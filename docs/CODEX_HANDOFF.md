@@ -11,10 +11,11 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
-## 2026-08-03 网页模考教师批改与学生复盘闭环（任务分支，未 push/部署）
+## 2026-08-03 网页模考教师批改与学生复盘闭环（已部署）
 
-- 当前工作树：`/Users/zhouxin/.codex/worktrees/7691/studytracker`；分支
-  `codex/mock-exam-review-web`，已 rebase 到 `origin/main@f5a7b2c7`。保留 main 最新的
+- 开发工作树：`/Users/zhouxin/.codex/worktrees/7691/studytracker`；任务分支
+  `codex/mock-exam-review-web` 已推送，业务 HEAD `4f4fefd3` 已 fast-forward 到 `main`。实现基于
+  `origin/main@f5a7b2c7`，并保留当时主线最新的
   `api/mock_exam_student.py`、`exam/_review_components.html`、`_review_assets.html`、答题状态隔离和 TOEFL 发布内容。
 - 已实现教师写作批改草稿/发布、独立签名批改 capability、短期编辑 scope、乐观锁与排队式自动保存；发布后
   capability 只读，可由后台重新开放。学生 token 复盘和 profile/当前浏览器授权复盘共用同一 context/组件，草稿
@@ -28,10 +29,17 @@
   `X-Forwarded-Proto`。页面同时保留桌面双栏与窄屏布局。
 - 验证：目标 review/migration/config 用例 45 项通过；Jinja 9 个模板解析、变更文件 Ruff、Python 编译和
   `git diff --check` 通过。官方全量 unittest 共发现 354 项，其中 2 个既有静态音频 fixture 缺失导致 404，
-  另有 1 个既有 TOEFL unittest 模块因环境未安装 pytest 无法导入；这三项与本任务无关。未重新部署或进行生产浏览器 QA，
-  本地 test client 已覆盖桌面/窄屏模板结构、发布链路和权限隔离。
-- 本分支尚未 push、merge 或部署；收尾提交在本次交接结束时创建，精确 HEAD 以 `git log -1` 为准。未记录任何
-  token、Cookie、密钥或学生隐私。
+  另有 1 个既有 TOEFL unittest 模块因环境未安装 pytest 无法导入；这三项与本任务无关。本地 test client
+  覆盖桌面/窄屏模板结构、发布链路和权限隔离；CI
+  [30757325387](https://github.com/KB77GG/studytracker/actions/runs/30757325387) 与部署
+  [30757325373](https://github.com/KB77GG/studytracker/actions/runs/30757325373) 均成功。
+- 生产发布前已将 `app.db` 备份为 `app.db.bak-20260802-mock-review` 并通过完整性检查；迁移首次唯一回填
+  8 场历史会话，第二次为 0 变更，歧义/缺失均为 0。生产 `.env` 已配置随机 `SECRET_KEY`、
+  `SESSION_COOKIE_SECURE=1`、`MOCK_REVIEW_PUBLIC_SCHEME=https`，因此旧网页会话需重新登录一次。
+  生产 HEAD `4f4fefd3`、服务 active、5002 `/practice` 返回 200，gunicorn 保持
+  `workers=1 / gthread / threads=6`；匿名 history 为 401，错误 capability 为 404 且隐私头完整。
+  真实已交卷学生 token 复盘和无登录教师批改页均完成不输出学生内容的生产冒烟，测试教师链接已立即撤销。
+  家长端本次未接入。未记录任何 token、Cookie、密钥或学生隐私。
 
 ## 2026-08-02 当前任务：模考复盘与答题状态隔离（已部署）
 
@@ -62,11 +70,11 @@
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/mock-exam-review-isolation`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker` |
-| 分支基线 | `efc0896f 开放学生模考逐题复盘`，包含前序 `bdb76d57` |
-| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-isolation` 均包含 `efc0896f`；精确 HEAD 以 `git log -1` 为准 |
-| 本次交接范围 | 只改模考复盘、模考前端草稿隔离和判分别名；主工作树及其用户未跟踪文件未覆盖 |
-| 后端生产 | 已部署 `efc0896f`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
+| 分支 | `codex/mock-exam-review-web`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/7691/studytracker` |
+| 分支基线 | 业务 HEAD `4f4fefd3 修正模考评分覆盖下拉选项`，包含教师批改与学生复盘闭环 |
+| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-web` 均包含 `4f4fefd3`；精确 HEAD 以 `git log -1` 为准 |
+| 本次交接范围 | 网页教师写作批改、学生模考历史/复盘、capability 与 profile 迁移；家长端未接入 |
+| 后端生产 | 已部署 `4f4fefd3`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）

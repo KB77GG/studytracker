@@ -6,7 +6,7 @@
 
 ---
 
-## 2026-08-03 网页模考教师批改与学生复盘闭环（本地任务分支，未 push/部署）
+## 2026-08-03 网页模考教师批改与学生复盘闭环（已部署）
 
 - 在 `codex/mock-exam-review-web` 上完成第一阶段网页闭环，并先 rebase 到
   `origin/main@f5a7b2c7`；保留主线学生逐题复盘组件、答题状态隔离和 TOEFL 发布内容。
@@ -20,8 +20,14 @@
   `SECRET_KEY` 从环境读取，session cookie 为 HttpOnly/SameSite=Lax，Secure 由环境布尔值控制。
 - 补齐后台 JSON POST、capability HTTPS scheme 和学生复盘隐私响应头。目标 review/migration/config 用例 45 项通过；
   Jinja、Ruff、Python 编译、diff-check 通过。官方全量 unittest 354 项中 2 个既有音频 fixture 404、1 个既有 TOEFL
-  模块因环境没有 pytest 无法导入；未 push/部署，也未重新进行生产浏览器 QA。
-- 收尾提交在本次交接结束时创建，精确 SHA 以 `git log -1` 为准；不记录任何 token、Cookie、密钥或学生隐私。
+  模块因环境没有 pytest 无法导入；CI `30757325387` 与部署 `30757325373` 均成功。
+- 实现提交 `a41d79ee`、审查修复 `431a186a` / `f45f3520`、下拉契约修复 `4f4fefd3` 已推送任务分支和
+  `main`。生产发布前备份 `app.db.bak-20260802-mock-review` 并通过完整性检查；迁移首次回填 8 场、第二次
+  0 变更、无歧义或缺失。生产配置随机 `SECRET_KEY`、Secure cookie 与固定 HTTPS scheme；旧网页 session
+  需重新登录一次。
+- 生产 HEAD `4f4fefd3`，服务 active，5002 `/practice` 200，gunicorn 保持 1 worker/gthread/6 threads；
+  学生 token 复盘与无登录教师批改页真实冒烟均通过，测试教师链接已撤销。家长端未接入；未记录任何
+  token、Cookie、密钥或学生隐私。
 
 ## 2026-08-02 学生端模考逐题复盘入口（已部署）
 
