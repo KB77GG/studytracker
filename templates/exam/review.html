@@ -1,4 +1,4 @@
-{% from "exam/_review_components.html" import review_block, writing_block %}
+{% from "exam/_review_components.html" import review_block, writing_block, teacher_review_block %}
 <!doctype html>
 <html lang="zh">
 <head>
@@ -28,11 +28,12 @@
       <div class="exam-card__body">
         <div class="student-review-summary">
           <p>
-            综合 IELTS Band：
+            听力 + 阅读客观科综合 Band：
             <strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong>
           </p>
           <p>开始 {{ summary.started_at_text or '—' }} · 交卷 {{ summary.finished_at_text or '—' }}</p>
         </div>
+        <p class="review-muted">该综合分只合并听力与阅读客观科，不代表完整 IELTS Overall；Writing Band 单独显示。</p>
         <div class="student-review-actions">
           <a class="exam-btn-outline" href="{{ url_for('mock_exam_result', exam_id=exam.id, token=session.access_token) }}">← 返回成绩</a>
           <label style="font-weight:600; cursor:pointer;">
@@ -46,6 +47,14 @@
     {{ review_block('Reading', reading_units, summary.reading) }}
     {% if has_writing %}
       {{ writing_block(writing_tasks, summary, session) }}
+    {% endif %}
+    {% if teacher_review %}
+      {{ teacher_review_block(teacher_review, session) }}
+    {% else %}
+      <section class="card review-card">
+        <div class="review-card__head"><h2>老师批改</h2></div>
+        <p class="review-muted">老师还在整理写作批改。发布后，你会在这里看到点评、四项评分、Writing Band 和老师修改稿。</p>
+      </section>
     {% endif %}
   </main>
 

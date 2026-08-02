@@ -63,6 +63,11 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
             logout_user()
             return "ok"
 
+        @self.app.post("/test-remember/<int:session_id>")
+        def test_remember(session_id):
+            workflow.remember_browser_exam_session(session_id)
+            return "ok"
+
         self.app.register_blueprint(mock_exam_review_bp)
         with self.app.app_context():
             db.create_all()
@@ -344,9 +349,7 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self.assertEqual(rows[0]["review_status"], "draft")
 
         self.client.post("/test-logout")
-        with self.client.session_transaction() as browser:
-            browser["mock_exam_session_id"] = self.mock_session_id
-            browser["mock_exam_session_auth_at"] = int(datetime.utcnow().timestamp())
+        self.client.post(f"/test-remember/{self.mock_session_id}")
         light = self.client.get("/api/practice/mock-exams")
         self.assertEqual(light.status_code, 200)
         self.assertEqual([row["id"] for row in light.get_json()["sessions"]], [self.mock_session_id])
@@ -354,9 +357,7 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self.assertEqual(cross.status_code, 404)
 
     def test_anonymous_mock_session_scope_works_without_practice_name(self):
-        with self.client.session_transaction() as browser:
-            browser["mock_exam_session_id"] = self.mock_session_id
-            browser["mock_exam_session_auth_at"] = int(datetime.utcnow().timestamp())
+        self.client.post(f"/test-remember/{self.mock_session_id}")
         history = self.client.get("/api/practice/mock-exams")
         self.assertEqual(history.status_code, 200)
         self.assertEqual([row["id"] for row in history.get_json()["sessions"]], [self.mock_session_id])
@@ -364,6 +365,26 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self.assertEqual(own_review.status_code, 200)
         other_review = self.client.get(f"/practice/mock-exams/{self.other_session_id}/review")
         self.assertEqual(other_review.status_code, 404)
+
+    def test_anonymous_mock_scope_requires_matching_access_proof(self):
+        self.client.post(f"/test-remember/{self.mock_session_id}")
+        with self.client.session_transaction() as browser:
+            browser.pop(workflow.EXAM_SESSION_PROOF_KEY, None)
+        self.assertEqual(self.client.get("/api/practice/mock-exams").status_code, 401)
+
+        self.client.post(f"/test-remember/{self.mock_session_id}")
+        with self.client.session_transaction() as browser:
+            browser[workflow.EXAM_SESSION_KEY] = self.other_session_id
+        self.assertEqual(self.client.get("/api/practice/mock-exams").status_code, 401)
+        self.assertEqual(
+            self.client.get(f"/practice/mock-exams/{self.other_session_id}/review").status_code,
+            404,
+        )
+
+        self.client.post(f"/test-remember/{self.mock_session_id}")
+        with self.client.session_transaction() as browser:
+            browser[workflow.EXAM_SESSION_PROOF_KEY] = "wrong-proof"
+        self.assertEqual(self.client.get("/api/practice/mock-exams").status_code, 401)
 
     def test_unbound_same_name_student_cannot_access_history(self):
         self._login(self.unbound_student_id)
@@ -415,6 +436,9 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self._login(self.student_id)
         draft = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
         self.assertEqual(draft.status_code, 200)
+        self.assertEqual(draft.headers["Cache-Control"], "no-store, no-cache, must-revalidate, max-age=0")
+        self.assertEqual(draft.headers["Referrer-Policy"], "no-referrer")
+        self.assertEqual(draft.headers["X-Robots-Tag"], "noindex, nofollow, noarchive")
         draft_html = draft.get_data(as_text=True)
         self.assertIn("老师还在整理写作批改", draft_html)
         self.assertNotIn("Good structure.", draft_html)

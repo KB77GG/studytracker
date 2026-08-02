@@ -8,7 +8,7 @@ def _load_env_file(path: str) -> None:
     if not os.path.exists(path):
         return
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
                 if not line or line.startswith("#") or "=" not in line:
@@ -24,9 +24,21 @@ def _load_env_file(path: str) -> None:
 
 _load_env_file(os.path.join(BASE_DIR, ".env"))
 
+
+def _env_bool(name: str, default: bool = False) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 class Config:
-    # 用于 Flask 的安全密钥（后面我们可以改成更安全的随机值）
-    SECRET_KEY = "dev-key-change-later"
+    # Production must provide a random value in .env/environment; keep the
+    # development fallback so local tests and a fresh checkout still boot.
+    SECRET_KEY = os.environ.get("SECRET_KEY", "dev-key-change-later")
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_SECURE = _env_bool("SESSION_COOKIE_SECURE")
 
     # Capability links may be generated behind a TLS-terminating proxy. Set
     # this to ``https`` in production; the review helper also accepts a

@@ -107,6 +107,15 @@ def _add_index(conn: sqlite3.Connection, table: str, column: str, index_name: st
     )
 
 
+def _add_unique_index(
+    conn: sqlite3.Connection, table: str, column: str, index_name: str
+) -> None:
+    conn.execute(
+        f"CREATE UNIQUE INDEX IF NOT EXISTS {_quote_identifier(index_name)} "
+        f"ON {_quote_identifier(table)} ({_quote_identifier(column)})"
+    )
+
+
 def _create_review_table(conn: sqlite3.Connection) -> None:
     conn.execute(
         """
@@ -191,6 +200,18 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         "ix_mock_exam_session_student_profile_id",
     )
     _add_index(conn, "mock_exam_review", "session_id", "ix_mock_exam_review_session_id")
+    _add_unique_index(
+        conn,
+        "mock_exam_review",
+        "session_id",
+        "uq_mock_exam_review_session_id",
+    )
+    _add_unique_index(
+        conn,
+        "mock_exam_review_edit_session",
+        "token_hash",
+        "uq_mock_exam_review_edit_session_token_hash",
+    )
     _add_index(
         conn,
         "mock_exam_review_edit_session",

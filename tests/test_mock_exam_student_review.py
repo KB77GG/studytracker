@@ -7,7 +7,8 @@ from unittest.mock import patch
 from flask import Flask
 
 from api.mock_exam_student import mock_exam_student_bp
-from models import MockExam, MockExamSession, db
+from models import MockExam, MockExamReview, MockExamSession, db
+from services import mock_exam_review_workflow as review_workflow
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -165,6 +166,9 @@ class MockExamStudentReviewRouteTest(unittest.TestCase):
             response = self.client.get(f"/exam/{self.exam_id}/session/student-session-token/review")
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers["Cache-Control"], "no-store, no-cache, must-revalidate, max-age=0")
+        self.assertEqual(response.headers["Referrer-Policy"], "no-referrer")
+        self.assertEqual(response.headers["X-Robots-Tag"], "noindex, nofollow, noarchive")
         page = response.get_data(as_text=True)
         self.assertIn("学生可见模考 · 逐题复盘", page)
         self.assertIn("Question stem.", page)
@@ -175,6 +179,9 @@ class MockExamStudentReviewRouteTest(unittest.TestCase):
 
         missing = self.client.get(f"/exam/{self.exam_id}/session/wrong-token/review")
         self.assertEqual(missing.status_code, 404)
+        self.assertEqual(missing.headers["Cache-Control"], "no-store, no-cache, must-revalidate, max-age=0")
+        self.assertEqual(missing.headers["Referrer-Policy"], "no-referrer")
+        self.assertEqual(missing.headers["X-Robots-Tag"], "noindex, nofollow, noarchive")
 
     def test_in_progress_student_is_redirected_without_loading_answers(self):
         with patch("api.mock_exam_student._load_payload") as loader:
@@ -184,6 +191,63 @@ class MockExamStudentReviewRouteTest(unittest.TestCase):
         self.assertIn("/exam/", response.headers["Location"])
         self.assertIn("/session/in-progress-token", response.headers["Location"])
         loader.assert_not_called()
+
+    def test_published_teacher_review_is_visible_on_existing_token_route_only_after_publish(self):
+        with self.app.app_context():
+            session = MockExamSession.query.filter_by(access_token="student-session-token").first()
+            review = review_workflow.ensure_review_draft(session)
+            review.overall_feedback = "SECRET draft feedback"
+            review.task1_teacher_draft = "SECRET draft correction"
+            db.session.commit()
+
+        with patch("api.mock_exam_student._load_payload", side_effect=self._load_payload):
+            draft = self.client.get(f"/exam/{self.exam_id}/session/student-session-token/review")
+        self.assertEqual(draft.status_code, 200)
+        draft_page = draft.get_data(as_text=True)
+        self.assertNotIn("SECRET draft feedback", draft_page)
+        self.assertNotIn("SECRET draft correction", draft_page)
+
+        with self.app.app_context():
+            review = MockExamReview.query.join(MockExamSession).filter(
+                MockExamSession.access_token == "student-session-token"
+            ).first()
+            review.status = MockExamReview.STATUS_PUBLISHED
+            review.reviewer_name = "李老师"
+            review.listening_feedback = "Published listening feedback"
+            review.reading_feedback = "Published reading feedback"
+            review.overall_feedback = "Published overall feedback"
+            review.next_stage_advice = "Published next step"
+            review.task1_ta = review.task1_cc = review.task1_lr = review.task1_gra = "6"
+            review.task2_tr = review.task2_cc = review.task2_lr = review.task2_gra = "7"
+            review.task1_band = 6.0
+            review.task2_band = 7.0
+            review.writing_raw = 6.6666666667
+            review.writing_band = 6.5
+            review.task1_teacher_draft = "Published teacher correction"
+            review.task2_teacher_draft = "Published Task 2 correction"
+            review.question_feedback_json = json.dumps(
+                {"task1": "Task 1 published note", "task2": "Task 2 published note"}
+            )
+            db.session.commit()
+
+        with patch("api.mock_exam_student._load_payload", side_effect=self._load_payload):
+            published = self.client.get(
+                f"/exam/{self.exam_id}/session/student-session-token/review"
+            )
+        self.assertEqual(published.status_code, 200)
+        published_page = published.get_data(as_text=True)
+        for text in (
+            "Published listening feedback",
+            "Published reading feedback",
+            "Published overall feedback",
+            "Published next step",
+            "Published teacher correction",
+            "Published Task 2 correction",
+            "Writing Band",
+            "6.5",
+            "TA",
+        ):
+            self.assertIn(text, published_page)
 
 
 if __name__ == "__main__":

@@ -32,17 +32,23 @@ class MockExamTemplateIsolationTest(unittest.TestCase):
 
     def test_student_result_links_to_token_scoped_review_and_shows_task_image(self):
         template = (ROOT / "templates/exam/result.html").read_text(encoding="utf-8")
-        self.assertIn("mock_exam_student.session_review", template)
+        self.assertEqual(template.count("mock_exam_student.session_review"), 1)
         self.assertIn("session.access_token", template)
         self.assertIn("Writing Task 1 题目图表", template)
 
     def test_admin_and_student_reviews_share_the_same_components(self):
         admin = (ROOT / "templates/admin/mock_exam_session_detail.html").read_text(encoding="utf-8")
+        admin_sessions = (ROOT / "templates/admin/mock_exam_sessions.html").read_text(encoding="utf-8")
         student = (ROOT / "templates/exam/review.html").read_text(encoding="utf-8")
         self.assertIn('from "exam/_review_components.html"', admin)
         self.assertIn('from "exam/_review_components.html"', student)
         self.assertIn('include "exam/_review_assets.html"', admin)
         self.assertIn('include "exam/_review_assets.html"', student)
+        self.assertNotIn("querySelectorAll('.review-table tbody tr')", admin)
+        self.assertIn("teacher_review_block", student)
+        for template in (admin, admin_sessions):
+            self.assertIn("'Content-Type': 'application/json'", template)
+            self.assertIn("body: '{}'", template)
 
 
 if __name__ == "__main__":

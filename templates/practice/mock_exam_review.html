@@ -1,181 +1,46 @@
 {% extends "base.html" %}
+{% from "exam/_review_components.html" import review_block, writing_block, teacher_review_block %}
+
 {% block page_title %}我的模考复盘{% endblock %}
 {% block page_subtitle %}My Mock Exam Review{% endblock %}
 
-{% macro objective_block(title, units, section) -%}
-<section class="card student-review-card">
-  <div class="student-review-card__head">
-    <div>
-      <h2>{{ title }}</h2>
-      {% if section.submitted %}
-      <p>原始分 <strong>{{ section.correct }}/{{ section.total }}</strong> · Band <strong>{{ section.band if section.band is not none else '—' }}</strong> · 用时 {{ section.duration_text }}</p>
-      {% else %}<p>尚未提交</p>{% endif %}
-    </div>
-  </div>
-  {% if units %}
-  {% for unit in units %}
-  <div class="student-review-unit">
-    <h3>{{ unit.label }} <small>{{ unit.correct }}/{{ unit.total }} 分 · 错 {{ unit.wrong }} 题</small></h3>
-    {% for group in unit.groups %}
-    {% if group.title or group.instruction %}<p class="student-review-group">{% if group.title %}<strong>{{ group.title }}</strong>{% endif %}{% if group.instruction %} {{ group.instruction }}{% endif %}</p>{% endif %}
-    <table class="student-review-table">
-      <thead><tr><th>题号</th><th>你的答案</th><th>正确答案</th><th>判定</th></tr></thead>
-      <tbody>
-      {% for row in group.rows %}
-      <tr class="{% if row.is_correct %}is-correct{% elif row.is_partial %}is-partial{% else %}is-wrong{% endif %}" data-correct="{{ '1' if row.is_correct else '0' }}">
-        <td>{{ row.label }}</td><td class="{% if not row.answered %}is-blank{% endif %}">{{ row.student_answer }}</td><td>{{ row.correct_answer }}</td>
-        <td>{% if row.is_correct %}正确{% elif row.is_partial %}{{ row.awarded }}/{{ row.marks }}{% else %}错误{% endif %}</td>
-      </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-    {% endfor %}
-  </div>
-  {% endfor %}
-  <label class="wrong-only-toggle"><input type="checkbox" data-wrong-only> 只看错题</label>
-  {% else %}<p class="student-review-empty">暂无逐题结果。</p>{% endif %}
-</section>
-{%- endmacro %}
-
 {% macro student_review_content() -%}
-<div class="container student-mock-review-page">
+<div class="container practice-student-review">
   <div class="header-row">
     <div>
       <h1>{{ session.student_name }} · {{ exam.name }}</h1>
-      <p class="student-review-subtitle">已交卷复盘</p>
+      <p class="review-muted">已交卷复盘</p>
     </div>
     <a href="{{ url_for('practice_library') }}" class="btn btn-outline-secondary btn-sm">← 返回我的模考</a>
   </div>
 
-  <section class="card student-score-summary">
-    <h2>成绩概览</h2>
-    <div class="student-score-grid">
-      <div><span>Listening</span><strong>{{ session.listening_ielts_score if session.listening_ielts_score is not none else '—' }}</strong></div>
-      <div><span>Reading</span><strong>{{ session.reading_ielts_score if session.reading_ielts_score is not none else '—' }}</strong></div>
-      <div><span>听力 + 阅读客观科综合</span><strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong></div>
-      {% if published and review.scores.writing_band is not none %}<div><span>Writing Band</span><strong>{{ review.scores.writing_band }}</strong></div>{% endif %}
+  <section class="card review-card practice-student-review__summary">
+    <div class="student-review-summary">
+      <p>听力 + 阅读客观科综合 Band：<strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong></p>
+      <p>该综合分不代表完整 IELTS Overall；Writing Band 单独显示。</p>
     </div>
-    <p class="student-score-note">这里的综合分只合并听力与阅读客观科，不代表完整 IELTS Overall；Writing Band 单独显示。</p>
+    <label style="font-weight:600; cursor:pointer;">
+      <input type="checkbox" id="wrongOnly"> 只看错题
+    </label>
   </section>
 
-  {% if not published %}
-  <section class="card teacher-pending-card">
-    <h2>老师批改</h2>
-    <p>老师还在整理写作批改。发布后，你会在这里看到听力 / 阅读点评、Task 1/2 四项评分、老师修改稿和下一阶段建议。</p>
-  </section>
+  {{ review_block('Listening', listening_units, summary.listening) }}
+  {{ review_block('Reading', reading_units, summary.reading) }}
+  {% if has_writing %}
+    {{ writing_block(writing_tasks, summary, session) }}
   {% endif %}
 
-  {{ objective_block('Listening', listening_units, summary.listening) }}
-  {{ objective_block('Reading', reading_units, summary.reading) }}
-
-  {% if published and review %}
-  <section class="card student-review-card teacher-feedback-card">
-    <div class="student-review-card__head"><div><h2>老师点评</h2><p>批改老师：{{ review.reviewer_name or '—' }}</p></div></div>
-    <div class="teacher-feedback-grid">
-      <article><h3>Listening 点评</h3><p>{{ review.listening_feedback or '—' }}</p></article>
-      <article><h3>Reading 点评</h3><p>{{ review.reading_feedback or '—' }}</p></article>
-      <article><h3>总体评语</h3><p>{{ review.overall_feedback or '—' }}</p></article>
-      <article><h3>下一阶段建议</h3><p>{{ review.next_stage_advice or '—' }}</p></article>
-    </div>
-  </section>
-
-  {% set wt = writing_tasks or [] %}
-  <section class="card student-review-card">
-    <div class="student-review-card__head"><div><h2>Writing 复盘</h2><p>Task 1/2 原文保留，老师修改稿仅供学习对照。</p></div></div>
-    <div class="student-writing-grid">
-      {% for index in [0, 1] %}
-      {% set key = 'task' ~ (index + 1) %}
-      <article class="student-writing-task">
-        <h3>Task {{ index + 1 }}</h3>
-        {% if wt|length > index and wt[index].prompt %}<p class="student-writing-prompt">{{ wt[index].prompt }}</p>{% endif %}
-        <div class="student-writing-columns">
-          {% set original_essay = session.writing_essay_task1 if index == 0 else session.writing_essay_task2 %}
-          {% set teacher_draft = review.task1_teacher_draft if index == 0 else review.task2_teacher_draft %}
-          <div><h4>你的原文</h4><pre>{{ original_essay or '（未作答）' }}</pre></div>
-          <div><h4>老师修改稿</h4><pre>{{ teacher_draft or '（老师未填写修改稿）' }}</pre></div>
-        </div>
-        <p class="student-task-feedback"><strong>分题评语：</strong>{{ review.question_feedback[key] or '—' }}</p>
-      </article>
-      {% endfor %}
-    </div>
-  </section>
-
-  <section class="card student-review-card">
-    <div class="student-review-card__head"><div><h2>Writing 评分</h2><p>Task Band = 四项平均后按 0.5 half-up；人工覆盖会保留在批改记录中。</p></div></div>
-    <div class="student-band-grid">
-      {% for key, label, fields in [('task1', 'Task 1', ['TA', 'CC', 'LR', 'GRA']), ('task2', 'Task 2', ['TR', 'CC', 'LR', 'GRA'])] %}
-      <article><h3>{{ label }} · Band {{ review.scores[key].band if review.scores[key].band is not none else ('不评分' if review.scores[key].state == 'not_scorable' else '—') }}</h3><div class="student-criterion-list">{% for field in fields %}<span>{{ field }} <strong>{{ review.scores[key][field|lower] if review.scores[key][field|lower] else '—' }}</strong></span>{% endfor %}</div></article>
-      {% endfor %}
-    </div>
-    <p class="student-writing-band">Writing Band：<strong>{{ review.scores.writing_band if review.scores.writing_band is not none else ('不评分' if review.scores.writing_state == 'not_scorable' else '—') }}</strong></p>
-  </section>
+  {% if teacher_review %}
+    {{ teacher_review_block(teacher_review, session) }}
+  {% else %}
+    <section class="card review-card">
+      <div class="review-card__head"><h2>老师批改</h2></div>
+      <p class="review-muted">老师还在整理写作批改。发布后，你会在这里看到点评、四项评分、Writing Band 和老师修改稿。</p>
+    </section>
   {% endif %}
 </div>
 
-<style>
-  .student-mock-review-page { max-width: 1180px; }
-  .student-review-subtitle { margin: 5px 0 0; color: #667; font-size: 13px; }
-  .student-score-summary, .teacher-pending-card, .student-review-card { margin-top: 16px; }
-  .student-score-summary h2, .teacher-pending-card h2 { margin: 0 0 12px; font-size: 20px; }
-  .student-score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-  .student-score-grid div { display: grid; gap: 5px; padding: 12px; border: 1px solid #e1e8ed; border-radius: 8px; background: #fafcfd; }
-  .student-score-grid span { color: #667; font-size: 12px; line-height: 1.4; }
-  .student-score-grid strong { color: #1f3340; font-size: 22px; }
-  .student-score-note, .teacher-pending-card p { margin: 12px 0 0; color: #667; font-size: 13px; line-height: 1.6; }
-  .teacher-pending-card { border-color: #e5d7af; background: #fffaf0; }
-  .student-review-card__head { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid #e6ebf0; }
-  .student-review-card__head h2 { margin: 0 0 4px; font-size: 20px; }
-  .student-review-card__head p { margin: 0; color: #667; font-size: 13px; }
-  .student-review-unit { margin-top: 16px; }
-  .student-review-unit h3 { margin: 0 0 7px; font-size: 15px; }
-  .student-review-unit h3 small { margin-left: 6px; color: #778; font-size: 12px; font-weight: 400; }
-  .student-review-group { margin: 9px 0 5px; color: #778; font-size: 12px; line-height: 1.5; }
-  .student-review-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .student-review-table th, .student-review-table td { padding: 7px 9px; border: 1px solid #e2e8ec; text-align: left; }
-  .student-review-table th { background: #f6f8fa; color: #667; font-size: 12px; }
-  .student-review-table tr.is-wrong td { background: #fff5f5; }
-  .student-review-table tr.is-partial td { background: #fffaf0; }
-  .student-review-table td.is-blank { color: #aeb6bd; }
-  .wrong-only-toggle { display: inline-flex; gap: 6px; align-items: center; margin-top: 12px; color: #52636d; font-size: 13px; font-weight: 700; }
-  .student-review-empty { margin: 12px 0 0; color: #778; }
-  .teacher-feedback-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
-  .teacher-feedback-grid article { padding: 12px; border-radius: 8px; background: #f7fafb; }
-  .teacher-feedback-grid article:nth-child(3), .teacher-feedback-grid article:nth-child(4) { grid-column: 1 / -1; }
-  .teacher-feedback-grid h3, .student-writing-task h3, .student-band-grid h3 { margin: 0 0 6px; font-size: 15px; }
-  .teacher-feedback-grid p { margin: 0; color: #334952; line-height: 1.65; white-space: pre-wrap; }
-  .student-writing-grid { display: grid; gap: 16px; margin-top: 14px; }
-  .student-writing-task { padding-top: 12px; border-top: 1px solid #e6ebf0; }
-  .student-writing-task:first-child { border-top: 0; padding-top: 0; }
-  .student-writing-prompt { margin: 0 0 8px; color: #667; font-size: 13px; line-height: 1.55; }
-  .student-writing-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .student-writing-columns h4 { margin: 0 0 5px; color: #52636d; font-size: 13px; }
-  .student-writing-columns pre { min-height: 130px; margin: 0; padding: 10px 11px; border: 1px solid #e2e8ec; border-radius: 8px; background: #fafcfd; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.6; }
-  .student-task-feedback { margin: 10px 0 0; color: #334952; line-height: 1.6; white-space: pre-wrap; }
-  .student-band-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
-  .student-band-grid article { padding: 12px; border: 1px solid #e2e8ec; border-radius: 8px; background: #fafcfd; }
-  .student-criterion-list { display: flex; flex-wrap: wrap; gap: 7px 14px; color: #667; font-size: 13px; }
-  .student-criterion-list strong { color: #1f3340; }
-  .student-writing-band { margin: 14px 0 0; color: #52636d; font-size: 15px; }
-  .student-writing-band strong { color: #1f3340; font-size: 21px; }
-  @media (max-width: 760px) {
-    .student-score-grid, .teacher-feedback-grid, .student-writing-columns, .student-band-grid { grid-template-columns: 1fr; }
-    .teacher-feedback-grid article:nth-child(3), .teacher-feedback-grid article:nth-child(4) { grid-column: auto; }
-    .student-review-table { min-width: 650px; }
-    .student-review-card { overflow-x: auto; }
-  }
-</style>
-
-<script>
-document.querySelectorAll('[data-wrong-only]').forEach(function (toggle) {
-  toggle.addEventListener('change', function () {
-    const card = toggle.closest('.student-review-card');
-    if (!card) return;
-    card.querySelectorAll('tbody tr').forEach(function (row) {
-      row.hidden = toggle.checked && row.dataset.correct === '1';
-    });
-  });
-});
-</script>
+{% include "exam/_review_assets.html" %}
 {%- endmacro %}
 
 {% block content_dashboard %}{{ student_review_content() }}{% endblock %}

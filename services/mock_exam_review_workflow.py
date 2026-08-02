@@ -12,7 +12,6 @@ import hashlib
 import json
 import secrets
 from datetime import datetime, timedelta
-
 from urllib.parse import urlsplit, urlunsplit
 
 from flask import current_app, request, url_for
@@ -55,6 +54,7 @@ SCORE_MAP = {
 EDITOR_SESSION_KEY = "mock_exam_review_edit_sessions"
 EXAM_SESSION_KEY = "mock_exam_session_id"
 EXAM_SESSION_AUTH_AT_KEY = "mock_exam_session_auth_at"
+EXAM_SESSION_PROOF_KEY = "mock_exam_session_access_proof"
 DEFAULT_LINK_DAYS = 14
 DEFAULT_EDITOR_HOURS = 2
 DEFAULT_STUDENT_BROWSER_DAYS = 14
@@ -439,7 +439,17 @@ def current_editor_scope(review_id: int) -> MockExamReviewEditSession | None:
 
 def remember_browser_exam_session(session_id: int) -> None:
     """Authorize only the just-started mock session for light practice mode."""
-    browser_session[EXAM_SESSION_KEY] = int(session_id)
+    mock_session = db.session.get(MockExamSession, int(session_id))
+    if not mock_session or not mock_session.access_token:
+        browser_session.pop(EXAM_SESSION_KEY, None)
+        browser_session.pop(EXAM_SESSION_AUTH_AT_KEY, None)
+        browser_session.pop(EXAM_SESSION_PROOF_KEY, None)
+        browser_session.modified = True
+        return
+    browser_session[EXAM_SESSION_KEY] = mock_session.id
+    browser_session[EXAM_SESSION_PROOF_KEY] = hashlib.sha256(
+        mock_session.access_token.encode("utf-8")
+    ).hexdigest()
     browser_session[EXAM_SESSION_AUTH_AT_KEY] = int(utcnow().timestamp())
     browser_session.modified = True
 
@@ -448,7 +458,10 @@ def light_browser_exam_session_id() -> int | None:
     try:
         session_id = int(browser_session.get(EXAM_SESSION_KEY))
         authorized_at = int(browser_session.get(EXAM_SESSION_AUTH_AT_KEY))
+        saved_proof = str(browser_session.get(EXAM_SESSION_PROOF_KEY) or "")
     except (TypeError, ValueError):
+        return None
+    if not saved_proof:
         return None
     max_age = int(
         current_app.config.get("MOCK_REVIEW_BROWSER_SESSION_DAYS", DEFAULT_STUDENT_BROWSER_DAYS)
@@ -456,6 +469,13 @@ def light_browser_exam_session_id() -> int | None:
     if utcnow().timestamp() - authorized_at > max(1, max_age):
         browser_session.pop(EXAM_SESSION_KEY, None)
         browser_session.pop(EXAM_SESSION_AUTH_AT_KEY, None)
+        browser_session.pop(EXAM_SESSION_PROOF_KEY, None)
+        return None
+    mock_session = db.session.get(MockExamSession, session_id)
+    if not mock_session or not mock_session.access_token:
+        return None
+    expected_proof = hashlib.sha256(mock_session.access_token.encode("utf-8")).hexdigest()
+    if not secrets.compare_digest(saved_proof, expected_proof):
         return None
     return session_id
 

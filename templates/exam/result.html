@@ -33,7 +33,7 @@
         </p>
         {% if session.status == 'submitted' %}
           <p>
-            <a class="exam-btn-outline" href="{{ url_for('mock_exam_student.session_review', exam_id=exam.id, token=session.access_token) }}">查看逐题复盘</a>
+            <a class="exam-btn-outline" href="{{ url_for('mock_exam_student.session_review', exam_id=exam.id, token=session.access_token) }}">进入我的模考复盘</a>
           </p>
         {% endif %}
       </div>
@@ -117,12 +117,6 @@
     </section>
     {% endif %}
   </main>
-
-  {% if session.status == 'submitted' %}
-  <div style="text-align:center; margin: 0 auto 22px;">
-    <a class="exam-btn-dark" href="{{ url_for('mock_exam_review.student_review', session_id=session.id) }}">进入我的模考复盘</a>
-  </div>
-  {% endif %}
 
   <style>
     .exam-essay { margin-top: 12px; }

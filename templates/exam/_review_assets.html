@@ -58,10 +58,31 @@
   .student-review-summary { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
   .student-review-summary p { margin: 0; line-height: 1.6; }
   .student-review-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .teacher-feedback-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+  .teacher-feedback-grid article { padding: 12px; border-radius: 8px; background: #f7fafb; }
+  .teacher-feedback-grid article:nth-child(3), .teacher-feedback-grid article:nth-child(4) { grid-column: 1 / -1; }
+  .teacher-feedback-grid h3, .teacher-writing-review h3, .teacher-score-review h3 { margin: 0 0 6px; font-size: 15px; }
+  .teacher-feedback-grid p, .teacher-writing-review__feedback { margin: 0; color: #334952; line-height: 1.65; white-space: pre-wrap; }
+  .teacher-writing-review, .teacher-score-review { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e6ebf0; }
+  .teacher-writing-review > p { margin: 0 0 10px; }
+  .teacher-writing-review__task { margin-top: 14px; }
+  .teacher-writing-review__task h4, .teacher-score-review h4 { margin: 0 0 7px; font-size: 14px; }
+  .teacher-writing-review__columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .teacher-writing-review__columns h5 { margin: 0 0 5px; color: #52636d; font-size: 12px; }
+  .teacher-writing-review__columns pre { min-height: 110px; margin: 0; padding: 10px 11px; border: 1px solid #e2e8ec; border-radius: 8px; background: #fafcfd; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.6; }
+  .teacher-writing-review__feedback { margin-top: 9px; }
+  .teacher-score-review__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .teacher-score-review__grid article { padding: 12px; border: 1px solid #e2e8ec; border-radius: 8px; background: #fafcfd; }
+  .teacher-score-review__criteria { display: flex; flex-wrap: wrap; gap: 7px 14px; color: #667; font-size: 13px; }
+  .teacher-score-review__criteria strong, .teacher-score-review__writing strong { color: #1f3340; }
+  .teacher-score-review__grid p { margin: 9px 0 0; color: #667; font-size: 13px; }
+  .teacher-score-review__writing { margin: 14px 0 0; color: #52636d; font-size: 15px; }
   @media (max-width: 640px) {
     .exam-app-bg .review-card { padding: 16px; }
     .review-table { font-size: 13px; }
     .review-table th, .review-table td { padding: 6px 8px; }
+    .teacher-feedback-grid, .teacher-writing-review__columns, .teacher-score-review__grid { grid-template-columns: 1fr; }
+    .teacher-feedback-grid article:nth-child(3), .teacher-feedback-grid article:nth-child(4) { grid-column: auto; }
   }
 </style>
 

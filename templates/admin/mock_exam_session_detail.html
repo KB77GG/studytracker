@@ -71,13 +71,6 @@
 </style>
 
 <script>
-document.getElementById('wrongOnly').addEventListener('change', function (event) {
-  const wrongOnly = event.target.checked;
-  document.querySelectorAll('.review-table tbody tr').forEach(function (row) {
-    row.style.display = wrongOnly && row.dataset.correct === '1' ? 'none' : '';
-  });
-});
-
 (function () {
   const toolbar = document.querySelector('.review-link-toolbar');
   if (!toolbar) return;

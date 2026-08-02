@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from flask import Blueprint, jsonify, make_response, redirect, render_template, request, url_for
+from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy.orm.exc import StaleDataError
 from werkzeug.exceptions import NotFound
@@ -10,6 +10,7 @@ from werkzeug.exceptions import NotFound
 from models import MockExamReview, MockExamSession, User, db
 from services import mock_exam_review as objective_review
 from services import mock_exam_review_workflow as workflow
+from services.web_privacy import no_store
 
 mock_exam_review_bp = Blueprint("mock_exam_review", __name__)
 
@@ -22,13 +23,7 @@ def _can_manage(user) -> bool:
 
 
 def _no_store(response):
-    if not hasattr(response, "headers"):
-        response = make_response(response)
-    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Referrer-Policy"] = "no-referrer"
-    response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
-    return response
+    return no_store(response)
 
 
 def _json(payload, status=200):
@@ -385,23 +380,12 @@ def student_review(session_id: int):
         return _no_store(jsonify({"ok": False, "error": "not_found"})), 404
     if mock_session.status != MockExamSession.STATUS_SUBMITTED:
         return _no_store(jsonify({"ok": False, "error": "exam_not_submitted"})), 409
-    review = workflow.ensure_review_draft(mock_session)
-    db.session.commit()
-    listening_units, reading_units = _objective_units(mock_session)
-    published = review.status == MockExamReview.STATUS_PUBLISHED
+    from api.mock_exam_student import render_student_review_page
+
     return _no_store(
-        render_template(
-            "practice/mock_exam_review.html",
-            exam=mock_session.exam,
-            session=mock_session,
-            summary=objective_review.summarize_session(mock_session),
-            listening_units=listening_units,
-            reading_units=reading_units,
-            writing_tasks=_writing_tasks(mock_session),
-            review=workflow.review_payload(
-                review,
-                writing_tasks=_writing_tasks(mock_session),
-            ) if published else None,
-            published=published,
+        render_student_review_page(
+            mock_session.exam,
+            mock_session,
+            template_name="practice/mock_exam_review.html",
         )
     )

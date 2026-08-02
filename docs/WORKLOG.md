@@ -6,6 +6,23 @@
 
 ---
 
+## 2026-08-03 网页模考教师批改与学生复盘闭环（本地任务分支，未 push/部署）
+
+- 在 `codex/mock-exam-review-web` 上完成第一阶段网页闭环，并先 rebase 到
+  `origin/main@f5a7b2c7`；保留主线学生逐题复盘组件、答题状态隔离和 TOEFL 发布内容。
+- 教师端支持草稿、Task 1/2 四项评分、half-up 计算、修改稿、分题/三科点评、发布与重新开放；签名 capability
+  与短期 scoped 编辑会话独立于学生 token。自动保存使用 revision + queued save/publish，发布失败可重试且不会卡死。
+- 学生端 token 复盘与 `/practice` profile/当前模考浏览器授权入口复用同一 context；只有已发布教师反馈可见，原文只读。
+  登录学生必须有绑定的 `StudentProfile.user_id`，匿名刚考完只由签名浏览器 session 锁定当前单场。
+- 新增自包含、可提前运行的 SQLite 迁移：
+  `.venv/bin/python scripts/migrate_mock_exam_review.py --database /path/to/app.db`。只按唯一 active profile 回填，
+  deleted/歧义不猜，重复执行安全；生产操作仍需先备份数据库。匿名 session 额外绑定 access-token proof，
+  `SECRET_KEY` 从环境读取，session cookie 为 HttpOnly/SameSite=Lax，Secure 由环境布尔值控制。
+- 补齐后台 JSON POST、capability HTTPS scheme 和学生复盘隐私响应头。目标 review/migration/config 用例 45 项通过；
+  Jinja、Ruff、Python 编译、diff-check 通过。官方全量 unittest 354 项中 2 个既有音频 fixture 404、1 个既有 TOEFL
+  模块因环境没有 pytest 无法导入；未 push/部署，也未重新进行生产浏览器 QA。
+- 收尾提交在本次交接结束时创建，精确 SHA 以 `git log -1` 为准；不记录任何 token、Cookie、密钥或学生隐私。
+
 ## 2026-08-02 学生端模考逐题复盘入口（已部署）
 
 - 新增 token 隔离的学生复盘路由 `/exam/<exam_id>/session/<token>/review`；只有整场状态为

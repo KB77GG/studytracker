@@ -150,3 +150,50 @@
   {% endfor %}
 </div>
 {%- endmacro %}
+
+{% macro teacher_review_block(teacher_review, session) -%}
+<section class="card review-card teacher-review-card">
+  <div class="review-card__head">
+    <h2>老师批改</h2>
+    <div class="review-card__meta">批改老师：{{ teacher_review.reviewer_name or '—' }}</div>
+  </div>
+  <div class="teacher-feedback-grid">
+    <article><h3>Listening 点评</h3><p>{{ teacher_review.listening_feedback or '—' }}</p></article>
+    <article><h3>Reading 点评</h3><p>{{ teacher_review.reading_feedback or '—' }}</p></article>
+    <article><h3>总体评语</h3><p>{{ teacher_review.overall_feedback or '—' }}</p></article>
+    <article><h3>下一阶段建议</h3><p>{{ teacher_review.next_stage_advice or '—' }}</p></article>
+  </div>
+
+  <div class="teacher-writing-review">
+    <h3>Writing 对照</h3>
+    <p class="review-muted">学生原文不可修改；老师修改稿仅供学习对照。</p>
+    {% for index in [0, 1] %}
+    {% set key = 'task' ~ (index + 1) %}
+    <article class="teacher-writing-review__task">
+      <h4>Task {{ index + 1 }}</h4>
+      <div class="teacher-writing-review__columns">
+        <div><h5>学生原文</h5><pre>{{ (session.writing_essay_task1 if index == 0 else session.writing_essay_task2) or '（未作答）' }}</pre></div>
+        <div><h5>老师修改稿</h5><pre>{{ (teacher_review.task1_teacher_draft if index == 0 else teacher_review.task2_teacher_draft) or '（老师未填写修改稿）' }}</pre></div>
+      </div>
+      <p class="teacher-writing-review__feedback"><strong>分题评语：</strong>{{ teacher_review.question_feedback[key] or '—' }}</p>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="teacher-score-review">
+    <h3>Writing 评分</h3>
+    <div class="teacher-score-review__grid">
+      {% for key, label, fields in [('task1', 'Task 1', ['ta', 'cc', 'lr', 'gra']), ('task2', 'Task 2', ['tr', 'cc', 'lr', 'gra'])] %}
+      <article>
+        <h4>{{ label }} · Band {{ teacher_review.scores[key].band if teacher_review.scores[key].band is not none else ('不评分' if teacher_review.scores[key].state == 'not_scorable' else '—') }}</h4>
+        <div class="teacher-score-review__criteria">
+          {% for field in fields %}<span>{{ field|upper }} <strong>{{ teacher_review.scores[key][field] or '—' }}</strong></span>{% endfor %}
+        </div>
+        <p>分题 raw：{{ teacher_review.scores[key].raw_average if teacher_review.scores[key].raw_average is not none else '—' }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="teacher-score-review__writing">Writing Band：<strong>{{ teacher_review.scores.writing_band if teacher_review.scores.writing_band is not none else ('不评分' if teacher_review.scores.writing_state == 'not_scorable' else '—') }}</strong></p>
+  </div>
+</section>
+{%- endmacro %}

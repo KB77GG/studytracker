@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-02（Asia/Shanghai）。
+> 最近更新：2026-08-03（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -10,6 +10,28 @@
 3. 不覆盖或删除来源不明的本地改动；先确认它们是否属于用户或另一项任务。
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
+
+## 2026-08-03 网页模考教师批改与学生复盘闭环（任务分支，未 push/部署）
+
+- 当前工作树：`/Users/zhouxin/.codex/worktrees/7691/studytracker`；分支
+  `codex/mock-exam-review-web`，已 rebase 到 `origin/main@f5a7b2c7`。保留 main 最新的
+  `api/mock_exam_student.py`、`exam/_review_components.html`、`_review_assets.html`、答题状态隔离和 TOEFL 发布内容。
+- 已实现教师写作批改草稿/发布、独立签名批改 capability、短期编辑 scope、乐观锁与排队式自动保存；发布后
+  capability 只读，可由后台重新开放。学生 token 复盘和 profile/当前浏览器授权复盘共用同一 context/组件，草稿
+  不可见，已发布反馈在现有 token 复盘页展示。学生原文只读。
+- 已补登录学生绑定校验、匿名模考 session 授权、链接版本/过期/撤销隔离、统一 `no-store`/`no-referrer`/
+  `noindex` 响应头，以及无 `app`/模型导入的自包含迁移脚本。匿名 session 绑定 access-token proof，
+  不能只伪造 session id；生产 `SECRET_KEY` 从环境读取，session cookie 明确 HttpOnly/SameSite=Lax，Secure
+  由 `SESSION_COOKIE_SECURE` 环境布尔值控制。迁移命令：
+  `.venv/bin/python scripts/migrate_mock_exam_review.py --database /path/to/app.db`；运行前应先备份生产 SQLite。
+- 后台 issue/revoke/reopen POST 要求 JSON；capability URL 使用配置的 HTTPS 或受限的
+  `X-Forwarded-Proto`。页面同时保留桌面双栏与窄屏布局。
+- 验证：目标 review/migration/config 用例 45 项通过；Jinja 9 个模板解析、变更文件 Ruff、Python 编译和
+  `git diff --check` 通过。官方全量 unittest 共发现 354 项，其中 2 个既有静态音频 fixture 缺失导致 404，
+  另有 1 个既有 TOEFL unittest 模块因环境未安装 pytest 无法导入；这三项与本任务无关。未重新部署或进行生产浏览器 QA，
+  本地 test client 已覆盖桌面/窄屏模板结构、发布链路和权限隔离。
+- 本分支尚未 push、merge 或部署；收尾提交在本次交接结束时创建，精确 HEAD 以 `git log -1` 为准。未记录任何
+  token、Cookie、密钥或学生隐私。
 
 ## 2026-08-02 当前任务：模考复盘与答题状态隔离（已部署）
 
