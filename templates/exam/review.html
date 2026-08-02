@@ -1,0 +1,58 @@
+{% from "exam/_review_components.html" import review_block, writing_block %}
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{{ exam.name }} · 逐题复盘</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+</head>
+<body class="exam-app-bg">
+  <header class="exam-topbar">
+    <div class="exam-topbar__brand">
+      <span class="exam-topbar__logo">📝</span>
+      <span class="exam-topbar__name">{{ exam.name }} · 逐题复盘</span>
+    </div>
+    <div class="exam-topbar__meta">
+      <span>考号：<strong>{{ session.student_name }}</strong></span>
+    </div>
+  </header>
+
+  <main class="exam-process">
+    <section class="exam-card">
+      <header class="exam-card__head">
+        <h2>本次模考复盘</h2>
+        <span class="exam-card__status is-ok">Submitted</span>
+      </header>
+      <div class="exam-card__body">
+        <div class="student-review-summary">
+          <p>
+            综合 IELTS Band：
+            <strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong>
+          </p>
+          <p>开始 {{ summary.started_at_text or '—' }} · 交卷 {{ summary.finished_at_text or '—' }}</p>
+        </div>
+        <div class="student-review-actions">
+          <a class="exam-btn-outline" href="{{ url_for('mock_exam_result', exam_id=exam.id, token=session.access_token) }}">← 返回成绩</a>
+          <label style="font-weight:600; cursor:pointer;">
+            <input type="checkbox" id="wrongOnly"> 只看错题
+          </label>
+        </div>
+      </div>
+    </section>
+
+    {{ review_block('Listening', listening_units, summary.listening) }}
+    {{ review_block('Reading', reading_units, summary.reading) }}
+    {% if has_writing %}
+      {{ writing_block(writing_tasks, summary, session) }}
+    {% endif %}
+  </main>
+
+  {% include "exam/_review_assets.html" %}
+  <footer class="exam-bottombar">
+    <span class="exam-bottombar__brand">睿然国际教育</span>
+    <a class="exam-bottombar__exit" href="{{ url_for('practice_library') }}">Exit</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<style>
+  .review-card { margin-top: 16px; }
+  .exam-app-bg .review-card {
+    background: #fff; border: 1px solid var(--exam-line); border-radius: 8px;
+    padding: 20px 24px; margin: 0;
+  }
+  .review-card__head { border-bottom: 1px solid #e6ebf0; padding-bottom: 10px; margin-bottom: 12px; }
+  .review-card__head h2 { margin: 0 0 4px; font-size: 20px; }
+  .review-card__meta { color: #667; font-size: 13px; }
+  .review-muted, .review-empty { color: #78828d; }
+  .review-empty { padding: 8px 0; }
+  .review-flag { color: #c0392b; font-weight: 600; }
+  .review-unit { margin-bottom: 18px; }
+  .review-unit h3, .review-essay h3 { font-size: 15px; margin: 12px 0 6px; }
+  .review-unit h3 small { color: #888; font-weight: 400; margin-left: 6px; }
+  .review-group-block { margin-top: 12px; }
+  .review-group { font-size: 13px; color: #667; margin: 10px 0 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; }
+  .review-group span { white-space: pre-line; }
+  .review-prompt {
+    white-space: pre-wrap; word-break: break-word; font: inherit; font-size: 13px; line-height: 1.55;
+    background: #f8fafc; border-left: 3px solid #94a3b8; padding: 10px 12px; margin: 6px 0 8px;
+  }
+  .review-option-bank, .review-question-options { display: grid; gap: 4px; font-size: 13px; margin: 6px 0 10px; }
+  .review-question-image { display: block; max-width: min(100%, 760px); max-height: 560px; object-fit: contain; margin: 8px 0 12px; }
+  .review-table-wrap { width: 100%; overflow-x: auto; }
+  .review-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px; }
+  .review-table th, .review-table td { border: 1px solid #e6ebf0; padding: 6px 10px; text-align: left; }
+  .review-table th { background: #f6f8fa; font-size: 12px; color: #667; font-weight: 600; }
+  .review-table th:first-child { width: 80px; }
+  .review-table th:last-child { width: 90px; }
+  .review-table tr.is-wrong td { background: #fff5f5; }
+  .review-table tr.is-partial td { background: #fffaf0; }
+  .review-table td.is-blank { color: #b0b6bd; }
+  .review-context-row td { padding: 9px 12px 11px; border-top: 0; }
+  .review-context-row.is-correct td { background: #fbfdfc; }
+  .review-question-stem { margin: 0 0 6px; line-height: 1.5; }
+  .review-evidence summary, .review-analysis summary, .review-source summary { color: #245c4f; font-weight: 600; cursor: pointer; }
+  .review-evidence p, .review-analysis p { margin: 7px 0 0; line-height: 1.55; white-space: pre-line; }
+  .review-no-excerpt { color: #78828d; font-size: 13px; margin: 7px 0; }
+  .review-evidence small, .review-transcript small { display: block; color: #78828d; margin: 2px 0 0 46px; }
+  .review-time { display: inline-block; min-width: 40px; color: #8a94a0; font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .review-source { margin: 8px 0 12px; border: 1px solid #dfe7e4; border-radius: 8px; padding: 8px 10px; background: #fbfdfc; }
+  .review-source__body { max-height: 520px; overflow-y: auto; margin-top: 10px; padding: 2px 8px; }
+  .review-source__body p { line-height: 1.65; margin: 0 0 10px; }
+  .review-essay { margin-top: 12px; }
+  .review-essay__prompt { color: #667; font-size: 13px; margin: 0 0 6px; }
+  .review-essay__figure { margin: 10px 0 14px; }
+  .review-essay__figure img {
+    display: block; max-width: min(100%, 900px); max-height: 720px; object-fit: contain;
+    border: 1px solid #e3e8ed; border-radius: 8px; background: #fff;
+  }
+  .review-essay__figure figcaption { margin-top: 5px; color: #78828d; font-size: 12px; }
+  .review-essay__text {
+    white-space: pre-wrap; word-break: break-word; font: inherit;
+    background: #f6f8fa; border: 1px solid #e3e8ed; border-radius: 8px;
+    padding: 12px 14px; margin: 0; line-height: 1.6;
+  }
+  .student-review-summary { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+  .student-review-summary p { margin: 0; line-height: 1.6; }
+  .student-review-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  @media (max-width: 640px) {
+    .exam-app-bg .review-card { padding: 16px; }
+    .review-table { font-size: 13px; }
+    .review-table th, .review-table td { padding: 6px 8px; }
+  }
+</style>
+
+<script>
+(function () {
+  const checkbox = document.getElementById('wrongOnly');
+  if (!checkbox) return;
+  checkbox.addEventListener('change', function (event) {
+    const wrongOnly = event.target.checked;
+    document.querySelectorAll('.review-item').forEach(function (item) {
+      item.hidden = wrongOnly && item.dataset.correct === '1';
+    });
+    document.querySelectorAll('.review-group-block').forEach(function (group) {
+      group.hidden = wrongOnly && !group.querySelector('.review-item:not([hidden])');
+    });
+    document.querySelectorAll('.review-unit').forEach(function (unit) {
+      unit.hidden = wrongOnly && !unit.querySelector('.review-item:not([hidden])');
+    });
+  });
+}());
+</script>

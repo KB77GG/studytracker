@@ -1,0 +1,152 @@
+{% macro review_block(title, units, section) -%}
+<div class="card review-card">
+  <div class="review-card__head">
+    <h2>{{ title }}</h2>
+    <div class="review-card__meta">
+      {% if section.submitted %}
+        原始分 <strong>{{ section.correct }}/{{ section.total }}</strong> ·
+        正确率 {{ '%.1f'|format(section.accuracy or 0) }}% ·
+        Band {{ section.band if section.band is not none else '—' }} ·
+        用时 {{ section.duration_text }}
+        {% if section.auto_submitted %}<span class="review-flag">到时自动交卷</span>{% endif %}
+        · 交卷 {{ section.submitted_at_text }}
+      {% else %}
+        <span class="review-muted">尚未提交</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if units %}
+    {% for unit in units %}
+    <div class="review-unit">
+      <h3>{{ unit.label }} <small>{{ unit.correct }}/{{ unit.total }} 分，错 {{ unit.wrong }} 题</small></h3>
+      {% if unit.source.kind == 'reading' and unit.source.paragraphs %}
+      <details class="review-source">
+        <summary>查看本 Passage 完整原文 · {{ unit.source.title }}</summary>
+        <div class="review-source__body">
+          {% for paragraph in unit.source.paragraphs %}
+          <p>{% if paragraph.label %}<strong>{{ paragraph.label }}</strong> {% endif %}{{ paragraph.text }}</p>
+          {% endfor %}
+        </div>
+      </details>
+      {% elif unit.source.kind == 'listening' and unit.source.transcript %}
+      <details class="review-source">
+        <summary>查看本 Section 完整听力原文 · {{ unit.source.title }}</summary>
+        <div class="review-source__body review-transcript">
+          {% for line in unit.source.transcript %}
+          <p><span class="review-time">{{ line.time }}</span> {{ line.text }}{% if line.translation %}<small>{{ line.translation }}</small>{% endif %}</p>
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+      {% for group in unit.groups %}
+      <div class="review-group-block">
+        {% if group.title or group.instruction %}
+        <div class="review-group">
+          {% if group.title %}<strong>{{ group.title }}</strong>{% endif %}
+          {% if group.instruction %}<span>{{ group.instruction }}</span>{% endif %}
+        </div>
+        {% endif %}
+        {% if group.prompt %}<pre class="review-prompt">{{ group.prompt }}</pre>{% endif %}
+        {% if group.options %}
+        <div class="review-option-bank">
+          {% for option in group.options %}
+          <span><strong>{{ option.key }}</strong>{% if option.text %} {{ option.text }}{% endif %}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if group.image_src %}<img class="review-question-image" src="{{ group.image_src }}" alt="题目配图">{% endif %}
+        <div class="review-table-wrap">
+          <table class="review-table">
+            <thead>
+              <tr><th>题号</th><th>学生答案</th><th>正确答案</th><th>判定</th></tr>
+            </thead>
+            {% for row in group.rows %}
+            <tbody class="review-item" data-correct="{{ '1' if row.is_correct else '0' }}">
+              <tr class="{% if row.is_correct %}is-correct{% elif row.is_partial %}is-partial{% else %}is-wrong{% endif %}">
+                <td>{{ row.label }}</td>
+                <td class="{% if not row.answered %}is-blank{% endif %}">{{ row.student_answer }}</td>
+                <td>{{ row.correct_answer }}</td>
+                <td>
+                  {% if row.is_correct %}✅
+                  {% elif row.is_partial %}{{ row.awarded }}/{{ row.marks }}
+                  {% else %}❌{% endif %}
+                </td>
+              </tr>
+              {% if row.has_context %}
+              <tr class="review-context-row {% if row.is_correct %}is-correct{% elif row.is_partial %}is-partial{% else %}is-wrong{% endif %}">
+                <td colspan="4">
+                  {% if row.question_stem %}<p class="review-question-stem"><strong>题干：</strong>{{ row.question_stem }}</p>{% endif %}
+                  {% if row.question_options %}
+                  <div class="review-question-options">
+                    {% for option in row.question_options %}
+                    <span><strong>{{ option.key }}</strong>{% if option.text %} {{ option.text }}{% endif %}</span>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% if row.evidence %}
+                  <details class="review-evidence"{% if not row.is_correct %} open{% endif %}>
+                    <summary>对应原文</summary>
+                    {% for excerpt in row.evidence %}
+                    <p>{% if excerpt.time %}<span class="review-time">{{ excerpt.time }}</span> {% endif %}{{ excerpt.text }}{% if excerpt.translation %}<small>{{ excerpt.translation }}</small>{% endif %}</p>
+                    {% endfor %}
+                  </details>
+                  {% elif row.question_stem %}
+                  <p class="review-no-excerpt">题库未标注单一对应句，请展开上方完整原文核对。</p>
+                  {% endif %}
+                  {% if row.question_analysis %}
+                  <details class="review-analysis"{% if not row.is_correct %} open{% endif %}>
+                    <summary>题目解析</summary>
+                    <p>{{ row.question_analysis }}</p>
+                  </details>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endif %}
+            </tbody>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="review-empty">没有可复盘的作答记录。</p>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro writing_block(writing_tasks, summary, session) -%}
+<div class="card review-card">
+  <div class="review-card__head">
+    <h2>Writing</h2>
+    <div class="review-card__meta">
+      {% if summary.writing.submitted %}
+        用时 {{ summary.writing.duration_text }} · 交卷 {{ summary.writing.submitted_at_text }}
+        {% if summary.writing.auto_submitted %}<span class="review-flag">到时自动交卷</span>{% endif %}
+        · 写作不自动判分，需人工评分
+      {% else %}
+        <span class="review-muted">尚未提交</span>
+      {% endif %}
+    </div>
+  </div>
+  {% for index in [0, 1] %}
+  <div class="review-essay">
+    <h3>Task {{ index + 1 }}（{{ summary.writing.task1_words if index == 0 else summary.writing.task2_words }} 词）</h3>
+    {% if writing_tasks|length > index and writing_tasks[index].prompt %}
+      <p class="review-essay__prompt">{{ writing_tasks[index].prompt }}</p>
+    {% endif %}
+    {% if writing_tasks|length > index and writing_tasks[index].image_src %}
+      <figure class="review-essay__figure">
+        <a href="{{ writing_tasks[index].image_src }}" target="_blank" rel="noopener" title="点击查看原图">
+          <img src="{{ writing_tasks[index].image_src }}" alt="Writing Task {{ index + 1 }} 题目图表" loading="lazy">
+        </a>
+        <figcaption>题目图表 · 点击查看原图</figcaption>
+      </figure>
+    {% endif %}
+    <pre class="review-essay__text">{{ (session.writing_essay_task1 if index == 0 else session.writing_essay_task2) or '（未作答）' }}</pre>
+  </div>
+  {% endfor %}
+</div>
+{%- endmacro %}

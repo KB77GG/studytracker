@@ -14,6 +14,8 @@ import re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
+from services.ielts_practice_scoring import grade_reading_test_answers
+
 UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 UNANSWERED_TEXT = "（未作答）"
@@ -82,6 +84,24 @@ def has_legacy_not_given_misgrade(results: list) -> bool:
         if answer in {"NG", "NOTGIVEN"} and value == "NOT" and awarded < marks:
             return True
     return False
+
+
+def repair_legacy_not_given_grade(session, reading_payload: dict | None) -> bool:
+    """按保存答案幂等修复旧版 ``NOT``/``NOT GIVEN`` 误判。"""
+    saved_results = parse_json_list(session.reading_results_json)
+    if not reading_payload or not has_legacy_not_given_misgrade(saved_results):
+        return False
+    answers = parse_json_dict(session.reading_answers_json)
+    if not answers:
+        return False
+    grade = grade_reading_test_answers(reading_payload, answers)
+    session.reading_correct = grade["correct"]
+    session.reading_total = grade["total"]
+    session.reading_accuracy = grade["accuracy"]
+    session.reading_ielts_score = grade["ielts_score"]
+    session.reading_results_json = json.dumps(grade["results"], ensure_ascii=False)
+    session.reading_wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
+    return True
 
 
 def local_time_text(value: datetime | None, fmt: str = "%Y-%m-%d %H:%M") -> str:

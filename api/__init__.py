@@ -13,6 +13,7 @@ def init_app(app):
     from api.materials import material_bp  # New material bank API
     from api.miniprogram import mp_bp
     from api.mock_exam_admin import mock_exam_admin_bp  # 模考成绩 / 逐题复盘（教师后台）
+    from api.mock_exam_student import mock_exam_student_bp  # 学生模考逐题复盘
     from api.reading_study import reading_study_bp  # Reading Study (阅读句子解析)
     from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
     from api.students import api_bp
@@ -38,3 +39,4 @@ def init_app(app):
     app.register_blueprint(teacher_practice_bp)
     app.register_blueprint(toefl_mock_bp)
     app.register_blueprint(mock_exam_admin_bp)  # Register mock exam review console
+    app.register_blueprint(mock_exam_student_bp)  # Register student mock exam review

@@ -31,6 +31,11 @@
             综合分待两个 section 都完成后计算。
           {% endif %}
         </p>
+        {% if session.status == 'submitted' %}
+          <p>
+            <a class="exam-btn-outline" href="{{ url_for('mock_exam_student.session_review', exam_id=exam.id, token=session.access_token) }}">查看逐题复盘</a>
+          </p>
+        {% endif %}
       </div>
     </section>
 
@@ -89,6 +94,14 @@
           <div class="exam-essay">
             <h3 style="margin:8px 0;">Task 1（{{ session.writing_task1_words or 0 }} 词）</h3>
             {% if wt and wt[0].prompt %}<p class="exam-essay__prompt">{{ wt[0].prompt }}</p>{% endif %}
+            {% if wt and wt[0].image %}
+              <figure class="exam-essay__figure">
+                <a href="{{ url_for('static', filename='writing_tests/' + wt[0].image) }}" target="_blank" rel="noopener">
+                  <img src="{{ url_for('static', filename='writing_tests/' + wt[0].image) }}" alt="Writing Task 1 题目图表" loading="lazy">
+                </a>
+                <figcaption>题目图表 · 点击查看原图</figcaption>
+              </figure>
+            {% endif %}
             <pre class="exam-essay__text">{{ session.writing_essay_task1 or '（未作答）' }}</pre>
           </div>
 
@@ -108,6 +121,12 @@
   <style>
     .exam-essay { margin-top: 12px; }
     .exam-essay__prompt { color: var(--exam-muted); font-size: 13px; margin: 0 0 6px; }
+    .exam-essay__figure { margin: 10px 0 14px; }
+    .exam-essay__figure img {
+      display: block; max-width: min(100%, 900px); max-height: 720px; object-fit: contain;
+      border: 1px solid #e3e8ed; border-radius: 8px; background: #fff;
+    }
+    .exam-essay__figure figcaption { margin-top: 5px; color: var(--exam-muted); font-size: 12px; }
     .exam-essay__text {
       white-space: pre-wrap; word-break: break-word; font: inherit;
       background: #f6f8fa; border: 1px solid #e3e8ed; border-radius: 8px;

@@ -2,7 +2,6 @@ import unittest
 from datetime import datetime
 from types import SimpleNamespace
 
-from api.mock_exam_admin import _repair_legacy_not_given_grade
 from services import mock_exam_review as review
 
 
@@ -342,11 +341,11 @@ class LegacyReadingRepairTest(unittest.TestCase):
             reading_wrong_numbers_json="[10]",
         )
 
-        self.assertTrue(_repair_legacy_not_given_grade(sess, payload))
+        self.assertTrue(review.repair_legacy_not_given_grade(sess, payload))
         self.assertEqual(sess.reading_correct, 1)
         self.assertEqual(sess.reading_accuracy, 100.0)
         self.assertEqual(sess.reading_wrong_numbers_json, "[]")
-        self.assertFalse(_repair_legacy_not_given_grade(sess, payload))
+        self.assertFalse(review.repair_legacy_not_given_grade(sess, payload))
 
 
 if __name__ == "__main__":

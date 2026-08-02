@@ -6,6 +6,15 @@
 
 ---
 
+## 2026-08-02 学生端模考逐题复盘入口（发布中）
+
+- 新增 token 隔离的学生复盘路由 `/exam/<exam_id>/session/<token>/review`；只有整场状态为
+  `submitted` 才加载题库和答案，未交卷会退回考试流程，错误 token 返回 404。
+- 学生成绩页新增「查看逐题复盘」入口；学生复盘与教师后台复用同一套题干、答案、对应原文、全文、
+  解析和写作图表组件，避免两端显示能力继续分叉。Task 1 图表也直接补到学生成绩页。
+- 验证：模考复盘相关定向 Python 34 passed，真实 `app.url_map` 已注册学生路由，Ruff、全部 Node 与
+  `git diff --check` 通过；用户已授权与前一提交一起推送 `main`，生产结果待 GitHub Actions 和 5002 验证。
+
 ## 2026-08-01 模考复盘上下文、答题隔离与 NOT GIVEN 误判修复（本地已完成/未部署）
 
 - 独立工作树 `/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker`，分支
