@@ -36,6 +36,12 @@ class MockExamTemplateIsolationTest(unittest.TestCase):
         self.assertIn("session.access_token", template)
         self.assertIn("Writing Task 1 题目图表", template)
 
+    def test_review_overrides_do_not_offer_not_scorable(self):
+        template = (ROOT / "templates/admin/mock_exam_review_editor.html").read_text(encoding="utf-8")
+        self.assertIn("allow_not_scorable=true", template)
+        self.assertIn("option != 'not_scorable'", template)
+        self.assertEqual(template.count("allow_not_scorable=false"), 3)
+
     def test_admin_and_student_reviews_share_the_same_components(self):
         admin = (ROOT / "templates/admin/mock_exam_session_detail.html").read_text(encoding="utf-8")
         admin_sessions = (ROOT / "templates/admin/mock_exam_sessions.html").read_text(encoding="utf-8")

@@ -3,13 +3,15 @@
 {% block page_title %}写作批改{% endblock %}
 {% block page_subtitle %}Mock Exam Writing Review{% endblock %}
 
-{% macro score_select(name, value, read_only=false) -%}
+{% macro score_select(name, value, read_only=false, allow_not_scorable=true) -%}
 <select class="review-score" data-review-field="{{ name }}" aria-label="{{ name }}"{% if read_only %} disabled{% endif %}>
   <option value="">未评分</option>
   {% for option in score_options %}
+  {% if allow_not_scorable or option != 'not_scorable' %}
   <option value="{{ option }}"{% if value|string == option|string %} selected{% endif %}>
     {{ '不评分' if option == 'not_scorable' else option }}
   </option>
+  {% endif %}
   {% endfor %}
 </select>
 {%- endmacro %}
@@ -94,7 +96,7 @@
           <label>GRA {{ score_select('task1_gra', review_payload.scores.task1.gra, review_payload.read_only) }}</label>
         </div>
         <p class="score-result">Raw <strong id="task1Raw">{{ review_payload.scores.task1.raw_average if review_payload.scores.task1.raw_average is not none else '—' }}</strong> · Band <strong id="task1Band">{{ review_payload.scores.task1.band if review_payload.scores.task1.band is not none else ('不评分' if review_payload.scores.task1.state == 'not_scorable' else '—') }}</strong></p>
-        <label class="review-field">人工覆盖 {{ score_select('task1_band_override', review_payload.scores.task1.override, review_payload.read_only) }}</label>
+        <label class="review-field">人工覆盖 {{ score_select('task1_band_override', review_payload.scores.task1.override, review_payload.read_only, allow_not_scorable=false) }}</label>
       </div>
       <div class="review-score-task">
         <h3>Task 2</h3>
@@ -105,13 +107,13 @@
           <label>GRA {{ score_select('task2_gra', review_payload.scores.task2.gra, review_payload.read_only) }}</label>
         </div>
         <p class="score-result">Raw <strong id="task2Raw">{{ review_payload.scores.task2.raw_average if review_payload.scores.task2.raw_average is not none else '—' }}</strong> · Band <strong id="task2Band">{{ review_payload.scores.task2.band if review_payload.scores.task2.band is not none else ('不评分' if review_payload.scores.task2.state == 'not_scorable' else '—') }}</strong></p>
-        <label class="review-field">人工覆盖 {{ score_select('task2_band_override', review_payload.scores.task2.override, review_payload.read_only) }}</label>
+        <label class="review-field">人工覆盖 {{ score_select('task2_band_override', review_payload.scores.task2.override, review_payload.read_only, allow_not_scorable=false) }}</label>
       </div>
     </div>
     <div class="review-writing-result">
       <span>Writing raw <strong id="writingRaw">{{ review_payload.scores.writing_raw if review_payload.scores.writing_raw is not none else '—' }}</strong></span>
       <span>Writing Band <strong id="writingBand">{{ review_payload.scores.writing_band if review_payload.scores.writing_band is not none else ('不评分' if review_payload.scores.writing_state == 'not_scorable' else '—') }}</strong></span>
-      <label>Writing Band 人工覆盖 {{ score_select('writing_band_override', review_payload.scores.writing_override, review_payload.read_only) }}</label>
+      <label>Writing Band 人工覆盖 {{ score_select('writing_band_override', review_payload.scores.writing_override, review_payload.read_only, allow_not_scorable=false) }}</label>
     </div>
     <label class="review-field review-field--wide">
       <span>人工覆盖原因（填写任一覆盖时必填）</span>
