@@ -59,6 +59,7 @@ from services.ielts_practice_scoring import (
     grade_reading_test_answers as _grade_reading_test_answers_shared,
 )
 from services import mock_exam_review as _mock_review
+from services import mock_exam_review_workflow as _mock_review_workflow
 from services import mock_exam_writing as _mock_writing
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
@@ -7950,24 +7951,33 @@ def api_mock_exam_start(exam_id):
     if not name or not pincode:
         return jsonify({"ok": False, "error": "missing_fields"}), 400
 
-    profile = StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
-    if not profile:
-        return jsonify({"ok": False, "error": "student_not_found"}), 404
-
     if not secrets.compare_digest(pincode, exam.pincode.upper()):
         return jsonify({"ok": False, "error": "invalid_pincode"}), 403
+
+    profiles = StudentProfile.query.filter_by(full_name=name, is_deleted=False).all()
+    if not profiles:
+        return jsonify({"ok": False, "error": "student_not_found"}), 404
+    if len(profiles) != 1:
+        return jsonify({"ok": False, "error": "student_name_ambiguous"}), 409
+    profile = profiles[0]
 
     sess = MockExamSession.query.filter_by(exam_id=exam.id, student_name=profile.full_name).first()
     if not sess:
         sess = MockExamSession(
             exam_id=exam.id,
             student_name=profile.full_name,
+            student_profile_id=profile.id,
             access_token=secrets.token_urlsafe(24),
             current_section=MockExamSession.SECTION_INTRO,
             started_at=datetime.utcnow(),
         )
         db.session.add(sess)
-        db.session.commit()
+    elif sess.student_profile_id is None:
+        sess.student_profile_id = profile.id
+
+    db.session.flush()
+    _mock_review_workflow.remember_browser_exam_session(sess.id)
+    db.session.commit()
 
     return jsonify({
         "ok": True,
@@ -8237,6 +8247,8 @@ def api_mock_exam_submit_reading(exam_id, token):
         auto_submitted,
         has_writing=bool(exam.writing_test_id),
     )
+    if sess.status == MockExamSession.STATUS_SUBMITTED:
+        _mock_review_workflow.ensure_review_draft(sess)
     db.session.commit()
 
     return jsonify({
@@ -8290,6 +8302,7 @@ def api_mock_exam_submit_writing(exam_id, token):
     sess.current_section = MockExamSession.SECTION_FINISHED
     sess.status = MockExamSession.STATUS_SUBMITTED
     sess.finished_at = now
+    _mock_review_workflow.ensure_review_draft(sess)
     db.session.commit()
 
     return jsonify({

@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block page_title %}写作批改{% endblock %}
+{% block page_subtitle %}Mock Exam Writing Review{% endblock %}
+
+{% macro score_select(name, value, read_only=false) -%}
+<select class="review-score" data-review-field="{{ name }}" aria-label="{{ name }}"{% if read_only %} disabled{% endif %}>
+  <option value="">未评分</option>
+  {% for option in score_options %}
+  <option value="{{ option }}"{% if value|string == option|string %} selected{% endif %}>
+    {{ '不评分' if option == 'not_scorable' else option }}
+  </option>
+  {% endfor %}
+</select>
+{%- endmacro %}
+
+{% macro feedback_box(name, label, value, read_only=false) -%}
+<label class="review-field review-field--wide">
+  <span>{{ label }}</span>
+  <textarea data-review-field="{{ name }}" rows="4"{% if read_only %} readonly{% endif %}>{{ value or '' }}</textarea>
+</label>
+{%- endmacro %}
+
+{% block content_dashboard %}
+<div class="container review-editor-page" id="reviewEditor" data-review-id="{{ review.id }}">
+  <div class="header-row">
+    <div>
+      <h1>{{ mock_session.student_name }} · 写作批改</h1>
+      <p class="review-subtitle">{{ exam.name }} · 原文只读 · 版本 {{ review_payload.version }}</p>
+    </div>
+    <a href="{{ url_for('mock_exam_admin.exam_session_detail', exam_id=exam.id, session_id=mock_session.id) }}" class="btn btn-outline-secondary btn-sm">← 返回复盘</a>
+  </div>
+
+  <div class="review-status" id="reviewStatus" data-status="{{ review.status }}">
+    <strong id="reviewStatusLabel">{{ '已发布（只读）' if review.status == 'published' else '草稿' }}</strong>
+    <span id="saveState">{% if review.status == 'published' %}发布后批改链接只读{% else %}尚未保存本次页面修改{% endif %}</span>
+  </div>
+
+  <section class="card review-objective-card">
+    <div class="review-card__head">
+      <h2>客观科成绩</h2>
+      <p>以下听力 / 阅读逐题结果来自交卷快照，不在批改器中重新判分。</p>
+    </div>
+    <div class="review-objective-grid">
+      <div><strong>Listening</strong><span>{{ mock_session.listening_correct or 0 }}/{{ mock_session.listening_total or 0 }} · Band {{ mock_session.listening_ielts_score if mock_session.listening_ielts_score is not none else '—' }}</span></div>
+      <div><strong>Reading</strong><span>{{ mock_session.reading_correct or 0 }}/{{ mock_session.reading_total or 0 }} · Band {{ mock_session.reading_ielts_score if mock_session.reading_ielts_score is not none else '—' }}</span></div>
+    </div>
+  </section>
+
+  <section class="review-essay-grid">
+    {% for index in [0, 1] %}
+    {% set key = 'task' ~ (index + 1) %}
+    <article class="card review-essay-editor">
+      <header class="review-essay-editor__head">
+        <div>
+          <h2>Task {{ index + 1 }}</h2>
+          <p>{{ review_payload.original.task1_words if index == 0 else review_payload.original.task2_words }} 词</p>
+        </div>
+        <span class="review-readonly-label">左侧学生原文只读</span>
+      </header>
+      <div class="review-essay-columns">
+        <div class="review-essay-pane">
+          <h3>学生原文</h3>
+          {% if review_payload.original[key ~ '_prompt'] %}
+          <p class="review-prompt">{{ review_payload.original[key ~ '_prompt'] }}</p>
+          {% endif %}
+          <pre>{{ review_payload.original[key] or '（未作答）' }}</pre>
+        </div>
+        <label class="review-essay-pane review-essay-pane--edit">
+          <h3>老师修改稿</h3>
+          <textarea data-review-field="{{ key }}_teacher_draft" rows="16"{% if review_payload.read_only %} readonly{% endif %}>{{ review_payload[key ~ '_teacher_draft'] }}</textarea>
+        </label>
+      </div>
+      <label class="review-field review-field--wide review-question-feedback">
+        <span>Task {{ index + 1 }} 分题评语</span>
+        <textarea data-review-field="{{ key }}_feedback" rows="3"{% if review_payload.read_only %} readonly{% endif %}>{{ review_payload.question_feedback[key] }}</textarea>
+      </label>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section class="card review-scoring-card">
+    <div class="review-card__head">
+      <h2>Writing 评分</h2>
+      <p>四项分数为 0–9、步长 0.5，也可明确选择“不评分”。Task raw = 四项平均；单篇 Band 与 Writing Band 均按 0.5 half-up。</p>
+    </div>
+    <div class="review-score-grid">
+      <div class="review-score-task">
+        <h3>Task 1</h3>
+        <div class="review-score-fields">
+          <label>TA {{ score_select('task1_ta', review_payload.scores.task1.ta, review_payload.read_only) }}</label>
+          <label>CC {{ score_select('task1_cc', review_payload.scores.task1.cc, review_payload.read_only) }}</label>
+          <label>LR {{ score_select('task1_lr', review_payload.scores.task1.lr, review_payload.read_only) }}</label>
+          <label>GRA {{ score_select('task1_gra', review_payload.scores.task1.gra, review_payload.read_only) }}</label>
+        </div>
+        <p class="score-result">Raw <strong id="task1Raw">{{ review_payload.scores.task1.raw_average if review_payload.scores.task1.raw_average is not none else '—' }}</strong> · Band <strong id="task1Band">{{ review_payload.scores.task1.band if review_payload.scores.task1.band is not none else ('不评分' if review_payload.scores.task1.state == 'not_scorable' else '—') }}</strong></p>
+        <label class="review-field">人工覆盖 {{ score_select('task1_band_override', review_payload.scores.task1.override, review_payload.read_only) }}</label>
+      </div>
+      <div class="review-score-task">
+        <h3>Task 2</h3>
+        <div class="review-score-fields">
+          <label>TR {{ score_select('task2_tr', review_payload.scores.task2.tr, review_payload.read_only) }}</label>
+          <label>CC {{ score_select('task2_cc', review_payload.scores.task2.cc, review_payload.read_only) }}</label>
+          <label>LR {{ score_select('task2_lr', review_payload.scores.task2.lr, review_payload.read_only) }}</label>
+          <label>GRA {{ score_select('task2_gra', review_payload.scores.task2.gra, review_payload.read_only) }}</label>
+        </div>
+        <p class="score-result">Raw <strong id="task2Raw">{{ review_payload.scores.task2.raw_average if review_payload.scores.task2.raw_average is not none else '—' }}</strong> · Band <strong id="task2Band">{{ review_payload.scores.task2.band if review_payload.scores.task2.band is not none else ('不评分' if review_payload.scores.task2.state == 'not_scorable' else '—') }}</strong></p>
+        <label class="review-field">人工覆盖 {{ score_select('task2_band_override', review_payload.scores.task2.override, review_payload.read_only) }}</label>
+      </div>
+    </div>
+    <div class="review-writing-result">
+      <span>Writing raw <strong id="writingRaw">{{ review_payload.scores.writing_raw if review_payload.scores.writing_raw is not none else '—' }}</strong></span>
+      <span>Writing Band <strong id="writingBand">{{ review_payload.scores.writing_band if review_payload.scores.writing_band is not none else ('不评分' if review_payload.scores.writing_state == 'not_scorable' else '—') }}</strong></span>
+      <label>Writing Band 人工覆盖 {{ score_select('writing_band_override', review_payload.scores.writing_override, review_payload.read_only) }}</label>
+    </div>
+    <label class="review-field review-field--wide">
+      <span>人工覆盖原因（填写任一覆盖时必填）</span>
+      <input type="text" data-review-field="override_reason" value="{{ review_payload.scores.override_reason }}"{% if review_payload.read_only %} readonly{% endif %}>
+    </label>
+  </section>
+
+  <section class="card review-feedback-card">
+    <div class="review-card__head">
+      <h2>三科点评与下一阶段</h2>
+      <p>常用评语可点击插入，插入后仍可继续修改。</p>
+    </div>
+    <div class="review-shortcuts" aria-label="常用评语">
+      <button type="button" data-target="overall_feedback" data-insert="先保证段落结构清晰，再逐句检查语法和词汇。">结构清晰</button>
+      <button type="button" data-target="overall_feedback" data-insert="论点有基础，下一阶段重点补充具体解释与例子。">补充解释</button>
+      <button type="button" data-target="next_stage_advice" data-insert="建议按反馈完成一轮重写，并保留修改前后版本进行对照。">安排重写</button>
+      <button type="button" data-target="next_stage_advice" data-insert="建议建立个人错误清单，下一次练习优先复查高频问题。">错误清单</button>
+    </div>
+    <div class="review-feedback-grid">
+      <label class="review-field">
+        <span>批改老师姓名</span>
+        <input type="text" data-review-field="reviewer_name" value="{{ review_payload.reviewer_name }}"{% if review_payload.read_only %} readonly{% endif %}>
+      </label>
+      {{ feedback_box('listening_feedback', 'Listening 点评', review_payload.listening_feedback, review_payload.read_only) }}
+      {{ feedback_box('reading_feedback', 'Reading 点评', review_payload.reading_feedback, review_payload.read_only) }}
+      {{ feedback_box('overall_feedback', '总体评语', review_payload.overall_feedback, review_payload.read_only) }}
+      {{ feedback_box('next_stage_advice', '下一阶段建议', review_payload.next_stage_advice, review_payload.read_only) }}
+    </div>
+  </section>
+
+  <div class="review-actions">
+    <span class="review-actions__hint" id="publishHint">发布后学生才能看到老师点评、评分和修改稿。</span>
+    <button class="btn btn-primary" type="button" id="publishBtn"{% if review_payload.read_only %} disabled{% endif %}>发布给学生</button>
+  </div>
+</div>
+
+<style>
+  .review-editor-page { max-width: 1180px; }
+  .review-subtitle { margin: 5px 0 0; color: #667; font-size: 13px; }
+  .review-status { display: flex; align-items: center; gap: 12px; margin: 14px 0; padding: 11px 14px; border: 1px solid #dce5eb; border-radius: 9px; background: #f7fafb; color: #667; }
+  .review-status[data-status="published"] { border-color: #b9dec9; background: #f0fbf4; color: #256b42; }
+  .review-status strong { color: #1f3340; }
+  .review-card__head { margin-bottom: 12px; }
+  .review-card__head h2 { margin: 0 0 4px; font-size: 20px; }
+  .review-card__head p { margin: 0; color: #667; font-size: 13px; line-height: 1.55; }
+  .review-objective-card, .review-scoring-card, .review-feedback-card { margin-top: 16px; }
+  .review-objective-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .review-objective-grid div { display: grid; gap: 4px; padding: 12px; border: 1px solid #e1e8ed; border-radius: 8px; background: #fafcfd; }
+  .review-objective-grid span { color: #667; font-size: 13px; }
+  .review-essay-grid { display: grid; gap: 16px; margin-top: 16px; }
+  .review-essay-editor { margin: 0; }
+  .review-essay-editor__head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; padding-bottom: 9px; border-bottom: 1px solid #e6ebf0; }
+  .review-essay-editor__head h2 { margin: 0; font-size: 20px; }
+  .review-essay-editor__head p, .review-readonly-label { margin: 0; color: #778; font-size: 12px; }
+  .review-essay-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+  .review-essay-pane { min-width: 0; }
+  .review-essay-pane h3 { margin: 0 0 7px; font-size: 14px; }
+  .review-essay-pane pre, .review-essay-pane textarea { width: 100%; min-height: 280px; box-sizing: border-box; margin: 0; padding: 11px 12px; border: 1px solid #dce5eb; border-radius: 8px; background: #f7f9fa; color: #25343d; font: inherit; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .review-essay-pane textarea { resize: vertical; background: #fff; }
+  .review-prompt { margin: 0 0 7px; color: #667; font-size: 12px; line-height: 1.5; }
+  .review-question-feedback { margin-top: 14px; }
+  .review-field { display: grid; gap: 5px; color: #52636d; font-size: 13px; font-weight: 700; }
+  .review-field--wide { width: 100%; }
+  .review-field textarea, .review-field input { box-sizing: border-box; width: 100%; padding: 9px 10px; border: 1px solid #d8e1e7; border-radius: 7px; background: #fff; color: #25343d; font: inherit; font-weight: 400; line-height: 1.55; }
+  .review-field textarea { resize: vertical; }
+  .review-field input:focus, .review-field textarea:focus, .review-score:focus { border-color: #2f8e87; box-shadow: 0 0 0 3px rgba(47,142,135,.14); outline: none; }
+  .review-score-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .review-score-task { padding: 14px; border: 1px solid #e1e8ed; border-radius: 8px; background: #fafcfd; }
+  .review-score-task h3 { margin: 0 0 10px; font-size: 16px; }
+  .review-score-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .review-score-fields label, .review-score-task > .review-field { display: grid; gap: 4px; color: #667; font-size: 12px; font-weight: 700; }
+  .review-score { min-width: 0; width: 100%; padding: 8px 5px; border: 1px solid #d8e1e7; border-radius: 6px; background: #fff; color: #25343d; font: inherit; }
+  .review-score-task > .review-field { margin-top: 12px; }
+  .score-result { margin: 10px 0 0; color: #667; font-size: 13px; }
+  .score-result strong, .review-writing-result strong { color: #1f3340; }
+  .review-writing-result { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin: 14px 0; padding: 12px 14px; border-radius: 8px; background: #eef8f6; color: #52636d; font-size: 13px; }
+  .review-writing-result label { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+  .review-writing-result .review-score { width: 100px; }
+  .review-feedback-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .review-feedback-grid .review-field:first-child, .review-feedback-grid .review-field:last-child { grid-column: 1 / -1; }
+  .review-shortcuts { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 13px; }
+  .review-shortcuts button { padding: 6px 9px; border: 1px solid #bddbd6; border-radius: 999px; background: #f3fbfa; color: #2c716b; cursor: pointer; font-size: 12px; }
+  .review-actions { display: flex; justify-content: flex-end; align-items: center; gap: 14px; padding: 18px 0 30px; }
+  .review-actions__hint { color: #667; font-size: 13px; }
+  @media (max-width: 760px) {
+    .review-objective-grid, .review-essay-columns, .review-score-grid, .review-feedback-grid { grid-template-columns: 1fr; }
+    .review-feedback-grid .review-field:first-child, .review-feedback-grid .review-field:last-child { grid-column: auto; }
+    .review-score-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .review-actions { align-items: stretch; flex-direction: column; }
+    .review-actions .btn { width: 100%; }
+  }
+</style>
+
+<script>
+(function () {
+  const root = document.getElementById('reviewEditor');
+  const reviewId = root.dataset.reviewId;
+  const saveState = document.getElementById('saveState');
+  const statusBar = document.getElementById('reviewStatus');
+  const statusLabel = document.getElementById('reviewStatusLabel');
+  const publishBtn = document.getElementById('publishBtn');
+  let version = {{ review_payload.version|tojson }};
+  let readOnly = {{ review_payload.read_only|tojson }};
+  let saveTimer = null;
+  let saving = false;
+  let dirty = false;
+
+  function fields() {
+    const output = {};
+    root.querySelectorAll('[data-review-field]').forEach(function (element) {
+      output[element.dataset.reviewField] = element.value;
+    });
+    return output;
+  }
+
+  function setState(text, error) {
+    saveState.textContent = text;
+    saveState.style.color = error ? '#b43b3b' : '';
+  }
+
+  function applyReview(review) {
+    version = review.version;
+    readOnly = review.read_only;
+    const score = review.scores || {};
+    const task1 = score.task1 || {};
+    const task2 = score.task2 || {};
+    const values = Object.assign({}, {
+      task1_ta: task1.ta, task1_cc: task1.cc, task1_lr: task1.lr, task1_gra: task1.gra,
+      task2_tr: task2.tr, task2_cc: task2.cc, task2_lr: task2.lr, task2_gra: task2.gra,
+      task1_band_override: task1.override, task2_band_override: task2.override,
+      writing_band_override: score.writing_override, override_reason: score.override_reason,
+      reviewer_name: review.reviewer_name, listening_feedback: review.listening_feedback,
+      reading_feedback: review.reading_feedback, overall_feedback: review.overall_feedback,
+      next_stage_advice: review.next_stage_advice, task1_teacher_draft: review.task1_teacher_draft,
+      task2_teacher_draft: review.task2_teacher_draft,
+      task1_feedback: (review.question_feedback || {}).task1,
+      task2_feedback: (review.question_feedback || {}).task2
+    });
+    root.querySelectorAll('[data-review-field]').forEach(function (element) {
+      if (Object.prototype.hasOwnProperty.call(values, element.dataset.reviewField)) {
+        const value = values[element.dataset.reviewField];
+        element.value = value == null ? '' : String(value);
+      }
+      element.disabled = readOnly && element.tagName === 'SELECT';
+      if (readOnly && element.tagName !== 'SELECT') element.readOnly = true;
+    });
+    document.getElementById('task1Raw').textContent = task1.raw_average == null ? '—' : task1.raw_average;
+    document.getElementById('task2Raw').textContent = task2.raw_average == null ? '—' : task2.raw_average;
+    document.getElementById('task1Band').textContent = task1.band == null ? (task1.state === 'not_scorable' ? '不评分' : '—') : task1.band;
+    document.getElementById('task2Band').textContent = task2.band == null ? (task2.state === 'not_scorable' ? '不评分' : '—') : task2.band;
+    document.getElementById('writingRaw').textContent = score.writing_raw == null ? '—' : score.writing_raw;
+    document.getElementById('writingBand').textContent = score.writing_band == null ? (score.writing_state === 'not_scorable' ? '不评分' : '—') : score.writing_band;
+    statusBar.dataset.status = review.status;
+    statusLabel.textContent = review.status === 'published' ? '已发布（只读）' : '草稿';
+    publishBtn.disabled = readOnly;
+  }
+
+  async function save(kind) {
+    if (readOnly || saving) return;
+    saving = true;
+    setState(kind === 'publish' ? '正在校验并发布…' : '正在保存…', false);
+    const endpoint = kind === 'publish' ? `/mock-review/${reviewId}/publish` : `/mock-review/${reviewId}/save`;
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ version: version, fields: fields() })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        if (data.error === 'version_conflict') {
+          setState('版本冲突：请刷新页面后确认最新内容。', true);
+        } else if (data.errors) {
+          setState('保存未完成：请检查评分和覆盖原因。', true);
+        } else if (data.error === 'read_only' || data.error === 'already_published') {
+          setState('该批改已发布，只读。', true);
+          readOnly = true;
+          publishBtn.disabled = true;
+        } else {
+          setState('保存失败，请稍后重试。', true);
+        }
+        return;
+      }
+      applyReview(data.review);
+      dirty = false;
+      setState(kind === 'publish' ? '已发布，学生现在可以查看复盘。' : '已自动保存', false);
+    } catch (_error) {
+      setState('网络错误：修改仍保留在本页，稍后会重试。', true);
+    } finally {
+      saving = false;
+    }
+  }
+
+  root.querySelectorAll('[data-review-field]').forEach(function (element) {
+    element.addEventListener('input', function () {
+      dirty = true;
+      if (readOnly) return;
+      setState('有未保存修改…', false);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () { save('save'); }, 650);
+    });
+    element.addEventListener('change', function () {
+      dirty = true;
+      if (readOnly) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () { save('save'); }, 350);
+    });
+  });
+
+  document.querySelectorAll('.review-shortcuts button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (readOnly) return;
+      const target = root.querySelector(`[data-review-field="${button.dataset.target}"]`);
+      if (!target) return;
+      const text = button.dataset.insert || '';
+      target.value = target.value ? `${target.value}\n${text}` : text;
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.focus();
+    });
+  });
+
+  publishBtn.addEventListener('click', function () {
+    clearTimeout(saveTimer);
+    save('publish');
+  });
+
+  window.addEventListener('beforeunload', function (event) {
+    if (dirty && !readOnly) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  });
+})();
+</script>
+{% endblock %}

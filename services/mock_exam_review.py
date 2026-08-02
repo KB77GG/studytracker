@@ -12,6 +12,7 @@ import json
 import math
 import re
 from datetime import datetime, timezone
+from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from zoneinfo import ZoneInfo
 
 from services.ielts_practice_scoring import grade_reading_test_answers
@@ -24,6 +25,203 @@ _PLACEHOLDER_RE = re.compile(r"\$(\d+)\$")
 _BREAK_TAG_RE = re.compile(r"<\s*(?:br\s*/?|/p|/div|/li|/tr|/h[1-6])\s*>", re.IGNORECASE)
 _OPEN_LIST_ITEM_RE = re.compile(r"<\s*li(?:\s[^>]*)?>", re.IGNORECASE)
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
+
+NOT_SCORABLE = "not_scorable"
+TASK1_SCORE_FIELDS = ("ta", "cc", "lr", "gra")
+TASK2_SCORE_FIELDS = ("tr", "cc", "lr", "gra")
+ALL_SCORE_FIELDS = (
+    "task1_ta",
+    "task1_cc",
+    "task1_lr",
+    "task1_gra",
+    "task2_tr",
+    "task2_cc",
+    "task2_lr",
+    "task2_gra",
+)
+
+
+def normalize_score_value(value, *, allow_blank: bool = True) -> str | None:
+    """Return a canonical half-band score or the explicit not-scorable marker."""
+    if value is None or (isinstance(value, str) and not value.strip()):
+        if allow_blank:
+            return None
+        raise ValueError("score_required")
+    if isinstance(value, str) and value.strip().lower() == NOT_SCORABLE:
+        return NOT_SCORABLE
+    try:
+        score = Decimal(str(value).strip())
+    except (InvalidOperation, TypeError, ValueError):
+        raise ValueError("score_invalid") from None
+    if not score.is_finite() or score < 0 or score > 9 or (score * 2) % 1 != 0:
+        raise ValueError("score_invalid")
+    return f"{score:.1f}"
+
+
+def half_up_band(value: Decimal | float | None) -> float | None:
+    """Round a raw score to the nearest 0.5 using half-up, not bankers rounding."""
+    if value is None:
+        return None
+    try:
+        raw = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        return None
+    if not raw.is_finite():
+        return None
+    rounded = (raw * 2).quantize(Decimal("1"), rounding=ROUND_HALF_UP) / 2
+    return float(rounded)
+
+
+def _task_score_result(scores: dict, fields: tuple[str, ...]) -> dict:
+    normalized = {}
+    numeric = []
+    has_not_scorable = False
+    has_blank = False
+    for field in fields:
+        value = scores.get(field)
+        try:
+            canonical = normalize_score_value(value)
+        except ValueError as exc:
+            return {
+                "scores": normalized,
+                "raw_average": None,
+                "band": None,
+                "state": "invalid",
+                "error_field": field,
+                "error": str(exc),
+            }
+        normalized[field] = canonical
+        if canonical is None:
+            has_blank = True
+        elif canonical == NOT_SCORABLE:
+            has_not_scorable = True
+        else:
+            numeric.append(Decimal(canonical))
+
+    if has_not_scorable:
+        state = "not_scorable"
+    elif has_blank:
+        state = "pending"
+    else:
+        state = "scored"
+    raw_average = sum(numeric, Decimal("0")) / 4 if state == "scored" else None
+    return {
+        "scores": normalized,
+        "raw_average": float(raw_average) if raw_average is not None else None,
+        "band": half_up_band(raw_average),
+        "state": state,
+        "error_field": None,
+        "error": None,
+    }
+
+
+def calculate_writing_scores(
+    task1_scores: dict | None,
+    task2_scores: dict | None,
+    *,
+    task1_override=None,
+    task2_override=None,
+    writing_override=None,
+) -> dict:
+    """Calculate Task bands and Writing band from the four-criterion scores.
+
+    Task raw average is the four criteria divided by four. Task bands are then
+    half-up rounded to 0.5; Writing raw uses ``(Task 1 + 2 * Task 2) / 3``.
+    Explicit overrides are numeric half-band values and take precedence over
+    the corresponding calculated band.
+    """
+    task1 = _task_score_result(task1_scores or {}, TASK1_SCORE_FIELDS)
+    task2 = _task_score_result(task2_scores or {}, TASK2_SCORE_FIELDS)
+
+    override_values = {}
+    for key, value in (
+        ("task1", task1_override),
+        ("task2", task2_override),
+        ("writing", writing_override),
+    ):
+        try:
+            override_values[key] = normalize_score_value(value)
+        except ValueError as exc:
+            return {"error": str(exc), "error_field": f"{key}_override"}
+        if override_values[key] == NOT_SCORABLE:
+            return {"error": "score_invalid", "error_field": f"{key}_override"}
+
+    task1_band = float(override_values["task1"]) if override_values["task1"] else task1["band"]
+    task2_band = float(override_values["task2"]) if override_values["task2"] else task2["band"]
+    if task1_band is None or task2_band is None:
+        writing_state = (
+            "not_scorable"
+            if task1["state"] == "not_scorable" or task2["state"] == "not_scorable"
+            else "pending"
+        )
+        writing_raw = None
+        writing_band = None
+    else:
+        writing_raw_decimal = (Decimal(str(task1_band)) + 2 * Decimal(str(task2_band))) / 3
+        writing_raw = float(writing_raw_decimal)
+        writing_band = half_up_band(writing_raw_decimal)
+        writing_state = "scored"
+    if override_values["writing"]:
+        writing_band = float(override_values["writing"])
+        writing_state = "scored"
+
+    return {
+        "task1": {**task1, "band": task1_band},
+        "task2": {**task2, "band": task2_band},
+        "writing_raw": writing_raw,
+        "writing_band": writing_band,
+        "writing_state": writing_state,
+        "overrides": override_values,
+        "error": None,
+        "error_field": None,
+    }
+
+
+def validate_score_payload(payload: dict, *, require_complete: bool = False) -> tuple[dict, dict]:
+    """Normalize score inputs and return ``(normalized, errors)``."""
+    normalized = {}
+    errors = {}
+    for field in ALL_SCORE_FIELDS:
+        try:
+            normalized[field] = normalize_score_value(
+                payload.get(field), allow_blank=not require_complete
+            )
+        except ValueError as exc:
+            errors[field] = str(exc)
+
+    for field in ("task1_band_override", "task2_band_override", "writing_band_override"):
+        try:
+            normalized[field] = normalize_score_value(payload.get(field))
+        except ValueError as exc:
+            errors[field] = str(exc)
+
+    reason = str(payload.get("override_reason") or "").strip()
+    normalized["override_reason"] = reason[:2000]
+    if any(normalized.get(field) for field in (
+        "task1_band_override",
+        "task2_band_override",
+        "writing_band_override",
+    )) and not reason:
+        errors["override_reason"] = "override_reason_required"
+
+    if require_complete:
+        for field in ALL_SCORE_FIELDS:
+            if normalized.get(field) is None and field not in errors:
+                errors[field] = "score_required"
+
+    task1_scores = {field[6:]: normalized.get(field) for field in ALL_SCORE_FIELDS if field.startswith("task1_")}
+    task2_scores = {field[6:]: normalized.get(field) for field in ALL_SCORE_FIELDS if field.startswith("task2_")}
+    calculated = calculate_writing_scores(
+        task1_scores,
+        task2_scores,
+        task1_override=normalized.get("task1_band_override"),
+        task2_override=normalized.get("task2_band_override"),
+        writing_override=normalized.get("writing_band_override"),
+    )
+    if calculated.get("error"):
+        errors[calculated.get("error_field") or "scores"] = calculated["error"]
+    normalized["calculated"] = calculated
+    return normalized, errors
 
 
 def parse_json_list(blob) -> list:
@@ -486,6 +684,13 @@ def _section_summary(
 
 def summarize_session(sess) -> dict:
     """一条会话在教师端的展示口径（成绩列表与复盘页共用）。"""
+    attached_review = getattr(sess, "review", None)
+    link_active = bool(
+        attached_review
+        and not getattr(attached_review, "link_revoked_at", None)
+        and getattr(attached_review, "link_expires_at", None)
+        and attached_review.link_expires_at > datetime.utcnow()
+    )
     listening = _section_summary(
         sess.listening_correct,
         sess.listening_total,
@@ -524,4 +729,13 @@ def summarize_session(sess) -> dict:
             "auto_submitted": bool(sess.writing_auto_submitted),
         },
         "overall_band": overall_band(sess.listening_ielts_score, sess.reading_ielts_score),
+        "review_status": getattr(attached_review, "status", None),
+        "review_status_text": (
+            "已发布"
+            if getattr(attached_review, "status", None) == "published"
+            else "草稿"
+            if attached_review
+            else "未创建"
+        ),
+        "review_link_active": link_active,
     }

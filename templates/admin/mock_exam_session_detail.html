@@ -7,7 +7,12 @@
 <div class="container">
   <div class="header-row">
     <h1>{{ session.student_name }} · {{ exam.name }}</h1>
-    <a href="{{ url_for('mock_exam_admin.exam_sessions', exam_id=exam.id) }}" class="btn btn-outline-secondary btn-sm">← 返回成绩列表</a>
+    <div class="header-actions">
+      {% if session.status == 'submitted' %}
+      <a href="{{ url_for('mock_exam_review.open_admin_review', exam_id=exam.id, session_id=session.id) }}" class="btn btn-primary btn-sm">打开写作批改</a>
+      {% endif %}
+      <a href="{{ url_for('mock_exam_admin.exam_sessions', exam_id=exam.id) }}" class="btn btn-outline-secondary btn-sm">← 返回成绩列表</a>
+    </div>
   </div>
 
   <div class="card">
@@ -16,7 +21,7 @@
       {% if summary.status != 'submitted' %}（当前：{{ summary.current_section }}）{% endif %}
       · 开始 {{ summary.started_at_text or '—' }}
       · 交卷 {{ summary.finished_at_text or '—' }}
-      · 综合 Band
+      · 听力+阅读客观科综合 Band
       <strong>{{ summary.overall_band if summary.overall_band is not none else '—' }}</strong>
       <span style="color:#888;">（时间为北京时间）</span>
     </p>
@@ -27,6 +32,27 @@
     </p>
   </div>
 
+  {% if session.status == 'submitted' %}
+  <div class="card review-link-toolbar"
+       data-issue-url="{{ url_for('mock_exam_review.issue_review_link', exam_id=exam.id, session_id=session.id) }}"
+       data-revoke-url="{{ url_for('mock_exam_review.revoke_review_link', exam_id=exam.id, session_id=session.id) }}"
+       data-reopen-url="{{ url_for('mock_exam_review.reopen_review', exam_id=exam.id, session_id=session.id) }}">
+    <div>
+      <strong>写作批改：{{ summary.review_status_text }}</strong>
+      <small id="reviewLinkMessage">链接不会显示在学生页面；复制后可发给老师。</small>
+    </div>
+    <div class="review-link-toolbar__actions">
+      <button type="button" class="btn btn-primary btn-sm" id="copyReviewLink">复制批改链接</button>
+      {% if summary.review_status == 'published' %}
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="reopenReview">重新开放</button>
+      {% endif %}
+      {% if summary.review_link_active %}
+      <button type="button" class="btn btn-outline-danger btn-sm" id="revokeReview">撤销链接</button>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
   {{ review_block('Listening', listening_units, summary.listening) }}
   {{ review_block('Reading', reading_units, summary.reading) }}
 
@@ -36,4 +62,80 @@
 </div>
 
 {% include "exam/_review_assets.html" %}
+<style>
+  .header-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .review-link-toolbar { display: flex; justify-content: space-between; gap: 14px; align-items: center; margin-top: 16px; }
+  .review-link-toolbar strong, .review-link-toolbar small { display: block; }
+  .review-link-toolbar small { margin-top: 4px; color: #667; }
+  .review-link-toolbar__actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+</style>
+
+<script>
+document.getElementById('wrongOnly').addEventListener('change', function (event) {
+  const wrongOnly = event.target.checked;
+  document.querySelectorAll('.review-table tbody tr').forEach(function (row) {
+    row.style.display = wrongOnly && row.dataset.correct === '1' ? 'none' : '';
+  });
+});
+
+(function () {
+  const toolbar = document.querySelector('.review-link-toolbar');
+  if (!toolbar) return;
+  const message = document.getElementById('reviewLinkMessage');
+  const setMessage = function (text, error) {
+    message.textContent = text;
+    message.style.color = error ? '#b43b3b' : '';
+  };
+  const copyText = function (value) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(value);
+    const input = document.createElement('textarea');
+    input.value = value;
+    input.style.position = 'fixed';
+    input.style.opacity = '0';
+    document.body.appendChild(input);
+    input.select();
+    const copied = document.execCommand('copy');
+    input.remove();
+    return copied ? Promise.resolve() : Promise.reject(new Error('copy_failed'));
+  };
+  const post = async function (url) {
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{}'
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+    return data;
+  };
+  document.getElementById('copyReviewLink')?.addEventListener('click', async function () {
+    setMessage('生成中…');
+    try {
+      const data = await post(toolbar.dataset.issueUrl);
+      await copyText(data.url);
+      setMessage('已复制，链接有效至 ' + (data.expires_at || '').slice(0, 10));
+    } catch (_error) { setMessage('复制失败，请重试。', true); }
+  });
+  document.getElementById('reopenReview')?.addEventListener('click', async function () {
+    if (!window.confirm('重新开放后旧链接会失效，当前发布内容回到草稿状态。继续？')) return;
+    setMessage('重新开放中…');
+    try {
+      const data = await post(toolbar.dataset.reopenUrl);
+      await copyText(data.url);
+      setMessage('已重新开放并复制新链接。');
+      window.setTimeout(function () { window.location.reload(); }, 500);
+    } catch (_error) { setMessage('重新开放失败，请重试。', true); }
+  });
+  document.getElementById('revokeReview')?.addEventListener('click', async function () {
+    if (!window.confirm('撤销后已发出的批改链接立即失效。继续？')) return;
+    setMessage('撤销中…');
+    try {
+      await post(toolbar.dataset.revokeUrl);
+      setMessage('已撤销。');
+      window.setTimeout(function () { window.location.reload(); }, 500);
+    } catch (_error) { setMessage('撤销失败，请重试。', true); }
+  });
+})();
+</script>
 {% endblock %}

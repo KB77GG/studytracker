@@ -20,15 +20,15 @@
   <main class="exam-process">
     <section class="exam-card">
       <header class="exam-card__head">
-        <h2>综合成绩</h2>
+        <h2>客观科成绩</h2>
         <span class="exam-card__status is-ok">Submitted</span>
       </header>
       <div class="exam-card__body">
         <p class="exam-result-band">
           {% if overall_band is not none %}
-            综合 IELTS Band：<strong>{{ overall_band }}</strong>
+            听力 + 阅读客观科综合 Band：<strong>{{ overall_band }}</strong>
           {% else %}
-            综合分待两个 section 都完成后计算。
+            听力与阅读客观科综合分待两个 section 都完成后计算。
           {% endif %}
         </p>
         {% if session.status == 'submitted' %}
@@ -117,6 +117,12 @@
     </section>
     {% endif %}
   </main>
+
+  {% if session.status == 'submitted' %}
+  <div style="text-align:center; margin: 0 auto 22px;">
+    <a class="exam-btn-dark" href="{{ url_for('mock_exam_review.student_review', session_id=session.id) }}">进入我的模考复盘</a>
+  </div>
+  {% endif %}
 
   <style>
     .exam-essay { margin-top: 12px; }

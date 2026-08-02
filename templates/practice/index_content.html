@@ -298,6 +298,43 @@ a.practice-resource:hover {
   font-weight: 700;
   white-space: nowrap;
 }
+.practice-mock-reviews {
+  display: none;
+  margin: 0 0 22px;
+  padding: 18px;
+  border: 1px solid rgba(47, 142, 135, .24);
+  border-radius: var(--r);
+  background: var(--brand-tint);
+  box-shadow: var(--shadow-sm);
+}
+.practice-mock-reviews__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.practice-mock-reviews__head h3 { margin: 0; color: var(--text-strong); font-size: var(--fs-xl); }
+.practice-mock-reviews__meta { color: var(--muted); font-size: var(--fs-sm); font-weight: 700; }
+.practice-mock-review-list { display: grid; gap: 10px; }
+.practice-mock-review-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #fff;
+}
+.practice-mock-review-row__title { margin: 0 0 5px; color: var(--text-strong); font-size: var(--fs-md); font-weight: 900; }
+.practice-mock-review-row__meta { display: flex; flex-wrap: wrap; gap: 6px 12px; color: var(--muted); font-size: var(--fs-sm); }
+.practice-mock-review-row__status { display: inline-flex; align-items: center; margin-bottom: 7px; padding: 3px 8px; border-radius: var(--r-pill); background: var(--brand-soft); color: var(--brand-dark); font-size: var(--fs-xs); font-weight: 900; }
+.practice-mock-review-row__status--published { background: var(--success-soft); color: var(--success); }
+.practice-mock-review-row__status--in_progress { background: #fef3c7; color: var(--warning); }
+.practice-mock-review-row__action { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 13px; border-radius: var(--r-sm); background: var(--brand); color: #fff; font-size: var(--fs-sm); font-weight: 900; text-decoration: none; white-space: nowrap; }
+.practice-mock-review-row__action:hover { background: var(--brand-dark); color: #fff; text-decoration: none; }
+.practice-mock-review-empty { padding: 13px 14px; border: 1px dashed var(--line-strong); border-radius: var(--r-sm); background: #fff; color: var(--muted); font-size: var(--fs-sm); }
 .practice-assigned__groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -427,10 +464,20 @@ a.practice-resource:hover {
   .practice-resource {
     grid-template-columns: 1fr;
   }
+  .practice-mock-review-row {
+    grid-template-columns: 1fr;
+  }
+  .practice-mock-review-row__action {
+    width: 100%;
+  }
   .practice-toefl {
     grid-template-columns: 1fr;
   }
   .practice-assigned__head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .practice-mock-reviews__head {
     align-items: flex-start;
     flex-direction: column;
   }
@@ -490,6 +537,16 @@ a.practice-resource:hover {
         <div class="practice-task-list" id="practiceTeacherTasks"></div>
       </article>
     </div>
+  </section>
+
+  <section class="practice-mock-reviews" id="practiceMockReviews" aria-label="我的模考">
+    <div class="practice-mock-reviews__head">
+      <div>
+        <h3>我的模考</h3>
+        <p class="practice-mock-reviews__meta" id="practiceMockReviewsMeta">加载中</p>
+      </div>
+    </div>
+    <div class="practice-mock-review-list" id="practiceMockReviewList"></div>
   </section>
 
   <nav class="practice-exam-switch" aria-label="考试类型">
@@ -602,6 +659,9 @@ a.practice-resource:hover {
   const teacherList = document.getElementById('practiceTeacherTasks');
   const assistantCount = document.getElementById('practiceAssistantCount');
   const teacherCount = document.getElementById('practiceTeacherCount');
+  const mockReviewsSection = document.getElementById('practiceMockReviews');
+  const mockReviewsMeta = document.getElementById('practiceMockReviewsMeta');
+  const mockReviewList = document.getElementById('practiceMockReviewList');
   const staffMode = identitySection && identitySection.dataset.practiceStaffMode === '1';
   const staffName = (identitySection && identitySection.dataset.staffName) || '课堂模式';
   const staffHint = (identitySection && identitySection.dataset.staffHint) || '课堂模式：可直接进入题库讲题；提交只做本地判分，不同步到学生记录。';
@@ -625,6 +685,65 @@ a.practice-resource:hover {
     assistantCount.textContent = '0';
     teacherCount.textContent = '0';
     assignedMeta.textContent = '';
+  }
+
+  function hideMockReviews() {
+    if (!mockReviewsSection) return;
+    mockReviewsSection.style.display = 'none';
+    mockReviewList.innerHTML = '';
+    mockReviewsMeta.textContent = '';
+  }
+
+  function mockScoreMeta(record) {
+    const parts = [];
+    if (record.listening_band != null) parts.push('听力 ' + escapeHtml(record.listening_band));
+    if (record.reading_band != null) parts.push('阅读 ' + escapeHtml(record.reading_band));
+    if (record.objective_band != null) parts.push('客观科综合 ' + escapeHtml(record.objective_band));
+    if (record.writing_band != null) parts.push('Writing ' + escapeHtml(record.writing_band));
+    return parts.join('<span>·</span>') || '成绩待生成';
+  }
+
+  function renderMockReviews(records) {
+    if (!records.length) {
+      mockReviewList.innerHTML = '<div class="practice-mock-review-empty">暂无当前学生可查看的模考记录。姓名验证模式只展示当前浏览器刚授权的模考；正式登录后可查看历史。</div>';
+      return;
+    }
+    mockReviewList.innerHTML = records.map(function (record) {
+      const status = record.status === 'in_progress'
+        ? '进行中'
+        : (record.review_status === 'published' ? '已发布复盘' : '已交卷，等待老师发布');
+      const statusClass = record.status === 'in_progress'
+        ? 'practice-mock-review-row__status--in_progress'
+        : (record.review_status === 'published' ? 'practice-mock-review-row__status--published' : '');
+      const href = record.status === 'in_progress' ? record.continue_url : record.detail_url;
+      const action = record.status === 'in_progress' ? '继续模考' : '查看复盘';
+      return '<article class="practice-mock-review-row">'
+        + '<div><span class="practice-mock-review-row__status ' + statusClass + '">' + escapeHtml(status) + '</span>'
+        + '<p class="practice-mock-review-row__title">' + escapeHtml(record.exam_name || '模考') + '</p>'
+        + '<div class="practice-mock-review-row__meta">' + mockScoreMeta(record) + '</div></div>'
+        + (href ? '<a class="practice-mock-review-row__action" href="' + escapeHtml(href) + '">' + action + '</a>' : '')
+        + '</article>';
+    }).join('');
+  }
+
+  async function loadMockReviews() {
+    if (!mockReviewsSection || staffMode) return;
+    mockReviewsSection.style.display = 'block';
+    mockReviewsMeta.textContent = '加载中';
+    try {
+      const response = await fetch('/api/practice/mock-exams', { credentials: 'same-origin' });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        hideMockReviews();
+        return;
+      }
+      const records = Array.isArray(data.sessions) ? data.sessions : [];
+      mockReviewsMeta.textContent = records.length ? records.length + ' 场' : '暂无记录';
+      renderMockReviews(records);
+    } catch (_error) {
+      mockReviewsMeta.textContent = '加载失败';
+      renderMockReviews([]);
+    }
   }
 
   function taskMeta(task) {
@@ -697,6 +816,7 @@ a.practice-resource:hover {
     switchBtn.hidden = false;
     setError('');
     loadAssignedTasks();
+    loadMockReviews();
   }
 
   function setStaffMode(name, hint) {
@@ -707,6 +827,7 @@ a.practice-resource:hover {
     switchBtn.hidden = true;
     setError('');
     hideAssignedTasks();
+    hideMockReviews();
   }
 
   function setUnverified(message) {
@@ -716,6 +837,7 @@ a.practice-resource:hover {
     form.hidden = false;
     switchBtn.hidden = true;
     hideAssignedTasks();
+    hideMockReviews();
     if (message) setError(message);
   }
 

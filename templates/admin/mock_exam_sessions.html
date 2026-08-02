@@ -26,7 +26,8 @@
           <th>听力</th>
           <th>阅读</th>
           {% if exam.writing_test_id %}<th>写作</th>{% endif %}
-          <th>综合 Band</th>
+          <th>听力+阅读 Band</th>
+          <th>写作批改</th>
           <th>时间</th>
           <th>操作</th>
         </tr>
@@ -67,6 +68,26 @@
           </td>
           {% endif %}
           <td>{% if row.overall_band is not none %}<strong>{{ row.overall_band }}</strong>{% else %}<span style="color:#999;">—</span>{% endif %}</td>
+          <td class="review-link-cell">
+            {% if row.status == 'submitted' %}
+              <span class="review-status-label review-status-label--{{ row.review_status or 'none' }}">{{ row.review_status_text }}</span>
+              <div class="review-link-actions"
+                   data-issue-url="{{ url_for('mock_exam_review.issue_review_link', exam_id=exam.id, session_id=row.id) }}"
+                   data-revoke-url="{{ url_for('mock_exam_review.revoke_review_link', exam_id=exam.id, session_id=row.id) }}"
+                   data-reopen-url="{{ url_for('mock_exam_review.reopen_review', exam_id=exam.id, session_id=row.id) }}">
+                <button type="button" class="btn btn-sm btn-primary js-review-link">复制链接</button>
+                {% if row.review_status == 'published' %}
+                <button type="button" class="btn btn-sm btn-outline-secondary js-review-reopen">重新开放</button>
+                {% endif %}
+                {% if row.review_link_active %}
+                <button type="button" class="btn btn-sm btn-outline-danger js-review-revoke">撤销</button>
+                {% endif %}
+              </div>
+              <small class="review-link-message" aria-live="polite"></small>
+            {% else %}
+              <span style="color:#999;">交卷后生成</span>
+            {% endif %}
+          </td>
           <td>
             <small>开始 {{ row.started_at_text or '—' }}<br>交卷 {{ row.finished_at_text or '—' }}</small>
           </td>
@@ -76,7 +97,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="{{ 8 if exam.writing_test_id else 7 }}" style="text-align:center; color:#888;">还没有学生作答。</td></tr>
+        <tr><td colspan="{{ 9 if exam.writing_test_id else 8 }}" style="text-align:center; color:#888;">还没有学生作答。</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -89,5 +110,78 @@
   .sessions-table { width: 100%; font-size: 14px; }
   .sessions-table th, .sessions-table td { vertical-align: middle; white-space: nowrap; padding: 8px 10px; }
   .sessions-table .btn { white-space: nowrap; }
+  .review-link-cell { min-width: 150px; white-space: normal !important; }
+  .review-status-label { display: inline-block; margin-bottom: 5px; color: #667; font-size: 12px; font-weight: 700; }
+  .review-status-label--published { color: #28784a; }
+  .review-link-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+  .review-link-message { display: block; min-height: 16px; margin-top: 4px; color: #28784a; }
 </style>
+
+<script>
+(function () {
+  function copyText(value) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(value);
+    }
+    return new Promise(function (resolve, reject) {
+      const input = document.createElement('textarea');
+      input.value = value;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      try {
+        document.execCommand('copy') ? resolve() : reject(new Error('copy_failed'));
+      } catch (error) { reject(error); }
+      input.remove();
+    });
+  }
+
+  async function post(url) {
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) throw new Error(data.error || 'request_failed');
+    return data;
+  }
+
+  document.querySelectorAll('.review-link-actions').forEach(function (actions) {
+    const message = actions.parentElement.querySelector('.review-link-message');
+    const setMessage = function (text, error) {
+      message.textContent = text;
+      message.style.color = error ? '#b43b3b' : '';
+    };
+    actions.querySelector('.js-review-link')?.addEventListener('click', async function () {
+      setMessage('生成中…', false);
+      try {
+        const data = await post(actions.dataset.issueUrl);
+        await copyText(data.url);
+        setMessage('已复制，链接有效至 ' + (data.expires_at || '').slice(0, 10), false);
+      } catch (_error) { setMessage('复制失败，请重试。', true); }
+    });
+    actions.querySelector('.js-review-reopen')?.addEventListener('click', async function () {
+      if (!window.confirm('重新开放后，旧批改链接会失效，当前发布内容回到草稿状态。继续？')) return;
+      setMessage('重新开放中…', false);
+      try {
+        const data = await post(actions.dataset.reopenUrl);
+        await copyText(data.url);
+        setMessage('已重新开放并复制新链接。', false);
+        window.setTimeout(function () { window.location.reload(); }, 500);
+      } catch (_error) { setMessage('重新开放失败，请重试。', true); }
+    });
+    actions.querySelector('.js-review-revoke')?.addEventListener('click', async function () {
+      if (!window.confirm('撤销后，已发出的批改链接立即失效。继续？')) return;
+      setMessage('撤销中…', false);
+      try {
+        await post(actions.dataset.revokeUrl);
+        setMessage('已撤销。', false);
+        window.setTimeout(function () { window.location.reload(); }, 500);
+      } catch (_error) { setMessage('撤销失败，请重试。', true); }
+    });
+  });
+})();
+</script>
 {% endblock %}

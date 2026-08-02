@@ -1779,6 +1779,12 @@ class MockExamSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exam_id = db.Column(db.Integer, db.ForeignKey("mock_exam.id"), nullable=False, index=True)
     student_name = db.Column(db.String(64), nullable=False, index=True)
+    student_profile_id = db.Column(
+        db.Integer,
+        db.ForeignKey("student_profile.id"),
+        nullable=True,
+        index=True,
+    )
     access_token = db.Column(db.String(64), unique=True, nullable=False, index=True)
     status = db.Column(db.String(20), default=STATUS_IN_PROGRESS, nullable=False, index=True)
     current_section = db.Column(db.String(20), default=SECTION_INTRO, nullable=False)
@@ -1824,6 +1830,15 @@ class MockExamSession(db.Model):
     writing_auto_submitted = db.Column(db.Boolean, default=False, nullable=False)
 
     exam = db.relationship("MockExam", backref=db.backref("sessions", lazy="dynamic"))
+    student_profile = db.relationship(
+        "StudentProfile",
+        backref=db.backref("mock_exam_sessions", lazy="dynamic"),
+    )
+    review = db.relationship(
+        "MockExamReview",
+        back_populates="session",
+        uselist=False,
+    )
 
     __table_args__ = (
         db.UniqueConstraint("exam_id", "student_name", name="uq_mock_exam_student"),
@@ -1831,6 +1846,97 @@ class MockExamSession(db.Model):
 
     def __repr__(self) -> str:
         return f"<MockExamSession exam={self.exam_id} student={self.student_name} section={self.current_section}>"
+
+
+class MockExamReview(db.Model, TimestampMixin):
+    """Teacher-owned writing review attached one-to-one to a submitted mock exam."""
+
+    __tablename__ = "mock_exam_review"
+
+    STATUS_DRAFT = "draft"
+    STATUS_PUBLISHED = "published"
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(
+        db.Integer,
+        db.ForeignKey("mock_exam_session.id"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    status = db.Column(db.String(16), default=STATUS_DRAFT, nullable=False, index=True)
+
+    listening_feedback = db.Column(db.Text)
+    reading_feedback = db.Column(db.Text)
+    overall_feedback = db.Column(db.Text)
+    next_stage_advice = db.Column(db.Text)
+
+    # Scores are strings so the explicit ``not_scorable`` state is lossless.
+    task1_ta = db.Column(db.String(16))
+    task1_cc = db.Column(db.String(16))
+    task1_lr = db.Column(db.String(16))
+    task1_gra = db.Column(db.String(16))
+    task2_tr = db.Column(db.String(16))
+    task2_cc = db.Column(db.String(16))
+    task2_lr = db.Column(db.String(16))
+    task2_gra = db.Column(db.String(16))
+
+    task1_band = db.Column(db.Float)
+    task2_band = db.Column(db.Float)
+    task1_band_state = db.Column(db.String(20), default="pending", nullable=False)
+    task2_band_state = db.Column(db.String(20), default="pending", nullable=False)
+    writing_raw = db.Column(db.Float)
+    writing_band = db.Column(db.Float)
+    writing_band_state = db.Column(db.String(20), default="pending", nullable=False)
+    task1_band_override = db.Column(db.Float)
+    task2_band_override = db.Column(db.Float)
+    writing_band_override = db.Column(db.Float)
+    override_reason = db.Column(db.Text)
+
+    question_feedback_json = db.Column(db.Text)
+    task1_teacher_draft = db.Column(db.Text)
+    task2_teacher_draft = db.Column(db.Text)
+    annotations_json = db.Column(db.Text)
+
+    reviewer_name = db.Column(db.String(64))
+    version = db.Column(db.Integer, default=1, nullable=False)
+    auto_saved_at = db.Column(db.DateTime)
+    published_at = db.Column(db.DateTime)
+    link_version = db.Column(db.Integer, default=1, nullable=False)
+    link_expires_at = db.Column(db.DateTime)
+    link_revoked_at = db.Column(db.DateTime)
+    last_saved_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    # Keep the editor's explicit version increments, while making SQLAlchemy
+    # include the previous version in every UPDATE's WHERE clause.
+    __mapper_args__ = {"version_id_col": version, "version_id_generator": False}
+
+    session = db.relationship("MockExamSession", back_populates="review")
+    last_saved_by_user = db.relationship("User")
+
+
+class MockExamReviewEditSession(db.Model, TimestampMixin):
+    """Short-lived server-side scope exchanged from a signed teacher capability."""
+
+    __tablename__ = "mock_exam_review_edit_session"
+
+    id = db.Column(db.Integer, primary_key=True)
+    review_id = db.Column(
+        db.Integer,
+        db.ForeignKey("mock_exam_review.id"),
+        nullable=False,
+        index=True,
+    )
+    token_hash = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    link_version = db.Column(db.Integer, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False, index=True)
+    last_seen_at = db.Column(db.DateTime)
+    revoked_at = db.Column(db.DateTime)
+
+    review = db.relationship(
+        "MockExamReview",
+        backref=db.backref("edit_sessions", lazy="dynamic"),
+    )
 
 
 # ---- Reading Study (阅读句子解析) ----
