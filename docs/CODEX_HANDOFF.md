@@ -11,7 +11,7 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
-## 2026-08-02 当前任务：模考复盘与答题状态隔离（本地待发布）
+## 2026-08-02 当前任务：模考复盘与答题状态隔离（已部署）
 
 - 工作树：`/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker`；分支：
   `codex/mock-exam-review-isolation`；基线：`origin/main@3d5a74fd`。没有改主工作树或其用户未跟踪文件。
@@ -30,19 +30,21 @@
   `git diff --check` 通过；剑21 Test4 Task 1 图表静态请求返回 200 `image/png`；Chrome headless 1440px
   实际渲染复盘页布局正常。全仓 Python 327 项为
   325 passed + 2 个既有静态音频 fixture 404 失败。
-- 用户已授权部署：将学生入口与前一提交一起推送 `main`，随后验证 GitHub Actions、生产 5002、
-  学生成绩页入口和教师复盘；上线后再用两名测试学生同机同卷走一次真实端到端隔离。
+- 提交 `bdb76d57`、`efc0896f` 已推送任务分支与 `main`；CI `30740988787`、部署 `30740988779`
+  成功。生产 HEAD `efc0896f`，服务 active/running，5002 返回 200；学生成绩页入口、Task 1 图表、
+  错误 token 404 与 gunicorn `workers=1 / gthread / threads=6` 均已核验。
+- 下一步仅剩真实浏览器业务验收：用两名测试学生同机同卷确认草稿隔离，并分别从成绩页进入本人复盘。
 
 ## 当前基线
 
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/toefl-student-workbench`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/f712/studytracker` |
-| 分支基线 | `a6d20e4a 正式发布三套 TOEFL 2026 刷题流程`，已推送任务分支并进入 `main` |
-| 远端 | `origin/main` 与 `origin/codex/toefl-student-workbench` 均包含 `a6d20e4a`；精确 HEAD 以 `git log -1` 为准 |
-| 本次交接范围 | 只改当前独立 worktree；主工作树的用户未跟踪文件未覆盖。现有 `data/toefl_practice` 发布 JSON 零修改 |
-| 后端生产 | 已部署 `a6d20e4a`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
+| 分支 | `codex/mock-exam-review-isolation`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/mock-exam-review-isolation/studytracker` |
+| 分支基线 | `efc0896f 开放学生模考逐题复盘`，包含前序 `bdb76d57` |
+| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-isolation` 均包含 `efc0896f`；精确 HEAD 以 `git log -1` 为准 |
+| 本次交接范围 | 只改模考复盘、模考前端草稿隔离和判分别名；主工作树及其用户未跟踪文件未覆盖 |
+| 后端生产 | 已部署 `efc0896f`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）

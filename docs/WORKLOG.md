@@ -6,14 +6,19 @@
 
 ---
 
-## 2026-08-02 学生端模考逐题复盘入口（发布中）
+## 2026-08-02 学生端模考逐题复盘入口（已部署）
 
 - 新增 token 隔离的学生复盘路由 `/exam/<exam_id>/session/<token>/review`；只有整场状态为
   `submitted` 才加载题库和答案，未交卷会退回考试流程，错误 token 返回 404。
 - 学生成绩页新增「查看逐题复盘」入口；学生复盘与教师后台复用同一套题干、答案、对应原文、全文、
   解析和写作图表组件，避免两端显示能力继续分叉。Task 1 图表也直接补到学生成绩页。
-- 验证：模考复盘相关定向 Python 34 passed，真实 `app.url_map` 已注册学生路由，Ruff、全部 Node 与
-  `git diff --check` 通过；用户已授权与前一提交一起推送 `main`，生产结果待 GitHub Actions 和 5002 验证。
+- 实现提交 `bdb76d57`、学生入口提交 `efc0896f` 已推送任务分支与 `main`；CI
+  [30740988787](https://github.com/KB77GG/studytracker/actions/runs/30740988787) 与生产部署
+  [30740988779](https://github.com/KB77GG/studytracker/actions/runs/30740988779) 成功。
+- 验证：模考复盘相关定向 Python 34 passed，Ruff、全部 Node 与 `git diff --check` 通过；生产服务器
+  HEAD `efc0896f`，`studytracker.service=active/running`，`127.0.0.1:5002/exam/8` 返回 200，学生成绩页
+  已输出复盘入口与 Task 1 图表，错误 token 返回 404，图表静态文件返回 `200 image/png`；gunicorn 保持
+  `workers=1 / gthread / threads=6`。
 
 ## 2026-08-01 模考复盘上下文、答题隔离与 NOT GIVEN 误判修复（本地已完成/未部署）
 
