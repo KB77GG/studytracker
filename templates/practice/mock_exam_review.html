@@ -37,7 +37,7 @@
 </section>
 {%- endmacro %}
 
-{% block content_dashboard %}
+{% macro student_review_content() -%}
 <div class="container student-mock-review-page">
   <div class="header-row">
     <div>
@@ -176,4 +176,7 @@ document.querySelectorAll('[data-wrong-only]').forEach(function (toggle) {
   });
 });
 </script>
-{% endblock %}
+{%- endmacro %}
+
+{% block content_dashboard %}{{ student_review_content() }}{% endblock %}
+{% block content_public %}{{ student_review_content() }}{% endblock %}

@@ -21,7 +21,7 @@
 </label>
 {%- endmacro %}
 
-{% block content_dashboard %}
+{% macro review_editor_content() -%}
 <div class="container review-editor-page" id="reviewEditor" data-review-id="{{ review.id }}">
   <div class="header-row">
     <div>
@@ -216,7 +216,13 @@
   let version = {{ review_payload.version|tojson }};
   let readOnly = {{ review_payload.read_only|tojson }};
   let saveTimer = null;
+  let retryTimer = null;
   let saving = false;
+  let editRevision = 0;
+  let persistedRevision = 0;
+  let queuedSave = false;
+  let publishQueued = false;
+  let publishStarted = false;
   let dirty = false;
 
   function fields() {
@@ -230,6 +236,13 @@
   function setState(text, error) {
     saveState.textContent = text;
     saveState.style.color = error ? '#b43b3b' : '';
+  }
+
+  function setEditorLocked(locked) {
+    root.querySelectorAll('[data-review-field]').forEach(function (element) {
+      if (element.tagName === 'SELECT') element.disabled = locked;
+      else element.readOnly = locked;
+    });
   }
 
   function applyReview(review) {
@@ -255,8 +268,6 @@
         const value = values[element.dataset.reviewField];
         element.value = value == null ? '' : String(value);
       }
-      element.disabled = readOnly && element.tagName === 'SELECT';
-      if (readOnly && element.tagName !== 'SELECT') element.readOnly = true;
     });
     document.getElementById('task1Raw').textContent = task1.raw_average == null ? '—' : task1.raw_average;
     document.getElementById('task2Raw').textContent = task2.raw_average == null ? '—' : task2.raw_average;
@@ -266,59 +277,153 @@
     document.getElementById('writingBand').textContent = score.writing_band == null ? (score.writing_state === 'not_scorable' ? '不评分' : '—') : score.writing_band;
     statusBar.dataset.status = review.status;
     statusLabel.textContent = review.status === 'published' ? '已发布（只读）' : '草稿';
-    publishBtn.disabled = readOnly;
+    setEditorLocked(readOnly || publishStarted);
+    publishBtn.disabled = readOnly || publishStarted || publishQueued;
   }
 
-  async function save(kind) {
-    if (readOnly || saving) return;
+  function scheduleSave(delay) {
+    if (readOnly || publishStarted) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () { enqueueSave('save'); }, delay);
+  }
+
+  function enqueueSave(kind) {
+    if (readOnly || publishStarted) return;
+    if (kind === 'publish') {
+      publishQueued = true;
+      clearTimeout(saveTimer);
+      publishBtn.disabled = true;
+    } else {
+      queuedSave = true;
+    }
+    pumpSaveQueue();
+  }
+
+  function retrySaveLater() {
+    clearTimeout(retryTimer);
+    retryTimer = setTimeout(function () {
+      retryTimer = null;
+      pumpSaveQueue();
+    }, 1200);
+  }
+
+  function pumpSaveQueue() {
+    if (readOnly || saving || publishStarted) return;
+    if (publishQueued) {
+      // A publish request always waits for the newest edit revision to land.
+      if (persistedRevision < editRevision) {
+        queuedSave = false;
+        sendSave('save', editRevision);
+        return;
+      }
+      publishQueued = false;
+      sendSave('publish', editRevision);
+      return;
+    }
+    if (queuedSave || persistedRevision < editRevision) {
+      queuedSave = false;
+      sendSave('save', editRevision);
+    }
+  }
+
+  async function sendSave(kind, requestRevision) {
+    if (readOnly) return;
+    if (saving) return;
     saving = true;
+    if (kind === 'publish') {
+      publishStarted = true;
+      setEditorLocked(true);
+    }
     setState(kind === 'publish' ? '正在校验并发布…' : '正在保存…', false);
     const endpoint = kind === 'publish' ? `/mock-review/${reviewId}/publish` : `/mock-review/${reviewId}/save`;
+    const requestVersion = version;
+    const requestFields = fields();
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ version: version, fields: fields() })
+        body: JSON.stringify({ version: requestVersion, fields: requestFields })
       });
       const data = await response.json();
       if (!response.ok || !data.ok) {
         if (data.error === 'version_conflict') {
+          publishQueued = false;
+          queuedSave = false;
+          publishStarted = false;
+          publishBtn.disabled = false;
+          setEditorLocked(false);
           setState('版本冲突：请刷新页面后确认最新内容。', true);
         } else if (data.errors) {
+          publishQueued = false;
+          queuedSave = false;
+          publishStarted = false;
+          publishBtn.disabled = false;
+          setEditorLocked(false);
           setState('保存未完成：请检查评分和覆盖原因。', true);
         } else if (data.error === 'read_only' || data.error === 'already_published') {
           setState('该批改已发布，只读。', true);
           readOnly = true;
+          publishStarted = false;
+          publishQueued = false;
+          queuedSave = false;
+          setEditorLocked(true);
           publishBtn.disabled = true;
         } else {
+          if (kind === 'publish') {
+            publishQueued = true;
+            publishStarted = false;
+            setEditorLocked(false);
+            publishBtn.disabled = false;
+          } else queuedSave = true;
           setState('保存失败，请稍后重试。', true);
+          retrySaveLater();
         }
         return;
       }
-      applyReview(data.review);
-      dirty = false;
-      setState(kind === 'publish' ? '已发布，学生现在可以查看复盘。' : '已自动保存', false);
+      version = data.review.version;
+      if (editRevision === requestRevision) {
+        // Only a response for the current page revision may refill controls.
+        applyReview(data.review);
+        persistedRevision = Math.max(persistedRevision, requestRevision);
+        dirty = false;
+        setState(kind === 'publish' ? '已发布，学生现在可以查看复盘。' : '已自动保存', false);
+      } else {
+        // The server accepted an older snapshot. Keep the user's newer text,
+        // carry forward only the optimistic-lock version, and save again.
+        persistedRevision = Math.max(persistedRevision, requestRevision);
+        queuedSave = true;
+        dirty = true;
+        setState('已保存上一版，正在继续保存最新修改…', false);
+      }
     } catch (_error) {
+      if (kind === 'publish') {
+        publishQueued = true;
+        publishStarted = false;
+        setEditorLocked(false);
+        publishBtn.disabled = false;
+      } else queuedSave = true;
       setState('网络错误：修改仍保留在本页，稍后会重试。', true);
+      retrySaveLater();
     } finally {
       saving = false;
+      if (!retryTimer) pumpSaveQueue();
     }
   }
 
   root.querySelectorAll('[data-review-field]').forEach(function (element) {
     element.addEventListener('input', function () {
+      editRevision += 1;
       dirty = true;
       if (readOnly) return;
       setState('有未保存修改…', false);
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(function () { save('save'); }, 650);
+      scheduleSave(650);
     });
     element.addEventListener('change', function () {
+      editRevision += 1;
       dirty = true;
       if (readOnly) return;
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(function () { save('save'); }, 350);
+      scheduleSave(350);
     });
   });
 
@@ -336,7 +441,7 @@
 
   publishBtn.addEventListener('click', function () {
     clearTimeout(saveTimer);
-    save('publish');
+    enqueueSave('publish');
   });
 
   window.addEventListener('beforeunload', function (event) {
@@ -347,4 +452,7 @@
   });
 })();
 </script>
-{% endblock %}
+{%- endmacro %}
+
+{% block content_dashboard %}{{ review_editor_content() }}{% endblock %}
+{% block content_public %}{{ review_editor_content() }}{% endblock %}

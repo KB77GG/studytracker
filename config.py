@@ -28,6 +28,11 @@ class Config:
     # 用于 Flask 的安全密钥（后面我们可以改成更安全的随机值）
     SECRET_KEY = "dev-key-change-later"
 
+    # Capability links may be generated behind a TLS-terminating proxy. Set
+    # this to ``https`` in production; the review helper also accepts a
+    # validated X-Forwarded-Proto value when this is unset.
+    MOCK_REVIEW_PUBLIC_SCHEME = os.environ.get("MOCK_REVIEW_PUBLIC_SCHEME", "")
+
     # Always reload templates when source changes (prevents stale cache)
     TEMPLATES_AUTO_RELOAD = True
 

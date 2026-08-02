@@ -84,7 +84,15 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
                 role=User.ROLE_STUDENT,
                 display_name="学生乙",
             )
-            db.session.add_all([self.teacher, self.student, self.other_student])
+            self.unbound_student = User(
+                username="review_unbound_same_name",
+                password_hash="unused",
+                role=User.ROLE_STUDENT,
+                display_name="学生甲",
+            )
+            db.session.add_all(
+                [self.teacher, self.student, self.other_student, self.unbound_student]
+            )
             db.session.flush()
             self.profile = StudentProfile(full_name="学生甲", user_id=self.student.id)
             self.other_profile = StudentProfile(full_name="学生乙", user_id=self.other_student.id)
@@ -106,6 +114,7 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
             self.exam_id = self.exam.id
             self.mock_session_id = self.mock_session.id
             self.other_session_id = self.other_session.id
+            self.unbound_student_id = self.unbound_student.id
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -152,7 +161,8 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
     def _issue_link(self, session_id=None):
         self._login(self.teacher_id)
         response = self.client.post(
-            f"/admin/mock-exams/{self.exam_id}/sessions/{session_id or self.mock_session_id}/review-link"
+            f"/admin/mock-exams/{self.exam_id}/sessions/{session_id or self.mock_session_id}/review-link",
+            json={},
         )
         self.assertEqual(response.status_code, 200)
         url = response.get_json()["url"]
@@ -221,13 +231,57 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self.assertEqual(self.client.get(current).status_code, 404)
         self.assertEqual(self.client.get(rotated, follow_redirects=False).status_code, 303)
 
+    def test_capability_url_uses_forwarded_https_scheme(self):
+        self._login(self.teacher_id)
+        response = self.client.post(
+            f"/admin/mock-exams/{self.exam_id}/sessions/{self.mock_session_id}/review-link",
+            json={},
+            headers={"X-Forwarded-Proto": "https"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()["url"].startswith("https://"))
+
+    def test_admin_open_reuses_active_capability(self):
+        link = self._issue_link()
+        with self.app.app_context():
+            review = db.session.get(MockExamSession, self.mock_session_id).review
+            link_version = review.link_version
+
+        self._login(self.teacher_id)
+        opened = self.client.get(
+            f"/admin/mock-exams/{self.exam_id}/sessions/{self.mock_session_id}/review/open",
+            follow_redirects=False,
+        )
+        self.assertEqual(opened.status_code, 302)
+        with self.app.app_context():
+            self.assertEqual(
+                db.session.get(MockExamSession, self.mock_session_id).review.link_version,
+                link_version,
+            )
+        self.assertEqual(self.client.get(link, follow_redirects=False).status_code, 303)
+
+    def test_management_posts_require_json(self):
+        self._login(self.teacher_id)
+        base = f"/admin/mock-exams/{self.exam_id}/sessions/{self.mock_session_id}"
+        for suffix in ("/review-link", "/review-link/revoke", "/review-link/reopen"):
+            response = self.client.post(base + suffix)
+            self.assertEqual(response.status_code, 415)
+
+        issued = self.client.post(base + "/review-link", json={})
+        self.assertEqual(issued.status_code, 200)
+        revoked = self.client.post(base + "/review-link/revoke", json={})
+        self.assertEqual(revoked.status_code, 200)
+        reopened = self.client.post(base + "/review-link/reopen", json={})
+        self.assertEqual(reopened.status_code, 200)
+
     def test_revoke_invalidates_capability_and_editor_scope(self):
         link = self._issue_link()
         self._login(self.teacher_id)
         with self.app.app_context():
             review_id = db.session.get(MockExamSession, self.mock_session_id).review.id
         revoked = self.client.post(
-            f"/admin/mock-exams/{self.exam_id}/sessions/{self.mock_session_id}/review-link/revoke"
+            f"/admin/mock-exams/{self.exam_id}/sessions/{self.mock_session_id}/review-link/revoke",
+            json={},
         )
         self.assertEqual(revoked.status_code, 200)
         self.assertEqual(self.client.get(link).status_code, 404)
@@ -291,17 +345,71 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
 
         self.client.post("/test-logout")
         with self.client.session_transaction() as browser:
-            browser["practice_student_name"] = "学生甲"
             browser["mock_exam_session_id"] = self.mock_session_id
             browser["mock_exam_session_auth_at"] = int(datetime.utcnow().timestamp())
         light = self.client.get("/api/practice/mock-exams")
         self.assertEqual(light.status_code, 200)
         self.assertEqual([row["id"] for row in light.get_json()["sessions"]], [self.mock_session_id])
+        cross = self.client.get(f"/practice/mock-exams/{self.other_session_id}/review")
+        self.assertEqual(cross.status_code, 404)
+
+    def test_anonymous_mock_session_scope_works_without_practice_name(self):
         with self.client.session_transaction() as browser:
-            browser["mock_exam_session_id"] = self.other_session_id
-        cross = self.client.get("/api/practice/mock-exams")
-        self.assertEqual(cross.status_code, 200)
-        self.assertEqual(cross.get_json()["sessions"], [])
+            browser["mock_exam_session_id"] = self.mock_session_id
+            browser["mock_exam_session_auth_at"] = int(datetime.utcnow().timestamp())
+        history = self.client.get("/api/practice/mock-exams")
+        self.assertEqual(history.status_code, 200)
+        self.assertEqual([row["id"] for row in history.get_json()["sessions"]], [self.mock_session_id])
+        own_review = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
+        self.assertEqual(own_review.status_code, 200)
+        other_review = self.client.get(f"/practice/mock-exams/{self.other_session_id}/review")
+        self.assertEqual(other_review.status_code, 404)
+
+    def test_unbound_same_name_student_cannot_access_history(self):
+        self._login(self.unbound_student_id)
+        history = self.client.get("/api/practice/mock-exams")
+        self.assertEqual(history.status_code, 401)
+        self.assertEqual(history.get_json()["error"], "not_verified")
+        review = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
+        self.assertEqual(review.status_code, 404)
+
+    def test_editor_template_has_revision_aware_save_queue(self):
+        template = (
+            Path(__file__).resolve().parents[1]
+            / "templates"
+            / "admin"
+            / "mock_exam_review_editor.html"
+        ).read_text(encoding="utf-8")
+        for marker in (
+            "editRevision",
+            "persistedRevision",
+            "queuedSave",
+            "publishQueued",
+            "if (editRevision === requestRevision)",
+            "sendSave('save', editRevision)",
+            "publishStarted = false",
+            "retrySaveLater()",
+        ):
+            self.assertIn(marker, template)
+        self.assertNotIn("if (readOnly || saving) return;", template)
+
+        catch_block = template.split("} catch (_error) {", 1)[1].split("} finally {", 1)[0]
+        self.assertIn("publishQueued = true", catch_block)
+        self.assertIn("publishStarted = false", catch_block)
+        self.assertIn("setEditorLocked(false)", catch_block)
+        self.assertIn("retrySaveLater()", catch_block)
+
+    def test_public_review_templates_render_both_base_content_blocks(self):
+        root = Path(__file__).resolve().parents[1]
+        base = (root / "templates" / "base.html").read_text(encoding="utf-8")
+        self.assertNotIn("self.content_dashboard()", base)
+        for relative in (
+            "templates/admin/mock_exam_review_editor.html",
+            "templates/practice/mock_exam_review.html",
+        ):
+            template = (root / relative).read_text(encoding="utf-8")
+            self.assertIn("{% block content_dashboard %}", template)
+            self.assertIn("{% block content_public %}", template)
 
     def test_student_cannot_see_draft_teacher_feedback_until_published(self):
         self._login(self.student_id)

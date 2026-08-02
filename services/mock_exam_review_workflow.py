@@ -13,7 +13,9 @@ import json
 import secrets
 from datetime import datetime, timedelta
 
-from flask import current_app
+from urllib.parse import urlsplit, urlunsplit
+
+from flask import current_app, request, url_for
 from flask import session as browser_session
 from flask_login import current_user
 from itsdangerous import BadSignature, URLSafeSerializer
@@ -302,6 +304,16 @@ def _capability_serializer() -> URLSafeSerializer:
     )
 
 
+def _capability_token(review: MockExamReview) -> str:
+    return _capability_serializer().dumps(
+        {
+            "review_id": review.id,
+            "link_version": int(review.link_version or 0),
+            "expires_at": int(review.link_expires_at.timestamp()),
+        }
+    )
+
+
 def issue_capability(review: MockExamReview) -> tuple[str, datetime]:
     now = utcnow()
     days = int(current_app.config.get("MOCK_REVIEW_LINK_DAYS", DEFAULT_LINK_DAYS))
@@ -309,14 +321,40 @@ def issue_capability(review: MockExamReview) -> tuple[str, datetime]:
     review.link_version = int(review.link_version or 0) + 1
     review.link_expires_at = expires_at
     review.link_revoked_at = None
-    token = _capability_serializer().dumps(
-        {
-            "review_id": review.id,
-            "link_version": review.link_version,
-            "expires_at": int(expires_at.timestamp()),
-        }
-    )
-    return token, expires_at
+    return _capability_token(review), expires_at
+
+
+def active_capability(review: MockExamReview) -> tuple[str, datetime] | None:
+    """Return the current capability without rotating its generation."""
+    now = utcnow()
+    if (
+        not review
+        or not review.link_version
+        or review.link_revoked_at
+        or not review.link_expires_at
+        or review.link_expires_at <= now
+    ):
+        return None
+    return _capability_token(review), review.link_expires_at
+
+
+def capability_url(token: str) -> str:
+    """Build a capability URL with the externally visible request scheme.
+
+    The app is behind a TLS-terminating proxy in production and does not use
+    ``ProxyFix`` globally.  Prefer an explicitly configured public scheme;
+    otherwise accept only the first trusted-looking ``X-Forwarded-Proto``
+    value when it is exactly ``http`` or ``https``.  Any other value falls
+    back to Flask's request scheme, so it cannot inject a URL scheme.
+    """
+    path = url_for("mock_exam_review.access_link", token=token)
+    configured = str(current_app.config.get("MOCK_REVIEW_PUBLIC_SCHEME") or "").strip().lower()
+    forwarded = (request.headers.get("X-Forwarded-Proto") or "").split(",", 1)[0].strip().lower()
+    scheme = configured if configured in {"http", "https"} else forwarded
+    if scheme not in {"http", "https"}:
+        scheme = request.scheme if request.scheme in {"http", "https"} else "https"
+    parts = urlsplit(request.host_url)
+    return urlunsplit((scheme, parts.netloc, path, "", ""))
 
 
 def revoke_capability(review: MockExamReview) -> None:
@@ -424,22 +462,22 @@ def light_browser_exam_session_id() -> int | None:
 
 def current_student_profile() -> StudentProfile | None:
     if current_user.is_authenticated and current_user.role == User.ROLE_STUDENT:
-        profile = StudentProfile.query.filter_by(
+        return StudentProfile.query.filter_by(
             user_id=current_user.id,
             is_deleted=False,
         ).first()
-        if profile:
-            return profile
-        name = (current_user.display_name or current_user.username or "").strip()
-        if name:
-            return StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
-        return None
     if current_user.is_authenticated:
         return None
-    name = (browser_session.get("practice_student_name") or "").strip()
-    if not name:
+    session_id = light_browser_exam_session_id()
+    if not session_id:
         return None
-    return StudentProfile.query.filter_by(full_name=name, is_deleted=False).first()
+    mock_session = db.session.get(MockExamSession, session_id)
+    if not mock_session or not mock_session.student_profile_id:
+        return None
+    return StudentProfile.query.filter_by(
+        id=mock_session.student_profile_id,
+        is_deleted=False,
+    ).first()
 
 
 def can_student_view_session(mock_session: MockExamSession, profile: StudentProfile) -> bool:

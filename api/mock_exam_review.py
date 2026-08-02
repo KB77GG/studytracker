@@ -35,6 +35,12 @@ def _json(payload, status=200):
     return _no_store(jsonify(payload)), status
 
 
+def _require_json():
+    if not request.is_json:
+        return _json({"ok": False, "error": "json_required"}, 415)
+    return None
+
+
 def _load_payload(kind: str, test_id: str | None):
     if not test_id:
         return None
@@ -191,6 +197,9 @@ def _review_update_payload(review: MockExamReview, data: dict, *, publish: bool 
 def issue_review_link(exam_id: int, session_id: int):
     if not _can_manage(current_user):
         return _json({"ok": False, "error": "forbidden"}, 403)
+    json_error = _require_json()
+    if json_error is not None:
+        return json_error
     mock_session, review = _get_submitted_review(exam_id, session_id)
     if review is None:
         return _json({"ok": False, "error": "exam_not_submitted"}, 409)
@@ -201,7 +210,7 @@ def issue_review_link(exam_id: int, session_id: int):
             "ok": True,
             "review_id": review.id,
             "status": review.status,
-            "url": url_for("mock_exam_review.access_link", token=token, _external=True),
+            "url": workflow.capability_url(token),
             "expires_at": expires_at.isoformat(),
         }
     )
@@ -212,6 +221,9 @@ def issue_review_link(exam_id: int, session_id: int):
 def revoke_review_link(exam_id: int, session_id: int):
     if not _can_manage(current_user):
         return _json({"ok": False, "error": "forbidden"}, 403)
+    json_error = _require_json()
+    if json_error is not None:
+        return json_error
     _mock_session, review = _get_submitted_review(exam_id, session_id)
     if review is None:
         return _json({"ok": False, "error": "exam_not_submitted"}, 409)
@@ -225,6 +237,9 @@ def revoke_review_link(exam_id: int, session_id: int):
 def reopen_review(exam_id: int, session_id: int):
     if not _can_manage(current_user):
         return _json({"ok": False, "error": "forbidden"}, 403)
+    json_error = _require_json()
+    if json_error is not None:
+        return json_error
     _mock_session, review = _get_submitted_review(exam_id, session_id)
     if review is None:
         return _json({"ok": False, "error": "exam_not_submitted"}, 409)
@@ -237,7 +252,7 @@ def reopen_review(exam_id: int, session_id: int):
         {
             "ok": True,
             "status": review.status,
-            "url": url_for("mock_exam_review.access_link", token=token, _external=True),
+            "url": workflow.capability_url(token),
             "expires_at": expires_at.isoformat(),
         }
     )
@@ -251,7 +266,11 @@ def open_admin_review(exam_id: int, session_id: int):
     _mock_session, review = _get_submitted_review(exam_id, session_id)
     if review is None:
         return _no_store(jsonify({"ok": False, "error": "exam_not_submitted"})), 409
-    token, _expires_at = workflow.issue_capability(review)
+    active = workflow.active_capability(review)
+    if active is None:
+        token, _expires_at = workflow.issue_capability(review)
+    else:
+        token, _expires_at = active
     db.session.commit()
     return _no_store(redirect(url_for("mock_exam_review.access_link", token=token)))
 
