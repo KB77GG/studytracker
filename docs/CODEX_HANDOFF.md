@@ -11,6 +11,21 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
+## 2026-08-03 刷题页姓名绑定可查看模考历史（已部署）
+
+- 修复 `/practice` 已通过姓名绑定、今日任务正常显示，但 `/api/practice/mock-exams` 仍返回
+  `401 not_verified` 并把“我的模考”整块隐藏的问题。根因是模考复盘只接受正式账号 profile 绑定或
+  当前单场 token，没有复用刷题页已有的 `practice_student_name` 轻量身份。
+- 现在无需学生密码：匿名姓名绑定可查看唯一 active `StudentProfile` 下的全部模考；已登录但尚未直绑
+  profile 的学生也可通过显式“切换账号 → 输入姓名”使用同一规则。正式账号直绑仍优先，教师/管理员
+  不会走姓名绑定；同名的多个 active profile 一律拒绝猜测，避免串号。
+- 新增姓名绑定历史、跨学生隔离、同名歧义拒绝、已登录未直绑后显式姓名绑定回退测试；模考相关
+  48 项通过，Ruff 与 `git diff --check` 通过。提交 `9a503252` 已推送任务分支与 `main`；CI
+  [30810970416](https://github.com/KB77GG/studytracker/actions/runs/30810970416) 与部署
+  [30810970394](https://github.com/KB77GG/studytracker/actions/runs/30810970394) 均成功。
+- 生产业务代码已包含 `9a503252`、服务 active，5002 保持 `workers=1 / gthread / threads=6`。使用真实已交卷学生的
+  姓名绑定链路做不输出内容的冒烟：模考列表从 401 改为 200，返回 1 场已交卷记录，复盘详情为 200。
+
 ## 2026-08-03 网页模考教师批改与学生复盘闭环（已部署）
 
 - 开发工作树：`/Users/zhouxin/.codex/worktrees/7691/studytracker`；任务分支
@@ -71,10 +86,10 @@
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
 | 分支 | `codex/mock-exam-review-web`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/7691/studytracker` |
-| 分支基线 | 业务 HEAD `4f4fefd3 修正模考评分覆盖下拉选项`，包含教师批改与学生复盘闭环 |
-| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-web` 均包含 `4f4fefd3`；精确 HEAD 以 `git log -1` 为准 |
+| 分支基线 | 业务 HEAD `9a503252 修复姓名绑定学生看不到模考复盘`，包含教师批改与学生复盘闭环 |
+| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-web` 均包含 `9a503252`；精确 HEAD 以 `git log -1` 为准 |
 | 本次交接范围 | 网页教师写作批改、学生模考历史/复盘、capability 与 profile 迁移；家长端未接入 |
-| 后端生产 | 已部署 `4f4fefd3`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
+| 后端生产 | 业务代码已包含 `9a503252`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）
