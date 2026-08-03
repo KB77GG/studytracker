@@ -324,7 +324,9 @@ def student_mock_exams():
     profile = workflow.current_student_profile()
     if not profile:
         return _json({"ok": False, "error": "not_verified"}, 401)
-    if current_user.is_authenticated and current_user.role == User.ROLE_STUDENT:
+    if (
+        current_user.is_authenticated and current_user.role == User.ROLE_STUDENT
+    ) or workflow.practice_bound_student_profile():
         sessions = (
             MockExamSession.query.filter_by(student_profile_id=profile.id)
             .order_by(MockExamSession.started_at.desc())

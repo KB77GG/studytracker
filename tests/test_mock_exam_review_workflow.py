@@ -366,6 +366,34 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         other_review = self.client.get(f"/practice/mock-exams/{self.other_session_id}/review")
         self.assertEqual(other_review.status_code, 404)
 
+    def test_practice_name_binding_can_access_own_mock_history(self):
+        with self.client.session_transaction() as browser:
+            browser[workflow.PRACTICE_STUDENT_NAME_KEY] = "学生甲"
+
+        history = self.client.get("/api/practice/mock-exams")
+        self.assertEqual(history.status_code, 200)
+        self.assertEqual(
+            [row["id"] for row in history.get_json()["sessions"]],
+            [self.mock_session_id],
+        )
+        own_review = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
+        self.assertEqual(own_review.status_code, 200)
+        other_review = self.client.get(f"/practice/mock-exams/{self.other_session_id}/review")
+        self.assertEqual(other_review.status_code, 404)
+
+    def test_practice_name_binding_rejects_ambiguous_active_profiles(self):
+        with self.app.app_context():
+            db.session.add(StudentProfile(full_name="学生甲"))
+            db.session.commit()
+        with self.client.session_transaction() as browser:
+            browser[workflow.PRACTICE_STUDENT_NAME_KEY] = "学生甲"
+
+        history = self.client.get("/api/practice/mock-exams")
+        self.assertEqual(history.status_code, 401)
+        self.assertEqual(history.get_json()["error"], "not_verified")
+        review = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
+        self.assertEqual(review.status_code, 404)
+
     def test_anonymous_mock_scope_requires_matching_access_proof(self):
         self.client.post(f"/test-remember/{self.mock_session_id}")
         with self.client.session_transaction() as browser:
@@ -393,6 +421,18 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
         self.assertEqual(history.get_json()["error"], "not_verified")
         review = self.client.get(f"/practice/mock-exams/{self.mock_session_id}/review")
         self.assertEqual(review.status_code, 404)
+
+    def test_unbound_student_can_use_explicit_practice_name_binding(self):
+        self._login(self.unbound_student_id)
+        with self.client.session_transaction() as browser:
+            browser[workflow.PRACTICE_STUDENT_NAME_KEY] = "学生甲"
+
+        history = self.client.get("/api/practice/mock-exams")
+        self.assertEqual(history.status_code, 200)
+        self.assertEqual(
+            [row["id"] for row in history.get_json()["sessions"]],
+            [self.mock_session_id],
+        )
 
     def test_editor_template_has_revision_aware_save_queue(self):
         template = (

@@ -55,6 +55,7 @@ EDITOR_SESSION_KEY = "mock_exam_review_edit_sessions"
 EXAM_SESSION_KEY = "mock_exam_session_id"
 EXAM_SESSION_AUTH_AT_KEY = "mock_exam_session_auth_at"
 EXAM_SESSION_PROOF_KEY = "mock_exam_session_access_proof"
+PRACTICE_STUDENT_NAME_KEY = "practice_student_name"
 DEFAULT_LINK_DAYS = 14
 DEFAULT_EDITOR_HOURS = 2
 DEFAULT_STUDENT_BROWSER_DAYS = 14
@@ -480,14 +481,42 @@ def light_browser_exam_session_id() -> int | None:
     return session_id
 
 
+def practice_bound_student_profile() -> StudentProfile | None:
+    """Resolve the name-only identity used by the public practice library.
+
+    A name is accepted only when it identifies exactly one active profile.  The
+    practice page deliberately uses this lightweight binding instead of a
+    password account, but ambiguous names must never expose another student's
+    mock-exam history.
+    """
+    if current_user.is_authenticated and current_user.role != User.ROLE_STUDENT:
+        return None
+    name = str(browser_session.get(PRACTICE_STUDENT_NAME_KEY) or "").strip()
+    if not name:
+        return None
+    profiles = (
+        StudentProfile.query.filter_by(full_name=name, is_deleted=False)
+        .order_by(StudentProfile.id.asc())
+        .limit(2)
+        .all()
+    )
+    return profiles[0] if len(profiles) == 1 else None
+
+
 def current_student_profile() -> StudentProfile | None:
     if current_user.is_authenticated and current_user.role == User.ROLE_STUDENT:
-        return StudentProfile.query.filter_by(
+        account_profile = StudentProfile.query.filter_by(
             user_id=current_user.id,
             is_deleted=False,
         ).first()
+        if account_profile:
+            return account_profile
     if current_user.is_authenticated:
-        return None
+        if current_user.role != User.ROLE_STUDENT:
+            return None
+    practice_profile = practice_bound_student_profile()
+    if practice_profile:
+        return practice_profile
     session_id = light_browser_exam_session_id()
     if not session_id:
         return None
@@ -505,6 +534,9 @@ def can_student_view_session(mock_session: MockExamSession, profile: StudentProf
         return False
     if current_user.is_authenticated and current_user.role == User.ROLE_STUDENT:
         return mock_session.student_profile_id == profile.id
+    practice_profile = practice_bound_student_profile()
+    if practice_profile:
+        return practice_profile.id == profile.id and mock_session.student_profile_id == profile.id
     return (
         light_browser_exam_session_id() == mock_session.id
         and mock_session.student_profile_id == profile.id
