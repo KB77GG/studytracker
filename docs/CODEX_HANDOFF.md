@@ -11,7 +11,7 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
-## 2026-08-07 ETS Official Practice / OG 六套 v2（发布中）
+## 2026-08-07 ETS Official Practice / OG 六套 v2（已部署）
 
 - 新增 `ets-practice-1` 至 `ets-practice-5` 与 `ets-og-chapter-6` 六套完整四科题包：
   P1–P5 各 97 题，OG 120 题，合计 605 个原子题、0 blocked；Reading、Listening、Writing、
@@ -25,8 +25,14 @@
 - 本地验证：TOEFL 定向 39 passed；全仓排除既有缺失静态音频 fixture 后 384 passed、7 subtests；
   完整运行仅有同一基线的 2 个 `tests/test_static_audio_headers.py` 404 失败。Ruff、JS syntax、
   Node response queue、`git diff --check` 均通过。
-- 当前任务分支 `codex/toefl-official-full-import`，基于 `origin/main@cf875c26`；代码提交、main
-  发布和生产页面/接口验证仍在进行，完成后将本节更新为实际提交和部署状态。
+- 实现提交 `0ab9a0a6` 已推送任务分支和 `main`；CI
+  [31184914430](https://github.com/KB77GG/studytracker/actions/runs/31184914430) 与部署
+  [31184914554](https://github.com/KB77GG/studytracker/actions/runs/31184914554) 均成功。生产 HEAD
+  为 `0ab9a0a6`、服务 active，5002 保持 `workers=1 / gthread / threads=6`。
+- 生产验收：公网 `/toefl/mock` 为 200，真实浏览器显示 9 套 / 965 题、九张卡均为
+  `published / 正式门禁：通过`；P1 开题页显示 97 题 / 9 phase / 四科选择 / 麦克风门禁，
+  控制台无 error/warn。六个 definition 均为 200、release ready，题量与听力 group 数为
+  `97×5 + 120` 和 `23×5 + 29`，每套 Speaking 都是 11 题。
 
 ## 2026-08-03 刷题页姓名绑定可查看模考历史（已部署）
 
