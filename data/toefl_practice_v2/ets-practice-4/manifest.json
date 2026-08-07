@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0.0",
+  "exam_id": "toefl:ets-practice-4",
+  "generated_at": "2026-08-07T13:53:26.544148+00:00",
+  "generator": "scripts/build_toefl_official_v2.py",
+  "source_root_portability": "All source paths are relative to the configured source root.",
+  "counts": {
+    "questions": 97,
+    "auto": 84,
+    "manual": 13,
+    "blocked": 0,
+    "by_subject": {
+      "reading": 40,
+      "listening": 34,
+      "speaking": 11,
+      "writing": 12
+    }
+  },
+  "quality": {
+    "validation_status": "pending",
+    "publish_status": "published",
+    "subject_reviews": {
+      "reading": "pending",
+      "listening": "pending",
+      "speaking": "pending",
+      "writing": "pending"
+    },
+    "review_basis": "Official PDF text, embedded answer tables, and question-scoped ETS media were cross-checked by the deterministic importer.",
+    "release_authorization": {
+      "status": "owner_authorized",
+      "scope": [
+        "reading",
+        "listening",
+        "speaking",
+        "writing"
+      ],
+      "basis": "The owner explicitly requested completion, v2 conversion, and production release on 2026-08-07."
+    },
+    "speaking_timing_policy": {
+      "preparation_seconds": 0,
+      "listen_and_repeat_response_seconds": "source-specific 8/10/12 seconds when stated; otherwise conservative 12 seconds",
+      "take_an_interview_response_seconds": 45,
+      "section_duration_seconds": 480
+    },
+    "blocking_reasons": [],
+    "known_blocked_question_ids": []
+  }
+}

@@ -6,6 +6,7 @@ from scripts.import_toefl_official_reading import (
     complete_practice_fill_answers,
     item_count,
     parse_options,
+    valid_question_matches,
 )
 
 
@@ -66,6 +67,31 @@ class ImportToeflOfficialReadingTest(unittest.TestCase):
             ["ght", "at"],
         )
         self.assertEqual(words, ["might", "that"])
+
+    def test_practice_fill_ignores_hyphenated_compound_words(self):
+        words = complete_practice_fill_answers(
+            "It is a laboratory-based sci_ _ _ _ that comb_ _ _ _ two fields.",
+            ["ence", "ines"],
+        )
+        self.assertEqual(words, ["science", "combines"])
+
+    def test_practice_fill_accepts_hyphen_blanks(self):
+        words = complete_practice_fill_answers(
+            "We mi- - - think th- - people danced.",
+            ["ght", "at"],
+        )
+        self.assertEqual(words, ["might", "that"])
+
+    def test_numbered_passage_lines_are_not_questions(self):
+        page = (
+            "1. Noise Levels: Please keep noise to a minimum.\n"
+            "2. Electronic Devices: Set phones to silent mode.\n"
+            "13. What can be concluded about the library?\n"
+            "(A) First answer\n(B) Second answer\n"
+            "(C) Third answer\n(D) Fourth answer\n"
+        )
+        matches = valid_question_matches(page, 20)
+        self.assertEqual([match.group("number") for match in matches], ["13"])
 
 
 if __name__ == "__main__":

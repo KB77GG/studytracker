@@ -9,7 +9,9 @@ from pathlib import Path
 from typing import Any
 
 SECTION_ORDER = ("reading", "listening", "speaking", "writing")
-PACKAGE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}_[A-Z]$")
+PACKAGE_PATTERN = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2}_[A-Z]|ets-(?:practice-[1-5]|og-chapter-6))$"
+)
 WRITING_TIMERS = {
     "build_a_sentence": 420,
     "write_email": 420,
@@ -21,8 +23,8 @@ MODULE_TIMERS = {
 }
 SPEAKING_SECTION_SECONDS = 480
 SPEAKING_RESPONSE_SECONDS = {
-    "listen_and_repeat": 12,
-    "take_an_interview": 45,
+    "listen_and_repeat": {8, 10, 12},
+    "take_an_interview": {45},
 }
 
 
@@ -142,7 +144,7 @@ def speaking_timing_blockers(content: dict[str, Any]) -> list[str]:
         response = config.get("response_seconds")
         group = groups.get(question.get("group_id")) or {}
         task_type = group.get("task_type")
-        expected_response = SPEAKING_RESPONSE_SECONDS.get(task_type)
+        expected_responses = SPEAKING_RESPONSE_SECONDS.get(task_type, set())
         stimulus = group.get("stimulus") or {}
         cue_start = stimulus.get("cue_start_seconds")
         cue_end = stimulus.get("cue_end_seconds")
@@ -151,7 +153,7 @@ def speaking_timing_blockers(content: dict[str, Any]) -> list[str]:
         confidence = stimulus.get("alignment_confidence")
         if preparation != 0:
             missing.append(f"{question.get('id', 'unknown')}: preparation timing")
-        if response != expected_response:
+        if response not in expected_responses:
             missing.append(f"{question.get('id', 'unknown')}: response timing")
         if (
             stimulus.get("format") != "audio_cue"
@@ -337,6 +339,7 @@ def _phase_plan(
         for module in subject_modules:
             module_key = str(module.get("module", "m1"))
             if subject != "writing":
+                source_timer = module.get("timer_policy") == "source"
                 phases.append(
                     {
                         "id": f"{subject}:{module_key}",
@@ -344,11 +347,15 @@ def _phase_plan(
                         "module": module_key,
                         "module_id": module["id"],
                         "label": module.get("label", f"{subject} {module_key}"),
-                        "duration_seconds": MODULE_TIMERS.get(
-                            (subject, module_key),
+                        "duration_seconds": (
                             module.get("duration_seconds")
-                            if subject == "speaking"
-                            else None,
+                            if source_timer
+                            else MODULE_TIMERS.get(
+                                (subject, module_key),
+                                module.get("duration_seconds")
+                                if subject == "speaking"
+                                else None,
+                            )
                         ),
                         "timer_mode": (
                             "audio_driven"

@@ -31,8 +31,8 @@ FORBIDDEN_PUBLIC_KEYS = {
     "ordered_tokens",
 }
 SPEAKING_RESPONSE_SECONDS = {
-    "listen_and_repeat": 12,
-    "take_an_interview": 45,
+    "listen_and_repeat": {8, 10, 12},
+    "take_an_interview": {45},
 }
 
 
@@ -170,12 +170,12 @@ def validate_package(package_dir: Path, schema_path: Path, source_root: Path | N
             qid = question["id"]
             group = group_by_id.get(question.get("group_id")) or {}
             config = question.get("input_config") or {}
-            expected_response = SPEAKING_RESPONSE_SECONDS.get(
-                group.get("task_type")
+            expected_responses = SPEAKING_RESPONSE_SECONDS.get(
+                group.get("task_type"), set()
             )
             if config.get("preparation_seconds") != 0:
                 errors.append(f"question {qid}: speaking preparation must be 0 seconds")
-            if config.get("response_seconds") != expected_response:
+            if config.get("response_seconds") not in expected_responses:
                 errors.append(
                     f"question {qid}: response_seconds does not match its task type"
                 )
@@ -224,8 +224,10 @@ def validate_package(package_dir: Path, schema_path: Path, source_root: Path | N
         if response_type == "order":
             ordered = answer.get("ordered_tokens", [])
             scrambled = question.get("input_config", {}).get("scramble_tokens", [])
-            if not ordered or Counter(ordered) != Counter(scrambled):
-                errors.append(f"answer {qid}: scramble tokens do not match ordered tokens")
+            if not ordered or Counter(ordered) - Counter(scrambled):
+                errors.append(
+                    f"answer {qid}: ordered tokens are not available in scramble tokens"
+                )
 
     expected = content.get("exam", {}).get("expected_question_count")
     if expected != len(questions):
@@ -357,7 +359,7 @@ def release_blockers(
         return (
             config.get("preparation_seconds") == 0
             and config.get("response_seconds")
-            == SPEAKING_RESPONSE_SECONDS.get(group.get("task_type"))
+            in SPEAKING_RESPONSE_SECONDS.get(group.get("task_type"), set())
             and group.get("question_ids") == [question.get("id")]
             and stimulus.get("format") == "audio_cue"
             and isinstance(cue_start, (int, float))

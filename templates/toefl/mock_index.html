@@ -6,8 +6,8 @@
   <div class="mock-library__intro">
     <div>
       <p class="mock-eyebrow">TOEFL 2026 · 正式刷题系统</p>
-      <h2>三套真题，按新版考试流程完整训练</h2>
-      <p>本页已替换原托福刷题入口。听力与口语原音频均已上线；口语按 11 题逐题播放、自动录音、限时收卷并保存续考。</p>
+      <h2>{{ exams|length }} 套真题与官方材料，按新版考试流程完整训练</h2>
+      <p>听力与口语原音频均已上线；口语按 11 题逐题播放、自动录音、按源材料限时收卷并保存续考。</p>
     </div>
     <div class="mock-library__metric">
       <strong>{{ exams|length }}</strong>
@@ -16,8 +16,8 @@
   </div>
 
   <div class="mock-gate-note mock-gate-note--ready">
-    <strong>三套题包已通过结构、媒体和逐题计时门禁。</strong>
-    Listen and Repeat 每题 12 秒，Take an Interview 每题 45 秒；口语两阶段合计 8 分钟。
+    <strong>全部题包均已通过结构、媒体和逐题计时门禁。</strong>
+    Listen and Repeat 按官方材料设置 8、10 或 12 秒，Take an Interview 每题 45 秒；口语两阶段合计 8 分钟。
   </div>
 
   <div class="mock-card-grid">
@@ -27,7 +27,7 @@
         <span>{{ exam.date }} · {{ exam.variant }} 卷</span>
         <span class="mock-badge mock-badge--ready">音频已就绪</span>
       </div>
-      <h3>{{ exam.date }} 新托福真题 {{ exam.variant }} 卷</h3>
+      <h3>{{ exam.title }}</h3>
       <div class="mock-counts">
         <span><b>{{ exam.counts.questions }}</b> 总题</span>
         <span><b>{{ exam.counts.auto }}</b> 自动判分</span>

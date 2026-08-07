@@ -32,6 +32,7 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
         "audio_cue",
         "cue_start_seconds",
         "cue_end_seconds",
+        "playback_scope",
         "题目播放中",
         "自动推进",
         "recordingId",

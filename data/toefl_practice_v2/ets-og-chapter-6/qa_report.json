@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "exam_id": "toefl:ets-og-chapter-6",
+  "generated_at": "2026-08-07T13:53:22.120938+00:00",
+  "status": "pass",
+  "checks": [
+    {
+      "id": "atomic-counts",
+      "status": "pass",
+      "detail": "{'reading': 50, 'listening': 47, 'speaking': 11, 'writing': 12}"
+    },
+    {
+      "id": "answer-separation",
+      "status": "pass",
+      "detail": "Objective answers are private."
+    },
+    {
+      "id": "media-coverage",
+      "status": "pass",
+      "detail": "Every Listening group and Speaking item has one source-exact ETS asset."
+    },
+    {
+      "id": "source-traceability",
+      "status": "pass",
+      "detail": "All content and media carry source-relative SHA-256 references."
+    }
+  ]
+}

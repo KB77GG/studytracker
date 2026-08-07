@@ -259,17 +259,24 @@ def _validated_audio_state(
 ) -> tuple[dict[str, dict[str, bool]] | None, tuple[dict[str, str], int] | None]:
     if not isinstance(value, dict):
         return None, ({"error": "audio_state_invalid"}, 400)
-    listening_phase_ids = {
+    allowed_audio_ids = {
         phase.get("id")
         for phase in mock_definition.get("phases", [])
         if phase.get("section") == "listening"
     }
+    allowed_audio_ids.update(
+        group.get("id")
+        for group in mock_definition.get("groups", [])
+        if group.get("subject") == "listening"
+        and (group.get("stimulus") or {}).get("format") == "audio"
+        and (group.get("stimulus") or {}).get("playback_scope") == "group"
+    )
     allowed_fields = {"ready", "skipped", "played"}
     validated: dict[str, dict[str, bool]] = {}
-    if len(value) > len(listening_phase_ids):
+    if len(value) > len(allowed_audio_ids):
         return None, ({"error": "audio_state_invalid"}, 400)
-    for phase_id, state in value.items():
-        if phase_id not in listening_phase_ids or not isinstance(state, dict):
+    for audio_id, state in value.items():
+        if audio_id not in allowed_audio_ids or not isinstance(state, dict):
             return None, ({"error": "audio_state_invalid"}, 400)
         if set(state) - allowed_fields:
             return None, ({"error": "audio_state_invalid"}, 400)
@@ -277,7 +284,7 @@ def _validated_audio_state(
             return None, ({"error": "audio_state_invalid"}, 400)
         if state.get("skipped") and not attempt.is_preview:
             return None, ({"error": "audio_skip_preview_only"}, 409)
-        validated[phase_id] = {
+        validated[audio_id] = {
             key: state[key] for key in allowed_fields if key in state
         }
     return validated, None

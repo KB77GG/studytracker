@@ -17,6 +17,21 @@ from services.toefl_mock_v2 import (
     validate_response_value,
 )
 
+OFFICIAL_SLUGS = {
+    "ets-og-chapter-6",
+    "ets-practice-1",
+    "ets-practice-2",
+    "ets-practice-3",
+    "ets-practice-4",
+    "ets-practice-5",
+}
+RELEASED_SLUGS = {
+    "2026-01-27_A",
+    "2026-01-28_A",
+    "2026-01-28_B",
+    *OFFICIAL_SLUGS,
+}
+
 
 @pytest.fixture()
 def app(tmp_path):
@@ -42,30 +57,36 @@ def app(tmp_path):
         db.drop_all()
 
 
-def test_catalog_integrates_all_seven_source_backed_sets():
+def test_catalog_integrates_all_thirteen_source_backed_sets():
     exams = catalog()
 
-    assert len(exams) == 7
-    assert sum(item["counts"]["questions"] for item in exams) == 840
+    assert len(exams) == 13
+    assert sum(item["counts"]["questions"] for item in exams) == 1445
     assert sum(item["counts"]["blocked"] for item in exams) == 7
     assert all(item["validation_status"] == "pass" for item in exams)
     assert {
         item["slug"] for item in exams if item["release_ready"]
-    } == {"2026-01-27_A", "2026-01-28_A", "2026-01-28_B"}
+    } == RELEASED_SLUGS
     assert {
         item["slug"] for item in exams if item["preview_ready"]
-    } == {"2026-01-27_A", "2026-01-28_A", "2026-01-28_B"}
+    } == RELEASED_SLUGS
 
 
-def test_public_catalog_exposes_only_audio_ready_pilots():
+def test_public_catalog_exposes_only_audio_ready_packages():
     exams = public_catalog()
 
     assert [item["slug"] for item in exams] == [
         "2026-01-27_A",
         "2026-01-28_A",
         "2026-01-28_B",
+        "ets-og-chapter-6",
+        "ets-practice-1",
+        "ets-practice-2",
+        "ets-practice-3",
+        "ets-practice-4",
+        "ets-practice-5",
     ]
-    assert sum(item["counts"]["questions"] for item in exams) == 360
+    assert sum(item["counts"]["questions"] for item in exams) == 965
 
 
 def test_published_pilots_keep_visual_ocr_repairs_and_clean_audio_delivery():
@@ -212,6 +233,33 @@ def test_three_released_sets_have_atomic_speaking_cues_and_2026_timing():
         assert "Welcome to the wood shop" not in public_json
         assert "What kind of movies do your family" not in public_json
         assert "Enter your name and student ID" not in public_json
+
+
+def test_official_packages_preserve_source_timing_and_group_audio():
+    practice = definition("ets-practice-1")
+    og = definition("ets-og-chapter-6")
+
+    assert [phase["duration_seconds"] for phase in practice["phases"][:2]] == [720, 720]
+    assert [phase["duration_seconds"] for phase in og["phases"][:2]] == [1200, 540]
+    listening_groups = [
+        group for group in practice["groups"] if group["subject"] == "listening"
+    ]
+    assert listening_groups
+    assert all(
+        group["stimulus"]["playback_scope"] == "group"
+        for group in listening_groups
+    )
+    og_speaking = [
+        question["input_config"]["response_seconds"]
+        for question in og["questions"]
+        if question["subject"] == "speaking"
+    ]
+    assert [
+        question["number"]
+        for question in og["questions"]
+        if question["subject"] == "speaking"
+    ] == list(range(1, 12))
+    assert og_speaking == [8, 8, 10, 10, 10, 12, 12, 45, 45, 45, 45]
 
 
 def test_route_m2_scores_module_one_but_returns_only_verified_default():
@@ -375,10 +423,12 @@ def test_catalog_and_exam_pages_render(app):
 
     assert catalog_page.status_code == 200
     catalog_html = catalog_page.get_data(as_text=True)
-    assert catalog_html.count("开始正式刷题") == 3
-    assert "2026-01-27 新托福真题 A 卷" in catalog_html
-    assert "2026-01-28 新托福真题 A 卷" in catalog_html
-    assert "2026-01-28 新托福真题 B 卷" in catalog_html
+    assert catalog_html.count("开始正式刷题") == 9
+    assert "2026-01-27 TOEFL Real Exam A" in catalog_html
+    assert "2026-01-28 TOEFL Real Exam A" in catalog_html
+    assert "2026-01-28 TOEFL Real Exam B" in catalog_html
+    assert "ETS Student Practice Test 1" in catalog_html
+    assert "ETS Official Guide Chapter 6 Practice Test" in catalog_html
     assert "2026-01-21 新托福真题" not in catalog_html
     assert exam_page.status_code == 200
     assert "ONLINE PREVIEW" in exam_page.get_data(as_text=True)
@@ -554,6 +604,33 @@ def test_audio_state_is_whitelisted_and_survives_resume(app):
         },
     )
     assert invalid.status_code == 400
+
+
+def test_group_scoped_official_audio_state_is_accepted(app):
+    client = app.test_client()
+    payload = definition("ets-practice-1", ["listening"])
+    group_id = payload["groups"][0]["id"]
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={
+            "testId": "ets-practice-1",
+            "sections": ["listening"],
+            "preview": True,
+        },
+    ).get_json()["attempt"]
+    audio = {group_id: {"ready": True, "skipped": False, "played": True}}
+
+    saved = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0, "audio": audio},
+            "currentPhase": "listening:m1",
+            "remainingSeconds": None,
+        },
+    )
+
+    assert saved.status_code == 200
+    assert saved.get_json()["attempt"]["state"]["audio"] == audio
 
 
 def test_response_validation_rejects_wrong_shape_but_allows_repeated_tokens():

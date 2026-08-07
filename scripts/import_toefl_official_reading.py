@@ -12,6 +12,8 @@ from pathlib import Path
 try:
     from scripts.audit_toefl_official_materials import (
         DEFAULT_OUTPUT as DEFAULT_AUDIT_OUTPUT,
+    )
+    from scripts.audit_toefl_official_materials import (
         DEFAULT_SOURCE,
         clean_page_text,
         discover_sources,
@@ -22,6 +24,8 @@ try:
 except ModuleNotFoundError:
     from audit_toefl_official_materials import (
         DEFAULT_OUTPUT as DEFAULT_AUDIT_OUTPUT,
+    )
+    from audit_toefl_official_materials import (
         DEFAULT_SOURCE,
         clean_page_text,
         discover_sources,
@@ -53,21 +57,69 @@ SOURCE_METADATA = {
         "title": "ETS Student Practice Test 1",
         "subtitle": "官方完整样题",
         "source_kind": "student_practice",
+        "layout": "student_practice",
         "expected_modules": {"m1": 20, "m2": 20},
         "duration_seconds": 24 * 60,
         "module_durations": {"m1": 12 * 60, "m2": 12 * 60},
         "sort_key": "2026-01-official-01",
     },
+    "ets-practice-2": {
+        "title": "ETS Student Practice Test 2",
+        "subtitle": "官方完整样题",
+        "source_kind": "student_practice",
+        "layout": "student_practice",
+        "expected_modules": {"m1": 20, "m2": 20},
+        "duration_seconds": 24 * 60,
+        "module_durations": {"m1": 12 * 60, "m2": 12 * 60},
+        "sort_key": "2026-01-official-02",
+    },
+    "ets-practice-3": {
+        "title": "ETS Teacher Practice Test 3",
+        "subtitle": "官方完整样题",
+        "source_kind": "teacher_practice",
+        "layout": "student_practice",
+        "expected_modules": {"m1": 20, "m2": 20},
+        "duration_seconds": 24 * 60,
+        "module_durations": {"m1": 12 * 60, "m2": 12 * 60},
+        "sort_key": "2026-01-official-03",
+    },
+    "ets-practice-4": {
+        "title": "ETS Teacher Practice Test 4",
+        "subtitle": "官方完整样题",
+        "source_kind": "teacher_practice",
+        "layout": "student_practice",
+        "expected_modules": {"m1": 20, "m2": 20},
+        "duration_seconds": 24 * 60,
+        "module_durations": {"m1": 12 * 60, "m2": 12 * 60},
+        "sort_key": "2026-01-official-04",
+    },
+    "ets-practice-5": {
+        "title": "ETS Teacher Practice Test 5",
+        "subtitle": "官方完整样题",
+        "source_kind": "teacher_practice",
+        "layout": "student_practice",
+        "expected_modules": {"m1": 20, "m2": 20},
+        "duration_seconds": 24 * 60,
+        "module_durations": {"m1": 12 * 60, "m2": 12 * 60},
+        "sort_key": "2026-01-official-05",
+    },
     "ets-og-chapter-6": {
         "title": "ETS Official Guide Chapter 6",
         "subtitle": "OG 官方完整样题",
         "source_kind": "official_guide",
+        "layout": "official_guide",
         "expected_modules": {"m1": 35, "m2": 15},
         "duration_seconds": 29 * 60,
         "module_durations": {"m1": 20 * 60, "m2": 9 * 60},
         "sort_key": "2026-01-official-00",
     },
 }
+
+
+def layout_of(source_id: str) -> str:
+    """Return the PDF layout family for one configured source."""
+
+    return SOURCE_METADATA[source_id]["layout"]
 
 
 def normalize_space(value: str) -> str:
@@ -91,7 +143,7 @@ def clean_content(value: str) -> str:
 
 
 def reading_text(source_id: str, source_text: str) -> str:
-    if source_id == "ets-practice-1":
+    if layout_of(source_id) == "student_practice":
         start_match = re.search(r"(?m)^\s*Reading Section, Module 1\s*$", source_text)
         end_match = re.search(
             r"(?m)^\s*Reading Section, Module 1\s*$\s*^\s*Answer Key\s*$",
@@ -122,20 +174,20 @@ def parse_options(block: str) -> tuple[str, list[dict]]:
 
 
 def extract_answer_maps(source_id: str, full_text: str) -> dict[str, dict[int, str]]:
-    if source_id == "ets-practice-1":
+    if layout_of(source_id) == "student_practice":
         section_match = re.search(
             r"(?ms)Reading Section, Module 1\s+Answer Key(?P<body>.+?)"
             r"^\s*Listening Section\s*$",
             full_text,
         )
         if not section_match:
-            raise RuntimeError("Practice Test 1 reading answer keys not found")
+            raise RuntimeError(f"{source_id} reading answer keys not found")
         section = section_match.group("body")
         module_chunks = re.split(r"(?m)^\s*Reading Section, Module 2\s*$", section)
         if len(module_chunks) != 2:
-            raise RuntimeError("Practice Test 1 module answer split failed")
+            raise RuntimeError(f"{source_id} module answer split failed")
         maps = {}
-        for module_id, chunk in zip(("m1", "m2"), module_chunks):
+        for module_id, chunk in zip(("m1", "m2"), module_chunks, strict=True):
             pairs = re.findall(r"(?m)^\s*(\d{1,2})\s+([A-Za-z]+)\s*$", chunk)
             maps[module_id] = {int(number): answer for number, answer in pairs}
         return maps
@@ -170,20 +222,27 @@ def extract_answer_maps(source_id: str, full_text: str) -> dict[str, dict[int, s
 
 
 def fill_matches(source_id: str, page: str) -> list[re.Match]:
-    pattern = PRACTICE_FILL_RE if source_id == "ets-practice-1" else OG_FILL_RE
+    pattern = (
+        PRACTICE_FILL_RE
+        if layout_of(source_id) == "student_practice"
+        else OG_FILL_RE
+    )
     return list(pattern.finditer(page))
 
 
 def complete_practice_fill_answers(body: str, fragments: list[str]) -> list[str]:
     stems = re.findall(
-        r"\b([A-Za-z]+)(?=(?:[_-](?:\s*[_-])*)+)",
+        r"\b([A-Za-z]+)(?=(?:[_-](?:\s*[_-])*)(?![A-Za-z]))",
         body,
     )
     if len(stems) != len(fragments):
         raise RuntimeError(
             f"Practice fill stem count {len(stems)} does not match answers {len(fragments)}"
         )
-    return [stem + fragment for stem, fragment in zip(stems, fragments)]
+    return [
+        stem + fragment
+        for stem, fragment in zip(stems, fragments, strict=True)
+    ]
 
 
 def module_for_page(page: str, current: str) -> str:
@@ -194,11 +253,19 @@ def module_for_page(page: str, current: str) -> str:
 
 
 def valid_question_matches(page: str, maximum: int) -> list[re.Match]:
+    candidates = [
+        match
+        for match in QUESTION_RE.finditer(page)
+        if 1 <= int(match.group("number")) <= maximum
+    ]
     matches = []
     previous = 0
-    for match in QUESTION_RE.finditer(page):
+    for index, match in enumerate(candidates):
         number = int(match.group("number"))
-        if not 1 <= number <= maximum or number < previous:
+        if number < previous:
+            continue
+        end = candidates[index + 1].start() if index + 1 < len(candidates) else len(page)
+        if len(OPTION_RE.findall(page[match.start():end])) != 4:
             continue
         matches.append(match)
         previous = number
@@ -238,7 +305,7 @@ def parse_reading_questions(
                 raise RuntimeError(
                     f"Missing {source_id} {current_module} fill answers {start}-{end}"
                 )
-            if source_id == "ets-practice-1":
+            if layout_of(source_id) == "student_practice":
                 expected = complete_practice_fill_answers(match.group("body"), expected)
             order += 1
             questions.append({

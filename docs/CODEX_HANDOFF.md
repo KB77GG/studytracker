@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-03（Asia/Shanghai）。
+> 最近更新：2026-08-07（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -10,6 +10,23 @@
 3. 不覆盖或删除来源不明的本地改动；先确认它们是否属于用户或另一项任务。
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
+
+## 2026-08-07 ETS Official Practice / OG 六套 v2（发布中）
+
+- 新增 `ets-practice-1` 至 `ets-practice-5` 与 `ets-og-chapter-6` 六套完整四科题包：
+  P1–P5 各 97 题，OG 120 题，合计 605 个原子题、0 blocked；Reading、Listening、Writing、
+  Speaking 均来自本地官方 PDF/答案/媒体，公开内容和私有答案继续分离。
+- 新增确定性导入流水线 `scripts/build_toefl_official_v2.py` 及官方媒体/三科解析模块；支持
+  P1–P5 与 OG 的不同版式、OG 无下划线填词、Build a Sentence 多词块与干扰项、OG 口语
+  8/10/12 秒源计时。v2 runtime 兼容每个 Listening group 独立原音频，旧三套整段音频行为不变。
+- 六套严格 `--require-release-ready` 全部通过；210 个新媒体文件（约 64.5 MB）本地逐项核对
+  SHA-256/大小，并已先同步到生产 `static/toefl/v2/ets-*`。rsync checksum dry-run 无文件差异，
+  抽查 OGG/MP3/MP4 的 5002 Range 请求均返回 206。
+- 本地验证：TOEFL 定向 39 passed；全仓排除既有缺失静态音频 fixture 后 384 passed、7 subtests；
+  完整运行仅有同一基线的 2 个 `tests/test_static_audio_headers.py` 404 失败。Ruff、JS syntax、
+  Node response queue、`git diff --check` 均通过。
+- 当前任务分支 `codex/toefl-official-full-import`，基于 `origin/main@cf875c26`；代码提交、main
+  发布和生产页面/接口验证仍在进行，完成后将本节更新为实际提交和部署状态。
 
 ## 2026-08-03 刷题页姓名绑定可查看模考历史（已部署）
 

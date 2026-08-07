@@ -168,11 +168,17 @@
     return { preparation, response };
   }
 
+  function audioStateKey(phase, group) {
+    return group?.stimulus?.playback_scope === "group" ? group.id : phase.id;
+  }
+
   function renderAudioGate(phase, group) {
     if (phase.section !== "listening" || !group || group.stimulus?.format !== "audio") return false;
     const asset = assetById.get(group.stimulus.asset_id);
-    const audioState = audioStates.get(phase.id) || { ready: false, skipped: false, played: false };
-    audioStates.set(phase.id, audioState);
+    const stateKey = audioStateKey(phase, group);
+    const groupScoped = stateKey === group.id;
+    const audioState = audioStates.get(stateKey) || { ready: false, skipped: false, played: false };
+    audioStates.set(stateKey, audioState);
     const card = document.createElement("div");
     card.className = "mock-audio-card";
     const title = document.createElement("strong");
@@ -200,9 +206,11 @@
       elements.stimulus.appendChild(card);
       return true;
     }
-    if (state.groupIndex !== 0 || audioState.ready) {
+    if ((!groupScoped && state.groupIndex !== 0) || audioState.ready) {
       const note = document.createElement("p");
-      note.textContent = audioState.ready ? "音频已播放；测试模式禁止重播和拖动。" : "音频将在本 Module 的第一组加载。";
+      note.textContent = audioState.ready
+        ? "音频已播放；测试模式禁止重播和拖动。"
+        : "音频将在本 Module 的第一组加载。";
       card.appendChild(note);
       elements.stimulus.appendChild(card);
       return true;
@@ -698,7 +706,7 @@
     if (phase?.section !== "listening") return true;
     const group = currentGroup();
     if (group?.stimulus?.format !== "audio") return true;
-    return Boolean(audioStates.get(phase.id)?.ready);
+    return Boolean(audioStates.get(audioStateKey(phase, group))?.ready);
   }
 
   function currentGroupRecordingsReady() {

@@ -22,12 +22,11 @@ import re
 import shutil
 import subprocess
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from difflib import SequenceMatcher
 from pathlib import Path
-from typing import Iterable
-
 
 DEFAULT_SOURCE = Path.home() / "Desktop" / "新托福资料"
 DEFAULT_OUTPUT = Path("data") / "toefl_official_audit"
@@ -115,6 +114,7 @@ def discover_sources(root: Path) -> list[OfficialSource]:
             "teacher_practice",
             root / "tmp_pdfs" / "ets_practice_test_3.pdf",
             (
+                root / "test 5" / "Teacher Practice Test 3 Audio Files",
                 root / "test 5" / "teacher-Practice-Test-3-audio-files.zip",
                 root / "test 5" / "teacher-Practice-Test-3-audio-files (1).zip",
             ),
