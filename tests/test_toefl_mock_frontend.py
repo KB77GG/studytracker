@@ -27,6 +27,7 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
         "seeking",
         "ratechange",
         "activeListeningAudio",
+        "stateSaveChain",
         "继续并播放音频",
         "audio.controls = false",
         "题目将在音频结束后显示",

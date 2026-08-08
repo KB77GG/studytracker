@@ -56,6 +56,7 @@
   const inFlightResponseSaves = new Set();
   const inFlightResponseValues = new Map();
   const audioStates = new Map();
+  let stateSaveChain = Promise.resolve();
 
   function rebuildDefinitionMaps() {
     groupById = new Map((definition.groups || []).map((item) => [item.id, item]));
@@ -304,7 +305,7 @@
       audioState.played = true;
       playbackStatus.textContent = "音频正在播放 · 不可暂停、拖动或倍速";
       playFallback.hidden = true;
-      persistState().catch(() => setSaveState("音频播放状态同步失败", true));
+      persistState({ includeRemaining: false }).catch(() => setSaveState("音频播放状态同步失败", true));
       updateNextState();
     });
     audio.addEventListener("pause", () => {
@@ -327,7 +328,8 @@
       activeListeningAudio = null;
       audioState.ready = true;
       playbackStatus.textContent = "音频播放完毕 · 可以继续答题";
-      await persistState();
+      await persistState({ includeRemaining: false });
+      setSaveState("音频播放完毕");
       render();
     });
     audio.addEventListener("error", () => {
@@ -801,23 +803,27 @@
     updateNextState();
   }
 
-  async function persistState() {
-    if (!attempt || attempt.status !== "in_progress") return;
-    const audio = {};
-    audioStates.forEach((value, key) => { audio[key] = value; });
-    const statePayload = { ...state, audio, returnTo: attempt.state?.returnTo || config.returnTo };
-    if (statePayload.deviceCheck?.microphone !== "passed") delete statePayload.deviceCheck;
-    const payload = {
-      state: statePayload,
-      currentPhase: currentPhase()?.id,
-      remainingSeconds,
-    };
-    const result = await api(`/api/toefl/attempts/${attempt.id}/state`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
+  function persistState({ includeRemaining = true } = {}) {
+    const operation = stateSaveChain.catch(() => undefined).then(async () => {
+      if (!attempt || attempt.status !== "in_progress") return;
+      const audio = {};
+      audioStates.forEach((value, key) => { audio[key] = value; });
+      const statePayload = { ...state, audio, returnTo: attempt.state?.returnTo || config.returnTo };
+      if (statePayload.deviceCheck?.microphone !== "passed") delete statePayload.deviceCheck;
+      const payload = {
+        state: statePayload,
+        currentPhase: currentPhase()?.id,
+      };
+      if (includeRemaining) payload.remainingSeconds = remainingSeconds;
+      const result = await api(`/api/toefl/attempts/${attempt.id}/state`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+      attempt = result.attempt;
+      remainingSeconds = attempt.remaining_seconds;
     });
-    attempt = result.attempt;
-    remainingSeconds = attempt.remaining_seconds;
+    stateSaveChain = operation;
+    return operation;
   }
 
   function audioReadyForCurrentGroup() {
@@ -855,6 +861,8 @@
       if (!activeRecording) {
         elements.route.textContent = "点击“播放题目并开始录音”；播放结束后会自动录音、上传并进入下一题。";
       }
+    } else {
+      elements.route.textContent = "";
     }
   }
 
