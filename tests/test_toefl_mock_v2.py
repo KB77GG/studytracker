@@ -1,12 +1,14 @@
 import io
 import json
+from datetime import datetime
+from pathlib import Path
 
 import pytest
 from flask import Flask
 from flask_login import LoginManager
 
 from api.toefl_mock import toefl_mock_bp
-from models import ToeflMockAttempt, db
+from models import StudentProfile, ToeflMockAttempt, ToeflMockResponse, User, db
 from services.toefl_mock_v2 import (
     catalog,
     definition,
@@ -41,13 +43,34 @@ def app(tmp_path):
         SQLALCHEMY_DATABASE_URI="sqlite://",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         UPLOAD_FOLDER=str(tmp_path / "uploads"),
+        TOEFL_MOCK_RECORDING_FOLDER=str(tmp_path / "private_uploads" / "toefl_mock"),
         TESTING=True,
     )
     db.init_app(test_app)
     login_manager = LoginManager(test_app)
-    login_manager.user_loader(lambda _user_id: None)
+    login_manager.user_loader(
+        lambda user_id: db.session.get(User, int(user_id))
+        if str(user_id).isdigit()
+        else None
+    )
     test_app.add_url_rule("/", endpoint="index", view_func=lambda: "index")
     test_app.add_url_rule("/login", endpoint="login", view_func=lambda: "login")
+    for endpoint in (
+        "student_today",
+        "materials_list",
+        "word_examples_page",
+        "tasks_page",
+        "grading_list",
+        "course_plan_list",
+        "practice_library",
+        "admin_mock_exams_index",
+        "admin_mock_exams_create",
+        "report_page",
+        "logout",
+    ):
+        test_app.add_url_rule(
+            f"/__test/{endpoint}", endpoint=endpoint, view_func=lambda: "ok"
+        )
     test_app.register_blueprint(toefl_mock_bp)
     with test_app.app_context():
         db.create_all()
@@ -55,6 +78,90 @@ def app(tmp_path):
     with test_app.app_context():
         db.session.remove()
         db.drop_all()
+
+
+def _login_as(app, client, role, username, *, profile_name=None):
+    with app.app_context():
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            user = User(
+                username=username,
+                password_hash="test-password-hash",
+                display_name=username,
+                role=role,
+            )
+            db.session.add(user)
+            db.session.flush()
+        profile = None
+        if role == User.ROLE_STUDENT:
+            profile = StudentProfile.query.filter_by(user_id=user.id).first()
+            if not profile:
+                profile = StudentProfile(full_name=profile_name or username, user_id=user.id)
+                db.session.add(profile)
+                db.session.flush()
+        user_id = user.id
+        profile_id = profile.id if profile else None
+        db.session.commit()
+    with client.session_transaction() as browser_session:
+        browser_session["_user_id"] = str(user_id)
+        browser_session["_fresh"] = True
+    return profile_id
+
+
+def _make_completed_attempt(app, student_id, *, status="completed", sections=None):
+    with app.app_context():
+        return _make_completed_attempt_in_context(
+            student_id, status=status, sections=sections
+        )
+
+
+def _make_completed_attempt_in_context(student_id, *, status="completed", sections=None):
+    sections = sections or ["reading", "writing"]
+    payload = definition("ets-practice-1", sections)
+    now = datetime.utcnow()
+    attempt_id = f"attempt-{student_id}-{status}"
+    attempt = ToeflMockAttempt(
+        id=attempt_id,
+        student_id=student_id,
+        actor_key=f"student:{student_id}",
+        exam_id=payload["test"]["id"],
+        sections_json=json.dumps(sections),
+        status=status,
+        is_preview=False,
+        current_phase=payload["phases"][0]["id"],
+        remaining_seconds=0 if status == "completed" else 600,
+        state_json="{}",
+        routes_json="{}",
+        started_at=now,
+        completed_at=now if status == "completed" else None,
+        updated_at=now,
+    )
+    db.session.add(attempt)
+    auto = next(
+        (item for item in payload["questions"] if item.get("grading_status") == "auto"),
+        None,
+    )
+    if auto:
+        db.session.add(
+            ToeflMockResponse(
+                attempt_id=attempt_id,
+                question_id=auto["id"],
+                response_json=json.dumps("intentionally-wrong"),
+            )
+        )
+    for question in payload["questions"]:
+        if question.get("grading_status") != "manual":
+            continue
+        value = "A teacher response for review." if question["response_type"] == "free_text" else {"recorded": True}
+        db.session.add(
+            ToeflMockResponse(
+                attempt_id=attempt_id,
+                question_id=question["id"],
+                response_json=json.dumps(value),
+            )
+        )
+    db.session.commit()
+    return attempt_id
 
 
 def test_catalog_integrates_all_thirteen_source_backed_sets():
@@ -826,3 +933,170 @@ def test_formal_recording_is_one_take(app):
     repeated = upload()
     assert repeated.status_code == 409
     assert repeated.get_json()["error"] == "recording_take_limit_reached"
+
+
+def test_review_permissions_and_incomplete_attempt_do_not_leak_answers(app):
+    client = app.test_client()
+    student_id = _login_as(app, client, User.ROLE_STUDENT, "student-one", profile_name="学生一")
+    attempt_id = _make_completed_attempt(app, student_id)
+    with app.app_context():
+        incomplete_id = _make_completed_attempt(app, student_id, status="in_progress")
+
+    own = client.get(f"/api/toefl/attempts/{attempt_id}/review")
+    assert own.status_code == 200
+    assert own.get_json()["attempt"]["status"] == "completed"
+    assert own.get_json()["objective"][0]["correct_answer"] is not None
+    assert client.get(f"/toefl/mock/attempts/{attempt_id}/review").status_code == 200
+
+    incomplete = client.get(f"/api/toefl/attempts/{incomplete_id}/review")
+    assert incomplete.status_code == 409
+    assert "correct_answer" not in json.dumps(incomplete.get_json())
+
+    other_student_id = _login_as(app, client, User.ROLE_STUDENT, "student-two", profile_name="学生二")
+    assert other_student_id != student_id
+    assert client.get(f"/api/toefl/attempts/{attempt_id}/review").status_code == 404
+    assert client.get(f"/api/toefl/teacher/attempts/{attempt_id}").status_code == 403
+
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-one")
+    assert client.get(f"/api/toefl/teacher/attempts/{attempt_id}").status_code == 200
+    assert client.get("/api/toefl/teacher/attempts").status_code == 200
+    assert client.get("/toefl/mock/teacher/attempts").status_code == 200
+    assert client.get(f"/toefl/mock/teacher/attempts/{attempt_id}").status_code == 200
+
+
+def test_teacher_save_publish_student_visibility_and_version_conflict(app):
+    client = app.test_client()
+    student_id = _login_as(app, client, User.ROLE_STUDENT, "student-review", profile_name="复盘学生")
+    attempt_id = _make_completed_attempt(app, student_id)
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-review")
+
+    detail = client.get(f"/api/toefl/teacher/attempts/{attempt_id}")
+    assert detail.status_code == 200
+    version = detail.get_json()["attempt"]["review_version"]
+    manual_ids = [item["id"] for item in detail.get_json()["manual"]]
+    reviews = [
+        {"question_id": question_id, "score": 4, "score_max": 5, "feedback": "继续加强组织与细节。"}
+        for question_id in manual_ids
+    ]
+    saved = client.patch(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review",
+        json={"version": version, "reviews": reviews},
+    )
+    assert saved.status_code == 200
+    assert saved.get_json()["attempt"]["review_status"] == "draft"
+    next_version = saved.get_json()["attempt"]["review_version"]
+    stale = client.patch(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review",
+        json={"version": version, "reviews": reviews},
+    )
+    assert stale.status_code == 409
+    assert stale.get_json()["error"] == "review_version_conflict"
+
+    before_publish = client.get(f"/api/toefl/teacher/attempts/{attempt_id}").get_json()
+    assert all(item["score"] == 4 for item in before_publish["manual"])
+
+    _login_as(app, client, User.ROLE_STUDENT, "student-review", profile_name="复盘学生")
+    hidden = client.get(f"/api/toefl/attempts/{attempt_id}/review")
+    assert hidden.status_code == 200
+    assert all(item["score"] is None for item in hidden.get_json()["manual"])
+    assert all(item["feedback"] is None for item in hidden.get_json()["manual"])
+    assert all(item["recording_url"] is None for item in hidden.get_json()["manual"])
+
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-review")
+    published = client.post(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review/publish",
+        json={"version": next_version},
+    )
+    assert published.status_code == 200
+    assert published.get_json()["attempt"]["review_status"] == "published"
+
+    _login_as(app, client, User.ROLE_STUDENT, "student-review", profile_name="复盘学生")
+    student_review = client.get(f"/api/toefl/attempts/{attempt_id}/review")
+    assert student_review.status_code == 200
+    review_json = student_review.get_json()
+    assert review_json["manual"][0]["score"] == 4
+    assert review_json["manual"][0]["feedback"] == "继续加强组织与细节。"
+    assert "recording_token" not in json.dumps(review_json)
+    assert "toefl_mock" not in json.dumps(review_json)
+    assert client.get(
+        f"/api/toefl/attempts/{attempt_id}/report"
+    ).get_json()["manual"]["status"] == "published"
+
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-review")
+    assert client.post(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review/reopen"
+    ).status_code == 415
+    assert client.post(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review/reopen", json={}
+    ).status_code == 400
+    reopened = client.post(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review/reopen",
+        json={"version": published.get_json()["attempt"]["review_version"]},
+    )
+    assert reopened.status_code == 200
+    assert reopened.get_json()["attempt"]["review_status"] == "draft"
+
+
+def test_protected_recording_supports_range_missing_file_and_path_traversal(app):
+    client = app.test_client()
+    student_id = _login_as(app, client, User.ROLE_STUDENT, "student-audio", profile_name="录音学生")
+    attempt_id = _make_completed_attempt(app, student_id, sections=["speaking"])
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, attempt_id)
+        attempt.review_status = "draft"
+        row = attempt.responses[0]
+        token = f"{attempt_id}/{'a' * 32}.webm"
+        row.recording_token = token
+        db.session.commit()
+        target = Path(app.config["TOEFL_MOCK_RECORDING_FOLDER"]) / token
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0123456789")
+        response_id = row.id
+
+    url = f"/api/toefl/attempts/{attempt_id}/responses/{response_id}/recording"
+    assert client.get(url).status_code == 403
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-audio")
+    assert client.get(url).status_code == 200
+    _login_as(app, client, User.ROLE_STUDENT, "student-audio", profile_name="录音学生")
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, attempt_id)
+        attempt.review_status = "published"
+        db.session.commit()
+    ranged = client.get(url, headers={"Range": "bytes=2-5"})
+    assert ranged.status_code == 206
+    assert ranged.data == b"2345"
+    assert ranged.headers["Content-Range"].startswith("bytes 2-5/")
+    assert "no-store" in ranged.headers["Cache-Control"]
+    review = client.get(f"/api/toefl/attempts/{attempt_id}/review").get_json()
+    assert review["manual"][0]["context"]
+    assert review["manual"][0]["stimulus"]["audio_url"].startswith(
+        "/static/toefl/v2/"
+    )
+    _login_as(app, client, User.ROLE_STUDENT, "student-audio-other", profile_name="其他学生")
+    assert client.get(url).status_code == 404
+    _login_as(app, client, User.ROLE_STUDENT, "student-audio", profile_name="录音学生")
+
+    with app.app_context():
+        row = db.session.get(ToeflMockResponse, response_id)
+        row.recording_token = f"{attempt_id}/../secret.webm"
+        db.session.commit()
+    assert client.get(url).status_code == 404
+    with app.app_context():
+        row = db.session.get(ToeflMockResponse, response_id)
+        row.recording_token = f"{attempt_id}/{'b' * 32}.webm"
+        db.session.commit()
+    assert client.get(url).status_code == 404
+
+
+def test_student_history_only_lists_own_completed_attempts(app):
+    client = app.test_client()
+    first_id = _login_as(app, client, User.ROLE_STUDENT, "student-history-one", profile_name="历史一")
+    own_id = _make_completed_attempt(app, first_id)
+    second_id = _login_as(app, client, User.ROLE_STUDENT, "student-history-two", profile_name="历史二")
+    other_id = _make_completed_attempt(app, second_id)
+    _login_as(app, client, User.ROLE_STUDENT, "student-history-one", profile_name="历史一")
+    history = client.get("/api/toefl/attempts/history")
+    assert history.status_code == 200
+    ids = {item["id"] for item in history.get_json()["attempts"]}
+    assert own_id in ids
+    assert other_id not in ids

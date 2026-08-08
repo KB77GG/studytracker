@@ -182,6 +182,63 @@ button { cursor: pointer; font: inherit; }
 .mock-library__legacy { margin: -18px 0 34px; color: var(--muted); font-size: 12px; }
 .mock-library__legacy a { margin: 0 3px; color: var(--ink); font-weight: 700; }
 
+.mock-review-shell { max-width: 1180px; margin: 0 auto; padding-bottom: 48px; }
+.mock-review-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 24px 0; }
+.mock-review-heading h2 { margin: 2px 0 8px; font-family: Georgia, serif; font-size: 34px; }
+.mock-review-heading__actions, .mock-review-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.mock-link-button { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+.mock-review-meta, .mock-attempt-row p, .mock-muted { color: var(--muted); }
+.mock-review-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+.mock-review-summary div { padding: 16px; border: 1px solid var(--line); background: #fff; }
+.mock-review-summary span, .mock-review-summary strong { display: block; }
+.mock-review-summary span { color: var(--muted); font-size: 12px; }
+.mock-review-summary strong { margin-top: 5px; font-size: 24px; }
+.mock-save-state { min-width: 64px; color: var(--muted); font-size: 13px; }
+.mock-review-actions { justify-content: flex-end; margin: 0 0 20px; }
+.mock-review-filter { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--ink); font-size: 14px; }
+.mock-review-section { margin-top: 28px; }
+.mock-review-section__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; border-bottom: 2px solid var(--ink); }
+.mock-review-section__heading h3 { margin: 0 0 10px; font-family: Georgia, serif; font-size: 24px; }
+.mock-review-section__heading span { color: var(--muted); font-size: 12px; }
+.mock-review-items { display: grid; gap: 12px; padding-top: 12px; }
+.mock-review-item { padding: 18px; border: 1px solid var(--line); background: #fff; }
+.mock-review-item__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+.mock-review-item h4 { margin: 12px 0; white-space: pre-line; font-size: 16px; line-height: 1.65; }
+.mock-review-stimulus, .mock-student-writing, .mock-review-explanation { white-space: pre-line; line-height: 1.7; }
+.mock-review-stimulus { padding: 12px; background: #f5f8f6; }
+.mock-review-options { margin: 12px 0; padding-left: 24px; line-height: 1.7; }
+.mock-review-options strong { display: inline-block; width: 20px; }
+.mock-answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.mock-answer-grid div { padding: 12px; background: #f8faf9; }
+.mock-answer-grid dt { color: var(--muted); font-size: 12px; }
+.mock-answer-grid dd { margin: 5px 0 0; white-space: pre-line; line-height: 1.6; }
+.mock-review-explanation { margin: 14px 0 0; padding-left: 12px; border-left: 3px solid var(--amber); }
+.mock-review-explanation strong { display: block; margin-bottom: 4px; }
+.mock-review-evidence { color: var(--muted); font-size: 12px; }
+.mock-student-writing { max-height: 260px; overflow: auto; padding: 14px; border: 1px solid var(--line); background: #fbfcfb; }
+.mock-review-audio { width: min(100%, 480px); margin: 14px 0 4px; }
+.mock-source-audio { display: grid; gap: 4px; margin-top: 10px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.mock-source-audio .mock-review-audio { margin-top: 4px; }
+.mock-pending-note { padding: 12px; color: #72551d; background: #fff7e8; }
+.mock-score-readout { margin-top: 14px; padding: 14px; border-left: 3px solid var(--sage); background: #edf7f3; }
+.mock-score-readout strong { font-size: 20px; }
+.mock-score-readout p { margin: 6px 0 0; white-space: pre-line; line-height: 1.65; }
+.mock-review-editor { display: grid; grid-template-columns: 140px 140px 1fr; gap: 12px; margin-top: 14px; }
+.mock-review-editor label, .mock-review-filters label { display: grid; gap: 5px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.mock-review-editor input, .mock-review-editor textarea, .mock-review-filters input, .mock-review-filters select { width: 100%; padding: 9px 10px; border: 1px solid #aeb9b6; border-radius: 4px; background: #fff; color: var(--ink); font: inherit; }
+.mock-review-editor__feedback textarea { resize: vertical; }
+.mock-review-filters { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding: 14px; border: 1px solid var(--line); background: #fff; }
+.mock-review-filters label { min-width: 180px; }
+.mock-attempt-list { display: grid; gap: 10px; }
+.mock-attempt-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px; border: 1px solid var(--line); background: #fff; }
+.mock-attempt-row__eyebrow { margin: 0 0 5px; font-size: 12px; }
+.mock-attempt-row h3 { margin: 0 0 6px; font-size: 18px; }
+.mock-attempt-row p { margin: 0; font-size: 13px; }
+.mock-attempt-row__status { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.mock-badge--pending { color: #72551d; background: #fff0c9; }
+.mock-badge--danger { color: #8f332b; background: #f9dfdc; }
+.mock-empty-state { padding: 30px; border: 1px dashed #aeb9b6; color: var(--muted); text-align: center; }
+
 @media (max-width: 800px) {
   body:not(.dashboard-body) > main.container { width: auto; }
   .mock-toolbar { grid-template-columns: 1fr auto; padding: 10px 14px; }
@@ -200,4 +257,10 @@ button { cursor: pointer; font: inherit; }
   .mock-welcome h2 { font-size: 35px; }
   .mock-stimulus { padding: 18px; font-size: 16px; }
   .mock-question { padding: 16px; }
+  .mock-review-heading, .mock-attempt-row { display: block; }
+  .mock-review-heading__actions, .mock-attempt-row__status { justify-content: flex-start; margin-top: 14px; }
+  .mock-review-summary { grid-template-columns: 1fr 1fr; }
+  .mock-answer-grid, .mock-review-editor { grid-template-columns: 1fr; }
+  .mock-review-editor__feedback { grid-column: auto; }
+  .mock-review-filters { align-items: stretch; }
 }

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block page_subtitle %}TOEFL 2026 · TEACHER REVIEW{% endblock %}
+{% block page_title %}新版模考批改{% endblock %}
+
+{% block content_dashboard %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
+<section class="mock-review-shell">
+  <div class="mock-review-heading">
+    <div>
+      <p class="mock-kicker">TOEFL V2 REVIEW WORKBENCH</p>
+      <h2>学生交卷</h2>
+    </div>
+    <a class="mock-secondary mock-link-button" href="/toefl/mock">返回题库</a>
+  </div>
+  <form class="mock-review-filters" method="get">
+    <label>学生<input name="student" type="search" placeholder="姓名"></label>
+    <label>批改状态
+      <select name="reviewStatus">
+        <option value="">全部</option>
+        <option value="pending">待批改</option>
+        <option value="draft">草稿</option>
+        <option value="published">已发布</option>
+      </select>
+    </label>
+    <button class="mock-secondary" type="submit">筛选</button>
+  </form>
+  {% if attempts %}
+  <div class="mock-attempt-list">
+    {% for attempt in attempts %}
+    <article class="mock-attempt-row">
+      <div>
+        <p class="mock-attempt-row__eyebrow">{{ attempt.completed_at or attempt.started_at }}</p>
+        <h3>{{ attempt.student_name }} · {{ attempt.exam_title }}</h3>
+        <p>{{ attempt.sections|join(' · ') }} · {{ attempt.summary.manual_reviewed }}/{{ attempt.summary.manual_total }} 道主观题已评分</p>
+      </div>
+      <div class="mock-attempt-row__status">
+        <span class="mock-badge mock-badge--{{ 'ready' if attempt.review_status == 'published' else 'pending' }}">
+          {% if attempt.review_status == 'published' %}已发布{% elif attempt.review_status == 'draft' %}草稿{% elif attempt.review_status == 'not_required' %}无需批改{% else %}待批改{% endif %}
+        </span>
+        <a class="mock-primary mock-link-button" href="/toefl/mock/teacher/attempts/{{ attempt.id }}">打开</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="mock-empty-state">暂无符合条件的已交卷 attempt。</div>
+  {% endif %}
+</section>
+{% endblock %}

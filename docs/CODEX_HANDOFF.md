@@ -11,6 +11,26 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
+## 2026-08-07 TOEFL v2 教师批改与学生错题复盘（当前本地未提交）
+
+- 当前隔离 worktree 为 `/Users/zhouxin/.codex/worktrees/fe6e/studytracker`，实际状态是
+  detached `HEAD e1f1b3fa`；工作区保留本次未提交改动，未 commit、未 push、未 deploy，主工作区未修改。
+- 已新增新版 attempt/response 的 review 状态、版本、评分、反馈、reviewer 和发布时间字段；新增
+  `scripts/migrate_toefl_mock_review.py`，使用外部环境运行：
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python scripts/migrate_toefl_mock_review.py --database /path/to/app.db`。
+  脚本只做显式 SQLite `ALTER TABLE`/索引/状态回填，重复执行幂等；生产执行前应先备份 SQLite。
+- 已新增独立 `services/toefl_mock_review.py` 与 TOEFL 蓝图内的教师列表/详情、草稿保存、乐观锁、发布/重新开放、
+  学生历史/逐题复盘和受保护录音流；新版录音改存公共 `/uploads` 之外的 `private_uploads/toefl_mock/`，
+  只保留内部相对 token，播放支持 Range、`private/no-store`，并校验 attempt 归属、真实路径边界、后缀/MIME 和大小。
+  运维与保留策略见 `docs/TOEFL_MOCK_REVIEW_RUNBOOK.md`。
+- 本地定向结果：`tests/test_toefl_mock_v2.py` 及新迁移/闭环用例通过；当前共 29 项定向通过（含原有 24 项回归）。
+  全量 pytest 为 `393 passed, 2 failed`；2 个失败均是既有 `tests/test_static_audio_headers.py` 依赖缺失的
+  `static/listening/ielts10_test1_s1.mp3` 返回 404，未修改该静态链路。本次未执行生产迁移、部署或浏览器真实账号 QA。
+- 本次本地变更路径：`.gitignore`、`config.py`、`api/toefl_mock.py`、`models.py`、`services/toefl_mock_review.py`、
+  `scripts/migrate_toefl_mock_review.py`、`templates/toefl/{attempt_history,teacher_attempts,review_detail}.html`、
+  `static/css/toefl_mock.css`、`static/js/toefl_mock.js`、`templates/toefl/mock_index.html`、
+  `docs/TOEFL_MOCK_REVIEW_RUNBOOK.md`，以及相关测试文件。
+
 ## 2026-08-07 ETS Official Practice / OG 六套 v2（已部署）
 
 - 新增 `ets-practice-1` 至 `ets-practice-5` 与 `ets-og-chapter-6` 六套完整四科题包：

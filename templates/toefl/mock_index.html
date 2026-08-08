@@ -14,6 +14,11 @@
       <span>套正式题包 / {{ exams|sum(attribute='counts.questions') }} 个原子题</span>
     </div>
   </div>
+  {% if current_user.is_authenticated and current_user.role == 'student' %}
+  <p><a class="mock-secondary mock-link-button" href="/toefl/mock/history">我的模考复盘</a></p>
+  {% elif current_user.is_authenticated and current_user.role in ['admin', 'teacher', 'assistant'] %}
+  <p><a class="mock-secondary mock-link-button" href="/toefl/mock/teacher/attempts">进入教师批改</a></p>
+  {% endif %}
 
   <div class="mock-gate-note mock-gate-note--ready">
     <strong>全部题包均已通过结构、媒体和逐题计时门禁。</strong>

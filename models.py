@@ -758,16 +758,31 @@ class ToeflMockAttempt(db.Model):
     routes_json = db.Column(db.Text, nullable=False, default="{}")
     started_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
     completed_at = db.Column(db.DateTime)
+    review_status = db.Column(
+        db.String(24), default="not_started", nullable=False, index=True
+    )
+    review_version = db.Column(db.Integer, default=1, nullable=False)
+    review_reviewer_id = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=True, index=True
+    )
+    review_updated_at = db.Column(db.DateTime)
+    review_published_at = db.Column(db.DateTime)
+    review_reopened_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
     updated_at = db.Column(
         db.DateTime, default=utcnow_naive, onupdate=utcnow_naive, nullable=False
     )
+
+    student = db.relationship("StudentProfile", foreign_keys=[student_id])
 
     responses = db.relationship(
         "ToeflMockResponse",
         backref="attempt",
         lazy="selectin",
         cascade="all, delete-orphan",
+    )
+    review_reviewer = db.relationship(
+        "User", foreign_keys=[review_reviewer_id]
     )
 
 
@@ -786,10 +801,22 @@ class ToeflMockResponse(db.Model):
     question_id = db.Column(db.String(120), nullable=False, index=True)
     response_json = db.Column(db.Text, nullable=False, default="null")
     recording_token = db.Column(db.String(500))
+    review_status = db.Column(
+        db.String(24), default="pending", nullable=False, index=True
+    )
+    teacher_score = db.Column(db.Float)
+    score_max = db.Column(db.Float, default=5.0)
+    teacher_feedback = db.Column(db.Text)
+    reviewed_by = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=True, index=True
+    )
+    reviewed_at = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
     updated_at = db.Column(
         db.DateTime, default=utcnow_naive, onupdate=utcnow_naive, nullable=False
     )
+
+    reviewer = db.relationship("User", foreign_keys=[reviewed_by])
 
     __table_args__ = (
         db.UniqueConstraint(

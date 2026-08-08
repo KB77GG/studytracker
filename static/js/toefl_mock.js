@@ -843,9 +843,15 @@
     const heading = document.createElement("h2");
     heading.textContent = "流程已完整结束";
     const note = document.createElement("p");
+    const manualStatus = {
+      pending: "pending teacher review（待老师批改）",
+      draft: "老师批改中",
+      published: "老师已发布",
+      not_required: "无需人工批改",
+    }[report.manual.status] || report.manual.status;
     note.textContent = attempt.preview
-      ? "这是预览作答报告，不是正式成绩单；Speaking/Writing 仍 pending teacher review。"
-      : "客观题已自动判分；Speaking/Writing 已提交并等待人工批改。";
+      ? `这是预览作答报告，不是正式成绩单；人工题状态：${manualStatus}。`
+      : `客观题已自动判分；人工题状态：${manualStatus}。`;
     const metrics = document.createElement("div");
     metrics.className = "report-metrics";
     appendMetric(metrics, `${report.objective.correct}/${report.objective.auto_total}`, "客观题正确 / 判分分母");
@@ -853,13 +859,18 @@
     appendMetric(metrics, `${report.manual.submitted}/${report.manual.total}`, "主观题已提交");
     const blocked = document.createElement("p");
     blocked.className = "mock-report-note";
-    blocked.textContent = `blocked 题不进入分母；人工题状态：${report.manual.status === "pending_teacher_review" ? "pending teacher review" : "none"}。`;
+    blocked.textContent = `blocked 题不进入分母；人工题状态：${manualStatus}。`;
     const returnLine = document.createElement("p");
     const returnLink = document.createElement("a");
     returnLink.href = attempt.state?.returnTo || config.returnTo || "/toefl/mock";
     returnLink.textContent = "返回模考目录";
     returnLine.appendChild(returnLink);
-    elements.report.append(kicker, heading, note, metrics, blocked, returnLine);
+    const reviewLine = document.createElement("p");
+    const reviewLink = document.createElement("a");
+    reviewLink.href = `/toefl/mock/attempts/${encodeURIComponent(attempt.id)}/review`;
+    reviewLink.textContent = "进入错题复盘";
+    reviewLine.appendChild(reviewLink);
+    elements.report.append(kicker, heading, note, metrics, blocked, reviewLine, returnLine);
   }
 
   async function start() {

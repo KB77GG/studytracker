@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_subtitle %}TOEFL 2026 · REVIEW HISTORY{% endblock %}
+{% block page_title %}我的新版模考{% endblock %}
+
+{% block content_dashboard %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
+<section class="mock-review-shell">
+  <div class="mock-review-heading">
+    <div>
+      <p class="mock-kicker">TOEFL V2</p>
+      <h2>已交卷模考</h2>
+    </div>
+    <a class="mock-secondary mock-link-button" href="/toefl/mock">返回题库</a>
+  </div>
+  {% if attempts %}
+  <div class="mock-attempt-list">
+    {% for attempt in attempts %}
+    <article class="mock-attempt-row">
+      <div>
+        <p class="mock-attempt-row__eyebrow">{{ attempt.completed_at or attempt.started_at }}</p>
+        <h3>{{ attempt.exam_title }}</h3>
+        <p>{{ attempt.sections|join(' · ') }} · {{ attempt.summary.objective_correct }}/{{ attempt.summary.objective_total }} 客观题正确</p>
+      </div>
+      <div class="mock-attempt-row__status">
+        <span class="mock-badge mock-badge--{{ 'ready' if attempt.review_status == 'published' else 'pending' }}">
+          {{ '老师已发布' if attempt.review_status == 'published' else '待老师批改' }}
+        </span>
+        <a class="mock-primary mock-link-button" href="/toefl/mock/attempts/{{ attempt.id }}/review">查看复盘</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="mock-empty-state">还没有已交卷的新版模考。</div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -57,6 +57,12 @@ class Config:
     # 证据文件保存目录
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
+    # TOEFL v2 学生录音必须位于公共 /uploads 树之外，只能经鉴权接口播放。
+    TOEFL_MOCK_RECORDING_FOLDER = os.environ.get(
+        "TOEFL_MOCK_RECORDING_FOLDER",
+        os.path.join(BASE_DIR, "private_uploads", "toefl_mock"),
+    )
+
     # 上传文件大小限制（100MB，精听音频可能较大）
     MAX_CONTENT_LENGTH = 100 * 1024 * 1024
 

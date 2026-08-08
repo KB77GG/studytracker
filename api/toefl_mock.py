@@ -15,6 +15,7 @@ from flask import (
     jsonify,
     render_template,
     request,
+    send_file,
     session,
 )
 from flask_login import current_user
@@ -26,6 +27,7 @@ from models import (
     User,
     db,
 )
+from services import toefl_mock_review as review_workflow
 from services.toefl_mock_v2 import (
     PackageNotFoundError,
     PackageReleaseBlockedError,
@@ -38,11 +40,36 @@ from services.toefl_mock_v2 import (
     validate_navigation_state,
     validate_response_value,
 )
+from services.web_privacy import no_store
 
 toefl_mock_bp = Blueprint("toefl_mock", __name__)
 MAX_RECORDING_BYTES = 20 * 1024 * 1024
 MIN_RECORDING_DURATION_MS = 250
 RECORDING_DURATION_TOLERANCE_MS = 2000
+RECORDING_SUFFIXES = {
+    ".webm": "audio/webm",
+    ".wav": "audio/wav",
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+    ".ogg": "audio/ogg",
+}
+
+
+def _recording_root() -> Path:
+    configured = current_app.config.get("TOEFL_MOCK_RECORDING_FOLDER")
+    root = Path(
+        configured
+        or (Path(current_app.root_path) / "private_uploads" / "toefl_mock")
+    )
+    root = root.resolve()
+    public_root = Path(current_app.config["UPLOAD_FOLDER"]).resolve()
+    try:
+        root.relative_to(public_root)
+    except ValueError:
+        return root
+    raise RuntimeError(
+        "TOEFL_MOCK_RECORDING_FOLDER must be outside the public UPLOAD_FOLDER"
+    )
 
 
 def _json_text(value: Any) -> str:
@@ -539,8 +566,8 @@ def save_recording():
         return jsonify({"error": "recording_type_invalid"}), 400
     if suffix not in {".webm", ".wav", ".mp3", ".m4a", ".ogg"}:
         suffix = ".webm"
-    relative = Path("toefl_mock") / attempt.id / f"{uuid.uuid4().hex}{suffix}"
-    target = Path(current_app.config["UPLOAD_FOLDER"]) / relative
+    relative = Path(attempt.id) / f"{uuid.uuid4().hex}{suffix}"
+    target = _recording_root() / relative
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(payload)
     token = relative.as_posix()
@@ -727,6 +754,7 @@ def complete_attempt(attempt_id: str):
         attempt.status = "completed"
         attempt.completed_at = _utcnow_naive()
         attempt.remaining_seconds = 0
+        review_workflow.ensure_review_state(attempt)
         db.session.commit()
     return jsonify({"attempt": _serialize_attempt(attempt)})
 
@@ -752,6 +780,8 @@ def attempt_report(attempt_id: str):
         item.get("grading_status") == "manual"
         for item in mock_definition["questions"]
     )
+    if review_workflow.ensure_review_state(attempt):
+        db.session.commit()
     return jsonify(
         {
             "attemptId": attempt.id,
@@ -768,7 +798,11 @@ def attempt_report(attempt_id: str):
                     for item in mock_definition["questions"]
                     if item.get("grading_status") == "manual"
                 ),
-                "status": "pending_teacher_review" if manual_total else "none",
+                "status": (
+                    attempt.review_status
+                    if manual_total
+                    else review_workflow.REVIEW_NOT_REQUIRED
+                ),
             },
             "blocked": {
                 "total": sum(
@@ -781,3 +815,310 @@ def attempt_report(attempt_id: str):
             "release": mock_definition["release"],
         }
     )
+
+
+def _private_json(payload: dict[str, Any], status: int = 200):
+    response = no_store(jsonify(payload))
+    response.headers["Cache-Control"] = (
+        "private, no-store, no-cache, must-revalidate, max-age=0"
+    )
+    return response, status
+
+
+def _review_recording_url(row: ToeflMockResponse) -> str:
+    return f"/api/toefl/attempts/{row.attempt_id}/responses/{row.id}/recording"
+
+
+def _review_attempt(attempt_id: str) -> ToeflMockAttempt | None:
+    return db.session.get(ToeflMockAttempt, attempt_id)
+
+
+def _review_json(attempt: ToeflMockAttempt, *, student_view: bool):
+    changed = review_workflow.ensure_review_state(attempt)
+    if changed:
+        db.session.commit()
+    return review_workflow.build_review(
+        attempt,
+        student_view=student_view,
+        recording_url_factory=_review_recording_url,
+    )
+
+
+@toefl_mock_bp.get("/api/toefl/attempts/<attempt_id>/review")
+def student_attempt_review(attempt_id: str):
+    attempt = _owned_attempt(attempt_id)
+    if not attempt:
+        return _private_json({"error": "attempt_not_found"}, 404)
+    if attempt.status != "completed":
+        return _private_json({"error": "attempt_incomplete"}, 409)
+    if _is_staff():
+        return _private_json({"error": "student_endpoint_required"}, 403)
+    return _private_json(_review_json(attempt, student_view=True))
+
+
+@toefl_mock_bp.get("/api/toefl/attempts/history")
+def student_attempt_history():
+    profile = _current_student()
+    if not profile:
+        return _private_json({"error": "student_login_required"}, 401)
+    attempts = (
+        ToeflMockAttempt.query.filter_by(
+            student_id=profile.id,
+            status="completed",
+        )
+        .order_by(ToeflMockAttempt.completed_at.desc())
+        .all()
+    )
+    return _private_json(
+        {
+            "attempts": [review_workflow.attempt_summary(item) for item in attempts]
+        }
+    )
+
+
+def _teacher_attempt_query():
+    query = ToeflMockAttempt.query
+    status = str(request.args.get("status") or "completed").strip()
+    if status and status != "all":
+        query = query.filter(ToeflMockAttempt.status == status)
+    review_status = str(request.args.get("reviewStatus") or "").strip()
+    if review_status:
+        query = query.filter(ToeflMockAttempt.review_status == review_status)
+    exam_id = str(request.args.get("examId") or "").strip()
+    if exam_id:
+        query = query.filter(ToeflMockAttempt.exam_id == exam_id)
+    student = str(request.args.get("student") or "").strip()
+    if student:
+        ids = [
+            item.id
+            for item in StudentProfile.query.filter(
+                StudentProfile.full_name.ilike(f"%{student}%"),
+                StudentProfile.is_deleted.is_(False),
+            ).all()
+        ]
+        query = query.filter(ToeflMockAttempt.student_id.in_(ids or [-1]))
+    return query.order_by(ToeflMockAttempt.completed_at.desc())
+
+
+@toefl_mock_bp.get("/api/toefl/teacher/attempts")
+def teacher_attempt_list_api():
+    if not _is_staff():
+        return _private_json({"error": "staff_required"}, 403)
+    attempts = _teacher_attempt_query().all()
+    return _private_json(
+        {"attempts": [review_workflow.attempt_summary(item) for item in attempts]}
+    )
+
+
+@toefl_mock_bp.get("/api/toefl/teacher/attempts/<attempt_id>")
+def teacher_attempt_detail_api(attempt_id: str):
+    if not _is_staff():
+        return _private_json({"error": "staff_required"}, 403)
+    attempt = _review_attempt(attempt_id)
+    if not attempt:
+        return _private_json({"error": "attempt_not_found"}, 404)
+    if attempt.status != "completed":
+        return _private_json({"error": "attempt_incomplete"}, 409)
+    payload = _review_json(attempt, student_view=False)
+    payload["student"] = {
+        "id": attempt.student_id,
+        "name": getattr(attempt.student, "full_name", None) or "未绑定学生",
+    }
+    return _private_json(payload)
+
+
+def _teacher_review_attempt(attempt_id: str):
+    if not _is_staff():
+        return None, _private_json({"error": "staff_required"}, 403)
+    attempt = _review_attempt(attempt_id)
+    if not attempt:
+        return None, _private_json({"error": "attempt_not_found"}, 404)
+    if attempt.status != "completed":
+        return None, _private_json({"error": "attempt_incomplete"}, 409)
+    return attempt, None
+
+
+@toefl_mock_bp.patch("/api/toefl/teacher/attempts/<attempt_id>/review")
+def save_teacher_review(attempt_id: str):
+    attempt, error = _teacher_review_attempt(attempt_id)
+    if error:
+        return error
+    if not request.is_json:
+        return _private_json({"error": "json_required"}, 415)
+    ok, reason = review_workflow.save_reviews(
+        attempt,
+        request.get_json(silent=True) or {},
+        int(current_user.id),
+    )
+    if not ok:
+        status = 409 if reason == "review_version_conflict" else 400
+        return _private_json({"error": reason}, status)
+    db.session.commit()
+    return _private_json(_review_json(attempt, student_view=False))
+
+
+@toefl_mock_bp.post("/api/toefl/teacher/attempts/<attempt_id>/review/publish")
+def publish_teacher_review(attempt_id: str):
+    attempt, error = _teacher_review_attempt(attempt_id)
+    if error:
+        return error
+    if not request.is_json:
+        return _private_json({"error": "json_required"}, 415)
+    ok, reason = review_workflow.publish_reviews(
+        attempt,
+        request.get_json(silent=True) or {},
+        int(current_user.id),
+    )
+    if not ok:
+        status = 409 if reason in {
+            "review_version_conflict",
+            "manual_submission_incomplete",
+            "manual_review_incomplete",
+        } else 400
+        return _private_json({"error": reason}, status)
+    db.session.commit()
+    return _private_json(_review_json(attempt, student_view=False))
+
+
+@toefl_mock_bp.post("/api/toefl/teacher/attempts/<attempt_id>/review/reopen")
+def reopen_teacher_review(attempt_id: str):
+    attempt, error = _teacher_review_attempt(attempt_id)
+    if error:
+        return error
+    if not request.is_json:
+        return _private_json({"error": "json_required"}, 415)
+    payload = request.get_json(silent=True) or {}
+    ok, reason = review_workflow.reopen_review(
+        attempt,
+        int(current_user.id),
+        payload.get("version"),
+    )
+    if not ok:
+        status = 409 if reason in {
+            "review_not_published",
+            "review_version_conflict",
+        } else 400
+        return _private_json({"error": reason}, status)
+    db.session.commit()
+    return _private_json(_review_json(attempt, student_view=False))
+
+
+def _recording_path(attempt: ToeflMockAttempt, row: ToeflMockResponse) -> Path | None:
+    token = str(row.recording_token or "")
+    relative = Path(token)
+    parts = relative.parts
+    if (
+        relative.is_absolute()
+        or len(parts) != 2
+        or parts[0] != attempt.id
+        or any(part in {"", ".", ".."} for part in parts)
+        or Path(parts[1]).suffix.lower() not in RECORDING_SUFFIXES
+    ):
+        return None
+    root = _recording_root()
+    expected_dir = (root / attempt.id).resolve()
+    target = (root / relative).resolve()
+    try:
+        target.relative_to(expected_dir)
+    except ValueError:
+        return None
+    try:
+        if not target.is_file() or target.stat().st_size > MAX_RECORDING_BYTES:
+            return None
+    except OSError:
+        return None
+    return target
+
+
+@toefl_mock_bp.get("/api/toefl/attempts/<attempt_id>/responses/<int:response_id>/recording")
+def stream_attempt_recording(attempt_id: str, response_id: int):
+    attempt = _owned_attempt(attempt_id)
+    if not attempt:
+        return _private_json({"error": "attempt_not_found"}, 404)
+    if attempt.status != "completed":
+        return _private_json({"error": "attempt_incomplete"}, 409)
+    if not _is_staff() and attempt.review_status != review_workflow.REVIEW_PUBLISHED:
+        return _private_json({"error": "review_not_published"}, 403)
+    row = db.session.get(ToeflMockResponse, response_id)
+    if not row or row.attempt_id != attempt.id or not row.recording_token:
+        return _private_json({"error": "recording_not_found"}, 404)
+    target = _recording_path(attempt, row)
+    if not target:
+        return _private_json({"error": "recording_not_found"}, 404)
+    response = send_file(
+        target,
+        mimetype=RECORDING_SUFFIXES[target.suffix.lower()],
+        conditional=True,
+        max_age=0,
+        etag=False,
+    )
+    response = no_store(response)
+    response.headers["Cache-Control"] = (
+        "private, no-store, no-cache, must-revalidate, max-age=0"
+    )
+    response.headers["Accept-Ranges"] = "bytes"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@toefl_mock_bp.get("/toefl/mock/history")
+def student_attempt_history_page():
+    profile = _current_student()
+    if not profile:
+        return "student login required", 401
+    attempts = (
+        ToeflMockAttempt.query.filter_by(student_id=profile.id, status="completed")
+        .order_by(ToeflMockAttempt.completed_at.desc())
+        .all()
+    )
+    response = render_template(
+        "toefl/attempt_history.html",
+        attempts=[review_workflow.attempt_summary(item) for item in attempts],
+    )
+    return no_store(response)
+
+
+@toefl_mock_bp.get("/toefl/mock/attempts/<attempt_id>/review")
+def student_attempt_review_page(attempt_id: str):
+    attempt = _owned_attempt(attempt_id)
+    if not attempt:
+        return "attempt not found", 404
+    if attempt.status != "completed":
+        return "attempt incomplete", 409
+    if _is_staff():
+        return "student endpoint required", 403
+    response = render_template(
+        "toefl/review_detail.html",
+        review=_review_json(attempt, student_view=True),
+        student_view=True,
+    )
+    return no_store(response)
+
+
+@toefl_mock_bp.get("/toefl/mock/teacher/attempts")
+def teacher_attempt_list_page():
+    if not _is_staff():
+        return "staff login required", 403
+    attempts = _teacher_attempt_query().all()
+    response = render_template(
+        "toefl/teacher_attempts.html",
+        attempts=[review_workflow.attempt_summary(item) for item in attempts],
+    )
+    return no_store(response)
+
+
+@toefl_mock_bp.get("/toefl/mock/teacher/attempts/<attempt_id>")
+def teacher_attempt_detail_page(attempt_id: str):
+    attempt, error = _teacher_review_attempt(attempt_id)
+    if error:
+        return error
+    response = render_template(
+        "toefl/review_detail.html",
+        review=_review_json(attempt, student_view=False),
+        student_view=False,
+        student={
+            "id": attempt.student_id,
+            "name": getattr(attempt.student, "full_name", None) or "未绑定学生",
+        },
+    )
+    return no_store(response)

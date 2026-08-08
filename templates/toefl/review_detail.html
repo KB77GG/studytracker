@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% macro answer_value(value) -%}
+  {% if value is mapping %}
+    <span>{{ value.key }}{% if value.text %} · {{ value.text }}{% endif %}</span>
+  {% elif value is sequence and value is not string %}
+    {% for item in value %}{{ answer_value(item) }}{% if not loop.last %}、{% endif %}{% endfor %}
+  {% elif value is not none and value != '' %}
+    <span>{{ value }}</span>
+  {% else %}
+    <span class="mock-muted">未作答</span>
+  {% endif %}
+{%- endmacro %}
+
+{% block page_subtitle %}TOEFL 2026 · {{ 'STUDENT REVIEW' if student_view else 'TEACHER REVIEW' }}{% endblock %}
+{% block page_title %}{{ review.attempt.exam_title }}{% endblock %}
+
+{% block content_dashboard %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toefl_mock.css') }}">
+<section class="mock-review-shell" data-review-version="{{ review.attempt.review_version }}" data-attempt-id="{{ review.attempt.id }}">
+  <div class="mock-review-heading">
+    <div>
+      <p class="mock-kicker">{{ review.attempt.completed_at or 'TOEFL V2' }}</p>
+      <h2>{{ review.attempt.exam_title }}</h2>
+      <p class="mock-review-meta">{{ review.attempt.sections|join(' · ') }} · {{ '预览' if review.attempt.preview else '正式模考' }}</p>
+      {% if not student_view %}<p class="mock-review-meta">学生：{{ student.name }} · 交卷：{{ review.attempt.completed_at or '未知' }}</p>{% endif %}
+    </div>
+    <div class="mock-review-heading__actions">
+      {% if student_view %}
+      <a class="mock-secondary mock-link-button" href="/toefl/mock/history">模考历史</a>
+      {% else %}
+      <a class="mock-secondary mock-link-button" href="/toefl/mock/teacher/attempts">返回列表</a>
+      {% endif %}
+      <span id="reviewSaveState" class="mock-save-state" role="status"></span>
+    </div>
+  </div>
+
+  <div class="mock-review-summary">
+    <div><span>客观题</span><strong>{{ review.summary.objective_correct }}/{{ review.summary.objective_total }}</strong></div>
+    <div><span>错题</span><strong>{{ review.summary.objective_wrong }}</strong></div>
+    <div><span>主观题</span><strong>{{ review.summary.manual_reviewed }}/{{ review.summary.manual_total }}</strong></div>
+    <div><span>状态</span><strong>{% if review.attempt.review_status == 'published' %}已发布{% elif review.attempt.review_status == 'draft' %}草稿{% elif review.attempt.review_status == 'not_required' %}无需批改{% else %}待批改{% endif %}</strong></div>
+  </div>
+
+  {% if not student_view %}
+  <div class="mock-review-actions" data-review-actions>
+    {% if review.attempt.review_status != 'published' %}
+    <button class="mock-primary" type="button" data-save-review>保存草稿</button>
+    <button class="mock-secondary" type="button" data-publish-review>发布给学生</button>
+    {% endif %}
+    {% if review.attempt.review_status == 'published' %}
+    <button class="mock-secondary" type="button" data-reopen-review>重新开放</button>
+    {% endif %}
+  </div>
+  {% else %}
+  <label class="mock-review-filter"><input id="wrongOnly" type="checkbox"> 只看错题</label>
+  {% endif %}
+
+  <section class="mock-review-section">
+    <div class="mock-review-section__heading"><h3>客观题复盘</h3><span>错题优先</span></div>
+    <div class="mock-review-items" data-objective-items>
+      {% for item in review.objective %}
+      <article class="mock-review-item objective-item" data-wrong="{{ '1' if item.is_wrong else '0' }}">
+        <div class="mock-review-item__topline">
+          <span>{{ item.section|capitalize }} · {{ item.number or loop.index }} · {{ item.group_title or item.task_type or '题目' }}</span>
+          <span class="mock-badge mock-badge--{{ 'danger' if item.is_wrong else 'ready' }}">{{ '错题' if item.is_wrong else '正确' }}</span>
+        </div>
+        <h4>{{ item.prompt }}</h4>
+        {% if item.stimulus and (item.stimulus.text or item.stimulus.display_text) %}
+        <p class="mock-review-stimulus">{{ item.stimulus.text or item.stimulus.display_text }}</p>
+        {% endif %}
+        {% if item.stimulus and item.stimulus.audio_url %}
+        <audio class="mock-review-audio" controls preload="none" src="{{ item.stimulus.audio_url }}"></audio>
+        {% endif %}
+        {% if item.context %}<p class="mock-review-stimulus">{{ item.context }}</p>{% endif %}
+        {% if item.options %}
+        <ul class="mock-review-options">
+          {% for option in item.options %}<li><strong>{{ option.key }}</strong> {{ option.text }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+        <dl class="mock-answer-grid">
+          <div><dt>你的答案</dt><dd>{{ answer_value(item.student_answer) }}</dd></div>
+          <div><dt>正确答案</dt><dd>{{ answer_value(item.correct_answer) }}</dd></div>
+        </dl>
+        {% if item.explanation %}<p class="mock-review-explanation"><strong>讲解</strong>{{ item.explanation }}</p>{% endif %}
+        {% if item.evidence %}
+        <p class="mock-review-evidence">证据：{% for evidence in item.evidence %}{{ evidence.source }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+        {% endif %}
+      </article>
+      {% else %}
+      <div class="mock-empty-state">本次没有可复盘的客观题。</div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="mock-review-section">
+    <div class="mock-review-section__heading"><h3>主观题与老师批改</h3><span>{{ '老师发布后显示分数与反馈' if student_view else '逐题保存，全部评分后发布' }}</span></div>
+    <div class="mock-review-items">
+      {% for item in review.manual %}
+      <article class="mock-review-item manual-item" data-question-id="{{ item.id }}">
+        <div class="mock-review-item__topline">
+          <span>{{ item.section|capitalize }} · {{ item.number or loop.index }} · {{ item.group_title or item.task_type or '主观题' }}</span>
+          {% if student_view %}
+          <span class="mock-badge mock-badge--{{ 'ready' if review.attempt.review_status == 'published' else 'pending' }}">{{ '已发布' if review.attempt.review_status == 'published' else '待批改' }}</span>
+          {% else %}<span class="mock-badge mock-badge--pending">{{ '已评分' if item.score is not none else '待评分' }}</span>{% endif %}
+        </div>
+        <h4>{{ item.prompt }}</h4>
+        {% if item.context %}<p class="mock-review-stimulus">{{ item.context }}</p>{% endif %}
+        {% if item.stimulus and (item.stimulus.text or item.stimulus.display_text) %}
+        <p class="mock-review-stimulus">{{ item.stimulus.text or item.stimulus.display_text }}</p>
+        {% endif %}
+        {% if item.stimulus and item.stimulus.audio_url %}
+        <div class="mock-source-audio"><span>题目原音频</span><audio class="mock-review-audio" controls preload="none" src="{{ item.stimulus.audio_url }}"></audio></div>
+        {% endif %}
+        {% if item.student_answer %}<div class="mock-student-writing">{{ item.student_answer }}</div>{% endif %}
+        {% if item.recording_available %}
+          {% if item.recording_url %}<div class="mock-source-audio"><span>学生作答录音</span><audio class="mock-review-audio" controls preload="none" src="{{ item.recording_url }}"></audio></div>{% else %}<p class="mock-muted">已提交录音，老师发布后可播放。</p>{% endif %}
+        {% elif item.section == 'speaking' %}<p class="mock-muted">未提交录音</p>{% endif %}
+        {% if student_view %}
+          {% if review.attempt.review_status == 'published' %}
+          <div class="mock-score-readout"><strong>{{ item.score if item.score is not none else '未评分' }}{% if item.score is not none %}/{{ item.score_max|round(1) }}{% endif %}</strong><p>{{ item.feedback or '老师暂未填写文字反馈。' }}</p></div>
+          {% else %}<p class="mock-pending-note">老师完成批改并发布后，这里会显示分数、反馈和录音播放器。</p>{% endif %}
+        {% else %}
+        <div class="mock-review-editor">
+          <label>本题原始分<input data-review-score type="number" min="0" max="100" step="0.5" value="{{ item.score if item.score is not none else '' }}"></label>
+          <label>本题满分<input data-review-max type="number" min="1" max="100" step="0.5" value="{{ item.score_max or 5 }}"></label>
+          <label class="mock-review-editor__feedback">反馈<textarea data-review-feedback rows="4" maxlength="8000">{{ item.feedback or '' }}</textarea></label>
+        </div>
+        <p class="mock-muted">默认按 0–5 原始分记录；这里不是 ETS 官方 scaled score。</p>
+        {% endif %}
+      </article>
+      {% else %}<div class="mock-empty-state">本次没有主观题。</div>{% endfor %}
+    </div>
+  </section>
+</section>
+
+{% if not student_view %}
+<script>
+(() => {
+  const shell = document.querySelector('[data-review-version]');
+  const state = document.querySelector('#reviewSaveState');
+  const endpoint = `/api/toefl/teacher/attempts/${shell.dataset.attemptId}/review`;
+  const version = () => Number(shell.dataset.reviewVersion || shell.getAttribute('data-review-version'));
+  const payload = () => ({
+    version: version(),
+    reviews: [...document.querySelectorAll('.manual-item')].map((item) => ({
+      question_id: item.dataset.questionId,
+      score: item.querySelector('[data-review-score]').value,
+      score_max: item.querySelector('[data-review-max]').value,
+      feedback: item.querySelector('[data-review-feedback]').value,
+    })),
+  });
+  const send = async (url, body) => {
+    state.textContent = '保存中';
+    const response = await fetch(url, {method: url === endpoint ? 'PATCH' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '保存失败');
+    shell.dataset.reviewVersion = data.attempt.review_version;
+    state.textContent = '已保存';
+    if (data.attempt.review_status === 'published' || url.endsWith('/reopen')) window.location.reload();
+  };
+  document.querySelector('[data-save-review]')?.addEventListener('click', async () => { try { await send(endpoint, payload()); } catch (error) { state.textContent = error.message; } });
+  document.querySelector('[data-publish-review]')?.addEventListener('click', async () => { try { await send(`${endpoint}/publish`, payload()); } catch (error) { state.textContent = error.message; } });
+  document.querySelector('[data-reopen-review]')?.addEventListener('click', async () => { try { await send(`${endpoint}/reopen`, {version: version()}); } catch (error) { state.textContent = error.message; } });
+})();
+</script>
+{% else %}
+<script>
+document.querySelector('#wrongOnly')?.addEventListener('change', (event) => {
+  document.querySelectorAll('.objective-item').forEach((item) => { item.hidden = event.target.checked && item.dataset.wrong !== '1'; });
+});
+</script>
+{% endif %}
+{% endblock %}
