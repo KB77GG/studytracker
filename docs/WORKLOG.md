@@ -6,12 +6,13 @@
 
 ---
 
-## 2026-08-08 TOEFL v2 2026 评分边界与分科练习统计（本地已提交/未部署）
+## 2026-08-08 TOEFL v2 教师批改、学生复盘与 2026 评分边界（已部署）
 
-- 在 `/Users/zhouxin/.codex/worktrees/80f1/studytracker` 的 `codex/toefl-v2-rubric-tightening` 分支从 `0dd91fd2` 继续；本轮已提交，未 push、未执行生产迁移、未部署、未上传小程序。
+- 提交 `0dd91fd2`、`3c51e96d`、`e27092eb` 已推送任务分支与 `main`。教师批改、学生历史/复盘、私有录音鉴权播放、草稿/发布/重开和乐观锁闭环已上线。
 - 已将四类口语/写作人工题收紧为服务端固定 0–5 整数，取消教师可编辑满分；新增四类 2026 rubric 的简洁中文锚点、关注项和 `rubric_code` / `rubric_version`，并补幂等 SQLite 迁移。未知 manual task 保持 pending，不写入未知 rubric。
 - `/report` 保留旧 objective 字段，新增 `practice_breakdown.by_subject`：Reading/Listening 使用 definition/answer key 的实际 eligible_total，仅展示本站练习答对数、正确率和错题；OG 测 R=50/L=47，P1 测 R=40/L=34。Writing/20、Speaking/55 只在人工评分齐全后展示。
-- 全部 `tests/test_toefl*.py` 共 69 passed；变更文件 Ruff、JS syntax、Node 全部 14 项、diff-check 通过。全量 pytest 为 398 passed、2 failed，均为既有缺失 `static/listening/ielts10_test1_s1.mp3` 造成的 404；全仓 Ruff 有既有 107 项错误，变更文件检查通过。当前提交以 `git log -1` 为准；不 push、不部署。
+- 最终 TOEFL 测试 70 passed；变更文件 Ruff、JS syntax、Node 14 项、diff-check 通过。全量 pytest 398 passed、2 个既有音频 fixture 404。生产库先备份为 `app.db.bak-20260808-toefl-review-v1` 再迁移，迁移前后完整性均为 `ok`；生产没有历史 response 需要回填。
+- CI `31252331389`、任务分支 CI `31252329005`、部署 `31252331391` 均成功。生产业务代码包含 `e27092eb`、服务 active、5002 保持 1 worker/gthread/6 threads；公网目录与 OG 开考页真实浏览器冒烟通过，9 套/965 题和设备门禁正常、控制台无错误。生产暂无已交卷新版 attempt，未生成测试学生数据。
 
 ## 2026-08-03 刷题页姓名绑定模考历史修复（已部署）
 

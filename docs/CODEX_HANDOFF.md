@@ -11,19 +11,29 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
-## 2026-08-08 TOEFL v2 2026 评分标准收紧（本地任务分支，已提交；未 push / 未部署）
+## 2026-08-08 TOEFL v2 批改、复盘与 2026 评分边界（已部署）
 
-- 当前 worktree：`/Users/zhouxin/.codex/worktrees/80f1/studytracker`；分支：`codex/toefl-v2-rubric-tightening`；从 `0dd91fd2` 继续，本轮已提交，未 push；当前提交以 `git log -1` 为准。
+- 实现提交 `0dd91fd2`、评分收紧 `3c51e96d`、迁移状态保护 `e27092eb` 已推送
+  `codex/toefl-mock-review` 与 `main`。开发 worktree 为
+  `/Users/zhouxin/.codex/worktrees/fe6e/studytracker`。
 - 教师口语 Listen and Repeat / Take an Interview、写作 Write an Email / Write for an Academic Discussion 现固定为 ETS task-level 0–5 整数；服务端拒绝 4.5、6 和自定义满分，旧 `score_max` 列保留但服务端固定为 5。
 - 新增 `services/toefl_rubrics.py` 的简洁中文锚点/关注项和 `rubric_code` / `rubric_version` 审计字段；SQLite 迁移幂等回填已知 rubric，未知 manual task 仍为 pending 且 rubric 为空。
 - `/report` 保留旧 `objective.correct/auto_total/answered/accuracy`，新增 `practice_breakdown.by_subject`，按 definition/answer key 实际可判题数分开 Reading/Listening；OG 覆盖 R=50/L=47，P1 覆盖 R=40/L=34。Writing/20、Speaking/55 仅在人工评分齐全后显示，绝不生成 1–6 band。
 - 学生完成页、历史摘要、复盘页已明确本站练习统计与 ETS 官方成绩的边界；教师页显示四类 2026 rubric 的短中文量表与审计标识。录音私有存储、Range、权限、发布/重开、乐观锁和旧字段兼容链路保持不变。
-- 已验证：全部 `tests/test_toefl*.py` 共 69 passed；定向变更文件 Ruff、`node --check static/js/toefl_mock.js`、Node 全部 14 项、`git diff --check` 通过。全量 pytest 为 398 passed、2 failed，失败均为本 worktree 缺少既有 `static/listening/ielts10_test1_s1.mp3` 导致静态 Range 测试 404；全仓 Ruff 仍有既有 107 项错误，变更文件检查无错误。尚未执行生产迁移、部署、小程序上传或真实账号浏览器 QA。
+- 最终验证：全部 `tests/test_toefl*.py` 共 70 passed；变更文件 Ruff、JS syntax、Node 14 项、
+  `git diff --check` 通过。全量 pytest 为 398 passed、2 failed，仍只是缺失既有
+  `static/listening/ielts10_test1_s1.mp3` 导致的 404。生产库副本迁移连续两次通过；真实生产库已先备份为
+  `app.db.bak-20260808-toefl-review-v1`（完整性 `ok`），再新增 6 个 attempt 字段与 8 个 response
+  字段，迁移后完整性 `ok`，没有历史 response 需要回填。
+- CI [31252331389](https://github.com/KB77GG/studytracker/actions/runs/31252331389)、任务分支 CI
+  [31252329005](https://github.com/KB77GG/studytracker/actions/runs/31252329005) 与部署
+  [31252331391](https://github.com/KB77GG/studytracker/actions/runs/31252331391) 均成功。生产业务代码包含
+  `e27092eb`，服务 active，5002 保持 1 worker / gthread / 6 threads，近十分钟无应用错误。
+  公网 `/toefl/mock` 和 OG 开考页均为 200；真实浏览器显示 9 套 / 965 题、OG 120 题、四科选择和麦克风门禁正常，控制台无 error/warn。生产尚无已交卷新版 attempt，因此未用真实学生数据执行“老师发布 → 学生查看”冒烟；该闭环已由本地权限/发布测试覆盖。
 
-## 2026-08-07 TOEFL v2 教师批改与学生错题复盘（当前本地未提交）
+## 2026-08-07 TOEFL v2 教师批改与学生错题复盘（实现基线，已随上节部署）
 
-- 当前隔离 worktree 为 `/Users/zhouxin/.codex/worktrees/fe6e/studytracker`，实际状态是
-  detached `HEAD e1f1b3fa`；工作区保留本次未提交改动，未 commit、未 push、未 deploy，主工作区未修改。
+- 本节记录部署前的实现基线；最终提交、测试、迁移和发布状态以上一节为准。
 - 已新增新版 attempt/response 的 review 状态、版本、评分、反馈、reviewer 和发布时间字段；新增
   `scripts/migrate_toefl_mock_review.py`，使用外部环境运行：
   `/Users/zhouxin/Desktop/studytracker/.venv/bin/python scripts/migrate_toefl_mock_review.py --database /path/to/app.db`。
