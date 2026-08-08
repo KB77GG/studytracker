@@ -11,10 +11,10 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
-## 2026-08-08 TOEFL v2 正式考试流程与倒计时对齐（待部署）
+## 2026-08-08 TOEFL v2 正式考试流程与倒计时对齐（已部署）
 
 - 开发 worktree `/Users/zhouxin/.codex/worktrees/fe6e/studytracker`，分支
-  `codex/toefl-mock-review`，基线 `c2ab7d56`。当前改动尚未提交、push 或部署。
+  `codex/toefl-mock-review`；实现提交 `10c805f6`、听力状态串行修复 `02cd395e` 已推送任务分支与 `main`。
 - 新 attempt 固定按 Reading → Listening → Writing → Speaking 推进；旧 attempt 通过
   `flowVersion` 缺省兼容原 R/L/S/W 顺序，避免进行中的学生被换序。
 - 每个 Module / 写作任务先显示说明页，说明与 Speaking 麦克风检查不计时；点击开始后服务端才启动
@@ -22,12 +22,18 @@
   18/9，Writing 使用 6/7/10，Speaking 使用 3/5。
 - 到时后封闭当前整个阶段，不再逐题快速跳转；Listening 不能回退，音频自动连续播放一次，不显示原生
   暂停/拖动/倍速控件，音频结束后才显示题目；Speaking 在进入本科前检查麦克风。
-- 本地浏览器已验证四科顺序、说明页不计时、开始后倒计时、Reading M1→M2、Listening 门禁、Writing
-  6→7 分钟切换、Speaking 开始前麦克风门禁；本地独立 worktree 未带正式音频静态文件，因此音频 404
-  只验证了显式失败状态，线上需在部署后复核自动播放资源。
-- 定向 TOEFL 测试 38 passed；Node response queue 2 passed；变更文件 Ruff、JS syntax、diff check
+- 浏览器已验证四科顺序、说明页不计时、开始后倒计时、Reading M1→M2、Listening 门禁、Writing
+  6→7 分钟切换、Speaking 开始前麦克风门禁。生产浏览器进一步验证正式 OGG 自动播放、播放中隐藏题目、
+  播放结束后自动显示题目且短对话不泄露文字原句；顶部状态为“音频播放完毕”，无并发保存假警报。
+- 定向 TOEFL 测试 73 passed；Node response queue 2 passed；变更文件 Ruff、JS syntax、diff check
   通过。全量 pytest 402 passed、2 failed，仍是既有缺失
   `static/listening/ielts10_test1_s1.mp3` 导致的静态音频 404。
+- 最终 CI [31261278421](https://github.com/KB77GG/studytracker/actions/runs/31261278421)、任务分支 CI
+  [31261069712](https://github.com/KB77GG/studytracker/actions/runs/31261069712) 与部署
+  [31261278408](https://github.com/KB77GG/studytracker/actions/runs/31261278408) 均成功。生产业务代码包含
+  `02cd395e`，服务 active，5002 保持 1 worker / gthread / 6 threads，近五分钟无服务错误；六套官方
+  definition 均为 R/L/W/S，P1–P5 计时 18/9、18/9、6/7/10、3/5，OG Reading 保留 20/9；正式听力
+  OGG Range 返回 206。本次无数据库迁移。
 
 ## 2026-08-08 TOEFL v2 批改、复盘与 2026 评分边界（已部署）
 
@@ -165,11 +171,11 @@
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/mock-exam-review-web`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/7691/studytracker` |
-| 分支基线 | 业务 HEAD `9a503252 修复姓名绑定学生看不到模考复盘`，包含教师批改与学生复盘闭环 |
-| 远端 | `origin/main` 与 `origin/codex/mock-exam-review-web` 均包含 `9a503252`；精确 HEAD 以 `git log -1` 为准 |
-| 本次交接范围 | 网页教师写作批改、学生模考历史/复盘、capability 与 profile 迁移；家长端未接入 |
-| 后端生产 | 业务代码已包含 `9a503252`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
+| 分支 | `codex/toefl-mock-review`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/fe6e/studytracker` |
+| 分支基线 | 业务 HEAD `02cd395e 串行保存 TOEFL 听力播放状态` |
+| 远端 | `origin/main` 与 `origin/codex/toefl-mock-review` 均包含 `02cd395e`；精确 HEAD 以 `git log -1` 为准 |
+| 本次交接范围 | TOEFL v2 四科正式流程、倒计时、听力单次自动播放；评分与复盘闭环保持已部署 |
+| 后端生产 | 业务代码已包含 `02cd395e`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
 | 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
 
 ## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）

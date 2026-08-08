@@ -6,17 +6,20 @@
 
 ---
 
-## 2026-08-08 TOEFL 2026 正式流程与倒计时对齐（本地完成，待部署）
+## 2026-08-08 TOEFL 2026 正式流程与倒计时对齐（已部署）
 
 - 新模考顺序改为 Reading → Listening → Writing → Speaking，并为旧进行中 attempt 保留旧顺序兼容。
 - 每阶段增加不计时说明页；服务端只在学生点击开始后启动权威倒计时，运行中不可暂停，到时封闭整个
   Module/任务。R 18/9（OG 20/9）、L 18/9、W 6/7/10、S 3/5。
 - Listening 改为无原生控制条的单次自动连续播放、禁止返回，音频结束后才显示题目；Speaking 麦克风
   检查移到进入 Speaking 时执行。Writing 任务间不可返回。
-- 浏览器已覆盖四科顺序、阶段说明、计时启动与跨阶段推进；定向 38 passed、Node 2 passed、Ruff、
+- 浏览器已覆盖四科顺序、阶段说明、计时启动与跨阶段推进；定向 73 passed、Node 2 passed、Ruff、
   JS syntax、diff check 通过。全量 402 passed、2 个既有静态音频 fixture 404。
-- 当前尚未提交、push 或部署；部署后需核验 GitHub Actions、生产 HEAD、5002 单 worker 配置、六套官方
-  definition 的阶段顺序/秒数，以及公网正式音频的自动播放和 Range。
+- 提交 `10c805f6`、`02cd395e` 已推送任务分支与 `main`；CI `31261278421`、任务分支 CI
+  `31261069712`、部署 `31261278408` 成功。生产业务代码包含 `02cd395e`、服务 active、5002 仍为
+  1 worker/gthread/6 threads，近五分钟无错误。
+- 六套生产 definition 均为 R/L/W/S 和预期秒数；正式听力 OGG Range 206。生产浏览器确认音频自动播放、
+  播放时隐藏题目、播完显示题目且状态保存无假警报。本次没有数据库迁移。
 
 ## 2026-08-08 TOEFL v2 教师批改、学生复盘与 2026 评分边界（已部署）
 
