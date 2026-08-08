@@ -133,7 +133,11 @@ def backfill(
         "SELECT id, exam_id, status, review_status FROM toefl_mock_attempt"
     ).fetchall()
     for attempt_id, exam_id, status, review_status in attempts:
-        manual_ids = package_manual.get(str(exam_id), {})
+        manual_ids = package_manual.get(str(exam_id))
+        # If the package is no longer present, keep the newly-added conservative
+        # defaults instead of guessing whether legacy responses were manual.
+        if manual_ids is None:
+            continue
         if status == "completed" and review_status == "not_started":
             new_status = "pending" if manual_ids else "not_required"
             conn.execute(
@@ -171,15 +175,20 @@ def backfill(
             )
             if not status_needs_update and not rubric_needs_update:
                 continue
-            if rubric:
+            if status_needs_update and rubric:
                 conn.execute(
                     "UPDATE toefl_mock_response SET review_status = ?, rubric_code = ?, rubric_version = ? WHERE id = ?",
                     (new_status, rubric[0], rubric[1], response_id),
                 )
-            else:
+            elif status_needs_update:
                 conn.execute(
                     "UPDATE toefl_mock_response SET review_status = ? WHERE id = ?",
                     (new_status, response_id),
+                )
+            else:
+                conn.execute(
+                    "UPDATE toefl_mock_response SET rubric_code = ?, rubric_version = ? WHERE id = ?",
+                    (rubric[0], rubric[1], response_id),
                 )
             responses_changed += 1
     return attempts_changed, responses_changed

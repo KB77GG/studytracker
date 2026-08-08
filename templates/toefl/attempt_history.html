@@ -25,8 +25,8 @@
         <p class="mock-muted">{% if breakdown.reading is defined %}Reading {{ breakdown.reading.correct }}/{{ breakdown.reading.eligible_total }}{% endif %}{% if breakdown.listening is defined %} · Listening {{ breakdown.listening.correct }}/{{ breakdown.listening.eligible_total }}{% endif %}</p>
       </div>
       <div class="mock-attempt-row__status">
-        <span class="mock-badge mock-badge--{{ 'ready' if attempt.review_status == 'published' else 'pending' }}">
-          {{ '老师已发布' if attempt.review_status == 'published' else '待老师批改' }}
+        <span class="mock-badge mock-badge--{{ 'ready' if attempt.review_status in ['published', 'not_required'] else 'pending' }}">
+          {% if attempt.review_status == 'published' %}老师已发布{% elif attempt.review_status == 'not_required' %}复盘已就绪{% elif attempt.review_status == 'draft' %}老师批改中{% else %}待老师批改{% endif %}
         </span>
         <a class="mock-primary mock-link-button" href="/toefl/mock/attempts/{{ attempt.id }}/review">查看复盘</a>
       </div>

@@ -41,6 +41,9 @@ def test_toefl_review_migration_is_idempotent_and_backfills_statuses(tmp_path):
     connection.execute(
         "UPDATE toefl_mock_response SET review_status = 'reviewed' WHERE id = 1"
     )
+    connection.execute(
+        "UPDATE toefl_mock_response SET rubric_code = NULL, rubric_version = NULL WHERE id = 1"
+    )
     connection.commit()
     connection.close()
     assert migrate_toefl_mock_review.migrate(
@@ -82,6 +85,45 @@ def test_toefl_review_migration_is_idempotent_and_backfills_statuses(tmp_path):
         for row in connection.execute("PRAGMA index_list(toefl_mock_attempt)")
     }
     assert "ix_toefl_mock_attempt_review_status" in indexes
+    connection.close()
+
+
+def test_toefl_review_migration_does_not_guess_when_package_is_absent(tmp_path):
+    database = tmp_path / "absent-package.sqlite"
+    package_root = tmp_path / "packages"
+    package_root.mkdir()
+    connection = sqlite3.connect(database)
+    connection.executescript(
+        """
+        CREATE TABLE toefl_mock_attempt (
+            id VARCHAR(36) PRIMARY KEY,
+            exam_id VARCHAR(80) NOT NULL,
+            status VARCHAR(24) NOT NULL
+        );
+        CREATE TABLE toefl_mock_response (
+            id INTEGER PRIMARY KEY,
+            attempt_id VARCHAR(36) NOT NULL,
+            question_id VARCHAR(120) NOT NULL,
+            response_json TEXT NOT NULL
+        );
+        INSERT INTO toefl_mock_attempt (id, exam_id, status)
+        VALUES ('missing-a', 'missing-exam', 'completed');
+        INSERT INTO toefl_mock_response (id, attempt_id, question_id, response_json)
+        VALUES (1, 'missing-a', 'missing-q', '"answer"');
+        """
+    )
+    connection.commit()
+    connection.close()
+
+    assert migrate_toefl_mock_review.migrate(database, package_root) == 0
+    connection = sqlite3.connect(database)
+    assert connection.execute(
+        "SELECT review_status FROM toefl_mock_attempt WHERE id = 'missing-a'"
+    ).fetchone()[0] == "not_started"
+    assert connection.execute(
+        "SELECT review_status, rubric_code, rubric_version "
+        "FROM toefl_mock_response WHERE id = 1"
+    ).fetchone() == ("pending", None, None)
     connection.close()
 
 
