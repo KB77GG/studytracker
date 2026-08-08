@@ -8,18 +8,22 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-SECTION_ORDER = ("reading", "listening", "speaking", "writing")
+SECTION_ORDER = ("reading", "listening", "writing", "speaking")
+LEGACY_SECTION_ORDER = ("reading", "listening", "speaking", "writing")
 PACKAGE_PATTERN = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2}_[A-Z]|ets-(?:practice-[1-5]|og-chapter-6))$"
 )
 WRITING_TIMERS = {
-    "build_a_sentence": 420,
+    "build_a_sentence": 360,
+    "build_sentence": 360,
     "write_email": 420,
     "academic_discussion": 600,
 }
 MODULE_TIMERS = {
     ("reading", "m1"): 1080,
     ("reading", "m2"): 540,
+    ("listening", "m1"): 1080,
+    ("listening", "m2"): 540,
 }
 SPEAKING_SECTION_SECONDS = 480
 SPEAKING_RESPONSE_SECONDS = {
@@ -256,16 +260,20 @@ def public_catalog(root: Path | None = None) -> list[dict[str, Any]]:
     return [exam for exam in catalog(root) if exam["preview_ready"]]
 
 
-def parse_sections(raw_sections: str | list[str] | None) -> list[str]:
+def parse_sections(
+    raw_sections: str | list[str] | None,
+    *,
+    section_order: tuple[str, ...] = SECTION_ORDER,
+) -> list[str]:
     if raw_sections is None:
-        return list(SECTION_ORDER)
+        return list(section_order)
     values = (
         raw_sections
         if isinstance(raw_sections, list)
         else re.split(r"[|,]", raw_sections)
     )
     requested = {str(value).strip().lower() for value in values}
-    sections = [subject for subject in SECTION_ORDER if subject in requested]
+    sections = [subject for subject in section_order if subject in requested]
     if not sections:
         raise ValueError("No valid TOEFL sections were selected")
     return sections
@@ -324,6 +332,22 @@ def _public_question(question: dict[str, Any]) -> dict[str, Any]:
     return public
 
 
+def _module_duration(module: dict[str, Any], subject: str, module_key: str) -> int | None:
+    source_duration = module.get("duration_seconds")
+    official_default = MODULE_TIMERS.get((subject, module_key))
+    if module.get("timer_policy") != "source":
+        if official_default is not None:
+            return official_default
+        return source_duration if subject == "speaking" else None
+    if subject == "reading" and module_key == "m1":
+        if isinstance(source_duration, int) and 1080 <= source_duration <= 1260:
+            return source_duration
+        return official_default
+    if subject == "reading" and module_key == "m2":
+        return source_duration if source_duration == 540 else official_default
+    return source_duration
+
+
 def _phase_plan(
     modules: list[dict[str, Any]], groups: list[dict[str, Any]], sections: list[str]
 ) -> list[dict[str, Any]]:
@@ -339,7 +363,6 @@ def _phase_plan(
         for module in subject_modules:
             module_key = str(module.get("module", "m1"))
             if subject != "writing":
-                source_timer = module.get("timer_policy") == "source"
                 phases.append(
                     {
                         "id": f"{subject}:{module_key}",
@@ -347,21 +370,10 @@ def _phase_plan(
                         "module": module_key,
                         "module_id": module["id"],
                         "label": module.get("label", f"{subject} {module_key}"),
-                        "duration_seconds": (
-                            module.get("duration_seconds")
-                            if source_timer
-                            else MODULE_TIMERS.get(
-                                (subject, module_key),
-                                module.get("duration_seconds")
-                                if subject == "speaking"
-                                else None,
-                            )
+                        "duration_seconds": _module_duration(
+                            module, subject, module_key
                         ),
-                        "timer_mode": (
-                            "audio_driven"
-                            if subject == "listening"
-                            else "countdown"
-                        ),
+                        "timer_mode": "countdown",
                         "adaptive_checkpoint": (
                             module_key == "m1"
                             and subject in {"reading", "listening"}
@@ -412,11 +424,12 @@ def definition(
     sections: str | list[str] | None = None,
     *,
     root: Path | None = None,
+    section_order: tuple[str, ...] = SECTION_ORDER,
 ) -> dict[str, Any]:
     package_dir = resolve_package(test_id, root)
     content = load_json(package_dir / "content.json")
     manifest = load_json(package_dir / "manifest.json")
-    selected = parse_sections(sections)
+    selected = parse_sections(sections, section_order=section_order)
     modules = [
         _public_record(item)
         for item in content.get("modules", [])
@@ -456,7 +469,7 @@ def definition(
             "slug": package_dir.name,
         },
         "sections": selected,
-        "section_order": list(SECTION_ORDER),
+        "section_order": list(section_order),
         "phases": _phase_plan(modules, groups, selected),
         "modules": modules,
         "groups": groups,
@@ -613,17 +626,6 @@ def validate_navigation_state(
         return None
     if phase_delta == 1 and target_group_index == 0:
         return None
-    if phase_delta == -1:
-        current = phases[current_phase_index]
-        previous = phases[target_phase_index]
-        if (
-            current.get("module_id") == previous.get("module_id")
-            and phase_navigation_policy(mock_definition, current_phase_index)
-            == "within_module"
-            and previous.get("group_ids")
-            and target_group_index == len(previous["group_ids"]) - 1
-        ):
-            return None
     return "invalid_navigation_jump"
 
 

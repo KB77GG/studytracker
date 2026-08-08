@@ -8,7 +8,7 @@
 四个 section，固定顺序：
 
 ```
-Reading → Listening → Speaking → Writing
+Reading → Listening → Writing → Speaking
 ```
 
 其中 **Reading 和 Listening 是两模块自适应**（m1 → 服务端判分 → m2 走 easy 或 hard 分支）。
@@ -99,8 +99,9 @@ listening-m2-q1 … listening-m2-q16   Module 2，16 题
 listening-end-section
 ```
 
-M1 18 题、M2 16 题。听力计时由音频驱动，不是固定倒计时（bundle 里没有 listening 的秒数常量，
-说明每题时限来自 test definition）。
+M1/M2 题量由套题 definition 决定。运行时按 ETS 2026 技术规格显示服务端权威 Module 倒计时：
+M1 18 分钟；当前唯一可核对的 Default M2 使用 OG 线性练习的 9 分钟。正式考试的 M2 会随
+lower/upper 路由在 7–11 分钟之间变化。音频仍只能播放一次，且不可回退。
 
 ### Speaking
 
@@ -173,7 +174,7 @@ writing-end
 
 | 阶段 | 秒 | 分钟 |
 |---|---|---|
-| `writingBuildSentenceSeconds` | 420 | 7 |
+| `writingBuildSentenceSeconds` | 360 | 6 |
 | `writingQ1Seconds`（Email） | 420 | 7 |
 | `writingQ2Seconds`（Academic Discussion） | 600 | 10 |
 
@@ -185,7 +186,7 @@ finished / completed → 报告页
 
 ## 5. 计时器实现
 
-前端同时跑 **5 个独立倒计时**，统一在一个 `setInterval(…, 1000)` 里递减，各自到 0 停：
+前端同时展示阶段/题级倒计时，统一在一个 `setInterval(…, 1000)` 里递减，各自到 0 停：
 
 1. section 总时限
 2. 当前题时限
@@ -193,8 +194,8 @@ finished / completed → 报告页
 4. 口语作答时间
 5. 写作单题时限
 
-**建议照抄的点**：一个 interval 驱动全部计时器，而不是每个计时器各起一个 timer。
-省 CPU，也避免多 timer 漂移导致的时间不一致。
+一个 interval 驱动全部计时器，避免多 timer 漂移。阶段说明、Module 过渡和 Speaking 麦克风检查
+不消耗作答时间；学生点击“开始本阶段”后，服务端才启动该阶段权威时钟。
 
 **必须补的点**：前端倒计时只是显示。剩余时间要通过 `PUT /attempts/{id}/state` 同步到服务端，
 交卷时以服务端时间为准，否则学生改本地时钟就能作弊。
@@ -221,7 +222,7 @@ finished / completed → 报告页
 
 1. **自适应阈值**具体定多少（wofo 放服务端，看不到）
 2. **计分映射**：raw → scaled 的换算表
-3. 听力仍由音频驱动；Speaking 时间已按上方 2026 定义落地并由 release gate 校验
+3. Listening 使用服务端 Module 倒计时并保持音频单次播放；Speaking 时间按上方 2026 定义落地并由 release gate 校验
 
 ---
 

@@ -110,7 +110,7 @@ OFFICIAL_METADATA = {
     },
 }
 
-SUBJECT_ORDER = ("reading", "listening", "speaking", "writing")
+SUBJECT_ORDER = ("reading", "listening", "writing", "speaking")
 COMPLETION_RE = re.compile(r"\b(?P<prefix>[A-Za-z]*)(?P<blank>(?:[_-](?:\s*[_-])*)+)(?![A-Za-z])")
 
 

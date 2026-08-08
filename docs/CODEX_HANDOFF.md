@@ -11,6 +11,24 @@
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
 
+## 2026-08-08 TOEFL v2 正式考试流程与倒计时对齐（待部署）
+
+- 开发 worktree `/Users/zhouxin/.codex/worktrees/fe6e/studytracker`，分支
+  `codex/toefl-mock-review`，基线 `c2ab7d56`。当前改动尚未提交、push 或部署。
+- 新 attempt 固定按 Reading → Listening → Writing → Speaking 推进；旧 attempt 通过
+  `flowVersion` 缺省兼容原 R/L/S/W 顺序，避免进行中的学生被换序。
+- 每个 Module / 写作任务先显示说明页，说明与 Speaking 麦克风检查不计时；点击开始后服务端才启动
+  权威时钟，运行中不能暂停。Reading 使用 18/9 分钟（OG 保留来源可核对的 20/9），Listening 使用
+  18/9，Writing 使用 6/7/10，Speaking 使用 3/5。
+- 到时后封闭当前整个阶段，不再逐题快速跳转；Listening 不能回退，音频自动连续播放一次，不显示原生
+  暂停/拖动/倍速控件，音频结束后才显示题目；Speaking 在进入本科前检查麦克风。
+- 本地浏览器已验证四科顺序、说明页不计时、开始后倒计时、Reading M1→M2、Listening 门禁、Writing
+  6→7 分钟切换、Speaking 开始前麦克风门禁；本地独立 worktree 未带正式音频静态文件，因此音频 404
+  只验证了显式失败状态，线上需在部署后复核自动播放资源。
+- 定向 TOEFL 测试 38 passed；Node response queue 2 passed；变更文件 Ruff、JS syntax、diff check
+  通过。全量 pytest 402 passed、2 failed，仍是既有缺失
+  `static/listening/ielts10_test1_s1.mp3` 导致的静态音频 404。
+
 ## 2026-08-08 TOEFL v2 批改、复盘与 2026 评分边界（已部署）
 
 - 实现提交 `0dd91fd2`、评分收紧 `3c51e96d`、迁移状态保护 `e27092eb` 已推送

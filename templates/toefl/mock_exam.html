@@ -56,7 +56,7 @@
       <div id="welcomePanel" class="mock-welcome">
         <p class="mock-kicker">SPEC-DRIVEN TOEFL 2026</p>
         <h2>先准备，再进入考试工作台</h2>
-        <p>Reading → Listening → Speaking → Writing。答案逐题增量保存到服务端；刷新后通过 attemptId 恢复。Speaking 逐题播放原音频，播放结束后自动录音并限时上传。</p>
+        <p>Reading → Listening → Writing → Speaking。每个 Module / 限时任务先显示说明，点击开始后才启动服务端倒计时；答案逐题保存，刷新后可续考。</p>
         <div class="mock-preflight-grid">
           <section class="mock-preflight-card">
             <p class="mock-kicker">01 · SECTION SELECTION</p>
@@ -73,10 +73,8 @@
           </section>
           <section class="mock-preflight-card">
             <p class="mock-kicker">02 · DEVICE CHECK</p>
-            <h3>检查你的设备</h3>
-            <p>Speaking 正式模式必须先完成麦克风权限与音量测试。浏览器不会上传测试音频。</p>
-            <button id="micCheckButton" class="mock-secondary" type="button">测试麦克风</button>
-            <p id="micCheckStatus" class="mock-check-status" role="status">未测试</p>
+            <h3>准备耳机和麦克风</h3>
+            <p>Listening 音频只能播放一次。进入 Speaking 前会单独进行麦克风权限与音量检查，检查时间不计入作答时间，也不会上传测试音频。</p>
           </section>
         </div>
         {% if definition.release.blockers %}
@@ -97,6 +95,24 @@
           {{ '开始新版预览' if preview else '开始正式模考' }}
         </button>
       </div>
+      <section id="phaseIntroPanel" class="mock-phase-intro" hidden>
+        <p class="mock-kicker" id="phaseIntroKicker">SECTION DIRECTIONS</p>
+        <h2 id="phaseIntroTitle"></h2>
+        <p id="phaseIntroDescription"></p>
+        <div class="mock-phase-intro__time">
+          <span>本阶段作答时间</span>
+          <strong id="phaseIntroTimer">--:--</strong>
+          <small>说明与设备检查不计时</small>
+        </div>
+        <div id="phaseMicCheck" class="mock-preflight-card" hidden>
+          <p class="mock-kicker">MICROPHONE CHECK</p>
+          <h3>先检查麦克风</h3>
+          <p>请允许浏览器使用麦克风并正常说话；通过后才能开始 Speaking。</p>
+          <button id="phaseMicCheckButton" class="mock-secondary" type="button">测试麦克风</button>
+          <p id="phaseMicCheckStatus" class="mock-check-status" role="status">未测试</p>
+        </div>
+        <button id="beginPhaseButton" class="mock-primary" type="button">开始本阶段</button>
+      </section>
       <div id="questionPanel" hidden>
         <div class="mock-stage__heading">
           <div>

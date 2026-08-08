@@ -12,18 +12,25 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
 
     for marker in (
         "sectionPicker",
-        "micCheckButton",
+        "phaseMicCheckButton",
         "deviceCheck",
         "returnTo",
         "attemptId",
         "route-m2",
+        "phaseIntroPanel",
+        "beginPhaseButton",
     ):
         assert marker in template or marker in script
     for marker in (
         "local_source",
         "once in test mode",
-        "controlsList",
         "seeking",
+        "ratechange",
+        "activeListeningAudio",
+        "继续并播放音频",
+        "audio.controls = false",
+        "题目将在音频结束后显示",
+        "Choose the best response",
         "getUserMedia",
         "MediaRecorder",
         "durationMs",
@@ -39,6 +46,9 @@ def test_student_workbench_has_preflight_audio_and_recording_contracts():
     ):
         assert marker in script or marker in api
     assert "recordingToken" not in script
+    assert "Reading → Listening → Writing → Speaking" in template
+    assert "expirePhase" in script
+    assert "state.phaseRunning = false" in script
 
 
 def test_fast_text_input_flush_waits_for_pending_and_inflight_saves():

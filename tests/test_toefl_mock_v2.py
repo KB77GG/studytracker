@@ -1,6 +1,6 @@
 import io
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -297,11 +297,11 @@ def test_definition_is_public_safe_and_preserves_repaired_q33():
 def test_definition_follows_spec_section_order_and_does_not_invent_m2():
     payload = definition("toefl:2026-01-28-b")
 
-    assert payload["sections"] == ["reading", "listening", "speaking", "writing"]
+    assert payload["sections"] == ["reading", "listening", "writing", "speaking"]
     phase_sections = [item["section"] for item in payload["phases"]]
     assert phase_sections == sorted(
         phase_sections,
-        key=("reading", "listening", "speaking", "writing").index,
+        key=("reading", "listening", "writing", "speaking").index,
     )
     assert payload["phases"][0]["id"] == "reading:m1"
     assert payload["phases"][0]["duration_seconds"] == 1080
@@ -350,8 +350,18 @@ def test_official_packages_preserve_source_timing_and_group_audio():
     practice = definition("ets-practice-1")
     og = definition("ets-og-chapter-6")
 
-    assert [phase["duration_seconds"] for phase in practice["phases"][:2]] == [720, 720]
+    assert [phase["duration_seconds"] for phase in practice["phases"][:2]] == [1080, 540]
     assert [phase["duration_seconds"] for phase in og["phases"][:2]] == [1200, 540]
+    assert [
+        phase["duration_seconds"]
+        for phase in practice["phases"]
+        if phase["section"] == "listening"
+    ] == [1080, 540]
+    assert [
+        phase["duration_seconds"]
+        for phase in practice["phases"]
+        if phase["section"] == "writing"
+    ] == [360, 420, 600]
     listening_groups = [
         group for group in practice["groups"] if group["subject"] == "listening"
     ]
@@ -597,6 +607,147 @@ def test_state_rejects_navigation_jump_and_timer_increase(app):
     assert increase.status_code == 409
 
 
+def test_directions_pause_server_clock_and_running_phase_cannot_be_paused(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-27_A", "sections": ["reading"], "preview": True},
+    ).get_json()["attempt"]
+    assert started["remaining_seconds"] == 1080
+    assert started["state"]["phaseRunning"] is False
+
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        attempt.started_at = datetime.utcnow() - timedelta(minutes=30)
+        db.session.commit()
+    paused = client.get(f"/api/toefl/attempts/{started['id']}/state").get_json()["attempt"]
+    assert paused["remaining_seconds"] == 1080
+
+    running = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0, "phaseRunning": True},
+            "currentPhase": "reading:m1",
+            "remainingSeconds": 1080,
+        },
+    )
+    assert running.status_code == 200
+    assert running.get_json()["attempt"]["state"]["phaseRunning"] is True
+
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        state = json.loads(attempt.state_json)
+        state["phaseStartedAt"] = (
+            datetime.utcnow() - timedelta(seconds=8)
+        ).isoformat() + "Z"
+        attempt.state_json = json.dumps(state)
+        db.session.commit()
+    ticking = client.get(f"/api/toefl/attempts/{started['id']}/state").get_json()["attempt"]
+    assert ticking["remaining_seconds"] <= 1072
+
+    pause = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 0, "groupIndex": 0, "phaseRunning": False},
+            "currentPhase": "reading:m1",
+            "remainingSeconds": ticking["remaining_seconds"],
+        },
+    )
+    assert pause.status_code == 409
+    assert pause.get_json()["error"] == "phase_pause_not_allowed"
+
+
+def test_expired_module_routes_and_completes_without_group_fast_forward(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-27_A", "sections": ["reading"], "preview": True},
+    ).get_json()["attempt"]
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        state = json.loads(attempt.state_json)
+        state.update(
+            {
+                "phaseRunning": True,
+                "phaseStartedAt": (
+                    datetime.utcnow() - timedelta(minutes=30)
+                ).isoformat()
+                + "Z",
+            }
+        )
+        attempt.state_json = json.dumps(state)
+        db.session.commit()
+
+    routed = client.post(
+        f"/api/toefl/attempts/{started['id']}/route-m2",
+        json={"subject": "reading"},
+    )
+    assert routed.status_code == 200
+    assert routed.get_json()["route"] == "default"
+    moved = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {"phaseIndex": 1, "groupIndex": 0, "phaseRunning": False},
+            "currentPhase": "reading:m2",
+        },
+    )
+    assert moved.status_code == 200
+    assert moved.get_json()["attempt"]["state"]["groupIndex"] == 0
+
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        state = json.loads(attempt.state_json)
+        state.update(
+            {
+                "phaseRunning": True,
+                "phaseStartedAt": (
+                    datetime.utcnow() - timedelta(minutes=20)
+                ).isoformat()
+                + "Z",
+            }
+        )
+        attempt.state_json = json.dumps(state)
+        attempt.remaining_seconds = 540
+        db.session.commit()
+    completed = client.post(f"/api/toefl/attempts/{started['id']}/complete")
+    assert completed.status_code == 200
+    assert completed.get_json()["attempt"]["status"] == "completed"
+
+
+def test_legacy_in_progress_attempt_keeps_predeployment_phase_order(app):
+    client = app.test_client()
+    started = client.post(
+        "/api/toefl/attempts/start",
+        json={"testId": "2026-01-27_A", "preview": True},
+    ).get_json()["attempt"]
+    with app.app_context():
+        attempt = db.session.get(ToeflMockAttempt, started["id"])
+        attempt.sections_json = json.dumps(
+            ["reading", "listening", "speaking", "writing"]
+        )
+        attempt.current_phase = "speaking:m1"
+        attempt.remaining_seconds = 180
+        attempt.state_json = json.dumps(
+            {
+                "phaseIndex": 4,
+                "groupIndex": 0,
+                "phaseRunning": True,
+                "phaseStartedAt": datetime.utcnow().isoformat() + "Z",
+            }
+        )
+        db.session.commit()
+
+    resumed = client.get(f"/api/toefl/attempts/{started['id']}/resume").get_json()
+    assert resumed["definition"]["sections"] == [
+        "reading",
+        "listening",
+        "speaking",
+        "writing",
+    ]
+    assert resumed["definition"]["phases"][4]["id"] == "speaking:m1"
+    assert resumed["attempt"]["current_phase"] == "speaking:m1"
+
+
 def test_listening_back_policy_disables_same_phase_back_navigation(app):
     client = app.test_client()
     started = client.post(
@@ -609,7 +760,7 @@ def test_listening_back_policy_disables_same_phase_back_navigation(app):
         json={
             "state": {"phaseIndex": 0, "groupIndex": 1},
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
     assert forward.status_code == 200
@@ -618,14 +769,14 @@ def test_listening_back_policy_disables_same_phase_back_navigation(app):
         json={
             "state": {"phaseIndex": 0, "groupIndex": 0},
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
     assert backward.status_code == 409
     assert backward.get_json()["error"] == "back_navigation_disabled"
 
 
-def test_writing_phase_timer_snapshots_survive_back_and_forward(app):
+def test_writing_tasks_have_independent_timers_and_cannot_go_back(app):
     client = app.test_client()
     started = client.post(
         "/api/toefl/attempts/start",
@@ -664,24 +815,17 @@ def test_writing_phase_timer_snapshots_survive_back_and_forward(app):
             "state": {"phaseIndex": 0, "groupIndex": 0},
             "currentPhase": "writing:build_a_sentence",
         },
-    ).get_json()["attempt"]
-    assert back_to_build["remaining_seconds"] <= 100
-    forward_again = client.put(
+    )
+    assert back_to_build.status_code == 409
+    assert back_to_build.get_json()["error"] == "invalid_navigation_jump"
+    discussion = client.put(
         f"/api/toefl/attempts/{attempt_id}/state",
         json={
-            "state": {"phaseIndex": 1, "groupIndex": 0},
-            "currentPhase": "writing:write_email",
+            "state": {"phaseIndex": 2, "groupIndex": 0},
+            "currentPhase": "writing:academic_discussion",
         },
     ).get_json()["attempt"]
-    assert forward_again["remaining_seconds"] <= 200
-    back_again = client.put(
-        f"/api/toefl/attempts/{attempt_id}/state",
-        json={
-            "state": {"phaseIndex": 0, "groupIndex": 0},
-            "currentPhase": "writing:build_a_sentence",
-        },
-    ).get_json()["attempt"]
-    assert back_again["remaining_seconds"] <= 100
+    assert discussion["remaining_seconds"] == 600
 
 
 def test_audio_state_is_whitelisted_and_survives_resume(app):
@@ -696,7 +840,7 @@ def test_audio_state_is_whitelisted_and_survives_resume(app):
         json={
             "state": {"phaseIndex": 0, "groupIndex": 0, "audio": audio},
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
     assert saved.status_code == 200
@@ -711,7 +855,7 @@ def test_audio_state_is_whitelisted_and_survives_resume(app):
                 "audio": {"reading:m1": {"ready": True}},
             },
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
     assert invalid.status_code == 400
@@ -736,7 +880,7 @@ def test_group_scoped_official_audio_state_is_accepted(app):
         json={
             "state": {"phaseIndex": 0, "groupIndex": 0, "audio": audio},
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
 
@@ -780,7 +924,7 @@ def test_blocked_question_is_not_writable_and_stays_out_of_denominator(app):
         json={
             "state": {"phaseIndex": 0, "groupIndex": 0},
             "currentPhase": "listening:m1",
-            "remainingSeconds": None,
+            "remainingSeconds": 1080,
         },
     )
     assert audio_state.status_code == 200
@@ -788,22 +932,39 @@ def test_blocked_question_is_not_writable_and_stays_out_of_denominator(app):
     assert route_module_two("2026-01-21_A", "listening", {})["score"]["auto_total"] == 29
 
 
-def test_speaking_requires_device_check_and_recording_question_type(app):
+def test_speaking_requires_device_check_when_phase_starts(app):
     client = app.test_client()
     missing_check = client.post(
         "/api/toefl/attempts/start",
         json={"testId": "2026-01-27_A", "sections": ["speaking"], "preview": True},
     )
-    assert missing_check.status_code == 409
-    started = client.post(
-        "/api/toefl/attempts/start",
+    assert missing_check.status_code == 201
+    started = missing_check.get_json()["attempt"]
+    assert started["state"]["phaseRunning"] is False
+    blocked_start = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
         json={
-            "testId": "2026-01-27_A",
-            "sections": ["speaking"],
-            "preview": True,
-            "deviceCheck": {"microphone": "passed"},
+            "state": {"phaseIndex": 0, "groupIndex": 0, "phaseRunning": True},
+            "currentPhase": "speaking:m1",
+            "remainingSeconds": 180,
         },
-    ).get_json()["attempt"]
+    )
+    assert blocked_start.status_code == 409
+    assert blocked_start.get_json()["error"] == "microphone_check_required"
+    phase_started = client.put(
+        f"/api/toefl/attempts/{started['id']}/state",
+        json={
+            "state": {
+                "phaseIndex": 0,
+                "groupIndex": 0,
+                "phaseRunning": True,
+                "deviceCheck": {"microphone": "passed"},
+            },
+            "currentPhase": "speaking:m1",
+            "remainingSeconds": 180,
+        },
+    )
+    assert phase_started.status_code == 200
     writing_qid = "toefl:2026-01-27-a:writing:m1:g02:q08"
     invalid = client.post(
         "/api/toefl/recordings",

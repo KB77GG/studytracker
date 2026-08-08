@@ -29,6 +29,7 @@ from models import (
 )
 from services import toefl_mock_review as review_workflow
 from services.toefl_mock_v2 import (
+    LEGACY_SECTION_ORDER,
     PackageNotFoundError,
     PackageReleaseBlockedError,
     definition,
@@ -52,6 +53,7 @@ RECORDING_SUFFIXES = {
     ".m4a": "audio/mp4",
     ".ogg": "audio/ogg",
 }
+OFFICIAL_FLOW_VERSION = "2026-01-21-r-l-w-s"
 
 
 def _recording_root() -> Path:
@@ -144,9 +146,17 @@ def _response_map(attempt: ToeflMockAttempt) -> dict[str, Any]:
 
 
 def _attempt_definition(attempt: ToeflMockAttempt) -> dict[str, Any]:
+    state = _load_json_text(attempt.state_json, {})
+    section_order = (
+        None
+        if isinstance(state, dict)
+        and state.get("flowVersion") == OFFICIAL_FLOW_VERSION
+        else LEGACY_SECTION_ORDER
+    )
     return definition(
         attempt.exam_id,
         _load_json_text(attempt.sections_json, []),
+        **({} if section_order is None else {"section_order": section_order}),
     )
 
 
@@ -249,6 +259,10 @@ def _refresh_server_clock(
         attempt.remaining_seconds = None
         return None
     state = _state(attempt)
+    if state.get("phaseRunning") is False:
+        if attempt.remaining_seconds is None:
+            attempt.remaining_seconds = int(duration)
+        return attempt.remaining_seconds
     started = _phase_started_at(state, attempt.started_at or _utcnow_naive())
     elapsed = max(0, int((_utcnow_naive() - started).total_seconds()))
     computed = max(0, int(duration) - elapsed)
@@ -314,6 +328,14 @@ def _validated_audio_state(
             key: state[key] for key in allowed_fields if key in state
         }
     return validated, None
+
+
+def _validated_device_check(value: Any) -> dict[str, str] | None:
+    if not isinstance(value, dict) or set(value) - {"microphone"}:
+        return None
+    if value.get("microphone") != "passed":
+        return None
+    return {"microphone": "passed"}
 
 
 def _question_phase_index(
@@ -400,20 +422,10 @@ def start_attempt():
     sections = parse_sections(payload.get("sections"))
     mock_definition = definition(str(payload.get("testId") or ""), sections)
     preview = payload.get("preview") is True
-    device_check = payload.get("deviceCheck")
-    if not isinstance(device_check, dict):
-        device_check = {}
     permission_error = _start_permission(preview)
     if permission_error:
         body, status = permission_error
         return jsonify(body), status
-    if "speaking" in sections and device_check.get("microphone") != "passed":
-        return jsonify(
-            {
-                "error": "microphone_check_required",
-                "message": "开始包含 Speaking 的模考前必须完成麦克风测试",
-            }
-        ), 409
     require_attempt_allowed(mock_definition, preview)
     first_phase = mock_definition["phases"][0] if mock_definition["phases"] else {}
     profile = _current_student()
@@ -423,11 +435,12 @@ def start_attempt():
         "groupIndex": 0,
         "questionIndex": 0,
         "returnTo": _safe_return_to(payload.get("returnTo")),
-        "phaseStartedAt": now.isoformat() + "Z",
+        "flowVersion": OFFICIAL_FLOW_VERSION,
+        "phaseRunning": False,
         "phaseTimers": {
             first_phase.get("id"): first_phase.get("duration_seconds")
         },
-        "deviceCheck": device_check,
+        "deviceCheck": {},
     }
     attempt = ToeflMockAttempt(
         id=str(uuid.uuid4()),
@@ -607,7 +620,11 @@ def route_m2(attempt_id: str):
     phase = mock_definition["phases"][current_phase]
     if phase.get("section") != subject or phase.get("module") != "m1":
         return jsonify({"error": "m1_not_current"}), 409
-    if _phase_indices(attempt)[1] != len(phase.get("group_ids", [])) - 1:
+    phase_expired = _refresh_server_clock(attempt, mock_definition) == 0
+    if (
+        _phase_indices(attempt)[1] != len(phase.get("group_ids", [])) - 1
+        and not phase_expired
+    ):
         return jsonify({"error": "m1_not_complete"}), 409
     route = route_module_two(attempt.exam_id, subject, _response_map(attempt))
     routes[subject] = route
@@ -624,10 +641,7 @@ def resume_attempt(attempt_id: str):
     return jsonify(
         {
             "attempt": _serialize_attempt(attempt),
-            "definition": definition(
-                attempt.exam_id,
-                _load_json_text(attempt.sections_json, []),
-            ),
+            "definition": _attempt_definition(attempt),
         }
     )
 
@@ -683,6 +697,11 @@ def attempt_state(attempt_id: str):
         if audio_error:
             return jsonify(audio_error[0]), audio_error[1]
         previous["audio"] = audio_state
+    if "deviceCheck" in incoming:
+        device_check = _validated_device_check(incoming["deviceCheck"])
+        if device_check is None:
+            return jsonify({"error": "device_check_invalid"}), 400
+        previous["deviceCheck"] = device_check
     if "returnTo" in incoming:
         previous["returnTo"] = _safe_return_to(incoming["returnTo"])
     previous["phaseIndex"] = target_phase
@@ -708,9 +727,29 @@ def attempt_state(attempt_id: str):
             _save_phase_timer_snapshot(previous, target_phase_id, target_remaining)
         now = _utcnow_naive()
         previous["phaseStartedAt"] = now.isoformat() + "Z"
+        previous["phaseRunning"] = False
         attempt.remaining_seconds = target_remaining
     else:
-        server_remaining = _refresh_server_clock(attempt, mock_definition)
+        requested_running = incoming.get("phaseRunning")
+        if requested_running is not None and not isinstance(requested_running, bool):
+            return jsonify({"error": "invalid_phase_running"}), 400
+        was_running = previous.get("phaseRunning") is not False
+        if was_running and requested_running is False:
+            return jsonify({"error": "phase_pause_not_allowed"}), 409
+        if not was_running and requested_running is True:
+            if (
+                target_phase_definition.get("section") == "speaking"
+                and (previous.get("deviceCheck") or {}).get("microphone") != "passed"
+            ):
+                return jsonify({"error": "microphone_check_required"}), 409
+            previous["phaseRunning"] = True
+            previous["phaseStartedAt"] = _utcnow_naive().isoformat() + "Z"
+            server_remaining = attempt.remaining_seconds
+        elif not was_running:
+            server_remaining = attempt.remaining_seconds
+        else:
+            previous["phaseRunning"] = True
+            server_remaining = _refresh_server_clock(attempt, mock_definition)
         if "remainingSeconds" in payload:
             if payload["remainingSeconds"] is None:
                 if mock_definition["phases"][target_phase].get("duration_seconds") is not None:
@@ -747,7 +786,12 @@ def complete_attempt(attempt_id: str):
         current_phase, current_group = _phase_indices(attempt)
         if current_phase != len(mock_definition["phases"]) - 1:
             return jsonify({"error": "attempt_incomplete"}), 409
-        if current_group != len(mock_definition["phases"][current_phase].get("group_ids", [])) - 1:
+        phase_expired = _refresh_server_clock(attempt, mock_definition) == 0
+        if (
+            current_group
+            != len(mock_definition["phases"][current_phase].get("group_ids", [])) - 1
+            and not phase_expired
+        ):
             return jsonify({"error": "attempt_incomplete"}), 409
     if attempt.status != "completed":
         attempt.status = "completed"
@@ -765,10 +809,7 @@ def attempt_report(attempt_id: str):
         return jsonify({"error": "attempt_not_found"}), 404
     if attempt.status != "completed":
         return jsonify({"error": "attempt_incomplete"}), 409
-    mock_definition = definition(
-        attempt.exam_id,
-        _load_json_text(attempt.sections_json, []),
-    )
+    mock_definition = _attempt_definition(attempt)
     if review_workflow.ensure_review_state(attempt):
         db.session.commit()
     review = review_workflow.build_review(attempt, student_view=True)

@@ -5,6 +5,15 @@
   let definition = config.definition;
   const elements = {
     welcome: document.getElementById("welcomePanel"),
+    intro: document.getElementById("phaseIntroPanel"),
+    introKicker: document.getElementById("phaseIntroKicker"),
+    introTitle: document.getElementById("phaseIntroTitle"),
+    introDescription: document.getElementById("phaseIntroDescription"),
+    introTimer: document.getElementById("phaseIntroTimer"),
+    phaseMicCheck: document.getElementById("phaseMicCheck"),
+    phaseMicCheckButton: document.getElementById("phaseMicCheckButton"),
+    phaseMicCheckStatus: document.getElementById("phaseMicCheckStatus"),
+    beginPhase: document.getElementById("beginPhaseButton"),
     panel: document.getElementById("questionPanel"),
     report: document.getElementById("reportPanel"),
     start: document.getElementById("startButton"),
@@ -27,8 +36,6 @@
     closeReview: document.getElementById("closeReview"),
     sectionPicker: document.getElementById("sectionPicker"),
     selectionNotice: document.getElementById("selectionNotice"),
-    micCheckButton: document.getElementById("micCheckButton"),
-    micCheckStatus: document.getElementById("micCheckStatus"),
   };
 
   let groupById = new Map();
@@ -41,8 +48,8 @@
   let remainingSeconds = null;
   let tickCount = 0;
   let advancing = false;
-  let micTestPassed = false;
   let activeRecording = null;
+  let activeListeningAudio = null;
   const responseSaveTimers = new Map();
   const pendingResponseValues = new Map();
   const responseSaveChains = new Map();
@@ -109,29 +116,14 @@
     return [...elements.sectionPicker.querySelectorAll("input:checked")].map((input) => input.value);
   }
 
-  function selectedNeedsMic() {
-    return selectedSections().includes("speaking");
-  }
-
   function updatePreflight() {
     const sections = selectedSections();
     const invalidSelection = sections.length === 0;
-    const blockedByMic = selectedNeedsMic() && !micTestPassed;
-    elements.start.disabled = invalidSelection || blockedByMic;
-    elements.micCheckButton.disabled = !selectedNeedsMic();
-    if (!selectedNeedsMic()) {
-      elements.micCheckStatus.textContent = "本次未选择 Speaking，无需麦克风测试";
-      elements.micCheckStatus.className = "mock-check-status";
-    } else if (!micTestPassed) {
-      elements.micCheckStatus.textContent = "未测试 · Speaking 不能开始";
-      elements.micCheckStatus.className = "mock-check-status is-warning";
-    }
+    elements.start.disabled = invalidSelection;
     if (invalidSelection) {
       elements.selectionNotice.textContent = "至少选择一个科目。";
-    } else if (blockedByMic) {
-      elements.selectionNotice.textContent = "完成麦克风测试后才能开始包含 Speaking 的模考。";
     } else {
-      elements.selectionNotice.textContent = "准备完成后，答案会逐题保存；正式模式的发布门禁仍由服务端执行。";
+      elements.selectionNotice.textContent = "说明页和设备检查不计时；进入每个阶段后再启动服务端倒计时。";
     }
   }
 
@@ -152,6 +144,73 @@
       node.classList.toggle("is-active", sectionIndex === currentIndex);
       node.classList.toggle("is-complete", sectionIndex < currentIndex);
     });
+  }
+
+  function isFirstSpeakingPhase() {
+    return currentPhase()?.section === "speaking"
+      && definition.phases.findIndex((phase) => phase.section === "speaking") === state.phaseIndex;
+  }
+
+  function phaseDirections(phase) {
+    if (phase.section === "reading") {
+      return "本 Module 内可以前后检查答案；进入下一个 Module 后不能返回。倒计时归零会立即封闭本 Module。";
+    }
+    if (phase.section === "listening") {
+      return "题目必须按顺序完成，音频只播放一次，不能拖动、重播或返回上一题。倒计时归零会立即封闭本 Module。";
+    }
+    if (phase.section === "writing") {
+      return "本任务使用独立倒计时；进入下一项写作任务后不能返回。系统会持续保存当前输入。";
+    }
+    return "题目播放结束后立即录音，无准备时间；录音到时自动停止、上传并进入下一题。";
+  }
+
+  function renderPhaseIntro() {
+    const phase = currentPhase();
+    if (!phase) return;
+    elements.welcome.hidden = true;
+    elements.panel.hidden = true;
+    elements.report.hidden = true;
+    elements.footer.hidden = true;
+    elements.intro.hidden = false;
+    elements.review.hidden = true;
+    elements.section.textContent = phase.section;
+    elements.phase.textContent = `${phase.label} · Directions`;
+    elements.timer.textContent = "--:--";
+    elements.introKicker.textContent = `${phase.section.toUpperCase()} · ${phase.module.toUpperCase()}`;
+    elements.introTitle.textContent = phase.label;
+    elements.introDescription.textContent = phaseDirections(phase);
+    elements.introTimer.textContent = formatTime(phaseDuration(phase));
+    const needsMic = isFirstSpeakingPhase();
+    const micPassed = state.deviceCheck?.microphone === "passed";
+    elements.phaseMicCheck.hidden = !needsMic;
+    elements.phaseMicCheckStatus.textContent = micPassed ? "测试通过 · 麦克风可用" : "未测试";
+    elements.phaseMicCheckStatus.className = `mock-check-status${micPassed ? " is-success" : ""}`;
+    elements.beginPhase.disabled = needsMic && !micPassed;
+    elements.beginPhase.textContent = `开始 ${phase.label}`;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderCurrentStep() {
+    if (state.phaseRunning === false) renderPhaseIntro();
+    else render();
+  }
+
+  async function beginPhase() {
+    if (isFirstSpeakingPhase() && state.deviceCheck?.microphone !== "passed") return;
+    elements.beginPhase.disabled = true;
+    state.phaseRunning = true;
+    remainingSeconds = phaseDuration(currentPhase());
+    try {
+      await persistState();
+      elements.intro.hidden = true;
+      render();
+      setSaveState("本阶段计时已开始");
+    } catch (error) {
+      state.phaseRunning = false;
+      elements.beginPhase.disabled = false;
+      setSaveState(`无法开始本阶段：${error.message}`, true);
+    }
   }
 
   function questionIsRecording(question) {
@@ -216,16 +275,45 @@
       return true;
     }
     const audio = document.createElement("audio");
-    audio.controls = true;
+    audio.controls = false;
     audio.preload = "metadata";
     audio.src = asset.delivery.url;
-    audio.controlsList = "nodownload noplaybackrate";
     audio.setAttribute("aria-label", "Listening audio");
+    const playbackStatus = document.createElement("p");
+    playbackStatus.className = "mock-audio-status";
+    playbackStatus.textContent = "正在准备音频…";
+    const playFallback = document.createElement("button");
+    playFallback.type = "button";
+    playFallback.className = "mock-secondary";
+    playFallback.textContent = "继续并播放音频";
+    playFallback.hidden = true;
     let lastTime = 0;
+    let playbackBlocked = false;
+    let startedHere = false;
     audio.addEventListener("play", () => {
-      if (audioState.played && audio.currentTime < 0.5) audio.pause();
+      if (audioState.played && !startedHere && audio.currentTime < 0.5) {
+        playbackBlocked = true;
+        activeListeningAudio = null;
+        audio.pause();
+        playbackStatus.textContent = "本段音频已开始过 · 正式模式不允许刷新后重播";
+        setSaveState("测试模式禁止重新播放听力音频", true);
+        return;
+      }
+      activeListeningAudio = audio;
+      startedHere = true;
       audioState.played = true;
+      playbackStatus.textContent = "音频正在播放 · 不可暂停、拖动或倍速";
+      playFallback.hidden = true;
+      persistState().catch(() => setSaveState("音频播放状态同步失败", true));
       updateNextState();
+    });
+    audio.addEventListener("pause", () => {
+      if (!playbackBlocked && activeListeningAudio === audio && audioState.played && !audioState.ready && !audio.ended) {
+        audio.play().catch(() => setSaveState("听力音频播放中断，请检查设备", true));
+      }
+    });
+    audio.addEventListener("ratechange", () => {
+      if (audio.playbackRate !== 1) audio.playbackRate = 1;
     });
     audio.addEventListener("timeupdate", () => {
       if (audio.currentTime >= lastTime) lastTime = audio.currentTime;
@@ -236,15 +324,35 @@
       }
     });
     audio.addEventListener("ended", async () => {
+      activeListeningAudio = null;
       audioState.ready = true;
+      playbackStatus.textContent = "音频播放完毕 · 可以继续答题";
       await persistState();
-      updateNextState();
+      render();
     });
-    card.appendChild(audio);
+    audio.addEventListener("error", () => {
+      playbackBlocked = true;
+      activeListeningAudio = null;
+      playbackStatus.textContent = "音频加载失败 · 请检查网络后重新进入本次模考";
+      playFallback.hidden = true;
+      setSaveState("听力音频加载失败", true);
+    });
+    const startPlayback = async () => {
+      try {
+        await audio.play();
+      } catch (error) {
+        if (audioState.played) return;
+        playbackStatus.textContent = "浏览器等待确认；点击下方按钮后音频将连续播放一次。";
+        playFallback.hidden = false;
+      }
+    };
+    playFallback.addEventListener("click", startPlayback);
+    card.append(audio, playbackStatus, playFallback);
     const note = document.createElement("p");
-    note.textContent = "只能播放一次，不能拖动进度；播放结束后才能继续。";
+    note.textContent = "与正式考试一致：音频自动连续播放一次，播放结束后才能继续。";
     card.appendChild(note);
     elements.stimulus.appendChild(card);
+    startPlayback();
     return true;
   }
 
@@ -292,9 +400,13 @@
     wrapper.className = `mock-question${question.available ? "" : " is-blocked"}`;
     const recordingQuestion = questionIsRecording(question);
     const label = document.createElement("label");
+    const spokenPrompt = currentPhase()?.section === "listening"
+      && currentGroup()?.task_type === "listen_response";
     label.textContent = recordingQuestion
       ? `${question.number}. 听完题目后，系统会立即开始录音。`
-      : `${question.number}. ${question.prompt || "Respond to the item."}`;
+      : spokenPrompt
+        ? `${question.number}. Choose the best response.`
+        : `${question.number}. ${question.prompt || "Respond to the item."}`;
     wrapper.appendChild(label);
     if (question.context_sentence && !recordingQuestion) {
       const context = document.createElement("p");
@@ -411,10 +523,11 @@
     const group = groups[state.groupIndex];
     if (!phase || !group) return;
     elements.welcome.hidden = true;
+    elements.intro.hidden = true;
     elements.report.hidden = true;
     elements.panel.hidden = false;
     elements.footer.hidden = false;
-    elements.review.hidden = false;
+    elements.review.hidden = phase.section !== "reading";
     elements.section.textContent = phase.section;
     elements.phase.textContent = phase.label;
     elements.groupType.textContent = (group.task_type || "task").replaceAll("_", " ");
@@ -422,17 +535,21 @@
     elements.groupCounter.textContent = `Group ${state.groupIndex + 1} of ${groups.length}`;
     const hasInlineQuestions = renderStimulus(phase, group);
     elements.questions.replaceChildren();
-    if (!hasInlineQuestions) {
+    const waitingForListeningAudio = phase.section === "listening" && !audioReadyForCurrentGroup();
+    if (waitingForListeningAudio) {
+      const waiting = document.createElement("p");
+      waiting.className = "mock-timing-note";
+      waiting.textContent = "请先听完音频；题目将在音频结束后显示。";
+      elements.questions.appendChild(waiting);
+    } else if (!hasInlineQuestions) {
       (group.question_ids || []).forEach((questionId) => {
         const question = questionById.get(questionId);
         if (question) elements.questions.appendChild(responseControl(question));
       });
     }
     const module = moduleById.get(phase.module_id);
-    const previousPhase = definition.phases[state.phaseIndex - 1];
-    const canCrossPhase = previousPhase && previousPhase.module_id === phase.module_id;
     elements.back.disabled = module?.navigation?.back_policy !== "within_module"
-      || (state.groupIndex === 0 && !canCrossPhase);
+      || state.groupIndex === 0;
     elements.timer.textContent = formatTime(remainingSeconds);
     updateProgress();
     updateNextState();
@@ -688,8 +805,10 @@
     if (!attempt || attempt.status !== "in_progress") return;
     const audio = {};
     audioStates.forEach((value, key) => { audio[key] = value; });
+    const statePayload = { ...state, audio, returnTo: attempt.state?.returnTo || config.returnTo };
+    if (statePayload.deviceCheck?.microphone !== "passed") delete statePayload.deviceCheck;
     const payload = {
-      state: { ...state, audio, returnTo: attempt.state?.returnTo || config.returnTo },
+      state: statePayload,
       currentPhase: currentPhase()?.id,
       remainingSeconds,
     };
@@ -730,7 +849,7 @@
       const asset = assetById.get(currentGroup()?.stimulus?.asset_id);
       const published = asset?.delivery?.status === "published" && asset?.delivery?.url;
       elements.route.textContent = published
-        ? "先完整播放本 Module 音频，播放结束后才能继续。"
+        ? "请先完整听完当前音频；播放结束后题目会自动显示。"
         : "当前音频未进入发布存储；只可在 Staging 明确跳过缺口。";
     } else if (phase?.section === "speaking" && !currentGroupRecordingsReady()) {
       if (!activeRecording) {
@@ -766,12 +885,57 @@
       }
       state.phaseIndex += 1;
       state.groupIndex = 0;
+      state.phaseRunning = false;
       const nextPhase = currentPhase();
       remainingSeconds = phaseDuration(nextPhase);
       await persistState();
-      render();
+      renderCurrentStep();
+      setSaveState("等待开始下一阶段");
     } catch (error) {
       setSaveState(`无法继续：${error.message}`, true);
+    } finally {
+      advancing = false;
+      updateNextState();
+    }
+  }
+
+  async function expirePhase() {
+    if (advancing) return;
+    advancing = true;
+    try {
+      if (activeListeningAudio) {
+        const audio = activeListeningAudio;
+        activeListeningAudio = null;
+        audio.pause();
+      }
+      if (activeRecording) {
+        const recording = activeRecording;
+        stopActiveRecording(false);
+        await recording.done;
+      }
+      await flushPendingResponses();
+      remainingSeconds = 0;
+      await persistState();
+      const phase = currentPhase();
+      if (phase.adaptive_checkpoint) {
+        await api(`/api/toefl/attempts/${attempt.id}/route-m2`, {
+          method: "POST",
+          body: JSON.stringify({ subject: phase.section }),
+        });
+      }
+      if (state.phaseIndex >= definition.phases.length - 1) {
+        await finish();
+        return;
+      }
+      state.phaseIndex += 1;
+      state.groupIndex = 0;
+      state.phaseRunning = false;
+      remainingSeconds = phaseDuration(currentPhase());
+      await persistState();
+      renderCurrentStep();
+      setSaveState("上一阶段时间到，已自动封闭");
+    } catch (error) {
+      setSaveState(`到时提交失败：${error.message}`, true);
     } finally {
       advancing = false;
       updateNextState();
@@ -784,21 +948,9 @@
       await flushPendingResponses();
       const phase = currentPhase();
       const module = moduleById.get(phase.module_id);
-      const phaseBeforeBack = state.phaseIndex;
       if (module?.navigation?.back_policy !== "within_module") return;
-      if (state.groupIndex > 0) {
-        state.groupIndex -= 1;
-      } else if (state.phaseIndex > 0) {
-        const previousPhase = definition.phases[state.phaseIndex - 1];
-        if (previousPhase.module_id !== phase.module_id) return;
-        state.phaseIndex -= 1;
-        state.groupIndex = Math.max(0, phaseGroups(previousPhase).length - 1);
-      }
-      if (state.phaseIndex !== phaseBeforeBack) {
-        remainingSeconds = phaseDuration(currentPhase());
-      } else {
-        remainingSeconds = attempt.remaining_seconds;
-      }
+      if (state.groupIndex === 0) return;
+      state.groupIndex -= 1;
       await persistState();
       render();
     } catch (error) {
@@ -830,6 +982,7 @@
       attempt = completed.attempt;
     }
     const report = await api(`/api/toefl/attempts/${attempt.id}/report`);
+    elements.intro.hidden = true;
     elements.panel.hidden = true;
     elements.report.hidden = false;
     elements.back.hidden = true;
@@ -882,7 +1035,7 @@
 
   async function start() {
     const sections = selectedSections();
-    if (!sections.length || (sections.includes("speaking") && !micTestPassed)) {
+    if (!sections.length) {
       updatePreflight();
       return;
     }
@@ -900,7 +1053,6 @@
           sections: definition.sections,
           preview: config.preview,
           returnTo: config.returnTo,
-          deviceCheck: sections.includes("speaking") ? { microphone: "passed" } : {},
         }),
       });
       attempt = payload.attempt;
@@ -909,7 +1061,7 @@
       remainingSeconds = attempt.remaining_seconds;
       updateUrl();
       elements.sectionPicker.closest(".mock-preflight-grid")?.setAttribute("hidden", "hidden");
-      render();
+      renderCurrentStep();
       setSaveState("已建立 attempt");
     } catch (error) {
       elements.start.disabled = false;
@@ -933,13 +1085,14 @@
       return;
     }
     elements.welcome.hidden = true;
-    render();
+    renderCurrentStep();
     setSaveState("已恢复");
   }
 
   function showReview() {
     elements.reviewList.replaceChildren();
-    definition.questions.forEach((question) => {
+    const visibleQuestionIds = new Set(currentPhase()?.question_ids || []);
+    definition.questions.filter((question) => visibleQuestionIds.has(question.id)).forEach((question) => {
       const row = document.createElement("div");
       row.className = "review-row";
       const label = document.createElement("span");
@@ -953,9 +1106,9 @@
   }
 
   async function runMicCheck() {
-    if (!selectedNeedsMic()) return;
-    elements.micCheckButton.disabled = true;
-    elements.micCheckStatus.textContent = "请对麦克风说话，正在检测音量…";
+    if (!isFirstSpeakingPhase()) return;
+    elements.phaseMicCheckButton.disabled = true;
+    elements.phaseMicCheckStatus.textContent = "请对麦克风说话，正在检测音量…";
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error("browser_media_unavailable");
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -975,21 +1128,23 @@
         await context.close();
       }
       stream.getTracks().forEach((track) => track.stop());
-      micTestPassed = passed;
-      elements.micCheckStatus.textContent = passed ? "测试通过 · 麦克风可用" : "未检测到足够音量，请重试并说话";
-      elements.micCheckStatus.className = `mock-check-status ${passed ? "is-success" : "is-warning"}`;
+      state.deviceCheck = passed ? { microphone: "passed" } : {};
+      elements.phaseMicCheckStatus.textContent = passed ? "测试通过 · 麦克风可用" : "未检测到足够音量，请重试并说话";
+      elements.phaseMicCheckStatus.className = `mock-check-status ${passed ? "is-success" : "is-warning"}`;
+      elements.beginPhase.disabled = !passed;
     } catch (error) {
-      micTestPassed = false;
-      elements.micCheckStatus.textContent = "测试失败 · 请允许浏览器使用麦克风后重试";
-      elements.micCheckStatus.className = "mock-check-status is-warning";
+      state.deviceCheck = {};
+      elements.phaseMicCheckStatus.textContent = "测试失败 · 请允许浏览器使用麦克风后重试";
+      elements.phaseMicCheckStatus.className = "mock-check-status is-warning";
+      elements.beginPhase.disabled = true;
     } finally {
-      updatePreflight();
-      elements.micCheckButton.disabled = false;
+      elements.phaseMicCheckButton.disabled = false;
     }
   }
 
   elements.sectionPicker.querySelectorAll("input").forEach((input) => input.addEventListener("change", updatePreflight));
-  elements.micCheckButton.addEventListener("click", runMicCheck);
+  elements.phaseMicCheckButton.addEventListener("click", runMicCheck);
+  elements.beginPhase.addEventListener("click", beginPhase);
   elements.start.addEventListener("click", start);
   elements.next.addEventListener("click", advance);
   elements.back.addEventListener("click", goBack);
@@ -1006,12 +1161,12 @@
         if (now >= activeRecording.stopAt) stopActiveRecording(false);
       }
     }
-    if (remainingSeconds != null) {
+    if (remainingSeconds != null && state.phaseRunning !== false) {
       remainingSeconds = Math.max(0, remainingSeconds - 1);
       elements.timer.textContent = formatTime(remainingSeconds);
       tickCount += 1;
       if (remainingSeconds === 0 && !advancing) {
-        advance().catch((error) => setSaveState(`自动推进失败：${error.message}`, true));
+        expirePhase().catch((error) => setSaveState(`到时提交失败：${error.message}`, true));
       } else if (tickCount % 15 === 0) {
         persistState().catch(() => setSaveState("状态同步失败，正在保留本地显示", true));
       }
