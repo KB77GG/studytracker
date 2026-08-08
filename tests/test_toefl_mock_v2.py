@@ -108,16 +108,20 @@ def _login_as(app, client, role, username, *, profile_name=None):
     return profile_id
 
 
-def _make_completed_attempt(app, student_id, *, status="completed", sections=None):
+def _make_completed_attempt(
+    app, student_id, *, status="completed", sections=None, exam_id="ets-practice-1"
+):
     with app.app_context():
         return _make_completed_attempt_in_context(
-            student_id, status=status, sections=sections
+            student_id, status=status, sections=sections, exam_id=exam_id
         )
 
 
-def _make_completed_attempt_in_context(student_id, *, status="completed", sections=None):
+def _make_completed_attempt_in_context(
+    student_id, *, status="completed", sections=None, exam_id="ets-practice-1"
+):
     sections = sections or ["reading", "writing"]
-    payload = definition("ets-practice-1", sections)
+    payload = definition(exam_id, sections)
     now = datetime.utcnow()
     attempt_id = f"attempt-{student_id}-{status}"
     attempt = ToeflMockAttempt(
@@ -1100,3 +1104,176 @@ def test_student_history_only_lists_own_completed_attempts(app):
     ids = {item["id"] for item in history.get_json()["attempts"]}
     assert own_id in ids
     assert other_id not in ids
+
+
+def test_teacher_scores_are_fixed_task_level_integers_and_rubric_is_auditable(app):
+    client = app.test_client()
+    student_id = _login_as(
+        app, client, User.ROLE_STUDENT, "student-rubric", profile_name="量表学生"
+    )
+    attempt_id = _make_completed_attempt(
+        app, student_id, sections=["writing", "speaking"]
+    )
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-rubric")
+
+    detail = client.get(f"/api/toefl/teacher/attempts/{attempt_id}").get_json()
+    manual = detail["manual"]
+    by_task = {item["task_type"]: item for item in manual}
+    assert by_task["listen_and_repeat"]["rubric_code"] == (
+        "toefl_2026_speaking_listen_and_repeat"
+    )
+    assert by_task["take_an_interview"]["rubric_version"] == "2026-01"
+    assert by_task["write_email"]["rubric"]["anchors"]["5"]
+    assert "覆盖情境与每项要求" in by_task["write_email"]["rubric"]["focus"]
+
+    question_id = by_task["write_email"]["id"]
+    version = detail["attempt"]["review_version"]
+    for invalid_score in (4.5, 6):
+        rejected = client.patch(
+            f"/api/toefl/teacher/attempts/{attempt_id}/review",
+            json={
+                "version": version,
+                "reviews": [{"question_id": question_id, "score": invalid_score}],
+            },
+        )
+        assert rejected.status_code == 400
+        assert rejected.get_json()["error"] == "score_invalid"
+
+    rejected_max = client.patch(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review",
+        json={
+            "version": version,
+            "reviews": [{"question_id": question_id, "score": 4, "score_max": 100}],
+        },
+    )
+    assert rejected_max.status_code == 400
+    assert rejected_max.get_json()["error"] == "score_max_invalid"
+
+    for score in range(6):
+        current = client.get(f"/api/toefl/teacher/attempts/{attempt_id}").get_json()
+        saved = client.patch(
+            f"/api/toefl/teacher/attempts/{attempt_id}/review",
+            json={
+                "version": current["attempt"]["review_version"],
+                "reviews": [{"question_id": question_id, "score": score}],
+            },
+        )
+        assert saved.status_code == 200
+        saved_item = next(
+            item for item in saved.get_json()["manual"] if item["id"] == question_id
+        )
+        assert saved_item["score"] == score
+        assert saved_item["score_max"] == 5
+
+    teacher_page = client.get(f"/toefl/mock/teacher/attempts/{attempt_id}")
+    assert teacher_page.status_code == 200
+    assert "本题满分" not in teacher_page.get_data(as_text=True)
+    assert "固定保存 ETS task-level 0–5 整数" in teacher_page.get_data(as_text=True)
+
+
+def test_practice_breakdown_uses_definition_eligible_totals_without_band_conversion(app):
+    client = app.test_client()
+    og_student = _login_as(
+        app, client, User.ROLE_STUDENT, "student-breakdown-og", profile_name="OG学生"
+    )
+    og_attempt = _make_completed_attempt(
+        app,
+        og_student,
+        sections=["reading", "listening", "writing", "speaking"],
+        exam_id="ets-og-chapter-6",
+    )
+    og_report = client.get(f"/api/toefl/attempts/{og_attempt}/report").get_json()
+    og_by_subject = og_report["practice_breakdown"]["by_subject"]
+    assert og_by_subject["reading"]["eligible_total"] == 50
+    assert og_by_subject["listening"]["eligible_total"] == 47
+    assert set(("correct", "eligible_total", "answered", "accuracy")).issubset(
+        og_by_subject["reading"]
+    )
+    assert og_by_subject["writing"]["practice_max"] == 20
+    assert og_by_subject["speaking"]["practice_max"] == 55
+    assert "band" not in json.dumps(og_report["practice_breakdown"]).lower()
+
+    p1_student = _login_as(
+        app, client, User.ROLE_STUDENT, "student-breakdown-p1", profile_name="P1学生"
+    )
+    p1_attempt = _make_completed_attempt(
+        app, p1_student, sections=["reading", "listening"]
+    )
+    p1_report = client.get(f"/api/toefl/attempts/{p1_attempt}/report").get_json()
+    p1_by_subject = p1_report["practice_breakdown"]["by_subject"]
+    assert p1_by_subject["reading"]["eligible_total"] == 40
+    assert p1_by_subject["listening"]["eligible_total"] == 34
+    assert "本站练习答对数" in p1_report["practice_breakdown"]["notice"]
+    review_page = client.get(f"/toefl/mock/attempts/{p1_attempt}/review")
+    assert review_page.status_code == 200
+    review_html = review_page.get_data(as_text=True)
+    assert "Reading · 本站练习答对数" in review_html
+    assert "Listening · 本站练习答对数" in review_html
+
+
+def test_practice_raw_totals_wait_for_complete_manual_review(app):
+    client = app.test_client()
+    student_id = _login_as(
+        app, client, User.ROLE_STUDENT, "student-raw-total", profile_name="累计分学生"
+    )
+    attempt_id = _make_completed_attempt(
+        app, student_id, sections=["writing", "speaking"]
+    )
+    with app.app_context():
+        recording_ids = {
+            item["id"]
+            for item in definition("ets-practice-1", ["writing", "speaking"])["questions"]
+            if item.get("response_type") == "recording"
+        }
+        for row in ToeflMockResponse.query.filter_by(attempt_id=attempt_id):
+            if row.question_id in recording_ids:
+                row.recording_token = "test-recording-token"
+        db.session.commit()
+    _login_as(app, client, User.ROLE_TEACHER, "teacher-raw-total")
+    detail = client.get(f"/api/toefl/teacher/attempts/{attempt_id}").get_json()
+    saved = client.patch(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review",
+        json={
+            "version": detail["attempt"]["review_version"],
+            "reviews": [
+                {"question_id": detail["manual"][0]["id"], "score": 5},
+            ],
+        },
+    )
+    assert saved.status_code == 200
+    draft_breakdown = saved.get_json()["summary"]["practice_breakdown"]["by_subject"]
+    assert draft_breakdown["writing"]["practice_raw"] is None
+    assert draft_breakdown["speaking"]["practice_raw"] is None
+
+    page = client.get(f"/toefl/mock/teacher/attempts/{attempt_id}")
+    assert "查看 0–5 简洁锚点" in page.get_data(as_text=True)
+
+    detail = client.get(f"/api/toefl/teacher/attempts/{attempt_id}").get_json()
+    saved_all = client.patch(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review",
+        json={
+            "version": detail["attempt"]["review_version"],
+            "reviews": [
+                {"question_id": item["id"], "score": 5}
+                for item in detail["manual"]
+            ],
+        },
+    )
+    assert saved_all.status_code == 200
+    complete_breakdown = saved_all.get_json()["summary"]["practice_breakdown"]["by_subject"]
+    assert complete_breakdown["writing"]["practice_raw"] == (
+        complete_breakdown["writing"]["build_sentence"]["correct"] + 10
+    )
+    assert complete_breakdown["writing"]["practice_max"] == 20
+    assert complete_breakdown["speaking"]["practice_raw"] == 55
+
+    current = saved_all.get_json()
+    published = client.post(
+        f"/api/toefl/teacher/attempts/{attempt_id}/review/publish",
+        json={"version": current["attempt"]["review_version"]},
+    )
+    assert published.status_code == 200
+    _login_as(app, client, User.ROLE_STUDENT, "student-raw-total")
+    student_report = client.get(f"/api/toefl/attempts/{attempt_id}/report").get_json()
+    assert student_report["practice_breakdown"]["by_subject"]["speaking"]["practice_raw"] == 55
+    assert "band" not in json.dumps(student_report["practice_breakdown"]).lower()

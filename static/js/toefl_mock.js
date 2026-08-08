@@ -849,17 +849,24 @@
       published: "老师已发布",
       not_required: "无需人工批改",
     }[report.manual.status] || report.manual.status;
-    note.textContent = attempt.preview
-      ? `这是预览作答报告，不是正式成绩单；人工题状态：${manualStatus}。`
-      : `客观题已自动判分；人工题状态：${manualStatus}。`;
+    note.textContent = `这是本站练习报告，不是正式成绩单，也不是 ETS 官方成绩单；人工题状态：${manualStatus}。`;
     const metrics = document.createElement("div");
     metrics.className = "report-metrics";
-    appendMetric(metrics, `${report.objective.correct}/${report.objective.auto_total}`, "客观题正确 / 判分分母");
-    appendMetric(metrics, report.objective.accuracy == null ? "—" : `${Math.round(report.objective.accuracy * 100)}%`, "客观题准确率");
+    appendMetric(metrics, `${report.objective.correct}/${report.objective.auto_total}`, "本站练习客观题合计答对");
+    appendMetric(metrics, report.objective.accuracy == null ? "—" : `${Math.round(report.objective.accuracy * 100)}%`, "本站练习客观题准确率");
     appendMetric(metrics, `${report.manual.submitted}/${report.manual.total}`, "主观题已提交");
+    const bySubject = report.practice_breakdown?.by_subject || {};
+    ["reading", "listening"].forEach((subject) => {
+      const section = bySubject[subject];
+      if (section) appendMetric(metrics, `${section.correct}/${section.eligible_total}`, `${subject === "reading" ? "Reading" : "Listening"} · 本站练习答对数`);
+    });
+    ["writing", "speaking"].forEach((subject) => {
+      const section = bySubject[subject];
+      if (section?.practice_raw != null) appendMetric(metrics, `${section.practice_raw}/${section.practice_max}`, `${subject === "writing" ? "Writing" : "Speaking"} · 练习原始累计分`);
+    });
     const blocked = document.createElement("p");
     blocked.className = "mock-report-note";
-    blocked.textContent = `blocked 题不进入分母；人工题状态：${manualStatus}。`;
+    blocked.textContent = `${report.practice_breakdown?.notice || "本站统计不生成 ETS 官方 1–6 分数。"} blocked 题不进入分母或可判题数。`;
     const returnLine = document.createElement("p");
     const returnLink = document.createElement("a");
     returnLink.href = attempt.state?.returnTo || config.returnTo || "/toefl/mock";

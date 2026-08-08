@@ -805,7 +805,11 @@ class ToeflMockResponse(db.Model):
         db.String(24), default="pending", nullable=False, index=True
     )
     teacher_score = db.Column(db.Float)
+    # Kept for backwards-compatible reads, but TOEFL v2 task scoring always
+    # uses the fixed ETS task-level maximum of 5.
     score_max = db.Column(db.Float, default=5.0)
+    rubric_code = db.Column(db.String(64))
+    rubric_version = db.Column(db.String(24))
     teacher_feedback = db.Column(db.Text)
     reviewed_by = db.Column(
         db.Integer, db.ForeignKey("user.id"), nullable=True, index=True

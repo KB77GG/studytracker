@@ -62,3 +62,15 @@ def test_report_and_blocked_copy_are_explicitly_preview_safe():
     assert "不是正式成绩单" in script
     assert "pending teacher review" in script
     assert "blocked 题不进入分母" in script
+
+
+def test_review_ui_uses_fixed_integer_scores_and_subject_practice_copy():
+    review = (ROOT / "templates/toefl/review_detail.html").read_text(encoding="utf-8")
+    script = (ROOT / "static/js/toefl_mock.js").read_text(encoding="utf-8")
+
+    assert 'max="5" step="1"' in review
+    assert "data-review-max" not in review
+    assert "固定保存 ETS task-level 0–5 整数" in review
+    assert "practice_breakdown" in script
+    assert "本站练习答对数" in script
+    assert "练习原始累计分" in review

@@ -11,9 +11,15 @@
 ## 教学流程
 
 1. 学生交卷后，在 `/toefl/mock/history` 打开自己的模考复盘。客观题立即显示题干、作答、正确答案、原文或原音频；主观题先显示待批改。
-2. 老师在 `/toefl/mock/teacher/attempts` 按学生或状态筛选，进入详情后播放题目原音频和学生录音，查看写作原文，逐题填写 0–5 原始分与反馈并保存草稿。
+2. 老师在 `/toefl/mock/teacher/attempts` 按学生或状态筛选，进入详情后播放题目原音频和学生录音，查看写作原文，逐题填写固定的 0–5 整数任务级分数与反馈并保存草稿。满分固定为 5，不接受 0.5 分或自定义满分；每题响应保存对应的 `rubric_code` / `rubric_version`。
 3. 全部已提交主观题评分完成后才能发布。发布后学生看到分数、反馈和自己的录音；需要修改时，老师先“重新开放”，修改后再发布。
 4. 客观错题页老师和学生使用同一份只读题目结构，可打开原文/原音频，按“你的答案 → 正确答案 → 现有讲解/证据”顺序讲解。系统当前不保存老师对客观题的额外批注。
+
+## 分数边界与学生文案
+
+- 完成页、历史摘要和复盘页明确标注为“本站练习”。Reading / Listening 按 definition 与 answer key 的实际 eligible 题数展示 `correct / eligible_total`、已答、正确率和错题；例如 `ets-practice-1..5` 的实际自动题数为 R=40、L=34，`ets-og-chapter-6` 为 R=50、L=47。不能把这些题数称为 ETS official raw，也不能换算官方 0–30 或 1–6。
+- Writing 的练习原始累计分仅在两道构答题都完成老师评分后显示，计算为 10 道 Build a Sentence 客观题（每题 1 分）加两道 0–5 任务级分，满分 `/20`。Speaking 仅在 11 道回答都完成老师评分后显示练习原始累计分 `/55`。
+- 2026-01-21 起 ETS 官方单科与总分使用 1–6、0.5 递增。新版 Reading / Listening 为自适应测试，含非计分题，并经过 ETS 统计分析与质量检查；本站不自行生成 band。参考：[ETS Updated TOEFL iBT Test Overview](https://www.ets.org/pdfs/toefl/toefl-ibt-test-overview.pdf) 与 [ETS 2026 Test Specifications](https://www.ets.org/pdfs/toefl/toefl-ibt-test-specifications-2026.pdf)。
 
 ## 上线与备份
 
@@ -35,5 +41,6 @@
 
 ## 当前评分边界
 
-- 每道口语/写作题默认记录 0–5 原始分，老师可调整本题满分。
-- 当前不把原始分换算为 ETS 官方 0–30 scaled score，也不声称等同官方成绩。
+- 每道口语/写作题固定记录 ETS task-level 0–5 整数；`score_max` 仅为旧数据兼容列，服务端始终保存并展示 5，不允许编辑。
+- 旧字段 `objective.correct` / `objective.auto_total` 保留；新 `practice_breakdown.by_subject` 提供按科目的本站练习统计，避免把 Reading、Listening 和 Writing Build a Sentence 混在一起。
+- 当前不把任何本站练习累计分换算为 ETS 官方 0–30 或 1–6 scaled score，也不声称等同官方成绩。

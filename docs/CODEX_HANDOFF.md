@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨电脑开发交接
 
 > 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-07（Asia/Shanghai）。
+> 最近更新：2026-08-08（Asia/Shanghai）。
 
 ## 使用规则
 
@@ -10,6 +10,15 @@
 3. 不覆盖或删除来源不明的本地改动；先确认它们是否属于用户或另一项任务。
 4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
+
+## 2026-08-08 TOEFL v2 2026 评分标准收紧（本地任务分支，已提交；未 push / 未部署）
+
+- 当前 worktree：`/Users/zhouxin/.codex/worktrees/80f1/studytracker`；分支：`codex/toefl-v2-rubric-tightening`；从 `0dd91fd2` 继续，本轮已提交，未 push；当前提交以 `git log -1` 为准。
+- 教师口语 Listen and Repeat / Take an Interview、写作 Write an Email / Write for an Academic Discussion 现固定为 ETS task-level 0–5 整数；服务端拒绝 4.5、6 和自定义满分，旧 `score_max` 列保留但服务端固定为 5。
+- 新增 `services/toefl_rubrics.py` 的简洁中文锚点/关注项和 `rubric_code` / `rubric_version` 审计字段；SQLite 迁移幂等回填已知 rubric，未知 manual task 仍为 pending 且 rubric 为空。
+- `/report` 保留旧 `objective.correct/auto_total/answered/accuracy`，新增 `practice_breakdown.by_subject`，按 definition/answer key 实际可判题数分开 Reading/Listening；OG 覆盖 R=50/L=47，P1 覆盖 R=40/L=34。Writing/20、Speaking/55 仅在人工评分齐全后显示，绝不生成 1–6 band。
+- 学生完成页、历史摘要、复盘页已明确本站练习统计与 ETS 官方成绩的边界；教师页显示四类 2026 rubric 的短中文量表与审计标识。录音私有存储、Range、权限、发布/重开、乐观锁和旧字段兼容链路保持不变。
+- 已验证：全部 `tests/test_toefl*.py` 共 69 passed；定向变更文件 Ruff、`node --check static/js/toefl_mock.js`、Node 全部 14 项、`git diff --check` 通过。全量 pytest 为 398 passed、2 failed，失败均为本 worktree 缺少既有 `static/listening/ielts10_test1_s1.mp3` 导致静态 Range 测试 404；全仓 Ruff 仍有既有 107 项错误，变更文件检查无错误。尚未执行生产迁移、部署、小程序上传或真实账号浏览器 QA。
 
 ## 2026-08-07 TOEFL v2 教师批改与学生错题复盘（当前本地未提交）
 

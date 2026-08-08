@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,10 @@ from services.toefl_mock_v2 import (
     resolve_package,
     score_responses,
 )
+from services.toefl_rubrics import (
+    TASK_SCORE_MAX,
+    rubric_for_task_type,
+)
 
 REVIEW_PENDING = "pending"
 REVIEW_DRAFT = "draft"
@@ -26,7 +31,7 @@ REVIEW_NOT_REQUIRED = "not_required"
 REVIEW_NOT_STARTED = "not_started"
 REVIEWED = "reviewed"
 MAX_FEEDBACK_LENGTH = 8000
-MAX_SCORE = 100.0
+MAX_SCORE = TASK_SCORE_MAX
 
 
 def _json(value: str | None, fallback: Any = None) -> Any:
@@ -38,6 +43,32 @@ def _json(value: str | None, fallback: Any = None) -> Any:
 
 def _now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)  # noqa: UP017
+
+
+def parse_task_score(value: Any) -> int | None:
+    """Parse the fixed ETS task-level score without accepting half points."""
+
+    if value in (None, "") or isinstance(value, bool):
+        return None
+    try:
+        score = Decimal(str(value).strip()) if isinstance(value, str) else Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        return None
+    if not score.is_finite() or score != score.to_integral_value():
+        return None
+    integer = int(score)
+    return integer if 0 <= integer <= MAX_SCORE else None
+
+
+def _valid_persisted_score(value: Any) -> bool:
+    return parse_task_score(value) is not None
+
+
+def _rubric_for_question(
+    question: dict[str, Any],
+    group: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    return rubric_for_task_type((group or {}).get("task_type"))
 
 
 def _claim_review_version(
@@ -238,6 +269,8 @@ def ensure_review_state(attempt: ToeflMockAttempt) -> bool:
         attempt.review_status = REVIEW_PENDING if manual_ids else REVIEW_NOT_REQUIRED
         attempt.review_updated_at = _now()
         changed = True
+    groups = {item["id"]: item for item in mock_definition.get("groups", [])}
+    questions = {item["id"]: item for item in mock_definition.get("questions", [])}
     for row in attempt.responses:
         expected = REVIEW_PENDING if row.question_id in manual_ids else REVIEW_NOT_REQUIRED
         if not getattr(row, "review_status", None) or (
@@ -246,6 +279,18 @@ def ensure_review_state(attempt: ToeflMockAttempt) -> bool:
         ):
             row.review_status = expected
             changed = True
+        if row.question_id in manual_ids:
+            question = questions.get(row.question_id) or {}
+            rubric = _rubric_for_question(
+                question, groups.get(question.get("group_id"))
+            )
+            if rubric and (
+                getattr(row, "rubric_code", None) != rubric["code"]
+                or getattr(row, "rubric_version", None) != rubric["version"]
+            ):
+                row.rubric_code = rubric["code"]
+                row.rubric_version = rubric["version"]
+                changed = True
     return changed
 
 
@@ -333,6 +378,13 @@ def _manual_units(
         group = groups.get(question.get("group_id"))
         module = modules.get(question.get("module_id"))
         raw = _raw_response(row)
+        rubric = _rubric_for_question(question, group)
+        persisted_score = getattr(row, "teacher_score", None)
+        score = (
+            parse_task_score(persisted_score)
+            if _valid_persisted_score(persisted_score)
+            else None
+        )
         submitted = _has_student_response(question, row)
         unit = {
             "id": question["id"],
@@ -341,6 +393,13 @@ def _manual_units(
             "module": module.get("module") if module else None,
             "group_title": group.get("title") if group else None,
             "task_type": group.get("task_type") if group else None,
+            "rubric_code": (
+                rubric["code"] if rubric else getattr(row, "rubric_code", None)
+            ),
+            "rubric_version": (
+                rubric["version"] if rubric else getattr(row, "rubric_version", None)
+            ),
+            "rubric": rubric,
             "prompt": question.get("prompt"),
             "context": question.get("context_sentence")
             or review_contexts.get(question["id"]),
@@ -359,14 +418,89 @@ def _manual_units(
                 if student_view and not published
                 else _manual_status(row)
             ),
-            "score": None if student_view and not published else getattr(row, "teacher_score", None),
-            "score_max": None if student_view and not published else getattr(row, "score_max", None),
+            "score": None if student_view and not published else score,
+            "score_max": None if student_view and not published else TASK_SCORE_MAX,
             "feedback": None
             if student_view and not published
             else getattr(row, "teacher_feedback", None),
         }
         units.append(unit)
     return units
+
+
+def _objective_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
+    wrong_ids = [item["id"] for item in items if item["is_wrong"]]
+    correct = sum(bool(item["is_correct"]) for item in items)
+    answered = sum(bool(item["is_answered"]) for item in items)
+    eligible_total = len(items)
+    return {
+        "correct": correct,
+        "eligible_total": eligible_total,
+        "answered": answered,
+        "accuracy": round(correct / eligible_total, 4) if eligible_total else None,
+        "wrong": len(wrong_ids),
+        "wrong_question_ids": wrong_ids,
+    }
+
+
+def _practice_breakdown(
+    objective: list[dict[str, Any]],
+    manual: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Build practice-only section summaries without an ETS score conversion."""
+
+    by_subject = {
+        subject: _objective_summary(
+            [item for item in objective if item.get("section") == subject]
+        )
+        for subject in ("reading", "listening")
+        if any(item.get("section") == subject for item in objective)
+    }
+    for subject in by_subject:
+        by_subject[subject]["label"] = "本站练习答对数"
+
+    build_sentence = [
+        item
+        for item in objective
+        if item.get("section") == "writing"
+        and item.get("task_type") in {"build_sentence", "build_a_sentence"}
+    ]
+    writing_manual = [item for item in manual if item.get("section") == "writing"]
+    writing_scores = [item["score"] for item in writing_manual if item["score"] is not None]
+    writing_complete = len(writing_scores) == len(writing_manual) and bool(writing_manual)
+    writing_raw = sum(writing_scores) + _objective_summary(build_sentence)["correct"] if writing_complete else None
+    if build_sentence or writing_manual:
+        by_subject["writing"] = {
+            **_objective_summary(build_sentence),
+            "build_sentence": _objective_summary(build_sentence),
+            "teacher_total": len(writing_manual),
+            "teacher_scored": len(writing_scores),
+            "practice_raw": writing_raw,
+            "practice_max": len(build_sentence) + len(writing_manual) * TASK_SCORE_MAX,
+            "label": "练习原始累计分" if writing_raw is not None else "老师完成批改后显示练习原始累计分",
+        }
+
+    speaking_manual = [item for item in manual if item.get("section") == "speaking"]
+    speaking_scores = [item["score"] for item in speaking_manual if item["score"] is not None]
+    speaking_complete = len(speaking_scores) == len(speaking_manual) and bool(speaking_manual)
+    speaking_raw = sum(speaking_scores) if speaking_complete else None
+    if speaking_manual:
+        by_subject["speaking"] = {
+            "teacher_total": len(speaking_manual),
+            "teacher_scored": len(speaking_scores),
+            "practice_raw": speaking_raw,
+            "practice_max": len(speaking_manual) * TASK_SCORE_MAX,
+            "label": "练习原始累计分" if speaking_raw is not None else "老师完成批改后显示练习原始累计分",
+        }
+
+    return {
+        "by_subject": by_subject,
+        "notice": (
+            "这是本站练习答对数和教师任务级练习原始分，不是 ETS 官方成绩。"
+            "2026-01-21 起 ETS 单科和总分使用 1–6（0.5 递增）；"
+            "Reading/Listening 的自适应路由、非计分题、统计分析和质检不能由本站数据换算。"
+        ),
+    }
 
 
 def build_review(
@@ -394,6 +528,8 @@ def build_review(
     manual_total = len(manual)
     submitted = sum(item["submitted"] for item in manual)
     reviewed = sum(item["score"] is not None for item in manual)
+    objective_summary = _objective_summary(objective)
+    practice_breakdown = _practice_breakdown(objective, manual)
     return {
         "attempt": {
             "id": attempt.id,
@@ -414,12 +550,14 @@ def build_review(
         "manual": manual,
         "summary": {
             "objective_total": len(objective),
-            "objective_correct": sum(item["is_correct"] for item in objective),
-            "objective_wrong": sum(item["is_wrong"] for item in objective),
+            "objective_correct": objective_summary["correct"],
+            "objective_wrong": objective_summary["wrong"],
             "manual_total": manual_total,
             "manual_submitted": submitted,
             "manual_reviewed": reviewed,
             "manual_complete": manual_total == submitted == reviewed,
+            "objective": objective_summary,
+            "practice_breakdown": practice_breakdown,
         },
     }
 
@@ -483,32 +621,21 @@ def save_reviews(
         if raw_score in (None, ""):
             score = None
         else:
-            try:
-                score = float(raw_score)
-            except (TypeError, ValueError):
+            score = parse_task_score(raw_score)
+            if score is None:
                 return False, "score_invalid"
-            if not 0 <= score <= MAX_SCORE:
-                return False, "score_invalid"
-        raw_max = item.get(
-            "score_max",
-            item.get("scoreMax", (row.score_max if row else None) or 5),
-        )
-        try:
-            score_max = float(raw_max)
-        except (TypeError, ValueError):
+        supplied_max = item.get("score_max", item.get("scoreMax"))
+        if supplied_max not in (None, "") and parse_task_score(supplied_max) != MAX_SCORE:
             return False, "score_max_invalid"
-        if not 0 < score_max <= MAX_SCORE:
-            return False, "score_max_invalid"
-        if score is not None and score > score_max:
-            return False, "score_invalid"
         feedback = str(item.get("feedback", item.get("teacher_feedback", "")) or "").strip()
         if len(feedback) > MAX_FEEDBACK_LENGTH:
             return False, "feedback_too_long"
-        validated.append((question_id, score, score_max, feedback))
+        validated.append((question_id, score, feedback))
     if not _claim_review_version(attempt, version):
         return False, "review_version_conflict"
     reviewed_at = _now()
-    for question_id, score, score_max, feedback in validated:
+    groups = {item["id"]: item for item in mock_definition.get("groups", [])}
+    for question_id, score, feedback in validated:
         row = responses.get(question_id)
         if not row:
             row = ToeflMockResponse(
@@ -519,11 +646,18 @@ def save_reviews(
             db.session.add(row)
             responses[question_id] = row
         row.teacher_score = score
-        row.score_max = score_max
+        row.score_max = TASK_SCORE_MAX
         row.teacher_feedback = feedback
         row.review_status = REVIEWED if score is not None else REVIEW_DRAFT
         row.reviewed_by = reviewer_id
         row.reviewed_at = reviewed_at
+        rubric = _rubric_for_question(
+            manual_questions[question_id],
+            groups.get(manual_questions[question_id].get("group_id")),
+        )
+        if rubric:
+            row.rubric_code = rubric["code"]
+            row.rubric_version = rubric["version"]
     attempt.review_status = REVIEW_DRAFT if manual_questions else REVIEW_NOT_REQUIRED
     attempt.review_reviewer_id = reviewer_id
     attempt.review_updated_at = _now()
@@ -565,7 +699,7 @@ def publish_reviews(
             if version_claimed:
                 db.session.rollback()
             return False, "manual_submission_incomplete"
-        if not row or row.teacher_score is None:
+        if not row or not _valid_persisted_score(row.teacher_score):
             if version_claimed:
                 db.session.rollback()
             return False, "manual_review_incomplete"

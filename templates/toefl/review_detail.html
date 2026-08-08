@@ -36,11 +36,39 @@
   </div>
 
   <div class="mock-review-summary">
-    <div><span>客观题</span><strong>{{ review.summary.objective_correct }}/{{ review.summary.objective_total }}</strong></div>
+    <div><span>本站客观题合计</span><strong>{{ review.summary.objective_correct }}/{{ review.summary.objective_total }}</strong></div>
     <div><span>错题</span><strong>{{ review.summary.objective_wrong }}</strong></div>
     <div><span>主观题</span><strong>{{ review.summary.manual_reviewed }}/{{ review.summary.manual_total }}</strong></div>
     <div><span>状态</span><strong>{% if review.attempt.review_status == 'published' %}已发布{% elif review.attempt.review_status == 'draft' %}草稿{% elif review.attempt.review_status == 'not_required' %}无需批改{% else %}待批改{% endif %}</strong></div>
   </div>
+
+  <div class="mock-score-notice">
+    <strong>这是本站练习复盘，不是 ETS 官方成绩单。</strong>
+    <p>Reading / Listening 只显示本站练习答对数、可判题数、正确率和错题。新版考试存在自适应路由、非计分题以及 ETS 的统计分析与质检，本站不会把答对数换算为官方 0–30 或 1–6。</p>
+    <p>Writing / Speaking 的老师评分是逐题 0–5 整数。只有相关人工题全部评分后，才显示本站练习原始累计分；这也不是 ETS 1–6 分数。</p>
+  </div>
+
+  {% set breakdown = review.summary.practice_breakdown.by_subject %}
+  <section class="mock-practice-breakdown" aria-label="本站练习分科统计">
+    {% for subject in ['reading', 'listening'] %}
+    {% if breakdown[subject] is defined %}
+    <div class="mock-practice-breakdown__item">
+      <span>{{ subject|capitalize }} · 本站练习答对数</span>
+      <strong>{{ breakdown[subject].correct }}/{{ breakdown[subject].eligible_total }}</strong>
+      <small>已答 {{ breakdown[subject].answered }} · 正确率 {% if breakdown[subject].accuracy is not none %}{{ (breakdown[subject].accuracy * 100)|round(0)|int }}%{% else %}—{% endif %} · 错题 {{ breakdown[subject].wrong }}</small>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% for subject in ['writing', 'speaking'] %}
+    {% if breakdown[subject] is defined %}
+    <div class="mock-practice-breakdown__item">
+      <span>{{ subject|capitalize }} · 练习原始累计分</span>
+      <strong>{% if breakdown[subject].practice_raw is not none %}{{ breakdown[subject].practice_raw }}/{{ breakdown[subject].practice_max }}{% else %}待老师完成批改{% endif %}</strong>
+      <small>已评分 {{ breakdown[subject].teacher_scored }}/{{ breakdown[subject].teacher_total }} · 不生成 1–6 band</small>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </section>
 
   {% if not student_view %}
   <div class="mock-review-actions" data-review-actions>
@@ -102,8 +130,19 @@
           <span>{{ item.section|capitalize }} · {{ item.number or loop.index }} · {{ item.group_title or item.task_type or '主观题' }}</span>
           {% if student_view %}
           <span class="mock-badge mock-badge--{{ 'ready' if review.attempt.review_status == 'published' else 'pending' }}">{{ '已发布' if review.attempt.review_status == 'published' else '待批改' }}</span>
-          {% else %}<span class="mock-badge mock-badge--pending">{{ '已评分' if item.score is not none else '待评分' }}</span>{% endif %}
+        {% else %}<span class="mock-badge mock-badge--pending">{{ '已评分' if item.score is not none else '待评分' }}</span>{% endif %}
         </div>
+        {% if not student_view and item.rubric %}
+        <div class="mock-rubric-card">
+          <strong>{{ item.rubric.title }}</strong>
+          <span>审计标识：{{ item.rubric.code }} · {{ item.rubric.version }}</span>
+          <p>{{ item.rubric.summary }}</p>
+          <p><b>关注项：</b>{{ item.rubric.focus|join('、') }}</p>
+          <details><summary>查看 0–5 简洁锚点</summary>
+            <ul>{% for score in range(0, 6) %}<li><b>{{ score }}</b> · {{ item.rubric.anchors[score] }}</li>{% endfor %}</ul>
+          </details>
+        </div>
+        {% endif %}
         <h4>{{ item.prompt }}</h4>
         {% if item.context %}<p class="mock-review-stimulus">{{ item.context }}</p>{% endif %}
         {% if item.stimulus and (item.stimulus.text or item.stimulus.display_text) %}
@@ -118,15 +157,14 @@
         {% elif item.section == 'speaking' %}<p class="mock-muted">未提交录音</p>{% endif %}
         {% if student_view %}
           {% if review.attempt.review_status == 'published' %}
-          <div class="mock-score-readout"><strong>{{ item.score if item.score is not none else '未评分' }}{% if item.score is not none %}/{{ item.score_max|round(1) }}{% endif %}</strong><p>{{ item.feedback or '老师暂未填写文字反馈。' }}</p></div>
+          <div class="mock-score-readout"><strong>{{ item.score if item.score is not none else '未评分' }}{% if item.score is not none %}/5{% endif %}</strong><p>{{ item.feedback or '老师暂未填写文字反馈。' }}</p></div>
           {% else %}<p class="mock-pending-note">老师完成批改并发布后，这里会显示分数、反馈和录音播放器。</p>{% endif %}
         {% else %}
         <div class="mock-review-editor">
-          <label>本题原始分<input data-review-score type="number" min="0" max="100" step="0.5" value="{{ item.score if item.score is not none else '' }}"></label>
-          <label>本题满分<input data-review-max type="number" min="1" max="100" step="0.5" value="{{ item.score_max or 5 }}"></label>
+          <label>本题任务级分数（0–5整数）<input data-review-score type="number" min="0" max="5" step="1" inputmode="numeric" value="{{ item.score if item.score is not none else '' }}"></label>
           <label class="mock-review-editor__feedback">反馈<textarea data-review-feedback rows="4" maxlength="8000">{{ item.feedback or '' }}</textarea></label>
         </div>
-        <p class="mock-muted">默认按 0–5 原始分记录；这里不是 ETS 官方 scaled score。</p>
+        <p class="mock-muted">固定保存 ETS task-level 0–5 整数；满分不可编辑，也不生成 ETS 官方 1–6 分数。</p>
         {% endif %}
       </article>
       {% else %}<div class="mock-empty-state">本次没有主观题。</div>{% endfor %}
@@ -146,7 +184,6 @@
     reviews: [...document.querySelectorAll('.manual-item')].map((item) => ({
       question_id: item.dataset.questionId,
       score: item.querySelector('[data-review-score]').value,
-      score_max: item.querySelector('[data-review-max]').value,
       feedback: item.querySelector('[data-review-feedback]').value,
     })),
   });

@@ -20,7 +20,9 @@
       <div>
         <p class="mock-attempt-row__eyebrow">{{ attempt.completed_at or attempt.started_at }}</p>
         <h3>{{ attempt.exam_title }}</h3>
-        <p>{{ attempt.sections|join(' · ') }} · {{ attempt.summary.objective_correct }}/{{ attempt.summary.objective_total }} 客观题正确</p>
+        {% set breakdown = attempt.summary.practice_breakdown.by_subject %}
+        <p>{{ attempt.sections|join(' · ') }} · 本站练习客观题合计 {{ attempt.summary.objective_correct }}/{{ attempt.summary.objective_total }} 答对</p>
+        <p class="mock-muted">{% if breakdown.reading is defined %}Reading {{ breakdown.reading.correct }}/{{ breakdown.reading.eligible_total }}{% endif %}{% if breakdown.listening is defined %} · Listening {{ breakdown.listening.correct }}/{{ breakdown.listening.eligible_total }}{% endif %}</p>
       </div>
       <div class="mock-attempt-row__status">
         <span class="mock-badge mock-badge--{{ 'ready' if attempt.review_status == 'published' else 'pending' }}">

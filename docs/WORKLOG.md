@@ -6,6 +6,13 @@
 
 ---
 
+## 2026-08-08 TOEFL v2 2026 评分边界与分科练习统计（本地已提交/未部署）
+
+- 在 `/Users/zhouxin/.codex/worktrees/80f1/studytracker` 的 `codex/toefl-v2-rubric-tightening` 分支从 `0dd91fd2` 继续；本轮已提交，未 push、未执行生产迁移、未部署、未上传小程序。
+- 已将四类口语/写作人工题收紧为服务端固定 0–5 整数，取消教师可编辑满分；新增四类 2026 rubric 的简洁中文锚点、关注项和 `rubric_code` / `rubric_version`，并补幂等 SQLite 迁移。未知 manual task 保持 pending，不写入未知 rubric。
+- `/report` 保留旧 objective 字段，新增 `practice_breakdown.by_subject`：Reading/Listening 使用 definition/answer key 的实际 eligible_total，仅展示本站练习答对数、正确率和错题；OG 测 R=50/L=47，P1 测 R=40/L=34。Writing/20、Speaking/55 只在人工评分齐全后展示。
+- 全部 `tests/test_toefl*.py` 共 69 passed；变更文件 Ruff、JS syntax、Node 全部 14 项、diff-check 通过。全量 pytest 为 398 passed、2 failed，均为既有缺失 `static/listening/ielts10_test1_s1.mp3` 造成的 404；全仓 Ruff 有既有 107 项错误，变更文件检查通过。当前提交以 `git log -1` 为准；不 push、不部署。
+
 ## 2026-08-03 刷题页姓名绑定模考历史修复（已部署）
 
 - 根因：刷题页姓名验证和今日任务使用 `practice_student_name`，新模考接口却只接受正式账号 profile 绑定或

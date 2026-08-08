@@ -193,6 +193,13 @@ button { cursor: pointer; font: inherit; }
 .mock-review-summary span, .mock-review-summary strong { display: block; }
 .mock-review-summary span { color: var(--muted); font-size: 12px; }
 .mock-review-summary strong { margin-top: 5px; font-size: 24px; }
+.mock-score-notice { margin: 0 0 18px; padding: 14px 16px; border: 1px solid #d8c98e; background: #fff9df; color: #4c4426; line-height: 1.65; }
+.mock-score-notice strong { display: block; color: var(--ink); }
+.mock-score-notice p { margin: 5px 0 0; }
+.mock-practice-breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.mock-practice-breakdown__item { min-height: 96px; padding: 14px; border: 1px solid var(--line); background: #f7faf8; }
+.mock-practice-breakdown__item span, .mock-practice-breakdown__item small { display: block; color: var(--muted); font-size: 12px; }
+.mock-practice-breakdown__item strong { display: block; margin: 7px 0 4px; font-size: 21px; }
 .mock-save-state { min-width: 64px; color: var(--muted); font-size: 13px; }
 .mock-review-actions { justify-content: flex-end; margin: 0 0 20px; }
 .mock-review-filter { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--ink); font-size: 14px; }
@@ -204,6 +211,12 @@ button { cursor: pointer; font: inherit; }
 .mock-review-item { padding: 18px; border: 1px solid var(--line); background: #fff; }
 .mock-review-item__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
 .mock-review-item h4 { margin: 12px 0; white-space: pre-line; font-size: 16px; line-height: 1.65; }
+.mock-rubric-card { margin: 14px 0; padding: 13px 14px; border-left: 3px solid var(--sage); background: #f0f8f4; color: var(--ink); line-height: 1.6; }
+.mock-rubric-card strong, .mock-rubric-card span { display: block; }
+.mock-rubric-card span { margin-top: 3px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.mock-rubric-card p { margin: 6px 0 0; font-size: 13px; }
+.mock-rubric-card details { margin-top: 8px; font-size: 13px; }
+.mock-rubric-card ul { margin: 6px 0 0; padding-left: 20px; }
 .mock-review-stimulus, .mock-student-writing, .mock-review-explanation { white-space: pre-line; line-height: 1.7; }
 .mock-review-stimulus { padding: 12px; background: #f5f8f6; }
 .mock-review-options { margin: 12px 0; padding-left: 24px; line-height: 1.7; }
@@ -259,7 +272,7 @@ button { cursor: pointer; font: inherit; }
   .mock-question { padding: 16px; }
   .mock-review-heading, .mock-attempt-row { display: block; }
   .mock-review-heading__actions, .mock-attempt-row__status { justify-content: flex-start; margin-top: 14px; }
-  .mock-review-summary { grid-template-columns: 1fr 1fr; }
+  .mock-review-summary, .mock-practice-breakdown { grid-template-columns: 1fr 1fr; }
   .mock-answer-grid, .mock-review-editor { grid-template-columns: 1fr; }
   .mock-review-editor__feedback { grid-column: auto; }
   .mock-review-filters { align-items: stretch; }

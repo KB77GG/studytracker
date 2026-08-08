@@ -30,9 +30,19 @@ RESPONSE_COLUMNS = {
     "review_status": "VARCHAR(24) NOT NULL DEFAULT 'pending'",
     "teacher_score": "FLOAT",
     "score_max": "FLOAT DEFAULT 5.0",
+    "rubric_code": "VARCHAR(64)",
+    "rubric_version": "VARCHAR(24)",
     "teacher_feedback": "TEXT",
     "reviewed_by": "INTEGER",
     "reviewed_at": "DATETIME",
+}
+
+RUBRIC_VERSION = "2026-01"
+RUBRIC_CODES = {
+    "listen_and_repeat": "toefl_2026_speaking_listen_and_repeat",
+    "take_an_interview": "toefl_2026_speaking_take_an_interview",
+    "write_email": "toefl_2026_writing_write_an_email",
+    "academic_discussion": "toefl_2026_writing_academic_discussion",
 }
 
 
@@ -81,8 +91,10 @@ def add_indexes(conn: sqlite3.Connection) -> None:
         )
 
 
-def manual_question_ids(package_root: Path) -> dict[str, set[str]]:
-    result: dict[str, set[str]] = {}
+def manual_question_rubrics(
+    package_root: Path,
+) -> dict[str, dict[str, tuple[str, str] | None]]:
+    result: dict[str, dict[str, tuple[str, str] | None]] = {}
     if not package_root.is_dir():
         return result
     for content_path in sorted(package_root.glob("*/content.json")):
@@ -92,10 +104,20 @@ def manual_question_ids(package_root: Path) -> dict[str, set[str]]:
             continue
         exam = content.get("exam", {})
         exam_id = str(exam.get("id") or content_path.parent.name)
+        groups = {
+            str(item.get("id")): item.get("task_type")
+            for item in content.get("groups", [])
+            if item.get("id")
+        }
         result[exam_id] = {
-            str(item["id"])
+            str(item["id"]): (
+                (RUBRIC_CODES[groups.get(str(item.get("group_id")))], RUBRIC_VERSION)
+                if groups.get(str(item.get("group_id"))) in RUBRIC_CODES
+                else None
+            )
             for item in content.get("questions", [])
-            if item.get("grading_status") == "manual" and item.get("id")
+            if item.get("grading_status") == "manual"
+            and item.get("id")
         }
     return result
 
@@ -104,14 +126,14 @@ def backfill(
     conn: sqlite3.Connection,
     package_root: Path,
 ) -> tuple[int, int]:
-    package_manual = manual_question_ids(package_root)
+    package_manual = manual_question_rubrics(package_root)
     attempts_changed = 0
     responses_changed = 0
     attempts = conn.execute(
         "SELECT id, exam_id, status, review_status FROM toefl_mock_attempt"
     ).fetchall()
     for attempt_id, exam_id, status, review_status in attempts:
-        manual_ids = package_manual.get(str(exam_id), set())
+        manual_ids = package_manual.get(str(exam_id), {})
         if status == "completed" and review_status == "not_started":
             new_status = "pending" if manual_ids else "not_required"
             conn.execute(
@@ -120,25 +142,45 @@ def backfill(
             )
             attempts_changed += 1
         rows = conn.execute(
-            "SELECT id, question_id, review_status "
+            "SELECT id, question_id, review_status, rubric_code, rubric_version "
             "FROM toefl_mock_response WHERE attempt_id = ?",
             (attempt_id,),
         ).fetchall()
-        for response_id, question_id, current_status in rows:
-            new_status = "pending" if question_id in manual_ids else "not_required"
+        for response_id, question_id, current_status, current_code, current_version in rows:
+            is_manual = str(question_id) in manual_ids
+            rubric = manual_ids.get(str(question_id))
+            new_status = "pending" if is_manual else "not_required"
             # The added column defaults every legacy row to ``pending``.  Only
-            # objective rows need correcting on the first run.  Never overwrite
+            # rows with a legacy/default status need correcting.  Never overwrite
             # draft/reviewed state when an operator reruns this idempotent script
             # after teachers have started grading.
-            should_update = current_status in (None, "", "not_started") or (
-                new_status == "not_required" and current_status == "pending"
+            should_update = (
+                is_manual
+                and current_status in (None, "", "not_started", "not_required")
+            ) or (
+                not is_manual
+                and current_status in (None, "", "not_started", "pending")
             )
             if not should_update or current_status == new_status:
-                continue
-            conn.execute(
-                "UPDATE toefl_mock_response SET review_status = ? WHERE id = ?",
-                (new_status, response_id),
+                status_needs_update = False
+            else:
+                status_needs_update = True
+            rubric_needs_update = bool(
+                rubric
+                and (current_code != rubric[0] or current_version != rubric[1])
             )
+            if not status_needs_update and not rubric_needs_update:
+                continue
+            if rubric:
+                conn.execute(
+                    "UPDATE toefl_mock_response SET review_status = ?, rubric_code = ?, rubric_version = ? WHERE id = ?",
+                    (new_status, rubric[0], rubric[1], response_id),
+                )
+            else:
+                conn.execute(
+                    "UPDATE toefl_mock_response SET review_status = ? WHERE id = ?",
+                    (new_status, response_id),
+                )
             responses_changed += 1
     return attempts_changed, responses_changed
 

@@ -36,7 +36,6 @@ from services.toefl_mock_v2 import (
     public_catalog,
     require_attempt_allowed,
     route_module_two,
-    score_responses,
     validate_navigation_state,
     validate_response_value,
 )
@@ -770,40 +769,32 @@ def attempt_report(attempt_id: str):
         attempt.exam_id,
         _load_json_text(attempt.sections_json, []),
     )
-    responses = _response_map(attempt)
-    score = score_responses(
-        attempt.exam_id,
-        responses,
-        question_ids={item["id"] for item in mock_definition["questions"]},
-    )
-    manual_total = sum(
-        item.get("grading_status") == "manual"
-        for item in mock_definition["questions"]
-    )
     if review_workflow.ensure_review_state(attempt):
         db.session.commit()
+    review = review_workflow.build_review(attempt, student_view=True)
+    objective = review["summary"]["objective"]
+    practice_breakdown = review["summary"]["practice_breakdown"]
     return jsonify(
         {
             "attemptId": attempt.id,
             "status": attempt.status,
             "preview": attempt.is_preview,
             "objective": {
-                key: score[key]
-                for key in ("correct", "auto_total", "answered", "accuracy")
+                "correct": objective["correct"],
+                "auto_total": objective["eligible_total"],
+                "answered": objective["answered"],
+                "accuracy": objective["accuracy"],
             },
             "manual": {
-                "total": manual_total,
-                "submitted": sum(
-                    item["id"] in responses
-                    for item in mock_definition["questions"]
-                    if item.get("grading_status") == "manual"
-                ),
+                "total": review["summary"]["manual_total"],
+                "submitted": review["summary"]["manual_submitted"],
                 "status": (
                     attempt.review_status
-                    if manual_total
+                    if review["summary"]["manual_total"]
                     else review_workflow.REVIEW_NOT_REQUIRED
                 ),
             },
+            "practice_breakdown": practice_breakdown,
             "blocked": {
                 "total": sum(
                     item.get("grading_status") == "blocked"
