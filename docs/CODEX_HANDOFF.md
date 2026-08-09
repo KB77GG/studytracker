@@ -1,15 +1,208 @@
-# StudyTracker — Codex 跨电脑开发交接
+# StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-> 这是滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-08（Asia/Shanghai）。
+> 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
+> 最近更新：2026-08-09（Asia/Shanghai）。
+
+## 2026-08-09 词汇 v2 正式发布分支（最新 main，待小程序先发）
+
+- 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
+  `codex/vocabulary-v2-release-20260809` 已将完整实现重放到最新 `origin/main@67927544888e`；两份交接文档冲突已人工
+  合并，保留主线 TOEFL 已部署事实和词汇 v2 全部事实。重放后的业务提交为 `ba8b214d`，本节写入后会 amend，精确 HEAD
+  以 `git log -1` 为准。
+- 重放后完整发布回归：全部 `tests/*.js` 通过；
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `472 passed, 7 subtests passed`，只有既有 SQLAlchemy/UTC 弃用警告；旧强化拼写 50 词门禁包含在 Node 全量中。
+  微信开发者工具仍为 0 errors / 0 code problems。模拟器登录态失效，真实接口/真机仍必须在发布链路中完成。
+- 当前只允许先推发布分支并运行 CI；不得先更新 `main`。后续顺序保持：发布分支 CI → 上传/提审/发布小程序并确认线上可获取 →
+  暂停创建新词汇任务 → 备份生产库 → 更新 main 触发后端部署 → 核验迁移/映射/quick-check/5002/进程 → 真实登录学生与真机
+  冒烟 → 恢复任务创建。D+30/D+60 提醒以实际小程序发布日期创建。
+
+## 2026-08-09 旧强化拼写错词无限回插（已修复，发布门禁通过）
+
+- 学生反馈“错一个词后，该词会持续与新词组合出现”。代码核对与 50 词队列复现确认该问题真实存在于旧版
+  `miniprogram/pages/student/dictation/spell/index.js`：每次答错都会调用 `reinsertCurrentWord()`，按
+  `REINSERT_GAP=3` 把当前词再次插回队列；没有每词重试次数上限，揭示答案也不会把该词标记完成。
+- 50 词模拟中，若首词 `n` 始终答错、其余 49 词均答对，`n` 会先夹在新词之间出现 17 次；到第 66 次作答后
+  队列只剩 `n`，之后可无限循环。因此并非固定“打 50 遍”，而是没有有限上限。
+- 词汇 v2 小组状态机不存在同一问题：首答错题只在组末生成一次纠错重试，重试仍错会完成本组并记入
+  `needs_review`。定向执行
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q tests/test_vocabulary_group_learning.py -k "wrong_mastery_encounter_requires_one_retry or retry_wrong_can_finish"`
+  得到 `2 passed, 14 deselected`。但历史 `vocabulary_goal=NULL` 任务仍明确保留旧入口，所以仅部署 v2 不会消除
+  现有学生遇到的循环。
+- 已把旧强化拼写改为与 v2 一致的有限策略：主轮错词只追加到队尾一次；纠错轮仍错时把该词计为本轮完成并依赖首答时
+  已建立的后续复习安排，不再回插。纠错项有显式页面标签；恢复到已有错误首答时会复用该首答，不会把纠错答案误当作新首答。
+  首答成绩和教师统计保持不被纠错覆盖。
+- 新增纯队列模块 `miniprogram/utils/dictation-spell-queue.js` 与 50 词发布门禁
+  `tests/test_dictation_spell_queue.js`：持续答错的 `n` 只出现主轮、纠错轮各一次，50 个词共 51 次作答即可有限完成；重复点击
+  重新拼写不会追加多个纠错副本，多错词按首错顺序进入纠错，纠错仍错不再排队。门禁已接入 `.github/workflows/ci.yml`，也在
+  `.github/workflows/deploy.yml` 的 SSH 部署前执行，未来回归会直接阻止生产部署。
+- 验证：相关定向 pytest 为 `17 passed, 26 deselected`；全部 `tests/*.js` 通过；零 deselect Python 回归命令
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q --ignore=tests/test_static_audio_headers.py` 为
+  `458 passed, 7 subtests passed`；目标 Ruff、Node syntax 与 `git diff --check` 通过。微信开发者工具热重载后为 0 errors、
+  0 code problems；模拟器登录态失效，真实词书请求返回 401，故尚未完成真实登录学生/真机端到端。
+- 发布阻断已经解除，可以恢复既定“小程序先、后端后”流程；但本节更新时仍未 commit、push、写生产数据库、部署后端或
+  上传/提审/发布小程序。真实登录学生与真机冒烟仍是发布过程门禁。
+
+## 2026-08-09 登录页顶部比例修正（功能工作树，本地未提交）
+
+- 用户在主工作树的小程序预览中指出登录卡片顶部“返回 / 账号登录”比例失衡。本轮只在词汇发布候选工作树
+  `/Users/zhouxin/.codex/worktrees/9478/studytracker` 增量修改：`miniprogram/pages/index/index.wxml`、
+  `miniprogram/pages/index/index.wxss`、`tests/test_miniprogram_guest_access.py` 以及本交接文档/工作日志；主工作树
+  `/Users/zhouxin/Desktop/studytracker` 的既有脏改动没有被覆盖或改写。
+- 第一版三列居中方案在整窗缩略图里被误判为通过，但用户提供的局部截图明确显示小程序原生按钮仍被拉宽，并把
+  “账号登录”挤到只剩“登录”；该方案已撤回，交接不得继续把它写成正确结果。最终实现恢复为左右结构：返回使用原生
+  `size="mini"`，同时用 `width/min-width/max-width/flex-basis=132rpx` 强约束，触控高度为 `80rpx`；右侧“账号登录”
+  使用不换行纯文本标签。既有品牌色、卡片、主登录按钮和授权逻辑保持不变。
+- 微信开发者工具 Stable 2.01.2510290 已切换到上述功能工作树，iPhone 15 Pro Max（430×932）同状态对照通过：
+  用户局部截图与修正版完整截图已放在同一比较输入中核对，返回现为左侧紧凑按钮，“账号登录”在右侧完整显示且没有重叠；
+  编译为 0 errors、0 code problems，3 条为工具/基础库提示。辅助功能树仍把“返回”识别为按钮、“账号登录”识别为文本；
+  实际点击返回可回到欢迎页，再次进入登录页正常。审查截图暂存于 `/tmp/studytracker-login-auth-audit-2/`。
+- 验证命令与结果：
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q tests/test_miniprogram_guest_access.py`
+  为 `5 passed`；
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `457 passed, 7 subtests passed`；
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check tests/test_miniprogram_guest_access.py` 与
+  `git diff --check` 均通过。未做真机 VoiceOver/读屏专项验收。
+- 当前功能工作树仍为 detached HEAD `e1f1b3fafecf68cb065d29e0c76e67d30758fa8e`，共有 33 个 tracked 改动条目、
+  13 个 untracked 路径（包含此前整套词汇 v2 工作）；全部仅本机可见，未 commit、push、写生产数据库、部署后端、
+  上传/提审/发布小程序。下一位 agent 可从此工作树继续正式发布准备，不要误从当前主工作树上传小程序。
+
+## 2026-08-09 词汇 v2 发布就绪审查（错词循环门禁已补齐）
+
+- 结论：本地实现与自动化发布门禁已通过，微信开发者工具编译及关键模拟器交互也已通过，可以进入“整理发布分支 →
+  提交/推送 → 小程序先发 → 后端后发”的正式发布流程；当前仍不是已提交或已上线状态。本轮修改了两个测试缺陷和交接文档，
+  没有 commit、push、写生产数据库、部署后端或上传/提审/发布小程序。上方旧强化拼写错词门禁已补齐且完整回归通过。
+- 词汇功能工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，仍是 detached HEAD
+  `e1f1b3fafecf68cb065d29e0c76e67d30758fa8e`；核对的 `origin/main` 为
+  `67927544888eff91e3aadfa505d73377c13ada4f`，功能基线落后 7 个提交。当前共有 30 个 tracked 改动条目和 13 个
+  untracked 路径；本轮只增量修改了本来已属词汇实现的词汇 context 服务、学习/复习页、对应测试以及两份交接文档，
+  没有覆盖其他来源改动。
+- 两个测试缺陷已修正：HTTP 测试现在把固定复习时钟同时注入 preflight 与 group queue；稳定排序测试把相邻 pair 改为
+  等长的 `zip(seq[:-1], seq[1:], strict=True)`。功能工作树运行
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q --ignore=tests/test_static_audio_headers.py`
+  得到 `456 passed, 7 subtests passed`；最新 `origin/main` 临时集成副本运行同一命令得到
+  `470 passed, 7 subtests passed`，没有 deselect。唯一 ignore 的 `test_static_audio_headers.py` 依赖仓库长期缺失的两个静态音频
+  fixture；两个变更测试文件 Ruff 为 `All checks passed`。此前 6 个 Node 测试文件共 11 项、词汇模块 Ruff、Python 编译/
+  3.10 grammar、JS/JSON 和迁移幂等验证仍有效。
+- 最新 `main` 临时 worktree 中，业务 tracked diff 通过三方应用，untracked 词汇文件也完整复制；只有
+  `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 因主线同时更新而产生文档冲突，正式发布分支需人工保留双方最新事实。
+  临时集成 worktree 仅用于验证，收尾时删除，不是可发布分支。
+- context 填空中文辅助已补齐：例句有 `example_zh` 时题面明确显示“句子翻译”；缺少配套句译但有已审核中文词义时，
+  显示“目标词义”，不会把词义冒充整句翻译；搭配补词同样显示“目标词义”。连中文词义都缺失的资料失败关闭，不再生成下方
+  空白的填空题。学习页和今日复习页使用同一契约及视觉区块，新增服务端/页面结构测试覆盖标签和值。
+- 分组大小按目标固定为 reading/listening/writing/comprehensive=`10/8/8/6`，只有综合掌握是 6 词一组。熟悉卡按老师选定的
+  词书顺序（任务选择 random 时按服务端稳定随机顺序）浏览；主动提取、语境辨析、语境产出分别用 phase-specific seed 稳定乱序，
+  与熟悉顺序及相邻阶段解耦，并尽量避免同一 sense 在阶段边界连续出现。稳定性只用于刷新/换设备恢复同一题序，不代表沿用词位。
+- 教师真实 `/tasks` POST 冒烟通过：ID188 未显式选择时采用 `writing`，显式 override 可保存 `reading`，共创建 2 个任务，
+  同时验证 PlanItem shadow 与 material mode。真实文件 SQLite 并发/CAS 冒烟连续 10 轮通过：每轮两个独立 session/线程竞争
+  同一道首题，结果为 10 次成功、10 次预期冲突、0 重复首答，`state_version` 每轮只推进一次。两项均使用临时数据库，未写生产。
+- 用户登录后，微信开发者工具 Stable 2.01.2510290 已用官方 CLI 打开功能 worktree；补齐中文辅助区后再次编译仍为
+  0 errors、0 code problems；
+  仅有热重载、SharedArrayBuffer、`getSystemInfo` 与灰度基础库等工具/基础库警告。模拟器已检查熟悉、中文主动提取、严格键盘输入、
+  context 四选一、今日自主复习、错答反馈和下一题；iPhone 5（320×568）错题页无横向溢出或按钮遮挡。由于生产后端尚未部署，
+  新接口返回 404 属预期；本轮用页面状态 mock 做 UI/交互验收，尚未做真实后端端到端、真机、上传或提审。
+- 发布顺序必须固定为：① 在最新 `origin/main` 上创建 `codex/` 发布分支并人工合并两份交接文档；② 完整回归；③ **先上传、
+  提审并发布新版小程序，确认线上已可获取新版本**；④ 在后端切换完成前暂停老师创建新的映射词书任务；⑤ 备份生产
+  `app.db`，再部署后端并立即核验迁移 schema/映射计数、`PRAGMA quick_check`、5002 与进程参数；⑥ 做登录学生真实接口/
+  真机冒烟后解除任务创建暂停。原因：新版小程序连接旧后端时，summary 404 会降级为 0 且旧任务继续 legacy 流程；反向顺序下，
+  尚未更新的旧客户端会拿到带 `vocabulary_goal` 的 v2 任务，却不能理解 preflight/强制复习 409。
+- 生产只读状态仍为“未部署”：HEAD `67927544888e`、服务 active、Python 3.10.12、约 15G 空间，数据库
+  `quick_check=ok`、194 本/3,174 任务且无词汇 v2 schema；gunicorn 为 127.0.0.1:5002、1 worker、gthread、6 threads。
+  `/usr/local/sbin/deploy-studytracker` 不备份数据库且不显式核验词汇迁移，不能直接裸跑；迁移由启动链间接触发且异常可能只记日志。
+- 下一位 agent 可直接执行：获得用户明确授权后，在最新 main 建正式 `codex/` 发布分支，合入功能改动并解决两份文档冲突，
+  重跑上述零 deselect 回归；随后严格按“小程序先、后端后”的顺序发布。真实后端/真机 E2E、生产库备份与迁移验收仍是发布操作中的
+  必做门禁；完成前不得写成“已上线”。
+
+## 2026-08-08 词汇 v2 小组学习链（本地未提交）
+
+- 工作树仍为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，detached HEAD `e1f1b3fa`；本轮未
+  commit、push、部署、写生产数据库或上传小程序。已有未提交改动均保留并在其上增量修改。
+- opt-in `vocabulary_goal` 任务已接入服务端固定分组与 A–E 可恢复状态机：熟悉、稳定主动提取、语境辨析、
+  语境产出、错题纠正重试；reading/listening/writing/comprehensive 分组大小分别为 10/8/8/6，最后组取余数。
+  legacy `vocabulary_goal=NULL` 仍走原链路。新小程序专页显示组号/阶段，旧 practice/spell v2 入口在门禁后跳转。
+- 服务端保存组边界、题目快照、queue token、attempt id、CAS `state_version` 和首答/重试字段；熟悉不改 mastery，
+  同一 sense×dimension 遭遇最多结算一次，context 产出优先、缺失时显式 degraded choice 降级。错题至少重试一次，
+  重试不改首答/教师分母/mastery；重试仍错计入 needs_review 但不阻塞完成。跨日变更继续执行自主复习 preflight。
+- 稳定洗牌使用剩余计数优先和 hash tie-break，承接熟悉末词及正式阶段末词边界；存在可行排列时不会相邻出现同一 sense；
+  listening 目标不会生成 context 题。已有 schema 会为中间版本补齐 `state_version` 等字段，SQLite 锁冲突归一为可重试 409。
+- 验证：group+HTTP 20 项已通过；词汇/听写/小程序相关 Python 128 项、Node 测试脚本全量通过，未出现 skipped。
+  全仓 Python 共 427 项，仅 2 个既有静态音频 fixture 缺失用例仍因 404 失败；本轮相关 128 项全部为绿。目标文件
+  Ruff、`py_compile`、Python 3.10 grammar parse（19 个变更 Python 文件）、JSON/WXML 结构和 `git diff --check` 通过，Node 页面
+  `--check` 通过。
+- 在 61MB 生产只读副本的再副本上完成新增小组表迁移演练：二次迁移 SHA-256 不变，`PRAGMA quick_check=ok`，
+  `state_version` 存在。随后用真实 ID188 写作词书初始化 922 词任务，得到固定 8 词/组、116 组、尾组 2 词、
+  2,131 道冻结题；队列未出现答案字段，首次全书快照在本机耗时约 5.66 秒。原副本和生产数据库均未写入，临时
+  验收副本已移入系统废纸篓。
+- 未验证：当前机器没有独立 Python 3.10.12（grammar 用 Python 3.13 的 `feature_version=(3,10)` 检查）；未做真实文件
+  SQLite 双会话/多线程压力测试、微信开发者工具/真机窄屏视觉验收或生产接口演练。WXML 结构检查对小程序专用属性做了
+  XML 兼容化后解析，仍应在开发者工具中做最终编译检查。
 
 ## 使用规则
 
-1. 开工先完整阅读根目录 `AGENTS.md`、`CLAUDE.md` 和本文件。
+1. 开工先完整阅读根目录 `AGENTS.md`、`CLAUDE.md`、本文件和 `docs/WORKLOG.md`。
 2. 随后运行 `git status --short --branch` 与 `git log -5 --oneline`。如果实际 Git 状态与本文不一致，以 Git 和可复现验证结果为准，并更新本文。
 3. 不覆盖或删除来源不明的本地改动；先确认它们是否属于用户或另一项任务。
-4. 收工或换电脑前更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”。
+4. 每个项目任务收尾都做交接审计；有任何持久化事实变化时，更新“当前基线、近期完成、验证状态、发布状态、待办与下一步”，并在 `docs/WORKLOG.md` 顶部追加简短记录。
 5. 不在本文记录密码、令牌、Cookie、服务器密钥或学生隐私。
+6. 交接必须区分各 worktree 的绝对路径、分支/HEAD、既有与本轮脏文件，并区分本机未提交、已 commit、已 push、后端已部署及小程序已上传/提审/发布。
+7. 未获用户明确授权时，不得为了完成交接自行 commit、push、部署、写生产库或发布；只更新本地文档并明确其同步范围。
+8. 最终回复必须说明交接文档是否更新、位于哪里，以及下一账号或下一台电脑能否直接取得本轮内容。
+
+## 2026-08-08 跨账号交接机制固化（本地未提交）
+
+- 本机全局 `/Users/zhouxin/.codex/AGENTS.md` 已加入强制收尾交接审计；仓库根 `AGENTS.md`、
+  `CLAUDE.md`、本文件和 `docs/WORKLOG.md` 也同步写明账号无关的事实源、交接字段和授权边界。
+- 截至本次审计，主工作树 `/Users/zhouxin/Desktop/studytracker` 为 `main` / `fd711f1c`，落后
+  `origin/main` 21 个提交，且在本轮开始前已有多项未提交和未跟踪工作；本轮没有覆盖这些业务改动。
+- 词汇功能工作树 `/Users/zhouxin/.codex/worktrees/9478/studytracker` 仍为 detached HEAD
+  `e1f1b3fa`，四维词汇、自主复习和小组学习链的本地未提交实现保持不变，其详细验证与待办见本文件
+  对应章节。
+- 本轮只固化交接规则和日志，没有改业务代码、生产数据库或外部系统，也没有 commit、push、后端部署、
+  小程序上传/提审/发布。同一 macOS 用户下切换 Codex 账号可立即读取；另一台电脑暂时无法取得本轮文档改动。
+- 规则验证：本机不存在会遮蔽全局规则的 `AGENTS.override.md`；全局与项目 `AGENTS.md` 合计不足 7 KiB，
+  低于默认 32 KiB 指令上限；两个工作树的四份目标文档均通过 `git diff --check`。本轮是纯文档改动，未重复运行业务测试。
+
+## 2026-08-08 四维词汇掌握与 context_use v1（独立工作树，未提交/未发布）
+
+- 工作树：`/Users/zhouxin/.codex/worktrees/9478/studytracker`，detached HEAD 基线
+  `e1f1b3fa`；全部改动仍为本地未提交状态，没有 commit、push、后端部署或小程序上传。
+- 新任务按 `reading / writing / listening / comprehensive` 目标进入四维状态；历史
+  `vocabulary_goal=NULL` 任务继续走旧听写/错词链路。四维独立 stage/due，间隔为
+  1/3/7/14/30/60 天，跨过 30 天后仍以 60 天维护；提前答对不推进，答错次日重置。
+- 新增保守 sense 归并、同日到期领取、严格首答幂等与结算、按词条 ID 的音频/TTS、老师目标选择、
+  小程序逐题模式，以及 context_use 四类确定性题目。题面和服务端答案分栏固化；choice 固定 4 个
+  真实候选框架，fill 会遮蔽全部批准变体；缺素材时失败关闭，不调用模型临时生成或判分。
+- 词书空值回填：2–39 listening/IELTS；40–165 reading/TOEFL；166–173、175–187
+  comprehensive/general；188 writing/TOEFL；192 listening/TOEFL；194 reading/TOEFL。
+- 生产只读副本验证：原库 `quick_check=ok`，194 本/18,410 词条/3,157 任务；迁移首跑创建
+  四张 v2 表与旧表索引，二次运行文件 hash 不变。历史任务非空 goal 为 0；回填 listening 39、
+  reading 127、comprehensive 21、writing 1、未映射 6，ID174 保持空；partial unique 首答约束存在。
+- 真实资料审计覆盖 188 本映射词书/16,181 词条：15,979 条有安全 target 且至少一种 context 题；
+  `example_fill/collocation_fill/meaning_choice/collocation_choice` 可生成数依次为
+  13,470/13,879/15,975/12,280。所有 choice 均为 4 个唯一选项且唯一答案 ID，fill 目标残留为 0。
+  ID188 为 727/922，195 条脏数据继续隔离；另有 ID194 的 6 条未批准斜杠表达和 ID35 的
+  `0.75 m` 失败关闭。
+- “今日复习”现为独立 session/claim/answer/settle/continue 闭环，最多 20 题，跨词书按错误优先、
+  逾期程度和到期时间稳定排序；30/60 天从同一队列消费。新版任务入口及 queue API 的服务端
+  preflight 会拦 active session；当日完整 settlement 形成 student+review_date clearance，
+  当天第二个新版任务不重复强制，但剩余 due 仍显示在今日复习。`reviewDone=1` 仅 UX 防循环，
+  不是放行凭证。生产数据库、部署、commit/push 和小程序上传均未执行。
+- 主审补掉了首版未覆盖的边界：客户端 `limit=1` 不能缩小强制批次；首答立即、且只一次更新维度
+  状态，答错的 +24h 从真实答题时刻计算；真实错词优先级与首次解锁的 stage 0 分开；听力书的
+  meaning recall 保持“听音→中文”；首次作答有数据库唯一索引，结算用 active→settling 原子状态
+  抢占并要求 queue token。跨午夜会以完成日形成 clearance，全部答完但尚未结算的 active session
+  仍会显示在首页。
+- 小程序自主复习页复用严格英文键盘，支持现库实际存在的数字词和 `fiancé`，不会用原生输入冒充
+  strict；补齐 audio→中文、context target/翻译展示、从首个未答项恢复、全答后自动结算，以及
+  多标签页按当前页面来源返回任务。preflight 与 queue 之间若发生竞态，queue 的 409 也会正确回到
+  自主复习页，不会只显示“网络错误”。
+- 在生产只读库副本的再副本上重新验证自主复习迁移：四张新表与首答 partial unique 索引存在，
+  二次执行 SHA-256 不变，`PRAGMA quick_check=ok`，四表历史行数均为 0；生产原库未访问写路径。
+- 当前最终验证：四维/自主复习 Python 41 项、legacy/dictation/小程序结构 Python 66 项，共
+  107 项通过；3 个 Node 脚本通过（输入策略 6 个子测试）；`py_compile`、Python 3.10 grammar
+  parse、相关 Ruff、JS 语法、JSON 与 `git diff --check` 通过。当前机器仍无独立 Python 3.10.12
+  运行时；尚未做微信真机、生产接口、教师网页完整 POST 或并发压力测试。
 
 ## 2026-08-08 TOEFL v2 正式考试流程与倒计时对齐（已部署）
 
@@ -166,17 +359,17 @@
   错误 token 404 与 gunicorn `workers=1 / gthread / threads=6` 均已核验。
 - 下一步仅剩真实浏览器业务验收：用两名测试学生同机同卷确认草稿隔离，并分别从成绩页进入本人复盘。
 
-## 当前基线
+## 当前双工作树基线（2026-08-08）
 
 | 项目 | 当前状态 |
 |---|---|
 | 仓库 | `git@github.com:KB77GG/studytracker.git` |
-| 分支 | `codex/toefl-mock-review`，独立 worktree 为 `/Users/zhouxin/.codex/worktrees/fe6e/studytracker` |
-| 分支基线 | 业务 HEAD `02cd395e 串行保存 TOEFL 听力播放状态` |
-| 远端 | `origin/main` 与 `origin/codex/toefl-mock-review` 均包含 `02cd395e`；精确 HEAD 以 `git log -1` 为准 |
-| 本次交接范围 | TOEFL v2 四科正式流程、倒计时、听力单次自动播放；评分与复盘闭环保持已部署 |
-| 后端生产 | 业务代码已包含 `02cd395e`；`studytracker.service=active`、`127.0.0.1:5002`，单 worker/gthread/threads=6 |
-| 小程序 | 尚未上传、提审或发布，按授权由用户本人完成 |
+| 发布工作树 | `/Users/zhouxin/.codex/worktrees/9478/studytracker`；`codex/vocabulary-v2-release-20260809` 已基于 `origin/main@67927544`，精确 HEAD 以 `git log -1` 为准 |
+| 主工作树 | `/Users/zhouxin/Desktop/studytracker`；已有其他任务的未提交/未跟踪文件，本次未覆盖或改写 |
+| 远端 | 发布分支尚未 push；精确远端状态以接手时 `git fetch` 与 `git log -1` 为准 |
+| 本次交接范围 | 四维词汇、自主长期复习、小组学习链、context_use、旧强化拼写有限纠错、登录页比例和发布门禁 |
+| 后端生产 | 词汇 v2 尚未部署；仍须遵守 5002、workers=1、gthread、threads=6，并在部署前备份数据库 |
+| 小程序 | 尚未上传、提审或发布；必须先于后端发布并确认线上可获取 |
 
 ## 2026-07-29 三套 TOEFL 2026 正式题包（已上线）
 

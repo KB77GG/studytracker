@@ -9,6 +9,8 @@ from api.dictation import dictation_bp
 from dictation_answers import (
     is_chinese_answer_correct,
     is_english_answer_correct,
+    canonical_vocabulary_word,
+    parse_vocabulary_word_variants,
     parse_answer_variants,
     serialize_answer_variants,
     strip_part_of_speech_prefix,
@@ -37,6 +39,52 @@ class DictationAnswerTest(unittest.TestCase):
         self.assertEqual(parse_answer_variants("n. bike / bicycle"), ["bike", "bicycle"])
         self.assertEqual(parse_answer_variants("v. / n. account"), ["account"])
         self.assertEqual(strip_part_of_speech_prefix("v. / n. account"), "account")
+
+    def test_noisy_catalog_slash_phrases_are_not_blindly_split(self):
+        self.assertEqual(
+            parse_vocabulary_word_variants("teaching/ pedagogical methodology"),
+            [],
+        )
+        self.assertEqual(
+            parse_vocabulary_word_variants(
+                "students appraise/ evaluate their teachers’ performance"
+            ),
+            [],
+        )
+        self.assertEqual(
+            canonical_vocabulary_word(
+                "teaching/ pedagogical methodology",
+                '["teaching methodology", "pedagogical methodology"]',
+            ),
+            "teaching methodology",
+        )
+
+    def test_safe_catalog_cleanup_removes_pos_and_chinese_annotations(self):
+        self.assertEqual(
+            parse_vocabulary_word_variants("n. discipline 管教 vt. discipline"),
+            ["discipline"],
+        )
+        self.assertEqual(
+            parse_vocabulary_word_variants("adj. well- ‐rounded"),
+            ["well-rounded"],
+        )
+        self.assertEqual(
+            parse_vocabulary_word_variants("contribute to societal well- ‐being"),
+            ["contribute to societal well-being"],
+        )
+        self.assertEqual(parse_vocabulary_word_variants("n. toddlers 13~19 岁"), [])
+        self.assertEqual(
+            parse_vocabulary_word_variants("students’ feedback / o’clock"),
+            [],
+        )
+        self.assertEqual(
+            parse_vocabulary_word_variants("students’ feedback"),
+            ["students' feedback"],
+        )
+        self.assertEqual(parse_vocabulary_word_variants("o’clock"), ["o'clock"])
+        self.assertEqual(parse_vocabulary_word_variants("fiancé"), ["fiancé"])
+        self.assertEqual(parse_vocabulary_word_variants("mp3 player"), ["mp3 player"])
+        self.assertEqual(parse_vocabulary_word_variants("0.75 m"), [])
 
     def test_chinese_review_answers_remain_supported(self):
         self.assertTrue(is_chinese_answer_correct("自行车", "自行车；脚踏车"))
@@ -152,11 +200,11 @@ class DictationSubmitApiTest(unittest.TestCase):
         response = self.submit(self.behaviour_id, "举止", "en_to_zh")
         self.assertTrue(response.get_json()["is_correct"])
 
-    def create_appeal(self, answer="cycle", mode="zh_to_en"):
+    def create_appeal(self, answer="cycle", mode="zh_to_en", word_id=None):
         return self.client.post(
             "/api/dictation/appeals",
             json={
-                "word_id": self.bike_id,
+                "word_id": word_id or self.bike_id,
                 "answer": answer,
                 "mode": mode,
                 "reason": "这个表达意思相同",
@@ -195,6 +243,52 @@ class DictationSubmitApiTest(unittest.TestCase):
         response = self.create_appeal(answer="bike")
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.get_json()["error"], "answer_already_accepted")
+
+    def test_context_choice_cannot_enter_english_answer_appeal_flow(self):
+        response = self.create_appeal(answer="option_123", mode="context_choice")
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(
+            response.get_json()["error"], "appeal_not_supported_for_choice"
+        )
+
+    def test_audio_to_zh_appeal_uses_chinese_and_never_adds_english_variant(self):
+        with self.app.app_context():
+            word = db.session.get(DictationWord, self.behaviour_id)
+            word.core_meaning_zh = "行为"
+            db.session.commit()
+
+        accepted = self.create_appeal(
+            answer="行为", mode="audio_to_zh", word_id=self.behaviour_id
+        )
+        self.assertEqual(accepted.status_code, 409)
+        self.assertEqual(accepted.get_json()["error"], "answer_already_accepted")
+
+        created = self.create_appeal(
+            answer="行动", mode="audio_to_zh", word_id=self.behaviour_id
+        )
+        self.assertEqual(created.status_code, 201)
+        appeal_id = created.get_json()["appeal"]["id"]
+        legacy_chinese = self.create_appeal(
+            answer="举动", mode="en_to_zh", word_id=self.behaviour_id
+        )
+        self.assertEqual(legacy_chinese.status_code, 201)
+        legacy_appeal_id = legacy_chinese.get_json()["appeal"]["id"]
+        self.login_teacher()
+        reviewed = self.client.post(
+            f"/api/dictation/appeals/{appeal_id}/review",
+            json={"decision": "approved"},
+        )
+        self.assertFalse(reviewed.get_json()["appeal"]["added_to_accepted_answers"])
+        reviewed_legacy = self.client.post(
+            f"/api/dictation/appeals/{legacy_appeal_id}/review",
+            json={"decision": "approved"},
+        )
+        self.assertFalse(
+            reviewed_legacy.get_json()["appeal"]["added_to_accepted_answers"]
+        )
+        with self.app.app_context():
+            word = db.session.get(DictationWord, self.behaviour_id)
+            self.assertEqual(parse_answer_variants(word.accepted_answers), [])
 
 
 if __name__ == "__main__":

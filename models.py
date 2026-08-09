@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
@@ -495,6 +496,9 @@ class Task(db.Model):
     material_id = db.Column(db.Integer, db.ForeignKey("material_bank.id"), index=True)
     question_ids = db.Column(db.Text)  # JSON list of selected question IDs
     dictation_book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), index=True)
+    # Non-empty only for the four-dimension vocabulary v2 flow. Existing tasks
+    # deliberately remain NULL and continue using dictation_mode.
+    vocabulary_goal = db.Column(db.String(32), nullable=True, index=True)
     dictation_mode = db.Column(db.String(20), default="audio_to_en")
     dictation_order = db.Column(db.String(20), default="sequence")
     dictation_word_start = db.Column(db.Integer, default=1)  # 1-based index
@@ -1066,6 +1070,12 @@ class DictationBook(db.Model, TimestampMixin, SoftDeleteMixin):
     is_active = db.Column(db.Boolean, default=True, nullable=False, index=True)
     # 'dictation' = hear word, type spelling; 'translation' = see Chinese, type English
     book_type = db.Column(db.String(20), default='dictation', nullable=False)
+    # Teacher-facing default for newly created v2 tasks. Nullable books keep
+    # the legacy behavior when no catalog mapping is known.
+    default_vocabulary_goal = db.Column(db.String(32), nullable=True, index=True)
+    # Independent curriculum axis used for catalog/reporting; it does not
+    # select the four-dimension training behavior.
+    course_system = db.Column(db.String(32), nullable=True, index=True)
 
     # Relationships
     creator = db.relationship("User", backref=db.backref("dictation_books", lazy="dynamic"))
@@ -1075,6 +1085,34 @@ class DictationBook(db.Model, TimestampMixin, SoftDeleteMixin):
         return f"<DictationBook {self.title}>"
 
 
+class VocabularySense(db.Model, TimestampMixin):
+    """A stable meaning shared by word entries from multiple books.
+
+    The v2 mastery key is (student, sense), never (student, spelling). A
+    catalog/importer may provide a stronger ``canonical_key`` later; the v2
+    service also derives a conservative key from lemma + meaning for legacy
+    word rows. Different translations therefore remain different senses.
+    """
+
+    __tablename__ = "vocabulary_sense"
+    __table_args__ = (
+        db.UniqueConstraint("canonical_key", name="uq_vocabulary_sense_canonical_key"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    canonical_key = db.Column(db.String(255), nullable=False, index=True)
+    lemma = db.Column(db.String(100), nullable=False, index=True)
+    meaning_zh = db.Column(db.Text)
+    part_of_speech = db.Column(db.String(32))
+    definition_en = db.Column(db.Text)
+
+    words = db.relationship(
+        "DictationWord",
+        backref=db.backref("sense", lazy="joined"),
+        lazy="dynamic",
+    )
+
+
 class DictationWord(db.Model, TimestampMixin):
     """Individual word entry in a dictation book."""
     
@@ -1082,6 +1120,7 @@ class DictationWord(db.Model, TimestampMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=True, index=True)
     sequence = db.Column(db.Integer, nullable=False)  # Order in book (1, 2, 3...)
     word = db.Column(db.String(100), nullable=False)
     # JSON array of teacher-approved alternative English answers.
@@ -1150,6 +1189,22 @@ class DictationRecord(db.Model, TimestampMixin):
         nullable=True,
         index=True,
     )
+    # v2 vocabulary attempts use their own snapshot table while retaining the
+    # same durable attempt idempotency surface and history record.
+    vocabulary_task_review_id = db.Column(
+        db.Integer,
+        db.ForeignKey("vocabulary_task_review.id"),
+        nullable=True,
+        index=True,
+    )
+    vocabulary_dimension = db.Column(db.String(32), nullable=True, index=True)
+    vocabulary_question_id = db.Column(db.String(96), nullable=True, index=True)
+    # Group-flow statistics are server-owned. A guidance context choice can
+    # be retained as an event while excluded from the task denominator when a
+    # harder production question exists for the same sense/dimension.
+    vocabulary_phase = db.Column(db.String(32), nullable=True, index=True)
+    vocabulary_score_eligible = db.Column(db.Boolean, nullable=True, index=True)
+    vocabulary_mastery_applied = db.Column(db.Boolean, nullable=True, index=True)
     
     # Relationships
     student = db.relationship("User", backref=db.backref("dictation_records", lazy="dynamic"))
@@ -1157,6 +1212,7 @@ class DictationRecord(db.Model, TimestampMixin):
     word = db.relationship("DictationWord", backref=db.backref("records", lazy="dynamic"))
     task = db.relationship("Task", backref=db.backref("dictation_records", lazy="dynamic"))
     input_grant = db.relationship("DictationInputGrant")
+    vocabulary_task_review = db.relationship("VocabularyTaskReview")
     
     def __repr__(self):
         return f"<DictationRecord student={self.student_id} word={self.word_id} correct={self.is_correct}>"
@@ -1390,6 +1446,463 @@ class StudentWordMastery(db.Model, TimestampMixin):
         if level == 2:
             return "zh_to_en"
         return "audio_to_en"
+
+
+class StudentVocabularyMastery(db.Model, TimestampMixin):
+    """Four independent long-term dimensions for one student/sense pair."""
+
+    __tablename__ = "student_vocabulary_mastery"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "sense_id",
+            name="uq_student_vocabulary_mastery_student_sense",
+        ),
+        db.Index(
+            "ix_student_vocabulary_mastery_due",
+            "student_id",
+            "meaning_recall_next_due_at",
+            "form_recall_next_due_at",
+            "audio_form_recall_next_due_at",
+            "context_use_next_due_at",
+        ),
+    )
+
+    DIMENSIONS = (
+        "meaning_recall",
+        "form_recall",
+        "audio_form_recall",
+        "context_use",
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False, index=True)
+    representative_word_id = db.Column(
+        db.Integer,
+        db.ForeignKey("dictation_word.id"),
+        nullable=True,
+        index=True,
+    )
+    representative_book_id = db.Column(
+        db.Integer,
+        db.ForeignKey("dictation_book.id"),
+        nullable=True,
+        index=True,
+    )
+
+    # Stage 0 = not started. Stages 1..6 correspond to successful reviews at
+    # +1/+3/+7/+14/+30/+60 days. Stage 6 remains active forever.
+    meaning_recall_stage = db.Column(db.Integer, nullable=False, default=0)
+    meaning_recall_next_due_at = db.Column(db.DateTime, nullable=True, index=True)
+    form_recall_stage = db.Column(db.Integer, nullable=False, default=0)
+    form_recall_next_due_at = db.Column(db.DateTime, nullable=True, index=True)
+    audio_form_recall_stage = db.Column(db.Integer, nullable=False, default=0)
+    audio_form_recall_next_due_at = db.Column(db.DateTime, nullable=True, index=True)
+    context_use_stage = db.Column(db.Integer, nullable=False, default=0)
+    context_use_next_due_at = db.Column(db.DateTime, nullable=True, index=True)
+
+    meaning_recall_last_answered_at = db.Column(db.DateTime, nullable=True)
+    form_recall_last_answered_at = db.Column(db.DateTime, nullable=True)
+    audio_form_recall_last_answered_at = db.Column(db.DateTime, nullable=True)
+    context_use_last_answered_at = db.Column(db.DateTime, nullable=True)
+    meaning_recall_long_term_at = db.Column(db.DateTime, nullable=True, index=True)
+    form_recall_long_term_at = db.Column(db.DateTime, nullable=True, index=True)
+    audio_form_recall_long_term_at = db.Column(db.DateTime, nullable=True, index=True)
+    context_use_long_term_at = db.Column(db.DateTime, nullable=True, index=True)
+    long_term_mastered_at = db.Column(db.DateTime, nullable=True, index=True)
+
+    student = db.relationship("User", backref=db.backref("vocabulary_mastery", lazy="dynamic"))
+    sense = db.relationship("VocabularySense", backref=db.backref("student_mastery", lazy="dynamic"))
+    representative_word = db.relationship("DictationWord", foreign_keys=[representative_word_id])
+    representative_book = db.relationship("DictationBook", foreign_keys=[representative_book_id])
+
+    @classmethod
+    def stage_column(cls, dimension):
+        if dimension not in cls.DIMENSIONS:
+            raise ValueError(f"invalid vocabulary dimension: {dimension}")
+        return getattr(cls, f"{dimension}_stage")
+
+    @classmethod
+    def due_column(cls, dimension):
+        if dimension not in cls.DIMENSIONS:
+            raise ValueError(f"invalid vocabulary dimension: {dimension}")
+        return getattr(cls, f"{dimension}_next_due_at")
+
+
+class VocabularyTaskReview(db.Model, TimestampMixin):
+    """Server-owned v2 task item and first-answer snapshot."""
+
+    __tablename__ = "vocabulary_task_review"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "task_id",
+            "word_id",
+            "sense_id",
+            "dimension",
+            name="uq_vocabulary_task_review_item",
+        ),
+        db.Index(
+            "ix_vocabulary_task_review_task_order",
+            "student_id",
+            "task_id",
+            "queue_index",
+        ),
+    )
+
+    SOURCE_ASSIGNED = "assigned"
+    SOURCE_DUE = "due"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False, index=True)
+    dimension = db.Column(db.String(32), nullable=False, index=True)
+    source = db.Column(db.String(16), nullable=False, default=SOURCE_ASSIGNED)
+    review_date = db.Column(db.Date, nullable=True, index=True)
+    # If the assigned word was already due when this teacher snapshot was
+    # created, the teacher task may still show it, but its answer must not
+    # consume the independent review window.
+    mastery_due_at = db.Column(db.DateTime, nullable=True, index=True)
+    queue_index = db.Column(db.Integer, nullable=False, default=0)
+    question_id = db.Column(db.String(96), nullable=False, index=True)
+    question_snapshot_json = db.Column(db.Text, nullable=False)
+    answer_payload_json = db.Column(db.Text, nullable=False)
+
+    first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    first_is_correct = db.Column(db.Boolean, nullable=True)
+    first_answer = db.Column(db.String(200), nullable=True)
+    state_applied = db.Column(db.Boolean, nullable=False, default=False, index=True)
+
+    student = db.relationship("User", backref=db.backref("vocabulary_task_reviews", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("vocabulary_task_reviews", lazy="dynamic"))
+    book = db.relationship("DictationBook")
+    word = db.relationship("DictationWord")
+    sense = db.relationship("VocabularySense")
+
+
+class VocabularyTaskSettlement(db.Model, TimestampMixin):
+    """Idempotent once-only settlement record for a v2 task."""
+
+    __tablename__ = "vocabulary_task_settlement"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "task_id",
+            name="uq_vocabulary_task_settlement_student_task",
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    queue_token = db.Column(db.String(96), nullable=False)
+    result_json = db.Column(db.Text, nullable=False)
+    settled_at = db.Column(db.DateTime, nullable=False)
+
+    student = db.relationship("User", backref=db.backref("vocabulary_settlements", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("vocabulary_settlement", uselist=False))
+
+
+class VocabularyLearningFlow(db.Model, TimestampMixin):
+    """Server-owned state machine for the opt-in vocabulary group flow.
+
+    ``VocabularyTaskReview`` is retained for the first v2 queue contract. The
+    group flow needs a richer snapshot: fixed group boundaries, familiarity
+    progress, phase/position, diagnostics, and a separate retry pass. Keeping
+    that state in its own table lets legacy tasks and the autonomous review
+    session keep their existing semantics.
+    """
+
+    __tablename__ = "vocabulary_learning_flow"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "task_id",
+            name="uq_vocabulary_learning_flow_student_task",
+        ),
+        db.Index(
+            "ix_vocabulary_learning_flow_student_status",
+            "student_id",
+            "status",
+        ),
+    )
+
+    STATUS_ACTIVE = "active"
+    STATUS_COMPLETED = "completed"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    vocabulary_goal = db.Column(db.String(32), nullable=False, index=True)
+    group_size = db.Column(db.Integer, nullable=False)
+    total_word_count = db.Column(db.Integer, nullable=False)
+    total_group_count = db.Column(db.Integer, nullable=False)
+    # Immutable server snapshots. They intentionally contain no answer payload.
+    groups_json = db.Column(db.Text, nullable=False)
+    diagnostics_json = db.Column(db.Text, nullable=False, default="[]")
+    group_results_json = db.Column(db.Text, nullable=False, default="[]")
+    context_applied_json = db.Column(db.Text, nullable=False, default="{}")
+    retry_question_ids_json = db.Column(db.Text, nullable=False, default="[]")
+
+    current_group_index = db.Column(db.Integer, nullable=False, default=0, index=True)
+    phase = db.Column(db.String(32), nullable=False, default="familiarity", index=True)
+    phase_index = db.Column(db.Integer, nullable=False, default=0)
+    viewed_word_ids_json = db.Column(db.Text, nullable=False, default="[]")
+    queue_token = db.Column(db.String(96), nullable=False, index=True)
+    status = db.Column(db.String(16), nullable=False, default=STATUS_ACTIVE, index=True)
+    # Every answer/phase move uses a conditional update on this version. This
+    # is required because SQLite's ``with_for_update`` is not a lock.
+    state_version = db.Column(db.Integer, nullable=False, default=0)
+    started_at = db.Column(db.DateTime, nullable=False)
+    completed_at = db.Column(db.DateTime, nullable=True)
+
+    student = db.relationship("User", backref=db.backref("vocabulary_learning_flows", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("vocabulary_learning_flow", uselist=False))
+    book = db.relationship("DictationBook")
+    questions = db.relationship(
+        "VocabularyLearningQuestion",
+        back_populates="flow",
+        cascade="all, delete-orphan",
+        order_by="VocabularyLearningQuestion.question_order",
+    )
+
+
+class VocabularyLearningQuestion(db.Model, TimestampMixin):
+    """Frozen group-flow question and its first/retry answer state."""
+
+    __tablename__ = "vocabulary_learning_question"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "flow_id",
+            "question_order",
+            name="uq_vocabulary_learning_question_order",
+        ),
+        db.UniqueConstraint(
+            "flow_id",
+            "question_id",
+            name="uq_vocabulary_learning_question_id",
+        ),
+        db.Index(
+            "ix_vocabulary_learning_question_flow_phase",
+            "flow_id",
+            "group_index",
+            "phase",
+            "phase_index",
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    flow_id = db.Column(db.Integer, db.ForeignKey("vocabulary_learning_flow.id"), nullable=False, index=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    group_index = db.Column(db.Integer, nullable=False, index=True)
+    phase = db.Column(db.String(32), nullable=False, index=True)
+    phase_index = db.Column(db.Integer, nullable=False)
+    question_order = db.Column(db.Integer, nullable=False)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False, index=True)
+    dimension = db.Column(db.String(32), nullable=False, index=True)
+    context_role = db.Column(db.String(20), nullable=True)
+    # False marks a guidance/duplicate question that must not enter the task
+    # score denominator. The production/degraded context question is the one
+    # scoreable encounter for context_use.
+    score_eligible = db.Column(db.Boolean, nullable=False, default=True, index=True)
+    mastery_applied = db.Column(db.Boolean, nullable=False, default=False, index=True)
+    question_id = db.Column(db.String(96), nullable=False, index=True)
+    question_snapshot_json = db.Column(db.Text, nullable=False)
+    answer_payload_json = db.Column(db.Text, nullable=False)
+    first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    first_is_correct = db.Column(db.Boolean, nullable=True)
+    first_answer = db.Column(db.String(200), nullable=True)
+    retry_attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    retry_is_correct = db.Column(db.Boolean, nullable=True)
+    retry_answer = db.Column(db.String(200), nullable=True)
+
+    flow = db.relationship("VocabularyLearningFlow", back_populates="questions")
+    student = db.relationship("User")
+    task = db.relationship("Task")
+    book = db.relationship("DictationBook")
+    word = db.relationship("DictationWord")
+    sense = db.relationship("VocabularySense")
+
+
+class VocabularyReviewSession(db.Model, TimestampMixin):
+    """An independent, student-owned batch from the four-dimension queue.
+
+    This is deliberately not a ``Task``.  A review batch can be started from
+    the home page or as a preflight before a teacher task, and settling it
+    must never mark or score that teacher task.
+    """
+
+    __tablename__ = "vocabulary_review_session"
+    __table_args__ = (
+        db.UniqueConstraint("session_token", name="uq_vocabulary_review_session_token"),
+        db.UniqueConstraint("claim_key", name="uq_vocabulary_review_session_claim_key"),
+        db.Index(
+            "ix_vocabulary_review_session_student_status",
+            "student_id",
+            "status",
+            "review_date",
+        ),
+    )
+
+    STATUS_ACTIVE = "active"
+    STATUS_SETTLING = "settling"
+    STATUS_SETTLED = "settled"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    origin_task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=True, index=True)
+    review_date = db.Column(db.Date, nullable=False, index=True)
+    status = db.Column(db.String(16), nullable=False, default=STATUS_ACTIVE, index=True)
+    # Only active sessions have a claim key.  SQLite and PostgreSQL both allow
+    # multiple NULLs, so a settled session never blocks a later same-day batch.
+    claim_key = db.Column(db.String(96), nullable=True)
+    session_token = db.Column(db.String(96), nullable=False, index=True)
+    queue_token = db.Column(db.String(96), nullable=False)
+    batch_limit = db.Column(db.Integer, nullable=False, default=20)
+    started_at = db.Column(db.DateTime, nullable=False)
+    settled_at = db.Column(db.DateTime, nullable=True)
+    duration_seconds = db.Column(db.Integer, nullable=True)
+    result_json = db.Column(db.Text, nullable=True)
+
+    student = db.relationship("User", backref=db.backref("vocabulary_review_sessions", lazy="dynamic"))
+    origin_task = db.relationship("Task", foreign_keys=[origin_task_id])
+    items = db.relationship(
+        "VocabularyReviewItem",
+        back_populates="session",
+        cascade="all, delete-orphan",
+        order_by="VocabularyReviewItem.queue_index",
+    )
+
+
+class VocabularyReviewItem(db.Model, TimestampMixin):
+    """Frozen public question plus server-only answer for one review batch."""
+
+    __tablename__ = "vocabulary_review_item"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "session_id",
+            "queue_index",
+            name="uq_vocabulary_review_item_session_order",
+        ),
+        db.UniqueConstraint(
+            "session_id",
+            "word_id",
+            "sense_id",
+            "dimension",
+            name="uq_vocabulary_review_item_sense_dimension",
+        ),
+        db.Index(
+            "ix_vocabulary_review_item_student_session",
+            "student_id",
+            "session_id",
+            "queue_index",
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey("vocabulary_review_session.id"), nullable=False, index=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("dictation_book.id"), nullable=False, index=True)
+    word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False, index=True)
+    dimension = db.Column(db.String(32), nullable=False, index=True)
+    due_at = db.Column(db.DateTime, nullable=False, index=True)
+    stage_at_claim = db.Column(db.Integer, nullable=False, default=0)
+    queue_index = db.Column(db.Integer, nullable=False)
+    question_id = db.Column(db.String(96), nullable=False, index=True)
+    question_snapshot_json = db.Column(db.Text, nullable=False)
+    answer_payload_json = db.Column(db.Text, nullable=False)
+    first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
+    first_is_correct = db.Column(db.Boolean, nullable=True)
+    first_answer = db.Column(db.String(200), nullable=True)
+    state_applied = db.Column(db.Boolean, nullable=False, default=False, index=True)
+
+    session = db.relationship("VocabularyReviewSession", back_populates="items")
+    student = db.relationship("User")
+    book = db.relationship("DictationBook")
+    word = db.relationship("DictationWord")
+    sense = db.relationship("VocabularySense")
+    attempts = db.relationship(
+        "VocabularyReviewAttempt",
+        back_populates="item",
+        cascade="all, delete-orphan",
+        order_by="VocabularyReviewAttempt.id",
+    )
+
+
+class VocabularyReviewAttempt(db.Model, TimestampMixin):
+    """Durable answer idempotency surface for independent review."""
+
+    __tablename__ = "vocabulary_review_attempt"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "attempt_id",
+            name="uq_vocabulary_review_attempt_student_attempt",
+        ),
+        db.Index(
+            "ix_vocabulary_review_attempt_item_first",
+            "item_id",
+            "is_first_attempt",
+        ),
+        db.Index(
+            "uq_vocabulary_review_attempt_first",
+            "item_id",
+            unique=True,
+            sqlite_where=text("is_first_attempt = 1"),
+            postgresql_where=text("is_first_attempt IS TRUE"),
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey("vocabulary_review_session.id"), nullable=False, index=True)
+    item_id = db.Column(db.Integer, db.ForeignKey("vocabulary_review_item.id"), nullable=False, index=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    attempt_id = db.Column(db.String(96), nullable=False)
+    question_id = db.Column(db.String(96), nullable=False)
+    student_answer = db.Column(db.String(200), nullable=False)
+    is_correct = db.Column(db.Boolean, nullable=False)
+    is_first_attempt = db.Column(db.Boolean, nullable=False, default=True)
+    input_mode = db.Column(db.String(20), nullable=False, default="native")
+    input_grant_id = db.Column(db.Integer, db.ForeignKey("dictation_input_grant.id"), nullable=True)
+    submitted_at = db.Column(db.DateTime, nullable=False)
+
+    session = db.relationship("VocabularyReviewSession")
+    item = db.relationship("VocabularyReviewItem", back_populates="attempts")
+    student = db.relationship("User")
+    input_grant = db.relationship("DictationInputGrant")
+
+
+class VocabularyReviewSettlement(db.Model, TimestampMixin):
+    """Once-only independent settlement; never points at a teacher score."""
+
+    __tablename__ = "vocabulary_review_settlement"
+    __table_args__ = (
+        db.UniqueConstraint("session_id", name="uq_vocabulary_review_settlement_session"),
+        db.Index(
+            "ix_vocabulary_review_settlement_student_date",
+            "student_id",
+            "settled_at",
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey("vocabulary_review_session.id"), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    session_token = db.Column(db.String(96), nullable=False)
+    result_json = db.Column(db.Text, nullable=False)
+    settled_at = db.Column(db.DateTime, nullable=False)
+
+    session = db.relationship("VocabularyReviewSession", backref=db.backref("settlement", uselist=False))
+    student = db.relationship("User")
 
 
 class DictationTaskReview(db.Model, TimestampMixin):

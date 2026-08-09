@@ -91,12 +91,20 @@ const recoveredRetry = firstAttemptStateFromResponse({
 assert.strictEqual(recoveredRetry.correct, false)
 assert.strictEqual(recoveredRetry.answer, 'alhpa')
 const recoveredWords = [
-    { id: 41, word: 'alpha', first_attempt_id: 'first-41', first_is_correct: false, first_answer: 'alhpa' },
+    {
+        id: 41,
+        word: 'alpha',
+        first_attempt_id: 'first-41',
+        first_is_correct: false,
+        first_answer: 'alhpa',
+        revealed_answer: 'alpha'
+    },
     { id: 42, word: 'bravo' }
 ]
 const recovered = hydrateQueueFirstAttempts(recoveredWords)
 assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[0]).answer, 'alhpa')
 assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[0]).correct, false)
+assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[0]).revealedAnswer, 'alpha')
 assert.strictEqual(firstAttemptForWord(recovered, recoveredWords[1]), null)
 assert.deepStrictEqual(
     missingQueueItems({
@@ -105,6 +113,18 @@ assert.deepStrictEqual(
         missing_word_ids: [3, 2, 3, 999]
     }, queue),
     [queue[2], queue[1]]
+)
+const collidingIds = [
+    { word_id: 10, queue_item_id: 100 },
+    { word_id: 100, queue_item_id: 200 }
+]
+assert.deepStrictEqual(
+    missingQueueItems({ error: 'queue_incomplete', missing_queue_item_ids: [100] }, collidingIds),
+    [collidingIds[0]]
+)
+assert.deepStrictEqual(
+    missingQueueItems({ error: 'queue_incomplete', missing_word_ids: [100] }, collidingIds),
+    [collidingIds[1]]
 )
 assert.deepStrictEqual(missingQueueItems({ error: 'queue_changed' }, queue), [])
 const bookWords = [{ id: 1, word: 'alpha' }]

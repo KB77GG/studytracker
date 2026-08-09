@@ -329,6 +329,8 @@
           {% for m in all_materials %}
           <option value="{{ m.id }}" data-title="{{ m.title }}" data-type="{{ m.type }}"
             data-book-type="{{ m.book_type or '' }}"
+            data-vocabulary-goal="{{ m.vocabulary_goal or '' }}"
+            data-course-system="{{ m.course_system or '' }}"
             data-count="{{ m.question_count }}">{{ m.title }} ({{ m.question_count }})</option>
           {% endfor %}
         </select>
@@ -357,7 +359,20 @@
         </div>
       </div>
     </div>
-    <div class="task-form-row" id="dictationModeRow" style="display: none;">
+    <div class="task-form-row" id="learningGoalRow" style="display: none;">
+      <div class="field field--wide">
+        <label for="vocabularyGoalSelect">学习目标</label>
+        <select id="vocabularyGoalSelect" name="vocabulary_goal" class="form-select">
+          <option value="" disabled>请选择学习目标</option>
+          <option value="reading">阅读：释义回忆 + 语境运用</option>
+          <option value="writing">写作：形式回忆 + 语境运用</option>
+          <option value="listening">听力：释义回忆 + 听音回忆形式</option>
+          <option value="comprehensive">综合：四维轮换复习</option>
+        </select>
+        <small class="form-text text-muted">默认按词书分类，可按本次教学目标调整；历史任务不受影响。</small>
+      </div>
+    </div>
+    <div class="task-form-row" id="dictationModeRow" style="display: none;" aria-hidden="true">
       <div class="field field--wide">
         <label for="dictationModeSelect">练习模式</label>
         <select id="dictationModeSelect" name="dictation_mode" class="form-select">
@@ -3398,6 +3413,8 @@
       var dictationModeRow = document.getElementById("dictationModeRow");
       var dictationModeSelect = document.getElementById("dictationModeSelect");
       var dictationModeHint = document.getElementById("dictationModeHint");
+      var learningGoalRow = document.getElementById("learningGoalRow");
+      var vocabularyGoalSelect = document.getElementById("vocabularyGoalSelect");
       var dictationOrderRow = document.getElementById("dictationOrderRow");
       var dictationOrderSelect = document.getElementById("dictationOrderSelect");
       var questionRow = document.getElementById("questionSelectRow");
@@ -3441,8 +3458,16 @@
         if (dictationModeRow && dictationModeSelect) {
           if (isDict) {
             const bookType = option.getAttribute("data-book-type") || "dictation";
-            dictationModeRow.style.display = "flex";
+            if (learningGoalRow) learningGoalRow.style.display = "flex";
+            if (dictationModeRow) dictationModeRow.style.display = "none";
             if (dictationOrderRow) dictationOrderRow.style.display = "flex";
+            if (vocabularyGoalSelect) {
+              const defaultGoal = option.getAttribute("data-vocabulary-goal") || "";
+              if (vocabularyGoalSelect.dataset.autofill === "1" || !vocabularyGoalSelect.value) {
+                vocabularyGoalSelect.value = defaultGoal;
+                vocabularyGoalSelect.dataset.autofill = "1";
+              }
+            }
             if (!dictationModeSelect.value || dictationModeSelect.dataset.autofill === "1") {
               dictationModeSelect.value = bookType === "translation" ? "zh_to_en" : "audio_to_en";
               dictationModeSelect.dataset.autofill = "1";
@@ -3453,6 +3478,11 @@
                 : "该词书默认适合听发音写英文，也可在任务里切换成中英互译或强化拼写。";
             }
           } else {
+            if (learningGoalRow) learningGoalRow.style.display = "none";
+            if (vocabularyGoalSelect) {
+              vocabularyGoalSelect.value = "";
+              vocabularyGoalSelect.dataset.autofill = "1";
+            }
             dictationModeRow.style.display = "none";
             if (dictationOrderRow) dictationOrderRow.style.display = "none";
             dictationModeSelect.value = "audio_to_en";
@@ -3485,6 +3515,11 @@
       } else {
         detailInput.value = "";
         rangeGroup.style.display = "none";
+        if (learningGoalRow) learningGoalRow.style.display = "none";
+        if (vocabularyGoalSelect) {
+          vocabularyGoalSelect.value = "";
+          vocabularyGoalSelect.dataset.autofill = "1";
+        }
         if (dictationModeRow) dictationModeRow.style.display = "none";
         if (dictationOrderRow) dictationOrderRow.style.display = "none";
         if (dictationModeSelect) {
@@ -3713,6 +3748,12 @@
     if (dictationModeSelect) {
       dictationModeSelect.addEventListener("change", () => {
         dictationModeSelect.dataset.autofill = "0";
+      });
+    }
+    const vocabularyGoalSelect = document.getElementById("vocabularyGoalSelect");
+    if (vocabularyGoalSelect) {
+      vocabularyGoalSelect.addEventListener("change", () => {
+        vocabularyGoalSelect.dataset.autofill = "0";
       });
     }
 

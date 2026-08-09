@@ -30,9 +30,11 @@ from models import (
     DictationWord,
     DictationRecord,
     StudentWordMastery,
+    Task,
 )
 from api.qwen import generate_word_enrichment
 from dictation_answers import (
+    canonical_vocabulary_word,
     is_chinese_answer_correct,
     is_english_answer_correct,
     parse_answer_variants,
@@ -40,6 +42,16 @@ from dictation_answers import (
     strip_part_of_speech_prefix,
 )
 from services.dictation_review import DictationReviewError, submit_dictation_answer
+from services.vocabulary_mastery import (
+    VocabularyMasteryError,
+    default_course_system_for_book_id,
+    default_goal_for_book_id,
+    is_vocabulary_v2_task,
+)
+from services.vocabulary_group_learning import (
+    VocabularyGroupLearningError,
+    submit_vocabulary_group_answer,
+)
 
 
 def require_session_or_bearer(fn):
@@ -315,6 +327,10 @@ def get_books():
                 "description": book.description,
                 "word_count": book.word_count,
                 "book_type": book.book_type or "dictation",
+                "default_vocabulary_goal": book.default_vocabulary_goal
+                or default_goal_for_book_id(book.id),
+                "course_system": book.course_system
+                or default_course_system_for_book_id(book.id),
                 "created_at": book.created_at.isoformat() if book.created_at else None,
                 "creator": book.creator.display_name or book.creator.username if book.creator else None
             }
@@ -387,6 +403,10 @@ def upload_book():
         )
         db.session.add(book)
         db.session.flush()  # Get book.id
+        if not book.default_vocabulary_goal:
+            book.default_vocabulary_goal = default_goal_for_book_id(book.id)
+        if not book.course_system:
+            book.course_system = default_course_system_for_book_id(book.id)
         
         # Process each word (NO audio generation - Mini Program will use built-in TTS)
         words_added = 0
@@ -448,6 +468,10 @@ def get_book(book_id):
             "description": book.description,
             "word_count": book.word_count,
             "book_type": book.book_type or "dictation",
+            "default_vocabulary_goal": book.default_vocabulary_goal
+            or default_goal_for_book_id(book.id),
+            "course_system": book.course_system
+            or default_course_system_for_book_id(book.id),
             "created_at": book.created_at.isoformat() if book.created_at else None
         },
         "words": [_word_student_payload(w) for w in words]
@@ -1073,8 +1097,7 @@ def schedule_prewarm_for_book(book_id: int) -> None:
     threading.Thread(target=runner, daemon=True).start()
 
 
-@dictation_bp.route("/tts", methods=["GET"])
-def proxy_tts():
+def _proxy_tts_for_word(word: str):
     """Proxy TTS audio with a quality-gated hybrid of Youdao and Kokoro.
 
     Youdao serves a clean human recording (MPEG v1) for base dictionary words
@@ -1083,9 +1106,6 @@ def proxy_tts():
     artifact on some isolated words. So: prefer a Youdao v1 recording; when
     Youdao would only give v2, use the pre-baked Kokoro cache instead.
     """
-    word = strip_part_of_speech_prefix(request.args.get("word"))
-    if not word:
-        return jsonify({"ok": False, "error": "missing_word"}), 400
     tts_text = _dictation_tts_text(word)
 
     youdao_cache = _dictation_tts_cache_path("youdao", word, tts_text)
@@ -1125,6 +1145,37 @@ def proxy_tts():
         return _send_tts_file(generated_cache)
 
     return jsonify({"ok": False, "error": "tts_fetch_failed"}), 502
+
+
+@dictation_bp.route("/tts", methods=["GET"])
+def proxy_tts():
+    """Proxy TTS audio for the legacy free-text playback path."""
+    word = strip_part_of_speech_prefix(request.args.get("word"))
+    if not word:
+        return jsonify({"ok": False, "error": "missing_word"}), 400
+    return _proxy_tts_for_word(word)
+
+
+@dictation_bp.route("/words/<int:word_id>/tts", methods=["GET"])
+def word_tts(word_id):
+    """Serve TTS by word id without putting the answer in a v2 prompt.
+
+    The endpoint follows the existing public ``/tts`` playback contract so
+    mini-program ``wx.downloadFile`` can use it without a second auth-header
+    implementation.  It is intentionally limited to an existing dictionary
+    word and uses the same cache/provider chain as the legacy endpoint.
+    """
+    word = DictationWord.query.get_or_404(word_id)
+    for audio_path in (word.audio_us, word.audio_uk):
+        if not audio_path:
+            continue
+        full_path = os.path.join(current_app.root_path, audio_path)
+        if os.path.exists(full_path):
+            return send_file(full_path, mimetype="audio/mpeg")
+    text = canonical_vocabulary_word(word.word, word.accepted_answers)
+    if not text:
+        return jsonify({"ok": False, "error": "missing_word"}), 400
+    return _proxy_tts_for_word(text)
 
 
 @dictation_bp.route("/tts/prewarm", methods=["POST"])
@@ -1176,14 +1227,24 @@ def submit_answer():
 
     data = request.get_json() or {}
     try:
-        result = submit_dictation_answer(user, data)
-    except DictationReviewError as error:
+        task = None
+        if data.get("task_id") not in (None, ""):
+            try:
+                task = db.session.get(Task, int(data.get("task_id")))
+            except (TypeError, ValueError):
+                task = None
+        if is_vocabulary_v2_task(task):
+            result = submit_vocabulary_group_answer(user, data)
+        else:
+            result = submit_dictation_answer(user, data)
+    except (DictationReviewError, VocabularyMasteryError, VocabularyGroupLearningError) as error:
         db.session.rollback()
         payload = {"ok": False, "error": error.error}
         payload.update(error.details)
         return jsonify(payload), error.status_code
 
-    word = db.session.get(DictationWord, int(data.get("word_id")))
+    result_word_id = result.get("word_id") if is_vocabulary_v2_task(task) else data.get("word_id")
+    word = db.session.get(DictationWord, int(result_word_id))
     db.session.commit()
     response = dict(result)
     response.update({
@@ -1412,27 +1473,49 @@ def create_answer_appeal():
     word_id = data.get("word_id")
     student_answer = str(data.get("answer") or "").strip()
     mode = str(data.get("mode") or "audio_to_en").strip().lower()
-    if mode not in {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}:
+    if mode == "context_choice":
+        return jsonify({"ok": False, "error": "appeal_not_supported_for_choice"}), 409
+    if mode not in {
+        "audio_to_en",
+        "zh_to_en",
+        "audio_to_zh",
+        "en_to_zh",
+        "spelling_drill",
+        "context_fill",
+    }:
         mode = "audio_to_en"
     if not word_id or not student_answer:
         return jsonify({"ok": False, "error": "missing_params"}), 400
 
     word = DictationWord.query.get_or_404(word_id)
-    if mode == "en_to_zh":
-        already_accepted = is_chinese_answer_correct(student_answer, word.translation)
-        reference_answer = word.translation or word.word
+    if mode in {"audio_to_zh", "en_to_zh"}:
+        chinese_references = [
+            value
+            for value in (word.core_meaning_zh, word.translation)
+            if str(value or "").strip()
+        ]
+        already_accepted = any(
+            is_chinese_answer_correct(student_answer, reference)
+            for reference in chinese_references
+        )
+        reference_answer = word.core_meaning_zh or word.translation or word.word
     else:
+        canonical = canonical_vocabulary_word(word.word, word.accepted_answers)
+        if not canonical:
+            return jsonify({"ok": False, "error": "answer_not_supported"}), 409
         already_accepted = is_english_answer_correct(
             student_answer,
-            word.word,
+            canonical,
             accepted_answers=word.accepted_answers,
         )
-        reference_answer = word.word
+        reference_answer = canonical
     if already_accepted:
         return jsonify({"ok": False, "error": "answer_already_accepted"}), 409
 
     normalized_answer = (
-        student_answer.lower() if mode != "en_to_zh" else student_answer
+        student_answer.lower()
+        if mode not in {"audio_to_zh", "en_to_zh"}
+        else student_answer
     )
     existing = (
         DictationAnswerAppeal.query
@@ -1517,7 +1600,10 @@ def review_answer_appeal(appeal_id):
         return jsonify({"ok": False, "error": "invalid_decision"}), 400
 
     added = False
-    if decision == DictationAnswerAppeal.STATUS_APPROVED and appeal.mode != "en_to_zh":
+    if decision == DictationAnswerAppeal.STATUS_APPROVED and appeal.mode not in {
+        "audio_to_zh",
+        "en_to_zh",
+    }:
         answer = parse_answer_variants([appeal.student_answer])
         if answer and re.search(r"[a-zA-Z]", answer[0]):
             accepted = parse_answer_variants(appeal.word.accepted_answers)

@@ -1,0 +1,96 @@
+<view class="review-page">
+  <view class="loading" wx:if="{{loading}}">加载今日复习…</view>
+
+  <view class="error" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="secondary-btn" bindtap="retry">重试</button>
+  </view>
+
+  <view class="empty" wx:elif="{{empty && !finished}}">
+    <text class="empty-icon">✓</text>
+    <text class="empty-title">今日没有待复习的词</text>
+    <text class="empty-desc">到期词会自动进入这里；老师任务不会被复习词占用。</text>
+    <button class="primary-btn" bindtap="exitPage">返回</button>
+  </view>
+
+  <block wx:elif="{{!finished}}">
+    <view class="header">
+      <text class="header-title">今日自主复习</text>
+      <text class="progress">{{currentIndex + 1}} / {{items.length}}</text>
+    </view>
+
+    <view class="card" wx:if="{{currentItem}}">
+      <text class="dimension">{{currentDimensionLabel}}</text>
+      <block wx:if="{{currentItem.mode === 'en_to_zh'}}">
+        <text class="prompt-word">{{currentItem.question.prompt.word}}</text>
+        <text class="mode">看英文 → 写中文释义</text>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'zh_to_en'}}">
+        <text class="prompt-meaning">{{currentItem.question.prompt.meaning}}</text>
+        <text class="mode">看中文 → 写英文表达</text>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'audio_to_en' || currentItem.mode === 'audio_to_zh'}}">
+        <button class="audio-btn" bindtap="playAudio">▶ 播放发音</button>
+        <text class="mode">{{currentItem.mode === 'audio_to_en' ? '听音 → 写英文表达' : '听音 → 写中文释义'}}</text>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'context_choice'}}">
+        <text class="prompt-text">{{currentItem.question.prompt.instruction}}</text>
+        <text class="target-word" wx:if="{{currentItem.question.prompt.target_word}}">目标词：{{currentItem.question.prompt.target_word}}</text>
+        <text class="sentence" wx:if="{{currentItem.question.prompt.sentence}}">{{currentItem.question.prompt.sentence}}</text>
+        <view class="options">
+          <view wx:for="{{currentItem.question.options}}" wx:key="id"
+                class="option {{selectedOption === item.id ? 'selected' : ''}}"
+                bindtap="selectOption" data-id="{{item.id}}">
+            {{item.label}}
+          </view>
+        </view>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'context_fill'}}">
+        <text class="prompt-text">{{currentItem.question.prompt.instruction}}</text>
+        <text class="sentence">{{currentItem.question.prompt.sentence}}</text>
+        <view class="translation-block" wx:if="{{currentItem.question.prompt.translation}}">
+          <text class="translation-label">{{currentItem.question.prompt.translation_label || '中文提示'}}</text>
+          <text class="translation">{{currentItem.question.prompt.translation}}</text>
+        </view>
+      </block>
+
+      <input wx:if="{{!showResult && !isEnglishSpelling && currentItem.mode !== 'context_choice'}}"
+             class="answer-input" value="{{inputValue}}" bindinput="onInput"
+             bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
+      <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
+        <text>{{isCorrect ? '✓ 答对了' : '✗ 需要加强'}}</text>
+        <text class="submitted">你的答案：{{submittedAnswer}}</text>
+        <text class="correct-answer">正确答案：{{correctAnswer}}</text>
+      </view>
+    </view>
+
+    <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling}}">
+      <english-keyboard
+        answer=""
+        safe-separators="{{currentItem.answer_separators}}"
+        value="{{inputValue}}"
+        status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
+        can-confirm="{{!!inputValue && !submitting}}"
+        show-wrong-actions="{{false}}"
+        show-next="{{showResult}}"
+        disabled="{{submitting || settling}}"
+        bind:key="onKeyboardKey"
+        bind:backspace="onKeyboardBackspace"
+        bind:confirm="submitAnswer"
+        bind:next="nextItem"
+      />
+    </view>
+
+    <button wx:if="{{!isEnglishSpelling}}" class="primary-btn" bindtap="submitAnswer" disabled="{{submitting || settling}}">
+      {{showResult ? (settling ? '结算中…' : '下一题') : (submitting ? '提交中…' : '提交答案')}}
+    </button>
+  </block>
+
+  <view class="summary" wx:elif="{{finished}}">
+    <text class="summary-title">本批复习完成</text>
+    <text class="summary-score">{{result.correct_count}} / {{result.total_count}} 正确</text>
+    <text class="summary-desc">正确率 {{result.accuracy}}%。自主复习不计入老师任务成绩。</text>
+    <button wx:if="{{remainingDueCount > 0 && !returningToTask}}" class="primary-btn" bindtap="continueReview">继续复习（还有 {{remainingDueCount}}）</button>
+    <button class="secondary-btn" bindtap="exitPage">{{returningToTask ? '返回新词任务' : '返回首页'}}</button>
+  </view>
+</view>

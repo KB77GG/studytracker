@@ -42,6 +42,21 @@ class DictationGroupingMarkupTest(unittest.TestCase):
         self.assertIn("recoverMissingTaskWords", logic)
         self.assertIn("missingQueueItems", logic)
 
+    def test_legacy_spelling_uses_one_bounded_correction_round(self):
+        logic = (
+            ROOT / "miniprogram/pages/student/dictation/spell/index.js"
+        ).read_text(encoding="utf-8")
+        queue_logic = (
+            ROOT / "miniprogram/utils/dictation-spell-queue.js"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("resolveWrongAnswer", logic)
+        self.assertIn("completeCurrent", logic)
+        self.assertIn("enqueueCorrectionOnce", queue_logic)
+        self.assertIn("CORRECTION_ROUND_FLAG", queue_logic)
+        self.assertNotIn("REINSERT_GAP", logic)
+        self.assertNotIn("reinsertCurrentWord", logic)
+
     def test_english_pages_use_shared_keyboard_and_compatibility_input_only(self):
         practice_markup = (
             ROOT / "miniprogram/pages/student/dictation/practice/index.wxml"

@@ -12,6 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Guard legacy spelling correction queue
+        run: node tests/test_dictation_spell_queue.js
+
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
         with:

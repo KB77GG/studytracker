@@ -29,6 +29,14 @@ test('separator keys follow the actual answer', () => {
     assert.deepEqual(policy.answerSeparators('ordinary'), [])
 })
 
+test('v2 can expose safe separator capability without exposing an answer', () => {
+    assert.deepEqual(policy.answerSeparators(" -'"), [
+        { key: ' ', label: '空格', ariaLabel: '空格' },
+        { key: '-', label: '-', ariaLabel: '连字符' },
+        { key: "'", label: "'", ariaLabel: '撇号' }
+    ])
+})
+
 test('keyboard key normalization never emits uppercase letters', () => {
     assert.equal(policy.normalizeKeyboardKey('A'), 'a')
     assert.equal(policy.normalizeKeyboardKey('’'), "'")

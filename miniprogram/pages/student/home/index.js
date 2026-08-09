@@ -278,7 +278,7 @@ Page({
             return
         }
         wx.navigateTo({
-            url: '/pages/student/dictation/review/index'
+            url: '/pages/student/vocabulary-review/index'
         })
     },
 
@@ -287,10 +287,10 @@ Page({
             this.setData({ reviewDueCount: 0 })
             return
         }
-        request('/dictation/review/summary')
+        request('/miniprogram/student/vocabulary-review/summary')
             .then((res) => {
                 if (res && res.ok) {
-                    this.setData({ reviewDueCount: res.due_count || 0 })
+                    this.setData({ reviewDueCount: res.review_due_count != null ? res.review_due_count : (res.due_count || 0) })
                 } else {
                     this.setData({ reviewDueCount: 0 })
                 }
@@ -527,6 +527,7 @@ Page({
                 isDone: t.status === 'completed' || t.status === 'submitted',
                 dictationBookId: t.dictation_book_id,
                 dictationMode: t.dictation_mode || '',
+                vocabularyGoal: t.vocabulary_goal || t.learning_goal || '',
                 speakingBookId: t.speaking_book_id,
                 materialType: t.material_type || null,
                 materialId: t.material_id || null,
@@ -616,6 +617,10 @@ Page({
         }
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.vocabularyGoal) {
+            wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
+            return
+        }
         if (this.openListeningTask(taskId, task)) return
         if (this.openReadingTask(task)) return
         if (this.openSpellingTask(taskId, task)) return
@@ -733,6 +738,10 @@ Page({
 
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.vocabularyGoal) {
+            wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
+            return
+        }
         if (this.openListeningTask(taskId, task)) return
         if (this.openReadingTask(task)) return
 

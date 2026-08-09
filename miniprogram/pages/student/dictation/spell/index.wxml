@@ -41,6 +41,7 @@
 
     <view class="growth-progress" aria-label="本组进度 {{completedCount + 1}} / {{totalWords}}">
       <view class="progress-count">{{completedCount + 1}}/{{totalWords}}</view>
+      <view class="correction-round-label" wx:if="{{isCorrectionRound}}">错词纠正 · 本轮后进入后续复习</view>
       <view class="progress-path">
         <view class="path-endpoint path-start">
           <image class="path-icon" src="/images/icons/check-outline.svg" mode="aspectFit"/>

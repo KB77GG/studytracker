@@ -3,10 +3,12 @@
 > 本文件是“防止代码变屎山”的硬约定。**任何人或 AI agent 在本仓库写代码前，先读这里。**
 > 详细架构地图见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
-## 跨机器进度同步（多台电脑开发）
+## 跨账号 / 跨任务 / 跨机器进度同步
 
-- **每次会话开工时，先读 [docs/WORKLOG.md](docs/WORKLOG.md)**——最近干了什么、生产现场状态、下一步待办都在那里（本地记忆不跨机器，git 才是同步载体）。
-- 有实质进展的会话**结束时向 WORKLOG.md 顶部追加一条**并随代码一起提交；git 之外的状态（生产库操作、服务器手动步骤）必须记进去。
+- **每次会话开工时，先读 [docs/CODEX_HANDOFF.md](docs/CODEX_HANDOFF.md) 和 [docs/WORKLOG.md](docs/WORKLOG.md)**，再核对当前 worktree、分支、HEAD 与脏状态。聊天记录或某个账号的记忆不跨账号可靠共享，不能作为唯一事实源。
+- **每个项目任务结束前必须做交接审计。** 有实质进展、验证结论、部署/外部状态、阻塞项或下一步变化时，更新 `CODEX_HANDOFF.md` 的当前事实，并向 `WORKLOG.md` 顶部追加一条简短记录；没有变化时也要确认现有交接仍准确。
+- `CODEX_HANDOFF.md` 负责可直接接手的当前基线、精确验证、发布状态和下一步；`WORKLOG.md` 只保留简短时间线。生产库操作、服务器手动步骤、小程序上传/提审/发布等 Git 之外的状态必须写清。
+- 同一 macOS 用户下的另一个 Codex 账号可读取本机文件，但另一台电脑只能通过已 commit 并 push 的内容接续。未获用户明确授权时不得为了交接自行 commit、push 或部署；必须在交接中标明哪些内容仍仅本机可见。
 - 题库导入类操作照 [docs/IMPORT_PIPELINES.md](docs/IMPORT_PIPELINES.md) 手册执行。
 
 ## 项目是什么

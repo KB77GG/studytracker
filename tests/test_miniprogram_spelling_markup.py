@@ -10,6 +10,12 @@ class DictationSpellingMarkupTest(unittest.TestCase):
         "pages/student/dictation/spell/index",
         "pages/student/dictation/practice/index",
         "pages/student/dictation/review/index",
+        "pages/student/vocabulary-review/index",
+        "pages/student/vocabulary-learning/index",
+    }
+    INPUT_SWITCHER_PAGE_ROOTS = WORD_TASK_PAGE_ROOTS - {
+        "pages/student/vocabulary-review/index",
+        "pages/student/vocabulary-learning/index",
     }
 
     def read(self, relative):
@@ -29,6 +35,9 @@ class DictationSpellingMarkupTest(unittest.TestCase):
             self.assertIn(f'bindtap="{event}"', markup)
             self.assertIn(f"triggerEvent('{event.removeprefix('emit').lower()}", component)
         self.assertIn("answerSeparators", component)
+        self.assertIn("NUMBER_ROW", component)
+        self.assertIn("'é'", component)
+        self.assertIn('wx:for="{{numberRow}}"', markup)
         self.assertIn("showValue", component)
         self.assertNotIn("showReplay", component)
         self.assertNotIn("emitReplay", component)
@@ -53,8 +62,20 @@ class DictationSpellingMarkupTest(unittest.TestCase):
 
         practice = self.read("pages/student/dictation/practice/index.wxml")
         self.assertIn("!isEnglishSpelling || inputMode === 'compatible'", practice)
+        self.assertIn('safe-separators="{{currentWord.answer_separators}}"', practice)
+        self.assertIn('wx:if="{{!vocabularyV2}}" class="mini-btn"', practice)
         review = self.read("pages/student/dictation/review/index.wxml")
         self.assertIn("!isEnglishSpelling || inputMode === 'compatible'", review)
+        autonomous = self.read("pages/student/vocabulary-review/index.wxml")
+        self.assertIn("english-keyboard", autonomous)
+        self.assertNotIn("input-mode-switcher", autonomous)
+        self.assertIn("!isEnglishSpelling", autonomous)
+        self.assertIn(
+            'safe-separators="{{currentItem.answer_separators}}"',
+            autonomous,
+        )
+        self.assertIn("currentItem.question.prompt.target_word", autonomous)
+        self.assertIn("currentItem.question.prompt.translation", autonomous)
 
     def test_wrong_answer_paths_keep_answer_hidden_until_skip(self):
         for relative in (
@@ -173,7 +194,7 @@ class DictationSpellingMarkupTest(unittest.TestCase):
                 switcher_pages.add(page_root)
 
         self.assertEqual(keyboard_pages, self.WORD_TASK_PAGE_ROOTS)
-        self.assertEqual(switcher_pages, self.WORD_TASK_PAGE_ROOTS)
+        self.assertEqual(switcher_pages, self.INPUT_SWITCHER_PAGE_ROOTS)
 
     def test_policy_behavior_is_not_referenced_by_reading_listening_or_global_code(self):
         forbidden_tokens = (
@@ -212,6 +233,21 @@ class DictationSpellingMarkupTest(unittest.TestCase):
             if "dictation-input-policy.js" in source:
                 policy_pages.add(path.relative_to(MINI).with_suffix("").as_posix())
         self.assertEqual(policy_pages, self.WORD_TASK_PAGE_ROOTS)
+
+    def test_autonomous_review_keeps_server_gate_and_local_return_target(self):
+        source = self.read("pages/student/vocabulary-review/index.js")
+        practice = self.read("pages/student/dictation/practice/index.js")
+        spell = self.read("pages/student/dictation/spell/index.js")
+        self.assertIn("isEnglishSpellingMode", source)
+        self.assertIn("resolveAudioUrl", source)
+        self.assertIn("if (this.returnTaskId)", source)
+        self.assertNotIn(
+            "res.origin_task_id || this.data.originTaskId",
+            source,
+        )
+        self.assertIn("firstUnanswered", source)
+        self.assertIn("vocabulary_review_required", practice)
+        self.assertIn("vocabulary_review_required", spell)
 
     def test_teacher_grant_entry_is_word_task_scoped(self):
         grant_pages = set()

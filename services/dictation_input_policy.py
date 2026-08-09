@@ -23,6 +23,7 @@ MODE_AUDIO_TO_EN = "audio_to_en"
 MODE_ZH_TO_EN = "zh_to_en"
 MODE_SPELLING_DRILL = "spelling_drill"
 MODE_EN_TO_ZH = "en_to_zh"
+MODE_CONTEXT_FILL = "context_fill"
 
 INPUT_STRICT = "strict"
 INPUT_COMPATIBLE = "compatible"
@@ -34,6 +35,7 @@ WORD_TASK_ENGLISH_MODES = {
     MODE_AUDIO_TO_EN,
     MODE_ZH_TO_EN,
     MODE_SPELLING_DRILL,
+    MODE_CONTEXT_FILL,
 }
 
 AUTHORIZED_GRANT_DAYS = {7, 30}

@@ -28,8 +28,11 @@ const {
     isEnglishSpellingMode,
     normalizeKeyboardKey
 } = require('../../../../utils/dictation-input-policy.js')
+const {
+    isCorrectionWord,
+    resolveWrongAnswer
+} = require('../../../../utils/dictation-spell-queue.js')
 
-const REINSERT_GAP = 3
 const FIXED_SPELL_CHARS = "-‐‑‒–—'’‘`´.,，。.!！？?；;：:()（）[]{}<>/\\|_+*=~@#$%^&\""
 
 function buildDiff(inputValue, answerValue) {
@@ -194,7 +197,8 @@ Page({
         queueToken: '',
         assignedCount: 0,
         reviewCount: 0,
-        appealSubmitted: false
+        appealSubmitted: false,
+        isCorrectionRound: false
     },
 
     onLoad(options) {
@@ -214,6 +218,7 @@ Page({
         this.firstAttemptSent = {}
         this.firstAnswerInFlightKey = null
         this.wordAdvanceLocked = false
+        this.reviewDone = String(options.reviewDone || '') === '1'
         this.attemptRunStorageKey = options.taskId
             ? null
             : buildRunStorageKey(options.mode === 'review' ? 'review' : `book-${options.id || 'unknown'}`)
@@ -303,6 +308,40 @@ Page({
                     return
                 }
                 const task = res.task
+                if (task.vocabulary_goal) {
+                    request(`/miniprogram/student/tasks/${taskId}/vocabulary-review/preflight`)
+                        .then((gate) => {
+                            if (!gate || !gate.ok) {
+                                wx.hideLoading()
+                                wx.showToast({ title: '复习检查失败', icon: 'none' })
+                                return
+                            }
+                            if (gate && gate.required) {
+                                wx.hideLoading()
+                                wx.redirectTo({
+                                    url: `/pages/student/vocabulary-review/index?returnTaskId=${taskId}`
+                                })
+                                return
+                            }
+                            this.reviewDone = true
+                            wx.hideLoading()
+                            wx.redirectTo({ url: `/pages/student/vocabulary-learning/index?taskId=${taskId}` })
+                        })
+                        .catch(() => {
+                            wx.hideLoading()
+                            wx.showToast({ title: '复习检查失败', icon: 'none' })
+                        })
+                    return
+                }
+                this.setTaskAndLoadQueue(taskId, task)
+            })
+            .catch(() => {
+                wx.hideLoading()
+                wx.showToast({ title: '网络错误', icon: 'none' })
+            })
+    },
+
+    setTaskAndLoadQueue(taskId, task) {
                 this.setData({
                     bookTitle: task.task_name || '强化拼写',
                     bookId: task.dictation_book_id,
@@ -311,17 +350,18 @@ Page({
                     dictationOrder: task.dictation_order || 'sequence'
                 })
                 this.fetchTaskQueue(taskId)
-            })
-            .catch(() => {
-                wx.hideLoading()
-                wx.showToast({ title: '网络错误', icon: 'none' })
-            })
     },
 
     fetchTaskQueue(taskId) {
         request(`/miniprogram/student/tasks/${taskId}/dictation-queue`)
             .then((res) => {
                 wx.hideLoading()
+                if (res && res.error === 'vocabulary_review_required') {
+                    wx.redirectTo({
+                        url: `/pages/student/vocabulary-review/index?returnTaskId=${taskId}`
+                    })
+                    return
+                }
                 if (!res || !res.ok) {
                     wx.showToast({ title: '加载合并队列失败', icon: 'none' })
                     return
@@ -530,13 +570,11 @@ Page({
             resultRevealed: false,
             displayWord: word.syllables || word.word,
             diffTop: recoveredFirst ? buildDiff(recoveredFirst.answer, word.word) : [],
-            appealSubmitted: false
+            appealSubmitted: false,
+            isCorrectionRound: isCorrectionWord(word)
         }
         if (recoveredFirst && !recoveredFirst.correct) {
-            const tail = nextQueue.slice(1)
-            const insertAt = Math.min(REINSERT_GAP, tail.length)
-            tail.splice(insertAt, 0, Object.assign({}, word))
-            nextState.queue = [word].concat(tail)
+            nextState.queue = resolveWrongAnswer(nextQueue, word).queue
         }
         this.setData(nextState, () => {
             if (onReady) onReady()
@@ -593,7 +631,9 @@ Page({
 
         const isCorrect = isEnglishAnswerCorrect(raw, word)
         const key = word._originIndex
-        if (!this.firstAttempts[key]) {
+        const recordedFirst = this.firstAttempts[key]
+            || firstAttemptForWord(this.firstAttempts, word)
+        if (!recordedFirst) {
             if (this.firstAnswerInFlightKey === key) return
             this.firstAnswerInFlightKey = key
             this.setData({ isCheckingFirstAnswer: true })
@@ -650,8 +690,16 @@ Page({
             return
         }
 
-        this.reinsertCurrentWord()
+        const transition = resolveWrongAnswer(this.data.queue, word)
+        let nextCompleted = this.data.completedCount
+        if (transition.completeCurrent && !this.completedMap[key]) {
+            this.completedMap[key] = true
+            nextCompleted += 1
+        }
         this.setData({
+            queue: transition.queue,
+            completedCount: nextCompleted,
+            progressDots: buildProgressDots(this.data.totalWords, nextCompleted),
             showResult: true,
             resultCorrect: false,
             resultRevealed: false,
@@ -735,15 +783,6 @@ Page({
             clearTimeout(this.autoAdvanceTimer)
             this.autoAdvanceTimer = null
         }
-    },
-
-    reinsertCurrentWord() {
-        const queue = this.data.queue.slice()
-        const current = queue[0]
-        const tail = queue.slice(1)
-        const insertAt = Math.min(REINSERT_GAP, tail.length)
-        tail.splice(insertAt, 0, Object.assign({}, current))
-        this.setData({ queue: [current].concat(tail) })
     },
 
     nextAfterResult() {

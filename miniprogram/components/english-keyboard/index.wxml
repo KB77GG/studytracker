@@ -14,6 +14,20 @@
   </view>
 
   <block wx:if="{{!showWrongActions && !showNext}}">
+  <view class="key-row number-row">
+    <button
+      wx:for="{{numberRow}}"
+      wx:key="*this"
+      class="letter-key {{disabled ? 'is-disabled' : ''}}"
+      data-key="{{item}}"
+      aria-label="{{item}}"
+      aria-disabled="{{disabled}}"
+      hover-class="letter-key-pressed"
+      hover-start-time="0"
+      hover-stay-time="80"
+      bindtap="emitKey"
+    ><text class="key-label">{{item}}</text></button>
+  </view>
   <view class="key-row key-row-{{index}}" wx:for="{{letterRows}}" wx:key="index">
     <button
       wx:for="{{item}}"

@@ -53,6 +53,11 @@ from api.practice_catalog import (
 )
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
+from services.vocabulary_mastery import (
+    default_course_system_for_book_id,
+    default_goal_for_book_id,
+    normalize_goal,
+)
 from services.ielts_practice_scoring import (
     grade_listening_jijing_answers as _grade_listening_jijing_answers,
     grade_listening_test_answers as _grade_listening_test_answers_shared,
@@ -576,6 +581,7 @@ def _task_resource_binding(
     reading_test_id=None,
     reading_passage_number=None,
     dictation_book_id=None,
+    vocabulary_goal=None,
     dictation_mode=None,
     dictation_order=None,
     dictation_word_start=None,
@@ -607,6 +613,7 @@ def _task_resource_binding(
         if dictation_order_value not in {"sequence", "random"}:
             dictation_order_value = "sequence"
         metadata = {
+            "vocabulary_goal": vocabulary_goal,
             "dictation_mode": dictation_mode or "audio_to_en",
             "dictation_order": dictation_order_value,
             "dictation_word_start": dictation_word_start or 1,
@@ -646,6 +653,7 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
     if task.dictation_book_id:
         return _task_resource_binding(
             dictation_book_id=task.dictation_book_id,
+            vocabulary_goal=getattr(task, "vocabulary_goal", None),
             dictation_mode=task.dictation_mode,
             dictation_order=getattr(task, "dictation_order", None),
             dictation_word_start=task.dictation_word_start,
@@ -3588,6 +3596,8 @@ def tasks_page():
             grading_mode = "image"
             dictation_mode_raw = (request.form.get("dictation_mode") or "").strip().lower()
             dictation_order_raw = (request.form.get("dictation_order") or "").strip().lower()
+            vocabulary_goal_raw = (request.form.get("vocabulary_goal") or "").strip().lower()
+            vocabulary_goal = normalize_goal(vocabulary_goal_raw)
             dictation_mode = None
             dictation_order = "sequence"
             if material_id:
@@ -3595,6 +3605,14 @@ def tasks_page():
                 if not category:
                     category = "材料练习"
                 if material_id.startswith("dictation-"):
+                    book_default_goal = (
+                        getattr(dictation_book_data, "default_vocabulary_goal", None)
+                        or default_goal_for_book_id(dictation_book_data.id if dictation_book_data else None)
+                    )
+                    vocabulary_goal = normalize_goal(vocabulary_goal_raw or book_default_goal)
+                    if not vocabulary_goal:
+                        flash("学习目标无效，请重新选择")
+                        return redirect(url_for("tasks_page"))
                     dictation_mode = (
                         dictation_mode_raw
                         if dictation_mode_raw in VALID_DICTATION_MODES
@@ -3626,6 +3644,7 @@ def tasks_page():
                 reading_test_id=reading_test_id or None,
                 reading_passage_number=reading_passage_number,
                 dictation_book_id=dictation_task_book_id,
+                vocabulary_goal=vocabulary_goal,
                 dictation_mode=dictation_mode,
                 dictation_order=dictation_order,
                 dictation_word_start=dictation_task_start,
@@ -3666,6 +3685,7 @@ def tasks_page():
                 material_id=material_task_id,
                 question_ids=question_ids,
                 dictation_book_id=dictation_task_book_id,
+                vocabulary_goal=vocabulary_goal,
                 dictation_mode=dictation_mode,
                 dictation_order=dictation_order,
                 dictation_word_start=dictation_task_start,
@@ -3684,7 +3704,10 @@ def tasks_page():
             db.session.add(t)
             db.session.commit()
             # Warm dictation TTS cache for this book so the student's first play is fast.
-            if dictation_task_book_id:
+            if dictation_task_book_id and (
+                not vocabulary_goal
+                or vocabulary_goal in {"listening", "comprehensive"}
+            ):
                 try:
                     _schedule_dictation_prewarm(dictation_task_book_id)
                 except Exception as exc:
@@ -3895,7 +3918,11 @@ def tasks_page():
             "title": book.title,
             "type": "听写词库",
             "question_count": f"{book.word_count}词",
-            "book_type": book.book_type or "dictation"
+            "book_type": book.book_type or "dictation",
+            "vocabulary_goal": getattr(book, "default_vocabulary_goal", None)
+            or default_goal_for_book_id(book.id),
+            "course_system": getattr(book, "course_system", None)
+            or default_course_system_for_book_id(book.id),
         })
 
     # Add Speaking Books to material dropdown

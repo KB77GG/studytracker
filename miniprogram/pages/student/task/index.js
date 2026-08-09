@@ -37,6 +37,7 @@ Page({
     },
 
     onLoad(options) {
+        this.reviewDone = String((options || {}).reviewDone || '') === '1'
         this.setData({ taskId: parseInt(options.id) })
         this.fetchTaskDetail()
         this.setupRecorder()
@@ -126,6 +127,29 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
+                if (res.task.vocabulary_goal) {
+                    const gate = await request(
+                        `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-review/preflight`
+                    )
+                    if (!gate || !gate.ok) {
+                        throw new Error((gate && gate.error) || 'vocabulary_review_preflight_failed')
+                    }
+                    if (gate && gate.required) {
+                        wx.hideLoading()
+                        wx.redirectTo({
+                            url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}`
+                        })
+                        return
+                    }
+                    // Opt-in vocabulary v2 tasks use the server-owned group
+                    // chain. Legacy vocabulary_goal=NULL tasks continue below
+                    // on their existing dictation/material routes.
+                    wx.hideLoading()
+                    wx.redirectTo({
+                        url: `/pages/student/vocabulary-learning/index?taskId=${this.data.taskId}`
+                    })
+                    return
+                }
                 const dictationMode = String(res.task.dictation_mode || '').trim().toLowerCase()
                 if (res.task.dictation_book_id && dictationMode === MODE_SPELLING_DRILL) {
                     wx.redirectTo({

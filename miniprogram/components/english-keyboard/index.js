@@ -3,12 +3,17 @@ const { answerSeparators } = require('../../utils/dictation-input-policy.js')
 const LETTER_ROWS = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+    // The mapped production catalog currently contains the English loanword
+    // “fiancé”. Keep its required character available without falling back
+    // to a predictive/native keyboard.
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'é']
 ]
+const NUMBER_ROW = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
 Component({
     properties: {
         answer: { type: String, value: '' },
+        safeSeparators: { type: Array, value: null },
         value: { type: String, value: '' },
         status: { type: String, value: 'idle' },
         showValue: { type: Boolean, value: true },
@@ -20,12 +25,20 @@ Component({
 
     data: {
         letterRows: LETTER_ROWS,
+        numberRow: NUMBER_ROW,
         separators: []
     },
 
     observers: {
         answer(answer) {
-            this.setData({ separators: answerSeparators(answer) })
+            if (!Array.isArray(this.data.safeSeparators)) {
+                this.setData({ separators: answerSeparators(answer) })
+            }
+        },
+        safeSeparators(value) {
+            this.setData({
+                separators: Array.isArray(value) ? answerSeparators(value.join('')) : answerSeparators(this.data.answer)
+            })
         }
     },
 

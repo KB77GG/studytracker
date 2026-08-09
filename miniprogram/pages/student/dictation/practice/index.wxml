@@ -145,14 +145,29 @@
     <block wx:if="{{!finished}}">
       <!-- Word Card -->
       <view class="word-card test-word-card {{!showResult ? 'prompt-state' : 'result-state'}}">
+        <!-- Context question -->
+        <block wx:if="{{currentMode === 'context_choice' || currentMode === 'context_fill'}}">
+          <view class="translation-prompt context-prompt">
+            <text class="translation-hint">{{currentWord.question.prompt.instruction}}</text>
+            <text class="example-en context-sentence" wx:if="{{currentWord.question.prompt.sentence}}">{{currentWord.question.prompt.sentence}}</text>
+            <text class="translation-hint" wx:if="{{currentWord.question.prompt.translation}}">{{currentWord.question.prompt.translation}}</text>
+            <text class="translation-hint" wx:if="{{currentWord.question.prompt.target_word}}">目标词：{{currentWord.question.prompt.target_word}}</text>
+          </view>
+        </block>
+        <!-- Audio -> Chinese -->
+        <block wx:elif="{{currentMode === 'audio_to_zh'}}">
+          <view class="play-btn" bindtap="replayCurrentWord" hover-class="btn-hover"><view class="play-icon"></view></view>
+          <view class="play-hint">听音回忆中文释义</view>
+          <view class="play-controls"><button class="mini-btn" size="mini" bindtap="replayCurrentWord">重播</button></view>
+        </block>
         <!-- Chinese -> English -->
-        <block wx:if="{{currentMode === 'zh_to_en'}}">
+        <block wx:elif="{{currentMode === 'zh_to_en'}}">
           <view class="translation-prompt">
             <text class="translation-chinese">{{currentWord.translation || ''}}</text>
             <text class="translation-hint">请写出对应的英文表达</text>
           </view>
           <view class="play-controls">
-            <button class="mini-btn" size="mini" bindtap="replayCurrentWord">重播发音</button>
+            <button wx:if="{{!vocabularyV2}}" class="mini-btn" size="mini" bindtap="replayCurrentWord">重播发音</button>
           </view>
         </block>
         <!-- English -> Chinese -->
@@ -167,7 +182,7 @@
           </view>
         </block>
         <!-- Audio dictation -->
-        <block wx:else>
+        <block wx:elif="{{currentMode === 'audio_to_en'}}">
           <view class="play-btn" bindtap="replayCurrentWord" hover-class="btn-hover">
             <view class="play-icon"></view>
           </view>
@@ -189,10 +204,16 @@
           />
         </view>
 
+        <view class="context-options" wx:if="{{!showResult && currentMode === 'context_choice'}}">
+          <button wx:for="{{currentWord.question.options}}" wx:key="id"
+                  class="context-option {{selectedOptionId === item.id ? 'selected' : ''}}"
+                  data-option-id="{{item.id}}" bindtap="selectContextOption">{{item.label}}</button>
+        </view>
+
         <!-- Input Area (English strict mode has no native input at all.) -->
-        <view class="input-area" wx:if="{{!showResult && (!isEnglishSpelling || inputMode === 'compatible')}}">
+        <view class="input-area" wx:if="{{!showResult && currentMode !== 'context_choice' && (!isEnglishSpelling || inputMode === 'compatible')}}">
           <input class="word-input {{inputError ? 'incorrect' : ''}}"
-                 placeholder="{{currentMode === 'en_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : '听音输入单词')}}"
+                 placeholder="{{currentMode === 'en_to_zh' || currentMode === 'audio_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : (currentMode === 'context_fill' ? '填写目标词' : '听音输入单词'))}}"
                  focus="{{inputFocus}}"
                  value="{{inputValue}}"
                  disabled="{{isCheckingFirstAnswer}}"
@@ -211,7 +232,7 @@
           <view class="compare-block">
             <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
             <view class="wrong-guidance">可以重新拼写，或暂时跳过后查看正确拼写。</view>
-            <button wx:if="{{!isCorrect}}"
+          <button wx:if="{{!isCorrect && currentMode !== 'context_choice'}}"
                     class="answer-appeal-btn"
                     disabled="{{appealSubmitted}}"
                     bindtap="submitAnswerAppeal">
@@ -255,8 +276,8 @@
 
           <view class="compare-block">
             <view class="answer-row wrong">你的答案：{{userAnswer || '（空）'}}</view>
-            <view class="answer-row correct">参考答案：{{currentMode === 'en_to_zh' ? (currentWord.translation || '暂无释义') : currentWord.word}}</view>
-            <button wx:if="{{!isCorrect}}"
+            <view class="answer-row correct">参考答案：{{revealedAnswer || (currentMode === 'en_to_zh' || currentMode === 'audio_to_zh' ? (currentWord.translation || '暂无释义') : (currentWord.word || '已记录'))}}</view>
+          <button wx:if="{{!isCorrect && currentMode !== 'context_choice'}}"
                     class="answer-appeal-btn"
                     disabled="{{appealSubmitted}}"
                     bindtap="submitAnswerAppeal">
@@ -270,6 +291,7 @@
       <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && inputMode === 'strict'}}">
         <english-keyboard
           answer="{{currentWord.word || ''}}"
+          safe-separators="{{currentWord.answer_separators}}"
           value="{{inputValue}}"
           status="{{showResult ? (isCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
           can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"

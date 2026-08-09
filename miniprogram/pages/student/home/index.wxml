@@ -41,11 +41,11 @@
     <view class="review-today-card" wx:if="{{reviewDueCount > 0}}" bindtap="goReviewToday">
       <view class="review-today-left">
         <view class="review-today-title">今日复习</view>
-        <view class="review-today-desc">基于艾宾浩斯曲线，复盘到期单词</view>
+        <view class="review-today-desc">按间隔提取计划，完成到期训练</view>
       </view>
       <view class="review-today-right">
         <text class="review-today-num">{{reviewDueCount}}</text>
-        <text class="review-today-unit">词</text>
+        <text class="review-today-unit">项</text>
         <text class="review-today-arrow">›</text>
       </view>
     </view>

@@ -554,6 +554,8 @@ def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, du
         item.resource_id = f"dictation_book:{task.dictation_book_id}"
         item.resource_metadata = json.dumps(
             {
+                "vocabulary_goal": getattr(task, "vocabulary_goal", None),
+                "learning_goal": getattr(task, "vocabulary_goal", None),
                 "dictation_mode": getattr(task, "dictation_mode", None) or "audio_to_en",
                 "dictation_order": _resolve_task_dictation_order(task),
                 "dictation_word_start": getattr(task, "dictation_word_start", None) or 1,
@@ -1708,6 +1710,8 @@ def get_student_today_tasks():
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
             "dictation_book_type": dictation_book_type,
+            "vocabulary_goal": getattr(task, "vocabulary_goal", None),
+            "learning_goal": getattr(task, "vocabulary_goal", None),
             "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
             "dictation_order": _resolve_task_dictation_order(task),
             "dictation_word_start": task.dictation_word_start,
@@ -1836,6 +1840,8 @@ def get_task_detail(task_id):
                 # Dictation Info
                 "dictation_book_id": task.dictation_book_id,
                 "dictation_book_type": dictation_book_type,
+                "vocabulary_goal": getattr(task, "vocabulary_goal", None),
+                "learning_goal": getattr(task, "vocabulary_goal", None),
                 "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
                 "dictation_order": _resolve_task_dictation_order(task),
                 "dictation_word_start": task.dictation_word_start,
@@ -2417,9 +2423,37 @@ def submit_task(task_id):
     user = request.current_api_user
     data = request.get_json(silent=True) or {}
 
-    # New dictation clients submit only a queue token and answer ids.  The
-    # server computes the merged score from persisted first answers; the old
-    # client path below remains unchanged for compatibility.
+    # Vocabulary v2 has its own four-dimension snapshot/settlement service.
+    # It is selected only by an explicit task vocabulary_goal; all old tasks
+    # retain the existing strict dictation path below.
+    from services.vocabulary_group_learning import (
+        VocabularyGroupLearningError,
+        finalize_vocabulary_group_task,
+    )
+    from services.vocabulary_mastery import is_vocabulary_v2_task
+    current_task = Task.query.get(task_id)
+    if is_vocabulary_v2_task(current_task):
+        try:
+            result = finalize_vocabulary_group_task(user, task_id, data)
+        except VocabularyGroupLearningError as error:
+            db.session.rollback()
+            payload = {"ok": False, "error": error.error}
+            payload.update(error.details)
+            return jsonify(payload), error.status_code
+        task = Task.query.get(task_id)
+        if task:
+            _sync_plan_item_from_legacy_task(
+                task,
+                note=data.get("note"),
+                evidence_files=data.get("evidence_files", []),
+                duration=data.get("duration_seconds", 0),
+            )
+        db.session.commit()
+        return jsonify(result)
+
+    # New legacy dictation clients submit only a queue token and answer ids.
+    # The server computes the merged score from persisted first answers; the
+    # old client path remains unchanged for compatibility.
     if data.get("strict_queue"):
         from services.dictation_review import DictationReviewError, finalize_strict_task
 

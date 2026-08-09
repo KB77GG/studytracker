@@ -75,6 +75,10 @@ function firstAttemptStateFromQueueItem(item) {
     return {
         correct: item.first_is_correct === true,
         answer: item.first_answer == null ? '' : String(item.first_answer),
+        revealedAnswer: item.revealed_answer == null ? '' : String(item.revealed_answer),
+        revealedAnswerOptionId: item.revealed_answer_option_id == null
+            ? ''
+            : String(item.revealed_answer_option_id),
         attemptId: String(item.first_attempt_id),
         idempotent: true,
         recovered: true
@@ -101,20 +105,22 @@ function firstAttemptForWord(states, word) {
 
 function missingQueueItems(response, queue) {
     if (!response || response.error !== 'queue_incomplete') return []
-    const missingIds = Array.isArray(response.missing_word_ids)
+    const isWordIdResponse = Array.isArray(response.missing_word_ids)
+    const missingIds = isWordIdResponse
         ? response.missing_word_ids
-        : []
+        : (Array.isArray(response.missing_queue_item_ids) ? response.missing_queue_item_ids : [])
     const items = Array.isArray(queue) ? queue : []
-    const byWordId = new Map(items.map(item => [
-        String(item && (item.word_id || item.id) || ''),
+    const lookup = new Map(items.map(item => [
+        String(item && (isWordIdResponse ? (item.word_id || item.id) : item.queue_item_id) || ''),
         item
     ]))
     const seen = new Set()
-    return missingIds.reduce((result, wordId) => {
-        const key = String(wordId || '')
-        const item = byWordId.get(key)
-        if (item && !seen.has(key)) {
-            seen.add(key)
+    return missingIds.reduce((result, missingId) => {
+        const key = String(missingId || '')
+        const item = lookup.get(key)
+        const itemKey = String(item && (item.queue_item_id || item.word_id || item.id) || '')
+        if (item && !seen.has(itemKey)) {
+            seen.add(itemKey)
             result.push(item)
         }
         return result

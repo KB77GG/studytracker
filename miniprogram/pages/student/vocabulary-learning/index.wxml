@@ -1,0 +1,122 @@
+<view class="learning-page">
+  <view class="loading" wx:if="{{loading}}">加载小组学习…</view>
+
+  <view class="error-panel" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="secondary-btn" bindtap="retry">重试</button>
+  </view>
+
+  <view class="summary-panel" wx:elif="{{finished}}">
+    <text class="summary-title">词汇任务完成</text>
+    <text class="summary-score">{{result.correct_count}} / {{result.total_count}}</text>
+    <text class="summary-copy">首答正确率 {{result.accuracy}}%。重试只用于巩固，不改首答成绩。</text>
+    <text class="summary-copy" wx:if="{{result.skipped_count}}">安全资料不足，已跳过 {{result.skipped_count}} 个不可判分维度。</text>
+    <button class="primary-btn" bindtap="exitPage">返回任务</button>
+  </view>
+
+  <block wx:else>
+    <view class="topbar">
+      <view>
+        <text class="eyebrow">词汇小组学习</text>
+        <text class="group-title">第 {{groupNumber}} / {{groupCount}} 组</text>
+      </view>
+      <text class="word-total">共 {{totalWordCount}} 词</text>
+    </view>
+
+    <view class="phase-strip">
+      <text>当前阶段：{{phaseLabel}}</text>
+      <text wx:if="{{diagnostics.length}}">资料降级 {{diagnostics.length}} 项</text>
+    </view>
+
+    <block wx:if="{{phase === 'familiarity'}}">
+      <view class="card familiarity-card" wx:if="{{familiarity.length}}">
+        <view class="familiarity-progress">
+          <text>组内熟悉 {{familiarityIndex + 1}} / {{familiarity.length}}</text>
+          <text wx:if="{{familiarity[familiarityIndex].viewed}}">已浏览</text>
+        </view>
+        <block wx:if="{{familiarity[familiarityIndex]}}">
+          <text class="familiar-word">{{familiarity[familiarityIndex].word}}</text>
+          <text class="phonetic">{{familiarity[familiarityIndex].phonetic}}</text>
+          <text class="meaning">{{familiarity[familiarityIndex].meaning}}</text>
+          <button class="audio-btn" bindtap="playAudio">▶ 播放发音</button>
+          <text class="material-label" wx:if="{{familiarity[familiarityIndex].usage_pattern}}">必要搭配</text>
+          <text class="material-text" wx:if="{{familiarity[familiarityIndex].usage_pattern}}">{{familiarity[familiarityIndex].usage_pattern}}</text>
+          <text class="material-label" wx:if="{{familiarity[familiarityIndex].example_en}}">例句</text>
+          <text class="material-text" wx:if="{{familiarity[familiarityIndex].example_en}}">{{familiarity[familiarityIndex].example_en}}</text>
+          <text class="material-text translation" wx:if="{{familiarity[familiarityIndex].example_zh}}">{{familiarity[familiarityIndex].example_zh}}</text>
+        </block>
+      </view>
+      <view class="navigation-row">
+        <button class="secondary-btn" bindtap="previousFamiliarity" disabled="{{familiarityIndex === 0}}">上一词</button>
+        <button class="primary-btn" bindtap="nextFamiliarity">{{familiarity[familiarityIndex].viewed ? '下一词' : '看过并继续'}}</button>
+      </view>
+      <text class="hint">熟悉材料只记录浏览，不增加掌握度；整组浏览完成后才开始测试。</text>
+    </block>
+
+    <block wx:elif="{{currentQuestion}}">
+      <view class="card question-card">
+        <text class="question-kind">{{phaseLabel}}</text>
+        <block wx:if="{{currentQuestion.mode === 'en_to_zh'}}">
+          <text class="prompt-word">{{currentQuestion.question.prompt.word}}</text>
+          <text class="mode-copy">看英文 → 写中文释义</text>
+        </block>
+        <block wx:elif="{{currentQuestion.mode === 'zh_to_en'}}">
+          <text class="prompt-meaning">{{currentQuestion.question.prompt.meaning}}</text>
+          <text class="mode-copy">看中文 → 写英文表达</text>
+        </block>
+        <block wx:elif="{{currentQuestion.mode === 'audio_to_en' || currentQuestion.mode === 'audio_to_zh'}}">
+          <button class="audio-btn" bindtap="playAudio">▶ 播放发音</button>
+          <text class="mode-copy">{{currentQuestion.mode === 'audio_to_en' ? '听音 → 写英文表达' : '听音 → 写中文释义'}}</text>
+        </block>
+        <block wx:elif="{{currentQuestion.mode === 'context_choice'}}">
+          <text class="prompt-copy">{{currentQuestion.question.prompt.instruction}}</text>
+          <text class="target-word" wx:if="{{currentQuestion.question.prompt.target_word}}">目标词：{{currentQuestion.question.prompt.target_word}}</text>
+          <text class="sentence" wx:if="{{currentQuestion.question.prompt.sentence}}">{{currentQuestion.question.prompt.sentence}}</text>
+          <view class="options">
+            <view wx:for="{{currentQuestion.question.options}}" wx:key="id"
+                  class="option {{selectedOption === item.id ? 'selected' : ''}}"
+                  bindtap="selectOption" data-id="{{item.id}}">{{item.label}}</view>
+          </view>
+        </block>
+        <block wx:elif="{{currentQuestion.mode === 'context_fill'}}">
+          <text class="prompt-copy">{{currentQuestion.question.prompt.instruction}}</text>
+          <text class="sentence">{{currentQuestion.question.prompt.sentence}}</text>
+          <view class="translation-block" wx:if="{{currentQuestion.question.prompt.translation}}">
+            <text class="translation-label">{{currentQuestion.question.prompt.translation_label || '中文提示'}}</text>
+            <text class="translation">{{currentQuestion.question.prompt.translation}}</text>
+          </view>
+        </block>
+
+        <input wx:if="{{!showResult && !isEnglishSpelling && currentQuestion.mode !== 'context_choice'}}"
+               class="answer-input" value="{{inputValue}}" bindinput="onInput"
+               bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
+        <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
+          <text>{{isCorrect ? '✓ 答对了' : '✗ 首答需要加强'}}</text>
+          <text class="result-line">你的答案：{{submittedAnswer}}</text>
+          <text class="result-line">正确答案：{{correctAnswer}}</text>
+        </view>
+      </view>
+
+      <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling}}">
+        <english-keyboard
+          answer=""
+          safe-separators="{{currentQuestion.answer_separators}}"
+          value="{{inputValue}}"
+          status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
+          can-confirm="{{!!inputValue && !submitting}}"
+          show-wrong-actions="{{false}}"
+          show-next="{{showResult}}"
+          disabled="{{submitting || finishing}}"
+          bind:key="onKeyboardKey"
+          bind:backspace="onKeyboardBackspace"
+          bind:confirm="submitAnswer"
+          bind:next="submitAnswer"
+        />
+      </view>
+      <button wx:if="{{!isEnglishSpelling}}" class="primary-btn answer-btn" bindtap="submitAnswer" disabled="{{submitting || finishing}}">
+        {{showResult ? '下一题' : (submitting ? '提交中…' : '提交答案')}}
+      </button>
+      <text class="hint" wx:if="{{phase === 'retry'}}">错题至少完成一次纠正性重试；再次答错也不会无限循环。</text>
+    </block>
+  </block>
+</view>

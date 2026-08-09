@@ -1266,3 +1266,14 @@ def ensure_incremental_schema(engine, logger=None, now: datetime | None = None) 
 
     # Intentionally no backfill: rows created before the explicit collection
     # cutoff have a NULL activation marker and can never be auto-claimed.
+
+    # The four-dimension vocabulary flow is a separate opt-in compatibility
+    # layer. Keep its schema migration adjacent to the existing startup hook,
+    # but do not infer a v2 task from any legacy row.
+    try:
+        from services.vocabulary_mastery import ensure_vocabulary_schema
+
+        ensure_vocabulary_schema(engine, logger=logger)
+    except Exception as exc:  # pragma: no cover - startup must remain resilient
+        if logger:
+            logger.warning("Failed to ensure vocabulary v2 schema: %s", exc)

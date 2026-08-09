@@ -80,7 +80,7 @@
 
     <view class="login-section" wx:if="{{!hasToken && showLoginForm}}">
       <view class="auth-head">
-        <button class="auth-back" bindtap="backToWelcome">返回</button>
+        <button class="auth-back" size="mini" bindtap="backToWelcome">返回</button>
         <text class="auth-kicker">账号登录</text>
       </view>
       <text class="section-title auth-title">欢迎回来</text>
