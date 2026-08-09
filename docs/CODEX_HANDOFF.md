@@ -13,9 +13,13 @@
   `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/pytest -q --ignore=tests/test_static_audio_headers.py`
   为 `472 passed, 7 subtests passed`，只有既有 SQLAlchemy/UTC 弃用警告；旧强化拼写 50 词门禁包含在 Node 全量中。
   微信开发者工具仍为 0 errors / 0 code problems。模拟器登录态失效，真实接口/真机仍必须在发布链路中完成。
-- 当前只允许先推发布分支并运行 CI；不得先更新 `main`。后续顺序保持：发布分支 CI → 上传/提审/发布小程序并确认线上可获取 →
+- 发布分支已推送为 `ba51085a68726a0a7674f557ef914949af3b8619`；CI
+  [31318885765](https://github.com/KB77GG/studytracker/actions/runs/31318885765) 成功，强制 test job（含旧错词 Node 门禁）通过；
+  lint job 仍因仓库存量问题失败但按工作流为 advisory，整体结论为 success。不得先更新 `main`。后续顺序保持：
+  用户在微信开发者工具上传，并在公众平台提审/发布、确认线上可获取 →
   暂停创建新词汇任务 → 备份生产库 → 更新 main 触发后端部署 → 核验迁移/映射/quick-check/5002/进程 → 真实登录学生与真机
-  冒烟 → 恢复任务创建。D+30/D+60 提醒以实际小程序发布日期创建。
+  冒烟 → 恢复任务创建。用户已明确由本人处理小程序上传/提审/发布；完成后需告知实际版本和发布时间。
+  D+30/D+60 提醒以实际小程序发布日期创建。
 
 ## 2026-08-09 旧强化拼写错词无限回插（已修复，发布门禁通过）
 
