@@ -3,12 +3,13 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-10（Asia/Shanghai）。
 
-## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序已发布，后端待部署）
+## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序与后端已发布）
 
 - 工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
-  `codex/vocabulary-v2-release-20260809`，本轮基线/当前未提交前 HEAD 为 `386594064b08`。本轮在已发布热修之上新增答后反馈增强。
+  `codex/vocabulary-v2-release-20260809`，本轮基线为 `386594064b08`。本轮在已发布热修之上新增答后反馈增强。
   用户已于 2026-08-10 晚间从正确 worktree 手动上传并发布本轮小程序；语义版本号和微信平台发布时间尚未由 agent 独立读取。
-  对应代码及后端增强仍未 commit、push 或更新 `main`，生产后端仍未部署本轮增量。
+  对应业务提交 `35991ae59064` 已推送发布分支与 `main`，后端已部署到生产。本节最终部署状态的 docs-only 更新会只推送发布分支，
+  避免重复触发 `main` 部署。
 - 新增共享 `vocabulary-feedback-card` 和响应归一化工具。小组学习页在提交成功后用既有平铺响应显示目标词、音节、音标、核心义、
   必要搭配、双语例句和可选用法提醒，并可重播发音；切题/刷新队列时清空旧反馈。自主复习服务只在答后响应和
   `first_attempt_id` 已存在的恢复分支返回同结构 `answer_feedback`，未答公开题面和同批其他未答项不携带该字段，避免
@@ -24,15 +25,17 @@
   CTA，最终编译 `Errors: 0`；当前提示均为基础库/既有 WXSS 规则警告。设计对照记录为
   `/Users/zhouxin/.codex/worktrees/9478/studytracker/design-qa.md`，`final result: passed`；对照图保存在
   `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/`。
-- 当前业务改动涉及两个词汇页各自的 JS/JSON/WXML/WXSS、共享反馈组件/工具、
-  `services/vocabulary_autonomous_review.py`、三个测试文件；交接与 QA 文件也为未提交修改。未触及生产数据或生产服务，生产后端仍是
-  `26764e17677f`。截至 21:13 CST 的只读 Nginx 日志仍只见 `/83/` 页面引用，尚未看到新 page-frame 编号，因此“小程序已发布”目前
-  以用户的微信平台操作确认为准，尚无新客户端拉包证据。未验证项为该新卡在真实登录 iPhone/Dynamic Type 下的最终密度、自主复习
-  真实答题/刷新恢复，以及发布包被真机实际拉取；发音播放器本身未改且上一版真机已验收。
-- 用户已明确授权提交、推送并部署后端。下一位 agent 先用 `git status --short --branch` 核对上述改动，重跑门禁后将发布分支快进
-  更新到 `main` 触发部署；本轮后端字段为纯追加、无数据库迁移，旧客户端忽略，新前端在旧后端缺字段时安全隐藏。部署后核验
-  生产 HEAD、CI/deploy、5002、1 worker/gthread/6 threads、错误日志和答后 `answer_feedback` 契约，再用真实学生验收普通小组学习
-  答后卡及今日自主复习的答后/刷新恢复。
+- 发布与生产核验：发布分支 CI [31392897318](https://github.com/KB77GG/studytracker/actions/runs/31392897318)、`main` CI
+  [31392980006](https://github.com/KB77GG/studytracker/actions/runs/31392980006) 和部署
+  [31392980044](https://github.com/KB77GG/studytracker/actions/runs/31392980044) 均为 success；强制测试与旧错词无限回插门禁通过，lint
+  仍只报告仓库存量 advisory。生产 `/root/apps/studytracker` HEAD 为 `35991ae59064`，`studytracker.service` 自 21:28:07 CST 起
+  active/running；根路由为预期 302，监听 `127.0.0.1:5002`，`workers=1`、`gthread`、`threads=6` 且只有 1 个 worker 子进程。
+  部署后 `PRAGMA quick_check=ok`、外键检查无错误，近十分钟服务日志无 Traceback/ERROR/CRITICAL/OOM。本轮无 schema 迁移或主动生产
+  数据写入。
+- 小程序已发布仍以用户平台操作确认为准：截至部署前 21:13 CST 及随后最近 1,500 条 Nginx 日志，最高仍为 `/83/` 页面引用，尚未
+  看到新的 page-frame 编号，因而没有新客户端拉包的独立证据。生产 `vocabulary_review_item` 当前为 0，无法在不制造学生数据的前提下
+  做真实“未答无反馈 → 答后返回 → 刷新恢复”冒烟；自动化已完整覆盖该契约。下一位 agent 不要重复部署，等用户/真实学生打开新包后
+  核验新 page-frame、普通小组学习答后卡、按钮比例，以及首次到期自主复习的答后/刷新恢复；发音播放器本身未改且上一版真机已验收。
 
 ## 2026-08-10 词汇 v2 真机音频 / 输入 / 品牌色热修（已发布并通过真机音频验收）
 
