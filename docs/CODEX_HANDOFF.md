@@ -1,9 +1,43 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-09（Asia/Shanghai）。
+> 最近更新：2026-08-10（Asia/Shanghai）。
 
-## 2026-08-09 词汇 v2 正式发布分支（最新 main，待小程序先发）
+## 2026-08-10 词汇 v2 已正式上线（当前规范状态）
+
+- 发布工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支为
+  `codex/vocabulary-v2-release-20260809`。业务发布 HEAD `21398163fa98a647d66cbf29be8a320a88fd60b4`
+  已快进推送到 `origin/main`；小程序线上版本 `16.0.73` 已由用户于 2026-08-10 10:56:02（Asia/Shanghai）
+  发布。当前业务代码已 commit、已 push、已部署；本节交接更新会作为 docs-only 提交只推送到发布分支，避免再次触发
+  `main` 部署，精确文档 HEAD 以 `git log -1` 为准。
+- 更新 `main` 前已暂停创建新词汇任务，并对生产 `/root/apps/studytracker/app.db` 做 SQLite 在线备份：
+  `/root/apps/studytracker/app.db.bak-20260810-vocabulary-v2`，大小 `64,397,312` bytes，SHA-256
+  `dd5c1ec42c028e3913d54519a9a76aed1e11190b834739b4c69ebab63b6a2854`；备份
+  `PRAGMA quick_check=ok`，含 194 本词书、3,190 个任务、最大任务 ID 3326。备份为生产机本地文件，未同步到 Git，
+  不得把它加入仓库。
+- GitHub `main` CI [31351428148](https://github.com/KB77GG/studytracker/actions/runs/31351428148) 整体 success：
+  强制 test 和旧错词无限回插 Node 门禁通过；lint 仍因仓库存量 Ruff 问题失败但为 advisory。部署
+  [31351428153](https://github.com/KB77GG/studytracker/actions/runs/31351428153) success，部署前同一旧错词门禁通过；
+  生产 `/root/apps/studytracker` HEAD 为 `21398163fa98`，`studytracker.service` 于 11:02:42 重启并保持 active。
+- 生产迁移核验：`PRAGMA quick_check=ok`、`pragma_foreign_key_check` 为 0；历史任务仍为 3,190 条且
+  `vocabulary_goal IS NOT NULL` 为 0，没有把旧任务误升级。10 张词汇 v2 表均已创建且初始业务行数为 0。
+  词书目标共回填 188 本：`reading=127`、`listening=39`、`comprehensive=21`、`writing=1`；课程体系为
+  `IELTS=38`、`TOEFL=129`、`general=21`；ID 174 的目标和课程体系均保持 NULL。生产 gunicorn 仍为
+  `127.0.0.1:5002`、`workers=1`、`worker_class=gthread`、`threads=6`。
+- 生产只读 HTTP 冒烟：`/` 返回预期登录重定向 302；新
+  `/api/miniprogram/student/vocabulary-review/summary` 未带令牌返回预期 `401 missing_token`，证明蓝图已注册。
+  服务重启后，日志中已有真实 Android 微信学生继续取得 input-policy 并成功提交既有听写任务（HTTP 200），未见迁移或应用错误。
+  因生产在上线前没有 v2 任务，尚无法在不制造生产测试数据的前提下走一条真实 v2 新任务；本地/CI 已覆盖完整 v2 状态机，
+  生产迁移、路由、旧任务兼容和真机旧任务均正常，因此创建新词汇任务的暂停可以解除。建议首个真实 v2 任务使用小词量并观察一次
+  `vocabulary-queue`、context 阶段和次日复习。
+- Codex 已创建 active 线程提醒 `d-30`（名称“背单词旧版退场门禁”）：2026-09-09 10:56 做 D+30 旧入口检查，
+  2026-10-09 10:56 做 D+60 旧兼容检查。D+30 仅在新版覆盖率达到 95% 且连续 7 天无未完成 legacy 任务时规划移除 UI
+  旧入口；D+60 还要求 D+30 已完成、无活跃 legacy 任务且无旧客户端依赖。提醒不会自动删除历史成绩或未经回归直接发布。
+- 下一位 agent 的直接动作：无需再次部署本次代码；先检查实际 Git/生产状态。跟踪首个新 v2 任务的学习链、context 题与次日
+  自主复习数据；到 D+30/D+60 由提醒按真实生产指标决定是否退场旧入口。若需回滚业务代码，先保留当前数据库及上述上线前备份，
+  不要删除新表或历史记录。
+
+## 2026-08-09 词汇 v2 正式发布分支（历史发布准备记录）
 
 - 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
   `codex/vocabulary-v2-release-20260809` 已将完整实现重放到最新 `origin/main@67927544888e`；两份交接文档冲突已人工
