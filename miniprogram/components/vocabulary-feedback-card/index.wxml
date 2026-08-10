@@ -1,0 +1,34 @@
+<view class="feedback-card" wx:if="{{feedback}}">
+  <view class="feedback-head">
+    <view class="word-identity">
+      <text class="feedback-word" wx:if="{{feedback.word}}">{{feedback.word}}</text>
+      <text class="feedback-syllables" wx:if="{{feedback.syllables && feedback.syllables !== feedback.word}}">{{feedback.syllables}}</text>
+      <text class="feedback-phonetic" wx:if="{{feedback.phonetic}}">{{feedback.phonetic}}</text>
+    </view>
+    <button class="replay-button state-{{audioState}}" wx:if="{{feedback.audio_tts_url}}" bindtap="replay">
+      <image class="replay-icon" src="/images/icons/speaker-wave-outline.svg" mode="aspectFit" />
+      <text>{{audioState === 'loading' ? '加载中…' : (audioState === 'playing' ? '播放中' : '再听一遍')}}</text>
+    </button>
+  </view>
+
+  <view class="feedback-section" wx:if="{{feedback.core_meaning_zh}}">
+    <text class="feedback-label">核心义</text>
+    <text class="feedback-value meaning-value">{{feedback.core_meaning_zh}}</text>
+  </view>
+
+  <view class="feedback-section" wx:if="{{feedback.usage_pattern}}">
+    <text class="feedback-label">必要搭配</text>
+    <text class="feedback-value">{{feedback.usage_pattern}}</text>
+  </view>
+
+  <view class="feedback-section example-section" wx:if="{{feedback.example_en}}">
+    <text class="feedback-label">例句</text>
+    <text class="feedback-value example-en">{{feedback.example_en}}</text>
+    <text class="example-zh" wx:if="{{feedback.example_zh}}">{{feedback.example_zh}}</text>
+  </view>
+
+  <view class="feedback-section note-section" wx:if="{{feedback.usage_note}}">
+    <text class="feedback-label">用法提醒</text>
+    <text class="feedback-value">{{feedback.usage_note}}</text>
+  </view>
+</view>

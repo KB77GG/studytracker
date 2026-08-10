@@ -72,9 +72,15 @@
         <text class="submitted">你的答案：{{submittedAnswer}}</text>
         <text class="correct-answer">正确答案：{{correctAnswer}}</text>
       </view>
+      <vocabulary-feedback-card
+        wx:if="{{showResult && answerFeedback}}"
+        feedback="{{answerFeedback}}"
+        audio-state="{{audioState}}"
+        bind:replay="playAudio"
+      />
     </view>
 
-    <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling}}">
+    <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && !showResult}}">
       <english-keyboard
         answer=""
         safe-separators="{{currentItem.answer_separators}}"
@@ -82,17 +88,18 @@
         status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
         can-confirm="{{!!inputValue && !submitting}}"
         show-wrong-actions="{{false}}"
-        show-next="{{showResult}}"
         disabled="{{submitting || settling}}"
         bind:key="onKeyboardKey"
         bind:backspace="onKeyboardBackspace"
         bind:confirm="submitAnswer"
-        bind:next="nextItem"
       />
     </view>
 
-    <button wx:if="{{!isEnglishSpelling}}" class="primary-btn" bindtap="submitAnswer" disabled="{{submitting || settling}}">
-      {{showResult ? (settling ? '结算中…' : '下一题') : (submitting ? '提交中…' : '提交答案')}}
+    <button wx:if="{{!showResult && !isEnglishSpelling}}" class="primary-btn" bindtap="submitAnswer" disabled="{{submitting || settling}}">
+      {{submitting ? '提交中…' : '提交答案'}}
+    </button>
+    <button wx:if="{{showResult}}" class="primary-btn next-question-btn" bindtap="nextItem" disabled="{{submitting || settling}}">
+      {{currentIndex + 1 < items.length ? '下一题' : (settling ? '结算中…' : '完成本批复习')}}
     </button>
   </block>
 

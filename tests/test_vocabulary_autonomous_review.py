@@ -22,6 +22,7 @@ from models import (
 )
 from services.vocabulary_autonomous_review import (
     claim_today_review,
+    get_review_session,
     review_preflight,
     review_summary,
     settle_review_session,
@@ -181,6 +182,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             self.assertEqual(len(first["items"]), 20)
             self.assertGreater(len({item["book_id"] for item in first["items"]}), 1)
             self.assertTrue(all("answer_payload" not in item for item in first["items"]))
+            self.assertTrue(all("answer_feedback" not in item for item in first["items"]))
             self.assertTrue(
                 all(
                     "answer" not in item["question"]
@@ -231,6 +233,73 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             continued = claim_today_review(user, now=self.now, origin_task_id=self.task_id)
             self.assertEqual(continued["total_count"], 2)
             self.assertEqual(continued["origin_task_id"], self.task_id)
+
+    def test_answer_feedback_is_returned_after_answer_and_restored_on_refresh(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            claimed = claim_today_review(user, now=self.now)
+            item = claimed["items"][0]
+            self.assertNotIn("answer_feedback", item)
+
+            stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            word = stored.word
+            word.word = "n. analysis"
+            word.accepted_answers = json.dumps(["analysis"])
+            word.phonetic = "/əˈnæləsɪs/"
+            word.core_meaning_zh = "分析"
+            word.usage_pattern = "data analysis"
+            word.example_en = "The analysis supports the conclusion."
+            word.example_zh = "这项分析支持该结论。"
+            word.usage_note = "常与 data 搭配。"
+            expected_answer = json.loads(stored.answer_payload_json).get("answer")
+
+            result = submit_review_answer(
+                user,
+                claimed["session_id"],
+                {
+                    "session_token": claimed["session_token"],
+                    "review_item_id": item["review_item_id"],
+                    "question_id": item["question_id"],
+                    "word_id": item["word_id"],
+                    "sense_id": item["sense_id"],
+                    "dimension": item["dimension"],
+                    "answer": expected_answer,
+                    "attempt_id": "answer-feedback-first",
+                },
+                now=self.now,
+            )
+            expected_feedback = {
+                "word": "analysis",
+                "syllables": "anal·y·sis",
+                "phonetic": "/əˈnæləsɪs/",
+                "core_meaning_zh": "分析",
+                "usage_pattern": "data analysis",
+                "example_en": "The analysis supports the conclusion.",
+                "example_zh": "这项分析支持该结论。",
+                "usage_note": "常与 data 搭配。",
+                "audio_tts_url": f"/dictation/words/{word.id}/tts",
+            }
+            self.assertEqual(result["answer_feedback"], expected_feedback)
+
+            restored = get_review_session(
+                user,
+                claimed["session_id"],
+                claimed["session_token"],
+            )
+            restored_item = next(
+                candidate
+                for candidate in restored["items"]
+                if candidate["review_item_id"] == item["review_item_id"]
+            )
+            self.assertEqual(restored_item["answer_feedback"], expected_feedback)
+            self.assertTrue(restored_item["answered"])
+            self.assertTrue(
+                all(
+                    "answer_feedback" not in candidate
+                    for candidate in restored["items"]
+                    if candidate["review_item_id"] != item["review_item_id"]
+                )
+            )
 
     def test_active_review_blocks_task_queue_and_daily_settlement_clears_second_task(self):
         with self.app.app_context():

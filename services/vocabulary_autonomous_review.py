@@ -9,12 +9,18 @@ changing the teacher task's score, denominator, or completion state.
 from __future__ import annotations
 
 import json
+import re
 import secrets
 from datetime import datetime
+from functools import lru_cache
 
 from sqlalchemy.exc import IntegrityError, OperationalError
 
-from dictation_answers import is_chinese_answer_correct, is_english_answer_correct
+from dictation_answers import (
+    canonical_vocabulary_word,
+    is_chinese_answer_correct,
+    is_english_answer_correct,
+)
 from models import (
     DictationWord,
     StudentVocabularyMastery,
@@ -47,6 +53,7 @@ from services.vocabulary_mastery import (
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
 SAFE_ENGLISH_SEPARATORS = [" ", "-", "'"]
+_FEEDBACK_HYPHENATOR = None
 
 
 class VocabularyAutonomousReviewError(Exception):
@@ -237,6 +244,63 @@ def _validate_origin_task(user: User, task_id) -> Task | None:
     return task
 
 
+@lru_cache(maxsize=8192)
+def _feedback_syllables(value: str) -> str:
+    """Return a display-only syllable hint without importing an API module."""
+
+    text = str(value or "").strip()
+    if not text:
+        return ""
+
+    global _FEEDBACK_HYPHENATOR
+    if _FEEDBACK_HYPHENATOR is None:
+        try:
+            import pyphen
+
+            _FEEDBACK_HYPHENATOR = pyphen.Pyphen(lang="en_US")
+        except Exception:
+            _FEEDBACK_HYPHENATOR = False
+    if not _FEEDBACK_HYPHENATOR:
+        return text
+
+    def replace(match):
+        token = match.group(0)
+        parts = [part for part in _FEEDBACK_HYPHENATOR.inserted(token).split("-") if part]
+        return "·".join(parts) if len(parts) > 1 else token
+
+    return re.sub(r"[A-Za-z]+", replace, text)
+
+
+def _answer_feedback(item: VocabularyReviewItem) -> dict:
+    """Build the approved memory aid that is safe only after first answer."""
+
+    word = item.word or db.session.get(DictationWord, item.word_id)
+    if word is None:
+        return {
+            "word": "",
+            "syllables": "",
+            "phonetic": None,
+            "core_meaning_zh": None,
+            "usage_pattern": None,
+            "example_en": None,
+            "example_zh": None,
+            "usage_note": None,
+            "audio_tts_url": None,
+        }
+    canonical = canonical_vocabulary_word(word.word, word.accepted_answers)
+    return {
+        "word": canonical,
+        "syllables": _feedback_syllables(canonical),
+        "phonetic": word.phonetic,
+        "core_meaning_zh": word.core_meaning_zh or word.translation,
+        "usage_pattern": word.usage_pattern,
+        "example_en": word.example_en,
+        "example_zh": word.example_zh,
+        "usage_note": word.usage_note,
+        "audio_tts_url": f"/dictation/words/{word.id}/tts",
+    }
+
+
 def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
     snapshot = _safe_json(item.question_snapshot_json)
     answer_payload = _safe_json(item.answer_payload_json)
@@ -288,6 +352,7 @@ def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
             revealed_answer = option.get("label") if option else None
         payload["revealed_answer"] = revealed_answer
         payload["revealed_answer_option_id"] = revealed_option_id
+        payload["answer_feedback"] = _answer_feedback(item)
     return payload
 
 
@@ -457,6 +522,7 @@ def _answer_result(item, attempt, *, idempotent=False, settled=False):
         "student_answer": attempt.student_answer,
         "revealed_answer": revealed_answer,
         "revealed_answer_option_id": revealed_option_id,
+        "answer_feedback": _answer_feedback(item),
     }
 
 

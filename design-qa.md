@@ -1,3 +1,65 @@
+# Vocabulary answer-feedback design QA
+
+## Comparison target
+
+- Source visual truth: `/Users/zhouxin/Downloads/IMG_0223.PNG`
+- User-directed changes to that source: remove the empty pale-green result keyboard shell; resize the result CTA to a balanced standalone control; add post-answer memory support without exposing it before submission.
+- Rendered implementation:
+  - `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/final-top.png`
+  - `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/final-bottom.png`
+- Combined comparison evidence: `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/comparison.png`
+
+## Viewport and normalization
+
+- Source pixels: `944 × 2048`; attachment corresponds to the iPhone 15 Pro Max portrait aspect.
+- WeChat Developer Tools target: iPhone 15 Pro Max, portrait, CSS viewport approximately `430 × 932`, shown by the tool at 75% preview scale.
+- Raw implementation crop: `248 × 538` pixels from the Developer Tools preview.
+- Comparison copies: source and each implementation state normalized to `472 × 1024`; the combined comparison is `1416 × 1024`.
+- Density/canvas normalization: surrounding Developer Tools chrome was cropped out; source, top implementation, and scrolled-bottom implementation use the same portrait aspect before comparison.
+
+## State and interaction coverage
+
+- Route: `pages/student/vocabulary-learning/index`.
+- State: group 1/7, retry phase, `audio_to_en`, correct answer for `analyst`, full answer feedback available.
+- Verified top and scrolled-bottom states so both the memory card and result CTA were visible at the intended mobile width.
+- Verified the page scrolls to the CTA and the CTA remains fully reachable above the home indicator.
+- Developer Tools compilation reported 0 errors. The retained warnings are existing/base-library notices; the deliberate unauthenticated setup request was removed from the final error count.
+- Functional answer, refresh-restoration, no-leak, and next-item behavior are covered by automated tests; the visual fixture did not send a real answer or advance production state.
+
+## Required fidelity surfaces
+
+- Fonts and typography: retained the existing system font stack and established page hierarchy. Word, syllable, phonetic, labels, example, translation, and hint remain legible without clipping or awkward wrapping.
+- Spacing and layout rhythm: the empty keyboard shell and its safe-area padding are gone. The result CTA is a standalone `520rpx` pill (about 70% of page width), with balanced space above and below. The longer feedback content scrolls naturally rather than compressing the card.
+- Colors and visual tokens: retained StudyTracker green `#087f77`, existing success green, white card, and pale-green support surface. The pale-green surface now contains meaningful feedback rather than unexplained empty space.
+- Image quality and asset fidelity: replay uses the repository's existing speaker icon asset; no placeholder, emoji, inline SVG, handcrafted SVG, or new raster asset was introduced.
+- Copy and content: answer feedback adds target word, syllables, phonetic, core meaning, necessary collocation, one bilingual example, and optional usage note. Retry copy remains explicit that another error will not create an infinite loop.
+- Responsiveness/accessibility: CTA and replay control retain at least `88rpx` height. Long English and Chinese content wraps. The CTA is reachable at the bottom of the iPhone 15 Pro Max viewport; `rpx` sizing keeps the same relative width on narrower phones.
+
+## Findings
+
+- No actionable P0/P1/P2 findings remain.
+- The final layout intentionally differs from the source screenshot by adding the requested memory card and replacing the oversized empty keyboard shell with a content-free standalone CTA area.
+
+## Comparison history
+
+1. Initial source review:
+   - P1: the English keyboard hid its keys after submission but left its pale-green shell and safe-area padding, creating a large empty block.
+   - P2: the full-width CTA inside that shell had disproportionate visual weight.
+   - Fix: render the keyboard only before submission and render a separate result CTA after submission.
+2. First implementation review:
+   - P2: percentage width resolved against a virtual WXML block and fell back to the `320rpx` minimum, making the CTA too narrow.
+   - Fix: use a stable `520rpx` width and matching minimum, capped by `100%`.
+3. Final comparison:
+   - The empty shell is absent, the CTA is visually balanced, feedback content is readable, and no overlap, clipping, or unreachable control remains.
+
+## Follow-up polish
+
+- None required for this change. A physical-device pass after a future mini-program upload can reconfirm text density with the user's actual Dynamic Type setting.
+
+final result: passed
+
+---
+
 # 强化拼写 Sage Path 视觉 QA
 
 日期：2026-07-23

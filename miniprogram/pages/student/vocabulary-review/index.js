@@ -5,6 +5,7 @@ const {
     buildMeaningChoiceOptions,
     selectedOptionLabel
 } = require('../../../utils/vocabulary-interaction.js')
+const { normalizeAnswerFeedback } = require('../../../utils/vocabulary-feedback.js')
 const {
     isEnglishSpellingMode,
     normalizeKeyboardKey
@@ -41,6 +42,7 @@ Page({
         isCorrect: false,
         correctAnswer: '',
         submittedAnswer: '',
+        answerFeedback: null,
         submitting: false,
         settling: false,
         finished: false,
@@ -116,6 +118,9 @@ Page({
         const meaningOptions = isMeaningChoice
             ? buildMeaningChoiceOptions(item, [])
             : []
+        const answerFeedback = answered
+            ? normalizeAnswerFeedback({ answer_feedback: item.answer_feedback })
+            : null
         this.setData({
             currentIndex: index,
             currentItem: item,
@@ -128,7 +133,8 @@ Page({
             showResult: answered,
             isCorrect: !!item.first_is_correct,
             correctAnswer: answered ? (item.revealed_answer || '') : '',
-            submittedAnswer: answered ? (item.first_answer || '') : ''
+            submittedAnswer: answered ? (item.first_answer || '') : '',
+            answerFeedback
         }, () => {
             if (String(item.mode || '').indexOf('audio_to_') === 0) this.playAudio()
         })
@@ -206,6 +212,7 @@ Page({
             }
         }).then((res) => {
             if (!res || !res.ok) throw new Error((res && res.error) || 'review_answer_failed')
+            const answerFeedback = normalizeAnswerFeedback({ answer_feedback: res.answer_feedback })
             const nextItems = this.data.items.slice()
             nextItems[this.data.currentIndex] = Object.assign({}, item, {
                 first_attempt_id: res.attempt_id,
@@ -213,6 +220,7 @@ Page({
                 first_answer: res.student_answer || answer,
                 revealed_answer: res.revealed_answer || '',
                 revealed_answer_option_id: res.revealed_answer_option_id || '',
+                answer_feedback: res.answer_feedback || null,
                 answered: true
             })
             this.setData({
@@ -222,7 +230,8 @@ Page({
                 showResult: true,
                 isCorrect: !!res.is_correct,
                 correctAnswer: res.revealed_answer || '',
-                submittedAnswer: res.student_answer || answer
+                submittedAnswer: res.student_answer || answer,
+                answerFeedback
             })
         }).catch((err) => {
             console.warn('submit autonomous vocabulary review failed', err)
@@ -303,11 +312,14 @@ Page({
     playAudio() {
         const item = this.data.currentItem || {}
         const prompt = item.question && item.question.prompt
-        if (!this.audioPlayer || !prompt || !prompt.audio_tts_url) {
+        const feedback = this.data.answerFeedback || {}
+        const url = (this.data.showResult && feedback.audio_tts_url)
+            || (prompt && prompt.audio_tts_url)
+        if (!this.audioPlayer || !url) {
             wx.showToast({ title: '当前单词暂无发音', icon: 'none' })
             return
         }
-        this.audioPlayer.play(prompt.audio_tts_url, app.globalData.baseUrl)
+        this.audioPlayer.play(url, app.globalData.baseUrl)
     },
 
     retry() {

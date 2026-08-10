@@ -85,6 +85,50 @@ class VocabularyLearningMiniProgramStructureTest(unittest.TestCase):
         self.assertIn("#087f77", styles)
         self.assertNotIn("#e46b37", styles)
 
+    def test_answer_feedback_is_post_submit_and_result_action_is_compact(self):
+        component_markup = self.read(
+            "miniprogram/components/vocabulary-feedback-card/index.wxml"
+        )
+        component_styles = self.read(
+            "miniprogram/components/vocabulary-feedback-card/index.wxss"
+        )
+        self.assertIn("核心义", component_markup)
+        self.assertIn("必要搭配", component_markup)
+        self.assertIn("feedback.example_en", component_markup)
+        self.assertIn("feedback.example_zh", component_markup)
+        self.assertIn("用法提醒", component_markup)
+        self.assertIn("speaker-wave-outline.svg", component_markup)
+        self.assertIn("min-height: 88rpx", component_styles)
+
+        for page in ("vocabulary-learning", "vocabulary-review"):
+            markup = self.read(f"miniprogram/pages/student/{page}/index.wxml")
+            script = self.read(f"miniprogram/pages/student/{page}/index.js")
+            styles = self.read(f"miniprogram/pages/student/{page}/index.wxss")
+            config = json.loads(
+                self.read(f"miniprogram/pages/student/{page}/index.json")
+            )
+            self.assertIn("vocabulary-feedback-card", config["usingComponents"])
+            self.assertIn('wx:if="{{showResult && answerFeedback}}"', markup)
+            self.assertIn(
+                'class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && !showResult}}"',
+                markup,
+            )
+            self.assertIn('wx:if="{{showResult}}" class="primary-btn next-question-btn"', markup)
+            self.assertNotIn('show-next="{{showResult}}"', markup)
+            self.assertIn("normalizeAnswerFeedback", script)
+            self.assertIn("answerFeedback: null", script)
+            self.assertIn(".next-question-btn", styles)
+            self.assertIn("width: 520rpx", styles)
+
+        learning_script = self.read(
+            "miniprogram/pages/student/vocabulary-learning/index.js"
+        )
+        review_script = self.read(
+            "miniprogram/pages/student/vocabulary-review/index.js"
+        )
+        self.assertIn("normalizeAnswerFeedback(res, this.feedbackFallback(question))", learning_script)
+        self.assertIn("answer_feedback: res.answer_feedback", review_script)
+
 
 if __name__ == "__main__":
     unittest.main()

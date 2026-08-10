@@ -5,6 +5,7 @@ const {
     buildMeaningChoiceOptions,
     selectedOptionLabel
 } = require('../../../utils/vocabulary-interaction.js')
+const { normalizeAnswerFeedback } = require('../../../utils/vocabulary-feedback.js')
 const {
     isEnglishSpellingMode,
     normalizeKeyboardKey
@@ -45,6 +46,7 @@ Page({
         isCorrect: false,
         submittedAnswer: '',
         correctAnswer: '',
+        answerFeedback: null,
         submitting: false,
         finishing: false,
         finished: false,
@@ -143,6 +145,7 @@ Page({
             showResult: false,
             submittedAnswer: '',
             correctAnswer: '',
+            answerFeedback: null,
             diagnostics: Array.isArray(queue.diagnostics) ? queue.diagnostics : [],
             finished: false
         }, () => {
@@ -226,6 +229,13 @@ Page({
         return String(this.data.inputValue || '').trim()
     },
 
+    feedbackFallback(question) {
+        const wordId = question && question.word_id
+        return (this.data.familiarity || []).find(
+            (item) => String(item.word_id) === String(wordId)
+        ) || {}
+    },
+
     submitAnswer() {
         const question = this.data.currentQuestion
         if (!question || this.data.phase === 'familiarity') return
@@ -265,12 +275,14 @@ Page({
             }
         }).then((res) => {
             if (!res || !res.ok) throw new Error((res && res.error) || 'vocabulary_group_answer_failed')
+            const answerFeedback = normalizeAnswerFeedback(res, this.feedbackFallback(question))
             this.setData({
                 submitting: false,
                 showResult: true,
                 isCorrect: !!res.is_correct,
                 submittedAnswer: res.student_answer || answer,
-                correctAnswer: res.revealed_answer || ''
+                correctAnswer: res.revealed_answer || '',
+                answerFeedback
             })
         }).catch((err) => {
             console.warn('submit vocabulary group answer failed', err)
@@ -283,7 +295,10 @@ Page({
         const question = this.data.currentQuestion || {}
         const prompt = question.question && question.question.prompt
         const familiarity = this.familiarityItem() || {}
-        const url = (prompt && (prompt.audio_tts_url || prompt.audio_url)) || familiarity.audio_tts_url
+        const feedback = this.data.answerFeedback || {}
+        const url = (this.data.showResult && feedback.audio_tts_url)
+            || (prompt && (prompt.audio_tts_url || prompt.audio_url))
+            || familiarity.audio_tts_url
         if (!this.audioPlayer || !url) {
             wx.showToast({ title: '当前单词暂无发音', icon: 'none' })
             return

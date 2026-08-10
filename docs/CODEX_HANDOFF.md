@@ -3,6 +3,37 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-10（Asia/Shanghai）。
 
+## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序已发布，后端待部署）
+
+- 工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
+  `codex/vocabulary-v2-release-20260809`，本轮基线/当前未提交前 HEAD 为 `386594064b08`。本轮在已发布热修之上新增答后反馈增强。
+  用户已于 2026-08-10 晚间从正确 worktree 手动上传并发布本轮小程序；语义版本号和微信平台发布时间尚未由 agent 独立读取。
+  对应代码及后端增强仍未 commit、push 或更新 `main`，生产后端仍未部署本轮增量。
+- 新增共享 `vocabulary-feedback-card` 和响应归一化工具。小组学习页在提交成功后用既有平铺响应显示目标词、音节、音标、核心义、
+  必要搭配、双语例句和可选用法提醒，并可重播发音；切题/刷新队列时清空旧反馈。自主复习服务只在答后响应和
+  `first_attempt_id` 已存在的恢复分支返回同结构 `answer_feedback`，未答公开题面和同批其他未答项不携带该字段，避免
+  `audio_to_en` / `zh_to_en` 提前泄词。此增量不需要数据库迁移。
+- 用户截图中的浅绿色空块根因是严格键盘在结果态隐藏键列后仍保留组件外壳和 iPhone safe-area padding。两个词汇页现只在
+  未出结果时渲染严格键盘；结果态使用独立 StudyTracker 绿色按钮。视觉初版的百分比宽度在虚拟 WXML block 下退化到
+  `320rpx`，经二次对照改为稳定 `520rpx`（约页面宽度 70%），不再有空外壳，按钮上下留白正常；自主复习最后一题文案为
+  “完成本批复习”。
+- 回归结果：
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `475 passed, 7 subtests passed`；全部 `tests/test_*.js` 通过；四个变更 JS 文件 `node --check` 通过；目标 Ruff 和
+  `git diff --check` 通过。微信开发者工具打开的是正确 worktree，iPhone 15 Pro Max 模拟状态同时覆盖答后卡顶部和滚动到底部的
+  CTA，最终编译 `Errors: 0`；当前提示均为基础库/既有 WXSS 规则警告。设计对照记录为
+  `/Users/zhouxin/.codex/worktrees/9478/studytracker/design-qa.md`，`final result: passed`；对照图保存在
+  `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/`。
+- 当前业务改动涉及两个词汇页各自的 JS/JSON/WXML/WXSS、共享反馈组件/工具、
+  `services/vocabulary_autonomous_review.py`、三个测试文件；交接与 QA 文件也为未提交修改。未触及生产数据或生产服务，生产后端仍是
+  `26764e17677f`。截至 21:13 CST 的只读 Nginx 日志仍只见 `/83/` 页面引用，尚未看到新 page-frame 编号，因此“小程序已发布”目前
+  以用户的微信平台操作确认为准，尚无新客户端拉包证据。未验证项为该新卡在真实登录 iPhone/Dynamic Type 下的最终密度、自主复习
+  真实答题/刷新恢复，以及发布包被真机实际拉取；发音播放器本身未改且上一版真机已验收。
+- 用户已明确授权提交、推送并部署后端。下一位 agent 先用 `git status --short --branch` 核对上述改动，重跑门禁后将发布分支快进
+  更新到 `main` 触发部署；本轮后端字段为纯追加、无数据库迁移，旧客户端忽略，新前端在旧后端缺字段时安全隐藏。部署后核验
+  生产 HEAD、CI/deploy、5002、1 worker/gthread/6 threads、错误日志和答后 `answer_feedback` 契约，再用真实学生验收普通小组学习
+  答后卡及今日自主复习的答后/刷新恢复。
+
 ## 2026-08-10 词汇 v2 真机音频 / 输入 / 品牌色热修（已发布并通过真机音频验收）
 
 - 正确发布 worktree 仍为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
@@ -51,7 +82,7 @@
 - 真机截图同时暴露新的非阻断 UX 缺口：`错题再测` 答后反馈只显示“你的答案 / 正确答案”，没有呈现辅助记忆材料。不是资料缺失：
   learning 提交响应已有音节、音标、核心义、搭配、英例、中译和用法备注，任务 `3331` 的 50 词中前六项均为 50/50、用法备注 43/50；
   熟悉阶段也已有同组材料。最小后续方案是在**提交后**复用旧听写页的词汇反馈卡，严禁在作答前泄露；learning 仅需前端渲染，
-  autonomous review 还需后端只在答后响应及已答恢复分支返回 enrichment。该增强本轮尚未实现。
+  autonomous review 还需后端只在答后响应及已答恢复分支返回 enrichment。该增强已在后续本地工作中实现，尚未发布，见上一节。
 
 ## 2026-08-10 正确小程序 16.0.74 已发布并通过真机验收（发布事故已关闭）
 

@@ -102,13 +102,19 @@
                class="answer-input" value="{{inputValue}}" bindinput="onInput"
                bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
         <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
-          <text>{{isCorrect ? '✓ 答对了' : '✗ 首答需要加强'}}</text>
+          <text>{{isCorrect ? '✓ 答对了' : (phase === 'retry' ? '✗ 仍需巩固' : '✗ 首答需要加强')}}</text>
           <text class="result-line">你的答案：{{submittedAnswer}}</text>
           <text class="result-line">正确答案：{{correctAnswer}}</text>
         </view>
+        <vocabulary-feedback-card
+          wx:if="{{showResult && answerFeedback}}"
+          feedback="{{answerFeedback}}"
+          audio-state="{{audioState}}"
+          bind:replay="playAudio"
+        />
       </view>
 
-      <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling}}">
+      <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && !showResult}}">
         <english-keyboard
           answer=""
           safe-separators="{{currentQuestion.answer_separators}}"
@@ -116,16 +122,17 @@
           status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
           can-confirm="{{!!inputValue && !submitting}}"
           show-wrong-actions="{{false}}"
-          show-next="{{showResult}}"
           disabled="{{submitting || finishing}}"
           bind:key="onKeyboardKey"
           bind:backspace="onKeyboardBackspace"
           bind:confirm="submitAnswer"
-          bind:next="submitAnswer"
         />
       </view>
-      <button wx:if="{{!isEnglishSpelling}}" class="primary-btn answer-btn" bindtap="submitAnswer" disabled="{{submitting || finishing}}">
-        {{showResult ? '下一题' : (submitting ? '提交中…' : '提交答案')}}
+      <button wx:if="{{!showResult && !isEnglishSpelling}}" class="primary-btn answer-btn" bindtap="submitAnswer" disabled="{{submitting || finishing}}">
+        {{submitting ? '提交中…' : '提交答案'}}
+      </button>
+      <button wx:if="{{showResult}}" class="primary-btn next-question-btn" bindtap="submitAnswer" disabled="{{submitting || finishing}}">
+        下一题
       </button>
       <text class="hint" wx:if="{{phase === 'retry'}}">错题至少完成一次纠正性重试；再次答错也不会无限循环。</text>
     </block>
