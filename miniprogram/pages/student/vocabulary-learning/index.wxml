@@ -38,7 +38,10 @@
           <text class="familiar-word">{{familiarity[familiarityIndex].word}}</text>
           <text class="phonetic">{{familiarity[familiarityIndex].phonetic}}</text>
           <text class="meaning">{{familiarity[familiarityIndex].meaning}}</text>
-          <button class="audio-btn" bindtap="playAudio">▶ 播放发音</button>
+          <button class="audio-btn state-{{audioState}}" bindtap="playAudio">
+            <view class="play-icon"></view>
+            <text>{{audioButtonLabel}}</text>
+          </button>
           <text class="material-label" wx:if="{{familiarity[familiarityIndex].usage_pattern}}">必要搭配</text>
           <text class="material-text" wx:if="{{familiarity[familiarityIndex].usage_pattern}}">{{familiarity[familiarityIndex].usage_pattern}}</text>
           <text class="material-label" wx:if="{{familiarity[familiarityIndex].example_en}}">例句</text>
@@ -65,8 +68,16 @@
           <text class="mode-copy">看中文 → 写英文表达</text>
         </block>
         <block wx:elif="{{currentQuestion.mode === 'audio_to_en' || currentQuestion.mode === 'audio_to_zh'}}">
-          <button class="audio-btn" bindtap="playAudio">▶ 播放发音</button>
-          <text class="mode-copy">{{currentQuestion.mode === 'audio_to_en' ? '听音 → 写英文表达' : '听音 → 写中文释义'}}</text>
+          <button class="audio-btn state-{{audioState}}" bindtap="playAudio">
+            <view class="play-icon"></view>
+            <text>{{audioButtonLabel}}</text>
+          </button>
+          <text class="mode-copy">{{currentQuestion.mode === 'audio_to_en' ? '听音 → 拼写英文表达' : '听音 → 选择中文释义'}}</text>
+          <view class="options" wx:if="{{isMeaningChoice}}">
+            <view wx:for="{{meaningOptions}}" wx:key="id"
+                  class="option {{selectedOption === item.id ? 'selected' : ''}}"
+                  bindtap="selectOption" data-id="{{item.id}}">{{item.label}}</view>
+          </view>
         </block>
         <block wx:elif="{{currentQuestion.mode === 'context_choice'}}">
           <text class="prompt-copy">{{currentQuestion.question.prompt.instruction}}</text>
@@ -87,7 +98,7 @@
           </view>
         </block>
 
-        <input wx:if="{{!showResult && !isEnglishSpelling && currentQuestion.mode !== 'context_choice'}}"
+        <input wx:if="{{!showResult && !isEnglishSpelling && !isMeaningChoice && currentQuestion.mode !== 'context_choice'}}"
                class="answer-input" value="{{inputValue}}" bindinput="onInput"
                bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
         <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">

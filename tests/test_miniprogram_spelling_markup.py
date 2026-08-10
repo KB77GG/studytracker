@@ -239,7 +239,7 @@ class DictationSpellingMarkupTest(unittest.TestCase):
         practice = self.read("pages/student/dictation/practice/index.js")
         spell = self.read("pages/student/dictation/spell/index.js")
         self.assertIn("isEnglishSpellingMode", source)
-        self.assertIn("resolveAudioUrl", source)
+        self.assertIn("createReliableAudioPlayer", source)
         self.assertIn("if (this.returnTaskId)", source)
         self.assertNotIn(
             "res.origin_task_id || this.data.originTaskId",

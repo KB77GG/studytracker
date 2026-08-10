@@ -3,12 +3,70 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-10（Asia/Shanghai）。
 
+## 2026-08-10 词汇 v2 真机音频 / 输入 / 品牌色热修（本地已验证，待发布）
+
+- 正确发布 worktree 仍为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支
+  `codex/vocabulary-v2-release-20260809`，当前 HEAD `233b92970b2f`。本轮开始时只有上一轮未提交的
+  `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 修改；现新增词汇学习/自主复习页面、共享音频与选项工具、
+  两个词汇服务及对应测试修改。所有代码和文档都仅本机可见，尚未 commit、push、部署后端或上传/发布新小程序。
+- 线上 `16.0.74` 真机暴露三项问题：播放按钮无声且熟悉/听音题没有可靠自动播放；听音写中文走 iOS 原生键盘、
+  听音拼英文走小程序严格键盘，体验不一致；词汇 v2 正常交互误用了橙色而非 StudyTracker 品牌绿。生产访问日志此前已证明
+  word-id TTS 返回 206 且有完整音频字节，故根因位于新页面的 iOS 播放生命周期：未设置
+  `obeyMuteSwitch=false`，并在 `canplay` 前直接 `play()`。
+- 已抽出可靠播放器：全局与实例均关闭“跟随静音键”，音频先下载/缓存，兼容 200/206，等 `onCanplay` 后播放，处理快速切题、
+  重播和销毁竞态，并给按钮显示“正在加载 / 正在播放”。熟悉阶段首次进入、上一词/下一词，以及所有 audio 题切题后都会自动播放；
+  手动按钮复用同一播放器。TTS 端点本来就是公开播放契约，不需要另加认证头。
+- 听音→中文现统一为稳定四选一（尾组不足时按可用唯一释义降级），不再打开系统键盘；听音→英文继续使用小程序严格键盘。
+  当前已冻结的任务 `3331` 由客户端从该组 familiarity 安全生成稳定选项，正确项强制保留且题序不依赖词位；新题快照由后端生成
+  最多四个稳定中文选项，但仍提交选项标签并沿用 `answer_type=chinese`，所以旧 `16.0.74` 可继续手输中文，向后兼容。
+  已存在的自主复习 session 会在公开响应时动态补选项，不改数据库快照或答案。普通交互色改为 `#087f77` 品牌绿和配套浅绿；
+  橙色已从两个词汇页移除，红色只保留错答/错误语义。播放图标改为 CSS 三角形，避免系统 emoji 外观差异；触控项不低于 88rpx。
+- 验证：`node tests/test_dictation_audio.js` 通过，覆盖静音键配置、206 下载、`canplay` 门禁、播放器销毁、正确释义不被裁掉及稳定乱序；
+  六个词汇/小程序定向 pytest 文件合计 `78 passed`，包含“自主复习选择标签仍按中文正确判分”；全部 `tests/test_*.js` 通过。
+  全仓 pytest 为 `474 passed, 7 subtests passed, 2 failed`，两个失败均是 worktree 长期未带
+  `static/listening/ielts10_test1_s1.mp3` 导致既有 `test_static_audio_headers.py` 404，与本轮无关；同一 JSON fixture 通过。
+  四个变更 JS 文件 `node --check`、`git diff --check` 通过。微信开发者工具 CLI 已打开正确 worktree，日志确认本轮文件逐项触发编译，
+  IDE 底部为 0 errors / 0 warnings；未做真机声音/静音键终验。
+- 生产发音抽样：任务 `3331` 当前组 8 个 word-id 音频均为有效 48 kHz 单声道 MP3；`analyst`、`assignment`、
+  `audience`、`adventure`、`ankle`、`anger` 的生产文件 SHA-256 与有道词典 `type=2` 真人录音逐字节一致；词典对
+  `abstract`、`advertisements` 只提供被质量门禁拒绝的低质量合成版本，因此生产按既有策略使用 Kokoro
+  `af_heart / en-us / 0.88` 回退。word-id 路由先取 `audio_us`、再取 `audio_uk`，都缺失时才走上述质量门禁；
+  送入发音的文本先去掉词性并由 `canonical_vocabulary_word` 取安全词形，生产默认每词只读一次。该审计不替代热修版真机听感终验。
+- 发布状态：生产后端仍是 `main@21398163`，线上小程序仍是有上述缺陷的 `16.0.74`；本轮没有 schema 迁移、生产数据库写入或服务重启。
+  已建议先暂停学生继续任务 `3331`，但未修改任务数据。下一位 agent 获得明确 commit/push/deploy 授权后，应先提交并把后端热修安全
+  部署到 `main`（旧客户端兼容），核验生产 5002、1 worker/gthread/6 threads、接口选项与错误日志；然后让用户从正确 worktree
+  上传/提审/发布新的小程序热修版，最后用 iPhone 同时验证：静音键开启仍有声、熟悉和听音题自动播、按钮可重播、中文只显示选项、
+  英文只显示严格键盘、全页品牌绿。未完成真机验收前不要解除本次热修门禁。
+
+## 2026-08-10 正确小程序 16.0.74 已发布并通过真机验收（发布事故已关闭）
+
+- 15:55–15:57 的首个真实 v2 任务 `3331` 已正确保存为 `dictation_book_id=7`、范围 1–50、
+  `vocabulary_goal=listening`；生产后端详情和 `dictation-queue` 均返回 200，新队列响应约 5.4 KiB。手机却进入旧“听写练习”页，
+  显示“当日布置 0 词 + 自动复习 0 词”。访问日志证明客户端没有调用新版必经的
+  `vocabulary-review/preflight`，而是直接让旧页面读取新 group queue；旧页面只识别 `res.words`，因此把新契约显示为空。
+- 根因不是任务或数据库，而是小程序 `16.0.73` 上传了错误工作树。上传时微信开发者工具指向
+  `/Users/zhouxin/Desktop/studytracker/miniprogram`；该主工作树仍为 `main@fd711f1c`、落后 `origin/main` 23 个提交，
+  `home/index.js` 不含 `vocabularyGoal` / `vocabulary-learning` 路由。正确且已回归的前端在
+  `/Users/zhouxin/.codex/worktrees/9478/studytracker/miniprogram`（发布分支业务基线 `21398163`，当前 docs HEAD 见 Git）。
+- 已用微信开发者工具 CLI 将正确目录打开；解锁后确认 IDE 地址中的 `projectpath` 和资源管理器均指向正确发布工作树，
+  手动重新编译为 `Errors: 0`、`Problems: 0`，4 条 warning 均为基础库/开发工具提示。正确目录定向回归：
+  `tests/test_miniprogram_vocabulary_learning.py`、`tests/test_miniprogram_task_visibility.py`、
+  `tests/test_vocabulary_group_learning_api.py` 合计 `20 passed`；旧错词 Node 门禁、四个关键页面 `node --check`、
+  `git diff --check` 均通过。
+- 用户已从确认无误的正确项目
+  `/Users/zhouxin/.codex/worktrees/9478/studytracker/miniprogram` 发布 `16.0.74`，线上发布时间为
+  2026-08-10 16:27:56（Asia/Shanghai）。iPhone 完全退出并重开后，线上客户端路径从错误版本 `/81/` 切换为
+  `/82/`；任务 `3331` 依次调用 summary、task detail、`vocabulary-review/preflight`、`vocabulary-queue` 和
+  `vocabulary-learning/familiarity`，全部返回 200。服务端 flow `id=1` 为 listening / 8 词一组，已从 familiarity 正常推进到
+  `active_recall`，`state_version=8`，冻结题 100 道；`PRAGMA quick_check=ok`、服务 active、发布后应用错误为 0。
+  因此发布事故已关闭，可以恢复创建新词汇任务；任务 `3331` 保留并继续使用。本次没有回滚或重新部署后端。
+
 ## 2026-08-10 词汇 v2 已正式上线（当前规范状态）
 
 - 发布工作树为 `/Users/zhouxin/.codex/worktrees/9478/studytracker`，分支为
   `codex/vocabulary-v2-release-20260809`。业务发布 HEAD `21398163fa98a647d66cbf29be8a320a88fd60b4`
-  已快进推送到 `origin/main`；小程序线上版本 `16.0.73` 已由用户于 2026-08-10 10:56:02（Asia/Shanghai）
-  发布。当前业务代码已 commit、已 push、已部署；本节交接更新会作为 docs-only 提交只推送到发布分支，避免再次触发
+  已快进推送到 `origin/main`；最初发布的错误源版本 `16.0.73` 已由正确发布工作树构建的 `16.0.74` 于
+  2026-08-10 16:27:56（Asia/Shanghai）取代。当前业务代码已 commit、已 push、已部署；本节交接更新会作为 docs-only 提交只推送到发布分支，避免再次触发
   `main` 部署，精确文档 HEAD 以 `git log -1` 为准。
 - 更新 `main` 前已暂停创建新词汇任务，并对生产 `/root/apps/studytracker/app.db` 做 SQLite 在线备份：
   `/root/apps/studytracker/app.db.bak-20260810-vocabulary-v2`，大小 `64,397,312` bytes，SHA-256
@@ -24,14 +82,12 @@
   词书目标共回填 188 本：`reading=127`、`listening=39`、`comprehensive=21`、`writing=1`；课程体系为
   `IELTS=38`、`TOEFL=129`、`general=21`；ID 174 的目标和课程体系均保持 NULL。生产 gunicorn 仍为
   `127.0.0.1:5002`、`workers=1`、`worker_class=gthread`、`threads=6`。
-- 生产只读 HTTP 冒烟：`/` 返回预期登录重定向 302；新
-  `/api/miniprogram/student/vocabulary-review/summary` 未带令牌返回预期 `401 missing_token`，证明蓝图已注册。
-  服务重启后，日志中已有真实 Android 微信学生继续取得 input-policy 并成功提交既有听写任务（HTTP 200），未见迁移或应用错误。
-  因生产在上线前没有 v2 任务，尚无法在不制造生产测试数据的前提下走一条真实 v2 新任务；本地/CI 已覆盖完整 v2 状态机，
-  生产迁移、路由、旧任务兼容和真机旧任务均正常，因此创建新词汇任务的暂停可以解除。建议首个真实 v2 任务使用小词量并观察一次
-  `vocabulary-queue`、context 阶段和次日复习。
-- Codex 已创建 active 线程提醒 `d-30`（名称“背单词旧版退场门禁”）：2026-09-09 10:56 做 D+30 旧入口检查，
-  2026-10-09 10:56 做 D+60 旧兼容检查。D+30 仅在新版覆盖率达到 95% 且连续 7 天无未完成 legacy 任务时规划移除 UI
+- 生产 HTTP 与真机冒烟：`/` 返回预期登录重定向 302；未带令牌的新 summary 路由返回预期 `401 missing_token`。
+  服务重启后真实 Android 学生继续提交 legacy 任务成功；正确小程序 `16.0.74` 发布后，真实 iPhone 学生又用任务 `3331`
+  完成 summary → preflight → vocabulary queue → familiarity 的新版链路并进入 active recall，相关请求全部 200，未见迁移或应用错误。
+  创建新词汇任务的暂停已解除；后续继续观察 context 阶段、任务结算与次日自主复习。
+- Codex 已将 active 线程提醒 `d-30`（名称“背单词旧版退场门禁”）改以正确版本为起点：2026-09-09 16:27:56
+  做 D+30 旧入口检查，2026-10-09 16:27:56 做 D+60 旧兼容检查。D+30 仅在新版覆盖率达到 95% 且连续 7 天无未完成 legacy 任务时规划移除 UI
   旧入口；D+60 还要求 D+30 已完成、无活跃 legacy 任务且无旧客户端依赖。提醒不会自动删除历史成绩或未经回归直接发布。
 - 下一位 agent 的直接动作：无需再次部署本次代码；先检查实际 Git/生产状态。跟踪首个新 v2 任务的学习链、context 题与次日
   自主复习数据；到 D+30/D+60 由提醒按真实生产指标决定是否退场旧入口。若需回滚业务代码，先保留当前数据库及上述上线前备份，

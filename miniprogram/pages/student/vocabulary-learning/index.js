@@ -1,6 +1,10 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
-const { resolveAudioUrl } = require('../../../utils/dictation-audio.js')
+const { createReliableAudioPlayer } = require('../../../utils/dictation-audio.js')
+const {
+    buildMeaningChoiceOptions,
+    selectedOptionLabel
+} = require('../../../utils/vocabulary-interaction.js')
 const {
     isEnglishSpellingMode,
     normalizeKeyboardKey
@@ -32,7 +36,11 @@ Page({
         currentQuestion: null,
         inputValue: '',
         selectedOption: '',
+        meaningOptions: [],
+        isMeaningChoice: false,
         isEnglishSpelling: false,
+        audioState: 'idle',
+        audioButtonLabel: '播放发音',
         showResult: false,
         isCorrect: false,
         submittedAnswer: '',
@@ -52,17 +60,21 @@ Page({
             return
         }
         this.setData({ taskId: rawTaskId, startedAt: Date.now() })
-        this.audioCtx = wx.createInnerAudioContext()
-        this.audioCtx.onError(() => wx.showToast({ title: '音频播放失败', icon: 'none' }))
+        this.audioPlayer = createReliableAudioPlayer(wx, {
+            onStateChange: (state) => this.setData({
+                audioState: state,
+                audioButtonLabel: state === 'loading'
+                    ? '正在加载…'
+                    : (state === 'playing' ? '正在播放' : '播放发音')
+            }),
+            onError: () => wx.showToast({ title: '音频播放失败，请重试', icon: 'none' })
+        })
         this.fetchQueue()
     },
 
     onUnload() {
-        if (this.audioCtx) {
-            try { this.audioCtx.stop() } catch (e) {}
-            try { this.audioCtx.destroy() } catch (e) {}
-            this.audioCtx = null
-        }
+        if (this.audioPlayer) this.audioPlayer.destroy()
+        this.audioPlayer = null
     },
 
     queueUrl() {
@@ -106,6 +118,10 @@ Page({
         const displayIndex = firstUnviewed >= 0 ? firstUnviewed : Math.max(0, familiarity.length - 1)
         const question = queue.current_question || null
         const isEnglishSpelling = !!question && isEnglishSpellingMode(question.mode)
+        const isMeaningChoice = !!question && question.mode === 'audio_to_zh'
+        const meaningOptions = isMeaningChoice
+            ? buildMeaningChoiceOptions(question, familiarity)
+            : []
         const isFinished = !!queue.completed
         this.setData({
             loading: false,
@@ -120,6 +136,8 @@ Page({
             familiarityIndex: displayIndex,
             currentQuestion: question,
             isEnglishSpelling,
+            isMeaningChoice,
+            meaningOptions,
             inputValue: '',
             selectedOption: '',
             showResult: false,
@@ -132,7 +150,10 @@ Page({
                 this.finishTask()
                 return
             }
-            if (question && String(question.mode || '').indexOf('audio_to_') === 0) this.playAudio()
+            if (
+                queue.phase === 'familiarity'
+                || (question && String(question.mode || '').indexOf('audio_to_') === 0)
+            ) this.playAudio()
         })
     },
 
@@ -142,7 +163,7 @@ Page({
 
     previousFamiliarity() {
         if (this.data.phase !== 'familiarity' || this.data.familiarityIndex <= 0) return
-        this.setData({ familiarityIndex: this.data.familiarityIndex - 1 })
+        this.setData({ familiarityIndex: this.data.familiarityIndex - 1 }, () => this.playAudio())
     },
 
     nextFamiliarity() {
@@ -151,7 +172,9 @@ Page({
         if (!item) return
         if (item.viewed) {
             const next = this.data.familiarityIndex + 1
-            if (next < this.data.familiarity.length) this.setData({ familiarityIndex: next })
+            if (next < this.data.familiarity.length) {
+                this.setData({ familiarityIndex: next }, () => this.playAudio())
+            }
             return
         }
         request(`/miniprogram/student/tasks/${this.data.taskId}/vocabulary-learning/familiarity`, {
@@ -196,9 +219,11 @@ Page({
 
     answerValue() {
         const question = this.data.currentQuestion || {}
-        return question.mode === 'context_choice'
-            ? this.data.selectedOption
-            : String(this.data.inputValue || '').trim()
+        if (question.mode === 'context_choice') return this.data.selectedOption
+        if (this.data.isMeaningChoice) {
+            return selectedOptionLabel(this.data.meaningOptions, this.data.selectedOption)
+        }
+        return String(this.data.inputValue || '').trim()
     },
 
     submitAnswer() {
@@ -211,7 +236,12 @@ Page({
         if (this.data.submitting) return
         const answer = this.answerValue()
         if (!answer) {
-            wx.showToast({ title: question.mode === 'context_choice' ? '请选择答案' : '请输入答案', icon: 'none' })
+            wx.showToast({
+                title: question.mode === 'context_choice' || this.data.isMeaningChoice
+                    ? '请选择答案'
+                    : '请输入答案',
+                icon: 'none'
+            })
             return
         }
         const retryPrefix = this.data.phase === 'retry' ? 'retry:' : 'first:'
@@ -254,9 +284,11 @@ Page({
         const prompt = question.question && question.question.prompt
         const familiarity = this.familiarityItem() || {}
         const url = (prompt && (prompt.audio_tts_url || prompt.audio_url)) || familiarity.audio_tts_url
-        if (!this.audioCtx || !url) return
-        this.audioCtx.src = resolveAudioUrl(url, app.globalData.baseUrl)
-        try { this.audioCtx.play() } catch (e) {}
+        if (!this.audioPlayer || !url) {
+            wx.showToast({ title: '当前单词暂无发音', icon: 'none' })
+            return
+        }
+        this.audioPlayer.play(url, app.globalData.baseUrl)
     },
 
     finishTask() {

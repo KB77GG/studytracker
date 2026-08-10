@@ -614,6 +614,8 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
                 item["question"]["prompt"]["audio_tts_url"],
                 f"/dictation/words/{item['word_id']}/tts",
             )
+            self.assertGreaterEqual(len(item["question"]["options"]), 2)
+            self.assertLessEqual(len(item["question"]["options"]), 4)
             self.assertNotIn("word", item["question"]["prompt"])
             self.assertNotIn("audio_us", item["question"]["prompt"])
 

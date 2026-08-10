@@ -1,6 +1,10 @@
 const app = getApp()
 const { request } = require('../../../utils/request.js')
-const { resolveAudioUrl } = require('../../../utils/dictation-audio.js')
+const { createReliableAudioPlayer } = require('../../../utils/dictation-audio.js')
+const {
+    buildMeaningChoiceOptions,
+    selectedOptionLabel
+} = require('../../../utils/vocabulary-interaction.js')
 const {
     isEnglishSpellingMode,
     normalizeKeyboardKey
@@ -27,7 +31,11 @@ Page({
         currentItem: null,
         inputValue: '',
         selectedOption: '',
+        meaningOptions: [],
+        isMeaningChoice: false,
         isEnglishSpelling: false,
+        audioState: 'idle',
+        audioButtonLabel: '播放发音',
         currentDimensionLabel: '',
         showResult: false,
         isCorrect: false,
@@ -45,8 +53,15 @@ Page({
         const rawReturnTaskId = String(options.returnTaskId || options.originTaskId || '')
         this.returnTaskId = /^\d+$/.test(rawReturnTaskId) ? rawReturnTaskId : ''
         this.setData({ returningToTask: !!this.returnTaskId })
-        this.audioCtx = wx.createInnerAudioContext()
-        this.audioCtx.onError(() => wx.showToast({ title: '音频播放失败', icon: 'none' }))
+        this.audioPlayer = createReliableAudioPlayer(wx, {
+            onStateChange: (state) => this.setData({
+                audioState: state,
+                audioButtonLabel: state === 'loading'
+                    ? '正在加载…'
+                    : (state === 'playing' ? '正在播放' : '播放发音')
+            }),
+            onError: () => wx.showToast({ title: '音频播放失败，请重试', icon: 'none' })
+        })
         this.fetchSession()
     },
 
@@ -55,11 +70,8 @@ Page({
             clearTimeout(this.returnTimer)
             this.returnTimer = null
         }
-        if (this.audioCtx) {
-            try { this.audioCtx.stop() } catch (e) {}
-            try { this.audioCtx.destroy() } catch (e) {}
-            this.audioCtx = null
-        }
+        if (this.audioPlayer) this.audioPlayer.destroy()
+        this.audioPlayer = null
     },
 
     fetchSession() {
@@ -100,11 +112,17 @@ Page({
         if (!item) return
         const answered = !!item.first_attempt_id
         const isEnglishSpelling = isEnglishSpellingMode(item.mode)
+        const isMeaningChoice = item.mode === 'audio_to_zh'
+        const meaningOptions = isMeaningChoice
+            ? buildMeaningChoiceOptions(item, [])
+            : []
         this.setData({
             currentIndex: index,
             currentItem: item,
             inputValue: answered && item.first_answer ? item.first_answer : '',
             selectedOption: answered ? (item.revealed_answer_option_id || '') : '',
+            meaningOptions,
+            isMeaningChoice,
             isEnglishSpelling,
             currentDimensionLabel: DIMENSION_LABELS[item.dimension] || '词汇复习',
             showResult: answered,
@@ -146,7 +164,11 @@ Page({
 
     answerValue() {
         const item = this.data.currentItem || {}
-        return item.mode === 'context_choice' ? this.data.selectedOption : String(this.data.inputValue || '').trim()
+        if (item.mode === 'context_choice') return this.data.selectedOption
+        if (this.data.isMeaningChoice) {
+            return selectedOptionLabel(this.data.meaningOptions, this.data.selectedOption)
+        }
+        return String(this.data.inputValue || '').trim()
     },
 
     submitAnswer() {
@@ -159,7 +181,12 @@ Page({
         if (this.data.submitting) return
         const answer = this.answerValue()
         if (!answer) {
-            wx.showToast({ title: item.mode === 'context_choice' ? '请选择答案' : '请输入答案', icon: 'none' })
+            wx.showToast({
+                title: item.mode === 'context_choice' || this.data.isMeaningChoice
+                    ? '请选择答案'
+                    : '请输入答案',
+                icon: 'none'
+            })
             return
         }
         this.setData({ submitting: true })
@@ -276,9 +303,11 @@ Page({
     playAudio() {
         const item = this.data.currentItem || {}
         const prompt = item.question && item.question.prompt
-        if (!this.audioCtx || !prompt || !prompt.audio_tts_url) return
-        this.audioCtx.src = resolveAudioUrl(prompt.audio_tts_url, app.globalData.baseUrl)
-        try { this.audioCtx.play() } catch (e) {}
+        if (!this.audioPlayer || !prompt || !prompt.audio_tts_url) {
+            wx.showToast({ title: '当前单词暂无发音', icon: 'none' })
+            return
+        }
+        this.audioPlayer.play(prompt.audio_tts_url, app.globalData.baseUrl)
     },
 
     retry() {

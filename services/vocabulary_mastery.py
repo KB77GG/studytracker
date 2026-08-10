@@ -259,6 +259,48 @@ def _english_word_variants(word: DictationWord) -> list[str]:
     return variants
 
 
+def build_meaning_recall_options(word, candidates, seed: str, limit: int = 4) -> list[dict]:
+    """Build stable Chinese choices while keeping free-text grading compatible."""
+
+    correct = " ".join(
+        str(getattr(word, "core_meaning_zh", None) or getattr(word, "translation", None) or "").split()
+    ).strip()
+    if not correct:
+        return []
+    distractors = []
+    seen = {correct}
+    ordered = sorted(
+        list(candidates or []),
+        key=lambda candidate: hashlib.sha256(
+            f"{seed}|candidate|{getattr(candidate, 'id', '')}".encode()
+        ).hexdigest(),
+    )
+    for candidate in ordered:
+        label = " ".join(
+            str(
+                getattr(candidate, "core_meaning_zh", None)
+                or getattr(candidate, "translation", None)
+                or ""
+            ).split()
+        ).strip()
+        if not label or label in seen:
+            continue
+        seen.add(label)
+        distractors.append(label)
+        if len(distractors) >= max(0, limit - 1):
+            break
+    labels = [correct, *distractors]
+    labels.sort(key=lambda label: hashlib.sha256(f"{seed}|option|{label}".encode()).hexdigest())
+    return [
+        {
+            "id": "meaning_"
+            + hashlib.sha256(f"{seed}|{index}|{label}".encode()).hexdigest()[:16],
+            "label": label,
+        }
+        for index, label in enumerate(labels)
+    ]
+
+
 def _question_for(word, dimension, goal, stage, candidates):
     seed = f"v2:{word.id}:{word.sense_id}:{dimension}:{goal}:{stage}"
     if dimension == "context_use":
@@ -292,6 +334,7 @@ def _question_for(word, dimension, goal, stage, candidates):
             prompt["word"] = canonical_vocabulary_word(word.word, word.accepted_answers)
         answer = meaning
         answer_type = "chinese"
+        options = build_meaning_recall_options(word, candidates, seed) if listening_mode else []
     elif dimension == "form_recall":
         mode = "zh_to_en"
         meaning = str(word.core_meaning_zh or word.translation or "").strip()
@@ -306,6 +349,7 @@ def _question_for(word, dimension, goal, stage, candidates):
         }
         answer = variants[0]
         answer_type = "english"
+        options = []
     else:
         mode = "audio_to_en"
         prompt = {
@@ -318,10 +362,11 @@ def _question_for(word, dimension, goal, stage, candidates):
             return None
         answer = variants[0]
         answer_type = "english"
+        options = []
 
     question_id = hashlib.sha256(
         json.dumps(
-            {"seed": seed, "mode": mode, "prompt": prompt},
+            {"seed": seed, "mode": mode, "prompt": prompt, "options": options},
             ensure_ascii=False,
             sort_keys=True,
         ).encode("utf-8")
@@ -333,7 +378,7 @@ def _question_for(word, dimension, goal, stage, candidates):
             "kind": dimension,
             "mode": mode,
             "prompt": prompt,
-            "options": [],
+            "options": options,
             "answer_type": answer_type,
         },
         {

@@ -605,6 +605,25 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             self.assertEqual(item["mode"], "audio_to_zh")
             self.assertNotIn("word", item["question"]["prompt"])
             self.assertIn("audio_tts_url", item["question"]["prompt"])
+            self.assertTrue(item["question"]["options"])
+            self.assertLessEqual(len(item["question"]["options"]), 4)
+            selected_label = item["question"]["options"][0]["label"]
+            result = submit_review_answer(
+                db.session.get(User, self.student_id),
+                claimed["session_id"],
+                {
+                    "session_token": claimed["session_token"],
+                    "review_item_id": item["review_item_id"],
+                    "question_id": item["question_id"],
+                    "word_id": item["word_id"],
+                    "sense_id": item["sense_id"],
+                    "dimension": item["dimension"],
+                    "answer": selected_label,
+                    "attempt_id": "audio-meaning-choice",
+                },
+                now=self.now,
+            )
+            self.assertTrue(result["is_correct"])
 
     def test_answered_active_session_stays_visible_until_settlement(self):
         with self.app.app_context():

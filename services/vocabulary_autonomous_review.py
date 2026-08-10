@@ -38,6 +38,7 @@ from services.vocabulary_mastery import (
     _mastery_for,
     _question_for,
     _safe_json,
+    build_meaning_recall_options,
     ensure_mastery,
     is_vocabulary_v2_task,
     utc_naive,
@@ -236,9 +237,19 @@ def _validate_origin_task(user: User, task_id) -> Task | None:
     return task
 
 
-def _public_item(item: VocabularyReviewItem) -> dict:
+def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
     snapshot = _safe_json(item.question_snapshot_json)
     answer_payload = _safe_json(item.answer_payload_json)
+    if snapshot.get("mode") == "audio_to_zh" and not snapshot.get("options"):
+        word = db.session.get(DictationWord, item.word_id)
+        if word:
+            candidates = _candidate_words(word, candidate_cache if candidate_cache is not None else {})
+            snapshot = dict(snapshot)
+            snapshot["options"] = build_meaning_recall_options(
+                word,
+                candidates,
+                f"review-item:{item.id}:{item.question_id}",
+            )
     english_mode = snapshot.get("mode") in {"audio_to_en", "zh_to_en", "context_fill"}
     payload = {
         "review_item_id": item.id,
@@ -282,7 +293,8 @@ def _public_item(item: VocabularyReviewItem) -> dict:
 
 def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> dict:
     now = utc_naive(now)
-    items = [_public_item(item) for item in session.items]
+    candidate_cache = {}
+    items = [_public_item(item, candidate_cache) for item in session.items]
     due_count, remaining_due_count = _session_due_counts(user, session, now)
     answered_count = sum(item["answered"] for item in items)
     return {

@@ -68,6 +68,23 @@ class VocabularyLearningMiniProgramStructureTest(unittest.TestCase):
             self.assertIn("question.prompt.translation", markup)
             self.assertIn("中文提示", markup)
 
+    def test_listening_meaning_uses_choices_and_reliable_audio(self):
+        learning_markup = self.read("miniprogram/pages/student/vocabulary-learning/index.wxml")
+        review_markup = self.read("miniprogram/pages/student/vocabulary-review/index.wxml")
+        for markup in (learning_markup, review_markup):
+            self.assertIn("听音 → 选择中文释义", markup)
+            self.assertIn("!isMeaningChoice", markup)
+            self.assertIn('class="play-icon"', markup)
+            self.assertNotIn("▶ 播放发音", markup)
+        for page in ("vocabulary-learning", "vocabulary-review"):
+            script = self.read(f"miniprogram/pages/student/{page}/index.js")
+            self.assertIn("createReliableAudioPlayer", script)
+            self.assertIn("buildMeaningChoiceOptions", script)
+            self.assertIn("audioButtonLabel", script)
+        styles = self.read("miniprogram/pages/student/vocabulary-learning/index.wxss")
+        self.assertIn("#087f77", styles)
+        self.assertNotIn("#e46b37", styles)
+
 
 if __name__ == "__main__":
     unittest.main()
