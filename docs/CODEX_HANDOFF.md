@@ -3,13 +3,13 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-11（Asia/Shanghai）。
 
-## 2026-08-11 教师任务页“昨日任务 / 再次布置”（已授权部署，门禁通过）
+## 2026-08-11 教师任务页“昨日任务 / 再次布置”（已部署并通过生产验收）
 
 - 本轮为避免覆盖桌面主工作树的来源不明改动，从最新 `origin/main@35991ae5` 创建独立工作树
   `/Users/zhouxin/.codex/worktrees/tasks-yesterday-repeat/studytracker`，分支 `codex/tasks-yesterday-repeat`，
-  基线/当前 HEAD 仍为 `35991ae5`。新工作树初始干净；当前未提交改动为 `app.py`、
-  `templates/tasks.html`、新增 `services/task_assignment_history.py`、新增
-  `tests/test_task_assignment_history.py`，以及本轮交接文档。
+  基线为 `35991ae5`，业务提交/生产 HEAD 为 `ecda60e1`；最终部署状态记录提交见当前 Git 日志。
+  业务改动范围为 `app.py`、`templates/tasks.html`、新增 `services/task_assignment_history.py`、
+  新增 `tests/test_task_assignment_history.py` 与交接文档；本轮未带入其他工作树改动。
 - `/tasks` 布置表单现在会在学生/任务来源下方、具体材料选择上方显示选中学生的昨日任务。
   卡片包含任务名、类别、状态与资源来源；词书任务使用真实 `DictationBook.title` 并显示精确
   `第 X–Y 词`。结束位未存储时用词书总词数补充展示，但再次布置仍保留原始“至全部”语义。
@@ -29,14 +29,27 @@
   发布前项目级回归
   `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
   为 `481 passed, 7 subtests passed`；`node tests/test_dictation_spell_queue.js` 与最终 `git diff --check` 通过。
-- 本轮无 schema/数据迁移，未写本地或生产数据。用户已于 2026-08-11 明确授权 commit、push 和部署；
-  本条更新时尚未执行推送，生产后端、端口 5002 和数据库均未动；
-  未改小程序，也未上传/提审/发布。静态 QA 不等于真实登录数据的端到端验收；待授权发布后需在
-  真实 `/tasks` 依次验证无昨日任务、已完成、未完成词书及已停用资源，并确认“再次布置”回填后仍由“添加”创建一条今日任务。
+- 业务提交 `ecda60e1f9cda1e0aa30e959df29e66b9e73419d` 已原子推送到
+  `origin/codex/tasks-yesterday-repeat` 与 `origin/main`。CI [31505122657](https://github.com/KB77GG/studytracker/actions/runs/31505122657)
+  整体 `success`：强制轻量测试和 Node 门禁通过；存量全仓 Ruff 仍在 advisory job 报既有错误，该 job
+  因 `continue-on-error` 不阻断，本轮新 service/test 的定向 Ruff 已单独通过。部署
+  [31505122726](https://github.com/KB77GG/studytracker/actions/runs/31505122726) `success`，SSH 部署 job 用时 41 秒。
+- 生产 `/root/apps/studytracker` 已运行 `ecda60e1f9cd`，只有既有未跟踪备份/调度库，无 tracked 脏改动。
+  `studytracker.service` 于 2026-08-11 23:06:01 CST 重启后为 `active/running`；Gunicorn 仍是
+  `127.0.0.1:5002`、`workers=1`、`worker_class=gthread`、`threads=6`，主进程加单 worker 子进程正常。
+  本机回环 `/` 与 `/tasks` 均返回预期的未登录 `302`，部署后 `journalctl` 未见
+  Traceback/ERROR/CRITICAL/OOM。
+- 已在用户现有 Chrome 登录态中新建标签页验收真实生产 `/tasks`。选择“蒋雅诺”后显示
+  2026-08-10 的 4 条已完成任务，两条词书分别显示 `第 31–104 词` 和 `第 1–52 词`，且无“再次布置”。
+  选择测试账号后，未完成 `wl 3-1` 正确显示“进行中 / 第 1–50 词 / 再次布置”；点击后表单回填
+  `material=dictation-7`、范围 `1–50` 并显示复核提示。验收未点“添加”，未创建任务或写数据库；
+  原 Chrome 页中的未提交表单选择也未被刷新/覆盖。新生产验收标签已留给用户查看。
+- 本轮无 schema/数据迁移，未改小程序，也无小程序上传/提审/发布。真实“无昨日任务”和
+  “已停用旧资源拒绝回填”分支未在生产逐项点击，已由代码分支与定向测试覆盖。
 - 桌面主工作树 `/Users/zhouxin/Desktop/studytracker` 本轮只读，仍为
-  `main@fd711f1c`、落后 `origin/main` 28 个提交，且有多个已修改/未跟踪路径；本轮没有覆盖或并入这些改动。
-  下一步按已获授权的发布流程提交、推送任务分支并快进更新 `main`触发后端部署。
-  部署后按生产护栏核验 HEAD、5002、`workers=1` + gthread + `threads=6`、服务日志和真实任务页读取链路。
+  `main@fd711f1c`、明显落后 `origin/main`，且有多个已修改/未跟踪路径；本轮没有覆盖或并入这些改动。
+  本任务已完成；若用户在真实日常学生上发现某类历史任务回填不全，下一位 agent 可直接从该任务 ID
+  的 source/range 字段和浏览器回填值开始定向排查，不要更改生产任务数据。
 
 ## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序已发布，后端待部署）
 
