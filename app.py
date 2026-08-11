@@ -53,6 +53,7 @@ from api.practice_catalog import (
 )
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
+from services.task_assignment_history import load_previous_day_assignments
 from services.vocabulary_mastery import (
     default_course_system_for_book_id,
     default_goal_for_book_id,
@@ -3734,6 +3735,8 @@ def tasks_page():
     # Filter by period
     period = request.args.get("period", "week")
     today_obj = date.today()
+    previous_day = today_obj - timedelta(days=1)
+    previous_day_tasks = load_previous_day_assignments(previous_day.isoformat())
     if period == "month":
         start_date = today_obj - timedelta(days=30)
     elif period == "year":
@@ -4104,6 +4107,8 @@ def tasks_page():
         all_materials=all_materials,
         pending_reviews=pending_reviews,
         dictation_range_hints=dictation_range_hints,
+        previous_day=previous_day.isoformat(),
+        previous_day_tasks=previous_day_tasks,
         listening_exercises=listening_exercises,
         listening_exercise_segments=listening_exercise_segments,
         reading_exercises=reading_exercises,

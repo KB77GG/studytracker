@@ -4,6 +4,19 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-11 教师任务页昨日任务与再次布置（已授权部署）
+
+- 在独立工作树 `/Users/zhouxin/.codex/worktrees/tasks-yesterday-repeat/studytracker`、分支
+  `codex/tasks-yesterday-repeat`、`HEAD=35991ae5` 完成 `/tasks` 表单增强：选中学生后在材料选择上方显示
+  昨日任务，词书显示真实书名和精确词序；未完成/未提交任务可用“再次布置”回填今日表单，但不直接写库，老资源失效时拒绝部分回填。
+- 三个定向 pytest 文件共 `16 passed`；目标 Ruff、Black check、Python compile、Jinja 完整渲染后的
+  `node --check`、`git diff --check` 均通过。Chrome 静态宽屏目视核对通过，图在
+  `/Users/zhouxin/.codex/visualizations/2026/08/11/019ff13b-61b4-7be2-a0bf-7505ec06606b/qa-yesterday-task-tall.png`。
+- 发布前项目级 Python 回归为 `481 passed, 7 subtests passed`，部署 Node 门禁通过。无 schema/数据变更，未改或发布小程序。
+  用户已明确授权 commit/push/deploy；本条更新时尚未推送，生产未变。桌面主工作树
+  `/Users/zhouxin/Desktop/studytracker` 仍是落后 28 个提交且带有其他已修改/未跟踪内容的
+  `main@fd711f1c`，本轮未触碰。下一步是在独立工作树提交、推送任务分支并快进更新 `main`触发部署，然后核验生产 HEAD/服务/日志和真实登录页面。
+
 ## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序已发布，后端待部署）
 
 - 在正确发布 worktree `/Users/zhouxin/.codex/worktrees/9478/studytracker` 完成答后辅助记忆卡：小组学习复用现有提交响应；

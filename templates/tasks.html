@@ -220,6 +220,20 @@
       </div>
     </div>
 
+    <section class="previous-day-panel" id="previousDayPanel" aria-labelledby="previousDayTitle">
+      <div class="previous-day-panel__header">
+        <div>
+          <h3 id="previousDayTitle">昨日任务</h3>
+          <p>选择学生后，快速核对昨天布置的内容和单词序号。</p>
+        </div>
+        <span class="previous-day-panel__date">{{ previous_day }}</span>
+      </div>
+      <div id="previousDayTaskList" class="previous-day-task-list" aria-live="polite" aria-atomic="true">
+        <div class="previous-day-empty">选择学生后显示昨日任务。</div>
+      </div>
+      <div id="previousDayRepeatStatus" class="previous-day-repeat-status" role="status" aria-live="polite"></div>
+    </section>
+
     <!-- 精听练习选择区域 (默认隐藏) -->
     <div class="task-form-row" id="listeningSelectRow" style="display: none;">
       <div class="field field--wide">
@@ -469,6 +483,8 @@
       </div>
     </div>
     <input id="taskDetail" type="hidden" name="detail" value="">
+    <input type="hidden" name="speaking_phrase_start" value="1">
+    <input type="hidden" name="speaking_phrase_end" value="">
   </form>
 
   <details class="filter-panel" open>
@@ -1726,6 +1742,154 @@
 	      color: var(--task-muted);
 	    }
 
+	    .previous-day-panel {
+	      width: 100%;
+	      overflow: hidden;
+	      border: 1px solid rgba(32, 117, 111, .24);
+	      border-radius: 10px;
+	      background: #fff;
+	    }
+
+	    .previous-day-panel__header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 14px;
+	      padding: 13px 14px;
+	      border-bottom: 1px solid var(--task-border);
+	      background: rgba(232, 247, 245, .58);
+	    }
+
+	    .previous-day-panel__header h3 {
+	      margin: 0;
+	      color: var(--task-ink);
+	      font-size: 14px;
+	      font-weight: 850;
+	    }
+
+	    .previous-day-panel__header p {
+	      margin: 3px 0 0;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      line-height: 1.45;
+	    }
+
+	    .previous-day-panel__date {
+	      flex: 0 0 auto;
+	      padding: 4px 8px;
+	      border: 1px solid rgba(32, 117, 111, .18);
+	      border-radius: 999px;
+	      background: #fff;
+	      color: var(--task-primary-strong);
+	      font-size: 12px;
+	      font-weight: 800;
+	      white-space: nowrap;
+	    }
+
+	    .previous-day-task-list {
+	      display: grid;
+	      gap: 8px;
+	      padding: 10px;
+	    }
+
+	    .previous-day-empty {
+	      padding: 11px 12px;
+	      border: 1px dashed var(--task-border);
+	      border-radius: 8px;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	      text-align: center;
+	    }
+
+	    .previous-day-task {
+	      display: grid;
+	      grid-template-columns: minmax(0, 1fr) auto;
+	      align-items: center;
+	      gap: 12px;
+	      padding: 10px 12px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	    }
+
+	    .previous-day-task__main {
+	      min-width: 0;
+	    }
+
+	    .previous-day-task__title-row,
+	    .previous-day-task__meta {
+	      display: flex;
+	      align-items: center;
+	      flex-wrap: wrap;
+	      gap: 6px 8px;
+	    }
+
+	    .previous-day-task__title {
+	      overflow: hidden;
+	      color: var(--task-ink);
+	      font-size: 13px;
+	      font-weight: 850;
+	      text-overflow: ellipsis;
+	      white-space: nowrap;
+	    }
+
+	    .previous-day-task__meta {
+	      margin-top: 4px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      line-height: 1.45;
+	    }
+
+	    .previous-day-task__category {
+	      color: var(--task-muted);
+	    }
+
+	    .previous-day-repeat {
+	      min-height: 36px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      padding: 7px 11px;
+	      border: 1px solid var(--task-primary);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-primary-strong);
+	      font-size: 12px;
+	      font-weight: 850;
+	      white-space: nowrap;
+	      cursor: pointer;
+	    }
+
+	    .previous-day-repeat:hover {
+	      background: var(--task-primary-soft);
+	    }
+
+	    .previous-day-repeat:focus-visible {
+	      outline: 2px solid var(--task-primary);
+	      outline-offset: 2px;
+	    }
+
+	    .previous-day-repeat-status {
+	      min-height: 0;
+	      padding: 0 12px;
+	      color: var(--task-primary-strong);
+	      font-size: 12px;
+	      font-weight: 750;
+	    }
+
+	    .previous-day-repeat-status:not(:empty) {
+	      min-height: 34px;
+	      display: flex;
+	      align-items: center;
+	      border-top: 1px solid rgba(32, 117, 111, .12);
+	      background: rgba(232, 247, 245, .42);
+	    }
+
+	    .previous-day-repeat-status.is-error {
+	      color: #991b1b;
+	      background: #fff1f2;
+	    }
+
 	    .task-form {
 	      padding: 16px;
 	      border-color: var(--task-border);
@@ -2480,6 +2644,23 @@
 	      .review-button-row {
 	        flex-direction: column;
 	      }
+
+	      .previous-day-task {
+	        grid-template-columns: minmax(0, 1fr);
+	      }
+
+	      .previous-day-panel__header {
+	        flex-direction: column;
+	      }
+
+	      .previous-day-repeat {
+	        width: 100%;
+	        min-height: 44px;
+	      }
+
+	      .previous-day-task__title {
+	        white-space: normal;
+	      }
 	    }
 	  </style>
 
@@ -2530,6 +2711,209 @@
     const readingExercisePassages = {{ reading_exercise_passages | tojson }};
     const knownStudentOptions = {{ student_picker_options | tojson }};
     const studentMemoRecordsByName = {{ student_memos | tojson }};
+    const previousDayTaskRecordsByName = {{ previous_day_tasks | tojson }};
+
+    function setupPreviousDayTasks() {
+      const list = document.getElementById('previousDayTaskList');
+      const status = document.getElementById('previousDayRepeatStatus');
+      if (!list || !status) return;
+
+      const knownStudentNames = new Set(knownStudentOptions.map(item => item.name));
+      const statusClass = taskStatus => {
+        if (['done', 'completed', 'finished'].includes(taskStatus)) return 'status-done';
+        if (taskStatus === 'submitted') return 'status-submitted';
+        if (['progress', 'in_progress'].includes(taskStatus)) return 'status-progress';
+        return 'status-pending';
+      };
+      const setStatus = (message, isError = false) => {
+        status.textContent = message;
+        status.classList.toggle('is-error', isError);
+      };
+      const hasOption = (select, value) => Boolean(
+        select && Array.from(select.options).some(option => option.value === String(value || ''))
+      );
+      const setQuestionSelection = ids => {
+        const selected = new Set((ids || []).map(String));
+        document.querySelectorAll('#questionListContainer .question-checkbox').forEach(box => {
+          box.checked = selected.has(String(box.value));
+        });
+        syncQuestionIds();
+      };
+
+      async function applyRepeatPreset(studentName, task) {
+        const repeat = task.repeat || {};
+        const source = repeat.source || 'custom';
+        const sourceRadio = document.querySelector(`input[name="task_source"][value="${source}"]`);
+        const materialSelect = document.getElementById('material_id');
+        const listeningSelect = document.getElementById('listeningExerciseSelect');
+        const readingSelect = document.getElementById('readingExerciseSelect');
+        const categorySelect = document.getElementById('taskCategory');
+
+        if (!sourceRadio) {
+          setStatus('该任务来源当前不可用，未回填。', true);
+          return;
+        }
+        if (source === 'material' && !hasOption(materialSelect, repeat.material_value)) {
+          setStatus('昨天使用的材料当前已停用或不存在，未回填。', true);
+          return;
+        }
+        if (source === 'listening' && !hasOption(listeningSelect, repeat.listening_exercise_id)) {
+          setStatus('昨天使用的听力练习当前不可用，未回填。', true);
+          return;
+        }
+        if (source === 'reading' && !hasOption(readingSelect, repeat.reading_test_id)) {
+          setStatus('昨天使用的阅读练习当前不可用，未回填。', true);
+          return;
+        }
+        if (source === 'custom' && !hasOption(categorySelect, repeat.category)) {
+          setStatus('昨天使用的任务类别当前不可用，未回填。', true);
+          return;
+        }
+
+        const studentInput = document.getElementById('taskStudent');
+        if (studentInput) studentInput.value = studentName;
+        if (source === 'material' && materialSelect) materialSelect.value = '';
+        sourceRadio.checked = true;
+        toggleTaskSource(source);
+
+        if (source === 'material') {
+          materialSelect.value = repeat.material_value || '';
+          await toggleDetailInput();
+
+          const startInput = document.getElementsByName('dictation_word_start')[0];
+          const endInput = document.getElementsByName('dictation_word_end')[0];
+          if (startInput) {
+            startInput.value = repeat.dictation_word_start || 1;
+            startInput.dataset.autofill = '0';
+          }
+          if (endInput) endInput.value = repeat.dictation_word_end || '';
+
+          const goalSelect = document.getElementById('vocabularyGoalSelect');
+          if (goalSelect && repeat.vocabulary_goal) {
+            goalSelect.value = repeat.vocabulary_goal;
+            goalSelect.dataset.autofill = '0';
+          }
+          const modeSelect = document.getElementById('dictationModeSelect');
+          if (modeSelect && repeat.dictation_mode) {
+            modeSelect.value = repeat.dictation_mode;
+            modeSelect.dataset.autofill = '0';
+          }
+          const orderSelect = document.getElementById('dictationOrderSelect');
+          if (orderSelect && repeat.dictation_order) {
+            orderSelect.value = repeat.dictation_order;
+          }
+          const phraseStart = document.getElementsByName('speaking_phrase_start')[0];
+          const phraseEnd = document.getElementsByName('speaking_phrase_end')[0];
+          if (phraseStart) phraseStart.value = repeat.speaking_phrase_start || 1;
+          if (phraseEnd) phraseEnd.value = repeat.speaking_phrase_end || '';
+          setQuestionSelection(repeat.question_ids);
+          updateDictationRangeSuggestion();
+        } else if (source === 'listening') {
+          listeningSelect.value = repeat.listening_exercise_id || '';
+          const resourceType = document.getElementById('listeningResourceType');
+          if (resourceType) resourceType.value = repeat.listening_resource_type || 'intensive';
+          handleListeningExerciseChange();
+          window.syncListeningPickerFromSelect?.();
+          const sectionValue = repeat.listening_section_number
+            ? String(repeat.listening_section_number)
+            : '';
+          document.querySelectorAll('input[name="listening_section_number"]').forEach(radio => {
+            radio.checked = radio.value === sectionValue;
+          });
+          setQuestionSelection(repeat.question_ids);
+        } else if (source === 'reading') {
+          readingSelect.value = repeat.reading_test_id || '';
+          handleReadingExerciseChange();
+          const passageValue = repeat.reading_passage_number
+            ? String(repeat.reading_passage_number)
+            : '';
+          document.querySelectorAll('input[name="reading_passage_number"]').forEach(radio => {
+            radio.checked = radio.value === passageValue;
+          });
+        } else {
+          categorySelect.value = repeat.category || '';
+        }
+
+        const plannedInput = document.getElementById('taskPlanned');
+        const noteInput = document.getElementById('taskNote');
+        const detailInput = document.getElementById('taskDetail');
+        if (plannedInput) plannedInput.value = repeat.planned_minutes || '';
+        if (noteInput) noteInput.value = repeat.note || '';
+        if (detailInput) detailInput.value = repeat.detail || '';
+        setStatus(`已回填“${task.title}”，确认无误后点击“添加”。`);
+      }
+
+      function renderPreviousDayTasks(rawName) {
+        const studentName = String(rawName || '').trim();
+        setStatus('');
+        list.replaceChildren();
+
+        if (!studentName) {
+          const empty = document.createElement('div');
+          empty.className = 'previous-day-empty';
+          empty.textContent = '选择学生后显示昨日任务。';
+          list.appendChild(empty);
+          return;
+        }
+
+        const tasks = previousDayTaskRecordsByName[studentName];
+        if (!tasks || !tasks.length) {
+          const empty = document.createElement('div');
+          empty.className = 'previous-day-empty';
+          empty.textContent = knownStudentNames.has(studentName)
+            ? `${studentName} 昨天没有布置任务。`
+            : '请选择完整的学生姓名后查看昨日任务。';
+          list.appendChild(empty);
+          return;
+        }
+
+        tasks.forEach(task => {
+          const item = document.createElement('article');
+          item.className = 'previous-day-task';
+
+          const main = document.createElement('div');
+          main.className = 'previous-day-task__main';
+          const titleRow = document.createElement('div');
+          titleRow.className = 'previous-day-task__title-row';
+          const title = document.createElement('span');
+          title.className = 'previous-day-task__title';
+          title.textContent = task.title;
+          const badge = document.createElement('span');
+          badge.className = `badge ${statusClass(task.status)}`;
+          badge.textContent = task.status_label;
+          titleRow.append(title, badge);
+
+          const meta = document.createElement('div');
+          meta.className = 'previous-day-task__meta';
+          const resource = document.createElement('span');
+          resource.textContent = task.resource_meta;
+          meta.appendChild(resource);
+          if (task.category) {
+            const category = document.createElement('span');
+            category.className = 'previous-day-task__category';
+            category.textContent = task.category;
+            meta.appendChild(category);
+          }
+          main.append(titleRow, meta);
+          item.appendChild(main);
+
+          if (task.repeatable) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'previous-day-repeat';
+            button.textContent = '再次布置';
+            button.setAttribute('aria-label', `再次布置：${task.title}`);
+            button.addEventListener('click', () => applyRepeatPreset(studentName, task));
+            item.appendChild(button);
+          }
+          list.appendChild(item);
+        });
+      }
+
+      window.renderPreviousDayTasks = renderPreviousDayTasks;
+      renderPreviousDayTasks(document.getElementById('taskStudent')?.value || '');
+    }
+    setupPreviousDayTasks();
 
     function setupDictationInputGrant() {
       const panel = document.getElementById('dictationInputGrantPanel');
@@ -2864,6 +3248,7 @@
         if (window.setDictationGrantStudentByName) {
           window.setDictationGrantStudentByName(name);
         }
+        window.renderPreviousDayTasks?.(name);
       };
       const renderSuggestions = () => {
         const query = normalize(input.value);
@@ -2914,6 +3299,7 @@
         if (exact && window.setDictationGrantStudentByName) {
           window.setDictationGrantStudentByName(exact.name);
         }
+        window.renderPreviousDayTasks?.(input.value.trim());
       });
       input.addEventListener('focus', renderSuggestions);
       input.addEventListener('blur', () => {

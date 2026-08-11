@@ -1,7 +1,42 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-10（Asia/Shanghai）。
+> 最近更新：2026-08-11（Asia/Shanghai）。
+
+## 2026-08-11 教师任务页“昨日任务 / 再次布置”（已授权部署，门禁通过）
+
+- 本轮为避免覆盖桌面主工作树的来源不明改动，从最新 `origin/main@35991ae5` 创建独立工作树
+  `/Users/zhouxin/.codex/worktrees/tasks-yesterday-repeat/studytracker`，分支 `codex/tasks-yesterday-repeat`，
+  基线/当前 HEAD 仍为 `35991ae5`。新工作树初始干净；当前未提交改动为 `app.py`、
+  `templates/tasks.html`、新增 `services/task_assignment_history.py`、新增
+  `tests/test_task_assignment_history.py`，以及本轮交接文档。
+- `/tasks` 布置表单现在会在学生/任务来源下方、具体材料选择上方显示选中学生的昨日任务。
+  卡片包含任务名、类别、状态与资源来源；词书任务使用真实 `DictationBook.title` 并显示精确
+  `第 X–Y 词`。结束位未存储时用词书总词数补充展示，但再次布置仍保留原始“至全部”语义。
+- 只有未完成且未提交待批改的昨日任务显示“再次布置”。按钮不会立即写数据，而是安全回填
+  今日现有表单的学生、来源、材料/题库、词序/句序、学习目标、出题顺序、计划用时与备注；
+  老资源已停用或不存在时拒绝部分回填。教师仍必须复核后点原有“添加”，因此本轮没有新的直接写入端点。
+  动态内容用 `textContent` 生成，并增加 `aria-live`、键盘焦点样式、窄屏单列和 44px 触控目标。
+- 精确验证：
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_history.py tests/test_dictation_input_policy.py tests/test_task_review_permissions.py`
+  为 `16 passed`（只有既有 SQLAlchemy / `datetime.utcnow` 弃用警告）；
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check services/task_assignment_history.py tests/test_task_assignment_history.py`
+  为 `All checks passed!`；同两文件 `black --check` 通过；
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m py_compile services/task_assignment_history.py app.py` 与
+  `git diff --check` 通过。此外用 Jinja 假数据渲染完整 `tasks.html`，抽取所有内联脚本后 `node --check`
+  通过；Google Chrome 桌面宽度静态样例渲染已目视核对，截图为
+  `/Users/zhouxin/.codex/visualizations/2026/08/11/019ff13b-61b4-7be2-a0bf-7505ec06606b/qa-yesterday-task-tall.png`。
+  发布前项目级回归
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `481 passed, 7 subtests passed`；`node tests/test_dictation_spell_queue.js` 与最终 `git diff --check` 通过。
+- 本轮无 schema/数据迁移，未写本地或生产数据。用户已于 2026-08-11 明确授权 commit、push 和部署；
+  本条更新时尚未执行推送，生产后端、端口 5002 和数据库均未动；
+  未改小程序，也未上传/提审/发布。静态 QA 不等于真实登录数据的端到端验收；待授权发布后需在
+  真实 `/tasks` 依次验证无昨日任务、已完成、未完成词书及已停用资源，并确认“再次布置”回填后仍由“添加”创建一条今日任务。
+- 桌面主工作树 `/Users/zhouxin/Desktop/studytracker` 本轮只读，仍为
+  `main@fd711f1c`、落后 `origin/main` 28 个提交，且有多个已修改/未跟踪路径；本轮没有覆盖或并入这些改动。
+  下一步按已获授权的发布流程提交、推送任务分支并快进更新 `main`触发后端部署。
+  部署后按生产护栏核验 HEAD、5002、`workers=1` + gthread + `threads=6`、服务日志和真实任务页读取链路。
 
 ## 2026-08-10 词汇答后辅助记忆卡与结果按钮比例（小程序已发布，后端待部署）
 
