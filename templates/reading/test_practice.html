@@ -1021,13 +1021,17 @@ async function loadExistingSubmission() {
     const submission = data?.submission;
     if (!response.ok || !data.ok || !submission?.answers) return;
     Object.assign(answers, submission.answers);
-    serverResult = {
-      correct: submission.correct_count,
-      total: submission.total_count,
-      accuracy: submission.accuracy,
-      ielts_score: submission.ielts_score,
-      results: submission.results || []
-    };
+    if (assignedPassageNumber) {
+      serverResult = PracticeScoring.gradeReadingTestAnswers(testData, answers);
+    } else {
+      serverResult = {
+        correct: submission.correct_count,
+        total: submission.total_count,
+        accuracy: submission.accuracy,
+        ielts_score: submission.ielts_score,
+        results: submission.results || []
+      };
+    }
     resultMode = true;
     document.body.classList.add("result-mode");
     renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
