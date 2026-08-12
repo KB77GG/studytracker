@@ -57,7 +57,7 @@ class DictationGroupingMarkupTest(unittest.TestCase):
         self.assertNotIn("REINSERT_GAP", logic)
         self.assertNotIn("reinsertCurrentWord", logic)
 
-    def test_english_pages_use_shared_keyboard_and_compatibility_input_only(self):
+    def test_english_pages_use_native_input_and_keep_focus_recovery(self):
         practice_markup = (
             ROOT / "miniprogram/pages/student/dictation/practice/index.wxml"
         ).read_text(encoding="utf-8")
@@ -72,12 +72,16 @@ class DictationGroupingMarkupTest(unittest.TestCase):
         ).read_text(encoding="utf-8")
 
         self.assertIn('maxlength="-1"', practice_markup)
-        self.assertIn("english-keyboard", practice_markup)
-        self.assertIn("!isEnglishSpelling || inputMode === 'compatible'", practice_markup)
+        self.assertIn("<input", practice_markup)
+        self.assertNotIn("english-keyboard", practice_markup)
+        self.assertNotIn("inputMode", practice_markup)
+        self.assertIn("input_mode: 'native'", practice_logic)
         self.assertIn("refocusAnswerInput", practice_logic)
         self.assertIn("inputFocus: false", practice_logic)
-        self.assertIn("english-keyboard", spell_markup)
-        self.assertIn("inputMode === 'compatible'", spell_markup)
+        self.assertIn("<input", spell_markup)
+        self.assertNotIn("english-keyboard", spell_markup)
+        self.assertNotIn("inputMode", spell_markup)
+        self.assertIn("input_mode: 'native'", spell_logic)
         self.assertNotIn("refocusHiddenInput", spell_logic)
         self.assertNotIn("hidden-input", spell_markup)
 

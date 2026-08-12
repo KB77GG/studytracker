@@ -146,14 +146,14 @@
   line-height: 1.55;
 }
 
-.compat-review-actions {
+.spelling-correction-actions {
   display: flex;
   gap: 16rpx;
   max-width: 640px;
   margin: 24rpx auto 0;
 }
 
-.compat-review-actions button {
+.spelling-correction-actions button {
   flex: 1;
   height: 82rpx;
   line-height: 82rpx;
@@ -162,17 +162,17 @@
   font-weight: 700;
 }
 
-.compat-review-actions button::after {
+.spelling-correction-actions button::after {
   border: 0;
 }
 
-.compat-skip {
+.correction-skip {
   color: #237069;
   background: #eef7f5;
   border: 2rpx solid rgba(8, 127, 119, 0.35);
 }
 
-.compat-retry {
+.correction-retry {
   color: #fff;
   background: #087f77;
 }

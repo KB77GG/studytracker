@@ -730,9 +730,6 @@ def submit_dictation_answer(
         )
     except ValueError as error:
         raise DictationReviewError("invalid_input_mode", 400) from error
-    except PermissionError as error:
-        raise DictationReviewError("compatible_input_not_authorized", 403) from error
-
     is_correct = _answer_is_correct(word, answer, mode)
     is_first = True
     if snapshot is not None:

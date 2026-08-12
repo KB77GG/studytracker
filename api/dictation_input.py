@@ -1,4 +1,4 @@
-"""Staff-authorized native input policy for English spelling practice."""
+"""Legacy input-grant history and native-input policy endpoints."""
 
 from datetime import datetime
 from functools import wraps
@@ -46,7 +46,7 @@ def _student_task_for_user(user: User, task_id: int | None):
 @dictation_input_bp.get("/input-policy")
 @require_api_user()
 def get_input_policy():
-    """Return strict-by-default policy for the current student."""
+    """Return the native-input policy in the legacy response shape."""
 
     user = request.current_api_user
     if user.role != User.ROLE_STUDENT:

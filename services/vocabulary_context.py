@@ -188,9 +188,9 @@ def _public_question(question_id, kind, prompt, *, options=None, input_mode=None
         payload["mode"] = "context_choice"
     else:
         payload["options"] = []
-        payload["answer_type"] = "english_strict"
+        payload["answer_type"] = "english_text"
         payload["mode"] = "context_fill"
-        payload["input_mode"] = input_mode or "strict"
+        payload["input_mode"] = input_mode or "native"
     return payload
 
 
@@ -218,7 +218,7 @@ def _example_fill(word, seed):
     return public, {
         "answer": matched_lemma or lemma,
         "accepted_answers": _accepted_answers(word, matched_lemma or lemma),
-        "answer_type": "english_strict",
+        "answer_type": "english_text",
     }
 
 
@@ -248,7 +248,7 @@ def _collocation_fill(word, seed):
     return public, {
         "answer": matched_lemma or lemma,
         "accepted_answers": _accepted_answers(word, matched_lemma or lemma),
-        "answer_type": "english_strict",
+        "answer_type": "english_text",
     }
 
 

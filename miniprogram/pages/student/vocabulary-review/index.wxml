@@ -64,7 +64,7 @@
         </view>
       </block>
 
-      <input wx:if="{{!showResult && !isEnglishSpelling && !isMeaningChoice && currentItem.mode !== 'context_choice'}}"
+      <input wx:if="{{!showResult && !isMeaningChoice && currentItem.mode !== 'context_choice'}}"
              class="answer-input" value="{{inputValue}}" bindinput="onInput"
              bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
       <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
@@ -80,23 +80,7 @@
       />
     </view>
 
-    <view class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && !showResult}}">
-      <english-keyboard
-        answer=""
-        safe-separators="{{currentItem.answer_separators}}"
-        value="{{inputValue}}"
-        status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
-        can-confirm="{{!!inputValue && !submitting}}"
-        confirm-label="{{submitting ? '提交中…' : '确认'}}"
-        show-wrong-actions="{{false}}"
-        disabled="{{submitting || settling}}"
-        bind:key="onKeyboardKey"
-        bind:backspace="onKeyboardBackspace"
-        bind:confirm="submitAnswer"
-      />
-    </view>
-
-    <button wx:if="{{!showResult && !isEnglishSpelling}}" class="primary-btn" bindtap="submitAnswer" disabled="{{submitting || settling}}">
+    <button wx:if="{{!showResult}}" class="primary-btn" bindtap="submitAnswer" disabled="{{submitting || settling}}">
       {{submitting ? '提交中…' : '提交答案'}}
     </button>
     <button wx:if="{{showResult}}" class="primary-btn next-question-btn" bindtap="nextItem" disabled="{{submitting || settling}}">

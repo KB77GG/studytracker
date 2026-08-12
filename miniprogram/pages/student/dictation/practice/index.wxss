@@ -161,13 +161,6 @@
   margin-bottom: 20rpx;
 }
 
-.practice-input-mode {
-  width: 100%;
-  margin: 8rpx 0 4rpx;
-  display: flex;
-  justify-content: center;
-}
-
 .context-prompt {
   width: 100%;
   gap: 18rpx;
@@ -226,20 +219,14 @@
   line-height: 1.55;
 }
 
-.strict-keyboard-wrap {
-  width: 100%;
-  padding: 0 12rpx;
-  box-sizing: border-box;
-}
-
-.compat-practice-actions {
+.spelling-correction-actions {
   display: flex;
   gap: 16rpx;
   max-width: 640px;
   margin: 24rpx auto 0;
 }
 
-.compat-practice-actions button {
+.spelling-correction-actions button {
   flex: 1;
   height: 82rpx;
   line-height: 82rpx;
@@ -248,17 +235,17 @@
   font-weight: 700;
 }
 
-.compat-practice-actions button::after {
+.spelling-correction-actions button::after {
   border: 0;
 }
 
-.compat-practice-actions .compat-skip {
+.spelling-correction-actions .correction-skip {
   color: #237069;
   background: #eef7f5;
   border: 2rpx solid rgba(8, 127, 119, 0.35);
 }
 
-.compat-practice-actions .compat-retry {
+.spelling-correction-actions .correction-retry {
   color: #fff;
   background: #087f77;
 }
@@ -967,105 +954,5 @@
   .word-card {
     padding-left: 18px;
     padding-right: 18px;
-  }
-}
-
-.practice-container.strict-practice {
-  height: 100vh;
-  min-height: 0;
-  max-width: 760px;
-  padding: 16rpx 16rpx 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.strict-practice .queue-source-count,
-.strict-practice .status-bar {
-  flex: 0 0 auto;
-}
-
-.strict-practice .status-bar {
-  margin-bottom: 12rpx;
-}
-
-.strict-practice .word-card {
-  flex: 1 1 auto;
-  min-height: 0;
-  margin-bottom: 12rpx;
-  padding: 24rpx 28rpx;
-  overflow-x: hidden;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-
-.strict-practice .test-word-card.prompt-state {
-  justify-content: center;
-}
-
-.strict-practice .translation-prompt {
-  padding: 14rpx 12rpx;
-}
-
-.strict-practice .play-controls {
-  margin-bottom: 8rpx;
-}
-
-.strict-practice .practice-input-mode {
-  margin-top: 4rpx;
-}
-
-.strict-practice .strict-keyboard-wrap {
-  flex: 0 0 auto;
-  width: 100%;
-  padding: 0;
-}
-
-/* Keep the round play button circular even when the card is height-constrained. */
-.strict-practice .play-btn {
-  flex-shrink: 0;
-}
-
-/* Result state: drop answer-time chrome so the vocabulary card owns the space. */
-.strict-practice .result-state .play-btn,
-.strict-practice .result-state .play-hint,
-.strict-practice .result-state .play-controls,
-.strict-practice .result-state .practice-input-mode {
-  display: none;
-}
-
-.strict-practice .result-state .result-feedback,
-.strict-practice .result-state .english-wrong-feedback {
-  margin-top: 0;
-}
-
-@media (max-width: 360px) {
-  .practice-container.strict-practice {
-    padding: 10px 6px 0;
-  }
-
-  .strict-practice .word-card {
-    padding: 12px 14px;
-  }
-}
-
-@media (max-height: 700px) {
-  .practice-container.strict-practice {
-    padding-top: 8rpx;
-  }
-
-  .strict-practice .status-bar {
-    margin-bottom: 6rpx;
-  }
-
-  .strict-practice .word-card {
-    margin-bottom: 6rpx;
-    padding-top: 14rpx;
-    padding-bottom: 14rpx;
-  }
-
-  .strict-practice .translation-prompt {
-    padding-top: 6rpx;
-    padding-bottom: 6rpx;
   }
 }

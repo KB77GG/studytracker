@@ -896,9 +896,6 @@ def submit_vocabulary_answer(user: User, payload: dict, *, now: datetime | None 
         )
     except ValueError as error:
         raise VocabularyMasteryError("invalid_input_mode", 400) from error
-    except PermissionError as error:
-        raise VocabularyMasteryError("compatible_input_not_authorized", 403) from error
-
     if item.dimension == "context_use":
         is_correct = grade_context_answer(
             snapshot,

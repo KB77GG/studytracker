@@ -110,9 +110,10 @@ class VocabularyLearningMiniProgramStructureTest(unittest.TestCase):
             self.assertIn("vocabulary-feedback-card", config["usingComponents"])
             self.assertIn('wx:if="{{showResult && answerFeedback}}"', markup)
             self.assertIn(
-                'class="strict-keyboard-wrap" wx:if="{{isEnglishSpelling && !showResult}}"',
+                '<input wx:if="{{!showResult && !isMeaningChoice',
                 markup,
             )
+            self.assertNotIn("english-keyboard", markup)
             self.assertIn('wx:if="{{showResult}}" class="primary-btn next-question-btn"', markup)
             self.assertNotIn('show-next="{{showResult}}"', markup)
             self.assertIn("normalizeAnswerFeedback", script)
@@ -133,10 +134,8 @@ class VocabularyLearningMiniProgramStructureTest(unittest.TestCase):
         for page in ("vocabulary-learning", "vocabulary-review"):
             markup = self.read(f"miniprogram/pages/student/{page}/index.wxml")
             script = self.read(f"miniprogram/pages/student/{page}/index.js")
-            self.assertIn(
-                'confirm-label="{{submitting ? \'提交中…\' : \'确认\'}}"',
-                markup,
-            )
+            self.assertIn('confirm-type="done"', markup)
+            self.assertIn("input_mode: 'native'", script)
             self.assertIn("timeout: 15000", script)
             self.assertIn("this.setData({ submitting: false })", script)
 

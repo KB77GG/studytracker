@@ -33,7 +33,6 @@
 .option { min-height: 88rpx; padding: 22rpx; border: 2rpx solid #e0e5ee; border-radius: 16rpx; color: #3f4a61; line-height: 1.45; overflow-wrap: anywhere; box-sizing: border-box; }
 .option.selected { border-color: #087f77; background: #e8f7f4; color: #1b5851; }
 .answer-input { width: 100%; padding: 20rpx; border: 2rpx solid #dfe4ee; border-radius: 16rpx; box-sizing: border-box; font-size: 31rpx; }
-.strict-keyboard-wrap { width: 100%; margin-top: 20rpx; }
 .result { width: 100%; padding: 22rpx; border-radius: 16rpx; display: flex; flex-direction: column; gap: 8rpx; box-sizing: border-box; }
 .result.correct { background: #eaf8ef; color: #218647; }
 .result.wrong { background: #fff0ef; color: #b43b35; }

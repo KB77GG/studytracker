@@ -30,13 +30,6 @@
   <block wx:elif="{{stage === 'drill'}}">
     <view class="sage-header">
       <image class="sage-logo" src="/images/logo.jpg" mode="aspectFill"/>
-      <view class="mode-switch-row" wx:if="{{inputPolicy.compatibleAllowed}}">
-        <input-mode-switcher
-          value="{{inputMode}}"
-          allowed="{{inputPolicy.compatibleAllowed}}"
-          bind:change="onInputModeChange"
-        />
-      </view>
     </view>
 
     <view class="growth-progress" aria-label="本组进度 {{completedCount + 1}} / {{totalWords}}">
@@ -72,7 +65,7 @@
         <text>{{isLoadingAudio ? '播放中' : '重听'}}</text>
       </button>
 
-      <input wx:if="{{inputMode === 'compatible'}}" class="compat-input"
+      <input wx:if="{{!showResult}}" class="native-answer-input"
              value="{{inputValue}}"
              focus="{{!showResult}}"
              confirm-type="done"
@@ -114,34 +107,15 @@
       </button>
     </view>
 
-    <view class="strict-keyboard-wrap" wx:if="{{inputMode === 'strict'}}">
-      <english-keyboard
-        answer="{{currentWord.word || ''}}"
-        value="{{inputValue}}"
-        status="{{showResult ? (resultCorrect ? 'correct' : (resultRevealed ? 'revealed' : 'wrong')) : 'idle'}}"
-        show-value="{{false}}"
-        can-confirm="{{!!inputValue && !isCheckingFirstAnswer}}"
-        show-wrong-actions="{{showResult && !resultCorrect && !resultRevealed}}"
-        show-next="{{showResult && (resultCorrect || resultRevealed)}}"
-        disabled="{{isCheckingFirstAnswer || isAdvancingWord}}"
-        bind:key="onKeyboardKey"
-        bind:backspace="onKeyboardBackspace"
-        bind:confirm="checkAnswer"
-        bind:retry="retrySpell"
-        bind:skip="skipSpell"
-        bind:next="nextAfterResult"
-      />
-    </view>
-
-    <view wx:if="{{inputMode === 'compatible' && !(showResult && !resultCorrect && !resultRevealed)}}" class="bottom-bar" style="bottom: calc(24rpx + env(safe-area-inset-bottom));">
+    <view wx:if="{{!(showResult && !resultCorrect && !resultRevealed)}}" class="bottom-bar" style="bottom: calc(24rpx + env(safe-area-inset-bottom));">
       <button class="round-control exit" bindtap="exitPage">×<text class="key-hint">Esc</text></button>
       <button class="round-control confirm" loading="{{isCheckingFirstAnswer || isAdvancingWord}}" disabled="{{isCheckingFirstAnswer || isAdvancingWord}}" bindtap="submitOrNext">
         {{showResult ? '→' : '✓'}}<text class="key-hint">↵</text>
       </button>
     </view>
-    <view wx:if="{{inputMode === 'compatible' && showResult && !resultCorrect && !resultRevealed}}" class="compat-wrong-actions">
-      <button class="compat-skip" bindtap="skipSpell">暂时跳过</button>
-      <button class="compat-retry" bindtap="retrySpell">重新拼写</button>
+    <view wx:if="{{showResult && !resultCorrect && !resultRevealed}}" class="spelling-correction-actions">
+      <button class="correction-skip" bindtap="skipSpell">暂时跳过</button>
+      <button class="correction-retry" bindtap="retrySpell">重新拼写</button>
     </view>
 
     <view class="phonetic-pill" wx:if="{{showResult && resultCorrect && currentWord.phonetic}}">

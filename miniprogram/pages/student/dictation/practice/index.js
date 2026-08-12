@@ -24,17 +24,7 @@ const {
     summarizeQueue,
     queueMode
 } = require('../../../../utils/dictation-review.js')
-const {
-    INPUT_COMPATIBLE,
-    INPUT_NATIVE,
-    INPUT_STRICT,
-    answerInputLimit,
-    chooseInputMode,
-    defaultInputPolicy,
-    inputModeStorageKey,
-    isEnglishSpellingMode,
-    normalizeKeyboardKey
-} = require('../../../../utils/dictation-input-policy.js')
+const { isEnglishSpellingMode } = require('../../../../utils/dictation-input-policy.js')
 const { resolveAudioUrl } = require('../../../../utils/dictation-audio.js')
 
 const MODE_AUDIO_TO_EN = 'audio_to_en'
@@ -109,13 +99,6 @@ function directYoudaoAudioUrl(word) {
     return `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`
 }
 
-function answerLimitForWord(word) {
-    if (!word) return 1
-    if (word.word) return answerInputLimit(word.word, word.accepted_answers)
-    const length = Number(word.answer_length)
-    return Number.isFinite(length) && length > 0 ? length : 64
-}
-
 Page({
     data: {
         bookId: null,
@@ -186,8 +169,6 @@ Page({
         reviewCount: 0,
         recoveryMissingWordIds: [],
         appealSubmitted: false,
-        inputMode: INPUT_NATIVE,
-        inputPolicy: defaultInputPolicy(MODE_AUDIO_TO_EN),
         isEnglishSpelling: true
     },
 
@@ -556,97 +537,11 @@ Page({
     },
 
     refocusAnswerInput(delay = 50) {
-        if (this.data.inputMode === INPUT_STRICT) return;
         this.setData({ inputFocus: false });
         setTimeout(() => {
             if (this.data.phase !== 'test' || this.data.showResult || this.data.finished) return;
             this.setData({ inputFocus: true });
         }, delay);
-    },
-
-    loadInputPolicy(mode) {
-        this.inputPolicyRequestToken = (this.inputPolicyRequestToken || 0) + 1;
-        const requestToken = this.inputPolicyRequestToken;
-        const fallback = defaultInputPolicy(mode);
-        const storageKey = inputModeStorageKey({
-            taskId: this.data.taskId,
-            bookId: this.data.bookId,
-            mode
-        });
-        this.setData({
-            inputPolicy: fallback,
-            inputMode: fallback.defaultInputMode,
-            isEnglishSpelling: fallback.isEnglishSpelling
-        });
-        if (!fallback.isEnglishSpelling) return;
-        request('/dictation/input-policy', {
-            data: {
-                mode,
-                task_id: this.data.taskId || undefined
-            }
-        }).then((res) => {
-            if (requestToken !== this.inputPolicyRequestToken) return;
-            const raw = res && res.policy;
-            const policy = raw ? {
-                mode: raw.mode || mode,
-                isEnglishSpelling: !!raw.is_english_spelling,
-                defaultInputMode: raw.default_input_mode || INPUT_STRICT,
-                compatibleAllowed: !!raw.compatible_allowed,
-                grant: raw.grant || null
-            } : fallback;
-            this.setData({
-                inputPolicy: policy,
-                inputMode: chooseInputMode(policy, wx.getStorageSync(storageKey))
-            }, () => this.refocusAnswerInput());
-        }).catch(() => {
-            if (requestToken !== this.inputPolicyRequestToken) return;
-            this.setData({ inputPolicy: fallback, inputMode: INPUT_STRICT });
-        });
-    },
-
-    onInputModeChange(e) {
-        const nextMode = e && e.detail && e.detail.mode;
-        if (!this.data.inputPolicy.compatibleAllowed || !nextMode || nextMode === this.data.inputMode) return;
-        const change = () => {
-            const storageKey = inputModeStorageKey({
-                taskId: this.data.taskId,
-                bookId: this.data.bookId,
-                mode: this.data.currentMode
-            });
-            wx.setStorageSync(storageKey, nextMode);
-            this.setData({
-                inputMode: nextMode,
-                inputValue: '',
-                inputError: false,
-                resultRevealed: false
-            }, () => this.refocusAnswerInput());
-        };
-        if (this.data.inputValue) {
-            wx.showModal({
-                title: '切换输入方式',
-                content: '切换后会清空当前答案，是否继续？',
-                confirmText: '清空并切换',
-                success: res => { if (res.confirm) change(); }
-            });
-            return;
-        }
-        change();
-    },
-
-    onKeyboardKey(e) {
-        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return;
-        const key = normalizeKeyboardKey(e && e.detail && e.detail.key);
-        const limit = answerLimitForWord(this.data.currentWord);
-        if (!key || this.data.inputValue.length >= limit) return;
-        this.setData({ inputValue: `${this.data.inputValue}${key}`, inputError: false });
-    },
-
-    onKeyboardBackspace() {
-        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return;
-        this.setData({
-            inputValue: String(this.data.inputValue || '').slice(0, -1),
-            inputError: false
-        });
     },
 
     retrySpelling() {
@@ -690,11 +585,8 @@ Page({
             showHint: false,
             attemptCount: recoveredFirst ? 1 : 0,
             appealSubmitted: false,
-            inputMode: defaultInputPolicy(currentMode).defaultInputMode,
-            inputPolicy: defaultInputPolicy(currentMode),
             isEnglishSpelling: isEnglishSpellingMode(currentMode)
         }, () => {
-            this.loadInputPolicy(currentMode);
             this.refocusAnswerInput();
             if (onReady) onReady();
         });
@@ -986,7 +878,6 @@ Page({
     },
 
     onInput: function (e) {
-        if (this.data.inputMode === INPUT_STRICT) return;
         this.setData({
             inputValue: e.detail.value,
             inputError: false
@@ -1181,8 +1072,7 @@ Page({
             task_id: this.data.taskId || null,
             answer,
             mode: this.data.currentMode,
-            input_mode: this.data.inputMode,
-            input_grant_id: this.data.inputPolicy.grant && this.data.inputPolicy.grant.id,
+            input_mode: 'native',
             attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
             is_first_attempt: true,
             strict_queue: !!this.data.taskId,

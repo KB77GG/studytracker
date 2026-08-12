@@ -1051,8 +1051,6 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         )
     except ValueError as error:
         raise VocabularyGroupLearningError("invalid_input_mode", 400) from error
-    except PermissionError as error:
-        raise VocabularyGroupLearningError("compatible_input_not_authorized", 403) from error
     is_correct = _grade_question(question, answer)
     is_first = question.first_attempt_id is None
     if supplied_retry != (not is_first):

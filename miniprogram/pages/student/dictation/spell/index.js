@@ -19,16 +19,6 @@ const {
     queueMode
 } = require('../../../../utils/dictation-review.js')
 const {
-    INPUT_COMPATIBLE,
-    INPUT_STRICT,
-    answerInputLimit,
-    chooseInputMode,
-    defaultInputPolicy,
-    inputModeStorageKey,
-    isEnglishSpellingMode,
-    normalizeKeyboardKey
-} = require('../../../../utils/dictation-input-policy.js')
-const {
     isCorrectionWord,
     resolveWrongAnswer
 } = require('../../../../utils/dictation-spell-queue.js')
@@ -190,9 +180,6 @@ Page({
         isCheckingFirstAnswer: false,
         isAdvancingWord: false,
         skipSpellInReview: false,
-        inputMode: INPUT_STRICT,
-        inputPolicy: defaultInputPolicy('spelling_drill'),
-        isEnglishSpelling: true,
         dictationOrder: 'sequence',
         queueToken: '',
         assignedCount: 0,
@@ -466,73 +453,7 @@ Page({
         })
         this.drillStartedAt = null
         this.taskResultSubmitted = false
-        this.loadInputPolicy()
         this.prewarmAudio(words)
-    },
-
-    loadInputPolicy() {
-        const mode = 'spelling_drill'
-        const fallback = defaultInputPolicy(mode)
-        const storageKey = inputModeStorageKey({ taskId: this.data.taskId, bookId: this.data.bookId, mode })
-        this.setData({
-            inputMode: INPUT_STRICT,
-            inputPolicy: fallback,
-            isEnglishSpelling: true
-        })
-        request('/dictation/input-policy', {
-            data: {
-                mode,
-                task_id: this.data.taskId || undefined
-            }
-        }).then((res) => {
-            const raw = res && res.policy
-            const policy = raw ? {
-                mode: raw.mode || mode,
-                isEnglishSpelling: !!raw.is_english_spelling,
-                defaultInputMode: raw.default_input_mode || INPUT_STRICT,
-                compatibleAllowed: !!raw.compatible_allowed,
-                grant: raw.grant || null
-            } : fallback
-            const stored = wx.getStorageSync(storageKey)
-            this.setData({
-                inputPolicy: policy,
-                inputMode: chooseInputMode(policy, stored)
-            })
-        }).catch(() => {
-            // Network failure is intentionally strict, never compatible.
-            this.setData({ inputPolicy: fallback, inputMode: INPUT_STRICT })
-        })
-    },
-
-    onInputModeChange(e) {
-        const nextMode = e && e.detail && e.detail.mode
-        if (!this.data.inputPolicy.compatibleAllowed || !nextMode) return
-        if (nextMode === this.data.inputMode) return
-        if (this.data.inputValue) {
-            wx.showModal({
-                title: '切换输入方式',
-                content: '切换后会清空当前拼写，是否继续？',
-                confirmText: '清空并切换',
-                success: (res) => {
-                    if (!res.confirm) return
-                    this.setInputMode(nextMode)
-                }
-            })
-            return
-        }
-        this.setInputMode(nextMode)
-    },
-
-    setInputMode(mode) {
-        if (![INPUT_STRICT, INPUT_COMPATIBLE].includes(mode)) return
-        const storageKey = inputModeStorageKey({ taskId: this.data.taskId, bookId: this.data.bookId, mode: 'spelling_drill' })
-        wx.setStorageSync(storageKey, mode)
-        this.setData({
-            inputMode: mode,
-            inputValue: '',
-            spellSlots: buildSpellSlots('', this.data.currentWord.word),
-            resultRevealed: false
-        })
     },
 
     startDrill() {
@@ -583,32 +504,11 @@ Page({
     },
 
     onInput(e) {
-        if (this.data.inputMode !== INPUT_COMPATIBLE) return
         const value = (e && e.detail && e.detail.value) || ''
         this.setData({
             inputValue: value,
             spellSlots: buildSpellSlots(value, this.data.currentWord.word)
         })
-    },
-
-    onKeyboardKey(e) {
-        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
-        const key = normalizeKeyboardKey(e && e.detail && e.detail.key)
-        const limit = answerInputLimit(
-            this.data.currentWord.word,
-            this.data.currentWord.accepted_answers
-        )
-        if (!key || this.data.inputValue.length >= limit) return
-        this.setData({
-            inputValue: `${this.data.inputValue}${key}`,
-            spellSlots: buildSpellSlots(`${this.data.inputValue}${key}`, this.data.currentWord.word)
-        })
-    },
-
-    onKeyboardBackspace() {
-        if (this.data.inputMode !== INPUT_STRICT || this.data.showResult) return
-        const value = String(this.data.inputValue || '').slice(0, -1)
-        this.setData({ inputValue: value, spellSlots: buildSpellSlots(value, this.data.currentWord.word) })
     },
 
     submitOrNext() {
@@ -820,8 +720,7 @@ Page({
             task_id: this.data.taskId || null,
             answer,
             mode: 'spelling_drill',
-            input_mode: this.data.inputMode,
-            input_grant_id: this.data.inputPolicy.grant && this.data.inputPolicy.grant.id,
+            input_mode: 'native',
             attempt_id: buildFirstAttemptId(this.data.taskId, this.data.bookId, wordId, this.attemptSessionId),
             is_first_attempt: true,
             strict_queue: !!this.data.taskId,

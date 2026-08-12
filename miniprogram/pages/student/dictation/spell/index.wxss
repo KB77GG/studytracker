@@ -35,9 +35,8 @@
 .sage-header,
 .growth-progress,
 .drill-center,
-.strict-keyboard-wrap,
 .bottom-bar,
-.compat-wrong-actions,
+.spelling-correction-actions,
 .phonetic-pill,
 .summary-head,
 .tip-strip,
@@ -148,13 +147,6 @@
   height: 66rpx;
   border-radius: 4rpx;
   flex: 0 0 auto;
-}
-
-.mode-switch-row {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }
 
 .growth-progress {
@@ -318,7 +310,7 @@
   height: 34rpx;
 }
 
-.compat-input {
+.native-answer-input {
   width: 100%;
   max-width: 560px;
   height: 92rpx;
@@ -496,13 +488,6 @@
   line-height: 56rpx;
 }
 
-.strict-keyboard-wrap {
-  flex: 0 0 auto;
-  width: 100%;
-  padding: 0 8rpx;
-  box-sizing: border-box;
-}
-
 .bottom-bar {
   position: fixed;
   right: max(40rpx, calc((100vw - 820px) / 2));
@@ -549,7 +534,7 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-.compat-wrong-actions {
+.spelling-correction-actions {
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
@@ -560,8 +545,8 @@
   box-sizing: border-box;
 }
 
-.compat-skip,
-.compat-retry {
+.correction-skip,
+.correction-retry {
   height: 88rpx;
   margin: 0;
   border-radius: 16rpx;
@@ -569,13 +554,13 @@
   font-weight: 700;
 }
 
-.compat-skip {
+.correction-skip {
   border: 2rpx solid rgba(8, 127, 119, 0.42);
   color: #237069;
   background: rgba(255, 255, 255, 0.9);
 }
 
-.compat-retry {
+.correction-retry {
   border: 0;
   color: #fff;
   background: #087f77;

@@ -144,14 +144,14 @@ class DictationInputPolicyApiTest(unittest.TestCase):
             },
         )
 
-    def test_strict_is_default_and_chinese_input_is_native(self):
-        strict = self.client.get(
+    def test_all_free_text_policies_default_to_native(self):
+        english = self.client.get(
             "/api/dictation/input-policy?mode=zh_to_en",
             headers=self.headers(self.student_id, User.ROLE_STUDENT),
         )
-        self.assertEqual(strict.status_code, 200)
-        self.assertEqual(strict.get_json()["policy"]["default_input_mode"], "strict")
-        self.assertFalse(strict.get_json()["policy"]["compatible_allowed"])
+        self.assertEqual(english.status_code, 200)
+        self.assertEqual(english.get_json()["policy"]["default_input_mode"], "native")
+        self.assertTrue(english.get_json()["policy"]["compatible_allowed"])
 
         native = self.client.get(
             "/api/dictation/input-policy?mode=en_to_zh",
@@ -176,7 +176,16 @@ class DictationInputPolicyApiTest(unittest.TestCase):
         self.assertEqual(submitted.status_code, 200, submitted.get_json())
         self.assertEqual(submitted.get_json()["input_mode"], "native")
 
-    def test_student_cannot_self_authorize_and_compatible_submission_is_rejected(self):
+        english_submission = self.submit(
+            self.word_ids[1],
+            "bravo",
+            "native",
+            "native-english-path",
+        )
+        self.assertEqual(english_submission.status_code, 200, english_submission.get_json())
+        self.assertEqual(english_submission.get_json()["input_mode"], "native")
+
+    def test_student_cannot_create_grants_but_compatible_submission_needs_none(self):
         self.assertEqual(
             self.client.post(
                 "/api/dictation/input-grants",
@@ -185,18 +194,19 @@ class DictationInputPolicyApiTest(unittest.TestCase):
             ).status_code,
             403,
         )
-        rejected = self.submit(
+        accepted = self.submit(
             self.word_ids[0],
             "alpha",
             "compatible",
             "unauthorized-compatible",
         )
-        self.assertEqual(rejected.status_code, 403)
-        self.assertEqual(rejected.get_json()["error"], "compatible_input_not_authorized")
+        self.assertEqual(accepted.status_code, 200, accepted.get_json())
+        self.assertEqual(accepted.get_json()["input_mode"], "compatible")
         with self.app.app_context():
-            self.assertEqual(DictationRecord.query.count(), 0)
+            record = DictationRecord.query.one()
+            self.assertIsNone(record.input_grant_id)
 
-    def test_teacher_grant_is_server_checked_recorded_and_revoke_takes_effect(self):
+    def test_historical_grant_reference_is_optional_and_revoke_does_not_block(self):
         created = self.client.post(
             "/api/dictation/input-grants",
             headers=self.headers(self.teacher_id, User.ROLE_TEACHER),
@@ -234,13 +244,18 @@ class DictationInputPolicyApiTest(unittest.TestCase):
             headers=self.headers(self.teacher_id, User.ROLE_TEACHER),
         )
         self.assertEqual(revoked.status_code, 200, revoked.get_json())
-        rejected = self.submit(
+        accepted_after_revoke = self.submit(
             self.word_ids[1],
             "bravo",
             "compatible",
             "revoked-compatible",
         )
-        self.assertEqual(rejected.status_code, 403)
+        self.assertEqual(
+            accepted_after_revoke.status_code,
+            200,
+            accepted_after_revoke.get_json(),
+        )
+        self.assertEqual(accepted_after_revoke.get_json()["input_mode"], "compatible")
 
         strict = self.submit(
             self.word_ids[1],
@@ -254,6 +269,10 @@ class DictationInputPolicyApiTest(unittest.TestCase):
         with self.app.app_context():
             grant = db.session.get(DictationInputGrant, grant_id)
             self.assertIsNotNone(grant.revoked_at)
+            revoked_record = DictationRecord.query.filter_by(
+                attempt_id="revoked-compatible"
+            ).one()
+            self.assertIsNone(revoked_record.input_grant_id)
 
     def test_assistant_back_office_can_replace_and_revoke_shared_student_grant(self):
         self.login_session(self.assistant_id)
@@ -317,17 +336,30 @@ class DictationInputPolicyApiTest(unittest.TestCase):
 
 
 class DictationInputBackOfficeMarkupTest(unittest.TestCase):
-    def test_tasks_page_exposes_staff_grant_status_duration_and_revoke_controls(self):
+    def test_staff_grant_panels_are_removed_without_touching_legacy_api(self):
         markup = (
             Path(__file__).resolve().parents[1] / "templates/tasks.html"
         ).read_text(encoding="utf-8")
-        self.assertIn("单词任务输入授权", markup)
-        self.assertIn('data-input-grant-days="7"', markup)
-        self.assertIn('data-input-grant-days="30"', markup)
-        self.assertIn("inputGrantRevoke", markup)
-        self.assertIn("/api/dictation/staff/input-grants", markup)
-        self.assertIn("授权只影响单词任务", markup)
-        self.assertIn("不影响听力、阅读或其他刷题", markup)
+        for removed in (
+            "单词任务输入授权",
+            'data-input-grant-days="7"',
+            'data-input-grant-days="30"',
+            "inputGrantRevoke",
+            "/api/dictation/staff/input-grants",
+            "setupDictationInputGrant",
+        ):
+            self.assertNotIn(removed, markup)
+
+        teacher_root = (
+            Path(__file__).resolve().parents[1]
+            / "miniprogram/pages/teacher/students"
+        )
+        teacher_source = "\n".join(
+            (teacher_root / name).read_text(encoding="utf-8")
+            for name in ("index.js", "index.wxml", "index.wxss")
+        )
+        self.assertNotIn("单词任务实体键盘", teacher_source)
+        self.assertNotIn("/dictation/input-grants", teacher_source)
 
 
 if __name__ == "__main__":

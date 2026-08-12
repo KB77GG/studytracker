@@ -1,8 +1,9 @@
-"""Server-owned input policy for vocabulary spelling practice.
+"""Backward-compatible input metadata for vocabulary spelling practice.
 
-The client may choose strict or compatible input, but it can never grant
-itself compatible input.  This module is intentionally independent from the
-HTTP blueprints so answer submission and policy discovery share one rule.
+Current clients use the system-native input for every free-text answer.  The
+legacy ``strict`` and ``compatible`` values remain accepted so students can
+finish an already-open task while a mini-program release rolls out.  Historic
+grant rows are audit data only and no longer authorize or reject submissions.
 """
 
 from __future__ import annotations
@@ -99,7 +100,7 @@ def input_policy(
     task_id: int | None = None,
     now: datetime | None = None,
 ) -> dict:
-    """Return the effective client policy, defaulting safely to strict."""
+    """Return native-first policy while retaining the legacy response shape."""
 
     normalized_mode = str(mode or "").strip().lower()
     now = now or datetime.utcnow()
@@ -116,8 +117,11 @@ def input_policy(
     return {
         "mode": normalized_mode,
         "is_english_spelling": True,
-        "default_input_mode": INPUT_STRICT,
-        "compatible_allowed": bool(grant),
+        "default_input_mode": INPUT_NATIVE,
+        # Old clients only know ``strict`` and ``compatible``. Keep their
+        # native-input switch available during rollout without requiring a
+        # grant; new clients no longer render the switch at all.
+        "compatible_allowed": True,
         "grant": grant_payload(grant),
     }
 
@@ -136,16 +140,16 @@ def resolve_submission_input(
     if not is_english_spelling_mode(normalized_mode):
         return INPUT_NATIVE, None
 
-    requested = normalize_input_mode(requested_input_mode) or INPUT_STRICT
-    if requested == INPUT_STRICT:
-        return INPUT_STRICT, None
+    requested = normalize_input_mode(requested_input_mode) or INPUT_NATIVE
+    if requested in {INPUT_STRICT, INPUT_NATIVE}:
+        return requested, None
     if requested != INPUT_COMPATIBLE:
         raise ValueError("invalid_input_mode")
 
+    # Preserve an active historical grant reference when one exists, but it
+    # is no longer a prerequisite for using the system keyboard.
     grant = active_input_grant(user.id, task_id, now=now)
-    if not grant:
-        raise PermissionError("compatible_input_not_authorized")
-    return INPUT_COMPATIBLE, grant.id
+    return INPUT_COMPATIBLE, grant.id if grant else None
 
 
 def staff_can_manage_student(staff: User, profile: StudentProfile) -> bool:

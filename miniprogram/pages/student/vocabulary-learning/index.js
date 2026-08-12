@@ -6,10 +6,6 @@ const {
     selectedOptionLabel
 } = require('../../../utils/vocabulary-interaction.js')
 const { normalizeAnswerFeedback } = require('../../../utils/vocabulary-feedback.js')
-const {
-    isEnglishSpellingMode,
-    normalizeKeyboardKey
-} = require('../../../utils/dictation-input-policy.js')
 
 const PHASE_LABELS = {
     familiarity: '熟悉材料',
@@ -39,7 +35,6 @@ Page({
         selectedOption: '',
         meaningOptions: [],
         isMeaningChoice: false,
-        isEnglishSpelling: false,
         audioState: 'idle',
         audioButtonLabel: '播放发音',
         showResult: false,
@@ -119,7 +114,6 @@ Page({
         const firstUnviewed = familiarity.findIndex((item) => !item.viewed)
         const displayIndex = firstUnviewed >= 0 ? firstUnviewed : Math.max(0, familiarity.length - 1)
         const question = queue.current_question || null
-        const isEnglishSpelling = !!question && isEnglishSpellingMode(question.mode)
         const isMeaningChoice = !!question && question.mode === 'audio_to_zh'
         const meaningOptions = isMeaningChoice
             ? buildMeaningChoiceOptions(question, familiarity)
@@ -137,7 +131,6 @@ Page({
             familiarity,
             familiarityIndex: displayIndex,
             currentQuestion: question,
-            isEnglishSpelling,
             isMeaningChoice,
             meaningOptions,
             inputValue: '',
@@ -193,25 +186,8 @@ Page({
     },
 
     onInput(e) {
-        if (this.data.showResult || this.data.isEnglishSpelling) return
+        if (this.data.showResult) return
         this.setData({ inputValue: (e && e.detail && e.detail.value) || '' })
-    },
-
-    onKeyboardKey(e) {
-        if (!this.data.isEnglishSpelling || this.data.showResult) return
-        const key = normalizeKeyboardKey(e && e.detail && e.detail.key)
-        const separators = (this.data.currentQuestion && this.data.currentQuestion.answer_separators) || []
-        if (!/^[a-z0-9é]$/.test(key) && !separators.includes(key)) return
-        const limit = Number(this.data.currentQuestion && this.data.currentQuestion.answer_length) || 100
-        if (Array.from(this.data.inputValue || '').length >= limit) return
-        this.setData({ inputValue: `${this.data.inputValue || ''}${key}` })
-    },
-
-    onKeyboardBackspace() {
-        if (!this.data.isEnglishSpelling || this.data.showResult) return
-        const chars = Array.from(this.data.inputValue || '')
-        chars.pop()
-        this.setData({ inputValue: chars.join('') })
     },
 
     selectOption(e) {
@@ -272,7 +248,7 @@ Page({
                 answer,
                 attempt_id: attemptId,
                 retry: this.data.phase === 'retry',
-                input_mode: this.data.isEnglishSpelling ? 'strict' : 'native'
+                input_mode: 'native'
             }
         }).then((res) => {
             if (!res || !res.ok) throw new Error((res && res.error) || 'vocabulary_group_answer_failed')

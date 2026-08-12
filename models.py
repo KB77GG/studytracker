@@ -1170,8 +1170,9 @@ class DictationRecord(db.Model, TimestampMixin):
     word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
     student_answer = db.Column(db.String(100))
     is_correct = db.Column(db.Boolean, nullable=False)
-    # strict = shared in-page keyboard; compatible = teacher-authorized native
-    # input; native = existing non-English (e.g. Chinese) system input.
+    # Current clients use native for all system-keyboard answers. ``strict``
+    # and ``compatible`` remain as historical/old-client values; a grant link
+    # is optional audit metadata and no longer controls submission.
     input_mode = db.Column(db.String(20), nullable=True, index=True)
     input_grant_id = db.Column(
         db.Integer,
