@@ -1,9 +1,9 @@
 """Four-dimension vocabulary mastery and task-owned review snapshots.
 
 The legacy dictation service remains the compatibility path. This service is
-entered only when a Task has an explicit ``vocabulary_goal``. It owns sense
-resolution, independent dimension schedules, answer idempotency, and strict
-once-only task settlement.
+entered only when a Task has both a dictation book and an explicit
+``vocabulary_goal``. It owns sense resolution, independent dimension schedules,
+answer idempotency, and strict once-only task settlement.
 """
 
 from __future__ import annotations
@@ -86,8 +86,26 @@ def normalize_goal(value) -> str | None:
     return value if value in VALID_GOALS else None
 
 
+def resolve_task_vocabulary_goal(
+    material_id,
+    requested_goal=None,
+    default_goal=None,
+) -> str | None:
+    """Return a vocabulary goal only for an explicitly selected dictation book."""
+    if not str(material_id or "").strip().startswith("dictation-"):
+        return None
+    return normalize_goal(requested_goal or default_goal)
+
+
+def vocabulary_goal_for_task(task: Task | None) -> str | None:
+    """Hide stray vocabulary metadata on tasks that are not dictation tasks."""
+    if not task or not getattr(task, "dictation_book_id", None):
+        return None
+    return normalize_goal(getattr(task, "vocabulary_goal", None))
+
+
 def is_vocabulary_v2_task(task: Task | None) -> bool:
-    return bool(task and task.dictation_book_id and normalize_goal(getattr(task, "vocabulary_goal", None)))
+    return bool(vocabulary_goal_for_task(task))
 
 
 def dimensions_for_goal(goal: str) -> tuple[str, ...]:

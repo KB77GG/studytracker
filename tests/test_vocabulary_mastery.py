@@ -35,6 +35,7 @@ from services.vocabulary_mastery import (
     get_vocabulary_task_queue,
     is_vocabulary_v2_task,
     required_dimensions_long_term,
+    resolve_task_vocabulary_goal,
     submit_vocabulary_answer,
 )
 
@@ -328,6 +329,19 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
         self.assertEqual(default_course_system_for_book_id(166), "general")
         self.assertIsNone(default_course_system_for_book_id(174))
         self.assertEqual(default_course_system_for_book_id(192), "TOEFL")
+
+    def test_task_goal_is_accepted_only_for_dictation_materials(self):
+        self.assertEqual(
+            resolve_task_vocabulary_goal("dictation-40", "reading"),
+            "reading",
+        )
+        self.assertEqual(
+            resolve_task_vocabulary_goal("dictation-40", "", "reading"),
+            "reading",
+        )
+        self.assertIsNone(resolve_task_vocabulary_goal(None, "reading"))
+        self.assertIsNone(resolve_task_vocabulary_goal("42", "reading"))
+        self.assertIsNone(resolve_task_vocabulary_goal("speaking-3", "reading"))
 
     def test_task_creation_does_not_prewarm_non_audio_v2_goals(self):
         source = (Path(__file__).resolve().parents[1] / "app.py").read_text(

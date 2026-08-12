@@ -344,8 +344,8 @@
     <div class="task-form-row" id="learningGoalRow" style="display: none;">
       <div class="field field--wide">
         <label for="vocabularyGoalSelect">学习目标</label>
-        <select id="vocabularyGoalSelect" name="vocabulary_goal" class="form-select">
-          <option value="" disabled>请选择学习目标</option>
+        <select id="vocabularyGoalSelect" name="vocabulary_goal" class="form-select" disabled>
+          <option value="" disabled selected>请选择学习目标</option>
           <option value="reading">阅读：释义回忆 + 语境运用</option>
           <option value="writing">写作：形式回忆 + 语境运用</option>
           <option value="listening">听力：释义回忆 + 听音回忆形式</option>
@@ -3174,6 +3174,8 @@
       const listeningSelect = document.getElementById('listeningExerciseSelect');
       const readingSelect = document.getElementById('readingExerciseSelect');
       const listeningResourceType = document.getElementById('listeningResourceType');
+      const learningGoalRow = document.getElementById('learningGoalRow');
+      const vocabularyGoalSelect = document.getElementById('vocabularyGoalSelect');
 
       materialRow.style.display = 'none';
       categoryRow.style.display = 'none';
@@ -3187,6 +3189,15 @@
       resetReadingPassageSelection();
       if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
       setSentenceRangeControlsVisible(false, true);
+
+      if (source !== 'material') {
+        if (learningGoalRow) learningGoalRow.style.display = 'none';
+        if (vocabularyGoalSelect) {
+          vocabularyGoalSelect.value = '';
+          vocabularyGoalSelect.disabled = true;
+          vocabularyGoalSelect.dataset.autofill = '1';
+        }
+      }
 
       if (source === 'material') {
         materialRow.style.display = 'flex';
@@ -3482,6 +3493,7 @@
             if (dictationModeRow) dictationModeRow.style.display = "none";
             if (dictationOrderRow) dictationOrderRow.style.display = "flex";
             if (vocabularyGoalSelect) {
+              vocabularyGoalSelect.disabled = false;
               const defaultGoal = option.getAttribute("data-vocabulary-goal") || "";
               if (vocabularyGoalSelect.dataset.autofill === "1" || !vocabularyGoalSelect.value) {
                 vocabularyGoalSelect.value = defaultGoal;
@@ -3501,6 +3513,7 @@
             if (learningGoalRow) learningGoalRow.style.display = "none";
             if (vocabularyGoalSelect) {
               vocabularyGoalSelect.value = "";
+              vocabularyGoalSelect.disabled = true;
               vocabularyGoalSelect.dataset.autofill = "1";
             }
             dictationModeRow.style.display = "none";
@@ -3538,6 +3551,7 @@
         if (learningGoalRow) learningGoalRow.style.display = "none";
         if (vocabularyGoalSelect) {
           vocabularyGoalSelect.value = "";
+          vocabularyGoalSelect.disabled = true;
           vocabularyGoalSelect.dataset.autofill = "1";
         }
         if (dictationModeRow) dictationModeRow.style.display = "none";

@@ -82,10 +82,22 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             random_dictation.dictation_order = "random"
             random_dictation.dictation_word_start = 1
             random_dictation.dictation_word_end = 50
+            malformed_listening = self._task(
+                self.today,
+                "listening with stray vocabulary goal",
+                "pending",
+                teacher.id,
+            )
+            malformed_listening.category = "雅思-听力-精听"
+            malformed_listening.listening_resource_type = "intensive"
+            malformed_listening.listening_exercise_id = "ielts18_test1_s1"
+            malformed_listening.listening_access_token = "listening-token"
+            malformed_listening.vocabulary_goal = "reading"
             db.session.add_all([
                 self._task(self.today, "today", "pending", teacher.id),
                 self._task(self.today, "today assistant", "pending", assistant.id),
                 random_dictation,
+                malformed_listening,
                 self._task(self.d1, "d1 pending", "pending", teacher.id),
                 completed_listening,
                 self._task(self.d1, "d1 other", "pending", other_teacher.id),
@@ -138,6 +150,7 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             self.other_teacher_id = other_teacher.id
             self.completed_listening_id = completed_listening.id
             self.random_dictation_id = random_dictation.id
+            self.malformed_listening_id = malformed_listening.id
 
         self.client = self.app.test_client()
 
@@ -211,6 +224,25 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         task = response.get_json()["task"]
         self.assertEqual(task["dictation_order"], "random")
+
+    def test_listening_task_hides_stray_vocabulary_goal_in_list_and_detail(self):
+        details = {task["task_name"]: task for task in self._today_tasks()["tasks"]}
+        summary = details[
+            "雅思-听力-精听 - listening with stray vocabulary goal"
+        ]
+        self.assertIsNone(summary["vocabulary_goal"])
+        self.assertIsNone(summary["learning_goal"])
+        self.assertEqual(summary["listening_exercise_id"], "ielts18_test1_s1")
+
+        response = self.client.get(
+            f"/api/miniprogram/student/tasks/{self.malformed_listening_id}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        self.assertEqual(response.status_code, 200)
+        task = response.get_json()["task"]
+        self.assertIsNone(task["vocabulary_goal"])
+        self.assertIsNone(task["learning_goal"])
+        self.assertEqual(task["listening_exercise_id"], "ielts18_test1_s1")
 
     def test_each_visible_date_is_an_exact_date_view(self):
         history = self.client.get(

@@ -617,7 +617,7 @@ Page({
         }
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
-        if (task && task.vocabularyGoal) {
+        if (task && task.dictationBookId && task.vocabularyGoal) {
             wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
             return
         }
@@ -738,7 +738,7 @@ Page({
 
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
-        if (task && task.vocabularyGoal) {
+        if (task && task.dictationBookId && task.vocabularyGoal) {
             wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
             return
         }

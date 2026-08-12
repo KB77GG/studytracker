@@ -127,7 +127,7 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
-                if (res.task.vocabulary_goal) {
+                if (res.task.dictation_book_id && res.task.vocabulary_goal) {
                     const gate = await request(
                         `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-review/preflight`
                     )

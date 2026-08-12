@@ -58,7 +58,7 @@ from services.task_assignment_history import load_previous_day_assignments
 from services.vocabulary_mastery import (
     default_course_system_for_book_id,
     default_goal_for_book_id,
-    normalize_goal,
+    resolve_task_vocabulary_goal,
 )
 from services.ielts_practice_scoring import (
     grade_listening_jijing_answers as _grade_listening_jijing_answers,
@@ -3606,7 +3606,13 @@ def tasks_page():
             dictation_mode_raw = (request.form.get("dictation_mode") or "").strip().lower()
             dictation_order_raw = (request.form.get("dictation_order") or "").strip().lower()
             vocabulary_goal_raw = (request.form.get("vocabulary_goal") or "").strip().lower()
-            vocabulary_goal = normalize_goal(vocabulary_goal_raw)
+            # The learning-goal field belongs exclusively to dictation books.
+            # Hidden HTML controls are still submitted, so never let their
+            # stale/default value classify listening, reading, or custom tasks.
+            vocabulary_goal = resolve_task_vocabulary_goal(
+                material_id,
+                vocabulary_goal_raw,
+            )
             dictation_mode = None
             dictation_order = "sequence"
             if material_id:
@@ -3618,7 +3624,11 @@ def tasks_page():
                         getattr(dictation_book_data, "default_vocabulary_goal", None)
                         or default_goal_for_book_id(dictation_book_data.id if dictation_book_data else None)
                     )
-                    vocabulary_goal = normalize_goal(vocabulary_goal_raw or book_default_goal)
+                    vocabulary_goal = resolve_task_vocabulary_goal(
+                        material_id,
+                        vocabulary_goal_raw,
+                        book_default_goal,
+                    )
                     if not vocabulary_goal:
                         flash("学习目标无效，请重新选择")
                         return redirect(url_for("tasks_page"))

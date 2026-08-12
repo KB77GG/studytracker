@@ -50,6 +50,7 @@ from services.scheduler_client import (
     coerce_schedule_list as _shared_coerce_schedule_list,
     fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
 )
+from services.vocabulary_mastery import vocabulary_goal_for_task
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
@@ -1710,8 +1711,8 @@ def get_student_today_tasks():
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
             "dictation_book_type": dictation_book_type,
-            "vocabulary_goal": getattr(task, "vocabulary_goal", None),
-            "learning_goal": getattr(task, "vocabulary_goal", None),
+            "vocabulary_goal": vocabulary_goal_for_task(task),
+            "learning_goal": vocabulary_goal_for_task(task),
             "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
             "dictation_order": _resolve_task_dictation_order(task),
             "dictation_word_start": task.dictation_word_start,
@@ -1840,8 +1841,8 @@ def get_task_detail(task_id):
                 # Dictation Info
                 "dictation_book_id": task.dictation_book_id,
                 "dictation_book_type": dictation_book_type,
-                "vocabulary_goal": getattr(task, "vocabulary_goal", None),
-                "learning_goal": getattr(task, "vocabulary_goal", None),
+                "vocabulary_goal": vocabulary_goal_for_task(task),
+                "learning_goal": vocabulary_goal_for_task(task),
                 "dictation_mode": _resolve_task_dictation_mode(task, dictation_book_type),
                 "dictation_order": _resolve_task_dictation_order(task),
                 "dictation_word_start": task.dictation_word_start,
