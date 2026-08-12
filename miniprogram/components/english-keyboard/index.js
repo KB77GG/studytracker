@@ -18,6 +18,7 @@ Component({
         status: { type: String, value: 'idle' },
         showValue: { type: Boolean, value: true },
         canConfirm: { type: Boolean, value: false },
+        confirmLabel: { type: String, value: '确认' },
         showWrongActions: { type: Boolean, value: false },
         showNext: { type: Boolean, value: false },
         disabled: { type: Boolean, value: false }
@@ -54,7 +55,11 @@ Component({
         },
 
         emitConfirm() {
-            if (this.data.disabled || !this.data.canConfirm) return
+            // The displayed value is the authoritative readiness signal. A
+            // separately bound Boolean can diverge from that value and be used
+            // to make a filled answer silently discard taps in this child.
+            const value = String(this.data.value || '').trim()
+            if (this.data.disabled || !value) return
             this.triggerEvent('confirm')
         },
 

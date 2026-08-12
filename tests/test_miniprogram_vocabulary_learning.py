@@ -129,6 +129,17 @@ class VocabularyLearningMiniProgramStructureTest(unittest.TestCase):
         self.assertIn("normalizeAnswerFeedback(res, this.feedbackFallback(question))", learning_script)
         self.assertIn("answer_feedback: res.answer_feedback", review_script)
 
+    def test_v2_answer_submit_recovers_quickly_and_exposes_progress(self):
+        for page in ("vocabulary-learning", "vocabulary-review"):
+            markup = self.read(f"miniprogram/pages/student/{page}/index.wxml")
+            script = self.read(f"miniprogram/pages/student/{page}/index.js")
+            self.assertIn(
+                'confirm-label="{{submitting ? \'提交中…\' : \'确认\'}}"',
+                markup,
+            )
+            self.assertIn("timeout: 15000", script)
+            self.assertIn("this.setData({ submitting: false })", script)
+
 
 if __name__ == "__main__":
     unittest.main()

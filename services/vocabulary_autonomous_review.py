@@ -26,6 +26,7 @@ from models import (
     StudentVocabularyMastery,
     Task,
     User,
+    VocabularyLearningFlow,
     VocabularyReviewAttempt,
     VocabularyReviewItem,
     VocabularyReviewSession,
@@ -901,6 +902,13 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
 
     now = utc_naive(now)
     task = _validate_origin_task(user, task_id)
+    task_flow_started = (
+        VocabularyLearningFlow.query.filter_by(
+            student_id=user.id,
+            task_id=task.id,
+        ).first()
+        is not None
+    )
     active = (
         VocabularyReviewSession.query.filter_by(
             student_id=user.id,
@@ -924,12 +932,21 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
     # the finite-batch overload guard useful when a student has two tasks in a
     # day. The remaining due count is deliberately still returned so Home can
     # offer the next batch; it is not silently converted into task progress.
-    required = bool(active or (due_count and latest_settled is None))
+    # Review is an entry gate, not an interrupt. A group's queue is fetched
+    # after every answer, so applying the due-time check to an existing flow
+    # can redirect a student in the middle of a task when a dimension becomes
+    # due by a few seconds. Keep Home's review debt/session intact, but let an
+    # already-started teacher task resume until its own state machine settles.
+    required = bool(
+        not task_flow_started
+        and (active or (due_count and latest_settled is None))
+    )
     return {
         "ok": True,
         "task_id": task.id,
         "required": required,
         "review_required": required,
+        "task_flow_started": task_flow_started,
         "due_count": due_count,
         "batch_limit": MAX_REVIEW_BATCH,
         "active_session_id": active.id if active else None,

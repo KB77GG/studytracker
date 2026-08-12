@@ -259,6 +259,7 @@ Page({
         this.setData({ submitting: true })
         request('/dictation/submit', {
             method: 'POST',
+            timeout: 15000,
             data: {
                 task_id: Number(this.data.taskId),
                 queue_token: this.data.queueToken,

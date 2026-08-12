@@ -21,6 +21,8 @@ from models import (
 )
 from services.vocabulary_autonomous_review import (
     claim_today_review,
+    review_preflight,
+    review_summary,
     settle_review_session,
     submit_review_answer,
 )
@@ -500,7 +502,7 @@ class VocabularyGroupLearningTest(unittest.TestCase):
                 )
             self.assertEqual(stale.exception.error, "question_not_current")
 
-    def test_old_queue_token_crossing_day_rechecks_autonomous_clearance(self):
+    def test_started_task_is_not_interrupted_when_review_becomes_due(self):
         with self.app.app_context():
             user = self._user()
             task = self._task("reading", end=1)
@@ -510,12 +512,15 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             mastery = StudentVocabularyMastery.query.filter_by(student_id=user.id).first()
             mastery.meaning_recall_next_due_at = day_two - timedelta(minutes=1)
             db.session.flush()
-            with self.assertRaises(VocabularyGroupLearningError) as blocked:
-                get_vocabulary_group_queue(user, task.id, now=day_two)
-            self.assertEqual(blocked.exception.error, "vocabulary_review_required")
-
             review = claim_today_review(user, origin_task_id=task.id, now=day_two)
             self.assertEqual(review["total_count"], 1)
+            gate = review_preflight(user, task.id, now=day_two)
+            self.assertTrue(gate["task_flow_started"])
+            self.assertFalse(gate["required"])
+            self.assertTrue(review_summary(user, now=day_two)["has_active_session"])
+            resumed_during_review = get_vocabulary_group_queue(user, task.id, now=day_two)
+            self.assertEqual(resumed_during_review["queue_token"], queue["queue_token"])
+
             item = review["items"][0]
             stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
             answer_payload = json.loads(stored.answer_payload_json)

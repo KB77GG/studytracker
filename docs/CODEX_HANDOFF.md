@@ -1,7 +1,35 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-11（Asia/Shanghai）。
+> 最近更新：2026-08-12（Asia/Shanghai）。
+
+## 2026-08-12 词汇任务中途复习门禁 / 自主复习确认键热修（本地完成，待发布）
+
+- 本轮从最新 `origin/main@79698f2b` 创建独立工作树
+  `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker`，分支
+  `codex/vocabulary-review-hotfix`；桌面原工作树带有来源不明的修改/未跟踪文件，本轮未触碰。
+  当前改动未 commit、未 push、未部署后端、未上传或发布小程序，也没有写生产数据库。
+- 生产只读核验确认两名学生不是同一个表面故障：蒋雅诺任务 `3364` 的 `saving` 维度于
+  13:30:37 CST 到期，13:30:40 的下一次 queue 正好被服务端返回 409，随即创建自主复习 session `1`；
+  陈相予任务 `3337` 也被引到 session `2`，首题为 `incline`。两人的教师任务学习流分别仍为 active
+  （flow `13` / `2`），复习 session 也仍为 active，均为 0 答；Nginx/Gunicorn 没有任何对应 answer POST，
+  `vocabulary_review_attempt` 也无两人的记录。因此已确认的共同根因是 queue 每次换题都重跑到期门禁，
+  会把已经开始的任务在中途打断；没有服务端拒绝答案或数据丢失。
+- 截图还确认严格键盘已显示 `saving`，但确认键处于不可用外观且点击没有到达服务端。服务端日志无法判定
+  是独立 Boolean 属性与显示值短暂分叉，还是请求前客户端状态卡住，不能把具体微信运行时子因说成已证实。
+  热修因此采用防御式处理：确认资格直接以组件当前显示值为事实源，不再由冗余 `canConfirm` 硬拦截；
+  v2 两页提交时显示“提交中…”，answer 请求 15 秒超时后恢复可重试，attempt id 仍保证重复提交幂等。
+- 后端保留“开始新任务前先复习”的规则，但已有 `VocabularyLearningFlow` 的任务不再被复习到期或 active
+  session 中断；首页的复习欠账和 active session 不会清除。生产两人的任务都已有 flow，部署后可直接退出
+  复习页并恢复原任务，无需删 session、重置 flow 或修改学生数据。
+- 定向 51 个后端/API/小程序结构测试通过；项目级
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `482 passed, 7 subtests passed`。全部 `tests/test_*.js`、三个变更 JS 的 `node --check`、目标 Ruff 和
+  `git diff --check` 通过。目标 Python 文件在本轮前就全部不符合当前 Black，未为热修批量格式化存量代码。
+- 上线需要两步：后端代码部署后才能解除“已开始任务”的中途门禁；确认键修复属于小程序包，必须从上述
+  正确 worktree 重新上传、提审并发布。用户已于本轮明确授权 commit/push/deploy；发布过程需核验生产 HEAD、
+  5002、1 worker/gthread/6 threads、错误日志和两人原任务恢复；小程序发布后
+  还需真机验证 `saving` 类拼写确认会发出 answer POST、`incline` 类非拼写题也可提交及 15 秒失败恢复提示。
 
 ## 2026-08-11 教师任务页“昨日任务 / 再次布置”（已部署并通过生产验收）
 

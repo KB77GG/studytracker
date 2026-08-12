@@ -77,6 +77,6 @@
     <button class="action-button confirm-button {{disabled ? 'is-disabled' : ''}}" aria-disabled="{{disabled}}" hover-class="action-button-pressed" bindtap="emitNext"><text class="action-button-label">下一题</text></button>
   </view>
   <view wx:else class="keyboard-actions">
-    <button class="action-button confirm-button {{disabled || !canConfirm ? 'is-disabled' : ''}}" aria-disabled="{{disabled || !canConfirm}}" hover-class="action-button-pressed" bindtap="emitConfirm"><text class="action-button-label">确认</text></button>
+    <button class="action-button confirm-button {{disabled || !value ? 'is-disabled' : ''}}" aria-disabled="{{disabled || !value}}" hover-class="action-button-pressed" bindtap="emitConfirm"><text class="action-button-label">{{confirmLabel}}</text></button>
   </view>
 </view>

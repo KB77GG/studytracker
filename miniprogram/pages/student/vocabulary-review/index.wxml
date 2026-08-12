@@ -87,6 +87,7 @@
         value="{{inputValue}}"
         status="{{showResult ? (isCorrect ? 'correct' : 'wrong') : 'idle'}}"
         can-confirm="{{!!inputValue && !submitting}}"
+        confirm-label="{{submitting ? '提交中…' : '确认'}}"
         show-wrong-actions="{{false}}"
         disabled="{{submitting || settling}}"
         bind:key="onKeyboardKey"

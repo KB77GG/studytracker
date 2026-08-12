@@ -39,6 +39,11 @@ class DictationSpellingMarkupTest(unittest.TestCase):
         self.assertIn("'é'", component)
         self.assertIn('wx:for="{{numberRow}}"', markup)
         self.assertIn("showValue", component)
+        self.assertIn("confirmLabel", component)
+        self.assertIn("String(this.data.value || '').trim()", component)
+        self.assertNotIn("this.data.disabled || !this.data.canConfirm", component)
+        self.assertIn("disabled || !value", markup)
+        self.assertIn("{{confirmLabel}}", markup)
         self.assertNotIn("showReplay", component)
         self.assertNotIn("emitReplay", component)
         self.assertIn("/images/icons/backspace-outline.svg", markup)
@@ -76,6 +81,7 @@ class DictationSpellingMarkupTest(unittest.TestCase):
         )
         self.assertIn("currentItem.question.prompt.target_word", autonomous)
         self.assertIn("currentItem.question.prompt.translation", autonomous)
+        self.assertIn("confirm-label=\"{{submitting ? '提交中…' : '确认'}}\"", autonomous)
 
     def test_wrong_answer_paths_keep_answer_hidden_until_skip(self):
         for relative in (

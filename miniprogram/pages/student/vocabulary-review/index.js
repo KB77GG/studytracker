@@ -199,6 +199,7 @@ Page({
         const attemptId = `wx-vocabulary-review:${this.data.sessionId}:${item.review_item_id}`
         request(`/miniprogram/student/vocabulary-review/sessions/${this.data.sessionId}/answers`, {
             method: 'POST',
+            timeout: 15000,
             data: {
                 session_token: this.data.sessionToken,
                 review_item_id: item.review_item_id,
