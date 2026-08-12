@@ -3,12 +3,12 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-12（Asia/Shanghai）。
 
-## 2026-08-12 词汇任务中途复习门禁 / 自主复习确认键热修（本地完成，待发布）
+## 2026-08-12 词汇任务中途复习门禁 / 自主复习确认键热修（后端已部署，小程序待发布）
 
 - 本轮从最新 `origin/main@79698f2b` 创建独立工作树
   `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker`，分支
-  `codex/vocabulary-review-hotfix`；桌面原工作树带有来源不明的修改/未跟踪文件，本轮未触碰。
-  当前改动未 commit、未 push、未部署后端、未上传或发布小程序，也没有写生产数据库。
+  `codex/vocabulary-review-hotfix`；业务提交 `1df19dfb8574` 已原子推送到该分支与 `main`。桌面原工作树
+  带有来源不明的修改/未跟踪文件，本轮未触碰；没有写生产数据库，也没有代替用户上传或发布小程序。
 - 生产只读核验确认两名学生不是同一个表面故障：蒋雅诺任务 `3364` 的 `saving` 维度于
   13:30:37 CST 到期，13:30:40 的下一次 queue 正好被服务端返回 409，随即创建自主复习 session `1`；
   陈相予任务 `3337` 也被引到 session `2`，首题为 `incline`。两人的教师任务学习流分别仍为 active
@@ -26,10 +26,14 @@
   `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
   为 `482 passed, 7 subtests passed`。全部 `tests/test_*.js`、三个变更 JS 的 `node --check`、目标 Ruff 和
   `git diff --check` 通过。目标 Python 文件在本轮前就全部不符合当前 Black，未为热修批量格式化存量代码。
-- 上线需要两步：后端代码部署后才能解除“已开始任务”的中途门禁；确认键修复属于小程序包，必须从上述
-  正确 worktree 重新上传、提审并发布。用户已于本轮明确授权 commit/push/deploy；发布过程需核验生产 HEAD、
-  5002、1 worker/gthread/6 threads、错误日志和两人原任务恢复；小程序发布后
-  还需真机验证 `saving` 类拼写确认会发出 answer POST、`incline` 类非拼写题也可提交及 15 秒失败恢复提示。
+- CI `31573492201` 与部署 `31573492198` 均 success。生产 `/root/apps/studytracker` 已运行
+  `1df19dfb8574`，服务于 15:20:11 CST 重启后 active/running；5002、1 worker、gthread、6 threads、单 worker
+  子进程均正确，回环根路由 302，`quick_check=ok`、外键无错误，部署后 10 分钟应用错误计数为 0。两人的
+  active flow / review session 均保留，按新规则 task gate 为 0，无需数据操作即可恢复原任务。
+- 微信开发者工具 CLI 已打开正确项目
+  `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker/miniprogram`（CLI 返回 `open`，HTTP 服务
+  `127.0.0.1:63551`），等待用户手动上传、提审和发布。小程序发布后还需真机验证 `saving` 类拼写确认会发出
+  answer POST、`incline` 类非拼写题也可提交及 15 秒失败恢复提示；未完成真机验证前不能宣称客户端问题闭环。
 
 ## 2026-08-11 教师任务页“昨日任务 / 再次布置”（已部署并通过生产验收）
 
