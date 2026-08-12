@@ -644,6 +644,46 @@ class ReadingTestSubmission(db.Model):
     task = db.relationship("Task", backref=db.backref("reading_test_submission", uselist=False, cascade="all, delete"))
 
 
+class PracticeSubmissionAttempt(db.Model):
+    """Append-only snapshot for each IELTS listening/reading submission."""
+
+    __tablename__ = "practice_submission_attempt"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    kind = db.Column(db.String(20), nullable=False, index=True)
+    test_id = db.Column(db.String(120), nullable=False, index=True)
+    test_title = db.Column(db.String(200))
+    scope_number = db.Column(db.Integer)
+    attempt_number = db.Column(db.Integer, default=1, nullable=False)
+    correct_count = db.Column(db.Integer, default=0, nullable=False)
+    total_count = db.Column(db.Integer, default=0, nullable=False)
+    accuracy = db.Column(db.Float, default=0.0, nullable=False)
+    ielts_score = db.Column(db.Float)
+    completion_rate = db.Column(db.Float, default=100.0, nullable=False)
+    duration_seconds = db.Column(db.Integer, default=0, nullable=False)
+    answers_json = db.Column(db.Text)
+    results_json = db.Column(db.Text)
+    wrong_numbers_json = db.Column(db.Text)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    task = db.relationship(
+        "Task",
+        backref=db.backref("practice_submission_attempts", lazy="dynamic", cascade="all, delete"),
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "kind",
+            "task_id",
+            "attempt_number",
+            name="uq_practice_submission_attempt",
+        ),
+    )
+
+
 class ToeflTestSubmission(db.Model):
     """One retained TOEFL practice attempt for a verified student."""
 

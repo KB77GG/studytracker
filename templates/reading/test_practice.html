@@ -505,6 +505,7 @@ const examContext = {{ exam_context|default(none)|tojson }};
 const rawTestData = {{ test | tojson }};
 const readingTaskId = pageParams.get("task_id") || "";
 const readingTaskToken = pageParams.get("token") || "";
+const historyAttemptId = pageParams.get("history_attempt") || "";
 const assignedPassageNumber = Number(pageParams.get("passage") || 0);
 const testData = assignedPassageNumber
   ? {
@@ -1010,7 +1011,10 @@ async function loadExistingSubmission() {
       params.set("token", readingTaskToken);
     }
     const query = params.toString();
-    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submission${query ? `?${query}` : ""}`, {
+    const submissionUrl = historyAttemptId
+      ? `/api/practice/history/attempt/${encodeURIComponent(historyAttemptId)}`
+      : `/api/reading/test/${encodeURIComponent(testData.id)}/submission${query ? `?${query}` : ""}`;
+    const response = await fetch(submissionUrl, {
       credentials: "same-origin"
     });
     const data = await response.json();

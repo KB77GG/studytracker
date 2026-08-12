@@ -378,10 +378,8 @@
 .today-task__title { font-size: var(--fs-base); font-weight: 700; line-height: 1.35; }
 .today-task__hint { font-size: var(--fs-sm); color: var(--muted); }
 .practice-history {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
+  display: block;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
   background: var(--success-soft);
@@ -390,6 +388,24 @@
   transition: border-color .15s ease, transform .15s ease;
 }
 .practice-history:hover { border-color: var(--success); transform: translateY(-1px); }
+.practice-history__summary,
+.practice-history__single {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  color: inherit;
+  text-decoration: none;
+}
+.practice-history__summary { cursor: pointer; list-style: none; }
+.practice-history__summary::-webkit-details-marker { display: none; }
+.practice-history__expand {
+  color: var(--success);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+.practice-history[open] .practice-history__expand::after { content: "收起"; }
+.practice-history:not([open]) .practice-history__expand::after { content: "查看各部分"; }
 .practice-history__row {
   display: flex;
   align-items: center;
@@ -421,6 +437,37 @@
   font-size: var(--fs-sm);
 }
 .practice-history__score { color: var(--success); font-weight: 800; }
+.practice-history__attempts {
+  display: grid;
+  gap: 7px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid rgba(22, 163, 74, .2);
+  background: rgba(255, 255, 255, .62);
+}
+.practice-history__attempt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid rgba(22, 163, 74, .2);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-strong);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+.practice-history__attempt:hover { border-color: var(--success); }
+.practice-history__attempt-meta { color: var(--muted); font-size: var(--fs-xs); font-weight: 500; }
+.practice-history__legacy-note {
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #fff8dc;
+  color: #765b00;
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
 .practice-overview__empty {
   padding: 16px;
   text-align: center;
@@ -807,6 +854,16 @@ if (document.getElementById('loginGate')) {
     return match ? `${Number(match[2])}月${Number(match[3])}日` : (value || '');
   }
 
+  function formatAttemptTime(value) {
+    if (!value) return '';
+    const normalized = /(?:Z|[+-]\d{2}:?\d{2})$/.test(value) ? value : `${value}Z`;
+    const date = new Date(normalized);
+    if (Number.isNaN(date.getTime())) return '';
+    return new Intl.DateTimeFormat('zh-CN', {
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Shanghai'
+    }).format(date);
+  }
+
   function renderNewTasks(data) {
     const list = document.getElementById('newTasksList');
     const meta = document.getElementById('newTasksMeta');
@@ -853,8 +910,11 @@ if (document.getElementById('loginGate')) {
       list.innerHTML = '<div class="practice-overview__empty">完成并提交练习后，记录会显示在这里。</div>';
       return;
     }
-    list.innerHTML = records.map(record => `
-      <a class="practice-history" href="${escapeHtml(record.url)}">
+    list.innerHTML = records.map(record => {
+      const attempts = Array.isArray(record.attempts) ? record.attempts : [];
+      const missing = Number(record.legacy_missing_attempts || 0);
+      const expandable = attempts.length > 1 || missing > 0;
+      const content = `
         <div class="practice-history__row">
           <span class="practice-history__source">${escapeHtml(record.source_label)}</span>
           <span class="practice-history__date">${escapeHtml(formatPracticeDate(record.date))}</span>
@@ -863,8 +923,30 @@ if (document.getElementById('loginGate')) {
         <div class="practice-history__result">
           <span>${escapeHtml(record.scope_label)}</span>
           <span class="practice-history__score">${escapeHtml(record.correct_count)}/${escapeHtml(record.total_count)} · ${escapeHtml(record.accuracy)}%</span>
-        </div>
-      </a>`).join('');
+        </div>`;
+      if (!expandable) {
+        return `<div class="practice-history"><a class="practice-history__single" href="${escapeHtml(record.url)}">${content}</a></div>`;
+      }
+      const attemptLinks = attempts.map(attempt => {
+        const time = formatAttemptTime(attempt.submitted_at);
+        return `
+          <a class="practice-history__attempt" href="${escapeHtml(attempt.url)}">
+            <span>${escapeHtml(attempt.label)}</span>
+            <span class="practice-history__attempt-meta">${time ? `${escapeHtml(time)} · ` : ''}${escapeHtml(attempt.correct_count)}/${escapeHtml(attempt.total_count)} · ${escapeHtml(attempt.accuracy)}%</span>
+          </a>`;
+      }).join('');
+      const legacyNote = missing > 0
+        ? `<div class="practice-history__legacy-note">另有 ${missing} 次旧版提交。旧版会覆盖前一次答案，因此只能确认提交发生过，无法安全还原答题明细。</div>`
+        : '';
+      return `
+        <details class="practice-history">
+          <summary class="practice-history__summary">
+            ${content}
+            <span class="practice-history__expand" aria-hidden="true"></span>
+          </summary>
+          <div class="practice-history__attempts">${attemptLinks}${legacyNote}</div>
+        </details>`;
+    }).join('');
   }
 
   function renderOverviewError(listId, metaId, message) {

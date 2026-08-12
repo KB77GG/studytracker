@@ -51,6 +51,7 @@ from api.practice_catalog import (
     summarize_book_progress,
     summarize_jijing_book_progress,
 )
+from api.practice_attempts import append_submission_attempt, preserve_legacy_submission
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
@@ -96,6 +97,7 @@ from models import (
     ListeningSegmentResult,
     ListeningRepeatResult,
     ListeningTestSubmission,
+    PracticeSubmissionAttempt,
     ReadingTestSubmission,
     ToeflMockAttempt,
     ToeflMockResponse,
@@ -2157,6 +2159,12 @@ def ensure_legacy_schema() -> None:
     except Exception as exc:  # pragma: no cover
         current_app.logger.warning(
             "Failed to ensure reading_test_submission table exists: %s", exc
+        )
+    try:
+        PracticeSubmissionAttempt.__table__.create(bind=db.engine, checkfirst=True)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.warning(
+            "Failed to ensure practice_submission_attempt table exists: %s", exc
         )
     try:
         ToeflTestSubmission.__table__.create(bind=db.engine, checkfirst=True)
@@ -7484,6 +7492,11 @@ def api_reading_test_submit(test_id):
     now = datetime.utcnow()
     submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
     if submission:
+        preserve_legacy_submission(
+            submission,
+            kind="reading",
+            scope_number=task.reading_passage_number,
+        )
         submission.attempt_count = int(submission.attempt_count or 0) + 1
         submission.updated_at = now
     else:
@@ -7512,6 +7525,11 @@ def api_reading_test_submit(test_id):
     submission.results_json = json.dumps(grade["results"], ensure_ascii=False)
     submission.wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
     submission.submitted_at = now
+    append_submission_attempt(
+        submission,
+        kind="reading",
+        scope_number=task.reading_passage_number,
+    )
 
     task.student_submitted = True
     task.submitted_at = now
@@ -7679,6 +7697,11 @@ def api_listening_test_submit(test_id):
 
     submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
     if submission:
+        preserve_legacy_submission(
+            submission,
+            kind="listening",
+            scope_number=section_number,
+        )
         submission.attempt_count = int(submission.attempt_count or 0) + 1
         submission.updated_at = now
     else:
@@ -7707,6 +7730,11 @@ def api_listening_test_submit(test_id):
     submission.results_json = json.dumps(grade["results"], ensure_ascii=False)
     submission.wrong_numbers_json = json.dumps(grade["wrong_numbers"], ensure_ascii=False)
     submission.submitted_at = now
+    append_submission_attempt(
+        submission,
+        kind="listening",
+        scope_number=section_number,
+    )
 
     task.student_submitted = True
     task.submitted_at = now

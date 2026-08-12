@@ -759,6 +759,7 @@ const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
 const listeningTaskId = pageParams.get('task_id') || '';
 const listeningTaskToken = pageParams.get('token') || '';
+const historyAttemptId = pageParams.get('history_attempt') || '';
 const assignedSectionNumber = Number(pageParams.get('section') || 0);
 const rawTest = {{ test|tojson }};
 const test = assignedSectionNumber
@@ -1358,7 +1359,10 @@ async function loadExistingSubmission() {
       params.set('section', assignedSectionNumber);
     }
     const query = params.toString();
-    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submission${query ? `?${query}` : ''}`, {
+    const submissionUrl = historyAttemptId
+      ? `/api/practice/history/attempt/${encodeURIComponent(historyAttemptId)}`
+      : `/api/listening/test/${encodeURIComponent(test.id)}/submission${query ? `?${query}` : ''}`;
+    const response = await fetch(submissionUrl, {
       credentials: 'same-origin'
     });
     const data = await response.json();

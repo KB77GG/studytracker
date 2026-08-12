@@ -6,7 +6,7 @@ import json
 import re
 from collections import defaultdict
 from datetime import datetime, timedelta
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from flask import Blueprint, jsonify, request, session
 from flask_login import current_user
@@ -15,6 +15,7 @@ from sqlalchemy import func
 from models import (
     ListeningSegmentResult,
     ListeningTestSubmission,
+    PracticeSubmissionAttempt,
     ReadingTestSubmission,
     StudentProfile,
     Task,
@@ -90,17 +91,30 @@ def _task_date(task: Task, submitted_at: datetime | None) -> str:
     return task.date or ""
 
 
-def _test_review_url(task: Task, test_id: str, kind: str, scope: int | None) -> str:
+def _test_review_url(
+    task: Task,
+    test_id: str,
+    kind: str,
+    scope: int | None,
+    attempt_id: int | None = None,
+) -> str:
     safe_id = quote(test_id, safe="")
+    params = {}
+    if attempt_id:
+        params["history_attempt"] = int(attempt_id)
     if kind == "reading":
         path = f"/reading/test/{safe_id}"
-        return f"{path}?passage={scope}" if scope else path
+        if scope:
+            params["passage"] = int(scope)
+        return f"{path}?{urlencode(params)}" if params else path
 
     resource_type = (task.listening_resource_type or "intensive").strip()
     if resource_type == "jijing":
         return f"/listening/jijing/{safe_id}"
     path = f"/listening/test/{safe_id}"
-    return f"{path}?section={scope}" if scope else path
+    if scope:
+        params["section"] = int(scope)
+    return f"{path}?{urlencode(params)}" if params else path
 
 
 def _source_label(task: Task, kind: str) -> str:
@@ -113,63 +127,176 @@ def _source_label(task: Task, kind: str) -> str:
     return "剑雅听力"
 
 
-def _serialize_submission_groups(rows: list[tuple], kind: str) -> list[dict]:
-    groups: dict[tuple, list[dict]] = defaultdict(list)
-    for submission, task in rows:
-        test_id = (submission.test_id or "").strip()
-        scope = _scope_number(task, kind)
-        submitted_at = submission.submitted_at or task.submitted_at
-        day = _task_date(task, submitted_at)
-        # Section/Passage submissions from the same test and day form one record.
-        # Whole-test submissions stay tied to their task to avoid summing retries.
-        group_scope = "scoped" if scope else f"full:{task.id}"
-        key = (day, kind, test_id, group_scope)
-        groups[key].append(
-            {
-                "submission": submission,
-                "task": task,
-                "scope": scope,
-                "submitted_at": submitted_at,
-            }
+def _json_object(value: str | None) -> dict:
+    try:
+        decoded = json.loads(value or "{}")
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return {}
+    return decoded if isinstance(decoded, dict) else {}
+
+
+def _json_list(value: str | None) -> list:
+    try:
+        decoded = json.loads(value or "[]")
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return []
+    return decoded if isinstance(decoded, list) else []
+
+
+def _json_rows(value: str | None) -> list[dict]:
+    return [row for row in _json_list(value) if isinstance(row, dict)]
+
+
+def _score_attempt(
+    item: dict,
+    *,
+    kind: str,
+    scope: int | None,
+    correct: int,
+    total: int,
+) -> dict:
+    scope_word = "Passage" if kind == "reading" else "Section"
+    submitted_at = item["submitted_at"]
+    return {
+        "label": f"{scope_word} {scope}" if scope else "整套",
+        "scope": scope,
+        "correct_count": int(correct or 0),
+        "total_count": int(total or 0),
+        "accuracy": round(correct / total * 100, 1) if total else 0.0,
+        "url": _test_review_url(
+            item["task"],
+            item["test_id"],
+            kind,
+            scope,
+            item.get("attempt_id"),
+        ),
+        "attempt_number": int(item.get("attempt_number") or 1),
+        "submitted_at": submitted_at.isoformat() if submitted_at else None,
+        "_submitted_at": submitted_at or datetime.min,
+        "_task_id": int(item["task"].id or 0),
+    }
+
+
+def _submission_scope_attempts(item: dict, kind: str) -> list[dict]:
+    submission = item["submission"]
+    explicit_scope = item.get("scope")
+    if explicit_scope:
+        return [
+            _score_attempt(
+                item,
+                kind=kind,
+                scope=explicit_scope,
+                correct=int(submission.correct_count or 0),
+                total=int(submission.total_count or 0),
+            )
+        ]
+
+    scope_key = "passage" if kind == "reading" else "section"
+    answers = _json_object(submission.answers_json)
+    result_groups: dict[int, list[dict]] = defaultdict(list)
+    for row in _json_rows(submission.results_json):
+        raw_scope = row.get(scope_key)
+        try:
+            scope = int(raw_scope) + 1
+        except (TypeError, ValueError):
+            continue
+        if scope <= 0:
+            continue
+        result_groups[scope].append(row)
+
+    attempts = []
+    for scope, rows in sorted(result_groups.items()):
+        attempted = False
+        for row in rows:
+            ids = [str(value) for value in (row.get("ids") or [])]
+            if any(str(answers.get(question_id, "")).strip() for question_id in ids):
+                attempted = True
+                break
+            if str(row.get("value") or "").strip():
+                attempted = True
+                break
+        if not attempted:
+            continue
+        correct = sum(int(row.get("awarded") or 0) for row in rows)
+        total = sum(max(1, int(row.get("marks") or 1)) for row in rows)
+        attempts.append(
+            _score_attempt(
+                item,
+                kind=kind,
+                scope=scope,
+                correct=correct,
+                total=total,
+            )
         )
+    if attempts:
+        return attempts
+    return [
+        _score_attempt(
+            item,
+            kind=kind,
+            scope=None,
+            correct=int(submission.correct_count or 0),
+            total=int(submission.total_count or 0),
+        )
+    ]
+
+
+def _serialize_submission_groups(items: list[dict], kind: str) -> list[dict]:
+    groups: dict[tuple, list[dict]] = defaultdict(list)
+    for item in items:
+        test_id = item["test_id"]
+        day = _task_date(item["task"], item["submitted_at"])
+        groups[(day, kind, test_id)].append(item)
 
     records = []
-    for (day, row_kind, test_id, group_scope), items in groups.items():
-        items.sort(
-            key=lambda item: (item["submitted_at"] or datetime.min, item["task"].id or 0),
+    for (day, row_kind, test_id), group_items in groups.items():
+        group_items.sort(
+            key=lambda item: (
+                item["submitted_at"] or datetime.min,
+                item["task"].id or 0,
+            ),
             reverse=True,
         )
-        if group_scope == "scoped":
-            latest_by_scope = {}
-            for item in items:
-                latest_by_scope.setdefault(item["scope"], item)
-            items = list(latest_by_scope.values())
-        latest = items[0]
+        latest = group_items[0]
         latest_submission = latest["submission"]
         latest_task = latest["task"]
-        correct = sum(int(item["submission"].correct_count or 0) for item in items)
-        total = sum(int(item["submission"].total_count or 0) for item in items)
+        all_attempts = [
+            attempt
+            for item in group_items
+            for attempt in _submission_scope_attempts(item, row_kind)
+        ]
+        all_attempts.sort(
+            key=lambda attempt: (
+                attempt["scope"] or 0,
+                attempt["_submitted_at"],
+                attempt["_task_id"],
+            )
+        )
+        latest_by_scope = {}
+        for attempt in reversed(all_attempts):
+            latest_by_scope.setdefault(attempt["scope"], attempt)
+        current_attempts = sorted(
+            latest_by_scope.values(), key=lambda attempt: attempt["scope"] or 0
+        )
+        correct = sum(attempt["correct_count"] for attempt in current_attempts)
+        total = sum(attempt["total_count"] for attempt in current_attempts)
         accuracy = (
             round(correct / total * 100, 1)
             if total
             else round(float(latest_submission.accuracy or 0.0), 1)
         )
-        is_scoped = group_scope == "scoped"
         scope_total = 3 if row_kind == "reading" else 4
         scope_word = "Passage" if row_kind == "reading" else "Section"
-        attempts = []
-        for item in sorted(items, key=lambda entry: entry["scope"] or 0):
-            submission = item["submission"]
-            scope = item["scope"]
-            attempts.append(
-                {
-                    "label": f"{scope_word} {scope}" if scope else "整套",
-                    "correct_count": int(submission.correct_count or 0),
-                    "total_count": int(submission.total_count or 0),
-                    "accuracy": round(float(submission.accuracy or 0.0), 1),
-                    "url": _test_review_url(item["task"], test_id, row_kind, scope),
-                }
-            )
+        scoped = bool(current_attempts) and all(
+            attempt["scope"] for attempt in current_attempts
+        )
+        legacy_missing = sum(
+            int(item.get("legacy_missing_attempts") or 0) for item in group_items
+        )
+        latest_item_attempts = _submission_scope_attempts(latest, row_kind)
+        for attempt in all_attempts:
+            attempt.pop("_submitted_at", None)
+            attempt.pop("_task_id", None)
         records.append(
             {
                 "kind": row_kind,
@@ -185,10 +312,11 @@ def _serialize_submission_groups(rows: list[tuple], kind: str) -> list[dict]:
                 "total_count": total,
                 "accuracy": accuracy,
                 "scope_label": (
-                    f"{len(items)}/{scope_total} {scope_word}" if is_scoped else "整套"
+                    f"{len(current_attempts)}/{scope_total} {scope_word}" if scoped else "整套"
                 ),
-                "url": _test_review_url(latest_task, test_id, row_kind, latest["scope"]),
-                "attempts": attempts,
+                "url": latest_item_attempts[-1]["url"] if latest_item_attempts else "#",
+                "attempts": all_attempts,
+                "legacy_missing_attempts": legacy_missing,
                 "_sort_at": latest["submitted_at"] or datetime.min,
             }
         )
@@ -247,6 +375,61 @@ def _serialize_intensive_records(student_name: str) -> list[dict]:
     return records
 
 
+def _submission_items(
+    current_rows: list[tuple],
+    snapshot_rows: list[tuple],
+    kind: str,
+) -> list[dict]:
+    items = []
+    snapshots_by_task: dict[int, list[dict]] = defaultdict(list)
+    for snapshot, task in snapshot_rows:
+        if snapshot.kind != kind:
+            continue
+        item = {
+            "submission": snapshot,
+            "task": task,
+            "test_id": (snapshot.test_id or "").strip(),
+            "scope": snapshot.scope_number or _scope_number(task, kind),
+            "submitted_at": snapshot.submitted_at or task.submitted_at,
+            "attempt_id": snapshot.id,
+            "attempt_number": int(snapshot.attempt_number or 1),
+            "legacy_missing_attempts": 0,
+        }
+        items.append(item)
+        snapshots_by_task[task.id].append(item)
+
+    for submission, task in current_rows:
+        task_snapshots = snapshots_by_task.get(task.id, [])
+        current_number = max(1, int(submission.attempt_count or 1))
+        current_item = next(
+            (
+                item
+                for item in task_snapshots
+                if item["attempt_number"] == current_number
+            ),
+            None,
+        )
+        if not current_item:
+            current_item = {
+                "submission": submission,
+                "task": task,
+                "test_id": (submission.test_id or "").strip(),
+                "scope": _scope_number(task, kind),
+                "submitted_at": submission.submitted_at or task.submitted_at,
+                "attempt_id": None,
+                "attempt_number": current_number,
+                "legacy_missing_attempts": 0,
+            }
+            items.append(current_item)
+        retained_numbers = {
+            item["attempt_number"] for item in task_snapshots
+        } | {current_number}
+        current_item["legacy_missing_attempts"] = max(
+            0, current_number - len(retained_numbers)
+        )
+    return items
+
+
 def _recent_practice_records(student_name: str, limit: int) -> list[dict]:
     listening_rows = (
         db.session.query(ListeningTestSubmission, Task)
@@ -264,15 +447,49 @@ def _recent_practice_records(student_name: str, limit: int) -> list[dict]:
         .limit(120)
         .all()
     )
+    snapshot_rows = (
+        db.session.query(PracticeSubmissionAttempt, Task)
+        .join(Task, Task.id == PracticeSubmissionAttempt.task_id)
+        .filter(Task.student_name == student_name)
+        .order_by(PracticeSubmissionAttempt.submitted_at.desc())
+        .limit(240)
+        .all()
+    )
     records = [
-        *_serialize_submission_groups(listening_rows, "listening"),
-        *_serialize_submission_groups(reading_rows, "reading"),
+        *_serialize_submission_groups(
+            _submission_items(listening_rows, snapshot_rows, "listening"),
+            "listening",
+        ),
+        *_serialize_submission_groups(
+            _submission_items(reading_rows, snapshot_rows, "reading"),
+            "reading",
+        ),
         *_serialize_intensive_records(student_name),
     ]
     records.sort(key=lambda item: item["_sort_at"], reverse=True)
     for record in records:
         record.pop("_sort_at", None)
     return records[:limit]
+
+
+def _serialize_attempt_submission(attempt: PracticeSubmissionAttempt) -> dict:
+    return {
+        "task_id": attempt.task_id,
+        "student_name": attempt.student_name,
+        "test_id": attempt.test_id,
+        "test_title": attempt.test_title,
+        "correct_count": int(attempt.correct_count or 0),
+        "total_count": int(attempt.total_count or 0),
+        "accuracy": round(float(attempt.accuracy or 0.0), 1),
+        "ielts_score": attempt.ielts_score,
+        "completion_rate": round(float(attempt.completion_rate or 0.0), 1),
+        "duration_seconds": int(attempt.duration_seconds or 0),
+        "attempt_count": int(attempt.attempt_number or 1),
+        "submitted_at": attempt.submitted_at.isoformat() if attempt.submitted_at else None,
+        "answers": _json_object(attempt.answers_json),
+        "results": _json_rows(attempt.results_json),
+        "wrong_numbers": _json_list(attempt.wrong_numbers_json),
+    }
 
 
 @practice_history_bp.get("/api/practice/history")
@@ -291,5 +508,26 @@ def practice_history():
             "ok": True,
             "name": profile.full_name,
             "records": records,
+        }
+    )
+
+
+@practice_history_bp.get("/api/practice/history/attempt/<int:attempt_id>")
+def practice_history_attempt(attempt_id: int):
+    """Return one immutable attempt owned by the verified student."""
+    profile = _current_student_profile()
+    if not profile:
+        return jsonify({"ok": False, "error": "not_verified"}), 401
+    attempt = PracticeSubmissionAttempt.query.filter_by(
+        id=attempt_id,
+        student_name=profile.full_name,
+    ).first()
+    if not attempt:
+        return jsonify({"ok": False, "error": "attempt_not_found"}), 404
+    return jsonify(
+        {
+            "ok": True,
+            "kind": attempt.kind,
+            "submission": _serialize_attempt_submission(attempt),
         }
     )
