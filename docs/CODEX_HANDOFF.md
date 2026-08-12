@@ -3,6 +3,44 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-12（Asia/Shanghai）。
 
+## 2026-08-12 听力 / 精听任务在小程序打开为空（后端已部署，小程序待用户发布）
+
+- 当前工作树为 `/Users/zhouxin/Desktop/studytracker`，分支 `main`；本轮业务基线为 `bef6ca5450aa`，
+  修复提交为 `db49c13c26cf`，已 push 到 `origin/main`。本轮开始时先安全暂存旧工作区改动，再 `git pull --ff-only`
+  从 `fd711f1c` 快进到 `bef6ca54`；旧改动完整保留在
+  `stash@{0}: codex-safety-before-pull-20260812`，没有丢弃或覆盖。
+- 生产后台 Chrome 登录态只读核验：当前隐藏的“学习目标”下拉框实际为 `display:none`、`disabled=false`、
+  `value=reading`；后台代码会把该值写入任何任务的 `Task.vocabulary_goal`。小程序首页和通用任务页又只凭
+  `vocabulary_goal` 先走词汇 v2 门禁，所以被污染的听力任务会跳过原生听力路由，最终停在空白通用任务壳。
+  生产“昨日任务”内嵌数据进一步显示 5 条听力记录中 4 条已完成记录 goal 为空，另 1 条待完成记录已误写为
+  `reading`，解释了“昨天多数任务正常”与本故障可以同时成立。
+- 当前故障任务的精听网页链接已只读打开并正常加载 58 句，剑雅整套网页链接正常加载 10 题，证明题库 JSON、
+  token 链路和网页 URL 本身可用。生产 SSH 目前在密钥交换阶段由远端关闭，无法直接查询当前两条任务行；因此
+  当前两条记录的 `vocabulary_goal` 仍是由相同创建路径、生产表单状态和小程序落页行为作出的高置信度推断，
+  没有冒充数据库直查结论，也没有写生产数据库。
+- 三层隔离已上线/就绪：`/tasks` 后端只允许 `dictation-*` 材料写学习目标；隐藏控件默认禁用并在离开词书来源时
+  清空；小程序 API 对没有 `dictation_book_id` 的任务隐藏 stray goal；现有小程序首页、计时入口和通用详情页也
+  必须同时看到词书 ID 与合法 goal 才能进入词汇 v2。后端/API/网页部分已部署，可兼容已污染任务且不依赖先清库；
+  新增小程序防线需下一次由用户上传、提审、发布后生效。
+- 本轮 9 个代码/测试文件已包含在 `db49c13c26cf`：`app.py`、`api/miniprogram.py`、
+  `services/vocabulary_mastery.py`、`templates/tasks.html`、两个小程序任务页和三个回归测试文件。其余
+  `.tmp/`、`artifacts/`、`data/reading_study/{browse,preview}.html`、
+  `data/toefl_practice/ets-practice-{2,3,4,5}/`、`docs/design/`、两份 dictation 提案文档和 `prototypes/` 均为
+  本轮前已存在的用户/其他任务内容，未修改。
+- 验证：`.venv/bin/python -m pytest -q` 为 `492 passed, 7 subtests passed`；定向两轮分别为
+  `45 passed`、`57 passed`；全部 `tests/test_*.js` 通过；两个改动小程序 JS 的 `node --check`、Python
+  `compileall` 与 `git diff --check` 通过；新回归文件 Ruff/Black 通过。对旧巨型文件执行 Ruff 安全选择仍报告
+  基线已有的 `app.py:2464 ParentStudentLink` 未定义，本轮未扩大范围修理。
+- GitHub CI `31611257505` 的强制 test 与旧拼写门禁通过，整体 conclusion 为 success；存量 advisory Ruff job
+  仍因仓库旧问题红，不阻断。部署 `31611257508` success，23:15:45 CST 重启服务并于 23:15:47 报告
+  `Deployment successful`。登录态生产页刷新后真实 DOM 已变为隐藏控件 `disabled=true`、空值、占位
+  “请选择学习目标”；公网 `/listening/tests` 为 200，根路由和未登录 `/tasks` 为预期 302。
+- 本机到生产 SSH 仍在密钥交换阶段被关闭，因此未独立复核生产 Git HEAD、5002 进程参数、数据库 quick-check/
+  外键和当前两条任务行；部署 workflow 的受限 SSH job 已成功完成。没有主动写业务数据，也无需清理历史任务行。
+  小程序尚未由 agent 上传/提审/发布；用户应从当前主工作树
+  `/Users/zhouxin/Desktop/studytracker/miniprogram` 发布，不能继续使用此前打开的
+  `vocabulary-review-hotfix` 工作树。发布后让学生完全退出再进入，并先复测原听力/精听任务。
+
 ## 2026-08-12 取消单词严格键盘与输入授权（后端已部署，小程序待用户发布）
 
 - 在同一正确发布工作树
