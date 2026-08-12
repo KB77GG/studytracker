@@ -4,6 +4,19 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-12 取消严格键盘与输入授权（后端已上线，小程序待发布）
+
+- 同一发布工作树在整合最新 `main@bec2dd27` 后完成：五条单词作答链统一系统原生键盘，移除严格键盘/模式切换组件、
+  网页 `/tasks` 授权面板和教师小程序授权入口；首答判分、纠正性重试、错词队列与间隔复习不变。
+- 后端默认 native，旧 `strict` / `compatible` 提交继续接受且不再要求授权；历史授权表、记录、关联字段和兼容 API 保留，
+  无迁移、无授权记录删除、无生产数据写入。未授权 compatible、撤销后 compatible、新 native 与旧 strict 均有回归覆盖。
+- 全部 Node/小程序语法与 JSON、目标 Ruff/compile/diff check 通过；整合后项目级为
+  `482 passed, 7 subtests passed`（继续忽略长期缺失静态音频 fixture）。业务提交 `51623206` 已推送分支与 `main`；
+  CI `31575728750` / `31575728809` 和部署 `31575728757` 均 success。
+- 生产为 `51623206`，15:52:00 CST 重启后 active，5002 / 1 worker / gthread / 6 threads 正常；
+  `quick_check=ok`、外键错误 0、部署后应用错误 0。开发者工具已重新打开正确目录
+  `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker/miniprogram`；下一步由用户上传、提审、发布并真机验证。
+
 ## 2026-08-12 词汇任务中途被复习打断 / 确认键无响应（后端已上线，小程序待发布）
 
 - 只读核验生产服务器代码、Nginx/Gunicorn 日志及 SQLite：蒋雅诺任务 `3364` 在 `saving` 到期约 3 秒后

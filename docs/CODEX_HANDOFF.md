@@ -3,6 +3,36 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-12（Asia/Shanghai）。
 
+## 2026-08-12 取消单词严格键盘与输入授权（后端已部署，小程序待用户发布）
+
+- 在同一正确发布工作树
+  `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker`、分支
+  `codex/vocabulary-review-hotfix` 完成一次性改造，并在提交前整合远端新增的“学生做题记录”
+  `bec2dd27`，没有覆盖该并行功能。业务提交 `51623206d270` 已原子推送到任务分支和 `main`。
+- 学生端所有五条单词自由文本作答链现在统一使用微信系统原生 `<input>`：旧听写练习、强化拼写、今日复习、
+  词汇小组学习和自主间隔复习。严格键盘、输入模式切换组件及对应页面策略调用已删除；新客户端统一提交
+  `input_mode=native`。首答判分、服务端幂等 attempt、错词纠正性重试、错词队列和后续间隔复习均保留，
+  未改变判分归一化或掌握度结算规则。
+- 后端输入策略改为 native 默认；为发布滚动期兼容，旧客户端提交的 `strict`、`compatible` 仍被接受，
+  `compatible` 不再检查授权。已有有效授权只会作为旧提交的可选审计关联，不影响接受/拒绝。历史
+  `dictation_input_grant` 表、记录和兼容 API 均保留，没有 schema 迁移、记录删除或生产数据写入。
+- 网页 `/tasks` 的“单词任务输入授权”面板（含脚本/样式）和教师小程序学生页的“单词任务实体键盘”入口均已移除。
+  旧授权 API 暂留只为兼容/审计，不再有产品入口；测试覆盖未授权 compatible、撤销后 compatible、native
+  和旧 strict 均能提交，以及历史授权关联的保留行为。
+- 整合最新 `main` 后，全部 Node 测试、全量小程序 JS 语法与 JSON 解析、目标 Ruff、Python compile 和
+  `git diff --check` 通过；项目级
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `482 passed, 7 subtests passed`。仓库长期缺失的静态音频 fixture 仍按既有约定忽略。
+- `main` CI `31575728750`、任务分支 CI `31575728809`、部署 `31575728757` 均 success。生产
+  `/root/apps/studytracker` 已运行 `51623206d270`，服务于 15:52:00 CST 重启后 active；回环根路由 302，
+  `127.0.0.1:5002`、1 worker、gthread、6 threads、单 worker 子进程均正确。数据库 `quick_check=ok`、
+  外键错误 0，部署后应用错误 0；生产只保留既有未跟踪备份/调度库，没有 tracked 脏改动。
+- 微信开发者工具 CLI 已重新打开正确项目
+  `/Users/zhouxin/.codex/worktrees/vocabulary-review-hotfix/studytracker/miniprogram`（CLI 返回 `open`，HTTP 服务
+  `127.0.0.1:63551`），等待用户手动上传、提审和发布。本地代码与后端已就绪，但小程序包尚未由 agent 上传；
+  用户发布后仍应真机覆盖 `saving` 拼写、`incline` 所在流程、错答重试和跨复习到期点恢复，未完成真机验证前
+  不把客户端闭环误报为完成。
+
 ## 2026-08-12 词汇任务中途复习门禁 / 自主复习确认键热修（后端已部署，小程序待发布）
 
 - 本轮从最新 `origin/main@79698f2b` 创建独立工作树
