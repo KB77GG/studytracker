@@ -1,7 +1,113 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-12（Asia/Shanghai）。
+> 最近更新：2026-08-13（Asia/Shanghai）。
+
+## 2026-08-13 剑20 Test 1 Section 1 覆盖为45句纯对话版（已上线）
+
+- 当前工作树为 `/Users/zhouxin/Desktop/studytracker`、分支 `main`。业务提交
+  `9aadc1525b3d58452f30bbe42262d830cc75d73c` 已 commit/push 到 `origin/main` 并部署。
+  后续复现性修正 `8b1c69dc568be66355dd36d4726671c7568a0e05` 也已 commit/push/deploy：正式资源
+  覆盖后，生成器默认使用日期化原轨备份，并优先读取每句保存的 `original_start/end`；实测可重新生成
+  完全相同 SHA-256 的279.840秒MP3。
+  提交包含生成器 `scripts/build_xdf_intensive_pilot.py`、正式覆盖的
+  `static/listening/ielts20_test1_s1.json`、门禁测试
+  `tests/test_xdf_intensive_replacement.py`，以及
+  `miniprogram/pages/student/listening/practice/index.js` 的句尾停止修正。
+  本轮结束前另有来源不属于本任务的未跟踪 `data/idictation_zyz_vocab/`、
+  `scripts/import_zyz_vocab.py`、`tests/test_import_zyz_vocab.py` 出现，与原有 `.tmp/`、`artifacts/`、
+  阅读/TOEFL临时数据、设计/提案和 `prototypes/` 一样均未触碰、未提交。
+- 生成脚本通过新东方公开接口 qId `1817` 取45句结构，规范化后与本地原58句的742个词逐词完全一致；
+  再把新东方的两段剪辑时间轴映射回本地原音频。试点纯对话音频由本地原 MP3 的
+  `40.990–205.280s` 与 `251.990–367.540s` 两段拼接生成，删去中间 `46.710s` 看题/说明块；
+  成品 `static/listening/ielts20_test1_s1.mp3` 为 `279.840s`、`4,510,888` bytes、
+  SHA-256 `ec0bc0dc1ab21bd1d18e6397a9c4b7978a292a66da8273c2637798dfa1c9dfa4`。
+  该 MP3 命中仓库 `static/listening/*.mp3` ignore 规则，已在 JSON 部署前单独 rsync 并原子替换生产同名文件。
+  本机旧原轨备份为 `static/listening/ielts20_test1_s1_pre_45sentence_20260813.mp3`；生产旧 JSON/MP3
+  也分别备份为 `static/listening/ielts20_test1_s1_pre_45sentence_20260813.{json,mp3}`，可恢复。
+- 覆盖前只读查询生产库：`listening_exercise_id='ielts20_test1_s1'` 的任务数为0，关联
+  `listening_segment_result` 也为0，因此本次用原 canonical ID/文件名直接覆盖，没有旧任务进度错位。
+  线上教师目录与原链接无需改变，之后新布置任务自动使用45句。
+- 小程序逐句停止条件从 `segment.end - 0.05s` 改为精确 `segment.end`，去掉会主动削短尾音的50ms；
+  网页原本已按精确 `end` 停止。本轮没有改后端代码或数据库记录，但已按用户授权替换生产JSON/MP3资源。
+- 对试点 MP3 跑 Whisper base 全轨逐词校验：期望742词、ASR 744词，LCS 匹配732词（98.652%）；
+  44个内部句界中41个可由相邻匹配词可靠核验，没有句界早于当前句最后一个词结束，最小尾部余量约
+  `0.200s`。拼接点前后完整识别 `Not sure ... quite limited` 与
+  `I've just thought of another idea ...`，没有把对话剪断。`scripts/audit_listening_alignment.py`
+  单文件审计为 `checked=1 / issue_count=0`。
+- 用户已在同一播放器中实际对比原58句版与45句纯对话试点，并明确反馈“45句的版本确实更好”。
+  产品方向因此确定为：纯对话音轨、减少脆弱短句切点、播放器不提前50ms停止；后续扩展应沿用这三个原则，
+  而不是只在旧时间戳上无条件增加尾部余量。
+- 精确验证：`.venv/bin/ruff check scripts/build_xdf_intensive_pilot.py tests/test_xdf_intensive_replacement.py`、
+  `.venv/bin/black --check ...`、Python `py_compile`、
+  `node --check miniprogram/pages/student/listening/practice/index.js` 均通过；覆盖发布前新增/目录定向测试为
+  `6 passed`，复现性修正后定向为 `7 passed`；全部 `tests/test_*.js` 通过；`.venv/bin/python -m pytest -q` 为
+  `496 passed, 7 subtests passed`（仅存量弃用警告）。结束前仍需保持 `git diff --check` 通过。
+- GitHub 首次覆盖的 CI `31711801740` / 部署 `31711801774`，以及复现性修正的 CI
+  `31712275524` / 部署 `31712275451` 均 success。生产 HEAD 为 `8b1c69dc`，
+  `studytracker.service=active`；Gunicorn 监听 `127.0.0.1:5002`、gthread、单 worker 子进程。
+  生产页面/API为200且API返回45句（0.00–279.84秒），MP3 Range为206、大小4,510,888 bytes、
+  SHA-256与本机一致；公网同样页面/API 200、音频206，`cache-control: no-cache`，不存在长期旧音频缓存头。
+- 网页与后端资源已上线。小程序代码中的精确 `end` 停播修正虽已 commit/push并进入生产仓库，
+  但微信小程序包尚未由用户上传、提审、发布；当前已发布旧包仍提前50ms停止，不过会立即使用新的45句JSON和
+  纯对话MP3。下一步在实际使用中记录具体“第几句”问题，定点修正；扩展其他Section前仍先只读检查是否有旧任务。
+  复现性修正后生产仍为45句/279.84秒，`workers=1 / worker_class=gthread / threads=6`，部署后日志未发现
+  traceback/exception/error/failed。
+
+## 2026-08-13 剑雅精听时间戳来源与越句现象核验（只读诊断）
+
+- 当前工作树为 `/Users/zhouxin/Desktop/studytracker`，分支 `main`，诊断基线/`origin/main`
+  均为 `a3a5fedf843797478842a78a05f9801720f47e3a`，左右差异为 `0/0`。本轮开始时没有 tracked 业务改动；
+  已有 `.tmp/`、`artifacts/`、`data/reading_study/{browse,preview}.html`、
+  `data/toefl_practice/ets-practice-{2,3,4,5}/`、`docs/design/`、两份 dictation 提案和 `prototypes/`
+  均为本轮前存在的未跟踪内容，未修改。
+- 已确认当前剑雅精听导入器 `scripts/import_idictation_xyy_listening.py` 不重新对齐句子：
+  它直接读取 iDictation part 响应 `content[]` 的 `start_time/end_time/en_text/cn_text`，
+  时间只做毫秒→秒与两位小数四舍五入，同时保留 `source_start_time/source_end_time`；
+  播放音频 URL 也直接来自同一 part 响应的 `file_url`。
+- 对本地保留的 iDictation 原始 API 响应
+  `data/idictation_xyy_listening/raw.json`、导入报告与 `static/listening/ielts*.json`
+  做了全量只读逐句对账：288 个 Cambridge Section、13,104 句全部存在，句数差异 0、
+  文本差异 0、源音频 URL 差异 0。12,949 句时间与原始 API 值一致，导入四舍五入的
+  最大改变仅 0.005 秒；余下 155 句全部是剑21 四套 Section 1，已在提交
+  `78a7721a34b4083685316b79487996d16b541c1a` 因原站整段偏移而使用官方 MP3 轨重对齐修正。
+- 原始 API 数据的 12,816 个相邻句边界中，307 个出现 `next.start < previous.end`
+  的时间重叠，4,027 个间隔不超过 50ms；还存在少数明显的时间轴回跳。
+  因此“句尾几个词落到下一句”可以来自原站逐句边界本身，不是导入换算制造的数秒级误差。
+  原站当前公开 `/main/book` 页面可 200 加载，但精确到某个登录后练习的 UI 播放表现
+  本轮没有冒充已对比；原站如果整段连续播放，同一数据缺陷可能不如逐句硬停明显。
+- 本项目小程序句播放在 `segment.end - 0.05s` 到达时暂停；网页播放器按
+  `segment.end` 暂停。小程序的 50ms 余量可能削掉极短尾音，但不足以单独解释“几个词”。
+  本轮只诊断，没有修改播放器、JSON、MP3、数据库或生产状态。
+- 用户随后提供新东方 IELTS Cat 对照页
+  `https://ieltscat.xdf.cn/intensive/intensive/1817/2/1`。公开接口确认它是“剑雅20 Test 1
+  Section 1 / Recommendation for Restaurants”：新东方为 45 句，本地/iDictation 在排除
+  `PART 1` 后为 58 句；去掉每句重复说话人标签并规范标点后，两边 742 个英文词完全一致。
+  新东方 44 个内部句界中有 42 个与本地/iDictation 落在相同词位（95.5%），另有 2 个
+  新东方独有句界和 15 个本地独有句界，说明新东方主要是把较短片段合并成更长的精听句。
+- 两边不能直接比较绝对秒数：新东方使用独立剪辑的纯对话 MP3，时长 `279.013875s`；
+  本地/iDictation 原轨为 `435.570917s`，保留开场说明、看题时间和结尾。按共同词位分段校正后，
+  前半段时间轴固定偏移中位数为 `40.620s`，共同句界残差绝对值中位数 `0.030s`、95 分位
+  `0.120s`、最大 `0.140s`；中间删去约 `46.755s` 看题/说明块后，后半段固定偏移中位数
+  为 `87.375s`，残差绝对值中位数 `0.015s`、95 分位 `0.055s`、最大 `0.075s`。
+  因此这一个样本没有显示新东方逐句微调明显优于 iDictation；它听感更干净主要来自删掉非对话段、
+  减少 13 个分句切点。新东方前端也没有显式句尾缓冲：`timeupdate` 到达 API `end` 后暂停/循环，
+  浏览器事件粒度只可能带来少量越界播放，不能视作对时间戳缺陷的系统修复。
+- 验证：`git status --short --branch`、`git log -5 --oneline`、
+  `git rev-list --left-right --count HEAD...origin/main` 分别确认工作树、基线与 `0 0`；
+  全量对账使用 `.venv/bin/python` 只读加载上述 raw/report/288 份 JSON，逐 part id 比较
+  数量、文本、时间和 `file_url`，结果数字见上；`git show --stat 78a7721a`
+  确认剑21修正只涉及四套 Section 1 JSON。新东方对照使用
+  `curl -sS https://ieltscat.xdf.cn/api/newquestion/getIntensive -H 'content-type: application/x-www-form-urlencoded' --data 'qId=1817'`
+  获取公开数据，再由 `.venv/bin/python` 对本地 `ielts20_test1_s1.json` 做规范化词序、共同边界及
+  分段偏移统计；`ffprobe` 核对两条 MP3 时长，前端公开 bundle 只读确认逐句停止条件。
+  本轮未改业务代码，不需重跑项目级测试；
+  交接文档更新后 `git diff --check` 需保持通过。
+- 下一位 agent 如要修正：先让用户给出 2–3 个可复现的“剑几 / Test 几 / Section 几 /
+  第几句”，在同一 MP3 上核对该句与前后句的真实语音边界，再决定是只修数据、调整播放余量，
+  还是对 288 个 Section 做一次可审计的批量重对齐。若采用新东方方案，必须重建或逐段映射其剪辑时间轴，
+  不能把 0–279 秒的时间戳直接套到当前 0–435 秒原轨；可先以剑20 Test 1 Section 1 做 45 句试点。
+  不要无条件给每句加大尾部余量，否则会把下一句的开头泄到当前句。
 
 ## 2026-08-12 听力 / 精听任务在小程序打开为空（后端已部署，小程序待用户发布）
 
