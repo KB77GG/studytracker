@@ -594,7 +594,7 @@ Page({
             currentTimeText: this.formatTime(relative)
         })
 
-        if (!this.segmentStopHandled && currentTime >= Math.max(segment.start, segment.end - 0.05)) {
+        if (!this.segmentStopHandled && currentTime >= Math.max(segment.start, segment.end)) {
             this.segmentStopHandled = true
             this.pauseAudio()
         }
