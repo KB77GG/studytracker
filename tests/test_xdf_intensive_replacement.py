@@ -3,7 +3,12 @@ import json
 import unittest
 from pathlib import Path
 
-from scripts.build_xdf_intensive_pilot import normalized_tokens
+from scripts.build_xdf_intensive_pilot import (
+    ORIGINAL_AUDIO_BACKUP,
+    _infer_regions,
+    _token_spans,
+    normalized_tokens,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 EXERCISE_PATH = ROOT / "static/listening/ielts20_test1_s1.json"
@@ -65,6 +70,27 @@ class XdfIntensiveReplacementTests(unittest.TestCase):
 
         self.assertIn("currentTime >= Math.max(segment.start, segment.end)", source)
         self.assertNotIn("segment.end - 0.05", source)
+
+    def test_generator_recovers_original_timeline_after_replacement(self):
+        _, local_spans = _token_spans(self.segments, "text")
+        xdf_rows = [
+            {
+                "entext": segment["text"],
+                "start": segment["source_start_time"] / 1000,
+                "end": segment["source_end_time"] / 1000,
+            }
+            for segment in self.segments
+        ]
+        _, xdf_spans = _token_spans(xdf_rows, "entext")
+        regions = _infer_regions(xdf_spans, local_spans)
+
+        self.assertEqual(
+            ORIGINAL_AUDIO_BACKUP,
+            "ielts20_test1_s1_pre_45sentence_20260813.mp3",
+        )
+        self.assertEqual(len(regions), 2)
+        self.assertAlmostEqual(regions[0]["offset"], 40.63, places=2)
+        self.assertAlmostEqual(regions[1]["offset"], 87.375, places=3)
 
 
 if __name__ == "__main__":

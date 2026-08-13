@@ -25,6 +25,7 @@ XDF_PAGE_URL = "https://ieltscat.xdf.cn/intensive/intensive/1817/2/1"
 SPEAKER_RE = re.compile(r"^(?:MAN|WOMAN):\s*", re.IGNORECASE)
 TOKEN_RE = re.compile(r"[a-z0-9]+")
 PART_LABEL_RE = re.compile(r"^PART\s+\d+$", re.IGNORECASE)
+ORIGINAL_AUDIO_BACKUP = "ielts20_test1_s1_pre_45sentence_20260813.mp3"
 
 
 def normalized_tokens(text: str) -> list[str]:
@@ -77,7 +78,10 @@ def fetch_xdf_payload(qid: int) -> dict:
 
 
 def _infer_regions(xdf_spans: list[dict], local_spans: list[dict]) -> list[dict]:
-    local_starts = {span["start_position"]: float(span["row"]["start"]) for span in local_spans}
+    local_starts = {
+        span["start_position"]: float(span["row"].get("original_start", span["row"]["start"]))
+        for span in local_spans
+    }
     anchors = []
     for row_index, span in enumerate(xdf_spans):
         local_time = local_starts.get(span["start_position"])
@@ -140,8 +144,14 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
             f"xdf={len(xdf_tokens)}, local={len(local_tokens)}"
         )
 
-    local_starts = {span["start_position"]: float(span["row"]["start"]) for span in local_spans}
-    local_ends = {span["end_position"]: float(span["row"]["end"]) for span in local_spans}
+    local_starts = {
+        span["start_position"]: float(span["row"].get("original_start", span["row"]["start"]))
+        for span in local_spans
+    }
+    local_ends = {
+        span["end_position"]: float(span["row"].get("original_end", span["row"]["end"]))
+        for span in local_spans
+    }
     regions = _infer_regions(xdf_spans, local_spans)
 
     mapped_rows = []
@@ -220,6 +230,7 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
         for previous, current in zip(clips, clips[1:], strict=False)
     ]
     source = source_payload.get("source") or {}
+    source_mapping = source.get("mapping") or {}
     return {
         "id": "ielts20_test1_s1_xdf_pilot",
         "title": "Cambridge IELTS 20 Test 1 Section 1（45句纯对话试点）",
@@ -230,15 +241,18 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
             "page_url": XDF_PAGE_URL,
             "api_url": XDF_API_URL,
             "original_audio": source_payload.get("audio"),
-            "original_provider": source.get("provider"),
-            "original_file_url": source.get("file_url"),
+            "original_provider": source.get("original_provider") or source.get("provider"),
+            "original_file_url": source.get("original_file_url") or source.get("file_url"),
             "generated_by": "scripts/build_xdf_intensive_pilot.py",
             "mapping": {
                 "token_count": len(xdf_tokens),
                 "xdf_segment_count": len(xdf_rows),
-                "original_dialogue_segment_count": len(local_rows),
-                "shared_internal_boundaries": len(
-                    xdf_internal_boundaries & local_internal_boundaries
+                "original_dialogue_segment_count": int(
+                    source_mapping.get("original_dialogue_segment_count") or len(local_rows)
+                ),
+                "shared_internal_boundaries": int(
+                    source_mapping.get("shared_internal_boundaries")
+                    or len(xdf_internal_boundaries & local_internal_boundaries)
                 ),
                 "region_offsets_seconds": [round(region["offset"], 3) for region in regions],
                 "removed_gaps_seconds": removed_gaps,
@@ -305,7 +319,7 @@ def main() -> int:
     parser.add_argument(
         "--source-audio",
         type=Path,
-        default=ROOT / "static/listening/ielts20_test1_s1.mp3",
+        default=ROOT / "static/listening" / ORIGINAL_AUDIO_BACKUP,
     )
     parser.add_argument(
         "--output-json",
