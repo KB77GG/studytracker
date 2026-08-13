@@ -34,6 +34,12 @@ class ListeningIntensiveCatalogTests(unittest.TestCase):
             _write_exercise(root, "jfdr6_test1_s2", "JFDR 6 Test 1 Part 2", 3)
             _write_exercise(root, "jfdr6_test1_s1", "JFDR 6 Test 1 Part 1", 1)
             _write_exercise(root, "ielts6_test1_s1", "IELTS 6 Test 1 Section 1", 4)
+            _write_exercise(
+                root,
+                "ielts6_test1_s1_legacy_20260813",
+                "Hidden legacy snapshot",
+                4,
+            )
             _write_exercise(root, "not_registered_s1", "Ignore me", 99)
             (root / "ielts6_test1.json").write_text("{}", encoding="utf-8")
             (root / "ielts6_test2_s1.json").write_text("not json", encoding="utf-8")
@@ -73,6 +79,20 @@ class ListeningIntensiveCatalogTests(unittest.TestCase):
             self.assertEqual(
                 load_registered_intensive_exercise(root, "jfdr6_test1_s9")[0], None
             )
+
+            _write_exercise(
+                root,
+                "jfdr6_test1_s2_legacy_20260813",
+                "Legacy Part 2",
+                1,
+            )
+            legacy_payload, legacy_info, legacy_id = load_registered_intensive_exercise(
+                root,
+                "jfdr6_test1_s2_legacy_20260813",
+            )
+            self.assertEqual(legacy_payload["title"], "Legacy Part 2")
+            self.assertEqual(legacy_info["section"], 2)
+            self.assertEqual(legacy_id, "jfdr6_test1_s2_legacy_20260813")
 
 
 if __name__ == "__main__":

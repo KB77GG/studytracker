@@ -9,6 +9,10 @@ from pathlib import Path
 from .listening_series import parse_intensive_id, parse_test_id
 
 _EXERCISE_ID_RE = re.compile(r"^[A-Za-z0-9_]+$")
+_LEGACY_EXERCISE_ID_RE = re.compile(
+    r"^(?P<base>(?:ielts|jfdr)\d+_test\d+_s\d+)_legacy_\d{8}$",
+    re.IGNORECASE,
+)
 
 
 def _read_json(path: Path) -> dict | None:
@@ -126,6 +130,10 @@ def load_registered_intensive_exercise(
 
     candidate = str(exercise_id or "")
     info = parse_intensive_id(candidate)
+    if not info:
+        legacy_match = _LEGACY_EXERCISE_ID_RE.fullmatch(candidate)
+        if legacy_match:
+            info = parse_intensive_id(legacy_match.group("base"))
     if not candidate or not _EXERCISE_ID_RE.fullmatch(candidate) or not info:
         return None, None, None
 

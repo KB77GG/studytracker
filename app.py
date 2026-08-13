@@ -4033,6 +4033,8 @@ def tasks_page():
         for f in sorted(listening_dir.glob("*.json")):
             try:
                 meta = json.loads(f.read_text(encoding="utf-8"))
+                if meta.get("hidden_from_catalog"):
+                    continue
                 segment_items = []
                 global_idx = 0
                 for part_idx, part in enumerate(meta.get("parts", [])):
@@ -6730,7 +6732,11 @@ def _practice_library_summary() -> dict:
 
     intensive_count = 0
     if _listening_root().exists():
-        intensive_count = sum(1 for _path in _listening_root().glob("*.json"))
+        intensive_count = sum(
+            1
+            for path in _listening_root().glob("*.json")
+            if parse_intensive_id(path.stem)
+        )
 
     jijing_book_count = 0
     jijing_test_count = 0
@@ -6997,6 +7003,8 @@ def listening_index():
         for f in sorted(listening_dir.glob("*.json")):
             try:
                 meta = json.loads(f.read_text(encoding="utf-8"))
+                if meta.get("hidden_from_catalog"):
+                    continue
                 usage = usage_map.get(f.stem, {})
                 accuracy_count = int(usage.get("accuracy_count") or 0)
                 exercises.append({
