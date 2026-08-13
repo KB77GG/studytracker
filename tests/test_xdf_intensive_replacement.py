@@ -34,7 +34,7 @@ class XdfIntensiveReplacementTests(unittest.TestCase):
         transcript_hash = hashlib.sha256(" ".join(tokens).encode()).hexdigest()
 
         self.assertEqual(self.exercise["id"], "ielts20_test1_s1")
-        self.assertEqual(self.exercise["audio"], "ielts20_test1_s1.mp3")
+        self.assertEqual(self.exercise["audio"], "ielts20_test1_s1_xdf_20260813.mp3")
         self.assertEqual(self.exercise["source"]["provider"], "xdf_ieltscat_mapped")
         self.assertEqual(len(self.segments), 45)
         self.assertEqual(len(tokens), 742)
@@ -89,8 +89,8 @@ class XdfIntensiveReplacementTests(unittest.TestCase):
             "ielts20_test1_s1_pre_45sentence_20260813.mp3",
         )
         self.assertEqual(len(regions), 2)
-        self.assertAlmostEqual(regions[0]["offset"], 40.63, places=2)
-        self.assertAlmostEqual(regions[1]["offset"], 87.375, places=3)
+        self.assertAlmostEqual(regions[0]["offset"], 40.645, places=3)
+        self.assertAlmostEqual(regions[1]["offset"], 87.412, places=3)
 
 
 if __name__ == "__main__":

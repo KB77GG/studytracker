@@ -74,9 +74,7 @@ def build_intensive_catalog(root: Path) -> list[dict]:
                 "series": info["series"],
                 "book": info["book"],
                 "test": info["test"],
-                "title": parse_test_id(info["test_key"])["title"].removesuffix(
-                    " Listening"
-                ),
+                "title": parse_test_id(info["test_key"])["title"].removesuffix(" Listening"),
                 "parts": [],
             },
         )

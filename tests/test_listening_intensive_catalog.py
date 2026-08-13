@@ -64,21 +64,13 @@ class ListeningIntensiveCatalogTests(unittest.TestCase):
             root = Path(temp_dir)
             _write_exercise(root, "jfdr6_test1_s2", "Part 2", 1)
 
-            payload, info, safe_id = load_registered_intensive_exercise(
-                root, "jfdr6_test1_s2"
-            )
+            payload, info, safe_id = load_registered_intensive_exercise(root, "jfdr6_test1_s2")
             self.assertEqual(payload["title"], "Part 2")
             self.assertEqual(info["section"], 2)
             self.assertEqual(safe_id, "jfdr6_test1_s2")
-            self.assertEqual(
-                load_registered_intensive_exercise(root, "jfdr6_test1")[0], None
-            )
-            self.assertEqual(
-                load_registered_intensive_exercise(root, "../jfdr6_test1_s2")[0], None
-            )
-            self.assertEqual(
-                load_registered_intensive_exercise(root, "jfdr6_test1_s9")[0], None
-            )
+            self.assertEqual(load_registered_intensive_exercise(root, "jfdr6_test1")[0], None)
+            self.assertEqual(load_registered_intensive_exercise(root, "../jfdr6_test1_s2")[0], None)
+            self.assertEqual(load_registered_intensive_exercise(root, "jfdr6_test1_s9")[0], None)
 
             _write_exercise(
                 root,

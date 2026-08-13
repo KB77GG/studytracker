@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build one XDF-style intensive-listening pilot from an existing IELTS asset.
+"""Build one XDF-style intensive-listening asset from an existing IELTS asset.
 
 The public XDF transcript uses an edited dialogue-only timeline.  This script
 maps its sentence structure back to the existing local source audio, removes
@@ -15,23 +15,39 @@ import re
 import shutil
 import statistics
 import subprocess
+import time
 from pathlib import Path
 
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 XDF_API_URL = "https://ieltscat.xdf.cn/api/newquestion/getIntensive"
-XDF_PAGE_URL = "https://ieltscat.xdf.cn/intensive/intensive/1817/2/1"
-SPEAKER_RE = re.compile(r"^(?:MAN|WOMAN):\s*", re.IGNORECASE)
+XDF_PAGE_URL_TEMPLATE = "https://ieltscat.xdf.cn/intensive/intensive/{qid}/2/1"
+XDF_PAGE_URL = XDF_PAGE_URL_TEMPLATE.format(qid=1817)
+SPEAKER_RE = re.compile(r"^\s*[A-Z][A-Z0-9 .&'’_-]{0,30}:\s*")
+TRAILING_SPEAKER_RE = re.compile(r"\s*[A-Z][A-Z0-9 .&'’_-]{0,30}:\s*$")
 TOKEN_RE = re.compile(r"[a-z0-9]+")
 PART_LABEL_RE = re.compile(r"^PART\s+\d+$", re.IGNORECASE)
 ORIGINAL_AUDIO_BACKUP = "ielts20_test1_s1_pre_45sentence_20260813.mp3"
+CLIP_EDGE_MARGIN_SECONDS = 0.2
+TOKEN_CORRECTIONS: dict[str, tuple[str, ...]] = {
+    # Known OCR defects in the original idictation transcript.  They are only
+    # used while proving that both sources describe the same spoken words.
+    "companywas": ("company", "was"),
+    "ffnished": ("finished",),
+    "fft": ("fit",),
+    "fgure": ("figure",),
+}
 
 
 def normalized_tokens(text: str) -> list[str]:
-    normalized = SPEAKER_RE.sub("", str(text or "").strip())
+    normalized = str(text or "").strip()
+    while SPEAKER_RE.match(normalized):
+        normalized = SPEAKER_RE.sub("", normalized, count=1)
+    normalized = TRAILING_SPEAKER_RE.sub("", normalized)
     normalized = normalized.replace("’", "'").replace("‘", "'")
-    return TOKEN_RE.findall(normalized.lower())
+    tokens = TOKEN_RE.findall(normalized.lower())
+    return [corrected for token in tokens for corrected in TOKEN_CORRECTIONS.get(token, (token,))]
 
 
 def _dialogue_segments(payload: dict) -> list[dict]:
@@ -64,12 +80,21 @@ def _token_spans(rows: list[dict], text_key: str) -> tuple[list[str], list[dict]
 
 
 def fetch_xdf_payload(qid: int) -> dict:
-    response = requests.post(
-        XDF_API_URL,
-        data={"qId": str(qid)},
-        headers={"User-Agent": "StudyTracker intensive-listening pilot"},
-        timeout=30,
-    )
+    response = None
+    for attempt in range(3):
+        try:
+            response = requests.post(
+                XDF_API_URL,
+                data={"qId": str(qid)},
+                headers={"User-Agent": "StudyTracker intensive-listening builder"},
+                timeout=30,
+            )
+            break
+        except requests.RequestException:
+            if attempt == 2:
+                raise
+            time.sleep(attempt + 1)
+    assert response is not None
     response.raise_for_status()
     payload = response.json()
     if payload.get("status") != 0 or not isinstance(payload.get("data"), dict):
@@ -130,7 +155,20 @@ def _mapped_boundary(
     return xdf_time + region_offset
 
 
-def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str) -> dict:
+def build_pilot_payload(
+    source_payload: dict,
+    xdf_payload: dict,
+    audio_name: str,
+    *,
+    asset_id: str = "ielts20_test1_s1_xdf_pilot",
+    title: str = "Cambridge IELTS 20 Test 1 Section 1（45句纯对话试点）",
+    part_name: str = "Section 1 · 45句试点",
+    provider: str = "xdf_ieltscat_pilot",
+    generated_by: str = "scripts/build_xdf_intensive_pilot.py",
+    qid: int | None = None,
+    source_audio_file: str | None = None,
+    region_offsets: tuple[float, ...] | None = None,
+) -> dict:
     local_rows = _dialogue_segments(source_payload)
     xdf_rows = sorted(
         xdf_payload.get("sentence") or [],
@@ -144,15 +182,20 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
             f"xdf={len(xdf_tokens)}, local={len(local_tokens)}"
         )
 
-    local_starts = {
-        span["start_position"]: float(span["row"].get("original_start", span["row"]["start"]))
-        for span in local_spans
-    }
-    local_ends = {
-        span["end_position"]: float(span["row"].get("original_end", span["row"]["end"]))
+    local_translations = {
+        (span["start_position"], span["end_position"]): str(
+            span["row"].get("translation") or ""
+        ).strip()
         for span in local_spans
     }
     regions = _infer_regions(xdf_spans, local_spans)
+    if region_offsets is not None:
+        if len(region_offsets) != len(regions):
+            raise ValueError(
+                f"Expected {len(regions)} calibrated region offsets, got {len(region_offsets)}"
+            )
+        for region, calibrated_offset in zip(regions, region_offsets, strict=True):
+            region["offset"] = float(calibrated_offset)
 
     mapped_rows = []
     for region_index, region in enumerate(regions):
@@ -161,19 +204,12 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
             row = span["row"]
             xdf_start = float(row["start"])
             xdf_end = float(row["end"])
-            original_start = _mapped_boundary(
-                local_starts,
-                span["start_position"],
-                xdf_start,
-                region["offset"],
-            )
-            original_end = _mapped_boundary(
-                local_ends,
-                span["end_position"],
-                xdf_end,
-                region["offset"],
-                force_local=row_index == len(xdf_spans) - 1,
-            )
+            # The old local boundaries are useful anchors for finding each
+            # source-audio region, but they are not accurate enough to reuse as
+            # sentence cuts.  Once the region offset is known, preserve XDF's
+            # boundary times exactly on the original recording.
+            original_start = xdf_start + region["offset"]
+            original_end = xdf_end + region["offset"]
             if original_end <= original_start:
                 raise ValueError(f"Invalid mapped range at XDF sentence {row_index + 1}")
             mapped_rows.append(
@@ -190,8 +226,10 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
     for region_index, region in enumerate(regions):
         first = mapped_rows[region["start_row"]]
         last = mapped_rows[region["end_row"] - 1]
-        clip_start = first["original_start"]
-        clip_end = last["original_end"]
+        clip_start = max(0, first["original_start"] - CLIP_EDGE_MARGIN_SECONDS)
+        clip_end = last["original_end"] + CLIP_EDGE_MARGIN_SECONDS
+        first["original_start"] = clip_start
+        last["original_end"] = clip_end
         clips.append(
             {
                 "region_index": region_index,
@@ -208,13 +246,20 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
         clip = clips[item["region_index"]]
         output_start = clip["output_start"] + (item["original_start"] - clip["original_start"])
         output_end = clip["output_start"] + (item["original_end"] - clip["original_start"])
+        translation = str(row.get("cntext") or "").strip()
+        if not translation:
+            span = xdf_spans[len(segments)]
+            translation = local_translations.get(
+                (span["start_position"], span["end_position"]),
+                "",
+            )
         segments.append(
             {
                 "id": len(segments) + 1,
                 "start": round(output_start, 2),
                 "end": round(output_end, 2),
                 "text": str(row.get("entext") or "").strip(),
-                "translation": str(row.get("cntext") or "").strip(),
+                "translation": translation,
                 "source_order": int(row.get("sortNum") or len(segments) + 1),
                 "source_start_time": round(float(row["start"]) * 1000),
                 "source_end_time": round(float(row["end"]) * 1000),
@@ -231,19 +276,20 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
     ]
     source = source_payload.get("source") or {}
     source_mapping = source.get("mapping") or {}
+    resolved_qid = int(qid or xdf_rows[0].get("qId") or 1817)
     return {
-        "id": "ielts20_test1_s1_xdf_pilot",
-        "title": "Cambridge IELTS 20 Test 1 Section 1（45句纯对话试点）",
+        "id": asset_id,
+        "title": title,
         "audio": audio_name,
         "source": {
-            "provider": "xdf_ieltscat_pilot",
-            "q_id": int(xdf_rows[0].get("qId") or 1817),
-            "page_url": XDF_PAGE_URL,
+            "provider": provider,
+            "q_id": resolved_qid,
+            "page_url": XDF_PAGE_URL_TEMPLATE.format(qid=resolved_qid),
             "api_url": XDF_API_URL,
-            "original_audio": source_payload.get("audio"),
+            "original_audio": source.get("original_audio") or source_payload.get("audio"),
             "original_provider": source.get("original_provider") or source.get("provider"),
             "original_file_url": source.get("original_file_url") or source.get("file_url"),
-            "generated_by": "scripts/build_xdf_intensive_pilot.py",
+            "generated_by": generated_by,
             "mapping": {
                 "token_count": len(xdf_tokens),
                 "xdf_segment_count": len(xdf_rows),
@@ -255,7 +301,14 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
                     or len(xdf_internal_boundaries & local_internal_boundaries)
                 ),
                 "region_offsets_seconds": [round(region["offset"], 3) for region in regions],
+                "region_offset_method": (
+                    "xdf_reference_audio_cross_correlation"
+                    if region_offsets is not None
+                    else "median_shared_boundaries"
+                ),
                 "removed_gaps_seconds": removed_gaps,
+                "clip_edge_margin_seconds": CLIP_EDGE_MARGIN_SECONDS,
+                "source_audio_file": source_audio_file or source_payload.get("audio"),
                 "clips": [
                     {
                         "original_start": round(clip["original_start"], 3),
@@ -266,7 +319,7 @@ def build_pilot_payload(source_payload: dict, xdf_payload: dict, audio_name: str
                 ],
             },
         },
-        "parts": [{"name": "Section 1 · 45句试点", "segments": segments}],
+        "parts": [{"name": part_name, "segments": segments}],
     }
 
 
