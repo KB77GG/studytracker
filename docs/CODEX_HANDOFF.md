@@ -1,9 +1,60 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14（Asia/Shanghai）。
+> 最近更新：2026-08-14 21:57（Asia/Shanghai）。
 
-## 2026-08-14 数字听写发音恢复（生产已恢复，后台已上线，小程序保护待发布）
+## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端已上线，小程序待用户发布）
+
+- 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
+  `codex/listening-dictation-release`。先从干净的精听发布 HEAD `d5d2e70f` 线性快进合入数字发音
+  `1222b2f0` / `5f2ba4b4`，再形成业务提交
+  `6635b32011aee0b5216233cc026c44f90da53469`；该提交已原子推送发布分支与 `origin/main`，因此本目录
+  同时包含精听智能听写升级、数字音频失败保护、电话/邮编逐字符发音和音频 URL 修复。桌面主工作树
+  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端 5 个提交，原有两份交接文档修改及
+  `.tmp/`、`artifacts/`、iDictation/ZYZ 导入数据与脚本、阅读/TOEFL 临时数据、设计/提案/原型均未覆盖。
+- 语义审计确认第一阶段生成的数字音频会把长号码按基数/分组数朗读，不符合电话号码、邮编和编号的听写目的。
+  现以受版本控制的
+  `data/dictation_tts_overrides/ielts_sun_number_dictation_phone_postcode.json` 固定 19 个精确序号：
+  `22,24,27,31,36,40,43,51,73,89,90,103,113,114,116,118,122,123,124`。规则为每个数字/字母
+  单独读，`0` 读 `oh`，重复数字不合并成 double/triple；例如 `94635550` 为
+  `nine, four, six, three, five, five, five, oh`。日期、年份、价格、数量及 `17A`/`201 A` 等地址门牌
+  没有纳入，不改变其自然读法。映射同时钉死 book ID `196`、完整书名、序号和原词，任一不符都会在生成前失败。
+- `scripts/backfill_dictation_book_tts.py` 新增 `--spoken-text-map`：映射模式不受全局重复次数影响，只读一遍；
+  仍保持默认 dry-run、MP3 校验、原子落盘、全量成功后单事务绑定，并拒绝把映射用于错误书本、部分范围或错位词条。
+  生产 dry-run 先确认 19/19 精确匹配；写库前用 SQLite 在线备份
+  `/root/apps/studytracker/app.db.bak-20260814-book196-digitwise-before`，大小 `85,270,528` bytes，SHA-256
+  `180425bff5411515e126b0d857bc9ea4c0c818e98d77de7ca6ec8c039fee26d4`，`quick_check=ok`。
+  随后 DashScope 新生成 19 份逐字符 MP3 并在一个事务内替换对应 `audio_us`；旧缓存文件未删除，上一阶段备份也保留，
+  没有修改学生答案、进度或任务状态。
+- 生产写入后 19/19 文件均大于 1 KiB，回环与公网 word-id 请求全部为 `200 audio/mpeg`，样例 Range 为
+  `206 / 1024 bytes`；数据库 `quick_check=ok`、外键错误 0。成品拉回本机后用缓存的 Whisper small/base
+  逐条核验，并对容易混淆的 6 条再用阿里云 ASR 交叉检查；号码已不再被读成千/百万位基数，孤立 B/D、R/are 等
+  字母在 ASR 文本中仍会出现识别混淆，故最终事实源是受测的逐字符 spoken-text 映射与实际 TTS 输入。
+  本机忽略证据位于 `output/transcribe/phone-postcode-digitwise-20260814/`；生产机没有运行 Whisper/Kokoro。
+- 验收又发现第一阶段回填的数据库值为服务端文件路径 `uploads/tts_cache/...`，旧小程序以
+  `https://studytracker.xin/api` 为 base 时会误拼为不存在的 `/api/uploads/...`。业务提交 `6635b320` 增加共享
+  `services/dictation_audio.py`：书本接口和 legacy 任务队列现在把绑定音频统一序列化为带文件指纹的
+  `/dictation/words/{id}/tts?v=...`；151/151 个词均已在生产核对为该契约，样例公网 Range 206。
+  版本指纹也避免换音频后命中旧缓存。新小程序的 `resolveAudioUrl` 同时正确处理根目录
+  `uploads/` / `static/` 资产。已打开旧页面仍持有旧队列和内存缓存，因此学生需要完全退出练习/小程序并重新进入一次；
+  后端兼容已上线，不需要等新版小程序发布才能恢复。
+- 自动化与编译：专项 Python `43 passed`；项目级
+  `PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --ignore=tests/test_static_audio_headers.py`
+  为 `512 passed, 44 subtests passed`；全部 Node 为 `40 pass`。目标 Ruff、Black（新增/独立文件）、Python
+  `py_compile`、JS `node --check`、JSON 解析与 `git diff --check` 通过。微信开发者工具 Stable 2.01.2510290
+  地址栏再次确认项目为本 worktree 的 `miniprogram`，普通编译为 `Errors: 0`、`Problems: 0`；调试器唯一 warning
+  是工具自身 SharedArrayBuffer 弃用提示。安装包内官方 `wcc` / `wcsc -lc` 全量为 `32/32 WXML`、
+  `33/33 WXSS`，另有 `49/49 JS` 语法及 `36/36 JSON` 解析通过。
+- CI `31806798880` 与部署 `31806798923` 均 success。生产 `/root/apps/studytracker` HEAD 为 `6635b320`，
+  tracked 工作区干净；`studytracker.service` 于 21:53:42 CST 重启后 active，监听 `127.0.0.1:5002`，
+  `workers=1 / worker_class=gthread / threads=6`，主进程只有 1 个 worker 子进程，重启后应用错误计数 0。
+  远端三个 `/tmp` 验证脚本/映射副本已删除，正式音频和两份可恢复数据库备份保留。
+- 小程序仍未上传、提审或发布。微信开发者工具保留在正确目录
+  `/Users/zhouxin/.codex/worktrees/2b72/studytracker/miniprogram` 的 `pages/index/index`，供用户手动上传完整功能包；
+  不要从桌面旧主工作树或 `/private/tmp/studytracker-number-audio-hotfix` 上传。手机真机对新版包的精听与数字音频
+  联合回归仍待用户发布后执行。
+
+## 2026-08-14 数字听写发音恢复（第一阶段；已由上节逐字符修正接续）
 
 - 发布工作树为 `/private/tmp/studytracker-number-audio-hotfix`，分支
   `codex/dictation-number-audio-hotfix`，基线 `d5d2e70f5722446538a004d33d172768050c02ab`；业务提交

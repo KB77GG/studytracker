@@ -4,7 +4,29 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-08-14 数字听写发音恢复（生产已恢复）
+## 2026-08-14 电话/邮编逐字符发音与完整小程序发布包（后端已上线，小程序待发布）
+
+- 在精听发布工作树 `/Users/zhouxin/.codex/worktrees/2b72/studytracker` 线性合入数字热修，再以
+  `6635b320` 完成 19 个电话/邮编/编号的逐字符发音、审计映射、后端音频 URL 兼容与客户端根目录音频解析；
+  提交已推送发布分支和 `main`。规则为 `0 → oh`、数字/字母逐个读、重复数字不读 double/triple；日期、年份、
+  价格、数量和普通门牌保持自然读法。
+- 写生产库前新建 `app.db.bak-20260814-book196-digitwise-before`（85,270,528 bytes，SHA-256 见交接）；
+  19 份 DashScope MP3 全部生成成功并单事务换绑。Whisper small/base 与阿里云 ASR 交叉核验不再按千/百万位读；
+  19/19 公网接口 200，样例 Range 206，数据库 quick-check/外键正常。学生答案、进度、任务状态未改，旧缓存和两份
+  数据库备份保留；生产机没有运行本地重模型。
+- 额外发现旧包会把 `uploads/...` 错拼为 `/api/uploads/...`。后端现把 151/151 条绑定音频输出为带版本指纹的
+  `/dictation/words/{id}/tts?v=...`，新客户端也补根目录资产解析。后端已经生效，学生完全退出练习/小程序再进入即可，
+  不必等新包；当前打开页面仍持有旧队列/缓存，不能只反复点播放。
+- 项目级 Python 为 `512 passed, 44 subtests passed`（继续只忽略仓库长期缺失的静态 MP3 fixture）；全部 Node
+  `40 pass`，目标 lint/compile/diff check 通过。微信开发者工具确认正确 worktree，普通编译 `Errors: 0 / Problems: 0`，
+  唯一 debugger warning 为工具 SharedArrayBuffer 弃用提示；官方 `wcc/wcsc` 为 `32 WXML + 33 WXSS` 全通过，
+  另有 49 JS / 36 JSON 全通过。
+- CI `31806798880`、部署 `31806798923` success。生产为 `6635b320`、service active、5002、1 worker、gthread、
+  6 threads，数据库正常且部署后错误 0。临时远端脚本已清理。开发者工具仍打开
+  `/Users/zhouxin/.codex/worktrees/2b72/studytracker/miniprogram`，该目录同时含精听与数字修复；未上传、提审或发布，
+  下一步由用户从该目录手动发完整包并做真机联合回归。
+
+## 2026-08-14 数字听写发音恢复（第一阶段；已由上节接续）
 
 - 确认不是小程序未重进：数字表达缺音频，word-id 路由会返回 400/502，Android 又把明确 HTTP 失败放大为
   重复播放请求。来源站没有可直接导出的逐题原录音，因此按用户授权使用项目现有阿里云 DashScope TTS。
