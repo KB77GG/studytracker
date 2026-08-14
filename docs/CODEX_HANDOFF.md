@@ -3,14 +3,15 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-14（Asia/Shanghai）。
 
-## 2026-08-14 精听智能听写稳定升级（仅本机，未提交）
+## 2026-08-14 精听智能听写稳定升级（后端/网页已上线，小程序待用户发布）
 
-- 本轮工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，处于 detached
-  `HEAD`，基线为 `6ded77d24586327ad94e151e172ae4811b4a2eed`。本轮没有 commit、push、部署、
-  生产数据库写入、小程序上传/提审/发布，也没有改动 16 份剑20 JSON 或 MP3。当前业务改动包含
+- 本轮工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，发布分支为
+  `codex/listening-dictation-release`，基线为 `6ded77d24586327ad94e151e172ae4811b4a2eed`。业务提交
+  `18484d1ee1f6f861e1f370dd5ab89c9222a43d91` 已 commit、推送发布分支并快进到 `origin/main`，后端/网页
+  已部署；没有生产数据库写入、小程序上传/提审/发布，也没有改动 16 份剑20 JSON 或 MP3。业务改动包含
   `app.py`、新服务 `services/listening_cloze.py`、`templates/listening/player.html`、小程序精听页三件套、
   网页/小程序两份 `listening-cloze.js` 纯函数模块，以及契约 fixture 和 5 个精听测试文件；本节与
-  `WORKLOG.md` 也尚未提交。主工作区既有用户/其他任务脏改动未触碰；仅在其已存在的 `.tmp/` 下写入
+  `WORKLOG.md`。主工作区既有用户/其他任务脏改动未触碰；仅在其已存在的 `.tmp/` 下写入
   本轮浏览器与微信模拟器审阅截图。
 - 网页与小程序共用同一份契约 fixture：新选择器保留原始 `segment.text` 的 whitespace
   坐标，把 `MAN:`/`WOMAN:` 等说话人标签标为不可答而不重编号。新网页写入原始
@@ -74,7 +75,15 @@
   浏览器与模拟器证据仅本机位于
   `/Users/zhouxin/Desktop/studytracker/.tmp/listening-release-qa-20260814/`，不是待发布产品资产。
   验收用 `5062` 开发服务器与浏览器页均已关闭；指向主工作区真实 T1S1 MP3 的临时只读 symlink 已精确删除，
-  未复制、改写或删除主工作区音频。仍未做手机真机调试、微信上传/提审/发布；这些只能在用户明确授权后进行。
+  未复制、改写或删除主工作区音频。仍未做手机真机调试、微信上传/提审/发布；用户明确表示将自行上传发布。
+- 发布分支 CI `31766305566`、主分支 CI `31766349645`、部署 `31766349635` 均为 success；CI 的 Ruff
+  失败仅是仓库既有 advisory lint job，工作流整体成功且本次未修改所报旧文件。生产目录 HEAD 为
+  `18484d1e`，`studytracker.service=active`（2026-08-14 11:18:00 CST 重启）；Gunicorn 监听
+  `127.0.0.1:5002`，配置为 `workers=1 / worker_class=gthread / threads=6`，主进程仅 1 个 worker 子进程。
+  生产数据库 `PRAGMA quick_check=ok`、外键错误 0，重启后 journal 的 traceback/exception/error/failed 计数为 0。
+  公网 `/listening/ielts20_test1_s1` 与 `/static/js/listening-cloze.js` 均为 200，新脚本 SHA-256
+  `a99d3ec8984d428612729808d77afc255c212d97e509fafe00321a7fed37b721` 与本地一致；页面含新流程代码，
+  正式 T1S1 音频 Range 为 206。后端/网页已上线；微信小程序包仍待用户从本 worktree 手动上传、提审、发布。
 
 ## 2026-08-13 剑20 Test 1 Section 1 覆盖为45句纯对话版（已上线）
 
