@@ -65,6 +65,7 @@ from services.ielts_practice_scoring import (
     grade_listening_test_answers as _grade_listening_test_answers_shared,
     grade_reading_test_answers as _grade_reading_test_answers_shared,
 )
+from services.listening_cloze import ListeningClozeValidationError, grade_first_attempt
 from services import mock_exam_review as _mock_review
 from services import mock_exam_review_workflow as _mock_review_workflow
 from services import mock_exam_writing as _mock_writing
@@ -9176,6 +9177,40 @@ def _resolve_listening_access_token():
     ).strip()
 
 
+def _serialize_listening_cloze_results(results):
+    """Expose canonical word judgments in the shape shared by both JS clients."""
+    return [
+        {
+            "index": row.get("index"),
+            "wordIndex": row.get("word_index"),
+            "answer": row.get("answer", ""),
+            "rawAnswer": row.get("raw_answer", ""),
+            "isCorrect": bool(row.get("is_correct")),
+            "isExtra": bool(row.get("is_extra")),
+        }
+        for row in (results or [])
+    ]
+
+
+def _canonical_results_for_saved_listening_segment(exercise_data, row):
+    """Best-effort canonical detail for legacy progress rows.
+
+    A few historical rows predate canonical coordinates. Their aggregate score
+    remains readable even if their old coordinates cannot be regraded safely.
+    """
+    try:
+        grade = grade_first_attempt(
+            exercise_data,
+            row.segment_index,
+            segment_text=row.segment_text or "",
+            hidden_word_indices=json.loads(row.hidden_word_indices or "[]"),
+            answers=json.loads(row.answers_json or "[]"),
+        )
+    except (ListeningClozeValidationError, TypeError, ValueError, json.JSONDecodeError):
+        return []
+    return _serialize_listening_cloze_results(grade["results"])
+
+
 @app.route("/api/student/listening/task/<int:task_id>")
 def api_student_listening_task(task_id):
     """返回任务信息 + 精听数据 + 已有做题进度。"""
@@ -9206,6 +9241,11 @@ def api_student_listening_task(task_id):
             continue
         progress[r.segment_index] = {
             "segment_index": r.segment_index,
+            # Coordinate basis for legacy and new listening-cloze clients.
+            # Older web saves stripped text; older mini-program saves original
+            # text including the speaker label. Clients must restore the saved
+            # indices against this exact text rather than recalculate them.
+            "segment_text": r.segment_text or "",
             "correct_words": r.correct_words,
             "total_words": r.total_words,
             "accuracy": r.accuracy,
@@ -9213,6 +9253,7 @@ def api_student_listening_task(task_id):
             "attempt_count": r.attempt_count,
             "hidden_word_indices": json.loads(r.hidden_word_indices) if r.hidden_word_indices else [],
             "answers_json": json.loads(r.answers_json) if r.answers_json else [],
+            "results": _canonical_results_for_saved_listening_segment(exercise_data, r),
         }
 
     repeat_results = ListeningRepeatResult.query.filter_by(task_id=task_id).all()
@@ -9263,53 +9304,86 @@ def api_student_listening_submit_segment(task_id, segment_index):
     if selected_indices and segment_index not in set(selected_indices):
         return jsonify({"ok": False, "error": "segment_not_assigned"}), 400
 
-    correct_words = int(data.get("correct_words", 0))
-    total_words = int(data.get("total_words", 0))
-    accuracy = round(correct_words / total_words * 100, 1) if total_words > 0 else 0.0
-    hidden_word_indices = data.get("hidden_word_indices", [])
-    answers_json = data.get("answers", [])
-    duration_seconds = data.get("duration_seconds")
-
-    # upsert ListeningSegmentResult
+    # A first attempt is immutable. Retries caused by a lost response return the
+    # already persisted result instead of incrementing attempts or overwriting
+    # the student's original score.
     result = ListeningSegmentResult.query.filter_by(
         task_id=task_id, segment_index=segment_index
     ).first()
     if result:
-        result.correct_words = correct_words
-        result.total_words = total_words
-        result.accuracy = accuracy
-        result.is_completed = True
-        result.attempt_count = result.attempt_count + 1
-        result.hidden_word_indices = json.dumps(hidden_word_indices)
-        result.answers_json = json.dumps(answers_json)
-        result.updated_at = datetime.utcnow()
-    else:
-        result = ListeningSegmentResult(
-            task_id=task_id,
-            student_name=task.student_name,
-            segment_index=segment_index,
-            segment_text=data.get("segment_text", ""),
-            hidden_word_indices=json.dumps(hidden_word_indices),
-            answers_json=json.dumps(answers_json),
-            correct_words=correct_words,
-            total_words=total_words,
-            accuracy=accuracy,
-            is_completed=True,
-            attempt_count=1,
-        )
-        db.session.add(result)
+        existing_results = []
+        safe_id = secure_filename(task.listening_exercise_id)
+        existing_json_path = Path(app.static_folder) / "listening" / f"{safe_id}.json"
+        if existing_json_path.exists():
+            try:
+                existing_exercise_data = json.loads(existing_json_path.read_text(encoding="utf-8"))
+                existing_results = _canonical_results_for_saved_listening_segment(
+                    existing_exercise_data, result
+                )
+            except (OSError, TypeError, ValueError, json.JSONDecodeError):
+                existing_results = []
+        return jsonify({
+            "ok": True,
+            "already_saved": True,
+            "segment": {
+                "segment_index": segment_index,
+                "segment_text": result.segment_text or "",
+                "accuracy": result.accuracy,
+                "correct_words": result.correct_words,
+                "total_words": result.total_words,
+                "hidden_word_indices": json.loads(result.hidden_word_indices or "[]"),
+                "answers": json.loads(result.answers_json or "[]"),
+                "results": existing_results,
+            },
+            "task": {
+                "status": task.status,
+                "accuracy": task.accuracy,
+                "completion_rate": task.completion_rate,
+            },
+        })
 
-    # 汇总到 Task：统计总 segment 数和完成数
     safe_id = secure_filename(task.listening_exercise_id)
     json_path = Path(app.static_folder) / "listening" / f"{safe_id}.json"
-    total_segments = 0
-    if json_path.exists():
-        ex_data = json.loads(json_path.read_text(encoding="utf-8"))
-        total_segments = _listening_segment_count_for_task(task, ex_data)
+    if not json_path.exists():
+        return jsonify({"ok": False, "error": "exercise_not_found"}), 404
+    ex_data = json.loads(json_path.read_text(encoding="utf-8"))
+    try:
+        grade = grade_first_attempt(
+            ex_data,
+            segment_index,
+            segment_text=data.get("segment_text", ""),
+            hidden_word_indices=data.get("hidden_word_indices", []),
+            answers=data.get("answers", []),
+        )
+    except ListeningClozeValidationError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 400
+
+    correct_words = grade["correct_words"]
+    total_words = grade["total_words"]
+    accuracy = grade["accuracy"]
+    hidden_word_indices = grade["hidden_word_indices"]
+    answers_json = grade["answers"]
+    duration_seconds = data.get("duration_seconds")
+    result = ListeningSegmentResult(
+        task_id=task_id,
+        student_name=task.student_name,
+        segment_index=segment_index,
+        segment_text=grade["segment_text"],
+        hidden_word_indices=json.dumps(hidden_word_indices),
+        answers_json=json.dumps(answers_json),
+        correct_words=correct_words,
+        total_words=total_words,
+        accuracy=accuracy,
+        is_completed=True,
+        attempt_count=1,
+    )
+    db.session.add(result)
+
+    # 汇总到 Task：统计总 segment 数和完成数
+    total_segments = _listening_segment_count_for_task(task, ex_data)
 
     all_results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
     selected_set = set(selected_indices or [])
-    # 加上当前这条（如果是新建的还没在 all_results 里）
     relevant_results = [
         r for r in all_results
         if not selected_set or r.segment_index in selected_set
@@ -9344,6 +9418,10 @@ def api_student_listening_submit_segment(task_id, segment_index):
             "accuracy": accuracy,
             "correct_words": correct_words,
             "total_words": total_words,
+            "segment_text": grade["segment_text"],
+            "hidden_word_indices": hidden_word_indices,
+            "answers": answers_json,
+            "results": _serialize_listening_cloze_results(grade["results"]),
         },
         "task": {
             "status": task.status,

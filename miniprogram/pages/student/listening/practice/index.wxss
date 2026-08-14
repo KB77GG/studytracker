@@ -365,6 +365,12 @@ page {
   margin-bottom: 26rpx;
 }
 
+.audio-notice {
+  margin-left: 16rpx;
+  color: #b45309;
+  font-size: 22rpx;
+}
+
 .time-text {
   font-size: 23rpx;
   color: #746b60;
@@ -471,6 +477,10 @@ page {
   font-weight: 750;
 }
 
+.option-pill.pill-disabled {
+  opacity: 0.58;
+}
+
 .dictation-box {
   background: #fffaf2;
   border: 2rpx solid #e3d9cb;
@@ -497,6 +507,8 @@ page {
 }
 
 .blank-input {
+  width: 160rpx;
+  box-sizing: border-box;
   min-height: 60rpx;
   padding: 0 10rpx 4rpx;
   border-radius: 0;
@@ -524,6 +536,113 @@ page {
 .blank-suffix {
   font-size: 28rpx;
   color: #746b60;
+}
+
+.blank-result {
+  display: block;
+  max-width: 160rpx;
+  font-size: 20rpx;
+  line-height: 1.25;
+  color: #746b60;
+  text-align: center;
+  white-space: normal;
+}
+
+.blank-result.correct {
+  color: #2f8a5f;
+}
+
+.blank-result.wrong {
+  color: #c34a3e;
+}
+
+.dictation-intro,
+.dictation-empty,
+.challenge-wrap {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dictation-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14rpx;
+}
+
+.dictation-intro-title {
+  font-size: 30rpx;
+  font-weight: 750;
+  color: #25211c;
+}
+
+.dictation-intro-copy,
+.dictation-empty,
+.dictation-notice {
+  display: block;
+  font-size: 24rpx;
+  line-height: 1.55;
+  color: #746b60;
+}
+
+.start-dictation-btn {
+  margin: 6rpx 0 0;
+  padding: 0 28rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 18rpx;
+  font-size: 25rpx;
+  font-weight: 700;
+  color: #fff;
+  background: #2f8e87;
+}
+
+.start-dictation-btn::after {
+  border: none;
+}
+
+.challenge-input {
+  width: 100%;
+  min-height: 176rpx;
+  box-sizing: border-box;
+  padding: 20rpx;
+  border: 2rpx solid #cfc2b1;
+  border-radius: 16rpx;
+  background: #fffdf8;
+  color: #25211c;
+  font-size: 28rpx;
+  line-height: 1.55;
+}
+
+.challenge-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 18rpx;
+}
+
+.challenge-result {
+  max-width: 100%;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  overflow-wrap: anywhere;
+  background: #f4f0e9;
+  color: #746b60;
+}
+
+.challenge-result.correct {
+  background: #e6f4eb;
+  color: #2f8a5f;
+}
+
+.challenge-result.wrong {
+  background: #fff0ed;
+  color: #c34a3e;
+}
+
+.dictation-notice {
+  margin: -2rpx 4rpx 16rpx;
 }
 
 .side-translation {
@@ -1154,6 +1273,7 @@ page {
 }
 
 .blank-input {
+  width: 160rpx;
   min-height: 58rpx;
   padding: 0 10rpx;
   border-radius: 14rpx;

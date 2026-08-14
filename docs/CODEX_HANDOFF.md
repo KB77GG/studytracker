@@ -1,7 +1,80 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-13（Asia/Shanghai）。
+> 最近更新：2026-08-14（Asia/Shanghai）。
+
+## 2026-08-14 精听智能听写稳定升级（仅本机，未提交）
+
+- 本轮工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，处于 detached
+  `HEAD`，基线为 `6ded77d24586327ad94e151e172ae4811b4a2eed`。本轮没有 commit、push、部署、
+  生产数据库写入、小程序上传/提审/发布，也没有改动 16 份剑20 JSON 或 MP3。当前业务改动包含
+  `app.py`、新服务 `services/listening_cloze.py`、`templates/listening/player.html`、小程序精听页三件套、
+  网页/小程序两份 `listening-cloze.js` 纯函数模块，以及契约 fixture 和 5 个精听测试文件；本节与
+  `WORKLOG.md` 也尚未提交。主工作区既有用户/其他任务脏改动未触碰；仅在其已存在的 `.tmp/` 下写入
+  本轮浏览器与微信模拟器审阅截图。
+- 网页与小程序共用同一份契约 fixture：新选择器保留原始 `segment.text` 的 whitespace
+  坐标，把 `MAN:`/`WOMAN:` 等说话人标签标为不可答而不重编号。新网页写入原始
+  `segment_text`、数值 `hidden_word_indices` 和平铺逐词 `answers`；旧网页的 stripped
+  文本坐标、旧小程序的完整文本坐标均按保存文本原样恢复，绝不重算。任务进度 API 现返回
+  已保存的 `segment_text`，使客户端能够区分这两种历史基准。
+- 三档实现为“基础·关键词 / 标准·辨音 / 挑战·整句”：基础和标准使用确定性候选排序、
+  数量边界与相邻降级；挑战只显示不泄露长度的整句输入，但仍保存逐词数组和数值下标。选择器默认
+  排除说话人、纯标点、问候/填充、未明确拼写的人名；数字/时间/地址/明确拼写优先。`right`、`fine`、
+  `sure` 只在回应语境排除，支持连字符和分开的逐字母拼写序列；名称白名单可配置。
+- 网页“句子精听”恢复为先听、可显示原文核对；听写首次进入显示“先听，再填 / 开始作答”，
+  不锁播放。两端使用固定宽度单词槽、可读 `aria-label`、挑战 textarea 和立即逐词反馈；订正
+  只在本地评分，不会第二次 POST 或覆盖首答。保存进度、已开始作答和保存失败的首答均冻结本句难度；
+  历史记录仅在下标恰好覆盖全部 spoken token 时才渲染为挑战，旧 60%/50% 记录保留逐词 UI。
+  网页自由练习只有在 `localStorage` 真正写入后才显示侧栏勾选；任务模式只有服务端确认后才标记完成。
+  小程序现在跨模式/切句保存未提交草稿，汇总值始终由可见 `progressMap` 重算，避免陈旧 Task 汇总与页面不一致。
+  两端挑战模式保留并惩罚多输单词（显示“多余”），不再截断后仍给 100%；分数统一保留到一位小数。
+  较长正确答案在反馈态按答案有限扩展，`restaurants` 不再被固定宽度截断。
+- 音频链路也完成稳定修正：网页时间条、±5 秒和进度点击都限制在当前句范围；播放按钮由真实
+  `play/pause` 事件驱动，`play()` 拒绝会显示错误；`requestAnimationFrame + timeupdate` 双保险在精确句尾停播。
+  小程序不再用固定 120ms 猜测 seek 完成，而是等待 `onSeeked`，另有 400ms 兼容兜底；播放 token 能取消
+  切句/暂停后的待播任务，50ms 边界监视与 `onTimeUpdate` 双保险避免越界。加载/失败状态现在可见。
+- 服务端新增 canonical 首答判分：从任务对应 JSON 找到原句，兼容旧网页 stripped 坐标和完整说话人坐标，
+  验证文本、下标、说话人标签和答案形态，并完全忽略客户端上报的 `correct_words/total_words` 后重算。
+  首答记录改为幂等不可覆盖；网络丢响应后的重复 POST 返回第一次已保存结果，不增加 attempt 或篡改成绩。
+  服务端现在同时返回 canonical 逐词结果，网页和小程序均以它覆盖客户端临时判色；模拟器用故意冲突的
+  “本地 2/3、服务端 1/3”响应复验后，总分 `33.3% / 1 of 3` 与逐词 1 绿 2 红完全一致，不再出现总分和颜色矛盾。
+- 验证（均在此 worktree，Python 使用
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`）：`node --test tests/*.js` 为 `40 pass`；新增覆盖
+  标准/挑战草稿恢复、挑战多余词、66.7% 小数、陈旧汇总、完整 `canplay→seeked→单次 play` 事件链、
+  取消待播、句尾停播和全剑20契约。
+  `tests/test_listening_cloze_exercise_contract.js` 扫描 16/16 个正式 Section、594 句，验证时间单调、
+  三档确定性、说话人不可答，以及基础/标准不挖问候词或未拼写人名。进度 API 定向为
+  `4 passed, 3 subtests passed`，覆盖服务端拒绝伪造文本/说话人下标、客户端伪造 100% 被重算、canonical
+  逐词结果及首答幂等。
+  `node --check`、Python `py_compile`、`git diff --check` 均通过。
+- 全仓 `pytest -q` 结果为 `504 passed, 44 subtests passed, 2 failed`。两个失败仍为
+  `tests/test_static_audio_headers.py`：它固定请求
+  `/static/listening/ielts10_test1_s1.mp3`，但该 MP3 在本 worktree 不存在且被
+  `.gitignore` 的 `static/listening/*.mp3` 忽略，故返回 404；本轮未伪造该旧 fixture。正式剑20 T1S1 资产则
+  实测普通请求 `200 / 4,510,470 bytes / Accept-Ranges: bytes`，Range 请求
+  `206 / Content-Range: bytes 0-1023/4510470`。
+- 当前轮浏览器 QA 真实挂载剑20 T1S1 音频，不再只是静态界面：音频 `readyState=4` 后正常播放，第一句在
+  `4.526825s` 自动暂停；句2时间条显示本句 `00:00–00:08`，不再显示全轨 `04:39`，连续两次前进5秒被
+  正确限制为 `9.52s / 13.21s`。标准档切换模式后草稿仍在，真实 4/4 提交显示 `100%` 且侧栏只在保存后勾选；
+  挑战整句多输 `EXTRA` 显示“多余”并得 `95.5%`；刷新后整体 `3/45、86.2%` 与逐句首答一致，已保存结果
+  可恢复且不会因查看自动播放。长答案 `restaurants` 截图确认完整显示。16 个正式 XDF MP3 也逐一用
+  `ffprobe` 核对：每份 JSON 最后 `end` 与对应音频时长差均为 `0.00s`。
+- 微信开发者工具 `/Applications/wechatwebdevtools.app` 已登录，官方 CLI 打开的是本 worktree 的
+  `miniprogram`。第一次真实编译暴露出 `app.json` 所列 5 个页面缺少同名 page JSON，SummerCompiler 因此报
+  `path must be string`；已为 `pages/index`、`pages/student/{home,task,stats}`、`pages/parent/report` 补齐
+  `{ "usingComponents": {} }`，并新增门禁保证 app.json 每个页面均有 JS/JSON/WXML/WXSS 四件套。
+  清洁重编译后调试器 `Errors: 0, Warnings: 0`；安装包内官方 `wcc` / `wcsc -lc` 全量复验仍为
+  `32/32 WXML`、`33/33 WXSS` 通过。
+- 微信模拟器（基础库 3.17.1）用内存隔离任务跑完运行时验收，没有生产任务 POST 或数据库写入：默认先听页正常，
+  点击开始后 3 个真实 input 可见，草稿 `table/six/evening` 在“句子精听 ↔ 听写模式”往返后不丢；提交只发
+  1 次，服务端权威总分、汇总和逐词颜色一致。真实公网剑20 T1S1 音频 `audioReady=true`，第二句从非零时间戳
+  播放 1.6 秒后显示 `00:01/00:08`；切回第一句立即取消旧播放且保持停止；第一句再次播放后在
+  `00:04/00:04` 自动停止，运行期 exception/console error 均为 0。验收注入已通过再次普通编译彻底清除，
+  自动化连接和 27MB 临时 npm 目录已删除，开发者工具保留在干净的 `pages/index/index`。
+  浏览器与模拟器证据仅本机位于
+  `/Users/zhouxin/Desktop/studytracker/.tmp/listening-release-qa-20260814/`，不是待发布产品资产。
+  验收用 `5062` 开发服务器与浏览器页均已关闭；指向主工作区真实 T1S1 MP3 的临时只读 symlink 已精确删除，
+  未复制、改写或删除主工作区音频。仍未做手机真机调试、微信上传/提审/发布；这些只能在用户明确授权后进行。
 
 ## 2026-08-13 剑20 Test 1 Section 1 覆盖为45句纯对话版（已上线）
 

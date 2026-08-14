@@ -4,6 +4,31 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-14 精听智能听写稳定升级（本机未提交）
+
+- 独立 worktree `/Users/zhouxin/.codex/worktrees/2b72/studytracker`、detached `HEAD@6ded77d2`
+  已形成网页/小程序精听发布候选：三档确定性挖空、旧/新坐标恢复、输入草稿、长答案、首答/订正、失败保存和
+  挑战多余词均统一；服务端新增 canonical 重算与首答幂等，客户端伪造正确率无法落库。
+- 网页时间/进度/±5 秒限制在当前句，真实播放 promise 和句尾 rAF 监视接管按钮与停播；小程序改为
+  `onSeeked + 400ms fallback + playback token + 50ms boundary monitor`，切句/暂停不会被旧 timer 拉起播放。
+  小程序汇总从可见 progress 重算，跨模式/切句草稿不丢，加载/失败状态可见。
+- 自动化：全部 Node `40 pass`；API 定向 `4 passed, 3 subtests passed`；全仓 Python
+  `504 passed, 44 subtests passed, 2 failed`，仅存量缺失且被忽略的 `ielts10_test1_s1.mp3` 使两个静态 Range
+  测试 404。正式剑20 T1S1 HTTP/Range 为 200/206；16/16 个正式 XDF MP3 的 ffprobe 时长与 JSON 末句 end
+  全部相差 0.00s。语法、compile、diff check 通过。
+- 真实浏览器：T1S1 音频 `readyState=4`，第一句在 4.526825s 自动暂停；句2显示 00:00–00:08、快进限制在
+  13.21s。标准档草稿跨模式保留，4/4=100%；挑战多输 EXTRA 显示“多余”且 95.5%；刷新后 3/45、86.2%
+  与逐句数据一致，`restaurants` 完整显示。证据在主工作区未跟踪
+  `.tmp/listening-release-qa-20260814/`。
+- 没有 commit、push、部署、生产数据库写入、JSON/MP3 改动或小程序上传/提审/发布；全部业务变更仅本机可见。
+  微信开发者工具已经登录并打开正确 worktree；真实编译发现并补齐 app.json 所列 5 个页面缺失的 page JSON，
+  新增四件套门禁。模拟器隔离任务已验收输入出现、草稿跨模式、一次首答、权威 33.3% 总分与 1 绿 2 红一致；
+  真实剑20音频可从第二句非零时间戳播放、切句取消旧播放，并在第一句 00:04 精确停止，运行异常为 0。
+  验收注入和临时自动化依赖已清理，干净重编译 `Errors: 0, Warnings: 0`；官方 `wcc/wcsc` 仍为
+  `32 WXML + 33 WXSS` 全通过。全部 Node 更新为 `40 pass`，API 定向仍为 `4 passed, 3 subtests passed`。
+  尚未做手机真机、上传、提审或发布；之后只有在用户明确授权时才能提交、推送、部署和发布。
+  收尾已关闭 `5062` 开发服务器和浏览器页，并删除验收用的临时音频 symlink；主工作区真实 MP3 未改动。
+
 ## 2026-08-13 剑20 T1S1 覆盖为45句纯对话版（已上线）
 
 - 用户确认试点更好后，沿用 canonical ID `ielts20_test1_s1` 覆盖线上原58句资源；公开 XDF 45句与本地

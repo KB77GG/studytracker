@@ -1,0 +1,147 @@
+[
+  {
+    "name": "speaker-label-and-greeting",
+    "text": "MAN: Hello, I need a table at seven thirty.",
+    "seed": "speaker",
+    "expected": {
+      "basic": [8],
+      "standard": [3, 7, 8],
+      "challenge": [1, 2, 3, 4, 5, 6, 7, 8]
+    },
+    "notSelected": {
+      "basic": [0],
+      "standard": [0]
+    }
+  },
+  {
+    "name": "unspelled-name-and-time",
+    "text": "WOMAN: Hi, I am meeting Daniel at 7:30 on Tuesday.",
+    "seed": "name",
+    "expected": {
+      "basic": [7, 9],
+      "standard": [4, 7, 9],
+      "challenge": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    },
+    "notSelected": {
+      "basic": [0, 5],
+      "standard": [0, 5]
+    }
+  },
+  {
+    "name": "explicit-spelling",
+    "text": "MAN: The restaurant is spelled A-U-D-L-E-Y.",
+    "seed": "spell",
+    "expected": {
+      "basic": [5],
+      "standard": [2, 5],
+      "challenge": [1, 2, 3, 4, 5]
+    }
+  },
+  {
+    "name": "separate-letter-spelling",
+    "text": "WOMAN: The code is A U D L E Y.",
+    "seed": "separate-letters",
+    "expected": {
+      "basic": [2, 4],
+      "standard": [2, 4, 6],
+      "challenge": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    }
+  },
+  {
+    "name": "short-fallback",
+    "text": "Yes.",
+    "seed": "short",
+    "expected": {
+      "basic": [0],
+      "standard": [0],
+      "challenge": [0]
+    }
+  },
+  {
+    "name": "punctuation-only",
+    "text": "...",
+    "seed": "punct",
+    "expected": {
+      "basic": [],
+      "standard": [],
+      "challenge": []
+    }
+  },
+  {
+    "name": "apostrophe-hyphen",
+    "text": "WOMAN: I don't need a twenty-one pound booking fee.",
+    "seed": "apostrophe",
+    "expected": {
+      "basic": [7],
+      "standard": [2, 5, 7],
+      "challenge": [1, 2, 3, 4, 5, 6, 7, 8]
+    }
+  },
+  {
+    "name": "long-time-boundary",
+    "text": "The number is 24 and the office opens at eight thirty on Monday morning.",
+    "seed": "long",
+    "expected": {
+      "basic": [12, 13],
+      "standard": [10, 12, 13],
+      "challenge": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    }
+  },
+  {
+    "name": "legacy-coordinate-bases",
+    "sourceText": "WOMAN: I need a table.",
+    "legacyWeb": {
+      "segmentText": "I need a table.",
+      "hiddenWordIndices": [1, 3],
+      "answers": ["need", "table"],
+      "expectedWords": ["need", "table"]
+    },
+    "legacyMini": {
+      "segmentText": "WOMAN: I need a table.",
+      "hiddenWordIndices": [2, 4],
+      "answers": ["need", "table"],
+      "expectedWords": ["need", "table"]
+    },
+    "newCanonical": {
+      "segmentText": "WOMAN: I need a table.",
+      "hiddenWordIndices": [2, 4],
+      "answers": ["need", "table"],
+      "expectedWords": ["need", "table"]
+    }
+  },
+  {
+    "name": "contextual-response-and-spelling-scope",
+    "contentText": "MAN: Turn right at a fine restaurant and make sure you book.",
+    "responseText": "WOMAN: Right, thanks.",
+    "spellingText": "MAN: Please spell Daniel and meet Rachel at seven.",
+    "uppercaseSpellingText": "MAN: Please spell AUDLEY and meet BRISTOL at seven.",
+    "contentWords": ["right", "fine", "sure"],
+    "responseWord": "right",
+    "spellingTarget": "daniel",
+    "unspelledName": "rachel",
+    "uppercaseSpellingTarget": "audley",
+    "uppercaseUnspelledName": "bristol"
+  },
+  {
+    "name": "saved-level-inference",
+    "sourceText": "WOMAN: I need a table at seven.",
+    "newChallenge": {
+      "segment_text": "WOMAN: I need a table at seven.",
+      "hidden_word_indices": [1, 2, 3, 4, 5, 6],
+      "total_words": 6,
+      "expectedLevel": "challenge"
+    },
+    "legacySixtyPercent": {
+      "segment_text": "WOMAN: I need a table at seven.",
+      "hidden_word_indices": [2, 4, 6],
+      "total_words": 3,
+      "expectedLevel": "standard"
+    },
+    "legacyFiftyPercent": {
+      "segment_text": "WOMAN: I need a table at seven.",
+      "hidden_word_indices": [2, 6],
+      "total_words": 2,
+      "expectedLevel": "basic"
+    }
+  }
+]

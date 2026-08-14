@@ -104,6 +104,7 @@
 
       <view class="time-bar">
         <text class="time-text">{{currentTimeText}} / {{segmentDurationText}}</text>
+        <text class="audio-notice" wx:if="{{audioNotice}}">{{audioNotice}}</text>
       </view>
 
       <!-- ─ 句子精听 ─ -->
@@ -129,7 +130,7 @@
           <text class="section-label">难度</text>
           <view class="pill-group">
             <view
-              class="option-pill {{difficultyIndex === index ? 'pill-active' : ''}}"
+              class="option-pill {{activeDifficultyIndex === index ? 'pill-active' : ''}} {{dictationLevelFrozen ? 'pill-disabled' : ''}}"
               wx:for="{{difficultyOptions}}"
               wx:key="label"
               data-index="{{index}}"
@@ -139,24 +140,62 @@
         </view>
 
         <view class="dictation-box">
-          <block wx:for="{{renderTokens}}" wx:key="tokenKey">
-            <text wx:if="{{item.kind === 'text'}}" class="plain-word">{{item.text}}</text>
-            <view wx:else class="blank-wrap {{item.status}}">
-              <input
-                class="blank-input {{item.status}}"
-                type="text"
-                adjust-position="false"
+          <view class="dictation-intro" wx:if="{{!dictationStarted && !dictationLocked && hasDictationTargets}}">
+            <text class="dictation-intro-title">先听，再填</text>
+            <text class="dictation-intro-copy">先重播这一整句；准备好后开始作答。</text>
+            <button class="start-dictation-btn" bindtap="startCurrentDictation">开始作答</button>
+          </view>
+
+          <view class="dictation-empty" wx:if="{{!hasDictationTargets}}">
+            <text>这一句没有可作答的单词，请重听后查看原文核对。</text>
+          </view>
+
+          <block wx:if="{{dictationStarted || dictationLocked}}">
+            <view class="challenge-wrap" wx:if="{{dictationLevelKey === 'challenge'}}">
+              <textarea
+                class="challenge-input"
+                value="{{challengeAnswer}}"
                 disabled="{{dictationLocked}}"
-                value="{{blankAnswers[item.blankIndex] || item.value || ''}}"
-                data-blank-index="{{item.blankIndex}}"
-                bindinput="onBlankInput"
-                placeholder="…"
-                style="width: {{item.width}}px;"
+                maxlength="-1"
+                auto-height
+                placeholder="输入听到的整句或意群"
+                aria-label="整句听写输入"
+                bindinput="onChallengeInput"
               />
-              <text wx:if="{{item.suffix}}" class="blank-suffix">{{item.suffix}}</text>
+              <view class="challenge-results" wx:if="{{challengeResults.length}}">
+                <text
+                  wx:for="{{challengeResults}}"
+                  wx:key="index"
+                  class="challenge-result {{item.isCorrect ? 'correct' : 'wrong'}}"
+                >{{item.answer}} · {{item.isExtra ? '多余' : (item.isCorrect ? '正确' : '需订正')}}</text>
+              </view>
             </view>
+
+            <block wx:elif="{{hasDictationTargets}}">
+              <block wx:for="{{renderTokens}}" wx:key="tokenKey">
+                <text wx:if="{{item.kind === 'text'}}" class="plain-word">{{item.text}}</text>
+                <view wx:else class="blank-wrap {{item.status}}">
+                  <input
+                    class="blank-input {{item.status}}"
+                    style="width: {{item.inputWidth}}rpx"
+                    type="text"
+                    adjust-position="false"
+                    disabled="{{dictationLocked}}"
+                    value="{{blankAnswers[item.blankIndex] || item.value || ''}}"
+                    data-blank-index="{{item.blankIndex}}"
+                    aria-label="{{item.ariaLabel}}"
+                    bindinput="onBlankInput"
+                    placeholder="…"
+                  />
+                  <text wx:if="{{item.suffix}}" class="blank-suffix">{{item.suffix}}</text>
+                  <text wx:if="{{item.resultText}}" class="blank-result {{item.status}}">{{item.resultText}}</text>
+                </view>
+              </block>
+            </block>
           </block>
         </view>
+
+        <text class="dictation-notice" wx:if="{{dictationNotice}}">{{dictationNotice}}</text>
 
         <text class="translation-text side-translation" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
 
@@ -174,8 +213,8 @@
           <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
             {{showTranslation ? '隐藏译文' : '显示译文'}}
           </view>
-          <button class="action-btn btn-primary" wx:if="{{!dictationLocked}}" bindtap="submitCurrentSegment">提交本句</button>
-          <button class="action-btn btn-ghost" wx:else bindtap="redoCurrentSegment">重做本句</button>
+          <button class="action-btn btn-primary" wx:if="{{dictationStarted && !dictationLocked && hasDictationTargets}}" bindtap="submitCurrentSegment">提交首答</button>
+          <button class="action-btn btn-ghost" wx:if="{{dictationLocked && currentResult && !correctionMode && !pendingSave}}" bindtap="redoCurrentSegment">订正再听</button>
           <button class="action-btn btn-ghost" bindtap="nextSegment">
             {{currentIndex + 1 >= segments.length ? '返回末句' : '下一句'}}
           </button>

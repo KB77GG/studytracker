@@ -1,11 +1,8 @@
 const app = getApp()
 const { request } = require('../../../../utils/request.js')
+const ListeningCloze = require('../../../../utils/listening-cloze.js')
 
-const DIFFICULTY_OPTIONS = [
-    { label: '简单', ratio: 0.3 },
-    { label: '标准', ratio: 0.5 },
-    { label: '挑战', ratio: 0.8 }
-]
+const DIFFICULTY_OPTIONS = ListeningCloze.LEVELS
 
 const SPEED_OPTIONS = [
     { label: '0.75x', value: 0.75 },
@@ -47,6 +44,13 @@ Page({
         currentResult: null,
         currentRepeatResult: null,
         dictationLocked: false,
+        dictationStarted: false,
+        hasDictationTargets: false,
+        correctionMode: false,
+        pendingSave: false,
+        challengeAnswer: '',
+        challengeResults: [],
+        dictationNotice: '',
         repeatRecording: false,
         repeatFilePath: '',
         repeatPlayingRecord: false,
@@ -56,10 +60,14 @@ Page({
         showTranslation: false,
         difficultyOptions: DIFFICULTY_OPTIONS,
         difficultyIndex: 1,
+        activeDifficultyIndex: 1,
+        dictationLevelKey: 'standard',
+        dictationLevelFrozen: false,
         speedOptions: SPEED_OPTIONS,
         speedIndex: 1,
         audioReady: false,
         audioPlaying: false,
+        audioNotice: '音频加载中…',
         currentTimeText: '00:00',
         segmentDurationText: '00:00',
         startedAt: 0,
@@ -79,6 +87,16 @@ Page({
             rootUrl: this.getRootUrl(),
             startedAt: Date.now()
         })
+        this.dictationStartedMap = new Set()
+        this.correctionMap = new Set()
+        this.firstAttemptGates = new Map()
+        this.dictationLevelMap = new Map()
+        this.pendingFirstAttempts = new Map()
+        this.dictationDraftMap = new Map()
+        this.pendingPlaybackToken = 0
+        this.pendingSeekPlayback = null
+        this.audioBoundaryTimer = null
+        this.pendingPlaybackFallback = null
         this.initAudio()
         this.initRepeatRecorder()
         this.fetchPractice()
@@ -108,27 +126,38 @@ Page({
         this.audioCtx.autoplay = false
 
         this.audioCtx.onCanplay(() => {
-            this.setData({ audioReady: true })
+            this.setData({ audioReady: true, audioNotice: '' })
             if (this.pendingAutoplay) {
                 this.pendingAutoplay = false
                 this.playCurrentSegment()
             }
         })
 
+        if (typeof this.audioCtx.onSeeked === 'function') {
+            this.audioCtx.onSeeked(() => {
+                const pending = this.pendingSeekPlayback
+                if (pending) this.completePendingPlayback(pending.token)
+            })
+        }
+
         this.audioCtx.onPlay(() => {
             this.setData({ audioPlaying: true })
+            this.startAudioBoundaryMonitor()
         })
 
         this.audioCtx.onPause(() => {
             this.setData({ audioPlaying: false })
+            this.stopAudioBoundaryMonitor()
         })
 
         this.audioCtx.onStop(() => {
             this.setData({ audioPlaying: false })
+            this.stopAudioBoundaryMonitor()
         })
 
         this.audioCtx.onEnded(() => {
             this.setData({ audioPlaying: false })
+            this.stopAudioBoundaryMonitor()
         })
 
         this.audioCtx.onTimeUpdate(() => {
@@ -137,7 +166,8 @@ Page({
 
         this.audioCtx.onError((err) => {
             console.error('listening audio error', err)
-            this.setData({ audioPlaying: false })
+            this.cancelPendingPlayback()
+            this.setData({ audioPlaying: false, audioReady: false, audioNotice: '音频加载失败，请重试' })
             wx.showToast({ title: '音频播放失败', icon: 'none' })
         })
     },
@@ -175,6 +205,7 @@ Page({
 
     destroyAudio() {
         if (!this.audioCtx) return
+        this.cancelPendingPlayback()
         try {
             this.audioCtx.stop()
             this.audioCtx.destroy()
@@ -198,6 +229,7 @@ Page({
 
     pauseAudio() {
         if (!this.audioCtx) return
+        this.cancelPendingPlayback()
         try {
             this.audioCtx.pause()
         } catch (err) {
@@ -264,6 +296,7 @@ Page({
             })
 
             if (exercise.audio && this.audioCtx) {
+                this.setData({ audioReady: false, audioNotice: '音频加载中…' })
                 this.audioCtx.src = `${this.data.rootUrl}/static/listening/${exercise.audio}`
             }
 
@@ -304,7 +337,8 @@ Page({
                     sentenceIndex,
                     start: Number(segment.start || 0),
                     end: Number(segment.end || 0),
-                    text: segment.text || '',
+                    sourceText: segment.text || '',
+                    text: ListeningCloze.stripSpeakerLabel(segment.text || ''),
                     translation: segment.translation || ''
                 })
                 fallbackIndex += 1
@@ -335,21 +369,19 @@ Page({
             return !!(progress && progress.is_completed)
         }).length
 
-        let accuracy = Number(task.accuracy || 0)
-        if (!accuracy && completedCount > 0) {
-            let totalCorrect = 0
-            let totalWords = 0
-            Object.values(progressMap).forEach(progress => {
-                totalCorrect += Number(progress.correct_words || 0)
-                totalWords += Number(progress.total_words || 0)
-            })
-            accuracy = totalWords > 0 ? Number(((totalCorrect / totalWords) * 100).toFixed(1)) : 0
-        }
-
-        let completionRate = Number(task.completion_rate || 0)
-        if (!completionRate && totalCount > 0) {
-            completionRate = Number(((completedCount / totalCount) * 100).toFixed(1))
-        }
+        let totalCorrect = 0
+        let totalWords = 0
+        Object.values(progressMap).forEach(progress => {
+            if (!progress || !progress.is_completed) return
+            totalCorrect += Number(progress.correct_words || 0)
+            totalWords += Number(progress.total_words || 0)
+        })
+        const accuracy = totalWords > 0
+            ? Number(((totalCorrect / totalWords) * 100).toFixed(1))
+            : Number(task.accuracy || 0)
+        const completionRate = totalCount > 0
+            ? Number(((completedCount / totalCount) * 100).toFixed(1))
+            : Number(task.completion_rate || 0)
 
         return {
             completedCount,
@@ -405,34 +437,209 @@ Page({
         return firstPending >= 0 ? firstPending : 0
     },
 
+    getDictationStateKey(segment) {
+        return String(segment && segment.globalIndex)
+    },
+
+    ensureDictationState() {
+        if (!this.dictationStartedMap) this.dictationStartedMap = new Set()
+        if (!this.correctionMap) this.correctionMap = new Set()
+        if (!this.firstAttemptGates) this.firstAttemptGates = new Map()
+        if (!this.dictationLevelMap) this.dictationLevelMap = new Map()
+        if (!this.pendingFirstAttempts) this.pendingFirstAttempts = new Map()
+        if (!this.dictationDraftMap) this.dictationDraftMap = new Map()
+    },
+
+    getDictationDraftKey(segment, levelKey) {
+        return `${this.getDictationStateKey(segment)}:${levelKey}`
+    },
+
+    saveCurrentDictationDraft() {
+        const segment = this.data.currentSegment
+        if (!segment || this.data.dictationLocked || this.data.correctionMode) return
+        this.ensureDictationState()
+        const progress = this.data.progressMap[String(segment.globalIndex)]
+        if (progress || this.getPendingFirstAttempt(segment)) return
+        const levelKey = this.data.dictationLevelKey || this.getDictationLevelForSegment(segment, progress)
+        this.dictationDraftMap.set(this.getDictationDraftKey(segment, levelKey), {
+            blankAnswers: [...(this.data.blankAnswers || [])],
+            challengeAnswer: String(this.data.challengeAnswer || '')
+        })
+    },
+
+    getSelectedDictationLevel() {
+        return DIFFICULTY_OPTIONS[this.data.difficultyIndex] || DIFFICULTY_OPTIONS[1]
+    },
+
+    getDictationLevelForSegment(segment, progress) {
+        this.ensureDictationState()
+        const key = this.getDictationStateKey(segment)
+        if (this.dictationLevelMap.has(key)) {
+            return this.dictationLevelMap.get(key)
+        }
+        const selected = this.getSelectedDictationLevel().key
+        // Historical progress has no difficulty field. Only an exact complete
+        // spoken-token coverage is safe to present as challenge; partial legacy
+        // records must remain per-word regardless of the currently selected UI.
+        if (progress) {
+            const sourceText = this.getProgressSegmentText(progress, segment)
+            const inferred = ListeningCloze.inferSavedDictationLevel(sourceText, progress)
+            this.dictationLevelMap.set(key, inferred)
+            return inferred
+        }
+        return selected
+    },
+
+    freezeDictationLevel(segment, progress) {
+        this.ensureDictationState()
+        const key = this.getDictationStateKey(segment)
+        const level = this.getDictationLevelForSegment(segment, progress)
+        this.dictationLevelMap.set(key, level)
+        return level
+    },
+
+    isDictationLevelFrozen(segment, progress) {
+        this.ensureDictationState()
+        return !!progress || this.dictationLevelMap.has(this.getDictationStateKey(segment))
+    },
+
+    getProgressSegmentText(progress, segment) {
+        return String((progress && progress.segment_text) || (segment && segment.sourceText) || '').trim()
+    },
+
+    getFirstAttemptGate(segment, hasSavedProgress) {
+        this.ensureDictationState()
+        const key = this.getDictationStateKey(segment)
+        if (!this.firstAttemptGates.has(key)) {
+            this.firstAttemptGates.set(key, ListeningCloze.createFirstAttemptGate(hasSavedProgress))
+        }
+        return this.firstAttemptGates.get(key)
+    },
+
+    getPendingFirstAttempt(segment) {
+        this.ensureDictationState()
+        return this.pendingFirstAttempts.get(this.getDictationStateKey(segment)) || null
+    },
+
+    markFirstAttemptSavePending(segment, attempt) {
+        this.ensureDictationState()
+        this.pendingFirstAttempts.set(this.getDictationStateKey(segment), attempt)
+    },
+
+    resultFromProgress(sourceText, hiddenIndices, progress) {
+        if (!progress) return null
+        const localGrade = ListeningCloze.gradeAnswers(sourceText, hiddenIndices, progress.answers_json || [])
+        const canonicalResults = Array.isArray(progress.results) ? progress.results : []
+        const grade = canonicalResults.length
+            ? {
+                ...localGrade,
+                results: canonicalResults,
+                accuracy: Number(progress.accuracy || 0),
+                correctWords: Number(progress.correct_words || 0),
+                totalWords: Number(progress.total_words || 0)
+            }
+            : localGrade
+        return {
+            grade,
+            summary: {
+                accuracy: Number(progress.accuracy || 0),
+                correctWords: Number(progress.correct_words || 0),
+                totalWords: Number(progress.total_words || 0)
+            }
+        }
+    },
+
     selectSegment(index, autoplay = false) {
         const segments = this.data.segments || []
         if (index < 0 || index >= segments.length) return
 
+        this.saveCurrentDictationDraft()
         this.pauseAudio()
 
         const currentSegment = segments[index]
         const progress = this.data.progressMap[String(currentSegment.globalIndex)]
         const repeatProgress = this.data.repeatProgressMap[String(currentSegment.globalIndex)]
-        const hiddenIndices = this.getHideIndices(currentSegment)
-        const presetAnswers = progress && Array.isArray(progress.answers_json) ? progress.answers_json : []
-        const built = this.buildRenderTokens(currentSegment, hiddenIndices, presetAnswers)
+        const stateKey = this.getDictationStateKey(currentSegment)
+        const pendingAttempt = this.getPendingFirstAttempt(currentSegment)
+        const sourceText = pendingAttempt
+            ? pendingAttempt.sourceText
+            : this.getProgressSegmentText(progress, currentSegment)
+        const levelKey = pendingAttempt
+            ? pendingAttempt.level
+            : this.getDictationLevelForSegment(currentSegment, progress)
+        const effectiveDifficultyIndex = Math.max(0, DIFFICULTY_OPTIONS.findIndex(option => option.key === levelKey))
+        const hiddenIndices = pendingAttempt
+            ? pendingAttempt.hiddenIndices
+            : this.getHideIndices(currentSegment, levelKey, sourceText, progress)
+        this.ensureDictationState()
+        const draft = this.dictationDraftMap.get(this.getDictationDraftKey(currentSegment, levelKey)) || null
+        const presetAnswers = pendingAttempt
+            ? pendingAttempt.answers
+            : (progress && Array.isArray(progress.answers_json)
+                ? progress.answers_json
+                : (draft ? draft.blankAnswers : []))
+        const resultFromProgress = this.resultFromProgress(sourceText, hiddenIndices, progress)
+        const resultToRender = pendingAttempt
+            ? {
+                grade: pendingAttempt.grade,
+                summary: {
+                    accuracy: pendingAttempt.grade.accuracy,
+                    correctWords: pendingAttempt.grade.correctWords,
+                    totalWords: pendingAttempt.grade.totalWords
+                }
+            }
+            : resultFromProgress
+        const correctionMode = this.correctionMap.has(stateKey)
+        const built = this.buildRenderTokens(
+            sourceText,
+            hiddenIndices,
+            correctionMode ? [] : presetAnswers,
+            correctionMode ? null : resultToRender && resultToRender.grade
+        )
+        const expected = ListeningCloze.expectedTokens(sourceText, hiddenIndices)
+        const dictationLevelFrozen = this.isDictationLevelFrozen(currentSegment, progress)
+        const challengeAnswer = correctionMode
+            ? ''
+            : (resultToRender && levelKey === 'challenge'
+                ? resultToRender.grade.results
+                    .filter(result => !result.isExtra)
+                    .map(result => result.isCorrect ? result.rawAnswer : result.answer)
+                    .join(' ')
+                : (draft ? draft.challengeAnswer : ''))
 
         this.segmentStopHandled = false
+        this.getFirstAttemptGate(currentSegment, !!progress)
 
         this.setData({
             currentIndex: index,
             currentSegment,
+            // Keep the global choice for the next untouched sentence. A saved
+            // legacy result may need a different, safely inferred render mode.
+            activeDifficultyIndex: effectiveDifficultyIndex,
+            dictationLevelKey: levelKey,
+            dictationLevelFrozen,
             hiddenIndices,
             renderTokens: built.renderTokens,
             blankAnswers: built.blankAnswers,
-            currentResult: progress ? {
-                accuracy: Number(progress.accuracy || 0),
-                correctWords: Number(progress.correct_words || 0),
-                totalWords: Number(progress.total_words || 0)
-            } : null,
+            currentResult: resultToRender && !correctionMode ? resultToRender.summary : null,
             currentRepeatResult: repeatProgress ? this.buildRepeatResult(repeatProgress) : null,
-            dictationLocked: !!progress,
+            dictationLocked: (!!progress || !!pendingAttempt) && !correctionMode,
+            dictationStarted: !!progress || !!pendingAttempt || this.dictationStartedMap.has(stateKey),
+            hasDictationTargets: expected.length > 0,
+            correctionMode,
+            pendingSave: !!pendingAttempt && !correctionMode,
+            challengeAnswer,
+            challengeResults: resultToRender && !correctionMode && levelKey === 'challenge'
+                ? resultToRender.grade.results.map((result, index) => ({
+                    index,
+                    answer: result.isExtra ? result.rawAnswer : result.answer,
+                    isCorrect: result.isCorrect,
+                    isExtra: !!result.isExtra
+                }))
+                : [],
+            dictationNotice: correctionMode
+                ? '订正仅在本地核对，不会再次提交或改写首答成绩。'
+                : (pendingAttempt ? '首答保存未确认；请刷新确认，避免重复提交覆盖成绩。' : ''),
             repeatFilePath: '',
             repeatRecording: false,
             repeatPlayingRecord: false,
@@ -453,7 +660,10 @@ Page({
     switchMode(e) {
         const mode = e.currentTarget.dataset.mode
         if (!mode || mode === this.data.mode) return
-        this.setData({ mode })
+        this.saveCurrentDictationDraft()
+        this.setData({ mode }, () => {
+            if (mode === 'dictation') this.selectSegment(this.data.currentIndex, false)
+        })
     },
 
     toggleOriginal() {
@@ -507,24 +717,42 @@ Page({
 
     changeDifficulty(e) {
         const difficultyIndex = Number(e.currentTarget.dataset.index || 0)
-        if (difficultyIndex === this.data.difficultyIndex) return
-        this.setData({ difficultyIndex })
-        if (!this.data.currentResult && this.data.currentSegment) {
-            const hiddenIndices = this.getHideIndices(this.data.currentSegment, difficultyIndex)
-            this.setData({ hiddenIndices })
-            this.rebuildCurrentTokens(true, hiddenIndices)
+        const currentSegment = this.data.currentSegment
+        const progress = currentSegment && this.data.progressMap[String(currentSegment.globalIndex)]
+        if (currentSegment && this.isDictationLevelFrozen(currentSegment, progress)) {
+            const notice = progress
+                ? '已保存的本句难度已冻结，切到未开始的新句后再选择。'
+                : '本句已开始作答，难度已冻结以保留答案。'
+            this.setData({ dictationNotice: notice })
+            wx.showToast({ title: '本句难度已冻结', icon: 'none' })
+            return
         }
+        if (difficultyIndex === this.data.difficultyIndex) return
+        this.setData({ difficultyIndex }, () => {
+            if (this.data.currentSegment) this.selectSegment(this.data.currentIndex, false)
+        })
     },
 
     rebuildCurrentTokens(preserveAnswers = true, hiddenIndices = this.data.hiddenIndices) {
         const currentSegment = this.data.currentSegment
         if (!currentSegment) return
         const answers = preserveAnswers ? (this.data.blankAnswers || []) : []
-        const built = this.buildRenderTokens(currentSegment, hiddenIndices, answers)
+        const progress = this.data.progressMap[String(currentSegment.globalIndex)]
+        const sourceText = this.getProgressSegmentText(progress, currentSegment)
+        const built = this.buildRenderTokens(sourceText, hiddenIndices, answers)
         this.setData({
             renderTokens: built.renderTokens,
             blankAnswers: built.blankAnswers
         })
+    },
+
+    startCurrentDictation() {
+        const segment = this.data.currentSegment
+        if (!segment) return
+        const progress = this.data.progressMap[String(segment.globalIndex)]
+        this.freezeDictationLevel(segment, progress)
+        this.dictationStartedMap.add(this.getDictationStateKey(segment))
+        this.selectSegment(this.data.currentIndex, false)
     },
 
     togglePlay() {
@@ -556,10 +784,52 @@ Page({
         this.selectSegment(nextIndex, true)
     },
 
+    stopAudioBoundaryMonitor() {
+        if (this.audioBoundaryTimer) {
+            clearInterval(this.audioBoundaryTimer)
+            this.audioBoundaryTimer = null
+        }
+    },
+
+    startAudioBoundaryMonitor() {
+        this.stopAudioBoundaryMonitor()
+        this.audioBoundaryTimer = setInterval(() => this.handleAudioTimeUpdate(), 50)
+    },
+
+    cancelPendingPlayback() {
+        this.pendingPlaybackToken = Number(this.pendingPlaybackToken || 0) + 1
+        this.pendingSeekPlayback = null
+        this.pendingAutoplay = false
+        if (this.pendingPlaybackFallback) {
+            clearTimeout(this.pendingPlaybackFallback)
+            this.pendingPlaybackFallback = null
+        }
+        this.stopAudioBoundaryMonitor()
+    },
+
+    completePendingPlayback(token) {
+        const pending = this.pendingSeekPlayback
+        if (!pending || pending.token !== token || token !== this.pendingPlaybackToken) return false
+        const current = this.data.currentSegment
+        if (!this.audioCtx || !current || current.globalIndex !== pending.segmentIndex) {
+            this.cancelPendingPlayback()
+            return false
+        }
+        if (this.pendingPlaybackFallback) {
+            clearTimeout(this.pendingPlaybackFallback)
+            this.pendingPlaybackFallback = null
+        }
+        this.pendingSeekPlayback = null
+        this.audioCtx.playbackRate = pending.speed
+        this.audioCtx.play()
+        return true
+    },
+
     playCurrentSegment() {
         if (!this.audioCtx || !this.data.currentSegment) return
         if (!this.data.audioReady) {
             this.pendingAutoplay = true
+            this.setData({ audioNotice: '音频加载中，稍候会自动播放…' })
             return
         }
 
@@ -568,18 +838,23 @@ Page({
         this.segmentStopHandled = false
 
         try {
+            this.cancelPendingPlayback()
             this.audioCtx.pause()
             this.audioCtx.playbackRate = speed
+            const token = this.pendingPlaybackToken
+            this.pendingSeekPlayback = {
+                token,
+                segmentIndex: segment.globalIndex,
+                speed
+            }
             this.audioCtx.seek(Math.max(0, segment.start))
-            setTimeout(() => {
-                if (!this.audioCtx || !this.data.currentSegment || this.data.currentSegment.globalIndex !== segment.globalIndex) {
-                    return
-                }
-                this.audioCtx.playbackRate = speed
-                this.audioCtx.play()
-            }, 120)
+            this.pendingPlaybackFallback = setTimeout(() => {
+                this.completePendingPlayback(token)
+            }, 400)
         } catch (err) {
             console.error('playCurrentSegment failed', err)
+            this.cancelPendingPlayback()
+            this.setData({ audioNotice: '播放失败，请重试' })
             wx.showToast({ title: '播放失败', icon: 'none' })
         }
     },
@@ -589,7 +864,8 @@ Page({
         if (!segment || !this.audioCtx) return
 
         const currentTime = Number(this.audioCtx.currentTime || 0)
-        const relative = Math.max(0, currentTime - segment.start)
+        const duration = Math.max(0, segment.end - segment.start)
+        const relative = Math.min(duration, Math.max(0, currentTime - segment.start))
         this.setData({
             currentTimeText: this.formatTime(relative)
         })
@@ -606,54 +882,84 @@ Page({
         const value = e.detail.value || ''
         const blankAnswers = [...this.data.blankAnswers]
         blankAnswers[blankIndex] = value
-        this.setData({ blankAnswers })
+        if (String(value).trim()) {
+            const segment = this.data.currentSegment
+            const progress = segment && this.data.progressMap[String(segment.globalIndex)]
+            if (segment) this.freezeDictationLevel(segment, progress)
+        }
+        this.setData({ blankAnswers }, () => this.saveCurrentDictationDraft())
+    },
+
+    onChallengeInput(e) {
+        if (this.data.dictationLocked) return
+        const value = e.detail.value || ''
+        if (String(value).trim() && this.data.currentSegment) {
+            const progress = this.data.progressMap[String(this.data.currentSegment.globalIndex)]
+            this.freezeDictationLevel(this.data.currentSegment, progress)
+        }
+        this.setData({ challengeAnswer: value }, () => this.saveCurrentDictationDraft())
     },
 
     async submitCurrentSegment() {
         if (this.data.dictationLocked || !this.data.currentSegment) return
-
-        const rawAnswers = (this.data.blankAnswers || []).map(item => item || '')
-        if (rawAnswers.length === 0) {
+        if (!this.data.hasDictationTargets) {
             wx.showToast({ title: '当前句没有可听写单词', icon: 'none' })
             return
         }
-
-        const filledCount = rawAnswers.filter(item => item.trim()).length
-        if (filledCount === 0) {
-            wx.showToast({ title: '请先输入答案', icon: 'none' })
+        const progress = this.data.progressMap[String(this.data.currentSegment.globalIndex)]
+        const sourceText = this.getProgressSegmentText(progress, this.data.currentSegment)
+        const levelKey = this.getDictationLevelForSegment(this.data.currentSegment, progress)
+        const expected = ListeningCloze.expectedTokens(sourceText, this.data.hiddenIndices)
+        const hasAnyAnswer = levelKey === 'challenge'
+            ? String(this.data.challengeAnswer || '').trim().length > 0
+            : (this.data.blankAnswers || []).some(answer => String(answer || '').trim().length > 0)
+        if (!hasAnyAnswer) {
+            const notice = levelKey === 'challenge'
+                ? '请先输入整句或意群，再提交首答。'
+                : '请至少填写一个听写词，再提交首答。'
+            this.setData({ dictationNotice: notice })
+            wx.showToast({ title: '请先作答', icon: 'none' })
             return
         }
-
-        let correctWords = 0
-        const updatedTokens = this.data.renderTokens.map(token => {
-            if (token.kind !== 'blank') return token
-            const raw = rawAnswers[token.blankIndex] || ''
-            const normalized = this.normalizeWord(raw)
-            const isCorrect = normalized === token.answer
-            if (isCorrect) correctWords += 1
-            return {
-                ...token,
-                status: isCorrect ? 'correct' : 'wrong',
-                value: isCorrect ? raw : token.displayAnswer
-            }
-        })
-
+        this.freezeDictationLevel(this.data.currentSegment, progress)
+        const rawAnswers = levelKey === 'challenge'
+            ? ListeningCloze.splitChallengeAnswers(this.data.challengeAnswer, expected.length)
+            : (this.data.blankAnswers || []).map(item => item || '')
+        const grade = ListeningCloze.gradeAnswers(sourceText, this.data.hiddenIndices, rawAnswers)
+        const built = this.buildRenderTokens(sourceText, this.data.hiddenIndices, rawAnswers, grade)
         const currentResult = {
-            accuracy: rawAnswers.length > 0 ? Number(((correctWords / rawAnswers.length) * 100).toFixed(1)) : 0,
-            correctWords,
-            totalWords: rawAnswers.length
+            accuracy: grade.accuracy,
+            correctWords: grade.correctWords,
+            totalWords: grade.totalWords
         }
-
-        const displayAnswers = updatedTokens
-            .filter(token => token.kind === 'blank')
-            .map(token => token.value || '')
+        const displayChallengeAnswer = grade.results
+            .filter(result => !result.isExtra)
+            .map(result => result.isCorrect ? result.rawAnswer : result.answer)
+            .join(' ')
 
         this.setData({
-            renderTokens: updatedTokens,
-            blankAnswers: displayAnswers,
+            renderTokens: built.renderTokens,
+            blankAnswers: built.blankAnswers,
             currentResult,
-            dictationLocked: true
+            dictationLocked: true,
+            challengeAnswer: displayChallengeAnswer,
+            challengeResults: levelKey === 'challenge'
+                ? grade.results.map((result, index) => ({
+                    index,
+                    answer: result.isExtra ? result.rawAnswer : result.answer,
+                    isCorrect: result.isCorrect,
+                    isExtra: !!result.isExtra
+                }))
+                : [],
+            dictationNotice: this.data.correctionMode
+                ? '订正结果仅本地核对，首答成绩保持不变。'
+                : '已显示首答逐词结果和正确答案。'
         })
+
+        if (this.data.correctionMode) return
+
+        const gate = this.getFirstAttemptGate(this.data.currentSegment, !!progress)
+        if (!gate.beginFirstAttempt()) return
 
         try {
             const res = await request(
@@ -661,35 +967,50 @@ Page({
                 {
                     method: 'POST',
                     data: {
-                        segment_text: this.data.currentSegment.text,
+                        segment_text: sourceText,
                         hidden_word_indices: this.data.hiddenIndices,
                         answers: rawAnswers,
-                        correct_words: correctWords,
-                        total_words: rawAnswers.length,
+                        correct_words: grade.correctWords,
+                        total_words: grade.totalWords,
                         duration_seconds: this.computeDurationSeconds()
                     }
                 }
             )
 
             if (!res.ok) {
+                this.markFirstAttemptSavePending(this.data.currentSegment, {
+                    sourceText,
+                    hiddenIndices: [...this.data.hiddenIndices],
+                    level: levelKey,
+                    answers: [...rawAnswers],
+                    grade
+                })
+                this.setData({
+                    pendingSave: true,
+                    dictationNotice: '首答保存未确认；请刷新确认，避免重复提交覆盖成绩。'
+                })
                 wx.showToast({ title: '进度保存失败', icon: 'none' })
                 return
             }
 
+            const serverSegment = res.segment || {}
+            const savedProgress = {
+                segment_index: this.data.currentSegment.globalIndex,
+                segment_text: serverSegment.segment_text || sourceText,
+                correct_words: Number(serverSegment.correct_words ?? grade.correctWords),
+                total_words: Number(serverSegment.total_words ?? grade.totalWords),
+                accuracy: Number(serverSegment.accuracy ?? currentResult.accuracy),
+                is_completed: true,
+                hidden_word_indices: serverSegment.hidden_word_indices || this.data.hiddenIndices,
+                answers_json: serverSegment.answers || rawAnswers,
+                results: Array.isArray(serverSegment.results) ? serverSegment.results : []
+            }
             const progressMap = {
                 ...this.data.progressMap,
-                [String(this.data.currentSegment.globalIndex)]: {
-                    segment_index: this.data.currentSegment.globalIndex,
-                    correct_words: correctWords,
-                    total_words: rawAnswers.length,
-                    accuracy: currentResult.accuracy,
-                    is_completed: true,
-                    hidden_word_indices: this.data.hiddenIndices,
-                    answers_json: rawAnswers
-                }
+                [String(this.data.currentSegment.globalIndex)]: savedProgress
             }
 
-            const segments = this.decorateSegments(this.data.segments, progressMap)
+            const segments = this.decorateSegments(this.data.segments, progressMap, this.data.repeatProgressMap)
             const task = res.task ? {
                 ...this.data.task,
                 accuracy: res.task.accuracy,
@@ -697,13 +1018,49 @@ Page({
             } : this.data.task
             const summary = this.buildSummary(segments, progressMap, task)
             const allCompleted = summary.totalCount > 0 && summary.completedCount >= summary.totalCount
+            const canonicalDisplay = this.resultFromProgress(
+                savedProgress.segment_text,
+                savedProgress.hidden_word_indices,
+                savedProgress
+            )
+            const canonicalGrade = canonicalDisplay ? canonicalDisplay.grade : grade
+            const canonicalBuilt = this.buildRenderTokens(
+                savedProgress.segment_text,
+                savedProgress.hidden_word_indices,
+                savedProgress.answers_json,
+                canonicalGrade
+            )
 
+            this.ensureDictationState()
+            this.dictationDraftMap.delete(this.getDictationDraftKey(this.data.currentSegment, levelKey))
+            this.pendingFirstAttempts.delete(this.getDictationStateKey(this.data.currentSegment))
             this.setData({
                 progressMap,
                 segments,
                 task,
                 summary,
-                allCompleted
+                allCompleted,
+                renderTokens: canonicalBuilt.renderTokens,
+                blankAnswers: canonicalBuilt.blankAnswers,
+                currentResult: canonicalDisplay ? canonicalDisplay.summary : currentResult,
+                challengeAnswer: levelKey === 'challenge'
+                    ? canonicalGrade.results
+                        .filter(result => !result.isExtra)
+                        .map(result => result.isCorrect ? result.rawAnswer : result.answer)
+                        .join(' ')
+                    : this.data.challengeAnswer,
+                challengeResults: levelKey === 'challenge'
+                    ? canonicalGrade.results.map((result, index) => ({
+                        index,
+                        answer: result.isExtra ? result.rawAnswer : result.answer,
+                        isCorrect: result.isCorrect,
+                        isExtra: !!result.isExtra
+                    }))
+                    : [],
+                pendingSave: false,
+                dictationNotice: '首答已保存；已显示逐词结果和正确答案。'
+            }, () => {
+                if (res.already_saved) this.selectSegment(this.data.currentIndex, false)
             })
 
             wx.showToast({
@@ -712,19 +1069,39 @@ Page({
             })
         } catch (err) {
             console.error(err)
-            wx.showToast({ title: '网络错误', icon: 'none' })
+            this.markFirstAttemptSavePending(this.data.currentSegment, {
+                sourceText,
+                hiddenIndices: [...this.data.hiddenIndices],
+                level: levelKey,
+                answers: [...rawAnswers],
+                grade
+            })
+            this.setData({
+                pendingSave: true,
+                dictationNotice: '首答保存未确认；请刷新确认，避免重复提交覆盖成绩。'
+            })
+            wx.showToast({ title: '保存未确认，请刷新核对', icon: 'none' })
         }
     },
 
-    redoCurrentSegment() {
+    startCorrection() {
         if (!this.data.currentSegment) return
-        const built = this.buildRenderTokens(this.data.currentSegment, this.data.hiddenIndices, [])
-        this.setData({
-            renderTokens: built.renderTokens,
-            blankAnswers: built.blankAnswers,
-            currentResult: null,
-            dictationLocked: false
-        })
+        if (this.getPendingFirstAttempt(this.data.currentSegment)) {
+            this.setData({ dictationNotice: '首答保存未确认；请先刷新确认，避免重复提交覆盖成绩。' })
+            wx.showToast({ title: '请先刷新确认首答', icon: 'none' })
+            return
+        }
+        const progress = this.data.progressMap[String(this.data.currentSegment.globalIndex)]
+        const gate = this.getFirstAttemptGate(this.data.currentSegment, !!progress)
+        if (!gate.enterCorrection()) return
+        this.correctionMap.add(this.getDictationStateKey(this.data.currentSegment))
+        this.dictationStartedMap.add(this.getDictationStateKey(this.data.currentSegment))
+        this.selectSegment(this.data.currentIndex, false)
+        this.playCurrentSegment()
+    },
+
+    redoCurrentSegment() {
+        this.startCorrection()
     },
 
     startRepeatRecording() {
@@ -899,78 +1276,79 @@ Page({
         return '跟读评测暂时失败，请稍后重试。'
     },
 
-    buildRenderTokens(segment, hiddenIndices, presetAnswers = []) {
-        const words = (segment.text || '').split(/\s+/).filter(Boolean)
+    buildRenderTokens(sourceText, hiddenIndices, presetAnswers = [], grade = null) {
+        const words = ListeningCloze.tokenizeSentence(sourceText)
         const hiddenSet = new Set(hiddenIndices)
+        const expectedByWordIndex = new Map(
+            ListeningCloze.expectedTokens(sourceText, hiddenIndices)
+                .map((token, blankIndex) => [token.index, { token, blankIndex }])
+        )
         const renderTokens = []
         const blankAnswers = []
-        let blankIndex = 0
 
-        words.forEach((word, wordIndex) => {
-            if (!hiddenSet.has(wordIndex)) {
+        words.forEach(word => {
+            const answerMeta = expectedByWordIndex.get(word.index)
+            if (!hiddenSet.has(word.index) || !answerMeta) {
                 renderTokens.push({
-                    tokenKey: `text-${wordIndex}`,
+                    tokenKey: `text-${word.index}`,
                     kind: 'text',
-                    text: `${word} `
+                    text: `${word.raw} `
                 })
                 return
             }
 
-            const displayAnswer = word.replace(/^[.,!?;:"'“”‘’()]+|[.,!?;:"'“”‘’()]+$/g, '')
+            const blankIndex = answerMeta.blankIndex
+            const displayAnswer = word.display
             if (!displayAnswer) {
                 renderTokens.push({
-                    tokenKey: `text-${wordIndex}`,
+                    tokenKey: `text-${word.index}`,
                     kind: 'text',
-                    text: `${word} `
+                    text: `${word.raw} `
                 })
                 return
             }
 
-            const suffixMatch = word.match(/[.,!?;:"'”’)\]]+$/)
+            const suffixMatch = word.raw.match(/[.,!?;:"'”’)\]]+$/)
             const presetValue = presetAnswers[blankIndex] || ''
-            blankAnswers[blankIndex] = presetValue
+            const result = grade && grade.results[blankIndex]
+            const displayValue = result ? (result.isCorrect ? result.rawAnswer : result.answer) : presetValue
+            const answerLength = Array.from(String(displayAnswer || '')).length
+            blankAnswers[blankIndex] = displayValue
             renderTokens.push({
-                tokenKey: `blank-${wordIndex}`,
+                tokenKey: `blank-${word.index}`,
                 kind: 'blank',
                 blankIndex,
-                answer: this.normalizeWord(displayAnswer),
+                answer: word.normalized,
                 displayAnswer,
-                value: presetValue,
-                width: Math.max(76, displayAnswer.length * 18),
+                value: displayValue,
                 suffix: suffixMatch ? suffixMatch[0] : '',
-                status: ''
+                status: result ? (result.isCorrect ? 'correct' : 'wrong') : '',
+                inputWidth: result ? Math.max(160, Math.min(360, answerLength * 28 + 40)) : 160,
+                resultText: result ? (result.isCorrect ? '正确' : '需订正') : '',
+                ariaLabel: result
+                    ? `第 ${blankIndex + 1} 个听写词，${result.isCorrect ? '正确' : '需订正，正确答案 ' + result.answer}`
+                    : `第 ${blankIndex + 1} 个听写词`
             })
-            blankIndex += 1
         })
 
         return { renderTokens, blankAnswers }
     },
 
-    getHideIndices(segment, difficultyIndex = this.data.difficultyIndex) {
-        const existing = this.data.progressMap[String(segment.globalIndex)]
-        if (existing && Array.isArray(existing.hidden_word_indices) && existing.hidden_word_indices.length) {
-            return existing.hidden_word_indices
+    getHideIndices(segment, levelKey = this.getSelectedDictationLevel().key, sourceText = '', existingProgress = null) {
+        const existing = existingProgress || this.data.progressMap[String(segment.globalIndex)]
+        if (existing && Array.isArray(existing.hidden_word_indices)) {
+            return existing.hidden_word_indices.map(Number).filter(Number.isInteger)
         }
 
-        const words = (segment.text || '').split(/\s+/).filter(Boolean)
-        if (!words.length) return []
-
-        const ratio = DIFFICULTY_OPTIONS[difficultyIndex].ratio
-        const hideCount = Math.max(1, Math.round(words.length * ratio))
-        const indices = Array.from({ length: words.length }, (_, index) => index)
-        const rng = this.seededRandom(this.hashCode(`${this.data.taskId}-${segment.globalIndex}-${segment.text.slice(0, 20)}-${hideCount}`))
-
-        for (let i = indices.length - 1; i > 0; i -= 1) {
-            const j = Math.floor(rng() * (i + 1))
-            ;[indices[i], indices[j]] = [indices[j], indices[i]]
-        }
-        return indices.slice(0, hideCount).sort((a, b) => a - b)
+        const level = DIFFICULTY_OPTIONS.find(option => option.key === levelKey)
+            || this.getSelectedDictationLevel()
+        return ListeningCloze.selectHiddenWordIndices(sourceText || segment.sourceText || '', level.key, {
+            seed: `${this.data.taskId}:${segment.globalIndex}:${level.key}`
+        })
     },
 
     normalizeWord(word) {
-        return String(word || '')
-            .toLowerCase()
-            .replace(/[^\w]/g, '')
+        return ListeningCloze.normalizeWord(word)
     },
 
     hashCode(text) {
