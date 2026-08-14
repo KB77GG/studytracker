@@ -50,6 +50,20 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
         self.assertIn('src="/static/js/practice_workspace.js"', listening)
         self.assertIn('src="/static/js/practice_workspace.js"', reading)
 
+    def test_every_workspace_catalog_has_writing_subject_navigation(self):
+        for path in (
+            "/listening/tests",
+            "/reading/tests",
+            "/listening/jijing",
+            "/reading/jijing",
+        ):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                html = response.get_data(as_text=True)
+                self.assertIn('href="/writing/">写作</a>', html)
+                self.assertEqual(html.count('href="/writing/">写作</a>'), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
