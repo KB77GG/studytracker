@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ exercise.topic_zh }} · IELTS 写作 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "practice/_workspace_styles.html" %}
+<link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
+</head>
+<body class="practice-workspace-page writing-library-page">
+<div class="practice-workspace" data-practice-workspace data-writing-detail data-exercise-id="{{ exercise.id }}">
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">剑雅真题</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        <a href="{{ url_for('listening_test_index') }}">听力</a>
+        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+      </nav>
+    </div>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('writing_library.index') }}">返回写作题库</a>
+      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+    </div>
+  </header>
+
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="本题学习目录">
+      <div class="practice-workspace__sidebar-head">
+        <strong>本题目录</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
+      <nav class="writing-detail-nav">
+        <a class="is-active" href="#question"><span>01</span><strong>原题</strong><small>题干{% if exercise.image %}与原图{% endif %}</small></a>
+        <a href="#position"><span>02</span><strong>{{ '总览与特征' if exercise.task == 'task1' else '立场与论点' }}</strong><small>先想清楚再动笔</small></a>
+        <a href="#models"><span>03</span><strong>分层范文</strong><small>6.0 / 6.5 / 7.0+</small></a>
+        <a href="#structure"><span>04</span><strong>结构拆解</strong><small>四段式 / 五段式</small></a>
+        <a href="#expressions"><span>05</span><strong>可复用表达</strong><small>迁移到同类题</small></a>
+        <a href="#typing"><span>06</span><strong>打字练习</strong><small>字数 · 速度 · 准确率</small></a>
+      </nav>
+      <a class="writing-back-link" href="{{ url_for('writing_library.index') }}">← 返回 40 题目录</a>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">WRITING</span>
+    </aside>
+
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭本题目录" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main writing-detail">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button" type="button" aria-controls="practice-catalog" aria-expanded="false" data-open-catalog>本题目录</button>
+
+      <header class="writing-detail__title">
+        <div class="writing-card__meta">
+          <span class="writing-pill writing-pill--primary">{{ exercise.task_label }}</span>
+          <span class="writing-pill">{{ exercise.task_type_zh }}</span>
+          <span class="writing-card__number">NO. {{ '%03d'|format(exercise.sequence) }}</span>
+        </div>
+        <h1>{{ exercise.topic_zh }}</h1>
+        <p>{{ exercise.title_en }}</p>
+      </header>
+
+      <section class="writing-section writing-question" id="question" aria-labelledby="questionTitle">
+        <div class="writing-section__heading">
+          <span>01</span><div><p>Question</p><h2 id="questionTitle">原题{% if exercise.image %}与图表{% endif %}</h2></div>
+        </div>
+        <blockquote>{{ exercise.prompt }}</blockquote>
+        {% if exercise.image %}
+        <figure class="writing-question__figure">
+          <a href="{{ url_for('static', filename=exercise.image) }}" target="_blank" rel="noopener" aria-label="新窗口查看原图">
+            <img src="{{ url_for('static', filename=exercise.image) }}" alt="{{ exercise.topic_zh }} IELTS Task 1 原图" loading="eager">
+          </a>
+          <figcaption>点击图片可查看原尺寸</figcaption>
+        </figure>
+        {% endif %}
+      </section>
+
+      <section class="writing-section" id="position" aria-labelledby="positionTitle">
+        <div class="writing-section__heading">
+          <span>02</span><div><p>Plan Before Writing</p><h2 id="positionTitle">{{ '总览与核心特征' if exercise.task == 'task1' else '文章立场与核心论点' }}</h2></div>
+        </div>
+        <div class="writing-position">
+          <div class="writing-position__thesis"><small>{{ '总览句思路' if exercise.task == 'task1' else '推荐立场' }}</small><strong>{{ exercise.position_zh }}</strong></div>
+          <div class="writing-argument-grid">
+            {% set points = exercise.details if exercise.task == 'task1' else exercise.arguments %}
+            {% for point in points %}
+            <article><span>0{{ loop.index }}</span><h3>{{ point.title_zh }}</h3><p>{{ point.claim }}</p><small>{{ point.why }}</small></article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <section class="writing-section" id="models" aria-labelledby="modelsTitle">
+        <div class="writing-section__heading">
+          <span>03</span><div><p>Levelled Models</p><h2 id="modelsTitle">三档教学范文</h2></div>
+        </div>
+        <div class="writing-notice" role="note">目标档位是教学分层参考，不是官方评分结果；建议先读结构，再进入打字练习。</div>
+        <div class="writing-tabs" role="tablist" aria-label="选择范文档位">
+          {% for band in bands %}
+          <button id="model-tab-{{ loop.index }}" type="button" role="tab" aria-controls="model-panel-{{ loop.index }}" aria-selected="{{ 'true' if loop.first else 'false' }}" class="{{ 'is-active' if loop.first else '' }}" data-model-band="{{ band }}">Band {{ band }}</button>
+          {% endfor %}
+        </div>
+        {% for band in bands %}
+        {% set essay = exercise.essays[band] %}
+        <article class="writing-model" id="model-panel-{{ loop.index }}" role="tabpanel" aria-labelledby="model-tab-{{ loop.index }}" data-model-panel="{{ band }}" {% if not loop.first %}hidden{% endif %}>
+          <div class="writing-model__meta"><strong>Band {{ band }} 教学范文</strong><span>{{ essay.word_count }} words · {{ essay.paragraphs|length }} paragraphs</span></div>
+          <div class="writing-model__body">
+            {% for paragraph in essay.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+
+      <section class="writing-section" id="structure" aria-labelledby="structureTitle">
+        <div class="writing-section__heading">
+          <span>04</span><div><p>Essay Architecture</p><h2 id="structureTitle">文章结构与每段功能</h2></div>
+        </div>
+        <div class="writing-structure-switch" role="tablist" aria-label="选择结构">
+          <button type="button" class="is-active" role="tab" aria-selected="true" data-structure-tab="four">四段式</button>
+          <button type="button" role="tab" aria-selected="false" data-structure-tab="five">五段式（扩展）</button>
+        </div>
+        {% for structure_key, rows in exercise.structures.items() %}
+        <div class="writing-structure" data-structure-panel="{{ structure_key }}" {% if structure_key != 'four' %}hidden{% endif %}>
+          {% for row in rows %}
+          <article><span>{{ '%02d'|format(loop.index) }}</span><div><h3>{{ row.label }}</h3><p>{{ row.function_zh }}</p><small>{{ row.content_zh }}</small></div></article>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </section>
+
+      <section class="writing-section" id="expressions" aria-labelledby="expressionsTitle">
+        <div class="writing-section__heading">
+          <span>05</span><div><p>Reusable Language</p><h2 id="expressionsTitle">可复用表达</h2></div>
+        </div>
+        <div class="writing-expression-list">
+          {% for expression in exercise.expressions %}
+          <article><span>0{{ loop.index }}</span><div><strong>{{ expression.en }}</strong><p>{{ expression.zh }}</p></div><button type="button" data-copy-expression="{{ expression.en }}" aria-label="复制表达 {{ expression.en }}">复制</button></article>
+          {% endfor %}
+        </div>
+        <p class="writing-copy-status" id="writingCopyStatus" aria-live="polite"></p>
+      </section>
+
+      <section class="writing-section writing-typing" id="typing" aria-labelledby="typingTitle" data-staff-mode="{{ '1' if staff_mode else '0' }}">
+        <div class="writing-section__heading">
+          <span>06</span><div><p>Typing Practice</p><h2 id="typingTitle">逐字输入训练</h2></div>
+        </div>
+        <div class="writing-typing__controls">
+          <div><span>练习档位</span><div class="writing-band-picker" role="radiogroup" aria-label="打字练习档位">
+            {% for band in bands %}<button type="button" role="radio" aria-checked="{{ 'true' if loop.first else 'false' }}" class="{{ 'is-active' if loop.first else '' }}" data-typing-band="{{ band }}">{{ band }}</button>{% endfor %}
+          </div></div>
+          <button class="writing-primary-button" type="button" id="typingStart">开始本次练习</button>
+        </div>
+        <div class="writing-typing__status" id="typingSaveStatus" role="status">选择档位后开始；输入内容会自动保存在当前浏览器。</div>
+        <div class="writing-metrics" aria-label="实时练习数据">
+          <div><span>字数</span><strong id="typingWords">0</strong><small id="typingTargetWords">/ {{ exercise.essays['6.0'].word_count }}</small></div>
+          <div><span>速度</span><strong id="typingSpeed">0.0</strong><small>WPM</small></div>
+          <div><span>准确率</span><strong id="typingAccuracy">0.0</strong><small>%</small></div>
+          <div><span>用时</span><strong id="typingTimer">00:00</strong><small>分:秒</small></div>
+        </div>
+        <div class="writing-typing__workspace">
+          <article class="writing-typing__target">
+            <header><strong>范文原文</strong><span id="typingTargetBand">Band 6.0</span></header>
+            <div id="typingTargetText" tabindex="0"></div>
+          </article>
+          <div class="writing-typing__input">
+            <label for="typingInput">请逐字输入</label>
+            <textarea id="typingInput" disabled spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="点击“开始本次练习”后输入……"></textarea>
+            <div class="writing-typing__actions">
+              <button type="button" class="writing-secondary-button" id="typingReset" disabled>重新开始</button>
+              <button type="button" class="writing-primary-button" id="typingFinish" disabled>完成并记录</button>
+            </div>
+          </div>
+        </div>
+        {% if staff_mode %}<p class="writing-mode-note">课堂模式：可完整体验打字与实时统计，本次数据不会写入学生记录。</p>{% endif %}
+
+        <section class="writing-history" aria-labelledby="historyTitle">
+          <div class="writing-history__heading"><h3 id="historyTitle">最近练习记录</h3><span>{{ attempts|length }} 次</span></div>
+          <div id="typingHistory">
+            {% if attempts %}
+            <div class="writing-history__table" role="table" aria-label="最近打字练习记录">
+              <div role="row" class="writing-history__row writing-history__row--head"><span role="columnheader">时间</span><span role="columnheader">档位</span><span role="columnheader">字数</span><span role="columnheader">速度</span><span role="columnheader">准确率</span></div>
+              {% for attempt in attempts %}
+              <div role="row" class="writing-history__row"><span role="cell">{{ attempt.completed_at }}</span><span role="cell">{{ attempt.band }}</span><span role="cell">{{ attempt.typed_word_count }}/{{ attempt.target_word_count }}</span><span role="cell">{{ attempt.speed_wpm }} WPM</span><span role="cell">{{ attempt.accuracy }}%</span></div>
+              {% endfor %}
+            </div>
+            {% else %}<p class="writing-history__empty" id="typingHistoryEmpty">完成一次练习后，字数、速度和准确率会显示在这里。</p>{% endif %}
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</div>
+<script id="writingEssayData" type="application/json">{{ exercise.essays|tojson }}</script>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/writing-library-detail.js') }}" defer></script>
+</body>
+</html>

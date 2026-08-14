@@ -49,7 +49,7 @@
           href="{{ url_for('student_today') }}">今日计划</a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher', 'assistant', 'student') %}
-        <a class="nav-link {{ 'is-active' if endpoint in ('practice_library', 'exams_library', 'listening_index', 'listening_jijing_index', 'listening_jijing_part', 'listening_test_index', 'listening_test_practice', 'listening_player', 'listening_upload', 'reading_test_index', 'reading_test_practice') else '' }}"
+        <a class="nav-link {{ 'is-active' if endpoint in ('practice_library', 'exams_library', 'listening_index', 'listening_jijing_index', 'listening_jijing_part', 'listening_test_index', 'listening_test_practice', 'listening_player', 'listening_upload', 'reading_test_index', 'reading_test_practice', 'writing_library.index', 'writing_library.detail') else '' }}"
           href="{{ url_for('practice_library') }}">刷题 / 模考</a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher', 'assistant') %}

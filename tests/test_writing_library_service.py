@@ -1,0 +1,49 @@
+"""Content integrity and typing-score tests for the IELTS writing pilot."""
+
+from pathlib import Path
+
+from services.writing_library import load_catalog, normalize_typing_text, typing_metrics
+
+
+def test_pilot_contains_expected_tasks_and_complete_learning_content():
+    catalog = load_catalog()
+    exercises = catalog["exercises"]
+
+    assert len(exercises) == 40
+    assert sum(row["task"] == "task1" for row in exercises) == 10
+    assert sum(row["task"] == "task2" for row in exercises) == 30
+    assert {row["batch"] for row in exercises} == {"A", "B", "C"}
+
+    for row in exercises:
+        assert set(row["essays"]) == {"6.0", "6.5", "7.0+"}
+        assert len(row["structures"]["four"]) == 4
+        assert len(row["structures"]["five"]) == 5
+        assert len(row["expressions"]) >= 3
+        minimum = 150 if row["task"] == "task1" else 250
+        assert all(model["word_count"] >= minimum for model in row["essays"].values())
+
+
+def test_all_task1_images_are_versioned_static_assets():
+    static_root = Path(__file__).resolve().parents[1] / "static"
+    task1_rows = [row for row in load_catalog()["exercises"] if row["task"] == "task1"]
+
+    assert len(task1_rows) == 10
+    for row in task1_rows:
+        assert row["image"].startswith("writing_library/images/")
+        assert (static_root / row["image"]).is_file()
+
+
+def test_typing_metrics_are_server_reproducible_and_normalized():
+    target = "A clear plan—when followed—works well."
+    exact = typing_metrics(target, "A  clear plan-when followed-works well.", 60)
+    partial = typing_metrics(target, "A plan works.", 60)
+
+    assert exact == {
+        "typed_word_count": 5,
+        "target_word_count": 5,
+        "duration_seconds": 60,
+        "speed_wpm": 5.0,
+        "accuracy": 100.0,
+    }
+    assert partial["accuracy"] < exact["accuracy"]
+    assert normalize_typing_text("  Smart ‘quotes’  ") == "smart 'quotes'"

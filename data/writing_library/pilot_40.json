@@ -1,0 +1,487 @@
+{
+  "schema_version": 1,
+  "title": "IELTS 写作高频试点题库",
+  "source_note": "题目与小作文图表整理自本地九分达人机考资料；范文与教学拆解为 Sage Path 教研内容，不是官方评分样文。",
+  "exercises": [
+    {
+      "id": "t2-010", "sequence": 10, "batch": "A", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "犯罪行为对策", "title_en": "Criminal Behavior Solutions",
+      "prompt": "The most common solution for criminal behavior is prison, but many believe education is a better method. To what extent do you agree or disagree?",
+      "position_zh": "部分同意：监禁仍需隔离危险罪犯，但教育更能降低大多数罪犯的再犯率。",
+      "intro": "Although imprisonment is necessary for offenders who pose an immediate danger, I largely agree that education is a more effective long-term response to criminal behaviour.",
+      "conclusion": "Prison should therefore remain a tool of public protection, while education becomes the central strategy for rehabilitation and crime prevention.",
+      "arguments": [
+        {"title_zh": "教育降低再犯", "claim": "Education addresses causes of crime that punishment alone leaves untouched.", "why": "Literacy, vocational skills and basic financial knowledge give offenders lawful ways to support themselves after release.", "example": "A prisoner trained in construction or catering can compete for work instead of returning to theft for income.", "result": "This improves reintegration and reduces the likelihood of another offence.", "nuance": "Training works best when employers are also encouraged to hire rehabilitated offenders."},
+        {"title_zh": "监禁仍有边界作用", "claim": "Education cannot fully replace custody for violent or persistent criminals.", "why": "Courts must protect the public and make serious wrongdoing carry a credible consequence.", "example": "A dangerous repeat offender may need secure detention before any course can safely support rehabilitation.", "result": "A combined system can punish proportionately without abandoning the possibility of reform.", "nuance": "The sentence should be reviewed according to risk rather than used as an automatic response to every offence."}
+      ],
+      "expressions": [{"en": "address the underlying causes of crime", "zh": "处理犯罪的根源"}, {"en": "reduce the likelihood of reoffending", "zh": "降低再犯可能"}, {"en": "pose an immediate danger", "zh": "构成立即危险"}]
+    },
+    {
+      "id": "t2-011", "sequence": 11, "batch": "A", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "环境责任辩论", "title_en": "Environmental Responsibility Debate",
+      "prompt": "Individuals can do nothing to improve the environment; only governments and large companies can make a difference. To what extent do you agree or disagree?",
+      "position_zh": "不同意：政府和企业影响最大，但个人选择既能直接减排，也能推动制度改变。",
+      "intro": "Governments and major companies control infrastructure and production, yet it is wrong to conclude that individual action is meaningless.",
+      "conclusion": "Environmental progress is fastest when regulation and corporate investment are reinforced by millions of consistent personal choices.",
+      "arguments": [
+        {"title_zh": "制度力量决定规模", "claim": "Public authorities and large firms can deliver environmental change at scale.", "why": "They decide how electricity is generated, how cities are designed and which materials enter mass production.", "example": "A national clean-energy standard can cut more emissions than isolated households could ever achieve alone.", "result": "Strong rules also prevent responsible companies from being undercut by polluting competitors.", "nuance": "This makes institutional leadership indispensable rather than merely helpful."},
+        {"title_zh": "个人形成需求与压力", "claim": "Individuals still shape both markets and political priorities.", "why": "Repeated choices about transport, food and consumption create demand that companies cannot ignore.", "example": "Customers who favour reusable packaging can make low-waste products commercially attractive, while voters can support greener policies.", "result": "Personal behaviour therefore multiplies into collective pressure for wider reform.", "nuance": "Its impact depends less on one perfect consumer than on large numbers adopting achievable habits."}
+      ],
+      "expressions": [{"en": "deliver change at scale", "zh": "实现规模化改变"}, {"en": "shape market demand", "zh": "塑造市场需求"}, {"en": "institutional leadership is indispensable", "zh": "制度层面的引领不可或缺"}]
+    },
+    {
+      "id": "t2-018", "sequence": 18, "batch": "A", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "学校行为教育", "title_en": "School Behavioral Education",
+      "prompt": "It is the responsibility of schools to teach children good behavior in addition to providing formal education. To what extent do you agree or disagree with this statement?",
+      "position_zh": "同意学校承担共同责任，但家庭仍是行为教育的第一现场。",
+      "intro": "Schools should teach respectful and responsible behaviour alongside academic subjects, although this duty must be shared with families.",
+      "conclusion": "Behaviour education should be a visible part of school life, supported by parents so that children receive consistent expectations.",
+      "arguments": [
+        {"title_zh": "学校是社会练习场", "claim": "School is where children practise living with people beyond their family.", "why": "Group work, competition and disagreement create daily opportunities to learn fairness, patience and self-control.", "example": "Teachers can use a playground dispute to demonstrate listening, apology and peaceful problem solving.", "result": "Such guidance improves classroom safety and prepares pupils for workplaces and civic life.", "nuance": "These skills should be modelled across lessons rather than confined to an occasional lecture."},
+        {"title_zh": "家校标准需一致", "claim": "Parents remain the strongest influence on a child's habits and values.", "why": "Behaviour learned at school is unlikely to last if courtesy and responsibility are not reinforced at home.", "example": "A pupil asked to cooperate in class may receive the opposite message when selfish conduct is tolerated by family members.", "result": "Regular home-school communication can align rules and respond early to difficulties.", "nuance": "Shared responsibility also prevents teachers from being expected to solve every social problem alone."}
+      ],
+      "expressions": [{"en": "shared responsibility", "zh": "共同责任"}, {"en": "reinforce expectations at home", "zh": "在家庭中强化行为要求"}, {"en": "prepare pupils for civic life", "zh": "让学生为社会生活做好准备"}]
+    },
+    {
+      "id": "t2-022", "sequence": 22, "batch": "A", "task": "task2", "task_type": "positive_negative", "task_type_zh": "利弊判断", "topic_zh": "全球产品趋同", "title_en": "Global Product Sameness",
+      "prompt": "Countries are becoming more and more similar because people are able to buy the same products anywhere in the world. Do you think this is a positive or negative development?",
+      "position_zh": "总体偏负面：便利和质量提升真实存在，但地方产业与文化差异被削弱的代价更长久。",
+      "intro": "Global access to the same products brings convenience and reliable quality, but I regard the resulting uniformity as a largely negative development.",
+      "conclusion": "International products can widen consumer choice, yet policy should protect local producers so that convenience does not erase economic and cultural variety.",
+      "arguments": [
+        {"title_zh": "便利与质量扩散", "claim": "Global distribution gives consumers dependable goods at competitive prices.", "why": "Large supply networks spread safety standards and useful technology to places where equivalent products may be unavailable.", "example": "Affordable smartphones allow people in many countries to use banking, maps and educational services immediately.", "result": "This improves daily life and reduces the disadvantage of living far from major markets.", "nuance": "The benefit is strongest when competition remains open rather than dominated by one brand."},
+        {"title_zh": "本土特色与产业受损", "claim": "The same global brands can displace local businesses and cultural products.", "why": "Small producers rarely match the advertising budgets and economies of scale of multinational chains.", "example": "A traditional market may gradually be replaced by identical shops selling food, clothing and souvenirs found worldwide.", "result": "Communities lose distinctive skills, jobs and a sense of place that are difficult to restore.", "nuance": "Consumer choice appears wider at first but can become narrower once local alternatives disappear."}
+      ],
+      "expressions": [{"en": "economies of scale", "zh": "规模经济"}, {"en": "a distinctive sense of place", "zh": "独特的地方感"}, {"en": "displace local producers", "zh": "挤压本地生产者"}]
+    },
+    {
+      "id": "t2-025", "sequence": 25, "batch": "B", "task": "task2", "task_type": "positive_negative", "task_type_zh": "利弊判断", "topic_zh": "拥堵税收政策", "title_en": "Congestion Tax Policy",
+      "prompt": "In some countries, the government has tried to reduce traffic. For instance, they imposed a congestion tax during rush hour. Do you think this development is positive or negative?",
+      "position_zh": "总体正面，前提是收入用于公共交通，并为必要出行者提供合理豁免。",
+      "intro": "Charging drivers to enter congested areas at peak times is a positive policy when the revenue is reinvested fairly.",
+      "conclusion": "A well-designed congestion charge can make urban travel cleaner and faster without placing an unreasonable burden on essential users.",
+      "arguments": [
+        {"title_zh": "价格信号改变出行", "claim": "A peak-hour charge makes drivers consider the true social cost of each journey.", "why": "Road space is limited, and free access encourages trips that could be shifted to public transport or another time.", "example": "A commuter may take a train when driving into the centre carries an extra daily fee.", "result": "Fewer cars mean shorter delays, cleaner air and more reliable buses.", "nuance": "The response will be weak unless attractive alternatives are already available."},
+        {"title_zh": "公平性可通过设计保障", "claim": "The main objection is that a flat charge can affect low-income drivers disproportionately.", "why": "Some workers travel at fixed hours or live in areas poorly served by public transport.", "example": "Nurses on early shifts should not face the same treatment as optional peak-time motorists.", "result": "Discounts, exemptions and investment in outer suburbs can protect essential journeys.", "nuance": "Using the revenue transparently is crucial to public trust."}
+      ],
+      "expressions": [{"en": "the social cost of a journey", "zh": "一次出行的社会成本"}, {"en": "affect low-income drivers disproportionately", "zh": "对低收入驾驶者造成不成比例的影响"}, {"en": "reinvest the revenue", "zh": "将收入再投资"}]
+    },
+    {
+      "id": "t2-029", "sequence": 29, "batch": "B", "task": "task2", "task_type": "positive_negative", "task_type_zh": "利弊判断", "topic_zh": "城市家庭结构", "title_en": "Urban Family Structure",
+      "prompt": "Many people in cities live alone or in small family units instead of with extended family. Do you think this is a positive or negative development?",
+      "position_zh": "利弊并存但总体偏负面：独立性增强，却更容易造成照护缺口与孤独。",
+      "intro": "Smaller urban households offer privacy and independence, but their social and caring costs make this a moderately negative trend overall.",
+      "conclusion": "Independent living is valuable, yet cities need stronger community and care networks to replace support once provided by extended families.",
+      "arguments": [
+        {"title_zh": "自主与流动性", "claim": "Living alone or in a nuclear family can give adults greater control over daily life.", "why": "They can move for work, manage money and organise routines without constant negotiation with relatives.", "example": "A young professional can accept a position in another city and build an independent household.", "result": "This freedom supports personal development and a flexible labour market.", "nuance": "Privacy is especially beneficial where traditional households impose unequal roles."},
+        {"title_zh": "照护与情感支持变弱", "claim": "Small households have fewer people available when care or emotional support is needed.", "why": "Childcare, elder care and household emergencies become expensive services rather than shared family duties.", "example": "An older person living alone may have no immediate help after an illness, while parents struggle with long workdays.", "result": "Isolation and financial pressure can therefore rise despite material independence.", "nuance": "Neighbourhood programmes can reduce, but not fully replace, close family support."}
+      ],
+      "expressions": [{"en": "greater control over daily life", "zh": "对日常生活有更大掌控"}, {"en": "a gap in informal care", "zh": "非正式照护缺口"}, {"en": "material independence", "zh": "物质上的独立"}]
+    },
+    {
+      "id": "t2-030", "sequence": 30, "batch": "A", "task": "task2", "task_type": "positive_negative", "task_type_zh": "利弊判断", "topic_zh": "机器人广泛应用", "title_en": "Widespread Robot Use",
+      "prompt": "Today, there are many tasks at home or work that have been done by robots. Is this a positive or negative development?",
+      "position_zh": "总体正面：机器人提升安全与效率，但需要再培训和责任规范来处理失业与失控风险。",
+      "intro": "The growing use of robots is broadly positive because it removes dangerous and repetitive work, provided that workers are supported through the transition.",
+      "conclusion": "Robots should be adopted for the value they create, while education and regulation ensure that the gains are shared and human judgement remains accountable.",
+      "arguments": [
+        {"title_zh": "安全与生产率", "claim": "Machines excel at repetitive tasks and work in environments that put humans at risk.", "why": "They can operate with consistent precision without fatigue, exposure to toxins or physical injury.", "example": "A robot can inspect a damaged nuclear facility or lift heavy components on an assembly line.", "result": "Businesses gain productivity while employees avoid preventable harm.", "nuance": "Human supervision is still required when an unusual situation demands judgement."},
+        {"title_zh": "转型成本需治理", "claim": "Automation can displace workers whose jobs consist mainly of routine actions.", "why": "Without retraining, productivity gains may flow to owners while affected communities lose stable incomes.", "example": "Warehouse staff replaced by sorting machines may lack the qualifications for new technical roles.", "result": "Funded training and portable social protection can turn displacement into occupational transition.", "nuance": "The problem is not the machine itself but how institutions distribute its benefits."}
+      ],
+      "expressions": [{"en": "remove repetitive and hazardous work", "zh": "替代重复且危险的工作"}, {"en": "occupational transition", "zh": "职业转型"}, {"en": "human judgement remains accountable", "zh": "人的判断仍需承担责任"}]
+    },
+    {
+      "id": "t2-034", "sequence": 34, "batch": "A", "task": "task2", "task_type": "advantages", "task_type_zh": "利弊比较", "topic_zh": "社交媒体联系", "title_en": "Social Media Connection",
+      "prompt": "Many people around the world use social media every day to keep in touch with other people and news events. Do you think the advantages of this development outweigh the disadvantages?",
+      "position_zh": "优势略大于劣势：低成本联系和信息触达价值更大，但须治理虚假信息与沉迷。",
+      "intro": "Daily social-media use creates real risks, yet its ability to sustain relationships and widen access to information gives it a net benefit.",
+      "conclusion": "The advantages outweigh the drawbacks when platforms, schools and users share responsibility for verification, privacy and healthy limits.",
+      "arguments": [
+        {"title_zh": "连接与信息触达", "claim": "Social platforms make communication across distance immediate and inexpensive.", "why": "Families, migrants and specialist communities can exchange messages, support and public information regardless of location.", "example": "During an emergency, residents can receive local updates while relatives abroad confirm one another's safety.", "result": "This strengthens social ties and helps useful information reach people quickly.", "nuance": "Smaller groups can also find a voice that traditional media once denied them."},
+        {"title_zh": "失真与注意力代价", "claim": "The same speed allows false claims and manipulative content to spread widely.", "why": "Algorithms often reward emotional reactions rather than accuracy or wellbeing.", "example": "A misleading health story may be shared thousands of times before professional advice reaches the same audience.", "result": "Media literacy, transparent moderation and personal time limits are therefore necessary.", "nuance": "These harms are serious but manageable and do not cancel the underlying communication benefit."}
+      ],
+      "expressions": [{"en": "widen access to information", "zh": "拓宽信息获取渠道"}, {"en": "reward emotional reactions", "zh": "奖励情绪化反应"}, {"en": "the underlying communication benefit", "zh": "根本的沟通价值"}]
+    },
+    {
+      "id": "t2-035", "sequence": 35, "batch": "B", "task": "task2", "task_type": "advantages", "task_type_zh": "利弊比较", "topic_zh": "在家教育趋势", "title_en": "Home Education Trend",
+      "prompt": "In some countries, many people choose to educate their children at home by themselves instead of sending them to school. Do you think the advantages outweigh the disadvantages?",
+      "position_zh": "劣势更大：个性化教学有益于少数家庭，但普遍实施会牺牲教学专业性与同伴社会化。",
+      "intro": "Home education can be highly personalised, but for most children its limitations in teaching quality and social development outweigh that advantage.",
+      "conclusion": "Home schooling should remain a carefully monitored option for particular needs rather than a general replacement for well-resourced schools.",
+      "arguments": [
+        {"title_zh": "个性化与灵活性", "claim": "Parents can adapt lessons to a child's pace, interests and circumstances.", "why": "Time need not be divided among a large class, and schedules can accommodate health needs or advanced ability.", "example": "A child fascinated by engineering might spend longer building practical projects instead of waiting for classmates.", "result": "This can restore motivation and allow focused support.", "nuance": "The benefit depends heavily on parents having time, knowledge and suitable materials."},
+        {"title_zh": "专业教学与社会化缺口", "claim": "Most homes cannot reproduce the expertise and peer environment of a good school.", "why": "One parent is unlikely to teach every subject well or provide daily contact with diverse classmates.", "example": "Laboratory science, team sport and negotiating group conflict are difficult to learn in isolation.", "result": "Children may develop academic gaps and fewer chances to practise cooperation.", "nuance": "Clubs can help, but arranging them adds cost and still offers less continuous social contact."}
+      ],
+      "expressions": [{"en": "adapt lessons to a child's pace", "zh": "按孩子的节奏调整课程"}, {"en": "reproduce a peer environment", "zh": "再现同伴环境"}, {"en": "remain a carefully monitored option", "zh": "作为受到审慎监管的选择"}]
+    },
+    {
+      "id": "t2-036", "sequence": 36, "batch": "B", "task": "task2", "task_type": "advantages", "task_type_zh": "利弊比较", "topic_zh": "寻找新石油", "title_en": "Finding New Oil",
+      "prompt": "Demand for gas and oil is increasing, so finding new sources in remote and untouched areas is necessary. Do the advantages of this outweigh the disadvantages?",
+      "position_zh": "劣势显著更大：短期能源安全不足以抵消生态破坏、泄漏风险和对化石燃料的锁定。",
+      "intro": "Opening remote and untouched regions to oil and gas extraction may ease short-term supply pressure, but the environmental and strategic disadvantages are far greater.",
+      "conclusion": "Governments should meet energy needs through efficiency and cleaner power instead of creating long-lived dependence on new remote oil fields.",
+      "arguments": [
+        {"title_zh": "短期供应保障", "claim": "New reserves can improve energy security while economies still rely on fossil fuels.", "why": "A broader supply base reduces vulnerability to disruption and sudden price rises in existing producing regions.", "example": "Domestic extraction may keep transport and heating affordable during an international supply shock.", "result": "This gives governments time to expand alternative energy systems.", "nuance": "However, exploration and construction often take years, so the relief is neither immediate nor guaranteed."},
+        {"title_zh": "生态与锁定效应", "claim": "Industrial activity can cause irreversible damage in fragile, previously undisturbed ecosystems.", "why": "Roads, drilling and spills fragment habitats, while new infrastructure encourages decades of continued carbon emissions.", "example": "An accident in an Arctic or rainforest location is exceptionally difficult to contain and clean up.", "result": "Society bears environmental costs long after the extracted fuel has been consumed.", "nuance": "Investment directed to renewables would address both supply security and climate risk."}
+      ],
+      "expressions": [{"en": "ease short-term supply pressure", "zh": "缓解短期供应压力"}, {"en": "cause irreversible ecological damage", "zh": "造成不可逆的生态破坏"}, {"en": "lock economies into fossil fuels", "zh": "使经济体锁定在化石燃料上"}]
+    },
+    {
+      "id": "t2-038", "sequence": 38, "batch": "A", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "公共卫生法律", "title_en": "Public Health Laws",
+      "prompt": "Some people think that public health within a country can be improved by the government making laws regarding nutritious food. Others, however, think that health is a matter of personal choice and responsibility. Discuss both views and give your opinion.",
+      "position_zh": "个人负责日常选择，但政府应矫正信息、价格和供给环境，因此适度立法必要。",
+      "intro": "Individuals make the final decision about what they eat, but I believe sensible food laws are justified because those decisions occur in a market shaped by government and industry.",
+      "conclusion": "Personal responsibility remains important, while targeted rules make the healthy choice understandable, affordable and genuinely available.",
+      "arguments": [
+        {"title_zh": "个人选择论", "claim": "Health ultimately depends on repeated choices that no law can make for a citizen.", "why": "People differ in medical needs, culture and priorities, so a single official diet may be intrusive or unsuitable.", "example": "Clear advice cannot prevent illness if an informed adult consistently chooses excessive sugar and little exercise.", "result": "Education and self-discipline therefore remain essential.", "nuance": "Excessive restrictions can also provoke resistance instead of healthier habits."},
+        {"title_zh": "政府塑造选择环境", "claim": "Government action is needed when commercial incentives distort food choices.", "why": "Children face advertising, labels can be confusing and cheap processed products may dominate disadvantaged areas.", "example": "Mandatory nutrition labels and limits on school advertising help families compare options without banning any food.", "result": "Such laws correct information gaps and prevent avoidable public healthcare costs.", "nuance": "Policy should target harmful market practices, not punish occasional personal indulgence."}
+      ],
+      "expressions": [{"en": "occur in a market shaped by industry", "zh": "发生在由行业塑造的市场中"}, {"en": "correct an information gap", "zh": "纠正信息差"}, {"en": "target harmful market practices", "zh": "针对有害的市场行为"}]
+    },
+    {
+      "id": "t2-042", "sequence": 42, "batch": "B", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "儿童发展因素", "title_en": "Child Development Factors",
+      "prompt": "Some people think that the main factors influencing a child's development these days are things such as TV, friends, and music. Others believe that the family still remains more important. Discuss both views and give your opinion.",
+      "position_zh": "外部媒体和同伴影响扩大，但家庭通过早期依恋、规则与媒介引导仍是最深层因素。",
+      "intro": "Media and peers increasingly shape children's tastes and behaviour, yet the family remains the most fundamental influence on their development.",
+      "conclusion": "Modern influences matter greatly, but their effect is filtered through the security, values and guidance children receive at home.",
+      "arguments": [
+        {"title_zh": "同伴与媒体影响扩大", "claim": "Children now spend substantial time with peers and digital content.", "why": "These sources set trends in language, appearance and behaviour, especially during adolescence when belonging is important.", "example": "A teenager may adopt music, clothing or risky habits to gain acceptance from friends or online groups.", "result": "External influences can therefore reshape identity quickly and visibly.", "nuance": "Algorithms intensify this effect by repeatedly presenting similar messages."},
+        {"title_zh": "家庭奠定解释框架", "claim": "Families establish the emotional security and values through which outside messages are judged.", "why": "Early routines, conversation and parental example shape self-control long before peer pressure becomes strong.", "example": "A child accustomed to discussing online claims with parents is better able to resist harmful trends.", "result": "The home influences not only behaviour but also how later influences are processed.", "nuance": "Its importance does not mean every family influence is positive, only that it is foundational."}
+      ],
+      "expressions": [{"en": "shape a child's sense of identity", "zh": "塑造孩子的身份认同"}, {"en": "provide an interpretive framework", "zh": "提供理解外界的框架"}, {"en": "resist harmful peer pressure", "zh": "抵御有害的同伴压力"}]
+    },
+    {
+      "id": "t2-055", "sequence": 55, "batch": "B", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "沟通能力下降", "title_en": "Communication Skills Decline",
+      "prompt": "The increase use of mobile phone and computers makes people lose the ability to communicate face to face. To what extent do you agree or disagree?",
+      "position_zh": "部分同意：过度依赖会削弱线下线索与耐心，但技术也能维系关系并为线下沟通创造机会。",
+      "intro": "Heavy dependence on phones and computers can weaken some face-to-face skills, although technology does not inevitably destroy our ability to communicate in person.",
+      "conclusion": "Digital tools should complement rather than replace direct conversation, with deliberate practice and device-free settings preserving interpersonal skills.",
+      "arguments": [
+        {"title_zh": "线下线索练习减少", "claim": "Text-based interaction removes many cues required in an in-person exchange.", "why": "Users can edit replies and avoid eye contact, tone, interruption and immediate disagreement.", "example": "A student comfortable with messaging may struggle to read discomfort or respond spontaneously in an interview.", "result": "Constant avoidance can reduce confidence, empathy and conversational patience.", "nuance": "The risk comes from replacement and overuse, not from owning a device."},
+        {"title_zh": "技术也可支持真实联系", "claim": "Digital communication can maintain relationships that would otherwise fade.", "why": "Messages and video calls help people coordinate meetings and stay emotionally connected across distance.", "example": "Friends who move abroad can speak regularly online and then continue their relationship naturally when they meet.", "result": "Technology may therefore expand the number of meaningful conversations rather than eliminate them.", "nuance": "Schools and workplaces can reinforce this benefit through collaborative, device-free activities."}
+      ],
+      "expressions": [{"en": "remove non-verbal cues", "zh": "移除非语言线索"}, {"en": "respond spontaneously", "zh": "即时自然地回应"}, {"en": "complement rather than replace", "zh": "补充而非取代"}]
+    },
+    {
+      "id": "t2-061", "sequence": 61, "batch": "A", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "免费政府教育", "title_en": "Free Government Education",
+      "prompt": "Education, from preschool through university, should be paid for by the government and therefore free to students. To what extent do you agree or disagree?",
+      "position_zh": "基础教育应免费；高等教育应大幅补贴并按支付能力分担，而非对所有人完全免费。",
+      "intro": "Education should never be denied because a family is poor, but I support universal free schooling and targeted university funding rather than entirely free education at every level.",
+      "conclusion": "Public funding should guarantee access from preschool onward, while a fair contribution system keeps university expansion sustainable.",
+      "arguments": [
+        {"title_zh": "早期与基础教育的公共回报", "claim": "Free preschool and school education create benefits for the whole society.", "why": "Literacy, numeracy and social development improve employment, health decisions and democratic participation.", "example": "A child from a low-income household can build the same basic capabilities as a wealthier classmate when fees are removed.", "result": "Universal access reduces inherited disadvantage and later social costs.", "nuance": "Because these gains are broad, funding them through general taxation is justified."},
+        {"title_zh": "大学资助需可持续", "claim": "Completely free university can direct scarce public money towards people who later earn high salaries.", "why": "Universities are expensive, and unlimited subsidies may reduce places or funding for hospitals and schools.", "example": "A graduate in a lucrative profession can reasonably repay part of the cost only after reaching a comfortable income.", "result": "Income-linked contributions preserve access without shifting every cost to non-graduates.", "nuance": "Grants should fully protect disadvantaged students and socially essential subjects."}
+      ],
+      "expressions": [{"en": "reduce inherited disadvantage", "zh": "减少代际传递的不利"}, {"en": "income-linked contributions", "zh": "与收入挂钩的缴费"}, {"en": "preserve access without shifting every cost", "zh": "在不转嫁全部成本的前提下保障机会"}]
+    },
+    {
+      "id": "t2-074", "sequence": 74, "batch": "B", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "减少化石燃料", "title_en": "Fossil Fuel Reduction",
+      "prompt": "The international community must act immediately to ensure all nations reduce the consumption of fossil fuels (gas and oil). To what extent do you agree or disagree?",
+      "position_zh": "强烈同意立即行动，但各国减排节奏与支持应体现发展阶段和能源条件差异。",
+      "intro": "I strongly agree that coordinated action to reduce fossil-fuel use must begin immediately, although responsibilities and timelines should reflect national circumstances.",
+      "conclusion": "Immediate international action is essential, but fairness, finance and technology transfer must make reduction possible in every country.",
+      "arguments": [
+        {"title_zh": "延迟会锁定排放", "claim": "Every year of delay adds infrastructure that may emit carbon for decades.", "why": "Power stations, vehicles and buildings have long operating lives, so today's investment determines tomorrow's energy demand.", "example": "A new oil-dependent transport network can keep a city consuming fuel long after cleaner technology becomes affordable.", "result": "Early standards and investment avoid costly replacement and worsening climate damage.", "nuance": "Coordinated targets also prevent countries from waiting for competitors to move first."},
+        {"title_zh": "公平转型才能持续", "claim": "Uniform reductions would be unfair and politically fragile.", "why": "Low-income nations may lack capital and still need reliable energy for hospitals, industry and household development.", "example": "Wealthier states can finance renewable grids and share technology instead of simply imposing the same deadline.", "result": "Differentiated support turns a global obligation into an achievable transition.", "nuance": "Fairness should change the method, not excuse indefinite inaction."}
+      ],
+      "expressions": [{"en": "lock in emissions for decades", "zh": "将排放锁定数十年"}, {"en": "reflect national circumstances", "zh": "体现各国国情"}, {"en": "technology transfer", "zh": "技术转移"}]
+    },
+    {
+      "id": "t2-124", "sequence": 124, "batch": "B", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "不健康食品税", "title_en": "Unhealthy Food Tax",
+      "prompt": "Some people think that the government should increase taxes on unhealthy food to encourage people to start eating healthy. To what extent do you agree or disagree?",
+      "position_zh": "有条件同意：税收可改变价格信号，但必须准确定义、补贴健康食品并配合信息教育。",
+      "intro": "A carefully designed tax on clearly unhealthy products can improve diets, but it should be combined with subsidies and education rather than treated as a complete solution.",
+      "conclusion": "Food taxes are justified when they target measurable harm, fund healthier access and avoid turning poverty into a penalty.",
+      "arguments": [
+        {"title_zh": "价格信号与公共成本", "claim": "Higher prices can reduce routine purchases of products linked to preventable disease.", "why": "Consumers respond to cost, while society pays part of the medical bill created by excessive sugar, salt and fat.", "example": "A tax on sugary drinks may lead families to buy water more often and encourage manufacturers to reformulate recipes.", "result": "The policy can change both demand and supply while funding healthcare.", "nuance": "Taxes should rely on transparent nutritional thresholds rather than vague labels."},
+        {"title_zh": "单独加税可能不公平", "claim": "Price penalties alone can burden poorer households without giving them a realistic alternative.", "why": "Fresh food may cost more or be unavailable near where low-income families live and work.", "example": "A parent with limited time will not cook differently merely because a convenient meal becomes slightly more expensive.", "result": "Subsidised produce, school meals and clear information are needed alongside the tax.", "nuance": "This package changes the environment instead of blaming individual consumers."}
+      ],
+      "expressions": [{"en": "transparent nutritional thresholds", "zh": "透明的营养标准线"}, {"en": "change both demand and supply", "zh": "同时改变需求与供给"}, {"en": "give consumers a realistic alternative", "zh": "给消费者可行的替代选择"}]
+    },
+    {
+      "id": "t2-151", "sequence": 151, "batch": "B", "task": "task2", "task_type": "advantages", "task_type_zh": "利弊比较", "topic_zh": "学生交换项目", "title_en": "Student Exchange Programs",
+      "prompt": "Some teachers think that international student exchange would be beneficial for all teenage school students. Do you think its advantages will outweigh the disadvantages?",
+      "position_zh": "对多数学生优势更大，但“所有学生”过于绝对，需要补贴、保障与替代方案。",
+      "intro": "International exchanges can transform teenagers' language skills and independence, so their advantages usually outweigh the drawbacks, although participation should not be compulsory for every student.",
+      "conclusion": "Well-supported exchanges are highly valuable, but equitable funding and flexible participation are necessary for the benefit to be genuinely broad.",
+      "arguments": [
+        {"title_zh": "真实语境与独立成长", "claim": "Living abroad turns language and cultural knowledge into daily practical experience.", "why": "Teenagers must communicate, adapt to unfamiliar routines and reconsider assumptions learned at home.", "example": "A student staying with a host family uses the target language to solve ordinary problems rather than only complete textbook exercises.", "result": "Confidence, empathy and independence can develop rapidly.", "nuance": "These gains often continue after the visit through stronger motivation to learn."},
+        {"title_zh": "成本与适应风险", "claim": "Exchange schemes can exclude poorer families or overwhelm students with particular needs.", "why": "Travel is expensive, and homesickness, disability or anxiety may make a long placement unsuitable.", "example": "If only wealthy pupils can participate, the programme widens inequality inside the school.", "result": "Public funding, careful host screening and shorter alternatives can reduce these disadvantages.", "nuance": "The policy should maximise access without pretending one format benefits everyone equally."}
+      ],
+      "expressions": [{"en": "turn knowledge into lived experience", "zh": "把知识转化为亲身经历"}, {"en": "widen inequality", "zh": "扩大不平等"}, {"en": "flexible participation", "zh": "灵活参与"}]
+    },
+    {
+      "id": "t2-169", "sequence": 169, "batch": "A", "task": "task2", "task_type": "mixed", "task_type_zh": "混合提问", "topic_zh": "即时满足趋势", "title_en": "Instant Gratification Trend",
+      "prompt": "Today, more and more people want things instantly (e.g. goods, services, news). Why is this the case? Is it a positive or negative development?",
+      "position_zh": "技术与竞争抬高了速度预期；总体负面，因为便利收益被耐心、判断与环境成本抵消。",
+      "intro": "Digital technology and intense market competition have normalised immediate access to goods and information; despite obvious convenience, I see this as a mainly negative trend.",
+      "conclusion": "Speed is useful for genuine needs, but consumers and firms should stop treating every delay as failure and restore room for reflection and sustainable delivery.",
+      "arguments": [
+        {"title_zh": "技术与竞争塑造预期", "claim": "Fast digital systems repeatedly teach consumers that waiting is unnecessary.", "why": "One-click payment, live updates and same-day delivery turn speed into a visible point of competition.", "example": "When one retailer shortens delivery, rivals promise an even faster service and customers soon regard it as normal.", "result": "Expectations rise even when the underlying need is not urgent.", "nuance": "The cycle is reinforced by notifications that reward immediate attention."},
+        {"title_zh": "判断与可持续性受损", "claim": "Constant instant access encourages impulsive decisions and resource-intensive services.", "why": "People have less reason to compare information, delay purchases or consolidate deliveries.", "example": "A shopper may order several unnecessary items separately because each can arrive tomorrow.", "result": "This creates waste, transport emissions and a lower tolerance for complex tasks that take time.", "nuance": "Emergency services benefit from speed, but that exception does not justify impatience everywhere."}
+      ],
+      "expressions": [{"en": "normalise immediate access", "zh": "使即时获取常态化"}, {"en": "raise consumer expectations", "zh": "抬高消费者预期"}, {"en": "lower tolerance for delay", "zh": "降低对等待的容忍"}]
+    },
+    {
+      "id": "t2-173", "sequence": 173, "batch": "C", "task": "task2", "task_type": "mixed", "task_type_zh": "混合提问", "topic_zh": "性别学科选择", "title_en": "Gender Subject Choice",
+      "prompt": "In schools and universities, girls tend to choose the arts, while boys like science. What are the reasons for this trend? Do you think this tendency should be changed?",
+      "position_zh": "刻板印象、榜样和早期鼓励造成分化；应消除限制，但不应强迫个人选择特定学科。",
+      "intro": "Gendered subject choices are shaped more by social expectations and unequal encouragement than by ability, so barriers should be changed without dictating individual preferences.",
+      "conclusion": "The goal is not identical enrolment by force, but a learning environment in which neither gender mistakes a stereotype for a limit.",
+      "arguments": [
+        {"title_zh": "早期信号累积", "claim": "Children receive different messages about which interests suit their gender.", "why": "Toys, praise, media images and teacher expectations can make science appear masculine and the arts feminine.", "example": "A girl rarely shown female engineers may interpret an ordinary setback in physics as evidence that she does not belong.", "result": "Small differences in confidence accumulate into later subject choices.", "nuance": "Peers then reinforce the pattern because students prefer courses where they expect social acceptance."},
+        {"title_zh": "扩大选择而非强制配额", "claim": "Schools should actively remove stereotypes and provide diverse role models.", "why": "Workshops, balanced examples and unbiased careers advice allow talent to emerge across traditional boundaries.", "example": "Meeting a male designer and a female scientist can make both paths feel realistic to every pupil.", "result": "Students can then choose according to interest and aptitude.", "nuance": "Compulsory quotas may replace one form of pressure with another and should not be the primary tool."}
+      ],
+      "expressions": [{"en": "gendered expectations", "zh": "性别化预期"}, {"en": "accumulate into later choices", "zh": "逐渐累积并影响后续选择"}, {"en": "choose according to aptitude", "zh": "依据能力倾向选择"}]
+    },
+    {
+      "id": "t2-176", "sequence": 176, "batch": "C", "task": "task2", "task_type": "mixed", "task_type_zh": "混合提问", "topic_zh": "父母成功压力", "title_en": "Parental Success Pressure",
+      "prompt": "Nowadays, parents put too much pressure on their children to succeed. What are the reasons for this? Is this a positive or negative development for children?",
+      "position_zh": "竞争焦虑、比较文化和教育成本推动压力；总体负面，损害心理健康与自主学习。",
+      "intro": "Parental pressure is fuelled by economic insecurity and constant social comparison, and its excessive form is clearly harmful to children.",
+      "conclusion": "Parents should provide structure and encouragement while judging success by sustainable growth rather than rank, income or prestige.",
+      "arguments": [
+        {"title_zh": "竞争焦虑被投射", "claim": "Parents increasingly view academic success as protection against an uncertain economy.", "why": "Selective schools, expensive housing and visible online comparisons make every advantage seem decisive.", "example": "Seeing another child win a prize may prompt parents to add tutoring even when their own child is already exhausted.", "result": "Fear is translated into longer schedules and unrealistically high expectations.", "nuance": "The pressure often comes from concern, but good intentions do not remove its effects."},
+        {"title_zh": "心理与动机受损", "claim": "Excessive pressure can replace curiosity with anxiety and fear of failure.", "why": "Children learn to treat mistakes as threats to approval instead of useful feedback.", "example": "A capable pupil may avoid a challenging subject because a lower grade would disappoint the family.", "result": "Stress, dishonesty and dependence on external rewards can follow.", "nuance": "Clear expectations are beneficial only when paired with autonomy, rest and unconditional support."}
+      ],
+      "expressions": [{"en": "economic insecurity", "zh": "经济不安全感"}, {"en": "translate fear into expectations", "zh": "把焦虑转化为期待"}, {"en": "replace curiosity with anxiety", "zh": "以焦虑取代好奇心"}]
+    },
+    {
+      "id": "t2-178", "sequence": 178, "batch": "C", "task": "task2", "task_type": "mixed", "task_type_zh": "混合提问", "topic_zh": "晚育趋势", "title_en": "Delayed Childbearing Trend",
+      "prompt": "In many countries, people decide to have children at a later age than in the past. Why? Do the advantages of this development outweigh the disadvantages?",
+      "position_zh": "教育、职业、住房成本和可靠避孕共同促成；优势略大，但生育健康风险不能忽视。",
+      "intro": "People are postponing parenthood because education, careers and financial security take longer to establish; on balance, better preparation slightly outweighs the disadvantages.",
+      "conclusion": "Later parenthood is generally positive when it reflects genuine choice and is supported by accurate fertility information and family-friendly policy.",
+      "arguments": [
+        {"title_zh": "人生路径变长", "claim": "Young adults now spend longer building qualifications, careers and stable homes.", "why": "Reliable contraception also allows couples to separate marriage and parenthood from a fixed early timetable.", "example": "Two graduates may wait until employment and housing are secure before taking on childcare costs.", "result": "Economic conditions and personal choice therefore reinforce one another.", "nuance": "Workplace cultures that penalise early parenthood can make postponement less voluntary than it appears."},
+        {"title_zh": "准备更充分但有生理代价", "claim": "Older parents often bring greater maturity, income and relationship stability.", "why": "They may have more resources and patience for a child's education and health.", "example": "A settled couple can share leave and absorb unexpected expenses more easily than insecure workers.", "result": "However, fertility declines with age and some medical risks rise.", "nuance": "The overall benefit depends on informed timing rather than assuming postponement is cost-free."}
+      ],
+      "expressions": [{"en": "postpone parenthood", "zh": "推迟为人父母"}, {"en": "establish financial security", "zh": "建立经济稳定"}, {"en": "reflect genuine choice", "zh": "体现真实的自主选择"}]
+    },
+    {
+      "id": "t2-187", "sequence": 187, "batch": "A", "task": "task2", "task_type": "report", "task_type_zh": "原因与对策", "topic_zh": "平衡工作生活", "title_en": "Balancing Work Life",
+      "prompt": "Many people find it hard to balance their work with other parts of their lives. What are the reasons for this? How can this problem be overcome?",
+      "position_zh": "长工时、数字化常在线和生活成本侵蚀边界；需企业制度、法律底线与个人边界共同解决。",
+      "intro": "Work-life balance has deteriorated because time and attention are increasingly claimed by employers; effective solutions must change workplace expectations as well as individual habits.",
+      "conclusion": "Balance will improve only when reasonable workloads and a right to disconnect make personal boundary-setting realistic.",
+      "arguments": [
+        {"title_zh": "工作侵入私人时间", "claim": "Long hours and digital connectivity have blurred the end of the working day.", "why": "Employees can receive messages anywhere, while high living costs make overtime or multiple jobs difficult to refuse.", "example": "A worker may answer evening emails during family time because silence could be interpreted as low commitment.", "result": "Rest, relationships and health are repeatedly postponed.", "nuance": "Remote work can intensify the problem when output is judged by constant availability."},
+        {"title_zh": "把边界写进制度", "claim": "Employers should redesign workloads and protect time away from work.", "why": "Predictable schedules, realistic staffing and evaluation by results reduce the incentive to perform long hours.", "example": "A company can block routine messages after work and train managers not to reward unnecessary overtime.", "result": "Labour law can set a minimum right to rest, while individuals plan device-free periods.", "nuance": "Personal discipline matters, but it cannot compensate for an organisation that punishes boundaries."}
+      ],
+      "expressions": [{"en": "blur the end of the working day", "zh": "模糊工作日结束的边界"}, {"en": "a right to disconnect", "zh": "离线权"}, {"en": "evaluate staff by results", "zh": "按成果评价员工"}]
+    },
+    {
+      "id": "t2-191", "sequence": 191, "batch": "B", "task": "task2", "task_type": "report", "task_type_zh": "原因与对策", "topic_zh": "生物多样性减少趋势", "title_en": "Biodiversity Loss Trend",
+      "prompt": "In many countries, the number of animals and plants is declining. Why do you think this is happening? How can this issue be solved?",
+      "position_zh": "栖息地破坏、污染、过度利用和气候变化共同驱动；保护区、执法与生产方式转型必须结合。",
+      "intro": "Wildlife decline is driven mainly by human destruction of habitats and unsustainable resource use, so protection must extend beyond isolated conservation projects.",
+      "conclusion": "Biodiversity can recover when governments protect connected habitats and make farming, fishing and trade respect ecological limits.",
+      "arguments": [
+        {"title_zh": "多重压力叠加", "claim": "Animals and plants lose the space and conditions needed to reproduce.", "why": "Farming, construction and logging fragment habitats, while pollution, hunting and climate change add further stress.", "example": "A wetland species may lose nesting sites to development and then face polluted water in the small area that remains.", "result": "Separate pressures combine until populations can no longer recover.", "nuance": "Rare species are especially vulnerable because a local shock can affect most of their population."},
+        {"title_zh": "保护与经济规则联动", "claim": "Solutions must protect habitats while changing the incentives behind their destruction.", "why": "Connected reserves, enforced harvest limits and restoration give species room to recover.", "example": "Farmers can be paid to preserve river buffers, while companies prove that timber and seafood come from legal sources.", "result": "Monitoring and penalties then make conservation financially credible.", "nuance": "International cooperation is needed because wildlife and supply chains cross national borders."}
+      ],
+      "expressions": [{"en": "fragment natural habitats", "zh": "割裂自然栖息地"}, {"en": "respect ecological limits", "zh": "尊重生态边界"}, {"en": "make conservation financially credible", "zh": "使保护在经济上可行"}]
+    },
+    {
+      "id": "t2-198", "sequence": 198, "batch": "C", "task": "task2", "task_type": "report", "task_type_zh": "原因与对策", "topic_zh": "青少年犯罪上升", "title_en": "Rising Youth Crime",
+      "prompt": "Crime appears to be rising in most countries in the world, especially among young people. What are the possible causes of this trend, and what solutions would be effective in reducing crime levels?",
+      "position_zh": "家庭和社区支持薄弱、教育脱离就业、同伴与网络影响是主因；早期干预比单纯重刑更有效。",
+      "intro": "Youth crime grows where social support and credible opportunities are weak; reducing it therefore requires early intervention, education and focused policing rather than punishment alone.",
+      "conclusion": "Young people are less likely to offend when families, schools and justice systems combine firm boundaries with a believable route into adult life.",
+      "arguments": [
+        {"title_zh": "归属与机会缺失", "claim": "Some young people turn to crime when neither school nor work offers status or hope.", "why": "Family instability and under-resourced neighbourhoods can leave gangs or online groups as the strongest source of belonging.", "example": "A teenager who repeatedly fails at school may gain money and recognition by carrying out theft for older peers.", "result": "Short-term rewards then outweigh distant legal risks.", "nuance": "Exposure to glamorous online portrayals of crime can accelerate this process."},
+        {"title_zh": "早期干预与精准执法", "claim": "Prevention should reconnect at-risk teenagers with adults and practical opportunity.", "why": "Mentoring, vocational courses and family support address causes before offending becomes an identity.", "example": "A programme linking school attendance to paid apprenticeships offers both supervision and a realistic income path.", "result": "Focused policing can target serious recruiters while diversion keeps minor first offenders out of criminal networks.", "nuance": "Consistent consequences still matter, but they should support rehabilitation."}
+      ],
+      "expressions": [{"en": "a credible route into adult life", "zh": "通往成年生活的可信路径"}, {"en": "early intervention", "zh": "早期干预"}, {"en": "minor first offenders", "zh": "初次轻微违法者"}]
+    },
+    {
+      "id": "t2-208", "sequence": 208, "batch": "C", "task": "task2", "task_type": "report", "task_type_zh": "原因与影响", "topic_zh": "理科教育遇冷", "title_en": "Science Education Decline",
+      "prompt": "Nowadays, not enough students choose science subjects at university in many countries. Why is this? What effect does this have on society?",
+      "position_zh": "课程难度认知、教学脱离现实与职业信息不足抑制选择；将造成技能短缺、创新放缓和科学素养下降。",
+      "intro": "Students often avoid university science because it appears difficult and disconnected from attractive careers, a pattern that weakens both the skilled workforce and public decision-making.",
+      "conclusion": "Making science visible, practical and well supported is necessary to protect innovation and society's ability to judge technical evidence.",
+      "arguments": [
+        {"title_zh": "回报不清而门槛明显", "claim": "Science courses are widely seen as demanding before their rewards are understood.", "why": "Abstract school teaching, limited laboratory access and weak careers guidance hide the variety of scientific work.", "example": "A pupil may know that chemistry requires difficult examinations but not that it leads to roles in energy, medicine and materials.", "result": "Students choose subjects whose pathways feel clearer or whose grades seem safer.", "nuance": "A shortage of inspiring specialist teachers further reinforces this perception."},
+        {"title_zh": "技能与公共判断受损", "claim": "Too few science graduates create shortages in research and technical industries.", "why": "Hospitals, engineering firms and clean-energy projects compete for a limited pool of trained people.", "example": "A country may import expertise or delay infrastructure because it lacks laboratory and engineering staff.", "result": "Innovation slows, while citizens with weak scientific literacy are more vulnerable to misinformation.", "nuance": "The effect therefore reaches beyond employment into democratic choices about health and climate."}
+      ],
+      "expressions": [{"en": "hide the variety of career paths", "zh": "掩盖职业路径的多样性"}, {"en": "a limited pool of specialists", "zh": "有限的专业人才池"}, {"en": "judge technical evidence", "zh": "判断技术证据"}]
+    },
+    {
+      "id": "t2-216", "sequence": 216, "batch": "C", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "经济与环境", "title_en": "Economy and Environment",
+      "prompt": "Some people believe that economic growth is the only way to end poverty and hunger in the world, while others say that economic growth is causing damage to the environment and should be stopped. Discuss both views and give your own opinion.",
+      "position_zh": "增长有助减贫但不是唯一方式；不应停止增长，而应改变增长的能源、资源与分配方式。",
+      "intro": "Economic growth can finance poverty reduction, but neither growth alone nor a complete halt to it is a convincing solution; the priority should be cleaner and more inclusive development.",
+      "conclusion": "Prosperity and environmental protection need not be opposites if policy measures progress by wellbeing, distribution and ecological cost rather than output alone.",
+      "arguments": [
+        {"title_zh": "增长提供资源", "claim": "A larger economy can create jobs and public revenue needed to reduce deprivation.", "why": "Productive investment raises incomes, while taxes can fund food security, schools, sanitation and healthcare.", "example": "Industrial development may move families from unstable subsistence work into paid employment with reliable services.", "result": "For poor countries, rejecting all growth would restrict essential improvements.", "nuance": "However, gains do not automatically reach the poorest without fair institutions."},
+        {"title_zh": "改变增长质量", "claim": "Conventional growth often consumes resources and shifts environmental costs onto vulnerable people.", "why": "Polluting energy and land destruction can increase output today while damaging health, farming and future livelihoods.", "example": "A factory may add to national income yet poison the river used by nearby communities.", "result": "Carbon pricing, clean infrastructure and social investment can separate wellbeing from resource waste.", "nuance": "The answer is to transform the model of growth, not freeze living standards."}
+      ],
+      "expressions": [{"en": "inclusive development", "zh": "包容性发展"}, {"en": "shift environmental costs onto", "zh": "把环境成本转嫁给"}, {"en": "transform the model of growth", "zh": "转变增长模式"}]
+    },
+    {
+      "id": "t2-219", "sequence": 219, "batch": "C", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "科技与犯罪", "title_en": "Technology and Crime",
+      "prompt": "Some people think technology development decreases crime, while others believe it actually encourages crime. Discuss both views and give your own opinion.",
+      "position_zh": "科技同时降低传统犯罪、催生新型犯罪；总体效果取决于安全设计、执法能力和公众素养。",
+      "intro": "Technology supplies powerful tools to prevent crime but also creates new targets and methods; in my view, its net effect depends on governance rather than the technology itself.",
+      "conclusion": "Technical progress can reduce crime overall only when security, law enforcement and public education evolve at the same speed.",
+      "arguments": [
+        {"title_zh": "预防与侦查能力增强", "claim": "Modern systems can deter offences and help authorities respond quickly.", "why": "Secure payments, location data, alarms and forensic databases make many acts harder to conceal.", "example": "A stolen phone can be locked and tracked, while camera footage may identify a violent offender.", "result": "The expected reward falls and the probability of detection rises.", "nuance": "Safeguards are needed so surveillance does not violate innocent people's privacy."},
+        {"title_zh": "攻击面同步扩大", "claim": "Connected systems allow criminals to reach victims across borders at low cost.", "why": "Anonymous accounts and automated tools scale fraud, harassment and theft far beyond physical limits.", "example": "One phishing campaign can imitate a bank and target thousands of users in a single day.", "result": "Police face jurisdictional and technical challenges that traditional methods cannot solve.", "nuance": "Security-by-design and international cooperation can reduce, though never remove, these risks."}
+      ],
+      "expressions": [{"en": "raise the probability of detection", "zh": "提高被侦破的概率"}, {"en": "reach victims across borders", "zh": "跨境接触受害者"}, {"en": "security by design", "zh": "安全内建"}]
+    },
+    {
+      "id": "t2-222", "sequence": 222, "batch": "C", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "动物权利辩论", "title_en": "Animal Rights Debate",
+      "prompt": "Some people say that animals can be used in any way for the benefit of humans. Others say that exploiting animals for human purposes is not acceptable. Discuss both views and give your own opinion.",
+      "position_zh": "两种绝对立场都不可取：仅在重大人类利益、无可行替代且严格减少痛苦时才可使用动物。",
+      "intro": "Human interests sometimes justify limited use of animals, but the claim that they may be used in any way ignores their capacity to suffer and is ethically unacceptable.",
+      "conclusion": "Animal use should pass a strict test of necessity, proportional benefit and welfare, with alternatives replacing it whenever possible.",
+      "arguments": [
+        {"title_zh": "重大人类利益", "claim": "Some use of animals has supported food security and life-saving medical knowledge.", "why": "Where no reliable alternative exists, refusing every use may expose humans to serious harm.", "example": "A tightly controlled study for a critical treatment can be defensible after non-animal methods have failed.", "result": "This view gives priority to substantial human needs rather than convenience.", "nuance": "It cannot justify entertainment or cosmetic harm merely because people receive some benefit."},
+        {"title_zh": "感知痛苦带来道德约束", "claim": "Animals' ability to feel pain creates duties independent of their usefulness to humans.", "why": "Intensive farming, unnecessary experiments and cruel entertainment can impose severe suffering for minor gains.", "example": "A cheaper product is not enough reason to confine an animal in conditions that prevent natural movement.", "result": "Welfare law and investment in alternatives should continually narrow animal use.", "nuance": "An absolute ban may be impractical, but unrestricted exploitation is much harder to defend."}
+      ],
+      "expressions": [{"en": "capacity to suffer", "zh": "感受痛苦的能力"}, {"en": "pass a strict test of necessity", "zh": "通过严格的必要性检验"}, {"en": "substantial human needs", "zh": "重大的人类需求"}]
+    },
+    {
+      "id": "t2-237", "sequence": 237, "batch": "C", "task": "task2", "task_type": "discussion", "task_type_zh": "讨论双方", "topic_zh": "大学教育与成功", "title_en": "University Education Success",
+      "prompt": "Some people think that the best way to be successful in life is to get a university education. Others disagree and say this is no longer true. Discuss both views and give your own opinion.",
+      "position_zh": "大学仍是部分职业的最佳路径，但成功定义多元，职业教育、创业和持续学习同样有效。",
+      "intro": "A university degree remains the strongest route into some careers, but it is no longer the single best path to a successful life.",
+      "conclusion": "Success depends on matching education to a person's goals and abilities, then continuing to learn as work and life change.",
+      "arguments": [
+        {"title_zh": "大学的结构化优势", "claim": "Universities provide deep knowledge, credentials and networks required in many professions.", "why": "Medicine, engineering and research demand systematic training that informal experience cannot safely replace.", "example": "A future doctor needs supervised clinical education as well as theoretical study before treating patients.", "result": "Graduation can therefore unlock stable work and long-term intellectual development.", "nuance": "The benefit is weaker when students enter an expensive course without a clear purpose."},
+        {"title_zh": "替代路径日益成熟", "claim": "Many valuable careers reward practical skill, initiative and continuous learning more than a general degree.", "why": "Apprenticeships, technical colleges and digital training connect learning directly to changing labour demand.", "example": "An electrician or software specialist may build income and expertise without following a traditional campus route.", "result": "These options can avoid debt and allow earlier experience.", "nuance": "Personal wellbeing, relationships and contribution also make success broader than occupational status."}
+      ],
+      "expressions": [{"en": "unlock a professional pathway", "zh": "打开职业路径"}, {"en": "connect learning to labour demand", "zh": "把学习与劳动力需求连接"}, {"en": "a broader definition of success", "zh": "更广义的成功定义"}]
+    },
+    {
+      "id": "t2-248", "sequence": 248, "batch": "C", "task": "task2", "task_type": "opinion", "task_type_zh": "观点型", "topic_zh": "企业公民义务", "title_en": "Corporate Civic Duty",
+      "prompt": "As well as making money, businesses also have a responsibility towards society. To what extent do you agree or disagree?",
+      "position_zh": "强烈同意：企业依赖公共制度、劳动力与环境，因此至少应依法、公平并承担其外部成本。",
+      "intro": "I strongly agree that businesses have social responsibilities because profit is generated through employees, public infrastructure, natural resources and community trust.",
+      "conclusion": "A responsible company remains profitable by creating value without transferring hidden costs to workers, communities or future generations.",
+      "arguments": [
+        {"title_zh": "不转嫁外部成本", "claim": "Companies should bear the real social and environmental costs of their operations.", "why": "Low prices are misleading if they depend on unsafe work, pollution or unpaid use of public resources.", "example": "A factory that treats wastewater rather than contaminating a river protects residents who receive none of its profits.", "result": "Law sets a minimum, while transparent standards help consumers and investors reward better practice.", "nuance": "Responsibility begins with core operations, not a charitable campaign used to distract from harm."},
+        {"title_zh": "长期价值依赖社会信任", "claim": "Fair treatment of stakeholders can also support durable commercial success.", "why": "Well-trained employees, reliable suppliers and trusted communities reduce turnover, conflict and reputational risk.", "example": "A firm that pays fairly and invests in local skills builds a stable workforce and customer base.", "result": "Social responsibility is therefore compatible with profit over the long term.", "nuance": "Managers must still measure impact carefully rather than spend shareholder funds on unrelated personal causes."}
+      ],
+      "expressions": [{"en": "bear the full social cost", "zh": "承担完整的社会成本"}, {"en": "core business operations", "zh": "核心经营活动"}, {"en": "durable commercial success", "zh": "可持续的商业成功"}]
+    },
+    {
+      "id": "t1-001", "sequence": 1, "batch": "A", "task": "task1", "task_type": "diagram", "task_type_zh": "示意图", "topic_zh": "太阳能板", "title_en": "Solar Panel",
+      "prompt": "The diagrams below show the structure of a solar panel and its use. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-001-solar-panel.png",
+      "position_zh": "总览：盒体与透明顶盖构成基础装置；空气直接穿过加热，而水通过盘管吸热。",
+      "overview": "Overall, both systems use solar energy captured through a transparent top, but air passes directly through the box whereas water is heated inside a pipe.",
+      "details": [
+        {"title_zh": "基础结构与空气加热", "claim": "The basic panel is a shallow box covered by a transparent sheet.", "why": "For air heating, cool air enters through an inlet on one side and moves through the enclosed space.", "example": "Sunlight warms the air inside before it leaves from the outlet at the opposite end.", "result": "No additional internal component is required for this version.", "nuance": "The top both admits solar radiation and helps retain the resulting heat."},
+        {"title_zh": "水加热的差异", "claim": "The water-heating panel uses the same outer box and transparent cover.", "why": "Its key addition is a winding water pipe fitted inside the container.", "example": "Cool water enters the pipe, absorbs heat as it travels across the box and emerges as warm water.", "result": "The two applications therefore share one heat source but use different flow paths.", "nuance": "Air occupies the box itself, while water remains contained within the pipe."}
+      ],
+      "expressions": [{"en": "is fitted with a transparent cover", "zh": "装有透明顶盖"}, {"en": "passes through the enclosed space", "zh": "穿过封闭空间"}, {"en": "emerges as warm water", "zh": "以温水形式流出"}]
+    },
+    {
+      "id": "t1-003", "sequence": 3, "batch": "A", "task": "task1", "task_type": "data_chart", "task_type_zh": "折线图", "topic_zh": "婚姻趋势", "title_en": "Marriage Trends",
+      "prompt": "The graph below shows the number of marriages in the UK from 1951 to 2001. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-003-marriage-trends.png",
+      "position_zh": "总览：总婚姻数在1971年前上升后回落；初婚显著减少，而再婚在末期明显增加。",
+      "overview": "Overall, total marriages peaked around 1971 before declining, largely because first marriages fell, while remarriages rose markedly by the end of the period.",
+      "details": [
+        {"title_zh": "总量与初婚", "claim": "The total number was about 400,000 in both 1951 and 1961.", "why": "It then climbed to roughly 460,000 in 1971 before falling in each subsequent decade.", "example": "By 2001 the figure stood at approximately 385,000.", "result": "First marriages followed a stronger downward pattern after an early period of stability.", "nuance": "They declined from around 350,000 in 1961 to about 260,000 in 2001."},
+        {"title_zh": "再婚逆势上升", "claim": "Remarriages remained close to 150,000 for most of the first four decades.", "why": "The category increased only gradually to about 160,000 in 1991.", "example": "A much sharper rise then took the total to roughly 210,000 in 2001.", "result": "This narrowed the gap between first marriages and remarriages considerably.", "nuance": "The late increase partly offset, but did not reverse, the fall in all marriages."}
+      ],
+      "expressions": [{"en": "peaked at approximately", "zh": "在约……达到峰值"}, {"en": "followed a downward pattern", "zh": "呈下降趋势"}, {"en": "narrowed the gap between", "zh": "缩小……之间的差距"}]
+    },
+    {
+      "id": "t1-004", "sequence": 4, "batch": "A", "task": "task1", "task_type": "map", "task_type_zh": "地图", "topic_zh": "海岸区域变化", "title_en": "Beachfront Changes",
+      "prompt": "The maps below show a beachfront area in Australia in 1950 and the same area today. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-004-beachfront-changes.jpg",
+      "position_zh": "总览：该区域道路和停车能力增强，休闲设施更加商业化、运动化，部分原有设施被扩大或取代。",
+      "overview": "Overall, the beachfront has become more accessible and commercially developed, with expanded roads, parking and sports facilities replacing some of the simpler amenities shown in 1950.",
+      "details": [
+        {"title_zh": "交通与西侧设施", "claim": "In 1950, a road ended near a small car park in the centre of the site.", "why": "Today it extends around the beachfront and serves an additional car park on the western side.", "example": "A restaurant and surf clubs have also been built close to this new parking area.", "result": "The pavilion and dining tables in the central area remain in place.", "nuance": "These changes indicate greater capacity for visitors and organised activities."},
+        {"title_zh": "泳池与东侧变化", "claim": "The western 25-metre pool has been enlarged to 50 metres.", "why": "By contrast, the second 25-metre pool on the eastern side has been retained.", "example": "The playground that once occupied the north-east corner is no longer shown.", "result": "The current layout gives more space to swimming and beach-related clubs.", "nuance": "Not every original feature disappeared, but the recreational emphasis clearly shifted."}
+      ],
+      "expressions": [{"en": "has been extended around", "zh": "已围绕……延伸"}, {"en": "has been retained", "zh": "被保留"}, {"en": "occupy the north-east corner", "zh": "位于东北角"}]
+    },
+    {
+      "id": "t1-005", "sequence": 5, "batch": "A", "task": "task1", "task_type": "process", "task_type_zh": "流程图", "topic_zh": "铝制品回收", "title_en": "Aluminum Recycling",
+      "prompt": "The diagram below shows the recycling process of aluminum cans. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-005-aluminum-recycling.jpg",
+      "position_zh": "总览：这是从收集旧罐到制造新罐并再次使用的闭环流程，英国约74%的铝罐进入循环。",
+      "overview": "Overall, aluminium cans pass through a cyclical process from collection and preparation to melting, rolling and remanufacture, after which the new cans can be used and recycled again.",
+      "details": [
+        {"title_zh": "收集与预处理", "claim": "The cycle begins when used cans are placed in recycling bins and collected by a truck.", "why": "At the processing facility, they are cleaned and sorted before being shredded into small pieces.", "example": "The fragments are then compressed so that the material can be handled efficiently.", "result": "These preparatory stages remove waste and produce a compact aluminium feedstock.", "nuance": "The diagram states that 74% of cans in the UK follow this recycling route."},
+        {"title_zh": "熔炼、轧制与再制造", "claim": "The compressed aluminium is heated and melted.", "why": "It is subsequently rolled into sheets measuring between 2.5 and 6 millimetres in thickness.", "example": "These sheets are used to manufacture new cans, which return to shops and consumers.", "result": "Once emptied, the cans can re-enter the collection stage.", "nuance": "The final product is therefore also the input for another cycle."}
+      ],
+      "expressions": [{"en": "passes through a cyclical process", "zh": "经历循环过程"}, {"en": "is shredded and compressed", "zh": "被切碎并压缩"}, {"en": "re-enter the collection stage", "zh": "重新进入收集阶段"}]
+    },
+    {
+      "id": "t1-045", "sequence": 45, "batch": "C", "task": "task1", "task_type": "map", "task_type_zh": "地图", "topic_zh": "城镇发展", "title_en": "Town Development",
+      "prompt": "The maps below show the town of Brindell and local areas in 1800, 1900 and 2000. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "image": "writing_library/images/t1-045-town-development.png",
+      "position_zh": "总览：两百年间，Brindell显著扩张，新村庄和工业区出现；河流、农地和大部分林地保持稳定。",
+      "overview": "Overall, the area became substantially more urbanised between 1800 and 2000 as Brindell expanded and new settlement and industry appeared, while the river, farmland and much of the woodland remained.",
+      "details": [
+        {"title_zh": "1800至1900", "claim": "In 1800, Brindell was a small settlement south of the River Stour.", "why": "It was surrounded by farmland, with woodland occupying the south-western area.", "example": "By 1900 the town had grown and a village had appeared at Bun Hill to the south-east.", "result": "An industrial area was also established beside the new village.", "nuance": "The main natural land uses were still clearly visible at this stage."},
+        {"title_zh": "1900至2000", "claim": "Urban growth continued strongly during the twentieth century.", "why": "Brindell spread over a larger area, while both Bun Hill village and its industrial zone expanded.", "example": "A road was added through the woodland to reach Bun Hill Park.", "result": "Despite this development, the River Stour retained its course and large areas of farmland survived.", "nuance": "The maps therefore show concentration of growth rather than complete replacement of the rural landscape."}
+      ],
+      "expressions": [{"en": "became substantially more urbanised", "zh": "城市化程度显著提高"}, {"en": "retained its course", "zh": "保持原有河道"}, {"en": "concentration of development", "zh": "集中式开发"}]
+    },
+    {
+      "id": "t1-046", "sequence": 46, "batch": "B", "task": "task1", "task_type": "process", "task_type_zh": "流程图", "topic_zh": "饮料制造过程", "title_en": "Drink Manufacturing Process",
+      "prompt": "The diagram below shows how bottled and canned carbonated drinks are made. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-046-drink-manufacturing.png",
+      "position_zh": "总览：生产包含水处理、碳酸化、混合、灌装包装和配送五个阶段；瓶装与罐装仅在灌装处分流。",
+      "overview": "Overall, carbonated drinks are produced in five main stages, beginning with water cleaning and ending with delivery to supermarkets; bottles and cans follow the same process until the filling stage.",
+      "details": [
+        {"title_zh": "净化、加热与碳酸化", "claim": "Raw water first passes through a filter before chemicals and a water softener are added.", "why": "A pump then sends the cleaned water to electric heaters.", "example": "After heating, the water travels through a cooling pipe into a chamber where carbon dioxide is introduced.", "result": "This creates carbonated water ready for flavouring.", "nuance": "The early stages are concerned entirely with cleaning and changing the physical properties of the water."},
+        {"title_zh": "混合、灌装与配送", "claim": "The carbonated water enters a mixing tank where colouring, syrup and flavour are added.", "why": "The finished liquid is filtered again and divided between bottle- and can-filling lines.", "example": "Both types of container are packed into boxes and loaded onto delivery vehicles.", "result": "The final stage transports the products to supermarkets.", "nuance": "Packaging is the only point at which the two product formats differ."}
+      ],
+      "expressions": [{"en": "is introduced into a chamber", "zh": "被注入容器"}, {"en": "is divided between two filling lines", "zh": "被分配至两条灌装线"}, {"en": "the only point at which", "zh": "唯一发生……的环节"}]
+    },
+    {
+      "id": "t1-068", "sequence": 68, "batch": "A", "task": "task1", "task_type": "data_chart", "task_type_zh": "表格", "topic_zh": "水价比较", "title_en": "Water Cost Comparison",
+      "prompt": "The table below shows the cost of water in five cities in Australia. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-068-water-cost.png",
+      "position_zh": "总览：城市定价结构差异明显；Perth阶梯价最高且账单最高，Melbourne统一价最低且账单最低。",
+      "overview": "Overall, water-pricing structures varied considerably: Perth charged the highest rate above 125 kilolitres and had the largest average bill, whereas Melbourne recorded the lowest bill.",
+      "details": [
+        {"title_zh": "低用量与阶梯价格", "claim": "For consumption up to 125 kilolitres, Sydney had the highest unit price at $0.98.", "why": "Brisbane and Melbourne charged $0.81 and $0.78 respectively, while Adelaide and Perth were lowest at $0.42.", "example": "Above the threshold, Perth's price rose sharply to $1.50 and Adelaide's to $1.00.", "result": "Brisbane increased only slightly to $0.84.", "nuance": "Melbourne and Sydney kept flat rates of $0.78 and $0.98 at both levels."},
+        {"title_zh": "平均账单对比", "claim": "Average household bills did not simply follow the lower-tier unit price.", "why": "Perth recorded the highest bill at $332 despite sharing the cheapest initial rate.", "example": "Sydney followed at $319, ahead of Adelaide at $312 and Brisbane at $310.", "result": "Melbourne was clearly the least expensive city, with an average bill of $253.", "nuance": "The figures suggest that both consumption and tier design affected total cost."}
+      ],
+      "expressions": [{"en": "above the consumption threshold", "zh": "超过用量门槛"}, {"en": "kept a flat rate", "zh": "维持统一费率"}, {"en": "did not simply follow", "zh": "并非简单地与……一致"}]
+    },
+    {
+      "id": "t1-071", "sequence": 71, "batch": "B", "task": "task1", "task_type": "data_chart", "task_type_zh": "饼图", "topic_zh": "能源生产比较", "title_en": "Energy Production Comparison",
+      "prompt": "The chart below shows a comparison of different kinds of energy production in France in 1995 and 2005. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-071-energy-production.png",
+      "position_zh": "总览：煤炭和天然气两年均占最大且略升；石油明显下降，核能与其他能源几乎翻倍。",
+      "overview": "Overall, coal and gas remained the two largest and almost equal sources in France, while petroleum lost substantial share and both nuclear and other energy increased markedly.",
+      "details": [
+        {"title_zh": "三类化石能源", "claim": "In 1995, coal, gas and petroleum each supplied just under 30% of energy.", "why": "Coal accounted for 29.8% and gas for 29.63%, with petroleum close behind at 29.27%.", "example": "By 2005, coal and gas had edged up to 30.93% and 30.31% respectively.", "result": "Petroleum moved in the opposite direction, falling to 19.55%.", "nuance": "The decline left it more than ten percentage points below either leading source."},
+        {"title_zh": "核能与其他能源", "claim": "The two smaller categories both expanded during the decade.", "why": "Nuclear energy rose from 6.4% to 10.1%.", "example": "Other sources increased even more proportionally, from 4.9% to 9.1%.", "result": "Together they represented almost one fifth of production in 2005.", "nuance": "Their combined gain broadly matched the reduction in petroleum."}
+      ],
+      "expressions": [{"en": "accounted for just under", "zh": "占比略低于"}, {"en": "edged up to", "zh": "小幅上升至"}, {"en": "moved in the opposite direction", "zh": "走势相反"}]
+    },
+    {
+      "id": "t1-080", "sequence": 80, "batch": "C", "task": "task1", "task_type": "data_chart", "task_type_zh": "组合图", "topic_zh": "水资源消费模式", "title_en": "Water Consumption Patterns",
+      "prompt": "The pie and bar charts below show the percentage of water consumption and use in Australia in 2004. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-080-water-consumption.jpeg",
+      "position_zh": "总览：住宅用水占全国七成，远超其他类别；住宅内部花园和浴室用水最大，厨房最少。",
+      "overview": "Overall, residential users consumed by far the largest share of Australian water in 2004, and within homes the garden and bathroom were the two biggest uses while the kitchen used the least.",
+      "details": [
+        {"title_zh": "全国用水构成", "claim": "Residential consumption represented 70% of the national total.", "why": "Houses alone accounted for 50%, with apartments adding a further 20%.", "example": "Industrial and business use were much smaller at 11% and 10% respectively.", "result": "Government consumed 6%, and the remaining 3% was classified as other use.", "nuance": "Combined non-residential demand was therefore less than half the household figure."},
+        {"title_zh": "住宅内部用途", "claim": "Gardens were the largest household use at 28%, narrowly ahead of bathrooms at 27%.", "why": "Washing clothes made up one fifth of residential consumption.", "example": "Toilets used 15%, while kitchens accounted for the smallest proportion, at 10%.", "result": "Outdoor watering and personal washing together consumed a majority of household water.", "nuance": "The distribution suggests that conservation efforts could focus on these two leading uses."}
+      ],
+      "expressions": [{"en": "by far the largest share", "zh": "远为最大份额"}, {"en": "added a further", "zh": "另占"}, {"en": "narrowly ahead of", "zh": "略高于"}]
+    },
+    {
+      "id": "t1-088", "sequence": 88, "batch": "B", "task": "task1", "task_type": "data_chart", "task_type_zh": "柱状图", "topic_zh": "网站访问比较", "title_en": "Website Visits Comparison",
+      "prompt": "The bar chart shows the number of visits to a community website in the first and second years of use. Summarise the information by selecting and reporting the main features and make comparisons where relevant.",
+      "image": "writing_library/images/t1-088-website-visits.jpeg",
+      "position_zh": "总览：第二年除最后一个月外访问量均更高且峰值更大；两年都在冬季较高、春季回落。",
+      "overview": "Overall, the website attracted more visits in its second year in every month except August, and both years showed a winter rise followed by a marked spring decline.",
+      "details": [
+        {"title_zh": "第一年走势", "claim": "First-year traffic rose from about 2,000 visits in September to roughly 10,000 in November and December.", "why": "It then fell sharply, reaching only around 1,000 in February and March.", "example": "Visits recovered from April and climbed steadily through the summer.", "result": "The first year ended at its peak of approximately 15,000 in August.", "nuance": "This created a clear low middle period between two phases of growth."},
+        {"title_zh": "第二年及对比", "claim": "The second year began slightly higher and reached about 17,000 in both November and December.", "why": "Although traffic declined to around 10,000 in February and March, this was still far above the first-year level.", "example": "It then surged to approximately 22,000 in June and July.", "result": "August was the exception, falling to about 12,500 while the first year peaked.", "nuance": "The largest year-on-year gaps occurred from late spring to midsummer."}
+      ],
+      "expressions": [{"en": "attracted more visits", "zh": "吸引了更多访问"}, {"en": "reached a seasonal low", "zh": "降至季节性低点"}, {"en": "the only exception was", "zh": "唯一的例外是"}]
+    }
+  ]
+}

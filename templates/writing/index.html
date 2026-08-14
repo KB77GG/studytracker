@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS 写作范文库 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "practice/_workspace_styles.html" %}
+<link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
+</head>
+<body class="practice-workspace-page writing-library-page">
+<div class="practice-workspace" data-practice-workspace data-writing-index>
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">剑雅真题</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        <a href="{{ url_for('listening_test_index') }}">听力</a>
+        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+      </nav>
+    </div>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('practice_library') }}">返回题库</a>
+      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+    </div>
+  </header>
+
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="写作题库筛选">
+      <div class="practice-workspace__sidebar-head">
+        <strong>筛选题库</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
+      <nav class="practice-workspace__source-nav" aria-label="题型筛选">
+        <section class="practice-workspace__source-group">
+          <button class="practice-workspace__source-toggle is-active" type="button" data-writing-filter="all" aria-pressed="true">
+            <span><strong>全部试点题</strong><em>高频写作范文库</em></span><small>{{ summary.total }} 题</small>
+          </button>
+        </section>
+        <section class="practice-workspace__source-group">
+          <button class="practice-workspace__source-toggle" type="button" data-writing-filter="task2" aria-pressed="false">
+            <span><strong>Task 2 大作文</strong><em>观点与论证训练</em></span><small>{{ summary.task2 }} 题</small>
+          </button>
+          <div class="practice-workspace__source-items">
+            {% for code, label in [('opinion', '观点型'), ('positive_negative', '利弊判断'), ('advantages', '利弊比较'), ('discussion', '讨论双方'), ('mixed', '混合提问'), ('report', '原因与对策')] %}
+            <button class="practice-workspace__source-item" type="button" data-writing-filter="{{ code }}" aria-pressed="false"><span>{{ label }}</span></button>
+            {% endfor %}
+          </div>
+        </section>
+        <section class="practice-workspace__source-group">
+          <button class="practice-workspace__source-toggle" type="button" data-writing-filter="task1" aria-pressed="false">
+            <span><strong>Task 1 小作文</strong><em>图表与流程概括</em></span><small>{{ summary.task1 }} 题</small>
+          </button>
+          <div class="practice-workspace__source-items">
+            {% for code, label in [('data_chart', '数据图表'), ('map', '地图'), ('process', '流程图'), ('diagram', '示意图')] %}
+            <button class="practice-workspace__source-item" type="button" data-writing-filter="{{ code }}" aria-pressed="false"><span>{{ label }}</span></button>
+            {% endfor %}
+          </div>
+        </section>
+      </nav>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">WRITING</span>
+    </aside>
+
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭题库筛选" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main writing-catalog">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button" type="button" aria-controls="practice-catalog" aria-expanded="false" data-open-catalog>筛选题库</button>
+
+      <header class="writing-catalog__hero">
+        <div>
+          <p class="writing-eyebrow">IELTS Writing · Pilot Library</p>
+          <h1>写作范文与打字训练</h1>
+          <p>从原题到立场、论点、结构和表达，最后用逐字输入把范文真正练熟。</p>
+        </div>
+        <div class="writing-catalog__stats" aria-label="题库概览">
+          <div><strong>{{ summary.task2 }}</strong><span>大作文</span></div>
+          <div><strong>{{ summary.task1 }}</strong><span>小作文</span></div>
+          <div><strong>3</strong><span>分数层级</span></div>
+        </div>
+      </header>
+
+      <section class="writing-catalog__toolbar" aria-label="搜索题库">
+        <label for="writingSearch">搜索题目</label>
+        <div class="writing-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="writingSearch" type="search" placeholder="输入主题、英文标题或题干关键词" autocomplete="off">
+        </div>
+        <p id="writingResultCount" aria-live="polite">显示 {{ summary.total }} 道题</p>
+      </section>
+
+      <section class="writing-card-grid" id="writingCardGrid" aria-label="写作题目列表">
+        {% for item in exercises %}
+        <article class="writing-card" data-writing-card data-task="{{ item.task }}" data-type="{{ item.task_type }}" data-search="{{ (item.topic_zh ~ ' ' ~ item.title_en ~ ' ' ~ item.prompt)|lower }}">
+          <a class="writing-card__link" href="{{ url_for('writing_library.detail', exercise_id=item.id) }}" aria-label="学习 {{ item.topic_zh }}">
+            <div class="writing-card__meta">
+              <span class="writing-pill writing-pill--primary">{{ item.task_label }}</span>
+              <span class="writing-pill">{{ item.task_type_zh }}</span>
+              <span class="writing-card__number">NO. {{ '%03d'|format(item.sequence) }}</span>
+            </div>
+            <h2>{{ item.topic_zh }}</h2>
+            <p class="writing-card__english">{{ item.title_en }}</p>
+            <p class="writing-card__prompt">{{ item.prompt }}</p>
+            <div class="writing-card__footer">
+              <span>6.0 · 6.5 · 7.0+</span>
+              <strong>进入学习 <span aria-hidden="true">→</span></strong>
+            </div>
+          </a>
+        </article>
+        {% endfor %}
+      </section>
+      <div class="writing-empty" id="writingEmpty" hidden>没有匹配的题目，换个关键词或题型试试。</div>
+      <p class="writing-source-note">{{ source_note }}</p>
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/writing-library-index.js') }}" defer></script>
+</body>
+</html>

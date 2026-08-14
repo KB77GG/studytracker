@@ -10,7 +10,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    def test_ielts_catalogs_keep_all_five_direct_entries(self):
+    def test_ielts_catalogs_keep_all_six_direct_entries(self):
         response = self.client.get("/practice")
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
@@ -24,6 +24,7 @@ class PracticePortalCatalogGroupingTest(unittest.TestCase):
         for path in (
             "/listening/tests",
             "/reading/tests",
+            "/writing/",
             "/listening/jijing",
             "/reading/jijing",
             "/listening",

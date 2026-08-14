@@ -24,6 +24,8 @@ def init_app(app):
     from api.tts import tts_bp  # TTS API
     from api.vocab_review import vocab_review_bp
     from api.wechat import wechat_bp
+    from api.writing_library import writing_library_bp
+    from models import WritingTypingAttempt, db
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
@@ -44,3 +46,10 @@ def init_app(app):
     app.register_blueprint(mock_exam_admin_bp)  # Register mock exam review console
     app.register_blueprint(mock_exam_student_bp)  # Register student mock exam review
     app.register_blueprint(mock_exam_review_bp)
+    app.register_blueprint(writing_library_bp)
+
+    # The project still uses check-first schema creation for additive SQLite
+    # tables in production. Keep this local to the feature instead of adding
+    # more migration logic to the legacy app.py monolith.
+    with app.app_context():
+        WritingTypingAttempt.__table__.create(bind=db.engine, checkfirst=True)

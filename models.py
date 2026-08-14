@@ -2572,3 +2572,53 @@ class StudentSavedExpression(db.Model, TimestampMixin):
 
     def __repr__(self) -> str:
         return f"<StudentSavedExpression student={self.student_id} text={self.normalized_text!r}>"
+
+
+class WritingTypingAttempt(db.Model, TimestampMixin):
+    """Server-owned result for one model-essay typing attempt."""
+
+    __tablename__ = "writing_typing_attempt"
+
+    STATUS_IN_PROGRESS = "in_progress"
+    STATUS_COMPLETED = "completed"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_profile_id = db.Column(
+        db.Integer,
+        db.ForeignKey("student_profile.id"),
+        nullable=False,
+        index=True,
+    )
+    exercise_id = db.Column(db.String(32), nullable=False, index=True)
+    band = db.Column(db.String(8), nullable=False)
+    status = db.Column(
+        db.String(16), default=STATUS_IN_PROGRESS, nullable=False, index=True
+    )
+    started_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
+    completed_at = db.Column(db.DateTime)
+    duration_seconds = db.Column(db.Integer)
+    typed_text = db.Column(db.Text)
+    typed_word_count = db.Column(db.Integer)
+    target_word_count = db.Column(db.Integer)
+    speed_wpm = db.Column(db.Float)
+    accuracy = db.Column(db.Float)
+
+    student_profile = db.relationship(
+        "StudentProfile",
+        backref=db.backref("writing_typing_attempts", lazy="dynamic"),
+    )
+
+    __table_args__ = (
+        db.Index(
+            "ix_writing_attempt_student_exercise_created",
+            "student_profile_id",
+            "exercise_id",
+            "created_at",
+        ),
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<WritingTypingAttempt student={self.student_profile_id} "
+            f"exercise={self.exercise_id} band={self.band}>"
+        )
