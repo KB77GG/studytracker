@@ -27,19 +27,19 @@
   公网写作目录 200 且 40 张题卡，`/practice` 入口和 Task 1 原图正常。
 - 专项 `12 passed`；全仓 `520 passed, 44 subtests passed, 2 failed`，仅存量缺失 MP3 fixture 的两个 404；
   目标 lint/compile/JS syntax/JSON/diff check 全通过。桌面主工作树的既有脏改动未覆盖，仍落后远端 9 个提交。
-## 2026-08-14 精听正式训练方式（本机完成，待发布）
+## 2026-08-14 精听正式训练方式（后端/网页已上线，小程序待上传）
 
-- 在 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`、`codex/listening-dictation-release@d500b396`
+- 在 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`、`codex/listening-dictation-release`
   完成助教布置五种训练方式、服务端正式首答锁定、长句自动降档、首答后复盘/升档，以及网页/小程序学生端一致体验。
   历史 NULL 任务保持学生自选；旧小程序缺少新字段时走合法三档兼容，新小程序助教选择器由后端 capability 控制。
 - 听辨核对改为完整播放并揭示原文后的幂等完成制，不计 0% 正确率；已开始任务不能改正式方式，教师明细显示实际档位或
-  “已核对”。数据库仅新增两个 nullable 兼容列，由启动 safeguard 补齐，未触碰生产库。
-- 专项 Python `19 passed, 3 subtests passed`，小程序策略 Node `15 passed`，全部 `tests/*.js`、模板/JS/Python语法、
-  目标 WXML/WXSS 官方编译、新增文件 Ruff/Black 和 diff check 通过。全仓为
-  `523 passed, 44 subtests passed, 2 failed`，仅因本 worktree 缺长期
-  gitignore 的 `ielts10_test1_s1.mp3` 静态 Range fixture。
-- 当前全部代码和本条交接仅本机可见，未 commit/push/deploy，也未做微信开发者工具/真机验收。现有已上传待审核包不含
-  本轮功能，之后需在明确授权下提交、推送和部署，再由用户从本 worktree 重新上传包含本功能的小程序包。
+  “已核对”。生产已补两个 nullable 兼容列，未改已有任务、答案或进度。
+- 业务提交 `88480851` 已推送发布分支与 main；CI `31814253746`、部署 `31814253358` success。生产为该提交、
+  service active、5002、1 worker、gthread、6 threads，部署后错误 0；SQLite quick-check/外键正常，公网精听页 200。
+- 整合后全仓排除长期缺失静态 fixture 为 `531 passed, 48 subtests passed`，全部 Node `42 pass`，目标编译/静态检查通过。
+  微信开发者工具已打开正确 worktree 的 `miniprogram` 并重新编译为 `Errors: 0 / Problems: 0`；本轮未点击上传、提审或
+  发布，现有审核中旧包不含本功能，下一步由用户从当前工具窗口上传新包并做五档与兼容真机回归。
+
 ## 2026-08-14 完整功能小程序已上传（审核中，尚未发布）
 
 - 用户于 22:20 CST 更正：完整包只是从正确目录上传并等待审核，尚未发布；此前“已发布”的说法无效。上传包包含精听升级

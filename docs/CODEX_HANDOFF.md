@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14 23:25（Asia/Shanghai）。
+> 最近更新：2026-08-14 23:27（Asia/Shanghai）。
 
 ## 2026-08-14 IELTS 写作范文与打字训练网页模块（后端/网页已上线）
 
@@ -55,12 +55,13 @@
   增加教师布置、批改或小程序入口，应作为独立需求设计，不要把逻辑继续堆入 `app.py`，也不要把当前教学档位误称为
   IELTS 官方评分。上线后的首个真实学生完成记录应只读抽查题号、档位、server duration、WPM 与 accuracy 是否合理，
   不要修改学生原文。
-## 2026-08-14 精听正式训练方式（本机完成，未提交/推送/部署/上传）
+## 2026-08-14 精听正式训练方式（后端/网页已上线，小程序待用户上传）
 
-- 当前正式工作树是 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
-  `codex/listening-dictation-release`，HEAD、跟踪分支和 `origin/main` 均为
-  `d500b396e903f2d4bf1b88f9998ae9c1fc5b9f1f`。本节全部改动仍是本机未提交内容；既有未跟踪
-  `.tmp/product-audit-listening-modes-20260814/` 审计截图原样保留，未纳入本轮业务文件。
+- 正式工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
+  `codex/listening-dictation-release`。业务提交
+  `8848085145ffe256ad0533c558721127174a5843` 已线性整合写作模块和写作导航修复，并原子推送同名发布分支与
+  `origin/main`。既有未跟踪 `.tmp/product-audit-listening-modes-20260814/` 审计截图原样保留，未纳入提交；
+  桌面主工作树的既有脏改动与未跟踪资料均未覆盖。
 - 助教网页与小程序布置端现可为精听任务选择并保存
   `system / review / basic / standard / challenge`（系统推荐 / 听辨核对 / 关键词 / 标准 / 整句）。
   新任务正式首答由任务字段 `Task.listening_training_mode` 锁定；首答保存后开放句子复盘、跟读和不低于原档位的
@@ -73,23 +74,28 @@
 - “听辨核对”是完成制：学生必须完整播放本句、再揭示原文，才可调用幂等 completion API；网页在未完成前禁用向前
   跳播，小程序没有句内跳播入口。该模式不写 0% 到任务汇总，教师明细显示“已核对/完成制”，不把它混入词级正确率。
   新 review API 对双设备并发重复提交使用唯一键和冲突回读，避免返回 500。
-- 两端兼容门禁：小程序助教选择器只有在目录 API 返回 `capabilities.listening_training_modes=true` 时出现，因此新版小程序
-  先于后端发布时会自动隐藏；旧任务/旧后端仍按原逻辑。网页由同一后端模板与契约一起上线。现有“已上传待审核”的
-  小程序包来自本轮之前，**不包含本节训练方式改造**；本功能最终需要另一次小程序上传、审核和发布。
+- 两端兼容门禁：小程序助教选择器只有在目录 API 返回 `capabilities.listening_training_modes=true` 时出现；旧任务和
+  旧已安装小程序继续按原逻辑工作。网页由同一后端模板与契约一起上线。现有“已上传待审核”的小程序包来自本轮之前，
+  **不包含本节训练方式改造**；本功能仍需要本次的新包另行上传、审核和发布。
 - 本轮业务/测试改动包括：`models.py`、`app.py`、`api/{__init__,miniprogram,listening_training}.py`、
   `services/{listening_training,task_assignment_history}.py`、网页布置/播放器/教师明细模板、小程序助教和学生精听页三件套，
-  以及 4 个精听/助教测试文件。启动时的 legacy schema safeguard 会为既有库补两列；尚未在生产执行，也没有生产数据写入。
-- 验证均在本 worktree，Python 使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`：专项
-  `19 passed, 3 subtests passed`；小程序策略交互 Node `15 passed`；`tests/*.js` 全部通过；Jinja 三模板可编译，
-  网页内联 JS、两个小程序 JS `node --check`、Python `py_compile`、新增 Python 文件 Ruff/Black、
-  微信官方编译器目标页 WXML/WXSS、`git diff --check` 均通过。全仓 `pytest -q` 为
-  `523 passed, 44 subtests passed, 2 failed`；两个失败仍仅因本 worktree
-  缺少被 gitignore 的既有 `static/listening/ielts10_test1_s1.mp3`，对应普通/Range 请求 404，桌面主工作树有该资产，
-  与本轮代码无关。
-- 尚未验证/发布边界：未做微信开发者工具 GUI 编译、模拟器或真机联合验收；未 commit、未 push、未部署后端/网页，
-  未上传/提审/发布包含本节的新小程序包。下一位 agent 应先复核当前 dirty diff；得到用户明确授权后再提交并推送，
-  按后端 5002 单 worker/gthread/6 threads 门禁部署，再由用户从本 worktree 上传新小程序包，最后覆盖五种布置方式、
-  首答锁定、首答后复盘升档、听辨完成制及旧任务兼容的真机回归。
+  以及 4 个精听/助教测试文件。启动时的 legacy schema safeguard 已在生产安全补齐两个 nullable 列
+  `task.listening_training_mode` 与 `listening_segment_result.training_level`；未改已有任务、答案或进度数据。
+- 整合最新 `origin/main` 后验证（Python 使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`）：精听专项
+  `19 passed, 3 subtests passed`；全仓排除长期缺失且被 gitignore 的
+  `tests/test_static_audio_headers.py` 静态 MP3 fixture 后为 `531 passed, 48 subtests passed`；全部
+  `tests/*.js` 为 `42 pass`。Jinja、网页内联 JS、两个小程序 JS、Python compile、新增文件 Ruff/Black、微信官方编译器
+  目标 WXML/WXSS 与 `git diff --check` 均通过。
+- CI `31814253746` 与部署 `31814253358` 均 success。生产 `/root/apps/studytracker` 业务 HEAD 为 `88480851`，
+  tracked 工作区干净；`studytracker.service` 于 23:24:15 CST 重启后 active，监听 `127.0.0.1:5002`，配置为
+  `workers=1 / worker_class=gthread / threads=6`，主进程只有一个 worker 子进程，部署后 journal 的
+  traceback/exception/error/failed 计数为 0。数据库 `quick_check=ok`、外键检查无输出；公网精听页为 200，
+  受保护的小程序目录 API 返回预期未登录 401。
+- 微信开发者工具 Stable 2.01.2510290 已打开正确目录
+  `/Users/zhouxin/.codex/worktrees/2b72/studytracker/miniprogram` 并重新普通编译；界面显示 `Errors: 0`、
+  `Problems: 0`（调试器仍列 3 条既有 warning）。本轮没有代替用户点击上传，也未提审或发布；下一步由用户直接在当前
+  工具窗口上传新包，之后真机覆盖五种布置方式、首答锁定、首答后复盘升档、听辨完成制与历史任务兼容。
+
 ## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端已上线，小程序已上传待审核）
 
 - 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
