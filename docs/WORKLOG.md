@@ -4,6 +4,20 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-14 数字听写发音恢复（生产已恢复）
+
+- 确认不是小程序未重进：数字表达缺音频，word-id 路由会返回 400/502，Android 又把明确 HTTP 失败放大为
+  重复播放请求。来源站没有可直接导出的逐题原录音，因此按用户授权使用项目现有阿里云 DashScope TTS。
+- 生产写库前保留 `/root/apps/studytracker/app.db.bak-20260814-book196-dashscope-before`；数字书 151 条已
+  150 条新生成、1 条复用并全部绑定 `audio_us`。部署前后两次全量验证均为 151/151 个接口 200，当前 Range
+  为 206；无缺文件，SQLite quick_check 正常、外键错误 0，学生答案/进度未改。临时远端脚本已删除，备份保留。
+- 提交 `1222b2f0` 已推送发布分支和 main；CI `31797920336`、部署 `31797920393` 均 success。生产为
+  `1222b2f0`、service active、5002、1 worker、gthread、6 threads，部署后应用错误计数 0。后端新增数字原文
+  DashScope 优先和可复用回填脚本；小程序明确 4xx/5xx 后不再交给播放器重试。
+- 专项 `18 passed`，全仓排除长期缺失的静态 MP3 fixture 后 `508 passed, 44 subtests passed`，CI 门禁
+  68 tests OK，16 个 Node 测试文件、目标静态/语法/compile/diff check 通过。后端与生产数据已上线；
+  小程序保护代码已 commit/push，但尚未上传/提审/发布。若个别号码需特定逐位读法，按词书序号定点重生。
+
 ## 2026-08-14 精听智能听写稳定升级（后端/网页已上线，小程序待发布）
 
 - 独立 worktree `/Users/zhouxin/.codex/worktrees/2b72/studytracker`、detached `HEAD@6ded77d2`

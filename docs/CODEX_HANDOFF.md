@@ -3,6 +3,43 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-08-14（Asia/Shanghai）。
 
+## 2026-08-14 数字听写发音恢复（生产已恢复，后台已上线，小程序保护待发布）
+
+- 发布工作树为 `/private/tmp/studytracker-number-audio-hotfix`，分支
+  `codex/dictation-number-audio-hotfix`，基线 `d5d2e70f5722446538a004d33d172768050c02ab`；业务提交
+  `1222b2f0c3ed0eb5e8453aeaba35453d35e733bf` 已 commit，已推送同名分支并快进到 `origin/main`。
+  主工作区 `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`，其既有两份交接文档改动及
+  `.tmp/`、`artifacts/`、词书导入数据/脚本/测试、阅读/TOEFL 临时数据、设计/提案/原型等未跟踪内容
+  均未覆盖或纳入业务提交；同一 macOS 用户仍可见，另一台电脑只能取得已推送的 `1222b2f0`。
+- 故障确认为真实服务端音频故障而非小程序未重新进入：数字练习没有随导入绑定音频，部分合法数字表达被
+  纯词形校验拒绝为 400，另一些表达在 Youdao 失败后为 502；小程序再把明确 HTTP 失败交给
+  `InnerAudioContext`，Android 媒体栈会放大为重复请求并停在「正在加载」。来源站导出不含逐题源录音，
+  当前站点实现本身也是有道发音 URL 与签名重试，故未搬运或热链第三方音频。
+- 按用户授权改用项目已配置的阿里云 DashScope TTS。写生产库前创建 SQLite 在线备份
+  `/root/apps/studytracker/app.db.bak-20260814-book196-dashscope-before`，大小 `84,992,000` bytes，
+  SHA-256 `d83a7eddf9dc3dfb0bed61b35015292b5733ddd338b3dcd0b2384e212e62a98c`。数字练习词书 151 条均已
+  生成/复用本地 MP3 缓存并绑定 `audio_us`：150 条新生成，大小写重复的同文本 1 条复用；先生成并验证
+  全部目标文件，再以单事务绑定数据库。未修改学生答案、学习进度或任务状态。
+- 新增 `scripts/backfill_dictation_book_tts.py`：默认 dry-run，支持限定书本/序号/提供商/音频字段，MP3
+  校验、原子文件写入、有限重试和全量成功后单事务绑定；失败时不提交数据库。后端 word-id TTS 对含数字的
+  数据库合法表达保留原文并优先使用 DashScope，默认生成链改为 `youdao,dashscope`，缓存读取链包含
+  DashScope 且会复用已生成缓存。小程序 `dictation-audio.js` 对明确 4xx/5xx 立即退出 loading、只报告一次，
+  不再把同一错误 URL 交给播放器内部重试。
+- 精确验证：专项 Python `18 passed`；全仓首次为 `509 passed, 44 subtests passed, 2 failed`，两个失败仅是
+  长期缺失且被忽略的 `/static/listening/ielts10_test1_s1.mp3` fixture；明确忽略该文件后为
+  `508 passed, 44 subtests passed`。CI 同款依赖轻量门禁 `68 tests OK`；16 个 `tests/test_*.js` 文件全部
+  通过，目标高信号 Ruff、JS `node --check`、Python `py_compile` 与 `git diff --check` 通过。
+- 生产数据写入后及代码部署后均逐条请求 151 个 word-id 音频接口：全部为 `200 audio/mpeg`、长度大于
+  1 KiB，无缺绑定、缺文件或失败接口；当前练习的 Range 请求为 `206`。SQLite `quick_check=ok`、外键错误 0。
+  GitHub CI `31797920336` 与部署 `31797920393` 均 success；生产 HEAD 为 `1222b2f0`，服务于
+  2026-08-14 19:52:24 CST 重启后 active，`127.0.0.1:5002`、`workers=1`、gthread、`threads=6`、
+  单 worker 子进程。部署后 journal 的 traceback/exception/error/failed 均为 0；公网当前音频 Range
+  返回 `206 audio/mpeg`。远端 `/tmp/backfill_dictation_book_tts.py` 已删除，正式缓存和上述可恢复备份保留。
+- 后端代码与生产数据已经上线，学生可立即重新进入练习；小程序的“HTTP 失败不重复请求”保护代码已 commit/push，
+  但尚未上传、提审或发布，需下一次小程序人工发版才生效。现有线上小程序因服务器已稳定返回音频，不依赖该发版
+  才能继续当前练习。若后续发现某个邮编/号码需要特定的逐位读法，应记录词书序号后按指定 spoken text 定点重生，
+  不要重新依赖来源站内部签名。
+
 ## 2026-08-14 精听智能听写稳定升级（后端/网页已上线，小程序待用户发布）
 
 - 本轮工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，发布分支为
