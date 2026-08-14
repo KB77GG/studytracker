@@ -1,6 +1,7 @@
 """统一工作台的访客空状态、公开路由与目录能力回归。"""
 
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from app import app
@@ -50,19 +51,25 @@ class PracticeWorkspaceRegressionTest(unittest.TestCase):
         self.assertIn('src="/static/js/practice_workspace.js"', listening)
         self.assertIn('src="/static/js/practice_workspace.js"', reading)
 
-    def test_every_workspace_catalog_has_writing_subject_navigation(self):
-        for path in (
-            "/listening/tests",
-            "/reading/tests",
-            "/listening/jijing",
-            "/reading/jijing",
-        ):
+    def test_every_workspace_catalog_has_only_subject_navigation(self):
+        paths_and_templates = {
+            "/listening/tests": "templates/listening/test_index.html",
+            "/reading/tests": "templates/reading/test_index.html",
+            "/listening/jijing": "templates/listening/jijing_index.html",
+            "/reading/jijing": "templates/reading/jijing_index.html",
+        }
+        project_root = Path(app.root_path)
+
+        for path, template_path in paths_and_templates.items():
             with self.subTest(path=path):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 200)
                 html = response.get_data(as_text=True)
                 self.assertIn('href="/writing/">写作</a>', html)
                 self.assertEqual(html.count('href="/writing/">写作</a>'), 1)
+                template = (project_root / template_path).read_text(encoding="utf-8")
+                self.assertNotIn("report_page", template)
+                self.assertNotIn("学习报告", template)
 
 
 if __name__ == "__main__":

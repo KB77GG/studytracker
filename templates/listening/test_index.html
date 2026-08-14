@@ -21,9 +21,6 @@
         <a class="is-active" href="{{ url_for('listening_test_index') }}" aria-current="page">听力</a>
         <a href="{{ url_for('reading_test_index') }}">阅读</a>
         <a href="{{ url_for('writing_library.index') }}">写作</a>
-        {% if current_user.is_authenticated %}
-        <a class="practice-workspace__report-link" href="{{ url_for('report_page') }}">学习报告</a>
-        {% endif %}
       </nav>
     </div>
     <div class="practice-workspace__account">
