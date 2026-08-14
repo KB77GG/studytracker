@@ -1,9 +1,9 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14 21:57（Asia/Shanghai）。
+> 最近更新：2026-08-14 22:08（Asia/Shanghai）。
 
-## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端已上线，小程序待用户发布）
+## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端与小程序均已上线，待真机联合回归）
 
 - 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
   `codex/listening-dictation-release`。先从干净的精听发布 HEAD `d5d2e70f` 线性快进合入数字发音
@@ -49,10 +49,10 @@
   tracked 工作区干净；`studytracker.service` 于 21:53:42 CST 重启后 active，监听 `127.0.0.1:5002`，
   `workers=1 / worker_class=gthread / threads=6`，主进程只有 1 个 worker 子进程，重启后应用错误计数 0。
   远端三个 `/tmp` 验证脚本/映射副本已删除，正式音频和两份可恢复数据库备份保留。
-- 小程序仍未上传、提审或发布。微信开发者工具保留在正确目录
-  `/Users/zhouxin/.codex/worktrees/2b72/studytracker/miniprogram` 的 `pages/index/index`，供用户手动上传完整功能包；
-  不要从桌面旧主工作树或 `/private/tmp/studytracker-number-audio-hotfix` 上传。手机真机对新版包的精听与数字音频
-  联合回归仍待用户发布后执行。
+- 用户于 2026-08-14 22:08 CST 明确确认完整功能小程序“发布了”；发布内容来自正确目录
+  `/Users/zhouxin/.codex/worktrees/2b72/studytracker/miniprogram`，包含精听升级及电话/邮编逐字符发音相关客户端修复。
+  该发布状态来自用户确认，平台版本号、上传/审核/发布时间与客户端实际拉取版本尚未独立读取。请让学生完全退出练习和
+  小程序后重新进入，联合回归精听、电话号码及邮编发音；若仍卡在“正在加载”，记录具体词书序号/原词、时间和截图。
 
 ## 2026-08-14 数字听写发音恢复（第一阶段；已由上节逐字符修正接续）
 
