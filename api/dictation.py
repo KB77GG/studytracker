@@ -41,6 +41,7 @@ from dictation_answers import (
     serialize_answer_variants,
     strip_part_of_speech_prefix,
 )
+from services.dictation_audio import word_tts_playback_url
 from services.dictation_review import DictationReviewError, submit_dictation_answer
 from services.vocabulary_mastery import (
     VocabularyMasteryError,
@@ -182,6 +183,7 @@ def _syllabify(word):
 
 
 def _word_student_payload(word):
+    playback_url = word_tts_playback_url(word)
     payload = {
         "id": word.id,
         "sequence": word.sequence,
@@ -190,8 +192,12 @@ def _word_student_payload(word):
         "syllables": _syllabify(word.word),
         "phonetic": word.phonetic,
         "translation": word.translation,
-        "audio_us": word.audio_us,
-        "audio_uk": word.audio_uk,
+        # Database values are server-relative file paths.  Returning them
+        # directly makes clients with an /api base request /api/uploads/... .
+        # Keep file paths private and expose the public word-id endpoint.
+        "audio_us": playback_url if word.audio_us else None,
+        "audio_uk": playback_url if word.audio_uk and not word.audio_us else None,
+        "audio_tts_url": playback_url,
     }
     payload.update(_word_enrichment_payload(word))
     return payload

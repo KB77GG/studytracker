@@ -6,7 +6,7 @@ import jwt
 from flask import Flask
 from sqlalchemy import inspect as sqlalchemy_inspect
 
-from api.dictation import dictation_bp
+from api.dictation import _word_student_payload, dictation_bp
 from api.miniprogram import mp_bp
 from api.vocab_review import vocab_review_bp
 from models import (
@@ -197,6 +197,25 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertEqual(queue["total_count"], 3)
             self.assertEqual([item["word_id"] for item in queue["words"]], [self.word_ids[0], self.word_ids[2], self.word_ids[1]])
             self.assertEqual(queue["words"][1]["source"], "auto_review")
+
+    def test_bound_audio_is_exposed_as_public_word_id_url(self):
+        with self.app.app_context():
+            word = db.session.get(DictationWord, self.word_ids[0])
+            word.audio_us = "uploads/tts_cache/number.mp3"
+            db.session.commit()
+            task_id = self._task(start=1, end=1)
+
+        queue = self._queue(task_id)
+        expected_url = f"/dictation/words/{self.word_ids[0]}/tts?v=74652eb9587d"
+        self.assertEqual(queue["words"][0]["audio_us"], expected_url)
+        self.assertEqual(queue["words"][0]["audio_tts_url"], expected_url)
+
+        with self.app.app_context():
+            book_payload = _word_student_payload(
+                db.session.get(DictationWord, self.word_ids[0])
+            )
+        self.assertEqual(book_payload["audio_us"], expected_url)
+        self.assertEqual(book_payload["audio_tts_url"], expected_url)
 
     def test_overlap_counts_once_and_queue_snapshot_survives_reopen(self):
         now = AUTO_REVIEW_NOW

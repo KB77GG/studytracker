@@ -20,6 +20,18 @@ assert.strictEqual(
     'https://studytracker.xin/api/dictation/words/7/tts'
 )
 assert.strictEqual(
+    resolveAudioUrl('uploads/tts_cache/number.mp3', base),
+    'https://studytracker.xin/uploads/tts_cache/number.mp3'
+)
+assert.strictEqual(
+    resolveAudioUrl('/uploads/tts_cache/number.mp3', base),
+    'https://studytracker.xin/uploads/tts_cache/number.mp3'
+)
+assert.strictEqual(
+    resolveAudioUrl('/static/listening/sample.mp3', base),
+    'https://studytracker.xin/static/listening/sample.mp3'
+)
+assert.strictEqual(
     resolveAudioUrl('https://cdn.example.test/a.mp3', base),
     'https://cdn.example.test/a.mp3'
 )

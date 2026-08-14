@@ -5,6 +5,12 @@ function resolveAudioUrl(source, baseUrl) {
 
     const base = String(baseUrl || '').replace(/\/$/, '')
     if (!base) return value
+    // Uploaded/static assets live at the site root, outside the /api prefix.
+    // Backfilled dictionary audio is stored as uploads/tts_cache/... .
+    if (/\/api$/i.test(base) && /^\/?(?:uploads|static)\//i.test(value)) {
+        const rootBase = base.slice(0, -4)
+        return `${rootBase}${value.startsWith('/') ? value : `/${value}`}`
+    }
     // Some older snapshots carried /api/... while baseUrl already ends in
     // /api. Keep this helper tolerant during rollout, although v2 now emits
     // the canonical /dictation/... path.

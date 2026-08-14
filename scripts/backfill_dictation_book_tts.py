@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import tempfile
 import time
@@ -68,12 +69,57 @@ def _write_atomic(path: Path, data: bytes) -> None:
                 pass
 
 
+def _one_pass_tts_text(text: str) -> str:
+    """Normalize an audited pronunciation override without repeating it."""
+    cleaned = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not cleaned:
+        raise ValueError("spoken_text must not be blank")
+    return cleaned if cleaned.endswith((".", "!", "?")) else f"{cleaned}."
+
+
+def _load_spoken_text_overrides(
+    path: Path,
+) -> tuple[int, str, dict[int, tuple[str, str]]]:
+    """Load an exact book/sequence/word to spoken-text pronunciation map."""
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read pronunciation map {path}: {exc}") from exc
+
+    if not isinstance(payload, dict):
+        raise ValueError("pronunciation map must be a JSON object")
+    book_id = payload.get("book_id")
+    if isinstance(book_id, bool) or not isinstance(book_id, int) or book_id < 1:
+        raise ValueError("pronunciation map book_id must be a positive integer")
+    book_title = str(payload.get("book_title") or "").strip()
+    if not book_title:
+        raise ValueError("pronunciation map book_title must not be blank")
+    items = payload.get("items")
+    if not isinstance(items, list) or not items:
+        raise ValueError("pronunciation map items must be a non-empty list")
+
+    overrides: dict[int, tuple[str, str]] = {}
+    for offset, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            raise ValueError(f"pronunciation map item {offset} must be an object")
+        sequence = item.get("sequence")
+        if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence < 1:
+            raise ValueError(f"pronunciation map item {offset} has invalid sequence")
+        if sequence in overrides:
+            raise ValueError(f"duplicate pronunciation sequence: {sequence}")
+        word = str(item.get("word") or "").strip()
+        if not word:
+            raise ValueError(f"pronunciation map sequence {sequence} has a blank word")
+        spoken_text = _one_pass_tts_text(item.get("spoken_text"))
+        overrides[sequence] = (word, spoken_text)
+    return book_id, book_title, overrides
+
+
 def _generate_target(
-    target: tuple[int, int, str], provider: str, force: bool, retries: int
+    target: tuple[int, int, str, str], provider: str, force: bool, retries: int
 ) -> tuple[int, int, str, Path, str]:
-    word_id, sequence, word = target
+    word_id, sequence, word, tts_text = target
     with app.app_context():
-        tts_text = _dictation_tts_text(word)
         cache_path = _dictation_tts_cache_path(provider, word, tts_text)
         if not force and _valid_mp3_file(cache_path):
             return word_id, sequence, word, cache_path, "reused"
@@ -100,6 +146,14 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--force", action="store_true")
     parser.add_argument(
+        "--spoken-text-map",
+        type=Path,
+        help=(
+            "JSON map that pins exact book/sequence/word values to audited spoken text; "
+            "cannot be combined with a partial sequence range."
+        ),
+    )
+    parser.add_argument(
         "--apply",
         action="store_true",
         help="Generate files and commit audio paths; otherwise only print the plan.",
@@ -111,23 +165,70 @@ def main() -> int:
     args = _parse_args()
     if args.start < 1 or (args.end is not None and args.end < args.start):
         raise SystemExit("invalid sequence range")
+    if args.spoken_text_map and (args.start != 1 or args.end is not None):
+        raise SystemExit("--spoken-text-map cannot be combined with --start/--end")
     workers = min(6, max(1, args.workers))
     retries = min(3, max(0, args.retries))
+
+    override_path = args.spoken_text_map.expanduser().resolve() if args.spoken_text_map else None
+    override_book_id = None
+    override_book_title = None
+    spoken_overrides: dict[int, tuple[str, str]] = {}
+    if override_path:
+        try:
+            override_book_id, override_book_title, spoken_overrides = _load_spoken_text_overrides(
+                override_path
+            )
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
+        if override_book_id != args.book:
+            raise SystemExit(
+                f"pronunciation map is pinned to book {override_book_id}, not {args.book}"
+            )
 
     with app.app_context():
         book = db.session.get(DictationBook, args.book)
         if book is None or book.is_deleted:
             raise SystemExit(f"active dictation book not found: {args.book}")
-        query = DictationWord.query.filter(
-            DictationWord.book_id == args.book,
-            DictationWord.sequence >= args.start,
-        )
-        if args.end is not None:
-            query = query.filter(DictationWord.sequence <= args.end)
+        if override_book_title is not None and book.title != override_book_title:
+            raise SystemExit(
+                "pronunciation map title mismatch: "
+                f"expected {override_book_title!r}, found {book.title!r}"
+            )
+
+        query = DictationWord.query.filter(DictationWord.book_id == args.book)
+        if spoken_overrides:
+            query = query.filter(DictationWord.sequence.in_(spoken_overrides))
+        else:
+            query = query.filter(DictationWord.sequence >= args.start)
+            if args.end is not None:
+                query = query.filter(DictationWord.sequence <= args.end)
         rows = query.order_by(DictationWord.sequence.asc(), DictationWord.id.asc()).all()
-        targets = [(row.id, row.sequence, (row.word or "").strip()) for row in rows]
-        if not targets or any(not word for _word_id, _sequence, word in targets):
+        if not rows or any(not (row.word or "").strip() for row in rows):
             raise SystemExit("selected range is empty or contains a blank word")
+
+        targets: list[tuple[int, int, str, str]] = []
+        if spoken_overrides:
+            rows_by_sequence = {row.sequence: row for row in rows}
+            missing_sequences = sorted(set(spoken_overrides) - set(rows_by_sequence))
+            if missing_sequences:
+                raise SystemExit(
+                    f"pronunciation map sequences not found in book: {missing_sequences}"
+                )
+            for sequence, (expected_word, spoken_text) in spoken_overrides.items():
+                row = rows_by_sequence[sequence]
+                word = (row.word or "").strip()
+                if word != expected_word:
+                    raise SystemExit(
+                        f"pronunciation map word mismatch at sequence {sequence}: "
+                        f"expected {expected_word!r}, found {word!r}"
+                    )
+                targets.append((row.id, sequence, word, spoken_text))
+        else:
+            targets = [
+                (row.id, row.sequence, (row.word or "").strip(), _dictation_tts_text(row.word))
+                for row in rows
+            ]
 
         plan = {
             "apply": args.apply,
@@ -137,8 +238,10 @@ def main() -> int:
             "provider": args.provider,
             "sequence_start": targets[0][1],
             "sequence_end": targets[-1][1],
+            "target_sequences": [target[1] for target in targets],
             "target_count": len(targets),
             "workers": workers,
+            "spoken_text_map": str(override_path) if override_path else None,
         }
         print(json.dumps(plan, ensure_ascii=False), flush=True)
         if not args.apply:

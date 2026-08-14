@@ -29,6 +29,7 @@ from models import (
     User,
     db,
 )
+from services.dictation_audio import word_tts_playback_url
 from services.dictation_input_policy import resolve_submission_input
 
 UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
@@ -177,6 +178,7 @@ def _queue_token(items: list[DictationTaskReview]) -> str:
 
 def _word_payload(word: DictationWord, item: DictationTaskReview, mode: str) -> dict:
     mastery = _mastery(item.student_id, word.id)
+    playback_url = word_tts_playback_url(word)
     return {
         "id": word.id,
         "word_id": word.id,
@@ -188,8 +190,9 @@ def _word_payload(word: DictationWord, item: DictationTaskReview, mode: str) -> 
         "accepted_answers": parse_answer_variants(word.accepted_answers),
         "translation": word.translation,
         "phonetic": word.phonetic,
-        "audio_us": word.audio_us,
-        "audio_uk": word.audio_uk,
+        "audio_us": playback_url if word.audio_us else None,
+        "audio_uk": playback_url if word.audio_uk and not word.audio_us else None,
+        "audio_tts_url": playback_url,
         "core_meaning_zh": word.core_meaning_zh,
         "usage_pattern": word.usage_pattern,
         "example_en": word.example_en,
