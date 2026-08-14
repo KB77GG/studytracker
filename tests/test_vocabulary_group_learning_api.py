@@ -1,6 +1,7 @@
 import json
 import unittest
 from datetime import date
+from unittest.mock import patch
 
 import jwt
 from flask import Flask
@@ -176,6 +177,26 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
             },
             headers=self.headers,
         )
+
+    def test_numeric_word_tts_uses_raw_text_and_licensed_provider(self):
+        with self.app.app_context():
+            book = db.session.query(DictationBook).one()
+            word = DictationWord(
+                book_id=book.id,
+                sequence=5,
+                word="28th June",
+                translation="6月28日",
+            )
+            db.session.add(word)
+            db.session.commit()
+            word_id = word.id
+
+        response = self.app.response_class(b"AUDIO", mimetype="audio/mpeg")
+        with patch("api.dictation._proxy_tts_for_word", return_value=response) as proxy:
+            result = self.client.get(f"/api/dictation/words/{word_id}/tts")
+
+        self.assertEqual(result.status_code, 200)
+        proxy.assert_called_once_with("28th June", preferred_providers=["dashscope"])
 
     def test_http_group_queue_requires_contract_and_finalize_is_idempotent(self):
         queue_url = f"/api/miniprogram/student/tasks/{self.task_id}/vocabulary-queue"

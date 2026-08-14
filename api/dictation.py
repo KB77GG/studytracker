@@ -551,14 +551,14 @@ def _config_optional_float(name: str) -> float | None:
 
 def _dictation_tts_provider_order() -> list[str]:
     providers = _parse_tts_provider_order(current_app.config.get("DICTATION_TTS_PROVIDER_ORDER"))
-    return providers or ["youdao"]
+    return providers or ["youdao", "kokoro", "dashscope"]
 
 
 def _dictation_tts_generation_provider_order() -> list[str]:
     providers = _parse_tts_provider_order(
         current_app.config.get("DICTATION_TTS_GENERATION_PROVIDER_ORDER")
     )
-    return providers or ["youdao"]
+    return providers or ["youdao", "dashscope"]
 
 
 def _parse_tts_provider_order(raw) -> list[str]:
@@ -1030,6 +1030,8 @@ def _generate_tts_to_cache(
         provider_order,
         include_legacy=False,
     ):
+        if cache_path.exists():
+            return cache_path
         audio = _tts_provider_audio(provider, tts_text)
         if audio:
             cache_path.write_bytes(audio)
@@ -1097,7 +1099,7 @@ def schedule_prewarm_for_book(book_id: int) -> None:
     threading.Thread(target=runner, daemon=True).start()
 
 
-def _proxy_tts_for_word(word: str):
+def _proxy_tts_for_word(word: str, preferred_providers: list[str] | None = None):
     """Proxy TTS audio with a quality-gated hybrid of Youdao and Kokoro.
 
     Youdao serves a clean human recording (MPEG v1) for base dictionary words
@@ -1107,6 +1109,18 @@ def _proxy_tts_for_word(word: str):
     Youdao would only give v2, use the pre-baked Kokoro cache instead.
     """
     tts_text = _dictation_tts_text(word)
+
+    # Structured prompts such as dates, prices, times and postcodes are not
+    # dictionary headwords. Give their explicitly selected provider first
+    # chance so they do not depend on Youdao's dictionary URL accepting them.
+    if preferred_providers:
+        preferred_cache = _generate_tts_to_cache(
+            word,
+            tts_text,
+            providers=preferred_providers,
+        )
+        if preferred_cache:
+            return _send_tts_file(preferred_cache)
 
     youdao_cache = _dictation_tts_cache_path("youdao", word, tts_text)
     youdao_v2_cached = False  # a low-quality (v2 synth) Youdao clip is on disk
@@ -1172,10 +1186,17 @@ def word_tts(word_id):
         full_path = os.path.join(current_app.root_path, audio_path)
         if os.path.exists(full_path):
             return send_file(full_path, mimetype="audio/mpeg")
-    text = canonical_vocabulary_word(word.word, word.accepted_answers)
+    raw_text = strip_part_of_speech_prefix(word.word)
+    has_numeric_content = any(char.isdigit() for char in raw_text)
+    text = (
+        raw_text
+        if has_numeric_content
+        else canonical_vocabulary_word(word.word, word.accepted_answers) or raw_text
+    )
     if not text:
         return jsonify({"ok": False, "error": "missing_word"}), 400
-    return _proxy_tts_for_word(text)
+    preferred_providers = ["dashscope"] if has_numeric_content else None
+    return _proxy_tts_for_word(text, preferred_providers=preferred_providers)
 
 
 @dictation_bp.route("/tts/prewarm", methods=["POST"])

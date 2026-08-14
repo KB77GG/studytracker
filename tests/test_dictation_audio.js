@@ -81,6 +81,39 @@ assert.deepStrictEqual(states.slice(0, 2), ['loading', 'playing'])
 player.destroy()
 assert.strictEqual(destroyCount, 1)
 
+let failedAudioSrc = ''
+const failedStates = []
+const failedErrors = []
+const failedPlayer = createReliableAudioPlayer({
+    createInnerAudioContext() {
+        return {
+            get src() { return failedAudioSrc },
+            set src(value) { failedAudioSrc = value },
+            stop() {},
+            play() {},
+            destroy() {},
+            onCanplay() {},
+            onPlay() {},
+            onEnded() {},
+            onStop() {},
+            onError() {}
+        }
+    },
+    downloadFile(options) {
+        options.success({ statusCode: 502, tempFilePath: '/tmp/error-response' })
+        return { abort() {} }
+    }
+}, {
+    onStateChange(state) { failedStates.push(state) },
+    onError(error) { failedErrors.push(error) }
+})
+assert.strictEqual(failedPlayer.play('/dictation/words/8/tts', base), true)
+assert.strictEqual(failedAudioSrc, '', 'HTTP failures must not be retried through InnerAudioContext')
+assert.deepStrictEqual(failedStates, ['loading', 'error'])
+assert.strictEqual(failedErrors.length, 1)
+assert.strictEqual(failedErrors[0].statusCode, 502)
+failedPlayer.destroy()
+
 const question = {
     question_id: 'fixed-question',
     word_id: 7,

@@ -81,6 +81,14 @@ function createReliableAudioPlayer(wxApi, options) {
         playPrepared(url, token)
     }
 
+    function failPlayback(error, token) {
+        if (destroyed || token !== playToken) return
+        pendingToken = 0
+        activePath = ''
+        emitState('error')
+        if (typeof options.onError === 'function') options.onError(error)
+    }
+
     if (typeof audioCtx.onCanplay === 'function') {
         audioCtx.onCanplay(() => {
             if (!pendingToken || pendingToken !== playToken || destroyed) return
@@ -137,7 +145,14 @@ function createReliableAudioPlayer(wxApi, options) {
                     playPrepared(result.tempFilePath, token)
                     return
                 }
-                fallBackToRemote(url, token)
+                // A completed HTTP error will fail identically when assigned
+                // to InnerAudioContext and may trigger its internal retries.
+                // Surface it once; remote fallback is only useful when the
+                // download API itself is unavailable or fails locally.
+                failPlayback({
+                    errMsg: `audio download HTTP ${status || 'unknown'}`,
+                    statusCode: status || 0
+                }, token)
             },
             fail() {
                 if (currentDownloadTask === task) currentDownloadTask = null

@@ -12,12 +12,12 @@ import tempfile
 import unittest
 
 import api.dictation as dictation_mod
-from app import app
 from api.dictation import (
     _dictation_tts_cache_path,
     _dictation_tts_text,
     _is_high_quality_mp3,
 )
+from app import app
 
 # 最小 MPEG 帧头：v1 = 真人高质量，v2 = 合成音
 MP3_V1 = b"\xff\xfb\x90\x64" + b"\x00" * 200
@@ -31,10 +31,14 @@ class DictationTtsHybridTest(unittest.TestCase):
         self._old_upload = app.config.get("UPLOAD_FOLDER")
         app.config["UPLOAD_FOLDER"] = self.tmpdir.name
         self._old_youdao = dictation_mod._youdao_tts
+        self._old_dashscope = dictation_mod._dashscope_tts
+        self._old_generation_order = app.config.get("DICTATION_TTS_GENERATION_PROVIDER_ORDER")
 
     def tearDown(self):
         app.config["UPLOAD_FOLDER"] = self._old_upload
         dictation_mod._youdao_tts = self._old_youdao
+        dictation_mod._dashscope_tts = self._old_dashscope
+        app.config["DICTATION_TTS_GENERATION_PROVIDER_ORDER"] = self._old_generation_order
         self.tmpdir.cleanup()
 
     def _write_kokoro(self, word):
@@ -112,6 +116,33 @@ class DictationTtsHybridTest(unittest.TestCase):
                 self.assertEqual(_dictation_tts_provider_order(), ["youdao", "kokoro"])
         finally:
             app.config["DICTATION_TTS_PROVIDER_ORDER"] = old
+
+    def test_dashscope_is_generation_fallback_when_youdao_fails(self):
+        self._fake_youdao(None)
+        dictation_mod._dashscope_tts = lambda _text: MP3_V1 + b"DASHSCOPE"
+        app.config["DICTATION_TTS_GENERATION_PROVIDER_ORDER"] = "youdao,dashscope"
+
+        resp = self.client.get("/api/dictation/tts?word=28th%20June")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.data.endswith(b"DASHSCOPE"))
+
+    def test_generation_reuses_existing_dashscope_cache(self):
+        calls = []
+        dictation_mod._dashscope_tts = lambda text: calls.append(text)
+        with app.app_context():
+            cache = _dictation_tts_cache_path(
+                "dashscope", "28th June", _dictation_tts_text("28th June")
+            )
+            cache.write_bytes(MP3_V1 + b"CACHED")
+            generated = dictation_mod._generate_tts_to_cache(
+                "28th June",
+                _dictation_tts_text("28th June"),
+                providers=["dashscope"],
+            )
+
+        self.assertEqual(generated, cache)
+        self.assertEqual(calls, [])
 
     def test_tts_text_matches_configured_repeat(self):
         # 默认 DICTATION_TTS_REPEAT_COUNT=1：读一遍、补句号

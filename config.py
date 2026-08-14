@@ -122,14 +122,15 @@ class Config:
 
     # Dictation TTS provider preference (prewarm / helpers). proxy_tts itself
     # runs a quality-gated hybrid: Youdao v1 human recording for base words,
-    # pre-baked Kokoro cache when Youdao would only give a v2 synth voice.
+    # pre-baked Kokoro cache when Youdao would only give a v2 synth voice, and
+    # the licensed DashScope voice when the dictionary source has no recording.
     DICTATION_TTS_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_PROVIDER_ORDER",
-        "youdao,kokoro",
+        "youdao,kokoro,dashscope",
     )
     DICTATION_TTS_GENERATION_PROVIDER_ORDER = os.environ.get(
         "DICTATION_TTS_GENERATION_PROVIDER_ORDER",
-        "youdao",
+        "youdao,dashscope",
     )
 
     # Local Piper TTS for dictation word playback
