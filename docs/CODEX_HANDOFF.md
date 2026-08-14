@@ -1,7 +1,48 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14 22:20（Asia/Shanghai）。
+> 最近更新：2026-08-14 23:18（Asia/Shanghai）。
+
+## 2026-08-14 IELTS 写作范文与打字训练网页模块（后端/网页已上线）
+
+- 正式发布工作树为 `/private/tmp/studytracker-ielts-writing-web`，分支
+  `codex/ielts-writing-web`，由干净的 `origin/main@d500b396` 开始；业务提交
+  `587ab585dfb6e6240308ce2af7770848b61b61b0` 已原子推送同名分支与 `origin/main`。桌面主工作树
+  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端 9 个提交；原有两份交接文档修改以及
+  `.tmp/`、`artifacts/`、iDictation/ZYZ 导入数据与脚本、阅读/TOEFL 临时数据、设计/提案/原型等未跟踪内容
+  均未覆盖或纳入本次提交。
+- 网页 `/practice` 的“剑雅真题”新增写作入口；新蓝图 `/writing/` 提供 40 道试点题目录（30 道 Task 2、
+  10 道 Task 1），支持全文搜索和题型筛选。每题包含原题、小作文原图、6.0 / 6.5 / 7.0+ 三档完整教学范文、
+  立场或总览、两组核心论点/特征、四段式与五段式结构、逐段功能和 3 条可复用表达。版本化内容位于
+  `data/writing_library/pilot_40.json`，10 张原图位于 `static/writing_library/images/`；三档字数门禁保证
+  Task 1 均不少于 150 词、Task 2 均不少于 250 词。题目与图片来自用户本机九分达人资料，范文和教学拆解为
+  Sage Path 教研内容，并在页面明确不是官方评分样文。
+- 页面复用现有听力/阅读的 `practice-workspace` 外壳、Sage Path `#2F8E87` 主色、暖白背景、左侧目录、
+  圆角卡片、键盘焦点和移动端抽屉；没有引入另一套紫色或小程序视觉。打字工作台支持档位切换、浏览器草稿自动保存、
+  目标/输入双栏、实时字数/WPM/前缀准确率/计时，以及完成时服务端按规范化全文 Levenshtein 距离重算最终准确率。
+  学生练习通过服务端 `started_at` 计时并写入新增 `writing_typing_attempt` 表；完成接口校验学生归属、题号和档位且
+  幂等。老师与课堂模式只做本页统计，返回 `client_only`，不会伪造学生记录。
+- 访问模型沿用现有刷题身份：正式学生账号优先，其次为 `/practice` 已验证姓名；admin/teacher/assistant 与课堂模式
+  可直接讲题但不落学生记录，未验证访客会回到 `/practice#ieltsPractice`。模块仅接网页，**未修改、上传、提审或发布
+  小程序**；前一任务的小程序包仍是用户所述“已上传、审核中、尚未发布”。
+- 验证均在发布工作树执行，Python 使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`：新增/入口专项
+  `12 passed`；全仓 `520 passed, 44 subtests passed, 2 failed`，仅两个长期缺失且被忽略的
+  `static/listening/ielts10_test1_s1.mp3` Range fixture 继续返回 404，与本次无关。目标 Ruff、Python
+  `py_compile`、两个新增 JS 的 `node --check`、JSON 解析和 `git diff --check` 均通过。真实 Chrome 桌面目录、
+  小作文原图详情、打字工作台及 CDP 390px 视口无横向溢出；课堂模式实际完成一次 39 词练习，实时准确率 100%、
+  草稿和完成状态正常，历史仅显示在本页。QA 图仅本机位于
+  `/Users/zhouxin/.codex/visualizations/2026/08/14/01a00084-1c7a-7801-b5e9-8c22c5dfe707/`，未纳入仓库。
+- GitHub CI `31813362019` 与部署 `31813362004` 均 success。生产 `/root/apps/studytracker` 当前业务 HEAD 为
+  `587ab585`，tracked 工作区干净；已有 15 个未跟踪数据库备份/本地资源（本轮部署前即存在）保持原样。服务于
+  23:13:28 CST 重启后 active，监听 `127.0.0.1:5002`，`workers=1 / worker_class=gthread / threads=6`，
+  主进程仅一个 worker 子进程，部署后 journal 的 traceback/exception/error/failed 计数为 0。
+  新表存在且当前 0 行，SQLite `quick_check=ok`、外键检查无输出。公网 `/writing/` 为 HTTP 200、40 张题卡，
+  `/practice` 含唯一写作入口，小作文原图为 `200 image/png / 176,951 bytes`；公网课堂模式 start API 返回
+  `client_only=true`，复核表仍为 0 行，因此生产验收没有写学生练习数据。
+- 下一位 agent 可直接从 `origin/main` 获取已上线模块。内容扩充应继续编辑版本化题库并跑字数/图片完整性测试；若要
+  增加教师布置、批改或小程序入口，应作为独立需求设计，不要把逻辑继续堆入 `app.py`，也不要把当前教学档位误称为
+  IELTS 官方评分。上线后的首个真实学生完成记录应只读抽查题号、档位、server duration、WPM 与 accuracy 是否合理，
+  不要修改学生原文。
 
 ## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端已上线，小程序已上传待审核）
 
