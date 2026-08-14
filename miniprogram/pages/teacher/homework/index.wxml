@@ -71,6 +71,15 @@
       <picker range="{{intensivePartLabels}}" value="{{intensivePartIndex}}" bindchange="handleIntensivePartChange">
         <view class="picker-field">{{intensivePartLabels[intensivePartIndex] || '选择 Part'}}</view>
       </picker>
+      <view class="training-mode-field" wx:if="{{supportsListeningTrainingModes}}">
+        <text class="training-mode-label">精听训练方式（正式任务锁定）</text>
+        <view class="picker-field" wx:if="{{preserveLegacyListeningTrainingMode}}">学生自选（历史任务保持原规则）</view>
+        <picker wx:else range="{{listeningTrainingModeLabels}}" value="{{listeningTrainingModeIndex}}" bindchange="handleListeningTrainingModeChange">
+          <view class="picker-field">{{listeningTrainingModeLabels[listeningTrainingModeIndex] || '系统推荐'}}</view>
+        </picker>
+        <text class="training-mode-desc" wx:if="{{preserveLegacyListeningTrainingMode}}">历史任务不追溯锁定；请新建任务使用五种正式训练方式。</text>
+        <text class="training-mode-desc" wx:else>{{listeningTrainingModeDescription}}。学生首答后可复盘并升档，首答成绩不覆盖。</text>
+      </view>
     </view>
 
     <view wx:if="{{isReadingSource}}" class="practice-picker-stack">
@@ -102,7 +111,7 @@
       <view class="queue-item" wx:for="{{selectedPracticeList}}" wx:key="key">
         <view class="queue-main">
           <text class="queue-title">{{item.detail}}</text>
-          <text class="queue-meta">{{item.summary}} ｜ {{item.plannedMinutes}} 分钟</text>
+          <text class="queue-meta">{{item.summary}} ｜ {{item.plannedMinutes}} 分钟{{item.listening_training_mode_label ? (' ｜ ' + item.listening_training_mode_label) : ''}}</text>
         </view>
         <button class="remove-btn" size="mini" data-key="{{item.key}}" bindtap="removePracticeFromQueue">移除</button>
       </view>
@@ -128,6 +137,7 @@
         <view class="assigned-main">
           <text class="assigned-title">{{item.detail}}</text>
           <text class="assigned-meta">{{item.date}} ｜ {{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
+          <text class="assigned-mode" wx:if="{{item.source_type === 'listening_intensive'}}">训练：{{item.listening_training_mode_label || '学生自选（旧任务）'}}</text>
           <view class="practice-result" wx:if="{{item.practiceResultSummary}}">
             <text class="practice-result-main">{{item.practiceResultSummary}}</text>
             <text class="practice-result-wrong {{item.practice_result.wrong_count > 0 ? 'has-wrong' : ''}}">{{item.practiceWrongSummary}}</text>

@@ -524,6 +524,10 @@ class Task(db.Model):
     listening_resource_type = db.Column(db.String(32), default="intensive", index=True)
     listening_exercise_id = db.Column(db.String(120), index=True)
     listening_access_token = db.Column(db.String(64), index=True)  # 精听任务访问令牌
+    # NULL means a legacy task whose student-choice behaviour must be kept.
+    # New intensive-listening assignments explicitly store one of
+    # system/review/basic/standard/challenge.
+    listening_training_mode = db.Column(db.String(24), nullable=True)
     reading_test_id = db.Column(db.String(120), index=True)
     reading_passage_number = db.Column(db.Integer)
     reading_access_token = db.Column(db.String(64), index=True)
@@ -551,6 +555,9 @@ class ListeningSegmentResult(db.Model):
     accuracy = db.Column(db.Float, default=0.0, nullable=False)
     is_completed = db.Column(db.Boolean, default=False, nullable=False)
     attempt_count = db.Column(db.Integer, default=0, nullable=False)
+    # review marks a completion-only listening check; the other values record
+    # the immutable first-attempt difficulty for later rendering and audit.
+    training_level = db.Column(db.String(16), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 

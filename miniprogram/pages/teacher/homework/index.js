@@ -12,6 +12,13 @@ const SOURCE_OPTIONS = [
 ]
 
 const LISTENING_SOURCE_KEYS = ['cambridge_listening', 'listening_intensive']
+const DEFAULT_LISTENING_TRAINING_MODES = [
+    { key: 'system', label: '系统推荐', description: '标准辨音为主，长句自动降低负荷' },
+    { key: 'review', label: '听辨核对', description: '完整听完后查看原文并完成本句' },
+    { key: 'basic', label: '关键词听写', description: '每句听写 1–2 个高价值关键词' },
+    { key: 'standard', label: '标准辨音', description: '每句听写 2–4 个辨音或信息词' },
+    { key: 'challenge', label: '整句听写', description: '短句整句听写，长句自动降为标准' }
+]
 
 const SUBJECT_SOURCE_KEYS = {
     listening: LISTENING_SOURCE_KEYS,
@@ -78,6 +85,12 @@ Page({
         isListeningSource: false,
         isReadingSource: false,
         isCambridgeSource: false,
+        supportsListeningTrainingModes: false,
+        listeningTrainingModes: DEFAULT_LISTENING_TRAINING_MODES,
+        listeningTrainingModeLabels: DEFAULT_LISTENING_TRAINING_MODES.map(item => item.label),
+        listeningTrainingModeIndex: 0,
+        listeningTrainingModeDescription: DEFAULT_LISTENING_TRAINING_MODES[0].description,
+        preserveLegacyListeningTrainingMode: false,
         catalogLoading: false,
         catalog: {
             cambridge_listening: [],
@@ -195,12 +208,32 @@ Page({
         try {
             const res = await request('/miniprogram/practice/catalog')
             if (res && res.ok) {
+                const supportsListeningTrainingModes = !!(
+                    res.capabilities && res.capabilities.listening_training_modes
+                )
+                const listeningTrainingModes = supportsListeningTrainingModes
+                    && Array.isArray(res.listening_training_modes)
+                    && res.listening_training_modes.length
+                    ? res.listening_training_modes
+                    : DEFAULT_LISTENING_TRAINING_MODES
                 await this.setDataAsync({
                     catalog: {
                         cambridge_listening: res.cambridge_listening || [],
                         listening_intensive: res.listening_intensive || [],
                         cambridge_reading: res.cambridge_reading || []
-                    }
+                    },
+                    supportsListeningTrainingModes,
+                    listeningTrainingModes,
+                    listeningTrainingModeLabels: listeningTrainingModes.map(item => item.label),
+                    listeningTrainingModeIndex: clampIndex(
+                        this.data.listeningTrainingModeIndex,
+                        listeningTrainingModes.length
+                    ),
+                    listeningTrainingModeDescription: (
+                        listeningTrainingModes[
+                            clampIndex(this.data.listeningTrainingModeIndex, listeningTrainingModes.length)
+                        ] || listeningTrainingModes[0] || {}
+                    ).description || ''
                 })
                 this.refreshPracticeOptions(false)
                 return true
@@ -332,7 +365,8 @@ Page({
                 || test.label
                 || `剑雅 ${test.book}`
             const partLabel = part.part_title || part.title || `Part ${part.number}`
-            return {
+            const mode = (this.data.listeningTrainingModes || [])[this.data.listeningTrainingModeIndex]
+            const result = {
                 source_type: source.key,
                 practice_exercise_id: part.id,
                 practice_scope: 'part',
@@ -342,6 +376,13 @@ Page({
                 plannedMinutes: 20,
                 summary: `${bookLabel} Test ${test.test} · ${partLabel} · ${part.segment_count || 0} 句`
             }
+            if (this.data.supportsListeningTrainingModes
+                && !this.data.preserveLegacyListeningTrainingMode
+                && mode && mode.key) {
+                result.listening_training_mode = mode.key
+                result.listening_training_mode_label = mode.label
+            }
+            return result
         }
         if (source.key === 'cambridge_reading') {
             const test = context.readingTest
@@ -374,7 +415,8 @@ Page({
             item.practice_scope || '',
             section,
             passage,
-            part
+            part,
+            item.listening_training_mode || ''
         ].join(':')
     },
 
@@ -388,6 +430,8 @@ Page({
             practice_section_number: selected.practice_section_number || null,
             practice_passage_number: selected.practice_passage_number || null,
             practice_part_number: selected.practice_part_number || null,
+            listening_training_mode: selected.listening_training_mode || null,
+            listening_training_mode_label: selected.listening_training_mode_label || '',
             category: selected.category,
             detail: selected.detail,
             plannedMinutes: selected.plannedMinutes,
@@ -508,13 +552,24 @@ Page({
             wx.hideLoading()
         }
 
-        const items = buildIntensiveQueueItems({
+        let items = buildIntensiveQueueItems({
             catalog: this.data.catalog.listening_intensive || [],
             listeningTask: task,
             selectedPracticeList: this.data.selectedPracticeList || [],
             existingTasks: this.data.existingTasks || [],
             date: this.data.form.date
         })
+        if (this.data.supportsListeningTrainingModes) {
+            const mode = (this.data.listeningTrainingModes || [])[this.data.listeningTrainingModeIndex]
+            if (mode && mode.key) {
+                items = items.map(item => ({
+                    ...item,
+                    listening_training_mode: mode.key,
+                    listening_training_mode_label: mode.label,
+                    key: `${item.key}:${mode.key}`
+                }))
+            }
+        }
         if (!items.length) {
             const hasMaterial = findMatchingIntensiveParts(
                 this.data.catalog.listening_intensive || [],
@@ -567,7 +622,8 @@ Page({
             intensivePartIndex: 0,
             readingBookIndex: 0,
             readingTestIndex: 0,
-            readingScopeIndex: 0
+            readingScopeIndex: 0,
+            preserveLegacyListeningTrainingMode: false
         }, () => this.refreshPracticeOptions(true))
     },
 
@@ -607,6 +663,16 @@ Page({
 
     handleIntensivePartChange(e) {
         this.setData({ intensivePartIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleListeningTrainingModeChange(e) {
+        const modes = this.data.listeningTrainingModes || DEFAULT_LISTENING_TRAINING_MODES
+        const index = clampIndex(e.detail.value, modes.length)
+        this.setData({
+            listeningTrainingModeIndex: index,
+            listeningTrainingModeDescription: (modes[index] || {}).description || '',
+            preserveLegacyListeningTrainingMode: false
+        }, () => this.refreshPracticeOptions(false))
     },
 
     handleReadingBookChange(e) {
@@ -840,6 +906,13 @@ Page({
             update.intensiveBookIndex = selection.bookIndex
             update.intensiveTestIndex = selection.testIndex
             update.intensivePartIndex = selection.partIndex
+            const modes = this.data.listeningTrainingModes || DEFAULT_LISTENING_TRAINING_MODES
+            const modeIndex = modes.findIndex(mode => mode.key === task.listening_training_mode)
+            update.listeningTrainingModeIndex = modeIndex >= 0 ? modeIndex : 0
+            update.listeningTrainingModeDescription = (
+                modes[modeIndex >= 0 ? modeIndex : 0] || {}
+            ).description || ''
+            update.preserveLegacyListeningTrainingMode = !task.listening_training_mode
         }
         if (sourceKey === 'cambridge_reading') {
             const selection = this.findReadingSelection(task)
@@ -909,6 +982,7 @@ Page({
             editingTaskId: null,
             editingTaskSummary: '',
             selectedPracticeList: [],
+            preserveLegacyListeningTrainingMode: false,
             sourceIndex: 0,
             form: {
                 date: this.data.form.date || this.getTodayString(),
@@ -932,6 +1006,8 @@ Page({
         if (msg === 'practice_not_found') msg = '未找到练习篇目'
         if (msg === 'invalid_practice_scope') msg = '练习范围不正确'
         if (msg === 'missing_detail') msg = '请填写作业内容'
+        if (msg === 'invalid_listening_training_mode') msg = '精听训练方式不正确，请重新选择'
+        if (msg === 'listening_progress_exists') msg = '学生已开始作答，不能再修改正式训练方式'
         return msg
     },
 

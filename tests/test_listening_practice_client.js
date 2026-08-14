@@ -112,6 +112,103 @@ test('difficulty changes are rejected after a sentence starts or has saved progr
     assert.equal(startedPage.data.difficultyIndex, 1)
 })
 
+test('assigned task locks first attempt, then unlocks review and upward difficulty', () => {
+    const assignedSegment = {
+        ...segment,
+        assignedTrainingLevel: 'standard',
+        challengeAllowed: true,
+        start: 0,
+        end: 7
+    }
+    const page = makePage({
+        trainingPolicy: { locked: true, review_only: false },
+        mode: 'listen',
+        showOriginal: true,
+        showTranslation: true,
+        segments: [assignedSegment],
+        progressMap: {},
+        repeatProgressMap: {}
+    })
+    page.pauseAudio = () => {}
+    page.selectSegment(0, false)
+
+    assert.equal(page.data.mode, 'dictation')
+    assert.equal(page.data.modeLockedBeforeFirst, true)
+    assert.equal(page.data.revealAllowed, false)
+    assert.equal(page.data.showOriginal, false)
+    assert.equal(page.data.dictationLevelKey, 'standard')
+    assert.deepEqual(
+        page.data.difficultyOptions.map(option => option.disabled),
+        [true, false, true]
+    )
+
+    page.switchMode({ currentTarget: { dataset: { mode: 'listen' } } })
+    assert.equal(page.data.mode, 'dictation')
+
+    page.data.progressMap = {
+        '0': { ...legacyProgress, training_level: 'standard' }
+    }
+    page.selectSegment(0, false)
+    assert.equal(page.data.modeLockedBeforeFirst, false)
+    assert.equal(page.data.revealAllowed, true)
+    assert.deepEqual(
+        page.data.difficultyOptions.map(option => option.disabled),
+        [true, false, false]
+    )
+
+    page.changeDifficulty({ currentTarget: { dataset: { index: '2' } } })
+    assert.equal(page.data.dictationLevelKey, 'challenge')
+    assert.equal(page.data.correctionMode, true)
+})
+
+test('review-only task reveals after a full pass and saves completion', async () => {
+    requestCalls = 0
+    requestHandler = options => options.success({
+        statusCode: 200,
+        data: {
+            ok: true,
+            segment: {
+                segment_index: 0,
+                segment_text: segment.sourceText,
+                is_completed: true,
+                training_level: 'review',
+                correct_words: 0,
+                total_words: 0,
+                accuracy: 0,
+                hidden_word_indices: [],
+                answers: [],
+                results: []
+            },
+            task: { status: 'done', accuracy: 0, completion_rate: 100 }
+        }
+    })
+    const reviewSegment = { ...segment, start: 0, end: 5, challengeAllowed: true }
+    const page = makePage({
+        taskId: 7,
+        token: 'review-token',
+        trainingPolicy: { locked: true, review_only: true },
+        reviewOnly: true,
+        mode: 'listen',
+        segments: [reviewSegment],
+        progressMap: {},
+        repeatProgressMap: {}
+    })
+    page.pauseAudio = () => {}
+    page.reviewListenedMap = new Set()
+    page.selectSegment(0, false)
+    page.audioCtx = { currentTime: 5 }
+    page.segmentStopHandled = false
+    page.handleAudioTimeUpdate()
+    assert.equal(page.data.reviewListened, true)
+    assert.equal(page.data.revealAllowed, true)
+    page.toggleOriginal()
+    await page.completeReviewSegment()
+    assert.equal(requestCalls, 1)
+    assert.equal(page.data.currentSegment.isCompleted, true)
+    assert.equal(page.data.summary.completionRate, 100)
+    requestHandler = null
+})
+
 test('blank first answers and local correction never issue a POST', async () => {
     requestCalls = 0
     requestHandler = null

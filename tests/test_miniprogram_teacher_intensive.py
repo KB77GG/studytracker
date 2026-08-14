@@ -9,7 +9,7 @@ from flask import Flask
 
 from api.miniprogram import mp_bp
 from api.teacher_practice_access import teacher_practice_bp
-from models import StudentProfile, Task, User, db
+from models import ListeningSegmentResult, StudentProfile, Task, User, db
 
 
 class MiniprogramTeacherIntensiveTest(unittest.TestCase):
@@ -113,7 +113,13 @@ class MiniprogramTeacherIntensiveTest(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        books = response.get_json()["listening_intensive"]
+        payload = response.get_json()
+        self.assertTrue(payload["capabilities"]["listening_training_modes"])
+        self.assertEqual(
+            [item["key"] for item in payload["listening_training_modes"]],
+            ["system", "review", "basic", "standard", "challenge"],
+        )
+        books = payload["listening_intensive"]
         self.assertTrue(any(book["series"] == "cambridge" for book in books))
         jfdr6 = next(book for book in books if book["series"] == "jfdr" and book["book"] == 6)
         part = jfdr6["tests"][0]["parts"][1]
@@ -138,6 +144,7 @@ class MiniprogramTeacherIntensiveTest(unittest.TestCase):
             first_token = task.listening_access_token
             self.assertIsNone(task.reading_test_id)
             self.assertIsNone(task.question_ids)
+            self.assertIsNone(task.listening_training_mode)
 
         updated = self.client.patch(
             f"/api/miniprogram/teacher/homework/{task_payload['id']}",
@@ -170,6 +177,54 @@ class MiniprogramTeacherIntensiveTest(unittest.TestCase):
         )
         self.assertEqual(listed.status_code, 200)
         self.assertEqual(listed.get_json()["tasks"][0]["source_type"], "listening_intensive")
+
+    def test_create_serializes_training_mode_and_started_task_cannot_change_it(self):
+        response = self.client.post(
+            "/api/miniprogram/teacher/homework",
+            json={**self._common(), "listening_training_mode": "system"},
+            headers=self._headers(self.teacher_id),
+        )
+        self.assertEqual(response.status_code, 200)
+        task_payload = response.get_json()["task"]
+        self.assertEqual(task_payload["listening_training_mode"], "system")
+        self.assertEqual(task_payload["listening_training_mode_label"], "系统推荐")
+
+        with self.app.app_context():
+            task = db.session.get(Task, task_payload["id"])
+            db.session.add(
+                ListeningSegmentResult(
+                    task_id=task.id,
+                    student_name=task.student_name,
+                    segment_index=0,
+                    segment_text="A saved first attempt.",
+                    hidden_word_indices="[1]",
+                    answers_json='["saved"]',
+                    correct_words=1,
+                    total_words=1,
+                    accuracy=100,
+                    is_completed=True,
+                    attempt_count=1,
+                    training_level="standard",
+                )
+            )
+            db.session.commit()
+
+        changed = self.client.patch(
+            f"/api/miniprogram/teacher/homework/{task_payload['id']}",
+            json={**self._common(), "listening_training_mode": "basic"},
+            headers=self._headers(self.teacher_id),
+        )
+        self.assertEqual(changed.status_code, 409)
+        self.assertEqual(changed.get_json()["error"], "listening_progress_exists")
+
+    def test_invalid_training_mode_is_rejected(self):
+        response = self.client.post(
+            "/api/miniprogram/teacher/homework",
+            json={**self._common(), "listening_training_mode": "random"},
+            headers=self._headers(self.teacher_id),
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["error"], "invalid_listening_training_mode")
 
     def test_invalid_intensive_ids_are_rejected(self):
         for exercise_id in ("jfdr6_test1", "jfdr6_test1_s9", "not_registered_s1"):

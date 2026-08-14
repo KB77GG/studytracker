@@ -237,6 +237,42 @@ page {
   box-shadow: 0 18rpx 50rpx rgba(62, 50, 34, 0.08);
 }
 
+.training-policy {
+  margin-bottom: 20rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #eaf8f4;
+  border: 2rpx solid #c5e9df;
+}
+
+.training-policy-title,
+.training-policy-desc {
+  display: block;
+}
+
+.training-policy-title {
+  color: #176b63;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.training-policy-desc,
+.review-hint {
+  margin-top: 6rpx;
+  color: #64748b;
+  font-size: 21rpx;
+  line-height: 1.5;
+}
+
+.mode-tab.mode-disabled,
+.toggle-btn.toggle-disabled {
+  opacity: .42;
+}
+
+.review-complete {
+  margin-top: 22rpx;
+}
+
 /* 顶部信息行 */
 .player-top {
   display: flex;

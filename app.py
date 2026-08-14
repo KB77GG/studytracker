@@ -66,6 +66,15 @@ from services.ielts_practice_scoring import (
     grade_reading_test_answers as _grade_reading_test_answers_shared,
 )
 from services.listening_cloze import ListeningClozeValidationError, grade_first_attempt
+from services.listening_training import (
+    TRAINING_MODE_OPTIONS,
+    normalize_training_mode,
+    selected_segment_indices as _training_selected_segment_indices,
+    task_training_mode,
+    task_training_policy,
+    update_task_progress_summary,
+    validate_first_attempt_level,
+)
 from services import mock_exam_review as _mock_review
 from services import mock_exam_review_workflow as _mock_review_workflow
 from services import mock_exam_writing as _mock_writing
@@ -582,6 +591,7 @@ def _task_resource_binding(
     *,
     listening_exercise_id=None,
     listening_resource_type=None,
+    listening_training_mode=None,
     reading_test_id=None,
     reading_passage_number=None,
     dictation_book_id=None,
@@ -603,6 +613,9 @@ def _task_resource_binding(
             return PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST, str(listening_exercise_id), metadata
         if listening_resource_type == LISTENING_RESOURCE_JIJING:
             return PLAN_RESOURCE_LISTENING_JIJING, str(listening_exercise_id), metadata
+        metadata["listening_training_mode"] = normalize_training_mode(
+            listening_training_mode
+        )
         return PLAN_RESOURCE_INTENSIVE_LISTENING, str(listening_exercise_id), metadata
     if reading_test_id:
         metadata = {
@@ -646,6 +659,7 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
         return _task_resource_binding(
             listening_exercise_id=task.listening_exercise_id,
             listening_resource_type=_task_listening_resource_type(task),
+            listening_training_mode=task_training_mode(task),
         )
     if task.reading_test_id:
         return _task_resource_binding(
@@ -1628,22 +1642,7 @@ def _listening_exercise_usage_map():
 
 
 def _selected_listening_segment_indices(task):
-    raw = (task.question_ids or "").strip()
-    if not raw:
-        return None
-    try:
-        values = json.loads(raw)
-    except Exception:
-        return None
-    if not isinstance(values, list):
-        return None
-    selected = []
-    for value in values:
-        try:
-            selected.append(int(value))
-        except (TypeError, ValueError):
-            continue
-    return sorted(set(selected)) if selected else None
+    return _training_selected_segment_indices(task)
 
 
 def _build_listening_task_payload(task, exercise_data: dict):
@@ -1672,6 +1671,7 @@ def _build_listening_task_payload(task, exercise_data: dict):
     payload["parts"] = filtered_parts
     payload["selected_segment_indices"] = retained_indices if selected else []
     payload["selected_segment_count"] = len(retained_indices)
+    task_training_policy(task, payload)
     return payload
 
 
@@ -1909,6 +1909,7 @@ def ensure_legacy_schema() -> None:
             "listening_resource_type": "VARCHAR(32) DEFAULT 'intensive'",
             "listening_exercise_id": "VARCHAR(120)",
             "listening_access_token": "VARCHAR(64)",
+            "listening_training_mode": "VARCHAR(24)",
             "reading_test_id": "VARCHAR(120)",
             "reading_passage_number": "INTEGER",
             "reading_access_token": "VARCHAR(64)",
@@ -1969,6 +1970,25 @@ def ensure_legacy_schema() -> None:
             current_app.logger.warning(
                 "Failed to ensure index on task.plan_item_id: %s", exc
             )
+    if "listening_segment_result" in tables:
+        columns = {
+            col["name"] for col in inspector.get_columns("listening_segment_result")
+        }
+        if "training_level" not in columns:
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "ALTER TABLE listening_segment_result "
+                            "ADD COLUMN training_level VARCHAR(16)"
+                        )
+                    )
+            except Exception as exc:  # pragma: no cover - best-effort safeguard
+                if "duplicate column" not in str(exc).lower():
+                    current_app.logger.warning(
+                        "Failed to add listening_segment_result.training_level: %s",
+                        exc,
+                    )
     if "dictation_word" in tables:
         columns = {col["name"] for col in inspector.get_columns("dictation_word")}
         if "accepted_answers" not in columns:
@@ -3510,6 +3530,7 @@ def tasks_page():
         if listening_resource_type not in LISTENING_RESOURCE_TYPES:
             listening_resource_type = LISTENING_RESOURCE_INTENSIVE
         listening_access_token = None
+        listening_training_mode = None
         listening_error = None
         if listening_exercise_id:
             # 自动填充 category 和 detail
@@ -3539,6 +3560,10 @@ def tasks_page():
                     listening_error = "选择的剑雅整套练习不存在"
             else:
                 listening_resource_type = LISTENING_RESOURCE_INTENSIVE
+                listening_training_mode = normalize_training_mode(
+                    request.form.get("listening_training_mode"),
+                    default="system",
+                )
                 listening_json = _listening_root() / f"{safe_listening_id}.json"
                 if listening_json.exists():
                     meta = json.loads(listening_json.read_text(encoding="utf-8"))
@@ -3661,6 +3686,7 @@ def tasks_page():
             resource_type, resource_id, resource_metadata = _task_resource_binding(
                 listening_exercise_id=listening_exercise_id or None,
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
+                listening_training_mode=listening_training_mode,
                 reading_test_id=reading_test_id or None,
                 reading_passage_number=reading_passage_number,
                 dictation_book_id=dictation_task_book_id,
@@ -3717,6 +3743,7 @@ def tasks_page():
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
                 listening_exercise_id=listening_exercise_id or None,
                 listening_access_token=listening_access_token,
+                listening_training_mode=listening_training_mode,
                 reading_test_id=reading_test_id or None,
                 reading_passage_number=reading_passage_number,
                 reading_access_token=reading_access_token,
@@ -4132,6 +4159,7 @@ def tasks_page():
         previous_day_tasks=previous_day_tasks,
         listening_exercises=listening_exercises,
         listening_exercise_segments=listening_exercise_segments,
+        listening_training_modes=TRAINING_MODE_OPTIONS,
         reading_exercises=reading_exercises,
         reading_exercise_passages=reading_exercise_passages,
     )
@@ -4437,7 +4465,14 @@ def task_listening_detail_page(tid):
         })
 
     total_segments = len(segment_rows)
-    summary_accuracy = round(total_correct * 100.0 / total_words, 1) if total_words else float(task.accuracy or 0.0)
+    training_policy = task_training_policy(task)
+    summary_accuracy = (
+        None
+        if training_policy["review_only"]
+        else round(total_correct * 100.0 / total_words, 1)
+        if total_words
+        else float(task.accuracy or 0.0)
+    )
     summary_completion = round(completed_count * 100.0 / total_segments, 1) if total_segments else float(task.completion_rate or 0.0)
     repeat_summary = _listening_repeat_summary(list(repeat_rows.values()), total_segments)
 
@@ -4456,6 +4491,7 @@ def task_listening_detail_page(tid):
             "total_words": total_words,
         },
         repeat_summary=repeat_summary,
+        training_policy=training_policy,
     )
 
 
@@ -9231,6 +9267,7 @@ def api_student_listening_task(task_id):
         return jsonify({"ok": False, "error": "exercise_not_found"}), 404
     exercise_data = json.loads(json_path.read_text(encoding="utf-8"))
     task_exercise_data = _build_listening_task_payload(task, exercise_data)
+    training_policy = task_training_policy(task)
     selected_indices = set(task_exercise_data.get("selected_segment_indices") or [])
 
     # 已有进度
@@ -9251,6 +9288,7 @@ def api_student_listening_task(task_id):
             "accuracy": r.accuracy,
             "is_completed": r.is_completed,
             "attempt_count": r.attempt_count,
+            "training_level": r.training_level,
             "hidden_word_indices": json.loads(r.hidden_word_indices) if r.hidden_word_indices else [],
             "answers_json": json.loads(r.answers_json) if r.answers_json else [],
             "results": _canonical_results_for_saved_listening_segment(exercise_data, r),
@@ -9279,6 +9317,8 @@ def api_student_listening_task(task_id):
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "selected_segment_count": task_exercise_data.get("selected_segment_count"),
+            "listening_training_mode": task_training_mode(task),
+            "listening_training_policy": training_policy,
         },
         "exercise": task_exercise_data,
         "progress": progress,
@@ -9334,6 +9374,7 @@ def api_student_listening_submit_segment(task_id, segment_index):
                 "hidden_word_indices": json.loads(result.hidden_word_indices or "[]"),
                 "answers": json.loads(result.answers_json or "[]"),
                 "results": existing_results,
+                "training_level": result.training_level,
             },
             "task": {
                 "status": task.status,
@@ -9347,6 +9388,16 @@ def api_student_listening_submit_segment(task_id, segment_index):
     if not json_path.exists():
         return jsonify({"ok": False, "error": "exercise_not_found"}), 404
     ex_data = json.loads(json_path.read_text(encoding="utf-8"))
+    try:
+        training_level = validate_first_attempt_level(
+            task,
+            ex_data,
+            segment_index,
+            submitted_level=data.get("training_level"),
+            hidden_word_indices=data.get("hidden_word_indices"),
+        )
+    except ValueError as exc:
+        return jsonify({"ok": False, "error": str(exc)}), 409
     try:
         grade = grade_first_attempt(
             ex_data,
@@ -9376,38 +9427,18 @@ def api_student_listening_submit_segment(task_id, segment_index):
         accuracy=accuracy,
         is_completed=True,
         attempt_count=1,
+        training_level=training_level,
     )
     db.session.add(result)
 
-    # 汇总到 Task：统计总 segment 数和完成数
-    total_segments = _listening_segment_count_for_task(task, ex_data)
-
+    db.session.flush()
     all_results = ListeningSegmentResult.query.filter_by(task_id=task_id).all()
-    selected_set = set(selected_indices or [])
-    relevant_results = [
-        r for r in all_results
-        if not selected_set or r.segment_index in selected_set
-    ]
-    completed_count = sum(1 for r in relevant_results if r.is_completed)
-    if not any(r.segment_index == segment_index for r in relevant_results):
-        completed_count += 1  # 新记录
-
-    total_correct = sum(r.correct_words for r in relevant_results if r.segment_index != segment_index) + correct_words
-    total_total = sum(r.total_words for r in relevant_results if r.segment_index != segment_index) + total_words
-
-    task.completion_rate = round(completed_count / total_segments * 100, 1) if total_segments > 0 else 0.0
-    task.accuracy = round(total_correct / total_total * 100, 1) if total_total > 0 else 0.0
-    if duration_seconds is not None:
-        try:
-            duration_val = max(0, int(duration_seconds))
-            task.actual_seconds = max(int(task.actual_seconds or 0), duration_val)
-        except (TypeError, ValueError):
-            pass
-
-    if completed_count >= total_segments and total_segments > 0:
-        task.status = "done"
-    elif completed_count > 0:
-        task.status = "progress"
+    update_task_progress_summary(
+        task,
+        all_results,
+        total_segments=_listening_segment_count_for_task(task, ex_data),
+        duration_seconds=duration_seconds,
+    )
 
     db.session.commit()
 
@@ -9422,6 +9453,7 @@ def api_student_listening_submit_segment(task_id, segment_index):
             "hidden_word_indices": hidden_word_indices,
             "answers": answers_json,
             "results": _serialize_listening_cloze_results(grade["results"]),
+            "training_level": training_level,
         },
         "task": {
             "status": task.status,

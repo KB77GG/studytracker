@@ -102,6 +102,7 @@ def _repeat_payload(task: Any) -> dict[str, Any]:
         "speaking_phrase_end": _safe_int(getattr(task, "speaking_phrase_end", None)),
         "listening_resource_type": getattr(task, "listening_resource_type", None) or "intensive",
         "listening_exercise_id": getattr(task, "listening_exercise_id", None) or "",
+        "listening_training_mode": getattr(task, "listening_training_mode", None) or "",
         "listening_section_number": _listening_section_number(getattr(task, "question_ids", None)),
         "reading_test_id": getattr(task, "reading_test_id", None) or "",
         "reading_passage_number": _safe_int(getattr(task, "reading_passage_number", None)),

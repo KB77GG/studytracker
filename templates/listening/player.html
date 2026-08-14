@@ -301,6 +301,12 @@ body {
 }
 
 .mode-tab:hover:not(.active) { color: var(--accent); }
+.mode-tab:disabled { opacity: .42; cursor: not-allowed; }
+.training-policy-banner {
+  display: none; margin: 0 24px 12px; padding: 9px 12px; border-radius: 10px;
+  background: #ecfdf5; color: #115e59; font-size: 12px; line-height: 1.5;
+}
+.training-policy-banner.visible { display: block; }
 
 /* Controls */
 .controls {
@@ -867,6 +873,7 @@ body {
         <button class="mode-tab" data-mode="dictation">听写模式</button>
       </div>
     </div>
+    <div class="training-policy-banner" id="trainingPolicyBanner"></div>
 
     <!-- Controls -->
     <div class="controls">
@@ -1000,6 +1007,8 @@ body {
   const taskId = urlParams.get('task_id');
   const taskToken = urlParams.get('token') || '';
   let taskProgress = {};  // segment_index -> result
+  let taskTrainingPolicy = { locked: false, review_only: false };
+  const reviewListenedSegments = new Set();
   const freeStudentName = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student') || 'guest';
 
   function getFreeProgressStorageKey() {
@@ -1186,7 +1195,9 @@ body {
     const correctWords = rows.reduce((sum, r) => sum + (Number(r.correct_words) || 0), 0);
     const totalWords = rows.reduce((sum, r) => sum + (Number(r.total_words) || 0), 0);
     const accuracy = totalWords > 0 ? Number((correctWords * 100 / totalWords).toFixed(1)) : 0;
-    if (completedCount > 0) {
+    if (taskTrainingPolicy.review_only && taskId) {
+      sub.textContent = `已完成 ${completedCount}/${totalSegs} 句 · 听辨核对不计正确率`;
+    } else if (completedCount > 0) {
       sub.textContent = `已完成 ${completedCount}/${totalSegs} 句 · 正确率 ${formatAccuracy(accuracy)}%`;
     } else if (taskId) {
       sub.textContent = `已完成 0/${totalSegs} 句`;
@@ -1247,6 +1258,10 @@ body {
         if (!d.ok) { alert('加载失败: ' + (d.error || '未知错误')); return; }
         data = d.exercise;
         taskProgress = d.progress || {};
+        taskTrainingPolicy = d.task?.listening_training_policy || { locked: false, review_only: false };
+        if (taskTrainingPolicy.locked) {
+          mode = taskTrainingPolicy.initial_mode === 'listen' ? 'sentence' : 'dictation';
+        }
         init();
       })
       .catch(e => alert('加载数据失败: ' + e.message));
@@ -1280,6 +1295,7 @@ body {
       updatePracticeSubtitle(freeProgress, totalSegs);
     }
 
+    updateTrainingPolicyUI();
     updateModeControls();
     buildPartTabs();
     buildSentenceList();
@@ -1426,6 +1442,18 @@ body {
     audio.pause();
     currentSegIdx = idx;
     const seg = segs[idx];
+    const segGlobalIdx = getGlobalSegmentIndex();
+    if (taskTrainingPolicy.review_only) {
+      mode = 'sentence';
+    } else if (taskTrainingPolicy.locked && !getCurrentSegmentProgress(segGlobalIdx)) {
+      mode = 'dictation';
+    }
+    if (taskTrainingPolicy.locked && !getCurrentSegmentProgress(segGlobalIdx)) {
+      showOriginal = false;
+      showTranslation = false;
+      document.getElementById('btnShowText').classList.remove('on');
+      document.getElementById('btnShowTrans').classList.remove('on');
+    }
 
     // Update sidebar
     document.querySelectorAll('.sentence-item').forEach((el, i) => {
@@ -1487,7 +1515,21 @@ body {
         block.innerHTML = '<span style="opacity:0.45;">当前为精听模式。先听，再按“显示原文”核对。</span>';
       }
       area.appendChild(block);
+      if (taskTrainingPolicy.review_only && taskId) {
+        const segGlobalIdx = getGlobalSegmentIndex();
+        const progress = getCurrentSegmentProgress(segGlobalIdx);
+        const complete = document.createElement('button');
+        complete.type = 'button';
+        complete.className = 'dictation-start-btn';
+        complete.style.marginTop = '14px';
+        complete.textContent = progress ? '本句已完成' : '完成本句听辨';
+        complete.disabled = !!progress || !reviewListenedSegments.has(segGlobalIdx) || !showOriginal;
+        complete.title = complete.disabled && !progress ? '请先完整听完本句并显示原文' : '';
+        complete.onclick = completeCurrentReview;
+        area.appendChild(complete);
+      }
     }
+    updateModeControls();
   }
 
   function getGlobalSegmentIndex() {
@@ -1515,9 +1557,15 @@ body {
     // every spoken token is safe to show as a challenge textarea; partial
     // legacy records stay per-word regardless of the current global choice.
     if (savedProgress) {
-      const inferred = ListeningCloze.inferSavedDictationLevel(sourceText || savedProgress.segment_text || '', savedProgress);
+      const inferred = savedProgress.training_level
+        || ListeningCloze.inferSavedDictationLevel(sourceText || savedProgress.segment_text || '', savedProgress);
       dictationLevelsBySegment.set(key, inferred);
       return inferred;
+    }
+    const seg = currentSegments()[currentSegIdx];
+    if (taskTrainingPolicy.locked && seg?.assigned_training_level) {
+      dictationLevelsBySegment.set(key, seg.assigned_training_level);
+      return seg.assigned_training_level;
     }
     return dictationLevel;
   }
@@ -1530,6 +1578,7 @@ body {
   }
 
   function isDictationLevelFrozen(segGlobalIdx, savedProgress) {
+    if (taskTrainingPolicy.locked && savedProgress) return false;
     return !!savedProgress || dictationLevelsBySegment.has(dictationStateKey(segGlobalIdx));
   }
 
@@ -1542,7 +1591,11 @@ body {
   }
 
   function getHideIndices(seg, segGlobalIdx, sourceText, savedProgress, level) {
-    if (savedProgress && Array.isArray(savedProgress.hidden_word_indices)) {
+    const savedLevel = savedProgress
+      ? (savedProgress.training_level
+        || ListeningCloze.inferSavedDictationLevel(sourceText || savedProgress.segment_text || '', savedProgress))
+      : null;
+    if (savedProgress && savedLevel === level && Array.isArray(savedProgress.hidden_word_indices)) {
       return savedProgress.hidden_word_indices.map(Number).filter(Number.isInteger);
     }
     const seed = `${taskId || freeStudentName}:${segGlobalIdx}:${level}`;
@@ -1558,6 +1611,9 @@ body {
     const activeLevel = context?.level || dictationLevel;
     const active = ListeningCloze.LEVELS.find(level => level.key === activeLevel) || ListeningCloze.LEVELS[1];
     const frozen = !!context && isDictationLevelFrozen(context.segGlobalIdx, context.savedProgress);
+    const ranks = { basic: 0, standard: 1, challenge: 2 };
+    const assignedLevel = context?.seg?.assigned_training_level;
+    const savedLevel = context?.savedProgress?.training_level || assignedLevel;
     desc.textContent = active.description;
     options.innerHTML = '';
     ListeningCloze.LEVELS.forEach(level => {
@@ -1567,9 +1623,17 @@ body {
       button.dataset.dictationLevel = level.key;
       button.textContent = level.label;
       button.setAttribute('aria-pressed', String(level.key === activeLevel));
-      button.disabled = frozen && level.key !== activeLevel;
+      const belowAssigned = !!(taskTrainingPolicy.locked && savedLevel
+        && ranks[level.key] < ranks[savedLevel]);
+      const challengeBlocked = level.key === 'challenge' && context?.seg?.challenge_allowed === false;
+      const beforeFirstAttempt = !!(taskTrainingPolicy.locked && !context?.savedProgress);
+      button.disabled = challengeBlocked || belowAssigned
+        || (beforeFirstAttempt && level.key !== assignedLevel)
+        || (frozen && level.key !== activeLevel);
       button.setAttribute('aria-disabled', String(button.disabled));
-      if (button.disabled) button.title = '本句已开始或已保存，难度已冻结';
+      if (button.disabled) button.title = challengeBlocked
+        ? '本句较长，不开放整句听写'
+        : (beforeFirstAttempt ? '正式首答使用助教布置的档位' : '复盘只可保持或升档');
       button.onclick = () => changeDictationLevel(level.key);
       options.appendChild(button);
     });
@@ -1910,8 +1974,8 @@ body {
     correctionSegments.add(context.stateKey);
     dictationStartedSegments.add(context.stateKey);
     dictationDrafts.delete(dictationDraftKey(context.segGlobalIdx, context.level));
-    renderDictationLevelPanel(true, context);
-    if (autoplay) startAutoRepeatSequence();
+    renderContent();
+    startAutoRepeatSequence();
   }
 
   function confirmDisplayedFirstAttempt(savedProgress) {
@@ -1923,8 +1987,9 @@ body {
   }
 
   function changeDictationLevel(nextLevel) {
-    if (!ListeningCloze.LEVELS.some(level => level.key === nextLevel) || nextLevel === dictationLevel) return;
+    if (!ListeningCloze.LEVELS.some(level => level.key === nextLevel)) return;
     const context = currentDictationContext;
+    if (context && nextLevel === context.level) return;
     if (context && isDictationLevelFrozen(context.segGlobalIdx, context.savedProgress)) {
       showDictationValidationMessage(context.savedProgress
         ? '本句已有保存进度，难度已冻结；请切换到未开始的新句后再选择。'
@@ -1933,6 +1998,11 @@ body {
     }
     saveCurrentDictationDraft();
     dictationLevel = nextLevel;
+    if (context?.savedProgress && taskTrainingPolicy.locked) {
+      dictationLevelsBySegment.set(context.stateKey, nextLevel);
+      correctionSegments.add(context.stateKey);
+      dictationStartedSegments.add(context.stateKey);
+    }
     renderContent();
   }
 
@@ -1980,6 +2050,7 @@ body {
           answers: answers,
           correct_words: grade.correctWords,
           total_words: grade.totalWords,
+          training_level: context.level,
           duration_seconds: computeDurationSeconds(),
         })
       })
@@ -1998,6 +2069,7 @@ body {
             hidden_word_indices: savedSegment.hidden_word_indices || context.hiddenIndices,
             answers_json: savedSegment.answers || answers,
             results: Array.isArray(savedSegment.results) ? savedSegment.results : [],
+            training_level: savedSegment.training_level || context.level,
           };
           applyCompletedMarkers(taskProgress);
           buildSentenceList();
@@ -2022,6 +2094,7 @@ body {
         is_completed: true,
         hidden_word_indices: context.hiddenIndices,
         answers_json: answers,
+        training_level: context.level,
       };
       if (saveFreeProgress()) {
         applyCompletedMarkers(freeProgress);
@@ -2059,6 +2132,9 @@ body {
     const modeRange = getCurrentModeRange();
     if (modeRange && t >= modeRange.end && !segmentEndHandled) {
         segmentEndHandled = true;
+        if (taskTrainingPolicy.review_only && taskId) {
+          reviewListenedSegments.add(getGlobalSegmentIndex());
+        }
         if (sentenceLoopActive && isSegmentPracticeMode()) {
           segmentEndHandled = false;
           audio.currentTime = modeRange.start;
@@ -2079,6 +2155,7 @@ body {
           audio.pause();
           updatePlayBtn(false);
         }
+        if (taskTrainingPolicy.review_only && taskId) renderContent();
     }
   }
 
@@ -2096,6 +2173,9 @@ body {
   }
 
   function seekWithinCurrentRange(deltaSeconds) {
+    if (taskTrainingPolicy.review_only
+      && deltaSeconds > 0
+      && !getCurrentSegmentProgress(getGlobalSegmentIndex())) return;
     stopAutoRepeat();
     audio.currentTime = clampToCurrentRange(Number(audio.currentTime || 0) + deltaSeconds);
     updateAudioProgressDisplay();
@@ -2160,6 +2240,7 @@ body {
     seekWithinCurrentRange(-5);
   };
   document.getElementById('btnFwd5').onclick = () => {
+    if (taskTrainingPolicy.review_only && !getCurrentSegmentProgress(getGlobalSegmentIndex())) return;
     seekWithinCurrentRange(5);
   };
 
@@ -2182,12 +2263,14 @@ body {
   };
 
   document.getElementById('btnShowText').onclick = function() {
+    if (this.disabled) return;
     showOriginal = !showOriginal;
     this.classList.toggle('on', showOriginal);
     renderContent();
   };
 
   document.getElementById('btnShowTrans').onclick = function() {
+    if (this.disabled) return;
     showTranslation = !showTranslation;
     this.classList.toggle('on', showTranslation);
     renderContent();
@@ -2208,9 +2291,59 @@ body {
   };
 
   function updateModeControls() {
-    document.getElementById('btnShowText').style.display = 'inline-flex';
+    const segGlobalIdx = getGlobalSegmentIndex();
+    const progress = getCurrentSegmentProgress(segGlobalIdx);
+    const listened = reviewListenedSegments.has(segGlobalIdx);
+    const lockedBeforeFirst = !!(taskTrainingPolicy.locked
+      && !taskTrainingPolicy.review_only && !progress);
+    const revealAllowed = !taskTrainingPolicy.locked || !!progress
+      || (taskTrainingPolicy.review_only && listened);
+    const textButton = document.getElementById('btnShowText');
+    const transButton = document.getElementById('btnShowTrans');
+    textButton.style.display = 'inline-flex';
+    textButton.disabled = !revealAllowed;
+    transButton.disabled = !revealAllowed;
+    textButton.title = revealAllowed ? '显示原文 ( - )' : '完成正式首答或完整听完后开放';
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      const targetMode = tab.dataset.mode;
+      tab.disabled = taskTrainingPolicy.review_only
+        ? targetMode !== 'sentence'
+        : (lockedBeforeFirst && targetMode !== 'dictation');
+      tab.classList.toggle('active', targetMode === mode);
+    });
     const repeatBtn = document.getElementById('btnRepeat');
     repeatBtn.textContent = '↻ 当前句';
+  }
+
+  function updateTrainingPolicyUI() {
+    const banner = document.getElementById('trainingPolicyBanner');
+    if (!banner) return;
+    banner.classList.toggle('visible', !!taskTrainingPolicy.locked);
+    banner.textContent = taskTrainingPolicy.locked
+      ? `正式训练：${taskTrainingPolicy.label || '系统推荐'}。${taskTrainingPolicy.description || ''} 首答后开放复盘与升档，首答成绩不会被覆盖。`
+      : '';
+  }
+
+  function completeCurrentReview() {
+    const segGlobalIdx = getGlobalSegmentIndex();
+    if (!taskId || !reviewListenedSegments.has(segGlobalIdx) || !showOriginal) return;
+    fetch(`/api/student/listening/task/${taskId}/segment/${segGlobalIdx}/review`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: taskToken,
+        listened: true,
+        revealed_original: true,
+        duration_seconds: computeDurationSeconds(),
+      }),
+    }).then(r => r.json()).then(result => {
+      if (!result.ok) throw new Error(result.error || '保存失败');
+      taskProgress[segGlobalIdx] = result.segment;
+      applyCompletedMarkers(taskProgress);
+      buildSentenceList();
+      updatePracticeSubtitle(taskProgress, totalSegmentCount());
+      renderContent();
+    }).catch(error => alert('保存听辨进度失败：' + error.message));
   }
 
   function bindErrorSummaryHandlers() {
@@ -2234,6 +2367,7 @@ body {
   // Mode tabs
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.onclick = function() {
+      if (this.disabled) return;
       stopAutoRepeat();
       audio.pause();
       mode = this.dataset.mode;
@@ -2246,6 +2380,7 @@ body {
 
   // Progress bar click
   document.getElementById('progressTrack').onclick = function(e) {
+    if (taskTrainingPolicy.review_only && !getCurrentSegmentProgress(getGlobalSegmentIndex())) return;
     stopAutoRepeat();
     const rect = this.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;

@@ -43,7 +43,41 @@
   增加教师布置、批改或小程序入口，应作为独立需求设计，不要把逻辑继续堆入 `app.py`，也不要把当前教学档位误称为
   IELTS 官方评分。上线后的首个真实学生完成记录应只读抽查题号、档位、server duration、WPM 与 accuracy 是否合理，
   不要修改学生原文。
+## 2026-08-14 精听正式训练方式（本机完成，未提交/推送/部署/上传）
 
+- 当前正式工作树是 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支
+  `codex/listening-dictation-release`，HEAD、跟踪分支和 `origin/main` 均为
+  `d500b396e903f2d4bf1b88f9998ae9c1fc5b9f1f`。本节全部改动仍是本机未提交内容；既有未跟踪
+  `.tmp/product-audit-listening-modes-20260814/` 审计截图原样保留，未纳入本轮业务文件。
+- 助教网页与小程序布置端现可为精听任务选择并保存
+  `system / review / basic / standard / challenge`（系统推荐 / 听辨核对 / 关键词 / 标准 / 整句）。
+  新任务正式首答由任务字段 `Task.listening_training_mode` 锁定；首答保存后开放句子复盘、跟读和不低于原档位的
+  升档练习，订正仍只在本地核对，不覆盖不可变首答。学生已开始的任务不可修改训练方式；历史 NULL 任务继续保持
+  学生自选，助教编辑历史任务时不会被误升级为系统推荐。
+- 共享策略位于 `services/listening_training.py`：系统推荐通常给标准档，超过 15 秒或 20 个内容词的长句降为关键词；
+  整句档遇长句降为标准。任务 API 给每句下发 `assigned_training_level` 与 `challenge_allowed`，提交接口校验新客户端
+  上报的正式档位并把实际首答档位写入 `ListeningSegmentResult.training_level`。旧已安装小程序不上传档位时继续接受
+  原有三档合法形态，避免灰度期间任务不可用；新客户端显式上报错误档位则返回 409。
+- “听辨核对”是完成制：学生必须完整播放本句、再揭示原文，才可调用幂等 completion API；网页在未完成前禁用向前
+  跳播，小程序没有句内跳播入口。该模式不写 0% 到任务汇总，教师明细显示“已核对/完成制”，不把它混入词级正确率。
+  新 review API 对双设备并发重复提交使用唯一键和冲突回读，避免返回 500。
+- 两端兼容门禁：小程序助教选择器只有在目录 API 返回 `capabilities.listening_training_modes=true` 时出现，因此新版小程序
+  先于后端发布时会自动隐藏；旧任务/旧后端仍按原逻辑。网页由同一后端模板与契约一起上线。现有“已上传待审核”的
+  小程序包来自本轮之前，**不包含本节训练方式改造**；本功能最终需要另一次小程序上传、审核和发布。
+- 本轮业务/测试改动包括：`models.py`、`app.py`、`api/{__init__,miniprogram,listening_training}.py`、
+  `services/{listening_training,task_assignment_history}.py`、网页布置/播放器/教师明细模板、小程序助教和学生精听页三件套，
+  以及 4 个精听/助教测试文件。启动时的 legacy schema safeguard 会为既有库补两列；尚未在生产执行，也没有生产数据写入。
+- 验证均在本 worktree，Python 使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`：专项
+  `19 passed, 3 subtests passed`；小程序策略交互 Node `15 passed`；`tests/*.js` 全部通过；Jinja 三模板可编译，
+  网页内联 JS、两个小程序 JS `node --check`、Python `py_compile`、新增 Python 文件 Ruff/Black、
+  微信官方编译器目标页 WXML/WXSS、`git diff --check` 均通过。全仓 `pytest -q` 为
+  `523 passed, 44 subtests passed, 2 failed`；两个失败仍仅因本 worktree
+  缺少被 gitignore 的既有 `static/listening/ielts10_test1_s1.mp3`，对应普通/Range 请求 404，桌面主工作树有该资产，
+  与本轮代码无关。
+- 尚未验证/发布边界：未做微信开发者工具 GUI 编译、模拟器或真机联合验收；未 commit、未 push、未部署后端/网页，
+  未上传/提审/发布包含本节的新小程序包。下一位 agent 应先复核当前 dirty diff；得到用户明确授权后再提交并推送，
+  按后端 5002 单 worker/gthread/6 threads 门禁部署，再由用户从本 worktree 上传新小程序包，最后覆盖五种布置方式、
+  首答锁定、首答后复盘升档、听辨完成制及旧任务兼容的真机回归。
 ## 2026-08-14 电话/邮编逐字符发音修正与小程序整合（后端已上线，小程序已上传待审核）
 
 - 正式发布工作树为 `/Users/zhouxin/.codex/worktrees/2b72/studytracker`，分支

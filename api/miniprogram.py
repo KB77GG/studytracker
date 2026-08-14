@@ -19,7 +19,7 @@ from models import (
     MaterialBank, Question, QuestionOption, SpeakingSession, SpeakingMessage,
     StudentAnswer, StudentSavedWord,
     DictationBook, DictationWord, DictationRecord, StudentWordMastery,
-    ListeningTestSubmission, ReadingTestSubmission
+    ListeningSegmentResult, ListeningTestSubmission, ReadingTestSubmission
 )
 from .auth_utils import can_view_all_schedules, require_api_user
 from .listening_intensive import (
@@ -51,6 +51,12 @@ from services.scheduler_client import (
     fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
 )
 from services.vocabulary_mastery import vocabulary_goal_for_task
+from services.listening_training import (
+    TRAINING_MODE_OPTIONS,
+    normalize_training_mode,
+    task_training_mode,
+    training_mode_option,
+)
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
@@ -1729,6 +1735,10 @@ def get_student_today_tasks():
             # 精听练习字段
             "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
             "listening_exercise_id": task.listening_exercise_id,
+            "listening_training_mode": task_training_mode(task),
+            "listening_training_mode_label": training_mode_option(
+                task_training_mode(task)
+            )["label"],
             "listening_section_number": _task_listening_section_number(task),
             "listening_token": task.listening_access_token,
             "listening_url": _task_listening_url(task),
@@ -1854,6 +1864,10 @@ def get_task_detail(task_id):
                 # Listening Info
                 "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
                 "listening_exercise_id": task.listening_exercise_id,
+                "listening_training_mode": task_training_mode(task),
+                "listening_training_mode_label": training_mode_option(
+                    task_training_mode(task)
+                )["label"],
                 "listening_section_number": _task_listening_section_number(task),
                 "listening_token": task.listening_access_token,
                 "listening_url": _task_listening_url(task),
@@ -4206,6 +4220,10 @@ def get_practice_catalog():
     """给小程序布置作业页提供剑雅刷题与精听目录。"""
     return jsonify({
         "ok": True,
+        "capabilities": {
+            "listening_training_modes": True,
+        },
+        "listening_training_modes": [dict(option) for option in TRAINING_MODE_OPTIONS],
         "cambridge_listening": _practice_listening_catalog(),
         "listening_intensive": _practice_intensive_catalog(),
         "cambridge_reading": _practice_reading_catalog(),
@@ -4308,6 +4326,7 @@ def _serialize_teacher_practice_result(
 
 def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = None) -> dict:
     listening_section_number = _task_listening_section_number(task)
+    listening_training = training_mode_option(task_training_mode(task))
     source_type = "custom"
     source_summary = task.detail or ""
     if task.listening_exercise_id:
@@ -4350,6 +4369,8 @@ def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = 
         "source_summary": source_summary,
         "listening_resource_type": _task_listening_resource_type(task) if task.listening_exercise_id else None,
         "listening_exercise_id": task.listening_exercise_id,
+        "listening_training_mode": task_training_mode(task),
+        "listening_training_mode_label": listening_training["label"],
         "listening_section_number": listening_section_number,
         "listening_url": _task_listening_url(task),
         "reading_test_id": task.reading_test_id,
@@ -4483,6 +4504,7 @@ def _build_teacher_homework_values(
     listening_resource_type = None
     listening_exercise_id = None
     listening_access_token = None
+    listening_training_mode = None
     reading_test_id = None
     reading_passage_number = None
     reading_access_token = None
@@ -4531,6 +4553,13 @@ def _build_teacher_homework_values(
             existing_task,
             safe_id,
         )
+        raw_training_mode = data.get("listening_training_mode")
+        if raw_training_mode in (None, ""):
+            listening_training_mode = task_training_mode(existing_task)
+        else:
+            listening_training_mode = normalize_training_mode(raw_training_mode)
+            if not listening_training_mode:
+                return None, "invalid_listening_training_mode", 400
         default_detail = payload.get("title") or info["title"]
         detail = detail or default_detail
         category = (data.get("category") or "雅思-听力-精听").strip()[:32]
@@ -4581,6 +4610,7 @@ def _build_teacher_homework_values(
         "listening_resource_type": listening_resource_type,
         "listening_exercise_id": listening_exercise_id,
         "listening_access_token": listening_access_token,
+        "listening_training_mode": listening_training_mode,
         "reading_test_id": reading_test_id,
         "reading_passage_number": reading_passage_number,
         "reading_access_token": reading_access_token,
@@ -4770,6 +4800,7 @@ def _create_teacher_homework(data: dict, *, force_quick: bool = False):
         listening_resource_type=values["listening_resource_type"],
         listening_exercise_id=values["listening_exercise_id"],
         listening_access_token=values["listening_access_token"],
+        listening_training_mode=values["listening_training_mode"],
         reading_test_id=values["reading_test_id"],
         reading_passage_number=values["reading_passage_number"],
         reading_access_token=values["reading_access_token"],
@@ -4855,6 +4886,16 @@ def _update_teacher_homework(task_id: int, data: dict, *, force_quick: bool = Fa
     )
     if error:
         return _teacher_homework_error(error, status)
+
+    next_training_mode = values.get(
+        "listening_training_mode",
+        task_training_mode(task),
+    )
+    if (
+        next_training_mode != task_training_mode(task)
+        and ListeningSegmentResult.query.filter_by(task_id=task.id).first()
+    ):
+        return _teacher_homework_error("listening_progress_exists", 409)
 
     for field, value in values.items():
         setattr(task, field, value)

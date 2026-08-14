@@ -7,6 +7,7 @@ from pathlib import Path
 from flask import Flask
 
 import app as app_module
+from api.listening_training import listening_training_bp
 from models import ListeningSegmentResult, Task, db
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,7 +24,9 @@ class ListeningClozeProgressApiTest(unittest.TestCase):
             TESTING=True,
         )
         db.init_app(self.app)
+        self.app.register_blueprint(listening_training_bp)
         app_module.app = self.app
+        self.client = self.app.test_client()
 
         with self.app.app_context():
             db.create_all()
@@ -187,6 +190,113 @@ class ListeningClozeProgressApiTest(unittest.TestCase):
                 )
                 self.assertEqual(response.status_code, 400)
                 self.assertEqual(response.get_json()["error"], case["expected_error"])
+
+    def test_assigned_mode_is_returned_and_enforced_for_first_attempt(self):
+        with self.app.app_context():
+            task = Task(
+                student_name="正式训练",
+                category="雅思-听力-精听",
+                detail="locked standard",
+                status="pending",
+                listening_exercise_id="ielts20_test1_s1",
+                listening_access_token="locked-token",
+                listening_training_mode="standard",
+            )
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        with self.app.test_request_context(
+            f"/api/student/listening/task/{task_id}?token=locked-token"
+        ):
+            response = self.app.make_response(
+                app_module.api_student_listening_task(task_id)
+            )
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertTrue(payload["task"]["listening_training_policy"]["locked"])
+        segment = payload["exercise"]["parts"][0]["segments"][2]
+        self.assertEqual(segment["assigned_training_level"], "standard")
+
+        canonical = segment["text"]
+        with self.app.test_request_context(
+            f"/api/student/listening/task/{task_id}/segment/2?token=locked-token",
+            method="POST",
+            json={
+                "segment_text": canonical,
+                "hidden_word_indices": [1],
+                "answers": ["The"],
+                "training_level": "basic",
+            },
+        ):
+            mismatch = self.app.make_response(
+                app_module.api_student_listening_submit_segment(task_id, 2)
+            )
+        self.assertEqual(mismatch.status_code, 409)
+        self.assertEqual(mismatch.get_json()["error"], "training_level_mismatch")
+
+        with self.app.test_request_context(
+            f"/api/student/listening/task/{task_id}/segment/2?token=locked-token",
+            method="POST",
+            json={
+                "segment_text": canonical,
+                "hidden_word_indices": [1, 2],
+                "answers": ["The", "Junction"],
+                "training_level": "standard",
+            },
+        ):
+            saved = self.app.make_response(
+                app_module.api_student_listening_submit_segment(task_id, 2)
+            )
+        self.assertEqual(saved.status_code, 200)
+        self.assertEqual(saved.get_json()["segment"]["training_level"], "standard")
+        with self.app.app_context():
+            row = ListeningSegmentResult.query.filter_by(task_id=task_id).one()
+            self.assertEqual(row.training_level, "standard")
+
+    def test_review_task_requires_listen_and_reveal_then_saves_idempotently(self):
+        with self.app.app_context():
+            task = Task(
+                student_name="听辨核对",
+                category="雅思-听力-精听",
+                detail="review only",
+                status="pending",
+                listening_exercise_id="ielts20_test1_s1",
+                listening_access_token="review-token",
+                listening_training_mode="review",
+                question_ids=json.dumps([0]),
+            )
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        rejected = self.client.post(
+            f"/api/student/listening/task/{task_id}/segment/0/review?token=review-token",
+            json={"listened": True, "revealed_original": False},
+        )
+        self.assertEqual(rejected.status_code, 400)
+        self.assertEqual(rejected.get_json()["error"], "review_requirements_not_met")
+
+        completed = self.client.post(
+            f"/api/student/listening/task/{task_id}/segment/0/review?token=review-token",
+            json={"listened": True, "revealed_original": True},
+        )
+        self.assertEqual(completed.status_code, 200)
+        self.assertFalse(completed.get_json()["already_saved"])
+        self.assertEqual(completed.get_json()["task"]["completion_rate"], 100.0)
+        self.assertIsNone(completed.get_json()["task"]["accuracy"])
+        self.assertEqual(completed.get_json()["task"]["status"], "done")
+
+        duplicate = self.client.post(
+            f"/api/student/listening/task/{task_id}/segment/0/review?token=review-token",
+            json={"listened": True, "revealed_original": True},
+        )
+        self.assertEqual(duplicate.status_code, 200)
+        self.assertTrue(duplicate.get_json()["already_saved"])
+        with self.app.app_context():
+            row = ListeningSegmentResult.query.filter_by(task_id=task_id).one()
+            self.assertEqual(row.training_level, "review")
+            self.assertEqual(row.total_words, 0)
 
 
 if __name__ == "__main__":

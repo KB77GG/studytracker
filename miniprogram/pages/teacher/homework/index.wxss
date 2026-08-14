@@ -110,6 +110,39 @@
   line-height: 1.5;
 }
 
+.training-mode-field {
+  padding: 10px;
+  border: 1px solid #ccfbf1;
+  border-radius: 10px;
+  background: #f0fdfa;
+}
+
+.training-mode-label,
+.training-mode-desc,
+.assigned-mode {
+  display: block;
+}
+
+.training-mode-label {
+  margin-bottom: 7px;
+  color: #115e59;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.training-mode-desc {
+  margin-top: 7px;
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.assigned-mode {
+  margin-top: 4px;
+  color: #0f766e;
+  font-size: 11px;
+}
+
 .quick-source-mode {
   margin-top: 12px;
 }

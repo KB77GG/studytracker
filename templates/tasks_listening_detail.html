@@ -11,7 +11,7 @@
     <div>
       <div class="eyebrow">任务信息</div>
       <h2>{{ task.student_name }} · {{ task.detail or exercise.title }}</h2>
-      <div class="meta-line">材料：{{ exercise.title }} · 任务日期：{{ task.date }} · 状态：{{ task.status }}</div>
+      <div class="meta-line">材料：{{ exercise.title }} · 训练：{{ training_policy.label }} · 任务日期：{{ task.date }} · 状态：{{ task.status }}</div>
     </div>
     <div class="hero-actions">
       <a class="btn btn-primary" href="{{ url_for('listening_player', exercise_id=exercise_id) }}?task_id={{ task.id }}&token={{ task.listening_access_token }}" target="_blank">打开练习页</a>
@@ -25,9 +25,15 @@
       <div class="stat-meta">完成率 {{ '%.1f'|format(summary.completion_rate) }}%</div>
     </article>
     <article class="stat-card">
+      {% if training_policy.review_only %}
+      <p class="stat-label">训练记录</p>
+      <div class="stat-value">完成制</div>
+      <div class="stat-meta">听完并核对原文，不计正确率</div>
+      {% else %}
       <p class="stat-label">词级正确率</p>
       <div class="stat-value">{{ '%.1f'|format(summary.accuracy) }}%</div>
       <div class="stat-meta">{{ summary.total_correct }}/{{ summary.total_words }} 词正确</div>
+      {% endif %}
     </article>
     <article class="stat-card">
       <p class="stat-label">计划时长</p>
@@ -64,7 +70,7 @@
         </div>
         <div class="segment-pill {{ 'done' if result and result.is_completed else 'pending' }}">
           {% if result and result.is_completed %}
-          {{ '%.1f'|format(result.accuracy) }}%
+          {{ '已核对' if result.training_level == 'review' else ('%.1f'|format(result.accuracy) ~ '%') }}
           {% else %}
           未完成
           {% endif %}
@@ -87,15 +93,21 @@
           <div class="segment-block">
             <div class="block-label">结果</div>
             {% if result and result.is_completed %}
-            <div class="mini-meta">尝试 {{ result.attempt_count }} 次 · 正确 {{ result.correct_words }}/{{ result.total_words }}</div>
+            {% if result.training_level == 'review' %}
+            <div class="mini-meta">已完整听辨并核对原文</div>
+            {% else %}
+            <div class="mini-meta">{{ result.training_level or '历史档位' }} · 尝试 {{ result.attempt_count }} 次 · 正确 {{ result.correct_words }}/{{ result.total_words }}</div>
+            {% endif %}
             {% else %}
             <div class="mini-meta">学生还没有提交这一句</div>
             {% endif %}
           </div>
           <div class="segment-block">
-            <div class="block-label">挖空位置</div>
+            <div class="block-label">{{ '训练要求' if result and result.training_level == 'review' else '挖空位置' }}</div>
             <div class="mini-meta">
-              {% if row.hidden_indices_display %}
+              {% if result and result.training_level == 'review' %}
+                听完并核对原文
+              {% elif row.hidden_indices_display %}
                 第 {% for pos in row.hidden_indices_display %}{{ pos }}{% if not loop.last %}、{% endif %}{% endfor %} 位单词
               {% else %}
                 —
@@ -104,7 +116,7 @@
           </div>
         </div>
 
-        <div class="segment-block">
+        <div class="segment-block" {% if result and result.training_level == 'review' %}style="display:none"{% endif %}>
           <div class="block-label">跟读评测</div>
           {% if row.repeat_result %}
           <div class="repeat-metrics">
@@ -134,7 +146,7 @@
           {% endif %}
         </div>
 
-        <div class="segment-block">
+        <div class="segment-block" {% if result and result.training_level == 'review' %}style="display:none"{% endif %}>
           <div class="block-label">答案对照</div>
           {% if row.answer_pairs %}
           <div class="answer-list">

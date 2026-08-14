@@ -238,6 +238,15 @@
           {% endfor %}
           </optgroup>
         </select>
+        <div id="listeningTrainingModeField" style="display:none; margin-top:14px;">
+          <label for="listeningTrainingModeSelect">精听训练方式</label>
+          <select class="form-select" id="listeningTrainingModeSelect" name="listening_training_mode">
+            {% for mode in listening_training_modes %}
+            <option value="{{ mode.key }}" {% if mode.key == 'system' %}selected{% endif %}>{{ mode.label }} — {{ mode.description }}</option>
+            {% endfor %}
+          </select>
+          <small class="text-muted">正式任务会锁定首答方式；完成首答后开放听辨复盘和更高难度。</small>
+        </div>
       </div>
     </div>
 
@@ -2641,6 +2650,10 @@
           const resourceType = document.getElementById('listeningResourceType');
           if (resourceType) resourceType.value = repeat.listening_resource_type || 'intensive';
           handleListeningExerciseChange();
+          const trainingModeSelect = document.getElementById('listeningTrainingModeSelect');
+          if (trainingModeSelect) {
+            trainingModeSelect.value = repeat.listening_training_mode || 'system';
+          }
           window.syncListeningPickerFromSelect?.();
           const sectionValue = repeat.listening_section_number
             ? String(repeat.listening_section_number)
@@ -3164,6 +3177,7 @@
       const categoryRow = document.getElementById('categoryRow');
       const listeningRow = document.getElementById('listeningSelectRow');
       const listeningSectionRow = document.getElementById('listeningSectionRow');
+      const listeningTrainingModeField = document.getElementById('listeningTrainingModeField');
       const readingRow = document.getElementById('readingSelectRow');
       const readingPassageRow = document.getElementById('readingPassageRow');
       const questionRow = document.getElementById('questionSelectRow');
@@ -3181,6 +3195,7 @@
       categoryRow.style.display = 'none';
       listeningRow.style.display = 'none';
       if (listeningSectionRow) listeningSectionRow.style.display = 'none';
+      if (listeningTrainingModeField) listeningTrainingModeField.style.display = 'none';
       if (readingRow) readingRow.style.display = 'none';
       if (readingPassageRow) readingPassageRow.style.display = 'none';
       if (questionRow) questionRow.style.display = 'none';
@@ -3573,17 +3588,21 @@
       const detailInput = document.getElementById('taskDetail');
       const resourceTypeInput = document.getElementById('listeningResourceType');
       const sectionRow = document.getElementById('listeningSectionRow');
+      const trainingModeField = document.getElementById('listeningTrainingModeField');
+      const trainingModeSelect = document.getElementById('listeningTrainingModeSelect');
       if (!listeningSelect || !questionRow || !container || !questionIds || !detailInput) return;
 
       questionIds.value = '';
       setSentenceRangeControlsVisible(false, true);
       if (sectionRow) sectionRow.style.display = 'none';
+      if (trainingModeField) trainingModeField.style.display = 'none';
       resetListeningSectionSelection();
       if (!listeningSelect.value) {
         questionRow.style.display = 'none';
         container.innerHTML = '<div class="text-muted">请选择听力练习</div>';
         detailInput.value = '';
         if (resourceTypeInput) resourceTypeInput.value = 'intensive';
+        if (trainingModeSelect) trainingModeSelect.value = 'system';
         return;
       }
 
@@ -3599,6 +3618,7 @@
         questionIds.value = '';
         return;
       }
+      if (trainingModeField) trainingModeField.style.display = 'block';
       setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
       questionRow.style.display = 'flex';
 

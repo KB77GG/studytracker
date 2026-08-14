@@ -25,20 +25,20 @@
       <view class="stats-row">
         <view class="stat-cell">
           <text class="stat-val">{{summary.completedCount}}<text class="stat-total">/{{summary.totalCount}}</text></text>
-          <text class="stat-key">听写完成</text>
+          <text class="stat-key">{{reviewOnly ? '听辨完成' : '听写完成'}}</text>
         </view>
-        <view class="stat-divider"></view>
-        <view class="stat-cell">
+        <view class="stat-divider" wx:if="{{!reviewOnly}}"></view>
+        <view class="stat-cell" wx:if="{{!reviewOnly}}">
           <text class="stat-val">{{summary.accuracy}}<text class="stat-unit">%</text></text>
           <text class="stat-key">正确率</text>
         </view>
-        <view class="stat-divider"></view>
-        <view class="stat-cell">
+        <view class="stat-divider" wx:if="{{!reviewOnly}}"></view>
+        <view class="stat-cell" wx:if="{{!reviewOnly}}">
           <text class="stat-val">{{repeatSummary.passedCount}}<text class="stat-total">/{{summary.totalCount}}</text></text>
           <text class="stat-key">跟读通过</text>
         </view>
-        <view class="stat-divider"></view>
-        <view class="stat-cell">
+        <view class="stat-divider" wx:if="{{!reviewOnly}}"></view>
+        <view class="stat-cell" wx:if="{{!reviewOnly}}">
           <text class="stat-val">{{repeatSummary.avgScore || '—'}}</text>
           <text class="stat-key">跟读均分</text>
         </view>
@@ -62,6 +62,11 @@
     <!-- ── 播放器主卡片 ── -->
     <view class="player-card" wx:if="{{currentSegment}}">
 
+      <view class="training-policy" wx:if="{{trainingPolicy.locked}}">
+        <text class="training-policy-title">正式训练 · {{trainingModeLabel}}</text>
+        <text class="training-policy-desc">{{trainingPolicy.description}}。首答后开放复盘与升档，首答成绩不覆盖。</text>
+      </view>
+
       <!-- 句子信息 + 速度 -->
       <view class="player-top">
         <view class="sentence-meta">
@@ -75,13 +80,13 @@
 
       <!-- 模式切换 -->
       <view class="mode-tabs">
-        <view class="mode-tab {{mode === 'listen' ? 'mode-active' : ''}}" data-mode="listen" bindtap="switchMode">
+        <view class="mode-tab {{mode === 'listen' ? 'mode-active' : ''}} {{modeLockedBeforeFirst ? 'mode-disabled' : ''}}" data-mode="listen" bindtap="switchMode">
           <text class="mode-label">句子精听</text>
         </view>
-        <view class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
+        <view wx:if="{{!reviewOnly}}" class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
           <text class="mode-label">听写模式</text>
         </view>
-        <view class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}}" data-mode="repeat" bindtap="switchMode">
+        <view wx:if="{{!reviewOnly}}" class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}} {{modeLockedBeforeFirst ? 'mode-disabled' : ''}}" data-mode="repeat" bindtap="switchMode">
           <text class="mode-label">跟读检查</text>
         </view>
       </view>
@@ -111,16 +116,23 @@
       <view class="mode-content" wx:if="{{mode === 'listen'}}">
         <view class="text-card">
           <view class="toggle-row">
-            <view class="toggle-btn {{showOriginal ? 'tog-active' : ''}}" bindtap="toggleOriginal">
+            <view class="toggle-btn {{showOriginal ? 'tog-active' : ''}} {{!revealAllowed ? 'toggle-disabled' : ''}}" bindtap="toggleOriginal">
               {{showOriginal ? '隐藏原文' : '显示原文'}}
             </view>
-            <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
+            <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}} {{!revealAllowed ? 'toggle-disabled' : ''}}" bindtap="toggleTranslation">
               {{showTranslation ? '隐藏译文' : '显示译文'}}
             </view>
           </view>
           <text class="hint-text" wx:if="{{!showOriginal && !showTranslation}}">先仔细听，准备好了再查看原文。</text>
           <text class="original-text" wx:if="{{showOriginal}}">{{currentSegment.text}}</text>
           <text class="translation-text" wx:if="{{showTranslation && currentSegment.translation}}">{{currentSegment.translation}}</text>
+          <text class="review-hint" wx:if="{{reviewOnly && !reviewListened}}">请先完整听完本句，再查看原文核对。</text>
+          <button
+            class="action-btn btn-primary review-complete"
+            wx:if="{{reviewOnly}}"
+            bindtap="completeReviewSegment"
+            disabled="{{!reviewListened || !showOriginal || currentSegment.isCompleted}}"
+          >{{currentSegment.isCompleted ? '本句已完成' : '完成本句听辨'}}</button>
         </view>
       </view>
 
@@ -130,7 +142,7 @@
           <text class="section-label">难度</text>
           <view class="pill-group">
             <view
-              class="option-pill {{activeDifficultyIndex === index ? 'pill-active' : ''}} {{dictationLevelFrozen ? 'pill-disabled' : ''}}"
+              class="option-pill {{activeDifficultyIndex === index ? 'pill-active' : ''}} {{item.disabled ? 'pill-disabled' : ''}}"
               wx:for="{{difficultyOptions}}"
               wx:key="label"
               data-index="{{index}}"
