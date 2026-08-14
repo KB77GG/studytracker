@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14 23:27（Asia/Shanghai）。
+> 最近更新：2026-08-14 23:38（Asia/Shanghai）。
 
 ## 2026-08-14 IELTS 写作范文与打字训练网页模块（后端/网页已上线）
 
@@ -15,6 +15,11 @@
   跟进提交 `fce9468e71a6deab9480eb9664666a7dad5536ea` 已在听力/阅读的真题与机经共 4 个目录模板补入唯一
   `/writing/` 链接，保留当前科目的 `aria-current` 与既有品牌色/移动端规则；没有新增视觉语言或改动练习页。
   对应回归覆盖 4 个公开目录，防止后续再次漏项。
+- 用户随后要求三科切换更大更清楚，并确认该工作台不需要学习报告。提交
+  `0e921208a87518e255f83be0a7db56a1a1567b66` 将共享科目导航提升为桌面 16px / 移动端 15px、全项 700 字重、
+  64px / 48px 最小宽度与 3px 品牌绿激活线；链接仍占满 60px / 56px 顶栏高度，键盘焦点与 `aria-current`
+  保持。听力/阅读真题与机经 4 个目录已同时删除登录态“学习报告”，写作页原本即只有三科，因此六个同款页面现统一为
+  “听力 / 阅读 / 写作”。没有使用新字体、胶囊按钮或另一套颜色。
 - 网页 `/practice` 的“剑雅真题”新增写作入口；新蓝图 `/writing/` 提供 40 道试点题目录（30 道 Task 2、
   10 道 Task 1），支持全文搜索和题型筛选。每题包含原题、小作文原图、6.0 / 6.5 / 7.0+ 三档完整教学范文、
   立场或总览、两组核心论点/特征、四段式与五段式结构、逐段功能和 3 条可复用表达。版本化内容位于
@@ -51,6 +56,12 @@
   `href="/writing/">写作</a>`；专项命令
   `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest tests/test_practice_workspace_regression.py tests/test_writing_library_routes.py tests/test_writing_library_service.py -q`
   为 `11 passed, 8 subtests passed`，`git diff --check` 通过。本跟进没有数据库写入，也没有修改/上传/提审/发布小程序。
+- 第二次导航优化已原子推送同名分支与 `main`；CI `31815149885`、部署 `31815149801` 整体 success，lint job
+  仍只报仓库既有 advisory，测试 job 成功。2026-08-14 23:37 CST 生产 HEAD 为 `0e92120`、tracked 干净、
+  `studytracker.service=active`，5002 / 1 worker / gthread / 6 threads、部署后应用错误 0。公网
+  `/listening/tests` 含唯一写作链接且学习报告计数为 0；真实 Chrome 1170×770 与 390×844 页面均无横向溢出，
+  三科标签、激活线和移动端 56px 点击高度正常。专项仍为 `11 passed, 8 subtests passed`，`git diff --check`
+  通过；未写数据库、未修改/上传/提审/发布小程序。
 - 下一位 agent 可直接从 `origin/main` 获取已上线模块。内容扩充应继续编辑版本化题库并跑字数/图片完整性测试；若要
   增加教师布置、批改或小程序入口，应作为独立需求设计，不要把逻辑继续堆入 `app.py`，也不要把当前教学档位误称为
   IELTS 官方评分。上线后的首个真实学生完成记录应只读抽查题号、档位、server duration、WPM 与 accuracy 是否合理，
