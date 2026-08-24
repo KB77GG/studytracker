@@ -13,6 +13,8 @@
     '.inline-answer',
     '.result-pill',
     '.answer-pill',
+    // Grading injects this text after submit; it must not change the content fingerprint.
+    '.option-feedback',
     '.analysis',
     '.sel-tx-popover',
     '.ex-hl-toolbar',

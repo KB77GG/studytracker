@@ -4,6 +4,17 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-24 网页听力提交后高亮保留（本地已修复）
+
+- 从最新 `origin/main@1c945a50` 建立独立工作树
+  `/Users/zhouxin/.codex/worktrees/listening-highlight-persistence/studytracker`、分支
+  `codex/listening-highlight-persistence`，未触碰桌面旧主工作树的既有脏改动。
+- 根因是听力判分向高亮根内的 `.option-feedback` 写文字，改变全文指纹后 MutationObserver 无法从旧 key
+  恢复高亮；现将该动态反馈排除出指纹，并新增契约测试。阅读 Passage、高亮 localStorage 结构、判分和后端均未改。
+- 网页专项为 `25 passed, 8 subtests passed`，全部 Node 为 `42 pass`，JS 语法及 diff check 通过；真实 Chromium
+  自动执行“高亮 → 注入判分反馈 → 重绘”后仍保留 `.ex-hl`。当前代码、测试和交接仅本机未提交，未
+  commit/push/deploy，未改数据库或小程序；下一步获得授权后提交推送并做生产听力页面验收。
+
 ## 2026-08-14 写作顶部科目导航补齐与层级优化（已上线）
 
 - 用户反馈生产听力目录顶部缺少“写作”。提交 `fce9468e` 已为听力/阅读的真题与机经共 4 个目录补入写作链接，

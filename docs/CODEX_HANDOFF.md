@@ -1,7 +1,34 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-14 23:38（Asia/Shanghai）。
+> 最近更新：2026-08-24 22:44（Asia/Shanghai）。
+
+## 2026-08-24 网页听力刷题提交后高亮保留（本地已修复，未提交/未部署）
+
+- 为避开桌面旧主工作树的既有脏改动，本轮从最新 `origin/main@1c945a500a5f` 建立独立工作树
+  `/Users/zhouxin/.codex/worktrees/listening-highlight-persistence/studytracker`，分支
+  `codex/listening-highlight-persistence`；开始时与 `origin/main` 左右计数为 `0/0`、工作区干净。
+  桌面 `/Users/zhouxin/Desktop/studytracker` 的旧 `main@6ded77d2` 及其交接文档、题库、脚本、原型等
+  已有未提交/未跟踪内容均未触碰或覆盖。
+- 根因是共享 `static/js/selection-highlight.js` 用“高亮根节点名 + 过滤后全文指纹”保存坐标；听力提交会在
+  `listening-questions` 根节点内给 `.option-feedback` 注入选对/选错文字，MutationObserver 随后先拆除高亮，
+  再用已经变化的指纹恢复，因而读不到旧指纹下的记录。阅读常用高亮位于不随判分改写的 Passage 根节点，
+  所以表现为阅读保留、听力消失；两科高亮实际都只存浏览器 `localStorage`，没有提交后端。
+- 修复只把 `.option-feedback` 加入高亮文本过滤器，使判分反馈不再参与指纹；该节点提交前为空，因此不会改变
+  现有未提交状态的指纹，也不需要迁移已有浏览器高亮。新增
+  `tests/test_selection_highlight_contract.py` 固化听力题目根、动态反馈写入和过滤器三者契约。
+- 精确验证：
+  `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q -p no:cacheprovider tests/test_selection_highlight_contract.py tests/test_practice_workspace_regression.py tests/test_listening_test_index_workspace.py tests/test_reading_test_index_workspace.py tests/test_practice_catalog.py tests/test_practice_history.py`
+  为 `25 passed, 101 warnings, 8 subtests passed`（warnings 均为既有 SQLAlchemy UTC 弃用提示）；
+  `node --test tests/*.js` 为 `42 pass`；`node --check static/js/selection-highlight.js`、
+  `node tests/test_practice_scoring.js`、`node tests/test_practice_table.js` 与 `git diff --check` 均通过。
+  另用真实 Chromium 加载实际脚本，自动执行“题干高亮 → 注入 Correct answer → 等待 MutationObserver 重绘”，
+  最终 DOM 为 `data-result=pass` 且 `.ex-hl` 仍存在；临时 HTML 已删除，Chrome 临时 profile 已移入废纸篓。
+- 当前本轮未提交内容为 `static/js/selection-highlight.js`、新增
+  `tests/test_selection_highlight_contract.py` 及两份交接文档；均仅本机可见，尚未 commit/push/deploy。
+  没有后端接口、数据库、生产服务或小程序改动，也未做生产浏览器验收。下一位 agent 可在用户明确授权后
+  复核 diff、提交并推送到 `main` 触发网页部署，随后在生产听力刷题页实测“高亮题干 → 提交 → 复盘仍保留”；
+  未部署前不能把本修复写成线上已生效。
 
 ## 2026-08-14 IELTS 写作范文与打字训练网页模块（后端/网页已上线）
 
