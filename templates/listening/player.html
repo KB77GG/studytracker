@@ -679,6 +679,24 @@ body {
 
 .score-bar .score-label { color: var(--text-muted); }
 
+.task-completion-panel {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(217,164,74,0.42);
+  border-radius: 12px;
+  background: #fff8e9;
+}
+
+.task-completion-panel.visible { display: block; }
+.task-completion-panel.completed {
+  border-color: rgba(47,142,135,0.28);
+  background: var(--accent-soft);
+}
+.task-completion-title { color: var(--text); font-size: 16px; font-weight: 700; }
+.task-completion-desc { margin-top: 6px; color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+.task-completion-action { margin-top: 12px; }
+
 /* Error summary box */
 .error-summary-box {
   margin-top: 18px;
@@ -948,6 +966,11 @@ body {
           <textarea id="errorSummaryInput" placeholder="例：连读没听出来 / 单词不认识 / 数字混淆 / 同义替换没反应过来 ..."></textarea>
           <div class="esb-hint">自动按句保存到本地浏览器（每句独立）。Ctrl+S 立即保存。</div>
         </div>
+        <div class="task-completion-panel" id="taskCompletionPanel" aria-live="polite">
+          <div class="task-completion-title" id="taskCompletionTitle"></div>
+          <div class="task-completion-desc" id="taskCompletionDesc"></div>
+          <button class="dictation-submit-btn task-completion-action" id="btnTaskCompletionAction" type="button"></button>
+        </div>
       </div>
     </div>
 
@@ -1210,6 +1233,103 @@ body {
     return data.parts.reduce((sum, part) => sum + (part.segments || []).length, 0);
   }
 
+  function getActiveProgressMap() {
+    return taskId ? taskProgress : freeProgress;
+  }
+
+  function getSegmentLocations() {
+    const locations = [];
+    let fallbackIndex = 0;
+    data.parts.forEach((part, partIndex) => {
+      (part.segments || []).forEach((seg, segmentIndex) => {
+        locations.push({
+          partIndex,
+          segmentIndex,
+          globalIndex: getSegmentSourceIndex(seg, fallbackIndex),
+          displayNumber: locations.length + 1,
+          seg,
+        });
+        fallbackIndex += 1;
+      });
+    });
+    return locations;
+  }
+
+  function isLocationCompleted(location, progressMap = getActiveProgressMap()) {
+    const progress = getEffectiveProgress(
+      progressMap,
+      location.globalIndex,
+      getPracticeText(location.seg)
+    );
+    return !!(progress && progress.is_completed);
+  }
+
+  function findFirstPendingSegmentLocation(progressMap = getActiveProgressMap()) {
+    return getSegmentLocations().find(location => !isLocationCompleted(location, progressMap)) || null;
+  }
+
+  function selectSegmentLocation(location) {
+    if (!location) return;
+    if (currentPartIdx !== location.partIndex) {
+      currentPartIdx = location.partIndex;
+      updatePartTabs();
+      buildSentenceList();
+    }
+    selectSegment(location.segmentIndex);
+  }
+
+  function updateTaskCompletionPanel() {
+    const panel = document.getElementById('taskCompletionPanel');
+    if (!panel) return;
+    if (!taskId) {
+      panel.classList.remove('visible', 'completed');
+      return;
+    }
+    const locations = getSegmentLocations();
+    const progressMap = getActiveProgressMap();
+    const completedCount = locations.filter(location => isLocationCompleted(location, progressMap)).length;
+    const pending = findFirstPendingSegmentLocation(progressMap);
+    const title = document.getElementById('taskCompletionTitle');
+    const desc = document.getElementById('taskCompletionDesc');
+    const action = document.getElementById('btnTaskCompletionAction');
+    panel.classList.add('visible');
+    panel.classList.toggle('completed', !pending && locations.length > 0);
+    if (!pending && locations.length > 0) {
+      title.textContent = `全部 ${locations.length} 句已完成`;
+      desc.textContent = '最后一句保存后，系统已自动提交整项精听任务，无需再次整批提交。';
+      action.textContent = '返回任务列表';
+      action.onclick = () => { window.location.href = "{{ url_for('listening_index') }}"; };
+      return;
+    }
+    title.textContent = `还有 ${Math.max(0, locations.length - completedCount)} 句未保存`;
+    desc.textContent = pending
+      ? `已保存 ${completedCount}/${locations.length} 句。完成第 ${pending.displayNumber} 句后，任务会自动提交。`
+      : `已保存 ${completedCount}/${locations.length} 句。`;
+    action.textContent = pending ? `前往第 ${pending.displayNumber} 句` : '继续练习';
+    action.onclick = () => selectSegmentLocation(pending);
+  }
+
+  function goToNextSegmentOrPending() {
+    const locations = getSegmentLocations();
+    const currentPosition = locations.findIndex(location =>
+      location.partIndex === currentPartIdx && location.segmentIndex === currentSegIdx);
+    if (currentPosition >= 0 && currentPosition < locations.length - 1) {
+      selectSegmentLocation(locations[currentPosition + 1]);
+      return;
+    }
+    updateTaskCompletionPanel();
+    const pending = findFirstPendingSegmentLocation();
+    if (pending) {
+      selectSegmentLocation(pending);
+      showDictationValidationMessage(`已到最后一句；第 ${pending.displayNumber} 句还未保存，已为你返回。`);
+      return;
+    }
+    showDictationValidationMessage(taskId
+      ? '全部句子已保存，任务已自动提交。'
+      : '已经到最后一句。');
+    document.getElementById('taskCompletionPanel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   function getCurrentSegmentProgress(segGlobalIdx) {
     const seg = currentSegments()[currentSegIdx];
     const practiceText = getPracticeText(seg);
@@ -1299,7 +1419,10 @@ body {
     updateModeControls();
     buildPartTabs();
     buildSentenceList();
-    selectSegment(0);
+    const initialPending = taskId ? findFirstPendingSegmentLocation(taskProgress) : null;
+    if (initialPending) selectSegmentLocation(initialPending);
+    else selectSegment(0);
+    updateTaskCompletionPanel();
     audio.addEventListener('timeupdate', onTimeUpdate);
     audio.addEventListener('loadedmetadata', updateAudioProgressDisplay);
   }
@@ -2074,6 +2197,7 @@ body {
           applyCompletedMarkers(taskProgress);
           buildSentenceList();
           updatePracticeSubtitle(taskProgress, totalSegmentCount());
+          updateTaskCompletionPanel();
           renderContent();
           confirmDisplayedFirstAttempt(taskProgress[context.segGlobalIdx]);
         } else {
@@ -2221,7 +2345,7 @@ body {
   // Button bindings
   document.getElementById('btnPlay').onclick = togglePlay;
   document.getElementById('btnPrev').onclick = () => selectSegment(currentSegIdx - 1);
-  document.getElementById('btnNext').onclick = () => selectSegment(currentSegIdx + 1);
+  document.getElementById('btnNext').onclick = goToNextSegmentOrPending;
   document.getElementById('btnRepeat').onclick = () => {
     if (isSegmentPracticeMode()) {
       startAutoRepeatSequence();
@@ -2278,7 +2402,7 @@ body {
 
   document.getElementById('btnSubmitDictation').onclick = checkDictation;
   document.getElementById('btnRetry').onclick = startCorrection;
-  document.getElementById('btnNextAfterScore').onclick = () => selectSegment(currentSegIdx + 1);
+  document.getElementById('btnNextAfterScore').onclick = goToNextSegmentOrPending;
   document.getElementById('btnResetFreeProgress').onclick = () => {
     if (taskId) return;
     if (!confirm('确认清空本篇自由练习进度？已保存的本地结果会被移除。')) return;
@@ -2342,6 +2466,7 @@ body {
       applyCompletedMarkers(taskProgress);
       buildSentenceList();
       updatePracticeSubtitle(taskProgress, totalSegmentCount());
+      updateTaskCompletionPanel();
       renderContent();
     }).catch(error => alert('保存听辨进度失败：' + error.message));
   }
@@ -2408,7 +2533,7 @@ body {
         selectSegment(currentSegIdx - 1);
         break;
       case ']':
-        selectSegment(currentSegIdx + 1);
+        goToNextSegmentOrPending();
         break;
       case 'r':
       case 'R':

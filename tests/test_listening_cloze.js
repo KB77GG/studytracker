@@ -177,6 +177,17 @@ test('client integrations retain the empty-answer guard and frozen saved-level p
     assert.match(miniPlayer, /isDictationLevelFrozen\(currentSegment, progress\)/)
 })
 
+test('web task completion returns students to a missing sentence and explains automatic submission', () => {
+    const webPlayer = fs.readFileSync(path.join(__dirname, '..', 'templates', 'listening', 'player.html'), 'utf8')
+    assert.match(webPlayer, /function findFirstPendingSegmentLocation/)
+    assert.match(webPlayer, /function goToNextSegmentOrPending/)
+    assert.match(webPlayer, /btnNext'\)\.onclick = goToNextSegmentOrPending/)
+    assert.match(webPlayer, /btnNextAfterScore'\)\.onclick = goToNextSegmentOrPending/)
+    assert.match(webPlayer, /第 \$\{pending\.displayNumber\} 句还未保存，已为你返回/)
+    assert.match(webPlayer, /系统已自动提交整项精听任务，无需再次整批提交/)
+    assert.match(webPlayer, /const initialPending = taskId \? findFirstPendingSegmentLocation\(taskProgress\) : null/)
+})
+
 test('free-progress reset opens a fresh first-attempt gate without touching task state', () => {
     const containers = {
         dictationStartedSegments: new Set(['0']),
