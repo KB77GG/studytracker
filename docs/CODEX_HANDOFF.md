@@ -1,7 +1,35 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-24 23:00（Asia/Shanghai）。
+> 最近更新：2026-08-24 23:18（Asia/Shanghai）。
+
+## 2026-08-24 网页精听遗漏句收口（网页已上线；小程序 Android 修复仍待上传）
+
+- 为避开桌面旧主工作树和固定小程序发布目录中的既有脏候选，本轮从最新
+  `origin/main@fced2502` 建立干净发布工作树
+  `/private/tmp/studytracker-listening-completion-20260824`，分支
+  `codex/listening-web-completion-20260824`。业务提交
+  `b974b04ab320c8866ad88019d65971b97d545dc9` 已原子推送同名分支与 `origin/main`；只包含
+  `templates/listening/player.html` 和 `tests/test_listening_cloze.js`，没有夹带固定目录里的小程序、词汇、申诉或后端候选。
+- 只读诊断确认反馈任务的实际状态是 `57/58`，缺第二句；不是已保存单句阻止了整项提交。既有后端会在所有句子保存齐后
+  自动把任务置为 `done`，网页原问题是最后一句“下一句”越界静默返回，也没有解释自动完成规则或返回遗漏句。
+- 网页现在打开任务时直接进入第一条未完成句；普通“下一句”、成绩区“下一句”和 `]` 快捷键支持跨 Part 前进，到末尾时
+  若仍有遗漏会明确提示并跳回第一条缺句。任务面板显示已保存/总句数，全部齐全后明确提示“最后一句保存后，系统已自动
+  提交整项精听任务，无需再次整批提交”。自由练习仍保持原有本地进度逻辑。
+- 发布前验证：`node --test tests/*.js` 为 `43 passed`；精听 API/策略专项为 `13 passed, 3 subtests passed`；
+  排除仓库长期缺失静态 MP3 夹具的全仓 Python 为 `532 passed, 48 subtests passed`；Jinja 模板编译和
+  `git diff --check` 均通过。
+- 分支 CI `32743783522`、main CI `32743786121` 与生产部署 `32743784037` 全部 success。生产
+  `/root/apps/studytracker` 为业务 HEAD `b974b04a`，tracked 工作区干净，原有 15 个未跟踪备份/静态快照/调度库保持；
+  `studytracker.service=active`，于 `2026-08-24 23:16:30 CST` 重启，监听 `127.0.0.1:5002`，配置仍为
+  `workers=1 / worker_class=gthread / threads=6`，StudyTracker 仅一个 worker。部署后 journal 的
+  traceback/exception/error/failed 计数均为 0，SQLite `quick_check=ok`、外键检查无输出。
+- 回环与公网 `/listening/ielts12_test8_s1` 均为 HTTP 200；公网 HTML 已包含自动提交说明。生产模板 SHA-256 与业务提交
+  文件一致，为 `6604961da901254eadae1ab37f228c3856fb8a68a38bd87f3d9a2d23dcbc06b5`。本轮没有生产数据库写入，
+  没有代学生补写遗漏句，也没有修改/上传/提审/发布小程序。
+- 小程序 Android `seek` 落点核验与末句回缺句修复仍只存在于固定目录
+  `/Users/zhouxin/Desktop/studytracker-release/miniprogram` 的未提交本机候选中；网页部署不会让该客户端修复生效。
+  后续应从固定目录真机验证后人工上传：若 `16.0.86` 已使用则发 `16.0.87`，否则可继续使用 `16.0.86`。
 
 ## 2026-08-24 网页听力刷题提交后高亮保留（网页已上线）
 

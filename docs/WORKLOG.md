@@ -4,6 +4,18 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-24 网页精听遗漏句收口（已上线）
+
+- 干净发布工作树 `/private/tmp/studytracker-listening-completion-20260824`、分支
+  `codex/listening-web-completion-20260824` 只修改网页精听播放器与契约测试，未夹带固定小程序目录的脏候选。
+- 网页现会打开第一条缺句，末句后也会返回缺句；全部句子保存齐时明确说明后端已自动提交整项任务。反馈任务的只读诊断为
+  57/58、缺第二句，并非单句已提交导致不能整项提交。
+- Node `43 passed`，精听专项 `13 passed, 3 subtests passed`，全仓 Python（排除长期缺 MP3 fixture）
+  `532 passed, 48 subtests passed`，Jinja 与 diff check 通过。
+- 业务提交 `b974b04a` 已推送分支和 main；CI `32743783522` / `32743786121`、部署 `32743784037` 均 success。
+  生产 HEAD 正确、service active、5002 / 1 worker / gthread / 6 threads、SQLite 正常、部署后错误 0；公网 200 且模板哈希匹配。
+- 未写生产库，未代学生补句；小程序 Android 播放定位修复仍仅在桌面固定目录，尚未 commit/push/upload/review/publish。
+
 ## 2026-08-24 网页听力提交后高亮保留（已上线）
 
 - 从最新 `origin/main@1c945a50` 建立独立工作树
