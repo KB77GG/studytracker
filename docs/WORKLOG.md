@@ -4,7 +4,7 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-08-24 网页听力提交后高亮保留（本地已修复）
+## 2026-08-24 网页听力提交后高亮保留（已上线）
 
 - 从最新 `origin/main@1c945a50` 建立独立工作树
   `/Users/zhouxin/.codex/worktrees/listening-highlight-persistence/studytracker`、分支
@@ -12,8 +12,11 @@
 - 根因是听力判分向高亮根内的 `.option-feedback` 写文字，改变全文指纹后 MutationObserver 无法从旧 key
   恢复高亮；现将该动态反馈排除出指纹，并新增契约测试。阅读 Passage、高亮 localStorage 结构、判分和后端均未改。
 - 网页专项为 `25 passed, 8 subtests passed`，全部 Node 为 `42 pass`，JS 语法及 diff check 通过；真实 Chromium
-  自动执行“高亮 → 注入判分反馈 → 重绘”后仍保留 `.ex-hl`。当前代码、测试和交接仅本机未提交，未
-  commit/push/deploy，未改数据库或小程序；下一步获得授权后提交推送并做生产听力页面验收。
+  自动执行“高亮 → 注入判分反馈 → 重绘”后仍保留 `.ex-hl`。
+- 业务提交 `66c935f0` 已推送发布分支和 main；CI `32741622722`、部署 `32741622780` success。生产为该业务
+  HEAD、tracked 干净、service active，5002 / 1 worker / gthread / 6 threads，SQLite quick-check/外键正常，
+  部署后应用错误 0；公网听力目录和脚本均为 200，脚本 SHA-256 与本次发布文件一致并含修复规则。
+- 没有后端接口、数据库 schema/data 或小程序改动，未上传/提审/发布小程序；桌面旧主工作树既有脏改动未触碰。
 
 ## 2026-08-14 写作顶部科目导航补齐与层级优化（已上线）
 

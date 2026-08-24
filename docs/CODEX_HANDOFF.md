@@ -1,9 +1,9 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-24 22:44（Asia/Shanghai）。
+> 最近更新：2026-08-24 23:00（Asia/Shanghai）。
 
-## 2026-08-24 网页听力刷题提交后高亮保留（本地已修复，未提交/未部署）
+## 2026-08-24 网页听力刷题提交后高亮保留（网页已上线）
 
 - 为避开桌面旧主工作树的既有脏改动，本轮从最新 `origin/main@1c945a500a5f` 建立独立工作树
   `/Users/zhouxin/.codex/worktrees/listening-highlight-persistence/studytracker`，分支
@@ -24,11 +24,18 @@
   `node tests/test_practice_scoring.js`、`node tests/test_practice_table.js` 与 `git diff --check` 均通过。
   另用真实 Chromium 加载实际脚本，自动执行“题干高亮 → 注入 Correct answer → 等待 MutationObserver 重绘”，
   最终 DOM 为 `data-result=pass` 且 `.ex-hl` 仍存在；临时 HTML 已删除，Chrome 临时 profile 已移入废纸篓。
-- 当前本轮未提交内容为 `static/js/selection-highlight.js`、新增
-  `tests/test_selection_highlight_contract.py` 及两份交接文档；均仅本机可见，尚未 commit/push/deploy。
-  没有后端接口、数据库、生产服务或小程序改动，也未做生产浏览器验收。下一位 agent 可在用户明确授权后
-  复核 diff、提交并推送到 `main` 触发网页部署，随后在生产听力刷题页实测“高亮题干 → 提交 → 复盘仍保留”；
-  未部署前不能把本修复写成线上已生效。
+- 业务提交 `66c935f0d096a65025149f8b053b93729cb2dca5` 已原子推送
+  `codex/listening-highlight-persistence` 与 `origin/main`。GitHub CI `32741622722` 整体 success，其中测试 job
+  成功、仅 continue-on-error 的全仓 Ruff advisory 继续报告既有问题；部署 `32741622780` success。
+- 生产 `/root/apps/studytracker` 为业务 HEAD `66c935f0`、tracked 工作区干净，`studytracker.service=active`；
+  仍监听 `127.0.0.1:5002`，`workers=1 / worker_class=gthread / threads=6`，StudyTracker 主进程只有一个 worker。
+  SQLite `quick_check=ok`、外键检查无输出，部署后 journal 应用错误计数为 0。公网 `/listening/tests` 与回环地址
+  均返回 200；公网 `selection-highlight.js` 含 `.option-feedback` 排除规则，且 SHA-256 与本次发布文件一致：
+  `1827c6c4138ee96bdea485fb9f7693117e6813bf0551dfcbddec26380ae6d639`。本地真实 Chromium 的提交后保留断言
+  已通过；直接从 `file://` 加载公网脚本的额外验收因本机 Chrome SSL handshake/update 进程异常未产出断言，
+  但公网 200、内容哈希及已通过的相同文件运行时测试共同覆盖了发布内容与行为。
+- 本轮没有后端接口、数据库 schema/data 或小程序改动；未上传、提审或发布小程序。桌面旧主工作树的既有脏改动
+  仍未触碰。后续若学生端仍显示旧行为，先完整刷新网页以淘汰既有标签页脚本，再复测“高亮题干 → 提交 → 复盘”。
 
 ## 2026-08-14 IELTS 写作范文与打字训练网页模块（后端/网页已上线）
 
