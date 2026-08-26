@@ -1,14 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-27 00:15（Asia/Shanghai）。
+> 最近更新：2026-08-27 00:20（Asia/Shanghai）。
 
-## 2026-08-27 网页端助教可布置虾滑听力与 ZYZ 阅读（已推送，部署工作流待触发）
+## 2026-08-27 网页端助教可布置虾滑听力与 ZYZ 阅读（网页已上线）
 
 - 本轮为避开桌面旧主工作树的既有脏改动，从最新 `origin/main@378d4e83` 建立独立工作树
   `/Users/zhouxin/.codex/worktrees/teacher-practice-jijing-options/studytracker`，分支
-  `codex/teacher-practice-jijing-options`，跟踪 `origin/main`，当前左右计数 `0/0`。桌面
-  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端 24 个提交；其中原有两份交接文档修改、
+  `codex/teacher-practice-jijing-options`，跟踪 `origin/main`。业务与首次交接提交后两条远端 ref 均为
+  `4269c338976fbc1a5323934bb785d6748e226eb9`。桌面
+  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端 26 个提交；其中原有两份交接文档修改、
   `.tmp/`、`artifacts/`、题库数据、导入脚本、测试、设计文档和原型等未提交/未跟踪内容均未触碰或覆盖。
 - 用户澄清主要入口是网页 `/tasks`，助教需要能布置两个来源。网页听力选择器原本只有精听与整套 Test，服务端即使收到
   `jijing` 也会降级成精听；ZYZ 数据其实已进入阅读下拉框，但只显示为笼统的“阅读机经”，来源不清晰。业务提交
@@ -22,7 +23,7 @@
   Test；成功创建 `jijing/xiahuar_001_p1/15min` 和 `reading_jijing_5_test_59/Passage 1/20min` 两个 Task，均归属助教。
   虾滑 URL 正确，ZYZ 首题保留 3 个选择项；没有写本机正式数据库。
 - 精确验证（Python 使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`）：
-  `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q -p no:cacheprovider --disable-warnings tests/test_miniprogram_teacher_jijing.py tests/test_miniprogram_teacher_intensive.py tests/test_teacher_practice_access.py tests/test_miniprogram_task_visibility.py`
+  `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q -p no:cacheprovider --disable-warnings tests/test_web_teacher_jijing_assignment.py tests/test_miniprogram_teacher_jijing.py tests/test_miniprogram_teacher_intensive.py tests/test_task_assignment_history.py tests/test_practice_history.py tests/test_jijing_scoring.py tests/test_reading_jijing_index_workspace.py tests/test_listening_jijing_index_workspace.py tests/test_practice_workspace_regression.py`
   网页/机经专项为 `38 passed, 8 subtests passed`；`node --test tests/*.js` 为 `44/44 pass`。微信开发者工具内置
   `/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc` 全量编译
   `32/32 WXML`，同目录 `wcsc -lc` 全量编译
@@ -35,11 +36,22 @@
   `tests/test_static_audio_headers.py::{test_plain_200_advertises_accept_ranges,test_range_request_still_returns_206}`，原因是干净
   工作树没有仓库未版本化的 `static/listening/ielts10_test1_s1.mp3`，所以返回 404。桌面旧主工作树本机有该未跟踪/忽略
   夹具，但它不属于 `origin/main`，不能作为干净工作树或另一台电脑的仓库事实；这两项与本轮题目推送链路无关。
-- 用户已明确授权部署。业务提交已原子推送分支 `codex/teacher-practice-jijing-options` 与 `origin/main`；截至
-  2026-08-27 00:15 CST，两条远端 ref 均已确认指向 `c09f2ee1`，但该 SHA 的 GitHub Actions check/run 尚未出现，
-  所以此刻不能声称生产已部署。本轮没有数据库 schema/data 变化，没有生产数据库或外部服务写入；小程序未上传、提审
-  或发布。下一步先用本次交接提交再次触发 main push，等待 CI/部署成功后核对生产 HEAD、service、5002、单 worker、
-  SQLite 与公网 `/tasks` 内容，再把实际结果回写本节。
+- 用户已明确授权部署。业务提交 `c09f2ee1` 与首次交接提交 `4269c338` 均已原子推送分支
+  `codex/teacher-practice-jijing-options` 和 `origin/main`；两次 push 后 GitHub Actions 均未生成对应 check/run，故按项目
+  既有受限入口手动执行 `ssh aliyun-server 'sudo /usr/local/sbin/deploy-studytracker'`。脚本成功 fast-forward 到
+  `4269c338`、执行标准迁移检查并重启服务，输出 `Deployment successful.`；本功能不需要 schema/data 迁移，没有创建
+  测试任务或写学生业务数据。
+- 生产 `/root/apps/studytracker` 当前 HEAD 为 `4269c338`，tracked 文件干净；原有 17 个未跟踪数据库备份、听力静态快照
+  与 `training_scheduler.db` 保留未动。`studytracker.service=active`，于 `2026-08-27 00:17:24 CST` 重启，监听
+  `127.0.0.1:5002`，配置为 `workers=1 / worker_class=gthread / threads=6` 且只有一个 StudyTracker worker。部署后
+  journal 的 traceback/exception/error/failed 计数为 0，SQLite `quick_check=ok`、外键错误数为 0。
+- 生产选择器数据只读核对为 113 个虾滑 Part、57 套 ZYZ Test / 171 个 Passage；`templates/tasks.html` 同时包含
+  “虾滑刷题”“虾滑听力”“ZYZ 阅读”入口。回环及公网的 `/listening/jijing/xiahuar_001_p1`、
+  `/reading/test/reading_jijing_5_test_59` 均为 HTTP 200；公网页面分别出现“虾滑听力”和“阅读机经”。未登录
+  `/tasks` 按预期 302 到登录页；助教登录态的实际 GET/POST 已由前述内存数据库覆盖。生产 `app.py`、新 catalog 模块及
+  两个模板的 SHA-256 与发布工作树完全一致。
+- 小程序源码兼容改动已随业务提交入库，但固定小程序发布目录未触碰，本轮没有上传、提审或发布小程序。下一位 agent 可从
+  `origin/main` 取得网页已上线代码；若助教现场仍看到旧下拉框，先强制刷新 `/tasks`，再确认登录账号为 assistant/teacher。
 
 ## 2026-08-24 网页精听遗漏句收口（网页已上线；小程序 Android 修复仍待上传）
 

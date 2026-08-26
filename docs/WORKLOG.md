@@ -4,18 +4,22 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-08-27 网页端助教布置虾滑听力 / ZYZ 阅读（已推送，部署待触发）
+## 2026-08-27 网页端助教布置虾滑听力 / ZYZ 阅读（网页已上线）
 
 - 在独立工作树 `/Users/zhouxin/.codex/worktrees/teacher-practice-jijing-options/studytracker`、分支
-  `codex/teacher-practice-jijing-options`，基于且仍停在 `origin/main@378d4e83` 完成老师端新增“虾滑听力·刷题”和
-  “ZYZ 阅读”来源；桌面旧 `main@6ded77d2` 及既有脏改动未触碰。
+  `codex/teacher-practice-jijing-options`，从 `origin/main@378d4e83` 完成老师端新增“虾滑听力·刷题”和
+  “ZYZ 阅读”来源；桌面旧 `main@6ded77d2` 及既有脏改动未触碰。业务提交为 `c09f2ee1`，生产部署提交为
+  `4269c338`。
 - 网页 `/tasks` 现明确提供虾滑 113 项和 ZYZ 57 个 Test；助教可创建/回填，学生网页 URL 与 ZYZ 选择项正常。一次性
   内存 DB 的真实助教 GET/POST 已通过，未写本机正式库。
 - 网页/机经专项 `38 passed, 8 subtests passed`，全部 Node `44/44`，排除仓库长期缺失静态 MP3 夹具后的全仓 Python
   `560 passed, 48 subtests passed`，目标 lint/compile/diff check 通过。
-- 业务提交 `c09f2ee1` 已原子推送发布分支与 main；00:15 CST 尚未出现该 SHA 的 Actions run，所以生产仍待确认。
-  无 schema/data 或外部写入；小程序源码兼容改动虽已提交，但没有上传、提审或发布。下一步用交接提交触发 main workflow，
-  完成生产核验后更新实际状态。
+- 两次 main push 均未生成 Actions run，故按用户部署授权执行受限脚本
+  `ssh aliyun-server 'sudo /usr/local/sbin/deploy-studytracker'`，脚本成功更新到 `4269c338` 并重启服务。生产 tracked 干净，
+  原有 17 个未跟踪备份/快照/调度库保留；service active，5002 / 1 worker / gthread / 6 threads，SQLite quick-check/外键
+  正常，部署后应用错误 0。
+- 生产选择器只读统计为 113 个虾滑 Part、57 个 ZYZ Test / 171 个 Passage；回环及公网两个样例题目页均 200，页面标识和
+  本地/生产文件哈希一致。未写测试任务或学生业务数据；小程序兼容源码虽已提交，但固定发布目录未触碰，未上传、提审或发布。
 
 ## 2026-08-24 网页精听遗漏句收口（已上线）
 
