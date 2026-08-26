@@ -80,7 +80,11 @@ def get_dictation_queue(task_id):
                     batch_limit=gate["batch_limit"],
                     active_session_id=gate["active_session_id"],
                 )
-            result = get_vocabulary_group_queue(request.current_api_user, task_id)
+            result = get_vocabulary_group_queue(
+                request.current_api_user,
+                task_id,
+                supports_correction=request.args.get("supports_correction") == "1",
+            )
         else:
             result = get_task_queue(request.current_api_user, task_id)
         # Queue creation is the claim operation.  Persist it before returning
@@ -120,7 +124,11 @@ def get_vocabulary_queue(task_id):
         task = Task.query.get(task_id)
         if not is_vocabulary_v2_task(task):
             raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
-        result = get_vocabulary_group_queue(request.current_api_user, task_id)
+        result = get_vocabulary_group_queue(
+            request.current_api_user,
+            task_id,
+            supports_correction=request.args.get("supports_correction") == "1",
+        )
         db.session.commit()
         return jsonify(result)
     except VocabularyMasteryError as error:
@@ -238,6 +246,7 @@ def get_vocabulary_review_session(session_id):
 def submit_vocabulary_review_answer(session_id):
     try:
         payload = request.get_json(silent=True) or {}
+        payload["supports_correction"] = payload.get("supports_correction") is True
         session_token = str(payload.get("session_token") or "").strip() or None
         result = submit_review_answer(
             request.current_api_user,
@@ -282,6 +291,7 @@ def submit_vocabulary_review_correction(session_id):
 def settle_vocabulary_review_session(session_id):
     try:
         payload = request.get_json(silent=True) or {}
+        payload["supports_correction"] = payload.get("supports_correction") is True
         session_token = str(payload.get("session_token") or "").strip() or None
         result = settle_review_session(
             request.current_api_user,

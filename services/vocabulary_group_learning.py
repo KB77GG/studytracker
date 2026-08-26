@@ -1213,6 +1213,20 @@ def _advance_after_answer(flow, user, now):
             return
 
 
+def _release_legacy_pending_correction(flow) -> None:
+    """Unblock clients published before the correction UI existed."""
+
+    if not flow.pending_correction_question_id:
+        return
+    question = db.session.get(
+        VocabularyLearningQuestion,
+        flow.pending_correction_question_id,
+    )
+    if question:
+        _mark_weak_word(flow, question.word_id)
+    flow.pending_correction_question_id = None
+
+
 def _public_flow(flow):
     group = _group_payload(flow) or {"word_ids": [], "familiarity": [], "size": 0}
     viewed = set(_json_list(flow.viewed_word_ids_json))
@@ -1303,11 +1317,19 @@ def _public_flow(flow):
     }
 
 
-def get_vocabulary_group_queue(user: User, task_id: int, *, now: datetime | None = None) -> dict:
+def get_vocabulary_group_queue(
+    user: User,
+    task_id: int,
+    *,
+    now: datetime | None = None,
+    supports_correction: bool = True,
+) -> dict:
     now = utc_naive(now)
     _require_daily_clearance(user, task_id, now)
     task, flow = _flow_or_error(user, task_id, lock=True)
     flow = flow or _ensure_flow(user, task, now)
+    if not supports_correction:
+        _release_legacy_pending_correction(flow)
     _advance_after_answer(flow, user, now)
     return _public_flow(flow)
 
@@ -1650,7 +1672,11 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         question.retry_attempt_id = attempt_id
         question.retry_is_correct = is_correct
         question.retry_answer = answer[:100]
-    if not is_correct and _uses_comprehensive_scheduler(flow):
+    if (
+        not is_correct
+        and _uses_comprehensive_scheduler(flow)
+        and payload.get("supports_correction", True) is not False
+    ):
         # A correction is a one-shot action for the current formal attempt.
         # The same question may later be shown as a delayed retry, so its
         # idempotency slot must be reopened for that new attempt.

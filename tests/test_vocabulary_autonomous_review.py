@@ -163,8 +163,8 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
         def fixed_review_preflight(user, task_id):
             return review_preflight(user, task_id, now=self.now)
 
-        def fixed_group_queue(user, task_id):
-            return get_vocabulary_group_queue(user, task_id, now=self.now)
+        def fixed_group_queue(user, task_id, **kwargs):
+            return get_vocabulary_group_queue(user, task_id, now=self.now, **kwargs)
 
         with patch(
             "api.vocab_review.review_preflight",
@@ -971,6 +971,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             "dimension": item["dimension"],
             "answer": "明显错误",
             "attempt_id": "http-review-wrong-first",
+            "supports_correction": True,
         }
         wrong = self.client.post(
             f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/answers",
@@ -1000,6 +1001,72 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
         self.assertEqual(duplicate.status_code, 200, duplicate.get_json())
         self.assertTrue(duplicate.get_json()["idempotent"])
         self.assertTrue(duplicate.get_json()["correction_required"])
+
+    def test_published_legacy_client_can_settle_wrong_review_without_correction_ui(self):
+        today = self.client.get(
+            "/api/miniprogram/student/vocabulary-review/today?limit=1",
+            headers=self.headers,
+        )
+        self.assertEqual(today.status_code, 200, today.get_json())
+        session = today.get_json()
+        item = session["items"][0]
+        wrong = self.client.post(
+            f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/answers",
+            json={
+                "session_token": session["session_token"],
+                "review_item_id": item["review_item_id"],
+                "question_id": item["question_id"],
+                "word_id": item["word_id"],
+                "sense_id": item["sense_id"],
+                "dimension": item["dimension"],
+                "answer": "legacy-wrong-answer",
+                "attempt_id": "legacy-review-first-wrong",
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(wrong.status_code, 200, wrong.get_json())
+        self.assertFalse(wrong.get_json()["correction_required"])
+        with self.app.app_context():
+            stored_session = db.session.get(
+                VocabularyReviewSession,
+                session["session_id"],
+            )
+            # Recreate the transitional state left by the brief pre-hotfix
+            # deployment. Legacy settlement must still release it.
+            first_item = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            first_item.correction_exhausted = False
+            first_item.deferred_to_review = False
+            for tail in stored_session.items:
+                if tail.first_attempt_id:
+                    continue
+                expected = json.loads(tail.answer_payload_json)
+                submit_review_answer(
+                    db.session.get(User, self.student_id),
+                    stored_session.id,
+                    {
+                        "session_token": stored_session.session_token,
+                        "review_item_id": tail.id,
+                        "question_id": tail.question_id,
+                        "word_id": tail.word_id,
+                        "sense_id": tail.sense_id,
+                        "dimension": tail.dimension,
+                        "answer": expected.get("answer")
+                        or expected.get("answer_option_id"),
+                        "attempt_id": f"legacy-review-tail-{tail.id}",
+                    },
+                    now=self.now,
+                )
+            db.session.commit()
+        settled = self.client.post(
+            f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/settle",
+            json={
+                "session_token": session["session_token"],
+                "queue_token": session["queue_token"],
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(settled.status_code, 200, settled.get_json())
+        self.assertEqual(settled.get_json()["status"], "settled")
 
     def test_wrong_stage_zero_outranks_unanswered_stage_zero(self):
         with self.app.app_context():

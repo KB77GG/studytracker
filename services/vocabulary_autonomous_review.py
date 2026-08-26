@@ -78,6 +78,20 @@ def _correction_required(item: VocabularyReviewItem) -> bool:
     )
 
 
+def _supports_correction(payload: dict) -> bool:
+    """Default direct service callers to v2; HTTP routes inject legacy False."""
+
+    return payload.get("supports_correction", True) is not False
+
+
+def _bypass_legacy_correction(item: VocabularyReviewItem) -> None:
+    """Keep a pre-correction client able to finish without losing its answer."""
+
+    if _correction_required(item):
+        item.correction_exhausted = True
+        item.deferred_to_review = True
+
+
 def _candidate_remediation_kind(
     user: User,
     mastery: StudentVocabularyMastery,
@@ -839,6 +853,8 @@ def submit_review_answer(
         if existing_attempt.item_id != item.id:
             raise VocabularyAutonomousReviewError("attempt_id_conflict", 409)
         _restore_first_attempt_state(user, item, existing_attempt)
+        if not _supports_correction(payload):
+            _bypass_legacy_correction(item)
         return _answer_result(item, existing_attempt, idempotent=True)
     if item.first_attempt_id:
         first_attempt = (
@@ -853,6 +869,8 @@ def submit_review_answer(
             # A second tab may submit a stale local answer after the first tab
             # won.  Return the durable first result instead of grading twice.
             _restore_first_attempt_state(user, item, first_attempt)
+            if not _supports_correction(payload):
+                _bypass_legacy_correction(item)
             return _answer_result(item, first_attempt, idempotent=True)
         raise VocabularyAutonomousReviewError("review_item_already_answered", 409)
     answer = str(payload.get("answer") or "").strip()
@@ -926,6 +944,8 @@ def submit_review_answer(
     item.first_is_correct = is_correct
     item.first_answer = answer[:100]
     _apply_review_item_state(user, item, is_correct, now)
+    if not _supports_correction(payload):
+        _bypass_legacy_correction(item)
     return _answer_result(item, attempt)
 
 
@@ -1126,6 +1146,9 @@ def settle_review_session(
         .with_for_update()
         .all()
     )
+    if not _supports_correction(payload):
+        for item in items:
+            _bypass_legacy_correction(item)
     missing = [
         item.id
         for item in items

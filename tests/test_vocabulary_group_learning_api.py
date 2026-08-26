@@ -16,6 +16,7 @@ from models import (
     StudentProfile,
     Task,
     User,
+    VocabularyLearningFlow,
     VocabularyLearningQuestion,
     db,
 )
@@ -321,6 +322,7 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
                 "answer": "definitely-not-the-answer",
                 "attempt_id": "http-comprehensive-first-wrong",
                 "retry": False,
+                "supports_correction": True,
                 "input_mode": "strict",
             },
             headers=self.headers,
@@ -352,6 +354,55 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         )
         self.assertEqual(duplicate.status_code, 200, duplicate.get_json())
         self.assertTrue(duplicate.get_json()["correction_idempotent"])
+
+    def test_published_legacy_client_skips_server_only_correction(self):
+        task_id = self._task("comprehensive", end=1)
+        queue_url = f"/api/miniprogram/student/tasks/{task_id}/vocabulary-queue"
+        queue = self.client.get(queue_url, headers=self.headers).get_json()
+        familiarity_url = (
+            f"/api/miniprogram/student/tasks/{task_id}/vocabulary-learning/familiarity"
+        )
+        while queue["phase"] == "familiarity":
+            item = next(item for item in queue["familiarity"] if not item["viewed"])
+            queue = self.client.post(
+                familiarity_url,
+                json={"queue_token": queue["queue_token"], "word_id": item["word_id"]},
+                headers=self.headers,
+            ).get_json()
+        question = queue["current_question"]
+        wrong = self.client.post(
+            "/api/dictation/submit",
+            json={
+                "task_id": task_id,
+                "queue_token": queue["queue_token"],
+                "learning_question_id": question["learning_question_id"],
+                "queue_item_id": question["queue_item_id"],
+                "question_id": question["question_id"],
+                "word_id": question["word_id"],
+                "sense_id": question["sense_id"],
+                "dimension": question["dimension"],
+                "answer": "legacy-wrong-answer",
+                "attempt_id": "legacy-client-first-wrong",
+                "retry": False,
+                "input_mode": "strict",
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(wrong.status_code, 200, wrong.get_json())
+        self.assertFalse(wrong.get_json()["correction_required"])
+        # Simulate an answer saved during the brief pre-hotfix deployment,
+        # where the server had already opened a correction unknown to the
+        # published client. Its next legacy queue fetch must release it.
+        with self.app.app_context():
+            flow = db.session.query(VocabularyLearningFlow).filter_by(task_id=task_id).one()
+            flow.pending_correction_question_id = question["learning_question_id"]
+            db.session.commit()
+        resumed = self.client.get(queue_url, headers=self.headers).get_json()
+        self.assertFalse(resumed["correction_required"])
+        self.assertNotEqual(
+            resumed["current_question"]["learning_question_id"],
+            question["learning_question_id"],
+        )
 
     def test_http_context_choice_and_fill_share_one_mastery_encounter(self):
         task_id = self._task("reading")

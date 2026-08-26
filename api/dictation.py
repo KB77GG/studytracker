@@ -1253,6 +1253,10 @@ def submit_answer():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
 
     data = request.get_json() or {}
+    # Capability negotiation is intentionally opt-in. Published mini-program
+    # builds predating the correction UI must retain their original flow and
+    # must never be trapped behind a server-only correction step.
+    data["supports_correction"] = data.get("supports_correction") is True
     try:
         task = None
         if data.get("task_id") not in (None, ""):
