@@ -18,12 +18,14 @@ from services.vocabulary_autonomous_review import (
     review_summary,
     settle_review_session,
     submit_review_answer,
+    submit_review_correction,
 )
 from services.vocabulary_group_learning import (
     VocabularyGroupLearningError,
     get_vocabulary_group_queue,
     group_flow_diagnostics,
     mark_familiarity_viewed,
+    submit_vocabulary_group_correction,
 )
 from services.vocabulary_mastery import (
     VocabularyMasteryError,
@@ -154,6 +156,26 @@ def mark_vocabulary_learning_familiarity(task_id):
 
 
 @vocab_review_bp.route(
+    "/miniprogram/student/tasks/<int:task_id>/vocabulary-learning/correction",
+    methods=["POST"],
+)
+@require_api_user(User.ROLE_STUDENT)
+def submit_vocabulary_learning_correction(task_id):
+    try:
+        payload = request.get_json(silent=True) or {}
+        payload["task_id"] = task_id
+        result = submit_vocabulary_group_correction(
+            request.current_api_user,
+            payload,
+        )
+        db.session.commit()
+        return jsonify(result)
+    except VocabularyGroupLearningError as error:
+        db.session.rollback()
+        return _group_error_response(error)
+
+
+@vocab_review_bp.route(
     "/miniprogram/student/tasks/<int:task_id>/vocabulary-learning/diagnostics",
     methods=["GET"],
 )
@@ -218,6 +240,28 @@ def submit_vocabulary_review_answer(session_id):
         payload = request.get_json(silent=True) or {}
         session_token = str(payload.get("session_token") or "").strip() or None
         result = submit_review_answer(
+            request.current_api_user,
+            session_id,
+            payload,
+            session_token=session_token,
+        )
+        db.session.commit()
+        return jsonify(result)
+    except VocabularyAutonomousReviewError as error:
+        db.session.rollback()
+        return _autonomous_error_response(error)
+
+
+@vocab_review_bp.route(
+    "/miniprogram/student/vocabulary-review/sessions/<int:session_id>/corrections",
+    methods=["POST"],
+)
+@require_api_user(User.ROLE_STUDENT)
+def submit_vocabulary_review_correction(session_id):
+    try:
+        payload = request.get_json(silent=True) or {}
+        session_token = str(payload.get("session_token") or "").strip() or None
+        result = submit_review_correction(
             request.current_api_user,
             session_id,
             payload,

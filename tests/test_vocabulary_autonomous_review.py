@@ -21,13 +21,16 @@ from models import (
     db,
 )
 from services.vocabulary_autonomous_review import (
+    VocabularyAutonomousReviewError,
     claim_today_review,
     get_review_session,
     review_preflight,
     review_summary,
     settle_review_session,
     submit_review_answer,
+    submit_review_correction,
 )
+from services.vocabulary_context import build_context_question
 from services.vocabulary_group_learning import get_vocabulary_group_queue
 from services.vocabulary_mastery import ensure_mastery, ensure_word_sense
 
@@ -171,6 +174,325 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             side_effect=fixed_group_queue,
         ):
             return self.client.get(path, headers=self.headers)
+
+    def _run_bounded_correction_case(self, dimension, expected_mode, *, context_kind=None):
+        """Exercise one public mode through correction, delay, and retry claim."""
+
+        user = db.session.get(User, self.student_id)
+        masteries = StudentVocabularyMastery.query.filter_by(student_id=user.id).all()
+        target = masteries[0]
+        for mastery in masteries:
+            for candidate_dimension in StudentVocabularyMastery.DIMENSIONS:
+                setattr(
+                    mastery,
+                    f"{candidate_dimension}_next_due_at",
+                    self.now + timedelta(days=10),
+                )
+        setattr(target, f"{dimension}_next_due_at", self.now)
+        word = target.representative_word
+        target_word = str(word.word).split()[0]
+        word.usage_pattern = f"{target_word} on evidence"
+        word.example_en = f"Students {target_word} on evidence."
+        word.example_zh = "学生依赖证据。"
+        db.session.flush()
+        claimed = claim_today_review(user, now=self.now)
+        self.assertEqual(claimed["total_count"], 1)
+        item = claimed["items"][0]
+        stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+        if context_kind:
+            generated = build_context_question(
+                word,
+                DictationWord.query.filter_by(book_id=word.book_id).all(),
+                seed=f"autonomous-mode:{context_kind}:{word.id}",
+                allowed_kinds={context_kind},
+            )
+            self.assertIsNotNone(generated)
+            public, answer_payload = generated
+            stored.question_id = public["question_id"]
+            stored.question_snapshot_json = json.dumps(public, ensure_ascii=False, sort_keys=True)
+            stored.answer_payload_json = json.dumps(answer_payload, ensure_ascii=False, sort_keys=True)
+            item = dict(item, question_id=stored.question_id, question=public)
+        db.session.flush()
+        identity = {
+            "session_token": claimed["session_token"],
+            "review_item_id": stored.id,
+            "question_id": stored.question_id,
+            "word_id": stored.word_id,
+            "sense_id": stored.sense_id,
+            "dimension": stored.dimension,
+        }
+        self.assertEqual(json.loads(stored.question_snapshot_json)["mode"], expected_mode)
+        wrong = submit_review_answer(
+            user,
+            claimed["session_id"],
+            dict(identity, answer="明显错误", attempt_id=f"mode-first:{dimension}"),
+            now=self.now,
+        )
+        self.assertFalse(wrong["is_correct"])
+        self.assertTrue(wrong["correction_required"])
+        with self.assertRaises(VocabularyAutonomousReviewError) as incomplete:
+            settle_review_session(
+                user,
+                claimed["session_id"],
+                {"queue_token": claimed["queue_token"]},
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+        self.assertEqual(incomplete.exception.error, "review_session_incomplete")
+        wrong_correction = submit_review_correction(
+            user,
+            claimed["session_id"],
+            dict(identity, answer="仍然错误", attempt_id=f"mode-correction-wrong:{dimension}"),
+            now=self.now,
+        )
+        self.assertFalse(wrong_correction["correction_completed"])
+        self.assertTrue(wrong_correction["correction_required"])
+        duplicate = submit_review_correction(
+            user,
+            claimed["session_id"],
+            dict(identity, answer="另一个错误", attempt_id=f"mode-correction-wrong:{dimension}"),
+            now=self.now,
+        )
+        self.assertTrue(duplicate["idempotent"])
+        self.assertTrue(duplicate["correction_required"])
+        expected_answer = json.loads(stored.answer_payload_json).get("answer")
+        if json.loads(stored.answer_payload_json).get("answer_type") == "option_id":
+            expected_answer = json.loads(stored.answer_payload_json).get("answer_option_id")
+        corrected = submit_review_correction(
+            user,
+            claimed["session_id"],
+            dict(
+                identity,
+                answer=expected_answer,
+                attempt_id=f"mode-correction-right:{dimension}",
+            ),
+            now=self.now,
+        )
+        self.assertTrue(corrected["correction_completed"])
+        self.assertFalse(corrected["correction_required"])
+        self.assertEqual(corrected["correction_count"], 2)
+        self.assertEqual(
+            corrected["correction_attempt_id"],
+            f"mode-correction-right:{dimension}",
+        )
+        stale_replay = submit_review_correction(
+            user,
+            claimed["session_id"],
+            dict(
+                identity,
+                answer="旧 attempt 不得覆盖",
+                attempt_id=f"mode-correction-wrong:{dimension}",
+            ),
+            now=self.now,
+        )
+        self.assertTrue(stale_replay["idempotent"])
+        self.assertEqual(
+            db.session.get(VocabularyReviewItem, stored.id).correction_attempt_id,
+            f"mode-correction-right:{dimension}",
+        )
+        self.assertEqual(
+            db.session.get(VocabularyReviewItem, stored.id).correction_count,
+            2,
+        )
+        settled = settle_review_session(
+            user,
+            claimed["session_id"],
+            {"queue_token": claimed["queue_token"]},
+            session_token=claimed["session_token"],
+            now=self.now,
+        )
+        self.assertEqual(settled["total_count"], 1)
+        mastery = db.session.get(StudentVocabularyMastery, target.id)
+        self.assertEqual(
+            getattr(mastery, f"{dimension}_next_due_at"),
+            self.now + timedelta(days=1),
+        )
+        self.assertTrue(claim_today_review(user, now=self.now + timedelta(hours=1))["empty"])
+        next_day = claim_today_review(user, now=self.now + timedelta(days=1))
+        self.assertEqual(next_day["total_count"], 1)
+        self.assertEqual(next_day["items"][0]["remediation_kind"], "same_dimension")
+        return user, next_day
+
+    def test_autonomous_zh_to_en_has_correction_and_day1_retry(self):
+        with self.app.app_context():
+            self._run_bounded_correction_case("form_recall", "zh_to_en")
+
+    def test_autonomous_audio_to_en_has_correction_and_day1_retry(self):
+        with self.app.app_context():
+            self._run_bounded_correction_case("audio_form_recall", "audio_to_en")
+
+    def test_autonomous_en_to_zh_has_correction_and_day1_retry(self):
+        with self.app.app_context():
+            self._run_bounded_correction_case("meaning_recall", "en_to_zh")
+
+    def test_autonomous_context_choice_has_correction_and_day1_retry(self):
+        with self.app.app_context():
+            self._run_bounded_correction_case(
+                "context_use", "context_choice", context_kind="meaning_choice"
+            )
+
+    def test_autonomous_context_fill_has_correction_and_day1_retry(self):
+        with self.app.app_context():
+            self._run_bounded_correction_case(
+                "context_use", "context_fill", context_kind="example_fill"
+            )
+
+    def test_autonomous_failed_delayed_retry_releases_one_related_dimension(self):
+        with self.app.app_context():
+            user, delayed = self._run_bounded_correction_case(
+                "form_recall", "zh_to_en"
+            )
+            item = delayed["items"][0]
+            identity = {
+                "session_token": delayed["session_token"],
+                "review_item_id": item["review_item_id"],
+                "question_id": item["question_id"],
+                "word_id": item["word_id"],
+                "sense_id": item["sense_id"],
+                "dimension": item["dimension"],
+            }
+            wrong = submit_review_answer(
+                user,
+                delayed["session_id"],
+                dict(identity, answer="又一次错误", attempt_id="related-retry-first"),
+                now=self.now + timedelta(days=1),
+            )
+            self.assertTrue(wrong["correction_required"])
+            stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            expected = json.loads(stored.answer_payload_json).get("answer")
+            corrected = submit_review_correction(
+                user,
+                delayed["session_id"],
+                dict(identity, answer=expected, attempt_id="related-retry-correction"),
+                now=self.now + timedelta(days=1),
+            )
+            self.assertTrue(corrected["correction_completed"])
+            settle_review_session(
+                user,
+                delayed["session_id"],
+                {"queue_token": delayed["queue_token"]},
+                session_token=delayed["session_token"],
+                now=self.now + timedelta(days=1),
+            )
+            related_day = claim_today_review(user, now=self.now + timedelta(days=2))
+            dimensions = [candidate["dimension"] for candidate in related_day["items"]]
+            self.assertEqual(dimensions, ["context_use"])
+            self.assertLessEqual(
+                sum(candidate["remediation_kind"] is not None for candidate in related_day["items"]),
+                2,
+            )
+
+    def test_comprehensive_sense_rotates_one_dimension_per_day(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            masteries = StudentVocabularyMastery.query.filter_by(
+                student_id=self.student_id
+            ).all()
+            target = masteries[0]
+            word = target.representative_word
+            word_word = str(word.word).split()[0]
+            word.usage_pattern = f"{word_word} on evidence"
+            word.example_en = f"Students {word_word} on evidence."
+            word.example_zh = "学生依赖证据。"
+            for mastery in masteries:
+                for dimension in StudentVocabularyMastery.DIMENSIONS:
+                    setattr(
+                        mastery,
+                        f"{dimension}_next_due_at",
+                        self.now + timedelta(days=30),
+                    )
+                    setattr(mastery, f"{dimension}_stage", 0)
+                    setattr(mastery, f"{dimension}_last_answered_at", None)
+            for dimension in StudentVocabularyMastery.DIMENSIONS:
+                setattr(target, f"{dimension}_next_due_at", self.now)
+            db.session.commit()
+
+            expected_dimensions = [
+                "meaning_recall",
+                "audio_form_recall",
+                "form_recall",
+                "context_use",
+            ]
+            seen_dimensions = []
+            for day, expected_dimension in enumerate(expected_dimensions):
+                current = self.now + timedelta(days=day)
+                claimed = claim_today_review(user, now=current)
+                self.assertEqual(claimed["total_count"], 1)
+                self.assertEqual(claimed["due_count"], 1)
+                self.assertEqual(
+                    len({item["sense_id"] for item in claimed["items"]}),
+                    1,
+                )
+                item = claimed["items"][0]
+                self.assertEqual(item["sense_id"], target.sense_id)
+                self.assertEqual(item["dimension"], expected_dimension)
+                seen_dimensions.append(item["dimension"])
+                stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+                answer = json.loads(stored.answer_payload_json).get("answer")
+                if json.loads(stored.answer_payload_json).get("answer_type") == "option_id":
+                    answer = json.loads(stored.answer_payload_json)["answer_option_id"]
+                answered = submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    {
+                        "session_token": claimed["session_token"],
+                        "review_item_id": item["review_item_id"],
+                        "question_id": item["question_id"],
+                        "word_id": item["word_id"],
+                        "sense_id": item["sense_id"],
+                        "dimension": item["dimension"],
+                        "answer": answer,
+                        "attempt_id": f"rotation-first-{day}",
+                    },
+                    now=current,
+                )
+                self.assertTrue(answered["is_correct"])
+                settled = settle_review_session(
+                    user,
+                    claimed["session_id"],
+                    {"queue_token": claimed["queue_token"]},
+                    session_token=claimed["session_token"],
+                    now=current,
+                )
+                self.assertEqual(settled["total_count"], 1)
+                self.assertEqual(settled["remaining_due_count"], 0)
+                same_day = claim_today_review(user, now=current + timedelta(hours=1))
+                self.assertTrue(same_day["empty"])
+                self.assertEqual(same_day["remaining_due_count"], 0)
+                self.assertEqual(review_summary(user, now=current + timedelta(hours=1))["due_count"], 0)
+                if day == 0:
+                    preflight = review_preflight(user, self.task_id, now=current)
+                    self.assertEqual(preflight["due_count"], 0)
+
+            self.assertEqual(seen_dimensions, expected_dimensions)
+            next_day = claim_today_review(
+                user,
+                now=self.now + timedelta(days=len(expected_dimensions)),
+            )
+            self.assertTrue(next_day["total_count"] <= 1)
+
+    def test_due_batch_never_repeats_a_sense_and_error_wins(self):
+        with self.app.app_context():
+            rows = StudentVocabularyMastery.query.filter_by(
+                student_id=self.student_id
+            ).order_by(StudentVocabularyMastery.sense_id.asc()).all()
+            for mastery in rows:
+                for dimension in StudentVocabularyMastery.DIMENSIONS:
+                    setattr(mastery, f"{dimension}_next_due_at", self.now)
+                    setattr(mastery, f"{dimension}_stage", 0)
+                    setattr(mastery, f"{dimension}_last_answered_at", None)
+            failed = rows[1]
+            failed.meaning_recall_last_answered_at = self.now - timedelta(days=1)
+            db.session.commit()
+
+            claimed = claim_today_review(
+                db.session.get(User, self.student_id),
+                now=self.now,
+            )
+            sense_ids = [item["sense_id"] for item in claimed["items"]]
+            self.assertGreater(len(sense_ids), 1)
+            self.assertEqual(len(sense_ids), len(set(sense_ids)))
+            self.assertEqual(claimed["items"][0]["sense_id"], failed.sense_id)
 
     def test_cross_book_batch_is_real_questions_and_repeat_claim_is_idempotent(self):
         with self.app.app_context():
@@ -429,6 +751,25 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                 now=self.now,
             )
             self.assertTrue(duplicate["idempotent"])
+            correction_answer = json.loads(
+                db.session.get(VocabularyReviewItem, first_item["review_item_id"]).answer_payload_json
+            ).get("answer")
+            correction = submit_review_correction(
+                user,
+                session_payload["session_id"],
+                {
+                    "session_token": session_payload["session_token"],
+                    "review_item_id": first_item["review_item_id"],
+                    "question_id": first_item["question_id"],
+                    "word_id": first_item["word_id"],
+                    "sense_id": first_item["sense_id"],
+                    "dimension": first_item["dimension"],
+                    "answer": correction_answer,
+                    "attempt_id": "autonomous-wrong-correction",
+                },
+                now=self.now,
+            )
+            self.assertTrue(correction["correction_completed"])
             for item in db.session.get(VocabularyReviewSession, session_payload["session_id"]).items[1:]:
                 answer_payload = json.loads(item.answer_payload_json)
                 self.assertTrue(
@@ -612,6 +953,53 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
         )
         self.assertEqual(continued.status_code, 200)
         self.assertGreater(continued.get_json()["total_count"], 0)
+
+    def test_http_wrong_review_requires_correction_and_keeps_false_feedback(self):
+        today = self.client.get(
+            "/api/miniprogram/student/vocabulary-review/today",
+            headers=self.headers,
+        )
+        self.assertEqual(today.status_code, 200, today.get_json())
+        session = today.get_json()
+        item = session["items"][0]
+        answer_payload = {
+            "session_token": session["session_token"],
+            "review_item_id": item["review_item_id"],
+            "question_id": item["question_id"],
+            "word_id": item["word_id"],
+            "sense_id": item["sense_id"],
+            "dimension": item["dimension"],
+            "answer": "明显错误",
+            "attempt_id": "http-review-wrong-first",
+        }
+        wrong = self.client.post(
+            f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/answers",
+            json=answer_payload,
+            headers=self.headers,
+        )
+        self.assertEqual(wrong.status_code, 200, wrong.get_json())
+        self.assertTrue(wrong.get_json()["correction_required"])
+        correction_payload = dict(
+            answer_payload,
+            answer="仍然错误",
+            attempt_id="http-review-wrong-correction",
+        )
+        correction = self.client.post(
+            f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/corrections",
+            json=correction_payload,
+            headers=self.headers,
+        )
+        self.assertEqual(correction.status_code, 200, correction.get_json())
+        self.assertFalse(correction.get_json()["correction_completed"])
+        self.assertTrue(correction.get_json()["correction_required"])
+        duplicate = self.client.post(
+            f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/corrections",
+            json=dict(correction_payload, answer="别的错误"),
+            headers=self.headers,
+        )
+        self.assertEqual(duplicate.status_code, 200, duplicate.get_json())
+        self.assertTrue(duplicate.get_json()["idempotent"])
+        self.assertTrue(duplicate.get_json()["correction_required"])
 
     def test_wrong_stage_zero_outranks_unanswered_stage_zero(self):
         with self.app.app_context():

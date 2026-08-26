@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import re
 import secrets
-from datetime import datetime
+from datetime import datetime, time, timedelta, timezone
 from functools import lru_cache
 
 from sqlalchemy.exc import IntegrityError, OperationalError
@@ -34,11 +34,12 @@ from models import (
     db,
 )
 from services.dictation_input_policy import resolve_submission_input
-from services.dictation_review import local_date
+from services.dictation_review import SHANGHAI, local_date
 from services.vocabulary_context import grade_context_answer
 from services.vocabulary_mastery import (
     DIMENSIONS,
     MAX_ENGLISH_ANSWER_LENGTH,
+    REVIEW_INTERVALS_DAYS,
     _apply_dimension_answer,
     _dimension_due,
     _dimension_stage,
@@ -50,11 +51,65 @@ from services.vocabulary_mastery import (
     is_vocabulary_v2_task,
     utc_naive,
 )
+from services.vocabulary_remediation import (
+    MAX_CORRECTION_ATTEMPTS,
+    MAX_REMEDIATION_PER_WORD,
+    correction_state,
+    dimension_priority,
+    related_dimension_for,
+    remediation_kind_for_dimension,
+    remediation_priority,
+)
 
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
 SAFE_ENGLISH_SEPARATORS = [" ", "-", "'"]
 _FEEDBACK_HYPHENATOR = None
+
+
+def _correction_required(item: VocabularyReviewItem) -> bool:
+    """A wrong formal answer must be corrected before the session can settle."""
+
+    return bool(
+        item.first_attempt_id
+        and item.first_is_correct is False
+        and item.correction_is_correct is not True
+        and not item.correction_exhausted
+    )
+
+
+def _candidate_remediation_kind(
+    user: User,
+    mastery: StudentVocabularyMastery,
+    dimension: str,
+    now: datetime,
+) -> str | None:
+    """Classify a due item without creating a second queue.
+
+    A wrong item is re-exposed in the next due cycle as a same-dimension
+    remediation. A marker on mastery identifies the single related dimension
+    released after that delayed retry; the marker is cleared once answered.
+    """
+
+    related_due = getattr(mastery, "review_related_due_at", None)
+    if (
+        getattr(mastery, "review_related_dimension", None) == dimension
+        and related_due is not None
+        and related_due <= now
+    ):
+        return remediation_kind_for_dimension(is_retry=False, is_related=True)
+    latest = (
+        VocabularyReviewItem.query.filter_by(
+            student_id=user.id,
+            sense_id=mastery.sense_id,
+            dimension=dimension,
+        )
+        .order_by(VocabularyReviewItem.id.desc())
+        .first()
+    )
+    if latest and latest.first_is_correct is False and not _correction_required(latest):
+        return remediation_kind_for_dimension(is_retry=True)
+    return None
 
 
 class VocabularyAutonomousReviewError(Exception):
@@ -113,8 +168,51 @@ def _candidate_words(word: DictationWord, cache: dict[int, list[DictationWord]])
     return cache[word.book_id]
 
 
+def _answered_senses_on_local_date(user: User, now: datetime) -> set[int]:
+    """Return senses with a formal autonomous answer on the local day.
+
+    The answer-attempt table is the durable source for this cooldown, so it
+    also works for old sessions and for a request that resumes after a crash.
+    Corrections are deliberately excluded: they are not formal questions, but
+    the first formal attempt still cools the whole sense for the day.
+    """
+
+    review_date = local_date(now)
+    day_start = datetime.combine(review_date, time.min, tzinfo=SHANGHAI)
+    day_end = datetime.combine(review_date + timedelta(days=1), time.min, tzinfo=SHANGHAI)
+    start_utc = day_start.astimezone(timezone.utc).replace(tzinfo=None)  # noqa: UP017
+    end_utc = day_end.astimezone(timezone.utc).replace(tzinfo=None)  # noqa: UP017
+    rows = (
+        db.session.query(
+            VocabularyReviewItem.sense_id,
+        )
+        .join(
+            VocabularyReviewAttempt,
+            VocabularyReviewAttempt.item_id == VocabularyReviewItem.id,
+        )
+        .filter(
+            VocabularyReviewItem.student_id == user.id,
+            VocabularyReviewAttempt.student_id == user.id,
+            VocabularyReviewAttempt.is_first_attempt.is_(True),
+            VocabularyReviewAttempt.submitted_at >= start_utc,
+            VocabularyReviewAttempt.submitted_at < end_utc,
+        )
+        .all()
+    )
+    return {int(sense_id) for (sense_id,) in rows if sense_id is not None}
+
+
 def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
-    """Return qualified due dimensions in stable, overload-safe order."""
+    """Return at most one qualified due dimension per sense.
+
+    Several dimension timestamps can legitimately be due together after a
+    comprehensive first exposure. They are a backlog, not four questions to
+    freeze into one batch. Select one dimension per sense using the shared
+    remediation priority, then untested-stage priority, due time, last-answer
+    age, and the stable dimension order. A formal answer cools the whole sense
+    until the next local date, so ``continue`` cannot immediately reopen the
+    other dimensions of the same word.
+    """
 
     now = utc_naive(now)
     rows = (
@@ -123,8 +221,9 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
         .all()
     )
     candidate_cache: dict[int, list[DictationWord]] = {}
-    result = []
-    seen = set()
+    candidates_by_sense: dict[int, list[dict]] = {}
+    cooled_senses = _answered_senses_on_local_date(user, now)
+    planned_remediation_counts: dict[int, int] = {}
     for mastery in rows:
         word = _word_for_mastery(mastery)
         if not word:
@@ -133,10 +232,11 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
             # Existing mastery rows should point to a sense.  Avoid writing or
             # guessing during a read-only count if a hand-created row does not.
             continue
+        if mastery.sense_id in cooled_senses:
+            continue
         for dimension in DIMENSIONS:
             due_at = _dimension_due(mastery, dimension)
-            key = (mastery.sense_id, dimension)
-            if key in seen or not due_at or due_at > now:
+            if not due_at or due_at > now:
                 continue
             question = _question_for(
                 word,
@@ -148,7 +248,25 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
             if not question:
                 continue
             public, answer = question
-            seen.add(key)
+            remediation_kind = _candidate_remediation_kind(
+                user,
+                mastery,
+                dimension,
+                now,
+            )
+            existing_remediation_count = (
+                int(getattr(mastery, "review_remediation_count", 0) or 0)
+                if getattr(mastery, "review_remediation_date", None) == local_date(now)
+                else 0
+            )
+            if (
+                remediation_kind
+                and existing_remediation_count >= MAX_REMEDIATION_PER_WORD
+            ):
+                # Keep the bounded budget explicit. The existing due timestamp
+                # remains intact; the next claim after the date boundary can
+                # pick it up instead of spinning on the same word today.
+                continue
             overdue_seconds = max(0, int((now - due_at).total_seconds()))
             stage = _dimension_stage(mastery, dimension)
             last_answered_at = getattr(
@@ -156,7 +274,7 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
                 f"{dimension}_last_answered_at",
                 None,
             )
-            result.append(
+            candidates_by_sense.setdefault(mastery.sense_id, []).append(
                 {
                     "word": word,
                     "mastery": mastery,
@@ -165,22 +283,57 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
                     "stage": stage,
                     "public": public,
                     "answer": answer,
+                    "remediation_kind": remediation_kind,
                     "overdue_seconds": overdue_seconds,
+                    "last_answered_at": last_answered_at,
                     # Stage 0 also represents a newly unlocked dimension. A
                     # real wrong answer is distinguishable because it records
                     # ``last_answered_at`` before resetting the stage.
                     "error_priority": 1 if stage == 0 and last_answered_at else 0,
+                    "untested_priority": int(stage == 0 and not last_answered_at),
+                    "remediation_priority": remediation_priority(remediation_kind),
+                    "dimension_priority": dimension_priority(dimension),
                 }
             )
+
+    result = []
+    for sense_id, options in candidates_by_sense.items():
+        options.sort(
+            key=lambda item: (
+                -item["remediation_priority"],
+                -item["error_priority"],
+                -item["untested_priority"],
+                item["due_at"],
+                item["last_answered_at"] or datetime.min,
+                item["dimension_priority"],
+            )
+        )
+        selected = None
+        for candidate in options:
+            if candidate["remediation_kind"]:
+                if (
+                    planned_remediation_counts.get(sense_id, 0)
+                    >= MAX_REMEDIATION_PER_WORD
+                ):
+                    continue
+                planned_remediation_counts[sense_id] = (
+                    planned_remediation_counts.get(sense_id, 0) + 1
+                )
+            selected = candidate
+            break
+        if selected is not None:
+            result.append(selected)
     result.sort(
         key=lambda item: (
+            -item["remediation_priority"],
             -item["error_priority"],
-            -item["overdue_seconds"],
+            -item["untested_priority"],
             item["due_at"],
+            item["last_answered_at"] or datetime.min,
             item["word"].book_id,
             item["word"].sequence,
             item["word"].id,
-            item["dimension"],
+            item["dimension_priority"],
         )
     )
     return result
@@ -198,12 +351,15 @@ def _session_due_counts(
     """Return actionable count and due debt outside the frozen session."""
 
     candidates = _due_candidates(user, now)
-    session_keys = {(item.sense_id, item.dimension) for item in session.items}
+    session_senses = {item.sense_id for item in session.items}
     outside_due = sum(
-        (candidate["mastery"].sense_id, candidate["dimension"]) not in session_keys
+        candidate["mastery"].sense_id not in session_senses
         for candidate in candidates
     )
-    unanswered = sum(item.first_attempt_id is None for item in session.items)
+    unanswered = sum(
+        item.first_attempt_id is None or _correction_required(item)
+        for item in session.items
+    )
     return unanswered + outside_due, outside_due
 
 
@@ -332,6 +488,17 @@ def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
         "first_attempt_id": item.first_attempt_id,
         "first_is_correct": item.first_is_correct,
         "first_answer": item.first_answer,
+        "correction_required": _correction_required(item),
+        "correction_attempt_id": item.correction_attempt_id,
+        "correction_is_correct": item.correction_is_correct,
+        "correction_answer": item.correction_answer,
+        "correction_count": int(item.correction_count or 0),
+        "correction_max_attempts": MAX_CORRECTION_ATTEMPTS,
+        "correction_retry_allowed": _correction_required(item)
+        and int(item.correction_count or 0) < MAX_CORRECTION_ATTEMPTS,
+        "correction_exhausted": bool(item.correction_exhausted),
+        "remediation_kind": item.remediation_kind,
+        "deferred_to_review": bool(item.deferred_to_review),
         # These are only input capabilities.  The answer and its shape remain
         # server-side until this item has been answered.
         "answer_length": MAX_ENGLISH_ANSWER_LENGTH if english_mode else 0,
@@ -362,7 +529,9 @@ def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> 
     candidate_cache = {}
     items = [_public_item(item, candidate_cache) for item in session.items]
     due_count, remaining_due_count = _session_due_counts(user, session, now)
-    answered_count = sum(item["answered"] for item in items)
+    answered_count = sum(
+        item["answered"] and not item["correction_required"] for item in items
+    )
     return {
         "ok": True,
         "session_id": session.id,
@@ -473,6 +642,7 @@ def claim_today_review(
             due_at=candidate["due_at"],
             stage_at_claim=candidate["stage"],
             queue_index=index,
+            remediation_kind=candidate.get("remediation_kind"),
             question_id=candidate["public"]["question_id"],
             question_snapshot_json=json.dumps(
                 candidate["public"], ensure_ascii=False, sort_keys=True
@@ -521,6 +691,13 @@ def _answer_result(item, attempt, *, idempotent=False, settled=False):
         "question_id": item.question_id,
         "dimension": item.dimension,
         "student_answer": attempt.student_answer,
+        "attempt_kind": attempt.attempt_kind,
+        "correction_required": _correction_required(item),
+        "correction_count": int(item.correction_count or 0),
+        "correction_max_attempts": MAX_CORRECTION_ATTEMPTS,
+        "correction_retry_allowed": _correction_required(item)
+        and int(item.correction_count or 0) < MAX_CORRECTION_ATTEMPTS,
+        "correction_exhausted": bool(item.correction_exhausted),
         "revealed_answer": revealed_answer,
         "revealed_answer_option_id": revealed_option_id,
         "answer_feedback": _answer_feedback(item),
@@ -540,6 +717,18 @@ def _apply_review_item_state(
     mastery = _mastery_for(user.id, item.sense_id)
     if mastery is None:
         mastery = ensure_mastery(user, item.word, item.sense)
+    if item.remediation_kind:
+        answer_date = local_date(utc_naive(answered_at))
+        if getattr(mastery, "review_remediation_date", None) != answer_date:
+            mastery.review_remediation_date = answer_date
+            mastery.review_remediation_count = 0
+        mastery.review_remediation_count = min(
+            MAX_REMEDIATION_PER_WORD,
+            int(getattr(mastery, "review_remediation_count", 0) or 0) + 1,
+        )
+    if getattr(mastery, "review_related_dimension", None) == item.dimension:
+        mastery.review_related_dimension = None
+        mastery.review_related_due_at = None
     _apply_dimension_answer(
         mastery,
         item.dimension,
@@ -548,6 +737,29 @@ def _apply_review_item_state(
         bootstrap_dimensions=(),
     )
     item.state_applied = True
+
+
+def _schedule_related_dimension(
+    mastery: StudentVocabularyMastery,
+    dimension: str,
+    now: datetime,
+) -> str | None:
+    """Release one related dimension at the normal first review interval."""
+
+    related = related_dimension_for(dimension)
+    if not related:
+        return None
+    due_attr = f"{related}_next_due_at"
+    due = now + timedelta(days=REVIEW_INTERVALS_DAYS[0])
+    current_due = getattr(mastery, due_attr, None)
+    # Pulling an already-later due date forward is allowed for a diagnostic,
+    # but the stage and every other dimension remain untouched. Never replace
+    # an already-earlier due date.
+    if current_due is None or current_due > due:
+        setattr(mastery, due_attr, due)
+    mastery.review_related_dimension = related
+    mastery.review_related_due_at = getattr(mastery, due_attr, due)
+    return related
 
 
 def _restore_first_attempt_state(
@@ -678,6 +890,7 @@ def submit_review_answer(
         student_answer=answer[:100],
         is_correct=is_correct,
         is_first_attempt=True,
+        attempt_kind="first",
         input_mode=input_mode,
         input_grant_id=input_grant_id,
         submitted_at=now,
@@ -716,6 +929,168 @@ def submit_review_answer(
     return _answer_result(item, attempt)
 
 
+def submit_review_correction(
+    user: User,
+    session_id: int,
+    payload: dict,
+    *,
+    session_token: str | None = None,
+    now: datetime | None = None,
+) -> dict:
+    """Record a bounded, non-formal correction for a wrong review answer."""
+
+    now = utc_naive(now)
+    session_token = session_token or str(payload.get("session_token") or "").strip() or None
+    session = _session_for_user(
+        user,
+        session_id,
+        session_token,
+        lock=True,
+        require_token=True,
+    )
+    try:
+        item_id = int(payload.get("review_item_id") or payload.get("queue_item_id"))
+    except (TypeError, ValueError) as error:
+        raise VocabularyAutonomousReviewError("invalid_review_item_id", 400) from error
+    item = (
+        VocabularyReviewItem.query.filter_by(
+            id=item_id,
+            session_id=session.id,
+            student_id=user.id,
+        )
+        .with_for_update()
+        .first()
+    )
+    if not item:
+        raise VocabularyAutonomousReviewError("review_item_not_in_session", 409)
+    supplied_identity = (
+        str(payload.get("question_id") or "").strip(),
+        str(payload.get("word_id") or ""),
+        str(payload.get("sense_id") or ""),
+        str(payload.get("dimension") or "").strip().lower(),
+    )
+    expected_identity = (
+        item.question_id,
+        str(item.word_id),
+        str(item.sense_id),
+        item.dimension,
+    )
+    if supplied_identity != expected_identity:
+        raise VocabularyAutonomousReviewError("review_question_changed", 409)
+    attempt_id = str(payload.get("attempt_id") or "").strip()
+    if not attempt_id:
+        raise VocabularyAutonomousReviewError("attempt_id_required", 400)
+    if len(attempt_id) > SESSION_TOKEN_MAX_LENGTH:
+        raise VocabularyAutonomousReviewError(
+            "attempt_id_too_long", 400, max_length=SESSION_TOKEN_MAX_LENGTH
+        )
+    existing = VocabularyReviewAttempt.query.filter_by(
+        student_id=user.id,
+        attempt_id=attempt_id,
+    ).first()
+    if existing:
+        if existing.item_id != item.id or existing.attempt_kind != "correction":
+            raise VocabularyAutonomousReviewError("attempt_id_conflict", 409)
+        return _correction_result(item, existing, idempotent=True)
+    if not _correction_required(item):
+        raise VocabularyAutonomousReviewError("correction_not_required", 409)
+    answer = str(payload.get("answer") or "").strip()
+    if not answer or len(answer) > 200:
+        raise VocabularyAutonomousReviewError("missing_answer", 400)
+
+    snapshot = _safe_json(item.question_snapshot_json)
+    try:
+        input_mode, input_grant_id = resolve_submission_input(
+            user,
+            snapshot.get("mode") or "en_to_zh",
+            payload.get("input_mode"),
+            task_id=session.origin_task_id,
+            now=now,
+        )
+    except ValueError as error:
+        raise VocabularyAutonomousReviewError("invalid_input_mode", 400) from error
+    expected = _safe_json(item.answer_payload_json)
+    if item.dimension == "context_use":
+        is_correct = grade_context_answer(snapshot, expected, answer)
+    elif expected.get("answer_type") == "chinese":
+        is_correct = is_chinese_answer_correct(answer, expected.get("answer") or "")
+    else:
+        is_correct = is_english_answer_correct(
+            answer,
+            expected.get("answer") or "",
+            accepted_answers=expected.get("accepted_answers") or [],
+        )
+    attempt = VocabularyReviewAttempt(
+        session_id=session.id,
+        item_id=item.id,
+        student_id=user.id,
+        attempt_id=attempt_id,
+        question_id=item.question_id,
+        student_answer=answer[:100],
+        is_correct=is_correct,
+        is_first_attempt=False,
+        attempt_kind="correction",
+        input_mode=input_mode,
+        input_grant_id=input_grant_id,
+        submitted_at=now,
+    )
+    try:
+        with db.session.begin_nested():
+            db.session.add(attempt)
+            db.session.flush()
+    except OperationalError:
+        raise VocabularyAutonomousReviewError("review_correction_in_progress", 409) from None
+    except IntegrityError:
+        duplicate = VocabularyReviewAttempt.query.filter_by(
+            student_id=user.id,
+            attempt_id=attempt_id,
+        ).first()
+        if duplicate and duplicate.item_id == item.id and duplicate.attempt_kind == "correction":
+            return _correction_result(item, duplicate, idempotent=True)
+        raise VocabularyAutonomousReviewError("attempt_id_conflict", 409) from None
+
+    state = correction_state(item.correction_count, is_correct)
+    item.correction_attempt_id = attempt_id
+    item.correction_is_correct = is_correct
+    item.correction_answer = answer[:100]
+    item.correction_count = state["count"]
+    item.correction_exhausted = state["exhausted"]
+    if state["exhausted"]:
+        item.deferred_to_review = True
+    if state["completed"] and item.remediation_kind == "same_dimension":
+        mastery = _mastery_for(user.id, item.sense_id)
+        if mastery is None:
+            mastery = ensure_mastery(user, item.word, item.sense)
+        if item.first_is_correct is False:
+            _schedule_related_dimension(mastery, item.dimension, now)
+    return _correction_result(item, attempt)
+
+
+def _correction_result(
+    item: VocabularyReviewItem,
+    attempt: VocabularyReviewAttempt,
+    *,
+    idempotent: bool = False,
+) -> dict:
+    result = _answer_result(item, attempt, idempotent=idempotent)
+    result.update(
+        {
+            "correction_completed": bool(item.correction_is_correct) or bool(item.correction_exhausted),
+            "correction_required": _correction_required(item),
+            "correction_is_correct": item.correction_is_correct,
+            "correction_answer": item.correction_answer,
+            "correction_attempt_id": item.correction_attempt_id,
+            "correction_count": int(item.correction_count or 0),
+            "correction_max_attempts": MAX_CORRECTION_ATTEMPTS,
+            "correction_retry_allowed": _correction_required(item)
+            and int(item.correction_count or 0) < MAX_CORRECTION_ATTEMPTS,
+            "correction_exhausted": bool(item.correction_exhausted),
+            "deferred_to_review": bool(item.deferred_to_review),
+        }
+    )
+    return result
+
+
 def _settlement_result(session: VocabularyReviewSession) -> dict | None:
     if not session.result_json:
         return None
@@ -751,7 +1126,11 @@ def settle_review_session(
         .with_for_update()
         .all()
     )
-    missing = [item.id for item in items if not item.first_attempt_id]
+    missing = [
+        item.id
+        for item in items
+        if not item.first_attempt_id or _correction_required(item)
+    ]
     if missing:
         raise VocabularyAutonomousReviewError(
             "review_session_incomplete",
@@ -970,11 +1349,14 @@ def review_summary(user: User, *, now: datetime | None = None) -> dict:
     due_count = _due_count(user, now)
     active_remaining = 0
     if active:
-        active_remaining = VocabularyReviewItem.query.filter(
-            VocabularyReviewItem.session_id == active.id,
-            VocabularyReviewItem.student_id == user.id,
-            VocabularyReviewItem.first_attempt_id.is_(None),
-        ).count()
+        active_items = VocabularyReviewItem.query.filter_by(
+            session_id=active.id,
+            student_id=user.id,
+        ).all()
+        active_remaining = sum(
+            item.first_attempt_id is None or _correction_required(item)
+            for item in active_items
+        )
     # Even an all-answered session still needs its once-only settlement. Keep
     # Home's entry visible so a crash between the final answer and settle does
     # not leave an invisible gate that blocks every teacher task.

@@ -458,6 +458,55 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
                 for column in inspector.get_columns("vocabulary_learning_flow")
             },
         )
+        self.assertTrue(
+            {
+                "related_source_question_ids_json",
+                "weak_word_ids_json",
+                "remediation_wave",
+                "pending_correction_question_id",
+            }.issubset(
+                {
+                    column["name"]
+                    for column in inspector.get_columns("vocabulary_learning_flow")
+                }
+            )
+        )
+        self.assertTrue(
+            {
+                "correction_attempt_id",
+                "correction_count",
+                "remediation_kind",
+                "source_question_id",
+                "formal_ordinal",
+                "deferred_to_review",
+            }.issubset(
+                {
+                    column["name"]
+                    for column in inspector.get_columns("vocabulary_learning_question")
+                }
+            )
+        )
+        self.assertTrue(
+            {
+                "correction_attempt_id",
+                "correction_count",
+                "correction_exhausted",
+                "remediation_kind",
+                "deferred_to_review",
+            }.issubset(
+                {
+                    column["name"]
+                    for column in inspector.get_columns("vocabulary_review_item")
+                }
+            )
+        )
+        self.assertIn(
+            "attempt_kind",
+            {
+                column["name"]
+                for column in inspector.get_columns("vocabulary_review_attempt")
+            },
+        )
         with engine.connect() as connection:
             rows = connection.execute(
                 text(

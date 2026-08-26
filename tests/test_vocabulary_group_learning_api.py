@@ -292,6 +292,67 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         self.assertEqual(repeated.status_code, 200)
         self.assertEqual(repeated.get_json()["total_count"], settled.get_json()["total_count"])
 
+    def test_http_comprehensive_correction_is_saved_without_formal_attempt(self):
+        task_id = self._task("comprehensive", end=1)
+        queue_url = f"/api/miniprogram/student/tasks/{task_id}/vocabulary-queue"
+        queue = self.client.get(queue_url, headers=self.headers).get_json()
+        familiarity_url = (
+            f"/api/miniprogram/student/tasks/{task_id}/vocabulary-learning/familiarity"
+        )
+        while queue["phase"] == "familiarity":
+            item = next(item for item in queue["familiarity"] if not item["viewed"])
+            queue = self.client.post(
+                familiarity_url,
+                json={"queue_token": queue["queue_token"], "word_id": item["word_id"]},
+                headers=self.headers,
+            ).get_json()
+        question = queue["current_question"]
+        first = self.client.post(
+            "/api/dictation/submit",
+            json={
+                "task_id": task_id,
+                "queue_token": queue["queue_token"],
+                "learning_question_id": question["learning_question_id"],
+                "queue_item_id": question["queue_item_id"],
+                "question_id": question["question_id"],
+                "word_id": question["word_id"],
+                "sense_id": question["sense_id"],
+                "dimension": question["dimension"],
+                "answer": "definitely-not-the-answer",
+                "attempt_id": "http-comprehensive-first-wrong",
+                "retry": False,
+                "input_mode": "strict",
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(first.status_code, 200, first.get_json())
+        self.assertTrue(first.get_json()["correction_required"])
+
+        with self.app.app_context():
+            stored = db.session.get(VocabularyLearningQuestion, question["learning_question_id"])
+            answer = json.loads(stored.answer_payload_json)["answer"]
+        correction_payload = {
+            "queue_token": first.get_json()["queue_token"],
+            "learning_question_id": question["learning_question_id"],
+            "queue_item_id": question["queue_item_id"],
+            "answer": answer,
+            "attempt_id": "http-comprehensive-correction",
+        }
+        corrected = self.client.post(
+            f"/api/miniprogram/student/tasks/{task_id}/vocabulary-learning/correction",
+            json=correction_payload,
+            headers=self.headers,
+        )
+        self.assertEqual(corrected.status_code, 200, corrected.get_json())
+        self.assertTrue(corrected.get_json()["correction_completed"])
+        duplicate = self.client.post(
+            f"/api/miniprogram/student/tasks/{task_id}/vocabulary-learning/correction",
+            json=correction_payload,
+            headers=self.headers,
+        )
+        self.assertEqual(duplicate.status_code, 200, duplicate.get_json())
+        self.assertTrue(duplicate.get_json()["correction_idempotent"])
+
     def test_http_context_choice_and_fill_share_one_mastery_encounter(self):
         task_id = self._task("reading")
         queue_url = f"/api/miniprogram/student/tasks/{task_id}/vocabulary-queue"

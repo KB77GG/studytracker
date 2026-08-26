@@ -42,6 +42,7 @@ from services.vocabulary_mastery import (
     SAFE_ENGLISH_SEPARATORS,
     _apply_dimension_answer,
     _assigned_words,
+    _bootstrap_unstarted_dimensions,
     _dimension_stage,
     _mastery_for,
     _question_for,
@@ -52,6 +53,14 @@ from services.vocabulary_mastery import (
     normalize_goal,
     utc_naive,
 )
+from services.vocabulary_remediation import (
+    MAX_CORRECTION_ATTEMPTS,
+    MAX_FORMAL_QUESTIONS_PER_WORD,
+    MAX_REMEDIATION_PER_WORD,
+    MIN_OTHER_FORMAL_QUESTIONS,
+    RELATED_DIMENSION_BY_ERROR,
+    correction_state,
+)
 
 GROUP_SIZES = {
     "reading": 10,
@@ -59,6 +68,15 @@ GROUP_SIZES = {
     "writing": 8,
     "comprehensive": 6,
 }
+
+# Comprehensive first learning deliberately owns only the two capabilities
+# that are useful immediately. The other dimensions remain in the independent
+# spaced-review queue instead of becoming short-term repeats.
+COMPREHENSIVE_BASE_DIMENSIONS = ("form_recall", "context_use")
+# Kept as a compatibility alias for callers/tests that imported the old
+# name; the shared policy is the only source of the actual limit.
+MAX_CORRECTIONS_PER_QUESTION = MAX_CORRECTION_ATTEMPTS
+COMPREHENSIVE_REVIEW_DIMENSIONS = ("meaning_recall", "audio_form_recall")
 
 PHASE_FAMILIARITY = "familiarity"
 PHASE_RECALL = "active_recall"
@@ -104,6 +122,15 @@ def build_fixed_groups(words: list[DictationWord], group_size: int) -> list[list
     if group_size <= 0:
         raise ValueError("group_size must be positive")
     return [words[start : start + group_size] for start in range(0, len(words), group_size)]
+
+
+def _schedule_comprehensive_review_dimensions(mastery, now):
+    """Bootstrap unused dimensions with the normal first Day-1 interval."""
+
+    # Do not make an unused dimension immediately due after Day 0. This helper
+    # is the same bootstrap used by mastery answers and therefore preserves
+    # REVIEW_INTERVALS_DAYS and any future interval policy change.
+    _bootstrap_unstarted_dimensions(mastery, COMPREHENSIVE_REVIEW_DIMENSIONS, now)
 
 
 def stable_question_order(specs: list[dict], seed: str, previous_sense_id=None) -> list[dict]:
@@ -249,6 +276,15 @@ def _build_group_specs(
     used_score_keys,
     diagnostics,
 ):
+    if goal == "comprehensive":
+        return _build_comprehensive_group_specs(
+            user,
+            group_words,
+            group_index,
+            candidates,
+            used_score_keys,
+            diagnostics,
+        )
     by_phase = {phase: [] for phase in PHASE_ORDER}
     has_context_dimension = "context_use" in dimensions_for_goal(goal)
     for word in group_words:
@@ -385,7 +421,124 @@ def _build_group_specs(
     return by_phase
 
 
-def _public_question(question: VocabularyLearningQuestion, *, retry=False) -> dict:
+def _build_comprehensive_group_specs(
+    user,
+    group_words,
+    group_index,
+    candidates,
+    used_score_keys,
+    diagnostics,
+):
+    """Build one active-recall and one context task per comprehensive word.
+
+    The two phases deliberately use the same server-owned word order. With a
+    six-word group this gives each word five other formal questions between its
+    two base tasks; larger groups naturally land in the preferred 8–12 range.
+    """
+
+    active_specs = []
+    context_by_word = {}
+    for word in group_words:
+        sense = ensure_word_sense(word)
+        mastery = ensure_mastery(user, word, sense)
+        recall = _question_for(
+            word,
+            "form_recall",
+            "comprehensive",
+            _dimension_stage(mastery, "form_recall"),
+            candidates,
+        )
+        if recall:
+            public, answer = recall
+            active_specs.append(
+                _question_spec(
+                    word,
+                    sense,
+                    public,
+                    answer,
+                    group_index=group_index,
+                    phase=PHASE_RECALL,
+                    context_role="base_recall",
+                    score_eligible=(sense.id, "form_recall") not in used_score_keys,
+                )
+            )
+            used_score_keys.add((sense.id, "form_recall"))
+        else:
+            diagnostics.append(
+                {
+                    "group_index": group_index,
+                    "word_id": word.id,
+                    "sense_id": sense.id,
+                    "phase": PHASE_RECALL,
+                    "reason": "missing_required_recall_material",
+                    "dimension": "form_recall",
+                }
+            )
+
+        # Choice is the default context task. Fill is only the safe fallback
+        # when no approved choice can be built for this word.
+        context = _context_question(
+            word,
+            candidates,
+            seed=f"g2:{group_index}:{word.id}:context-choice",
+            allowed_kinds={"meaning_choice", "collocation_choice"},
+            rotation=0,
+        )
+        if not context:
+            context = _context_question(
+                word,
+                candidates,
+                seed=f"g2:{group_index}:{word.id}:context-production",
+                allowed_kinds={"example_fill", "collocation_fill"},
+                rotation=1,
+            )
+        if context:
+            public, answer = context
+            context_by_word[word.id] = _question_spec(
+                word,
+                sense,
+                public,
+                answer,
+                group_index=group_index,
+                phase=PHASE_DISCRIMINATION,
+                context_role="base_context",
+                score_eligible=(sense.id, "context_use") not in used_score_keys,
+            )
+            used_score_keys.add((sense.id, "context_use"))
+        else:
+            diagnostics.append(
+                {
+                    "group_index": group_index,
+                    "word_id": word.id,
+                    "sense_id": sense.id,
+                    "phase": PHASE_DISCRIMINATION,
+                    "reason": "context_skipped_no_safe_question",
+                }
+            )
+
+    active_ordered = stable_question_order(
+        active_specs,
+        f"vocabulary-group:{group_index}:active_recall:comprehensive",
+        ensure_word_sense(group_words[-1]).id if group_words else None,
+    )
+    context_ordered = [
+        context_by_word[spec["word_id"]]
+        for spec in active_ordered
+        if spec["word_id"] in context_by_word
+    ]
+    return {
+        PHASE_RECALL: active_ordered,
+        PHASE_DISCRIMINATION: context_ordered,
+        PHASE_PRODUCTION: [],
+    }
+
+
+def _public_question(
+    question: VocabularyLearningQuestion,
+    *,
+    retry=False,
+    correction=False,
+) -> dict:
     snapshot = _json_dict(question.question_snapshot_json)
     payload = {
         "learning_question_id": question.id,
@@ -398,6 +551,8 @@ def _public_question(question: VocabularyLearningQuestion, *, retry=False) -> di
         "context_role": question.context_role,
         "score_eligible": bool(question.score_eligible),
         "retry": bool(retry),
+        "correction": bool(correction),
+        "remediation_kind": question.remediation_kind,
         "question": snapshot,
         "mode": snapshot.get("mode"),
         "dictation_mode": snapshot.get("mode"),
@@ -408,8 +563,18 @@ def _public_question(question: VocabularyLearningQuestion, *, retry=False) -> di
         if snapshot.get("mode") in {"audio_to_en", "zh_to_en", "context_fill"}
         else [],
     }
-    if retry:
+    if retry or correction or question.first_attempt_id:
         payload["first_is_correct"] = bool(question.first_is_correct)
+        payload["first_attempt_id"] = question.first_attempt_id
+        payload["first_answer"] = question.first_answer
+        payload["revealed_answer"] = _revealed_answer(question)
+    if correction:
+        payload["correction_required"] = True
+        payload["correction_count"] = int(question.correction_count or 0)
+        payload["correction_max_attempts"] = MAX_CORRECTION_ATTEMPTS
+        payload["correction_retry_allowed"] = int(question.correction_count or 0) < MAX_CORRECTION_ATTEMPTS
+        payload["correction_is_correct"] = question.correction_is_correct
+        payload["correction_exhausted"] = bool(question.deferred_to_review)
     return payload
 
 
@@ -467,7 +632,9 @@ def _initialize_flow(user, task, now):
     used_score_keys = set()
     for group_index, group_words in enumerate(groups):
         for word in group_words:
-            ensure_mastery(user, word, ensure_word_sense(word))
+            mastery = ensure_mastery(user, word, ensure_word_sense(word))
+            if goal == "comprehensive":
+                _schedule_comprehensive_review_dimensions(mastery, now)
         phase_specs = _build_group_specs(
             user,
             group_words,
@@ -484,11 +651,17 @@ def _initialize_flow(user, task, now):
             ensure_word_sense(group_words[-1]).id if group_words else None
         )
         for phase in PHASE_ORDER:
-            ordered = stable_question_order(
-                phase_specs[phase],
-                f"vocabulary-group:{task.id}:{group_index}:{phase}",
-                previous_sense,
-            )
+            if goal == "comprehensive" and phase in {PHASE_RECALL, PHASE_DISCRIMINATION}:
+                # The comprehensive builder has already paired each context
+                # task with the active-recall order. Re-shuffling either phase
+                # would collapse the required same-word cooldown.
+                ordered = list(phase_specs[phase])
+            else:
+                ordered = stable_question_order(
+                    phase_specs[phase],
+                    f"vocabulary-group:{task.id}:{group_index}:{phase}",
+                    previous_sense,
+                )
             for phase_index, spec in enumerate(ordered):
                 spec["phase_index"] = phase_index
                 all_specs.append(spec)
@@ -516,9 +689,13 @@ def _initialize_flow(user, task, now):
         group_results_json="[]",
         context_applied_json="{}",
         retry_question_ids_json="[]",
+        related_source_question_ids_json="[]",
+        weak_word_ids_json="[]",
         current_group_index=0,
         phase=PHASE_FAMILIARITY,
         phase_index=0,
+        remediation_wave=1,
+        pending_correction_question_id=None,
         viewed_word_ids_json="[]",
         queue_token="pending",
         status=VocabularyLearningFlow.STATUS_ACTIVE,
@@ -546,6 +723,7 @@ def _initialize_flow(user, task, now):
             question_id=spec["question_id"],
             question_snapshot_json=json.dumps(spec["public"], ensure_ascii=False, sort_keys=True),
             answer_payload_json=json.dumps(spec["answer"], ensure_ascii=False, sort_keys=True),
+            formal_ordinal=(question_order + 1),
         )
         db.session.add(question)
     db.session.flush()
@@ -596,39 +774,121 @@ def _retry_questions(flow):
     ids = [int(item) for item in _json_list(flow.retry_question_ids_json) if str(item).isdigit()]
     if not ids:
         return []
-    by_id = {question.id: question for question in flow.questions}
+    # Related remediation rows are appended after the flow relationship may
+    # already have been loaded. Query by the persisted ids so a same-request
+    # refresh cannot mistake a newly-created wave for an empty retry queue.
+    by_id = {
+        question.id: question
+        for question in VocabularyLearningQuestion.query.filter(
+            VocabularyLearningQuestion.flow_id == flow.id,
+            VocabularyLearningQuestion.id.in_(ids),
+        ).all()
+    }
     return [by_id[item_id] for item_id in ids if item_id in by_id]
+
+
+def _base_formal_questions(flow):
+    return [
+        question
+        for question in _group_questions(flow)
+        if question.remediation_kind is None and question.phase in PHASE_ORDER
+    ]
+
+
+def _uses_comprehensive_scheduler(flow):
+    """Gate the new contract so an older in-progress flow remains resumable."""
+
+    if flow.vocabulary_goal != "comprehensive":
+        return False
+    base_questions = _base_formal_questions(flow)
+    return bool(base_questions) and all(
+        question.formal_ordinal is not None for question in base_questions
+    )
+
+
+def _formal_questions(flow):
+    return [
+        question
+        for question in _group_questions(flow)
+        if question.phase in PHASE_ORDER or question.remediation_kind
+    ]
+
+
+def _word_remediation_count(flow, word_id):
+    base_retries = sum(
+        1
+        for question in _base_formal_questions(flow)
+        if question.word_id == word_id and question.retry_attempt_id
+    )
+    related = sum(
+        1
+        for question in _group_questions(flow)
+        if question.word_id == word_id and question.remediation_kind
+    )
+    return base_retries + related
+
+
+def _mark_weak_word(flow, word_id):
+    weak = set(_json_list(flow.weak_word_ids_json))
+    weak.add(int(word_id))
+    flow.weak_word_ids_json = json.dumps(sorted(weak), ensure_ascii=False)
 
 
 def _set_retry_questions(flow):
     questions = [
         question
-        for question in _group_questions(flow)
-        if question.first_attempt_id and question.first_is_correct is False
+        for question in _base_formal_questions(flow)
+        if question.first_attempt_id and question.first_is_correct is False and not question.retry_attempt_id
     ]
-    ordered = stable_question_order(
-        [
-            {
-                "question_id": question.question_id,
-                "word_id": question.word_id,
-                "sense_id": question.sense_id,
-                "dimension": question.dimension,
-                "question": question,
-            }
-            for question in questions
-        ],
-        f"vocabulary-group-retry:{flow.id}:{flow.current_group_index}",
-        previous_sense_id=next(
-            (
-                question.sense_id
-                for phase in reversed(PHASE_ORDER)
-                for question in reversed(_group_questions(flow, phase))
-                if question.first_attempt_id
+    if not _uses_comprehensive_scheduler(flow):
+        ordered = stable_question_order(
+            [
+                {
+                    "question_id": question.question_id,
+                    "word_id": question.word_id,
+                    "sense_id": question.sense_id,
+                    "dimension": question.dimension,
+                    "question": question,
+                }
+                for question in questions
+            ],
+            f"vocabulary-group-retry:{flow.id}:{flow.current_group_index}",
+            previous_sense_id=next(
+                (
+                    question.sense_id
+                    for phase in reversed(PHASE_ORDER)
+                    for question in reversed(_group_questions(flow, phase))
+                    if question.first_attempt_id
+                ),
+                None,
             ),
-            None,
-        ),
-    )
-    flow.retry_question_ids_json = json.dumps([item["question"].id for item in ordered])
+        )
+        flow.retry_question_ids_json = json.dumps(
+            [item["question"].id for item in ordered],
+            ensure_ascii=False,
+        )
+        flow.related_source_question_ids_json = "[]"
+        flow.remediation_wave = 1
+        flow.phase = PHASE_RETRY
+        flow.phase_index = 0
+        return
+    # Sort by the last formal occurrence, not by a fresh random shuffle. A
+    # later retry can then be placed after earlier retries and still maintain
+    # the same-word cooldown.
+    questions.sort(key=lambda question: (question.formal_ordinal or question.question_order, question.id))
+    base_count = len(_base_formal_questions(flow))
+    retry_ids = []
+    for offset, question in enumerate(questions):
+        retry_position = base_count + offset + 1
+        last_position = question.formal_ordinal or question.question_order + 1
+        if retry_position - last_position < MIN_OTHER_FORMAL_QUESTIONS + 1:
+            question.deferred_to_review = True
+            _mark_weak_word(flow, question.word_id)
+            continue
+        retry_ids.append(question.id)
+    flow.retry_question_ids_json = json.dumps(retry_ids, ensure_ascii=False)
+    flow.related_source_question_ids_json = "[]"
+    flow.remediation_wave = 1
     # Even an all-correct group enters the explicit retry boundary. The state
     # machine then calls _finish_group, so the next group/finalize transition
     # cannot be skipped by an ambiguous ``complete`` phase.
@@ -670,7 +930,8 @@ def _apply_context_once(flow, user, now):
     production = [
         question
         for question in questions
-        if question.dimension == "context_use" and question.context_role == "production"
+        if question.dimension == "context_use"
+        and question.context_role in {"production", "base_context"}
     ]
     degraded = [
         question
@@ -735,6 +996,136 @@ def _apply_context_once(flow, user, now):
     return result
 
 
+def _prepare_related_remediations(flow, user, now):
+    """Create at most one related-dimension wave after same-dimension retries."""
+
+    if not _uses_comprehensive_scheduler(flow) or flow.remediation_wave != 1:
+        return False
+    source_ids = [int(item) for item in _json_list(flow.related_source_question_ids_json) if str(item).isdigit()]
+    primary_ids = [int(item) for item in _json_list(flow.retry_question_ids_json) if str(item).isdigit()]
+    flow.remediation_wave = 2
+    if not source_ids:
+        return False
+
+    base_questions = _base_formal_questions(flow)
+    base_count = len(base_questions)
+    candidate_cache = {}
+    related_ids = []
+    max_question_order = max(
+        (question.question_order for question in flow.questions),
+        default=-1,
+    )
+    max_formal_ordinal = max(
+        (question.formal_ordinal or question.question_order + 1 for question in flow.questions),
+        default=0,
+    )
+    primary_positions = {question_id: index for index, question_id in enumerate(primary_ids)}
+    related_offset = 0
+    for source_id in sorted(source_ids, key=lambda item: primary_positions.get(item, 10**9)):
+        source = db.session.get(VocabularyLearningQuestion, source_id)
+        if not source or source.retry_is_correct is not False:
+            continue
+        failed_dimensions = {
+            question.dimension
+            for question in base_questions
+            if question.word_id == source.word_id and question.first_is_correct is False
+        }
+        if len(failed_dimensions) >= 2 or _word_remediation_count(flow, source.word_id) >= MAX_REMEDIATION_PER_WORD:
+            _mark_weak_word(flow, source.word_id)
+            continue
+        related_dimension = RELATED_DIMENSION_BY_ERROR.get(source.dimension)
+        if not related_dimension:
+            _mark_weak_word(flow, source.word_id)
+            continue
+        word = source.word
+        if not word:
+            _mark_weak_word(flow, source.word_id)
+            continue
+        if word.book_id not in candidate_cache:
+            candidate_cache[word.book_id] = (
+                DictationWord.query.filter_by(book_id=word.book_id)
+                .order_by(DictationWord.id.asc())
+                .all()
+            )
+        candidates = candidate_cache[word.book_id]
+        question_data = None
+        if related_dimension == "context_use":
+            question_data = _context_question(
+                word,
+                candidates,
+                seed=f"remediation:{flow.id}:{source.id}:context-choice",
+                allowed_kinds={"meaning_choice", "collocation_choice"},
+                rotation=1,
+            )
+            if not question_data:
+                question_data = _context_question(
+                    word,
+                    candidates,
+                    seed=f"remediation:{flow.id}:{source.id}:context-production",
+                    allowed_kinds={"example_fill", "collocation_fill"},
+                    rotation=2,
+                )
+        else:
+            mastery = _mastery_for(user.id, source.sense_id) or ensure_mastery(
+                user, word, source.sense
+            )
+            question_data = _question_for(
+                word,
+                related_dimension,
+                flow.vocabulary_goal,
+                _dimension_stage(mastery, related_dimension),
+                candidates,
+            )
+        if not question_data:
+            _mark_weak_word(flow, source.word_id)
+            continue
+        public, answer = question_data
+        source_position = base_count + primary_positions.get(source.id, len(primary_ids)) + 1
+        related_position = base_count + len(primary_ids) + related_offset + 1
+        if related_position - source_position < MIN_OTHER_FORMAL_QUESTIONS + 1:
+            source.deferred_to_review = True
+            _mark_weak_word(flow, source.word_id)
+            continue
+        max_question_order += 1
+        max_formal_ordinal = max(max_formal_ordinal, related_position)
+        related = VocabularyLearningQuestion(
+            flow_id=flow.id,
+            student_id=user.id,
+            task_id=flow.task_id,
+            book_id=flow.book_id,
+            group_index=flow.current_group_index,
+            phase=PHASE_RETRY,
+            phase_index=related_offset,
+            question_order=max_question_order,
+            word_id=source.word_id,
+            sense_id=source.sense_id,
+            dimension=related_dimension,
+            context_role="remediation",
+            score_eligible=False,
+            mastery_applied=False,
+            question_id=public["question_id"],
+            question_snapshot_json=json.dumps(public, ensure_ascii=False, sort_keys=True),
+            answer_payload_json=json.dumps(answer, ensure_ascii=False, sort_keys=True),
+            remediation_kind="related_dimension",
+            source_question_id=source.id,
+            formal_ordinal=max_formal_ordinal,
+        )
+        db.session.add(related)
+        db.session.flush()
+        related_ids.append(related.id)
+        related_offset += 1
+    flow.related_source_question_ids_json = "[]"
+    if not related_ids:
+        return False
+    flow.retry_question_ids_json = json.dumps(related_ids, ensure_ascii=False)
+    flow.phase_index = 0
+    flow.queue_token = _queue_token(
+        flow,
+        VocabularyLearningQuestion.query.filter_by(flow_id=flow.id).all(),
+    )
+    return True
+
+
 def _finish_group(flow, now):
     results = _json_list(flow.group_results_json)
     group_questions = _group_questions(flow)
@@ -748,7 +1139,12 @@ def _finish_group(flow, now):
             "group_index": flow.current_group_index,
             "scorable_count": len(scored),
             "correct_count": sum(bool(question.first_is_correct) for question in scored),
-            "retry_count": sum(bool(question.retry_attempt_id) for question in group_questions),
+            "retry_count": sum(
+                bool(question.retry_attempt_id)
+                or bool(question.remediation_kind and question.first_attempt_id)
+                for question in group_questions
+            ),
+            "weak_word_ids": sorted(int(item) for item in _json_list(flow.weak_word_ids_json)),
         }
     )
     flow.group_results_json = json.dumps(results, ensure_ascii=False, sort_keys=True)
@@ -758,6 +1154,10 @@ def _finish_group(flow, now):
         flow.phase_index = 0
         flow.viewed_word_ids_json = "[]"
         flow.retry_question_ids_json = "[]"
+        flow.related_source_question_ids_json = "[]"
+        flow.weak_word_ids_json = "[]"
+        flow.remediation_wave = 1
+        flow.pending_correction_question_id = None
     else:
         flow.phase = PHASE_COMPLETE
         flow.phase_index = 0
@@ -769,6 +1169,10 @@ def _advance_after_answer(flow, user, now):
     """Advance only from a server-validated current position."""
 
     while flow.status == VocabularyLearningFlow.STATUS_ACTIVE:
+        # A wrong answer is followed by a persisted correction action before
+        # any next formal task may be exposed. This also makes refreshes safe.
+        if flow.pending_correction_question_id:
+            return
         if flow.phase == PHASE_FAMILIARITY:
             group = _group_payload(flow) or {}
             viewed = set(_json_list(flow.viewed_word_ids_json))
@@ -801,6 +1205,8 @@ def _advance_after_answer(flow, user, now):
             retry_questions = _retry_questions(flow)
             if flow.phase_index < len(retry_questions):
                 return
+            if _prepare_related_remediations(flow, user, now):
+                continue
             _finish_group(flow, now)
             continue
         if flow.phase == PHASE_COMPLETE:
@@ -813,7 +1219,16 @@ def _public_flow(flow):
     familiarity = [dict(item, viewed=item.get("word_id") in viewed) for item in group.get("familiarity", [])]
     current_question = None
     retry = False
-    if flow.phase in PHASE_ORDER:
+    correction_question = None
+    if flow.pending_correction_question_id:
+        correction_question = db.session.get(
+            VocabularyLearningQuestion,
+            flow.pending_correction_question_id,
+        )
+    correction_required = correction_question is not None
+    if correction_required:
+        current_question = _public_question(correction_question, correction=True)
+    elif flow.phase in PHASE_ORDER:
         questions = _group_questions(flow, flow.phase)
         if flow.phase_index < len(questions):
             current_question = _public_question(questions[flow.phase_index])
@@ -827,6 +1242,24 @@ def _public_flow(flow):
         for item in _json_list(flow.diagnostics_json)
         if item.get("group_index") == flow.current_group_index
     ]
+    base_questions = _base_formal_questions(flow)
+    base_completed = sum(bool(question.first_attempt_id) for question in base_questions)
+    remediation_questions = [
+        question
+        for question in _group_questions(flow)
+        if question.remediation_kind
+        or question.retry_attempt_id
+        or (question.first_attempt_id is not None and question.first_is_correct is not True)
+    ]
+    remediation_completed = sum(
+        bool(question.retry_attempt_id)
+        if question.remediation_kind is None
+        else bool(question.first_attempt_id)
+        for question in remediation_questions
+    )
+    remediation_budget = max(0, len(group.get("word_ids") or []) * MAX_REMEDIATION_PER_WORD)
+    remediation_allocated = len(remediation_questions)
+    pending_remediation = max(0, len(_retry_questions(flow)) - flow.phase_index) if flow.phase == PHASE_RETRY else 0
     return {
         "ok": True,
         "task_id": flow.task_id,
@@ -847,6 +1280,22 @@ def _public_flow(flow):
         "familiarity": familiarity,
         "current_question": current_question,
         "retry": retry,
+        "correction_required": correction_required,
+        "correction_question_id": correction_question.id if correction_question else None,
+        "base_progress_completed": min(base_completed, len(base_questions)),
+        "base_progress_total": len(base_questions),
+        "remediation_progress_completed": min(remediation_completed, remediation_allocated),
+        # ``progress_total`` is the work actually allocated by observed
+        # errors. The budget is a ceiling, not twelve promised questions.
+        "remediation_progress_total": remediation_allocated,
+        "remediation_allocated_total": remediation_allocated,
+        "remediation_budget_total": remediation_budget,
+        "remediation_pending_count": pending_remediation,
+        "deferred_review_count": sum(
+            bool(question.deferred_to_review)
+            for question in _group_questions(flow)
+        ),
+        "weak_word_ids": sorted(int(item) for item in _json_list(flow.weak_word_ids_json)),
         "diagnostics": diagnostics,
         "queue_token": flow.queue_token,
         "completed": flow.status == VocabularyLearningFlow.STATUS_COMPLETED,
@@ -956,6 +1405,12 @@ def _revealed_answer(question):
 
 
 def _serialize_answer(question, record, *, idempotent=False):
+    flow = question.flow
+    correction_required = bool(
+        flow
+        and flow.pending_correction_question_id == question.id
+        and question.first_is_correct is False
+    )
     return {
         "ok": True,
         "is_correct": bool(record.is_correct),
@@ -975,6 +1430,10 @@ def _serialize_answer(question, record, *, idempotent=False):
         "phase": question.phase,
         "revealed_answer": _revealed_answer(question),
         "retry_required": bool(question.first_is_correct is False and not question.retry_attempt_id),
+        "correction_required": correction_required,
+        "correction_count": int(question.correction_count or 0),
+        "remediation_kind": question.remediation_kind,
+        "queue_token": flow.queue_token if flow else None,
     }
 
 
@@ -1003,16 +1462,13 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         attempt_id=raw_attempt_id,
     ).first()
     if existing_record:
-        question = next(
-            (
-                item
-                for item in flow.questions
-                if item.question_id == existing_record.vocabulary_question_id
-            ),
-            None,
-        )
+        question = VocabularyLearningQuestion.query.filter_by(
+            flow_id=flow.id,
+            question_id=existing_record.vocabulary_question_id,
+        ).first()
         if question and existing_record.task_id == task_id:
-            if supplied_retry != (not existing_record.is_first_attempt):
+            expected_retry = bool(question.remediation_kind) or not existing_record.is_first_attempt
+            if supplied_retry != expected_retry:
                 raise VocabularyGroupLearningError("attempt_phase_required", 400)
             return _serialize_answer(question, existing_record, idempotent=True)
         raise VocabularyGroupLearningError("attempt_id_conflict", 409)
@@ -1053,19 +1509,29 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         raise VocabularyGroupLearningError("invalid_input_mode", 400) from error
     is_correct = _grade_question(question, answer)
     is_first = question.first_attempt_id is None
-    if supplied_retry != (not is_first):
+    is_remediation = bool(question.remediation_kind)
+    if is_remediation:
+        if not supplied_retry:
+            raise VocabularyGroupLearningError(
+                "question_not_current",
+                409,
+                state=_public_flow(flow),
+            )
+    elif supplied_retry != (not is_first):
         raise VocabularyGroupLearningError(
             "question_not_current",
             409,
             state=_public_flow(flow),
         )
     attempt_id = raw_attempt_id
-    if is_first:
+    if is_first and not is_remediation:
         attempt_id = attempt_id or f"vocabulary-group:{flow.id}:question:{question.id}"
-    else:
+    elif not is_first:
         if flow.phase != PHASE_RETRY or question.first_is_correct is not False:
             raise VocabularyGroupLearningError("question_not_current", 409, state=_public_flow(flow))
         attempt_id = attempt_id or f"vocabulary-group-retry:{flow.id}:question:{question.id}"
+    else:
+        attempt_id = attempt_id or f"vocabulary-group-remediation:{flow.id}:question:{question.id}"
     record = DictationRecord(
         student_id=user.id,
         task_id=task_id,
@@ -1172,10 +1638,27 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
             # The aggregate context result is applied at the phase boundary,
             # after we know there is no safe production question.
             pass
+        elif is_remediation and not is_correct and not question.mastery_applied:
+            mastery = _mastery_for(user.id, question.sense_id) or ensure_mastery(
+                user, question.word, question.sense
+            )
+            _apply_dimension_answer(mastery, question.dimension, False, now)
+            question.mastery_applied = True
+            record.vocabulary_mastery_applied = True
+            _mark_weak_word(flow, question.word_id)
     else:
         question.retry_attempt_id = attempt_id
         question.retry_is_correct = is_correct
         question.retry_answer = answer[:100]
+    if not is_correct and _uses_comprehensive_scheduler(flow):
+        # A correction is a one-shot action for the current formal attempt.
+        # The same question may later be shown as a delayed retry, so its
+        # idempotency slot must be reopened for that new attempt.
+        question.correction_attempt_id = None
+        question.correction_is_correct = None
+        question.correction_answer = None
+        question.correction_count = 0
+        flow.pending_correction_question_id = question.id
     if is_first:
         question.first_attempt_id = attempt_id
         question.first_is_correct = is_correct
@@ -1190,6 +1673,117 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
     return _serialize_answer(question, record)
 
 
+def submit_vocabulary_group_correction(user: User, payload: dict, *, now=None) -> dict:
+    """Persist one immediate correction without creating a formal attempt."""
+
+    now = utc_naive(now)
+    try:
+        task_id = int(payload.get("task_id"))
+    except (TypeError, ValueError) as error:
+        raise VocabularyGroupLearningError("invalid_task_id", 400) from error
+    _require_daily_clearance(user, task_id, now)
+    task, flow = _flow_or_error(user, task_id, lock=True)
+    flow = flow or _ensure_flow(user, task, now)
+    raw_attempt_id = str(payload.get("attempt_id") or "").strip()
+    if not raw_attempt_id:
+        raise VocabularyGroupLearningError("attempt_id_required", 400)
+    if len(raw_attempt_id) > 96:
+        raise VocabularyGroupLearningError("attempt_id_too_long", 400, max_length=96)
+    try:
+        question_id = int(payload.get("learning_question_id") or payload.get("queue_item_id"))
+    except (TypeError, ValueError) as error:
+        raise VocabularyGroupLearningError("invalid_learning_question_id", 400) from error
+    question = db.session.get(VocabularyLearningQuestion, question_id)
+    all_flow_questions = VocabularyLearningQuestion.query.filter_by(flow_id=flow.id).all()
+    for candidate in all_flow_questions:
+        if candidate.correction_attempt_id == raw_attempt_id:
+            if candidate.id != question_id:
+                raise VocabularyGroupLearningError("attempt_id_conflict", 409)
+            exhausted = bool(
+                candidate.correction_is_correct is False
+                and int(candidate.correction_count or 0) >= MAX_CORRECTION_ATTEMPTS
+            )
+            result = _public_flow(flow)
+            result.update(
+                {
+                    "correction_completed": bool(candidate.correction_is_correct) or exhausted,
+                    "correction_required": not bool(candidate.correction_is_correct) and not exhausted,
+                    "correction_idempotent": True,
+                    "correction_is_correct": candidate.correction_is_correct,
+                    "correction_attempt_id": candidate.correction_attempt_id,
+                    "correction_count": candidate.correction_count,
+                    "correction_limit": MAX_CORRECTION_ATTEMPTS,
+                    "correction_retry_allowed": not bool(candidate.correction_is_correct) and not exhausted,
+                    "correction_exhausted": exhausted,
+                }
+            )
+            return result
+    supplied_token = str(payload.get("queue_token") or "").strip()
+    if supplied_token != flow.queue_token:
+        raise VocabularyGroupLearningError("queue_changed", 409, state=_public_flow(flow))
+    if not question or flow.pending_correction_question_id != question.id:
+        raise VocabularyGroupLearningError("correction_not_current", 409, state=_public_flow(flow))
+    if question.first_is_correct is not False:
+        raise VocabularyGroupLearningError("correction_not_required", 409, state=_public_flow(flow))
+    if int(question.correction_count or 0) >= MAX_CORRECTION_ATTEMPTS:
+        raise VocabularyGroupLearningError("correction_limit_reached", 409, state=_public_flow(flow))
+    answer = str(payload.get("answer") or "").strip()
+    if not answer or len(answer) > 200:
+        raise VocabularyGroupLearningError("missing_answer", 400)
+    is_correct = _grade_question(question, answer)
+    previous_count = int(question.correction_count or 0)
+    state = correction_state(previous_count, is_correct)
+    question.correction_attempt_id = raw_attempt_id
+    question.correction_count = state["count"]
+    question.correction_answer = answer[:100]
+    question.correction_is_correct = is_correct
+
+    # A failed same-dimension retry may earn one related-dimension diagnostic;
+    # it is created only after this correction and after the retry wave ends.
+    if (
+        _uses_comprehensive_scheduler(flow)
+        and question.remediation_kind is None
+        and question.retry_is_correct is False
+    ):
+        related_sources = [
+            int(item)
+            for item in _json_list(flow.related_source_question_ids_json)
+            if str(item).isdigit()
+        ]
+        if question.id not in related_sources:
+            related_sources.append(question.id)
+        flow.related_source_question_ids_json = json.dumps(
+            related_sources,
+            ensure_ascii=False,
+        )
+    # A wrong correction is feedback, not completion. Keep the same persisted
+    # question current for one bounded retry. At the cap, mark it weak/deferred
+    # and release the queue so a student can never be trapped by a bad input.
+    if state["required"]:
+        flow.state_version = int(flow.state_version or 0) + 1
+    else:
+        if state["exhausted"]:
+            question.deferred_to_review = True
+            _mark_weak_word(flow, question.word_id)
+        flow.pending_correction_question_id = None
+        flow.state_version = int(flow.state_version or 0) + 1
+        _advance_after_answer(flow, user, now)
+    result = _public_flow(flow)
+    result.update(
+        {
+            "correction_completed": state["completed"],
+            "correction_required": state["required"],
+            "correction_is_correct": is_correct,
+            "correction_attempt_id": raw_attempt_id,
+            "correction_count": state["count"],
+            "correction_limit": MAX_CORRECTION_ATTEMPTS,
+            "correction_retry_allowed": state["retry_allowed"],
+            "correction_exhausted": state["exhausted"],
+        }
+    )
+    return result
+
+
 def finalize_vocabulary_group_task(user: User, task_id: int, payload: dict, *, now=None) -> dict:
     now = utc_naive(now)
     _require_daily_clearance(user, task_id, now)
@@ -1202,17 +1796,29 @@ def finalize_vocabulary_group_task(user: User, task_id: int, payload: dict, *, n
         raise VocabularyGroupLearningError("queue_changed", 409)
     if flow.status != VocabularyLearningFlow.STATUS_COMPLETED:
         raise VocabularyGroupLearningError("group_flow_incomplete", 409, state=_public_flow(flow))
+    if flow.pending_correction_question_id:
+        raise VocabularyGroupLearningError(
+            "correction_incomplete",
+            409,
+            correction_question_id=flow.pending_correction_question_id,
+        )
     settlement = VocabularyTaskSettlement.query.filter_by(
         student_id=user.id,
         task_id=task.id,
     ).first()
     if settlement:
         return _json_dict(settlement.result_json)
-    questions = list(flow.questions)
+    questions = VocabularyLearningQuestion.query.filter_by(flow_id=flow.id).all()
     missing_retry = [
         question.id
         for question in questions
-        if question.first_is_correct is False and not question.retry_attempt_id
+        if (
+            question.remediation_kind is None
+            and question.first_is_correct is False
+            and not question.retry_attempt_id
+            and not question.deferred_to_review
+        )
+        or (question.remediation_kind and not question.first_attempt_id)
     ]
     if missing_retry:
         raise VocabularyGroupLearningError(
@@ -1259,11 +1865,26 @@ def finalize_vocabulary_group_task(user: User, task_id: int, payload: dict, *, n
         "guidance_count": sum(
             1 for question in questions if question.context_role == "guide" and question.first_attempt_id
         ),
-        "retry_count": sum(bool(question.retry_attempt_id) for question in questions),
-        "needs_review_count": sum(
-            bool(question.retry_attempt_id and question.retry_is_correct is False)
+        "retry_count": sum(
+            bool(question.retry_attempt_id)
+            or bool(question.remediation_kind and question.first_attempt_id)
             for question in questions
         ),
+        "needs_review_count": sum(
+            bool(
+                (question.retry_attempt_id and question.retry_is_correct is False)
+                or (
+                    question.remediation_kind
+                    and question.first_attempt_id
+                    and question.first_is_correct is False
+                )
+            )
+            for question in questions
+        ),
+        "remediation_budget_per_word": MAX_REMEDIATION_PER_WORD,
+        "max_formal_questions_per_word": MAX_FORMAL_QUESTIONS_PER_WORD,
+        "deferred_review_count": sum(bool(question.deferred_to_review) for question in questions),
+        "weak_word_ids": sorted(int(item) for item in _json_list(flow.weak_word_ids_json)),
         "diagnostics": diagnostics,
         "queue_token": flow.queue_token,
     }

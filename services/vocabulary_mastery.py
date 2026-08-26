@@ -1202,6 +1202,10 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
                 f"{dimension}_last_answered_at": "DATETIME"
                 for dimension in DIMENSIONS
             },
+            "review_related_dimension": "VARCHAR(32)",
+            "review_related_due_at": "DATETIME",
+            "review_remediation_date": "DATE",
+            "review_remediation_count": "INTEGER NOT NULL DEFAULT 0",
             **{
                 f"{dimension}_long_term_at": "DATETIME"
                 for dimension in DIMENSIONS
@@ -1220,9 +1224,13 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
             "group_results_json": "TEXT NOT NULL DEFAULT '[]'",
             "context_applied_json": "TEXT NOT NULL DEFAULT '{}'",
             "retry_question_ids_json": "TEXT NOT NULL DEFAULT '[]'",
+            "related_source_question_ids_json": "TEXT NOT NULL DEFAULT '[]'",
+            "weak_word_ids_json": "TEXT NOT NULL DEFAULT '[]'",
             "current_group_index": "INTEGER NOT NULL DEFAULT 0",
             "phase": "VARCHAR(32) NOT NULL DEFAULT 'familiarity'",
             "phase_index": "INTEGER NOT NULL DEFAULT 0",
+            "remediation_wave": "INTEGER NOT NULL DEFAULT 1",
+            "pending_correction_question_id": "INTEGER",
             "viewed_word_ids_json": "TEXT NOT NULL DEFAULT '[]'",
             "queue_token": "VARCHAR(96) NOT NULL DEFAULT 'pending'",
             "status": "VARCHAR(16) NOT NULL DEFAULT 'active'",
@@ -1242,7 +1250,31 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
             "retry_attempt_id": "VARCHAR(96)",
             "retry_is_correct": "BOOLEAN",
             "retry_answer": "VARCHAR(200)",
+            "correction_attempt_id": "VARCHAR(96)",
+            "correction_is_correct": "BOOLEAN",
+            "correction_answer": "VARCHAR(200)",
+            "correction_count": "INTEGER NOT NULL DEFAULT 0",
+            "remediation_kind": "VARCHAR(24)",
+            "source_question_id": "INTEGER",
+            "formal_ordinal": "INTEGER",
+            "deferred_to_review": "BOOLEAN NOT NULL DEFAULT 0",
         },
+    )
+    add_columns(
+        "vocabulary_review_item",
+        {
+            "correction_attempt_id": "VARCHAR(96)",
+            "correction_is_correct": "BOOLEAN",
+            "correction_answer": "VARCHAR(200)",
+            "correction_count": "INTEGER NOT NULL DEFAULT 0",
+            "correction_exhausted": "BOOLEAN NOT NULL DEFAULT 0",
+            "remediation_kind": "VARCHAR(24)",
+            "deferred_to_review": "BOOLEAN NOT NULL DEFAULT 0",
+        },
+    )
+    add_columns(
+        "vocabulary_review_attempt",
+        {"attempt_kind": "VARCHAR(16) NOT NULL DEFAULT 'first'"},
     )
 
     for model in (
