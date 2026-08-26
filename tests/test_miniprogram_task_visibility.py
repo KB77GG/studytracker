@@ -1,13 +1,21 @@
 import json
 import time
 import unittest
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import jwt
 from flask import Flask
 
 from api.miniprogram import mp_bp
-from models import ListeningTestSubmission, StudentProfile, Task, User, db
+from models import (
+    ListeningTestSubmission,
+    PracticeSubmissionAttempt,
+    ReadingTestSubmission,
+    StudentProfile,
+    Task,
+    User,
+    db,
+)
 
 
 class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
@@ -356,6 +364,208 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             headers=self._headers(self.other_teacher_id, User.ROLE_TEACHER),
         )
         self.assertEqual(forbidden.status_code, 403)
+
+    def test_teacher_sees_first_latest_and_each_retained_attempt(self):
+        with self.app.app_context():
+            row = ListeningTestSubmission.query.filter_by(task_id=self.completed_listening_id).one()
+            row.attempt_count = 3
+            row.correct_count = 9
+            row.total_count = 10
+            row.accuracy = 90
+            row.wrong_numbers_json = json.dumps([10])
+            row.results_json = json.dumps(
+                [
+                    {
+                        "ids": ["10"],
+                        "numbers": [10],
+                        "answer": "library",
+                        "value": "libary",
+                        "marks": 1,
+                        "awarded": 0,
+                        "correct": False,
+                    }
+                ]
+            )
+            row.submitted_at = datetime(2026, 8, 26, 3, 0)
+            db.session.add_all(
+                [
+                    PracticeSubmissionAttempt(
+                        task_id=self.completed_listening_id,
+                        student_name="可见性学生",
+                        kind="listening",
+                        test_id="ielts11_test1",
+                        attempt_number=1,
+                        correct_count=4,
+                        total_count=10,
+                        accuracy=40,
+                        answers_json=json.dumps({"1": "wrong"}),
+                        results_json=json.dumps(
+                            [
+                                {
+                                    "ids": ["1"],
+                                    "numbers": [1],
+                                    "answer": "answer",
+                                    "value": "wrong",
+                                    "marks": 1,
+                                    "awarded": 0,
+                                    "correct": False,
+                                }
+                            ]
+                        ),
+                        wrong_numbers_json=json.dumps([1]),
+                        submitted_at=datetime(2026, 8, 26, 1, 0),
+                    ),
+                    PracticeSubmissionAttempt(
+                        task_id=self.completed_listening_id,
+                        student_name="可见性学生",
+                        kind="listening",
+                        test_id="ielts11_test1",
+                        attempt_number=2,
+                        correct_count=7,
+                        total_count=10,
+                        accuracy=70,
+                        answers_json=json.dumps({"2": "wrong"}),
+                        results_json=json.dumps(
+                            [
+                                {
+                                    "ids": ["2"],
+                                    "numbers": [2],
+                                    "answer": "answer",
+                                    "value": "wrong",
+                                    "marks": 1,
+                                    "awarded": 0,
+                                    "correct": False,
+                                }
+                            ]
+                        ),
+                        wrong_numbers_json=json.dumps([2]),
+                        submitted_at=datetime(2026, 8, 26, 2, 0),
+                    ),
+                ]
+            )
+            db.session.commit()
+
+        listing = self.client.get(
+            "/api/miniprogram/teacher/homework",
+            query_string={
+                "student_name": "可见性学生",
+                "date": self.today.isoformat(),
+                "scope": "recent",
+            },
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        completed = next(
+            task
+            for task in listing.get_json()["tasks"]
+            if task["id"] == self.completed_listening_id
+        )
+        overview = completed["practice_result"]["attempt_overview"]
+        self.assertEqual(overview["attempt_count"], 3)
+        self.assertEqual(overview["first_attempt"]["accuracy"], 40.0)
+        self.assertEqual(overview["latest_attempt"]["accuracy"], 90.0)
+        self.assertEqual(overview["score_delta"], 50.0)
+        self.assertEqual(overview["legacy_missing_attempts"], 0)
+
+        detail = self.client.get(
+            f"/api/miniprogram/teacher/homework/{self.completed_listening_id}/result",
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        ).get_json()
+        attempts = detail["attempt_history"]["attempts"]
+        self.assertEqual(
+            [attempt["attempt_number"] for attempt in attempts],
+            [1, 2, 3],
+        )
+        self.assertTrue(attempts[0]["is_first"])
+        self.assertTrue(attempts[-1]["is_latest"])
+        self.assertEqual(attempts[0]["wrong_details"][0]["question_label"], "Q1")
+
+    def test_teacher_discloses_legacy_attempts_that_cannot_be_restored(self):
+        with self.app.app_context():
+            row = ListeningTestSubmission.query.filter_by(task_id=self.completed_listening_id).one()
+            row.attempt_count = 3
+            db.session.commit()
+
+        response = self.client.get(
+            "/api/miniprogram/teacher/homework",
+            query_string={
+                "student_name": "可见性学生",
+                "date": self.today.isoformat(),
+                "scope": "recent",
+            },
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        completed = next(
+            task
+            for task in response.get_json()["tasks"]
+            if task["id"] == self.completed_listening_id
+        )
+        overview = completed["practice_result"]["attempt_overview"]
+        self.assertIsNone(overview["first_attempt"])
+        self.assertEqual(overview["legacy_missing_attempts"], 2)
+        self.assertEqual(
+            [attempt["attempt_number"] for attempt in overview["attempts"]],
+            [3],
+        )
+
+    def test_teacher_attempt_history_also_supports_reading(self):
+        with self.app.app_context():
+            task = self._task(
+                self.today,
+                "reading done",
+                "done",
+                self.teacher_id,
+                accuracy=85,
+            )
+            task.reading_test_id = "ielts11_test1"
+            db.session.add(task)
+            db.session.flush()
+            db.session.add_all([
+                ReadingTestSubmission(
+                    task_id=task.id,
+                    student_name="可见性学生",
+                    test_id="ielts11_test1",
+                    correct_count=17,
+                    total_count=20,
+                    accuracy=85,
+                    attempt_count=2,
+                    results_json=json.dumps([]),
+                    wrong_numbers_json=json.dumps([18, 19, 20]),
+                    submitted_at=datetime(2026, 8, 26, 4, 0),
+                ),
+                PracticeSubmissionAttempt(
+                    task_id=task.id,
+                    student_name="可见性学生",
+                    kind="reading",
+                    test_id="ielts11_test1",
+                    attempt_number=1,
+                    correct_count=12,
+                    total_count=20,
+                    accuracy=60,
+                    results_json=json.dumps([]),
+                    wrong_numbers_json=json.dumps(list(range(13, 21))),
+                    submitted_at=datetime(2026, 8, 26, 3, 0),
+                ),
+            ])
+            db.session.commit()
+            reading_task_id = task.id
+
+        response = self.client.get(
+            "/api/miniprogram/teacher/homework",
+            query_string={
+                "student_name": "可见性学生",
+                "date": self.today.isoformat(),
+                "scope": "recent",
+            },
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        reading = next(
+            task for task in response.get_json()["tasks"] if task["id"] == reading_task_id
+        )
+        overview = reading["practice_result"]["attempt_overview"]
+        self.assertEqual(reading["practice_result"]["kind"], "reading")
+        self.assertEqual(overview["first_attempt"]["accuracy"], 60.0)
+        self.assertEqual(overview["latest_attempt"]["accuracy"], 85.0)
+        self.assertEqual(overview["score_delta"], 25.0)
 
     def test_partial_group_uses_score_difference_for_wrong_count_and_detail(self):
         with self.app.app_context():

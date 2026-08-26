@@ -63,6 +63,11 @@ from services.listening_training import (
     task_training_mode,
     training_mode_option,
 )
+from services.practice_attempt_reporting import (
+    build_attempt_overview,
+    load_attempts_by_task,
+    retained_attempt_records,
+)
 
 mp_bp = Blueprint("miniprogram", __name__, url_prefix="/api/miniprogram")
 READING_VOCAB_CHOICE_TYPE = "reading_vocab_choice"
@@ -4352,12 +4357,63 @@ def _serialize_teacher_practice_result(
             0,
             int(submission.total_count or 0) - int(submission.correct_count or 0),
         ),
-        "attempt_count": submission.attempt_count,
+        "attempt_count": int(
+            getattr(
+                submission,
+                "attempt_count",
+                getattr(submission, "attempt_number", 1),
+            )
+            or 1
+        ),
         "submitted_at": submission.submitted_at.isoformat() if submission.submitted_at else None,
     }
     if include_details and task:
         result["wrong_details"] = _teacher_wrong_answer_details(task, kind, submission)
     return result
+
+
+def _teacher_practice_result_with_attempts(
+    task: Task,
+    kind: str,
+    submission,
+    snapshots: list,
+    *,
+    include_details: bool = False,
+) -> tuple[dict, dict]:
+    """Keep the legacy latest result while exposing honest attempt history."""
+    current_result = _serialize_teacher_practice_result(
+        kind,
+        submission,
+        task=task,
+        include_details=include_details,
+    )
+    overview = build_attempt_overview(submission, snapshots, kind=kind)
+    current_result["attempt_overview"] = overview
+    if not include_details:
+        return current_result, overview
+
+    detailed_attempts = []
+    current_number = int(overview["attempt_count"] or 1)
+    for attempt_number, row in retained_attempt_records(
+        submission,
+        snapshots,
+        kind=kind,
+    ):
+        detail = _serialize_teacher_practice_result(
+            kind,
+            row,
+            task=task,
+            include_details=True,
+        )
+        detail.update({
+            "attempt_number": attempt_number,
+            "is_first": attempt_number == 1,
+            "is_latest": attempt_number == current_number,
+        })
+        detailed_attempts.append(detail)
+    detail_overview = dict(overview)
+    detail_overview["attempts"] = detailed_attempts
+    return current_result, detail_overview
 
 
 def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = None) -> dict:
@@ -4779,6 +4835,8 @@ def list_teacher_homework():
     task_ids = [task.id for task in tasks]
     practice_results = {}
     if task_ids:
+        tasks_by_id = {task.id: task for task in tasks}
+        attempts_by_task = load_attempts_by_task(task_ids)
         listening_rows = ListeningTestSubmission.query.filter(
             ListeningTestSubmission.task_id.in_(task_ids)
         ).all()
@@ -4786,9 +4844,21 @@ def list_teacher_homework():
             ReadingTestSubmission.task_id.in_(task_ids)
         ).all()
         for row in listening_rows:
-            practice_results[row.task_id] = _serialize_teacher_practice_result("listening", row)
+            task = tasks_by_id[row.task_id]
+            practice_results[row.task_id], _overview = _teacher_practice_result_with_attempts(
+                task,
+                "listening",
+                row,
+                attempts_by_task.get(row.task_id, []),
+            )
         for row in reading_rows:
-            practice_results[row.task_id] = _serialize_teacher_practice_result("reading", row)
+            task = tasks_by_id[row.task_id]
+            practice_results[row.task_id], _overview = _teacher_practice_result_with_attempts(
+                task,
+                "reading",
+                row,
+                attempts_by_task.get(row.task_id, []),
+            )
 
     return jsonify({
         "ok": True,
@@ -4819,17 +4889,22 @@ def get_teacher_homework_result(task_id):
     if not submission:
         return _teacher_homework_error("result_not_found", 404)
 
+    attempts_by_task = load_attempts_by_task([task.id])
+    practice_result, attempt_history = _teacher_practice_result_with_attempts(
+        task,
+        kind,
+        submission,
+        attempts_by_task.get(task.id, []),
+        include_details=True,
+    )
+
     return jsonify({
         "ok": True,
         "task_id": task.id,
         "student_name": task.student_name,
         "task_title": _task_display_title(task),
-        "practice_result": _serialize_teacher_practice_result(
-            kind,
-            submission,
-            task=task,
-            include_details=True,
-        ),
+        "practice_result": practice_result,
+        "attempt_history": attempt_history,
     })
 
 
