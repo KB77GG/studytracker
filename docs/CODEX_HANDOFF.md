@@ -1,7 +1,7 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-27 00:20（Asia/Shanghai）。
+> 最近更新：2026-08-27 00:22（Asia/Shanghai）。
 
 ## 2026-08-27 网页端助教可布置虾滑听力与 ZYZ 阅读（网页已上线）
 
@@ -9,7 +9,7 @@
   `/Users/zhouxin/.codex/worktrees/teacher-practice-jijing-options/studytracker`，分支
   `codex/teacher-practice-jijing-options`，跟踪 `origin/main`。业务与首次交接提交后两条远端 ref 均为
   `4269c338976fbc1a5323934bb785d6748e226eb9`。桌面
-  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端 26 个提交；其中原有两份交接文档修改、
+  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后远端且未更新；其中原有两份交接文档修改、
   `.tmp/`、`artifacts/`、题库数据、导入脚本、测试、设计文档和原型等未提交/未跟踪内容均未触碰或覆盖。
 - 用户澄清主要入口是网页 `/tasks`，助教需要能布置两个来源。网页听力选择器原本只有精听与整套 Test，服务端即使收到
   `jijing` 也会降级成精听；ZYZ 数据其实已进入阅读下拉框，但只显示为笼统的“阅读机经”，来源不清晰。业务提交
