@@ -249,7 +249,11 @@ class MiniprogramTeacherIntensiveTest(unittest.TestCase):
         subject = listing.get_json()["students"][0]["subjects"][0]
         self.assertEqual(
             subject["allowed_sources"],
-            ["cambridge_listening", "listening_intensive"],
+            [
+                "cambridge_listening",
+                "listening_intensive",
+                "listening_jijing",
+            ],
         )
         common = {
             **self._common(),

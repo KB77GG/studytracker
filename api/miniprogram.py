@@ -27,6 +27,12 @@ from .listening_intensive import (
     load_registered_intensive_exercise,
 )
 from .listening_series import parse_test_id
+from .teacher_practice_catalog import (
+    build_listening_jijing_catalog,
+    build_reading_jijing_catalog,
+    load_listening_jijing_part,
+    load_reading_jijing_test,
+)
 from .teacher_practice_access import validate_quick_practice_request
 from .reading_vocab_grading import grade_reading_vocab_submission
 from .stats_utils import (
@@ -73,12 +79,17 @@ VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"
 VALID_DICTATION_ORDERS = {"sequence", "random"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
+LISTENING_RESOURCE_JIJING = "jijing"
 READING_RESOURCE_CAMBRIDGE_TEST = "cambridge_reading_test"
 
 
 def _task_listening_resource_type(task) -> str:
     value = (getattr(task, "listening_resource_type", "") or "").strip()
-    if value in {LISTENING_RESOURCE_INTENSIVE, LISTENING_RESOURCE_CAMBRIDGE_TEST}:
+    if value in {
+        LISTENING_RESOURCE_INTENSIVE,
+        LISTENING_RESOURCE_CAMBRIDGE_TEST,
+        LISTENING_RESOURCE_JIJING,
+    }:
         return value
     return LISTENING_RESOURCE_INTENSIVE
 
@@ -104,6 +115,11 @@ def _task_listening_url(task) -> str | None:
         return None
     if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
         return None
+    if _task_listening_resource_type(task) == LISTENING_RESOURCE_JIJING:
+        return (
+            f"https://studytracker.xin/listening/jijing/{quote(exercise_id, safe='')}"
+            f"?task_id={task.id}&token={quote(token, safe='')}"
+        )
     return (
         f"https://studytracker.xin/listening/{exercise_id}"
         f"?task_id={task.id}&token={token}"
@@ -1684,7 +1700,8 @@ def get_student_today_tasks():
         dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
         listening_test_submission = (
             ListeningTestSubmission.query.filter_by(task_id=task.id).first()
-            if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            if _task_listening_resource_type(task)
+            in {LISTENING_RESOURCE_CAMBRIDGE_TEST, LISTENING_RESOURCE_JIJING}
             else None
         )
         reading_test_submission = (
@@ -1793,7 +1810,8 @@ def get_task_detail(task_id):
         dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
         listening_test_submission = (
             ListeningTestSubmission.query.filter_by(task_id=task.id).first()
-            if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            if _task_listening_resource_type(task)
+            in {LISTENING_RESOURCE_CAMBRIDGE_TEST, LISTENING_RESOURCE_JIJING}
             else None
         )
         reading_test_submission = (
@@ -3276,7 +3294,8 @@ def get_parent_stats():
     for t in recent_tasks:
         listening_test_submission = (
             ListeningTestSubmission.query.filter_by(task_id=t.id).first()
-            if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            if _task_listening_resource_type(t)
+            in {LISTENING_RESOURCE_CAMBRIDGE_TEST, LISTENING_RESOURCE_JIJING}
             else None
         )
         task_report = _parent_task_report(t, include_items=False)
@@ -4161,6 +4180,14 @@ def _practice_intensive_catalog() -> list[dict]:
     return build_intensive_catalog(_static_root("listening"))
 
 
+def _practice_listening_jijing_catalog() -> list[dict]:
+    return build_listening_jijing_catalog(_static_root("listening_jijing"))
+
+
+def _practice_reading_jijing_catalog() -> list[dict]:
+    return build_reading_jijing_catalog(_static_root("reading_jijing"))
+
+
 def _practice_reading_catalog() -> list[dict]:
     catalog = _load_static_json("reading_tests", "catalog.json")
     if catalog and isinstance(catalog.get("books"), list):
@@ -4217,7 +4244,7 @@ def _practice_reading_catalog() -> list[dict]:
 @mp_bp.route("/practice/catalog", methods=["GET"])
 @require_api_user(User.ROLE_TEACHER)
 def get_practice_catalog():
-    """给小程序布置作业页提供剑雅刷题与精听目录。"""
+    """给小程序布置作业页提供雅思刷题与精听目录。"""
     return jsonify({
         "ok": True,
         "capabilities": {
@@ -4226,14 +4253,23 @@ def get_practice_catalog():
         "listening_training_modes": [dict(option) for option in TRAINING_MODE_OPTIONS],
         "cambridge_listening": _practice_listening_catalog(),
         "listening_intensive": _practice_intensive_catalog(),
+        "listening_jijing": _practice_listening_jijing_catalog(),
         "cambridge_reading": _practice_reading_catalog(),
+        "reading_jijing": _practice_reading_jijing_catalog(),
     })
 
 
 def _teacher_practice_question_map(task: Task, kind: str) -> dict[str, dict]:
     if kind == "listening":
-        payload, _ = _load_cambridge_listening_test(task.listening_exercise_id or "")
-        roots = (payload or {}).get("sections") or []
+        if _task_listening_resource_type(task) == LISTENING_RESOURCE_JIJING:
+            payload, _ = load_listening_jijing_part(
+                _static_root("listening_jijing"),
+                task.listening_exercise_id or "",
+            )
+            roots = [payload] if payload else []
+        else:
+            payload, _ = _load_cambridge_listening_test(task.listening_exercise_id or "")
+            roots = (payload or {}).get("sections") or []
     else:
         payload, _ = _load_student_reading_test(task.reading_test_id or "")
         roots = (payload or {}).get("passages") or []
@@ -4330,15 +4366,23 @@ def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = 
     source_type = "custom"
     source_summary = task.detail or ""
     if task.listening_exercise_id:
-        if _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST:
+        listening_resource_type = _task_listening_resource_type(task)
+        if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
             source_type = "cambridge_listening"
             suffix = f"Section {listening_section_number}" if listening_section_number else "整套 Test"
             source_summary = f"{task.detail or task.listening_exercise_id} · {suffix}"
+        elif listening_resource_type == LISTENING_RESOURCE_JIJING:
+            source_type = "listening_jijing"
+            source_summary = task.detail or task.listening_exercise_id
         else:
             source_type = "listening_intensive"
             source_summary = task.detail or task.listening_exercise_id
     elif task.reading_test_id:
-        source_type = "cambridge_reading"
+        source_type = (
+            "reading_jijing"
+            if task.reading_test_id.startswith("reading_jijing_")
+            else "cambridge_reading"
+        )
         suffix = f"Passage {task.reading_passage_number}" if task.reading_passage_number else "整套 Test"
         source_summary = f"{task.detail or task.reading_test_id} · {suffix}"
 
@@ -4380,7 +4424,9 @@ def _serialize_teacher_homework_task(task: Task, practice_result: dict | None = 
             "custom",
             "cambridge_listening",
             "listening_intensive",
+            "listening_jijing",
             "cambridge_reading",
+            "reading_jijing",
         },
         "can_delete": True,
     }
@@ -4463,6 +4509,17 @@ def _intensive_listening_access_token(task: Task | None, exercise_id: str) -> st
     return secrets.token_urlsafe(16)
 
 
+def _jijing_listening_access_token(task: Task | None, exercise_id: str) -> str:
+    if (
+        task
+        and task.listening_exercise_id == exercise_id
+        and _task_listening_resource_type(task) == LISTENING_RESOURCE_JIJING
+        and task.listening_access_token
+    ):
+        return task.listening_access_token
+    return secrets.token_urlsafe(16)
+
+
 def _build_teacher_homework_values(
     data: dict,
     *,
@@ -4497,7 +4554,9 @@ def _build_teacher_homework_values(
         "custom",
         "cambridge_listening",
         "listening_intensive",
+        "listening_jijing",
         "cambridge_reading",
+        "reading_jijing",
     }:
         return None, "invalid_source_type", 400
 
@@ -4565,8 +4624,42 @@ def _build_teacher_homework_values(
         category = (data.get("category") or "雅思-听力-精听").strip()[:32]
         if not planned_minutes:
             planned_minutes = 20
-    elif source_type == "cambridge_reading":
-        payload, safe_id = _load_cambridge_reading_test(data.get("practice_test_id") or "")
+    elif source_type == "listening_jijing":
+        payload, safe_id = load_listening_jijing_part(
+            _static_root("listening_jijing"),
+            data.get("practice_exercise_id") or data.get("practice_test_id") or "",
+        )
+        if not payload:
+            return None, "practice_not_found", 404
+        listening_resource_type = LISTENING_RESOURCE_JIJING
+        listening_exercise_id = safe_id
+        listening_access_token = _jijing_listening_access_token(
+            existing_task,
+            safe_id,
+        )
+        default_detail = " ".join(
+            value
+            for value in (
+                payload.get("source_label") or payload.get("collection_title") or "虾滑听力",
+                payload.get("test_name"),
+                payload.get("part_title"),
+            )
+            if value
+        )
+        detail = detail or default_detail or safe_id
+        category = (data.get("category") or "雅思-听力-虾滑").strip()[:32]
+        if not planned_minutes:
+            planned_minutes = 15
+    elif source_type in {"cambridge_reading", "reading_jijing"}:
+        if source_type == "reading_jijing":
+            payload, safe_id = load_reading_jijing_test(
+                _static_root("reading_jijing"),
+                data.get("practice_test_id") or "",
+            )
+        else:
+            payload, safe_id = _load_cambridge_reading_test(
+                data.get("practice_test_id") or ""
+            )
         if not payload:
             return None, "practice_not_found", 404
         scope = (data.get("practice_scope") or "test").strip()
@@ -4589,7 +4682,10 @@ def _build_teacher_homework_values(
         if reading_passage_number:
             default_detail = f"{default_detail} Passage {reading_passage_number}"
         detail = detail or default_detail
-        category = (data.get("category") or "雅思-阅读").strip()[:32]
+        default_category = (
+            "雅思-阅读-ZYZ" if source_type == "reading_jijing" else "雅思-阅读"
+        )
+        category = (data.get("category") or default_category).strip()[:32]
         if not planned_minutes:
             planned_minutes = 20 if reading_passage_number else 60
     elif not detail:

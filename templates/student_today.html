@@ -104,6 +104,8 @@
       <div class="task-card__meta">
         {% if lt.listening_resource_type == 'cambridge_test' %}
           整套 Test · {{ lt.listening_segment_count or 40 }} 题
+        {% elif lt.listening_resource_type == 'jijing' %}
+          虾滑听力刷题
         {% else %}
           已分配 {{ lt.listening_segment_count or 0 }} 句
         {% endif %}
@@ -120,7 +122,7 @@
     </div>
     <a class="task-card__cta {{ 'task-card__cta--success' if lt.status == 'done' }}"
        href="{{ lt.listening_url or ('/listening/' ~ lt.listening_exercise_id ~ '?task_id=' ~ lt.id ~ '&token=' ~ lt.listening_access_token) }}">
-      {% if lt.status == 'done' %}已完成{% elif lt.listening_resource_type == 'cambridge_test' %}打开整套{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
+      {% if lt.status == 'done' %}已完成{% elif lt.listening_resource_type == 'cambridge_test' %}打开整套{% elif lt.listening_resource_type == 'jijing' %}打开刷题{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
     </a>
   </article>
   {% endfor %}

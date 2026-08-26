@@ -8,10 +8,16 @@ const SOURCE_OPTIONS = [
     { key: 'custom', label: '自定义' },
     { key: 'cambridge_listening', label: '雅思听力·刷题' },
     { key: 'listening_intensive', label: '雅思听力·精听' },
-    { key: 'cambridge_reading', label: '剑雅阅读' }
+    { key: 'listening_jijing', label: '虾滑听力·刷题' },
+    { key: 'cambridge_reading', label: '剑雅阅读' },
+    { key: 'reading_jijing', label: 'ZYZ 阅读' }
 ]
 
-const LISTENING_SOURCE_KEYS = ['cambridge_listening', 'listening_intensive']
+const LISTENING_SOURCE_KEYS = [
+    'cambridge_listening',
+    'listening_intensive',
+    'listening_jijing'
+]
 const DEFAULT_LISTENING_TRAINING_MODES = [
     { key: 'system', label: '系统推荐', description: '标准辨音为主，长句自动降低负荷' },
     { key: 'review', label: '听辨核对', description: '完整听完后查看原文并完成本句' },
@@ -22,7 +28,7 @@ const DEFAULT_LISTENING_TRAINING_MODES = [
 
 const SUBJECT_SOURCE_KEYS = {
     listening: LISTENING_SOURCE_KEYS,
-    reading: ['cambridge_reading']
+    reading: ['cambridge_reading', 'reading_jijing']
 }
 
 const decodeParam = (value) => {
@@ -85,6 +91,11 @@ Page({
         isListeningSource: false,
         isReadingSource: false,
         isCambridgeSource: false,
+        isCambridgeListeningSource: false,
+        isIntensiveListeningSource: false,
+        isJijingListeningSource: false,
+        isCambridgeReadingSource: false,
+        isReadingJijingSource: false,
         supportsListeningTrainingModes: false,
         listeningTrainingModes: DEFAULT_LISTENING_TRAINING_MODES,
         listeningTrainingModeLabels: DEFAULT_LISTENING_TRAINING_MODES.map(item => item.label),
@@ -95,7 +106,9 @@ Page({
         catalog: {
             cambridge_listening: [],
             listening_intensive: [],
-            cambridge_reading: []
+            listening_jijing: [],
+            cambridge_reading: [],
+            reading_jijing: []
         },
         listeningBookIndex: 0,
         listeningTestIndex: 0,
@@ -109,12 +122,24 @@ Page({
         intensiveBookLabels: [],
         intensiveTestLabels: [],
         intensivePartLabels: [],
+        jijingListeningBookIndex: 0,
+        jijingListeningTestIndex: 0,
+        jijingListeningPartIndex: 0,
+        jijingListeningBookLabels: [],
+        jijingListeningTestLabels: [],
+        jijingListeningPartLabels: [],
         readingBookIndex: 0,
         readingTestIndex: 0,
         readingScopeIndex: 0,
         readingBookLabels: [],
         readingTestLabels: [],
         readingScopeLabels: [],
+        jijingReadingBookIndex: 0,
+        jijingReadingTestIndex: 0,
+        jijingReadingScopeIndex: 0,
+        jijingReadingBookLabels: [],
+        jijingReadingTestLabels: [],
+        jijingReadingScopeLabels: [],
         selectedPracticeSummary: '',
         selectedPracticeList: [],
         existingTasks: [],
@@ -220,7 +245,9 @@ Page({
                     catalog: {
                         cambridge_listening: res.cambridge_listening || [],
                         listening_intensive: res.listening_intensive || [],
-                        cambridge_reading: res.cambridge_reading || []
+                        listening_jijing: res.listening_jijing || [],
+                        cambridge_reading: res.cambridge_reading || [],
+                        reading_jijing: res.reading_jijing || []
                     },
                     supportsListeningTrainingModes,
                     listeningTrainingModes,
@@ -251,7 +278,9 @@ Page({
         const source = sourceOptions[this.data.sourceIndex] || sourceOptions[0] || SOURCE_OPTIONS[0]
         const listeningBooks = this.data.catalog.cambridge_listening || []
         const intensiveBooks = this.data.catalog.listening_intensive || []
+        const jijingListeningBooks = this.data.catalog.listening_jijing || []
         const readingBooks = this.data.catalog.cambridge_reading || []
+        const jijingReadingBooks = this.data.catalog.reading_jijing || []
 
         const listeningBookIndex = clampIndex(this.data.listeningBookIndex, listeningBooks.length)
         const listeningBook = listeningBooks[listeningBookIndex] || {}
@@ -276,6 +305,23 @@ Page({
         const intensiveParts = intensiveTest.parts || intensiveTest.sections || []
         const intensivePartIndex = clampIndex(this.data.intensivePartIndex, intensiveParts.length)
 
+        const jijingListeningBookIndex = clampIndex(
+            this.data.jijingListeningBookIndex,
+            jijingListeningBooks.length
+        )
+        const jijingListeningBook = jijingListeningBooks[jijingListeningBookIndex] || {}
+        const jijingListeningTests = jijingListeningBook.tests || []
+        const jijingListeningTestIndex = clampIndex(
+            this.data.jijingListeningTestIndex,
+            jijingListeningTests.length
+        )
+        const jijingListeningTest = jijingListeningTests[jijingListeningTestIndex] || {}
+        const jijingListeningParts = jijingListeningTest.parts || []
+        const jijingListeningPartIndex = clampIndex(
+            this.data.jijingListeningPartIndex,
+            jijingListeningParts.length
+        )
+
         const readingBookIndex = clampIndex(this.data.readingBookIndex, readingBooks.length)
         const readingBook = readingBooks[readingBookIndex] || {}
         const readingTests = readingBook.tests || []
@@ -291,6 +337,30 @@ Page({
         ]
         const readingScopeIndex = clampIndex(this.data.readingScopeIndex, readingScopes.length)
 
+        const jijingReadingBookIndex = clampIndex(
+            this.data.jijingReadingBookIndex,
+            jijingReadingBooks.length
+        )
+        const jijingReadingBook = jijingReadingBooks[jijingReadingBookIndex] || {}
+        const jijingReadingTests = jijingReadingBook.tests || []
+        const jijingReadingTestIndex = clampIndex(
+            this.data.jijingReadingTestIndex,
+            jijingReadingTests.length
+        )
+        const jijingReadingTest = jijingReadingTests[jijingReadingTestIndex] || {}
+        const jijingReadingScopes = [
+            { label: '整套 Test', scope: 'test' },
+            ...((jijingReadingTest.passages || []).map(passage => ({
+                label: `${passage.title || ('Passage ' + passage.number)} · ${passage.question_name || ''}`,
+                scope: 'passage',
+                passageNumber: passage.number
+            })))
+        ]
+        const jijingReadingScopeIndex = clampIndex(
+            this.data.jijingReadingScopeIndex,
+            jijingReadingScopes.length
+        )
+
         const selected = this.getSelectedPractice({
             source,
             listeningBook,
@@ -299,9 +369,15 @@ Page({
             intensiveBook,
             intensiveTest,
             intensivePart: intensiveParts[intensivePartIndex],
+            jijingListeningBook,
+            jijingListeningTest,
+            jijingListeningPart: jijingListeningParts[jijingListeningPartIndex],
             readingBook,
             readingTest,
-            readingScope: readingScopes[readingScopeIndex]
+            readingScope: readingScopes[readingScopeIndex],
+            jijingReadingBook,
+            jijingReadingTest,
+            jijingReadingScope: jijingReadingScopes[jijingReadingScopeIndex]
         })
 
         this.setData({
@@ -310,7 +386,10 @@ Page({
             isListeningSource: LISTENING_SOURCE_KEYS.includes(source.key),
             isCambridgeListeningSource: source.key === 'cambridge_listening',
             isIntensiveListeningSource: source.key === 'listening_intensive',
-            isReadingSource: source.key === 'cambridge_reading',
+            isJijingListeningSource: source.key === 'listening_jijing',
+            isReadingSource: ['cambridge_reading', 'reading_jijing'].includes(source.key),
+            isCambridgeReadingSource: source.key === 'cambridge_reading',
+            isReadingJijingSource: source.key === 'reading_jijing',
             isCambridgeSource: source.key === 'cambridge_listening' || source.key === 'cambridge_reading',
             listeningBookIndex,
             listeningTestIndex,
@@ -326,12 +405,26 @@ Page({
             intensivePartLabels: intensiveParts.map(part => (
                 `${part.part_title || part.title || ('Part ' + part.number)} · ${part.segment_count || 0} 句`
             )),
+            jijingListeningBookIndex,
+            jijingListeningTestIndex,
+            jijingListeningPartIndex,
+            jijingListeningBookLabels: jijingListeningBooks.map(book => book.title || book.group || book.label),
+            jijingListeningTestLabels: jijingListeningTests.map(test => test.test_name || test.title || test.id),
+            jijingListeningPartLabels: jijingListeningParts.map(part => (
+                `${part.part_title || '练习'} · ${part.question_name || (part.question_count + ' 题')}`
+            )),
             readingBookIndex,
             readingTestIndex,
             readingScopeIndex,
             readingBookLabels: readingBooks.map(book => `剑雅 ${book.book}`),
             readingTestLabels: readingTests.map(test => `Test ${test.test}`),
             readingScopeLabels: readingScopes.map(item => item.label),
+            jijingReadingBookIndex,
+            jijingReadingTestIndex,
+            jijingReadingScopeIndex,
+            jijingReadingBookLabels: jijingReadingBooks.map(book => book.label || `ZYZ ${book.book}`),
+            jijingReadingTestLabels: jijingReadingTests.map(test => `Test ${test.test}`),
+            jijingReadingScopeLabels: jijingReadingScopes.map(item => item.label),
             selectedPracticeSummary: selected ? selected.summary : ''
         }, () => {
             if (applySelection) this.applySelectedPractice()
@@ -384,20 +477,44 @@ Page({
             }
             return result
         }
-        if (source.key === 'cambridge_reading') {
-            const test = context.readingTest
-            const scope = context.readingScope
+        if (source.key === 'listening_jijing') {
+            const book = context.jijingListeningBook
+            const test = context.jijingListeningTest
+            const part = context.jijingListeningPart
+            if (!test || !part || !part.id) return null
+            const collectionLabel = (book && book.label) || '虾滑听力'
+            const groupLabel = (book && (book.title || book.group)) || ''
+            const testLabel = test.test_name || test.title || test.id
+            return {
+                source_type: source.key,
+                practice_exercise_id: part.id,
+                practice_scope: 'part',
+                practice_part_number: part.number || null,
+                category: '雅思-听力-虾滑',
+                detail: `${collectionLabel} ${testLabel}`,
+                plannedMinutes: 15,
+                summary: [collectionLabel, groupLabel, testLabel, part.question_name]
+                    .filter(Boolean)
+                    .join(' · ')
+            }
+        }
+        if (source.key === 'cambridge_reading' || source.key === 'reading_jijing') {
+            const isJijing = source.key === 'reading_jijing'
+            const test = isJijing ? context.jijingReadingTest : context.readingTest
+            const scope = isJijing ? context.jijingReadingScope : context.readingScope
+            const book = isJijing ? context.jijingReadingBook : context.readingBook
             if (!test || !test.id || !scope) return null
             const suffix = scope.scope === 'passage' ? ` ${scope.label.split(' · ')[0]}` : ' 整套'
+            const bookLabel = (book && book.label) || (isJijing ? `ZYZ ${test.book}` : `剑雅 ${test.book}`)
             return {
                 source_type: source.key,
                 practice_test_id: test.id,
                 practice_scope: scope.scope,
                 practice_passage_number: scope.passageNumber || null,
-                category: '雅思-阅读',
-                detail: `${test.title || ('Cambridge IELTS ' + test.book + ' Test ' + test.test + ' Reading')}${suffix}`,
+                category: isJijing ? '雅思-阅读-ZYZ' : '雅思-阅读',
+                detail: `${test.title || (bookLabel + ' Test ' + test.test + ' Reading')}${suffix}`,
                 plannedMinutes: scope.scope === 'passage' ? 20 : 60,
-                summary: `剑雅 ${test.book} Test ${test.test} · ${scope.label}`
+                summary: `${bookLabel} Test ${test.test} · ${scope.label}`
             }
         }
         return null
@@ -464,12 +581,29 @@ Page({
         const intensiveTest = (intensiveBook.tests || [])[this.data.intensiveTestIndex] || {}
         const intensiveParts = intensiveTest.parts || intensiveTest.sections || []
 
+        const jijingListeningBooks = this.data.catalog.listening_jijing || []
+        const jijingListeningBook = jijingListeningBooks[this.data.jijingListeningBookIndex] || {}
+        const jijingListeningTest = (jijingListeningBook.tests || [])[this.data.jijingListeningTestIndex] || {}
+        const jijingListeningParts = jijingListeningTest.parts || []
+
         const readingBooks = this.data.catalog.cambridge_reading || []
         const readingBook = readingBooks[this.data.readingBookIndex] || {}
         const readingTest = (readingBook.tests || [])[this.data.readingTestIndex] || {}
         const readingScopes = [
             { label: '整套 Test', scope: 'test' },
             ...((readingTest.passages || []).map(passage => ({
+                label: `${passage.title || ('Passage ' + passage.number)} · ${passage.question_name || ''}`,
+                scope: 'passage',
+                passageNumber: passage.number
+            })))
+        ]
+
+        const jijingReadingBooks = this.data.catalog.reading_jijing || []
+        const jijingReadingBook = jijingReadingBooks[this.data.jijingReadingBookIndex] || {}
+        const jijingReadingTest = (jijingReadingBook.tests || [])[this.data.jijingReadingTestIndex] || {}
+        const jijingReadingScopes = [
+            { label: '整套 Test', scope: 'test' },
+            ...((jijingReadingTest.passages || []).map(passage => ({
                 label: `${passage.title || ('Passage ' + passage.number)} · ${passage.question_name || ''}`,
                 scope: 'passage',
                 passageNumber: passage.number
@@ -484,9 +618,15 @@ Page({
             intensiveBook,
             intensiveTest,
             intensivePart: intensiveParts[this.data.intensivePartIndex],
+            jijingListeningBook,
+            jijingListeningTest,
+            jijingListeningPart: jijingListeningParts[this.data.jijingListeningPartIndex],
             readingBook,
             readingTest,
-            readingScope: readingScopes[this.data.readingScopeIndex]
+            readingScope: readingScopes[this.data.readingScopeIndex],
+            jijingReadingBook,
+            jijingReadingTest,
+            jijingReadingScope: jijingReadingScopes[this.data.jijingReadingScopeIndex]
         })
         return selected || { source_type: source.key }
     },
@@ -620,9 +760,15 @@ Page({
             intensiveBookIndex: 0,
             intensiveTestIndex: 0,
             intensivePartIndex: 0,
+            jijingListeningBookIndex: 0,
+            jijingListeningTestIndex: 0,
+            jijingListeningPartIndex: 0,
             readingBookIndex: 0,
             readingTestIndex: 0,
             readingScopeIndex: 0,
+            jijingReadingBookIndex: 0,
+            jijingReadingTestIndex: 0,
+            jijingReadingScopeIndex: 0,
             preserveLegacyListeningTrainingMode: false
         }, () => this.refreshPracticeOptions(true))
     },
@@ -665,6 +811,27 @@ Page({
         this.setData({ intensivePartIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
     },
 
+    handleJijingListeningBookChange(e) {
+        this.setData({
+            jijingListeningBookIndex: Number(e.detail.value) || 0,
+            jijingListeningTestIndex: 0,
+            jijingListeningPartIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleJijingListeningTestChange(e) {
+        this.setData({
+            jijingListeningTestIndex: Number(e.detail.value) || 0,
+            jijingListeningPartIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleJijingListeningPartChange(e) {
+        this.setData({
+            jijingListeningPartIndex: Number(e.detail.value) || 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
     handleListeningTrainingModeChange(e) {
         const modes = this.data.listeningTrainingModes || DEFAULT_LISTENING_TRAINING_MODES
         const index = clampIndex(e.detail.value, modes.length)
@@ -692,6 +859,27 @@ Page({
 
     handleReadingScopeChange(e) {
         this.setData({ readingScopeIndex: Number(e.detail.value) || 0 }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleJijingReadingBookChange(e) {
+        this.setData({
+            jijingReadingBookIndex: Number(e.detail.value) || 0,
+            jijingReadingTestIndex: 0,
+            jijingReadingScopeIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleJijingReadingTestChange(e) {
+        this.setData({
+            jijingReadingTestIndex: Number(e.detail.value) || 0,
+            jijingReadingScopeIndex: 0
+        }, () => this.refreshPracticeOptions(true))
+    },
+
+    handleJijingReadingScopeChange(e) {
+        this.setData({
+            jijingReadingScopeIndex: Number(e.detail.value) || 0
+        }, () => this.refreshPracticeOptions(true))
     },
 
     handleDateChange(e) {
@@ -854,8 +1042,21 @@ Page({
         return null
     },
 
-    findReadingSelection(task) {
-        const books = this.data.catalog.cambridge_reading || []
+    findJijingListeningSelection(task) {
+        const books = this.data.catalog.listening_jijing || []
+        for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
+            const tests = books[bookIndex].tests || []
+            for (let testIndex = 0; testIndex < tests.length; testIndex += 1) {
+                const parts = tests[testIndex].parts || []
+                const partIndex = parts.findIndex(part => part.id === task.listening_exercise_id)
+                if (partIndex >= 0) return { bookIndex, testIndex, partIndex }
+            }
+        }
+        return null
+    },
+
+    findReadingSelection(task, catalogKey = 'cambridge_reading') {
+        const books = this.data.catalog[catalogKey] || []
         for (let bookIndex = 0; bookIndex < books.length; bookIndex += 1) {
             const tests = books[bookIndex].tests || []
             for (let testIndex = 0; testIndex < tests.length; testIndex += 1) {
@@ -886,7 +1087,9 @@ Page({
             'custom',
             'cambridge_listening',
             'listening_intensive',
-            'cambridge_reading'
+            'listening_jijing',
+            'cambridge_reading',
+            'reading_jijing'
         ].includes(sourceKey)) return null
 
         const update = {
@@ -914,12 +1117,26 @@ Page({
             ).description || ''
             update.preserveLegacyListeningTrainingMode = !task.listening_training_mode
         }
+        if (sourceKey === 'listening_jijing') {
+            const selection = this.findJijingListeningSelection(task)
+            if (!selection) return null
+            update.jijingListeningBookIndex = selection.bookIndex
+            update.jijingListeningTestIndex = selection.testIndex
+            update.jijingListeningPartIndex = selection.partIndex
+        }
         if (sourceKey === 'cambridge_reading') {
             const selection = this.findReadingSelection(task)
             if (!selection) return null
             update.readingBookIndex = selection.bookIndex
             update.readingTestIndex = selection.testIndex
             update.readingScopeIndex = selection.scopeIndex
+        }
+        if (sourceKey === 'reading_jijing') {
+            const selection = this.findReadingSelection(task, 'reading_jijing')
+            if (!selection) return null
+            update.jijingReadingBookIndex = selection.bookIndex
+            update.jijingReadingTestIndex = selection.testIndex
+            update.jijingReadingScopeIndex = selection.scopeIndex
         }
         return update
     },
@@ -949,7 +1166,17 @@ Page({
             await this.fetchPracticeCatalog()
             wx.hideLoading()
         }
+        if (sourceKey === 'listening_jijing' && !(this.data.catalog.listening_jijing || []).length) {
+            wx.showLoading({ title: '加载目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
         if (sourceKey === 'cambridge_reading' && !(this.data.catalog.cambridge_reading || []).length) {
+            wx.showLoading({ title: '加载目录...' })
+            await this.fetchPracticeCatalog()
+            wx.hideLoading()
+        }
+        if (sourceKey === 'reading_jijing' && !(this.data.catalog.reading_jijing || []).length) {
             wx.showLoading({ title: '加载目录...' })
             await this.fetchPracticeCatalog()
             wx.hideLoading()
@@ -1069,7 +1296,9 @@ Page({
 
     hasPracticeSelection(item) {
         if (!item || item.source_type === 'custom') return true
-        if (item.source_type === 'listening_intensive') return !!item.practice_exercise_id
+        if (['listening_intensive', 'listening_jijing'].includes(item.source_type)) {
+            return !!item.practice_exercise_id
+        }
         return !!item.practice_test_id
     },
 

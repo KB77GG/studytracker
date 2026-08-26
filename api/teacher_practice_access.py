@@ -26,12 +26,16 @@ SUBJECTS = {
     "listening": {
         "label": "雅思听力",
         "allowed_source": "cambridge_listening",
-        "allowed_sources": ["cambridge_listening", "listening_intensive"],
+        "allowed_sources": [
+            "cambridge_listening",
+            "listening_intensive",
+            "listening_jijing",
+        ],
     },
     "reading": {
         "label": "雅思阅读",
         "allowed_source": "cambridge_reading",
-        "allowed_sources": ["cambridge_reading"],
+        "allowed_sources": ["cambridge_reading", "reading_jijing"],
     },
 }
 

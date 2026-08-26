@@ -82,7 +82,22 @@
       </view>
     </view>
 
-    <view wx:if="{{isReadingSource}}" class="practice-picker-stack">
+    <view wx:elif="{{isJijingListeningSource}}" class="practice-picker-stack">
+      <view class="mode-hint">虾滑听力按 Part 与频次分组，可直接选一套 10 题刷题素材推送给学生。</view>
+      <view class="practice-picker-row">
+        <picker range="{{jijingListeningBookLabels}}" value="{{jijingListeningBookIndex}}" bindchange="handleJijingListeningBookChange">
+          <view class="picker-field compact">{{jijingListeningBookLabels[jijingListeningBookIndex] || '选择分组'}}</view>
+        </picker>
+        <picker range="{{jijingListeningTestLabels}}" value="{{jijingListeningTestIndex}}" bindchange="handleJijingListeningTestChange">
+          <view class="picker-field compact">{{jijingListeningTestLabels[jijingListeningTestIndex] || '选择题目'}}</view>
+        </picker>
+      </view>
+      <picker range="{{jijingListeningPartLabels}}" value="{{jijingListeningPartIndex}}" bindchange="handleJijingListeningPartChange">
+        <view class="picker-field">{{jijingListeningPartLabels[jijingListeningPartIndex] || '选择练习'}}</view>
+      </picker>
+    </view>
+
+    <view wx:if="{{isCambridgeReadingSource}}" class="practice-picker-stack">
       <view class="practice-picker-row">
         <picker range="{{readingBookLabels}}" value="{{readingBookIndex}}" bindchange="handleReadingBookChange">
           <view class="picker-field compact">{{readingBookLabels[readingBookIndex] || '选择书册'}}</view>
@@ -96,10 +111,25 @@
       </picker>
     </view>
 
+    <view wx:elif="{{isReadingJijingSource}}" class="practice-picker-stack">
+      <view class="mode-hint">ZYZ 阅读可按整套 Test 或单篇 Passage 布置，题型与选项会随任务一起加载。</view>
+      <view class="practice-picker-row">
+        <picker range="{{jijingReadingBookLabels}}" value="{{jijingReadingBookIndex}}" bindchange="handleJijingReadingBookChange">
+          <view class="picker-field compact">{{jijingReadingBookLabels[jijingReadingBookIndex] || '选择 ZYZ 分组'}}</view>
+        </picker>
+        <picker range="{{jijingReadingTestLabels}}" value="{{jijingReadingTestIndex}}" bindchange="handleJijingReadingTestChange">
+          <view class="picker-field compact">{{jijingReadingTestLabels[jijingReadingTestIndex] || '选择 Test'}}</view>
+        </picker>
+      </view>
+      <picker range="{{jijingReadingScopeLabels}}" value="{{jijingReadingScopeIndex}}" bindchange="handleJijingReadingScopeChange">
+        <view class="picker-field">{{jijingReadingScopeLabels[jijingReadingScopeIndex] || '选择范围'}}</view>
+      </picker>
+    </view>
+
     <view class="practice-summary" wx:if="{{selectedPracticeSummary}}">
       <text>{{selectedPracticeSummary}}</text>
     </view>
-    <view class="practice-actions" wx:if="{{(isCambridgeSource || isIntensiveListeningSource) && !editingTaskId}}">
+    <view class="practice-actions" wx:if="{{!isCustomSource && !editingTaskId}}">
       <button class="queue-btn" size="mini" bindtap="addSelectedPracticeToQueue">加入清单</button>
       <button wx:if="{{selectedPracticeList.length}}" class="queue-btn ghost" size="mini" bindtap="clearPracticeQueue">清空</button>
     </view>

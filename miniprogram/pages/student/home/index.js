@@ -646,6 +646,13 @@ Page({
             })
             return true
         }
+        if (task.listeningResourceType === 'jijing') {
+            if (!task.listeningUrl) return false
+            wx.navigateTo({
+                url: `/pages/student/webview/index?url=${encodeURIComponent(task.listeningUrl)}`
+            })
+            return true
+        }
         if (!task || !task.listeningUrl) return false
         const token = encodeURIComponent(task.listeningToken || '')
         wx.navigateTo({

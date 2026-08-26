@@ -53,6 +53,10 @@ from api.practice_catalog import (
 )
 from api.practice_attempts import append_submission_attempt, preserve_legacy_submission
 from api.dictation import schedule_prewarm_for_book as _schedule_dictation_prewarm
+from api.teacher_practice_catalog import (
+    build_listening_jijing_assignment,
+    build_listening_jijing_options,
+)
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
 from services.vocabulary_mastery import (
@@ -3532,6 +3536,7 @@ def tasks_page():
         listening_access_token = None
         listening_training_mode = None
         listening_error = None
+        listening_default_minutes = 0
         if listening_exercise_id:
             # 自动填充 category 和 detail
             listening_access_token = secrets.token_urlsafe(16)
@@ -3558,6 +3563,19 @@ def tasks_page():
                     listening_exercise_id = safe_listening_id
                 else:
                     listening_error = "选择的剑雅整套练习不存在"
+            elif listening_resource_type == LISTENING_RESOURCE_JIJING:
+                assignment = build_listening_jijing_assignment(
+                    _listening_jijing_root(),
+                    listening_exercise_id,
+                )
+                if assignment:
+                    listening_exercise_id = assignment["id"]
+                    detail = assignment["detail"]
+                    category = assignment["category"]
+                    listening_default_minutes = assignment["planned_minutes"]
+                    question_ids = None
+                else:
+                    listening_error = "选择的虾滑听力练习不存在"
             else:
                 listening_resource_type = LISTENING_RESOURCE_INTENSIVE
                 listening_training_mode = normalize_training_mode(
@@ -3611,7 +3629,11 @@ def tasks_page():
                         if reading_passage_number
                         else title
                     )
-                    category = "雅思-阅读-整套"
+                    category = (
+                        "雅思-阅读-ZYZ"
+                        if payload.get("source") == "idictation_reading_jijing"
+                        else "雅思-阅读-整套"
+                    )
                     reading_test_id = safe_reading_id
                     reading_default_minutes = 20 if reading_passage_number else 60
 
@@ -3676,6 +3698,8 @@ def tasks_page():
             planned_minutes = int(request.form.get("planned_minutes", 0) or 0)
             if not planned_minutes and reading_default_minutes:
                 planned_minutes = reading_default_minutes
+            if not planned_minutes and listening_default_minutes:
+                planned_minutes = listening_default_minutes
             material_task_id = int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None
             dictation_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None
             speaking_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None
@@ -3854,7 +3878,8 @@ def tasks_page():
             "completion_rate": manual_progress,
             "accuracy": accuracy_value,
             "listening_test": _serialize_listening_test_submission(t.listening_test_submission)
-            if _task_listening_resource_type(t) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+            if _task_listening_resource_type(t)
+            in {LISTENING_RESOURCE_CAMBRIDGE_TEST, LISTENING_RESOURCE_JIJING}
             else None,
             "reading_test": _serialize_reading_test_submission(t.reading_test_submission),
             "reading_url": _task_reading_url(t, absolute=False)
@@ -4102,6 +4127,9 @@ def tasks_page():
                 })
             except Exception:
                 pass
+    listening_exercises.extend(
+        build_listening_jijing_options(_listening_jijing_root())
+    )
 
     reading_exercises = []
     reading_exercise_passages = {}
@@ -4123,8 +4151,8 @@ def tasks_page():
                     })
                 book_no = test.get("book") or book.get("book")
                 test_no = test.get("test")
-                if source_label == "阅读机经":
-                    title = f"阅读机经 {book_no} Test {test_no}"
+                if source_label == "ZYZ 阅读":
+                    title = f"ZYZ 阅读 {book_no} Test {test_no}"
                 else:
                     title = f"Cambridge IELTS {book_no} Test {test_no} Reading"
                 reading_exercises.append({
@@ -4139,7 +4167,7 @@ def tasks_page():
                 reading_exercise_passages[safe_id] = passages
 
     add_reading_exercise_options(_reading_test_catalog(), "剑雅阅读")
-    add_reading_exercise_options(_reading_jijing_catalog(), "阅读机经")
+    add_reading_exercise_options(_reading_jijing_catalog(), "ZYZ 阅读")
 
     return render_template(
         "tasks.html",

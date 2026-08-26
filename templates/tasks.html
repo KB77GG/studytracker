@@ -212,10 +212,11 @@
             <div class="listening-type-filter" role="group" aria-label="听力练习类型">
               <button type="button" class="listening-type-filter__btn is-active" data-listening-filter="intensive">精听切句</button>
               <button type="button" class="listening-type-filter__btn" data-listening-filter="cambridge_test">整套 Test</button>
+              <button type="button" class="listening-type-filter__btn" data-listening-filter="jijing">虾滑刷题</button>
             </div>
             <label class="listening-search-field" for="listeningPickerSearch">
               <span>搜索</span>
-              <input id="listeningPickerSearch" type="search" placeholder="如 11 Test 2 Section 2">
+              <input id="listeningPickerSearch" type="search" placeholder="如 虾滑 001、11 Test 2 Section 2">
             </label>
           </div>
           <div class="listening-picker__selected" id="listeningPickerSelected">未选择听力练习</div>
@@ -227,6 +228,13 @@
           {% for ex in listening_exercises %}
           {% if ex.resource_type == 'intensive' %}
           <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-resource-type="{{ ex.resource_type }}">{{ ex.title }} ({{ ex.segment_count }}句)</option>
+          {% endif %}
+          {% endfor %}
+          </optgroup>
+          <optgroup label="虾滑听力">
+          {% for ex in listening_exercises %}
+          {% if ex.resource_type == 'jijing' %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-resource-type="{{ ex.resource_type }}">{{ ex.title }} ({{ ex.question_count }}题)</option>
           {% endif %}
           {% endfor %}
           </optgroup>
@@ -292,9 +300,9 @@
           {% endif %}
           {% endfor %}
           </optgroup>
-          <optgroup label="阅读机经">
+          <optgroup label="ZYZ 阅读">
           {% for ex in reading_exercises %}
-          {% if ex.source_label == '阅读机经' %}
+          {% if ex.source_label == 'ZYZ 阅读' %}
           <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-passage-count="{{ ex.passage_count }}" data-question-count="{{ ex.question_count }}">{{ ex.title }} ({{ ex.passage_count }} Passage / {{ ex.question_count }}题)</option>
           {% endif %}
           {% endfor %}
@@ -638,7 +646,7 @@
                 <button class="btn-stop" type="button" style="display:none;">结束</button>
                 <div class="task-actions">
                   {% if t.listening_exercise_id %}
-                  <a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else '精听明细' }}</a>
+                  <a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开虾滑题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>
                   {% endif %}
                   {% if t.reading_test_id and t.reading_url %}
                   <a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>
@@ -3040,7 +3048,9 @@
             section: structuredTitle.section,
             meta: resourceType === 'cambridge_test'
               ? `整套 Test${metaMatch ? ` · ${metaMatch[1]}` : ''}`
-              : `精听切句${metaMatch ? ` · ${metaMatch[1]}` : ''}`,
+              : resourceType === 'jijing'
+                ? `虾滑刷题${metaMatch ? ` · ${metaMatch[1]}` : ''}`
+                : `精听切句${metaMatch ? ` · ${metaMatch[1]}` : ''}`,
             searchText: normalize(`${cleanLabel} ${title} ${resourceType.replace('_', ' ')}`)
           };
         });
@@ -3069,7 +3079,11 @@
           return;
         }
         const resourceType = option.dataset.resourceType || 'intensive';
-        const typeLabel = resourceType === 'cambridge_test' ? '整套 Test' : '精听切句';
+        const typeLabel = resourceType === 'cambridge_test'
+          ? '整套 Test'
+          : resourceType === 'jijing'
+            ? '虾滑刷题'
+            : '精听切句';
         selectedLabel.textContent = `${typeLabel}：${option.textContent.trim()}`;
       }
 
@@ -3615,6 +3629,13 @@
         if (sectionRow) sectionRow.style.display = 'flex';
         questionRow.style.display = 'none';
         container.innerHTML = '<div class="text-muted">剑雅 Test 会在小程序原生页面打开。</div>';
+        questionIds.value = '';
+        return;
+      }
+      if (resourceType === 'jijing') {
+        setQuestionSelectionMeta('虾滑听力刷题', '学生进入虾滑网页题目完成练习');
+        questionRow.style.display = 'none';
+        container.innerHTML = '<div class="text-muted">虾滑题目会在网页刷题页打开。</div>';
         questionIds.value = '';
         return;
       }

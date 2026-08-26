@@ -166,6 +166,12 @@ Page({
                         })
                         return
                     }
+                    if (res.task.listening_resource_type === 'jijing' && res.task.listening_url) {
+                        wx.redirectTo({
+                            url: `/pages/student/webview/index?url=${encodeURIComponent(res.task.listening_url)}`
+                        })
+                        return
+                    }
                     const token = encodeURIComponent(res.task.listening_token)
                     wx.redirectTo({
                         url: `/pages/student/listening/practice/index?taskId=${this.data.taskId}&token=${token}`
