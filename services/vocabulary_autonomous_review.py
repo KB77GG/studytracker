@@ -14,7 +14,9 @@ import secrets
 from datetime import datetime, time, timedelta, timezone
 from functools import lru_cache
 
+from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.orm import joinedload
 
 from dictation_answers import (
     canonical_vocabulary_word,
@@ -35,7 +37,7 @@ from models import (
 )
 from services.dictation_input_policy import resolve_submission_input
 from services.dictation_review import SHANGHAI, local_date
-from services.vocabulary_context import grade_context_answer
+from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
 from services.vocabulary_mastery import (
     DIMENSIONS,
     MAX_ENGLISH_ANSWER_LENGTH,
@@ -64,6 +66,27 @@ from services.vocabulary_remediation import (
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
 SAFE_ENGLISH_SEPARATORS = [" ", "-", "'"]
+VALID_REVIEW_MODES = {
+    "en_to_zh",
+    "zh_to_en",
+    "audio_to_en",
+    "audio_to_zh",
+    "context_choice",
+    "context_fill",
+}
+VALID_REVIEW_SKIP_REASONS = {
+    "invalid_item",
+    "invalid_dimension",
+    "invalid_question",
+    "invalid_time",
+    "missing_word",
+    "missing_answer",
+    "missing_audio",
+    "missing_context",
+    "missing_meaning_prompt",
+    "missing_options",
+    "long_text",
+}
 _FEEDBACK_HYPHENATOR = None
 
 
@@ -97,6 +120,7 @@ def _candidate_remediation_kind(
     mastery: StudentVocabularyMastery,
     dimension: str,
     now: datetime,
+    latest_by_key: dict[tuple[int, str], VocabularyReviewItem] | None = None,
 ) -> str | None:
     """Classify a due item without creating a second queue.
 
@@ -112,15 +136,18 @@ def _candidate_remediation_kind(
         and related_due <= now
     ):
         return remediation_kind_for_dimension(is_retry=False, is_related=True)
-    latest = (
-        VocabularyReviewItem.query.filter_by(
-            student_id=user.id,
-            sense_id=mastery.sense_id,
-            dimension=dimension,
+    if latest_by_key is None:
+        latest = (
+            VocabularyReviewItem.query.filter_by(
+                student_id=user.id,
+                sense_id=mastery.sense_id,
+                dimension=dimension,
+            )
+            .order_by(VocabularyReviewItem.id.desc())
+            .first()
         )
-        .order_by(VocabularyReviewItem.id.desc())
-        .first()
-    )
+    else:
+        latest = latest_by_key.get((mastery.sense_id, dimension))
     if latest and latest.first_is_correct is False and not _correction_required(latest):
         return remediation_kind_for_dimension(is_retry=True)
     return None
@@ -150,9 +177,11 @@ def _goal_for_dimension(
     # ``meaning_recall`` uses sound as its cue for listening books and the
     # written form elsewhere. The dimension alone cannot express that cue, so
     # retain the curriculum goal from the mastery row's representative book.
-    book = mastery.representative_book if mastery else None
-    if book is None and word is not None:
-        book = word.book
+    # Bulk candidate loading joins the book relationship. Prefer it so a
+    # count/preflight never falls back to one lazy book query per mastery.
+    book = word.book if word is not None else None
+    if book is None and mastery:
+        book = mastery.representative_book
     if str(getattr(book, "default_vocabulary_goal", "") or "").strip().lower() == "listening":
         return "listening"
     return "reading"
@@ -180,6 +209,151 @@ def _candidate_words(word: DictationWord, cache: dict[int, list[DictationWord]])
             if candidate.sense_id is None:
                 continue
     return cache[word.book_id]
+
+
+def _latest_review_items_by_key(
+    user_id: int,
+    sense_ids: set[int] | None = None,
+) -> dict[tuple[int, str], VocabularyReviewItem]:
+    """Load one latest item per sense/dimension for remediation classification."""
+
+    if sense_ids is not None and not sense_ids:
+        return {}
+    filters = [VocabularyReviewItem.student_id == user_id]
+    if sense_ids is not None:
+        filters.append(VocabularyReviewItem.sense_id.in_(sense_ids))
+    latest_ids = (
+        db.session.query(func.max(VocabularyReviewItem.id).label("item_id"))
+        .filter(*filters)
+        .group_by(VocabularyReviewItem.sense_id, VocabularyReviewItem.dimension)
+        .subquery()
+    )
+    rows = (
+        VocabularyReviewItem.query.join(
+            latest_ids,
+            VocabularyReviewItem.id == latest_ids.c.item_id,
+        )
+        .all()
+    )
+    return {(item.sense_id, item.dimension): item for item in rows}
+
+
+def _bulk_representative_words(
+    masteries: list[StudentVocabularyMastery],
+) -> dict[int, DictationWord]:
+    """Resolve representatives without triggering relationship N+1 queries."""
+
+    representative_ids = {
+        int(mastery.representative_word_id)
+        for mastery in masteries
+        if mastery.representative_word_id is not None
+    }
+    sense_ids = {int(mastery.sense_id) for mastery in masteries}
+    if not representative_ids and not sense_ids:
+        return {}
+    query = DictationWord.query.options(joinedload(DictationWord.book)).filter(
+        or_(
+            DictationWord.id.in_(representative_ids or {-1}),
+            DictationWord.sense_id.in_(sense_ids or {-1}),
+        )
+    )
+    words = query.order_by(
+        DictationWord.sense_id.asc(),
+        DictationWord.book_id.asc(),
+        DictationWord.sequence.asc(),
+        DictationWord.id.asc(),
+    ).all()
+    by_id = {word.id: word for word in words}
+    first_by_sense: dict[int, DictationWord] = {}
+    for word in words:
+        if word.sense_id is not None and word.sense_id not in first_by_sense:
+            first_by_sense[word.sense_id] = word
+    return {
+        mastery.id: by_id.get(mastery.representative_word_id)
+        or first_by_sense.get(mastery.sense_id)
+        for mastery in masteries
+        if by_id.get(mastery.representative_word_id)
+        or first_by_sense.get(mastery.sense_id)
+    }
+
+
+def _context_has_direct_source(word: DictationWord) -> bool:
+    """Check context eligibility without building a full choice question."""
+
+    return bool(
+        _example_fill(word, f"eligibility:{word.id}")
+        or _collocation_fill(word, f"eligibility:{word.id}")
+    )
+
+
+def _candidate_is_eligible(
+    word: DictationWord,
+    mastery: StudentVocabularyMastery,
+    dimension: str,
+    catalog_cache: dict[int, list[DictationWord]],
+) -> bool:
+    """Apply cheap field checks before materializing the public question."""
+
+    if dimension == "meaning_recall":
+        meaning = str(word.core_meaning_zh or word.translation or "").strip()
+        goal = _goal_for_dimension(dimension, mastery, word)
+        return bool(
+            meaning
+            and (
+                goal == "listening"
+                or canonical_vocabulary_word(word.word, word.accepted_answers)
+            )
+        )
+    if dimension in {"form_recall", "audio_form_recall"}:
+        meaning = str(word.core_meaning_zh or word.translation or "").strip()
+        from services.vocabulary_mastery import _english_word_variants
+
+        return bool(meaning if dimension == "form_recall" else True) and bool(
+            _english_word_variants(word)
+        )
+    if _context_has_direct_source(word):
+        return True
+    # Choice-based context questions need the catalog, but the catalog is
+    # loaded once per book and only for words that lack a direct source.
+    candidates = _candidate_words(word, catalog_cache)
+    return bool(
+        _question_for(
+            word,
+            dimension,
+            _goal_for_dimension(dimension, mastery, word),
+            _dimension_stage(mastery, dimension),
+            candidates,
+        )
+    )
+
+
+def _materialize_due_candidates(
+    candidates: list[dict],
+    limit: int,
+) -> list[dict]:
+    """Build public questions only for the finite batch being claimed."""
+
+    candidate_cache: dict[int, list[DictationWord]] = {}
+    materialized = []
+    for candidate in candidates:
+        if len(materialized) >= limit:
+            break
+        word = candidate["word"]
+        question = _question_for(
+            word,
+            candidate["dimension"],
+            _goal_for_dimension(candidate["dimension"], candidate["mastery"], word),
+            candidate["stage"],
+            _candidate_words(word, candidate_cache),
+        )
+        if not question:
+            continue
+        public, answer = question
+        item = dict(candidate)
+        item["public"] = public
+        item["answer"] = answer
+        materialized.append(item)
+    return materialized
 
 
 def _answered_senses_on_local_date(user: User, now: datetime) -> set[int]:
@@ -229,17 +403,31 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
     """
 
     now = utc_naive(now)
+    due_columns = [
+        getattr(StudentVocabularyMastery, f"{dimension}_next_due_at")
+        for dimension in DIMENSIONS
+    ]
     rows = (
-        StudentVocabularyMastery.query.filter_by(student_id=user.id)
+        StudentVocabularyMastery.query.filter(
+            StudentVocabularyMastery.student_id == user.id,
+            or_(*(column <= now for column in due_columns)),
+        )
         .order_by(StudentVocabularyMastery.sense_id.asc())
         .all()
     )
-    candidate_cache: dict[int, list[DictationWord]] = {}
+    if not rows:
+        return []
+    words_by_mastery = _bulk_representative_words(rows)
+    latest_by_key = _latest_review_items_by_key(
+        user.id,
+        {int(mastery.sense_id) for mastery in rows},
+    )
+    catalog_cache: dict[int, list[DictationWord]] = {}
     candidates_by_sense: dict[int, list[dict]] = {}
     cooled_senses = _answered_senses_on_local_date(user, now)
     planned_remediation_counts: dict[int, int] = {}
     for mastery in rows:
-        word = _word_for_mastery(mastery)
+        word = words_by_mastery.get(mastery.id)
         if not word:
             continue
         if word.sense_id is None:
@@ -252,21 +440,14 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
             due_at = _dimension_due(mastery, dimension)
             if not due_at or due_at > now:
                 continue
-            question = _question_for(
-                word,
-                dimension,
-                _goal_for_dimension(dimension, mastery, word),
-                _dimension_stage(mastery, dimension),
-                _candidate_words(word, candidate_cache),
-            )
-            if not question:
+            if not _candidate_is_eligible(word, mastery, dimension, catalog_cache):
                 continue
-            public, answer = question
             remediation_kind = _candidate_remediation_kind(
                 user,
                 mastery,
                 dimension,
                 now,
+                latest_by_key,
             )
             existing_remediation_count = (
                 int(getattr(mastery, "review_remediation_count", 0) or 0)
@@ -295,8 +476,6 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
                     "dimension": dimension,
                     "due_at": due_at,
                     "stage": stage,
-                    "public": public,
-                    "answer": answer,
                     "remediation_kind": remediation_kind,
                     "overdue_seconds": overdue_seconds,
                     "last_answered_at": last_answered_at,
@@ -442,10 +621,13 @@ def _feedback_syllables(value: str) -> str:
     return re.sub(r"[A-Za-z]+", replace, text)
 
 
-def _answer_feedback(item: VocabularyReviewItem) -> dict:
+def _answer_feedback(
+    item: VocabularyReviewItem,
+    word: DictationWord | None = None,
+) -> dict:
     """Build the approved memory aid that is safe only after first answer."""
 
-    word = item.word or db.session.get(DictationWord, item.word_id)
+    word = word or item.word or db.session.get(DictationWord, item.word_id)
     if word is None:
         return {
             "word": "",
@@ -472,11 +654,15 @@ def _answer_feedback(item: VocabularyReviewItem) -> dict:
     }
 
 
-def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
+def _public_item(
+    item: VocabularyReviewItem,
+    candidate_cache=None,
+    word: DictationWord | None = None,
+) -> dict:
     snapshot = _safe_json(item.question_snapshot_json)
     answer_payload = _safe_json(item.answer_payload_json)
     if snapshot.get("mode") == "audio_to_zh" and not snapshot.get("options"):
-        word = db.session.get(DictationWord, item.word_id)
+        word = word or db.session.get(DictationWord, item.word_id)
         if word:
             candidates = _candidate_words(word, candidate_cache if candidate_cache is not None else {})
             snapshot = dict(snapshot)
@@ -534,14 +720,27 @@ def _public_item(item: VocabularyReviewItem, candidate_cache=None) -> dict:
             revealed_answer = option.get("label") if option else None
         payload["revealed_answer"] = revealed_answer
         payload["revealed_answer_option_id"] = revealed_option_id
-        payload["answer_feedback"] = _answer_feedback(item)
+        payload["answer_feedback"] = _answer_feedback(item, word)
     return payload
 
 
 def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> dict:
     now = utc_naive(now)
     candidate_cache = {}
-    items = [_public_item(item, candidate_cache) for item in session.items]
+    item_rows = list(session.items)
+    words_by_id = {}
+    word_ids = {item.word_id for item in item_rows if item.word_id is not None}
+    if word_ids:
+        words_by_id = {
+            word.id: word
+            for word in DictationWord.query.options(joinedload(DictationWord.book))
+            .filter(DictationWord.id.in_(word_ids))
+            .all()
+        }
+    items = [
+        _public_item(item, candidate_cache, words_by_id.get(item.word_id))
+        for item in item_rows
+    ]
     due_count, remaining_due_count = _session_due_counts(user, session, now)
     answered_count = sum(
         item["answered"] and not item["correction_required"] for item in items
@@ -565,6 +764,161 @@ def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> 
         "words": items,
         "queue_token": session.queue_token,
     }
+
+
+def _review_item_skip_reason(item: VocabularyReviewItem) -> str | None:
+    """Validate a client-reported unusable frozen item on the server.
+
+    The client may report that a row cannot be rendered, but it cannot decide
+    that a valid row is optional. This validator only inspects the frozen
+    server snapshot, answer contract, and the referenced word; it never trusts
+    a client-supplied answer or skip reason.
+    """
+
+    if item is None:
+        return "invalid_item"
+    if not item.word_id or db.session.get(DictationWord, item.word_id) is None:
+        return "missing_word"
+    if not item.sense_id:
+        return "invalid_item"
+    if not item.question_id or not item.question_snapshot_json or not item.answer_payload_json:
+        return "invalid_question"
+    try:
+        snapshot = json.loads(item.question_snapshot_json)
+        answer_payload = json.loads(item.answer_payload_json)
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return "invalid_question"
+    if not isinstance(snapshot, dict) or not isinstance(answer_payload, dict):
+        return "invalid_question"
+    if not isinstance(item.due_at, datetime):
+        return "invalid_time"
+    if len(item.question_snapshot_json) > 12000 or len(item.answer_payload_json) > 8000:
+        return "long_text"
+
+    dimension = str(item.dimension or "").strip().lower()
+    mode = str(snapshot.get("mode") or "").strip().lower()
+    prompt = snapshot.get("prompt")
+    if dimension not in DIMENSIONS:
+        return "invalid_dimension"
+    if mode not in VALID_REVIEW_MODES or not isinstance(prompt, dict):
+        return "invalid_question"
+    if str(snapshot.get("question_id") or "").strip() != str(item.question_id):
+        return "invalid_question"
+
+    def text(value, limit=2000):
+        if value is None:
+            return ""
+        value = str(value).strip()
+        return value if len(value) <= limit else ""
+
+    prompt_values = (
+        prompt.get("word"),
+        prompt.get("meaning"),
+        prompt.get("sentence"),
+        prompt.get("translation"),
+        prompt.get("instruction"),
+        prompt.get("audio_url"),
+        prompt.get("audio_tts_url"),
+    )
+    if any(value is not None and len(str(value)) > 2000 for value in prompt_values):
+        return "long_text"
+
+    options = snapshot.get("options")
+    normalized_options = []
+    if options is not None:
+        if not isinstance(options, list):
+            return "missing_options"
+        seen = set()
+        for option in options:
+            if not isinstance(option, dict):
+                return "missing_options"
+            option_id = text(option.get("id"), 200)
+            label = text(option.get("label"), 500)
+            if not option_id or not label or option_id in seen:
+                return "missing_options"
+            seen.add(option_id)
+            normalized_options.append(option_id)
+
+    if mode == "en_to_zh" and not text(prompt.get("word")):
+        return "missing_meaning_prompt"
+    if mode == "zh_to_en" and not text(prompt.get("meaning")):
+        return "missing_meaning_prompt"
+    if mode in {"audio_to_en", "audio_to_zh"} and not text(
+        prompt.get("audio_url") or prompt.get("audio_tts_url")
+    ):
+        return "missing_audio"
+    if mode == "audio_to_zh" and not normalized_options:
+        return "missing_options"
+    if mode == "context_fill" and not text(prompt.get("sentence")):
+        return "missing_context"
+    if mode == "context_choice":
+        if not normalized_options:
+            return "missing_options"
+        if not text(prompt.get("sentence")) and not text(prompt.get("target_word")):
+            return "missing_context"
+
+    answer_type = str(answer_payload.get("answer_type") or "").strip().lower()
+    if answer_type == "option_id":
+        answer_option_id = text(answer_payload.get("answer_option_id"), 200)
+        if not answer_option_id or answer_option_id not in normalized_options:
+            return "missing_options"
+    elif answer_type in {"chinese", "english", "english_text"}:
+        if not text(answer_payload.get("answer"), 200):
+            return "missing_answer"
+    else:
+        return "missing_answer"
+    return None
+
+
+def _validated_skipped_items(
+    session: VocabularyReviewSession,
+    payload: dict,
+    items: list[VocabularyReviewItem],
+) -> dict[int, str]:
+    """Return server-approved deferred rows; reject malicious omissions."""
+
+    raw_skipped = payload.get("skipped_items")
+    if raw_skipped in (None, ""):
+        return {}
+    if not isinstance(raw_skipped, list) or len(raw_skipped) > len(items):
+        raise VocabularyAutonomousReviewError("invalid_review_item_skips", 400)
+    by_id = {item.id: item for item in items}
+    approved: dict[int, str] = {}
+    invalid = []
+    for entry in raw_skipped:
+        if not isinstance(entry, dict):
+            raise VocabularyAutonomousReviewError("invalid_review_item_skips", 400)
+        try:
+            item_id = int(entry.get("review_item_id") or entry.get("queue_item_id"))
+        except (TypeError, ValueError) as error:
+            raise VocabularyAutonomousReviewError("invalid_review_item_skips", 400) from error
+        reason = str(entry.get("reason") or "").strip().lower()
+        if item_id not in by_id or reason not in VALID_REVIEW_SKIP_REASONS:
+            invalid.append({"review_item_id": item_id, "reason": reason})
+            continue
+        previous = approved.get(item_id)
+        if previous and previous != reason:
+            invalid.append({"review_item_id": item_id, "reason": reason})
+            continue
+        approved[item_id] = reason
+
+    for item_id, supplied_reason in approved.items():
+        server_reason = _review_item_skip_reason(by_id[item_id])
+        if server_reason != supplied_reason:
+            invalid.append(
+                {
+                    "review_item_id": item_id,
+                    "reason": supplied_reason,
+                    "server_reason": server_reason or "usable",
+                }
+            )
+    if invalid:
+        raise VocabularyAutonomousReviewError(
+            "review_item_skip_invalid",
+            409,
+            invalid_skips=invalid,
+        )
+    return approved
 
 
 def claim_today_review(
@@ -591,7 +945,9 @@ def claim_today_review(
         return _session_payload(user, active, now)
 
     candidates = _due_candidates(user, now)
-    if not candidates:
+    batch_limit = MAX_REVIEW_BATCH
+    materialized_candidates = _materialize_due_candidates(candidates, batch_limit)
+    if not materialized_candidates:
         return {
             "ok": True,
             "empty": True,
@@ -608,7 +964,6 @@ def claim_today_review(
     # The mandatory batch size is a server policy. Accepting a client-provided
     # lower limit would let a modified client answer one item and obtain the
     # whole day's task clearance.
-    batch_limit = MAX_REVIEW_BATCH
     review_date = local_date(now)
     claim_key = f"vocabulary-review:{user.id}:{review_date.isoformat()}"
     session = VocabularyReviewSession(
@@ -644,7 +999,7 @@ def claim_today_review(
             return _session_payload(user, active, now)
         raise VocabularyAutonomousReviewError("review_claim_conflict", 409) from None
 
-    for index, candidate in enumerate(candidates[:batch_limit]):
+    for index, candidate in enumerate(materialized_candidates):
         word = candidate["word"]
         item = VocabularyReviewItem(
             session_id=session.id,
@@ -1146,13 +1501,16 @@ def settle_review_session(
         .with_for_update()
         .all()
     )
+    skipped_items = _validated_skipped_items(session, payload, items)
+    skipped_ids = set(skipped_items)
     if not _supports_correction(payload):
         for item in items:
             _bypass_legacy_correction(item)
     missing = [
         item.id
         for item in items
-        if not item.first_attempt_id or _correction_required(item)
+        if item.id not in skipped_ids
+        and (not item.first_attempt_id or _correction_required(item))
     ]
     if missing:
         raise VocabularyAutonomousReviewError(
@@ -1200,6 +1558,13 @@ def settle_review_session(
     session.status = VocabularyReviewSession.STATUS_SETTLING
 
     for item in items:
+        if item.id in skipped_ids:
+            # This is an explicit quarantine marker, not a mastery result. It
+            # makes the frozen row settle-able while the due mastery remains
+            # untouched so a later claim can regenerate it after repair.
+            item.deferred_to_review = True
+            item.state_applied = True
+            continue
         if item.state_applied:
             continue
         attempt = (
@@ -1251,6 +1616,8 @@ def settle_review_session(
         "dimensions": by_dimension,
         "queue_token": session.queue_token,
         "origin_task_id": session.origin_task_id,
+        "skipped_count": len(skipped_ids),
+        "skipped_item_ids": sorted(skipped_ids),
         "remaining_due_count": remaining_due_count,
         "continue_available": remaining_due_count > 0,
     }

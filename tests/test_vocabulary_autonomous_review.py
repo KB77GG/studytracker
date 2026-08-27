@@ -16,6 +16,7 @@ from models import (
     StudentVocabularyMastery,
     Task,
     User,
+    VocabularyReviewAttempt,
     VocabularyReviewItem,
     VocabularyReviewSession,
     db,
@@ -1182,6 +1183,128 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             gate = review_preflight(user, self.task_id, now=completed_at)
             self.assertFalse(gate["required"])
             self.assertEqual(gate["clearance_review_date"], "2026-08-09")
+
+    def _claim_protocol_fixture(self, count=2):
+        user = db.session.get(User, self.student_id)
+        rows = StudentVocabularyMastery.query.filter_by(
+            student_id=self.student_id
+        ).order_by(StudentVocabularyMastery.id.asc()).all()
+        for mastery in rows:
+            for dimension in StudentVocabularyMastery.DIMENSIONS:
+                setattr(
+                    mastery,
+                    f"{dimension}_next_due_at",
+                    self.now + timedelta(days=30),
+                )
+        for mastery in rows[:count]:
+            mastery.meaning_recall_next_due_at = self.now
+        db.session.commit()
+        claimed = claim_today_review(user, now=self.now)
+        self.assertEqual(claimed["total_count"], count)
+        return user, claimed
+
+    def _answer_protocol_item(self, user, claimed, item):
+        stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+        expected = json.loads(stored.answer_payload_json)
+        answer = expected.get("answer") or expected.get("answer_option_id")
+        return submit_review_answer(
+            user,
+            claimed["session_id"],
+            {
+                "session_token": claimed["session_token"],
+                "review_item_id": stored.id,
+                "question_id": stored.question_id,
+                "word_id": stored.word_id,
+                "sense_id": stored.sense_id,
+                "dimension": stored.dimension,
+                "answer": answer,
+                "attempt_id": f"protocol-good-{stored.id}",
+            },
+            now=self.now,
+        )
+
+    def test_verified_bad_item_can_settle_without_attempt_and_is_regenerated(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture()
+            good, bad = claimed["items"]
+            bad_row = db.session.get(VocabularyReviewItem, bad["review_item_id"])
+            bad_row.question_snapshot_json = "{not-json"
+            self._answer_protocol_item(user, claimed, good)
+            settled = settle_review_session(
+                user,
+                claimed["session_id"],
+                {
+                    "queue_token": claimed["queue_token"],
+                    "skipped_items": [
+                        {"review_item_id": bad_row.id, "reason": "invalid_question"},
+                        {"review_item_id": bad_row.id, "reason": "invalid_question"},
+                    ],
+                },
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+            self.assertEqual(settled["total_count"], 1)
+            self.assertEqual(settled["skipped_count"], 1)
+            self.assertEqual(settled["skipped_item_ids"], [bad_row.id])
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(item_id=bad_row.id).count(),
+                0,
+            )
+            self.assertTrue(bad_row.deferred_to_review)
+            self.assertTrue(bad_row.state_applied)
+            mastery = db.session.get(StudentVocabularyMastery, bad_row.sense_id)
+            self.assertLessEqual(mastery.meaning_recall_next_due_at, self.now)
+
+            regenerated = claim_today_review(user, now=self.now)
+            self.assertEqual(regenerated["total_count"], 1)
+            self.assertEqual(regenerated["items"][0]["sense_id"], bad_row.sense_id)
+            self.assertEqual(regenerated["items"][0]["dimension"], "meaning_recall")
+
+    def test_valid_item_cannot_be_maliciously_skipped(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture()
+            item = claimed["items"][0]
+            with self.assertRaises(VocabularyAutonomousReviewError) as error:
+                settle_review_session(
+                    user,
+                    claimed["session_id"],
+                    {
+                        "queue_token": claimed["queue_token"],
+                        "skipped_items": [
+                            {"review_item_id": item["review_item_id"], "reason": "invalid_question"}
+                        ],
+                    },
+                    session_token=claimed["session_token"],
+                    now=self.now,
+                )
+            self.assertEqual(error.exception.error, "review_item_skip_invalid")
+            self.assertFalse(db.session.get(VocabularyReviewItem, item["review_item_id"]).state_applied)
+
+    def test_all_bad_items_settle_with_zero_score_and_remain_recoverable(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture(count=1)
+            item = claimed["items"][0]
+            row = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            row.question_snapshot_json = "{not-json"
+            settled = settle_review_session(
+                user,
+                claimed["session_id"],
+                {
+                    "queue_token": claimed["queue_token"],
+                    "skipped_items": [
+                        {"review_item_id": row.id, "reason": "invalid_question"}
+                    ],
+                },
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+            self.assertEqual(settled["total_count"], 0)
+            self.assertEqual(settled["correct_count"], 0)
+            self.assertEqual(settled["skipped_count"], 1)
+            self.assertEqual(VocabularyReviewAttempt.query.filter_by(item_id=row.id).count(), 0)
+            regenerated = claim_today_review(user, now=self.now)
+            self.assertEqual(regenerated["total_count"], 1)
+            self.assertEqual(regenerated["items"][0]["sense_id"], row.sense_id)
 
 
 if __name__ == "__main__":
