@@ -651,6 +651,9 @@
                   {% if t.reading_test_id and t.reading_url %}
                   <a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>
                   {% endif %}
+                  {% if t.listening_test or t.reading_test %}
+                  <button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>
+                  {% endif %}
                   {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}
                   <a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>
                   {% endif %}
@@ -2396,6 +2399,216 @@
 	      gap: 8px;
 	    }
 
+	    #attemptHistoryModal .card {
+	      width: min(880px, 94vw);
+	      max-height: 84vh;
+	      overflow: hidden;
+	      padding: 0;
+	    }
+
+	    .attempt-history-modal__header {
+	      display: flex;
+	      align-items: flex-start;
+	      justify-content: space-between;
+	      gap: 16px;
+	      padding: 18px 20px;
+	      border-bottom: 1px solid var(--task-border);
+	    }
+
+	    .attempt-history-modal__header h3 {
+	      margin: 0 0 5px;
+	    }
+
+	    .attempt-history-modal__subtitle {
+	      margin: 0;
+	      color: var(--task-muted);
+	      font-size: 13px;
+	    }
+
+	    .attempt-history-modal__close {
+	      flex: none;
+	      min-height: 32px;
+	      padding: 6px 11px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	      color: var(--task-ink);
+	      font-weight: 800;
+	      cursor: pointer;
+	    }
+
+	    .attempt-history-modal__content {
+	      max-height: calc(84vh - 78px);
+	      overflow-y: auto;
+	      padding: 20px;
+	    }
+
+	    .attempt-history-state {
+	      padding: 48px 20px;
+	      color: var(--task-muted);
+	      text-align: center;
+	    }
+
+	    .attempt-history-summary {
+	      display: grid;
+	      grid-template-columns: repeat(3, minmax(0, 1fr));
+	      gap: 10px;
+	    }
+
+	    .attempt-history-metric {
+	      padding: 14px 12px;
+	      border-radius: 8px;
+	      background: var(--task-surface-soft);
+	      text-align: center;
+	    }
+
+	    .attempt-history-metric__label,
+	    .attempt-history-metric__value {
+	      display: block;
+	    }
+
+	    .attempt-history-metric__label {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 700;
+	    }
+
+	    .attempt-history-metric__value {
+	      margin-top: 7px;
+	      color: var(--task-primary-strong);
+	      font-size: 16px;
+	      font-weight: 850;
+	    }
+
+	    .attempt-history-insight,
+	    .attempt-history-notice,
+	    .attempt-history-disclaimer {
+	      margin: 12px 0 0;
+	      padding: 10px 12px;
+	      border-radius: 8px;
+	      font-size: 13px;
+	      line-height: 1.55;
+	    }
+
+	    .attempt-history-insight {
+	      background: var(--task-primary-soft);
+	      color: var(--task-primary-strong);
+	      font-weight: 800;
+	    }
+
+	    .attempt-history-notice {
+	      background: var(--task-warning-soft);
+	      color: #92400e;
+	    }
+
+	    .attempt-history-disclaimer {
+	      background: #f3f4f6;
+	      color: #59656b;
+	    }
+
+	    .attempt-history-list {
+	      display: grid;
+	      gap: 12px;
+	      margin-top: 18px;
+	    }
+
+	    .attempt-history-entry {
+	      padding: 14px;
+	      border: 1px solid var(--task-border);
+	      border-radius: 8px;
+	      background: #fff;
+	    }
+
+	    .attempt-history-entry.is-first {
+	      border-color: rgba(32, 117, 111, .35);
+	      background: #f7fbfa;
+	    }
+
+	    .attempt-history-entry__head,
+	    .attempt-history-entry__meta,
+	    .attempt-wrong__head,
+	    .attempt-wrong__answer {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 12px;
+	    }
+
+	    .attempt-history-entry__title,
+	    .attempt-history-entry__score {
+	      font-weight: 850;
+	    }
+
+	    .attempt-history-entry__score {
+	      color: var(--task-primary-strong);
+	      text-align: right;
+	    }
+
+	    .attempt-history-entry__meta {
+	      margin-top: 7px;
+	      color: var(--task-muted);
+	      font-size: 12px;
+	    }
+
+	    .attempt-history-entry__wrong.has-wrong {
+	      color: #b42318;
+	      font-weight: 800;
+	    }
+
+	    .attempt-wrong-list {
+	      display: grid;
+	      gap: 8px;
+	      margin-top: 12px;
+	    }
+
+	    .attempt-wrong {
+	      padding: 11px 12px;
+	      border-radius: 8px;
+	      background: var(--task-surface-soft);
+	    }
+
+	    .attempt-wrong__head {
+	      color: var(--task-muted);
+	      font-size: 12px;
+	      font-weight: 800;
+	    }
+
+	    .attempt-wrong__question {
+	      color: var(--task-primary-strong);
+	    }
+
+	    .attempt-wrong__answer {
+	      align-items: flex-start;
+	      margin-top: 8px;
+	      font-size: 13px;
+	    }
+
+	    .attempt-wrong__answer-label {
+	      flex: none;
+	      color: var(--task-muted);
+	      font-weight: 700;
+	    }
+
+	    .attempt-wrong__answer-value {
+	      overflow-wrap: anywhere;
+	      text-align: right;
+	      white-space: pre-wrap;
+	    }
+
+	    .attempt-wrong__answer-value.is-student {
+	      color: #b42318;
+	    }
+
+	    .attempt-wrong__answer-value.is-correct,
+	    .attempt-history-all-correct {
+	      color: #166534;
+	    }
+
+	    .attempt-history-all-correct {
+	      margin: 12px 0 0;
+	      font-size: 13px;
+	    }
+
 	    @media (max-width: 1100px) {
 	      .tasks-page .stat-grid {
 	        grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2550,6 +2763,22 @@
     </div>
   </div>
 
+  <div id="attemptHistoryModal" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="attemptHistoryTitle">
+    <div id="attemptHistoryBackdrop" class="backdrop"></div>
+    <div class="card">
+      <div class="attempt-history-modal__header">
+        <div>
+          <h3 id="attemptHistoryTitle">学习轨迹</h3>
+          <p id="attemptHistorySubtitle" class="attempt-history-modal__subtitle">正在读取作答记录</p>
+        </div>
+        <button id="attemptHistoryClose" class="attempt-history-modal__close" type="button">关闭</button>
+      </div>
+      <div id="attemptHistoryContent" class="attempt-history-modal__content">
+        <div class="attempt-history-state">正在加载...</div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
     const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
@@ -2557,6 +2786,192 @@
     const knownStudentOptions = {{ student_picker_options | tojson }};
     const studentMemoRecordsByName = {{ student_memos | tojson }};
     const previousDayTaskRecordsByName = {{ previous_day_tasks | tojson }};
+
+    function createAttemptHistoryElement(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined && text !== null) node.textContent = String(text);
+      return node;
+    }
+
+    function formatAttemptHistoryAccuracy(value) {
+      return Number(value || 0).toFixed(1).replace(/\.0$/, '');
+    }
+
+    function formatAttemptHistoryScore(attempt) {
+      if (!attempt) return '旧版未留存';
+      const ielts = attempt.ielts_score !== null && attempt.ielts_score !== undefined
+        ? ` · IELTS ${attempt.ielts_score}`
+        : '';
+      return `${Number(attempt.correct_count || 0)}/${Number(attempt.total_count || 0)} · ${formatAttemptHistoryAccuracy(attempt.accuracy)}%${ielts}`;
+    }
+
+    function formatAttemptHistoryTime(value) {
+      if (!value) return '';
+      const raw = String(value);
+      const normalized = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw) ? raw : `${raw}Z`;
+      const date = new Date(normalized);
+      if (Number.isNaN(date.getTime())) return raw.replace('T', ' ').slice(0, 16);
+      return new Intl.DateTimeFormat('zh-CN', {
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).format(date);
+    }
+
+    function formatAttemptHistoryAnswer(value, emptyText = '未作答') {
+      if (Array.isArray(value)) return value.join('、') || emptyText;
+      if (value && typeof value === 'object') return JSON.stringify(value);
+      if (value === null || value === undefined || value === '') return emptyText;
+      return String(value);
+    }
+
+    function appendAttemptHistoryMessage(container, className, text) {
+      container.appendChild(createAttemptHistoryElement('p', className, text));
+    }
+
+    function renderStaffAttemptHistory(payload) {
+      const content = document.getElementById('attemptHistoryContent');
+      const subtitle = document.getElementById('attemptHistorySubtitle');
+      const task = payload.task || {};
+      const overview = payload.attempt_overview || {};
+      content.replaceChildren();
+      subtitle.textContent = `${task.student_name || '学生'} · ${task.kind_label || '练习'} · ${task.title || '练习记录'}`;
+
+      const summary = createAttemptHistoryElement('div', 'attempt-history-summary');
+      [
+        ['首答正确率', formatAttemptHistoryScore(overview.first_attempt)],
+        ['最后一次正确率', formatAttemptHistoryScore(overview.latest_attempt)],
+        ['作答次数', `共 ${Number(overview.attempt_count || 1)} 次`],
+      ].forEach(([label, value]) => {
+        const metric = createAttemptHistoryElement('div', 'attempt-history-metric');
+        metric.appendChild(createAttemptHistoryElement('span', 'attempt-history-metric__label', label));
+        metric.appendChild(createAttemptHistoryElement('span', 'attempt-history-metric__value', value));
+        summary.appendChild(metric);
+      });
+      content.appendChild(summary);
+
+      if (overview.score_delta !== null && overview.score_delta !== undefined) {
+        const delta = Number(overview.score_delta);
+        appendAttemptHistoryMessage(
+          content,
+          'attempt-history-insight',
+          `末答比首答 ${delta >= 0 ? '+' : ''}${formatAttemptHistoryAccuracy(delta)} 个百分点`,
+        );
+      }
+      const legacyMissing = Number(overview.legacy_missing_attempts || 0);
+      if (legacyMissing > 0) {
+        appendAttemptHistoryMessage(
+          content,
+          'attempt-history-notice',
+          `其中 ${legacyMissing} 次旧版作答只留下次数，答案和分数“旧版未留存”，无法还原。`,
+        );
+      } else if (Number(overview.attempt_count || 1) > 1) {
+        appendAttemptHistoryMessage(
+          content,
+          'attempt-history-notice',
+          '首答反映独立完成水平；最后一次反映反复练习后的结果。',
+        );
+      }
+      appendAttemptHistoryMessage(
+        content,
+        'attempt-history-disclaimer',
+        '成绩变化用于观察学习过程。',
+      );
+
+      const list = createAttemptHistoryElement('div', 'attempt-history-list');
+      (overview.attempts || []).forEach(attempt => {
+        const entry = createAttemptHistoryElement(
+          'section',
+          `attempt-history-entry${attempt.is_first ? ' is-first' : ''}`,
+        );
+        const labels = [];
+        if (attempt.is_first) labels.push('首答');
+        if (attempt.is_latest && !attempt.is_first) labels.push('最后一次');
+        const head = createAttemptHistoryElement('div', 'attempt-history-entry__head');
+        head.appendChild(createAttemptHistoryElement(
+          'span',
+          'attempt-history-entry__title',
+          `第 ${Number(attempt.attempt_number || 1)} 次${labels.length ? `（${labels.join('、')}）` : ''}`,
+        ));
+        head.appendChild(createAttemptHistoryElement('span', 'attempt-history-entry__score', formatAttemptHistoryScore(attempt)));
+        entry.appendChild(head);
+
+        const wrongCount = Number(attempt.wrong_count || 0);
+        const meta = createAttemptHistoryElement('div', 'attempt-history-entry__meta');
+        meta.appendChild(createAttemptHistoryElement('span', '', formatAttemptHistoryTime(attempt.submitted_at) || '提交时间未留存'));
+        meta.appendChild(createAttemptHistoryElement(
+          'span',
+          `attempt-history-entry__wrong${wrongCount > 0 ? ' has-wrong' : ''}`,
+          wrongCount > 0 ? `错 ${wrongCount} 题` : '全部答对',
+        ));
+        entry.appendChild(meta);
+
+        const wrongDetails = attempt.wrong_details || [];
+        if (wrongDetails.length) {
+          const wrongList = createAttemptHistoryElement('div', 'attempt-wrong-list');
+          wrongDetails.forEach(wrong => {
+            const wrongCard = createAttemptHistoryElement('div', 'attempt-wrong');
+            const wrongHead = createAttemptHistoryElement('div', 'attempt-wrong__head');
+            wrongHead.appendChild(createAttemptHistoryElement('span', 'attempt-wrong__question', wrong.question_label || '错题'));
+            wrongHead.appendChild(createAttemptHistoryElement('span', '', `${Number(wrong.awarded || 0)} / ${Number(wrong.marks || 1)} 分`));
+            wrongCard.appendChild(wrongHead);
+            [
+              ['学生答案', formatAttemptHistoryAnswer(wrong.student_answer), 'is-student'],
+              ['正确答案', formatAttemptHistoryAnswer(wrong.correct_answer, '暂无参考答案'), 'is-correct'],
+            ].forEach(([label, value, valueClass]) => {
+              const answer = createAttemptHistoryElement('div', 'attempt-wrong__answer');
+              answer.appendChild(createAttemptHistoryElement('span', 'attempt-wrong__answer-label', label));
+              answer.appendChild(createAttemptHistoryElement('span', `attempt-wrong__answer-value ${valueClass}`, value));
+              wrongCard.appendChild(answer);
+            });
+            wrongList.appendChild(wrongCard);
+          });
+          entry.appendChild(wrongList);
+        } else {
+          entry.appendChild(createAttemptHistoryElement('p', 'attempt-history-all-correct', '本次没有错题'));
+        }
+        list.appendChild(entry);
+      });
+      content.appendChild(list);
+    }
+
+    function closeStaffAttemptHistory() {
+      document.getElementById('attemptHistoryModal')?.classList.add('hidden');
+    }
+
+    async function openStaffAttemptHistory(taskId) {
+      const modal = document.getElementById('attemptHistoryModal');
+      const content = document.getElementById('attemptHistoryContent');
+      const subtitle = document.getElementById('attemptHistorySubtitle');
+      modal.classList.remove('hidden');
+      subtitle.textContent = '正在读取作答记录';
+      content.replaceChildren(createAttemptHistoryElement('div', 'attempt-history-state', '正在加载...'));
+      try {
+        const response = await fetch(`/api/staff/tasks/${encodeURIComponent(taskId)}/attempt-history`, {
+          headers: { Accept: 'application/json' },
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) throw new Error(payload.error || 'request_failed');
+        renderStaffAttemptHistory(payload);
+      } catch (error) {
+        const message = error && error.message === 'forbidden_task'
+          ? '当前账号无权查看该学生的作答记录。'
+          : '作答记录加载失败，请刷新页面后重试。';
+        content.replaceChildren(createAttemptHistoryElement('div', 'attempt-history-state', message));
+      }
+    }
+
+    document.querySelectorAll('.btn-attempt-history').forEach(button => {
+      button.addEventListener('click', () => openStaffAttemptHistory(button.dataset.taskId));
+    });
+    document.getElementById('attemptHistoryClose')?.addEventListener('click', closeStaffAttemptHistory);
+    document.getElementById('attemptHistoryBackdrop')?.addEventListener('click', closeStaffAttemptHistory);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeStaffAttemptHistory();
+    });
 
     function setupPreviousDayTasks() {
       const list = document.getElementById('previousDayTaskList');

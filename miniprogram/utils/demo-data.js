@@ -169,6 +169,24 @@ const buildParentTaskDetail = (taskId) => {
         accuracy: 88,
         summary_text: '共 4 题 · 已答 4 · 正确 3 · 错误 1',
         summary: { assigned_total: 4, attempted_total: 4, correct_total: 3, wrong_total: 1, pending_total: 0, mastered_total: 0 },
+        attempt_overview: {
+            attempt_count: 2,
+            retained_attempt_count: 2,
+            legacy_missing_attempts: 0,
+            first_attempt: { attempt_number: 1, correct_count: 2, total_count: 4, wrong_count: 2, accuracy: 50, ielts_score: null, submitted_at: `${formatDate(addDays(today, -1))}T08:10:00`, is_first: true, is_latest: false },
+            latest_attempt: { attempt_number: 2, correct_count: 3, total_count: 4, wrong_count: 1, accuracy: 75, ielts_score: null, submitted_at: `${formatDate(today)}T08:25:00`, is_first: false, is_latest: true },
+            best_accuracy: 75,
+            score_delta: 25,
+            attempts: [
+                { attempt_number: 1, correct_count: 2, total_count: 4, wrong_count: 2, accuracy: 50, ielts_score: null, submitted_at: `${formatDate(addDays(today, -1))}T08:10:00`, is_first: true, is_latest: false, wrong_details: [
+                    { question_label: 'Q2', student_answer: '2:15', correct_answer: '2:30', awarded: 0, marks: 1, status: 'incorrect', status_label: '错误' },
+                    { question_label: 'Q4', student_answer: 'Tuesday', correct_answer: 'Thursday', awarded: 0, marks: 1, status: 'incorrect', status_label: '错误' }
+                ] },
+                { attempt_number: 2, correct_count: 3, total_count: 4, wrong_count: 1, accuracy: 75, ielts_score: null, submitted_at: `${formatDate(today)}T08:25:00`, is_first: false, is_latest: true, wrong_details: [
+                    { question_label: 'Q2', student_answer: '2:15', correct_answer: '2:30', awarded: 0, marks: 1, status: 'incorrect', status_label: '错误' }
+                ] }
+            ]
+        },
         teacher_note: '注意复数形式和数字信息。',
         student_note: '',
         evidence: { image: [], audio: [], doc: [], other: [] },

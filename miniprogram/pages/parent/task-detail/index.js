@@ -7,6 +7,81 @@ const decodeParam = (value) => {
     return decodeURIComponent(value)
 }
 
+const compactAccuracy = (value) => Number(value || 0).toFixed(1).replace(/\.0$/, '')
+
+const formatAnswerValue = (value, emptyText = '未作答') => {
+    if (Array.isArray(value)) return value.join('、') || emptyText
+    if (value && typeof value === 'object') return JSON.stringify(value)
+    if (value === null || value === undefined || value === '') return emptyText
+    return String(value)
+}
+
+const attemptScoreText = (attempt) => {
+    if (!attempt) return '旧版未留存'
+    const ielts = attempt.ielts_score !== null && attempt.ielts_score !== undefined
+        ? ` · IELTS ${attempt.ielts_score}`
+        : ''
+    return `${Number(attempt.correct_count || 0)}/${Number(attempt.total_count || 0)} · ${compactAccuracy(attempt.accuracy)}%${ielts}`
+}
+
+const formatAttemptTime = (value) => {
+    if (!value) return ''
+    const raw = String(value)
+    const normalized = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw) ? raw : `${raw}Z`
+    const date = new Date(normalized)
+    if (Number.isNaN(date.getTime())) return raw.replace('T', ' ').slice(0, 16)
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const hour = String(date.getHours()).padStart(2, '0')
+    const minute = String(date.getMinutes()).padStart(2, '0')
+    return `${month}-${day} ${hour}:${minute}`
+}
+
+const normalizeAttemptOverview = (source) => {
+    if (!source || !source.latest_attempt) return null
+    const attemptCount = Number(source.attempt_count || 1)
+    const legacyMissing = Number(source.legacy_missing_attempts || 0)
+    const delta = source.score_delta
+    const attempts = (source.attempts || []).map((attempt, attemptIndex) => {
+        const labels = []
+        if (attempt.is_first) labels.push('首答')
+        if (attempt.is_latest && !attempt.is_first) labels.push('最后一次')
+        const wrongDetails = (attempt.wrong_details || []).map((detail, detailIndex) => ({
+            ...detail,
+            id: `${attempt.attempt_number || attemptIndex + 1}-${detailIndex}`,
+            studentAnswerText: formatAnswerValue(detail.student_answer),
+            correctAnswerText: formatAnswerValue(detail.correct_answer, '暂无参考答案')
+        }))
+        return {
+            ...attempt,
+            id: String(attempt.attempt_number || attemptIndex + 1),
+            titleText: `第 ${attempt.attempt_number || attemptIndex + 1} 次${labels.length ? `（${labels.join('、')}）` : ''}`,
+            scoreText: attemptScoreText(attempt),
+            timeText: formatAttemptTime(attempt.submitted_at),
+            wrongSummary: Number(attempt.wrong_count || 0) > 0
+                ? `错 ${Number(attempt.wrong_count || 0)} 题`
+                : '全部答对',
+            wrongDetails
+        }
+    })
+    return {
+        ...source,
+        firstScoreText: attemptScoreText(source.first_attempt),
+        latestScoreText: attemptScoreText(source.latest_attempt),
+        attemptCountText: `共 ${attemptCount} 次`,
+        deltaText: delta === null || delta === undefined
+            ? ''
+            : `末答比首答 ${Number(delta) >= 0 ? '+' : ''}${compactAccuracy(delta)} 个百分点`,
+        noticeText: legacyMissing > 0
+            ? `其中 ${legacyMissing} 次旧版作答只留下次数，答案和分数“旧版未留存”，无法还原。`
+            : attemptCount > 1
+            ? '首答反映独立完成水平；最后一次反映反复练习后的结果。'
+            : '',
+        attempts,
+        canExpand: attempts.length > 0
+    }
+}
+
 Page({
     data: {
         taskId: '',
@@ -17,7 +92,8 @@ Page({
         activeFilter: 'all',
         filters: [],
         visibleItems: [],
-        summaryMetrics: []
+        summaryMetrics: [],
+        attemptHistoryExpanded: false
     },
 
     onLoad(options) {
@@ -82,6 +158,7 @@ Page({
         }))
         detail.showAccuracy = detail.accuracy !== null && detail.accuracy !== undefined
         detail.evidence = this.normalizeEvidence(detail.evidence)
+        detail.attemptOverview = normalizeAttemptOverview(detail.attempt_overview)
         const summary = detail.summary || {}
         const fourthMetric = Number(summary.pending_total || 0) > 0
             ? { label: '待批改', value: summary.pending_total || 0 }
@@ -107,6 +184,7 @@ Page({
             summaryMetrics,
             activeFilter: 'all',
             visibleItems: detail.items,
+            attemptHistoryExpanded: false,
             errorMessage: '',
             loading: false
         })
@@ -157,6 +235,10 @@ Page({
             activeFilter: key,
             visibleItems: key === 'all' ? items : items.filter(item => key === 'wrong' ? isWrong(item) : item.result_status === key)
         })
+    },
+
+    toggleAttemptHistory() {
+        this.setData({ attemptHistoryExpanded: !this.data.attemptHistoryExpanded })
     },
 
     previewImage(e) {

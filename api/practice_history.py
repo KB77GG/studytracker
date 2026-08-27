@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from urllib.parse import quote, urlencode
 
 from flask import Blueprint, jsonify, request, session
-from flask_login import current_user
+from flask_login import current_user, login_required
 from sqlalchemy import func
 
 from models import (
@@ -21,6 +21,10 @@ from models import (
     Task,
     User,
     db,
+)
+from services.practice_attempt_reporting import (
+    build_detailed_attempt_history,
+    load_attempts_by_task,
 )
 
 practice_history_bp = Blueprint("practice_history", __name__)
@@ -529,5 +533,51 @@ def practice_history_attempt(attempt_id: int):
             "ok": True,
             "kind": attempt.kind,
             "submission": _serialize_attempt_submission(attempt),
+        }
+    )
+
+
+@practice_history_bp.get("/api/staff/tasks/<int:task_id>/attempt-history")
+@login_required
+def staff_task_attempt_history(task_id: int):
+    """Return one IELTS task's retained history to authorized web staff."""
+    task = db.session.get(Task, task_id)
+    if not task:
+        return jsonify({"ok": False, "error": "task_not_found"}), 404
+
+    role = getattr(current_user, "role", None)
+    if not getattr(current_user, "is_active", False) or role not in {
+        User.ROLE_ADMIN,
+        User.ROLE_ASSISTANT,
+        User.ROLE_TEACHER,
+    }:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    if role == User.ROLE_TEACHER and int(task.created_by or 0) != int(current_user.id):
+        return jsonify({"ok": False, "error": "forbidden_task"}), 403
+
+    submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
+    kind = "listening"
+    if not submission:
+        submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
+        kind = "reading"
+    if not submission:
+        return jsonify({"ok": False, "error": "attempt_history_not_found"}), 404
+
+    snapshots = load_attempts_by_task([task.id]).get(task.id, [])
+    return jsonify(
+        {
+            "ok": True,
+            "task": {
+                "id": task.id,
+                "student_name": task.student_name,
+                "title": submission.test_title or task.detail or "练习记录",
+                "kind": kind,
+                "kind_label": "听力" if kind == "listening" else "阅读",
+            },
+            "attempt_overview": build_detailed_attempt_history(
+                submission,
+                snapshots,
+                kind=kind,
+            ),
         }
     )

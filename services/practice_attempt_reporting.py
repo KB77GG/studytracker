@@ -1,4 +1,4 @@
-"""Build teacher-facing first/latest attempt summaries for IELTS practice."""
+"""Build permission-neutral first/latest attempt summaries for IELTS practice."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def _json_list(value: str | None) -> list:
 def load_attempts_by_task(
     task_ids: Iterable[int],
 ) -> dict[int, list[PracticeSubmissionAttempt]]:
-    """Load immutable snapshots in one query for a teacher homework list."""
+    """Load immutable snapshots in one query for authorized practice reports."""
     normalized_ids = sorted({int(task_id) for task_id in task_ids if task_id})
     if not normalized_ids:
         return {}
@@ -63,10 +63,13 @@ def retained_attempt_records(
 
 
 def _attempt_summary(number: int, row, *, latest_number: int) -> dict:
+    correct_count = int(row.correct_count or 0)
+    total_count = int(row.total_count or 0)
     return {
         "attempt_number": number,
-        "correct_count": int(row.correct_count or 0),
-        "total_count": int(row.total_count or 0),
+        "correct_count": correct_count,
+        "total_count": total_count,
+        "wrong_count": max(0, total_count - correct_count),
         "accuracy": round(float(row.accuracy or 0.0), 1),
         "ielts_score": row.ielts_score,
         "duration_seconds": int(row.duration_seconds or 0),
@@ -120,3 +123,80 @@ def build_attempt_overview(
         "score_delta": score_delta,
         "attempts": attempts,
     }
+
+
+def attempt_wrong_answer_details(row) -> list[dict]:
+    """Serialize retained wrong-answer rows without exposing unrelated data."""
+    details = []
+    for index, result in enumerate(_json_list(row.results_json)):
+        if not isinstance(result, dict):
+            continue
+        status = result.get("status")
+        if status == "correct" or (status is None and result.get("correct") is True):
+            continue
+
+        raw_numbers = result.get("numbers") or []
+        if not isinstance(raw_numbers, list):
+            raw_numbers = [raw_numbers]
+        numbers = [value for value in raw_numbers if value not in (None, "")]
+        raw_label = result.get("q")
+        if numbers:
+            question_label = "、".join(f"Q{number}" for number in numbers)
+        elif raw_label not in (None, ""):
+            label = str(raw_label)
+            question_label = label if label.upper().startswith("Q") else f"Q{label}"
+        else:
+            question_label = f"Q{index + 1}"
+
+        awarded = result.get("awarded") or 0
+        marks = result.get("marks") or 1
+        normalized_status = status or (
+            "correct" if result.get("correct") is True else "incorrect"
+        )
+        details.append(
+            {
+                "question_label": question_label,
+                "student_answer": (
+                    result.get("value")
+                    if result.get("value") not in (None, "")
+                    else "未作答"
+                ),
+                "correct_answer": result.get("answer") or "",
+                "awarded": awarded,
+                "marks": marks,
+                "status": normalized_status,
+                "status_label": result.get("status_label")
+                or (
+                    f"部分正确 {awarded}/{marks}"
+                    if normalized_status == "partial" or awarded
+                    else "错误"
+                ),
+            }
+        )
+    return details
+
+
+def build_detailed_attempt_history(
+    submission,
+    snapshots: Iterable[PracticeSubmissionAttempt],
+    *,
+    kind: str,
+) -> dict:
+    """Build one permission-neutral history payload for authorized viewers."""
+    overview = build_attempt_overview(submission, snapshots, kind=kind)
+    summaries = {
+        int(attempt["attempt_number"]): attempt for attempt in overview["attempts"]
+    }
+    detailed_attempts = []
+    for attempt_number, row in retained_attempt_records(
+        submission,
+        snapshots,
+        kind=kind,
+    ):
+        summary = dict(summaries.get(attempt_number) or {})
+        if not summary:
+            continue
+        summary["wrong_details"] = attempt_wrong_answer_details(row)
+        detailed_attempts.append(summary)
+    overview["attempts"] = detailed_attempts
+    return overview

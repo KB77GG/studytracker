@@ -8,6 +8,7 @@
 
 .hero-card,
 .summary-card,
+.attempt-overview-card,
 .note-card,
 .detail-card,
 .submission-card,
@@ -135,6 +136,223 @@
 
 .summary-card {
   padding: 26rpx 16rpx 22rpx;
+}
+
+.attempt-overview-card {
+  padding: 26rpx;
+}
+
+.attempt-card-heading,
+.attempt-history-head,
+.attempt-history-meta,
+.attempt-wrong-head,
+.attempt-answer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.attempt-card-title,
+.attempt-card-subtitle,
+.attempt-summary-label,
+.attempt-summary-value,
+.attempt-delta,
+.attempt-notice,
+.attempt-disclaimer,
+.attempt-history-title,
+.attempt-history-score,
+.attempt-all-correct {
+  display: block;
+}
+
+.attempt-card-title {
+  color: #263238;
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.attempt-card-subtitle {
+  margin-top: 8rpx;
+  color: #7d8b90;
+  font-size: 21rpx;
+}
+
+.attempt-kind-tag {
+  flex: none;
+  padding: 7rpx 14rpx;
+  border-radius: 999rpx;
+  background: #eaf6f4;
+  color: #20756f;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.attempt-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 24rpx;
+}
+
+.attempt-summary-cell {
+  min-width: 0;
+  padding: 18rpx 12rpx;
+  border-radius: 14rpx;
+  background: #f4f8f7;
+  text-align: center;
+}
+
+.attempt-summary-label {
+  color: #829095;
+  font-size: 19rpx;
+}
+
+.attempt-summary-value {
+  margin-top: 9rpx;
+  color: #20756f;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.attempt-summary-value.first {
+  color: #3f5962;
+}
+
+.attempt-delta {
+  margin-top: 18rpx;
+  color: #20756f;
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.attempt-notice,
+.attempt-disclaimer {
+  margin-top: 12rpx;
+  padding: 14rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 21rpx;
+  line-height: 1.55;
+}
+
+.attempt-notice {
+  background: #fff8e8;
+  color: #8a641b;
+}
+
+.attempt-disclaimer {
+  background: #f3f5f6;
+  color: #68777d;
+}
+
+.attempt-toggle {
+  margin-top: 18rpx;
+  border: 1rpx solid #20756f;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #20756f;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.attempt-history-list {
+  margin-top: 20rpx;
+}
+
+.attempt-history-card {
+  margin-top: 16rpx;
+  padding: 20rpx;
+  border: 1rpx solid #e3ebea;
+  border-radius: 16rpx;
+  background: #fbfcfc;
+}
+
+.attempt-history-card.first {
+  border-color: #bcdcd8;
+  background: #f4fbfa;
+}
+
+.attempt-history-title {
+  color: #34464c;
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.attempt-history-score {
+  color: #20756f;
+  font-size: 21rpx;
+  font-weight: 800;
+  text-align: right;
+}
+
+.attempt-history-meta {
+  margin-top: 10rpx;
+  color: #839096;
+  font-size: 20rpx;
+}
+
+.attempt-history-wrong.has-wrong {
+  color: #c14f4a;
+  font-weight: 700;
+}
+
+.attempt-wrong-list {
+  margin-top: 14rpx;
+}
+
+.attempt-wrong-card {
+  margin-top: 12rpx;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background: #fff;
+}
+
+.attempt-question-label,
+.attempt-question-score,
+.attempt-answer-label {
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.attempt-question-label {
+  color: #20756f;
+}
+
+.attempt-question-score,
+.attempt-answer-label {
+  color: #849196;
+}
+
+.attempt-answer-row {
+  align-items: flex-start;
+  margin-top: 12rpx;
+}
+
+.attempt-answer-label {
+  flex: none;
+}
+
+.attempt-answer-value {
+  color: #3a484e;
+  font-size: 21rpx;
+  font-weight: 700;
+  text-align: right;
+  word-break: break-all;
+}
+
+.attempt-answer-value.student {
+  color: #b4534d;
+}
+
+.attempt-answer-value.correct {
+  color: #2f8150;
+}
+
+.attempt-all-correct {
+  margin-top: 14rpx;
+  color: #2f8150;
+  font-size: 21rpx;
 }
 
 .summary-grid {

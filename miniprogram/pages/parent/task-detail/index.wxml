@@ -41,6 +41,69 @@
       </view>
     </view>
 
+    <view class="attempt-overview-card" wx:if="{{detail.attemptOverview}}">
+      <view class="attempt-card-heading">
+        <view>
+          <text class="attempt-card-title">能力变化与练习轨迹</text>
+          <text class="attempt-card-subtitle">区分独立完成水平与练习后的成绩</text>
+        </view>
+        <text class="attempt-kind-tag">{{detail.kind === 'listening_test' ? '听力' : '阅读'}}</text>
+      </view>
+      <view class="attempt-summary-grid">
+        <view class="attempt-summary-cell">
+          <text class="attempt-summary-label">首答正确率</text>
+          <text class="attempt-summary-value first">{{detail.attemptOverview.firstScoreText}}</text>
+        </view>
+        <view class="attempt-summary-cell">
+          <text class="attempt-summary-label">最后一次正确率</text>
+          <text class="attempt-summary-value">{{detail.attemptOverview.latestScoreText}}</text>
+        </view>
+        <view class="attempt-summary-cell">
+          <text class="attempt-summary-label">作答次数</text>
+          <text class="attempt-summary-value">{{detail.attemptOverview.attemptCountText}}</text>
+        </view>
+      </view>
+      <text class="attempt-delta" wx:if="{{detail.attemptOverview.deltaText}}">{{detail.attemptOverview.deltaText}}</text>
+      <text class="attempt-notice" wx:if="{{detail.attemptOverview.noticeText}}">{{detail.attemptOverview.noticeText}}</text>
+      <text class="attempt-disclaimer">成绩变化用于观察学习过程。</text>
+      <button
+        wx:if="{{detail.attemptOverview.canExpand}}"
+        class="attempt-toggle"
+        size="mini"
+        bindtap="toggleAttemptHistory"
+      >{{attemptHistoryExpanded ? '收起历次作答' : '查看历次提交、错题与答案'}}</button>
+
+      <view class="attempt-history-list" wx:if="{{attemptHistoryExpanded}}">
+        <view class="attempt-history-card {{attempt.is_first ? 'first' : ''}}" wx:for="{{detail.attemptOverview.attempts}}" wx:key="id" wx:for-item="attempt">
+          <view class="attempt-history-head">
+            <text class="attempt-history-title">{{attempt.titleText}}</text>
+            <text class="attempt-history-score">{{attempt.scoreText}}</text>
+          </view>
+          <view class="attempt-history-meta">
+            <text wx:if="{{attempt.timeText}}">提交 {{attempt.timeText}}</text>
+            <text class="attempt-history-wrong {{attempt.wrong_count > 0 ? 'has-wrong' : ''}}">{{attempt.wrongSummary}}</text>
+          </view>
+          <view class="attempt-wrong-list" wx:if="{{attempt.wrongDetails.length}}">
+            <view class="attempt-wrong-card" wx:for="{{attempt.wrongDetails}}" wx:key="id" wx:for-item="wrong">
+              <view class="attempt-wrong-head">
+                <text class="attempt-question-label">{{wrong.question_label}}</text>
+                <text class="attempt-question-score">{{wrong.awarded}} / {{wrong.marks}} 分</text>
+              </view>
+              <view class="attempt-answer-row">
+                <text class="attempt-answer-label">学生答案</text>
+                <text class="attempt-answer-value student">{{wrong.studentAnswerText}}</text>
+              </view>
+              <view class="attempt-answer-row">
+                <text class="attempt-answer-label">正确答案</text>
+                <text class="attempt-answer-value correct">{{wrong.correctAnswerText}}</text>
+              </view>
+            </view>
+          </view>
+          <text class="attempt-all-correct" wx:else>本次没有错题</text>
+        </view>
+      </view>
+    </view>
+
     <view class="note-card" wx:if="{{detail.teacher_note || detail.student_note}}">
       <view class="note-block" wx:if="{{detail.teacher_note}}">
         <text class="note-label">老师反馈</text>

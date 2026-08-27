@@ -65,6 +65,7 @@ from services.listening_training import (
 )
 from services.practice_attempt_reporting import (
     build_attempt_overview,
+    build_detailed_attempt_history,
     load_attempts_by_task,
     retained_attempt_records,
 )
@@ -3138,7 +3139,7 @@ def _parent_test_task_report(task, submission, kind, include_items):
     total = int(detail.get("total_count") or len(rows))
     correct = int(detail.get("correct_count") or 0)
     wrong = max(0, total - correct)
-    return {
+    report = {
         "kind": kind,
         "summary": {
             "assigned_total": total,
@@ -3152,6 +3153,15 @@ def _parent_test_task_report(task, submission, kind, include_items):
         "ielts_score": detail.get("ielts_score"),
         "attempt_count": detail.get("attempt_count"),
     }
+    if include_items:
+        history_kind = "listening" if kind == "listening_test" else "reading"
+        snapshots = load_attempts_by_task([task.id]).get(task.id, [])
+        report["attempt_overview"] = build_detailed_attempt_history(
+            submission,
+            snapshots,
+            kind=history_kind,
+        )
+    return report
 
 
 def _parent_generic_task_report(task):
