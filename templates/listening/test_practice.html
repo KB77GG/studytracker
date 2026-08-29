@@ -88,6 +88,56 @@ body {
 h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
 .meta { margin-top: 6px; color: var(--muted); font-size: 13px; }
 audio { width: 100%; display: block; }
+.simulation-audio-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 42px;
+  color: #334155;
+  font-size: 14px;
+}
+.simulation-audio-status__label { font-weight: 800; }
+.simulation-audio-status__volume {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.simulation-audio-status__volume input { width: 132px; }
+.simulation-audio-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, .58);
+}
+.simulation-audio-gate[hidden] { display: none; }
+.simulation-audio-gate__panel {
+  width: min(560px, 100%);
+  padding: 28px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+.simulation-audio-gate h2 { margin: 0 0 12px; font-size: 22px; }
+.simulation-audio-gate p { margin: 0 0 14px; color: #475569; line-height: 1.6; }
+.simulation-audio-gate__state { min-height: 24px; font-weight: 800; }
+.simulation-audio-gate__start {
+  min-width: 180px;
+  min-height: 44px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 4px;
+  background: #2563eb;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.simulation-audio-gate__start:disabled { background: #94a3b8; cursor: wait; }
 .page {
   max-width: 1280px;
   margin: 0 auto;
@@ -645,11 +695,12 @@ body.result-mode .transcript-panel { display: block; }
   .bottom-brand { display: none; }
 }
 </style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/practice_shell.css') }}">
 {% if exam_context %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
 {% endif %}
 </head>
-<body{% if exam_context %} class="exam-mode"{% endif %}>
+<body class="practice-shell-page{% if exam_context %} exam-mode{% endif %}">
 {% if exam_context %}
 <header class="exam-mode-shell">
   <div class="exam-mode-shell__left">
@@ -660,7 +711,7 @@ body.result-mode .transcript-panel { display: block; }
   <div class="exam-mode-shell__right">
     <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
-    <a class="exam-mode-shell__exit" href="{{ exam_context.exit_url }}">Exit</a>
+    <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
   </div>
 </header>
 <style>
@@ -673,6 +724,21 @@ body.exam-mode #templateSourceWarning,
 body.exam-mode #viewTabs { display: none; }
 body.exam-mode .submit-btn { display: none; }
 body.exam-mode .bottom-nav { padding-right: 220px; }
+body[data-experience-mode="simulation"] {
+  background: #f5f6f7;
+}
+body[data-experience-mode="simulation"] .layout,
+body[data-experience-mode="simulation"].result-mode .layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+body[data-experience-mode="simulation"] .card {
+  border-radius: 0;
+  box-shadow: none;
+}
+body[data-experience-mode="simulation"] .section-head::after,
+body[data-experience-mode="simulation"] .group::before {
+  display: none;
+}
 .exam-finish-btn {
   position: fixed; right: 24px; bottom: 18px; z-index: 50;
   background: #2563eb; color: #fff; border: none;
@@ -687,22 +753,50 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
 {% endif %}
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand-line">
+    <div class="brand-line practice-shell__heading">
+      <button class="practice-shell__back" type="button" data-practice-back data-capability="canShowPracticeBack">← 返回练习列表</button>
+      <button class="practice-shell__back" type="button" data-practice-module-exit data-capability="canShowPracticeBack">退出刷题</button>
       <div class="brand-mark" aria-hidden="true">
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
       </div>
-      <div>
+      <div class="practice-shell__title-block">
         <div class="crumb"><a href="{{ url_for('practice_library') }}">听力</a> / <a href="{{ url_for('listening_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
         <h1 id="practiceTitle">{{ test.title }}</h1>
-        <div class="meta" id="practiceMeta">
-          4 个 Section · 40 题
-          · <a class="back-link" href="{{ url_for('listening_test_index') }}">返回剑雅整套</a>
-        </div>
+        <div class="meta" id="practiceMeta">4 个 Section · 40 题</div>
       </div>
     </div>
+    <div class="practice-shell__facts" aria-label="练习状态" data-capability="showPracticeSyncStatus">
+      <span class="practice-shell__fact" id="practiceShellSection">Section 1</span>
+      <span class="practice-shell__fact" id="practiceShellMode">{{ '模考' if exam_context else '练习' }}</span>
+      <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+      <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
+    </div>
+    {% if exam_context %}
+    <div class="simulation-audio-status" aria-live="polite">
+      <span class="simulation-audio-status__label" id="simulationAudioState">等待音频检查</span>
+      <span id="simulationAudioPart">Part 1</span>
+      <label class="simulation-audio-status__volume" for="simulationAudioVolume">
+        音量
+        <input id="simulationAudioVolume" type="range" min="0" max="1" step="0.05" value="0.8">
+      </label>
+    </div>
+    <audio id="audio" preload="metadata" playsinline></audio>
+    {% else %}
     <audio id="audio" controls preload="metadata"></audio>
+    {% endif %}
   </div>
 </header>
+
+{% if exam_context %}
+<section class="simulation-audio-gate" id="simulationAudioGate" aria-labelledby="simulationAudioGateTitle">
+  <div class="simulation-audio-gate__panel">
+    <h2 id="simulationAudioGateTitle">Listening 音频检查</h2>
+    <p>系统会先确认本次任务全部 Part 的音频地址、metadata 和时长。正式开始后录音只播放一次，不能暂停、拖动或重听。</p>
+    <p class="simulation-audio-gate__state" id="simulationAudioGateState" role="status">正在检查音频资源…</p>
+    <button class="simulation-audio-gate__start" id="simulationAudioStart" type="button" disabled>请稍候</button>
+  </div>
+</section>
+{% endif %}
 
 <div class="template-source-warning" id="templateSourceWarning">
   当前打开的是 HTML 模板源文件，题目数据不会注入。请通过 Flask 路由访问：/listening/test/ielts20_test1。
@@ -711,8 +805,8 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
 <main class="page">
   {% set nav_subject = 'listening' %}
   {% set nav_active = 'tests' %}
-  {% include "practice/_nav.html" %}
-  <nav class="tabs" id="viewTabs" aria-label="练习视图">
+  <div data-capability="canShowPracticeNavigation">{% include "practice/_nav.html" %}</div>
+  <nav class="tabs" id="viewTabs" aria-label="练习视图" data-capability="canUseTrainingViews">
     <button class="tab active" type="button" data-view="practice">题目练习</button>
     <button class="tab" type="button" data-view="dictation">精听</button>
     <button class="tab" type="button" data-view="analysis">解析</button>
@@ -720,30 +814,60 @@ body.exam-mode .bottom-nav { padding-right: 220px; }
   </nav>
   <nav class="tabs" id="sectionTabs" aria-label="Section"></nav>
   <div class="view-panel active" id="practiceView">
+    {% if not exam_context %}
+    <section class="review-summary" id="reviewSummary" aria-label="复盘概览"></section>
+    <div class="review-controls" id="reviewControls">
+      <button type="button" data-review-action="current">当前题解析</button>
+      <button type="button" data-review-action="expand">展开全部</button>
+      <button type="button" data-review-action="wrong">只看错题</button>
+    </div>
+    {% endif %}
     <div class="layout">
-      <aside class="card transcript-panel" id="transcriptPanel" data-hl-root="listening-transcript"></aside>
+      {% if not exam_context %}
+      <aside class="card transcript-panel" id="transcriptPanel" data-hl-root="listening-transcript" data-capability="canShowTranscript"></aside>
+      {% endif %}
       <div id="sectionsRoot" data-hl-root="listening-questions"></div>
-      <aside class="card side">
+      {% if not exam_context %}
+      <aside class="card side" data-capability="showPracticeScorePanel">
         <h3 id="scorePanelTitle">整套判分</h3>
         <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
         <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
         <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
-        <button class="submit-btn" id="submitBtn">提交并判分</button>
-        <div class="result-box" id="resultBox">填写后可按 IELTS 听力 40 题查看得分。</div>
+        <button class="submit-btn" id="submitBtn" data-capability="canSubmitForScoring">提交并判分</button>
+        <div class="result-box" id="resultBox" data-capability="canShowCorrectness">填写后可按 IELTS 听力 40 题查看得分。</div>
       </aside>
+      {% endif %}
     </div>
   </div>
-  <section class="view-panel card wide-card" id="dictationView"></section>
-  <section class="view-panel card wide-card" id="analysisView"></section>
-  <section class="view-panel card wide-card" id="transcriptView" data-hl-root="listening-transcript-full"></section>
+  {% if not exam_context %}
+  <section class="view-panel card wide-card" id="dictationView" data-capability="canUseTrainingViews"></section>
+  <section class="view-panel card wide-card" id="analysisView" data-capability="canShowAnalysis"></section>
+  <section class="view-panel card wide-card" id="transcriptView" data-hl-root="listening-transcript-full" data-capability="canShowTranscript"></section>
+  {% endif %}
 </main>
 
 <footer class="bottom-nav">
   <div class="bottom-inner">
-    <div class="bottom-brand">睿然国际教育</div>
-    <div class="question-nav" id="questionNav"></div>
+    <div class="bottom-brand" data-capability="canShowPracticeNavigation">睿然国际教育</div>
+    <div class="practice-bottom-nav">
+      <button class="practice-bottom-nav__step" type="button" id="previousQuestion">上一题</button>
+      <button class="practice-bottom-nav__step practice-bottom-nav__flag" type="button" id="toggleQuestionFlag" aria-pressed="false" data-capability="canFlagQuestions">待回看</button>
+      <div class="question-nav" id="questionNav"></div>
+      <button class="practice-bottom-nav__step" type="button" id="nextQuestion">下一题</button>
+    </div>
   </div>
 </footer>
+
+<dialog class="practice-exit-dialog" id="practiceExitDialog">
+  <div class="practice-exit-dialog__body">
+    <h2>退出并保存进度？</h2>
+    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
+  </div>
+  <div class="practice-exit-dialog__actions">
+    <button type="button" data-practice-exit-cancel>继续答题</button>
+    <button type="button" data-practice-exit-confirm>退出并保存</button>
+  </div>
+</dialog>
 
 <script>
 if (window.location.protocol === 'file:') {
@@ -754,9 +878,26 @@ if (window.location.protocol === 'file:') {
 
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_modes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/simulation_audio.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_renderers.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
+const practiceContext = {{ practice_context|default(none)|tojson }};
+const persistenceContext = examContext || practiceContext;
+let experienceMode = PracticeModes.resolve(examContext
+  ? { simulationMode: true }
+  : { practiceMode: true });
+let experienceCapabilities = PracticeModes.capabilities(experienceMode);
+
+function setExperienceMode(mode) {
+  experienceMode = PracticeModes.resolve(mode);
+  experienceCapabilities = PracticeModes.apply(document, experienceMode);
+  return experienceCapabilities;
+}
 const listeningTaskId = pageParams.get('task_id') || '';
 const listeningTaskToken = pageParams.get('token') || '';
 const historyAttemptId = pageParams.get('history_attempt') || '';
@@ -775,14 +916,27 @@ const storageScope = assignedSectionNumber ? `section_${assignedSectionNumber}` 
 const practiceStorageOwner = localStorage.getItem('listening_student') || 'guest';
 const storageKey = examContext
   ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
+  : practiceContext
+    ? `question_type_answers_${practiceContext.task_id}_${test.id}`
   : `listening_test_answers_${test.id}_${storageScope}_${practiceStorageOwner}`;
 const noteStorageKey = examContext
   ? `mock_exam_notes_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
   : `listening_test_error_notes_${test.id}_${storageScope}_${practiceStorageOwner}`;
+const flagStorageKey = `${storageKey}:flags`;
+let flaggedQuestions = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem(flagStorageKey) || '[]').map(String)); }
+  catch (_error) { return new Set(); }
+})();
 const practiceStartedAt = Date.now();
 let activeSectionIndex = 0;
 let activeView = 'practice';
 let currentTranscriptKey = '';
+let currentQuestionId = '';
+let latestResults = null;
+let practiceShellController = null;
+let simulationAudioPlaylist = null;
+let simulationAudioResources = [];
+window.__simulationAudioComplete = false;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -845,6 +999,7 @@ function formatClock(seconds) {
 }
 
 function seekTo(sectionIndex, seconds) {
+  if (!experienceCapabilities.canSeekAudio) return;
   switchSection(sectionIndex, false);
   const target = Number(seconds || 0);
   const applySeek = () => {
@@ -930,6 +1085,11 @@ function allQuestions() {
   );
 }
 
+function resultIds(row) {
+  const value = row?.ids ?? row?.id ?? '';
+  return (Array.isArray(value) ? value : String(value).split(',')).map(String).filter(Boolean);
+}
+
 function inputName(question) {
   return `q_${question.id || question.number}`;
 }
@@ -945,7 +1105,12 @@ function getNotes() {
 function saveNote(questionId, value) {
   const notes = getNotes();
   notes[questionId] = value;
-  localStorage.setItem(noteStorageKey, JSON.stringify(notes));
+  try {
+    localStorage.setItem(noteStorageKey, JSON.stringify(notes));
+    practiceShellController?.markDirty();
+  } catch (_error) {
+    practiceShellController?.setStatus('保存失败，点击重试', 'error');
+  }
 }
 
 function toggleNote(questionId) {
@@ -957,13 +1122,14 @@ function toggleNote(questionId) {
 }
 
 function answerTools(question, sectionIndex) {
+  if (experienceCapabilities.simulationMode || !experienceCapabilities.canShowCorrectness) return '';
   const id = escapeHtml(question.id || question.number);
   const saved = escapeHtml(getNotes()[question.id || question.number] || '');
   const seek = question.start
-    ? `<button class="answer-action" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})">定位 ${formatClock(question.start)}</button>`
+    ? `<button class="answer-action" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})" data-capability="canSeekAudio">定位 ${formatClock(question.start)}</button>`
     : '';
   return `
-    <div class="answer-note">
+    <div class="answer-note" data-capability="canShowCorrectness">
       <span class="answer-pill">
         Q${escapeHtml(question.number)} 答案：<strong>${escapeHtml(question.answer || '')}</strong>
         ${seek}
@@ -974,6 +1140,14 @@ function answerTools(question, sectionIndex) {
       </div>
     </div>
   `;
+}
+
+function reviewCard(question, result = null, value = '') {
+  if (experienceCapabilities.simulationMode) return '';
+  if (!experienceCapabilities.canShowCorrectness) {
+    return `<div data-review-slot="${escapeHtml(question.id || question.number)}"></div>`;
+  }
+  return PracticeRenderers.renderReviewCard(question, result, value);
 }
 
 function optionBank(group) {
@@ -1015,6 +1189,7 @@ function renderTable(group, sectionIndex, context) {
 }
 
 function isCombinedMulti(group) {
+  if (group.response_layout === 'combined_multi') return true;
   if (group.type !== 2) return false;
   const options = group.collect_option?.list || [];
   const questions = group.questions || [];
@@ -1028,7 +1203,7 @@ function renderCombinedMulti(group) {
   const answer = escapeHtml(questions[0]?.answer || '');
   const ids = questions.map(question => question.id || question.number).join(',');
   const numbers = questions.map(question => question.number).join(',');
-  const maxSelections = questions.length;
+  const maxSelections = Number(group.max_selections || questions.length);
   const hintId = `selection_hint_${ids.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
   return `
     <div class="answer-unit" data-kind="checkbox-set" data-answer="${answer}" data-marks="${questions.length}" data-max-selections="${maxSelections}" data-id="${escapeHtml(ids)}" data-q="${escapeHtml(numbers)}" aria-describedby="${hintId}">
@@ -1047,11 +1222,12 @@ function renderCombinedMulti(group) {
 function controlForQuestion(question, sectionIndex, group = {}, inline = false) {
   const answer = escapeHtml(question.answer || '');
   const qn = escapeHtml(question.number);
-  const baseAttrs = `data-q="${qn}" data-answer="${answer}" data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}" aria-label="Question ${qn} answer"`;
+  const answerAttr = question.answer === undefined ? '' : ` data-answer="${answer}"`;
+  const baseAttrs = `data-q="${qn}"${answerAttr} data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}" aria-label="Question ${qn} answer"`;
 
   if (question.options && question.options.length) {
-    const isMulti = String(question.answer || '').includes(',') || group.type === 9;
-    const maxSelections = isMulti ? splitLetters(question.answer || '').length : 0;
+    const isMulti = question.response_kind === 'multiple_choice_multiple' || String(question.answer || '').includes(',') || group.type === 9;
+    const maxSelections = isMulti ? Number(question.max_selections || splitLetters(question.answer || '').length || 1) : 0;
     const hintId = `selection_hint_${question.id || question.number}`;
     return `
       <div class="answer-unit" data-kind="${isMulti ? 'checkboxes' : 'radio'}" ${isMulti ? `data-max-selections="${maxSelections}" aria-describedby="${hintId}"` : ''} ${baseAttrs}>
@@ -1081,7 +1257,7 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
 
   return `
     <span class="${inline ? 'inline-answer' : ''}">
-      <input class="answer-input answer-unit" data-kind="text" ${baseAttrs} placeholder="Q${qn}">
+      <input class="answer-input answer-unit" data-kind="text" ${baseAttrs} placeholder="Q${qn}" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off">
     </span>
   `;
 }
@@ -1111,17 +1287,17 @@ function renderCollectText(text, group, sectionIndex, context = { seenIds: new S
 
 function renderQuestion(question, sectionIndex, group) {
   const seek = question.start
-    ? `<button class="seek-btn" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})">定位音频</button>`
+    ? `<button class="seek-btn" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})" data-capability="canSeekAudio">定位音频</button>`
     : '';
   return `
-    <div class="question">
+    <div class="question practice-question-anchor" data-question-id="${escapeHtml(question.id || question.number)}" data-question-number="${escapeHtml(question.number)}">
       <div class="q-head">
         <div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>
         ${seek}
       </div>
       ${controlForQuestion(question, sectionIndex, group)}
       ${answerTools(question, sectionIndex)}
-      ${question.analysis ? `<div class="analysis">${escapeHtml(question.analysis)}</div>` : ''}
+      ${reviewCard(question)}
     </div>
   `;
 }
@@ -1132,33 +1308,53 @@ function renderGroup(group, sectionIndex) {
   const combinedMulti = isCombinedMulti(group);
   const img = imageSrc(group);
   const renderContext = { seenIds: new Set() };
+  const isForm = PracticeRenderers.isFormGroup(group);
+  const isMatching = PracticeRenderers.isMatchingGroup(group) && !combinedMulti;
+  const isMap = PracticeRenderers.isMapGroup(group) && Boolean(img);
+  const structuredContent = isForm
+    ? PracticeRenderers.renderForm(
+        group,
+        question => controlForQuestion(question, sectionIndex, group, true),
+        question => `${answerTools(question, sectionIndex)}${reviewCard(question)}`
+      )
+    : isMap
+      ? PracticeRenderers.renderMap(group, img, question => renderQuestion(question, sectionIndex, group))
+      : isMatching
+        ? PracticeRenderers.renderMatching(
+            group,
+            optionBank,
+            question => `<div><div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>${answerTools(question, sectionIndex)}</div><div>${controlForQuestion(question, sectionIndex, group)}${reviewCard(question)}<button class="matching-row__clear" type="button" data-clear-question="${escapeHtml(question.id || question.number)}">清除答案</button></div>`
+          )
+        : '';
   return `
     <article class="card group">
       ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
       ${group.desc ? `<div class="desc">${richText(group.desc)}</div>` : ''}
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
-      ${img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
-      ${hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext)}</div>` : ''}
-      ${combinedMulti ? '' : optionBank(group)}
-      ${renderTable(group, sectionIndex, renderContext)}
-      ${combinedMulti ? renderCombinedMulti(group) : ''}
-      ${!hasCollect && !hasTable && !combinedMulti ? (group.questions || []).map(q => renderQuestion(q, sectionIndex, group)).join('') : ''}
-      ${(hasCollect || hasTable || combinedMulti) ? (group.questions || []).map(q => `
+      ${structuredContent}
+      ${!structuredContent && img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
+      ${!structuredContent && hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext)}</div>` : ''}
+      ${!structuredContent && !combinedMulti ? optionBank(group) : ''}
+      ${!structuredContent ? renderTable(group, sectionIndex, renderContext) : ''}
+      ${!structuredContent && combinedMulti ? renderCombinedMulti(group) : ''}
+      ${!structuredContent && !hasCollect && !hasTable && !combinedMulti ? (group.questions || []).map(q => renderQuestion(q, sectionIndex, group)).join('') : ''}
+      ${!structuredContent && (hasCollect || hasTable || combinedMulti) ? (group.questions || []).map(q => `
         ${answerTools(q, sectionIndex)}
-        ${q.analysis ? `<div class="analysis">Q${escapeHtml(q.number)}：${escapeHtml(q.analysis)}</div>` : ''}
+        ${reviewCard(q)}
       `).join('') : ''}
     </article>
   `;
 }
 
 function renderSection(section, sectionIndex) {
+  const typeBadges = experienceCapabilities.simulationMode
+    ? ''
+    : `<div class="type-badges">${(section.question_type || []).map(type => `<span class="type-badge">${escapeHtml(type)}</span>`).join('')}</div>`;
   return `
     <section class="panel ${sectionIndex === 0 ? 'active' : ''}" data-section-index="${sectionIndex}">
       <div class="card section-head">
         <h2>${escapeHtml(section.title)} · ${escapeHtml(section.question_name)}</h2>
-        <div class="type-badges">
-          ${(section.question_type || []).map(type => `<span class="type-badge">${escapeHtml(type)}</span>`).join('')}
-        </div>
+        ${typeBadges}
       </div>
       ${(section.groups || []).map(group => renderGroup(group, sectionIndex)).join('')}
     </section>
@@ -1171,16 +1367,139 @@ function switchSection(index, scroll = true) {
   document.querySelectorAll('#sectionTabs .tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
   document.querySelectorAll('.panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
   const section = test.sections[index];
-  if (section && !audio.src.endsWith(section.audio)) {
+  if (!experienceCapabilities.requiresAudioPreflight && section && !audio.src.endsWith(section.audio)) {
     audio.src = audioBase + section.audio;
   }
-  document.getElementById('activeSectionLabel').textContent = section ? `Section ${section.section}` : '-';
+  const activeSectionLabel = document.getElementById('activeSectionLabel');
+  if (activeSectionLabel) activeSectionLabel.textContent = section ? `Section ${section.section}` : '-';
+  document.getElementById('practiceShellSection').textContent = section ? `Section ${section.section}` : 'Section';
   renderTranscript(section);
   renderActiveView();
   syncQuestionNav();
   syncTranscriptFromAudio();
   if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
   if (window.__onExamSectionChange) window.__onExamSectionChange(index);
+}
+
+function simulationResourceRows() {
+  return test.sections.map((section, index) => ({
+    index,
+    label: `Part ${section.section || index + 1}`,
+    url: new URL(audioBase + section.audio, window.location.origin).href
+  }));
+}
+
+async function startSimulationClock() {
+  if (examContext.started_at && examContext.deadline_at) return examContext;
+  const response = await fetch(examContext.start_url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({
+      audio_duration_seconds: simulationAudioResources.reduce((sum, row) => sum + Number(row.duration || 0), 0)
+    })
+  });
+  const data = await response.json();
+  if (!response.ok || !data.ok) throw new Error(data.error || 'listening_start_failed');
+  examContext.started_at = data.started_at;
+  examContext.deadline_at = data.deadline_at;
+  window.dispatchEvent(new CustomEvent('simulation:started', { detail: data }));
+  return examContext;
+}
+
+async function closeSimulationReviewWindow() {
+  if (!examContext?.audio_complete_url) return;
+  try {
+    const response = await fetch(examContext.audio_complete_url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: '{}'
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) throw new Error(data.error || 'review_window_failed');
+    examContext.deadline_at = data.deadline_at;
+    window.dispatchEvent(new CustomEvent('simulation:deadline', { detail: data }));
+  } catch (error) {
+    document.getElementById('simulationAudioState').textContent = `录音已结束 · 截止时间同步失败：${error.message || error}`;
+  }
+}
+
+async function beginSimulationPlayback() {
+  const gate = document.getElementById('simulationAudioGate');
+  const gateState = document.getElementById('simulationAudioGateState');
+  const startButton = document.getElementById('simulationAudioStart');
+  startButton.disabled = true;
+  startButton.textContent = '正在开始…';
+  try {
+    await startSimulationClock();
+    const position = SimulationAudio.timelinePosition(
+      simulationAudioResources.map(row => row.duration),
+      Date.parse(examContext.started_at),
+      Date.now()
+    );
+    gate.hidden = true;
+    if (position.complete) {
+      window.__simulationAudioComplete = true;
+      document.getElementById('simulationAudioState').textContent = '录音已结束 · 请检查答案';
+      await closeSimulationReviewWindow();
+      window.dispatchEvent(new CustomEvent('simulation:audio-complete'));
+      return;
+    }
+    simulationAudioPlaylist = SimulationAudio.createLockedPlaylist({
+      audio,
+      resources: simulationAudioResources,
+      onSectionChange(index, resource) {
+        switchSection(index, false);
+        document.getElementById('simulationAudioPart').textContent = resource.label;
+      },
+      onState(state) {
+        if (state === 'playing') document.getElementById('simulationAudioState').textContent = 'Audio is playing';
+      },
+      async onComplete() {
+        window.__simulationAudioComplete = true;
+        document.getElementById('simulationAudioState').textContent = '录音已结束 · 2 分钟检查答案';
+        await closeSimulationReviewWindow();
+        window.dispatchEvent(new CustomEvent('simulation:audio-complete'));
+      },
+      onError(error) {
+        document.getElementById('simulationAudioState').textContent = `播放故障：${error.message || error}`;
+      }
+    });
+    simulationAudioPlaylist.setVolume(document.getElementById('simulationAudioVolume').value);
+    const started = await simulationAudioPlaylist.loadSection(position.sectionIndex, position.offsetSeconds);
+    if (!started) throw new Error('audio_playback_failed');
+  } catch (error) {
+    gate.hidden = false;
+    gateState.textContent = `无法开始：${error.message || error}`;
+    startButton.disabled = false;
+    startButton.textContent = '重新检查';
+    startButton.onclick = initializeSimulationAudio;
+  }
+}
+
+async function initializeSimulationAudio() {
+  if (!examContext) return;
+  const gate = document.getElementById('simulationAudioGate');
+  const gateState = document.getElementById('simulationAudioGateState');
+  const startButton = document.getElementById('simulationAudioStart');
+  gate.hidden = false;
+  gateState.textContent = `正在检查 ${simulationResourceRows().length} 个 Part 的音频资源…`;
+  startButton.disabled = true;
+  startButton.textContent = '请稍候';
+  try {
+    simulationAudioResources = await SimulationAudio.preflightResources(simulationResourceRows());
+    const seconds = simulationAudioResources.reduce((sum, row) => sum + row.duration, 0);
+    gateState.textContent = `音频已准备：${simulationAudioResources.length} 个 Part，共 ${formatClock(seconds)}。`;
+    startButton.disabled = false;
+    startButton.textContent = examContext.started_at ? '恢复 Listening' : '开始 Listening';
+    startButton.onclick = beginSimulationPlayback;
+  } catch (error) {
+    gateState.textContent = `音频检查失败：${error.message || error}。正式模拟尚未开始。`;
+    startButton.disabled = false;
+    startButton.textContent = '重新检查';
+    startButton.onclick = initializeSimulationAudio;
+  }
 }
 
 function unitValue(unit) {
@@ -1231,6 +1550,60 @@ function applyUnitFeedback(unit, feedback) {
   if (hint && feedback.selection_error === 'too_many') {
     hint.textContent = `最多选择 ${feedback.max_selections} 项；本题 ${feedback.awarded}/${feedback.marks}`;
   }
+  updateReviewCards(unit, feedback);
+}
+
+function questionForId(id) {
+  return allQuestions().find(question => String(question.id || question.number) === String(id));
+}
+
+function updateReviewCards(unit, feedback) {
+  String(unit.dataset.id || '').split(',').filter(Boolean).forEach(id => {
+    const question = questionForId(id);
+    const card = document.querySelector(`[data-review-question="${CSS.escape(String(id))}"], [data-review-slot="${CSS.escape(String(id))}"]`);
+    if (!question || !card) return;
+    const value = unitValue(unit);
+    const status = value.trim() ? feedback.status : 'unanswered';
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = PracticeRenderers.renderReviewCard(question, { ...feedback, status }, value).trim();
+    const replacement = wrapper.firstElementChild;
+    replacement.classList.toggle('is-open', String(currentQuestionId) === String(id));
+    card.replaceWith(replacement);
+  });
+}
+
+function renderReviewSummary(results) {
+  const rows = Array.isArray(results) ? results : [];
+  const statuses = allQuestions().map(question => {
+    const id = String(question.id || question.number);
+    const row = rows.find(item => resultIds(item).includes(id));
+    const unit = findUnitByQuestionId(id);
+    if (!unit || !unitValue(unit).trim()) return 'unanswered';
+    return row?.status || (row?.correct ? 'correct' : 'incorrect');
+  });
+  const correct = statuses.filter(status => status === 'correct').length;
+  const partial = statuses.filter(status => status === 'partial').length;
+  const unanswered = statuses.filter(status => status === 'unanswered').length;
+  const incorrect = statuses.length - correct - partial - unanswered;
+  const rate = statuses.length ? Math.round(correct / statuses.length * 100) : 0;
+  const summary = document.getElementById('reviewSummary');
+  if (!summary) return;
+  summary.innerHTML = `
+    <div class="review-summary__stat">正确<strong>${correct}</strong></div>
+    <div class="review-summary__stat">错误<strong>${incorrect + partial}</strong></div>
+    <div class="review-summary__stat">未作答<strong>${unanswered}</strong></div>
+    <div class="review-summary__stat">正确率<strong>${rate}%</strong></div>`;
+}
+
+function openReviewCard(id, scroll = false) {
+  currentQuestionId = String(id || currentQuestionId || '');
+  document.querySelectorAll('.review-card').forEach(card => {
+    card.classList.toggle('is-open', card.dataset.reviewQuestion === currentQuestionId);
+  });
+  syncQuestionNav(latestResults);
+  if (!scroll) return;
+  const target = findUnitByQuestionId(currentQuestionId);
+  target?.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function answerSnapshot() {
@@ -1241,10 +1614,44 @@ function answerSnapshot() {
   return rows;
 }
 
+async function persistAnswers(reason = 'local') {
+  const snapshot = answerSnapshot();
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(snapshot));
+    refreshAnsweredCount();
+    syncQuestionNav(latestResults);
+  } catch (_error) {
+    return false;
+  }
+  if (!persistenceContext?.draft_url || reason === 'local') return true;
+  const indicator = document.getElementById('examSavedIndicator');
+  if (indicator) indicator.textContent = 'Saving…';
+  try {
+    const response = await fetch(persistenceContext.draft_url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      keepalive: reason === 'pagehide' || reason === 'visibilitychange',
+      body: JSON.stringify({ answers: snapshot })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      if (data.submitted && data.next_url) window.location.replace(data.next_url);
+      throw new Error(data.error || 'draft_save_failed');
+    }
+    if (indicator) indicator.textContent = 'Saved';
+    return true;
+  } catch (_error) {
+    if (indicator) indicator.textContent = 'Not saved';
+    return false;
+  }
+}
+
 function saveAnswers() {
-  localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
-  refreshAnsweredCount();
-  syncQuestionNav();
+  const saved = persistAnswers('local');
+  if (saved) practiceShellController?.markDirty();
+  else practiceShellController?.setStatus('保存失败，点击重试', 'error');
+  return saved;
 }
 
 function applyAnswerRows(rows) {
@@ -1280,6 +1687,19 @@ function restoreAnswers() {
   applyAnswerRows(rows);
 }
 
+async function restoreServerAnswers() {
+  if (!persistenceContext?.draft_url) return;
+  try {
+    const response = await fetch(persistenceContext.draft_url, { credentials: 'same-origin' });
+    const data = await response.json();
+    if (!response.ok || !data.ok || !data.answers) return;
+    const local = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
+    applyAnswerRows({ ...data.answers, ...local });
+  } catch (_error) {
+    // Local session draft remains available when server recovery is unreachable.
+  }
+}
+
 function resultHtml(correct, total, wrongLabels, syncedText = '') {
   const rate = total ? Math.round(correct / total * 100) : 0;
   return `
@@ -1291,9 +1711,10 @@ function resultHtml(correct, total, wrongLabels, syncedText = '') {
 
 function applyServerResults(results) {
   const rows = Array.isArray(results) ? results : [];
+  latestResults = rows;
   document.querySelectorAll('.answer-unit').forEach(unit => {
     const ids = String(unit.dataset.id || '').split(',').filter(Boolean);
-    const row = rows.find(item => ids.some(id => (item.ids || [item.id]).map(String).includes(String(id))));
+    const row = rows.find(item => ids.some(id => resultIds(item).includes(String(id))));
     if (row) {
       const feedback = row.status
         ? row
@@ -1306,6 +1727,7 @@ function applyServerResults(results) {
     }
   });
   syncQuestionNav(rows);
+  renderReviewSummary(rows);
 }
 
 async function syncListeningTestSubmission(baseHtml) {
@@ -1321,7 +1743,7 @@ async function syncListeningTestSubmission(baseHtml) {
       payload.task_id = Number(listeningTaskId);
       payload.token = listeningTaskToken;
     }
-    const response = await fetch(`/api/listening/test/${encodeURIComponent(test.id)}/submit`, {
+    const response = await fetch(practiceContext?.submit_url || `/api/listening/test/${encodeURIComponent(test.id)}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',
@@ -1341,14 +1763,17 @@ async function syncListeningTestSubmission(baseHtml) {
     } else {
       resultBox.innerHTML = `${resultHtml(grade.correct, grade.total, (grade.results || []).filter(row => row.status !== 'correct').map(row => row.q))}<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
     }
+    practiceShellController?.markSaved();
   } catch (err) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
+    practiceShellController?.setStatus('保存失败，点击重试', 'error');
   }
 }
 
 async function loadExistingSubmission() {
   // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
   if (examContext) return;
+  if (practiceContext) return;
   try {
     const params = new URLSearchParams();
     if (listeningTaskId && listeningTaskToken) {
@@ -1376,6 +1801,8 @@ async function loadExistingSubmission() {
     applyServerResults(results);
     document.body.classList.add('show-answers');
     document.body.classList.add('result-mode');
+    setExperienceMode('review');
+    document.getElementById('practiceShellMode').textContent = '复盘';
     const wrongLabels = submission.wrong_numbers || results.filter(row => row.status !== 'correct' && !row.correct).map(row => row.q);
     document.getElementById('submitBtn').textContent = '已提交，查看复盘';
     document.getElementById('resultBox').innerHTML = resultHtml(
@@ -1386,6 +1813,8 @@ async function loadExistingSubmission() {
         ? `已同步后台：IELTS Listening ${submission.ielts_score}`
         : '已同步后台'
     );
+    openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
+    practiceShellController?.markSaved();
   } catch (err) {
     // 已提交结果加载失败时，不影响学生继续做题或重新提交。
   }
@@ -1397,7 +1826,8 @@ function refreshAnsweredCount() {
     const marks = Number(unit.dataset.marks || 1);
     return sum + (unitValue(unit).trim() ? marks : 0);
   }, 0);
-  document.getElementById('answeredCount').textContent = answered;
+  const answeredCount = document.getElementById('answeredCount');
+  if (answeredCount) answeredCount.textContent = answered;
 }
 
 function findUnitByQuestionId(id) {
@@ -1408,7 +1838,9 @@ function findUnitByQuestionId(id) {
 
 function renderTranscript(section) {
   if (!section) return;
-  document.getElementById('transcriptPanel').innerHTML = `
+  const panel = document.getElementById('transcriptPanel');
+  if (!panel) return;
+  panel.innerHTML = `
     <h3>Section ${escapeHtml(section.section)} 原文复盘</h3>
     ${(section.transcript || []).map((row, index) => `
       <div class="transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0">
@@ -1476,18 +1908,22 @@ function renderActiveView() {
 
 function renderQuestionNav() {
   document.getElementById('questionNav').innerHTML = allQuestions().map(question => `
-    <button class="q-chip" type="button" data-id="${escapeHtml(question.id || question.number)}" data-section="${question.sectionIndex}">
+    <button class="q-chip" type="button" aria-label="Question ${escapeHtml(question.number)}" data-id="${escapeHtml(question.id || question.number)}" data-section="${question.sectionIndex}">
       ${escapeHtml(question.number)}
     </button>
   `).join('');
+  currentQuestionId = String(allQuestions()[0]?.id || allQuestions()[0]?.number || '');
   document.querySelectorAll('.q-chip').forEach(button => {
     button.addEventListener('click', () => {
       const sectionIndex = Number(button.dataset.section || 0);
-      switchSection(sectionIndex);
+      switchSection(sectionIndex, false);
       const target = findUnitByQuestionId(button.dataset.id);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        currentQuestionId = button.dataset.id;
+        target.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if (target.matches('input')) target.focus({ preventScroll: true });
+        if (document.body.classList.contains('result-mode')) openReviewCard(button.dataset.id);
+        else syncQuestionNav(latestResults);
       }
     });
   });
@@ -1499,22 +1935,55 @@ function syncQuestionNav(results = null) {
     const filled = target && unitValue(target).trim();
     button.classList.toggle('is-filled', Boolean(filled));
     button.classList.toggle('is-active', Number(button.dataset.section) === activeSectionIndex);
+    button.classList.toggle('is-current', String(button.dataset.id) === String(currentQuestionId));
+    const flagged = flaggedQuestions.has(String(button.dataset.id));
+    button.dataset.state = flagged ? 'flagged' : (filled ? 'answered' : 'unanswered');
+    button.classList.toggle('is-flagged', flagged);
     if (results) {
-      const result = results.find(row => (row.ids || String(row.id || '').split(',')).map(String).includes(String(button.dataset.id)));
-      const status = result?.status || (result?.correct ? 'correct' : result ? 'incorrect' : '');
+      const result = results.find(row => resultIds(row).includes(String(button.dataset.id)));
+      const status = !filled ? 'unanswered' : (result?.status || (result?.correct ? 'correct' : result ? 'incorrect' : ''));
       button.classList.toggle('is-right', status === 'correct');
       button.classList.toggle('is-partial', status === 'partial');
       button.classList.toggle('is-wrong', status === 'incorrect');
+      button.classList.toggle('is-unanswered', status === 'unanswered');
+      button.dataset.state = status;
+      button.setAttribute('aria-label', `Question ${button.textContent.trim()}：${status === 'correct' ? '正确' : status === 'incorrect' || status === 'partial' ? '错误' : '未作答'}`);
+    } else {
+      button.setAttribute('aria-label', `Question ${button.textContent.trim()}：${flagged ? '待回看' : filled ? '已作答' : '未作答'}`);
     }
   });
+  const flagButton = document.getElementById('toggleQuestionFlag');
+  if (flagButton) {
+    const active = flaggedQuestions.has(String(currentQuestionId));
+    flagButton.setAttribute('aria-pressed', String(active));
+    flagButton.textContent = active ? '取消待回看' : '待回看';
+  }
+}
+
+function toggleCurrentQuestionFlag() {
+  if (!currentQuestionId) return;
+  if (flaggedQuestions.has(String(currentQuestionId))) flaggedQuestions.delete(String(currentQuestionId));
+  else flaggedQuestions.add(String(currentQuestionId));
+  localStorage.setItem(flagStorageKey, JSON.stringify(Array.from(flaggedQuestions)));
+  syncQuestionNav(latestResults);
+}
+
+function goToAdjacentQuestion(offset) {
+  const questions = allQuestions();
+  const currentIndex = Math.max(0, questions.findIndex(question => String(question.id || question.number) === String(currentQuestionId)));
+  const target = questions[Math.min(questions.length - 1, Math.max(0, currentIndex + offset))];
+  if (!target) return;
+  document.querySelector(`.q-chip[data-id="${CSS.escape(String(target.id || target.number))}"]`)?.click();
 }
 
 function render() {
   if (assignedSectionNumber) {
     document.getElementById('practiceCrumbTail').textContent = 'Part 练习';
     document.getElementById('practiceTitle').textContent = `${rawTest.title} Part ${assignedSectionNumber}`;
-    document.getElementById('scorePanelTitle').textContent = 'Part 判分';
-    document.getElementById('resultBox').textContent = '填写后可查看本 Part 正确率，并同步到任务和报告。';
+    const scorePanelTitle = document.getElementById('scorePanelTitle');
+    const resultBox = document.getElementById('resultBox');
+    if (scorePanelTitle) scorePanelTitle.textContent = 'Part 判分';
+    if (resultBox) resultBox.textContent = '填写后可查看本 Part 正确率，并同步到任务和报告。';
   }
   document.getElementById('sectionTabs').innerHTML = test.sections.map((section, index) => `
     <button class="tab ${index === 0 ? 'active' : ''}" type="button" data-index="${index}">
@@ -1522,10 +1991,12 @@ function render() {
     </button>
   `).join('');
   document.getElementById('sectionsRoot').innerHTML = test.sections.map(renderSection).join('');
-  document.getElementById('questionCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
+  const questionTotal = Array.from(document.querySelectorAll('.answer-unit'))
     .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
+  const questionCount = document.getElementById('questionCount');
+  if (questionCount) questionCount.textContent = questionTotal;
   if (assignedSectionNumber) {
-    document.getElementById('practiceMeta').innerHTML = `1 个 Section · ${document.getElementById('questionCount').textContent} 题 · <a class="back-link" href="{{ url_for('listening_test_index') }}">返回剑雅整套</a>`;
+    document.getElementById('practiceMeta').textContent = `1 个 Section · ${questionTotal} 题`;
   }
   document.querySelectorAll('.tab').forEach(tab => {
     if (!tab.dataset.index) return;
@@ -1543,6 +2014,10 @@ function render() {
     });
   });
   document.querySelectorAll('.answer-unit').forEach(unit => {
+    unit.addEventListener('focusin', () => {
+      currentQuestionId = String(unit.dataset.id || '').split(',')[0];
+      syncQuestionNav(latestResults);
+    });
     unit.addEventListener('change', event => {
       const limited = PracticeScoring.limitSelection(unit, event);
       if (!limited) {
@@ -1553,13 +2028,41 @@ function render() {
     });
     unit.addEventListener('input', saveAnswers);
   });
+  document.querySelectorAll('[data-clear-question]').forEach(button => {
+    button.addEventListener('click', () => {
+      const unit = findUnitByQuestionId(button.dataset.clearQuestion);
+      if (!unit) return;
+      if (unit.matches('select, input')) unit.value = '';
+      unit.querySelectorAll?.('input').forEach(input => { input.checked = false; });
+      saveAnswers();
+    });
+  });
+  document.getElementById('previousQuestion').addEventListener('click', () => goToAdjacentQuestion(-1));
+  document.getElementById('nextQuestion').addEventListener('click', () => goToAdjacentQuestion(1));
+  document.getElementById('toggleQuestionFlag').addEventListener('click', toggleCurrentQuestionFlag);
+  document.getElementById('reviewControls')?.addEventListener('click', event => {
+    const action = event.target.closest('[data-review-action]')?.dataset.reviewAction;
+    if (!action) return;
+    if (action === 'current') openReviewCard(currentQuestionId, true);
+    if (action === 'expand') document.querySelectorAll('.review-card').forEach(card => card.classList.add('is-open'));
+    if (action === 'wrong') {
+      document.querySelectorAll('[data-question-id]').forEach(row => {
+        const unit = findUnitByQuestionId(row.dataset.questionId);
+        row.hidden = Boolean(unit && unit.dataset.status === 'correct');
+      });
+    }
+  });
   renderQuestionNav();
+  setExperienceMode(experienceMode);
+  PracticeRenderers.initMapViewers(document, experienceCapabilities);
   restoreAnswers();
+  restoreServerAnswers();
   switchSection(0, false);
   loadExistingSubmission();
 }
 
-document.getElementById('submitBtn').addEventListener('click', () => {
+document.getElementById('submitBtn')?.addEventListener('click', () => {
+  if (!experienceCapabilities.canSubmitForScoring) return;
   const units = Array.from(document.querySelectorAll('.answer-unit'));
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);
@@ -1567,7 +2070,12 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const wrong = results.filter(row => row.status !== 'correct');
   document.body.classList.add('show-answers');
   document.body.classList.add('result-mode');
+  setExperienceMode('review');
+  document.getElementById('practiceShellMode').textContent = '复盘';
+  latestResults = results;
   syncQuestionNav(results);
+  renderReviewSummary(results);
+  openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.getElementById('submitBtn').textContent = '已提交，查看复盘';
   const baseHtml = resultHtml(correct, total, wrong.map(row => row.q));
@@ -1580,7 +2088,21 @@ audio.addEventListener('timeupdate', syncTranscriptFromAudio);
 audio.addEventListener('seeked', syncTranscriptFromAudio);
 audio.addEventListener('loadedmetadata', syncTranscriptFromAudio);
 
+practiceShellController = PracticeShell.init({
+  fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",
+  fallbackMode: persistenceContext ? 'task_detail' : 'listening_tests',
+  confirmExit: Boolean(persistenceContext),
+  initialSaved: true,
+  save: persistAnswers
+});
 render();
+if (examContext) {
+  document.getElementById('simulationAudioVolume').addEventListener('input', (event) => {
+    audio.volume = Number(event.target.value);
+    simulationAudioPlaylist?.setVolume(event.target.value);
+  });
+  initializeSimulationAudio();
+}
 </script>
 
 {% if exam_context %}
@@ -1589,7 +2111,7 @@ render();
 window.EXAM_CONTEXT = examContext;
 (function() {
   const ctx = window.EXAM_CONTEXT;
-  const deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
+  let deadlineMs = ctx.deadline_at ? Date.parse(ctx.deadline_at) : 0;
   const countdown = document.getElementById('examCountdown');
   const finishBtn = document.getElementById('examFinishBtn');
   const sectionLabel = ctx.section_label || '本部分';
@@ -1603,11 +2125,25 @@ window.EXAM_CONTEXT = examContext;
   }
   function updateFinishBtn() {
     if (submitted) return;
+    if (ctx.section === 'listening' && !window.__simulationAudioComplete) {
+      finishBtn.hidden = true;
+      return;
+    }
+    finishBtn.hidden = false;
     const last = isLastPart();
     finishBtn.textContent = last ? `提交并结束 ${sectionLabel}` : '下一部分 →';
     finishBtn.classList.toggle('is-final', last);
   }
   window.__onExamSectionChange = updateFinishBtn;
+  window.addEventListener('simulation:audio-complete', updateFinishBtn);
+  window.addEventListener('simulation:started', (event) => {
+    deadlineMs = Date.parse(event.detail.deadline_at);
+    tick();
+  });
+  window.addEventListener('simulation:deadline', (event) => {
+    deadlineMs = Date.parse(event.detail.deadline_at);
+    tick();
+  });
 
   function fmt(ms) {
     const total = Math.max(0, Math.floor(ms / 1000));
@@ -1620,7 +2156,8 @@ window.EXAM_CONTEXT = examContext;
     if (!deadlineMs) { countdown.textContent = '--:--'; return; }
     const remaining = deadlineMs - Date.now();
     countdown.textContent = fmt(remaining);
-    if (remaining < 60_000) countdown.classList.add('is-warning');
+    countdown.classList.toggle('is-warning', remaining <= 10 * 60_000);
+    countdown.classList.toggle('is-critical', remaining <= 5 * 60_000);
     if (remaining <= 0 && !submitted) {
       submitted = true;
       forceSubmit();
@@ -1646,6 +2183,7 @@ window.EXAM_CONTEXT = examContext;
       if (!resp.ok || !data.ok) throw new Error(data.error || 'submit_failed');
       localStorage.removeItem(storageKey);
       localStorage.removeItem(noteStorageKey);
+      localStorage.removeItem(flagStorageKey);
       window.location.href = data.next_url || ctx.next_url;
     } catch (err) {
       if (finishBtn) { finishBtn.disabled = false; finishBtn.textContent = 'Finish section'; }

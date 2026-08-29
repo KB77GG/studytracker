@@ -47,7 +47,7 @@
   <div class="exam-mode-shell__right">
     <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
-    <a class="exam-mode-shell__exit" href="{{ exam_context.exit_url }}">Exit</a>
+    <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>Exit</button>
   </div>
 </header>
 
@@ -80,6 +80,8 @@
 
 <button type="button" class="exam-finish-btn" id="examFinishBtn">Submit Writing</button>
 
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
 <script>
 window.EXAM_CONTEXT = {{ exam_context|tojson }};
 const DRAFT_URL = {{ draft_url|tojson }};
@@ -191,6 +193,17 @@ const DRAFT_URL = {{ draft_url|tojson }};
   setInterval(saveDraft, 30000);
   setInterval(tick, 1000);
   tick();
+  PracticeShell.init({
+    fallbackUrl: ctx.exit_url,
+    fallbackMode: 'mock_exam_process',
+    confirmExit: true,
+    initialSaved: true,
+    save: async () => {
+      if (!dirty) return true;
+      await saveDraft();
+      return !dirty;
+    }
+  });
 })();
 </script>
 </body>

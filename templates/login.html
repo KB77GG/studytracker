@@ -78,6 +78,7 @@
       </div>
 
       <form method="post" class="login-form">
+        {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
         <div class="form-group">
           <label for="username">用户名</label>
           <input type="text" id="username" name="username" placeholder="请输入用户名" required autofocus>

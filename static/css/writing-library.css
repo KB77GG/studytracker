@@ -235,11 +235,15 @@
   padding: 0 11px;
   display: flex;
   align-items: center;
+  width: 100%;
+  border: 0;
   border-top: 1px solid var(--lw-neutral-100);
+  background: transparent;
   color: var(--lw-green-600);
   font-size: 12px;
   font-weight: 800;
   text-decoration: none;
+  cursor: pointer;
 }
 .writing-detail { padding-bottom: 90px; }
 .writing-detail__title { max-width: 1060px; margin: 0 auto 18px; }

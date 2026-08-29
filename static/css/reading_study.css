@@ -71,6 +71,7 @@ button:focus-visible, a:focus-visible {
   font-size: 13px;
   font-weight: 850;
   text-decoration: none;
+  cursor: pointer;
 }
 .mode:hover { color: var(--sage-deep); }
 .mode.active { color: #fff; background: var(--sage); box-shadow: 0 4px 12px rgba(47, 142, 135, .23); }
@@ -327,11 +328,13 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   justify-content: center;
   padding: 0 16px;
+  border: 0;
   border-radius: 9px;
   color: #fff;
   background: var(--sage);
   font-size: 14px;
   font-weight: 850;
+  cursor: pointer;
   text-decoration: none;
 }
 .point-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }

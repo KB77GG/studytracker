@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>精听练习</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/practice_shell.css') }}">
 <style>
 :root {
   --bg: #f3eee6;
@@ -867,8 +868,11 @@ body {
     <div class="topbar">
       <div class="topbar-title" id="currentSentenceLabel">第1句</div>
       <div class="topbar-actions">
+        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+        <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
         <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重置本地进度</button>
-        <a class="back-link" href="{{ url_for('listening_index') }}">返回列表</a>
+        <button class="practice-shell__back back-link" type="button" data-practice-back>← 返回精听列表</button>
+        <button class="practice-shell__back back-link" type="button" data-practice-module-exit>退出刷题</button>
       </div>
     </div>
 
@@ -989,10 +993,26 @@ body {
   </div>
 </div>
 
+<dialog class="practice-exit-dialog" id="practiceExitDialog">
+  <div class="practice-exit-dialog__body">
+    <h2>退出并保存进度？</h2>
+    <p>当前听写进度和错因笔记会先保存，再返回进入本页前的位置。</p>
+  </div>
+  <div class="practice-exit-dialog__actions">
+    <button type="button" data-practice-exit-cancel>继续练习</button>
+    <button type="button" data-practice-exit-confirm>退出并保存</button>
+  </div>
+</dialog>
+
 <audio id="audio" preload="auto"></audio>
 
 <script src="{{ url_for('static', filename='js/listening-cloze.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_modes.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
 <script>
+const intensiveListeningExperienceMode = PracticeModes.resolve({ intensiveListeningMode: true });
+const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveListeningExperienceMode);
 (function() {
   // ── State ──
   let data = null;
@@ -1033,6 +1053,7 @@ body {
   let taskTrainingPolicy = { locked: false, review_only: false };
   const reviewListenedSegments = new Set();
   const freeStudentName = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student') || 'guest';
+  let practiceShellController = null;
 
   function getFreeProgressStorageKey() {
     return `listening_free_progress_${exerciseId}_${freeStudentName}`;
@@ -1098,11 +1119,13 @@ body {
     saveErrorSummaries();
     errorSummaryDirty = false;
     setErrorSummaryStatus('已保存', 'saved');
+    practiceShellController?.markSaved();
   }
 
   function scheduleErrorSummarySave() {
     errorSummaryDirty = true;
     setErrorSummaryStatus('未保存…', 'dirty');
+    practiceShellController?.markDirty();
     if (errorSummarySaveTimer) clearTimeout(errorSummarySaveTimer);
     errorSummarySaveTimer = setTimeout(() => {
       persistCurrentErrorSummary(false);
@@ -1126,6 +1149,17 @@ body {
       return false;
     }
   }
+
+  practiceShellController = PracticeShell.init({
+    fallbackUrl: taskId ? "{{ url_for('tasks_page') }}" : "{{ url_for('listening_index') }}",
+    fallbackMode: taskId ? 'task_detail' : 'intensive_library',
+    confirmExit: Boolean(taskId),
+    initialSaved: true,
+    save: () => {
+      if (errorSummaryDirty) persistCurrentErrorSummary(true);
+      return taskId ? true : saveFreeProgress();
+    }
+  });
 
   function clearFreeProgress() {
     freeProgress = {};
@@ -2200,13 +2234,16 @@ body {
           updateTaskCompletionPanel();
           renderContent();
           confirmDisplayedFirstAttempt(taskProgress[context.segGlobalIdx]);
+          practiceShellController?.markSaved();
         } else {
           markFirstAttemptSavePending(context, grade, answers);
+          practiceShellController?.setStatus('保存失败，点击重试', 'error');
         }
       })
       .catch(e => {
         console.error('保存进度失败:', e);
         markFirstAttemptSavePending(context, grade, answers);
+        practiceShellController?.setStatus('保存失败，点击重试', 'error');
       });
     } else {
       freeProgress[context.segGlobalIdx] = {
@@ -2225,9 +2262,11 @@ body {
         buildSentenceList();
         updatePracticeSubtitle(freeProgress, totalSegmentCount());
         confirmDisplayedFirstAttempt(freeProgress[context.segGlobalIdx]);
+        practiceShellController?.markSaved();
       } else {
         delete freeProgress[context.segGlobalIdx];
         markFirstAttemptSavePending(context, grade, answers);
+        practiceShellController?.setStatus('保存失败，点击重试', 'error');
       }
     }
   }

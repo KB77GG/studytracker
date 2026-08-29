@@ -81,7 +81,11 @@ from services.listening_training import (
 )
 from services import mock_exam_review as _mock_review
 from services import mock_exam_review_workflow as _mock_review_workflow
+from services import mock_exam_runtime as _mock_exam_runtime
 from services import mock_exam_writing as _mock_writing
+from services.ielts_exam_payload import build_simulation_payload as _build_simulation_payload
+from services.practice_navigation import navigation_defaults, safe_local_target
+from services.practice_library_offline import filter_offline_catalog_books, load_offline_test_ids
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -430,6 +434,7 @@ PLAN_RESOURCE_DICTATION = "dictation"
 PLAN_RESOURCE_SPEAKING = "speaking"
 PLAN_RESOURCE_MATERIAL = "material"
 PLAN_RESOURCE_FREEFORM = "freeform"
+PLAN_RESOURCE_QUESTION_TYPE_PRACTICE = "question_type_practice"
 
 
 def _task_listening_resource_type(task) -> str:
@@ -659,6 +664,21 @@ def _task_resource_binding(
 
 
 def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]:
+    if task.grading_mode == "question_type_practice":
+        from services.question_type_practice import snapshot_from_task
+
+        snapshot = snapshot_from_task(task) or {}
+        return (
+            PLAN_RESOURCE_QUESTION_TYPE_PRACTICE,
+            snapshot.get("snapshot_hash"),
+            {
+                "task_type": "question_type_practice",
+                "subject": snapshot.get("subject"),
+                "standard_type": snapshot.get("standard_type"),
+                "pace": snapshot.get("pace"),
+                "group_ids": snapshot.get("group_ids") or [],
+            },
+        )
     if task.listening_exercise_id:
         return _task_resource_binding(
             listening_exercise_id=task.listening_exercise_id,
@@ -1133,6 +1153,35 @@ def _current_practice_student_profile() -> StudentProfile | None:
     return profile
 
 
+def inject_practice_navigation_defaults():
+    """Expose one identity-aware navigation default to every entry template."""
+
+    defaults = navigation_defaults(
+        authenticated=bool(getattr(current_user, "is_authenticated", False)),
+        role=getattr(current_user, "role", None),
+        classroom_mode=_classroom_unlocked(),
+        verified_student=bool((session.get("practice_student_name") or "").strip()),
+    )
+    return {"practice_navigation": defaults.as_dict()}
+
+
+def _practice_navigation_query_args() -> dict[str, str]:
+    values: dict[str, str] = {}
+    for key in ("practice_return", "practice_exit"):
+        value = safe_local_target(request.args.get(key), "")
+        if value:
+            values[key] = value
+    for key in ("practice_source", "practice_identity"):
+        value = str(request.args.get(key) or "").strip()
+        if value and len(value) <= 40 and value.replace("_", "").isalnum():
+            values[key] = value
+    return values
+
+
+def _url_for_with_practice_navigation(endpoint: str, **values) -> str:
+    return url_for(endpoint, **values, **_practice_navigation_query_args())
+
+
 def _practice_task_creator_id(profile: StudentProfile | None = None) -> int | None:
     if getattr(current_user, "is_authenticated", False):
         return current_user.id
@@ -1486,15 +1535,19 @@ def _reading_test_catalog() -> list[dict]:
 
 
 def _reading_jijing_catalog() -> list[dict]:
-    catalog_path = _reading_jijing_root() / "catalog.json"
+    root = _reading_jijing_root()
+    catalog_path = root / "catalog.json"
     if catalog_path.exists():
         try:
             catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
-            return catalog.get("books") or []
+            return filter_offline_catalog_books(root, catalog.get("books") or [])
         except Exception:
             pass
+    offline_ids = load_offline_test_ids(root)
     tests_by_book = defaultdict(list)
-    for path in sorted(_reading_jijing_root().glob("reading_jijing_*_test_*.json")):
+    for path in sorted(root.glob("reading_jijing_*_test_*.json")):
+        if path.stem in offline_ids:
+            continue
         match = re.match(r"^reading_jijing_(?P<book>\d+)_test_(?P<test>\d+)\.json$", path.name)
         if not match:
             continue
@@ -1831,6 +1884,7 @@ app.config.from_object(Config)
 db.init_app(app)
 init_api(app)
 app.register_blueprint(toefl_bp)
+app.context_processor(inject_practice_navigation_defaults)
 
 
 UPLOAD_ROOT = Path(app.config.get("UPLOAD_FOLDER", Path(app.root_path) / "uploads"))
@@ -2255,15 +2309,16 @@ def entrance_web_file(filename):
 # 登录路由
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    next_url = safe_local_target(request.values.get("next"), "")
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
         user = User.query.filter_by(username=username).first()
         if user and user.is_active and user.check_password(password):
             login_user(user)
-            return redirect(url_for("index"))
+            return redirect(next_url or url_for("index"))
         flash("用户名或密码不正确，或账号已被停用。")
-    return render_template("login.html")
+    return render_template("login.html", next_url=next_url)
 
 
 # 登出路由
@@ -2291,9 +2346,9 @@ def _classroom_unlocked() -> bool:
 def classroom_gate():
     """课堂模式：老师输入口令后进入刷题库播放音频/讲例题。"""
     expected = (app.config.get("CLASSROOM_PASSCODE") or "").strip()
-    next_url = request.values.get("next") or url_for("practice_library")
-    if not next_url.startswith("/"):
-        next_url = url_for("practice_library")
+    next_url = safe_local_target(
+        request.values.get("next"), url_for("practice_library")
+    )
 
     if _classroom_unlocked():
         return redirect(next_url)
@@ -2736,6 +2791,15 @@ def student_today():
         Task.date == today.isoformat(),
         Task.listening_exercise_id.isnot(None),
     ).all()
+    question_type_tasks = Task.query.filter(
+        Task.student_name == profile.full_name,
+        Task.date == today.isoformat(),
+        Task.grading_mode == "question_type_practice",
+    ).order_by(Task.id.asc()).all()
+    from services.question_type_assignments import assignment_url
+
+    for task in question_type_tasks:
+        task.question_type_url = assignment_url(task)
     tokens_updated = False
     for task in listening_tasks:
         if not task.listening_access_token:
@@ -2760,6 +2824,7 @@ def student_today():
         plan=plan,
         recent_plans=recent_plans,
         listening_tasks=listening_tasks,
+        question_type_tasks=question_type_tasks,
     )
 
 
@@ -3832,6 +3897,7 @@ def tasks_page():
         StudySession.task_id.in_([t.id for t in items])
     ).all()
     active_session_map = {s.task_id: s for s in active_sessions}
+    from services.question_type_assignments import assignment_url as question_type_assignment_url
 
     # 为每个任务计算衍生字段：实际分钟、进度百分比
     enriched_items = []
@@ -3887,6 +3953,16 @@ def tasks_page():
             else (
                 _reading_test_url(t.reading_test_submission.test_id, absolute=False)
                 if t.reading_test_submission
+                else None
+            ),
+            "question_type_url": (
+                question_type_assignment_url(t)
+                if t.grading_mode == "question_type_practice"
+                else None
+            ),
+            "question_type_result_url": (
+                f"/tasks/question-types/{t.id}/result"
+                if t.grading_mode == "question_type_practice" and t.submitted_at
                 else None
             ),
             "student_submitted": t.student_submitted,
@@ -8079,7 +8155,11 @@ def admin_mock_exams_toggle_active(exam_id):
 def mock_exam_login(exam_id):
     """模考登录页：姓名 + pincode。"""
     exam = MockExam.query.get_or_404(exam_id)
-    return render_template("exam/login.html", exam=exam)
+    return render_template(
+        "exam/login.html",
+        exam=exam,
+        start_url=_url_for_with_practice_navigation("api_mock_exam_start", exam_id=exam.id),
+    )
 
 
 @app.post("/api/exam/<int:exam_id>/start")
@@ -8124,7 +8204,9 @@ def api_mock_exam_start(exam_id):
 
     return jsonify({
         "ok": True,
-        "session_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "session_url": _url_for_with_practice_navigation(
+            "mock_exam_process", exam_id=exam.id, token=sess.access_token
+        ),
     })
 
 
@@ -8135,17 +8217,19 @@ def mock_exam_process(exam_id, token):
     if err:
         return f"模考会话不存在：{err[0]}", err[1]
     if sess.status == MockExamSession.STATUS_SUBMITTED:
-        return redirect(url_for("mock_exam_result", exam_id=exam.id, token=token))
+        return redirect(
+            _url_for_with_practice_navigation("mock_exam_result", exam_id=exam.id, token=token)
+        )
     return render_template(
         "exam/process.html",
         exam=exam,
         session=sess,
         session_payload=_serialize_mock_exam_session(sess),
         has_writing=bool(exam.writing_test_id),
-        listening_url=url_for("mock_exam_listening", exam_id=exam.id, token=token),
-        reading_url=url_for("mock_exam_reading", exam_id=exam.id, token=token),
-        writing_url=url_for("mock_exam_writing", exam_id=exam.id, token=token),
-        result_url=url_for("mock_exam_result", exam_id=exam.id, token=token),
+        listening_url=_url_for_with_practice_navigation("mock_exam_listening", exam_id=exam.id, token=token),
+        reading_url=_url_for_with_practice_navigation("mock_exam_reading", exam_id=exam.id, token=token),
+        writing_url=_url_for_with_practice_navigation("mock_exam_writing", exam_id=exam.id, token=token),
+        result_url=_url_for_with_practice_navigation("mock_exam_result", exam_id=exam.id, token=token),
     )
 
 
@@ -8153,17 +8237,17 @@ def _exam_section_context(exam, sess, section):
     """构造模板用的 exam_context（顶栏、计时、提交目标）。"""
     if section == MockExamSession.SECTION_LISTENING:
         deadline = sess.listening_deadline_at
-        submit_path = url_for("api_mock_exam_submit_listening", exam_id=exam.id, token=sess.access_token)
+        submit_path = _url_for_with_practice_navigation("api_mock_exam_submit_listening", exam_id=exam.id, token=sess.access_token)
         section_label = "Listening"
         minutes = exam.listening_minutes
     elif section == MockExamSession.SECTION_WRITING:
         deadline = sess.writing_deadline_at
-        submit_path = url_for("api_mock_exam_submit_writing", exam_id=exam.id, token=sess.access_token)
+        submit_path = _url_for_with_practice_navigation("api_mock_exam_submit_writing", exam_id=exam.id, token=sess.access_token)
         section_label = "Writing"
         minutes = exam.writing_minutes
     else:
         deadline = sess.reading_deadline_at
-        submit_path = url_for("api_mock_exam_submit_reading", exam_id=exam.id, token=sess.access_token)
+        submit_path = _url_for_with_practice_navigation("api_mock_exam_submit_reading", exam_id=exam.id, token=sess.access_token)
         section_label = "Reading"
         minutes = exam.reading_minutes
     return {
@@ -8175,9 +8259,49 @@ def _exam_section_context(exam, sess, section):
         "section_label": section_label,
         "minutes": minutes,
         "deadline_at": deadline.isoformat() + "Z" if deadline else None,
+        "started_at": (
+            sess.listening_started_at.isoformat() + "Z"
+            if section == MockExamSession.SECTION_LISTENING and sess.listening_started_at
+            else sess.reading_started_at.isoformat() + "Z"
+            if section == MockExamSession.SECTION_READING and sess.reading_started_at
+            else sess.writing_started_at.isoformat() + "Z"
+            if section == MockExamSession.SECTION_WRITING and sess.writing_started_at
+            else None
+        ),
+        "start_url": (
+            _url_for_with_practice_navigation(
+                "mock_exam_student.start_listening_runtime",
+                exam_id=exam.id,
+                token=sess.access_token,
+            )
+            if section == MockExamSession.SECTION_LISTENING
+            else None
+        ),
+        "audio_complete_url": (
+            _url_for_with_practice_navigation(
+                "mock_exam_student.complete_listening_audio",
+                exam_id=exam.id,
+                token=sess.access_token,
+            )
+            if section == MockExamSession.SECTION_LISTENING
+            else None
+        ),
+        "draft_url": (
+            _url_for_with_practice_navigation(
+                "mock_exam_student.save_objective_draft",
+                exam_id=exam.id,
+                token=sess.access_token,
+                section=section,
+            )
+            if section in (
+                MockExamSession.SECTION_LISTENING,
+                MockExamSession.SECTION_READING,
+            )
+            else None
+        ),
         "submit_url": submit_path,
-        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
-        "exit_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "next_url": _url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "exit_url": _url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=sess.access_token),
     }
 
 
@@ -8190,22 +8314,24 @@ def mock_exam_listening(exam_id, token):
         MockExamSession.SECTION_READING,
         MockExamSession.SECTION_FINISHED,
     ):
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
 
     test, _path, _safe = _load_listening_test_payload(exam.listening_test_id)
     if not test:
         return f"听力题目 {exam.listening_test_id} 不存在", 404
 
-    now = datetime.utcnow()
-    if not sess.listening_started_at:
-        sess.listening_started_at = now
-        sess.listening_deadline_at = now + timedelta(minutes=exam.listening_minutes)
-        sess.current_section = MockExamSession.SECTION_LISTENING
+    if _mock_exam_runtime.finalize_expired_section(
+        sess,
+        exam,
+        MockExamSession.SECTION_LISTENING,
+        test,
+    ):
         db.session.commit()
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
 
     return render_template(
         "listening/test_practice.html",
-        test=test,
+        test=_build_simulation_payload(test, "listening"),
         exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_LISTENING),
     )
 
@@ -8216,24 +8342,38 @@ def mock_exam_reading(exam_id, token):
     if err:
         return f"模考会话不存在：{err[0]}", err[1]
     if not sess.listening_submitted_at:
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
     if sess.reading_submitted_at or sess.current_section == MockExamSession.SECTION_FINISHED:
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
 
     test, _path, _safe = _load_reading_test_payload(exam.reading_test_id)
     if not test:
         return f"阅读题目 {exam.reading_test_id} 不存在", 404
 
     now = datetime.utcnow()
+    if _mock_exam_runtime.finalize_expired_section(
+        sess,
+        exam,
+        MockExamSession.SECTION_READING,
+        test,
+        now,
+    ):
+        if sess.status == MockExamSession.STATUS_SUBMITTED:
+            _mock_review_workflow.ensure_review_draft(sess)
+        db.session.commit()
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
     if not sess.reading_started_at:
-        sess.reading_started_at = now
-        sess.reading_deadline_at = now + timedelta(minutes=exam.reading_minutes)
-        sess.current_section = MockExamSession.SECTION_READING
+        _mock_exam_runtime.start_section(
+            sess,
+            MockExamSession.SECTION_READING,
+            exam.reading_minutes,
+            now,
+        )
         db.session.commit()
 
     return render_template(
         "reading/test_practice.html",
-        test=test,
+        test=_build_simulation_payload(test, "reading"),
         exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_READING),
     )
 
@@ -8244,11 +8384,11 @@ def mock_exam_writing(exam_id, token):
     if err:
         return f"模考会话不存在：{err[0]}", err[1]
     if not exam.writing_test_id:
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
     if not sess.reading_submitted_at:
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
     if sess.writing_submitted_at or sess.status == MockExamSession.STATUS_SUBMITTED:
-        return redirect(url_for("mock_exam_process", exam_id=exam.id, token=token))
+        return redirect(_url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=token))
 
     test, _path, _safe = _load_writing_test_payload(exam.writing_test_id)
     if not test:
@@ -8267,7 +8407,7 @@ def mock_exam_writing(exam_id, token):
         exam=exam,
         session=sess,
         exam_context=_exam_section_context(exam, sess, MockExamSession.SECTION_WRITING),
-        draft_url=url_for("api_mock_exam_save_writing_draft", exam_id=exam.id, token=token),
+        draft_url=_url_for_with_practice_navigation("api_mock_exam_save_writing_draft", exam_id=exam.id, token=token),
         essay_task1=sess.writing_essay_task1 or "",
         essay_task2=sess.writing_essay_task2 or "",
     )
@@ -8282,37 +8422,15 @@ def _persist_mock_exam_section_grade(
     auto_submitted: bool,
     has_writing: bool = False,
 ):
-    now = datetime.utcnow()
-    if section == MockExamSession.SECTION_LISTENING:
-        sess.listening_submitted_at = now
-        sess.listening_correct = grade.get("correct")
-        sess.listening_total = grade.get("total")
-        sess.listening_accuracy = grade.get("accuracy")
-        sess.listening_ielts_score = grade.get("ielts_score")
-        sess.listening_duration_seconds = max(int(sess.listening_duration_seconds or 0), int(duration_seconds or 0))
-        sess.listening_answers_json = json.dumps(answers, ensure_ascii=False)
-        sess.listening_results_json = json.dumps(grade.get("results") or [], ensure_ascii=False)
-        sess.listening_wrong_numbers_json = json.dumps(grade.get("wrong_numbers") or [], ensure_ascii=False)
-        sess.listening_auto_submitted = bool(auto_submitted)
-        sess.current_section = MockExamSession.SECTION_READING
-    else:
-        sess.reading_submitted_at = now
-        sess.reading_correct = grade.get("correct")
-        sess.reading_total = grade.get("total")
-        sess.reading_accuracy = grade.get("accuracy")
-        sess.reading_ielts_score = grade.get("ielts_score")
-        sess.reading_duration_seconds = max(int(sess.reading_duration_seconds or 0), int(duration_seconds or 0))
-        sess.reading_answers_json = json.dumps(answers, ensure_ascii=False)
-        sess.reading_results_json = json.dumps(grade.get("results") or [], ensure_ascii=False)
-        sess.reading_wrong_numbers_json = json.dumps(grade.get("wrong_numbers") or [], ensure_ascii=False)
-        sess.reading_auto_submitted = bool(auto_submitted)
-        if has_writing:
-            # 还有写作科：留在进行中，交给写作科收尾
-            sess.current_section = MockExamSession.SECTION_WRITING
-        else:
-            sess.current_section = MockExamSession.SECTION_FINISHED
-            sess.status = MockExamSession.STATUS_SUBMITTED
-            sess.finished_at = now
+    _mock_exam_runtime.persist_section_grade(
+        sess,
+        section,
+        grade,
+        answers,
+        duration_seconds,
+        auto_submitted,
+        has_writing=has_writing,
+    )
 
 
 @app.post("/api/exam/<int:exam_id>/session/<token>/submit-listening")
@@ -8328,15 +8446,17 @@ def api_mock_exam_submit_listening(exam_id, token):
         return jsonify({"ok": False, "error": "test_not_found"}), 404
 
     data = request.get_json(silent=True) or {}
-    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    incoming_answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
     try:
         duration_seconds = max(0, int(data.get("duration_seconds") or 0))
     except (TypeError, ValueError):
         duration_seconds = 0
 
-    auto_submitted = False
-    if sess.listening_deadline_at and datetime.utcnow() > sess.listening_deadline_at + timedelta(seconds=5):
-        auto_submitted = True
+    answers, auto_submitted = _mock_exam_runtime.submission_answers(
+        sess,
+        MockExamSession.SECTION_LISTENING,
+        incoming_answers,
+    )
 
     grade = _grade_listening_test_answers(payload, answers)
     _persist_mock_exam_section_grade(
@@ -8352,7 +8472,7 @@ def api_mock_exam_submit_listening(exam_id, token):
     return jsonify({
         "ok": True,
         "result": grade,
-        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "next_url": _url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=sess.access_token),
         "auto_submitted": auto_submitted,
     })
 
@@ -8370,15 +8490,17 @@ def api_mock_exam_submit_reading(exam_id, token):
         return jsonify({"ok": False, "error": "test_not_found"}), 404
 
     data = request.get_json(silent=True) or {}
-    answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
+    incoming_answers = data.get("answers") if isinstance(data.get("answers"), dict) else {}
     try:
         duration_seconds = max(0, int(data.get("duration_seconds") or 0))
     except (TypeError, ValueError):
         duration_seconds = 0
 
-    auto_submitted = False
-    if sess.reading_deadline_at and datetime.utcnow() > sess.reading_deadline_at + timedelta(seconds=5):
-        auto_submitted = True
+    answers, auto_submitted = _mock_exam_runtime.submission_answers(
+        sess,
+        MockExamSession.SECTION_READING,
+        incoming_answers,
+    )
 
     grade = _grade_reading_test_answers(payload, answers)
     _persist_mock_exam_section_grade(
@@ -8397,7 +8519,7 @@ def api_mock_exam_submit_reading(exam_id, token):
     return jsonify({
         "ok": True,
         "result": grade,
-        "next_url": url_for("mock_exam_process", exam_id=exam.id, token=sess.access_token),
+        "next_url": _url_for_with_practice_navigation("mock_exam_process", exam_id=exam.id, token=sess.access_token),
         "auto_submitted": auto_submitted,
     })
 
@@ -8451,7 +8573,7 @@ def api_mock_exam_submit_writing(exam_id, token):
     return jsonify({
         "ok": True,
         "result": counts,
-        "next_url": url_for("mock_exam_result", exam_id=exam.id, token=sess.access_token),
+        "next_url": _url_for_with_practice_navigation("mock_exam_result", exam_id=exam.id, token=sess.access_token),
         "auto_submitted": auto_submitted,
     })
 
@@ -8698,6 +8820,8 @@ def _practice_task_sort_key(task: Task) -> tuple[int, str, int]:
 
 
 def _practice_task_source_label(task: Task) -> str:
+    if task.grading_mode == "question_type_practice":
+        return "IELTS 题型专项"
     if task.reading_test_id:
         test_id = (task.reading_test_id or "").strip()
         if test_id.startswith("reading_jijing_"):
@@ -8737,7 +8861,17 @@ def _practice_role_group(role: str | None) -> str | None:
 
 
 def _practice_task_payload(task) -> dict | None:
-    if task.listening_exercise_id:
+    if task.grading_mode == "question_type_practice":
+        from services.question_type_assignments import assignment_url
+        from services.question_type_practice import snapshot_from_task
+
+        snapshot = snapshot_from_task(task)
+        url = assignment_url(task)
+        if not snapshot or not url:
+            return None
+        category = "题型专项"
+        title = task.detail or snapshot.get("standard_type_label") or "IELTS 题型专项"
+    elif task.listening_exercise_id:
         if not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
         url = _task_listening_url(task, absolute=False)
@@ -8820,6 +8954,7 @@ def api_practice_tasks():
             or_(
                 Task.listening_exercise_id.isnot(None),
                 Task.reading_test_id.isnot(None),
+                Task.grading_mode == "question_type_practice",
             ),
             or_(
                 Task.date.is_(None),
@@ -8897,6 +9032,7 @@ def api_student_practices_today():
             or_(
                 Task.listening_exercise_id.isnot(None),
                 Task.reading_test_id.isnot(None),
+                Task.grading_mode == "question_type_practice",
             ),
         )
         .order_by(Task.id.asc())

@@ -21,7 +21,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         <span>introduce</span>
       </div>
-      <div class="exam-window__close">×</div>
+      <button class="exam-window__close" type="button" data-practice-back aria-label="返回练习中心">×</button>
     </header>
 
     <main class="exam-window__body">
@@ -60,7 +60,7 @@
 
 <script>
 const examId = {{ exam.id|tojson }};
-const startUrl = `/api/exam/${examId}/start`;
+const startUrl = {{ start_url|tojson }};
 const formTitle = document.getElementById('formStepTitle');
 const rowName = document.getElementById('rowName');
 const rowPin = document.getElementById('rowPin');
@@ -125,5 +125,8 @@ document.getElementById('examName').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') { e.preventDefault(); btnLogin.click(); }
 });
 </script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.init({fallbackUrl: {{ url_for('practice_library')|tojson }}, fallbackMode: 'practice_library', initialSaved: true});</script>
 </body>
 </html>

@@ -1,3 +1,9 @@
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -7,7 +13,7 @@
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 {% include "practice/_workspace_styles.html" %}
 </head>
-<body class="practice-workspace-page">
+<body class="practice-workspace-page" data-practice-hub="section">
 {% set collections = catalog.get("collections") if catalog else [] %}
 {% if books and not collections %}
   {% set collections = [{"id": "idictation", "title": "听力机经", "part_count": catalog.part_count}] %}
@@ -15,7 +21,7 @@
 <div class="practice-workspace" data-practice-workspace>
   <header class="practice-workspace__topbar">
     <div class="practice-workspace__brand-nav">
-      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
         <span>Sage Path</span>
       </a>
@@ -27,7 +33,8 @@
       </nav>
     </div>
     <div class="practice-workspace__account">
-      <a href="{{ url_for('index') }}">返回首页</a>
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
       {% if current_user.is_authenticated %}
       <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
       {% endif %}
@@ -171,5 +178,8 @@
   </div>
 </div>
 <script src="{{ url_for('static', filename='js/practice_workspace.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.installListContext({ ...window.PRACTICE_NAVIGATION_DEFAULTS, sourceMode: 'listening_jijing' }); PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);</script>
 </body>
 </html>

@@ -1,5 +1,11 @@
 <!doctype html>
 <html lang="zh">
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
 
 <head>
   <meta charset="utf-8">
@@ -117,7 +123,12 @@
   <header class="topbar">
     <h1>学习计划与打卡系统</h1>
     <nav>
+      {% if request.path.startswith('/practice') %}
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+      {% else %}
       <a href="{{ url_for('index') }}">首页</a>
+      {% endif %}
       <a href="{{ url_for('login') }}">登录</a>
     </nav>
   </header>
@@ -140,6 +151,12 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <script>window.PRACTICE_NAVIGATION_DEFAULTS = {{ practice_navigation|tojson }};</script>
+  <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+  <script>
+    PracticeShell.installListContext(window.PRACTICE_NAVIGATION_DEFAULTS);
+    PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {

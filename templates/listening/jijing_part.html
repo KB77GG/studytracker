@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ part.in_book }} {{ part.test_name }} {{ part.part_title }} - 听力机经</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/practice_shell.css') }}">
 <style>
 :root {
   --brand: #2F8E87;
@@ -65,6 +66,14 @@ body {
   flex-direction: column;
   gap: 12px;
 }
+.player-shell-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.player-shell-row > div:first-child { min-width: 0; }
+.player-shell-actions { display: flex; align-items: center; gap: 8px; }
 .crumb {
   color: var(--brand);
   font-size: 13px;
@@ -493,6 +502,7 @@ table.practice-table {
   .tabs { overflow-x: auto; }
   .tab { white-space: nowrap; }
   .transcript-row { grid-template-columns: 1fr; }
+  .player-shell-row { align-items: flex-start; flex-direction: column; }
 }
 </style>
 </head>
@@ -500,8 +510,9 @@ table.practice-table {
 <div class="shell">
   <header class="player-bar">
     <div class="player-inner">
-      <div>
-        <div class="crumb">Sage Path · Listening</div>
+      <div class="player-shell-row">
+        <div>
+          <div class="crumb">Sage Path · Listening</div>
         {% if part.collection == "xiahuar" %}
         <h1>{{ part.test_name }}</h1>
         <div class="meta">{{ part.part_title }} · {{ part.question_name }} · {{ part.question_type }}</div>
@@ -509,7 +520,14 @@ table.practice-table {
         {% else %}
         <h1>{{ part.part_title }} · {{ part.question_name }}</h1>
         <div class="meta">{{ part.question_type }} · Paper {{ part.paper_id }}</div>
-        {% endif %}
+          {% endif %}
+        </div>
+        <div class="player-shell-actions">
+          <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+          <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
+          <button class="practice-shell__back" type="button" data-practice-back>← 返回听力机经</button>
+          <button class="practice-shell__back" type="button" data-practice-module-exit>退出刷题</button>
+        </div>
       </div>
       <audio id="audio" controls preload="metadata"></audio>
     </div>
@@ -524,7 +542,6 @@ table.practice-table {
       <button class="tab" data-tab="dictation">精听</button>
       <button class="tab" data-tab="analysis">解析</button>
       <button class="tab" data-tab="transcript">原文</button>
-      <a class="tab" href="{{ url_for('listening_jijing_index') }}{% if part.collection %}#collection-{{ part.collection }}{% endif %}" style="text-decoration:none;">返回机经列表</a>
     </nav>
 
     <section class="panel active" id="practicePanel">
@@ -555,8 +572,21 @@ table.practice-table {
   </main>
 </div>
 
+<dialog class="practice-exit-dialog" id="practiceExitDialog">
+  <div class="practice-exit-dialog__body">
+    <h2>退出并保存进度？</h2>
+    <p>当前答案会先保存，再返回进入本页前的位置。</p>
+  </div>
+  <div class="practice-exit-dialog__actions">
+    <button type="button" data-practice-exit-cancel>继续答题</button>
+    <button type="button" data-practice-exit-confirm>退出并保存</button>
+  </div>
+</dialog>
+
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -566,6 +596,9 @@ const staticBase = "{{ url_for('static', filename='listening_jijing/') }}";
 const audio = document.getElementById('audio');
 audio.src = staticBase + part.audio.local_path;
 const practiceStartedAt = Date.now();
+const jijingDraftOwner = localStorage.getItem('listening_student') || 'guest';
+const jijingDraftKey = `listening_jijing_answers_${part.id}_${jijingDraftOwner}`;
+let practiceShellController = null;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -827,6 +860,27 @@ function answerSnapshot() {
   return answers;
 }
 
+function persistJijingDraft() {
+  try {
+    localStorage.setItem(jijingDraftKey, JSON.stringify(answerSnapshot()));
+    return true;
+  } catch (_error) {
+    return false;
+  }
+}
+
+function restoreJijingDraft() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(jijingDraftKey) || '{}');
+    document.querySelectorAll('.answer-unit').forEach(unit => {
+      const key = unit.dataset.q || '';
+      if (key && Object.prototype.hasOwnProperty.call(saved, key)) setUnitValue(unit, saved[key]);
+    });
+  } catch (_error) {
+    localStorage.removeItem(jijingDraftKey);
+  }
+}
+
 function markUnit(unit) {
   const kind = unit.dataset.kind;
   const answer = unit.dataset.answer || '';
@@ -912,8 +966,10 @@ async function syncJijingSubmission(results, correct, total, baseHtml) {
     } else {
       resultBox.innerHTML = `${grade.correct}/${grade.total} · 正确率 ${Math.round((grade.accuracy || 0))}%<br><span class="muted">未绑定学生姓名，仅完成本地判分。</span>`;
     }
+    practiceShellController?.markSaved();
   } catch (_error) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
+    practiceShellController?.setStatus('保存失败，点击重试', 'error');
   }
 }
 
@@ -949,6 +1005,7 @@ async function loadExistingJijingSubmission() {
       ${wrong.length ? `<br>待核对：${wrong.slice(0, 12).map(row => escapeHtml(row)).join('、')}${wrong.length > 12 ? '…' : ''}` : '<br>全部正确'}
       <br>已加载后台记录
     `;
+    practiceShellController?.markSaved();
   } catch (_error) {
     // 历史记录加载失败时不影响本次练习。
   }
@@ -960,12 +1017,18 @@ function renderPractice() {
   document.getElementById('markCount').textContent = Array.from(document.querySelectorAll('.answer-unit'))
     .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
   document.querySelectorAll('.answer-unit').forEach(unit => {
+    const saveDraft = () => {
+      if (persistJijingDraft()) practiceShellController?.markDirty();
+      else practiceShellController?.setStatus('保存失败，点击重试', 'error');
+    };
+    unit.addEventListener('input', saveDraft);
     unit.addEventListener('change', event => {
       const limited = PracticeScoring.limitSelection(unit, event);
       if (!limited) {
         const hint = unit.querySelector('.selection-hint');
         if (hint) hint.textContent = `最多选择 ${unit.dataset.maxSelections} 项，请先取消一个选择`;
       }
+      saveDraft();
     });
   });
 }
@@ -1032,10 +1095,18 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     ${wrong.length ? `<br>待核对：${wrong.slice(0, 12).map(row => escapeHtml(row.q)).join('、')}${wrong.length > 12 ? '…' : ''}` : '<br>全部正确'}
   `;
   document.getElementById('resultBox').innerHTML = baseHtml;
+  persistJijingDraft();
   syncJijingSubmission(results, correct, total, baseHtml);
 });
 
+practiceShellController = PracticeShell.init({
+  fallbackUrl: "{{ url_for('listening_jijing_index') }}{% if part.collection %}#collection-{{ part.collection }}{% endif %}",
+  fallbackMode: listeningTaskId ? 'task_detail' : 'listening_jijing',
+  initialSaved: true,
+  save: persistJijingDraft
+});
 renderPractice();
+restoreJijingDraft();
 renderTranscript();
 renderDictation();
 renderAnalysis();

@@ -1,3 +1,9 @@
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -485,7 +491,7 @@
 </style>
 {% include "listening/_library_styles.html" %}
 </head>
-<body>
+<body data-practice-hub="section">
 
 {% macro render_intensive_catalog(catalog, staff=False, can_manage=False) %}
 {% set suffix = 'staff' if staff else 'student' %}
@@ -646,9 +652,9 @@
   <div class="identity-bar identity-bar--staff listening-library__identity">
     <span>{{ '员工模式' if show_upload else '课堂模式' }} · <span class="name">{{ practice_staff_label or (current_user.display_name if current_user.is_authenticated else '课堂模式') or (current_user.username if current_user.is_authenticated else '课堂模式') }}</span></span>
     <span class="actions">
-      <a href="{{ url_for('practice_library') }}">刷题 / 模考</a>
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
       {% if current_user.is_authenticated %}
-      <a href="{{ url_for('index') }}">后台首页</a>
       <a href="{{ url_for('logout') }}">退出登录</a>
       {% else %}
       <a href="{{ url_for('login') }}">员工登录</a>
@@ -712,6 +718,8 @@
     <span>欢迎，<span class="name" id="displayName"></span></span>
     <span class="actions">
       <button onclick="logout()">切换账号</button>
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
     </span>
   </div>
 
@@ -1130,5 +1138,8 @@ document.querySelectorAll('.js-delete-exercise').forEach(btn => {
   });
 });
 </script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.installListContext({ ...window.PRACTICE_NAVIGATION_DEFAULTS, sourceMode: 'intensive_library' }); PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);</script>
 </body>
 </html>

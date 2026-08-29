@@ -51,7 +51,15 @@ class WebTeacherJijingAssignmentTest(unittest.TestCase):
         reading = build_reading_jijing_catalog(ROOT / "static" / "reading_jijing")
         template = (ROOT / "templates" / "tasks.html").read_text(encoding="utf-8")
 
-        self.assertEqual(len(reading), 57)
+        self.assertEqual(len(reading), 56)
+        self.assertNotIn(
+            "reading_jijing_83_test_95",
+            {
+                test["id"]
+                for book in reading
+                for test in book.get("tests") or []
+            },
+        )
         self.assertIn('data-listening-filter="jijing">虾滑刷题', template)
         self.assertIn('<optgroup label="虾滑听力">', template)
         self.assertIn('<optgroup label="ZYZ 阅读">', template)

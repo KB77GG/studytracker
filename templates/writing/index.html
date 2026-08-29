@@ -1,3 +1,9 @@
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -8,11 +14,11 @@
 {% include "practice/_workspace_styles.html" %}
 <link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
 </head>
-<body class="practice-workspace-page writing-library-page">
+<body class="practice-workspace-page writing-library-page" data-practice-hub="section">
 <div class="practice-workspace" data-practice-workspace data-writing-index>
   <header class="practice-workspace__topbar">
     <div class="practice-workspace__brand-nav">
-      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
         <span>Sage Path</span>
       </a>
@@ -24,7 +30,8 @@
       </nav>
     </div>
     <div class="practice-workspace__account">
-      <a href="{{ url_for('practice_library') }}">返回题库</a>
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
       <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
     </div>
   </header>
@@ -120,5 +127,8 @@
 </div>
 <script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/writing-library-index.js') }}" defer></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.installListContext({ ...window.PRACTICE_NAVIGATION_DEFAULTS, sourceMode: 'writing_library' }); PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);</script>
 </body>
 </html>

@@ -7,6 +7,8 @@ from pathlib import Path
 
 from werkzeug.utils import secure_filename
 
+from services.practice_library_offline import load_offline_test_ids
+
 
 def _load_json(path: Path) -> dict | None:
     if not path.exists():
@@ -160,10 +162,13 @@ def build_reading_jijing_catalog(root: Path) -> list[dict]:
     """Return ZYZ reading Tests enriched with Passage picker metadata."""
 
     catalog = _load_json(root / "catalog.json") or {}
+    offline_ids = load_offline_test_ids(root)
     result = []
     for book in catalog.get("books") or []:
         tests = []
         for catalog_test in book.get("tests") or []:
+            if str(catalog_test.get("id") or "") in offline_ids:
+                continue
             payload, safe_id = load_reading_jijing_test(
                 root,
                 str(catalog_test.get("id") or ""),

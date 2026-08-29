@@ -10,6 +10,7 @@
   <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'year' else '' }}"
     onclick="location.href='?period=year'">Year</button>
 </div>
+<a class="btn" href="{{ url_for('question_type_practice.teacher_index') }}">题型专项</a>
 <a class="btn" href="#taskForm">+ New Task</a>
 {% endblock %}
 {% block content %}{% endblock %}
@@ -650,6 +651,12 @@
                   {% endif %}
                   {% if t.reading_test_id and t.reading_url %}
                   <a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>
+                  {% endif %}
+                  {% if t.question_type_url %}
+                  <a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>
+                  {% endif %}
+                  {% if t.question_type_result_url %}
+                  <a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>
                   {% endif %}
                   {% if t.listening_test or t.reading_test %}
                   <button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>

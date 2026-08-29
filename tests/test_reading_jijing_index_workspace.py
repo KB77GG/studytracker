@@ -31,6 +31,7 @@ class ReadingJijingIndexWorkspaceTest(unittest.TestCase):
         self.assertEqual(html.count("data-reading-study-test="), len(tests))
         for test in tests:
             self.assertIn(f'href="/reading/jijing/{test["id"]}"', html)
+        self.assertNotIn("reading_jijing_83_test_95", html)
 
     def test_only_first_ten_groups_show_before_expanding_more(self):
         books = _reading_jijing_catalog()

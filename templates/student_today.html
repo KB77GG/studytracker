@@ -129,6 +129,27 @@
 </section>
 {% endif %}
 
+{% if question_type_tasks %}
+<section class="card listening-section">
+  <h3>IELTS 题型专项</h3>
+  {% for task in question_type_tasks %}
+  <article class="task-card">
+    <div class="task-card__body">
+      <div class="task-card__title">{{ task.detail }}</div>
+      <div class="task-card__meta">
+        {% if task.status == 'done' %}已完成 · 正确率 {{ '%.1f'|format(task.accuracy or 0) }}%
+        {% elif task.status == 'progress' %}已自动保存，可继续作答
+        {% else %}未开始{% endif %}
+      </div>
+    </div>
+    <a class="task-card__cta {{ 'task-card__cta--success' if task.status == 'done' }}" href="{{ task.question_type_url }}">
+      {{ '查看复盘' if task.status == 'done' else ('继续专项' if task.status == 'progress' else '开始专项') }}
+    </a>
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
 <section class="card listening-section">
   <h3>自由精听练习</h3>
   <article class="task-card">

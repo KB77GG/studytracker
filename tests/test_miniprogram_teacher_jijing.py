@@ -111,7 +111,15 @@ class MiniprogramTeacherJijingTest(unittest.TestCase):
         self.assertEqual(listening_parts[0]["id"], "xiahuar_001_p1")
 
         reading = payload["reading_jijing"]
-        self.assertEqual(len(reading), 57)
+        self.assertEqual(len(reading), 56)
+        self.assertNotIn(
+            "reading_jijing_83_test_95",
+            {
+                test["id"]
+                for book in reading
+                for test in book.get("tests") or []
+            },
+        )
         self.assertEqual(reading[0]["label"], "ZYZ 5")
         self.assertEqual(reading[0]["tests"][0]["id"], "reading_jijing_5_test_59")
         self.assertEqual(len(reading[0]["tests"][0]["passages"]), 3)

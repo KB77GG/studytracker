@@ -298,6 +298,7 @@ class PlanItem(db.Model, TimestampMixin, SoftDeleteMixin):
     STUDENT_SUBMITTED = "submitted"
 
     RESOURCE_CAMBRIDGE_LISTENING_TEST = "cambridge_listening_test"
+    RESOURCE_QUESTION_TYPE_PRACTICE = "question_type_practice"
     RESOURCE_INTENSIVE_LISTENING = "intensive_listening"
     RESOURCE_DICTATION = "dictation"
     RESOURCE_SPEAKING = "speaking"
@@ -468,6 +469,49 @@ class AuditLogEntry(db.Model):
     metadata_payload = db.Column(db.JSON)
 
     actor = db.relationship("User", backref=db.backref("audit_logs", lazy="dynamic"))
+
+
+class QuestionTypePracticeAttempt(db.Model, TimestampMixin):
+    """Server-owned draft and result for one frozen question-group task.
+
+    The assignment itself remains the existing ``Task``/``PlanItem`` pair.
+    This additive table only retains resumable answers, the exam deadline, and
+    immutable post-submit feedback for that assignment.
+    """
+
+    __tablename__ = "question_type_practice_attempt"
+
+    STATUS_PENDING = "pending"
+    STATUS_IN_PROGRESS = "in_progress"
+    STATUS_SUBMITTED = "submitted"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, unique=True, index=True)
+    student_name = db.Column(db.String(64), nullable=False, index=True)
+    subject = db.Column(db.String(20), nullable=False, index=True)
+    standard_type = db.Column(db.String(64), nullable=False, index=True)
+    pace = db.Column(db.String(20), nullable=False)
+    snapshot_hash = db.Column(db.String(64), nullable=False, index=True)
+    status = db.Column(db.String(20), nullable=False, default=STATUS_PENDING, index=True)
+    answers_json = db.Column(db.Text)
+    results_json = db.Column(db.Text)
+    wrong_group_ids_json = db.Column(db.Text)
+    started_at = db.Column(db.DateTime, index=True)
+    deadline_at = db.Column(db.DateTime, index=True)
+    submitted_at = db.Column(db.DateTime, index=True)
+    correct_count = db.Column(db.Integer, nullable=False, default=0)
+    total_count = db.Column(db.Integer, nullable=False, default=0)
+    accuracy = db.Column(db.Float, nullable=False, default=0.0)
+    duration_seconds = db.Column(db.Integer, nullable=False, default=0)
+
+    task = db.relationship(
+        "Task",
+        backref=db.backref(
+            "question_type_attempt",
+            uselist=False,
+            cascade="all, delete-orphan",
+        ),
+    )
 
 
 # ---- Legacy models (kept temporarily for compatibility with existing views) ----
@@ -2364,7 +2408,7 @@ class MockExam(db.Model):
     listening_test_id = db.Column(db.String(120), nullable=False)
     reading_test_id = db.Column(db.String(120), nullable=False)
     writing_test_id = db.Column(db.String(120))  # nullable: 未配写作卷=两科模考
-    listening_minutes = db.Column(db.Integer, default=30, nullable=False)
+    listening_minutes = db.Column(db.Integer, default=32, nullable=False)
     reading_minutes = db.Column(db.Integer, default=60, nullable=False)
     writing_minutes = db.Column(db.Integer, default=60, nullable=False)
     pincode = db.Column(db.String(16), nullable=False, index=True)

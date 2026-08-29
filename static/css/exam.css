@@ -70,9 +70,11 @@ body.exam-bg {
   margin-left: auto;
   width: 28px; height: 28px;
   display: inline-flex; align-items: center; justify-content: center;
+  border: 0;
   border-radius: 50%;
   background: var(--exam-orange);
   color: #fff; font-size: 18px; line-height: 1;
+  cursor: pointer;
 }
 
 .exam-window__body {
@@ -301,10 +303,12 @@ body.exam-app-bg {
   z-index: 20;
 }
 .exam-bottombar__exit {
+  background: #fff;
   color: var(--exam-ink); font-weight: 700; text-decoration: none;
   padding: 6px 16px;
   border: 1px solid var(--exam-line);
   border-radius: 4px;
+  cursor: pointer;
 }
 .exam-bottombar__exit:hover { background: var(--exam-bg); }
 
@@ -343,6 +347,7 @@ body.exam-mode { padding-top: 0 !important; padding-bottom: 60px !important; }
   border-radius: 4px;
 }
 .exam-mode-shell__timer.is-warning { color: var(--exam-warn); border-color: var(--exam-warn); animation: examPulse 1s infinite; }
+.exam-mode-shell__timer.is-critical { color: #b91c1c; border-color: #b91c1c; background: #fff1f2; }
 .exam-mode-shell__exit {
   color: var(--exam-ink); font-weight: 700; text-decoration: none;
   padding: 6px 16px;

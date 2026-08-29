@@ -487,7 +487,7 @@ a.practice-resource:hover {
 }
 </style>
 
-<main class="practice-page">
+<main class="practice-page" data-practice-hub="root">
   <section class="practice-hero">
     <div>
       <p class="practice-hero__eyebrow">Practice Library</p>
@@ -590,6 +590,13 @@ a.practice-resource:hover {
             <div class="practice-resource__meta">40 道高频试点题 · 6.0 / 6.5 / 7.0+ 三档范文 · 结构学习与打字记录</div>
           </div>
           <span class="practice-resource__cta">进入</span>
+        </a>
+        <a class="practice-resource js-practice-resource" href="{{ url_for('question_type_practice.student_index') }}">
+          <div>
+            <p class="practice-resource__label">听力 / 阅读题型专项</p>
+            <div class="practice-resource__meta">按完整 Question Group 练习；可选题型、范围、题组数以及考试或训练节奏。</div>
+          </div>
+          <span class="practice-resource__cta">开始专项</span>
         </a>
       </div>
     </article>

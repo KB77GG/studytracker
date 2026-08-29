@@ -272,6 +272,7 @@ select.answer-control { min-width: 154px; }
   margin: 0 4px;
 }
 .blank-number { color: var(--sage-deep); font-weight: 900; }
+.practice-form__prompt { display: inline-block; min-width: 28px; white-space: nowrap; }
 .choice-stack { display: grid; gap: 8px; width: 100%; min-width: 0; }
 .choice-option {
   display: flex;
@@ -412,6 +413,7 @@ body.result-mode .analysis { display: block; }
   .btn { width: 100%; }
 }
 </style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/practice_shell.css') }}">
 {% if exam_context %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
 <style>
@@ -419,10 +421,25 @@ body.exam-mode .topbar { box-shadow: none; border-bottom: 1px solid #e3e8ed; }
 body.exam-mode .topbar .crumb,
 body.exam-mode .topbar h1,
 body.exam-mode .topbar .meta { display: none; }
+body.exam-mode .practice-shell__heading { display: none; }
 body.exam-mode #templateSourceWarning,
 body.exam-mode .mode-nav { display: none; }
 body.exam-mode #submitBtn,
 body.exam-mode #resetBtn { display: none; }
+@media (min-width: 981px) {
+  body.practice-reading-page.exam-mode .page {
+    height: calc(100vh - 52px - var(--practice-bottom-height));
+    margin-top: 0;
+  }
+  body.practice-reading-page.exam-mode .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+body[data-experience-mode="simulation"] .card,
+body[data-experience-mode="simulation"] .group {
+  border-radius: 0;
+  box-shadow: none;
+}
 .exam-finish-btn {
   position: fixed; right: 24px; bottom: 18px; z-index: 50;
   background: #2563eb; color: #fff; border: none;
@@ -436,7 +453,7 @@ body.exam-mode #resetBtn { display: none; }
 </style>
 {% endif %}
 </head>
-<body{% if exam_context %} class="exam-mode"{% endif %}>
+<body class="practice-shell-page practice-reading-page{% if exam_context %} exam-mode{% endif %}" data-reading-pane="questions">
 {% if exam_context %}
 <header class="exam-mode-shell">
   <div class="exam-mode-shell__left">
@@ -447,13 +464,17 @@ body.exam-mode #resetBtn { display: none; }
   <div class="exam-mode-shell__right">
     <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
-    <a class="exam-mode-shell__exit" href="{{ exam_context.exit_url }}">Exit</a>
+    <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
   </div>
 </header>
 {% endif %}
+{% if not exam_context %}
 <header class="topbar">
   <div class="topbar-inner">
-    <div>
+    <div class="practice-shell__heading">
+      <button class="practice-shell__back" type="button" data-practice-back data-capability="canShowPracticeBack">← 返回练习列表</button>
+      <button class="practice-shell__back" type="button" data-practice-module-exit data-capability="canShowPracticeBack">退出刷题</button>
+      <div class="practice-shell__title-block">
       {% set is_reading_jijing = test.source == 'idictation_reading_jijing' %}
       <div class="crumb">
         <a href="{{ url_for('practice_library') }}">阅读</a> /
@@ -462,21 +483,30 @@ body.exam-mode #resetBtn { display: none; }
       </div>
       <h1 id="practiceTitle">{{ test.title }}</h1>
       <div class="meta" id="practiceMeta">3 篇 Passage · 40 题 · 建议 60 分钟完成</div>
+      </div>
     </div>
     <div class="topbar-actions">
       {% if not exam_context %}
-      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden>Reading Study</a>
+      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
       {% endif %}
-      <div class="timer" aria-live="polite">
+      <div class="timer" aria-live="polite" data-capability="showElapsedTimer">
         <div class="timer-label">用时</div>
         <div class="timer-value" id="timerValue">00:00</div>
       </div>
+      <span class="practice-shell__save" data-practice-save-status aria-live="polite" data-capability="showPracticeSyncStatus">已保存</span>
+      <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
     </div>
   </div>
 </header>
+{% endif %}
 
 <main class="page">
   <nav class="tabs" id="passageTabs" aria-label="阅读 Passage"></nav>
+
+  <div class="reading-workspace-toggle" aria-label="阅读工作区">
+    <button type="button" data-reading-pane-button="article">文章</button>
+    <button class="is-active" type="button" data-reading-pane-button="questions">题目</button>
+  </div>
 
   <section class="layout">
     <article class="card passage-card" id="passagePanel" data-hl-root="reading-passage"></article>
@@ -486,22 +516,59 @@ body.exam-mode #resetBtn { display: none; }
 
 <footer class="bottom-bar">
   <div class="bottom-inner">
+    {% if not exam_context %}
     <div>
-      <div class="score-summary" id="scoreSummary">已答 <strong>0</strong> / 40</div>
-      <div class="sync-status" id="syncStatus">已绑定学生姓名后，提交会同步到练习记录和报告</div>
+      <div class="score-summary" id="scoreSummary" data-capability="showAnsweredSummary">已答 <strong>0</strong> / 40</div>
+      <div class="sync-status" id="syncStatus" data-capability="showPracticeSyncStatus">已绑定学生姓名后，提交会同步到练习记录和报告</div>
     </div>
+    {% endif %}
+    <div class="practice-bottom-nav">
+      <button class="practice-bottom-nav__step" type="button" id="previousQuestion">上一题</button>
+      <button class="practice-bottom-nav__step practice-bottom-nav__flag" type="button" id="toggleQuestionFlag" aria-pressed="false" data-capability="canFlagQuestions">待回看</button>
+      <div class="question-nav" id="questionNav" aria-label="题号导航"></div>
+      <button class="practice-bottom-nav__step" type="button" id="nextQuestion">下一题</button>
+    </div>
+    {% if not exam_context %}
     <div class="actions">
-      <button class="btn" type="button" id="resetBtn">重做</button>
-      <button class="btn btn-primary" type="button" id="submitBtn">提交判分</button>
+      <button class="btn" type="button" id="resetBtn" data-capability="canResetAnswers">重做</button>
+      <button class="btn btn-primary" type="button" id="submitBtn" data-capability="canSubmitForScoring">提交判分</button>
     </div>
+    {% endif %}
   </div>
 </footer>
 
+<dialog class="practice-exit-dialog" id="practiceExitDialog">
+  <div class="practice-exit-dialog__body">
+    <h2>退出并保存进度？</h2>
+    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
+  </div>
+  <div class="practice-exit-dialog__actions">
+    <button type="button" data-practice-exit-cancel>继续答题</button>
+    <button type="button" data-practice-exit-confirm>退出并保存</button>
+  </div>
+</dialog>
+
 <script src="{{ url_for('static', filename='js/practice_table.js') }}"></script>
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_modes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_renderers.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
+const practiceContext = {{ practice_context|default(none)|tojson }};
+const persistenceContext = examContext || practiceContext;
+let experienceMode = PracticeModes.resolve(examContext
+  ? { simulationMode: true }
+  : { practiceMode: true });
+let experienceCapabilities = PracticeModes.capabilities(experienceMode);
+
+function setExperienceMode(mode) {
+  experienceMode = PracticeModes.resolve(mode);
+  experienceCapabilities = PracticeModes.apply(document, experienceMode);
+  return experienceCapabilities;
+}
 const rawTestData = {{ test | tojson }};
 const readingTaskId = pageParams.get("task_id") || "";
 const readingTaskToken = pageParams.get("token") || "";
@@ -514,36 +581,84 @@ const testData = assignedPassageNumber
     }
   : rawTestData;
 const answers = {};
+const readingStorageOwner = localStorage.getItem("listening_student") || "guest";
+const readingStorageScope = assignedPassageNumber ? `passage_${assignedPassageNumber}` : "full";
 const examDraftStorageKey = examContext
   ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_reading_${testData.id}_full`
-  : "";
+  : practiceContext
+    ? `question_type_answers_${practiceContext.task_id}_${testData.id}`
+  : `reading_test_answers_${testData.id}_${readingStorageScope}_${readingStorageOwner}`;
+const readingFlagStorageKey = `${examDraftStorageKey}:flags`;
+let flaggedQuestions = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem(readingFlagStorageKey) || "[]").map(String)); }
+  catch (_error) { return new Set(); }
+})();
 let currentPassageId = testData.passages[0]?.id || "";
+let currentQuestionId = String(testData.passages[0]?.groups?.[0]?.questions?.[0]?.id || "");
 let resultMode = false;
 let startedAt = Date.now();
 let serverResult = null;
+let practiceShellController = null;
+const passageScrollPositions = {};
+const questionScrollPositions = {};
 
 function updateExamSavedIndicator(label = "Saved") {
   const indicator = document.getElementById("examSavedIndicator");
   if (indicator) indicator.textContent = label;
 }
 
-function persistExamDraft() {
-  if (!examDraftStorageKey) return;
+async function persistExamDraft(reason = "local") {
   try {
     localStorage.setItem(examDraftStorageKey, JSON.stringify(answers));
-    updateExamSavedIndicator();
   } catch (_error) {
     updateExamSavedIndicator("Not saved");
+    return false;
+  }
+  if (!persistenceContext?.draft_url || reason === "local") return true;
+  updateExamSavedIndicator("Saving…");
+  try {
+    const response = await fetch(persistenceContext.draft_url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      keepalive: reason === "pagehide" || reason === "visibilitychange",
+      body: JSON.stringify({ answers })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      if (data.submitted && data.next_url) window.location.replace(data.next_url);
+      throw new Error(data.error || "draft_save_failed");
+    }
+    updateExamSavedIndicator();
+    return true;
+  } catch (_error) {
+    updateExamSavedIndicator("Not saved");
+    return false;
   }
 }
 
 function restoreExamDraft() {
-  if (!examDraftStorageKey) return;
   try {
     const saved = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}");
     if (saved && typeof saved === "object" && !Array.isArray(saved)) Object.assign(answers, saved);
   } catch (_error) {
     localStorage.removeItem(examDraftStorageKey);
+  }
+}
+
+async function restoreServerExamDraft() {
+  if (!persistenceContext?.draft_url) return;
+  try {
+    const response = await fetch(persistenceContext.draft_url, { credentials: "same-origin" });
+    const data = await response.json();
+    if (!response.ok || !data.ok || !data.answers) return;
+    const local = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}") || {};
+    Object.assign(answers, data.answers, local);
+    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
+    updateSummary();
+    syncQuestionNav();
+  } catch (_error) {
+    // Local session draft remains available when server recovery is unreachable.
   }
 }
 
@@ -669,8 +784,50 @@ function groupForQuestion(question) {
   return {};
 }
 
+function groupInstruction(group) {
+  return `${group?.desc || ""} ${group?.question_title || ""} ${group?.title || ""}`.toLowerCase();
+}
+
+function passageLetterOptions(question) {
+  const passage = passageForQuestion(question.id);
+  const labels = (passage?.content?.paragraphs || [])
+    .map((paragraph) => String(paragraph?.label || "").trim().toUpperCase())
+    .filter((label) => /^[A-Z]$/.test(label));
+  return Array.from(new Set(labels)).map((key) => ({ key, text: `Paragraph ${key}` }));
+}
+
+function groupLooksLikeParagraphMatching(group) {
+  const instruction = groupInstruction(group);
+  if (/which\s+(?:paragraph|section)\s+contains/.test(instruction)) return true;
+  const questions = group?.questions || [];
+  return questions.length >= 2
+    && !(group?.collect_option?.list || []).length
+    && questions.every((question) => /^[A-Z]$/i.test(String(question.answer || "").trim()))
+    && questions.every((question) => !(question.options || []).some((option) => !canonicalJudgmentAnswer(option.key) && !canonicalJudgmentAnswer(option.text)));
+}
+
+function effectiveGroupOptions(question, group) {
+  const source = group?.collect_option?.list || [];
+  if (source.length) return source;
+  return groupLooksLikeParagraphMatching(group) ? passageLetterOptions(question) : [];
+}
+
+function displayQuestionPrompt(question, group) {
+  const title = String(question?.title || "").trim();
+  if (title) return title;
+  const instruction = groupInstruction(group);
+  if (/heading\s+for\s+each\s+(?:paragraph|section)/.test(instruction)) {
+    const index = Math.max(0, (group?.questions || []).findIndex((item) => String(item.id) === String(question.id)));
+    const passage = passageForQuestion(question.id);
+    const label = String(passage?.content?.paragraphs?.[index]?.label || String.fromCharCode(65 + index)).trim();
+    return `${instruction.includes("section") ? "Section" : "Paragraph"} ${label}`;
+  }
+  return "";
+}
+
 function shouldUseGroupOptions(question, group) {
-  const groupOptions = group.collect_option?.list || [];
+  if (question.uses_group_options === true || question.response_kind === "group_select") return true;
+  const groupOptions = effectiveGroupOptions(question, group);
   if (!groupOptions.length) return false;
   const questionOptions = question.options || [];
   if (!questionOptions.length) return true;
@@ -688,9 +845,20 @@ function allQuestions() {
   );
 }
 
+function resultIds(row) {
+  const value = row?.ids ?? row?.id ?? "";
+  return (Array.isArray(value) ? value : String(value).split(",")).map(String).filter(Boolean);
+}
+
+function passageForQuestion(id) {
+  return testData.passages.find((passage) =>
+    (passage.groups || []).some((group) => (group.questions || []).some((question) => String(question.id) === String(id)))
+  );
+}
+
 function questionControl(question, group) {
   const value = answers[question.id] || "";
-  const groupOptions = group.collect_option?.list || [];
+  const groupOptions = effectiveGroupOptions(question, group);
   const answerLabel = `Question ${question.number} answer`;
   if (shouldUseGroupOptions(question, group)) {
     return `<select class="answer-control" data-qid="${question.id}" aria-label="${escapeHtml(answerLabel)}">
@@ -699,8 +867,8 @@ function questionControl(question, group) {
     </select>`;
   }
   if (shouldUseQuestionOptions(question, group)) {
-    const isMulti = String(question.answer || "").includes(",");
-    const maxSelections = isMulti ? PracticeScoring.splitLetters(question.answer || "").length : 0;
+    const isMulti = question.response_kind === "multiple_choice_multiple" || String(question.answer || "").includes(",");
+    const maxSelections = isMulti ? Number(question.max_selections || PracticeScoring.splitLetters(question.answer || "").length || 1) : 0;
     const hintId = `selection_hint_${question.id}`;
     const selectedValues = splitLetters(value);
     return `<div class="choice-stack" data-qid="${question.id}" ${isMulti ? `data-max-selections="${maxSelections}" aria-describedby="${hintId}"` : ""}>
@@ -720,7 +888,15 @@ function questionControl(question, group) {
       ${groupOptions.map((option) => `<option value="${escapeHtml(option.key)}" ${value === option.key ? "selected" : ""}>${escapeHtml(option.key)}</option>`).join("")}
     </select>`;
   }
-  return `<input class="answer-control" data-qid="${question.id}" value="${escapeHtml(value)}" autocomplete="off" inputmode="text" aria-label="${escapeHtml(answerLabel)}">`;
+  return `<input class="answer-control" data-qid="${question.id}" value="${escapeHtml(value)}" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off" inputmode="text" aria-label="${escapeHtml(answerLabel)}">`;
+}
+
+function reviewCard(question, result = null, value = "") {
+  if (experienceCapabilities.simulationMode) return "";
+  if (!experienceCapabilities.canShowCorrectness) {
+    return `<div data-review-slot="${escapeHtml(question.id)}"></div>`;
+  }
+  return PracticeRenderers.renderReviewCard(question, result, value);
 }
 
 function inlineControl(question, group) {
@@ -762,11 +938,11 @@ function renderTable(table, group, context) {
 }
 
 function renderQuestionRow(question, group) {
-  return `<div class="question-row" data-row-qid="${question.id}">
+  return `<div class="question-row practice-question-anchor" data-row-qid="${question.id}" data-question-id="${question.id}" data-question-number="${escapeHtml(question.number)}">
     <div>
-      <div class="question-text"><span class="question-no">Q${escapeHtml(question.number)}</span> ${escapeHtml(question.title || "")}</div>
+      <div class="question-text"><span class="question-no">Q${escapeHtml(question.number)}</span> ${escapeHtml(displayQuestionPrompt(question, group))}</div>
       <span class="result-pill"></span>
-      <div class="analysis" data-analysis-qid="${question.id}"></div>
+      ${reviewCard(question)}
     </div>
     <div>${questionControl(question, group)}</div>
   </div>`;
@@ -784,32 +960,63 @@ function renderOptionBank(group) {
 function renderGroup(group) {
   const hasStructured = Boolean(group.collect) || Boolean(group.table?.content);
   const renderContext = { seenIds: new Set() };
+  const isForm = PracticeRenderers.isFormGroup(group);
+  const isMatching = PracticeRenderers.isMatchingGroup(group);
+  const structuredRenderer = isForm
+    ? PracticeRenderers.renderForm(
+        group,
+        question => questionControl(question, group),
+        question => reviewCard(question)
+      )
+    : isMatching
+      ? PracticeRenderers.renderMatching(
+          group,
+          renderOptionBank,
+          question => `<div><div class="question-text"><span class="question-no">Q${escapeHtml(question.number)}</span> ${escapeHtml(displayQuestionPrompt(question, group))}</div></div><div>${questionControl(question, group)}${reviewCard(question)}<button class="matching-row__clear" type="button" data-clear-question="${question.id}">清除答案</button></div>`
+        )
+      : "";
   return `<section class="group">
     ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ""}
     ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ""}
-    ${group.img_local || group.img_url ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
-    ${renderOptionBank(group)}
-    ${group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group, renderContext)}</div>` : ""}
-    ${group.table ? renderTable(group.table, group, renderContext) : ""}
-    ${hasStructured ? "" : (group.questions || []).map((question) => renderQuestionRow(question, group)).join("")}
-    ${hasStructured ? (group.questions || []).map((question) => `<div class="analysis" data-analysis-qid="${question.id}"></div>`).join("") : ""}
+    ${structuredRenderer}
+    ${!structuredRenderer && (group.img_local || group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
+    ${!structuredRenderer ? renderOptionBank(group) : ""}
+    ${!structuredRenderer && group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group, renderContext)}</div>` : ""}
+    ${!structuredRenderer && group.table ? renderTable(group.table, group, renderContext) : ""}
+    ${!structuredRenderer && !hasStructured ? (group.questions || []).map((question) => renderQuestionRow(question, group)).join("") : ""}
+    ${!structuredRenderer && hasStructured ? (group.questions || []).map((question) => reviewCard(question)).join("") : ""}
   </section>`;
 }
 
 function renderPassage(passage) {
-  document.getElementById("passagePanel").innerHTML = `
-    <h2 class="passage-title">${escapeHtml(passage.content?.title || passage.title)}</h2>
-    <div class="passage-meta">
+  const passageMeta = experienceCapabilities.simulationMode
+    ? ""
+    : `<div class="passage-meta">
       <span class="badge">${escapeHtml(passage.question_name)}</span>
       ${(passage.question_type || []).map((type) => `<span class="badge">${escapeHtml(type)}</span>`).join("")}
-    </div>
+    </div>`;
+  document.getElementById("passagePanel").innerHTML = `
+    <h2 class="passage-title">${escapeHtml(passage.content?.title || passage.title)}</h2>
+    ${passageMeta}
     ${(passage.content?.paragraphs || []).map((para) => `
       <p class="paragraph">${para.label ? `<span class="paragraph-label">${escapeHtml(para.label)}</span>` : ""}${escapeHtml(para.text)}</p>
     `).join("")}
   `;
-  document.getElementById("questionPanel").innerHTML = (passage.groups || []).map(renderGroup).join("");
+  document.getElementById("questionPanel").innerHTML = `
+    ${experienceCapabilities.canShowCorrectness ? `<section class="review-summary" id="reviewSummary" aria-label="复盘概览"></section>
+    <div class="review-controls" id="reviewControls">
+      <button type="button" data-review-action="current">当前题解析</button>
+      <button type="button" data-review-action="expand">展开全部</button>
+      <button type="button" data-review-action="wrong">只看错题</button>
+    </div>` : ""}
+    ${(passage.groups || []).map(renderGroup).join("")}`;
   bindInputs();
+  setExperienceMode(experienceMode);
   if (resultMode) paintResults();
+  requestAnimationFrame(() => {
+    document.getElementById("passagePanel").scrollTop = passageScrollPositions[passage.id] || 0;
+    document.getElementById("questionPanel").scrollTop = questionScrollPositions[passage.id] || 0;
+  });
   if (window.__onExamPassageChange) window.__onExamPassageChange(passage);
 }
 
@@ -817,6 +1024,10 @@ function bindInputs() {
   document.querySelectorAll("[data-qid]").forEach((control) => {
     control.addEventListener("input", handleAnswerChange);
     control.addEventListener("change", handleAnswerChange);
+    control.addEventListener("focusin", () => {
+      currentQuestionId = String(control.dataset.qid || control.closest('[data-qid]')?.dataset.qid || currentQuestionId);
+      syncQuestionNav();
+    });
   });
   document.querySelectorAll(".choice-stack input").forEach((control) => {
     control.addEventListener("change", (event) => {
@@ -826,6 +1037,24 @@ function bindInputs() {
         if (hint) hint.textContent = `最多选择 ${stack.dataset.maxSelections} 项，请先取消一个选择`;
       }
       handleAnswerChange(event);
+    });
+  });
+  document.querySelectorAll("[data-clear-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      answers[button.dataset.clearQuestion] = "";
+      renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
+      persistExamDraft();
+      practiceShellController?.markDirty();
+      updateSummary();
+      syncQuestionNav();
+    });
+  });
+  document.getElementById("reviewControls")?.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-review-action]")?.dataset.reviewAction;
+    if (action === "current") openReviewCard(currentQuestionId, true);
+    if (action === "expand") document.querySelectorAll(".review-card").forEach((card) => card.classList.add("is-open"));
+    if (action === "wrong") document.querySelectorAll("[data-question-id]").forEach((row) => {
+      row.hidden = isCorrect(questionById(row.dataset.questionId));
     });
   });
 }
@@ -844,20 +1073,23 @@ function handleAnswerChange(event) {
   } else if (target.dataset.qid) {
     answers[target.dataset.qid] = target.value;
   }
-  persistExamDraft();
+  const saved = persistExamDraft();
+  if (saved) practiceShellController?.markDirty();
+  else practiceShellController?.setStatus("保存失败，点击重试", "error");
   if (resultMode && serverResult) {
     serverResult = null;
     setSyncStatus("答案已修改，需重新提交后才会更新记录和报告", "warn");
     paintResults();
   }
   updateSummary();
+  syncQuestionNav();
 }
 
 function resultForQuestion(question) {
   const source = serverResult || PracticeScoring.gradeReadingTestAnswers(testData, answers);
   if (!source?.results) return null;
   return source.results.find((result) =>
-    (result.ids || []).map(String).includes(String(question.id))
+    resultIds(result).includes(String(question.id))
   ) || null;
 }
 
@@ -866,7 +1098,7 @@ function answerForQuestion(question) {
 }
 
 function isCorrect(question) {
-  return resultForQuestion(question)?.status === "correct";
+  return Boolean(question) && resultForQuestion(question)?.status === "correct";
 }
 
 function paintOptionStates(question, result) {
@@ -887,42 +1119,82 @@ function paintOptionStates(question, result) {
 function paintResults() {
   allQuestions().forEach((question) => {
     const result = resultForQuestion(question);
-    const status = result?.status || "incorrect";
+    const value = String(answers[question.id] || "").trim();
+    const status = value ? (result?.status || "incorrect") : "unanswered";
     document.querySelectorAll(`[data-row-qid="${question.id}"], [data-inline-qid="${question.id}"]`).forEach((row) => {
       row.classList.toggle("is-correct", status === "correct");
       row.classList.toggle("is-partial", status === "partial");
       row.classList.toggle("is-wrong", status === "incorrect");
       const pill = row.querySelector(".result-pill");
-      if (pill) pill.textContent = result?.status_label || `✕ 答案：${answerForQuestion(question)}`;
+      if (pill) pill.textContent = status === "correct" ? "正确" : status === "unanswered" ? "未作答" : `错误 · 答案：${answerForQuestion(question)}`;
     });
     paintOptionStates(question, result);
-    document.querySelectorAll(`[data-analysis-qid="${question.id}"]`).forEach((node) => {
-      node.innerHTML = `<strong>Q${escapeHtml(question.number)} 答案：${escapeHtml(answerForQuestion(question))}</strong>${question.analysis ? `<br>${escapeHtml(question.analysis).replace(/\n/g, "<br>")}` : ""}`;
+    document.querySelectorAll(`[data-review-question="${question.id}"], [data-review-slot="${question.id}"]`).forEach((card) => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = PracticeRenderers.renderReviewCard(question, { ...(result || {}), status }, value).trim();
+      const replacement = wrapper.firstElementChild;
+      replacement.classList.toggle("is-open", String(question.id) === String(currentQuestionId));
+      card.replaceWith(replacement);
     });
   });
+  renderReviewSummary();
+  openReviewCard(currentQuestionId || allQuestions()[0]?.id);
+}
+
+function renderReviewSummary() {
+  const statuses = allQuestions().map((question) => {
+    if (!String(answers[question.id] || "").trim()) return "unanswered";
+    return resultForQuestion(question)?.status || "incorrect";
+  });
+  const correct = statuses.filter((status) => status === "correct").length;
+  const unanswered = statuses.filter((status) => status === "unanswered").length;
+  const wrong = statuses.length - correct - unanswered;
+  const rate = statuses.length ? Math.round(correct / statuses.length * 100) : 0;
+  const summary = document.getElementById("reviewSummary");
+  if (!summary) return;
+  summary.innerHTML = `
+    <div class="review-summary__stat">正确<strong>${correct}</strong></div>
+    <div class="review-summary__stat">错误<strong>${wrong}</strong></div>
+    <div class="review-summary__stat">未作答<strong>${unanswered}</strong></div>
+    <div class="review-summary__stat">正确率<strong>${rate}%</strong></div>`;
+}
+
+function openReviewCard(id, scroll = false) {
+  currentQuestionId = String(id || currentQuestionId || "");
+  document.querySelectorAll(".review-card").forEach((card) => {
+    card.classList.toggle("is-open", card.dataset.reviewQuestion === currentQuestionId);
+  });
+  syncQuestionNav();
+  if (scroll) {
+    document.querySelector(`[data-question-id="${CSS.escape(currentQuestionId)}"], [data-row-qid="${CSS.escape(currentQuestionId)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 }
 
 function updateSummary() {
   const total = allQuestions().length;
   const answered = allQuestions().filter((question) => String(answers[question.id] || "").trim()).length;
+  const summary = document.getElementById("scoreSummary");
+  if (!summary) return;
   if (!resultMode) {
-    document.getElementById("scoreSummary").innerHTML = `已答 <strong>${answered}</strong> / ${total}`;
+    summary.innerHTML = `已答 <strong>${answered}</strong> / ${total}`;
     return;
   }
   const localResult = PracticeScoring.gradeReadingTestAnswers(testData, answers);
   const correct = serverResult?.correct ?? localResult.correct;
   const accuracy = total ? Math.round(correct / total * 100) : 0;
   const band = serverResult?.ielts_score;
-  document.getElementById("scoreSummary").innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined && band !== null ? ` · IELTS ${band}` : ""}`;
+  summary.innerHTML = `得分 <strong>${correct}</strong> / ${total} · 正确率 ${accuracy}%${band !== undefined && band !== null ? ` · IELTS ${band}` : ""}`;
 }
 
 function setSyncStatus(message, tone = "") {
   const node = document.getElementById("syncStatus");
+  if (!node) return;
   node.textContent = message;
   node.className = `sync-status ${tone}`.trim();
 }
 
 function updatePracticeHeader() {
+  if (examContext) return;
   const total = allQuestions().length;
   if (assignedPassageNumber) {
     document.getElementById("practiceCrumbTail").textContent = "Passage 练习";
@@ -942,6 +1214,8 @@ function renderPassageTabs() {
   `).join("");
   document.querySelectorAll("[data-passage-tab]").forEach((tab) => {
     tab.addEventListener("click", () => {
+      passageScrollPositions[currentPassageId] = document.getElementById("passagePanel").scrollTop;
+      questionScrollPositions[currentPassageId] = document.getElementById("questionPanel").scrollTop;
       currentPassageId = tab.dataset.passageTab;
       document.querySelectorAll("[data-passage-tab]").forEach((item) => item.classList.toggle("active", item === tab));
       renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
@@ -949,14 +1223,78 @@ function renderPassageTabs() {
   });
 }
 
+function renderQuestionNav() {
+  document.getElementById("questionNav").innerHTML = allQuestions().map((question) => `
+    <button class="q-chip" type="button" data-question-nav="${question.id}" aria-label="Question ${escapeHtml(question.number)}">${escapeHtml(question.number)}</button>
+  `).join("");
+  document.querySelectorAll("[data-question-nav]").forEach((button) => {
+    button.addEventListener("click", () => goToQuestion(button.dataset.questionNav));
+  });
+  syncQuestionNav();
+}
+
+function syncQuestionNav() {
+  document.querySelectorAll("[data-question-nav]").forEach((button) => {
+    const question = questionById(button.dataset.questionNav);
+    const answered = Boolean(String(answers[button.dataset.questionNav] || "").trim());
+    const result = resultMode && question ? resultForQuestion(question) : null;
+    const status = !answered ? "unanswered" : resultMode ? (result?.status || "incorrect") : "answered";
+    const flagged = flaggedQuestions.has(String(button.dataset.questionNav));
+    button.dataset.state = !resultMode && flagged ? "flagged" : status;
+    button.classList.toggle("is-flagged", flagged);
+    button.classList.toggle("is-filled", answered);
+    button.classList.toggle("is-current", String(button.dataset.questionNav) === String(currentQuestionId));
+    button.classList.toggle("is-right", status === "correct");
+    button.classList.toggle("is-wrong", status === "incorrect" || status === "partial");
+    button.classList.toggle("is-unanswered", resultMode && status === "unanswered");
+    button.setAttribute("aria-label", `Question ${question?.number || button.textContent.trim()}：${status === "correct" ? "正确" : status === "incorrect" || status === "partial" ? "错误" : !resultMode && flagged ? "待回看" : status === "answered" ? "已作答" : "未作答"}`);
+  });
+  const flagButton = document.getElementById("toggleQuestionFlag");
+  if (flagButton) {
+    const active = flaggedQuestions.has(String(currentQuestionId));
+    flagButton.setAttribute("aria-pressed", String(active));
+    flagButton.textContent = active ? "取消待回看" : "待回看";
+  }
+}
+
+function toggleCurrentQuestionFlag() {
+  if (!currentQuestionId) return;
+  if (flaggedQuestions.has(String(currentQuestionId))) flaggedQuestions.delete(String(currentQuestionId));
+  else flaggedQuestions.add(String(currentQuestionId));
+  localStorage.setItem(readingFlagStorageKey, JSON.stringify(Array.from(flaggedQuestions)));
+  syncQuestionNav();
+}
+
+function goToQuestion(id) {
+  const passage = passageForQuestion(id);
+  if (!passage) return;
+  currentQuestionId = String(id);
+  if (passage.id !== currentPassageId) {
+    document.querySelector(`[data-passage-tab="${CSS.escape(String(passage.id))}"]`)?.click();
+  }
+  document.body.dataset.readingPane = "questions";
+  document.querySelectorAll("[data-reading-pane-button]").forEach((button) => button.classList.toggle("is-active", button.dataset.readingPaneButton === "questions"));
+  requestAnimationFrame(() => {
+    const target = document.querySelector(`[data-question-id="${CSS.escape(String(id))}"], [data-row-qid="${CSS.escape(String(id))}"], [data-inline-qid="${CSS.escape(String(id))}"]`);
+    target?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (resultMode) openReviewCard(id);
+    else syncQuestionNav();
+  });
+}
+
+function goToAdjacentQuestion(offset) {
+  const questions = allQuestions();
+  const index = Math.max(0, questions.findIndex((question) => String(question.id) === String(currentQuestionId)));
+  const question = questions[Math.min(questions.length - 1, Math.max(0, index + offset))];
+  if (question) goToQuestion(question.id);
+}
+
 async function submitAnswers() {
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   setSyncStatus("正在提交并同步记录...", "");
-  resultMode = true;
-  document.body.classList.add("result-mode");
   try {
-    const response = await fetch(`/api/reading/test/${encodeURIComponent(testData.id)}/submit`, {
+    const response = await fetch(practiceContext?.submit_url || `/api/reading/test/${encodeURIComponent(testData.id)}/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
@@ -973,6 +1311,11 @@ async function submitAnswers() {
       throw new Error(data.error || "submit_failed");
     }
     serverResult = data.result || null;
+    resultMode = true;
+    document.body.classList.add("result-mode");
+    document.getElementById("practiceCrumbTail").textContent = "复盘";
+    setExperienceMode("review");
+    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
     paintResults();
     updateSummary();
     if (data.synced) {
@@ -980,11 +1323,16 @@ async function submitAnswers() {
     } else {
       setSyncStatus("未绑定学生姓名，仅完成本地判分", "warn");
     }
+    practiceShellController?.markSaved();
+    syncQuestionNav();
   } catch (error) {
     serverResult = null;
-    paintResults();
+    resultMode = false;
+    document.body.classList.remove("result-mode");
+    setExperienceMode(examContext ? "simulation" : "practice");
     updateSummary();
     setSyncStatus(`提交同步失败：${error.message || error}`, "error");
+    practiceShellController?.setStatus("保存失败，点击重试", "error");
   } finally {
     submitBtn.disabled = false;
   }
@@ -993,17 +1341,23 @@ async function submitAnswers() {
 function resetAnswers() {
   Object.keys(answers).forEach((key) => delete answers[key]);
   if (examDraftStorageKey) localStorage.removeItem(examDraftStorageKey);
+  localStorage.removeItem(readingFlagStorageKey);
+  flaggedQuestions = new Set();
   serverResult = null;
   resultMode = false;
   document.body.classList.remove("result-mode");
+  setExperienceMode("practice");
+  document.getElementById("practiceCrumbTail").textContent = assignedPassageNumber ? "Passage 练习" : "整套练习";
   renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
   updateSummary();
   setSyncStatus("已绑定学生姓名后，提交会同步到练习记录和报告");
+  practiceShellController?.markSaved();
+  syncQuestionNav();
 }
 
 async function loadExistingSubmission() {
   // 模考按 session token 恢复本地草稿，不读取普通刷题的“上次提交”。
-  if (examContext) return;
+  if (examContext || practiceContext) return;
   try {
     const params = new URLSearchParams();
     if (readingTaskId && readingTaskToken) {
@@ -1034,10 +1388,14 @@ async function loadExistingSubmission() {
     }
     resultMode = true;
     document.body.classList.add("result-mode");
+    setExperienceMode("review");
+    document.getElementById("practiceCrumbTail").textContent = "复盘";
     renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
     paintResults();
     updateSummary();
     setSyncStatus("已加载今天的上次提交记录", "ok");
+    practiceShellController?.markSaved();
+    syncQuestionNav();
   } catch (_error) {
     // 历史记录加载失败不影响当前练习。
   }
@@ -1058,8 +1416,17 @@ async function revealReadingStudyEntry() {
   }
 }
 
-document.getElementById("submitBtn").addEventListener("click", submitAnswers);
-document.getElementById("resetBtn").addEventListener("click", resetAnswers);
+document.getElementById("submitBtn")?.addEventListener("click", submitAnswers);
+document.getElementById("resetBtn")?.addEventListener("click", resetAnswers);
+document.getElementById("previousQuestion").addEventListener("click", () => goToAdjacentQuestion(-1));
+document.getElementById("nextQuestion").addEventListener("click", () => goToAdjacentQuestion(1));
+document.getElementById("toggleQuestionFlag").addEventListener("click", toggleCurrentQuestionFlag);
+document.querySelectorAll("[data-reading-pane-button]").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.body.dataset.readingPane = button.dataset.readingPaneButton;
+    document.querySelectorAll("[data-reading-pane-button]").forEach((item) => item.classList.toggle("is-active", item === button));
+  });
+});
 
 setInterval(() => {
   const seconds = Math.floor((Date.now() - startedAt) / 1000);
@@ -1068,11 +1435,21 @@ setInterval(() => {
   document.getElementById("timerValue").textContent = `${mm}:${ss}`;
 }, 1000);
 
+practiceShellController = PracticeShell.init({
+  fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
+  fallbackMode: persistenceContext ? 'task_detail' : (rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
+  confirmExit: Boolean(persistenceContext),
+  initialSaved: true,
+  save: persistExamDraft
+});
 restoreExamDraft();
+restoreServerExamDraft();
 renderPassageTabs();
 updatePracticeHeader();
 renderPassage(testData.passages[0]);
+renderQuestionNav();
 updateSummary();
+setExperienceMode(experienceMode);
 loadExistingSubmission();
 revealReadingStudyEntry();
 </script>
@@ -1124,7 +1501,8 @@ window.EXAM_CONTEXT = examContext;
     if (!deadlineMs) { countdown.textContent = '--:--'; return; }
     const remaining = deadlineMs - Date.now();
     countdown.textContent = fmt(remaining);
-    if (remaining < 60_000) countdown.classList.add('is-warning');
+    countdown.classList.toggle('is-warning', remaining <= 10 * 60_000);
+    countdown.classList.toggle('is-critical', remaining <= 5 * 60_000);
     if (remaining <= 0 && !submitted) {
       submitted = true;
       forceSubmit();

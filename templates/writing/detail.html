@@ -12,7 +12,7 @@
 <div class="practice-workspace" data-practice-workspace data-writing-detail data-exercise-id="{{ exercise.id }}">
   <header class="practice-workspace__topbar">
     <div class="practice-workspace__brand-nav">
-      <a class="practice-workspace__brand" href="{{ url_for('index') }}" aria-label="返回 Sage Path 首页">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" aria-label="返回练习中心">
         <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
         <span>Sage Path</span>
       </a>
@@ -24,7 +24,8 @@
       </nav>
     </div>
     <div class="practice-workspace__account">
-      <a href="{{ url_for('writing_library.index') }}">返回写作题库</a>
+      <button type="button" data-practice-back>返回写作题库</button>
+      <button type="button" data-practice-module-exit>退出刷题</button>
       <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
     </div>
   </header>
@@ -43,7 +44,7 @@
         <a href="#expressions"><span>05</span><strong>可复用表达</strong><small>迁移到同类题</small></a>
         <a href="#typing"><span>06</span><strong>打字练习</strong><small>字数 · 速度 · 准确率</small></a>
       </nav>
-      <a class="writing-back-link" href="{{ url_for('writing_library.index') }}">← 返回 40 题目录</a>
+      <button class="writing-back-link" type="button" data-practice-back>← 返回 40 题目录</button>
       <span class="practice-workspace__sidebar-watermark" aria-hidden="true">WRITING</span>
     </aside>
 
@@ -196,5 +197,8 @@
 <script id="writingEssayData" type="application/json">{{ exercise.essays|tojson }}</script>
 <script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/writing-library-detail.js') }}" defer></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.init({fallbackUrl: {{ url_for('writing_library.index')|tojson }}, fallbackMode: 'writing_library', initialSaved: true});</script>
 </body>
 </html>

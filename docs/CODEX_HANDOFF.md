@@ -1,7 +1,171 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-27 00:22（Asia/Shanghai）。
+> 最近更新：2026-08-30 07:48（Asia/Shanghai）。
+
+## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（发布候选 GO；待一次部署）
+
+- 唯一整合工作树为 `/Users/zhouxin/.codex/worktrees/practices-interaction-refactor`，分支
+  `codex/practices-interaction-refactor`，HEAD/基线仍为 `f8152ff01df98d04cca9860d31d49b8e2697aaef`，相对
+  `origin/main` 为 0/0。开工前已逐项审计 status/diff/staged diff/全部分支/全部 worktree/全部历史；题型专项与 IELTS on
+  Computer 两项成果都只存在于当前脏工作树，没有可安全重复 cherry-pick 的另一提交。根目录
+  `PARALLEL_WORK_INTEGRATION_REVIEW.md` 是本轮整合定位、冲突面、数据库变化和执行方式的事实报告。
+- 本轮在上述真实整合候选上增加统一的两层导航，不重写前两项成果。`services/practice_navigation.py` 负责服务端同源目标校验和
+  student/staff/classroom/verified-guest 四类默认出口；`static/js/practice_shell.js` v2 负责“返回当前模块内上一层”与“退出整个
+  Practices”的独立上下文、跨新标签页 query 传递、刷新/滚动恢复和浏览器后退护栏。外部 URL、协议相对 URL、反斜杠和控制字符
+  均不能成为返回目标；登录页和课堂 gate 的 `next` 也只接受安全本地路径。
+- 导航已适配 Practices 首页、听力/阅读真题与机经目录、写作/精听目录、Test/Section/Passage、题型专项创建/任务/结果、学生今日
+  计划、助教任务中心、模考登录/流程/写作/成绩/复盘和 Reading Study。学生账号退出回今日计划，staff 回工作台/任务中心，课堂
+  模式显示“退出课堂刷题”，姓名验证/访客退出到登录；目录内部返回到 `/practice`，练习页返回各自目录，不再把公开学生错误送入
+  StaffAuthGuard。移动 390×844 实测保留返回图标和退出按钮，页面无横向溢出。
+- 浏览器真实验证：`/practice -> /listening/tests -> ielts21 Test 1 -> 返回剑雅听力 -> 浏览器后退 /practice`；Reading 目录与整卷
+  同样正确；显式 student_today/staff_tasks/classroom/guest 上下文分别显示正确标签与目标。题型专项 task 3 为 7 个正常 matching
+  行，1280px 无页面横向溢出；三个测试标签页 console error 均为 0。本轮没有提交表单、没有创建任务或写学生记录。
+- 精确自动化结果：
+  - `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q`：
+    **618 passed, 72 subtests passed**（只有仓库既有 SQLAlchemy/Python deprecation warnings）。
+  - `node --test tests/test_practice_shell.js tests/test_practice_modes.js tests/test_practice_renderers.js tests/test_simulation_audio.js`：
+    **18/18 passed**。
+  - 导航/题型/模考目标集：**21 passed, 17 subtests passed**；Writing 与导航隔离蓝图回归：**7 passed, 4 subtests passed**。
+  - `node --check static/js/practice_shell.js` 与 `git diff --check`：通过。
+- 用户明确授权把缺 Q40 的 `reading_jijing_83_test_95` 暂时下架。原 JSON 与历史记录解析能力保留，公开网页目录、助教网页/小程序
+  选题目录和题型专项索引统一通过 `static/reading_jijing/offline_tests.json` 隔离；原文件 SHA-256 锁定为
+  `6951e219ea404a5a614e90f4e04d26a2c813f38b3569bb8cf6bafe51c4c81947`，补得可信 Q40 后才能恢复。门禁新增校验：源文件丢失或哈希
+  漂移、隔离题仍出现在 catalog、隔离题数与清单不符，任一项都会 P0 阻断。
+- 发布资源门禁以桌面正式音频根运行
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python scripts/check_ielts_practice_library.py --audio-root /Users/zhouxin/Desktop/studytracker/static/listening`
+  后为 **PASS**：84 套 Listening、128 套在线 Reading、1 套明确隔离 Reading、8,480 道在线题、336 个有效音频和 48 张图片。
+  浏览器复核 `/reading/jijing` 为 56 张卡、0 个下架 ID 链接，题型专项听力/阅读入口正常，0 个下架 ID 引用。
+- 发布前只读基线已记录：生产代码 HEAD `f8152ff01df98d04cca9860d31d49b8e2697aaef`，tracked dirty=0；最新 main deploy run
+  `33079779450` 为 success；`studytracker.service=active`，`127.0.0.1:5002 / workers=1 / gthread / threads=6`；SQLite
+  `user_version=0`、`quick_check=ok`、71 张表、`question_type_practice_attempt` 尚不存在。当前代码 HEAD 是代码回滚点；因门禁未进入
+  发布阶段，没有创建新的生产 DB 备份或 deployment id，也没有写生产数据库。
+- 当前 `git status --short` 为 39 个 tracked 修改、40 个未跟踪路径，包含前两项成果、本轮导航、下架清单、测试、证据和交接；暂存区为空。
+  本机忽略 DB 仍为 9 个 QA Task / 8 个 attempt，本轮没有新增。全部改动仅同一台 Mac 可见，**未 commit、未 push、未部署，未写
+  生产库，也未上传/提审/发布小程序**。本地预览在 `127.0.0.1:5078`，方便用户继续检查。
+- 用户已明确授权一次发布整合版本。下一步创建部署前 SQLite 备份并记录哈希，把题型专项、机考体验、导航和 39 题 Test 隔离作为
+  同一提交推送 main；等待唯一一次 deploy 完成后，验证生产 HEAD、schema、服务进程、题库目录、关键公网路由和日志，再回写部署事实。
+
+## 2026-08-29 Question Group 题型专项完整通路（仅本机，功能 GO / 仓库发布 NO-GO）
+
+- 当前唯一开发工作树仍为 `/Users/zhouxin/.codex/worktrees/practices-interaction-refactor`，分支
+  `codex/practices-interaction-refactor`，HEAD/基线均为
+  `f8152ff01df98d04cca9860d31d49b8e2697aaef`，跟踪 `origin/main` 且提交左右差值为 0/0。本轮在已有脏候选上继续，
+  没有 reset、checkout、pull 或覆盖来源不明改动；桌面 `/Users/zhouxin/Desktop/studytracker` 只读提供现有 MP3 和 `.venv`。
+- 新增 `services/question_type_practice.py` 的语义题型分类、Question Group 安全门禁、完整组过滤、题号/占位符重映射、
+  冻结 snapshot hash 和 public redaction；新增 `services/question_type_assignments.py` 把专项复用现有 `Task + StudyPlan + PlanItem`。
+  `models.py` 新增 `QuestionTypePracticeAttempt`，`api/question_type_practice.py` 提供学生自建、助教多学生批量发布、token 任务页、
+  服务端草稿/恢复、考试态开始/音频结束/截止、提交、逐题结果和错题完整组/同题型新题再推送。当前仓库没有独立 Class 实体，
+  助教页明确说明并用现有学生档案多选；没有伪造班级表。
+- 专项没有复制第三套 renderer。Listening/Reading 冻结快照继续进入
+  `templates/listening/test_practice.html` / `templates/reading/test_practice.html`，共享
+  `PracticeRenderers`、`PracticeTable` 和服务端评分。提交前 DOM 无 `data-answer`，答案/解析只在 submit 后 review mode 出现。
+  Listening 考试态真实验收为 1 Part / 7:11，单一无 controls 音频连续播放，倒计时为实际音频 431.992 秒 + 120 秒复核，
+  训练视图不可见、音频结束前最终交卷隐藏；服务端 attempt 窗口为 552 秒。
+- 2026-08-29 21:48 按用户给出的正式题库分类收拢学生/助教 UI：听力固定为“全部、填空题、单选题、多选题、地图题、匹配题”，
+  阅读固定为“全部、填空题、单选题、多选题、匹配题、判断题”。页面不再暴露表单/笔记/摘要、T/F/NG 与 Y/N/NG、四类
+  Reading matching 等内部细分；canonical type 仍保留在 source group 中供 renderer、评分和安全门禁使用。广义筛选和冻结快照
+  支持同一大类包含多个 canonical type，错题重练/同类新题再推送仍按大类校验；旧 canonical 快照/API 继续兼容。
+- 学生页的科目和题型改为与参考图一致的横向标签。选择听力或听力题型会自动显示匹配的 Section，选择阅读或阅读题型会自动显示
+  匹配的 Passage；同一个 Section/Passage 下的多个完整 Question Group 会合并为一张来源卡，仍不会拆共享题干、选项库、文章或音频。
+  2026-08-29 21:55 又把来源卡改为可操作选择：默认不选、开始按钮禁用，学生可以只点一张练单篇，也可以继续点选多篇；显式选择后
+  创建任务只冻结所选 Section/Passage 内的完整题组。浏览器实测 Listening Section 1 只选中 2 个完整题组 / 10 题，Reading
+  Passage 1 只选中 3 个完整题组 / 13 题。`QUESTION_TYPE_INVENTORY.json` / `QUESTION_TYPE_AUDIT.html` 继续保留内部细型审计，
+  题库统计未改变。
+- 2026-08-29 22:06 纠正“全部剑雅”被候选数量截成首批剑10的错误语义：学生页删除“显示前 N 篇”，新增只读 catalog API，按
+  剑雅册数（剑4—剑21）、Test、Section/Passage 三级展示所有符合当前题型且可发布的篇目。全部范围真实返回 18 册 / 72 套；
+  Listening 当前为 287 个可练 Section，Reading 为 216 个可练 Passage。册数下拉可直接缩到任一册，例如剑雅10阅读为 4 套 /
+  12 个 Passage；每张篇目卡均为独立按钮，选中状态、题组/题数汇总、清空和“开始练习（已选 N 篇）”都明确可见。
+- 2026-08-29 22:49 修复 Reading 双栏中的匹配题二次横向分栏：半屏题目区约 428px 时，旧布局的 220px 选项库、14px 间距和
+  至少 150px 答案列会把题干计算宽度压到 0px，导致英文逐字竖排。现仅在 Reading 页面把共享选项库堆叠到题目行上方，题目行保留
+  约 254px 题干列与 160px 答案列；同一任务实测 Q6 正常三行显示，题干原始文本和共享选项均未改动。
+  后续全量静态核对确认该规则覆盖全部 136 个 Reading `renderMatching` 可发布题组 / 113 个 Passage，包括 classification、通用
+  matching、matching features、matching headings、matching information 与 matching sentence endings 六类；逐类打开 6 个代表
+  Passage 读取计算布局，全部最小题干宽度为 254px，0 个仍为 0px。
+- 新增根目录 `PRACTICE_ARCHITECTURE_REVIEW.md`、`QUESTION_TYPE_INVENTORY.json`、`QUESTION_TYPE_AUDIT.html`。
+  全库语义清单为 1,271 个 group / 6,240 题，1,260 组 publishable、11 组因重复占位符引用进入 manual review 并默认排除、
+  0 组 blocked；共 20 个 canonical type、按科目/numeric subtype 展开 38 条事实记录。生成脚本为
+  `scripts/build_question_type_inventory.py`。
+- 浏览器真实跑通助教预览/安全检查/批量发布、学生任务中心、自动保存、刷新恢复、提交、提交后逐题复盘、助教逐题结果、错题完整组
+  和同题型新题再推送。固定 Cambridge IELTS 21 Test 3 Listening Part 1 与 IELTS 7 Test 2 Section 1 均为 10 控件、
+  0 空 Question 标签且 MP3 metadata/duration 有效。本轮再按 inventory 自动访问 17 条 Listening + 21 条 Reading 代表页，
+  38/38 DOM 门禁通过并各有整页截图。证据在
+  `docs/evidence/question-type-practice-2026-08-29/`：56 张 PNG（约 10 MiB）及 `BROWSER_TYPE_MATRIX.json`；
+  `student-reading-broad-types.png` 证明阅读六类标签与自动 Passage 结果，`student-single-passage-selected.png` 证明 Passage 1 单篇选中态、
+  3 个完整题组 / 13 题统计和可用的开始按钮；新增 `student-all-cambridge-volumes.png` 与
+  `student-cambridge-catalog-single-passage.png` 分别证明 18 册题库范围和剑雅10 Passage 2 的独立选中态；
+  `reading-matching-prompt-width-fixed.png` 证明 Reading 匹配题题干恢复正常宽度。浏览器另验证听力“地图题”和阅读“判断题”筛选；
+  Listening/Reading 的“全部”均按 Section/Passage 合并来源卡，不会把共享内容拆开。
+- 验收中额外修复 Reading 段落匹配异常数据的段落选项/标题提示、未登录学生专项页空白、已保存时常驻“重试”、Listening 专项
+  门禁硬编码“四个 Part”等真实回归。新增专项 service/route/contract 测试；目标新增 Python 文件 Ruff 与格式检查通过，
+  Python compile、3 个关键 JS syntax、`git diff --check` 通过。最终全仓
+  `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q`
+  为 **611 passed, 63 subtests passed**；本次题型目录、单篇选择与 Reading 匹配布局定向 unittest 为 **18 passed**，相关 Node 为
+  **15/15 pass**。
+- 全题库资源 gate 使用桌面音频根仍扫描到 84 套 Listening、129 套 Reading、8,519 题、336 个有效音频、48 张图片；唯一 P0
+  仍是 `static/reading_jijing/reading_jijing_83_test_95.json` 只有 Q1–39。题型专项自身门禁为 GO，但整个仓库发布仍为 **NO-GO**，
+  不能杜撰 Q40。必须从可信合卷源补齐/重组后让 gate 返回 0，另补真实手机与完整时长连续验收。
+- 本地 Flask 预览当前运行在 `127.0.0.1:5078`（开发 server，仅测试），入口 `/practice`，直接未提交样例为
+  `/practice/question-types/task/3`（浏览器内已带本地 token 并标记为交付页）。忽略的本机 `app.db` 只保留本轮明确命名的 1 个 QA
+  助教、1 个 QA 学生、9 个专项 Task / 8 个 attempt，供用户当前验收；最新 task 9 / attempt 为用户本轮实际创建并仍在 progress，
+  前一阶段 2 个 mock preview session 和 mock exam 已精确删除。
+  本地静态目录只保留 5 个只读 MP3 符号链接：既有 Range/固定回归夹具 `ielts10_test1_s1.mp3`、`ielts21_test3_s1.mp3`、
+  `ielts7_test2_s1.mp3`，以及为用户本轮已实际打开任务补齐的 `ielts15_test1_s2.mp3`、`ielts12_test6_s1.mp3`；两个新增链接
+  均已通过本地 HTTP 200，只指向桌面主工作树已有文件，不应提交。
+- 当前全部业务代码、文档、证据、QA 数据和预览仅同一台 Mac 本机可见；**未 commit、未 push、未部署、未写生产库、未操作小程序
+  上传/提审/发布**。下一位 agent 先读 `PRACTICE_ARCHITECTURE_REVIEW.md` 与浏览器矩阵，复跑专项/全仓测试和 library gate；
+  解决 39 题包与真机/完整时长缺口后，再向用户请求 commit/push/deploy 明确授权。
+
+## 2026-08-29 IELTS on Computer 四模式与正式模考候选（仅本机，NO-GO）
+
+- 唯一工作树为 `/Users/zhouxin/.codex/worktrees/practices-interaction-refactor`，分支
+  `codex/practices-interaction-refactor`，当前 HEAD/基线均为
+  `f8152ff01df98d04cca9860d31d49b8e2697aaef`，跟踪 `origin/main`。本轮继续该工作树中上一轮尚未提交的 Practices
+  交互重构，没有切换、pull 或覆盖来源不明改动。桌面旧主工作树 `/Users/zhouxin/Desktop/studytracker` 仍为
+  `main@6ded77d24586327ad94e151e172ae4811b4a2eed`、落后 `origin/main` 31 个提交且有其自身脏改动，本轮只读使用其中
+  已有 MP3 资源，未修改其 Git 工作区。
+- 先按官方 IELTS、British Council、IDP 和当前 Inspera familiarisation 建立
+  `docs/IELTS_EXPERIENCE_BASELINE.md`；明确官方与 demo 的已确认差异、未知项和证据来源。
+  `docs/SIMULATION_PRACTICE_MODE_MATRIX.md` 把 Simulation / Practice / Intensive Listening / Review 的能力和 DOM 边界
+  固化为单一矩阵；`static/js/practice_modes.js` 强制四个显式模式恰有一个激活。
+- Simulation Listening 新增四段音频 URL/metadata/duration 预检和一次用户动作开考。考试态全程只用一个无原生 controls
+  的 `<audio>`，禁止 pause/seek/rate/replay，只在 `ended` 时推进播放列表；切 Part 不替换 `src`，刷新依据服务端开考时间
+  映射回正确段落和偏移。播放完毕把原截止时间收紧到最多两分钟检查，不能借刷新或重复请求延长。
+- 新增 `services/mock_exam_runtime.py` 及学生模考 start/complete-audio/draft 路由：服务端拥有开始时间和 deadline，开考与
+  音频完成均幂等；过期后的新客户端答案被拒绝，用最后一份服务端草稿结算。Reading/Listening 为本地即时草稿 + 服务端
+  防抖和 `pagehide` 兜底保存。此次复用 `MockExamSession.*_answers_json`，没有 schema migration。
+- 新增 `services/ielts_exam_payload.py`，Simulation payload 递归剥离答案、正确答案、解析、原文、翻译等字段；模板也不创建
+  review/score/training/transcript DOM。浏览器和 HTML 契约确认提交前无泄露。Practice 仍有自主音频和提交，成功提交后才
+  进入 Review；精听播放器只激活 `intensiveListening`，四种模式没有并存。
+- 阅读考试态为约 50/50 文章/题目双栏和独立滚动；题号状态、标记、Previous/Next、10/5 分钟提醒、退出确认、保存状态
+  均保留。修复 `type=8` 与 matching 的数字碰撞：没有共享选项池时继续按 completion 渲染，不再出现虚假“清除答案”。
+  form/note/table/matching/map 题型语义改造、来源感知返回和逐题复盘继续保留；缺少坐标的 drag-to-gap/map 只能降级为选择控件，
+  未伪造数据。
+- 新增 `scripts/check_ielts_practice_library.py` 全库 gate。使用桌面主工作树音频根扫描为 84 套 Listening、129 套 Reading、
+  8,519 题、336 个非空且 `ffprobe` 时长有效的音频、48 张图片；JSON、容器、题号连续/唯一、占位符及资源引用均通过，
+  唯一 P0 是 `static/reading_jijing/reading_jijing_83_test_95.json` 只有 Q1–39。第三篇
+  `Ancient Societies Classification` 的可查题源本身止于总体 Q39，不能杜撰 Q40；必须回到该套合卷的可信原始来源补齐或重组。
+  gate 因此正确返回非零，整体发布状态为 **NO-GO**。
+- 精确验证（工作目录均为该隔离 worktree）：挂接桌面主工作树已有但未版本化的
+  `static/listening/ielts10_test1_s1.mp3` 测试夹具后，
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --tb=short` 为
+  `593 passed, 61 subtests passed`；不挂接时唯二失败是该静态资源 404 的既有 Range 测试。
+  `node --test tests/test_practice_modes.js tests/test_practice_renderers.js tests/test_practice_shell.js tests/test_simulation_audio.js`
+  为 `15/15 pass`；四个相关 JS `node --check`、新增/目标 Python 文件 Ruff、`git diff --check` 均通过。全库 gate 的精确
+  FAIL 如上一条，不得省略。
+- 真实 Chromium 证据版本化在 `docs/evidence/ielts-experience-2026-08-28/`：Listening 预检为 4 Part / 25:19，开考后
+  只有一个无 controls 音频且切 Part 不换 `src`；Reading 双栏无训练/评分 DOM；Practice、Review、Intensive Listening
+  三种状态均有独立截图。没有完成华为真机、Safari/Chrome 各一遍完整 40 题、Listening 全约 25 分钟 + 2 分钟检查或
+  Reading 全 60 分钟连续录像，故这些仍是未验证项，不能用局部截图替代。
+- 上一阶段的 `127.0.0.1:5077` 预览已停止，两条 mock preview session、对应 mock exam 和四个
+  `ielts17_test1_s*.mp3` 临时链接已精确清理。当前本机预览和 QA 状态以上一节为准；桌面主工作树源文件仍未修改。
+- 当前 tracked 修改：`api/mock_exam_student.py`、`app.py`、`models.py`、`static/css/exam.css`、
+  `templates/admin/mock_exams_form.html`、`templates/base.html`、听力 6 个模板、阅读 3 个模板，以及本交接/工作日志；未跟踪交付为
+  4 份 IELTS/Practice 文档、`docs/evidence/ielts-experience-2026-08-28/`、全库 gate 脚本、2 个 service 模块、
+  `practice_shell.css`、4 个 JS 和 9 个新测试文件。完整路径以 `git status --short` 为准；全部仅同一台 Mac 本机可见。
+- 下一位 agent 先在此 worktree 读取 `docs/IELTS_EXPERIENCE_ACCEPTANCE.md` 并复跑全库 gate。首要内容阻塞是从可信合卷源修复
+  39 题包；然后做华为真机及完整时长流程。只有 gate=0 和真实体验证据补齐后，才能请用户授权 commit/push/deploy；生产
+  发布还必须复核端口 5002、`workers=1 / gthread / threads=6`。
 
 ## 2026-08-27 网页端助教可布置虾滑听力与 ZYZ 阅读（网页已上线）
 

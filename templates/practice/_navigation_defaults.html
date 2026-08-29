@@ -1,0 +1,7 @@
+{% set navigation_defaults = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
+<script>window.PRACTICE_NAVIGATION_DEFAULTS = {{ navigation_defaults|tojson }};</script>

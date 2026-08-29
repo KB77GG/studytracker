@@ -14,7 +14,7 @@
         <div class="brand-title">Reading Study · 阅读句子解析</div>
       </div>
       <nav class="mode-switch" aria-label="阅读模式">
-        <a class="mode" href="{{ practice_url }}">Practice</a>
+        <button class="mode" type="button" data-practice-back>Practice</button>
         <span class="mode active" aria-current="page">Reading Study</span>
       </nav>
     </div>
@@ -73,7 +73,7 @@
       <div class="g-camp" data-camp="structure">需要学生身份</div>
       <h2 class="g-title" id="identityTitle">先完成姓名验证</h2>
       <p class="g-desc">请先回到练习页完成学生姓名验证，再回来收藏表达。</p>
-      <a class="identity-link" href="{{ practice_url }}">前往 Practice</a>
+      <button class="identity-link" type="button" data-practice-back>前往 Practice</button>
     </div>
   </div>
 
@@ -86,5 +86,8 @@
     } | tojson }};
   </script>
   <script src="{{ url_for('static', filename='js/reading_study.js') }}" defer></script>
+  {% include "practice/_navigation_defaults.html" %}
+  <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+  <script>PracticeShell.init({fallbackUrl: {{ practice_url|tojson }}, fallbackMode: 'reading_tests', initialSaved: true});</script>
 </body>
 </html>

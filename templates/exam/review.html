@@ -61,7 +61,11 @@
   {% include "exam/_review_assets.html" %}
   <footer class="exam-bottombar">
     <span class="exam-bottombar__brand">睿然国际教育</span>
-    <a class="exam-bottombar__exit" href="{{ url_for('practice_library') }}">Exit</a>
+    <button class="exam-bottombar__exit" type="button" data-practice-back>返回成绩</button>
+    <button class="exam-bottombar__exit" type="button" data-practice-module-exit>Exit</button>
   </footer>
+  {% include "practice/_navigation_defaults.html" %}
+  <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+  <script>PracticeShell.installListContext(window.PRACTICE_NAVIGATION_DEFAULTS); PracticeShell.init({fallbackUrl: {{ url_for('mock_exam_result', exam_id=exam.id, token=session.access_token)|tojson }}, fallbackMode: 'mock_exam_process', initialSaved: true});</script>
 </body>
 </html>

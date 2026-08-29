@@ -100,13 +100,19 @@
   font-weight: 800;
 }
 .practice-workspace__account { flex: 0 0 auto; gap: 14px; }
-.practice-workspace__account a {
+.practice-workspace__account a,
+.practice-workspace__account button {
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--lw-neutral-500);
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
 }
-.practice-workspace__account a:hover { color: var(--lw-green-600); }
+.practice-workspace__account a:hover,
+.practice-workspace__account button:hover { color: var(--lw-green-600); }
 .practice-workspace__account span {
   width: 34px;
   height: 34px;
@@ -620,7 +626,18 @@
   .practice-workspace__brand span { display: none; }
   .practice-workspace__brand-nav { gap: 18px; }
   .practice-workspace__subjects { gap: 6px; }
-  .practice-workspace__account a { display: none; }
+  .practice-workspace__account a,
+  .practice-workspace__account button { display: none; }
+  .practice-workspace__account [data-practice-module-exit] {
+    min-height: 34px;
+    padding: 6px 9px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--lw-neutral-200);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 11px;
+  }
   .practice-workspace__layout { grid-template-columns: 1fr; min-height: calc(100vh - 60px); }
   .practice-workspace__sidebar {
     position: fixed;
