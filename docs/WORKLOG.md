@@ -4,7 +4,7 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（发布候选 GO）
+## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（网页已上线）
 
 - 已审计全部分支/worktree/未提交成果并生成 `PARALLEL_WORK_INTEGRATION_REVIEW.md`；题型专项和 IELTS on Computer 成果均在当前
   `codex/practices-interaction-refactor@f8152ff0` 脏工作树中，本轮没有重复合并或覆盖它们。
@@ -14,11 +14,11 @@
 - 用户明确授权暂时下架缺 Q40 的 `reading_jijing_83_test_95`。原 JSON 和历史记录解析保留；统一隔离清单让网页目录、助教网页/小程序
   选题和题型专项都不再枚举该 Test，并用源文件 SHA-256、目录残留和题数三道发布门禁防止误恢复。
 - 全仓 `618 passed, 72 subtests passed`，相关 Node `18/18`，目标导航集 `21 passed, 17 subtests passed`，Writing 隔离回归
-  `7 passed, 4 subtests passed`，JS syntax 与 diff check 通过。生产只读基线为 HEAD `f8152ff0`、deploy run `33079779450`
-  success、service active、5002/1 worker/gthread/6 threads、SQLite quick-check ok/71 表，新 attempt 表尚未上线。
-- 全库 gate 现为 PASS：84 Listening、128 在线 Reading、1 隔离 Reading、8,480 在线题、336 音频、48 图片；浏览器中阅读机经为
-  56 张卡且下架 ID 为 0，题型专项正常。当前 39 个 tracked 修改 + 40 个未跟踪路径仍仅本机，尚未 commit/push/deploy 或写生产库；
-  本地 QA DB 仍为 9 Task / 8 attempt。下一步按用户授权先备份生产 SQLite，再把三项成果作为一个版本提交、推送 main 并一次部署。
+  `7 passed, 4 subtests passed`，JS syntax 与 diff check 通过。统一业务提交 `a31ac484` 已推送任务分支和 main；没有拆分三项成果。
+- 发布前 SQLite 备份为 `backups/app.db.predeploy-a31ac484-20260830-0751.sqlite3`，SHA-256 `c5552508…f6e5`、quick-check ok。
+  唯一一次部署 run `33281910942` success；生产 HEAD `a31ac484`、service active、5002/1 worker/gthread/6 threads，数据库 quick-check/
+  外键正常且 additive attempt 表为 0 行。生产 gate PASS：84 Listening、128 在线 Reading、1 隔离 Reading、8,480 在线题、336 音频、
+  48 图片；公网主要目录和三个代表题面均 200，机经 56 张卡、下架 ID 0，日志无应用错误。未写生产测试数据；小程序未上传/提审/发布。
 
 ## 2026-08-29 Reading 匹配题题干被压成竖排（仅本机）
 

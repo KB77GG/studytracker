@@ -1,13 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-30 07:48（Asia/Shanghai）。
+> 最近更新：2026-08-30 07:56（Asia/Shanghai）。
 
-## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（发布候选 GO；待一次部署）
+## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（网页已上线）
 
 - 唯一整合工作树为 `/Users/zhouxin/.codex/worktrees/practices-interaction-refactor`，分支
-  `codex/practices-interaction-refactor`，HEAD/基线仍为 `f8152ff01df98d04cca9860d31d49b8e2697aaef`，相对
-  `origin/main` 为 0/0。开工前已逐项审计 status/diff/staged diff/全部分支/全部 worktree/全部历史；题型专项与 IELTS on
+  `codex/practices-interaction-refactor`。统一业务发布提交为 `a31ac48402659963654e7ca8a381a2f729831fc8`，已推送任务分支和
+  `origin/main`；发布前基线为 `f8152ff01df98d04cca9860d31d49b8e2697aaef`。开工前已逐项审计
+  status/diff/staged diff/全部分支/全部 worktree/全部历史；题型专项与 IELTS on
   Computer 两项成果都只存在于当前脏工作树，没有可安全重复 cherry-pick 的另一提交。根目录
   `PARALLEL_WORK_INTEGRATION_REVIEW.md` 是本轮整合定位、冲突面、数据库变化和执行方式的事实报告。
 - 本轮在上述真实整合候选上增加统一的两层导航，不重写前两项成果。`services/practice_navigation.py` 负责服务端同源目标校验和
@@ -36,15 +37,20 @@
   `/Users/zhouxin/Desktop/studytracker/.venv/bin/python scripts/check_ielts_practice_library.py --audio-root /Users/zhouxin/Desktop/studytracker/static/listening`
   后为 **PASS**：84 套 Listening、128 套在线 Reading、1 套明确隔离 Reading、8,480 道在线题、336 个有效音频和 48 张图片。
   浏览器复核 `/reading/jijing` 为 56 张卡、0 个下架 ID 链接，题型专项听力/阅读入口正常，0 个下架 ID 引用。
-- 发布前只读基线已记录：生产代码 HEAD `f8152ff01df98d04cca9860d31d49b8e2697aaef`，tracked dirty=0；最新 main deploy run
-  `33079779450` 为 success；`studytracker.service=active`，`127.0.0.1:5002 / workers=1 / gthread / threads=6`；SQLite
-  `user_version=0`、`quick_check=ok`、71 张表、`question_type_practice_attempt` 尚不存在。当前代码 HEAD 是代码回滚点；因门禁未进入
-  发布阶段，没有创建新的生产 DB 备份或 deployment id，也没有写生产数据库。
-- 当前 `git status --short` 为 39 个 tracked 修改、40 个未跟踪路径，包含前两项成果、本轮导航、下架清单、测试、证据和交接；暂存区为空。
-  本机忽略 DB 仍为 9 个 QA Task / 8 个 attempt，本轮没有新增。全部改动仅同一台 Mac 可见，**未 commit、未 push、未部署，未写
-  生产库，也未上传/提审/发布小程序**。本地预览在 `127.0.0.1:5078`，方便用户继续检查。
-- 用户已明确授权一次发布整合版本。下一步创建部署前 SQLite 备份并记录哈希，把题型专项、机考体验、导航和 39 题 Test 隔离作为
-  同一提交推送 main；等待唯一一次 deploy 完成后，验证生产 HEAD、schema、服务进程、题库目录、关键公网路由和日志，再回写部署事实。
+- 发布前生产代码回滚点为 `f8152ff01df98d04cca9860d31d49b8e2697aaef`。生产 SQLite 已用在线 `.backup` 保存到
+  `/root/apps/studytracker/backups/app.db.predeploy-a31ac484-20260830-0751.sqlite3`，大小 125,489,152 bytes，`quick_check=ok`，
+  SHA-256 为 `c5552508eff96359a98a748222204779757c8e93a4417fd4accce685f9e8f6e5`；这是数据回滚点。
+- 项目既有 main 工作流仅触发一次正式部署：[GitHub Actions 33281910942](https://github.com/KB77GG/studytracker/actions/runs/33281910942)
+  success，deploy job 41 秒。生产 `/root/apps/studytracker` 当前业务 HEAD 为 `a31ac484`，tracked 文件干净（既有未跟踪备份/静态快照/
+  调度库保留）；服务自 07:51:02 CST 起 active，监听 `127.0.0.1:5002`，配置和实进程均为 `workers=1 / gthread / threads=6`、1 个 worker。
+- 部署后 SQLite `user_version=0`、`quick_check=ok`、外键错误 0、72 张表；additive `question_type_practice_attempt` 已创建且 0 行，没有
+  回填或覆盖现有学生记录。生产题库 gate 再次 PASS（84 Listening、128 在线 Reading、1 隔离 Reading、8,480 在线题、336 音频、
+  48 图片）；公网 `/practice`、听力/阅读目录、阅读机经、题型专项均 200，三个代表 Test 题面 200，机经目录 56 张卡且下架 ID 为 0。
+  发布后 journal 无 Traceback/Exception/CRITICAL/worker failure，关键发布文件本地/生产 SHA-256 一致。
+- 本机忽略 DB 仍为 9 个 QA Task / 8 个 attempt，本轮发布验证未创建生产测试任务或写学生业务数据。网页三项成果已 commit/push/deploy；
+  小程序兼容源码已入 Git，但**未上传、未提审、未发布小程序**。本节部署事实将以 `[skip ci]` 文档提交推送，不触发第二次部署。
+- 下一步仅需现场观察；若严重回归，代码回退到 `f8152ff0`，数据使用上述 predeploy 备份。取得可信 Q40 和答案后，先恢复源数据、移除
+  offline manifest 项并重跑同一全库 gate，不能直接把 39 题 Test 放回公开 catalog。
 
 ## 2026-08-29 Question Group 题型专项完整通路（仅本机，功能 GO / 仓库发布 NO-GO）
 

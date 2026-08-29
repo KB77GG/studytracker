@@ -176,5 +176,9 @@ error 为 0。
 用户随后明确授权暂时下架这套不完整 Test。实现没有删除源题或历史记录：`static/reading_jijing/offline_tests.json` 以源文件 SHA-256
 锁定隔离项，主网页目录、助教网页/小程序选题和题型专项统一排除；门禁反向检查隔离源存在/哈希/题数以及 catalog 不得残留。完整资源
 gate 现为 **PASS**：84 Listening、128 在线 Reading、1 隔离 Reading、8,480 在线题、336 有效音频、48 图片。浏览器复核阅读机经
-56 张卡、下架 ID 0 个，题型专项仍可用。因此题型专项、IELTS on Computer 和多入口导航的统一候选已转为发布 **GO**；下一步按用户
-授权创建生产 SQLite 备份，再用项目现有 main 工作流只部署一次。
+56 张卡、下架 ID 0 个，题型专项仍可用。因此题型专项、IELTS on Computer 和多入口导航的统一候选转为发布 **GO**。
+
+最终业务提交 `a31ac48402659963654e7ca8a381a2f729831fc8` 已同时推送任务分支和 main。部署前 SQLite 备份为
+`backups/app.db.predeploy-a31ac484-20260830-0751.sqlite3`（SHA-256 `c5552508eff96359a98a748222204779757c8e93a4417fd4accce685f9e8f6e5`）；
+唯一一次正式部署 [33281910942](https://github.com/KB77GG/studytracker/actions/runs/33281910942) success。生产 HEAD、服务进程、72 表 schema、
+完整题库 gate、公开目录/题面和错误日志均通过终检，三项成果已作为同一网页版本上线。
