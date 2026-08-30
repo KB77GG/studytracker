@@ -1,15 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-31 00:08（Asia/Shanghai）。
+> 最近更新：2026-08-31 00:18（Asia/Shanghai）。
 
-## 2026-08-30 听力表格题题干缺失热修（仅本机，待授权发布）
+## 2026-08-31 听力表格题题干缺失热修（网页已上线）
 
 - 本轮在干净工作树 `/Users/zhouxin/.codex/worktrees/listening-form-stem-hotfix`、分支
-  `codex/listening-form-stem-hotfix` 开发，基线与当前未提交 HEAD 均为最新 `origin/main@d6618d3a358eefd96c35939e2459a1aa1ba72f4e`。
-  当前未提交文件为 `static/js/practice_renderers.js`、`tests/test_practice_renderers.js`、`docs/CODEX_HANDOFF.md` 和
-  `docs/WORKLOG.md`，没有其他未跟踪文件。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 仍为
-  `main@6ded77d2`、落后 `origin/main` 36 个提交；其中原有的样式/模板/交接文档改动、大量数据/脚本/测试/原型未跟踪内容，以及与本问题
+  `codex/listening-form-stem-hotfix` 完成；基线为 `d6618d3a358eefd96c35939e2459a1aa1ba72f4e`，业务提交
+  `4520fd68f1114f675314105dbee945f08739d750` 已推送任务分支与 `origin/main`。桌面旧工作树
+  `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、继续落后远端；其中原有的样式/模板/交接文档改动、大量数据/脚本/测试/原型未跟踪内容，以及与本问题
   有关但只固定顶部上下文、不能恢复逐题题干的 `templates/listening/test_practice.html` / `tests/test_listening_practice_context.py`
   候选均未触碰、未覆盖、未纳入本热修。
 - 学生截图中的剑桥雅思 20 Test 4 Listening Part 1 是真实题干缺失，不是浏览器缓存或源数据丢失。该题组 Q1-Q10 的
@@ -33,10 +32,16 @@
 - 本地 5066 真实浏览器验收通过：剑20 Test 4 Part 1 的 Q3/Q4/Q6/Q7/Q8 均显示 collect 中完整句子并把输入框嵌回原位；剑19
   Test 4 Part 1 的 supervisor/coat/mobile 左右列表格题干恢复；剑21 Test 4 Part 4 Q32 的尾部空白行题干恢复且控件可见。
   没有填写或提交答案、没有创建任务、没有写本机或生产学生数据；本地验收服务已停止，临时浏览器页无需保留。
-- 用户已于 2026-08-31 明确授权部署；本节在业务提交前仍尚未 commit、push 或 deploy，当前仅同一台 Mac 本机可见。生产仍是前一节记录的网页业务版本
-  `f3e363aa05437bfa6abaf2839550d45e3e1c7d74`，本轮没有重新核验生产服务/数据库，也没有后端、schema、生产数据库或小程序改动，
-  未上传/提审/发布小程序。下一位 agent 可先复核本节命令与 `git diff`；得到用户明确发布授权后，再提交/推送该独立分支并按 main
-  工作流发布，随后用生产剑20 Test 4 Part 1、剑19 Test 4 Part 1、剑21 Test 4 Part 4 做 DOM/视觉回归并记录 Actions 与服务状态。
+- 用户于 2026-08-31 明确授权部署。GitHub Actions
+  [33321922334](https://github.com/KB77GG/studytracker/actions/runs/33321922334) **success**，deploy job 37 秒；生产
+  `/root/apps/studytracker` HEAD 为 `4520fd68`，tracked 文件干净并保留 17 个既有未跟踪备份/快照/调度库。服务自
+  `2026-08-31 00:15:39 CST` 起 active，监听 `127.0.0.1:5002`；配置和实进程均为 `workers=1 / gthread / threads=6`、1 个 worker。
+  数据库只读 `quick_check=ok`、外键错误 0；部署后日志无 Traceback/Exception/CRITICAL/worker failure。
+- 本地、生产文件及公网 `practice_renderers.js` SHA-256 均为
+  `32483b94ae039e1254f1b5c4af694fcbc7574a64d31f1a70043aa15a3db71646`。公网剑20 Test 4 Part 1、剑19 Test 4 Part 1、剑21
+  Test 4 Part 4 均 HTTP 200；真实浏览器确认目标题干恢复且控制台 0 error。本轮没有后端、schema 或小程序改动，没有显式写入生产
+  数据库或学生业务数据，未上传/提审/发布小程序。本节将以一个后续 `[skip ci]` 文档提交推送，不触发第二次部署；生产业务 HEAD
+  保持 `4520fd68`。下一步只需观察真实学生浏览器反馈；若出现严重回归，应创建 revert `4520fd68` 的新提交，不能重置或覆盖其他 worktree。
 
 ## 2026-08-30 登录入口视觉改造（网页已上线）
 

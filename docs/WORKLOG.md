@@ -4,18 +4,19 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-08-30 听力表格题题干缺失热修（仅本机）
+## 2026-08-31 听力表格题题干缺失热修（网页已上线）
 
 - 在独立干净工作树 `/Users/zhouxin/.codex/worktrees/listening-form-stem-hotfix`、分支
-  `codex/listening-form-stem-hotfix@d6618d3a` 修复统一表格题渲染：空 `question.title` 改从 collect 的题号 marker 恢复完整原句，兼容
-  同行左右 cell 与行末空白；桌面旧 `main@6ded77d2` 的脏候选及其他用户改动均未触碰。
+  `codex/listening-form-stem-hotfix` 完成业务提交 `4520fd68`：空 `question.title` 改从 collect 的题号 marker 恢复完整原句，兼容
+  同行左右 cell 与行末空白；已推送任务分支和 main，桌面旧 `main@6ded77d2` 的脏候选及其他用户改动均未触碰。
 - 全听力/阅读表格题库扫描为 195 组 / 1,476 控件 / 230 个空逐题标题，0 个缺 source target，控件全部恰好一次；相关 Node
   **22/22 passed**；5 个原卷合法纯空列表项已逐一核对并固定成回归清单。正式音频根下全仓 Python 单次
   **623 passed / 72 subtests passed**，题库 gate PASS（84 Listening、128 在线 Reading、1 隔离 Reading、8,480 在线题、336 音频、
   48 图片）；JS syntax 与 diff check 通过。
-- 本地真实浏览器已确认剑20 T4S1 截图中的 Q3/Q4/Q6/Q7/Q8、剑19 T4S1 左右列表格和剑21 T4S4 Q32 均恢复题干；未填写/提交、
-  未创建任务或写数据。当前四个修改文件仅本机、未 commit/push/deploy；生产未重新核验且仍按上一交接为业务 `f3e363aa`，无后端/
-  数据库/小程序改动。用户已于 2026-08-31 明确授权发布；下一步提交、推送、走 main 部署并复核生产代表页。
+- GitHub Actions `33321922334` success（37 秒）；生产 HEAD `4520fd68`、tracked clean，service active，5002 / 1 worker / gthread /
+  6 threads，数据库 quick-check/外键正常，部署后无应用错误。公网三个代表页 200，剑20 T4S1 截图中的五题、剑19左右列表格和剑21
+  T4S4 Q32 均已真实浏览器确认恢复，控制台 0 error；本地/生产/公网脚本哈希一致。未填写或提交答案、未创建任务、未写生产业务数据，
+  无后端/schema/小程序改动；小程序未上传/提审/发布。下一步仅观察现场反馈。
 
 ## 2026-08-30 登录入口视觉改造（网页已上线）
 
