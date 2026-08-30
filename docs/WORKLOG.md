@@ -4,6 +4,16 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-08-30 登录入口视觉改造（网页已上线）
+
+- 从最新 `origin/main@01690d92` 建立干净发布工作树，保留桌面旧 `main` 的全部脏内容；业务提交 `f3e363aa` 已推送任务分支和 main。
+  `/login` 与未验证 `/practices` 共用真实 Logo、生成楼梯图和响应式 49/51 品牌壳层；登录安全 `next`、课堂入口、姓名验证、浏览器进度
+  与验证后 Practices 新导航均保留。
+- 定向 unittest **14 passed**，部署工作流 Node gate 与 diff check 通过；本地及生产 1440×1024 / 390×844 浏览器验收无横向溢出，
+  密码切换和两类错误状态正常，控制台无错误。截图在 `/tmp/studytracker-auth-release-qa/`，不提交 Git。
+- GitHub Actions `33284599698` success；生产业务 HEAD `f3e363aa`、tracked clean、service active，5002 / 1 worker / gthread / 6 threads，
+  公网 `/login`、`/practices` 和楼梯素材均已核验。未写生产数据库，未操作小程序；下一步只需观察真实用户首次加载与入口反馈。
+
 ## 2026-08-30 Practices 三项成果整合、导航与 39 题 Test 下架（网页已上线）
 
 - 已审计全部分支/worktree/未提交成果并生成 `PARALLEL_WORK_INTEGRATION_REVIEW.md`；题型专项和 IELTS on Computer 成果均在当前
