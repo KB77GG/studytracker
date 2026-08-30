@@ -8,8 +8,8 @@
 - 为保护桌面旧工作树，发布在干净工作树 `/private/tmp/studytracker-auth-release.Jmg0DD` 完成；分支
   `codex/auth-entry-redesign`，基线/父提交为 `01690d928e57b99f604ac5568fadf9036f91e2be`，业务提交
   `f3e363aa05437bfa6abaf2839550d45e3e1c7d74` 已同时推送任务分支和 `origin/main`。桌面
-  `/Users/zhouxin/Desktop/studytracker` 的 `main` 仍保留原有未提交/未跟踪内容且未被覆盖；发布后它落后远端 34 提交。本任务在旧
-  工作树内原有的本机候选包括 `design-qa.md`、两份交接文档、`static/style.css`、两个入口模板，以及未跟踪的楼梯图、共享壳层、
+  `/Users/zhouxin/Desktop/studytracker` 的 `main` 仍保留原有未提交/未跟踪内容且未被覆盖，并继续明显落后远端；不得在该旧脏工作树
+  pull/rebase/切换或部署。本任务在旧工作树内原有的本机候选包括 `design-qa.md`、两份交接文档、`static/style.css`、两个入口模板，以及未跟踪的楼梯图、共享壳层、
   定向测试和 `artifacts/` 截图；其他既有数据导入、原型和文档目录也保持原状。
 - `/login` 与未验证 `/practices` 现在共用 `templates/auth/_entrance_shell.html`：110px 白色品牌栏、49% / 51% 分栏、真实 Sage Path
   Logo、独立生成的暖白弧形楼梯图和无悬浮卡片表单。登录页保留用户名/密码 POST 字段、安全本地 `next` 隐藏字段、Flask flash、
@@ -29,7 +29,7 @@
   `workers=1 / gthread / threads=6`、1 个 worker。发布文件本机/生产 SHA-256 一致；公网
   `https://studytracker.xin/login` 与 `https://studytracker.xin/practices` 均 200，楼梯图公网哈希一致，最近十分钟日志没有
   Traceback/Exception/CRITICAL/worker failure。
-- 本次没有修改或写入学生数据、生产数据库或外部业务数据；没有上传、提审或发布小程序。业务代码已 commit/push/deploy；本节将以
+- 本次没有修改或写入学生数据、生产数据库或外部业务数据；没有上传、提审或发布小程序。业务代码已 commit/push/deploy；本节已以
   `[skip ci]` 文档提交推送，不触发第二次部署。若出现严重视觉或入口回归，应通过新提交 revert `f3e363aa`，不要重置或覆盖其他
   worktree；下一步仅需观察真实用户浏览器的首次图片加载与登录/姓名验证反馈。
 
