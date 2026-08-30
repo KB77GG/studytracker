@@ -10,6 +10,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>睿然练习系统 · Sage Path</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 <style>
 /* listening/index 局部样式 — 颜色全部走全局 token，不再硬编码 */
@@ -491,7 +492,8 @@
 </style>
 {% include "listening/_library_styles.html" %}
 </head>
-<body data-practice-hub="section">
+{% set auth_gate_visible = not (staff_mode|default(show_upload)) %}
+<body class="{{ 'auth-entry-body' if auth_gate_visible else '' }}" data-practice-hub="section">
 
 {% macro render_intensive_catalog(catalog, staff=False, can_manage=False) %}
 {% set suffix = 'staff' if staff else 'student' %}
@@ -697,19 +699,42 @@
 {% else %}
 {# 未登录：学生姓名验证 #}
 
-<!-- Student name verification gate -->
-<div class="login-gate" id="loginGate">
-  <p class="eyebrow">Sage Path · Practices</p>
-  <h1>睿然练习系统</h1>
-  <p class="desc">输入你的姓名进入练习，进度会自动保存在当前浏览器。</p>
-  <div class="form-card">
-    <label for="studentName">学生姓名</label>
-    <input type="text" id="studentName" placeholder="请输入姓名" autofocus>
-    <button class="btn" id="btnVerify" onclick="verifyStudent()">进入练习</button>
-    <div class="error" id="errorMsg"></div>
-    <span class="form-help">没找到自己？请联系老师确认姓名。</span>
+{% from "auth/_entrance_shell.html" import entrance_shell %}
+<div id="loginGate">
+  {% call entrance_shell('studentEntryTitle', 'auth-entry__panel-inner--student') %}
+  <div class="auth-entry__heading">
+    <h1 id="studentEntryTitle">学生练习入口</h1>
+    <p>输入老师登记的姓名，继续你的练习。</p>
   </div>
-  <a class="staff-link" href="{{ url_for('login') }}?next={{ url_for('listening_index') }}">员工登录</a>
+
+  <form class="auth-entry__form"
+        id="studentVerifyForm"
+        action="{{ url_for('api_listening_verify') }}"
+        method="post"
+        novalidate>
+    <div class="auth-entry__field">
+      <label for="studentName">学生姓名</label>
+      <input type="text"
+             id="studentName"
+             name="name"
+             placeholder="请输入姓名"
+             autocomplete="name"
+             required>
+    </div>
+    <button class="auth-entry__primary" id="btnVerify" type="submit">
+      <span id="btnVerifyText">进入练习</span>
+      <i class="fas fa-arrow-right" aria-hidden="true"></i>
+    </button>
+    <div class="auth-entry__error"
+         id="errorMsg"
+         role="alert"
+         aria-live="assertive"
+         hidden></div>
+    <p class="auth-entry__help">没找到自己？请联系老师确认姓名。</p>
+  </form>
+
+  <a class="auth-entry__staff-link" href="{{ url_for('login') }}?next=/practices">员工登录</a>
+  {% endcall %}
 </div>
 
 <!-- Main content (hidden until student verified) -->
@@ -781,10 +806,20 @@
 if (document.getElementById('loginGate')) {
   function verifyStudent() {
     const name = document.getElementById('studentName').value.trim();
-    if (!name) return;
+    const error = document.getElementById('errorMsg');
+    const button = document.getElementById('btnVerify');
+    const buttonText = document.getElementById('btnVerifyText');
+    error.hidden = true;
+    error.textContent = '';
+    if (!name) {
+      error.textContent = '请输入老师登记的学生姓名。';
+      error.hidden = false;
+      document.getElementById('studentName').focus();
+      return;
+    }
 
-    document.getElementById('btnVerify').textContent = '验证中...';
-    document.getElementById('btnVerify').disabled = true;
+    buttonText.textContent = '验证中…';
+    button.disabled = true;
 
     fetch('/api/listening/verify', {
       method: 'POST',
@@ -798,20 +833,19 @@ if (document.getElementById('loginGate')) {
         rememberStudent(verifiedName);
         showMain(verifiedName);
       } else {
-        const err = document.getElementById('errorMsg');
-        err.textContent = data.error === 'student_not_found'
+        error.textContent = data.error === 'student_not_found'
           ? '未找到该学生，请确认姓名是否正确，或联系老师。'
           : (data.message || '验证失败');
-        err.style.display = 'block';
+        error.hidden = false;
       }
     })
     .catch(() => {
-      document.getElementById('errorMsg').textContent = '网络错误，请重试';
-      document.getElementById('errorMsg').style.display = 'block';
+      error.textContent = '网络错误，请重试';
+      error.hidden = false;
     })
     .finally(() => {
-      document.getElementById('btnVerify').textContent = '进入练习';
-      document.getElementById('btnVerify').disabled = false;
+      buttonText.textContent = '进入练习';
+      button.disabled = false;
     });
   }
 
@@ -985,11 +1019,12 @@ if (document.getElementById('loginGate')) {
     document.getElementById('loginGate').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('studentName').value = '';
-    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('errorMsg').hidden = true;
     document.getElementById('newTasksList').innerHTML = '<div class="practice-overview__empty">正在加载任务…</div>';
     document.getElementById('newTasksMeta').textContent = '加载中';
     document.getElementById('practiceHistoryList').innerHTML = '<div class="practice-overview__empty">正在加载记录…</div>';
     document.getElementById('practiceHistoryMeta').textContent = '加载中';
+    document.getElementById('studentName').focus();
   }
 
   // Auto-login if previously verified in this session
@@ -1006,9 +1041,9 @@ if (document.getElementById('loginGate')) {
     }
   });
 
-  // Enter key to submit
-  document.getElementById('studentName').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') verifyStudent();
+  document.getElementById('studentVerifyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    verifyStudent();
   });
 }
 

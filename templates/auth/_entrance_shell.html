@@ -1,0 +1,38 @@
+{% macro entrance_shell(panel_labelledby, panel_modifier='') -%}
+<div class="auth-entry">
+  <header class="auth-entry__brandbar">
+    <a class="auth-entry__brand" href="{{ url_for('login') }}" aria-label="Sage Path 睿然国际教育">
+      <img class="auth-entry__brand-mark"
+           src="{{ url_for('static', filename='brand/sagepath-mark.png') }}"
+           alt="">
+      <span class="auth-entry__brand-copy" aria-hidden="true">
+        <span class="auth-entry__brand-en">Sage Path</span>
+        <span class="auth-entry__brand-zh">睿然国际教育</span>
+      </span>
+    </a>
+  </header>
+
+  <div class="auth-entry__layout">
+    <section class="auth-entry__visual" aria-label="Sage Path 品牌介绍">
+      <img class="auth-entry__visual-image"
+           src="{{ url_for('static', filename='brand/auth-staircase-hero.png') }}"
+           alt="暖色自然光下的浅色弧形楼梯">
+      <div class="auth-entry__story">
+        <h2 class="auth-entry__story-title">
+          让每一次<span class="auth-entry__story-accent">进步</span><br>
+          都看得见
+        </h2>
+        <span class="auth-entry__story-rule" aria-hidden="true"></span>
+        <p class="auth-entry__story-copy">我们帮助教师更清晰地指导，<br>让学生更自信地成长。</p>
+      </div>
+    </section>
+
+    <main class="auth-entry__panel" aria-labelledby="{{ panel_labelledby }}">
+      <div class="auth-entry__panel-inner {{ panel_modifier }}">
+        {{ caller() }}
+        <p class="auth-entry__copyright">© Sage Path · 睿然国际教育</p>
+      </div>
+    </main>
+  </div>
+</div>
+{%- endmacro %}

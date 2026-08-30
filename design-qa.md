@@ -1,3 +1,60 @@
+# 登录入口重设计 Design QA
+
+日期：2026-08-30
+目标页面：`/login`、`/practices`（未登录状态）
+
+## Comparison target
+
+- 唯一视觉事实源：`/Users/zhouxin/.codex/generated_images/01a04fe9-7e5f-7241-b5b2-b40aa7ab0774/exec-01c10a36-c06f-4f20-91b1-6669bf07840e.png`
+- 最终实现截图：
+  - `/tmp/studytracker-auth-release-qa/login-desktop-1440x1024.png`
+  - `/tmp/studytracker-auth-release-qa/login-mobile-390x844.png`
+  - `/tmp/studytracker-auth-release-qa/practices-desktop-1440x1024.png`
+  - `/tmp/studytracker-auth-release-qa/practices-mobile-390x844.png`
+- 初始实现证据：`/Users/zhouxin/Desktop/studytracker/artifacts/auth-entry-20260830/login-desktop-v1.png`
+- 对比方法：在同一次原始分辨率图像查看输入中并列载入 1440×1024 视觉参考与最终 `/login` 截图；浏览器截图均使用用户指定真实视口，未做拉伸或裁切。
+
+## Viewport and measured surfaces
+
+- 桌面：1440×1024；品牌栏 110px，左右分栏 49% / 51%，表单宽 560px，输入框 66px，主按钮 62px，学生入口 118px；页面 `scrollWidth === innerWidth` 且无纵向滚动。
+- 手机：390×844；品牌栏 82px，主视觉隐藏，表单优先；输入框 58px，主按钮 58px；两个页面均 `scrollWidth === innerWidth`，主按钮在首屏可达。
+- 桌面 `/login` 关键位置：表单 x=814；用户名输入 y=372；密码输入 y=508；主按钮 y=627；学生入口 y=772。参考图对应位置约为 x=815、y=375、y=513、y=624、y=775。
+
+## Findings and comparison history
+
+1. 初始实现：
+   - P2：左侧品牌文案比参考图向左约 33px，字号略大。
+   - P2：右侧表单比参考图向左约 21px，后半段控件整体偏上约 20–30px。
+   - P2：首个输入框因 `autofocus` 呈现焦点描边，和参考图静态状态不一致，手机端也可能在载入时立即弹出键盘。
+2. 修复：
+   - 将品牌文案锚点调到左栏 15.4%，缩小标题上限并上移约 9px。
+   - 将桌面表单左侧锚点调到 x≈814，重新校准表单与字段间距。
+   - 移除自动聚焦，保留真实 `label`、键盘可见焦点和密码按钮的无障碍状态。
+3. 最终对比：
+   - 品牌栏、分栏、Logo、标题、表单、按钮、学生入口和主留白均与参考图进入同一构图范围。
+   - 生成楼梯图保持暖白、自然光和浅色弧形楼梯主体；其具体台阶与扶手形状并非对参考图像素复制，这是遵守“生成独立干净素材、不得裁切整张界面图”的有意差异。
+   - `/login` 额外保留了业务需要的课堂入口，并按要求降为底部辅助文字链接。
+   - `/practices` 共享同一品牌壳层，只替换为姓名验证内容；验证后的练习目录仍为原实现。
+
+## Interaction, accessibility, and runtime checks
+
+- 密码显示按钮：点击后 `type=text`、`aria-pressed=true`、`aria-label=隐藏密码`。
+- 错误状态：账号错误由 Flask flash 返回并显示；姓名为空和姓名不存在均在 `role=alert` 区域显示，按钮会恢复可用。
+- 学生入口链接固定为 `/practices`；课堂入口 `/classroom` 保留；员工入口返回 `/login?next=/practices`。
+- 浏览器控制台：两个页面均 0 error、0 warning。
+- 两套页面使用真实表单、真实标签、非颜色单独表达的错误文案、至少 58px 的移动触控控件，并尊重 `prefers-reduced-motion`。
+
+## Final findings
+
+- P0：0
+- P1：0
+- P2：0
+- 可接受差异：楼梯为新生成的独立照片素材；登录页保留参考图未显示但业务仍需要的低调课堂入口。
+
+final result: passed
+
+---
+
 # Vocabulary answer-feedback design QA
 
 ## Comparison target
