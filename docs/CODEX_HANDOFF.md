@@ -1,7 +1,42 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-08-30 09:03（Asia/Shanghai）。
+> 最近更新：2026-08-31 00:08（Asia/Shanghai）。
+
+## 2026-08-30 听力表格题题干缺失热修（仅本机，待授权发布）
+
+- 本轮在干净工作树 `/Users/zhouxin/.codex/worktrees/listening-form-stem-hotfix`、分支
+  `codex/listening-form-stem-hotfix` 开发，基线与当前未提交 HEAD 均为最新 `origin/main@d6618d3a358eefd96c35939e2459a1aa1ba72f4e`。
+  当前未提交文件为 `static/js/practice_renderers.js`、`tests/test_practice_renderers.js`、`docs/CODEX_HANDOFF.md` 和
+  `docs/WORKLOG.md`，没有其他未跟踪文件。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 仍为
+  `main@6ded77d2`、落后 `origin/main` 36 个提交；其中原有的样式/模板/交接文档改动、大量数据/脚本/测试/原型未跟踪内容，以及与本问题
+  有关但只固定顶部上下文、不能恢复逐题题干的 `templates/listening/test_practice.html` / `tests/test_listening_practice_context.py`
+  候选均未触碰、未覆盖、未纳入本热修。
+- 学生截图中的剑桥雅思 20 Test 4 Listening Part 1 是真实题干缺失，不是浏览器缓存或源数据丢失。该题组 Q1-Q10 的
+  `question.title` 全为空，但完整题干仍在 `group.collect` 中；统一 Practices 表格渲染器此前只在 `question.title` 非空时输出题干，
+  因而 Q3/Q4/Q6/Q7/Q8 等退化成孤立输入框。进一步全库审计发现旧纸质表格还存在“题干与空格分处同一行左右 cell”和“源行以空格结尾”
+  两种同类结构，不能只补截图中的一套题。
+- `practice_renderers.js` 现会在逐题标题为空时从对应 `$question.id$` 的 collect cell 恢复空格前后原句，并合并同一视觉行上被大段
+  `&nbsp;` 分开的前缀 cell；解析视觉行前先去除尾部空白，避免整行被正则漏掉。关联到题干的前缀 cell 不再作为孤立静态事实重复渲染，
+  原有非空题名、判分、答案控件、题组标题/说明和语义 section 逻辑不变。
+- 新增剑20 Test 4 完整句、剑19 Test 4 左右列、剑21 Test 4 尾部空白三个定向回归，以及听力/阅读全表格题库扫描。扫描结果为
+  **195 个 form group / 1,476 个 control / 230 个空 `question.title`，0 个缺 source target，全部 control 恰好渲染一次**。
+  其中 5 个没有行内文字的 control 已逐一对照原 `collect`，均为共享标题/列表下原本就只包含空格的合法项目，并以固定 ID 清单加入回归，
+  不属于题干丢失。
+  `node --test tests/test_practice_renderers.js tests/test_practice_shell.js tests/test_practice_modes.js tests/test_simulation_audio.js`
+  为 **22/22 passed**；`node --check static/js/practice_renderers.js` 与 `git diff --check` 通过。
+- 发布前临时只读挂接桌面正式 MP3，并设置
+  `STUDYTRACKER_AUDIO_ROOT=/Users/zhouxin/Desktop/studytracker/static/listening` 后，全仓
+  `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q` 单次运行 **623 passed / 72 subtests passed**；临时链接随后已删除，
+  工作树无残留。`scripts/check_ielts_practice_library.py --audio-root /Users/zhouxin/Desktop/studytracker/static/listening` 为 **PASS**：
+  84 套 Listening、128 套在线 Reading、1 套明确隔离 Reading、8,480 道在线题、336 个有效音频和 48 张图片。
+- 本地 5066 真实浏览器验收通过：剑20 Test 4 Part 1 的 Q3/Q4/Q6/Q7/Q8 均显示 collect 中完整句子并把输入框嵌回原位；剑19
+  Test 4 Part 1 的 supervisor/coat/mobile 左右列表格题干恢复；剑21 Test 4 Part 4 Q32 的尾部空白行题干恢复且控件可见。
+  没有填写或提交答案、没有创建任务、没有写本机或生产学生数据；本地验收服务已停止，临时浏览器页无需保留。
+- 用户已于 2026-08-31 明确授权部署；本节在业务提交前仍尚未 commit、push 或 deploy，当前仅同一台 Mac 本机可见。生产仍是前一节记录的网页业务版本
+  `f3e363aa05437bfa6abaf2839550d45e3e1c7d74`，本轮没有重新核验生产服务/数据库，也没有后端、schema、生产数据库或小程序改动，
+  未上传/提审/发布小程序。下一位 agent 可先复核本节命令与 `git diff`；得到用户明确发布授权后，再提交/推送该独立分支并按 main
+  工作流发布，随后用生产剑20 Test 4 Part 1、剑19 Test 4 Part 1、剑21 Test 4 Part 4 做 DOM/视觉回归并记录 Actions 与服务状态。
 
 ## 2026-08-30 登录入口视觉改造（网页已上线）
 

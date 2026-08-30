@@ -64,6 +64,105 @@ test('continuous notes keep static lines with their section instead of making qu
   assert.ok(html.indexOf('• 17th, from 10 a.m. to 3 p.m.') < html.indexOf('data-test-q="10"'))
 })
 
+test('empty per-question titles fall back to the complete collect stem', () => {
+  const listening20 = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', 'static', 'listening_tests', 'ielts20_test4.json'),
+    'utf8'
+  ))
+  const group = listening20.sections[0].groups.find(item => item.title === 'Advice on family visit')
+  const html = renderers.renderForm(group, question => `<input data-test-q="${question.number}">`)
+
+  for (let number = 1; number <= 10; number += 1) {
+    assert.equal((html.match(new RegExp(`data-test-q="${number}"`, 'g')) || []).length, 1)
+  }
+  assert.ok(html.includes('· a <input data-test-q="3"> tour of the city centre'))
+  assert.ok(html.includes('· a trip by <input data-test-q="4"> to the old fort'))
+  assert.ok(html.includes('· see the exhibition about <input data-test-q="6">, which opens soon'))
+  assert.ok(html.includes('- good for <input data-test-q="7"> food'))
+  assert.ok(html.includes('- need to have lunch before <input data-test-q="8"> p.m.'))
+  assert.ok(!html.includes('practice-form__content"><input data-test-q="3">'))
+})
+
+test('empty titles also recover prompts split into paper-form columns', () => {
+  const listening19 = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', 'static', 'listening_tests', 'ielts19_test4.json'),
+    'utf8'
+  ))
+  const group = listening19.sections[0].groups.find(item => item.title === 'First day at work')
+  const html = renderers.renderForm(group, question => `<input data-test-q="${question.number}">`)
+
+  assert.ok(html.includes('• Name of supervisor: <input data-test-q="1">'))
+  assert.ok(html.includes('• Where to leave coat and bag: use <input data-test-q="2"> in staffroom'))
+  assert.ok(html.includes('• Supervisor’s mobile number: <input data-test-q="6">'))
+})
+
+test('trailing source whitespace does not hide a collect stem', () => {
+  const listening21 = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', 'static', 'listening_tests', 'ielts21_test4.json'),
+    'utf8'
+  ))
+  const group = listening21.sections[3].groups.find(item => item.title === 'Music therapy for surgical patients')
+  const fields = renderers.formFields(group)
+  const html = renderers.renderForm(group, question => `<input data-test-q="${question.number}">`)
+
+  assert.ok(fields.find(field => field.question.number === 32).target)
+  assert.ok(html.includes('A study reviewed data from about 100 <input data-test-q="32"> and found that listening to music'))
+})
+
+test('all form-completion fixtures map every control to a source stem', () => {
+  let groupCount = 0
+  let controlCount = 0
+  let emptyTitleCount = 0
+  const sourceOnlyControls = []
+
+  for (const directory of ['listening_tests', 'reading_tests']) {
+    const fixtureDirectory = path.join(__dirname, '..', 'static', directory)
+    for (const filename of fs.readdirSync(fixtureDirectory).filter(name => name.endsWith('.json'))) {
+      let book
+      try {
+        book = JSON.parse(fs.readFileSync(path.join(fixtureDirectory, filename), 'utf8'))
+      } catch {
+        continue
+      }
+      for (const section of book.sections || []) {
+        for (const group of section.groups || []) {
+          if (!renderers.isFormGroup(group)) continue
+          groupCount += 1
+          const fields = renderers.formFields(group)
+          const html = renderers.renderForm(group, question => `<input data-test-id="${question.id}">`)
+          controlCount += fields.length
+          for (const field of fields) {
+            if (!String(field.question.title || '').trim()) {
+              emptyTitleCount += 1
+              assert.ok(field.target, `${filename} Q${field.question.number} has no source target`)
+              const marker = `$${field.question.id}$`
+              const sourceText = renderers.plainText(renderers.targetSource(field).replace(marker, ''))
+                .replace(/[^\p{L}\p{N}]+/gu, '')
+              if (!sourceText) sourceOnlyControls.push(`${filename}:Q${field.question.number}`)
+            }
+            assert.equal(
+              (html.match(new RegExp(`data-test-id="${field.question.id}"`, 'g')) || []).length,
+              1,
+              `${filename} Q${field.question.number} should render once`
+            )
+          }
+        }
+      }
+    }
+  }
+
+  assert.equal(groupCount, 195)
+  assert.equal(controlCount, 1476)
+  assert.equal(emptyTitleCount, 230)
+  assert.deepEqual(sourceOnlyControls.sort(), [
+    'ielts21_test1.json:Q31',
+    'ielts4_test1.json:Q2',
+    'ielts4_test4.json:Q7',
+    'ielts4_test4.json:Q8',
+    'ielts4_test4.json:Q9'
+  ].sort())
+})
+
 test('matching and map renderers expose dedicated workspaces without repeated option banks', () => {
   const questions = [16, 17, 18, 19, 20].map(number => ({ id: number, number, title: `Item ${number}` }))
   const matching = renderers.renderMatching(

@@ -38,9 +38,10 @@
       .replace(/<[^>]+>/g, "");
     const cells = [];
     normalized.split(/\r?\n/).forEach((line, lineIndex) => {
+      const searchableLine = line.replace(/[ \t\u00a0]+$/g, "");
       const matcher = /[^ \t\u00a0](?:[\s\S]*?[^ \t\u00a0])?(?=[ \t\u00a0]{8,}|$)/g;
       let match;
-      while ((match = matcher.exec(line))) {
+      while ((match = matcher.exec(searchableLine))) {
         const raw = match[0];
         const start = match.index;
         cells.push({
@@ -123,6 +124,26 @@
     };
   }
 
+  function targetPrefixIndexes(field) {
+    if (!field || !field.target || field.targetIndex < 0) return [];
+    return field.cells
+      .map((cell, index) => ({ cell, index }))
+      .filter(({ cell, index }) => (
+        index < field.targetIndex &&
+        cell.line === field.target.line &&
+        !/\$\d+\$/.test(cell.raw)
+      ))
+      .map(({ index }) => index);
+  }
+
+  function targetSource(field) {
+    if (!field || !field.target) return "";
+    const prefix = targetPrefixIndexes(field).map((index) => field.cells[index].raw);
+    return [...prefix, field.target.raw]
+      .join(" ")
+      .replace(/\[\[LABEL:([^\]]+)\]\]/g, "$1");
+  }
+
   function questionTemplate(question, controlHtml) {
     const title = String(question && question.title || "");
     const questionNumber = String(question && question.number || "").replace(/\D/g, "");
@@ -140,12 +161,28 @@
     return title.trim() ? `${escapeHtml(title)} ${controlHtml}` : controlHtml;
   }
 
+  function targetTemplate(field, controlHtml) {
+    const question = field && field.question || {};
+    const marker = `$${question.id}$`;
+    const raw = targetSource(field);
+    const markerIndex = raw.indexOf(marker);
+    if (markerIndex < 0) return controlHtml;
+    const questionNumber = String(question.number || "").replace(/\D/g, "");
+    let before = raw.slice(0, markerIndex);
+    if (questionNumber) before = before.replace(new RegExp(`\\s+${questionNumber}\\s*$`), "");
+    return `${escapeHtml(before)}${controlHtml}${escapeHtml(raw.slice(markerIndex + marker.length))}`;
+  }
+
   function staticFacts(group, fields) {
     const normalizeLabel = (value) => String(value || "").replace(/:\s*$/, "").trim().toLowerCase();
     const usedLabels = new Set(fields.map((field) => normalizeLabel(field.label)).filter(Boolean));
     const questionMarkers = new Set((group.questions || []).map((question) => `$${question.id}$`));
+    const promptCellIndexes = new Set(
+      fields.filter((field) => !usefulTitle(field.question)).flatMap(targetPrefixIndexes)
+    );
     const facts = [];
-    visualCells(group.collect || "").forEach((cell) => {
+    visualCells(group.collect || "").forEach((cell, index) => {
+      if (promptCellIndexes.has(index)) return;
       if (Array.from(questionMarkers).some((marker) => cell.raw.includes(marker))) return;
       let text = cell.text.replace(/\[\[LABEL:([^\]]+)\]\]/g, "$1").trim();
       if (!text || /^[-–—]+$/.test(text) || /^(?:Example|Answer)$/i.test(text)) return;
@@ -193,6 +230,16 @@
     return Boolean(title && prompt && (title.startsWith(prompt) || prompt.startsWith(title)));
   }
 
+  function targetContainsLabel(field, label) {
+    if (!field || !field.target) return false;
+    const marker = `$${field.question && field.question.id}$`;
+    const target = normalizedPrompt(
+      targetSource(field).replace(marker, " ")
+    );
+    const prompt = normalizedPrompt(label);
+    return Boolean(target && prompt && target.includes(prompt));
+  }
+
   function flowFact(text) {
     const value = String(text || "").trim();
     if (!value) return "";
@@ -231,14 +278,17 @@
         prelude += field.context.map(flowFact).join("");
         activeSectionContext = contextKey;
       }
-      const directLabel = !isSectionLabel && field.label && !/^q(?:uestion)?$/i.test(field.label.trim()) && !titleContainsLabel(field.question, field.label)
+      const directLabel = !isSectionLabel && field.label && !/^q(?:uestion)?$/i.test(field.label.trim()) && !titleContainsLabel(field.question, field.label) && !targetContainsLabel(field, field.label)
         ? `<span class="practice-form__prompt">${escapeHtml(field.label)}:</span> `
         : "";
+      const questionContent = usefulTitle(field.question)
+        ? questionTemplate(field.question, control)
+        : targetTemplate(field, control);
       return `
         ${prelude}
         <div class="practice-form__field practice-question-anchor" data-question-id="${id}" data-question-number="${number}">
           ${!isSectionLabel && field.context.length ? `<div class="practice-form__context">${field.context.map(escapeHtml).join(" · ")}</div>` : ""}
-          <div class="practice-form__content">${directLabel}${questionTemplate(field.question, control)}</div>
+          <div class="practice-form__content">${directLabel}${questionContent}</div>
           ${typeof renderExtras === "function" ? renderExtras(field.question) : ""}
         </div>`;
     }).join("");
@@ -391,6 +441,7 @@
     renderMatching,
     renderReviewCard,
     staticFacts,
+    targetSource,
     visualCells
   };
 }));
