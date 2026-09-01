@@ -50,12 +50,15 @@ body.admin-suite-v2 .brand-icon {
   height: 42px;
   flex: 0 0 42px;
   border-radius: 14px;
-  background: var(--suite-sage);
+  border: 1px solid rgba(255, 255, 255, .38);
+  background: #fffaf2;
+  box-shadow: 0 5px 16px rgba(2, 18, 29, .24);
 }
 
 body.admin-suite-v2 .brand-icon img {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 body.admin-suite-v2 .brand-title {

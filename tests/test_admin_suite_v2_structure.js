@@ -9,6 +9,7 @@ function read(path) {
 const base = read('templates/base.html')
 const shellCss = read('static/admin_suite_v2.css')
 const shellJs = read('static/js/admin_suite_v2.js')
+const entrance = read('entrance_web/admin/invitations.html')
 
 test('shared Direction 2 shell is wired for staff pages', () => {
   assert.match(base, /admin_suite_v2\.css/)
@@ -17,9 +18,12 @@ test('shared Direction 2 shell is wired for staff pages', () => {
   assert.match(base, /brand\/sagepath-mark\.png/)
   assert.match(base, /tasks-header-wave\.png|suite-header-search/)
   assert.match(shellCss, /--suite-navy:/)
+  assert.match(shellCss, /\.brand-icon \{[\s\S]*?background: #fffaf2/)
   assert.match(shellCss, /\.suite-workspace/)
   assert.match(shellCss, /width: min\(100%, 1680px\)/)
   assert.match(shellJs, /admin-suite:search/)
+  assert.match(entrance, /src="\/static\/brand\/sagepath-mark\.png"/)
+  assert.doesNotMatch(entrance, /class="entrance-brand"><img src="\.\.\/assets\/logo\.png"/)
 })
 
 test('every sidebar destination has the selected design structure', () => {
