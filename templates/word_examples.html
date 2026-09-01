@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block page_title %}词汇审核{% endblock %}
-{% block page_subtitle %}Answer Appeals & Vocabulary Review{% endblock %}
+{% block page_subtitle %}VOCABULARY REVIEW{% endblock %}
+{% block page_description %}集中处理学生判分申诉与词汇增强内容，确保评估公平与词库质量{% endblock %}
 
 {% block content_dashboard %}
 <style>
@@ -80,85 +81,33 @@
   }
 </style>
 
-<div class="container-fluid">
-  <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-      <div>
-        <strong>判分申诉</strong>
-        <span class="text-muted small ml-2">通过英文申诉后，答案会自动加入该词的可接受答案</span>
-      </div>
-      <div class="d-flex align-items-center mt-2 mt-md-0">
-        <select id="appealStatus" class="form-control form-control-sm mr-2" style="width: 120px;">
-          <option value="pending">待审核</option>
-          <option value="approved">已通过</option>
-          <option value="rejected">已驳回</option>
-          <option value="all">全部</option>
-        </select>
-        <button class="btn btn-sm btn-outline-secondary" id="appealRefreshBtn" type="button">刷新</button>
-      </div>
-    </div>
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-sm table-hover mb-0">
-          <thead class="thead-light">
-            <tr>
-              <th style="width: 150px;">学生 / 时间</th>
-              <th style="width: 180px;">词条</th>
-              <th>申诉答案</th>
-              <th style="width: 150px;">状态</th>
-              <th style="width: 230px;">操作</th>
-            </tr>
-          </thead>
-          <tbody id="appealsBody">
-            <tr><td colspan="5" class="text-center text-muted py-4">加载中...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<section class="suite-workspace vocabulary-suite">
+  <div class="suite-workspace__list">
+    <nav class="suite-tabs" id="reviewModeTabs" aria-label="审核类型">
+      <button class="suite-tab is-active" data-review-mode="appeals" type="button">判分申诉 <span class="suite-tab__count" id="appealCount">—</span></button>
+      <button class="suite-tab" data-review-mode="examples" type="button">词汇增强 <span class="suite-tab__count" id="exampleCount">—</span></button>
+    </nav>
+    <section id="appealPanel">
+      <div class="suite-toolbar"><label>状态<select id="appealStatus"><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option><option value="all">全部</option></select></label><span class="suite-toolbar__spacer"></span><button class="suite-icon-button" id="appealRefreshBtn" type="button" title="刷新"><i class="fas fa-sync-alt" aria-hidden="true"></i></button></div>
+      <div class="suite-list suite-table-wrap"><table class="suite-table"><thead><tr><th>学生 / 时间</th><th>词条</th><th>学生答案</th><th>状态</th><th>操作</th></tr></thead><tbody id="appealsBody"><tr><td colspan="5">加载中...</td></tr></tbody></table></div>
+      <footer class="suite-list-footer"><span id="appealFooter">正在加载申诉</span><span>通过后可加入可接受答案</span></footer>
+    </section>
+    <section id="examplesPanel" hidden>
+      <nav class="suite-tabs vocabulary-status-tabs" id="statusTabs"><button class="suite-tab is-active" data-status="pending" type="button">未审</button><button class="suite-tab" data-status="reported" type="button">学生反馈</button><button class="suite-tab" data-status="reviewed" type="button">已审</button><button class="suite-tab" data-status="failed" type="button">失败</button></nav>
+      <div class="suite-toolbar"><label><select id="bookFilter"><option value="">全部词库</option></select></label><button class="suite-icon-button" id="refreshBtn" type="button" title="刷新"><i class="fas fa-sync-alt" aria-hidden="true"></i></button><span class="suite-toolbar__spacer"></span><span class="suite-badge" id="totalLabel">加载中...</span></div>
+      <div class="suite-list suite-table-wrap"><table class="suite-table"><thead><tr><th>单词</th><th>词汇增强内容</th><th>状态</th><th>操作</th></tr></thead><tbody id="itemsBody"><tr><td colspan="4">加载中...</td></tr></tbody></table></div>
+      <footer class="suite-list-footer"><button class="suite-icon-button" id="prevPage" type="button" title="上一页"><i class="fas fa-chevron-left" aria-hidden="true"></i></button><span id="pageLabel">第 1 页</span><button class="suite-icon-button" id="nextPage" type="button" title="下一页"><i class="fas fa-chevron-right" aria-hidden="true"></i></button></footer>
+    </section>
   </div>
-
-  <div class="card">
-    <div class="card-header">
-      <ul class="nav nav-tabs card-header-tabs" id="statusTabs">
-        <li class="nav-item"><button class="nav-link active" data-status="pending" type="button">未审</button></li>
-        <li class="nav-item"><button class="nav-link" data-status="reported" type="button">学生反馈</button></li>
-        <li class="nav-item"><button class="nav-link" data-status="reviewed" type="button">已审</button></li>
-        <li class="nav-item"><button class="nav-link" data-status="failed" type="button">失败</button></li>
-      </ul>
-    </div>
-    <div class="card-body">
-      <div class="review-toolbar">
-        <select id="bookFilter" class="form-control form-control-sm">
-          <option value="">全部词库</option>
-        </select>
-        <button class="btn btn-sm btn-outline-secondary" id="refreshBtn" type="button">刷新</button>
-        <span class="text-muted small" id="totalLabel">加载中...</span>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-sm table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th class="word-cell">单词</th>
-              <th>词汇增强内容</th>
-              <th style="width: 140px;">状态</th>
-              <th style="width: 260px;">操作</th>
-            </tr>
-          </thead>
-          <tbody id="itemsBody">
-            <tr><td colspan="4" class="text-center text-muted py-4">加载中...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center mt-3">
-        <button class="btn btn-sm btn-outline-secondary" id="prevPage" type="button">上一页</button>
-        <span class="text-muted small" id="pageLabel">第 1 页</span>
-        <button class="btn btn-sm btn-outline-secondary" id="nextPage" type="button">下一页</button>
-      </div>
-    </div>
-  </div>
-</div>
+  <aside class="suite-workspace__inspector vocabulary-inspector">
+    <p class="suite-inspector__kicker" id="reviewInspectorKicker">申诉详情</p>
+    <div class="suite-inspector__identity"><span class="suite-icon-avatar" id="reviewInspectorInitial"><i class="fas fa-spell-check" aria-hidden="true"></i></span><div><h2 id="reviewInspectorTitle">选择一条审核记录</h2><p id="reviewInspectorMeta">详细信息会显示在这里</p></div></div>
+    <section class="suite-inspector__section"><h4>学生答案 / 核心义</h4><p id="reviewInspectorAnswer">—</p></section>
+    <section class="suite-inspector__section"><h4>参考信息</h4><p id="reviewInspectorReference">—</p></section>
+    <section class="suite-inspector__section"><h4>来源与状态</h4><dl class="suite-facts"><div><dt>任务来源</dt><dd id="reviewInspectorSource">—</dd></div><div><dt>当前状态</dt><dd id="reviewInspectorStatus">—</dd></div></dl></section>
+    <div class="suite-inspector__actions"><button class="btn" id="reviewInspectorApprove" type="button" disabled><i class="far fa-check-circle" aria-hidden="true"></i> 通过并收录</button><button class="btn btn-outline" id="reviewInspectorEdit" type="button" disabled><i class="fas fa-pen" aria-hidden="true"></i> 编辑</button><button class="btn btn-outline vocabulary-inspector__reject" id="reviewInspectorReject" type="button" disabled><i class="far fa-times-circle" aria-hidden="true"></i> 驳回</button></div>
+  </aside>
+</section>
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -213,6 +162,8 @@
     items: []
   };
 
+  const inspectorState = { mode: null, id: null };
+
   function escapeHtml(value) {
     return String(value || '')
       .replace(/&/g, '&amp;')
@@ -247,17 +198,19 @@
     const body = document.getElementById('appealsBody');
     if (!appealState.items.length) {
       body.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">暂无判分申诉</td></tr>';
+      document.getElementById('appealCount').textContent = '0';
+      document.getElementById('appealFooter').textContent = '暂无判分申诉';
       return;
     }
     body.innerHTML = appealState.items.map(item => {
       const actions = item.status === 'pending' ? `
-        <button class="btn btn-sm btn-success mb-1" onclick="reviewAppeal(${item.id}, 'approved')">
+        <button class="btn btn-sm btn-success mb-1" onclick="event.stopPropagation(); reviewAppeal(${item.id}, 'approved')">
           ${item.mode === 'en_to_zh' ? '通过' : '通过并收录'}
         </button>
-        <button class="btn btn-sm btn-outline-danger mb-1" onclick="reviewAppeal(${item.id}, 'rejected')">驳回</button>
+        <button class="btn btn-sm btn-outline-danger mb-1" onclick="event.stopPropagation(); reviewAppeal(${item.id}, 'rejected')">驳回</button>
       ` : `<span class="text-muted small">${escapeHtml(item.resolution_note || '已处理')}</span>`;
       return `
-        <tr>
+        <tr class="review-select-row" data-appeal-id="${item.id}" onclick="selectAppeal(${item.id})">
           <td>
             <strong>${escapeHtml(item.student_name)}</strong>
             <div class="word-sub">${escapeHtml(fmtDate(item.created_at))}</div>
@@ -283,6 +236,29 @@
         </tr>
       `;
     }).join('');
+    document.getElementById('appealCount').textContent = appealState.items.length;
+    document.getElementById('appealFooter').textContent = `共 ${appealState.items.length} 条申诉`;
+    selectAppeal(appealState.items[0].id);
+  }
+
+  function selectAppeal(id) {
+    const item = appealState.items.find(entry => Number(entry.id) === Number(id));
+    if (!item) return;
+    inspectorState.mode = 'appeal';
+    inspectorState.id = Number(item.id);
+    document.querySelectorAll('[data-appeal-id]').forEach(row => row.classList.toggle('is-selected', Number(row.dataset.appealId) === inspectorState.id));
+    document.getElementById('reviewInspectorKicker').textContent = '申诉详情';
+    document.getElementById('reviewInspectorInitial').textContent = (item.student_name || '?').slice(0, 1);
+    document.getElementById('reviewInspectorTitle').textContent = item.word || '未命名词条';
+    document.getElementById('reviewInspectorMeta').textContent = `${item.student_name || '未知学生'} · ${fmtDate(item.created_at)}`;
+    document.getElementById('reviewInspectorAnswer').textContent = item.student_answer || '—';
+    document.getElementById('reviewInspectorReference').textContent = item.reference_answer || '—';
+    document.getElementById('reviewInspectorSource').textContent = `${item.book_title || '词库'}${item.task_id ? ' · 任务 #' + item.task_id : ''}`;
+    document.getElementById('reviewInspectorStatus').textContent = appealStatusLabel(item);
+    document.getElementById('reviewInspectorApprove').disabled = item.status !== 'pending';
+    document.getElementById('reviewInspectorApprove').innerHTML = '<i class="far fa-check-circle" aria-hidden="true"></i> ' + (item.mode === 'en_to_zh' ? '通过申诉' : '通过并收录');
+    document.getElementById('reviewInspectorEdit').disabled = true;
+    document.getElementById('reviewInspectorReject').disabled = item.status !== 'pending';
   }
 
   async function loadAppeals() {
@@ -343,11 +319,12 @@
     const body = document.getElementById('itemsBody');
     if (!state.items.length) {
       body.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">没有符合条件的词条</td></tr>';
+      document.getElementById('exampleCount').textContent = '0';
       return;
     }
 
     body.innerHTML = state.items.map(item => `
-      <tr>
+      <tr class="review-select-row" data-word-id="${item.id}" onclick="selectVocabulary(${item.id})">
         <td class="word-cell">
           <div class="word-main">${escapeHtml(item.word)}</div>
           <div class="word-sub">${escapeHtml(item.phonetic || '')}</div>
@@ -371,14 +348,16 @@
         </td>
         <td>
           <div class="btn-group btn-group-sm mb-1" role="group">
-            <button class="btn btn-outline-success" onclick="approveItem(${item.id})">通过</button>
-            <button class="btn btn-outline-primary" onclick="openEdit(${item.id})">编辑</button>
-            <button class="btn btn-outline-warning" onclick="regenerateItem(${item.id})">重生成</button>
+            <button class="btn btn-outline-success" onclick="event.stopPropagation(); approveItem(${item.id})">通过</button>
+            <button class="btn btn-outline-primary" onclick="event.stopPropagation(); openEdit(${item.id})">编辑</button>
+            <button class="btn btn-outline-warning" onclick="event.stopPropagation(); regenerateItem(${item.id})">重生成</button>
           </div>
-          <button class="btn btn-sm btn-outline-danger" onclick="clearItem(${item.id})">清空</button>
+          <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); clearItem(${item.id})">清空</button>
         </td>
       </tr>
     `).join('');
+    document.getElementById('exampleCount').textContent = state.total || state.items.length;
+    selectVocabulary(state.items[0].id);
   }
 
   async function loadItems() {
@@ -425,6 +404,26 @@
     return state.items.find(item => item.id === id);
   }
 
+  function selectVocabulary(id) {
+    const item = findItem(Number(id));
+    if (!item) return;
+    inspectorState.mode = 'word';
+    inspectorState.id = Number(item.id);
+    document.querySelectorAll('[data-word-id]').forEach(row => row.classList.toggle('is-selected', Number(row.dataset.wordId) === inspectorState.id));
+    document.getElementById('reviewInspectorKicker').textContent = '词汇增强详情';
+    document.getElementById('reviewInspectorInitial').textContent = (item.word || '?').slice(0, 1).toUpperCase();
+    document.getElementById('reviewInspectorTitle').textContent = item.word || '未命名词条';
+    document.getElementById('reviewInspectorMeta').textContent = `${item.phonetic || ''} · ${item.translation || ''}`;
+    document.getElementById('reviewInspectorAnswer').textContent = item.core_meaning_zh || item.translation || '—';
+    document.getElementById('reviewInspectorReference').textContent = [item.usage_pattern, item.example_en, item.example_zh, item.usage_note].filter(Boolean).join(' · ') || '尚未生成增强内容';
+    document.getElementById('reviewInspectorSource').textContent = `${item.book_title || '词库'} #${item.sequence || '—'}`;
+    document.getElementById('reviewInspectorStatus').textContent = statusLabel(item);
+    document.getElementById('reviewInspectorApprove').disabled = false;
+    document.getElementById('reviewInspectorApprove').innerHTML = '<i class="far fa-check-circle" aria-hidden="true"></i> 通过词条';
+    document.getElementById('reviewInspectorEdit').disabled = false;
+    document.getElementById('reviewInspectorReject').disabled = true;
+  }
+
   function approveItem(id) {
     postAction(`/api/dictation/example/${id}/approve`);
   }
@@ -463,14 +462,36 @@
     if (ok) $('#editModal').modal('hide');
   });
 
-  document.querySelectorAll('#statusTabs .nav-link').forEach(btn => {
+  document.querySelectorAll('#statusTabs .suite-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('#statusTabs .nav-link').forEach(node => node.classList.remove('active'));
-      btn.classList.add('active');
+      document.querySelectorAll('#statusTabs .suite-tab').forEach(node => node.classList.remove('is-active'));
+      btn.classList.add('is-active');
       state.status = btn.dataset.status;
       state.page = 1;
       loadItems();
     });
+  });
+
+  document.querySelectorAll('#reviewModeTabs [data-review-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.reviewMode;
+      document.querySelectorAll('#reviewModeTabs [data-review-mode]').forEach(node => node.classList.toggle('is-active', node === btn));
+      document.getElementById('appealPanel').hidden = mode !== 'appeals';
+      document.getElementById('examplesPanel').hidden = mode !== 'examples';
+      if (mode === 'appeals' && appealState.items.length) selectAppeal(appealState.items[0].id);
+      if (mode === 'examples' && state.items.length) selectVocabulary(state.items[0].id);
+    });
+  });
+
+  document.getElementById('reviewInspectorApprove').addEventListener('click', () => {
+    if (inspectorState.mode === 'appeal') reviewAppeal(inspectorState.id, 'approved');
+    if (inspectorState.mode === 'word') approveItem(inspectorState.id);
+  });
+  document.getElementById('reviewInspectorEdit').addEventListener('click', () => {
+    if (inspectorState.mode === 'word') openEdit(inspectorState.id);
+  });
+  document.getElementById('reviewInspectorReject').addEventListener('click', () => {
+    if (inspectorState.mode === 'appeal') reviewAppeal(inspectorState.id, 'rejected');
   });
 
   document.getElementById('bookFilter').addEventListener('change', () => {
@@ -499,4 +520,17 @@
   loadAppeals();
   loadItems();
 </script>
+<style>
+  .vocabulary-suite { grid-template-columns:minmax(0,1.65fr) minmax(330px,.94fr); }
+  .vocabulary-suite #appealPanel,
+  .vocabulary-suite #examplesPanel { min-height:0; }
+  .vocabulary-suite .suite-table { min-width:760px; }
+  .vocabulary-suite .suite-table td { height:auto; min-height:66px; }
+  .vocabulary-suite .review-select-row { cursor:pointer; }
+  .vocabulary-suite .btn-group .btn,
+  .vocabulary-suite td > .btn { min-height:29px; padding:5px 8px; border-radius:6px; background:#fff; color:var(--suite-sage-dark); border:1px solid var(--suite-line-strong); box-shadow:none; font-size:10px; }
+  .vocabulary-suite .status-pill { background:var(--suite-orange-soft); color:#b85d16; font-size:10px; font-weight:800; }
+  .vocabulary-status-tabs { min-height:48px; background:#fffefa; }
+  .vocabulary-inspector__reject { grid-column:1 / -1; color:var(--suite-danger)!important; border-color:#edc9c2!important; }
+</style>
 {% endblock %}

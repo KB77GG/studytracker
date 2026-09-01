@@ -549,6 +549,18 @@ a.practice-resource:hover {
     <div class="practice-mock-review-list" id="practiceMockReviewList"></div>
   </section>
 
+  <aside class="practice-suite-filters" aria-label="资源筛选">
+    <section>
+      <h3>科目</h3>
+      <button class="is-active" type="button" data-practice-target-index="0"><i class="fas fa-headphones" aria-hidden="true"></i> 听力</button>
+      <button type="button" data-practice-target-index="1"><i class="far fa-book-open" aria-hidden="true"></i> 阅读</button>
+      <button type="button" data-practice-target-index="2"><i class="fas fa-pen-nib" aria-hidden="true"></i> 写作</button>
+      <button type="button" data-practice-target-index="3"><i class="fas fa-microphone" aria-hidden="true"></i> 题型专项</button>
+    </section>
+    <section><h3>资源类型</h3><label><input type="checkbox" checked> 单项练习</label><label><input type="checkbox" checked> 整套 Test</label><label><input type="checkbox" checked> 模考</label></section>
+    <section><h3>考试系列</h3><label><input type="checkbox" checked> IELTS</label><label><input type="checkbox" checked> TOEFL</label></section>
+  </aside>
+
   <nav class="practice-exam-switch" aria-label="考试类型">
     <a href="#ieltsPractice">IELTS 雅思</a>
     <a href="#toeflPractice">TOEFL 托福</a>
@@ -655,7 +667,19 @@ a.practice-resource:hover {
     </div>
     <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl_mock.mock_catalog') }}">进入全新模考</a>
   </section>
+
+  <aside class="practice-suite-preview" aria-label="练习预览">
+    <p class="suite-inspector__kicker">练习预览</p>
+    <div class="suite-inspector__identity"><span class="practice-suite-preview__icon"><i class="fas fa-headphones" aria-hidden="true"></i></span><div><h3>剑雅听力真题</h3><p>IELTS · {{ summary.listening.cambridge_books }} 本书</p></div></div>
+    <section class="suite-inspector__section"><h4>资源概览</h4><dl class="suite-facts"><div><dt>真题套数</dt><dd>{{ summary.listening.cambridge_tests }}</dd></div><div><dt>题目总量</dt><dd>{{ summary.listening.cambridge_questions }}</dd></div><div><dt>练习模式</dt><dd>单项 / 整套 / 精听</dd></div></dl></section>
+    <section class="suite-inspector__section"><h4>任务适配</h4><p>可直接进入练习，也可从任务管理统一布置给学生并检查重复记录。</p></section>
+    <div class="suite-inspector__actions"><button class="btn" type="button" data-practice-open-selected><i class="far fa-play-circle" aria-hidden="true"></i> 进入练习</button><a class="btn btn-outline" href="{{ url_for('tasks_page') }}"><i class="far fa-paper-plane" aria-hidden="true"></i> 布置给学生</a></div>
+  </aside>
 </main>
+
+<style>
+body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minmax(0,1fr) 330px;gap:0;width:100%;max-width:none;margin:0;padding:0;border:1px solid var(--suite-line);border-radius:12px;background:var(--suite-surface);box-shadow:var(--suite-shadow);overflow:hidden}body.admin-suite-v2 .practice-hero{display:none}body.admin-suite-v2 .practice-exam-switch{grid-column:1 / -1;grid-row:1;margin:0;padding:10px 18px;border:0;border-bottom:1px solid var(--suite-line);border-radius:0;background:#fffefa}body.admin-suite-v2 .practice-suite-filters{grid-column:1;grid-row:2 / span 3;padding:18px 16px;border-right:1px solid var(--suite-line);background:#fbf8f2}body.admin-suite-v2 .practice-suite-filters section+section{margin-top:18px;padding-top:16px;border-top:1px solid var(--suite-line)}body.admin-suite-v2 .practice-suite-filters h3{margin:0 0 9px;color:var(--suite-ink);font-size:11px;font-weight:850}body.admin-suite-v2 .practice-suite-filters button,body.admin-suite-v2 .practice-suite-filters label{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;margin:0;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:var(--suite-ink-soft);font:inherit;font-size:11px;text-align:left;text-decoration:none;cursor:pointer}body.admin-suite-v2 .practice-suite-filters button.is-active{border:1px solid #b9d8cf;background:#eff8f4;color:var(--suite-sage-dark);font-weight:800}body.admin-suite-v2 #ieltsPractice{display:none}body.admin-suite-v2 .practice-subjects{grid-column:2;grid-row:2;display:block;margin:0;padding:12px 16px;border:0;border-radius:0;background:#fff}body.admin-suite-v2 .practice-subject{margin:0 0 12px;border:1px solid var(--suite-line);border-radius:9px;box-shadow:none}body.admin-suite-v2 .practice-subject__head{padding:13px 15px}body.admin-suite-v2 .practice-resource{min-height:58px;padding:11px 14px;border-color:#eee8df}body.admin-suite-v2 .practice-suite-preview{grid-column:3;grid-row:2 / span 3;display:flex;flex-direction:column;min-width:0;padding:20px;border-left:1px solid var(--suite-line);background:#fffefa}body.admin-suite-v2 .practice-suite-preview__icon{width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;border-radius:11px;background:var(--suite-sage-soft);color:var(--suite-sage-dark);font-size:18px}body.admin-suite-v2 #toeflPractice{grid-column:2;grid-row:3;margin:0;padding:10px 18px 0}body.admin-suite-v2 .practice-toefl{grid-column:2;grid-row:4;margin:12px 16px 18px}body.admin-suite-v2 .practice-identity,body.admin-suite-v2 .practice-assigned,body.admin-suite-v2 .practice-mock-reviews{grid-column:1 / -1;order:8;margin:14px 16px}body.admin-suite-v2 .practice-identity{margin-top:20px}body.admin-suite-v2 .practice-suite-preview .suite-inspector__actions{margin-top:auto}@media(max-width:1050px){body.admin-suite-v2 .practice-page{grid-template-columns:170px minmax(0,1fr)}body.admin-suite-v2 .practice-suite-preview{grid-column:1 / -1;grid-row:auto;border-top:1px solid var(--suite-line);border-left:0}}@media(max-width:700px){body.admin-suite-v2 .practice-page{display:block}body.admin-suite-v2 .practice-suite-filters{display:none}body.admin-suite-v2 .practice-subjects,body.admin-suite-v2 .practice-suite-preview,body.admin-suite-v2 #toeflPractice,body.admin-suite-v2 .practice-toefl{margin:0;grid-column:auto;grid-row:auto;border-left:0}}
+</style>
 
 <script>
 (function () {
@@ -899,7 +923,36 @@ a.practice-resource:hover {
     input.focus();
   });
 
-  document.querySelectorAll('.js-practice-resource').forEach(function (link) {
+  const practiceResourceLinks = Array.from(document.querySelectorAll('.js-practice-resource'));
+  let selectedPracticeResource = practiceResourceLinks[0] || null;
+  const practicePreviewTitle = document.querySelector('.practice-suite-preview h3');
+  const practicePreviewMeta = document.querySelector('.practice-suite-preview .suite-inspector__identity p');
+
+  function selectPracticeResource(resource, filterButton) {
+    if (!resource) return;
+    selectedPracticeResource = resource;
+    document.querySelectorAll('[data-practice-target-index]').forEach(function (button) {
+      button.classList.toggle('is-active', button === filterButton);
+    });
+    if (practicePreviewTitle) {
+      practicePreviewTitle.textContent = resource.querySelector('.practice-resource__label')?.textContent?.trim() || resource.textContent.trim();
+    }
+    if (practicePreviewMeta) {
+      practicePreviewMeta.textContent = resource.querySelector('.practice-resource__meta')?.textContent?.trim() || '选择后进入对应练习资源';
+    }
+  }
+
+  document.querySelectorAll('[data-practice-target-index]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      selectPracticeResource(practiceResourceLinks[Number(button.dataset.practiceTargetIndex)] || null, button);
+    });
+  });
+
+  document.querySelector('[data-practice-open-selected]')?.addEventListener('click', function () {
+    selectedPracticeResource?.click();
+  });
+
+  practiceResourceLinks.forEach(function (link) {
     link.addEventListener('click', function (event) {
       if (verified) return;
       event.preventDefault();

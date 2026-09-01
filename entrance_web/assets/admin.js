@@ -150,7 +150,7 @@ async function loadInvitations() {
       }
       const sessionInfo = inv.status === 'in_progress' && session.deadline_at
         ? `<div class="mt-1 text-[11px] ${session.is_locked ? 'text-orange-600 font-semibold' : 'text-gray-500'}">
-            ${session.is_locked ? `🔒 ${esc(SESSION_REASON_LABELS[session.locked_reason] || '会话已锁定')} · ` : ''}
+            ${session.is_locked ? `<i class="fas fa-lock" aria-hidden="true"></i> ${esc(SESSION_REASON_LABELS[session.locked_reason] || '会话已锁定')} · ` : ''}
             离开 ${session.exit_count || 0} 次 · 换设备 ${session.device_switch_count || 0} 次
             ${session.last_saved_at ? `<br>保存：${esc(session.last_saved_at.slice(0, 16).replace('T', ' '))}` : ''}
           </div>`

@@ -1,160 +1,41 @@
 {% extends "base.html" %}
 
-{% block page_subtitle %}Stage Report{% endblock %}
-{% block page_title %}阶段学习报告管理{% endblock %}
+{% block page_subtitle %}STAGE REPORTS{% endblock %}
+{% block page_title %}阶段报告{% endblock %}
+{% block page_description %}将阶段数据整理成可编辑、可分享的学习总结{% endblock %}
+{% block header_actions %}<a href="{{ url_for('stage_report_create') }}" class="btn"><i class="fas fa-plus" aria-hidden="true"></i> 新建阶段报告</a>{% endblock %}
 
 {% block content_dashboard %}
-<div class="container">
-  <div class="header-row">
-    <div>
-      <h2>阶段学习报告</h2>
-      <p class="header-desc">为每位学生生成阶段学习分析，支持编辑和 PDF 下载</p>
-    </div>
-    <a href="{{ url_for('stage_report_create') }}" class="btn btn-primary">+ 新建报告</a>
+<section class="suite-workspace stage-report-suite">
+  <div class="suite-workspace__list">
+    <nav class="suite-tabs"><button class="suite-tab is-active" type="button">全部报告 <span class="suite-tab__count">{{ reports|length }}</span></button><button class="suite-tab" type="button" disabled>草稿</button><button class="suite-tab" type="button" disabled>已完成</button></nav>
+    <div class="suite-toolbar"><label><i class="far fa-user" aria-hidden="true"></i><input id="stageReportFilter" type="search" placeholder="选择学生或搜索报告"></label><span class="suite-toolbar__spacer"></span><span class="suite-badge">{{ reports|length }} 份报告</span></div>
+    <div class="suite-list suite-table-wrap"><table class="suite-table"><thead><tr><th>报告标题</th><th>学生</th><th>阶段日期</th><th>创建人</th><th>更新时间</th><th>操作</th></tr></thead><tbody>
+      {% for report in reports %}{% set title = report.title or '未命名报告' %}{% set student = report.student.full_name if report.student else '未知学生' %}{% set creator = report.creator.display_name if report.creator else '系统' %}
+      <tr data-suite-search-row data-title="{{ title|e }}" data-student="{{ student|e }}" data-period="{{ report.start_date }} 至 {{ report.end_date }}" data-creator="{{ creator|e }}" data-updated="{{ report.updated_at.strftime('%Y-%m-%d %H:%M') }}" data-edit="{{ url_for('stage_report_create', report_id=report.id) }}" data-pdf="{{ url_for('export_stage_report_pdf', report_id=report.id) }}">
+        <td><span class="suite-row-title"><i class="far fa-file-alt" aria-hidden="true"></i>&nbsp; {{ title }}</span><span class="suite-row-sub">报告 ID {{ report.id }}</span></td><td>{{ student }}</td><td>{{ report.start_date }}<span class="suite-row-sub">至 {{ report.end_date }}</span></td><td>{{ creator }}</td><td>{{ report.updated_at.strftime('%Y-%m-%d') }}</td>
+        <td><div class="suite-row-actions"><a class="suite-icon-button" href="{{ url_for('stage_report_create', report_id=report.id) }}" title="编辑"><i class="fas fa-pen" aria-hidden="true"></i></a><a class="suite-icon-button" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank" title="下载 PDF"><i class="fas fa-download" aria-hidden="true"></i></a><form method="post" action="{{ url_for('delete_stage_report', report_id=report.id) }}" onsubmit="return confirm('确定删除该报告吗？');"><button class="suite-icon-button" type="submit" title="删除"><i class="far fa-trash-alt" aria-hidden="true"></i></button></form></div></td>
+      </tr>
+      {% else %}<tr><td colspan="6"><div class="suite-empty"><i class="far fa-file-alt" aria-hidden="true"></i><strong>暂无阶段报告</strong><span>从右上角新建第一份报告。</span></div></td></tr>{% endfor %}
+    </tbody></table></div>
+    <footer class="suite-list-footer"><span>共 {{ reports|length }} 份报告</span><span>显示最新更新</span></footer>
   </div>
-
-  <div class="card" style="border-radius:14px;padding:4px 0;">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>报告标题</th>
-          <th>学生</th>
-          <th>阶段区间</th>
-          <th>创建人</th>
-          <th>更新时间</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for report in reports %}
-        <tr>
-          <td class="id-cell">{{ report.id }}</td>
-          <td class="title-cell">{{ report.title or '未命名报告' }}</td>
-          <td><span class="student-badge">{{ report.student.full_name if report.student else '未知' }}</span></td>
-          <td class="date-cell">{{ report.start_date }} 至 {{ report.end_date }}</td>
-          <td>{{ report.creator.display_name if report.creator else '系统' }}</td>
-          <td class="date-cell">{{ report.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
-          <td class="actions">
-            <a class="btn btn-sm btn-outline" href="{{ url_for('stage_report_create', report_id=report.id) }}">编辑</a>
-            <a class="btn btn-sm btn-pdf-sm" href="{{ url_for('export_stage_report_pdf', report_id=report.id) }}" target="_blank">📄 PDF</a>
-            <form method="post" action="{{ url_for('delete_stage_report', report_id=report.id) }}" onsubmit="return confirm('确定删除该报告吗？');">
-              <button type="submit" class="btn btn-sm btn-danger">删除</button>
-            </form>
-          </td>
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="7" class="empty">暂无报告，请点击右上角新建。</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<style>
-  .header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .header-row h2 {
-    margin: 0;
-  }
-  .header-desc {
-    margin: 4px 0 0 0;
-    font-size: 13px;
-    color: #6b7280;
-  }
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .data-table thead th {
-    background: #0f766e;
-    color: #fff;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 12px 10px;
-    border: none;
-  }
-  .data-table thead th:first-child {
-    border-radius: 10px 0 0 0;
-  }
-  .data-table thead th:last-child {
-    border-radius: 0 10px 0 0;
-  }
-  .data-table td {
-    border-bottom: 1px solid #e9eef3;
-    padding: 12px 10px;
-    text-align: left;
-    vertical-align: middle;
-    font-size: 14px;
-  }
-  .data-table tbody tr:hover {
-    background: #f0fdfa;
-  }
-  .data-table tbody tr:nth-child(even) {
-    background: #f8fcfb;
-  }
-  .data-table tbody tr:nth-child(even):hover {
-    background: #ecfdf5;
-  }
-  .id-cell {
-    color: #9ca3af;
-    font-size: 13px;
-  }
-  .title-cell {
-    font-weight: 600;
-    color: #1f2937;
-  }
-  .date-cell {
-    color: #6b7280;
-    font-size: 13px;
-  }
-  .student-badge {
-    display: inline-block;
-    background: #f0fdfa;
-    color: #0f766e;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 3px 10px;
-    border-radius: 6px;
-    border: 1px solid #99d8cf;
-  }
-  .actions {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .actions form {
-    margin: 0;
-  }
-  .btn-pdf-sm {
-    border: 1px solid #0f766e;
-    background: #f0fdfa;
-    color: #0f766e !important;
-    font-weight: 600;
-  }
-  .btn-pdf-sm:hover {
-    background: #ccfbf1;
-  }
-  .btn-danger {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-  }
-  .btn-danger:hover {
-    background: #b91c1c;
-  }
-  .empty {
-    text-align: center;
-    color: #8b96a6;
-    padding: 40px 0;
-    font-size: 14px;
-  }
-</style>
+  <aside class="suite-workspace__inspector">
+    <p class="suite-inspector__kicker">报告概览</p>
+    {% if reports %}{% set first = reports[0] %}
+    <div class="suite-inspector__identity"><span class="suite-icon-avatar" id="reportInitial">{{ (first.student.full_name if first.student else '?')[:1] }}</span><div><h2 id="reportStudent">{{ first.student.full_name if first.student else '未知学生' }}</h2><p id="reportTitle">{{ first.title or '未命名报告' }}</p></div></div>
+    <section class="suite-inspector__section"><h4>阶段信息</h4><dl class="suite-facts"><div><dt>阶段日期</dt><dd id="reportPeriod">{{ first.start_date }} 至 {{ first.end_date }}</dd></div><div><dt>创建者</dt><dd id="reportCreator">{{ first.creator.display_name if first.creator else '系统' }}</dd></div><div><dt>最后更新</dt><dd id="reportUpdated">{{ first.updated_at.strftime('%Y-%m-%d %H:%M') }}</dd></div></dl></section>
+    <section class="suite-inspector__section"><h4>报告内容</h4><p>进入编辑页可查看学习投入、能力变化、问题诊断、下阶段建议与家长摘要。</p></section>
+    <div class="suite-inspector__actions"><a class="btn" id="reportEdit" href="{{ url_for('stage_report_create', report_id=first.id) }}"><i class="fas fa-eye" aria-hidden="true"></i> 查看 / 编辑</a><a class="btn btn-outline" id="reportPdf" href="{{ url_for('export_stage_report_pdf', report_id=first.id) }}" target="_blank"><i class="fas fa-download" aria-hidden="true"></i> 下载 PDF</a></div>
+    {% else %}<div class="suite-empty"><i class="far fa-file-alt" aria-hidden="true"></i><strong>选择报告后查看概览</strong></div>{% endif %}
+  </aside>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const rows = Array.from(document.querySelectorAll('.stage-report-suite tbody tr[data-title]'));
+  function selectRow(row) { rows.forEach(function (item) { item.classList.toggle('is-selected', item === row); }); document.getElementById('reportInitial').textContent = (row.dataset.student || '?').slice(0,1); document.getElementById('reportStudent').textContent = row.dataset.student; document.getElementById('reportTitle').textContent = row.dataset.title; document.getElementById('reportPeriod').textContent = row.dataset.period; document.getElementById('reportCreator').textContent = row.dataset.creator; document.getElementById('reportUpdated').textContent = row.dataset.updated; document.getElementById('reportEdit').href = row.dataset.edit; document.getElementById('reportPdf').href = row.dataset.pdf; }
+  rows.forEach(function (row) { row.addEventListener('click', function (event) { if (!event.target.closest('a,button,form')) selectRow(row); }); }); if (rows.length) selectRow(rows[0]);
+  const input = document.getElementById('stageReportFilter'); if (input) input.addEventListener('input', function () { const q = input.value.trim().toLowerCase(); rows.forEach(function (row) { row.hidden = Boolean(q && !row.textContent.toLowerCase().includes(q)); }); });
+});
+</script>
 {% endblock %}

@@ -1,84 +1,94 @@
 {% extends "base.html" %}
 
-{% block page_title %}作业批改{% endblock %}
-{% block page_subtitle %}Grading Center{% endblock %}
+{% block page_title %}批改中心{% endblock %}
+{% block page_subtitle %}GRADING CENTER{% endblock %}
+{% block page_description %}集中处理待批作业，保持反馈清晰一致{% endblock %}
 
 {% block content_dashboard %}
-<div class="card">
-    <div class="card-header">
-        <h3>待批改作业</h3>
-        <div class="filters">
-            <!-- Future filters can go here -->
-        </div>
+<section class="suite-workspace grading-suite">
+  <div class="suite-workspace__list">
+    <nav class="suite-tabs" aria-label="批改状态">
+      <button class="suite-tab is-active" type="button">待批改 <span class="suite-tab__count">{{ tasks|length }}</span></button>
+      <button class="suite-tab" type="button" disabled>批改中</button>
+      <button class="suite-tab" type="button" disabled>已完成</button>
+    </nav>
+    <div class="suite-toolbar">
+      <label><i class="far fa-user" aria-hidden="true"></i><input class="suite-local-filter" type="search" placeholder="筛选学生"></label>
+      <label><i class="far fa-file-alt" aria-hidden="true"></i>
+        <select class="suite-local-type-filter"><option value="">全部材料类型</option><option value="material">材料库</option><option value="upload">图片 / 音频</option></select>
+      </label>
+      <span class="suite-toolbar__spacer"></span>
+      <span class="suite-badge suite-badge--orange"><i class="far fa-clock" aria-hidden="true"></i>&nbsp; {{ tasks|length }} 份等待处理</span>
     </div>
-    <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>提交时间</th>
-                    <th>学生</th>
-                    <th>任务内容</th>
-                    <th>材料类型</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for task in tasks %}
-                <tr>
-                    <td>{{ task.submitted_at.strftime('%Y-%m-%d %H:%M') if task.submitted_at else 'Unknown' }}</td>
-                    <td>{{ task.student_name }}</td>
-                    <td>
-                        <div class="text-truncate" style="max-width: 300px;">
-                            {{ task.detail }}
-                        </div>
-                        {% if task.category %}
-                        <span class="badge badge-sm badge-outline">{{ task.category }}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if task.grading_mode == 'material' %}
-                        <span class="badge badge-purple">材料库</span>
-                        {% else %}
-                        <span class="badge badge-blue">图片/音频</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <span class="status-dot status-warning"></span> 待批改
-                    </td>
-                    <td>
-                        <a href="{{ url_for('grading_detail', task_id=task.id) }}" class="btn btn-sm btn-primary">
-                            批改
-                        </a>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-center py-5 text-muted">
-                        🎉 太棒了！所有作业都已批改完成。
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="suite-list suite-table-wrap">
+      <table class="suite-table" aria-label="待批改作业">
+        <thead><tr><th>提交时间</th><th>学生</th><th>任务内容</th><th>材料类型</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          {% for task in tasks %}
+          {% set submitted = task.submitted_at.strftime('%Y-%m-%d %H:%M') if task.submitted_at else '未知时间' %}
+          {% set material_type = '材料库' if task.grading_mode == 'material' else '图片 / 音频' %}
+          <tr data-suite-search-row data-kind="{{ 'material' if task.grading_mode == 'material' else 'upload' }}"
+              data-title="{{ task.detail|e }}" data-student="{{ task.student_name|e }}"
+              data-category="{{ (task.category or '未分类')|e }}" data-submitted="{{ submitted|e }}"
+              data-material="{{ material_type|e }}" data-href="{{ url_for('grading_detail', task_id=task.id) }}">
+            <td><span class="suite-row-title">{{ submitted.split(' ')[0] }}</span><span class="suite-row-sub">{{ submitted.split(' ')[1] if ' ' in submitted else '' }}</span></td>
+            <td><span class="suite-row-title">{{ task.student_name }}</span></td>
+            <td><span class="suite-row-title">{{ task.detail }}</span>{% if task.category %}<span class="suite-row-sub">{{ task.category }}</span>{% endif %}</td>
+            <td><span class="suite-badge {{ 'suite-badge--sage' if task.grading_mode == 'material' else 'suite-badge--blue' }}">{{ material_type }}</span></td>
+            <td><span class="suite-badge suite-badge--sage">待批改</span></td>
+            <td><a class="suite-icon-button" href="{{ url_for('grading_detail', task_id=task.id) }}" title="开始批改"><i class="fas fa-arrow-right" aria-hidden="true"></i></a></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6"><div class="suite-empty"><i class="fas fa-check-circle" aria-hidden="true"></i><strong>所有作业都已批改完成</strong><span>新的学生提交会显示在这里。</span></div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</div>
+    <footer class="suite-list-footer"><span>共 {{ tasks|length }} 份待批作业</span><span>按提交时间排序</span></footer>
+  </div>
 
-<style>
-    .badge-purple {
-        background-color: #f3e8ff;
-        color: #7e22ce;
-    }
+  <aside class="suite-workspace__inspector" id="gradingInspector">
+    <p class="suite-inspector__kicker">批改预览</p>
+    {% if tasks %}
+    <div class="suite-inspector__identity">
+      <span class="suite-icon-avatar" id="gradingInitial">{{ tasks[0].student_name[:1] }}</span>
+      <div><h2 id="gradingStudent">{{ tasks[0].student_name }}</h2><p id="gradingSubmitted">{{ tasks[0].submitted_at.strftime('%Y-%m-%d %H:%M') if tasks[0].submitted_at else '未知时间' }}</p></div>
+    </div>
+    <section class="suite-inspector__section"><h4>任务内容</h4><p id="gradingTitle">{{ tasks[0].detail }}</p></section>
+    <section class="suite-inspector__section"><h4>作业信息</h4><dl class="suite-facts"><div><dt>分类</dt><dd id="gradingCategory">{{ tasks[0].category or '未分类' }}</dd></div><div><dt>提交类型</dt><dd id="gradingMaterial">{{ '材料库' if tasks[0].grading_mode == 'material' else '图片 / 音频' }}</dd></div><div><dt>当前状态</dt><dd>等待教师批改</dd></div></dl></section>
+    <section class="suite-inspector__section"><h4>批改说明</h4><p>进入批改页后可查看完整作答、附件和自动判分，并填写教师反馈。</p></section>
+    <div class="suite-inspector__actions"><a class="btn" id="gradingOpen" href="{{ url_for('grading_detail', task_id=tasks[0].id) }}"><i class="fas fa-pen" aria-hidden="true"></i> 开始批改</a><a class="btn btn-outline" href="{{ url_for('tasks_page') }}">返回任务</a></div>
+    {% else %}
+    <div class="suite-empty"><i class="fas fa-inbox" aria-hidden="true"></i><strong>暂无待批作业</strong></div>
+    {% endif %}
+  </aside>
+</section>
 
-    .badge-blue {
-        background-color: #e0f2fe;
-        color: #0369a1;
-    }
-
-    .text-truncate {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const rows = Array.from(document.querySelectorAll('.grading-suite tbody tr[data-title]'));
+  function selectRow(row) {
+    rows.forEach(function (item) { item.classList.toggle('is-selected', item === row); });
+    document.getElementById('gradingInitial').textContent = (row.dataset.student || '?').slice(0, 1);
+    document.getElementById('gradingStudent').textContent = row.dataset.student;
+    document.getElementById('gradingSubmitted').textContent = row.dataset.submitted;
+    document.getElementById('gradingTitle').textContent = row.dataset.title;
+    document.getElementById('gradingCategory').textContent = row.dataset.category;
+    document.getElementById('gradingMaterial').textContent = row.dataset.material;
+    document.getElementById('gradingOpen').href = row.dataset.href;
+  }
+  rows.forEach(function (row) { row.addEventListener('click', function (event) { if (!event.target.closest('a,button')) selectRow(row); }); });
+  if (rows.length) selectRow(rows[0]);
+  const nameFilter = document.querySelector('.suite-local-filter');
+  const kindFilter = document.querySelector('.suite-local-type-filter');
+  function filterRows() {
+    const query = (nameFilter.value || '').trim().toLowerCase();
+    rows.forEach(function (row) {
+      row.hidden = Boolean((query && !row.textContent.toLowerCase().includes(query)) || (kindFilter.value && row.dataset.kind !== kindFilter.value));
+    });
+  }
+  if (nameFilter) nameFilter.addEventListener('input', filterRows);
+  if (kindFilter) kindFilter.addEventListener('change', filterRows);
+});
+</script>
 {% endblock %}

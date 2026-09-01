@@ -1,71 +1,31 @@
 {% extends "base.html" %}
+{% block page_subtitle %}BULK CREATE{% endblock %}
+{% block page_title %}批量添加{% endblock %}
+{% block page_description %}先校验、再预览，最后一次性创建任务{% endblock %}
 {% block content %}{% endblock %}
 {% block content_dashboard %}
-<h2>批量添加任务</h2>
-
-<div class="card">
-  <p style="margin:0 0 8px;">
-    每行一条，格式：<code>学生名 | 类别 | 任务描述 | 备注(可选)</code>
-  </p>
-  <p style="margin:0 0 12px; color:var(--muted);">
-    示例：<br>
-    张三 | 基础-四级词汇 | 四级词汇 Day3<br>
-    李四 | 雅思-听力-精听 | TPO1 S3 精听 | 家里环境安静
-  </p>
-
-  <form method="post">
-    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
-      <label>日期：</label>
-      <input type="date" name="date" value="{{ today }}">
-      <label>默认状态：</label>
-      <select name="status">
-        <option value="pending">未开始</option>
-        <option value="progress">进行中</option>
-        <option value="done">已完成</option>
-      </select>
-    </div>
-
-    <textarea name="lines" rows="10" style="width:100%;"></textarea>
-
-    <div style="display:flex; gap:8px; margin-top:10px;">
-      <button type="submit" name="action" value="preview">预览</button>
-      <button type="submit" name="action" value="create">直接创建</button>
-      <a class="btn-secondary" href="{{ url_for('tasks_page') }}">返回任务列表</a>
-    </div>
-  </form>
-</div>
-
-{% if msg %}
-<div class="alert">{{ msg }}</div>
-{% endif %}
-
-{% if preview and preview|length %}
-<h3 style="margin-top:18px;">预览（{{ preview|length }} 条）</h3>
-<table class="task-table">
-  <tr>
-    <th>#</th>
-    <th>学生</th>
-    <th>类别</th>
-    <th>任务</th>
-    <th>备注</th>
-  </tr>
-  {% for it in preview %}
-  <tr>
-    <td>{{ loop.index }}</td>
-    <td>{{ it.student }}</td>
-    <td>{{ it.category }}</td>
-    <td>{{ it.detail }}</td>
-    <td>{{ it.note }}</td>
-  </tr>
-  {% endfor %}
-</table>
-<form method="post" style="margin-top:10px;">
-  <input type="hidden" name="date" value="{{ today }}">
-  <input type="hidden" name="status" value="pending">
-  <textarea name="lines" style="display:none;">{% for it in preview -%}
-{{ it.student }} | {{ it.category }} | {{ it.detail }}{% if it.note %} | {{ it.note }}{% endif %}
-{%- endfor %}</textarea>
-  <button type="submit" name="action" value="create">确认创建这些任务</button>
-</form>
-{% endif %}
+<section class="suite-workspace suite-workspace--wide bulk-suite">
+  <div class="suite-workspace__list bulk-main">
+    <nav class="bulk-steps" aria-label="批量添加步骤"><span class="is-done"><i class="fas fa-check" aria-hidden="true"></i><b>1</b> 粘贴任务</span><span class="{{ 'is-active' if preview else '' }}"><b>2</b> 校验预览</span><span><b>3</b> 确认创建</span></nav>
+    <form method="post" class="bulk-form-card">
+      <div class="bulk-form-tabs"><button type="button" class="is-active">粘贴文本</button><span>每行一条任务</span></div>
+      <p>格式：<code>学生名 | 类别 | 任务描述 | 备注（可选）</code></p>
+      <div class="bulk-defaults"><label>默认日期<input type="date" name="date" value="{{ today }}"></label><label>默认状态<select name="status"><option value="pending">待开始</option><option value="progress">进行中</option><option value="done">已完成</option></select></label></div>
+      <label class="bulk-textarea-label" for="bulkLines">任务数据</label>
+      <textarea id="bulkLines" name="lines" rows="11" placeholder="张三 | 基础-四级词汇 | 四级词汇 Day3&#10;李四 | 雅思-听力-精听 | TPO1 S3 精听 | 家里环境安静">{% if preview %}{% for it in preview -%}{{ it.student }} | {{ it.category }} | {{ it.detail }}{% if it.note %} | {{ it.note }}{% endif %}
+{%- endfor %}{% endif %}</textarea>
+      <div class="bulk-form-actions"><a class="btn btn-outline" href="{{ url_for('tasks_page') }}">返回任务列表</a><button class="btn" type="submit" name="action" value="preview"><i class="fas fa-search" aria-hidden="true"></i> 校验并预览</button></div>
+    </form>
+    {% if msg %}<div class="bulk-message">{{ msg }}</div>{% endif %}
+    {% if preview and preview|length %}
+    <div class="suite-table-wrap bulk-preview"><table class="suite-table"><thead><tr><th>#</th><th>学生</th><th>类别</th><th>任务内容</th><th>备注</th><th>校验结果</th></tr></thead><tbody>{% for it in preview %}<tr data-suite-search-row><td>{{ loop.index }}</td><td>{{ it.student }}</td><td>{{ it.category }}</td><td><span class="suite-row-title">{{ it.detail }}</span></td><td>{{ it.note or '—' }}</td><td><span class="suite-badge suite-badge--sage"><i class="far fa-check-circle" aria-hidden="true"></i>&nbsp; 可创建</span></td></tr>{% endfor %}</tbody></table></div>
+    <form method="post" class="bulk-confirm-form"><input type="hidden" name="date" value="{{ today }}"><input type="hidden" name="status" value="pending"><textarea name="lines" hidden>{% for it in preview -%}{{ it.student }} | {{ it.category }} | {{ it.detail }}{% if it.note %} | {{ it.note }}{% endif %}
+{%- endfor %}</textarea><button class="btn" type="submit" name="action" value="create"><i class="fas fa-check" aria-hidden="true"></i> 确认创建 {{ preview|length }} 条任务</button></form>
+    {% endif %}
+  </div>
+  <aside class="suite-workspace__inspector bulk-inspector"><p class="suite-inspector__kicker">导入检查</p><div class="bulk-check-stats"><div><strong>{{ preview|length if preview else 0 }}</strong><span>预览行数</span></div><div><strong>{{ preview|length if preview else 0 }}</strong><span>可创建</span></div><div><strong>0</strong><span>需修正</span></div></div><section class="suite-inspector__section"><h4>格式提示</h4><p>请用竖线“|”分隔学生、类别、任务内容和可选备注。预览不会写入任何任务。</p></section><section class="suite-inspector__section"><h4>安全提示</h4><p>只有点击“确认创建”后才会生成任务；发现问题可直接返回文本区修改后再次校验。</p></section></aside>
+</section>
+<style>
+.bulk-main{padding:22px;gap:16px}.bulk-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 6px 18px;border-bottom:1px solid var(--suite-line);color:var(--suite-muted);font-size:12px;font-weight:800}.bulk-steps span{display:flex;align-items:center;gap:8px}.bulk-steps b,.bulk-steps i{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--suite-line-strong);border-radius:50%;font-size:11px}.bulk-steps .is-done b{display:none}.bulk-steps .is-done i,.bulk-steps .is-active b{border-color:var(--suite-sage);background:var(--suite-sage);color:#fff}.bulk-form-card{padding:18px;border:1px solid var(--suite-line);border-radius:10px;background:var(--suite-surface-soft)}.bulk-form-tabs{display:flex;align-items:center;gap:14px}.bulk-form-tabs button{min-height:34px;padding:6px 12px;border:1px solid var(--suite-line);border-radius:7px;background:#fff;color:var(--suite-sage-dark);font-size:12px;font-weight:800}.bulk-form-tabs span,.bulk-form-card p{color:var(--suite-muted);font-size:11px}.bulk-defaults{display:grid;grid-template-columns:repeat(2,minmax(0,220px));gap:12px;margin:14px 0}.bulk-defaults label,.bulk-textarea-label{display:grid;gap:5px;margin:0;color:var(--suite-muted);font-size:11px;font-weight:800}.bulk-defaults input,.bulk-defaults select,.bulk-form-card textarea{width:100%;border:1px solid var(--suite-line-strong);border-radius:8px;background:#fff;box-shadow:none}.bulk-form-card textarea{min-height:230px;margin-top:6px;padding:12px;color:var(--suite-ink);font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}.bulk-form-actions,.bulk-confirm-form{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.bulk-form-actions .btn,.bulk-confirm-form .btn{min-height:38px;padding:8px 14px;border-radius:8px;font-size:12px}.bulk-form-actions .btn-outline{border:1px solid var(--suite-line-strong);background:#fff;color:var(--suite-ink-soft)}.bulk-check-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 0 18px}.bulk-check-stats div{text-align:center;border-right:1px solid var(--suite-line)}.bulk-check-stats div:last-child{border:0}.bulk-check-stats strong,.bulk-check-stats span{display:block}.bulk-check-stats strong{color:var(--suite-ink);font-size:24px}.bulk-check-stats span{margin-top:4px;color:var(--suite-muted);font-size:10px}.bulk-preview{border:1px solid var(--suite-line);border-radius:9px}.bulk-message{padding:10px 12px;border:1px solid #b8ddd4;border-radius:8px;background:var(--suite-sage-soft);color:var(--suite-sage-dark);font-size:12px}@media(max-width:700px){.bulk-steps{grid-template-columns:1fr}.bulk-defaults{grid-template-columns:1fr}}
+</style>
 {% endblock %}

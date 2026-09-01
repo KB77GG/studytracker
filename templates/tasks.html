@@ -2,9 +2,15 @@
 {% block page_subtitle %}TASKS{% endblock %}
 {% block page_title %}任务管理{% endblock %}
 {% block page_description %}布置、追踪并调整学生学习任务{% endblock %}
+{% block header_search %}
+<label class="suite-header-search tasks-header-search" for="taskQuickSearch">
+  <i class="fas fa-search" aria-hidden="true"></i>
+  <span class="sr-only">搜索任务</span>
+  <input id="taskQuickSearch" type="search" placeholder="搜索学生、任务内容、材料名称">
+  <kbd>⌘ K</kbd>
+</label>
+{% endblock %}
 {% block header_actions %}
-<label class="tasks-header-search" for="taskQuickSearch"><span>搜索任务</span><input id="taskQuickSearch" type="search" placeholder="学生、任务或类别"></label>
-<button class="tasks-header-alert" type="button" aria-label="查看提醒"><i class="far fa-bell" aria-hidden="true"></i>{% if pending_reviews %}<span>{{ pending_reviews|length }}</span>{% endif %}</button>
 <button class="btn btn-primary tasks-open-assignment" id="openTaskAssignment" type="button"><i class="fas fa-plus" aria-hidden="true"></i> 布置新任务</button>
 {% endblock %}
 {% block content %}{% endblock %}

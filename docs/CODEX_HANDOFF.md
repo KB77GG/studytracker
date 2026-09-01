@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-01 任务管理统一入口改版（Asia/Shanghai）。
+> 最近更新：2026-09-01 方向 2 后台全功能区本机实现与验收（Asia/Shanghai）。
+
+## 2026-09-01 方向 2 后台全功能区已在独立工作树实现（仅本机，未发布）
+
+- 当前工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `feb5bd7679fb56b1b3c37a96b810fd04bee05e2e`，`HEAD...origin/main=0 0`。桌面原工作树 `/Users/zhouxin/Desktop/studytracker` 仍为 `main@6ded77d2`、落后 origin 41 个提交并含来源不明的既有改动；本轮完全未触碰。
+- 本轮在现有 `/tasks` 方向 2 与统一布置 / 防重复功能之上，为侧边栏全部 12 个入口落地统一后台壳层：`templates/base.html`、新增 `static/admin_suite_v2.css` / `static/js/admin_suite_v2.js`，以及材料、词汇、任务、批改、课程计划、刷题、配卷、入学测试、报表、阶段报告、批量添加、用户模板。继续使用真实 Sage mark、页头波纹与 Font Awesome；未伪造 SVG / emoji 图标。
+- `/tasks` 取消超宽屏横向摊薄：主内容最大 1680px，日期带、筛选、任务行、进度与检查器恢复自然桌面高度；`1440×1024` 与 `2048×872` 均已浏览器复验。题型专项仍在“布置新任务”抽屉内，旧入口保留兼容；历史矩阵、重复确认、复训原因、幂等 / 409 服务端能力均未回退。
+- 其他 11 页统一为适合各自业务的紧凑列表 / 表格 + 右侧检查器或业务预览。原有真实操作入口均保留：发布 / 查看 / 编辑 / 删除、批改、计划 / 报告 PDF、模考口令 / 成绩、入学邀请、筛选 / 图表 / 导出、批量预览 / 创建、学生与系统账号管理。浏览器首次发现并修复 `templates/users.html` 的循环变量作用域 500；同时把刷题页新增的导航 / 预览入口改为按钮驱动，避免重复输出既有题库链接。
+- 浏览器本地服务为 `http://127.0.0.1:5088`，使用忽略的合成 `app.db` 与合成管理员；12 / 12 路由均返回 200。`artifacts/admin-suite-v2-qa-20260901/` 保存本机忽略的逐页截图，根 `design-qa.md` 顶部记录目标 / 实现成对对照与 `final result: passed`。本地测试账号凭据未写入交接。
+- 精确验证：`node --test tests/test_tasks_workspace_structure.js tests/test_admin_suite_v2_structure.js` → **5 passed**；`node --check static/js/admin_suite_v2.js` 与 `node --check entrance_web/assets/admin.js` 通过；`git diff --check` 通过。`python -m pytest -q tests/test_practice_portal_catalog_grouping.py tests/test_task_assignment_routes.py tests/test_question_type_practice_routes.py tests/test_teacher_practice_access.py tests/test_entrance_sessions.py` → **34 passed**；`python -m pytest -q --ignore=tests/test_static_audio_headers.py` → **642 passed, 72 subtests passed**。完整 pytest 的仅剩两项失败来自仓库本地缺少既有静态音频测试资产，和本轮页面实现无关。
+- 当前全部代码、文档与截图仍为未提交 / 未跟踪的本机改动；未 commit、未 push、未 deploy，未写生产数据库。生产业务 HEAD 仍为 `6e82b264`，服务 / 5002 / 部署状态沿用上一条已发布记录；小程序无改动、未上传 / 提审 / 发布。下一位 agent 可直接在本工作树审阅 diff，待用户明确授权后再 commit / push / 部署；不得从桌面脏 `main` 合并或覆盖。
 
 ## 2026-09-01 `/tasks` 统一任务布置与防重复已发布
 

@@ -2,6 +2,8 @@
 
 {% block page_subtitle %}Practice Library{% endblock %}
 {% block page_title %}刷题 / 模考{% endblock %}
+{% block page_description %}统一查找练习资源并进入真实作答环境{% endblock %}
+{% block header_actions %}<a class="btn" href="{{ url_for('tasks_page') }}"><i class="fas fa-chart-line" aria-hidden="true"></i> 查看学生练习记录</a>{% endblock %}
 
 {% block content_dashboard %}
 {% include "practice/index_content.html" %}

@@ -1,110 +1,71 @@
 {% extends "base.html" %}
 
+{% block page_subtitle %}COURSE PLANS{% endblock %}
+{% block page_title %}课程计划{% endblock %}
+{% block page_description %}为学生制定目标清晰、可持续调整的学习路径{% endblock %}
+{% block header_actions %}<a href="{{ url_for('course_plan_create') }}" class="btn"><i class="fas fa-plus" aria-hidden="true"></i> 新建课程计划</a>{% endblock %}
+
 {% block content_dashboard %}
-<div class="container">
-    <div class="header-row">
-        <h1>学习方案管理（雅思/托福）</h1>
-        <a href="{{ url_for('course_plan_create') }}" class="btn btn-primary">
-            <span class="icon">+</span> 新建方案
-        </a>
+<section class="suite-workspace course-plan-suite">
+  <div class="suite-workspace__list">
+    <nav class="suite-tabs" aria-label="计划类型"><button class="suite-tab is-active" type="button">全部计划 <span class="suite-tab__count">{{ plans|length }}</span></button><button class="suite-tab" type="button" disabled>雅思</button><button class="suite-tab" type="button" disabled>托福</button></nav>
+    <div class="suite-toolbar">
+      <label><i class="fas fa-search" aria-hidden="true"></i><input id="coursePlanFilter" type="search" placeholder="选择学生或搜索计划"></label>
+      <label><select id="coursePlanExam"><option value="">全部考试类型</option><option value="IELTS">雅思</option><option value="TOEFL">托福</option></select></label>
+      <span class="suite-toolbar__spacer"></span><span class="suite-badge">{{ plans|length }} 个计划</span>
     </div>
-
-    <div class="card">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>方案标题</th>
-                    <th>学生姓名</th>
-                    <th>考试类型</th>
-                    <th>创建人</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for plan in plans %}
-                {% set exam_type = plan.plan_data.get('student', {}).get('examType', 'IELTS') %}
-                {% set exam_label = '托福' if exam_type == 'TOEFL' else '雅思' %}
-                <tr>
-                    <td>{{ plan.id }}</td>
-                    <td>{{ plan.title or '未命名方案' }}</td>
-                    <td>{{ plan.student.full_name if plan.student else '未知' }}</td>
-                    <td>{{ exam_label }}</td>
-                    <td>{{ plan.creator.display_name }}</td>
-                    <td>{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                    <td>
-                        <a href="{{ url_for('course_plan_create', plan_id=plan.id) }}"
-                            class="btn btn-sm btn-outline">查看/编辑</a>
-                        <a href="{{ url_for('export_course_plan_pdf', plan_id=plan.id) }}" target="_blank"
-                            class="btn btn-sm btn-primary">下载PDF</a>
-                        <button onclick="deletePlan({{ plan.id }}, '{{ plan.title }}')" class="btn btn-sm"
-                            style="background:#ef4444;color:white;">删除</button>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">暂无方案，请点击右上角新建</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="suite-list suite-table-wrap">
+      <table class="suite-table"><thead><tr><th>计划名称</th><th>学生</th><th>考试类型</th><th>创建人</th><th>更新时间</th><th>操作</th></tr></thead>
+        <tbody>
+          {% for plan in plans %}
+          {% set exam_type = plan.plan_data.get('student', {}).get('examType', 'IELTS') %}
+          {% set exam_label = '托福' if exam_type == 'TOEFL' else '雅思' %}
+          {% set student_name = plan.student.full_name if plan.student else '未知学生' %}
+          {% set plan_title = plan.title or '未命名方案' %}
+          <tr data-suite-search-row data-exam="{{ exam_type }}" data-title="{{ plan_title|e }}" data-student="{{ student_name|e }}" data-exam-label="{{ exam_label }}" data-creator="{{ plan.creator.display_name|e }}" data-created="{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}" data-edit="{{ url_for('course_plan_create', plan_id=plan.id) }}" data-pdf="{{ url_for('export_course_plan_pdf', plan_id=plan.id) }}">
+            <td><span class="suite-row-title"><i class="far fa-dot-circle" aria-hidden="true"></i>&nbsp; {{ plan_title }}</span><span class="suite-row-sub">计划 ID {{ plan.id }}</span></td>
+            <td>{{ student_name }}</td><td><span class="suite-badge {{ 'suite-badge--blue' if exam_type == 'TOEFL' else 'suite-badge--sage' }}">{{ exam_label }}</span></td><td>{{ plan.creator.display_name }}</td><td>{{ plan.created_at.strftime('%Y-%m-%d') }}</td>
+            <td><div class="suite-row-actions"><a class="suite-icon-button" href="{{ url_for('course_plan_create', plan_id=plan.id) }}" title="查看或编辑"><i class="fas fa-pen" aria-hidden="true"></i></a><a class="suite-icon-button" href="{{ url_for('export_course_plan_pdf', plan_id=plan.id) }}" target="_blank" title="下载 PDF"><i class="fas fa-download" aria-hidden="true"></i></a><button class="suite-icon-button" type="button" data-delete-plan="{{ plan.id }}" data-delete-title="{{ plan_title|e }}" title="删除"><i class="far fa-trash-alt" aria-hidden="true"></i></button></div></td>
+          </tr>
+          {% else %}<tr><td colspan="6"><div class="suite-empty"><i class="far fa-calendar-plus" aria-hidden="true"></i><strong>暂无课程计划</strong><span>从右上角新建第一份学习路径。</span></div></td></tr>{% endfor %}
+        </tbody>
+      </table>
     </div>
-</div>
-
-<style>
-    .header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-    }
-
-    .data-table th {
-        font-weight: 600;
-        color: #666;
-    }
-
-    .text-center {
-        text-align: center;
-        color: #999;
-        padding: 2rem;
-    }
-</style>
+    <footer class="suite-list-footer"><span>共 {{ plans|length }} 个计划</span><span>按创建时间排列</span></footer>
+  </div>
+  <aside class="suite-workspace__inspector">
+    <p class="suite-inspector__kicker">计划概览</p>
+    {% if plans %}
+    {% set first = plans[0] %}{% set first_exam = first.plan_data.get('student', {}).get('examType', 'IELTS') %}
+    <div class="suite-inspector__identity"><span class="suite-icon-avatar" id="planInitial">{{ (first.student.full_name if first.student else '?')[:1] }}</span><div><h2 id="planStudent">{{ first.student.full_name if first.student else '未知学生' }}</h2><p id="planTitle">{{ first.title or '未命名方案' }}</p></div></div>
+    <section class="suite-inspector__section"><h4>计划信息</h4><dl class="suite-facts"><div><dt>目标考试</dt><dd id="planExam">{{ '托福' if first_exam == 'TOEFL' else '雅思' }}</dd></div><div><dt>创建人</dt><dd id="planCreator">{{ first.creator.display_name }}</dd></div><div><dt>创建时间</dt><dd id="planCreated">{{ first.created_at.strftime('%Y-%m-%d %H:%M') }}</dd></div></dl></section>
+    <section class="suite-inspector__section"><h4>后续操作</h4><p>进入计划编辑器可调整学生目标、阶段安排、课程节奏与交付内容。</p></section>
+    <div class="suite-inspector__actions"><a class="btn" id="planEdit" href="{{ url_for('course_plan_create', plan_id=first.id) }}"><i class="fas fa-pen" aria-hidden="true"></i> 查看 / 编辑</a><a class="btn btn-outline" id="planPdf" target="_blank" href="{{ url_for('export_course_plan_pdf', plan_id=first.id) }}"><i class="fas fa-download" aria-hidden="true"></i> 下载 PDF</a></div>
+    {% else %}<div class="suite-empty"><i class="far fa-calendar" aria-hidden="true"></i><strong>选择计划后查看详情</strong></div>{% endif %}
+  </aside>
+</section>
 
 <script>
-    async function deletePlan(planId, planTitle) {
-        if (!confirm(`确定要删除方案 "${planTitle}" 吗？此操作不可恢复。`)) {
-            return;
-        }
-
-        try {
-            const response = await fetch(`/api/course-plans/${planId}`, {
-                method: 'DELETE',
-                credentials: 'same-origin'
-            });
-
-            if (response.ok) {
-                alert('删除成功');
-                location.reload();
-            } else {
-                alert('删除失败，请重试');
-            }
-        } catch (error) {
-            alert('删除失败：' + error.message);
-        }
-    }
+document.addEventListener('DOMContentLoaded', function () {
+  const rows = Array.from(document.querySelectorAll('.course-plan-suite tbody tr[data-title]'));
+  function selectRow(row) {
+    rows.forEach(function (item) { item.classList.toggle('is-selected', item === row); });
+    document.getElementById('planInitial').textContent = (row.dataset.student || '?').slice(0, 1);
+    document.getElementById('planStudent').textContent = row.dataset.student;
+    document.getElementById('planTitle').textContent = row.dataset.title;
+    document.getElementById('planExam').textContent = row.dataset.examLabel;
+    document.getElementById('planCreator').textContent = row.dataset.creator;
+    document.getElementById('planCreated').textContent = row.dataset.created;
+    document.getElementById('planEdit').href = row.dataset.edit;
+    document.getElementById('planPdf').href = row.dataset.pdf;
+  }
+  rows.forEach(function (row) { row.addEventListener('click', function (event) { if (!event.target.closest('a,button')) selectRow(row); }); });
+  if (rows.length) selectRow(rows[0]);
+  const query = document.getElementById('coursePlanFilter');
+  const exam = document.getElementById('coursePlanExam');
+  function filter() { const q = query.value.trim().toLowerCase(); rows.forEach(function (row) { row.hidden = Boolean((q && !row.textContent.toLowerCase().includes(q)) || (exam.value && row.dataset.exam !== exam.value)); }); }
+  query.addEventListener('input', filter); exam.addEventListener('change', filter);
+  document.querySelectorAll('[data-delete-plan]').forEach(function (button) { button.addEventListener('click', async function () { if (!confirm('确定要删除方案“' + button.dataset.deleteTitle + '”吗？此操作不可恢复。')) return; try { const response = await fetch('/api/course-plans/' + button.dataset.deletePlan, { method: 'DELETE', credentials: 'same-origin' }); if (response.ok) location.reload(); else alert('删除失败，请重试'); } catch (error) { alert('删除失败：' + error.message); } }); });
+});
 </script>
 {% endblock %}

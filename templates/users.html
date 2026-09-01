@@ -3,9 +3,9 @@
 {% block title %}用户管理{% endblock %}
 {% block page_subtitle %}System{% endblock %}
 {% block page_title %}用户管理{% endblock %}
+{% block page_description %}管理学生档案、系统账号与访问状态{% endblock %}
 {% block header_actions %}
-<a class="btn users-header-link" href="#studentProfiles">学生档案</a>
-<a class="btn users-header-link users-header-link--secondary" href="#systemUsers">系统账号</a>
+<a class="btn users-header-link" href="#studentCreate"><i class="fas fa-plus" aria-hidden="true"></i> 添加用户</a>
 {% endblock %}
 
 {% block content %}{% endblock %}
@@ -77,7 +77,7 @@
       <span class="users-count-pill">{{ students|length }} 位学生</span>
     </div>
 
-    <form method="POST" class="student-create-form">
+    <form method="POST" class="student-create-form" id="studentCreate">
       <input type="hidden" name="action" value="create_student">
       <label class="users-field users-field--grow">
         <span>学生姓名</span>
@@ -98,7 +98,7 @@
         </thead>
         <tbody>
           {% for s in students %}
-          <tr>
+          <tr class="user-profile-row" data-suite-search-row data-student-id="{{ s.id }}" data-student-name="{{ s.full_name|e }}" data-binding="{% if s.user_id and s.user and s.user.wechat_openid %}微信已绑定{% elif s.user_id %}账号已绑定{% else %}未绑定{% endif %}">
             <td class="users-id-cell">{{ s.id }}</td>
             <td>
               <div class="users-person">
@@ -221,6 +221,16 @@
       </table>
     </div>
   </section>
+
+  <aside class="suite-workspace__inspector users-inspector">
+    <p class="suite-inspector__kicker">学生档案</p>
+    {% if students %}{% set first_student = students[0] %}
+    <div class="suite-inspector__identity"><span class="suite-icon-avatar" id="userInspectorInitial">{{ first_student.full_name[:1] }}</span><div><h2 id="userInspectorName">{{ first_student.full_name }}</h2><p>学生编号：<span id="userInspectorId">{{ first_student.id }}</span></p></div></div>
+    <section class="suite-inspector__section"><h4>关联账号</h4><dl class="suite-facts"><div><dt>绑定状态</dt><dd id="userInspectorBinding">{% if first_student.user_id and first_student.user and first_student.user.wechat_openid %}微信已绑定{% elif first_student.user_id %}账号已绑定{% else %}未绑定{% endif %}</dd></div><div><dt>账户角色</dt><dd>学生</dd></div></dl></section>
+    <section class="suite-inspector__section"><h4>学习数据</h4><p>从学习报表查看该学生的任务完成率、正确率、学习时长与阶段变化。</p></section>
+    <div class="suite-inspector__actions"><a class="btn" id="userInspectorReport" href="{{ url_for('report_page', student=first_student.full_name) }}"><i class="fas fa-chart-line" aria-hidden="true"></i> 查看学习记录</a><a class="btn btn-outline" href="#studentCreate"><i class="fas fa-user-plus" aria-hidden="true"></i> 添加学生</a></div>
+    {% else %}<div class="suite-empty"><i class="far fa-user" aria-hidden="true"></i><strong>暂无学生档案</strong></div>{% endif %}
+  </aside>
 </section>
 
 <style>
@@ -707,12 +717,51 @@
   }
 </style>
 
+<style>
+  body.admin-suite-v2 .users-header-link{border-color:var(--suite-sage);background:linear-gradient(135deg,var(--suite-sage),#117665);color:#fff;box-shadow:0 7px 18px rgba(22,139,120,.16)}
+  body.admin-suite-v2 .users-page{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
+  body.admin-suite-v2 .users-overview-grid{grid-column:1 / -1;display:flex;gap:0;margin:0;padding:10px 14px;border:1px solid var(--suite-line);border-radius:10px;background:var(--suite-surface)}
+  body.admin-suite-v2 .users-stat-card{flex:1;min-height:62px;margin:0;padding:8px 16px;border:0;border-right:1px solid var(--suite-line);border-radius:0;box-shadow:none}
+  body.admin-suite-v2 .users-stat-card:last-child{border-right:0}
+  body.admin-suite-v2 .users-stat-card strong{display:inline;margin:0 6px;color:var(--suite-ink);font-size:20px}
+  body.admin-suite-v2 .users-stat-card span{display:inline;color:var(--suite-muted);font-size:10px}
+  body.admin-suite-v2 .users-stat-label{display:block!important;margin-bottom:6px;color:var(--suite-sage-dark)!important}
+  body.admin-suite-v2 .users-panel{grid-column:1;margin:0;padding:0;border-color:var(--suite-line);border-radius:10px;background:var(--suite-surface);box-shadow:none;overflow:hidden}
+  body.admin-suite-v2 #systemUsers{margin-top:0}
+  body.admin-suite-v2 .users-section-header{margin:0;padding:16px 18px;border-bottom:1px solid var(--suite-line)}
+  body.admin-suite-v2 .users-section-header h2{font-size:16px;color:var(--suite-ink)}
+  body.admin-suite-v2 .users-section-header p{font-size:11px}
+  body.admin-suite-v2 .student-create-form,body.admin-suite-v2 .system-create-form{margin:0;padding:12px 18px;border:0;border-bottom:1px solid var(--suite-line);border-radius:0;background:var(--suite-surface-soft)}
+  body.admin-suite-v2 .users-table-wrap{border:0;border-radius:0}
+  body.admin-suite-v2 .users-table{margin:0;border:0;box-shadow:none}
+  body.admin-suite-v2 .users-table th{background:#fffefa;color:var(--suite-muted);font-size:10px}
+  body.admin-suite-v2 .users-table td{height:60px;border-color:#eee8df;font-size:12px}
+  body.admin-suite-v2 .user-profile-row{cursor:pointer}
+  body.admin-suite-v2 .user-profile-row.is-selected{background:#eff8f4;box-shadow:inset 3px 0 0 var(--suite-sage)}
+  body.admin-suite-v2 .users-inspector{grid-column:2;grid-row:2 / span 2;position:sticky;top:16px;min-height:620px;border:1px solid var(--suite-line);border-radius:10px;background:var(--suite-surface)}
+  body.admin-suite-v2 .users-inspector .suite-inspector__actions{margin-top:auto}
+  @media(max-width:1000px){body.admin-suite-v2 .users-page{grid-template-columns:1fr}body.admin-suite-v2 .users-inspector{grid-column:1;grid-row:auto;position:static;min-height:0}}
+  @media(max-width:700px){body.admin-suite-v2 .users-overview-grid{display:grid;grid-template-columns:1fr 1fr}body.admin-suite-v2 .users-stat-card{border-right:0;border-bottom:1px solid var(--suite-line)}}
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     function renderUserStatus(cell, isActive) {
       if (!cell) return;
       cell.innerHTML = `<span class="user-status-badge ${isActive ? 'user-status-badge--active' : 'user-status-badge--inactive'}">${isActive ? '启用' : '停用'}</span>`;
     }
+
+    const profileRows = Array.from(document.querySelectorAll('.user-profile-row'));
+    function selectProfile(row) {
+      profileRows.forEach(function (item) { item.classList.toggle('is-selected', item === row); });
+      document.getElementById('userInspectorInitial').textContent = (row.dataset.studentName || '?').slice(0, 1);
+      document.getElementById('userInspectorName').textContent = row.dataset.studentName;
+      document.getElementById('userInspectorId').textContent = row.dataset.studentId;
+      document.getElementById('userInspectorBinding').textContent = row.dataset.binding;
+      document.getElementById('userInspectorReport').href = `{{ url_for('report_page') }}?student=${encodeURIComponent(row.dataset.studentName)}`;
+    }
+    profileRows.forEach(function (row) { row.addEventListener('click', function (event) { if (!event.target.closest('button,form,input')) selectProfile(row); }); });
+    if (profileRows.length) selectProfile(profileRows[0]);
 
     const buttons = document.querySelectorAll('.toggle-btn');
     buttons.forEach(btn => {

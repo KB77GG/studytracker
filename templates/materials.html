@@ -3,6 +3,7 @@
 {% block title %}材料库管理{% endblock %}
 {% block page_subtitle %}Materials{% endblock %}
 {% block page_title %}材料库{% endblock %}
+{% block page_description %}集中管理教辅材料与词库资源，高效组织与复用内容{% endblock %}
 {% block header_actions %}
 <button type="button" class="btn btn-primary material-create-button" onclick="window.location.href='/materials/create'">
     <i class="fas fa-plus"></i>
@@ -12,7 +13,8 @@
 
 {% block content_dashboard %}
 <section class="materials-page">
-    <div class="library-panel">
+    <div class="library-panel suite-workspace materials-suite">
+      <div class="suite-workspace__list">
         <div class="library-tabs">
             <ul class="nav material-segment" id="materialTabs" role="tablist">
                 <li class="nav-item">
@@ -107,6 +109,17 @@
                 </div>
             </div>
         </div>
+      </div>
+      <aside class="suite-workspace__inspector material-inspector" id="materialInspector">
+        <p class="suite-inspector__kicker">材料详情</p>
+        <div class="suite-inspector__identity">
+          <span class="material-inspector__icon" id="materialInspectorIcon"><i class="far fa-file-alt" aria-hidden="true"></i></span>
+          <div><h2 id="materialInspectorTitle">选择一份材料</h2><p><span class="suite-badge suite-badge--sage" id="materialInspectorType">等待选择</span> <span id="materialInspectorCount"></span></p></div>
+        </div>
+        <section class="suite-inspector__section"><h4>材料描述</h4><p id="materialInspectorDescription">点击左侧材料可查看说明并执行发布、查看和编辑操作。</p></section>
+        <section class="suite-inspector__section"><h4>关联信息</h4><dl class="suite-facts"><div><dt>创建时间</dt><dd id="materialInspectorDate">—</dd></div><div><dt>创建者</dt><dd>{{ current_user.display_name or current_user.username }}</dd></div><div><dt>题目数量</dt><dd id="materialInspectorQuestions">—</dd></div></dl></section>
+        <div class="suite-inspector__actions material-inspector__actions"><button class="btn" id="materialInspectorView" type="button" disabled><i class="far fa-eye" aria-hidden="true"></i> 查看材料</button><button class="btn btn-outline" id="materialInspectorPublish" type="button" disabled><i class="far fa-paper-plane" aria-hidden="true"></i> 发布任务</button><button class="btn btn-outline" id="materialInspectorEdit" type="button" disabled><i class="fas fa-pen" aria-hidden="true"></i> 编辑材料</button><button class="btn btn-outline material-inspector__delete" id="materialInspectorDelete" type="button" disabled><i class="far fa-trash-alt" aria-hidden="true"></i> 删除材料</button></div>
+      </aside>
     </div>
 </section>
 
@@ -180,6 +193,17 @@
         speaking: 'type-chip--speaking',
         writing: 'type-chip--writing'
     };
+
+    const typeIcons = {
+        grammar: 'fas fa-infinity',
+        translation: 'fas fa-language',
+        reading_vocab_choice: 'fas fa-book-open',
+        ielts_reading_practice: 'fas fa-book-reader',
+        speaking: 'fas fa-microphone',
+        writing: 'fas fa-pen-nib'
+    };
+
+    let selectedMaterialId = null;
 
     function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>"']/g, function (char) {
@@ -478,7 +502,7 @@
             const label = typeLabels[m.type] || m.type || '未分类';
             const typeClass = typeClasses[m.type] || 'type-chip--neutral';
             return `
-                <tr>
+                <tr class="material-select-row" data-material-id="${Number(m.id)}" tabindex="0">
                     <td>
                         <div class="item-title">${escapeHtml(m.title)}</div>
                         <div class="item-description">${escapeHtml(m.description || '暂无说明')}</div>
@@ -487,18 +511,7 @@
                     <td><span class="metric-value">${escapeHtml(m.question_count || 0)}</span><span class="metric-unit">题</span></td>
                     <td><div class="date-cell">${formatDate(m.created_at)}</div></td>
                     <td class="actions-cell">
-                        <button type="button" class="action-button" onclick="viewMaterial(${Number(m.id)})" title="查看材料">
-                            <i class="fas fa-eye"></i><span>查看</span>
-                        </button>
-                        <button type="button" class="action-button action-button--primary" onclick="createTaskFromMaterial(${Number(m.id)})" title="发布任务">
-                            <i class="fas fa-paper-plane"></i><span>发布</span>
-                        </button>
-                        <button type="button" class="action-button" onclick="editMaterial(${Number(m.id)})" title="编辑材料">
-                            <i class="fas fa-pen"></i><span>编辑</span>
-                        </button>
-                        <button type="button" class="action-button action-button--danger" onclick="deleteMaterial(${Number(m.id)})" title="删除材料">
-                            <i class="fas fa-trash"></i><span>删除</span>
-                        </button>
+                        <button type="button" class="action-button material-more-button" title="查看详情" aria-label="查看材料详情"><i class="fas fa-ellipsis-v"></i></button>
                     </td>
                 </tr>
             `;
@@ -513,13 +526,36 @@
                             <th style="width: 132px;">类型</th>
                             <th style="width: 96px;">题量</th>
                             <th style="width: 132px;">创建时间</th>
-                            <th style="width: 292px;">操作</th>
+                            <th style="width: 64px;">操作</th>
                         </tr>
                     </thead>
                     <tbody>${rows}</tbody>
                 </table>
             </div>
         `;
+
+        container.querySelectorAll('.material-select-row').forEach(function (row) {
+            const activate = function () { selectMaterial(Number(row.dataset.materialId)); };
+            row.addEventListener('click', activate);
+            row.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); activate(); } });
+        });
+        if (materials.length) selectMaterial(selectedMaterialId && materials.some(function (item) { return Number(item.id) === Number(selectedMaterialId); }) ? selectedMaterialId : Number(materials[0].id));
+    }
+
+    function selectMaterial(id) {
+        const material = allMaterials.find(function (item) { return Number(item.id) === Number(id); });
+        if (!material) return;
+        selectedMaterialId = Number(material.id);
+        document.querySelectorAll('.material-select-row').forEach(function (row) { row.classList.toggle('is-selected', Number(row.dataset.materialId) === selectedMaterialId); });
+        const label = typeLabels[material.type] || material.type || '未分类';
+        document.getElementById('materialInspectorTitle').textContent = material.title || '未命名材料';
+        document.getElementById('materialInspectorType').textContent = label;
+        document.getElementById('materialInspectorCount').textContent = `${Number(material.question_count || 0)} 题`;
+        document.getElementById('materialInspectorDescription').textContent = material.description || '暂无说明';
+        document.getElementById('materialInspectorDate').textContent = String(material.created_at || '—').split('T')[0];
+        document.getElementById('materialInspectorQuestions').textContent = `${Number(material.question_count || 0)} 题`;
+        document.getElementById('materialInspectorIcon').innerHTML = `<i class="${escapeHtml(typeIcons[material.type] || 'far fa-file-alt')}" aria-hidden="true"></i>`;
+        ['materialInspectorView', 'materialInspectorPublish', 'materialInspectorEdit', 'materialInspectorDelete'].forEach(function (buttonId) { document.getElementById(buttonId).disabled = false; });
     }
 
     // 筛选材料
@@ -574,6 +610,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         loadMaterials();
 
+        document.getElementById('materialInspectorView').addEventListener('click', function () { if (selectedMaterialId) viewMaterial(selectedMaterialId); });
+        document.getElementById('materialInspectorPublish').addEventListener('click', function () { if (selectedMaterialId) createTaskFromMaterial(selectedMaterialId); });
+        document.getElementById('materialInspectorEdit').addEventListener('click', function () { if (selectedMaterialId) editMaterial(selectedMaterialId); });
+        document.getElementById('materialInspectorDelete').addEventListener('click', function () { if (selectedMaterialId) deleteMaterial(selectedMaterialId); });
+
         document.getElementById('dictation-tab').addEventListener('click', function () {
             if (!dictationLoaded) loadDictationBooks();
         });
@@ -610,6 +651,23 @@
         --library-primary-strong: #145C57;
         --library-primary-soft: #E6F5F2;
     }
+
+    .materials-suite {
+        grid-template-columns: minmax(0, 1.65fr) minmax(330px, .92fr);
+        min-height: min(760px, calc(100vh - 190px));
+    }
+
+    .materials-suite .suite-workspace__list { min-height: 0; overflow: hidden; }
+    .materials-suite .tab-content,
+    .materials-suite .tab-pane.active { min-height: 0; height: 100%; }
+    .material-inspector__icon {
+        width: 56px; height: 56px; display: inline-flex; align-items: center; justify-content: center;
+        flex: 0 0 56px; border-radius: 13px; background: #fff0df; color: #ca641c; font-size: 22px;
+    }
+    .material-inspector__actions { grid-template-columns: 1fr 1fr; }
+    .material-inspector__delete { color: var(--suite-danger) !important; border-color: #edc9c2 !important; }
+    .material-select-row.is-selected { background: #eff8f4 !important; box-shadow: inset 3px 0 0 var(--suite-sage); }
+    .material-more-button { min-width: 30px; padding: 6px 9px; }
 
     .library-panel {
         background: var(--library-surface);

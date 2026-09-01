@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block title %}学习报表{% endblock %}
-{% block page_subtitle %}Data Analysis{% endblock %}
+{% block page_subtitle %}LEARNING REPORT{% endblock %}
 {% block page_title %}学习报表{% endblock %}
+{% block page_description %}从任务、时长与正确率看清学习进展{% endblock %}
 {% block header_actions %}
-<button type="button" id="exportBtn" class="btn report-export-button">导出 Excel</button>
-<button type="button" id="exportPdfBtn" class="btn report-export-button report-export-button--secondary">导出 PDF</button>
+<button type="button" id="exportPdfBtn" class="btn report-export-button report-export-button--secondary"><i class="far fa-file-pdf" aria-hidden="true"></i> 导出 PDF</button>
+<button type="button" id="exportBtn" class="btn report-export-button"><i class="far fa-file-excel" aria-hidden="true"></i> 导出 Excel</button>
 {% endblock %}
 {% block content %}{% endblock %}
 {% block content_dashboard %}
@@ -1193,4 +1194,7 @@
     createCharts();
   });
 </script>
+<style>
+body.admin-suite-v2 .report-page{color:var(--suite-ink)}body.admin-suite-v2 .report-filter-panel,body.admin-suite-v2 .metric-card,body.admin-suite-v2 .chart-card,body.admin-suite-v2 .summary-card{border-color:var(--suite-line);border-radius:10px;background:var(--suite-surface);box-shadow:none}body.admin-suite-v2 .report-filter-panel{padding:16px 20px;margin-bottom:14px}body.admin-suite-v2 .report-section-header{display:none}body.admin-suite-v2 .report-filter-form{padding:0;background:transparent;border:0}body.admin-suite-v2 .filter-row{grid-template-columns:minmax(150px,.7fr) 150px 150px minmax(220px,1.1fr) minmax(180px,.8fr) auto;gap:10px;align-items:end}body.admin-suite-v2 .filter-group label{font-size:10px;color:var(--suite-muted)}body.admin-suite-v2 .filter-group input,body.admin-suite-v2 .student-combo__control{min-height:38px;border-color:var(--suite-line-strong);border-radius:8px;background:#fff;font-size:11px}body.admin-suite-v2 .range-buttons{min-height:38px;border-color:var(--suite-line-strong);border-radius:8px;background:#fff}body.admin-suite-v2 .range-btn{min-height:34px;padding:6px 8px;background:transparent;color:var(--suite-muted);font-size:10px;box-shadow:none}body.admin-suite-v2 .range-btn.active{background:var(--suite-sage-soft);color:var(--suite-sage-dark)}body.admin-suite-v2 .filter-actions .btn-primary,body.admin-suite-v2 .filter-actions .btn-secondary{min-height:38px;padding:8px 11px;border-radius:8px;font-size:11px}body.admin-suite-v2 .metrics-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0 0 14px;padding:12px 8px;border:1px solid var(--suite-line);border-radius:10px;background:var(--suite-surface)}body.admin-suite-v2 .metric-card{min-height:72px;margin:0;padding:8px 18px;border:0;border-right:1px solid var(--suite-line);border-radius:0}body.admin-suite-v2 .metric-card:last-child{border-right:0}body.admin-suite-v2 .metric-label{font-size:10px;color:var(--suite-muted)}body.admin-suite-v2 .metric-value{margin-top:5px;color:var(--suite-ink);font-size:21px}body.admin-suite-v2 .metric-note{font-size:9px}body.admin-suite-v2 .charts-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}body.admin-suite-v2 .chart-card{padding:16px}body.admin-suite-v2 .chart-title{color:var(--suite-ink);font-size:12px}body.admin-suite-v2 .chart-card canvas,body.admin-suite-v2 .chart-card--wide canvas{height:225px!important}body.admin-suite-v2 .summary-card{padding:14px 18px}body.admin-suite-v2 .report-table{margin:0;border:0;box-shadow:none}body.admin-suite-v2 .report-table th{background:#fffefa;color:var(--suite-muted);font-size:10px}body.admin-suite-v2 .report-table td{font-size:11px}@media(max-width:1180px){body.admin-suite-v2 .filter-row{grid-template-columns:repeat(3,minmax(0,1fr))}body.admin-suite-v2 .metrics-grid{grid-template-columns:repeat(3,minmax(0,1fr))}body.admin-suite-v2 .metric-card{border-bottom:1px solid var(--suite-line)}}@media(max-width:700px){body.admin-suite-v2 .filter-row,body.admin-suite-v2 .metrics-grid{grid-template-columns:1fr}body.admin-suite-v2 .metric-card{border-right:0}}
+</style>
 {% endblock %}
