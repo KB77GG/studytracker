@@ -1,7 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-01 方向 2 后台全功能区已发布并完成生产验收（Asia/Shanghai）。
+> 最近更新：2026-09-01 后台左上角 Logo 对比度修复已发布（Asia/Shanghai）。
+
+## 2026-09-01 后台左上角 Logo 已恢复清晰显示
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`。业务提交 `f2a7c647e1a48512769611752458c4c8a98d0eae`（`fix: restore visible sidebar logo`）已推送任务分支与 `origin/main`；本条交接随后以 `[skip ci]` 文档提交同步。桌面脏 `main@6ded77d2` 仍未触碰。
+- 根因有两项：共享后台的 teal 图标落在近似 teal 底块上，轮廓对比度过低；独立入学测试页则把带大面积白边的 1024×1024 整张品牌图压进 42px，主体几乎不可见。用户提供的 `/Users/zhouxin/Desktop/entrepreneurship/宣传材料/logo.PNG` 与仓库 `static/brand/sagepath-logo.png` SHA-256 完全相同，因此没有重复提交二进制资产。
+- `templates/base.html` 与 `entrance_web/admin/invitations.html` 统一使用已存在的透明 `static/brand/sagepath-mark.png`；图标容器改为米白底、细描边和轻阴影，深墨侧栏上可清晰识别。入学测试页改用绝对 `/static/...` 路径，避免目录相对路径和整图缩放问题；新增结构回归锁定路径与高对比底色。
+- 验证：`node --test tests/test_admin_suite_v2_structure.js tests/test_tasks_workspace_structure.js` → **5 passed**，`git diff --check` 通过。本机浏览器实际核对材料库与入学测试两种壳层：图片均 complete，原始尺寸 `238×210`、显示尺寸 `42×42`、背景 `rgb(255,250,242)`，左上角截图确认清晰。
+- GitHub CI `33523054279` 与部署 `33523054249` 均 **success**。生产 HEAD `f2a7c647`、tracked 工作树干净；服务 active，监听 `127.0.0.1:5002`，保持 `workers=1 / gthread / threads=6`。生产 SQLite 只读 `quick_check=ok`、外键错误 0，部署后 journal 无应用错误。公网 CSS、入学测试 HTML 与品牌图均已核对为新版本；未写生产业务数据，小程序未改 / 未发布。
+- `artifacts/` 与本地合成 `app.db` 继续未跟踪、仅本机可见。下一步只需管理员刷新正式后台（若标签页长期未刷新可强制刷新一次）确认现场观感。
 
 ## 2026-09-01 方向 2 后台全功能区已发布
 
