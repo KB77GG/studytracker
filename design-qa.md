@@ -1,319 +1,232 @@
-# 登录入口重设计 Design QA
+# `/tasks` 方向 2 · 本轮视觉返修 QA（2026-09-01）
 
-日期：2026-08-30
-目标页面：`/login`、`/practices`（未登录状态）
+## Sol 第四次精确视口独立验收：通过（2026-09-01）
 
-## Comparison target
+### 同一视觉输入与精确证据
 
-- 唯一视觉事实源：`/Users/zhouxin/.codex/generated_images/01a04fe9-7e5f-7241-b5b2-b40aa7ab0774/exec-01c10a36-c06f-4f20-91b1-6669bf07840e.png`
-- 最终实现截图：
-  - `/tmp/studytracker-auth-release-qa/login-desktop-1440x1024.png`
-  - `/tmp/studytracker-auth-release-qa/login-mobile-390x844.png`
-  - `/tmp/studytracker-auth-release-qa/practices-desktop-1440x1024.png`
-  - `/tmp/studytracker-auth-release-qa/practices-mobile-390x844.png`
-- 初始实现证据：`/Users/zhouxin/Desktop/studytracker/artifacts/auth-entry-20260830/login-desktop-v1.png`
-- 对比方法：在同一次原始分辨率图像查看输入中并列载入 1440×1024 视觉参考与最终 `/login` 截图；浏览器截图均使用用户指定真实视口，未做拉伸或裁切。
+- 目标图：`/Users/zhouxin/.codex/generated_images/01a05850-a764-7672-8bbb-93aafacb13ce/exec-480d1dcf-5f1e-4b23-afce-fe89a5cca987.png`。
+- Chrome CSS viewport `1440×1024` 实现图：`artifacts/sol-visual-qa-20260901/tasks-workspace-1440x1024-sol-approved.png`。
+- 目标与最终实现同图并排：`artifacts/sol-visual-qa-20260901/target-vs-sol-1440x1024-approved.png`。目标图按等比例同画幅归一后与实现水平并排，未用缩放浏览器视口伪造结果。
+- Chrome CSS viewport `390×844`：`tasks-workspace-390x844-sol-approved.png`、`task-assignment-drawer-390x844-sol-approved.png`、`task-assignment-qtype-390x844-sol-approved.png`、`task-inspector-390x844-sol-approved.png`，均在 `artifacts/sol-visual-qa-20260901/`。
 
-## Viewport and measured surfaces
+### Sol 独立检查结果
 
-- 桌面：1440×1024；品牌栏 110px，左右分栏 49% / 51%，表单宽 560px，输入框 66px，主按钮 62px，学生入口 118px；页面 `scrollWidth === innerWidth` 且无纵向滚动。
-- 手机：390×844；品牌栏 82px，主视觉隐藏，表单优先；输入框 58px，主按钮 58px；两个页面均 `scrollWidth === innerWidth`，主按钮在首屏可达。
-- 桌面 `/login` 关键位置：表单 x=814；用户名输入 y=372；密码输入 y=508；主按钮 y=627；学生入口 y=772。参考图对应位置约为 x=815、y=375、y=513、y=624、y=775。
+- 桌面首屏结构与目标一致：176px 深墨侧栏、正式 Sage Path mark 与完整图标导航、`TASKS` 页头/说明/搜索/提醒/布置入口、周/月/年、七日日期条、单行筛选、统一任务列表及右侧检查器。统计、Recent、Top、备忘录和待审核区均留在主工作区之后，不再占默认核心首屏。
+- 1440×1024 实测几何：header `110px`、tabs `46px`、日期条 `44px`、筛选 `64px`、表头 `32px`、首行 `59px`、分页 `40px`、检查器 `460px`；主工作区 `y=272..733`。列表内容结束后不再由检查器制造 200px 级空高，两项主操作在同一行可见。
+- 桌面横向几何：`innerWidth=1440`，`document/body.scrollWidth=1425`；没有页面横向溢出。页面源 console error/warning 为 `[]`。
+- 移动首屏在 390×844 内可见首张任务卡；首行 `task-status` 与 `task-deadline` 的 computed `display=block`，状态圆点、百分比、进度条和完整截止日期均可见；`document.scrollWidth=375`。
+- 移动抽屉为真实三段布局：header `y=0..127`、独立滚动 body `y=127..623`（题型专项 `scrollHeight=1498 > clientHeight=496`）、静态 footer `y=623..844`，body/footer overlap=`0`。五种来源全部可见、普通与题型专项字段均可滚动，发布操作固定占位且不覆盖内容。
+- 移动详情检查器显示任务标题/状态、来源、学生范围、计划/截止、证据、备注、时间线、状态/计时和两项主操作；点击任务卡可打开，关闭按钮可用。
+- 交互抽查：搜索“Demo 学员 B”只显示 1 条；清空后日期 `2026-09-01` 显示 2 条，再次点击恢复 6 条；切换任务行会同步检查器；“调整任务”打开编辑弹窗并可取消；“更多操作”显示当前任务的打开、编辑、删除入口；统一抽屉可切换题型专项。
+- 最终自动化由 Sol 在最终文件状态重新运行：指定 Python 五文件 `40 passed, 152 warnings, 2 subtests passed`；扩展六文件 `46 passed, 254 warnings, 2 subtests passed`；旧任务/学生端/听写 `55 passed, 1189 warnings, 3 subtests passed`；Node `23/23 passed`；Python/JS syntax 与 `git diff --check` 全部通过。warnings 仅为既有 SQLAlchemy datetime/Query deprecation。
+- 防重复、幂等键、HTTP 409、强制复训与审计、多学生题型专项和旧任务能力的服务/路由回归继续全绿；本轮末次变更仅为视觉模板/CSS 三段布局与高度预算，没有改这些服务端合同。本轮浏览器没有再次发布任务；同一工作树此前的真实合成数据 409/复训证据仍保留，最终自动化覆盖未回归。
 
-## Findings and comparison history
+### 五项 fidelity surfaces
 
-1. 初始实现：
-   - P2：左侧品牌文案比参考图向左约 33px，字号略大。
-   - P2：右侧表单比参考图向左约 21px，后半段控件整体偏上约 20–30px。
-   - P2：首个输入框因 `autofocus` 呈现焦点描边，和参考图静态状态不一致，手机端也可能在载入时立即弹出键盘。
-2. 修复：
-   - 将品牌文案锚点调到左栏 15.4%，缩小标题上限并上移约 9px。
-   - 将桌面表单左侧锚点调到 x≈814，重新校准表单与字段间距。
-   - 移除自动聚焦，保留真实 `label`、键盘可见焦点和密码按钮的无障碍状态。
-3. 最终对比：
-   - 品牌栏、分栏、Logo、标题、表单、按钮、学生入口和主留白均与参考图进入同一构图范围。
-   - 生成楼梯图保持暖白、自然光和浅色弧形楼梯主体；其具体台阶与扶手形状并非对参考图像素复制，这是遵守“生成独立干净素材、不得裁切整张界面图”的有意差异。
-   - `/login` 额外保留了业务需要的课堂入口，并按要求降为底部辅助文字链接。
-   - `/practices` 共享同一品牌壳层，只替换为姓名验证内容；验证后的练习目录仍为原实现。
+1. Composition：首屏顺序、列表/检查器双栏、核心工作区高度和分页位置与方向 2 对齐。
+2. Geometry：侧栏、页头、日期/筛选、59px 任务行、460px 检查器和三段抽屉均通过真实边界测量。
+3. Typography：标题、说明、类型、任务内容、状态与事实区层级清晰；移动英文标题限制一至两行。
+4. Color and assets：深墨、暖象牙、Sage 翡翠绿、正式 mark、Font Awesome 导航与真实页头曲线资产均实际加载。
+5. Interaction and responsive behavior：筛选、日期、分页、选择行、检查器、编辑/更多、五来源抽屉、移动任务卡和底部详情均可用。
 
-## Interaction, accessibility, and runtime checks
+final result: passed
 
-- 密码显示按钮：点击后 `type=text`、`aria-pressed=true`、`aria-label=隐藏密码`。
-- 错误状态：账号错误由 Flask flash 返回并显示；姓名为空和姓名不存在均在 `role=alert` 区域显示，按钮会恢复可用。
-- 学生入口链接固定为 `/practices`；课堂入口 `/classroom` 保留；员工入口返回 `/login?next=/practices`。
-- 浏览器控制台：两个页面均 0 error、0 warning。
-- 两套页面使用真实表单、真实标签、非颜色单独表达的错误文案、至少 58px 的移动触控控件，并尊重 `prefers-reduced-motion`。
+## 当前第四轮视觉残留修复（Luna，等待 Sol 第四次 exact Chrome 复验）
 
-## Final findings
+本轮只修 Sol 第三次 exact 复核留下的两个布局问题，不改变防重复、409、幂等、复训审计或任务业务逻辑；此前各轮独立结论保留为历史背景。
+
+### 本轮修改与结构证据
+
+- `templates/tasks.html` 将布置抽屉整理为 `header / .task-assignment-drawer__body / publish footer` 三段；表单使用 `auto minmax(0,1fr) auto`，最终级联强制 `align-items: stretch`。body 自己 `overflow-y:auto`，发布区是独立静态第三行，不再悬浮覆盖来源或字段。
+- `static/tasks_workspace_final.css` 保持普通来源与题型专项共用该布局；桌面检查器最终高度覆盖为 `clamp(460px, calc(100vh - 564px), 500px)`，信息体继续内部滚动，列表自然决定工作区高度。
+- `tests/test_tasks_workspace_structure.js` 新增/保留抽屉 body、非 overlay footer、compact inspector height、移动状态/截止日期高优先级和双主操作并排断言；未改业务 API 合同。
+
+### IAB 实测（非 exact viewport）
+
+- 当前可用浏览器实际是 `1280×720`，不是任务要求的 `1440×1024` 或 `390×844`。普通来源与题型专项均打开核对：表单 grid rows 为 `113.188px / 509.812px / 97px`；题型专项 body `y=113..623`、`clientHeight=510`、`scrollHeight=1034`，footer `y=623..720`、`position:static`，两者无交叠；五个来源均可见，字段可在 body 内滚动访问。
+- 关闭抽屉后的工作区：header `110px`、tabs `46px`、日期条 `44px`、筛选 `64px`、表格 `y=272..658`、首行 `59px`、分页 `40px`；检查器 `y=272..732`、高度 `460px`，两项主操作仍同一行；`document/body.scrollWidth=1265`，页面源 console error/warning 为 `[]`。
+- 最终 IAB 截图：`artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-final.png`、`artifacts/tasks-workspace-qa-20260901/tasks-drawer-qtype-1280x720-final.png`；目标与当前实现同一次比较输入：`artifacts/tasks-workspace-qa-20260901/target-vs-drawer-qtype-1280qa-final.png`。组合图明确标注实现为 IAB 1280×720，不能冒充同尺寸 exact 对照。
+
+### 当前阻塞与结果
+
+Luna 没有伪造或宣称 1440×1024 / 390×844 的新截图、computed style 或 overflow 结果；等待 Sol 使用可控 Chrome 完成第四次 exact 视口复验，重点确认移动普通/题型专项抽屉所有字段均不被 footer 覆盖、CTA 始终可见，以及桌面检查器压缩后的目标图对照。此前 Sol 第三次 exact 证据中已通过的移动状态/截止日期、双主操作、紧凑桌面预算必须保持。
+
+final result: blocked
+
+## 当前第三轮视觉残留修复（Luna，等待 Sol 第三次 exact Chrome 复验）
+
+本条仅覆盖 Sol 第二次 exact 复核后发现的移动级联、抽屉 CTA 和桌面密度残留；此前独立视觉结论保留作历史背景，不被本条覆盖。
+
+### 本轮修改
+
+- 新增最后加载的 `static/tasks_workspace_final.css`，并在 `templates/tasks.html` 中置于旧模板样式与工作台模块之后，确保移动任务卡的状态/截止日期不再被 legacy nth-child 规则隐藏。
+- 移动抽屉发布区恢复为真正的 `position: sticky` 底栏，设置 `scroll-padding-bottom` 和底部预留空间；五来源与所有字段仍保持可滚动访问。
+- 桌面紧凑预算继续收紧：页头 106px 预算、页签 46px、日期条 40px 内容高度、筛选 55px 预算、表头 32px、任务行 46px 内容轨道、分页 40px；检查器两项主操作以并排双列呈现，“打开学生任务”仍在更多操作。
+- `tests/test_tasks_workspace_structure.js` 增加最终级联、sticky/底部预留、紧凑预算和主操作并排的结构断言；未改防重复、409、幂等、复训审计或其他业务逻辑。
+
+### 本轮视觉输入、实测与边界
+
+- 已实际打开目标图、Sol 桌面/移动 exact 证据、目标并排复核图及本文件；目标源为 `/Users/zhouxin/.codex/generated_images/01a05850-a764-7672-8bbb-93aafacb13ce/exec-480d1dcf-5f1e-4b23-afce-fe89a5cca987.png`，本轮新实现截图为 `artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-repair-final2.png`，同次组合输入落盘为 `artifacts/tasks-workspace-qa-20260901/target-vs-current-repair-final2-1280qa.png`。组合图明确标注实现为 IAB 1280×720，尺寸不同，不能当作 exact viewport 对照。
+- 可用 IAB 实际视口为 `1280×720`：页头 `110.09px`、页签 `46px`、日期条 `44px`、筛选 `64px`、表头 `32px`、首行 `59px`、分页 `40px`；状态和截止日期 computed `display:block`/visible，检查器“调整任务”和“查看学生进度”同一行，`document.scrollWidth=1265`。
+- IAB 已确认最终样式表加载、页头/日期/筛选/分页/检查器编辑取消和五来源抽屉交互；页面源 console error/warning 为 `[]`。IAB 无 viewport capability，本轮没有伪造或声称 `1440×1024`、`390×844` 的 computed style、截图或 overflow 结果。
+
+### 五项 fidelity surfaces
+
+1. Composition：桌面实际可见日期/筛选/列表/检查器连续工作区；exact 1440 首屏仍待 Sol 复验。
+2. Geometry：桌面高度预算与检查器按钮已压缩；移动 sticky 发布栏和内容底部预留已写入最终级联。
+3. Type and hierarchy：`TASKS`、中文说明、状态/截止日期、双主操作层级保留。
+4. Color and assets：深墨侧栏、暖象牙工作区、Sage 选中态/主操作与正式品牌资产未改。
+5. Responsive behavior：当前 IAB 无横向溢出；移动 exact 卡片 computed style、CTA 覆盖检查和截图仍需 Sol 控制视口复验。
+
+### 当前阻塞与结果
+
+等待 Sol 使用可控 Chrome 完成第三次 `1440×1024` 与 `390×844` exact 复验、移动状态/截止日期截图、sticky CTA 不遮挡来源/字段检查，以及目标同尺寸并排对照。任何 exact 视觉结论在此之前均不提升为通过。
+
+final result: blocked
+
+本条覆盖本轮 `/tasks` 首屏信息架构返修；下方此前的矩阵/功能记录保留作历史背景，不覆盖本条结论。
+
+## 本轮第二次视觉返修：Sol 精确视口问题的代码修正（2026-09-01）
+
+### 修正后的比较输入与视口
+
+- 延续已实际打开的任务管理目标图与 Sol 独立 1440×1024/390×844 证据；本轮把目标图与新实现截图再次置于同一次组合输入：`artifacts/tasks-workspace-qa-20260901/target-vs-current-repair-final-1280qa.png`。
+- 新实现原图：`artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-repair-final.png`，来源为 IAB 实际 `1280×720`；目标源为 1487×1058，组合图将目标归一到高 720（1012×720），实现为 1280×720（展示时 1279×720），没有宣称同 CSS viewport。
+- IAB 无 viewport capability。本轮没有伪造 exact `1440×1024` 或 `390×844`，也没有把 Sol 的独立截图冒充本轮 Luna 渲染证据。
+
+### 本轮修正与可验证结果
+
+- 桌面密度：侧栏压至 176px，页头 overline/说明拆开，日期/筛选压缩，隐藏额外 `ASSIGNMENTS / 任务列表` 标题工具条；首屏 IAB 工作区 y=146，任务行保留状态圆点、进度和截止日期。
+- 检查器：增加内部信息滚动区；状态/计时控制和“调整任务”“查看学生进度”固定在检查器底部可用；“打开学生任务”仅作为低频入口进入“更多操作”。
+- 移动 cascade：显式恢复 `.task-status` 与 `.task-deadline` 卡片单元的可见性，任务标题限制两行；筛选在窄屏改为两列；抽屉首行使用 `task-assignment-meta`，发布区在窄屏改为正常流布局，不覆盖五来源。
+- 1280×720 IAB：scrollWidth `document=1265 / body=1265`，页面源 console `error=[] / warning=[]`；已操作检查器编辑/取消、打开/关闭抽屉并确认五种来源。
+
+### 五项 fidelity surfaces（本轮修正后）
+
+1. Fonts and typography：`TASKS`、中文说明、任务标题/状态层级分离；任务标题和移动卡片使用受限换行。
+2. Spacing and layout rhythm：压缩首屏纵向预算，移除标题工具条，检查器内部滚动，抽屉 meta 与发布区不再制造/覆盖空洞。
+3. Colors and visual tokens：保留深墨侧栏、暖象牙工作区、Sage 主操作与 Sage 实心当前日；本轮未改既有色彩合同。
+4. Image quality and asset fidelity：继续使用正式 Sage Path mark、Font Awesome 导航图标和 `tasks-header-wave.png`，未以文字/emoji/CSS art 替代可见资产。
+5. Copy and content：页头为 `TASKS / 任务管理 / 布置、追踪并调整学生学习任务`；主操作明确为“调整任务”“查看学生进度”，历史功能入口仍可达。
+
+### 当前阻塞与结果
+
+- 自动化与当前 IAB 交互回归已通过；但 exact `1440×1024`、`390×844` 的本轮浏览器渲染、同视口截图、移动 overflow/console 仍需 Sol 的可控 Chrome 独立复验。
+- 该证据门槛是当前唯一未完成的视觉验收项；不要把下方历史 `passed` 结论提升为本轮结论。
+
+final result: blocked
+
+## 现场与视觉输入
+
+- 工作树：`/Users/zhouxin/.codex/worktrees/c56a/studytracker`；detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a`；本轮继续保留既有脏实现，未 commit/push/deploy/写生产库。
+- 已实际打开：目标图 `.../exec-480d1dcf-5f1e-4b23-afce-fe89a5cca987.png`、此前实现图 `artifacts/tasks-list-inspector-desktop-1440x1024-final.png`、此前并排复核图 `artifacts/audit-tasks-design-20260901/01-target-vs-final-implementation.png`、本文件。
+- 本轮实现截图与目标图已置于同一次并排输入：`artifacts/tasks-workspace-qa-20260901/target-vs-current-1280qa.png`；实现原图为 `tasks-workspace-1280x720-clean.png`。IAB 实际视口为 **1280×720**，没有 viewport capability，因此没有伪造 1440×1024 或 390×844 证据。
+- 已运行 user-context preflight：脚本存在且正常返回 saved context 缺失；按任务提供的视觉源继续，不视为插件阻塞。
+
+## 本轮实际返修
+
+- 默认首屏顺序已改为：深墨侧栏 → 标题/说明/搜索/提醒/布置 → Week/Month/Year → 逐日日期条 → 学生/分类/状态/截止日期筛选 → 统一任务列表 → 右侧检查器。统计、Recent、Top、备忘录降为次级折叠区域。
+- 任务列表主列改为头像/中英文姓名、类型图标、标题/范围、计划用时、状态圆点/文字/进度条、截止日期；旧状态下拉、计时、证据、完成率、正确率、编辑/删除/批改/轨迹仍保留在检查器或“更多”操作中。
+- 检查器补齐来源/布置时间、学生与范围、计划时间/截止日期、完成证据/提交方式/当前进度、教师备注、时间线、调整任务、学生进度和可操作更多菜单；现有真实 control hook 未改后端合同。
+- 侧栏改用仓库正式 `static/brand/sagepath-mark.png` 与 Font Awesome 导航图标；页头使用本轮生成并复制到 `static/brand/tasks-header-wave.png` 的 sage 曲线资产。
+- 新增 `static/tasks_workspace.css`、`static/js/tasks_workspace.js`，收拢响应式任务卡、日期选择和分页；统一抽屉五种来源与专项矩阵逻辑继续复用原模板/服务。
+
+## 五项 fidelity surfaces（本轮 1280×720 实测）
+
+1. Composition：列表与检查器已进入工作区首屏，日期条/筛选紧邻列表；无默认“任务记录与计时”重复标题、独立任务窗口摘要卡或按学生大分组卡。
+2. Geometry：列表与检查器双栏，计划/实际用时分行显示避免覆盖状态/截止日期；抽屉标题固定、来源分段，底部发布操作固定可见。
+3. Type and hierarchy：任务页头、时间范围、列表工具栏、状态/进度和检查器事实区形成连续层级；桌面实际截图中可读。
+4. Color and assets：深墨侧栏、暖象牙工作区、sage 主操作/选中态、正式 Logo 与 Font Awesome 图标已实装；目标曲线资产已进入页头。
+5. Copy and responsive behavior：搜索、分页、更多操作、抽屉来源和历史功能入口仍可达；移动断点的任务摘要卡/底部检查器与抽屉规则已写入专用 CSS，但本轮未取得可控 390px 浏览器渲染证据。
+
+## 当前浏览器证据与阻塞项
+
+- IAB 当前视口：`innerWidth=1280`、`innerHeight=720`；`document.documentElement.scrollWidth=1265`、`body.scrollWidth=1265`，当前视口无横向溢出。
+- IAB 页面源 console error/warning：新建干净页读取为 `[]`。已实测普通抽屉、题型专项抽屉、来源数量 5、搜索过滤、日期选择、分页、检查器更多菜单；没有创建任务或写生产数据。
+- 本轮未在浏览器重新执行 409/复训发布；既有防重复、幂等、矩阵、复训和旧入口由自动化回归继续覆盖。
+- P2 evidence gate：IAB 无 viewport capability，无法提供用户要求的 exact `1440×1024` 与 `390×844` 截图/scrollWidth/交互证据；等待 Sol 使用可控 Chrome 完成 exact viewport 复验，并重新制作同尺寸目标图对照。
+
+## 本轮截图
+
+- `/Users/zhouxin/.codex/worktrees/c56a/studytracker/artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-clean.png`
+- `/Users/zhouxin/.codex/worktrees/c56a/studytracker/artifacts/tasks-workspace-qa-20260901/task-assignment-drawer-1280x720.png`
+- `/Users/zhouxin/.codex/worktrees/c56a/studytracker/artifacts/tasks-workspace-qa-20260901/target-vs-current-1280qa.png`
+
+final result: blocked
+
+# `/tasks` 方向 2 Design QA
+
+日期：2026-09-01（Asia/Shanghai）
+工作树：`/Users/zhouxin/.codex/worktrees/c56a/studytracker`
+范围：任务列表、右侧检查器、统一布置抽屉、题型专项预览与重复发布状态。
+
+## 2026-09-01 独立视觉复核结论（覆盖下方原验收结论）
+
+用户指出最终页面没有忠实按照已确认效果图实现。独立复核将任务管理目标图与最终
+`artifacts/tasks-list-inspector-desktop-1440x1024-final.png` 并排比较，确认该判断成立；
+组合证据为 `artifacts/audit-tasks-design-20260901/01-target-vs-final-implementation.png`。
+
+- **结构级 P1：未通过。** 目标首屏是“周/月/年主标签 → 每日日期条 → 一行筛选 → 统一任务列表 + 固定右侧检查器”；实现仍保留“任务记录与计时”二级标题、单块日期摘要、独立筛选卡和按学生分组/备忘录卡，信息架构不是同一构图。
+- **列表级 P1：未通过。** 目标用头像、类型图标、进度条、截止日期和单行任务记录形成高密度可扫视列表；实现继续使用旧式表格控件、日期换行、状态下拉、计时器与按钮堆叠，首屏可扫视性和视觉密度明显偏离。
+- **检查器 P1：未通过。** 虽已加入右侧检查器，但目标中的任务范围、完成证据、教师备注、时间线及底部主次操作层级没有完整还原；实现只是较窄的字段摘要卡。
+- **品牌与导航 P2：未通过。** 深墨/象牙/Sage 色彩方向接近，但目标的品牌图标、导航图标、完整分组、页头曲线资产、标题比例和留白没有忠实实现，当前仍像旧后台换肤。
+- **抽屉功能可用但视觉未验收。** 统一入口、题型专项、重复矩阵与 409 防护属于功能成果；现有效果图没有提供抽屉的逐状态视觉目标，因此不能用功能通过替代视觉忠实度通过。
+- **移动端仅能确认无明显横向溢出。** 当前证据中的任务卡列宽、标题换行和状态/计时控件密度仍需重新设计；不能据截图宣称完整可用性或无障碍合规。
+
+独立结论：功能整合可以保留，但页面视觉不能以当前版本验收。应由 Luna 在同一 worktree
+按目标图重做首屏构图，再用同视口并排图复验；下方旧记录中的 `P0/P1/P2 = 0` 与
+`final result: passed` 已被本节明确否定。
+
+## 组合视觉输入
+
+本轮使用 `product-design:image-to-code` 流程。目标图与真实 Chromium 实现截图在同一次组合视觉输入中连续载入比较；桌面实现保持 1440×1024，窄屏另行以 390×844 复验；不是按文件名或文字猜测。
+
+- 任务管理目标图：`/Users/zhouxin/.codex/generated_images/01a05850-a764-7672-8bbb-93aafacb13ce/exec-480d1dcf-5f1e-4b23-afce-fe89a5cca987.png`
+- 共用后台方向基准：`/Users/zhouxin/.codex/generated_images/01a05850-a764-7672-8bbb-93aafacb13ce/exec-80ea9a25-3b04-4a63-8f63-f6aa6b94fd0a.png`
+- 现生产页参考：`/Users/zhouxin/Desktop/studytracker/artifacts/admin-redesign-current-tasks-20260901.png`（仅理解布局；其中真实姓名未复制）
+- 最终目标图+实现图组合中的实现截图：`/Users/zhouxin/.codex/worktrees/c56a/studytracker/artifacts/tasks-list-inspector-desktop-1440x1024-final.png`
+- 本次 P1/P2 修复的目标图+实现图组合：目标仍为上面的任务管理目标图，实现图为
+  `/Users/zhouxin/.codex/worktrees/c56a/studytracker/artifacts/tasks-qtype-matrix-409-desktop-1440x1024.png`；两张图在同一次视觉输入中复核，确认抽屉内矩阵不会把未命中题组折叠掉，且命中的原子题组格显示“完全重复”。
+
+## 五项 fidelity surfaces
+
+1. Composition：深墨色左导航、暖象牙工作区、Sage 主操作；日期窗口、筛选、任务列表与右侧检查器在桌面首屏连续出现。统计、Recent、Top、备忘录保留为次级区域，不再遮挡核心任务工作流。
+2. Geometry：桌面列表与检查器采用双栏；`+ 布置新任务` 打开右侧抽屉；原 11 列表格的 ID、证据、完成率、正确率、备注等低频/细节进入检查器或“更多操作”，任务行主列保持可读。
+3. Type and hierarchy：`TASKS / 任务管理`、`NEW ASSIGNMENT`、`SPECIALTY PRACTICE`、状态徽标、题组元数据和检查器事实字段形成稳定层级；日期条明确显示当前 Week/Month/Year 窗口。
+4. Color and tokens：导航使用深墨色，工作区使用暖象牙，内容面为白色，主按钮/选中态为 Sage 翡翠绿，重复警告为琥珀，阻止/删除为红色，边框和辅助文案保持低对比。
+5. Content, controls, responsive behavior：保留 Week/Month/Year、任务统计、计时、完成率、正确率、备忘录、昨日任务、普通/材料/听力/阅读/题型专项入口；题型专项显示完整 Question Group、原题号、renderer、音频/文章/图片/时间点、按组移除与逐学生历史。390px 使用移动任务行网格和单列抽屉，无横向滚动。
+
+## 验收视口与交互
+
+- 1440×1024：`tasks-list-inspector-desktop-1440x1024-final.png` 显示首屏任务列表+检查器，日期窗口和筛选紧邻列表；最终 `document.documentElement.scrollWidth=1425 <= innerWidth=1440`，正文 `body.scrollWidth=1425`。
+- 390×844：`tasks-list-mobile-visible-390x844-final.png` 显示可读的日期/类别/任务/状态/计时行；`document.documentElement.scrollWidth=375`、`innerWidth=390`，表单抽屉 `clientWidth=scrollWidth=358`。
+- 统一抽屉：普通任务、材料库、听力题库、阅读题库、题型专项并列；普通来源单学生，题型专项可多选学生。专项预览实测 2 个完整组，并显示 Demo Student One / Demo Student Two 的四个独立「学生 × 题组」矩阵单元：仅第一位学生的第一组有历史，另外三格明确“未布置”（合成浏览器数据仅存在本地）。
+- P1 矩阵响应：`resource.units` 返回本次请求的每个 group，`matrix_rows` 对 2 名学生 × 2 个 group 恰好返回 4 行；命中行含原任务 ID、日期、状态、重叠题组和 staff-safe 查看入口，未命中行含“未布置”，不含 token 或答案。
+- P1 409 重显：预览后在后台本地合成第二位学生的历史题组，点击发布真实收到 `HTTP 409 duplicate_assignment_conflict`；抽屉仍显示 4 个矩阵单元，命中的 G1/G2 原子格显示“未开始 · 完全重复 / 原任务 #1/#2”，未命中格明确“未布置”，未退化为笼统提示。
+- P2 状态语义：任务级 `students[].matches[].overlap_type` 对 G1+G2 仍为 `partial`，供发布策略和审计使用；只有 question_type 的原子 `matrix_rows` 命中格覆盖为 `exact`，renderer 优先使用行语义，所以 G1 显示“完全重复”，其余三格显示“未布置”。
+- P2 409 文案：真实 409 仍保留完整矩阵，但 `#taskQtaStatus` 显示“检测到重复任务：请查看下方历史记录；如需复训，请二次确认并填写原因。”；普通来源复用同一映射且把中文提示插入历史容器，不覆盖矩阵；页面正文不再暴露 `duplicate_assignment_conflict`。
+- 窄屏矩阵：`tasks-qtype-matrix-mobile-390x844-final.png` 与 `tasks-qtype-matrix-409-mobile-390x844.png` 均同时显示四格；`document.documentElement.scrollWidth=375`、`body.scrollWidth=375`、抽屉 `scrollWidth=358`，均不超过 `innerWidth=390`。
+- Chrome 409 证据：`artifacts/tasks-qtype-matrix-409-chrome-desktop-1440x1024.png` 与 `artifacts/tasks-qtype-matrix-409-chrome-mobile-390x844.png`；Chrome 页面源 console error/warning `[]`（不计 Chrome 扩展自身日志），桌面四格和中文提示同屏，移动端四格完整可见且 DOM 中文提示已核对。
+- Listening Section 2：Demo Student One 显示“进行中 · 完全重复”、原任务 #1、日期、Section 2 和 staff-safe 查看链接；Reading Passage 1 对 Demo Student Two 显示“待批改 · 完全重复”、原任务 #3。
+- 材料题号：材料题目范围显示原任务 #2 的部分重复；听写 5–9 与历史 3–8 显示原任务 #4 的“进行中 · 部分重复”、重叠 5–8。
+- 普通 Listening 发布：实际点击添加后保持抽屉打开，HTTP 409 的 `duplicate_assignment_conflict` 详情重新显示在抽屉中；勾选复训确认并填写原因后本地合成任务可发布。
+- 旧入口：`/tasks/question-types` 实际重定向到 `/tasks?source=question_type#taskForm` 并打开专项抽屉。
+- 检查器“更多操作”是可展开的真实 `details` 菜单，实测能显示编辑/删除按钮；控制台 error 日志为 `[]`。
+- 本次修复新增 `static/js/task_assignment_matrix.js` 的 renderer 单测；Node DOM 字符串断言确认四个学生×题组单元各渲染一次，且 staff-safe 链接不泄露 token。
+
+## P2 横向溢出修复迭代历史
+
+1. Sol 首轮指出 P2：抽屉表单横向排列造成 `taskForm.scrollWidth=1816`；任务列表首屏被统计/Recent/备忘录推到下方；旧 11 列和说明式“更多操作”不符合目标构图；390px 有水平滚动条。
+2. 第一轮返修：任务工作台排序为“标题 → 日期窗口 → 筛选 → 列表+检查器”，抽屉改为纵向固定视口，低频字段进入检查器/菜单。
+3. 第二轮返修：补齐所有资源字段的防抖历史刷新和 revision guard；移动端初步虽然 `scrollWidth` 归零，但任务名出现逐字竖排。
+4. 最终返修：390px 任务表行改为三列网格，修复长任务名、状态和计时入口的可读性；补日期窗口条并重新跑 1440/390 实测。最终两种视口均无页面或抽屉横向溢出。
+
+## Findings
 
 - P0：0
 - P1：0
 - P2：0
-- 可接受差异：楼梯为新生成的独立照片素材；登录页保留参考图未显示但业务仍需要的低调课堂入口。
+- 有意差异：目标稿使用示例头像、姓名和较丰富的任务密度；实现使用真实数据库查询结果。浏览器验收只使用本地合成学生与任务，不把生产截图中的姓名写入代码、fixture、文档或日志。
+- 未在生产浏览器、生产数据库或学生真实发布链路执行写操作；这些属于本轮明确禁止范围。
 
-final result: passed
-
----
-
-# Vocabulary answer-feedback design QA
-
-## Comparison target
-
-- Source visual truth: `/Users/zhouxin/Downloads/IMG_0223.PNG`
-- User-directed changes to that source: remove the empty pale-green result keyboard shell; resize the result CTA to a balanced standalone control; add post-answer memory support without exposing it before submission.
-- Rendered implementation:
-  - `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/final-top.png`
-  - `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/final-bottom.png`
-- Combined comparison evidence: `/Users/zhouxin/.codex/visualizations/2026/08/10/studytracker-vocabulary-feedback/comparison.png`
-
-## Viewport and normalization
-
-- Source pixels: `944 × 2048`; attachment corresponds to the iPhone 15 Pro Max portrait aspect.
-- WeChat Developer Tools target: iPhone 15 Pro Max, portrait, CSS viewport approximately `430 × 932`, shown by the tool at 75% preview scale.
-- Raw implementation crop: `248 × 538` pixels from the Developer Tools preview.
-- Comparison copies: source and each implementation state normalized to `472 × 1024`; the combined comparison is `1416 × 1024`.
-- Density/canvas normalization: surrounding Developer Tools chrome was cropped out; source, top implementation, and scrolled-bottom implementation use the same portrait aspect before comparison.
-
-## State and interaction coverage
-
-- Route: `pages/student/vocabulary-learning/index`.
-- State: group 1/7, retry phase, `audio_to_en`, correct answer for `analyst`, full answer feedback available.
-- Verified top and scrolled-bottom states so both the memory card and result CTA were visible at the intended mobile width.
-- Verified the page scrolls to the CTA and the CTA remains fully reachable above the home indicator.
-- Developer Tools compilation reported 0 errors. The retained warnings are existing/base-library notices; the deliberate unauthenticated setup request was removed from the final error count.
-- Functional answer, refresh-restoration, no-leak, and next-item behavior are covered by automated tests; the visual fixture did not send a real answer or advance production state.
-
-## Required fidelity surfaces
-
-- Fonts and typography: retained the existing system font stack and established page hierarchy. Word, syllable, phonetic, labels, example, translation, and hint remain legible without clipping or awkward wrapping.
-- Spacing and layout rhythm: the empty keyboard shell and its safe-area padding are gone. The result CTA is a standalone `520rpx` pill (about 70% of page width), with balanced space above and below. The longer feedback content scrolls naturally rather than compressing the card.
-- Colors and visual tokens: retained StudyTracker green `#087f77`, existing success green, white card, and pale-green support surface. The pale-green surface now contains meaningful feedback rather than unexplained empty space.
-- Image quality and asset fidelity: replay uses the repository's existing speaker icon asset; no placeholder, emoji, inline SVG, handcrafted SVG, or new raster asset was introduced.
-- Copy and content: answer feedback adds target word, syllables, phonetic, core meaning, necessary collocation, one bilingual example, and optional usage note. Retry copy remains explicit that another error will not create an infinite loop.
-- Responsiveness/accessibility: CTA and replay control retain at least `88rpx` height. Long English and Chinese content wraps. The CTA is reachable at the bottom of the iPhone 15 Pro Max viewport; `rpx` sizing keeps the same relative width on narrower phones.
-
-## Findings
-
-- No actionable P0/P1/P2 findings remain.
-- The final layout intentionally differs from the source screenshot by adding the requested memory card and replacing the oversized empty keyboard shell with a content-free standalone CTA area.
-
-## Comparison history
-
-1. Initial source review:
-   - P1: the English keyboard hid its keys after submission but left its pale-green shell and safe-area padding, creating a large empty block.
-   - P2: the full-width CTA inside that shell had disproportionate visual weight.
-   - Fix: render the keyboard only before submission and render a separate result CTA after submission.
-2. First implementation review:
-   - P2: percentage width resolved against a virtual WXML block and fell back to the `320rpx` minimum, making the CTA too narrow.
-   - Fix: use a stable `520rpx` width and matching minimum, capped by `100%`.
-3. Final comparison:
-   - The empty shell is absent, the CTA is visually balanced, feedback content is readable, and no overlap, clipping, or unreachable control remains.
-
-## Follow-up polish
-
-- None required for this change. A physical-device pass after a future mini-program upload can reconfirm text density with the user's actual Dynamic Type setting.
-
-final result: passed
-
----
-
-# 强化拼写 Sage Path 视觉 QA
-
-日期：2026-07-23
-目标页面：`pages/student/dictation/spell/index`
-视觉来源：`/Users/zhouxin/Downloads/已生成图像 1 (1).png`
-
-## 对照证据
-
-- 同屏对照（左侧来源、右侧生产实现）：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/source-vs-implementation.png`
-- 390×844 初始空答案：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-390x844-blank.jpeg`
-- 390×844 手动点击 `c`、`o` 后：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-390x844-typed-co.jpeg`
-- 320×568：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-320x568.jpeg`
-- 768×1024：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-768x1024.jpeg`
-- iPad 768×1024、开发者工具 75% 显示比例，手动输入 `c`、`o` 后：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/spell-ipad-75-typed-co-outline-no-caret.png`
-- 方格输入区同屏聚焦对照（左侧来源、右侧修复后实现）：
-  `/Users/zhouxin/.codex/visualizations/2026/07/23/studytracker-sage-spelling/cursor-focus-source-vs-final.png`
-
-来源图像为 853×1844 px；iPad 实现由微信开发者工具按 768×1024 CSS 视口、DPR 2、75% 显示比例渲染，工具窗口截图为 1248×768 px。聚焦对照把来源裁区 763×340 px 与实现裁区 380×170 px 等比容纳到各自 720×320 px 画布，避免仅因密度和工具缩放差异产生误判。
-
-## 检查结果
-
-- 视觉层级：Sage Path 品牌头、成长路径进度、中文释义、中央重听、方格答案区、底部键盘均与来源保持同一视觉语言。
-- 输入状态：初始十个方格完全为空；对照图中的 `c`、`o` 是 QA 时逐个点击键盘产生，不是首字母提示或预填。
-- 当前输入位：只用琥珀色描边和轻微外圈标记，不在单字符方格内叠加闪烁竖线，避免出现悬空或偏位的伪光标。
-- 播放入口：页面只有中央“重听”入口；键盘内没有第二个重听按钮。
-- 键盘比例：字母键使用三行紧凑 QWERTY，标签通过独立文本层做光学垂直居中；确认键占满键盘宽度，平板端键盘最大宽度 560px。
-- 响应式：320×568、390×844、768×1024 均完整显示主要操作；窄屏没有横向溢出，平板没有无限拉宽，底部保留安全区。
-- 开发者工具：最终页面 0 error；3 条 warning 均为自动热重载、HarmonyOS 提示和灰度基础库提示，没有页面或组件告警。
-- 字体与排版：中文释义、进度、重听与字母方格的字号、字重和行高保持原 Sage Path 层级，输入后字母在方格中垂直居中。
-- 间距与布局：本次只删除方格内伪光标，不改变进度、释义、重听、答案方格和键盘之间的既有响应式节奏。
-- 颜色与状态：当前格继续使用既有琥珀色状态色，已输入格使用青绿色；没有用闪烁动画重复表达同一状态。
-- 图像质量：品牌图、成长路径背景和功能图标继续使用现有 JPG/SVG 资源，没有新增占位图、文本符号或 CSS 绘制替代物。
-- 文案：页面仍只显示中性“重听”，未增加答案提示、严格模式标签或授权常驻文案。
-
-## 本轮比较历史
-
-- 先前 P2：iPad 空答案状态在当前方格中叠加闪烁竖线，竖线视觉位置不自然，并与方格描边重复表达焦点。
-- 修复：删除 `.slot.active::after` 伪元素；保留 `.slot.active` 的琥珀色描边与轻微外圈。
-- 修复后证据：iPad 空答案与手动输入 `c`、`o` 后均只显示活动方格描边；字母清晰落入前两个方格。聚焦同屏对照未发现新的 P0/P1/P2 差异。
-
-## 有意差异
-
-- 未显示来源图右上角“严格拼写”，遵循已确认产品要求。
-- 未显示来源图键盘上方“实体键盘需教师授权”，授权规则保留在服务端和模式切换逻辑中，不做常驻文案。
-- 来源图的键帽更高；生产实现按学生反馈缩短键帽和操作区，保持手指可点范围并减少页面比例失衡。
-
-## 缺陷分级
-
-- P0：0
-- P1：0
-- P2：0
-
-final result: passed
-
----
-
-# 刷题库二期统一工作台 Design QA
-
-## Comparison Target
-
-- 视觉基准：现有 `/listening/tests` 工作台与用户提供的 3a 设计截图。
-- 实现页面：
-  - `http://127.0.0.1:5001/practice`
-  - `http://127.0.0.1:5001/listening/tests`
-  - `http://127.0.0.1:5001/reading/tests`
-  - `http://127.0.0.1:5001/listening/jijing`
-  - `http://127.0.0.1:5001/reading/jijing`
-- 对照证据：
-  - `/tmp/studytracker-workspace-phase2-task1-comparison.png`
-  - `/tmp/studytracker-workspace-phase2-task2-comparison.png`
-  - `/tmp/qa-1280-contact.png`
-  - `/tmp/qa-768-contact.png`
-  - `/tmp/qa-375-contact.png`
-- 视口：1280 × 844、768 × 844、375 × 844。
-- 状态：访客未绑定；剑雅默认书、`#cambridge-12`、`#jfdr-6`；阅读学习入口已渐进显示；阅读机经更多分组展开；移动端目录抽屉打开与关闭。
-
-## Findings
-
-- No actionable P0, P1, or P2 findings remain.
-- 五个页面在三档视口均满足 `scrollWidth === innerWidth`，无页面级横向溢出。
-- 剑雅听力、剑雅阅读和两类机经共用同一顶栏、题库侧栏、内容层级、进度与状态视觉；门户按题库分组后仍保持五个 IELTS 入口一键直达。
-- 阅读 Test 保持平铺主路径；听力机经保持 Part 直达；未为高频操作增加手风琴或中间选择层。
-- 375/768 下侧栏改为抽屉；选择题库、scrim 点击、关闭按钮与 Esc 均可关闭，正文滚动宽度不受影响。
-- 57 组阅读机经默认显示 10 组，其余可展开；听力机经长目录独立滚动，虾滑听力分组可访问。
-- 已刷状态、正确率、继续条、Reading Study 渐进入口、剑雅 hash 直达与 9 分达人分组均保留。
-- Chrome DevTools 控制台在回归页无页面错误；课堂模式仍绕过学生绑定，访客模式仍要求先绑定，未绑定学生不渲染继续条。
-
-## Engineering Guardrails
-
-- 公开 URL 与 Flask endpoint 未改。
-- `test_practice.html`、`jijing_part.html`、`player.html` 及阅读做题模板与改版前一致。
-- `app.py` 只增加目录纯函数调用与模板数据；新聚合逻辑全部位于 `api/practice_catalog.py`。
-- 判分与提交代码未改；旧听力专用类前缀、旧 JS/样式文件名与旧模式导航组件引用均为零。
-- 完整测试：229 tests passed。
-
-final result: passed
-
----
-
-# TOEFL Formal Exam UI Design QA
-
-## Comparison Target
-
-- Source visual truth:
-  - `/Users/zhouxin/Desktop/studytracker/tmp/pdfs/toefl_ui_refs/reading/page-03.png`
-  - `/Users/zhouxin/Desktop/studytracker/tmp/pdfs/toefl_ui_refs/writing/page-1.png`
-  - `/Users/zhouxin/Desktop/studytracker/tmp/pdfs/toefl_ui_refs/og/page-015.png`
-- Implementation:
-  - `http://127.0.0.1:5001/toefl/test/2026-01-21_A/reading`
-  - `http://127.0.0.1:5001/toefl/test/2026-01-21_A/writing`
-- Implementation screenshots:
-  - `/Users/zhouxin/Desktop/studytracker/tmp/design-qa/reading-implementation.png`
-  - `/Users/zhouxin/Desktop/studytracker/tmp/design-qa/writing-implementation.png`
-  - `/Users/zhouxin/Desktop/studytracker/tmp/design-qa/reading-mobile-final.png`
-- Viewport: desktop 1280 x 720; mobile 390 x 844
-- States: Reading multiple choice question 4; Writing build-a-sentence question 1
-
-## Full-View Comparison Evidence
-
-- `/Users/zhouxin/Desktop/studytracker/tmp/design-qa/reading-comparison.png`
-- `/Users/zhouxin/Desktop/studytracker/tmp/design-qa/writing-comparison.png`
-
-The implementation matches the source hierarchy: thin teal section divider, section/question status at left, timer at right, large white exam canvas, Reading split pane, Writing centered prompt, real circular speaker imagery, answer line, and word bank.
-
-## Focused Region Evidence
-
-Separate crops were not required because both comparison images retain the source and implementation at the same 720-pixel height. The toolbar, status strip, Reading option controls, Writing avatars, answer line, and word tokens remain legible in the combined files.
-
-## Findings
-
-- No actionable P0, P1, or P2 findings remain.
-- Fonts and typography: Arial/Helvetica UI text and Georgia passage text preserve the official hierarchy and reading density. Weight and wrapping remain legible at desktop and mobile widths.
-- Spacing and layout: desktop split panes and Writing dialogue rows match the source composition. Mobile has no page, toolbar, or passage horizontal overflow.
-- Colors and tokens: white canvas, dark toolbar, charcoal text, and restrained teal dividers follow the official screenshots while retaining Sage Path branding.
-- Image quality: Writing uses speaker portraits extracted from the provided real-question PDF rather than placeholders. Crops remain sharp at the rendered 72-pixel size.
-- Copy and content: test chrome is concise and exam-specific. Dynamic question content comes from the imported structured source.
-- Interactions: Help, Review, Back, Next, timer hiding, Listening must-answer behavior, module audio, word ordering, undo, free writing, and submission feedback were exercised.
-- Accessibility: controls are semantic, focus-visible styles are present, images have alt text, inputs are labeled, and mobile tap targets remain usable.
-
-## Patches Made During QA
-
-- Hid the Listening audio drawer on Reading and Writing pages.
-- Replaced oversized speaker placeholders with cropped source portraits and source-matched dialogue spacing.
-- Removed duplicated Writing directive text.
-- Removed mobile toolbar and passage horizontal scrolling.
-- Verified Reading Review navigation, Listening forward-only navigation, must-answer modal, Writing token selection and undo, and responsive width.
-
-## Follow-up Polish
-
-- P3: add source-matched toolbar icons if a licensed official icon asset set becomes available.
-- P3: preserve richer social-post or notice artwork when future structured imports include clean image regions alongside text.
-
-final result: passed
-
----
-
-# Parent Practice Detail Design QA
-
-## Comparison Target
-
-- Source visual truth: `/Users/zhouxin/Downloads/87.jpg`
-- Implementation screenshot: `/tmp/studytracker-parent-detail-qa.png`
-- Combined comparison evidence: `/tmp/studytracker-parent-detail-comparison.png`
-- Viewport: WeChat DevTools iPhone 12/13 simulator
-- State: parent guest demo, completed vocabulary dictation task
-
-The source is the existing parent report screen rather than a detail-screen mock. The comparison therefore checks design-system continuity and information hierarchy, not pixel identity between different screens.
-
-## Focused Region Evidence
-
-The combined comparison keeps the source overview card and the implementation result, summary, feedback, filters, and first word card legible. A separate crop was not needed.
-
-## Findings
-
-- No actionable P0, P1, or P2 findings remain.
-- Fonts and typography: the implementation preserves the source's bold section hierarchy, compact gray metadata, and large teal result number without clipping.
-- Spacing and layout rhythm: 28-30rpx page/card spacing, 24rpx radii, four-column metrics, and stacked white cards match the source density and remain readable on the simulator width.
-- Colors and visual tokens: pale green page background, white cards, teal emphasis, and restrained semantic status colors remain consistent with the parent report.
-- Image quality and asset fidelity: this state contains no decorative image assets; the UI does not substitute placeholders or generated artwork.
-- Copy and content: the first screen answers the parent's questions directly with assigned/tested/correct/review counts, mastery context, teacher feedback, filters, and word-level evidence.
-- Interaction states: filter controls, image preview, audio playback, retry, pull-to-refresh, and home-to-detail navigation are implemented. Automated API tests cover linked and unlinked parent access.
-
-## Patches Made During QA
-
-- Added a dedicated parent detail route instead of crowding the overview timeline.
-- Added task-type-aware summary metrics and result filters.
-- Added explicit pending-review treatment for subjective answers.
-- Added latest-attempt and spaced-review mastery context for vocabulary tasks.
-
-## Follow-up Polish
-
-- P3: a future exact detail-screen mock could refine the lower word-card density beyond the currently visible first viewport.
-
-final result: passed
+历史记录（已被本文件顶部本轮 QA 覆盖）：此前 Luna/矩阵专项视觉结论为 passed；本轮 exact viewport evidence gate 尚未完成。

@@ -18,6 +18,7 @@ def init_app(app):
     from api.mock_exam_review import mock_exam_review_bp  # 模考写作批改 / 学生复盘
     from api.practice_history import practice_history_bp
     from api.question_type_practice import question_type_practice_bp
+    from api.task_assignments import task_assignments_bp
     from api.reading_study import reading_study_bp  # Reading Study (阅读句子解析)
     from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
     from api.students import api_bp
@@ -34,6 +35,7 @@ def init_app(app):
     app.register_blueprint(mp_bp)
     app.register_blueprint(practice_history_bp)
     app.register_blueprint(question_type_practice_bp)
+    app.register_blueprint(task_assignments_bp)
     app.register_blueprint(material_bp)  # Register material bank
     app.register_blueprint(tts_bp)  # Register TTS
     app.register_blueprint(azure_tts_bp)  # Register Azure TTS

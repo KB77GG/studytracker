@@ -1,22 +1,19 @@
 {% extends "base.html" %}
-{% block page_subtitle %}Task Management{% endblock %}
-{% block page_title %}辅导任务记录{% endblock %}
+{% block page_subtitle %}TASKS{% endblock %}
+{% block page_title %}任务管理{% endblock %}
+{% block page_description %}布置、追踪并调整学生学习任务{% endblock %}
 {% block header_actions %}
-<div class="segmented-control">
-  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'week' else '' }}"
-    onclick="location.href='?period=week'">Week</button>
-  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'month' else '' }}"
-    onclick="location.href='?period=month'">Month</button>
-  <button type="button" class="segmented-control__btn {{ 'is-active' if period == 'year' else '' }}"
-    onclick="location.href='?period=year'">Year</button>
-</div>
-<a class="btn" href="{{ url_for('question_type_practice.teacher_index') }}">题型专项</a>
-<a class="btn" href="#taskForm">+ New Task</a>
+<label class="tasks-header-search" for="taskQuickSearch"><span>搜索任务</span><input id="taskQuickSearch" type="search" placeholder="学生、任务或类别"></label>
+<button class="tasks-header-alert" type="button" aria-label="查看提醒"><i class="far fa-bell" aria-hidden="true"></i>{% if pending_reviews %}<span>{{ pending_reviews|length }}</span>{% endif %}</button>
+<button class="btn btn-primary tasks-open-assignment" id="openTaskAssignment" type="button"><i class="fas fa-plus" aria-hidden="true"></i> 布置新任务</button>
 {% endblock %}
 {% block content %}{% endblock %}
 {% block content_dashboard %}
 {% set stats = stats or {"total":0,"completed":0,"total_minutes":0,"avg_accuracy":0} %}
 <section class="tasks-page">
+<details class="task-secondary-panel">
+  <summary><span><i class="fas fa-chart-line" aria-hidden="true"></i> 数据摘要与近期任务</span><span class="task-secondary-panel__hint">统计、Recent Tasks、Top Students</span></summary>
+  <div class="task-secondary-panel__body">
 <section class="stat-grid">
   <article class="stat-card">
     <p class="stat-label">Total Tasks</p>
@@ -103,16 +100,78 @@
     {% endif %}
   </div>
 </section>
+</div>
+</details>
 
 <section class="card-section task-workspace">
-  <div class="task-section-header">
-    <div>
-      <h2>任务记录与计时</h2>
-      <p>布置任务、跟踪计时、批改提交和更新完成率。</p>
-    </div>
-    <span class="task-count-pill">{{ items|length }} 条记录</span>
+  <nav class="task-period-tabs" aria-label="任务时间范围">
+    <a class="task-period-tab {{ 'is-active' if period == 'week' else '' }}" href="?period=week">本周<span>Week</span></a>
+    <a class="task-period-tab {{ 'is-active' if period == 'month' else '' }}" href="?period=month">本月<span>Month</span></a>
+    <a class="task-period-tab {{ 'is-active' if period == 'year' else '' }}" href="?period=year">本年<span>Year</span></a>
+    <span class="task-period-tabs__count">{{ items|length }} 条任务</span>
+  </nav>
+
+  <div class="task-date-strip" id="taskDateStrip" data-period="{{ period }}" data-start-date="{{ start_date.isoformat() }}" data-end-date="{{ today_obj.isoformat() }}" aria-label="按日期查看任务">
+    <button type="button" class="task-date-nav" data-date-shift="-1" aria-label="前一组日期"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+    <div class="task-date-choices" id="taskDateChoices"></div>
+    <button type="button" class="task-date-nav" data-date-shift="1" aria-label="后一组日期"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
   </div>
 
+  <div class="task-filter-bar" role="search" aria-label="筛选任务">
+    <label>学生<input id="filterStudent" placeholder="选择学生"></label>
+    <label>任务分类
+      <select id="filterCategory">
+        <option value="">全部分类</option>
+        <optgroup label="基础">
+          <option value="基础-四级词汇">四级词汇巩固</option>
+          <option value="基础-每日记忆计划">每日记忆计划</option>
+          <option value="基础-课堂抽查">课堂随机抽查</option>
+          <option value="基础-语法单选练习">语法单选练习</option>
+          <option value="基础-翻译句子练习">翻译句子练习</option>
+          <option value="基础-口语素材朗读">口语素材朗读</option>
+        </optgroup>
+        <optgroup label="雅思">
+          <option value="雅思-听力-精听">听力精听</option>
+          <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
+          <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
+          <option value="雅思-阅读-整套">阅读整套练习</option>
+          <option value="雅思-阅读-精读">阅读精读</option>
+          <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
+          <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
+          <option value="雅思-口语-常见题库问答">常见题库问答</option>
+          <option value="雅思-写作-句型与语法">句型与语法纠正</option>
+          <option value="雅思-写作-翻译句子">写作翻译句子</option>
+          <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+        </optgroup>
+        <optgroup label="托福">
+          <option value="托福-听力-精听">听力精听</option>
+          <option value="托福-听力-速记训练">速记关键信息训练</option>
+          <option value="托福-阅读-精读">阅读深度分析</option>
+          <option value="托福-阅读-词汇复述">专项词汇复述</option>
+          <option value="托福-口语-完整演练">口语全程对练</option>
+          <option value="托福-口语-模拟考试">口语模拟考试</option>
+          <option value="托福-写作-观点论据">写作观点-论据梳理</option>
+          <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
+          <option value="托福-语法-练习">语法单选练习</option>
+        </optgroup>
+      </select>
+    </label>
+    <label>状态
+      <select id="filterStatus">
+        <option value="">全部状态</option>
+        <option value="pending">未开始</option>
+        <option value="progress">进行中</option>
+        <option value="submitted">待批改</option>
+        <option value="done">已完成</option>
+      </select>
+    </label>
+    <label>截止日期<input id="filterDueDate" type="date"></label>
+    <button id="filterClear" type="button"><i class="fas fa-undo" aria-hidden="true"></i> 重置</button>
+    <span id="filterStat" aria-live="polite"></span>
+  </div>
+
+  <details class="task-secondary-tools">
+    <summary><span><i class="fas fa-sticky-note" aria-hidden="true"></i> 学生备忘录</span><span>课后安排与薄弱点</span></summary>
   <section class="student-memo-panel" id="studentMemoPanel" aria-labelledby="studentMemoTitle">
     <div class="student-memo-panel__header">
       <div>
@@ -141,9 +200,13 @@
       </div>
     </div>
   </section>
+  </details>
 
-  <form id="taskForm" class="task-form" method="post" action="{{ url_for('tasks_page') }}">
-    <div class="task-form-row">
+  <div id="taskDrawerBackdrop" class="task-drawer-backdrop" hidden></div>
+  <form id="taskForm" class="task-form task-assignment-drawer" method="post" action="{{ url_for('tasks_page') }}" aria-label="布置新任务">
+    <div class="task-assignment-drawer__header"><div><span class="drawer-kicker">NEW ASSIGNMENT</span><h3>布置新任务</h3><p>普通任务保持单学生体验；题型专项支持批量发布与重复检查。</p></div><button type="button" class="drawer-close" id="closeTaskAssignment" aria-label="关闭布置任务面板">关闭</button></div>
+    <div class="task-assignment-drawer__body">
+    <div class="task-form-row task-assignment-meta">
       <div class="field">
         <label for="taskDate">日期</label>
         <input id="taskDate" type="date" name="date" value="{{ today }}" required>
@@ -163,6 +226,16 @@
         </div>
         {% endif %}
         <small class="field-hint">可直接输入新学生姓名，也可输入拼音/姓名关键字筛选。</small>
+      </div>
+
+      <div class="field field--wide question-type-student-field" id="questionTypeStudentField" hidden>
+        <label>专项学生（可多选）</label>
+        <div class="question-type-student-list" id="questionTypeStudentList">
+          {% for option in student_picker_options %}
+          <label class="question-type-student-option"><input type="checkbox" name="question_type_student_names" value="{{ option.name }}"><span>{{ option.name }}</span></label>
+          {% endfor %}
+        </div>
+        <small class="field-hint">普通任务仍保持单学生；题型专项会按「学生 × 题组」检查历史。</small>
       </div>
 
       <!-- 任务来源切换 -->
@@ -185,6 +258,10 @@
             <input type="radio" name="task_source" value="reading" onchange="toggleTaskSource('reading')">
             <span>阅读题库</span>
           </label>
+          <label class="source-option source-option--specialty">
+            <input type="radio" name="task_source" value="question_type" onchange="toggleTaskSource('question_type')">
+            <span>题型专项</span>
+          </label>
         </div>
       </div>
     </div>
@@ -201,6 +278,34 @@
         <div class="previous-day-empty">选择学生后显示昨日任务。</div>
       </div>
       <div id="previousDayRepeatStatus" class="previous-day-repeat-status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="question-type-workspace" id="questionTypeWorkspace" hidden aria-labelledby="questionTypeWorkspaceTitle">
+      <div class="question-type-workspace__heading">
+        <div><span class="drawer-kicker">SPECIALTY PRACTICE</span><h3 id="questionTypeWorkspaceTitle">题型专项 · 冻结完整题组</h3><p>从真实题库生成 Question Group；发布时保存快照与 snapshot_hash。</p></div>
+        <a class="legacy-specialty-link" href="{{ url_for('question_type_practice.teacher_index') }}">旧版链接（自动转入此处）</a>
+      </div>
+      <div class="question-type-grid">
+        <label class="field"><span>科目</span><select id="taskQtaSubject"><option value="listening">听力</option><option value="reading">阅读</option></select></label>
+        <label class="field"><span>中文题型分类</span><select id="taskQtaType"></select></label>
+        <label class="field"><span>题库范围</span><select id="taskQtaScope"></select></label>
+        <label class="field"><span>完整 Question Group 数量</span><input id="taskQtaCount" type="number" min="1" max="20" value="2"></label>
+        <label class="field"><span>训练节奏</span><select id="taskQtaPace"><option value="training">训练节奏</option><option value="exam">考试节奏</option></select></label>
+        <label class="field"><span>建议 / 限时分钟</span><input id="taskQtaMinutes" type="number" min="1" max="180" value="25"></label>
+      </div>
+      <div class="question-type-actions"><button class="btn btn-secondary" id="taskQtaPreview" type="button">预览并运行安全检查</button><button class="btn btn-primary" id="taskQtaPublish" type="button" disabled>发布冻结快照</button></div>
+      <label class="question-type-repeat-toggle" id="taskQtaIncludeHistoryRow" hidden><input id="taskQtaIncludeHistory" type="checkbox"> 允许复训：将已布置题组重新纳入预览（发布时必须确认并填写原因）</label>
+      <div class="question-type-exclusion-notice" id="taskQtaExclusionNotice" role="status" aria-live="polite"></div>
+      <div class="question-type-status" id="taskQtaStatus" role="status" aria-live="polite"></div>
+      <div class="question-type-preview" id="taskQtaPreviewPanel" hidden>
+        <div class="question-type-preview__header"><div><strong>发布前预览</strong><span>可按完整 Question Group 移除；不会拆开题组。</span></div><span id="taskQtaPreviewSummary"></span></div>
+        <div class="question-type-groups" id="taskQtaGroups"></div>
+        <div class="question-type-history" id="taskQtaHistory" hidden></div>
+        <div class="question-type-repeat" id="taskQtaRepeat" hidden>
+          <label><input id="taskQtaConfirmRepeat" type="checkbox"> 我确认这是有意复训，并允许重复布置</label>
+          <input id="taskQtaForceReason" type="text" maxlength="500" placeholder="请填写复训原因（必填，例如：错题完整组复训）">
+        </div>
+      </div>
     </section>
 
     <!-- 精听练习选择区域 (默认隐藏) -->
@@ -455,7 +560,13 @@
         </select>
       </div>
     </div>
-    <div class="task-form-row">
+    <div class="assignment-duplicate-status" id="assignmentDuplicateStatus" role="status" aria-live="polite"></div>
+    <div class="legacy-repeat-controls" id="legacyRepeatControls" hidden>
+      <label><input type="checkbox" name="confirm_repeat" value="1"> 我确认这是有意复训，并允许重复布置</label>
+      <input type="text" name="force_reason" maxlength="500" placeholder="检测到重复，请填写复训原因">
+    </div>
+    </div>
+    <div class="task-form-row task-form-row--publish">
       <div class="field">
         <label for="taskPlanned">预计用时（分钟）</label>
         <input id="taskPlanned" type="number" name="planned_minutes" min="0" placeholder="例如 45">
@@ -471,210 +582,126 @@
     <input id="taskDetail" type="hidden" name="detail" value="">
     <input type="hidden" name="speaking_phrase_start" value="1">
     <input type="hidden" name="speaking_phrase_end" value="">
+    <input type="hidden" name="idempotency_key" id="taskIdempotencyKey" value="">
   </form>
 
-  <details class="filter-panel" open>
-    <summary>筛选任务</summary>
-    <div class="filter-content">
-      <label>学生
-        <input id="filterStudent" placeholder="输入学生姓名的一部分">
-      </label>
-      <label>类别
-        <select id="filterCategory">
-          <option value="">全部</option>
-          <optgroup label="基础">
-            <option value="基础-四级词汇">四级词汇巩固</option>
-            <option value="基础-每日记忆计划">每日记忆计划</option>
-            <option value="基础-课堂抽查">课堂随机抽查</option>
-            <option value="基础-语法单选练习">语法单选练习</option>
-            <option value="基础-翻译句子练习">翻译句子练习</option>
-            <option value="基础-口语素材朗读">口语素材朗读</option>
-          </optgroup>
-          <optgroup label="雅思">
-            <option value="雅思-听力-精听">听力精听</option>
-            <option value="雅思-听力-听写跟读">精听短篇（听写→跟读）</option>
-            <option value="雅思-听力-单词807">听力词汇 807 背诵</option>
-            <option value="雅思-阅读-整套">阅读整套练习</option>
-            <option value="雅思-阅读-精读">阅读精读</option>
-            <option value="雅思-阅读-词汇巩固">阅读词汇巩固</option>
-            <option value="雅思-口语-Part1对练">口语 Part1 对练</option>
-            <option value="雅思-口语-常见题库问答">常见题库问答</option>
-            <option value="雅思-写作-句型与语法">句型与语法纠正</option>
-            <option value="雅思-写作-翻译句子">写作翻译句子</option>
-            <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
-          </optgroup>
-          <optgroup label="托福">
-            <option value="托福-听力-精听">听力精听</option>
-            <option value="托福-听力-速记训练">速记关键信息训练</option>
-            <option value="托福-阅读-精读">阅读深度分析</option>
-            <option value="托福-阅读-词汇复述">专项词汇复述</option>
-            <option value="托福-口语-完整演练">口语全程对练</option>
-            <option value="托福-口语-模拟考试">口语模拟考试</option>
-            <option value="托福-写作-观点论据">写作观点-论据梳理</option>
-            <option value="托福-写作-逻辑链">写作逻辑链扩展</option>
-            <option value="托福-语法-练习">语法单选练习</option>
-          </optgroup>
-        </select>
-      </label>
-      <label>状态
-        <select id="filterStatus">
-          <option value="">全部</option>
-          <option value="pending">未开始</option>
-          <option value="progress">进行中</option>
-          <option value="done">已完成</option>
-        </select>
-      </label>
-      <button id="filterClear" type="button">清除筛选</button>
-      <span id="filterStat"></span>
-    </div>
-  </details>
-
-  {% set grouped = items|sort(attribute='student_name')|groupby('student_name') %}
-  <div class="task-accordion">
-    {% for group in grouped %}
-    {% set student = group.grouper|default('未填写学生', true) %}
-    {% set memo_payload = student_memos.get(student) %}
-    {% set memo_text = memo_payload.memo if memo_payload else '' %}
-    <details class="student-group" data-student="{{ student }}" {% if loop.first %}open{% endif %}>
-      <summary>
-        <span class="student-name">{{ student }}</span>
-        <span class="student-summary">
-          <span class="student-count">任务数 {{ group.list|length }}</span>
-        </span>
-      </summary>
-      <div class="student-group-memo {{ 'is-empty' if not memo_text else '' }}">
-        <div class="student-group-memo__head">
-          <span>课后安排备忘录</span>
-          {% if memo_payload %}
-          <button type="button" class="student-memo-jump" data-memo-student="{{ student }}">{{ '编辑' if memo_text else '填写' }}</button>
-          {% endif %}
-        </div>
-        <div class="student-group-memo__body">{{ memo_text or '暂无备忘录' }}</div>
-      </div>
-      <div class="student-tasks">
-        <table class="task-table task-subtable">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>日期</th>
-              <th>类别</th>
-              <th>任务</th>
-              <th>状态</th>
-              <th>证据</th>
-              <th>用时</th>
-              <th>完成率</th>
-              <th>正确率</th>
-              <th>备注</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for t in group.list %}
-            <tr data-id="{{ t.id }}" data-student="{{ student }}" data-planned="{{ t.planned_minutes or 0 }}"
-              data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}"
-              data-completion="{{ '%.1f'|format(t.completion_rate) if t.completion_rate is not none else '' }}"
-              data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}"
-              data-session-id="{{ t.session_id or '' }}" data-session-start="{{ t.session_start or '' }}">
-              <td class="task-id">{{ t.id }}</td>
-              <td class="task-date">{{ t.date }}</td>
-              <td class="task-category">{{ t.category }}</td>
-              <td class="task-detail">{{ t.detail }}</td>
-              <td>
-                <span
-                  class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else ('status-submitted' if t.status=='submitted' else 'status-done')) }}">{{
-                  "未开始" if t.status=="pending" else ("进行中" if t.status=="progress" else ("待批改" if t.status=="submitted" else "已完成")) }}</span>
-              </td>
-              <td class="task-evidence">
-                {% if t.evidence_photos %}
-                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                  {% for photo_url in t.evidence_photos %}
-                  {% set full_url = photo_url if photo_url.startswith('http') else ('https://studytracker.xin' +
-                  photo_url) %}
-                  <a href="{{ full_url }}" target="_blank" rel="noopener">
-                    <img src="{{ full_url }}" alt="证据"
-                      style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid #ddd;">
-                  </a>
-                  {% endfor %}
-                </div>
-                {% elif t.student_note %}
-                <span class="muted" style="font-size: 0.85em;">{{ t.student_note[:20] }}...</span>
-                {% else %}
-                <span class="muted">无</span>
-                {% endif %}
-              </td>
-              <td class="task-time">计划:{{ t.planned_minutes or 0 }} 分 ｜ 实际:{{ '%.1f'|format(t.actual_minutes or 0) }} 分
-              </td>
-              {% set manual_completion = t.completion_rate %}
-              {% set display_completion = manual_completion if manual_completion is not none else (t.progress if
-              t.progress is defined else 0) %}
-              <td class="task-progress" data-auto="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
-                <div class="percent-input">
-                  <input type="number" class="progress-input" value="{{ '%.1f'|format(display_completion or 0) }}"
-                    min="0" max="100" step="0.1" aria-label="完成率">
-                  <span class="progress-suffix">%</span>
-                </div>
-                {% if t.planned_minutes %}
-                <div class="progress-hint">计时：{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}%</div>
-                {% endif %}
-              </td>
-              <td class="task-accuracy">
-                <div class="percent-input">
-                  <input type="number" class="accuracy-input" value="{{ '%.1f'|format(t.accuracy or 0) }}" min="0"
-                    max="100" step="0.1" aria-label="正确率">
-                  <span class="accuracy-suffix">%</span>
-                </div>
-                {% if t.listening_test %}
-                <div class="progress-hint">
-                  原始分 {{ t.listening_test.correct_count }}/{{ t.listening_test.total_count }} · IELTS {{ t.listening_test.ielts_score }}
-                </div>
-                {% elif t.reading_test %}
-                <div class="progress-hint">
-                  阅读原始分 {{ t.reading_test.correct_count }}/{{ t.reading_test.total_count }} · IELTS {{ t.reading_test.ielts_score }}
-                </div>
-                {% endif %}
-              </td>
-              <td class="task-note">{{ t.note }}</td>
-              <td>
-                <select class="status-select">
-                  <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
-                  <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
-                  <option value="submitted" {{ 'selected' if t.status=='submitted' else '' }}>待批改</option>
-                  <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
-                </select>
-                <span class="timer" aria-label="计时" title="计时">00:00:00</span>
-                <button class="btn-start" type="button">开始计时</button>
-                <button class="btn-pause" type="button" style="display:none;">暂停</button>
-                <button class="btn-stop" type="button" style="display:none;">结束</button>
-                <div class="task-actions">
-                  {% if t.listening_exercise_id %}
-                  <a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开虾滑题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>
-                  {% endif %}
-                  {% if t.reading_test_id and t.reading_url %}
-                  <a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>
-                  {% endif %}
-                  {% if t.question_type_url %}
-                  <a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>
-                  {% endif %}
-                  {% if t.question_type_result_url %}
-                  <a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>
-                  {% endif %}
-                  {% if t.listening_test or t.reading_test %}
-                  <button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>
-                  {% endif %}
-                  {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}
-                  <a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>
-                  {% endif %}
-                  <button class="btn-edit" type="button" onclick="handleEditClick(event)">编辑</button>
-                  <button class="btn-delete" type="button">删除</button>
-                </div>
-              </td>
-            </tr>
+  <div class="task-list-inspector">
+  <div class="task-list-column">
+  <div class="task-list-toolbar">
+    <div><span class="task-list-toolbar__eyebrow">ASSIGNMENTS</span><h2>任务列表</h2></div>
+    <span class="task-count-pill">{{ items|length }} 条任务</span>
+  </div>
+  <table class="task-table task-subtable">
+    <thead>
+      <tr>
+        <th class="task-id">ID</th>
+        <th class="task-student">学生</th>
+        <th class="task-category">任务类型</th>
+        <th class="task-detail">任务内容</th>
+        <th class="task-time">计划时间</th>
+        <th class="task-status">进度 / 状态</th>
+        <th class="task-deadline">截止日期</th>
+        <th class="task-date">计划日期</th>
+        <th class="task-evidence">证据</th>
+        <th class="task-progress">完成率</th>
+        <th class="task-accuracy">正确率</th>
+        <th class="task-note">备注</th>
+        <th class="task-controls">操作</th>
+      </tr>
+    </thead>
+    <tbody id="taskRows">
+      {% for t in items %}
+      {% set student = t.student_name|default('未填写学生', true) %}
+      {% set manual_completion = t.completion_rate %}
+      {% set display_completion = manual_completion if manual_completion is not none else (t.progress if t.progress is defined else 0) %}
+      {% set status_label = '未开始' if t.status == 'pending' else ('进行中' if t.status == 'progress' else ('待批改' if t.status == 'submitted' else '已完成')) %}
+      {% set category_icon = 'fa-headphones' if '听力' in t.category else ('fa-book-open' if '阅读' in t.category else ('fa-spell-check' if '词' in t.category else ('fa-pen-nib' if '写作' in t.category else ('fa-microphone' if '口语' in t.category else 'fa-tasks')))) %}
+      <tr data-id="{{ t.id }}" data-student="{{ student }}" data-date="{{ t.date }}" data-planned="{{ t.planned_minutes or 0 }}"
+        data-actual="{{ (t.actual_minutes * 60)|int if t.actual_minutes is defined else 0 }}"
+        data-completion="{{ '%.1f'|format(t.completion_rate) if t.completion_rate is not none else '' }}"
+        data-auto-progress="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}"
+        data-session-id="{{ t.session_id or '' }}" data-session-start="{{ t.session_start or '' }}">
+        <td class="task-id">{{ t.id }}</td>
+        <td class="task-student">
+          <div class="task-student__identity">
+            <span class="task-student__avatar" aria-hidden="true">{{ student[:1] }}</span>
+            <span class="task-student__names"><strong>{{ student }}</strong><small>Student · 学员</small></span>
+          </div>
+        </td>
+        <td class="task-category"><span class="task-category__icon" aria-hidden="true"><i class="fas {{ category_icon }}"></i></span><span>{{ t.category }}</span></td>
+        <td class="task-detail"><strong class="task-detail__title">{{ t.detail }}</strong><small class="task-detail__range">{{ t.note or '按计划完成并提交' }}</small></td>
+        <td class="task-time"><span class="task-time__planned">{{ t.planned_minutes or 0 }} 分钟</span><small class="task-time__actual">实际 {{ '%.1f'|format(t.actual_minutes or 0) }} 分钟</small></td>
+        <td class="task-status">
+          <div class="task-status__line"><span class="badge {{ 'status-pending' if t.status=='pending' else ('status-progress' if t.status=='progress' else ('status-submitted' if t.status=='submitted' else 'status-done')) }}"><i class="task-status__dot" aria-hidden="true"></i>{{ status_label }}</span><span class="task-status__percent">{{ '%.0f'|format(display_completion or 0) }}%</span></div>
+          <div class="task-progress-bar" aria-label="完成 {{ '%.0f'|format(display_completion or 0) }}%"><span style="width: {{ display_completion or 0 }}%"></span></div>
+        </td>
+        <td class="task-deadline"><strong>{{ t.date }}</strong><small>{% if t.date == today_obj.isoformat() %}今天{% elif t.date < today_obj.isoformat() %}已过期{% else %}计划{% endif %}</small></td>
+        <td class="task-date">{{ t.date }}</td>
+        <td class="task-evidence">
+          {% if t.evidence_photos %}
+          <div class="task-evidence__items">
+            {% for photo_url in t.evidence_photos %}
+            {% set full_url = photo_url if photo_url.startswith('http') else ('https://studytracker.xin' + photo_url) %}
+            <a href="{{ full_url }}" target="_blank" rel="noopener"><img src="{{ full_url }}" alt="证据"></a>
             {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </details>
-    {% endfor %}
+          </div>
+          {% elif t.student_note %}<span>{{ t.student_note[:20] }}...</span>
+          {% else %}<span class="muted">无</span>{% endif %}
+        </td>
+        <td class="task-progress" data-auto="{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}">
+          <div class="percent-input"><input type="number" class="progress-input" value="{{ '%.1f'|format(display_completion or 0) }}" min="0" max="100" step="0.1" aria-label="完成率"><span class="progress-suffix">%</span></div>
+          {% if t.planned_minutes %}<div class="progress-hint">计时：{{ '%.1f'|format(t.progress) if t.progress is defined else '0.0' }}%</div>{% endif %}
+        </td>
+        <td class="task-accuracy">
+          <div class="percent-input"><input type="number" class="accuracy-input" value="{{ '%.1f'|format(t.accuracy or 0) }}" min="0" max="100" step="0.1" aria-label="正确率"><span class="accuracy-suffix">%</span></div>
+          {% if t.listening_test %}<div class="progress-hint">原始分 {{ t.listening_test.correct_count }}/{{ t.listening_test.total_count }} · IELTS {{ t.listening_test.ielts_score }}</div>{% elif t.reading_test %}<div class="progress-hint">阅读原始分 {{ t.reading_test.correct_count }}/{{ t.reading_test.total_count }} · IELTS {{ t.reading_test.ielts_score }}</div>{% endif %}
+        </td>
+        <td class="task-note">{{ t.note }}</td>
+        <td class="task-controls">
+          <select class="status-select">
+            <option value="pending" {{ 'selected' if t.status=='pending' else '' }}>未开始</option>
+            <option value="progress" {{ 'selected' if t.status=='progress' else '' }}>进行中</option>
+            <option value="submitted" {{ 'selected' if t.status=='submitted' else '' }}>待批改</option>
+            <option value="done" {{ 'selected' if t.status=='done' else '' }}>已完成</option>
+          </select>
+          <span class="timer" aria-label="计时" title="计时">00:00:00</span>
+          <button class="btn-start" type="button">开始计时</button><button class="btn-pause" type="button" style="display:none;">暂停</button><button class="btn-stop" type="button" style="display:none;">结束</button>
+          <div class="task-actions">
+            {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开虾滑题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
+            {% if t.reading_test_id and t.reading_url %}<a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>{% endif %}
+            {% if t.question_type_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>{% endif %}
+            {% if t.question_type_result_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>{% endif %}
+            {% if t.listening_test or t.reading_test %}<button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>{% endif %}
+            {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}<a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>{% endif %}
+            <button class="btn-edit" type="button" onclick="handleEditClick(event)">编辑</button><button class="btn-delete" type="button">删除</button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="task-list-footer"><span id="taskListCount">共 {{ items|length }} 条任务</span><div class="task-pagination" aria-label="任务分页"><button id="taskPrevPage" type="button" disabled aria-label="上一页"><i class="fas fa-chevron-left"></i></button><span id="taskPageNumbers"></span><button id="taskNextPage" type="button" disabled aria-label="下一页"><i class="fas fa-chevron-right"></i></button></div><label>每页 <select id="taskPageSize"><option>10</option><option>25</option><option>50</option></select></label></div>
+
+  </div>
+  <aside class="task-inspector" id="taskInspector" aria-live="polite">
+    <div class="task-inspector__header">
+      <div class="task-inspector__identity"><span class="task-inspector__icon" aria-hidden="true"><i class="fas fa-clipboard-list"></i></span><div><div class="task-inspector__eyebrow">TASK INSPECTOR</div><span class="task-inspector__source" id="taskInspectorSource">任务详情</span></div></div>
+      <button class="task-inspector__close" type="button" aria-label="收起任务详情"><i class="fas fa-times" aria-hidden="true"></i></button>
+    </div>
+    <div class="task-inspector__heading"><h3 id="taskInspectorTitle">选择一条任务</h3><div class="task-inspector__status" id="taskInspectorStatus">—</div></div>
+    <p class="task-inspector__muted" id="taskInspectorStudent">从左侧任务列表查看详细状态。</p>
+    <div class="task-inspector__body">
+    <section class="task-inspector__section"><h4>来源与布置时间</h4><dl class="task-inspector__facts"><div><dt>任务类型</dt><dd id="taskInspectorCategory">—</dd></div><div><dt>计划日期</dt><dd id="taskInspectorDate">—</dd></div></dl></section>
+    <section class="task-inspector__section"><h4>学生与适用范围</h4><p class="task-inspector__value" id="taskInspectorScope">—</p></section>
+    <section class="task-inspector__section"><h4>计划时间与截止日期</h4><dl class="task-inspector__facts"><div><dt>计划用时</dt><dd id="taskInspectorMinutes">—</dd></div><div><dt>截止日期</dt><dd id="taskInspectorDeadline">—</dd></div></dl></section>
+    <section class="task-inspector__section task-inspector__evidence"><h4>完成证据</h4><div class="task-inspector__progress-line"><span>当前进度</span><strong id="taskInspectorProgressValue">—</strong></div><div class="task-progress-bar task-progress-bar--inspector"><span id="taskInspectorProgressBar"></span></div><p id="taskInspectorEvidence" class="task-inspector__muted">—</p><p class="task-inspector__submission"><span>提交方式</span><strong id="taskInspectorSubmission">—</strong></p><p class="task-inspector__submission"><span>完成率 / 正确率</span><strong id="taskInspectorScores">—</strong></p></section>
+    <section class="task-inspector__section"><h4>教师备注</h4><p class="task-inspector__note" id="taskInspectorNote">—</p></section>
+    <section class="task-inspector__section"><h4>时间线</h4><ol class="task-inspector__timeline" id="taskInspectorTimeline"><li>选择任务后显示时间线</li></ol></section>
+    </div>
+    <section class="task-inspector__controls" aria-label="任务状态和计时控制"><label>更新状态<select id="taskInspectorStatusSelect"><option value="pending">未开始</option><option value="progress">进行中</option><option value="submitted">待批改</option><option value="done">已完成</option></select></label><div class="task-inspector__timer"><span id="taskInspectorTimer">00:00:00</span><div><button id="taskInspectorTimerStart" type="button">开始计时</button><button id="taskInspectorTimerPause" type="button" hidden>暂停</button><button id="taskInspectorTimerStop" type="button" hidden>结束</button></div></div></section>
+    <div class="task-inspector__actions"><button id="taskInspectorEdit" class="btn btn-primary" type="button"><i class="fas fa-pen" aria-hidden="true"></i> 调整任务</button><a id="taskInspectorProgress" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fas fa-chart-line" aria-hidden="true"></i> 查看学生进度</a><a id="taskInspectorOpen" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt" aria-hidden="true"></i> 打开学生任务</a></div>
+    <details class="task-inspector__more"><summary><i class="fas fa-ellipsis-h" aria-hidden="true"></i> 更多操作</summary><div id="taskInspectorMoreActions" class="task-inspector__more-actions"><p>选择任务后显示打开学生任务、复制、批改、学习轨迹和删除。</p></div></details>
+  </aside>
   </div>
 
   <!-- 待审核提交 -->
@@ -2728,6 +2755,196 @@
 	      }
 	    }
 	  </style>
+  <style>
+    /* Direction 2 task shell: ink navigation, ivory canvas, sage actions. */
+    body:has(.tasks-page), body:has(.tasks-page) .main-panel { background: #f7f3eb; }
+    body:has(.tasks-page) .sidebar { background: #132a36; border-right-color: #132a36; color: #f7f3eb; }
+    body:has(.tasks-page) .brand-title, body:has(.tasks-page) .brand-sub,
+    body:has(.tasks-page) .nav-label, body:has(.tasks-page) .nav-link { color: #f7f3eb; }
+    body:has(.tasks-page) .brand-icon { background: #278a78; }
+    body:has(.tasks-page) .nav-link:hover { background: rgba(39, 138, 120, .24); }
+    body:has(.tasks-page) .nav-link.is-active { background: #278a78; color: #fff; }
+    body:has(.tasks-page) .sidebar__user { background: rgba(255,255,255,.08); }
+    body:has(.tasks-page) .main-header { padding-top: 26px; }
+    .tasks-header-search { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 11px; border: 1px solid #d7d0c5; border-radius: 8px; background: rgba(255,255,255,.72); color: #66736f; font-size: 12px; font-weight: 800; }
+    .tasks-header-search input { width: 170px; border: 0; outline: 0; background: transparent; color: #132a36; font-size: 13px; }
+    .tasks-open-assignment, .question-type-actions .btn-primary { background: #278a78 !important; border-color: #278a78 !important; color: #fff !important; }
+    .tasks-open-assignment:hover, .question-type-actions .btn-primary:hover { background: #1e6f61 !important; }
+    .tasks-page .stat-card, .tasks-page .card-section, .tasks-page .task-review-panel, .tasks-page .student-group { border-color: #e4ddd2; background: #fffdf9; }
+    .tasks-page .stat-grid { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+    .tasks-page .task-overview { grid-template-columns: minmax(0, 1.35fr) minmax(250px, .8fr); }
+    .tasks-page .task-workspace { background: transparent; border: 0; box-shadow: none; overflow: visible; }
+    .tasks-page { display: flex; flex-direction: column; min-width: 0; }
+    .tasks-page .task-workspace { order: -1; display: flex; flex-direction: column; min-width: 0; }
+    body:has(.tasks-page) .header-actions { min-width: 0; overflow-x: hidden; }
+    .tasks-page .task-workspace > .task-section-header { order: -4; }
+    .task-period-strip { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 12px; margin: 0 16px 12px; padding: 10px 14px; border: 1px solid #e4ddd2; border-radius: 8px; background: rgba(255,253,249,.8); color: #132a36; }
+    .task-period-strip__label { color: #278a78; font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .task-period-strip strong { font-size: 13px; }
+    .task-period-strip__hint { color: #66736f; font-size: 12px; }
+    .tasks-page .task-workspace > .task-period-strip { order: -3; }
+    .tasks-page .task-workspace > .filter-panel { order: -3; }
+    .tasks-page .task-workspace > .task-list-inspector { order: -2; }
+    .tasks-page .task-workspace > .student-memo-panel { order: 2; }
+    .tasks-page .task-workspace > .task-review-panel,
+    .tasks-page .task-workspace > .previous-day-panel { order: 3; }
+    .tasks-page .task-section-header { padding-left: 0; padding-right: 0; background: transparent; border-bottom: 0; }
+    .tasks-page .task-section-header h2 { font-size: 21px; }
+    .task-list-inspector { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 320px); gap: 16px; align-items: start; margin: 0 16px 16px; }
+    .task-list-column { min-width: 0; }
+    .task-list-inspector .task-accordion { margin: 0; }
+    .task-inspector { position: sticky; top: 18px; min-width: 0; padding: 18px; border: 1px solid #ddd4c7; border-radius: 10px; background: #fffdf9; box-shadow: 0 8px 24px rgba(19,42,54,.06); }
+    .task-inspector__eyebrow { color: #278a78; font-size: 10px; font-weight: 900; letter-spacing: .13em; }
+    .task-inspector h3 { margin: 7px 0 3px; color: #132a36; font-size: 18px; overflow-wrap: anywhere; }
+    .task-inspector__muted { margin: 0; color: #66736f; font-size: 12px; line-height: 1.5; }
+    .task-inspector__status { display: inline-flex; margin: 14px 0 10px; padding: 5px 9px; border-radius: 999px; background: #e6f5f2; color: #1e6f61; font-size: 12px; font-weight: 850; }
+    .task-inspector__facts { display: grid; gap: 10px; margin: 0; }
+    .task-inspector__facts div { display: grid; gap: 3px; padding-bottom: 9px; border-bottom: 1px solid #eee7dd; }
+    .task-inspector__facts dt { color: #66736f; font-size: 11px; font-weight: 800; }
+    .task-inspector__facts dd { margin: 0; color: #132a36; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+    .task-inspector__actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .task-inspector__actions .btn { min-height: 34px; padding: 7px 10px; border-radius: 7px; font-size: 12px; font-weight: 800; }
+    .task-inspector__actions .btn-primary { border-color: #278a78; background: #278a78; color: #fff; }
+    .task-inspector__actions .btn-secondary { border: 1px solid #d7d0c5; background: transparent; color: #1e6f61; }
+    .task-inspector__more { margin-top: 16px; color: #66736f; font-size: 11px; }
+    .task-inspector__more summary { cursor: pointer; color: #1e6f61; font-weight: 800; }
+    .task-inspector__more p { line-height: 1.5; }
+    .task-inspector__more-actions { display: grid; gap: 7px; margin-top: 10px; }
+    .task-inspector-action, .task-inspector__more-actions a { display: block; width: 100%; padding: 7px 9px; border: 1px solid #d7d0c5; border-radius: 7px; background: #fff; color: #1e6f61; font-size: 11px; font-weight: 800; text-align: left; text-decoration: none; cursor: pointer; }
+    .task-drawer-backdrop { position: fixed; inset: 0; z-index: 70; background: rgba(19, 42, 54, .28); backdrop-filter: blur(2px); }
+    .task-assignment-drawer { display: none; position: fixed; z-index: 80; top: 0; right: 0; bottom: 0; width: min(720px, calc(100vw - 16px)); max-width: 100%; height: 100vh; margin: 0 !important; padding: 0 22px 28px; overflow-x: hidden; overflow-y: auto; flex-wrap: nowrap !important; border: 0 !important; border-left: 1px solid #ddd4c7 !important; border-radius: 0 !important; background: #fffdf9 !important; box-shadow: -20px 0 48px rgba(19,42,54,.16) !important; }
+    .task-assignment-drawer:not(.is-open) { display: none !important; }
+    .task-assignment-drawer.is-open { display: flex; }
+    .task-assignment-drawer__header { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin: 0 -22px 8px; padding: 24px 22px 18px; border-bottom: 1px solid #e4ddd2; background: rgba(255,253,249,.96); }
+    .task-assignment-drawer__header h3 { margin: 3px 0 4px; color: #132a36; font-size: 22px; }
+    .task-assignment-drawer__header p { margin: 0; color: #66736f; font-size: 12px; line-height: 1.5; }
+    .drawer-kicker { color: #278a78; font-size: 10px; font-weight: 900; letter-spacing: .14em; }
+    .drawer-close { min-height: 34px; padding: 6px 10px; border: 1px solid #d7d0c5; border-radius: 7px; background: transparent; color: #66736f; font-weight: 800; cursor: pointer; }
+    .drawer-close:hover { border-color: #278a78; color: #1e6f61; }
+    .task-assignment-drawer .task-form-row { flex-direction: column; }
+    .task-assignment-drawer > .task-form-row:nth-child(2) { flex-direction: row; }
+    .task-assignment-drawer > .task-form-row:nth-child(2) > .field { flex: 1 1 220px; }
+    .task-assignment-drawer > .task-form-row:nth-child(2) > .field--wide { flex-basis: 100%; }
+    .task-assignment-drawer .task-form-row:last-of-type { flex-direction: row; align-items: end; }
+    .task-assignment-drawer .field--action { flex: 0 0 auto; }
+    .question-type-student-field[hidden], .question-type-workspace[hidden] { display: none !important; }
+    .question-type-student-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; max-height: 160px; overflow: auto; padding: 2px; }
+    .question-type-student-option { display: flex !important; flex-direction: row !important; align-items: center; gap: 7px; min-height: 36px; padding: 7px 9px; border: 1px solid #e4ddd2; border-radius: 7px; background: #fff; color: #132a36 !important; cursor: pointer; }
+    .question-type-student-option:has(input:checked) { border-color: #278a78; background: #eef8f4; color: #1e6f61 !important; }
+    .question-type-workspace { display: grid; gap: 14px; padding: 16px; border: 1px solid #cfe2dc; border-radius: 10px; background: #f3faf7; }
+    .question-type-workspace__heading { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+    .question-type-workspace__heading h3 { margin: 4px 0; color: #132a36; font-size: 17px; }
+    .question-type-workspace__heading p, .legacy-specialty-link { margin: 0; color: #66736f; font-size: 12px; line-height: 1.5; }
+    .legacy-specialty-link { flex: 0 0 auto; color: #1e6f61; font-weight: 800; text-decoration: underline; }
+    .question-type-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .question-type-grid .field { min-width: 0; }
+    .question-type-grid .field > span { color: #66736f; font-size: 11px; font-weight: 800; }
+    .question-type-grid input, .question-type-grid select, .question-type-repeat input { width: 100%; min-height: 36px; padding: 7px 9px; border: 1px solid #d5e1dc; border-radius: 7px; background: #fff; color: #132a36; }
+    .question-type-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .question-type-actions .btn { min-height: 36px; border-radius: 7px; font-weight: 800; }
+    .question-type-repeat-toggle { display: flex; gap: 7px; align-items: flex-start; color: #805b13; font-size: 12px; line-height: 1.45; }
+    .question-type-repeat-toggle input { margin-top: 2px; }
+    .question-type-exclusion-notice { min-height: 18px; color: #66736f; font-size: 12px; line-height: 1.45; }
+    .question-type-status { min-height: 20px; color: #1e6f61; font-size: 12px; font-weight: 800; }
+    .question-type-status.is-error { color: #a33a2b; }
+    .question-type-preview { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid #d5e8e1; }
+    .question-type-preview__header { display: flex; justify-content: space-between; gap: 10px; color: #132a36; font-size: 13px; }
+    .question-type-preview__header div { display: grid; gap: 3px; }
+    .question-type-preview__header span { color: #66736f; font-size: 11px; }
+    .question-type-groups { display: grid; gap: 8px; }
+    .question-type-group { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; padding: 10px; border: 1px solid #d8e6e1; border-radius: 8px; background: #fff; }
+    .question-type-group strong { color: #132a36; font-size: 12px; }
+    .question-type-group small { display: block; margin-top: 4px; color: #66736f; font-size: 11px; line-height: 1.45; }
+    .question-type-group button { align-self: start; border: 1px solid #e3b6af; border-radius: 6px; background: #fff8f6; color: #a33a2b; padding: 5px 7px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .question-type-history { display: grid; gap: 7px; }
+    .history-student-result { padding: 9px 10px; border-left: 3px solid #278a78; background: #fff; color: #132a36; font-size: 12px; }
+    .history-student-result.is-warning { border-left-color: #d38a25; }
+    .history-student-result.is-blocking { border-left-color: #b64a3d; background: #fff8f6; }
+    .history-student-result > div { display: flex; justify-content: space-between; gap: 8px; }
+    .history-student-result small { display: block; margin-top: 5px; color: #66736f; line-height: 1.45; }
+    .history-student-result a { color: #1e6f61; font-weight: 800; }
+    .question-type-repeat { display: grid; gap: 8px; padding: 10px; border: 1px solid #e1bb70; border-radius: 8px; background: #fff9e9; color: #805b13; font-size: 12px; }
+    .question-type-repeat label { display: flex; align-items: center; gap: 7px; }
+    .question-type-repeat input[type="checkbox"] { width: auto; min-height: auto; }
+    .assignment-duplicate-status { min-height: 20px; color: #66736f; font-size: 12px; }
+    .task-assignment-drawer .assignment-duplicate-status { margin-top: -4px; }
+    .assignment-duplicate-status.is-warning { color: #805b13; }
+    .assignment-duplicate-status.is-error { color: #a33a2b; }
+    .legacy-repeat-controls { display: grid; gap: 8px; padding: 9px 10px; border: 1px solid #e1bb70; border-radius: 8px; background: #fff9e9; color: #805b13; font-size: 12px; }
+    .legacy-repeat-controls label { display: flex; align-items: center; gap: 7px; }
+    .legacy-repeat-controls input[type="text"] { min-height: 34px; padding: 6px 8px; border: 1px solid #e5d4a5; border-radius: 6px; }
+    .task-subtable { min-width: 0; table-layout: fixed; }
+    .task-subtable th:nth-child(1), .task-subtable td:nth-child(1), .task-subtable th:nth-child(6), .task-subtable td:nth-child(6), .task-subtable th:nth-child(8), .task-subtable td:nth-child(8), .task-subtable th:nth-child(9), .task-subtable td:nth-child(9), .task-subtable th:nth-child(10), .task-subtable td:nth-child(10) { display: none; }
+    .task-subtable th:nth-child(2) { width: 86px; }
+    .task-subtable th:nth-child(3) { width: 120px; }
+    .task-subtable th:nth-child(5) { width: 78px; }
+    .task-subtable th:nth-child(7), .task-subtable th:nth-child(8), .task-subtable th:nth-child(9) { width: 92px; }
+    .task-subtable th:nth-child(11) { width: 132px; }
+    .task-subtable .task-actions { display: none; }
+    .student-tasks { max-width: 100%; overflow-x: auto; }
+    .task-subtable td { overflow-wrap: anywhere; }
+    .task-subtable tbody tr.is-selected td { background: #eef8f4; }
+    @media (max-width: 900px) {
+      .tasks-header-search { order: 3; width: 100%; }
+      .tasks-header-search input { flex: 1; width: auto; }
+      .tasks-page .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tasks-page .task-overview { grid-template-columns: minmax(0, 1fr); }
+      .question-type-workspace__heading { flex-direction: column; }
+      .task-subtable th:nth-child(7), .task-subtable td:nth-child(7) { display: none; }
+      .task-list-inspector { grid-template-columns: minmax(0, 1fr); margin-left: 12px; margin-right: 12px; }
+      .task-inspector { position: static; }
+      .task-period-strip { margin-left: 12px; margin-right: 12px; }
+      .task-subtable th:nth-child(11) { width: 116px; }
+    }
+    @media (max-width: 600px) {
+      body:has(.tasks-page) .header-actions { flex-wrap: wrap; overflow-x: hidden; }
+      .tasks-page .stat-grid { grid-template-columns: minmax(0, 1fr); }
+      .question-type-grid { grid-template-columns: 1fr; }
+      .question-type-student-list { grid-template-columns: 1fr; }
+      .task-assignment-drawer { padding-left: 14px; padding-right: 14px; }
+      .task-assignment-drawer__header { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
+      .task-assignment-drawer > .task-form-row:nth-child(2), .task-assignment-drawer .task-form-row:last-of-type { flex-direction: column; flex-wrap: nowrap; }
+      .task-assignment-drawer > .task-form-row:nth-child(2) > .field, .task-assignment-drawer .field--action { width: 100%; flex: 0 0 auto !important; }
+      .student-tasks { overflow-x: hidden; }
+      .task-subtable { width: 100%; min-width: 0 !important; table-layout: fixed; }
+      .task-subtable thead { display: none; }
+      .task-subtable tbody { display: grid; gap: 10px; padding: 10px; }
+      .task-subtable tbody tr {
+        display: grid;
+        grid-template-columns: 70px minmax(0, 1fr) 104px;
+        grid-template-rows: auto auto;
+        gap: 7px 9px;
+        padding: 11px;
+        border: 1px solid var(--task-border);
+        border-radius: 10px;
+        background: var(--task-surface);
+      }
+      .task-subtable tbody tr td { display: block !important; width: auto !important; max-width: none !important; min-width: 0; padding: 0 !important; overflow-wrap: anywhere; }
+      .task-subtable tbody tr td:nth-child(1),
+      .task-subtable tbody tr td:nth-child(6),
+      .task-subtable tbody tr td:nth-child(7),
+      .task-subtable tbody tr td:nth-child(8),
+      .task-subtable tbody tr td:nth-child(9),
+      .task-subtable tbody tr td:nth-child(10) { display: none !important; }
+      .task-subtable tbody tr td:nth-child(2) { grid-column: 1; grid-row: 1; }
+      .task-subtable tbody tr td:nth-child(3) { grid-column: 2; grid-row: 1; }
+      .task-subtable tbody tr td:nth-child(4) { grid-column: 1 / 3; grid-row: 2; font-weight: 800; }
+      .task-subtable tbody tr td:nth-child(5) { grid-column: 3; grid-row: 1; }
+      .task-subtable tbody tr td:nth-child(11) { grid-column: 3; grid-row: 2; }
+      .task-subtable tbody tr td:nth-child(11) .status-select { width: 100%; max-width: 104px; }
+      .task-subtable tbody tr td:nth-child(11) .timer { display: flex; margin: 5px 0 0; font-size: 10px; }
+      .task-subtable tbody tr td:nth-child(11) .btn-start,
+      .task-subtable tbody tr td:nth-child(11) .btn-pause,
+      .task-subtable tbody tr td:nth-child(11) .btn-stop { width: 100%; margin-top: 5px; }
+      .task-subtable th:nth-child(2) { width: 70px; }
+      .task-subtable th:nth-child(3) { width: 86px; }
+      .task-subtable th:nth-child(5) { width: 66px; }
+      .task-subtable th:nth-child(11) { width: 102px; }
+    }
+  </style>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='tasks_workspace.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='tasks_workspace_final.css') }}">
 
   <div id="editModal" class="modal hidden" aria-modal="true" role="dialog">
     <div id="editBackdrop" class="backdrop"></div>
@@ -2786,6 +3003,7 @@
     </div>
   </div>
 
+  <script src="{{ url_for('static', filename='js/task_assignment_matrix.js') }}"></script>
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
     const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
@@ -3626,6 +3844,9 @@
       const listeningResourceType = document.getElementById('listeningResourceType');
       const learningGoalRow = document.getElementById('learningGoalRow');
       const vocabularyGoalSelect = document.getElementById('vocabularyGoalSelect');
+      const questionTypeWorkspace = document.getElementById('questionTypeWorkspace');
+      const questionTypeStudentField = document.getElementById('questionTypeStudentField');
+      const taskStudentInput = document.getElementById('taskStudent');
 
       materialRow.style.display = 'none';
       categoryRow.style.display = 'none';
@@ -3635,6 +3856,12 @@
       if (readingRow) readingRow.style.display = 'none';
       if (readingPassageRow) readingPassageRow.style.display = 'none';
       if (questionRow) questionRow.style.display = 'none';
+      if (questionTypeWorkspace) questionTypeWorkspace.hidden = source !== 'question_type';
+      if (questionTypeStudentField) questionTypeStudentField.hidden = source !== 'question_type';
+      if (taskStudentInput) {
+        if (source === 'question_type') taskStudentInput.removeAttribute('required');
+        else taskStudentInput.setAttribute('required', 'required');
+      }
       if (questionIds) questionIds.value = '';
       resetListeningSectionSelection();
       resetReadingPassageSelection();
@@ -3650,7 +3877,17 @@
         }
       }
 
-      if (source === 'material') {
+      if (source === 'question_type') {
+        categorySelect.removeAttribute('required');
+        materialSelect.value = '';
+        listeningSelect.value = '';
+        window.syncListeningPickerFromSelect?.();
+        if (readingSelect) readingSelect.value = '';
+        if (listeningResourceType) listeningResourceType.value = 'intensive';
+        document.getElementById('taskDetail').value = '题型专项';
+        document.getElementById('taskNote').value = document.getElementById('taskNote').value || '';
+        window.taskQtaRefresh?.();
+      } else if (source === 'material') {
         materialRow.style.display = 'flex';
         categorySelect.removeAttribute('required');
         categorySelect.value = '';
@@ -3875,6 +4112,7 @@
       if (!questionIds || !container) return;
       const ids = Array.from(container.querySelectorAll('.question-checkbox:checked')).map(cb => Number(cb.value));
       questionIds.value = ids.length ? JSON.stringify(ids) : "";
+      window.__scheduleLegacyHistory?.();
     }
 
     function selectAllQuestions(checked) {
@@ -4203,6 +4441,11 @@
       categorySelect.addEventListener('change', syncDetail);
       taskForm.addEventListener('submit', event => {
         const activeSource = document.querySelector('input[name="task_source"]:checked')?.value;
+        if (activeSource === 'question_type') {
+          event.preventDefault();
+          window.taskQtaPublish?.();
+          return;
+        }
         const resourceType = document.getElementById('listeningResourceType')?.value || 'intensive';
         const rangeInput = document.getElementById('sentenceRangeInput');
         if (activeSource === 'listening' && resourceType === 'intensive' && rangeInput && rangeInput.value.trim()) {
@@ -4213,6 +4456,36 @@
           }
         }
         syncDetail();
+        event.preventDefault();
+        if (window.__taskSubmitting) return;
+        const keyInput = document.getElementById('taskIdempotencyKey');
+        if (keyInput && !keyInput.value) {
+          keyInput.value = (window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`).replace(/[^A-Za-z0-9_.:-]/g, '-');
+        }
+        window.__taskSubmitting = true;
+        taskForm.querySelectorAll('button[type="submit"]').forEach(button => { button.disabled = true; });
+        fetch(taskForm.action, {
+          method: 'POST',
+          body: new FormData(taskForm),
+          headers: { 'Accept': 'application/json' },
+          credentials: 'same-origin'
+        }).then(async response => {
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.ok) {
+            if (response.status === 409 && data.error === 'duplicate_assignment_conflict') {
+              window.__renderTaskDuplicateResult?.(data);
+              window.__renderTaskDuplicateError?.(data.error);
+              return;
+            }
+            throw new Error(data.error || 'publish_failed');
+          }
+          window.location.assign(data.redirect || '/tasks');
+        }).catch(error => {
+          window.__renderTaskDuplicateError?.(`发布失败：${error.message}`);
+        }).finally(() => {
+          window.__taskSubmitting = false;
+          taskForm.querySelectorAll('button[type="submit"]').forEach(button => { button.disabled = false; });
+        });
       });
     }
 
@@ -4765,6 +5038,8 @@
       const studentInp = document.getElementById('filterStudent');
       const catSel = document.getElementById('filterCategory');
       const statusSel = document.getElementById('filterStatus');
+      const dueDateInp = document.getElementById('filterDueDate');
+      const quickSearchInp = document.getElementById('taskQuickSearch');
       const clearBtn = document.getElementById('filterClear');
       const stat = document.getElementById('filterStat');
 
@@ -4773,7 +5048,10 @@
       function apply() {
         const kw = norm(studentInp?.value);
         const cat = catSel?.value || '';
-        const st = statusSel?.value || ''; // pending/progress/done/''
+        const st = statusSel?.value || ''; // pending/progress/submitted/done/''
+        const dueDate = dueDateInp?.value || '';
+        const selectedDate = window.taskSelectedDate || '';
+        const quickSearch = norm(quickSearchInp?.value);
         let showCount = 0;
 
         const dataRows = Array.from(document.querySelectorAll('tr[data-id]'));
@@ -4781,33 +5059,23 @@
           const student = norm(row.dataset.student);
           const category = (row.querySelector('.task-category')?.textContent || '').trim();
           const badge = row.querySelector('.badge');
-          const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending');
+          const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-submitted') ? 'submitted' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending'));
 
           let ok = true;
           if (kw && (!student || !student.includes(kw))) ok = false;
+          if (ok && quickSearch && !row.textContent.toLowerCase().includes(quickSearch)) ok = false;
           if (ok && cat && category !== cat) ok = false;
           if (ok && st && status !== st) ok = false;
+          if (ok && dueDate && row.dataset.date !== dueDate) ok = false;
+          if (ok && selectedDate && row.dataset.date !== selectedDate) ok = false;
 
-          row.style.display = ok ? '' : 'none';
+          row.dataset.filterVisible = ok ? 'true' : 'false';
           if (ok) showCount++;
-        });
-
-        const groups = Array.from(document.querySelectorAll('.student-group'));
-        groups.forEach(group => {
-          const rows = Array.from(group.querySelectorAll('tr[data-id]'));
-          const visibleRows = rows.filter(r => r.style.display !== 'none');
-          const hasVisible = visibleRows.length > 0;
-          group.style.display = hasVisible ? '' : 'none';
-          const countEl = group.querySelector('.student-count');
-          if (countEl) {
-            const total = rows.length;
-            const visibleCount = visibleRows.length;
-            countEl.textContent = visibleCount === total ? `任务数 ${total}` : `任务数 ${visibleCount} / ${total}`;
-          }
         });
 
         const totalRows = dataRows.length;
         if (stat) stat.textContent = `显示 ${showCount} / ${totalRows} 条`;
+        window.taskWorkspaceApplyPagination?.();
       }
 
       window.applyTaskFilters = apply;
@@ -4820,10 +5088,14 @@
       });
       catSel && catSel.addEventListener('change', apply);
       statusSel && statusSel.addEventListener('change', apply);
+      dueDateInp && dueDateInp.addEventListener('change', apply);
       clearBtn && clearBtn.addEventListener('click', () => {
         if (studentInp) studentInp.value = '';
         if (catSel) catSel.value = '';
         if (statusSel) statusSel.value = '';
+        if (dueDateInp) dueDateInp.value = '';
+        window.taskSelectedDate = '';
+        document.querySelectorAll('.task-date-choice.is-active').forEach(choice => choice.classList.remove('is-active'));
         apply();
       });
 
@@ -4846,7 +5118,14 @@
         if (!cell) return;
         const left = planned > 0 ? `计划:${planned} 分` : `计划:—`;
         const right = `实际:${formatPercent(minutes(totalSec))} 分`;
-        cell.textContent = `${left} ｜ ${right}`;
+        const plannedEl = cell.querySelector('.task-time__planned');
+        const actualEl = cell.querySelector('.task-time__actual');
+        if (plannedEl && actualEl) {
+          plannedEl.textContent = left;
+          actualEl.textContent = right;
+        } else {
+          cell.textContent = `${left} ｜ ${right}`;
+        }
         // 同步完成率显示（保留 1 位小数）
         const progCell = row.querySelector('.task-progress');
         if (progCell) {
@@ -4872,6 +5151,16 @@
           }
         }
         if (planned > 0 && totalSec >= planned * 60) cell.classList.add('exceed'); else cell.classList.remove('exceed');
+        if (window.__taskInspectorRow === row) {
+          const inspectorTimer = document.getElementById('taskInspectorTimer');
+          if (inspectorTimer) inspectorTimer.textContent = fmt(totalSec);
+          const inspectorProgress = document.getElementById('taskInspectorProgressValue');
+          const inspectorBar = document.getElementById('taskInspectorProgressBar');
+          const manual = row.dataset.completion || '';
+          const current = manual === '' && planned > 0 ? Math.min(100, Math.round((totalSec / 60) / planned * 1000) / 10) : Number(manual || 0);
+          if (inspectorProgress) inspectorProgress.textContent = `${formatPercent(current)}%`;
+          if (inspectorBar) inspectorBar.style.width = `${Math.min(100, Math.max(0, current))}%`;
+        }
       }
 
       document.querySelectorAll('tr[data-id]').forEach(row => {
@@ -5193,6 +5482,365 @@
       loadAppeals();
     })();
 
+    // Unified assignment drawer and question-type specialty workflow.
+    (function installUnifiedAssignmentDrawer() {
+      const form = document.getElementById('taskForm');
+      const backdrop = document.getElementById('taskDrawerBackdrop');
+      const openButton = document.getElementById('openTaskAssignment');
+      const closeButton = document.getElementById('closeTaskAssignment');
+      const sourceInputs = Array.from(document.querySelectorAll('input[name="task_source"]'));
+      const qtaTypes = {{ question_type_summaries|default([])|tojson }};
+      const qtaSubject = document.getElementById('taskQtaSubject');
+      const qtaType = document.getElementById('taskQtaType');
+      const qtaScope = document.getElementById('taskQtaScope');
+      const qtaCount = document.getElementById('taskQtaCount');
+      const qtaPace = document.getElementById('taskQtaPace');
+      const qtaMinutes = document.getElementById('taskQtaMinutes');
+      const qtaPreviewButton = document.getElementById('taskQtaPreview');
+      const qtaPublishButton = document.getElementById('taskQtaPublish');
+      const qtaStatus = document.getElementById('taskQtaStatus');
+      const qtaPanel = document.getElementById('taskQtaPreviewPanel');
+      const qtaSummary = document.getElementById('taskQtaPreviewSummary');
+      const qtaGroupsNode = document.getElementById('taskQtaGroups');
+      const qtaHistoryNode = document.getElementById('taskQtaHistory');
+      const qtaRepeat = document.getElementById('taskQtaRepeat');
+      const qtaConfirm = document.getElementById('taskQtaConfirmRepeat');
+      const qtaReason = document.getElementById('taskQtaForceReason');
+      const qtaIncludeHistoryRow = document.getElementById('taskQtaIncludeHistoryRow');
+      const qtaIncludeHistory = document.getElementById('taskQtaIncludeHistory');
+      const qtaExclusionNotice = document.getElementById('taskQtaExclusionNotice');
+      const legacyDuplicateStatus = document.getElementById('assignmentDuplicateStatus');
+      const legacyRepeatControls = document.getElementById('legacyRepeatControls');
+      const idempotencyInput = document.getElementById('taskIdempotencyKey');
+      let qtaGroups = [];
+      let qtaDuplicateResult = null;
+      let duplicateTimer = null;
+      let duplicateRevision = 0;
+
+      const escapeText = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[char]));
+      const selectedStudents = () => Array.from(document.querySelectorAll('[name="question_type_student_names"]:checked')).map(node => node.value);
+      const setStatus = (text, isError = false) => {
+        if (!qtaStatus) return;
+        qtaStatus.textContent = text;
+        qtaStatus.classList.toggle('is-error', isError);
+      };
+      const activeType = () => qtaTypes.find(row => row.subject === qtaSubject?.value && row.standard_type === qtaType?.value);
+      const qtaUnitLabels = () => Object.fromEntries(qtaGroups.map(row => [row.question_group_id, `${row.test_title || ''} · ${row.unit_label || ''} ${row.unit_number || ''}`.replace(/\s+/g, ' ').trim()]));
+      const qtaPayload = extra => ({
+        source: 'question_type', subject: qtaSubject?.value || '', standard_type: qtaType?.value || '',
+        scope: qtaScope?.value || 'all', count: Number(qtaCount?.value || 1), pace: qtaPace?.value || 'training',
+        planned_minutes: Number(qtaMinutes?.value || 25), due_date: document.getElementById('taskDate')?.value || '',
+        note: document.getElementById('taskNote')?.value || '', unit_labels: qtaUnitLabels(), ...(extra || {})
+      });
+      const currentLegacyPayload = () => {
+        const source = document.querySelector('input[name="task_source"]:checked')?.value || 'custom';
+        const material = document.getElementById('material_id')?.value || '';
+        const dictationMatch = material.match(/^dictation-(\d+)$/);
+        return {
+          source, task_source: source, material_id: material && !dictationMatch ? material : '',
+          dictation_book_id: dictationMatch ? dictationMatch[1] : '',
+          dictation_word_start: document.querySelector('[name="dictation_word_start"]')?.value || 1,
+          dictation_word_end: document.querySelector('[name="dictation_word_end"]')?.value || '',
+          speaking_book_id: (material.match(/^speaking-(\d+)$/) || [])[1] || '',
+          listening_exercise_id: document.getElementById('listeningExerciseSelect')?.value || '',
+          listening_resource_type: document.getElementById('listeningResourceType')?.value || '',
+          listening_section_number: document.querySelector('[name="listening_section_number"]:checked')?.value || '',
+          reading_test_id: document.getElementById('readingExerciseSelect')?.value || '',
+          reading_passage_number: document.querySelector('[name="reading_passage_number"]:checked')?.value || '',
+          question_ids: document.getElementById('questionIds')?.value || ''
+        };
+      };
+      const duplicateFetch = async (names, payload) => {
+        const response = await fetch('/api/task-assignments/duplicates', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({...payload, student_names: names})
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || 'duplicate_check_failed');
+        return data;
+      };
+      const matrixMarkup = window.renderTaskAssignmentMatrix;
+      const renderHistory = result => {
+        if (!qtaHistoryNode) return;
+        qtaHistoryNode.hidden = false;
+        qtaHistoryNode.innerHTML = matrixMarkup(result);
+        const needsConfirm = Boolean(result.has_history);
+        if (qtaRepeat) qtaRepeat.hidden = !needsConfirm;
+      };
+      const renderLegacyHistory = result => {
+        if (!legacyDuplicateStatus) return;
+        legacyDuplicateStatus.innerHTML = matrixMarkup(result);
+        legacyDuplicateStatus.className = 'assignment-duplicate-status' + (result.has_history ? ' is-warning' : '');
+        const repeatControls = document.getElementById('legacyRepeatControls');
+        if (repeatControls) repeatControls.hidden = !result.has_history;
+      };
+      window.__renderTaskDuplicateResult = result => {
+        qtaDuplicateResult = result;
+        if (document.querySelector('input[name="task_source"]:checked')?.value === 'question_type') renderHistory(result);
+        else renderLegacyHistory(result);
+      };
+      window.__renderTaskDuplicateError = message => {
+        const duplicateMessage = matrixMarkup?.duplicateErrorMessage?.(message);
+        const displayMessage = duplicateMessage || message;
+        const isQuestionType = document.querySelector('input[name="task_source"]:checked')?.value === 'question_type';
+        if (isQuestionType) {
+          setStatus(displayMessage, true);
+          return;
+        }
+        if (legacyDuplicateStatus) {
+          legacyDuplicateStatus.querySelectorAll('.assignment-duplicate-message').forEach(node => node.remove());
+          const notice = document.createElement('div');
+          notice.className = 'assignment-duplicate-message is-error';
+          notice.textContent = displayMessage;
+          legacyDuplicateStatus.prepend(notice);
+          legacyDuplicateStatus.classList.add('is-error');
+        }
+      };
+      const renderGroups = () => {
+        if (!qtaGroupsNode) return;
+        qtaGroupsNode.innerHTML = qtaGroups.map(row => `<article class="question-type-group"><div><strong>${escapeText(row.test_title)} · ${escapeText(row.unit_label)} ${escapeText(row.unit_number)} · 原题 Q${escapeText(row.original_question_range)}</strong><small>${escapeText(row.practice_type_label || row.standard_type_display_label || '')} · ${escapeText(row.question_count)}题 · renderer ${escapeText(row.renderer)}<br>音频 ${row.has_audio ? '✓' : '—'} · 文章 ${row.has_article ? '✓' : '—'} · 图片 ${row.has_image ? '✓' : '—'} · 时间点 ${row.reliable_audio_timestamps ? '✓' : '—'}${row.warnings?.length ? '<br>提示：' + escapeText(row.warnings.join('；')) : ''}</small></div><button type="button" data-qta-remove="${escapeText(row.question_group_id)}">移除整组</button></article>`).join('');
+        qtaGroupsNode.querySelectorAll('[data-qta-remove]').forEach(button => button.addEventListener('click', () => {
+          qtaGroups = qtaGroups.filter(row => row.question_group_id !== button.dataset.qtaRemove);
+          renderGroups();
+          qtaPublishButton.disabled = !qtaGroups.length;
+          if (qtaGroups.length) refreshQtaHistory();
+        }));
+      };
+      const refreshQtaHistory = async () => {
+        const revision = ++duplicateRevision;
+        const names = selectedStudents();
+        if (!names.length || !qtaGroups.length) {
+          if (qtaHistoryNode) { qtaHistoryNode.innerHTML = ''; qtaHistoryNode.hidden = true; }
+          if (qtaRepeat) qtaRepeat.hidden = true;
+          qtaDuplicateResult = null;
+          return;
+        }
+        try {
+          qtaDuplicateResult = await duplicateFetch(names, qtaPayload({group_ids: qtaGroups.map(row => row.question_group_id)}));
+          if (revision !== duplicateRevision) return;
+          renderHistory(qtaDuplicateResult);
+        } catch (error) {
+          setStatus('历史检查失败：' + error.message, true);
+        }
+      };
+      const refreshQtaTypes = () => {
+        if (!qtaType || !qtaScope) return;
+        const rows = qtaTypes.filter(row => row.subject === qtaSubject.value);
+        const previousType = qtaType.value;
+        qtaType.innerHTML = rows.map(row => `<option value="${escapeText(row.standard_type)}">${escapeText(row.label)} · ${escapeText(row.unit_count)}个${qtaSubject.value === 'listening' ? 'Section' : 'Passage'}</option>`).join('');
+        if (rows.some(row => row.standard_type === previousType)) qtaType.value = previousType;
+        const active = activeType();
+        qtaScope.innerHTML = '<option value="all">全部题库</option>' + (active?.tests || []).map(id => `<option value="${escapeText(id)}">${escapeText(id)}</option>`).join('');
+      };
+      window.taskQtaRefresh = refreshQtaTypes;
+      const clearQtaSelection = () => {
+        qtaGroups = [];
+        if (qtaGroupsNode) qtaGroupsNode.innerHTML = '';
+        if (qtaHistoryNode) { qtaHistoryNode.innerHTML = ''; qtaHistoryNode.hidden = true; }
+        if (qtaRepeat) qtaRepeat.hidden = true;
+        if (qtaPublishButton) qtaPublishButton.disabled = true;
+        qtaDuplicateResult = null;
+      };
+      qtaSubject?.addEventListener('change', () => { clearQtaSelection(); refreshQtaTypes(); });
+      qtaType?.addEventListener('change', () => { clearQtaSelection(); refreshQtaTypes(); });
+      qtaPreviewButton?.addEventListener('click', async () => {
+        const names = selectedStudents();
+        if (!names.length) { setStatus('请至少选择一名专项学生', true); return; }
+        qtaPreviewButton.disabled = true;
+        qtaPublishButton.disabled = true;
+        setStatus('正在排除所选学生做过的题组，并运行题面安全检查…');
+        try {
+          const history = await duplicateFetch(names, qtaPayload());
+          const excludedGroupIds = history.excluded_group_ids || [];
+          if (qtaIncludeHistoryRow) qtaIncludeHistoryRow.hidden = !excludedGroupIds.length;
+          if (qtaExclusionNotice) qtaExclusionNotice.textContent = excludedGroupIds.length && !qtaIncludeHistory?.checked ? `已为本批学生自动排除 ${excludedGroupIds.length} 个历史题组；如需复训，请勾选上方选项后重新预览。` : '';
+          const previewResponse = await fetch('/api/question-type-practice/preview', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(qtaPayload({exclude_group_ids: qtaIncludeHistory?.checked ? [] : excludedGroupIds}))});
+          const preview = await previewResponse.json();
+          if (!previewResponse.ok || !preview.ok) throw new Error(preview.error || 'preview_failed');
+          qtaGroups = preview.groups || [];
+          renderGroups();
+          qtaPanel.hidden = false;
+          qtaSummary.textContent = `${qtaGroups.length} 个完整题组 · ${preview.selection.question_count} 题`;
+          await refreshQtaHistory();
+          qtaPublishButton.disabled = !qtaGroups.length;
+          setStatus(qtaGroups.length ? '预览就绪：发布时会在同一事务重新检查重复。' : '题库不足，请减少数量或调整范围。', !qtaGroups.length);
+        } catch (error) {
+          qtaGroups = []; renderGroups(); qtaPanel.hidden = false;
+          const message = String(error.message || error);
+          setStatus(message.startsWith('insufficient_question_groups:') ? `题库不足：还缺少 ${message.split(':')[1]} 组，请减少数量或调整范围。` : '预览失败：' + message, true);
+        } finally { qtaPreviewButton.disabled = false; }
+      });
+      window.taskQtaPublish = async () => {
+        const names = selectedStudents();
+        if (!names.length || !qtaGroups.length) { setStatus('请先选择学生并完成预览', true); return; }
+        const hasHistory = Boolean(qtaDuplicateResult?.has_history);
+        const confirmed = Boolean(qtaConfirm?.checked);
+        const reason = qtaReason?.value.trim() || '';
+        if (hasHistory && (!confirmed || reason.length < 2)) { setStatus('检测到历史重复：请二次确认并填写复训原因。', true); qtaRepeat.hidden = false; return; }
+        if (!idempotencyInput.value) idempotencyInput.value = (window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`).replace(/[^A-Za-z0-9_.:-]/g, '-');
+        qtaPublishButton.disabled = true; setStatus('正在发布，服务器会再次执行重复检查…');
+        try {
+          const response = await fetch('/api/question-type-practice/assign', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(qtaPayload({student_names: names, group_ids: qtaGroups.map(row => row.question_group_id), idempotency_key: idempotencyInput.value, force_repeat: hasHistory, confirm_repeat: confirmed, force_reason: reason}))});
+          const data = await response.json();
+          if (!response.ok || !data.ok) {
+            if (data.students) { window.__renderTaskDuplicateResult?.(data); }
+            throw new Error(data.error || 'publish_failed');
+          }
+          setStatus(data.idempotent ? '本次请求已安全幂等返回。' : `已为 ${data.tasks.length} 位学生发布任务。`);
+          setTimeout(() => window.location.reload(), 550);
+        } catch (error) {
+          qtaPublishButton.disabled = false;
+          const duplicateMessage = matrixMarkup?.duplicateErrorMessage?.(error.message);
+          setStatus(duplicateMessage || ('发布失败：' + error.message), true);
+        }
+      };
+      qtaPublishButton?.addEventListener('click', () => window.taskQtaPublish?.());
+      const refreshLegacyHistory = async () => {
+        const revision = duplicateRevision;
+        const source = document.querySelector('input[name="task_source"]:checked')?.value;
+        const student = document.getElementById('taskStudent')?.value.trim();
+        const repeatControls = document.getElementById('legacyRepeatControls');
+        if (repeatControls) repeatControls.hidden = true;
+        if (!legacyDuplicateStatus || source === 'question_type' || !student) return;
+        const payload = currentLegacyPayload();
+        if (source === 'custom') {
+          renderLegacyHistory({has_history: false, students: [{student_name: student, status: 'unable_to_determine', status_label: '无法自动判断', matches: []}]});
+          return;
+        }
+        try {
+          const result = await duplicateFetch([student], payload);
+          if (revision !== duplicateRevision) return;
+          renderLegacyHistory(result);
+        } catch (error) { window.__renderTaskDuplicateError?.('历史检查暂不可用，请发布时由服务器校验。'); }
+      };
+      const scheduleLegacyHistory = () => { duplicateRevision += 1; window.clearTimeout(duplicateTimer); duplicateTimer = window.setTimeout(refreshLegacyHistory, 220); };
+      window.__scheduleLegacyHistory = scheduleLegacyHistory;
+      const clearLegacyHistory = () => {
+        duplicateRevision += 1;
+        window.clearTimeout(duplicateTimer);
+        if (legacyDuplicateStatus) { legacyDuplicateStatus.innerHTML = ''; legacyDuplicateStatus.className = 'assignment-duplicate-status'; }
+        if (legacyRepeatControls) legacyRepeatControls.hidden = true;
+        if (qtaHistoryNode) { qtaHistoryNode.innerHTML = ''; qtaHistoryNode.hidden = true; }
+        if (qtaRepeat) qtaRepeat.hidden = true;
+        qtaDuplicateResult = null;
+      };
+      taskForm?.addEventListener('change', event => {
+        if (event.target.matches('[name="student_name"], #material_id, #listeningExerciseSelect, #listeningResourceType, #readingExerciseSelect, #questionIds, #sentenceRangeInput, #questionListContainer .question-checkbox, [name="listening_section_number"], [name="reading_passage_number"], [name="dictation_word_start"], [name="dictation_word_end"], [name="speaking_phrase_start"], [name="speaking_phrase_end"], input[name="question_ids"]')) scheduleLegacyHistory();
+      });
+      taskForm?.addEventListener('input', event => {
+        if (event.target.matches('[name="student_name"], #questionIds, #sentenceRangeInput, [name="dictation_word_start"], [name="dictation_word_end"], [name="speaking_phrase_start"], [name="speaking_phrase_end"]')) scheduleLegacyHistory();
+      });
+      sourceInputs.forEach(input => input.addEventListener('change', () => { clearLegacyHistory(); scheduleLegacyHistory(); }));
+      document.querySelectorAll('[name="question_type_student_names"]').forEach(input => input.addEventListener('change', () => { if (qtaGroups.length) refreshQtaHistory(); }));
+      const inspector = document.getElementById('taskInspector');
+      const updateInspector = row => {
+        if (!row || !inspector) return;
+        document.querySelectorAll('.task-subtable tbody tr.is-selected').forEach(item => item.classList.remove('is-selected'));
+        row.classList.add('is-selected');
+        const text = selector => row.querySelector(selector)?.textContent.trim() || '—';
+        const value = selector => row.querySelector(selector)?.value || '—';
+        const taskId = text('.task-id');
+        const statusBadge = row.querySelector('.task-status .badge');
+        const statusSelect = row.querySelector('.status-select');
+        const detailTitle = text('.task-detail');
+        const student = row.dataset.student || '未填写学生';
+        const category = text('.task-category');
+        const status = statusBadge?.textContent.trim() || '—';
+        const completion = row.querySelector('.task-status__percent')?.textContent.trim() || '0%';
+        const progressBar = document.getElementById('taskInspectorProgressBar');
+        document.getElementById('taskInspectorTitle').textContent = detailTitle || `任务 #${taskId}`;
+        document.getElementById('taskInspectorStudent').textContent = `${student} · ${category}`;
+        document.getElementById('taskInspectorSource').textContent = category;
+        document.getElementById('taskInspectorStatus').textContent = status;
+        document.getElementById('taskInspectorCategory').textContent = category;
+        document.getElementById('taskInspectorDate').textContent = text('.task-date');
+        document.getElementById('taskInspectorScope').textContent = `${student} · ${detailTitle}`;
+        document.getElementById('taskInspectorMinutes').textContent = text('.task-time');
+        document.getElementById('taskInspectorDeadline').textContent = text('.task-deadline');
+        document.getElementById('taskInspectorProgressValue').textContent = completion;
+        if (progressBar) progressBar.style.width = `${Math.min(100, Math.max(0, parseFloat(completion) || 0))}%`;
+        const evidence = text('.task-evidence');
+        document.getElementById('taskInspectorEvidence').textContent = evidence === '无' || evidence === '—' ? '暂无上传证据，等待学生提交。' : `已记录：${evidence}`;
+        document.getElementById('taskInspectorSubmission').textContent = row.querySelector('.task-action-link--primary') ? '在线任务提交' : '教师记录';
+        document.getElementById('taskInspectorScores').textContent = `${value('.progress-input')}% / ${value('.accuracy-input')}%`;
+        document.getElementById('taskInspectorNote').textContent = text('.task-note');
+        const timeline = document.getElementById('taskInspectorTimeline');
+        if (timeline) {
+          timeline.replaceChildren();
+          [[`计划日期 · ${text('.task-date')}`, '计划'], [`当前状态 · ${status}`, '状态'], [`完成进度 · ${completion}`, '进度']].forEach(([label, valueText]) => {
+            const item = document.createElement('li');
+            item.textContent = `${label} · ${valueText}`;
+            timeline.appendChild(item);
+          });
+        }
+        if (statusSelect) {
+          const inspectorStatusSelect = document.getElementById('taskInspectorStatusSelect');
+          if (inspectorStatusSelect) inspectorStatusSelect.value = statusSelect.value;
+          if (inspectorStatusSelect) inspectorStatusSelect.onchange = () => { statusSelect.value = inspectorStatusSelect.value; statusSelect.dispatchEvent(new Event('change', { bubbles: true })); };
+        }
+        const rowTimer = row.querySelector('.timer');
+        const inspectorTimer = document.getElementById('taskInspectorTimer');
+        if (inspectorTimer) inspectorTimer.textContent = rowTimer?.textContent.trim() || '00:00:00';
+        [['taskInspectorTimerStart', '.btn-start'], ['taskInspectorTimerPause', '.btn-pause'], ['taskInspectorTimerStop', '.btn-stop']].forEach(([buttonId, selector]) => {
+          const button = document.getElementById(buttonId);
+          const sourceButton = row.querySelector(selector);
+          if (!button || !sourceButton) return;
+          button.hidden = sourceButton.style.display === 'none';
+          button.onclick = () => sourceButton.click();
+        });
+        window.__taskInspectorRow = row;
+        const taskLink = row.querySelector('.task-actions a')?.href || `/tasks/${encodeURIComponent(taskId)}/review`;
+        document.getElementById('taskInspectorOpen').href = taskLink;
+        document.getElementById('taskInspectorProgress').href = `/tasks/${encodeURIComponent(taskId)}/review`;
+        document.getElementById('taskInspectorEdit').onclick = () => row.querySelector('.btn-edit')?.click();
+        const more = document.getElementById('taskInspectorMoreActions');
+        if (more) {
+          const actionMarkup = Array.from(row.querySelectorAll('.task-actions > *')).map(action => {
+            if (action.matches('a')) return action.outerHTML;
+            const classes = Array.from(action.classList).join(' ');
+            return `<button type="button" class="task-inspector-action" data-forward-class="${escapeText(classes)}">${escapeText(action.textContent.trim())}</button>`;
+          }).join('');
+          more.innerHTML = actionMarkup || `<a class="task-inspector-action" href="${escapeText(taskLink)}" target="_blank" rel="noopener">打开学生任务</a>`;
+          more.querySelectorAll('[data-forward-class]').forEach(button => button.addEventListener('click', () => {
+            const className = button.dataset.forwardClass.split(' ').find(value => value && value !== 'task-action-link');
+            row.querySelector(`.${CSS.escape(className || '')}`)?.click();
+          }));
+        }
+      };
+      document.querySelectorAll('.task-subtable tbody tr').forEach(row => row.addEventListener('click', event => {
+        if (!event.target.closest('button, a, input, select')) {
+          updateInspector(row);
+          if (window.matchMedia('(max-width: 900px)').matches) document.body.classList.add('task-inspector-mobile-open');
+        }
+      }));
+      updateInspector(document.querySelector('.task-subtable tbody tr'));
+      document.querySelector('.task-inspector__close')?.addEventListener('click', () => document.body.classList.remove('task-inspector-mobile-open'));
+      document.body.addEventListener('click', event => {
+        if (event.target === document.body && window.matchMedia('(max-width: 900px)').matches) document.body.classList.remove('task-inspector-mobile-open');
+      });
+      const setDrawerOpen = open => { form?.classList.toggle('is-open', open); if (backdrop) backdrop.hidden = !open; document.body.classList.toggle('task-drawer-open', open); };
+      openButton?.addEventListener('click', () => setDrawerOpen(true));
+      closeButton?.addEventListener('click', () => setDrawerOpen(false));
+      backdrop?.addEventListener('click', () => setDrawerOpen(false));
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && form?.classList.contains('is-open')) setDrawerOpen(false); });
+      document.getElementById('taskQuickSearch')?.addEventListener('input', event => {
+        const query = event.target.value.trim().toLowerCase();
+        document.querySelectorAll('tr[data-id]').forEach(row => {
+          const matched = !query || row.textContent.toLowerCase().includes(query);
+          row.dataset.searchVisible = matched ? 'true' : 'false';
+        });
+        window.applyTaskFilters?.();
+      });
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('source') === 'question_type' || window.location.hash === '#taskForm') {
+        const radio = document.querySelector('input[name="task_source"][value="question_type"]');
+        if (radio) { radio.checked = true; toggleTaskSource('question_type'); setDrawerOpen(true); }
+      }
+      refreshQtaTypes();
+    })();
+
     // 从 /listening 跳转过来时支持 ?preset_exercise=<id> 自动预选
     (function applyPresetExercise() {
       try {
@@ -5216,6 +5864,7 @@
         }
         const formAnchor = document.getElementById('taskForm');
         if (formAnchor && formAnchor.scrollIntoView) {
+          document.getElementById('openTaskAssignment')?.click();
           formAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       } catch (err) {
@@ -5223,6 +5872,7 @@
       }
     })();
   </script>
+  <script src="{{ url_for('static', filename='js/tasks_workspace.js') }}"></script>
 </section>
 </section>
 {% endblock %}

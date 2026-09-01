@@ -575,6 +575,10 @@ class Task(db.Model):
     reading_test_id = db.Column(db.String(120), index=True)
     reading_passage_number = db.Column(db.Integer)
     reading_access_token = db.Column(db.String(64), index=True)
+    # One publish request can create several Tasks, so the caller stores a
+    # request key namespaced by student.  The unique index makes a browser
+    # retry safe even when two handlers reach the insert path together.
+    assignment_idempotency_key = db.Column(db.String(128), unique=True, index=True)
 
     creator = db.relationship("User", backref=db.backref("legacy_tasks", lazy="dynamic"))
     material = db.relationship("MaterialBank", backref=db.backref("tasks", lazy="dynamic"))

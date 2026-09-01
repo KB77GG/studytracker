@@ -110,6 +110,7 @@ def create_assignment(
     due_date: str,
     planned_minutes: int,
     note: str = "",
+    idempotency_key: str | None = None,
 ) -> Task:
     """Create one Task plus its normal published PlanItem shadow."""
 
@@ -141,6 +142,7 @@ def create_assignment(
         question_ids=dump_snapshot(snapshot),
         listening_access_token=token if snapshot["subject"] == "listening" else None,
         reading_access_token=token if snapshot["subject"] == "reading" else None,
+        assignment_idempotency_key=idempotency_key,
     )
     db.session.add(task)
     db.session.flush()

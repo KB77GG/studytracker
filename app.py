@@ -59,6 +59,13 @@ from api.teacher_practice_catalog import (
 )
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
+from services.task_assignment_duplicates import (
+    build_legacy_duplicate_payload,
+    duplicate_conflict_payload,
+    legacy_assignment_preflight,
+    staff_task_payload,
+    write_repeat_audit,
+)
 from services.vocabulary_mastery import (
     default_course_system_for_book_id,
     default_goal_for_book_id,
@@ -1971,6 +1978,7 @@ def ensure_legacy_schema() -> None:
             "reading_test_id": "VARCHAR(120)",
             "reading_passage_number": "INTEGER",
             "reading_access_token": "VARCHAR(64)",
+            "assignment_idempotency_key": "VARCHAR(128)",
         }
         for column_name, column_type in legacy_task_columns.items():
             if column_name in columns:
@@ -2017,6 +2025,23 @@ def ensure_legacy_schema() -> None:
                 current_app.logger.warning(
                     "Failed to add dictation_mode to task table: %s", exc
                 )
+        try:
+            existing_indexes = {idx["name"] for idx in inspector.get_indexes("task")}
+            if (
+                "ix_task_assignment_idempotency_key" not in existing_indexes
+                and "assignment_idempotency_key" in columns
+            ):
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "CREATE UNIQUE INDEX IF NOT EXISTS "
+                            "ix_task_assignment_idempotency_key ON task (assignment_idempotency_key)"
+                        )
+                    )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure index on task.assignment_idempotency_key: %s", exc
+            )
         try:
             existing_indexes = {idx["name"] for idx in inspector.get_indexes("task")}
             if "ix_task_plan_item_id" not in existing_indexes and "plan_item_id" in columns:
@@ -3588,7 +3613,7 @@ def tasks_page():
                 material_data = MaterialBank.query.get(int(material_id))
                 if material_data and not detail:
                     detail = material_data.title
-                if not material_data or material_data.type not in {"speaking_part1", "speaking_part2", "speaking_part2_3"}:
+                if not material_data:
                     question_ids = None
 
         # 精听练习
@@ -3772,6 +3797,44 @@ def tasks_page():
             dictation_task_end = int(dictation_word_end) if dictation_word_end else None
             speaking_task_start = int(request.form.get("speaking_phrase_start") or 1)
             speaking_task_end = int(request.form.get("speaking_phrase_end")) if request.form.get("speaking_phrase_end") else None
+            duplicate_payload = build_legacy_duplicate_payload(
+                source=task_source,
+                material_id=material_task_id,
+                question_ids=question_ids,
+                dictation_book_id=dictation_task_book_id,
+                dictation_word_start=dictation_task_start,
+                dictation_word_end=dictation_task_end,
+                speaking_book_id=speaking_task_book_id,
+                speaking_phrase_start=speaking_task_start,
+                speaking_phrase_end=speaking_task_end,
+                listening_exercise_id=listening_exercise_id,
+                listening_resource_type=listening_resource_type,
+                reading_test_id=reading_test_id,
+                reading_passage_number=reading_passage_number,
+            )
+            confirm_repeat = request.form.get("confirm_repeat") in {"1", "true", "on"}
+            assignment_idempotency_key, existing_task, duplicate_result = legacy_assignment_preflight(
+                student,
+                duplicate_payload,
+                raw_key=request.form.get("idempotency_key"),
+                force_repeat=confirm_repeat,
+                force_reason=request.form.get("force_reason", ""),
+                confirmed=confirm_repeat,
+            )
+            if existing_task:
+                db.session.rollback()
+                if request.accept_mimetypes.best == "application/json":
+                    return jsonify(
+                        ok=True,
+                        idempotent=True,
+                        task=staff_task_payload(existing_task),
+                        redirect=url_for("tasks_page"),
+                    )
+                flash("该布置请求已安全处理，无需重复提交。")
+                return redirect(url_for("tasks_page"))
+            if not duplicate_result["can_publish"]:
+                db.session.rollback()
+                return jsonify(duplicate_conflict_payload(duplicate_result)), 409
             resource_type, resource_id, resource_metadata = _task_resource_binding(
                 listening_exercise_id=listening_exercise_id or None,
                 listening_resource_type=listening_resource_type if listening_exercise_id else None,
@@ -3836,8 +3899,20 @@ def tasks_page():
                 reading_test_id=reading_test_id or None,
                 reading_passage_number=reading_passage_number,
                 reading_access_token=reading_access_token,
+                assignment_idempotency_key=assignment_idempotency_key or None,
             )
             db.session.add(t)
+            db.session.flush()
+            if duplicate_result.get("forced"):
+                write_repeat_audit(
+                    [t],
+                    actor_id=current_user.id,
+                    reason=request.form.get("force_reason", ""),
+                    source_task_ids_by_student={
+                        row["student_name"]: row.get("source_task_ids", [])
+                        for row in duplicate_result.get("students", [])
+                    },
+                )
             db.session.commit()
             # Warm dictation TTS cache for this book so the student's first play is fast.
             if dictation_task_book_id and (
@@ -3866,6 +3941,12 @@ def tasks_page():
                 except Exception as exc:
                     current_app.logger.warning("Failed to send subscribe message: %s", exc)
             flash("已添加")
+            if request.accept_mimetypes.best == "application/json":
+                return jsonify(
+                    ok=True,
+                    task=staff_task_payload(t),
+                    redirect=url_for("tasks_page"),
+                )
             return redirect(url_for("tasks_page"))
     # Filter by period
     period = request.args.get("period", "week")
@@ -4245,6 +4326,12 @@ def tasks_page():
     add_reading_exercise_options(_reading_test_catalog(), "剑雅阅读")
     add_reading_exercise_options(_reading_jijing_catalog(), "ZYZ 阅读")
 
+    # The specialty builder now lives inside the task drawer.  Keep its
+    # inventory server-rendered so the first interaction is useful offline;
+    # group details are still fetched through the existing preview API.
+    from api.question_type_practice import _type_summaries
+    question_type_summaries = _type_summaries()
+
     return render_template(
         "tasks.html",
         items=enriched_items,
@@ -4256,6 +4343,8 @@ def tasks_page():
         student_memos=student_memos,
         student_picker_options=student_picker_options,
         period=period,
+        start_date=start_date,
+        today_obj=today_obj,
         all_materials=all_materials,
         pending_reviews=pending_reviews,
         dictation_range_hints=dictation_range_hints,
@@ -4266,6 +4355,7 @@ def tasks_page():
         listening_training_modes=TRAINING_MODE_OPTIONS,
         reading_exercises=reading_exercises,
         reading_exercise_passages=reading_exercise_passages,
+        question_type_summaries=question_type_summaries,
     )
 
 # ---- Grading Interface ----

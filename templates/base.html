@@ -16,6 +16,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
 </head>
 
 <body class="{{ 'dashboard-body' if current_user.is_authenticated else '' }}">
@@ -25,7 +26,7 @@
     <button type="button" class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></button>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar__brand">
-        <span class="brand-icon">S</span>
+        <span class="brand-icon"><img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="Sage Path"></span>
         <div>
           <div class="brand-title">Sage Path</div>
           <div class="brand-sub">
@@ -40,48 +41,48 @@
         <p class="nav-label">主导航</p>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
         <a class="nav-link {{ 'is-active' if 'materials' in endpoint else '' }}"
-          href="{{ url_for('materials_list') }}">材料库</a>
+          href="{{ url_for('materials_list') }}"><i class="nav-link__icon fas fa-book-open" aria-hidden="true"></i><span>材料库</span></a>
         <a class="nav-link {{ 'is-active' if endpoint == 'word_examples_page' else '' }}"
-          href="{{ url_for('word_examples_page') }}">词汇审核</a>
+          href="{{ url_for('word_examples_page') }}"><i class="nav-link__icon fas fa-spell-check" aria-hidden="true"></i><span>词汇审核</span></a>
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
-          href="{{ url_for('tasks_page') }}">任务管理</a>
+          href="{{ url_for('tasks_page') }}"><i class="nav-link__icon fas fa-clipboard-list" aria-hidden="true"></i><span>任务管理</span></a>
         <a class="nav-link {{ 'is-active' if 'grading' in endpoint else '' }}"
-          href="{{ url_for('grading_list') }}">批改中心</a>
+          href="{{ url_for('grading_list') }}"><i class="nav-link__icon fas fa-check-double" aria-hidden="true"></i><span>批改中心</span></a>
         <a class="nav-link {{ 'is-active' if 'course_plan' in endpoint else '' }}"
-          href="{{ url_for('course_plan_list') }}">课程计划</a>
+          href="{{ url_for('course_plan_list') }}"><i class="nav-link__icon fas fa-calendar-alt" aria-hidden="true"></i><span>课程计划</span></a>
         {% endif %}
         {% if current_user.role == 'student' %}
         <a class="nav-link {{ 'is-active' if endpoint == 'student_today' else '' }}"
-          href="{{ url_for('student_today') }}">今日计划</a>
+          href="{{ url_for('student_today') }}"><i class="nav-link__icon fas fa-calendar-day" aria-hidden="true"></i><span>今日计划</span></a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher', 'assistant', 'student') %}
         <a class="nav-link {{ 'is-active' if endpoint in ('practice_library', 'exams_library', 'listening_index', 'listening_jijing_index', 'listening_jijing_part', 'listening_test_index', 'listening_test_practice', 'listening_player', 'listening_upload', 'reading_test_index', 'reading_test_practice', 'writing_library.index', 'writing_library.detail') else '' }}"
-          href="{{ url_for('practice_library') }}">刷题 / 模考</a>
+          href="{{ url_for('practice_library') }}"><i class="nav-link__icon fas fa-layer-group" aria-hidden="true"></i><span>刷题 / 模考</span></a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher', 'assistant') %}
         <a class="nav-link {{ 'is-active' if endpoint in ('admin_mock_exams_index', 'admin_mock_exams_create') else '' }}"
-          href="{{ url_for('admin_mock_exams_index') }}">模考配卷</a>
+          href="{{ url_for('admin_mock_exams_index') }}"><i class="nav-link__icon fas fa-file-alt" aria-hidden="true"></i><span>模考配卷</span></a>
         {% endif %}
         {% if current_user.role in ('admin', 'teacher') %}
-        <a class="nav-link" href="/entrance/admin/invitations.html">入学测试</a>
+        <a class="nav-link" href="/entrance/admin/invitations.html"><i class="nav-link__icon fas fa-user-check" aria-hidden="true"></i><span>入学测试</span></a>
         {% endif %}
         <p class="nav-label">数据分析</p>
         {% if current_user.role in ['teacher', 'assistant', 'admin'] %}
         <a class="nav-link {{ 'is-active' if endpoint == 'report_page' else '' }}"
-          href="{{ url_for('report_page') }}">学习报表</a>
+          href="{{ url_for('report_page') }}"><i class="nav-link__icon fas fa-chart-line" aria-hidden="true"></i><span>学习报表</span></a>
         {% endif %}
         {% if current_user.role == 'admin' or current_user.username == '陈悦' or current_user.display_name == '陈悦' %}
         <a class="nav-link {{ 'is-active' if 'stage_report' in endpoint else '' }}"
-          href="{{ url_for('stage_report_list') }}">阶段报告</a>
+          href="{{ url_for('stage_report_list') }}"><i class="nav-link__icon fas fa-chart-bar" aria-hidden="true"></i><span>阶段报告</span></a>
         {% endif %}
         {% if current_user.role == 'admin' %}
         <p class="nav-label">系统</p>
         <a class="nav-link {{ 'is-active' if endpoint == 'bulk_page' else '' }}"
-          href="{{ url_for('bulk_page') }}">批量添加</a>
+          href="{{ url_for('bulk_page') }}"><i class="nav-link__icon fas fa-users" aria-hidden="true"></i><span>批量添加</span></a>
         <a class="nav-link {{ 'is-active' if endpoint == 'users_page' else '' }}"
-          href="{{ url_for('users_page') }}">用户管理</a>
+          href="{{ url_for('users_page') }}"><i class="nav-link__icon fas fa-user-cog" aria-hidden="true"></i><span>用户管理</span></a>
         {% endif %}
-        <a class="nav-link" href="{{ url_for('logout') }}">退出登录</a>
+        <a class="nav-link" href="{{ url_for('logout') }}"><i class="nav-link__icon fas fa-sign-out-alt" aria-hidden="true"></i><span>退出登录</span></a>
       </div>
       <div class="sidebar__user">
         <div class="avatar">{{ current_user.display_name[:1] if current_user.display_name else
@@ -100,6 +101,7 @@
         <div class="main-header__title">
           <p class="eyebrow">{% block page_subtitle %}Dashboard Overview{% endblock %}</p>
           <h1>{% block page_title %}学习计划与打卡系统{% endblock %}</h1>
+          <p class="main-header__description">{% block page_description %}{% endblock %}</p>
         </div>
         <div class="header-actions">
           {% block header_actions %}{% endblock %}

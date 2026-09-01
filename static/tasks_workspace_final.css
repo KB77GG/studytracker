@@ -1,0 +1,205 @@
+/*
+ * Final cascade guard for the /tasks workspace.
+ * This file is loaded after the legacy template styles and the main workspace
+ * module so responsive behavior cannot be re-hidden by the old table rules.
+ */
+
+body:has(.tasks-page) .task-inspector__actions #taskInspectorEdit,
+body:has(.tasks-page) .task-inspector__actions #taskInspectorProgress{
+  grid-column:auto !important;
+}
+body:has(.tasks-page) .task-inspector__actions #taskInspectorOpen{
+  display:none !important;
+}
+
+/* Keep the assignment drawer as three non-overlapping layout rows. */
+body:has(.tasks-page) .task-assignment-drawer{
+  display:none !important;
+  grid-template-rows:auto minmax(0,1fr) auto !important;
+  height:100vh !important;
+  padding:0 24px !important;
+  gap:0 !important;
+  align-items:stretch !important;
+  overflow:hidden !important;
+}
+body:has(.tasks-page) .task-assignment-drawer.is-open{
+  display:grid !important;
+}
+body:has(.tasks-page) .task-assignment-drawer > .task-assignment-drawer__header{
+  grid-row:1;
+  position:static !important;
+  min-height:0;
+  margin:0 -24px !important;
+  padding:18px 24px 14px !important;
+}
+body:has(.tasks-page) .task-assignment-drawer > .task-assignment-drawer__body{
+  grid-row:2;
+  display:flex;
+  flex-direction:column;
+  align-self:stretch !important;
+  gap:12px;
+  min-height:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  padding:0 0 16px;
+  scrollbar-width:thin;
+}
+body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish{
+  grid-row:3;
+  position:static !important;
+  z-index:auto !important;
+  display:grid !important;
+  grid-template-columns:150px minmax(0,1fr) 112px;
+  align-items:end;
+  gap:12px;
+  min-height:0;
+  margin:0 -24px !important;
+  padding:12px 24px 16px !important;
+  border-top:1px solid var(--tasks-line) !important;
+  background:rgba(255,253,249,.98) !important;
+  box-shadow:0 -5px 14px rgba(19,42,54,.06) !important;
+}
+body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish .field{
+  min-width:0;
+}
+
+@media (min-width:901px){
+  body:has(.tasks-page) .task-inspector{
+    height:clamp(460px, calc(100vh - 564px), 500px) !important;
+  }
+}
+
+@media (min-width:901px){
+  body:has(.tasks-page) .main-header{
+    min-height:106px !important;
+    padding:16px 32px 8px !important;
+  }
+  body:has(.tasks-page) .panel-content{
+    padding:8px 32px 24px !important;
+  }
+  body:has(.tasks-page) .task-period-tabs{
+    min-height:46px !important;
+  }
+  body:has(.tasks-page) .task-period-tab{
+    padding:4px 12px !important;
+    gap:0 !important;
+    font-size:13px !important;
+    line-height:18px !important;
+  }
+  body:has(.tasks-page) .task-period-tab span{
+    font-size:8px !important;
+    line-height:10px !important;
+  }
+  body:has(.tasks-page) .task-date-strip{
+    padding-top:2px !important;
+    padding-bottom:2px !important;
+  }
+  body:has(.tasks-page) .task-date-choice{
+    min-height:0 !important;
+    height:40px !important;
+    box-sizing:border-box !important;
+    gap:0 !important;
+    padding:2px 3px !important;
+  }
+  body:has(.tasks-page) .task-date-choice small{
+    font-size:9px !important;
+    line-height:11px !important;
+  }
+  body:has(.tasks-page) .task-date-choice strong{
+    font-size:12px !important;
+    line-height:15px !important;
+  }
+  body:has(.tasks-page) .task-filter-bar{
+    min-height:55px !important;
+    padding-top:6px !important;
+    padding-bottom:6px !important;
+  }
+  body:has(.tasks-page) .task-filter-bar label{
+    margin:0 !important;
+    gap:4px !important;
+  }
+  body:has(.tasks-page) .task-filter-bar input,
+  body:has(.tasks-page) .task-filter-bar select,
+  body:has(.tasks-page) .task-filter-bar button,
+  body:has(.tasks-page) #filterStat{
+    min-height:30px !important;
+    box-sizing:border-box !important;
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+  }
+  body:has(.tasks-page) .task-subtable thead tr{
+    min-height:32px !important;
+    padding-top:4px !important;
+    padding-bottom:4px !important;
+  }
+  body:has(.tasks-page) .task-subtable tbody tr{
+    min-height:0 !important;
+    grid-template-rows:46px !important;
+    padding-top:6px !important;
+    padding-bottom:6px !important;
+  }
+  body:has(.tasks-page) .task-list-footer{
+    min-height:40px !important;
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+  }
+  body:has(.tasks-page) .task-list-footer > *{
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+  }
+  body:has(.tasks-page) .task-detail strong{
+    font-size:11px !important;
+    line-height:1.2 !important;
+  }
+  body:has(.tasks-page) .task-detail small,
+  body:has(.tasks-page) .task-time small{
+    margin-top:2px !important;
+    font-size:9px !important;
+    line-height:1.2 !important;
+  }
+  body:has(.tasks-page) .task-status .task-progress-bar{
+    height:4px !important;
+    margin-top:4px !important;
+  }
+}
+
+@media (max-width:600px){
+  /* The legacy table hides these cells by nth-child; keep the card contract. */
+  body:has(.tasks-page) .task-list-inspector .task-subtable tbody tr td.task-status,
+  body:has(.tasks-page) .task-list-inspector .task-subtable tbody tr td.task-deadline{
+    display:block !important;
+    visibility:visible !important;
+  }
+
+  /* The drawer body scrolls above a static CTA row that owns its footprint. */
+  body:has(.tasks-page) .task-assignment-drawer{
+    padding:0 14px !important;
+    scroll-padding-bottom:0 !important;
+  }
+  body:has(.tasks-page) .task-assignment-drawer > .task-assignment-drawer__header{
+    margin:0 -14px !important;
+    padding:14px !important;
+  }
+  body:has(.tasks-page) .task-assignment-drawer > .task-assignment-drawer__body{
+    gap:10px;
+    padding-bottom:14px;
+  }
+  body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish{
+    position:static !important;
+    z-index:auto !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:8px;
+    margin:0 -14px !important;
+    padding:10px 14px 14px !important;
+    border-top:1px solid var(--tasks-line) !important;
+    background:rgba(255,253,249,.98) !important;
+    box-shadow:0 -5px 14px rgba(19,42,54,.06) !important;
+  }
+  body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish .field--grow,
+  body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish .field--action{
+    grid-column:1 / -1;
+  }
+  body:has(.tasks-page) .task-assignment-drawer > .task-form-row--publish .field--action button{
+    min-height:44px;
+  }
+}

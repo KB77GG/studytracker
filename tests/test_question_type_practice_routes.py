@@ -1,4 +1,7 @@
 import json
+import os
+import tempfile
+from datetime import datetime
 import unittest
 from urllib.parse import parse_qs, urlsplit
 
@@ -6,12 +9,15 @@ from flask import Flask
 from flask_login import LoginManager
 
 from api.question_type_practice import question_type_practice_bp
+from api import question_type_practice as question_type_practice_module
+from api.task_assignments import task_assignments_bp
 from models import (
     PlanItem,
     QuestionTypePracticeAttempt,
     StudentProfile,
     Task,
     User,
+    AuditLogEntry,
     db,
 )
 from services.question_type_practice import TASK_TYPE, snapshot_from_task
@@ -19,6 +25,12 @@ from services.question_type_practice import TASK_TYPE, snapshot_from_task
 
 class QuestionTypePracticeRouteTest(unittest.TestCase):
     def setUp(self):
+        self._audio_tmp = tempfile.TemporaryDirectory()
+        self._audio_env_before = os.environ.get("STUDYTRACKER_AUDIO_ROOT")
+        os.environ["STUDYTRACKER_AUDIO_ROOT"] = self._audio_tmp.name
+        for section in range(1, 5):
+            open(os.path.join(self._audio_tmp.name, f"ielts10_test1_s{section}.mp3"), "wb").close()
+        question_type_practice_module._library_rows.cache_clear()
         self.app = Flask(__name__, template_folder="../templates", static_folder="../static")
         self.app.config.update(
             TESTING=True,
@@ -54,6 +66,7 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
             return "today"
 
         self.app.register_blueprint(question_type_practice_bp)
+        self.app.register_blueprint(task_assignments_bp)
         with self.app.app_context():
             db.create_all()
             staff = User(username="assistant", password_hash="test", role=User.ROLE_ASSISTANT)
@@ -70,6 +83,12 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         with self.app.app_context():
             db.session.remove()
             db.drop_all()
+        question_type_practice_module._library_rows.cache_clear()
+        if self._audio_env_before is None:
+            os.environ.pop("STUDYTRACKER_AUDIO_ROOT", None)
+        else:
+            os.environ["STUDYTRACKER_AUDIO_ROOT"] = self._audio_env_before
+        self._audio_tmp.cleanup()
 
     def _login_staff(self):
         with self.client.session_transaction() as flask_session:
@@ -163,7 +182,8 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
     def test_token_draft_submit_result_and_wrong_group_repush(self):
         row = self._create_reading_task()
         task_id = row["id"]
-        token = row["url"].split("token=", 1)[1]
+        with self.app.app_context():
+            token = db.session.get(Task, task_id).reading_access_token
         draft_url = f"/api/question-type-practice/task/{task_id}/draft?token={token}"
         submit_url = (
             f"/api/question-type-practice/task/{task_id}/submit?token={token}"
@@ -198,6 +218,7 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
             self.assertEqual(attempt.duration_seconds, 42)
             self.assertTrue(json.loads(attempt.wrong_group_ids_json))
             self.assertEqual(task.plan_item.student_status, PlanItem.STUDENT_SUBMITTED)
+            token = task.reading_access_token
 
         self._login_staff()
         repush = self.client.post(
@@ -206,6 +227,7 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         )
         self.assertEqual(repush.status_code, 200, repush.get_data(as_text=True))
         self.assertEqual(len(repush.get_json()["tasks"]), 1)
+        self.assertNotIn(token, repush.get_data(as_text=True))
 
     def test_wrong_token_cannot_read_or_submit(self):
         row = self._create_reading_task()
@@ -223,6 +245,226 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
             ).status_code,
             404,
         )
+
+    def test_duplicate_publish_returns_409_with_per_student_group_details(self):
+        first = self._create_reading_task()
+        with self.app.app_context():
+            task = db.session.get(Task, first["id"])
+            token = task.reading_access_token
+            group_id = snapshot_from_task(task)["group_ids"][0]
+        duplicate = {
+            "student_names": ["测试学生"],
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+            "pace": "training",
+            "due_date": "2026-08-29",
+            "idempotency_key": "second-publish",
+        }
+        response = self.client.post("/api/question-type-practice/assign", json=duplicate)
+        self.assertEqual(response.status_code, 409, response.get_data(as_text=True))
+        payload = response.get_json()
+        self.assertEqual(payload["error"], "duplicate_assignment_conflict")
+        self.assertEqual(payload["students"][0]["matches"][0]["task_id"], first["id"])
+        self.assertEqual(payload["students"][0]["matches"][0]["overlap_type"], "exact")
+        self.assertNotIn(token, response.get_data(as_text=True))
+
+    def test_duplicate_preview_and_409_return_complete_student_group_matrix(self):
+        with self.app.app_context():
+            student_user = User(username="student-two", password_hash="test", role=User.ROLE_STUDENT)
+            db.session.add(student_user)
+            db.session.flush()
+            db.session.add(StudentProfile(full_name="测试学生乙", user_id=student_user.id))
+            db.session.commit()
+
+        self._login_staff()
+        selection = {
+            "student_names": ["测试学生", "测试学生乙"],
+            "subject": "reading",
+            "standard_type": "judgment",
+            "scope": "all",
+            "count": 2,
+            "pace": "training",
+            "planned_minutes": 12,
+            "due_date": "2026-08-29",
+        }
+        preview = self.client.post("/api/question-type-practice/preview", json=selection)
+        self.assertEqual(preview.status_code, 200, preview.get_data(as_text=True))
+        group_ids = [row["question_group_id"] for row in preview.get_json()["groups"][:2]]
+        self.assertEqual(len(group_ids), 2)
+
+        first = self.client.post(
+            "/api/question-type-practice/assign",
+            json={**selection, "student_names": ["测试学生"], "group_ids": [group_ids[0]], "idempotency_key": "matrix-history"},
+        )
+        self.assertEqual(first.status_code, 200, first.get_data(as_text=True))
+        with self.app.app_context():
+            token = db.session.get(Task, first.get_json()["tasks"][0]["id"]).reading_access_token
+
+        history = self.client.post(
+            "/api/task-assignments/duplicates",
+            json={
+                "student_names": ["测试学生", "测试学生乙"],
+                "source": "question_type",
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": group_ids,
+            },
+        )
+        self.assertEqual(history.status_code, 200, history.get_data(as_text=True))
+        history_payload = history.get_json()
+        self.assertEqual(len(history_payload["matrix_rows"]), 4)
+        self.assertEqual(
+            {(row["student_name"], row["unit_id"]) for row in history_payload["matrix_rows"]},
+            {(student, group) for student in ("测试学生", "测试学生乙") for group in group_ids},
+        )
+        matrix = {(row["student_name"], row["unit_id"]): row for row in history_payload["matrix_rows"]}
+        self.assertEqual(matrix[("测试学生", group_ids[0])]["match"]["task_id"], first.get_json()["tasks"][0]["id"])
+        self.assertEqual(matrix[("测试学生", group_ids[1])]["status_label"], "未布置")
+        self.assertEqual(matrix[("测试学生乙", group_ids[0])]["status_label"], "未布置")
+        self.assertEqual(matrix[("测试学生乙", group_ids[1])]["status_label"], "未布置")
+        self.assertNotIn(token, history.get_data(as_text=True))
+
+        conflict = self.client.post(
+            "/api/question-type-practice/assign",
+            json={**selection, "group_ids": group_ids, "idempotency_key": "matrix-conflict"},
+        )
+        self.assertEqual(conflict.status_code, 409, conflict.get_data(as_text=True))
+        conflict_payload = conflict.get_json()
+        self.assertEqual(conflict_payload["error"], "duplicate_assignment_conflict")
+        self.assertEqual(len(conflict_payload["matrix_rows"]), 4)
+        conflict_matrix = {
+            (row["student_name"], row["unit_id"]): row for row in conflict_payload["matrix_rows"]
+        }
+        self.assertEqual(conflict_matrix[("测试学生", group_ids[0])]["match"]["task_id"], first.get_json()["tasks"][0]["id"])
+        self.assertEqual(conflict_matrix[("测试学生", group_ids[1])]["status_label"], "未布置")
+        self.assertNotIn(token, conflict.get_data(as_text=True))
+
+    def test_client_retraining_mode_cannot_bypass_unfinished_duplicate(self):
+        first = self._create_reading_task()
+        with self.app.app_context():
+            group_id = snapshot_from_task(db.session.get(Task, first["id"]))["group_ids"][0]
+        response = self.client.post(
+            "/api/question-type-practice/assign",
+            json={
+                "student_names": ["测试学生"],
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": [group_id],
+                "retraining_mode": "wrong",
+                "idempotency_key": "malicious-bypass",
+            },
+        )
+        self.assertEqual(response.status_code, 409, response.get_data(as_text=True))
+        self.assertEqual(response.get_json()["error"], "duplicate_assignment_conflict")
+
+    def test_forced_repeat_derives_source_and_records_actor_reason(self):
+        first = self._create_reading_task()
+        with self.app.app_context():
+            task = db.session.get(Task, first["id"])
+            task.status = "done"
+            group_id = snapshot_from_task(task)["group_ids"][0]
+            db.session.commit()
+        response = self.client.post(
+            "/api/question-type-practice/assign",
+            json={
+                "student_names": ["测试学生"],
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": [group_id],
+                "force_repeat": True,
+                "confirm_repeat": True,
+                "force_reason": "复训来源测试",
+                "source_task_id": 999999,
+                "idempotency_key": "forced-source-derived",
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        self.assertNotIn("token=", response.get_data(as_text=True))
+        with self.app.app_context():
+            audit = AuditLogEntry.query.filter_by(field="assignment_repeat").order_by(AuditLogEntry.id.desc()).first()
+            self.assertEqual(audit.actor_id, self.staff_id)
+            self.assertEqual(audit.metadata_payload["reason"], "复训来源测试")
+            self.assertEqual(audit.metadata_payload["source_task_ids"], [first["id"]])
+            self.assertNotEqual(audit.metadata_payload["source_task_id"], 999999)
+
+    def test_staff_duplicate_history_endpoint_is_token_free(self):
+        first = self._create_reading_task()
+        with self.app.app_context():
+            task = db.session.get(Task, first["id"])
+            token = task.reading_access_token
+            group_id = snapshot_from_task(task)["group_ids"][0]
+        response = self.client.post(
+            "/api/task-assignments/duplicates",
+            json={
+                "student_names": ["测试学生"],
+                "source": "question_type",
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": [group_id],
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        body = response.get_data(as_text=True)
+        self.assertNotIn(token, body)
+        self.assertEqual(response.get_json()["students"][0]["status_label"], "已布置")
+
+    def test_same_idempotency_key_returns_one_batch(self):
+        self._login_staff()
+        selection = {
+            "student_names": ["测试学生"],
+            "subject": "reading",
+            "standard_type": "judgment",
+            "scope": "all",
+            "count": 1,
+            "pace": "training",
+            "planned_minutes": 12,
+            "due_date": "2026-08-29",
+            "idempotency_key": "stable-publish-key",
+        }
+        preview = self.client.post("/api/question-type-practice/preview", json=selection)
+        self.assertEqual(preview.status_code, 200, preview.get_data(as_text=True))
+        selection["group_ids"] = [preview.get_json()["groups"][0]["question_group_id"]]
+        first = self.client.post("/api/question-type-practice/assign", json=selection)
+        second = self.client.post("/api/question-type-practice/assign", json=selection)
+        self.assertEqual(first.status_code, 200, first.get_data(as_text=True))
+        self.assertEqual(second.status_code, 200, second.get_data(as_text=True))
+        self.assertTrue(second.get_json()["idempotent"])
+        self.assertNotIn("token=", first.get_data(as_text=True))
+        self.assertNotIn("token=", second.get_data(as_text=True))
+        with self.app.app_context():
+            self.assertEqual(Task.query.count(), 1)
+
+    def test_wrong_repush_rejects_empty_groups_and_unknown_students(self):
+        row = self._create_reading_task()
+        with self.app.app_context():
+            task = db.session.get(Task, row["id"])
+            attempt = question_type_practice_module._attempt(task, snapshot_from_task(task))
+            attempt.submitted_at = datetime.utcnow()
+            attempt.wrong_group_ids_json = "[]"
+            db.session.commit()
+        empty = self.client.post(
+            f"/api/question-type-practice/task/{row['id']}/repush",
+            json={"mode": "wrong"},
+        )
+        self.assertEqual(empty.status_code, 400)
+        self.assertEqual(empty.get_json()["error"], "wrong_groups_empty")
+        with self.app.app_context():
+            attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=row["id"]).one()
+            attempt.wrong_group_ids_json = json.dumps([snapshot_from_task(db.session.get(Task, row["id"]))["group_ids"][0]])
+            db.session.commit()
+        unknown = self.client.post(
+            f"/api/question-type-practice/task/{row['id']}/repush",
+            json={"mode": "wrong", "student_names": ["不存在学生"]},
+        )
+        self.assertEqual(unknown.status_code, 400)
+        self.assertEqual(unknown.get_json()["error"], "student_not_found")
+
+    def test_legacy_teacher_entry_redirects_to_unified_task_drawer(self):
+        self._login_staff()
+        response = self.client.get("/tasks/question-types")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.location, "/tasks?source=question_type#taskForm")
 
 
 if __name__ == "__main__":

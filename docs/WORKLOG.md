@@ -4,6 +4,88 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-01 /tasks 方向 2 · Sol 最终 exact Chrome 验收通过
+
+- Sol 读取最终 diff 后用 Chrome 精确 `1440×1024` / `390×844` 复核，并将方向 2 目标与最终桌面实现置于同一张 `artifacts/sol-visual-qa-20260901/target-vs-sol-1440x1024-approved.png`。桌面核心工作区结束约 y=733；移动卡状态/进度/截止日期可见；三段抽屉 body/footer overlap=0；移动检查器、筛选/日期、编辑/更多与五来源切换通过，console error/warning `[]`，无横向溢出。
+- 最终回归由 Sol 重跑：Python `40/46/55 passed`，Node `23/23`，py_compile、JS syntax、diff check 全通过；防重复、409、幂等、复训审计、专项矩阵和旧任务链路无回归。`design-qa.md` 顶部覆盖结论更新为 `final result: passed`。
+- 现场仍为原 detached HEAD `846900c6` 与原脏 worktree；合成 `app.db` 和 5079 预览保留给用户体验。未 commit/push/deploy、未写生产数据库，全部成果仅本机可见；下一步等待用户决定是否统一提交与部署。
+
+## 2026-09-01 `/tasks` 方向 2 第四轮视觉残留修复（Luna，待 Sol exact 复验）
+
+- 只修最后两个视觉布局问题：抽屉改成 header / 独立滚动 body / 静态发布 footer 三段，footer 不再覆盖五来源或题型专项字段；桌面 inspector 高度压到 460–500px，保留内部滚动与两项并排主操作。业务防重复、409、幂等、复训审计未改。
+- IAB 真实 `1280×720` 核对：题型专项 body `y=113..623`、`scrollHeight=1034`，footer `y=623..720` 且 static、无重叠；普通/题型专项五来源可见；正常工作区 `scrollWidth=1265`、inspector `460px`、页面源 console error/warning `[]`。截图与非 exact 目标对照在 `artifacts/tasks-workspace-qa-20260901/`。
+- Python `40/46/55 passed`（152/254/1189 warnings，2/2/3 subtests），Node **23/23**，py_compile、node check、diff check 全通过。`design-qa.md` 保持 `final result: blocked`，等待 Sol 第四次 exact Chrome 复验；临时 5087/数据库收尾清理，5079/app.db 体验环境保留。
+
+## 2026-09-01 /tasks 方向 2 第三轮视觉残留修复（Luna，待 Sol exact 复验）
+
+- 在原 worktree detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a` 仅修移动级联/抽屉 sticky CTA/桌面高度预算/检查器双主操作；新增最后加载 `static/tasks_workspace_final.css` 与结构断言，业务防重复链路未改。
+- IAB 实测 1280×720：header 110.09、tabs 46、dates 44、filters 64、thead 32、首行 59、footer 40；状态/截止日期 visible、主操作同一行、scrollWidth 1265、页面源 console error/warning `[]`。证据 `artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-repair-final2.png`，目标同次组合图 `artifacts/tasks-workspace-qa-20260901/target-vs-current-repair-final2-1280qa.png`。
+- Python `40/46/55 passed`（152/254/1189 warnings，2/2/3 subtests），Node `23/23`，py_compile、node check、diff check 通过。IAB 无 exact viewport，`design-qa.md` 保持 blocked，等待 Sol 用 Chrome 复验 1440/390；未 commit/push/deploy/生产写入。临时 5087/数据库已清理，用户 app.db/5079 保留未触碰。
+
+## 2026-09-01 /tasks 方向 2 第二轮视觉返修（Luna，待 Sol exact viewport 复验）
+
+- 在原 worktree detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a` 继续返修，未 commit/push/deploy/写生产库；压缩侧栏、页头、日期/筛选和任务行，隐藏任务列表标题工具条，检查器改为内部信息滚动并固定状态/计时/两项主操作，移动状态/截止日期用高优先级规则恢复，抽屉元区改为稳定单列/双列且发布区不覆盖来源。
+- IAB 仅实测 1280×720：scrollWidth `1265`，页面源 error/warning `[]`；编辑弹窗、五来源抽屉和检查器主操作可用。截图/同次目标对照在 `artifacts/tasks-workspace-qa-20260901/tasks-workspace-1280x720-repair-final.png`、`target-vs-current-repair-final-1280qa.png`。无 viewport capability，未伪造 1440/390，`design-qa.md` 保持 `final result: blocked` 等 Sol exact Chrome 复验。
+- 最终自动化：Python `40/46/55 passed`（分别 152/254/1189 warnings，2/2/3 subtests）；Node 指定 `19/19`，含矩阵/工作台 `23/23`；py_compile、node check、diff check 全部通过。独立临时 5087/数据库已清理；用户保留 app.db/5079 未触碰。
+
+## 2026-09-01 /tasks 方向 2 首屏返修（Luna，本轮待 Sol exact viewport 复验）
+
+- 在既有脏 worktree `/Users/zhouxin/.codex/worktrees/c56a/studytracker`、detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a` 继续工作，起始 `## HEAD (no branch)`，`HEAD...origin/main=0 0`；未 commit/push/deploy/写生产库。
+- `/tasks` 首屏已改成日期标签/日期条/筛选/统一任务列表+右侧检查器，列表和检查器保留真实状态、计时、成绩、编辑、删除、批改、轨迹入口；正式 Sage mark/Font Awesome 导航、页头曲线、新 CSS/JS 工作区模块和结构测试已加入。原统一布置五来源、题型专项矩阵、防重复功能未改合同。
+- 验证：指定五文件 Python **40 passed / 2 subtests**；六文件任务路由扩展 **46 passed / 2 subtests**；旧任务/学生端/听写回归 **55 passed / 3 subtests**；Node 指定三文件+matrix+workspace structure **23/23**；`py_compile`、`node --check`、`git diff --check` 通过，仅既有 SQLAlchemy 弃用警告。
+- IAB 实际只能提供 `1280×720`：首屏顺序、抽屉、搜索、日期、分页、更多菜单可用，`document/body.scrollWidth=1265`，干净页 console error/warning `[]`；截图和目标并排图在 `artifacts/tasks-workspace-qa-20260901/`。IAB 无 viewport capability，故 `design-qa.md` 保持 `final result: blocked`，等待 Sol 用可控 Chrome 补 1440×1024 与 390×844。
+- 独立临时 `/tmp/studytracker-qa.IUENjE`、端口 5087 和临时浏览器页已清理；用户保留的 `app.db` 与 5079 未触碰，仍仅本机可见。下一步只做 Sol exact viewport 视觉/overflow/console 复验，不要覆盖既有未提交成果。
+
+## 2026-09-01 /tasks 方向 2 独立视觉复核未通过
+
+- 使用 Luna 最终桌面截图与已确认目标图并排复核，确认用户判断成立：当前实现仍是旧任务页换肤/重排，未忠实还原目标的日期标签与逐日条、统一高密度任务列表、完整右侧检查器、图标化导航和页头品牌资产。
+- 功能侧的统一任务入口、防重复矩阵、409 与幂等成果可保留；返修应集中于首屏信息架构和视觉 fidelity。覆盖性结论已写入 `design-qa.md`，对照图在 `artifacts/audit-tasks-design-20260901/01-target-vs-final-implementation.png`。
+- 本轮未改业务代码、数据库或生产服务，未重新运行功能测试，未 commit/push/deploy；所有审计证据仍仅本机可见。
+
+## 2026-09-01 /tasks 方向 2 统一任务入口与重复发布防护（仅本机）
+
+### 本轮本地真实体验环境（仅本机，保留中）
+
+- 为用户真实体验 `/tasks`，本工作树保留本地 `app.db` 合成数据：1 个体验管理员、3 个 Demo 学员、1 个 Demo 材料、6 条多来源/多状态任务。
+- Flask 开发服务当前运行于 `http://127.0.0.1:5079`；Chrome 已登录本地体验管理员并停留在 `/tasks`，统一“布置新任务”抽屉已打开。
+- 仅本机可见，可随时清理；未写生产数据库、未部署，未记录演示账号密码或任何令牌。
+
+### P2 返修：409 内部码改为中文操作提示（仅本机）
+
+- API 仍返回稳定 `duplicate_assignment_conflict`；前端映射为“检测到重复任务：请查看下方历史记录；如需复训，请二次确认并填写原因。”。题型专项与普通/材料/听力/阅读 409 都保留完整历史矩阵，不再把内部码展示给助教；未知错误仍保留通用发布失败文案。
+- Chrome 真实 409 重做桌面/390px 证据：`artifacts/tasks-qtype-matrix-409-chrome-desktop-1440x1024.png`、`artifacts/tasks-qtype-matrix-409-chrome-mobile-390x844.png`；桌面 `body/document=1425`，移动 `body/document=375`、抽屉 `358`，页面源 console error/warning `[]`，Chrome 扩展自身日志不计入；四格完整，命中格“完全重复”，中文提示已核对。
+- 定向 renderer **2 passed**；用户指定 Python **40 passed / 2 subtests**；用户指定 Node **19/19**；task routes **6 passed**；node syntax、diff check 通过。无数据库/schema 改动；本地服务已停止、`app.db*` 已清理，未 commit/push/deploy/写生产库，不宣称 Sol 已验收。
+
+### Sol 独立最终复验（不覆盖此前 Luna 结果）
+
+- Sol 独立源码审阅确认 P1/P2 已关闭：普通来源幂等/409、服务端事务重检、`retraining_mode` 不可绕过、token-free staff API、服务端审计来源、完整学生×题组矩阵、原子格 exact 语义、中文 409 提示。
+- 工作树 `/Users/zhouxin/.codex/worktrees/c56a/studytracker`，detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a`，`HEAD...origin/main=0 0`。Sol 自动化：指定五文件 Python **40 passed, 152 warnings, 2 subtests**；六文件扩展集合 **46 passed, 254 warnings, 2 subtests**；旧任务/学生端/听写回归 **55 passed, 1189 warnings, 3 subtests**；Node 三指定文件+matrix renderer **21/21**；`node --check`、`git diff --check` 通过，仅有既有 SQLAlchemy deprecation warnings。
+- Sol 用独立新建/清理的本地合成数据完成 Chrome：1440×1024 列表+检查器首屏、scrollWidth `1425≤1440`、无孤立专项入口；专项两学生×两题组四格，真实 409 后仍完整，命中格“进行中/待批改 · 完全重复”、其余“未布置”；显式复训、普通单学生发布、旧入口重定向均通过。390×844 document/body `375`、drawer `358`，无溢出；中文 409 提示可见，页面源不含内部码，console error/warning `[]`（Chrome 扩展日志排除）。
+- Sol 同一次视觉输入比较目标图与最终实现图，确认方向 2 的深墨侧栏、暖象牙工作区、Sage 主操作、列表+检查器、抽屉和移动响应式通过。临时 `app.db*` 已删除、5079 已停止；生产浏览器/生产数据/部署环境未验证。结论：**Sol 独立功能、自动化、浏览器、视觉验收通过**。截图：`artifacts/tasks-qtype-matrix-409-chrome-desktop-1440x1024.png`、`artifacts/tasks-qtype-matrix-409-chrome-mobile-390x844.png`。
+- 当前改动仍仅本机可见，未 commit、未 push、未 deploy、未写生产数据库；本条为 Sol 独立复验，不覆盖此前 Luna 结果。
+
+### P1 返修：question_type 学生 × 题组矩阵（仅本机）
+
+- 在原有脏 worktree `/Users/zhouxin/.codex/worktrees/c56a/studytracker` 继续修复：duplicate history 响应新增请求题组全集与完整 `matrix_rows`，前端改用独立 renderer，预览与 409 都按学生×题组逐格展示，不再仅遍历历史 matches。
+- 自动化新增两名学生×两题组四格服务/路由断言和 JS renderer 断言；实际验证“一格历史 + 三格未布置”、并发 409 后仍四格、token-free。用户指定 Python **40 passed / 2 subtests**，扩展集合 **46 passed / 2 subtests**，相关旧回归 **55 passed / 3 subtests**，用户指定 Node **19/19**，新增 renderer **1 passed**。
+- 真实 Chromium 使用本地合成账号在 1440×1024 / 390×844 复验，四格可见、抽屉和页面无横向溢出、console error/warning 为空。证据图在 `artifacts/tasks-qtype-matrix-*.png`；目标图与桌面实现图同一次组合比较已更新 `design-qa.md`。
+- 未 commit、push、deploy、写生产数据库；本机临时 `app.db` 仅用于验收，最终已停止服务并清理数据库文件。
+
+### P2 返修：原子题组格显示完全重复（仅本机）
+
+- 保持任务级 G1+G2 部分重叠语义不变；只把 question_type 的命中 `student × group` 矩阵行设为 `exact`，renderer 优先使用行字段并兼容旧响应回退到 match 字段。
+- 浏览器重新验证预览与真实 409：G1（以及 409 中的 G2）显示“未开始 · 完全重复”，另外三格逐格显示“未布置”；返回只含 staff-safe 原任务入口，无 token。桌面 `body.scrollWidth=1425`，390px 页面 `document/body=375`、抽屉 `scrollWidth=358`，console error/warning `[]`。
+- 重做并覆盖四张矩阵截图：`artifacts/tasks-qtype-matrix-desktop-1440x1024-final.png`、`artifacts/tasks-qtype-matrix-mobile-390x844-final.png`、`artifacts/tasks-qtype-matrix-409-desktop-1440x1024.png`、`artifacts/tasks-qtype-matrix-409-mobile-390x844.png`。目标图与最终 409 桌面实现图已在同一次视觉输入中组合复核。
+- 最终命令：用户指定 Python **40 passed / 2 subtests**；扩展任务路由 **26 passed**；相关旧回归 **55 passed / 3 subtests**；用户指定 Node **19/19**；矩阵 renderer **1 passed**；py_compile、node syntax、diff check 全部通过。未 commit、push、deploy、写生产库；不要宣称 Sol 已验收。
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/c56a/studytracker` 为 detached HEAD `846900c6`；起始状态为 `## HEAD (no branch)`，远端 `origin/main`，`HEAD...origin/main=0 0`。本轮没有 commit、push、deploy 或生产数据库写入。
+- `/tasks` 现为方向 2 工作台：日期窗口/筛选、任务列表和右侧检查器首屏可见；统计、Recent、Top、备忘录仍保留。布置抽屉合并普通、材料、Listening、Reading、题型专项，普通来源单学生，专项支持多学生；旧专项入口安全重定向。
+- 新 service 负责稳定资源身份、批量历史查询、学生×单位/题组矩阵、完全/部分重复、409 冲突详情和审计。统一识别 snapshot group IDs、Listening Section/题号、Reading Passage/题号、材料题号/范围、听写/口语序号范围；普通文字无法可靠判断时不显示“未布置”。
+- 所有 staff 发布响应 token-free；统一表单首提生成并复用幂等 key，旧客户端有确定性 fallback；后端事务复核、整批原子、SQLite writer lock 和唯一索引保护双击/重试/并发。完全重复默认阻止，完成/部分重复需要确认+原因；合法错题 repush 验证来源、拒绝空 wrong groups，并写 actor/reason/source 审计。
+- 自动化：原任务书 Python 精确命令 `38 passed, 2 subtests passed`；含新增 `tests/test_task_assignment_routes.py` 的扩展集合 `44 passed, 2 subtests passed`；Node `19/19 passed`；py_compile、diff check 通过。具体命令和结果已写入 `docs/CODEX_HANDOFF.md`。
+- 真实 Chromium `127.0.0.1:5079` 已验收 1440×1024 / 390×844、专项矩阵、Listening Section、Reading Passage、材料题号、听写交叉范围、409 回显、显式复训、更多菜单和旧入口；console error `[]`，两视口无横向溢出。目标图与最终实现图在同一次组合输入中复核；证据在未跟踪 `artifacts/tasks-*.png`，报告为根目录 `design-qa.md`，最终 `final result: passed`。
+- 本机浏览器仅使用合成数据，本地服务器已停止，临时 `app.db` 已从工作树清理；这些内容只本机可见，不进入生产、fixture、日志或学生隐私。交接文件已同步更新，最终 Git 状态已复核。
+
 ## 2026-08-31 听力表格题题干缺失热修（网页已上线）
 
 - 在独立干净工作树 `/Users/zhouxin/.codex/worktrees/listening-form-stem-hotfix`、分支

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import hashlib
 from datetime import date, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
@@ -32,6 +33,14 @@ from services.question_type_assignments import (
     create_assignment,
 )
 from services.practice_navigation import safe_local_target
+from services.task_assignment_duplicates import (
+    begin_assignment_transaction,
+    check_duplicate_assignments,
+    normalize_idempotency_key,
+    staff_task_payload,
+    validate_publish_conflicts,
+    write_repeat_audit,
+)
 from services.question_type_practice import (
     PACE_EXAM,
     PRACTICE_TYPE_ORDER,
@@ -243,6 +252,10 @@ def _selection_snapshot(data: dict) -> tuple[list[dict], dict]:
     pace = str(data.get("pace") or "training").strip()
     standard_type = str(data.get("standard_type") or "").strip()
     selected = _selected_rows(data)
+    if not data.get("group_ids") and data.get("unit_count") in (None, ""):
+        requested = max(1, min(int(data.get("count") or 1), 20))
+        if len(selected) < requested:
+            raise ValueError(f"insufficient_question_groups:{requested - len(selected)}")
     snapshot = build_snapshot(
         selected,
         pace=pace,
@@ -485,17 +498,9 @@ def student_index():
 def teacher_index():
     if not _is_staff():
         return redirect(url_for("question_type_practice.student_index"))
-    students = (
-        StudentProfile.query.filter_by(is_deleted=False)
-        .order_by(StudentProfile.full_name.asc())
-        .all()
-    )
-    return render_template(
-        "question_type_practice/teacher_index.html",
-        students=students,
-        type_summaries=_type_summaries(),
-        today=date.today().isoformat(),
-    )
+    # Keep old bookmarks alive while making the unified task drawer the one
+    # teacher-facing assignment entry point.
+    return redirect("/tasks?source=question_type#taskForm")
 
 
 @question_type_practice_bp.get("/api/question-type-practice/inventory")
@@ -563,6 +568,27 @@ def _assignment_inputs(data: dict, snapshot: dict) -> tuple[str, int, str]:
     return due_date, planned_minutes, str(data.get("note") or "").strip()
 
 
+def _exclude_groups_for_students(data: dict, names: list[str]) -> dict:
+    """Exclude the union of previously assigned groups for a batch."""
+
+    if data.get("group_ids"):
+        return data
+    subject = str(data.get("subject") or "").strip()
+    standard_type = str(data.get("standard_type") or "").strip()
+    if not subject or not standard_type or not names:
+        return data
+    excluded: set[str] = set()
+    history = Task.query.filter(Task.student_name.in_(names)).all()
+    for task in history:
+        snapshot = snapshot_from_task(task) if task else None
+        if snapshot and snapshot.get("subject") == subject and snapshot.get("standard_type") == standard_type:
+            excluded.update(str(group_id) for group_id in snapshot.get("group_ids") or [])
+    excluded.update(str(group_id) for group_id in data.get("exclude_group_ids") or [])
+    if not excluded:
+        return data
+    return {**data, "exclude_group_ids": sorted(excluded)}
+
+
 @question_type_practice_bp.post("/api/question-type-practice/assign")
 @login_required
 def assign_api():
@@ -576,12 +602,60 @@ def assign_api():
     )
     profiles = StudentProfile.query.filter(
         StudentProfile.full_name.in_(names), StudentProfile.is_deleted.is_(False)
-    ).all()
+    ).order_by(StudentProfile.id.asc()).all()
     if not names or len(profiles) != len(names):
         return jsonify(ok=False, error="student_not_found"), 400
     try:
+        data = _exclude_groups_for_students(data, names)
         _selected, snapshot = _selection_snapshot(data)
         due_date, minutes, note = _assignment_inputs(data, snapshot)
+        # The first publish request from the unified drawer always carries a
+        # key.  A deterministic fallback preserves idempotency for older API
+        # clients that have not added it yet.
+        raw_key = normalize_idempotency_key(data.get("idempotency_key"))
+        if not raw_key:
+            fingerprint = json.dumps(
+                {
+                    "names": names,
+                    "subject": snapshot["subject"],
+                    "standard_type": snapshot["standard_type"],
+                    "groups": snapshot["group_ids"],
+                    "due_date": due_date,
+                    "minutes": minutes,
+                    "note": note,
+                },
+                sort_keys=True,
+                ensure_ascii=False,
+            ).encode("utf-8")
+            raw_key = "legacy-" + hashlib.sha256(fingerprint).hexdigest()[:48]
+        per_student_keys = {
+            profile.id: hashlib.sha256(f"{raw_key}:{profile.id}".encode()).hexdigest()
+            for profile in profiles
+        }
+        begin_assignment_transaction()
+        existing = Task.query.filter(
+            Task.assignment_idempotency_key.in_(list(per_student_keys.values()))
+        ).all()
+        if existing:
+            if len(existing) == len(profiles):
+                return jsonify(
+                        ok=True,
+                        idempotent=True,
+                        tasks=[staff_task_payload(task) for task in sorted(existing, key=lambda row: row.id)],
+                )
+            db.session.rollback()
+            return jsonify(ok=False, error="idempotency_key_reused"), 409
+
+        duplicate_result = validate_publish_conflicts(
+            names,
+            {**data, "source": "question_type", "group_ids": snapshot["group_ids"]},
+            force_repeat=bool(data.get("force_repeat")),
+            force_reason=str(data.get("force_reason") or ""),
+            confirmed=bool(data.get("confirm_repeat")),
+        )
+        if not duplicate_result["can_publish"]:
+            db.session.rollback()
+            return jsonify(ok=False, **duplicate_result), 409
         tasks = [
             create_assignment(
                 profile=profile,
@@ -590,20 +664,37 @@ def assign_api():
                 due_date=due_date,
                 planned_minutes=minutes,
                 note=note,
+                idempotency_key=per_student_keys[profile.id],
             )
             for profile in profiles
         ]
+        if duplicate_result.get("forced"):
+            write_repeat_audit(
+                tasks,
+                actor_id=current_user.id,
+                reason=str(data.get("force_reason") or ""),
+                source_task_ids_by_student={
+                    row["student_name"]: row.get("source_task_ids", [])
+                    for row in duplicate_result.get("students", [])
+                },
+            )
         db.session.commit()
     except (TypeError, ValueError) as exc:
         db.session.rollback()
         return jsonify(ok=False, error=str(exc)), 400
+    except Exception as exc:
+        # A unique-key race is a safe retry response; all other failures keep
+        # the transaction atomic and remain server errors for observability.
+        db.session.rollback()
+        if "unique" in str(exc).lower() and "assignment_idempotency" in str(exc).lower():
+            return jsonify(ok=False, error="idempotency_key_reused"), 409
+        raise
     for profile, task in zip(profiles, tasks, strict=True):
         _notify_assignment(profile, task)
     return jsonify(
         ok=True,
         tasks=[
-            {"id": task.id, "student_name": task.student_name, "url": assignment_url(task)}
-            for task in tasks
+            staff_task_payload(task) for task in tasks
         ],
     )
 
@@ -911,13 +1002,22 @@ def repush_api(task_id: int):
         return jsonify(ok=False, error="result_not_found"), 404
     data = request.get_json(silent=True) or {}
     mode = str(data.get("mode") or "wrong").strip()
+    names = data.get("student_names") or [task.student_name]
+    names = list(dict.fromkeys(str(name).strip() for name in names if str(name).strip()))
     selection = {
         "subject": snapshot["subject"],
         "standard_type": snapshot["standard_type"],
         "pace": str(data.get("pace") or snapshot["pace"]),
     }
     if mode == "wrong":
-        selection["group_ids"] = json.loads(attempt.wrong_group_ids_json or "[]")
+        wrong_group_ids = json.loads(attempt.wrong_group_ids_json or "[]")
+        if not isinstance(wrong_group_ids, list) or not wrong_group_ids:
+            return jsonify(ok=False, error="wrong_groups_empty"), 400
+        source_group_ids = {str(group_id) for group_id in snapshot.get("group_ids") or []}
+        wrong_group_ids = [str(group_id) for group_id in wrong_group_ids]
+        if any(group_id not in source_group_ids for group_id in wrong_group_ids):
+            return jsonify(ok=False, error="wrong_groups_not_in_source"), 400
+        selection["group_ids"] = wrong_group_ids
     elif mode == "same_type_new":
         selection.update(
             {
@@ -928,13 +1028,48 @@ def repush_api(task_id: int):
         )
     else:
         return jsonify(ok=False, error="invalid_repush_mode"), 400
-    names = data.get("student_names") or [task.student_name]
+    selection = _exclude_groups_for_students(selection, names)
     profiles = StudentProfile.query.filter(
         StudentProfile.full_name.in_(names), StudentProfile.is_deleted.is_(False)
-    ).all()
+    ).order_by(StudentProfile.id.asc()).all()
+    if not names or len(profiles) != len(names):
+        return jsonify(ok=False, error="student_not_found"), 400
     try:
         _selected, new_snapshot = _selection_snapshot(selection)
         due_date, minutes, note = _assignment_inputs(data, new_snapshot)
+        raw_key = normalize_idempotency_key(data.get("idempotency_key"))
+        if not raw_key:
+            fingerprint = json.dumps(
+                {
+                    "source_task_id": task_id,
+                    "mode": mode,
+                    "names": names,
+                    "groups": new_snapshot["group_ids"],
+                    "due_date": due_date,
+                },
+                sort_keys=True,
+                ensure_ascii=False,
+            ).encode("utf-8")
+            raw_key = "repush-" + hashlib.sha256(fingerprint).hexdigest()[:48]
+        per_student_keys = {
+            profile.id: hashlib.sha256(f"{raw_key}:{profile.id}".encode()).hexdigest()
+            for profile in profiles
+        }
+        begin_assignment_transaction()
+        existing = Task.query.filter(
+            Task.assignment_idempotency_key.in_(list(per_student_keys.values()))
+        ).all()
+        if existing:
+            if len(existing) == len(profiles):
+                return jsonify(
+                    ok=True,
+                    idempotent=True,
+                    tasks=[
+                        staff_task_payload(row) for row in sorted(existing, key=lambda row: row.id)
+                    ],
+                )
+            db.session.rollback()
+            return jsonify(ok=False, error="idempotency_key_reused"), 409
         tasks = [
             create_assignment(
                 profile=profile,
@@ -943,9 +1078,27 @@ def repush_api(task_id: int):
                 due_date=due_date,
                 planned_minutes=minutes,
                 note=note or ("错题重练" if mode == "wrong" else "同题型新题"),
+                idempotency_key=per_student_keys[profile.id],
             )
             for profile in profiles
         ]
+        for row in tasks:
+            metadata = _json_object(row.plan_item.resource_metadata)
+            metadata.update(
+                {
+                    "retraining_mode": "wrong_answer_retrain" if mode == "wrong" else "same_type_new",
+                    "source_task_id": task_id,
+                    "source_task_ids": [task_id],
+                }
+            )
+            row.plan_item.resource_metadata = json.dumps(metadata, ensure_ascii=False)
+        write_repeat_audit(
+            tasks,
+            actor_id=current_user.id,
+            reason=note or ("错题完整组复训" if mode == "wrong" else "同题型新题"),
+            source_task_id=task_id,
+            mode="wrong_answer_retrain" if mode == "wrong" else "same_type_new",
+        )
         db.session.commit()
     except (TypeError, ValueError, json.JSONDecodeError) as exc:
         db.session.rollback()
@@ -953,7 +1106,6 @@ def repush_api(task_id: int):
     return jsonify(
         ok=True,
         tasks=[
-            {"id": row.id, "student_name": row.student_name, "url": assignment_url(row)}
-            for row in tasks
+            staff_task_payload(row) for row in tasks
         ],
     )
