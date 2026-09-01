@@ -8,7 +8,6 @@ from flask_login import current_user, login_required
 from models import User
 from services.task_assignment_duplicates import check_duplicate_assignments
 
-
 task_assignments_bp = Blueprint("task_assignments", __name__)
 
 

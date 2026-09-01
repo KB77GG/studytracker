@@ -1,23 +1,23 @@
 import json
 import os
 import tempfile
-from datetime import datetime
 import unittest
+from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
 
 from flask import Flask
 from flask_login import LoginManager
 
-from api.question_type_practice import question_type_practice_bp
 from api import question_type_practice as question_type_practice_module
+from api.question_type_practice import question_type_practice_bp
 from api.task_assignments import task_assignments_bp
 from models import (
+    AuditLogEntry,
     PlanItem,
     QuestionTypePracticeAttempt,
     StudentProfile,
     Task,
     User,
-    AuditLogEntry,
     db,
 )
 from services.question_type_practice import TASK_TYPE, snapshot_from_task

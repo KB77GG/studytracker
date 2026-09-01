@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
-import hashlib
 from datetime import date, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
@@ -27,19 +27,11 @@ from services.ielts_practice_scoring import (
     grade_listening_test_answers,
     grade_reading_test_answers,
 )
+from services.practice_navigation import safe_local_target
 from services.question_type_assignments import (
     assignment_url,
     complete_assignment_plan_item,
     create_assignment,
-)
-from services.practice_navigation import safe_local_target
-from services.task_assignment_duplicates import (
-    begin_assignment_transaction,
-    check_duplicate_assignments,
-    normalize_idempotency_key,
-    staff_task_payload,
-    validate_publish_conflicts,
-    write_repeat_audit,
 )
 from services.question_type_practice import (
     PACE_EXAM,
@@ -58,6 +50,13 @@ from services.question_type_practice import (
     public_snapshot,
     question_type_display_label,
     snapshot_from_task,
+)
+from services.task_assignment_duplicates import (
+    begin_assignment_transaction,
+    normalize_idempotency_key,
+    staff_task_payload,
+    validate_publish_conflicts,
+    write_repeat_audit,
 )
 
 question_type_practice_bp = Blueprint("question_type_practice", __name__)

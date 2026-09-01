@@ -9,16 +9,15 @@ answers, and other student secrets never leave this service.
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import re
-from datetime import date
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from sqlalchemy import text
 
 from models import AuditLogEntry, Task, db
-
 
 STATUS_LABELS = {
     "pending": "未开始",
