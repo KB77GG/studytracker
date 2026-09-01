@@ -4,6 +4,12 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-01 /tasks 统一任务布置与防重复已上线
+
+- 用户授权发布后，从原 worktree 新建 `codex/unified-task-assignment`；业务提交 `e971556f` 与任务内 import/lint 清理 `6e82b264` 已推送该分支及 `main`。合成 `app.db` 和 16 MiB `artifacts/` 未入 Git。
+- GitHub 最终 CI `33512536726` 的 test job 通过，部署 `33512536754` success；全仓 Ruff 仍只报既有迁移脚本 advisory，本任务定向 Ruff 已全通过。Sol 重跑 Python `46/55 passed`、Node `23/23`、语法与 diff check 全通过。
+- 生产 HEAD `6e82b264`，service active，5002 / 1 worker / gthread / 6 threads；SQLite `quick_check=ok`、外键 0，幂等列与唯一索引已生效，无生产业务/学生数据写入。公网静态资产与本地/服务器哈希一致，部署后日志无应用错误。小程序未上传/提审/发布；下一步只观察现场反馈。
+
 ## 2026-09-01 /tasks 方向 2 · Sol 最终 exact Chrome 验收通过
 
 - Sol 读取最终 diff 后用 Chrome 精确 `1440×1024` / `390×844` 复核，并将方向 2 目标与最终桌面实现置于同一张 `artifacts/sol-visual-qa-20260901/target-vs-sol-1440x1024-approved.png`。桌面核心工作区结束约 y=733；移动卡状态/进度/截止日期可见；三段抽屉 body/footer overlap=0；移动检查器、筛选/日期、编辑/更多与五来源切换通过，console error/warning `[]`，无横向溢出。

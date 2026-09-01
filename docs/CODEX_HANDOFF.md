@@ -3,6 +3,16 @@
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
 > 最近更新：2026-09-01 任务管理统一入口改版（Asia/Shanghai）。
 
+## 2026-09-01 `/tasks` 统一任务布置与防重复已发布
+
+- 发布工作树为 `/Users/zhouxin/.codex/worktrees/c56a/studytracker`，分支 `codex/unified-task-assignment`，基线 `846900c65e3b094354c4ebb3d3367a7a918b0b0a`。业务提交 `e971556fb9eae40b9584d419b782b197e5d09611` 和仅整理本任务 imports 的 `6e82b264506ec5dcbfb8c77fd21e01b2c258f1b4` 已推送任务分支与 `origin/main`。生产业务 HEAD 为 `6e82b264`。
+- GitHub Actions 部署 `33512182679` 与最终部署 `33512536754` 均为 success；对应 CI `33512182660` / `33512536726` 的 test job 通过。全仓 Ruff job 仍会报既有 `add_*.py` 迁移脚本的 advisory 问题，但本任务 5 个 Python 文件的定向 Ruff 已 `All checks passed`。
+- Sol 发布前/质量修正后均重跑：任务与路由 **46 passed, 254 warnings, 2 subtests**，旧任务/学生端/听写 **55 passed, 1189 warnings, 3 subtests**，Node **23/23**；py_compile、两个 JS syntax check、`git diff --check` 通过。警告均为既有 SQLAlchemy deprecation。
+- 生产 `/root/apps/studytracker` 的 tracked 文件干净（保留 17 个既有未跟踪备份/调度文件），`studytracker.service` 自 `2026-09-01 21:18:33 CST` 起 active；监听 `127.0.0.1:5002`，为 `workers=1 / gthread / threads=6`。最终部署后日志只有正常 stop/start/worker boot，无 Traceback、Exception、CRITICAL 或 worker failure。
+- 生产 SQLite 只读核对为 `quick_check=ok`、外键错误 0；`task.assignment_idempotency_key` 及唯一索引 `ix_task_assignment_idempotency_key` 已存在。发布仅应用这项 additive schema 兼容补齐，没有创建测试任务、修改学生记录或写生产业务数据。
+- 公网 `/tasks` 未登录请求按预期 302 到 `/login?next=%2Ftasks`。两个 workspace CSS、两个 JS 与页头图的本地/生产/公网 SHA-256 一致；本轮不登录生产后台，避免读取或触碰真实学生数据。小程序无改动，未上传/提审/发布。
+- 本机 `artifacts/` 视觉证据仍为未跟踪文件，忽略的合成 `app.db` 与 5079 体验环境未纳入 Git 或生产。本节随一个 `[skip ci]` 文档提交推送，不触发第三次业务部署；下一步只需观察真实 Admin 使用反馈。
+
 ## 2026-09-01 `/tasks` 方向 2 · Sol 第四次 exact Chrome 最终验收通过
 
 - 事实现场：worktree `/Users/zhouxin/.codex/worktrees/c56a/studytracker`，detached HEAD `846900c65e3b094354c4ebb3d3367a7a918b0b0a`，`HEAD...origin/main=0 0`。统一任务入口、防重复、视觉返修、测试和证据仍全部为本机未提交/未跟踪改动；未 commit、push、deploy 或写生产数据库。
