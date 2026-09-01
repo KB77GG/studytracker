@@ -21,7 +21,7 @@
 - 任务统一布置抽屉可打开 / 关闭；切换“题型专项”后工作区可见，旧入口仍作为兼容链接，预览安全检查、历史区域、重复确认与复训原因控件均存在。
 - 刷题页左侧科目按钮可切换选中态并同步右侧预览，正式题库链接每条只保留一次；用户列表选中行可同步右侧档案；全局搜索可过滤当前页面真实表格行。
 - Python 全仓（排除与本次无关且因仓库缺少音频资产而固定失败的 `tests/test_static_audio_headers.py`）：`642 passed, 72 subtests passed`。定向页面 / 任务 / 入学测试：`34 passed`。Node 结构测试：`5 passed`。两个 JS syntax check 和 `git diff --check` 通过。
-- 未执行 commit、push、部署或生产数据库写入；生产仍为此前已发布的 `6e82b264`，本轮只在本机独立工作树与合成数据库验收。
+- 业务提交 `b05e15b4` 已推送任务分支与 `origin/main`；GitHub CI `33520182316`、部署 `33520182295` 均 success。生产 HEAD、服务 5002 / 单 worker / gthread / 6 threads、SQLite 只读健康检查及新静态资产公网哈希均已核对；未写生产业务数据，小程序未改 / 未发布。
 
 final result: passed
 
