@@ -1648,6 +1648,7 @@ async function persistAnswers(reason = 'local') {
 }
 
 function saveAnswers() {
+  if (practiceContext?.read_only) return true;
   const saved = persistAnswers('local');
   if (saved) practiceShellController?.markDirty();
   else practiceShellController?.setStatus('保存失败，点击重试', 'error');
@@ -1753,6 +1754,11 @@ async function syncListeningTestSubmission(baseHtml) {
     if (!response.ok || !data.ok) {
       throw new Error(data.error || 'sync_failed');
     }
+    if (practiceContext?.task_type === 'question_type_practice' && data.next_url) {
+      practiceShellController?.markSaved();
+      window.location.replace(data.next_url);
+      return;
+    }
     const grade = data.result || data.submission || {};
     applyServerResults(grade.results || []);
     const band = grade.ielts_score;
@@ -1771,6 +1777,36 @@ async function syncListeningTestSubmission(baseHtml) {
 }
 
 async function loadExistingSubmission() {
+  const embeddedReview = practiceContext?.initial_review;
+  if (embeddedReview?.answers && embeddedReview?.result) {
+    const grade = embeddedReview.result;
+    const results = Array.isArray(grade.results) ? grade.results : [];
+    applyAnswerRows(embeddedReview.answers);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(embeddedReview.answers));
+    } catch (_error) {
+      // Review remains usable when storage is restricted by an embedded webview.
+    }
+    applyServerResults(results);
+    document.body.classList.add('show-answers');
+    document.body.classList.add('result-mode');
+    setExperienceMode('review');
+    document.getElementById('practiceShellMode').textContent = '专项复盘';
+    const wrongLabels = results
+      .filter(row => row.status !== 'correct')
+      .map(row => row.q);
+    document.getElementById('submitBtn').textContent = '已提交，查看复盘';
+    document.getElementById('resultBox').innerHTML = resultHtml(
+      grade.correct_count ?? grade.correct ?? 0,
+      grade.total_count ?? grade.total ?? results.length,
+      wrongLabels,
+      '已加载题型专项原题与作答记录'
+    );
+    lockReadOnlyReviewControls();
+    openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
+    practiceShellController?.markSaved();
+    return;
+  }
   // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
   if (examContext) return;
   if (practiceContext) return;
@@ -1828,6 +1864,20 @@ function refreshAnsweredCount() {
   }, 0);
   const answeredCount = document.getElementById('answeredCount');
   if (answeredCount) answeredCount.textContent = answered;
+}
+
+function lockReadOnlyReviewControls() {
+  if (!practiceContext?.read_only) return;
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    if ('disabled' in unit) unit.disabled = true;
+    if ('readOnly' in unit) unit.readOnly = true;
+    unit.querySelectorAll?.('input, select, textarea, button').forEach(control => {
+      control.disabled = true;
+    });
+  });
+  document.querySelectorAll('[data-clear-question]').forEach(button => {
+    button.disabled = true;
+  });
 }
 
 function findUnitByQuestionId(id) {
@@ -2091,7 +2141,7 @@ audio.addEventListener('loadedmetadata', syncTranscriptFromAudio);
 practiceShellController = PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",
   fallbackMode: persistenceContext ? 'task_detail' : 'listening_tests',
-  confirmExit: Boolean(persistenceContext),
+  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
   initialSaved: true,
   save: persistAnswers
 });
@@ -2211,6 +2261,7 @@ window.EXAM_CONTEXT = examContext;
 <script>
 window.__PRACTICE_SOURCE__ = {{ practice_source|default('listening_test')|tojson }};
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
+window.__SELECTION_HIGHLIGHT_PATH__ = practiceContext?.highlight_path || window.location.pathname;
 </script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>

@@ -741,7 +741,25 @@ def _practice_context(
         "submission_url": result_url,
         "result_url": result_url,
         "exit_url": url_for("practice_library"),
+        # The live task and /result page render the same frozen paper. Keep
+        # browser-local highlights under one stable, token-free task scope.
+        "highlight_path": url_for(
+            "question_type_practice.task_page", task_id=task.id
+        ),
     }
+
+
+def _review_practice_context(
+    task: Task, snapshot: dict, attempt: QuestionTypePracticeAttempt, token: str
+) -> dict:
+    context = _practice_context(task, snapshot, attempt, token)
+    context["draft_url"] = None
+    context["read_only"] = True
+    context["initial_review"] = {
+        "answers": _json_object(attempt.answers_json),
+        "result": _json_object(attempt.results_json),
+    }
+    return context
 
 
 def _exam_context(
@@ -957,14 +975,18 @@ def task_result(task_id: int):
                 assignment_url(task) or url_for("question_type_practice.student_index")
             )
         )
+    template = (
+        "listening/test_practice.html"
+        if snapshot["subject"] == SUBJECT_LISTENING
+        else "reading/test_practice.html"
+    )
     return render_template(
-        "question_type_practice/result.html",
-        task=task,
-        snapshot=snapshot,
-        type_label=question_type_display_label(snapshot["standard_type"]),
-        attempt=attempt,
-        rows=_result_rows(snapshot, attempt),
-        staff_mode=False,
+        template,
+        test=public_snapshot(snapshot)["payload"],
+        practice_context=_review_practice_context(task, snapshot, attempt, token),
+        exam_context=None,
+        practice_source=TASK_TYPE,
+        practice_source_ref=str(task.id),
     )
 
 

@@ -2,7 +2,10 @@
   'use strict';
 
   var STORE_PREFIX = 'exhl:v1:';
-  var STORE_KEY = STORE_PREFIX + window.location.pathname;
+  // A practice task and its dedicated review URL are two pages for the same
+  // paper. Templates may provide a stable path so both pages share highlights.
+  var STORE_PATH = String(window.__SELECTION_HIGHLIGHT_PATH__ || window.location.pathname);
+  var STORE_KEY = STORE_PREFIX + STORE_PATH;
   var MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
   var EXCLUDE_SELECTOR = [
     'input',
@@ -13,8 +16,14 @@
     '.inline-answer',
     '.result-pill',
     '.answer-pill',
-    // Grading injects this text after submit; it must not change the content fingerprint.
+    // Grading/review UI is injected or rewritten after submit. It is not part of
+    // the source material, so it must never change the highlight fingerprint.
     '.option-feedback',
+    '.selection-hint',
+    '.review-chrome',
+    '.review-card',
+    '.review-summary',
+    '.review-controls',
     '.analysis',
     '.sel-tx-popover',
     '.ex-hl-toolbar',
@@ -27,6 +36,11 @@
   var refreshTimers = new WeakMap();
   var memoryStore = null;
   var selectionTimer = 0;
+  var pendingSelection = null;
+  var selectionRetryTimers = [];
+  var SELECTION_SNAPSHOT_TTL_MS = 1500;
+  var lastTouchAt = 0;
+  var suppressTouchEndUntil = 0;
 
   // ---------- Storage ----------
   function emptyStore() {
@@ -285,6 +299,7 @@
     var style = document.createElement('style');
     style.id = 'exHlStyles';
     style.textContent = [
+      '[data-hl-root] { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }',
       '.ex-hl { background: #ffe75e; border-radius: 2px; cursor: pointer; }',
       '.ex-hl:hover { background: #ffd83b; }',
       '.ex-hl-toolbar {',
@@ -299,7 +314,20 @@
       '  white-space: nowrap;',
       '}',
       '.ex-hl-toolbar button:hover { border-color: #2F8E87; }',
-      '.ex-hl-toolbar button.ex-hl-primary { background: #ffe75e; border-color: #e8c93a; }'
+      '.ex-hl-toolbar button.ex-hl-primary { background: #ffe75e; border-color: #e8c93a; }',
+      '.ex-hl-toolbar--mobile {',
+      '  position: fixed; left: 12px; right: 12px; top: auto;',
+      '  bottom: calc(var(--practice-bottom-height, 68px) + 12px);',
+      '  bottom: calc(var(--practice-bottom-height, 68px) + 12px + env(safe-area-inset-bottom, 0px));',
+      '  justify-content: center;',
+      '}',
+      '.ex-hl-toolbar--mobile button {',
+      '  flex: 1 1 0; max-width: 220px; min-height: 44px; padding-inline: 14px;',
+      '  touch-action: manipulation; -webkit-tap-highlight-color: transparent;',
+      '}',
+      '@media (pointer: coarse) {',
+      '  .ex-hl-toolbar button { min-height: 44px; padding-inline: 14px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }',
+      '}'
     ].join('\n');
     document.head.appendChild(style);
   }
@@ -315,6 +343,7 @@
     hideToolbar();
     toolbar = document.createElement('div');
     toolbar.className = 'ex-hl-toolbar';
+    if (anchor.preferBelow) toolbar.classList.add('ex-hl-toolbar--mobile');
     toolbar.setAttribute('role', 'toolbar');
     toolbar.setAttribute('aria-label', '划词高亮');
     toolbar.addEventListener('mousedown', function(event) {
@@ -322,50 +351,101 @@
       event.stopPropagation();
     });
     toolbar.addEventListener('touchstart', function(event) {
+      // Keep the captured range alive while the native selection collapses.
+      event.preventDefault();
       event.stopPropagation();
-    }, { passive: true });
+    }, { passive: false });
 
     buttons.forEach(function(button) {
       var element = document.createElement('button');
       element.type = 'button';
       element.textContent = button.label;
       if (button.primary) element.className = 'ex-hl-primary';
-      element.addEventListener('click', function(event) {
+      var activated = false;
+      var activate = function(event) {
         event.preventDefault();
         event.stopPropagation();
+        if (activated) return;
+        activated = true;
+        cancelPendingSelection();
         button.onClick();
         hideToolbar();
-      });
+      };
+      element.addEventListener('click', activate);
+      // Some iOS/WebView builds suppress the synthesized click after touching
+      // a floating control while native selection handles are active.
+      element.addEventListener('touchend', activate, { passive: false });
       toolbar.appendChild(element);
     });
 
     document.body.appendChild(toolbar);
+    // Native iOS selection controls live above the page and can cover any
+    // in-document popover. A temporary bottom action bar stays reachable.
+    if (anchor.preferBelow) return;
     var margin = 8;
     var scrollX = window.scrollX || window.pageXOffset;
     var scrollY = window.scrollY || window.pageYOffset;
-    var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    var visualViewport = window.visualViewport;
+    var viewportLeft = scrollX + (visualViewport ? visualViewport.offsetLeft : 0);
+    var viewportTop = scrollY + (visualViewport ? visualViewport.offsetTop : 0);
+    var viewportWidth = visualViewport
+      ? visualViewport.width
+      : (document.documentElement.clientWidth || window.innerWidth);
+    var viewportHeight = visualViewport
+      ? visualViewport.height
+      : (document.documentElement.clientHeight || window.innerHeight);
     var width = toolbar.offsetWidth;
     var height = toolbar.offsetHeight;
     var left = Math.min(
-      Math.max(anchor.x - width / 2, margin),
-      Math.max(margin, viewportWidth - width - margin)
+      Math.max(anchor.x + scrollX - width / 2, viewportLeft + margin),
+      Math.max(viewportLeft + margin, viewportLeft + viewportWidth - width - margin)
     );
-    var top = anchor.top - height - margin;
-    if (top < scrollY + margin) top = anchor.bottom + margin;
-    toolbar.style.left = (left + scrollX) + 'px';
+    var above = anchor.top - height - margin;
+    var below = anchor.bottom + margin;
+    var viewportBottom = viewportTop + viewportHeight;
+    var top = anchor.preferBelow ? below : above;
+    if (anchor.preferBelow && below + height > viewportBottom - margin) top = above;
+    if (!anchor.preferBelow && above < viewportTop + margin) top = below;
+    top = Math.min(
+      Math.max(top, viewportTop + margin),
+      Math.max(viewportTop + margin, viewportBottom - height - margin)
+    );
+    toolbar.style.left = left + 'px';
     toolbar.style.top = top + 'px';
   }
 
-  function collectSelectionSpans() {
-    var selection = window.getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return null;
-    var range = selection.getRangeAt(0);
+  function collectRangeSpans(range) {
     var spans = [];
     highlightRoots().forEach(function(root) {
       var span = rangeToSpan(root, range);
-      if (span) spans.push({ root: root, span: span });
+      if (span) spans.push({ root: root, span: span, key: blockKey(root) });
     });
     return spans.length ? spans : null;
+  }
+
+  function selectionSnapshot(preferBelow) {
+    var selection = window.getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return null;
+    var range = selection.getRangeAt(0);
+    var spans = collectRangeSpans(range);
+    if (!spans) return null;
+    var rect = range.getBoundingClientRect();
+    if (!rect || (!rect.width && !rect.height)) {
+      var rects = range.getClientRects ? range.getClientRects() : [];
+      rect = rects && rects.length ? rects[0] : null;
+    }
+    if (!rect) return null;
+    var scrollY = window.scrollY || window.pageYOffset;
+    return {
+      spans: spans,
+      capturedAt: Date.now(),
+      anchor: {
+        x: rect.left + rect.width / 2,
+        top: rect.top + scrollY,
+        bottom: rect.bottom + scrollY,
+        preferBelow: Boolean(preferBelow)
+      }
+    };
   }
 
   function selectionOverlapsHighlight(spans) {
@@ -377,9 +457,17 @@
     });
   }
 
-  function toolbarForSelection(anchor) {
-    var spans = collectSelectionSpans();
-    if (!spans) {
+  function validCapturedSpans(spans) {
+    return (spans || []).filter(function(item) {
+      return item.root && item.root.isConnected !== false &&
+        (!item.key || item.key === blockKey(item.root));
+    });
+  }
+
+  function toolbarForSelection(anchor, capturedSpans) {
+    var spans = capturedSpans || selectionSnapshot(Boolean(anchor.preferBelow))?.spans;
+    spans = validCapturedSpans(spans);
+    if (!spans || !spans.length) {
       hideToolbar();
       return false;
     }
@@ -387,7 +475,9 @@
       label: '🖍 高亮',
       primary: true,
       onClick: function() {
-        applyHighlight(spans);
+        var currentSpans = validCapturedSpans(spans);
+        if (!currentSpans.length) return;
+        applyHighlight(currentSpans);
         var selection = window.getSelection();
         if (selection) selection.removeAllRanges();
       }
@@ -395,7 +485,10 @@
     if (selectionOverlapsHighlight(spans)) {
       buttons.push({
         label: '取消高亮',
-        onClick: function() { removeOverlapping(spans); }
+        onClick: function() {
+          var currentSpans = validCapturedSpans(spans);
+          if (currentSpans.length) removeOverlapping(currentSpans);
+        }
       });
     }
     showToolbar(anchor, buttons);
@@ -403,43 +496,105 @@
   }
 
   // ---------- Events ----------
-  function scheduleSelectionToolbar(delay) {
+  function coarsePointer() {
+    return Boolean(
+      (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
+      (window.navigator && window.navigator.maxTouchPoints > 0) ||
+      Date.now() - lastTouchAt < 2000
+    );
+  }
+
+  function clearSelectionRetries() {
+    selectionRetryTimers.forEach(function(timer) { window.clearTimeout(timer); });
+    selectionRetryTimers = [];
+  }
+
+  function cancelPendingSelection() {
+    window.clearTimeout(selectionTimer);
+    selectionTimer = 0;
+    clearSelectionRetries();
+    pendingSelection = null;
+  }
+
+  function scheduleSelectionToolbar(delay, preferBelow, snapshot) {
+    var captured = snapshot || selectionSnapshot(preferBelow);
+    if (captured) pendingSelection = captured;
+    if (!pendingSelection) return false;
     window.clearTimeout(selectionTimer);
     selectionTimer = window.setTimeout(function() {
-      var selection = window.getSelection();
-      if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
-      var rect = selection.getRangeAt(0).getBoundingClientRect();
-      if (!rect || (!rect.width && !rect.height)) return;
-      var scrollY = window.scrollY || window.pageYOffset;
-      toolbarForSelection({
-        x: rect.left + rect.width / 2,
-        top: rect.top + scrollY,
-        bottom: rect.bottom + scrollY
-      });
+      selectionTimer = 0;
+      // Re-read once because iOS often finalizes the native range after
+      // touchend. If it briefly collapses afterwards, use the valid snapshot
+      // captured by selectionchange instead of losing the action entirely.
+      var latest = selectionSnapshot(preferBelow);
+      if (latest) pendingSelection = latest;
+      var ready = pendingSelection;
+      pendingSelection = null;
+      if (!ready || Date.now() - ready.capturedAt > SELECTION_SNAPSHOT_TTL_MS) return;
+      toolbarForSelection(ready.anchor, ready.spans);
     }, delay);
+    return true;
+  }
+
+  function retryTouchSelection() {
+    clearSelectionRetries();
+    [0, 120, 320, 600].forEach(function(delay) {
+      var timer = window.setTimeout(function() {
+        var captured = selectionSnapshot(true);
+        if (!captured) {
+          if (delay === 600) selectionRetryTimers = [];
+          return;
+        }
+        clearSelectionRetries();
+        pendingSelection = captured;
+        scheduleSelectionToolbar(80, true, captured);
+      }, delay);
+      selectionRetryTimers.push(timer);
+    });
   }
 
   document.addEventListener('mouseup', function(event) {
+    if (Date.now() - lastTouchAt < 800) return;
     if (toolbar && toolbar.contains(event.target)) return;
-    scheduleSelectionToolbar(80);
+    scheduleSelectionToolbar(80, false);
   });
 
   document.addEventListener('touchend', function() {
-    scheduleSelectionToolbar(200);
+    lastTouchAt = Date.now();
+    if (Date.now() < suppressTouchEndUntil) {
+      suppressTouchEndUntil = 0;
+      return;
+    }
+    retryTouchSelection();
   }, { passive: true });
+
+  // iOS may finalize its native selection handles after touchend. Listening to
+  // selectionchange keeps the highlighter reachable on mobile and also covers
+  // keyboard-created selections without changing the desktop mouse flow.
+  document.addEventListener('selectionchange', function() {
+    var captured = selectionSnapshot(coarsePointer());
+    // A transient collapsed event is common while WebKit dismisses its native
+    // menu. It must not cancel the last valid range.
+    if (!captured) return;
+    clearSelectionRetries();
+    pendingSelection = captured;
+    scheduleSelectionToolbar(coarsePointer() ? 100 : 80, coarsePointer(), captured);
+  });
 
   document.addEventListener('contextmenu', function(event) {
     var selection = window.getSelection();
     if (!selection || selection.isCollapsed) return;
-    var spans = collectSelectionSpans();
-    if (!spans) return;
-    event.preventDefault();
+    var captured = selectionSnapshot(coarsePointer());
+    if (!captured) return;
+    cancelPendingSelection();
+    if (!coarsePointer()) event.preventDefault();
     var scrollY = window.scrollY || window.pageYOffset;
     toolbarForSelection({
       x: event.clientX,
       top: event.clientY + scrollY,
-      bottom: event.clientY + scrollY
-    });
+      bottom: event.clientY + scrollY,
+      preferBelow: coarsePointer()
+    }, captured.spans);
   });
 
   document.addEventListener('click', function(event) {
@@ -457,7 +612,8 @@
     showToolbar({
       x: rect.left + rect.width / 2,
       top: rect.top + scrollY,
-      bottom: rect.bottom + scrollY
+      bottom: rect.bottom + scrollY,
+      preferBelow: coarsePointer()
     }, [
       {
         label: '取消高亮',
@@ -469,18 +625,44 @@
   }, true);
 
   document.addEventListener('mousedown', function(event) {
-    if (toolbar && !toolbar.contains(event.target)) hideToolbar();
+    if (Date.now() - lastTouchAt < 800) return;
+    if (!toolbar || !toolbar.contains(event.target)) {
+      cancelPendingSelection();
+      hideToolbar();
+    }
   });
 
   document.addEventListener('touchstart', function(event) {
-    if (toolbar && !toolbar.contains(event.target)) hideToolbar();
+    lastTouchAt = Date.now();
+    if (!toolbar || !toolbar.contains(event.target)) {
+      var selection = window.getSelection();
+      var hadSelectionUi = Boolean(
+        toolbar || pendingSelection || selectionTimer || selectionRetryTimers.length ||
+        (selection && !selection.isCollapsed && selection.rangeCount)
+      );
+      if (hadSelectionUi) suppressTouchEndUntil = Date.now() + 700;
+      cancelPendingSelection();
+      hideToolbar();
+    }
   }, { passive: true });
 
   document.addEventListener('keyup', function(event) {
-    if (event.key === 'Escape') hideToolbar();
+    if (event.key === 'Escape') {
+      cancelPendingSelection();
+      hideToolbar();
+    }
   });
 
-  document.addEventListener('scroll', hideToolbar, true);
+  document.addEventListener('scroll', function() {
+    // A long-press may auto-scroll the page while iOS is still finalizing its
+    // selection handles. The mobile toolbar is fixed, so neither its pending
+    // retry nor the visible action needs to be removed on scroll.
+    if (coarsePointer() || (toolbar && toolbar.classList.contains('ex-hl-toolbar--mobile'))) {
+      return;
+    }
+    cancelPendingSelection();
+    hideToolbar();
+  }, true);
 
   // ---------- Restore after page redraws ----------
   function observeRoot(root) {

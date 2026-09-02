@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-02 网页刷题移动端高亮 / 复盘保留修复（仅本机）
+
+- 确认学生手机反馈对应真实生产风险：线上脚本只在 `touchend` 后单次读 Selection，无法可靠覆盖 iOS / WKWebView 晚到或短暂折叠的长按选区。候选改为监听 `selectionchange`、缓存有效范围、多时点重试，显式开放 iOS 文本选择，并提供不被系统菜单遮挡的底部高亮操作条；移动滚动、touchend 与合成 click 竞态也已处理。
+- 同时修复复盘 UI 改变高亮文本指纹导致画面高亮被拆除；Reading / Listening 动态判分区域不再参与指纹。题型专项学生结果页恢复完整原题、只读答案与稳定无 token 高亮路径，提交统一跳到结果页；Reading 机经历史链接保持原路径，复盘 / 刷新可以继续使用既有浏览器高亮。
+- JS syntax、diff check 通过；Node **79 passed**（含只读结果页 DOM VM **4/4**），高亮 / 专项 / 历史定向 Python **38 passed**。全仓 Python **611 tests / 2 failures**，仅仓库既有静态音频夹具缺失的 404。隔离 DOM 覆盖选区晚到 280ms、短暂折叠、touch 单次应用与刷新恢复；本地 390×844 Listening / Reading / 听力机经均能显示工具条，前两类点击高亮并刷新后仍在；两路独立审阅均为 GO。
+- 真 iPhone Safari / 微信内置浏览器的原生长按仍须部署后冒烟，不能用桌面窄视口替代。工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`、分支 `codex/admin-option2-full-suite`、基线 `997f1c1e`；发布前修复未 commit / push / deploy，既有 `artifacts/` 未跟踪，生产仍为业务 HEAD `5f9fedc2`。未写数据库，小程序未改 / 未发布；用户已授权发布，下一步提交部署并验证“长按选词 → 高亮 → 提交 → 复盘 → 刷新仍在”。
+
 ## 2026-09-02 `/tasks` 现场修复已上线
 
 - 在唯一发布工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite` 合并完成昨日任务独立滚动、显式管理 / 删除、学生中文姓名 / 拼音筛选候选三项现场修复；桌面脏旧工作树未触碰，`artifacts/` 只作本机 QA 证据且不会提交。

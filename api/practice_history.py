@@ -107,7 +107,11 @@ def _test_review_url(
     if attempt_id:
         params["history_attempt"] = int(attempt_id)
     if kind == "reading":
-        path = f"/reading/test/{safe_id}"
+        path = (
+            f"/reading/jijing/{safe_id}"
+            if test_id.startswith("reading_jijing_")
+            else f"/reading/test/{safe_id}"
+        )
         if scope:
             params["passage"] = int(scope)
         return f"{path}?{urlencode(params)}" if params else path

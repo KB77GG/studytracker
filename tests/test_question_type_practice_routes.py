@@ -49,6 +49,26 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         def practice_library():
             return "practice"
 
+        @self.app.get("/reading/tests", endpoint="reading_test_index")
+        def reading_tests():
+            return "reading tests"
+
+        @self.app.get("/reading/jijing", endpoint="reading_jijing_index")
+        def reading_jijing():
+            return "reading jijing"
+
+        @self.app.get("/listening/tests", endpoint="listening_test_index")
+        def listening_tests():
+            return "listening tests"
+
+        @self.app.get("/listening", endpoint="listening_index")
+        def listening_home():
+            return "listening"
+
+        @self.app.get("/listening/jijing", endpoint="listening_jijing_index")
+        def listening_jijing():
+            return "listening jijing"
+
         @self.app.get("/")
         def index():
             return "index"
@@ -110,6 +130,25 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         preview = self.client.post("/api/question-type-practice/preview", json=selection)
         self.assertEqual(preview.status_code, 200, preview.get_data(as_text=True))
         selection["group_ids"] = [row["question_group_id"] for row in preview.get_json()["groups"]]
+        response = self.client.post("/api/question-type-practice/assign", json=selection)
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        return response.get_json()["tasks"][0]
+
+    def _create_listening_task(self):
+        self._login_staff()
+        selection = {
+            "student_names": ["测试学生"],
+            "subject": "listening",
+            "standard_type": "completion",
+            "scope": "ielts10_test1",
+            "count": 1,
+            "pace": "training",
+            "planned_minutes": 12,
+            "due_date": "2026-08-29",
+        }
+        preview = self.client.post("/api/question-type-practice/preview", json=selection)
+        self.assertEqual(preview.status_code, 200, preview.get_data(as_text=True))
+        selection["group_ids"] = [preview.get_json()["groups"][0]["question_group_id"]]
         response = self.client.post("/api/question-type-practice/assign", json=selection)
         self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
         return response.get_json()["tasks"][0]
@@ -210,6 +249,17 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         next_query = parse_qs(urlsplit(submitted_payload["next_url"]).query)
         self.assertEqual(next_query["practice_return"], ["/student/today"])
         self.assertEqual(next_query["practice_source"], ["student_today"])
+        review = self.client.get(submitted_payload["next_url"])
+        self.assertEqual(review.status_code, 200, review.get_data(as_text=True))
+        review_body = review.get_data(as_text=True)
+        self.assertIn('data-hl-root="reading-passage"', review_body)
+        self.assertIn('data-hl-root="reading-questions"', review_body)
+        self.assertIn('js/selection-highlight.js', review_body)
+        self.assertIn('"initial_review"', review_body)
+        self.assertIn('"highlight_path": "/practice/question-types/task/', review_body)
+        self.assertIn('"draft_url": null', review_body)
+        self.assertIn('"read_only": true', review_body)
+        self.assertNotIn('class="qtr"', review_body)
         with self.app.app_context():
             task = db.session.get(Task, task_id)
             attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task_id).one()
@@ -229,6 +279,27 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         self.assertEqual(len(repush.get_json()["tasks"]), 1)
         self.assertNotIn(token, repush.get_data(as_text=True))
 
+    def test_listening_result_restores_full_paper_highlight_workspace(self):
+        row = self._create_listening_task()
+        task_id = row["id"]
+        with self.app.app_context():
+            token = db.session.get(Task, task_id).listening_access_token
+        submitted = self.client.post(
+            f"/api/question-type-practice/task/{task_id}/submit?token={token}",
+            json={"answers": {}, "duration_seconds": 5},
+        )
+        self.assertEqual(submitted.status_code, 200, submitted.get_data(as_text=True))
+        review = self.client.get(submitted.get_json()["next_url"])
+        self.assertEqual(review.status_code, 200, review.get_data(as_text=True))
+        body = review.get_data(as_text=True)
+        self.assertIn('data-hl-root="listening-transcript"', body)
+        self.assertIn('data-hl-root="listening-questions"', body)
+        self.assertIn('js/selection-highlight.js', body)
+        self.assertIn('"initial_review"', body)
+        self.assertIn('"highlight_path": "/practice/question-types/task/', body)
+        self.assertIn('"draft_url": null', body)
+        self.assertIn('"read_only": true', body)
+
     def test_wrong_token_cannot_read_or_submit(self):
         row = self._create_reading_task()
         task_id = row["id"]
@@ -242,6 +313,12 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
             self.client.post(
                 f"/api/question-type-practice/task/{task_id}/submit?token=wrong",
                 json={"answers": {}},
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get(
+                f"/practice/question-types/task/{task_id}/result?token=wrong"
             ).status_code,
             404,
         )

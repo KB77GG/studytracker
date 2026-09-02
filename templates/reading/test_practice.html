@@ -1003,21 +1003,38 @@ function renderPassage(passage) {
     `).join("")}
   `;
   document.getElementById("questionPanel").innerHTML = `
-    ${experienceCapabilities.canShowCorrectness ? `<section class="review-summary" id="reviewSummary" aria-label="复盘概览"></section>
-    <div class="review-controls" id="reviewControls">
-      <button type="button" data-review-action="current">当前题解析</button>
-      <button type="button" data-review-action="expand">展开全部</button>
-      <button type="button" data-review-action="wrong">只看错题</button>
-    </div>` : ""}
+    <div class="review-chrome" data-capability="canShowCorrectness">
+      <section class="review-summary" id="reviewSummary" aria-label="复盘概览"></section>
+      <div class="review-controls" id="reviewControls">
+        <button type="button" data-review-action="current">当前题解析</button>
+        <button type="button" data-review-action="expand">展开全部</button>
+        <button type="button" data-review-action="wrong">只看错题</button>
+      </div>
+    </div>
     ${(passage.groups || []).map(renderGroup).join("")}`;
   bindInputs();
   setExperienceMode(experienceMode);
   if (resultMode) paintResults();
+  lockReadOnlyReviewControls();
   requestAnimationFrame(() => {
     document.getElementById("passagePanel").scrollTop = passageScrollPositions[passage.id] || 0;
     document.getElementById("questionPanel").scrollTop = questionScrollPositions[passage.id] || 0;
   });
   if (window.__onExamPassageChange) window.__onExamPassageChange(passage);
+}
+
+function lockReadOnlyReviewControls() {
+  if (!practiceContext?.read_only) return;
+  document.querySelectorAll("[data-qid]").forEach((control) => {
+    if ("disabled" in control) control.disabled = true;
+    if ("readOnly" in control) control.readOnly = true;
+    control.querySelectorAll?.("input, select, textarea, button").forEach((child) => {
+      child.disabled = true;
+    });
+  });
+  document.querySelectorAll("[data-clear-question]").forEach((button) => {
+    button.disabled = true;
+  });
 }
 
 function bindInputs() {
@@ -1041,6 +1058,7 @@ function bindInputs() {
   });
   document.querySelectorAll("[data-clear-question]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (practiceContext?.read_only) return;
       answers[button.dataset.clearQuestion] = "";
       renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
       persistExamDraft();
@@ -1060,6 +1078,7 @@ function bindInputs() {
 }
 
 function handleAnswerChange(event) {
+  if (practiceContext?.read_only) return;
   const target = event.target;
   if (target.matches(".choice-stack input")) {
     const stack = target.closest(".choice-stack");
@@ -1310,6 +1329,11 @@ async function submitAnswers() {
     if (!response.ok || !data.ok) {
       throw new Error(data.error || "submit_failed");
     }
+    if (practiceContext?.task_type === "question_type_practice" && data.next_url) {
+      practiceShellController?.markSaved();
+      window.location.replace(data.next_url);
+      return;
+    }
     serverResult = data.result || null;
     resultMode = true;
     document.body.classList.add("result-mode");
@@ -1356,6 +1380,24 @@ function resetAnswers() {
 }
 
 async function loadExistingSubmission() {
+  const embeddedReview = practiceContext?.initial_review;
+  if (embeddedReview?.answers && embeddedReview?.result) {
+    Object.keys(answers).forEach((key) => delete answers[key]);
+    Object.assign(answers, embeddedReview.answers);
+    serverResult = embeddedReview.result;
+    resultMode = true;
+    document.body.classList.add("result-mode");
+    setExperienceMode("review");
+    document.getElementById("practiceCrumbTail").textContent = "专项复盘";
+    renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
+    paintResults();
+    updateSummary();
+    setSyncStatus("已加载题型专项原题与作答记录", "ok");
+    lockReadOnlyReviewControls();
+    practiceShellController?.markSaved();
+    syncQuestionNav();
+    return;
+  }
   // 模考按 session token 恢复本地草稿，不读取普通刷题的“上次提交”。
   if (examContext || practiceContext) return;
   try {
@@ -1438,7 +1480,7 @@ setInterval(() => {
 practiceShellController = PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
   fallbackMode: persistenceContext ? 'task_detail' : (rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
-  confirmExit: Boolean(persistenceContext),
+  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
   initialSaved: true,
   save: persistExamDraft
 });
@@ -1554,6 +1596,7 @@ window.EXAM_CONTEXT = examContext;
 <script>
 window.__PRACTICE_SOURCE__ = {{ practice_source|default('reading_test')|tojson }};
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
+window.__SELECTION_HIGHLIGHT_PATH__ = practiceContext?.highlight_path || window.location.pathname;
 </script>
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>

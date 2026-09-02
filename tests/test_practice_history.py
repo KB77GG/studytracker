@@ -7,7 +7,7 @@ from datetime import datetime
 from flask import Flask
 from flask_login import LoginManager
 
-from api.practice_history import practice_history_bp
+from api.practice_history import _test_review_url, practice_history_bp
 from models import (
     ListeningSegmentResult,
     ListeningTestSubmission,
@@ -181,6 +181,19 @@ class PracticeHistoryApiTest(unittest.TestCase):
         response = self.client.get("/api/practice/history")
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.get_json()["error"], "not_verified")
+
+    def test_reading_jijing_review_keeps_its_original_highlight_path(self):
+        task = Task(reading_test_id="reading_jijing_2026_01")
+        self.assertEqual(
+            _test_review_url(
+                task,
+                "reading_jijing_2026_01",
+                "reading",
+                2,
+                attempt_id=17,
+            ),
+            "/reading/jijing/reading_jijing_2026_01?history_attempt=17&passage=2",
+        )
 
     def test_sections_are_merged_into_one_daily_test_record(self):
         self._verify_student()

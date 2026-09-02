@@ -13,6 +13,8 @@ class QuestionTypePracticeContractTest(unittest.TestCase):
             self.assertIn("persistenceContext", source)
             self.assertIn("practiceContext?.submit_url", source)
             self.assertIn("js/practice_renderers.js", source)
+            self.assertIn("practiceContext?.task_type", source)
+            self.assertIn("window.location.replace(data.next_url)", source)
         templates = list((ROOT / "templates/question_type_practice").glob("*.html"))
         self.assertTrue(templates)
         self.assertFalse(
