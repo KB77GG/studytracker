@@ -1,17 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-02 网页刷题高亮与复盘保留回归已在独立工作树修复并完成自动化 / 隔离运行时验证；用户已授权部署，当前正在发布（Asia/Shanghai）。
+> 最近更新：2026-09-02 网页刷题移动端高亮与复盘保留修复已部署并通过生产只读验收；待学生真机确认 iOS / 微信原生长按体验（Asia/Shanghai）。
 
-## 2026-09-02 网页刷题移动端高亮与复盘保留修复（仅本机，待发布）
+## 2026-09-02 网页刷题移动端高亮与复盘保留修复已上线
 
-- 唯一工作树为 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，基线 HEAD `997f1c1e43184c8aa9ff487acb9aedc5a0bf4922`，与任务分支 upstream 左右计数 `0/0`。本轮 tracked 改动为 `api/practice_history.py`、`api/question_type_practice.py`、`static/js/selection-highlight.js`、两份 Listening / Reading 练习模板、四份 Python 测试、新增 `tests/test_question_type_review_readonly.js` 及本交接 / 工作日志；既有未跟踪 `artifacts/` 保持原样。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。
+- 唯一发布工作树为 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`。业务提交 `6335485b2259cc41212885efc60300f3933e6612`（`fix: restore mobile practice highlighting`）已原子推送任务分支与 `origin/main`；既有未跟踪 `artifacts/` 保持原样，桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。
 - 学生“手机无法选中单词进行高亮”的反馈不能由桌面窄视口测试否定，且生产脚本确有对应缺口：它只在 `touchend` 后单次延迟读取当前 Selection；iOS / WKWebView 原生长按选区可能在该时点之后才最终确定，或在系统菜单切换时短暂折叠，导致高亮操作条不出现。当前候选同时监听 `selectionchange`、缓存最近有效范围、在 `0/120/320/600ms` 重试，明确恢复 `-webkit-user-select:text` / touch callout；移动操作条固定在底部导航上方，直接处理 `touchend`，长按自动滚动也不再丢失待处理选区。桌面 mouseup / 右键路径保留。
 - 复盘丢失还有独立根因：8 月 30 日 `a31ac484` 新增的复盘卡 / 汇总 / 操作栏与动态多选提示会改变 `data-hl-root` 的文本指纹，MutationObserver 找不到旧 key 后拆掉画面高亮。修复将全部动态判分 / 复盘 chrome 排除出指纹，并让 Reading 使用始终存在、练习态隐藏的单一 review wrapper，保持旧 offset 兼容。高亮仍以当前浏览器 `localStorage` 保存 14 天，不是跨设备服务器同步。
 - 题型专项提交后不再落到只有成绩摘要、没有题面的旧结果模板：学生 `/result` 现在复用完整 Listening / Reading 原题工作区，以 `read_only=true` 锁定所有答题与清除控件，提交成功统一 `location.replace(next_url)`。练习页与结果页共用无 token 的稳定任务路径作为高亮域，刷新复盘仍可恢复；错误 token 为 404、提交前 payload 继续脱敏。Reading 机经历史复盘 URL 同时修正回原 `/reading/jijing/...` 路径，避免 pathname 改变造成看似丢失。
 - 精确验证：`node --check static/js/selection-highlight.js`、`git diff --check` 通过；`node --test tests/*.js` 为 **79 passed**，其中新增只读 DOM VM 回归 **4/4 passed**；高亮 / 题型专项 / 历史 / 工作区定向 Python 为 **38 passed**。全仓 Python 为 **611 tests / 2 failures**，失败仍是 `tests/test_static_audio_headers.py` 两项因仓库缺少静态音频夹具得到 404，与本轮无关。隔离 DOM 运行时验证“有效 selectionchange 后短暂折叠”“选区晚到 280ms”“touchend 后单次应用”和刷新恢复均通过；本地 `390×844` Listening / Reading / 听力机经用浏览器拖选均能出现工具条，Listening / Reading 点击高亮并刷新后仍在，页面无应用错误。独立移动竞态审阅与题型专项路由 / 安全审阅均为 **GO**。
-- 仍需如实保留一个验证边界：现有自动化和桌面 Chromium 的触控仿真不能复制 iPhone Safari / 微信内置浏览器的原生长按手柄，真实 iOS 只能在部署后用学生路径冒烟确认。合并模考的总复盘页当前不加载高亮器；本轮覆盖的是普通 Listening / Reading、听力 / 阅读机经和题型专项原题复盘，未把能力扩称到从未支持高亮的其他练习模块。
-- 发布前状态：改动尚未 commit / push / deploy，生产业务 HEAD 仍为 `5f9fedc2`，远端最新 `997f1c1e` 只是已发布任务修复的 `[skip ci]` 交接提交；用户已明确授权本轮提交与部署。本轮没有生产 / 本地数据库写入，不涉及 schema，也没有微信小程序客户端改动、上传、提审或发布。下一步提交并原子推送任务分支与 `main` 触发部署；随后核对 CI / deploy、生产单 worker 配置、公网脚本 / 模板哈希，并在真机完成“长按选词 → 高亮 → 提交 → 复盘 → 刷新仍保留”。
+- 功能覆盖需按页面族准确表述：原高亮功能的 Listening 整套、Reading 整套、听力机经三套模板均已修复；Reading 机经和雅思模考中的 Listening / Reading 复用这些模板，因此练习态同样覆盖；题型专项 Listening / Reading 现也复用完整模板并新增复盘保留。合并模考总复盘页、精听播放器、写作、TOEFL、入学测试等从未接入高亮器的页面不在本次范围，不能表述成“整个网站任意页面都支持高亮”。
+- GitHub CI `33609634597` 与部署 `33609634380` 均为 **success**。生产 `/root/apps/studytracker` HEAD 已核对为 `6335485b`、tracked 工作树干净；`studytracker.service` 自 `2026-09-02 16:37:16 CST` 起 active，`NRestarts=0`，监听 `127.0.0.1:5002`，保持 `workers=1 / gthread / threads=6` 和一主一 worker；部署后 10 分钟日志未见 Traceback、Exception、CRITICAL、ERROR 或 worker failure。
+- 生产 SQLite 只读检查为 `quick_check=ok`、外键错误 0。本机、服务器与公网 `selection-highlight.js` SHA-256 一致（`74da7e6b...`），两份模板本机 / 服务器哈希一致；公网 `/practice` 为 200，未登录 `/tasks` 为预期 302。公网 Listening 整套、Reading 整套、听力机经、Reading 机经四个样例页均为 200，并同时含 `data-hl-root` 与新高亮脚本。本轮没有数据库 / schema / 静态题库或小程序客户端改动，也没有生产业务数据写入；无需数据库迁移，小程序未上传 / 提审 / 发布。
+- 仍需如实保留一个验证边界：自动化和桌面 Chromium 不能复制 iPhone Safari / 微信内置浏览器的原生长按手柄；部署后的浏览器控制连接在导航时超时，因此没有伪称完成生产交互点击。下一步请学生正常刷新（静态脚本为 `Cache-Control: no-cache`；若旧标签页仍异常则强制刷新），在 iPhone Safari / 微信内分别验证“长按选词 → 点击高亮 → 提交 → 进入复盘 → 刷新仍保留”。本条将以 `[skip ci]` 文档提交同步，不触发二次部署。
 
 ## 2026-09-02 `/tasks` 现场问题修复已上线
 
