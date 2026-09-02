@@ -4,6 +4,19 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-02 网页听力表单题干重复审计与共享多空题干修复（仅本机）
+
+- 确认根因在共用 `PracticeRenderers.renderForm()`：完整 `question.title` 与纸面 `collect` 左列前缀同时输出，导致 IELTS 18 T1 S1 Q4/Q5 末尾重复，Q8 `Goes to the` 错放在 Q9 前。修复改为按共享 `visualCells` 的精确 cell index 处理 `staticFacts`、`beforeFacts` 和 `context`；仅 fallback context 与命中 index 相交时释放，正常 context 只移除命中的 cell，题库、答案、判分、数据库和提交链路未改。
+- 38 个 Listening 多空题组的每个 `question.title` 还复制完整共享题干，旧单空模板逐题渲染后只保留第一个 blank。新增通用共享题干聚类与 target cell 分段：每组共享题干只输出一次，placeholder 顺序对应每题 control、anchor、review/answer extra，覆盖 same/distinct/mixed source cell；Reading form 不触发，未改题库 JSON。
+- 回归覆盖 IELTS 13 T3 S4 Q38–40、IELTS 5 T1 S4 Q36–40、IELTS 8 T1 S4 Q38–40、IELTS 18 T1 S4 Q33–34；全量不变量为 Listening **38 / 31 / 100**（clusters / sections / questions），Reading **0**。
+- 扩展到全部 Listening 题型的重复标题审计覆盖 84 份数据 / 336 Sections / 658 groups / 3,360 questions：43 组连续同标题中，38 组为已处理的多空共享题干；其余 4 组是不同 source row 的合法单空短模板、1 组是 type-3 表格中不同活动行的合法 `in the [blank]`。跨 group 重复为 0，Section 末尾 7 组连续同标题全部已纳入共享题干修复，本缺陷范围无未覆盖篇目。
+- 追加修复同一 `contextIndex` 被多个字段重复输出的问题：最终独立 source-vs-rendered normalized audit 有 **30 个 excess 文本项 / 25 个表单组**，均为 source=1、rendered=2/3；现在按 source cell index 的 emitted/used 去重，保留同文案不同 index，完整 audit excess 为 **0**。新增 repeated-context synthetic 回归，并保留前两类重复与 shared stem 回归。
+- 完整性审阅发现带尾随值的粗体 cell（如 `[[LABEL:Andrea]] Brown`、`[[LABEL:home]] 796431`）被误认作 preceding label；现仅纯 LABEL cell 可作 label 候选，三处真实 trailing-value 回归均保留值且无错误题目前缀。
+- 纯 label 判定允许装饰性 bullet/dash：JFDR6 Test 2 S4 G1 的 `• [[LABEL:Methodology:]]` 恢复为 Q32 前的 Methodology section，Q31 的 The study heading 与 Q32/Q33 归属正确；IELTS10 T1/T4、IELTS16 T4、IELTS6 T3、IELTS7 T1、JFDR6 T2 六个 labelChanged group 的顺序/静态值已审计无丢失。
+- 共享 cluster 的冒号结尾 direct/group label 现按精确 `labelIndex` 消费并跨相邻 cluster 去重；IELTS 6 Test 4 S1 G1 的 Q7–8、Q9–10 共用题干前保留一次 `Location:`，Q7→Q8→Q9→Q10 四个 control 各一次。全量 38 个 shared cluster source-label 扫描无源有页面为 0。
+- 旧渲染器全量对 Cambridge Listening / Reading type-5 forms 的实际 standalone 重复为 **9**，新渲染为 **0**；IELTS 18 顺序与 Q8 完整题干、Maple syrup 两条合法 bullet、IELTS 5 T4 `Problems: been affected by` 均有回归断言。Jijing 独立模板链路 345 parts / 675 groups 审计，structured collect 与 item title overlap **0**。
+- 验证：Node 全量 **97 passed**；使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python` 独立复跑相关 Python `unittest` **21 passed**；`git diff --check` 通过。独立旧版↔候选审计覆盖 195 个 form group / 1,476 个控件；70 个变化表单均归入共享题干、精确前缀去重、label 纠正、静态/context excess 去重或同源 label 单次输出，未解释变化 0，旧版可见非答题源文本丢失 0。旧 9 个 standalone 重复均消失；第三类 source-vs-rendered excess audit 为 0；两个 synthetic 反例、四个指定 shared stem 样例、repeated-context、三处 trailing-value 回归、JFDR6 decorated-label 回归、IELTS 6 `Location:` 相邻 shared cluster 回归、38 个 source-label 保留扫描、全库不变量和普通字段与 shared cluster 之间无数组分隔符回归也通过。初版及中间版的全组文本过滤、context 清空、尾随值丢失、decorated label 错归属与 shared label 缺失均被审阅拦截；当前实现按精确 cell-index 处理重复、共享题干和 direct/group label，均仅在本机未提交。已用 Chrome 只读检查现网 IELTS 18 T1 S1，确认尚未发布的旧版本仍有三个 standalone 重复片段及 `Travelling by car` 错位；受控 Chrome 因 `ERR_BLOCKED_BY_CLIENT` 未能打开 loopback 验收页，故修复后真实浏览器 DOM / 截图待部署后复核。未 commit / push / deploy，未写生产；下一步仅在用户授权后提交并发布。
+
 ## 2026-09-02 网页听力复盘音频定位回归已上线
 
 - 学生反馈不是时间戳数据缺失：剑 20 Test 4 Q1–Q10 均有有效 `start`，生产 `seekTo()`、原文/精听定位也仍在。问题由 `a31ac484` 复盘重构引入：练习态首次渲染时 `answerTools()` 因能力 guard 不生成旧“定位 mm:ss”入口，进入复盘后又不重渲；新错题卡和底部题号只展开/滚动，不调用 `seekTo()`，所以点击后音频仍在 `0:00`。
