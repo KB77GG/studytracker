@@ -1,7 +1,37 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-01 后台左上角 Logo 对比度修复已发布（Asia/Shanghai）。
+> 最近更新：2026-09-02 `/tasks` 昨日任务、删除安全与学生筛选修复已完成发布前验证；用户接受移动视觉证据缺口并授权发布，尚未 commit / push / deploy（Asia/Shanghai）。
+
+## 2026-09-02 `/tasks` 现场问题修复发布候选（已授权，待发布）
+
+- 唯一发布工作树为 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。当前业务、测试、QA 和交接文件均未提交；`services/task_deletion.py` 为本轮新文件，既有未跟踪 `artifacts/` 仅存本机 QA 证据，不得提交。
+- 三个现场断点已合并修复：昨日任务列表不再被抽屉 flex 布局裁切，可独立滚动；每条昨日任务可直接进入准确任务并在检查器看到显式“删除任务”；主任务学生筛选输入中文姓、姓名、连续拼音或空格拼音时会显示可触摸 / 键盘操作的候选并同步筛选任务。
+- 删除能力已从前端可发现性修复扩展为后端安全闭环：`/tasks` 与网页删除接口仅允许 teacher / assistant（admin 由全局角色规则放行），teacher 只能删除自己布置的任务；网页与小程序共用 `services/task_deletion.py`。仅 `pending` 且没有计时、提交、批改、练习或任何已映射 `task.id` 外键记录的误布置任务可取消，否则返回 409；共享 `PlanItem` 不会被提前软删，最后一个有效引用取消时才软删；操作保留审计记录。
+- `Task` 删除采用不可复活的软取消：新增独立 `cancelled_at` tombstone，普通 ORM 查询全局排除该标记；即使学生请求在取消后迟到并把 `status` 覆盖为 `progress/done`，任务仍不可见。启动时 `ensure_legacy_schema()` 以 additive 方式增加 `task.cancelled_at` 与 `ix_task_cancelled_at`；重新布置会释放旧幂等键和访问 token。生产发布前只读预检为 SQLite `quick_check=ok`、外键错误 0、共享 `PlanItem` 11 组。
+- 发布前精确验证：定向 Python **52 passed**；全仓（排除仓库既有缺失音频资产的 `tests/test_static_audio_headers.py`）**655 passed, 72 subtests passed**；Node 工作台 / 后台 / 矩阵 **9 passed**；GitHub CI 同款 dependency-light unittest **68 passed**、拼写队列通过；Python / JS syntax 与 `git diff --check` 通过。两路独立删除 / 安全审阅均给出 **GO**；其中一位额外用两个 SQLAlchemy 连接复现“取消后迟到写回 progress”，确认默认不可见、子记录保留且 `foreign_key_check=0`。
+- 昨日任务滚动 / 删除的 1280×868 浏览器对照已通过并保存在本机 `artifacts/tasks-yesterday-delete-qa-20260902/`。学生筛选的结构、路由、姓名 / 拼音合同与自动化已通过，但因当时浏览器控制超时，没有新的 390×844 实现截图；根 `design-qa.md` 如实保留 `final result: blocked`。用户已明确接受该视觉证据缺口并要求与其他修复一起部署；这不等同于补拍完成。
+- 用户已明确授权 commit、push 与部署。下一步：提交（排除 `artifacts/`），先推任务分支，再把同一业务 SHA 推 `main` 触发 GitHub CI / deploy；随后核对生产 HEAD、服务 5002 / `workers=1` / gthread / 6 threads、SQLite 新列与索引、journal、公网静态资产。发布完成后再把精确 SHA / run ID / 生产结果写回本节与工作日志，并以 `[skip ci]` 文档提交同步。小程序代码兼容删除接口有改动，但本轮不包含微信小程序上传 / 提审 / 发布。
+
+## 2026-09-02 `/tasks` 学生姓名 / 拼音筛选候选（仅本机，视觉 QA 待补）
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。当前未提交 tracked 改动为 `design-qa.md`、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`、`templates/tasks.html`、`static/js/tasks_workspace.js`、`static/tasks_workspace.css`、`static/tasks_workspace_final.css`、`tests/test_task_assignment_history.py`、`tests/test_tasks_workspace_structure.js`；另有既有未跟踪 `artifacts/`。其中昨日任务滚动 / 删除入口改动来自同一未提交工作批次，本节新增的是主筛选自动补全、匹配与相应测试 / 文档。
+- 根因是主筛选 `#filterStudent` 只有普通输入和任务行字符串过滤，虽能把 352 条过滤到相关任务，却从未渲染学生候选。现在输入框下方新增可访问 listbox，复用既有 `student_picker_options.search`，支持中文姓 / 姓名、连续拼音与空格拼音；点选后填写完整姓名、立即过滤并收起。ArrowUp / ArrowDown / Enter / Escape、鼠标 / 触摸点选、失焦、清空和“没有匹配的学生”空态均已覆盖。
+- 主任务过滤同步使用同一姓名 / 拼音匹配器，因此输入 `xin` 不只显示候选，也会真正筛出对应学生任务；未建档历史任务仍保留中文姓名字符串包含匹配作为后备。移动候选最多 12 人、`max-height:min(260px,32dvh)`、独立纵向滚动、触摸项最小 `44px`，字段使用独立 `<label for>` 和完整 combobox / listbox ARIA 合同。
+- 用户源截图为 `/tmp/codex-remote-attachments/01a05850-a764-7672-8bbb-93aafacb13ce/D5615B5D-4066-4DE0-814D-484871EC44D3/1-照片-1.jpg`（`589×1280`）。本轮本机内置预览窗口无可控会话，已连接 Chrome 能列出本地任务页但新建 / 接管 / 截图均超时，因此未取得实现截图或同图对照；根 `design-qa.md` 最新结果按 Product Design 规则为 `final result: blocked`，阻塞项仅为浏览器渲染证据，不是代码 / 路由失败。下一位 agent 必须先在 `390×844` 补拍“辛”与 `xin` 候选展开态并完成同图比较，再把 QA 改为 passed。
+- 本机忽略的合成 `app.db` 曾临时加入固定 ID `99001/99002` 的两名“辛”姓合成学生及两条任务；登录态 Flask 路由返回 200，HTML 包含中文姓名、`xintongxuejia` 与对应任务行。4 条临时记录已精确清理，剩余 `0`，`PRAGMA quick_check=ok`、无外键错误。开发预览目前运行于 `http://127.0.0.1:5088/tasks`，数据库仍只含原有合成数据。
+- 精确验证：`node --check static/js/tasks_workspace.js`；`node --test tests/test_tasks_workspace_structure.js tests/test_admin_suite_v2_structure.js` → **7 passed**；`/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_history.py tests/test_task_assignment_routes.py` → **12 passed**（仅既有 SQLAlchemy deprecation warnings）；登录态 Flask 路由 / 合成中文与拼音合同检查通过；`git diff --check` 通过。
+- 当前全部业务 / 文档改动均未 commit、未 push、未 deploy；生产数据库 / 服务 / 公网未触碰，小程序未改 / 未上传 / 未提审 / 未发布。下一步先补浏览器视觉证据；用户明确授权发布后，再从本工作树提交并推送 `main` 触发部署，随后做生产只读健康检查与登录后的真实数据冒烟。
+
+## 2026-09-02 `/tasks` 昨日任务可滚动、删除入口可发现（仅本机）
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。起始 tracked 工作树干净，仅有既有未跟踪 `artifacts/`；本轮修改 `templates/tasks.html`、`static/tasks_workspace_final.css`、`static/js/tasks_workspace.js`、两个定向测试、根 `design-qa.md` 与本交接 / 工作日志。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。
+- 根因是抽屉正文为纵向 flex，而昨日任务 panel 允许 shrink 且自身 `overflow:hidden`，造成数据已渲染但被裁切。最终级联禁止抽屉正文直接子项收缩，并把昨日任务列表变成有 max-height、独立 `overflow-y:auto`、可键盘聚焦的滚动区；抽屉自身仍可继续滚到任务类别、后续选择器与底部“添加”。
+- 每条昨日任务新增“管理 / 删除”：关闭抽屉，按学生 + 昨日日期过滤主列表，翻到对应分页并选中准确任务。右侧检查器新增折叠区外的显式危险态“删除任务”；仍转发既有受权限保护的删除接口与不可恢复二次确认。成功后同步列表、昨日快照、周期 / 工具栏计数和检查器；403、网络及非 JSON 错误均恢复按钮并给出中文反馈，“更多操作”不再重复复制编辑 / 删除。
+- Chrome 使用本地忽略的合成 `app.db` 与合成管理员在 CSS viewport `1280×868` 验收：6 条昨日任务时 list `clientHeight=278` / `scrollHeight=476` / `overflow-y=auto`，默认桌面进一步验证 `scrollTop 0→168`；drawer body `658/828`，无横向溢出。“管理 / 删除”共 6 个，首个入口准确选中任务并聚焦显式删除按钮。未接受删除确认、未通过产品删除任何现有任务。
+- 视觉证据仅本机可见：`artifacts/tasks-yesterday-delete-qa-20260902/`；用户截图与实现同图对照为 `reference-vs-drawer.png`，根 `design-qa.md` 顶部为 `final result: passed`。验收临时增加的 4 条合成记录已按固定 ID 精确清理，剩余 0，`PRAGMA quick_check=ok`；既有忽略 `app.db` 保留，合成数据预览已重新运行于 `http://127.0.0.1:5088/tasks` 供用户检查。
+- 精确验证：`node --check static/js/tasks_workspace.js`；`node --test tests/test_tasks_workspace_structure.js tests/test_admin_suite_v2_structure.js` → **6 passed**；`/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_history.py tests/test_task_assignment_routes.py` → **12 passed**（仅既有 SQLAlchemy deprecation warnings）；`git diff --check` 通过。
+- 当前所有本轮 tracked 改动均未 commit、未 push、未 deploy；生产数据库 / 服务 / 公网未触碰，小程序未改 / 未上传 / 未提审 / 未发布。下一步是在用户明确授权后，从本工作树提交并推送 `main` 触发部署，再做生产只读健康检查与登录后的真实数据冒烟。
 
 ## 2026-09-01 后台左上角 Logo 已恢复清晰显示
 

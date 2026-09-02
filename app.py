@@ -131,6 +131,7 @@ from models import (
     MockExam,
     MockExamSession,
 )
+from services.task_deletion import TaskDeletionError, delete_unstarted_task
 
 def time_ago(dt):
     """Helper to format time difference"""
@@ -1979,6 +1980,7 @@ def ensure_legacy_schema() -> None:
             "reading_passage_number": "INTEGER",
             "reading_access_token": "VARCHAR(64)",
             "assignment_idempotency_key": "VARCHAR(128)",
+            "cancelled_at": "DATETIME",
         }
         for column_name, column_type in legacy_task_columns.items():
             if column_name in columns:
@@ -2052,6 +2054,22 @@ def ensure_legacy_schema() -> None:
         except Exception as exc:  # pragma: no cover
             current_app.logger.warning(
                 "Failed to ensure index on task.plan_item_id: %s", exc
+            )
+        try:
+            existing_indexes = {
+                idx["name"] for idx in inspect(db.engine).get_indexes("task")
+            }
+            if "ix_task_cancelled_at" not in existing_indexes and "cancelled_at" in columns:
+                with db.engine.begin() as conn:
+                    conn.execute(
+                        text(
+                            "CREATE INDEX IF NOT EXISTS ix_task_cancelled_at "
+                            "ON task (cancelled_at)"
+                        )
+                    )
+        except Exception as exc:  # pragma: no cover
+            current_app.logger.warning(
+                "Failed to ensure index on task.cancelled_at: %s", exc
             )
     if "listening_segment_result" in tables:
         columns = {
@@ -3570,6 +3588,7 @@ def teacher_download_evidence(evidence_id):
 
 @app.route("/tasks", methods=["GET", "POST"])
 @login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def tasks_page():
     if request.method == "POST":
         d = request.form.get("date") or date.today().isoformat()
@@ -4439,15 +4458,19 @@ def grading_submit(task_id):
 # ---- AJAX: 删除任务 ----
 @app.post("/api/tasks/<int:tid>/delete")
 @login_required
+@role_required(User.ROLE_TEACHER, User.ROLE_ASSISTANT)
 def api_task_delete(tid):
-    t = Task.query.get_or_404(tid)
-    # 权限：创建者、管理员或助教可删
-    if t.created_by != current_user.id and current_user.role not in ["admin", "assistant"]:
-        return jsonify({"ok": False, "error": "no_permission"}), 403
-    if t.plan_item:
-        t.plan_item.is_deleted = True
-    db.session.delete(t)
-    db.session.commit()
+    try:
+        delete_unstarted_task(
+            tid,
+            actor_id=current_user.id,
+            is_allowed=lambda task: (
+                task.created_by == current_user.id
+                or current_user.role in [User.ROLE_ADMIN, User.ROLE_ASSISTANT]
+            ),
+        )
+    except TaskDeletionError as error:
+        return jsonify({"ok": False, "error": error.code}), error.status
     return jsonify({"ok": True})
 
 

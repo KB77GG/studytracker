@@ -57,6 +57,7 @@ from services.scheduler_client import (
     fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
 )
 from services.vocabulary_mastery import vocabulary_goal_for_task
+from services.task_deletion import TaskDeletionError, delete_unstarted_task
 from services.listening_training import (
     TRAINING_MODE_OPTIONS,
     normalize_training_mode,
@@ -5114,13 +5115,15 @@ def update_teacher_quick_practice_homework(task_id):
 def delete_teacher_homework(task_id):
     """老师在小程序内删除自己布置错的作业。"""
     user = request.current_api_user
-    task = Task.query.get_or_404(task_id)
-    if task.created_by != user.id:
-        return _teacher_homework_error("forbidden_task", 403)
-    if task.plan_item:
-        task.plan_item.is_deleted = True
-    db.session.delete(task)
-    db.session.commit()
+    try:
+        delete_unstarted_task(
+            task_id,
+            actor_id=user.id,
+            is_allowed=lambda task: task.created_by == user.id,
+            permission_error="forbidden_task",
+        )
+    except TaskDeletionError as error:
+        return _teacher_homework_error(error.code, error.status)
     return jsonify({"ok": True})
 
 

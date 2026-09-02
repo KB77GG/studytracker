@@ -6,6 +6,135 @@
   const strip = document.getElementById('taskDateStrip');
   const choices = document.getElementById('taskDateChoices');
   const rows = () => Array.from(document.querySelectorAll('#taskRows tr[data-id]'));
+
+  function setupStudentFilterAutocomplete() {
+    const input = document.getElementById('filterStudent');
+    const listbox = document.getElementById('filterStudentSuggestions');
+    const clearButton = document.getElementById('filterClear');
+    const options = Array.isArray(window.taskStudentFilterOptions)
+      ? window.taskStudentFilterOptions
+      : [];
+    if (!input || !listbox) return;
+
+    const normalize = value => String(value || '').trim().toLowerCase();
+    const optionMatches = (option, query) => normalize(option?.search || option?.name).includes(query);
+    let matches = [];
+    let activeIndex = -1;
+
+    window.taskStudentFilterMatchesName = (studentName, query) => {
+      const normalizedName = normalize(studentName);
+      const normalizedQuery = normalize(query);
+      if (!normalizedQuery) return true;
+      if (normalizedName.includes(normalizedQuery)) return true;
+      const option = options.find(item => normalize(item?.name) === normalizedName);
+      return Boolean(option && optionMatches(option, normalizedQuery));
+    };
+
+    function setExpanded(expanded) {
+      listbox.hidden = !expanded;
+      input.setAttribute('aria-expanded', String(expanded));
+      if (!expanded) {
+        activeIndex = -1;
+        input.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    function setActive(index) {
+      const optionButtons = Array.from(listbox.querySelectorAll('[role="option"]'));
+      if (!optionButtons.length) return;
+      activeIndex = Math.max(0, Math.min(index, optionButtons.length - 1));
+      optionButtons.forEach((button, buttonIndex) => {
+        const selected = buttonIndex === activeIndex;
+        button.classList.toggle('is-active', selected);
+        button.setAttribute('aria-selected', String(selected));
+      });
+      const activeButton = optionButtons[activeIndex];
+      input.setAttribute('aria-activedescendant', activeButton.id);
+      activeButton.scrollIntoView({ block: 'nearest' });
+    }
+
+    function choose(option) {
+      input.value = option.name;
+      setExpanded(false);
+      window.applyTaskFilters?.();
+      input.blur();
+    }
+
+    function render() {
+      const query = normalize(input.value);
+      listbox.replaceChildren();
+      activeIndex = -1;
+      input.removeAttribute('aria-activedescendant');
+      if (!query) {
+        matches = [];
+        setExpanded(false);
+        return;
+      }
+
+      matches = options.filter(option => optionMatches(option, query)).slice(0, 12);
+      if (!matches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'filter-student-suggestion-empty';
+        empty.textContent = '没有匹配的学生';
+        listbox.appendChild(empty);
+        setExpanded(true);
+        return;
+      }
+
+      matches.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.id = `filter-student-option-${index}`;
+        button.className = 'student-suggestion filter-student-suggestion';
+        button.setAttribute('role', 'option');
+        button.setAttribute('aria-selected', 'false');
+
+        const name = document.createElement('span');
+        name.textContent = option.name;
+        const hint = document.createElement('small');
+        hint.textContent = '选择筛选';
+        button.append(name, hint);
+        button.addEventListener('mousedown', event => event.preventDefault());
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          choose(option);
+        });
+        listbox.appendChild(button);
+      });
+      setExpanded(true);
+    }
+
+    input.addEventListener('input', render);
+    input.addEventListener('focus', () => {
+      if (normalize(input.value)) render();
+    });
+    input.addEventListener('blur', () => window.setTimeout(() => setExpanded(false), 120));
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        setExpanded(false);
+        return;
+      }
+      if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) return;
+      if (listbox.hidden) render();
+      if (!matches.length) return;
+      if (event.key === 'Enter') {
+        if (activeIndex >= 0) {
+          event.preventDefault();
+          choose(matches[activeIndex]);
+        }
+        return;
+      }
+      event.preventDefault();
+      const delta = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex = activeIndex < 0
+        ? (delta > 0 ? 0 : matches.length - 1)
+        : (activeIndex + delta + matches.length) % matches.length;
+      setActive(nextIndex);
+    });
+    clearButton?.addEventListener('click', () => setExpanded(false));
+  }
+
+  setupStudentFilterAutocomplete();
   if (!strip || !choices) return;
 
   const parseDate = value => {
@@ -93,6 +222,14 @@
     }
   }
   window.taskWorkspaceApplyPagination = renderPagination;
+  window.taskWorkspaceRevealRow = targetRow => {
+    if (!targetRow) return;
+    const filteredRows = rows().filter(row => row.dataset.filterVisible !== 'false');
+    const size = Math.max(1, Number(document.getElementById('taskPageSize')?.value || 10));
+    const targetIndex = filteredRows.indexOf(targetRow);
+    if (targetIndex >= 0) page = Math.floor(targetIndex / size) + 1;
+    renderPagination();
+  };
   document.getElementById('taskPrevPage')?.addEventListener('click', () => { page -= 1; renderPagination(); });
   document.getElementById('taskNextPage')?.addEventListener('click', () => { page += 1; renderPagination(); });
   document.getElementById('taskPageSize')?.addEventListener('change', () => { page = 1; renderPagination(); });

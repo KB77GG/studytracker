@@ -63,3 +63,54 @@ test('tasks workspace exposes real navigation assets and responsive behaviors', 
   assert.match(workspaceJs, /taskWorkspaceApplyPagination/)
   assert.match(workspaceJs, /task-date-choice/)
 })
+
+test('yesterday tasks scroll and expose a discoverable, synchronized delete flow', () => {
+  assert.match(tasksTemplate, /id="previousDayTaskList"[^>]+role="region"[^>]+aria-label="昨日任务列表"[^>]+tabindex="0"/)
+  assert.match(finalCss, /task-assignment-drawer[^{]*task-assignment-drawer__body > \*\{[\s\S]*?flex:0 0 auto/)
+  assert.match(finalCss, /previous-day-panel\{[\s\S]*?flex:0 0 auto !important/)
+  assert.match(finalCss, /previous-day-task-list\{[\s\S]*?max-height:[^;]+;[\s\S]*?overflow-y:auto[\s\S]*?overscroll-behavior:contain/)
+
+  assert.match(tasksTemplate, /function openTaskManager\(studentName, task\)/)
+  assert.match(tasksTemplate, /className = 'previous-day-manage'/)
+  assert.match(tasksTemplate, /<span>管理 \/ 删除<\/span>/)
+  assert.match(tasksTemplate, /openTaskManager\(studentName, task\)/)
+  assert.match(workspaceJs, /window\.taskWorkspaceRevealRow = targetRow =>/)
+
+  const deleteButtonIndex = tasksTemplate.indexOf('id="taskInspectorDelete"')
+  const moreActionsIndex = tasksTemplate.indexOf('<details class="task-inspector__more">')
+  assert.ok(deleteButtonIndex >= 0 && deleteButtonIndex < moreActionsIndex)
+  assert.match(tasksTemplate, /id="taskInspectorDelete"[^>]+type="button"[^>]+disabled/)
+  assert.match(tasksTemplate, /const sourceDelete = row\.querySelector\('\.btn-delete'\)/)
+  assert.match(tasksTemplate, /inspectorDelete\.onclick = sourceDelete \? \(\) => sourceDelete\.click\(\) : null/)
+  assert.match(tasksTemplate, /filter\(action => !action\.matches\('\.btn-edit, \.btn-delete'\)\)/)
+  assert.match(tasksTemplate, /window\.__taskInspectorAfterDelete\?\.\(nextRow\)/)
+  assert.match(tasksTemplate, /window\.__taskInspectorAfterDelete = nextRow =>/)
+  assert.match(tasksTemplate, /headers: \{ Accept: 'application\/json' \}/)
+  assert.match(tasksTemplate, /task_has_activity/)
+  assert.match(tasksTemplate, /window\.location\.reload\(\)/)
+  assert.match(tasksTemplate, /taskInspectorStatusSelect" disabled/)
+  assert.match(tasksTemplate, /taskInspectorProgress"[^>]+aria-disabled="true"[^>]+tabindex="-1"/)
+  assert.match(tasksTemplate, /remainingRows\.find\(candidate => candidate\.dataset\.filterVisible !== 'false'\) \|\| null/)
+  assert.match(finalCss, /taskInspectorDelete\{[\s\S]*?grid-column:1 \/ -1 !important/)
+  assert.match(finalCss, /a\[aria-disabled="true"\]\{[\s\S]*?pointer-events:none/)
+})
+
+test('student task filter exposes a mobile-friendly name and pinyin autocomplete', () => {
+  assert.match(tasksTemplate, /id="filterStudent"[\s\S]*?role="combobox"[\s\S]*?aria-autocomplete="list"[\s\S]*?aria-haspopup="listbox"[\s\S]*?aria-controls="filterStudentSuggestions"[\s\S]*?aria-expanded="false"/)
+  assert.match(tasksTemplate, /id="filterStudentSuggestions"[\s\S]*?role="listbox"/)
+  assert.match(tasksTemplate, /window\.taskStudentFilterOptions = knownStudentOptions/)
+  assert.match(tasksTemplate, /window\.taskStudentFilterMatchesName\(student, kw\)/)
+
+  assert.match(workspaceJs, /function setupStudentFilterAutocomplete\(\)/)
+  assert.match(workspaceJs, /option\?\.search \|\| option\?\.name/)
+  assert.match(workspaceJs, /没有匹配的学生/)
+  assert.match(workspaceJs, /mousedown/)
+  assert.match(workspaceJs, /addEventListener\('click'/)
+  for (const key of ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']) {
+    assert.match(workspaceJs, new RegExp(`event\\.key === '${key}'|\\['ArrowDown', 'ArrowUp', 'Enter'\\]`))
+  }
+  assert.match(workspaceJs, /window\.applyTaskFilters\?\.\(\)/)
+
+  assert.match(workspaceCss, /filter-student-suggestions\{[\s\S]*?max-height:min\(260px,32dvh\)[\s\S]*?overscroll-behavior:contain/)
+  assert.match(workspaceCss, /task-filter-bar \.filter-student-suggestion\{[\s\S]*?min-height:44px[\s\S]*?border:0/)
+})

@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 
 import jwt
 from flask import Flask
+from sqlalchemy import select
 
 from api.miniprogram import mp_bp
 from models import (
@@ -218,6 +219,45 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(
             details["课后作业 - today assistant"]["assigned_by_role"], "assistant"
         )
+
+    def test_teacher_delete_soft_cancels_fresh_task_and_hides_it_from_students(self):
+        with self.app.app_context():
+            task = self._task(
+                self.today,
+                "mistaken assignment",
+                "pending",
+                self.teacher_id,
+            )
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+        response = self.client.delete(
+            f"/api/miniprogram/teacher/homework/{task_id}",
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        self.assertTrue(response.get_json()["ok"])
+        with self.app.app_context():
+            self.assertIsNone(db.session.get(Task, task_id))
+            tombstone = db.session.execute(
+                select(Task)
+                .where(Task.id == task_id)
+                .execution_options(include_cancelled_tasks=True)
+            ).scalar_one()
+            self.assertEqual(tombstone.status, Task.STATUS_CANCELLED)
+            self.assertIsNotNone(tombstone.cancelled_at)
+        task_names = {item["task_name"] for item in self._today_tasks()["tasks"]}
+        self.assertNotIn("课后作业 - mistaken assignment", task_names)
+
+    def test_teacher_delete_preserves_completed_task_history(self):
+        response = self.client.delete(
+            f"/api/miniprogram/teacher/homework/{self.completed_listening_id}",
+            headers=self._headers(self.teacher_id, User.ROLE_TEACHER),
+        )
+        self.assertEqual(response.status_code, 409, response.get_data(as_text=True))
+        self.assertEqual(response.get_json()["error"], "task_has_activity")
+        with self.app.app_context():
+            self.assertIsNotNone(db.session.get(Task, self.completed_listening_id))
 
     def test_dictation_task_exposes_order_in_list_and_detail(self):
         details = {task["task_name"]: task for task in self._today_tasks()["tasks"]}

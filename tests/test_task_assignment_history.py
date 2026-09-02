@@ -55,6 +55,7 @@ class TaskAssignmentHistoryTest(unittest.TestCase):
         )
 
         item = grouped["测试学生"][0]
+        self.assertEqual(item["id"], 3342)
         self.assertEqual(item["title"], "四级单词 Day18")
         self.assertEqual(item["resource_meta"], "词书 · 第 11–30 词")
         self.assertTrue(item["repeatable"])
@@ -112,9 +113,13 @@ class TaskAssignmentHistoryTest(unittest.TestCase):
         app_source = (ROOT / "app.py").read_text(encoding="utf-8")
 
         self.assertIn('id="previousDayPanel"', markup)
+        self.assertIn('aria-label="昨日任务列表"', markup)
+        self.assertIn('tabindex="0"', markup)
         self.assertIn('aria-live="polite"', markup)
         self.assertIn("previousDayTaskRecordsByName", markup)
         self.assertIn("applyRepeatPreset", markup)
+        self.assertIn("openTaskManager", markup)
+        self.assertIn("previous-day-manage", markup)
         self.assertIn("document.getElementById('taskStudent')?.value", markup)
         self.assertIn("确认无误后点击“添加”", markup)
         self.assertIn("load_previous_day_assignments(previous_day.isoformat())", app_source)

@@ -4,6 +4,26 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-02 `/tasks` 现场修复发布候选（用户已授权，待发布）
+
+- 在唯一发布工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite` 合并完成昨日任务独立滚动、显式管理 / 删除、学生中文姓名 / 拼音筛选候选三项现场修复；桌面脏旧工作树未触碰，`artifacts/` 只作本机 QA 证据且不会提交。
+- 删除链路已加固为 staff-only 的安全软取消：网页 / 小程序共用服务，仅允许取消无任何学习 / 计时 / 提交 / 批改 / 外键历史的 pending 误布置任务；共享 PlanItem、审计与 409 冲突均覆盖。独立 `cancelled_at` tombstone 防止迟到进度写把任务复活，启动时 additive 增列 / 建索引。
+- 发布前验证：定向 Python **52 passed**，全仓（忽略既有缺失音频资产测试）**655 passed + 72 subtests**，Node **9 passed**，CI 同款 unittest **68 passed**，拼写队列、Python / JS syntax、diff check 通过；两路独立删除 / 安全审阅均为 GO，双连接迟到写竞态复现也通过。生产只读预检 `quick_check=ok`、外键 0、共享 PlanItem 11 组。
+- 昨日任务 1280×868 视觉对照已通过；学生候选因浏览器控制超时缺少新的 390×844 截图，`design-qa.md` 仍如实为 blocked。用户明确接受此证据缺口并授权一起 commit / push / deploy；当前仍未发布，下一步直接执行发布链路。
+
+## 2026-09-02 `/tasks` 学生姓名 / 拼音筛选候选（仅本机）
+
+- 修复主任务筛选“输入姓氏后只过滤行、不出现学生下拉”的断点：复用已有学生姓名 / 拼音搜索数据，新增可访问 combobox/listbox、最多 12 个候选、无匹配空态、触摸与完整键盘操作；点选填写完整姓名并立即筛选。输入拼音也会同步过滤任务行，历史未建档任务保留中文包含匹配。
+- 移动候选使用 `32dvh` 高度上限、独立滚动和 44px 触摸项，保持方向 2 既有 Sage / 象牙视觉。临时加入两名“辛”姓合成学生和两条任务完成登录态路由 / 拼音合同检查，固定 ID 数据已精确清理，SQLite `quick_check=ok`。
+- Node **7 passed**、Python **12 passed**、JS syntax / diff check 通过。内置预览无可控会话，Chrome 可列出本地任务页但无法接管 / 截图，故根 `design-qa.md` 最新结果为 blocked，待 `390×844` 补拍“辛”与 `xin` 展开态后完成同图比较。5088 合成数据预览运行中；本轮及上一批昨日任务 / 删除改动均未 commit、push、deploy，生产和小程序未触碰。
+
+## 2026-09-02 `/tasks` 昨日任务滚动与删除入口修复（仅本机）
+
+- 在 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`、`codex/admin-option2-full-suite@852f4d82` 修复两个现场断点：昨日任务 panel 不再被 flex shrink + overflow hidden 裁切，列表成为独立可聚焦滚动区；每条昨日任务新增“管理 / 删除”，可准确过滤 / 翻页 / 选中主列表任务，右侧检查器在折叠区外显示危险态删除按钮。
+- 删除仍复用既有权限 API 和不可恢复确认；新增请求失败恢复、中文无权限提示、成功后列表 / 昨日快照 / 计数 / 检查器同步，并从“更多操作”移除重复编辑 / 删除克隆。未改后端合同、题库、判分或生产数据。
+- Chrome `1280×868` 合成数据验收：6 条昨日任务 list `278/476px`、`overflow-y:auto`，键盘滚动 `scrollTop 0→168`；drawer body `658/828px`，无横向溢出；6 个“管理 / 删除”均可见，首个入口准确聚焦右侧删除。对照图与截图在本机忽略目录 `artifacts/tasks-yesterday-delete-qa-20260902/`，`design-qa.md` 顶部为 passed。
+- Node **6 passed**、Python **12 passed**、JS syntax 与 diff check 通过。4 条临时合成 QA 任务已精确清理、SQLite `quick_check=ok`；5088 合成数据预览已重新启动供用户检查。本轮未 commit / push / deploy，生产与小程序未触碰。下一步等待用户授权后提交、推送并部署。
+
 ## 2026-09-01 后台左上角 Logo 可见性修复已上线
 
 - 用户提供的 `logo.PNG` 与仓库完整品牌图完全相同；实际缺陷不是文件丢失，而是共享后台 teal 图标 / teal 底色对比不足，以及入学测试页把带大白边的整图缩进 42px。两种壳层现统一使用透明品牌 mark，配米白底、描边和轻阴影；入学测试页同时修正为绝对静态路径。

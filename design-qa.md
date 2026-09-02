@@ -1,5 +1,77 @@
 # `/tasks` 方向 2 · 本轮视觉返修 QA（2026-09-01）
 
+## 学生筛选姓名 / 拼音候选：浏览器证据待补（2026-09-02）
+
+### 对照目标与状态
+
+- Source visual truth：`/tmp/codex-remote-attachments/01a05850-a764-7672-8bbb-93aafacb13ce/D5615B5D-4066-4DE0-814D-484871EC44D3/1-照片-1.jpg`，源位图 `589×1280`。截图状态为手机端 `/tasks` 主筛选区、学生输入框已输入“辛”，但输入框下方没有匹配学生候选；截图包含系统键盘，设备 CSS viewport / deviceScaleFactor 未由源图提供。
+- Intended implementation state：`/tasks`、CSS viewport `390×844`、学生输入“辛”、匹配候选下拉展开；还需补测拼音 `xin`、触摸点选、ArrowDown + Enter、Escape、清空和无匹配空态。
+- Implementation screenshot：本轮未能取得。本机内置预览窗口没有暴露可控会话；已连接的 Chrome 能列出 `http://127.0.0.1:5088/tasks`，但新建 / 接管 / 截图操作均超时。因此没有可用于同一输入比较的浏览器渲染图，也没有可声明的实现位图、实际 CSS viewport 或 density normalization。
+
+### 已完成但不能替代视觉比较的验证
+
+- 页面结构现提供独立 `label`、`role="combobox"`、`aria-autocomplete="list"`、`aria-haspopup="listbox"`、`aria-controls` / `aria-expanded` 与 `role="listbox"`；候选层位于输入框下方，最多 12 人，可独立滚动，触摸项最小高度 `44px`。
+- 复用后端现有 `student_picker_options.search`，中文姓 / 姓名、连续拼音和空格拼音可匹配；主任务列表的姓名过滤同步复用该匹配，仍保留历史任务中文字符串包含匹配作为后备。
+- 使用本机忽略的合成数据库临时加入“辛同学甲 / 乙”及两条任务，Flask 登录态路由返回 `200`，HTML 同时包含中文、`xintongxuejia` 搜索串与对应任务行。4 条固定 ID 合成记录随后已精确清理，剩余 `0`，SQLite `quick_check=ok`。
+- Node 结构 / 语法、任务路由定向测试与 diff check 均通过；这些只能证明合同和代码路径存在，不能证明视觉层级、手机键盘遮挡或实际触摸命中。
+
+### Findings
+
+- [P1] 缺少浏览器渲染后的同图视觉证据。
+  - Location：手机端 `/tasks` 学生筛选及 `#filterStudentSuggestions`。
+  - Evidence：源图已打开，但实现截图不可取得，无法按要求把源图与实现放入同一比较输入。
+  - Impact：候选逻辑已实现并有结构 / 路由证据，但不能确认真实手机断点中下拉是否被后续筛选项或软键盘遮挡。
+  - Fix：本机预览控制恢复后，在 `390×844` 输入“辛”捕获展开态，再用相同裁切与源图拼成对照；同时补拍 `xin`、无匹配和键盘选择状态。
+
+### Required fidelity surfaces
+
+1. Fonts and typography：代码保持现有任务页 9–12px 筛选层级与既有学生候选组件；未取得渲染图，不能完成字体 / 换行肉眼判定。
+2. Spacing and layout rhythm：候选绝对定位、`32dvh` 最大高度、44px 触摸项已实现；未取得渲染图，不能确认真实软键盘下的可见高度。
+3. Colors and visual tokens：复用现有 Sage hover / active、暖白卡片和边框 token；未完成像素比较。
+4. Image quality and assets：本改动不新增或替换图片、Logo、插画或图标；无资产差异。
+5. Copy and content：候选使用真实学生姓名和“选择筛选”，空态为“没有匹配的学生”；未把调试文案或提示泄漏到产品界面。
+
+### Comparison history
+
+- Iteration 1：源图已确认缺失候选为 P1 工作流断点；实现完成姓名 / 拼音候选、任务同步过滤、键盘 / 触摸 / 空态与移动滚动样式。后续浏览器捕获被本机预览连接阻塞，无法执行 post-fix 同图比较。
+- Release decision：用户于 2026-09-02 明确接受当前缺少 390×844 实现截图的证据缺口，并授权与昨日任务 / 删除修复一起发布。该授权允许发布，但不把视觉证据状态改写为通过；后续仍应补拍并完成同图比较。
+
+final result: blocked
+
+## 昨日任务滚动与删除入口修复：通过（2026-09-02）
+
+### 用户反馈与实现
+
+- 用户截图：`/tmp/codex-remote-attachments/01a05850-a764-7672-8bbb-93aafacb13ce/C8E0608A-C39A-4315-A480-70E261D28619/1-照片-1.jpg`（`1280×868`）。反馈中的两个 P1 工作流断点均已关闭：昨日任务不再被抽屉 flex 布局压缩后裁切；删除不再隐藏在“更多操作”深层路径中。
+- 昨日任务列表现在是可聚焦的独立滚动区域，使用有限高度、`overflow-y:auto`、滚动边界隔离和稳定滚动条；抽屉正文的直接子项禁止 flex shrink，因此整个抽屉仍能继续滚到后续字段和底部“添加”。
+- 每条昨日任务新增“管理 / 删除”，会关闭抽屉、自动按学生与昨日日期筛选、翻到任务所在分页、选中准确任务并把焦点放到右侧显式“删除任务”。检查器中的删除位于主操作区而非折叠区；保留不可恢复提示和二次确认，权限仍复用现有后端规则。
+- 删除成功后同步移除任务行、昨日任务快照、当前周期 / 工具栏计数，并选中下一条任务或清空检查器；网络、非 JSON、无权限失败均恢复按钮并给出中文提示，避免旧检查器继续指向已删除任务。
+
+### 同一输入视觉比较与浏览器证据
+
+- 实现截图：`artifacts/tasks-yesterday-delete-qa-20260902/drawer-scroll-1280x868.png`；管理 / 删除定位截图：`artifacts/tasks-yesterday-delete-qa-20260902/task-manager-delete-1280x868.png`。
+- 用户参考与修复后抽屉已置于同一比较输入：`artifacts/tasks-yesterday-delete-qa-20260902/reference-vs-drawer.png`。左侧参考清楚显示列表被裁到约 1.5 行；右侧实现保持方向 2 的深墨 / 象牙 / Sage 设计，并把 6 条昨日任务放入明确的独立滚动区，每条均显示可发现的管理入口。
+- Chrome CSS viewport 实测 `1280×868`；浏览器截图内容位图为 `1265×858`。昨日列表 `clientHeight=278`、`scrollHeight=476`、computed `overflow-y=auto`；在默认桌面视口进一步验证 `scrollTop 0 → 168`，键盘 `End` 可滚到底。抽屉正文 `clientHeight=658`、`scrollHeight=828`，后续任务类别和发布区仍可达。
+- “管理 / 删除”共 6 个；点击首个入口后抽屉关闭，筛选自动变为 `Demo 学员 A / 2026-09-01`，准确选中任务 `7004`，右侧删除按钮可见、启用并获得焦点；页面无横向溢出。验收没有接受删除确认，也没有通过产品删除任何既有任务。
+- 仅为滚动密度验收临时添加的 4 条本地合成记录已精确清理，剩余数量为 0，`PRAGMA quick_check=ok`；本地 5088 合成数据预览已重新启动供用户检查。请求日志除既有 `/favicon.ico` 404 外均为 200，无应用异常。
+
+### 五项 fidelity surfaces
+
+1. Composition：沿用原抽屉信息架构，只把昨日任务从裁切区变为明确滚动区，并在卡片右侧增加低风险管理入口。
+2. Geometry：1280 视口下滚动区 278 / 476px、抽屉正文 658 / 828px；无横向溢出，后续表单与底部添加区未被遮挡。
+3. Typography：保持原标题、状态徽标和 12–14px 密度；新增说明明确提示“列表内上下滚动”，操作文案直接写“管理 / 删除”。
+4. Color and assets：继续复用 Sage token 与 Font Awesome `cog` / `trash-alt`，删除按钮使用克制的浅红危险态，不引入伪造图标或新视觉语言。
+5. Interaction and responsive behavior：鼠标、触控与键盘滚动可用；移动端按钮为两列 / 单按钮满宽；入口准确定位任务、删除有二次确认，删除后状态同步。
+
+### 回归
+
+- `node --check static/js/tasks_workspace.js` 通过。
+- `node --test tests/test_tasks_workspace_structure.js tests/test_admin_suite_v2_structure.js` → **6 passed**。
+- `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_history.py tests/test_task_assignment_routes.py` → **12 passed**（仅既有 SQLAlchemy deprecation warnings）。
+- `git diff --check` 通过。
+
+final result: passed
+
 ## 后台左上角 Logo 可见性修复：通过（2026-09-01 23:01 CST）
 
 - 原完整品牌图文件存在且与用户提供的 `logo.PNG` SHA-256 一致；问题来自图标与底块同色，以及入学测试页把带白边整图缩小。共享后台和入学测试页现统一使用透明 `sagepath-mark.png`，配米白高对比底色、细描边和轻阴影。

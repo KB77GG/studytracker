@@ -2,7 +2,8 @@ from datetime import datetime, timedelta, timezone
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from sqlalchemy import event, text
+from sqlalchemy.orm import Session, with_loader_criteria
 from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
@@ -520,12 +521,19 @@ class QuestionTypePracticeAttempt(db.Model, TimestampMixin):
 class Task(db.Model):
     """Legacy task entity used by当前页面；后续将由 PlanItem 取代。"""
 
+    STATUS_CANCELLED = "cancelled"
+
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(10), index=True)  # YYYY-MM-DD
     student_name = db.Column(db.String(64), index=True)
     category = db.Column(db.String(32))
     detail = db.Column(db.String(200))
     status = db.Column(db.String(12), default="pending")  # pending / progress / done
+    # Independent tombstone for staff-cancelled assignments.  This must not be
+    # derived from ``status``: a delayed learner request may still update the
+    # legacy status column after cancellation, but it must never make the task
+    # visible again.
+    cancelled_at = db.Column(db.DateTime, nullable=True, index=True)
     note = db.Column(db.String(200))
     accuracy = db.Column(db.Float, default=0.0)
     completion_rate = db.Column(db.Float)
@@ -586,6 +594,23 @@ class Task(db.Model):
 
     def __repr__(self) -> str:
         return f"<Task {self.student_name} {self.category} {self.status}>"
+
+
+@event.listens_for(Session, "do_orm_execute")
+def _hide_cancelled_tasks(execute_state) -> None:
+    """Keep soft-cancelled legacy tasks out of normal application reads."""
+
+    if not execute_state.is_select or execute_state.execution_options.get(
+        "include_cancelled_tasks"
+    ):
+        return
+    execute_state.statement = execute_state.statement.options(
+        with_loader_criteria(
+            Task,
+            lambda task: task.cancelled_at.is_(None),
+            include_aliases=True,
+        )
+    )
 
 
 class ListeningSegmentResult(db.Model):
