@@ -4,12 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-09-02 `/tasks` 现场修复发布候选（用户已授权，待发布）
+## 2026-09-02 `/tasks` 现场修复已上线
 
 - 在唯一发布工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite` 合并完成昨日任务独立滚动、显式管理 / 删除、学生中文姓名 / 拼音筛选候选三项现场修复；桌面脏旧工作树未触碰，`artifacts/` 只作本机 QA 证据且不会提交。
 - 删除链路已加固为 staff-only 的安全软取消：网页 / 小程序共用服务，仅允许取消无任何学习 / 计时 / 提交 / 批改 / 外键历史的 pending 误布置任务；共享 PlanItem、审计与 409 冲突均覆盖。独立 `cancelled_at` tombstone 防止迟到进度写把任务复活，启动时 additive 增列 / 建索引。
 - 发布前验证：定向 Python **52 passed**，全仓（忽略既有缺失音频资产测试）**655 passed + 72 subtests**，Node **9 passed**，CI 同款 unittest **68 passed**，拼写队列、Python / JS syntax、diff check 通过；两路独立删除 / 安全审阅均为 GO，双连接迟到写竞态复现也通过。生产只读预检 `quick_check=ok`、外键 0、共享 PlanItem 11 组。
-- 昨日任务 1280×868 视觉对照已通过；学生候选因浏览器控制超时缺少新的 390×844 截图，`design-qa.md` 仍如实为 blocked。用户明确接受此证据缺口并授权一起 commit / push / deploy；当前仍未发布，下一步直接执行发布链路。
+- 昨日任务 1280×868 视觉对照已通过；学生候选因浏览器控制超时缺少新的 390×844 截图，`design-qa.md` 仍如实为 blocked，用户明确接受该证据缺口后授权发布。
+- 业务提交 `5f9fedc2` 已推任务分支与 `main`；CI `33592609749`、任务分支 CI `33592601082`、部署 `33592609800` 均 success。生产 HEAD `5f9fedc2`、tracked 干净、服务 active、5002 / 1 worker / gthread / 6 threads、`NRestarts=0`；部署后 journal 无应用错误。SQLite `quick_check=ok`、外键 0，`cancelled_at` 列与索引已生效、取消行 0；未写生产业务 / 学生数据。内外 `/tasks` 未登录 302，任务 CSS / JS 哈希一致。小程序客户端未上传 / 提审 / 发布。
 
 ## 2026-09-02 `/tasks` 学生姓名 / 拼音筛选候选（仅本机）
 

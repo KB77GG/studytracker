@@ -1,19 +1,23 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-02 `/tasks` 昨日任务、删除安全与学生筛选修复已完成发布前验证；用户接受移动视觉证据缺口并授权发布，尚未 commit / push / deploy（Asia/Shanghai）。
+> 最近更新：2026-09-02 `/tasks` 昨日任务、删除安全与学生筛选修复已发布并完成生产只读验收；移动筛选视觉证据缺口仍如实保留（Asia/Shanghai）。
 
-## 2026-09-02 `/tasks` 现场问题修复发布候选（已授权，待发布）
+## 2026-09-02 `/tasks` 现场问题修复已上线
 
-- 唯一发布工作树为 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。当前业务、测试、QA 和交接文件均未提交；`services/task_deletion.py` 为本轮新文件，既有未跟踪 `artifacts/` 仅存本机 QA 证据，不得提交。
+- 唯一发布工作树为 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`。业务提交 `5f9fedc2b3ebac6f1c8d0511ba9fbe798e5bca0c`（`fix: harden task management workflows`）已推送任务分支与 `origin/main`；桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。既有未跟踪 `artifacts/` 仅存本机 QA 证据，没有提交或上传。
 - 三个现场断点已合并修复：昨日任务列表不再被抽屉 flex 布局裁切，可独立滚动；每条昨日任务可直接进入准确任务并在检查器看到显式“删除任务”；主任务学生筛选输入中文姓、姓名、连续拼音或空格拼音时会显示可触摸 / 键盘操作的候选并同步筛选任务。
 - 删除能力已从前端可发现性修复扩展为后端安全闭环：`/tasks` 与网页删除接口仅允许 teacher / assistant（admin 由全局角色规则放行），teacher 只能删除自己布置的任务；网页与小程序共用 `services/task_deletion.py`。仅 `pending` 且没有计时、提交、批改、练习或任何已映射 `task.id` 外键记录的误布置任务可取消，否则返回 409；共享 `PlanItem` 不会被提前软删，最后一个有效引用取消时才软删；操作保留审计记录。
 - `Task` 删除采用不可复活的软取消：新增独立 `cancelled_at` tombstone，普通 ORM 查询全局排除该标记；即使学生请求在取消后迟到并把 `status` 覆盖为 `progress/done`，任务仍不可见。启动时 `ensure_legacy_schema()` 以 additive 方式增加 `task.cancelled_at` 与 `ix_task_cancelled_at`；重新布置会释放旧幂等键和访问 token。生产发布前只读预检为 SQLite `quick_check=ok`、外键错误 0、共享 `PlanItem` 11 组。
 - 发布前精确验证：定向 Python **52 passed**；全仓（排除仓库既有缺失音频资产的 `tests/test_static_audio_headers.py`）**655 passed, 72 subtests passed**；Node 工作台 / 后台 / 矩阵 **9 passed**；GitHub CI 同款 dependency-light unittest **68 passed**、拼写队列通过；Python / JS syntax 与 `git diff --check` 通过。两路独立删除 / 安全审阅均给出 **GO**；其中一位额外用两个 SQLAlchemy 连接复现“取消后迟到写回 progress”，确认默认不可见、子记录保留且 `foreign_key_check=0`。
 - 昨日任务滚动 / 删除的 1280×868 浏览器对照已通过并保存在本机 `artifacts/tasks-yesterday-delete-qa-20260902/`。学生筛选的结构、路由、姓名 / 拼音合同与自动化已通过，但因当时浏览器控制超时，没有新的 390×844 实现截图；根 `design-qa.md` 如实保留 `final result: blocked`。用户已明确接受该视觉证据缺口并要求与其他修复一起部署；这不等同于补拍完成。
-- 用户已明确授权 commit、push 与部署。下一步：提交（排除 `artifacts/`），先推任务分支，再把同一业务 SHA 推 `main` 触发 GitHub CI / deploy；随后核对生产 HEAD、服务 5002 / `workers=1` / gthread / 6 threads、SQLite 新列与索引、journal、公网静态资产。发布完成后再把精确 SHA / run ID / 生产结果写回本节与工作日志，并以 `[skip ci]` 文档提交同步。小程序代码兼容删除接口有改动，但本轮不包含微信小程序上传 / 提审 / 发布。
+- GitHub CI `33592609749`、任务分支 CI `33592601082` 与部署 `33592609800` 均为 **success**。生产 `/root/apps/studytracker` 业务 HEAD 已核对为 `5f9fedc2`、tracked 工作树干净；`studytracker.service` 自 `2026-09-02 12:55:15 CST` 起 active，`NRestarts=0`，监听 `127.0.0.1:5002`，保持 `workers=1 / gthread / threads=6` 和一主一 worker。部署后 journal 无 Traceback、Exception、CRITICAL、ERROR 或 worker failure。
+- 生产 SQLite 只读复核：`quick_check=ok`、外键错误 0、`task.cancelled_at` 列与 `ix_task_cancelled_at` 索引均已创建，当前取消墓碑 0 条。未创建 / 删除真实任务，也未写学生数据；因此没有用生产数据执行破坏性“删除再重布置”冒烟。公网与内网 `/tasks` 未登录均按预期 302 到登录；两个 workspace CSS 与任务 JS 的本地 / 服务器 / 公网 SHA-256 一致，模板本地 / 服务器哈希一致。小程序接口代码随服务端部署，但本轮不包含微信小程序客户端上传 / 提审 / 发布。
+- 本条之后以 `[skip ci]` 文档提交同步最终发布事实；届时远端 `main` 会领先生产业务 HEAD 一个纯文档提交，生产无需再次重启。下一步仅需管理员刷新正式 `/tasks`，用真实账号确认昨日列表滚动、删除入口和中文 / 拼音候选观感；不要为验收删除已有学习记录的任务。
 
-## 2026-09-02 `/tasks` 学生姓名 / 拼音筛选候选（仅本机，视觉 QA 待补）
+## 2026-09-02 `/tasks` 学生姓名 / 拼音筛选候选（发布前记录，视觉 QA 待补）
+
+> 本节保留发布前实现与证据现场；commit / push / deploy 状态以上一节为准，勿按本节旧“未发布”描述重复发布。
 
 - 工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。当前未提交 tracked 改动为 `design-qa.md`、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`、`templates/tasks.html`、`static/js/tasks_workspace.js`、`static/tasks_workspace.css`、`static/tasks_workspace_final.css`、`tests/test_task_assignment_history.py`、`tests/test_tasks_workspace_structure.js`；另有既有未跟踪 `artifacts/`。其中昨日任务滚动 / 删除入口改动来自同一未提交工作批次，本节新增的是主筛选自动补全、匹配与相应测试 / 文档。
 - 根因是主筛选 `#filterStudent` 只有普通输入和任务行字符串过滤，虽能把 352 条过滤到相关任务，却从未渲染学生候选。现在输入框下方新增可访问 listbox，复用既有 `student_picker_options.search`，支持中文姓 / 姓名、连续拼音与空格拼音；点选后填写完整姓名、立即过滤并收起。ArrowUp / ArrowDown / Enter / Escape、鼠标 / 触摸点选、失焦、清空和“没有匹配的学生”空态均已覆盖。
@@ -23,7 +27,9 @@
 - 精确验证：`node --check static/js/tasks_workspace.js`；`node --test tests/test_tasks_workspace_structure.js tests/test_admin_suite_v2_structure.js` → **7 passed**；`/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_history.py tests/test_task_assignment_routes.py` → **12 passed**（仅既有 SQLAlchemy deprecation warnings）；登录态 Flask 路由 / 合成中文与拼音合同检查通过；`git diff --check` 通过。
 - 当前全部业务 / 文档改动均未 commit、未 push、未 deploy；生产数据库 / 服务 / 公网未触碰，小程序未改 / 未上传 / 未提审 / 未发布。下一步先补浏览器视觉证据；用户明确授权发布后，再从本工作树提交并推送 `main` 触发部署，随后做生产只读健康检查与登录后的真实数据冒烟。
 
-## 2026-09-02 `/tasks` 昨日任务可滚动、删除入口可发现（仅本机）
+## 2026-09-02 `/tasks` 昨日任务可滚动、删除入口可发现（发布前记录）
+
+> 本节保留发布前实现与浏览器验收现场；commit / push / deploy 状态以上一节为准。
 
 - 工作树 `/Users/zhouxin/.codex/worktrees/admin-option2-full-suite`，分支 `codex/admin-option2-full-suite`，HEAD `852f4d822de62753be78bd22c76938b9ac6aa976`；`HEAD...origin/main=0 0`、`HEAD...origin/codex/admin-option2-full-suite=0 0`。起始 tracked 工作树干净，仅有既有未跟踪 `artifacts/`；本轮修改 `templates/tasks.html`、`static/tasks_workspace_final.css`、`static/js/tasks_workspace.js`、两个定向测试、根 `design-qa.md` 与本交接 / 工作日志。桌面脏旧工作树 `/Users/zhouxin/Desktop/studytracker` 未触碰。
 - 根因是抽屉正文为纵向 flex，而昨日任务 panel 允许 shrink 且自身 `overflow:hidden`，造成数据已渲染但被裁切。最终级联禁止抽屉正文直接子项收缩，并把昨日任务列表变成有 max-height、独立 `overflow-y:auto`、可键盘聚焦的滚动区；抽屉自身仍可继续滚到任务类别、后续选择器与底部“添加”。
