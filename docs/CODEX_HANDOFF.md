@@ -1,7 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-02 网页刷题移动端高亮与复盘保留修复已部署并通过生产只读验收；待学生真机确认 iOS / 微信原生长按体验（Asia/Shanghai）。
+> 最近更新：2026-09-02 网页听力复盘题目与音频定位回归已完成修复和全量发布前验证，等待提交、推送与部署（Asia/Shanghai）。
+
+## 2026-09-02 网页听力复盘题目与音频定位回归（已修复，待发布）
+
+- 修复工作树为 `/Users/zhouxin/.codex/worktrees/listening-review-audio-diagnosis`，分支 `codex/listening-review-audio-diagnosis`，基线/当前 HEAD `b6b292457e716e5db4e754352af8a1002f91d06f`（`origin/main`）。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 仍在旧 `main@6ded77d2` 且含来源不明改动，本轮未触碰。当前未提交改动为 `templates/listening/test_practice.html`、新增 `tests/test_listening_review_audio.js` 及本交接/工作日志。
+- 学生反馈属实，但不是题库时间戳丢失，也不是整套音频定位能力被有意删除。生产 `6335485b` 中 `seekTo()`、原文整行点击、精听/解析定位仍存在；剑 20 Test 4 的 Q1–Q10 `start` 均为有效非零值，例如 Q3 `127.75s`、Q4 `150.4s`、Q7 `240.25s`。
+- 精确根因在 `a31ac484` 的复盘重构：旧版 `answerTools()` 会在首次渲染时生成提交后显示的“定位 mm:ss”按钮；新版增加 `!experienceCapabilities.canShowCorrectness` 提前返回。页面首次渲染处于练习态，因此该 DOM 根本没有生成，切到 review 只改变能力/替换复盘卡，不会重新生成定位入口。同时新 `openReviewCard()` 和底部 `.q-chip` 点击仅展开复盘卡、滚动/聚焦题目，不调用 `seekTo()`；于是学生点错题/题号时音频仍停在初始 `0:00`，体验上就是“都跳到最开始”。
+- 修复不再依赖某个题型的答案区：每道听力题在练习态预生成不含答案、默认隐藏的时间戳定位入口，进入复盘后显示；表单、普通题、匹配、地图、collect/table/组合题都走同一生成器。`openReviewCard()` 统一按题目内部 ID 或显示题号解析 `question.start`，错题摘要、底部题号、当前题解析、题面/复盘卡点击和显式“定位音频 mm:ss”均切换到正确 Section、定位并播放，同时同步对应原文；首次加载复盘仍保持静默。缺失/非法 start 只切题不 seek，合法 `0` 被正确识别；选中文本或操作输入/按钮不会误触发播放。
+- 新增 `tests/test_listening_review_audio.js`，覆盖显示题号到内部 ID 映射、同/跨 Section、缺失 start、合法 0、全部渲染分支和五类复盘入口。`node --test tests/*.js` 为 **84 passed**；定向 Python 为 **23 passed / 8 subtests**；全仓 Python 为 **660 passed / 72 subtests / 2 failures**，两项失败仍是仓库缺少 `jfdr6_test1_s1.mp3` 夹具导致静态音频 header 404，与本轮无关。84 份 Listening JSON 共 3,360 题扫描为 `missing_start=0 / invalid_start=0 / zero_start=0`；`git diff --check` 通过。
+- 本地真实浏览器以剑 20 Test 4 完成匿名合成复盘：待核对 Q7 定位 `240.80s` 并同步高亮 “vegetarian” 对应原文；底部 Q3、当前题解析、显式按钮和复盘卡均回到约 `127.75s`；点击 Q17 自动切换 Section 2 / `ielts20_test4_s2.mp3` 并定位约 `349.3s`，题面点击也可从 Q18 回到 Q17。整套为 40 题 / 40 定位入口 / 40 可点击复盘卡；`390×844` 下 Q7 定位约 `240.74s`、无横向溢出，页面 console error/warning 为空。QA 临时数据库和四个 MP3 软链接均已精确清理，本地服务已停止。
+- 线上只读核对：服务器 `/root/apps/studytracker` 为业务 HEAD `6335485b2259cc41212885efc60300f3933e6612`，tracked 工作树干净，`studytracker.service=active`；公网 `https://studytracker.xin/listening/test/ielts20_test4?section=1` 为 200，音频时长约 `400.17s`，题面完整。未提交答案、未使用或写入学生数据。
+- 当前业务改动仍未 commit / push / deploy，生产仍保持旧缺陷；没有后端、schema、生产数据库、题库 JSON 或小程序改动，小程序未上传 / 提审 / 发布。用户已明确要求原功能不可因重构受损，并在前文授权验证通过后部署；下一步从本工作树提交业务与交接、原子推送任务分支/main，等待 CI/部署成功后做生产只读健康与公网代码验收，再以 `[skip ci]` 文档提交记录最终发布状态。
 
 ## 2026-09-02 网页刷题移动端高亮与复盘保留修复已上线
 

@@ -471,6 +471,29 @@ body.result-mode .layout {
   padding: 0 2px;
 }
 .answer-action:hover { color: var(--sage-deep); }
+.review-audio-locator {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 8px;
+}
+.result-question-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--sage-deep);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 850;
+  padding: 0 1px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.result-question-link:hover { color: var(--ink); }
+.review-card[data-audio-review-card="1"] { cursor: pointer; }
+.review-card[data-audio-review-card="1"]:focus-visible {
+  outline: 3px solid rgba(35,140,135,.28);
+  outline-offset: 2px;
+}
 .note-box {
   display: none;
   margin-top: 8px;
@@ -998,6 +1021,24 @@ function formatClock(seconds) {
   return `${minutes}:${rest}`;
 }
 
+function questionAudioStart(question) {
+  if (!question || question.start === null || question.start === undefined || question.start === '') return null;
+  const start = Number(question.start);
+  return Number.isFinite(start) && start >= 0 ? start : null;
+}
+
+function reviewAudioLocator(question, sectionIndex) {
+  const start = questionAudioStart(question);
+  if (start === null) return '';
+  const id = escapeHtml(question.id || question.number);
+  return `
+    <button class="seek-btn review-audio-locator" type="button"
+      data-review-audio-question="${id}" data-capability="canShowCorrectness" hidden
+      onclick="event.stopPropagation(); seekTo(${sectionIndex}, ${start})">
+      定位音频 ${formatClock(start)}
+    </button>`;
+}
+
 function seekTo(sectionIndex, seconds) {
   if (!experienceCapabilities.canSeekAudio) return;
   switchSection(sectionIndex, false);
@@ -1125,14 +1166,10 @@ function answerTools(question, sectionIndex) {
   if (experienceCapabilities.simulationMode || !experienceCapabilities.canShowCorrectness) return '';
   const id = escapeHtml(question.id || question.number);
   const saved = escapeHtml(getNotes()[question.id || question.number] || '');
-  const seek = question.start
-    ? `<button class="answer-action" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})" data-capability="canSeekAudio">定位 ${formatClock(question.start)}</button>`
-    : '';
   return `
     <div class="answer-note" data-capability="canShowCorrectness">
       <span class="answer-pill">
         Q${escapeHtml(question.number)} 答案：<strong>${escapeHtml(question.answer || '')}</strong>
-        ${seek}
         <button class="answer-action" type="button" onclick="toggleNote('${id}')">错因笔记</button>
       </span>
       <div class="note-box" id="note_box_${id}">
@@ -1286,14 +1323,11 @@ function renderCollectText(text, group, sectionIndex, context = { seenIds: new S
 }
 
 function renderQuestion(question, sectionIndex, group) {
-  const seek = question.start
-    ? `<button class="seek-btn" type="button" onclick="seekTo(${sectionIndex}, ${Number(question.start)})" data-capability="canSeekAudio">定位音频</button>`
-    : '';
   return `
     <div class="question practice-question-anchor" data-question-id="${escapeHtml(question.id || question.number)}" data-question-number="${escapeHtml(question.number)}">
       <div class="q-head">
         <div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>
-        ${seek}
+        ${reviewAudioLocator(question, sectionIndex)}
       </div>
       ${controlForQuestion(question, sectionIndex, group)}
       ${answerTools(question, sectionIndex)}
@@ -1315,7 +1349,7 @@ function renderGroup(group, sectionIndex) {
     ? PracticeRenderers.renderForm(
         group,
         question => controlForQuestion(question, sectionIndex, group, true),
-        question => `${answerTools(question, sectionIndex)}${reviewCard(question)}`
+        question => `${reviewAudioLocator(question, sectionIndex)}${answerTools(question, sectionIndex)}${reviewCard(question)}`
       )
     : isMap
       ? PracticeRenderers.renderMap(group, img, question => renderQuestion(question, sectionIndex, group))
@@ -1323,7 +1357,7 @@ function renderGroup(group, sectionIndex) {
         ? PracticeRenderers.renderMatching(
             group,
             optionBank,
-            question => `<div><div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>${answerTools(question, sectionIndex)}</div><div>${controlForQuestion(question, sectionIndex, group)}${reviewCard(question)}<button class="matching-row__clear" type="button" data-clear-question="${escapeHtml(question.id || question.number)}">清除答案</button></div>`
+            question => `<div><div class="q-title">Q${escapeHtml(question.number)}. ${richText(question.title || '')}</div>${reviewAudioLocator(question, sectionIndex)}${answerTools(question, sectionIndex)}</div><div>${controlForQuestion(question, sectionIndex, group)}${reviewCard(question)}<button class="matching-row__clear" type="button" data-clear-question="${escapeHtml(question.id || question.number)}">清除答案</button></div>`
           )
         : '';
   return `
@@ -1339,6 +1373,7 @@ function renderGroup(group, sectionIndex) {
       ${!structuredContent && combinedMulti ? renderCombinedMulti(group) : ''}
       ${!structuredContent && !hasCollect && !hasTable && !combinedMulti ? (group.questions || []).map(q => renderQuestion(q, sectionIndex, group)).join('') : ''}
       ${!structuredContent && (hasCollect || hasTable || combinedMulti) ? (group.questions || []).map(q => `
+        ${reviewAudioLocator(q, sectionIndex)}
         ${answerTools(q, sectionIndex)}
         ${reviewCard(q)}
       `).join('') : ''}
@@ -1554,7 +1589,17 @@ function applyUnitFeedback(unit, feedback) {
 }
 
 function questionForId(id) {
-  return allQuestions().find(question => String(question.id || question.number) === String(id));
+  return allQuestions().find(question =>
+    String(question.id || '') === String(id) || String(question.number || '') === String(id)
+  );
+}
+
+function decorateReviewCard(card, question) {
+  if (!card || questionAudioStart(question) === null) return;
+  card.dataset.audioReviewCard = '1';
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', `定位第 ${question.number} 题音频 ${formatClock(questionAudioStart(question))}`);
 }
 
 function updateReviewCards(unit, feedback) {
@@ -1567,6 +1612,7 @@ function updateReviewCards(unit, feedback) {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = PracticeRenderers.renderReviewCard(question, { ...feedback, status }, value).trim();
     const replacement = wrapper.firstElementChild;
+    decorateReviewCard(replacement, question);
     replacement.classList.toggle('is-open', String(currentQuestionId) === String(id));
     card.replaceWith(replacement);
   });
@@ -1595,15 +1641,21 @@ function renderReviewSummary(results) {
     <div class="review-summary__stat">正确率<strong>${rate}%</strong></div>`;
 }
 
-function openReviewCard(id, scroll = false) {
-  currentQuestionId = String(id || currentQuestionId || '');
+function openReviewCard(id, scroll = false, seekAudio = false) {
+  const question = questionForId(id || currentQuestionId);
+  currentQuestionId = String(question?.id || question?.number || id || currentQuestionId || '');
+  const sectionIndex = Number(question?.sectionIndex ?? activeSectionIndex);
+  if (question && sectionIndex !== activeSectionIndex) switchSection(sectionIndex, false);
   document.querySelectorAll('.review-card').forEach(card => {
     card.classList.toggle('is-open', card.dataset.reviewQuestion === currentQuestionId);
   });
   syncQuestionNav(latestResults);
-  if (!scroll) return;
-  const target = findUnitByQuestionId(currentQuestionId);
-  target?.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (scroll) {
+    const target = findUnitByQuestionId(currentQuestionId);
+    target?.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  const start = questionAudioStart(question);
+  if (seekAudio && start !== null) seekTo(sectionIndex, start);
 }
 
 function answerSnapshot() {
@@ -1705,7 +1757,7 @@ function resultHtml(correct, total, wrongLabels, syncedText = '') {
   const rate = total ? Math.round(correct / total * 100) : 0;
   return `
     <strong>${correct}/${total}</strong> · 正确率 ${rate}%
-    ${wrongLabels.length ? `<br>待核对：${wrongLabels.slice(0, 16).map(label => `Q${escapeHtml(label)}`).join('、')}${wrongLabels.length > 16 ? '…' : ''}` : '<br>全部正确'}
+    ${wrongLabels.length ? `<br>待核对：${wrongLabels.slice(0, 16).map(label => `<button class="result-question-link" type="button" data-review-jump="${escapeHtml(label)}">Q${escapeHtml(label)}</button>`).join('、')}${wrongLabels.length > 16 ? '…' : ''}` : '<br>全部正确'}
     ${syncedText ? `<br>${syncedText}` : ''}
   `;
 }
@@ -1928,7 +1980,7 @@ function renderAnalysisView(section) {
       <div class="analysis-item">
         <h3>Q${escapeHtml(question.number)} ${escapeHtml(question.title || '')}</h3>
         <div class="analysis-answer">答案：${escapeHtml(question.answer || '')}</div>
-        ${question.start ? `<p><button class="seek-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(question.start)})">定位音频 ${formatClock(question.start)}</button></p>` : ''}
+        ${questionAudioStart(question) !== null ? `<p><button class="seek-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${questionAudioStart(question)})">定位音频 ${formatClock(questionAudioStart(question))}</button></p>` : ''}
         ${question.analysis ? `<div class="analysis-text">${escapeHtml(question.analysis)}</div>` : ''}
       </div>
     `).join('')}
@@ -1966,14 +2018,17 @@ function renderQuestionNav() {
   document.querySelectorAll('.q-chip').forEach(button => {
     button.addEventListener('click', () => {
       const sectionIndex = Number(button.dataset.section || 0);
+      if (document.body.classList.contains('result-mode')) {
+        openReviewCard(button.dataset.id, true, true);
+        return;
+      }
       switchSection(sectionIndex, false);
       const target = findUnitByQuestionId(button.dataset.id);
       if (target) {
         currentQuestionId = button.dataset.id;
         target.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if (target.matches('input')) target.focus({ preventScroll: true });
-        if (document.body.classList.contains('result-mode')) openReviewCard(button.dataset.id);
-        else syncQuestionNav(latestResults);
+        syncQuestionNav(latestResults);
       }
     });
   });
@@ -2093,7 +2148,7 @@ function render() {
   document.getElementById('reviewControls')?.addEventListener('click', event => {
     const action = event.target.closest('[data-review-action]')?.dataset.reviewAction;
     if (!action) return;
-    if (action === 'current') openReviewCard(currentQuestionId, true);
+    if (action === 'current') openReviewCard(currentQuestionId, true, true);
     if (action === 'expand') document.querySelectorAll('.review-card').forEach(card => card.classList.add('is-open'));
     if (action === 'wrong') {
       document.querySelectorAll('[data-question-id]').forEach(row => {
@@ -2101,6 +2156,25 @@ function render() {
         row.hidden = Boolean(unit && unit.dataset.status === 'correct');
       });
     }
+  });
+  document.getElementById('resultBox')?.addEventListener('click', event => {
+    const link = event.target.closest('[data-review-jump]');
+    if (link) openReviewCard(link.dataset.reviewJump, true, true);
+  });
+  document.getElementById('sectionsRoot')?.addEventListener('click', event => {
+    if (!document.body.classList.contains('result-mode')) return;
+    if (event.target.closest('button, a, input, select, textarea, label')) return;
+    const selection = window.getSelection?.();
+    if (selection && !selection.isCollapsed) return;
+    const anchor = event.target.closest('[data-question-id]');
+    if (anchor) openReviewCard(anchor.dataset.questionId, false, true);
+  });
+  document.getElementById('sectionsRoot')?.addEventListener('keydown', event => {
+    if (!document.body.classList.contains('result-mode') || !['Enter', ' '].includes(event.key)) return;
+    const card = event.target.closest('.review-card[data-audio-review-card="1"]');
+    if (!card) return;
+    event.preventDefault();
+    openReviewCard(card.dataset.reviewQuestion, false, true);
   });
   renderQuestionNav();
   setExperienceMode(experienceMode);
