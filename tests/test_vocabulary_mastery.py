@@ -25,6 +25,7 @@ from services.vocabulary_context import (
     grade_context_answer,
 )
 from services.vocabulary_mastery import (
+    VocabularyMasteryError,
     _apply_dimension_answer,
     _refresh_global_mastery,
     default_course_system_for_book_id,
@@ -127,9 +128,9 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    def _task(self, goal="reading", start=1, end=1):
+    def _task(self, goal="reading", start=1, end=1, scheduled_date=None):
         task = Task(
-            date=date(2026, 8, 7),
+            date=scheduled_date or date(2026, 8, 7),
             student_name="四维学生",
             category="词汇",
             detail="v2 test",
@@ -622,7 +623,12 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
             )
             self.assertIsNone(mastery.context_use_next_due_at)
 
-            next_task = self._task(goal="listening", start=1, end=1)
+            next_task = self._task(
+                goal="listening",
+                start=1,
+                end=1,
+                scheduled_date=date(2026, 8, 8),
+            )
             next_queue = get_vocabulary_task_queue(user, next_task.id, now + timedelta(days=1))
             self.assertEqual(next_queue["words"][0]["dimension"], other)
 
@@ -854,13 +860,14 @@ class VocabularyMasteryFlowTest(unittest.TestCase):
             )
             db.session.refresh(mastery)
             self.assertEqual(mastery.meaning_recall_stage, 1)
-            repeated = finalize_vocabulary_task(
-                user,
-                task.id,
-                {"queue_token": queue["queue_token"]},
-                now=now + timedelta(minutes=1),
-            )
-            self.assertEqual(repeated, settled)
+            with self.assertRaises(VocabularyMasteryError) as raised:
+                finalize_vocabulary_task(
+                    user,
+                    task.id,
+                    {"queue_token": queue["queue_token"]},
+                    now=now + timedelta(minutes=1),
+                )
+            self.assertEqual(raised.exception.error, "task_completed_read_only")
 
     def test_accepted_english_answer_is_used_for_v2(self):
         with self.app.app_context():

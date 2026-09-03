@@ -31,6 +31,11 @@ from models import (
 )
 from services.dictation_audio import word_tts_playback_url
 from services.dictation_input_policy import resolve_submission_input
+from services.task_date_gate import (
+    TaskDateGateError,
+    assert_task_write_allowed,
+    task_date_access,
+)
 
 UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
@@ -225,6 +230,17 @@ def get_task_queue(user: User, task_id: int, now: datetime | None = None) -> dic
         raise DictationReviewError("task_not_found", 404)
     if not _task_owner(task, user):
         raise DictationReviewError("forbidden", 403)
+    access = task_date_access(task, now)
+    if not access.read_only:
+        try:
+            assert_task_write_allowed(task, now)
+        except TaskDateGateError as error:
+            raise DictationReviewError(
+                error.error,
+                error.status_code,
+                message=error.message,
+                **error.details,
+            ) from error
     book = db.session.get(DictationBook, task.dictation_book_id)
     if not book:
         raise DictationReviewError("dictation_book_not_found", 404)
@@ -237,7 +253,7 @@ def get_task_queue(user: User, task_id: int, now: datetime | None = None) -> dic
         .order_by(DictationTaskReview.queue_index.asc(), DictationTaskReview.id.asc())
         .all()
     )
-    if not existing:
+    if not existing and not access.read_only:
         assigned = _assigned_words(task)
         assigned_ids = {word.id for word in assigned}
         review_day = local_date(now)
@@ -341,7 +357,7 @@ def get_task_queue(user: User, task_id: int, now: datetime | None = None) -> dic
         for snapshot in existing
         if snapshot.word is not None
     ]
-    return {
+    result = {
         "ok": True,
         "task_id": task.id,
         "book_id": book.id,
@@ -359,6 +375,8 @@ def get_task_queue(user: User, task_id: int, now: datetime | None = None) -> dic
         "queue_token": _queue_token(existing),
         "words": items,
     }
+    result.update(access.as_dict())
+    return result
 
 
 def _answer_is_correct(word: DictationWord, answer: str, mode: str) -> bool:
@@ -645,6 +663,30 @@ def submit_dictation_answer(
     """Grade one answer and mutate mastery only once for its first attempt."""
 
     now = utc_naive(now)
+    task_id = payload.get("task_id")
+    try:
+        task_id = int(task_id) if task_id else None
+    except (TypeError, ValueError) as error:
+        raise DictationReviewError("invalid_task_id", 400) from error
+    task = None
+    if task_id:
+        # Resolve and gate the assigned task before idempotency handling.  A
+        # replayed request is still a student write request and must not
+        # become a bypass after the task date has expired.
+        task = db.session.get(Task, task_id)
+        if not task:
+            raise DictationReviewError("task_not_found", 404)
+        if not _task_owner(task, user):
+            raise DictationReviewError("forbidden", 403)
+        try:
+            assert_task_write_allowed(task, now)
+        except TaskDateGateError as error:
+            raise DictationReviewError(
+                error.error,
+                error.status_code,
+                message=error.message,
+                **error.details,
+            ) from error
     word_id = payload.get("word_id")
     answer = str(payload.get("answer") or "").strip()
     if not word_id or not answer:
@@ -660,11 +702,6 @@ def submit_dictation_answer(
     mode = str(payload.get("mode") or "audio_to_en").strip().lower()
     if mode not in VALID_DICTATION_MODES:
         mode = "audio_to_en"
-    task_id = payload.get("task_id")
-    try:
-        task_id = int(task_id) if task_id else None
-    except (TypeError, ValueError) as error:
-        raise DictationReviewError("invalid_task_id", 400) from error
     submitted_book_id = payload.get("book_id")
     if submitted_book_id not in (None, ""):
         try:
@@ -701,11 +738,6 @@ def submit_dictation_answer(
 
     snapshot = None
     if task_id:
-        task = db.session.get(Task, task_id)
-        if not task:
-            raise DictationReviewError("task_not_found", 404)
-        if not _task_owner(task, user):
-            raise DictationReviewError("forbidden", 403)
         snapshot = DictationTaskReview.query.filter_by(
             student_id=user.id,
             task_id=task_id,
@@ -873,6 +905,15 @@ def _finalize_strict_task(
         raise DictationReviewError("task_not_found", 404)
     if not _task_owner(task, user):
         raise DictationReviewError("forbidden", 403)
+    try:
+        assert_task_write_allowed(task, now)
+    except TaskDateGateError as error:
+        raise DictationReviewError(
+            error.error,
+            error.status_code,
+            message=error.message,
+            **error.details,
+        ) from error
     items = (
         DictationTaskReview.query.filter_by(student_id=user.id, task_id=task.id)
         .order_by(DictationTaskReview.queue_index.asc())

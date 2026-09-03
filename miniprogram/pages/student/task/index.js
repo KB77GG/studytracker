@@ -127,6 +127,22 @@ Page({
         try {
             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
             if (res.ok && res.task) {
+                if (res.task.read_only) {
+                    this.stopTimerDisplay()
+                    const baseUrl = getApp().globalData.baseUrl
+                    const images = (res.task.evidence_photos || []).map(url => {
+                        if (url.startsWith('http')) return url
+                        return `${baseUrl}${url}`
+                    })
+                    this.setData({
+                        task: res.task,
+                        statusText: res.task.status_label || this.getStatusText(res.task.status),
+                        images,
+                        note: res.task.student_note || '',
+                        showAudio: false
+                    })
+                    return
+                }
                 if (res.task.dictation_book_id && res.task.vocabulary_goal) {
                     const gate = await request(
                         `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-review/preflight`
@@ -254,6 +270,7 @@ Page({
     },
 
     startRecord() {
+        if (this.data.task.read_only) return
         this.setData({ recording: true, recordDuration: 0 })
         recorderManager.start({
             duration: 600000, // 最长10分钟
@@ -262,6 +279,7 @@ Page({
     },
 
     stopRecord() {
+        if (this.data.task.read_only) return
         this.setData({ recording: false })
         recorderManager.stop()
     },
@@ -273,12 +291,14 @@ Page({
     },
 
     deleteAudio(e) {
+        if (this.data.task.read_only) return
         const index = e.currentTarget.dataset.index
         const audioFiles = this.data.audioFiles.filter((_, i) => i !== index)
         this.setData({ audioFiles })
     },
 
     chooseImage() {
+        if (this.data.task.read_only) return
         wx.chooseImage({
             count: 9 - this.data.images.length,
             sizeType: ['compressed'],
@@ -300,6 +320,7 @@ Page({
     },
 
     deleteImage(e) {
+        if (this.data.task.read_only) return
         const index = e.currentTarget.dataset.index
         const images = this.data.images.filter((_, i) => i !== index)
         this.setData({ images })
@@ -338,6 +359,7 @@ Page({
     },
 
     async stopTimer() {
+        if (this.data.task.read_only) return
         if (!this.data.timerRunning) return
 
         const res = await wx.showModal({
@@ -385,6 +407,10 @@ Page({
     },
 
     async submitTask() {
+        if (this.data.task.read_only) {
+            wx.showToast({ title: this.data.task.status_label || this.data.task.task_status_label || this.data.task.availability_label || '当前仅可查看', icon: 'none' })
+            return
+        }
         // Check if timer was used (reminder for students who forgot to start timer)
         const actualSeconds = this.data.task.actual_seconds || 0
         if (actualSeconds < 60) { // Less than 1 minute
@@ -460,12 +486,13 @@ Page({
                 header: {
                     'Authorization': `Bearer ${getApp().globalData.token}`
                 },
+                formData: { task_id: this.data.taskId || '' },
                 success: (res) => {
                     const data = JSON.parse(res.data)
                     if (data.ok) {
                         resolve(data.url)
                     } else {
-                        reject(data.error)
+                        reject(data.message || data.status_label || data.task_status_label || data.availability_label || data.error)
                     }
                 },
                 fail: reject

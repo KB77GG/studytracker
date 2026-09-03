@@ -291,8 +291,8 @@ class ListeningClozeProgressApiTest(unittest.TestCase):
             f"/api/student/listening/task/{task_id}/segment/0/review?token=review-token",
             json={"listened": True, "revealed_original": True},
         )
-        self.assertEqual(duplicate.status_code, 200)
-        self.assertTrue(duplicate.get_json()["already_saved"])
+        self.assertEqual(duplicate.status_code, 403)
+        self.assertEqual(duplicate.get_json()["error"], "task_completed_read_only")
         with self.app.app_context():
             row = ListeningSegmentResult.query.filter_by(task_id=task_id).one()
             self.assertEqual(row.training_level, "review")

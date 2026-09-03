@@ -185,7 +185,9 @@ Page({
         assignedCount: 0,
         reviewCount: 0,
         appealSubmitted: false,
-        isCorrectionRound: false
+        isCorrectionRound: false,
+        readOnly: false,
+        dateStatusText: ''
     },
 
     onLoad(options) {
@@ -295,6 +297,16 @@ Page({
                     return
                 }
                 const task = res.task
+                this.setData({
+                    bookTitle: task.task_name || '强化拼写',
+                    readOnly: !!task.read_only,
+                    dateStatusText: task.status_label || '该任务当前仅可查看'
+                })
+                if (task.read_only) {
+                    wx.hideLoading()
+                    this.setData({ stage: 'read_only' })
+                    return
+                }
                 if (task.vocabulary_goal) {
                     request(`/miniprogram/student/tasks/${taskId}/vocabulary-review/preflight`)
                         .then((gate) => {
@@ -457,6 +469,7 @@ Page({
     },
 
     startDrill() {
+        if (this.data.readOnly) return
         this.drillStartedAt = Date.now()
         this.setData({ stage: 'drill' })
         this.showNextWord(this.data.queue.slice())
@@ -504,6 +517,7 @@ Page({
     },
 
     onInput(e) {
+        if (this.data.readOnly) return
         const value = (e && e.detail && e.detail.value) || ''
         this.setData({
             inputValue: value,
@@ -520,6 +534,7 @@ Page({
     },
 
     checkAnswer() {
+        if (this.data.readOnly) return
         const word = this.data.currentWord
         if (!word || !word.word) return
         if (this.data.isCheckingFirstAnswer) return
@@ -611,6 +626,7 @@ Page({
     },
 
     retrySpell() {
+        if (this.data.readOnly) return
         if (!this.data.showResult || this.data.resultCorrect || this.data.resultRevealed) return
         this.clearAutoAdvance()
         this.setData({
@@ -625,6 +641,7 @@ Page({
     },
 
     skipSpell() {
+        if (this.data.readOnly) return
         if (!this.data.showResult || this.data.resultCorrect || this.data.resultRevealed) return
         this.setData({
             resultRevealed: true,
@@ -634,7 +651,7 @@ Page({
     },
 
     submitAnswerAppeal() {
-        if (this.data.appealSubmitted || this.data.resultCorrect) return
+        if (this.data.readOnly || this.data.appealSubmitted || this.data.resultCorrect) return
         const word = this.data.currentWord || {}
         const answer = String(this.data.inputValue || '').trim()
         if (!(word.word_id || word.id) || !answer) return
@@ -711,6 +728,7 @@ Page({
     },
 
     submitFirstAttempt(word, answer) {
+        if (this.data.readOnly) return Promise.reject(new Error('task_date_read_only'))
         const wordId = word && (word.word_id || word.id)
         if (!wordId) return Promise.resolve(null)
         const key = String(wordId)
@@ -828,7 +846,7 @@ Page({
     },
 
     submitTaskResultIfNeeded() {
-        if (!this.data.taskId || this.taskResultSubmitted) return
+        if (this.data.readOnly || !this.data.taskId || this.taskResultSubmitted) return
         this.taskResultSubmitted = true
 
         const result = this.buildTaskResult()
@@ -994,6 +1012,7 @@ Page({
     },
 
     prewarmAudio(words) {
+        if (this.data.readOnly) return
         const seen = {}
         const targets = []
         ;(words || []).forEach(item => {

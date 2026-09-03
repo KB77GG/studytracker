@@ -75,7 +75,7 @@
         <text class="task-group-title">{{currentDate === todayStr ? '今日任务' : '当日任务'}}</text>
       </view>
       <block wx:for="{{tasks}}" wx:key="id">
-      <view class="task-card {{item.isDone ? 'done' : ''}}">
+      <view class="task-card {{item.isDone ? 'done' : ''}} {{item.readOnly ? 'read-only' : ''}}">
         <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
           <view class="card-left">
             <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
@@ -92,7 +92,7 @@
           </view>
         </view>
 
-        <view class="timer-section" wx:if="{{!item.isDone}}">
+        <view class="timer-section" wx:if="{{!item.isDone && !item.readOnly}}">
           <view class="timer-display {{item.timerStatus}}">
             <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">{{item.displayTime}} / {{item.plannedTime}}</text>
           </view>

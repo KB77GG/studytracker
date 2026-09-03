@@ -34,6 +34,7 @@ from services.vocabulary_autonomous_review import (
 from services.vocabulary_context import build_context_question
 from services.vocabulary_group_learning import get_vocabulary_group_queue
 from services.vocabulary_mastery import ensure_mastery, ensure_word_sense
+from services.task_date_gate import beijing_today
 
 
 class AutonomousVocabularyReviewTest(unittest.TestCase):
@@ -816,6 +817,8 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
 
     def test_preflight_and_http_api_are_independent_from_teacher_task(self):
         with self.app.app_context():
+            db.session.get(Task, self.task_id).date = beijing_today()
+            db.session.commit()
             user = db.session.get(User, self.student_id)
             gate = review_preflight(user, self.task_id, now=self.now)
             self.assertTrue(gate["required"])
@@ -1160,7 +1163,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             self.assertTrue(summary["has_active_session"])
             self.assertGreaterEqual(summary["review_due_count"], 1)
 
-    def test_cross_midnight_settlement_grants_completion_day_clearance(self):
+    def test_cross_midnight_settlement_is_blocked_after_task_day_ends(self):
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
             claimed = claim_today_review(
@@ -1171,18 +1174,15 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             session = db.session.get(VocabularyReviewSession, claimed["session_id"])
             self._answer_all(session)
             completed_at = self.now + timedelta(hours=5)
-            settled = settle_review_session(
-                user,
-                session.id,
-                {"queue_token": session.queue_token},
-                session_token=session.session_token,
-                now=completed_at,
-            )
-            self.assertGreater(settled["remaining_due_count"], 0)
-            self.assertEqual(session.review_date, date(2026, 8, 9))
-            gate = review_preflight(user, self.task_id, now=completed_at)
-            self.assertFalse(gate["required"])
-            self.assertEqual(gate["clearance_review_date"], "2026-08-09")
+            with self.assertRaises(VocabularyAutonomousReviewError) as blocked:
+                settle_review_session(
+                    user,
+                    session.id,
+                    {"queue_token": session.queue_token},
+                    session_token=session.session_token,
+                    now=completed_at,
+                )
+            self.assertEqual(blocked.exception.error, "task_expired")
 
     def _claim_protocol_fixture(self, count=2):
         user = db.session.get(User, self.student_id)

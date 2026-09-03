@@ -779,6 +779,18 @@ body {
   color: var(--text);
 }
 
+.date-gate-banner {
+  display: none;
+  padding: 12px 28px;
+  background: #fff4df;
+  border-bottom: 1px solid #e6c98f;
+  color: #8a5a12;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.date-gate-banner.visible { display: block; }
+
 /* Difficulty slider */
 .difficulty-section {
   padding: 12px 28px;
@@ -896,6 +908,7 @@ body {
       </div>
     </div>
     <div class="training-policy-banner" id="trainingPolicyBanner"></div>
+    <div class="date-gate-banner" id="dateGateBanner" role="status"></div>
 
     <!-- Controls -->
     <div class="controls">
@@ -1051,6 +1064,8 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   const taskToken = urlParams.get('token') || '';
   let taskProgress = {};  // segment_index -> result
   let taskTrainingPolicy = { locked: false, review_only: false };
+  let taskReadOnly = false;
+  let taskDateStatusText = '';
   const reviewListenedSegments = new Set();
   const freeStudentName = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student') || 'guest';
   let practiceShellController = null;
@@ -1102,6 +1117,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function persistCurrentErrorSummary(force) {
+    if (taskReadOnly) return;
     const ta = document.getElementById('errorSummaryInput');
     if (!ta) return;
     const segGlobalIdx = getGlobalSegmentIndex();
@@ -1315,7 +1331,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   function updateTaskCompletionPanel() {
     const panel = document.getElementById('taskCompletionPanel');
     if (!panel) return;
-    if (!taskId) {
+    if (!taskId || taskReadOnly) {
       panel.classList.remove('visible', 'completed');
       return;
     }
@@ -1413,10 +1429,15 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
         data = d.exercise;
         taskProgress = d.progress || {};
         taskTrainingPolicy = d.task?.listening_training_policy || { locked: false, review_only: false };
-        if (taskTrainingPolicy.locked) {
+        taskReadOnly = !!d.task?.read_only;
+        taskDateStatusText = d.task?.status_label || d.task?.task_status_label || d.task?.availability_label || '';
+        if (taskReadOnly) {
+          mode = 'sentence';
+        } else if (taskTrainingPolicy.locked) {
           mode = taskTrainingPolicy.initial_mode === 'listen' ? 'sentence' : 'dictation';
         }
         init();
+        updateDateGateUI();
       })
       .catch(e => alert('加载数据失败: ' + e.message));
   } else {
@@ -1687,6 +1708,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
       }
     }
     updateModeControls();
+    updateDateGateUI();
   }
 
   function getGlobalSegmentIndex() {
@@ -2116,6 +2138,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function startCurrentDictation() {
+    if (taskReadOnly) return;
     const segGlobalIdx = getGlobalSegmentIndex();
     const context = currentDictationContext;
     freezeDictationLevel(segGlobalIdx, context?.savedProgress);
@@ -2124,6 +2147,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function startCorrection() {
+    if (taskReadOnly) return;
     const context = currentDictationContext;
     if (!context) return;
     const gate = getFirstAttemptGate(context.segGlobalIdx, !!context.savedProgress);
@@ -2144,6 +2168,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function changeDictationLevel(nextLevel) {
+    if (taskReadOnly) return;
     if (!ListeningCloze.LEVELS.some(level => level.key === nextLevel)) return;
     const context = currentDictationContext;
     if (context && nextLevel === context.level) return;
@@ -2164,6 +2189,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function checkDictation() {
+    if (taskReadOnly) return;
     const context = currentDictationContext;
     if (!context || !context.expected.length) return;
     const correction = context.correction;
@@ -2469,9 +2495,10 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     textButton.title = revealAllowed ? '显示原文 ( - )' : '完成正式首答或完整听完后开放';
     document.querySelectorAll('.mode-tab').forEach(tab => {
       const targetMode = tab.dataset.mode;
-      tab.disabled = taskTrainingPolicy.review_only
+      tab.disabled = taskReadOnly || taskTrainingPolicy.review_only
         ? targetMode !== 'sentence'
         : (lockedBeforeFirst && targetMode !== 'dictation');
+      if (taskReadOnly && targetMode === 'dictation') tab.style.display = 'none';
       tab.classList.toggle('active', targetMode === mode);
     });
     const repeatBtn = document.getElementById('btnRepeat');
@@ -2487,7 +2514,30 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
       : '';
   }
 
+  function updateDateGateUI() {
+    const banner = document.getElementById('dateGateBanner');
+    if (banner) {
+      banner.classList.toggle('visible', !!(taskId && taskReadOnly));
+      banner.textContent = taskReadOnly
+        ? `${taskDateStatusText || '当前仅可查看'}：当前仅可查看，不能答题、计时或提交。`
+        : '';
+    }
+    if (!taskReadOnly) return;
+    document.querySelectorAll('#dictationArea input, #dictationArea textarea, #errorSummaryInput').forEach(input => {
+      input.disabled = true;
+    });
+    document.querySelectorAll('#btnSubmitDictation, #btnRetry, #btnTaskCompletionAction').forEach(button => {
+      button.disabled = true;
+      button.style.display = 'none';
+    });
+    const actions = document.getElementById('dictationActions');
+    if (actions) actions.classList.remove('visible');
+    const errorBox = document.getElementById('errorSummaryBox');
+    if (errorBox) errorBox.style.display = 'none';
+  }
+
   function completeCurrentReview() {
+    if (taskReadOnly) return;
     const segGlobalIdx = getGlobalSegmentIndex();
     if (!taskId || !reviewListenedSegments.has(segGlobalIdx) || !showOriginal) return;
     fetch(`/api/student/listening/task/${taskId}/segment/${segGlobalIdx}/review`, {

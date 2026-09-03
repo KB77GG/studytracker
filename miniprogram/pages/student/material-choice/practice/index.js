@@ -40,6 +40,8 @@ Page({
         answeredCount: 0,
         note: '',
         loading: true,
+        readOnly: false,
+        dateStatusText: '',
         submitting: false,
         startedAt: 0,
         mode: 'practice',
@@ -64,6 +66,16 @@ Page({
     async fetchPractice(requestedMode) {
         wx.showLoading({ title: '加载中...' })
         try {
+            const detail = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
+            if (detail && detail.ok && detail.task && detail.task.read_only) {
+                this.setData({
+                    task: detail.task,
+                    readOnly: true,
+                    dateStatusText: detail.task.status_label || detail.task.task_status_label || detail.task.availability_label || '',
+                    loading: false
+                })
+                return
+            }
             const query = requestedMode ? `?mode=${encodeURIComponent(requestedMode)}` : ''
             const res = await request(
                 `/miniprogram/student/tasks/${this.data.taskId}/reading-vocab-practice${query}`
@@ -199,6 +211,7 @@ Page({
     },
 
     selectOption(e) {
+        if (this.data.readOnly) return
         if (this.data.mode === 'review') return  // read-only in review
         const key = e.currentTarget.dataset.key
         const currentQuestion = this.data.currentQuestion
@@ -235,6 +248,7 @@ Page({
     },
 
     onTextAnswerInput(e) {
+        if (this.data.readOnly) return
         if (this.data.mode === 'review') return
         const currentQuestion = this.data.currentQuestion
         if (!currentQuestion || (!currentQuestion.is_writing && !currentQuestion.is_auto_text)) return
@@ -254,6 +268,7 @@ Page({
     },
 
     toggleUncertain(e) {
+        if (this.data.readOnly) return
         if (this.data.mode === 'review') return
         const checked = !!e.detail.value.length
         const currentQuestion = this.data.currentQuestion
@@ -284,6 +299,7 @@ Page({
 
     // Action in review mode: redo only wrong questions
     async redoWrong() {
+        if (this.data.readOnly) return
         if (!this.data.wrongCount) {
             wx.showToast({ title: '没有错题', icon: 'none' })
             return
@@ -293,6 +309,7 @@ Page({
 
     // Action in review mode: redo everything from scratch
     async redoAll() {
+        if (this.data.readOnly) return
         const modal = await wx.showModal({
             title: '全部重做',
             content: '将清空本次作答记录，重新开始。继续吗？',
@@ -303,6 +320,7 @@ Page({
     },
 
     resetAndReload(mode) {
+        if (this.data.readOnly) return
         this.setData({
             mode,
             selectedAnswers: {},
@@ -327,6 +345,10 @@ Page({
     },
 
     async submitPractice() {
+        if (this.data.readOnly) {
+            wx.showToast({ title: this.data.dateStatusText || this.data.task?.status_label || this.data.task?.task_status_label || '当前仅可查看', icon: 'none' })
+            return
+        }
         if (this.data.submitting) return
         if (this.data.mode === 'review') return  // no submit in review
 

@@ -58,6 +58,12 @@ from services.task_assignment_duplicates import (
     validate_publish_conflicts,
     write_repeat_audit,
 )
+from services.task_date_gate import (
+    TaskDateGateError,
+    assert_task_write_allowed,
+    gate_error_payload,
+    task_date_access,
+)
 
 question_type_practice_bp = Blueprint("question_type_practice", __name__)
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -731,7 +737,7 @@ def _practice_context(
     base = f"/api/question-type-practice/task/{task.id}"
     query = "?" + urlencode({"token": token, **_navigation_args()})
     result_url = _task_result_url(task.id, token)
-    return {
+    context = {
         "task_id": task.id,
         "task_type": TASK_TYPE,
         "subject": snapshot["subject"],
@@ -747,6 +753,8 @@ def _practice_context(
             "question_type_practice.task_page", task_id=task.id
         ),
     }
+    context.update(task_date_access(task).as_dict())
+    return context
 
 
 def _review_practice_context(
@@ -798,6 +806,26 @@ def task_page(task_id: int):
     task, snapshot = _task_with_token(task_id, token)
     if not task or not snapshot:
         return "题型专项任务不存在或链接无效", 404
+    access = task_date_access(task) if not _is_staff() else None
+    if access is not None and access.state != "today":
+        attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task.id).first()
+        if access.state == "completed" and attempt and attempt.submitted_at:
+            return redirect(_task_result_url(task.id, token))
+        context = _practice_context(task, snapshot, attempt, token)
+        context["read_only"] = True
+        template = (
+            "listening/test_practice.html"
+            if snapshot["subject"] == SUBJECT_LISTENING
+            else "reading/test_practice.html"
+        )
+        return render_template(
+            template,
+            test=public_snapshot(snapshot)["payload"],
+            practice_context=context,
+            exam_context=None,
+            practice_source=TASK_TYPE,
+            practice_source_ref=str(task.id),
+        )
     attempt = _attempt(task, snapshot)
     if attempt.submitted_at:
         return redirect(_task_result_url(task.id, token))
@@ -830,6 +858,19 @@ def task_draft(task_id: int):
     task, snapshot = _task_with_token(task_id, token)
     if not task or not snapshot:
         return jsonify(ok=False, error="task_not_found"), 404
+    access = task_date_access(task) if not _is_staff() else None
+    if request.method == "GET" and access is not None and access.state != "today":
+        attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task.id).first()
+        payload = access.as_dict()
+        payload["read_only"] = True
+        if attempt:
+            payload.update(_attempt_payload(attempt))
+        return jsonify(ok=True, **payload)
+    if not _is_staff():
+        try:
+            assert_task_write_allowed(task)
+        except TaskDateGateError as error:
+            return jsonify(gate_error_payload(error)), error.status_code
     attempt = _attempt(task, snapshot)
     if attempt.submitted_at:
         return (
@@ -875,6 +916,11 @@ def task_start(task_id: int):
     task, snapshot = _task_with_token(task_id, token)
     if not task or not snapshot:
         return jsonify(ok=False, error="task_not_found"), 404
+    if not _is_staff():
+        try:
+            assert_task_write_allowed(task)
+        except TaskDateGateError as error:
+            return jsonify(gate_error_payload(error)), error.status_code
     attempt = _attempt(task, snapshot)
     if attempt.submitted_at:
         return jsonify(ok=False, error="already_submitted"), 409
@@ -901,6 +947,11 @@ def task_audio_complete(task_id: int):
     task, snapshot = _task_with_token(task_id, token)
     if not task or not snapshot:
         return jsonify(ok=False, error="task_not_found"), 404
+    if not _is_staff():
+        try:
+            assert_task_write_allowed(task)
+        except TaskDateGateError as error:
+            return jsonify(gate_error_payload(error)), error.status_code
     attempt = _attempt(task, snapshot)
     if not attempt.started_at or attempt.submitted_at:
         return jsonify(ok=False, error="task_not_active"), 409
@@ -917,6 +968,11 @@ def task_submit(task_id: int):
     task, snapshot = _task_with_token(task_id, token)
     if not task or not snapshot:
         return jsonify(ok=False, error="task_not_found"), 404
+    if not _is_staff():
+        try:
+            assert_task_write_allowed(task)
+        except TaskDateGateError as error:
+            return jsonify(gate_error_payload(error)), error.status_code
     attempt = _attempt(task, snapshot)
     if attempt.submitted_at:
         return jsonify(

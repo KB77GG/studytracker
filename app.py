@@ -132,6 +132,29 @@ from models import (
     MockExamSession,
 )
 from services.task_deletion import TaskDeletionError, delete_unstarted_task
+from services.task_date_gate import (
+    TaskDateGateError,
+    add_task_date_access,
+    assert_task_write_allowed,
+    bounded_task_session_end,
+    beijing_today,
+    close_expired_task_session,
+    gate_error_payload,
+    task_workflow_status,
+    task_date_access,
+)
+
+
+def _student_task_gate_response(task):
+    """Return the shared date-gate response for non-staff task requests."""
+
+    if getattr(current_user, "is_authenticated", False) and _role_can_manage_listening(current_user):
+        return None
+    try:
+        assert_task_write_allowed(task)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
+    return None
 
 def time_ago(dt):
     """Helper to format time difference"""
@@ -496,6 +519,50 @@ def _task_reading_url(task, absolute: bool = True) -> str | None:
     if absolute:
         return f"https://studytracker.xin{path}"
     return path
+
+
+def _web_assigned_practice_context(
+    task_id: int | None,
+    token: str,
+    *,
+    resource_kind: str,
+    resource_id: str,
+) -> dict | None:
+    """Build the read-only context for a token-linked web task page."""
+
+    if not task_id or not token:
+        return None
+    task = Task.query.get(task_id)
+    if not task:
+        return None
+    if resource_kind == "listening":
+        if secure_filename(task.listening_exercise_id or "") != resource_id:
+            return None
+        task_token = (task.listening_access_token or "").strip()
+    else:
+        if secure_filename(task.reading_test_id or "") != resource_id:
+            return None
+        task_token = (task.reading_access_token or "").strip()
+    if not task_token or not secrets.compare_digest(task_token, token):
+        return None
+
+    access = task_date_access(task)
+    staff_mode = (
+        getattr(current_user, "is_authenticated", False)
+        and _role_can_manage_listening(current_user)
+    )
+    return {
+        "task_id": task.id,
+        "task_type": "assigned_task",
+        "task_date": access.task_date.isoformat() if access.task_date else None,
+        "task_date_state": access.state,
+        "availability_status": access.state,
+        "availability_label": access.label,
+        "status_label": access.workflow_label,
+        "can_start": access.can_start or staff_mode,
+        "can_write": access.can_write or staff_mode,
+        "read_only": access.read_only and not staff_mode,
+    }
 
 
 def _listening_test_question_count(payload: dict) -> int:
@@ -2804,7 +2871,7 @@ def student_today():
         flash("未找到对应的学生信息，请联系老师。")
         return redirect(url_for("logout"))
 
-    today = date.today()
+    today = beijing_today()
     plan = (
         StudyPlan.query.filter_by(
             student_id=profile.id, plan_date=today, is_deleted=False
@@ -2843,8 +2910,10 @@ def student_today():
 
     for task in question_type_tasks:
         task.question_type_url = assignment_url(task)
+        task.student_status_label = task_date_access(task).workflow_label
     tokens_updated = False
     for task in listening_tasks:
+        task.student_status_label = task_date_access(task).workflow_label
         if not task.listening_access_token:
             task.listening_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
@@ -2891,7 +2960,7 @@ def _plan_item_payload(item: PlanItem) -> dict:
     sessions = [sess for sess in item.sessions if not sess.is_deleted]
     evidences = [ev for ev in item.evidences if not ev.is_deleted]
     total_sessions = sum(sess.duration_seconds for sess in sessions)
-    return {
+    payload = {
         "id": item.id,
         "plan_id": item.plan_id,
         "task_name": item.task_name,
@@ -2929,6 +2998,7 @@ def _plan_item_payload(item: PlanItem) -> dict:
         ],
         "total_session_seconds": total_sessions,
     }
+    return add_task_date_access(payload, item)
 
 
 @app.post("/api/student/plan-items/<int:item_id>/timer/start")
@@ -2939,6 +3009,10 @@ def api_student_timer_start(item_id):
         item = _load_plan_item_for_student(item_id)
     except PermissionError:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    try:
+        assert_task_write_allowed(item)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
 
     now = datetime.utcnow()
     session = PlanItemSession(
@@ -2962,7 +3036,6 @@ def api_student_timer_stop(item_id, session_id):
         item = _load_plan_item_for_student(item_id)
     except PermissionError:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-
     session = (
         PlanItemSession.query.filter_by(
             id=session_id,
@@ -2977,7 +3050,14 @@ def api_student_timer_stop(item_id, session_id):
     if session.ended_at:
         return jsonify({"ok": True, "actual_seconds": item.actual_seconds})
 
-    session.close(datetime.utcnow())
+    now = datetime.utcnow()
+    try:
+        assert_task_write_allowed(item, now)
+    except TaskDateGateError as error:
+        if not close_expired_task_session(session, item, now):
+            return jsonify(gate_error_payload(error)), error.status_code
+    else:
+        session.close(now)
     item.actual_seconds = (item.actual_seconds or 0) + session.duration_seconds
     db.session.commit()
     return jsonify({"ok": True, "actual_seconds": item.actual_seconds, "session_seconds": session.duration_seconds})
@@ -2991,6 +3071,10 @@ def api_student_submit(item_id):
         item = _load_plan_item_for_student(item_id)
     except PermissionError:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    try:
+        assert_task_write_allowed(item)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
 
     data = request.get_json(silent=True) or {}
     manual_minutes = max(0, int(data.get("manual_minutes") or 0))
@@ -3019,6 +3103,10 @@ def api_student_reset_status(item_id):
         item = _load_plan_item_for_student(item_id)
     except PermissionError:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    try:
+        assert_task_write_allowed(item)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
     if item.review_status != PlanItem.REVIEW_PENDING:
         return jsonify({"ok": False, "error": "already_reviewed"}), 400
     item.student_status = PlanItem.STUDENT_PENDING
@@ -3036,6 +3124,10 @@ def api_student_upload_evidence(item_id):
         item = _load_plan_item_for_student(item_id)
     except PermissionError:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    try:
+        assert_task_write_allowed(item)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
 
     if "file" not in request.files:
         return jsonify({"ok": False, "error": "missing_file"}), 400
@@ -4792,6 +4884,14 @@ def api_review_task(tid):
 def api_session_start():
     payload = request.get_json(silent=True) or {}
     task_id = payload.get("task_id")
+    if task_id and getattr(current_user, "role", None) == User.ROLE_STUDENT:
+        task = Task.query.get(task_id)
+        profile = current_user.student_profile
+        if not task or not profile or task.student_name != profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
+        blocked = _student_task_gate_response(task)
+        if blocked:
+            return blocked
     sess = StudySession(
         task_id=task_id,
         started_at=datetime.utcnow(),
@@ -4822,12 +4922,38 @@ def api_session_stop(sid):
     else:
         seconds_hint = None
 
+    task = None
+    if sess.task_id and getattr(current_user, "role", None) == User.ROLE_STUDENT:
+        task = Task.query.get(sess.task_id)
+        profile = current_user.student_profile
+        if not task or not profile or task.student_name != profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
+
     if not sess.ended_at:
-        if seconds_hint is not None:
-            ended_at = sess.started_at + timedelta(seconds=seconds_hint)
+        now = datetime.utcnow()
+        if task is not None:
+            try:
+                assert_task_write_allowed(task, now)
+            except TaskDateGateError as error:
+                if not close_expired_task_session(sess, task, now):
+                    return jsonify(gate_error_payload(error)), error.status_code
+                ended_at = sess.ended_at
+            else:
+                ended_at = bounded_task_session_end(
+                    task,
+                    sess.started_at,
+                    now,
+                    seconds_hint,
+                )
         else:
-            ended_at = datetime.utcnow()
-        sess.close(ended_at)
+            ended_at = bounded_task_session_end(
+                task,
+                sess.started_at,
+                now,
+                seconds_hint,
+            )
+        if not sess.ended_at:
+            sess.close(ended_at)
         # 若有关联任务则累加实际用时，并填写 ended_at（如未填）
         if sess.task_id:
             t = Task.query.get(sess.task_id)
@@ -7344,11 +7470,13 @@ def api_listening_jijing_submission(part_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
+        access = task_date_access(task)
         return jsonify({
             "ok": True,
             "task": {
                 "id": task.id,
                 "status": task.status,
+                **access.as_dict(),
                 "accuracy": task.accuracy,
                 "completion_rate": task.completion_rate,
                 "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7376,6 +7504,7 @@ def api_listening_jijing_submission(part_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **task_date_access(task).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7423,6 +7552,9 @@ def api_listening_jijing_submit(part_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
+        blocked = _student_task_gate_response(task)
+        if blocked:
+            return blocked
     else:
         task = _upsert_listening_jijing_self_task(part, safe_id, duration_seconds)
     if not task:
@@ -7536,9 +7668,16 @@ def listening_test_practice(test_id):
     test, _test_path, _safe_id = _load_listening_test_payload(test_id)
     if not test:
         return "听力 Test 不存在", 404
+    practice_context = _web_assigned_practice_context(
+        request.args.get("task_id", type=int),
+        (request.args.get("token") or "").strip(),
+        resource_kind="listening",
+        resource_id=_safe_id,
+    )
     return render_template(
         "listening/test_practice.html",
         test=test,
+        practice_context=practice_context,
         practice_source="listening_test",
         practice_source_ref=_safe_id,
     )
@@ -7605,9 +7744,16 @@ def reading_test_practice(test_id):
     test, _test_path, _safe_id = _load_reading_test_payload(test_id)
     if not test:
         return "阅读 Test 不存在", 404
+    practice_context = _web_assigned_practice_context(
+        request.args.get("task_id", type=int),
+        (request.args.get("token") or "").strip(),
+        resource_kind="reading",
+        resource_id=_safe_id,
+    )
     return render_template(
         "reading/test_practice.html",
         test=test,
+        practice_context=practice_context,
         practice_source="reading_test",
         practice_source_ref=_safe_id,
     )
@@ -7650,13 +7796,14 @@ def api_reading_test_submission(test_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
-        if _refresh_reading_test_submission_grade(task, data, safe_id):
+        if task_date_access(task).state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
             db.session.commit()
         return jsonify({
             "ok": True,
             "task": {
                 "id": task.id,
                 "status": task.status,
+                **task_date_access(task).as_dict(),
                 "accuracy": task.accuracy,
                 "completion_rate": task.completion_rate,
                 "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7682,13 +7829,14 @@ def api_reading_test_submission(test_id):
     task = _latest_submitted_task(query.order_by(Task.id.desc()).all())
     if not task:
         return jsonify({"ok": True, "submission": None})
-    if _refresh_reading_test_submission_grade(task, data, safe_id):
+    if task_date_access(task).state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
         db.session.commit()
     return jsonify({
         "ok": True,
         "task": {
             "id": task.id,
             "status": task.status,
+            **task_date_access(task).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7746,6 +7894,9 @@ def api_reading_test_submit(test_id):
                 return jsonify({"ok": False, "error": "forbidden"}), 403
             if task.reading_test_id and secure_filename(task.reading_test_id or "") != safe_id:
                 return jsonify({"ok": False, "error": "task_not_found"}), 404
+        blocked = _student_task_gate_response(task)
+        if blocked:
+            return blocked
         if task.reading_passage_number:
             passage_number = int(task.reading_passage_number)
     else:
@@ -7892,6 +8043,7 @@ def api_listening_test_submission(test_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **task_date_access(task).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7959,6 +8111,11 @@ def api_listening_test_submit(test_id):
             duration_seconds,
             section_number=section_number,
         )
+
+    if task and task_id:
+        blocked = _student_task_gate_response(task)
+        if blocked:
+            return blocked
 
     grade = _grade_listening_test_answers(payload, answers, section_number=section_number)
 
@@ -8777,7 +8934,7 @@ def api_listening_verify():
     if not profile:
         return jsonify({"ok": False, "error": "student_not_found"}), 404
     session["practice_student_name"] = profile.full_name
-    today_iso = date.today().isoformat()
+    today_iso = beijing_today().isoformat()
     task_count = Task.query.filter(
         Task.student_name == profile.full_name,
         Task.date == today_iso,
@@ -8914,10 +9071,12 @@ def api_practice_save_word():
 
 
 def _practice_task_status_label(task) -> tuple[str, str]:
-    raw = (task.status or "pending").lower()
-    if raw in ("done", "completed", "finished") or task.submitted_at:
+    workflow = task_workflow_status(task)
+    if workflow == "completed":
         return "done", "已完成"
-    if raw in ("progress", "in_progress", "started"):
+    if workflow == "submitted":
+        return "submitted", "已提交，待批改"
+    if workflow == "in_progress":
         return "in_progress", "进行中"
     return "pending", "未开始"
 
@@ -8974,6 +9133,7 @@ def _practice_role_group(role: str | None) -> str | None:
 
 
 def _practice_task_payload(task) -> dict | None:
+    access = task_date_access(task)
     if task.grading_mode == "question_type_practice":
         from services.question_type_assignments import assignment_url
         from services.question_type_practice import snapshot_from_task
@@ -8985,11 +9145,12 @@ def _practice_task_payload(task) -> dict | None:
         category = "题型专项"
         title = task.detail or snapshot.get("standard_type_label") or "IELTS 题型专项"
     elif task.listening_exercise_id:
-        if not task.listening_access_token:
+        if not task.listening_access_token and access.state in {"today", "completed"}:
             task.listening_access_token = secrets.token_urlsafe(16)
         url = _task_listening_url(task, absolute=False)
         if not url:
-            return None
+            if access.state not in {"future", "expired"}:
+                return None
         resource_type = _task_listening_resource_type(task)
         if resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
             category = "听力整套"
@@ -9006,11 +9167,12 @@ def _practice_task_payload(task) -> dict | None:
                 "Part",
             )
     elif task.reading_test_id:
-        if not task.reading_access_token:
+        if not task.reading_access_token and access.state in {"today", "completed"}:
             task.reading_access_token = secrets.token_urlsafe(16)
         url = _task_reading_url(task, absolute=False)
         if not url:
-            return None
+            if access.state not in {"future", "expired"}:
+                return None
         category = "阅读"
         title = task.detail or task.reading_test_id
         if task.reading_passage_number:
@@ -9024,6 +9186,11 @@ def _practice_task_payload(task) -> dict | None:
         return None
 
     status_key, status_label = _practice_task_status_label(task)
+    if access.state in {"future", "expired"} and task_workflow_status(task) in {
+        "pending",
+        "in_progress",
+    }:
+        status_label = access.workflow_label
     accuracy = float(task.accuracy or 0.0)
     completion = float(task.completion_rate or 0.0) if task.completion_rate is not None else None
     return {
@@ -9034,7 +9201,10 @@ def _practice_task_payload(task) -> dict | None:
         "url": url,
         "date": task.date or "",
         "status": status_key,
+        "raw_status": status_key,
         "status_label": status_label,
+        "display_status": access.state,
+        **access.as_dict(),
         "accuracy": round(accuracy, 1) if status_key == "done" else None,
         "completion_rate": round(completion, 1) if completion is not None else None,
         "note": task.note or "",
@@ -9055,7 +9225,7 @@ def api_practice_tasks():
     if not profile:
         return jsonify({"ok": False, "error": "not_verified"}), 401
 
-    today = date.today()
+    today = beijing_today()
     window_start = today - timedelta(days=30)
     window_end = today + timedelta(days=14)
     window_start_iso = window_start.isoformat()
@@ -9137,7 +9307,7 @@ def api_student_practices_today():
     if not profile:
         session.pop("practice_student_name", None)
         return jsonify({"ok": False, "error": "student_not_found"}), 404
-    today_iso = date.today().isoformat()
+    today_iso = beijing_today().isoformat()
     tasks = (
         Task.query.filter(
             Task.student_name == profile.full_name,
@@ -9536,6 +9706,7 @@ def api_student_listening_task(task_id):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
         return jsonify({"ok": False, "error": "invalid_token"}), 403
+    access = task_date_access(task)
 
     # 加载精听 JSON
     safe_id = secure_filename(task.listening_exercise_id)
@@ -9591,6 +9762,7 @@ def api_student_listening_task(task_id):
             "id": task.id,
             "student_name": task.student_name,
             "status": task.status,
+            **access.as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "selected_segment_count": task_exercise_data.get("selected_segment_count"),
@@ -9617,6 +9789,9 @@ def api_student_listening_submit_segment(task_id, segment_index):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
         return jsonify({"ok": False, "error": "invalid_token"}), 403
+    blocked = _student_task_gate_response(task)
+    if blocked:
+        return blocked
     selected_indices = _selected_listening_segment_indices(task)
     if selected_indices and segment_index not in set(selected_indices):
         return jsonify({"ok": False, "error": "segment_not_assigned"}), 400
@@ -9753,6 +9928,9 @@ def api_student_listening_repeat_segment(task_id, segment_index):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if not task.listening_access_token or not secrets.compare_digest(task.listening_access_token, access_token):
         return jsonify({"ok": False, "error": "invalid_token"}), 403
+    blocked = _student_task_gate_response(task)
+    if blocked:
+        return blocked
 
     selected_indices = _selected_listening_segment_indices(task)
     selected_set = set(selected_indices or [])

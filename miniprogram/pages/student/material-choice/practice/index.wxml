@@ -19,7 +19,12 @@
     </view>
   </view>
 
-  <view class="question-card" wx:if="{{currentQuestion}}">
+  <view class="date-gate-card" wx:if="{{readOnly}}">
+    <text class="date-gate-title">{{task.status_label || task.task_status_label || dateStatusText || task.availability_label}}</text>
+    <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>
+  </view>
+
+  <view class="question-card" wx:if="{{currentQuestion && !readOnly}}">
     <text class="question-no">Q{{currentIndex + 1}}</text>
     <text class="question-word">{{currentQuestion.content}}</text>
 
@@ -75,13 +80,13 @@
     </view>
   </view>
 
-  <view class="nav-row">
+  <view class="nav-row" wx:if="{{!readOnly}}">
     <button class="nav-btn secondary" bindtap="prevQuestion" disabled="{{currentIndex === 0}}">上一题</button>
     <button class="nav-btn secondary" bindtap="nextQuestion" disabled="{{currentIndex === questions.length - 1}}">下一题</button>
   </view>
 
   <!-- Review action bar -->
-  <view class="submit-card" wx:if="{{mode === 'review'}}">
+  <view class="submit-card" wx:if="{{mode === 'review' && !readOnly}}">
     <view class="review-summary">
       <text class="review-accuracy">正确率 {{task.accuracy || 0}}%</text>
       <text class="review-detail" wx:if="{{wrongCount > 0}}">还有 {{wrongCount}} 题待复习，建议重练</text>
@@ -97,7 +102,7 @@
   </view>
 
   <!-- Submit card (practice/redo modes) -->
-  <view class="submit-card" wx:else>
+  <view class="submit-card" wx:elif="{{!readOnly}}">
     <textarea
       class="note-input"
       placeholder="可选：记录学生备注"

@@ -384,6 +384,71 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(completed["wrong_count"], 2)
         self.assertEqual(completed["wrong_numbers"], [2, 7])
 
+    def test_student_status_label_preserves_submitted_semantics_across_date_gate(self):
+        with self.app.app_context():
+            historical = self._task(
+                self.d1,
+                "d1 submitted",
+                "submitted",
+                self.teacher_id,
+            )
+            today = self._task(
+                self.today,
+                "today submitted flag",
+                "progress",
+                self.teacher_id,
+            )
+            today.student_submitted = True
+            db.session.add_all([historical, today])
+            db.session.commit()
+            historical_id = historical.id
+
+        history = self.client.get(
+            f"/api/miniprogram/student/tasks/today?date={self.d1.isoformat()}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        historical_payload = next(
+            item
+            for item in history.get_json()["tasks"]
+            if item["task_name"].endswith(" - d1 submitted")
+        )
+        self.assertEqual(historical_payload["status"], "submitted")
+        self.assertEqual(historical_payload["status_label"], "已提交，待批改")
+        self.assertEqual(historical_payload["task_status_label"], "已提交，待批改")
+        self.assertEqual(historical_payload["availability_label"], "已截止")
+        self.assertTrue(historical_payload["read_only"])
+
+        today_tasks = self._today_tasks()
+        today_payload = next(
+            item
+            for item in today_tasks["tasks"]
+            if item["task_name"].endswith(" - today submitted flag")
+        )
+        self.assertEqual(today_payload["status"], "submitted")
+        self.assertEqual(today_payload["status_label"], "已提交，待批改")
+        self.assertEqual(today_payload["task_status_label"], "已提交，待批改")
+        self.assertFalse(today_payload["read_only"])
+
+        review_center = self.client.get(
+            "/api/miniprogram/student/task-history",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        self.assertEqual(review_center.status_code, 200)
+        submitted_history = next(
+            item
+            for item in review_center.get_json()["items"]
+            if item["title"] == "课后作业 - d1 submitted"
+        )
+        self.assertEqual(submitted_history["state_label"], "已提交，待批改")
+        self.assertEqual(submitted_history["display_state_label"], "已提交，待批改")
+
+        detail = self.client.get(
+            f"/api/miniprogram/student/tasks/{historical_id}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        self.assertEqual(detail.status_code, 200)
+        self.assertEqual(detail.get_json()["task"]["status_label"], "已提交，待批改")
+
     def test_teacher_can_view_each_wrong_answer_and_correct_answer(self):
         response = self.client.get(
             f"/api/miniprogram/teacher/homework/{self.completed_listening_id}/result",

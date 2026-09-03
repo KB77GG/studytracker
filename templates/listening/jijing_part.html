@@ -102,6 +102,17 @@ audio {
   margin: 0 auto;
   padding: 20px;
 }
+.date-gate-banner {
+  display: none;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid #e6c98f;
+  border-radius: 10px;
+  background: #fff4df;
+  color: #8a5a12;
+  line-height: 1.5;
+}
+.date-gate-banner.visible { display: block; }
 .tabs {
   display: flex;
   gap: 8px;
@@ -537,6 +548,7 @@ table.practice-table {
     {% set nav_subject = 'listening' %}
     {% set nav_active = 'jijing' %}
     {% include "practice/_nav.html" %}
+    <div class="date-gate-banner" id="dateGateBanner" role="status"></div>
     <nav class="tabs" aria-label="练习视图">
       <button class="tab active" data-tab="practice">题目练习</button>
       <button class="tab" data-tab="dictation">精听</button>
@@ -599,6 +611,30 @@ const practiceStartedAt = Date.now();
 const jijingDraftOwner = localStorage.getItem('listening_student') || 'guest';
 const jijingDraftKey = `listening_jijing_answers_${part.id}_${jijingDraftOwner}`;
 let practiceShellController = null;
+let taskReadOnly = false;
+let taskDateStatusText = '';
+
+function applyTaskDateGate(task) {
+  taskReadOnly = !!(listeningTaskId && task && task.read_only);
+  taskDateStatusText = (task && (task.status_label || task.task_status_label || task.availability_label)) || '';
+  const banner = document.getElementById('dateGateBanner');
+  if (banner) {
+    banner.classList.toggle('visible', !!(listeningTaskId && taskReadOnly));
+    banner.textContent = taskReadOnly
+      ? `${taskDateStatusText || '当前仅可查看'}：当前仅可查看，不能答题、计时或提交。`
+      : '';
+  }
+  if (!taskReadOnly) return;
+  document.querySelectorAll('.answer-unit').forEach(unit => {
+    if (unit.matches('input, select, textarea')) unit.disabled = true;
+    unit.querySelectorAll('input, select, textarea').forEach(input => { input.disabled = true; });
+  });
+  const submit = document.getElementById('submitBtn');
+  if (submit) {
+    submit.disabled = true;
+    submit.textContent = taskDateStatusText || '当前仅可查看';
+  }
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -935,6 +971,7 @@ function applyServerResults(results) {
 }
 
 async function syncJijingSubmission(results, correct, total, baseHtml) {
+  if (taskReadOnly) return;
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台记录...</span>`;
   const payload = {
@@ -985,6 +1022,7 @@ async function loadExistingJijingSubmission() {
       credentials: 'same-origin'
     });
     const data = await response.json();
+    if (data && data.task) applyTaskDateGate(data.task);
     const submission = data?.submission;
     if (!response.ok || !data.ok || !submission?.answers) return;
     document.querySelectorAll('.answer-unit').forEach(unit => {
@@ -1083,6 +1121,7 @@ document.querySelectorAll('.tab[data-tab]').forEach(tab => {
 });
 
 document.getElementById('submitBtn').addEventListener('click', () => {
+  if (taskReadOnly) return;
   const units = Array.from(document.querySelectorAll('.answer-unit'));
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);

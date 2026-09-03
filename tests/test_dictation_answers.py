@@ -1,4 +1,5 @@
 import unittest
+from datetime import timedelta
 from pathlib import Path
 
 import jwt
@@ -15,7 +16,16 @@ from dictation_answers import (
     serialize_answer_variants,
     strip_part_of_speech_prefix,
 )
-from models import DictationAnswerAppeal, DictationBook, DictationWord, User, db
+from models import (
+    DictationAnswerAppeal,
+    DictationBook,
+    DictationWord,
+    StudentProfile,
+    Task,
+    User,
+    db,
+)
+from services.task_date_gate import beijing_today
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -133,6 +143,7 @@ class DictationSubmitApiTest(unittest.TestCase):
             )
             db.session.add_all([teacher, student])
             db.session.flush()
+            db.session.add(StudentProfile(user_id=student.id, full_name="答题学生"))
             book = DictationBook(
                 title="answer variants",
                 word_count=2,
@@ -250,6 +261,39 @@ class DictationSubmitApiTest(unittest.TestCase):
         self.assertEqual(
             response.get_json()["error"], "appeal_not_supported_for_choice"
         )
+
+    def test_historical_task_can_appeal_and_report_word_content(self):
+        with self.app.app_context():
+            task = Task(
+                date=(beijing_today() - timedelta(days=1)).isoformat(),
+                student_name="答题学生",
+                category="词汇",
+                created_by=self.teacher_id,
+                dictation_book_id=self.book_id,
+            )
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        appeal = self.client.post(
+            "/api/dictation/appeals",
+            json={
+                "task_id": task_id,
+                "word_id": self.bike_id,
+                "answer": "cycle",
+                "mode": "zh_to_en",
+                "reason": "这个表达意思相同",
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(appeal.status_code, 201, appeal.get_json())
+
+        report = self.client.post(
+            f"/api/dictation/example/report/{self.bike_id}",
+            json={"task_id": task_id, "reason": "释义需要补充"},
+            headers=self.headers,
+        )
+        self.assertEqual(report.status_code, 200, report.get_json())
 
     def test_audio_to_zh_appeal_uses_chinese_and_never_adds_english_variant(self):
         with self.app.app_context():

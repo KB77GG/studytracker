@@ -31,6 +31,17 @@
   padding: 30rpx;
   margin-bottom: 30rpx;
 }
+.date-gate-card {
+  margin: 20rpx 0;
+  padding: 24rpx 28rpx;
+  border: 2rpx solid #f0c36d;
+  border-radius: 18rpx;
+  background: #fff8e7;
+}
+.date-gate-title,
+.date-gate-copy { display: block; }
+.date-gate-title { color: #8a4b08; font-size: 28rpx; font-weight: 750; }
+.date-gate-copy { margin-top: 8rpx; color: #9a6a2b; font-size: 24rpx; }
 
 /* Timer Card */
 .timer-card {

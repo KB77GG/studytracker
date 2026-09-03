@@ -21,6 +21,15 @@ class QuestionTypePracticeContractTest(unittest.TestCase):
             any("function renderGroup(" in path.read_text(encoding="utf-8") for path in templates)
         )
 
+    def test_listening_read_only_lock_runs_after_render_and_section_switch(self):
+        listening = (ROOT / "templates/listening/test_practice.html").read_text(
+            encoding="utf-8"
+        )
+        switch_start = listening.index("function switchSection(")
+        render_start = listening.index("function render()")
+        self.assertIn("lockReadOnlyReviewControls();", listening[switch_start:render_start])
+        self.assertIn("lockReadOnlyReviewControls();", listening[render_start:])
+
     def test_teacher_flow_keeps_preview_safety_and_repush_actions_visible(self):
         teacher = (ROOT / "templates/question_type_practice/teacher_index.html").read_text(
             encoding="utf-8"

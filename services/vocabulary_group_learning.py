@@ -61,6 +61,11 @@ from services.vocabulary_remediation import (
     RELATED_DIMENSION_BY_ERROR,
     correction_state,
 )
+from services.task_date_gate import (
+    TaskDateGateError,
+    assert_task_write_allowed,
+    task_date_access,
+)
 
 GROUP_SIZES = {
     "reading": 10,
@@ -897,6 +902,18 @@ def _set_retry_questions(flow):
 
 
 def _require_daily_clearance(user, task_id, now):
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        raise VocabularyGroupLearningError("task_not_found", 404)
+    try:
+        assert_task_write_allowed(task, now)
+    except TaskDateGateError as error:
+        raise VocabularyGroupLearningError(
+            error.error,
+            error.status_code,
+            message=error.message,
+            **error.details,
+        ) from error
     try:
         gate = review_preflight(user, task_id, now=now)
     except OperationalError as error:
@@ -1325,13 +1342,33 @@ def get_vocabulary_group_queue(
     supports_correction: bool = True,
 ) -> dict:
     now = utc_naive(now)
+    task, existing_flow = _flow_or_error(user, task_id, lock=False)
+    access = task_date_access(task, now)
+    if access.read_only:
+        if not existing_flow:
+            return {
+                "ok": True,
+                "task_id": task.id,
+                "task_mode": "vocabulary_group_v2",
+                "mode": "vocabulary_group_v2",
+                **access.as_dict(),
+                "completed": access.completed,
+                "status": task.status,
+                "current_question": None,
+                "familiarity": [],
+            }
+        result = _public_flow(existing_flow)
+        result.update(access.as_dict())
+        return result
     _require_daily_clearance(user, task_id, now)
     task, flow = _flow_or_error(user, task_id, lock=True)
     flow = flow or _ensure_flow(user, task, now)
     if not supports_correction:
         _release_legacy_pending_correction(flow)
     _advance_after_answer(flow, user, now)
-    return _public_flow(flow)
+    result = _public_flow(flow)
+    result.update(access.as_dict())
+    return result
 
 
 def mark_familiarity_viewed(user: User, task_id: int, payload: dict, *, now=None) -> dict:

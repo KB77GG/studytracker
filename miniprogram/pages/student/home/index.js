@@ -107,6 +107,13 @@ Page({
                 return
             }
 
+            if (this.data.tasks[taskIndex].readOnly) {
+                wx.removeStorageSync('activeTimer')
+                getApp().globalData.activeTimer = null
+                this.setData({ activeTimerId: null })
+                return
+            }
+
             // Restore timer state
             const tasks = this.data.tasks.map(task => {
                 if (task.id === taskId) {
@@ -523,7 +530,11 @@ Page({
                 iconClass: iconInfo.cls,
                 planned_minutes: t.planned_minutes,
                 status: t.status,
-                statusText: this.getStatusText(t.status),
+                rawStatus: t.raw_status || t.status,
+                statusText: t.status_label || this.getStatusText(t.status),
+                availabilityLabel: t.status_label || t.task_status_label || t.availability_label || '',
+                availabilityStatus: t.availability_status || t.task_date_state || '',
+                readOnly: !!t.read_only,
                 isDone: t.status === 'completed' || t.status === 'submitted',
                 dictationBookId: t.dictation_book_id,
                 dictationMode: t.dictation_mode || '',
@@ -556,6 +567,13 @@ Page({
             progress: { total, completed, percent },
             progressLabel: this.buildProgressLabel()
         })
+
+        const activeTimer = getApp().globalData.activeTimer
+        if (activeTimer && tasks.some(task => task.id === activeTimer.taskId && task.readOnly)) {
+            wx.removeStorageSync('activeTimer')
+            getApp().globalData.activeTimer = null
+            this.setData({ activeTimerId: null })
+        }
     },
 
     buildProgressLabel() {
@@ -617,6 +635,14 @@ Page({
         }
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.readOnly) {
+            // Historical completed tasks remain viewable through the generic
+            // detail page, which contains the saved result/teacher feedback.
+            // Future and expired tasks use the same read-only detail surface
+            // so an old assignment link can never open an answer flow.
+            wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
+            return
+        }
         if (task && task.dictationBookId && task.vocabularyGoal) {
             wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
             return
@@ -696,7 +722,7 @@ Page({
     // Update timer display every second
     updateTimerDisplay() {
         const tasks = this.data.tasks.map(task => {
-            if (task.id === this.data.activeTimerId && task.timerStatus === 'running') {
+            if (!task.readOnly && task.id === this.data.activeTimerId && task.timerStatus === 'running') {
                 const elapsed = task.elapsedSeconds + 1
                 const planned = task.planned_minutes * 60
                 const isOvertime = elapsed > planned
@@ -722,6 +748,11 @@ Page({
         }
         const taskId = e.currentTarget.dataset.id
         if (!taskId) return
+        const task = this.data.tasks.find(item => item.id === taskId)
+        if (task && task.readOnly) {
+            wx.showToast({ title: task.statusText || task.availabilityLabel || '当前仅可查看', icon: 'none' })
+            return
+        }
         wx.navigateTo({
             url: `/pages/student/dictation/spell/index?taskId=${taskId}`
         })
@@ -745,6 +776,10 @@ Page({
 
         // Dictation Routing
         const task = this.data.tasks.find(t => t.id === taskId)
+        if (task && task.readOnly) {
+            wx.showToast({ title: task.statusText || task.availabilityLabel || '当前仅可查看', icon: 'none' })
+            return
+        }
         if (task && task.dictationBookId && task.vocabularyGoal) {
             wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
             return
@@ -862,6 +897,8 @@ Page({
     // Pause timer
     pauseTimer(e) {
         const taskId = e.currentTarget.dataset.id
+        const task = this.data.tasks.find(item => item.id === taskId)
+        if (!task || task.readOnly) return
 
         if (this.data.timerInterval) {
             clearInterval(this.data.timerInterval)
@@ -881,6 +918,8 @@ Page({
     // Resume timer
     resumeTimer(e) {
         const taskId = e.currentTarget.dataset.id
+        const task = this.data.tasks.find(item => item.id === taskId)
+        if (!task || task.readOnly) return
 
         // Restart interval
         if (this.data.timerInterval) {
@@ -909,7 +948,7 @@ Page({
         const taskId = e.currentTarget.dataset.id
         const task = this.data.tasks.find(t => t.id === taskId)
 
-        if (!task) return
+        if (!task || task.readOnly) return
 
         try {
             // Call backend to stop session - use miniprogram API

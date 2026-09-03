@@ -860,3 +860,26 @@
     transition: none;
   }
 }
+
+.date-gate-card {
+  margin: 180rpx 30rpx 0;
+  padding: 44rpx 34rpx;
+  border-radius: 24rpx;
+  background: #fff7ed;
+  color: #8a4b16;
+  text-align: center;
+}
+
+.date-gate-title {
+  display: block;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.date-gate-copy {
+  display: block;
+  margin-top: 20rpx;
+  color: #a66a32;
+  font-size: 27rpx;
+  line-height: 1.6;
+}

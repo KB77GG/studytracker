@@ -6,6 +6,11 @@
     <button class="secondary-btn" bindtap="retry">重试</button>
   </view>
 
+  <view class="date-gate-card" wx:elif="{{readOnly}}">
+    <text class="date-gate-title">{{dateStatusText}}</text>
+    <text class="date-gate-copy">任务按所属日期开放，当前仅可查看，不能开始学习、答题或提交。</text>
+  </view>
+
   <view class="summary-panel" wx:elif="{{finished}}">
     <text class="summary-title">词汇任务完成</text>
     <text class="summary-score">{{result.correct_count}} / {{result.total_count}}</text>

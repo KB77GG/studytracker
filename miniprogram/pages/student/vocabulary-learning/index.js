@@ -47,7 +47,9 @@ Page({
         finished: false,
         result: null,
         diagnostics: [],
-        startedAt: 0
+        startedAt: 0,
+        readOnly: false,
+        dateStatusText: ''
     },
 
     onLoad(options) {
@@ -66,7 +68,7 @@ Page({
             }),
             onError: () => wx.showToast({ title: '音频播放失败，请重试', icon: 'none' })
         })
-        this.fetchQueue()
+        this.fetchTaskAccess()
     },
 
     onUnload() {
@@ -76,6 +78,25 @@ Page({
 
     queueUrl() {
         return `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-queue`
+    },
+
+    fetchTaskAccess() {
+        request(`/miniprogram/student/tasks/${this.data.taskId}`).then((res) => {
+            if (!res || !res.ok || !res.task) throw new Error('task_load_failed')
+            const task = res.task
+            this.setData({
+                readOnly: !!task.read_only,
+                dateStatusText: task.status_label || '该任务当前仅可查看'
+            })
+            if (task.read_only) {
+                this.setData({ loading: false })
+                return
+            }
+            this.fetchQueue()
+        }).catch((err) => {
+            console.warn('load vocabulary task failed', err)
+            this.setData({ loading: false, loadError: '任务加载失败，请重试' })
+        })
     },
 
     fetchQueue() {
@@ -163,6 +184,7 @@ Page({
     },
 
     nextFamiliarity() {
+        if (this.data.readOnly) return
         if (this.data.phase !== 'familiarity') return
         const item = this.familiarityItem()
         if (!item) return
@@ -186,12 +208,12 @@ Page({
     },
 
     onInput(e) {
-        if (this.data.showResult) return
+        if (this.data.readOnly || this.data.showResult) return
         this.setData({ inputValue: (e && e.detail && e.detail.value) || '' })
     },
 
     selectOption(e) {
-        if (this.data.showResult) return
+        if (this.data.readOnly || this.data.showResult) return
         const optionId = e && e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.id
         if (optionId) this.setData({ selectedOption: String(optionId) })
     },
@@ -213,6 +235,7 @@ Page({
     },
 
     submitAnswer() {
+        if (this.data.readOnly) return
         const question = this.data.currentQuestion
         if (!question || this.data.phase === 'familiarity') return
         if (this.data.showResult) {
@@ -284,7 +307,7 @@ Page({
     },
 
     finishTask() {
-        if (this.data.finishing || this.data.finished) return
+        if (this.data.readOnly || this.data.finishing || this.data.finished) return
         this.setData({ finishing: true })
         request(`/miniprogram/student/tasks/${this.data.taskId}/submit`, {
             method: 'POST',

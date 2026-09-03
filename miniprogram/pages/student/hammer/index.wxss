@@ -52,6 +52,30 @@ page {
   box-sizing: border-box;
 }
 
+.date-gate-card {
+  margin: 24rpx 24rpx 0;
+  padding: 28rpx 30rpx;
+  border-radius: 22rpx;
+  background: #fff7ed;
+  color: #8a4b16;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.date-gate-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.date-gate-copy {
+  display: block;
+  margin-top: 12rpx;
+  color: #a66a32;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
 .top-nav {
   flex-shrink: 0;
   padding: 14rpx 24rpx;

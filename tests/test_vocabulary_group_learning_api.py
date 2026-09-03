@@ -1,6 +1,5 @@
 import json
 import unittest
-from datetime import date
 from unittest.mock import patch
 
 import jwt
@@ -20,6 +19,7 @@ from models import (
     VocabularyLearningQuestion,
     db,
 )
+from services.task_date_gate import beijing_today
 
 
 class VocabularyGroupLearningApiTest(unittest.TestCase):
@@ -108,7 +108,7 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
             )
             db.session.flush()
             task = Task(
-                date=date(2026, 8, 8),
+                date=beijing_today(),
                 student_name="HTTP 小组学生",
                 category="词汇",
                 detail="HTTP 小组任务",
@@ -139,7 +139,7 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
     def _task(self, goal, *, start=1, end=1, mode="audio_to_en"):
         with self.app.app_context():
             task = Task(
-                date=date(2026, 8, 8),
+                date=beijing_today(),
                 student_name="HTTP 小组学生",
                 category="词汇",
                 detail=f"HTTP {goal} 测试",
@@ -290,8 +290,8 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
             json={"queue_token": queue["queue_token"], "duration_seconds": 99},
             headers=self.headers,
         )
-        self.assertEqual(repeated.status_code, 200)
-        self.assertEqual(repeated.get_json()["total_count"], settled.get_json()["total_count"])
+        self.assertEqual(repeated.status_code, 403)
+        self.assertEqual(repeated.get_json()["error"], "task_completed_read_only")
 
     def test_http_comprehensive_correction_is_saved_without_formal_attempt(self):
         task_id = self._task("comprehensive", end=1)
@@ -498,7 +498,7 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
     def test_legacy_null_goal_keeps_old_queue_contract(self):
         with self.app.app_context():
             task = Task(
-                date=date(2026, 8, 8),
+                date=beijing_today(),
                 student_name="HTTP 小组学生",
                 category="听写",
                 detail="legacy API task",

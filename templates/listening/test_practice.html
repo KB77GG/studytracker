@@ -143,6 +143,16 @@ audio { width: 100%; display: block; }
   margin: 0 auto;
   padding: 20px;
 }
+.task-date-gate {
+  max-width: 1280px;
+  margin: 18px auto 0;
+  padding: 14px 18px;
+  border: 1px solid #f0c36d;
+  border-radius: 12px;
+  background: #fff8e7;
+  color: #8a4b08;
+  font-weight: 800;
+}
 .tabs {
   display: flex;
   gap: 8px;
@@ -825,6 +835,12 @@ body[data-experience-mode="simulation"] .group::before {
   当前打开的是 HTML 模板源文件，题目数据不会注入。请通过 Flask 路由访问：/listening/test/ielts20_test1。
 </div>
 
+{% if practice_context and practice_context.read_only %}
+<div class="task-date-gate" role="status">
+  {{ practice_context.status_label or practice_context.availability_label or '当前仅可查看' }}：该任务当前仅可查看，答案和计时不会被保存。
+</div>
+{% endif %}
+
 <main class="page">
   {% set nav_subject = 'listening' %}
   {% set nav_active = 'tests' %}
@@ -1410,6 +1426,7 @@ function switchSection(index, scroll = true) {
   document.getElementById('practiceShellSection').textContent = section ? `Section ${section.section}` : 'Section';
   renderTranscript(section);
   renderActiveView();
+  lockReadOnlyReviewControls();
   syncQuestionNav();
   syncTranscriptFromAudio();
   if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1667,6 +1684,7 @@ function answerSnapshot() {
 }
 
 async function persistAnswers(reason = 'local') {
+  if (practiceContext?.read_only) return true;
   const snapshot = answerSnapshot();
   try {
     localStorage.setItem(storageKey, JSON.stringify(snapshot));
@@ -1784,6 +1802,7 @@ function applyServerResults(results) {
 }
 
 async function syncListeningTestSubmission(baseHtml) {
+  if (practiceContext?.read_only) return;
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台成绩...</span>`;
   try {
@@ -1861,7 +1880,6 @@ async function loadExistingSubmission() {
   }
   // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
   if (examContext) return;
-  if (practiceContext) return;
   try {
     const params = new URLSearchParams();
     if (listeningTaskId && listeningTaskToken) {
@@ -1928,6 +1946,9 @@ function lockReadOnlyReviewControls() {
     });
   });
   document.querySelectorAll('[data-clear-question]').forEach(button => {
+    button.disabled = true;
+  });
+  document.querySelectorAll("[data-capability='canResetAnswers'], [data-capability='canSubmitForScoring']").forEach(button => {
     button.disabled = true;
   });
 }
@@ -2176,6 +2197,7 @@ function render() {
     event.preventDefault();
     openReviewCard(card.dataset.reviewQuestion, false, true);
   });
+  lockReadOnlyReviewControls();
   renderQuestionNav();
   setExperienceMode(experienceMode);
   PracticeRenderers.initMapViewers(document, experienceCapabilities);
@@ -2186,7 +2208,7 @@ function render() {
 }
 
 document.getElementById('submitBtn')?.addEventListener('click', () => {
-  if (!experienceCapabilities.canSubmitForScoring) return;
+  if (!experienceCapabilities.canSubmitForScoring || practiceContext?.read_only) return;
   const units = Array.from(document.querySelectorAll('.answer-unit'));
   const results = units.map(markUnit);
   const total = results.reduce((sum, row) => sum + row.marks, 0);

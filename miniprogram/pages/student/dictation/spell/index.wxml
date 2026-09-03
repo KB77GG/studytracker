@@ -10,7 +10,14 @@
     当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
   </view>
 
-  <view class="loading" wx:if="{{stage === 'loading'}}">加载中...</view>
+  <block wx:if="{{stage === 'read_only'}}">
+    <view class="date-gate-card">
+      <text class="date-gate-title">{{dateStatusText}}</text>
+      <text class="date-gate-copy">任务按所属日期开放，当前仅可查看，不能开始拼写、计时或提交。</text>
+    </view>
+  </block>
+
+  <view class="loading" wx:elif="{{stage === 'loading'}}">加载中...</view>
 
   <block wx:elif="{{stage === 'ready'}}">
     <view class="ready-shell">

@@ -8,6 +8,7 @@
     placeholder="{{inline ? '答案' : '请输入答案'}}"
     aria-label="Question {{question.number}} answer"
     data-key="{{question.key}}"
+    disabled="{{question.disabled}}"
     bindinput="onTextInput"
   />
 
@@ -16,6 +17,7 @@
     range="{{question.options}}"
     range-key="label"
     data-key="{{question.key}}"
+    disabled="{{question.disabled}}"
     aria-label="Question {{question.number}} answer"
     bindchange="onPickerChange"
   >
@@ -32,7 +34,7 @@
     aria-label="Question {{question.number}} answer"
   >
     <label class="choice-row {{option.isCorrectOption ? 'correct' : ''}} {{option.isUserWrong ? 'wrong' : ''}}" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
-      <radio value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <radio value="{{option.value}}" checked="{{option.checked}}" disabled="{{question.disabled}}" color="#0f9f8f" />
       <text class="choice-text">{{option.label}}</text>
     </label>
   </radio-group>
@@ -45,7 +47,7 @@
     aria-label="Question {{question.number}} answer"
   >
     <label class="choice-row {{option.isCorrectOption ? 'correct' : ''}} {{option.isUserWrong ? 'wrong' : ''}}" wx:for="{{question.options}}" wx:for-item="option" wx:key="value">
-      <checkbox value="{{option.value}}" checked="{{option.checked}}" color="#0f9f8f" />
+      <checkbox value="{{option.value}}" checked="{{option.checked}}" disabled="{{question.disabled}}" color="#0f9f8f" />
       <text class="choice-text">{{option.label}}</text>
     </label>
   </checkbox-group>
@@ -100,6 +102,11 @@
           <text class="stat-key">范围</text>
         </view>
       </view>
+    </view>
+
+    <view class="date-gate-card" wx:if="{{task.read_only}}">
+      <text class="date-gate-title">{{task.status_label || task.task_status_label || dateStatusText || task.availability_label}}</text>
+      <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>
     </view>
 
     <scroll-view wx:if="{{!sectionLocked}}" scroll-x class="section-strip" enable-flex>
@@ -195,7 +202,7 @@
 
     <view class="submit-bar">
       <view class="submit-info">{{progress.answeredCount}} / {{progress.totalCount}}</view>
-      <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitAnswers">
+      <view wx:if="{{!task.read_only}}" class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitAnswers">
         {{submitting ? '提交中…' : (submitted ? '重新提交答卷' : (retryingWrong ? '提交错题重做' : '提交答卷'))}}
       </view>
     </view>

@@ -27,6 +27,7 @@ from services.vocabulary_group_learning import (
     mark_familiarity_viewed,
     submit_vocabulary_group_correction,
 )
+from services.task_date_gate import task_date_access
 from services.vocabulary_mastery import (
     VocabularyMasteryError,
     is_vocabulary_v2_task,
@@ -71,15 +72,16 @@ def get_dictation_queue(task_id):
     try:
         task = Task.query.get(task_id)
         if is_vocabulary_v2_task(task):
-            gate = review_preflight(request.current_api_user, task_id)
-            if gate["required"]:
-                raise VocabularyMasteryError(
-                    "vocabulary_review_required",
-                    409,
-                    due_count=gate["due_count"],
-                    batch_limit=gate["batch_limit"],
-                    active_session_id=gate["active_session_id"],
-                )
+            if not task_date_access(task).read_only:
+                gate = review_preflight(request.current_api_user, task_id)
+                if gate["required"]:
+                    raise VocabularyMasteryError(
+                        "vocabulary_review_required",
+                        409,
+                        due_count=gate["due_count"],
+                        batch_limit=gate["batch_limit"],
+                        active_session_id=gate["active_session_id"],
+                    )
             result = get_vocabulary_group_queue(
                 request.current_api_user,
                 task_id,
@@ -112,18 +114,19 @@ def get_dictation_queue(task_id):
 @require_api_user(User.ROLE_STUDENT)
 def get_vocabulary_queue(task_id):
     try:
-        gate = review_preflight(request.current_api_user, task_id)
-        if gate["required"]:
-            raise VocabularyMasteryError(
-                "vocabulary_review_required",
-                409,
-                due_count=gate["due_count"],
-                batch_limit=gate["batch_limit"],
-                active_session_id=gate["active_session_id"],
-            )
         task = Task.query.get(task_id)
         if not is_vocabulary_v2_task(task):
             raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
+        if not task_date_access(task).read_only:
+            gate = review_preflight(request.current_api_user, task_id)
+            if gate["required"]:
+                raise VocabularyMasteryError(
+                    "vocabulary_review_required",
+                    409,
+                    due_count=gate["due_count"],
+                    batch_limit=gate["batch_limit"],
+                    active_session_id=gate["active_session_id"],
+                )
         result = get_vocabulary_group_queue(
             request.current_api_user,
             task_id,

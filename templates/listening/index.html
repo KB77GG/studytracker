@@ -926,11 +926,13 @@ if (document.getElementById('loginGate')) {
       return;
     }
     list.innerHTML = tasks.slice(0, 4).map(task => {
+      const locked = Boolean(task.read_only && task.availability_status !== 'completed' && task.task_date_state !== 'completed');
+      const href = locked ? '#' : (task.url || '#');
       const hint = task.status === 'in_progress'
         ? ((task.completion_rate != null) ? `进度 ${task.completion_rate}% · 继续做题` : '继续做题')
-        : `${formatPracticeDate(task.date)} · 点击进入练习`;
+        : (locked ? (task.status_label || task.task_status_label || task.availability_label) : `${formatPracticeDate(task.date)} · 点击进入练习`);
       return `
-        <a class="today-task" href="${escapeHtml(task.url)}">
+        <a class="today-task${locked ? ' today-task--locked' : ''}" href="${escapeHtml(href)}"${locked ? ' aria-disabled="true" onclick="return false"' : ''}>
           <div class="today-task__row">
             <span class="today-task__category">${escapeHtml(task.category)}</span>
             <span class="today-task__status today-task__status--${escapeHtml(task.status)}">${escapeHtml(task.status_label)}</span>

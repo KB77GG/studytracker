@@ -15,6 +15,31 @@ page {
   color: #25211c;
 }
 
+.date-gate-card {
+  background: #fff7ed;
+  border: 2rpx solid #fed7aa;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.date-gate-title,
+.date-gate-copy {
+  display: block;
+}
+
+.date-gate-title {
+  color: #9a3412;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.date-gate-copy {
+  margin-top: 8rpx;
+  color: #c2410c;
+  font-size: 24rpx;
+}
+
 /* ─────────────────────────────────────────
    加载状态
 ───────────────────────────────────────── */

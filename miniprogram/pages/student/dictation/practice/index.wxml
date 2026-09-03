@@ -4,8 +4,18 @@
     当日布置 {{assignedCount}} 词 + 自动复习 {{reviewCount}} 词
   </view>
 
+  <block wx:if="{{readOnly}}">
+    <view class="status-bar group-status-bar">
+      <view class="book-title">{{bookTitle}}</view>
+    </view>
+    <view class="date-gate-card">
+      <text class="date-gate-title">{{dateStatusText}}</text>
+      <text class="date-gate-copy">任务按所属日期开放，当前仅可查看，不能开始听写、计时或提交。</text>
+    </view>
+  </block>
+
   <!-- ========== GROUP PREPARATION ========== -->
-  <block wx:if="{{phase === 'group_select'}}">
+  <block wx:elif="{{phase === 'group_select'}}">
     <view class="status-bar group-status-bar">
       <view class="book-title">{{bookTitle}}</view>
       <view class="progress-info">共 {{totalWords}} 词</view>
@@ -208,7 +218,7 @@
                  placeholder="{{currentMode === 'en_to_zh' || currentMode === 'audio_to_zh' ? '输入中文释义' : (currentMode === 'zh_to_en' ? '输入英文表达' : (currentMode === 'context_fill' ? '填写目标词' : '听音输入单词'))}}"
                  focus="{{inputFocus}}"
                  value="{{inputValue}}"
-                 disabled="{{isCheckingFirstAnswer}}"
+                 disabled="{{readOnly || isCheckingFirstAnswer}}"
                  maxlength="-1"
                  bindinput="onInput"
                  confirm-type="done"

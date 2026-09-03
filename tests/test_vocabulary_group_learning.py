@@ -21,6 +21,7 @@ from models import (
     db,
 )
 from services.vocabulary_autonomous_review import (
+    VocabularyAutonomousReviewError,
     claim_today_review,
     review_preflight,
     review_summary,
@@ -42,6 +43,7 @@ from services.vocabulary_group_learning import (
     submit_vocabulary_group_answer,
     submit_vocabulary_group_correction,
 )
+from services.task_date_gate import beijing_today
 from services.vocabulary_mastery import ensure_mastery, ensure_word_sense
 
 
@@ -119,9 +121,9 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    def _task(self, goal="reading", end=3):
+    def _task(self, goal="reading", end=3, task_date=None):
         task = Task(
-            date=date(2026, 8, 8),
+            date=task_date or beijing_today(),
             student_name="小组学生",
             category="词汇",
             detail="小组学习测试",
@@ -266,8 +268,8 @@ class VocabularyGroupLearningTest(unittest.TestCase):
         with self.app.app_context():
             self._ensure_six_words()
             user = self._user()
-            task = self._task("comprehensive", end=6)
             now = datetime(2026, 8, 8, 12, 0)
+            task = self._task("comprehensive", end=6, task_date=now.date())
             queue = get_vocabulary_group_queue(user, task.id, now=now)
             self.assertEqual(queue["phase"], PHASE_FAMILIARITY)
             self.assertEqual(queue["base_progress_completed"], 0)
@@ -287,7 +289,7 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             self.assertFalse(same_day_gate["required"])
             day_one_gate = review_preflight(user, task.id, now=now + timedelta(days=1))
             self.assertGreater(day_one_gate["due_count"], 0)
-            queue = self._view_group(user, task.id, queue)
+            queue = self._view_group(user, task.id, queue, now=now)
 
             questions = VocabularyLearningQuestion.query.filter_by(
                 task_id=task.id,
@@ -919,54 +921,16 @@ class VocabularyGroupLearningTest(unittest.TestCase):
                 )
             self.assertEqual(stale.exception.error, "question_not_current")
 
-    def test_started_task_is_not_interrupted_when_review_becomes_due(self):
+    def test_started_task_is_blocked_after_assigned_day_ends(self):
         with self.app.app_context():
             user = self._user()
-            task = self._task("reading", end=1)
             day_one = datetime(2026, 8, 8, 23, 55)
             day_two = datetime(2026, 8, 9, 8, 0)
-            queue = get_vocabulary_group_queue(user, task.id, now=day_one)
-            mastery = StudentVocabularyMastery.query.filter_by(student_id=user.id).first()
-            mastery.meaning_recall_next_due_at = day_two - timedelta(minutes=1)
-            db.session.flush()
-            review = claim_today_review(user, origin_task_id=task.id, now=day_two)
-            self.assertEqual(review["total_count"], 1)
-            gate = review_preflight(user, task.id, now=day_two)
-            self.assertTrue(gate["task_flow_started"])
-            self.assertFalse(gate["required"])
-            self.assertTrue(review_summary(user, now=day_two)["has_active_session"])
-            resumed_during_review = get_vocabulary_group_queue(user, task.id, now=day_two)
-            self.assertEqual(resumed_during_review["queue_token"], queue["queue_token"])
-
-            item = review["items"][0]
-            stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
-            answer_payload = json.loads(stored.answer_payload_json)
-            answer = answer_payload.get("answer_option_id") or answer_payload.get("answer")
-            submit_review_answer(
-                user,
-                review["session_id"],
-                {
-                    "session_token": review["session_token"],
-                    "review_item_id": item["review_item_id"],
-                    "question_id": item["question_id"],
-                    "word_id": item["word_id"],
-                    "sense_id": item["sense_id"],
-                    "dimension": item["dimension"],
-                    "answer": answer,
-                    "attempt_id": "day-two-clearance",
-                },
-                now=day_two,
-            )
-            settle_review_session(
-                user,
-                review["session_id"],
-                {"queue_token": review["queue_token"]},
-                session_token=review["session_token"],
-                now=day_two,
-            )
-            resumed = get_vocabulary_group_queue(user, task.id, now=day_two)
-            self.assertEqual(resumed["queue_token"], queue["queue_token"])
-            self.assertEqual(resumed["phase"], PHASE_FAMILIARITY)
+            task = self._task("reading", end=1, task_date=day_one.date())
+            get_vocabulary_group_queue(user, task.id, now=day_one)
+            with self.assertRaises(VocabularyAutonomousReviewError) as blocked:
+                claim_today_review(user, origin_task_id=task.id, now=day_two)
+            self.assertEqual(blocked.exception.error, "task_expired")
 
     def test_daily_clearance_errors_are_normalized_by_group_service(self):
         with self.app.app_context():

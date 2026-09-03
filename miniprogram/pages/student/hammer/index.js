@@ -16,6 +16,9 @@ Page({
     assignedQuestions: [],
     assignedCount: 0,
     assignedIndex: 0,
+    taskId: null,
+    readOnly: false,
+    dateStatusText: '',
     questionText: '',
     questionMeta: '',
     questionType: '',
@@ -743,7 +746,9 @@ Page({
               content: q.content,
               materialTitle: material.title,
               materialType: material.type,
-              taskId: task.task_id
+              taskId: task.task_id,
+              readOnly: !!task.read_only,
+              dateStatusText: task.status_label || '该任务当前仅可查看'
             })
           })
         })
@@ -939,10 +944,17 @@ Page({
               }
             : null,
           assignedIndex: index + 1,
+          taskId: item.taskId || null,
+          readOnly: !!item.readOnly,
+          dateStatusText: item.dateStatusText || '',
           loadingQuestion: false
         }, () => {
           this.refreshTopicPresentation()
         })
+        if (item.readOnly) {
+          this.appendSystemMessage(`${item.dateStatusText || '该任务当前仅可查看'}，不能提交回答。`)
+          return
+        }
         await this.createSession('assigned')
         this.appendSystemMessage('已切换新题，可直接作答 ✓')
         return
@@ -984,6 +996,9 @@ Page({
           questionText: res.question.content,
           questionMeta: '随机题',
           questionType: res.question.type,
+          taskId: null,
+          readOnly: false,
+          dateStatusText: '',
           linkedPart23: (res.question.type === 'speaking_part2_3')
             ? {
                 questionText: res.question.content,
@@ -1008,6 +1023,7 @@ Page({
   },
 
   async createSession(source) {
+    if (this.data.readOnly) return
     const question = (this.data.questionText || '').trim()
     if (!question) return
     const displayQuestion = this.getDisplayQuestion(
@@ -1021,6 +1037,7 @@ Page({
       question_type: this.data.questionType,
       source: source || this.data.sourceMode
     }
+    if (this.data.taskId) payload.task_id = this.data.taskId
     if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
       payload.part2_topic = this.data.selectedFramework
     }
@@ -1061,6 +1078,7 @@ Page({
   },
 
   handleAnswerInput(e) {
+    if (this.data.readOnly) return
     const value = e.detail.value || ''
     this.setData({
       answerText: value,
@@ -1317,6 +1335,7 @@ Page({
       transcript,
       session_id: sessionId || this.data.currentSessionId
     }
+    if (this.data.taskId) payload.task_id = this.data.taskId
     if (this.data.currentPart !== 'Part1' && this.data.selectedFramework) {
       payload.part2_topic = this.data.selectedFramework
     }
@@ -1437,7 +1456,7 @@ Page({
   },
 
   async submitEval(e) {
-    if (this.data.loadingEval) return
+    if (this.data.readOnly || this.data.loadingEval) return
     // Guest mode auth guard
     if (this.data.isGuest) {
       wx.showModal({
@@ -1496,7 +1515,7 @@ Page({
   },
 
   async retryMessageEval(e) {
-    if (this.data.loadingEval) return
+    if (this.data.readOnly || this.data.loadingEval) return
     const msgId = e.currentTarget.dataset.id
     const msg = (this.data.messages || []).find((item) => item.id === msgId)
     if (!msg || msg.role !== 'user') return
@@ -1644,7 +1663,7 @@ Page({
     try {
       const res = await request('/miniprogram/speaking/tts', {
         method: 'POST',
-        data: { text: paragraph }
+        data: { text: paragraph, task_id: this.data.taskId || null }
       })
       if (!res.ok || !res.audio_url) {
         wx.showToast({ title: res.error || '获取音频失败', icon: 'none' })
@@ -1712,7 +1731,8 @@ Page({
           method: 'POST',
           data: {
             warrant_id: this.data.oralWarrantId,
-            record_ids: sdkRes.recordIds
+            record_ids: sdkRes.recordIds,
+            task_id: this.data.taskId || null
           }
         })
         if (serverRes.ok) {
@@ -1736,6 +1756,7 @@ Page({
   },
 
   startRecord() {
+    if (this.data.readOnly) return
     this.setData({ showQuickActions: false, showMoreMenu: false, showContextMenu: false, quickReplies: [] })
     if (this.data.recordBusy && !this.data.isRecording && !this.data.uploadingAudio && !this.data.transcribingAudio) {
       this.setData({ recordBusy: false })
@@ -1773,6 +1794,7 @@ Page({
   },
 
   beginRecord() {
+    if (this.data.readOnly) return
     this.setData({
       recordStatus: '准备录音...',
       result: null,
@@ -1896,6 +1918,7 @@ Page({
   },
 
   async handleAudioFile(tempFilePath) {
+    if (this.data.readOnly) return
     this.setData({ uploadingAudio: true, transcribingAudio: false })
     let uploadedUrl = ''
     try {
@@ -1911,7 +1934,7 @@ Page({
     try {
       const res = await request('/miniprogram/speaking/transcribe', {
         method: 'POST',
-        data: { audio_url: uploadedUrl }
+        data: { audio_url: uploadedUrl, task_id: this.data.taskId || null }
       })
       if (!res.ok) {
         wx.showToast({ title: res.error || '转写失败', icon: 'none' })
@@ -1986,7 +2009,7 @@ Page({
   // ─── Call mode (phone-call-style conversation) ───
 
   startCallMode() {
-    if (this.data.callMode) return
+    if (this.data.readOnly || this.data.callMode) return
     if (this.data.isGuest) {
       wx.showModal({
         title: '需要登录',
@@ -2042,7 +2065,7 @@ Page({
   },
 
   async _callSubmit(transcript) {
-    if (!this.data.callMode || !transcript) return
+    if (this.data.readOnly || !this.data.callMode || !transcript) return
     const userMessageId = this.makeMessageId('user')
     this.appendMessage(this.createMessage('user', {
       id: userMessageId,
@@ -2067,7 +2090,8 @@ Page({
           question: this.data.questionText,
           transcript,
           session_id: sessionId,
-          audio_url: this.data.lastAudioUrl || ''
+          audio_url: this.data.lastAudioUrl || '',
+          task_id: this.data.taskId || null
         },
         timeout: 30000
       })
@@ -2167,7 +2191,7 @@ Page({
         filePath: tempFilePath,
         name: 'file',
         header,
-        formData: { filename: 'hammer_recording.mp3' },
+        formData: { filename: 'hammer_recording.mp3', task_id: this.data.taskId || '' },
         success: (res) => {
           try {
             const data = JSON.parse(res.data || '{}')

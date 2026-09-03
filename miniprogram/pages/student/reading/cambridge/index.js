@@ -9,6 +9,8 @@ Page({
         loading: true,
         submitting: false,
         task: {},
+        readOnly: false,
+        dateStatusText: '',
         test: {},
         passages: [],
         passageTabs: [],
@@ -89,6 +91,8 @@ Page({
 
             this.setData({
                 task: res.task || {},
+                readOnly: !!(res.task && res.task.read_only),
+                dateStatusText: (res.task && (res.task.status_label || res.task.task_status_label || res.task.availability_label)) || '',
                 test,
                 passages,
                 passageTabs: passages.map(passage => ({
@@ -210,6 +214,7 @@ Page({
             titleChunks: [],
             showControl: true
         }
+        decorated.disabled = !!this.data.readOnly
         decorated.titleChunks = this.splitQuestionTitle(decorated)
         return decorated
     },
@@ -483,18 +488,22 @@ Page({
     },
 
     onTextInput(e) {
+        if (this.data.readOnly) return
         this.setAnswer(String(e.currentTarget.dataset.key), e.detail.value, false)
     },
 
     onRadioChange(e) {
+        if (this.data.readOnly) return
         this.setAnswer(String(e.currentTarget.dataset.key), e.detail.value, true)
     },
 
     onCheckboxChange(e) {
+        if (this.data.readOnly) return
         this.setAnswer(String(e.currentTarget.dataset.key), e.detail.value || [], true)
     },
 
     onPickerChange(e) {
+        if (this.data.readOnly) return
         const key = String(e.currentTarget.dataset.key)
         const question = this.findQuestionByKey(key)
         const index = Number(e.detail.value || 0)
@@ -527,6 +536,10 @@ Page({
     },
 
     async submitAnswers() {
+        if (this.data.readOnly) {
+            wx.showToast({ title: this.data.dateStatusText || this.data.task?.status_label || this.data.task?.task_status_label || '当前仅可查看', icon: 'none' })
+            return
+        }
         if (this.data.submitting) return
         if (this.data.progress.answeredCount < this.data.progress.totalCount) {
             const ok = await this.confirmSubmitPartial()
@@ -606,6 +619,7 @@ Page({
     },
 
     redoWrong() {
+        if (this.data.readOnly) return
         const wrongKeys = this.data.wrongKeys || []
         if (!wrongKeys.length) {
             wx.showToast({ title: '没有错题', icon: 'none' })

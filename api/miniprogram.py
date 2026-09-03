@@ -58,6 +58,16 @@ from services.scheduler_client import (
 )
 from services.vocabulary_mastery import vocabulary_goal_for_task
 from services.task_deletion import TaskDeletionError, delete_unstarted_task
+from services.task_date_gate import (
+    TaskDateGateError,
+    add_task_date_access,
+    assert_task_write_allowed,
+    beijing_today,
+    close_expired_task_session,
+    gate_error_payload,
+    task_workflow_status,
+    task_date_access,
+)
 from services.listening_training import (
     TRAINING_MODE_OPTIONS,
     normalize_training_mode,
@@ -967,10 +977,29 @@ def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
 
 # --- 通用接口 ---
 
+def _student_task_payload_gate(data):
+    """Gate an optional assigned-task id before a speaking write."""
+    raw_task_id = (data or {}).get("task_id")
+    if raw_task_id in (None, ""):
+        return None
+    user = request.current_api_user
+    if getattr(user, "role", None) != User.ROLE_STUDENT:
+        return None
+    if not str(raw_task_id).isdigit():
+        return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+    task = Task.query.get(int(raw_task_id))
+    profile = getattr(user, "student_profile", None)
+    if not task or not profile or task.student_name != profile.full_name:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    return _task_gate_response(task)
+
 @mp_bp.route("/upload", methods=["POST"])
 @require_api_user()
 def upload_file():
     """上传文件接口 (图片/音频)"""
+    blocked = _student_task_payload_gate({"task_id": request.form.get("task_id")})
+    if blocked:
+        return blocked
     if "file" not in request.files:
         return jsonify({"ok": False, "error": "no_file"}), 400
     
@@ -1013,9 +1042,9 @@ def get_speaking_assigned():
         try:
             query_date = datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError:
-            query_date = date.today()
+            query_date = beijing_today()
     else:
-        query_date = date.today()
+        query_date = beijing_today()
 
     tasks = Task.query.filter_by(
         student_name=student.full_name,
@@ -1047,9 +1076,12 @@ def get_speaking_assigned():
                 "hint": q.hint,
                 "reference_answer": q.reference_answer,
             })
+        access = task_date_access(task)
         results.append({
             "task_id": task.id,
             "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
+            "status_label": access.label,
+            **access.as_dict(),
             "material": {
                 "id": task.material.id,
                 "title": task.material.title,
@@ -1192,6 +1224,9 @@ def _load_conversation_history(session, student_id, limit=6):
 @require_api_user(User.ROLE_STUDENT)
 def evaluate_speaking():
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
 
     # Inject conversation history for multi-turn context
     user = request.current_api_user
@@ -1320,6 +1355,9 @@ def evaluate_speaking():
 @require_api_user(User.ROLE_STUDENT)
 def transcribe_speaking_audio():
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
     file_url = (data.get("audio_url") or data.get("file_url") or "").strip()
     if not file_url:
         return jsonify({"ok": False, "error": "missing_audio_url"}), 400
@@ -1364,6 +1402,9 @@ def get_oral_warrant():
 def evaluate_oral_task():
     """Run Aliyun oral evaluation task using record_id list returned by client SDK."""
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
     user = request.current_api_user
     student = user.student_profile
     if not student:
@@ -1402,6 +1443,9 @@ def evaluate_oral_task():
 @require_api_user(User.ROLE_STUDENT)
 def create_speaking_session():
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
     question = (data.get("question") or "").strip()
     part = (data.get("part") or "").strip() or "Part1"
     question_type = (data.get("question_type") or "").strip()
@@ -1532,6 +1576,9 @@ def list_speaking_sessions():
 def quick_reply_speaking():
     """Lightweight eval for call mode — fast reply without full scoring."""
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
 
     user = request.current_api_user
     student = user.student_profile if user else None
@@ -1589,6 +1636,9 @@ def quick_reply_speaking():
 @require_api_user(User.ROLE_STUDENT)
 def speaking_tts():
     data = request.get_json(silent=True) or {}
+    blocked = _student_task_payload_gate(data)
+    if blocked:
+        return blocked
     text = (data.get("text") or "").strip()
     if not text:
         return jsonify({"ok": False, "error": "missing_text"}), 400
@@ -1626,6 +1676,18 @@ HOME_DATE_PAST_DAYS = 2
 HOME_DATE_FUTURE_DAYS = 2
 
 
+def _task_access_payload(task) -> dict:
+    return task_date_access(task).as_dict()
+
+
+def _task_gate_response(task):
+    try:
+        assert_task_write_allowed(task)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
+    return None
+
+
 @mp_bp.route("/student/tasks/today", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
@@ -1637,7 +1699,7 @@ def get_student_today_tasks():
     if not student:
         return jsonify({"ok": False, "error": "no_student_profile"}), 404
 
-    today = date.today()
+    today = beijing_today()
     query_date = today
 
     date_str = request.args.get("date")
@@ -1678,13 +1740,22 @@ def get_student_today_tasks():
             "message": "当前日期无任务",
         })
 
-    # 给缺少 token 的精听任务补上
+    # 只给今天或已完成任务补齐访问令牌；过期未完成任务的 GET 保持真正只读。
     tokens_updated = False
     for task in tasks:
-        if task.listening_exercise_id and not task.listening_access_token:
+        access = task_date_access(task)
+        if (
+            task.listening_exercise_id
+            and not task.listening_access_token
+            and access.state in {"today", "completed"}
+        ):
             task.listening_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
-        if task.reading_test_id and not task.reading_access_token:
+        if (
+            task.reading_test_id
+            and not task.reading_access_token
+            and access.state in {"today", "completed"}
+        ):
             task.reading_access_token = secrets.token_urlsafe(16)
             tokens_updated = True
     if tokens_updated:
@@ -1717,15 +1788,22 @@ def get_student_today_tasks():
             else None
         )
         # 判断状态
-        status = "pending"
-        if task.status == "done":
-            status = "completed"
-        elif task.status == "submitted" or task.student_submitted:
-            status = "submitted"
-        elif task.actual_seconds and task.actual_seconds > 0:
-            status = "in_progress"
+        workflow_status = task_workflow_status(task)
+        status = {
+            "pending": "pending",
+            "in_progress": "in_progress",
+            "submitted": "submitted",
+            "completed": "completed",
+        }[workflow_status]
 
-        tasks_data.append({
+        access = task_date_access(task)
+        status_label = {
+            "pending": "待完成",
+            "in_progress": "进行中",
+            "submitted": "审核中",
+            "completed": "已完成",
+        }.get(status, status)
+        task_payload = {
             "id": task.id,
             "date": task.date,
             "is_carryover": False,
@@ -1737,6 +1815,9 @@ def get_student_today_tasks():
             "planned_minutes": task.planned_minutes,
             "actual_seconds": task.actual_seconds,
             "status": status,
+            "raw_status": status,
+            "status_label": status_label,
+            **access.as_dict(),
             "is_locked": False,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
             "dictation_book_id": task.dictation_book_id,
@@ -1772,7 +1853,8 @@ def get_student_today_tasks():
             "reading_token": task.reading_access_token,
             "reading_url": _task_reading_url(task),
             "reading_test_result": _serialize_reading_test_submission(reading_test_submission),
-        })
+        }
+        tasks_data.append(task_payload)
         
     return jsonify({
         "ok": True,
@@ -1797,21 +1879,36 @@ def get_task_detail(task_id):
         # 简单权限验证
         if task.student_name != user.student_profile.full_name:
              return jsonify({"ok": False, "error": "forbidden"}), 403
-        if task.listening_exercise_id and not task.listening_access_token:
+        access = task_date_access(task)
+        if (
+            task.listening_exercise_id
+            and not task.listening_access_token
+            and access.state in {"today", "completed"}
+        ):
             task.listening_access_token = secrets.token_urlsafe(16)
             db.session.commit()
-        if task.reading_test_id and not task.reading_access_token:
+        if (
+            task.reading_test_id
+            and not task.reading_access_token
+            and access.state in {"today", "completed"}
+        ):
             task.reading_access_token = secrets.token_urlsafe(16)
             db.session.commit()
 
-        status = "pending"
-        if task.status == "done":
-            status = "completed"
-        elif task.status == "submitted" or task.student_submitted:
-            status = "submitted"
-        elif task.actual_seconds and task.actual_seconds > 0:
-            status = "in_progress"
+        workflow_status = task_workflow_status(task)
+        status = {
+            "pending": "pending",
+            "in_progress": "in_progress",
+            "submitted": "submitted",
+            "completed": "completed",
+        }[workflow_status]
 
+        status_label = {
+            "pending": "待完成",
+            "in_progress": "进行中",
+            "submitted": "审核中",
+            "completed": "已完成",
+        }.get(status, status)
         # 获取关联的材料信息
         dictation_book = DictationBook.query.get(task.dictation_book_id) if task.dictation_book_id else None
         dictation_book_type = dictation_book.book_type if dictation_book else "dictation"
@@ -1863,6 +1960,9 @@ def get_task_detail(task_id):
                 "instructions": task.note or "",
                 "planned_minutes": task.planned_minutes,
                 "status": status,
+                "raw_status": status,
+                "status_label": status_label,
+                **access.as_dict(),
                 "is_locked": False,
                 "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
                 # 反馈字段
@@ -1951,6 +2051,7 @@ def get_student_cambridge_listening_task(task_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **_task_access_payload(task),
             "student_name": task.student_name,
             "title": task.detail or payload.get("title") or safe_id,
             "listening_exercise_id": safe_id,
@@ -1999,6 +2100,7 @@ def get_student_cambridge_reading_task(task_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **_task_access_payload(task),
             "student_name": task.student_name,
             "title": task.detail or payload.get("title") or safe_id,
             "reading_test_id": safe_id,
@@ -2130,12 +2232,12 @@ def list_student_task_history():
     )
     tasks = task_query.all()
 
-    completed = sum(1 for task in tasks if task.status == "done")
+    completed = sum(1 for task in tasks if task_workflow_status(task) == "completed")
     total_seconds = sum(max(0, task.actual_seconds or 0) for task in tasks)
     accuracy_values = [
         float(task.accuracy)
         for task in tasks
-        if task.status == "done" and task.accuracy is not None
+        if task_workflow_status(task) == "completed" and task.accuracy is not None
     ]
 
     task_ids = [task.id for task in tasks]
@@ -2152,7 +2254,10 @@ def list_student_task_history():
 
     items = []
     for task in tasks:
-        is_completed = task.status == "done"
+        workflow_status = task_workflow_status(task)
+        is_completed = workflow_status == "completed"
+        is_submitted = workflow_status == "submitted"
+        access = task_date_access(task)
         practice_result = practice_results.get(task.id)
         items.append({
             "id": task.id,
@@ -2160,7 +2265,18 @@ def list_student_task_history():
             "category": task.category or "学习任务",
             "title": _task_display_title(task),
             "state": "completed" if is_completed else "pending_review",
-            "state_label": "已完成" if is_completed else "待审核",
+            "state_label": (
+                "已完成"
+                if is_completed
+                else "已提交，待批改"
+                if is_submitted
+                else "待审核"
+            ),
+            "raw_state": "completed" if is_completed else "pending_review",
+            "raw_state_label": "已完成" if is_completed else "待审核",
+            "display_state": access.state,
+            "display_state_label": access.workflow_label,
+            **access.as_dict(),
             "planned_minutes": task.planned_minutes or 0,
             "actual_seconds": task.actual_seconds or 0,
             "accuracy": task.accuracy if is_completed else None,
@@ -2225,6 +2341,7 @@ def get_reading_vocab_practice(task_id):
         return jsonify({"ok": False, "error": "forbidden"}), 403
     if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
+    access = task_date_access(task)
 
     mode = (request.args.get("mode") or "").strip().lower()
     is_done = bool(task.student_submitted) or (task.status == "done")
@@ -2301,6 +2418,7 @@ def get_reading_vocab_practice(task_id):
             "description": task.material.description or "",
             "planned_minutes": task.planned_minutes,
             "status": task.status or "pending",
+            **access.as_dict(),
             "accuracy": task.accuracy,
         },
         "is_done": is_done,
@@ -2340,6 +2458,9 @@ def submit_reading_vocab_practice(task_id):
         return jsonify({"ok": False, "error": "task_not_found"}), 404
     if task.student_name != user.student_profile.full_name:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _task_gate_response(task)
+    if blocked:
+        return blocked
     if not task.material or task.material.type not in CHOICE_PRACTICE_TYPES:
         return jsonify({"ok": False, "error": "invalid_material_type"}), 400
 
@@ -2472,6 +2593,10 @@ def submit_task(task_id):
     )
     from services.vocabulary_mastery import is_vocabulary_v2_task
     current_task = Task.query.get(task_id)
+    if current_task and current_task.student_name == user.student_profile.full_name:
+        blocked = _task_gate_response(current_task)
+        if blocked:
+            return blocked
     if is_vocabulary_v2_task(current_task):
         try:
             result = finalize_vocabulary_group_task(user, task_id, data)
@@ -2526,6 +2651,9 @@ def submit_task(task_id):
         # 验证权限
         if task.student_name != user.student_profile.full_name:
             return jsonify({"ok": False, "error": "forbidden"}), 403
+        blocked = _task_gate_response(task)
+        if blocked:
+            return blocked
             
         task.student_submitted = True
         task.submitted_at = datetime.now()
@@ -2564,6 +2692,9 @@ def submit_task(task_id):
         # 验证该任务是否属于当前学生
         if item.plan.student_id != user.student_profile.id:
             return jsonify({"ok": False, "error": "forbidden"}), 403
+        blocked = _task_gate_response(item)
+        if blocked:
+            return blocked
             
         # 更新任务状态
         item.student_status = PlanItem.STUDENT_SUBMITTED
@@ -2606,6 +2737,9 @@ def start_timer(task_id):
         # Verify ownership
         if task.student_name != user.student_profile.full_name:
             return jsonify({"ok": False, "error": "forbidden"}), 403
+        blocked = _task_gate_response(task)
+        if blocked:
+            return blocked
 
         if task.plan_item:
             now = datetime.utcnow()
@@ -2644,6 +2778,9 @@ def start_timer(task_id):
     # Verify ownership
     if item.plan.student_id != user.student_profile.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _task_gate_response(item)
+    if blocked:
+        return blocked
     
     # Create session for new format
     now = datetime.utcnow()
@@ -2679,6 +2816,9 @@ def stop_timer(task_id, session_id):
     if session_id == task_id:
         task = Task.query.get(task_id)
         if task and not task.plan_item and task.student_name == user.student_profile.full_name:
+            blocked = _task_gate_response(task)
+            if blocked:
+                return blocked
             # For old Task format, just return success
             # Timer duration is handled by miniprogram locally
             return jsonify({
@@ -2691,33 +2831,51 @@ def stop_timer(task_id, session_id):
     session = PlanItemSession.query.get(session_id)
     if not session or session.plan_item.plan.student_id != user.student_profile.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-    
-    # Update session end time
-    if not session.ended_at:
-        session.ended_at = datetime.utcnow()
-        duration = int((session.ended_at - session.started_at).total_seconds())
-        
-        # Update plan item actual_seconds
-        item = session.plan_item
-        if item.actual_seconds:
-            item.actual_seconds += duration
-        else:
-            item.actual_seconds = duration
-        linked_task = Task.query.filter_by(plan_item_id=item.id).first()
-        if linked_task:
-            linked_task.actual_seconds = max(int(linked_task.actual_seconds or 0), int(item.actual_seconds or 0))
-            if linked_task.status in (None, "", "pending", "in_progress"):
-                linked_task.status = "progress"
-            
-        db.session.commit()
-        
+    requested_task = Task.query.get(task_id)
+    requested_item = (
+        requested_task.plan_item
+        if requested_task and requested_task.plan_item
+        else PlanItem.query.get(task_id)
+        if not requested_task
+        else None
+    )
+    if not requested_item or requested_item.id != session.plan_item.id:
+        return jsonify({"ok": False, "error": "forbidden"}), 403
+    task_or_item = requested_task or requested_item
+
+    if session.ended_at:
         return jsonify({
             "ok": True,
-            "duration": duration,
-            "ended_at": session.ended_at.isoformat()
+            "duration": session.duration_seconds or 0,
+            "ended_at": session.ended_at.isoformat(),
         })
-    
-    return jsonify({"ok": False, "error": "already_stopped"}), 400
+
+    # Update session end time
+    now = datetime.utcnow()
+    try:
+        assert_task_write_allowed(task_or_item, now)
+    except TaskDateGateError as error:
+        if not close_expired_task_session(session, task_or_item, now):
+            return jsonify(gate_error_payload(error)), error.status_code
+    else:
+        session.close(now)
+
+    duration = session.duration_seconds or 0
+    item = session.plan_item
+    item.actual_seconds = (item.actual_seconds or 0) + duration
+    linked_task = Task.query.filter_by(plan_item_id=item.id).first()
+    if linked_task:
+        linked_task.actual_seconds = max(int(linked_task.actual_seconds or 0), int(item.actual_seconds or 0))
+        if linked_task.status in (None, "", "pending", "in_progress"):
+            linked_task.status = "progress"
+
+    db.session.commit()
+
+    return jsonify({
+        "ok": True,
+        "duration": duration,
+        "ended_at": session.ended_at.isoformat()
+    })
 
 
 @mp_bp.route("/student/stats", methods=["GET"])
@@ -2729,7 +2887,7 @@ def get_student_stats():
     
     # 使用 Task 表进行统计
     student_name = student.full_name
-    today = date.today()
+    today = beijing_today()
     week_dates = [(today - timedelta(days=i)) for i in range(6, -1, -1)]
     week_date_strings = [d.isoformat() for d in week_dates]
     

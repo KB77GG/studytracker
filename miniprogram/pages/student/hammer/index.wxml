@@ -19,6 +19,11 @@
     </view>
   </view>
 
+  <view class="date-gate-card" wx:if="{{readOnly}}">
+    <text class="date-gate-title">{{dateStatusText}}</text>
+    <text class="date-gate-copy">任务按所属日期开放，当前仅可查看，不能回答、录音或提交。</text>
+  </view>
+
   <scroll-view
     class="message-scroll"
     scroll-y="true"
@@ -36,7 +41,7 @@
             <text class="part-tag">{{currentPart}}</text>
             <text class="random-label">{{questionMeta || (sourceMode==='assigned' ? '已布置' : '随机题')}}</text>
           </view>
-          <button class="change-btn" bindtap="nextQuestion" loading="{{loadingQuestion}}">
+          <button wx:if="{{!readOnly}}" class="change-btn" bindtap="nextQuestion" loading="{{loadingQuestion}}">
             <image class="change-icon" src="/assets/icons/refresh.svg" mode="aspectFit" />
             <text>换题</text>
           </button>
@@ -210,7 +215,7 @@
     <image class="to-bottom-icon" src="/assets/icons/arrow-down.svg" mode="aspectFit" />
   </button>
 
-  <view class="composer-wrap" style="transform: {{composerTransform}};">
+  <view class="composer-wrap" wx:if="{{!readOnly}}" style="transform: {{composerTransform}};">
     <!-- Call mode panel -->
     <view class="call-panel" wx:if="{{callMode}}">
       <view class="call-status-row">

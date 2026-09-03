@@ -802,10 +802,11 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     }
     node.innerHTML = tasks.map(function (task) {
       const url = String(task.url || '#');
-      const href = url.startsWith('/') ? url : '#';
+      const locked = Boolean(task.read_only && task.availability_status !== 'completed' && task.task_date_state !== 'completed');
+      const href = !locked && url.startsWith('/') ? url : '#';
       const status = task.status || 'pending';
       return `
-        <a class="practice-task" href="${escapeHtml(href)}">
+        <a class="practice-task${locked ? ' practice-task--locked' : ''}" href="${escapeHtml(href)}"${locked ? ' aria-disabled="true" onclick="return false"' : ''}>
           <div class="practice-task__top">
             <span class="practice-task__source">${escapeHtml(task.source_label || task.category || '刷题')}</span>
             <span class="practice-task__status practice-task__status--${escapeHtml(status)}">${escapeHtml(task.status_label || '')}</span>

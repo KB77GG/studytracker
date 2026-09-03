@@ -169,7 +169,9 @@ Page({
         reviewCount: 0,
         recoveryMissingWordIds: [],
         appealSubmitted: false,
-        isEnglishSpelling: true
+        isEnglishSpelling: true,
+        readOnly: false,
+        dateStatusText: ''
     },
 
     onLoad: function (options) {
@@ -281,6 +283,16 @@ Page({
                 return;
             }
             const task = res.task;
+            this.setData({
+                bookTitle: task.task_name || '听写练习',
+                readOnly: !!task.read_only,
+                dateStatusText: task.status_label || '该任务当前仅可查看'
+            });
+            if (task.read_only) {
+                wx.hideLoading();
+                this.setData({ phase: 'read_only' });
+                return;
+            }
             const rawMode = String(task.dictation_mode || '').trim().toLowerCase();
             const vocabularyV2 = !!task.vocabulary_goal;
             if (vocabularyV2) {
@@ -331,7 +343,7 @@ Page({
     },
 
     startBackendTimer(taskId) {
-        if (!taskId) return;
+        if (!taskId || this.data.readOnly) return;
         request(`/miniprogram/student/tasks/${taskId}/timer/start`, { method: 'POST' })
             .catch((err) => console.warn('start timer failed', err));
     },
@@ -853,6 +865,7 @@ Page({
     },
 
     requestServerTtsPrewarm(words) {
+        if (this.data.readOnly) return;
         const targets = [];
         const seen = {};
         (words || []).forEach(item => {
@@ -878,6 +891,7 @@ Page({
     },
 
     onInput: function (e) {
+        if (this.data.readOnly) return;
         this.setData({
             inputValue: e.detail.value,
             inputError: false
@@ -885,7 +899,7 @@ Page({
     },
 
     selectContextOption(e) {
-        if (this.data.showResult || this.data.isCheckingFirstAnswer) return;
+        if (this.data.readOnly || this.data.showResult || this.data.isCheckingFirstAnswer) return;
         const optionId = String(e.currentTarget.dataset.optionId || '');
         if (!optionId) return;
         this.setData({ inputValue: optionId, selectedOptionId: optionId, inputError: false });
@@ -899,7 +913,7 @@ Page({
     },
 
     checkAnswer: function () {
-        if (this.data.showResult || this.data.isCheckingFirstAnswer) return;
+        if (this.data.readOnly || this.data.showResult || this.data.isCheckingFirstAnswer) return;
 
         const inputRaw = String(this.data.inputValue || '').trim();
         const mode = this.data.currentMode || MODE_AUDIO_TO_EN;
@@ -1063,6 +1077,7 @@ Page({
     },
 
     submitFirstAttempt(word, answer) {
+        if (this.data.readOnly) return Promise.reject(new Error('task_date_read_only'));
         const wordId = word && (word.word_id || word.id);
         if (!wordId) return Promise.resolve(null);
         const key = String(wordId);
@@ -1131,9 +1146,13 @@ Page({
     },
 
     reportExample: function (e) {
+        if (this.data.readOnly) return;
         const wordId = e.currentTarget.dataset.id;
         if (!wordId) return;
-        request(`/dictation/example/report/${wordId}`, { method: 'POST' })
+        request(`/dictation/example/report/${wordId}`, {
+            method: 'POST',
+            data: { task_id: this.data.taskId }
+        })
             .then((res) => {
                 wx.showToast({
                     title: res && res.ok ? '已反馈，助教会复审' : '反馈失败',
@@ -1144,7 +1163,7 @@ Page({
     },
 
     submitAnswerAppeal: function () {
-        if (this.data.appealSubmitted || this.data.isCorrect) return;
+        if (this.data.readOnly || this.data.appealSubmitted || this.data.isCorrect) return;
         const word = this.data.currentWord || {};
         const answer = String(this.data.userAnswer || '').trim();
         if (!word.id || !answer) return;
@@ -1178,6 +1197,7 @@ Page({
     },
 
     nextWord: function () {
+        if (this.data.readOnly) return;
         if (
             this.wordAdvanceLocked
             || this.data.isAdvancingWord
@@ -1229,6 +1249,7 @@ Page({
     },
 
     finishCurrentGroup(onReady) {
+        if (this.data.readOnly) return;
         this.pauseTimer();
         this.stopTicker();
         const total = this.data.groupWordCount;
@@ -1258,6 +1279,7 @@ Page({
     },
 
     continueNextGroup() {
+        if (this.data.readOnly) return;
         const nextGroupIndex = this.data.currentGroupIndex + 1;
         if (nextGroupIndex >= this.data.groupCount) {
             this.finishPractice();
@@ -1363,6 +1385,7 @@ Page({
     },
 
     submitTaskResult: function (accuracy, wrongWords, durationSeconds = 0, options = {}) {
+        if (this.data.readOnly) return;
         if (this.taskSubmitLocked || this.data.isSubmitting) return;
         this.taskSubmitLocked = true;
         this.setData({ isSubmitting: true });
@@ -1815,6 +1838,7 @@ Page({
     },
 
     startSelectedGroupPlan() {
+        if (this.data.readOnly) return;
         const plans = this.data.groupPlans || [];
         const plan = plans.find(item => item.key === this.data.selectedGroupPlanKey) || plans[0];
         if (!plan || !plan.sizes || !plan.sizes.length) {
@@ -1959,6 +1983,7 @@ Page({
     },
 
     startTest() {
+        if (this.data.readOnly) return;
         this.stopFamTimer();
         this.setData({
             phase: 'test',

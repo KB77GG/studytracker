@@ -98,6 +98,7 @@
 <section class="card listening-section">
   <h3>听力练习任务</h3>
   {% for lt in listening_tasks %}
+  {% set lt_status_label = lt.student_status_label or ('已完成' if lt.status == 'done' else ('进行中' if lt.completion_rate and lt.completion_rate > 0 else '未开始')) %}
   <article class="task-card">
     <div class="task-card__body">
       <div class="task-card__title">{{ lt.detail or lt.listening_exercise_id }}</div>
@@ -111,8 +112,10 @@
         {% endif %}
       </div>
       <div class="task-card__meta">
-        {% if lt.status == 'done' %}
+        {% if lt_status_label == '已完成' %}
           准确率 {{ '%.1f'|format(lt.accuracy or 0) }}% · 完成率 {{ '%.0f'|format(lt.completion_rate or 0) }}%
+        {% elif lt_status_label == '已提交，待批改' %}
+          {{ lt_status_label }}
         {% elif lt.completion_rate and lt.completion_rate > 0 %}
           进行中 · 完成率 {{ '%.0f'|format(lt.completion_rate) }}%
         {% else %}
@@ -120,9 +123,9 @@
         {% endif %}
       </div>
     </div>
-    <a class="task-card__cta {{ 'task-card__cta--success' if lt.status == 'done' }}"
+    <a class="task-card__cta {{ 'task-card__cta--success' if lt_status_label == '已完成' }}"
        href="{{ lt.listening_url or ('/listening/' ~ lt.listening_exercise_id ~ '?task_id=' ~ lt.id ~ '&token=' ~ lt.listening_access_token) }}">
-      {% if lt.status == 'done' %}已完成{% elif lt.listening_resource_type == 'cambridge_test' %}打开整套{% elif lt.listening_resource_type == 'jijing' %}打开刷题{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
+      {% if lt_status_label == '已完成' %}已完成{% elif lt_status_label == '已提交，待批改' %}已提交，待批改{% elif lt.listening_resource_type == 'cambridge_test' %}打开整套{% elif lt.listening_resource_type == 'jijing' %}打开刷题{% elif lt.completion_rate and lt.completion_rate > 0 %}继续精听{% else %}开始精听{% endif %}
     </a>
   </article>
   {% endfor %}
@@ -133,17 +136,19 @@
 <section class="card listening-section">
   <h3>IELTS 题型专项</h3>
   {% for task in question_type_tasks %}
+  {% set task_status_label = task.student_status_label or ('已完成' if task.status == 'done' else ('进行中' if task.status == 'progress' else '未开始')) %}
   <article class="task-card">
     <div class="task-card__body">
       <div class="task-card__title">{{ task.detail }}</div>
       <div class="task-card__meta">
-        {% if task.status == 'done' %}已完成 · 正确率 {{ '%.1f'|format(task.accuracy or 0) }}%
+        {% if task_status_label == '已完成' %}已完成 · 正确率 {{ '%.1f'|format(task.accuracy or 0) }}%
+        {% elif task_status_label == '已提交，待批改' %}{{ task_status_label }}
         {% elif task.status == 'progress' %}已自动保存，可继续作答
         {% else %}未开始{% endif %}
       </div>
     </div>
-    <a class="task-card__cta {{ 'task-card__cta--success' if task.status == 'done' }}" href="{{ task.question_type_url }}">
-      {{ '查看复盘' if task.status == 'done' else ('继续专项' if task.status == 'progress' else '开始专项') }}
+    <a class="task-card__cta {{ 'task-card__cta--success' if task_status_label == '已完成' }}" href="{{ task.question_type_url }}">
+      {{ '查看复盘' if task_status_label == '已完成' else ('已提交，待批改' if task_status_label == '已提交，待批改' else ('继续专项' if task.status == 'progress' else '开始专项')) }}
     </a>
   </article>
   {% endfor %}

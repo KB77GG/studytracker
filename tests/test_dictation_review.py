@@ -1,6 +1,6 @@
 import time
 import unittest
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import jwt
 from flask import Flask
@@ -31,9 +31,11 @@ from services.dictation_review import (
     get_task_queue,
     import_legacy_wrong_words,
     list_server_wrong_words,
+    local_date,
     next_local_midnight,
     submit_dictation_answer,
 )
+from services.task_date_gate import beijing_today
 
 AUTO_REVIEW_NOW = AUTO_REVIEW_QUEUE_START_UTC + timedelta(hours=1)
 
@@ -130,10 +132,17 @@ class DictationReviewFlowTest(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    def _task(self, start=1, end=2, mode="audio_to_en", order="sequence"):
+    def _task(
+        self,
+        start=1,
+        end=2,
+        mode="audio_to_en",
+        order="sequence",
+        task_date=None,
+    ):
         with self.app.app_context():
             task = Task(
-                date="2026-07-16",
+                date=task_date or beijing_today(),
                 student_name="复习学生",
                 category="词汇",
                 detail=f"范围 {start}-{end}",
@@ -188,7 +197,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            task_id = self._task(start=1, end=2)
+            task_id = self._task(start=1, end=2, task_date=local_date(review_now))
             queue = get_task_queue(
                 db.session.get(User, self.student_id), task_id, review_now
             )
@@ -233,7 +242,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            task_id = self._task(start=1, end=1)
+            task_id = self._task(start=1, end=1, task_date=local_date(now))
             first = get_task_queue(db.session.get(User, self.student_id), task_id, now)
             second = get_task_queue(db.session.get(User, self.student_id), task_id, now)
             db.session.commit()
@@ -261,7 +270,7 @@ class DictationReviewFlowTest(unittest.TestCase):
             db.session.add(mastery)
             db.session.commit()
             self.assertIsNone(DictationTaskReview.query.filter_by(word_id=self.word_ids[2]).first())
-            task_id = self._task(start=1, end=1)
+            task_id = self._task(start=1, end=1, task_date=local_date(now))
             queue = get_task_queue(db.session.get(User, self.student_id), task_id, now)
             self.assertIn(self.word_ids[2], [item["word_id"] for item in queue["words"]])
 
@@ -293,14 +302,14 @@ class DictationReviewFlowTest(unittest.TestCase):
                 ]
             )
             db.session.commit()
-            first = self._task(start=1, end=1)
-            second = self._task(start=1, end=1)
+            first = self._task(start=1, end=1, task_date=local_date(review_now))
+            second = self._task(start=1, end=1, task_date=local_date(review_now))
             first_queue = get_task_queue(db.session.get(User, self.student_id), first, review_now)
             second_queue = get_task_queue(db.session.get(User, self.student_id), second, review_now)
             self.assertEqual([item["word_id"] for item in first_queue["words"]], [self.word_ids[0], self.word_ids[2]])
             self.assertEqual([item["word_id"] for item in second_queue["words"]], [self.word_ids[0]])
             other_task = Task(
-                date="2026-07-17",
+                date=local_date(review_now),
                 student_name="复习学生",
                 category="词汇",
                 detail="另一本",
@@ -333,7 +342,7 @@ class DictationReviewFlowTest(unittest.TestCase):
             )
             db.session.add(mastery)
             db.session.commit()
-            task_id = self._task(start=2, end=2)
+            task_id = self._task(start=2, end=2, task_date=local_date(now))
             queue = get_task_queue(user, task_id, now)
             listed = list_server_wrong_words(user, self.book_id)
             db.session.refresh(mastery)
@@ -351,7 +360,7 @@ class DictationReviewFlowTest(unittest.TestCase):
         after_queue = AUTO_REVIEW_QUEUE_START_UTC + timedelta(hours=1)
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
-            collecting_task = self._task(start=1, end=1)
+            collecting_task = self._task(start=1, end=1, task_date=local_date(collected_at))
             collecting_queue = get_task_queue(user, collecting_task, before_queue)
             self.assertEqual(collecting_queue["auto_review_count"], 0)
             result = submit_dictation_answer(
@@ -378,11 +387,11 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertFalse(auto_review_queue_enabled(before_queue))
             self.assertTrue(auto_review_queue_enabled(after_queue))
 
-            before_task = self._task(start=2, end=2)
+            before_task = self._task(start=2, end=2, task_date=local_date(before_queue))
             before_snapshot = get_task_queue(user, before_task, before_queue)
             self.assertNotIn(self.word_ids[0], [item["word_id"] for item in before_snapshot["words"]])
 
-            after_task = self._task(start=2, end=2)
+            after_task = self._task(start=2, end=2, task_date=local_date(after_queue))
             after_snapshot = get_task_queue(user, after_task, after_queue)
             self.assertEqual(after_snapshot["auto_review_count"], 1)
             self.assertIn(self.word_ids[0], [item["word_id"] for item in after_snapshot["words"]])
@@ -505,7 +514,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            first_task = self._task(start=1, end=1)
+            first_task = self._task(start=1, end=1, task_date=local_date(first_now))
             get_task_queue(user, first_task, first_now)
             wrong = submit_dictation_answer(
                 user,
@@ -522,7 +531,7 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertFalse(wrong["is_correct"])
             db.session.commit()
 
-            second_task = self._task(start=2, end=2)
+            second_task = self._task(start=2, end=2, task_date=local_date(second_now))
             # The due word is outside the assigned range and is therefore
             # automatically claimed by the next same-book task.
             second_queue = get_task_queue(user, second_task, second_now)
@@ -563,7 +572,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 1,
             )
 
-            third_task = self._task(start=3, end=3)
+            third_task = self._task(start=3, end=3, task_date=local_date(third_now))
             third_queue = get_task_queue(user, third_task, third_now)
             self.assertEqual(third_queue["auto_review_count"], 1)
             correct_two = submit_dictation_answer(
@@ -618,7 +627,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            task_id = self._task(start=2, end=2)
+            task_id = self._task(start=2, end=2, task_date=local_date(now))
             queue = get_task_queue(user, task_id, now)
             result = submit_dictation_answer(
                 user,
@@ -688,15 +697,14 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertEqual(mastery.auto_review_correct_streak, 1)
             self.assertTrue(snapshot.state_applied)
 
-            second_finalize = finalize_strict_task(
-                user,
-                task_id,
-                {"queue_token": queue["queue_token"]},
-                now=now,
-            )
-            db.session.commit()
-            self.assertEqual(second_finalize["accuracy"], 100.0)
-            self.assertEqual(mastery.auto_review_correct_streak, 1)
+            with self.assertRaises(DictationReviewError) as completed:
+                finalize_strict_task(
+                    user,
+                    task_id,
+                    {"queue_token": queue["queue_token"]},
+                    now=now,
+                )
+            self.assertEqual(completed.exception.error, "task_completed_read_only")
 
     def test_non_task_correct_does_not_advance_auto_review_state(self):
         now = datetime(2026, 7, 17, 3, 0)
@@ -745,7 +753,7 @@ class DictationReviewFlowTest(unittest.TestCase):
         now = AUTO_REVIEW_NOW
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
-            task_id = self._task(start=1, end=1)
+            task_id = self._task(start=1, end=1, task_date=local_date(now))
             get_task_queue(user, task_id, now)
             first = submit_dictation_answer(
                 user,
@@ -800,7 +808,7 @@ class DictationReviewFlowTest(unittest.TestCase):
         now = AUTO_REVIEW_NOW
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
-            task_id = self._task(start=1, end=1)
+            task_id = self._task(start=1, end=1, task_date=local_date(now))
             queue = get_task_queue(user, task_id, now)
             first = submit_dictation_answer(
                 user,
@@ -852,7 +860,7 @@ class DictationReviewFlowTest(unittest.TestCase):
         now = AUTO_REVIEW_NOW
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
-            first_task = self._task(start=1, end=1)
+            first_task = self._task(start=1, end=1, task_date=local_date(now))
             get_task_queue(user, first_task, now)
             accepted = submit_dictation_answer(
                 user,
@@ -869,7 +877,7 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertTrue(accepted["is_correct"])
             db.session.commit()
 
-            second_task = self._task(start=1, end=1)
+            second_task = self._task(start=1, end=1, task_date=local_date(now))
             get_task_queue(user, second_task, now)
             with self.assertRaises(DictationReviewError) as context:
                 submit_dictation_answer(
@@ -904,7 +912,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            first_task = self._task(start=1, end=1)
+            first_task = self._task(start=1, end=1, task_date=local_date(first_now))
             get_task_queue(user, first_task, first_now)
             submit_dictation_answer(
                 user,
@@ -919,7 +927,7 @@ class DictationReviewFlowTest(unittest.TestCase):
                 now=first_now,
             )
             db.session.commit()
-            second_task = self._task(start=2, end=2)
+            second_task = self._task(start=2, end=2, task_date=local_date(second_now))
             second_queue = get_task_queue(user, second_task, second_now)
             self.assertEqual(second_queue["auto_review_count"], 1)
             submit_dictation_answer(
@@ -944,10 +952,10 @@ class DictationReviewFlowTest(unittest.TestCase):
             self.assertEqual(mastery.review_level, 1)
 
     def test_strict_task_score_is_server_merged_score(self):
-        now = AUTO_REVIEW_NOW
+        now = datetime.now()
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
-            task_id = self._task(start=1, end=2)
+            task_id = self._task(start=1, end=2, task_date=local_date(now))
             queue = get_task_queue(user, task_id, now)
             for item in queue["words"]:
                 answer = item["word"] if item["word_id"] == self.word_ids[0] else "wrong"
@@ -991,58 +999,23 @@ class DictationReviewFlowTest(unittest.TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.get_json()["error"], "queue_incomplete")
 
-    def test_strict_task_recovers_verified_legacy_resume_prefix(self):
+    def test_historical_strict_task_cannot_recover_legacy_resume_prefix(self):
         with self.app.app_context():
-            task_id = self._task(start=1, end=3)
+            task_id = self._task(start=1, end=3, task_date=date(2026, 7, 16))
         queue = self._queue(task_id)
-        with self.app.app_context():
-            user = db.session.get(User, self.student_id)
-            submit_dictation_answer(
-                user,
-                {
-                    "task_id": task_id,
-                    "word_id": self.word_ids[1],
-                    "answer": "brvo",
-                    "attempt_id": "legacy-resume:suffix:bravo",
-                    "strict_queue": True,
-                },
-            )
-            submit_dictation_answer(
-                user,
-                {
-                    "task_id": task_id,
-                    "word_id": self.word_ids[2],
-                    "answer": "charlie",
-                    "attempt_id": "legacy-resume:suffix:charlie",
-                    "strict_queue": True,
-                },
-            )
-            db.session.commit()
 
         response = self.client.post(
             f"/api/miniprogram/student/tasks/{task_id}/submit",
             headers=self.headers,
             json={
                 "strict_queue": True,
-                "queue_token": queue["queue_token"],
+                "queue_token": queue.get("queue_token"),
                 "accuracy": "66.7",
                 "wrong_words": "bravo (写成了: brvo)",
             },
         )
-        self.assertEqual(response.status_code, 200, response.get_json())
-        result = response.get_json()
-        self.assertEqual(result["legacy_resume_recovered"], 1)
-        self.assertEqual(result["correct_count"], 2)
-        self.assertEqual(result["accuracy"], 66.7)
-        with self.app.app_context():
-            recovered = DictationRecord.query.filter_by(
-                task_id=task_id,
-                word_id=self.word_ids[0],
-                is_first_attempt=True,
-            ).one()
-            self.assertEqual(recovered.student_answer, "alpha")
-            self.assertTrue(recovered.is_correct)
-            self.assertEqual(DictationRecord.query.filter_by(task_id=task_id).count(), 3)
+        self.assertEqual(response.status_code, 403, response.get_json())
+        self.assertEqual(response.get_json()["error"], "task_expired")
 
     def test_strict_task_rejects_inconsistent_legacy_resume_evidence(self):
         with self.app.app_context():

@@ -44,6 +44,11 @@ from models import (
 from services.dictation_input_policy import resolve_submission_input
 from services.dictation_review import local_date
 from services.vocabulary_context import build_context_question, grade_context_answer
+from services.task_date_gate import (
+    TaskDateGateError,
+    assert_task_write_allowed,
+    task_date_access,
+)
 
 UTC = timezone.utc  # noqa: UP017 - production remains Python 3.10 compatible
 
@@ -568,6 +573,7 @@ def get_vocabulary_task_queue(user: User, task_id: int, now: datetime | None = N
         raise VocabularyMasteryError("task_not_found", 404)
     if not _task_owner(task, user):
         raise VocabularyMasteryError("forbidden", 403)
+    access = task_date_access(task, now)
     goal = normalize_goal(getattr(task, "vocabulary_goal", None))
     if not goal or not task.dictation_book_id:
         raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
@@ -580,6 +586,34 @@ def get_vocabulary_task_queue(user: User, task_id: int, now: datetime | None = N
         .order_by(VocabularyTaskReview.queue_index.asc(), VocabularyTaskReview.id.asc())
         .all()
     )
+    if access.read_only and not existing:
+        return {
+            "ok": True,
+            "task_id": task.id,
+            "book_id": book.id,
+            "vocabulary_goal": goal,
+            "learning_goal": goal,
+            "dimensions": list(dimensions_for_goal(goal)),
+            "task_mode": "vocabulary_v2",
+            "mode": "vocabulary_v2",
+            "total_count": 0,
+            "assigned_count": 0,
+            "auto_review_count": 0,
+            "strict_submission": True,
+            "queue_token": None,
+            "words": [],
+            **access.as_dict(),
+        }
+    if not access.read_only:
+        try:
+            assert_task_write_allowed(task, now)
+        except TaskDateGateError as error:
+            raise VocabularyMasteryError(
+                error.error,
+                error.status_code,
+                message=error.message,
+                **error.details,
+            ) from error
     if not existing:
         assigned = _assigned_words(task)
         if not assigned:
@@ -669,7 +703,7 @@ def get_vocabulary_task_queue(user: User, task_id: int, now: datetime | None = N
         existing = snapshots
 
     items = [_public_item(item) for item in existing]
-    return {
+    result = {
         "ok": True,
         "task_id": task.id,
         "book_id": book.id,
@@ -689,6 +723,8 @@ def get_vocabulary_task_queue(user: User, task_id: int, now: datetime | None = N
         "queue_token": _queue_token(existing),
         "words": items,
     }
+    result.update(access.as_dict())
+    return result
 
 
 def _find_item(user: User, task_id: int, payload: dict) -> VocabularyTaskReview | None:
@@ -867,6 +903,15 @@ def submit_vocabulary_answer(user: User, payload: dict, *, now: datetime | None 
         raise VocabularyMasteryError("task_not_found", 404)
     if not _task_owner(task, user):
         raise VocabularyMasteryError("forbidden", 403)
+    try:
+        assert_task_write_allowed(task, now)
+    except TaskDateGateError as error:
+        raise VocabularyMasteryError(
+            error.error,
+            error.status_code,
+            message=error.message,
+            **error.details,
+        ) from error
     if not is_vocabulary_v2_task(task):
         raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
 
@@ -997,6 +1042,15 @@ def finalize_vocabulary_task(user: User, task_id: int, payload: dict, *, now=Non
         raise VocabularyMasteryError("task_not_found", 404)
     if not _task_owner(task, user):
         raise VocabularyMasteryError("forbidden", 403)
+    try:
+        assert_task_write_allowed(task, now)
+    except TaskDateGateError as error:
+        raise VocabularyMasteryError(
+            error.error,
+            error.status_code,
+            message=error.message,
+            **error.details,
+        ) from error
     if not is_vocabulary_v2_task(task):
         raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
     settlement = VocabularyTaskSettlement.query.filter_by(

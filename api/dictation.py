@@ -1501,6 +1501,16 @@ def create_answer_appeal():
         return jsonify({"ok": False, "error": "unauthorized"}), 401
 
     data = request.get_json() or {}
+    task_id = data.get("task_id")
+    if task_id not in (None, "") and not str(task_id).isdigit():
+        return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+    if str(task_id or "").isdigit():
+        task = db.session.get(Task, int(task_id))
+        if not task:
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        profile = getattr(user, "student_profile", None)
+        if not profile or task.student_name != profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
     word_id = data.get("word_id")
     student_answer = str(data.get("answer") or "").strip()
     mode = str(data.get("mode") or "audio_to_en").strip().lower()
@@ -1567,7 +1577,6 @@ def create_answer_appeal():
             "appeal": _answer_appeal_payload(existing),
         })
 
-    task_id = data.get("task_id")
     appeal = DictationAnswerAppeal(
         student_id=user.id,
         word_id=word.id,
@@ -1666,6 +1675,17 @@ def _has_enrichment_filter():
 @require_session_or_bearer
 def report_word_enrichment(word_id):
     """Allow a student to report an incorrect or awkward enrichment block."""
+    data = request.get_json(silent=True) or {}
+    task_id = data.get("task_id") or request.args.get("task_id")
+    if task_id not in (None, "") and not str(task_id).isdigit():
+        return jsonify({"ok": False, "error": "invalid_task_id"}), 400
+    if str(task_id or "").isdigit():
+        task = db.session.get(Task, int(task_id))
+        if not task:
+            return jsonify({"ok": False, "error": "task_not_found"}), 404
+        profile = getattr(_current_api_user(), "student_profile", None)
+        if not profile or task.student_name != profile.full_name:
+            return jsonify({"ok": False, "error": "forbidden"}), 403
     word = DictationWord.query.get_or_404(word_id)
     word.vocab_report_count = (word.vocab_report_count or 0) + 1
     word.vocab_reviewed_at = None

@@ -62,6 +62,7 @@ from services.vocabulary_remediation import (
     remediation_kind_for_dimension,
     remediation_priority,
 )
+from services.task_date_gate import TaskDateGateError, assert_task_write_allowed
 
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
@@ -594,6 +595,29 @@ def _validate_origin_task(user: User, task_id) -> Task | None:
     return task
 
 
+def _assert_origin_task_write_allowed(
+    user: User,
+    session: VocabularyReviewSession,
+    now: datetime,
+) -> None:
+    """Apply the task-date gate to an already-claimed task review session."""
+
+    if not session.origin_task_id:
+        return
+    task = _validate_origin_task(user, session.origin_task_id)
+    if task is None:
+        return
+    try:
+        assert_task_write_allowed(task, now=now)
+    except TaskDateGateError as error:
+        raise VocabularyAutonomousReviewError(
+            error.error,
+            error.status_code,
+            message=error.message,
+            **error.details,
+        ) from error
+
+
 @lru_cache(maxsize=8192)
 def _feedback_syllables(value: str) -> str:
     """Return a display-only syllable hint without importing an API module."""
@@ -931,6 +955,16 @@ def claim_today_review(
 
     now = utc_naive(now)
     origin_task = _validate_origin_task(user, origin_task_id)
+    if origin_task:
+        try:
+            assert_task_write_allowed(origin_task, now)
+        except TaskDateGateError as error:
+            raise VocabularyAutonomousReviewError(
+                error.error,
+                error.status_code,
+                message=error.message,
+                **error.details,
+            ) from error
     active = (
         VocabularyReviewSession.query.filter_by(
             student_id=user.id,
@@ -1167,6 +1201,7 @@ def submit_review_answer(
         lock=True,
         require_token=True,
     )
+    _assert_origin_task_write_allowed(user, session, now)
     try:
         item_id = int(payload.get("review_item_id") or payload.get("queue_item_id"))
     except (TypeError, ValueError) as error:
@@ -1323,6 +1358,7 @@ def submit_review_correction(
         lock=True,
         require_token=True,
     )
+    _assert_origin_task_write_allowed(user, session, now)
     try:
         item_id = int(payload.get("review_item_id") or payload.get("queue_item_id"))
     except (TypeError, ValueError) as error:
@@ -1490,6 +1526,7 @@ def settle_review_session(
         lock=True,
         require_token=True,
     )
+    _assert_origin_task_write_allowed(user, session, now)
     existing = _settlement_result(session)
     if existing:
         return existing

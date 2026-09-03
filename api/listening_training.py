@@ -19,6 +19,7 @@ from services.listening_training import (
     task_training_mode,
     update_task_progress_summary,
 )
+from services.task_date_gate import TaskDateGateError, assert_task_write_allowed, gate_error_payload
 
 listening_training_bp = Blueprint("listening_training", __name__)
 
@@ -59,6 +60,10 @@ def complete_listening_review_segment(task_id: int, segment_index: int):
         token,
     ):
         return jsonify({"ok": False, "error": "invalid_token"}), 403
+    try:
+        assert_task_write_allowed(task)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
     if task_training_mode(task) != MODE_REVIEW:
         return jsonify({"ok": False, "error": "listening_training_mode_mismatch"}), 409
     if data.get("listened") is not True or data.get("revealed_original") is not True:

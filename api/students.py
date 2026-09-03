@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 from secrets import token_urlsafe
 
@@ -19,6 +19,14 @@ from models import (
 
 from . import api_bp
 from .auth_utils import can_view_all_schedules, require_api_user
+from services.task_date_gate import (
+    TaskDateGateError,
+    add_task_date_access,
+    assert_task_write_allowed,
+    beijing_today,
+    close_expired_task_session,
+    gate_error_payload,
+)
 
 MAX_STUDENT_RESETS = 2
 
@@ -55,7 +63,7 @@ def _item_payload(item: PlanItem) -> dict:
     evidences = [
         ev for ev in item.evidences if not getattr(ev, "is_deleted", False)
     ]
-    return {
+    payload = {
         "id": item.id,
         "task_name": item.task_name,
         "module": item.module,
@@ -89,6 +97,15 @@ def _item_payload(item: PlanItem) -> dict:
             for ev in evidences
         ],
     }
+    return add_task_date_access(payload, item)
+
+
+def _plan_item_gate_response(item: PlanItem):
+    try:
+        assert_task_write_allowed(item)
+    except TaskDateGateError as error:
+        return jsonify(gate_error_payload(error)), error.status_code
+    return None
 
 
 @api_bp.get("/me")
@@ -159,7 +176,7 @@ def api_student_plan_today(student_id: int):
     plan = (
         StudyPlan.query.filter(
             StudyPlan.student_id == student_id,
-            StudyPlan.plan_date == date.today(),
+            StudyPlan.plan_date == beijing_today(),
             StudyPlan.is_deleted.is_(False),
         )
         .options(
@@ -211,6 +228,9 @@ def api_student_timer_start(item_id: int):
     item = _load_plan_item_for_student(item_id, user)
     if not item:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _plan_item_gate_response(item)
+    if blocked:
+        return blocked
 
     now = datetime.utcnow()
     session = PlanItemSession(
@@ -241,7 +261,6 @@ def api_student_timer_stop(item_id: int, session_id: int):
     item = _load_plan_item_for_student(item_id, user)
     if not item:
         return jsonify({"ok": False, "error": "forbidden"}), 403
-
     session = (
         PlanItemSession.query.filter_by(
             id=session_id,
@@ -264,7 +283,14 @@ def api_student_timer_stop(item_id: int, session_id: int):
             }
         )
 
-    session.close(datetime.utcnow())
+    now = datetime.utcnow()
+    try:
+        assert_task_write_allowed(item, now)
+    except TaskDateGateError as error:
+        if not close_expired_task_session(session, item, now):
+            return jsonify(gate_error_payload(error)), error.status_code
+    else:
+        session.close(now)
     item.actual_seconds = (item.actual_seconds or 0) + session.duration_seconds
     db.session.commit()
     return jsonify(
@@ -285,6 +311,9 @@ def api_student_submit(item_id: int):
     item = _load_plan_item_for_student(item_id, user)
     if not item:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _plan_item_gate_response(item)
+    if blocked:
+        return blocked
 
     data = request.get_json(silent=True) or {}
     manual_minutes = data.get("manual_minutes")
@@ -315,6 +344,9 @@ def api_student_reset(item_id: int):
     item = _load_plan_item_for_student(item_id, user)
     if not item:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _plan_item_gate_response(item)
+    if blocked:
+        return blocked
     if item.student_reset_count >= MAX_STUDENT_RESETS:
         return jsonify({"ok": False, "error": "reset_limit_reached"}), 400
     if item.review_status != PlanItem.REVIEW_PENDING:
@@ -335,6 +367,9 @@ def api_student_evidence(item_id: int):
     item = _load_plan_item_for_student(item_id, user)
     if not item:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    blocked = _plan_item_gate_response(item)
+    if blocked:
+        return blocked
 
     policy = item.evidence_policy or PlanItem.EVIDENCE_OPTIONAL
 

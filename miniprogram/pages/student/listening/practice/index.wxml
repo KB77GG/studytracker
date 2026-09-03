@@ -45,6 +45,11 @@
       </view>
     </view>
 
+    <view class="date-gate-card" wx:if="{{readOnly}}">
+      <text class="date-gate-title">{{task.status_label || task.task_status_label || dateStatusText || task.availability_label}}</text>
+      <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>
+    </view>
+
     <!-- ── 句子选择条 ── -->
     <scroll-view scroll-x class="segment-strip" enable-flex>
       <view
@@ -83,10 +88,10 @@
         <view class="mode-tab {{mode === 'listen' ? 'mode-active' : ''}} {{modeLockedBeforeFirst ? 'mode-disabled' : ''}}" data-mode="listen" bindtap="switchMode">
           <text class="mode-label">句子精听</text>
         </view>
-        <view wx:if="{{!reviewOnly}}" class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
+        <view wx:if="{{!reviewOnly && !readOnly}}" class="mode-tab {{mode === 'dictation' ? 'mode-active' : ''}}" data-mode="dictation" bindtap="switchMode">
           <text class="mode-label">听写模式</text>
         </view>
-        <view wx:if="{{!reviewOnly}}" class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}} {{modeLockedBeforeFirst ? 'mode-disabled' : ''}}" data-mode="repeat" bindtap="switchMode">
+        <view wx:if="{{!reviewOnly && !readOnly}}" class="mode-tab {{mode === 'repeat' ? 'mode-active' : ''}} {{modeLockedBeforeFirst ? 'mode-disabled' : ''}}" data-mode="repeat" bindtap="switchMode">
           <text class="mode-label">跟读检查</text>
         </view>
       </view>
@@ -155,7 +160,7 @@
           <view class="dictation-intro" wx:if="{{!dictationStarted && !dictationLocked && hasDictationTargets}}">
             <text class="dictation-intro-title">先听，再填</text>
             <text class="dictation-intro-copy">先重播这一整句；准备好后开始作答。</text>
-            <button class="start-dictation-btn" bindtap="startCurrentDictation">开始作答</button>
+            <button wx:if="{{!readOnly}}" class="start-dictation-btn" bindtap="startCurrentDictation">开始作答</button>
           </view>
 
           <view class="dictation-empty" wx:if="{{!hasDictationTargets}}">
@@ -167,7 +172,7 @@
               <textarea
                 class="challenge-input"
                 value="{{challengeAnswer}}"
-                disabled="{{dictationLocked}}"
+                disabled="{{readOnly || dictationLocked}}"
                 maxlength="-1"
                 auto-height
                 placeholder="输入听到的整句或意群"
@@ -192,7 +197,7 @@
                     style="width: {{item.inputWidth}}rpx"
                     type="text"
                     adjust-position="false"
-                    disabled="{{dictationLocked}}"
+                    disabled="{{readOnly || dictationLocked}}"
                     value="{{blankAnswers[item.blankIndex] || item.value || ''}}"
                     data-blank-index="{{item.blankIndex}}"
                     aria-label="{{item.ariaLabel}}"
@@ -225,8 +230,8 @@
           <view class="toggle-btn {{showTranslation ? 'tog-active' : ''}}" bindtap="toggleTranslation">
             {{showTranslation ? '隐藏译文' : '显示译文'}}
           </view>
-          <button class="action-btn btn-primary" wx:if="{{dictationStarted && !dictationLocked && hasDictationTargets}}" bindtap="submitCurrentSegment">提交首答</button>
-          <button class="action-btn btn-ghost" wx:if="{{dictationLocked && currentResult && !correctionMode && !pendingSave}}" bindtap="redoCurrentSegment">订正再听</button>
+          <button class="action-btn btn-primary" wx:if="{{!readOnly && dictationStarted && !dictationLocked && hasDictationTargets}}" bindtap="submitCurrentSegment">提交首答</button>
+          <button class="action-btn btn-ghost" wx:if="{{!readOnly && dictationLocked && currentResult && !correctionMode && !pendingSave}}" bindtap="redoCurrentSegment">订正再听</button>
           <button class="action-btn btn-ghost" bindtap="nextSegment">
             {{currentIndex + 1 >= segments.length ? '返回末句' : '下一句'}}
           </button>
@@ -247,7 +252,7 @@
         </view>
 
         <!-- 录音按钮 -->
-        <view class="record-zone">
+        <view class="record-zone" wx:if="{{!readOnly}}">
           <button
             class="record-btn {{repeatRecording ? 'recording' : ''}} {{repeatFilePath && !repeatRecording ? 'recorded' : ''}}"
             bindtap="{{repeatRecording ? 'stopRepeatRecording' : 'startRepeatRecording'}}"
@@ -275,7 +280,7 @@
             class="action-btn btn-primary"
             bindtap="submitRepeatSegment"
             loading="{{repeatUploading}}"
-            disabled="{{repeatRecording || !repeatFilePath}}"
+            disabled="{{readOnly || repeatRecording || !repeatFilePath}}"
           >提交跟读</button>
           <button class="action-btn btn-ghost" bindtap="nextSegment">下一句</button>
         </view>

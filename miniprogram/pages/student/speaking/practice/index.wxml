@@ -1,8 +1,13 @@
 <view class="practice-container">
   <view style="height: env(safe-area-inset-top);"></view>
 
+  <view class="date-gate-card" wx:if="{{readOnly}}">
+    <text class="date-gate-title">{{dateStatusText}}</text>
+    <text class="date-gate-copy">任务按所属日期开放，当前仅可查看，不能开始跟读、录音或提交。</text>
+  </view>
+
   <!-- Header -->
-  <view class="status-bar" wx:if="{{!finished}}">
+  <view class="status-bar" wx:if="{{!finished && !readOnly}}">
     <view class="book-title">{{bookTitle}}</view>
     <view class="header-right">
       <view class="progress-info">{{currentIndex + 1}} / {{totalPhrases}}</view>
@@ -11,7 +16,7 @@
   </view>
 
   <!-- Main Practice Card -->
-  <block wx:if="{{!finished && totalPhrases > 0}}">
+  <block wx:if="{{!finished && !readOnly && totalPhrases > 0}}">
     <view class="word-card">
       <!-- Play Button -->
       <view class="play-btn {{isLoadingAudio ? 'loading' : ''}}" bindtap="playCurrentPhrase" hover-class="btn-hover">

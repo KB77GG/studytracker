@@ -79,6 +79,16 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
 .timer-label { color: var(--muted); font-size: 12px; font-weight: 800; }
 .timer-value { margin-top: 2px; color: var(--sage-deep); font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
 .page { max-width: 1320px; margin: 0 auto; padding: 20px; }
+.task-date-gate {
+  max-width: 1320px;
+  margin: 18px auto 0;
+  padding: 14px 18px;
+  border: 1px solid #f0c36d;
+  border-radius: 12px;
+  background: #fff8e7;
+  color: #8a4b08;
+  font-weight: 800;
+}
 .tabs {
   display: flex;
   gap: 8px;
@@ -500,6 +510,12 @@ body[data-experience-mode="simulation"] .group {
 </header>
 {% endif %}
 
+{% if practice_context and practice_context.read_only %}
+<div class="task-date-gate" role="status">
+  {{ practice_context.status_label or practice_context.availability_label or '当前仅可查看' }}：该任务当前仅可查看，答案和计时不会被保存。
+</div>
+{% endif %}
+
 <main class="page">
   <nav class="tabs" id="passageTabs" aria-label="阅读 Passage"></nav>
 
@@ -608,6 +624,7 @@ function updateExamSavedIndicator(label = "Saved") {
 }
 
 async function persistExamDraft(reason = "local") {
+  if (practiceContext?.read_only) return true;
   try {
     localStorage.setItem(examDraftStorageKey, JSON.stringify(answers));
   } catch (_error) {
@@ -1035,6 +1052,9 @@ function lockReadOnlyReviewControls() {
   document.querySelectorAll("[data-clear-question]").forEach((button) => {
     button.disabled = true;
   });
+  document.querySelectorAll("[data-capability='canResetAnswers'], [data-capability='canSubmitForScoring']").forEach((button) => {
+    button.disabled = true;
+  });
 }
 
 function bindInputs() {
@@ -1309,6 +1329,7 @@ function goToAdjacentQuestion(offset) {
 }
 
 async function submitAnswers() {
+  if (practiceContext?.read_only) return;
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   setSyncStatus("正在提交并同步记录...", "");
@@ -1399,7 +1420,7 @@ async function loadExistingSubmission() {
     return;
   }
   // 模考按 session token 恢复本地草稿，不读取普通刷题的“上次提交”。
-  if (examContext || practiceContext) return;
+  if (examContext) return;
   try {
     const params = new URLSearchParams();
     if (readingTaskId && readingTaskToken) {

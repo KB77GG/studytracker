@@ -18,6 +18,8 @@ Page({
         loading: true,
         rootUrl: '',
         task: {},
+        readOnly: false,
+        dateStatusText: '',
         trainingPolicy: { locked: false, review_only: false },
         trainingModeLabel: '',
         reviewOnly: false,
@@ -290,12 +292,17 @@ Page({
             const initialIndex = this.findInitialIndex(segments, progressMap)
             const trainingPolicy = (res.task && res.task.listening_training_policy)
                 || { locked: false, review_only: false }
-            const initialMode = trainingPolicy.locked
+            const readOnly = !!(res.task && res.task.read_only)
+            const initialMode = readOnly
+                ? 'listen'
+                : trainingPolicy.locked
                 ? (trainingPolicy.review_only ? 'listen' : 'dictation')
                 : this.data.mode
 
             this.setData({
                 task: res.task || {},
+                readOnly,
+                dateStatusText: (res.task && (res.task.status_label || res.task.task_status_label || res.task.availability_label)) || '',
                 trainingPolicy,
                 trainingModeLabel: trainingPolicy.label || '',
                 reviewOnly: !!trainingPolicy.review_only,
@@ -328,8 +335,15 @@ Page({
     async ensureTaskToken() {
         if (this.data.token) return this.data.token
         const detail = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
+        if (detail.ok && detail.task) {
+            this.setData({
+                token: detail.task.listening_token || '',
+                task: detail.task,
+                readOnly: !!detail.task.read_only,
+                dateStatusText: detail.task.status_label || detail.task.task_status_label || detail.task.availability_label || ''
+            })
+        }
         if (detail.ok && detail.task && detail.task.listening_token) {
-            this.setData({ token: detail.task.listening_token })
             return detail.task.listening_token
         }
         return ''
@@ -474,7 +488,7 @@ Page({
 
     saveCurrentDictationDraft() {
         const segment = this.data.currentSegment
-        if (!segment || this.data.dictationLocked || this.data.correctionMode) return
+        if (!segment || this.data.readOnly || this.data.dictationLocked || this.data.correctionMode) return
         this.ensureDictationState()
         const progress = this.data.progressMap[String(segment.globalIndex)]
         if (progress || this.getPendingFirstAttempt(segment)) return
@@ -708,6 +722,7 @@ Page({
     switchMode(e) {
         const mode = e.currentTarget.dataset.mode
         if (!mode || mode === this.data.mode) return
+        if (this.data.readOnly) return
         if (this.data.reviewOnly || (this.data.modeLockedBeforeFirst && mode !== 'dictation')) {
             wx.showToast({ title: this.data.reviewOnly ? '本任务为听辨核对' : '首答后开放复盘模式', icon: 'none' })
             return
@@ -776,6 +791,7 @@ Page({
     },
 
     changeDifficulty(e) {
+        if (this.data.readOnly) return
         const difficultyIndex = Number(e.currentTarget.dataset.index || 0)
         const option = (this.data.difficultyOptions || [])[difficultyIndex]
         if (!option || option.disabled) {
@@ -820,6 +836,7 @@ Page({
     },
 
     startCurrentDictation() {
+        if (this.data.readOnly) return
         const segment = this.data.currentSegment
         if (!segment) return
         const progress = this.data.progressMap[String(segment.globalIndex)]
@@ -954,7 +971,7 @@ Page({
     },
 
     onBlankInput(e) {
-        if (this.data.dictationLocked) return
+        if (this.data.readOnly || this.data.dictationLocked) return
         const blankIndex = Number(e.currentTarget.dataset.blankIndex)
         const value = e.detail.value || ''
         const blankAnswers = [...this.data.blankAnswers]
@@ -968,7 +985,7 @@ Page({
     },
 
     onChallengeInput(e) {
-        if (this.data.dictationLocked) return
+        if (this.data.readOnly || this.data.dictationLocked) return
         const value = e.detail.value || ''
         if (String(value).trim() && this.data.currentSegment) {
             const progress = this.data.progressMap[String(this.data.currentSegment.globalIndex)]
@@ -978,6 +995,7 @@ Page({
     },
 
     async submitCurrentSegment() {
+        if (this.data.readOnly) return
         if (this.data.dictationLocked || !this.data.currentSegment) return
         if (!this.data.hasDictationTargets) {
             wx.showToast({ title: '当前句没有可听写单词', icon: 'none' })
@@ -1162,6 +1180,7 @@ Page({
     },
 
     startCorrection() {
+        if (this.data.readOnly) return
         if (!this.data.currentSegment) return
         if (this.getPendingFirstAttempt(this.data.currentSegment)) {
             this.setData({ dictationNotice: '首答保存未确认；请先刷新确认，避免重复提交覆盖成绩。' })
@@ -1182,6 +1201,7 @@ Page({
     },
 
     async completeReviewSegment() {
+        if (this.data.readOnly) return
         const segment = this.data.currentSegment
         if (!segment || !this.data.reviewOnly) return
         if (!this.data.reviewListened || !this.data.showOriginal) {
@@ -1236,7 +1256,7 @@ Page({
     },
 
     startRepeatRecording() {
-        if (this.data.repeatUploading) return
+        if (this.data.readOnly || this.data.repeatUploading) return
         this.pauseAudio()
         this.stopRepeatPlayback()
         this.setData({
@@ -1251,7 +1271,7 @@ Page({
     },
 
     stopRepeatRecording() {
-        if (!this.data.repeatRecording) return
+        if (this.data.readOnly || !this.data.repeatRecording) return
         this.recorderManager.stop()
     },
 
@@ -1262,6 +1282,7 @@ Page({
     },
 
     resetRepeatRecording() {
+        if (this.data.readOnly) return
         this.stopRepeatPlayback()
         this.setData({
             repeatFilePath: '',
@@ -1278,6 +1299,7 @@ Page({
                 filePath,
                 name: 'file',
                 header: token ? { Authorization: `Bearer ${token}` } : {},
+                formData: { task_id: this.data.taskId || '' },
                 success: (res) => {
                     try {
                         const data = JSON.parse(res.data || '{}')
@@ -1285,7 +1307,7 @@ Page({
                             resolve(data)
                             return
                         }
-                        reject(new Error(data.error || 'upload_failed'))
+                            reject(new Error(data.message || data.status_label || data.task_status_label || data.availability_label || data.error || 'upload_failed'))
                     } catch (err) {
                         reject(err)
                     }
@@ -1296,6 +1318,7 @@ Page({
     },
 
     async submitRepeatSegment() {
+        if (this.data.readOnly) return
         if (!this.data.currentSegment) return
         if (!this.data.repeatFilePath) {
             wx.showToast({ title: '请先录音', icon: 'none' })

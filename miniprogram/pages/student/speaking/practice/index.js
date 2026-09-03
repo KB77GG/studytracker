@@ -31,7 +31,9 @@ Page({
         completedSet: {},
         completedCount: 0,
         finished: false,
-        isSubmitting: false
+        isSubmitting: false,
+        readOnly: false,
+        dateStatusText: ''
     },
 
     onLoad(options) {
@@ -130,8 +132,14 @@ Page({
                     this.setData({
                         bookTitle: task.task_name || '跟读练习',
                         rangeStart: task.speaking_phrase_start,
-                        rangeEnd: task.speaking_phrase_end
+                        rangeEnd: task.speaking_phrase_end,
+                        readOnly: !!task.read_only,
+                        dateStatusText: task.status_label || '该任务当前仅可查看'
                     });
+                    if (task.read_only) {
+                        wx.hideLoading();
+                        return;
+                    }
                     if (task.speaking_book_id) {
                         this.setData({ bookId: task.speaking_book_id });
                         this.fetchPhrases(task.speaking_book_id);
@@ -183,11 +191,13 @@ Page({
                         totalPhrases: phrases.length,
                         currentIndex: 0,
                         currentPhrase: phrases[0],
-                        practiceStart: Date.now(),
+                        practiceStart: this.data.readOnly ? null : Date.now(),
                         accumulatedSeconds: 0
                     });
-                    this.startTicker();
-                    setTimeout(() => this.playCurrentPhrase(), 500);
+                    if (!this.data.readOnly) {
+                        this.startTicker();
+                        setTimeout(() => this.playCurrentPhrase(), 500);
+                    }
                 } else {
                     wx.showToast({ title: '加载失败', icon: 'none' });
                 }
@@ -262,6 +272,7 @@ Page({
 
     // ========== Card Interaction ==========
     revealPhrase() {
+        if (this.data.readOnly) return;
         const key = `completedSet.${this.data.currentIndex}`;
         const newCount = this.data.completedSet[this.data.currentIndex]
             ? this.data.completedCount
@@ -270,6 +281,7 @@ Page({
     },
 
     nextPhrase() {
+        if (this.data.readOnly) return;
         const nextIdx = this.data.currentIndex + 1;
         if (nextIdx >= this.data.totalPhrases) {
             this.finishPractice();
@@ -302,6 +314,7 @@ Page({
 
     // ========== Recording ==========
     startRecording() {
+        if (this.data.readOnly) return;
         this.recordingPhraseIndex = this.data.currentIndex;
         this.setData({ isRecording: true, recordFilePath: null });
         this.recorderManager.start({
@@ -312,6 +325,7 @@ Page({
     },
 
     stopRecording() {
+        if (this.data.readOnly) return;
         this.recorderManager.stop();
     },
 
@@ -323,6 +337,7 @@ Page({
 
     // ========== Finish & Submit ==========
     finishPractice() {
+        if (this.data.readOnly) return;
         if (this.data.isRecording) {
             wx.showToast({ title: '请先松开按钮结束录音', icon: 'none' });
             return;
@@ -343,6 +358,7 @@ Page({
     },
 
     async submitTaskResult(durationSeconds) {
+        if (this.data.readOnly) return;
         if (this.data.isSubmitting) return;
         this.setData({ isSubmitting: true });
         wx.showLoading({ title: '提交中...' });
@@ -376,7 +392,10 @@ Page({
                 this.setData({ finished: true });
                 wx.showToast({ title: '已提交，等待老师批改', icon: 'success' });
             } else {
-                wx.showToast({ title: (response.data && response.data.error) || '提交失败', icon: 'none' });
+                wx.showToast({
+                    title: (response.data && (response.data.message || response.data.status_label || response.data.task_status_label || response.data.availability_label || response.data.error)) || '提交失败',
+                    icon: 'none'
+                });
             }
         } catch (error) {
             console.error('Speaking recording submit failed:', error);
@@ -396,6 +415,7 @@ Page({
                 header: {
                     'Authorization': `Bearer ${wx.getStorageSync('token')}`
                 },
+                formData: { task_id: this.data.taskId || '' },
                 success: (res) => {
                     try {
                         const data = JSON.parse(res.data || '{}');
@@ -403,7 +423,7 @@ Page({
                             resolve(data.url);
                             return;
                         }
-                        reject(new Error(data.error || 'upload_failed'));
+                        reject(new Error(data.message || data.status_label || data.task_status_label || data.availability_label || data.error || 'upload_failed'));
                     } catch (error) {
                         reject(error);
                     }
@@ -423,6 +443,7 @@ Page({
     },
 
     startTicker() {
+        if (this.data.readOnly) return;
         if (this.data.ticker) return;
         this.data.ticker = setInterval(() => {
             const seconds = this.computeDurationSeconds();
@@ -440,6 +461,7 @@ Page({
     },
 
     pauseTimer() {
+        if (this.data.readOnly) return;
         if (this.data.practiceStart) {
             const elapsed = Math.floor((Date.now() - this.data.practiceStart) / 1000);
             this.setData({
@@ -450,6 +472,7 @@ Page({
     },
 
     resumeTimer() {
+        if (this.data.readOnly) return;
         if (!this.data.practiceStart) {
             this.setData({ practiceStart: Date.now() });
         }
