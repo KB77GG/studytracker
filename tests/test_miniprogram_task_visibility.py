@@ -220,6 +220,99 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
             details["课后作业 - today assistant"]["assigned_by_role"], "assistant"
         )
 
+    def test_completed_ielts_test_remains_retryable_only_on_assignment_day(self):
+        with self.app.app_context():
+            task = self._task(
+                self.today,
+                "today completed Cambridge",
+                "done",
+                self.teacher_id,
+                accuracy=70,
+            )
+            task.listening_resource_type = "cambridge_test"
+            task.listening_exercise_id = "ielts11_test2"
+            task.listening_access_token = "same-day-token"
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        today = next(
+            item
+            for item in self._today_tasks()["tasks"]
+            if item["id"] == task_id
+        )
+        self.assertEqual(today["status"], "completed")
+        self.assertEqual(today["status_label"], "已完成")
+        self.assertTrue(today["can_write"])
+        self.assertFalse(today["read_only"])
+
+        detail = self.client.get(
+            f"/api/miniprogram/student/tasks/{task_id}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        self.assertEqual(detail.status_code, 200)
+        self.assertTrue(detail.get_json()["task"]["can_write"])
+        self.assertFalse(detail.get_json()["task"]["read_only"])
+
+        history = self.client.get(
+            f"/api/miniprogram/student/tasks/today?date={self.d1.isoformat()}",
+            headers=self._headers(self.student_id, User.ROLE_STUDENT),
+        )
+        historical = next(
+            item
+            for item in history.get_json()["tasks"]
+            if item["id"] == self.completed_listening_id
+        )
+        self.assertFalse(historical["can_write"])
+        self.assertTrue(historical["read_only"])
+
+    def test_completed_cambridge_reading_remains_retryable_on_assignment_day(self):
+        with self.app.app_context():
+            task = self._task(
+                self.today,
+                "today completed Cambridge reading",
+                "done",
+                self.teacher_id,
+                accuracy=70,
+            )
+            task.reading_test_id = "ielts11_test2_reading"
+            task.reading_access_token = "reading-token"
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        today = next(
+            item
+            for item in self._today_tasks()["tasks"]
+            if item["id"] == task_id
+        )
+        self.assertEqual(today["status"], "completed")
+        self.assertTrue(today["can_write"])
+        self.assertFalse(today["read_only"])
+
+    def test_completed_reading_jijing_keeps_attempt_retaining_retry_access(self):
+        with self.app.app_context():
+            task = self._task(
+                self.today,
+                "today completed reading jijing",
+                "done",
+                self.teacher_id,
+                accuracy=70,
+            )
+            task.reading_test_id = "reading_jijing_5_test_59"
+            task.reading_access_token = "jijing-token"
+            db.session.add(task)
+            db.session.commit()
+            task_id = task.id
+
+        today = next(
+            item
+            for item in self._today_tasks()["tasks"]
+            if item["id"] == task_id
+        )
+        self.assertTrue(today["can_write"])
+        self.assertFalse(today["read_only"])
+
     def test_teacher_delete_soft_cancels_fresh_task_and_hides_it_from_students(self):
         with self.app.app_context():
             task = self._task(

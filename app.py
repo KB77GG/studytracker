@@ -167,13 +167,16 @@ from services.task_date_gate import (
 )
 
 
-def _student_task_gate_response(task):
+def _student_task_gate_response(task, *, allow_completed_today=False):
     """Return the shared date-gate response for non-staff task requests."""
 
     if getattr(current_user, "is_authenticated", False) and _role_can_manage_listening(current_user):
         return None
     try:
-        assert_task_write_allowed(task)
+        assert_task_write_allowed(
+            task,
+            allow_completed_today=allow_completed_today,
+        )
     except TaskDateGateError as error:
         return jsonify(gate_error_payload(error)), error.status_code
     return None
@@ -495,6 +498,15 @@ def _task_listening_resource_type(task) -> str:
     return value if value in LISTENING_RESOURCE_TYPES else LISTENING_RESOURCE_INTENSIVE
 
 
+def _task_allows_same_day_attempt_retry(task) -> bool:
+    """Limit completed-task retries to flows with append-only attempt history."""
+
+    return bool(getattr(task, "reading_test_id", None)) or (
+        bool(getattr(task, "listening_exercise_id", None))
+        and _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+    )
+
+
 def _task_listening_url(task, absolute: bool = True) -> str | None:
     exercise_id = (getattr(task, "listening_exercise_id", "") or "").strip()
     token = (getattr(task, "listening_access_token", "") or "").strip()
@@ -568,7 +580,10 @@ def _web_assigned_practice_context(
     if not task_token or not secrets.compare_digest(task_token, token):
         return None
 
-    access = task_date_access(task)
+    access = task_date_access(
+        task,
+        allow_completed_today=_task_allows_same_day_attempt_retry(task),
+    )
     staff_mode = (
         getattr(current_user, "is_authenticated", False)
         and _role_can_manage_listening(current_user)
@@ -7902,14 +7917,18 @@ def api_reading_test_submission(test_id):
             return jsonify({"ok": False, "error": "task_not_found"}), 404
         if not task.reading_access_token or not secrets.compare_digest(task.reading_access_token, token):
             return jsonify({"ok": False, "error": "invalid_token"}), 403
-        if task_date_access(task).state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
+        access = task_date_access(
+            task,
+            allow_completed_today=_task_allows_same_day_attempt_retry(task),
+        )
+        if access.state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
             db.session.commit()
         return jsonify({
             "ok": True,
             "task": {
                 "id": task.id,
                 "status": task.status,
-                **task_date_access(task).as_dict(),
+                **access.as_dict(),
                 "accuracy": task.accuracy,
                 "completion_rate": task.completion_rate,
                 "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -7935,14 +7954,18 @@ def api_reading_test_submission(test_id):
     task = _latest_submitted_task(query.order_by(Task.id.desc()).all())
     if not task:
         return jsonify({"ok": True, "submission": None})
-    if task_date_access(task).state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
+    access = task_date_access(
+        task,
+        allow_completed_today=_task_allows_same_day_attempt_retry(task),
+    )
+    if access.state == "today" and _refresh_reading_test_submission_grade(task, data, safe_id):
         db.session.commit()
     return jsonify({
         "ok": True,
         "task": {
             "id": task.id,
             "status": task.status,
-            **task_date_access(task).as_dict(),
+            **access.as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -8000,7 +8023,10 @@ def api_reading_test_submit(test_id):
                 return jsonify({"ok": False, "error": "forbidden"}), 403
             if task.reading_test_id and secure_filename(task.reading_test_id or "") != safe_id:
                 return jsonify({"ok": False, "error": "task_not_found"}), 404
-        blocked = _student_task_gate_response(task)
+        blocked = _student_task_gate_response(
+            task,
+            allow_completed_today=_task_allows_same_day_attempt_retry(task),
+        )
         if blocked:
             return blocked
         if task.reading_passage_number:
@@ -8086,6 +8112,10 @@ def api_reading_test_submit(test_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **task_date_access(
+                task,
+                allow_completed_today=_task_allows_same_day_attempt_retry(task),
+            ).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -8149,7 +8179,10 @@ def api_listening_test_submission(test_id):
         "task": {
             "id": task.id,
             "status": task.status,
-            **task_date_access(task).as_dict(),
+            **task_date_access(
+                task,
+                allow_completed_today=_task_allows_same_day_attempt_retry(task),
+            ).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
@@ -8219,7 +8252,10 @@ def api_listening_test_submit(test_id):
         )
 
     if task and task_id:
-        blocked = _student_task_gate_response(task)
+        blocked = _student_task_gate_response(
+            task,
+            allow_completed_today=_task_allows_same_day_attempt_retry(task),
+        )
         if blocked:
             return blocked
 
@@ -8298,6 +8334,10 @@ def api_listening_test_submit(test_id):
         "task": {
             "id": task.id,
             "status": task.status,
+            **task_date_access(
+                task,
+                allow_completed_today=_task_allows_same_day_attempt_retry(task),
+            ).as_dict(),
             "accuracy": task.accuracy,
             "completion_rate": task.completion_rate,
             "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,

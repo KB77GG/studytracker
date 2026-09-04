@@ -1676,8 +1676,24 @@ HOME_DATE_PAST_DAYS = 2
 HOME_DATE_FUTURE_DAYS = 2
 
 
+def _task_allows_same_day_attempt_retry(task) -> bool:
+    """Limit completed-task retries to flows with append-only attempt history."""
+
+    return bool(getattr(task, "reading_test_id", None)) or (
+        bool(getattr(task, "listening_exercise_id", None))
+        and _task_listening_resource_type(task) == LISTENING_RESOURCE_CAMBRIDGE_TEST
+    )
+
+
+def _student_task_access(task):
+    return task_date_access(
+        task,
+        allow_completed_today=_task_allows_same_day_attempt_retry(task),
+    )
+
+
 def _task_access_payload(task) -> dict:
-    return task_date_access(task).as_dict()
+    return _student_task_access(task).as_dict()
 
 
 def _task_gate_response(task):
@@ -1743,7 +1759,7 @@ def get_student_today_tasks():
     # 只给今天或已完成任务补齐访问令牌；过期未完成任务的 GET 保持真正只读。
     tokens_updated = False
     for task in tasks:
-        access = task_date_access(task)
+        access = _student_task_access(task)
         if (
             task.listening_exercise_id
             and not task.listening_access_token
@@ -1796,7 +1812,7 @@ def get_student_today_tasks():
             "completed": "completed",
         }[workflow_status]
 
-        access = task_date_access(task)
+        access = _student_task_access(task)
         status_label = {
             "pending": "待完成",
             "in_progress": "进行中",
@@ -1879,7 +1895,7 @@ def get_task_detail(task_id):
         # 简单权限验证
         if task.student_name != user.student_profile.full_name:
              return jsonify({"ok": False, "error": "forbidden"}), 403
-        access = task_date_access(task)
+        access = _student_task_access(task)
         if (
             task.listening_exercise_id
             and not task.listening_access_token

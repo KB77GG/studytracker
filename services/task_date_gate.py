@@ -236,8 +236,18 @@ def state_label(state: str) -> str:
     }.get(state, "今日可操作")
 
 
-def task_date_access(task: Any, now: datetime | None = None) -> TaskDateAccess:
-    """Derive the display and write state without changing task completion."""
+def task_date_access(
+    task: Any,
+    now: datetime | None = None,
+    *,
+    allow_completed_today: bool = False,
+) -> TaskDateAccess:
+    """Derive display and write state without changing task completion.
+
+    Most completed assignments are immutable. Practice workflows that retain
+    every attempt may opt into another submission on the assignment day; the
+    same task remains read-only before or after that Beijing calendar day.
+    """
 
     planned = task_date(task)
     today = beijing_today(now)
@@ -253,7 +263,13 @@ def task_date_access(task: Any, now: datetime | None = None) -> TaskDateAccess:
         state = STATE_FUTURE
     else:
         state = STATE_EXPIRED
-    writable = state == STATE_TODAY and not completed
+    # Retrying a completed assignment is an explicit same-calendar-day
+    # exception.  An undated legacy row has no safe cutoff to compare against,
+    # so it must not gain an open-ended retry window through this opt-in.
+    same_task_day = planned is not None and planned == today
+    writable = (state == STATE_TODAY and not completed) or (
+        allow_completed_today and completed and same_task_day
+    )
     return TaskDateAccess(
         task_date=planned,
         state=state,
@@ -338,10 +354,19 @@ def close_expired_task_session(
     return True
 
 
-def assert_task_write_allowed(task: Any, now: datetime | None = None) -> TaskDateAccess:
+def assert_task_write_allowed(
+    task: Any,
+    now: datetime | None = None,
+    *,
+    allow_completed_today: bool = False,
+) -> TaskDateAccess:
     """Raise a stable error unless a task can be changed right now."""
 
-    access = task_date_access(task, now)
+    access = task_date_access(
+        task,
+        now,
+        allow_completed_today=allow_completed_today,
+    )
     if access.can_write:
         return access
     if access.state == STATE_FUTURE:

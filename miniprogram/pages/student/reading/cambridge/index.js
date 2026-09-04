@@ -1,5 +1,5 @@
 const app = getApp()
-const { request } = require('../../../../utils/request.js')
+const { request, isTaskDateGateError } = require('../../../../utils/request.js')
 const { tableLayout: buildPracticeTableLayout } = require('../../../../utils/practice-table.js')
 
 Page({
@@ -565,6 +565,17 @@ Page({
                 timeout: 90000
             })
             if (!res.ok) {
+                if (isTaskDateGateError(res)) {
+                    const locked = this.buildReadOnlyTaskState(res, '当前仅可查看')
+                    this.setData(locked)
+                    wx.showModal({
+                        title: '当前不可提交',
+                        content: res.message || locked.dateStatusText,
+                        showCancel: false,
+                        complete: () => this.fetchCambridgeTask()
+                    })
+                    return
+                }
                 wx.showModal({
                     title: '提交失败',
                     content: res.error === 'invalid_token' ? '任务令牌已失效，请从首页重新打开。' : '提交失败，请稍后重试。',
@@ -578,7 +589,11 @@ Page({
             const activeGroups = this.data.activePassage
                 ? this.applyAnswerState(this.buildGroups(this.data.activePassage), loadedAnswers, reviewState.resultMap, true)
                 : this.data.activeGroups
+            const nextTask = Object.assign({}, this.data.task || {}, res.task || {})
             this.setData({
+                task: nextTask,
+                readOnly: !!nextTask.read_only,
+                dateStatusText: nextTask.status_label || nextTask.task_status_label || this.data.dateStatusText,
                 submitted: true,
                 result: res.result || null,
                 submission,
@@ -598,6 +613,30 @@ Page({
         } finally {
             wx.hideLoading()
             this.setData({ submitting: false })
+        }
+    },
+
+    buildReadOnlyTaskState(payload = {}, fallbackLabel = '当前仅可查看') {
+        const responseTask = payload.task || {}
+        const label = responseTask.status_label
+            || responseTask.task_status_label
+            || payload.taskStatusLabel
+            || payload.status_label
+            || payload.task_status_label
+            || payload.availabilityLabel
+            || payload.availability_label
+            || payload.message
+            || fallbackLabel
+        return {
+            task: Object.assign({}, this.data.task || {}, responseTask, {
+                read_only: true,
+                can_start: false,
+                can_write: false,
+                status_label: label,
+                task_status_label: label
+            }),
+            readOnly: true,
+            dateStatusText: label
         }
     },
 

@@ -71,6 +71,19 @@ class TaskDateGateDisplayContractTest(unittest.TestCase):
         self.assertNotIn("assert_task_write_allowed", source)
         self.assertNotIn("TaskDateGateError", source)
 
+    def test_cambridge_retry_stays_available_only_while_task_is_writable(self):
+        for subject in ("listening", "reading"):
+            root = f"miniprogram/pages/student/{subject}/cambridge/index"
+            script = (ROOT / f"{root}.js").read_text(encoding="utf-8")
+            template = (ROOT / f"{root}.wxml").read_text(encoding="utf-8")
+            self.assertIn("isTaskDateGateError(res)", script)
+            self.assertIn("nextTask.read_only", script)
+            self.assertIn("read_only: true", script)
+            self.assertIn(
+                "resultDisplay.hasWrong && !task.read_only",
+                template,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -95,6 +95,69 @@ def test_historical_completed_task_remains_viewable_but_read_only():
     assert raised.value.message == "该任务已完成，当前仅可查看结果。"
 
 
+def test_attempt_retaining_practice_can_retry_only_on_its_assigned_day():
+    scheduled = task("2026-09-04", status="done")
+    just_before_cutoff = datetime(
+        2026,
+        9,
+        4,
+        23,
+        59,
+        59,
+        999999,
+        tzinfo=SHANGHAI,
+    )
+    at_cutoff = datetime(2026, 9, 5, 0, 0, tzinfo=SHANGHAI)
+
+    default_access = task_date_access(scheduled, TODAY)
+    retry_access = task_date_access(
+        scheduled,
+        just_before_cutoff,
+        allow_completed_today=True,
+    )
+
+    assert default_access.read_only is True
+    assert retry_access.state == STATE_COMPLETED
+    assert retry_access.workflow_label == "已完成"
+    assert retry_access.can_start is True
+    assert retry_access.can_write is True
+    assert retry_access.read_only is False
+    assert_task_write_allowed(
+        scheduled,
+        just_before_cutoff,
+        allow_completed_today=True,
+    )
+
+    with pytest.raises(TaskDateGateError) as raised:
+        assert_task_write_allowed(
+            scheduled,
+            at_cutoff,
+            allow_completed_today=True,
+        )
+    assert raised.value.error == "task_completed_read_only"
+
+
+def test_attempt_retaining_practice_does_not_open_an_undated_completed_task():
+    scheduled = task(None, status="done")
+
+    access = task_date_access(
+        scheduled,
+        TODAY,
+        allow_completed_today=True,
+    )
+
+    assert access.state == STATE_COMPLETED
+    assert access.can_write is False
+    assert access.read_only is True
+    with pytest.raises(TaskDateGateError) as raised:
+        assert_task_write_allowed(
+            scheduled,
+            TODAY,
+            allow_completed_today=True,
+        )
+    assert raised.value.error == "task_completed_read_only"
+
+
 def test_plan_item_date_takes_precedence_for_legacy_linked_task():
     plan_item = SimpleNamespace(
         plan=SimpleNamespace(plan_date=TODAY.date()),

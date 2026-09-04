@@ -127,7 +127,7 @@
       </view>
       <text class="result-band" wx:if="{{resultDisplay.ieltsScore}}">IELTS Reading {{resultDisplay.ieltsScore}}</text>
       <text class="wrong-list" wx:if="{{resultDisplay.hasWrong}}">错题：{{resultDisplay.wrongText}}</text>
-      <view class="result-actions" wx:if="{{resultDisplay.hasWrong}}">
+      <view class="result-actions" wx:if="{{resultDisplay.hasWrong && !task.read_only}}">
         <view class="redo-btn" bindtap="redoWrong">重做错题</view>
       </view>
       <view class="back-btn" bindtap="goBack">返回任务页</view>
