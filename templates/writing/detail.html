@@ -9,7 +9,7 @@
 <link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
 </head>
 <body class="practice-workspace-page writing-library-page">
-<div class="practice-workspace" data-practice-workspace data-writing-detail data-exercise-id="{{ exercise.id }}">
+<div class="practice-workspace" data-practice-workspace data-writing-detail data-exercise-id="{{ exercise.id }}"{% if assigned_task %} data-assigned-task-id="{{ assigned_task.id }}"{% endif %}>
   <header class="practice-workspace__topbar">
     <div class="practice-workspace__brand-nav">
       <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" aria-label="返回练习中心">
@@ -64,6 +64,13 @@
         <h1>{{ exercise.topic_zh }}</h1>
         <p>{{ exercise.title_en }}</p>
       </header>
+
+      {% if assigned_task %}
+      <aside class="writing-assignment-callout {{ 'is-complete' if assigned_task.completed else '' }}" role="status">
+        <div><small>助教布置 · {{ assigned_task.date }}</small><strong>{{ '任务已完成，可继续复习' if assigned_task.completed else '完成任一档范文打字后，任务将自动提交' }}</strong></div>
+        <span>{{ '已完成' if assigned_task.completed else '待完成' }}</span>
+      </aside>
+      {% endif %}
 
       {% if exercise.mother_topic %}
       <aside class="mother-topic-context" aria-label="本题所属母题">

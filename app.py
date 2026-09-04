@@ -59,12 +59,34 @@ from api.teacher_practice_catalog import (
 )
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
+from services.task_assignment_catalogs import (
+    intensive_listening_catalog,
+    listening_test_catalog,
+)
 from services.task_assignment_duplicates import (
     build_legacy_duplicate_payload,
     duplicate_conflict_payload,
     legacy_assignment_preflight,
     staff_task_payload,
     write_repeat_audit,
+)
+from services.task_workspace import (
+    TaskWorkspaceFilters,
+    apply_task_filters,
+    paginate_tasks,
+    pagination_window,
+    task_metrics,
+    top_students as task_workspace_top_students,
+)
+from services.writing_assignments import (
+    TASK_TYPE as WRITING_TASK_TYPE,
+    WritingAssignmentError,
+    assignment_url as writing_assignment_url,
+    build_snapshot as build_writing_assignment_snapshot,
+    catalog_options as writing_assignment_options,
+    dump_snapshot as dump_writing_assignment_snapshot,
+    plan_resource as writing_plan_resource,
+    snapshot_from_task as writing_snapshot_from_task,
 )
 from services.vocabulary_mastery import (
     default_course_system_for_book_id,
@@ -690,8 +712,11 @@ def _task_resource_binding(
     material_id=None,
     question_ids=None,
     grading_mode=None,
+    writing_snapshot=None,
 ) -> tuple[str, str | None, dict]:
     metadata = {}
+    if writing_snapshot:
+        return writing_plan_resource(writing_snapshot)
     if listening_exercise_id:
         if listening_resource_type == LISTENING_RESOURCE_CAMBRIDGE_TEST:
             return PLAN_RESOURCE_CAMBRIDGE_LISTENING_TEST, str(listening_exercise_id), metadata
@@ -754,6 +779,10 @@ def _task_resource_binding_from_task(task: Task) -> tuple[str, str | None, dict]
                 "group_ids": snapshot.get("group_ids") or [],
             },
         )
+    if task.grading_mode == WRITING_TASK_TYPE:
+        snapshot = writing_snapshot_from_task(task)
+        if snapshot:
+            return writing_plan_resource(snapshot)
     if task.listening_exercise_id:
         return _task_resource_binding(
             listening_exercise_id=task.listening_exercise_id,
@@ -2906,10 +2935,21 @@ def student_today():
         Task.date == today.isoformat(),
         Task.grading_mode == "question_type_practice",
     ).order_by(Task.id.asc()).all()
+    writing_tasks = Task.query.filter(
+        Task.student_name == profile.full_name,
+        Task.date == today.isoformat(),
+        Task.grading_mode == WRITING_TASK_TYPE,
+    ).order_by(Task.id.asc()).all()
     from services.question_type_assignments import assignment_url
 
     for task in question_type_tasks:
         task.question_type_url = assignment_url(task)
+        task.student_status_label = task_date_access(task).workflow_label
+    for task in writing_tasks:
+        snapshot = writing_snapshot_from_task(task) or {}
+        task.writing_url = writing_assignment_url(task)
+        task.writing_label = snapshot.get("label") or "IELTS 写作"
+        task.writing_resource_type = snapshot.get("writing_resource_type")
         task.student_status_label = task_date_access(task).workflow_label
     tokens_updated = False
     for task in listening_tasks:
@@ -2937,6 +2977,7 @@ def student_today():
         recent_plans=recent_plans,
         listening_tasks=listening_tasks,
         question_type_tasks=question_type_tasks,
+        writing_tasks=writing_tasks,
     )
 
 
@@ -3693,7 +3734,7 @@ def tasks_page():
         task_source = (request.form.get("task_source") or "").strip()
         question_ids_raw = (request.form.get("question_ids") or "").strip()
         question_ids = question_ids_raw if question_ids_raw else None
-        if task_source in {"custom", "material", "listening", "reading"}:
+        if task_source in {"custom", "material", "listening", "reading", "writing"}:
             if task_source != "material":
                 material_id = None
         
@@ -3729,7 +3770,7 @@ def tasks_page():
 
         # 精听练习
         listening_exercise_id = request.form.get("listening_exercise_id", "").strip()
-        if task_source in {"custom", "material", "listening", "reading"} and task_source != "listening":
+        if task_source in {"custom", "material", "listening", "reading", "writing"} and task_source != "listening":
             listening_exercise_id = ""
         listening_resource_type = (request.form.get("listening_resource_type") or LISTENING_RESOURCE_INTENSIVE).strip()
         if listening_resource_type not in LISTENING_RESOURCE_TYPES:
@@ -3800,7 +3841,7 @@ def tasks_page():
 
         # 阅读整套 / Passage 练习
         reading_test_id = request.form.get("reading_test_id", "").strip()
-        if task_source in {"custom", "material", "listening", "reading"} and task_source != "reading":
+        if task_source in {"custom", "material", "listening", "reading", "writing"} and task_source != "reading":
             reading_test_id = ""
         reading_passage_number = None
         reading_access_token = None
@@ -3838,15 +3879,55 @@ def tasks_page():
                     reading_test_id = safe_reading_id
                     reading_default_minutes = 20 if reading_passage_number else 60
 
-        # Validate: need either category or material_id or listening_exercise_id or reading_test_id
+        # 网页端写作真题 / 大作文母题
+        writing_snapshot = None
+        writing_error = None
+        writing_default_minutes = 0
+        writing_resource_type = (
+            request.form.get("writing_resource_type", "").strip()
+            if task_source == "writing"
+            else ""
+        )
+        writing_resource_id = (
+            request.form.get("writing_resource_id", "").strip()
+            if task_source == "writing"
+            else ""
+        )
+        if task_source == "writing":
+            try:
+                writing_snapshot = build_writing_assignment_snapshot(
+                    writing_resource_type,
+                    writing_resource_id,
+                )
+            except WritingAssignmentError as exc:
+                writing_error = str(exc)
+            else:
+                question_ids = dump_writing_assignment_snapshot(writing_snapshot)
+                detail = writing_snapshot["title"]
+                category = (
+                    "雅思-写作-母题"
+                    if writing_resource_type == "mother_topic"
+                    else (
+                        "雅思-写作-小作文"
+                        if writing_snapshot["task"] == "task1"
+                        else "雅思-写作-大作文"
+                    )
+                )
+                writing_default_minutes = int(
+                    writing_snapshot.get("planned_minutes") or 0
+                )
+
+        # Validate: need either a category or a verified library resource.
         if not student:
             flash("请填写学生姓名")
         elif listening_error:
             flash(listening_error)
         elif reading_error:
             flash(reading_error)
-        elif not category and not material_id and not listening_exercise_id and not reading_test_id:
-            flash("请选择任务类别、材料、听力练习或阅读练习")
+        elif writing_error:
+            flash(writing_error)
+        elif not category and not material_id and not listening_exercise_id and not reading_test_id and not writing_snapshot:
+            flash("请选择任务类别、材料、听力、阅读或写作练习")
         elif not detail:
             flash("请填写任务描述")
         else:
@@ -3893,6 +3974,8 @@ def tasks_page():
                     )
             if reading_test_id:
                 grading_mode = "reading_test"
+            if writing_snapshot:
+                grading_mode = WRITING_TASK_TYPE
             
             dictation_word_start = request.form.get("dictation_word_start")
             dictation_word_end = request.form.get("dictation_word_end")
@@ -3901,6 +3984,8 @@ def tasks_page():
                 planned_minutes = reading_default_minutes
             if not planned_minutes and listening_default_minutes:
                 planned_minutes = listening_default_minutes
+            if not planned_minutes and writing_default_minutes:
+                planned_minutes = writing_default_minutes
             material_task_id = int(material_id) if material_id and not material_id.startswith(("dictation-", "speaking-")) else None
             dictation_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("dictation-") else None
             speaking_task_book_id = int(material_id.split("-")[1]) if material_id and material_id.startswith("speaking-") else None
@@ -3922,6 +4007,16 @@ def tasks_page():
                 listening_resource_type=listening_resource_type,
                 reading_test_id=reading_test_id,
                 reading_passage_number=reading_passage_number,
+                writing_resource_type=(
+                    writing_snapshot.get("writing_resource_type")
+                    if writing_snapshot
+                    else None
+                ),
+                writing_resource_id=(
+                    writing_snapshot.get("writing_resource_id")
+                    if writing_snapshot
+                    else None
+                ),
             )
             confirm_repeat = request.form.get("confirm_repeat") in {"1", "true", "on"}
             assignment_idempotency_key, existing_task, duplicate_result = legacy_assignment_preflight(
@@ -3964,6 +4059,7 @@ def tasks_page():
                 material_id=material_task_id,
                 question_ids=question_ids,
                 grading_mode=grading_mode,
+                writing_snapshot=writing_snapshot,
             )
             plan_item = _create_plan_item_shadow_for_task(
                 student_name=student,
@@ -4059,8 +4155,10 @@ def tasks_page():
                     redirect=url_for("tasks_page"),
                 )
             return redirect(url_for("tasks_page"))
-    # Filter by period
+    # Keep the list payload bounded: filtering and pagination happen in SQL.
     period = request.args.get("period", "week")
+    if period not in {"week", "month", "year"}:
+        period = "week"
     today_obj = date.today()
     previous_day = today_obj - timedelta(days=1)
     previous_day_tasks = load_previous_day_assignments(previous_day.isoformat())
@@ -4071,23 +4169,112 @@ def tasks_page():
     else:  # week
         start_date = today_obj - timedelta(days=7)
 
-    # Query tasks within the date range
-    # Query tasks within the date range
-    query = Task.query.filter(Task.date >= start_date.isoformat())
-    
-    # Filter by student_name if provided
-    filter_student = request.args.get("student_name")
-    if filter_student:
-        query = query.filter(Task.student_name == filter_student)
-        
-    items = query.order_by(Task.date.desc(), Task.id.desc()).all()
-    
-    # [NEW] Pre-fetch active sessions for the current user
-    active_sessions = StudySession.query.filter(
-        StudySession.created_by == current_user.id,
-        StudySession.ended_at.is_(None),
-        StudySession.task_id.in_([t.id for t in items])
-    ).all()
+    # Student metadata powers both the assignment drawer and pinyin-aware SQL
+    # filtering.  It is intentionally loaded before the task query.
+    student_profiles = (
+        StudentProfile.query.filter_by(is_deleted=False)
+        .order_by(StudentProfile.full_name)
+        .all()
+    )
+    all_students = [student.full_name for student in student_profiles]
+    student_memos = {
+        student.full_name: {
+            "id": student.id,
+            "name": student.full_name,
+            "memo": student.notes or "",
+        }
+        for student in student_profiles
+    }
+    student_picker_options = []
+    for student_profile in student_profiles:
+        name = student_profile.full_name
+        pinyin_parts = lazy_pinyin(name)
+        student_picker_options.append(
+            {
+                "id": student_profile.id,
+                "name": name,
+                "memo": student_profile.notes or "",
+                "search": " ".join(
+                    part
+                    for part in [name, "".join(pinyin_parts), " ".join(pinyin_parts)]
+                    if part
+                ),
+            }
+        )
+
+    workspace_filters = TaskWorkspaceFilters.from_mapping(request.args)
+    normalized_student_query = workspace_filters.student.lower()
+    matching_student_names = [
+        option["name"]
+        for option in student_picker_options
+        if normalized_student_query
+        and normalized_student_query in option["search"].lower()
+    ]
+    period_query = Task.query.filter(Task.date >= start_date.isoformat())
+    filtered_query = apply_task_filters(
+        period_query,
+        workspace_filters,
+        matching_student_names,
+    )
+    items, task_page = paginate_tasks(filtered_query, workspace_filters)
+
+    def task_workspace_url(
+        *, page_number=1, period_value=period, page_size=None, include_task_id=True
+    ):
+        params = workspace_filters.query_params()
+        if not include_task_id:
+            params.pop("task_id", None)
+        params["period"] = period_value
+        params["page"] = page_number
+        if page_size is not None:
+            params["page_size"] = page_size
+        return f"{url_for('tasks_page')}?{urlencode(params)}"
+
+    task_page["previous_url"] = (
+        task_workspace_url(page_number=int(task_page["page"]) - 1)
+        if task_page["has_previous"]
+        else None
+    )
+    task_page["next_url"] = (
+        task_workspace_url(page_number=int(task_page["page"]) + 1)
+        if task_page["has_next"]
+        else None
+    )
+    task_page["pages"] = [
+        (
+            {
+                "number": page_number,
+                "url": task_workspace_url(page_number=page_number),
+            }
+            if page_number is not None
+            else None
+        )
+        for page_number in pagination_window(
+            int(task_page["page"]), int(task_page["page_count"])
+        )
+    ]
+    task_page["page_sizes"] = [
+        {
+            "size": size,
+            "url": task_workspace_url(page_number=1, page_size=size),
+        }
+        for size in (10, 25, 50)
+    ]
+    period_urls = {
+        value: task_workspace_url(
+            page_number=1, period_value=value, include_task_id=False
+        )
+        for value in ("week", "month", "year")
+    }
+
+    page_task_ids = [task.id for task in items]
+    active_sessions = []
+    if page_task_ids:
+        active_sessions = StudySession.query.filter(
+            StudySession.created_by == current_user.id,
+            StudySession.ended_at.is_(None),
+            StudySession.task_id.in_(page_task_ids),
+        ).all()
     active_session_map = {s.task_id: s for s in active_sessions}
     from services.question_type_assignments import assignment_url as question_type_assignment_url
 
@@ -4147,6 +4334,14 @@ def tasks_page():
                 if t.reading_test_submission
                 else None
             ),
+            "writing_url": writing_assignment_url(t)
+            if t.grading_mode == WRITING_TASK_TYPE
+            else None,
+            "writing_resource_type": (
+                (writing_snapshot_from_task(t) or {}).get("writing_resource_type")
+                if t.grading_mode == WRITING_TASK_TYPE
+                else None
+            ),
             "question_type_url": (
                 question_type_assignment_url(t)
                 if t.grading_mode == "question_type_practice"
@@ -4163,92 +4358,31 @@ def tasks_page():
             "session_id": current_session_id,
             "session_start": current_session_start,
         })
-    total_tasks = len(enriched_items)
-    completed_tasks = sum(1 for t in enriched_items if t["status"] == "done")
-    total_minutes = round(sum((t["actual_minutes"] or 0) for t in enriched_items), 1)
-    accuracy_values = [t["accuracy"] for t in enriched_items if t["accuracy"] is not None]
-    avg_accuracy = round(sum(accuracy_values) / len(accuracy_values), 1) if accuracy_values else 0.0
-    stats_payload = {
-        "total": total_tasks,
-        "completed": completed_tasks,
-        "total_minutes": total_minutes,
-        "avg_accuracy": avg_accuracy,
-    }
-    top_map = {}
-    for t in enriched_items:
-        key = (t["student_name"] or "").strip() or "未填写学生"
-        entry = top_map.setdefault(
-            key, {"minutes": 0.0, "tasks": 0, "accuracy_sum": 0.0, "accuracy_cnt": 0}
-        )
-        entry["minutes"] += t["actual_minutes"] or 0.0
-        entry["tasks"] += 1
-        if t["accuracy"] is not None:
-            entry["accuracy_sum"] += t["accuracy"]
-            entry["accuracy_cnt"] += 1
-    top_students = []
-    for name, payload in top_map.items():
-        avg_acc = (
-            round(payload["accuracy_sum"] / payload["accuracy_cnt"], 1)
-            if payload["accuracy_cnt"]
-            else None
-        )
-        top_students.append(
-            {
-                "name": name,
-                "minutes": round(payload["minutes"], 1),
-                "tasks": payload["tasks"],
-                "accuracy": avg_acc,
-            }
-        )
-    top_students.sort(key=lambda item: item["minutes"], reverse=True)
-    top_students = top_students[:5]
+    stats_payload = task_metrics(filtered_query)
+    top_students = task_workspace_top_students(filtered_query)
     recent_tasks = enriched_items[:5]
-
-    # 获取所有学生用于下拉框与任务页备忘录
-    student_profiles = (
-        StudentProfile.query.filter_by(is_deleted=False)
-        .order_by(StudentProfile.full_name)
-        .all()
-    )
-    all_students = [s.full_name for s in student_profiles]
-    student_memos = {
-        s.full_name: {
-            "id": s.id,
-            "name": s.full_name,
-            "memo": s.notes or "",
-        }
-        for s in student_profiles
-    }
-    student_picker_options = []
-    for student_profile in student_profiles:
-        name = student_profile.full_name
-        pinyin_parts = lazy_pinyin(name)
-        student_picker_options.append({
-            "id": student_profile.id,
-            "name": name,
-            "memo": student_profile.notes or "",
-            "search": " ".join(
-                part for part in [
-                    name,
-                    "".join(pinyin_parts),
-                    " ".join(pinyin_parts),
-                ]
-                if part
-            ),
-        })
     
     # 获取所有材料用于材料库选择
     from models import MaterialBank, Question
-    materials_query = MaterialBank.query.filter_by(is_deleted=False, is_active=True).order_by(MaterialBank.created_at.desc()).all()
+    materials_query = MaterialBank.query.filter_by(
+        is_deleted=False, is_active=True
+    ).order_by(MaterialBank.created_at.desc()).all()
+    material_ids = [material.id for material in materials_query]
+    material_question_counts = {}
+    if material_ids:
+        material_question_counts = dict(
+            db.session.query(Question.material_id, func.count(Question.id))
+            .filter(Question.material_id.in_(material_ids))
+            .group_by(Question.material_id)
+            .all()
+        )
     all_materials = []
     for m in materials_query:
-        question_count = Question.query.filter_by(material_id=m.id).count()
         all_materials.append({
             "id": m.id,
             "title": m.title,
             "type": m.type,
-            "type": m.type,
-            "question_count": f"{question_count}题"
+            "question_count": f"{material_question_counts.get(m.id, 0)}题"
         })
 
     # Add Dictation Books to material dropdown
@@ -4346,55 +4480,23 @@ def tasks_page():
     # 按提交时间排序
     pending_reviews.sort(key=lambda x: x['submitted_at'] or datetime.min, reverse=True)
 
-    # 精听练习列表
+    # Only compact metadata belongs in the initial page. Intensive-listening
+    # sentence rows are fetched after a teacher selects one exercise.
     listening_exercises = []
-    listening_exercise_segments = {}
     listening_dir = Path(app.static_folder) / "listening"
-    if listening_dir.exists():
-        for f in sorted(listening_dir.glob("*.json")):
-            try:
-                meta = json.loads(f.read_text(encoding="utf-8"))
-                if meta.get("hidden_from_catalog"):
-                    continue
-                segment_items = []
-                global_idx = 0
-                for part_idx, part in enumerate(meta.get("parts", [])):
-                    part_name = part.get("name") or f"Part {part_idx + 1}"
-                    for seg_idx, seg in enumerate(part.get("segments", [])):
-                        text = (seg.get("text") or "").strip()
-                        preview = text[:90] + ("..." if len(text) > 90 else "")
-                        segment_items.append({
-                            "id": global_idx,
-                            "sequence": global_idx + 1,
-                            "content": f"{part_name} · 第{seg_idx + 1}句 · {preview}",
-                        })
-                        global_idx += 1
-                listening_exercises.append({
-                    "id": f.stem,
-                    "title": meta.get("title", f.stem),
-                    "resource_type": LISTENING_RESOURCE_INTENSIVE,
-                    "segment_count": sum(len(p.get("segments", [])) for p in meta.get("parts", [])),
-                })
-                listening_exercise_segments[f.stem] = segment_items
-            except Exception:
-                pass
-    listening_tests_dir = _listening_test_root()
-    if listening_tests_dir.exists():
-        for f in sorted(listening_tests_dir.glob("*.json")):
-            if not parse_test_id(f.stem):
-                continue
-            try:
-                meta = json.loads(f.read_text(encoding="utf-8"))
-                listening_exercises.append({
-                    "id": f.stem,
-                    "title": meta.get("title", f.stem),
+    for row in intensive_listening_catalog(listening_dir):
+        listening_exercises.append(
+            {**row, "resource_type": LISTENING_RESOURCE_INTENSIVE}
+        )
+    for row in listening_test_catalog(_listening_test_root()):
+        if parse_test_id(str(row["id"])):
+            listening_exercises.append(
+                {
+                    **row,
                     "resource_type": LISTENING_RESOURCE_CAMBRIDGE_TEST,
                     "segment_count": 0,
-                    "question_count": _listening_test_question_count(meta),
-                    "section_count": len(meta.get("sections") or []),
-                })
-            except Exception:
-                pass
+                }
+            )
     listening_exercises.extend(
         build_listening_jijing_options(_listening_jijing_root())
     )
@@ -4442,6 +4544,7 @@ def tasks_page():
     # group details are still fetched through the existing preview API.
     from api.question_type_practice import _type_summaries
     question_type_summaries = _type_summaries()
+    writing_resources = writing_assignment_options()
 
     return render_template(
         "tasks.html",
@@ -4462,11 +4565,14 @@ def tasks_page():
         previous_day=previous_day.isoformat(),
         previous_day_tasks=previous_day_tasks,
         listening_exercises=listening_exercises,
-        listening_exercise_segments=listening_exercise_segments,
         listening_training_modes=TRAINING_MODE_OPTIONS,
         reading_exercises=reading_exercises,
         reading_exercise_passages=reading_exercise_passages,
         question_type_summaries=question_type_summaries,
+        writing_resources=writing_resources,
+        task_filters=workspace_filters,
+        task_page=task_page,
+        period_urls=period_urls,
     )
 
 # ---- Grading Interface ----
@@ -9094,6 +9200,13 @@ def _practice_task_sort_key(task: Task) -> tuple[int, str, int]:
 def _practice_task_source_label(task: Task) -> str:
     if task.grading_mode == "question_type_practice":
         return "IELTS 题型专项"
+    if task.grading_mode == WRITING_TASK_TYPE:
+        snapshot = writing_snapshot_from_task(task) or {}
+        return (
+            "IELTS 大作文母题"
+            if snapshot.get("writing_resource_type") == "mother_topic"
+            else "IELTS 写作真题"
+        )
     if task.reading_test_id:
         test_id = (task.reading_test_id or "").strip()
         if test_id.startswith("reading_jijing_"):
@@ -9144,6 +9257,13 @@ def _practice_task_payload(task) -> dict | None:
             return None
         category = "题型专项"
         title = task.detail or snapshot.get("standard_type_label") or "IELTS 题型专项"
+    elif task.grading_mode == WRITING_TASK_TYPE:
+        snapshot = writing_snapshot_from_task(task)
+        url = writing_assignment_url(task)
+        if not snapshot or not url:
+            return None
+        category = "写作母题" if snapshot["writing_resource_type"] == "mother_topic" else "写作真题"
+        title = snapshot.get("title") or task.detail or "IELTS 写作练习"
     elif task.listening_exercise_id:
         if not task.listening_access_token and access.state in {"today", "completed"}:
             task.listening_access_token = secrets.token_urlsafe(16)
@@ -9238,6 +9358,7 @@ def api_practice_tasks():
                 Task.listening_exercise_id.isnot(None),
                 Task.reading_test_id.isnot(None),
                 Task.grading_mode == "question_type_practice",
+                Task.grading_mode == WRITING_TASK_TYPE,
             ),
             or_(
                 Task.date.is_(None),
@@ -9316,6 +9437,7 @@ def api_student_practices_today():
                 Task.listening_exercise_id.isnot(None),
                 Task.reading_test_id.isnot(None),
                 Task.grading_mode == "question_type_practice",
+                Task.grading_mode == WRITING_TASK_TYPE,
             ),
         )
         .order_by(Task.id.asc())

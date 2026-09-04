@@ -60,6 +60,8 @@ def _listening_section_number(value: Any) -> int | None:
 
 
 def _resource_source(task: Any) -> tuple[str, str | None]:
+    if getattr(task, "grading_mode", None) == "writing_practice":
+        return "writing", None
     if getattr(task, "dictation_book_id", None):
         return "material", f"dictation-{task.dictation_book_id}"
     if getattr(task, "speaking_book_id", None):
@@ -85,6 +87,13 @@ def _range_label(task: Any, dictation_book: Any | None) -> str:
 
 def _repeat_payload(task: Any) -> dict[str, Any]:
     source, material_value = _resource_source(task)
+    writing_snapshot = (
+        _json_payload(getattr(task, "question_ids", None))
+        if source == "writing"
+        else {}
+    )
+    if not isinstance(writing_snapshot, dict):
+        writing_snapshot = {}
     return {
         "source": source,
         "category": getattr(task, "category", None) or "",
@@ -106,6 +115,8 @@ def _repeat_payload(task: Any) -> dict[str, Any]:
         "listening_section_number": _listening_section_number(getattr(task, "question_ids", None)),
         "reading_test_id": getattr(task, "reading_test_id", None) or "",
         "reading_passage_number": _safe_int(getattr(task, "reading_passage_number", None)),
+        "writing_resource_type": writing_snapshot.get("writing_resource_type") or "",
+        "writing_resource_id": writing_snapshot.get("writing_resource_id") or "",
     }
 
 
@@ -162,6 +173,15 @@ def serialize_previous_day_assignments(
         elif getattr(task, "reading_test_id", None):
             resource_kind = "reading"
             resource_meta = "阅读题库"
+        elif getattr(task, "grading_mode", None) == "writing_practice":
+            snapshot = _json_payload(getattr(task, "question_ids", None)) or {}
+            resource_kind = "writing"
+            title = snapshot.get("title") or title
+            resource_meta = (
+                "写作真题"
+                if snapshot.get("writing_resource_type") == "exercise"
+                else "大作文母题"
+            )
         elif material_id:
             resource_kind = "material"
             resource_meta = "材料库"

@@ -1,13 +1,14 @@
 """Access control and server-owned attempt tests for the web writing library."""
 
-from datetime import timedelta
+from datetime import date, timedelta
 
 import pytest
 from flask import Flask
 from flask_login import LoginManager
 
 from api.writing_library import writing_library_bp
-from models import StudentProfile, WritingTypingAttempt, db
+from models import StudentProfile, Task, WritingTypingAttempt, db
+from services.writing_assignments import build_snapshot, dump_snapshot
 from services.writing_library import get_exercise
 
 
@@ -162,3 +163,80 @@ def test_classroom_mode_runs_without_creating_student_record(writing_app, writin
     assert response.get_json()["client_only"] is True
     with writing_app.app_context():
         assert WritingTypingAttempt.query.count() == 0
+
+
+def _assigned_writing_task(app, resource_type, resource_id):
+    with app.app_context():
+        snapshot = build_snapshot(resource_type, resource_id)
+        task = Task(
+            date=date.today().isoformat(),
+            student_name="写作学生",
+            category="雅思-写作-练习",
+            detail=snapshot["title"],
+            status="pending",
+            grading_mode="writing_practice",
+            question_ids=dump_snapshot(snapshot),
+        )
+        db.session.add(task)
+        db.session.commit()
+        return task.id
+
+
+def test_assigned_exercise_completes_task_after_typing(writing_app, writing_client):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    page = writing_client.get(f"/writing/t2-010?task_id={task_id}")
+    assert page.status_code == 200
+    assert f'data-assigned-task-id="{task_id}"' in page.get_data(as_text=True)
+
+    started = writing_client.post(
+        "/writing/api/t2-010/typing/start",
+        json={"band": "6.0", "task_id": task_id},
+    )
+    attempt_id = started.get_json()["attempt_id"]
+    target = get_exercise("t2-010")["essays"]["6.0"]["text"]
+    finished = writing_client.post(
+        f"/writing/api/t2-010/typing/{attempt_id}/finish",
+        json={"band": "6.0", "typed_text": target, "task_id": task_id},
+    )
+    assert finished.status_code == 200
+    assert finished.get_json()["task_completed"] is True
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        assert task.status == "done"
+        assert task.completion_rate == 100.0
+        assert task.student_submitted is True
+
+
+def test_assigned_mother_topic_can_be_confirmed_complete(writing_app, writing_client):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "mother_topic", "t01")
+    page = writing_client.get(f"/writing/topics/t01?task_id={task_id}")
+    assert page.status_code == 200
+    assert "确认完成学习" in page.get_data(as_text=True)
+
+    completed = writing_client.post(
+        f"/writing/api/topics/t01/tasks/{task_id}/complete",
+        json={"duration_seconds": 420},
+    )
+    assert completed.status_code == 200
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        assert task.status == "done"
+        assert task.actual_seconds == 420
+
+
+def test_one_student_cannot_complete_another_students_writing_task(writing_app, writing_client):
+    task_id = _assigned_writing_task(writing_app, "mother_topic", "t01")
+    _verify(writing_client, "另一位学生")
+
+    page = writing_client.get(f"/writing/topics/t01?task_id={task_id}")
+    assert page.status_code == 200
+    assert "确认完成学习" not in page.get_data(as_text=True)
+    completed = writing_client.post(
+        f"/writing/api/topics/t01/tasks/{task_id}/complete",
+        json={"duration_seconds": 60},
+    )
+    assert completed.status_code == 409
+    with writing_app.app_context():
+        assert db.session.get(Task, task_id).status == "pending"

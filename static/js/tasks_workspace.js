@@ -5,7 +5,6 @@
 
   const strip = document.getElementById('taskDateStrip');
   const choices = document.getElementById('taskDateChoices');
-  const rows = () => Array.from(document.querySelectorAll('#taskRows tr[data-id]'));
 
   function setupStudentFilterAutocomplete() {
     const input = document.getElementById('filterStudent');
@@ -150,7 +149,7 @@
   };
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
   let dateAnchor = parseDate(strip.dataset.endDate);
-  let page = 1;
+  window.taskSelectedDate = strip.dataset.selectedDate || '';
 
   function renderDates() {
     choices.replaceChildren();
@@ -176,6 +175,8 @@
       button.addEventListener('click', () => {
         window.taskSelectedDate = window.taskSelectedDate === value ? '' : value;
         renderDates();
+        const dueDate = document.getElementById('filterDueDate');
+        if (dueDate) dueDate.value = window.taskSelectedDate;
         window.applyTaskFilters?.();
       });
       choices.appendChild(button);
@@ -190,54 +191,16 @@
   strip.querySelector('[data-date-shift="-1"]')?.addEventListener('click', () => shiftDates(-1));
   strip.querySelector('[data-date-shift="1"]')?.addEventListener('click', () => shiftDates(1));
 
-  function renderPagination() {
-    const allRows = rows();
-    const filteredRows = allRows.filter(row => row.dataset.filterVisible !== 'false');
-    const size = Math.max(1, Number(document.getElementById('taskPageSize')?.value || 10));
-    const pageCount = Math.max(1, Math.ceil(filteredRows.length / size));
-    page = Math.min(page, pageCount);
-    const start = (page - 1) * size;
-    allRows.forEach(row => {
-      const index = filteredRows.indexOf(row);
-      row.style.display = index >= start && index < start + size ? '' : 'none';
-    });
-    const count = document.getElementById('taskListCount');
-    if (count) count.textContent = `显示 ${filteredRows.length} 条任务`;
-    const previous = document.getElementById('taskPrevPage');
-    const next = document.getElementById('taskNextPage');
-    if (previous) previous.disabled = page <= 1;
-    if (next) next.disabled = page >= pageCount;
-    const numbers = document.getElementById('taskPageNumbers');
-    if (numbers) {
-      numbers.replaceChildren();
-      for (let number = 1; number <= pageCount; number += 1) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = number === page ? 'is-active' : '';
-        button.textContent = String(number);
-        button.setAttribute('aria-label', `第 ${number} 页`);
-        button.addEventListener('click', () => { page = number; renderPagination(); });
-        numbers.appendChild(button);
-      }
-    }
-  }
-  window.taskWorkspaceApplyPagination = renderPagination;
   window.taskWorkspaceRevealRow = targetRow => {
     if (!targetRow) return;
-    const filteredRows = rows().filter(row => row.dataset.filterVisible !== 'false');
-    const size = Math.max(1, Number(document.getElementById('taskPageSize')?.value || 10));
-    const targetIndex = filteredRows.indexOf(targetRow);
-    if (targetIndex >= 0) page = Math.floor(targetIndex / size) + 1;
-    renderPagination();
+    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
-  document.getElementById('taskPrevPage')?.addEventListener('click', () => { page -= 1; renderPagination(); });
-  document.getElementById('taskNextPage')?.addEventListener('click', () => { page += 1; renderPagination(); });
-  document.getElementById('taskPageSize')?.addEventListener('change', () => { page = 1; renderPagination(); });
+  document.getElementById('taskPageSize')?.addEventListener('change', event => {
+    const targetUrl = event.target.selectedOptions[0]?.dataset.url;
+    if (targetUrl) window.location.assign(targetUrl);
+  });
 
-  window.taskSelectedDate = '';
   renderDates();
-  window.applyTaskFilters?.();
-  renderPagination();
 
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 900px)').matches) document.body.classList.remove('task-inspector-mobile-open');

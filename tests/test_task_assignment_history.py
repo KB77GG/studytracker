@@ -13,6 +13,7 @@ def task(**overrides):
         "student_name": "测试学生",
         "category": "材料练习",
         "detail": "旧任务标题",
+        "grading_mode": "image",
         "status": "pending",
         "student_submitted": False,
         "planned_minutes": 20,
@@ -107,6 +108,24 @@ class TaskAssignmentHistoryTest(unittest.TestCase):
     def test_blank_student_names_are_not_serialized(self):
         grouped = serialize_previous_day_assignments([task(student_name="  ")])
         self.assertEqual(grouped, {})
+
+    def test_writing_task_can_be_repeated_from_yesterday_without_losing_identity(self):
+        grouped = serialize_previous_day_assignments(
+            [
+                task(
+                    detail="T01 · 教育目标、课程与方法",
+                    grading_mode="writing_practice",
+                    question_ids='{"writing_resource_type":"mother_topic","writing_resource_id":"t01","title":"T01 · 教育目标、课程与方法"}',
+                )
+            ]
+        )
+
+        item = grouped["测试学生"][0]
+        self.assertEqual(item["resource_kind"], "writing")
+        self.assertEqual(item["resource_meta"], "大作文母题")
+        self.assertEqual(item["repeat"]["source"], "writing")
+        self.assertEqual(item["repeat"]["writing_resource_type"], "mother_topic")
+        self.assertEqual(item["repeat"]["writing_resource_id"], "t01")
 
     def test_tasks_template_contains_accessible_yesterday_panel_and_prefill(self):
         markup = (ROOT / "templates/tasks.html").read_text(encoding="utf-8")

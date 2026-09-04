@@ -155,6 +155,29 @@
 </section>
 {% endif %}
 
+{% if writing_tasks %}
+<section class="card listening-section">
+  <h3>IELTS 写作练习</h3>
+  {% for task in writing_tasks %}
+  {% set writing_status = task.student_status_label or ('已完成' if task.status == 'done' else '未开始') %}
+  <article class="task-card">
+    <div class="task-card__body">
+      <div class="task-card__title">{{ task.detail }}</div>
+      <div class="task-card__meta">
+        {{ task.writing_label }} ·
+        {% if writing_status == '已完成' %}已完成
+        {% elif task.writing_resource_type == 'mother_topic' %}阅读逻辑链并完成母题学习
+        {% else %}完成任一档范文的打字训练{% endif %}
+      </div>
+    </div>
+    <a class="task-card__cta {{ 'task-card__cta--success' if writing_status == '已完成' }}" href="{{ task.writing_url }}">
+      {{ '查看复盘' if writing_status == '已完成' else ('学习母题' if task.writing_resource_type == 'mother_topic' else '开始练习') }}
+    </a>
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
 <section class="card listening-section">
   <h3>自由精听练习</h3>
   <article class="task-card">

@@ -429,9 +429,15 @@ body:has(.tasks-page) .header-actions{
 .task-deadline small{ color:var(--tasks-sage-dark); }
 .task-list-footer{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:48px; padding:9px 18px; border-top:1px solid var(--tasks-line); color:var(--tasks-muted); font-size:11px; }
 .task-pagination{ display:flex; align-items:center; gap:4px; }
-.task-pagination button{ min-width:27px; min-height:27px; padding:4px 7px; border:1px solid var(--tasks-line); border-radius:7px; background:#fff; color:var(--tasks-sage-dark); font-size:11px; cursor:pointer; }
-.task-pagination button[disabled]{ opacity:.42; cursor:not-allowed; }
-.task-pagination button.is-active{ border-color:#b9d8ce; background:var(--tasks-sage-soft); font-weight:900; }
+.task-pagination a,
+.task-pagination > span.is-disabled,
+#taskPageNumbers > a{ display:inline-flex; align-items:center; justify-content:center; min-width:30px; min-height:30px; padding:4px 7px; border:1px solid var(--tasks-line); border-radius:7px; background:#fff; color:var(--tasks-sage-dark); font-size:11px; text-decoration:none; }
+.task-pagination > span.is-disabled{ opacity:.42; cursor:not-allowed; }
+#taskPageNumbers{ display:inline-flex; align-items:center; gap:4px; }
+.task-pagination a.is-active{ border-color:#b9d8ce; background:var(--tasks-sage-soft); font-weight:900; }
+.task-pagination a:focus-visible{ outline:3px solid rgba(47,142,135,.22); outline-offset:2px; }
+.task-pagination__ellipsis{ min-width:18px; text-align:center; }
+.task-table-empty td{ padding:44px 20px !important; color:var(--tasks-muted); text-align:center; }
 .task-list-footer label{ display:flex; align-items:center; gap:5px; white-space:nowrap; }
 .task-list-footer select{ min-height:28px; padding:3px 5px; border:1px solid var(--tasks-line); border-radius:6px; background:#fff; color:var(--tasks-ink); }
 
@@ -505,8 +511,30 @@ body:has(.tasks-page) .header-actions{
 .task-assignment-drawer .field{ flex:0 1 auto !important; }
 .task-assignment-drawer > .task-assignment-meta{ display:grid !important; grid-template-columns:150px minmax(0,1fr); align-items:start; gap:12px; flex:0 0 auto !important; min-height:0 !important; }
 .task-assignment-drawer > .task-assignment-meta > .field{ min-width:0; min-height:0; }
-.task-assignment-drawer .source-options{ display:grid !important; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; }
-.task-assignment-drawer .source-option{ min-height:38px; justify-content:center; padding:7px 5px; text-align:center; }
+.task-assignment-drawer .source-options{ display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.task-assignment-drawer .source-option{ min-height:44px; justify-content:center; padding:9px 7px; text-align:center; }
+.writing-assignment-picker{ display:grid; gap:10px; padding:12px; border:1px solid var(--tasks-line); border-radius:12px; background:#fbfdfc; }
+.writing-assignment-picker__top{ display:grid; grid-template-columns:minmax(0,auto) minmax(220px,1fr); gap:12px; align-items:end; }
+.writing-assignment-filter{ display:flex; gap:6px; padding:4px; border:1px solid var(--tasks-line); border-radius:10px; background:#fff; }
+.writing-assignment-filter button{ min-height:40px; padding:0 12px; border:0; border-radius:7px; background:transparent; color:var(--tasks-muted); font:inherit; font-weight:850; cursor:pointer; }
+.writing-assignment-filter button span{ color:#889693; font-size:11px; }
+.writing-assignment-filter button.is-active{ background:var(--tasks-sage-soft); color:var(--tasks-sage-dark); }
+.writing-assignment-search{ display:grid; gap:5px; color:var(--tasks-muted); font-size:11px; font-weight:850; }
+.writing-assignment-search input{ min-height:44px; width:100%; padding:0 12px; border:1px solid #cddbd8; border-radius:9px; background:#fff; color:var(--tasks-ink); font:inherit; }
+.writing-assignment-search input:focus,
+.writing-assignment-filter button:focus-visible,
+.writing-assignment-option:focus-visible{ outline:3px solid rgba(47,142,135,.22); outline-offset:2px; border-color:var(--tasks-sage); }
+.writing-assignment-picker__selected{ min-height:38px; padding:9px 11px; border-radius:8px; background:#fff; color:#43534f; font-size:12px; }
+.writing-assignment-picker__results{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; max-height:260px; overflow-y:auto; overscroll-behavior:contain; }
+.writing-assignment-option{ min-height:72px; padding:10px 11px; border:1px solid var(--tasks-line); border-radius:9px; background:#fff; color:#263a35; text-align:left; cursor:pointer; }
+.writing-assignment-option:hover,
+.writing-assignment-option.is-selected{ border-color:var(--tasks-sage); background:var(--tasks-sage-soft); }
+.writing-assignment-option strong,
+.writing-assignment-option small{ display:block; }
+.writing-assignment-option strong{ margin-bottom:4px; font-size:12px; line-height:1.35; }
+.writing-assignment-option small{ color:var(--tasks-muted); font-size:10px; line-height:1.4; }
+.writing-assignment-picker__empty{ grid-column:1/-1; padding:20px; color:var(--tasks-muted); text-align:center; }
+.writing-native-select.is-enhanced{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 .task-assignment-drawer > .task-form-row:nth-child(2) > .field{ flex:1 1 220px !important; }
 .task-assignment-drawer .task-form-row + .task-form-row{ padding-top:2px; }
 .task-assignment-drawer .question-type-workspace{ gap:12px; }
@@ -599,7 +627,8 @@ body:has(.tasks-page) .header-actions{
   .task-assignment-drawer .task-form-row{ flex:0 0 auto !important; min-height:0 !important; }
   .task-assignment-drawer > .task-assignment-meta{ grid-template-columns:minmax(0,1fr); gap:10px; }
   .task-assignment-drawer .source-options{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .task-assignment-drawer .source-option:last-child{ grid-column:1 / -1; }
+  .writing-assignment-picker__top{ grid-template-columns:1fr; }
+  .writing-assignment-picker__results{ grid-template-columns:1fr; max-height:220px; }
   .task-assignment-drawer .task-form-row--publish{ position:static !important; margin-top:10px; margin-bottom:0 !important; padding-top:12px; padding-bottom:24px; background:var(--tasks-surface); }
   .task-inspector{ inset:auto 6px 6px; max-height:82vh; padding:15px !important; }
   .task-detail strong{ overflow:hidden; text-overflow:ellipsis; -webkit-line-clamp:2; }

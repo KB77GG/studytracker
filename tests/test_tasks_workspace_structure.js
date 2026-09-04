@@ -25,9 +25,14 @@ test('tasks workspace keeps direction 2 above-the-fold composition', () => {
   assert.match(tasksTemplate, /taskInspectorEdit[^>]+btn btn-primary/)
   assert.match(tasksTemplate, /taskInspectorProgress[^>]+btn btn-secondary/)
   assert.match(tasksTemplate, /task-assignment-drawer__body[\s\S]*task-form-row--publish/)
-  for (const source of ['custom', 'material', 'listening', 'reading', 'question_type']) {
+  for (const source of ['custom', 'material', 'listening', 'reading', 'writing', 'question_type']) {
     assert.match(tasksTemplate, new RegExp(`value="${source}"`))
   }
+  assert.match(tasksTemplate, /id="writingAssignmentPicker"/)
+  assert.match(tasksTemplate, /data-writing-filter="exercise"/)
+  assert.match(tasksTemplate, /data-writing-filter="mother_topic"/)
+  assert.match(tasksTemplate, /writingAssignmentResources/)
+  assert.match(tasksTemplate, /writing_resource_id/)
 })
 
 test('tasks workspace exposes real navigation assets and responsive behaviors', () => {
@@ -60,7 +65,14 @@ test('tasks workspace exposes real navigation assets and responsive behaviors', 
   assert.match(finalCss, /task-assignment-drawer[^\{]*task-form-row--publish[^\{]*\{[\s\S]*?grid-row:3/)
   assert.match(finalCss, /height:clamp\(510px, calc\(100vh - 378px\), 680px\) !important/)
   assert.match(finalCss, /@media \(min-width:1400px\)[\s\S]*?grid-template-columns:minmax\(0,1fr\) 390px !important/)
-  assert.match(workspaceJs, /taskWorkspaceApplyPagination/)
+  assert.doesNotMatch(workspaceJs, /taskWorkspaceApplyPagination/)
+  assert.match(tasksTemplate, /task_page\.previous_url/)
+  assert.match(tasksTemplate, /task_page\.page_sizes/)
+  assert.match(tasksTemplate, /显示 \{\{ task_page\.start \}\}–\{\{ task_page\.end \}\}/)
+  assert.doesNotMatch(tasksTemplate, /listeningExerciseSegments/)
+  assert.match(tasksTemplate, /\/api\/task-assignments\/listening-segments\?exercise_id=/)
+  assert.match(tasksTemplate, /aria-busy/)
+  assert.match(workspaceJs, /selectedOptions\[0\]\?\.dataset\.url/)
   assert.match(workspaceJs, /task-date-choice/)
 })
 
@@ -99,7 +111,6 @@ test('student task filter exposes a mobile-friendly name and pinyin autocomplete
   assert.match(tasksTemplate, /id="filterStudent"[\s\S]*?role="combobox"[\s\S]*?aria-autocomplete="list"[\s\S]*?aria-haspopup="listbox"[\s\S]*?aria-controls="filterStudentSuggestions"[\s\S]*?aria-expanded="false"/)
   assert.match(tasksTemplate, /id="filterStudentSuggestions"[\s\S]*?role="listbox"/)
   assert.match(tasksTemplate, /window\.taskStudentFilterOptions = knownStudentOptions/)
-  assert.match(tasksTemplate, /window\.taskStudentFilterMatchesName\(student, kw\)/)
 
   assert.match(workspaceJs, /function setupStudentFilterAutocomplete\(\)/)
   assert.match(workspaceJs, /option\?\.search \|\| option\?\.name/)

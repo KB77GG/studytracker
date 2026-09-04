@@ -1,7 +1,33 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-04 IELTS 大作文母题库已上线。
+> 最近更新：2026-09-04 写作任务布置与 `/tasks` 性能优化待发布候选。
+
+## 2026-09-04 写作任务布置与 `/tasks` 性能优化（本机验证完成，待发布）
+
+- 唯一工作树为 `/Users/zhouxin/Desktop/studytracker-writing-mother-topics`，分支 `codex/writing-task-assignment`，当前 HEAD / `origin/main` 均为 `92bc4441`。本节涉及的代码、测试和文档仍为未提交改动；桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 的既有改动未触碰。
+- 写作链路已完成：助教 / 教师可在 `/tasks` 选择并搜索 **40 道写作真题 + 27 个 Task 2 母题**，服务端重新校验并冻结任务快照，接入重复检查、昨日复用、批量发布、学生网页直达和完成回写；没有改 schema、题库内容或小程序。
+- 任务页性能优化已完成：列表的关键词、学生 / 拼音、分类、状态、日期和指定任务过滤全部改为 SQL 查询，默认只查询 / 渲染当前 10 行并提供 10 / 25 / 50 服务端分页；听力 337 份精听目录与 84 份整套目录做单 worker 进程缓存，15,765 个句段不再写入首页，而由 staff-only `GET /api/task-assignments/listening-segments?exercise_id=...` 在选中具体练习后读取；材料题数由逐材料 N+1 改为一次分组统计，并对当前页的听力 / 阅读提交关系 eager-load。昨日任务“管理 / 删除”遇到不在当前页的记录会通过 `task_id` 精确打开。
+- 400 条合成任务的真实 Chrome 隔离验收：完整加载约 **470ms**，只渲染 **10 行 / 2,408 个 DOM 节点 / 563,352 HTML characters**，页面显示“1–10 / 共 400”；搜索 `399` 后 URL 变为 `/tasks?q=399&page=1` 且只返回 1 行，写作入口存在、句段大对象不在 HTML。与生产诊断基线 **2499ms / 383 行 / 23,242 nodes / 约 4.34M characters** 相比，DOM 约减少 90%、HTML 约减少 87%；耗时因本地隔离环境与生产不同，只作为发布前方向性证据，部署后必须用同一生产账号复测。
+- 精确验证：写作 + 布置 + 导航定向 pytest **53 passed / 4 subtests passed**；任务结构 + 批量渲染 Node **6 passed**；CI 同款 Python **68 passed** 且拼写队列通过；排除三个与本轮无关的已知基线问题后全仓 pytest **697 passed / 72 subtests passed / 1 deselected**。原始全仓为 **698 passed / 3 failed / 72 subtests**：一项日期测试在当前主机时区边界把任务算到次日，两项为工作树缺既有测试 MP3；仓库全 Node 为 **95 passed / 2 failed**，两项只读复盘 VM fixture 不接受既有 capability selector，本轮未改相关文件。改动模块 Ruff、Python / JavaScript 语法和 `git diff --check` 均通过。
+- 当前未 commit / push / deploy，生产业务 HEAD 仍是 `6eafb2ad`，任务页仍是诊断时的慢版本；未写生产数据库或学生数据，未重启服务。下一步：提交候选并原子推送任务分支和 `main`，等待 CI / Deploy，再核验生产 HEAD、服务 / gunicorn / 数据库与日志，最后用真实登录 Chrome 对照 `/tasks` 体积、DOM、刷新耗时、分页 / 筛选、写作选择和听力按需加载。
+
+## 2026-09-04 生产后台任务页卡顿诊断基线（修复已纳入上方候选）
+
+- 用户反馈“后台网页打开巨卡”时，真实登录 Chrome 当前页面为 `/tasks`。同一浏览器、同一网络下实测完整刷新：`/tasks` **2499ms**，`/materials` **586ms**，`/admin/word-examples` **652ms**，且浏览器 console 无 error / warning，因此问题集中在任务页，不是今天的全站网络或持续服务器过载。
+- `/tasks` 默认周视图只显示每页 10 行，但服务端实际一次返回并在 DOM 中保留 **383 条任务**，生成 **23,242 个 DOM 节点**；页面原始 HTML 约 **4.34M characters**，Nginx access log 对应响应约 **842KB（压缩后）**。月视图当日响应已约 964KB，年视图曾出现一次客户端中止的 499，数据量越大卡顿越明显。
+- 第二个主要放大器是任务布置下拉：每次 GET `/tasks` 都同步扫描并解析 `static/listening/*.json`。生产当前为 **337 份 JSON / 15,765 个句段 / 6,683,178 bytes 源文件**，仅内嵌的 `listeningExerciseSegments` JSON 就约 **1,926,866 characters / 2,024,599 UTF-8 bytes**；这些句段即使助教没有打开“布置新任务”也会随首页下载、解析并常驻浏览器。
+- 服务器在诊断时没有故障：load average `0.22 / 0.07 / 0.02`，`studytracker.service=active`、`NRestarts=0`，生产业务 HEAD `6eafb2ad`，回环绝大多数路由 TTFB 约 2–3ms；`/practice` 为约 340ms。同步刷新任务页时服务器 CPU 短时峰值约 39%，未饱和。机器仍只有约 1.67GB RAM、无 Swap，服务占约 551MB、可用约 451MB，这是额外的抖动风险，但不是本次持续卡顿的首要根因。数据库 `app.db` 约 136.8MB，`PRAGMA quick_check=ok`，磁盘使用 66%，今日错误日志仅见用户拒收微信订阅消息的既有业务错误，无 Traceback / worker timeout / OOM。
+- 本轮只读检查生产系统状态、响应体量、数据库完整性、Nginx / service 日志和真实登录浏览器，没有修改代码、数据库、任务或学生数据，没有重启 / commit / push / deploy，小程序未改。诊断提出的服务端分页、句段按需 API、资源目录缓存和材料题数 N+1 清理均已纳入上方待发布候选，生产前后对照尚待部署后完成。
+
+## 2026-09-04 写作练习接入统一任务布置（已纳入上方待发布候选）
+
+- 当前工作树为 `/Users/zhouxin/Desktop/studytracker-writing-mother-topics`，分支 `codex/writing-task-assignment`，基线 / HEAD 为 `92bc4441`（跟踪 `origin/main`）。本轮代码、测试和本交接记录均未提交、未推送、未部署；生产仍是已上线的写作母题业务版本 `6eafb2ad`，远端 `main` 的 `92bc4441` 只是对应发布事实文档提交。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 的既有改动未触碰。
+- 助教 / 教师的 `/tasks` 统一布置抽屉新增“写作练习”来源，可在 **40 道具体写作真题**与 **27 个 Task 2 母题**之间切换并搜索；选择后自动填充标题、说明与默认用时（Task 1 为 20 分钟、Task 2 为 40 分钟、母题为 30 分钟）。服务端通过 staff-only `GET /api/task-assignments/writing-catalog` 提供目录并重新校验提交的资源 ID，任务中冻结安全快照；重复布置检查、昨日任务复用、批量发布和任务列表操作均识别写作资源。
+- 学生网页 `/student/today`、`/api/practice/tasks` 与 `/api/student/practices/today` 已展示写作任务并生成直达链接。具体真题在完成打字练习时自动把 legacy Task 与关联 PlanItem 标为完成 / 已提交；母题页提供“确认完成学习”，同样回写任务和计划。两条完成接口均验证登录学生、任务归属、任务日期和资源 ID，其他学生不能代完成。没有数据库 schema 或题库内容改动，复用现有 `Task.question_ids` 快照与 PlanItem 通用资源字段。
+- UI 延续 Sage Path 任务工作台的 teal / 象牙色、抽屉结构和卡片语言，并补充搜索空态、选中反馈、44px 点击区、键盘焦点和移动端两列布局。真实 Chrome 本地验收覆盖打开抽屉、搜索“太阳能”、真题 / 母题切换、母题选择和一次临时内存数据库发布；临时服务已关闭，未触碰仓库数据库或生产 / 学生数据。
+- 精确验证：`/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_task_assignment_deduplication.py tests/test_task_assignment_history.py tests/test_task_assignment_routes.py tests/test_practice_navigation_routes.py tests/test_writing_library_routes.py tests/test_writing_library_service.py` → **51 passed / 4 subtests passed**；`node --test tests/test_tasks_workspace_structure.js tests/test_task_assignment_matrix_renderer.js` → **6 passed**。`python -m py_compile`（6 个改动模块）、两份写作 JS 的 `node --check`、渲染后 `/tasks` 内联脚本语法检查和 `git diff --check` 均通过；Python 测试只有既有 SQLAlchemy 弃用警告。
+- 当前未提交改动还包括性能服务 `services/task_workspace.py`、资源缓存 / 句段服务 `services/task_assignment_catalogs.py` 及对应模板、CSS、JS、路由与测试。尚未在生产真实账号做端到端布置 / 完成验证，也没有改动、上传、提审或发布小程序；网页生产和现有通知链路均未发布本候选。用户已授权继续，下一步按上方发布与生产验收顺序执行。
 
 ## 2026-09-04 IELTS 大作文母题库已上线
 

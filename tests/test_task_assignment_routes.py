@@ -1,6 +1,7 @@
 """Route-level regression coverage for the unified legacy assignment form."""
 
 import json
+import tempfile
 import unittest
 from datetime import date, datetime
 from pathlib import Path
@@ -10,6 +11,7 @@ from flask_login import LoginManager
 from sqlalchemy import inspect, select, text
 
 import app as app_module
+from api.task_assignments import listening_segments_api, writing_catalog_api
 from models import (
     AuditLogEntry,
     DictationBook,
@@ -37,6 +39,22 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
             SQLALCHEMY_DATABASE_URI="sqlite:///:memory:",
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
         )
+        self.listening_root = tempfile.TemporaryDirectory()
+        self.app.config["LISTENING_ASSIGNMENT_ROOT"] = self.listening_root.name
+        Path(self.listening_root.name, "lazy_sample.json").write_text(
+            json.dumps(
+                {
+                    "title": "Lazy sample",
+                    "parts": [
+                        {
+                            "name": "Part 1",
+                            "segments": [{"text": "LAZY_SEGMENT_SENTINEL"}],
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
         db.init_app(self.app)
         login = LoginManager(self.app)
 
@@ -50,6 +68,23 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
             endpoint="api_task_delete",
             view_func=app_module.api_task_delete,
             methods=["POST"],
+        )
+        self.app.add_url_rule(
+            "/api/task-assignments/writing-catalog",
+            endpoint="writing_catalog_api",
+            view_func=writing_catalog_api,
+            methods=["GET"],
+        )
+        self.app.add_url_rule(
+            "/api/task-assignments/listening-segments",
+            endpoint="listening_segments_api",
+            view_func=listening_segments_api,
+            methods=["GET"],
+        )
+        self.app.jinja_env.globals["url_for"] = lambda endpoint, **values: (
+            f"/static/{values.get('filename', '')}"
+            if endpoint == "static"
+            else f"/{endpoint}"
         )
         self.original_app = app_module.app
         app_module.app = self.app
@@ -81,6 +116,7 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
         with self.app.app_context():
             db.session.remove()
             db.drop_all()
+        self.listening_root.cleanup()
         app_module.app = self.original_app
 
     def _login_as(self, user_id):
@@ -119,6 +155,93 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
         self.assertNotIn("token=", second.get_data(as_text=True))
         with self.app.app_context():
             self.assertEqual(Task.query.count(), 1)
+
+    def test_staff_writing_catalog_exposes_both_assignable_layers(self):
+        self._login()
+        response = self.client.get("/api/task-assignments/writing-catalog")
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["summary"], {"exercises": 40, "mother_topics": 27})
+        self.assertEqual(len(payload["resources"]), 67)
+        self.assertEqual(
+            {row["resource_type"] for row in payload["resources"]},
+            {"exercise", "mother_topic"},
+        )
+
+        self._login_as(self.student_user_id)
+        forbidden = self.client.get("/api/task-assignments/writing-catalog")
+        self.assertEqual(forbidden.status_code, 403)
+
+    def test_intensive_listening_segments_are_staff_only_and_loaded_on_demand(self):
+        self._login()
+        missing = self.client.get("/api/task-assignments/listening-segments")
+        self.assertEqual(missing.status_code, 400)
+        response = self.client.get(
+            "/api/task-assignments/listening-segments?exercise_id=lazy_sample"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_json()["segments"],
+            [
+                {
+                    "id": 0,
+                    "sequence": 1,
+                    "content": "Part 1 · 第1句 · LAZY_SEGMENT_SENTINEL",
+                }
+            ],
+        )
+        traversal = self.client.get(
+            "/api/task-assignments/listening-segments?exercise_id=../lazy_sample"
+        )
+        self.assertEqual(traversal.status_code, 404)
+
+        self._login_as(self.student_user_id)
+        forbidden = self.client.get(
+            "/api/task-assignments/listening-segments?exercise_id=lazy_sample"
+        )
+        self.assertEqual(forbidden.status_code, 403)
+
+    def test_task_workspace_renders_only_one_server_page_and_preserves_filters(self):
+        with self.app.app_context():
+            tasks = [
+                Task(
+                    date=date.today().isoformat(),
+                    student_name=self.student_name,
+                    category="雅思-写作-母题" if index == 12 else "材料练习",
+                    detail="唯一筛选任务" if index == 12 else f"分页任务 {index:02d}",
+                    status="done" if index % 3 == 0 else "pending",
+                    created_by=self.staff_id,
+                    planned_minutes=20,
+                )
+                for index in range(27)
+            ]
+            db.session.add_all(tasks)
+            db.session.commit()
+
+        self._login()
+        first = self.client.get("/tasks")
+        self.assertEqual(first.status_code, 200, first.get_data(as_text=True))
+        first_html = first.get_data(as_text=True)
+        self.assertEqual(first_html.count('<tr data-id="'), 10)
+        self.assertIn("显示 1–10 / 共 27 条任务", first_html)
+        self.assertNotIn("listeningExerciseSegments", first_html)
+        self.assertNotIn("LAZY_SEGMENT_SENTINEL", first_html)
+
+        second = self.client.get("/tasks?page=2&page_size=10")
+        self.assertEqual(second.status_code, 200, second.get_data(as_text=True))
+        self.assertEqual(second.get_data(as_text=True).count('<tr data-id="'), 10)
+        self.assertIn('aria-current="page"', second.get_data(as_text=True))
+
+        filtered = self.client.get("/tasks?q=唯一筛选")
+        self.assertEqual(filtered.status_code, 200, filtered.get_data(as_text=True))
+        filtered_html = filtered.get_data(as_text=True)
+        self.assertEqual(filtered_html.count('<tr data-id="'), 1)
+        self.assertIn("唯一筛选任务", filtered_html)
+        self.assertIn('value="唯一筛选"', filtered_html)
+
+        pinyin = self.client.get("/tasks?student=luyouxuesheng")
+        self.assertEqual(pinyin.status_code, 200, pinyin.get_data(as_text=True))
+        self.assertEqual(pinyin.get_data(as_text=True).count('<tr data-id="'), 10)
 
     def test_legacy_sources_without_or_with_same_key_do_not_create_two_batches(self):
         no_key_first = self._post(idempotency_key=None)
@@ -200,6 +323,58 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
             self.assertEqual(rows[0].question_ids, json.dumps([self.question_id]))
             self.assertEqual(json.loads(rows[1].question_ids)["listening_section_number"], 2)
             self.assertEqual(rows[2].reading_passage_number, 1)
+
+    def test_writing_exercise_publishes_a_deep_linkable_resource_and_blocks_duplicate(self):
+        first = self._post(
+            idempotency_key="writing-first",
+            task_source="writing",
+            category="",
+            detail="",
+            writing_resource_type="exercise",
+            writing_resource_id="t2-010",
+        )
+        self.assertEqual(first.status_code, 200, first.get_data(as_text=True))
+        with self.app.app_context():
+            task = Task.query.one()
+            snapshot = json.loads(task.question_ids)
+            self.assertEqual(task.grading_mode, "writing_practice")
+            self.assertEqual(task.category, "雅思-写作-大作文")
+            self.assertEqual(snapshot["writing_resource_type"], "exercise")
+            self.assertEqual(snapshot["writing_resource_id"], "t2-010")
+            self.assertEqual(task.plan_item.resource_type, "writing_exercise")
+            self.assertEqual(task.plan_item.resource_id, "t2-010")
+            practice_payload = app_module._practice_task_payload(task)
+            self.assertEqual(practice_payload["url"], f"/writing/t2-010?task_id={task.id}")
+            self.assertEqual(practice_payload["source_label"], "IELTS 写作真题")
+
+        duplicate = self._post(
+            idempotency_key="writing-second",
+            task_source="writing",
+            category="",
+            detail="",
+            writing_resource_type="exercise",
+            writing_resource_id="t2-010",
+        )
+        self.assertEqual(duplicate.status_code, 409, duplicate.get_data(as_text=True))
+        self.assertEqual(duplicate.get_json()["resource"]["kind"], "writing")
+        self.assertNotIn("token=", duplicate.get_data(as_text=True))
+
+    def test_writing_mother_topic_publishes_with_topic_resource_binding(self):
+        response = self._post(
+            idempotency_key="writing-topic",
+            task_source="writing",
+            category="",
+            detail="",
+            planned_minutes="",
+            writing_resource_type="mother_topic",
+            writing_resource_id="t01",
+        )
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        with self.app.app_context():
+            task = Task.query.one()
+            self.assertEqual(task.category, "雅思-写作-母题")
+            self.assertEqual(task.planned_minutes, 30)
+            self.assertEqual(task.plan_item.resource_type, "writing_mother_topic")
 
     def test_material_duplicate_returns_json_409_with_match_details_and_is_atomic(self):
         first = self._post(

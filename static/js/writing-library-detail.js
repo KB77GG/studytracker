@@ -4,6 +4,7 @@
   const root = document.querySelector('[data-writing-detail]');
   if (!root) return;
   const exerciseId = root.dataset.exerciseId;
+  const assignedTaskId = root.dataset.assignedTaskId || '';
   const essayData = JSON.parse(document.getElementById('writingEssayData').textContent);
   const staffMode = document.getElementById('typing').dataset.staffMode === '1';
 
@@ -197,7 +198,7 @@
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ band: selectedBand })
+        body: JSON.stringify({ band: selectedBand, task_id: assignedTaskId || null })
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || 'start_failed');
@@ -318,7 +319,7 @@
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ band: selectedBand, typed_text: input.value })
+        body: JSON.stringify({ band: selectedBand, typed_text: input.value, task_id: assignedTaskId || null })
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || 'finish_failed');
@@ -330,7 +331,7 @@
       addHistoryRow(data.attempt);
       localStorage.removeItem(storageKey());
       stopAttempt();
-      setStatus('本次结果已保存到学生记录。', 'success');
+      setStatus(data.task_completed ? '本次结果已保存，助教布置的任务已自动提交。' : '本次结果已保存到学生记录。', 'success');
     } catch (_error) {
       finishButton.disabled = false;
       setStatus('保存失败，输入内容仍保留在当前浏览器，请重试。', 'error');

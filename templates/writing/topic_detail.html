@@ -9,7 +9,7 @@
 <link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
 </head>
 <body class="practice-workspace-page writing-library-page">
-<div class="practice-workspace" data-practice-workspace data-mother-topic-detail>
+<div class="practice-workspace" data-practice-workspace data-mother-topic-detail data-topic-id="{{ topic.id }}"{% if assigned_task %} data-assigned-task-id="{{ assigned_task.id }}" data-assigned-complete="{{ '1' if assigned_task.completed else '0' }}"{% endif %}>
   <header class="practice-workspace__topbar">
     <div class="practice-workspace__brand-nav">
       <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" aria-label="返回练习中心">
@@ -65,6 +65,13 @@
         <h1>{{ topic.title_zh }}</h1>
         <p>{{ topic.title_en }}</p>
       </header>
+
+      {% if assigned_task %}
+      <aside class="writing-assignment-callout {{ 'is-complete' if assigned_task.completed else '' }}" id="writingTopicAssignment" role="status">
+        <div><small>助教布置 · {{ assigned_task.date }}</small><strong>{{ '母题学习已完成，可继续复习' if assigned_task.completed else '阅读逻辑链、表达与迁移题后确认完成' }}</strong></div>
+        <button type="button" id="writingTopicComplete" {% if assigned_task.completed %}disabled{% endif %}>{{ '已完成' if assigned_task.completed else '确认完成学习' }}</button>
+      </aside>
+      {% endif %}
 
       <section class="writing-section" id="overview" aria-labelledby="overviewTitle">
         <div class="writing-section__heading">

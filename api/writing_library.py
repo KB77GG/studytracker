@@ -18,6 +18,14 @@ from services.writing_library import (
     mother_topic_summary,
     typing_metrics,
 )
+from services.writing_assignments import (
+    RESOURCE_EXERCISE,
+    RESOURCE_MOTHER_TOPIC,
+    WritingAssignmentError,
+    assigned_task,
+    complete_task,
+    require_student_task,
+)
 
 writing_library_bp = Blueprint("writing_library", __name__, url_prefix="/writing")
 _STAFF_ROLES = {User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT}
@@ -76,6 +84,28 @@ def _current_student() -> StudentProfile | None:
 def _access_context() -> tuple[StudentProfile | None, bool]:
     student = _current_student()
     return student, _is_staff_mode()
+
+
+def _assigned_context(
+    student: StudentProfile | None,
+    *,
+    resource_type: str,
+    resource_id: str,
+) -> dict | None:
+    task = assigned_task(
+        request.args.get("task_id"),
+        student=student,
+        resource_type=resource_type,
+        resource_id=resource_id,
+    )
+    if not task:
+        return None
+    return {
+        "id": task.id,
+        "status": task.status or "pending",
+        "completed": task.status in {"done", "completed", "finished"},
+        "date": task.date or "",
+    }
 
 
 def _require_page_access() -> tuple[StudentProfile | None, bool] | None:
@@ -167,6 +197,11 @@ def topic_detail(topic_id: str):
         related_exercises=related_exercises,
         student=student,
         staff_mode=staff_mode,
+        assigned_task=_assigned_context(
+            student,
+            resource_type=RESOURCE_MOTHER_TOPIC,
+            resource_id=topic["id"],
+        ),
     )
 
 
@@ -199,6 +234,11 @@ def detail(exercise_id: str):
         attempts=attempts,
         student=student,
         staff_mode=staff_mode,
+        assigned_task=_assigned_context(
+            student,
+            resource_type=RESOURCE_EXERCISE,
+            resource_id=exercise["id"],
+        ),
     )
 
 
@@ -212,6 +252,17 @@ def start_typing(exercise_id: str):
     band = str(payload.get("band") or "")
     if band not in BANDS:
         return jsonify(ok=False, error="invalid_band"), 400
+    task_id = payload.get("task_id")
+    if task_id and student:
+        try:
+            require_student_task(
+                task_id,
+                student=student,
+                resource_type=RESOURCE_EXERCISE,
+                resource_id=exercise["id"],
+            )
+        except WritingAssignmentError as exc:
+            return jsonify(ok=False, error=str(exc)), 409
     if staff_mode and not student:
         return jsonify(ok=True, client_only=True, attempt_id=None, band=band)
 
@@ -242,10 +293,30 @@ def finish_typing(exercise_id: str, attempt_id: int):
     ).first()
     if not attempt:
         return jsonify(ok=False, error="attempt_not_found"), 404
+    payload = request.get_json(silent=True) or {}
+    assigned = None
+    if payload.get("task_id"):
+        try:
+            assigned = require_student_task(
+                payload["task_id"],
+                student=student,
+                resource_type=RESOURCE_EXERCISE,
+                resource_id=exercise["id"],
+            )
+        except WritingAssignmentError as exc:
+            return jsonify(ok=False, error=str(exc)), 409
     if attempt.status == WritingTypingAttempt.STATUS_COMPLETED:
+        if assigned and assigned.status not in {"done", "completed", "finished"}:
+            complete_task(
+                assigned,
+                submitted_at=attempt.completed_at or utcnow_naive(),
+                duration_seconds=attempt.duration_seconds,
+                accuracy=attempt.accuracy,
+                note=f"写作打字完成：Band {attempt.band}，准确率 {attempt.accuracy:.1f}%",
+            )
+            db.session.commit()
         return jsonify(ok=True, attempt=_attempt_payload(attempt), idempotent=True)
 
-    payload = request.get_json(silent=True) or {}
     typed_text = str(payload.get("typed_text") or "")
     if len(typed_text) > 20000:
         return jsonify(ok=False, error="typed_text_too_long"), 413
@@ -266,5 +337,51 @@ def finish_typing(exercise_id: str, attempt_id: int):
     attempt.target_word_count = metrics["target_word_count"]
     attempt.speed_wpm = metrics["speed_wpm"]
     attempt.accuracy = metrics["accuracy"]
+    if assigned:
+        complete_task(
+            assigned,
+            submitted_at=now,
+            duration_seconds=metrics["duration_seconds"],
+            accuracy=metrics["accuracy"],
+            note=f"写作打字完成：Band {attempt.band}，准确率 {metrics['accuracy']:.1f}%",
+        )
     db.session.commit()
-    return jsonify(ok=True, attempt=_attempt_payload(attempt), idempotent=False)
+    return jsonify(
+        ok=True,
+        attempt=_attempt_payload(attempt),
+        task_completed=bool(assigned),
+        idempotent=False,
+    )
+
+
+@writing_library_bp.post("/api/topics/<topic_id>/tasks/<int:task_id>/complete")
+def complete_topic_task(topic_id: str, task_id: int):
+    student, _staff_mode = _require_api_access()
+    if not student:
+        return jsonify(ok=False, error="student_recording_unavailable"), 403
+    topic = get_mother_topic(topic_id)
+    if not topic:
+        return jsonify(ok=False, error="topic_not_found"), 404
+    try:
+        task = require_student_task(
+            task_id,
+            student=student,
+            resource_type=RESOURCE_MOTHER_TOPIC,
+            resource_id=topic["id"],
+        )
+    except WritingAssignmentError as exc:
+        return jsonify(ok=False, error=str(exc)), 409
+    payload = request.get_json(silent=True) or {}
+    try:
+        duration_seconds = max(0, min(int(payload.get("duration_seconds") or 0), 14400))
+    except (TypeError, ValueError):
+        duration_seconds = 0
+    now = utcnow_naive()
+    complete_task(
+        task,
+        submitted_at=now,
+        duration_seconds=duration_seconds,
+        note="已完成大作文母题学习：逻辑链、表达与迁移题",
+    )
+    db.session.commit()
+    return jsonify(ok=True, task={"id": task.id, "status": "done"})

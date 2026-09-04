@@ -128,6 +128,16 @@ def resource_identity_from_payload(payload: dict[str, Any] | None) -> dict[str, 
     if source in {"question_type", "question-type", "question_type_practice"} or grading_mode == "question_type_practice":
         return _question_type_identity(payload)
 
+    writing_type = _text(payload.get("writing_resource_type"))
+    writing_id = _text(payload.get("writing_resource_id"))
+    if writing_type in {"exercise", "mother_topic"} and writing_id:
+        label = "写作真题" if writing_type == "exercise" else "大作文母题"
+        return _identity(
+            kind="writing",
+            base=(writing_type, writing_id),
+            label=f"{label} {writing_id}",
+        )
+
     listening_id = _text(payload.get("listening_exercise_id"))
     resource_type = _text(payload.get("listening_resource_type")) or "intensive"
     if listening_id:
@@ -214,6 +224,12 @@ def resource_identity_from_task(task: Task) -> dict[str, Any]:
     if task.grading_mode == "question_type_practice":
         snapshot = _json(task.question_ids) or {}
         return _question_type_identity(snapshot if isinstance(snapshot, dict) else {})
+
+    if task.grading_mode == "writing_practice":
+        snapshot = _json(task.question_ids) or {}
+        return resource_identity_from_payload(
+            snapshot if isinstance(snapshot, dict) else {}
+        )
 
     if task.listening_exercise_id:
         section = None
@@ -576,6 +592,8 @@ def build_legacy_duplicate_payload(
     listening_resource_type: str | None,
     reading_test_id: str | None,
     reading_passage_number: int | None,
+    writing_resource_type: str | None = None,
+    writing_resource_id: str | None = None,
 ) -> dict[str, Any]:
     """Normalize the legacy form's resource fields for history and publish."""
 
@@ -600,6 +618,8 @@ def build_legacy_duplicate_payload(
         "listening_section_number": listening_section,
         "reading_test_id": reading_test_id,
         "reading_passage_number": reading_passage_number,
+        "writing_resource_type": writing_resource_type,
+        "writing_resource_id": writing_resource_id,
     }
 
 

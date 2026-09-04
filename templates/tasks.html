@@ -6,7 +6,7 @@
 <label class="suite-header-search tasks-header-search" for="taskQuickSearch">
   <i class="fas fa-search" aria-hidden="true"></i>
   <span class="sr-only">搜索任务</span>
-  <input id="taskQuickSearch" type="search" placeholder="搜索学生、任务内容、材料名称">
+  <input id="taskQuickSearch" type="search" value="{{ task_filters.query }}" placeholder="搜索学生、任务内容、材料名称">
   <kbd>⌘ K</kbd>
 </label>
 {% endblock %}
@@ -111,13 +111,13 @@
 
 <section class="card-section task-workspace">
   <nav class="task-period-tabs" aria-label="任务时间范围">
-    <a class="task-period-tab {{ 'is-active' if period == 'week' else '' }}" href="?period=week">本周<span>Week</span></a>
-    <a class="task-period-tab {{ 'is-active' if period == 'month' else '' }}" href="?period=month">本月<span>Month</span></a>
-    <a class="task-period-tab {{ 'is-active' if period == 'year' else '' }}" href="?period=year">本年<span>Year</span></a>
-    <span class="task-period-tabs__count">{{ items|length }} 条任务</span>
+    <a class="task-period-tab {{ 'is-active' if period == 'week' else '' }}" href="{{ period_urls.week }}">本周<span>Week</span></a>
+    <a class="task-period-tab {{ 'is-active' if period == 'month' else '' }}" href="{{ period_urls.month }}">本月<span>Month</span></a>
+    <a class="task-period-tab {{ 'is-active' if period == 'year' else '' }}" href="{{ period_urls.year }}">本年<span>Year</span></a>
+    <span class="task-period-tabs__count">{{ task_page.total }} 条任务</span>
   </nav>
 
-  <div class="task-date-strip" id="taskDateStrip" data-period="{{ period }}" data-start-date="{{ start_date.isoformat() }}" data-end-date="{{ today_obj.isoformat() }}" aria-label="按日期查看任务">
+  <div class="task-date-strip" id="taskDateStrip" data-period="{{ period }}" data-start-date="{{ start_date.isoformat() }}" data-end-date="{{ today_obj.isoformat() }}" data-selected-date="{{ task_filters.due_date }}" aria-label="按日期查看任务">
     <button type="button" class="task-date-nav" data-date-shift="-1" aria-label="前一组日期"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
     <div class="task-date-choices" id="taskDateChoices"></div>
     <button type="button" class="task-date-nav" data-date-shift="1" aria-label="后一组日期"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
@@ -129,6 +129,7 @@
       <div class="filter-student-picker">
         <input
           id="filterStudent"
+          value="{{ task_filters.student }}"
           placeholder="选择学生"
           autocomplete="off"
           role="combobox"
@@ -148,7 +149,7 @@
       </div>
     </div>
     <label>任务分类
-      <select id="filterCategory">
+      <select id="filterCategory" data-selected="{{ task_filters.category }}">
         <option value="">全部分类</option>
         <optgroup label="基础">
           <option value="基础-四级词汇">四级词汇巩固</option>
@@ -170,6 +171,9 @@
           <option value="雅思-写作-句型与语法">句型与语法纠正</option>
           <option value="雅思-写作-翻译句子">写作翻译句子</option>
           <option value="雅思-写作-逻辑链">写作逻辑链训练</option>
+          <option value="雅思-写作-小作文">写作小作文真题</option>
+          <option value="雅思-写作-大作文">写作大作文真题</option>
+          <option value="雅思-写作-母题">写作母题训练</option>
         </optgroup>
         <optgroup label="托福">
           <option value="托福-听力-精听">听力精听</option>
@@ -185,7 +189,7 @@
       </select>
     </label>
     <label>状态
-      <select id="filterStatus">
+      <select id="filterStatus" data-selected="{{ task_filters.status }}">
         <option value="">全部状态</option>
         <option value="pending">未开始</option>
         <option value="progress">进行中</option>
@@ -193,9 +197,9 @@
         <option value="done">已完成</option>
       </select>
     </label>
-    <label>截止日期<input id="filterDueDate" type="date"></label>
+    <label>截止日期<input id="filterDueDate" type="date" value="{{ task_filters.due_date }}"></label>
     <button id="filterClear" type="button"><i class="fas fa-undo" aria-hidden="true"></i> 重置</button>
-    <span id="filterStat" aria-live="polite"></span>
+    <span id="filterStat" aria-live="polite">显示 {{ task_page.start }}–{{ task_page.end }} / 共 {{ task_page.total }} 条</span>
   </div>
 
   <details class="task-secondary-tools">
@@ -232,7 +236,7 @@
 
   <div id="taskDrawerBackdrop" class="task-drawer-backdrop" hidden></div>
   <form id="taskForm" class="task-form task-assignment-drawer" method="post" action="{{ url_for('tasks_page') }}" aria-label="布置新任务">
-    <div class="task-assignment-drawer__header"><div><span class="drawer-kicker">NEW ASSIGNMENT</span><h3>布置新任务</h3><p>普通任务保持单学生体验；题型专项支持批量发布与重复检查。</p></div><button type="button" class="drawer-close" id="closeTaskAssignment" aria-label="关闭布置任务面板">关闭</button></div>
+    <div class="task-assignment-drawer__header"><div><span class="drawer-kicker">NEW ASSIGNMENT</span><h3>布置新任务</h3><p>可从材料、听力、阅读和写作题库选择；发布前自动检查重复。</p></div><button type="button" class="drawer-close" id="closeTaskAssignment" aria-label="关闭布置任务面板">关闭</button></div>
     <div class="task-assignment-drawer__body">
     <div class="task-form-row task-assignment-meta">
       <div class="field">
@@ -285,6 +289,10 @@
           <label class="source-option">
             <input type="radio" name="task_source" value="reading" onchange="toggleTaskSource('reading')">
             <span>阅读题库</span>
+          </label>
+          <label class="source-option source-option--writing">
+            <input type="radio" name="task_source" value="writing" onchange="toggleTaskSource('writing')">
+            <span>写作练习</span>
           </label>
           <label class="source-option source-option--specialty">
             <input type="radio" name="task_source" value="question_type" onchange="toggleTaskSource('question_type')">
@@ -453,6 +461,34 @@
       </div>
     </div>
 
+    <div class="task-form-row" id="writingSelectRow" style="display: none;">
+      <div class="field field--wide">
+        <label>选择写作内容</label>
+        <input type="hidden" id="writingResourceType" name="writing_resource_type" value="exercise">
+        <div class="writing-assignment-picker" id="writingAssignmentPicker">
+          <div class="writing-assignment-picker__top">
+            <div class="writing-assignment-filter" role="group" aria-label="写作内容类型">
+              <button type="button" class="is-active" data-writing-filter="exercise">真题打字 <span>40</span></button>
+              <button type="button" data-writing-filter="mother_topic">大作文母题 <span>27</span></button>
+            </div>
+            <label class="writing-assignment-search" for="writingPickerSearch">
+              <span>搜索</span>
+              <input id="writingPickerSearch" type="search" autocomplete="off" placeholder="输入主题、题型或英文关键词">
+            </label>
+          </div>
+          <div class="writing-assignment-picker__selected" id="writingPickerSelected" role="status" aria-live="polite">尚未选择写作内容</div>
+          <div class="writing-assignment-picker__results" id="writingPickerResults" role="listbox" aria-label="写作内容列表"></div>
+        </div>
+        <select class="form-select writing-native-select" id="writingResourceSelect" name="writing_resource_id">
+          <option value="">-- 选择写作内容 --</option>
+          {% for item in writing_resources %}
+          <option value="{{ item.id }}" data-resource-type="{{ item.resource_type }}" data-title="{{ item.title }}">{{ item.label }} · {{ item.title }}</option>
+          {% endfor %}
+        </select>
+        <small class="text-muted">真题任务完成一次分层范文打字后自动提交；母题任务阅读逻辑链后由学生确认完成。</small>
+      </div>
+    </div>
+
     <!-- 材料选择区域 (默认隐藏) -->
     <div class="task-form-row" id="materialSelectRow" style="display: none;">
       <div class="field field--wide">
@@ -617,7 +653,7 @@
   <div class="task-list-column">
   <div class="task-list-toolbar">
     <div><span class="task-list-toolbar__eyebrow">ASSIGNMENTS</span><h2>任务列表</h2></div>
-    <span class="task-count-pill">{{ items|length }} 条任务</span>
+    <span class="task-count-pill">{{ task_page.total }} 条任务</span>
   </div>
   <table class="task-table task-subtable">
     <thead>
@@ -698,6 +734,7 @@
             {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开虾滑题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
             {% if t.reading_test_id and t.reading_url %}<a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>{% endif %}
             {% if t.question_type_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>{% endif %}
+            {% if t.writing_url %}<a class="task-action-link task-action-link--primary" href="{{ t.writing_url }}" target="_blank">{{ '打开母题' if t.writing_resource_type == 'mother_topic' else '打开写作' }}</a>{% endif %}
             {% if t.question_type_result_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>{% endif %}
             {% if t.listening_test or t.reading_test %}<button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>{% endif %}
             {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}<a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>{% endif %}
@@ -706,9 +743,28 @@
         </td>
       </tr>
       {% endfor %}
+      {% if not items %}
+      <tr class="task-table-empty"><td colspan="13">当前筛选条件下没有任务。可以重置筛选，或直接布置新任务。</td></tr>
+      {% endif %}
     </tbody>
   </table>
-  <div class="task-list-footer"><span id="taskListCount">共 {{ items|length }} 条任务</span><div class="task-pagination" aria-label="任务分页"><button id="taskPrevPage" type="button" disabled aria-label="上一页"><i class="fas fa-chevron-left"></i></button><span id="taskPageNumbers"></span><button id="taskNextPage" type="button" disabled aria-label="下一页"><i class="fas fa-chevron-right"></i></button></div><label>每页 <select id="taskPageSize"><option>10</option><option>25</option><option>50</option></select></label></div>
+  <div class="task-list-footer">
+    <span id="taskListCount">显示 {{ task_page.start }}–{{ task_page.end }} / 共 {{ task_page.total }} 条任务</span>
+    <nav class="task-pagination" aria-label="任务分页">
+      {% if task_page.previous_url %}<a id="taskPrevPage" href="{{ task_page.previous_url }}" aria-label="上一页"><i class="fas fa-chevron-left"></i></a>{% else %}<span id="taskPrevPage" class="is-disabled" aria-disabled="true"><i class="fas fa-chevron-left"></i></span>{% endif %}
+      <span id="taskPageNumbers">
+        {% for page_item in task_page.pages %}
+          {% if page_item %}<a href="{{ page_item.url }}" class="{{ 'is-active' if page_item.number == task_page.page else '' }}" {% if page_item.number == task_page.page %}aria-current="page"{% endif %} aria-label="第 {{ page_item.number }} 页">{{ page_item.number }}</a>{% else %}<span class="task-pagination__ellipsis" aria-hidden="true">…</span>{% endif %}
+        {% endfor %}
+      </span>
+      {% if task_page.next_url %}<a id="taskNextPage" href="{{ task_page.next_url }}" aria-label="下一页"><i class="fas fa-chevron-right"></i></a>{% else %}<span id="taskNextPage" class="is-disabled" aria-disabled="true"><i class="fas fa-chevron-right"></i></span>{% endif %}
+    </nav>
+    <label>每页
+      <select id="taskPageSize">
+        {% for option in task_page.page_sizes %}<option value="{{ option.size }}" data-url="{{ option.url }}" {{ 'selected' if option.size == task_page.page_size else '' }}>{{ option.size }}</option>{% endfor %}
+      </select>
+    </label>
+  </div>
 
   </div>
   <aside class="task-inspector" id="taskInspector" aria-live="polite">
@@ -3034,8 +3090,8 @@
   <script src="{{ url_for('static', filename='js/task_assignment_matrix.js') }}"></script>
   <script>
     const dictationRangeHints = {{ dictation_range_hints | tojson }};
-    const listeningExerciseSegments = {{ listening_exercise_segments | tojson }};
     const readingExercisePassages = {{ reading_exercise_passages | tojson }};
+    const writingAssignmentResources = {{ writing_resources | tojson }};
     const knownStudentOptions = {{ student_picker_options | tojson }};
     window.taskStudentFilterOptions = knownStudentOptions;
     const studentMemoRecordsByName = {{ student_memos | tojson }};
@@ -3259,24 +3315,15 @@
         const row = Array.from(document.querySelectorAll('.task-subtable tbody tr[data-id]'))
           .find(candidate => candidate.dataset.id === taskId);
         if (!row) {
-          setStatus('任务列表中暂时找不到这条任务，请刷新页面后重试。', true);
+          const target = new URL('/tasks', window.location.origin);
+          target.searchParams.set('period', 'week');
+          target.searchParams.set('task_id', taskId);
+          target.searchParams.set('page_size', document.getElementById('taskPageSize')?.value || '10');
+          window.location.assign(target.toString());
           return;
         }
 
         document.getElementById('closeTaskAssignment')?.click();
-        const studentFilter = document.getElementById('filterStudent');
-        const categoryFilter = document.getElementById('filterCategory');
-        const statusFilter = document.getElementById('filterStatus');
-        const dueDateFilter = document.getElementById('filterDueDate');
-        const quickSearch = document.getElementById('taskQuickSearch');
-        if (studentFilter) studentFilter.value = studentName;
-        if (categoryFilter) categoryFilter.value = '';
-        if (statusFilter) statusFilter.value = '';
-        if (dueDateFilter) dueDateFilter.value = row.dataset.date || '';
-        if (quickSearch) quickSearch.value = '';
-        window.taskSelectedDate = '';
-        document.querySelectorAll('.task-date-choice.is-active').forEach(choice => choice.classList.remove('is-active'));
-        window.applyTaskFilters?.();
         window.taskWorkspaceRevealRow?.(row);
 
         window.setTimeout(() => {
@@ -3293,6 +3340,8 @@
         const materialSelect = document.getElementById('material_id');
         const listeningSelect = document.getElementById('listeningExerciseSelect');
         const readingSelect = document.getElementById('readingExerciseSelect');
+        const writingSelect = document.getElementById('writingResourceSelect');
+        const writingType = document.getElementById('writingResourceType');
         const categorySelect = document.getElementById('taskCategory');
 
         if (!sourceRadio) {
@@ -3309,6 +3358,10 @@
         }
         if (source === 'reading' && !hasOption(readingSelect, repeat.reading_test_id)) {
           setStatus('昨天使用的阅读练习当前不可用，未回填。', true);
+          return;
+        }
+        if (source === 'writing' && !hasOption(writingSelect, repeat.writing_resource_id)) {
+          setStatus('昨天使用的写作内容当前不可用，未回填。', true);
           return;
         }
         if (source === 'custom' && !hasOption(categorySelect, repeat.category)) {
@@ -3358,7 +3411,7 @@
           listeningSelect.value = repeat.listening_exercise_id || '';
           const resourceType = document.getElementById('listeningResourceType');
           if (resourceType) resourceType.value = repeat.listening_resource_type || 'intensive';
-          handleListeningExerciseChange();
+          await handleListeningExerciseChange();
           const trainingModeSelect = document.getElementById('listeningTrainingModeSelect');
           if (trainingModeSelect) {
             trainingModeSelect.value = repeat.listening_training_mode || 'system';
@@ -3380,6 +3433,10 @@
           document.querySelectorAll('input[name="reading_passage_number"]').forEach(radio => {
             radio.checked = radio.value === passageValue;
           });
+        } else if (source === 'writing') {
+          if (writingType) writingType.value = repeat.writing_resource_type || 'exercise';
+          if (writingSelect) writingSelect.value = repeat.writing_resource_id || '';
+          window.syncWritingAssignmentPicker?.();
         } else {
           categorySelect.value = repeat.category || '';
         }
@@ -3896,6 +3953,115 @@
     }
     initListeningPicker();
 
+    function initWritingAssignmentPicker() {
+      const picker = document.getElementById('writingAssignmentPicker');
+      const select = document.getElementById('writingResourceSelect');
+      const typeInput = document.getElementById('writingResourceType');
+      const searchInput = document.getElementById('writingPickerSearch');
+      const results = document.getElementById('writingPickerResults');
+      const selectedLabel = document.getElementById('writingPickerSelected');
+      const filterButtons = Array.from(document.querySelectorAll('[data-writing-filter]'));
+      if (!picker || !select || !typeInput || !searchInput || !results || !selectedLabel) return;
+
+      const normalize = value => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      const state = { filter: 'exercise', query: '' };
+      const selectedResource = () => writingAssignmentResources.find(item => (
+        item.id === select.value && item.resource_type === typeInput.value
+      ));
+
+      function syncSelection() {
+        const resource = selectedResource();
+        if (resource) state.filter = resource.resource_type;
+        filterButtons.forEach(button => {
+          const active = button.dataset.writingFilter === state.filter;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        selectedLabel.textContent = resource
+          ? `已选择：${resource.label} · ${resource.title}`
+          : '尚未选择写作内容';
+        document.getElementById('taskDetail').value = resource ? resource.title : '';
+        const planned = document.getElementById('taskPlanned');
+        if (planned && resource) planned.value = resource.planned_minutes || '';
+        renderResults();
+        window.__scheduleLegacyHistory?.();
+      }
+
+      function choose(resource) {
+        typeInput.value = resource.resource_type;
+        select.value = resource.id;
+        state.filter = resource.resource_type;
+        filterButtons.forEach(button => {
+          const active = button.dataset.writingFilter === state.filter;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        syncSelection();
+      }
+
+      function renderResults() {
+        const tokens = normalize(state.query).split(' ').filter(Boolean);
+        const matches = writingAssignmentResources.filter(item => {
+          if (item.resource_type !== state.filter) return false;
+          const haystack = normalize(`${item.id} ${item.title} ${item.title_en} ${item.label} ${item.meta} ${item.prompt}`);
+          return tokens.every(token => haystack.includes(token));
+        });
+        results.replaceChildren();
+        if (!matches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'writing-assignment-picker__empty';
+          empty.textContent = '没有匹配的写作内容，请换一个关键词。';
+          results.appendChild(empty);
+          return;
+        }
+        matches.forEach(resource => {
+          const button = document.createElement('button');
+          const isSelected = resource.id === select.value && resource.resource_type === typeInput.value;
+          button.type = 'button';
+          button.className = `writing-assignment-option${isSelected ? ' is-selected' : ''}`;
+          button.setAttribute('role', 'option');
+          button.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+          const title = document.createElement('strong');
+          title.textContent = resource.title;
+          const meta = document.createElement('small');
+          meta.textContent = `${resource.label} · ${resource.meta}`;
+          button.append(title, meta);
+          button.addEventListener('click', () => choose(resource));
+          results.appendChild(button);
+        });
+      }
+
+      window.syncWritingAssignmentPicker = syncSelection;
+      select.classList.add('is-enhanced');
+      select.setAttribute('aria-hidden', 'true');
+      select.tabIndex = -1;
+      filterButtons.forEach(button => button.addEventListener('click', () => {
+        state.filter = button.dataset.writingFilter || 'exercise';
+        typeInput.value = state.filter;
+        select.value = '';
+        filterButtons.forEach(candidate => {
+          const active = candidate === button;
+          candidate.classList.toggle('is-active', active);
+          candidate.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        syncSelection();
+      }));
+      searchInput.addEventListener('input', () => {
+        state.query = searchInput.value;
+        renderResults();
+      });
+      searchInput.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        const first = results.querySelector('.writing-assignment-option');
+        if (!first) return;
+        event.preventDefault();
+        first.click();
+      });
+      select.addEventListener('change', syncSelection);
+      renderResults();
+    }
+    initWritingAssignmentPicker();
+
     // Material Bank Selection Functions
     function toggleTaskSource(source) {
       const materialRow = document.getElementById('materialSelectRow');
@@ -3905,6 +4071,7 @@
       const listeningTrainingModeField = document.getElementById('listeningTrainingModeField');
       const readingRow = document.getElementById('readingSelectRow');
       const readingPassageRow = document.getElementById('readingPassageRow');
+      const writingRow = document.getElementById('writingSelectRow');
       const questionRow = document.getElementById('questionSelectRow');
       const questionIds = document.getElementById('questionIds');
       const questionContainer = document.getElementById('questionListContainer');
@@ -3912,6 +4079,8 @@
       const materialSelect = document.getElementById('material_id');
       const listeningSelect = document.getElementById('listeningExerciseSelect');
       const readingSelect = document.getElementById('readingExerciseSelect');
+      const writingSelect = document.getElementById('writingResourceSelect');
+      const writingResourceType = document.getElementById('writingResourceType');
       const listeningResourceType = document.getElementById('listeningResourceType');
       const learningGoalRow = document.getElementById('learningGoalRow');
       const vocabularyGoalSelect = document.getElementById('vocabularyGoalSelect');
@@ -3926,6 +4095,7 @@
       if (listeningTrainingModeField) listeningTrainingModeField.style.display = 'none';
       if (readingRow) readingRow.style.display = 'none';
       if (readingPassageRow) readingPassageRow.style.display = 'none';
+      if (writingRow) writingRow.style.display = 'none';
       if (questionRow) questionRow.style.display = 'none';
       if (questionTypeWorkspace) questionTypeWorkspace.hidden = source !== 'question_type';
       if (questionTypeStudentField) questionTypeStudentField.hidden = source !== 'question_type';
@@ -3934,6 +4104,7 @@
         else taskStudentInput.setAttribute('required', 'required');
       }
       if (questionIds) questionIds.value = '';
+      if (writingSelect) writingSelect.required = false;
       resetListeningSectionSelection();
       resetReadingPassageSelection();
       if (questionContainer) questionContainer.innerHTML = '<div class="text-muted">请选择材料后加载题目</div>';
@@ -3954,6 +4125,7 @@
         listeningSelect.value = '';
         window.syncListeningPickerFromSelect?.();
         if (readingSelect) readingSelect.value = '';
+        if (writingSelect) writingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskDetail').value = '题型专项';
         document.getElementById('taskNote').value = document.getElementById('taskNote').value || '';
@@ -3965,6 +4137,7 @@
         listeningSelect.value = '';
         window.syncListeningPickerFromSelect?.();
         if (readingSelect) readingSelect.value = '';
+        if (writingSelect) writingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('题目（口语题库）', '不勾选则默认布置全部题目');
         if (materialSelect.value) toggleDetailInput();
@@ -3974,6 +4147,7 @@
         categorySelect.value = '';
         materialSelect.value = '';
         if (readingSelect) readingSelect.value = '';
+        if (writingSelect) writingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
         window.syncListeningPickerFromSelect?.({ preserveFilter: true });
@@ -3984,10 +4158,23 @@
         categorySelect.value = '';
         materialSelect.value = '';
         listeningSelect.value = '';
+        if (writingSelect) writingSelect.value = '';
         window.syncListeningPickerFromSelect?.();
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskDetail').value = '';
         handleReadingExerciseChange();
+      } else if (source === 'writing') {
+        if (writingRow) writingRow.style.display = 'flex';
+        categorySelect.removeAttribute('required');
+        categorySelect.value = '';
+        materialSelect.value = '';
+        listeningSelect.value = '';
+        if (readingSelect) readingSelect.value = '';
+        if (listeningResourceType) listeningResourceType.value = 'intensive';
+        if (writingResourceType && !writingResourceType.value) writingResourceType.value = 'exercise';
+        document.getElementById('taskDetail').value = '';
+        window.syncListeningPickerFromSelect?.();
+        window.syncWritingAssignmentPicker?.();
       } else {
         categoryRow.style.display = 'flex';
         categorySelect.setAttribute('required', 'required');
@@ -3995,10 +4182,12 @@
         listeningSelect.value = '';
         window.syncListeningPickerFromSelect?.();
         if (readingSelect) readingSelect.value = '';
+        if (writingSelect) writingSelect.value = '';
         if (listeningResourceType) listeningResourceType.value = 'intensive';
         document.getElementById('taskNote').value = '';
         document.getElementById('taskDetail').value = '';
       }
+      if (source !== 'writing') window.syncWritingAssignmentPicker?.();
     }
 
     function setQuestionSelectionMeta(label, hint) {
@@ -4325,7 +4514,10 @@
       }
     }
 
-    function handleListeningExerciseChange() {
+    const listeningSegmentCache = new Map();
+    let listeningSegmentRequest = 0;
+
+    async function handleListeningExerciseChange() {
       const listeningSelect = document.getElementById('listeningExerciseSelect');
       const questionRow = document.getElementById('questionSelectRow');
       const container = document.getElementById('questionListContainer');
@@ -4336,8 +4528,10 @@
       const trainingModeField = document.getElementById('listeningTrainingModeField');
       const trainingModeSelect = document.getElementById('listeningTrainingModeSelect');
       if (!listeningSelect || !questionRow || !container || !questionIds || !detailInput) return;
+      const requestId = ++listeningSegmentRequest;
 
       questionIds.value = '';
+      container.removeAttribute('aria-busy');
       setSentenceRangeControlsVisible(false, true);
       if (sectionRow) sectionRow.style.display = 'none';
       if (trainingModeField) trainingModeField.style.display = 'none';
@@ -4373,10 +4567,35 @@
       if (trainingModeField) trainingModeField.style.display = 'block';
       setQuestionSelectionMeta('选择句子（精听任务）', '可勾选指定句子；不勾选则默认布置整篇');
       questionRow.style.display = 'flex';
-
-      const segments = listeningExerciseSegments[listeningSelect.value] || [];
-      renderQuestionCheckboxes(segments);
-      setSentenceRangeControlsVisible(true, true);
+      const exerciseId = listeningSelect.value;
+      container.setAttribute('aria-busy', 'true');
+      container.innerHTML = '<div class="text-muted" role="status">正在加载句子…</div>';
+      try {
+        let segments = listeningSegmentCache.get(exerciseId);
+        if (!segments) {
+          const response = await fetch(
+            `/api/task-assignments/listening-segments?exercise_id=${encodeURIComponent(exerciseId)}`,
+            { credentials: 'include', headers: { Accept: 'application/json' } }
+          );
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.ok || !Array.isArray(payload.segments)) {
+            throw new Error(payload.error || `HTTP ${response.status}`);
+          }
+          segments = payload.segments;
+          listeningSegmentCache.set(exerciseId, segments);
+        }
+        const selectedSource = document.querySelector('input[name="task_source"]:checked')?.value;
+        if (requestId !== listeningSegmentRequest || listeningSelect.value !== exerciseId || selectedSource !== 'listening') return;
+        renderQuestionCheckboxes(segments);
+        setSentenceRangeControlsVisible(true, true);
+      } catch (error) {
+        const selectedSource = document.querySelector('input[name="task_source"]:checked')?.value;
+        if (requestId !== listeningSegmentRequest || listeningSelect.value !== exerciseId || selectedSource !== 'listening') return;
+        container.innerHTML = '<div class="text-muted" role="alert">句子加载失败，请重新选择该练习后再试。</div>';
+        setSentenceRangeControlsVisible(false, true);
+      } finally {
+        if (requestId === listeningSegmentRequest) container.removeAttribute('aria-busy');
+      }
     }
 
     function renderReadingPassageChoices(passages) {
@@ -4484,6 +4703,7 @@
         const materialSelect = document.getElementById("material_id");
         const listeningSelect = document.getElementById("listeningExerciseSelect");
         const readingSelect = document.getElementById("readingExerciseSelect");
+        const writingSelect = document.getElementById("writingResourceSelect");
         const materialOption = materialSelect && materialSelect.value
           ? materialSelect.options[materialSelect.selectedIndex]
           : null;
@@ -4492,6 +4712,9 @@
           : null;
         const readingOption = readingSelect && readingSelect.value
           ? readingSelect.options[readingSelect.selectedIndex]
+          : null;
+        const writingOption = writingSelect && writingSelect.value
+          ? writingSelect.options[writingSelect.selectedIndex]
           : null;
         if (materialOption) {
           detailHidden.value = materialOption.getAttribute("data-title") || materialOption.textContent.trim();
@@ -4505,6 +4728,10 @@
           detailHidden.value = readingOption.getAttribute("data-title") || readingOption.textContent.trim();
           return;
         }
+        if (writingOption) {
+          detailHidden.value = writingOption.getAttribute("data-title") || writingOption.textContent.trim();
+          return;
+        }
         const option = categorySelect.options[categorySelect.selectedIndex];
         detailHidden.value = option ? option.textContent.trim() : '';
       };
@@ -4515,6 +4742,14 @@
         if (activeSource === 'question_type') {
           event.preventDefault();
           window.taskQtaPublish?.();
+          return;
+        }
+        const writingSelect = document.getElementById('writingResourceSelect');
+        if (activeSource === 'writing' && !writingSelect?.value) {
+          event.preventDefault();
+          const selected = document.getElementById('writingPickerSelected');
+          if (selected) selected.textContent = '请先选择一道写作真题或一个大作文母题。';
+          document.getElementById('writingPickerSearch')?.focus();
           return;
         }
         const resourceType = document.getElementById('listeningResourceType')?.value || 'intensive';
@@ -4760,12 +4995,6 @@
           if (selectedStudent === student) window.renderPreviousDayTasks?.(student);
         }
 
-        const remainingCount = remainingRows.length;
-        const periodCount = document.querySelector('.task-period-tabs__count');
-        const toolbarCount = document.querySelector('.task-list-toolbar .task-count-pill');
-        if (periodCount) periodCount.textContent = `${remainingCount} 条任务`;
-        if (toolbarCount) toolbarCount.textContent = `${remainingCount} 条任务`;
-        window.applyTaskFilters?.();
         if (wasInspected) window.__taskInspectorAfterDelete?.(nextRow);
         alert('任务已删除，页面将刷新以同步全部统计。');
         window.location.reload();
@@ -5150,7 +5379,7 @@
     setupInlineEdit('.accuracy-input', 'accuracy');
     setupInlineEdit('.progress-input', 'completion_rate');
 
-    // === 筛选逻辑（前端过滤当前列表） ===
+    // === 服务端筛选：只渲染当前页，避免数百行 DOM 阻塞浏览器 ===
     (function () {
       const studentInp = document.getElementById('filterStudent');
       const catSel = document.getElementById('filterCategory');
@@ -5158,56 +5387,36 @@
       const dueDateInp = document.getElementById('filterDueDate');
       const quickSearchInp = document.getElementById('taskQuickSearch');
       const clearBtn = document.getElementById('filterClear');
-      const stat = document.getElementById('filterStat');
-
-      function norm(s) { return (s || '').toLowerCase().trim(); }
+      if (catSel?.dataset.selected) catSel.value = catSel.dataset.selected;
+      if (statusSel?.dataset.selected) statusSel.value = statusSel.dataset.selected;
 
       function apply() {
-        const kw = norm(studentInp?.value);
-        const cat = catSel?.value || '';
-        const st = statusSel?.value || ''; // pending/progress/submitted/done/''
-        const dueDate = dueDateInp?.value || '';
-        const selectedDate = window.taskSelectedDate || '';
-        const quickSearch = norm(quickSearchInp?.value);
-        let showCount = 0;
-
-        const dataRows = Array.from(document.querySelectorAll('tr[data-id]'));
-        dataRows.forEach(row => {
-          const student = norm(row.dataset.student);
-          const category = (row.querySelector('.task-category')?.textContent || '').trim();
-          const badge = row.querySelector('.badge');
-          const status = badge?.classList.contains('status-done') ? 'done' : (badge?.classList.contains('status-submitted') ? 'submitted' : (badge?.classList.contains('status-progress') ? 'progress' : 'pending'));
-
-          let ok = true;
-          if (kw) {
-            const matchesStudent = window.taskStudentFilterMatchesName
-              ? window.taskStudentFilterMatchesName(student, kw)
-              : Boolean(student && student.includes(kw));
-            if (!matchesStudent) ok = false;
-          }
-          if (ok && quickSearch && !row.textContent.toLowerCase().includes(quickSearch)) ok = false;
-          if (ok && cat && category !== cat) ok = false;
-          if (ok && st && status !== st) ok = false;
-          if (ok && dueDate && row.dataset.date !== dueDate) ok = false;
-          if (ok && selectedDate && row.dataset.date !== selectedDate) ok = false;
-
-          row.dataset.filterVisible = ok ? 'true' : 'false';
-          if (ok) showCount++;
-        });
-
-        const totalRows = dataRows.length;
-        if (stat) stat.textContent = `显示 ${showCount} / ${totalRows} 条`;
-        window.taskWorkspaceApplyPagination?.();
+        const params = new URLSearchParams(window.location.search);
+        const setParam = (name, value) => {
+          const cleanValue = String(value || '').trim();
+          if (cleanValue) params.set(name, cleanValue);
+          else params.delete(name);
+        };
+        setParam('q', quickSearchInp?.value);
+        setParam('student', studentInp?.value);
+        setParam('category', catSel?.value);
+        setParam('status', statusSel?.value);
+        setParam('due_date', dueDateInp?.value);
+        params.delete('student_name');
+        params.delete('task_id');
+        params.set('page', '1');
+        window.location.assign(`${window.location.pathname}?${params.toString()}`);
       }
 
       window.applyTaskFilters = apply;
 
-      // 简单防抖
       let timer = null;
-      studentInp && studentInp.addEventListener('input', () => {
+      const applyDebounced = () => {
         clearTimeout(timer);
-        timer = setTimeout(apply, 200);
-      });
+        timer = setTimeout(apply, 350);
+      };
+      studentInp?.addEventListener('input', applyDebounced);
+      quickSearchInp?.addEventListener('input', applyDebounced);
       catSel && catSel.addEventListener('change', apply);
       statusSel && statusSel.addEventListener('change', apply);
       dueDateInp && dueDateInp.addEventListener('change', apply);
@@ -5220,9 +5429,6 @@
         document.querySelectorAll('.task-date-choice.is-active').forEach(choice => choice.classList.remove('is-active'));
         apply();
       });
-
-      // 初始化统计
-      apply();
     })();
     // === 计时逻辑：开始 / 暂停 / 结束（可多段累计） ===
     (function () {
@@ -5671,6 +5877,8 @@
           listening_section_number: document.querySelector('[name="listening_section_number"]:checked')?.value || '',
           reading_test_id: document.getElementById('readingExerciseSelect')?.value || '',
           reading_passage_number: document.querySelector('[name="reading_passage_number"]:checked')?.value || '',
+          writing_resource_type: document.getElementById('writingResourceType')?.value || '',
+          writing_resource_id: document.getElementById('writingResourceSelect')?.value || '',
           question_ids: document.getElementById('questionIds')?.value || ''
         };
       };
@@ -5849,7 +6057,7 @@
         qtaDuplicateResult = null;
       };
       taskForm?.addEventListener('change', event => {
-        if (event.target.matches('[name="student_name"], #material_id, #listeningExerciseSelect, #listeningResourceType, #readingExerciseSelect, #questionIds, #sentenceRangeInput, #questionListContainer .question-checkbox, [name="listening_section_number"], [name="reading_passage_number"], [name="dictation_word_start"], [name="dictation_word_end"], [name="speaking_phrase_start"], [name="speaking_phrase_end"], input[name="question_ids"]')) scheduleLegacyHistory();
+        if (event.target.matches('[name="student_name"], #material_id, #listeningExerciseSelect, #listeningResourceType, #readingExerciseSelect, #writingResourceSelect, #writingResourceType, #questionIds, #sentenceRangeInput, #questionListContainer .question-checkbox, [name="listening_section_number"], [name="reading_passage_number"], [name="dictation_word_start"], [name="dictation_word_end"], [name="speaking_phrase_start"], [name="speaking_phrase_end"], input[name="question_ids"]')) scheduleLegacyHistory();
       });
       taskForm?.addEventListener('input', event => {
         if (event.target.matches('[name="student_name"], #questionIds, #sentenceRangeInput, [name="dictation_word_start"], [name="dictation_word_end"], [name="speaking_phrase_start"], [name="speaking_phrase_end"]')) scheduleLegacyHistory();
@@ -6008,13 +6216,13 @@
         if (nextRow && document.body.contains(nextRow)) updateInspector(nextRow);
         else resetInspector();
       };
-      document.querySelectorAll('.task-subtable tbody tr').forEach(row => row.addEventListener('click', event => {
+      document.querySelectorAll('.task-subtable tbody tr[data-id]').forEach(row => row.addEventListener('click', event => {
         if (!event.target.closest('button, a, input, select')) {
           updateInspector(row);
           if (window.matchMedia('(max-width: 900px)').matches) document.body.classList.add('task-inspector-mobile-open');
         }
       }));
-      updateInspector(document.querySelector('.task-subtable tbody tr'));
+      updateInspector(document.querySelector('.task-subtable tbody tr[data-id]'));
       document.querySelector('.task-inspector__close')?.addEventListener('click', () => document.body.classList.remove('task-inspector-mobile-open'));
       document.body.addEventListener('click', event => {
         if (event.target === document.body && window.matchMedia('(max-width: 900px)').matches) document.body.classList.remove('task-inspector-mobile-open');
@@ -6024,14 +6232,6 @@
       closeButton?.addEventListener('click', () => setDrawerOpen(false));
       backdrop?.addEventListener('click', () => setDrawerOpen(false));
       document.addEventListener('keydown', event => { if (event.key === 'Escape' && form?.classList.contains('is-open')) setDrawerOpen(false); });
-      document.getElementById('taskQuickSearch')?.addEventListener('input', event => {
-        const query = event.target.value.trim().toLowerCase();
-        document.querySelectorAll('tr[data-id]').forEach(row => {
-          const matched = !query || row.textContent.toLowerCase().includes(query);
-          row.dataset.searchVisible = matched ? 'true' : 'false';
-        });
-        window.applyTaskFilters?.();
-      });
       const params = new URLSearchParams(window.location.search);
       if (params.get('source') === 'question_type' || window.location.hash === '#taskForm') {
         const radio = document.querySelector('input[name="task_source"][value="question_type"]');

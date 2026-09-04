@@ -481,6 +481,44 @@
 .writing-pill--link { border-color: var(--lw-green-100); color: var(--lw-green-700); text-decoration: none; }
 .writing-pill--link:hover { border-color: var(--lw-green-300); background: var(--lw-green-50); color: var(--lw-green-700); }
 
+.writing-assignment-callout {
+  max-width: 1060px;
+  min-height: 62px;
+  margin: 0 auto 16px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--lw-green-200);
+  border-radius: 11px;
+  background: var(--lw-green-50);
+}
+.writing-assignment-callout > div { display: grid; gap: 4px; }
+.writing-assignment-callout small { color: var(--lw-green-600); font-size: 10px; font-weight: 900; letter-spacing: .04em; }
+.writing-assignment-callout strong { color: var(--writing-ink); font-size: 13px; }
+.writing-assignment-callout > span,
+.writing-assignment-callout > button {
+  min-height: 40px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--lw-green-500);
+  border-radius: 8px;
+  background: var(--lw-green-500);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+}
+.writing-assignment-callout > button { min-height: 44px; cursor: pointer; }
+.writing-assignment-callout > button:focus-visible { outline: 3px solid rgba(47,142,135,.24); outline-offset: 2px; }
+.writing-assignment-callout.is-complete { border-color: var(--lw-neutral-200); background: var(--lw-neutral-50); }
+.writing-assignment-callout.is-complete > span,
+.writing-assignment-callout.is-complete > button { border-color: var(--lw-neutral-300); background: #fff; color: var(--lw-green-700); }
+.writing-assignment-callout > button:disabled { cursor: default; }
+
 .mother-topic-entry,
 .mother-topic-principle,
 .mother-topic-context {
@@ -631,6 +669,9 @@
   .mother-topic-training-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
+  .writing-assignment-callout { align-items: stretch; flex-direction: column; }
+  .writing-assignment-callout > span,
+  .writing-assignment-callout > button { width: 100%; }
   .mother-topic-entry,
   .mother-topic-principle,
   .mother-topic-context { align-items: stretch; flex-direction: column; gap: 13px; }
