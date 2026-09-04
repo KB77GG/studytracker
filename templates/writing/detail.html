@@ -58,11 +58,19 @@
         <div class="writing-card__meta">
           <span class="writing-pill writing-pill--primary">{{ exercise.task_label }}</span>
           <span class="writing-pill">{{ exercise.task_type_zh }}</span>
+          {% if exercise.mother_topic %}<a class="writing-pill writing-pill--link" href="{{ url_for('writing_library.topic_detail', topic_id=exercise.mother_topic.id) }}">{{ exercise.mother_topic.code }} · {{ exercise.mother_topic.title_zh }}</a>{% endif %}
           <span class="writing-card__number">NO. {{ '%03d'|format(exercise.sequence) }}</span>
         </div>
         <h1>{{ exercise.topic_zh }}</h1>
         <p>{{ exercise.title_en }}</p>
       </header>
+
+      {% if exercise.mother_topic %}
+      <aside class="mother-topic-context" aria-label="本题所属母题">
+        <div><small>本题所属母题</small><strong>{{ exercise.mother_topic.code }} · {{ exercise.mother_topic.title_zh }}</strong><span>先看母题逻辑链，再判断本题应选哪两条展开。</span></div>
+        <a href="{{ url_for('writing_library.topic_detail', topic_id=exercise.mother_topic.id) }}">打开母题解析 <span aria-hidden="true">→</span></a>
+      </aside>
+      {% endif %}
 
       <section class="writing-section writing-question" id="question" aria-labelledby="questionTitle">
         <div class="writing-section__heading">

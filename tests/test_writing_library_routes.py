@@ -60,9 +60,12 @@ def _verify(client, name="写作学生"):
 
 def test_guest_is_redirected_to_identity_gate(writing_client):
     response = writing_client.get("/writing/")
+    topics_response = writing_client.get("/writing/topics")
 
     assert response.status_code == 302
     assert response.headers["Location"].endswith("/practice#ieltsPractice")
+    assert topics_response.status_code == 302
+    assert topics_response.headers["Location"].endswith("/practice#ieltsPractice")
     assert writing_client.post("/writing/api/t2-010/typing/start", json={"band": "6.0"}).status_code == 401
 
 
@@ -105,6 +108,32 @@ def test_verified_student_can_open_catalog_and_complete_attempt(writing_app, wri
     )
     assert repeated.get_json()["idempotent"] is True
     assert repeated.get_json()["attempt"]["accuracy"] == 100.0
+
+
+def test_verified_student_can_browse_mother_topics_and_link_to_pilot(writing_client):
+    _verify(writing_client)
+
+    index_response = writing_client.get("/writing/topics")
+    assert index_response.status_code == 200
+    index_html = index_response.get_data(as_text=True)
+    assert index_html.count("data-mother-topic-card ") == 27
+    assert "252" in index_html
+    assert "108" in index_html
+
+    detail_response = writing_client.get("/writing/topics/t01")
+    assert detail_response.status_code == 200
+    detail_html = detail_response.get_data(as_text=True)
+    assert "教育目标、课程与方法" in detail_html
+    assert "4 条可复用逻辑链" in detail_html
+    assert "Band 7.0+ 教学范文" in detail_html
+    assert "展开全部 28 道同母题题干" in detail_html
+    assert "/writing/t2-018" in detail_html
+
+    pilot_html = writing_client.get("/writing/t2-018").get_data(as_text=True)
+    assert "T01 · 教育目标、课程与方法" in pilot_html
+    assert "/writing/topics/t01" in pilot_html
+
+    assert writing_client.get("/writing/topics/not-a-topic").status_code == 404
 
 
 def test_attempt_is_owned_by_verified_student(writing_client):

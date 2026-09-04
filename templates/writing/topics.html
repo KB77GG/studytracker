@@ -1,0 +1,128 @@
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS 大作文母题库 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "practice/_workspace_styles.html" %}
+<link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
+</head>
+<body class="practice-workspace-page writing-library-page" data-practice-hub="section">
+<div class="practice-workspace" data-practice-workspace data-mother-topics-index>
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">剑雅真题</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        <a href="{{ url_for('listening_test_index') }}">听力</a>
+        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+      </nav>
+    </div>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('writing_library.index') }}">40 题范文库</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+    </div>
+  </header>
+
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="母题分类筛选">
+      <div class="practice-workspace__sidebar-head">
+        <strong>母题分类</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
+      <nav class="practice-workspace__source-nav" aria-label="领域筛选">
+        <section class="practice-workspace__source-group">
+          <a class="writing-sidebar-entry" href="{{ url_for('writing_library.index') }}">
+            <span><strong>40 题范文库</strong><em>真题精练与打字训练</em></span><small>进入</small>
+          </a>
+        </section>
+        <section class="practice-workspace__source-group">
+          <button class="practice-workspace__source-toggle is-active" type="button" data-topic-filter="all" aria-pressed="true">
+            <span><strong>全部母题</strong><em>从框架迁移到真题</em></span><small>{{ summary.total }} 个</small>
+          </button>
+          <div class="practice-workspace__source-items">
+            {% for family in summary.families %}
+            <button class="practice-workspace__source-item" type="button" data-topic-filter="{{ family }}" aria-pressed="false"><span>{{ family }}</span></button>
+            {% endfor %}
+          </div>
+        </section>
+      </nav>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">WRITING</span>
+    </aside>
+
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭母题筛选" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main writing-catalog mother-topic-catalog">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button" type="button" aria-controls="practice-catalog" aria-expanded="false" data-open-catalog>母题分类</button>
+
+      <header class="writing-catalog__hero mother-topic-hero">
+        <div>
+          <p class="writing-eyebrow">IELTS Task 2 · Topic Families</p>
+          <h1>大作文母题库</h1>
+          <p>先掌握可迁移的论证框架，再处理不同问法。每个母题包含代表题、三档范文、4 条完整逻辑链、表达库和迁移训练。</p>
+        </div>
+        <div class="writing-catalog__stats" aria-label="母题库概览">
+          <div><strong>{{ summary.total }}</strong><span>个母题</span></div>
+          <div><strong>{{ summary.prompts }}</strong><span>道题干</span></div>
+          <div><strong>{{ summary.logic_chains }}</strong><span>条逻辑链</span></div>
+        </div>
+      </header>
+
+      <section class="mother-topic-principle" aria-label="母题学习方法">
+        <strong>母题不是万能模板</strong>
+        <p>同一母题共享的是分析维度与因果机制；落笔前仍要根据题型、主语、范围和绝对词重组立场。</p>
+        <a href="{{ url_for('writing_library.index') }}">去 40 题范文库练习 <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="writing-catalog__toolbar" aria-label="搜索母题">
+        <label for="motherTopicSearch">搜索母题</label>
+        <div class="writing-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="motherTopicSearch" type="search" placeholder="输入领域、母题、框架或题干关键词" autocomplete="off">
+        </div>
+        <p id="motherTopicResultCount" aria-live="polite">显示 {{ summary.total }} 个母题</p>
+      </section>
+
+      <section class="mother-topic-grid" id="motherTopicGrid" aria-label="大作文母题列表">
+        {% for topic in topics %}
+        <article class="mother-topic-card" data-mother-topic-card data-family="{{ topic.family }}" data-search="{{ (topic.family ~ ' ' ~ topic.title_zh ~ ' ' ~ topic.title_en ~ ' ' ~ topic.summary_zh ~ ' ' ~ topic.framework_zh ~ ' ' ~ (topic.prompts|map(attribute='topic_zh')|join(' ')) ~ ' ' ~ (topic.prompts|map(attribute='prompt')|join(' ')))|lower }}">
+          <a href="{{ url_for('writing_library.topic_detail', topic_id=topic.id) }}" aria-label="学习 {{ topic.code }} {{ topic.title_zh }}">
+            <header>
+              <span class="mother-topic-card__code">{{ topic.code }}</span>
+              <span class="writing-pill">{{ topic.family }}</span>
+              <span class="mother-topic-card__count">{{ topic.prompt_count }} 题</span>
+            </header>
+            <h2>{{ topic.title_zh }}</h2>
+            <p class="mother-topic-card__english">{{ topic.title_en }}</p>
+            <p class="mother-topic-card__summary">{{ topic.summary_zh }}</p>
+            <div class="mother-topic-card__framework"><small>分析框架</small><strong>{{ topic.framework_zh }}</strong></div>
+            <footer><span>4 条逻辑链 · 8 组表达 · 3 档范文</span><strong>进入母题 <span aria-hidden="true">→</span></strong></footer>
+          </a>
+        </article>
+        {% endfor %}
+      </section>
+      <div class="writing-empty" id="motherTopicEmpty" hidden>没有匹配的母题，换个关键词或领域试试。</div>
+      <p class="writing-source-note">{{ source_note }}</p>
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/writing-mother-topics.js') }}" defer></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.installListContext({ ...window.PRACTICE_NAVIGATION_DEFAULTS, sourceMode: 'writing_library' }); PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);</script>
+</body>
+</html>

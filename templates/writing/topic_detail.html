@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ topic.code }} {{ topic.title_zh }} · IELTS 大作文母题 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "practice/_workspace_styles.html" %}
+<link href="{{ url_for('static', filename='css/writing-library.css') }}" rel="stylesheet">
+</head>
+<body class="practice-workspace-page writing-library-page">
+<div class="practice-workspace" data-practice-workspace data-mother-topic-detail>
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" aria-label="返回练习中心">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">剑雅真题</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        <a href="{{ url_for('listening_test_index') }}">听力</a>
+        <a href="{{ url_for('reading_test_index') }}">阅读</a>
+        <a class="is-active" href="{{ url_for('writing_library.index') }}" aria-current="page">写作</a>
+      </nav>
+    </div>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('writing_library.topics_index') }}">返回母题库</a>
+      <a href="{{ url_for('writing_library.index') }}">40 题范文库</a>
+      <span aria-label="{{ '当前学生 ' ~ student.full_name if student else '课堂模式' }}">{{ student.full_name[:1] if student else '课' }}</span>
+    </div>
+  </header>
+
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="母题学习目录">
+      <div class="practice-workspace__sidebar-head">
+        <strong>{{ topic.code }} 学习目录</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
+      <nav class="writing-detail-nav">
+        <a class="is-active" href="#overview"><span>01</span><strong>母题概览</strong><small>边界与分析框架</small></a>
+        <a href="#prompts"><span>02</span><strong>题干库</strong><small>代表题与同母题变式</small></a>
+        <a href="#models"><span>03</span><strong>分层范文</strong><small>6.0 / 6.5 / 7.0+</small></a>
+        <a href="#logic"><span>04</span><strong>可复用逻辑链</strong><small>主张到边界</small></a>
+        <a href="#expressions"><span>05</span><strong>表达库</strong><small>功能化整理</small></a>
+        <a href="#transfer"><span>06</span><strong>迁移训练</strong><small>误区、提问与练习</small></a>
+        {% if related_exercises %}<a href="#practice"><span>07</span><strong>关联真题</strong><small>范文与打字训练</small></a>{% endif %}
+      </nav>
+      <a class="writing-back-link" href="{{ url_for('writing_library.topics_index') }}">← 返回 27 个母题</a>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">WRITING</span>
+    </aside>
+
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭母题目录" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main writing-detail mother-topic-detail">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button" type="button" aria-controls="practice-catalog" aria-expanded="false" data-open-catalog>母题目录</button>
+
+      <header class="writing-detail__title mother-topic-detail__title">
+        <div class="writing-card__meta">
+          <span class="mother-topic-card__code">{{ topic.code }}</span>
+          <span class="writing-pill writing-pill--primary">Task 2 大作文</span>
+          <span class="writing-pill">{{ topic.family }}</span>
+          <span class="writing-card__number">{{ topic.prompt_count }} 道题干</span>
+        </div>
+        <h1>{{ topic.title_zh }}</h1>
+        <p>{{ topic.title_en }}</p>
+      </header>
+
+      <section class="writing-section" id="overview" aria-labelledby="overviewTitle">
+        <div class="writing-section__heading">
+          <span>01</span><div><p>Topic Map</p><h2 id="overviewTitle">母题概览</h2></div>
+        </div>
+        <p class="mother-topic-lead">{{ topic.summary_zh }}</p>
+        <div class="mother-topic-overview-grid">
+          <article>
+            <small>核心分析框架</small>
+            <strong>{{ topic.framework_zh }}</strong>
+          </article>
+          <article>
+            <small>推荐基础立场</small>
+            <strong>{{ topic.stance_zh }}</strong>
+          </article>
+        </div>
+        <div class="mother-topic-thesis">
+          <small>可作为立场句的英文骨架</small>
+          <p>{{ topic.thesis_en }}</p>
+          <button type="button" data-copy-expression="{{ topic.thesis_en }}" aria-label="复制英文立场句">复制</button>
+        </div>
+        <div class="writing-notice" role="note">母题提供的是分析地图，不是整段套用模板。换题时先检查题型、主语、范围、程度词和责任主体，再选择两条最贴题的逻辑链。</div>
+      </section>
+
+      <section class="writing-section writing-question" id="prompts" aria-labelledby="promptsTitle">
+        <div class="writing-section__heading">
+          <span>02</span><div><p>Prompt Bank</p><h2 id="promptsTitle">代表题与同母题题干</h2></div>
+        </div>
+        <div class="mother-topic-representative">
+          <div><span>代表题</span><small>NO. {{ '%03d'|format(topic.representative_prompt.sequence) }} · {{ topic.representative_prompt.task_type }}</small></div>
+          <blockquote>{{ topic.representative_prompt.prompt }}</blockquote>
+        </div>
+        <details class="mother-topic-prompt-bank">
+          <summary>展开全部 {{ topic.prompt_count }} 道同母题题干 <span>用于识别换皮问法与练习迁移</span></summary>
+          <div>
+            {% for prompt in topic.prompts %}
+            <article>
+              <header><span>NO. {{ '%03d'|format(prompt.sequence) }}</span><strong>{{ prompt.topic_zh }}</strong><small>{{ prompt.task_type }}</small>{% if prompt.source_normalized %}<em>原文错误已规范</em>{% endif %}</header>
+              <p>{{ prompt.prompt }}</p>
+              {% if prompt.exercise_id %}<a href="{{ url_for('writing_library.detail', exercise_id=prompt.exercise_id) }}">进入本题范文与打字训练 <span aria-hidden="true">→</span></a>{% endif %}
+            </article>
+            {% endfor %}
+          </div>
+        </details>
+      </section>
+
+      <section class="writing-section" id="models" aria-labelledby="modelsTitle">
+        <div class="writing-section__heading">
+          <span>03</span><div><p>Levelled Models</p><h2 id="modelsTitle">代表题三档范文</h2></div>
+        </div>
+        <div class="writing-notice" role="note">以下范文专门回答上方代表题，用来观察同一组论点在不同档位中的展开深度；不要直接套到本母题的其他题干。</div>
+        <div class="writing-tabs" role="tablist" aria-label="选择母题范文档位">
+          {% for band in bands %}
+          <button id="topic-model-tab-{{ loop.index }}" type="button" role="tab" aria-controls="topic-model-panel-{{ loop.index }}" aria-selected="{{ 'true' if loop.first else 'false' }}" class="{{ 'is-active' if loop.first else '' }}" data-topic-model-band="{{ band }}">Band {{ band }}</button>
+          {% endfor %}
+        </div>
+        {% for band in bands %}
+        {% set essay = topic.model_essays[band] %}
+        <article class="writing-model" id="topic-model-panel-{{ loop.index }}" role="tabpanel" aria-labelledby="topic-model-tab-{{ loop.index }}" data-topic-model-panel="{{ band }}" {% if not loop.first %}hidden{% endif %}>
+          <div class="writing-model__meta"><strong>Band {{ band }} 教学范文</strong><span>{{ essay.word_count }} words · {{ essay.paragraphs|length }} paragraphs</span></div>
+          <div class="writing-model__body">
+            {% for paragraph in essay.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+
+      <section class="writing-section" id="logic" aria-labelledby="logicTitle">
+        <div class="writing-section__heading">
+          <span>04</span><div><p>Reusable Reasoning</p><h2 id="logicTitle">4 条可复用逻辑链</h2></div>
+        </div>
+        <p class="mother-topic-section-intro">使用顺序：先选与题干主语和范围最匹配的一条，再补“机制”和“边界”。不要只背 Claim 与 Example。</p>
+        <div class="mother-topic-logic-list">
+          {% for chain in topic.logic_chains %}
+          <article>
+            <header><span>链 {{ '%02d'|format(loop.index) }}</span><h3>{{ chain.title_zh }}</h3></header>
+            <ol>
+              <li><small>Claim · 主张</small><p>{{ chain.claim_en }}</p></li>
+              <li><small>Mechanism · 机制</small><p>{{ chain.mechanism_zh }}</p></li>
+              <li><small>Example · 情境</small><p>{{ chain.example_en }}</p></li>
+              <li><small>Result · 结果</small><p>{{ chain.result_en }}</p></li>
+              <li><small>Boundary · 边界</small><p>{{ chain.boundary_zh }}</p></li>
+            </ol>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="writing-section" id="expressions" aria-labelledby="expressionsTitle">
+        <div class="writing-section__heading">
+          <span>05</span><div><p>Reusable Language</p><h2 id="expressionsTitle">主题表达与论证表达</h2></div>
+        </div>
+        <div class="writing-expression-list mother-topic-expression-list">
+          {% for expression in topic.expressions %}
+          <article><span>{{ '%02d'|format(loop.index) }}</span><div><strong>{{ expression.en }}</strong><p>{{ expression.zh }} · {{ expression.function_zh }}</p></div><button type="button" data-copy-expression="{{ expression.en }}" aria-label="复制表达 {{ expression.en }}">复制</button></article>
+          {% endfor %}
+        </div>
+        <p class="writing-copy-status" id="writingCopyStatus" aria-live="polite"></p>
+      </section>
+
+      <section class="writing-section" id="transfer" aria-labelledby="transferTitle">
+        <div class="writing-section__heading">
+          <span>06</span><div><p>Transfer Practice</p><h2 id="transferTitle">从母题迁移到新题</h2></div>
+        </div>
+        <div class="mother-topic-training-grid">
+          <article><h3>常见失分点</h3><ul>{% for item in topic.pitfalls_zh %}<li>{{ item }}</li>{% endfor %}</ul></article>
+          <article><h3>审题追问</h3><ul>{% for item in topic.guiding_questions_zh %}<li>{{ item }}</li>{% endfor %}</ul></article>
+          <article><h3>迁移练习</h3><ol>{% for item in topic.transfer_drills_zh %}<li>{{ item }}</li>{% endfor %}</ol></article>
+        </div>
+      </section>
+
+      {% if related_exercises %}
+      <section class="writing-section" id="practice" aria-labelledby="practiceTitle">
+        <div class="writing-section__heading">
+          <span>07</span><div><p>Linked Practice</p><h2 id="practiceTitle">已上线关联真题</h2></div>
+        </div>
+        <p class="mother-topic-section-intro">这些题已配备独立立场、三档范文、结构拆解、表达和打字记录，可用于检验能否把母题框架真正迁移到具体题干。</p>
+        <div class="mother-topic-related-grid">
+          {% for exercise in related_exercises %}
+          <a href="{{ url_for('writing_library.detail', exercise_id=exercise.id) }}">
+            <div><span>NO. {{ '%03d'|format(exercise.sequence) }}</span><small>{{ exercise.task_type_zh }}</small></div>
+            <strong>{{ exercise.topic_zh }}</strong>
+            <p>{{ exercise.prompt }}</p>
+            <em>进入范文与打字训练 <span aria-hidden="true">→</span></em>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/writing-mother-topic-detail.js') }}" defer></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.init({fallbackUrl: {{ url_for('writing_library.topics_index')|tojson }}, fallbackMode: 'writing_library', initialSaved: true});</script>
+</body>
+</html>

@@ -44,6 +44,11 @@
       </div>
       <nav class="practice-workspace__source-nav" aria-label="题型筛选">
         <section class="practice-workspace__source-group">
+          <a class="writing-sidebar-entry writing-sidebar-entry--featured" href="{{ url_for('writing_library.topics_index') }}">
+            <span><strong>大作文母题库</strong><em>逻辑链与迁移训练</em></span><small>{{ summary.mother_topics }} 个</small>
+          </a>
+        </section>
+        <section class="practice-workspace__source-group">
           <button class="practice-workspace__source-toggle is-active" type="button" data-writing-filter="all" aria-pressed="true">
             <span><strong>全部试点题</strong><em>高频写作范文库</em></span><small>{{ summary.total }} 题</small>
           </button>
@@ -82,14 +87,23 @@
         <div>
           <p class="writing-eyebrow">IELTS Writing · Pilot Library</p>
           <h1>写作范文与打字训练</h1>
-          <p>从原题到立场、论点、结构和表达，最后用逐字输入把范文真正练熟。</p>
+          <p>先用母题建立论证地图，再进入具体真题学习立场、结构和表达，最后用逐字输入把范文真正练熟。</p>
         </div>
         <div class="writing-catalog__stats" aria-label="题库概览">
-          <div><strong>{{ summary.task2 }}</strong><span>大作文</span></div>
-          <div><strong>{{ summary.task1 }}</strong><span>小作文</span></div>
+          <div><strong>{{ summary.mother_topics }}</strong><span>大作文母题</span></div>
+          <div><strong>{{ summary.total }}</strong><span>试点真题</span></div>
           <div><strong>3</strong><span>分数层级</span></div>
         </div>
       </header>
+
+      <section class="mother-topic-entry" aria-labelledby="motherTopicEntryTitle">
+        <div>
+          <p class="writing-eyebrow">New · Task 2 Topic Families</p>
+          <h2 id="motherTopicEntryTitle">先学 27 个母题，再练 252 种题干变化</h2>
+          <p>每个母题都有代表题三档范文、4 条可复用逻辑链、8 组功能表达，以及审题误区与迁移练习。</p>
+        </div>
+        <a href="{{ url_for('writing_library.topics_index') }}">进入大作文母题库 <span aria-hidden="true">→</span></a>
+      </section>
 
       <section class="writing-catalog__toolbar" aria-label="搜索题库">
         <label for="writingSearch">搜索题目</label>
@@ -107,13 +121,14 @@
             <div class="writing-card__meta">
               <span class="writing-pill writing-pill--primary">{{ item.task_label }}</span>
               <span class="writing-pill">{{ item.task_type_zh }}</span>
+              {% if item.mother_topic %}<span class="writing-pill">{{ item.mother_topic.code }} · {{ item.mother_topic.title_zh }}</span>{% endif %}
               <span class="writing-card__number">NO. {{ '%03d'|format(item.sequence) }}</span>
             </div>
             <h2>{{ item.topic_zh }}</h2>
             <p class="writing-card__english">{{ item.title_en }}</p>
             <p class="writing-card__prompt">{{ item.prompt }}</p>
             <div class="writing-card__footer">
-              <span>6.0 · 6.5 · 7.0+</span>
+              <span>{% if item.mother_topic %}关联母题 · {% endif %}6.0 · 6.5 · 7.0+</span>
               <strong>进入学习 <span aria-hidden="true">→</span></strong>
             </div>
           </a>

@@ -12,7 +12,10 @@ from services.writing_library import (
     BANDS,
     catalog_summary,
     get_exercise,
+    get_mother_topic,
     load_catalog,
+    load_mother_topics,
+    mother_topic_summary,
     typing_metrics,
 )
 
@@ -121,6 +124,47 @@ def index():
         exercises=catalog["exercises"],
         summary=catalog_summary(),
         source_note=catalog["source_note"],
+        student=student,
+        staff_mode=staff_mode,
+    )
+
+
+@writing_library_bp.get("/topics")
+def topics_index():
+    access = _require_page_access()
+    if access is None:
+        return redirect(url_for("practice_library", _anchor="ieltsPractice"))
+    student, staff_mode = access
+    catalog = load_mother_topics()
+    return render_template(
+        "writing/topics.html",
+        topics=catalog["topics"],
+        summary=mother_topic_summary(),
+        source_note=catalog["source_note"],
+        student=student,
+        staff_mode=staff_mode,
+    )
+
+
+@writing_library_bp.get("/topics/<topic_id>")
+def topic_detail(topic_id: str):
+    access = _require_page_access()
+    if access is None:
+        return redirect(url_for("practice_library", _anchor="ieltsPractice"))
+    topic = get_mother_topic(topic_id)
+    if not topic:
+        abort(404)
+    student, staff_mode = access
+    related_exercises = [
+        exercise
+        for exercise_id in topic["related_exercise_ids"]
+        if (exercise := get_exercise(exercise_id))
+    ]
+    return render_template(
+        "writing/topic_detail.html",
+        topic=topic,
+        bands=BANDS,
+        related_exercises=related_exercises,
         student=student,
         staff_mode=staff_mode,
     )
