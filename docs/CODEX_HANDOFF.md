@@ -1,16 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-04 IELTS 大作文母题库发布候选（已整合最新主线，待发布验证）。
+> 最近更新：2026-09-04 IELTS 大作文母题库已上线。
 
-## 2026-09-04 IELTS 大作文母题库发布候选（已整合最新主线，待发布验证）
+## 2026-09-04 IELTS 大作文母题库已上线
 
-- 唯一发布工作树为 `/Users/zhouxin/Desktop/studytracker-writing-mother-topics`，分支 `codex/writing-mother-topics`；已在用户明确要求“部署看看”后整合 `origin/main@8aaa8d6b`。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 的既有脏改动未触碰。
+- 唯一发布工作树为 `/Users/zhouxin/Desktop/studytracker-writing-mother-topics`，分支 `codex/writing-mother-topics`；已在用户明确要求“部署看看”后整合 `origin/main@8aaa8d6b`。业务提交 `6eafb2adcd306ffb748ddd13229bc826220c131b`（`feat: add IELTS writing mother topics`）已原子推送任务分支与 `origin/main`。桌面旧工作树 `/Users/zhouxin/Desktop/studytracker` 的既有脏改动未触碰。
 - 新增 `/writing/topics` 与 `/writing/topics/<topic_id>`：共 27 个 Task 2 母题，归入 6 个教学领域，覆盖用户提供题库的 252 道大作文题干。每个母题含代表题、明确立场、3 档代表题范文（6.0 / 6.5 / 7.0+，均不少于 250 words）、4 条 Claim → Mechanism → Example → Result → Boundary 逻辑链、8 组按功能整理的表达、常见失分点、审题追问和迁移练习；题干库默认折叠。4 条源题干的明显语法 / 标点错误（序号 89 / 127 / 188 / 211）已规范化并透明标记。
 - 现有 30 道 Task 2 试点题全部与母题双向链接；10 道 Task 1、现有三档范文、结构拆解、打字计时 / 速度 / 准确率和服务端练习记录未改。写作首页新增突出母题入口，练习中心写作摘要同步更新。
 - 内容文件为 `data/writing_library/mother_topics.json`（约 279 KB）；母题中的 27 组教研内容由本轮编写，原始 252 题干来自用户提供的本机 `题库数据.json`，未把外部原始文件或任何账号信息加入仓库。没有数据库 / schema / 小程序改动，也没有写入学生或生产数据。
-- 整合前精确验证：写作服务 / 路由 / 工作区回归 **14 passed / 8 subtests passed**；JSON、Python / JS 语法和 `git diff --check` 通过。服务层断言固定 27 母题 / 252 唯一题干 / 108 条逻辑链 / 216 组表达 / 30 条试点回链，三档范文字数区间分别为 277–298 / 257–278 / 351–376 words；本地 `1440` 桌面目录、T01 详情和窄屏预览已检查。正式推送前须在最新主线上重跑，随后观察 CI / deploy 并完成生产 URL、服务、数据库只读与双向链接验收。
-- 本节是发布前事实；最终 commit / push / deploy / 生产状态以下一条发布审计更新为准。
+- 整合最新主线后精确验证：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q tests/test_writing_library_service.py tests/test_writing_library_routes.py tests/test_practice_workspace_regression.py` → **14 passed / 8 subtests passed**（26 条既有 SQLAlchemy 弃用警告）；JSON、Python / JS 语法和 `git diff --check origin/main..HEAD` 通过。服务层断言固定 27 母题 / 252 唯一题干 / 108 条逻辑链 / 216 组表达 / 30 条试点回链，三档范文字数区间分别为 277–298 / 257–278 / 351–376 words；本地 `1440` 桌面目录、T01 详情和窄屏预览已检查。
+- GitHub CI `33824034205` 与部署 `33824034233` 均为 **success**；CI test job 通过，advisory Ruff 仍只列仓库既有迁移脚本问题。生产 `/root/apps/studytracker` HEAD 已核对为 `6eafb2ad`、tracked 工作树干净；`studytracker.service` 自 `2026-09-04 09:00:46 CST` 起 active/running，`NRestarts=0`，实际一主一 worker，监听 `127.0.0.1:5002`，配置保持 `workers=1 / gthread / threads=6`。SQLite 只读检查 `quick_check=ok`、外键错误 0；部署后 journal 中 Traceback / Exception / CRITICAL / ERROR / worker failure 为 0。
+- 公网课堂模式 `/writing/`、`/writing/topics`、`/writing/topics/t01`、`/writing/t2-018` 均为 200；母题目录含 27 张卡、252 题统计和 T01 链接，T01 详情含三档范文、4 条 Mechanism、28 道同母题题干及 NO.018 链接，NO.018 页面反向链接 T01 且保留逐字输入训练。CSS 与两份新 JS 的本机 / 生产 SHA-256 一致。未填写或提交答案，没有数据库 / schema / 小程序改动，也没有生产业务 / 学生数据写入；小程序未修改、未上传、未提审、未发布。
+- 本条将以 `[skip ci]` 纯文档提交同步最终发布事实；届时远端 `main` 会领先生产业务 HEAD 一个文档提交，无需重启或二次部署。下一步仅需用户在浏览器查看实际母题内容与布局，并反馈需要细化的母题或范文措辞。
 
 ## 2026-09-04 学生任务所属日期严格开放闸门（后端已上线，小程序待上传）
 
