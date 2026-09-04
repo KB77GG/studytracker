@@ -4,11 +4,12 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-09-04 写作任务布置 + `/tasks` 性能候选（本机验证完成）
+## 2026-09-04 写作任务布置 + `/tasks` 性能优化已上线
 
 - 写作 40 道真题 / 27 个母题已接入助教任务抽屉、重复 / 昨日复用 / 批量布置、学生网页直达与完成回写；任务列表改为 SQL 筛选 + 10 / 25 / 50 服务端分页，精听句段改为 staff-only 按需 API，听力目录做进程缓存，材料题数 N+1 合并为分组查询。
-- 400 条任务 Chrome 隔离实测 470ms、10 行、2,408 nodes、563,352 HTML characters；相对生产诊断的 383 行 / 23,242 nodes / 约 4.34M characters，DOM / HTML 分别约减 90% / 87%。搜索与 URL 状态、分页、现有视觉、写作入口均通过；生产耗时须部署后同账号复测。
-- 定向 pytest 53 passed / 4 subtests，Node 6 passed，CI 同款 68 passed；排除 1 个既有时区边界测试和缺 MP3 文件后全仓 pytest 697 passed / 72 subtests。原始全仓 3 个失败、全 Node 2 个失败均在本轮未改链路；语法、Ruff、diff check 通过。当前仍未 commit / push / deploy，未写生产 / 学生数据，小程序未改；下一步提交并推送 main，等待部署后完成生产前后对照与写作 / 按需加载冒烟。
+- 400 条任务 Chrome 隔离实测 470ms、10 行、2,408 nodes、563,352 HTML characters；相对生产诊断的 383 行 / 23,242 nodes / 约 4.34M characters，DOM / HTML 分别约减 90% / 87%。搜索与 URL 状态、分页、现有视觉、写作入口均通过。
+- 定向 pytest 53 passed / 4 subtests，Node 6 passed，CI 同款 68 passed；排除 1 个既有时区边界测试和缺 MP3 文件后全仓 pytest 697 passed / 72 subtests。原始全仓 3 个失败、全 Node 2 个失败均在本轮未改链路；语法、Ruff、diff check 通过。
+- 业务提交 `be84b20f` 已推任务分支与 `main`；CI `33861834422`、Deploy `33861834460` success。生产 HEAD 正确，service active、NRestarts=0、5002 / 1 worker / gthread / 6 threads，DB quick_check=ok / 外键 0，部署后 warning 为空。鉴权生产 `/tasks` 冷 / 热 TTFB 为 1.310s / 0.446s / 0.292s，压缩响应 842,241 → 124,677 bytes（-85.2%），默认 10 行；10 / 25 分页、40 + 27 写作目录与 29 句按需 API 均通过。锁屏阻止了生产 Chrome 点击验收，本地 Chrome 已通过；未写生产 / 学生数据，无 schema / 题库 / 小程序改动。
 
 ## 2026-09-04 生产后台任务页卡顿只读诊断
 
