@@ -37,6 +37,7 @@ from models import (
 )
 from services.dictation_input_policy import resolve_submission_input
 from services.dictation_review import SHANGHAI, local_date
+from services.task_date_gate import TaskDateGateError, assert_task_write_allowed
 from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
 from services.vocabulary_mastery import (
     DIMENSIONS,
@@ -62,7 +63,6 @@ from services.vocabulary_remediation import (
     remediation_kind_for_dimension,
     remediation_priority,
 )
-from services.task_date_gate import TaskDateGateError, assert_task_write_allowed
 
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
@@ -578,6 +578,60 @@ def _session_for_user(
     return session
 
 
+def _active_session_for_date(
+    user_id: int,
+    review_date,
+) -> VocabularyReviewSession | None:
+    """Return only the unfinished batch that belongs to this review day."""
+
+    return (
+        VocabularyReviewSession.query.filter_by(
+            student_id=user_id,
+            status=VocabularyReviewSession.STATUS_ACTIVE,
+            review_date=review_date,
+        )
+        .order_by(VocabularyReviewSession.started_at.desc(), VocabularyReviewSession.id.desc())
+        .first()
+    )
+
+
+def _expire_stale_active_sessions(user_id: int, review_date) -> None:
+    """Close unfinished non-current-day batches without settling or replaying them.
+
+    Answer rows already recorded in an old batch remain available for audit,
+    but the frozen queue must not masquerade as today's review or grant today's
+    task clearance. Clearing the claim key allows a fresh daily batch to be
+    created without deleting or rewriting the old answers.
+    """
+
+    stale_sessions = (
+        VocabularyReviewSession.query.filter(
+            VocabularyReviewSession.student_id == user_id,
+            VocabularyReviewSession.status == VocabularyReviewSession.STATUS_ACTIVE,
+            VocabularyReviewSession.review_date != review_date,
+        )
+        .order_by(VocabularyReviewSession.started_at.asc(), VocabularyReviewSession.id.asc())
+        .all()
+    )
+    for session in stale_sessions:
+        session.status = VocabularyReviewSession.STATUS_EXPIRED
+        session.claim_key = None
+    if stale_sessions:
+        # Keep this update outside the nested insert savepoint below. If two
+        # claims race, rolling back the losing insert must not resurrect the
+        # stale batch and return it as today's session.
+        try:
+            db.session.flush()
+        except OperationalError:
+            # SQLite serializes writers. A second device can reach this lazy
+            # rollover while the winning request still owns the write lock;
+            # make that a bounded retry instead of leaking a 500 response.
+            raise VocabularyAutonomousReviewError(
+                "review_claim_in_progress",
+                409,
+            ) from None
+
+
 def _validate_origin_task(user: User, task_id) -> Task | None:
     if task_id in (None, ""):
         return None
@@ -595,12 +649,34 @@ def _validate_origin_task(user: User, task_id) -> Task | None:
     return task
 
 
-def _assert_origin_task_write_allowed(
+def _assert_review_session_write_allowed(
     user: User,
     session: VocabularyReviewSession,
     now: datetime,
 ) -> None:
-    """Apply the task-date gate to an already-claimed task review session."""
+    """Apply the review-day and task-day gates to a claimed session."""
+
+    current_date = local_date(now)
+    if session.review_date != current_date:
+        future = session.review_date > current_date
+        state = "future" if future else "expired"
+        raise VocabularyAutonomousReviewError(
+            "task_not_open" if future else "task_expired",
+            403,
+            message=(
+                "该复习批次尚未开放，请在所属日期再开始。"
+                if future
+                else "该复习批次已截止，请重新进入今日复习。"
+            ),
+            task_date=session.review_date.isoformat(),
+            task_date_state=state,
+            availability_status=state,
+            availability_label="尚未开放" if future else "已截止",
+            status_label="尚未开放" if future else "未完成·已截止",
+            read_only=True,
+            can_start=False,
+            can_write=False,
+        )
 
     if not session.origin_task_id:
         return
@@ -965,14 +1041,9 @@ def claim_today_review(
                 message=error.message,
                 **error.details,
             ) from error
-    active = (
-        VocabularyReviewSession.query.filter_by(
-            student_id=user.id,
-            status=VocabularyReviewSession.STATUS_ACTIVE,
-        )
-        .order_by(VocabularyReviewSession.started_at.desc(), VocabularyReviewSession.id.desc())
-        .first()
-    )
+    review_date = local_date(now)
+    _expire_stale_active_sessions(user.id, review_date)
+    active = _active_session_for_date(user.id, review_date)
     if active:
         if origin_task and active.origin_task_id is None:
             active.origin_task_id = origin_task.id
@@ -998,7 +1069,6 @@ def claim_today_review(
     # The mandatory batch size is a server policy. Accepting a client-provided
     # lower limit would let a modified client answer one item and obtain the
     # whole day's task clearance.
-    review_date = local_date(now)
     claim_key = f"vocabulary-review:{user.id}:{review_date.isoformat()}"
     session = VocabularyReviewSession(
         student_id=user.id,
@@ -1021,14 +1091,7 @@ def claim_today_review(
     except OperationalError:
         raise VocabularyAutonomousReviewError("review_claim_in_progress", 409) from None
     except IntegrityError:
-        active = (
-            VocabularyReviewSession.query.filter_by(
-                student_id=user.id,
-                status=VocabularyReviewSession.STATUS_ACTIVE,
-            )
-            .order_by(VocabularyReviewSession.started_at.desc(), VocabularyReviewSession.id.desc())
-            .first()
-        )
+        active = _active_session_for_date(user.id, review_date)
         if active:
             return _session_payload(user, active, now)
         raise VocabularyAutonomousReviewError("review_claim_conflict", 409) from None
@@ -1201,7 +1264,7 @@ def submit_review_answer(
         lock=True,
         require_token=True,
     )
-    _assert_origin_task_write_allowed(user, session, now)
+    _assert_review_session_write_allowed(user, session, now)
     try:
         item_id = int(payload.get("review_item_id") or payload.get("queue_item_id"))
     except (TypeError, ValueError) as error:
@@ -1358,7 +1421,7 @@ def submit_review_correction(
         lock=True,
         require_token=True,
     )
-    _assert_origin_task_write_allowed(user, session, now)
+    _assert_review_session_write_allowed(user, session, now)
     try:
         item_id = int(payload.get("review_item_id") or payload.get("queue_item_id"))
     except (TypeError, ValueError) as error:
@@ -1526,7 +1589,7 @@ def settle_review_session(
         lock=True,
         require_token=True,
     )
-    _assert_origin_task_write_allowed(user, session, now)
+    _assert_review_session_write_allowed(user, session, now)
     existing = _settlement_result(session)
     if existing:
         return existing
@@ -1659,8 +1722,8 @@ def settle_review_session(
         "continue_available": remaining_due_count > 0,
     }
     session.status = VocabularyReviewSession.STATUS_SETTLED
-    # A session that crosses midnight grants clearance on the day it was
-    # actually completed, not the day on which the frozen batch was opened.
+    # The write gate above guarantees that settlement stays on the batch's
+    # validated review day.
     session.review_date = local_date(now)
     session.claim_key = None
     session.settled_at = now
@@ -1712,14 +1775,7 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
         ).first()
         is not None
     )
-    active = (
-        VocabularyReviewSession.query.filter_by(
-            student_id=user.id,
-            status=VocabularyReviewSession.STATUS_ACTIVE,
-        )
-        .order_by(VocabularyReviewSession.started_at.desc(), VocabularyReviewSession.id.desc())
-        .first()
-    )
+    active = _active_session_for_date(user.id, local_date(now))
     due_count = _due_count(user, now)
     latest_settled = (
         VocabularyReviewSession.query.filter_by(
@@ -1765,14 +1821,7 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
 
 def review_summary(user: User, *, now: datetime | None = None) -> dict:
     now = utc_naive(now)
-    active = (
-        VocabularyReviewSession.query.filter_by(
-            student_id=user.id,
-            status=VocabularyReviewSession.STATUS_ACTIVE,
-        )
-        .order_by(VocabularyReviewSession.started_at.desc(), VocabularyReviewSession.id.desc())
-        .first()
-    )
+    active = _active_session_for_date(user.id, local_date(now))
     due_count = _due_count(user, now)
     active_remaining = 0
     if active:

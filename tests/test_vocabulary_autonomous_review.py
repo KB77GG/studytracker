@@ -6,6 +6,7 @@ from unittest.mock import patch
 import jwt
 from flask import Flask
 from flask_login import LoginManager
+from sqlalchemy.exc import OperationalError
 
 from api.miniprogram import mp_bp
 from api.vocab_review import vocab_review_bp
@@ -21,6 +22,7 @@ from models import (
     VocabularyReviewSession,
     db,
 )
+from services.task_date_gate import beijing_today
 from services.vocabulary_autonomous_review import (
     VocabularyAutonomousReviewError,
     claim_today_review,
@@ -34,7 +36,6 @@ from services.vocabulary_autonomous_review import (
 from services.vocabulary_context import build_context_question
 from services.vocabulary_group_learning import get_vocabulary_group_queue
 from services.vocabulary_mastery import ensure_mastery, ensure_word_sense
-from services.task_date_gate import beijing_today
 
 
 class AutonomousVocabularyReviewTest(unittest.TestCase):
@@ -162,6 +163,13 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             self.assertTrue(result["is_correct"])
 
     def _api_get_with_review_clock(self, path):
+        def fixed_claim_today_review(user, origin_task_id=None):
+            return claim_today_review(
+                user,
+                origin_task_id=origin_task_id,
+                now=self.now,
+            )
+
         def fixed_review_preflight(user, task_id):
             return review_preflight(user, task_id, now=self.now)
 
@@ -169,6 +177,9 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             return get_vocabulary_group_queue(user, task_id, now=self.now, **kwargs)
 
         with patch(
+            "api.vocab_review.claim_today_review",
+            side_effect=fixed_claim_today_review,
+        ), patch(
             "api.vocab_review.review_preflight",
             side_effect=fixed_review_preflight,
         ), patch(
@@ -176,6 +187,79 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             side_effect=fixed_group_queue,
         ):
             return self.client.get(path, headers=self.headers)
+
+    def _api_review_request_with_clock(self, method, path, *, now, payload=None):
+        def fixed_claim_today_review(user, origin_task_id=None):
+            return claim_today_review(
+                user,
+                origin_task_id=origin_task_id,
+                now=now,
+            )
+
+        def fixed_submit_review_answer(
+            user,
+            session_id,
+            request_payload,
+            *,
+            session_token=None,
+        ):
+            return submit_review_answer(
+                user,
+                session_id,
+                request_payload,
+                session_token=session_token,
+                now=now,
+            )
+
+        def fixed_submit_review_correction(
+            user,
+            session_id,
+            request_payload,
+            *,
+            session_token=None,
+        ):
+            return submit_review_correction(
+                user,
+                session_id,
+                request_payload,
+                session_token=session_token,
+                now=now,
+            )
+
+        def fixed_settle_review_session(
+            user,
+            session_id,
+            request_payload=None,
+            *,
+            session_token=None,
+        ):
+            return settle_review_session(
+                user,
+                session_id,
+                request_payload,
+                session_token=session_token,
+                now=now,
+            )
+
+        with patch(
+            "api.vocab_review.claim_today_review",
+            side_effect=fixed_claim_today_review,
+        ), patch(
+            "api.vocab_review.submit_review_answer",
+            side_effect=fixed_submit_review_answer,
+        ), patch(
+            "api.vocab_review.submit_review_correction",
+            side_effect=fixed_submit_review_correction,
+        ), patch(
+            "api.vocab_review.settle_review_session",
+            side_effect=fixed_settle_review_session,
+        ):
+            return self.client.open(
+                path,
+                method=method,
+                json=payload,
+                headers=self.headers,
+            )
 
     def _run_bounded_correction_case(self, dimension, expected_mode, *, context_kind=None):
         """Exercise one public mode through correction, delay, and retry claim."""
@@ -515,9 +599,8 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                 )
             )
             db.session.commit()
-            restored_from_api = self.client.get(
+            restored_from_api = self._api_get_with_review_clock(
                 "/api/miniprogram/student/vocabulary-review/today",
-                headers=self.headers,
             )
             self.assertEqual(restored_from_api.status_code, 200)
             self.assertEqual(
@@ -557,6 +640,300 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             continued = claim_today_review(user, now=self.now, origin_task_id=self.task_id)
             self.assertEqual(continued["total_count"], 2)
             self.assertEqual(continued["origin_task_id"], self.task_id)
+
+    def test_new_day_expires_partial_session_before_claiming_current_task_review(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            stale = claim_today_review(
+                user,
+                origin_task_id=self.task_id,
+                now=self.now,
+            )
+            stale_item = stale["items"][0]
+            stored_stale_item = db.session.get(
+                VocabularyReviewItem,
+                stale_item["review_item_id"],
+            )
+            expected = json.loads(stored_stale_item.answer_payload_json).get("answer")
+            if json.loads(stored_stale_item.answer_payload_json).get("answer_type") == "option_id":
+                expected = json.loads(stored_stale_item.answer_payload_json)["answer_option_id"]
+            submit_review_answer(
+                user,
+                stale["session_id"],
+                {
+                    "session_token": stale["session_token"],
+                    "review_item_id": stale_item["review_item_id"],
+                    "question_id": stale_item["question_id"],
+                    "word_id": stale_item["word_id"],
+                    "sense_id": stale_item["sense_id"],
+                    "dimension": stale_item["dimension"],
+                    "answer": expected,
+                    "attempt_id": "stale-review-first-answer",
+                },
+                now=self.now,
+            )
+            db.session.commit()
+
+            next_day = self.now + timedelta(days=1)
+            current_task = Task(
+                date=beijing_today(next_day),
+                student_name="自主复习学生",
+                category="词汇",
+                detail="次日独立队列任务",
+                created_by=db.session.get(Task, self.task_id).created_by,
+                dictation_book_id=db.session.get(Task, self.task_id).dictation_book_id,
+                vocabulary_goal="reading",
+                dictation_word_start=1,
+                dictation_word_end=1,
+                status="pending",
+            )
+            db.session.add(current_task)
+            db.session.commit()
+
+            summary = review_summary(user, now=next_day)
+            self.assertFalse(summary["has_active_session"])
+            self.assertIsNone(summary["active_session_id"])
+            preflight = review_preflight(user, current_task.id, now=next_day)
+            self.assertTrue(preflight["required"])
+            self.assertIsNone(preflight["active_session_id"])
+
+            current = claim_today_review(
+                user,
+                origin_task_id=current_task.id,
+                now=next_day,
+            )
+            self.assertNotEqual(current["session_id"], stale["session_id"])
+            self.assertEqual(current["review_date"], beijing_today(next_day).isoformat())
+            self.assertEqual(current["origin_task_id"], current_task.id)
+
+            expired = db.session.get(VocabularyReviewSession, stale["session_id"])
+            self.assertEqual(expired.status, VocabularyReviewSession.STATUS_EXPIRED)
+            self.assertIsNone(expired.claim_key)
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(session_id=expired.id).count(),
+                1,
+            )
+
+            current_item = current["items"][0]
+            stored_current_item = db.session.get(
+                VocabularyReviewItem,
+                current_item["review_item_id"],
+            )
+            current_expected = json.loads(stored_current_item.answer_payload_json).get("answer")
+            if json.loads(stored_current_item.answer_payload_json).get("answer_type") == "option_id":
+                current_expected = json.loads(stored_current_item.answer_payload_json)[
+                    "answer_option_id"
+                ]
+            accepted = submit_review_answer(
+                user,
+                current["session_id"],
+                {
+                    "session_token": current["session_token"],
+                    "review_item_id": current_item["review_item_id"],
+                    "question_id": current_item["question_id"],
+                    "word_id": current_item["word_id"],
+                    "sense_id": current_item["sense_id"],
+                    "dimension": current_item["dimension"],
+                    "answer": current_expected,
+                    "attempt_id": "current-review-first-answer",
+                },
+                now=next_day,
+            )
+            self.assertTrue(accepted["is_correct"])
+
+    def test_http_new_day_replaces_stale_session_and_blocks_every_old_write(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            stale = claim_today_review(
+                user,
+                origin_task_id=self.task_id,
+                now=self.now,
+            )
+            wrong_item, unanswered_item = stale["items"][:2]
+            wrong = submit_review_answer(
+                user,
+                stale["session_id"],
+                {
+                    "session_token": stale["session_token"],
+                    "review_item_id": wrong_item["review_item_id"],
+                    "question_id": wrong_item["question_id"],
+                    "word_id": wrong_item["word_id"],
+                    "sense_id": wrong_item["sense_id"],
+                    "dimension": wrong_item["dimension"],
+                    "answer": "definitely-wrong-review-answer",
+                    "attempt_id": "http-stale-review-wrong",
+                    "supports_correction": True,
+                },
+                now=self.now,
+            )
+            self.assertTrue(wrong["correction_required"])
+            stored_wrong = db.session.get(
+                VocabularyReviewItem,
+                wrong_item["review_item_id"],
+            )
+            correction_answer_payload = json.loads(stored_wrong.answer_payload_json)
+            correction_answer = correction_answer_payload.get(
+                "answer"
+            ) or correction_answer_payload.get("answer_option_id")
+
+            next_day = self.now + timedelta(days=1)
+            original_task = db.session.get(Task, self.task_id)
+            current_task = Task(
+                date=beijing_today(next_day),
+                student_name="自主复习学生",
+                category="词汇",
+                detail="次日 HTTP 独立队列任务",
+                created_by=original_task.created_by,
+                dictation_book_id=original_task.dictation_book_id,
+                vocabulary_goal="reading",
+                dictation_word_start=1,
+                dictation_word_end=1,
+                status="pending",
+            )
+            db.session.add(current_task)
+            db.session.commit()
+            current_task_id = current_task.id
+
+        today = self._api_review_request_with_clock(
+            "GET",
+            (
+                "/api/miniprogram/student/vocabulary-review/today"
+                f"?origin_task_id={current_task_id}"
+            ),
+            now=next_day,
+        )
+        self.assertEqual(today.status_code, 200, today.get_json())
+        current = today.get_json()
+        self.assertNotEqual(current["session_id"], stale["session_id"])
+        self.assertEqual(current["origin_task_id"], current_task_id)
+
+        with self.app.app_context():
+            expired = db.session.get(VocabularyReviewSession, stale["session_id"])
+            self.assertEqual(expired.status, VocabularyReviewSession.STATUS_EXPIRED)
+            self.assertIsNone(expired.claim_key)
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(session_id=expired.id).count(),
+                1,
+            )
+            current_item = db.session.get(
+                VocabularyReviewItem,
+                current["items"][0]["review_item_id"],
+            )
+            current_answer_payload = json.loads(current_item.answer_payload_json)
+            current_answer = current_answer_payload.get(
+                "answer"
+            ) or current_answer_payload.get("answer_option_id")
+
+        current_answer_response = self._api_review_request_with_clock(
+            "POST",
+            (
+                "/api/miniprogram/student/vocabulary-review/sessions/"
+                f"{current['session_id']}/answers"
+            ),
+            now=next_day,
+            payload={
+                "session_token": current["session_token"],
+                "review_item_id": current_item.id,
+                "question_id": current_item.question_id,
+                "word_id": current_item.word_id,
+                "sense_id": current_item.sense_id,
+                "dimension": current_item.dimension,
+                "answer": current_answer,
+                "attempt_id": "http-current-review-answer",
+            },
+        )
+        self.assertEqual(
+            current_answer_response.status_code,
+            200,
+            current_answer_response.get_json(),
+        )
+
+        stale_answer_payload = {
+            "session_token": stale["session_token"],
+            "review_item_id": unanswered_item["review_item_id"],
+            "question_id": unanswered_item["question_id"],
+            "word_id": unanswered_item["word_id"],
+            "sense_id": unanswered_item["sense_id"],
+            "dimension": unanswered_item["dimension"],
+            "answer": "blocked-after-midnight",
+            "attempt_id": "http-stale-review-answer-after-midnight",
+        }
+        stale_correction_payload = {
+            "session_token": stale["session_token"],
+            "review_item_id": wrong_item["review_item_id"],
+            "question_id": wrong_item["question_id"],
+            "word_id": wrong_item["word_id"],
+            "sense_id": wrong_item["sense_id"],
+            "dimension": wrong_item["dimension"],
+            "answer": correction_answer,
+            "attempt_id": "http-stale-review-correction-after-midnight",
+        }
+        stale_settle_payload = {
+            "session_token": stale["session_token"],
+            "queue_token": stale["queue_token"],
+        }
+        stale_writes = (
+            (
+                f"/api/miniprogram/student/vocabulary-review/sessions/"
+                f"{stale['session_id']}/answers",
+                stale_answer_payload,
+            ),
+            (
+                f"/api/miniprogram/student/vocabulary-review/sessions/"
+                f"{stale['session_id']}/corrections",
+                stale_correction_payload,
+            ),
+            (
+                f"/api/miniprogram/student/vocabulary-review/sessions/"
+                f"{stale['session_id']}/settle",
+                stale_settle_payload,
+            ),
+        )
+        for path, payload in stale_writes:
+            blocked = self._api_review_request_with_clock(
+                "POST",
+                path,
+                now=next_day,
+                payload=payload,
+            )
+            self.assertEqual(blocked.status_code, 403, blocked.get_json())
+            self.assertEqual(blocked.get_json()["error"], "task_expired")
+            self.assertEqual(blocked.get_json()["task_date_state"], "expired")
+
+        with self.app.app_context():
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(
+                    session_id=stale["session_id"],
+                ).count(),
+                1,
+            )
+
+    def test_http_stale_rollover_lock_conflict_is_retryable(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            stale = claim_today_review(user, now=self.now)
+            db.session.commit()
+
+        locked = OperationalError(
+            "UPDATE vocabulary_review_session",
+            {},
+            RuntimeError("database is locked"),
+        )
+        with patch(
+            "services.vocabulary_autonomous_review.db.session.flush",
+            side_effect=locked,
+        ):
+            response = self._api_review_request_with_clock(
+                "GET",
+                "/api/miniprogram/student/vocabulary-review/today",
+                now=self.now + timedelta(days=1),
+            )
+        self.assertEqual(response.status_code, 409, response.get_json())
+        self.assertEqual(response.get_json()["error"], "review_claim_in_progress")
+        with self.app.app_context():
+            restored = db.session.get(VocabularyReviewSession, stale["session_id"])
+            self.assertEqual(restored.status, VocabularyReviewSession.STATUS_ACTIVE)
+            self.assertIsNotNone(restored.claim_key)
 
     def test_answer_feedback_is_returned_after_answer_and_restored_on_refresh(self):
         with self.app.app_context():
@@ -901,6 +1278,10 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             stored_session = db.session.get(
                 VocabularyReviewSession, session["session_id"]
             )
+            session_now = datetime.combine(
+                stored_session.review_date,
+                datetime.min.time(),
+            )
             for tail in stored_session.items:
                 if tail.first_attempt_id:
                     continue
@@ -919,7 +1300,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                         or tail_payload.get("answer_option_id"),
                         "attempt_id": f"http-tail-{tail.id}",
                     },
-                    now=self.now,
+                    now=session_now,
                 )
             db.session.commit()
         missing_queue_token = self.client.post(
@@ -1035,6 +1416,10 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                 VocabularyReviewSession,
                 session["session_id"],
             )
+            session_now = datetime.combine(
+                stored_session.review_date,
+                datetime.min.time(),
+            )
             # Recreate the transitional state left by the brief pre-hotfix
             # deployment. Legacy settlement must still release it.
             first_item = db.session.get(VocabularyReviewItem, item["review_item_id"])
@@ -1058,7 +1443,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                         or expected.get("answer_option_id"),
                         "attempt_id": f"legacy-review-tail-{tail.id}",
                     },
-                    now=self.now,
+                    now=session_now,
                 )
             db.session.commit()
         settled = self.client.post(
@@ -1162,6 +1547,41 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             summary = review_summary(user, now=self.now)
             self.assertTrue(summary["has_active_session"])
             self.assertGreaterEqual(summary["review_due_count"], 1)
+
+    def test_previous_day_home_review_rejects_direct_answer_without_origin_task(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            claimed = claim_today_review(user, now=self.now)
+            item = claimed["items"][0]
+            stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            answer_payload = json.loads(stored.answer_payload_json)
+            answer = answer_payload.get("answer") or answer_payload.get("answer_option_id")
+
+            with self.assertRaises(VocabularyAutonomousReviewError) as blocked:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    {
+                        "session_token": claimed["session_token"],
+                        "review_item_id": item["review_item_id"],
+                        "question_id": item["question_id"],
+                        "word_id": item["word_id"],
+                        "sense_id": item["sense_id"],
+                        "dimension": item["dimension"],
+                        "answer": answer,
+                        "attempt_id": "stale-home-review-answer",
+                    },
+                    now=self.now + timedelta(days=1),
+                )
+
+            self.assertEqual(blocked.exception.error, "task_expired")
+            self.assertEqual(blocked.exception.details["task_date_state"], "expired")
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(
+                    session_id=claimed["session_id"],
+                ).count(),
+                0,
+            )
 
     def test_cross_midnight_settlement_is_blocked_after_task_day_ends(self):
         with self.app.app_context():

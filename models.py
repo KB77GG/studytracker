@@ -1893,6 +1893,7 @@ class VocabularyReviewSession(db.Model, TimestampMixin):
     )
 
     STATUS_ACTIVE = "active"
+    STATUS_EXPIRED = "expired"
     STATUS_SETTLING = "settling"
     STATUS_SETTLED = "settled"
 
