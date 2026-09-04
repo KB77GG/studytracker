@@ -1,7 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-04 写作任务布置与 `/tasks` 性能优化已上线。
+> 最近更新：2026-09-04 “今日复习”跨日旧会话提交卡住热修已上线。
+
+## 2026-09-04 “今日复习”跨日旧会话提交卡住（热修已上线）
+
+- 发布工作树为 `/Users/zhouxin/.codex/worktrees/vocabulary-review-stale-session/studytracker`，分支 `codex/fix-stale-vocabulary-review`，基线 `9f5c0c2232963a5faee8d569dc6a95926e55c9f4`。业务提交 `b58566f1d17c7394ab5ddeecbd32d6f0f5b38ede`（`fix: expire stale vocabulary review sessions`）已原子推送任务分支与 `origin/main`；本条最终状态将以 `[skip ci]` 纯文档提交同步。桌面主工作树及其他 worktree 的既有改动未触碰。按用户要求发起的侧边 Luna 任务初始化另生成 `/Users/zhouxin/.codex/worktrees/22b6/studytracker`，该 worktree 仍为 clean detached `9f5c0c22`、无任何实现改动；实际最终独立审阅由 Luna 子 agent 完成。
+- 生产只读诊断确认：`GET /student/vocabulary-review/today` 会把前一自然日未结算的 active 冻结批次重新当成今日批次返回，而随后 `POST /sessions/<id>/answers` 又被已上线的任务日期闸门以 403 拒绝，客户端因此表现为提交持续等待。受查样本仍指向两天前的部分完成批次；今天的重复提交没有写入新答案，旧答案 / 尝试记录也未丢失。只读扫描共发现 **6 个学生账号**存在不同日期的 stale active 自主复习会话，说明是服务端日切换状态错误，不是单一设备、网络或输入框问题。
+- 本地热修新增 `expired` 会话状态：领取当天复习时，把同一学生所有非当天 active 批次标记为 expired 并释放 claim key，保留旧 item / attempt / mastery 审计记录，不结算、不补做、不把旧队列滚到今天；只恢复当天 active 会话，否则按当天到期记忆重新冻结新批次。summary / preflight 只暴露当天 active，会话答案、纠错和结算即使没有来源任务也先校验 `review_date`，因此直接重放旧 session token 仍返回 `task_expired`。同日刷新 / 恢复逻辑保持不变，无 schema migration、无小程序代码改动。Luna 初审发现两台设备并发懒过期时 SQLite 写锁异常会泄漏为 500；现已在 stale flush 边界统一转成可重试 `review_claim_in_progress` 409，由 HTTP 层回滚事务。
+- 精确回归覆盖“旧批次仅答一题 → 次日 summary / preflight 不再返回旧 session → 领取新批次 → 旧会话 expired 且旧 attempt 保留 → 当天首题成功提交”，以及真实 Flask HTTP 链路的 `GET /today` 换新 session、当天 answer 200、旧 answer / correction / settle 全部 403、attempt 数不变和模拟 SQLite 写锁时 HTTP 409 / 回滚。无来源任务的旧 Home 会话也不能跨日直接写。`tests/test_vocabulary_autonomous_review.py` 为 **28 passed**；最终四文件聚焦回归命令 `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q -p no:cacheprovider tests/test_vocabulary_autonomous_review.py tests/test_task_date_gate.py tests/test_vocabulary_group_learning.py tests/test_vocabulary_group_learning_api.py` 为 **76 passed**。全仓 Python 为 **702 passed / 3 failed / 72 subtests**，3 项均复现当前主线已知基线（1 项随当前日期跨到未来任务、2 项 worktree 缺既有测试 MP3）；全仓 Node 为 **95 passed / 2 failed**，两项均为当前主线只读复盘 VM fixture 的 capability selector 基线。改动文件 Ruff、Python 编译、`git diff --check` 均通过。Luna 最终复审结论为 **GO，无剩余 P0 / P1 / P2**；残余风险仅为写锁测试采用异常注入而非双连接压力，以及按 session ID 的显式只读接口仍可短暂展示旧快照但所有写入已阻断。
+- GitHub 主线 CI [`33881848059`](https://github.com/KB77GG/studytracker/actions/runs/33881848059)、任务分支 CI [`33881848139`](https://github.com/KB77GG/studytracker/actions/runs/33881848139) 与 Deploy [`33881847763`](https://github.com/KB77GG/studytracker/actions/runs/33881847763) 均为 **success**。生产 `/root/apps/studytracker` 已核对运行 `b58566f1`，tracked 文件干净且既有 17 个未跟踪数据库备份 / 静态快照 / 调度库未变；`studytracker.service` 自 2026-09-04 22:07:22 CST 起 active/running，`NRestarts=0`，监听 `127.0.0.1:5002`，实际一主一 worker，配置保持 `workers=1 / gthread / threads=6`。回环根路由为预期 302；SQLite 只读检查 `quick_check=ok`、外键错误 0，部署后 warning journal 为空且实时小程序请求正常返回 200。
+- 部署验收前只读聚合仍显示 6 个跨日 stale active 会话，符合惰性清理设计；没有批量改库，也没有代学生调用会创建新批次的 `/today`，因此本轮除正常部署脚本的既有幂等迁移外没有生产业务 / 学生数据写入。学生关闭旧页面并重新进入“今日复习”后，自己的旧批次才会原子标记 expired 并取得当天新批次。小程序不是本次根因且无需为该热修重新上传；此前正确合并候选仍在 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`，当前未上传 / 提审 / 发布。下一步请受影响学生重新进入并完成一题真机复核；若仍异常，按时间点只读核对该次 GET / POST 状态。
 
 ## 2026-09-04 写作任务布置与 `/tasks` 性能优化（已上线）
 

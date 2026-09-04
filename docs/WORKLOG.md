@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-04 “今日复习”跨日旧会话提交卡住热修已上线
+
+- 生产只读定位到日切换状态错误：当天入口恢复了前一日未结算的 active 冻结队列，但答案写入又被任务日期闸门 403 拒绝，导致客户端持续等待；今天没有新答案落库，旧答题记录完整。只读扫描发现 6 个账号存在不同日期的 stale active 会话，生产服务本身 active、无重启或崩溃。
+- 在 `/Users/zhouxin/.codex/worktrees/vocabulary-review-stale-session/studytracker`、`codex/fix-stale-vocabulary-review@9f5c0c22` 实现惰性跨日过期：保留旧 item / attempt / mastery，旧会话不结算、不补做、不滚到今天；只恢复当天 active，并为当天重新领取到期批次。所有答案 / 纠错 / 结算先校验 session 自身日期，无来源任务的旧 Home 会话也不能跨日写。Luna 初审发现并发 stale flush 可能把 SQLite 写锁泄漏成 500，现已转为可重试 409 并由路由回滚。
+- 四文件聚焦回归 **76 passed**，自主复习文件 **28 passed**；真实 HTTP 回归覆盖新 session 当天 answer 200、旧 answer / correction / settle 403 和锁竞争 409；全仓 Python **702 passed / 3 个既有基线失败 / 72 subtests**，全仓 Node **95 passed / 2 个既有 fixture 基线失败**；Ruff、Python 编译、diff check 通过。Luna 复审 **GO、无剩余 P0/P1/P2**。
+- 业务提交 `b58566f1` 已推任务分支与 `main`；主线 CI `33881848059`、任务分支 CI `33881848139`、Deploy `33881847763` 均 success。生产 HEAD `b58566f1`、tracked 干净，service 自 22:07:22 CST active、`NRestarts=0`，5002 / 1 worker / gthread / 6 threads；DB `quick_check=ok`、外键 0，部署后 warning 为空。只读聚合仍有 6 个 stale active，未批量改库或代学生领取；学生关闭旧页再进入时惰性修复。小程序未改、未上传 / 提审 / 发布。
+
 ## 2026-09-04 写作任务布置 + `/tasks` 性能优化已上线
 
 - 写作 40 道真题 / 27 个母题已接入助教任务抽屉、重复 / 昨日复用 / 批量布置、学生网页直达与完成回写；任务列表改为 SQL 筛选 + 10 / 25 / 50 服务端分页，精听句段改为 staff-only 按需 API，听力目录做进程缓存，材料题数 N+1 合并为分组查询。
