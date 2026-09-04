@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-04 IELTS 同日错题重做回归热修已上线
+
+- 日期闸门曾把自动判分后的 Cambridge Listening / Reading 任务直接锁成只读，误伤原有同日错题重做；既有数据库其实会保留不可变首答和后续每次答卷。现仅对“任务绑定了可留痕 Reading，或 Cambridge Listening，且仍是所属日”的完成任务开放重做；次日、普通任务、无日期任务和听力机经仍锁定，staff、历史申诉 / 内容报错及午夜截时规则不变。客户端遇到跨日 403 会结束 loading、转只读并恢复已保存结果。
+- 规则 / 计时 / 申诉 / staff / 历史 / 尝试记录聚焦回归 **75 passed / 5 subtests**，新增客户端 **4 passed**；全仓 Python **714 passed / 3 个既有基线失败 / 72 subtests**，全仓 Node **99 passed / 2 个既有 fixture 基线失败**。新增测试 Ruff、Python / JS 语法与 diff check 通过；两个误生成的重复 Luna 侧边任务均已停止归档，最终差异由主任务复审。
+- 业务提交 `67a0fded` 已推任务分支与 `main`；主线 CI `33888547000`、任务分支 CI `33888547208`、Deploy `33888547001` 均 success。生产 HEAD `67a0fded`、tracked 干净，service 自 23:17:13 CST active、`NRestarts=0`，5002 / 1 worker / gthread / 6 threads；DB `quick_check=ok`、外键 0，部署后应用错误 0。无 schema、生产业务或学生数据写入。
+- 正确上传候选仍为 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`；本轮四个页面文件与提交版本哈希一致，release 全 JS 语法与客户端行为测试通过。开发者工具已打开该 projectpath 并普通编译，调试错误 / 问题均为 0；本轮未点击上传、提审或发布。下一步由用户从当前窗口上传后真机验收，再决定发布。
+
 ## 2026-09-04 “今日复习”跨日旧会话提交卡住热修已上线
 
 - 生产只读定位到日切换状态错误：当天入口恢复了前一日未结算的 active 冻结队列，但答案写入又被任务日期闸门 403 拒绝，导致客户端持续等待；今天没有新答案落库，旧答题记录完整。只读扫描发现 6 个账号存在不同日期的 stale active 会话，生产服务本身 active、无重启或崩溃。

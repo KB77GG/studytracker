@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-04 “今日复习”跨日旧会话提交卡住热修已上线。
+> 最近更新：2026-09-04 IELTS 同日错题重做回归热修已上线，小程序候选待手动上传。
+
+## 2026-09-04 IELTS 同日错题重做回归（后端已上线，小程序待手动上传）
+
+- 发布工作树为 `/Users/zhouxin/.codex/worktrees/vocabulary-review-stale-session/studytracker`，分支 `codex/fix-cambridge-completed-retry`，基线 `85def1d0d61e2a42762eb7e6567ce622531db2d9`；业务提交 `67a0fded48adfa8fc4ca70696779a947040b9081`（`fix: preserve same-day IELTS practice retries`）已原子推送任务分支与 `origin/main` 并部署。本条最终状态将以 `[skip ci]` 纯文档提交同步。桌面主工作树 `/Users/zhouxin/Desktop/studytracker@6ded77d2` 仍落后远端 62 个提交并保留原有已修改 / 未跟踪文件，本轮未触碰。误生成的两个重复 Luna 侧边任务均已停止并归档；停止前留下的过期测试已清除，最终代码和测试由主任务重新逐项审阅。
+- 根因是日期闸门把“任务已经自动判分完成”一律解释成不可写，覆盖了剑雅刷题长期存在的同日错题重做入口；不是该功能从未有人使用。生产只读数据确认听力、阅读均存在多次提交，既有 `practice_submission_attempt` 会按 `(kind, task_id, attempt_number)` 保存不可变首答 / 后续答卷。本轮没有改表、迁移或历史数据，也没有代学生提交。
+- 六条全局日期规则保持默认不变：仅所属上海自然日可操作；历史未提交为“未完成·已截止”；历史已提交待批改保持“已提交，待批改”；未来为“尚未开放”；计时截到午夜；教师 / 助教 / 管理员及历史申诉 / 题库报错不受学生写闸门影响。新增的是显式窄例外：只有任务自身绑定 `reading_test_id`，或绑定 Cambridge listening 资源且日期就是今天时，已完成任务才可同日重做；次日立即只读，无日期任务、普通任务和未保存逐次快照的听力机经不会获得该能力。阅读机经沿用 Reading 提交链，仍会保存每一次答卷。读取已完成答卷时仍只在 `task_date_state == today` 的未完成态做旧成绩刷新，不会因为开放重做而静默重写历史成绩。
+- 小程序 Cambridge Listening / Reading 成功提交后以服务端 `read_only / can_write` 为准，不再前端强制锁死同日错题重做；跨午夜或历史提交被 403 日期闸门拒绝时，会立即结束 loading、转只读、显示准确原因并重新载入已保存结果，历史页不再显示可点的“重做错题”。首答和第二次提交的快照均有数据库级回归；另有反例固定历史 Cambridge、普通已完成任务、无日期任务仍不可重做，并固定 staff 例外。
+- 最终规则聚焦回归命令 `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q -p no:cacheprovider tests/test_task_date_gate.py tests/test_cambridge_same_day_retry.py tests/test_miniprogram_task_visibility.py tests/test_task_date_gate_display_contract.py tests/test_task_timer_date_gate.py tests/test_dictation_answers.py tests/test_role_attempt_history.py tests/test_teacher_practice_access.py` 为 **75 passed / 5 subtests passed**；新增客户端行为测试为 **4 passed**。全仓 Python 为 **714 passed / 3 个既有基线失败 / 72 subtests passed**：一项旧听写测试在本机当前时区生成次日任务而得到预期 403，另两项因该 worktree 缺既有测试 MP3 返回 404；全仓 Node 为 **99 passed / 2 个既有 fixture 基线失败**，均是只读复盘 VM 不识别主线既有 capability selector。新增测试文件 Ruff、Python 编译、全部 JS 语法与 `git diff --check` 通过；CI 的 test job 通过，advisory Ruff 仍只报告仓库既有问题。
+- GitHub 主线 CI [`33888547000`](https://github.com/KB77GG/studytracker/actions/runs/33888547000)、任务分支 CI [`33888547208`](https://github.com/KB77GG/studytracker/actions/runs/33888547208) 与 Deploy [`33888547001`](https://github.com/KB77GG/studytracker/actions/runs/33888547001) 均为 **success**。生产 `/root/apps/studytracker` 已核对运行 `67a0fded`、tracked 文件干净并仅保留原有 17 个未跟踪备份 / 静态快照 / 调度库；`studytracker.service` 自 2026-09-04 23:17:13 CST 起 active，`NRestarts=0`，监听 `127.0.0.1:5002`，实际一主一 worker，配置为 `workers=1 / gthread / threads=6`。回环根路由 302，Listening / Reading 样例页均 200；SQLite `quick_check=ok`、外键错误 0，部署后应用错误 0。
+- 正确小程序候选目录为 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`。Listening / Reading Cambridge 的四个本轮 JS / WXML 与提交工作树 SHA-256 逐一一致，共用 `utils/request.js` 也一致；release 目录全部 JS 语法和同一套 4 个客户端行为测试通过。微信开发者工具当前打开的 projectpath 已核对为该目录，手动“普通编译”后 runtime 已刷新，调试错误 0、问题 0；界面保留的一条“代码上传成功”是先前通知，不能证明当前候选已上传。本轮没有点击上传，因此当前修复候选尚未由本轮上传、提审或发布。下一步由用户在这个已打开窗口先上传 / 体验，再真机验证同日错题重做可提交且首答仍在、历史任务只读；如通过再提审 / 发布。
 
 ## 2026-09-04 “今日复习”跨日旧会话提交卡住（热修已上线）
 
