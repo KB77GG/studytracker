@@ -96,12 +96,17 @@
         <checkbox-group bindchange="handlePrivacyChange">
           <label class="privacy-label">
             <checkbox value="agree" checked="{{privacyAgreed}}" color="#087f77" style="transform:scale(0.82)" />
-            <text class="privacy-text">我已阅读并同意 <text class="link" catchtap="openPrivacyContract">《用户协议》</text> 和 <text class="link" catchtap="openPrivacyContract">《隐私政策》</text></text>
+            <text class="privacy-text">我已阅读并同意以下协议</text>
           </label>
         </checkbox-group>
+        <view class="legal-links">
+          <button class="legal-link" bindtap="openUserAgreement">查看《用户协议》</button>
+          <button class="legal-link" bindtap="openPrivacyPolicy">查看《隐私政策》</button>
+        </view>
       </view>
 
-      <button class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">微信登录</button>
+      <button wx:if="{{privacyNeedAuth}}" class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" disabled="{{!privacyAgreed}}" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="handlePrivacyAuthorization">微信登录</button>
+      <button wx:else class="btn-primary {{!privacyAgreed ? 'btn-disabled' : ''}}" bindtap="handleLogin">微信登录</button>
       <button class="guest-entry" data-role="student" bindtap="enterPreview">暂不登录，继续免登录体验</button>
       <text class="auth-footnote">仅在你主动登录后绑定账号，不强制获取手机号、头像或昵称。</text>
     </view>
