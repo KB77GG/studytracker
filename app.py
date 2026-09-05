@@ -162,6 +162,7 @@ from services.task_date_gate import (
     beijing_today,
     close_expired_task_session,
     gate_error_payload,
+    task_date_cutoff_local,
     task_workflow_status,
     task_date_access,
 )
@@ -4125,6 +4126,7 @@ def tasks_page():
             )
             db.session.add(t)
             db.session.flush()
+            task_cutoff = task_date_cutoff_local(t)
             if duplicate_result.get("forced"):
                 write_repeat_audit(
                     [t],
@@ -4155,7 +4157,13 @@ def tasks_page():
                 data = {
                     "thing1": {"value": detail[:20]},
                     "time2": {"value": f"{d} 08:00"},
-                    "time3": {"value": f"{d} 23:59"},
+                    "time3": {
+                        "value": (
+                            task_cutoff.strftime("%Y-%m-%d %H:%M")
+                            if task_cutoff
+                            else f"{d} 23:59"
+                        )
+                    },
                     "thing4": {"value": "学习任务"}
                 }
                 try:

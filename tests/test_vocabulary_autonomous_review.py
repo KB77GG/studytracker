@@ -140,7 +140,8 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    def _answer_all(self, session):
+    def _answer_all(self, session, *, now=None):
+        submitted_at = now or self.now
         for item in session.items:
             answer = json.loads(item.answer_payload_json).get("answer")
             if json.loads(item.answer_payload_json).get("answer_type") == "option_id":
@@ -158,7 +159,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                     "answer": answer,
                     "attempt_id": f"auto-test-{item.id}",
                 },
-                now=self.now,
+                now=submitted_at,
             )
             self.assertTrue(result["is_correct"])
 
@@ -1583,7 +1584,54 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
                 0,
             )
 
-    def test_cross_midnight_settlement_is_blocked_after_task_day_ends(self):
+    def test_undated_origin_task_still_blocks_answers_after_completion(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            task = db.session.get(Task, self.task_id)
+            task.date = ""
+            claimed = claim_today_review(
+                user, origin_task_id=task.id, now=self.now
+            )
+            session = db.session.get(VocabularyReviewSession, claimed["session_id"])
+            task.status = "done"
+            with self.assertRaises(VocabularyAutonomousReviewError) as blocked:
+                self._answer_all(session)
+            self.assertEqual(blocked.exception.error, "task_completed_read_only")
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(session_id=session.id).count(),
+                0,
+            )
+
+    def test_task_linked_review_remains_attributed_and_writable_until_three_am(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            claimed = claim_today_review(
+                user,
+                origin_task_id=self.task_id,
+                now=self.now,
+            )
+            grace_time = self.now + timedelta(hours=6)
+            resumed = claim_today_review(
+                user,
+                origin_task_id=self.task_id,
+                now=grace_time,
+            )
+            self.assertEqual(resumed["session_id"], claimed["session_id"])
+            self.assertEqual(resumed["review_date"], "2026-08-08")
+
+            session = db.session.get(VocabularyReviewSession, claimed["session_id"])
+            self._answer_all(session, now=grace_time)
+            result = settle_review_session(
+                user,
+                session.id,
+                {"queue_token": session.queue_token},
+                session_token=session.session_token,
+                now=grace_time,
+            )
+            self.assertEqual(result["status"], VocabularyReviewSession.STATUS_SETTLED)
+            self.assertEqual(session.review_date.isoformat(), "2026-08-08")
+
+    def test_cross_midnight_settlement_is_blocked_after_three_am_cutoff(self):
         with self.app.app_context():
             user = db.session.get(User, self.student_id)
             claimed = claim_today_review(
@@ -1593,7 +1641,7 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             )
             session = db.session.get(VocabularyReviewSession, claimed["session_id"])
             self._answer_all(session)
-            completed_at = self.now + timedelta(hours=5)
+            completed_at = self.now + timedelta(hours=8)
             with self.assertRaises(VocabularyAutonomousReviewError) as blocked:
                 settle_review_session(
                     user,

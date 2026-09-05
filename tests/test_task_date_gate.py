@@ -11,12 +11,14 @@ from services.task_date_gate import (
     STATE_FUTURE,
     STATE_TODAY,
     TaskDateGateError,
+    active_task_grace_date,
     assert_task_write_allowed,
     close_expired_task_session,
     task_date_access,
+    task_date_cutoff_local,
+    task_date_end_utc,
     task_workflow_status,
 )
-
 
 TODAY = datetime(2026, 9, 4, 12, 0, tzinfo=SHANGHAI)
 
@@ -30,29 +32,35 @@ def task(task_date, *, status="pending", plan_item=None, **attributes):
     )
 
 
-def test_today_is_writable_from_local_midnight_through_before_next_midnight():
+def test_assignment_is_writable_through_next_day_before_three_am():
     scheduled = task("2026-09-04")
 
     at_start = task_date_access(
         scheduled,
         datetime(2026, 9, 4, 0, 0, tzinfo=SHANGHAI),
     )
-    just_before_end = task_date_access(
+    during_grace = task_date_access(
         scheduled,
-        datetime(2026, 9, 4, 23, 59, 59, 999999, tzinfo=SHANGHAI),
+        datetime(2026, 9, 5, 2, 59, 59, 999999, tzinfo=SHANGHAI),
     )
 
     assert at_start.state == STATE_TODAY
     assert at_start.can_write is True
-    assert just_before_end.can_write is True
+    assert at_start.is_grace_period is False
+    assert during_grace.state == STATE_TODAY
+    assert during_grace.can_write is True
+    assert during_grace.is_grace_period is True
+    assert during_grace.task_date.isoformat() == "2026-09-04"
+    assert during_grace.label == "宽限期内·03:00 截止"
+    assert during_grace.as_dict()["task_cutoff_at"].startswith("2026-09-05T03:00:00")
 
 
-def test_next_beijing_midnight_expires_an_incomplete_task():
+def test_next_day_three_am_expires_an_incomplete_task():
     scheduled = task("2026-09-04")
 
     access = task_date_access(
         scheduled,
-        datetime(2026, 9, 5, 0, 0, tzinfo=SHANGHAI),
+        datetime(2026, 9, 5, 3, 0, tzinfo=SHANGHAI),
     )
 
     assert access.state == STATE_EXPIRED
@@ -61,10 +69,22 @@ def test_next_beijing_midnight_expires_an_incomplete_task():
     assert access.as_dict()["status_label"] == "未完成·已截止"
     assert access.read_only is True
     with pytest.raises(TaskDateGateError) as raised:
-        assert_task_write_allowed(scheduled, datetime(2026, 9, 5, 0, 0, tzinfo=SHANGHAI))
+        assert_task_write_allowed(scheduled, datetime(2026, 9, 5, 3, 0, tzinfo=SHANGHAI))
     assert raised.value.error == "task_expired"
     assert raised.value.status_code == 403
-    assert raised.value.message == "该任务已截止，当前仅可查看，不能继续提交。"
+    assert raised.value.message == "该任务已于次日凌晨3:00截止，当前仅可查看，不能继续提交。"
+
+
+def test_home_grace_date_uses_shanghai_clock_and_ends_exactly_at_three():
+    assert active_task_grace_date(
+        datetime(2026, 9, 5, 2, 59, 59, tzinfo=SHANGHAI)
+    ).isoformat() == "2026-09-04"
+    assert active_task_grace_date(
+        datetime(2026, 9, 5, 3, 0, tzinfo=SHANGHAI)
+    ) is None
+    assert task_date_cutoff_local(task("2026-09-04")).strftime(
+        "%Y-%m-%d %H:%M"
+    ) == "2026-09-05 03:00"
 
 
 def test_future_task_is_not_open():
@@ -95,19 +115,19 @@ def test_historical_completed_task_remains_viewable_but_read_only():
     assert raised.value.message == "该任务已完成，当前仅可查看结果。"
 
 
-def test_attempt_retaining_practice_can_retry_only_on_its_assigned_day():
+def test_attempt_retaining_practice_can_retry_through_its_grace_period():
     scheduled = task("2026-09-04", status="done")
     just_before_cutoff = datetime(
         2026,
         9,
-        4,
-        23,
+        5,
+        2,
         59,
         59,
         999999,
         tzinfo=SHANGHAI,
     )
-    at_cutoff = datetime(2026, 9, 5, 0, 0, tzinfo=SHANGHAI)
+    at_cutoff = datetime(2026, 9, 5, 3, 0, tzinfo=SHANGHAI)
 
     default_access = task_date_access(scheduled, TODAY)
     retry_access = task_date_access(
@@ -122,6 +142,7 @@ def test_attempt_retaining_practice_can_retry_only_on_its_assigned_day():
     assert retry_access.can_start is True
     assert retry_access.can_write is True
     assert retry_access.read_only is False
+    assert retry_access.is_grace_period is True
     assert_task_write_allowed(
         scheduled,
         just_before_cutoff,
@@ -261,33 +282,34 @@ class _FakeTimerSession:
 
 
 @pytest.mark.parametrize("session_name", ["PlanItemSession", "StudySession"])
-def test_expired_timer_session_closes_at_shanghai_midnight_for_both_models(session_name):
+def test_expired_timer_session_closes_at_three_am_for_both_models(session_name):
     scheduled = task("2026-09-04")
-    session = _FakeTimerSession(datetime(2026, 9, 4, 15, 59, 50))
-    now = datetime(2026, 9, 4, 16, 0, 5)
+    session = _FakeTimerSession(datetime(2026, 9, 4, 18, 59, 50))
+    now = datetime(2026, 9, 4, 19, 0, 5)
 
     assert close_expired_task_session(session, scheduled, now) is True
-    assert session.ended_at == datetime(2026, 9, 4, 16, 0, 0)
+    assert session.ended_at == datetime(2026, 9, 4, 19, 0, 0)
     assert session.duration_seconds == 10, session_name
     assert close_expired_task_session(session, scheduled, now) is False
+    assert task_date_end_utc(scheduled) == datetime(2026, 9, 4, 19, 0, 0)
 
 
 def test_future_or_post_boundary_session_cannot_be_closed_by_expiry_helper():
     future = task("2026-09-05")
-    future_session = _FakeTimerSession(datetime(2026, 9, 4, 16, 0, 0))
+    future_session = _FakeTimerSession(datetime(2026, 9, 4, 19, 0, 0))
     assert close_expired_task_session(
         future_session,
         future,
-        datetime(2026, 9, 4, 16, 0, 5),
+        datetime(2026, 9, 4, 19, 0, 5),
     ) is False
     assert future_session.ended_at is None
 
     expired = task("2026-09-04")
-    post_boundary_session = _FakeTimerSession(datetime(2026, 9, 4, 16, 0, 1))
+    post_boundary_session = _FakeTimerSession(datetime(2026, 9, 4, 19, 0, 1))
     assert close_expired_task_session(
         post_boundary_session,
         expired,
-        datetime(2026, 9, 4, 16, 0, 5),
+        datetime(2026, 9, 4, 19, 0, 5),
     ) is False
     assert post_boundary_session.ended_at is None
 

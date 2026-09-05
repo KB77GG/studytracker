@@ -1,7 +1,24 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-04 IELTS 同日错题重做回归热修已上线，小程序候选待手动上传。
+> 最近更新：2026-09-05 次日凌晨 03:00 截止发布进行中，小程序仍待用户上传。
+
+## 2026-09-05 次日 03:00 截止发布复核（部署进行中）
+
+- 用户确认“先部署后端、再上传小程序”的发布顺序，继续使用 `/Users/zhouxin/.codex/worktrees/task-cutoff-3am/studytracker`、`codex/task-cutoff-3am`，发布前 `HEAD=origin/main=ac863d361be2`；此前 15 modified / 1 untracked 均为本需求候选。主线无新增冲突；生产部署前业务 HEAD 为 `67a0fded`、tracked 干净，17 个既有未跟踪备份/静态目录/调度库保留。
+- 生产实际 Python 为 **3.10.12**（本地文档的 3.13 仅对应开发/CI）：发布复核发现候选 `datetime.UTC` 导入不能在 3.10 运行，已恢复 `timezone.utc` 并用单行 UP017 豁免注明兼容原因。候选模块以 stdin 在生产解释器内存中执行，02:00 可写、03:00 截止、任务日期不变、UTC 计时边界全部通过，没有写服务器文件或数据库。另恢复无日期旧词汇来源任务的已完成只读检查，新增真实服务回归确认不会写入答案。
+- 最终聚焦命令：`PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --disable-warnings --tb=short -p no:cacheprovider tests/test_task_date_gate.py tests/test_task_timer_date_gate.py tests/test_vocabulary_autonomous_review.py tests/test_cambridge_same_day_retry.py tests/test_miniprogram_task_visibility.py tests/test_role_attempt_history.py tests/test_teacher_practice_access.py` → **91 passed / 5 subtests passed**；三份改动 Python 目标 Ruff、`git diff --check`、首页 Node 3/3 通过。此前全仓结果仍见下一节。
+- 本条随业务提交记录发布准备，线上部署结果待完成后回填；不代表已上线。没有本需求数据库迁移或生产学生数据写入。小程序上传目录仍为 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`，本轮未上传/提审/发布。
+
+## 2026-09-05 学生任务延长至次日 03:00（本地候选，未部署/未上传）
+
+- 后端实现位于干净工作树 `/Users/zhouxin/.codex/worktrees/task-cutoff-3am/studytracker`，分支 `codex/task-cutoff-3am`，基线/当前 HEAD 均为 `origin/main@ac863d361be2`；开工时工作树干净。本轮未触碰落后且脏的 `/Users/zhouxin/Desktop/studytracker`。当前业务改动为 `app.py`、`api/miniprogram.py`、`api/question_type_practice.py`、`services/task_date_gate.py`、`services/vocabulary_autonomous_review.py`、学生首页三文件、五份 Python 回归及新增 `tests/test_student_home_grace_client.js`；另由本条更新两份交接文档。全部仅本机未提交改动，尚未 commit/push/deploy。
+- 最终时间口径：日期为 D 的任务始终归属 D，可操作区间为上海时间 **D 00:00（含）至 D+1 03:00（不含）**。例如 9 月 4 日任务在 9 月 5 日 02:00 完成，任务和完成统计仍归 9 月 4 日，`submitted_at` 如实记录 9 月 5 日 02:00；到 03:00 整转为“未完成·已截止”。当天任务不与昨日任务混表，未来任务仍为“尚未开放”，历史已提交仍显示“已提交，待批改”。教师、助教、管理员及既有申诉/题库报错入口不受学生写闸门限制。跨截止计时精确截到 03:00。
+- 日期闸门继续作为所有学生写接口的统一判定，不改各题型提交实现。首页接口冻结一次服务端上海时钟，仍按请求日期精确返回任务，同时在 00:00–02:59:59 返回昨日未完成数量；学生首页常驻“次日 03:00 截止”提示，宽限时段出现“昨日未完成”入口，进入后明确展示任务归属日期。正确上传候选中的对应首页文件与干净分支 SHA-256 已逐一一致。
+- 为避免“首页可做、今日复习却在午夜被旧会话逻辑拒绝”，来源任务的词汇自主复习批次在宽限期保持原任务日期，答案/纠正/结算都复用任务日期闸门；无来源的首页独立复习继续按自然日。既有首答、后续作答、`PracticeSubmissionAttempt`、词汇 `VocabularyReviewAttempt` 等留痕未删除或覆盖，相关历史/权限回归通过。新任务订阅通知的三条发布链也统一显示任务归属日的**次日 03:00**，通知触发和模板未改。
+- 当前验证：日期闸门、计时、首页/API、路由、题型、听写、词汇、首答/历次记录、staff 权限组合为 **228 passed / 8 subtests passed**；通知补齐后的聚焦组合为 **109 passed / 5 subtests passed**，最终全仓 Python 为 **720 passed / 2 个既有缺失 MP3 的 404 / 72 subtests passed**。干净主线 Node 为 **102 passed / 2 个既有网页只读 VM fixture 失败**，失败涉及的测试和 Listening/Reading 模板均未被本轮修改；新增首页 Node 3/3 通过。目标 Ruff 全通过，`app.py` 的全文件 F821 仍只指向主线既有 `ParentStudentLink`，Python 编译与 `git diff --check` 通过。
+- 唯一正确小程序上传候选仍为 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`；该长期脏工作树开工前已有 74 modified / 26 untracked，本轮仅叠加首页 `index.js/.wxml/.wxss`、新增首页 Node 测试及交接文档，未覆盖其他候选。候选全部 Node **58 passed**，no-undef、52 个 JS、37 个 JSON、微信官方 32 个 WXML / 34 个 WXSS 编译通过。微信开发者工具已核对 URL 中 `projectpath=/Users/zhouxin/Desktop/studytracker-release/miniprogram`，普通编译后 Debugger 为 0 errors / 0 warnings，模拟器可见新提示；没有点击“上传”。
+- 发布状态：生产仍运行此前版本，本轮**未部署后端、未上传/提审/发布小程序、未写生产数据**。正确顺序是先在明确授权后提交/推送并部署本干净后端，再从固定 release 目录上传小程序；否则客户端提示已是 03:00，而生产闸门仍可能按旧截止执行。仍待真实学生账号在 00:00–03:00、03:00 精确边界以及 iPhone/Android 体验版端到端验收。
 
 ## 2026-09-04 IELTS 同日错题重做回归（后端已上线，小程序待手动上传）
 

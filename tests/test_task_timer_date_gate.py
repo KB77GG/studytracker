@@ -1,15 +1,24 @@
-from datetime import datetime, timedelta
 import time
+import unittest
+from datetime import datetime, timedelta
 
 import jwt
-import unittest
 from flask import Flask
 from flask_login import LoginManager
 
 import app as app_module
 from api import api_bp
 from api.miniprogram import mp_bp
-from models import PlanItem, PlanItemSession, StudentProfile, StudyPlan, StudySession, Task, User, db
+from models import (
+    PlanItem,
+    PlanItemSession,
+    StudentProfile,
+    StudyPlan,
+    StudySession,
+    Task,
+    User,
+    db,
+)
 from services.task_date_gate import beijing_today, task_date_end_utc
 
 
@@ -117,7 +126,7 @@ class TaskTimerDateGateRouteTest(unittest.TestCase):
             db.session.commit()
             return item.id, session.id
 
-    def test_api_v1_plan_item_timer_closes_at_midnight_and_counts_ten_seconds(self):
+    def test_api_v1_plan_item_timer_closes_at_three_am_and_counts_ten_seconds(self):
         item_id, session_id = self._expired_plan_item_session()
 
         response = self.client.post(
@@ -132,7 +141,7 @@ class TaskTimerDateGateRouteTest(unittest.TestCase):
             self.assertEqual(session.duration_seconds, 10)
             self.assertIsNotNone(session.ended_at)
 
-    def test_miniprogram_plan_item_timer_closes_at_midnight_and_is_idempotent(self):
+    def test_miniprogram_plan_item_timer_closes_at_three_am_and_is_idempotent(self):
         item_id, session_id = self._expired_plan_item_session()
         url = f"/api/miniprogram/student/tasks/{item_id}/timer/{session_id}/stop"
 
@@ -148,7 +157,7 @@ class TaskTimerDateGateRouteTest(unittest.TestCase):
             item = db.session.get(PlanItem, item_id)
             self.assertEqual(item.actual_seconds, 10)
 
-    def test_legacy_study_session_timer_closes_at_midnight_and_counts_ten_seconds(self):
+    def test_legacy_study_session_timer_closes_at_three_am_and_counts_ten_seconds(self):
         with self.app.app_context():
             task = Task(
                 date=(beijing_today() - timedelta(days=1)).isoformat(),

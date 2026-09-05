@@ -60,11 +60,14 @@ from services.vocabulary_mastery import vocabulary_goal_for_task
 from services.task_deletion import TaskDeletionError, delete_unstarted_task
 from services.task_date_gate import (
     TaskDateGateError,
+    active_task_grace_date,
     add_task_date_access,
     assert_task_write_allowed,
+    beijing_now,
     beijing_today,
     close_expired_task_session,
     gate_error_payload,
+    task_date_cutoff_local,
     task_workflow_status,
     task_date_access,
 )
@@ -1677,7 +1680,7 @@ HOME_DATE_FUTURE_DAYS = 2
 
 
 def _task_allows_same_day_attempt_retry(task) -> bool:
-    """Limit completed-task retries to flows with append-only attempt history."""
+    """Allow assigned-window retries only for append-only attempt histories."""
 
     return bool(getattr(task, "reading_test_id", None)) or (
         bool(getattr(task, "listening_exercise_id", None))
@@ -1685,9 +1688,10 @@ def _task_allows_same_day_attempt_retry(task) -> bool:
     )
 
 
-def _student_task_access(task):
+def _student_task_access(task, now=None):
     return task_date_access(
         task,
+        now,
         allow_completed_today=_task_allows_same_day_attempt_retry(task),
     )
 
@@ -1704,6 +1708,35 @@ def _task_gate_response(task):
     return None
 
 
+def _student_home_grace_payload(student_name: str, now: datetime) -> dict:
+    """Describe the previous assignment day while its 03:00 window is open."""
+
+    grace_date = active_task_grace_date(now)
+    if grace_date is None:
+        return {
+            "active": False,
+            "task_date": None,
+            "pending_count": 0,
+            "cutoff_time": "03:00",
+        }
+
+    grace_tasks = Task.query.filter(
+        Task.student_name == student_name,
+        Task.date == grace_date.isoformat(),
+    ).all()
+    pending_count = sum(
+        _student_task_access(task, now).can_write
+        and task_workflow_status(task) in {"pending", "in_progress"}
+        for task in grace_tasks
+    )
+    return {
+        "active": True,
+        "task_date": grace_date.isoformat(),
+        "pending_count": pending_count,
+        "cutoff_time": "03:00",
+    }
+
+
 @mp_bp.route("/student/tasks/today", methods=["GET"])
 @require_api_user(User.ROLE_STUDENT)
 def get_student_today_tasks():
@@ -1715,8 +1748,10 @@ def get_student_today_tasks():
     if not student:
         return jsonify({"ok": False, "error": "no_student_profile"}), 404
 
-    today = beijing_today()
+    now = beijing_now()
+    today = now.date()
     query_date = today
+    grace_period = _student_home_grace_payload(student.full_name, now)
 
     date_str = request.args.get("date")
     if date_str:
@@ -1734,6 +1769,8 @@ def get_student_today_tasks():
             "tasks": [],
             "outside_home_window": True,
             "message": "该日期不在首页五日范围内，请联系练习助教或老师重新布置。",
+            "server_date": today.isoformat(),
+            "grace_period": grace_period,
         })
 
     task_filters = [
@@ -1754,12 +1791,14 @@ def get_student_today_tasks():
             "tasks": [],
             "outside_home_window": False,
             "message": "当前日期无任务",
+            "server_date": today.isoformat(),
+            "grace_period": grace_period,
         })
 
-    # 只给今天或已完成任务补齐访问令牌；过期未完成任务的 GET 保持真正只读。
+    # 只给当前可操作或已完成任务补齐访问令牌；过期未完成任务的 GET 保持真正只读。
     tokens_updated = False
     for task in tasks:
-        access = _student_task_access(task)
+        access = _student_task_access(task, now)
         if (
             task.listening_exercise_id
             and not task.listening_access_token
@@ -1812,7 +1851,7 @@ def get_student_today_tasks():
             "completed": "completed",
         }[workflow_status]
 
-        access = _student_task_access(task)
+        access = _student_task_access(task, now)
         status_label = {
             "pending": "待完成",
             "in_progress": "进行中",
@@ -1877,6 +1916,8 @@ def get_student_today_tasks():
         "date": query_date.isoformat(),
         "tasks": tasks_data,
         "outside_home_window": False,
+        "server_date": today.isoformat(),
+        "grace_period": grace_period,
     })
 
 
@@ -5175,10 +5216,17 @@ def _create_teacher_homework(data: dict, *, force_quick: bool = False):
     elif not target_openid:
         push_error = "no_student_openid"
     else:
+        task_cutoff = task_date_cutoff_local(task)
         payload = {
             "thing1": {"value": values["detail"][:20]},
             "time2": {"value": f"{values['date']} 08:00"},
-            "time3": {"value": f"{values['date']} 23:59"},
+            "time3": {
+                "value": (
+                    task_cutoff.strftime("%Y-%m-%d %H:%M")
+                    if task_cutoff
+                    else f"{values['date']} 23:59"
+                )
+            },
             "thing4": {"value": (values["category"] or "学习任务")[:20]},
         }
         push_result = send_subscribe_message_result(

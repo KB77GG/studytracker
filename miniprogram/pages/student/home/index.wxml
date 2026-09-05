@@ -19,6 +19,22 @@
       </view>
     </view>
 
+    <view class="deadline-notice">
+      <view class="deadline-notice-head">
+        <text class="deadline-notice-title">温馨提示</text>
+        <text class="deadline-notice-time">次日 03:00 截止</text>
+      </view>
+      <text class="deadline-notice-copy">每项任务可在归属日期的次日凌晨 3:00 前完成；到 3:00 即截止，无法重做或补做。</text>
+      <view
+        class="grace-task-link"
+        wx:if="{{gracePeriod.active && gracePeriod.pendingCount > 0}}"
+        bindtap="openGraceTasks"
+      >
+        <text>昨日还有 {{gracePeriod.pendingCount}} 项未完成，点击继续</text>
+        <text class="grace-task-arrow">›</text>
+      </view>
+    </view>
+
     <view class="progress-card" wx:if="{{tasks.length > 0}}">
       <view class="progress-top">
         <view>
@@ -72,7 +88,7 @@
 
     <view class="task-list" wx:if="{{tasks.length > 0}}">
       <view class="task-group-header">
-        <text class="task-group-title">{{currentDate === todayStr ? '今日任务' : '当日任务'}}</text>
+        <text class="task-group-title">{{taskGroupTitle}}</text>
       </view>
       <block wx:for="{{tasks}}" wx:key="id">
       <view class="task-card {{item.isDone ? 'done' : ''}} {{item.readOnly ? 'read-only' : ''}}">
@@ -85,6 +101,7 @@
                 <text class="assigner-tag {{item.assignedByRole}}" wx:if="{{item.assignedByLabel}}">{{item.assignedByLabel}}</text>
                 <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
               </view>
+              <text class="task-date" wx:if="{{item.isGracePeriod}}">归属 {{item.date}} · 凌晨 3:00 前可提交</text>
             </view>
           </view>
           <view class="card-right">

@@ -37,7 +37,13 @@ from models import (
 )
 from services.dictation_input_policy import resolve_submission_input
 from services.dictation_review import SHANGHAI, local_date
-from services.task_date_gate import TaskDateGateError, assert_task_write_allowed
+from services.task_date_gate import (
+    TaskDateGateError,
+    active_task_grace_date,
+    assert_task_write_allowed,
+    task_date,
+    task_date_access,
+)
 from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
 from services.vocabulary_mastery import (
     DIMENSIONS,
@@ -595,8 +601,8 @@ def _active_session_for_date(
     )
 
 
-def _expire_stale_active_sessions(user_id: int, review_date) -> None:
-    """Close unfinished non-current-day batches without settling or replaying them.
+def _expire_stale_active_sessions(user_id: int, now: datetime) -> None:
+    """Close batches outside the current and active grace dates.
 
     Answer rows already recorded in an old batch remain available for audit,
     but the frozen queue must not masquerade as today's review or grant today's
@@ -604,11 +610,16 @@ def _expire_stale_active_sessions(user_id: int, review_date) -> None:
     created without deleting or rewriting the old answers.
     """
 
+    valid_review_dates = {local_date(now)}
+    grace_date = active_task_grace_date(now)
+    if grace_date is not None:
+        valid_review_dates.add(grace_date)
+
     stale_sessions = (
         VocabularyReviewSession.query.filter(
             VocabularyReviewSession.student_id == user_id,
             VocabularyReviewSession.status == VocabularyReviewSession.STATUS_ACTIVE,
-            VocabularyReviewSession.review_date != review_date,
+            ~VocabularyReviewSession.review_date.in_(valid_review_dates),
         )
         .order_by(VocabularyReviewSession.started_at.asc(), VocabularyReviewSession.id.asc())
         .all()
@@ -649,6 +660,16 @@ def _validate_origin_task(user: User, task_id) -> Task | None:
     return task
 
 
+def _review_date_for_origin_task(task: Task | None, now: datetime):
+    """Keep a task-linked review batch attributed to the task's own date."""
+
+    if task is not None and task_date_access(task, now).can_write:
+        assigned_date = task_date(task)
+        if assigned_date is not None:
+            return assigned_date
+    return local_date(now)
+
+
 def _assert_review_session_write_allowed(
     user: User,
     session: VocabularyReviewSession,
@@ -656,8 +677,14 @@ def _assert_review_session_write_allowed(
 ) -> None:
     """Apply the review-day and task-day gates to a claimed session."""
 
+    task = (
+        _validate_origin_task(user, session.origin_task_id)
+        if session.origin_task_id
+        else None
+    )
+    has_assignment_date = task is not None and task_date(task) is not None
     current_date = local_date(now)
-    if session.review_date != current_date:
+    if not has_assignment_date and session.review_date != current_date:
         future = session.review_date > current_date
         state = "future" if future else "expired"
         raise VocabularyAutonomousReviewError(
@@ -678,20 +705,18 @@ def _assert_review_session_write_allowed(
             can_write=False,
         )
 
-    if not session.origin_task_id:
-        return
-    task = _validate_origin_task(user, session.origin_task_id)
-    if task is None:
-        return
-    try:
-        assert_task_write_allowed(task, now=now)
-    except TaskDateGateError as error:
-        raise VocabularyAutonomousReviewError(
-            error.error,
-            error.status_code,
-            message=error.message,
-            **error.details,
-        ) from error
+    # Undated legacy tasks retain the review-day check above as well as the
+    # original completion/withdrawal gate.
+    if task is not None:
+        try:
+            assert_task_write_allowed(task, now=now)
+        except TaskDateGateError as error:
+            raise VocabularyAutonomousReviewError(
+                error.error,
+                error.status_code,
+                message=error.message,
+                **error.details,
+            ) from error
 
 
 @lru_cache(maxsize=8192)
@@ -1041,8 +1066,8 @@ def claim_today_review(
                 message=error.message,
                 **error.details,
             ) from error
-    review_date = local_date(now)
-    _expire_stale_active_sessions(user.id, review_date)
+    review_date = _review_date_for_origin_task(origin_task, now)
+    _expire_stale_active_sessions(user.id, now)
     active = _active_session_for_date(user.id, review_date)
     if active:
         if origin_task and active.origin_task_id is None:
@@ -1723,8 +1748,8 @@ def settle_review_session(
     }
     session.status = VocabularyReviewSession.STATUS_SETTLED
     # The write gate above guarantees that settlement stays on the batch's
-    # validated review day.
-    session.review_date = local_date(now)
+    # validated review day. Keep the original date so a task finished during
+    # its after-midnight grace period is still attributed to that task day.
     session.claim_key = None
     session.settled_at = now
     session.duration_seconds = duration
@@ -1775,13 +1800,14 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
         ).first()
         is not None
     )
-    active = _active_session_for_date(user.id, local_date(now))
+    review_date = _review_date_for_origin_task(task, now)
+    active = _active_session_for_date(user.id, review_date)
     due_count = _due_count(user, now)
     latest_settled = (
         VocabularyReviewSession.query.filter_by(
             student_id=user.id,
             status=VocabularyReviewSession.STATUS_SETTLED,
-            review_date=local_date(now),
+            review_date=review_date,
         )
         .order_by(VocabularyReviewSession.settled_at.desc(), VocabularyReviewSession.id.desc())
         .first()

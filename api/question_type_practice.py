@@ -63,6 +63,7 @@ from services.task_date_gate import (
     assert_task_write_allowed,
     gate_error_payload,
     task_date_access,
+    task_date_cutoff_local,
 )
 
 question_type_practice_bp = Blueprint("question_type_practice", __name__)
@@ -475,13 +476,20 @@ def _notify_assignment(profile: StudentProfile, task: Task) -> None:
     try:
         from api.wechat import send_subscribe_message
 
+        task_cutoff = task_date_cutoff_local(task)
         send_subscribe_message(
             openid,
             current_app.config.get("WECHAT_TASK_TEMPLATE_ID", ""),
             {
                 "thing1": {"value": (task.detail or "IELTS 题型专项")[:20]},
                 "time2": {"value": f"{task.date} 08:00"},
-                "time3": {"value": f"{task.date} 23:59"},
+                "time3": {
+                    "value": (
+                        task_cutoff.strftime("%Y-%m-%d %H:%M")
+                        if task_cutoff
+                        else f"{task.date} 23:59"
+                    )
+                },
                 "thing4": {"value": "题型专项"},
             },
         )

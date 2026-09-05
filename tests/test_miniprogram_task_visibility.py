@@ -2,6 +2,7 @@ import json
 import time
 import unittest
 from datetime import date, datetime, timedelta
+from unittest.mock import patch
 
 import jwt
 from flask import Flask
@@ -17,6 +18,7 @@ from models import (
     User,
     db,
 )
+from services.task_date_gate import SHANGHAI
 
 
 class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
@@ -219,6 +221,76 @@ class MiniprogramTaskVisibilityApiTest(unittest.TestCase):
         self.assertEqual(
             details["课后作业 - today assistant"]["assigned_by_role"], "assistant"
         )
+
+    def test_home_exposes_yesterday_grace_link_and_keeps_dates_separate(self):
+        grace_now = datetime.combine(
+            self.today,
+            datetime.min.time(),
+            tzinfo=SHANGHAI,
+        ).replace(hour=2)
+        with patch("api.miniprogram.beijing_now", return_value=grace_now):
+            today_response = self.client.get(
+                f"/api/miniprogram/student/tasks/today?date={self.today.isoformat()}",
+                headers=self._headers(self.student_id, User.ROLE_STUDENT),
+            )
+            yesterday_response = self.client.get(
+                f"/api/miniprogram/student/tasks/today?date={self.d1.isoformat()}",
+                headers=self._headers(self.student_id, User.ROLE_STUDENT),
+            )
+
+        self.assertEqual(today_response.status_code, 200)
+        today_payload = today_response.get_json()
+        self.assertEqual(today_payload["server_date"], self.today.isoformat())
+        self.assertEqual(
+            {item["date"] for item in today_payload["tasks"]},
+            {self.today.isoformat()},
+        )
+        self.assertEqual(
+            today_payload["grace_period"],
+            {
+                "active": True,
+                "task_date": self.d1.isoformat(),
+                "pending_count": 2,
+                "cutoff_time": "03:00",
+            },
+        )
+
+        yesterday_payload = yesterday_response.get_json()
+        pending = next(
+            item
+            for item in yesterday_payload["tasks"]
+            if item["task_name"] == "课后作业 - d1 pending"
+        )
+        self.assertEqual(pending["date"], self.d1.isoformat())
+        self.assertEqual(pending["task_date"], self.d1.isoformat())
+        self.assertTrue(pending["is_grace_period"])
+        self.assertTrue(pending["can_write"])
+        self.assertFalse(pending["read_only"])
+
+    def test_home_grace_link_and_yesterday_writes_close_at_three_am(self):
+        cutoff = datetime.combine(
+            self.today,
+            datetime.min.time(),
+            tzinfo=SHANGHAI,
+        ).replace(hour=3)
+        with patch("api.miniprogram.beijing_now", return_value=cutoff):
+            response = self.client.get(
+                f"/api/miniprogram/student/tasks/today?date={self.d1.isoformat()}",
+                headers=self._headers(self.student_id, User.ROLE_STUDENT),
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertFalse(payload["grace_period"]["active"])
+        pending = next(
+            item
+            for item in payload["tasks"]
+            if item["task_name"] == "课后作业 - d1 pending"
+        )
+        self.assertFalse(pending["is_grace_period"])
+        self.assertFalse(pending["can_write"])
+        self.assertTrue(pending["read_only"])
+        self.assertEqual(pending["status_label"], "未完成·已截止")
 
     def test_completed_ielts_test_remains_retryable_only_on_assignment_day(self):
         with self.app.app_context():

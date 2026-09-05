@@ -1,19 +1,22 @@
 """Beijing-time availability rules for scheduled student tasks.
 
-The assignment date is a calendar day, not a rolling 24-hour window.  This
-module is deliberately model-light so every student-facing workflow can use
-the same decision without importing a blueprint or duplicating date math.
+The assignment date is a calendar day, not a rolling 24-hour window. Each
+assignment keeps that date while receiving a fixed grace period until 03:00
+the following day. This module is deliberately model-light so every
+student-facing workflow can use the same decision without importing a
+blueprint or duplicating date math.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from typing import Any
 from zoneinfo import ZoneInfo
 
 SHANGHAI = ZoneInfo("Asia/Shanghai")
-UTC = timezone.utc
+UTC = timezone.utc  # noqa: UP017 -- production runs Python 3.10.
+TASK_CUTOFF_HOUR = 3
 
 STATE_TODAY = "today"
 STATE_FUTURE = "future"
@@ -64,6 +67,8 @@ class TaskDateAccess:
     can_start: bool
     can_write: bool
     read_only: bool
+    is_grace_period: bool
+    cutoff_at: datetime | None
     workflow_status: str
     workflow_label: str
 
@@ -79,6 +84,8 @@ class TaskDateAccess:
             "can_start": self.can_start,
             "can_write": self.can_write,
             "read_only": self.read_only,
+            "is_grace_period": self.is_grace_period,
+            "task_cutoff_at": self.cutoff_at.isoformat() if self.cutoff_at else None,
         }
 
 
@@ -114,6 +121,25 @@ def next_beijing_midnight(value: datetime | None = None) -> datetime:
     )
 
 
+def active_task_grace_date(value: datetime | None = None) -> date | None:
+    """Return yesterday while its assignment window remains open.
+
+    The server clock is authoritative. From local midnight through 02:59:59,
+    both the new calendar day's tasks and the previous assignment day's tasks
+    can be available, while each task keeps its original assigned date.
+    """
+
+    current = _local_now(value)
+    cutoff = datetime.combine(
+        current.date(),
+        time(hour=TASK_CUTOFF_HOUR),
+        tzinfo=SHANGHAI,
+    )
+    if current < cutoff:
+        return current.date() - timedelta(days=1)
+    return None
+
+
 def _parse_task_date(value: Any) -> date | None:
     if isinstance(value, date) and not isinstance(value, datetime):
         return value
@@ -145,12 +171,26 @@ def task_date(task: Any) -> date | None:
     )
 
 
+def task_date_cutoff_local(task: Any) -> datetime | None:
+    """Return the exclusive Shanghai-time cutoff for an assigned task."""
+
+    planned = task_date(task)
+    if planned is None:
+        return None
+    return datetime.combine(
+        planned + timedelta(days=1),
+        time(hour=TASK_CUTOFF_HOUR),
+        tzinfo=SHANGHAI,
+    )
+
+
 def task_is_completed(task: Any) -> bool:
     """Only a genuinely finished task is a completed historical task.
 
     ``submitted`` remains a separate workflow state and is intentionally not
     treated as completed here. A submitted task stays eligible for the
-    existing same-day withdrawal flow, but becomes read-only after its day.
+    existing withdrawal flow during the assignment window, but becomes
+    read-only after the next-day 03:00 cutoff.
     """
 
     status = str(getattr(task, "status", "") or "").strip().lower()
@@ -245,55 +285,69 @@ def task_date_access(
     """Derive display and write state without changing task completion.
 
     Most completed assignments are immutable. Practice workflows that retain
-    every attempt may opt into another submission on the assignment day; the
-    same task remains read-only before or after that Beijing calendar day.
+    every attempt may opt into another submission during the assignment
+    window; the same task remains read-only before it opens or after cutoff.
     """
 
     planned = task_date(task)
-    today = beijing_today(now)
+    current = _local_now(now)
     completed = task_is_completed(task)
+    cutoff = task_date_cutoff_local(task)
+    starts_at = (
+        datetime.combine(planned, time.min, tzinfo=SHANGHAI)
+        if planned is not None
+        else None
+    )
+    within_assigned_window = bool(
+        starts_at is not None
+        and cutoff is not None
+        and starts_at <= current < cutoff
+    )
+    is_grace_period = bool(
+        within_assigned_window and planned is not None and current.date() > planned
+    )
     if completed:
         state = STATE_COMPLETED
-    elif planned is None or planned == today:
+    elif planned is None or within_assigned_window:
         # Undated legacy/self-practice tasks predate the scheduled-assignment
         # contract. Preserve their existing behavior until they are assigned
         # a real calendar date.
         state = STATE_TODAY
-    elif planned > today:
+    elif starts_at is not None and current < starts_at:
         state = STATE_FUTURE
     else:
         state = STATE_EXPIRED
-    # Retrying a completed assignment is an explicit same-calendar-day
-    # exception.  An undated legacy row has no safe cutoff to compare against,
+    # Retrying a completed assignment is an explicit assigned-window
+    # exception. An undated legacy row has no safe cutoff to compare against,
     # so it must not gain an open-ended retry window through this opt-in.
-    same_task_day = planned is not None and planned == today
     writable = (state == STATE_TODAY and not completed) or (
-        allow_completed_today and completed and same_task_day
+        allow_completed_today and completed and within_assigned_window
     )
     return TaskDateAccess(
         task_date=planned,
         state=state,
-        label=state_label(state),
+        label=(
+            "宽限期内·03:00 截止"
+            if is_grace_period and not completed
+            else state_label(state)
+        ),
         completed=completed,
         can_start=writable,
         can_write=writable,
         read_only=not writable,
+        is_grace_period=is_grace_period,
+        cutoff_at=cutoff,
         workflow_status=task_workflow_status(task),
         workflow_label=task_display_status_label(task, state),
     )
 
 
 def task_date_end_utc(task: Any) -> datetime | None:
-    """Return the exclusive end of the assigned day as naive UTC."""
+    """Return the exclusive next-day 03:00 cutoff as naive UTC."""
 
-    planned = task_date(task)
-    if planned is None:
+    local_end = task_date_cutoff_local(task)
+    if local_end is None:
         return None
-    local_end = datetime.combine(
-        planned + timedelta(days=1),
-        datetime.min.time(),
-        tzinfo=SHANGHAI,
-    )
     return local_end.astimezone(UTC).replace(tzinfo=None)
 
 
@@ -309,7 +363,7 @@ def bounded_task_session_end(
     now: datetime | None = None,
     seconds_hint: int | None = None,
 ) -> datetime:
-    """Choose a session end that cannot pass now or the assigned-day cutoff."""
+    """Choose a session end that cannot pass now or the task cutoff."""
 
     current = _utc_naive(now or datetime.utcnow())
     started = _utc_naive(started_at)
@@ -330,7 +384,7 @@ def close_expired_task_session(
     task: Any,
     now: datetime | None = None,
 ) -> bool:
-    """Close one open session exactly at the assigned-day boundary.
+    """Close one open session exactly at the next-day 03:00 boundary.
 
     Callers must verify ownership before invoking this helper. It only
     handles an already-expired task whose session started before the boundary;
@@ -380,7 +434,7 @@ def assert_task_write_allowed(
     if access.state == STATE_EXPIRED:
         raise TaskDateGateError(
             "task_expired",
-            "该任务已截止，当前仅可查看，不能继续提交。",
+            "该任务已于次日凌晨3:00截止，当前仅可查看，不能继续提交。",
             state=access.state,
             task_date=access.task_date,
             status_label=access.workflow_label,

@@ -32,7 +32,14 @@ Page({
         reviewDueCount: 0,
         isGuest: false,
         weekdayText: '',
-        quickDates: []
+        quickDates: [],
+        gracePeriod: {
+            active: false,
+            taskDate: '',
+            pendingCount: 0,
+            cutoffTime: '03:00'
+        },
+        taskGroupTitle: '今日任务'
     },
 
     onLoad() {
@@ -376,7 +383,9 @@ Page({
             currentDate: date,
             dateStr: `${year}/${month}/${day}`,
             weekdayText: this.getWeekdayText(dateObj),
-            quickDates: this.buildQuickDates()
+            quickDates: this.buildQuickDates(),
+            progressLabel: this.buildProgressLabel(this.data.gracePeriod, date),
+            taskGroupTitle: this.buildTaskGroupTitle(this.data.gracePeriod, date)
         })
         if (options.fetch !== false) this.fetchTasks()
     },
@@ -486,7 +495,7 @@ Page({
     async fetchTasks() {
         // wx.showLoading({ title: '加载中...' }) // 移除 loading 以免闪烁
         if (this.data.isGuest || getApp().globalData.guestMode) {
-            this.applyTaskData(buildStudentTasks())
+            this.applyTaskData(buildStudentTasks(), this.normalizeGracePeriod())
             this.setData({ loading: false })
             return
         }
@@ -495,12 +504,18 @@ Page({
             console.log('Tasks response:', res)
 
             if (res.ok && res.tasks) {
-                this.applyTaskData(res.tasks)
+                this.applyTaskData(
+                    res.tasks,
+                    this.normalizeGracePeriod(res.grace_period)
+                )
             } else {
+                const gracePeriod = this.normalizeGracePeriod(res.grace_period)
                 this.setData({
                     tasks: [],
                     progress: { total: 0, completed: 0, percent: 0 },
-                    progressLabel: this.buildProgressLabel()
+                    gracePeriod,
+                    progressLabel: this.buildProgressLabel(gracePeriod),
+                    taskGroupTitle: this.buildTaskGroupTitle(gracePeriod)
                 })
             }
         } catch (err) {
@@ -512,7 +527,22 @@ Page({
         }
     },
 
-    applyTaskData(rawTasks) {
+    normalizeGracePeriod(payload = {}) {
+        return {
+            active: !!payload.active,
+            taskDate: payload.task_date || '',
+            pendingCount: Number(payload.pending_count || 0),
+            cutoffTime: payload.cutoff_time || '03:00'
+        }
+    },
+
+    openGraceTasks() {
+        const gracePeriod = this.data.gracePeriod || {}
+        if (!gracePeriod.active || !gracePeriod.taskDate) return
+        this.applyDate(gracePeriod.taskDate)
+    },
+
+    applyTaskData(rawTasks, gracePeriod = this.data.gracePeriod) {
         const tasks = (rawTasks || []).map(t => {
             const actualSeconds = t.actual_seconds || 0
             const plannedSeconds = t.planned_minutes * 60
@@ -535,6 +565,8 @@ Page({
                 availabilityLabel: t.status_label || t.task_status_label || t.availability_label || '',
                 availabilityStatus: t.availability_status || t.task_date_state || '',
                 readOnly: !!t.read_only,
+                isGracePeriod: !!t.is_grace_period,
+                cutoffAt: t.task_cutoff_at || '',
                 isDone: t.status === 'completed' || t.status === 'submitted',
                 dictationBookId: t.dictation_book_id,
                 dictationMode: t.dictation_mode || '',
@@ -565,7 +597,9 @@ Page({
         this.setData({
             tasks,
             progress: { total, completed, percent },
-            progressLabel: this.buildProgressLabel()
+            gracePeriod,
+            progressLabel: this.buildProgressLabel(gracePeriod),
+            taskGroupTitle: this.buildTaskGroupTitle(gracePeriod)
         })
 
         const activeTimer = getApp().globalData.activeTimer
@@ -576,8 +610,18 @@ Page({
         }
     },
 
-    buildProgressLabel() {
-        return this.data.currentDate === this.data.todayStr ? '今日完成度' : '当日完成度'
+    buildProgressLabel(gracePeriod = this.data.gracePeriod, date = this.data.currentDate) {
+        if (gracePeriod.active && date === gracePeriod.taskDate) {
+            return '昨日任务完成度'
+        }
+        return date === this.data.todayStr ? '今日完成度' : '当日完成度'
+    },
+
+    buildTaskGroupTitle(gracePeriod = this.data.gracePeriod, date = this.data.currentDate) {
+        if (gracePeriod.active && date === gracePeriod.taskDate) {
+            return `昨日任务 · 宽限至 ${gracePeriod.cutoffTime}`
+        }
+        return date === this.data.todayStr ? '今日任务' : '当日任务'
     },
 
     getModuleClass(module) {

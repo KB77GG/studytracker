@@ -94,6 +94,64 @@ page {
   flex-shrink: 0;
 }
 
+.deadline-notice {
+  box-sizing: border-box;
+  margin-bottom: 22rpx;
+  padding: 24rpx 26rpx;
+  border: 1rpx solid #f2d7a6;
+  border-radius: 28rpx;
+  background: #fffaf0;
+}
+
+.deadline-notice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-bottom: 10rpx;
+}
+
+.deadline-notice-title {
+  color: #9a5a05;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.deadline-notice-time {
+  flex-shrink: 0;
+  color: #b46100;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.deadline-notice-copy {
+  display: block;
+  color: #76531f;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.grace-task-link {
+  min-height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-top: 18rpx;
+  padding: 0 20rpx;
+  border-radius: 18rpx;
+  color: #fff;
+  background: #b46100;
+  font-size: 24rpx;
+  font-weight: 850;
+}
+
+.grace-task-arrow {
+  flex-shrink: 0;
+  font-size: 34rpx;
+  line-height: 1;
+}
+
 .sub-btn {
   width: 76rpx;
   height: 76rpx;

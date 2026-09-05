@@ -1,7 +1,6 @@
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -83,6 +82,15 @@ class TaskDateGateDisplayContractTest(unittest.TestCase):
                 "resultDisplay.hasWrong && !task.read_only",
                 template,
             )
+
+    def test_assignment_notifications_use_the_shared_next_day_cutoff(self):
+        expected = {
+            "app.py": 'task_cutoff.strftime("%Y-%m-%d %H:%M")',
+            "api/miniprogram.py": 'task_cutoff.strftime("%Y-%m-%d %H:%M")',
+            "api/question_type_practice.py": 'task_cutoff.strftime("%Y-%m-%d %H:%M")',
+        }
+        for path, text in expected.items():
+            self.assert_contains(path, text)
 
 
 if __name__ == "__main__":
