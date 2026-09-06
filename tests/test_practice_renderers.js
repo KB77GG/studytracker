@@ -4,6 +4,7 @@ const path = require('node:path')
 const test = require('node:test')
 
 const renderers = require('../static/js/practice_renderers.js')
+const PracticeTable = require('../static/js/practice_table.js')
 
 const fixture = JSON.parse(fs.readFileSync(
   path.join(__dirname, '..', 'static', 'listening_tests', 'ielts7_test2.json'),
@@ -668,6 +669,96 @@ test('type 8 without a shared option bank remains a completion task', () => {
     collect_option: { list: [{ key: 'A' }, { key: 'B' }, { key: 'C' }] },
     questions: [{ id: 1 }, { id: 2 }, { id: 3 }]
   }), true)
+})
+
+test('word-bank summaries with complete inline placeholders keep their source stem', () => {
+  const group = {
+    type: 10,
+    collect: '<p>The city has a $101$ and many residents are $102$.</p>',
+    collect_option: {
+      list: [
+        { key: 'A', text: 'dense population' },
+        { key: 'B', text: 'new immigrants' },
+        { key: 'C', text: 'distant country' }
+      ]
+    },
+    questions: [
+      { id: 101, number: 1, title: '' },
+      { id: 102, number: 2, title: '' }
+    ]
+  }
+  assert.equal(renderers.hasCompletePlaceholderLayout(group), true)
+  assert.equal(renderers.isMatchingGroup(group), false)
+  assert.equal(renderers.hasCompletePlaceholderLayout({
+    collect: 'Answer $3$',
+    questions: [{ number: 3 }]
+  }), true)
+})
+
+test('all corpus word-bank completion stems bypass the row-matching renderer', () => {
+  const candidates = []
+  let questionCount = 0
+  for (const directory of ['listening_tests', 'reading_tests']) {
+    const fixtureDirectory = path.join(__dirname, '..', 'static', directory)
+    for (const filename of fs.readdirSync(fixtureDirectory).filter(name => name.endsWith('.json'))) {
+      let book
+      try {
+        book = JSON.parse(fs.readFileSync(path.join(fixtureDirectory, filename), 'utf8'))
+      } catch {
+        continue
+      }
+      const units = book.sections || book.passages || []
+      for (const [unitIndex, unit] of units.entries()) {
+        for (const group of unit.groups || []) {
+          if (!(group.collect_option?.list || []).length) continue
+          if (!renderers.hasCompletePlaceholderLayout(group)) continue
+          candidates.push(`${directory}/${filename}:${unitIndex + 1}:${group.group_id}`)
+          questionCount += (group.questions || []).length
+          assert.equal(renderers.isMatchingGroup(group), false, candidates.at(-1))
+        }
+      }
+    }
+  }
+  assert.equal(candidates.length, 39)
+  assert.equal(questionCount, 191)
+  assert.ok(candidates.includes('reading_tests/ielts21_test4_reading.json:2:608'))
+  assert.ok(candidates.includes('reading_tests/ielts21_test4_reading.json:3:611'))
+})
+
+test('all catalogued ZYZ complete placeholder option stems keep one inline control per question', () => {
+  const root = path.join(__dirname, '..', 'static', 'reading_jijing')
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, 'catalog.json'), 'utf8'))
+  const testIds = (catalog.books || []).flatMap(book => (book.tests || []).map(row => row.id))
+  const candidates = []
+  let questionCount = 0
+
+  for (const testId of testIds) {
+    const book = JSON.parse(fs.readFileSync(path.join(root, `${testId}.json`), 'utf8'))
+    for (const [passageIndex, passage] of (book.passages || []).entries()) {
+      for (const group of passage.groups || []) {
+        if (Number(group.type) !== 10 || !(group.collect_option?.list || []).length) continue
+        if (!renderers.hasCompletePlaceholderLayout(group)) continue
+        const label = `${testId}:P${passageIndex + 1}:G${group.group_id}`
+        const html = PracticeTable.withStructuredPlaceholders(
+          group.collect,
+          id => `<input data-zyz-q="${id}">`
+        )
+        candidates.push(label)
+        questionCount += (group.questions || []).length
+        assert.equal(renderers.isMatchingGroup(group), false, label)
+        for (const question of group.questions || []) {
+          assert.equal(
+            (html.match(new RegExp(`data-zyz-q="${question.id}"`, 'g')) || []).length,
+            1,
+            `${label}:Q${question.number}`
+          )
+        }
+      }
+    }
+  }
+
+  assert.equal(candidates.length, 15)
+  assert.equal(questionCount, 73)
 })
 
 test('review cards use explicit textual status in addition to color', () => {

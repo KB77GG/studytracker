@@ -526,6 +526,17 @@ body[data-experience-mode="simulation"] .group {
 
   <section class="layout">
     <article class="card passage-card" id="passagePanel" data-hl-root="reading-passage"></article>
+    <div
+      class="reading-splitter"
+      id="readingSplitter"
+      role="separator"
+      aria-label="调整文章与题目宽度"
+      aria-orientation="vertical"
+      aria-valuemin="38"
+      aria-valuemax="62"
+      aria-valuenow="50"
+      tabindex="0"
+    ><span aria-hidden="true"></span></div>
     <section class="card question-card" id="questionPanel" data-hl-root="reading-questions"></section>
   </section>
 </main>
@@ -617,6 +628,66 @@ let serverResult = null;
 let practiceShellController = null;
 const passageScrollPositions = {};
 const questionScrollPositions = {};
+let questionNavigationRevision = 0;
+let readingSplitPercent = 50;
+
+function setReadingSplit(percent, persist = true) {
+  const layout = document.querySelector(".layout");
+  const splitter = document.getElementById("readingSplitter");
+  if (!layout || !splitter) return;
+  readingSplitPercent = Math.min(62, Math.max(38, Number(percent) || 50));
+  layout.style.setProperty("--reading-split", `${readingSplitPercent}%`);
+  splitter.setAttribute("aria-valuenow", String(Math.round(readingSplitPercent)));
+  splitter.setAttribute(
+    "aria-valuetext",
+    `文章 ${Math.round(readingSplitPercent)}%，题目 ${Math.round(100 - readingSplitPercent)}%`
+  );
+  if (persist) {
+    try { sessionStorage.setItem("reading_practice_split_percent", String(readingSplitPercent)); }
+    catch (_error) { /* Split resizing remains available without persistence. */ }
+  }
+}
+
+function initReadingSplitter() {
+  const layout = document.querySelector(".layout");
+  const splitter = document.getElementById("readingSplitter");
+  if (!layout || !splitter || examContext) return;
+  let saved = 0;
+  try { saved = Number(sessionStorage.getItem("reading_practice_split_percent")); }
+  catch (_error) { saved = 0; }
+  setReadingSplit(Number.isFinite(saved) && saved ? saved : 50, false);
+  let activePointer = null;
+  const resizeFromPointer = (event) => {
+    if (event.pointerId !== activePointer) return;
+    const bounds = layout.getBoundingClientRect();
+    if (!bounds.width) return;
+    setReadingSplit((event.clientX - bounds.left) / bounds.width * 100);
+  };
+  const finishResize = (event) => {
+    if (event.pointerId !== activePointer) return;
+    activePointer = null;
+    splitter.classList.remove("is-dragging");
+    document.body.classList.remove("is-resizing");
+  };
+  splitter.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    activePointer = event.pointerId;
+    splitter.setPointerCapture?.(event.pointerId);
+    splitter.classList.add("is-dragging");
+    document.body.classList.add("is-resizing");
+    resizeFromPointer(event);
+  });
+  splitter.addEventListener("pointermove", resizeFromPointer);
+  splitter.addEventListener("pointerup", finishResize);
+  splitter.addEventListener("pointercancel", finishResize);
+  splitter.addEventListener("dblclick", () => setReadingSplit(50));
+  splitter.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home"].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === "Home") setReadingSplit(50);
+    else setReadingSplit(readingSplitPercent + (event.key === "ArrowLeft" ? -2 : 2));
+  });
+}
 
 function updateExamSavedIndicator(label = "Saved") {
   const indicator = document.getElementById("examSavedIndicator");
@@ -924,9 +995,12 @@ function inlineControl(question, group) {
   </span>`;
 }
 
-function replacePlaceholders(text, group, context = { seenIds: new Set() }) {
+function replacePlaceholders(text, group, context = { seenIds: new Set() }, allowStructure = false) {
   const questions = new Map((group.questions || []).map((question) => [String(question.id), question]));
-  return PracticeTable.withPlaceholders(text, (qid) => {
+  const render = allowStructure
+    ? PracticeTable.withStructuredPlaceholders
+    : PracticeTable.withPlaceholders;
+  return render(text, (qid) => {
     const question = questions.get(String(qid));
     if (!question) return '<span class="duplicate-blank">____</span>';
     if (context.seenIds.has(String(qid))) {
@@ -998,7 +1072,7 @@ function renderGroup(group) {
     ${structuredRenderer}
     ${!structuredRenderer && (group.img_local || group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
     ${!structuredRenderer ? renderOptionBank(group) : ""}
-    ${!structuredRenderer && group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group, renderContext)}</div>` : ""}
+    ${!structuredRenderer && group.collect ? `<div class="collect">${replacePlaceholders(group.collect, group, renderContext, true)}</div>` : ""}
     ${!structuredRenderer && group.table ? renderTable(group.table, group, renderContext) : ""}
     ${!structuredRenderer && !hasStructured ? (group.questions || []).map((question) => renderQuestionRow(question, group)).join("") : ""}
     ${!structuredRenderer && hasStructured ? (group.questions || []).map((question) => reviewCard(question)).join("") : ""}
@@ -1062,6 +1136,7 @@ function bindInputs() {
     control.addEventListener("input", handleAnswerChange);
     control.addEventListener("change", handleAnswerChange);
     control.addEventListener("focusin", () => {
+      questionNavigationRevision += 1;
       currentQuestionId = String(control.dataset.qid || control.closest('[data-qid]')?.dataset.qid || currentQuestionId);
       syncQuestionNav();
     });
@@ -1263,9 +1338,19 @@ function renderPassageTabs() {
 }
 
 function renderQuestionNav() {
-  document.getElementById("questionNav").innerHTML = allQuestions().map((question) => `
-    <button class="q-chip" type="button" data-question-nav="${question.id}" aria-label="Question ${escapeHtml(question.number)}">${escapeHtml(question.number)}</button>
-  `).join("");
+  document.getElementById("questionNav").innerHTML = (testData.passages || []).map((passage, index) => {
+    const questions = (passage.groups || []).flatMap((group) => group.questions || []);
+    const passageNumber = passage.passage ?? index + 1;
+    const passageLabel = `Passage ${passageNumber}`;
+    return `<section class="question-nav__group" aria-label="${passageLabel}">
+      <span class="question-nav__label" aria-hidden="true">P${escapeHtml(passageNumber)}</span>
+      <div class="question-nav__chips">
+        ${questions.map((question) => `
+          <button class="q-chip" type="button" data-question-nav="${question.id}" aria-label="${passageLabel}, Question ${escapeHtml(question.number)}">${escapeHtml(question.number)}</button>
+        `).join("")}
+      </div>
+    </section>`;
+  }).join("");
   document.querySelectorAll("[data-question-nav]").forEach((button) => {
     button.addEventListener("click", () => goToQuestion(button.dataset.questionNav));
   });
@@ -1304,9 +1389,21 @@ function toggleCurrentQuestionFlag() {
   syncQuestionNav();
 }
 
+function focusQuestionControl(id) {
+  const selector = `[data-qid="${CSS.escape(String(id))}"]`;
+  const answerRoot = document.querySelector(selector);
+  if (!answerRoot) return;
+  const control = answerRoot.matches("input, select, textarea, button")
+    ? answerRoot
+    : answerRoot.querySelector("input:not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled)");
+  if (!control || control.disabled) return;
+  control.focus({ preventScroll: true });
+}
+
 function goToQuestion(id) {
   const passage = passageForQuestion(id);
   if (!passage) return;
+  const navigationRevision = ++questionNavigationRevision;
   currentQuestionId = String(id);
   if (passage.id !== currentPassageId) {
     document.querySelector(`[data-passage-tab="${CSS.escape(String(passage.id))}"]`)?.click();
@@ -1314,10 +1411,14 @@ function goToQuestion(id) {
   document.body.dataset.readingPane = "questions";
   document.querySelectorAll("[data-reading-pane-button]").forEach((button) => button.classList.toggle("is-active", button.dataset.readingPaneButton === "questions"));
   requestAnimationFrame(() => {
+    if (navigationRevision !== questionNavigationRevision) return;
     const target = document.querySelector(`[data-question-id="${CSS.escape(String(id))}"], [data-row-qid="${CSS.escape(String(id))}"], [data-inline-qid="${CSS.escape(String(id))}"]`);
     target?.scrollIntoView({ behavior: "smooth", block: "center" });
     if (resultMode) openReviewCard(id);
     else syncQuestionNav();
+    requestAnimationFrame(() => {
+      if (navigationRevision === questionNavigationRevision) focusQuestionControl(id);
+    });
   });
 }
 
@@ -1507,6 +1608,7 @@ practiceShellController = PracticeShell.init({
 });
 restoreExamDraft();
 restoreServerExamDraft();
+initReadingSplitter();
 renderPassageTabs();
 updatePracticeHeader();
 renderPassage(testData.passages[0]);

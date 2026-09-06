@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-06 — Web 题型专项全库审计与三页收敛完成（仅本机）
+
+- 在干净独立 worktree `/Users/zhouxin/.codex/worktrees/87b6/studytracker`、`codex/question-type-web-refinement@dbf781e5` 完成可达 558 文件 / 11,969 题审计；新增单命令 scanner。修复结构 HTML 外露、完整 placeholder completion 被错分 matching、缺 marker 无控件三项共因；题库原文不改，审阅发现的无依据题文修改已精确恢复并重拍 Reading 截图。
+- 目录首屏改为紧凑筛选 + 固定选择 CTA；Listening 改为紧凑头部 / 播放器和唯一底栏；Reading 改为可拖拽 / 键盘 38%–62% 双栏、独立滚动、全题号跨 Passage 精确聚焦。复盘只读、直达 Passage 编号、手动 focus 竞态均有回归。
+- 最终 PracticeTable 独立脚本通过；独立终审 Node **46 / 46**、Python **58 passed / 10 subtests passed**，scanner 可复跑，diff check 通过，结论 GO。应用内浏览器在 1440×1000、1366×768、1024×768 覆盖目录、全控件类型、音频、语义 table、分栏、草稿恢复、提交 / 只读复盘，无横向溢出或固定栏遮挡；`design-qa.md` 为 passed，证据在 `docs/design/question-type-web-execution-20260905/`。
+- 当前所有代码、测试、文档和截图仅本机未 commit / push / deploy；仅临时 DB 有合成 QA 数据，生产数据库 / 服务和小程序均未触碰。本地预览保留在 `http://127.0.0.1:5117/practice/question-types`。下一步待明确授权后提交 / 推送 / CI / 部署，再做真实学生账号、Safari / 微信 WebView、真机和生产音频验收。
+
 ## 2026-09-05 — 次日 03:00 截止后端已部署，小程序待用户上传
 
 - 用户确认先后端后小程序。发布前核对服务器为 Python 3.10.12，修复候选 `datetime.UTC` 导入不兼容，恢复无日期旧词汇任务的完成只读检查；生产解释器内存验证四个边界断言通过，91 项后端聚焦与首页 Node 3 项通过，Ruff/diff check 通过。

@@ -530,7 +530,29 @@
     return Number(group && group.type) === 5 && Boolean(group && group.collect) && (group.questions || []).length > 0;
   }
 
+  function collectPlaceholderIds(value, ids = new Set()) {
+    if (typeof value === "string") {
+      for (const match of value.matchAll(/\$([^$\s]+)\$/g)) ids.add(String(match[1]));
+    } else if (Array.isArray(value)) {
+      value.forEach((child) => collectPlaceholderIds(child, ids));
+    } else if (value && typeof value === "object") {
+      Object.values(value).forEach((child) => collectPlaceholderIds(child, ids));
+    }
+    return ids;
+  }
+
+  function hasCompletePlaceholderLayout(group) {
+    const questions = group && group.questions || [];
+    if (!questions.length) return false;
+    const ids = collectPlaceholderIds({ collect: group.collect, table: group.table });
+    return questions.every((question) => {
+      const key = question && (question.id ?? question.number);
+      return key !== undefined && key !== null && ids.has(String(key));
+    });
+  }
+
   function isMatchingGroup(group) {
+    if (hasCompletePlaceholderLayout(group)) return false;
     const options = group && group.collect_option && group.collect_option.list;
     return Array.isArray(options) && options.length >= 3 && (
       Number(group && group.type) === 8 || (group.questions || []).length >= 3
@@ -661,6 +683,7 @@
     formFields,
     initMapViewers,
     isFormGroup,
+    hasCompletePlaceholderLayout,
     isMapGroup,
     isMatchingGroup,
     plainText,

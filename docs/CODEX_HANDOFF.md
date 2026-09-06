@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-05 次日凌晨 03:00 截止后端已部署，小程序待用户从固定目录上传。
+> 最近更新：2026-09-06 Web 题型专项全库审计、共因修复与三页视觉收敛已完成，候选仅本机未提交。
+
+## 2026-09-06 Web 题型专项执行复核完成（仅本机候选）
+
+- 独立工作树为 `/Users/zhouxin/.codex/worktrees/87b6/studytracker`，分支 `codex/question-type-web-refinement`，`HEAD=origin/main=dbf781e51f2689052920b59459fd58f1a2265a26`；开工时工作树干净，因此当前所有 modified / untracked 均属于本任务。业务改动集中在 `services/question_type_practice.py`、`static/css/practice_shell.css`、`static/js/practice_renderers.js`、`static/js/practice_table.js`、Listening / Reading / 题型目录四个模板及相关测试；新增审计脚本、四份测试、执行复核、根 `design-qa.md` 和 14 张参考 / 实际截图。精确列表以 `git status --short` 为准。
+- 全库事实源 `scripts/audit_practice_markup.py` 覆盖实际可达 **558 文件 / 1,068 单元 / 2,452 题组 / 11,969 题**。修复三项共因：顶层 `collect` 的安全结构 HTML 不再外露；完整 placeholder ownership 优先于宽泛 matching 启发式，覆盖旧分发风险 47 组 / 228 题（canonical completion 43 / 208，其中 Cambridge 35 / 171、ZYZ 8 / 37）；缺 marker 的旧 Listening 结构题补中性答题行。sanitizer 只保留固定标签 / class 和受限 span / scope，兼容可选闭标签、重复 marker、非法结构与未知 placeholder。
+- 目录、Listening、Reading 视觉已按现有 Sage Path 语言收敛：目录首屏紧凑筛选 + 固定选择 CTA；Listening 紧凑头部 / 播放器与唯一底栏；Reading 38%–62% 双栏分隔、独立滚动、全题号跨 Passage 定位及焦点竞态保护；题型专项复盘在 capability 重绘后保持只读。题干、答案、评分、提交协议、schema、小程序和生产配置均未改。审阅曾发现无依据题文变更，已恢复原文；`static/reading_tests/ielts21_test2_reading.json` 与 HEAD 无差异，Reading 截图在恢复后重拍。
+- 最终自动化：`node --check` 两文件 + `node tests/test_practice_table.js` 通过；独立终审六份 Node test runner **46 / 46**；八份 Python 定向 **58 passed / 10 subtests passed**；scanner JSON 正常生成；`git diff --check` 通过。scanner 报告 `ok:false` 是 11 组重复 marker + 1 组缺 marker 的 12 个既有源 finding，`--strict` 按设计非零；运行时保护和回归已覆盖，未为清零报告而改题库。独立终审结论为 GO、无阻断项。
+- Codex 应用内浏览器已在 1440×1000、1366×768、1024×768 验收目录选择 / 开始、Listening 文本 / radio / select / combined checkbox / 跨 Section / 实际音频 play-pause、Reading 语义 5×3 table / 键盘分栏 / 跨 Passage / 直达 P3 / 草稿恢复 / 提交只读复盘 / 手动焦点竞态，全部通过且无横向溢出或固定栏遮挡。逐项记录见 `docs/WEB_PRACTICE_EXECUTION_REVIEW.md` 和 `design-qa.md`，证据在 `docs/design/question-type-web-execution-20260905/`；本地预览保留在 `http://127.0.0.1:5117/practice/question-types`，只使用 `/tmp/studytracker-question-type-preview.WuIvug/preview.db` 合成学生。
+- 发布状态：当前全部成果**仅本机未 commit / 未 push / 未部署**；未写生产数据库或学生数据，后端生产未变，小程序未改且未上传 / 提审 / 发布，外部服务未触碰。另一台电脑不可见。同机下一位 agent 可先读上述两份复核文档、核对 `git status --short --branch` / `git log -5 --oneline`，再独立审阅 diff；只有用户明确授权后才提交、推送和部署。
+- 尚未验证且不阻塞本地候选：真实生产学生账号、Safari / WebKit、微信 WebView、真机触屏和生产音频 CDN；未来若引入把文本 / placeholder 直接置于 `<table>` / `<tr>` 下等非法源结构，仍应先正规化数据或扩展 parser。若获发布授权，下一步应先提交 / 推送并等待 CI，再按既有单 worker / gthread / 6 threads 生产链部署，做生产只读冒烟和真实学生全题型复核；小程序无本轮发布项。
 
 ## 2026-09-05 次日 03:00 截止已部署（小程序待用户上传）
 

@@ -2,6 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
+from services.ielts_practice_scoring import grade_reading_test_answers
 from services.question_type_practice import (
     PRACTICE_TYPE_ORDER,
     TYPE_DISPLAY_LABELS,
@@ -255,6 +256,43 @@ class QuestionTypePracticeServiceTest(unittest.TestCase):
         group = public["payload"]["sections"][0]["groups"][0]
         self.assertEqual(group.get("response_layout"), "combined_multi")
         self.assertGreaterEqual(group.get("max_selections", 0), 2)
+
+    def test_literal_html_table_snapshot_rewrites_markers_and_scores_by_new_ids(self):
+        row = next(
+            item
+            for item in self.rows
+            if item["subject"] == "reading"
+            and item["test_id"] == "ielts21_test2_reading"
+            and item["question_group_id"].endswith(":589")
+        )
+        source = json.loads(Path(row["source_file"]).read_text(encoding="utf-8"))
+        source_group = source["passages"][row["unit_index"]]["groups"][row["group_index"]]
+        source_payload = {
+            **source,
+            "passages": [{**source["passages"][row["unit_index"]], "groups": [source_group]}],
+        }
+        source_answers = {
+            str(question["id"]): question["answer"] for question in source_group["questions"]
+        }
+        self.assertEqual(grade_reading_test_answers(source_payload, source_answers)["correct"], 5)
+
+        snapshot = build_snapshot(
+            [row], pace="training", standard_type=row["standard_type"], roots=self.roots
+        )
+        group = snapshot["payload"]["passages"][0]["groups"][0]
+        self.assertEqual(
+            [question["id"] for question in group["questions"]],
+            [9_000_000_001, 9_000_000_002, 9_000_000_003, 9_000_000_004, 9_000_000_005],
+        )
+        for question in group["questions"]:
+            self.assertEqual(group["collect"].count(f'${question["id"]}$'), 1)
+            self.assertTrue(question.get("source_question_id"))
+        snapshot_answers = {
+            str(question["id"]): question["answer"] for question in group["questions"]
+        }
+        score = grade_reading_test_answers(snapshot["payload"], snapshot_answers)
+        self.assertEqual((score["correct"], score["total"]), (5, 5))
+        self.assertNotIn('"answer"', json.dumps(public_snapshot(snapshot)["payload"]))
 
 
 if __name__ == "__main__":

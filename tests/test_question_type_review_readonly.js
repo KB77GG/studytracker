@@ -38,12 +38,16 @@ function runLockFunction({ templatePath, nextFunctionName, rootSelector, readOnl
     }
   };
   const clearButton = makeControl();
+  const capabilityButtons = [makeControl(), makeControl()];
   const selectorCalls = [];
   const document = {
     querySelectorAll(selector) {
       selectorCalls.push(selector);
       if (selector === rootSelector) return [directControl, wrapper];
       if (selector === '[data-clear-question]') return [clearButton];
+      if (selector === "[data-capability='canResetAnswers'], [data-capability='canSubmitForScoring']") {
+        return capabilityButtons;
+      }
       throw new Error(`Unexpected selector: ${selector}`);
     }
   };
@@ -57,7 +61,7 @@ function runLockFunction({ templatePath, nextFunctionName, rootSelector, readOnl
     }
   );
 
-  return { directControl, nestedControls, clearButton, selectorCalls };
+  return { directControl, nestedControls, clearButton, capabilityButtons, selectorCalls };
 }
 
 for (const scenario of [
@@ -81,7 +85,12 @@ for (const scenario of [
     assert.equal(result.directControl.readOnly, true);
     result.nestedControls.forEach((control) => assert.equal(control.disabled, true));
     assert.equal(result.clearButton.disabled, true);
-    assert.deepEqual(result.selectorCalls, [scenario.rootSelector, '[data-clear-question]']);
+    result.capabilityButtons.forEach((control) => assert.equal(control.disabled, true));
+    assert.deepEqual(result.selectorCalls, [
+      scenario.rootSelector,
+      '[data-clear-question]',
+      "[data-capability='canResetAnswers'], [data-capability='canSubmitForScoring']"
+    ]);
   });
 
   test(`${scenario.label} leaves controls unchanged outside a read-only review`, () => {
@@ -91,6 +100,7 @@ for (const scenario of [
     assert.equal(result.directControl.readOnly, false);
     result.nestedControls.forEach((control) => assert.equal(control.disabled, false));
     assert.equal(result.clearButton.disabled, false);
+    result.capabilityButtons.forEach((control) => assert.equal(control.disabled, false));
     assert.deepEqual(result.selectorCalls, []);
   });
 }

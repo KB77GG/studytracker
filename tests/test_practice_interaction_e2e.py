@@ -49,7 +49,10 @@ class PracticeInteractionE2ETest(unittest.TestCase):
     def test_layout_contract_has_independent_reading_panes_and_non_absolute_form_fields(self):
         css = (ROOT / "static/css/practice_shell.css").read_text(encoding="utf-8")
         renderers = (ROOT / "static/js/practice_renderers.js").read_text(encoding="utf-8")
-        self.assertIn("grid-template-columns: minmax(0, 56fr) minmax(420px, 44fr);", css)
+        self.assertIn(
+            "grid-template-columns: minmax(0, var(--reading-split)) 16px minmax(0, 1fr);",
+            css,
+        )
         self.assertIn("overflow: auto;", css)
         self.assertIn("object-fit: contain;", css)
         self.assertIn('data-renderer="form-completion"', renderers)

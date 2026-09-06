@@ -1,3 +1,46 @@
+# Question Type Web · Design QA
+
+Date: 2026-09-06
+Preview: `http://127.0.0.1:5117/practice/question-types`
+Evidence: `docs/design/question-type-web-execution-20260905/`
+Method: Product Design image-to-code workflow, with every final frame captured from the Codex in-app browser. No Playwright screenshots were used.
+
+## Reference-to-implementation comparison
+
+| Surface | Reference | Final evidence | Visual judgement |
+| --- | --- | --- | --- |
+| Catalog, selected state | `reference-current-catalog-selected.png` | `catalog-wide-1440x1000.png`, `catalog-reading-selection-1440x1000.png` | Existing Sage Path visual language is preserved. Filters and library facts now fit in the first viewport; the persistent selection / start bar removes the old scroll-dependent action path. Pass. |
+| Listening | `reference-current-listening.png` | `listening-specialty-1440x1000.png`, `listening-specialty-1366x768.png` | Header and player are materially tighter; the redundant global navigation and score sidebar are gone. One fixed footer owns navigation, state and submit without covering the active question. Pass. |
+| Reading | `reference-current-reading.png`, `reference-reading-specialty-refinement.png` | `reading-full-wide-1440x1000.png`, `reading-full-1366x768.png`, `reading-full-1024x768.png`, `reading-specialty-1440x1000.png`, `reading-specialty-1507x1045.png` | Final page realizes two independent panes, a keyboard / pointer splitter, compact fixed footer and a semantic three-column source table. It intentionally retains the real application header and complete source content instead of inventing the synthetic mock's sample copy; longer source cells therefore scroll rather than being shortened. Pass. |
+| Read-only review | same Reading target | `reading-specialty-review-1440x1000.png` | Submitted values and correctness remain readable; answer controls are disabled and write actions are removed. Pass. |
+
+Filenames record requested viewport labels. Browser chrome can reduce the captured content area (for example the 1440×1000 catalog frame is 1425×990); `file docs/design/question-type-web-execution-20260905/*.png` records exact artifact dimensions.
+
+## Interaction QA
+
+| Check | Evidence / outcome |
+| --- | --- |
+| Catalog selection | Listening inventory rendered as 18 volumes / 72 tests / 287 publishable Sections. Switching to Reading, selecting a 5-question group, clearing and starting all updated the fixed summary and CTA. Pass. |
+| Listening controls | Specialty Q2 text field, full-test Q11 radio, Q17 select and Q22 combined checkbox all received exact focus from the grouped footer navigation. Pass. |
+| Listening audio | A local source-equivalent MP3 was temporarily linked for QA; play changed the audio to playing and pause returned it to paused. Links were removed after capture. Pass. |
+| Reading table | IELTS 21 Test 2 group 589 produced one semantic 5×3 table, 3 header cells, 12 data cells and exactly 5 answer controls; no raw tags were exposed. Pass. |
+| Reading split view | Keyboard adjustment moved the split from 50% to 53%; both panes retained independent scroll positions and 1024×768 stayed usable. Pass. |
+| Reading navigation | Q1 focused its input; cross-Passage Q14 focused its select; direct `?passage=3` kept Passage 3 in both top and bottom navigation. Pass. |
+| Focus ownership | Manual focus after a queued cross-Passage navigation invalidated the stale callback, so the page did not steal focus back. Pass. |
+| Persistence and review | Draft `dream` survived reload; submitting `rats` produced 1 / 5 and the reloaded review remained locked. Pass. |
+| Overflow / obstruction | 1440×1000, 1366×768 and 1024×768 had no horizontal overflow; fixed footers did not cover the focused question. Pass. |
+
+## Source and environment integrity
+
+- Independent review caught an unsupported temporary source-text edit. The exact original `static/reading_tests/ielts21_test2_reading.json` was restored, `git diff --exit-code` confirms no data diff, and every final Reading screenshot was recaptured afterward.
+- Browser QA used a synthetic local student and `/tmp/studytracker-question-type-preview.WuIvug/preview.db`. It did not write production data or exercise deployment.
+- Production accounts, Safari / WebKit, WeChat WebView, touch hardware and production audio delivery remain post-deployment checks.
+
+
+---
+
+## 既有设计 QA 历史（保留）
+
 # `/tasks` 方向 2 · 本轮视觉返修 QA（2026-09-01）
 
 ## 学生筛选姓名 / 拼音候选：浏览器证据待补（2026-09-02）
@@ -71,7 +114,6 @@ final result: blocked
 - `git diff --check` 通过。
 
 final result: passed
-
 ## 后台左上角 Logo 可见性修复：通过（2026-09-01 23:01 CST）
 
 - 原完整品牌图文件存在且与用户提供的 `logo.PNG` SHA-256 一致；问题来自图标与底块同色，以及入学测试页把带白边整图缩小。共享后台和入学测试页现统一使用透明 `sagepath-mark.png`，配米白高对比底色、细描边和轻阴影。
@@ -335,3 +377,5 @@ final result: blocked
 - 未在生产浏览器、生产数据库或学生真实发布链路执行写操作；这些属于本轮明确禁止范围。
 
 历史记录（已被本文件顶部本轮 QA 覆盖）：此前 Luna/矩阵专项视觉结论为 passed；本轮 exact viewport evidence gate 尚未完成。
+
+final result: passed

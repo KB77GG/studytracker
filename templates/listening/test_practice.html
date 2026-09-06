@@ -174,13 +174,13 @@ audio { width: 100%; display: block; }
 .tab.active { color: var(--sage-deep); border-bottom-color: var(--sage); }
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 270px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
 .layout > * { min-width: 0; }
 body.result-mode .layout {
-  grid-template-columns: 340px minmax(0, 1fr) 260px;
+  grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
 }
 .panel { display: none; }
 .panel.active { display: block; }
@@ -411,21 +411,6 @@ body.result-mode .layout {
   cursor: pointer;
   white-space: nowrap;
 }
-.side {
-  position: sticky;
-  top: 108px;
-  padding: 16px;
-}
-.side h3 { margin: 0 0 10px; font-size: 16px; }
-.stat {
-  display: flex;
-  justify-content: space-between;
-  padding: 9px 0;
-  border-bottom: 1px solid rgba(222,219,208,.8);
-  color: var(--muted);
-  font-size: 14px;
-}
-.stat strong { color: var(--ink); }
 .submit-btn {
   width: 100%;
   height: 44px;
@@ -679,11 +664,6 @@ body.result-mode .transcript-panel { display: block; }
   align-items: center;
   gap: 14px;
 }
-.bottom-brand {
-  color: var(--muted);
-  font-weight: 800;
-  white-space: nowrap;
-}
 .question-nav {
   display: flex;
   gap: 5px;
@@ -712,20 +692,201 @@ body.result-mode .transcript-panel { display: block; }
 .q-chip.is-right { background: #ecfdf3; border-color: var(--success); color: var(--success); }
 .q-chip.is-partial { background: #fffbeb; border-color: #d97706; color: #b45309; }
 .q-chip.is-wrong { background: #fff1f2; border-color: var(--error); color: var(--error); }
+
+/* Listening keeps the player and source context close without spending the
+   first screen on repeated library/Section chrome. These selectors are
+   listening-scoped so the shared Reading workspace remains independent. */
+body.practice-listening-page {
+  --practice-shell-height: 112px;
+  --practice-bottom-height: 78px;
+}
+body.practice-listening-page .topbar-inner {
+  padding: 8px 20px 9px;
+  gap: 7px;
+}
+.practice-listening-topline {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+body.practice-listening-page .practice-shell__heading { gap: 9px; }
+body.practice-listening-page .practice-shell__back {
+  min-height: 34px;
+  padding: 6px 9px;
+  font-size: 12px;
+}
+body.practice-listening-page .brand-mark {
+  width: 44px;
+  height: 36px;
+}
+body.practice-listening-page .crumb {
+  margin-bottom: 1px;
+  font-size: 10px;
+}
+body.practice-listening-page h1 { font-size: 18px; }
+body.practice-listening-page .meta {
+  display: inline;
+  margin: 0 0 0 7px;
+  font-size: 11px;
+}
+body.practice-listening-page .practice-shell__title-block h1 { display: inline; }
+body.practice-listening-page .practice-shell__facts {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+}
+body.practice-listening-page .practice-shell__fact,
+body.practice-listening-page .practice-shell__save {
+  min-height: 27px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+.practice-listening-player { min-width: 0; }
+body.practice-listening-page:not(.exam-mode) audio { height: 36px; }
+body.practice-listening-page .page { padding-top: 12px; }
+body.practice-listening-page #viewTabs,
+body.practice-listening-page #sectionTabs { margin-bottom: 10px; }
+body.practice-listening-page #sectionTabs .tab {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 13px;
+}
+.section-type-summary {
+  margin: -2px 0 9px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-type-summary__label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+body.practice-listening-page .section-type-summary .type-badge {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+body.practice-listening-page .group {
+  padding: 24px;
+  margin-bottom: 12px;
+}
+body.practice-listening-page .bottom-inner {
+  padding: 8px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+}
+body.practice-listening-page .practice-bottom-nav { min-width: 0; }
+body.practice-listening-page .question-nav {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 2px 2px 4px;
+  scroll-padding-inline: 4px;
+  scrollbar-width: thin;
+}
+.question-nav-group {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 7px;
+  border-right: 1px solid rgba(222, 219, 208, .9);
+}
+.question-nav-group:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+.question-nav-group__label {
+  max-width: 92px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.question-nav-group.is-active .question-nav-group__label { color: var(--sage-deep); }
+.question-nav-group__chips {
+  display: flex;
+  gap: 4px;
+}
+body.practice-listening-page .q-chip {
+  min-width: 31px;
+  width: 31px;
+  height: 31px;
+}
+.practice-bottom-score {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.practice-bottom-score__progress {
+  min-width: 116px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.practice-bottom-score__progress > span { display: block; }
+.practice-bottom-score__count strong { color: var(--ink); font-size: 14px; }
+body.practice-listening-page .practice-bottom-score .submit-btn {
+  width: auto;
+  min-width: 132px;
+  height: 38px;
+  margin: 0;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+body.practice-listening-page .practice-bottom-score .result-box {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 18px);
+  width: min(410px, calc(100vw - 40px));
+  max-height: 176px;
+  margin: 0;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 16px 36px rgba(29, 22, 21, .16);
+}
 @media (max-width: 900px) {
   .layout,
   body.result-mode .layout { grid-template-columns: 1fr; }
-  .side,
   .transcript-panel { position: static; max-height: none; }
+}
+@media (max-width: 760px) {
+  body.practice-listening-page { --practice-bottom-height: 126px; }
+  .practice-listening-topline { gap: 8px; }
+  body.practice-listening-page .practice-shell__facts { display: none; }
+  body.practice-listening-page .bottom-inner {
+    padding: 7px 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+  .practice-bottom-score { justify-content: flex-end; }
+  .practice-bottom-score__progress { margin-right: auto; }
+  body.practice-listening-page .practice-bottom-score .result-box {
+    right: 0;
+    bottom: calc(100% + 10px);
+  }
 }
 @media (max-width: 640px) {
   .page { padding: 14px; }
-  .topbar-inner { padding: 12px 14px; }
+  body.practice-listening-page .topbar-inner { padding: 7px 12px 8px; }
   h1 { font-size: 19px; }
-  .brand-mark { width: 50px; height: 42px; }
+  body.practice-listening-page .brand-mark { display: none; }
+  body.practice-listening-page .practice-shell__back[data-practice-module-exit] { display: none; }
+  body.practice-listening-page .practice-shell__title-block .meta { display: none; }
   .group { padding: 18px; }
-  .bottom-inner { padding: 9px 12px; }
-  .bottom-brand { display: none; }
 }
 </style>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/practice_shell.css') }}">
@@ -733,7 +894,7 @@ body.result-mode .transcript-panel { display: block; }
 <link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
 {% endif %}
 </head>
-<body class="practice-shell-page{% if exam_context %} exam-mode{% endif %}">
+<body class="practice-shell-page practice-listening-page{% if exam_context %} exam-mode{% endif %}">
 {% if exam_context %}
 <header class="exam-mode-shell">
   <div class="exam-mode-shell__left">
@@ -786,24 +947,27 @@ body[data-experience-mode="simulation"] .group::before {
 {% endif %}
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand-line practice-shell__heading">
-      <button class="practice-shell__back" type="button" data-practice-back data-capability="canShowPracticeBack">← 返回练习列表</button>
-      <button class="practice-shell__back" type="button" data-practice-module-exit data-capability="canShowPracticeBack">退出刷题</button>
-      <div class="brand-mark" aria-hidden="true">
-        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+    <div class="practice-listening-topline">
+      <div class="brand-line practice-shell__heading">
+        <button class="practice-shell__back" type="button" data-practice-back data-capability="canShowPracticeBack">← 返回练习列表</button>
+        <button class="practice-shell__back" type="button" data-practice-module-exit data-capability="canShowPracticeBack">退出刷题</button>
+        <div class="brand-mark" aria-hidden="true">
+          <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        </div>
+        <div class="practice-shell__title-block">
+          <div class="crumb"><a href="{{ url_for('practice_library') }}">听力</a> / <a href="{{ url_for('listening_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
+          <h1 id="practiceTitle">{{ test.title }}</h1>
+          <div class="meta" id="practiceMeta">4 个 Section · 40 题</div>
+        </div>
       </div>
-      <div class="practice-shell__title-block">
-        <div class="crumb"><a href="{{ url_for('practice_library') }}">听力</a> / <a href="{{ url_for('listening_test_index') }}">剑桥雅思</a> / <span id="practiceCrumbTail">整套练习</span></div>
-        <h1 id="practiceTitle">{{ test.title }}</h1>
-        <div class="meta" id="practiceMeta">4 个 Section · 40 题</div>
+      <div class="practice-shell__facts" aria-label="练习状态" data-capability="showPracticeSyncStatus">
+        <span class="practice-shell__fact" id="practiceShellSection">Section 1</span>
+        <span class="practice-shell__fact" id="practiceShellMode">{{ '模考' if exam_context else '练习' }}</span>
+        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+        <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
       </div>
     </div>
-    <div class="practice-shell__facts" aria-label="练习状态" data-capability="showPracticeSyncStatus">
-      <span class="practice-shell__fact" id="practiceShellSection">Section 1</span>
-      <span class="practice-shell__fact" id="practiceShellMode">{{ '模考' if exam_context else '练习' }}</span>
-      <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
-      <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
-    </div>
+    <div class="practice-listening-player">
     {% if exam_context %}
     <div class="simulation-audio-status" aria-live="polite">
       <span class="simulation-audio-status__label" id="simulationAudioState">等待音频检查</span>
@@ -817,6 +981,7 @@ body[data-experience-mode="simulation"] .group::before {
     {% else %}
     <audio id="audio" controls preload="metadata"></audio>
     {% endif %}
+    </div>
   </div>
 </header>
 
@@ -842,9 +1007,6 @@ body[data-experience-mode="simulation"] .group::before {
 {% endif %}
 
 <main class="page">
-  {% set nav_subject = 'listening' %}
-  {% set nav_active = 'tests' %}
-  <div data-capability="canShowPracticeNavigation">{% include "practice/_nav.html" %}</div>
   <nav class="tabs" id="viewTabs" aria-label="练习视图" data-capability="canUseTrainingViews">
     <button class="tab active" type="button" data-view="practice">题目练习</button>
     <button class="tab" type="button" data-view="dictation">精听</button>
@@ -866,16 +1028,6 @@ body[data-experience-mode="simulation"] .group::before {
       <aside class="card transcript-panel" id="transcriptPanel" data-hl-root="listening-transcript" data-capability="canShowTranscript"></aside>
       {% endif %}
       <div id="sectionsRoot" data-hl-root="listening-questions"></div>
-      {% if not exam_context %}
-      <aside class="card side" data-capability="showPracticeScorePanel">
-        <h3 id="scorePanelTitle">整套判分</h3>
-        <div class="stat"><span>Section</span><strong id="activeSectionLabel">-</strong></div>
-        <div class="stat"><span>题目数</span><strong id="questionCount">40</strong></div>
-        <div class="stat"><span>已填写</span><strong id="answeredCount">0</strong></div>
-        <button class="submit-btn" id="submitBtn" data-capability="canSubmitForScoring">提交并判分</button>
-        <div class="result-box" id="resultBox" data-capability="canShowCorrectness">填写后可按 IELTS 听力 40 题查看得分。</div>
-      </aside>
-      {% endif %}
     </div>
   </div>
   {% if not exam_context %}
@@ -887,13 +1039,23 @@ body[data-experience-mode="simulation"] .group::before {
 
 <footer class="bottom-nav">
   <div class="bottom-inner">
-    <div class="bottom-brand" data-capability="canShowPracticeNavigation">睿然国际教育</div>
     <div class="practice-bottom-nav">
       <button class="practice-bottom-nav__step" type="button" id="previousQuestion">上一题</button>
       <button class="practice-bottom-nav__step practice-bottom-nav__flag" type="button" id="toggleQuestionFlag" aria-pressed="false" data-capability="canFlagQuestions">待回看</button>
-      <div class="question-nav" id="questionNav"></div>
+      <nav class="question-nav" id="questionNav" aria-label="题目定位"></nav>
       <button class="practice-bottom-nav__step" type="button" id="nextQuestion">下一题</button>
     </div>
+    {% if not exam_context %}
+    <section class="practice-bottom-score" data-capability="showPracticeScorePanel" aria-labelledby="scorePanelTitle">
+      <h2 class="sr-only" id="scorePanelTitle">整套判分</h2>
+      <div class="practice-bottom-score__progress" aria-live="polite">
+        <span id="activeSectionLabel">-</span>
+        <span class="practice-bottom-score__count">已答 <strong id="answeredCount">0</strong>/<strong id="questionCount">40</strong></span>
+      </div>
+      <button class="submit-btn" id="submitBtn" data-capability="canSubmitForScoring">提交并判分</button>
+      <div class="result-box" id="resultBox" data-capability="canShowCorrectness">填写后可按 IELTS 听力 40 题查看得分。</div>
+    </section>
+    {% endif %}
   </div>
 </footer>
 
@@ -935,6 +1097,9 @@ let experienceCapabilities = PracticeModes.capabilities(experienceMode);
 function setExperienceMode(mode) {
   experienceMode = PracticeModes.resolve(mode);
   experienceCapabilities = PracticeModes.apply(document, experienceMode);
+  // Capability application may re-enable controls that a date-gated
+  // specialty review already locked. Re-apply the lock after every redraw.
+  lockReadOnlyReviewControls();
   return experienceCapabilities;
 }
 const listeningTaskId = pageParams.get('task_id') || '';
@@ -971,6 +1136,7 @@ let activeSectionIndex = 0;
 let activeView = 'practice';
 let currentTranscriptKey = '';
 let currentQuestionId = '';
+let questionFocusRevision = 0;
 let latestResults = null;
 let practiceShellController = null;
 let simulationAudioPlaylist = null;
@@ -1140,6 +1306,28 @@ function allQuestions() {
       (group.questions || []).map(question => ({ ...question, sectionIndex }))
     )
   );
+}
+
+function sectionNavigationLabel(section, sectionIndex, compact = false) {
+  const sectionNumber = section?.section || sectionIndex + 1;
+  const sourceMatch = String(section?.source_test_id || '').match(/^ielts(\d+)_test(\d+)/i);
+  if (sourceMatch) {
+    return compact
+      ? `C${sourceMatch[1]} T${sourceMatch[2]} · S${sectionNumber}`
+      : `Cambridge ${sourceMatch[1]} Test ${sourceMatch[2]} · Section ${sectionNumber}`;
+  }
+  return compact ? `S${sectionNumber}` : `Section ${sectionNumber}`;
+}
+
+function sectionQuestionGroups() {
+  return test.sections.map((section, sectionIndex) => ({
+    section,
+    sectionIndex,
+    label: sectionNavigationLabel(section, sectionIndex, true),
+    questions: (section.groups || []).flatMap(group =>
+      (group.questions || []).map(question => ({ ...question, sectionIndex }))
+    )
+  }));
 }
 
 function resultIds(row) {
@@ -1315,27 +1503,22 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
   `;
 }
 
-function renderCollectText(text, group, sectionIndex, context = { seenIds: new Set() }) {
+function renderCollectText(text, group, sectionIndex, context = { seenIds: new Set() }, allowStructure = false) {
   const byId = new Map((group.questions || []).map(q => [String(q.id), q]));
-  const raw = String(text || '');
-  let html = '';
-  let last = 0;
-  raw.replace(/\$([^$\s]+)\$/g, (match, id, offset) => {
-    html += richText(raw.slice(last, offset));
+  const render = allowStructure
+    ? PracticeTable.withStructuredPlaceholders
+    : PracticeTable.withPlaceholders;
+  return render(text, (id) => {
     const question = byId.get(String(id));
     if (question && !context.seenIds.has(String(id))) {
       context.seenIds.add(String(id));
-      html += controlForQuestion(question, sectionIndex, group, true);
-    } else if (question) {
-      html += `<span class="inline-answer ghost-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
-    } else {
-      html += '____';
+      return controlForQuestion(question, sectionIndex, group, true);
     }
-    last = offset + match.length;
-    return match;
+    if (question) {
+      return `<span class="inline-answer ghost-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
+    }
+    return '____';
   });
-  html += richText(raw.slice(last));
-  return html;
 }
 
 function renderQuestion(question, sectionIndex, group) {
@@ -1383,7 +1566,7 @@ function renderGroup(group, sectionIndex) {
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
       ${structuredContent}
       ${!structuredContent && img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
-      ${!structuredContent && hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext)}</div>` : ''}
+      ${!structuredContent && hasCollect && !combinedMulti ? `<div class="collect">${renderCollectText(group.collect, group, sectionIndex, renderContext, true)}</div>` : ''}
       ${!structuredContent && !combinedMulti ? optionBank(group) : ''}
       ${!structuredContent ? renderTable(group, sectionIndex, renderContext) : ''}
       ${!structuredContent && combinedMulti ? renderCombinedMulti(group) : ''}
@@ -1403,10 +1586,7 @@ function renderSection(section, sectionIndex) {
     : `<div class="type-badges">${(section.question_type || []).map(type => `<span class="type-badge">${escapeHtml(type)}</span>`).join('')}</div>`;
   return `
     <section class="panel ${sectionIndex === 0 ? 'active' : ''}" data-section-index="${sectionIndex}">
-      <div class="card section-head">
-        <h2>${escapeHtml(section.title)} · ${escapeHtml(section.question_name)}</h2>
-        ${typeBadges}
-      </div>
+      ${typeBadges ? `<div class="section-type-summary" aria-label="当前 Section 题型"><span class="section-type-summary__label">题型</span>${typeBadges}</div>` : ''}
       ${(section.groups || []).map(group => renderGroup(group, sectionIndex)).join('')}
     </section>
   `;
@@ -1422,8 +1602,9 @@ function switchSection(index, scroll = true) {
     audio.src = audioBase + section.audio;
   }
   const activeSectionLabel = document.getElementById('activeSectionLabel');
-  if (activeSectionLabel) activeSectionLabel.textContent = section ? `Section ${section.section}` : '-';
-  document.getElementById('practiceShellSection').textContent = section ? `Section ${section.section}` : 'Section';
+  const sectionLabel = section ? sectionNavigationLabel(section, index) : '-';
+  if (activeSectionLabel) activeSectionLabel.textContent = section ? sectionNavigationLabel(section, index, true) : '-';
+  document.getElementById('practiceShellSection').textContent = sectionLabel;
   renderTranscript(section);
   renderActiveView();
   lockReadOnlyReviewControls();
@@ -2030,12 +2211,23 @@ function renderActiveView() {
 }
 
 function renderQuestionNav() {
-  document.getElementById('questionNav').innerHTML = allQuestions().map(question => `
-    <button class="q-chip" type="button" aria-label="Question ${escapeHtml(question.number)}" data-id="${escapeHtml(question.id || question.number)}" data-section="${question.sectionIndex}">
-      ${escapeHtml(question.number)}
-    </button>
+  const groups = sectionQuestionGroups();
+  document.getElementById('questionNav').innerHTML = groups.map(group => `
+    <div class="question-nav-group" role="group" data-section-group="${group.sectionIndex}" aria-label="${escapeHtml(sectionNavigationLabel(group.section, group.sectionIndex))}">
+      <span class="question-nav-group__label" title="${escapeHtml(sectionNavigationLabel(group.section, group.sectionIndex))}">${escapeHtml(group.label)}</span>
+      <div class="question-nav-group__chips">
+        ${group.questions.map(question => `
+          <button class="q-chip" type="button" aria-label="Question ${escapeHtml(question.number)}" data-id="${escapeHtml(question.id || question.number)}" data-section="${group.sectionIndex}">
+            ${escapeHtml(question.number)}
+          </button>
+        `).join('')}
+      </div>
+    </div>
   `).join('');
-  currentQuestionId = String(allQuestions()[0]?.id || allQuestions()[0]?.number || '');
+  const questions = allQuestions();
+  if (!questions.some(question => String(question.id || question.number) === String(currentQuestionId))) {
+    currentQuestionId = String(questions[0]?.id || questions[0]?.number || '');
+  }
   document.querySelectorAll('.q-chip').forEach(button => {
     button.addEventListener('click', () => {
       const sectionIndex = Number(button.dataset.section || 0);
@@ -2043,25 +2235,61 @@ function renderQuestionNav() {
         openReviewCard(button.dataset.id, true, true);
         return;
       }
-      switchSection(sectionIndex, false);
-      const target = findUnitByQuestionId(button.dataset.id);
-      if (target) {
-        currentQuestionId = button.dataset.id;
-        target.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if (target.matches('input')) target.focus({ preventScroll: true });
-        syncQuestionNav(latestResults);
-      }
+      navigateToQuestion(button.dataset.id, sectionIndex);
+    });
+  });
+}
+
+function focusableAnswerControl(unit) {
+  if (!unit) return null;
+  const directSelector = 'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])';
+  if (unit.matches?.(directSelector)) return unit;
+  return unit.querySelector?.('input:checked:not([disabled])')
+    || unit.querySelector?.(directSelector)
+    || null;
+}
+
+function questionIdForFocusedUnit(unit, preferredId = currentQuestionId) {
+  const ids = String(unit?.dataset?.id || '').split(',').filter(Boolean);
+  const preferred = String(preferredId || '');
+  return ids.includes(preferred) ? preferred : String(ids[0] || '');
+}
+
+function navigateToQuestion(questionId, sectionIndex) {
+  const id = String(questionId || '');
+  const revision = ++questionFocusRevision;
+  currentQuestionId = id;
+  switchSection(Number(sectionIndex || 0), false);
+  requestAnimationFrame(() => {
+    if (revision !== questionFocusRevision) return;
+    requestAnimationFrame(() => {
+      if (revision !== questionFocusRevision) return;
+      const target = findUnitByQuestionId(id);
+      if (!target) return;
+      const escapedId = CSS.escape(id);
+      const anchor = document.querySelector(`[data-question-id="${escapedId}"]`)
+        || target.closest?.('[data-question-id], .question, .matching-row')
+        || target;
+      anchor.scrollIntoView?.({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+      focusableAnswerControl(target)?.focus({ preventScroll: true });
+      syncQuestionNav(latestResults);
     });
   });
 }
 
 function syncQuestionNav(results = null) {
+  document.querySelectorAll('.question-nav-group').forEach(group => {
+    group.classList.toggle('is-active', Number(group.dataset.sectionGroup) === activeSectionIndex);
+  });
   document.querySelectorAll('.q-chip').forEach(button => {
     const target = findUnitByQuestionId(button.dataset.id);
     const filled = target && unitValue(target).trim();
+    const isCurrent = String(button.dataset.id) === String(currentQuestionId);
     button.classList.toggle('is-filled', Boolean(filled));
     button.classList.toggle('is-active', Number(button.dataset.section) === activeSectionIndex);
-    button.classList.toggle('is-current', String(button.dataset.id) === String(currentQuestionId));
+    button.classList.toggle('is-current', isCurrent);
+    if (isCurrent) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
     const flagged = flaggedQuestions.has(String(button.dataset.id));
     button.dataset.state = flagged ? 'flagged' : (filled ? 'answered' : 'unanswered');
     button.classList.toggle('is-flagged', flagged);
@@ -2113,7 +2341,7 @@ function render() {
   }
   document.getElementById('sectionTabs').innerHTML = test.sections.map((section, index) => `
     <button class="tab ${index === 0 ? 'active' : ''}" type="button" data-index="${index}">
-      Section ${escapeHtml(section.section)} · ${escapeHtml(section.question_name)}
+      ${escapeHtml(sectionNavigationLabel(section, index))} · ${escapeHtml(section.question_name)}
     </button>
   `).join('');
   document.getElementById('sectionsRoot').innerHTML = test.sections.map(renderSection).join('');
@@ -2121,9 +2349,7 @@ function render() {
     .reduce((sum, unit) => sum + Number(unit.dataset.marks || 1), 0);
   const questionCount = document.getElementById('questionCount');
   if (questionCount) questionCount.textContent = questionTotal;
-  if (assignedSectionNumber) {
-    document.getElementById('practiceMeta').textContent = `1 个 Section · ${questionTotal} 题`;
-  }
+  document.getElementById('practiceMeta').textContent = `${test.sections.length} 个 Section · ${questionTotal} 题`;
   document.querySelectorAll('.tab').forEach(tab => {
     if (!tab.dataset.index) return;
     tab.addEventListener('click', () => switchSection(Number(tab.dataset.index)));
@@ -2141,7 +2367,8 @@ function render() {
   });
   document.querySelectorAll('.answer-unit').forEach(unit => {
     unit.addEventListener('focusin', () => {
-      currentQuestionId = String(unit.dataset.id || '').split(',')[0];
+      questionFocusRevision += 1;
+      currentQuestionId = questionIdForFocusedUnit(unit);
       syncQuestionNav(latestResults);
     });
     unit.addEventListener('change', event => {
@@ -2200,6 +2427,7 @@ function render() {
   lockReadOnlyReviewControls();
   renderQuestionNav();
   setExperienceMode(experienceMode);
+  lockReadOnlyReviewControls();
   PracticeRenderers.initMapViewers(document, experienceCapabilities);
   restoreAnswers();
   restoreServerAnswers();

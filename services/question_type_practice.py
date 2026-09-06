@@ -376,7 +376,7 @@ def renderer_for(group: dict, canonical: str) -> str:
     if group.get("table"):
         return "PracticeTable.layout + full-test group renderer"
     if group.get("collect"):
-        return "PracticeTable.withPlaceholders + full-test group renderer"
+        return "PracticeTable.withStructuredPlaceholders + full-test group renderer"
     return "full-test questionControl group renderer"
 
 

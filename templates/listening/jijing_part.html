@@ -752,9 +752,12 @@ function controlForItem(item, group, inline = false) {
   `;
 }
 
-function renderWithPlaceholders(text, group, context = { seenIds: new Set() }) {
+function renderWithPlaceholders(text, group, context = { seenIds: new Set() }, allowStructure = false) {
   const itemsById = new Map((group.items || []).map(item => [String(item.id), item]));
-  return PracticeTable.withPlaceholders(text, (id) => {
+  const render = allowStructure
+    ? PracticeTable.withStructuredPlaceholders
+    : PracticeTable.withPlaceholders;
+  return render(text, (id) => {
     const item = itemsById.get(String(id));
     if (!item) return '____';
     if (context.seenIds.has(String(id))) {
@@ -832,6 +835,23 @@ function renderQuestionItem(item, group) {
   `;
 }
 
+function renderUnmappedItems(group, context) {
+  return PracticeTable.unmappedItems(group.items, context.seenIds)
+    .map(item => {
+      context.seenIds.add(String(item.id));
+      const title = String(item.title || '').trim();
+      return `
+        <div class="question practice-question-anchor" data-qid="${escapeHtml(item.id)}">
+          <div class="q-head">
+            <div class="q-title"><span class="q-number">${escapeHtml(item.number)}.</span>${title ? ` ${escapeHtml(title)}` : ''}</div>
+          </div>
+          ${controlForItem(item, group)}
+        </div>
+      `;
+    })
+    .join('');
+}
+
 function usableImage(url) {
   return /^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || '');
 }
@@ -847,11 +867,12 @@ function renderGroup(group) {
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
       ${group.title && group.title !== group.question_title ? `<div class="question-title">${richText(group.title)}</div>` : ''}
       ${usableImage(group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_url)}" alt="">` : ''}
-      ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group, renderContext)}</div>` : ''}
+      ${group.collect && !combinedMulti ? `<div class="collect">${renderWithPlaceholders(group.collect, group, renderContext, true)}</div>` : ''}
       ${combinedMulti ? '' : optionBank(group)}
       ${renderTable(group, renderContext)}
       ${combinedMulti ? renderCombinedMulti(group) : ''}
       ${!hasStructuredBlank && !combinedMulti ? (group.items || []).map(item => renderQuestionItem(item, group)).join('') : ''}
+      ${hasStructuredBlank && !combinedMulti ? renderUnmappedItems(group, renderContext) : ''}
       ${hasStructuredBlank ? (group.items || []).map(item => `<div class="answer-note">Q${escapeHtml(item.number)} 答案：${escapeHtml(item.answer || '')}</div>`).join('') : ''}
     </article>
   `;

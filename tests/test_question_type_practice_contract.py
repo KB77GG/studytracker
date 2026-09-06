@@ -73,6 +73,15 @@ class QuestionTypePracticeContractTest(unittest.TestCase):
         self.assertIn("body.practice-reading-page .matching-row", css)
         self.assertIn("minmax(130px, 160px)", css)
 
+    def test_listening_jijing_structured_groups_render_unmapped_answer_fallbacks(self):
+        template = (ROOT / "templates/listening/jijing_part.html").read_text(encoding="utf-8")
+        self.assertIn("function renderUnmappedItems(group, context)", template)
+        self.assertIn("PracticeTable.unmappedItems(group.items, context.seenIds)", template)
+        self.assertIn(
+            "hasStructuredBlank && !combinedMulti ? renderUnmappedItems(group, renderContext)",
+            template,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
