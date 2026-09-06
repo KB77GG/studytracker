@@ -124,17 +124,25 @@ Page({
         }
     },
 
-    openPrivacyContract() {
-        if (typeof wx.openPrivacyContract === 'function') {
-            wx.openPrivacyContract({
-                success: () => { },
-                fail: () => {
-                    wx.showToast({ title: '打开失败', icon: 'none' })
-                }
-            })
-        } else {
-            wx.showToast({ title: '当前版本不支持', icon: 'none' })
-        }
+    openUserAgreement() {
+        this.openLegalDocument('terms')
+    },
+
+    openPrivacyPolicy() {
+        this.openLegalDocument('privacy')
+    },
+
+    openLegalDocument(type) {
+        wx.navigateTo({
+            url: `/pages/legal/index?type=${type}`,
+            fail: () => {
+                wx.showModal({
+                    title: '暂时无法打开',
+                    content: '请稍后重试，或退出小程序后重新进入。',
+                    showCancel: false
+                })
+            }
+        })
     },
 
     handleLogin() {
@@ -143,18 +151,20 @@ Page({
             return
         }
 
-        // 若平台要求弹出隐私协议，先调用官方弹窗
-        if (this.data.privacyNeedAuth) {
-            try {
-                wx.openPrivacyContract({
-                    success: () => { },
-                    fail: () => { wx.showToast({ title: '请先查看隐私政策', icon: 'none' }) }
-                })
-            } catch (e) {
-                // ignore
-            }
+        this.loginWithWechat()
+    },
+
+    handlePrivacyAuthorization() {
+        if (!this.data.privacyAgreed) {
+            wx.showToast({ title: '请先阅读并同意隐私协议', icon: 'none' })
+            return
         }
 
+        this.setData({ privacyNeedAuth: false })
+        this.loginWithWechat()
+    },
+
+    loginWithWechat() {
         wx.showLoading({ title: '登录中...' })
         wx.login({
             success: async (res) => {
