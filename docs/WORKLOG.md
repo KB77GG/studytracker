@@ -4,12 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-09-06 — Web 题型专项全库审计与三页收敛完成（仅本机）
+## 2026-09-06 — Web 题型专项全库审计与三页收敛已上线
 
 - 在干净独立 worktree `/Users/zhouxin/.codex/worktrees/87b6/studytracker`、`codex/question-type-web-refinement@dbf781e5` 完成可达 558 文件 / 11,969 题审计；新增单命令 scanner。修复结构 HTML 外露、完整 placeholder completion 被错分 matching、缺 marker 无控件三项共因；题库原文不改，审阅发现的无依据题文修改已精确恢复并重拍 Reading 截图。
 - 目录首屏改为紧凑筛选 + 固定选择 CTA；Listening 改为紧凑头部 / 播放器和唯一底栏；Reading 改为可拖拽 / 键盘 38%–62% 双栏、独立滚动、全题号跨 Passage 精确聚焦。复盘只读、直达 Passage 编号、手动 focus 竞态均有回归。
-- 最终 PracticeTable 独立脚本通过；独立终审 Node **46 / 46**、Python **58 passed / 10 subtests passed**，scanner 可复跑，diff check 通过，结论 GO。应用内浏览器在 1440×1000、1366×768、1024×768 覆盖目录、全控件类型、音频、语义 table、分栏、草稿恢复、提交 / 只读复盘，无横向溢出或固定栏遮挡；`design-qa.md` 为 passed，证据在 `docs/design/question-type-web-execution-20260905/`。
-- 当前所有代码、测试、文档和截图仅本机未 commit / push / deploy；仅临时 DB 有合成 QA 数据，生产数据库 / 服务和小程序均未触碰。本地预览保留在 `http://127.0.0.1:5117/practice/question-types`。下一步待明确授权后提交 / 推送 / CI / 部署，再做真实学生账号、Safari / 微信 WebView、真机和生产音频验收。
+- 最终 PracticeTable 独立脚本通过；独立终审 Node **46 / 46**、Python **58 passed / 169 warnings / 10 subtests passed**，CI 同款 unittest 68、spelling queue、目标 Ruff、scanner 和 diff check 通过，结论 GO。应用内浏览器在 1440×1000、1366×768、1024×768 覆盖目录、全控件类型、音频、语义 table、分栏、草稿恢复、提交 / 只读复盘；`design-qa.md` 为 passed，证据在 `docs/design/question-type-web-execution-20260905/`。
+- 业务提交 `b3fceb11` 已原子推送任务分支与 main。任务 CI `34000980578`、主线 CI `34000980567`、Deploy `34000980581` 顶层均 success；CI test job 通过，advisory lint 仍仅报全仓存量问题，本任务目标 Ruff 通过。生产 HEAD b3fceb11、tracked 干净、原 17 个 untracked 保留；service 自 08:20:02 CST active，5002 / 1 worker / gthread / 6 threads / NRestarts=0，DB quick_check=ok / 外键 0、启动后日志无错误。本条最终状态使用 `[skip ci]` 纯文档提交同步，不重复部署。
+- 公网目录、Reading 两路、Listening 两路均 200，三个变动静态文件与本机 / 服务器 SHA-256 一致且 no-cache。生产 Chrome 只读确认语义 table 五控件、Listening 十题唯一提交、目录固定 CTA、旧机经缺 marker fallback 十输入；未输入 / 提交 / 播放或写学生数据。后端已上线，小程序无改动且未上传 / 提审 / 发布；本地预览继续保留。下一步观察真实学生，Safari / 微信 WebView / 真机仍待实测。
 
 ## 2026-09-05 — 次日 03:00 截止后端已部署，小程序待用户上传
 

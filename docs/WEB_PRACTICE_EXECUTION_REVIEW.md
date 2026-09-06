@@ -2,8 +2,8 @@
 
 更新时间：2026-09-06
 工作树：`/Users/zhouxin/.codex/worktrees/87b6/studytracker`
-分支 / HEAD / 基线：`codex/question-type-web-refinement` / `dbf781e51f2689052920b59459fd58f1a2265a26` / `origin/main@dbf781e5`
-状态：实现、自动化门禁和应用内浏览器验收均已完成；全部变化仅本机未提交，未 push、未部署、未写生产数据库，未上传 / 提审 / 发布小程序。
+分支 / 业务提交 / 基线：`codex/question-type-web-refinement` / `b3fceb11f8e40314988e0ec4583b2fdc794fc104` / `dbf781e51f2689052920b59459fd58f1a2265a26`
+状态：实现、自动化门禁、应用内浏览器验收、提交 / 推送和生产部署均已完成；未写生产业务数据，未改 schema，未改或发布小程序。
 
 ## 1. 扫描口径与可访问范围
 
@@ -100,7 +100,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. \
 git diff --check
 ```
 
-结果：PracticeTable 独立脚本通过；独立终审 Node test runner **46 / 46**；Python **58 passed / 10 subtests passed**；scanner JSON 正常生成；`git diff --check` 通过。主任务此前的窄集复跑（Node 37 / 37、Python 38 + 10 subtests）也通过。
+结果：PracticeTable 独立脚本通过；独立终审 Node test runner **46 / 46**；Python **58 passed / 169 warnings / 10 subtests passed**；CI 同款 unittest **68 passed**，spelling queue 与本任务 Python 目标 Ruff 通过；scanner JSON 正常生成；`git diff --check` 通过。主任务此前的窄集复跑（Node 37 / 37、Python 38 + 10 subtests）也通过。
 
 `scripts/audit_practice_markup.py --json` 的进程退出码为 0，但报告 `ok:false`，因为它忠实列出源语料中 11 组重复 marker 与 1 组缺 marker，共 12 个已知 finding；`--strict` 对这些已知源问题会按设计返回非零。运行时保护和对应回归已覆盖它们，不能把严格模式非零写成门禁通过，也不应静默改题库消除报告。
 
@@ -121,11 +121,19 @@ git diff --check
 
 实际截图和四张对照参考保存在 `docs/design/question-type-web-execution-20260905/`；逐图比较、视口、状态和差异说明见仓库根 `design-qa.md`。
 
-## 6. 审阅记录、边界与未验证项
+## 6. 提交、CI 与生产部署
+
+- 业务提交 **`b3fceb11f8e40314988e0ec4583b2fdc794fc104`** 已在再次 fetch 并确认 `origin/main` 未移动后，通过 `git push --atomic` 同步到 `codex/question-type-web-refinement` 与 `main`。本报告的最终生产状态随后以 `[skip ci]` 纯文档提交同步，不触发第二次部署。
+- GitHub 顶层任务分支 CI [34000980578](https://github.com/KB77GG/studytracker/actions/runs/34000980578)、主线 CI [34000980567](https://github.com/KB77GG/studytracker/actions/runs/34000980567) 和 Deploy [34000980581](https://github.com/KB77GG/studytracker/actions/runs/34000980581) 均为 success。两个 CI 的 test job 通过；advisory lint job 仍因未改的 `app.py`、旧脚本等存量 Ruff 问题失败，workflow 按配置 `continue-on-error`，本任务目标 Ruff 全过。
+- 生产 `/root/apps/studytracker` 为 `main@b3fceb11`、tracked clean，部署前后 17 个既有 untracked 备份 / 静态目录 / 调度库不变。`studytracker.service` 自 2026-09-06 08:20:02 CST active/running，`NRestarts=0`；5002、master + 1 worker、gthread、6 threads 精确符合约束。SQLite `quick_check=ok`、外键 0；服务启动后 journal 无 warning / error。
+- 公网根路由 302；目录、Reading IELTS 21 T2 整套 / `?passage=3`、Listening IELTS 21 T1、旧 Listening 机经均 200。PracticeTable `5978d1420cca66f08c24b09beaf2abdd01aa838c1027b417c71464668c720675`、PracticeRenderers `3333b1c3567570b917cfb9722d289b7b8801ddbc1d8d22ac38bcf6e093b025cd`、practice CSS `074b51efc49ff15a2238d6abde16dee3c9dc394deecb4c18ef9ef53bdab15335` 的本机 / 服务器 / 公网 SHA-256 一致，公网均为 `Cache-Control: no-cache`。
+- 生产 Chrome 只读复核：Reading raw table 变为 5 行 / 15 cell、5 个唯一控件且无标签外露；Listening S1 是 10 题号 / 10 题 / 唯一提交；目录有 8 个筛选按钮 / 固定选择栏 / 唯一开始；旧机经 group 2903 所在 Part 的 Q21–30 十个输入完整。没有输入、提交、播放、创建任务或写学生数据，临时生产标签页已关闭。
+
+## 7. 审阅记录、边界与未验证项
 
 - 三个并行实现分别完成目录、Listening、审计脚本；主任务逐项复核并整合。独立终审又发现并修复 sanitizer 对隐式 `p/colgroup` 关闭、Reading 直达 P3 底栏编号和跨篇导航 / 手动 focus 竞态；新增回归后再次通过。终审结论为 **GO**，未发现 sanitizer 可利用绕过或三页 UI 阻断回归。
 - 审阅发现曾出现无依据题文变更，已恢复原文；`static/reading_tests/ielts21_test2_reading.json` 与 HEAD 现无差异，Reading 截图均在恢复后重拍。页面展示忠实保留源文本，不把其中任何英文词误标为缺陷。
 - 数据题干、答案、评分、提交协议、数据库 schema、生产配置和小程序均未改。`services/question_type_practice.py` 只更新 renderer 元数据名称。
 - 未在真实生产账号、Safari / 微信 WebView、真机触屏或生产音频 CDN 上验收；本地浏览器覆盖的是 Chromium 应用内浏览器和开发用临时账号。
 - 非阻断的未来数据边界：若以后把文本 / placeholder 非法地直接放在 `<table>` 或 `<tr>` 下，浏览器仍会做 foster-parenting；inline 标签包裹 block 标签也可能产生语义无效但无执行面的 DOM。当前可达语料没有这种结构，唯一 raw table 的 5 个 marker 都合法位于 cell 内。
-- 当前成果未 commit / push / deploy，另一台电脑无法取得；同一 macOS 用户可从本 worktree 继续。下一步只有在用户明确授权后才可提交、推送和部署，然后再做生产只读冒烟与真实学生验收。
+- 当前业务代码、测试、报告和截图均已 commit / push，后端已部署；本轮没有生产数据库业务写入、schema 变更或小程序发布。下一步只需观察真实学生反馈；真实账号提交、Safari / WebKit、微信 WebView 与真机触屏仍待实测。

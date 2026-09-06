@@ -1,17 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-06 Web 题型专项全库审计、共因修复与三页视觉收敛已完成，候选仅本机未提交。
+> 最近更新：2026-09-06 Web 题型专项全库审计、共因修复与三页视觉收敛已上线。
 
-## 2026-09-06 Web 题型专项执行复核完成（仅本机候选）
+## 2026-09-06 Web 题型专项执行复核与三页收敛已上线
 
-- 独立工作树为 `/Users/zhouxin/.codex/worktrees/87b6/studytracker`，分支 `codex/question-type-web-refinement`，`HEAD=origin/main=dbf781e51f2689052920b59459fd58f1a2265a26`；开工时工作树干净，因此当前所有 modified / untracked 均属于本任务。业务改动集中在 `services/question_type_practice.py`、`static/css/practice_shell.css`、`static/js/practice_renderers.js`、`static/js/practice_table.js`、Listening / Reading / 题型目录四个模板及相关测试；新增审计脚本、四份测试、执行复核、根 `design-qa.md` 和 14 张参考 / 实际截图。精确列表以 `git status --short` 为准。
+- 独立工作树为 `/Users/zhouxin/.codex/worktrees/87b6/studytracker`，分支 `codex/question-type-web-refinement`，干净基线为 `origin/main@dbf781e51f2689052920b59459fd58f1a2265a26`。业务提交 **`b3fceb11f8e40314988e0ec4583b2fdc794fc104`**（`feat: refine web question type practice`）已原子推送任务分支与 `origin/main` 并部署；本条最终状态由随后 `[skip ci]` 纯文档提交同步。业务改动集中在 `services/question_type_practice.py`、`static/css/practice_shell.css`、两个共享 JS、Listening / Reading / 题型目录四个模板及相关测试；新增 scanner、四份测试、执行复核、根 `design-qa.md` 和 14 张参考 / 实际截图。题库 JSON、答案、评分、schema、生产配置和小程序均未改。
 - 全库事实源 `scripts/audit_practice_markup.py` 覆盖实际可达 **558 文件 / 1,068 单元 / 2,452 题组 / 11,969 题**。修复三项共因：顶层 `collect` 的安全结构 HTML 不再外露；完整 placeholder ownership 优先于宽泛 matching 启发式，覆盖旧分发风险 47 组 / 228 题（canonical completion 43 / 208，其中 Cambridge 35 / 171、ZYZ 8 / 37）；缺 marker 的旧 Listening 结构题补中性答题行。sanitizer 只保留固定标签 / class 和受限 span / scope，兼容可选闭标签、重复 marker、非法结构与未知 placeholder。
 - 目录、Listening、Reading 视觉已按现有 Sage Path 语言收敛：目录首屏紧凑筛选 + 固定选择 CTA；Listening 紧凑头部 / 播放器与唯一底栏；Reading 38%–62% 双栏分隔、独立滚动、全题号跨 Passage 定位及焦点竞态保护；题型专项复盘在 capability 重绘后保持只读。题干、答案、评分、提交协议、schema、小程序和生产配置均未改。审阅曾发现无依据题文变更，已恢复原文；`static/reading_tests/ielts21_test2_reading.json` 与 HEAD 无差异，Reading 截图在恢复后重拍。
-- 最终自动化：`node --check` 两文件 + `node tests/test_practice_table.js` 通过；独立终审六份 Node test runner **46 / 46**；八份 Python 定向 **58 passed / 10 subtests passed**；scanner JSON 正常生成；`git diff --check` 通过。scanner 报告 `ok:false` 是 11 组重复 marker + 1 组缺 marker 的 12 个既有源 finding，`--strict` 按设计非零；运行时保护和回归已覆盖，未为清零报告而改题库。独立终审结论为 GO、无阻断项。
+- 最终自动化：`node --check` 两文件 + `node tests/test_practice_table.js` 通过；独立终审六份 Node test runner **46 / 46**；八份 Python 定向 **58 passed / 169 warnings / 10 subtests passed**；CI 同款 unittest **68 passed**，spelling queue、目标 Ruff、scanner JSON 和 `git diff --check` 全通过。scanner 的 `ok:false` 是 11 组重复 marker + 1 组缺 marker 的 12 个既有源 finding，`--strict` 按设计非零；运行时保护和回归已覆盖。独立终审结论 GO、无阻断项。
 - Codex 应用内浏览器已在 1440×1000、1366×768、1024×768 验收目录选择 / 开始、Listening 文本 / radio / select / combined checkbox / 跨 Section / 实际音频 play-pause、Reading 语义 5×3 table / 键盘分栏 / 跨 Passage / 直达 P3 / 草稿恢复 / 提交只读复盘 / 手动焦点竞态，全部通过且无横向溢出或固定栏遮挡。逐项记录见 `docs/WEB_PRACTICE_EXECUTION_REVIEW.md` 和 `design-qa.md`，证据在 `docs/design/question-type-web-execution-20260905/`；本地预览保留在 `http://127.0.0.1:5117/practice/question-types`，只使用 `/tmp/studytracker-question-type-preview.WuIvug/preview.db` 合成学生。
-- 发布状态：当前全部成果**仅本机未 commit / 未 push / 未部署**；未写生产数据库或学生数据，后端生产未变，小程序未改且未上传 / 提审 / 发布，外部服务未触碰。另一台电脑不可见。同机下一位 agent 可先读上述两份复核文档、核对 `git status --short --branch` / `git log -5 --oneline`，再独立审阅 diff；只有用户明确授权后才提交、推送和部署。
-- 尚未验证且不阻塞本地候选：真实生产学生账号、Safari / WebKit、微信 WebView、真机触屏和生产音频 CDN；未来若引入把文本 / placeholder 直接置于 `<table>` / `<tr>` 下等非法源结构，仍应先正规化数据或扩展 parser。若获发布授权，下一步应先提交 / 推送并等待 CI，再按既有单 worker / gthread / 6 threads 生产链部署，做生产只读冒烟和真实学生全题型复核；小程序无本轮发布项。
+- GitHub 顶层任务分支 CI [34000980578](https://github.com/KB77GG/studytracker/actions/runs/34000980578)、主线 CI [34000980567](https://github.com/KB77GG/studytracker/actions/runs/34000980567) 和 Deploy [34000980581](https://github.com/KB77GG/studytracker/actions/runs/34000980581) 均 **success**。两个 CI 的 test job 通过；全仓 Ruff advisory job 仍因 `app.py`、旧迁移 / 调试脚本等存量问题失败，但 `continue-on-error`，且本任务全部 Python 目标 Ruff 通过。deploy 与 CI 是独立 workflow，发布复核已分别等到终态。
+- 生产 `/root/apps/studytracker` 已核对 HEAD **b3fceb11**、分支 main、tracked 干净，部署前后同一批 17 个未跟踪备份 / 静态快照 / 调度库保留；service 自 **2026-09-06 08:20:02 CST** 起 active/running、`NRestarts=0`，`127.0.0.1:5002`、master + 1 worker、gthread / 6 threads。SQLite `quick_check=ok`、外键错误 0，启动后 journal 无 warning / error。公网根路由 302，目录、Reading 整套 / 直达 P3、Listening 整套 / 旧机经均 200；三个变动静态资产的本机 / 服务器 / 公网 SHA-256 分别一致：PracticeTable `5978d142…675`、PracticeRenderers `3333b1c3…25cd`、CSS `074b51ef…5335`，公网 `Cache-Control: no-cache`。
+- 生产 Chrome 只读复核通过：Reading IELTS 21 T2 是 5 行 / 15 cell、5 个唯一答案控件且无 raw table 标签；Listening IELTS 21 T1 S1 为 10 题号 / 唯一提交；目录为 8 个筛选按钮 / 固定选择栏 / 唯一开始；旧机经 group 2903 所在 Part 的 Q21–30 十个输入均存在。全程未输入、提交、播放或写学生数据，临时生产标签页已关闭。本地隔离预览仍保留在 `http://127.0.0.1:5117/practice/question-types`。
+- 发布状态：业务代码、测试、文档和截图已 commit / push，后端已部署；没有生产数据库业务写入或 schema 改动，小程序无本轮改动且未上传 / 提审 / 发布。下一步只需观察真实学生反馈；仍未覆盖真实账号提交、Safari / WebKit、微信 WebView 和真机触屏。未来若引入把文本 / placeholder 直接置于 `<table>` / `<tr>` 下等非法源结构，应先正规化数据或扩展 parser。
 
 ## 2026-09-05 次日 03:00 截止已部署（小程序待用户上传）
 
