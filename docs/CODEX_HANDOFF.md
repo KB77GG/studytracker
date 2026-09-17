@@ -1,7 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-17 Web 题型专项解析与听力片段已通过生产媒体差异复审、部署并完成独立线上验收；5092 最终模块预览继续运行。
+> 最近更新：2026-09-17 题型专项跨日再次布置与只读历史已部署，并完成独立生产只读验收；5092 预览继续运行。
+
+## 2026-09-17 题型专项跨日再次布置与历史记录（已上线，独立生产验收 GO）
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/86d7/studytracker`，分支 `codex/question-type-review-audio`，干净基线 `7b7e9fa2ec874a0f4d7b838250020ddb066a4115`；业务提交 **`675a34731d54410738a4499b0c55eaf349624d20`**（`fix: allow next-day question type reassignment`）已用非强制原子推送同步任务分支与 `main` 并部署。本条最终状态由随后 `[skip ci]` 纯文档提交同步，不再次部署。未触碰脏旧目录 `/Users/zhouxin/Desktop/studytracker` 或其他任务成果。
+- 已完成：题型专项旧未完成任务在 `old_date < target_date` 时可直接再次布置；同日/倒序/缺失/非法日期仍保守阻断且保留既有显式人工复训覆盖。自动选题不再排除更早未完成题组，已提交/完成仍受保护；状态统一读取 Task/PlanItem/提交信号。新发布生成独立 Task/PlanItem/token/snapshot，旧快照、答案、成绩、提交与计时不改，幂等重试不重复创建。
+- 昨日任务现可安全恢复题型专项的科目、标准题型、完整 group_ids、节奏、用时和备注；重复矩阵显示同一学生×题组的全部历史并使用服务端 `blocking/requires_confirmation`。老师可从昨日卡、矩阵和普通任务行打开无 token 的专项记录；未开始、仅计时/进行中、缺逐题记录的已提交/完成及正常已提交结果均有只读显示，GET 不创建 attempt。没有暴露 token、snapshot hash、答案 key 或内部截止字段。
+- 验证：相关 Python **129 passed / 7 subtests passed**、Node **46 passed**；最后一项昨日卡 workflow 一致性调整后窄集 **23 passed**。目标 Ruff、py_compile、`node --check static/js/task_assignment_matrix.js`、`git diff --check` 均通过。独立首轮另跑 Python **101 passed / 2 subtests passed** + 旧链路 **31 passed**、Node **59 passed**；最终候选另跑 Python **41 passed**、Node 矩阵 **4 passed**，Reading/Listening 独立路由 probe 再次全过。5093 Chrome 最终通过昨日卡精确恢复、三条具体状态历史、同日确认/次日直发、内存库 3→4、旧记录不变、无 0 分只读草稿、北京时间 03:00 与任务列表直达，结论 **GO**。六个运行时 SHA 已锁定，完整值及命令见 `docs/QUESTION_TYPE_NEXT_DAY_REASSIGNMENT_EXECUTION.md`。
+- GitHub Actions：任务分支 CI [35234417214](https://github.com/KB77GG/studytracker/actions/runs/35234417214)、主线 CI [35234417432](https://github.com/KB77GG/studytracker/actions/runs/35234417432)、Deploy [35234417419](https://github.com/KB77GG/studytracker/actions/runs/35234417419) 均为 **success**。test 与拼写门禁通过；advisory Ruff 只列仓库既有旧迁移脚本问题，本任务目标 Ruff 通过。
+- 生产 `/root/apps/studytracker` 为 `main@675a3473`、tracked 干净，原 17 个 untracked 备份/静态快照/调度文件保留；14 个运行时/解析音频保护文件 SHA 均与候选一致，公网 matrix SHA 为 `e67a2d32…32378`。服务自 2026-09-17 22:34:34 CST 起 active，`NRestarts=0`；5002、`workers=1 / gthread / threads=6`、实际一主一 worker。SQLite 只读 `quick_check=ok`、外键 0，启动后 warning journal 0。
+- 独立生产验收最终 **GO**：`/tmp/studytracker-reassignment-deploy-rhP5Sy/verify_runtime_reviews.py` 确认 Listening 12/12 解析/依据/片段、3/3 题组音频和 Reading 17/17 解析/依据均 200 / `read_only=true`，GET 前后 snapshot/hash/answers/results/submission/grade/duration 不变。`verify_staff_history.py` 以 SQLite `mode=ro/query_only`、服务器内存 staff 会话做 GET 与无写入 duplicate-history POST，四类无 attempt/saved draft 样本均通过 staff 200、匿名拒绝、未提交无成绩；同日阻断、次日放行无需确认、完整矩阵、任务中心入口、昨日 repeat 精确字段均正确，Task/PlanItem/attempt 整行前后不变且没有创建 attempt。正式生产未用真实学生执行发布写入；探针初版两处仅为临时字段/时间范围适配，未改业务或生产数据。
+- 范围与现场：无 schema、题库、MP3、生产配置、小程序或微信页面改动，小程序未上传/提审/发布。5092/PID 45861 用户预览继续运行且 `/preview` 为 200；5093/PID 54517 已停止、两张验收标签已关闭。匿名本机验收材料仍在 `/var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/studytracker-reassignment-review-pfya96ut`，生产只读探针在 `/tmp/studytracker-reassignment-deploy-rhP5Sy/`。
+- 下一步：业务与生产验收已完成，只观察真实网页反馈；若未来调整跨日政策，继续以任务目标日期为准，不要把次日 03:00 学生写闸门混入老师布置判断。
 
 ## 2026-09-17 Web 题型专项解析与听力片段（已上线，独立终审与生产验收 GO）
 

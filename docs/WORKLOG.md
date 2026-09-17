@@ -4,6 +4,14 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-17 — 题型专项跨日再次布置与历史记录已上线
+
+- 业务提交 `675a34731d54410738a4499b0c55eaf349624d20` 已从 `/Users/zhouxin/.codex/worktrees/86d7/studytracker` 非强制原子推送任务分支与 main：旧未完成专项日期早于新目标日期时可直接再次布置，同日/倒序/无效日期仍阻断；新旧 Task/PlanItem/snapshot/attempt 独立，旧作答、成绩与计时不改。昨日卡恢复完整题组，自动选题只排除受保护历史，矩阵展示全部同组记录并信任服务端决策。
+- 新增无 token 老师只读专项记录：未开始、只计时/进行中、已提交或已完成但缺逐题记录均可查看且不创建 attempt；普通任务行也有入口，已提交仍保留原逐题结果。状态综合 Task、提交时间和 PlanItem，客户端复训字段不能绕过服务端。
+- 主任务回归 Python **129 passed / 7 subtests**、Node **46 passed**；最后一项 workflow 一致性调整后窄集 **23 passed**，目标 Ruff/compile/JS syntax/diff check 通过。独立首轮另有 Python **101+2**、旧链路 **31**、Node **59**；最终候选 Python **41 passed**、Node 矩阵 **4 passed**，Reading/Listening 独立路由和 5093 Chrome 的回填、历史、日期切换、新布置、草稿只读、截止显示、任务列表入口均通过，最终结论 **GO**。详细命令和六个运行时 SHA 见 `docs/QUESTION_TYPE_NEXT_DAY_REASSIGNMENT_EXECUTION.md`。
+- 任务分支 CI `35234417214`、主线 CI `35234417432`、Deploy `35234417419` 均 success；test/拼写通过，lint 仍只报仓库既有 advisory。生产 main@675a3473、tracked 干净、既有 17 untracked 保留，14 个保护文件 SHA 一致；service 自 22:34:34 CST active、NRestarts0、5002/1 worker/gthread/6 threads，DB quick_check ok/FK0、warning journal 0。
+- 独立生产只读验收 GO：Listening 12/12 解析依据片段、3/3 题组音频和 Reading 17/17 解析依据保持 200/read_only，GET 前后全部持久化字段不变；四类老师历史样本验证 staff 200/匿名拒绝/未提交无成绩、同日阻断/次日放行、完整矩阵/昨日 repeat/任务中心入口，Task/PlanItem/attempt 前后不变且未创建 attempt。没有用真实学生执行发布写入。小程序/微信/schema/题库/音频均未改；5092 继续运行，5093 已清理。最终交接由 `[skip ci]` 文档提交同步，不再部署。
+
 ## 2026-09-17 — 题型专项解析与听力片段已上线
 
 - 业务提交 `f881ef436c04c88ac15e287296009f5db39cd4da` 已从独立任务树原子推送任务分支与 main。任务 CI `35202935845`、主线 CI `35202935884`、Deploy `35202935965` 均 success；test 与拼写队列门禁通过，advisory Ruff 仅列仓库既有旧脚本问题。
