@@ -1,9 +1,9 @@
 # Web 题型专项解析与听力片段执行报告
 
 > 日期：2026-09-17
-> 状态：本机候选实现、全量回归、浏览器验收和独立终审均完成，结论 GO；终审用 5091 环境已清理，当前另有面向用户的 5092 隔离预览运行中；未 commit / push / deploy。
+> 状态：本机候选、生产媒体差异修复、全量 / 定向回归、独立终审与生产验收均完成，结论 GO；业务提交已 commit / push / deploy，5092 隔离预览继续运行。
 > 工作树：`/Users/zhouxin/.codex/worktrees/86d7/studytracker`
-> 分支 / 基线 / HEAD：`codex/question-type-review-audio` / `origin/main@df1463f9363996a2495477d5615935ada3e54e05` / `df1463f9363996a2495477d5615935ada3e54e05`
+> 分支 / 开工基线 / 业务提交：`codex/question-type-review-audio` / `origin/main@df1463f9363996a2495477d5615935ada3e54e05` / `f881ef436c04c88ac15e287296009f5db39cd4da`
 
 ## 结果
 
@@ -81,7 +81,7 @@
 
 - 用户入口为 `http://127.0.0.1:5092/preview`；三个不含 token 的稳定跳转入口为 `/preview/open/listening-practice`、`/preview/open/listening-review`、`/preview/open/reading-review`。入口页返回 200，三个跳转入口均已跟随重定向验证到最终页面 200。
 - 预览包含三个完全虚构的示例学生 / 任务：Listening 训练态可体验题组范围播放；Listening 与 Reading 已提交结果都包含正确、错误、未作答的混合状态，并展示只读解析与依据。Chrome 已再次确认 IELTS 20 Test 1 Section 1 Q2 会显示 `roof` 完整原句与解析，点击后进入对应有界片段；真实媒体时长 279.84 秒。
-- 隔离目录为 `/var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/studytracker-user-preview-w25d9d1g`，其中 `preview.py` 为启动脚本、`preview.log` 为日志、`preview.pid` 为 PID 记录；当前监听进程 PID 42674，地址 `127.0.0.1:5092`。数据使用 `tests/test_question_type_practice_routes.py` fixture 与 `sqlite:///:memory:`，不读取或写入真实学生 / 生产数据库。
+- 隔离目录为 `/var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/studytracker-user-preview-w25d9d1g`，其中 `preview.py` 为启动脚本、`preview.log` 为日志、`preview.pid` 为 PID 记录；发布后已停止旧 PID 42674，并用最终模块重启为 PID 45861，仍监听 `127.0.0.1:5092`。数据使用 `tests/test_question_type_practice_routes.py` fixture 与 `sqlite:///:memory:`，不读取或写入真实学生 / 生产数据库。
 - 媒体由 loopback Flask 从 `/Users/zhouxin/Desktop/studytracker/static/listening` 只读发送；执行工作树没有媒体软链接，也没有复制或改写源 MP3。临时访问 token 每次重启重建，只存在运行时，不写入仓库文档。
 - 当前服务特意保留给用户查看，不要在交接时自动停止。需要清理时，先读取 `preview.pid`，再用 `ps` / `lsof` 核对该 PID 的命令确实指向上述绝对 `preview.py` 且监听 5092；随后只停止该进程并删除上述精确临时目录。不要删除 Desktop 源媒体。需要重启时使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python` 加上述 `preview.py` 绝对路径；脚本已固定工作目录 / 项目根。
 
@@ -89,7 +89,10 @@
 
 ## Git、发布与下一步
 
-- 当前所有业务、测试、文档和截图均为本机未提交 / 未跟踪改动；另一台电脑不可取得。
-- 未 commit、未 push、未触发 CI 或部署；生产后端仍是既有版本，本轮未写生产数据库或学生数据。
-- 小程序无改动，未上传、提审或发布；当前 Web 候选不能称为学生已经可用。
-- 下一步：独立计划任务 `01a0ad73-9f1f-71d3-889d-791507202058` 已最终 GO。当前候选可等待用户决定是否 commit / push / deploy；这些动作仍需明确授权，现阶段生产和学生端尚未变化。
+- 业务提交为 **`f881ef436c04c88ac15e287296009f5db39cd4da`**（`fix: restore question type review guidance`），从 `origin/main@df1463f9363996a2495477d5615935ada3e54e05` 原子推送任务分支 `codex/question-type-review-audio` 与 `main`。提交不含 MP3、预览脚本 / 日志 / PID、数据库、schema、配置、题库或小程序改动。
+- GitHub Actions 任务分支 CI [35202935845](https://github.com/KB77GG/studytracker/actions/runs/35202935845)、主线 CI [35202935884](https://github.com/KB77GG/studytracker/actions/runs/35202935884) 和 Deploy [35202935965](https://github.com/KB77GG/studytracker/actions/runs/35202935965) 均为 **success**；两个 test job 与旧拼写队列门禁通过。advisory Ruff job 仍只报告仓库既有迁移 / 辅助脚本问题并按工作流设计不阻断，本任务目标 Ruff 全过。
+- 生产 `/root/apps/studytracker` 已运行 `f881ef43`、分支 main、tracked 干净，原 17 个未跟踪备份 / 静态快照 / 调度库保留。`studytracker.service` 自 2026-09-17 17:03:02 CST 起 active，`NRestarts=0`，`127.0.0.1:5002`、`workers=1 / gthread / threads=6`，实际一主一 worker；Python 3.10.12。部署后 journal 未见 Traceback / Exception / CRITICAL / 新应用错误。SQLite 只读 `quick_check=ok`、外键错误 0。
+- 生产 9 个运行时文件 SHA-256 与最终候选逐一一致；C20 / C21 MP3 哈希保持部署前生产版本不变。服务端运行时确认 C20 自动选择 `production_seek_indexed_original / source_original`，`roof` 两条依据 107.285–121.925 秒；C21 选择 `production_seek_indexed / sidecar_current`。未上传或改写生产媒体。
+- 独立旧任务只读 HTTP 验收：一个已提交 Listening 专项为 12 / 12 解析、12 / 12 依据、12 / 12 片段、3 / 3 题组范围；一个已提交 Reading 专项为 17 / 17 解析与 17 / 17 依据，均 200、`read_only=true`。GET 前后冻结 snapshot / hash、已存作答、成绩、提交时间和计时全部不变；未输出或记录学生、任务 ID 或 token。
+- 公网 `https://studytracker.xin/practice/question-types`、Listening 与 Reading 代表页均 200；`listening_clip_player.js`、`practice_renderers.js`、`practice_shell.css` 的公网 SHA-256 与候选一致，新 JS 为 `Cache-Control: no-cache`。Chrome 验收确认 Listening 10 个输入、唯一提交、真实媒体 duration 436.218776 / readyState 4 / paused；Reading 有 7 个文本框、18 个 radio、40 题导航和唯一提交；目录筛选正常，三页 console error / warn 为空。未填写、提交或创建真实任务，验收标签已关闭。
+- 最终交接仅再以 `[skip ci]` 纯文档提交同步，不重复部署。小程序无改动、未上传 / 提审 / 发布；Safari 未单独验证，主观音频听辨未做。后续只需观察真实网页反馈。
