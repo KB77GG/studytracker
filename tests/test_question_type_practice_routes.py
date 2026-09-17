@@ -85,6 +85,21 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         def student_today():
             return "today"
 
+        for endpoint in (
+            "materials_list",
+            "word_examples_page",
+            "tasks_page",
+            "grading_list",
+            "course_plan_list",
+            "admin_mock_exams_index",
+            "report_page",
+        ):
+            self.app.add_url_rule(
+                f"/__test__/{endpoint}",
+                endpoint=endpoint,
+                view_func=lambda: "stub",
+            )
+
         self.app.register_blueprint(question_type_practice_bp)
         self.app.register_blueprint(task_assignments_bp)
         with self.app.app_context():
@@ -425,6 +440,160 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         self.assertEqual(payload["students"][0]["matches"][0]["overlap_type"], "exact")
         self.assertNotIn(token, response.get_data(as_text=True))
 
+    def test_previous_day_unfinished_group_creates_independent_next_day_task_idempotently(self):
+        first = self._create_reading_task()
+        with self.app.app_context():
+            old_task = db.session.get(Task, first["id"])
+            old_snapshot = snapshot_from_task(old_task)
+            old_snapshot_text = old_task.question_ids
+            old_plan_item_id = old_task.plan_item_id
+            old_token = old_task.reading_access_token
+            group_id = old_snapshot["group_ids"][0]
+
+        request = {
+            "student_names": ["测试学生"],
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+            "pace": "training",
+            "planned_minutes": 12,
+            "due_date": "2026-08-30",
+            "idempotency_key": "next-day-unfinished-repeat",
+        }
+        created = self.client.post("/api/question-type-practice/assign", json=request)
+        repeated = self.client.post("/api/question-type-practice/assign", json=request)
+        self.assertEqual(created.status_code, 200, created.get_data(as_text=True))
+        self.assertEqual(repeated.status_code, 200, repeated.get_data(as_text=True))
+        self.assertTrue(repeated.get_json()["idempotent"])
+        new_id = created.get_json()["tasks"][0]["id"]
+        self.assertEqual(repeated.get_json()["tasks"][0]["id"], new_id)
+
+        with self.app.app_context():
+            old_task = db.session.get(Task, first["id"])
+            new_task = db.session.get(Task, new_id)
+            self.assertEqual(Task.query.count(), 2)
+            self.assertEqual(old_task.status, "pending")
+            self.assertEqual(old_task.question_ids, old_snapshot_text)
+            self.assertEqual(old_task.plan_item_id, old_plan_item_id)
+            self.assertEqual(old_task.reading_access_token, old_token)
+            self.assertEqual(new_task.date, "2026-08-30")
+            self.assertNotEqual(new_task.plan_item_id, old_plan_item_id)
+            self.assertNotEqual(new_task.reading_access_token, old_token)
+            self.assertEqual(snapshot_from_task(new_task)["group_ids"], [group_id])
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 0)
+
+    def test_invalid_assignment_date_does_not_fall_back_or_create_task(self):
+        self._login_staff()
+        preview = self.client.post(
+            "/api/question-type-practice/preview",
+            json={
+                "subject": "reading",
+                "standard_type": "judgment",
+                "scope": "all",
+                "count": 1,
+                "pace": "training",
+            },
+        )
+        group_id = preview.get_json()["groups"][0]["question_group_id"]
+        response = self.client.post(
+            "/api/question-type-practice/assign",
+            json={
+                "student_names": ["测试学生"],
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": [group_id],
+                "pace": "training",
+                "due_date": "2026-08-30-extra",
+                "idempotency_key": "invalid-date",
+            },
+        )
+        self.assertEqual(response.status_code, 400, response.get_data(as_text=True))
+        self.assertEqual(response.get_json()["error"], "invalid_due_date")
+        with self.app.app_context():
+            self.assertEqual(Task.query.count(), 0)
+
+    def test_staff_history_for_unsubmitted_task_is_read_only_and_shows_saved_draft(self):
+        first = self._create_reading_task()
+        task_id = first["id"]
+        with self.app.app_context():
+            task = db.session.get(Task, task_id)
+            original = (task.status, task.question_ids, task.accuracy, task.actual_seconds)
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 0)
+
+        pending = self.client.get(f"/tasks/question-types/{task_id}/result")
+        self.assertEqual(pending.status_code, 200, pending.get_data(as_text=True))
+        self.assertIn("学生尚未开始，未提交所以暂无成绩", pending.get_data(as_text=True))
+        self.assertIn("0 /", pending.get_data(as_text=True))
+        self._login_student()
+        forbidden = self.client.get(f"/tasks/question-types/{task_id}/result")
+        self.assertEqual(forbidden.status_code, 302)
+        self.assertIn("/practice/question-types", forbidden.location)
+        self._login_staff()
+        with self.app.app_context():
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 0)
+            task = db.session.get(Task, task_id)
+            self.assertEqual((task.status, task.question_ids, task.accuracy, task.actual_seconds), original)
+            snapshot = snapshot_from_task(task)
+            question_id = next(iter(question_type_practice_module.review_question_index(snapshot)))
+            attempt = QuestionTypePracticeAttempt(
+                task_id=task.id,
+                student_name=task.student_name,
+                subject=snapshot["subject"],
+                standard_type=snapshot["standard_type"],
+                pace=snapshot["pace"],
+                snapshot_hash=snapshot["snapshot_hash"],
+                status=QuestionTypePracticeAttempt.STATUS_IN_PROGRESS,
+                answers_json=json.dumps({question_id: "saved draft value"}),
+                started_at=datetime(2026, 8, 29, 1, 2, 3),
+            )
+            db.session.add(attempt)
+            db.session.commit()
+            attempt_id = attempt.id
+
+        draft = self.client.get(f"/tasks/question-types/{task_id}/result")
+        self.assertEqual(draft.status_code, 200, draft.get_data(as_text=True))
+        body = draft.get_data(as_text=True)
+        self.assertIn("进行中·尚未提交", body)
+        self.assertIn("saved draft value", body)
+        self.assertIn("未提交所以暂无成绩", body)
+        with self.app.app_context():
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 1)
+            self.assertEqual(QuestionTypePracticeAttempt.query.one().id, attempt_id)
+            task = db.session.get(Task, task_id)
+            self.assertEqual((task.status, task.question_ids, task.accuracy, task.actual_seconds), original)
+
+    def test_staff_history_uses_task_workflow_when_attempt_does_not_exist(self):
+        first = self._create_reading_task()
+        task_id = first["id"]
+        with self.app.app_context():
+            task = db.session.get(Task, task_id)
+            task.status = "progress"
+            task.actual_seconds = 45
+            db.session.commit()
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 0)
+
+        progress = self.client.get(f"/tasks/question-types/{task_id}/result")
+        self.assertEqual(progress.status_code, 200, progress.get_data(as_text=True))
+        progress_body = progress.get_data(as_text=True)
+        self.assertIn("进行中·尚未提交", progress_body)
+        self.assertIn("当前尚未留存逐题作答草稿", progress_body)
+        self.assertNotIn("学生尚未开始", progress_body)
+
+        with self.app.app_context():
+            task = db.session.get(Task, task_id)
+            task.status = "done"
+            db.session.commit()
+
+        completed = self.client.get(f"/tasks/question-types/{task_id}/result")
+        self.assertEqual(completed.status_code, 200, completed.get_data(as_text=True))
+        completed_body = completed.get_data(as_text=True)
+        self.assertIn("已完成·无逐题记录", completed_body)
+        self.assertIn("未留存已提交的逐题作答记录", completed_body)
+        self.assertIn("暂无可展示成绩", completed_body)
+        self.assertNotIn("学生尚未开始", completed_body)
+        with self.app.app_context():
+            self.assertEqual(QuestionTypePracticeAttempt.query.count(), 0)
+
     def test_duplicate_preview_and_409_return_complete_student_group_matrix(self):
         with self.app.app_context():
             student_user = User(username="student-two", password_hash="test", role=User.ROLE_STUDENT)
@@ -507,6 +676,7 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
                 "subject": "reading",
                 "standard_type": "judgment",
                 "group_ids": [group_id],
+                "due_date": "2026-08-29",
                 "retraining_mode": "wrong",
                 "idempotency_key": "malicious-bypass",
             },

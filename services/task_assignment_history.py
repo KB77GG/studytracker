@@ -7,6 +7,8 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any
 
+from services.task_date_gate import task_workflow_status
+
 _STATUS_LABELS = {
     "pending": "未开始",
     "progress": "进行中",
@@ -60,6 +62,8 @@ def _listening_section_number(value: Any) -> int | None:
 
 
 def _resource_source(task: Any) -> tuple[str, str | None]:
+    if getattr(task, "grading_mode", None) == "question_type_practice":
+        return "question_type", None
     if getattr(task, "grading_mode", None) == "writing_practice":
         return "writing", None
     if getattr(task, "dictation_book_id", None):
@@ -87,13 +91,13 @@ def _range_label(task: Any, dictation_book: Any | None) -> str:
 
 def _repeat_payload(task: Any) -> dict[str, Any]:
     source, material_value = _resource_source(task)
-    writing_snapshot = (
+    structured_snapshot = (
         _json_payload(getattr(task, "question_ids", None))
-        if source == "writing"
+        if source in {"question_type", "writing"}
         else {}
     )
-    if not isinstance(writing_snapshot, dict):
-        writing_snapshot = {}
+    if not isinstance(structured_snapshot, dict):
+        structured_snapshot = {}
     return {
         "source": source,
         "category": getattr(task, "category", None) or "",
@@ -115,8 +119,16 @@ def _repeat_payload(task: Any) -> dict[str, Any]:
         "listening_section_number": _listening_section_number(getattr(task, "question_ids", None)),
         "reading_test_id": getattr(task, "reading_test_id", None) or "",
         "reading_passage_number": _safe_int(getattr(task, "reading_passage_number", None)),
-        "writing_resource_type": writing_snapshot.get("writing_resource_type") or "",
-        "writing_resource_id": writing_snapshot.get("writing_resource_id") or "",
+        "writing_resource_type": structured_snapshot.get("writing_resource_type") or "",
+        "writing_resource_id": structured_snapshot.get("writing_resource_id") or "",
+        "question_type_subject": structured_snapshot.get("subject") or "",
+        "question_type_standard_type": structured_snapshot.get("standard_type") or "",
+        "question_type_group_ids": [
+            str(group_id)
+            for group_id in (structured_snapshot.get("group_ids") or [])
+            if str(group_id).strip()
+        ],
+        "question_type_pace": structured_snapshot.get("pace") or "training",
     }
 
 
@@ -157,7 +169,27 @@ def serialize_previous_day_assignments(
         resource_kind = "task"
         resource_meta = "普通任务"
         range_label = ""
-        if dictation_book_id:
+        question_type_snapshot = (
+            _json_payload(getattr(task, "question_ids", None))
+            if getattr(task, "grading_mode", None) == "question_type_practice"
+            else {}
+        )
+        if not isinstance(question_type_snapshot, dict):
+            question_type_snapshot = {}
+        question_type_valid = bool(
+            question_type_snapshot.get("subject")
+            and question_type_snapshot.get("standard_type")
+            and question_type_snapshot.get("group_ids")
+        )
+
+        if getattr(task, "grading_mode", None) == "question_type_practice":
+            resource_kind = "question_type"
+            subject_label = (
+                "听力" if question_type_snapshot.get("subject") == "listening" else "阅读"
+            )
+            group_count = len(question_type_snapshot.get("group_ids") or [])
+            resource_meta = f"题型专项 · {subject_label} · {group_count} 个完整题组"
+        elif dictation_book_id:
             resource_kind = "dictation"
             range_label = _range_label(task, dictation_book)
             resource_meta = f"词书 · {range_label}"
@@ -186,8 +218,14 @@ def serialize_previous_day_assignments(
             resource_kind = "material"
             resource_meta = "材料库"
 
-        status = str(getattr(task, "status", "pending") or "pending").lower()
-        student_submitted = bool(getattr(task, "student_submitted", False))
+        status = (
+            task_workflow_status(task)
+            if resource_kind == "question_type"
+            else str(getattr(task, "status", "pending") or "pending").lower()
+        )
+        student_submitted = bool(
+            getattr(task, "student_submitted", False) or status == "submitted"
+        )
         display_status = status
         if student_submitted and status not in {"done", "completed", "finished"}:
             status_label = "已提交，待批改"
@@ -196,6 +234,8 @@ def serialize_previous_day_assignments(
         else:
             status_label = _STATUS_LABELS.get(status, status or "未知状态")
             repeatable = status not in _NON_REPEATABLE_STATUSES
+        if resource_kind == "question_type" and not question_type_valid:
+            repeatable = False
 
         grouped[student_name].append(
             {
@@ -209,6 +249,11 @@ def serialize_previous_day_assignments(
                 "status_label": status_label,
                 "repeatable": repeatable,
                 "repeat": _repeat_payload(task),
+                "history_url": (
+                    f"/tasks/question-types/{int(task.id)}/result"
+                    if resource_kind == "question_type" and getattr(task, "id", None)
+                    else ""
+                ),
             }
         )
 

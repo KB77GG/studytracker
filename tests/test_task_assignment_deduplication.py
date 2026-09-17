@@ -14,6 +14,11 @@ def task(student_name, *, status="pending", date="2026-09-01", payload=None, **f
         "student_name": student_name,
         "status": status,
         "date": date,
+        "student_submitted": fields.pop("student_submitted", False),
+        "submitted_at": fields.pop("submitted_at", None),
+        "actual_seconds": fields.pop("actual_seconds", 0),
+        "review_status": fields.pop("review_status", None),
+        "plan_item": fields.pop("plan_item", None),
         "category": fields.pop("category", "雅思-听力-题型专项"),
         "detail": fields.pop("detail", "题型专项"),
         "grading_mode": fields.pop("grading_mode", None),
@@ -35,7 +40,15 @@ def task(student_name, *, status="pending", date="2026-09-01", payload=None, **f
 
 
 class TaskAssignmentDuplicateServiceTest(unittest.TestCase):
-    def qtype(self, student="学生甲", groups=None, status="pending", task_id=1):
+    def qtype(
+        self,
+        student="学生甲",
+        groups=None,
+        status="pending",
+        task_id=1,
+        task_date="2026-09-01",
+        **fields,
+    ):
         payload = {
             "subject": "reading",
             "standard_type": "judgment",
@@ -47,6 +60,8 @@ class TaskAssignmentDuplicateServiceTest(unittest.TestCase):
             payload=__import__("json").dumps(payload, ensure_ascii=False),
             grading_mode="question_type_practice",
             id=task_id,
+            date=task_date,
+            **fields,
         )
 
     def test_completed_same_group_is_warning_and_requires_explicit_reason(self):
@@ -80,6 +95,165 @@ class TaskAssignmentDuplicateServiceTest(unittest.TestCase):
         preview = check_duplicate_assignments(["学生甲"], request, tasks=[existing])
         self.assertTrue(preview["blocking"])
         self.assertFalse(preview["can_publish"])
+
+    def test_earlier_unfinished_question_group_is_visible_but_directly_reassignable(self):
+        group_id = "reading:test-1:passage-1:judgment:1-2"
+        existing = self.qtype(
+            status="progress",
+            task_date="2026-09-16",
+            groups=[group_id],
+        )
+        request = {
+            "source": "question_type",
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+            "due_date": "2026-09-17",
+        }
+
+        preview = check_duplicate_assignments(["学生甲"], request, tasks=[existing])
+        match = preview["students"][0]["matches"][0]
+        self.assertTrue(preview["has_history"])
+        self.assertFalse(preview["blocking"])
+        self.assertFalse(preview["requires_confirmation"])
+        self.assertTrue(preview["can_publish"])
+        self.assertTrue(match["reassignable"])
+        self.assertEqual(match["status_label"], "进行中")
+        self.assertEqual(match["assignment_date_relation"], "earlier")
+        self.assertEqual(match["view_url"], "/tasks/question-types/1/result")
+        self.assertEqual(preview["excluded_group_ids"], [])
+        self.assertTrue(validate_publish_conflicts(["学生甲"], request, tasks=[existing])["can_publish"])
+
+        auto_selection = check_duplicate_assignments(
+            ["学生甲"],
+            {
+                "source": "question_type",
+                "subject": "reading",
+                "standard_type": "judgment",
+                "due_date": "2026-09-17",
+            },
+            tasks=[existing],
+        )
+        self.assertEqual(auto_selection["excluded_group_ids"], [])
+        self.assertEqual(
+            auto_selection["students"][0]["matches"][0]["overlap_units"],
+            [group_id],
+        )
+
+    def test_same_later_missing_and_invalid_dates_keep_unfinished_group_protected(self):
+        group_id = "reading:test-1:passage-1:judgment:1-2"
+        existing = self.qtype(
+            status="progress",
+            task_date="2026-09-17",
+            groups=[group_id],
+        )
+        base = {
+            "source": "question_type",
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+        }
+        for due_date in ("2026-09-17", "2026-09-16", "", "not-a-date"):
+            request = {**base, "due_date": due_date}
+            result = check_duplicate_assignments(["学生甲"], request, tasks=[existing])
+            self.assertTrue(result["blocking"], due_date)
+            self.assertTrue(result["requires_confirmation"], due_date)
+            self.assertEqual(result["excluded_group_ids"], [group_id], due_date)
+
+        auto_selection = check_duplicate_assignments(
+            ["学生甲"],
+            {
+                "source": "question_type",
+                "subject": "reading",
+                "standard_type": "judgment",
+                "due_date": "2026-09-17",
+            },
+            tasks=[existing],
+        )
+        self.assertEqual(auto_selection["excluded_group_ids"], [group_id])
+
+        allowed = validate_publish_conflicts(
+            ["学生甲"],
+            {**base, "due_date": "2026-09-17"},
+            force_repeat=True,
+            confirmed=True,
+            force_reason="人工确认复训",
+            tasks=[existing],
+        )
+        self.assertTrue(allowed["can_publish"])
+        self.assertTrue(allowed["forced"])
+
+    def test_submitted_signal_is_not_misclassified_as_unfinished_cross_day(self):
+        group_id = "reading:test-1:passage-1:judgment:1-2"
+        existing = self.qtype(
+            status="progress",
+            task_date="2026-09-16",
+            groups=[group_id],
+            student_submitted=True,
+        )
+        request = {
+            "source": "question_type",
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+            "due_date": "2026-09-17",
+        }
+        result = check_duplicate_assignments(["学生甲"], request, tasks=[existing])
+        match = result["students"][0]["matches"][0]
+        self.assertEqual(match["status"], "submitted")
+        self.assertFalse(match["reassignable"])
+        self.assertFalse(result["blocking"])
+        self.assertTrue(result["requires_confirmation"])
+        self.assertFalse(validate_publish_conflicts(["学生甲"], request, tasks=[existing])["can_publish"])
+
+    def test_question_type_matrix_keeps_all_matching_task_records(self):
+        group_id = "reading:test-1:passage-1:judgment:1-2"
+        request = {
+            "source": "question_type",
+            "subject": "reading",
+            "standard_type": "judgment",
+            "group_ids": [group_id],
+            "due_date": "2026-09-18",
+        }
+        result = check_duplicate_assignments(
+            ["学生甲"],
+            request,
+            tasks=[
+                self.qtype(task_id=2, task_date="2026-09-17", groups=[group_id]),
+                self.qtype(task_id=1, task_date="2026-09-16", groups=[group_id]),
+            ],
+        )
+        row = result["matrix_rows"][0]
+        self.assertEqual([match["task_id"] for match in row["matches"]], [2, 1])
+        self.assertEqual(row["match"]["task_id"], 2)
+        self.assertFalse(row["blocking"])
+
+    def test_non_question_type_force_repeat_policy_is_unchanged(self):
+        existing = task(
+            "学生甲",
+            status="pending",
+            date="2026-09-17",
+            dictation_book_id=3,
+            dictation_word_start=1,
+            dictation_word_end=20,
+        )
+        request = {
+            "dictation_book_id": 3,
+            "dictation_word_start": 1,
+            "dictation_word_end": 20,
+            "due_date": "2026-09-18",
+        }
+        blocked = validate_publish_conflicts(["学生甲"], request, tasks=[existing])
+        self.assertFalse(blocked["can_publish"])
+        allowed = validate_publish_conflicts(
+            ["学生甲"],
+            request,
+            force_repeat=True,
+            confirmed=True,
+            force_reason="人工确认",
+            tasks=[existing],
+        )
+        self.assertTrue(allowed["can_publish"])
 
     def test_different_group_ids_are_not_duplicates(self):
         existing = self.qtype(groups=["reading:test-1:passage-1:judgment:3-4"])

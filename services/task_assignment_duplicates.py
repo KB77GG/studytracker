@@ -13,11 +13,13 @@ import hashlib
 import json
 import re
 from collections.abc import Iterable
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy import text
 
 from models import AuditLogEntry, Task, db
+from services.task_date_gate import task_workflow_status
 
 STATUS_LABELS = {
     "pending": "未开始",
@@ -30,6 +32,7 @@ STATUS_LABELS = {
 }
 
 _KEY_RE = re.compile(r"[^A-Za-z0-9_.:-]+")
+_UNFINISHED_STATUSES = frozenset({"pending", "progress", "in_progress"})
 
 
 def _text(value: Any) -> str:
@@ -68,6 +71,20 @@ def _number(value: Any, default: int | None = None) -> int | None:
         return int(value)
     except (TypeError, ValueError):
         return default
+
+
+def _assignment_date(value: Any) -> date | None:
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    raw = _text(value)
+    if not raw:
+        return None
+    try:
+        return date.fromisoformat(raw)
+    except ValueError:
+        return None
 
 
 def _range_units(start: Any, end: Any) -> tuple[int, int] | None:
@@ -318,12 +335,54 @@ def normalized_status(task: Task) -> str:
 
 def _safe_task_link(task: Task) -> str:
     # Staff review routes are token-free.  Never use assignment_url here.
+    if getattr(task, "grading_mode", None) == "question_type_practice":
+        return f"/tasks/question-types/{int(task.id)}/result"
     return f"/tasks/{int(task.id)}/review"
 
 
-def _match_payload(task: Task, overlap: tuple[str, list[str], bool]) -> dict[str, Any]:
+def _match_payload(
+    task: Task,
+    overlap: tuple[str, list[str], bool],
+    *,
+    identity: dict[str, Any],
+    target_date: date | None,
+) -> dict[str, Any]:
     overlap_type, units, _exact = overlap
-    status = normalized_status(task)
+    status = (
+        task_workflow_status(task)
+        if identity["kind"] == "question_type"
+        else normalized_status(task)
+    )
+    existing_date = _assignment_date(getattr(task, "date", None))
+    date_relation = "unknown"
+    if existing_date is not None and target_date is not None:
+        if existing_date < target_date:
+            date_relation = "earlier"
+        elif existing_date == target_date:
+            date_relation = "same"
+        else:
+            date_relation = "later"
+
+    # Question-type groups are daily assignments.  An unfinished group from
+    # an earlier assignment date remains visible as history but may be
+    # assigned again for the new date.  The old task's next-day 03:00 write
+    # window is enforced independently by task_date_gate; it must not prevent
+    # staff from planning the new calendar day's task.
+    reassignable = bool(
+        identity["kind"] == "question_type"
+        and status in _UNFINISHED_STATUSES
+        and date_relation == "earlier"
+    )
+    unfinished_overlap = bool(
+        status in _UNFINISHED_STATUSES
+        and (
+            overlap_type in {"exact", "partial"}
+            if identity["kind"] == "question_type"
+            else overlap_type == "exact"
+        )
+    )
+    blocking = bool(unfinished_overlap and not reassignable)
+    requires_confirmation = bool(not reassignable)
     return {
         "task_id": task.id,
         "assigned_date": task.date.isoformat() if hasattr(task.date, "isoformat") else task.date,
@@ -333,6 +392,11 @@ def _match_payload(task: Task, overlap: tuple[str, list[str], bool]) -> dict[str
         "overlap_units": units,
         "overlap_label": "、".join(units) if units else "完整资源",
         "view_url": _safe_task_link(task),
+        "assignment_date_relation": date_relation,
+        "reassignable": reassignable,
+        "blocking": blocking,
+        "requires_confirmation": requires_confirmation,
+        "exclude_from_auto_selection": blocking or requires_confirmation,
     }
 
 
@@ -356,6 +420,7 @@ def _student_result(name: str, matches: list[dict[str, Any]], identity: dict[str
             "matches": [],
             "can_publish": True,
             "requires_confirmation": False,
+            "blocking": False,
         }
     if not matches:
         return {
@@ -365,18 +430,17 @@ def _student_result(name: str, matches: list[dict[str, Any]], identity: dict[str
             "matches": [],
             "can_publish": True,
             "requires_confirmation": False,
+            "blocking": False,
         }
-    blocking = any(
-        row["overlap_type"] == "exact" and row["status"] in {"pending", "progress", "in_progress"}
-        for row in matches
-    )
+    blocking = any(row.get("blocking") for row in matches)
+    requires_confirmation = any(row.get("requires_confirmation") for row in matches)
     return {
         "student_name": name,
         "status": "partial_overlap" if any(row["overlap_type"] == "partial" for row in matches) else "assigned",
         "status_label": "部分题目重复" if any(row["overlap_type"] == "partial" for row in matches) else "已布置",
         "matches": matches,
         "can_publish": not blocking,
-        "requires_confirmation": True,
+        "requires_confirmation": requires_confirmation,
         "blocking": blocking,
         "source_task_ids": sorted({int(row["task_id"]) for row in matches}),
     }
@@ -431,6 +495,11 @@ def _question_type_matrix_rows(
                     "overlap_type": "exact",
                     "overlap_units": [unit_id],
                     "match": match,
+                    "matches": unit_matches,
+                    "blocking": any(item.get("blocking") for item in unit_matches),
+                    "requires_confirmation": any(
+                        item.get("requires_confirmation") for item in unit_matches
+                    ),
                 }
             )
         else:
@@ -444,6 +513,9 @@ def _question_type_matrix_rows(
                     "overlap_type": None,
                     "overlap_units": [],
                     "match": None,
+                    "matches": [],
+                    "blocking": False,
+                    "requires_confirmation": False,
                 }
             )
     return rows
@@ -456,6 +528,7 @@ def check_duplicate_assignments(
 
     names = list(dict.fromkeys(_text(name) for name in student_names if _text(name)))
     identity = resource_identity_from_payload(payload)
+    target_date = _assignment_date(payload.get("due_date"))
     history = list(tasks) if tasks is not None else (
         Task.query.filter(Task.student_name.in_(names)).order_by(Task.date.desc(), Task.id.desc()).all()
         if names
@@ -471,13 +544,19 @@ def check_duplicate_assignments(
         for task in by_student.get(name, []):
             overlap = _overlap(identity, resource_identity_from_task(task))
             if overlap:
-                match = _match_payload(task, overlap)
+                match = _match_payload(
+                    task,
+                    overlap,
+                    identity=identity,
+                    target_date=target_date,
+                )
                 match["kind"] = identity["kind"]
                 matches.append(match)
         results.append(_student_result(name, matches, identity))
 
     blocking = any(row.get("blocking") for row in results)
     warnings = any(row.get("matches") for row in results)
+    requires_confirmation = any(row.get("requires_confirmation") for row in results)
     question_type_units = _question_type_units(identity, payload)
     matrix_rows: list[dict[str, Any]] = []
     for student in results:
@@ -494,7 +573,7 @@ def check_duplicate_assignments(
         "students": results,
         "blocking": blocking,
         "has_history": warnings,
-        "requires_confirmation": bool(warnings),
+        "requires_confirmation": requires_confirmation,
         "can_publish": not blocking,
     }
     if identity["kind"] == "question_type":
@@ -504,10 +583,10 @@ def check_duplicate_assignments(
         row.setdefault("source_task_ids", sorted({int(match["task_id"]) for match in row.get("matches", [])}))
     if identity["kind"] == "question_type":
         used: set[str] = set()
-        for task in history:
-            existing = resource_identity_from_task(task)
-            if existing["kind"] == identity["kind"] and existing["base"] == identity["base"]:
-                used.update(existing.get("units") or ())
+        for student in results:
+            for match in student.get("matches") or []:
+                if match.get("exclude_from_auto_selection"):
+                    used.update(match.get("overlap_units") or ())
         response["excluded_group_ids"] = sorted(used)
     return response
 
@@ -536,14 +615,14 @@ def validate_publish_conflicts(
         result["error"] = "duplicate_assignment_conflict"
         result["reason_required"] = True
         return result
-    if result["has_history"]:
+    if result["requires_confirmation"]:
         if not force_repeat or not confirmed or len(reason) < 2:
             result["can_publish"] = False
             result["error"] = "duplicate_assignment_conflict"
             result["reason_required"] = True
             return result
     result["can_publish"] = True
-    result["forced"] = bool(result["has_history"])
+    result["forced"] = bool(result["has_history"] and explicit_repeat)
     return result
 
 

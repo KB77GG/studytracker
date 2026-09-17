@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block page_title %}专项历史记录{% endblock %}
+{% block page_subtitle %}{{ task.student_name }} · {{ task.detail }}{% endblock %}
+{% block header_actions %}<a class="btn" href="/tasks?task_id={{ task.id }}">返回任务中心</a>{% endblock %}
+{% block content %}{% endblock %}
+{% block content_dashboard %}
+<style>
+.qth{max-width:1050px;margin:auto}.qth-card{border:1px solid #dbe4df;border-radius:16px;background:#fff;padding:20px;margin-bottom:14px}.qth-summary{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:14px;background:linear-gradient(135deg,#edf8f5,#fff)}.qth-stat span{display:block;color:#64748b;font-size:13px}.qth-stat strong{display:block;margin-top:4px;color:#1f615d;font-size:18px}.qth-note{border-left:4px solid #55a7a0;background:#f3faf8;color:#334155}.qth-table{width:100%;border-collapse:collapse}.qth-table th,.qth-table td{padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:top}.qth-table th{color:#475569;font-size:13px}.qth-answer{font-weight:800;color:#1f615d}.qth-empty{color:#64748b}.qth-groups{display:grid;gap:8px}.qth-group{padding:9px 11px;border-radius:9px;background:#f8faf9;color:#475569}@media(max-width:760px){.qth-summary{grid-template-columns:1fr 1fr}.qth-table thead{display:none}.qth-table tr{display:grid;padding:10px 0}.qth-table td{border:0;padding:3px 0}}
+</style>
+<main class="qth">
+  <section class="qth-card qth-summary">
+    <div><h2>{{ task.student_name }} · {{ type_label }}</h2><p>{{ '听力' if snapshot.subject == 'listening' else '阅读' }} · {{ '考试节奏' if snapshot.pace == 'exam' else '训练节奏' }} · {{ snapshot.group_ids|length }} 个完整题组</p></div>
+    <div class="qth-stat"><span>任务日期</span><strong>{{ task.date }}</strong></div>
+    <div class="qth-stat"><span>当前状态</span><strong>{{ history.state_label }}</strong></div>
+    <div class="qth-stat"><span>已保存答案</span><strong>{{ history.saved_count }} / {{ history.question_count }}</strong></div>
+  </section>
+  <section class="qth-card qth-note">
+    {% if history.state == 'pending' %}学生尚未开始，未提交所以暂无成绩；本页只是查看记录，不会开始任务。
+    {% elif history.state == 'in_progress' %}学生已开始但尚未提交。{% if history.has_attempt %}下方仅展示已保存草稿，{% else %}当前尚未留存逐题作答草稿，{% endif %}未提交所以暂无成绩；旧任务仍按 {{ cutoff_label ~ '（北京时间）' if cutoff_label else '既有截止规则' }} 进入只读。
+    {% elif history.state == 'submitted_without_result' %}任务已提交，但未留存逐题作答记录；暂无可展示成绩。
+    {% else %}任务已完成，但未留存已提交的逐题作答记录；暂无可展示成绩。{% endif %}
+  </section>
+  <section class="qth-card"><h3>冻结题组</h3><div class="qth-groups">{% for group in snapshot.group_refs %}<div class="qth-group"><strong>{{ group.test_title }}</strong> · {{ group.unit_label }} {{ group.unit_number }} · 原题 Q{{ group.original_question_range }}</div>{% endfor %}</div></section>
+  <section class="qth-card"><h3>已保存草稿（只读）</h3><table class="qth-table"><thead><tr><th>题号</th><th>来源</th><th>学生答案</th></tr></thead><tbody>{% for row in history.rows %}<tr><td>Q{{ row.number }}</td><td>{{ row.source_label }}</td><td class="{{ 'qth-answer' if row.saved else 'qth-empty' }}">{{ row.value if row.saved else '未作答' }}</td></tr>{% endfor %}</tbody></table></section>
+</main>
+{% endblock %}

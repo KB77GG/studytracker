@@ -58,6 +58,7 @@ from services.question_type_review import (
 )
 from services.task_assignment_duplicates import (
     begin_assignment_transaction,
+    check_duplicate_assignments,
     normalize_idempotency_key,
     staff_task_payload,
     validate_publish_conflicts,
@@ -69,6 +70,7 @@ from services.task_date_gate import (
     gate_error_payload,
     task_date_access,
     task_date_cutoff_local,
+    task_workflow_status,
 )
 
 question_type_practice_bp = Blueprint("question_type_practice", __name__)
@@ -600,14 +602,18 @@ def catalog_api():
 
 
 def _assignment_inputs(data: dict, snapshot: dict) -> tuple[str, int, str]:
-    due_date = str(data.get("due_date") or date.today().isoformat())
+    due_date = str(data.get("due_date") or date.today().isoformat()).strip()
+    try:
+        due_date = date.fromisoformat(due_date).isoformat()
+    except ValueError as exc:
+        raise ValueError("invalid_due_date") from exc
     default_minutes = 20 if snapshot["subject"] == SUBJECT_LISTENING else 25
     planned_minutes = max(1, min(int(data.get("planned_minutes") or default_minutes), 180))
     return due_date, planned_minutes, str(data.get("note") or "").strip()
 
 
 def _exclude_groups_for_students(data: dict, names: list[str]) -> dict:
-    """Exclude the union of previously assigned groups for a batch."""
+    """Exclude groups still protected by duplicate/retraining policy."""
 
     if data.get("group_ids"):
         return data
@@ -615,12 +621,18 @@ def _exclude_groups_for_students(data: dict, names: list[str]) -> dict:
     standard_type = str(data.get("standard_type") or "").strip()
     if not subject or not standard_type or not names:
         return data
-    excluded: set[str] = set()
     history = Task.query.filter(Task.student_name.in_(names)).all()
-    for task in history:
-        snapshot = snapshot_from_task(task) if task else None
-        if snapshot and snapshot.get("subject") == subject and snapshot.get("standard_type") == standard_type:
-            excluded.update(str(group_id) for group_id in snapshot.get("group_ids") or [])
+    duplicate_result = check_duplicate_assignments(
+        names,
+        {
+            "source": "question_type",
+            "subject": subject,
+            "standard_type": standard_type,
+            "due_date": data.get("due_date"),
+        },
+        tasks=history,
+    )
+    excluded = set(duplicate_result.get("excluded_group_ids") or [])
     excluded.update(str(group_id) for group_id in data.get("exclude_group_ids") or [])
     if not excluded:
         return data
@@ -686,7 +698,12 @@ def assign_api():
 
         duplicate_result = validate_publish_conflicts(
             names,
-            {**data, "source": "question_type", "group_ids": snapshot["group_ids"]},
+            {
+                **data,
+                "source": "question_type",
+                "group_ids": snapshot["group_ids"],
+                "due_date": due_date,
+            },
             force_repeat=bool(data.get("force_repeat")),
             force_reason=str(data.get("force_reason") or ""),
             confirmed=bool(data.get("confirm_repeat")),
@@ -1080,6 +1097,91 @@ def _result_rows(snapshot: dict, attempt: QuestionTypePracticeAttempt) -> list[d
     return rows
 
 
+def _saved_answer_display(value) -> str:
+    if isinstance(value, list):
+        return "、".join(str(item) for item in value if str(item).strip())
+    if isinstance(value, dict):
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    return str(value or "").strip()
+
+
+def _staff_draft_history(
+    task: Task,
+    snapshot: dict,
+    attempt: QuestionTypePracticeAttempt | None,
+) -> dict:
+    """Build a read-only staff view without creating or updating an attempt."""
+
+    answers = _json_object(attempt.answers_json) if attempt else {}
+    question_map = review_question_index(snapshot)
+    group_map = _question_group_map(snapshot)
+    refs = {row["question_group_id"]: row for row in snapshot.get("group_refs") or []}
+
+    def sort_key(item: tuple[str, dict]) -> tuple[int, str]:
+        key, question = item
+        try:
+            return int(question.get("number")), key
+        except (TypeError, ValueError):
+            return 10**9, key
+
+    rows = []
+    saved_count = 0
+    for question_id, question in sorted(question_map.items(), key=sort_key):
+        value = _saved_answer_display(answers.get(question_id))
+        if value:
+            saved_count += 1
+        group_id = group_map.get(question_id, "")
+        source = refs.get(group_id, {})
+        rows.append(
+            {
+                "number": question.get("number"),
+                "value": value,
+                "saved": bool(value),
+                "source_label": " · ".join(
+                    str(part).strip()
+                    for part in (
+                        source.get("test_title"),
+                        f"{source.get('unit_label', '')} {source.get('unit_number', '')}".strip(),
+                        f"原题 Q{source.get('original_question_range', '')}".strip(),
+                    )
+                    if str(part).strip()
+                ),
+            }
+        )
+
+    workflow = task_workflow_status(task)
+    attempt_started = bool(
+        attempt
+        and (
+            attempt.started_at
+            or attempt.status == QuestionTypePracticeAttempt.STATUS_IN_PROGRESS
+            or saved_count
+        )
+    )
+    if workflow == "completed":
+        state = "completed_without_result"
+        state_label = "已完成·无逐题记录"
+    elif workflow == "submitted":
+        state = "submitted_without_result"
+        state_label = "已提交·无逐题记录"
+    elif workflow == "in_progress" or attempt_started:
+        state = "in_progress"
+        state_label = "进行中·尚未提交"
+    else:
+        state = "pending"
+        state_label = "未开始"
+    return {
+        "state": state,
+        "state_label": state_label,
+        "has_attempt": bool(attempt),
+        "saved_count": saved_count,
+        "question_count": len(rows),
+        "rows": rows,
+        "started_at": attempt.started_at if attempt else None,
+        "deadline_at": attempt.deadline_at if attempt else None,
+    }
+
+
 @question_type_practice_bp.get("/practice/question-types/task/<int:task_id>/result")
 def task_result(task_id: int):
     token = (request.args.get("token") or "").strip()
@@ -1116,8 +1218,18 @@ def teacher_result(task_id: int):
     task = db.session.get(Task, task_id)
     snapshot = snapshot_from_task(task) if task else None
     attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task_id).first() if task else None
-    if not task or not snapshot or not attempt:
+    if not task or not snapshot:
         return "结果不存在", 404
+    if not attempt or not attempt.submitted_at:
+        cutoff = task_date_cutoff_local(task)
+        return render_template(
+            "question_type_practice/history.html",
+            task=task,
+            snapshot=snapshot,
+            type_label=question_type_display_label(snapshot["standard_type"]),
+            history=_staff_draft_history(task, snapshot, attempt),
+            cutoff_label=cutoff.strftime("%Y-%m-%d 03:00") if cutoff else "",
+        )
     authorized_snapshot = _authorized_review_snapshot(snapshot)
     return render_template(
         "question_type_practice/result.html",

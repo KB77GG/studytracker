@@ -18,23 +18,39 @@
   }
 
   function rowMarkup(studentName, row) {
-    var match = row.match || null;
-    if (!match) {
+    var matches = Array.isArray(row.matches) && row.matches.length
+      ? row.matches
+      : (row.match ? [row.match] : []);
+    if (!matches.length) {
       return '<div class="history-student-result is-new">'
         + '<div><strong>' + escapeText(studentName) + ' · ' + escapeText(row.unit_label || row.unit_id || '题组') + '</strong>'
         + '<span>未布置</span></div>'
         + '<small>该题组尚未发现历史任务，可直接发布。</small>'
         + '</div>';
     }
-    var overlapType = row.overlap_type || match.overlap_type;
-    var blocking = ['pending', 'progress', 'in_progress'].indexOf(match.status) >= 0 && overlapType === 'exact';
-    var overlapLabel = overlapType === 'partial' ? '部分重复' : '完全重复';
+    var blocking = Boolean(row.blocking || matches.some(function (match) { return match.blocking; }));
+    var requiresConfirmation = Boolean(
+      row.requires_confirmation
+      || matches.some(function (match) { return match.requires_confirmation; })
+    );
+    var latest = matches[0];
+    var historyMarkup = matches.map(function (match) {
+      var overlapType = row.overlap_type || match.overlap_type;
+      var overlapLabel = overlapType === 'partial' ? '部分重复' : '完全重复';
+      var actionLabel = match.kind === 'question_type' ? '查看专项记录' : '查看原任务';
+      return '<small>原任务 #' + escapeText(match.task_id) + ' · 布置日期 ' + escapeText(match.assigned_date)
+        + ' · ' + escapeText(match.status_label) + ' · ' + overlapLabel
+        + ' · 重叠' + escapeText(row.unit_label || row.unit_id || match.overlap_label || '题组')
+        + ' · <a href="' + escapeText(match.view_url) + '" target="_blank" rel="noopener">' + actionLabel + '</a></small>';
+    }).join('');
+    var decisionLabel = blocking
+      ? '当前日期默认阻断'
+      : (requiresConfirmation ? '需确认复训' : '可跨日再次布置');
     return '<div class="history-student-result' + (blocking ? ' is-blocking' : ' is-warning') + '">'
       + '<div><strong>' + escapeText(studentName) + ' · ' + escapeText(row.unit_label || row.unit_id || '题组') + '</strong>'
-      + '<span>' + escapeText(match.status_label) + ' · ' + overlapLabel + '</span></div>'
-      + '<small>原任务 #' + escapeText(match.task_id) + ' · 布置日期 ' + escapeText(match.assigned_date)
-      + ' · 重叠' + escapeText(row.unit_label || row.unit_id || match.overlap_label || '题组')
-      + ' · <a href="' + escapeText(match.view_url) + '" target="_blank" rel="noopener">查看原任务</a></small>'
+      + '<span>' + escapeText(latest.status_label) + ' · ' + decisionLabel
+      + (matches.length > 1 ? ' · ' + matches.length + ' 条历史' : '') + '</span></div>'
+      + historyMarkup
       + '</div>';
   }
 
@@ -47,7 +63,10 @@
       return {
         unit_id: unit.id,
         unit_label: unit.label || unit.id,
-        match: unitMatches[0] || null
+        match: unitMatches[0] || null,
+        matches: unitMatches,
+        blocking: unitMatches.some(function (match) { return match.blocking; }),
+        requires_confirmation: unitMatches.some(function (match) { return match.requires_confirmation; })
       };
     });
   }

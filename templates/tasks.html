@@ -735,7 +735,7 @@
             {% if t.reading_test_id and t.reading_url %}<a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>{% endif %}
             {% if t.question_type_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>{% endif %}
             {% if t.writing_url %}<a class="task-action-link task-action-link--primary" href="{{ t.writing_url }}" target="_blank">{{ '打开母题' if t.writing_resource_type == 'mother_topic' else '打开写作' }}</a>{% endif %}
-            {% if t.question_type_result_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>{% endif %}
+            {% if t.question_type_result_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_result_url }}" target="_blank">逐题结果</a>{% elif t.question_type_url %}<a class="task-action-link task-action-link--primary" href="/tasks/question-types/{{ t.id }}/result" target="_blank">专项记录</a>{% endif %}
             {% if t.listening_test or t.reading_test %}<button class="task-action-link btn-attempt-history" type="button" data-task-id="{{ t.id }}">查看学习轨迹</button>{% endif %}
             {% if t.student_submitted and not t.dictation_book_id and not t.speaking_book_id %}<a class="task-action-link task-action-link--primary" href="/tasks/{{ t.id }}/review" target="_blank">批改</a>{% endif %}
             <button class="btn-edit" type="button" onclick="handleEditClick(event)">编辑</button><button class="btn-delete" type="button">删除</button>
@@ -3375,7 +3375,19 @@
         sourceRadio.checked = true;
         toggleTaskSource(source);
 
-        if (source === 'material') {
+        if (source === 'question_type') {
+          if (typeof window.taskQtaLoadRepeatPreset !== 'function') {
+            setStatus('题型专项工作区尚未就绪，请刷新后重试。', true);
+            return;
+          }
+          try {
+            await window.taskQtaLoadRepeatPreset(studentName, repeat);
+            setStatus(`已回填“${task.title}”的原完整题组；请核对新日期后发布。`);
+          } catch (error) {
+            setStatus(`专项回填失败：${error.message || error}`, true);
+          }
+          return;
+        } else if (source === 'material') {
           materialSelect.value = repeat.material_value || '';
           await toggleDetailInput();
 
@@ -3514,6 +3526,16 @@
             button.setAttribute('aria-label', `再次布置：${task.title}`);
             button.addEventListener('click', () => applyRepeatPreset(studentName, task));
             actions.appendChild(button);
+          }
+          if (task.history_url) {
+            const historyLink = document.createElement('a');
+            historyLink.className = 'previous-day-manage';
+            historyLink.href = task.history_url;
+            historyLink.target = '_blank';
+            historyLink.rel = 'noopener';
+            historyLink.textContent = '查看专项记录';
+            historyLink.setAttribute('aria-label', `查看专项记录：${task.title}`);
+            actions.appendChild(historyLink);
           }
           const manageButton = document.createElement('button');
           manageButton.type = 'button';
@@ -5896,7 +5918,7 @@
         if (!qtaHistoryNode) return;
         qtaHistoryNode.hidden = false;
         qtaHistoryNode.innerHTML = matrixMarkup(result);
-        const needsConfirm = Boolean(result.has_history);
+        const needsConfirm = Boolean(result.requires_confirmation);
         if (qtaRepeat) qtaRepeat.hidden = !needsConfirm;
       };
       const renderLegacyHistory = result => {
@@ -5948,10 +5970,12 @@
           return;
         }
         try {
-          qtaDuplicateResult = await duplicateFetch(names, qtaPayload({group_ids: qtaGroups.map(row => row.question_group_id)}));
+          const result = await duplicateFetch(names, qtaPayload({group_ids: qtaGroups.map(row => row.question_group_id)}));
           if (revision !== duplicateRevision) return;
+          qtaDuplicateResult = result;
           renderHistory(qtaDuplicateResult);
         } catch (error) {
+          if (revision !== duplicateRevision) return;
           setStatus('历史检查失败：' + error.message, true);
         }
       };
@@ -5964,8 +5988,57 @@
         const active = activeType();
         qtaScope.innerHTML = '<option value="all">全部题库</option>' + (active?.tests || []).map(id => `<option value="${escapeText(id)}">${escapeText(id)}</option>`).join('');
       };
+      window.taskQtaLoadRepeatPreset = async (studentName, repeat) => {
+        const subject = String(repeat?.question_type_subject || '');
+        const standardType = String(repeat?.question_type_standard_type || '');
+        const groupIds = Array.isArray(repeat?.question_type_group_ids)
+          ? repeat.question_type_group_ids.map(String).filter(Boolean)
+          : [];
+        if (!subject || !standardType || !groupIds.length) throw new Error('旧专项快照不完整，无法自动再次布置');
+        if (!qtaTypes.some(row => row.subject === subject && row.standard_type === standardType)) {
+          throw new Error('旧专项题型当前不可用');
+        }
+        document.querySelectorAll('[name="question_type_student_names"]').forEach(input => {
+          input.checked = input.value === studentName;
+        });
+        qtaSubject.value = subject;
+        refreshQtaTypes();
+        qtaType.value = standardType;
+        refreshQtaTypes();
+        qtaPace.value = repeat.question_type_pace || 'training';
+        qtaCount.value = groupIds.length;
+        qtaMinutes.value = Number(repeat.planned_minutes || qtaMinutes.value || 25);
+        const noteInput = document.getElementById('taskNote');
+        if (noteInput) noteInput.value = repeat.note || '';
+        if (qtaIncludeHistory) qtaIncludeHistory.checked = false;
+        if (qtaConfirm) qtaConfirm.checked = false;
+        if (qtaReason) qtaReason.value = '';
+
+        const revision = ++duplicateRevision;
+        qtaGroups = [];
+        qtaDuplicateResult = null;
+        renderGroups();
+        qtaPublishButton.disabled = true;
+        setStatus('正在恢复昨日专项的完整题组…');
+        const response = await fetch('/api/question-type-practice/preview', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(qtaPayload({group_ids: groupIds, exclude_group_ids: []})),
+        });
+        const preview = await response.json();
+        if (revision !== duplicateRevision) throw new Error('选择已变化，请重新点击再次布置');
+        if (!response.ok || !preview.ok) throw new Error(preview.error || '旧专项题组当前不可用');
+        qtaGroups = preview.groups || [];
+        renderGroups();
+        qtaPanel.hidden = false;
+        qtaSummary.textContent = `${qtaGroups.length} 个完整题组 · ${preview.selection.question_count} 题`;
+        await refreshQtaHistory();
+        qtaPublishButton.disabled = !qtaGroups.length;
+        setStatus('已恢复昨日专项的原完整题组；历史记录保留，新任务将使用当前所选日期。');
+      };
       window.taskQtaRefresh = refreshQtaTypes;
       const clearQtaSelection = () => {
+        duplicateRevision += 1;
         qtaGroups = [];
         if (qtaGroupsNode) qtaGroupsNode.innerHTML = '';
         if (qtaHistoryNode) { qtaHistoryNode.innerHTML = ''; qtaHistoryNode.hidden = true; }
@@ -5978,16 +6051,19 @@
       qtaPreviewButton?.addEventListener('click', async () => {
         const names = selectedStudents();
         if (!names.length) { setStatus('请至少选择一名专项学生', true); return; }
+        const revision = ++duplicateRevision;
         qtaPreviewButton.disabled = true;
         qtaPublishButton.disabled = true;
-        setStatus('正在排除所选学生做过的题组，并运行题面安全检查…');
+        setStatus('正在核对所选日期的历史题组，并运行题面安全检查…');
         try {
           const history = await duplicateFetch(names, qtaPayload());
+          if (revision !== duplicateRevision) return;
           const excludedGroupIds = history.excluded_group_ids || [];
           if (qtaIncludeHistoryRow) qtaIncludeHistoryRow.hidden = !excludedGroupIds.length;
-          if (qtaExclusionNotice) qtaExclusionNotice.textContent = excludedGroupIds.length && !qtaIncludeHistory?.checked ? `已为本批学生自动排除 ${excludedGroupIds.length} 个历史题组；如需复训，请勾选上方选项后重新预览。` : '';
+          if (qtaExclusionNotice) qtaExclusionNotice.textContent = excludedGroupIds.length && !qtaIncludeHistory?.checked ? `已自动排除 ${excludedGroupIds.length} 个仍在同日防重复或需确认复训的题组；更早未完成题组仍可直接再次布置。` : '';
           const previewResponse = await fetch('/api/question-type-practice/preview', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(qtaPayload({exclude_group_ids: qtaIncludeHistory?.checked ? [] : excludedGroupIds}))});
           const preview = await previewResponse.json();
+          if (revision !== duplicateRevision) return;
           if (!previewResponse.ok || !preview.ok) throw new Error(preview.error || 'preview_failed');
           qtaGroups = preview.groups || [];
           renderGroups();
@@ -6005,14 +6081,14 @@
       window.taskQtaPublish = async () => {
         const names = selectedStudents();
         if (!names.length || !qtaGroups.length) { setStatus('请先选择学生并完成预览', true); return; }
-        const hasHistory = Boolean(qtaDuplicateResult?.has_history);
+        const needsConfirmation = Boolean(qtaDuplicateResult?.requires_confirmation);
         const confirmed = Boolean(qtaConfirm?.checked);
         const reason = qtaReason?.value.trim() || '';
-        if (hasHistory && (!confirmed || reason.length < 2)) { setStatus('检测到历史重复：请二次确认并填写复训原因。', true); qtaRepeat.hidden = false; return; }
+        if (needsConfirmation && (!confirmed || reason.length < 2)) { setStatus('检测到需确认的历史重复：请二次确认并填写复训原因。', true); qtaRepeat.hidden = false; return; }
         if (!idempotencyInput.value) idempotencyInput.value = (window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`).replace(/[^A-Za-z0-9_.:-]/g, '-');
         qtaPublishButton.disabled = true; setStatus('正在发布，服务器会再次执行重复检查…');
         try {
-          const response = await fetch('/api/question-type-practice/assign', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(qtaPayload({student_names: names, group_ids: qtaGroups.map(row => row.question_group_id), idempotency_key: idempotencyInput.value, force_repeat: hasHistory, confirm_repeat: confirmed, force_reason: reason}))});
+          const response = await fetch('/api/question-type-practice/assign', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(qtaPayload({student_names: names, group_ids: qtaGroups.map(row => row.question_group_id), idempotency_key: idempotencyInput.value, force_repeat: needsConfirmation, confirm_repeat: confirmed, force_reason: reason}))});
           const data = await response.json();
           if (!response.ok || !data.ok) {
             if (data.students) { window.__renderTaskDuplicateResult?.(data); }
@@ -6064,6 +6140,11 @@
       });
       sourceInputs.forEach(input => input.addEventListener('change', () => { clearLegacyHistory(); scheduleLegacyHistory(); }));
       document.querySelectorAll('[name="question_type_student_names"]').forEach(input => input.addEventListener('change', () => { if (qtaGroups.length) refreshQtaHistory(); }));
+      document.getElementById('taskDate')?.addEventListener('change', () => {
+        duplicateRevision += 1;
+        if (qtaGroups.length) refreshQtaHistory();
+        else qtaDuplicateResult = null;
+      });
       const inspector = document.getElementById('taskInspector');
       const resetInspector = () => {
         document.querySelectorAll('.task-subtable tbody tr.is-selected').forEach(item => item.classList.remove('is-selected'));
