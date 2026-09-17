@@ -1,7 +1,23 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-06 Web 题型专项全库审计、共因修复与三页视觉收敛已上线。
+> 最近更新：2026-09-17 Web 题型专项解析与听力片段候选独立终审 GO；终审用环境已清理，当前另有 5092 隔离预览供用户查看，等待用户决定是否发布。
+
+## 2026-09-17 Web 题型专项解析与听力片段（仅本机，独立终审 GO，未发布）
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/86d7/studytracker`，分支 `codex/question-type-review-audio`，基线 / HEAD 均为 `origin/main@df1463f9363996a2495477d5615935ada3e54e05`。开工时干净；当前 modified 为 `api/question_type_practice.py`、`services/question_type_practice.py`、`static/css/practice_shell.css`、`static/js/practice_renderers.js`、`templates/listening/test_practice.html`、`templates/question_type_practice/result.html` 与四份既有测试；untracked 为 `services/question_type_review.py`、`static/js/listening_clip_player.js`、`data/listening_audio_timeline_overrides.json`、两份新测试、本执行报告和两张匿名 PNG。精确清单以 `git status --short` 为准。
+- 已完成：提交后恢复冻结题目的解析 / 答案依据；Listening 训练态题组范围、复盘逐题片段、终点自动暂停、单音频互斥和完整 Section 回退。运行时深拷贝派生，不改旧 / 新任务 snapshot、hash 或成绩；提交前继续去答案 / 解析 / 原文 / 逐题片段，考试节奏不暴露定位窗口。Reading 兼容真实题库数组形态的 `central_sentences`。
+- 首轮独立审阅发现并已修复两项：一是冻结题目坐标不能和当前 sidecar 来源坐标直接数值重叠，现由坐标选冻结 transcript 证据，再以完整句 / 拆合句语义对齐当前 sidecar，并用 `source_order` 消歧；二是失效时间轴下原文行仍能触发 seek 且 `playFrom` 绕过时长校验，现原文只读、精听 / 听写禁用，`playFrom` 与片段播放共用可信媒体闸门。
+- 第二轮独立复审已确认首轮两项、fallback 页和 Reading 页通过，同时发现 IELTS20 T1S1 Q2 冻结长句拆成两条 sidecar 后只保留后半句、漏掉 `roof`。现拆合句映射选择有新增词覆盖的有序 sidecar 行，并用 `SequenceMatcher(autojunk=False)` 要求组合文本完整覆盖冻结整行。最终合成 probe 进一步要求长铺垫后的短答案尾句不能因提前达标而丢失，且一题重叠的每条冻结 evidence 都必须成功映射；缺任一词或整行都回退。
+- 时间基准：按当前资产选择 `sidecar_current` 或 `source_original`，不使用语义不一致的 `lyc_index`，也不再假定冻结 / 当前坐标同轴。同名媒体由 sidecar SHA 和每个已知版本的媒体 SHA / 大小 / 时长显式绑定；C20T1S1 本机纯对话轨选 `sidecar_current`，生产完整轨选 `source_original`，C21T3S1 原容器 / seek-index 重封装均选 `sidecar_current`。未知版本、缺失、改变、无语义证据或非法边界全部回退。没有新增或改动受版本控制的 MP3、题库 JSON、schema、生产配置。
+- 审计：84 文件 / 336 Section 全部有可用时间轴；3,358 / 3,360 题和 656 / 658 题组可定位。每道可用题的每条冻结重叠 evidence，在当前 evidence 有序组合中的按词覆盖率必须为 100%；没有样例白名单。`ielts10_test2` S1 Q1 无冻结 transcript 重叠行、`ielts4_test3` S1 Q4 边界倒置，两题及对应组明确回退完整 Section。IELTS21 T3 Q1/Q2 为 `Northern Ferries` / `seven days a week`；IELTS20 T1S1 Q2 覆盖 `roof` 与 `need to book` 两段 66.84–81.48，Q6 只落 `Baxter Bridge` 189.24–193.88。实际媒体只读根是 `/Users/zhouxin/Desktop/studytracker/static/listening`。
+- 验证：完整 Python **756 passed / 72 subtests passed**（临时挂载桌面仓已有 MP3 fixture 后通过，fixture 链接已清理）；最终相关 Python **66 passed / 19 subtests passed**、Node **92 passed**；目标 Ruff / 编译 / JS syntax / diff check 通过。独立终审另跑 Python **54 passed / 2 subtests passed**、Node **55 passed**，自建两个边界 probe、336 Section / 3,358 可用题的 100% 冻结词序覆盖、snapshot 不变和 336 个真实 MP3 `ffprobe` / 边界均通过。Chrome `roof` 从 64.160604 秒播放、83.682981 秒已暂停、duration 279.84，两条依据完整，console 空；最终结论 **GO**。证据在 `docs/evidence/question-type-review-audio-2026-09-17/`，详细命令和契约见 `docs/QUESTION_TYPE_REVIEW_AUDIO_EXECUTION.md`。
+- 临时环境已清理：`127.0.0.1:5091` 已停止，本轮四个 worktree 媒体 symlink 均删除，没有覆盖桌面真实文件。桌面 `ielts20_test1_s1.mp3` 仍为 4,510,888-byte 普通文件，SHA-256 `ec0bc0dc1ab21bd1d18e6397a9c4b7978a292a66da8273c2637798dfa1c9dfa4`。
+- 用户查看用新预览当前运行于 `http://127.0.0.1:5092/preview`，稳定无 token 入口为 `/preview/open/listening-practice`、`/preview/open/listening-review`、`/preview/open/reading-review`；入口页 200，三个跳转均已跟随到最终 200。三个虚构示例覆盖 Listening 训练、Listening / Reading 已提交复盘，后两者都含正确 / 错误 / 未作答；Chrome 已确认 IELTS20 T1S1 Q2 的 `roof` 完整原句、解析和有界片段，媒体时长 279.84 秒。
+- 该预览仅使用 `tests/test_question_type_practice_routes.py` fixture、`sqlite:///:memory:` 和 loopback Flask 对 Desktop 音频的只读发送，不读写生产或真实学生数据，工作树没有媒体 symlink。隔离目录 `/var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/studytracker-user-preview-w25d9d1g` 内含 `preview.py` / `preview.log` / `preview.pid`，当前 PID 42674；运行时 token 每次重启重建，不写仓库。服务需保留给用户查看；清理前先核对 PID 命令确实指向该绝对 `preview.py` 且监听 5092，再只停止该进程并删除该精确临时目录，不能删除 Desktop 源媒体。
+- 发布前生产媒体只读审计覆盖 336 / 336 个文件；99 个整文件 hash 差异进一步做去容器 MP3 packet hash 后 99 / 99 内容一致。唯一实际不同的 canonical 音轨是 C20T1S1 的生产完整轨与本机纯对话轨；生产完整轨和保留原轨 packet 相同。多版本契约修复后，用生产实体只读临时副本验证 C20 自动选择 `source_original`，Q2 `roof` 两条依据为 107.285–121.925 秒；C21 自动选择生产 seek-index 版本，语义定位不变。临时副本已删除，生产未改；摘要证据已入执行报告 evidence。
+- 独立发布复审已通过：候选 service / registry SHA-256 分别为 `6dfdb1469efefd1443e7bfef2713786108bf159bbea66c14758d61967c135192` / `1e460ddadbc0aac7e16c308397f9d6a7b26a6ea78240500eb14164fca2b22234`，与生产 Python 3.10 内存全库审计使用的候选一致；独立五文件窄集 **56 passed / 2 subtests passed**，发布暂停已解除。
+- 发布状态：全部仅本机可见，尚未 commit / push / deploy，未写生产数据库或学生数据；小程序未改、未上传 / 提审 / 发布。用户最终范围只保障浏览器刷题网页，并明确排除微信页面、小程序与微信内置 WebView；Safari 未单独验证，主观音频听辨仍未做。用户已明确授权按既有链路 commit / push / deploy；下一步形成业务提交并原子更新任务分支 / main，跟踪 CI / Deploy 后做生产只读验收。
 
 ## 2026-09-06 Web 题型专项执行复核与三页收敛已上线
 

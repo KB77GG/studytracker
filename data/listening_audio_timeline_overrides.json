@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "assets": {
+    "ielts20_test1_s1.mp3": {
+      "sidecar": "ielts20_test1_s1.json",
+      "sidecar_sha256": "1d3ccba6dedf556d484b5a02af5dc0b7ad4322004f99dc7422e84352a0b348e6",
+      "default_media_version": "dialogue_current",
+      "media_versions": [
+        {
+          "id": "dialogue_current",
+          "timeline_basis": "sidecar_current",
+          "media_sha256": "ec0bc0dc1ab21bd1d18e6397a9c4b7978a292a66da8273c2637798dfa1c9dfa4",
+          "media_size_bytes": 4510888,
+          "media_duration_seconds": 279.84,
+          "reason": "Verified 45-sentence dialogue-only track."
+        },
+        {
+          "id": "production_seek_indexed_original",
+          "timeline_basis": "source_original",
+          "media_sha256": "2491294730dc2352e6a7bd048af897392685478ac6f19ff0266788a17861a89a",
+          "media_size_bytes": 10454245,
+          "media_duration_seconds": 436.218776,
+          "reason": "Production full Section remux with a seek index; compressed audio frames match the preserved original track."
+        }
+      ]
+    },
+    "ielts21_test3_s1.mp3": {
+      "sidecar": "ielts21_test3_s1.json",
+      "sidecar_sha256": "fde28942fa02b8d26794ea5c178f779f50f05261d64610081885db33d19fc11f",
+      "default_media_version": "original_container",
+      "media_versions": [
+        {
+          "id": "original_container",
+          "timeline_basis": "sidecar_current",
+          "media_sha256": "416f786615d82791775e771123a378883ccfb039802f83e00f72d661487a5a79",
+          "media_size_bytes": 10367812,
+          "media_duration_seconds": 431.992167,
+          "reason": "Original imported container used by local fixtures."
+        },
+        {
+          "id": "production_seek_indexed",
+          "timeline_basis": "sidecar_current",
+          "media_sha256": "a51a88308851a1d26186ac45b96e70ab286df4685cde55a6cb03288bad0e71b5",
+          "media_size_bytes": 10368483,
+          "media_duration_seconds": 432.64,
+          "reason": "Production seek-index remux; compressed audio frames match the original imported track."
+        }
+      ]
+    }
+  }
+}

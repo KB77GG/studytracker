@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-17",
+  "production_media_count": 336,
+  "local_media_count": 336,
+  "ffprobe_success_count": 336,
+  "whole_file_sha256_differences": 99,
+  "duration_differences_over_0_75_seconds": 39,
+  "packet_content_comparisons": 99,
+  "packet_content_matches": 99,
+  "packet_content_mismatches": [],
+  "packet_hash_method": "ffmpeg -map 0:a:0 -c:a copy -f hash -hash sha256 -",
+  "interpretation": "For 98 assets, production and local canonical MP3 packet streams are identical despite container or seek-index differences. IELTS 20 Test 1 Section 1 is the only materially different canonical track: production is the seek-indexed full Section, while local canonical is the dialogue-only edit. The production stream matches the preserved pre-45-sentence original packet-for-packet.",
+  "ielts20_test1_s1": {
+    "production": {
+      "sha256": "2491294730dc2352e6a7bd048af897392685478ac6f19ff0266788a17861a89a",
+      "size_bytes": 10454245,
+      "duration_seconds": 436.218776,
+      "timeline_basis": "source_original"
+    },
+    "local_dialogue_only": {
+      "sha256": "ec0bc0dc1ab21bd1d18e6397a9c4b7978a292a66da8273c2637798dfa1c9dfa4",
+      "size_bytes": 4510888,
+      "duration_seconds": 279.84,
+      "timeline_basis": "sidecar_current"
+    },
+    "production_and_preserved_original_packet_sha256": "a5ba4472a44e6c4f4f1efc19e2efa09f327fb0dd07c169b45fce264076057af8"
+  },
+  "ielts21_test3_s1": {
+    "production": {
+      "sha256": "a51a88308851a1d26186ac45b96e70ab286df4685cde55a6cb03288bad0e71b5",
+      "size_bytes": 10368483,
+      "duration_seconds": 432.64,
+      "timeline_basis": "sidecar_current"
+    },
+    "local_original_container": {
+      "sha256": "416f786615d82791775e771123a378883ccfb039802f83e00f72d661487a5a79",
+      "size_bytes": 10367812,
+      "duration_seconds": 431.992167,
+      "timeline_basis": "sidecar_current"
+    },
+    "shared_packet_sha256": "416f786615d82791775e771123a378883ccfb039802f83e00f72d661487a5a79"
+  }
+}

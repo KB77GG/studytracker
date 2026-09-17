@@ -18,18 +18,18 @@ function between(startMarker, endMarker) {
 }
 
 function reviewRuntime() {
-  const audioHelpers = between('function questionAudioStart(', '\n\nfunction seekTo(');
+  const audioHelpers = between('function questionAudioWindow(', '\n\nfunction seekTo(');
   const questionHelpers = between('function questionForId(', '\n\nfunction updateReviewCards(');
   const openReview = between('function openReviewCard(', '\n\nfunction answerSnapshot(');
-  const calls = { sections: [], seeks: [], scrolls: 0, syncs: 0 };
+  const calls = { sections: [], plays: [], scrolls: 0, syncs: 0 };
   const cards = [
     { dataset: { reviewQuestion: '22081' }, classList: { toggle(_name, open) { this.open = open; } } },
     { dataset: { reviewQuestion: '22082' }, classList: { toggle(_name, open) { this.open = open; } } }
   ];
   const questions = [
-    { id: 22081, number: 7, sectionIndex: 2, start: 240.25 },
-    { id: 22082, number: 8, sectionIndex: 3, start: null },
-    { id: 22083, number: 9, sectionIndex: 0, start: 0 }
+    { id: 22081, number: 7, sectionIndex: 2, audio_review: { available: true, start: 230.25, end: 244.5 } },
+    { id: 22082, number: 8, sectionIndex: 3, audio_review: { available: false, reason: '定位不可用' } },
+    { id: 22083, number: 9, sectionIndex: 0, audio_review: { available: true, start: 0, end: 8 } }
   ];
   const context = {
     __calls: calls,
@@ -43,7 +43,7 @@ function reviewRuntime() {
       closest: () => ({ scrollIntoView: () => { calls.scrolls += 1; } })
     }),
     switchSection: (index) => { calls.sections.push(index); },
-    seekTo: (sectionIndex, seconds) => { calls.seeks.push([sectionIndex, seconds]); },
+    playQuestionAudio: (questionId, sectionIndex) => { calls.plays.push([String(questionId), sectionIndex]); },
     syncQuestionNav: () => { calls.syncs += 1; },
     Number,
     String
@@ -60,37 +60,45 @@ function reviewRuntime() {
   return context;
 }
 
-test('review focus resolves a displayed question number and seeks its source timestamp', () => {
+test('review focus resolves a displayed question number and plays its verified clip', () => {
   const runtime = reviewRuntime();
   vm.runInContext(`openReviewCard('7', true, true)`, runtime);
 
   assert.deepEqual(runtime.__calls.sections, [2]);
-  assert.deepEqual(runtime.__calls.seeks, [[2, 240.25]]);
+  assert.deepEqual(runtime.__calls.plays, [['22081', 2]]);
   assert.equal(runtime.__calls.scrolls, 1);
   assert.equal(runtime.__cards[0].classList.open, true);
   assert.equal(runtime.__cards[1].classList.open, false);
 });
 
-test('review focus changes section but does not seek when a question has no timestamp', () => {
+test('review focus still delegates an unavailable window to the Section fallback', () => {
   const runtime = reviewRuntime();
   vm.runInContext(`openReviewCard('22082', true, true)`, runtime);
 
   assert.deepEqual(runtime.__calls.sections, [3]);
-  assert.deepEqual(runtime.__calls.seeks, []);
+  assert.deepEqual(runtime.__calls.plays, [['22082', 3]]);
   assert.equal(runtime.__calls.scrolls, 1);
 });
 
-test('zero is a valid audio timestamp and receives a visible review locator', () => {
+test('zero is a valid verified clip start and receives a visible review locator', () => {
   const runtime = reviewRuntime();
   const result = vm.runInContext(`({
-    start: questionAudioStart(__questions[2]),
+    window: questionAudioWindow(__questions[2]),
     locator: reviewAudioLocator(__questions[2], 0)
   })`, runtime);
 
-  assert.equal(result.start, 0);
-  assert.match(result.locator, /定位音频 0:00/);
-  assert.match(result.locator, /seekTo\(0, 0\)/);
+  assert.equal(result.window.start, 0);
+  assert.equal(result.window.end, 8);
+  assert.match(result.locator, /播放定位片段 0:00–0:08/);
+  assert.match(result.locator, /playQuestionAudio\('22083', 0\)/);
   assert.match(result.locator, /data-capability="canShowCorrectness" hidden/);
+});
+
+test('unavailable question locator is explicit about the full Section fallback', () => {
+  const runtime = reviewRuntime();
+  const locator = vm.runInContext(`reviewAudioLocator(__questions[1], 3)`, runtime);
+  assert.match(locator, /定位不可用 · 播放完整 Section/);
+  assert.match(locator, /data-audio-fallback="section"/);
 });
 
 test('every review entry point is wired to seek while initial review loading remains silent', () => {
@@ -108,4 +116,44 @@ test('every listening question renderer keeps a hidden locator ready for review'
   assert.match(TEMPLATE, /renderMatching\([\s\S]*\$\{reviewAudioLocator\(question, sectionIndex\)\}/);
   assert.match(TEMPLATE, /\(hasCollect \|\| hasTable \|\| combinedMulti\)[\s\S]*\$\{reviewAudioLocator\(q, sectionIndex\)\}/);
   assert.match(TEMPLATE, /data-review-audio-question="\$\{id\}" data-capability="canShowCorrectness" hidden/);
+});
+
+test('transcript seeks share the trusted timeline gate and expected media duration', () => {
+  const helpers = between('function sectionAudioTimeline(', '\n\nfunction transcriptIndexAt(');
+  const calls = { fallback: [], playFrom: [], sync: [] };
+  const context = {
+    test: {
+      sections: [
+        { audio_timeline: { available: false, reason: '版本不匹配' } },
+        { audio_timeline: { available: true, expected_duration: 123.5 } }
+      ]
+    },
+    experienceCapabilities: { canSeekAudio: true },
+    playCompleteSection: (sectionIndex, fallback) => calls.fallback.push([sectionIndex, fallback]),
+    listeningClipPlayer: {
+      playFrom: options => calls.playFrom.push(options)
+    },
+    syncTranscriptAt: (sectionIndex, seconds) => calls.sync.push([sectionIndex, seconds]),
+    Number
+  };
+  vm.createContext(context);
+  vm.runInContext(helpers, context);
+
+  vm.runInContext('seekTo(0, 88)', context);
+  assert.deepEqual(calls.fallback, [[0, true]]);
+  assert.deepEqual(calls.playFrom, []);
+  assert.deepEqual(calls.sync, [[0, 0]]);
+
+  vm.runInContext('seekTo(1, 22)', context);
+  assert.equal(calls.playFrom.length, 1);
+  assert.equal(calls.playFrom[0].sectionIndex, 1);
+  assert.equal(calls.playFrom[0].start, 22);
+  assert.equal(calls.playFrom[0].expectedDuration, 123.5);
+});
+
+test('untrusted transcript text stays readable but all sentence controls are disabled', () => {
+  assert.match(TEMPLATE, /transcript-timeline-warning/);
+  assert.match(TEMPLATE, /transcript-row\$\{timeline\.available \? '' : ' is-static'\}/);
+  assert.match(TEMPLATE, /timeline\.available \? `onclick="seekTo/);
+  assert.match(TEMPLATE, /<button class="small-btn" type="button" disabled>定位不可用<\/button>/);
 });

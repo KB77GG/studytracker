@@ -4,6 +4,28 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-09-17 — 题型专项用户预览运行中（仅浏览器刷题网页）
+
+- 在不改动已独立终审 GO 的业务候选前提下，启动独立用户预览 `http://127.0.0.1:5092/preview`。三个无 token 稳定入口覆盖 Listening 训练、Listening 已提交复盘、Reading 已提交复盘；两个结果页均放入完全虚构的正确 / 错误 / 未作答混合示例。入口页 200，三个跳转均已跟随到最终 200；Chrome 再次确认 IELTS20 T1S1 Q2 显示 `roof` 完整原句 / 解析并可进入有界片段，真实媒体时长 279.84 秒。
+- 预览目录为 `/var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/studytracker-user-preview-w25d9d1g`，含 `preview.py`、`preview.log`、`preview.pid`，当前 PID 42674 / `127.0.0.1:5092`。它复用路由测试 fixture 与内存 SQLite，loopback Flask 只读发送 Desktop 音频；不碰生产 / 真实学生数据，执行树没有媒体软链接，临时 token 不写仓库。服务按用户要求继续运行；清理前须核对 PID 命令与绝对 `preview.py`、5092 监听一致，再只停止该进程和删除该精确临时目录，不能删除 Desktop 源媒体。
+- 用户最终范围仅为浏览器刷题网页，并明确排除微信页面、小程序与微信内置 WebView；Safari 未单独验证。当前仍未 commit / push / deploy，生产与小程序均未变化；本条只同步预览 / 范围 / 外部运行状态，业务代码保持冻结。
+
+## 2026-09-17 — 发布前生产媒体差异闭环，独立复核通过
+
+- 用户授权部署后，推送前只读发现生产 C20T1S1 为 436.218776 秒完整 Section，而本机 canonical 为 279.84 秒纯对话轨；直接沿单版本契约会在生产回退。生产 336 个 MP3 与本机全部可 probe；99 个整文件 hash 不同、39 个容器时长差超过 0.75 秒，但去容器比较 MP3 packet 后 99 / 99 内容一致。唯一实际音轨版本差异是 C20T1S1；生产完整轨与保留原轨 packet 相同。C21T3S1 只是 seek-index 重封装，音频 packet 与本机相同。
+- 最小修复把覆盖清单升级为显式多版本契约：按实际 SHA + 大小选择 timeline basis / expected duration。C20 纯对话轨用 `sidecar_current`、生产完整轨用 `source_original`；C21 原容器 / 生产重封装都用 `sidecar_current`；未知版本继续回退。未改 MP3、题库、schema、配置或小程序。
+- 新增生产实体只读 probe：C20 选中 `production_seek_indexed_original`，`roof` 两条依据为 107.285–121.925 秒；C21 选中 `production_seek_indexed`，`Northern Ferries` / `seven days a week` 不变。临时副本已删除。本任务 Python **55 passed / 2 subtests passed**、Node **46 passed**；独立五文件窄集 **56 passed / 2 subtests passed**，并在生产 Python 3.10 内存中以同 SHA 候选跑通 336 Section / 3,358 可用题 / 656 可用组、真实生产时长边界与 payload 不变。目标 Ruff / compile / syntax / JSON / diff check 通过，发布暂停已解除；下一步继续用户已授权的 commit / push / deploy，5092 用户预览继续运行。
+
+## 2026-09-17 — Web 题型专项解析与听力片段本机候选
+
+- 在独立 worktree `/Users/zhouxin/.codex/worktrees/86d7/studytracker`、`codex/question-type-review-audio@df1463f9` 完成提交后授权复盘、Reading / Listening 解析与依据、Listening 训练题组范围、逐题有界播放、单音频互斥、当前媒体版本绑定和完整 Section 回退；旧 / 新任务均运行时派生，不改冻结 snapshot/hash/成绩，提交前与考试节奏不泄露复盘数据。
+- 首轮独立审阅发现冻结题目与当前 sidecar 不同轴导致提示语错配，以及失效时间轴原文仍可 seek；已改为“冻结坐标选冻结证据行 → 文本语义对齐当前 sidecar”，并统一 transcript / 片段的媒体版本闸门。IELTS21 T3 Q1/Q2 已落到 `Northern Ferries` / `seven days a week`，IELTS20 T1S1 Q6 只落 `Baxter Bridge`；失效合约下原文不可点且只回退完整 Section。
+- 第二轮独立复审确认上述两项、fallback 与 Reading 均通过，但抓到 IELTS20 T1S1 Q2 一条冻结长句被 sidecar 拆成两行后漏掉 `roof` 前半句。现一对多映射按词序列选择有新增覆盖的有序行，最终要求冻结整句 100% 覆盖；最终合成 probe 又封住长铺垫提前达标漏短答案，以及多条冻结 evidence 只映射部分的漏洞，缺任一词或整行都回退。Q2 当前 evidence 同时包含 `roof` 与 `need to book`，答案区间 66.84–81.48。
+- 全库 84 文件 / 336 Section 时间轴全可用，3,358 / 3,360 题、656 / 658 题组可定位；逐题审计要求每条冻结重叠 evidence 在当前组合 evidence 中 100% 覆盖，未设样例白名单，两道真实历史异常题明确回退。浏览器验证 IELTS20 Q2 两条依据及真实重建轨 83.70 秒自动停；先前语义片段、失效回退、Davies 阅读依据和 console 均已独立复审通过。匿名证据在 `docs/evidence/question-type-review-audio-2026-09-17/`。
+- 全仓 Python **756 passed / 72 subtests passed**，最终相关 Python **66 passed / 19 subtests passed**、Node **92 passed**，目标 Ruff / py_compile / JS syntax / diff check 全通过。详细根因、时间基准、命令、统计与未验证项见 `docs/QUESTION_TYPE_REVIEW_AUDIO_EXECUTION.md`。
+- 独立终审另跑 Python **54 passed / 2 subtests passed**、Node **55 passed**，两个自建边界 probe、336 Section / 3,358 可用题的 100% 冻结词序覆盖、snapshot 不变、336 个真实 MP3 `ffprobe` 和逐题 / 题组实际时长边界全部通过。Chrome `roof` 64.160604→83.682981 秒自动停，duration 279.84，两条依据完整，console 空；结论 **GO**。
+- 当前全部仅本机未提交 / 未跟踪，未 commit / push / deploy，未写生产或学生数据；受版本控制内容没有 MP3、题库、schema、生产配置或小程序改动。5091 合成服务与本轮四个临时媒体 symlink 已全部清理，桌面真实 `ielts20_test1_s1.mp3` 保持普通文件且哈希 `ec0bc0dc…dfa4`。Safari / 微信 WebView / 真机 / 主观听辨未验，下一步等待用户明确授权是否 commit / push / deploy。
+
 ## 2026-09-06 — Web 题型专项全库审计与三页收敛已上线
 
 - 在干净独立 worktree `/Users/zhouxin/.codex/worktrees/87b6/studytracker`、`codex/question-type-web-refinement@dbf781e5` 完成可达 558 文件 / 11,969 题审计；新增单命令 scanner。修复结构 HTML 外露、完整 placeholder completion 被错分 matching、缺 marker 无控件三项共因；题库原文不改，审阅发现的无依据题文修改已精确恢复并重拍 Reading 截图。

@@ -762,8 +762,36 @@ test('all catalogued ZYZ complete placeholder option stems keep one inline contr
 })
 
 test('review cards use explicit textual status in addition to color', () => {
-  const question = { id: 7, number: 7, answer: 'son', analysis: 'Listen for the relationship.' }
-  assert.ok(renderers.renderReviewCard(question, { status: 'correct' }, 'son').includes('✓ 正确'))
+  const question = {
+    id: 7,
+    number: 7,
+    answer: 'son',
+    analysis: 'Listen for the relationship.',
+    audio_review: { evidence: [{ text: 'He is my <son>.' }] }
+  }
+  const correct = renderers.renderReviewCard(question, { status: 'correct' }, 'son')
+  assert.ok(correct.includes('✓ 正确'))
+  assert.ok(correct.includes('Listen for the relationship.'))
+  assert.ok(correct.includes('He is my &lt;son&gt;.'))
+  assert.ok(renderers.renderReviewCard(question, { status: 'partial' }, 'son,friend').includes('△ 部分正确'))
   assert.ok(renderers.renderReviewCard(question, { status: 'incorrect' }, 'friend').includes('× 错误'))
   assert.ok(renderers.renderReviewCard(question, null, '').includes('— 未作答'))
+})
+
+test('review cards state when frozen legacy questions have no explanation or evidence', () => {
+  const html = renderers.renderReviewCard({ id: 8, number: 8, answer: 'A' }, { status: 'incorrect' }, 'B')
+  assert.ok(html.includes('本题暂无解析'))
+  assert.ok(html.includes('题库暂无可展示的答案依据'))
+})
+
+test('review cards render the reading corpus array form of central sentences', () => {
+  const html = renderers.renderReviewCard({
+    id: 9,
+    number: 9,
+    answer: 'F',
+    analysis: 'The claim contradicts the passage.',
+    central_sentences: [{ sentence: 'Unique to this <region>.' }]
+  }, { status: 'incorrect' }, 'T')
+  assert.ok(html.includes('Unique to this &lt;region&gt;.'))
+  assert.ok(!html.includes('题库暂无可展示的答案依据'))
 })

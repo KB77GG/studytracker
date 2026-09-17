@@ -97,6 +97,7 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
             db.session.add(profile)
             db.session.commit()
             self.staff_id = staff.id
+            self.student_id = student_user.id
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -113,6 +114,11 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
     def _login_staff(self):
         with self.client.session_transaction() as flask_session:
             flask_session["_user_id"] = str(self.staff_id)
+            flask_session["_fresh"] = True
+
+    def _login_student(self):
+        with self.client.session_transaction() as flask_session:
+            flask_session["_user_id"] = str(self.student_id)
             flask_session["_fresh"] = True
 
     def _create_reading_task(self):
@@ -222,7 +228,17 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         row = self._create_reading_task()
         task_id = row["id"]
         with self.app.app_context():
-            token = db.session.get(Task, task_id).reading_access_token
+            task = db.session.get(Task, task_id)
+            token = task.reading_access_token
+            snapshot = snapshot_from_task(task)
+            source_question = snapshot["payload"]["passages"][0]["groups"][0]["questions"][0]
+            analysis = source_question["analysis"]
+        live_page = self.client.get(f"/practice/question-types/task/{task_id}?token={token}")
+        self.assertEqual(live_page.status_code, 200, live_page.get_data(as_text=True))
+        live_body = live_page.get_data(as_text=True)
+        self.assertNotIn('"analysis":', live_body)
+        self.assertNotIn('"central_sentences":', live_body)
+        self.assertNotIn(json.dumps(analysis, ensure_ascii=True)[1:-1], live_body)
         draft_url = f"/api/question-type-practice/task/{task_id}/draft?token={token}"
         submit_url = (
             f"/api/question-type-practice/task/{task_id}/submit?token={token}"
@@ -259,7 +275,15 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         self.assertIn('"highlight_path": "/practice/question-types/task/', review_body)
         self.assertIn('"draft_url": null', review_body)
         self.assertIn('"read_only": true', review_body)
+        self.assertIn('"analysis":', review_body)
+        self.assertIn('"central_sentences":', review_body)
+        self.assertIn(json.dumps(analysis, ensure_ascii=True)[1:-1], review_body)
         self.assertNotIn('class="qtr"', review_body)
+        refreshed = self.client.get(submitted_payload["next_url"])
+        self.assertEqual(refreshed.status_code, 200, refreshed.get_data(as_text=True))
+        completed_entry = self.client.get(f"/practice/question-types/task/{task_id}?token={token}")
+        self.assertEqual(completed_entry.status_code, 302)
+        self.assertIn(f"/practice/question-types/task/{task_id}/result", completed_entry.location)
         with self.app.app_context():
             task = db.session.get(Task, task_id)
             attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task_id).one()
@@ -298,6 +322,61 @@ class QuestionTypePracticeRouteTest(unittest.TestCase):
         self.assertIn('"initial_review"', body)
         self.assertIn('"highlight_path": "/practice/question-types/task/', body)
         self.assertIn('"draft_url": null', body)
+        self.assertIn('"read_only": true', body)
+        self.assertIn('"analysis":', body)
+        self.assertIn('"audio_review":', body)
+        self.assertIn('"transcript":', body)
+        self.assertIn("播放定位片段", body)
+
+        with self.app.app_context():
+            task = db.session.get(Task, task_id)
+            attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task_id).one()
+            authorized = question_type_practice_module._authorized_review_snapshot(
+                snapshot_from_task(task)
+            )
+            rows = question_type_practice_module._result_rows(authorized, attempt)
+            self.assertTrue(rows[0]["review_details"])
+            self.assertIn("题目要求填写地址中的道路名称", rows[0]["review_details"][0]["analysis"])
+            self.assertTrue(rows[0]["review_details"][0]["evidence"])
+
+    def test_self_assigned_result_uses_the_same_authorized_review_contract(self):
+        self._login_student()
+        preview = self.client.post(
+            "/api/question-type-practice/preview",
+            json={
+                "subject": "reading",
+                "standard_type": "judgment",
+                "scope": "cambridge:21",
+                "count": 1,
+                "pace": "training",
+            },
+        )
+        self.assertEqual(preview.status_code, 200, preview.get_data(as_text=True))
+        group_id = preview.get_json()["groups"][0]["question_group_id"]
+        created = self.client.post(
+            "/api/question-type-practice/self",
+            json={
+                "subject": "reading",
+                "standard_type": "judgment",
+                "group_ids": [group_id],
+                "pace": "training",
+                "planned_minutes": 10,
+            },
+        )
+        self.assertEqual(created.status_code, 200, created.get_data(as_text=True))
+        task_id = created.get_json()["task"]["id"]
+        with self.app.app_context():
+            token = db.session.get(Task, task_id).reading_access_token
+        submitted = self.client.post(
+            f"/api/question-type-practice/task/{task_id}/submit?token={token}",
+            json={"answers": {}, "duration_seconds": 3},
+        )
+        self.assertEqual(submitted.status_code, 200, submitted.get_data(as_text=True))
+        review = self.client.get(submitted.get_json()["next_url"])
+        self.assertEqual(review.status_code, 200, review.get_data(as_text=True))
+        body = review.get_data(as_text=True)
+        self.assertIn('"analysis":', body)
+        self.assertIn('"central_sentences":', body)
         self.assertIn('"read_only": true', body)
 
     def test_wrong_token_cannot_read_or_submit(self):

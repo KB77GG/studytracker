@@ -92,7 +92,8 @@ class SelectionHighlightContractTest(unittest.TestCase):
             self.assertIn("practiceContext?.read_only", source)
         self.assertIn('"highlight_path": url_for(', routes)
         self.assertIn('context["initial_review"]', routes)
-        self.assertIn('test=public_snapshot(snapshot)["payload"]', routes)
+        self.assertIn('test=_authorized_review_snapshot(snapshot)["payload"]', routes)
+        self.assertIn('test=_public_snapshot(snapshot)["payload"]', routes)
 
 
 if __name__ == "__main__":

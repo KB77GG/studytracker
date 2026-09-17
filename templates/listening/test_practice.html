@@ -471,6 +471,37 @@ body.result-mode .layout {
   align-items: center;
   margin-top: 8px;
 }
+.audio-guidance-status {
+  min-height: 20px;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+  text-align: right;
+}
+.audio-guidance-status[data-tone="ok"] { color: #16734c; }
+.audio-guidance-status[data-tone="warn"] { color: #9a6700; }
+.audio-guidance-status[data-tone="error"] { color: var(--error); }
+.group-audio-guide {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(35,140,135,.2);
+  border-radius: 11px;
+  background: #f6fbfa;
+}
+.group-audio-guide__label { margin-right: auto; color: #315c58; font-size: 13px; font-weight: 800; }
+.group-audio-guide button {
+  border: 1px solid rgba(35,140,135,.3);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sage-deep);
+  padding: 7px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
 .result-question-link {
   appearance: none;
   border: 0;
@@ -618,6 +649,19 @@ body.result-mode .transcript-panel { display: block; }
 .transcript-row:hover,
 .full-transcript-row:hover { background: rgba(35,140,135,.06); }
 .full-transcript-row { cursor: pointer; }
+.transcript-row.is-static,
+.full-transcript-row.is-static { cursor: default; }
+.transcript-row.is-static:hover,
+.full-transcript-row.is-static:hover { background: transparent; }
+.transcript-timeline-warning {
+  margin: 0 0 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background: #fff8e8;
+  color: #8a5a00;
+  font-size: 12px;
+  line-height: 1.55;
+}
 .transcript-en {
   margin: 0 0 5px;
   color: var(--ink);
@@ -982,6 +1026,7 @@ body[data-experience-mode="simulation"] .group::before {
     <audio id="audio" controls preload="metadata"></audio>
     {% endif %}
     </div>
+    {% if not exam_context %}<div class="audio-guidance-status" id="audioGuidanceStatus" role="status" aria-live="polite"></div>{% endif %}
   </div>
 </header>
 
@@ -1081,6 +1126,7 @@ if (window.location.protocol === 'file:') {
 <script src="{{ url_for('static', filename='js/practice_scoring.js') }}"></script>
 <script src="{{ url_for('static', filename='js/practice_modes.js') }}"></script>
 <script src="{{ url_for('static', filename='js/simulation_audio.js') }}"></script>
+<script src="{{ url_for('static', filename='js/listening_clip_player.js') }}"></script>
 <script src="{{ url_for('static', filename='js/practice_renderers.js') }}"></script>
 {% include "practice/_navigation_defaults.html" %}
 <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
@@ -1141,6 +1187,7 @@ let latestResults = null;
 let practiceShellController = null;
 let simulationAudioPlaylist = null;
 let simulationAudioResources = [];
+let listeningClipPlayer = null;
 window.__simulationAudioComplete = false;
 
 function escapeHtml(value) {
@@ -1203,39 +1250,74 @@ function formatClock(seconds) {
   return `${minutes}:${rest}`;
 }
 
-function questionAudioStart(question) {
-  if (!question || question.start === null || question.start === undefined || question.start === '') return null;
-  const start = Number(question.start);
-  return Number.isFinite(start) && start >= 0 ? start : null;
+function questionAudioWindow(question) {
+  const review = question?.audio_review;
+  if (review && review.available === false) {
+    return { available: false, reason: review.reason || '本题定位不可用' };
+  }
+  const start = Number(review?.available ? review.start : question?.start);
+  const end = Number(review?.available ? review.end : question?.end);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start) {
+    return { available: false, reason: '本题定位不可用' };
+  }
+  return {
+    available: true,
+    start,
+    end,
+    expectedDuration: review?.expected_duration ?? null
+  };
 }
 
 function reviewAudioLocator(question, sectionIndex) {
-  const start = questionAudioStart(question);
-  if (start === null) return '';
+  const window = questionAudioWindow(question);
   const id = escapeHtml(question.id || question.number);
+  if (!window.available) {
+    return `
+      <button class="seek-btn review-audio-locator" type="button"
+        data-review-audio-question="${id}" data-audio-fallback="section"
+        data-capability="canShowCorrectness" hidden
+        onclick="event.stopPropagation(); playQuestionAudio('${id}', ${sectionIndex})">
+        定位不可用 · 播放完整 Section
+      </button>`;
+  }
   return `
     <button class="seek-btn review-audio-locator" type="button"
       data-review-audio-question="${id}" data-capability="canShowCorrectness" hidden
-      onclick="event.stopPropagation(); seekTo(${sectionIndex}, ${start})">
-      定位音频 ${formatClock(start)}
+      onclick="event.stopPropagation(); playQuestionAudio('${id}', ${sectionIndex})">
+      播放定位片段 ${formatClock(window.start)}–${formatClock(window.end)}
     </button>`;
+}
+
+function sectionAudioTimeline(sectionIndex) {
+  const timeline = test.sections?.[sectionIndex]?.audio_timeline;
+  if (timeline && timeline.available === false) {
+    return {
+      available: false,
+      reason: timeline.reason || '当前音轨定位不可用'
+    };
+  }
+  return {
+    available: true,
+    expectedDuration: timeline?.expected_duration ?? null
+  };
 }
 
 function seekTo(sectionIndex, seconds) {
   if (!experienceCapabilities.canSeekAudio) return;
-  switchSection(sectionIndex, false);
-  const target = Number(seconds || 0);
-  const applySeek = () => {
-    audio.currentTime = target;
-    audio.play().catch(() => {});
-    syncTranscriptAt(sectionIndex, target);
-  };
-  if (audio.readyState >= 1) {
-    applySeek();
-  } else {
-    audio.addEventListener('loadedmetadata', applySeek, { once: true });
-    syncTranscriptAt(sectionIndex, target);
+  const timeline = sectionAudioTimeline(sectionIndex);
+  if (!timeline.available) {
+    playCompleteSection(sectionIndex, true);
+    syncTranscriptAt(sectionIndex, 0);
+    return;
   }
+  const target = Number(seconds || 0);
+  listeningClipPlayer?.playFrom({
+    sectionIndex,
+    start: target,
+    expectedDuration: timeline.expectedDuration,
+    label: '原文定位'
+  });
+  syncTranscriptAt(sectionIndex, target);
 }
 
 function transcriptIndexAt(section, seconds) {
@@ -1389,6 +1471,47 @@ function reviewCard(question, result = null, value = '') {
     return `<div data-review-slot="${escapeHtml(question.id || question.number)}"></div>`;
   }
   return PracticeRenderers.renderReviewCard(question, result, value);
+}
+
+function playCompleteSection(sectionIndex, fallback = false) {
+  if (!experienceCapabilities.canSeekAudio) return;
+  listeningClipPlayer?.playFullSection(sectionIndex, { fallback });
+}
+
+function playQuestionAudio(questionId, sectionIndex) {
+  if (!experienceCapabilities.canSeekAudio) return;
+  const question = questionForId(questionId);
+  const window = questionAudioWindow(question);
+  if (!window.available) {
+    playCompleteSection(sectionIndex, true);
+    return;
+  }
+  listeningClipPlayer?.playWindow({
+    sectionIndex,
+    start: window.start,
+    end: window.end,
+    expectedDuration: window.expectedDuration,
+    label: `第 ${question.number} 题定位片段`
+  });
+}
+
+function groupAudioControls(group, sectionIndex) {
+  const window = group?.practice_audio;
+  if (!window) return '';
+  const label = window.available
+    ? `本题组相关录音 ${formatClock(window.start)}–${formatClock(window.end)}`
+    : (window.reason || '题组定位不可用，可播放完整 Section');
+  return `
+    <div class="group-audio-guide" data-capability="canSeekAudio"
+      data-audio-section="${sectionIndex}"
+      data-audio-available="${window.available ? '1' : '0'}"
+      data-audio-start="${window.available ? Number(window.start) : ''}"
+      data-audio-end="${window.available ? Number(window.end) : ''}"
+      data-audio-duration="${window.expected_duration ?? ''}">
+      <span class="group-audio-guide__label">${escapeHtml(label)}</span>
+      ${window.available ? `<button type="button" data-group-audio="range">播放题组范围</button>` : ''}
+      <button type="button" data-group-audio="section">播放完整 Section</button>
+    </div>`;
 }
 
 function optionBank(group) {
@@ -1560,7 +1683,8 @@ function renderGroup(group, sectionIndex) {
           )
         : '';
   return `
-    <article class="card group">
+    <article class="card group" data-question-group="${escapeHtml(group.question_group_id || '')}">
+      ${groupAudioControls(group, sectionIndex)}
       ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
       ${group.desc ? `<div class="desc">${richText(group.desc)}</div>` : ''}
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
@@ -1592,7 +1716,10 @@ function renderSection(section, sectionIndex) {
   `;
 }
 
-function switchSection(index, scroll = true) {
+function switchSection(index, scroll = true, preserveAudioRequest = false) {
+  if (!preserveAudioRequest && index !== activeSectionIndex) {
+    listeningClipPlayer?.cancel({ pauseAudio: true });
+  }
   activeSectionIndex = index;
   currentTranscriptKey = '';
   document.querySelectorAll('#sectionTabs .tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
@@ -1793,11 +1920,17 @@ function questionForId(id) {
 }
 
 function decorateReviewCard(card, question) {
-  if (!card || questionAudioStart(question) === null) return;
+  if (!card) return;
+  const window = questionAudioWindow(question);
   card.dataset.audioReviewCard = '1';
   card.setAttribute('role', 'button');
   card.setAttribute('tabindex', '0');
-  card.setAttribute('aria-label', `定位第 ${question.number} 题音频 ${formatClock(questionAudioStart(question))}`);
+  card.setAttribute(
+    'aria-label',
+    window.available
+      ? `播放第 ${question.number} 题定位片段 ${formatClock(window.start)} 至 ${formatClock(window.end)}`
+      : `第 ${question.number} 题定位不可用，播放完整 Section`
+  );
 }
 
 function updateReviewCards(unit, feedback) {
@@ -1852,8 +1985,7 @@ function openReviewCard(id, scroll = false, seekAudio = false) {
     const target = findUnitByQuestionId(currentQuestionId);
     target?.closest('[data-question-id], .question, .matching-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
-  const start = questionAudioStart(question);
-  if (seekAudio && start !== null) seekTo(sectionIndex, start);
+  if (seekAudio && question) playQuestionAudio(currentQuestionId, sectionIndex);
 }
 
 function answerSnapshot() {
@@ -2144,10 +2276,12 @@ function renderTranscript(section) {
   if (!section) return;
   const panel = document.getElementById('transcriptPanel');
   if (!panel) return;
+  const timeline = sectionAudioTimeline(activeSectionIndex);
   panel.innerHTML = `
     <h3>Section ${escapeHtml(section.section)} 原文复盘</h3>
+    ${timeline.available ? '' : `<div class="transcript-timeline-warning">${escapeHtml(timeline.reason)}；原文仅供阅读，可播放完整 Section。</div>`}
     ${(section.transcript || []).map((row, index) => `
-      <div class="transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0">
+      <div class="transcript-row${timeline.available ? '' : ' is-static'}" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" ${timeline.available ? `onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0"` : ''}>
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
       </div>
@@ -2156,12 +2290,16 @@ function renderTranscript(section) {
 }
 
 function renderDictationView(section) {
+  const timeline = sectionAudioTimeline(activeSectionIndex);
   document.getElementById('dictationView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 精听</h2>
+    ${timeline.available ? '' : `<div class="transcript-timeline-warning">${escapeHtml(timeline.reason)}；逐句定位已禁用，可播放完整 Section。</div>`}
     ${(section.transcript || []).map((row, index) => `
       <div class="dictation-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}">
         <div class="dictation-tools">
-          <button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">播放 ${formatClock(row.start)}</button>
+          ${timeline.available
+            ? `<button class="small-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">播放 ${formatClock(row.start)}</button>`
+            : '<button class="small-btn" type="button" disabled>定位不可用</button>'}
           <button class="small-btn" type="button" onclick="this.closest('.dictation-row').classList.toggle('revealed')">核对原文</button>
         </div>
         <textarea placeholder="S${index + 1}"></textarea>
@@ -2178,23 +2316,33 @@ function renderAnalysisView(section) {
   const items = (section.groups || []).flatMap(group => (group.questions || []).map(question => ({ ...question, group })));
   document.getElementById('analysisView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 解析</h2>
-    ${items.map(question => `
-      <div class="analysis-item">
-        <h3>Q${escapeHtml(question.number)} ${escapeHtml(question.title || '')}</h3>
-        <div class="analysis-answer">答案：${escapeHtml(question.answer || '')}</div>
-        ${questionAudioStart(question) !== null ? `<p><button class="seek-btn" type="button" onclick="seekTo(${activeSectionIndex}, ${questionAudioStart(question)})">定位音频 ${formatClock(questionAudioStart(question))}</button></p>` : ''}
-        ${question.analysis ? `<div class="analysis-text">${escapeHtml(question.analysis)}</div>` : ''}
-      </div>
-    `).join('')}
+    ${items.map(question => {
+      const window = questionAudioWindow(question);
+      const evidence = (question.audio_review?.evidence || [])
+        .map(row => String(row?.text || '').trim())
+        .filter(Boolean);
+      return `
+        <div class="analysis-item">
+          <h3>Q${escapeHtml(question.number)} ${escapeHtml(question.title || '')}</h3>
+          <div class="analysis-answer">答案：${escapeHtml(question.answer || '')}</div>
+          <p><button class="seek-btn" type="button" onclick="playQuestionAudio('${escapeHtml(question.id || question.number)}', ${activeSectionIndex})">${window.available ? `播放定位片段 ${formatClock(window.start)}–${formatClock(window.end)}` : '定位不可用 · 播放完整 Section'}</button></p>
+          <div class="analysis-text">${escapeHtml(question.analysis || '本题暂无解析')}</div>
+          ${evidence.length ? `<div class="review-card__evidence"><strong>答案依据</strong>${evidence.map(row => `<blockquote>${escapeHtml(row)}</blockquote>`).join('')}</div>` : '<div class="review-card__evidence"><strong>答案依据</strong><p>题库暂无可展示的答案依据。</p></div>'}
+        </div>`;
+    }).join('')}
   `;
 }
 
 function renderTranscriptView(section) {
+  const timeline = sectionAudioTimeline(activeSectionIndex);
   document.getElementById('transcriptView').innerHTML = `
     <h2>Section ${escapeHtml(section.section)} 原文</h2>
+    ${timeline.available ? '' : `<div class="transcript-timeline-warning">${escapeHtml(timeline.reason)}；逐句定位已禁用，可播放完整 Section。</div>`}
     ${(section.transcript || []).map((row, index) => `
-      <div class="full-transcript-row" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0">
-        <button class="small-btn" type="button" onclick="event.stopPropagation(); seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>
+      <div class="full-transcript-row${timeline.available ? '' : ' is-static'}" data-transcript-section="${activeSectionIndex}" data-transcript-index="${index}" data-start="${Number(row.start || 0)}" ${timeline.available ? `onclick="seekTo(${activeSectionIndex}, ${Number(row.start || 0)})" role="button" tabindex="0"` : ''}>
+        ${timeline.available
+          ? `<button class="small-btn" type="button" onclick="event.stopPropagation(); seekTo(${activeSectionIndex}, ${Number(row.start || 0)})">${formatClock(row.start)}</button>`
+          : '<button class="small-btn" type="button" disabled>定位不可用</button>'}
         <p class="transcript-en">${escapeHtml(row.en || '')}</p>
         ${row.cn ? `<p class="transcript-cn">${escapeHtml(row.cn)}</p>` : ''}
       </div>
@@ -2390,6 +2538,23 @@ function render() {
       saveAnswers();
     });
   });
+  document.getElementById('sectionsRoot')?.addEventListener('click', event => {
+    const button = event.target.closest('[data-group-audio]');
+    if (!button) return;
+    const guide = button.closest('.group-audio-guide');
+    const sectionIndex = Number(guide?.dataset.audioSection || 0);
+    if (button.dataset.groupAudio === 'section' || guide?.dataset.audioAvailable !== '1') {
+      playCompleteSection(sectionIndex, guide?.dataset.audioAvailable !== '1');
+      return;
+    }
+    listeningClipPlayer?.playWindow({
+      sectionIndex,
+      start: Number(guide.dataset.audioStart),
+      end: Number(guide.dataset.audioEnd),
+      expectedDuration: guide.dataset.audioDuration ? Number(guide.dataset.audioDuration) : null,
+      label: '本题组范围'
+    });
+  });
   document.getElementById('previousQuestion').addEventListener('click', () => goToAdjacentQuestion(-1));
   document.getElementById('nextQuestion').addEventListener('click', () => goToAdjacentQuestion(1));
   document.getElementById('toggleQuestionFlag').addEventListener('click', toggleCurrentQuestionFlag);
@@ -2461,6 +2626,19 @@ document.getElementById('submitBtn')?.addEventListener('click', () => {
 audio.addEventListener('timeupdate', syncTranscriptFromAudio);
 audio.addEventListener('seeked', syncTranscriptFromAudio);
 audio.addEventListener('loadedmetadata', syncTranscriptFromAudio);
+
+if (!examContext) {
+  listeningClipPlayer = ListeningClipPlayer.create({
+    audio,
+    selectSection: (sectionIndex, preserveAudioRequest) => switchSection(sectionIndex, false, preserveAudioRequest),
+    onStatus: (message, tone = '') => {
+      const status = document.getElementById('audioGuidanceStatus');
+      if (!status) return;
+      status.textContent = message;
+      status.dataset.tone = tone;
+    }
+  });
+}
 
 practiceShellController = PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",

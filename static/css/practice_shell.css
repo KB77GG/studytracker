@@ -367,6 +367,16 @@ body.result-mode .review-card.is-open { display: block; }
   overflow-wrap: anywhere;
 }
 .review-card__analysis { margin-top: 9px; white-space: pre-line; }
+.review-card__evidence { margin-top: 10px; color: #334155; }
+.review-card__evidence blockquote {
+  margin: 7px 0 0;
+  padding: 9px 11px;
+  border-left: 3px solid #55a7a0;
+  border-radius: 0 8px 8px 0;
+  background: #f3faf8;
+  line-height: 1.65;
+}
+.review-card__evidence p { margin: 6px 0 0; color: #64748b; }
 .review-controls { display: none; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 body.result-mode .review-controls { display: flex; }
 .review-controls button {

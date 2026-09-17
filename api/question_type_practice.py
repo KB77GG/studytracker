@@ -51,6 +51,11 @@ from services.question_type_practice import (
     question_type_display_label,
     snapshot_from_task,
 )
+from services.question_type_review import (
+    reading_evidence,
+    review_question_index,
+    review_snapshot,
+)
 from services.task_assignment_duplicates import (
     begin_assignment_transaction,
     normalize_idempotency_key,
@@ -111,6 +116,26 @@ def _roots() -> LibraryRoots:
         reading=_PROJECT_ROOT / "static/reading_tests",
         static=_PROJECT_ROOT / "static",
         audio=Path(configured_audio) if configured_audio else _PROJECT_ROOT / "static/listening",
+    )
+
+
+def _public_snapshot(snapshot: dict) -> dict:
+    roots = _roots()
+    return public_snapshot(
+        snapshot,
+        static_root=roots.static,
+        audio_root=roots.audio,
+        project_root=_PROJECT_ROOT,
+    )
+
+
+def _authorized_review_snapshot(snapshot: dict) -> dict:
+    roots = _roots()
+    return review_snapshot(
+        snapshot,
+        static_root=roots.static,
+        audio_root=roots.audio,
+        project_root=_PROJECT_ROOT,
     )
 
 
@@ -828,7 +853,7 @@ def task_page(task_id: int):
         )
         return render_template(
             template,
-            test=public_snapshot(snapshot)["payload"],
+            test=_public_snapshot(snapshot)["payload"],
             practice_context=context,
             exam_context=None,
             practice_source=TASK_TYPE,
@@ -848,7 +873,7 @@ def task_page(task_id: int):
     )
     return render_template(
         template,
-        test=public_snapshot(snapshot)["payload"],
+        test=_public_snapshot(snapshot)["payload"],
         practice_context=context,
         exam_context=(
             _exam_context(task, snapshot, attempt, token) if snapshot["pace"] == PACE_EXAM else None
@@ -1005,6 +1030,7 @@ def task_submit(task_id: int):
 
 def _result_rows(snapshot: dict, attempt: QuestionTypePracticeAttempt) -> list[dict]:
     group_map = _question_group_map(snapshot)
+    question_map = review_question_index(snapshot)
     refs = {row["question_group_id"]: row for row in snapshot["group_refs"]}
     rows = []
     for result in _json_object(attempt.results_json).get("results") or []:
@@ -1022,7 +1048,35 @@ def _result_rows(snapshot: dict, attempt: QuestionTypePracticeAttempt) -> list[d
                 source.get("standard_type", snapshot["standard_type"]),
             )
         )
-        rows.append({**result, "question_group_id": group_id, "source": source})
+        review_details = []
+        for question_id in ids:
+            question = question_map.get(str(question_id))
+            if not question:
+                continue
+            if snapshot["subject"] == SUBJECT_LISTENING:
+                evidence = [
+                    str(item.get("text") or "").strip()
+                    for item in (question.get("audio_review") or {}).get("evidence") or []
+                    if str(item.get("text") or "").strip()
+                ]
+            else:
+                evidence = reading_evidence(question)
+            review_details.append(
+                {
+                    "number": question.get("number"),
+                    "source_number": question.get("source_number"),
+                    "analysis": str(question.get("analysis") or "").strip(),
+                    "evidence": evidence,
+                }
+            )
+        rows.append(
+            {
+                **result,
+                "question_group_id": group_id,
+                "source": source,
+                "review_details": review_details,
+            }
+        )
     return rows
 
 
@@ -1046,7 +1100,7 @@ def task_result(task_id: int):
     )
     return render_template(
         template,
-        test=public_snapshot(snapshot)["payload"],
+        test=_authorized_review_snapshot(snapshot)["payload"],
         practice_context=_review_practice_context(task, snapshot, attempt, token),
         exam_context=None,
         practice_source=TASK_TYPE,
@@ -1064,13 +1118,14 @@ def teacher_result(task_id: int):
     attempt = QuestionTypePracticeAttempt.query.filter_by(task_id=task_id).first() if task else None
     if not task or not snapshot or not attempt:
         return "结果不存在", 404
+    authorized_snapshot = _authorized_review_snapshot(snapshot)
     return render_template(
         "question_type_practice/result.html",
         task=task,
-        snapshot=snapshot,
+        snapshot=authorized_snapshot,
         type_label=question_type_display_label(snapshot["standard_type"]),
         attempt=attempt,
-        rows=_result_rows(snapshot, attempt),
+        rows=_result_rows(authorized_snapshot, attempt),
         staff_mode=True,
     )
 

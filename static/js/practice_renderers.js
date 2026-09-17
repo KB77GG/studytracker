@@ -663,9 +663,29 @@
 
   function renderReviewCard(question, result, userAnswer) {
     const status = result && (result.status || (result.correct ? "correct" : "incorrect")) || "unanswered";
-    const label = status === "correct" ? "✓ 正确" : status === "unanswered" ? "— 未作答" : "× 错误";
+    const label = status === "correct"
+      ? "✓ 正确"
+      : status === "partial"
+        ? "△ 部分正确"
+        : status === "unanswered"
+          ? "— 未作答"
+          : "× 错误";
     const correctAnswer = result && result.answer !== undefined ? result.answer : question.answer;
     const analysis = result && result.analysis !== undefined ? result.analysis : question.analysis;
+    const resultEvidence = Array.isArray(result?.evidence) ? result.evidence : null;
+    const audioEvidence = Array.isArray(question?.audio_review?.evidence)
+      ? question.audio_review.evidence
+      : null;
+    const central = question?.central_sentences;
+    const readingEvidence = Array.isArray(central)
+      ? central
+      : central && typeof central === "object"
+        ? (central.sentences || central.central_sentences || [])
+        : [];
+    const evidence = (resultEvidence || audioEvidence || readingEvidence)
+      .map(row => typeof row === "object" ? (row.text || row.sentence || "") : row)
+      .map(row => String(row || "").trim())
+      .filter((row, index, rows) => row && rows.indexOf(row) === index);
     return `
       <div class="review-card" data-review-question="${escapeHtml(question.id || question.number)}" data-capability="canShowCorrectness">
         <div class="review-card__status" data-status="${escapeHtml(status)}">结果：${label}</div>
@@ -673,7 +693,10 @@
           <span><strong>你的答案</strong><br>${escapeHtml(userAnswer || "未作答")}</span>
           <span><strong>正确答案</strong><br>${escapeHtml(correctAnswer || "—")}</span>
         </div>
-        ${analysis ? `<div class="review-card__analysis"><strong>解析</strong><br>${escapeHtml(analysis)}</div>` : ""}
+        <div class="review-card__analysis"><strong>解析</strong><br>${escapeHtml(analysis || "本题暂无解析")}</div>
+        <div class="review-card__evidence"><strong>答案依据</strong>${evidence.length
+          ? evidence.map(row => `<blockquote>${escapeHtml(row)}</blockquote>`).join("")
+          : "<p>题库暂无可展示的答案依据。</p>"}</div>
       </div>`;
   }
 

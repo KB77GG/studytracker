@@ -19,6 +19,7 @@ from pathlib import Path
 
 from practice_tables import normalize_practice_tables
 from services.practice_library_offline import load_offline_test_ids
+from services.question_type_review import derive_listening_payload
 
 TASK_TYPE = "question_type_practice"
 SNAPSHOT_VERSION = 1
@@ -846,6 +847,7 @@ def _redact_payload(payload: dict) -> dict:
         "translation",
         "transcript",
         "scripts",
+        "audio_review",
     }
     if isinstance(payload, list):
         return [
@@ -1004,11 +1006,33 @@ def build_snapshot(
     return canonical
 
 
-def public_snapshot(snapshot: dict) -> dict:
+def _remove_training_audio(payload: dict) -> None:
+    for section in payload.get("sections") or []:
+        section.pop("audio_timeline", None)
+        for group in section.get("groups") or []:
+            group.pop("practice_audio", None)
+
+
+def public_snapshot(
+    snapshot: dict,
+    *,
+    static_root: Path | None = None,
+    audio_root: Path | None = None,
+    project_root: Path | None = None,
+) -> dict:
     """Return the pre-submission payload without any solution or review data."""
 
     public = copy.deepcopy(snapshot)
+    if public.get("subject") == SUBJECT_LISTENING and static_root:
+        public["payload"] = derive_listening_payload(
+            public["payload"],
+            static_root=static_root,
+            audio_root=audio_root,
+            project_root=project_root,
+        )
     public["payload"] = _redact_payload(public["payload"])
+    if public.get("pace") != PACE_TRAINING:
+        _remove_training_audio(public["payload"])
     return public
 
 
