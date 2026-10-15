@@ -4,6 +4,24 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-15 — 词汇“忘了”后端已部署；小程序待用户上传
+
+- 已审业务 `3990007cd8ab36eb2eff918153c244487499b9d2` 从 `/Users/zhouxin/.codex/worktrees/9ee5/studytracker` 非强制推送任务分支和 main，CI `38666056690`、Deploy `38666056649` success；生产 HEAD 相同、9 个源码 SHA 一致、tracked clean/原 17 untracked 保留，5002 单 worker/gthread/6 threads active，回环 302、未认证复习 GET 401、错误日志 0。
+- 生产 `/root/apps/studytracker/app.db` 先在 7 秒维护窗备份至 `/root/backups/studytracker/vocabulary-forgot-20261015-14b665cd/app.db`（SHA `c8572b2f…d3e8997a`，私有权限/quick_check ok），再显式补四表五列。默认 `answer`、非空、NULL0，四迁移表原列、任务分数及学习/复习结算结果与备份逐行相等；无真实学生答题写入。备份仅在服务器，后续新写入后不可直接覆盖恢复。
+- 后端专项 **173 passed / 2 subtests**，生产 Python3.10 合成兼容探针通过。完整证据、命令与回滚见 `docs/design/vocabulary-forgot-backend-deployment-20261015.md`。本树前端隔离审阅包及旧实施报告仍仅本机未跟踪；固定 `/Users/zhouxin/Desktop/studytracker-release/miniprogram` 的 11 路径补丁本机已合入，但本轮未上传/提审/发布。下一步由用户从固定目录手动上传并做真机/在线联调。
+
+## 2026-10-14 — 词汇“忘了”11 路径前端补丁已本机合入固定发布树
+
+- 固定 `/Users/zhouxin/Desktop/studytracker-release` 仍 `codex/miniprogram-release@d03a2749`、behind 49；合入前 75 modified/28 untracked 入口，合入后 75/30 入口（展开为 31 个未跟踪文件）。仅应用锁定 SHA 为 `b0e78d29…216d9b` 的 11 路径补丁并更新两份交接；快照 103 个既有脏文件中 93 个无关路径逐字保留，无额外脏路径，11 目标文件逐字等于隔离候选，反向补丁检查通过。来源 SHA 是合入前基线，不应重新生成补丁。
+- 发布树 Node 组合 **49/49**，四个 JS `node --check`、两页官方 WXML、整包官方 WXSS 均通过。后端仍只在 `/Users/zhouxin/.codex/worktrees/9ee5/studytracker` 的 `codex/vocabulary-forgot-button@14b665cd`，当前 13 modified/5 untracked 入口（展开为 51 文件），先前专项 173 passed/2 subtests；本次未重复后端回归。
+- 两树仅本机可见，未 commit/push/deploy、未迁移或写生产库，小程序未上传/提审/发布；本轮未复核线上状态。下一步固定目录完整项目与真机联调；如要发布，先明确授权并备份/迁移/核验生产库、部署后端，再上传小程序。
+
+## 2026-10-10 — 词汇“忘了”首版本机候选修复独立审阅问题
+
+- 在 `/Users/zhouxin/.codex/worktrees/9ee5/studytracker` 的本地 `codex/vocabulary-forgot-button@14b665cd` 完成两条后端链路的忘记作答、显式作答类型/兼容迁移、既有历史 API 与家长明细显示。首版不新建老师词汇逐题入口。固定 `/Users/zhouxin/Desktop/studytracker-release` 仍 `codex/miniprogram-release@d03a2749`、75 modified/28 untracked，未写入；脏旧主树未触碰。详见 `docs/design/vocabulary-forgot-button-implementation-review-20261010.md`。
+- 独立首轮指出自主交错重放重复消耗预算、组末再次忘记插入同组相关题、迟到按钮/键盘事件及数量口径，均已修复；二轮又发现迟到输入/选项污染新题，四个定向用例修复前 0/4、修后 4/4。原协调对话再复现忘了保存成功与队列 GET 之间重复 POST、旧 GET 回退新题；原探针 exit 1，修后 exit 0，新增交错 5/5。隔离 SQLite Python **173 passed / 2 subtests passed**，自主交错探针 exit 0；前端学生新增 **35/35**、旧导航 **12/12**、两份旧脚本通过，组合 **49/49**。11 文件增量补丁 SHA-256 `b0e78d29593ab15c43bef76ab1a98609f6c1cf5d30d2e0c8219b9a7fdc216d9b`，对固定树只读 `git apply --check` 通过。完整项目/真机/在线联调未验。
+- 本轮成果均未 commit/push/deploy，生产数据库/服务未写入或复核，小程序未上传/提审/发布。最新前端本机只读复审的旧队列探针、独立双 GET 乱序与失败重试均通过，无新本轮 P1/P2；完整微信项目、真机及在线联调仍待做。发布前必须备份真实生产库、显式迁移成功并核验四表五列；启动补列日志不能代替此检查。下一步由原对话最终核验，再决定按锁定 SHA 精确合入固定前端候选；发布与生产迁移需另有用户明确授权。
+
 ## 2026-09-17 — 题型专项跨日再次布置与历史记录已上线
 
 - 业务提交 `675a34731d54410738a4499b0c55eaf349624d20` 已从 `/Users/zhouxin/.codex/worktrees/86d7/studytracker` 非强制原子推送任务分支与 main：旧未完成专项日期早于新目标日期时可直接再次布置，同日/倒序/无效日期仍阻断；新旧 Task/PlanItem/snapshot/attempt 独立，旧作答、成绩与计时不改。昨日卡恢复完整题组，自动选题只排除受保护历史，矩阵展示全部同组记录并信任服务端决策。

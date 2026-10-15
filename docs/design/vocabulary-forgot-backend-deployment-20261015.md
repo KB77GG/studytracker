@@ -1,6 +1,6 @@
 # 词汇“忘了”后端部署记录（2026-10-15）
 
-> 2026-10-15 09:29 CST：生产库已一致性备份、显式迁移并逐行核验；旧后端服务已恢复。以下 Git/CI/最终运行状态在部署完成后续写。小程序上传由用户执行。
+> 2026-10-15：生产库已一致性备份、显式迁移并逐行核验；后端 `3990007c` 已提交、推送、部署和只读验收。小程序尚未上传，由用户操作。
 
 ## 范围与来源
 
@@ -52,8 +52,15 @@
 - 停服窗口内逐行比较了四张迁移表的全部原有列，及 `task.id/accuracy/completion_rate`（6,106 行）、`vocabulary_task_settlement.id/result_json`（393 行）、`vocabulary_review_session.id/result_json`（350 行）、`vocabulary_review_settlement.id/result_json`（311 行）；全部相等，行数相同。没有重算/改写真实学生的答案、成绩或结算记录。原服务于 09:29:03 恢复 active，`NRestarts=0`，`http://127.0.0.1:5002/` 返回 302；生产仍是旧 HEAD `675a3473`，tracked clean。
 - 服务端非 Git 操作日志留在根用户受限目录 `/root/.codex-vocabulary-forgot-rollout-20261015/` 的 `backup.json`、`migration.txt`、`verify.json`。线上数据库的当前行数会随正常学习继续增长；上述逐行相等结论只针对维护窗口的冻结快照。
 
-## 后端发布与回滚
+## 后端发布与验收
 
-- **待完成**：最小后端提交、非强制推送任务分支和 main，等待 GitHub Actions `Deploy to Alibaba Cloud` 终态，核对生产 HEAD、8 个运行时源文件 SHA、服务参数、5002 健康、五列及只读/合成兼容验证。push 前复查远端 main 与生产 tracked 状态，若前进或变脏先审查，不 force、不覆盖未知改动。
+- 2026-10-15 在实施树将精确 15 路径（上列 9 个业务源、5 个测试、本报告）提交为 `3990007cd8ab36eb2eff918153c244487499b9d2`（`feat: persist vocabulary forgotten responses`）；提交前 `origin/main` 仍为已审基线 `14b665cd`、生产 tracked clean 且备份存在。使用 `git push --atomic origin HEAD:refs/heads/codex/vocabulary-forgot-button HEAD:refs/heads/main` 非强制原子推送两分支。固定发布树和旧主树均未纳入该提交。
+- [CI `38666056690`](https://github.com/KB77GG/studytracker/actions/runs/38666056690) 与 [Deploy `38666056649`](https://github.com/KB77GG/studytracker/actions/runs/38666056649) 均为 completed/success；CI 的全仓 Ruff advisory 仍有仓库既有旧脚本诊断，工作流总体成功。部署脚本由 main push 触发，未手动执行第二次部署。
+- 生产 `/root/apps/studytracker` 的 `HEAD` 和 `origin/main` 均为 `3990007cd8ab36eb2eff918153c244487499b9d2`；tracked dirty=0，原 17 个未跟踪入口保留。上表 9 个生产源码 SHA-256 逐一等于已审候选。服务自 2026-10-15 09:31:36 CST active，`NRestarts=0`，`127.0.0.1:5002`、`workers=1`、`worker_class=gthread`、`threads=6`，监听为 master 与单 worker；回环 `GET /` 返回 302。自 09:30 起该 service 的 error 级 journal 条目 0。
+- 部署后以 `/root/apps/studytracker/.venv/bin/python /root/.codex-vocabulary-forgot-rollout-20261015/studytracker_forgot_prod_db_guard.py inspect --database /root/apps/studytracker/app.db` 再查：`quick_check=ok`、外键错误 0，四表五列均 `NOT NULL=1`、默认 `answer`、NULL=0；四表行数仍与维护快照一致。未认证 `GET /api/miniprogram/student/vocabulary-review/today` 返回 401，证明权限闸门仍生效；未使用普通 today/queue GET 领取真实批次，因为这些路径会写入。
+- 生产 Python 3.10 下的纯合成模块探针 `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. .venv/bin/python /root/.codex-vocabulary-forgot-rollout-20261015/studytracker_forgot_runtime_probe.py` 通过：明确 `forgot` 被接受，无字段/NULL 仍为旧客户端 `answer`，无效类型被拒绝，五个 ORM 字段仍为非空且默认 `answer`。探针不创建 app、连接库、登录账号或发 HTTP 作答；结合上线前 173 项临时 SQLite 回归与生产文件 SHA，构成当前可做的无真实学生写入验收。完整新客户端在线联调和真机仍待用户上传后进行。
+
+## 回滚入口与未完成项
+
 - 如新后端出现故障，可回滚到部署前后端提交 `675a34731d54410738a4499b0c55eaf349624d20` 的业务代码并重启；五个加法列可保留，旧客户端默认 `answer`，无需破坏性删列。数据库备份只作灾难恢复入口；若其后已有真实写入，不可直接覆盖当前库，否则会丢失新作答。回滚或再次发布前先确认实际 Git/DB 状态。
-- 小程序本轮未上传/提审/发布；用户将在后端上线后从固定目录自行上传。完整微信项目、iOS/Android 真机、真实双端并发与线上新客户端端到端验收仍待用户完成。
+- 小程序本轮未上传/提审/发布；用户将在后端上线后从固定目录 `/Users/zhouxin/Desktop/studytracker-release/miniprogram` 自行上传。完整微信项目、iOS/Android 真机、真实双端并发与线上新客户端端到端验收仍待用户完成。生产数据库是实际运行库，后续自然行数增长不代表本次迁移重写历史。
