@@ -53,6 +53,7 @@ from services.vocabulary_group_learning import (
     VocabularyGroupLearningError,
     submit_vocabulary_group_answer,
 )
+from services.vocabulary_attempt_reporting import dictation_attempt_display
 
 
 def require_session_or_bearer(fn):
@@ -1267,6 +1268,8 @@ def submit_answer():
         if is_vocabulary_v2_task(task):
             result = submit_vocabulary_group_answer(user, data)
         else:
+            if data.get("response_kind", "answer") != "answer":
+                raise DictationReviewError("unsupported_response_kind", 400)
             result = submit_dictation_answer(user, data)
     except (DictationReviewError, VocabularyMasteryError, VocabularyGroupLearningError) as error:
         db.session.rollback()
@@ -1317,6 +1320,8 @@ def get_history():
                 "id": r.id,
                 "word": r.word.word if r.word else None,
                 "student_answer": r.student_answer,
+                "response_kind": r.response_kind or "answer",
+                "answer_display": dictation_attempt_display([r])["student_answer"],
                 "is_correct": r.is_correct,
                 "created_at": r.created_at.isoformat() if r.created_at else None
             }

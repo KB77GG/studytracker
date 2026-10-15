@@ -167,31 +167,41 @@ class VocabularyGroupLearningTest(unittest.TestCase):
         book.word_count = 6
         db.session.commit()
 
-    def _answer_for_current(self, user, task_id, queue, *, wrong=False, now=None):
+    def _answer_for_current(
+        self, user, task_id, queue, *, wrong=False, now=None,
+        response_kind=None, answer_override=None, attempt_id=None,
+    ):
         question = queue["current_question"]
         stored = db.session.get(VocabularyLearningQuestion, question["learning_question_id"])
         answer_payload = json.loads(stored.answer_payload_json)
         answer = answer_payload.get("answer_option_id") or answer_payload.get("answer")
         if wrong:
             answer = "definitely-not-the-answer"
+        if answer_override is not None:
+            answer = answer_override
+        elif response_kind == "forgot":
+            answer = ""
+        payload = {
+            "task_id": task_id,
+            "queue_token": queue["queue_token"],
+            "learning_question_id": question["learning_question_id"],
+            "queue_item_id": question["queue_item_id"],
+            "question_id": question["question_id"],
+            "word_id": question["word_id"],
+            "sense_id": question["sense_id"],
+            "dimension": question["dimension"],
+            "answer": answer,
+            "attempt_id": attempt_id or (
+                f"group-test:{task_id}:{'retry' if queue['phase'] == PHASE_RETRY else 'first'}:"
+                f"{question['learning_question_id']}:{'wrong' if wrong else 'right'}"
+            ),
+            "retry": queue["phase"] == PHASE_RETRY,
+        }
+        if response_kind is not None:
+            payload["response_kind"] = response_kind
         result = submit_vocabulary_group_answer(
             user,
-            {
-                "task_id": task_id,
-                "queue_token": queue["queue_token"],
-                "learning_question_id": question["learning_question_id"],
-                "queue_item_id": question["queue_item_id"],
-                "question_id": question["question_id"],
-                "word_id": question["word_id"],
-                "sense_id": question["sense_id"],
-                "dimension": question["dimension"],
-                "answer": answer,
-                "attempt_id": (
-                    f"group-test:{task_id}:{'retry' if queue['phase'] == PHASE_RETRY else 'first'}:"
-                    f"{question['learning_question_id']}:{'wrong' if wrong else 'right'}"
-                ),
-                "retry": queue["phase"] == PHASE_RETRY,
-            },
+            payload,
             now=now,
         )
         return result
@@ -215,6 +225,23 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             },
             now=now,
         )
+
+    def _forgot_payload(self, task_id, queue, *, answer="", attempt_id="forgot-attempt"):
+        question = queue["current_question"]
+        return {
+            "task_id": task_id,
+            "queue_token": queue["queue_token"],
+            "learning_question_id": question["learning_question_id"],
+            "queue_item_id": question["queue_item_id"],
+            "question_id": question["question_id"],
+            "word_id": question["word_id"],
+            "sense_id": question["sense_id"],
+            "dimension": question["dimension"],
+            "answer": answer,
+            "attempt_id": attempt_id,
+            "retry": queue["phase"] == PHASE_RETRY,
+            "response_kind": "forgot",
+        }
 
     def _view_group(self, user, task_id, queue, now=None):
         while queue["phase"] == PHASE_FAMILIARITY:
@@ -427,6 +454,24 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             self._answer_for_current(user, task.id, queue, wrong=True)
             correction_queue = get_vocabulary_group_queue(user, task.id)
             self.assertTrue(correction_queue["correction_required"])
+            correction_recovery = get_vocabulary_group_queue(
+                user,
+                task.id,
+                supports_correction=False,
+                recovery_attempt_id=f"group-test:{task.id}:first:{wrong_question_id}:wrong",
+            )
+            self.assertTrue(correction_recovery["correction_required"])
+            self.assertTrue(correction_recovery["saved_response"]["correction_required"])
+            pending_records = DictationRecord.query.filter_by(task_id=task.id).count()
+            with self.assertRaises(VocabularyGroupLearningError) as pending_forgot:
+                submit_vocabulary_group_answer(
+                    user,
+                    self._forgot_payload(
+                        task.id, correction_queue, attempt_id="cannot-forget-correction"
+                    ),
+                )
+            self.assertEqual(pending_forgot.exception.error, "correction_required")
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), pending_records)
             self.assertEqual(
                 correction_queue["current_question"]["learning_question_id"],
                 wrong_question_id,
@@ -849,6 +894,408 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             )
             self.assertEqual(result["needs_review_count"], 1)
 
+    def test_forgotten_first_answer_and_conflicting_replay_use_saved_winner(self):
+        with self.app.app_context():
+            user = self._user()
+            task = self._task("reading", end=1)
+            queue = self._view_group(user, task.id, get_vocabulary_group_queue(user, task.id))
+            self.assertTrue(queue["supports_forgot_response"])
+            payload = self._forgot_payload(task.id, queue, answer="dep", attempt_id="forgot-vs-answer")
+            with self.assertRaises(VocabularyGroupLearningError) as empty_answer:
+                submit_vocabulary_group_answer(user, dict(payload, response_kind="answer", answer=""))
+            self.assertEqual(empty_answer.exception.error, "missing_answer")
+            with self.assertRaises(VocabularyGroupLearningError) as invalid_kind:
+                submit_vocabulary_group_answer(user, dict(payload, response_kind="skip"))
+            self.assertEqual(invalid_kind.exception.error, "invalid_response_kind")
+            with self.assertRaises(VocabularyGroupLearningError) as bad_token:
+                submit_vocabulary_group_answer(user, dict(payload, queue_token="wrong-token"))
+            self.assertEqual(bad_token.exception.error, "queue_changed")
+            with self.assertRaises(VocabularyGroupLearningError) as bad_question:
+                submit_vocabulary_group_answer(user, dict(payload, question_id="another-question"))
+            self.assertEqual(bad_question.exception.error, "question_not_current")
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 0)
+
+            first = submit_vocabulary_group_answer(user, payload)
+            self.assertFalse(first["is_correct"])
+            self.assertEqual(first["response_kind"], "forgot")
+            self.assertEqual(first["first_response_kind"], "forgot")
+            self.assertEqual(first["student_answer"], "dep")
+            stored = db.session.get(
+                VocabularyLearningQuestion, queue["current_question"]["learning_question_id"]
+            )
+            self.assertTrue(stored.score_eligible)
+            self.assertFalse(stored.first_is_correct)
+            self.assertEqual(stored.first_response_kind, "forgot")
+            record = DictationRecord.query.filter_by(task_id=task.id).one()
+            self.assertEqual(record.response_kind, "forgot")
+            self.assertTrue(record.vocabulary_score_eligible)
+            resumed = get_vocabulary_group_queue(user, task.id)
+            self.assertFalse(resumed["correction_required"])
+            self.assertEqual(resumed["last_saved_response"]["attempt_id"], "forgot-vs-answer")
+            self.assertEqual(resumed["last_saved_response"]["response_kind"], "forgot")
+            self.assertEqual(resumed["last_saved_response"]["student_answer"], "dep")
+            recovered = get_vocabulary_group_queue(
+                user, task.id, recovery_attempt_id="forgot-vs-answer"
+            )
+            self.assertEqual(recovered["saved_response"]["response_kind"], "forgot")
+            self.assertEqual(recovered["saved_response"]["learning_question_id"], stored.id)
+            expired_view = get_vocabulary_group_queue(
+                user,
+                task.id,
+                now=datetime.combine(
+                    date.fromisoformat(str(task.date)) + timedelta(days=2),
+                    datetime.min.time(),
+                ),
+                recovery_attempt_id="forgot-vs-answer",
+            )
+            self.assertTrue(expired_view["read_only"])
+            self.assertEqual(expired_view["saved_response"]["response_kind"], "forgot")
+            self.assertIsNone(
+                get_vocabulary_group_queue(
+                    user, task.id, recovery_attempt_id="unsaved-attempt"
+                )["saved_response"]
+            )
+            self.assertEqual(resumed["forgot_items"][0]["word_id"], stored.word_id)
+            self.assertTrue(resumed["forgot_items"][0]["audio_tts_url"])
+
+            replay = submit_vocabulary_group_answer(
+                user, dict(payload, response_kind="answer", answer="依赖")
+            )
+            self.assertTrue(replay["idempotent"])
+            self.assertFalse(replay["is_correct"])
+            self.assertEqual(replay["response_kind"], "forgot")
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 1)
+            with self.assertRaises(VocabularyGroupLearningError) as stale:
+                submit_vocabulary_group_answer(user, dict(payload, attempt_id="second-writer"))
+            self.assertEqual(stale.exception.error, "question_not_current")
+            with self.assertRaises(VocabularyGroupLearningError) as forged_replay:
+                submit_vocabulary_group_answer(user, dict(payload, question_id="another-question"))
+            self.assertEqual(forged_replay.exception.error, "question_not_current")
+
+            next_queue = get_vocabulary_group_queue(user, task.id)
+            normal = self._answer_for_current(
+                user, task.id, next_queue, attempt_id="normal-vs-forgot"
+            )
+            self.assertTrue(normal["is_correct"])
+            losing_forgot = submit_vocabulary_group_answer(
+                user,
+                self._forgot_payload(
+                    task.id, next_queue, attempt_id="normal-vs-forgot"
+                ),
+            )
+            self.assertTrue(losing_forgot["idempotent"])
+            self.assertEqual(losing_forgot["response_kind"], "answer")
+            self.assertTrue(losing_forgot["is_correct"])
+            later_recovery = get_vocabulary_group_queue(
+                user, task.id, recovery_attempt_id="forgot-vs-answer"
+            )
+            self.assertEqual(later_recovery["saved_response"]["response_kind"], "forgot")
+            self.assertEqual(later_recovery["last_saved_response"]["response_kind"], "answer")
+
+    def test_all_forgotten_first_and_retry_answers_finish_at_zero(self):
+        with self.app.app_context():
+            user = self._user()
+            now = datetime(2026, 8, 8, 12)
+            task = self._task("reading", end=1, task_date=now.date())
+            queue = get_vocabulary_group_queue(user, task.id, now=now)
+            steps = 0
+            while not queue["completed"]:
+                queue = self._view_group(user, task.id, queue, now=now)
+                question = queue["current_question"]
+                self.assertIsNotNone(question)
+                steps += 1
+                self.assertLess(steps, 16)
+                exact_answer = None
+                if steps == 1:
+                    stored = db.session.get(
+                        VocabularyLearningQuestion, question["learning_question_id"]
+                    )
+                    answer_key = json.loads(stored.answer_payload_json)
+                    exact_answer = answer_key.get("answer_option_id") or answer_key.get("answer")
+                result = submit_vocabulary_group_answer(
+                    user,
+                    self._forgot_payload(
+                        task.id, queue,
+                        answer=exact_answer or "",
+                        attempt_id=f"all-forgot:{question['learning_question_id']}:{queue['phase']}",
+                    ),
+                    now=now,
+                )
+                self.assertEqual(result["response_kind"], "forgot")
+                self.assertFalse(result["is_correct"])
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+                self.assertFalse(queue["correction_required"])
+            final = finalize_vocabulary_group_task(
+                user, task.id, {"queue_token": queue["queue_token"]}, now=now
+            )
+            self.assertEqual(final["correct_count"], 0)
+            self.assertEqual(final["accuracy"], 0)
+            self.assertGreater(final["total_count"], 0)
+            self.assertEqual(final["scored_forgotten_count"], final["total_count"])
+            self.assertEqual(final["forgotten_count"], final["guidance_count"] + final["total_count"])
+            self.assertGreater(final["retry_count"], 0)
+            self.assertGreater(final["needs_review_count"], 0)
+            self.assertGreater(final["deferred_review_count"], 0)
+            self.assertEqual(len(final["weak_word_ids"]), 1)
+            self.assertTrue(any(item["retry_response_kind"] == "forgot" for item in final["forgot_items"]))
+            restored = get_vocabulary_group_queue(user, task.id, now=now)
+            self.assertTrue(restored["completed"])
+            self.assertEqual(restored["forgot_items"], final["forgot_items"])
+            self.assertEqual(restored["settlement"]["accuracy"], 0)
+            self.assertEqual(restored["settlement"]["forgot_items"], final["forgot_items"])
+            question = VocabularyLearningQuestion.query.filter_by(task_id=task.id, phase=PHASE_RECALL).first()
+            mastery = StudentVocabularyMastery.query.filter_by(sense_id=question.sense_id).one()
+            self.assertLessEqual(mastery.meaning_recall_next_due_at, now + timedelta(days=1))
+
+    def test_retry_only_forgotten_item_is_in_visible_count_not_first_score_count(self):
+        with self.app.app_context():
+            user = self._user()
+            task = self._task("reading", end=1)
+            queue = self._view_group(user, task.id, get_vocabulary_group_queue(user, task.id))
+            ordinary_wrong_id = queue["current_question"]["learning_question_id"]
+            self._answer_for_current(user, task.id, queue, wrong=True)
+            queue = get_vocabulary_group_queue(user, task.id)
+            self.assertFalse(queue["correction_required"])
+            first_forgot_id = None
+            while queue["phase"] != PHASE_RETRY:
+                question = queue["current_question"]
+                self.assertIsNotNone(question)
+                if first_forgot_id is None:
+                    first_forgot_id = question["learning_question_id"]
+                    self._answer_for_current(user, task.id, queue, response_kind="forgot")
+                else:
+                    self._answer_for_current(user, task.id, queue)
+                queue = get_vocabulary_group_queue(user, task.id)
+            self.assertNotEqual(ordinary_wrong_id, first_forgot_id)
+            while not queue["completed"]:
+                question = queue["current_question"]
+                self.assertIsNotNone(question)
+                self._answer_for_current(
+                    user,
+                    task.id,
+                    queue,
+                    response_kind=(
+                        "forgot"
+                        if question["learning_question_id"] == ordinary_wrong_id
+                        else None
+                    ),
+                )
+                queue = get_vocabulary_group_queue(user, task.id)
+            self.assertEqual(queue["forgotten_count"], len(queue["forgot_items"]))
+            self.assertEqual(queue["forgotten_count"], 2)
+            final = finalize_vocabulary_group_task(
+                user, task.id, {"queue_token": queue["queue_token"]}
+            )
+            self.assertEqual(final["forgotten_count"], 2)
+            self.assertEqual(
+                final["scored_forgotten_count"],
+                sum(
+                    item["first_response_kind"] == "forgot" and item["score_eligible"]
+                    for item in final["forgot_items"]
+                ),
+            )
+
+    def test_comprehensive_forgotten_retry_defers_related_wave_to_next_review(self):
+        with self.app.app_context():
+            self._ensure_six_words()
+            user = self._user()
+            now = datetime(2026, 8, 8, 12)
+            task = self._task("comprehensive", end=6, task_date=now.date())
+            queue = self._view_group(user, task.id, get_vocabulary_group_queue(user, task.id, now=now), now=now)
+            forgotten_base_ids = set()
+            while queue["phase"] != PHASE_RETRY:
+                question = queue["current_question"]
+                self.assertIsNotNone(question)
+                if question["dimension"] == "form_recall":
+                    forgotten_base_ids.add(question["learning_question_id"])
+                    self._answer_for_current(
+                        user, task.id, queue, response_kind="forgot", now=now,
+                    )
+                else:
+                    self._answer_for_current(user, task.id, queue, now=now)
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+                self.assertFalse(queue["correction_required"])
+            self.assertEqual(len(forgotten_base_ids), 6)
+            first_source = db.session.get(
+                VocabularyLearningQuestion, min(forgotten_base_ids)
+            )
+            first_mastery = StudentVocabularyMastery.query.filter_by(
+                student_id=user.id, sense_id=first_source.sense_id
+            ).one()
+            earlier_related_due = now + timedelta(hours=12)
+            first_mastery.context_use_next_due_at = earlier_related_due
+            original_context_stage = first_mastery.context_use_stage
+            original_audio_stage = first_mastery.audio_form_recall_stage
+            original_audio_due = first_mastery.audio_form_recall_next_due_at
+            primary_retry_ids = set()
+            while (
+                queue["phase"] == PHASE_RETRY
+                and queue["current_question"]
+                and queue["current_question"]["remediation_kind"] is None
+            ):
+                question = queue["current_question"]
+                primary_retry_ids.add(question["learning_question_id"])
+                response = self._answer_for_current(
+                    user, task.id, queue, response_kind="forgot", now=now,
+                )
+                self.assertEqual(response["response_kind"], "forgot")
+                self.assertEqual(response["correction_count"], 0)
+                if question["learning_question_id"] == first_source.id:
+                    replay = self._answer_for_current(
+                        user, task.id, queue, response_kind="forgot", now=now,
+                    )
+                    self.assertTrue(replay["idempotent"])
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+                self.assertFalse(queue["correction_required"])
+            self.assertEqual(primary_retry_ids, forgotten_base_ids)
+            self.assertTrue(queue["completed"])
+            self.assertIsNone(queue["current_question"])
+            self.assertEqual(
+                VocabularyLearningQuestion.query.filter_by(
+                    task_id=task.id, remediation_kind="related_dimension"
+                ).count(),
+                0,
+            )
+            self.assertEqual(first_mastery.context_use_next_due_at, earlier_related_due)
+            self.assertEqual(first_mastery.review_related_dimension, "context_use")
+            self.assertEqual(first_mastery.review_related_due_at, earlier_related_due)
+            self.assertEqual(first_mastery.context_use_stage, original_context_stage)
+            self.assertEqual(first_mastery.audio_form_recall_stage, original_audio_stage)
+            self.assertEqual(first_mastery.audio_form_recall_next_due_at, original_audio_due)
+            self.assertEqual(first_mastery.form_recall_next_due_at, now + timedelta(days=1))
+            result = finalize_vocabulary_group_task(
+                user, task.id, {"queue_token": queue["queue_token"]}, now=now
+            )
+            self.assertEqual(result["total_count"], 12)
+            self.assertEqual(result["correct_count"], 6)
+            self.assertEqual(result["scored_forgotten_count"], 6)
+            self.assertEqual(result["retry_count"], 6)
+            self.assertEqual(result["deferred_review_count"], 6)
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 18)
+            with self.assertRaises(VocabularyGroupLearningError) as readonly:
+                finalize_vocabulary_group_task(
+                    user, task.id, {"queue_token": queue["queue_token"]}, now=now
+                )
+            self.assertEqual(readonly.exception.error, "task_completed_read_only")
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 18)
+            related_review = claim_today_review(user, now=now + timedelta(days=1, minutes=1))
+            self.assertEqual(len(related_review["items"]), 6)
+            self.assertEqual(
+                {item["dimension"] for item in related_review["items"]},
+                {"context_use"},
+            )
+            self.assertEqual(
+                {item["remediation_kind"] for item in related_review["items"]},
+                {"related_dimension"},
+            )
+
+    def test_comprehensive_mixed_retry_only_normal_wrong_gets_group_related_wave(self):
+        with self.app.app_context():
+            self._ensure_six_words()
+            user = self._user()
+            now = datetime(2026, 8, 8, 12)
+            task = self._task("comprehensive", end=6, task_date=now.date())
+            queue = self._view_group(
+                user, task.id, get_vocabulary_group_queue(user, task.id, now=now), now=now
+            )
+            while queue["phase"] != PHASE_RETRY:
+                question = queue["current_question"]
+                self._answer_for_current(
+                    user, task.id, queue,
+                    wrong=question["dimension"] == "form_recall", now=now,
+                )
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+                if queue["correction_required"]:
+                    self._correct_current(user, task.id, queue, now=now)
+                    queue = get_vocabulary_group_queue(user, task.id, now=now)
+            flow = VocabularyLearningFlow.query.filter_by(task_id=task.id).one()
+            forgotten_source_id = json.loads(flow.retry_question_ids_json)[-1]
+            normal_wrong_ids = set()
+            while (
+                queue["current_question"]
+                and queue["current_question"]["remediation_kind"] is None
+            ):
+                question_id = queue["current_question"]["learning_question_id"]
+                if question_id == forgotten_source_id:
+                    self._answer_for_current(
+                        user, task.id, queue, response_kind="forgot", now=now,
+                    )
+                else:
+                    normal_wrong_ids.add(question_id)
+                    self._answer_for_current(user, task.id, queue, wrong=True, now=now)
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+                if queue["correction_required"]:
+                    self._correct_current(user, task.id, queue, now=now)
+                    queue = get_vocabulary_group_queue(user, task.id, now=now)
+            self.assertEqual(len(normal_wrong_ids), 5)
+            related = VocabularyLearningQuestion.query.filter_by(
+                task_id=task.id, remediation_kind="related_dimension"
+            ).all()
+            self.assertEqual(len(related), 5)
+            self.assertEqual(
+                {question.source_question_id for question in related}, normal_wrong_ids
+            )
+            self.assertTrue(
+                db.session.get(VocabularyLearningQuestion, forgotten_source_id).deferred_to_review
+            )
+            while not queue["completed"]:
+                self._answer_for_current(user, task.id, queue, now=now)
+                queue = get_vocabulary_group_queue(user, task.id, now=now)
+            result = finalize_vocabulary_group_task(
+                user, task.id, {"queue_token": queue["queue_token"]}, now=now
+            )
+            self.assertEqual(result["retry_count"], 11)
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 23)
+
+    def test_forgotten_submission_rejects_foreign_and_expired_task_without_writing(self):
+        with self.app.app_context():
+            now = datetime(2026, 8, 8, 12)
+            user = self._user()
+            task = self._task("listening", end=1, task_date=now.date())
+            queue = self._view_group(user, task.id, get_vocabulary_group_queue(user, task.id, now=now), now=now)
+            payload = self._forgot_payload(task.id, queue)
+            foreign = User(
+                username="another_group_student", password_hash="test",
+                role=User.ROLE_STUDENT, is_active=True,
+            )
+            db.session.add(foreign)
+            db.session.flush()
+            db.session.add(StudentProfile(user_id=foreign.id, full_name="其他学生"))
+            db.session.flush()
+            with self.assertRaises(VocabularyGroupLearningError) as forbidden:
+                submit_vocabulary_group_answer(foreign, payload, now=now)
+            self.assertEqual(forbidden.exception.status_code, 403)
+            with self.assertRaises(VocabularyGroupLearningError) as expired:
+                submit_vocabulary_group_answer(user, payload, now=now + timedelta(days=1))
+            self.assertEqual(expired.exception.error, "task_expired")
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task.id).count(), 0)
+
+    def test_empty_forgot_is_valid_for_listening_and_writing_prompts(self):
+        with self.app.app_context():
+            user = self._user()
+            for goal in ("listening", "writing"):
+                with self.subTest(goal=goal):
+                    task = self._task(goal, end=1)
+                    queue = self._view_group(
+                        user, task.id, get_vocabulary_group_queue(user, task.id)
+                    )
+                    self.assertIn(
+                        queue["current_question"]["mode"],
+                        {"en_to_zh", "audio_to_en", "zh_to_en"},
+                    )
+                    response = submit_vocabulary_group_answer(
+                        user,
+                        self._forgot_payload(
+                            task.id, queue, attempt_id=f"{goal}-empty-forgot"
+                        ),
+                    )
+                    self.assertFalse(response["is_correct"])
+                    self.assertEqual(response["response_kind"], "forgot")
+                    self.assertEqual(
+                        DictationRecord.query.filter_by(task_id=task.id).one().student_answer,
+                        "",
+                    )
+
     def test_context_choice_only_is_explicit_degraded_single_encounter(self):
         with self.app.app_context(), patch(
             "services.vocabulary_group_learning._context_question"
@@ -914,6 +1361,7 @@ class VocabularyGroupLearningTest(unittest.TestCase):
             duplicate = submit_vocabulary_group_answer(user, dict(payload, answer="stale-answer"))
             self.assertTrue(duplicate["idempotent"])
             self.assertEqual(duplicate["is_correct"], first["is_correct"])
+            self.assertEqual(duplicate["response_kind"], "answer")
             with self.assertRaises(VocabularyGroupLearningError) as stale:
                 submit_vocabulary_group_answer(
                     user,

@@ -44,6 +44,7 @@ from .stats_utils import (
     summarize_today_status,
     summarize_weekly,
 )
+from services.vocabulary_attempt_reporting import dictation_attempt_display
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -3284,7 +3285,7 @@ def _parent_dictation_task_report(task, include_items):
                 "number": word.sequence,
                 "prompt": word.word,
                 "translation": word.translation or word.core_meaning_zh or "",
-                "student_answer": latest.student_answer if latest and latest.student_answer else "未作答",
+                **dictation_attempt_display(attempts),
                 "correct_answer": word.word,
                 "result_status": result_status,
                 "result_label": result_label,

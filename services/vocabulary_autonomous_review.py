@@ -94,6 +94,7 @@ VALID_REVIEW_SKIP_REASONS = {
     "missing_options",
     "long_text",
 }
+VALID_RESPONSE_KINDS = {"answer", "forgot"}
 _FEEDBACK_HYPHENATOR = None
 
 
@@ -103,9 +104,24 @@ def _correction_required(item: VocabularyReviewItem) -> bool:
     return bool(
         item.first_attempt_id
         and item.first_is_correct is False
+        and item.first_response_kind != "forgot"
         and item.correction_is_correct is not True
         and not item.correction_exhausted
     )
+
+
+def _response_kind(payload: dict) -> str:
+    """Keep a missing kind compatible with clients released before Forgot."""
+
+    raw = payload.get("response_kind", "answer")
+    if raw is None:
+        raw = "answer"
+    if not isinstance(raw, str):
+        raise VocabularyAutonomousReviewError("invalid_response_kind", 400)
+    kind = raw.strip().lower()
+    if kind not in VALID_RESPONSE_KINDS:
+        raise VocabularyAutonomousReviewError("invalid_response_kind", 400)
+    return kind
 
 
 def _supports_correction(payload: dict) -> bool:
@@ -813,6 +829,7 @@ def _public_item(
         "first_attempt_id": item.first_attempt_id,
         "first_is_correct": item.first_is_correct,
         "first_answer": item.first_answer,
+        "first_response_kind": item.first_response_kind,
         "correction_required": _correction_required(item),
         "correction_attempt_id": item.correction_attempt_id,
         "correction_is_correct": item.correction_is_correct,
@@ -872,6 +889,7 @@ def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> 
     )
     return {
         "ok": True,
+        "supports_forgot_response": True,
         "session_id": session.id,
         "session_token": session.session_token,
         "status": session.status,
@@ -888,6 +906,7 @@ def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> 
         "items": items,
         "words": items,
         "queue_token": session.queue_token,
+        "settlement": _settlement_result(session),
     }
 
 
@@ -1080,6 +1099,7 @@ def claim_today_review(
     if not materialized_candidates:
         return {
             "ok": True,
+            "supports_forgot_response": True,
             "empty": True,
             "status": "empty",
             "session_id": None,
@@ -1182,6 +1202,8 @@ def _answer_result(item, attempt, *, idempotent=False, settled=False):
         "question_id": item.question_id,
         "dimension": item.dimension,
         "student_answer": attempt.student_answer,
+        "response_kind": attempt.response_kind,
+        "first_response_kind": item.first_response_kind,
         "attempt_kind": attempt.attempt_kind,
         "correction_required": _correction_required(item),
         "correction_count": int(item.correction_count or 0),
@@ -1189,6 +1211,7 @@ def _answer_result(item, attempt, *, idempotent=False, settled=False):
         "correction_retry_allowed": _correction_required(item)
         and int(item.correction_count or 0) < MAX_CORRECTION_ATTEMPTS,
         "correction_exhausted": bool(item.correction_exhausted),
+        "deferred_to_review": bool(item.deferred_to_review),
         "revealed_answer": revealed_answer,
         "revealed_answer_option_id": revealed_option_id,
         "answer_feedback": _answer_feedback(item),
@@ -1203,7 +1226,23 @@ def _apply_review_item_state(
 ) -> None:
     """Apply one durable first answer exactly once at answer time."""
 
-    if item.state_applied:
+    # SQLite ignores SELECT ... FOR UPDATE, and another request can commit a
+    # first answer after this session loaded ``item``. Claim the transition in
+    # the database before touching mastery; an ORM-cached False is not proof
+    # that the answer has not already consumed its remediation budget.
+    try:
+        claimed = VocabularyReviewItem.query.filter_by(
+            id=item.id,
+            student_id=user.id,
+            state_applied=False,
+        ).update(
+            {VocabularyReviewItem.state_applied: True},
+            synchronize_session=False,
+        )
+    except OperationalError:
+        raise VocabularyAutonomousReviewError("review_answer_in_progress", 409) from None
+    if claimed != 1:
+        db.session.refresh(item)
         return
     mastery = _mastery_for(user.id, item.sense_id)
     if mastery is None:
@@ -1227,6 +1266,15 @@ def _apply_review_item_state(
         utc_naive(answered_at),
         bootstrap_dimensions=(),
     )
+    if (
+        item.first_response_kind == "forgot"
+        and item.remediation_kind == "same_dimension"
+        and not is_correct
+    ):
+        # A normal wrong answer reaches this release after its bounded
+        # correction. Forgot deliberately has no immediate correction, so
+        # carry the same related-dimension schedule through the first answer.
+        _schedule_related_dimension(mastery, item.dimension, utc_naive(answered_at))
     item.state_applied = True
 
 
@@ -1260,10 +1308,12 @@ def _restore_first_attempt_state(
 ) -> None:
     """Repair an interrupted/idempotent path without grading a second answer."""
 
-    if not item.first_attempt_id:
-        item.first_attempt_id = attempt.attempt_id
-        item.first_is_correct = bool(attempt.is_correct)
-        item.first_answer = attempt.student_answer[:100]
+    item.first_attempt_id = attempt.attempt_id
+    item.first_is_correct = bool(attempt.is_correct)
+    item.first_answer = attempt.student_answer[:100]
+    item.first_response_kind = attempt.response_kind
+    if attempt.response_kind == "forgot":
+        item.deferred_to_review = True
     _apply_review_item_state(
         user,
         item,
@@ -1316,6 +1366,7 @@ def submit_review_answer(
         or supplied_dimension != item.dimension
     ):
         raise VocabularyAutonomousReviewError("review_question_changed", 409)
+    response_kind = _response_kind(payload)
     raw_attempt_id = str(payload.get("attempt_id") or "").strip()
     if len(raw_attempt_id) > SESSION_TOKEN_MAX_LENGTH:
         raise VocabularyAutonomousReviewError(
@@ -1327,8 +1378,26 @@ def submit_review_answer(
         student_id=user.id,
         attempt_id=attempt_id,
     ).first()
+    if session.status != VocabularyReviewSession.STATUS_ACTIVE:
+        if existing_attempt and (
+            existing_attempt.item_id != item.id or not existing_attempt.is_first_attempt
+        ):
+            raise VocabularyAutonomousReviewError("attempt_id_conflict", 409)
+        first_attempt = existing_attempt or (
+            VocabularyReviewAttempt.query.filter_by(item_id=item.id, is_first_attempt=True)
+            .order_by(VocabularyReviewAttempt.id.asc())
+            .first()
+        )
+        if first_attempt:
+            return _answer_result(
+                item,
+                first_attempt,
+                idempotent=True,
+                settled=session.status == VocabularyReviewSession.STATUS_SETTLED,
+            )
+        raise VocabularyAutonomousReviewError("review_session_not_active", 409)
     if existing_attempt:
-        if existing_attempt.item_id != item.id:
+        if existing_attempt.item_id != item.id or not existing_attempt.is_first_attempt:
             raise VocabularyAutonomousReviewError("attempt_id_conflict", 409)
         _restore_first_attempt_state(user, item, existing_attempt)
         if not _supports_correction(payload):
@@ -1352,8 +1421,14 @@ def submit_review_answer(
             return _answer_result(item, first_attempt, idempotent=True)
         raise VocabularyAutonomousReviewError("review_item_already_answered", 409)
     answer = str(payload.get("answer") or "").strip()
-    if not answer or len(answer) > 200:
+    if (not answer and response_kind == "answer") or len(answer) > 200:
         raise VocabularyAutonomousReviewError("missing_answer", 400)
+    if response_kind == "forgot":
+        invalid_reason = _review_item_skip_reason(item)
+        if invalid_reason:
+            raise VocabularyAutonomousReviewError(
+                "review_item_invalid", 409, skip_reason=invalid_reason
+            )
 
     snapshot = _safe_json(item.question_snapshot_json)
     try:
@@ -1367,7 +1442,9 @@ def submit_review_answer(
     except ValueError as error:
         raise VocabularyAutonomousReviewError("invalid_input_mode", 400) from error
     expected = _safe_json(item.answer_payload_json)
-    if item.dimension == "context_use":
+    if response_kind == "forgot":
+        is_correct = False
+    elif item.dimension == "context_use":
         is_correct = grade_context_answer(snapshot, expected, answer)
     elif expected.get("answer_type") == "chinese":
         is_correct = is_chinese_answer_correct(answer, expected.get("answer") or "")
@@ -1384,6 +1461,7 @@ def submit_review_answer(
         attempt_id=attempt_id,
         question_id=item.question_id,
         student_answer=answer[:100],
+        response_kind=response_kind,
         is_correct=is_correct,
         is_first_attempt=True,
         attempt_kind="first",
@@ -1402,7 +1480,7 @@ def submit_review_answer(
             student_id=user.id,
             attempt_id=attempt_id,
         ).first()
-        if duplicate and duplicate.item_id == item.id:
+        if duplicate and duplicate.item_id == item.id and duplicate.is_first_attempt:
             _restore_first_attempt_state(user, item, duplicate)
             return _answer_result(item, duplicate, idempotent=True)
         first_attempt = (
@@ -1421,6 +1499,9 @@ def submit_review_answer(
     item.first_attempt_id = attempt_id
     item.first_is_correct = is_correct
     item.first_answer = answer[:100]
+    item.first_response_kind = response_kind
+    if response_kind == "forgot":
+        item.deferred_to_review = True
     _apply_review_item_state(user, item, is_correct, now)
     if not _supports_correction(payload):
         _bypass_legacy_correction(item)
@@ -1722,6 +1803,28 @@ def settle_review_session(
         if attempt:
             attempts.append((item, attempt))
     correct_count = sum(bool(attempt.is_correct) for _item, attempt in attempts)
+    forgot_items = []
+    for item, attempt in attempts:
+        if attempt.response_kind != "forgot":
+            continue
+        public = _public_item(item)
+        feedback = public.get("answer_feedback") or {}
+        forgot_items.append(
+            {
+                "review_item_id": item.id,
+                "word_id": item.word_id,
+                "sense_id": item.sense_id,
+                "question_id": item.question_id,
+                "dimension": item.dimension,
+                "mode": public.get("mode"),
+                "revealed_answer": public.get("revealed_answer"),
+                "revealed_answer_option_id": public.get("revealed_answer_option_id"),
+                "correct_spelling": feedback.get("word"),
+                "meaning": feedback.get("core_meaning_zh"),
+                "audio_tts_url": feedback.get("audio_tts_url"),
+                "answer_feedback": feedback,
+            }
+        )
     by_dimension = {}
     for item, attempt in attempts:
         bucket = by_dimension.setdefault(item.dimension, {"correct": 0, "total": 0})
@@ -1738,6 +1841,8 @@ def settle_review_session(
         "correct_count": correct_count,
         "total_count": total_count,
         "accuracy": accuracy,
+        "forgot_count": len(forgot_items),
+        "forgot_items": forgot_items,
         "dimensions": by_dimension,
         "queue_token": session.queue_token,
         "origin_task_id": session.origin_task_id,

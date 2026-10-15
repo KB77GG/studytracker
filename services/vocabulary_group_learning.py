@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import heapq
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError, OperationalError
@@ -34,6 +34,7 @@ from models import (
 from services.dictation_input_policy import resolve_submission_input
 from services.vocabulary_autonomous_review import (
     VocabularyAutonomousReviewError,
+    _schedule_related_dimension,
     review_preflight,
 )
 from services.vocabulary_context import build_context_question, grade_context_answer
@@ -98,6 +99,7 @@ PHASE_LABELS = {
     PHASE_RETRY: "错题再测",
     PHASE_COMPLETE: "本组完成",
 }
+RESPONSE_KINDS = frozenset({"answer", "forgot"})
 
 
 class VocabularyGroupLearningError(Exception):
@@ -568,11 +570,16 @@ def _public_question(
         if snapshot.get("mode") in {"audio_to_en", "zh_to_en", "context_fill"}
         else [],
     }
-    if retry or correction or question.first_attempt_id:
+    if question.first_attempt_id:
         payload["first_is_correct"] = bool(question.first_is_correct)
         payload["first_attempt_id"] = question.first_attempt_id
         payload["first_answer"] = question.first_answer
+        payload["first_response_kind"] = question.first_response_kind or "answer"
         payload["revealed_answer"] = _revealed_answer(question)
+    if question.retry_attempt_id:
+        payload["retry_is_correct"] = bool(question.retry_is_correct)
+        payload["retry_attempt_id"] = question.retry_attempt_id
+        payload["retry_response_kind"] = question.retry_response_kind or "answer"
     if correction:
         payload["correction_required"] = True
         payload["correction_count"] = int(question.correction_count or 0)
@@ -839,6 +846,21 @@ def _mark_weak_word(flow, word_id):
     flow.weak_word_ids_json = json.dumps(sorted(weak), ensure_ascii=False)
 
 
+def _defer_forgotten_retry(flow, user, question, now):
+    """Keep a failed retry visible in the next review without changing its first score."""
+
+    question.deferred_to_review = True
+    _mark_weak_word(flow, question.word_id)
+    mastery = _mastery_for(user.id, question.sense_id) or ensure_mastery(
+        user, question.word, question.sense
+    )
+    due_attr = f"{question.dimension}_next_due_at"
+    due = getattr(mastery, due_attr)
+    next_day = now + timedelta(days=1)
+    if due is None or due > next_day:
+        setattr(mastery, due_attr, next_day)
+
+
 def _set_retry_questions(flow):
     questions = [
         question
@@ -1040,7 +1062,13 @@ def _prepare_related_remediations(flow, user, now):
     related_offset = 0
     for source_id in sorted(source_ids, key=lambda item: primary_positions.get(item, 10**9)):
         source = db.session.get(VocabularyLearningQuestion, source_id)
-        if not source or source.retry_is_correct is not False:
+        if (
+            not source
+            or source.retry_is_correct is not False
+            or source.retry_response_kind == "forgot"
+        ):
+            # A forgotten retry is deferred to a later review, including when
+            # an older in-progress flow still lists it as a related source.
             continue
         failed_dimensions = {
             question.dimension
@@ -1244,7 +1272,106 @@ def _release_legacy_pending_correction(flow) -> None:
     flow.pending_correction_question_id = None
 
 
-def _public_flow(flow):
+def _forgotten_items(flow):
+    """Expose answers only for questions with a persisted forgotten response."""
+
+    items = []
+    questions = (
+        VocabularyLearningQuestion.query.filter_by(flow_id=flow.id)
+        .order_by(VocabularyLearningQuestion.question_order.asc())
+        .all()
+    )
+    for question in questions:
+        first_forgot = bool(
+            question.first_attempt_id and question.first_response_kind == "forgot"
+        )
+        retry_forgot = bool(
+            question.retry_attempt_id and question.retry_response_kind == "forgot"
+        )
+        if not (first_forgot or retry_forgot):
+            continue
+        word = question.word
+        items.append(
+            {
+                "learning_question_id": question.id,
+                "question_id": question.question_id,
+                "word_id": question.word_id,
+                "dimension": question.dimension,
+                "score_eligible": bool(question.score_eligible),
+                "word": (canonical_vocabulary_word(word.word, word.accepted_answers) or word.word) if word else None,
+                "meaning": (word.core_meaning_zh or word.translation) if word else None,
+                "revealed_answer": _revealed_answer(question),
+                "audio_tts_url": f"/dictation/words/{question.word_id}/tts",
+                "first_response_kind": question.first_response_kind or "answer",
+                "retry_response_kind": question.retry_response_kind if question.retry_attempt_id else None,
+            }
+        )
+    return items
+
+
+def _saved_response(flow, record):
+    if not record:
+        return None
+    question = VocabularyLearningQuestion.query.filter_by(
+        flow_id=flow.id, question_id=record.vocabulary_question_id
+    ).first()
+    if not question:
+        return None
+    word = question.word
+    return {
+        "learning_question_id": question.id,
+        "attempt_id": record.attempt_id,
+        "response_kind": record.response_kind or "answer",
+        "is_first_attempt": bool(record.is_first_attempt),
+        "is_correct": bool(record.is_correct),
+        "student_answer": record.student_answer,
+        "revealed_answer": _revealed_answer(question),
+        "correction_required": flow.pending_correction_question_id == question.id,
+        "answer_feedback": {
+            "word": (canonical_vocabulary_word(word.word, word.accepted_answers) or word.word) if word else None,
+            "core_meaning_zh": (word.core_meaning_zh or word.translation) if word else None,
+            "phonetic": word.phonetic if word else None,
+            "usage_pattern": word.usage_pattern if word else None,
+            "example_en": word.example_en if word else None,
+            "example_zh": word.example_zh if word else None,
+            "usage_note": word.usage_note if word else None,
+            "audio_tts_url": f"/dictation/words/{question.word_id}/tts",
+        },
+    }
+
+
+def _last_saved_response(flow):
+    record = (
+        DictationRecord.query.filter(
+            DictationRecord.student_id == flow.student_id,
+            DictationRecord.task_id == flow.task_id,
+            DictationRecord.vocabulary_question_id.isnot(None),
+        )
+        .order_by(DictationRecord.id.desc())
+        .first()
+    )
+    return _saved_response(flow, record)
+
+
+def _response_for_attempt(flow, attempt_id):
+    if not attempt_id or len(attempt_id) > 96:
+        return None
+    record = DictationRecord.query.filter_by(
+        student_id=flow.student_id,
+        task_id=flow.task_id,
+        attempt_id=attempt_id,
+    ).first()
+    return _saved_response(flow, record)
+
+
+def recover_vocabulary_group_attempt(user: User, task_id: int, attempt_id: str) -> dict | None:
+    """Read an exact saved answer even when a new review gate blocks the task."""
+
+    _, flow = _flow_or_error(user, task_id, lock=False)
+    return _response_for_attempt(flow, attempt_id) if flow else None
+
+
+def _public_flow(flow, *, recovery_attempt_id=None):
     group = _group_payload(flow) or {"word_ids": [], "familiarity": [], "size": 0}
     viewed = set(_json_list(flow.viewed_word_ids_json))
     familiarity = [dict(item, viewed=item.get("word_id") in viewed) for item in group.get("familiarity", [])]
@@ -1291,11 +1418,20 @@ def _public_flow(flow):
     remediation_budget = max(0, len(group.get("word_ids") or []) * MAX_REMEDIATION_PER_WORD)
     remediation_allocated = len(remediation_questions)
     pending_remediation = max(0, len(_retry_questions(flow)) - flow.phase_index) if flow.phase == PHASE_RETRY else 0
-    return {
+    forgot_items = _forgotten_items(flow)
+    settlement = VocabularyTaskSettlement.query.filter_by(
+        student_id=flow.student_id, task_id=flow.task_id
+    ).first()
+    result = {
         "ok": True,
         "task_id": flow.task_id,
         "task_mode": "vocabulary_group_v2",
         "mode": "vocabulary_group_v2",
+        "supports_forgot_response": True,
+        "forgot_items": forgot_items,
+        "forgotten_count": len(forgot_items),
+        "last_saved_response": _last_saved_response(flow),
+        "settlement": _json_dict(settlement.result_json) if settlement else None,
         "vocabulary_goal": flow.vocabulary_goal,
         "learning_goal": flow.vocabulary_goal,
         "dimensions": list(dimensions_for_goal(flow.vocabulary_goal)),
@@ -1332,6 +1468,9 @@ def _public_flow(flow):
         "completed": flow.status == VocabularyLearningFlow.STATUS_COMPLETED,
         "status": flow.status,
     }
+    if recovery_attempt_id is not None:
+        result["saved_response"] = _response_for_attempt(flow, recovery_attempt_id)
+    return result
 
 
 def get_vocabulary_group_queue(
@@ -1340,6 +1479,7 @@ def get_vocabulary_group_queue(
     *,
     now: datetime | None = None,
     supports_correction: bool = True,
+    recovery_attempt_id: str | None = None,
 ) -> dict:
     now = utc_naive(now)
     task, existing_flow = _flow_or_error(user, task_id, lock=False)
@@ -1351,22 +1491,23 @@ def get_vocabulary_group_queue(
                 "task_id": task.id,
                 "task_mode": "vocabulary_group_v2",
                 "mode": "vocabulary_group_v2",
+                "supports_forgot_response": True,
                 **access.as_dict(),
                 "completed": access.completed,
                 "status": task.status,
                 "current_question": None,
                 "familiarity": [],
             }
-        result = _public_flow(existing_flow)
+        result = _public_flow(existing_flow, recovery_attempt_id=recovery_attempt_id)
         result.update(access.as_dict())
         return result
     _require_daily_clearance(user, task_id, now)
     task, flow = _flow_or_error(user, task_id, lock=True)
     flow = flow or _ensure_flow(user, task, now)
-    if not supports_correction:
+    if not supports_correction and recovery_attempt_id is None:
         _release_legacy_pending_correction(flow)
     _advance_after_answer(flow, user, now)
-    result = _public_flow(flow)
+    result = _public_flow(flow, recovery_attempt_id=recovery_attempt_id)
     result.update(access.as_dict())
     return result
 
@@ -1477,9 +1618,12 @@ def _serialize_answer(question, record, *, idempotent=False):
         "idempotent": bool(idempotent),
         "attempt_id": record.attempt_id,
         "student_answer": record.student_answer,
+        "response_kind": record.response_kind or "answer",
         "first_attempt_id": question.first_attempt_id,
         "first_attempt_is_correct": question.first_is_correct,
         "first_attempt_answer": question.first_answer,
+        "first_response_kind": question.first_response_kind or "answer",
+        "retry_response_kind": (question.retry_response_kind or "answer") if question.retry_attempt_id else None,
         "learning_question_id": question.id,
         "queue_item_id": question.id,
         "question_id": question.question_id,
@@ -1488,7 +1632,12 @@ def _serialize_answer(question, record, *, idempotent=False):
         "dimension": question.dimension,
         "phase": question.phase,
         "revealed_answer": _revealed_answer(question),
-        "retry_required": bool(question.first_is_correct is False and not question.retry_attempt_id),
+        "retry_required": bool(
+            question.remediation_kind is None
+            and question.first_is_correct is False
+            and not question.retry_attempt_id
+            and not question.deferred_to_review
+        ),
         "correction_required": correction_required,
         "correction_count": int(question.correction_count or 0),
         "remediation_kind": question.remediation_kind,
@@ -1498,6 +1647,10 @@ def _serialize_answer(question, record, *, idempotent=False):
 
 def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> dict:
     now = utc_naive(now)
+    response_kind = payload.get("response_kind", "answer")
+    if not isinstance(response_kind, str) or response_kind not in RESPONSE_KINDS:
+        raise VocabularyGroupLearningError("invalid_response_kind", 400)
+    forgot = response_kind == "forgot"
     try:
         task_id = int(payload.get("task_id"))
     except (TypeError, ValueError) as error:
@@ -1526,6 +1679,16 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
             question_id=existing_record.vocabulary_question_id,
         ).first()
         if question and existing_record.task_id == task_id:
+            for field, expected in (
+                ("learning_question_id", question.id),
+                ("queue_item_id", question.id),
+                ("question_id", question.question_id),
+                ("word_id", question.word_id),
+                ("sense_id", question.sense_id),
+                ("dimension", question.dimension),
+            ):
+                if payload.get(field) in (None, "") or str(payload.get(field)) != str(expected):
+                    raise VocabularyGroupLearningError("question_not_current", 409, state=_public_flow(flow))
             expected_retry = bool(question.remediation_kind) or not existing_record.is_first_attempt
             if supplied_retry != expected_retry:
                 raise VocabularyGroupLearningError("attempt_phase_required", 400)
@@ -1539,6 +1702,8 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         )
     if flow.status != VocabularyLearningFlow.STATUS_ACTIVE:
         raise VocabularyGroupLearningError("task_already_completed", 409, state=_public_flow(flow))
+    if flow.pending_correction_question_id:
+        raise VocabularyGroupLearningError("correction_required", 409, state=_public_flow(flow))
     question = _current_question(flow)
     if not question:
         raise VocabularyGroupLearningError("question_not_current", 409, state=_public_flow(flow))
@@ -1553,7 +1718,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         if payload.get(field) in (None, "") or str(payload.get(field)) != str(expected):
             raise VocabularyGroupLearningError("question_not_current", 409, state=_public_flow(flow))
     answer = str(payload.get("answer") or "").strip()
-    if not answer or len(answer) > 200:
+    if (not answer and not forgot) or len(answer) > 200:
         raise VocabularyGroupLearningError("missing_answer", 400)
     snapshot = _json_dict(question.question_snapshot_json)
     try:
@@ -1566,7 +1731,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         )
     except ValueError as error:
         raise VocabularyGroupLearningError("invalid_input_mode", 400) from error
-    is_correct = _grade_question(question, answer)
+    is_correct = False if forgot else _grade_question(question, answer)
     is_first = question.first_attempt_id is None
     is_remediation = bool(question.remediation_kind)
     if is_remediation:
@@ -1598,6 +1763,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         word_id=question.word_id,
         student_answer=answer[:100],
         is_correct=is_correct,
+        response_kind=response_kind,
         input_mode=input_mode,
         input_grant_id=input_grant_id,
         attempt_id=attempt_id,
@@ -1623,6 +1789,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
                         first_attempt_id=attempt_id,
                         first_is_correct=is_correct,
                         first_answer=answer[:100],
+                        first_response_kind=response_kind,
                     )
                 )
             else:
@@ -1637,6 +1804,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
                         retry_attempt_id=attempt_id,
                         retry_is_correct=is_correct,
                         retry_answer=answer[:100],
+                        retry_response_kind=response_kind,
                     )
                 )
             if reserved.rowcount != 1:
@@ -1673,6 +1841,7 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         question.first_attempt_id = attempt_id
         question.first_is_correct = is_correct
         question.first_answer = answer[:100]
+        question.first_response_kind = response_kind
         if question.phase == PHASE_RECALL and question.score_eligible and not question.mastery_applied:
             already_applied = any(
                 item.mastery_applied
@@ -1701,14 +1870,31 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
             mastery = _mastery_for(user.id, question.sense_id) or ensure_mastery(
                 user, question.word, question.sense
             )
+            due_attr = f"{question.dimension}_next_due_at"
+            previous_due = getattr(mastery, due_attr) if forgot else None
             _apply_dimension_answer(mastery, question.dimension, False, now)
+            if previous_due is not None and previous_due < getattr(mastery, due_attr):
+                setattr(mastery, due_attr, previous_due)
             question.mastery_applied = True
             record.vocabulary_mastery_applied = True
             _mark_weak_word(flow, question.word_id)
+            if forgot:
+                _defer_forgotten_retry(flow, user, question, now)
     else:
         question.retry_attempt_id = attempt_id
         question.retry_is_correct = is_correct
         question.retry_answer = answer[:100]
+        question.retry_response_kind = response_kind
+        if forgot:
+            _defer_forgotten_retry(flow, user, question, now)
+            if (
+                _uses_comprehensive_scheduler(flow)
+                and question.remediation_kind is None
+            ):
+                mastery = _mastery_for(user.id, question.sense_id) or ensure_mastery(
+                    user, question.word, question.sense
+                )
+                _schedule_related_dimension(mastery, question.dimension, now)
     if (
         not is_correct
         and _uses_comprehensive_scheduler(flow)
@@ -1721,15 +1907,8 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         question.correction_is_correct = None
         question.correction_answer = None
         question.correction_count = 0
-        flow.pending_correction_question_id = question.id
-    if is_first:
-        question.first_attempt_id = attempt_id
-        question.first_is_correct = is_correct
-        question.first_answer = answer[:100]
-    else:
-        question.retry_attempt_id = attempt_id
-        question.retry_is_correct = is_correct
-        question.retry_answer = answer[:100]
+        if not forgot:
+            flow.pending_correction_question_id = question.id
     flow.phase_index = next_phase_index
     flow.state_version = expected_version + 1
     _advance_after_answer(flow, user, now)
@@ -1872,6 +2051,7 @@ def finalize_vocabulary_group_task(user: User, task_id: int, payload: dict, *, n
     if settlement:
         return _json_dict(settlement.result_json)
     questions = VocabularyLearningQuestion.query.filter_by(flow_id=flow.id).all()
+    forgot_items = _forgotten_items(flow)
     missing_retry = [
         question.id
         for question in questions
@@ -1924,6 +2104,12 @@ def finalize_vocabulary_group_task(user: User, task_id: int, payload: dict, *, n
         "group_count": flow.total_group_count,
         "total_word_count": flow.total_word_count,
         "scorable_count": total_count,
+        "forgot_items": forgot_items,
+        "forgotten_count": len(forgot_items),
+        "scored_forgotten_count": sum(
+            item["first_response_kind"] == "forgot" and item["score_eligible"]
+            for item in forgot_items
+        ),
         "skipped_count": skipped_count,
         "guidance_count": sum(
             1 for question in questions if question.context_role == "guide" and question.first_attempt_id

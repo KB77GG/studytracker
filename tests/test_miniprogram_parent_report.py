@@ -191,6 +191,52 @@ class ParentTaskDetailApiTest(unittest.TestCase):
         self.assertEqual(detail["items"][0]["correct_answer"], "B. right")
         self.assertEqual(detail["items"][1]["result_label"], "待批改")
 
+    def test_parent_distinguishes_forgotten_answer_from_unanswered(self):
+        with self.app.app_context():
+            prior = DictationRecord.query.filter_by(task_id=self.dictation_task_id).order_by(DictationRecord.id.desc()).first()
+            student_id, book_id, word_id = prior.student_id, prior.book_id, prior.word_id
+            db.session.add(
+                DictationRecord(
+                    student_id=student_id,
+                    task_id=self.dictation_task_id,
+                    book_id=book_id,
+                    word_id=word_id,
+                    student_answer="",
+                    is_correct=False,
+                    response_kind="forgot",
+                )
+            )
+            db.session.commit()
+        response = self.client.get(
+            f"/api/miniprogram/parent/tasks/{self.dictation_task_id}",
+            headers=self.parent_headers,
+        )
+        self.assertEqual(response.status_code, 200)
+        forgotten = response.get_json()["detail"]["items"][1]
+        self.assertEqual(forgotten["student_answer"], "忘了")
+        self.assertEqual(forgotten["response_kind"], "forgot")
+        self.assertEqual(forgotten["forgot_count"], 1)
+        with self.app.app_context():
+            db.session.add(
+                DictationRecord(
+                    student_id=student_id,
+                    task_id=self.dictation_task_id,
+                    book_id=book_id,
+                    word_id=word_id,
+                    student_answer="achieve",
+                    is_correct=True,
+                )
+            )
+            db.session.commit()
+        response = self.client.get(
+            f"/api/miniprogram/parent/tasks/{self.dictation_task_id}",
+            headers=self.parent_headers,
+        )
+        retried = response.get_json()["detail"]["items"][1]
+        self.assertEqual(retried["student_answer"], "achieve（曾点忘了）")
+        self.assertEqual(retried["response_kind"], "answer")
+        self.assertEqual(retried["forgot_count"], 1)
+
     def test_unlinked_parent_cannot_view_task_detail(self):
         response = self.client.get(
             f"/api/miniprogram/parent/tasks/{self.dictation_task_id}",

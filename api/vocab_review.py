@@ -25,6 +25,7 @@ from services.vocabulary_group_learning import (
     get_vocabulary_group_queue,
     group_flow_diagnostics,
     mark_familiarity_viewed,
+    recover_vocabulary_group_attempt,
     submit_vocabulary_group_correction,
 )
 from services.task_date_gate import task_date_access
@@ -63,6 +64,31 @@ def _group_error_response(error: VocabularyGroupLearningError):
     return jsonify(payload), error.status_code
 
 
+def _gated_saved_group_response(user, task_id, gate):
+    """Allow exact read-only recovery without reopening a gated learning task."""
+
+    attempt_id = request.args.get("attempt_id")
+    if not attempt_id:
+        return None
+    saved = recover_vocabulary_group_attempt(user, task_id, attempt_id)
+    if not saved:
+        return None
+    return {
+        "ok": True,
+        "task_id": task_id,
+        "task_mode": "vocabulary_group_v2",
+        "supports_forgot_response": True,
+        "recovery_only": True,
+        "read_only": True,
+        "review_required": True,
+        "current_question": None,
+        "saved_response": saved,
+        "due_count": gate.get("due_count", 0),
+        "batch_limit": gate.get("batch_limit"),
+        "active_session_id": gate.get("active_session_id"),
+    }
+
+
 @vocab_review_bp.route(
     "/miniprogram/student/tasks/<int:task_id>/dictation-queue",
     methods=["GET"],
@@ -75,6 +101,12 @@ def get_dictation_queue(task_id):
             if not task_date_access(task).read_only:
                 gate = review_preflight(request.current_api_user, task_id)
                 if gate["required"]:
+                    recovered = _gated_saved_group_response(
+                        request.current_api_user, task_id, gate
+                    )
+                    if recovered:
+                        db.session.rollback()
+                        return jsonify(recovered)
                     raise VocabularyMasteryError(
                         "vocabulary_review_required",
                         409,
@@ -86,6 +118,7 @@ def get_dictation_queue(task_id):
                 request.current_api_user,
                 task_id,
                 supports_correction=request.args.get("supports_correction") == "1",
+                recovery_attempt_id=request.args.get("attempt_id"),
             )
         else:
             result = get_task_queue(request.current_api_user, task_id)
@@ -120,6 +153,12 @@ def get_vocabulary_queue(task_id):
         if not task_date_access(task).read_only:
             gate = review_preflight(request.current_api_user, task_id)
             if gate["required"]:
+                recovered = _gated_saved_group_response(
+                    request.current_api_user, task_id, gate
+                )
+                if recovered:
+                    db.session.rollback()
+                    return jsonify(recovered)
                 raise VocabularyMasteryError(
                     "vocabulary_review_required",
                     409,
@@ -131,6 +170,7 @@ def get_vocabulary_queue(task_id):
             request.current_api_user,
             task_id,
             supports_correction=request.args.get("supports_correction") == "1",
+            recovery_attempt_id=request.args.get("attempt_id"),
         )
         db.session.commit()
         return jsonify(result)

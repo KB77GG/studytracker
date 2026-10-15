@@ -8,6 +8,7 @@ from flask import Flask
 from flask_login import LoginManager
 from sqlalchemy.exc import OperationalError
 
+import services.vocabulary_autonomous_review as autonomous_review_service
 from api.miniprogram import mp_bp
 from api.vocab_review import vocab_review_bp
 from models import (
@@ -467,6 +468,133 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             self.assertLessEqual(
                 sum(candidate["remediation_kind"] is not None for candidate in related_day["items"]),
                 2,
+            )
+
+    def test_forgot_delayed_retry_releases_related_without_correction_or_reschedule(self):
+        with self.app.app_context():
+            user, delayed = self._run_bounded_correction_case(
+                "form_recall", "zh_to_en"
+            )
+            item = delayed["items"][0]
+            identity = self._review_identity(delayed, item)
+            mastery = StudentVocabularyMastery.query.filter_by(
+                student_id=user.id, sense_id=item["sense_id"]
+            ).one()
+            forgotten_at = self.now + timedelta(days=1)
+            earlier_related_due = forgotten_at + timedelta(hours=12)
+            mastery.context_use_stage = 2
+            mastery.context_use_next_due_at = earlier_related_due
+            other_due = mastery.audio_form_recall_next_due_at
+            other_stage = mastery.audio_form_recall_stage
+            related_stage = mastery.context_use_stage
+            first = submit_review_answer(
+                user,
+                delayed["session_id"],
+                dict(identity, answer="", response_kind="forgot", attempt_id="retry-forgot"),
+                now=forgotten_at,
+            )
+            self.assertFalse(first["is_correct"])
+            self.assertFalse(first["correction_required"])
+            self.assertEqual(mastery.form_recall_next_due_at, forgotten_at + timedelta(days=1))
+            self.assertEqual(mastery.context_use_next_due_at, earlier_related_due)
+            self.assertEqual(mastery.review_related_dimension, "context_use")
+            self.assertEqual(mastery.review_related_due_at, earlier_related_due)
+            self.assertEqual(mastery.context_use_stage, related_stage)
+            self.assertEqual(mastery.audio_form_recall_next_due_at, other_due)
+            self.assertEqual(mastery.audio_form_recall_stage, other_stage)
+            duplicate = submit_review_answer(
+                user,
+                delayed["session_id"],
+                dict(identity, answer="a different answer", attempt_id="retry-forgot"),
+                now=forgotten_at,
+            )
+            self.assertTrue(duplicate["idempotent"])
+            self.assertEqual(duplicate["response_kind"], "forgot")
+            self.assertEqual(mastery.review_related_due_at, earlier_related_due)
+            self.assertEqual(mastery.context_use_stage, related_stage)
+            with self.assertRaises(VocabularyAutonomousReviewError) as correction:
+                submit_review_correction(
+                    user,
+                    delayed["session_id"],
+                    dict(identity, answer="autoword0", attempt_id="forgot-fake-correction"),
+                    now=forgotten_at,
+                )
+            self.assertEqual(correction.exception.error, "correction_not_required")
+            settled = settle_review_session(
+                user,
+                delayed["session_id"],
+                {"queue_token": delayed["queue_token"]},
+                session_token=delayed["session_token"],
+                now=forgotten_at,
+            )
+            self.assertEqual((settled["correct_count"], settled["forgot_count"]), (0, 1))
+            self.assertEqual(mastery.review_related_due_at, earlier_related_due)
+
+    def test_forgot_replay_after_other_session_commits_consumes_budget_once(self):
+        """An ORM-cached pre-answer item must not reapply a committed first."""
+
+        with self.app.app_context():
+            user, delayed = self._run_bounded_correction_case(
+                "form_recall", "zh_to_en"
+            )
+            item = delayed["items"][0]
+            payload = dict(
+                self._review_identity(delayed, item),
+                answer="",
+                response_kind="forgot",
+                attempt_id="interleaved-forgot-first",
+            )
+            user_id, sense_id = user.id, item["sense_id"]
+            answered_at = self.now + timedelta(days=1)
+            db.session.commit()
+            db.session.expire_all()
+            original_response_kind = autonomous_review_service._response_kind
+            interleaved = False
+            winner_budget = None
+
+            def save_in_other_session(request_payload):
+                nonlocal interleaved, winner_budget
+                if not interleaved:
+                    interleaved = True
+                    # The outer call has loaded its item. A different request
+                    # now commits the same first answer and mastery change.
+                    with self.app.app_context():
+                        winning_user = db.session.get(User, user_id)
+                        autonomous_review_service.submit_review_answer(
+                            winning_user,
+                            delayed["session_id"],
+                            payload,
+                            now=answered_at,
+                        )
+                        db.session.commit()
+                        winner_budget = StudentVocabularyMastery.query.filter_by(
+                            student_id=user_id, sense_id=sense_id
+                        ).one().review_remediation_count
+                return original_response_kind(request_payload)
+
+            with patch.object(
+                autonomous_review_service, "_response_kind", save_in_other_session
+            ):
+                replay = autonomous_review_service.submit_review_answer(
+                    user, delayed["session_id"], payload, now=answered_at
+                )
+            db.session.commit()
+            db.session.expire_all()
+            mastery = StudentVocabularyMastery.query.filter_by(
+                student_id=user_id, sense_id=sense_id
+            ).one()
+            stored_item = db.session.get(VocabularyReviewItem, item["review_item_id"])
+            self.assertEqual(winner_budget, 1)
+            self.assertTrue(replay["idempotent"])
+            self.assertEqual(replay["response_kind"], "forgot")
+            self.assertTrue(stored_item.state_applied)
+            self.assertEqual(stored_item.first_response_kind, "forgot")
+            self.assertEqual(mastery.review_remediation_count, winner_budget)
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(
+                    item_id=item["review_item_id"], is_first_attempt=True
+                ).count(),
+                1,
             )
 
     def test_comprehensive_sense_rotates_one_dimension_per_day(self):
@@ -1690,6 +1818,461 @@ class AutonomousVocabularyReviewTest(unittest.TestCase):
             },
             now=self.now,
         )
+
+    @staticmethod
+    def _review_identity(claimed, item):
+        return {
+            "session_token": claimed["session_token"],
+            "review_item_id": item["review_item_id"],
+            "question_id": item["question_id"],
+            "word_id": item["word_id"],
+            "sense_id": item["sense_id"],
+            "dimension": item["dimension"],
+        }
+
+    def test_forgot_empty_partial_and_mixed_answers_restore_first_result(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture(count=3)
+            self.assertTrue(claimed["supports_forgot_response"])
+            first, second, third = claimed["items"]
+            first_identity = self._review_identity(claimed, first)
+            with self.assertRaises(VocabularyAutonomousReviewError) as empty_answer:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    dict(first_identity, answer="", attempt_id="ordinary-empty"),
+                    now=self.now,
+                )
+            self.assertEqual(empty_answer.exception.error, "missing_answer")
+            forgotten = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    first_identity,
+                    answer="",
+                    response_kind="forgot",
+                    attempt_id="forgot-empty",
+                ),
+                now=self.now,
+            )
+            self.assertFalse(forgotten["is_correct"])
+            self.assertEqual(forgotten["response_kind"], "forgot")
+            self.assertFalse(forgotten["correction_required"])
+            self.assertFalse(forgotten["correction_exhausted"])
+            self.assertTrue(forgotten["deferred_to_review"])
+            first_row = db.session.get(VocabularyReviewItem, first["review_item_id"])
+            self.assertEqual(first_row.first_response_kind, "forgot")
+            self.assertEqual(first_row.correction_count, 0)
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(item_id=first_row.id).one().response_kind,
+                "forgot",
+            )
+
+            with self.assertRaises(VocabularyAutonomousReviewError) as cross_item:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    dict(
+                        self._review_identity(claimed, second),
+                        answer="",
+                        response_kind="forgot",
+                        attempt_id="forgot-empty",
+                    ),
+                    now=self.now,
+                )
+            self.assertEqual(cross_item.exception.error, "attempt_id_conflict")
+
+            self.assertTrue(self._answer_protocol_item(user, claimed, second)["is_correct"])
+            forgot_after_answer = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    self._review_identity(claimed, second),
+                    answer="",
+                    response_kind="forgot",
+                    attempt_id="forgot-lost-to-answer",
+                ),
+                now=self.now,
+            )
+            self.assertTrue(forgot_after_answer["idempotent"])
+            self.assertTrue(forgot_after_answer["is_correct"])
+            self.assertEqual(forgot_after_answer["response_kind"], "answer")
+            third_row = db.session.get(VocabularyReviewItem, third["review_item_id"])
+            expected = json.loads(third_row.answer_payload_json)["answer"]
+            partial = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    self._review_identity(claimed, third),
+                    answer=expected[:2],
+                    response_kind="forgot",
+                    attempt_id="forgot-partial",
+                ),
+                now=self.now,
+            )
+            self.assertFalse(partial["is_correct"])
+            self.assertEqual(partial["student_answer"], expected[:2])
+            replay = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    first_identity,
+                    answer="changed",
+                    response_kind="answer",
+                    attempt_id="forgot-empty",
+                ),
+                now=self.now,
+            )
+            self.assertTrue(replay["idempotent"])
+            self.assertEqual(replay["response_kind"], "forgot")
+            self.assertEqual(replay["student_answer"], "")
+            competing = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    first_identity,
+                    answer="correct-after-forgot",
+                    attempt_id="competing-first",
+                ),
+                now=self.now,
+            )
+            self.assertTrue(competing["idempotent"])
+            self.assertEqual(competing["attempt_id"], "forgot-empty")
+            self.assertEqual(VocabularyReviewAttempt.query.filter_by(item_id=first_row.id).count(), 1)
+
+            restored = get_review_session(
+                user, claimed["session_id"], claimed["session_token"]
+            )
+            self.assertEqual(restored["items"][0]["first_response_kind"], "forgot")
+            self.assertEqual(restored["items"][1]["first_response_kind"], "answer")
+            self.assertEqual(restored["items"][2]["first_response_kind"], "forgot")
+            self.assertFalse(restored["items"][0]["correction_required"])
+            self.assertTrue(restored["items"][0]["answer_feedback"]["word"])
+            settled = settle_review_session(
+                user,
+                claimed["session_id"],
+                {"queue_token": claimed["queue_token"]},
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+            self.assertEqual((settled["correct_count"], settled["total_count"]), (1, 3))
+            self.assertEqual(settled["forgot_count"], 2)
+            self.assertEqual(settled["skipped_count"], 0)
+            for forgotten_item in settled["forgot_items"]:
+                self.assertTrue(forgotten_item["correct_spelling"])
+                self.assertTrue(forgotten_item["meaning"])
+                self.assertTrue(forgotten_item["audio_tts_url"])
+            self.assertEqual(
+                get_review_session(user, claimed["session_id"], claimed["session_token"])[
+                    "settlement"
+                ],
+                settled,
+            )
+            settled_replay = submit_review_answer(
+                user,
+                claimed["session_id"],
+                dict(
+                    first_identity,
+                    answer="",
+                    response_kind="forgot",
+                    attempt_id="forgot-empty",
+                ),
+                now=self.now,
+            )
+            self.assertTrue(settled_replay["idempotent"])
+            self.assertTrue(settled_replay["settled"])
+            self.assertEqual(VocabularyReviewAttempt.query.filter_by(item_id=first_row.id).count(), 1)
+
+    def test_all_forgot_settles_zero_and_keeps_invalid_material_separate(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture(count=3)
+            first, second, invalid = claimed["items"]
+            invalid_row = db.session.get(VocabularyReviewItem, invalid["review_item_id"])
+            invalid_row.question_snapshot_json = "{not-json"
+            with self.assertRaises(VocabularyAutonomousReviewError) as invalid_forgot:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    dict(
+                        self._review_identity(claimed, invalid),
+                        answer="",
+                        response_kind="forgot",
+                        attempt_id="invalid-material-not-forgot",
+                    ),
+                    now=self.now,
+                )
+            self.assertEqual(invalid_forgot.exception.error, "review_item_invalid")
+            self.assertEqual(invalid_forgot.exception.details["skip_reason"], "invalid_question")
+            for item in (first, second):
+                result = submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    dict(
+                        self._review_identity(claimed, item),
+                        answer="",
+                        response_kind="forgot",
+                        attempt_id=f"all-forgot-{item['review_item_id']}",
+                    ),
+                    now=self.now,
+                )
+                self.assertFalse(result["correction_required"])
+            settled = settle_review_session(
+                user,
+                claimed["session_id"],
+                {
+                    "queue_token": claimed["queue_token"],
+                    "skipped_items": [
+                        {"review_item_id": invalid_row.id, "reason": "invalid_question"}
+                    ],
+                },
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+            self.assertEqual(settled["total_count"], 2)
+            self.assertEqual(settled["correct_count"], 0)
+            self.assertEqual(settled["accuracy"], 0.0)
+            self.assertEqual(settled["forgot_count"], 2)
+            self.assertEqual(settled["skipped_count"], 1)
+            self.assertEqual(VocabularyReviewAttempt.query.filter_by(item_id=invalid_row.id).count(), 0)
+            self.assertEqual(
+                get_review_session(user, claimed["session_id"], claimed["session_token"])[
+                    "settlement"
+                ],
+                settled,
+            )
+            with self.assertRaises(VocabularyAutonomousReviewError) as late_answer:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    dict(
+                        self._review_identity(claimed, invalid),
+                        answer="",
+                        response_kind="forgot",
+                        attempt_id="late-invalid-item",
+                    ),
+                    now=self.now,
+                )
+            self.assertEqual(late_answer.exception.error, "review_session_not_active")
+
+    def test_forgot_for_each_frozen_review_mode_is_wrong_even_with_correct_text(self):
+        with self.app.app_context():
+            user = db.session.get(User, self.student_id)
+            masteries = StudentVocabularyMastery.query.filter_by(
+                student_id=user.id
+            ).order_by(StudentVocabularyMastery.id.asc()).all()
+            for mastery in masteries:
+                for dimension in StudentVocabularyMastery.DIMENSIONS:
+                    setattr(
+                        mastery,
+                        f"{dimension}_next_due_at",
+                        self.now + timedelta(days=30),
+                    )
+            dimensions = (
+                "meaning_recall", "meaning_recall", "form_recall",
+                "audio_form_recall", "context_use", "context_use",
+            )
+            for mastery, dimension in zip(
+                masteries[: len(dimensions)], dimensions, strict=True
+            ):
+                setattr(mastery, f"{dimension}_next_due_at", self.now)
+                word = mastery.representative_word
+                word.usage_pattern = f"use {word.word} in context"
+                word.example_en = f"They use {word.word} in context."
+                word.example_zh = "他们在语境中使用它。"
+            masteries[1].representative_book.default_vocabulary_goal = "listening"
+            db.session.flush()
+            claimed = claim_today_review(user, now=self.now)
+            self.assertEqual(claimed["total_count"], 6)
+            expected_modes = {
+                "en_to_zh", "audio_to_zh", "zh_to_en", "audio_to_en",
+                "context_choice", "context_fill",
+            }
+            for item in claimed["items"]:
+                stored = db.session.get(VocabularyReviewItem, item["review_item_id"])
+                if stored.sense_id == masteries[4].sense_id:
+                    context_kind = "meaning_choice"
+                elif stored.sense_id == masteries[5].sense_id:
+                    context_kind = "example_fill"
+                else:
+                    context_kind = None
+                if context_kind:
+                    generated = build_context_question(
+                        stored.word,
+                        DictationWord.query.filter_by(book_id=stored.book_id).all(),
+                        seed=f"forgot-{context_kind}-{stored.word_id}",
+                        allowed_kinds={context_kind},
+                    )
+                    self.assertIsNotNone(generated)
+                    public, answer_payload = generated
+                    stored.question_id = public["question_id"]
+                    stored.question_snapshot_json = json.dumps(public, ensure_ascii=False, sort_keys=True)
+                    stored.answer_payload_json = json.dumps(answer_payload, ensure_ascii=False, sort_keys=True)
+                mode = json.loads(stored.question_snapshot_json)["mode"]
+                self.assertIn(mode, expected_modes)
+                expected_modes.remove(mode)
+                expected = json.loads(stored.answer_payload_json)
+                answer = expected.get("answer_option_id") if expected.get("answer_type") == "option_id" else expected.get("answer")
+                result = submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    {
+                        "session_token": claimed["session_token"],
+                        "review_item_id": stored.id,
+                        "question_id": stored.question_id,
+                        "word_id": stored.word_id,
+                        "sense_id": stored.sense_id,
+                        "dimension": stored.dimension,
+                        "answer": answer,
+                        "response_kind": "forgot",
+                        "attempt_id": f"forgot-mode-{stored.id}",
+                    },
+                    now=self.now,
+                )
+                self.assertFalse(result["is_correct"])
+                self.assertFalse(result["correction_required"])
+                self.assertEqual(result["response_kind"], "forgot")
+                self.assertTrue(stored.state_applied)
+                mastery = db.session.get(StudentVocabularyMastery, stored.sense_id)
+                self.assertEqual(
+                    getattr(mastery, f"{stored.dimension}_next_due_at"),
+                    self.now + timedelta(days=1),
+                )
+            self.assertFalse(expected_modes)
+            settled = settle_review_session(
+                user,
+                claimed["session_id"],
+                {"queue_token": claimed["queue_token"]},
+                session_token=claimed["session_token"],
+                now=self.now,
+            )
+            self.assertEqual((settled["correct_count"], settled["total_count"]), (0, 6))
+            self.assertEqual(settled["forgot_count"], 6)
+            self.assertTrue(
+                claim_today_review(user, now=self.now + timedelta(hours=1))["empty"]
+            )
+            next_day = claim_today_review(user, now=self.now + timedelta(days=1))
+            self.assertEqual(next_day["total_count"], 6)
+            next_item = next_day["items"][0]
+            next_row = db.session.get(VocabularyReviewItem, next_item["review_item_id"])
+            expected = json.loads(next_row.answer_payload_json)
+            next_answer = (
+                expected.get("answer_option_id")
+                if expected.get("answer_type") == "option_id"
+                else expected.get("answer")
+            )
+            new_formal = submit_review_answer(
+                user,
+                next_day["session_id"],
+                dict(
+                    self._review_identity(next_day, next_item),
+                    answer=next_answer,
+                    attempt_id="new-day-after-forgot",
+                ),
+                now=self.now + timedelta(days=1),
+            )
+            self.assertTrue(new_formal["is_correct"])
+            self.assertEqual(new_formal["response_kind"], "answer")
+            next_mastery = db.session.get(StudentVocabularyMastery, next_row.sense_id)
+            self.assertEqual(getattr(next_mastery, f"{next_row.dimension}_stage"), 1)
+
+    def test_http_forgot_rejects_bad_identity_and_recovers_durable_first(self):
+        with self.app.app_context():
+            _user, claimed = self._claim_protocol_fixture(count=1)
+            item = claimed["items"][0]
+            db.session.commit()
+        answer_url = (
+            f"/api/miniprogram/student/vocabulary-review/sessions/"
+            f"{claimed['session_id']}/answers"
+        )
+        payload = dict(
+            self._review_identity(claimed, item),
+            answer="",
+            response_kind="forgot",
+            attempt_id="http-forgot-first",
+            supports_correction=True,
+        )
+        for changed, error in (
+            ({"session_token": "wrong"}, "review_session_token_invalid"),
+            ({"question_id": "wrong"}, "review_question_changed"),
+            ({"response_kind": "skipped"}, "invalid_response_kind"),
+            ({"response_kind": []}, "invalid_response_kind"),
+        ):
+            rejected = self._api_review_request_with_clock(
+                "POST", answer_url, now=self.now, payload=dict(payload, **changed)
+            )
+            self.assertEqual(rejected.get_json()["error"], error)
+        ordinary_empty = self._api_review_request_with_clock(
+            "POST",
+            answer_url,
+            now=self.now,
+            payload=dict(payload, response_kind="answer"),
+        )
+        self.assertEqual(ordinary_empty.status_code, 400)
+        self.assertEqual(ordinary_empty.get_json()["error"], "missing_answer")
+        saved = self._api_review_request_with_clock(
+            "POST", answer_url, now=self.now, payload=payload
+        )
+        self.assertEqual(saved.status_code, 200, saved.get_json())
+        self.assertFalse(saved.get_json()["correction_required"])
+        self.assertFalse(saved.get_json()["correction_exhausted"])
+        retry = self._api_review_request_with_clock(
+            "POST",
+            answer_url,
+            now=self.now,
+            payload=dict(payload, answer="new text", response_kind="answer"),
+        )
+        self.assertEqual(retry.status_code, 200, retry.get_json())
+        self.assertTrue(retry.get_json()["idempotent"])
+        self.assertEqual(retry.get_json()["response_kind"], "forgot")
+        with self.app.app_context():
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(item_id=item["review_item_id"]).count(),
+                1,
+            )
+        restored = self.client.get(
+            f"/api/miniprogram/student/vocabulary-review/sessions/"
+            f"{claimed['session_id']}?session_token={claimed['session_token']}",
+            headers=self.headers,
+        )
+        self.assertEqual(restored.status_code, 200, restored.get_json())
+        self.assertEqual(restored.get_json()["items"][0]["first_response_kind"], "forgot")
+        self.assertEqual(restored.get_json()["items"][0]["first_answer"], "")
+
+    def test_forgot_cannot_write_another_students_or_expired_session(self):
+        with self.app.app_context():
+            user, claimed = self._claim_protocol_fixture(count=1)
+            item = claimed["items"][0]
+            payload = dict(
+                self._review_identity(claimed, item),
+                answer="",
+                response_kind="forgot",
+                attempt_id="forbidden-forgot",
+            )
+            outsider = User(
+                username="other_autonomous_student",
+                password_hash="test",
+                role=User.ROLE_STUDENT,
+                is_active=True,
+            )
+            db.session.add(outsider)
+            db.session.flush()
+            with self.assertRaises(VocabularyAutonomousReviewError) as wrong_student:
+                submit_review_answer(
+                    outsider, claimed["session_id"], payload, now=self.now
+                )
+            self.assertEqual(wrong_student.exception.error, "review_session_not_found")
+            with self.assertRaises(VocabularyAutonomousReviewError) as expired:
+                submit_review_answer(
+                    user,
+                    claimed["session_id"],
+                    payload,
+                    now=self.now + timedelta(days=1),
+                )
+            self.assertEqual(expired.exception.error, "task_expired")
+            self.assertEqual(
+                VocabularyReviewAttempt.query.filter_by(item_id=item["review_item_id"]).count(),
+                0,
+            )
 
     def test_verified_bad_item_can_settle_without_attempt_and_is_regenerated(self):
         with self.app.app_context():

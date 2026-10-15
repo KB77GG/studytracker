@@ -11,6 +11,7 @@ from api.miniprogram import mp_bp
 from api.vocab_review import vocab_review_bp
 from models import (
     DictationBook,
+    DictationRecord,
     DictationWord,
     StudentProfile,
     Task,
@@ -199,6 +200,42 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         proxy.assert_called_once_with("28th June", preferred_providers=["dashscope"])
 
+    def test_existing_history_shows_forgotten_action_and_keeps_raw_answer(self):
+        with self.app.app_context():
+            word = db.session.query(DictationWord).order_by(DictationWord.id).first()
+            db.session.add_all([
+                DictationRecord(
+                    student_id=self.student_id,
+                    task_id=self.task_id,
+                    book_id=word.book_id,
+                    word_id=word.id,
+                    student_answer="",
+                    is_correct=False,
+                    response_kind="forgot",
+                ),
+                DictationRecord(
+                    student_id=self.student_id,
+                    task_id=self.task_id,
+                    book_id=word.book_id,
+                    word_id=word.id,
+                    student_answer="depend",
+                    is_correct=True,
+                ),
+            ])
+            db.session.commit()
+        with self.client.session_transaction() as session:
+            session["_user_id"] = str(self.student_id)
+            session["_fresh"] = True
+        response = self.client.get(f"/api/dictation/history?task_id={self.task_id}")
+        self.assertEqual(response.status_code, 200)
+        rows = response.get_json()["records"]
+        forgot = next(row for row in rows if row["response_kind"] == "forgot")
+        self.assertEqual(forgot["student_answer"], "")
+        self.assertEqual(forgot["answer_display"], "忘了")
+        answer = next(row for row in rows if row["response_kind"] == "answer")
+        self.assertEqual(answer["student_answer"], "depend")
+        self.assertEqual(answer["answer_display"], "depend")
+
     def test_http_group_queue_requires_contract_and_finalize_is_idempotent(self):
         queue_url = f"/api/miniprogram/student/tasks/{self.task_id}/vocabulary-queue"
         queue = self.client.get(queue_url, headers=self.headers).get_json()
@@ -285,6 +322,9 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
             headers=self.headers,
         )
         self.assertEqual(settled.status_code, 200, settled.get_json())
+        settled_queue = self.client.get(queue_url, headers=self.headers)
+        self.assertEqual(settled_queue.status_code, 200, settled_queue.get_json())
+        self.assertEqual(settled_queue.get_json()["settlement"], settled.get_json())
         repeated = self.client.post(
             finalize_url,
             json={"queue_token": queue["queue_token"], "duration_seconds": 99},
@@ -292,6 +332,105 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         )
         self.assertEqual(repeated.status_code, 403)
         self.assertEqual(repeated.get_json()["error"], "task_completed_read_only")
+
+    def test_http_forgotten_answer_recovers_exact_saved_attempt(self):
+        queue_url = f"/api/miniprogram/student/tasks/{self.task_id}/vocabulary-queue"
+        queue = self.client.get(queue_url, headers=self.headers).get_json()
+        self.assertTrue(queue["supports_forgot_response"])
+        familiarity_url = (
+            f"/api/miniprogram/student/tasks/{self.task_id}/vocabulary-learning/familiarity"
+        )
+        while queue["phase"] == "familiarity":
+            item = next(item for item in queue["familiarity"] if not item["viewed"])
+            queue = self.client.post(
+                familiarity_url,
+                json={"queue_token": queue["queue_token"], "word_id": item["word_id"]},
+                headers=self.headers,
+            ).get_json()
+        question = queue["current_question"]
+        payload = {
+            "task_id": self.task_id,
+            "queue_token": queue["queue_token"],
+            "learning_question_id": question["learning_question_id"],
+            "queue_item_id": question["queue_item_id"],
+            "question_id": question["question_id"],
+            "word_id": question["word_id"],
+            "sense_id": question["sense_id"],
+            "dimension": question["dimension"],
+            "answer": "",
+            "attempt_id": "http-felt-forgotten",
+            "retry": False,
+            "response_kind": "forgot",
+            "input_mode": "native",
+        }
+        submitted = self.client.post(
+            "/api/dictation/submit", json=payload, headers=self.headers
+        )
+        self.assertEqual(submitted.status_code, 200, submitted.get_json())
+        self.assertFalse(submitted.get_json()["is_correct"])
+        self.assertEqual(submitted.get_json()["response_kind"], "forgot")
+        restored = self.client.get(
+            f"{queue_url}?supports_correction=1&attempt_id=http-felt-forgotten",
+            headers=self.headers,
+        )
+        self.assertEqual(restored.status_code, 200, restored.get_json())
+        result = restored.get_json()
+        self.assertEqual(result["saved_response"]["response_kind"], "forgot")
+        self.assertEqual(result["saved_response"]["attempt_id"], "http-felt-forgotten")
+        self.assertEqual(result["forgotten_count"], 1)
+        self.assertEqual(result["forgot_items"][0]["learning_question_id"], question["learning_question_id"])
+        duplicate = self.client.post(
+            "/api/dictation/submit",
+            json=dict(payload, response_kind="answer", answer="依赖"),
+            headers=self.headers,
+        )
+        self.assertEqual(duplicate.status_code, 200, duplicate.get_json())
+        self.assertTrue(duplicate.get_json()["idempotent"])
+        self.assertEqual(duplicate.get_json()["response_kind"], "forgot")
+        gate = {
+            "required": True,
+            "due_count": 2,
+            "batch_limit": 10,
+            "active_session_id": 123,
+        }
+        with patch("api.vocab_review.review_preflight", return_value=gate):
+            gated_recovery = self.client.get(
+                f"{queue_url}?supports_correction=1&attempt_id=http-felt-forgotten",
+                headers=self.headers,
+            )
+            self.assertEqual(gated_recovery.status_code, 200)
+            guarded = gated_recovery.get_json()
+            self.assertTrue(guarded["recovery_only"])
+            self.assertTrue(guarded["review_required"])
+            self.assertTrue(guarded["read_only"])
+            self.assertEqual(guarded["task_id"], self.task_id)
+            self.assertIsNone(guarded["current_question"])
+            self.assertEqual(guarded["saved_response"]["response_kind"], "forgot")
+            for suffix in ("", "?attempt_id=not-saved"):
+                blocked = self.client.get(f"{queue_url}{suffix}", headers=self.headers)
+                self.assertEqual(blocked.status_code, 409)
+                self.assertEqual(blocked.get_json()["error"], "vocabulary_review_required")
+
+        with self.app.app_context():
+            foreign = User(
+                username="foreign_api_student", password_hash="test",
+                role=User.ROLE_STUDENT, is_active=True,
+            )
+            db.session.add(foreign)
+            db.session.flush()
+            db.session.add(StudentProfile(user_id=foreign.id, full_name="别的学生"))
+            db.session.commit()
+            foreign_id = foreign.id
+        foreign_token = jwt.encode(
+            {"sub": str(foreign_id), "role": User.ROLE_STUDENT},
+            self.app.config["SECRET_KEY"], algorithm="HS256",
+        )
+        with patch("api.vocab_review.review_preflight", return_value=gate):
+            forbidden = self.client.get(
+                f"{queue_url}?attempt_id=http-felt-forgotten",
+                headers={"Authorization": f"Bearer {foreign_token}"},
+            )
+            self.assertEqual(forbidden.status_code, 403)
 
     def test_http_comprehensive_correction_is_saved_without_formal_attempt(self):
         task_id = self._task("comprehensive", end=1)
@@ -512,6 +651,7 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
             db.session.add(task)
             db.session.commit()
             task_id = task.id
+            book_id = task.dictation_book_id
         response = self.client.get(
             f"/api/miniprogram/student/tasks/{task_id}/dictation-queue",
             headers=self.headers,
@@ -520,6 +660,19 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         payload = response.get_json()
         self.assertNotEqual(payload.get("task_mode"), "vocabulary_group_v2")
         self.assertIn("words", payload)
+        unsupported = self.client.post(
+            "/api/dictation/submit",
+            json={
+                "task_id": task_id,
+                "book_id": book_id,
+                "word_id": payload["words"][0]["word_id"],
+                "answer": "",
+                "response_kind": "forgot",
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(unsupported.status_code, 400)
+        self.assertEqual(unsupported.get_json()["error"], "unsupported_response_kind")
 
 
 if __name__ == "__main__":

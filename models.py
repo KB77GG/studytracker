@@ -1290,6 +1290,10 @@ class DictationRecord(db.Model, TimestampMixin):
     word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"), nullable=False, index=True)
     student_answer = db.Column(db.String(100))
     is_correct = db.Column(db.Boolean, nullable=False)
+    # Explicit action on a submitted answer. Historical rows are ordinary answers.
+    response_kind = db.Column(
+        db.String(16), nullable=False, default="answer", server_default="answer"
+    )
     # Current clients use native for all system-keyboard answers. ``strict``
     # and ``compatible`` remain as historical/old-client values; a grant link
     # is optional audit metadata and no longer controls submission.
@@ -1852,9 +1856,15 @@ class VocabularyLearningQuestion(db.Model, TimestampMixin):
     first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
     first_is_correct = db.Column(db.Boolean, nullable=True)
     first_answer = db.Column(db.String(200), nullable=True)
+    first_response_kind = db.Column(
+        db.String(16), nullable=False, default="answer", server_default="answer"
+    )
     retry_attempt_id = db.Column(db.String(96), nullable=True, index=True)
     retry_is_correct = db.Column(db.Boolean, nullable=True)
     retry_answer = db.Column(db.String(200), nullable=True)
+    retry_response_kind = db.Column(
+        db.String(16), nullable=False, default="answer", server_default="answer"
+    )
     correction_attempt_id = db.Column(db.String(96), nullable=True, index=True)
     correction_is_correct = db.Column(db.Boolean, nullable=True)
     correction_answer = db.Column(db.String(200), nullable=True)
@@ -1964,6 +1974,9 @@ class VocabularyReviewItem(db.Model, TimestampMixin):
     first_attempt_id = db.Column(db.String(96), nullable=True, index=True)
     first_is_correct = db.Column(db.Boolean, nullable=True)
     first_answer = db.Column(db.String(200), nullable=True)
+    first_response_kind = db.Column(
+        db.String(16), nullable=False, default="answer", server_default="answer"
+    )
     correction_attempt_id = db.Column(db.String(96), nullable=True, index=True)
     correction_is_correct = db.Column(db.Boolean, nullable=True)
     correction_answer = db.Column(db.String(200), nullable=True)
@@ -2018,6 +2031,9 @@ class VocabularyReviewAttempt(db.Model, TimestampMixin):
     question_id = db.Column(db.String(96), nullable=False)
     student_answer = db.Column(db.String(200), nullable=False)
     is_correct = db.Column(db.Boolean, nullable=False)
+    response_kind = db.Column(
+        db.String(16), nullable=False, default="answer", server_default="answer"
+    )
     is_first_attempt = db.Column(db.Boolean, nullable=False, default=True)
     attempt_kind = db.Column(db.String(16), nullable=False, default="first")
     input_mode = db.Column(db.String(20), nullable=False, default="native")

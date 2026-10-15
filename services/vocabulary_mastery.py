@@ -1237,6 +1237,7 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
             "vocabulary_phase": "VARCHAR(32)",
             "vocabulary_score_eligible": "BOOLEAN",
             "vocabulary_mastery_applied": "BOOLEAN",
+            "response_kind": "VARCHAR(16) NOT NULL DEFAULT 'answer'",
         },
     )
     add_columns(
@@ -1301,9 +1302,11 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
             "first_attempt_id": "VARCHAR(96)",
             "first_is_correct": "BOOLEAN",
             "first_answer": "VARCHAR(200)",
+            "first_response_kind": "VARCHAR(16) NOT NULL DEFAULT 'answer'",
             "retry_attempt_id": "VARCHAR(96)",
             "retry_is_correct": "BOOLEAN",
             "retry_answer": "VARCHAR(200)",
+            "retry_response_kind": "VARCHAR(16) NOT NULL DEFAULT 'answer'",
             "correction_attempt_id": "VARCHAR(96)",
             "correction_is_correct": "BOOLEAN",
             "correction_answer": "VARCHAR(200)",
@@ -1317,6 +1320,7 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
     add_columns(
         "vocabulary_review_item",
         {
+            "first_response_kind": "VARCHAR(16) NOT NULL DEFAULT 'answer'",
             "correction_attempt_id": "VARCHAR(96)",
             "correction_is_correct": "BOOLEAN",
             "correction_answer": "VARCHAR(200)",
@@ -1328,7 +1332,10 @@ def ensure_vocabulary_schema(engine, logger=None) -> None:
     )
     add_columns(
         "vocabulary_review_attempt",
-        {"attempt_kind": "VARCHAR(16) NOT NULL DEFAULT 'first'"},
+        {
+            "attempt_kind": "VARCHAR(16) NOT NULL DEFAULT 'first'",
+            "response_kind": "VARCHAR(16) NOT NULL DEFAULT 'answer'",
+        },
     )
 
     for model in (
