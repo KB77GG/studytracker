@@ -1,7 +1,26 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 语法候选题 v0.1 已通过 Claude 交叉审核，抽查清单可以交给老师盲审。未推 main、未部署、未开 PR。
+> 最近更新：2026-10-18 用户决定先修复再交老师：v0 抽查表作废，`docs/GRAMMAR_ITEM_CANDIDATES_PLAN_V0_2.md` 待 Codex 执行（含 28 句机经原文和阅读解析修复）。未推 main、未部署、未开 PR。
+
+## 2026-10-18 语法候选题 v0.2 计划（待 Codex 执行）
+
+- **用户决定**：
+  - even if 归为“让步”（教师确认）；
+  - 两句粘连的原句重新拆句、重新标注；
+  - when / where / why 从句紧跟名词时不得自动通过；
+  - 凡高亮动词处都要显示完整动词单位。
+- **v0 抽查表作废**，不要交给老师。
+- **计划**：`docs/GRAMMAR_ITEM_CANDIDATES_PLAN_V0_2.md`。
+  - 第 A 部分：修复 28 句、30 处。在 `data/reading_jijing_text_fixes.json` 写修订表，构建脚本应用它，并原地修补 `static/reading_jijing/`；`data/reading_study/` 重新拆句、重新标注，原 ID 保留，新句用 `<原ID>b`。不改 raw.json。
+  - 第 B 部分：新增 `glued_sentence_boundary`（修复前 28 句）、`multi_sentence_unit`（51 句，本轮只排除不修）、`possible_relative_adverb`（119 个目标），并把动词高亮改为完整动词单位。
+  - 以上计数均由 Claude 在云端实测。
+- **线上待办（需另行授权，本轮不做）**：
+  1. 合并 main 并部署；
+  2. 服务器 `sqlite3 app.db ".backup ..."`；
+  3. `/root/apps/studytracker/.venv/bin/python scripts/import_reading_study.py`；
+  4. 抽查受影响的 Reading Study 页面。
+- **其他待决定事项**：另有 51 个“一条里含多句”的单元（多为引语，少数是机经 OCR 错字，如 `Free Flight. James`），是否也重新拆句由用户决定。
 
 ## 2026-10-18 语法候选题 v0.1 交叉审核：通过
 
