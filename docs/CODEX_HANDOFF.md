@@ -1,120 +1,93 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 语法候选题计划已修订为 v0.1，解除 Codex 报告的阻塞；下一步由 Codex 在 `codex/grammar-item-candidates` 快进到计划分支后继续实施。未推 main、未部署、未开 PR。
+> 最近更新：2026-10-18 语法候选题 v0.1 已完成本机实施、验证并推送指定任务分支，待 Claude 交叉审核和教师盲审。未推 main、未部署、未开 PR。
 
-## 2026-10-18 语法候选题计划 v0.1（阻塞已解除，待 Codex 继续）
+## 2026-10-18 语法候选题 v0.1（已生成、已推送，待交叉审核）
 
-- Claude 确认 Codex 的判断：v0 第 11 节与第 4、6 节冲突。C-04、H-02 的错误只在一个 span 上，同句其他题经人工核对是正确的；C-01 是原句残缺。
-- `docs/GRAMMAR_ITEM_CANDIDATES_PLAN.md` 已改为 v0.1：
-  - 写明单题失败不传播到同句其他模板；
-  - 新增整句过滤 `tagged_fragment`（全库 36 句）和 `clause_attached_to_conjunction`（全库 2 句：C-01、`ielts13_test2_p2` C-04）；
-  - 第 11 节改为逐句、逐模板写明预期；
-  - 明确禁止按句子 ID 加黑名单。
-- 两条规则由 Claude 在云端用与 Codex 相同的 spaCy 3.8.16、en_core_web_trf 3.8.0、torch 2.14.1（CPU，Python 3.11）对全部 12,657 句实测。6 个例句的解析与 Codex 在 Mac 上（Python 3.13）的结果一致。云端环境和解析缓存只在本次会话的容器里，不会长期保留。
-- 本分支已快进到 Codex 的 `cca6714`，再加上计划修订，所以 Codex 可以直接 `git merge --ff-only origin/claude/word-memorization-system-eval-55v2y5`。下面上一节 Codex 写的阻塞记录保留作历史，其“等待修订”状态已被本节取代。
+### 工作树、Git 与范围
 
-## 2026-10-18 语法候选题：计划回归条件冲突，等待修订
+- 项目原目录：`/Users/zhouxin/Desktop/studytracker`。本任务执行树：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，分支 `codex/grammar-item-candidates`。
+- 开工先核对交接与实际 Git；从干净的 `cca6714ec7903237e6434bc415c3c4bfe566a4fb` 执行 `git fetch origin claude/word-memorization-system-eval-55v2y5 && git merge --ff-only origin/claude/word-memorization-system-eval-55v2y5`，快进至修订计划 `c58c9693`。
+- 实现与四份交付文件的提交 **`2cc9e12388abae29a14d44a1552042d45975ddd3`** 已推到 `origin/codex/grammar-item-candidates`，`git ls-remote` 已确认远端同 SHA。本节随后由纯交接文档提交更新；最后 HEAD 以 `git rev-parse HEAD` 与 `git ls-remote origin refs/heads/codex/grammar-item-candidates` 核对，不能把实现提交误当成最终文档提交。
+- 实现提交后执行树 tracked/untracked 干净；编写本交接时只有 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 的本轮文档改动，随后提交并推送。无来源不明的执行树改动。
+- 只改计划允许的离线包、CLI、新测试、CI 测试列表一行、四份交付及交接；此前环境提交的 `.gitignore` 与 `requirements-grammar-tools.txt` 保持。相对 `c58c9693`，原标注、图谱、`api/`、`models.py`、`app.py`、`miniprogram/`、运行时 requirements、执行计划均无差异。
 
-### 工作树、授权及完成范围
-
-- 执行树：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`；分支 `codex/grammar-item-candidates`，从 `origin/claude/word-memorization-system-eval-55v2y5@443ea01f4e70d077fe1de4b7b00d4b2566bc242d` 创建，开工时干净。环境提交 HEAD 为 `985899f8feced120e491cd5d9c0557393353f46c`；本节由后续文档提交记录，最新完整 HEAD 用 `git rev-parse HEAD` 核对。
-- 用户明确授权本任务分支 commit/push；明确禁止推 main、部署、开 PR，并要求“遇到计划里做不到的地方，停下来告诉我，不要自己变通”。本轮没有修改计划、原始标注、图谱、API、数据库、前端、小程序或运行时依赖列表。
 - 原桌面树 `/Users/zhouxin/Desktop/studytracker` 保持 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，跟踪 `origin/main` 落后 73；既有 **7 modified / 22 untracked 入口**完整保留，本轮未写入该树。
   - 既有 modified：`design-qa.md`、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`、`static/style.css`、`templates/listening/index.html`、`templates/listening/test_practice.html`、`templates/login.html`。
   - 既有 untracked：`.tmp/`、`artifacts/`、`data/idictation_vocab_books/`、`data/idictation_zyz_vocab/`、`data/reading_study/browse.html`、`data/reading_study/preview.html`、`data/toefl_practice/ets-practice-{2,3,4,5}/`、`docs/design/`、`docs/dictation_input_policy_proposal.md`、`docs/dictation_strict_result_layout_fix.md`、`prototypes/`、`scripts/import_idictation_vocab_book.py`、`scripts/import_zyz_vocab.py`、`static/brand/auth-staircase-hero.png`、`templates/auth/`、`tests/test_auth_entry_pages.py`、`tests/test_import_idictation_vocab_book.py`、`tests/test_import_zyz_vocab.py`、`tests/test_listening_practice_context.py`。这些是其他任务的本机资料、候选实现与测试，没有纳入本分支。
-- 本轮仅新增 `requirements-grammar-tools.txt`、向 `.gitignore` 增加 `.venv-grammar-tools/`，并更新两份交接。实际安装 Python **3.13.3**、spaCy **3.8.16**、官方 `en_core_web_trf` **3.8.0**、Flask **3.1.3**、openpyxl **3.1.5**；解析强制 CPU，实际 torch **2.14.1**。主 `.venv` 未安装新依赖，未调用大模型 API。
-- 忽略的 `.venv-grammar-tools/` 及 `/tmp/studytracker-grammar-{install.log,plan-probe.py,plan-probe.jsonl,probe-stderr.log}` 只在本机；下方命令可在其他机器复现，无需这些临时文件。生成器、候选池、统计报告、抽查表、新测试和 CI 修改均**尚未实施**。
 
-### 阻塞证据（真实模型输出，不是候选题生成结果）
+### 完成结果
 
-计划第 11 节规定五个坏例“任何模板都不得出现 auto_pass”，但第 4 节按目标逐题校验，第 6 节没有把其他成分的错误传播到整句。三个坏例均通过现有整句过滤：词数在 6–60 内、ROOT 是 VERB、引号括号配对、所有 span 可按结构顺序定位，没有 heading/unknown/第 1 层定语或名词性从句。实际解析如下：
+- 实现 `scripts/generate_grammar_candidates.py` 与 `scripts/grammar_items/{spans,parse_view,checks,templates,review_batch,reporting}.py`；按原始 role 白名单选题，只复用原 `resolve_role()`；只有 `parse_view.py` 延迟导入 spaCy。没有 ID 黑名单，没有新增计划外整句规则，没有跨模板传播单题失败。
+- 全库 **317 篇 / 12,657 句**，生成 **49,564** 道候选；整句拒绝 **1,398** 条，模板拒绝 **17,923** 条。模板 rejected 计数包含每条整句拒绝一次及该模板的拒绝记录，不能把六列直接相加视为句数。
 
-| 坏例 | 指定解析器证据 | 按原计划会自动通过的题型 |
-|---|---|---|
-| `ielts8_test4_p1` C-04 | 29 个非标点 token；ROOT=`felt/VERB`。白名单 `infinitive_complement` `[35,88)` 的唯一中心为 `introduce/xcomp/VB`，非限定，子树边界完全吻合。排除 `explanatory_clause` 仅排除了另一个 span。 | T3 “不是从句”、T6(c) “非谓语” |
-| `reading_jijing_76_test_43_p2` H-02 | 40 个非标点 token；ROOT=`lost/VERB/VBN` 位于唯一第 1 层 `predicate` `[114,180)` 内；没有动词 conj 子节点，也不在从句内。动词单位为 `had` `[114,117)`、`lost` `[118,122)`、`out` `[123,126)`。 | T1（白名单内无干扰项，归 G-S01）、T6(a) “主句谓语” |
-| `reading_jijing_56_test_64_p2` C-01 | 21 个非标点 token；ROOT=`deter/VERB`。唯一白名单定语从句 `who vilified him` `[84,100)`，中心为 `vilified/relcl/VBD`，是限定动词，子树边界完全吻合。 | T2 定语从句、T3 定语从句、T6(b) “从句里的谓语” |
+| 模板 | auto_pass | needs_review | rejected |
+|---|---:|---:|---:|
+| main_verb_tap | 5912 | 363 | 6382 |
+| clause_boundary | 4814 | 2357 | 2763 |
+| clause_type_classify | 12986 | 1737 | 1398 |
+| adverbial_relation | 469 | 561 | 2631 |
+| subject_span | 5353 | 734 | 6570 |
+| finite_or_not | 12541 | 1737 | 6567 |
 
-H-02 的错误主语会影响 T5，但计划没有写 T5 失败则所有模板降级；C-01 的句子残缺也不会触发现有 `fragment` 条件，因为 ROOT 仍是 VERB。不能擅自增加坏例 ID 黑名单、扩大白名单、跨模板传播失败或更换解析器来达标。
+- 新整句规则在全部句子上分别统计：`tagged_fragment=36`、`clause_attached_to_conjunction=2`，与计划一致；完整名单见 `data/grammar_items/generation_report_v0.json` / `.md`。
+- 四份交付已提交推送：上述报告两份、`data/grammar_items/review_batch_v0.jsonl`、`data/grammar_items/review_batch_v0.xlsx`。盲审表 7 sheets、360 题、约 180 分钟；每类 50 auto_pass + 10 needs_review，按 seed 20261018 混排；auto 池按来源×难度最大余数分层；每表每句最多 1 行、每篇最多 2 行。
+- 工作簿仅含计划规定的 10 列，无隐藏状态、隐藏表/行/列、公式或批注。状态只在机器 JSONL 的 `pool_status`；老师判定四项下拉、换行、冻结均验证。用 Artifact Tool 导入成品并渲染全部 7 sheets 检查；预览在 `/tmp/studytracker-grammar-visual-qa/`，没有将预览作为额外交付提交。
+- 六坏例、三正例全部达到修订预期：K-03 整句 too_short/unbalanced；C-04 不选 explanatory_clause，T1/T5/T6(a) 无主句谓语标注而拒绝，T3 不定式/T6 introduce 自动通过；H-02 T5 subject_mismatch 需复核，但 T1 had/lost/out（G-S01）和 T6 lost 自动通过；F-05 tagged_fragment+unknown_span 整句拒绝；C-01 和新增 ielts13 C-04 均 clause_attached_to_conjunction 整句拒绝。正例 occurred（干扰 attended/representing）、apply 定语从句、produced 名词性从句按指定模板自动通过。报告逐句列出六模板的实际题目、原因及证据。
 
-其余第 11 节例句的诊断结果：
+### 环境、精确验证与复现
 
-| 例句 | 诊断结论 |
-|---|---|
-| 坏例 `ielts7_test3_p1` K-03 | 5 个非标点 token，符合 `too_short`；另有未配对尾引号。可整句拒绝。 |
-| 坏例 `reading_jijing_73_test_5_p2` F-05 | `purpose_modifier` 由原 `resolve_role()` 返回 `unknown`，符合 `unknown_span`。ROOT 实际是 `involving/VERB`，不能仅靠 `fragment` 拦截。 |
-| 正例 `reading_jijing_91_test_49_p3` D-02 | ROOT=`occurred` `[84,92)` 在标注谓语内；白名单干扰动词为 `attended` / `representing`，符合 T1 预期。 |
-| 正例 `ielts11_test3_p2` A-04 | `apply/relcl`，子树为 `that apply, in varying degrees and combinations, to all migrations` `[62,128)`，符合 T2 预期。 |
-| 正例 `ielts15_test2_p3` D-05 | `produced/ccomp`，子树与标注名词性从句 `[18,157)` 完全吻合，符合 T2 预期。 |
-
-### 精确复现与验证
-
-在执行树根目录运行；首次创建环境用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m venv .venv-grammar-tools`。初次 pip 默认 CA 校验失败，指定本机系统 CA 后成功，没有关闭 TLS 校验：
+- 独立 `.venv-grammar-tools/`：Python **3.13.3**、spaCy **3.8.16**、`en_core_web_trf` **3.8.0**、torch **2.14.1**、Flask **3.1.3**、openpyxl **3.1.5**；强制 CPU。主 `.venv` 没安装新依赖，未调用大模型 API。
+- 输入合并 SHA-256：`e6e58691a2db4a59f5a8b7fdbd451074395498fcee9400a673dc8b512950ed63`；图谱 SHA-256：`c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29`。
+- 在执行树根目录运行：
 
 ```bash
-.venv-grammar-tools/bin/python -m pip install --cert /etc/ssl/cert.pem -r requirements-grammar-tools.txt
 .venv-grammar-tools/bin/python -m pip check
-.venv-grammar-tools/bin/python -m unittest tests.test_grammar_graph_draft -v
+.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates -v
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m ruff check --config 'extend-exclude=[]' scripts/grammar_items scripts/generate_grammar_candidates.py tests/test_grammar_item_candidates.py
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m ruff format --check --config 'extend-exclude=[]' scripts/grammar_items scripts/generate_grammar_candidates.py tests/test_grammar_item_candidates.py
+.venv-grammar-tools/bin/python scripts/generate_grammar_candidates.py --seed 20261018
+shasum -a 256 data/grammar_items/*
+.venv-grammar-tools/bin/python scripts/generate_grammar_candidates.py --seed 20261018
+shasum -a 256 data/grammar_items/*
 git diff --check
 ```
 
-- `pip check`：`No broken requirements found.`；原图谱测试 **7 passed**（不是候选题新测试）；`git diff --check` 通过。没有实现 Python 代码，Ruff 本轮不适用，未声称候选题测试已通过。首次实际安装命令与上方的区别仅为包参数使用 `'spacy>=3.8,<3.9' Flask openpyxl 'https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl'`；安装成功后将实际版本固定到 requirements 文件。
-- 全量读取确认 **317 篇 / 12,657 句**；`data/reading_study` 全部 317 个文件按路径排序后顺次拼接原始字节的 SHA-256 为 `e6e58691a2db4a59f5a8b7fdbd451074395498fcee9400a673dc8b512950ed63`；图谱 JSON SHA-256 为 `c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29`。
-- 下方自包含命令是只读的八例模型探针，已从本文提取并实际执行，**exit 0，八例结果与独立探针一致**。输出可核对上述中心、边界、有限性、ROOT 子节点和 unknown；不生成题，不改变任何规则，不依赖 `/tmp` 脚本：
+- 结果：依赖无冲突；新测试 **32/32 通过**（含真实 xlsx 写出及字节稳定测试）；Ruff **0.15.21** check 通过、9 files formatted；diff-check 通过。全量候选 **49,564** 个 ID 唯一，所有答案/目标/干扰字符偏移与原句吻合，选项与状态一致。360 行工作簿内容逐行与 JSONL 对应，分层、50/10 配额、每句/每篇上限及盲审字段均通过。
+- 用独立临时环境验证 CI 只有 Flask 时也可运行（没有 spaCy/openpyxl）：
 
 ```bash
-.venv-grammar-tools/bin/python - <<'PY'
-import json
-from pathlib import Path
-import spacy
-from api.reading_study_glossary import resolve_role
-
-spacy.require_cpu()
-nlp = spacy.load('en_core_web_trf')
-cases = [('ielts7_test3_p1', 'K-03'), ('ielts8_test4_p1', 'C-04'),
-         ('reading_jijing_76_test_43_p2', 'H-02'),
-         ('reading_jijing_73_test_5_p2', 'F-05'),
-         ('reading_jijing_56_test_64_p2', 'C-01'),
-         ('reading_jijing_91_test_49_p3', 'D-02'),
-         ('ielts11_test3_p2', 'A-04'), ('ielts15_test2_p3', 'D-05')]
-tags = {'VBD', 'VBZ', 'VBP', 'MD'}
-def finite(t):
-    return ('Fin' in t.morph.get('VerbForm') or t.tag_ in tags or
-            any(c.dep_ in {'aux', 'auxpass'} and c.tag_ in tags for c in t.children))
-def boundary(tokens):
-    tokens = list(tokens)
-    while tokens and (tokens[0].is_punct or tokens[0].is_space):
-        tokens.pop(0)
-    while tokens and (tokens[-1].is_punct or tokens[-1].is_space):
-        tokens.pop()
-    return [tokens[0].idx, tokens[-1].idx + len(tokens[-1])] if tokens else None
-for passage, sid in cases:
-    data = json.loads((Path('data/reading_study') / f'{passage}.json').read_text())
-    sentence = next(s for s in data['sentences'] if s['id'] == sid)
-    doc = nlp(sentence['sentence'])
-    roots = [t for t in doc if t.dep_ == 'ROOT']
-    print(passage, sid, 'words=', sum(not t.is_punct and not t.is_space for t in doc))
-    print('ROOT=', [(t.text, t.pos_, t.tag_, [(c.text, c.dep_) for c in t.children]) for t in roots])
-    previous = 0
-    for span in sentence['structure']:
-        start = doc.text.find(span['text'], previous)
-        assert start >= 0, (passage, sid, span)
-        previous, end = start, start + len(span['text'])
-        inside = {t.i for t in doc if start <= t.idx and t.idx + len(t) <= end}
-        centers = [doc[i] for i in sorted(inside) if not doc[i].is_punct
-                   and not doc[i].is_space and doc[i].head.i not in inside]
-        print(span['role'], span['level'], resolve_role(span['role'])['concept'], [start, end],
-              [(t.text, t.dep_, finite(t), boundary(doc[t.left_edge.i:t.right_edge.i+1])) for t in centers])
-PY
+.venv-grammar-tools/bin/python -m venv /tmp/studytracker-grammar-ci-v0
+/tmp/studytracker-grammar-ci-v0/bin/python -m pip install --cert /etc/ssl/cert.pem Flask==3.1.3
+/tmp/studytracker-grammar-ci-v0/bin/python -m unittest \
+  tests.test_miniprogram_guest_access tests.test_miniprogram_dictation_grouping \
+  tests.test_inventory_toefl_materials tests.test_organize_toefl_materials \
+  tests.test_extract_toefl_answer_keys tests.test_map_toefl_answers_to_practice_docs \
+  tests.test_import_toefl_official_reading tests.test_reading_vocab_grading \
+  tests.test_stats_utils tests.test_grammar_graph_draft tests.test_grammar_item_candidates -v
+/Users/zhouxin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tests/test_dictation_spell_queue.js
 ```
 
-### 交付缺口、发布状态与下一步
+- **107 项运行，106 通过、1 项按计划跳过**（缺 openpyxl 的 xlsx 写出测试）；spelling queue exit 0。新测试的抽样及盲审行构造不依赖 openpyxl，全部实际执行。日志在 `/tmp/studytracker-grammar-{ci-tests,unit-tests}.log`。
+- GitHub [CI 39103643168](https://github.com/KB77GG/studytracker/actions/runs/39103643168) 对实现 SHA `2cc9e123` 已完成，整体 success，test job success。advisory lint job 因仓库未改文件的存量问题失败，已下载日志比对本轮 changed paths，0 个本轮文件被报告；本轮目标 Ruff check/format 均通过。交接提交使用 `[skip ci]`，不重跑相同源码。
+- `--limit 2` 实测只读取排序后的 `ielts10_test1_p1`、`ielts10_test1_p2`。该调试模式写忽略的候选/拒绝文件并打印统计，保持正式四份交付不变，避免小样本覆盖全量盲审表；调试验证后已恢复全量候选/拒绝文件。正常完整命令一次完成生成、统计和抽查表。
+- 两次最终完整生成逐字节一致（使用完整本机解析缓存；首次全库解析全部完成）。报告无运行时间戳/耗时；XLSX 固定元数据及 ZIP 顺序/时间，使用不压缩 ZIP 避免 zlib 差异。
 
-- 六模板的 `auto_pass / needs_review / rejected` 总数均 **未生成**，不是 0；四个交付文件未生成，因此没有两次生成的 SHA-256，也没有可给老师的抽查表。这是遵循计划“无法做到就停止”的结果，不能将本次探针当成完整生成或第 10 节验收。
-- 需要计划作者先明确：把哪些通用问题升级为整句拒绝/复核，还是将第 11 节的限制改为仅覆盖出错题型。修订应给出条件、原因码及测试预期；不能由执行 agent 自行选一种解释。计划文件保持原样。
-- 本轮环境固定项和两份交接只提交、推送 `codex/grammar-item-candidates`；提交后执行树无未提交或未跟踪的交付文件，仅保留被忽略的工具环境。最终以 `git rev-parse HEAD` 与 `git ls-remote origin refs/heads/codex/grammar-item-candidates` 一致为确认。此分支不触发仅监听 main 的 deploy workflow。未访问生产服务器、未改数据库、未部署后端/前端，未上传/提审/发布小程序，未开 PR。历史生产事实未复验。
-- 下一位 agent：先核对本树与远端 HEAD、`git status --short --branch`，读取本节及计划修订；若计划尚未修订，继续保持停止实施。收到修订后复跑八例探针，再按第 9/10 节实现、全量生成两次并比较四个文件；保留当前独立环境与桌面原脏树。
+| 文件 | 第一次 SHA-256 | 第二次 SHA-256 |
+|---|---|---|
+| generation_report_v0.json | `df33bed9370c6c303c4894724e302590c7fed1d58c2809ce95fb653482e993a5` | `df33bed9370c6c303c4894724e302590c7fed1d58c2809ce95fb653482e993a5` |
+| generation_report_v0.md | `91067784cfb635ef48c74c9fbd373f7b54b6c99c9389c64df73d8b5fe2b6067b` | `91067784cfb635ef48c74c9fbd373f7b54b6c99c9389c64df73d8b5fe2b6067b` |
+| review_batch_v0.jsonl | `db4a9068a20dfb58649a2466649f0d0cc773b81cda63c09d3dd45159bbc5c543` | `db4a9068a20dfb58649a2466649f0d0cc773b81cda63c09d3dd45159bbc5c543` |
+| review_batch_v0.xlsx | `9c354c07d6ccfa725a0a7b50e801f41ff2469558da74ebbd6519986d4038d046` | `9c354c07d6ccfa725a0a7b50e801f41ff2469558da74ebbd6519986d4038d046` |
+
+### 发布状态、未验证项与下一步
+
+- 代码与四份交付已 commit / push 到指定任务分支，另一台电脑可 fetch；完整候选池、拒绝记录、解析缓存和 `.venv-grammar-tools/` 被忽略，仅本机可见，必须用生成命令在别处重建。两次比较快照在忽略的 `output/grammar_items/repro_first/`。
+- 本轮未推 main、未开 PR；没有访问或部署生产服务器，没有写数据库或改 schema，没有发布前端/接口/外部服务，小程序未上传/提审/发布。旧章节的部署状态是历史记录，本轮没有重新验证或改变。
+- 与 v0.1 的规则及验收预期无偏离；旧阻塞已解除。`--limit` 的调试输出行为如上说明。云端重跑、Claude 对 auto_pass 的 30 题人工交叉审核、教师 360 题盲审尚未完成；自动通过只是程序判定，尚未入库。
+- 下一位 agent：在独立干净树执行 `git fetch origin codex/grammar-item-candidates` 并检出该分支，阅读计划第 13 节和报告；用相同环境执行上述测试和完整生成，再比四文件 SHA。报告包含真实 Python/torch/openpyxl 版本，逐字节比较时需对齐这些版本（仅模型相同而 Python 3.11/3.13 不同会使报告环境字段不同）。缓存不是交叉审核的前提。
+- 待 Claude 交叉审核后，将盲审工作簿交老师填写；机器 JSONL 留给审核者关联状态，不给老师展示池状态。入库、改规则、合并 main 和部署均需后续明确指令。
 
 ## 2026-10-18 语法知识图谱 v0 草稿（第一轮审核完成，未部署）
 
@@ -128,7 +101,7 @@ PY
 - 标注抽查（Claude 单人检查 30 句，非老师审核）：从句边界很可靠；约 1/10 的句子有影响答案的错误，约 1/4 的谓语标注带上了宾语，按位置找先行词不可靠。G-S01 / G-C04 / G-L01 的题源已改为“部分可自动”。结论：自动生成的题要先过滤、经人工抽检后存成固定题库，不能边做边生成。
 - 推送状态：重新连接 GitHub 后已推送到 `origin/claude/word-memorization-system-eval-55v2y5`，其他电脑可以 fetch 该分支；未合并 main，所以不会部署。
 - 候选题计划：`docs/GRAMMAR_ITEM_CANDIDATES_PLAN.md` 已写好，交给 Codex 在 Mac 上执行。计划要求：从本分支切出 `codex/grammar-item-candidates`，只推送该分支（用户授权），用 spaCy `en_core_web_trf` 离线复核 6 类题型，输出统计报告和 7 个工作表的盲审抽查清单。完成后由 Claude 按计划第 13 节交叉审核。
-- 下一步：Codex 执行候选题计划 → Claude 交叉审核 → 老师填抽查清单 → 设计数据表（知识点、依赖、题目标签、学生掌握度，参照 `StudentVocabularyMastery` 的多维度模式）和新蓝图。尚未建 PR。
+- 下一步：Claude 交叉审核已推送的候选题实现与交付 → 老师填抽查清单 → 设计数据表（知识点、依赖、题目标签、学生掌握度，参照 `StudentVocabularyMastery` 的多维度模式）和新蓝图。尚未建 PR。
 
 ## 2026-09-17 题型专项跨日再次布置与历史记录（已上线，独立生产验收 GO）
 

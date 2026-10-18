@@ -4,6 +4,15 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-18 — 语法候选题 v0.1 已完成生成与验证，已推指定分支
+
+- 执行树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates` 从修订计划 `c58c9693` 继续；实现提交 `2cc9e12388abae29a14d44a1552042d45975ddd3` 已 commit/push 并核对远端同 SHA。本条由后续纯交接文档提交同步。桌面 main 的 7 modified / 22 untracked 入口均保留，未动。
+- 完成 6 类模板、原始角色白名单、独立 spaCy CPU 复核、逐题失败隔离、原因统计、确定性抽样与盲审 xlsx。317 篇 / 12,657 句生成 49,564 题，六坏例/三正例均符合 v0.1；新规则分别独立命中 36/2，无 ID 黑名单。完整计数和证据见 `data/grammar_items/generation_report_v0.json` / `.md`。
+- 提交四份交付，7 sheets / 360 题（各类 50 自动+10 待复核混排）、约 180 分钟，老师表无池状态，四项下拉、字符标记、冻结、分层及每句/每篇限制已核验，全部 sheets 已渲染查看。两次完整生成四文件逐字节一致，完整双 SHA 表见 `CODEX_HANDOFF.md`。
+- 新测试 32 passed；独立 Flask-only CI 同款 107 项（106 passed / 1 skipped，跳过缺 openpyxl 的写表测试），spelling queue exit 0；Ruff check/format、pip check、diff-check 通过。全候选 ID/偏移及实际 360 行逐行核验通过；`--limit 2` 调试通过，正式交付未改变，完整池已恢复。
+- GitHub CI `39103643168`（实现 `2cc9e123`）整体 success，test job success；advisory lint 只报本轮未改文件的存量问题。后续交接提交 `[skip ci]` 不重跑相同源码。
+- 独立环境/全量候选/拒绝/缓存仅本机、被 gitignore；源码和四份交付已推送。未推 main、未部署、未开 PR，未改生产/数据库/接口/原标注/图谱/小程序，未上传/提审/发布。无计划规则偏离；云端跨机器重生成和 Claude 30 题、教师 360 题审核仍待执行。
+
 ## 2026-10-18 — 语法候选题计划修订为 v0.1
 
 - 针对 Codex 报告的冲突：单题失败不再传播到同句其他模板；新增 `tagged_fragment`、`clause_attached_to_conjunction` 两条整句过滤（云端全库实测分别命中 36 句和 2 句）；坏例改为逐模板写预期。计划分支已包含 Codex 的提交，Codex 快进后即可继续。
