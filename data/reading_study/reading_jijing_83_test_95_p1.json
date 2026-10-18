@@ -1668,35 +1668,7 @@
         }
       ]
     },
-    {
-      "id": "G-08",
-      "paragraph_label": "G",
-      "sentence_index": 46,
-      "sentence": "\"What's different?\"Pepperberg asked.",
-      "translation": "“什么是不同的？”佩珀伯格问。",
-      "structure": [
-        {
-          "text": "What's different?",
-          "role": "reported_question",
-          "level": 2
-        },
-        {
-          "text": "Pepperberg asked",
-          "role": "reporting_clause",
-          "level": 1
-        }
-      ],
-      "difficult_points": [
-        "疑问词 what 作主语，different 作表语。",
-        "引号与 Pepperberg 之间缺空格是源文排版异常。"
-      ],
-      "expressions": [
-        {
-          "text": "What's different?",
-          "meaning_zh": "有什么不同？"
-        }
-      ]
-    },
+    {"id": "G-08", "paragraph_label": "G", "sentence_index": 46, "sentence": "\"What's different?\" Pepperberg asked.", "translation": "“有什么不同？”佩珀伯格问。", "structure": [{"text": "What's different?", "role": "direct_speech", "level": 1}, {"text": "Pepperberg asked", "role": "reporting_clause", "level": 1}], "difficult_points": ["引语是疑问句，what 作主语，different 作表语。", "引述部分 Pepperberg asked 放在引语后面；疑问句引语末尾保留问号，不再加逗号。"], "expressions": [{"text": "What's different?", "meaning_zh": "有什么不同？"}]},
     {
       "id": "G-09",
       "paragraph_label": "G",

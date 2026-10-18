@@ -1139,60 +1139,12 @@
         }
       ]
     },
-    {
-      "id": "F-07",
-      "paragraph_label": "F",
-      "sentence_index": 26,
-      "sentence": "\"Our data suggest that in an optimal setting we could get 90 percent of the energy value of the gases into our fuel.\"After the bugs eat the gases, they release ethanol into the surrounding water.",
-      "translation": "“我们的数据表明，在最理想的条件下，我们能把气体中90%的能量值转化进我们的燃料里。”细菌吞食这些气体之后，会把乙醇释放到周围的水中。",
-      "structure": [
-        {
-          "text": "Our data",
-          "role": "subject",
-          "level": 1
-        },
-        {
-          "text": "suggest",
-          "role": "verb_phrase",
-          "level": 1
-        },
-        {
-          "text": "that in an optimal setting we could get 90 percent of the energy value of the gases into our fuel",
-          "role": "noun_clause",
-          "level": 2
-        },
-        {
-          "text": "in an optimal setting",
-          "role": "prepositional_phrase",
-          "level": 3
-        },
-        {
-          "text": "After the bugs eat the gases",
-          "role": "adverbial_clause",
-          "level": 1
-        },
-        {
-          "text": "they release ethanol into the surrounding water",
-          "role": "main_clause",
-          "level": 1
-        }
-      ],
-      "difficult_points": [
-        "原文此处引号后与 After 之间缺少空格和句子边界标记，属原文排版遗留问题；实际是两句独立的话。",
-        "in an optimal setting 表示“在最理想的条件下”。",
-        "After the bugs eat the gases 中 bugs 承接前文，仍指代细菌。"
-      ],
-      "expressions": [
-        {
-          "text": "in an optimal setting",
-          "meaning_zh": "在最理想的条件下"
-        }
-      ]
-    },
+    {"id": "F-07", "paragraph_label": "F", "sentence_index": 26, "sentence": "\"Our data suggest that in an optimal setting we could get 90 percent of the energy value of the gases into our fuel.\"", "translation": "“我们的数据表明，在最理想的条件下，我们能把气体中90%的能量转化到燃料里。”", "structure": [{"text": "Our data", "role": "subject", "level": 1}, {"text": "suggest", "role": "verb", "level": 1}, {"text": "that in an optimal setting we could get 90 percent of the energy value of the gases into our fuel", "role": "object_clause", "level": 2}, {"text": "in an optimal setting", "role": "prepositional_phrase", "level": 3}], "difficult_points": ["data 在这里作复数，谓语用 suggest 而不是 suggests。", "that 从句作 suggest 的宾语；could 表示可能性，get A into B 表示“把 A 转入 B”。"], "expressions": [{"text": "in an optimal setting", "meaning_zh": "在最理想的条件下"}]},
+    {"id": "F-07b", "paragraph_label": "F", "sentence_index": 27, "sentence": "After the bugs eat the gases, they release ethanol into the surrounding water.", "translation": "细菌吃掉这些气体后，会把乙醇释放到周围的水中。", "structure": [{"text": "After the bugs eat the gases", "role": "time_clause", "level": 2}, {"text": "they", "role": "subject", "level": 1}, {"text": "release", "role": "verb", "level": 1}, {"text": "ethanol", "role": "object", "level": 1}, {"text": "into the surrounding water", "role": "prepositional_phrase", "level": 1}], "difficult_points": ["After 引导时间状语从句；bugs 在这里指前文提到的细菌，they 也指细菌。", "release A into B 表示“把 A 释放到 B 中”。"], "expressions": [{"text": "release … into", "meaning_zh": "把……释放到……中"}]},
     {
       "id": "F-08",
       "paragraph_label": "F",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "Standard distillation or filtration techniques could extract the alcohol from the water.",
       "translation": "常规的蒸馏或过滤技术就能把乙醇从水中提取出来。",
       "structure": [
@@ -1231,7 +1183,7 @@
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "Coskata researchers estimate that their commercialized process could deliver ethanol at under $1 per gallon-less than half of today's $2-per-gallon wholesale price, Tobey claims.",
       "translation": "科斯卡塔的研究人员估计，他们的商业化工艺能以每加仑不到1美元的成本供应乙醇——不到目前每加仑2美元批发价的一半，托贝如是说。",
       "structure": [
@@ -1276,7 +1228,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "Outside evaluators of Argonne National Laboratory measured the input-output \"energy balance\" of the Coskata process and found that, optimally, it can produce 7.7 times as much energy in the end product as it takes to make it.",
       "translation": "阿贡国家实验室的外部评估人员测算了科斯卡塔工艺的投入产出“能量平衡”，发现在最理想情况下，最终产品所含的能量可达到制造它所耗能量的7.7倍。",
       "structure": [
@@ -1330,7 +1282,7 @@
     {
       "id": "H-01",
       "paragraph_label": "H",
-      "sentence_index": 30,
+      "sentence_index": 31,
       "sentence": "The company plans to construct a 40,000-gallon-a-year pilot plant near the GM test track in Milford, Mich., by the end of this year and hopes to build a full-scale, 100-million-gallon-a-year plant by 2011.",
       "translation": "该公司计划在今年年底前，于密歇根州米尔福德通用汽车测试跑道附近建成一座年产4万加仑的中试工厂，并希望在2011年前建成一座全面规模、年产1亿加仑的工厂。",
       "structure": [
@@ -1383,7 +1335,7 @@
     {
       "id": "H-02",
       "paragraph_label": "H",
-      "sentence_index": 31,
+      "sentence_index": 32,
       "sentence": "Coskata may have some company by then; Bioengineering Resources in Fayetteville, Ark., is already developing what seems to be a similar three-step pathway in which syngas is consumed by bacteria isolated by James Gaddy, a retired chemical engineer at the University of Arkansas.",
       "translation": "届时科斯卡塔可能不会是唯一一家这么做的公司：位于阿肯色州费耶特维尔的生物工程资源公司（Bioengineering Resources）也已经在开发一条看似相似的三步工艺路径，利用阿肯色大学退休化学工程师詹姆斯·加迪（James Gaddy）分离出的细菌来消耗合成气。",
       "structure": [
@@ -1442,7 +1394,7 @@
     {
       "id": "H-03",
       "paragraph_label": "H",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "Considering the advances in these and other methods, plant cellulose could provide the greener ethanol everyone wants.",
       "translation": "考虑到这些及其他工艺路径的进展，植物纤维素或许真能提供人人期待的更环保乙醇。",
       "structure": [

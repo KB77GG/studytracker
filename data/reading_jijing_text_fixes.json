@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "description": "机经阅读原文的人工修订：补句间缺失的空格、改明显错字。由 build_reading_test_practice.py --source jijing 和 apply_reading_jijing_text_fixes.py 应用。",
+  "fixes": [
+    {
+      "passage_id": "reading_jijing_10_test_78_p3",
+      "paragraph_label": "E",
+      "sentence_id": "E-04",
+      "find": "hese.\"Manufa",
+      "replace": "hese. \"Manufa",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_10_test_78_p3",
+      "paragraph_label": "P",
+      "sentence_id": "P-01",
+      "find": "ects.\"The po",
+      "replace": "ects. \"The po",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_14_test_23_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-02",
+      "find": "ates.'The ro",
+      "replace": "ates. 'The ro",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_14_test_23_p3",
+      "paragraph_label": "H",
+      "sentence_id": "H-01",
+      "find": "usie.'Whilst",
+      "replace": "usie. 'Whilst",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_16_test_97_p2",
+      "paragraph_label": "B",
+      "sentence_id": "B-09",
+      "find": "trol.\"Being ",
+      "replace": "trol.\" Being ",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_16_test_97_p2",
+      "paragraph_label": "F",
+      "sentence_id": "F-36",
+      "find": "appen.I've p",
+      "replace": "appen. I've p",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_18_test_53_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": "ools.'Unique",
+      "replace": "ools. 'Unique",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_18_test_53_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": "said.'When i",
+      "replace": "said. 'When i",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_23_test_46_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-04",
+      "find": "that.'Some s",
+      "replace": "that.' Some s",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_24_test_56_p1",
+      "paragraph_label": "D",
+      "sentence_id": "D-01",
+      "find": "reas.'Dogs a",
+      "replace": "reas. 'Dogs a",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_38_test_22_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-03",
+      "find": "orse.'Intere",
+      "replace": "orse.' Intere",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_44_test_29_p1",
+      "paragraph_label": "H",
+      "sentence_id": "H-03",
+      "find": "lear).Gregor",
+      "replace": "lear). Gregor",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_46_test_84_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-09",
+      "find": " Asia.Thaila",
+      "replace": " Asia. Thaila",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_53_test_83_p2",
+      "paragraph_label": "B",
+      "sentence_id": "B-03",
+      "find": "port.\"I'm 47",
+      "replace": "port. \"I'm 47",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_56_test_64_p2",
+      "paragraph_label": "G",
+      "sentence_id": "G-03",
+      "find": " case.The cu",
+      "replace": " case. The cu",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_56_test_64_p2",
+      "paragraph_label": "G",
+      "sentence_id": "G-03",
+      "find": "that t his may",
+      "replace": "that this may",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_65_test_69_p1",
+      "paragraph_label": "I",
+      "sentence_id": "I-03",
+      "find": "role.'All mu",
+      "replace": "role. 'All mu",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_71_test_1_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": "yer'.'Scopon",
+      "replace": "yer'. 'Scopon",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_71_test_1_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": "Scientifico',translates",
+      "replace": "Scientifico', translates",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_71_test_1_p3",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": "meteorologist,.Alfred",
+      "replace": "meteorologist, Alfred",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_73_test_5_p1",
+      "paragraph_label": "H",
+      "sentence_id": "H-01",
+      "find": "ight.'You co",
+      "replace": "ight. 'You co",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_76_test_43_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-04",
+      "find": "iques.Morris",
+      "replace": "iques. Morris",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p2",
+      "paragraph_label": "G",
+      "sentence_id": "G-01",
+      "find": "poons.Today'",
+      "replace": "poons. Today'",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p3",
+      "paragraph_label": "E",
+      "sentence_id": "E-03",
+      "find": "them.\"When w",
+      "replace": "them. \"When w",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_82_test_4_p1",
+      "paragraph_label": "F",
+      "sentence_id": "F-04",
+      "find": "ubber.Ford's",
+      "replace": "ubber. Ford's",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_83_test_95_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-08",
+      "find": "rent?\"Pepper",
+      "replace": "rent?\" Pepper",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_85_test_12_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-05",
+      "find": "says.\"It off",
+      "replace": "says. \"It off",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_85_test_12_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-05",
+      "find": "n it.\"Peter ",
+      "replace": "n it.\" Peter ",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_85_test_12_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-05",
+      "find": "as that,\"he says",
+      "replace": "as that,\" he says",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p2",
+      "paragraph_label": "D",
+      "sentence_id": "D-02",
+      "find": "don't.The bi",
+      "replace": "don't. The bi",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p2",
+      "paragraph_label": "G",
+      "sentence_id": "G-04",
+      "find": "sion.\"For in",
+      "replace": "sion.\" For in",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p3",
+      "paragraph_label": "D",
+      "sentence_id": "D-10",
+      "find": "cards.That's",
+      "replace": "cards. That's",
+      "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_91_test_49_p1",
+      "paragraph_label": "F",
+      "sentence_id": "F-07",
+      "find": "fuel.\"After ",
+      "replace": "fuel.\" After ",
+      "reason": "missing_space_between_sentences"
+    }
+  ]
+}

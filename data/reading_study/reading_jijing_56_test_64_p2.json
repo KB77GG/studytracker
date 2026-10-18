@@ -434,21 +434,10 @@
       "difficult_points": ["more ... than others 构成比较，others 指海洋中的其他区域。", "it 是形式主语，that 从句是真正被认为的内容。", "he 是源文 OCR 错误，应按 be 理解。"],
       "expressions": [{"text": "it used to be thought that", "meaning_zh": "过去人们认为……"}, {"text": "reflect local nutrient levels", "meaning_zh": "反映当地营养水平"}]
     },
+    {"id": "G-03", "paragraph_label": "G", "sentence_index": 36, "sentence": "Venter has found that this may not be the case.", "translation": "文特尔发现，情况可能并非如此。", "structure": [{"text": "Venter", "role": "subject", "level": 1}, {"text": "has found", "role": "verb_phrase", "level": 1}, {"text": "that this may not be the case", "role": "object_clause", "level": 2}], "difficult_points": ["that 从句作 has found 的宾语；this 回指上一句提到的传统看法。", "may not be the case 表示“情况可能并非如此”，是常用的委婉否定。"], "expressions": [{"text": "may not be the case", "meaning_zh": "情况可能并非如此"}]},
+    {"id": "G-03b", "paragraph_label": "G", "sentence_index": 37, "sentence": "The culprit could be bacterial viruses phages - which keep microbe levels low in some seas.", "translation": "罪魁祸首可能是细菌病毒，即噬菌体，它们使某些海域的微生物数量保持在较低水平。", "structure": [{"text": "The culprit", "role": "subject", "level": 1}, {"text": "could be", "role": "linking_predicate", "level": 1}, {"text": "bacterial viruses phages", "role": "predicative", "level": 1}, {"text": "which keep microbe levels low in some seas", "role": "nonrestrictive_relative_clause", "level": 2}], "difficult_points": ["bacterial viruses phages 原文缺少标点，意思是“细菌病毒，即噬菌体”。", "破折号后的 which 引导非限制性定语从句，补充说明 phages；keep + 宾语 + 形容词 表示“使……保持……”。"], "expressions": [{"text": "the culprit", "meaning_zh": "罪魁祸首"}, {"text": "keep … low", "meaning_zh": "使……保持在低水平"}]},
     {
-      "id": "G-03", "paragraph_label": "G", "sentence_index": 36,
-      "sentence": "Venter has found that t his may not be the case.The culprit could be bacterial viruses phages - which keep microbe levels low in some seas.",
-      "translation": "文特尔发现情况可能并非如此。罪魁祸首可能是噬菌体，也就是使某些海域微生物数量维持在低水平的细菌病毒。",
-      "structure": [
-        {"text": "Venter has found", "role": "main_clause", "level": 1},
-        {"text": "that t his may not be the case", "role": "object_clause", "level": 2},
-        {"text": "The culprit could be bacterial viruses phages", "role": "following_main_clause", "level": 1},
-        {"text": "which keep microbe levels low in some seas", "role": "relative_clause", "level": 2}
-      ],
-      "difficult_points": ["源文在 case.The 之间漏空格，导致两个语义句连成一个文本单元，必须原样保留。", "t his 是 this 的 OCR 断裂，回指前一句的传统看法。", "which 修饰 phages，说明噬菌体产生的影响。"],
-      "expressions": [{"text": "may not be the case", "meaning_zh": "情况可能并非如此"}, {"text": "keep ... levels low", "meaning_zh": "使……水平保持较低"}]
-    },
-    {
-      "id": "G-04", "paragraph_label": "G", "sentence_index": 37,
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 38,
       "sentence": "\"If we can understand this relationship more, and find out how to inhibit the viruses, or make the bacteria resistant, we would have a lot more organisms capturing carbon dioxide,\" says Venter.",
       "translation": "文特尔说：“如果我们能更深入地理解这种关系，弄清如何抑制病毒或使细菌产生抗性，就会有多得多的生物来捕获二氧化碳。”",
       "structure": [
@@ -460,7 +449,7 @@
       "expressions": [{"text": "find out how to", "meaning_zh": "弄清如何……"}, {"text": "make the bacteria resistant", "meaning_zh": "使细菌产生抗性"}, {"text": "capture carbon dioxide", "meaning_zh": "捕获二氧化碳"}]
     },
     {
-      "id": "H-01", "paragraph_label": "H", "sentence_index": 38,
+      "id": "H-01", "paragraph_label": "H", "sentence_index": 39,
       "sentence": "The biggest impact of his project has been on basic science, overturning many established ideas about the tree of life.",
       "translation": "他的项目对基础科学产生了最大影响，推翻了许多关于生命之树的既有观念。",
       "structure": [
@@ -472,7 +461,7 @@
       "expressions": [{"text": "have an impact on", "meaning_zh": "对……产生影响"}, {"text": "overturn established ideas", "meaning_zh": "推翻既有观念"}]
     },
     {
-      "id": "H-02", "paragraph_label": "H", "sentence_index": 39,
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 40,
       "sentence": "It used to be thought that the protein pigment in our own eyes that enables us to detect light was rare.",
       "translation": "过去人们认为，我们眼中使我们能够感知光线的蛋白质色素十分罕见。",
       "structure": [
@@ -484,7 +473,7 @@
       "expressions": [{"text": "it used to be thought that", "meaning_zh": "过去人们认为……"}, {"text": "enable somebody to do", "meaning_zh": "使某人能够做某事"}]
     },
     {
-      "id": "H-03", "paragraph_label": "H", "sentence_index": 40,
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 41,
       "sentence": "But Venter's gene trawl reveals that all surface marine organisms make proteorhodopsins that detect coloured light.",
       "translation": "但文特尔的大规模基因搜寻显示，所有海洋表层生物都会产生能够感知有色光的变形视紫红质。",
       "structure": [
@@ -496,7 +485,7 @@
       "expressions": [{"text": "reveal that", "meaning_zh": "揭示……"}, {"text": "detect coloured light", "meaning_zh": "感知有色光"}]
     },
     {
-      "id": "H-04", "paragraph_label": "H", "sentence_index": 41,
+      "id": "H-04", "paragraph_label": "H", "sentence_index": 42,
       "sentence": "\"They turn out to be one of the most abundant and important, gene families on the planet,\" he said.",
       "translation": "他说：“事实证明，它们是地球上数量最丰富、最重要的基因家族之一。”",
       "structure": [
@@ -508,7 +497,7 @@
       "expressions": [{"text": "turn out to be", "meaning_zh": "结果证明是"}, {"text": "one of the most abundant", "meaning_zh": "数量最丰富的……之一"}]
     },
     {
-      "id": "H-05", "paragraph_label": "H", "sentence_index": 42,
+      "id": "H-05", "paragraph_label": "H", "sentence_index": 43,
       "sentence": "Blue and green variants are found in different environments - blue light preferred in the open ocean such as the indigo Sargasso Sea and green light along coasts.",
       "translation": "蓝色和绿色变体分布在不同环境中——开阔海域（如靛蓝色的马尾藻海）偏向蓝光，而沿海区域偏向绿光。",
       "structure": [
@@ -521,7 +510,7 @@
       "expressions": [{"text": "be found in different environments", "meaning_zh": "分布在不同环境中"}, {"text": "such as", "meaning_zh": "例如"}]
     },
     {
-      "id": "H-06", "paragraph_label": "H", "sentence_index": 43,
+      "id": "H-06", "paragraph_label": "H", "sentence_index": 44,
       "sentence": "Venter believes these proteins help microbes to use energy from the sun, as plants do, but without photosynthesis.",
       "translation": "文特尔认为，这些蛋白质帮助微生物像植物一样利用太阳能，但并不通过光合作用。",
       "structure": [
@@ -534,7 +523,7 @@
       "expressions": [{"text": "use energy from the sun", "meaning_zh": "利用太阳能"}, {"text": "without photosynthesis", "meaning_zh": "不通过光合作用"}]
     },
     {
-      "id": "H-07", "paragraph_label": "H", "sentence_index": 44,
+      "id": "H-07", "paragraph_label": "H", "sentence_index": 45,
       "sentence": "Instead, they use this \"light-harvesting\" machinery to pump charged atoms in the equivalent of solar batteries.",
       "translation": "相反，它们利用这种“采光”机制，在类似太阳能电池的结构中泵送带电原子。",
       "structure": [
@@ -547,7 +536,7 @@
       "expressions": [{"text": "light-harvesting machinery", "meaning_zh": "采光机制"}, {"text": "the equivalent of", "meaning_zh": "类似于……的事物"}]
     },
     {
-      "id": "I-01", "paragraph_label": "I", "sentence_index": 45,
+      "id": "I-01", "paragraph_label": "I", "sentence_index": 46,
       "sentence": "The team discovered many new proteins that protect microbes from UV rays and some that are involved in repairing the damage caused by UV.",
       "translation": "团队发现了许多保护微生物免受紫外线伤害的新蛋白质，以及一些参与修复紫外线所致损伤的蛋白质。",
       "structure": [
@@ -560,7 +549,7 @@
       "expressions": [{"text": "protect ... from ...", "meaning_zh": "保护……免受……"}, {"text": "be involved in", "meaning_zh": "参与；涉及"}, {"text": "repair the damage", "meaning_zh": "修复损伤"}]
     },
     {
-      "id": "I-02", "paragraph_label": "I", "sentence_index": 46,
+      "id": "I-02", "paragraph_label": "I", "sentence_index": 47,
       "sentence": "They were also surprised to discover that many kinds of protein that were thought to be specific to one kingdom of life were more widespread.",
       "translation": "他们还惊讶地发现，许多原以为只存在于某一个生物界的蛋白质，其分布实际上更加广泛。",
       "structure": [
@@ -572,7 +561,7 @@
       "expressions": [{"text": "be surprised to discover", "meaning_zh": "惊讶地发现"}, {"text": "be specific to", "meaning_zh": "为……所特有"}]
     },
     {
-      "id": "I-03", "paragraph_label": "I", "sentence_index": 47,
+      "id": "I-03", "paragraph_label": "I", "sentence_index": 48,
       "sentence": "This is only the start.",
       "translation": "这仅仅是个开始。",
       "structure": [
@@ -583,7 +572,7 @@
       "expressions": [{"text": "only the start", "meaning_zh": "仅仅是开始"}]
     },
     {
-      "id": "I-04", "paragraph_label": "I", "sentence_index": 48,
+      "id": "I-04", "paragraph_label": "I", "sentence_index": 49,
       "sentence": "\"It's clear,\" says Venter, \"that we've only begun to scratch the surface of understanding the microbial world.\"",
       "translation": "文特尔说：“很明显，我们对微生物世界的认识才刚刚触及表面。”",
       "structure": [

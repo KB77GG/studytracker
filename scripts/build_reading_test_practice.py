@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from reading_jijing_text_fixes import apply_passage_fixes, load_fixes
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "data" / "idictation_reading" / "raw.json"
@@ -251,6 +252,8 @@ def test_title_for(book: int, test_no: int, source: str) -> str:
 def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
     raw_parts = raw.get("parts") or {}
     meta = SOURCE_META.get(source, SOURCE_META["academic"])
+    # Manual fixes (glued sentences, typos) must survive rebuilds from raw.
+    text_fixes = load_fixes() if source == "jijing" else {}
     tests: dict[str, dict[str, Any]] = {}
     for entry in raw.get("entries") or []:
         if entry.get("source") and entry.get("source") != source:
@@ -278,6 +281,8 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
             },
         )
         passage_id = passage_id_for(book, test_no, passage_no, source)
+        content = build_passage_content(part)
+        apply_passage_fixes(passage_id, content["paragraphs"], text_fixes)
         tests[tid]["passages"].append(
             {
                 "id": passage_id,
@@ -289,7 +294,7 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
                 "question_name": clean_text(part.get("question_name")),
                 "question_number": part.get("question_number"),
                 "question_type": as_list(part.get("question_type")),
-                "content": build_passage_content(part),
+                "content": content,
                 "groups": [build_group(group, passage_id) for group in part.get("question") or []],
             }
         )

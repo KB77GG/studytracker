@@ -1446,74 +1446,12 @@
         }
       ]
     },
-    {
-      "id": "F-04",
-      "paragraph_label": "F",
-      "sentence_index": 30,
-      "sentence": "Still, 10 years later, in 1942, the operation could only produce a paltry 750 tons of latex rubber.Ford's factories were hoping for almost 40,000.",
-      "translation": "然而，十年之后的1942年，这一经营项目也只能生产出区区750吨乳胶橡胶，而福特的工厂原本盼望的产量接近四万吨。",
-      "structure": [
-        {
-          "text": "Still",
-          "role": "adverbial_phrase",
-          "level": 1
-        },
-        {
-          "text": "10 years later, in 1942",
-          "role": "prepositional_phrase",
-          "level": 1
-        },
-        {
-          "text": "the operation",
-          "role": "subject",
-          "level": 1
-        },
-        {
-          "text": "could only produce",
-          "role": "verb_phrase",
-          "level": 1
-        },
-        {
-          "text": "a paltry 750 tons of latex rubber",
-          "role": "object",
-          "level": 1
-        },
-        {
-          "text": "Ford's factories",
-          "role": "subject",
-          "level": 2
-        },
-        {
-          "text": "were hoping for",
-          "role": "verb_phrase",
-          "level": 2
-        },
-        {
-          "text": "almost 40,000",
-          "role": "object",
-          "level": 2
-        }
-      ],
-      "difficult_points": [
-        "Still 在句首表转折，意为“然而、尽管如此”。",
-        "原文 rubber.Ford's 之间缺少空格，是两句被直接粘连在一起的排版错误，此处按原文保留。",
-        "40,000 承前省略了单位 tons，完整应为 almost 40,000 tons。"
-      ],
-      "expressions": [
-        {
-          "text": "a paltry",
-          "meaning_zh": "少得可怜的"
-        },
-        {
-          "text": "hope for",
-          "meaning_zh": "期望得到"
-        }
-      ]
-    },
+    {"id": "F-04", "paragraph_label": "F", "sentence_index": 30, "sentence": "Still, 10 years later, in 1942, the operation could only produce a paltry 750 tons of latex rubber.", "translation": "然而十年之后，也就是1942年，这项经营也只能生产区区750吨乳胶橡胶。", "structure": [{"text": "Still", "role": "discourse_marker", "level": 1}, {"text": "10 years later, in 1942", "role": "adverbial", "level": 1}, {"text": "the operation", "role": "subject", "level": 1}, {"text": "could only produce", "role": "verb_phrase", "level": 1}, {"text": "a paltry 750 tons of latex rubber", "role": "object", "level": 1}], "difficult_points": ["Still 放在句首表示转折，意思是“然而、尽管如此”。", "in 1942 是对 10 years later 的补充说明；a paltry 表示数量“少得可怜”。"], "expressions": [{"text": "a paltry", "meaning_zh": "少得可怜的"}]},
+    {"id": "F-04b", "paragraph_label": "F", "sentence_index": 31, "sentence": "Ford's factories were hoping for almost 40,000.", "translation": "而福特的工厂原本期望的产量接近四万吨。", "structure": [{"text": "Ford's factories", "role": "subject", "level": 1}, {"text": "were hoping for", "role": "verb_phrase", "level": 1}, {"text": "almost 40,000", "role": "object", "level": 1}], "difficult_points": ["were hoping for 用过去进行时表示当时一直怀有的期望。", "40,000 承前省略了单位 tons，完整的说法是 almost 40,000 tons。"], "expressions": [{"text": "hope for", "meaning_zh": "期望得到"}]},
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 31,
+      "sentence_index": 32,
       "sentence": "The final nail in the coffin was the development of synthetic rubber, and in 1945, it was time to admit defeat, although it was not Ford who did so.",
       "translation": "压垮骆驼的最后一根稻草是合成橡胶的问世；到了1945年，是时候承认失败了，尽管承认失败的并不是福特本人。",
       "structure": [
@@ -1572,7 +1510,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "By that time he was old and ill and had relinquished control of his company to his grandson, Henry Ford II, who closed down the entire rubber operation.",
       "translation": "到那时，他已年老体衰，并已将公司的控制权交给了孙子小亨利·福特，是后者关闭了整个橡胶经营项目。",
       "structure": [
@@ -1626,7 +1564,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 33,
+      "sentence_index": 34,
       "sentence": "The holdings were sold back to the Brazilian government for a pittance, leaving a loss of over $20 million (which would be over 10 times that much in today's terms) — a complete and utter financial disaster.",
       "translation": "这些资产以极低的价格卖回给了巴西政府，造成了超过两千万美元的亏损（按今天的价值计算将是这个数字的十倍以上）——完全是一场彻头彻尾的财务灾难。",
       "structure": [

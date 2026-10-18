@@ -169,21 +169,10 @@
       "difficult_points": ["yet 连接两个转折并列分句，强调巧合与实际吻合之间的反差。", "冒号后的 economic leadership and debt 具体说明 two important issues。"],
       "expressions": [{"text": "fit neatly with", "meaning_zh": "与……恰好吻合"}, {"text": "economic leadership", "meaning_zh": "经济领导地位"}]
     },
+    {"id": "B-09", "paragraph_label": "B", "sentence_index": 15, "sentence": "Thailand, Malaysia, and China are three economies widely seen as the future of Asia.", "translation": "泰国、马来西亚和中国是被普遍视为亚洲未来的三个经济体。", "structure": [{"text": "Thailand, Malaysia, and China", "role": "subject", "level": 1}, {"text": "are", "role": "linking_verb", "level": 1}, {"text": "three economies widely seen as the future of Asia", "role": "predicative", "level": 1}, {"text": "widely seen as the future of Asia", "role": "past_participle_modifier", "level": 2}], "difficult_points": ["widely seen as… 是过去分词短语，后置修饰 three economies，相当于 which are widely seen as…。", "be seen as 表示“被视为”。"], "expressions": [{"text": "be seen as", "meaning_zh": "被视为"}]},
+    {"id": "B-09b", "paragraph_label": "B", "sentence_index": 16, "sentence": "Thailand's economic boom in recent years has prompted many leaders in the region to look at its growth strategy.", "translation": "近年来泰国的经济繁荣促使该地区许多领导人研究其增长战略。", "structure": [{"text": "Thailand's economic boom in recent years", "role": "subject", "level": 1}, {"text": "has prompted", "role": "verb_phrase", "level": 1}, {"text": "many leaders in the region", "role": "object", "level": 1}, {"text": "to look at its growth strategy", "role": "object_complement_infinitive", "level": 2}], "difficult_points": ["prompt sb to do sth 表示“促使某人做某事”，to look at… 是宾语补足语。", "its 指代 Thailand；in recent years 常与现在完成时 has prompted 连用。"], "expressions": [{"text": "prompt sb to do sth", "meaning_zh": "促使某人做某事"}, {"text": "economic boom", "meaning_zh": "经济繁荣"}]},
     {
-      "id": "B-09", "paragraph_label": "B", "sentence_index": 15,
-      "sentence": "Thailand, Malaysia, and China are three economies widely seen as the future of Asia.Thailand's economic boom in recent years has prompted many leaders in the region to look at its growth strategy.",
-      "translation": "泰国、马来西亚和中国被广泛视为代表亚洲未来的三个经济体。近年来泰国的经济繁荣促使该地区许多领导人研究其增长战略。",
-      "structure": [
-        {"text": "Thailand, Malaysia, and China are three economies", "role": "first_main_clause", "level": 1},
-        {"text": "widely seen as the future of Asia", "role": "past_participle_modifier", "level": 2},
-        {"text": "Thailand's economic boom in recent years has prompted many leaders in the region", "role": "second_main_clause", "level": 1},
-        {"text": "to look at its growth strategy", "role": "object_complement_infinitive", "level": 2}
-      ],
-      "difficult_points": ["seen as 是过去分词短语，修饰 three economies，表示外界对三国的普遍看法。", "prompt sb to do sth 表示“促使某人做某事”；its 回指 Thailand。", "Asia. 与 Thailand's 之间缺少空格是源文排版异常，两句因此保留在同一条中。"],
-      "expressions": [{"text": "be seen as", "meaning_zh": "被视为"}, {"text": "prompt ... to ...", "meaning_zh": "促使……做……"}, {"text": "economic boom", "meaning_zh": "经济繁荣"}]
-    },
-    {
-      "id": "B-10", "paragraph_label": "B", "sentence_index": 16,
+      "id": "B-10", "paragraph_label": "B", "sentence_index": 17,
       "sentence": "Malaysia, which has a female central bank governor, is one of Asia's rising economic powers.",
       "translation": "马来西亚拥有一位女性央行行长，是亚洲正在崛起的经济强国之一。",
       "structure": [
@@ -195,7 +184,7 @@
       "expressions": [{"text": "central bank governor", "meaning_zh": "中央银行行长"}, {"text": "rising economic power", "meaning_zh": "正在崛起的经济强国"}]
     },
     {
-      "id": "B-11", "paragraph_label": "B", "sentence_index": 17,
+      "id": "B-11", "paragraph_label": "B", "sentence_index": 18,
       "sentence": "China, of course, is the world's hottest economy, and one that is shaking up trade patterns and business decisions everywhere.",
       "translation": "当然，中国是全球最炙手可热的经济体，也正深刻改变着各地的贸易格局和商业决策。",
       "structure": [
@@ -207,7 +196,7 @@
       "expressions": [{"text": "shake up", "meaning_zh": "彻底改变；重塑"}, {"text": "trade patterns", "meaning_zh": "贸易格局"}]
     },
     {
-      "id": "C-01", "paragraph_label": "C", "sentence_index": 18,
+      "id": "C-01", "paragraph_label": "C", "sentence_index": 19,
       "sentence": "Something all three economies have in common is an above-average level of female participation.",
       "translation": "这三个经济体的共同点是，女性参与程度都高于平均水平。",
       "structure": [
@@ -219,7 +208,7 @@
       "expressions": [{"text": "have in common", "meaning_zh": "有共同之处"}, {"text": "above-average level", "meaning_zh": "高于平均的水平"}]
     },
     {
-      "id": "C-02", "paragraph_label": "C", "sentence_index": 19,
+      "id": "C-02", "paragraph_label": "C", "sentence_index": 20,
       "sentence": "What the three worst ranked economies share are severe long-term economic challenges of high levels of debt and a female workforce that is being neglected.",
       "translation": "排名最末的三个经济体共同面临的是严峻的长期经济挑战：高额债务，以及一支遭到忽视的女性劳动力队伍。",
       "structure": [
@@ -232,7 +221,7 @@
       "expressions": [{"text": "long-term economic challenges", "meaning_zh": "长期经济挑战"}, {"text": "female workforce", "meaning_zh": "女性劳动力"}]
     },
     {
-      "id": "C-03", "paragraph_label": "C", "sentence_index": 20,
+      "id": "C-03", "paragraph_label": "C", "sentence_index": 21,
       "sentence": "Research in economic history is very conclusive on the role of women in economic growth and development, says Yuwa Hedrick-Wong, an economic adviser to MasterCard.",
       "translation": "万事达经济顾问余华德表示，经济史研究已经非常明确地证明了女性在经济增长与发展中的作用。",
       "structure": [
@@ -244,7 +233,7 @@
       "expressions": [{"text": "be conclusive on", "meaning_zh": "对……有明确结论"}, {"text": "economic growth and development", "meaning_zh": "经济增长与发展"}]
     },
     {
-      "id": "C-04", "paragraph_label": "C", "sentence_index": 21,
+      "id": "C-04", "paragraph_label": "C", "sentence_index": 22,
       "sentence": "The more extensive women's participation at all areas of economic activities, the higher the probability for stronger economic growth.",
       "translation": "女性参与各领域经济活动的范围越广，实现更强劲经济增长的可能性就越高。",
       "structure": [
@@ -255,7 +244,7 @@
       "expressions": [{"text": "economic activities", "meaning_zh": "经济活动"}, {"text": "the higher the probability", "meaning_zh": "可能性越高"}]
     },
     {
-      "id": "C-05", "paragraph_label": "C", "sentence_index": 22,
+      "id": "C-05", "paragraph_label": "C", "sentence_index": 23,
       "sentence": "That, Hedrick-Wong says, means societies and economies that consistently fail to fully incorporate women's ability and talent in businesses, and the workplace will suffer the consequences.",
       "translation": "余华德说，这意味着，那些始终未能在企业和职场中充分吸纳女性能力与才华的社会和经济体将承担后果。",
       "structure": [
@@ -268,7 +257,7 @@
       "expressions": [{"text": "incorporate ... in ...", "meaning_zh": "将……纳入……"}, {"text": "suffer the consequences", "meaning_zh": "承担后果"}]
     },
     {
-      "id": "C-06", "paragraph_label": "C", "sentence_index": 23,
+      "id": "C-06", "paragraph_label": "C", "sentence_index": 24,
       "sentence": "Take Korea, which has been walking in place economically in recent years.",
       "translation": "以韩国为例，近年来其经济一直停滞不前。",
       "structure": [
@@ -279,7 +268,7 @@
       "expressions": [{"text": "take ...", "meaning_zh": "以……为例"}, {"text": "walk in place economically", "meaning_zh": "经济停滞不前"}]
     },
     {
-      "id": "C-07", "paragraph_label": "C", "sentence_index": 24,
+      "id": "C-07", "paragraph_label": "C", "sentence_index": 25,
       "sentence": "Immediately following the 1997— 1998 Asian financial crisis, Korea became a regional role model as growth boomed and unemployment fell.",
       "translation": "1997—1998年亚洲金融危机刚结束后，随着经济增长腾飞、失业率下降，韩国成为地区典范。",
       "structure": [
@@ -291,7 +280,7 @@
       "expressions": [{"text": "financial crisis", "meaning_zh": "金融危机"}, {"text": "regional role model", "meaning_zh": "地区典范"}]
     },
     {
-      "id": "C-08", "paragraph_label": "C", "sentence_index": 25,
+      "id": "C-08", "paragraph_label": "C", "sentence_index": 26,
       "sentence": "Yet a massive increase in household debt left consumers overexposed and growth slowed.",
       "translation": "然而，家庭债务大幅增加，使消费者背负了过高风险，经济增长也随之放缓。",
       "structure": [
@@ -303,7 +292,7 @@
       "expressions": [{"text": "a massive increase in", "meaning_zh": "……的大幅增加"}, {"text": "household debt", "meaning_zh": "家庭债务"}]
     },
     {
-      "id": "D-01", "paragraph_label": "D", "sentence_index": 26,
+      "id": "D-01", "paragraph_label": "D", "sentence_index": 27,
       "sentence": "Maybe it is a just coincidence that Korea also ranks low on measures of gender equality published by the United Nations.",
       "translation": "韩国在联合国公布的性别平等指标中排名同样靠后，也许这只是巧合。",
       "structure": [
@@ -315,7 +304,7 @@
       "expressions": [{"text": "rank low on", "meaning_zh": "在……方面排名靠后"}, {"text": "measures of gender equality", "meaning_zh": "性别平等衡量指标"}]
     },
     {
-      "id": "D-02", "paragraph_label": "D", "sentence_index": 27,
+      "id": "D-02", "paragraph_label": "D", "sentence_index": 28,
       "sentence": "As of 2003, for example, it ranked below Honduras, Paraguay, Mauritius, and Ukraine in terms of women's economic and political empowerment.",
       "translation": "例如，截至2003年，韩国在女性经济和政治赋权方面的排名低于洪都拉斯、巴拉圭、毛里求斯和乌克兰。",
       "structure": [
@@ -327,7 +316,7 @@
       "expressions": [{"text": "as of", "meaning_zh": "截至"}, {"text": "in terms of", "meaning_zh": "就……而言"}, {"text": "economic and political empowerment", "meaning_zh": "经济与政治赋权"}]
     },
     {
-      "id": "D-03", "paragraph_label": "D", "sentence_index": 28,
+      "id": "D-03", "paragraph_label": "D", "sentence_index": 29,
       "sentence": "Utilising more of its female workforce would deepen Korea's labour pool and increase potential growth rates in the economy.",
       "translation": "更充分地利用女性劳动力，将扩大韩国的劳动力储备，并提高经济的潜在增长率。",
       "structure": [
@@ -339,7 +328,7 @@
       "expressions": [{"text": "female workforce", "meaning_zh": "女性劳动力"}, {"text": "potential growth rates", "meaning_zh": "潜在增长率"}]
     },
     {
-      "id": "D-04", "paragraph_label": "D", "sentence_index": 29,
+      "id": "D-04", "paragraph_label": "D", "sentence_index": 30,
       "sentence": "The same goes for Japan.",
       "translation": "日本也是如此。",
       "structure": [{"text": "The same", "role": "subject", "level": 1}, {"text": "goes", "role": "predicate", "level": 1}, {"text": "for Japan", "role": "prepositional_complement", "level": 1}],
@@ -347,7 +336,7 @@
       "expressions": [{"text": "the same goes for", "meaning_zh": "……也同样如此"}]
     },
     {
-      "id": "D-05", "paragraph_label": "D", "sentence_index": 30,
+      "id": "D-05", "paragraph_label": "D", "sentence_index": 31,
       "sentence": "The reluctance of Asia's biggest economy to increase female participation and let more women into the executive suite exacerbates its biggest long-term challenge: a declining birth rate.",
       "translation": "亚洲最大经济体不愿提高女性参与度、让更多女性进入高管层，这加剧了其最严重的长期挑战：出生率下降。",
       "structure": [
@@ -360,7 +349,7 @@
       "expressions": [{"text": "increase female participation", "meaning_zh": "提高女性参与度"}, {"text": "executive suite", "meaning_zh": "企业高管层"}, {"text": "exacerbate a challenge", "meaning_zh": "加剧挑战"}]
     },
     {
-      "id": "D-06", "paragraph_label": "D", "sentence_index": 31,
+      "id": "D-06", "paragraph_label": "D", "sentence_index": 32,
       "sentence": "In 2003, the number of children per Japanese woman fell to a record low of 1.29 versus about. 2 in the early 1970s.",
       "translation": "2003年，日本平均每名女性的子女数降至创纪录的1.29人，而20世纪70年代初约为2人。",
       "structure": [
@@ -373,7 +362,7 @@
       "expressions": [{"text": "fall to a record low", "meaning_zh": "降至历史最低点"}, {"text": "in the early 1970s", "meaning_zh": "20世纪70年代初"}]
     },
     {
-      "id": "D-07", "paragraph_label": "D", "sentence_index": 32,
+      "id": "D-07", "paragraph_label": "D", "sentence_index": 33,
       "sentence": "Preliminary government statistics suggest the rate declined further in 2004.",
       "translation": "政府初步统计数据显示，这一比率在2004年进一步下降。",
       "structure": [
@@ -385,7 +374,7 @@
       "expressions": [{"text": "preliminary statistics", "meaning_zh": "初步统计数据"}, {"text": "decline further", "meaning_zh": "进一步下降"}]
     },
     {
-      "id": "D-08", "paragraph_label": "D", "sentence_index": 33,
+      "id": "D-08", "paragraph_label": "D", "sentence_index": 34,
       "sentence": "The trend is nothing short of a crisis for a highly indebted nation of 126 million that has yet to figure out how to fund the national pension system down the road.",
       "translation": "对于一个拥有1.26亿人口、负债累累且尚未找到未来如何为国家养老金体系筹资的国家而言，这一趋势无异于一场危机。",
       "structure": [
@@ -398,7 +387,7 @@
       "expressions": [{"text": "nothing short of", "meaning_zh": "简直就是；无异于"}, {"text": "have yet to", "meaning_zh": "尚未"}, {"text": "down the road", "meaning_zh": "在未来"}]
     },
     {
-      "id": "D-09", "paragraph_label": "D", "sentence_index": 34,
+      "id": "D-09", "paragraph_label": "D", "sentence_index": 35,
       "sentence": "Yet Japan has been slow to realise that for many women, the decision to delay childbirth is a form of rebellion against societal expectations to have children and become housewives,",
       "translation": "然而，日本迟迟没有意识到，对许多女性而言，推迟生育的决定是对社会期待她们生儿育女并成为家庭主妇的一种反抗，",
       "structure": [
@@ -410,7 +399,7 @@
       "expressions": [{"text": "be slow to realise", "meaning_zh": "迟迟没有意识到"}, {"text": "delay childbirth", "meaning_zh": "推迟生育"}, {"text": "a form of rebellion against", "meaning_zh": "对……的一种反抗"}]
     },
     {
-      "id": "E-01", "paragraph_label": "E", "sentence_index": 35,
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 36,
       "sentence": "It may be 2005, yet having children is a career-ending decision for millions of bright, ambit ions, and well-educated Japanese,",
       "translation": "尽管已经是2005年，但对数百万聪明、有抱负且受过良好教育的日本女性来说，生育仍是一个会终结职业生涯的决定，",
       "structure": [
@@ -423,7 +412,7 @@
       "expressions": [{"text": "career-ending decision", "meaning_zh": "终结职业生涯的决定"}, {"text": "well-educated", "meaning_zh": "受过良好教育的"}]
     },
     {
-      "id": "E-02", "paragraph_label": "E", "sentence_index": 36,
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 37,
       "sentence": "Until corrected, Japan's birth rate will drop and economic growth will lag,",
       "translation": "在这一问题得到纠正之前，日本的生育率将继续下降，经济增长也会滞后，",
       "structure": [
@@ -435,7 +424,7 @@
       "expressions": [{"text": "birth rate", "meaning_zh": "生育率"}, {"text": "economic growth will lag", "meaning_zh": "经济增长将会滞后"}]
     },
     {
-      "id": "E-03", "paragraph_label": "E", "sentence_index": 37,
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 38,
       "sentence": "UN Secretary General Kofi Annan was absolutely right earlier this month when he said no other policy is as likely to raise economic productivity than the empowerment of women.",
       "translation": "联合国秘书长科菲·安南本月早些时候说，没有其他政策比赋权女性更有可能提高经济生产率；他的这一说法完全正确。",
       "structure": [
@@ -447,7 +436,7 @@
       "expressions": [{"text": "raise economic productivity", "meaning_zh": "提高经济生产率"}, {"text": "the empowerment of women", "meaning_zh": "女性赋权"}]
     },
     {
-      "id": "E-04", "paragraph_label": "E", "sentence_index": 38,
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 39,
       "sentence": "Here, in Thailand, the government is getting some decent marks in this regard, and the economy's 6 per cent-plus growth rate may be a direct result.",
       "translation": "在泰国，政府在这方面获得了相当不错的评价，而该国超过6%的经济增长率或许正是一个直接结果。",
       "structure": [
@@ -458,7 +447,7 @@
       "expressions": [{"text": "get decent marks", "meaning_zh": "获得不错的评价"}, {"text": "in this regard", "meaning_zh": "在这方面"}, {"text": "a direct result", "meaning_zh": "直接结果"}]
     },
     {
-      "id": "E-05", "paragraph_label": "E", "sentence_index": 39,
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 40,
       "sentence": "Thailand still has a long way to go.",
       "translation": "泰国仍有很长的路要走。",
       "structure": [{"text": "Thailand", "role": "subject", "level": 1}, {"text": "still has", "role": "predicate", "level": 1}, {"text": "a long way to go", "role": "object", "level": 1}],
@@ -466,7 +455,7 @@
       "expressions": [{"text": "have a long way to go", "meaning_zh": "仍有很长的路要走"}]
     },
     {
-      "id": "E-06", "paragraph_label": "E", "sentence_index": 40,
+      "id": "E-06", "paragraph_label": "E", "sentence_index": 41,
       "sentence": "Yet the Bank of Thailand's deputy governor, Tarisa Watanagase, is a woman, as are seven of nine assistant governors.",
       "translation": "不过，泰国央行副行长塔丽莎·瓦塔纳格塞是一名女性，九位助理行长中也有七位是女性。",
       "structure": [
@@ -479,7 +468,7 @@
       "expressions": [{"text": "deputy governor", "meaning_zh": "副行长"}, {"text": "assistant governor", "meaning_zh": "助理行长"}]
     },
     {
-      "id": "E-07", "paragraph_label": "E", "sentence_index": 41,
+      "id": "E-07", "paragraph_label": "E", "sentence_index": 42,
       "sentence": "Then there's Jada Wattanasiritham, who runs Siam Commercial Bank Plc, Thailand's fourth-biggest lender.",
       "translation": "此外还有佳达·瓦塔纳西里探，她执掌泰国第四大贷款机构——暹罗商业银行。",
       "structure": [
@@ -491,7 +480,7 @@
       "expressions": [{"text": "run a bank", "meaning_zh": "经营一家银行"}, {"text": "fourth-biggest lender", "meaning_zh": "第四大贷款机构"}]
     },
     {
-      "id": "E-08", "paragraph_label": "E", "sentence_index": 42,
+      "id": "E-08", "paragraph_label": "E", "sentence_index": 43,
       "sentence": "How many female chief executives can you name in Japan or Korea?",
       "translation": "你能说出多少位日本或韩国的女性首席执行官？",
       "structure": [
@@ -503,7 +492,7 @@
       "expressions": [{"text": "chief executive", "meaning_zh": "首席执行官"}, {"text": "name", "meaning_zh": "说出；列举"}]
     },
     {
-      "id": "E-09", "paragraph_label": "E", "sentence_index": 43,
+      "id": "E-09", "paragraph_label": "E", "sentence_index": 44,
       "sentence": "Looked at broadly in Asia, MasterCard's survey is on to something.",
       "translation": "从整个亚洲的广阔视角来看，万事达的调查确实发现了重要问题。",
       "structure": [
@@ -515,7 +504,7 @@
       "expressions": [{"text": "looked at broadly", "meaning_zh": "从广泛角度来看"}, {"text": "be on to something", "meaning_zh": "发现了重要线索或道理"}]
     },
     {
-      "id": "E-10", "paragraph_label": "E", "sentence_index": 44,
+      "id": "E-10", "paragraph_label": "E", "sentence_index": 45,
       "sentence": "It is that giving women more opportunities to contribute to an economy is not just about fairness, but dollars and sense, too.",
       "translation": "这个道理就是：给予女性更多为经济作贡献的机会，不仅关乎公平，也关乎实实在在的经济利益。",
       "structure": [

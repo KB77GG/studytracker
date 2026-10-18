@@ -788,70 +788,12 @@
         }
       ]
     },
-    {
-      "id": "D-02",
-      "paragraph_label": "D",
-      "sentence_index": 20,
-      "sentence": "Many products fail because of a universal, but largely ignored, psychological bias: People irrationally overvalue benefits they currently possess relative to those they don't.The bias leads consumers to value the advantages of products they own more than the benefits of new ones.",
-      "translation": "许多产品的失败源于一种普遍存在却常被忽视的心理偏差：人们会不理性地高估自己目前拥有的利益，而相对贬低那些自己没有的利益。这种偏差使消费者更看重自己已拥有产品的优点，而非新产品的优点。",
-      "structure": [
-        {
-          "text": "Many products fail",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "because of a universal, but largely ignored, psychological bias",
-          "role": "prepositional_phrase",
-          "level": 2
-        },
-        {
-          "text": "People irrationally overvalue benefits",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "they currently possess",
-          "role": "relative_clause",
-          "level": 2
-        },
-        {
-          "text": "relative to those they don't",
-          "role": "prepositional_phrase",
-          "level": 2
-        },
-        {
-          "text": "The bias leads consumers",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "to value the advantages of products they own more than the benefits of new ones",
-          "role": "infinitive_phrase",
-          "level": 2
-        }
-      ],
-      "difficult_points": [
-        "原文在 don't 后缺少空格，The bias 与前一句直接粘连，属排印错误；实际上这里是两句独立的句子，本条按原文合并保留。",
-        "benefits 后省略了关系代词 that/which，they currently possess 是省略关系词的定语从句。",
-        "those they don't 中 don't 后省略了 possess，指人们没有拥有的那些利益。",
-        "products they own 中省略了关系代词，they own 修饰 products。"
-      ],
-      "expressions": [
-        {
-          "text": "overvalue",
-          "meaning_zh": "高估"
-        },
-        {
-          "text": "relative to",
-          "meaning_zh": "相对于"
-        }
-      ]
-    },
+    {"id": "D-02", "paragraph_label": "D", "sentence_index": 20, "sentence": "Many products fail because of a universal, but largely ignored, psychological bias: People irrationally overvalue benefits they currently possess relative to those they don't.", "translation": "许多产品失败，是因为一种普遍存在却常被忽视的心理偏差：人们会不理性地高估自己现有的好处，而看轻自己没有的那些。", "structure": [{"text": "Many products", "role": "subject", "level": 1}, {"text": "fail", "role": "verb", "level": 1}, {"text": "because of a universal, but largely ignored, psychological bias", "role": "prepositional_phrase", "level": 1}, {"text": "People irrationally overvalue benefits they currently possess relative to those they don't", "role": "explanatory_clause", "level": 2}, {"text": "they currently possess", "role": "relative_clause", "level": 3}], "difficult_points": ["冒号后的句子具体解释这种心理偏差是什么。", "they currently possess 是省略关系代词的定语从句，修饰 benefits。", "those they don't 中 don't 后省略了 possess，指人们没有的那些好处。"], "expressions": [{"text": "overvalue", "meaning_zh": "高估"}, {"text": "relative to", "meaning_zh": "相对于"}]},
+    {"id": "D-02b", "paragraph_label": "D", "sentence_index": 21, "sentence": "The bias leads consumers to value the advantages of products they own more than the benefits of new ones.", "translation": "这种偏差使消费者更看重自己已有产品的优点，而不是新产品的好处。", "structure": [{"text": "The bias", "role": "subject", "level": 1}, {"text": "leads", "role": "verb", "level": 1}, {"text": "consumers", "role": "object", "level": 1}, {"text": "to value the advantages of products they own more than the benefits of new ones", "role": "object_complement_infinitive", "level": 2}, {"text": "they own", "role": "relative_clause", "level": 3}], "difficult_points": ["lead sb to do sth 表示“使某人做某事”，to value… 是宾语补足语。", "they own 是省略关系代词的定语从句，修饰 products；ones 代替 products。"], "expressions": [{"text": "lead sb to do sth", "meaning_zh": "使某人做某事"}]},
     {
       "id": "D-03",
       "paragraph_label": "D",
-      "sentence_index": 21,
+      "sentence_index": 22,
       "sentence": "It also leads executives to value the benefits of innovations they've developed over the advantages of incumbent products.",
       "translation": "这种偏差还使高管们更看重自己所开发的创新产品的优点，而非现有产品的优势。",
       "structure": [
@@ -895,7 +837,7 @@
     {
       "id": "E-01",
       "paragraph_label": "E",
-      "sentence_index": 22,
+      "sentence_index": 23,
       "sentence": "Companies have long assumed that people will adopt new products that deliver more value or utility than existing ones.",
       "translation": "企业长期以来一直认为，人们会采用那些比现有产品带来更多价值或效用的新产品。",
       "structure": [
@@ -939,7 +881,7 @@
     {
       "id": "E-02",
       "paragraph_label": "E",
-      "sentence_index": 23,
+      "sentence_index": 24,
       "sentence": "Thus, businesses need only to develop innovations that are objectively superior to incumbent products, and consumers will have sufficient incentive to purchase them.",
       "translation": "因此，企业只需要开发出客观上优于现有产品的创新产品，消费者就会有足够的动力去购买它们。",
       "structure": [
@@ -983,7 +925,7 @@
     {
       "id": "E-03",
       "paragraph_label": "E",
-      "sentence_index": 24,
+      "sentence_index": 25,
       "sentence": "In the 1960s, communications scholar Everett Rogers called the concept\"relative advantage\" and identified it as the most critical driver of new-product adoption.",
       "translation": "20世纪60年代，传播学学者埃弗雷特·罗杰斯将这一概念称为“相对优势”，并将其视为新产品被采用的最关键驱动因素。",
       "structure": [
@@ -1027,7 +969,7 @@
     {
       "id": "E-04",
       "paragraph_label": "E",
-      "sentence_index": 25,
+      "sentence_index": 26,
       "sentence": "This argument assumes that companies make unbiased assessments of innovations and of consumers, likelihood of adopting them.",
       "translation": "这一论点假定，企业能够对创新产品以及消费者采用这些产品的可能性做出不带偏见的评估。",
       "structure": [
@@ -1071,7 +1013,7 @@
     {
       "id": "E-05",
       "paragraph_label": "E",
-      "sentence_index": 26,
+      "sentence_index": 27,
       "sentence": "Although compelling, the theory has one major flaw: It fails to capture the psychological biases that affect decision making.",
       "translation": "尽管这一理论颇具说服力，却存在一个重大缺陷：它未能涵盖影响决策的心理偏差。",
       "structure": [
@@ -1119,7 +1061,7 @@
     {
       "id": "F-01",
       "paragraph_label": "F",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "In 2002, psychologist Daniel Kahneman won the Nobel Prize in economics for a body of work that explores why and when individuals deviate from rational economic behavior.",
       "translation": "2002年，心理学家丹尼尔·卡尼曼因一系列研究成果获得了诺贝尔经济学奖，这些研究探讨了个体在何时、为何会偏离理性经济行为。",
       "structure": [
@@ -1172,7 +1114,7 @@
     {
       "id": "F-02",
       "paragraph_label": "F",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "One of the cornerstones of that research, developed with psychologist Amos Tversky, is how individuals value prospects, or choices, in the marketplace.",
       "translation": "该研究的基石之一——与心理学家阿莫斯·特沃斯基共同完成——是关于个体如何评估市场中的前景，也就是各种选择。",
       "structure": [
@@ -1216,7 +1158,7 @@
     {
       "id": "F-03",
       "paragraph_label": "F",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "Kahneman and Tversky showed, and others have confirmed, that human beings' responses to the alternatives before they have four distinct characteristics.",
       "translation": "卡尼曼和特沃斯基的研究表明——后来也被其他学者证实——人类面对眼前各种选择时的反应具有四个明显特征。",
       "structure": [
@@ -1255,7 +1197,7 @@
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 30,
+      "sentence_index": 31,
       "sentence": "First, people evaluate the attractiveness of an alternative based not on its objective, or actual, value but on its subjective, or perceived value.",
       "translation": "第一，人们评估一个选择的吸引力时，依据的不是其客观（即实际）价值，而是其主观（即感知）价值。",
       "structure": [
@@ -1293,7 +1235,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 31,
+      "sentence_index": 32,
       "sentence": "Second, consumers evaluate new products or investments relative to a reference point, usually the products they already own or consume.",
       "translation": "第二，消费者评估新产品或投资时，会参照一个基准点，通常就是他们已经拥有或正在使用的产品。",
       "structure": [
@@ -1336,7 +1278,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "Third, people view any improvements relative to this reference point as gains and treat all shortcomings as losses.",
       "translation": "第三，人们会把相对于这个基准点的任何改进都视为收益，而把所有不足都当作损失。",
       "structure": [
@@ -1371,74 +1313,12 @@
         }
       ]
     },
-    {
-      "id": "G-04",
-      "paragraph_label": "G",
-      "sentence_index": 33,
-      "sentence": "Fourth, and most important, losses have a far greater impact on people than similarly sized gains, a phenomenon that Kahneman and Tversky called \"loss aversion.\"For instance, studies show that most people will not accept a bet in which there is a 50% chance of winning $100 and a 50% chance of losing $100.",
-      "translation": "第四，也是最重要的一点：损失给人们带来的影响远大于同等规模的收益，卡尼曼和特沃斯基把这种现象称为“损失厌恶”。例如，研究表明，大多数人不会接受这样一个赌局——有50%的概率赢得100美元，也有50%的概率输掉100美元。",
-      "structure": [
-        {
-          "text": "Fourth, and most important",
-          "role": "adverbial",
-          "level": 2
-        },
-        {
-          "text": "losses have a far greater impact on people than similarly sized gains",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "a phenomenon that Kahneman and Tversky called \"loss aversion.\"",
-          "role": "apposition",
-          "level": 2
-        },
-        {
-          "text": "that Kahneman and Tversky called \"loss aversion.\"",
-          "role": "relative_clause",
-          "level": 3
-        },
-        {
-          "text": "For instance, studies show",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "that most people will not accept a bet",
-          "role": "noun_clause",
-          "level": 2
-        },
-        {
-          "text": "in which there is a 50% chance of winning $100 and a 50% chance of losing $100",
-          "role": "relative_clause",
-          "level": 3
-        }
-      ],
-      "difficult_points": [
-        "原文在 aversion. 后缺少空格，For instance 与前一句直接粘连，属排印错误；实际上这是两句独立的句子，本条按原文合并保留。",
-        "a phenomenon that ... 是对前一分句内容的同位概括。",
-        "have a greater impact on ... than ... 是比较结构，突出损失影响大于收益。",
-        "in which 引导定语从句修饰 a bet，说明赌局的具体内容。"
-      ],
-      "expressions": [
-        {
-          "text": "have an impact on",
-          "meaning_zh": "对……产生影响"
-        },
-        {
-          "text": "loss aversion",
-          "meaning_zh": "损失厌恶"
-        },
-        {
-          "text": "a 50% chance of doing",
-          "meaning_zh": "有50%的概率做……"
-        }
-      ]
-    },
+    {"id": "G-04", "paragraph_label": "G", "sentence_index": 34, "sentence": "Fourth, and most important, losses have a far greater impact on people than similarly sized gains, a phenomenon that Kahneman and Tversky called \"loss aversion.\"", "translation": "第四点，也是最重要的一点：损失对人的影响远大于同等规模的收益，卡尼曼和特沃斯基把这种现象称为“损失厌恶”。", "structure": [{"text": "Fourth, and most important", "role": "adverbial", "level": 1}, {"text": "losses", "role": "subject", "level": 1}, {"text": "have", "role": "verb", "level": 1}, {"text": "a far greater impact on people than similarly sized gains", "role": "object", "level": 1}, {"text": "a phenomenon that Kahneman and Tversky called \"loss aversion.\"", "role": "apposition", "level": 2}, {"text": "that Kahneman and Tversky called \"loss aversion.\"", "role": "relative_clause", "level": 3}], "difficult_points": ["have a greater impact on … than … 是比较结构，far 修饰比较级 greater。", "a phenomenon that… 是对前面整个分句的同位语概括；that 引导定语从句修饰 phenomenon。"], "expressions": [{"text": "have an impact on", "meaning_zh": "对……产生影响"}, {"text": "loss aversion", "meaning_zh": "损失厌恶"}]},
+    {"id": "G-04b", "paragraph_label": "G", "sentence_index": 35, "sentence": "For instance, studies show that most people will not accept a bet in which there is a 50% chance of winning $100 and a 50% chance of losing $100.", "translation": "例如，研究表明，大多数人不会接受这样一个赌局：有50%的概率赢100美元，也有50%的概率输100美元。", "structure": [{"text": "For instance", "role": "discourse_marker", "level": 1}, {"text": "studies", "role": "subject", "level": 1}, {"text": "show", "role": "verb", "level": 1}, {"text": "that most people will not accept a bet in which there is a 50% chance of winning $100 and a 50% chance of losing $100", "role": "object_clause", "level": 2}, {"text": "in which there is a 50% chance of winning $100 and a 50% chance of losing $100", "role": "relative_clause", "level": 3}], "difficult_points": ["that 从句作 show 的宾语。", "in which 是“介词 + 关系代词”引导的定语从句，修饰 a bet，说明赌局的内容。"], "expressions": [{"text": "a 50% chance of doing", "meaning_zh": "有50%的概率做……"}]},
     {
       "id": "G-05",
       "paragraph_label": "G",
-      "sentence_index": 34,
+      "sentence_index": 36,
       "sentence": "The gains from the wager must outweigh the losses by a factor of between two and three before most people find such a bet attractive.",
       "translation": "赌局带来的收益必须是损失的两到三倍，大多数人才会觉得这样的赌局具有吸引力。",
       "structure": [
@@ -1481,7 +1361,7 @@
     {
       "id": "G-06",
       "paragraph_label": "G",
-      "sentence_index": 35,
+      "sentence_index": 37,
       "sentence": "Similarly, a survey of 1,500 customers of Pacific Gas and Electric revealed that consumers demand three to four times more compensation to endure a power outage – and suffer a loss – than they are willing to pay to avoid the problem, a potential gain.",
       "translation": "同样，一项针对太平洋煤气电力公司1500名客户的调查显示，消费者若要忍受停电（即承受一次损失），要求获得的补偿是他们为避免停电（即获得一次潜在收益）而愿意支付金额的三到四倍。",
       "structure": [
@@ -1544,7 +1424,7 @@
     {
       "id": "G-07",
       "paragraph_label": "G",
-      "sentence_index": 36,
+      "sentence_index": 38,
       "sentence": "As Kahneman and Tversky wrote, \"losses loom larger than gains.\"",
       "translation": "正如卡尼曼和特沃斯基所写的那样，“损失比收益更为显眼”。",
       "structure": [
@@ -1573,7 +1453,7 @@
     {
       "id": "H-01",
       "paragraph_label": "H",
-      "sentence_index": 37,
+      "sentence_index": 39,
       "sentence": "Loss aversion leads people to value products that they already possess – those that are part of their endowment – more than those they don't have.",
       "translation": "损失厌恶使人们更看重自己已经拥有的产品——即属于其禀赋的那部分——而非那些自己没有的产品。",
       "structure": [
@@ -1622,7 +1502,7 @@
     {
       "id": "H-02",
       "paragraph_label": "H",
-      "sentence_index": 38,
+      "sentence_index": 40,
       "sentence": "According to behavioral economist Richard Thaler, consumers value what they own, but many have to give up, much more than they value what they don't own but could obtain.",
       "translation": "行为经济学家理查德·塞勒指出，相较于自己不曾拥有但可以获得的东西，消费者更看重自己拥有、但可能不得不放弃的东西。",
       "structure": [
@@ -1666,7 +1546,7 @@
     {
       "id": "H-03",
       "paragraph_label": "H",
-      "sentence_index": 39,
+      "sentence_index": 41,
       "sentence": "Thaler called that bias the \"endowment effect.\"",
       "translation": "塞勒把这种偏差称为“禀赋效应”。",
       "structure": [
@@ -1695,7 +1575,7 @@
     {
       "id": "I-01",
       "paragraph_label": "I",
-      "sentence_index": 40,
+      "sentence_index": 42,
       "sentence": "In a 1990 paper, Thaler and his colleagues describe a series of experiments they conducted to measure the magnitude of the endowment effect.",
       "translation": "在一篇1990年发表的论文中，塞勒和同事们描述了一系列他们为测量禀赋效应大小而设计的实验。",
       "structure": [
@@ -1743,7 +1623,7 @@
     {
       "id": "I-02",
       "paragraph_label": "I",
-      "sentence_index": 41,
+      "sentence_index": 43,
       "sentence": "In one such experiment, they gave coffee mugs to a group of people, the Sellers, and asked at what price point – from 25 cents to $9.25– the Sellers would be willing to part with those mugs.",
       "translation": "在其中一个实验中，他们把咖啡杯发给一组人（称为“卖家”），并询问在从25美分到9.25美元之间的哪个价位上，卖家愿意放弃这些杯子。",
       "structure": [
@@ -1802,7 +1682,7 @@
     {
       "id": "I-03",
       "paragraph_label": "I",
-      "sentence_index": 42,
+      "sentence_index": 44,
       "sentence": "They asked another group – the Choosers – to whom they didn't give coffee mugs, to indicate whether they would choose the mug or the money at each price point.",
       "translation": "他们又询问了另一组人（称为“选择者”，没有得到咖啡杯），请这组人在每个价位上指出自己会选择杯子还是选择等值的钱。",
       "structure": [
@@ -1852,7 +1732,7 @@
     {
       "id": "I-04",
       "paragraph_label": "I",
-      "sentence_index": 43,
+      "sentence_index": 45,
       "sentence": "In objective terms, all the Sellers and Choosers were in the same situation: They were choosing between a mug and a sum of money.",
       "translation": "客观而言，所有卖家和选择者所面临的情况其实是一样的：他们都是在一个杯子和一笔钱之间做选择。",
       "structure": [
@@ -1890,7 +1770,7 @@
     {
       "id": "I-05",
       "paragraph_label": "I",
-      "sentence_index": 44,
+      "sentence_index": 46,
       "sentence": "In one trial of this experiment, the Sellers priced the mug at $7.12, on average, but the Choosers were willing to pay only $3.12.",
       "translation": "在这个实验的一次试验中，卖家给杯子的平均定价是7.12美元，而选择者却只愿意支付3.12美元。",
       "structure": [
@@ -1928,7 +1808,7 @@
     {
       "id": "I-06",
       "paragraph_label": "I",
-      "sentence_index": 45,
+      "sentence_index": 47,
       "sentence": "In another trial, the Sellers and the Choosers valued the mug at $7.00 and $3.50, respectively.",
       "translation": "在另一次试验中，卖家和选择者对杯子的估值分别是7美元和3.5美元。",
       "structure": [
@@ -1962,7 +1842,7 @@
     {
       "id": "I-07",
       "paragraph_label": "I",
-      "sentence_index": 46,
+      "sentence_index": 48,
       "sentence": "Overall, the Sellers always demanded at least twice as much to give up the mugs as the Choosers would pay to obtain them.",
       "translation": "总体而言，卖家为放弃杯子所要求的金额，始终至少是选择者为获得杯子而愿意支付金额的两倍。",
       "structure": [
@@ -2005,7 +1885,7 @@
     {
       "id": "J-01",
       "paragraph_label": "J",
-      "sentence_index": 47,
+      "sentence_index": 49,
       "sentence": "Kahneman and Tversky's research also explains why people tend to stick with what they have even if a better alternative exists.",
       "translation": "卡尼曼和特沃斯基的研究还解释了为什么人们即使存在更好的选择，也倾向于坚持自己已有的东西。",
       "structure": [
@@ -2049,7 +1929,7 @@
     {
       "id": "J-02",
       "paragraph_label": "J",
-      "sentence_index": 48,
+      "sentence_index": 50,
       "sentence": "In a 1989 paper, economist Jack Knetsch provided a compelling demonstration of what economists William Samuelson and Richard Zeckhauser called the \"status quo bias.\"",
       "translation": "在一篇1989年发表的论文中，经济学家杰克·内奇有力地展示了经济学家威廉·萨缪尔森和理查德·泽克豪泽所称的“现状偏见”。",
       "structure": [
@@ -2092,7 +1972,7 @@
     {
       "id": "J-03",
       "paragraph_label": "J",
-      "sentence_index": 49,
+      "sentence_index": 51,
       "sentence": "Knetsch asked one group of students to choose between an attractive coffee mug and a large bar of Swiss chocolate.",
       "translation": "内奇请一组学生在一个精美的咖啡杯和一大块瑞士巧克力之间做选择。",
       "structure": [
@@ -2121,7 +2001,7 @@
     {
       "id": "J-04",
       "paragraph_label": "J",
-      "sentence_index": 50,
+      "sentence_index": 52,
       "sentence": "He gave a second group of students the coffee mugs but a short time later allowed each student to exchange his or her mug for a chocolate bar.",
       "translation": "他给第二组学生发了咖啡杯，但不久后又允许每个学生把自己的杯子换成一块巧克力。",
       "structure": [
@@ -2159,7 +2039,7 @@
     {
       "id": "J-05",
       "paragraph_label": "J",
-      "sentence_index": 51,
+      "sentence_index": 53,
       "sentence": "Finally, Knetsch gave chocolate bars to a third group of students but much later allowed each student to exchange his or her bar for a mug.",
       "translation": "最后，内奇给第三组学生发了巧克力，但过了更长时间后，才允许每个学生把巧克力换成杯子。",
       "structure": [
@@ -2193,7 +2073,7 @@
     {
       "id": "J-06",
       "paragraph_label": "J",
-      "sentence_index": 52,
+      "sentence_index": 54,
       "sentence": "Of the students given a choice at the outset, 56% chose the mug, and 44% chose the chocolate bar, indicating a near even split in preferences between the two products.",
       "translation": "在一开始就被给予自由选择权的学生中，56%选择了杯子，44%选择了巧克力，这表明两种产品之间的偏好几乎是对半分的。",
       "structure": [
@@ -2241,7 +2121,7 @@
     {
       "id": "J-07",
       "paragraph_label": "J",
-      "sentence_index": 53,
+      "sentence_index": 55,
       "sentence": "Logically, therefore, about half of the students to whom Knetsch gave the coffee mug should have traded for the chocolate bar and vice versa.",
       "translation": "因此，从逻辑上讲，内奇给了咖啡杯的那组学生中应该有大约一半人会把杯子换成巧克力，反之亦然。",
       "structure": [
@@ -2290,7 +2170,7 @@
     {
       "id": "J-08",
       "paragraph_label": "J",
-      "sentence_index": 54,
+      "sentence_index": 56,
       "sentence": "That didn't happen.",
       "translation": "但这种情况并没有发生。",
       "structure": [
@@ -2315,7 +2195,7 @@
     {
       "id": "J-09",
       "paragraph_label": "J",
-      "sentence_index": 55,
+      "sentence_index": 57,
       "sentence": "Only 11% of the students who had been given the mugs and 10% of those who had been given the chocolate bars wanted to exchange their products.",
       "translation": "在拿到杯子的学生中，只有11%想换成巧克力；在拿到巧克力的学生中，也只有10%想换成杯子。",
       "structure": [
@@ -2359,7 +2239,7 @@
     {
       "id": "J-10",
       "paragraph_label": "J",
-      "sentence_index": 56,
+      "sentence_index": 58,
       "sentence": "To approximately 90% of the students, giving up what they already had seemed like a painful loss and shrank their desire to trade.",
       "translation": "对大约90%的学生而言，放弃自己已经拥有的东西感觉像是一种痛苦的损失，这削弱了他们交换的意愿。",
       "structure": [
@@ -2402,7 +2282,7 @@
     {
       "id": "K-01",
       "paragraph_label": "K",
-      "sentence_index": 57,
+      "sentence_index": 59,
       "sentence": "Interestingly, most people seem oblivious to the existence of the behaviors implicit in the endowment effect and the status quo bias.",
       "translation": "有趣的是，大多数人似乎完全没有意识到禀赋效应和现状偏见中所隐含的这些行为倾向的存在。",
       "structure": [
@@ -2445,7 +2325,7 @@
     {
       "id": "K-02",
       "paragraph_label": "K",
-      "sentence_index": 58,
+      "sentence_index": 60,
       "sentence": "In study after study, when researchers presented people with evidence that they had irrationally overvalued the status quo, they were shocked, skeptical, and more than a bit defensive.",
       "translation": "在一项又一项研究中，当研究者向人们展示证据、表明他们不理性地高估了现状时，人们的反应是震惊、怀疑，甚至颇有些抵触情绪。",
       "structure": [
@@ -2489,7 +2369,7 @@
     {
       "id": "K-03",
       "paragraph_label": "K",
-      "sentence_index": 59,
+      "sentence_index": 61,
       "sentence": "These behavioral tendencies are universal, but awareness of them is not.",
       "translation": "这些行为倾向普遍存在，但人们对它们的意识却并非如此。",
       "structure": [

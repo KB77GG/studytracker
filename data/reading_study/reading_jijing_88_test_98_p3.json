@@ -1290,64 +1290,12 @@
         }
       ]
     },
-    {
-      "id": "D-10",
-      "paragraph_label": "D",
-      "sentence_index": 32,
-      "sentence": "When it comes time to recall, Cooke takes a mental walk along his route and translates the images into cards.That's why the MRIs of the memory contestants showed activation in the brain areas associated with visual imagery and spatial navigation.",
-      "translation": "到了需要回忆的时候，库克会沿着自己的路线做一次“心理漫步”，把画面重新转译成扑克牌。这就是为什么记忆选手的核磁共振扫描显示，与视觉形象和空间导航相关的脑区出现了激活。",
-      "structure": [
-        {
-          "text": "When it comes time to recall",
-          "role": "adverbial_clause",
-          "level": 1
-        },
-        {
-          "text": "Cooke",
-          "role": "subject",
-          "level": 1
-        },
-        {
-          "text": "takes a mental walk along his route",
-          "role": "verb_phrase",
-          "level": 1
-        },
-        {
-          "text": "and translates the images into cards",
-          "role": "coordinated_clause",
-          "level": 1
-        },
-        {
-          "text": "That's why the MRIs of the memory contestants showed activation in the brain areas",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "associated with visual imagery and spatial navigation",
-          "role": "participial_phrase",
-          "level": 2
-        }
-      ],
-      "difficult_points": [
-        "源文本句在 cards. 与 That's 之间缺少空格，是原始素材的排版缺失，按原文逐字保留，不做增补。",
-        "that's why 引导原因结果，指代前文库克的记忆方法，说明为何脑扫描会显示特定区域激活。",
-        "associated with visual imagery and spatial navigation 是过去分词短语，修饰 brain areas。"
-      ],
-      "expressions": [
-        {
-          "text": "take a mental walk",
-          "meaning_zh": "进行一次心理漫步"
-        },
-        {
-          "text": "that's why",
-          "meaning_zh": "这就是为什么"
-        }
-      ]
-    },
+    {"id": "D-10", "paragraph_label": "D", "sentence_index": 32, "sentence": "When it comes time to recall, Cooke takes a mental walk along his route and translates the images into cards.", "translation": "到了需要回忆的时候，库克会沿着自己的路线在脑中走一遍，把那些画面重新转换成扑克牌。", "structure": [{"text": "When it comes time to recall", "role": "time_clause", "level": 2}, {"text": "Cooke", "role": "subject", "level": 1}, {"text": "takes a mental walk along his route", "role": "verb_phrase", "level": 1}, {"text": "translates the images into cards", "role": "coordinated_predicate", "level": 1}], "difficult_points": ["When it comes time to do 表示“到了该做某事的时候”。", "takes… 和 translates… 是共用主语 Cooke 的两个并列谓语。"], "expressions": [{"text": "take a mental walk", "meaning_zh": "在脑海中走一遍"}, {"text": "translate A into B", "meaning_zh": "把 A 转换成 B"}]},
+    {"id": "D-10b", "paragraph_label": "D", "sentence_index": 33, "sentence": "That's why the MRIs of the memory contestants showed activation in the brain areas associated with visual imagery and spatial navigation.", "translation": "这就是为什么记忆选手的核磁共振扫描显示，与视觉想象和空间导航有关的脑区出现了激活。", "structure": [{"text": "That", "role": "subject", "level": 1}, {"text": "'s", "role": "linking_verb", "level": 1}, {"text": "why the MRIs of the memory contestants showed activation in the brain areas associated with visual imagery and spatial navigation", "role": "predicative_clause", "level": 2}, {"text": "associated with visual imagery and spatial navigation", "role": "past_participle_modifier", "level": 3}], "difficult_points": ["That's why… 中 why 引导表语从句，That 指上一句库克的记忆方法。", "associated with… 是过去分词短语，后置修饰 brain areas。"], "expressions": [{"text": "that's why", "meaning_zh": "这就是为什么"}, {"text": "be associated with", "meaning_zh": "与……有关"}]},
     {
       "id": "E-01",
       "paragraph_label": "E",
-      "sentence_index": 33,
+      "sentence_index": 34,
       "sentence": "The more resonant the images are, the more difficult they are to forget.",
       "translation": "画面越是引发共鸣，就越难以忘记。",
       "structure": [
@@ -1380,7 +1328,7 @@
     {
       "id": "E-02",
       "paragraph_label": "E",
-      "sentence_index": 34,
+      "sentence_index": 35,
       "sentence": "But even meaningful information is hard to remember when there's a lot of it.",
       "translation": "但即使是有意义的信息，一旦数量庞大，也很难记住。",
       "structure": [
@@ -1409,7 +1357,7 @@
     {
       "id": "E-03",
       "paragraph_label": "E",
-      "sentence_index": 35,
+      "sentence_index": 36,
       "sentence": "That's why competitive memorizers place their images along an imaginary route.",
       "translation": "这就是为什么参加记忆比赛的人会把自己的画面沿着一条想象中的路线摆放。",
       "structure": [
@@ -1438,7 +1386,7 @@
     {
       "id": "E-04",
       "paragraph_label": "E",
-      "sentence_index": 36,
+      "sentence_index": 37,
       "sentence": "That technique, known as the loci method, reportedly originated in 477 B.C. with the Greek poet Simonides of Ceos.",
       "translation": "据说，这种被称为“位置记忆法”的技巧起源于公元前477年，创始人是希腊诗人凯奥斯的西蒙尼德斯。",
       "structure": [
@@ -1487,7 +1435,7 @@
     {
       "id": "E-05",
       "paragraph_label": "E",
-      "sentence_index": 37,
+      "sentence_index": 38,
       "sentence": "Simonides was the sole survivor of a roof collapse that killed all the other guests at a royal banquet.",
       "translation": "西蒙尼德斯是一场屋顶坍塌事故中唯一的幸存者，那场事故夺去了皇室宴会上所有其他宾客的性命。",
       "structure": [
@@ -1526,7 +1474,7 @@
     {
       "id": "E-06",
       "paragraph_label": "E",
-      "sentence_index": 38,
+      "sentence_index": 39,
       "sentence": "The bodies were mangled beyond recognition, but Simonides was able to reconstruct the guest list by closing his eyes and recalling each individual around the dinner table.",
       "translation": "遗体都被毁损得难以辨认，但西蒙尼德斯却能够通过闭上双眼、回忆餐桌旁每个人的位置，重新列出完整的宾客名单。",
       "structure": [
@@ -1569,7 +1517,7 @@
     {
       "id": "E-07",
       "paragraph_label": "E",
-      "sentence_index": 39,
+      "sentence_index": 40,
       "sentence": "What he had discovered was that our brains are exceptionally good at remembering images and spatial information.",
       "translation": "他发现的是：人类大脑格外擅长记忆图像和空间信息。",
       "structure": [
@@ -1604,7 +1552,7 @@
     {
       "id": "E-08",
       "paragraph_label": "E",
-      "sentence_index": 40,
+      "sentence_index": 41,
       "sentence": "Evolutionary psychologists have offered an explanation: Presumably, our ancestors found it important to recall where they found their last meal or the way back to the cave.",
       "translation": "进化心理学家给出了一种解释：据推测，我们的祖先认为记住上一顿食物的来源，或者回洞穴的路，是很重要的事。",
       "structure": [
@@ -1653,7 +1601,7 @@
     {
       "id": "E-09",
       "paragraph_label": "E",
-      "sentence_index": 41,
+      "sentence_index": 42,
       "sentence": "After Simonides' discovery, the loci method became popular across ancient Greece as a trick for memorizing speeches and texts.",
       "translation": "在西蒙尼德斯的这一发现之后，位置记忆法作为一种记忆演讲稿和文本的技巧，在整个古希腊流行开来。",
       "structure": [
@@ -1692,7 +1640,7 @@
     {
       "id": "E-10",
       "paragraph_label": "E",
-      "sentence_index": 42,
+      "sentence_index": 43,
       "sentence": "Aristotle wrote about it, and later a number of treatises on the art of memory were published in Rome.",
       "translation": "亚里士多德曾写文章论及此事，后来罗马又出版了不少关于记忆艺术的论著。",
       "structure": [
@@ -1721,7 +1669,7 @@
     {
       "id": "E-11",
       "paragraph_label": "E",
-      "sentence_index": 43,
+      "sentence_index": 44,
       "sentence": "Before printed books, the art of memory was considered a staple of classical education, on a par with grammar, logic, and rhetoric.",
       "translation": "在印刷书籍出现之前，记忆术被视为古典教育的重要组成部分，与语法、逻辑和修辞相提并论。",
       "structure": [
@@ -1764,7 +1712,7 @@
     {
       "id": "F-01",
       "paragraph_label": "F",
-      "sentence_index": 44,
+      "sentence_index": 45,
       "sentence": "The most famous of the naturals was the Russian journalist S.V. Shereshevski, who could recall long lists of numbers memorized decades earlier, as well as poems, strings of nonsense syllables, and just about anything else he was asked to remember.",
       "translation": "这些天生记忆高手中最有名的，是俄罗斯记者S.V.舍雷舍夫斯基，他能回忆起几十年前记住的一长串数字，还有诗歌、一串串无意义的音节，以及几乎任何被要求记住的东西。",
       "structure": [
@@ -1818,7 +1766,7 @@
     {
       "id": "F-02",
       "paragraph_label": "F",
-      "sentence_index": 45,
+      "sentence_index": 46,
       "sentence": "\"The capacity of his memory had no distinct limits,\" wrote Alexander Luria, the Russian psychologist who studies Shereshevski also had synesthesia, a rare condition in which the senses become intertwined.",
       "translation": "“他的记忆容量没有明确的界限，”研究他的俄罗斯心理学家亚历山大·卢里亚写道——舍雷舍夫斯基还患有联觉，这是一种感官相互交织的罕见症状。",
       "structure": [
@@ -1872,7 +1820,7 @@
     {
       "id": "F-03",
       "paragraph_label": "F",
-      "sentence_index": 46,
+      "sentence_index": 47,
       "sentence": "For example, every number may be associated with a color or every word with a taste.",
       "translation": "比如，每个数字可能都会与某种颜色相关联，每个词则可能与某种味道相关联。",
       "structure": [
@@ -1906,7 +1854,7 @@
     {
       "id": "F-04",
       "paragraph_label": "F",
-      "sentence_index": 47,
+      "sentence_index": 48,
       "sentence": "Synesthetic reactions evoke a response in more areas of the brain, making memory easier.",
       "translation": "联觉反应会在大脑更多区域引发反应，从而让记忆变得更容易。",
       "structure": [
@@ -1940,7 +1888,7 @@
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 48,
+      "sentence_index": 49,
       "sentence": "K. Anders Ericsson, a Swedish-born psychologist at Florida State University, thinks anyone can acquire Shereshevski's skills.",
       "translation": "K·安德斯·埃里克森是佛罗里达州立大学一位瑞典裔心理学家，他认为任何人都可以掌握舍雷舍夫斯基那样的技能。",
       "structure": [
@@ -1979,7 +1927,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 49,
+      "sentence_index": 50,
       "sentence": "He cites an experiment with S. F., an undergraduate who was paid to take a standard test of memory called the digit span for one hour a day, two or three days a week.",
       "translation": "他引用了一个针对S.F.的实验，S.F.是一名本科生，受雇每周两三天、每天一小时接受一种叫作“数字广度”的标准记忆测试。",
       "structure": [
@@ -2033,7 +1981,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 50,
+      "sentence_index": 51,
       "sentence": "When he started, he could hold, like most people, only about seven digits in his head at any given time (conveniently, the length of a phone number).",
       "translation": "他刚开始时，和大多数人一样，脑海中同一时间只能记住大约七位数字（恰好是一个电话号码的长度）。",
       "structure": [
@@ -2082,7 +2030,7 @@
     {
       "id": "G-04",
       "paragraph_label": "G",
-      "sentence_index": 51,
+      "sentence_index": 52,
       "sentence": "Over two years, S. F. completed 250 hours of testing.",
       "translation": "在两年时间里，S.F.完成了250个小时的测试。",
       "structure": [
@@ -2111,7 +2059,7 @@
     {
       "id": "G-05",
       "paragraph_label": "G",
-      "sentence_index": 52,
+      "sentence_index": 53,
       "sentence": "By then, he had stretched his digit span from 7 to more than 80.",
       "translation": "到那时，他已经把自己的数字广度从7位提升到了80多位。",
       "structure": [
@@ -2145,7 +2093,7 @@
     {
       "id": "G-06",
       "paragraph_label": "G",
-      "sentence_index": 53,
+      "sentence_index": 54,
       "sentence": "The study of S. F. led Ericsson to believe that innately superior memory doesn't exist at all.",
       "translation": "对S.F.的这项研究让埃里克森相信，天生优越的记忆力根本不存在。",
       "structure": [
@@ -2183,7 +2131,7 @@
     {
       "id": "G-07",
       "paragraph_label": "G",
-      "sentence_index": 54,
+      "sentence_index": 55,
       "sentence": "When he reviewed original case studies of naturals, he found that exceptional memorizers were using techniques – sometimes without realizing it – and lots of practice.",
       "translation": "当他重新审视关于天生记忆高手的原始案例研究时，他发现那些卓越的记忆者其实是在运用技巧——有时候自己都没意识到——再加上大量的练习。",
       "structure": [
@@ -2233,7 +2181,7 @@
     {
       "id": "G-08",
       "paragraph_label": "G",
-      "sentence_index": 55,
+      "sentence_index": 56,
       "sentence": "Often, exceptional memory was only for a single type of material, like digits.",
       "translation": "通常，卓越的记忆力只针对单一类型的材料，比如数字。",
       "structure": [
@@ -2267,7 +2215,7 @@
     {
       "id": "G-09",
       "paragraph_label": "G",
-      "sentence_index": 56,
+      "sentence_index": 57,
       "sentence": "\"If we look at some of these memory tasks, they're the kind of thing most people don't even waste one hour practicing, but if they wasted 50 hours, they'd be exceptional at it,\" Ericsson says.",
       "translation": "埃里克森说：“如果我们审视这些记忆任务中的一些，会发现它们是那种大多数人连一个小时都不愿花时间练习的事情，但如果他们花上50个小时去练习，就会在这方面变得非常出色。”",
       "structure": [
@@ -2326,7 +2274,7 @@
     {
       "id": "G-10",
       "paragraph_label": "G",
-      "sentence_index": 57,
+      "sentence_index": 58,
       "sentence": "It would be remarkable, he adds, to find a \"person who is exceptional across a number of tasks.",
       "translation": "他补充说，如果能找到一个在多项任务上都表现卓越的“人”，那将是非同寻常的。",
       "structure": [
@@ -2371,7 +2319,7 @@
     {
       "id": "G-11",
       "paragraph_label": "G",
-      "sentence_index": 58,
+      "sentence_index": 59,
       "sentence": "I don't think that there's any compelling evidence that there are such people.",
       "translation": "我不认为有任何令人信服的证据能证明存在这样的人。",
       "structure": [

@@ -830,69 +830,12 @@
         }
       ]
     },
-    {
-      "id": "D-01",
-      "paragraph_label": "D",
-      "sentence_index": 20,
-      "sentence": "According to Dr. Colin Groves, of the Department of Archaeology and Anthropology at Australian National University, early humans came to rely on dogs' keen ability to hear, smell and see - allowing certain areas of the human brain to shrink in size relative to oilier areas.'Dogs acted as human's alarm systems, trackers and hunting aids, garbage disposal facilities, hot-water bottles and children's guardians and playmates.",
-      "translation": "据科林·格罗夫斯博士所说，早期人类逐渐依赖狗敏锐的听觉、嗅觉和视觉能力，从而使人脑某些区域相对于其他区域缩小。“狗充当人类的警报系统、追踪者、狩猎助手、垃圾处理设施、热水袋，以及儿童的守护者和玩伴。",
-      "structure": [
-        {
-          "text": "According to Dr. Colin Groves, of the Department of Archaeology and Anthropology at Australian National University",
-          "role": "source_adverbial",
-          "level": 2
-        },
-        {
-          "text": "early humans came to rely on dogs' keen ability to hear, smell and see",
-          "role": "main_clause",
-          "level": 1
-        },
-        {
-          "text": "allowing certain areas of the human brain to shrink in size relative to oilier areas",
-          "role": "result_participial_phrase",
-          "level": 2
-        },
-        {
-          "text": "Dogs",
-          "role": "subject",
-          "level": 1
-        },
-        {
-          "text": "acted as",
-          "role": "main_predicate",
-          "level": 1
-        },
-        {
-          "text": "human's alarm systems, trackers and hunting aids, garbage disposal facilities, hot-water bottles and children's guardians and playmates",
-          "role": "subject_complement_list",
-          "level": 1
-        }
-      ],
-      "difficult_points": [
-        "come to rely on 表示逐渐开始依赖；hear、smell、see 是 ability 后并列不定式。",
-        "allowing ... 是结果分词短语；原文 oilier areas 很可能是 other areas 的误写。",
-        "原文在 areas. 与 'Dogs 之间没有空格，因此两部分必须作为同一个句子块保留。",
-        "act as 后接一长串并列表语；human's 的单数所有格也按源文保留。"
-      ],
-      "expressions": [
-        {
-          "text": "come to rely on",
-          "meaning_zh": "逐渐开始依赖"
-        },
-        {
-          "text": "keen ability to",
-          "meaning_zh": "做……的敏锐能力"
-        },
-        {
-          "text": "shrink in size relative to",
-          "meaning_zh": "相对于……缩小"
-        }
-      ]
-    },
+    {"id": "D-01", "paragraph_label": "D", "sentence_index": 20, "sentence": "According to Dr. Colin Groves, of the Department of Archaeology and Anthropology at Australian National University, early humans came to rely on dogs' keen ability to hear, smell and see - allowing certain areas of the human brain to shrink in size relative to oilier areas.", "translation": "澳大利亚国立大学考古与人类学系的科林·格罗夫斯博士认为，早期人类逐渐依赖狗敏锐的听觉、嗅觉和视觉，这使人脑的某些区域相对于其他区域缩小了。", "structure": [{"text": "According to Dr. Colin Groves", "role": "attribution", "level": 1}, {"text": "of the Department of Archaeology and Anthropology at Australian National University", "role": "prepositional_phrase", "level": 2}, {"text": "early humans", "role": "subject", "level": 1}, {"text": "came to rely on", "role": "verb_phrase", "level": 1}, {"text": "dogs' keen ability to hear, smell and see", "role": "object", "level": 1}, {"text": "to hear, smell and see", "role": "infinitive_modifier", "level": 2}, {"text": "allowing certain areas of the human brain to shrink in size relative to oilier areas", "role": "present_participle_result", "level": 2}], "difficult_points": ["According to… 说明观点来源；of the Department… 补充说明格罗夫斯博士所在的单位。", "come to rely on 表示“逐渐开始依赖”；to hear, smell and see 是修饰 ability 的不定式。", "破折号后的 allowing… 是表示结果的现在分词短语；oilier areas 很可能是 other areas 的印刷错误，按原文保留。"], "expressions": [{"text": "come to rely on", "meaning_zh": "逐渐开始依赖"}, {"text": "shrink in size", "meaning_zh": "体积缩小"}]},
+    {"id": "D-01b", "paragraph_label": "D", "sentence_index": 21, "sentence": "'Dogs acted as human's alarm systems, trackers and hunting aids, garbage disposal facilities, hot-water bottles and children's guardians and playmates.", "translation": "“狗充当了人类的警报系统、追踪者和狩猎助手、垃圾处理设施、热水袋，以及孩子的守护者和玩伴。", "structure": [{"text": "Dogs", "role": "subject", "level": 1}, {"text": "acted as", "role": "verb_phrase", "level": 1}, {"text": "human's alarm systems, trackers and hunting aids, garbage disposal facilities, hot-water bottles and children's guardians and playmates", "role": "complement", "level": 1}], "difficult_points": ["这是格罗夫斯博士引语的第一句，引号要到后文 said Dr. Groves 前才结束。", "act as 后面接一长串并列名词，说明狗在人类生活中的多种角色。"], "expressions": [{"text": "act as", "meaning_zh": "充当"}, {"text": "garbage disposal", "meaning_zh": "垃圾处理"}]},
     {
       "id": "D-02",
       "paragraph_label": "D",
-      "sentence_index": 21,
+      "sentence_index": 22,
       "sentence": "Humans provided dogs with food and security.",
       "translation": "人类则为狗提供食物和安全保障。",
       "structure": [
@@ -926,7 +869,7 @@
     {
       "id": "D-03",
       "paragraph_label": "D",
-      "sentence_index": 22,
+      "sentence_index": 23,
       "sentence": "This symbiotic relationship was stable for over 100,000 years and intensified into mutual domestication,' said Dr. Groves.",
       "translation": "格罗夫斯博士说：“这种共生关系稳定持续了十万多年，并逐渐加强为相互驯化。”",
       "structure": [
@@ -973,7 +916,7 @@
     {
       "id": "D-04",
       "paragraph_label": "D",
-      "sentence_index": 23,
+      "sentence_index": 24,
       "sentence": "In his opinion, humans domesticated dogs and dogs domesticated humans.",
       "translation": "他认为，人类驯化了狗，狗也驯化了人类。",
       "structure": [
@@ -1007,7 +950,7 @@
     {
       "id": "E-01",
       "paragraph_label": "E",
-      "sentence_index": 24,
+      "sentence_index": 25,
       "sentence": "Dr. Groves repealed an assertion made as early as 1914 that humans have some of the same physical characteristics as domesticated animals, the most notable being decreased brain size.",
       "translation": "格罗夫斯博士重申了一项早在1914年就提出的论断：人类具有一些与驯养动物相同的身体特征，其中最显著的是脑容量减小。",
       "structure": [
@@ -1055,7 +998,7 @@
     {
       "id": "E-02",
       "paragraph_label": "E",
-      "sentence_index": 25,
+      "sentence_index": 26,
       "sentence": "The horse experienced a 16 percent reduction in brain size after domestication while pigs'brains shrank by as much as 34 percent.",
       "translation": "马在驯化后脑容量减少了16%，而猪的脑容量缩小幅度高达34%。",
       "structure": [
@@ -1093,7 +1036,7 @@
     {
       "id": "E-03",
       "paragraph_label": "E",
-      "sentence_index": 26,
+      "sentence_index": 27,
       "sentence": "The estimated brain-size reduction in domesticated dogs varies from 30 percent to 10 percent.",
       "translation": "据估计，家犬脑容量的缩减幅度在10%至30%之间。",
       "structure": [
@@ -1126,7 +1069,7 @@
     {
       "id": "E-04",
       "paragraph_label": "E",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "Only in the last decade have archaeologists uncovered enough fossil evidence to establish that brain capacity in humans declined in Europe and Africa by at least 10 percent beginning about 10,000 years ago.",
       "translation": "直到最近十年，考古学家才发现足够的化石证据，证实约从1万年前开始，欧洲和非洲人类的脑容量至少下降了10%。",
       "structure": [
@@ -1174,7 +1117,7 @@
     {
       "id": "E-05",
       "paragraph_label": "E",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "Dr. Groves believes this reduction may have taken place as the relationship between humans and dogs intensified.",
       "translation": "格罗夫斯博士认为，这种缩减可能发生在人类与狗的关系不断加强之时。",
       "structure": [
@@ -1212,7 +1155,7 @@
     {
       "id": "E-06",
       "paragraph_label": "E",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "The close interaction between the two species allowed for the diminishing of certain human brain functions like smell and hearing.",
       "translation": "两个物种之间的密切互动，使人类嗅觉和听觉等某些大脑功能得以减弱。",
       "structure": [

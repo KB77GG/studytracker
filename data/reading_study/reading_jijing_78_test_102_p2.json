@@ -271,16 +271,10 @@
       "difficult_points": ["became 是系动词，说明该化合物后来获得的工业用途。", "manufactured 修饰 grape juice，指工业生产的葡萄汁。"],
       "expressions": [{"text": "the chief flavoring compound", "meaning_zh": "主要调味化合物"}, {"text": "manufactured grape juice", "meaning_zh": "工业生产的葡萄汁"}]
     },
+    {"id": "G-01", "paragraph_label": "G", "sentence_index": 34, "sentence": "The quality that people seek most of all in a food, its flavour, is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons.", "translation": "人们在食物中最看重的品质——风味——通常含量极其微小，无法用盎司或茶匙这类传统烹饪单位来衡量。", "structure": [{"text": "The quality that people seek most of all in a food", "role": "subject", "level": 1}, {"text": "that people seek most of all in a food", "role": "relative_clause", "level": 2}, {"text": "its flavour", "role": "apposition", "level": 2}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "predicative", "level": 1}, {"text": "too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "adjective_phrase", "level": 2}], "difficult_points": ["that 引导定语从句修饰 quality；its flavour 是同位语，点明这种品质就是风味。", "too … to be measured 表示“太……以至于无法被衡量”。"], "expressions": [{"text": "most of all", "meaning_zh": "最重要的是"}, {"text": "too infinitesimal to", "meaning_zh": "微小到无法……"}]},
+    {"id": "G-01b", "paragraph_label": "G", "sentence_index": 35, "sentence": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components, detecting chemical aromas in amounts as low as one part per billion.", "translation": "如今先进的光谱仪、气相色谱仪和顶空蒸气分析仪能绘制出食物风味成分的详细图谱，检测出含量低至十亿分之一的化学香气。", "structure": [{"text": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers", "role": "subject", "level": 1}, {"text": "provide", "role": "verb", "level": 1}, {"text": "a detailed map of a food's flavour components", "role": "object", "level": 1}, {"text": "detecting chemical aromas in amounts as low as one part per billion", "role": "present_participle_adverbial", "level": 2}], "difficult_points": ["主语是三种仪器的并列，谓语用复数 provide。", "detecting… 是现在分词短语作伴随状语，说明这些仪器的检测能力；as low as 表示“低至”。"], "expressions": [{"text": "provide a detailed map of", "meaning_zh": "绘制……的详细图谱"}, {"text": "one part per billion", "meaning_zh": "十亿分之一"}]},
     {
-      "id": "G-01", "paragraph_label": "G", "sentence_index": 34,
-      "sentence": "The quality that people seek most of all in a food, its flavour, is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons.Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components, detecting chemical aromas in amounts as low as one part per billion.",
-      "translation": "人们在食物中最看重的品质——风味——通常含量微乎其微，无法用盎司或茶匙等传统烹饪单位衡量。如今先进的光谱仪、气相色谱仪和顶空蒸气分析仪能够绘制食物风味成分的详细图谱，检测低至十亿分之一含量的化学香气。",
-      "structure": [{"text": "The quality that people seek most of all in a food, its flavour", "role": "subject", "level": 1}, {"text": "is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "predicate", "level": 1}, {"text": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components", "role": "coordinate_statement", "level": 1}, {"text": "detecting chemical aromas in amounts as low as one part per billion", "role": "present_participle_adverbial", "level": 2}],
-      "difficult_points": ["that 修饰 quality；its flavour 是 quality 的同位语。", "too...to be measured 表示数量微小到无法用传统烹饪单位衡量。", "原文 teaspoons.Today's 两句之间没有空格，因此合并保留；detecting... 说明仪器的检测能力。"],
-      "expressions": [{"text": "seek most of all", "meaning_zh": "最为看重"}, {"text": "too infinitesimal to", "meaning_zh": "微小到无法……"}, {"text": "provide a detailed map of", "meaning_zh": "提供……的详细图谱"}, {"text": "one part per billion", "meaning_zh": "十亿分之一"}]
-    },
-    {
-      "id": "G-02", "paragraph_label": "G", "sentence_index": 35,
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 36,
       "sentence": "The human nose, however, is still more sensitive than any machine yet invented.",
       "translation": "然而，人类鼻子的灵敏度仍高于迄今发明的任何机器。",
       "structure": [{"text": "The human nose", "role": "subject", "level": 1}, {"text": "however", "role": "sentence_adverbial", "level": 1}, {"text": "is still more sensitive than any machine", "role": "linking_predicate", "level": 1}, {"text": "yet invented", "role": "past_participle_modifier", "level": 2}],
@@ -288,7 +282,7 @@
       "expressions": [{"text": "be more sensitive than", "meaning_zh": "比……更灵敏"}, {"text": "any machine yet invented", "meaning_zh": "迄今发明的任何机器"}]
     },
     {
-      "id": "G-03", "paragraph_label": "G", "sentence_index": 36,
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 37,
       "sentence": "A nose can detect aromas present in quantities of a few parts per trillion.",
       "translation": "鼻子能够检测出浓度仅为万亿分之几的香气。",
       "structure": [{"text": "A nose can detect aromas", "role": "main_clause", "level": 1}, {"text": "present in quantities of a few parts per trillion", "role": "adjective_modifier", "level": 2}],
@@ -296,7 +290,7 @@
       "expressions": [{"text": "be present in quantities of", "meaning_zh": "以……的含量存在"}, {"text": "parts per trillion", "meaning_zh": "万亿分之几"}]
     },
     {
-      "id": "G-04", "paragraph_label": "G", "sentence_index": 37,
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 38,
       "sentence": "Complex aromas, such as those of coffee or roasted meat, may be composed of gases from nearly a thousand different chemicals.",
       "translation": "复杂香气，例如咖啡或烤肉的香气，可能由近一千种不同化学物质产生的气体组成。",
       "structure": [{"text": "Complex aromas", "role": "subject", "level": 1}, {"text": "such as those of coffee or roasted meat", "role": "example_supplement", "level": 2}, {"text": "may be composed of gases", "role": "passive_predicate", "level": 1}, {"text": "from nearly a thousand different chemicals", "role": "prepositional_modifier", "level": 2}],
@@ -304,7 +298,7 @@
       "expressions": [{"text": "be composed of", "meaning_zh": "由……组成"}, {"text": "roasted meat", "meaning_zh": "烤肉"}, {"text": "nearly a thousand", "meaning_zh": "近一千种"}]
     },
     {
-      "id": "G-05", "paragraph_label": "G", "sentence_index": 38,
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 39,
       "sentence": "The chemical that provides the dominant flavour of bell pepper can be tasted in amounts as low as 0.02 parts per billion; one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools",
       "translation": "赋予甜椒主要风味的化学物质，即使含量低至十亿分之0.02也能被尝出；只需一滴，就足以为填满五个普通大小游泳池的水增添味道。",
       "structure": [{"text": "The chemical", "role": "subject", "level": 1}, {"text": "that provides the dominant flavour of bell pepper", "role": "relative_clause", "level": 2}, {"text": "can be tasted in amounts as low as 0.02 parts per billion", "role": "passive_predicate", "level": 1}, {"text": "one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools", "role": "coordinate_clause", "level": 1}],

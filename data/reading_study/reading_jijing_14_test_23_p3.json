@@ -295,16 +295,10 @@
       "difficult_points": ["traffic 后的竖线是源文异常分隔符，语义上相当于句号，原句按源文保留。", "if 从句与 would 主句构成假设；which 修饰 driverless car，anywhere 后省略关系副词 where。"],
       "expressions": [{"text": "rush-hour traffic", "meaning_zh": "高峰时段交通"}, {"text": "hop in", "meaning_zh": "迅速上车"}, {"text": "never want to ... again", "meaning_zh": "再也不想……"}]
     },
+    {"id": "H-01", "paragraph_label": "H", "sentence_index": 37, "sentence": "Jason Steiner, a school teacher in a Pittsburgh secondary school, is inclined to agree with Susie.", "translation": "匹兹堡一所中学的教师杰森·斯坦纳倾向于赞同苏茜的看法。", "structure": [{"text": "Jason Steiner", "role": "subject", "level": 1}, {"text": "a school teacher in a Pittsburgh secondary school", "role": "apposition", "level": 2}, {"text": "is inclined", "role": "verb_phrase", "level": 1}, {"text": "to agree with Susie", "role": "infinitive_complement", "level": 2}], "difficult_points": ["a school teacher in a Pittsburgh secondary school 是同位语，补充说明 Jason Steiner 的身份。", "be inclined to do 表示“倾向于做某事”，to agree with Susie 是不定式补足语。"], "expressions": [{"text": "be inclined to", "meaning_zh": "倾向于"}]},
+    {"id": "H-01b", "paragraph_label": "H", "sentence_index": 38, "sentence": "'Whilst I'm not averse to driving, I would swap the stressful daily commute by car to a driverless one if I had the chance!", "translation": "“虽然我并不排斥开车，但如果有机会，我愿意把每天充满压力的驾车通勤换成无人驾驶出行！", "structure": [{"text": "Whilst I'm not averse to driving", "role": "concessive_clause", "level": 2}, {"text": "I", "role": "subject", "level": 1}, {"text": "would swap", "role": "verb_phrase", "level": 1}, {"text": "the stressful daily commute by car", "role": "object", "level": 1}, {"text": "to a driverless one", "role": "prepositional_phrase", "level": 1}, {"text": "if I had the chance", "role": "conditional_clause", "level": 2}], "difficult_points": ["Whilst 引导让步状语从句，意思同 although；be averse to doing 表示“反感做某事”。", "if I had the chance 用一般过去时表示假设，主句相应用 would swap。", "one 代替前面的 commute，a driverless one 指无人驾驶的通勤方式。"], "expressions": [{"text": "be averse to", "meaning_zh": "反感；排斥"}, {"text": "daily commute", "meaning_zh": "每日通勤"}]},
     {
-      "id": "H-01", "paragraph_label": "H", "sentence_index": 37,
-      "sentence": "Jason Steiner, a school teacher in a Pittsburgh secondary school, is inclined to agree with Susie.'Whilst I'm not averse to driving, I would swap the stressful daily commute by car to a driverless one if I had the chance!",
-      "translation": "匹兹堡一所中学的教师杰森·斯坦纳倾向于赞同苏茜的看法。“虽然我并不排斥开车，但如果有机会，我愿意把充满压力的每日驾车通勤换成无人驾驶出行！”",
-      "structure": [{"text": "Jason Steiner", "role": "subject", "level": 1}, {"text": "a school teacher in a Pittsburgh secondary school", "role": "apposition", "level": 2}, {"text": "is inclined to agree with Susie", "role": "verb_phrase", "level": 1}, {"text": "'Whilst I'm not averse to driving", "role": "adverbial_clause", "level": 1}, {"text": "I would swap the stressful daily commute by car to a driverless one", "role": "main_clause", "level": 1}, {"text": "if I had the chance", "role": "conditional_clause", "level": 2}],
-      "difficult_points": ["源文在 Susie. 与引语 'Whilst 之间缺少空格；为保证原文完整复现，此处作为同一分析块保留。", "Whilst 引导让步从句；one 代替 commute，if 从句表达假设条件。"],
-      "expressions": [{"text": "be inclined to agree with", "meaning_zh": "倾向于赞同"}, {"text": "be averse to", "meaning_zh": "排斥；反感"}, {"text": "daily commute", "meaning_zh": "每日通勤"}]
-    },
-    {
-      "id": "H-02", "paragraph_label": "H", "sentence_index": 38,
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 39,
       "sentence": "It just takes the pressure off driving.",
       "translation": "它就是能减轻驾驶的压力。",
       "structure": [{"text": "It", "role": "subject", "level": 1}, {"text": "just takes the pressure off driving", "role": "verb_phrase", "level": 1}],
@@ -312,7 +306,7 @@
       "expressions": [{"text": "take the pressure off", "meaning_zh": "减轻……的压力"}]
     },
     {
-      "id": "H-03", "paragraph_label": "H", "sentence_index": 39,
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 40,
       "sentence": "I would be slightly wary though, of completely dependent on a robot-driven car when it comes to having to react to unexpected obstacles in the road.'",
       "translation": "不过，说到必须应对道路上的意外障碍时，我还是会有些担心完全依赖机器人驾驶的汽车。”",
       "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "would be slightly wary though", "role": "verb_phrase", "level": 1}, {"text": "of completely dependent on a robot-driven car", "role": "prepositional_phrase", "level": 2}, {"text": "when it comes to having to react to unexpected obstacles in the road", "role": "adverbial_clause", "level": 2}],
