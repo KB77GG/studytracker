@@ -179,6 +179,8 @@ def _render_nodes(graph: dict, sentence_concepts: list[set[str]]) -> list[str]:
                 lines.append("- **前置**：")
                 for edge in requires[node["id"]]:
                     kind = "硬" if edge["strength"] == "hard" else "软"
+                    if edge.get("confirmed_by") == "teacher":
+                        kind += "·老师已确认"
                     prereq = by_id[edge["requires"]]
                     lines.append(f"  - [{kind}] {_node_label(prereq)}：{edge['reason']}")
             else:
@@ -263,15 +265,17 @@ def render(graph: dict, tag_stats: dict) -> str:
         for item in graph["not_covered"]
     )
     lines = [
-        "# 语法知识图谱 v0（草稿，待教师审核）",
+        "# 语法知识图谱 v0（草稿）",
         "",
         "> 本文件由 `scripts/render_grammar_graph_review.py` 从 "
         "`data/grammar_graph/grammar_graph_v0.json` 生成，请勿手改；改 JSON 后重新运行脚本。",
         "",
+        graph["status_note"],
+        "",
         graph["scope"],
         graph["format_note"],
         "",
-        "**请老师重点审核：**",
+        "**审核要点：**",
         "",
         "1. 每个知识点的粒度是否合适：太粗的拆开，太细的合并。",
         "2. 每条硬依赖是否真的是“不会前者就学不会后者”；拿不准的改成软依赖。",
@@ -280,6 +284,14 @@ def render(graph: dict, tag_stats: dict) -> str:
         "5. 是否缺了重要的知识点。",
         "",
     ]
+    if graph.get("review_log"):
+        by_label = {"teacher": "老师", "claude": "Claude"}
+        lines += ["## 审核记录", ""]
+        lines += [
+            f"- {item['date']} · {by_label.get(item['by'], item['by'])}：{item['decision']}"
+            for item in graph["review_log"]
+        ]
+        lines.append("")
     lines += _render_overview(graph)
     lines += _render_mermaid(graph)
     lines += _render_nodes(graph, tag_stats["sentences"])

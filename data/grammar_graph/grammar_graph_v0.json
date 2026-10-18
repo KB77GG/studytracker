@@ -2,7 +2,7 @@
   "schema_version": 1,
   "graph_version": "v0-draft",
   "status": "draft",
-  "status_note": "草稿，待教师审核。知识点、依赖和第一阶段范围都可以改；改完运行 scripts/render_grammar_graph_review.py 重新生成审核文档。",
+  "status_note": "草稿。三条关键依赖已由老师确认（标 confirmed_by: teacher），其余由 Claude 判断，老师可以随时推翻。改完运行 scripts/render_grammar_graph_review.py 重新生成审核文档。",
   "scope": "以 Reading Study 句子解析的 35 个封闭语法概念（api/reading_study_glossary.py 的 CONCEPTS）为底，整理成可诊断的能力知识点。",
   "format_note": "知识点 + 带 hard/soft 强度和理由的依赖边，借鉴 Marble Skill Taxonomy 的结构；没有使用 Marble 的数据或文本。",
   "edge_semantics": "node 依赖 requires。hard：不会 requires 就学不会 node；soft：requires 有帮助但不是必需。",
@@ -394,7 +394,7 @@
       ],
       "auto_items": "auto",
       "grammar_60_units": [],
-      "phase": 2
+      "phase": 1
     },
     {
       "id": "G-P06",
@@ -417,7 +417,7 @@
       ],
       "auto_items": "auto",
       "grammar_60_units": [],
-      "phase": 2
+      "phase": 1
     },
     {
       "id": "G-C01",
@@ -452,13 +452,15 @@
       "concepts": [
         "coordinate_clause"
       ],
-      "objective": "识别用 and / but / or / while 连接的平级分句，并分别找出各自的主谓。",
+      "objective": "识别用 and / but / or 连接的平级分句，判断 and 连接的到底是两个分句、两个谓语还是两个词组，并分别找出各分句的主谓。",
       "evidence": [
         "拆出两个平级分句",
-        "分别点出每个分句的谓语"
+        "分别点出每个分句的谓语",
+        "判断 and / but 连接的是两个分句、两个谓语还是两个词组"
       ],
       "common_errors": [
-        "把共用主语的并列谓语误当成两个分句"
+        "把共用主语的并列谓语误当成两个分句",
+        "看到 and 就断句，把 A and B 这样的并列名词拆成两个分句"
       ],
       "task_types": [
         "boundary",
@@ -601,7 +603,8 @@
         "判断它在句中的成分"
       ],
       "common_errors": [
-        "把 that 引导的名词性从句当成定语从句"
+        "把 that 引导的名词性从句当成定语从句",
+        "宾语从句省略 that 后找不到从句起点（The study found most patients…）"
       ],
       "task_types": [
         "boundary",
@@ -637,22 +640,47 @@
     {
       "id": "G-C10",
       "module": "M3",
-      "name_zh": "状语从句及逻辑类型",
-      "name_en": "Adverbial clauses",
+      "name_zh": "状语从句：识别与边界",
+      "name_en": "Adverbial clauses: span",
       "concepts": [
         "adverbial_clause"
       ],
-      "objective": "识别状语从句，判断它表示时间、原因、条件、让步、目的还是结果。",
+      "objective": "识别状语从句，划出它的起止位置，并找到它依附的主句。",
       "evidence": [
-        "划出状语从句",
-        "判断其逻辑类型"
+        "划出状语从句的起止位置",
+        "指出它依附的主句"
+      ],
+      "common_errors": [
+        "句首状语从句后没有逗号时，把从句结尾和主句开头混在一起"
+      ],
+      "task_types": [
+        "boundary"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "23 并列与从属连词"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-C11",
+      "module": "M3",
+      "name_zh": "状语从句的逻辑关系",
+      "name_en": "Adverbial clauses: logical relation",
+      "concepts": [
+        "adverbial_clause"
+      ],
+      "objective": "判断状语从句表示时间、原因、条件、让步、对比、目的还是结果，尤其分清让步和对比（although / while / whereas）。",
+      "evidence": [
+        "判断状语从句的逻辑类型",
+        "说明同一个连接词在不同句子里的意思（while 表时间还是对比，since 表时间还是原因）"
       ],
       "common_errors": [
         "把表对比的 while 当成时间",
-        "把表原因的 since 当成时间"
+        "把表原因的 since 当成时间",
+        "忽略让步关系，误判作者的真实观点"
       ],
       "task_types": [
-        "boundary",
         "classify"
       ],
       "auto_items": "auto",
@@ -1113,7 +1141,8 @@
       "node": "G-S06",
       "requires": "G-S05",
       "strength": "hard",
-      "reason": "主谓宾宾补是五种句型之一"
+      "reason": "主谓宾宾补是五种句型之一",
+      "confirmed_by": "teacher"
     },
     {
       "node": "G-S07",
@@ -1220,8 +1249,9 @@
     {
       "node": "G-C03",
       "requires": "G-C02",
-      "strength": "soft",
-      "reason": "先理解“两个动词单位 = 两个分句”，再学其中一个降级为从句"
+      "strength": "hard",
+      "reason": "雅思学生要先把 and / but 连接的平级分句学透，再学主从句",
+      "confirmed_by": "teacher"
     },
     {
       "node": "G-C04",
@@ -1233,7 +1263,8 @@
       "node": "G-C04",
       "requires": "G-P01",
       "strength": "hard",
-      "reason": "先行词是名词，要先会找名词短语的中心词"
+      "reason": "先行词是名词，要先会找名词短语的中心词",
+      "confirmed_by": "teacher"
     },
     {
       "node": "G-C05",
@@ -1324,6 +1355,18 @@
       "requires": "G-P04",
       "strength": "hard",
       "reason": "状语从句是一个“大状语”，要先理解状语的语义类型"
+    },
+    {
+      "node": "G-C11",
+      "requires": "G-C10",
+      "strength": "hard",
+      "reason": "要先找到状语从句，才能判断它表示什么关系"
+    },
+    {
+      "node": "G-C11",
+      "requires": "G-C01",
+      "strength": "soft",
+      "reason": "while / since 等连接词有多种意思，理解连接词有帮助"
     },
     {
       "node": "G-N01",
@@ -1570,6 +1613,18 @@
       "requires": "G-N04",
       "strength": "soft",
       "reason": "分词短语也常出现在嵌套中"
+    }
+  ],
+  "review_log": [
+    {
+      "date": "2026-10-18",
+      "by": "teacher",
+      "decision": "确认“判断五种基本句型”必须先学“宾语补足语”、“定语从句”必须先学“名词短语中心词”；“区分主句与从句”对“并列分句”从最好先学改为必须先学，因为雅思学生要先把 and / but 连接的句子学透。"
+    },
+    {
+      "date": "2026-10-18",
+      "by": "claude",
+      "decision": "状语从句拆成“识别与边界”和“逻辑关系”两个知识点；同位语、插入语移入第一阶段；并列分句补充“判断 and 连接的是什么”的证据；名词性从句补充“省略 that”的常见错误。其余审核项交由 Claude 判断。"
     }
   ]
 }

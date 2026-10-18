@@ -66,6 +66,7 @@ class GrammarGraphDraftTest(unittest.TestCase):
                 self.assertNotEqual(edge["node"], edge["requires"])
                 self.assertIn(edge["strength"], ("hard", "soft"))
                 self.assertTrue(edge["reason"].strip())
+                self.assertIn(edge.get("confirmed_by", "teacher"), ("teacher",))
                 self.assertNotIn(pair, seen)
                 seen.add(pair)
 

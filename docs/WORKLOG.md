@@ -4,6 +4,11 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-18 — 语法知识图谱 v0 第一轮审核
+
+- 老师确认三条关键硬依赖，其中“区分主句与从句 ← 并列分句”由软改硬；其余审核交给 Claude 判断：状语从句拆为 G-C10 / G-C11，同位语、插入语移入第一阶段，并补充了并列分句和名词性从句的证据与常见错误。现为 39 个知识点（第一阶段 25 个）、90 条依赖，决定记录在 JSON 的 `review_log` 中。
+- 仍在任务分支，未合并 main、未部署。下一步：抽检标注准确率，再设计数据表与出题。
+
 ## 2026-10-18 — 语法知识图谱 v0 草稿（待教师审核，未部署）
 
 - 云端会话在分支 `claude/word-memorization-system-eval-55v2y5` 把 Reading Study 句子解析的 35 个语法概念整理成 38 个能力知识点、88 条 hard/soft 依赖（第一阶段 22 个）。事实源 `data/grammar_graph/grammar_graph_v0.json`；审核文档 `docs/GRAMMAR_GRAPH_V0_REVIEW.md` 由 `scripts/render_grammar_graph_review.py` 生成；`tests/test_grammar_graph_draft.py` 已加入 CI 轻量测试。
