@@ -1,0 +1,1575 @@
+{
+  "schema_version": 1,
+  "graph_version": "v0-draft",
+  "status": "draft",
+  "status_note": "草稿，待教师审核。知识点、依赖和第一阶段范围都可以改；改完运行 scripts/render_grammar_graph_review.py 重新生成审核文档。",
+  "scope": "以 Reading Study 句子解析的 35 个封闭语法概念（api/reading_study_glossary.py 的 CONCEPTS）为底，整理成可诊断的能力知识点。",
+  "format_note": "知识点 + 带 hard/soft 强度和理由的依赖边，借鉴 Marble Skill Taxonomy 的结构；没有使用 Marble 的数据或文本。",
+  "edge_semantics": "node 依赖 requires。hard：不会 requires 就学不会 node；soft：requires 有帮助但不是必需。",
+  "auto_items_semantics": {
+    "auto": "可以直接从 data/reading_study 的标注自动出题",
+    "partial": "标注只能出一部分题，或需要规则推断加人工复核",
+    "none": "标注无法出题，需要人工出题"
+  },
+  "modules": [
+    {
+      "id": "M1",
+      "name_zh": "句子骨架",
+      "name_en": "Sentence core"
+    },
+    {
+      "id": "M2",
+      "name_zh": "短语与修饰",
+      "name_en": "Phrases and modifiers"
+    },
+    {
+      "id": "M3",
+      "name_zh": "连接与从句",
+      "name_en": "Linking and clauses"
+    },
+    {
+      "id": "M4",
+      "name_zh": "非谓语",
+      "name_en": "Non-finite forms"
+    },
+    {
+      "id": "M5",
+      "name_zh": "特殊句式",
+      "name_en": "Special structures"
+    },
+    {
+      "id": "M6",
+      "name_zh": "引述与衔接",
+      "name_en": "Reporting and cohesion"
+    },
+    {
+      "id": "M7",
+      "name_zh": "长难句综合",
+      "name_en": "Complex-sentence integration"
+    }
+  ],
+  "task_types": {
+    "tap_span": "点选成分：在句中点出指定成分，答案取自标注 span",
+    "boundary": "划出边界：标出某个结构的起止位置",
+    "classify": "判断类型：给出划线部分，判断它的成分、从句类型或语义类型",
+    "skeleton": "提取主干：选出或拼出句子的主语 + 谓语 + 宾语/表语",
+    "manual": "人工出题：标注不足以自动出题，需老师出题或使用语法 60 题包"
+  },
+  "excluded_concepts": {
+    "generic_phrase": "解析器的兜底标签，不对应一项具体能力",
+    "heading": "原文排版里的小标题，不是句子成分"
+  },
+  "not_covered": [
+    {
+      "topic": "时态与时态选择",
+      "grammar_60_units": [
+        "1–6"
+      ]
+    },
+    {
+      "topic": "情态动词",
+      "grammar_60_units": [
+        "13–14"
+      ]
+    },
+    {
+      "topic": "虚拟语气与愿望句",
+      "grammar_60_units": [
+        "18"
+      ]
+    },
+    {
+      "topic": "省略与替代",
+      "grammar_60_units": [
+        "21"
+      ]
+    },
+    {
+      "topic": "名词数、冠词与限定词",
+      "grammar_60_units": [
+        "7–8"
+      ]
+    },
+    {
+      "topic": "主谓一致",
+      "grammar_60_units": []
+    }
+  ],
+  "nodes": [
+    {
+      "id": "G-S01",
+      "module": "M1",
+      "name_zh": "识别谓语动词单位",
+      "name_en": "Identify the finite verb unit",
+      "concepts": [
+        "verb_phrase"
+      ],
+      "objective": "在简单句中点出完整的谓语动词单位，包括助动词、情态动词组成的复合谓语。",
+      "evidence": [
+        "在简单句中点出完整谓语（may have been done 算一个单位）",
+        "不把名词、形容词或介词短语里的词误当成谓语"
+      ],
+      "common_errors": [
+        "只点实义动词，漏掉助动词或情态动词",
+        "把 -ing / -ed 形式误认为谓语"
+      ],
+      "task_types": [
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S02",
+      "module": "M1",
+      "name_zh": "识别主语及其边界",
+      "name_en": "Identify the subject and its span",
+      "concepts": [
+        "subject"
+      ],
+      "objective": "找到谓语的发出者（被动句中为承受者），划出包括后置修饰在内的完整主语。",
+      "evidence": [
+        "划出带后置修饰的长主语（the inhabitants of ... in north-western India）",
+        "指出主语的中心名词"
+      ],
+      "common_errors": [
+        "只划中心名词，漏掉后置修饰",
+        "把句首介词短语或状语当成主语"
+      ],
+      "task_types": [
+        "tap_span",
+        "boundary"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S03",
+      "module": "M1",
+      "name_zh": "识别宾语",
+      "name_en": "Identify the object",
+      "concepts": [
+        "object"
+      ],
+      "objective": "找出及物动词的宾语，并与状语区分开。",
+      "evidence": [
+        "点出谓语后的宾语",
+        "区分宾语与时间、地点状语（developed a method during the dry season）"
+      ],
+      "common_errors": [
+        "把介词短语或时间状语当成宾语"
+      ],
+      "task_types": [
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S04",
+      "module": "M1",
+      "name_zh": "系动词与表语",
+      "name_en": "Linking verbs and predicatives",
+      "concepts": [
+        "linking_verb",
+        "predicative",
+        "complement"
+      ],
+      "objective": "识别 be / seem / become / remain 等系动词及其后的表语，理解“主系表”是在说明主语是什么、怎么样。",
+      "evidence": [
+        "点出系动词和表语",
+        "区分表语与宾语（is surprising 对比 found a method）"
+      ],
+      "common_errors": [
+        "把“系动词 + 分词形容词”误认为被动",
+        "把表语当成宾语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S05",
+      "module": "M1",
+      "name_zh": "宾语补足语",
+      "name_en": "Object complements",
+      "concepts": [
+        "object_complement",
+        "complement"
+      ],
+      "objective": "识别补充说明宾语状态或身份的成分，理解“主谓宾宾补”句型。",
+      "evidence": [
+        "在 make / keep / find / consider + 宾语 + 补语结构中点出宾补",
+        "说明去掉宾补后句意为何不完整"
+      ],
+      "common_errors": [
+        "把宾补当作宾语的定语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S06",
+      "module": "M1",
+      "name_zh": "判断五种基本句型",
+      "name_en": "Five basic sentence patterns",
+      "concepts": [],
+      "objective": "判断一个简单句或主句属于主谓、主谓宾、主谓双宾、主谓宾宾补、主系表中的哪一种。",
+      "evidence": [
+        "给出主干，判断句型",
+        "说明判断依据：谓语后面接了什么"
+      ],
+      "common_errors": [
+        "把状语当成宾语，导致句型判断错误"
+      ],
+      "task_types": [
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-S07",
+      "module": "M1",
+      "name_zh": "被动谓语",
+      "name_en": "Passive predicates",
+      "concepts": [
+        "passive_predicate"
+      ],
+      "objective": "识别“be + 过去分词”构成的被动谓语，理解此时主语是动作的承受者。",
+      "evidence": [
+        "点出被动谓语（含 have been found、can be seen 等复合形式）",
+        "说明主语与动作的关系"
+      ],
+      "common_errors": [
+        "把“系动词 + 分词形容词”（is interested）与被动混淆",
+        "把后置过去分词定语当成被动谓语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "22 被动语态形式与用途"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-P01",
+      "module": "M2",
+      "name_zh": "名词短语与中心词",
+      "name_en": "Noun phrases and head nouns",
+      "concepts": [
+        "noun_phrase"
+      ],
+      "objective": "找出名词短语的中心词，区分前置修饰和后置修饰。",
+      "evidence": [
+        "指出长名词短语的中心词（the alarming rate of loss → rate）",
+        "分别标出前置和后置修饰语"
+      ],
+      "common_errors": [
+        "把 of 后面的名词当成中心词，导致主谓一致判断出错"
+      ],
+      "task_types": [
+        "tap_span"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "12 名词加介词短语"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-P02",
+      "module": "M2",
+      "name_zh": "介词短语及其修饰对象",
+      "name_en": "Prepositional phrases",
+      "concepts": [
+        "prepositional_phrase"
+      ],
+      "objective": "识别介词短语，判断它修饰前面的名词（作定语）还是修饰动词或整句（作状语）。",
+      "evidence": [
+        "划出介词短语",
+        "判断其修饰对象"
+      ],
+      "common_errors": [
+        "把介词短语里的名词当成主语或宾语"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "12 名词加介词短语",
+        "19 介词短语"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-P03",
+      "module": "M2",
+      "name_zh": "形容词短语（含后置）",
+      "name_en": "Adjective phrases",
+      "concepts": [
+        "adjective_phrase"
+      ],
+      "objective": "识别以形容词为核心的短语，理解它带补充成分变长后为何要后置（a task difficult to finish）。",
+      "evidence": [
+        "点出形容词短语及其修饰的名词",
+        "解释后置原因"
+      ],
+      "common_errors": [
+        "把后置形容词短语误当成表语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "10 形容词与分词形容词"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-P04",
+      "module": "M2",
+      "name_zh": "状语及其语义类型",
+      "name_en": "Adverbials",
+      "concepts": [
+        "adverbial"
+      ],
+      "objective": "识别给动作或整句补充时间、地点、方式、原因、程度等信息的状语，并判断其语义类型。",
+      "evidence": [
+        "点出状语",
+        "判断状语表示时间、地点、方式、原因还是目的"
+      ],
+      "common_errors": [
+        "把状语误认为宾语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "10 方式、地点、时间与频率副词"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-P05",
+      "module": "M2",
+      "name_zh": "同位语",
+      "name_en": "Apposition",
+      "concepts": [
+        "apposition"
+      ],
+      "objective": "识别紧跟在名词后面、把它再解释一遍的成分。",
+      "evidence": [
+        "点出同位语及它解释的名词",
+        "区分同位语与并列名词"
+      ],
+      "common_errors": [
+        "把同位语当成另一个并列的主语"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-P06",
+      "module": "M2",
+      "name_zh": "插入语",
+      "name_en": "Parenthesis",
+      "concepts": [
+        "parenthesis"
+      ],
+      "objective": "识别用逗号、破折号或括号插入的补充说明，读主干时能先跳过它。",
+      "evidence": [
+        "划出插入语",
+        "去掉插入语后确认主干仍然完整"
+      ],
+      "common_errors": [
+        "把插入语里的动词当成主句谓语"
+      ],
+      "task_types": [
+        "boundary"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-C01",
+      "module": "M3",
+      "name_zh": "并列连词与从属连词",
+      "name_en": "Coordinating vs subordinating conjunctions",
+      "concepts": [
+        "conjunction"
+      ],
+      "objective": "判断连接词是连接平级成分（and / but / or），还是引出从句（because / although / when / if）。",
+      "evidence": [
+        "给出连接词，判断是并列还是从属",
+        "说明它连接的是词、短语还是分句"
+      ],
+      "common_errors": [
+        "把 while / since 等多义连接词只理解成一种意思"
+      ],
+      "task_types": [
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "23 并列与从属连词"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-C02",
+      "module": "M3",
+      "name_zh": "并列分句",
+      "name_en": "Coordinate clauses",
+      "concepts": [
+        "coordinate_clause"
+      ],
+      "objective": "识别用 and / but / or / while 连接的平级分句，并分别找出各自的主谓。",
+      "evidence": [
+        "拆出两个平级分句",
+        "分别点出每个分句的谓语"
+      ],
+      "common_errors": [
+        "把共用主语的并列谓语误当成两个分句"
+      ],
+      "task_types": [
+        "boundary",
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-C03",
+      "module": "M3",
+      "name_zh": "区分主句与从句",
+      "name_en": "Main vs subordinate clauses",
+      "concepts": [],
+      "objective": "理解从句有自己的谓语、由引导词引出、在主句中充当一个成分，能判断某个分句是主句还是从句。",
+      "evidence": [
+        "在复合句中指出哪个分句是主句",
+        "说明从句由哪个词引导"
+      ],
+      "common_errors": [
+        "把从句谓语当成主句谓语（The students who completed the survey reported… 中选 completed）"
+      ],
+      "task_types": [
+        "classify",
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-C04",
+      "module": "M3",
+      "name_zh": "定语从句：边界与先行词",
+      "name_en": "Relative clauses: span and antecedent",
+      "concepts": [
+        "relative_clause"
+      ],
+      "objective": "识别定语从句，划出它的起止位置，并找到它修饰的先行词。",
+      "evidence": [
+        "划出定语从句的起止位置",
+        "指出先行词"
+      ],
+      "common_errors": [
+        "从句终点划过头，把主句谓语划进从句",
+        "把离得最近的名词当成先行词（the rate of loss of rainforests that…）"
+      ],
+      "task_types": [
+        "boundary",
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "20 限定性定语从句"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-C05",
+      "module": "M3",
+      "name_zh": "关系词的成分与省略",
+      "name_en": "Role of the relative word and omission",
+      "concepts": [],
+      "objective": "判断 who / whom / which / that / whose / where / when 在从句中作主语、宾语还是状语，并据此判断能否省略。",
+      "evidence": [
+        "说明关系词在从句中的成分",
+        "识别省略了关系词的定语从句（the book I read）"
+      ],
+      "common_errors": [
+        "以为所有关系词都可以省略"
+      ],
+      "task_types": [
+        "classify",
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "20 限定性定语从句"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-C06",
+      "module": "M3",
+      "name_zh": "限制性与非限制性定语从句",
+      "name_en": "Defining vs non-defining relative clauses",
+      "concepts": [],
+      "objective": "根据逗号和语义区分限制性与非限制性定语从句，理解 which 指代前面整句的情况。",
+      "evidence": [
+        "判断定语从句是否限制先行词的范围",
+        "识别 which 指代整句"
+      ],
+      "common_errors": [
+        "在非限制性定语从句中使用 that"
+      ],
+      "task_types": [
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "20 非限定性定语从句"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-C07",
+      "module": "M3",
+      "name_zh": "介词 + 关系代词",
+      "name_en": "Preposition + relative pronoun",
+      "concepts": [],
+      "objective": "理解 in which / of whom 等结构，能还原介词原本搭配的词。",
+      "evidence": [
+        "把“介词 + 关系代词”还原成从句里的原位置",
+        "选择正确的介词"
+      ],
+      "common_errors": [
+        "介词搭配错误"
+      ],
+      "task_types": [
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "20 介词与简化定语从句"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-C08",
+      "module": "M3",
+      "name_zh": "名词性从句及其成分",
+      "name_en": "Noun clauses",
+      "concepts": [
+        "noun_clause"
+      ],
+      "objective": "识别名词性从句，判断它在句中作主语、宾语、表语还是同位语。",
+      "evidence": [
+        "划出名词性从句",
+        "判断它在句中的成分"
+      ],
+      "common_errors": [
+        "把 that 引导的名词性从句当成定语从句"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "21 it 从句与 what 从句"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-C09",
+      "module": "M3",
+      "name_zh": "同位语从句与定语从句的区分",
+      "name_en": "Appositive vs relative that-clauses",
+      "concepts": [],
+      "objective": "区分 the fact that… 中的 that 从句是在解释 fact 的内容（同位语从句），还是在修饰 fact（定语从句）。",
+      "evidence": [
+        "判断 that 从句类型，并说明依据：that 在从句中是否充当成分"
+      ],
+      "common_errors": [
+        "只看 that 前面有没有名词就判断为定语从句"
+      ],
+      "task_types": [
+        "classify",
+        "manual"
+      ],
+      "auto_items": "none",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-C10",
+      "module": "M3",
+      "name_zh": "状语从句及逻辑类型",
+      "name_en": "Adverbial clauses",
+      "concepts": [
+        "adverbial_clause"
+      ],
+      "objective": "识别状语从句，判断它表示时间、原因、条件、让步、目的还是结果。",
+      "evidence": [
+        "划出状语从句",
+        "判断其逻辑类型"
+      ],
+      "common_errors": [
+        "把表对比的 while 当成时间",
+        "把表原因的 since 当成时间"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "17 零条件句与第一条件句",
+        "17 第二条件句",
+        "18 第三条件句",
+        "18 混合条件句",
+        "23 并列与从属连词"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-N01",
+      "module": "M4",
+      "name_zh": "区分谓语与非谓语",
+      "name_en": "Finite vs non-finite verbs",
+      "concepts": [
+        "non_finite_clause"
+      ],
+      "objective": "理解“一句一个动词单位”，能区分句中的谓语动词与 to do / doing / done 等非谓语形式。",
+      "evidence": [
+        "在含多个动词形式的句子中指出哪些是非谓语",
+        "说明非谓语在句中起什么作用"
+      ],
+      "common_errors": [
+        "把非谓语当成谓语，以为一句话有两个谓语"
+      ],
+      "task_types": [
+        "classify",
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-N02",
+      "module": "M4",
+      "name_zh": "不定式的功能",
+      "name_en": "Infinitives",
+      "concepts": [
+        "infinitive_phrase"
+      ],
+      "objective": "判断不定式在句中作名词（主语、宾语）、定语还是目的状语。",
+      "evidence": [
+        "划出不定式短语",
+        "判断其功能"
+      ],
+      "common_errors": [
+        "把作定语的不定式（measures to reduce pollution）当成目的状语"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "16 动词加不定式",
+        "16 不带 to 的不定式"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-N03",
+      "module": "M4",
+      "name_zh": "动名词作主语和宾语",
+      "name_en": "Gerunds",
+      "concepts": [
+        "gerund_phrase"
+      ],
+      "objective": "识别动名词短语，判断它作主语还是宾语。",
+      "evidence": [
+        "点出动名词短语",
+        "判断它作主语还是宾语"
+      ],
+      "common_errors": [
+        "与现在分词混淆"
+      ],
+      "task_types": [
+        "tap_span",
+        "classify"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "16 动词加 -ing",
+        "16 动词加介词再加 -ing"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-N04",
+      "module": "M4",
+      "name_zh": "分词短语",
+      "name_en": "Participial phrases",
+      "concepts": [
+        "participial_phrase"
+      ],
+      "objective": "理解 -ing 表主动或进行、-ed 表被动或完成，判断分词短语是作后置定语还是作状语。",
+      "evidence": [
+        "划出分词短语",
+        "判断它修饰名词还是交代背景",
+        "把后置分词还原成定语从句（the results published → that were published）"
+      ],
+      "common_errors": [
+        "把后置过去分词当成主句谓语（The results published last year showed… 中选 published）"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "10 形容词与分词形容词",
+        "12 分词与不定式名词短语"
+      ],
+      "phase": 1
+    },
+    {
+      "id": "G-N05",
+      "module": "M4",
+      "name_zh": "独立主格",
+      "name_en": "Absolute constructions",
+      "concepts": [
+        "absolute"
+      ],
+      "objective": "识别“名词 + 分词或介词短语”独立给整句补充背景的结构，找到它的逻辑主语。",
+      "evidence": [
+        "划出独立主格结构",
+        "指出它的逻辑主语"
+      ],
+      "common_errors": [
+        "把独立主格里的名词当成句子主语"
+      ],
+      "task_types": [
+        "boundary",
+        "tap_span"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-X01",
+      "module": "M5",
+      "name_zh": "There be 存现句",
+      "name_en": "Existential there",
+      "concepts": [
+        "existential_clause"
+      ],
+      "objective": "理解 there 只是占位，真正的主语在 be 后面。",
+      "evidence": [
+        "指出 there be 句的真主语",
+        "根据真主语判断 be 的单复数"
+      ],
+      "common_errors": [
+        "把 there 当成主语"
+      ],
+      "task_types": [
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-X02",
+      "module": "M5",
+      "name_zh": "形式主语 it",
+      "name_en": "Formal subject it",
+      "concepts": [
+        "formal_subject"
+      ],
+      "objective": "识别 it 占主语位置、真主语（不定式或从句）后置的结构，并找到真主语。",
+      "evidence": [
+        "指出形式主语句的真主语",
+        "把真主语放回主语位置改写句子"
+      ],
+      "common_errors": [
+        "把 it 理解成指代前文的代词"
+      ],
+      "task_types": [
+        "tap_span",
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "21 形式主语 it"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-X03",
+      "module": "M5",
+      "name_zh": "强调句 It is … that",
+      "name_en": "Cleft sentences",
+      "concepts": [
+        "cleft"
+      ],
+      "objective": "识别 It is … that … 强调结构，找到被强调的成分，并与形式主语句区分。",
+      "evidence": [
+        "指出被强调的成分",
+        "去掉 It is … that 后还原句子，以此与形式主语句区分"
+      ],
+      "common_errors": [
+        "把强调句当成形式主语句"
+      ],
+      "task_types": [
+        "tap_span",
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-X04",
+      "module": "M5",
+      "name_zh": "倒装",
+      "name_en": "Inversion",
+      "concepts": [
+        "inversion"
+      ],
+      "objective": "识别否定词或 only 开头等引起的倒装，还原正常语序。",
+      "evidence": [
+        "指出倒装句中的主语和提前的助动词",
+        "把倒装句还原成正常语序"
+      ],
+      "common_errors": [
+        "倒装后找错主语"
+      ],
+      "task_types": [
+        "tap_span",
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [],
+      "phase": 2
+    },
+    {
+      "id": "G-X05",
+      "module": "M5",
+      "name_zh": "比较结构与省略补全",
+      "name_en": "Comparatives and ellipsis",
+      "concepts": [
+        "comparative"
+      ],
+      "objective": "理解 than / as … as 引导的比较，并补全比较对象后省略的部分。",
+      "evidence": [
+        "指出比较的双方",
+        "补全 than 后省略的成分"
+      ],
+      "common_errors": [
+        "比较对象不对等（把 A 的某属性和 B 本身比较）"
+      ],
+      "task_types": [
+        "classify",
+        "manual"
+      ],
+      "auto_items": "partial",
+      "grammar_60_units": [
+        "11 比较级与最高级",
+        "11 其他比较结构"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-D01",
+      "module": "M6",
+      "name_zh": "引述框架",
+      "name_en": "Reporting frames",
+      "concepts": [
+        "reporting_clause",
+        "direct_speech",
+        "attribution"
+      ],
+      "objective": "识别 says Professor X、the study suggests、according to … 等引述成分，把说话人和被引用的内容分开。",
+      "evidence": [
+        "划出引述句或引述来源",
+        "指出被引用内容的主干"
+      ],
+      "common_errors": [
+        "把引述句当成句子主干，忽略真正的观点"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "15 转述动词",
+        "15 间接引语与时态变化"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-D02",
+      "module": "M6",
+      "name_zh": "连接副词与逻辑衔接",
+      "name_en": "Discourse markers",
+      "concepts": [
+        "discourse_marker"
+      ],
+      "objective": "判断 however / therefore / moreover 表示的逻辑关系，理解它们是副词、不能像连词一样直接连接两个句子。",
+      "evidence": [
+        "判断连接副词表示转折、因果还是递进",
+        "判断标点使用是否正确（分号或句号 + however + 逗号）"
+      ],
+      "common_errors": [
+        "用逗号直接把 however 前后两个句子连起来"
+      ],
+      "task_types": [
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [
+        "23 连接副词与连接介词"
+      ],
+      "phase": 2
+    },
+    {
+      "id": "G-L01",
+      "module": "M7",
+      "name_zh": "定位主句谓语",
+      "name_en": "Locate the main-clause verb",
+      "concepts": [],
+      "objective": "在含从句或非谓语的句子中，排除从句里的动词和非谓语，找到主句谓语。",
+      "evidence": [
+        "从多个候选动词中点出主句谓语",
+        "说明其他动词为什么不是（属于哪个从句或非谓语）"
+      ],
+      "common_errors": [
+        "选从句谓语（completed 对比 reported）",
+        "选后置分词（published 对比 showed）"
+      ],
+      "task_types": [
+        "tap_span"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-L02",
+      "module": "M7",
+      "name_zh": "提取长难句主干",
+      "name_en": "Extract the sentence skeleton",
+      "concepts": [
+        "main_clause"
+      ],
+      "objective": "把长难句压缩到“主语 + 谓语 + 宾语或表语”，说出这句话的核心意思。",
+      "evidence": [
+        "写出或选出句子主干",
+        "用一句中文概括主干意思"
+      ],
+      "common_errors": [
+        "把修饰成分留在主干里",
+        "主干缺宾语或表语"
+      ],
+      "task_types": [
+        "skeleton"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    },
+    {
+      "id": "G-L03",
+      "module": "M7",
+      "name_zh": "拆解多层嵌套",
+      "name_en": "Untangle nested structures",
+      "concepts": [],
+      "objective": "处理从句套从句、从句里再含非谓语等三层及以上的嵌套，说清每一层修饰谁。",
+      "evidence": [
+        "标出每个修饰层的起止位置",
+        "说明每一层修饰的对象"
+      ],
+      "common_errors": [
+        "只拆出第一层，内层修饰对象判断错误"
+      ],
+      "task_types": [
+        "boundary",
+        "classify"
+      ],
+      "auto_items": "auto",
+      "grammar_60_units": [],
+      "phase": 1
+    }
+  ],
+  "edges": [
+    {
+      "node": "G-S02",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "先锁定谓语，再往前找它的发出者"
+    },
+    {
+      "node": "G-S02",
+      "requires": "G-P01",
+      "strength": "soft",
+      "reason": "长主语的边界要靠名词短语的中心词来判断"
+    },
+    {
+      "node": "G-S03",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "宾语是谓语动作的对象，先要找到谓语"
+    },
+    {
+      "node": "G-S03",
+      "requires": "G-P04",
+      "strength": "soft",
+      "reason": "区分宾语和状语时需要知道状语是什么"
+    },
+    {
+      "node": "G-S04",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "系动词本身就是谓语动词单位"
+    },
+    {
+      "node": "G-S04",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "表语说明的是主语，要先找到主语"
+    },
+    {
+      "node": "G-S05",
+      "requires": "G-S03",
+      "strength": "hard",
+      "reason": "宾补说明的是宾语，要先找到宾语"
+    },
+    {
+      "node": "G-S05",
+      "requires": "G-S04",
+      "strength": "soft",
+      "reason": "宾补和表语同属“补语”，理解表语有助于理解宾补"
+    },
+    {
+      "node": "G-S06",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "五种句型都以主语和谓语为前提"
+    },
+    {
+      "node": "G-S06",
+      "requires": "G-S03",
+      "strength": "hard",
+      "reason": "要判断谓语后接的是不是宾语"
+    },
+    {
+      "node": "G-S06",
+      "requires": "G-S04",
+      "strength": "hard",
+      "reason": "主系表是五种句型之一"
+    },
+    {
+      "node": "G-S06",
+      "requires": "G-S05",
+      "strength": "hard",
+      "reason": "主谓宾宾补是五种句型之一"
+    },
+    {
+      "node": "G-S07",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "被动谓语仍然是一个谓语动词单位"
+    },
+    {
+      "node": "G-S07",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要判断主语是动作的发出者还是承受者"
+    },
+    {
+      "node": "G-P02",
+      "requires": "G-P01",
+      "strength": "hard",
+      "reason": "介词短语的核心是“介词 + 名词短语”"
+    },
+    {
+      "node": "G-P02",
+      "requires": "G-P04",
+      "strength": "soft",
+      "reason": "介词短语作状语时需要理解状语的功能"
+    },
+    {
+      "node": "G-P03",
+      "requires": "G-P01",
+      "strength": "hard",
+      "reason": "形容词短语修饰的是名词"
+    },
+    {
+      "node": "G-P03",
+      "requires": "G-S04",
+      "strength": "soft",
+      "reason": "形容词短语也常作表语"
+    },
+    {
+      "node": "G-P04",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "状语修饰的是谓语或整句"
+    },
+    {
+      "node": "G-P05",
+      "requires": "G-P01",
+      "strength": "hard",
+      "reason": "同位语解释的是名词"
+    },
+    {
+      "node": "G-P06",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "跳过插入语的目的是看清主谓"
+    },
+    {
+      "node": "G-P06",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "插入语常把主语和谓语隔开"
+    },
+    {
+      "node": "G-P06",
+      "requires": "G-P05",
+      "strength": "soft",
+      "reason": "同位语和插入语都用标点隔开，需要区分"
+    },
+    {
+      "node": "G-C01",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "判断是否连接分句，要先能数出动词单位"
+    },
+    {
+      "node": "G-C02",
+      "requires": "G-C01",
+      "strength": "hard",
+      "reason": "并列分句靠并列连词连接"
+    },
+    {
+      "node": "G-C02",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要分别找出每个分句的主语"
+    },
+    {
+      "node": "G-C03",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "判断分句的依据是动词单位"
+    },
+    {
+      "node": "G-C03",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "每个分句都有自己的主语"
+    },
+    {
+      "node": "G-C03",
+      "requires": "G-C01",
+      "strength": "hard",
+      "reason": "从句由从属连词或关系词引出"
+    },
+    {
+      "node": "G-C03",
+      "requires": "G-C02",
+      "strength": "soft",
+      "reason": "先理解“两个动词单位 = 两个分句”，再学其中一个降级为从句"
+    },
+    {
+      "node": "G-C04",
+      "requires": "G-C03",
+      "strength": "hard",
+      "reason": "定语从句是从句的一种"
+    },
+    {
+      "node": "G-C04",
+      "requires": "G-P01",
+      "strength": "hard",
+      "reason": "先行词是名词，要先会找名词短语的中心词"
+    },
+    {
+      "node": "G-C05",
+      "requires": "G-C04",
+      "strength": "hard",
+      "reason": "要先找到定语从句和关系词"
+    },
+    {
+      "node": "G-C05",
+      "requires": "G-S03",
+      "strength": "hard",
+      "reason": "能否省略取决于关系词是不是从句的宾语"
+    },
+    {
+      "node": "G-C06",
+      "requires": "G-C04",
+      "strength": "hard",
+      "reason": "要先能识别定语从句"
+    },
+    {
+      "node": "G-C06",
+      "requires": "G-P05",
+      "strength": "soft",
+      "reason": "非限制性定语从句和同位语一样靠逗号隔开"
+    },
+    {
+      "node": "G-C07",
+      "requires": "G-C05",
+      "strength": "hard",
+      "reason": "要知道关系词在从句中的成分"
+    },
+    {
+      "node": "G-C07",
+      "requires": "G-P02",
+      "strength": "hard",
+      "reason": "介词 + 关系代词本质上是介词短语前移"
+    },
+    {
+      "node": "G-C08",
+      "requires": "G-C03",
+      "strength": "hard",
+      "reason": "名词性从句是从句的一种"
+    },
+    {
+      "node": "G-C08",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "名词性从句可以作主语"
+    },
+    {
+      "node": "G-C08",
+      "requires": "G-S03",
+      "strength": "hard",
+      "reason": "名词性从句最常见的是作宾语"
+    },
+    {
+      "node": "G-C08",
+      "requires": "G-S04",
+      "strength": "soft",
+      "reason": "名词性从句也能作表语"
+    },
+    {
+      "node": "G-C09",
+      "requires": "G-C08",
+      "strength": "hard",
+      "reason": "同位语从句是名词性从句的一种"
+    },
+    {
+      "node": "G-C09",
+      "requires": "G-C05",
+      "strength": "hard",
+      "reason": "区分依据是 that 在从句中是否充当成分"
+    },
+    {
+      "node": "G-C09",
+      "requires": "G-P05",
+      "strength": "soft",
+      "reason": "同位语从句和同位语一样是在解释名词"
+    },
+    {
+      "node": "G-C10",
+      "requires": "G-C03",
+      "strength": "hard",
+      "reason": "状语从句是从句的一种"
+    },
+    {
+      "node": "G-C10",
+      "requires": "G-P04",
+      "strength": "hard",
+      "reason": "状语从句是一个“大状语”，要先理解状语的语义类型"
+    },
+    {
+      "node": "G-N01",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "要先知道什么是谓语动词单位"
+    },
+    {
+      "node": "G-N01",
+      "requires": "G-C03",
+      "strength": "soft",
+      "reason": "多出来的动词要么进从句、要么变非谓语，两者一起理解更完整"
+    },
+    {
+      "node": "G-N02",
+      "requires": "G-N01",
+      "strength": "hard",
+      "reason": "不定式是非谓语的一种"
+    },
+    {
+      "node": "G-N02",
+      "requires": "G-P01",
+      "strength": "soft",
+      "reason": "不定式作定语时修饰名词"
+    },
+    {
+      "node": "G-N02",
+      "requires": "G-P04",
+      "strength": "soft",
+      "reason": "不定式作状语时最常表示目的"
+    },
+    {
+      "node": "G-N03",
+      "requires": "G-N01",
+      "strength": "hard",
+      "reason": "动名词是非谓语的一种"
+    },
+    {
+      "node": "G-N03",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "动名词常作主语"
+    },
+    {
+      "node": "G-N03",
+      "requires": "G-S03",
+      "strength": "hard",
+      "reason": "动名词常作宾语"
+    },
+    {
+      "node": "G-N04",
+      "requires": "G-N01",
+      "strength": "hard",
+      "reason": "分词是非谓语的一种"
+    },
+    {
+      "node": "G-N04",
+      "requires": "G-S07",
+      "strength": "soft",
+      "reason": "-ed 分词表被动，理解被动谓语有帮助"
+    },
+    {
+      "node": "G-N04",
+      "requires": "G-C04",
+      "strength": "soft",
+      "reason": "后置分词可以看作简化的定语从句"
+    },
+    {
+      "node": "G-N05",
+      "requires": "G-N04",
+      "strength": "hard",
+      "reason": "独立主格的核心常是分词"
+    },
+    {
+      "node": "G-N05",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要区分独立主格的逻辑主语和句子主语"
+    },
+    {
+      "node": "G-X01",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要找出 be 后面的真主语"
+    },
+    {
+      "node": "G-X01",
+      "requires": "G-S04",
+      "strength": "soft",
+      "reason": "there be 里的 be 也是系动词形式"
+    },
+    {
+      "node": "G-X02",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要区分形式主语和真主语"
+    },
+    {
+      "node": "G-X02",
+      "requires": "G-N02",
+      "strength": "soft",
+      "reason": "真主语常是不定式"
+    },
+    {
+      "node": "G-X02",
+      "requires": "G-C08",
+      "strength": "soft",
+      "reason": "真主语常是名词性从句"
+    },
+    {
+      "node": "G-X03",
+      "requires": "G-X02",
+      "strength": "hard",
+      "reason": "强调句和形式主语句外形相似，必须能区分"
+    },
+    {
+      "node": "G-X03",
+      "requires": "G-C03",
+      "strength": "hard",
+      "reason": "要识别 that 后面的部分不是独立的主句"
+    },
+    {
+      "node": "G-X04",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "要知道正常语序中谓语的位置"
+    },
+    {
+      "node": "G-X04",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "倒装后要重新找到主语"
+    },
+    {
+      "node": "G-X05",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "补全省略要知道省掉的是哪部分谓语"
+    },
+    {
+      "node": "G-X05",
+      "requires": "G-C10",
+      "strength": "soft",
+      "reason": "than 引导的部分本质上是比较状语从句"
+    },
+    {
+      "node": "G-D01",
+      "requires": "G-S01",
+      "strength": "hard",
+      "reason": "引述句本身有谓语（says / suggests）"
+    },
+    {
+      "node": "G-D01",
+      "requires": "G-S02",
+      "strength": "hard",
+      "reason": "要找出说话人"
+    },
+    {
+      "node": "G-D01",
+      "requires": "G-C08",
+      "strength": "soft",
+      "reason": "the study suggests that… 后面是宾语从句"
+    },
+    {
+      "node": "G-D02",
+      "requires": "G-C01",
+      "strength": "hard",
+      "reason": "要先理解连词，才能区分连接副词和连词"
+    },
+    {
+      "node": "G-L01",
+      "requires": "G-C03",
+      "strength": "hard",
+      "reason": "要先能区分主句和从句"
+    },
+    {
+      "node": "G-L01",
+      "requires": "G-N01",
+      "strength": "hard",
+      "reason": "要先能区分谓语和非谓语"
+    },
+    {
+      "node": "G-L01",
+      "requires": "G-C04",
+      "strength": "soft",
+      "reason": "定语从句是主语后最常见的干扰来源"
+    },
+    {
+      "node": "G-L01",
+      "requires": "G-N04",
+      "strength": "soft",
+      "reason": "后置分词是另一个常见干扰来源"
+    },
+    {
+      "node": "G-L02",
+      "requires": "G-L01",
+      "strength": "hard",
+      "reason": "主干以主句谓语为中心"
+    },
+    {
+      "node": "G-L02",
+      "requires": "G-S06",
+      "strength": "hard",
+      "reason": "主干一定是五种基本句型之一"
+    },
+    {
+      "node": "G-L02",
+      "requires": "G-P06",
+      "strength": "soft",
+      "reason": "先跳过插入语更容易看清主干"
+    },
+    {
+      "node": "G-L02",
+      "requires": "G-P05",
+      "strength": "soft",
+      "reason": "先跳过同位语更容易看清主干"
+    },
+    {
+      "node": "G-L03",
+      "requires": "G-L02",
+      "strength": "hard",
+      "reason": "先拆出主干，再逐层处理修饰"
+    },
+    {
+      "node": "G-L03",
+      "requires": "G-C04",
+      "strength": "hard",
+      "reason": "嵌套中最常见的是定语从句"
+    },
+    {
+      "node": "G-L03",
+      "requires": "G-C08",
+      "strength": "hard",
+      "reason": "嵌套中常出现名词性从句"
+    },
+    {
+      "node": "G-L03",
+      "requires": "G-C10",
+      "strength": "hard",
+      "reason": "嵌套中常出现状语从句"
+    },
+    {
+      "node": "G-L03",
+      "requires": "G-N04",
+      "strength": "soft",
+      "reason": "分词短语也常出现在嵌套中"
+    }
+  ]
+}

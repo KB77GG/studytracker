@@ -1,7 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-09-17 题型专项跨日再次布置与只读历史已部署，并完成独立生产只读验收；5092 预览继续运行。
+> 最近更新：2026-10-18 语法知识图谱 v0 草稿已提交到任务分支，推送因 GitHub 授权 403 失败，暂时只在云端容器里可见；待教师审核（未部署）。上一条生产事实仍为 2026-09-17 题型专项跨日再次布置。
+
+## 2026-10-18 语法知识图谱 v0 草稿（待教师审核，未部署）
+
+- 分支 `claude/word-memorization-system-eval-55v2y5`（云端会话），基于 `main@14b665c`。只新增数据、脚本、测试和文档，外加 CI 轻量测试列表的一行，业务代码不变。
+- 事实源 `data/grammar_graph/grammar_graph_v0.json`：7 个模块、38 个知识点（第一阶段 22 个）、88 条依赖（硬 63 / 软 25），每条依赖都写了理由。每个知识点含学习目标、掌握证据、常见错误、题型、是否能从现有标注自动出题，以及对应的语法 60 题包单元。词表 36 个 key 中 34 个已映射，`generic_phrase` 和 `heading` 不纳入。
+- 审核文档 `docs/GRAMMAR_GRAPH_V0_REVIEW.md` 不要手改：改 JSON 后运行 `python scripts/render_grammar_graph_review.py`（需要 Flask）。文档中的句数和标注问题统计按 `data/reading_study/` 317 篇 / 12,657 句实时计算。
+- 验证：`python -m unittest tests.test_grammar_graph_draft -v` 7 passed，已加入 `.github/workflows/ci.yml` 的轻量测试列表；CI 全部轻量测试 75 passed；目标 Ruff 通过。
+- 结构借鉴 Marble Skill Taxonomy（节点 + hard/soft 依赖 + 理由），没有导入它的数据或文本，因此不受其 ODbL / CC BY-SA 的相同方式共享条款约束。以后如果导入 Marble 数据，必须署名，衍生数据库也要以 ODbL 公开。
+- 已知标注问题，自动出题前要处理：被动漏标（约 650 条形如“be + 过去分词”的谓语没标成被动）；第 2 层成分多数不是第 1 层的子串，划边界前要先把标注整理成树；主句标注只覆盖 25.6% 的句子。
+- 推送状态：本次提交的推送被 GitHub 拒绝（403，Claude GitHub App 未授权该仓库），目前只存在于云端容器，其他电脑看不到。
+- 下一步：修好授权后推送 → 老师审核 → 抽检标注准确率 → 设计数据表（知识点、依赖、题目标签、学生掌握度，参照 `StudentVocabularyMastery` 的多维度模式）和新蓝图。尚未建 PR。
 
 ## 2026-09-17 题型专项跨日再次布置与历史记录（已上线，独立生产验收 GO）
 
