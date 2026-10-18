@@ -1,7 +1,109 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 语法知识图谱 v0 完成第一轮审核（老师定了三条关键依赖，其余由 Claude 判断），已推送到任务分支 `claude/word-memorization-system-eval-55v2y5`（未合并 main、未部署）。上一条生产事实仍为 2026-09-17 题型专项跨日再次布置。
+> 最近更新：2026-10-18（Asia/Shanghai）语法候选题执行前复核发现计划第 4/6 节与第 11 节冲突，按用户要求停止实施。独立 trf 环境可用；环境固定项及本节证据仅同步到 `codex/grammar-item-candidates`，未推 main、未部署、未开 PR。历史生产记录本轮未复验。
+
+## 2026-10-18 语法候选题：计划回归条件冲突，等待修订
+
+### 工作树、授权及完成范围
+
+- 执行树：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`；分支 `codex/grammar-item-candidates`，从 `origin/claude/word-memorization-system-eval-55v2y5@443ea01f4e70d077fe1de4b7b00d4b2566bc242d` 创建，开工时干净。环境提交 HEAD 为 `985899f8feced120e491cd5d9c0557393353f46c`；本节由后续文档提交记录，最新完整 HEAD 用 `git rev-parse HEAD` 核对。
+- 用户明确授权本任务分支 commit/push；明确禁止推 main、部署、开 PR，并要求“遇到计划里做不到的地方，停下来告诉我，不要自己变通”。本轮没有修改计划、原始标注、图谱、API、数据库、前端、小程序或运行时依赖列表。
+- 原桌面树 `/Users/zhouxin/Desktop/studytracker` 保持 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，跟踪 `origin/main` 落后 73；既有 **7 modified / 22 untracked 入口**完整保留，本轮未写入该树。
+  - 既有 modified：`design-qa.md`、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`、`static/style.css`、`templates/listening/index.html`、`templates/listening/test_practice.html`、`templates/login.html`。
+  - 既有 untracked：`.tmp/`、`artifacts/`、`data/idictation_vocab_books/`、`data/idictation_zyz_vocab/`、`data/reading_study/browse.html`、`data/reading_study/preview.html`、`data/toefl_practice/ets-practice-{2,3,4,5}/`、`docs/design/`、`docs/dictation_input_policy_proposal.md`、`docs/dictation_strict_result_layout_fix.md`、`prototypes/`、`scripts/import_idictation_vocab_book.py`、`scripts/import_zyz_vocab.py`、`static/brand/auth-staircase-hero.png`、`templates/auth/`、`tests/test_auth_entry_pages.py`、`tests/test_import_idictation_vocab_book.py`、`tests/test_import_zyz_vocab.py`、`tests/test_listening_practice_context.py`。这些是其他任务的本机资料、候选实现与测试，没有纳入本分支。
+- 本轮仅新增 `requirements-grammar-tools.txt`、向 `.gitignore` 增加 `.venv-grammar-tools/`，并更新两份交接。实际安装 Python **3.13.3**、spaCy **3.8.16**、官方 `en_core_web_trf` **3.8.0**、Flask **3.1.3**、openpyxl **3.1.5**；解析强制 CPU，实际 torch **2.14.1**。主 `.venv` 未安装新依赖，未调用大模型 API。
+- 忽略的 `.venv-grammar-tools/` 及 `/tmp/studytracker-grammar-{install.log,plan-probe.py,plan-probe.jsonl,probe-stderr.log}` 只在本机；下方命令可在其他机器复现，无需这些临时文件。生成器、候选池、统计报告、抽查表、新测试和 CI 修改均**尚未实施**。
+
+### 阻塞证据（真实模型输出，不是候选题生成结果）
+
+计划第 11 节规定五个坏例“任何模板都不得出现 auto_pass”，但第 4 节按目标逐题校验，第 6 节没有把其他成分的错误传播到整句。三个坏例均通过现有整句过滤：词数在 6–60 内、ROOT 是 VERB、引号括号配对、所有 span 可按结构顺序定位，没有 heading/unknown/第 1 层定语或名词性从句。实际解析如下：
+
+| 坏例 | 指定解析器证据 | 按原计划会自动通过的题型 |
+|---|---|---|
+| `ielts8_test4_p1` C-04 | 29 个非标点 token；ROOT=`felt/VERB`。白名单 `infinitive_complement` `[35,88)` 的唯一中心为 `introduce/xcomp/VB`，非限定，子树边界完全吻合。排除 `explanatory_clause` 仅排除了另一个 span。 | T3 “不是从句”、T6(c) “非谓语” |
+| `reading_jijing_76_test_43_p2` H-02 | 40 个非标点 token；ROOT=`lost/VERB/VBN` 位于唯一第 1 层 `predicate` `[114,180)` 内；没有动词 conj 子节点，也不在从句内。动词单位为 `had` `[114,117)`、`lost` `[118,122)`、`out` `[123,126)`。 | T1（白名单内无干扰项，归 G-S01）、T6(a) “主句谓语” |
+| `reading_jijing_56_test_64_p2` C-01 | 21 个非标点 token；ROOT=`deter/VERB`。唯一白名单定语从句 `who vilified him` `[84,100)`，中心为 `vilified/relcl/VBD`，是限定动词，子树边界完全吻合。 | T2 定语从句、T3 定语从句、T6(b) “从句里的谓语” |
+
+H-02 的错误主语会影响 T5，但计划没有写 T5 失败则所有模板降级；C-01 的句子残缺也不会触发现有 `fragment` 条件，因为 ROOT 仍是 VERB。不能擅自增加坏例 ID 黑名单、扩大白名单、跨模板传播失败或更换解析器来达标。
+
+其余第 11 节例句的诊断结果：
+
+| 例句 | 诊断结论 |
+|---|---|
+| 坏例 `ielts7_test3_p1` K-03 | 5 个非标点 token，符合 `too_short`；另有未配对尾引号。可整句拒绝。 |
+| 坏例 `reading_jijing_73_test_5_p2` F-05 | `purpose_modifier` 由原 `resolve_role()` 返回 `unknown`，符合 `unknown_span`。ROOT 实际是 `involving/VERB`，不能仅靠 `fragment` 拦截。 |
+| 正例 `reading_jijing_91_test_49_p3` D-02 | ROOT=`occurred` `[84,92)` 在标注谓语内；白名单干扰动词为 `attended` / `representing`，符合 T1 预期。 |
+| 正例 `ielts11_test3_p2` A-04 | `apply/relcl`，子树为 `that apply, in varying degrees and combinations, to all migrations` `[62,128)`，符合 T2 预期。 |
+| 正例 `ielts15_test2_p3` D-05 | `produced/ccomp`，子树与标注名词性从句 `[18,157)` 完全吻合，符合 T2 预期。 |
+
+### 精确复现与验证
+
+在执行树根目录运行；首次创建环境用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m venv .venv-grammar-tools`。初次 pip 默认 CA 校验失败，指定本机系统 CA 后成功，没有关闭 TLS 校验：
+
+```bash
+.venv-grammar-tools/bin/python -m pip install --cert /etc/ssl/cert.pem -r requirements-grammar-tools.txt
+.venv-grammar-tools/bin/python -m pip check
+.venv-grammar-tools/bin/python -m unittest tests.test_grammar_graph_draft -v
+git diff --check
+```
+
+- `pip check`：`No broken requirements found.`；原图谱测试 **7 passed**（不是候选题新测试）；`git diff --check` 通过。没有实现 Python 代码，Ruff 本轮不适用，未声称候选题测试已通过。首次实际安装命令与上方的区别仅为包参数使用 `'spacy>=3.8,<3.9' Flask openpyxl 'https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl'`；安装成功后将实际版本固定到 requirements 文件。
+- 全量读取确认 **317 篇 / 12,657 句**；`data/reading_study` 全部 317 个文件按路径排序后顺次拼接原始字节的 SHA-256 为 `e6e58691a2db4a59f5a8b7fdbd451074395498fcee9400a673dc8b512950ed63`；图谱 JSON SHA-256 为 `c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29`。
+- 下方自包含命令是只读的八例模型探针，已从本文提取并实际执行，**exit 0，八例结果与独立探针一致**。输出可核对上述中心、边界、有限性、ROOT 子节点和 unknown；不生成题，不改变任何规则，不依赖 `/tmp` 脚本：
+
+```bash
+.venv-grammar-tools/bin/python - <<'PY'
+import json
+from pathlib import Path
+import spacy
+from api.reading_study_glossary import resolve_role
+
+spacy.require_cpu()
+nlp = spacy.load('en_core_web_trf')
+cases = [('ielts7_test3_p1', 'K-03'), ('ielts8_test4_p1', 'C-04'),
+         ('reading_jijing_76_test_43_p2', 'H-02'),
+         ('reading_jijing_73_test_5_p2', 'F-05'),
+         ('reading_jijing_56_test_64_p2', 'C-01'),
+         ('reading_jijing_91_test_49_p3', 'D-02'),
+         ('ielts11_test3_p2', 'A-04'), ('ielts15_test2_p3', 'D-05')]
+tags = {'VBD', 'VBZ', 'VBP', 'MD'}
+def finite(t):
+    return ('Fin' in t.morph.get('VerbForm') or t.tag_ in tags or
+            any(c.dep_ in {'aux', 'auxpass'} and c.tag_ in tags for c in t.children))
+def boundary(tokens):
+    tokens = list(tokens)
+    while tokens and (tokens[0].is_punct or tokens[0].is_space):
+        tokens.pop(0)
+    while tokens and (tokens[-1].is_punct or tokens[-1].is_space):
+        tokens.pop()
+    return [tokens[0].idx, tokens[-1].idx + len(tokens[-1])] if tokens else None
+for passage, sid in cases:
+    data = json.loads((Path('data/reading_study') / f'{passage}.json').read_text())
+    sentence = next(s for s in data['sentences'] if s['id'] == sid)
+    doc = nlp(sentence['sentence'])
+    roots = [t for t in doc if t.dep_ == 'ROOT']
+    print(passage, sid, 'words=', sum(not t.is_punct and not t.is_space for t in doc))
+    print('ROOT=', [(t.text, t.pos_, t.tag_, [(c.text, c.dep_) for c in t.children]) for t in roots])
+    previous = 0
+    for span in sentence['structure']:
+        start = doc.text.find(span['text'], previous)
+        assert start >= 0, (passage, sid, span)
+        previous, end = start, start + len(span['text'])
+        inside = {t.i for t in doc if start <= t.idx and t.idx + len(t) <= end}
+        centers = [doc[i] for i in sorted(inside) if not doc[i].is_punct
+                   and not doc[i].is_space and doc[i].head.i not in inside]
+        print(span['role'], span['level'], resolve_role(span['role'])['concept'], [start, end],
+              [(t.text, t.dep_, finite(t), boundary(doc[t.left_edge.i:t.right_edge.i+1])) for t in centers])
+PY
+```
+
+### 交付缺口、发布状态与下一步
+
+- 六模板的 `auto_pass / needs_review / rejected` 总数均 **未生成**，不是 0；四个交付文件未生成，因此没有两次生成的 SHA-256，也没有可给老师的抽查表。这是遵循计划“无法做到就停止”的结果，不能将本次探针当成完整生成或第 10 节验收。
+- 需要计划作者先明确：把哪些通用问题升级为整句拒绝/复核，还是将第 11 节的限制改为仅覆盖出错题型。修订应给出条件、原因码及测试预期；不能由执行 agent 自行选一种解释。计划文件保持原样。
+- 本轮环境固定项和两份交接只提交、推送 `codex/grammar-item-candidates`；提交后执行树无未提交或未跟踪的交付文件，仅保留被忽略的工具环境。最终以 `git rev-parse HEAD` 与 `git ls-remote origin refs/heads/codex/grammar-item-candidates` 一致为确认。此分支不触发仅监听 main 的 deploy workflow。未访问生产服务器、未改数据库、未部署后端/前端，未上传/提审/发布小程序，未开 PR。历史生产事实未复验。
+- 下一位 agent：先核对本树与远端 HEAD、`git status --short --branch`，读取本节及计划修订；若计划尚未修订，继续保持停止实施。收到修订后复跑八例探针，再按第 9/10 节实现、全量生成两次并比较四个文件；保留当前独立环境与桌面原脏树。
 
 ## 2026-10-18 语法知识图谱 v0 草稿（第一轮审核完成，未部署）
 

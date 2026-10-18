@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-18 — 语法候选题执行前发现计划回归冲突（停止实施）
+
+- 在独立 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 从计划分支 `443ea01f` 创建 `codex/grammar-item-candidates`。桌面旧 `main@6ded77d2` 的 7 modified/22 untracked 入口未动；仅固定独立工具依赖、忽略虚拟环境并更新交接。环境提交 `985899f8`，本轮仅同步授权任务分支，禁止推 main/部署/开 PR。
+- Python 3.13.3 + spaCy 3.8.16 + 官方 en_core_web_trf 3.8.0 CPU 真实复核八例。C-04 的 `introduce/xcomp` 满足 T3/T6(c)，H-02 的 `lost/ROOT` 满足 T1/T6(a)，C-01 的 `vilified/relcl` 及完整子树满足 T2/T3/T6(b)；这三句未触发第 6 节整句过滤，却被第 11 节要求所有模板都不得 auto_pass。依用户“做不到就停”停止，没有擅加黑名单/全句降级规则，也没有改计划或标注。
+- K-03 可因 too_short、F-05 可因 unknown_span 拒绝；三正例均符合指定模板预期。`pip check` 通过，原图谱测试 7 passed，diff-check 通过；未实现生成器/新测试/CI，未生成候选、报告或盲审表，因此没有六模板计数或双跑 SHA。证据、自包含复现命令、原树脏路径及下一步均见 `CODEX_HANDOFF.md` 最新节。
+- 环境与临时探针仅本机；依赖固定文件和交接随分支 commit/push 可供云端交叉核对。未访问生产、未改数据库/业务/前端/小程序、未部署或微信发布。下一步需先修订整句过滤与坏例验收之间的冲突，再恢复原计划。
+
 ## 2026-10-18 — 语法候选题生成计划（交 Codex 执行）
 
 - 新增 `docs/GRAMMAR_ITEM_CANDIDATES_PLAN.md`：6 类题型覆盖 11 个第一阶段知识点；按原始 role 白名单选题（归一后的状语从句是兜底桶，祈使句、疑问句等也会掉进去）；用 spaCy trf 独立复核，结果分为 auto_pass / needs_review / rejected；老师盲审抽查清单每类 60 行。
