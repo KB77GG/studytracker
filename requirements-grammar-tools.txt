@@ -1,0 +1,6 @@
+# Offline grammar tooling only; install into .venv-grammar-tools/.
+# Never install these dependencies into the production environment.
+spacy==3.8.16
+en_core_web_trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl
+Flask==3.1.3
+openpyxl==3.1.5
