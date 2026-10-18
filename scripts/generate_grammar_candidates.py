@@ -85,10 +85,10 @@ def main(argv=None):
         parser.error("--limit must be positive")
     nlp, environment = load_parser(args.seed)
     output = ROOT / "output/grammar_items"
-    cache = ParseCache(output / "parse_cache_v0.jsonl", environment)
+    cache = ParseCache(output / "parse_cache_v0_2.jsonl", environment)
     candidates, rejections, results = collect(ROOT, nlp, cache, args.limit)
-    write_jsonl(output / "candidates_v0.jsonl", candidates)
-    write_jsonl(output / "rejections_v0.jsonl", rejections)
+    write_jsonl(output / "candidates_v0_2.jsonl", candidates)
+    write_jsonl(output / "rejections_v0_2.jsonl", rejections)
     if args.limit is not None:
         print(json.dumps(template_counts(candidates, rejections), ensure_ascii=False, indent=2))
         print("Debug limit: formal report/review files were not overwritten.")
@@ -100,10 +100,12 @@ def main(argv=None):
     names = {node["id"]: node["name_zh"] for node in graph["nodes"]}
     report = build_report(ROOT, environment, args.seed, candidates, rejections, results, stats)
     deliverables = ROOT / "data/grammar_items"
-    write_json(deliverables / "generation_report_v0.json", report)
-    (deliverables / "generation_report_v0.md").write_text(markdown_report(report), encoding="utf-8")
-    write_jsonl(deliverables / "review_batch_v0.jsonl", batch)
-    write_workbook(batch, names, deliverables / "review_batch_v0.xlsx")
+    write_json(deliverables / "generation_report_v0_2.json", report)
+    (deliverables / "generation_report_v0_2.md").write_text(
+        markdown_report(report), encoding="utf-8"
+    )
+    write_jsonl(deliverables / "review_batch_v0_2.jsonl", batch)
+    write_workbook(batch, names, deliverables / "review_batch_v0_2.xlsx")
     print(json.dumps(report["counts_by_template"], ensure_ascii=False, indent=2))
     print(f"Review batch: {len(batch)} rows; estimated {len(batch) / 2:g} minutes")
     return 0

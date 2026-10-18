@@ -1,6 +1,17 @@
 """The exhaustive plan reason codes and whole-sentence checks (no ID rules)."""
 
+import re
 from enum import StrEnum
+
+# Plan v0.2 section B1: a sentence end glued to the next sentence ("these."Manufacturers).
+GLUED_BOUNDARY = re.compile(r"(?<=\S)[.!?][\"”’')\]]?(?=[A-Z])")
+INITIALS = re.compile(r"\b(?:[A-Z]\.)+[A-Z]$")
+# Plan v0.2 section B1: a properly spaced sentence end inside one unit.
+SPACED_BOUNDARY = re.compile(r"[a-z0-9][.!?][\"”’')\]]?\s+[\"“‘'(]?[A-Z]")
+ABBREVIATION = re.compile(
+    r"\b(Mr|Mrs|Ms|Dr|St|Prof|Jr|Sr|No|Co|Inc|Ltd|vs|etc|U\.S|U\.K|e\.g|i\.e|a\.m|p\.m)"
+    r"[.!?][\"”’')\]]?\s+[A-Z]$"
+)
 
 
 class Reason(StrEnum):
@@ -14,6 +25,8 @@ class Reason(StrEnum):
     UNBALANCED_QUOTES_OR_BRACKETS = "unbalanced_quotes_or_brackets"
     TAGGED_FRAGMENT = "tagged_fragment"
     CLAUSE_ATTACHED_TO_CONJUNCTION = "clause_attached_to_conjunction"
+    GLUED_SENTENCE_BOUNDARY = "glued_sentence_boundary"
+    MULTI_SENTENCE_UNIT = "multi_sentence_unit"
     PARSE_FAILURE = "parse_failure"
     AMBIGUOUS_SPAN_LOCATION = "ambiguous_span_location"
     PARSER_ROOT_OUTSIDE_VERB_SPAN = "parser_root_outside_verb_span"
@@ -37,6 +50,7 @@ class Reason(StrEnum):
     SUBJECT_AFTER_VERB = "subject_after_verb"
     RELATION_LABEL_OUT_OF_SCOPE = "relation_label_out_of_scope"
     NO_DISTRACTOR = "no_distractor"
+    POSSIBLE_RELATIVE_ADVERB = "possible_relative_adverb"
 
 
 def unbalanced(sentence):
@@ -63,6 +77,20 @@ def unbalanced(sentence):
     return bool(stack or straight)
 
 
+def glued_sentence_boundary(sentence):
+    return any(
+        not INITIALS.search(sentence[max(0, m.start() - 4) : m.end() + 1])
+        for m in GLUED_BOUNDARY.finditer(sentence)
+    )
+
+
+def multi_sentence_unit(sentence):
+    return any(
+        not ABBREVIATION.search(sentence[max(0, m.start() - 6) : m.end()])
+        for m in SPACED_BOUNDARY.finditer(sentence)
+    )
+
+
 def clause_attached_to_conjunction(view):
     clause_deps = {"advcl", "conj", "ccomp", "relcl", "csubj", "csubjpass", "acl"}
     return any(t.dep in clause_deps and view.tokens[t.head].dep == "cc" for t in view.tokens)
@@ -78,6 +106,8 @@ def sentence_reasons(sentence, spans, view):
         ),
         Reason.UNBALANCED_QUOTES_OR_BRACKETS: unbalanced(sentence),
         Reason.TAGGED_FRAGMENT: any("fragment" in s.role for s in spans),
+        Reason.GLUED_SENTENCE_BOUNDARY: glued_sentence_boundary(sentence),
+        Reason.MULTI_SENTENCE_UNIT: multi_sentence_unit(sentence),
         Reason.PARSE_FAILURE: view is None,
     }
     if view is not None:

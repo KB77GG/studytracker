@@ -2,6 +2,7 @@
 
 import json
 import platform
+import re
 from collections import Counter
 from hashlib import sha256
 from importlib.metadata import version
@@ -19,7 +20,20 @@ REGRESSION_CASES = (
     ("positive", "reading_jijing_91_test_49_p3", "D-02"),
     ("positive", "ielts11_test3_p2", "A-04"),
     ("positive", "ielts15_test2_p3", "D-05"),
+    # Plan v0.2 section B5.
+    ("bad", "ielts4_test2_p2", "G-31"),
+    ("positive", "ielts6_test3_p1", "C-06"),
+    ("positive", "reading_jijing_88_test_98_p2", "G-04"),
+    ("positive", "reading_jijing_88_test_98_p2", "G-04b"),
 )
+# Expected whole-sentence hits; None means "report only" (plan v0.2 B1).
+INDEPENDENT_FILTERS = (
+    (R.TAGGED_FRAGMENT, 36),
+    (R.CLAUSE_ATTACHED_TO_CONJUNCTION, 2),
+    (R.GLUED_SENTENCE_BOUNDARY, 0),
+    (R.MULTI_SENTENCE_UNIT, None),
+)
+RESPLIT_ID = re.compile(r"^[A-Z]-\d+[b-z]$")
 NODE_IDS = (
     "G-S01",
     "G-S02",
@@ -102,15 +116,36 @@ def benchmark_results(candidates, rejections, sources):
 
 def independent_hits(rows):
     result = {}
-    for reason, expected in ((R.TAGGED_FRAGMENT, 36), (R.CLAUSE_ATTACHED_TO_CONJUNCTION, 2)):
+    for reason, expected in INDEPENDENT_FILTERS:
         hits = [source for source, reasons in rows if reason in reasons]
         result[reason] = {
             "expected": expected,
             "actual": len(hits),
-            "matches_expected": len(hits) == expected,
+            "matches_expected": None if expected is None else len(hits) == expected,
             "sentences": hits,
         }
     return result
+
+
+def relative_adverb_stats(candidates):
+    flagged = [i for i in candidates if R.POSSIBLE_RELATIVE_ADVERB in i["reasons"]]
+    targets = {
+        (i["source"]["passage_id"], i["source"]["sentence_id"], i["evidence"]["tag_span"]["start"])
+        for i in flagged
+    }
+    return {
+        "items_by_template": dict(sorted(Counter(i["template"] for i in flagged).items())),
+        "distinct_targets": len(targets),
+    }
+
+
+def resplit_stats(all_results):
+    ids = sorted(
+        f"{s['passage_id']} {s['sentence_id']}"
+        for s, _ in all_results
+        if RESPLIT_ID.match(s["sentence_id"])
+    )
+    return {"sentences": len(all_results), "new_sentence_ids": ids}
 
 
 def build_report(root, environment, seed, candidates, rejections, all_results, batch_stats):
@@ -127,7 +162,7 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
     row_count = sum(value["rows"] for value in batch_stats.values())
     return {
         "generator_version": GENERATOR_VERSION,
-        "plan_version": "v0.1",
+        "plan_version": "v0.2",
         "corpus": {
             "passages": len({s["passage_id"] for s, _ in all_results}),
             "sentences": len(all_results),
@@ -154,6 +189,8 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
         ),
         "candidate_difficulty": dict(sorted(Counter(i["difficulty"] for i in candidates).items())),
         "independent_sentence_filters": independent_hits(all_results),
+        "possible_relative_adverb": relative_adverb_stats(candidates),
+        "resplit": resplit_stats(all_results),
         "regression_cases": benchmark_results(candidates, rejections, sources),
         "review_batch": {
             "rows": row_count,
@@ -163,7 +200,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
         "counting_notes": [
             "候选题按 item_id 计数；模板 rejected 含每个整句拒绝一次，以及该模板的目标/选句拒绝记录。",
             "原因码按候选题及拒绝记录计数；整句拒绝在 JSONL 中只记录一条，保留全部原因。",
-            "两条新增整句规则在全库独立统计，不受其他过滤顺序影响。",
+            "整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 只报告不设预期。",
+            "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
+            "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
             "无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。",
             "字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。",
             "分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。",
@@ -175,9 +214,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
 
 def markdown_report(report):
     lines = [
-        "# 语法候选题生成报告 v0",
+        "# 语法候选题生成报告 v0.2",
         "",
-        "按执行计划 v0.1 生成；候选题尚未通过教师审核、未入库。",
+        "按执行计划 v0.2（在 v0.1 基础上的增量）生成；候选题尚未通过教师审核、未入库。",
         "",
         "## 题型数量",
         "",
@@ -196,6 +235,8 @@ def markdown_report(report):
         ("candidate_source_kind", "来源分布"),
         ("candidate_difficulty", "难度分布"),
         ("review_batch", "抽查清单"),
+        ("possible_relative_adverb", "关系副词风险"),
+        ("resplit", "重新拆句"),
     ):
         lines.extend(
             [
@@ -213,7 +254,12 @@ def markdown_report(report):
             [
                 f"### {reason}",
                 "",
-                f"实际 {result['actual']} 句；计划预期 {result['expected']} 句。",
+                f"实际 {result['actual']} 句；"
+                + (
+                    "计划未设预期，只报告。"
+                    if result["expected"] is None
+                    else f"计划预期 {result['expected']} 句。"
+                ),
                 "",
             ]
         )

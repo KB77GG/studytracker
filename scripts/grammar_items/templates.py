@@ -34,7 +34,11 @@ TEMPLATES = (
 TYPE_OPTIONS = [*CLAUSE_LABELS.values(), "不是从句（短语或非谓语）"]
 RELATION_OPTIONS = ["时间", "原因", "条件", "让步", "对比", "目的", "结果"]
 FINITE_OPTIONS = ["主句谓语", "从句里的谓语", "非谓语（不定式、分词、动名词）"]
-GENERATOR_VERSION = "grammar-items-v0"
+GENERATOR_VERSION = "grammar-items-v0.2"
+# Plan v0.2 B3: a highlighted verb always carries its auxiliaries, negation and particle.
+VERB_UNIT_DEPS = frozenset({"aux", "auxpass", "neg", "prt"})
+# Plan v0.2 B2: when/where/why right after a noun may be a relative adverb.
+RELATIVE_ADVERBS = frozenset({"when", "where", "why"})
 
 
 def char_span(sentence, start, end):
@@ -49,9 +53,95 @@ def span_from_tokens(sentence, tokens):
     return char_span(sentence, tokens[0].start, tokens[-1].end) if tokens else None
 
 
+QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
+
+
+def single_quote_role(sentence, index):
+    """'open' / 'close' for a straight single quote used as a quote mark, else None."""
+    before = sentence[index - 1] if index else " "
+    after = sentence[index + 1] if index + 1 < len(sentence) else " "
+    if (before.isspace() or before in '(“"‘—–-') and after.isalnum():
+        return "open"
+    if (before.isalnum() or before in ".,!?;:)") and not after.isalnum():
+        return "close"
+    return None  # An apostrophe inside a word, such as it's.
+
+
+def balance_single_quotes(sentence, start, end, low, high):
+    roles = [single_quote_role(sentence, i) for i in range(start, end) if sentence[i] == "'"]
+    opened, closed = roles.count("open"), roles.count("close")
+    if opened > closed:
+        for i in range(end, high):
+            if sentence[i] == "'" and single_quote_role(sentence, i) == "close":
+                return start, i + 1
+    if closed > opened:
+        for i in range(start - 1, low - 1, -1):
+            if sentence[i] == "'" and single_quote_role(sentence, i) == "open":
+                return i, end
+    return start, end
+
+
+def close_quotes(sentence, span, low, high):
+    """Re-attach a quote mark that trimming split off, staying inside [low, high)."""
+    if not span:
+        return span
+    start, end = span["start"], span["end"]
+    for opening, closing in QUOTE_PAIRS.items():
+        text = sentence[start:end]
+        if opening == closing:
+            missing_open = missing_close = text.count(opening) % 2 == 1
+        else:
+            balance = text.count(opening) - text.count(closing)
+            missing_open, missing_close = balance < 0, balance > 0
+        before = sentence.rfind(opening, low, start) if missing_open else -1
+        if before >= 0:
+            start = before
+            continue
+        after = sentence.find(closing, end, high) if missing_close else -1
+        if after >= 0:
+            end = after + len(closing)
+    start, end = balance_single_quotes(sentence, start, end, low, high)
+    if (start, end) == (span["start"], span["end"]):
+        return span
+    return char_span(sentence, start, end)
+
+
 def item_id(source, template, start, end, variant):
     text = f"{source['passage_id']}|{source['sentence_id']}|{template}|{start}:{end}|{variant}"
-    return "gi_v0_" + sha1(text.encode("utf-8")).hexdigest()[:12]
+    return "gi_v02_" + sha1(text.encode("utf-8")).hexdigest()[:12]
+
+
+def verb_unit(view, head, start, end):
+    """The head verb plus its aux/auxpass/neg/prt children inside [start, end)."""
+    children = (
+        c
+        for c in view.children(head)
+        if c.dep in VERB_UNIT_DEPS and start <= c.start and c.end <= end
+    )
+    return sorted([head, *children], key=lambda t: t.i)
+
+
+def unit_target(sentence, tokens):
+    """Display span covering the unit, with one part per run of adjacent tokens."""
+    runs = []
+    for token in tokens:
+        if runs and token.i == runs[-1][-1].i + 1:
+            runs[-1].append(token)
+        else:
+            runs.append([token])
+    target = char_span(sentence, tokens[0].start, tokens[-1].end)
+    target["parts"] = [char_span(sentence, run[0].start, run[-1].end) for run in runs]
+    return target
+
+
+def relative_adverb_risk(view, span):
+    tokens = trim_tokens(view.within(span.start, span.end))
+    if not tokens or tokens[0].text.lower() not in RELATIVE_ADVERBS:
+        return []
+    before = [t for t in view.tokens if t.end <= span.start and not t.is_punct]
+    before = [t for t in before if not t.text.isspace()]
+    risky = bool(before) and before[-1].pos in {"NOUN", "PROPN", "NUM"}
+    return [R.POSSIBLE_RELATIVE_ADVERB] if risky else []
 
 
 def difficulty(view, spans):
@@ -187,15 +277,22 @@ def main_checks(ctx, span):
 
 
 def main_distractors(ctx, unit):
+    """Verbs inside deeper clause/non-finite spans, each shown as its full verb unit."""
     targets = {}
     excluded = {t.i for t in unit}
     for span in ctx.spans:
         if span.level < 2 or not (clause_kind(span) or span.role in NON_FINITE_ROLES):
             continue
-        for token in ctx.view.within(span.start, span.end):
+        inside = ctx.view.within(span.start, span.end)
+        indexes = {t.i for t in inside}
+        for token in inside:
             if token.pos not in {"VERB", "AUX"} or token.i in excluded:
                 continue
-            value = targets.setdefault(token.i, {**token_span(ctx.sentence, token), "roles": []})
+            if token.dep in VERB_UNIT_DEPS and token.head in indexes:
+                continue  # An auxiliary shown as part of its head's unit.
+            unit_tokens = verb_unit(ctx.view, token, span.start, span.end)
+            parts = [t for t in unit_tokens if t.i not in excluded]
+            value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
                 value["roles"].append(span.role)
     return [targets[index] for index in sorted(targets)]
@@ -209,19 +306,7 @@ def main_verb(ctx):
     if reasons:
         ctx.reject(TEMPLATES[0], reasons, span)
         return None, reasons
-    unit = sorted(
-        [
-            root,
-            *(
-                c
-                for c in ctx.view.children(root)
-                if c.dep in {"aux", "auxpass", "neg", "prt"}
-                and span.start <= c.start
-                and c.end <= span.end
-            ),
-        ],
-        key=lambda t: t.i,
-    )
+    unit = verb_unit(ctx.view, root, span.start, span.end)
     distractors = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span)
     item = ctx.emit(
@@ -271,7 +356,11 @@ def clause_boundaries(ctx):
                 subtree = trim_tokens(ctx.view.subtree(head), kind == "coordinate")
                 if token_bounds(subtree) != token_bounds(tokens):
                     reasons.append(R.BOUNDARY_MISMATCH)
-            answer = span_from_tokens(ctx.sentence, tokens)
+            if kind == "adverbial":
+                reasons.extend(relative_adverb_risk(ctx.view, span))
+            answer = close_quotes(
+                ctx.sentence, span_from_tokens(ctx.sentence, tokens), span.start, span.end
+            )
             ctx.emit(
                 TEMPLATES[1],
                 CLAUSE_NODES[kind],
@@ -303,6 +392,8 @@ def classify_clauses(ctx):
             )
             if not matches:
                 reasons.append(R.CLAUSE_TYPE_MISMATCH)
+        if kind == "adverbial":
+            reasons.extend(relative_adverb_risk(ctx.view, span))
         option = TYPE_OPTIONS[-1] if kind == "phrase" else CLAUSE_LABELS[kind]
         ctx.emit(
             TEMPLATES[2],
@@ -310,7 +401,9 @@ def classify_clauses(ctx):
             "判断句中【】标出的部分是什么。",
             span,
             head,
-            target=span_from_tokens(ctx.sentence, tokens),
+            target=close_quotes(
+                ctx.sentence, span_from_tokens(ctx.sentence, tokens), span.start, span.end
+            ),
             options=TYPE_OPTIONS,
             option=option,
             reasons=reasons,
@@ -351,13 +444,16 @@ def adverbial_relations(ctx):
             reasons.append(R.SUBORDINATOR_UNKNOWN)
         elif SUBORDINATOR_RELATIONS[word] != relation:
             reasons.append(R.SUBORDINATOR_MISMATCH)
+        reasons.extend(relative_adverb_risk(ctx.view, span))
         ctx.emit(
             TEMPLATES[3],
             "G-C11",
             "句中【】标出的状语从句表示什么关系？",
             span,
             head,
-            target=span_from_tokens(ctx.sentence, tokens),
+            target=close_quotes(
+                ctx.sentence, span_from_tokens(ctx.sentence, tokens), span.start, span.end
+            ),
             options=RELATION_OPTIONS,
             option=relation,
             reasons=reasons,
@@ -389,7 +485,9 @@ def subject_boundary(ctx):
     if not head or token_bounds(trim_tokens(ctx.view.subtree(head))) != token_bounds(tokens):
         reasons.append(R.SUBJECT_MISMATCH)
     reasons.extend(ambiguous(verb, ctx.sentence))
-    answer = span_from_tokens(ctx.sentence, tokens)
+    answer = close_quotes(
+        ctx.sentence, span_from_tokens(ctx.sentence, tokens), subject.start, verb.start
+    )
     ctx.emit(
         TEMPLATES[4],
         "G-S02",
@@ -452,7 +550,7 @@ def finite_or_not(ctx, main_item, main_rejections):
             "句中【】里的动词在句子里是什么身份？",
             span,
             head,
-            target=token_span(ctx.sentence, head),
+            target=unit_target(ctx.sentence, verb_unit(ctx.view, head, span.start, span.end)),
             options=FINITE_OPTIONS,
             option=option,
             reasons=reasons,

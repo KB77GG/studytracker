@@ -14,7 +14,12 @@ from zipfile import ZipFile
 
 from scripts.grammar_items import spans as roles
 from scripts.grammar_items.checks import Reason as R
-from scripts.grammar_items.checks import sentence_reasons, unbalanced
+from scripts.grammar_items.checks import (
+    glued_sentence_boundary,
+    multi_sentence_unit,
+    sentence_reasons,
+    unbalanced,
+)
 from scripts.grammar_items.parse_view import ParseView, Token, finite, trim_tokens
 from scripts.grammar_items.reporting import independent_hits, template_counts
 from scripts.grammar_items.review_batch import (
@@ -29,7 +34,7 @@ from scripts.grammar_items.review_batch import (
     write_workbook,
 )
 from scripts.grammar_items.spans import classification_kind, locate_spans
-from scripts.grammar_items.templates import TEMPLATES, generate_templates, item_id
+from scripts.grammar_items.templates import TEMPLATES, close_quotes, generate_templates, item_id
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -643,7 +648,11 @@ class SamplingAndOutputTests(unittest.TestCase):
         sentence = "They had lost out."
         self.assertEqual(
             highlighted(sentence, [{"start": 5, "end": 8}, {"start": 9, "end": 13}]),
-            "They 【had】 【lost】 out.",
+            "They 【had lost】 out.",
+        )
+        self.assertEqual(
+            highlighted(sentence, [{"start": 5, "end": 8}, {"start": 14, "end": 17}]),
+            "They 【had】 lost 【out】.",
         )
         with self.assertRaises(ValueError):
             highlighted(sentence, [{"start": 5, "end": 12}, {"start": 9, "end": 13}])
@@ -707,6 +716,165 @@ import scripts.grammar_items.review_batch
                         archive.read(n).decode() for n in archive.namelist() if n.endswith(".xml")
                     ),
                 )
+
+
+class V02Tests(unittest.TestCase):
+    """Plan v0.2: new sentence filters, relative-adverb risk and full verb units."""
+
+    def test_close_quotes_reattaches_split_quote(self):
+        sentence = 'they called "loss aversion." For "apprentice" programmes'
+        end = sentence.index("aversion") + len("aversion")
+        span = {"start": 0, "end": end, "text": sentence[:end]}
+        fixed = close_quotes(sentence, span, 0, sentence.index(" For"))
+        self.assertEqual(fixed["text"], 'they called "loss aversion."')
+        start = sentence.index("apprentice")
+        span = {"start": start, "end": len(sentence), "text": sentence[start:]}
+        fixed = close_quotes(sentence, span, sentence.index('"apprentice'), len(sentence))
+        self.assertEqual(fixed["text"], '"apprentice" programmes')
+        sentence2 = "someone who 'became rich faster than ever before'."
+        start2 = sentence2.index("who")
+        end2 = sentence2.index("before") + len("before")
+        span2 = {"start": start2, "end": end2, "text": sentence2[start2:end2]}
+        fixed = close_quotes(sentence2, span2, start2, len(sentence2))
+        self.assertEqual(fixed["text"], "who 'became rich faster than ever before'")
+        owners = "the students' books were lost"
+        span3 = {"start": 4, "end": 20, "text": owners[4:20]}
+        self.assertIs(close_quotes(owners, span3, 4, 20), span3)
+        balanced = {"start": 0, "end": 4, "text": "they"}
+        self.assertIs(close_quotes(sentence, balanced, 0, len(sentence)), balanced)
+
+    def test_glued_sentence_boundary(self):
+        self.assertTrue(glued_sentence_boundary('such as these."Manufacturers are not aware.'))
+        self.assertTrue(glued_sentence_boundary("the future of Asia.Thailand's boom"))
+        self.assertFalse(glued_sentence_boundary('such as these." Manufacturers are not aware.'))
+        self.assertFalse(glued_sentence_boundary("J.K.Rowling wrote the books."))
+
+    def test_multi_sentence_unit(self):
+        self.assertTrue(multi_sentence_unit("It failed. They tried again."))
+        self.assertTrue(multi_sentence_unit("ice can be reflected in Mt. Cook Region."))
+        self.assertFalse(multi_sentence_unit("He met Dr. Smith yesterday."))
+        self.assertFalse(multi_sentence_unit("'All music has a message.' he says."))
+
+    def test_new_filters_are_sentence_reasons(self):
+        reasons = sentence_reasons("It failed. They tried again.Then it worked.", [], None)
+        self.assertIn(R.GLUED_SENTENCE_BOUNDARY, reasons)
+        self.assertIn(R.MULTI_SENTENCE_UNIT, reasons)
+
+    def relative_adverb_items(self):
+        sentence, view = tree(
+            [
+                ("People", "nsubj", 1, "NOUN", "NNS"),
+                ("save", "ROOT", 1, "VERB", "VBP"),
+                ("money", "dobj", 1, "NOUN", "NN"),
+                ("when", "mark", 5, "SCONJ", "WRB"),
+                ("prices", "nsubj", 5, "NOUN", "NNS"),
+                ("rise", "advcl", 1, "VERB", "VBP"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("People", "subject", 1),
+            ("save", "verb", 1),
+            ("money", "object", 1),
+            ("when prices rise", "time_clause", 2),
+        ]
+        return generate(sentence, view, tags)[0]
+
+    def test_relative_adverb_risk_after_noun(self):
+        items = self.relative_adverb_items()
+        for template in ("clause_boundary", "clause_type_classify", "adverbial_relation"):
+            adverbial = [i for i in by_template(items, template) if "when" in str(i)]
+            self.assertTrue(adverbial, template)
+            for item in adverbial:
+                self.assertIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"])
+                self.assertEqual(item["status"], "needs_review")
+
+    def test_no_relative_adverb_risk_after_verb_particle(self):
+        sentence, view = main_tree()
+        items, _ = generate(sentence, view, main_tags())
+        relation = by_template(items, "adverbial_relation")
+        self.assertTrue(relation)
+        self.assertNotIn(R.POSSIBLE_RELATIVE_ADVERB, relation[0]["reasons"])
+
+    def test_main_verb_target_is_contiguous_unit(self):
+        sentence, view = main_tree()
+        items, _ = generate(sentence, view, main_tags())
+        main = [
+            i for i in by_template(items, "finite_or_not") if i["answer"]["option"] == "主句谓语"
+        ]
+        self.assertEqual(main[0]["target"]["text"], "may not work out")
+        self.assertEqual(len(main[0]["target"]["parts"]), 1)
+
+    def test_discontinuous_unit_has_two_parts(self):
+        sentence, view = tree(
+            [
+                ("The", "det", 1, "DET", "DT"),
+                ("team", "nsubj", 4, "NOUN", "NN"),
+                ("has", "aux", 4, "AUX", "VBZ"),
+                ("also", "advmod", 4, "ADV", "RB"),
+                ("identified", "ROOT", 4, "VERB", "VBN"),
+                ("problems", "dobj", 4, "NOUN", "NNS"),
+                (".", "punct", 4, "PUNCT", "."),
+            ]
+        )
+        tags = [("The team", "subject", 1), ("has also identified", "verb_phrase", 1)]
+        items, _ = generate(sentence, view, [*tags, ("problems", "object", 1)])
+        item = by_template(items, "finite_or_not")[0]
+        self.assertEqual([p["text"] for p in item["target"]["parts"]], ["has", "identified"])
+        row = teacher_row({**item, "review_row": 1}, {item["node_id"]: "名称"})
+        self.assertIn("【has】 also 【identified】", row[HEADERS[4]])
+
+    def test_infinitive_target_includes_to(self):
+        sentence, view = tree(
+            [
+                ("She", "nsubj", 1, "PRON", "PRP"),
+                ("wants", "ROOT", 1, "VERB", "VBZ"),
+                ("to", "aux", 3, "PART", "TO"),
+                ("introduce", "xcomp", 1, "VERB", "VB"),
+                ("changes", "dobj", 3, "NOUN", "NNS"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("She", "subject", 1),
+            ("wants", "verb", 1),
+            ("to introduce changes", "infinitive_phrase", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        non_finite = [
+            i for i in by_template(items, "finite_or_not") if i["answer"]["option"] != "主句谓语"
+        ]
+        self.assertEqual(non_finite[0]["target"]["text"], "to introduce")
+
+    def test_passive_clause_verb_and_distractor_show_was_born(self):
+        sentence, view = tree(
+            [
+                ("That", "nsubj", 1, "PRON", "DT"),
+                ("was", "ROOT", 1, "AUX", "VBD"),
+                ("the", "det", 3, "DET", "DT"),
+                ("moment", "attr", 1, "NOUN", "NN"),
+                ("when", "advmod", 7, "SCONJ", "WRB"),
+                ("cinema", "nsubjpass", 7, "NOUN", "NN"),
+                ("was", "auxpass", 7, "AUX", "VBD"),
+                ("born", "relcl", 3, "VERB", "VBN"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("That", "subject", 1),
+            ("was", "linking_verb", 1),
+            ("the moment when cinema was born", "predicative", 1),
+            ("when cinema was born", "relative_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        clause = [
+            i
+            for i in by_template(items, "finite_or_not")
+            if i["answer"]["option"] == "从句里的谓语"
+        ]
+        self.assertEqual(clause[0]["target"]["text"], "was born")
+        distractors = by_template(items, "main_verb_tap")[0]["distractors"]
+        self.assertEqual([d["text"] for d in distractors], ["was born"])
 
 
 if __name__ == "__main__":

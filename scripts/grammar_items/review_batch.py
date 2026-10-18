@@ -142,9 +142,25 @@ def sample_batch(candidates, seed, *, auto_count=50, review_count=10):
     return batch, stats
 
 
+def merged_spans(sentence, spans):
+    """Join spans separated only by whitespace, so a verb unit shows as one 【…】 run."""
+    merged = []
+    for span in sorted(spans, key=lambda s: (s["start"], s["end"])):
+        previous_end = merged[-1]["end"] if merged else None
+        if (
+            merged
+            and previous_end <= span["start"]
+            and not sentence[previous_end : span["start"]].strip()
+        ):
+            merged[-1] = {**merged[-1], "end": span["end"]}
+        else:
+            merged.append(dict(span))
+    return merged
+
+
 def highlighted(sentence, spans):
     result, previous = [], 0
-    for span in sorted(spans, key=lambda s: (s["start"], s["end"])):
+    for span in merged_spans(sentence, spans):
         start, end = span["start"], span["end"]
         if not (previous <= start < end <= len(sentence)):
             raise ValueError("Invalid or overlapping display span")
@@ -157,7 +173,10 @@ def highlighted(sentence, spans):
 def teacher_row(item, node_names):
     sentence = item["source"]["sentence"]
     option = item["answer"]["option"]
-    display_sentence = highlighted(sentence, [item["target"]]) if item["target"] else sentence
+    target = item["target"]
+    display_sentence = (
+        highlighted(sentence, target.get("parts") or [target]) if target else sentence
+    )
     answer = (
         option
         if item["answer"]["kind"] == "option"
@@ -190,7 +209,11 @@ def instruction_rows(total):
         ("答案错", "机器答案不对，请在“正确答案应为”里写出正确答案。"),
         ("题目有歧义", "不止一个合理答案，或者题干说不清。"),
         ("句子不适合出题", "原句残缺、太偏，或者和这个知识点无关。"),
-        ("标记说明", "【】标出分类题的目标，或点选题、划边界题的机器答案；原句不改写。"),
+        (
+            "标记说明",
+            "【】标出分类题的目标，或点选题、划边界题的机器答案；动词连同助动词、否定词一起标出，"
+            "如【was born】、【has】 also 【identified】；原句不改写。",
+        ),
         ("预计用时", f"共 {total} 题，按每题 30 秒估算，约 {total / 2:g} 分钟。"),
         ("填写完成后", "请将完整文件交回本项目负责人（发送此表的老师），按题目编号汇总复核。"),
         (
