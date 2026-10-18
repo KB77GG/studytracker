@@ -1,0 +1,2212 @@
+{
+  "generator_version": "grammar-items-v0",
+  "plan_version": "v0.1",
+  "corpus": {
+    "passages": 317,
+    "sentences": 12657,
+    "candidates": 49564,
+    "sentence_rejections": 1398,
+    "template_rejections": 17923
+  },
+  "environment": {
+    "spacy": "3.8.16",
+    "model_name": "en_core_web_trf",
+    "model_version": "3.8.0",
+    "device": "CPU",
+    "python": "3.13.3",
+    "torch": "2.14.1",
+    "openpyxl": "3.1.5",
+    "seed": 20261018,
+    "reading_study_sha256": "e6e58691a2db4a59f5a8b7fdbd451074395498fcee9400a673dc8b512950ed63",
+    "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
+  },
+  "counts_by_template": {
+    "main_verb_tap": {
+      "auto_pass": 5912,
+      "needs_review": 363,
+      "rejected": 6382
+    },
+    "clause_boundary": {
+      "auto_pass": 4814,
+      "needs_review": 2357,
+      "rejected": 2763
+    },
+    "clause_type_classify": {
+      "auto_pass": 12986,
+      "needs_review": 1737,
+      "rejected": 1398
+    },
+    "adverbial_relation": {
+      "auto_pass": 469,
+      "needs_review": 561,
+      "rejected": 2631
+    },
+    "subject_span": {
+      "auto_pass": 5353,
+      "needs_review": 734,
+      "rejected": 6570
+    },
+    "finite_or_not": {
+      "auto_pass": 12541,
+      "needs_review": 1737,
+      "rejected": 6567
+    }
+  },
+  "counts_by_node": {
+    "G-S01": {
+      "auto_pass": 2766,
+      "needs_review": 157
+    },
+    "G-S02": {
+      "auto_pass": 5353,
+      "needs_review": 734
+    },
+    "G-C02": {
+      "auto_pass": 570,
+      "needs_review": 649
+    },
+    "G-C03": {
+      "auto_pass": 12986,
+      "needs_review": 1737
+    },
+    "G-C04": {
+      "auto_pass": 1794,
+      "needs_review": 328
+    },
+    "G-C08": {
+      "auto_pass": 1139,
+      "needs_review": 744
+    },
+    "G-C10": {
+      "auto_pass": 1311,
+      "needs_review": 636
+    },
+    "G-C11": {
+      "needs_review": 561,
+      "auto_pass": 469
+    },
+    "G-N01": {
+      "auto_pass": 10681,
+      "needs_review": 1673
+    },
+    "G-N04": {
+      "auto_pass": 1860,
+      "needs_review": 64
+    },
+    "G-L01": {
+      "auto_pass": 3146,
+      "needs_review": 206
+    }
+  },
+  "reason_counts": {
+    "no_main_verb_tag": 12258,
+    "coordinated_main_verbs": 3990,
+    "split_subject": 3786,
+    "coordinated_main_clauses": 3591,
+    "clause_type_mismatch": 1905,
+    "ambiguous_span_location": 1565,
+    "span_not_constituent": 1432,
+    "multiple_targets_same_type": 1365,
+    "boundary_mismatch": 1296,
+    "no_relation_label": 1233,
+    "finiteness_mismatch": 666,
+    "subject_mismatch": 558,
+    "parser_root_outside_verb_span": 540,
+    "unbalanced_quotes_or_brackets": 425,
+    "subordinator_unknown": 323,
+    "unknown_span": 316,
+    "existential": 304,
+    "too_short": 253,
+    "level_one_subordinate": 225,
+    "subordinator_ambiguous": 210,
+    "fragment": 186,
+    "multiple_main_verbs": 186,
+    "span_not_found": 153,
+    "too_long": 54,
+    "subject_after_verb": 44,
+    "tagged_fragment": 36,
+    "heading": 32,
+    "parser_root_inside_subordinate_span": 22,
+    "subordinator_mismatch": 16,
+    "clause_attached_to_conjunction": 2
+  },
+  "candidate_source_kind": {
+    "reading_jijing": 15815,
+    "reading_test": 33749
+  },
+  "candidate_difficulty": {
+    "easy": 16728,
+    "hard": 18507,
+    "medium": 14329
+  },
+  "independent_sentence_filters": {
+    "tagged_fragment": {
+      "expected": 36,
+      "actual": 36,
+      "matches_expected": true,
+      "sentences": [
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts17_test2_reading",
+          "passage_id": "ielts17_test2_p3",
+          "sentence_id": "F-07",
+          "sentence": "No."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts17_test3_reading",
+          "passage_id": "ielts17_test3_p2",
+          "sentence_id": "A-04",
+          "sentence": "Primarily because its unique properties – such as remaining solid at room temperature – make it an ideal ingredient for long-term preservation, allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts4_test4_reading",
+          "passage_id": "ielts4_test4_p1",
+          "sentence_id": "A-04",
+          "sentence": "At the 1908 Olympics, John Hayes of the U.S."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts4_test4_reading",
+          "passage_id": "ielts4_test4_p1",
+          "sentence_id": "A-05",
+          "sentence": "team ran the marathon in a time of 2:55:18."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts4_test4_reading",
+          "passage_id": "ielts4_test4_p1",
+          "sentence_id": "C-14",
+          "sentence": "But with the right training we can go much further with that one third than we've been going.\" Yessis believes that U.S."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts4_test4_reading",
+          "passage_id": "ielts4_test4_p1",
+          "sentence_id": "E-22",
+          "sentence": "\"Many athletes are not getting the best nutrition, even though supplements,\" Yessis insists."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts4_test4_reading",
+          "passage_id": "ielts4_test4_p1",
+          "sentence_id": "I-42",
+          "sentence": "Raglin, a sports psychologist at Indiana University."
+        },
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts6_test1_reading",
+          "passage_id": "ielts6_test1_p1",
+          "sentence_id": "E-04",
+          "sentence": "'A start of this much, each free-swimming period has to be this fast, with a certain stroke frequency and stroke length, with turns done in these times.'"
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_10_test_78",
+          "passage_id": "reading_jijing_10_test_78_p1",
+          "sentence_id": "C-16",
+          "sentence": "Introduced Category 1: INTERPERSONAL ROLES."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_10_test_78",
+          "passage_id": "reading_jijing_10_test_78_p1",
+          "sentence_id": "D-26",
+          "sentence": "Introduced Category 2: INFORMATIONAL ROLES."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_10_test_78",
+          "passage_id": "reading_jijing_10_test_78_p1",
+          "sentence_id": "F-35",
+          "sentence": "Introduced Category 3: DECISIONAL ROLES."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_10_test_78",
+          "passage_id": "reading_jijing_10_test_78_p3",
+          "sentence_id": "H-06",
+          "sentence": "\"Many child-resistant packs"
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_10_test_78",
+          "passage_id": "reading_jijing_10_test_78_p3",
+          "sentence_id": "I-01",
+          "sentence": "are based on strength."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_11_test_103",
+          "passage_id": "reading_jijing_11_test_103_p1",
+          "sentence_id": "G-01",
+          "sentence": "Researchers from the Center of Astrobiology (Spain) and the Catholic University of the North in Chile have found an 'oasis' of microorganisms two meters below the surface of the Atacama Desert, SOLID, a detector for signs of life which could be used in environments similar to subsoil on Mars."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_11_test_103",
+          "passage_id": "reading_jijing_11_test_103_p1",
+          "sentence_id": "H-01",
+          "sentence": "Even more intriguing, however, is the alternative scenario by Spanish scientists: If those samples could be found to that use DNA, as Earthly life does, as their genetic code."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_11_test_103",
+          "passage_id": "reading_jijing_11_test_103_p2",
+          "sentence_id": "A-03",
+          "sentence": "They under the banner of geoengineering generally defined as the intentional large-scale manipulation of the environment."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_16_test_97",
+          "passage_id": "reading_jijing_16_test_97_p3",
+          "sentence_id": "E-08",
+          "sentence": "Steven Johnson, author of"
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_16_test_97",
+          "passage_id": "reading_jijing_16_test_97_p3",
+          "sentence_id": "F-01",
+          "sentence": "Everything Bad is Good For You: How Today's Popular Culture, says gamers must deal with immediate problems while keeping their long-term goals on their horizon."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_22_test_90",
+          "passage_id": "reading_jijing_22_test_90_p2",
+          "sentence_id": "G-21",
+          "sentence": "Jackson, Professor of Psychiatry and Human Behavior at Brown University's Alpert Medical School in Providence, and Director of Chronobiology at Bradley Hospital in East Providence."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_22_test_90",
+          "passage_id": "reading_jijing_22_test_90_p3",
+          "sentence_id": "G-08",
+          "sentence": "One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_24_test_56",
+          "passage_id": "reading_jijing_24_test_56_p3",
+          "sentence_id": "C-02",
+          "sentence": "These individuals were split into six groups; each pair common diet."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_24_test_56",
+          "passage_id": "reading_jijing_24_test_56_p3",
+          "sentence_id": "G-03",
+          "sentence": "Phase 11(b) to evaluate effectiveness."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_26_test_72",
+          "passage_id": "reading_jijing_26_test_72_p1",
+          "sentence_id": "C-01",
+          "sentence": "Montpellier, France."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_26_test_72",
+          "passage_id": "reading_jijing_26_test_72_p1",
+          "sentence_id": "E-01",
+          "sentence": "International Plant Genetic Resources Institute."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_27_test_33",
+          "passage_id": "reading_jijing_27_test_33_p3",
+          "sentence_id": "E-02",
+          "sentence": "Tate argues that a decision should be made after a consideration of all alternatives, and a hierarchical structure that then takes responsibility for the decision and, most importantly, follows that decision through to verify whether the problem has indeed been resolved."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_32_test_20",
+          "passage_id": "reading_jijing_32_test_20_p3",
+          "sentence_id": "D-07",
+          "sentence": "The best advice for moms-to-be: Get fit before you get pregnant."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_50_test_30",
+          "passage_id": "reading_jijing_50_test_30_p2",
+          "sentence_id": "E-04",
+          "sentence": "An acceptable profit margin."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_56_test_64",
+          "passage_id": "reading_jijing_56_test_64_p2",
+          "sentence_id": "B-02",
+          "sentence": "Seven wars ago."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_5_test_59",
+          "passage_id": "reading_jijing_5_test_59_p1",
+          "sentence_id": "H-04",
+          "sentence": "'The cost of accidents business, people tend to call such efforts failure.'"
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_62_test_44",
+          "passage_id": "reading_jijing_62_test_44_p2",
+          "sentence_id": "B-05",
+          "sentence": "When cotton production started spreading through Andhra Pradesh state."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_65_test_69",
+          "passage_id": "reading_jijing_65_test_69_p2",
+          "sentence_id": "F-01",
+          "sentence": "In The Environment Game, a vision of a utopia that would be at once high-tech and environmentalist."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_65_test_69",
+          "passage_id": "reading_jijing_65_test_69_p3",
+          "sentence_id": "E-02",
+          "sentence": "Surveyor J. that had landed in a crater on April 19. 1967."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_73_test_5",
+          "passage_id": "reading_jijing_73_test_5_p1",
+          "sentence_id": "K-01",
+          "sentence": "Standing on a roof catwalk, peering down inside at people as small as termites below."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_73_test_5",
+          "passage_id": "reading_jijing_73_test_5_p1",
+          "sentence_id": "K-03",
+          "sentence": "like that termite fungus, further extending the whole 'organic machine' metaphor."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_73_test_5",
+          "passage_id": "reading_jijing_73_test_5_p2",
+          "sentence_id": "F-05",
+          "sentence": "Many incidents of attacks on people involving villagers squatting or bending over to cut grass for fodder or building material."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_85_test_12",
+          "passage_id": "reading_jijing_85_test_12_p1",
+          "sentence_id": "C-08",
+          "sentence": "The company is the recipe is in a vault somewhere and in my sole owner of the intellectual property."
+        }
+      ]
+    },
+    "clause_attached_to_conjunction": {
+      "expected": 2,
+      "actual": 2,
+      "matches_expected": true,
+      "sentences": [
+        {
+          "source_kind": "reading_test",
+          "test_id": "ielts13_test2_reading",
+          "passage_id": "ielts13_test2_p2",
+          "sentence_id": "C-04",
+          "sentence": "Jennifer Bartz from Mount Sinai School of Medicine, New York, found that it improves people's ability to read emotions, but only if they are not very socially adept to begin with."
+        },
+        {
+          "source_kind": "reading_jijing",
+          "test_id": "reading_jijing_56_test_64",
+          "passage_id": "reading_jijing_56_test_64_p2",
+          "sentence_id": "C-01",
+          "sentence": "It did not deter him, and while many of the critics in the scientific establishment who vilified him disappeared from view."
+        }
+      ]
+    }
+  },
+  "regression_cases": [
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_test",
+        "test_id": "ielts7_test3_reading",
+        "passage_id": "ielts7_test3_p1",
+        "sentence_id": "K-03",
+        "sentence": "Be careful of little lives.'"
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "subject_span": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [],
+          "rejections": [
+            [
+              "too_short",
+              "unbalanced_quotes_or_brackets"
+            ]
+          ],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_test",
+        "test_id": "ielts8_test4_reading",
+        "passage_id": "ielts8_test4_p1",
+        "sentence_id": "C-04",
+        "sentence": "(One teacher was particularly keen to introduce colour and pictures into maths textbooks: he felt this would make them more accessible to pupils brought up in a cartoon culture.)"
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [],
+          "rejections": [
+            [
+              "no_main_verb_tag"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "clause_type_classify": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_4e13e34abf35",
+              "node_id": "G-C03",
+              "target": {
+                "start": 35,
+                "end": 88,
+                "text": "to introduce colour and pictures into maths textbooks"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "不是从句（短语或非谓语）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "infinitive_complement",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 35,
+                  "end": 88
+                },
+                "parser": {
+                  "head": "introduce",
+                  "head_token": 7,
+                  "dep": "xcomp",
+                  "finite": false,
+                  "subtree": [
+                    6,
+                    14
+                  ]
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "subject_span": {
+          "candidates": [],
+          "rejections": [
+            [
+              "no_main_verb_tag"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_0d32aa368921",
+              "node_id": "G-N01",
+              "target": {
+                "start": 38,
+                "end": 47,
+                "text": "introduce"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "非谓语（不定式、分词、动名词）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "infinitive_complement",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 35,
+                  "end": 88
+                },
+                "parser": {
+                  "head": "introduce",
+                  "head_token": 7,
+                  "dep": "xcomp",
+                  "finite": false,
+                  "subtree": [
+                    6,
+                    14
+                  ]
+                },
+                "variant": "non_finite"
+              }
+            }
+          ],
+          "rejections": [
+            [
+              "no_main_verb_tag"
+            ]
+          ],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_jijing",
+        "test_id": "reading_jijing_76_test_43",
+        "passage_id": "reading_jijing_76_test_43_p2",
+        "sentence_id": "H-02",
+        "sentence": "By the late 1980s the Modern Movement, unfairly blamed for the social experiments implicit in high- rise housing, had lost out to irony and spectacle in the shape of post-modernism, with its cheerful borrowings from anywhere and any period."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_9d5269e6b685",
+              "node_id": "G-S01",
+              "target": null,
+              "answer": {
+                "kind": "tokens",
+                "spans": [
+                  {
+                    "start": 114,
+                    "end": 117,
+                    "text": "had"
+                  },
+                  {
+                    "start": 118,
+                    "end": 122,
+                    "text": "lost"
+                  },
+                  {
+                    "start": 123,
+                    "end": 126,
+                    "text": "out"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "predicate",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 114,
+                  "end": 180
+                },
+                "parser": {
+                  "head": "lost",
+                  "head_token": 21,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    44
+                  ]
+                },
+                "verb_unit_tokens": [
+                  20,
+                  21,
+                  22
+                ]
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "clause_type_classify": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "subject_span": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_5609176275e9",
+              "node_id": "G-S02",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 112,
+                    "text": "By the late 1980s the Modern Movement, unfairly blamed for the social experiments implicit in high- rise housing"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "needs_review",
+              "reasons": [
+                "subject_mismatch"
+              ],
+              "evidence": {
+                "tag_role": "subject",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 0,
+                  "end": 37
+                },
+                "parser": {
+                  "head": "Movement",
+                  "head_token": 6,
+                  "dep": "nsubj",
+                  "finite": false,
+                  "subtree": [
+                    4,
+                    19
+                  ]
+                },
+                "predicate_start": 114
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_6eb3e86e075c",
+              "node_id": "G-N01",
+              "target": {
+                "start": 118,
+                "end": 122,
+                "text": "lost"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "主句谓语"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "predicate",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 114,
+                  "end": 180
+                },
+                "parser": {
+                  "head": "lost",
+                  "head_token": 21,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    44
+                  ]
+                },
+                "variant": "main"
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_jijing",
+        "test_id": "reading_jijing_73_test_5",
+        "passage_id": "reading_jijing_73_test_5_p2",
+        "sentence_id": "F-05",
+        "sentence": "Many incidents of attacks on people involving villagers squatting or bending over to cut grass for fodder or building material."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "subject_span": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [],
+          "rejections": [
+            [
+              "tagged_fragment",
+              "unknown_span"
+            ]
+          ],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_jijing",
+        "test_id": "reading_jijing_56_test_64",
+        "passage_id": "reading_jijing_56_test_64_p2",
+        "sentence_id": "C-01",
+        "sentence": "It did not deter him, and while many of the critics in the scientific establishment who vilified him disappeared from view."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "subject_span": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "bad",
+      "source": {
+        "source_kind": "reading_test",
+        "test_id": "ielts13_test2_reading",
+        "passage_id": "ielts13_test2_p2",
+        "sentence_id": "C-04",
+        "sentence": "Jennifer Bartz from Mount Sinai School of Medicine, New York, found that it improves people's ability to read emotions, but only if they are not very socially adept to begin with."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "subject_span": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [],
+          "rejections": [
+            [
+              "clause_attached_to_conjunction"
+            ]
+          ],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "positive",
+      "source": {
+        "source_kind": "reading_jijing",
+        "test_id": "reading_jijing_91_test_49",
+        "passage_id": "reading_jijing_91_test_49_p3",
+        "sentence_id": "D-02",
+        "sentence": "The meeting itself attended by over 4,000 delegates representing some 168 countries occurred almost 10 years to the day after the Great Hanshin earthquake in Kobe."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_0381a31fb398",
+              "node_id": "G-L01",
+              "target": null,
+              "answer": {
+                "kind": "tokens",
+                "spans": [
+                  {
+                    "start": 84,
+                    "end": 92,
+                    "text": "occurred"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [
+                {
+                  "start": 19,
+                  "end": 27,
+                  "text": "attended",
+                  "roles": [
+                    "participial_phrase"
+                  ]
+                },
+                {
+                  "start": 52,
+                  "end": 64,
+                  "text": "representing",
+                  "roles": [
+                    "participial_phrase"
+                  ]
+                }
+              ],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 84,
+                  "end": 92
+                },
+                "parser": {
+                  "head": "occurred",
+                  "head_token": 12,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    26
+                  ]
+                },
+                "verb_unit_tokens": [
+                  12
+                ]
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "clause_type_classify": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_f24ece4b2387",
+              "node_id": "G-C03",
+              "target": {
+                "start": 19,
+                "end": 83,
+                "text": "attended by over 4,000 delegates representing some 168 countries"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "不是从句（短语或非谓语）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "participial_phrase",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 19,
+                  "end": 83
+                },
+                "parser": {
+                  "head": "attended",
+                  "head_token": 3,
+                  "dep": "acl",
+                  "finite": false,
+                  "subtree": [
+                    3,
+                    12
+                  ]
+                }
+              }
+            },
+            {
+              "item_id": "gi_v0_050f240cf556",
+              "node_id": "G-C03",
+              "target": {
+                "start": 52,
+                "end": 83,
+                "text": "representing some 168 countries"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "不是从句（短语或非谓语）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "participial_phrase",
+                "tag_level": 3,
+                "tag_span": {
+                  "start": 52,
+                  "end": 83
+                },
+                "parser": {
+                  "head": "representing",
+                  "head_token": 8,
+                  "dep": "acl",
+                  "finite": false,
+                  "subtree": [
+                    8,
+                    12
+                  ]
+                }
+              }
+            },
+            {
+              "item_id": "gi_v0_3ce9b4c3539d",
+              "node_id": "G-C03",
+              "target": {
+                "start": 93,
+                "end": 162,
+                "text": "almost 10 years to the day after the Great Hanshin earthquake in Kobe"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "不是从句（短语或非谓语）"
+              },
+              "distractors": [],
+              "status": "needs_review",
+              "reasons": [
+                "span_not_constituent"
+              ],
+              "evidence": {
+                "tag_role": "prepositional_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 93,
+                  "end": 162
+                },
+                "parser": {
+                  "head": null,
+                  "head_token": null,
+                  "dep": null,
+                  "finite": null,
+                  "subtree": null
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "subject_span": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_2aedfbed726c",
+              "node_id": "G-S02",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 83,
+                    "text": "The meeting itself attended by over 4,000 delegates representing some 168 countries"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "subject",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 0,
+                  "end": 18
+                },
+                "parser": {
+                  "head": "meeting",
+                  "head_token": 1,
+                  "dep": "nsubj",
+                  "finite": false,
+                  "subtree": [
+                    0,
+                    12
+                  ]
+                },
+                "predicate_start": 84
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_3c85dcb17196",
+              "node_id": "G-N01",
+              "target": {
+                "start": 84,
+                "end": 92,
+                "text": "occurred"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "主句谓语"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 84,
+                  "end": 92
+                },
+                "parser": {
+                  "head": "occurred",
+                  "head_token": 12,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    26
+                  ]
+                },
+                "variant": "main"
+              }
+            },
+            {
+              "item_id": "gi_v0_c2ac9a3fc7b1",
+              "node_id": "G-N04",
+              "target": {
+                "start": 19,
+                "end": 27,
+                "text": "attended"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "非谓语（不定式、分词、动名词）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "participial_phrase",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 19,
+                  "end": 83
+                },
+                "parser": {
+                  "head": "attended",
+                  "head_token": 3,
+                  "dep": "acl",
+                  "finite": false,
+                  "subtree": [
+                    3,
+                    12
+                  ]
+                },
+                "variant": "non_finite"
+              }
+            },
+            {
+              "item_id": "gi_v0_539cb2b8860c",
+              "node_id": "G-N04",
+              "target": {
+                "start": 52,
+                "end": 64,
+                "text": "representing"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "非谓语（不定式、分词、动名词）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "participial_phrase",
+                "tag_level": 3,
+                "tag_span": {
+                  "start": 52,
+                  "end": 83
+                },
+                "parser": {
+                  "head": "representing",
+                  "head_token": 8,
+                  "dep": "acl",
+                  "finite": false,
+                  "subtree": [
+                    8,
+                    12
+                  ]
+                },
+                "variant": "non_finite"
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "positive",
+      "source": {
+        "source_kind": "reading_test",
+        "test_id": "ielts11_test3_reading",
+        "passage_id": "ielts11_test3_p2",
+        "sentence_id": "A-04",
+        "sentence": "The biologist Hugh Dingle has identified five characteristics that apply, in varying degrees and combinations, to all migrations."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_b2c1dd610abe",
+              "node_id": "G-L01",
+              "target": null,
+              "answer": {
+                "kind": "tokens",
+                "spans": [
+                  {
+                    "start": 26,
+                    "end": 29,
+                    "text": "has"
+                  },
+                  {
+                    "start": 30,
+                    "end": 40,
+                    "text": "identified"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [
+                {
+                  "start": 67,
+                  "end": 72,
+                  "text": "apply",
+                  "roles": [
+                    "relative_clause"
+                  ]
+                },
+                {
+                  "start": 77,
+                  "end": 84,
+                  "text": "varying",
+                  "roles": [
+                    "relative_clause"
+                  ]
+                }
+              ],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 26,
+                  "end": 61
+                },
+                "parser": {
+                  "head": "identified",
+                  "head_token": 5,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    20
+                  ]
+                },
+                "verb_unit_tokens": [
+                  4,
+                  5
+                ]
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_ea0065d5e248",
+              "node_id": "G-C04",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 62,
+                    "end": 128,
+                    "text": "that apply, in varying degrees and combinations, to all migrations"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "relative_clause",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 62,
+                  "end": 128
+                },
+                "parser": {
+                  "head": "apply",
+                  "head_token": 9,
+                  "dep": "relcl",
+                  "finite": true,
+                  "subtree": [
+                    8,
+                    20
+                  ]
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_1730776b0cd4",
+              "node_id": "G-C03",
+              "target": {
+                "start": 62,
+                "end": 128,
+                "text": "that apply, in varying degrees and combinations, to all migrations"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "定语从句"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "relative_clause",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 62,
+                  "end": 128
+                },
+                "parser": {
+                  "head": "apply",
+                  "head_token": 9,
+                  "dep": "relcl",
+                  "finite": true,
+                  "subtree": [
+                    8,
+                    20
+                  ]
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "subject_span": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_194ded90dd5b",
+              "node_id": "G-S02",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 25,
+                    "text": "The biologist Hugh Dingle"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "subject",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 0,
+                  "end": 25
+                },
+                "parser": {
+                  "head": "biologist",
+                  "head_token": 1,
+                  "dep": "nsubj",
+                  "finite": false,
+                  "subtree": [
+                    0,
+                    4
+                  ]
+                },
+                "predicate_start": 26
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_6c66f95b5434",
+              "node_id": "G-N01",
+              "target": {
+                "start": 30,
+                "end": 40,
+                "text": "identified"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "主句谓语"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 26,
+                  "end": 61
+                },
+                "parser": {
+                  "head": "identified",
+                  "head_token": 5,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    20
+                  ]
+                },
+                "variant": "main"
+              }
+            },
+            {
+              "item_id": "gi_v0_9bb35606fb9a",
+              "node_id": "G-N01",
+              "target": {
+                "start": 67,
+                "end": 72,
+                "text": "apply"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "从句里的谓语"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "relative_clause",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 62,
+                  "end": 128
+                },
+                "parser": {
+                  "head": "apply",
+                  "head_token": 9,
+                  "dep": "relcl",
+                  "finite": true,
+                  "subtree": [
+                    8,
+                    20
+                  ]
+                },
+                "variant": "subordinate"
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        }
+      }
+    },
+    {
+      "kind": "positive",
+      "source": {
+        "source_kind": "reading_test",
+        "test_id": "ielts15_test2_reading",
+        "passage_id": "ielts15_test2_p3",
+        "sentence_id": "D-05",
+        "sentence": "Analysis revealed that, as expected, high-status individuals produced more dominant laughs and fewer submissive laughs relative to the low-status individuals."
+      },
+      "templates": {
+        "main_verb_tap": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_df6cff09bcf4",
+              "node_id": "G-L01",
+              "target": null,
+              "answer": {
+                "kind": "tokens",
+                "spans": [
+                  {
+                    "start": 9,
+                    "end": 17,
+                    "text": "revealed"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [
+                {
+                  "start": 27,
+                  "end": 35,
+                  "text": "expected",
+                  "roles": [
+                    "noun_clause"
+                  ]
+                },
+                {
+                  "start": 61,
+                  "end": 69,
+                  "text": "produced",
+                  "roles": [
+                    "noun_clause"
+                  ]
+                }
+              ],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 9,
+                  "end": 17
+                },
+                "parser": {
+                  "head": "revealed",
+                  "head_token": 1,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    26
+                  ]
+                },
+                "verb_unit_tokens": [
+                  1
+                ]
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_boundary": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_9d2af5a988f4",
+              "node_id": "G-C08",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 18,
+                    "end": 157,
+                    "text": "that, as expected, high-status individuals produced more dominant laughs and fewer submissive laughs relative to the low-status individuals"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "noun_clause",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 18,
+                  "end": 157
+                },
+                "parser": {
+                  "head": "produced",
+                  "head_token": 11,
+                  "dep": "ccomp",
+                  "finite": true,
+                  "subtree": [
+                    2,
+                    26
+                  ]
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "clause_type_classify": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_57cb37df1350",
+              "node_id": "G-C03",
+              "target": {
+                "start": 18,
+                "end": 157,
+                "text": "that, as expected, high-status individuals produced more dominant laughs and fewer submissive laughs relative to the low-status individuals"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "名词性从句"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "noun_clause",
+                "tag_level": 2,
+                "tag_span": {
+                  "start": 18,
+                  "end": 157
+                },
+                "parser": {
+                  "head": "produced",
+                  "head_token": 11,
+                  "dep": "ccomp",
+                  "finite": true,
+                  "subtree": [
+                    2,
+                    26
+                  ]
+                }
+              }
+            },
+            {
+              "item_id": "gi_v0_c62e6afe299f",
+              "node_id": "G-C03",
+              "target": {
+                "start": 119,
+                "end": 157,
+                "text": "relative to the low-status individuals"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "不是从句（短语或非谓语）"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "prepositional_phrase",
+                "tag_level": 3,
+                "tag_span": {
+                  "start": 119,
+                  "end": 157
+                },
+                "parser": {
+                  "head": "relative",
+                  "head_token": 19,
+                  "dep": "advmod",
+                  "finite": false,
+                  "subtree": [
+                    19,
+                    26
+                  ]
+                }
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "adverbial_relation": {
+          "candidates": [],
+          "rejections": [],
+          "not_applicable": true
+        },
+        "subject_span": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_304ee99e284e",
+              "node_id": "G-S02",
+              "target": null,
+              "answer": {
+                "kind": "span",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "text": "Analysis"
+                  }
+                ],
+                "option": null
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "subject",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 0,
+                  "end": 8
+                },
+                "parser": {
+                  "head": "Analysis",
+                  "head_token": 0,
+                  "dep": "nsubj",
+                  "finite": false,
+                  "subtree": [
+                    0,
+                    1
+                  ]
+                },
+                "predicate_start": 9
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        },
+        "finite_or_not": {
+          "candidates": [
+            {
+              "item_id": "gi_v0_ed7ad46b65a1",
+              "node_id": "G-N01",
+              "target": {
+                "start": 9,
+                "end": 17,
+                "text": "revealed"
+              },
+              "answer": {
+                "kind": "option",
+                "spans": [],
+                "option": "主句谓语"
+              },
+              "distractors": [],
+              "status": "auto_pass",
+              "reasons": [],
+              "evidence": {
+                "tag_role": "verb_phrase",
+                "tag_level": 1,
+                "tag_span": {
+                  "start": 9,
+                  "end": 17
+                },
+                "parser": {
+                  "head": "revealed",
+                  "head_token": 1,
+                  "dep": "ROOT",
+                  "finite": true,
+                  "subtree": [
+                    0,
+                    26
+                  ]
+                },
+                "variant": "main"
+              }
+            }
+          ],
+          "rejections": [],
+          "not_applicable": false
+        }
+      }
+    }
+  ],
+  "review_batch": {
+    "rows": 360,
+    "estimated_minutes": 180.0,
+    "templates": {
+      "main_verb_tap": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 1121,
+            "sample_size": 10
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 348,
+            "sample_size": 3
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 462,
+            "sample_size": 4
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 1942,
+            "sample_size": 16
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 1059,
+            "sample_size": 9
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 980,
+            "sample_size": 8
+          }
+        ]
+      },
+      "clause_boundary": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 462,
+            "sample_size": 5
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 547,
+            "sample_size": 6
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 542,
+            "sample_size": 6
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 786,
+            "sample_size": 8
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 1484,
+            "sample_size": 15
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 993,
+            "sample_size": 10
+          }
+        ]
+      },
+      "clause_type_classify": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 969,
+            "sample_size": 4
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 1571,
+            "sample_size": 6
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 1156,
+            "sample_size": 4
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 2292,
+            "sample_size": 9
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 4238,
+            "sample_size": 16
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 2760,
+            "sample_size": 11
+          }
+        ]
+      },
+      "adverbial_relation": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 68,
+            "sample_size": 7
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 87,
+            "sample_size": 9
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 94,
+            "sample_size": 10
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 48,
+            "sample_size": 5
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 88,
+            "sample_size": 10
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 84,
+            "sample_size": 9
+          }
+        ]
+      },
+      "subject_span": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 1005,
+            "sample_size": 9
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 334,
+            "sample_size": 3
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 395,
+            "sample_size": 4
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 1781,
+            "sample_size": 17
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 965,
+            "sample_size": 9
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 873,
+            "sample_size": 8
+          }
+        ]
+      },
+      "finite_or_not": {
+        "auto_pass": 50,
+        "needs_review": 10,
+        "rows": 60,
+        "auto_pool_shortfall": 0,
+        "auto_strata": [
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "easy",
+            "pool_size": 1599,
+            "sample_size": 6
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "hard",
+            "pool_size": 1255,
+            "sample_size": 5
+          },
+          {
+            "source_kind": "reading_jijing",
+            "difficulty": "medium",
+            "pool_size": 1065,
+            "sample_size": 4
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "easy",
+            "pool_size": 2920,
+            "sample_size": 12
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "hard",
+            "pool_size": 3331,
+            "sample_size": 13
+          },
+          {
+            "source_kind": "reading_test",
+            "difficulty": "medium",
+            "pool_size": 2371,
+            "sample_size": 10
+          }
+        ]
+      }
+    }
+  },
+  "counting_notes": [
+    "候选题按 item_id 计数；模板 rejected 含每个整句拒绝一次，以及该模板的目标/选句拒绝记录。",
+    "原因码按候选题及拒绝记录计数；整句拒绝在 JSONL 中只记录一条，保留全部原因。",
+    "两条新增整句规则在全库独立统计，不受其他过滤顺序影响。",
+    "无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。",
+    "字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。",
+    "分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。",
+    "同一模板完全相同的 item_id 和内容去重，ID 相同但内容不同则报错停止。",
+    "XLSX 使用固定元数据和不压缩 ZIP，避免时间及压缩库版本影响字节复现。"
+  ]
+}
