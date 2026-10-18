@@ -1,7 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 语法候选题 v0.1 已完成本机实施、验证并推送指定任务分支，待 Claude 交叉审核和教师盲审。未推 main、未部署、未开 PR。
+> 最近更新：2026-10-18 语法候选题 v0.1 已通过 Claude 交叉审核，抽查清单可以交给老师盲审。未推 main、未部署、未开 PR。
+
+## 2026-10-18 语法候选题 v0.1 交叉审核：通过
+
+- Claude 按计划第 13 节审核 `codex/grammar-item-candidates@db7c2de`，结论为通过，详情见 `docs/GRAMMAR_ITEM_CANDIDATES_CROSS_REVIEW.md`。
+  - 白名单经脚本逐表比对一致。
+  - 在云端不使用缓存从零重跑：`review_batch_v0.jsonl` / `.xlsx` 逐字节一致；两份报告只有 Python 版本一行不同；49,564 道候选与各模板计数一致。
+  - 测试 39 项通过，GitHub CI test job 为 success。
+  - 人工抽查 30 道 auto_pass 题，29 道正确。错的 1 道是 when 从句修饰 times，实为定语从句。
+  - 另有 2 个展示或原句问题：finite_or_not 只高亮 `born` 而不是 `was born`；两句粘连的原句（全库 23 句）。
+- 下一步：用户把 `data/grammar_items/review_batch_v0.xlsx` 交给老师盲审。老师反馈回来后，与审核记录末尾的 4 条建议合并成 v0.2 修订，再由 Codex 执行。
+- 本分支 `claude/word-memorization-system-eval-55v2y5` 已快进到 `db7c2de`，并加上本审核记录；两条分支内容一致，Codex 下一轮可以继续快进。
 
 ## 2026-10-18 语法候选题 v0.1（已生成、已推送，待交叉审核）
 

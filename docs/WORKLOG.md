@@ -4,6 +4,10 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-18 — 语法候选题 v0.1 交叉审核通过
+
+- Claude 云端从零重跑，审核清单逐字节一致；人工抽查 30 题有 29 题正确，并记录了 3 个问题和 v0.2 建议（`docs/GRAMMAR_ITEM_CANDIDATES_CROSS_REVIEW.md`）。下一步：抽查清单交老师盲审。
+
 ## 2026-10-18 — 语法候选题 v0.1 已完成生成与验证，已推指定分支
 
 - 执行树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates` 从修订计划 `c58c9693` 继续；实现提交 `2cc9e12388abae29a14d44a1552042d45975ddd3` 已 commit/push 并核对远端同 SHA。本条由后续纯交接文档提交同步。桌面 main 的 7 modified / 22 untracked 入口均保留，未动。
