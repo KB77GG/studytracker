@@ -1,9 +1,34 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 用户决定先修复再交老师：v0 抽查表作废，`docs/GRAMMAR_ITEM_CANDIDATES_PLAN_V0_2.md` 待 Codex 执行（含 28 句机经原文和阅读解析修复）。未推 main、未部署、未开 PR。
+> 最近更新：2026-10-18 语法候选题 v0.2 已由 Claude 执行完毕：28 句机经原文和阅读解析已修复，`data/grammar_items/review_batch_v0_2.xlsx` 可交老师盲审。分支 `claude/word-memorization-system-eval-55v2y5`，未合并 main、未部署；阅读解析线上生效需另行授权并在服务器重新导入。
 
-## 2026-10-18 语法候选题 v0.2 计划（待 Codex 执行）
+## 2026-10-18 语法候选题 v0.2（已执行，抽查表待老师盲审）
+
+- **执行方与分支**：用户改为由 Claude 直接执行，没有交给 Codex。工作在 `claude/word-memorization-system-eval-55v2y5` 上完成。`codex/grammar-item-candidates` 仍停在 v0.1（`db7c2de`），Codex 下一轮可以直接快进到本分支。
+- **独立性**：本轮由同一方实现和检查，没有第二方交叉审核。如需复核，可让 Codex 按 v0.2 计划第 D 节检查。
+- **第 A 部分**：
+  - 修订表 `data/reading_jijing_text_fixes.json` 共 33 条；构建脚本应用它；`scripts/reading_jijing_text_fixes.py` 原地修补 `static/reading_jijing/`（21 个文件、28 个段落）。
+  - `data/reading_study/` 中 28 个单元拆成 59 句，并重写翻译、语法结构、难点和表达；其余 997 句除 `sentence_index` 外逐字节不变。
+  - 验证：validator 0 错误；`tests.test_reading_study` 22 项通过；临时库模拟导入 updated=25 / skipped=292 / failed=0。
+  - 逐句记录见 `docs/READING_STUDY_RESPLIT_2026-10.md`。raw.json 没有改动。
+- **第 B 部分**：
+  - 新增 `glued_sentence_boundary`（修复后 0 句）、`multi_sentence_unit`（51 句，只排除不修）、`possible_relative_adverb`（109 个目标）三条规则；
+  - T6 目标和 T1 干扰项改为完整动词单位；
+  - 另外修正了答案或目标两端引号被切掉的问题，属于计划 B3 要求排查的同类问题。
+  - 测试：出题器测试 42 项；只装 Flask 的 CI 环境 125 项运行，1 项按设计跳过；连续两次生成 4 份文件逐字节一致。
+- **交付**：
+  - `data/grammar_items/generation_report_v0_2.{json,md}`、`review_batch_v0_2.{jsonl,xlsx}`；v0 的 4 份交付已删除。
+  - 自查记录 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_REVIEW.md`：B5 回归例句全部符合预期，人工核对 30 道 auto_pass 题全部正确。
+- **复现环境**：云端 Python 3.11.15、spaCy 3.8.16、en_core_web_trf 3.8.0、torch 2.14.1（CPU）。该环境只存在于云端会话中；在 Mac 上用 `.venv-grammar-tools/` 复现时，除报告里记录 Python 版本的那一行外，其余应逐字节一致。
+- **线上待办（需用户另行授权）**：
+  1. 合并 main 并部署：机经练习页原文的补空格和错字修正会随之上线；
+  2. 在服务器上 `sqlite3 /root/apps/studytracker/app.db ".backup ..."`；
+  3. 运行 `/root/apps/studytracker/.venv/bin/python scripts/import_reading_study.py`，预期 updated=25；
+  4. 抽查 `reading_jijing_88_test_98` 等受影响的 Reading Study 页面。
+- **下一步**：把 `review_batch_v0_2.xlsx` 交给老师盲审，按每类题 50 道 auto_pass 中错误不超过 1 道的标准决定能否入库；51 个“一条里含多句”的单元是否重新拆句，待用户决定。
+
+## 2026-10-18 语法候选题 v0.2 计划（已由 Claude 执行，见上一节）
 
 - **用户决定**：
   - even if 归为“让步”（教师确认）；
