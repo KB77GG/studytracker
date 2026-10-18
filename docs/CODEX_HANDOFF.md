@@ -1,7 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18（Asia/Shanghai）语法候选题执行前复核发现计划第 4/6 节与第 11 节冲突，按用户要求停止实施。独立 trf 环境可用；环境固定项及本节证据仅同步到 `codex/grammar-item-candidates`，未推 main、未部署、未开 PR。历史生产记录本轮未复验。
+> 最近更新：2026-10-18 语法候选题计划已修订为 v0.1，解除 Codex 报告的阻塞；下一步由 Codex 在 `codex/grammar-item-candidates` 快进到计划分支后继续实施。未推 main、未部署、未开 PR。
+
+## 2026-10-18 语法候选题计划 v0.1（阻塞已解除，待 Codex 继续）
+
+- Claude 确认 Codex 的判断：v0 第 11 节与第 4、6 节冲突。C-04、H-02 的错误只在一个 span 上，同句其他题经人工核对是正确的；C-01 是原句残缺。
+- `docs/GRAMMAR_ITEM_CANDIDATES_PLAN.md` 已改为 v0.1：
+  - 写明单题失败不传播到同句其他模板；
+  - 新增整句过滤 `tagged_fragment`（全库 36 句）和 `clause_attached_to_conjunction`（全库 2 句：C-01、`ielts13_test2_p2` C-04）；
+  - 第 11 节改为逐句、逐模板写明预期；
+  - 明确禁止按句子 ID 加黑名单。
+- 两条规则由 Claude 在云端用与 Codex 相同的 spaCy 3.8.16、en_core_web_trf 3.8.0、torch 2.14.1（CPU，Python 3.11）对全部 12,657 句实测。6 个例句的解析与 Codex 在 Mac 上（Python 3.13）的结果一致。云端环境和解析缓存只在本次会话的容器里，不会长期保留。
+- 本分支已快进到 Codex 的 `cca6714`，再加上计划修订，所以 Codex 可以直接 `git merge --ff-only origin/claude/word-memorization-system-eval-55v2y5`。下面上一节 Codex 写的阻塞记录保留作历史，其“等待修订”状态已被本节取代。
 
 ## 2026-10-18 语法候选题：计划回归条件冲突，等待修订
 

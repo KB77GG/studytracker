@@ -4,6 +4,10 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-18 — 语法候选题计划修订为 v0.1
+
+- 针对 Codex 报告的冲突：单题失败不再传播到同句其他模板；新增 `tagged_fragment`、`clause_attached_to_conjunction` 两条整句过滤（云端全库实测分别命中 36 句和 2 句）；坏例改为逐模板写预期。计划分支已包含 Codex 的提交，Codex 快进后即可继续。
+
 ## 2026-10-18 — 语法候选题执行前发现计划回归冲突（停止实施）
 
 - 在独立 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 从计划分支 `443ea01f` 创建 `codex/grammar-item-candidates`。桌面旧 `main@6ded77d2` 的 7 modified/22 untracked 入口未动；仅固定独立工具依赖、忽略虚拟环境并更新交接。环境提交 `985899f8`，本轮仅同步授权任务分支，禁止推 main/部署/开 PR。

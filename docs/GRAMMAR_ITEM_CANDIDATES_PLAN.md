@@ -1,7 +1,23 @@
-# 语法候选题生成与抽查清单 — 执行计划（v0）
+# 语法候选题生成与抽查清单 — 执行计划（v0.1）
 
 > 执行方：Codex（用户的 Mac）。交叉审核：Claude（云端会话）。
 > 本计划是验收标准：没写的不要做；写了但做不到的，停下来在汇报里说明，不要自行变通。
+
+## 修订记录
+
+- **v0.1（2026-10-18）**：Codex 用指定解析器实测后发现，v0 第 11 节“坏例在任何模板都不得自动通过”与第 4、6 节冲突。
+  C-04、H-02 的错误只在某一个 span 上，同句其他 span 出的题其实是对的；C-01 是原句残缺，但现有整句过滤拦不住。修订内容：
+  1. 第 6 节写明整句过滤与单题失败的边界：**单题失败不传播到同句其他模板**。
+  2. 第 6 节新增两条整句过滤：`tagged_fragment`、`clause_attached_to_conjunction`。
+  3. 第 11 节改为逐句、逐模板写明预期结果。
+  4. 第 7.2、10、13 节相应补充。
+  - 两条新规则已由 Claude 在云端用同版本模型（spaCy 3.8.16 + en_core_web_trf 3.8.0 + torch 2.14.1，CPU）对全部 12,657 句实测：
+    `tagged_fragment` 命中 36 句，`clause_attached_to_conjunction` 命中 2 句（C-01 和 `ielts13_test2_p2` C-04）。
+    云端（Python 3.11）的 6 个例句解析结果与 Codex 在 Mac 上（Python 3.13）的结果一致。
+  - 实测中放弃的两种写法：按标注判断“并列分句以 and/but + 从属连词开头”会误伤 36 个正常句；
+    按解析器判断“并列分句里没有自己的主句谓语”会命中 105 句，大多是正常句。**不要采用这两种写法。**
+- 继续在 `codex/grammar-item-candidates` 上工作：先 `git merge --ff-only origin/claude/word-memorization-system-eval-55v2y5`
+  （该分支已包含你的两个提交，应能直接快进），再从第 9 节开始实施。
 
 ## 0. 目标
 
@@ -183,7 +199,17 @@ explanatory / interrogative / infinitive / elliptical / imperative / passive / c
 | `level_one_subordinate` | 第 1 层出现定语从句或名词性从句（已知异常） |
 | `fragment` | 解析器 ROOT 不是 VERB/AUX |
 | `unbalanced_quotes_or_brackets` | 引号或括号不成对 |
+| `tagged_fragment` | 任一 span 的**原始** role 含子串 `fragment`（标注者自己标了残句，全库 36 句） |
+| `clause_attached_to_conjunction` | 解析器中存在 dep ∈ {advcl, conj, ccomp, relcl, csubj, csubjpass, acl} 的 token，而它的 head 的 dep = `cc`。含义是解析器找不到这个从句依附的主句，原句残缺或是省略结构。全库命中 2 句 |
 | `parse_failure` | 解析异常 |
+
+**整句过滤和单题失败的边界（v0.1 新增，必须遵守）：**
+
+- 整句过滤只处理“整句都不能用”的情况：上表各项。
+- 一句命中多条整句规则时，`rejections_v0.jsonl` 记录命中的**全部**原因码。
+- 某个 span 标错（例如主语边界错），只让**以该 span 为目标或答案依赖该 span 的题**失败，
+  对应模板记 `needs_review` 或 `rejected`。**不传播**到同句的其他模板，同句其他 span 出的题照常复核。
+- 不得为了让坏例达标而增加按句子 ID 的黑名单，也不得增加本表以外的整句规则。如果发现还需要别的整句规则，停下来汇报。
 
 **定位 span**：按 `structure` 顺序，取不早于上一个 span 起点的第一次出现。
 如果题目目标文本在句中出现不止一次 → 该题 `needs_review/ambiguous_span_location`。
@@ -238,7 +264,9 @@ explanatory / interrogative / infinitive / elliptical / imperative / passive / c
 4. 环境：spaCy 版本、模型名与版本、Python 版本、随机种子、`data/reading_study` 全部文件内容的合并 SHA-256、图谱 JSON 的 SHA-256。
 5. 第 11 节“已知坏例 / 正例”每句在每个模板下的处理结果。
 6. 抽查清单的行数，以及按每行 30 秒估算的老师工作量。
-7. **不得**包含时间戳或运行耗时，保证重跑结果逐字节一致。
+7. `tagged_fragment` 和 `clause_attached_to_conjunction` 在全部 12,657 句上**各自独立统计**的命中句数（不受过滤顺序影响），并**逐句列出**命中的 passage_id、sentence_id 和原句。
+   预期分别为 36 和 2；不一致时写出差异的句子。
+8. **不得**包含时间戳或运行耗时，保证重跑结果逐字节一致。
 
 ## 8. 老师抽查清单（`review_batch_v0.xlsx`）
 
@@ -300,17 +328,23 @@ explanatory / interrogative / infinitive / elliptical / imperative / passive / c
   6. T5：仿照第 11 节坏例 3（主语前多了介词短语）→ `subject_mismatch`。
   7. `item_id` 重跑稳定且全局唯一。
   8. 抽样：同一种子结果一致；每表每句最多 1 行、每篇最多 2 行；老师看到的行里没有 status 字段。
+  9. 新整句规则：role 含 `fragment` → `tagged_fragment`；从句中心挂在 cc 上 → `clause_attached_to_conjunction`；
+     正常的“并列分句里带状语从句”（如 `…, and when it does break it shatters…`）不命中。
+  10. 不传播：同一句里 T5 因 `subject_mismatch` 失败时，T1 仍可 auto_pass。
 - 本机还要跑完整生成一次，并**再跑第二次**，确认提交的 4 个文件逐字节一致（汇报里写出两次的 SHA-256）。
 
 ## 11. 已知坏例与正例（报告第 5 项必须逐句列出结果）
 
-坏例（任何模板都**不得**出现 auto_pass）：
+坏例：v0.1 起按句、按模板写预期。表中“允许”的题，Claude 已人工确认答案正确。
 
-1. `ielts7_test3_p1` K-03 `Be careful of little lives.'`：祈使句被标成从句。
-2. `ielts8_test4_p1` C-04 `(One teacher was particularly keen …: he felt this would make …)`：冒号后的独立句被标成状语从句。
-3. `reading_jijing_76_test_43_p2` H-02：主语标成了 `By the late 1980s the Modern Movement`。
-4. `reading_jijing_73_test_5_p2` F-05：原句是残句，并含 unknown span。
-5. `reading_jijing_56_test_64_p2` C-01：原句残缺。
+| 句子 | 错在哪里 | 预期 |
+|---|---|---|
+| `ielts7_test3_p1` K-03 `Be careful of little lives.'` | 祈使句被标成从句 | 整句 `rejected`（`too_short` 或 `unbalanced_quotes_or_brackets`） |
+| `ielts8_test4_p1` C-04 `(One teacher was particularly keen …: he felt this would make …)` | 冒号后的独立句被标成 `explanatory_clause` | ① 不得有以 `he felt…` 为目标的题（不在白名单）。② T1、T5、T6(a) 无题（`no_main_verb_tag`）。③ **允许并预期 auto_pass**：T3 `to introduce colour and pictures into maths textbooks` → 不是从句；T6(c) `introduce` → 非谓语 |
+| `reading_jijing_76_test_43_p2` H-02 | 主语标成了 `By the late 1980s the Modern Movement` | ① T5 必须是 `needs_review/subject_mismatch`。② **允许并预期 auto_pass**：T1（G-S01，答案 had / lost / out）、T6(a) `lost` → 主句谓语 |
+| `reading_jijing_73_test_5_p2` F-05 | 原句是残句 | 整句 `rejected`（`unknown_span` 或 `tagged_fragment`） |
+| `reading_jijing_56_test_64_p2` C-01 | 原句残缺 | 整句 `rejected`（`clause_attached_to_conjunction`） |
+| `ielts13_test2_p2` C-04 | 省略结构 `but only if…` | 整句 `rejected`（`clause_attached_to_conjunction`，保守拒绝） |
 
 正例（预期 auto_pass；如果不是，报告里要写解析器给出的理由）：
 
@@ -333,7 +367,7 @@ explanatory / interrogative / infinitive / elliptical / imperative / passive / c
 
 1. diff 只涉及第 7、9、10 节列出的文件，加上 `.gitignore`、`requirements-grammar-tools.txt`、ci.yml 中的一行和交接文档。
 2. 白名单、对照表与第 5 节逐项一致。
-3. CI 轻量测试通过；第 10 节的 8 类用例都在。
-4. 在云端重跑生成，item_id 和统计数一致（若云端装不上 trf，则只核对报告与 JSONL 的一致性）。
-5. 从抽查清单的 auto_pass 中随机再抽 30 题人工核对，并确认第 11 节的坏例全部不是 auto_pass。
+3. CI 轻量测试通过；第 10 节的 10 类用例都在。
+4. 在云端用同版本环境重跑生成，提交的 4 个文件逐字节一致，item_id 和统计数一致（云端已装好 trf）。
+5. 从抽查清单的 auto_pass 中随机再抽 30 题人工核对，并确认第 11 节每句的结果符合表中预期。
 6. xlsx 是盲审（老师看到的行里没有状态信息）、有下拉框、行数符合第 8 节。
