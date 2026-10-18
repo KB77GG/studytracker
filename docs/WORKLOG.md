@@ -7,7 +7,7 @@
 ## 2026-10-18 — 语法知识图谱 v0 草稿（待教师审核，未部署）
 
 - 云端会话在分支 `claude/word-memorization-system-eval-55v2y5` 把 Reading Study 句子解析的 35 个语法概念整理成 38 个能力知识点、88 条 hard/soft 依赖（第一阶段 22 个）。事实源 `data/grammar_graph/grammar_graph_v0.json`；审核文档 `docs/GRAMMAR_GRAPH_V0_REVIEW.md` 由 `scripts/render_grammar_graph_review.py` 生成；`tests/test_grammar_graph_draft.py` 已加入 CI 轻量测试。
-- 只借鉴 Marble Skill Taxonomy 的结构，没有导入其 ODbL / CC BY-SA 数据。没有 schema、接口、小程序或生产改动；提交在任务分支而不是 main，不会触发部署；首次推送因 GitHub 授权 403 失败，修好授权后需重新推送。
+- 只借鉴 Marble Skill Taxonomy 的结构，没有导入其 ODbL / CC BY-SA 数据。没有 schema、接口、小程序或生产改动；已推送到任务分支（不是 main），不会触发部署；首次推送曾因 GitHub 授权 403 失败，重新连接后已推送成功。
 - 下一步：老师审核知识点粒度、硬依赖和第一阶段范围；之后先抽检标注准确率（被动漏标、层级不是严格包含关系），再设计数据表和出题。
 
 ## 2026-09-17 — 题型专项跨日再次布置与历史记录已上线
