@@ -409,11 +409,51 @@ def _match(pattern: str, value: str) -> bool:
     return re.search(pattern, value) is not None
 
 
+# 状语从句以外的 *_clause：按 role 名称里能确定的含义归类（2026-10-19）。
+# 以前这些名字一律兜底成「状语从句」，问句、祈使句、不定式等都被标错。
+_CLAUSE_SYNONYM_FLAVORS = {"temporal": "time", "causal": "cause"}
+_CLAUSE_PART_FLAVORS = frozenset(FLAVORS) - {"example", "explanatory", "sentence", "source"}
+_CLAUSE_RULES = (
+    (r"adverbial", "adverbial_clause", None, None),
+    (r"prepositional", "prepositional_phrase", None, None),
+    (r"infinitive", "infinitive_phrase", None, None),
+    (r"participial|participle", "participial_phrase", None, None),
+    (r"gerund", "gerund_phrase", None, None),
+    (r"non_?finite", "non_finite_clause", None, None),
+)
+_SENTENCE_TYPE_RULES = (
+    (r"interrogative|question", "main_clause", "疑问句", "Interrogative Clause"),
+    (r"imperative", "main_clause", "祈使句", "Imperative Clause"),
+    (r"exclamatory", "main_clause", "感叹句", "Exclamatory Clause"),
+    (r"elliptical", "generic_phrase", "省略结构", "Elliptical Clause"),
+    (r"invers", "inversion", None, None),
+    (r"nominal|whether|fact|^(adjective_)?complement_clause$", "noun_clause", None, None),
+    (r"independent|run_on|comma_splic", "main_clause", None, None),
+    (r"^((first|second|third)_)?clause$", "main_clause", "分句", "Clause"),
+)
+
+
+def _unflavored_clause(role: str) -> tuple[str, str | None, str | None, str | None]:
+    """(key, zh, en, flavor) for a *_clause role whose first word is not a flavor."""
+    for pattern, key, zh, en in _CLAUSE_RULES:
+        if _match(pattern, role):
+            return key, zh, en, None
+    for part in role.split("_"):
+        flavor = _CLAUSE_SYNONYM_FLAVORS.get(part, part)
+        if flavor in _CLAUSE_PART_FLAVORS:
+            return "adverbial_clause", None, None, flavor
+    for pattern, key, zh, en in _SENTENCE_TYPE_RULES:
+        if _match(pattern, role):
+            return key, zh, en, None
+    return "adverbial_clause", None, None, None
+
+
 def resolve_role(role: str) -> dict:
     """归一化一个原始 role，返回 ``{concept, zh, en, camp}``。
 
-    忠实移植 browse.html 的 resolveRole()：先查 EXACT，再走后缀/词干规则，
-    带 flavor 的状语(从句)拼出精确标签，最后兜底。concept 一定是
+    移植自 browse.html 的 resolveRole()：先查 EXACT，再走后缀/词干规则，
+    带 flavor 的状语(从句)拼出精确标签，最后兜底。不以 flavor 开头的 *_clause
+    另按 ``_unflavored_clause`` 归类（browse.html 原版把它们全当状语从句）。concept 一定是
     ``glossary_payload()['concepts']`` 里的一个 key（35 概念之一或 unknown）。
     """
     role = str(role or "")
@@ -455,10 +495,11 @@ def resolve_role(role: str) -> dict:
                 key = "cleft"
             elif _match("invert", r):
                 key = "inversion"
-            else:
+            elif prefix in FLAVORS:
                 key = "adverbial_clause"
-                if prefix in FLAVORS:
-                    flavor = prefix
+                flavor = prefix
+            else:
+                key, zh_override, en_override, flavor = _unflavored_clause(r)
         elif _match("participial|participle", r):
             key = "participial_phrase"
         elif _match("infinitive", r):

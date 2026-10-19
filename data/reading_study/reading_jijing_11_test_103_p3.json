@@ -80,14 +80,14 @@
     },
     {
       "id": "B-01", "paragraph_label": "B", "sentence_index": 7,
-      "sentence": "The villagers of muthukandiya arrived in the 1970s as part of a government resettlement scheme.",
+      "sentence": "The villagers of Muthukandiya arrived in the 1970s as part of a government resettlement scheme.",
       "translation": "穆图坎迪亚的村民于20世纪70年代迁来，是政府移民安置计划的一部分。",
       "structure": [
-        {"text": "The villagers of muthukandiya", "role": "subject", "level": 1},
+        {"text": "The villagers of Muthukandiya", "role": "subject", "level": 1},
         {"text": "arrived in the 1970s", "role": "verb_phrase", "level": 1},
         {"text": "as part of a government resettlement scheme", "role": "prepositional_phrase", "level": 1}
       ],
-      "difficult_points": ["as part of... 说明这些村民迁来的政策背景，而不是表示身份比较。", "muthukandiya 在源文此处以小写开头，按原文保留。"],
+      "difficult_points": ["as part of... 说明这些村民迁来的政策背景，而不是表示身份比较。", "Muthukandiya 是村庄名，The villagers of Muthukandiya 意为“穆图坎迪亚的村民”；in the 1970s 指20世纪70年代。"],
       "expressions": [{"text": "as part of", "meaning_zh": "作为……的一部分"}, {"text": "resettlement scheme", "meaning_zh": "移民安置计划"}]
     },
     {
@@ -155,15 +155,15 @@
     },
     {
       "id": "C-02", "paragraph_label": "C", "sentence_index": 13,
-      "sentence": "What followed was a drought mitigation initiative based on a low-cost \"rainwater harvesting\"technology already used in Sri Lanka and elsewhere in the region.",
+      "sentence": "What followed was a drought mitigation initiative based on a low-cost \"rainwater harvesting\" technology already used in Sri Lanka and elsewhere in the region.",
       "translation": "随后启动的是一项缓解旱灾的计划，该计划以一种低成本的“雨水收集”技术为基础；这项技术此前已在斯里兰卡及本地区其他地方使用。",
       "structure": [
         {"text": "What followed", "role": "noun_clause", "level": 1},
         {"text": "was a drought mitigation initiative", "role": "verb_phrase", "level": 1},
-        {"text": "based on a low-cost \"rainwater harvesting\"technology", "role": "participial_phrase", "level": 2},
+        {"text": "based on a low-cost \"rainwater harvesting\" technology", "role": "participial_phrase", "level": 2},
         {"text": "already used in Sri Lanka and elsewhere in the region", "role": "participial_phrase", "level": 3}
       ],
-      "difficult_points": ["What followed 是 what 引导的主语从句，意为随后发生的事情。", "源文在引号后的 technology 前缺少空格，按原文保留；already used... 过去分词短语修饰 technology。"],
+      "difficult_points": ["What followed 是 what 引导的主语从句，意为随后发生的事情。", "already used in Sri Lanka and elsewhere in the region 是过去分词短语，修饰 technology，说明这项技术已在别处使用过。"],
       "expressions": [{"text": "drought mitigation", "meaning_zh": "旱灾缓解"}, {"text": "be based on", "meaning_zh": "以……为基础"}, {"text": "elsewhere in the region", "meaning_zh": "本地区其他地方"}]
     },
     {
@@ -258,7 +258,7 @@
     },
     {
       "id": "E-04", "paragraph_label": "E", "sentence_index": 21,
-      "sentence": "Each system, including tank, pipes, gutters and filters, cost US$195 –equivalent to a month's income for an average village family.",
+      "sentence": "Each system, including tank, pipes, gutters and filters, cost US$195 – equivalent to a month's income for an average village family.",
       "translation": "每套系统（包括水箱、管道、檐槽和过滤器）造价195美元，相当于一个普通村民家庭一个月的收入。",
       "structure": [
         {"text": "Each system", "role": "subject", "level": 1},
@@ -266,7 +266,7 @@
         {"text": "cost US$195", "role": "verb_phrase", "level": 1},
         {"text": "equivalent to a month's income for an average village family", "role": "supplement", "level": 2}
       ],
-      "difficult_points": ["including... 是插入成分，列举一套系统所含部件。", "破折号后的 equivalent... 补充说明195美元对普通家庭意味着什么；源文破折号后缺少空格，按原文保留。"],
+      "difficult_points": ["including... 是插入成分，列举一套系统所含部件。", "破折号后的 equivalent to... 补充说明195美元对普通家庭意味着什么：相当于一个月的收入。"],
       "expressions": [{"text": "be equivalent to", "meaning_zh": "相当于"}, {"text": "an average village family", "meaning_zh": "普通村民家庭"}]
     },
     {
@@ -516,14 +516,14 @@
     },
     {
       "id": "H-01", "paragraph_label": "H", "sentence_index": 42,
-      "sentence": "The non-structural elements of the work, especially it's financial and organizational, present a bigger challenge.",
+      "sentence": "The non-structural elements of the work, especially its financial and organizational, present a bigger challenge.",
       "translation": "这项工作中的非工程性因素，尤其是财务和组织方面的问题，构成了更大的挑战。",
       "structure": [
         {"text": "The non-structural elements of the work", "role": "subject", "level": 1},
-        {"text": "especially it's financial and organizational", "role": "parenthesis", "level": 2},
+        {"text": "especially its financial and organizational", "role": "parenthesis", "level": 2},
         {"text": "present a bigger challenge", "role": "verb_phrase", "level": 1}
       ],
-      "difficult_points": ["non-structural 在此指技术设施以外的财务和组织管理因素。", "it's 是源文语法异常，按语境应为 its financial and organizational elements，但原句按源文保留。"],
+      "difficult_points": ["non-structural 在此指技术设施以外的财务和组织管理因素。", "its financial and organizational 后省略了 elements，指工作中财务和组织方面的因素；especially 引出具体所指。"],
       "expressions": [{"text": "present a bigger challenge", "meaning_zh": "构成更大的挑战"}, {"text": "financial and organizational", "meaning_zh": "财务和组织方面的"}]
     },
     {
@@ -569,15 +569,15 @@
     },
     {
       "id": "I-01", "paragraph_label": "I", "sentence_index": 46,
-      "sentence": "The Muthkandiya initiative was planned as a demonstration project, to show that community-based drought mitigation through rainwater harvesting was feasible.",
+      "sentence": "The Muthukandiya initiative was planned as a demonstration project, to show that community-based drought mitigation through rainwater harvesting was feasible.",
       "translation": "穆图坎迪亚的这项行动被规划为一个示范项目，用以证明通过雨水收集开展以社区为基础的旱灾缓解是可行的。",
       "structure": [
-        {"text": "The Muthkandiya initiative", "role": "subject", "level": 1},
+        {"text": "The Muthukandiya initiative", "role": "subject", "level": 1},
         {"text": "was planned as a demonstration project", "role": "verb_phrase", "level": 1},
         {"text": "to show that community-based drought mitigation through rainwater harvesting was feasible", "role": "non_finite_clause", "level": 2},
         {"text": "that community-based drought mitigation through rainwater harvesting was feasible", "role": "noun_clause", "level": 3}
       ],
-      "difficult_points": ["to show... 是目的状语，说明设立示范项目的目的；that 从句作 show 的宾语。", "Muthkandiya 与前文 Muthukandiya 拼写不一致，是源文地名拼写异常，按原文保留。"],
+      "difficult_points": ["to show... 是目的状语，说明设立示范项目的目的；that 从句作 show 的宾语。", "community-based 意为“以社区为基础的”；through rainwater harvesting 说明缓解旱灾的方式。"],
       "expressions": [{"text": "demonstration project", "meaning_zh": "示范项目"}, {"text": "community-based", "meaning_zh": "以社区为基础的"}, {"text": "be feasible", "meaning_zh": "切实可行"}]
     },
     {

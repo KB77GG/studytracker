@@ -359,7 +359,7 @@
         }
       ],
       "difficult_points": [
-        "need 与主语 heart 不一致，原文如此，应为 needs，属于原文本身的语法错误。",
+        "is 和 need 是并列谓语，主语 heart 是单数，need 按语法应为 needs。",
         "or 引导选择关系，表示不锻炼就会导致心脏失去力量。"
       ],
       "expressions": [
@@ -537,7 +537,7 @@
       "id": "C-14",
       "paragraph_label": "C",
       "sentence_index": 14,
-      "sentence": "Three European countries are giving children a head start in PE, France, Austria and\nSwitzerland – offer at least two hours in primary and secondary schools.",
+      "sentence": "Three European countries are giving children a head start in PE, France, Austria and Switzerland – offer at least two hours in primary and secondary schools.",
       "translation": "三个欧洲国家——法国、奥地利和瑞士——让本国孩子在体育课上抢占先机，中小学每周至少安排两小时体育课。",
       "structure": [
         {
@@ -546,7 +546,7 @@
           "level": 1
         },
         {
-          "text": "France, Austria and\nSwitzerland",
+          "text": "France, Austria and Switzerland",
           "role": "apposition",
           "level": 2
         },
@@ -668,11 +668,16 @@
       "id": "C-17",
       "paragraph_label": "C",
       "sentence_index": 17,
-      "sentence": "From age six to 18\u0000British children received, on average, 106 minutes of PE a week.",
+      "sentence": "From age six to 18, British children received, on average, 106 minutes of PE a week.",
       "translation": "从6岁到18岁，英国儿童平均每周只能上106分钟的体育课。",
       "structure": [
         {
-          "text": "From age six to 18\u0000British children",
+          "text": "From age six to 18",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "British children",
           "role": "subject",
           "level": 1
         },
@@ -1060,7 +1065,7 @@
       "id": "D-27",
       "paragraph_label": "D",
       "sentence_index": 27,
-      "sentence": "\"He added that children need to have the opportunity to take part in a wide variety of individual, partner and team sports.",
+      "sentence": "He added that children need to have the opportunity to take part in a wide variety of individual, partner and team sports.",
       "translation": "他还补充说，孩子们需要有机会参与个人、双人和团队等各种各样的运动项目。",
       "structure": [
         {
@@ -1080,7 +1085,7 @@
         }
       ],
       "difficult_points": [
-        "句首多出的引号紧贴在 He 之前，是原文标点错位，属于源文本身的排版问题。",
+        "added that... 中 that 从句作 added 的宾语。",
         "have the opportunity to do 表示拥有做某事的机会。",
         "a wide variety of 修饰后面并列的三类运动。"
       ],
@@ -1215,7 +1220,7 @@
       "id": "E-31",
       "paragraph_label": "E",
       "sentence_index": 31,
-      "sentence": "'Michael Jackson, she shouts, and they all do a spoof fan-crazed shriek.",
+      "sentence": "'Michael Jackson,' she shouts, and they all do a spoof fan-crazed shriek.",
       "translation": "“迈克尔·杰克逊！”她喊道，孩子们全都发出模仿痴狂粉丝的尖叫。",
       "structure": [
         {
@@ -1235,7 +1240,7 @@
         }
       ],
       "difficult_points": [
-        "引语前的单引号没有对应的右引号，属于原文标点缺失。",
+        "引语后的 she shouts 交代说话人；引语末尾的逗号放在引号内。",
         "a spoof fan-crazed shriek 中 fan-crazed 是复合形容词，模仿痴狂粉丝的尖叫。"
       ],
       "expressions": [
@@ -1559,7 +1564,7 @@
       "id": "F-40",
       "paragraph_label": "F",
       "sentence_index": 40,
-      "sentence": "'Ninety per cent of children don't like team sports,'says company director, Gillian Gale.",
+      "sentence": "'Ninety per cent of children don't like team sports,' says company director, Gillian Gale.",
       "translation": "“百分之九十的孩子不喜欢团队运动，”公司总监吉莉安·盖尔说道。",
       "structure": [
         {
@@ -1579,7 +1584,7 @@
         }
       ],
       "difficult_points": [
-        "引号与 says 之间原文缺少空格，属于排版问题，不影响理解。",
+        "引语在前，says company director 在后，采用主谓倒装。",
         "Gillian Gale 是 company director 的同位语，说明说话人的具体姓名。"
       ],
       "expressions": [
@@ -1763,7 +1768,7 @@
       "id": "G-45",
       "paragraph_label": "G",
       "sentence_index": 45,
-      "sentence": "\"Now, kids in obese families are expending only 200 calories a day in physical activity,\" says Lifshitz, \"incorporate more movement in your family's life park farther away from the stores at the mall, take stairs instead of the elevator, and walk to nearbyfriends' houses instead of driving.\"",
+      "sentence": "\"Now, kids in obese families are expending only 200 calories a day in physical activity,\" says Lifshitz, \"incorporate more movement in your family's life: park farther away from the stores at the mall, take stairs instead of the elevator, and walk to nearby friends' houses instead of driving.\"",
       "translation": "“现在，肥胖家庭的孩子每天体力活动消耗的热量只有200卡路里，”利夫希茨说，“要在日常生活中增加更多运动量：把车停得离商场入口远一点，用爬楼梯代替坐电梯，步行去附近朋友家而不是开车去。”",
       "structure": [
         {
@@ -1792,15 +1797,15 @@
           "level": 2
         },
         {
-          "text": "and walk to nearbyfriends' houses instead of driving",
+          "text": "and walk to nearby friends' houses instead of driving",
           "role": "coordinated_imperative_clause",
           "level": 2
         }
       ],
       "difficult_points": [
-        "引号内后半部分句子结构混乱，incorporate more movement in your family's life 与 park farther away... 之间原文缺少必要的断句，疑似源文本身脱漏或拼接错误。",
+        "says Lifshitz 前后是同一段引语；后半部分 incorporate more movement... 是祈使句，冒号后列出具体做法。",
         "park farther away、take stairs、walk to...均为并列的祈使句，建议增加日常活动量的具体做法。",
-        "nearbyfriends' 缺少空格，应为 nearby friends'，原文如此保留。"
+        "nearby friends' houses 意为“附近朋友的家”，friends' 是复数名词的所有格。"
       ],
       "expressions": [
         {

@@ -33,14 +33,14 @@
     },
     {
       "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
-      "sentence": "There are more than a billion people In India and Indian tigers probably see humans every single day of their lives.",
+      "sentence": "There are more than a billion people in India and Indian tigers probably see humans every single day of their lives.",
       "translation": "印度有十亿以上人口，印度老虎很可能一生中每天都能看到人类。",
       "structure": [
-        {"text": "There are more than a billion people In India", "role": "existential_clause", "level": 1},
+        {"text": "There are more than a billion people in India", "role": "existential_clause", "level": 1},
         {"text": "and Indian tigers probably see humans", "role": "coordinate_clause", "level": 1},
         {"text": "every single day of their lives", "role": "frequency_adverbial", "level": 2}
       ],
-      "difficult_points": ["their 指 Indian tigers，而不是 humans。", "every single day 强调频率极高；原文 In 的大写属于源文异常。"],
+      "difficult_points": ["their 指 Indian tigers，而不是 humans。", "every single day 强调频率极高，single 加强语气。"],
       "expressions": [{"text": "more than a billion", "meaning_zh": "十亿以上"}, {"text": "every single day", "meaning_zh": "每一天；天天"}]
     },
     {
@@ -104,14 +104,14 @@
     },
     {
       "id": "B-04", "paragraph_label": "B", "sentence_index": 9,
-      "sentence": "There were also far more tigers around in those days (probably 60.000 in the subcontinent compared to just 3000 today).",
+      "sentence": "There were also far more tigers around in those days (probably 60,000 in the subcontinent compared to just 3000 today).",
       "translation": "而且当时的老虎数量远多于现在（整个次大陆可能有六万只，而今天只有三千只）。",
       "structure": [
         {"text": "There were also far more tigers around", "role": "existential_clause", "level": 1},
         {"text": "in those days", "role": "time_adverbial", "level": 2},
-        {"text": "probably 60.000 in the subcontinent compared to just 3000 today", "role": "parenthetical_comparison", "level": 2}
+        {"text": "probably 60,000 in the subcontinent compared to just 3000 today", "role": "parenthetical_comparison", "level": 2}
       ],
-      "difficult_points": ["far 修饰比较级 more，表示过去老虎数量多得多。", "括号比较过去与今天的数量；原文 60.000 按语境表示 60,000。"],
+      "difficult_points": ["far 修饰比较级 more，表示过去老虎数量多得多。", "括号中比较过去与今天的老虎数量；compared to 意为“与……相比”。"],
       "expressions": [{"text": "far more", "meaning_zh": "多得多"}, {"text": "compared to", "meaning_zh": "与……相比"}, {"text": "the subcontinent", "meaning_zh": "印度次大陆"}]
     },
     {
@@ -159,7 +159,7 @@
     },
     {
       "id": "C-04", "paragraph_label": "C", "sentence_index": 14,
-      "sentence": "Has the species programmed the experiences of all tigers with humans its genes to be inherited as instinct?",
+      "sentence": "Has the species programmed the experiences of all tigers with humans into its genes to be inherited as instinct?",
       "translation": "难道虎这一物种把所有老虎与人类相遇的经验写进了基因，使其作为本能遗传下来吗？",
       "structure": [
         {"text": "Has the species programmed", "role": "main_question", "level": 1},
@@ -167,7 +167,7 @@
         {"text": "its genes", "role": "location_complement", "level": 1},
         {"text": "to be inherited as instinct", "role": "purpose_adverbial", "level": 2}
       ],
-      "difficult_points": ["原文 humans 与 its genes 之间缺少 into，语义应为 programmed the experiences into its genes。", "to be inherited 是不定式被动结构，说明写入基因后的遗传结果。", "the species 指老虎这一物种整体。"],
+      "difficult_points": ["program A into B 意为“把 A 写进 B”，这里 A 是 the experiences of all tigers with humans。", "to be inherited 是不定式被动结构，说明写入基因后的遗传结果。", "the species 指老虎这一物种整体。"],
       "expressions": [{"text": "be inherited as instinct", "meaning_zh": "作为本能遗传"}, {"text": "program into genes", "meaning_zh": "写入基因"}]
     },
     {
@@ -192,7 +192,7 @@
     },
     {
       "id": "D-01", "paragraph_label": "D", "sentence_index": 17,
-      "sentence": "Since the growth of ethology in the 1950s. we have tried to understand animal behaviour from the animal's point of view.",
+      "sentence": "Since the growth of ethology in the 1950s, we have tried to understand animal behaviour from the animal's point of view.",
       "translation": "自20世纪50年代动物行为学兴起以来，我们一直尝试从动物自身的视角理解其行为。",
       "structure": [
         {"text": "Since the growth of ethology in the 1950s", "role": "time_adverbial", "level": 1},
@@ -200,7 +200,7 @@
         {"text": "have tried to understand animal behaviour", "role": "predicate", "level": 1},
         {"text": "from the animal's point of view", "role": "perspective_adverbial", "level": 2}
       ],
-      "difficult_points": ["Since 与现在完成时 have tried 配合，表示从20世纪50年代持续至今。", "原文 1950s 后误用句点，语义上 Since 短语仍修饰主句。"],
+      "difficult_points": ["Since 与现在完成时 have tried 配合，表示从20世纪50年代持续至今。", "Since the growth of ethology in the 1950s 是时间状语，后接逗号与主句隔开。"],
       "expressions": [{"text": "from the animal's point of view", "meaning_zh": "从动物的视角"}, {"text": "animal behaviour", "meaning_zh": "动物行为"}]
     },
     {
@@ -217,14 +217,14 @@
     },
     {
       "id": "D-03", "paragraph_label": "D", "sentence_index": 19,
-      "sentence": "Jim Corbett's breathless accounts of his duels with a an-eaters in truth tell us more about Jim Corbett than they do about the animals.",
+      "sentence": "Jim Corbett's breathless accounts of his duels with man-eaters in truth tell us more about Jim Corbett than they do about the animals.",
       "translation": "吉姆·科贝特对自己与食人虎搏斗所作的紧张叙述，事实上让我们更多地了解了科贝特本人，而不是那些动物。",
       "structure": [
-        {"text": "Jim Corbett's breathless accounts of his duels with a an-eaters", "role": "subject", "level": 1},
+        {"text": "Jim Corbett's breathless accounts of his duels with man-eaters", "role": "subject", "level": 1},
         {"text": "in truth tell us more about Jim Corbett", "role": "predicate", "level": 1},
         {"text": "than they do about the animals", "role": "comparative_clause", "level": 2}
       ],
-      "difficult_points": ["than 从句中 do 代替重复的 tell us，they 指 accounts。", "原文 a an-eaters 是 man-eaters 的 OCR 异常；breathless 描写叙述紧张刺激。"],
+      "difficult_points": ["than 从句中 do 代替重复的 tell us，they 指 accounts。", "man-eaters 指食人兽，这里指食人虎；breathless 形容叙述紧张刺激。"],
       "expressions": [{"text": "breathless accounts of", "meaning_zh": "对……的紧张刺激叙述"}, {"text": "in truth", "meaning_zh": "事实上"}, {"text": "tell us more about A than B", "meaning_zh": "让我们更多了解 A 而非 B"}]
     },
     {
@@ -242,15 +242,15 @@
     },
     {
       "id": "E-01", "paragraph_label": "E", "sentence_index": 21,
-      "sentence": "I suspect that a tiger's afraid of humans lies not in some preprogramed ancestral logic but in the way he actually perceives us visually.",
+      "sentence": "I suspect that a tiger's fear of humans lies not in some preprogramed ancestral logic but in the way he actually perceives us visually.",
       "translation": "我怀疑，老虎对人类的恐惧并非来自某种预设的祖先逻辑，而是来自它在视觉上实际感知我们的方式。",
       "structure": [
         {"text": "I suspect", "role": "main_clause", "level": 1},
-        {"text": "that a tiger's afraid of humans lies not in some preprogramed ancestral logic", "role": "object_clause", "level": 2},
+        {"text": "that a tiger's fear of humans lies not in some preprogramed ancestral logic", "role": "object_clause", "level": 2},
         {"text": "but in the way he actually perceives us visually", "role": "coordinate_complement", "level": 2},
         {"text": "he actually perceives us visually", "role": "relative_clause", "level": 3}
       ],
-      "difficult_points": ["not in...but in... 对比恐惧的两种可能来源。", "the way 后省略关系词 that/in which，he 指 tiger。", "原文 a tiger's afraid 应为 a tiger's fear，preprogramed 也为源文拼写形式。"],
+      "difficult_points": ["not in...but in... 对比恐惧的两种可能来源。", "the way 后省略关系词 that/in which，he 指 tiger。", "a tiger's fear of humans 意为“老虎对人类的恐惧”；preprogramed 意为“预先设定的”，常见拼写是 preprogrammed。"],
       "expressions": [{"text": "lie not in ... but in ...", "meaning_zh": "不在于……而在于……"}, {"text": "perceive visually", "meaning_zh": "从视觉上感知"}]
     },
     {
@@ -316,15 +316,15 @@
     },
     {
       "id": "E-07", "paragraph_label": "E", "sentence_index": 27,
-      "sentence": "If he meet a deer of this size, he might attack the animal by leaping on its back, but when he looks behind the mind he can't see a back.",
+      "sentence": "If he meets a deer of this size, he might attack the animal by leaping on its back, but when he looks behind the man he can't see a back.",
       "translation": "如果它遇到这么大的鹿，可能会跳到鹿背上发动攻击；但当它把目光移到这个人身后时，却看不到可供扑上的背部。",
       "structure": [
-        {"text": "If he meet a deer of this size", "role": "conditional_clause", "level": 2},
+        {"text": "If he meets a deer of this size", "role": "conditional_clause", "level": 2},
         {"text": "he might attack the animal by leaping on its back", "role": "main_clause", "level": 1},
-        {"text": "but when he looks behind the mind", "role": "contrast_time_clause", "level": 2},
+        {"text": "but when he looks behind the man", "role": "contrast_time_clause", "level": 2},
         {"text": "he can't see a back", "role": "contrast_clause", "level": 1}
       ],
-      "difficult_points": ["he 指 tiger；its 指 deer；by leaping... 说明老虎攻击大型猎物的方式。", "原文 he meet 应为 he meets，behind the mind 按语境很可能应为 behind the man。", "but 对比老虎对鹿的正常攻击判断与面对直立人类时的视觉困惑。"],
+      "difficult_points": ["he 指 tiger；its 指 deer；by leaping... 说明老虎攻击大型猎物的方式。", "If 引导条件状语从句，主语 he 是第三人称单数，所以用 meets；behind the man 指人的身后。", "but 对比老虎对鹿的正常攻击判断与面对直立人类时的视觉困惑。"],
       "expressions": [{"text": "of this size", "meaning_zh": "这种体形的"}, {"text": "leap on", "meaning_zh": "跳到……之上"}]
     },
     {
@@ -391,14 +391,14 @@
     },
     {
       "id": "F-02", "paragraph_label": "F", "sentence_index": 33,
-      "sentence": "A squatting human is half he size and presents twice the spread of back, and more closely resembles a medium-sized deer.",
+      "sentence": "A squatting human is half the size and presents twice the spread of back, and more closely resembles a medium-sized deer.",
       "translation": "蹲着的人高度只有原来的一半，展现出的背部宽度却是原来的两倍，因此看起来更像一只中等体形的鹿。",
       "structure": [
-        {"text": "A squatting human is half he size", "role": "main_clause", "level": 1},
+        {"text": "A squatting human is half the size", "role": "main_clause", "level": 1},
         {"text": "and presents twice the spread of back", "role": "coordinate_predicate", "level": 1},
         {"text": "and more closely resembles a medium-sized deer", "role": "coordinate_predicate", "level": 1}
       ],
-      "difficult_points": ["原文 half he size 按语境应为 half the size。", "三个并列谓语分别描述蹲姿的高度、背部展开面积和外形相似度。", "twice the spread of back 指老虎视觉中可见的背部横向面积约为两倍。"],
+      "difficult_points": ["half the size 与 twice the spread of back 都是“倍数 + the + 名词”结构，表示大小和宽度的倍数关系。", "三个并列谓语分别描述蹲姿的高度、背部展开面积和外形相似度。", "twice the spread of back 指老虎视觉中可见的背部横向面积约为两倍。"],
       "expressions": [{"text": "half the size", "meaning_zh": "尺寸的一半"}, {"text": "twice the", "meaning_zh": "……的两倍"}, {"text": "resemble", "meaning_zh": "与……相似"}]
     },
     {
@@ -415,14 +415,14 @@
     },
     {
       "id": "F-04", "paragraph_label": "F", "sentence_index": 35,
-      "sentence": "This, however appears not to be the case.",
+      "sentence": "This, however, appears not to be the case.",
       "translation": "然而，事实似乎并非如此。",
       "structure": [
         {"text": "This", "role": "subject", "level": 1},
         {"text": "however", "role": "sentence_adverbial", "level": 1},
         {"text": "appears not to be the case", "role": "predicate", "level": 1}
       ],
-      "difficult_points": ["This 指蹲着的人与站着的人同样不具吸引力的推论。", "not to be the case 表示实际情况与上述推论不符；原文 however 后缺少逗号。"],
+      "difficult_points": ["This 指蹲着的人与站着的人同样不具吸引力的推论。", "however 是插入语，前后用逗号隔开；not to be the case 表示实际情况与上述推论不符。"],
       "expressions": [{"text": "appear not to be the case", "meaning_zh": "情况似乎并非如此"}]
     },
     {
@@ -435,7 +435,7 @@
         {"text": "to cut grass", "role": "purpose_adverbial", "level": 3},
         {"text": "for fodder or building material", "role": "purpose_modifier", "level": 3}
       ],
-      "difficult_points": ["该句按原文缺少谓语，是用名词短语补充支持上一句结论的残句。", "involving... 修饰 incidents；squatting 与 bending over 是 villagers 的两种姿态。", "to cut grass 表示弯腰或蹲下的目的，for... 说明草的用途。"],
+      "difficult_points": ["这句话缺少谓语，是用名词短语补充支持上一句结论的残句。", "involving... 修饰 incidents；squatting 与 bending over 是 villagers 的两种姿态。", "to cut grass 表示弯腰或蹲下的目的，for... 说明草的用途。"],
       "expressions": [{"text": "incidents of attacks on", "meaning_zh": "袭击……的事件"}, {"text": "bend over", "meaning_zh": "弯腰"}, {"text": "cut grass for fodder", "meaning_zh": "割草作饲料"}]
     },
     {

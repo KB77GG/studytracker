@@ -623,28 +623,96 @@
       "id": "C-03",
       "paragraph_label": "C",
       "sentence_index": 18,
-      "sentence": "Scrub jays know that other jays are thieves and that stashed food can spoil; sheep can recognize faces; chimpanzees use a variety of tools to probe termite mounds and even use weapons to hunt small mammals; dolphins can imitate human postures; the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt simply by watching an experienced fish perform the task. And Alex the parrot turned out to be a surprisingly good talker.",
-      "translation": "灌丛松鸦知道其他松鸦会偷东西，也知道藏起来的食物会变质；绵羊能够识别面孔；黑猩猩会使用多种工具探查白蚁丘，甚至会使用武器猎捕小型哺乳动物；海豚能模仿人类的姿势；而射水鱼——它能用突然喷出的水柱击晕昆虫——仅仅通过观察一条有经验的同类执行任务，就能学会如何瞄准喷水。至于鹦鹉亚历克斯，则出人意料地成了一个很会“说话”的家伙。",
+      "sentence": "Scrub jays know that other jays are thieves and that stashed food can spoil; sheep can recognize faces; chimpanzees use a variety of tools to probe termite mounds and even use weapons to hunt small mammals; dolphins can imitate human postures; the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt simply by watching an experienced fish perform the task.",
+      "translation": "灌丛松鸦知道其他松鸦会偷东西，也知道藏起来的食物会变质；绵羊能够识别面孔；黑猩猩会使用多种工具探查白蚁丘，甚至会使用武器猎捕小型哺乳动物；海豚能模仿人类的姿势；射水鱼会突然喷出水柱击晕昆虫，它只要观察一条有经验的鱼完成任务，就能学会如何瞄准喷水。",
       "structure": [
         {
           "text": "Scrub jays know that other jays are thieves and that stashed food can spoil",
+          "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "that other jays are thieves and that stashed food can spoil",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "sheep can recognize faces",
           "role": "coordinate_clause",
           "level": 1
         },
         {
-          "text": "the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt",
+          "text": "chimpanzees use a variety of tools to probe termite mounds and even use weapons to hunt small mammals",
           "role": "coordinate_clause",
           "level": 1
         },
         {
-          "text": "And Alex the parrot turned out to be a surprisingly good talker",
+          "text": "dolphins can imitate human postures",
           "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt simply by watching an experienced fish perform the task",
+          "role": "coordinate_clause",
+          "level": 1
+        },
+        {
+          "text": "which stuns insects with a sudden blast of water",
+          "role": "relative_clause",
+          "level": 2
+        },
+        {
+          "text": "simply by watching an experienced fish perform the task",
+          "role": "prepositional_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "分号把五个并列分句连在一起，每个分句列举一种动物的能力。",
+        "know 后接两个由 and 连接的 that 宾语从句。",
+        "which 引导非限制性定语从句修饰 archerfish；how to aim its squirt 作 learn 的宾语，by watching ... 表示学习方式，watch + 宾语 + 动词原形 表示看到动作的全过程。"
+      ],
+      "expressions": [
+        {
+          "text": "a variety of",
+          "meaning_zh": "多种"
+        },
+        {
+          "text": "probe termite mounds",
+          "meaning_zh": "探查白蚁丘"
+        },
+        {
+          "text": "imitate human postures",
+          "meaning_zh": "模仿人类的姿势"
+        }
+      ]
+    },
+    {
+      "id": "C-03b",
+      "paragraph_label": "C",
+      "sentence_index": 19,
+      "sentence": "And Alex the parrot turned out to be a surprisingly good talker.",
+      "translation": "至于鹦鹉亚历克斯，结果它出人意料地很会“说话”。",
+      "structure": [
+        {
+          "text": "Alex the parrot",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "turned out to be",
+          "role": "linking_predicate",
+          "level": 1
+        },
+        {
+          "text": "a surprisingly good talker",
+          "role": "subject_complement",
           "level": 1
         }
       ],
       "difficult_points": [
-        "分号串联多种动物能力的并列例证；本句在源文中还连入 Alex 的总结句。",
-        "which 修饰 archerfish；how 从句作 learn 的宾语，by watching 表学习方式。"
+        "Alex the parrot 中 the parrot 是同位语，说明 Alex 是一只鹦鹉。",
+        "turn out to be 表示“结果是、原来是”；句首 And 承接上句的列举，引出最突出的一个例子。"
       ],
       "expressions": [
         {
@@ -652,16 +720,16 @@
           "meaning_zh": "结果是"
         },
         {
-          "text": "a variety of",
-          "meaning_zh": "多种"
+          "text": "a good talker",
+          "meaning_zh": "很会说话的人（动物）"
         }
       ]
     },
     {
       "id": "D-01",
       "paragraph_label": "D",
-      "sentence_index": 19,
-      "sentence": "Thirty years after the Alex studies began; Pepperberg and a changing collection of assistants were still giving him English lessons.",
+      "sentence_index": 20,
+      "sentence": "Thirty years after the Alex studies began, Pepperberg and a changing collection of assistants were still giving him English lessons.",
       "translation": "在“亚历克斯”研究启动三十年后，佩珀伯格和一批不断更替的助手仍在给他上英语课。",
       "structure": [
         {
@@ -682,7 +750,7 @@
       ],
       "difficult_points": [
         "after 内含时间从句 the Alex studies began。",
-        "分号位于时间状语之后是源文标点异常。"
+        "Thirty years after... 是时间状语，后接逗号与主句隔开；were still giving 是过去进行时。"
       ],
       "expressions": [
         {
@@ -694,7 +762,7 @@
     {
       "id": "D-02",
       "paragraph_label": "D",
-      "sentence_index": 20,
+      "sentence_index": 21,
       "sentence": "The humans, along with two younger parrots, also served as Alex's flock, providing the social input all parrots crave.",
       "translation": "这些人类连同两只更年轻的鹦鹉，也构成了亚历克斯的“鸟群”，为他提供所有鹦鹉都渴望的社交刺激。",
       "structure": [
@@ -732,7 +800,7 @@
     {
       "id": "D-03",
       "paragraph_label": "D",
-      "sentence_index": 21,
+      "sentence_index": 22,
       "sentence": "Like any flock, this one – as small as it was – had its share of drama.",
       "translation": "像任何群体一样，这个小小的“鸟群”也少不了各种风波。",
       "structure": [
@@ -766,7 +834,7 @@
     {
       "id": "D-04",
       "paragraph_label": "D",
-      "sentence_index": 22,
+      "sentence_index": 23,
       "sentence": "Alex dominated his fellow parrots, acted huffy at times around Pepperberg, tolerated the other female humans, and fell to pieces over a male assistant who dropped by for a visit.",
       "translation": "亚历克斯在同伴鹦鹉面前占据主导地位；在佩珀伯格身边有时会闹别扭；对其他女性人类尚能容忍；而一名偶尔来访的男助手则让他情绪彻底崩溃。",
       "structure": [
@@ -804,7 +872,7 @@
     {
       "id": "D-05",
       "paragraph_label": "D",
-      "sentence_index": 23,
+      "sentence_index": 24,
       "sentence": "Pepperberg bought Alex in a Chicago pet store where she let the store's assistant pick him out because she didn't want other scientists saying later that she'd particularly chosen an especially smart bird for her work.",
       "translation": "佩珀伯格在芝加哥一家宠物店买下了亚历克斯，并让店员替她挑选，因为她不希望日后有其他科学家指责她是特意为研究挑了只格外聪明的鸟。",
       "structure": [
@@ -852,7 +920,7 @@
     {
       "id": "D-06",
       "paragraph_label": "D",
-      "sentence_index": 24,
+      "sentence_index": 25,
       "sentence": "Given that Alex's brain was the size of a shelled walnut, most researchers thought Pepperberg's interspecies communication study would be futile.",
       "translation": "鉴于亚历克斯的大脑只有一颗带壳核桃那么大，大多数研究者认为佩珀伯格的跨物种交流研究注定徒劳无功。",
       "structure": [
@@ -895,7 +963,7 @@
     {
       "id": "E-01",
       "paragraph_label": "E",
-      "sentence_index": 25,
+      "sentence_index": 26,
       "sentence": "\"Some people actually called me crazy for trying this,\" she said.",
       "translation": "“有些人真的因为我尝试这件事而说我疯了，”她说。",
       "structure": [
@@ -924,7 +992,7 @@
     {
       "id": "E-02",
       "paragraph_label": "E",
-      "sentence_index": 26,
+      "sentence_index": 27,
       "sentence": "\"Scientists thought that chimpanzees were better subjects, although, of course, chimps can't speak.\"",
       "translation": "“科学家认为黑猩猩是更好的研究对象，当然，黑猩猩不会说话。”",
       "structure": [
@@ -958,7 +1026,7 @@
     {
       "id": "E-03",
       "paragraph_label": "E",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "Chimpanzees, bonobos, and gorillas have been taught to use sign language and symbols to communicate with us, often with impressive results.",
       "translation": "人们已经教会黑猩猩、倭黑猩猩和大猩猩使用手语和符号与我们交流，而且结果往往令人印象深刻。",
       "structure": [
@@ -996,7 +1064,7 @@
     {
       "id": "E-04",
       "paragraph_label": "E",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "The bonobo Kanzi, for instance, carries his symbol-communication board with him so he can \"talk\" to his human researchers, and he has invented combinations of symbols to express his thoughts.",
       "translation": "例如，倭黑猩猩坎齐随身携带他的符号交流板，这样他就能与人类研究人员“交谈”，而且他还发明了符号组合来表达自己的想法。",
       "structure": [
@@ -1039,7 +1107,7 @@
     {
       "id": "E-05",
       "paragraph_label": "E",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "Nevertheless, this is not the same thing as having an animal look up at you, open his mouth, and speak.",
       "translation": "然而，这仍不同于让一只动物抬头看着你、张开嘴巴并开口说话。",
       "structure": [
@@ -1073,7 +1141,7 @@
     {
       "id": "E-06",
       "paragraph_label": "E",
-      "sentence_index": 30,
+      "sentence_index": 31,
       "sentence": "Under Pepperberg's patient tutelage, Alex learned how to use his vocal tract to imitate almost one hundred English words, including the sounds for various foods, although he calls an apple a \"beanery.\"",
       "translation": "在佩珀伯格耐心的教导下，亚历克斯学会了如何运用发声器官模仿近一百个英文单词，其中包括多种食物的发音；不过，他把苹果称作“beanery”。",
       "structure": [
@@ -1116,7 +1184,7 @@
     {
       "id": "E-07",
       "paragraph_label": "E",
-      "sentence_index": 31,
+      "sentence_index": 32,
       "sentence": "\"Apples taste a little bit like bananas to him, and they look a little bit like cherries, Alex made up that word for them,\" Pepperberg said.",
       "translation": "佩珀伯格说：“在他看来，苹果吃起来有点像香蕉，外观又有点像樱桃，所以亚历克斯就为它们自创了那个词。”",
       "structure": [
@@ -1159,7 +1227,7 @@
     {
       "id": "F-01",
       "paragraph_label": "F",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "It sounded a bit mad, the idea of a bird having lessons to practice, and willingly doing it.",
       "translation": "让一只鸟上课练习，而且还心甘情愿地配合，这个想法听起来确实有点荒唐。",
       "structure": [
@@ -1193,7 +1261,7 @@
     {
       "id": "F-02",
       "paragraph_label": "F",
-      "sentence_index": 33,
+      "sentence_index": 34,
       "sentence": "But after listening to and observing Alex, it was difficult to argue with Pepperberg's explanation for his behaviors.",
       "translation": "然而，在聆听并观察了亚历克斯之后，人们就很难再反驳佩珀伯格对他行为的解释了。",
       "structure": [
@@ -1227,7 +1295,7 @@
     {
       "id": "F-03",
       "paragraph_label": "F",
-      "sentence_index": 34,
+      "sentence_index": 35,
       "sentence": "She wasn't handing him treats for the repetitious work or rapping him on the claws to make him say the sounds.",
       "translation": "她既没有因为这些重复性的训练就给他零食奖励，也没有敲打他的爪子来逼他发出那些声音。",
       "structure": [
@@ -1270,7 +1338,7 @@
     {
       "id": "F-04",
       "paragraph_label": "F",
-      "sentence_index": 35,
+      "sentence_index": 36,
       "sentence": "\"He has to hear the words over and over before he can correctly imitate them,\" Pepperberg said, after pronouncing \"seven\" for Alex a good dozen times in a row.",
       "translation": "佩珀伯格在连续十来次对亚历克斯念出“seven”之后说道：“他必须反复听到这些词，才能正确地模仿出来。”",
       "structure": [
@@ -1313,7 +1381,7 @@
     {
       "id": "F-05",
       "paragraph_label": "F",
-      "sentence_index": 36,
+      "sentence_index": 37,
       "sentence": "\"I'm not trying to see if Alex can learn a human language,\" she added.",
       "translation": "她又补充说：“我并不是想看看亚历克斯能不能学会人类语言。”",
       "structure": [
@@ -1347,7 +1415,7 @@
     {
       "id": "F-06",
       "paragraph_label": "F",
-      "sentence_index": 37,
+      "sentence_index": 38,
       "sentence": "\"That's never been the point.",
       "translation": "“这从来都不是重点。",
       "structure": [
@@ -1376,7 +1444,7 @@
     {
       "id": "F-07",
       "paragraph_label": "F",
-      "sentence_index": 38,
+      "sentence_index": 39,
       "sentence": "My plan always was to use his imitative skills to get a better understanding of avian cognition.\"",
       "translation": "我的计划一直是利用他的模仿能力，更深入地理解鸟类的认知。”",
       "structure": [
@@ -1419,7 +1487,7 @@
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 39,
+      "sentence_index": 40,
       "sentence": "In other words, because Alex was able to produce a close approximation of the sounds of some English words, Pepperberg could ask him questions about a bird's basic understanding of the world.",
       "translation": "换句话说，正因为亚历克斯能够相当逼真地发出一些英语单词的声音，佩珀伯格才得以向他提出问题，以探查一只鸟对世界最基本的理解。",
       "structure": [
@@ -1462,7 +1530,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 40,
+      "sentence_index": 41,
       "sentence": "She couldn't ask him what he was thinking about, but she could ask him about his knowledge of numbers, shapes, and colors.",
       "translation": "她无法问他正在想什么，但她可以问他对数字、形状和颜色等概念的掌握情况。",
       "structure": [
@@ -1501,7 +1569,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 41,
+      "sentence_index": 42,
       "sentence": "To demonstrate, Pepperberg carried Alex on her arm to a tall wooden perch in the middle of the room.",
       "translation": "为了演示，佩珀伯格让亚历克斯站在她的手臂上，把他带到房间中央一根高高的木栖架上。",
       "structure": [
@@ -1540,7 +1608,7 @@
     {
       "id": "G-04",
       "paragraph_label": "G",
-      "sentence_index": 42,
+      "sentence_index": 43,
       "sentence": "She then retrieved a green key and a small green cup from a basket on a shelf.",
       "translation": "随后，她从架子上的一个篮子里取出一把绿色的钥匙和一个小小的绿色杯子。",
       "structure": [
@@ -1574,7 +1642,7 @@
     {
       "id": "G-05",
       "paragraph_label": "G",
-      "sentence_index": 43,
+      "sentence_index": 44,
       "sentence": "She held up the two items to Alex's eye.",
       "translation": "她把这两样物品举到亚历克斯眼前。",
       "structure": [
@@ -1608,12 +1676,12 @@
     {
       "id": "G-06",
       "paragraph_label": "G",
-      "sentence_index": 44,
-      "sentence": "\"What'ssame?\" she asked.",
+      "sentence_index": 45,
+      "sentence": "\"What's same?\" she asked.",
       "translation": "“什么是相同的？”她问道。",
       "structure": [
         {
-          "text": "What'ssame?",
+          "text": "What's same?",
           "role": "reported_question",
           "level": 2
         },
@@ -1624,7 +1692,7 @@
         }
       ],
       "difficult_points": [
-        "What'ssame 是源文将 What's 与 same 连写的异常。",
+        "What's same? 即 What is same?，问两样东西的相同之处，口语中省略了 the。",
         "问题省略了 between them 等成分，实际问两物品相同之处。"
       ],
       "expressions": []
@@ -1632,7 +1700,7 @@
     {
       "id": "G-07",
       "paragraph_label": "G",
-      "sentence_index": 45,
+      "sentence_index": 46,
       "sentence": "Without hesitation, Alex's beak opened: \"Co-lor.\"",
       "translation": "亚历克斯毫不犹豫地张开喙：“颜—色。”",
       "structure": [
@@ -1668,11 +1736,11 @@
         }
       ]
     },
-    {"id": "G-08", "paragraph_label": "G", "sentence_index": 46, "sentence": "\"What's different?\" Pepperberg asked.", "translation": "“有什么不同？”佩珀伯格问。", "structure": [{"text": "What's different?", "role": "direct_speech", "level": 1}, {"text": "Pepperberg asked", "role": "reporting_clause", "level": 1}], "difficult_points": ["引语是疑问句，what 作主语，different 作表语。", "引述部分 Pepperberg asked 放在引语后面；疑问句引语末尾保留问号，不再加逗号。"], "expressions": [{"text": "What's different?", "meaning_zh": "有什么不同？"}]},
+    {"id": "G-08", "paragraph_label": "G", "sentence_index": 47, "sentence": "\"What's different?\" Pepperberg asked.", "translation": "“有什么不同？”佩珀伯格问。", "structure": [{"text": "What's different?", "role": "direct_speech", "level": 1}, {"text": "Pepperberg asked", "role": "reporting_clause", "level": 1}], "difficult_points": ["引语是疑问句，what 作主语，different 作表语。", "引述部分 Pepperberg asked 放在引语后面；疑问句引语末尾保留问号，不再加逗号。"], "expressions": [{"text": "What's different?", "meaning_zh": "有什么不同？"}]},
     {
       "id": "G-09",
       "paragraph_label": "G",
-      "sentence_index": 47,
+      "sentence_index": 48,
       "sentence": "\"Shape,\" Alex said.",
       "translation": "“形状。”亚历克斯说道。",
       "structure": [
@@ -1696,7 +1764,7 @@
     {
       "id": "G-10",
       "paragraph_label": "G",
-      "sentence_index": 48,
+      "sentence_index": 49,
       "sentence": "His voice had the digitized sound of a cartoon character.",
       "translation": "他的声音带着卡通人物那种电子合成般的质感。",
       "structure": [
@@ -1725,7 +1793,7 @@
     {
       "id": "G-11",
       "paragraph_label": "G",
-      "sentence_index": 49,
+      "sentence_index": 50,
       "sentence": "Since parrots lack lips (another reason it was difficult for Alex to pronounce some sounds, such as ba), the words seemed to come from the air around him, as if a ventriloquist were speaking.",
       "translation": "由于鹦鹉没有嘴唇（这也是亚历克斯难以发出某些音、例如 ba 的另一个原因），那些词听起来仿佛不是从他口中发出，而是从他周围的空气里飘来，就像有个腹语术演员在说话一样。",
       "structure": [
@@ -1773,7 +1841,7 @@
     {
       "id": "G-12",
       "paragraph_label": "G",
-      "sentence_index": 50,
+      "sentence_index": 51,
       "sentence": "But the words – and what can only be called the thoughts – were entirely his.",
       "translation": "然而，这些话——以及只能称之为“思考”的东西——完全出自他自己。",
       "structure": [
@@ -1807,7 +1875,7 @@
     {
       "id": "H-01",
       "paragraph_label": "H",
-      "sentence_index": 51,
+      "sentence_index": 52,
       "sentence": "For the next 20 minutes, Alex ran through his tests, distinguishing colors, shapes, sizes, and materials (wool versus wood versus metal).",
       "translation": "接下来的20分钟里，亚历克斯依次完成各项测试，辨别颜色、形状、大小以及材质（羊毛、木头和金属）。",
       "structure": [
@@ -1845,7 +1913,7 @@
     {
       "id": "H-02",
       "paragraph_label": "H",
-      "sentence_index": 52,
+      "sentence_index": 53,
       "sentence": "He did some simple arithmetic, such as counting the yellow toy blocks among a pile of mixed hues.",
       "translation": "他还做了一些简单的算术题，比如在一堆颜色混杂的积木中数出黄色玩具块的数量。",
       "structure": [
@@ -1883,7 +1951,7 @@
     {
       "id": "H-03",
       "paragraph_label": "H",
-      "sentence_index": 53,
+      "sentence_index": 54,
       "sentence": "And, then, as if to offer final proof of the mind inside his bird's brain, Alex spoke up.",
       "translation": "随后，他仿佛是在为那颗鸟脑中的“心智”提供最后的证据一般，开口说话了。",
       "structure": [
@@ -1921,7 +1989,7 @@
     {
       "id": "H-04",
       "paragraph_label": "H",
-      "sentence_index": 54,
+      "sentence_index": 55,
       "sentence": "\"Talk clearly!\" he commanded, when one of the younger birds Pepperberg was also teaching talked with wrong pronunciation.",
       "translation": "“说清楚点！”当佩珀伯格也在教的一只更年轻的鹦鹉发音不正确时，他命令道。",
       "structure": [
@@ -1955,18 +2023,37 @@
     {
       "id": "H-05",
       "paragraph_label": "H",
-      "sentence_index": 55,
-      "sentence": "\"Talk clearly!\"\"Don't be a smart aleck,\" Pepperberg said, shaking her head at him.",
-      "translation": "“说清楚点！”“别自作聪明，”佩珀伯格说着，对他摇了摇头。",
+      "sentence_index": 56,
+      "sentence": "\"Talk clearly!\"",
+      "translation": "“说清楚点！”",
       "structure": [
         {
           "text": "Talk clearly!",
-          "role": "reported_command",
-          "level": 2
-        },
+          "role": "imperative_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Talk clearly! 是祈使句，省略了主语 you，引号表示这是别人说的话。",
+        "clearly 是副词，修饰 talk，意为“清楚地”。"
+      ],
+      "expressions": [
+        {
+          "text": "talk clearly",
+          "meaning_zh": "说清楚"
+        }
+      ]
+    },
+    {
+      "id": "H-05b",
+      "paragraph_label": "H",
+      "sentence_index": 57,
+      "sentence": "\"Don't be a smart aleck,\" Pepperberg said, shaking her head at him.",
+      "translation": "“别自作聪明，”佩珀伯格说着，对他摇了摇头。",
+      "structure": [
         {
           "text": "Don't be a smart aleck",
-          "role": "reported_command",
+          "role": "imperative_clause",
           "level": 2
         },
         {
@@ -1981,8 +2068,8 @@
         }
       ],
       "difficult_points": [
-        "源文把两个相邻引语的引号连写，必须整体保留。",
-        "shaking 分词短语说明 Pepperberg 说话时摇头的伴随动作。"
+        "Don't be a smart aleck 是否定祈使句；smart aleck 指自作聪明、爱耍嘴皮子的人。",
+        "shaking her head at him 是现在分词短语，说明 Pepperberg 说话时摇头的伴随动作。"
       ],
       "expressions": [
         {
@@ -1998,7 +2085,7 @@
     {
       "id": "H-06",
       "paragraph_label": "H",
-      "sentence_index": 56,
+      "sentence_index": 58,
       "sentence": "\"He knows all this, and he gets bored, so he interrupts the others, or he gives the wrong answer just to be obstinate.",
       "translation": "“这些他全都懂，可他会觉得无聊，所以就会打断别人，或者干脆为了唱反调而故意答错。",
       "structure": [
@@ -2041,7 +2128,7 @@
     {
       "id": "H-07",
       "paragraph_label": "H",
-      "sentence_index": 57,
+      "sentence_index": 59,
       "sentence": "At this stage, he's like a teenager; he's moody, and I'm never sure what he'll do.\"",
       "translation": "到了这个阶段，他就像个青少年：情绪多变，我永远拿不准他接下来会做什么。”",
       "structure": [

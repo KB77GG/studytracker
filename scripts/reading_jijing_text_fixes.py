@@ -6,6 +6,12 @@ and carries a few obvious typos. The fixes live in
 ``data/reading_jijing_text_fixes.json`` and are applied in two places so they
 survive rebuilds from raw:
 
+A fix edits one paragraph. With ``"questions": true`` the same replacement is also
+made in that passage's question data (titles, central sentences, locating words),
+which quote the passage; ``"paragraph_label": null`` marks a fix found only there.
+``"at_end": true`` replaces ``find`` at the very end of the paragraph, for adding a
+missing final full stop (there ``find`` is part of ``replace``).
+
 - ``build_reading_test_practice.py --source jijing`` applies them while building;
 - this script patches the existing ``static/reading_jijing/*.json`` in place.
 
@@ -41,24 +47,56 @@ def load_fixes(path: Path = FIXES_PATH) -> dict[str, list[dict]]:
 def apply_fix(text: str, fix: dict) -> tuple[str, bool]:
     """Apply one fix to a paragraph text. Returns (text, changed)."""
     find, replace = fix["find"], fix["replace"]
+    where = f"{fix['passage_id']} {fix['paragraph_label']}"
+    if fix.get("at_end"):
+        if text.endswith(replace):
+            return text, False
+        if text.endswith(find):
+            return text[: len(text) - len(find)] + replace, True
+        raise TextFixError(f"{where}: paragraph does not end with {find!r}")
     count = text.count(find)
     if count == 1:
         return text.replace(find, replace), True
     if count == 0 and replace in text:
         return text, False
-    where = f"{fix['passage_id']} {fix['paragraph_label']}"
     raise TextFixError(f"{where}: {find!r} occurs {count} times")
 
 
-def apply_passage_fixes(passage_id: str, paragraphs: list[dict], fixes: dict) -> int:
+def replace_in_place(node, find: str, replace: str) -> tuple[int, bool]:
+    """Replace in every string of nested lists/dicts. Returns (count, replace seen)."""
+    count, seen = 0, False
+    items = node.items() if isinstance(node, dict) else enumerate(node)
+    for key, value in list(items):
+        if isinstance(value, str):
+            count += value.count(find)
+            node[key] = value.replace(find, replace)
+            seen = seen or replace in node[key]
+        elif isinstance(value, (dict, list)):
+            sub_count, sub_seen = replace_in_place(value, find, replace)
+            count, seen = count + sub_count, seen or sub_seen
+    return count, seen
+
+
+def apply_passage_fixes(
+    passage_id: str, paragraphs: list[dict], fixes: dict, groups: list | None = None
+) -> int:
     """Apply all fixes for one passage in place. Returns how many changed text."""
     by_label = {row.get("label"): row for row in paragraphs}
     changed = 0
     for fix in fixes.get(passage_id, []):
-        row = by_label.get(fix["paragraph_label"])
-        if row is None:
-            raise TextFixError(f"{passage_id}: no paragraph {fix['paragraph_label']!r}")
-        row["text"], did_change = apply_fix(row["text"], fix)
+        did_change = False
+        if fix["paragraph_label"] is not None:
+            row = by_label.get(fix["paragraph_label"])
+            if row is None:
+                raise TextFixError(f"{passage_id}: no paragraph {fix['paragraph_label']!r}")
+            row["text"], did_change = apply_fix(row["text"], fix)
+        if fix.get("questions") and fix.get("at_end"):
+            raise TextFixError(f"{passage_id}: an at_end fix cannot also edit question data")
+        if fix.get("questions") and groups is not None:
+            count, seen = replace_in_place(groups, fix["find"], fix["replace"])
+            if fix["paragraph_label"] is None and not count and not seen:
+                raise TextFixError(f"{passage_id}: {fix['find']!r} not in question data")
+            did_change = did_change or count > 0
         changed += did_change
     return changed
 
@@ -71,7 +109,7 @@ def patch_static_files(fixes: dict, static_dir: Path = STATIC_DIR, write: bool =
         path = static_dir / f"{test_id}.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         changed = sum(
-            apply_passage_fixes(p["id"], p["content"]["paragraphs"], fixes)
+            apply_passage_fixes(p["id"], p["content"]["paragraphs"], fixes, p.get("groups"))
             for p in payload["passages"]
         )
         if changed and write:

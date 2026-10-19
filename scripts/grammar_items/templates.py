@@ -54,6 +54,12 @@ def span_from_tokens(sentence, tokens):
 
 
 QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
+# Trimming also drops a closing bracket ("Rani Ki Vav (Queen's Stepwell"); same bounded repair.
+BRACKET_PAIRS = {"(": ")", "[": "]"}
+# Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
+COORDINATING_MARKS = frozenset({"for", "so", "yet"})
+# A coordinate clause needs a subject of its own; without one it is a coordinated predicate.
+CLAUSE_SUBJECT_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "expl"})
 
 
 def single_quote_role(sentence, index):
@@ -96,11 +102,11 @@ def balance_single_quotes(sentence, start, end, low, high):
 
 
 def close_quotes(sentence, span, low, high):
-    """Re-attach a quote mark that trimming split off, staying inside [low, high)."""
+    """Re-attach a quote mark or bracket that trimming split off, staying inside [low, high)."""
     if not span:
         return span
     start, end = span["start"], span["end"]
-    for opening, closing in QUOTE_PAIRS.items():
+    for opening, closing in {**QUOTE_PAIRS, **BRACKET_PAIRS}.items():
         text = sentence[start:end]
         if opening == closing:
             missing_open = missing_close = text.count(opening) % 2 == 1
@@ -353,6 +359,21 @@ def main_verb(ctx):
     return item, []
 
 
+def type_matches(view, head, kind):
+    """A finite head with the clause dep; a coordinate clause has its own subject and no
+    subordinator ("and that ..." is a noun clause, "and usually refer to ..." a predicate).
+    An adverbial clause led by "for" ("for they shared ...") is coordinate as taught."""
+    if not (finite(head, view) and head.dep in CLAUSE_DEPS[kind]):
+        return False
+    children = view.children(head)
+    marks = {c.text.lower() for c in children if c.dep == "mark"}
+    if kind == "adverbial":
+        return "for" not in marks
+    if kind != "coordinate":
+        return True
+    return marks <= COORDINATING_MARKS and any(c.dep in CLAUSE_SUBJECT_DEPS for c in children)
+
+
 def boundary_reasons(ctx, head, tokens, kind):
     """Clause targets must match the parser subtree, as T2 already requires (review F3)."""
     subtree = trim_tokens(ctx.view.subtree(head), kind == "coordinate")
@@ -381,7 +402,7 @@ def clause_boundaries(ctx):
                 continue
             tokens, head, reasons = target_analysis(ctx, span, kind)
             if head:
-                if head.dep not in CLAUSE_DEPS[kind] or not finite(head, ctx.view):
+                if not type_matches(ctx.view, head, kind):
                     reasons.append(R.CLAUSE_TYPE_MISMATCH)
                 reasons.extend(boundary_reasons(ctx, head, tokens, kind))
             if kind == "adverbial":
@@ -416,7 +437,7 @@ def classify_clauses(ctx):
             matches = (
                 (not finite(head, ctx.view) or head.dep == "prep")
                 if kind == "phrase"
-                else (finite(head, ctx.view) and head.dep in CLAUSE_DEPS[kind])
+                else type_matches(ctx.view, head, kind)
             )
             if not matches:
                 reasons.append(R.CLAUSE_TYPE_MISMATCH)

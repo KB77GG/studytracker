@@ -107,7 +107,7 @@
       "difficult_points": [
         "冒号后的内容具体说明 Conditions...are brutal 中“恶劣”体现在哪些方面。",
         "only intensified by... 是过去分词短语，修饰前面整个状况，说明狂风和贫瘠土壤使情况雪上加霜。",
-        "mal-nutritious rocky 之后疑似省略了 soil 一词，是原文排版/用词不完整之处，此处按原文保留。"
+        "mal-nutritious rocky 后面疑似漏了 soil，意思是贫瘠多石的土壤。"
       ],
       "expressions": [
         {
@@ -193,7 +193,7 @@
       "id": "A-06",
       "paragraph_label": "A",
       "sentence_index": 6,
-      "sentence": "Results of extensive studies on bristlecone pine stands have shown that in fact such, environmental limitations are positively associated with the attainment of great age.",
+      "sentence": "Results of extensive studies on bristlecone pine stands have shown that in fact such environmental limitations are positively associated with the attainment of great age.",
       "translation": "对狐尾松林的大量研究结果表明，事实上，这类环境限制条件与树木获得高龄之间是正相关的。",
       "structure": [
         {
@@ -207,14 +207,14 @@
           "level": 1
         },
         {
-          "text": "that in fact such, environmental limitations are positively associated with the attainment of great age",
+          "text": "that in fact such environmental limitations are positively associated with the attainment of great age",
           "role": "noun_clause",
           "level": 2
         }
       ],
       "difficult_points": [
         "that 引导宾语从句，作 have shown 的宾语。",
-        "such 后多出的逗号是原文排版问题，应连读为 such environmental limitations，即“这类环境限制条件”。",
+        "such environmental limitations 意为“这类环境限制条件”，such 修饰名词短语。",
         "be positively associated with 表示“与……呈正相关”，是学术写作中的常见搭配。"
       ],
       "expressions": [
@@ -421,16 +421,16 @@
       "id": "C-02",
       "paragraph_label": "C",
       "sentence_index": 13,
-      "sentence": "With every strenuous year that passes in the While Mountains, each bristlecone grows and forms a new outer layer of cambium that reflects a season's particular ease or hardship.",
+      "sentence": "With every strenuous year that passes in the White Mountains, each bristlecone grows and forms a new outer layer of cambium that reflects a season's particular ease or hardship.",
       "translation": "在白山，每熬过艰难的一年，每棵狐尾松都会生长并形成一层新的外层形成层，忠实反映出那一季节的顺遂或艰辛。",
       "structure": [
         {
-          "text": "With every strenuous year that passes in the While Mountains",
+          "text": "With every strenuous year that passes in the White Mountains",
           "role": "prepositional_phrase",
           "level": 2
         },
         {
-          "text": "that passes in the While Mountains",
+          "text": "that passes in the White Mountains",
           "role": "relative_clause",
           "level": 3
         },
@@ -452,7 +452,7 @@
       ],
       "difficult_points": [
         "With every...year that passes 是介词短语作时间状语，相当于“每过一年”。",
-        "the While Mountains 中的 While 是原文排版错误，应为 White（白山），此处按原文保留。",
+        "the White Mountains 是山脉名（白山），山脉名前用 the。",
         "that reflects... 是定语从句，修饰 a new outer layer of cambium，说明这层形成层记录当年气候状况的功能。"
       ],
       "expressions": [
@@ -656,11 +656,11 @@
       "id": "D-03",
       "paragraph_label": "D",
       "sentence_index": 19,
-      "sentence": "Since, the rings of wood formed each year reveal the trees'response to climatic conditions during a particular growing season, in their persistence they have left us natural recordings of the past, markers of the present, and clues to the future.",
+      "sentence": "Since the rings of wood formed each year reveal the trees' response to climatic conditions during a particular growing season, in their persistence they have left us natural recordings of the past, markers of the present, and clues to the future.",
       "translation": "由于每年形成的木质年轮揭示了树木在某个生长季节对气候条件的反应，它们凭借这份坚韧，为我们留下了记录过去的自然档案、标示现在的标记，以及通向未来的线索。",
       "structure": [
         {
-          "text": "Since, the rings of wood formed each year reveal the trees'response to climatic conditions during a particular growing season",
+          "text": "Since the rings of wood formed each year reveal the trees' response to climatic conditions during a particular growing season",
           "role": "adverbial_clause",
           "level": 2
         },
@@ -686,9 +686,9 @@
         }
       ],
       "difficult_points": [
-        "Since 后多出的逗号是原文排版问题，应连读为 Since the rings of wood...，表示原因。",
+        "Since 引导原因状语从句，从句主语是 the rings of wood，谓语是 reveal。",
         "formed each year 是过去分词短语，修饰 the rings of wood，说明年轮是每年形成的。",
-        "trees'response 中缺失空格是原文排版问题，应为 trees' response。",
+        "the trees' response to... 意为“树木对……的反应”，trees' 是复数名词的所有格。",
         "natural recordings of the past, markers of the present, and clues to the future 三者并列，都是 left us 的宾语。"
       ],
       "expressions": [
@@ -814,7 +814,7 @@
       "id": "E-04",
       "paragraph_label": "E",
       "sentence_index": 23,
-      "sentence": "This adaptation helps the bristlecone photosynthesize during particularly brutal months. Saving the energy of constant needle replacement and providing a stable supply of chlorophyll.",
+      "sentence": "This adaptation helps the bristlecone photosynthesize during particularly brutal months, saving the energy of constant needle replacement and providing a stable supply of chlorophyll.",
       "translation": "这种适应有助于狐尾松在尤为严酷的月份进行光合作用，同时节省了不断更换松针所需的能量，并提供了稳定的叶绿素供应。",
       "structure": [
         {
@@ -828,14 +828,14 @@
           "level": 1
         },
         {
-          "text": "Saving the energy of constant needle replacement and providing a stable supply of chlorophyll",
+          "text": "saving the energy of constant needle replacement and providing a stable supply of chlorophyll",
           "role": "participial_phrase",
           "level": 2
         }
       ],
       "difficult_points": [
         "help sb do 结构中 photosynthesize 是不带 to 的原形动词，作宾语补足语。",
-        "Saving...and providing... 是现在分词短语，前面多出的句号是原文排版错误，应视为对前一句的补充说明（伴随结果），而非独立成句。",
+        "saving ... and providing ... 是两个并列的现在分词短语，作结果状语，说明这种适应带来的好处。",
         "the energy of constant needle replacement 指反复更换松针原本需要消耗的能量。"
       ],
       "expressions": [
@@ -1076,7 +1076,7 @@
       "id": "F-01",
       "paragraph_label": "F",
       "sentence_index": 30,
-      "sentence": "The technique of cambial edge retreat has helped promote old age in bristlecone pine, but that certainly is no the only reason.",
+      "sentence": "The technique of cambial edge retreat has helped promote old age in bristlecone pine, but that certainly is not the only reason.",
       "translation": "形成层边缘退缩这一机制有助于促成狐尾松的高龄，但这肯定不是唯一的原因。",
       "structure": [
         {
@@ -1090,14 +1090,14 @@
           "level": 1
         },
         {
-          "text": "but that certainly is no the only reason",
+          "text": "but that certainly is not the only reason",
           "role": "coordinated_clause",
           "level": 1
         }
       ],
       "difficult_points": [
         "help do 结构中 promote 是不带 to 的原形动词，作宾语补足语。",
-        "is no the only reason 中 no 应为 not，是原文排版/拼写错误，此处按原文保留，意思是“不是唯一的原因”。"
+        "that 指上一句所说的形成层边缘退缩；is not the only reason 意为“不是唯一的原因”。"
       ],
       "expressions": [
         {
@@ -1329,7 +1329,7 @@
         }
       ],
       "difficult_points": [
-        "restricted 前疑似省略了 are，属于原文的语法疏漏，此处按原文保留，理解为 are restricted to。",
+        "restricted 前疑似漏了 are，应理解为 are restricted to（局限于）。",
         "rather isolated 修饰 stands，说明这些林分彼此之间相对孤立分散。"
       ],
       "expressions": [
@@ -1377,7 +1377,7 @@
       "id": "G-03",
       "paragraph_label": "G",
       "sentence_index": 39,
-      "sentence": "Within this natural range, the oldest and most widely researched stands of bristlecones occur in California's the White Mountains.",
+      "sentence": "Within this natural range, the oldest and most widely researched stands of bristlecones occur in California's White Mountains.",
       "translation": "在这一自然分布范围内，最古老、研究最广泛的狐尾松林分布在加州的白山。",
       "structure": [
         {
@@ -1391,13 +1391,13 @@
           "level": 1
         },
         {
-          "text": "occur in California's the White Mountains",
+          "text": "occur in California's White Mountains",
           "role": "verb_phrase",
           "level": 1
         }
       ],
       "difficult_points": [
-        "California's the White Mountains 中 's 后又加 the，是原文排版重复问题，实际所指即“加州的白山”。",
+        "California's White Mountains 意为“加州的白山”，所有格后不再加 the。",
         "the oldest and most widely researched 并列修饰 stands，强调其历史最悠久、研究最充分两重特点。"
       ],
       "expressions": [
@@ -1484,7 +1484,7 @@
       "id": "G-06",
       "paragraph_label": "G",
       "sentence_index": 42,
-      "sentence": "The peaks south of the Owens Valley, are higher up than they might appear from a distance.",
+      "sentence": "The peaks south of the Owens Valley are higher up than they might appear from a distance.",
       "translation": "欧文斯谷以南的山峰，实际高度比远观时看起来要高。",
       "structure": [
         {
@@ -1504,7 +1504,7 @@
         }
       ],
       "difficult_points": [
-        "the Owens Valley 之后多出的逗号是原文排版问题，不影响 The peaks south of the Owens Valley 作为完整主语。",
+        "主语是 The peaks south of the Owens Valley，south of... 是后置修饰语。",
         "than 引导比较状语从句，appear from a distance 指从远处看时呈现出的样子。"
       ],
       "expressions": [

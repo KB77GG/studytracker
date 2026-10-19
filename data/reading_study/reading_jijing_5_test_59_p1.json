@@ -9,16 +9,16 @@
   "sentences": [
     {
       "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
-      "sentence": "In 1894 Dr John Kellogg and his brother. Will, were supervising a hospital and health spa in Michigan.",
+      "sentence": "In 1894 Dr John Kellogg and his brother, Will, were supervising a hospital and health spa in Michigan.",
       "translation": "1894年，约翰·凯洛格博士和他的弟弟威尔当时正在管理密歇根州的一家医院兼健康疗养中心。",
       "structure": [
         {"text": "In 1894", "role": "time_adverbial", "level": 1},
-        {"text": "Dr John Kellogg and his brother. Will", "role": "subject", "level": 1},
+        {"text": "Dr John Kellogg and his brother, Will", "role": "subject", "level": 1},
         {"text": "were supervising", "role": "verb_phrase", "level": 1},
         {"text": "a hospital and health spa", "role": "object", "level": 1},
         {"text": "in Michigan", "role": "prepositional_phrase", "level": 1}
       ],
-      "difficult_points": ["原文在 brother 后误用了句号，Will 实际是对 his brother 的同位说明。", "were supervising 使用过去进行时，交代当时持续进行的管理工作。"],
+      "difficult_points": ["Will 是 his brother 的同位语，用两个逗号隔开，说明弟弟的名字。", "were supervising 使用过去进行时，交代当时持续进行的管理工作。"],
       "expressions": [{"text": "health spa", "meaning_zh": "健康疗养中心"}]
     },
     {
@@ -156,32 +156,32 @@
     },
     {
       "id": "C-02", "paragraph_label": "C", "sentence_index": 12,
-      "sentence": "The mistake that gave US cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets.",
+      "sentence": "The mistake that gave us cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets.",
       "translation": "那次为我们带来玉米片的失误，在颠覆式创新的历史中一再重演；这类创新能够改变市场。",
       "structure": [
         {"text": "The mistake", "role": "subject", "level": 1},
-        {"text": "that gave US cornflakes", "role": "relative_clause", "level": 2},
+        {"text": "that gave us cornflakes", "role": "relative_clause", "level": 2},
         {"text": "keeps repeating itself", "role": "verb_phrase", "level": 1},
         {"text": "in the history of disruptive innovation", "role": "prepositional_phrase", "level": 1},
         {"text": "the kind", "role": "apposition", "level": 1},
         {"text": "that transforms markets", "role": "relative_clause", "level": 2}
       ],
-      "difficult_points": ["原文大写 US 按语义应理解为 us，即“给我们带来玉米片”。", "第一个 that 修饰 mistake，第二个 that 修饰 the kind。", "the kind 是 disruptive innovation 的同位语，进一步界定这类创新。"],
+      "difficult_points": ["gave us cornflakes 是双宾语结构，us 是间接宾语。", "第一个 that 修饰 mistake，第二个 that 修饰 the kind。", "the kind 是 disruptive innovation 的同位语，进一步界定这类创新。"],
       "expressions": [{"text": "keep repeating itself", "meaning_zh": "一再重演"}, {"text": "disruptive innovation", "meaning_zh": "颠覆式创新"}, {"text": "transform markets", "meaning_zh": "改变市场"}]
     },
     {
       "id": "C-03", "paragraph_label": "C", "sentence_index": 13,
-      "sentence": "Louis Daguerre, for, instance, discovered the technique that gave US photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image.",
+      "sentence": "Louis Daguerre, for instance, discovered the technique that gave us photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image.",
       "translation": "例如，路易·达盖尔在19世纪30年代发现了摄影技术：当时，一支破碎温度计中滴出的水银意外生成了摄影图像。",
       "structure": [
         {"text": "Louis Daguerre", "role": "subject", "level": 1},
-        {"text": "for, instance", "role": "parenthesis", "level": 1},
+        {"text": "for instance", "role": "parenthesis", "level": 1},
         {"text": "discovered", "role": "verb", "level": 1},
         {"text": "the technique", "role": "object", "level": 1},
-        {"text": "that gave US photography in the 1830s", "role": "relative_clause", "level": 2},
+        {"text": "that gave us photography in the 1830s", "role": "relative_clause", "level": 2},
         {"text": "when drops of mercury from a shattered thermometer produced a photographic image", "role": "adverbial_clause", "level": 2}
       ],
-      "difficult_points": ["for, instance 是 OCR 标点异常，正常写法为 for instance，作插入语表示“例如”。", "that 引导定语从句修饰 technique；其中 US 按语义应为 us。", "when 从句交代这一技术发现时发生的偶然事件。"],
+      "difficult_points": ["for instance 是插入语，意为“例如”。", "that 引导定语从句修饰 technique；gave us photography 是双宾语结构。", "when 从句交代这一技术发现时发生的偶然事件。"],
       "expressions": [{"text": "for instance", "meaning_zh": "例如"}, {"text": "produce an image", "meaning_zh": "生成图像"}]
     },
     {
@@ -413,7 +413,7 @@
     },
     {
       "id": "G-02", "paragraph_label": "G", "sentence_index": 30,
-      "sentence": "It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways, other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing oil the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.",
+      "sentence": "It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways, other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing on the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.",
       "translation": "这意味着把背景各异的人临时组合起来，并以不可预测的方式融合观点。其他策略还包括：建立能够留意意外并评估其价值的系统；在意外发生得不够频繁时主动制造机会；抓住其中有用的意外；提取它们的宝贵特征；并在此基础上增加价值，为有益意外创造可能。",
       "structure": [
         {"text": "It means", "role": "main_clause", "level": 1},
@@ -423,11 +423,11 @@
         {"text": "having systems that watch out for accidents and examine them for value", "role": "gerund_object", "level": 2},
         {"text": "that watch out for accidents and examine them for value", "role": "relative_clause", "level": 3},
         {"text": "generating them when they do not happen often enough", "role": "coordinate_gerund_object", "level": 2},
-        {"text": "seizing oil the useful ones", "role": "coordinate_gerund_object", "level": 2},
+        {"text": "seizing on the useful ones", "role": "coordinate_gerund_object", "level": 2},
         {"text": "capturing their valuable features", "role": "coordinate_gerund_object", "level": 2},
         {"text": "building on them to add value and give potential for useful accidents", "role": "coordinate_gerund_object", "level": 2}
       ],
-      "difficult_points": ["原文用逗号连接 It means... 与 other strategies... 两个独立分句，属于标点异常。", "include 后接五个并列的动名词结构，列举不同策略。", "that 修饰 systems；其中 them 指 accidents。", "seizing oil 疑为 OCR 错误，结合语境应表达“抓住有用的意外”，但原文按要求保留。"],
+      "difficult_points": ["It means... 与 other strategies... 是两个独立分句，中间只用逗号连接，规范写法应用句号或分号隔开。", "include 后接五个并列的动名词结构，列举不同策略。", "that 修饰 systems；其中 them 指 accidents。", "seizing on the useful ones 中 seize on 意为“抓住、利用”，ones 指 accidents。"],
       "expressions": [{"text": "diverse backgrounds", "meaning_zh": "多元背景"}, {"text": "watch out for", "meaning_zh": "留意；密切关注"}, {"text": "build on", "meaning_zh": "以……为基础继续发展"}, {"text": "add value", "meaning_zh": "增加价值"}]
     },
     {
@@ -461,17 +461,17 @@
     },
     {
       "id": "H-03", "paragraph_label": "H", "sentence_index": 33,
-      "sentence": "It runs counter to the notion frequently pushes by consultants that you can 'harness'creativity and direct it to line up with intention.",
+      "sentence": "It runs counter to the notion frequently pushed by consultants that you can 'harness' creativity and direct it to line up with intention.",
       "translation": "它与顾问们经常宣扬的一种观念背道而驰：人们可以“驾驭”创造力，并引导它与既定意图保持一致。",
       "structure": [
         {"text": "It", "role": "subject", "level": 1},
         {"text": "runs counter to", "role": "verb_phrase", "level": 1},
         {"text": "the notion", "role": "object_of_preposition", "level": 1},
-        {"text": "frequently pushes by consultants", "role": "participial_phrase", "level": 2},
-        {"text": "that you can 'harness'creativity and direct it to line up with intention", "role": "appositive_clause", "level": 2},
+        {"text": "frequently pushed by consultants", "role": "participial_phrase", "level": 2},
+        {"text": "that you can 'harness' creativity and direct it to line up with intention", "role": "appositive_clause", "level": 2},
         {"text": "direct it to line up with intention", "role": "coordinate_predicate", "level": 3}
       ],
-      "difficult_points": ["It 指代前两句所说的反直觉思维。", "frequently pushes by consultants 存在 OCR/语法异常，按语义应是 frequently pushed by consultants，修饰 notion。", "that 从句具体说明 notion 的内容，不是普通定语从句。", "it 指 creativity；line up with 表示“与……保持一致”。"],
+      "difficult_points": ["It 指代前两句所说的反直觉思维。", "frequently pushed by consultants 是过去分词短语，修饰 notion，意为“顾问们经常宣扬的”。", "that 从句具体说明 notion 的内容，不是普通定语从句。", "it 指 creativity；line up with 表示“与……保持一致”。"],
       "expressions": [{"text": "run counter to", "meaning_zh": "与……背道而驰"}, {"text": "line up with", "meaning_zh": "与……一致"}, {"text": "harness creativity", "meaning_zh": "驾驭创造力"}]
     },
     {
@@ -490,16 +490,16 @@
     },
     {
       "id": "I-01", "paragraph_label": "I", "sentence_index": 35,
-      "sentence": "There are tentative signs that more companies are starting to realise that failure can lead to commercial gain, and that this is part or the risk-talking that underpins innovation.",
+      "sentence": "There are tentative signs that more companies are starting to realise that failure can lead to commercial gain, and that this is part of the risk-taking that underpins innovation.",
       "translation": "已有一些初步迹象显示，越来越多的公司开始意识到，失败能够带来商业收益，而且这是支撑创新的风险承担的一部分。",
       "structure": [
         {"text": "There are tentative signs", "role": "main_clause", "level": 1},
         {"text": "that more companies are starting to realise", "role": "relative_clause", "level": 2},
         {"text": "that failure can lead to commercial gain", "role": "object_clause", "level": 3},
-        {"text": "and that this is part or the risk-talking", "role": "coordinate_object_clause", "level": 3},
+        {"text": "and that this is part of the risk-taking", "role": "coordinate_object_clause", "level": 3},
         {"text": "that underpins innovation", "role": "relative_clause", "level": 4}
       ],
-      "difficult_points": ["第一个 that 修饰 signs，说明迹象的具体内容。", "realise 后有两个由 and 连接的 that 宾语从句。", "this 指“失败可能带来商业收益”这种认识或现象。", "part or the risk-talking 疑为 part of the risk-taking 的 OCR 错误；末尾 that 修饰 risk-taking。"],
+      "difficult_points": ["第一个 that 修饰 signs，说明迹象的具体内容。", "realise 后有两个由 and 连接的 that 宾语从句。", "this 指“失败可能带来商业收益”这种认识或现象。", "part of the risk-taking 意为“冒险行为的一部分”；末尾 that underpins innovation 是定语从句，修饰 risk-taking。"],
       "expressions": [{"text": "tentative signs", "meaning_zh": "初步迹象"}, {"text": "lead to commercial gain", "meaning_zh": "带来商业收益"}, {"text": "underpin innovation", "meaning_zh": "支撑创新"}]
     },
     {
@@ -547,15 +547,15 @@
     },
     {
       "id": "J-01", "paragraph_label": "J", "sentence_index": 39,
-      "sentence": "Instead of wiping the unsuccessfull product launch, Fosters used this lesson learned to go on and develop other brands instead.",
+      "sentence": "Instead of wiping the unsuccessful product launch, Fosters used this lesson learned to go on and develop other brands instead.",
       "translation": "福斯特没有把这次不成功的产品发布一笔勾销，而是吸取教训，继续开发其他品牌。",
       "structure": [
-        {"text": "Instead of wiping the unsuccessfull product launch", "role": "prepositional_phrase", "level": 1},
+        {"text": "Instead of wiping the unsuccessful product launch", "role": "prepositional_phrase", "level": 1},
         {"text": "Fosters", "role": "subject", "level": 1},
         {"text": "used this lesson learned", "role": "verb_phrase", "level": 1},
         {"text": "to go on and develop other brands instead", "role": "purpose_adverbial", "level": 1}
       ],
-      "difficult_points": ["Instead of 后接动名词 wiping，表示实际采取的做法与放弃失败项目相反。", "原文 unsuccessfull 与 Fosters 存在拼写/所有格异常，但需原样保留。", "to go on and develop 表示利用所学教训继续开发其他品牌。"],
+      "difficult_points": ["Instead of 后接动名词 wiping，表示实际采取的做法与放弃失败项目相反。", "Fosters 是公司名；this lesson learned 中 learned 是过去分词，后置修饰 lesson。", "to go on and develop 表示利用所学教训继续开发其他品牌。"],
       "expressions": [{"text": "instead of", "meaning_zh": "而不是"}, {"text": "lesson learned", "meaning_zh": "吸取的教训"}, {"text": "go on and develop", "meaning_zh": "继续开发"}]
     },
     {

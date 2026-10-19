@@ -1,7 +1,50 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 Codex 对 v0.2 审核修复独立复审：不通过，1 阻断、3 应修、3 建议。只审到 f9aebc7，后续 Claude 提交未合入；仅报告，未修改被审核文件，未部署。以下旧节保留为历史自查记录，其“全部修复”等结论以本次复审为准。
+> 最近更新：2026-10-19 已按用户授权合并指定的1f03c84，保留第一轮Codex独立复审及Claude第二至四轮记录，正在独立复审；未合并main、未部署。以下各轮结论均限其审核范围。
+
+## 2026-10-19 语法候选题 v0.2 第四轮（Claude，待复审）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第四轮”一节；逐句清单与分类 `docs/READING_STUDY_SOURCE_ERRORS_2026-10.md`（脚本生成）。
+- **用户决定**：把难点里记着的“原文有误、按原样保留”列清单、分类后修；修完再交 Codex 复审。
+- **原文**：486 句改原文（553 处），其中拆句 22 个单元、合并 5 处，句子 12,726 → 12,745。修订表 93 → 641 条（282 条同时改题目数据）；用户看过清单后追加 `50_30_p2` 的 `catching` → `caching` 2 条，共 643 条。新增可选字段 `at_end: true`（只替换段落末尾，用于补段末句号），`scripts/reading_jijing_text_fixes.py` 支持并有测试；新原因 `punctuation`。42 个机经 static 文件更新，从 raw 重建 171 篇与 static 完全一致。
+- **阅读解析**：116 个文件、611 个句子对象；结构成分随原文同步，过时的“必须保留/按原文保留/源文异常”等说明全部改写；119 句不改原文、只改写说明（不是错误 20、原文分段或句末标点 12、作者原文的语法用词 70、无法确定 17）。
+- **出题器**：`scripts/grammar_items/templates.py` 的 `type_matches`：并列分句目标必须有自己的主语（167 道 auto_pass 降为人审）；状语从句目标由 for 引出时判类型不符（10 道降级）。`reporting.py` 预期 `tagged_fragment` 32、`suspected_split_word` 0。候选 50,188；auto_pass T1 5987 / T2 4755 / T3 11582 / T4 411 / T5 5428 / T6 12886；抽查表 360 行。
+- **验证**：新 auto_pass 共 657 道逐题核对（5 道错题都来自上述两处存量问题，已降级）；种子 20261025、20261026 各复抽 30 题全对；回归 78 项状态和原因不变；两次生成逐字节一致（jsonl `0c727e740e89…`、xlsx `3fa09b550cfc…`、report json 追加修订后为 `ad5178ea7a54…`）。Flask-only CI 列表 153 ran / 1 skipped，Node 通过，`tests.test_reading_study` 22 通过，validator 0 错误，`--check` 0，Ruff 通过。临时库先导入 main 完整快照再导入本分支：updated=227 / skipped=90 / failed=0（133 篇数据改动 + 94 篇标签变化）。
+- **main 已前进**：`origin/main` 比本分支多 2 个提交（词汇“忘记”反馈，`3990007`、`cc6323e`）；合并只在 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 两份文档冲突，两边内容都保留即可。
+- **遗留**：第一、二轮 63 条修订仍未改题目数据；约 85 处名字含混的 role 仍显示“状语从句”；清单第五、六节的疑似错误未改；题目数据里 10 处定位词同义词仍是修订前写法（单个词，修订表改不到，页面不显示）。
+- **仅云端会话可见**：转换、同步、核对脚本和临时 SQLite 在会话 scratchpad，不提交；`output/grammar_items/` 被忽略，需重跑生成脚本获得。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。上线需用户授权：合并 main 并部署 → 备份数据库 → `scripts/import_reading_study.py`，预期 updated=227。
+- **下一步**：Codex 合并复审第二、三、四轮（`f9aebc7..` 本轮最后提交）；第一轮（`8f273e9..f9aebc7`）提示照旧 → 老师盲审 → 用户授权上线。
+
+## 2026-10-19 语法候选题 v0.2 第三轮（Claude，待复审）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第三轮”一节；逐句记录 `docs/READING_STUDY_RESPLIT_2026-10_ROUND3.md`（脚本生成）。
+- **用户决定**：乱码 6 句修掉；CO 缺下标、fagging、阅读页“问句/省略句显示成状语从句”也修。
+- **原文**：修订表 63 → 93 条（本轮 30 条）。NUL 按上下文补回（29_63_p3 五处为 `$`，84_73_p2 为逗号，另有 75_57_p2 段落和 50_30_p2 题干各一处）；29_63_p1 实际是 9 个 CO 缺下标、9 个 `2` 散落他处，统一改为 `CO2` 并删散落的 `2`，`2 to 5` 补为 `2°C to 5°C`；fagging → logging。修订表新增可选字段 `questions: true`（同时改该篇题目数据）和 `paragraph_label: null`（只在题目数据里），`scripts/reading_jijing_text_fixes.py` 与构建脚本同步支持并有测试；从 raw 重建 171 篇，段落和题目数据都与 static 一致。
+- **阅读解析**：17 句更新（含 29_63_p3 三处“元”改“美元”的翻译、过时的“必须保留”说明改写）；E-01 的 because 从句改标原因状语从句。
+- **阅读页标签**：`api/reading_study_glossary.py` 新增 `_unflavored_clause`，只改以前兜底成“状语从句”且名字能确定含义的 role（疑问句、祈使句、感叹句、省略结构、不定式、分词、动名词、名词性从句、主句、名字中间带关系词的状语从句等）；以关系词开头的 role 不变。新增 `tests/test_reading_study_glossary.py` 并加入 `.github/workflows/ci.yml` 的轻量测试列表。重新生成 `docs/GRAMMAR_GRAPH_V0_REVIEW.md`（只有句数变化）。
+- **出题器**：`control_character` 预期 0；统计变化为个位数，候选 49,901，抽查表 360 行。
+- **验证**：17 句的 52 道自动通过题逐题核对全对；种子 20261023 复抽 30 题全对；回归 78 项不变；两次生成逐字节一致。Flask-only CI 列表 148 ran / 1 skipped，Node 通过，`tests.test_reading_study` 22 通过，validator 0 错误，`--check` 0。临时库先导入 main 完整快照再导入本分支：updated=187 / skipped=130 / failed=0（59 篇数据改动 + 128 篇标签变化）。
+- **遗留待用户决定**：难点里还记着约 88 句“原文有误、按原样保留”（如 wax、DINA、tills、Jiving、chat），需逐条判断哪些真是错误；前两轮修订未同步改题目数据；约 85 处名字含混的 role（contrastive_clause 等）仍显示“状语从句”，需逐条改标注；ielts18_test3 定位词里的 `\x02`（不显示、不属机经修订表）。
+- **部署注意**：本轮改了后端 `api/reading_study_glossary.py`。标签在导入时写入数据库，必须先部署新代码、再运行 `scripts/import_reading_study.py`，预期 updated=187。
+- **仅云端会话可见**：批次与核对脚本、临时 SQLite 在会话 scratchpad，不提交。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。
+- **下一步**：Codex 复审（第一轮提示审 f9aebc7；第二、三轮用更新后的提示）→ 老师盲审 → 用户授权上线。
+
+## 2026-10-19 语法候选题 v0.2 第二轮（Claude，待复审）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第二轮”一节；逐句记录 `docs/READING_STUDY_RESPLIT_2026-10_ROUND2.md`（脚本生成）。
+- **用户决定**：claim mat 加修订；段首多余句点“修原文，并且排除”；51 个多句单元“拆”；上线后续再说。
+- **复审安排**：用户已拿到只审第一轮修复（`8f273e9..f9aebc7`）的 Codex 提示词，审核记录预定为 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md`，Codex 分支会与本分支分叉，事后合并。第二轮（`f9aebc7..` 之后的提交）需要另一次复审。
+- **数据**：修订表 33 → 63 条；句子 12,688 → 12,726；97 个句子对象变化，其余同文件句子除 `sentence_index` 外不变，文件排版保持原样。raw.json 未改；从 raw 重建 171 篇与 static 一致。
+- **出题器**：新增 `leading_stray_punctuation`（预期 0）、`control_character`（6 句 NUL，只报告）；`multi_sentence_unit` 修正列表编号、引语问句后接说话人、`Mt.`、缩写后接引号的误报（预期 1）；答案/目标被切掉的括号按原标注范围补回（不成对 155 → 2）；并列分句目标带从属连词时判 clause_type_mismatch（23 道降级）。tagged_fragment 预期 36。
+- **统计**：候选 49,895；auto_pass T1 5954 / T2 4790 / T3 11596 / T4 403 / T5 5399 / T6 12802；抽查表 360 行。
+- **验证**：97 个变动句子的 276 道自动通过题逐题核对（据此加了括号和并列从句两条修正）；种子 20261021 复抽 30 题全对；回归 78 项与第一轮修复后一致；两次生成逐字节一致。Flask-only CI 列表 138 ran / 1 skipped，Node 通过，`tests.test_reading_study` 22 通过，validator 0 错误，`--check` 0；改动 Python 文件 Ruff 通过。临时库先导入 main 完整快照再导入本分支：updated=56 / skipped=261 / failed=0。
+- **遗留待用户决定**：NUL 字符（29_63_p3 5 句、84_73_p2 1 句，另有题目文字中的同类问题）；29_63_p1 的 CO 缺下标；83_95_p2 D-04 的 `fagging`；词汇表把 interrogative_clause 等兜底显示成“状语从句”。
+- **仅云端会话可见**：批次脚本（`resplit/batch_m1.py` 等）、核对脚本和临时 SQLite 在会话 scratchpad，不提交。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。上线时 Reading Study 导入预期 updated=56（不再是 25）。
+- **下一步**：Codex 复审两轮修复 → 老师盲审 `data/grammar_items/review_batch_v0_2.xlsx` → 用户授权后上线。
 
 ## 2026-10-19 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
 

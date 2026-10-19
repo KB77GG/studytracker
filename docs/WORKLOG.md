@@ -4,6 +4,25 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-19 — 第四轮追加：catching → caching（Claude）
+
+- 用户决定把清单里记下未改的 `50_30_p2` F-02、F-03 `catching` 改为 `caching`：修订表 643 条（含题目数据 11 处），阅读解析同步两句，清单加第七节。题目统计不变，两次生成一致，模拟导入仍为 updated=227。Codex 复审提示词覆盖到本次提交。未推 main、未部署。
+
+## 2026-10-19 — 语法候选题 v0.2 第四轮（Claude）
+
+- 难点里记录的原文错误逐条列清单、分类：486 句改原文（含拆句 22、合并 5，修订表 93 → 641 条，可同时改题目数据，新增段末补句号的 `at_end`），119 句保留原文、改写说明。清单见 `docs/READING_STUDY_SOURCE_ERRORS_2026-10.md`，记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 第四轮。
+- 逐题核对时修了出题器两处存量误判：并列谓语当成并列分句（167 道降级）、for 分句当成状语从句（10 道降级）。两次生成一致，复抽 60 题全对，CI 列表 153 项通过（1 跳过），模拟导入 updated=227。未推 main、未部署；main 已多 2 个提交，合并只会在两份交接文档冲突。
+
+## 2026-10-19 — 语法候选题 v0.2 第三轮（Claude）
+
+- 修掉乱码（NUL）、29_63_p1 的 CO₂ 下标（实际 9 处 + 散落的 9 个 2）和 fagging，修订表可同时改题目数据；阅读页不再把问句、祈使句、省略句、不定式等显示成“状语从句”（72 个 role、407 处）。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 第三轮、`docs/READING_STUDY_RESPLIT_2026-10_ROUND3.md`。
+- 两次生成一致，复抽 30 题全对，CI 列表 148 项通过（1 跳过），模拟导入 updated=187。改了后端词汇表：部署新代码后再导入才生效。未推 main、未部署。
+
+## 2026-10-19 — 语法候选题 v0.2 第二轮（Claude）
+
+- 按用户决定：加 claim mat 等原文修订（共 30 条），修复并排除 14 个段首句点，51 个多句单元处理完毕（34 拆句、9 改原文、7 改规则、1 保留）。逐题核对新句子的题后，又补回被切掉的括号、并修正“并列的从句”误判为并列分句。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`、`docs/READING_STUDY_RESPLIT_2026-10_ROUND2.md`。
+- 两次生成一致，复抽 30 题全对，CI 列表 138 项通过（1 跳过），模拟导入 updated=56。未推 main、未部署。第一轮修复的 Codex 复审提示已交用户；第二轮待另行复审。
+
 ## 2026-10-19 — 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
 
 - 任务树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 的 `codex/grammar-item-candidates` 仅快进到 **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，审 `8f273e9..f9aebc7`；没有合入Claude后续提交或rebase。只新增 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md` 并更新两份交接，桌面main既有脏状态保留。
@@ -11,7 +30,7 @@
 - 65测试通过；Flask-only完整CI列表133运行/132通过/1跳过，Node通过；5改动Python Ruff check/format通过；validator0错误，textfix0未应用；完整main快照到当前临时SQLite导入updated25/skipped292/failed0。Mac冷/热两次四交付逐字节一致，报告对提交版仅Python版本行不同；13回归对象与基线完全一致。seed20261020两套各30题已逐题审核；七工作表盲审格式通过。
 - 正文 **0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8 已commit/push** 至任务分支并核对远端。CI [39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728) 整体success，test/Node成功，lint存量advisory失败、format跳过；日志问题路径与本轮被审改动文件无交集。本条由后续纯文档提交补记，两次均不带skip标记，最终回复前再核对最后提交CI。未改被审核代码/数据，未推main、部署、PR、生产操作或大模型API调用。临时证据只在本机；下一步处理R1–R4后再审，教师审核和Claude后续提交均未验收。
 
-## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude，历史自查）
+## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude）
 
 - 按 Codex 审核修完 F1–F5，采纳 S1–S3，S4 说明不修（生产 Python 3.10）。另把 T3/T4 从句目标纳入边界检查。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`。
 - 两次生成逐字节一致，复抽 30 题全部正确，CI 列表 133 项通过（1 跳过），模拟导入 updated=25。未推 main、未部署。下一步：复核修复后交老师盲审；OCR 错字 `claim mat`、14 个段首 `. `、51 个多句单元待用户决定。

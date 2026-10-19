@@ -59,15 +59,15 @@
     },
     {
       "id": "C-01", "paragraph_label": "C", "sentence_index": 5,
-      "sentence": "Tea, coffee, cocoa, cotton, flowers, handicrafts, and gold are all major fair-trade items, with coffee being the most recognisable, fund on supermarket shelves and at café chains throughout the developed world.",
+      "sentence": "Tea, coffee, cocoa, cotton, flowers, handicrafts, and gold are all major fair-trade items, with coffee being the most recognisable, found on supermarket shelves and at café chains throughout the developed world.",
       "translation": "茶、咖啡、可可、棉花、鲜花、手工艺品和黄金都是主要的公平贸易商品，其中咖啡最为人熟知，在发达国家各地的超市货架和连锁咖啡馆都能看到。",
       "structure": [
         {"text": "Tea, coffee, cocoa, cotton, flowers, handicrafts, and gold", "role": "compound_subject", "level": 1},
         {"text": "are all major fair-trade items", "role": "linking_predicate", "level": 1},
         {"text": "with coffee being the most recognisable", "role": "with_absolute_construction", "level": 1},
-        {"text": "fund on supermarket shelves and at café chains throughout the developed world", "role": "participle_supplement", "level": 2}
+        {"text": "found on supermarket shelves and at café chains throughout the developed world", "role": "participle_supplement", "level": 2}
       ],
-      "difficult_points": ["with coffee being ... 是 with 独立结构，突出咖啡在这些商品中最知名。", "fund 是源文 OCR 错误，按 found 理解，表示咖啡在各处都能找到。", "on supermarket shelves 与 at café chains 并列说明出现地点。"],
+      "difficult_points": ["with coffee being ... 是 with 独立结构，突出咖啡在这些商品中最知名。", "found on supermarket shelves... 是过去分词短语，补充说明咖啡随处可见。", "on supermarket shelves 与 at café chains 并列说明出现地点。"],
       "expressions": [{"text": "fair-trade items", "meaning_zh": "公平贸易商品"}, {"text": "throughout the developed world", "meaning_zh": "遍及发达国家"}]
     },
     {
@@ -122,27 +122,27 @@
     },
     {
       "id": "E-03", "paragraph_label": "E", "sentence_index": 10,
-      "sentence": "Additionally, the fair-trade system diers from that of the open market because there is a minimum price paid for goods, which may be higher than that of the open market.",
+      "sentence": "Additionally, the fair-trade system differs from that of the open market because there is a minimum price paid for goods, which may be higher than that of the open market.",
       "translation": "此外，公平贸易体系不同于开放市场体系，因为商品有一个最低收购价，而这个价格可能高于开放市场价格。",
       "structure": [
-        {"text": "the fair-trade system diers from that of the open market", "role": "main_clause", "level": 1},
+        {"text": "the fair-trade system differs from that of the open market", "role": "main_clause", "level": 1},
         {"text": "because there is a minimum price paid for goods", "role": "cause_clause", "level": 2},
         {"text": "which may be higher than that of the open market", "role": "relative_clause", "level": 3}
       ],
-      "difficult_points": ["diers 是源文 OCR 异常，应按 differs 理解。", "第一个 that 替代 system，避免重复 the system of the open market。", "which 修饰 minimum price；第二个 that 替代 price。"],
+      "difficult_points": ["differ from 意为“不同于”；because 引导原因状语从句，说明不同之处。", "第一个 that 替代 system，避免重复 the system of the open market。", "which 修饰 minimum price；第二个 that 替代 price。"],
       "expressions": [{"text": "differ from", "meaning_zh": "不同于"}, {"text": "minimum price", "meaning_zh": "最低价格"}, {"text": "be higher than", "meaning_zh": "高于"}]
     },
     {
       "id": "E-04", "paragraph_label": "E", "sentence_index": 11,
-      "sentence": "Secondly, a small premium, earmarked for community development, is added in good years; for example, coee co-operatives in South America frequently receive an additional 25c per kilogram.",
+      "sentence": "Secondly, a small premium, earmarked for community development, is added in good years; for example, coffee co-operatives in South America frequently receive an additional 25c per kilogram.",
       "translation": "其次，在收成好的年份还会增加一小笔专用于社区发展的溢价；例如，南美洲的咖啡合作社经常每公斤额外获得 25 美分。",
       "structure": [
         {"text": "a small premium", "role": "subject", "level": 1},
         {"text": "earmarked for community development", "role": "participle_attributive", "level": 2},
         {"text": "is added in good years", "role": "passive_predicate", "level": 1},
-        {"text": "coee co-operatives in South America frequently receive an additional 25c per kilogram", "role": "example_clause", "level": 1}
+        {"text": "coffee co-operatives in South America frequently receive an additional 25c per kilogram", "role": "example_clause", "level": 1}
       ],
-      "difficult_points": ["earmarked for 是过去分词短语，修饰 premium，说明这笔钱的指定用途。", "分号后以 for example 给出前述机制的具体实例。", "coee 是源文 OCR 错误，按 coffee 理解。"],
+      "difficult_points": ["earmarked for 是过去分词短语，修饰 premium，说明这笔钱的指定用途。", "分号后以 for example 给出前述机制的具体实例。", "25c 即25美分（cents）；per kilogram 意为“每公斤”。"],
       "expressions": [{"text": "be earmarked for", "meaning_zh": "专门用于"}, {"text": "community development", "meaning_zh": "社区发展"}, {"text": "per kilogram", "meaning_zh": "每公斤"}]
     },
     {
@@ -393,15 +393,15 @@
     },
     {
       "id": "H-07", "paragraph_label": "H", "sentence_index": 32,
-      "sentence": "One UK café chain is known to have passed on 1.6% of the extra 18% is charged for fair-trade coee to producers.",
+      "sentence": "One UK café chain is known to have passed on 1.6% of the extra 18% is charged for fair-trade coffee to producers.",
       "translation": "据悉，英国一家连锁咖啡馆对公平贸易咖啡额外加收了 18%，但其中仅有 1.6% 转交给生产者。",
       "structure": [
         {"text": "One UK café chain is known", "role": "passive_main_clause", "level": 1},
         {"text": "to have passed on 1.6%", "role": "perfect_infinitive_complement", "level": 2},
-        {"text": "of the extra 18% is charged for fair-trade coee", "role": "malformed_postmodifier", "level": 2},
+        {"text": "of the extra 18% is charged for fair-trade coffee", "role": "malformed_postmodifier", "level": 2},
         {"text": "to producers", "role": "recipient_adverbial", "level": 2}
       ],
-      "difficult_points": ["is known to have passed on 是“据悉已经转交”的被动报道结构，完成不定式表示动作已发生。", "of the extra 18% is charged 语法残缺，疑似源文漏掉 that；语义为“额外收取的 18% 中”。", "coee 是源文 OCR 错误，应按 coffee 理解。"],
+      "difficult_points": ["is known to have passed on 是“据悉已经转交”的被动报道结构，完成不定式表示动作已发生。", "of the extra 18% is charged 中缺少关系代词，规范写法应为 the extra 18% that is charged，意为“额外收取的18%中”。", "pass on A to B 中 A 较长，to producers 被放到了句末；fair-trade coffee 意为“公平贸易咖啡”。"],
       "expressions": [{"text": "be known to have done", "meaning_zh": "据悉已经做了……"}, {"text": "pass ... on to", "meaning_zh": "把……转交给……"}]
     },
     {
@@ -430,15 +430,15 @@
     },
     {
       "id": "H-10", "paragraph_label": "H", "sentence_index": 35,
-      "sentence": "Other critics find the entire fair-trade system awed – nothing more than a colossal marketing scam- and they would rather assist the genuinely poor in more transparent ways, but this criticism may be overblown since fair trade has endured for and been praised in the developing world itself.",
+      "sentence": "Other critics find the entire fair-trade system flawed – nothing more than a colossal marketing scam - and they would rather assist the genuinely poor in more transparent ways, but this criticism may be overblown since fair trade has endured for and been praised in the developing world itself.",
       "translation": "另一些批评者认为整个公平贸易体系存在缺陷，不过是一场巨大的营销骗局；他们宁愿以更透明的方式帮助真正的穷人。但这种批评可能有所夸大，因为公平贸易在发展中国家本身长期存在并受到赞扬。",
       "structure": [
-        {"text": "Other critics find the entire fair-trade system awed", "role": "main_clause", "level": 1},
+        {"text": "Other critics find the entire fair-trade system flawed", "role": "main_clause", "level": 1},
         {"text": "nothing more than a colossal marketing scam", "role": "appositive_evaluation", "level": 1},
         {"text": "and they would rather assist the genuinely poor in more transparent ways", "role": "coordinated_clause", "level": 1},
         {"text": "but this criticism may be overblown since fair trade has endured for and been praised in the developing world itself", "role": "contrast_clause", "level": 1}
       ],
-      "difficult_points": ["awed 是源文 OCR 异常，按 flawed 理解；find + 宾语 + 形容词构成宾语补足语。", "nothing more than 强调批评者认为该体系“不过是”营销骗局。", "would rather 后接动词原形 assist，表示宁愿采取另一种帮助方式。", "has endured for 结构疑似缺少时间成分，但应保留原文；since 引出作者认为批评可能夸大的原因。"],
+      "difficult_points": ["find + 宾语 + 形容词构成复合宾语，flawed 意为“有缺陷的”。", "nothing more than 强调批评者认为该体系“不过是”营销骗局。", "would rather 后接动词原形 assist，表示宁愿采取另一种帮助方式。", "has endured for and been praised in the developing world 中 for 后缺少宾语，大意是公平贸易在发展中国家长期存在并受到赞扬；since 引出作者认为批评可能夸大的原因。"],
       "expressions": [{"text": "nothing more than", "meaning_zh": "不过是"}, {"text": "would rather assist", "meaning_zh": "宁愿帮助"}, {"text": "in more transparent ways", "meaning_zh": "以更透明的方式"}, {"text": "be overblown", "meaning_zh": "被夸大"}]
     }
   ]

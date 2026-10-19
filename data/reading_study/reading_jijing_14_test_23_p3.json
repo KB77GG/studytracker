@@ -65,10 +65,10 @@
     },
     {
       "id": "B-04", "paragraph_label": "B", "sentence_index": 8,
-      "sentence": "On the as well as stay in lane, and maintain a steady cruising seed.",
+      "sentence": "On the as well as stay in lane, and maintain a steady cruising speed.",
       "translation": "（原文此句严重残缺）……以及保持在车道内，并维持稳定的巡航速度。",
-      "structure": [{"text": "On the", "role": "incomplete_opening", "level": 1}, {"text": "as well as stay in lane", "role": "coordinated_verb_phrase", "level": 1}, {"text": "and maintain a steady cruising seed", "role": "coordinated_verb_phrase", "level": 1}],
-      "difficult_points": ["源句从 On the 后明显缺失内容，无法恢复完整主干，翻译仅呈现仍可辨认的信息。", "cruising seed 是源文拼写异常，按语境应为 cruising speed（巡航速度），原句按源文保留。"],
+      "structure": [{"text": "On the", "role": "incomplete_opening", "level": 1}, {"text": "as well as stay in lane", "role": "coordinated_verb_phrase", "level": 1}, {"text": "and maintain a steady cruising speed", "role": "coordinated_verb_phrase", "level": 1}],
+      "difficult_points": ["源句从 On the 后明显缺失内容，无法恢复完整主干，翻译仅呈现仍可辨认的信息。", "cruising speed 指巡航速度；stay in lane 与 maintain a steady cruising speed 是并列的动作。"],
       "expressions": [{"text": "stay in lane", "meaning_zh": "保持在车道内"}, {"text": "maintain a steady cruising speed", "meaning_zh": "保持稳定巡航速度（按语境还原的积累形式）"}]
     },
     {
@@ -137,10 +137,10 @@
     },
     {
       "id": "C-02", "paragraph_label": "C", "sentence_index": 17,
-      "sentence": "Not surprisingly, the industry views the concept of selt-driving cars with a sense of growing alarm.",
+      "sentence": "Not surprisingly, the industry views the concept of self-driving cars with a sense of growing alarm.",
       "translation": "不出所料，汽车行业对自动驾驶汽车这一概念感到日益忧虑。",
-      "structure": [{"text": "the industry", "role": "subject", "level": 1}, {"text": "views the concept of selt-driving cars with a sense of growing alarm", "role": "verb_phrase", "level": 1}],
-      "difficult_points": ["view A with B 表示以某种态度看待某事，with 后是行业的情绪。", "selt-driving 是源文拼写错误，按语境应为 self-driving，原句按源文保留。"],
+      "structure": [{"text": "the industry", "role": "subject", "level": 1}, {"text": "views the concept of self-driving cars with a sense of growing alarm", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["view A with B 表示以某种态度看待某事，with 后是行业的情绪。", "self-driving cars 指自动驾驶汽车；with a sense of growing alarm 表示带着日益加剧的担忧。"],
       "expressions": [{"text": "not surprisingly", "meaning_zh": "不出所料"}, {"text": "with growing alarm", "meaning_zh": "怀着日益加深的忧虑"}]
     },
     {
@@ -201,10 +201,10 @@
     },
     {
       "id": "D-06", "paragraph_label": "D", "sentence_index": 25,
-      "sentence": "As a consortium of researchers put it, 'I self-driving cars cut the roughly 40,000 annual US traffic fatalities in half, the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'",
+      "sentence": "As a consortium of researchers put it, 'If self-driving cars cut the roughly 40,000 annual US traffic fatalities in half, the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'",
       "translation": "正如一个研究联盟所说：“如果自动驾驶汽车把美国每年约4万起交通死亡人数减半，汽车制造商得到的可能不是2万封感谢信，而是2万份诉讼。”",
-      "structure": [{"text": "As a consortium of researchers put it", "role": "adverbial_clause", "level": 1}, {"text": "'I self-driving cars cut the roughly 40,000 annual US traffic fatalities in half", "role": "conditional_clause", "level": 2}, {"text": "the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'", "role": "main_clause", "level": 2}],
-      "difficult_points": ["As ... put it 表示正如某方所说，引出直接引语。", "引语开头 I 是源文 OCR 错误，按语境应为 If；not...but... 对比感谢信与诉讼，突出法律风险。"],
+      "structure": [{"text": "As a consortium of researchers put it", "role": "adverbial_clause", "level": 1}, {"text": "'If self-driving cars cut the roughly 40,000 annual US traffic fatalities in half", "role": "conditional_clause", "level": 2}, {"text": "the car makers might get not 20,000 thank-you notes, but 20,000 lawsuits.'", "role": "main_clause", "level": 2}],
+      "difficult_points": ["As ... put it 表示正如某方所说，引出直接引语。", "If 引导条件状语从句；not...but... 对比感谢信与诉讼，突出法律风险。"],
       "expressions": [{"text": "as ... put it", "meaning_zh": "正如……所说"}, {"text": "cut ... in half", "meaning_zh": "把……减少一半"}, {"text": "not ... but ...", "meaning_zh": "不是……而是……"}]
     },
     {
@@ -265,10 +265,10 @@
     },
     {
       "id": "G-01", "paragraph_label": "G", "sentence_index": 33,
-      "sentence": "Susie Greenacre, a redident of Pittsburgh, has no such reservations about driverless cars.",
+      "sentence": "Susie Greenacre, a resident of Pittsburgh, has no such reservations about driverless cars.",
       "translation": "匹兹堡居民苏茜·格里纳克对无人驾驶汽车没有这样的顾虑。",
-      "structure": [{"text": "Susie Greenacre", "role": "subject", "level": 1}, {"text": "a redident of Pittsburgh", "role": "apposition", "level": 2}, {"text": "has no such reservations about driverless cars", "role": "verb_phrase", "level": 1}],
-      "difficult_points": ["a redident... 是主语的同位语；redident 是源文拼写错误，按语境应为 resident。", "such reservations 指上一段出租车司机对生计与安全的那些顾虑。"],
+      "structure": [{"text": "Susie Greenacre", "role": "subject", "level": 1}, {"text": "a resident of Pittsburgh", "role": "apposition", "level": 2}, {"text": "has no such reservations about driverless cars", "role": "verb_phrase", "level": 1}],
+      "difficult_points": ["a resident of Pittsburgh 是主语 Susie Greenacre 的同位语，说明她的身份。", "such reservations 指上一段出租车司机对生计与安全的那些顾虑。"],
       "expressions": [{"text": "have no reservations about", "meaning_zh": "对……毫无保留或顾虑"}]
     },
     {
@@ -289,16 +289,24 @@
     },
     {
       "id": "G-04", "paragraph_label": "G", "sentence_index": 36,
-      "sentence": "I hate the stress of rush-hour traffic| I think if I could just hop in a driverless car which would take me anywhere I wanted I would never want to drive again!'",
-      "translation": "我讨厌高峰时段交通带来的压力。我想，如果我只需跳上一辆无人驾驶汽车，它就能带我去任何想去的地方，我就再也不会想自己开车了！”",
-      "structure": [{"text": "I hate the stress of rush-hour traffic", "role": "main_clause", "level": 1}, {"text": "I think", "role": "main_clause", "level": 1}, {"text": "if I could just hop in a driverless car which would take me anywhere I wanted", "role": "conditional_clause", "level": 2}, {"text": "which would take me anywhere I wanted", "role": "relative_clause", "level": 3}, {"text": "I would never want to drive again!'", "role": "main_clause", "level": 2}],
-      "difficult_points": ["traffic 后的竖线是源文异常分隔符，语义上相当于句号，原句按源文保留。", "if 从句与 would 主句构成假设；which 修饰 driverless car，anywhere 后省略关系副词 where。"],
-      "expressions": [{"text": "rush-hour traffic", "meaning_zh": "高峰时段交通"}, {"text": "hop in", "meaning_zh": "迅速上车"}, {"text": "never want to ... again", "meaning_zh": "再也不想……"}]
+      "sentence": "I hate the stress of rush-hour traffic.",
+      "translation": "我讨厌高峰时段交通带来的压力。",
+      "structure": [{"text": "I hate the stress of rush-hour traffic", "role": "main_clause", "level": 1}, {"text": "the stress of rush-hour traffic", "role": "object", "level": 2}],
+      "difficult_points": ["hate 后接名词短语 the stress of rush-hour traffic 作宾语，of 说明压力的来源。", "rush-hour 是复合形容词，修饰 traffic，意为“高峰时段的”。"],
+      "expressions": [{"text": "rush-hour traffic", "meaning_zh": "高峰时段交通"}]
     },
-    {"id": "H-01", "paragraph_label": "H", "sentence_index": 37, "sentence": "Jason Steiner, a school teacher in a Pittsburgh secondary school, is inclined to agree with Susie.", "translation": "匹兹堡一所中学的教师杰森·斯坦纳倾向于赞同苏茜的看法。", "structure": [{"text": "Jason Steiner", "role": "subject", "level": 1}, {"text": "a school teacher in a Pittsburgh secondary school", "role": "apposition", "level": 2}, {"text": "is inclined", "role": "verb_phrase", "level": 1}, {"text": "to agree with Susie", "role": "infinitive_complement", "level": 2}], "difficult_points": ["a school teacher in a Pittsburgh secondary school 是同位语，补充说明 Jason Steiner 的身份。", "be inclined to do 表示“倾向于做某事”，to agree with Susie 是不定式补足语。"], "expressions": [{"text": "be inclined to", "meaning_zh": "倾向于"}]},
-    {"id": "H-01b", "paragraph_label": "H", "sentence_index": 38, "sentence": "'Whilst I'm not averse to driving, I would swap the stressful daily commute by car to a driverless one if I had the chance!", "translation": "“虽然我并不排斥开车，但如果有机会，我愿意把每天充满压力的驾车通勤换成无人驾驶出行！", "structure": [{"text": "Whilst I'm not averse to driving", "role": "concessive_clause", "level": 2}, {"text": "I", "role": "subject", "level": 1}, {"text": "would swap", "role": "verb_phrase", "level": 1}, {"text": "the stressful daily commute by car", "role": "object", "level": 1}, {"text": "to a driverless one", "role": "prepositional_phrase", "level": 1}, {"text": "if I had the chance", "role": "conditional_clause", "level": 2}], "difficult_points": ["Whilst 引导让步状语从句，意思同 although；be averse to doing 表示“反感做某事”。", "if I had the chance 用一般过去时表示假设，主句相应用 would swap。", "one 代替前面的 commute，a driverless one 指无人驾驶的通勤方式。"], "expressions": [{"text": "be averse to", "meaning_zh": "反感；排斥"}, {"text": "daily commute", "meaning_zh": "每日通勤"}]},
     {
-      "id": "H-02", "paragraph_label": "H", "sentence_index": 39,
+      "id": "G-04b", "paragraph_label": "G", "sentence_index": 37,
+      "sentence": "I think if I could just hop in a driverless car which would take me anywhere I wanted I would never want to drive again!'",
+      "translation": "我想，如果我只需跳上一辆无人驾驶汽车，它就能带我去任何想去的地方，我就再也不会想自己开车了！”",
+      "structure": [{"text": "I think", "role": "main_clause", "level": 1}, {"text": "if I could just hop in a driverless car which would take me anywhere I wanted", "role": "conditional_clause", "level": 2}, {"text": "which would take me anywhere I wanted", "role": "relative_clause", "level": 3}, {"text": "I would never want to drive again!'", "role": "main_clause", "level": 2}],
+      "difficult_points": ["I think 后省略了 that，后面整个条件句都是 think 的宾语。", "if 从句与 would 主句构成与现在事实相反的假设；which 修饰 driverless car，anywhere I wanted 意为“我想去的任何地方”。"],
+      "expressions": [{"text": "hop in", "meaning_zh": "迅速上车"}, {"text": "never want to ... again", "meaning_zh": "再也不想……"}]
+    },
+    {"id": "H-01", "paragraph_label": "H", "sentence_index": 38, "sentence": "Jason Steiner, a school teacher in a Pittsburgh secondary school, is inclined to agree with Susie.", "translation": "匹兹堡一所中学的教师杰森·斯坦纳倾向于赞同苏茜的看法。", "structure": [{"text": "Jason Steiner", "role": "subject", "level": 1}, {"text": "a school teacher in a Pittsburgh secondary school", "role": "apposition", "level": 2}, {"text": "is inclined", "role": "verb_phrase", "level": 1}, {"text": "to agree with Susie", "role": "infinitive_complement", "level": 2}], "difficult_points": ["a school teacher in a Pittsburgh secondary school 是同位语，补充说明 Jason Steiner 的身份。", "be inclined to do 表示“倾向于做某事”，to agree with Susie 是不定式补足语。"], "expressions": [{"text": "be inclined to", "meaning_zh": "倾向于"}]},
+    {"id": "H-01b", "paragraph_label": "H", "sentence_index": 39, "sentence": "'Whilst I'm not averse to driving, I would swap the stressful daily commute by car to a driverless one if I had the chance!", "translation": "“虽然我并不排斥开车，但如果有机会，我愿意把每天充满压力的驾车通勤换成无人驾驶出行！", "structure": [{"text": "Whilst I'm not averse to driving", "role": "concessive_clause", "level": 2}, {"text": "I", "role": "subject", "level": 1}, {"text": "would swap", "role": "verb_phrase", "level": 1}, {"text": "the stressful daily commute by car", "role": "object", "level": 1}, {"text": "to a driverless one", "role": "prepositional_phrase", "level": 1}, {"text": "if I had the chance", "role": "conditional_clause", "level": 2}], "difficult_points": ["Whilst 引导让步状语从句，意思同 although；be averse to doing 表示“反感做某事”。", "if I had the chance 用一般过去时表示假设，主句相应用 would swap。", "one 代替前面的 commute，a driverless one 指无人驾驶的通勤方式。"], "expressions": [{"text": "be averse to", "meaning_zh": "反感；排斥"}, {"text": "daily commute", "meaning_zh": "每日通勤"}]},
+    {
+      "id": "H-02", "paragraph_label": "H", "sentence_index": 40,
       "sentence": "It just takes the pressure off driving.",
       "translation": "它就是能减轻驾驶的压力。",
       "structure": [{"text": "It", "role": "subject", "level": 1}, {"text": "just takes the pressure off driving", "role": "verb_phrase", "level": 1}],
@@ -306,11 +314,11 @@
       "expressions": [{"text": "take the pressure off", "meaning_zh": "减轻……的压力"}]
     },
     {
-      "id": "H-03", "paragraph_label": "H", "sentence_index": 40,
-      "sentence": "I would be slightly wary though, of completely dependent on a robot-driven car when it comes to having to react to unexpected obstacles in the road.'",
+      "id": "H-03", "paragraph_label": "H", "sentence_index": 41,
+      "sentence": "I would be slightly wary though, of being completely dependent on a robot-driven car when it comes to having to react to unexpected obstacles in the road.'",
       "translation": "不过，说到必须应对道路上的意外障碍时，我还是会有些担心完全依赖机器人驾驶的汽车。”",
-      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "would be slightly wary though", "role": "verb_phrase", "level": 1}, {"text": "of completely dependent on a robot-driven car", "role": "prepositional_phrase", "level": 2}, {"text": "when it comes to having to react to unexpected obstacles in the road", "role": "adverbial_clause", "level": 2}],
-      "difficult_points": ["of completely dependent 是源文语法异常，按语境应为 of being completely dependent，原句按源文保留。", "when it comes to 后接动名词，表示谈到某种情形；having to react 表示不得不作出反应。"],
+      "structure": [{"text": "I", "role": "subject", "level": 1}, {"text": "would be slightly wary though", "role": "verb_phrase", "level": 1}, {"text": "of being completely dependent on a robot-driven car", "role": "prepositional_phrase", "level": 2}, {"text": "when it comes to having to react to unexpected obstacles in the road", "role": "adverbial_clause", "level": 2}],
+      "difficult_points": ["be wary of 意为“对……有顾虑”，of 后接动名词短语 being completely dependent on...；though 放在句中表示“不过”。", "when it comes to 后接动名词，表示谈到某种情形；having to react 表示不得不作出反应。"],
       "expressions": [{"text": "be wary of", "meaning_zh": "对……有所警惕"}, {"text": "be dependent on", "meaning_zh": "依赖"}, {"text": "when it comes to", "meaning_zh": "当谈到……时"}]
     }
   ]

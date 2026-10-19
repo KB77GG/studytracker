@@ -130,30 +130,132 @@
       "id": "A-07",
       "paragraph_label": "A",
       "sentence_index": 7,
-      "sentence": "Playful young animals use around two or three per cent of their energy cavorting, and in children that figure can be closer to fifteen per cent. \"Even two or three per cent is huge,\" says John Byers of Idaho University. \"You just don't find animals wasting energy like that,\" he adds.",
-      "translation": "活泼的幼兽会用大约百分之二到三的能量嬉戏，儿童这一比例可接近百分之十五。",
+      "sentence": "Playful young animals use around two or three per cent of their energy cavorting, and in children that figure can be closer to fifteen per cent.",
+      "translation": "活泼的幼兽会把大约百分之二到三的能量用于嬉戏，而儿童的这一比例可接近百分之十五。",
       "structure": [
         {
-          "text": "Playful young animals use around two or three per cent of their energy cavorting, and in children that figure can be closer to fifteen per cent. \"Even two or three per cent is huge,\" says John Byers of Idaho University. \"You just don't find animals wasting energy like that,\" he adds.",
-          "role": "main_clause",
+          "text": "Playful young animals",
+          "role": "subject",
           "level": 1
         },
         {
-          "text": "that figure can be closer to fifteen per cent. \"Even two or three per cent is huge",
-          "role": "noun_clause",
+          "text": "use",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "around two or three per cent of their energy",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "cavorting",
+          "role": "participial_phrase",
           "level": 2
+        },
+        {
+          "text": "and in children that figure can be closer to fifteen per cent",
+          "role": "coordinate_clause",
+          "level": 1
         }
       ],
       "difficult_points": [
-        "that 引导的从句需要结合前面的动词或名词确定其内容关系。",
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。"
+        "use + 能量 + doing 表示“把能量用于做某事”，cavorting 意为“嬉戏、蹦跳”。",
+        "and 后是并列分句；that figure 指前面“百分之二到三”这一比例。"
+      ],
+      "expressions": [
+        {
+          "text": "per cent",
+          "meaning_zh": "百分之……"
+        },
+        {
+          "text": "be closer to",
+          "meaning_zh": "更接近"
+        }
+      ]
+    },
+    {
+      "id": "A-07b",
+      "paragraph_label": "A",
+      "sentence_index": 8,
+      "sentence": "\"Even two or three per cent is huge,\" says John Byers of Idaho University.",
+      "translation": "“即便是百分之二到三也已经很多了，”爱达荷大学的约翰·拜尔斯说。",
+      "structure": [
+        {
+          "text": "Even two or three per cent",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is",
+          "role": "linking_verb",
+          "level": 1
+        },
+        {
+          "text": "huge",
+          "role": "subject_complement",
+          "level": 1
+        },
+        {
+          "text": "says John Byers of Idaho University",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Even 修饰主语，强调“哪怕只有这么多”；huge 在这里表示这个比例非常大。",
+        "says John Byers ... 是倒装的引述分句。"
       ],
       "expressions": []
     },
     {
+      "id": "A-07c",
+      "paragraph_label": "A",
+      "sentence_index": 9,
+      "sentence": "\"You just don't find animals wasting energy like that,\" he adds.",
+      "translation": "“你根本看不到动物那样浪费能量，”他补充说。",
+      "structure": [
+        {
+          "text": "You",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "just don't find",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "animals",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "wasting energy like that",
+          "role": "participial_phrase",
+          "level": 2
+        },
+        {
+          "text": "he adds",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "find + 宾语 + doing 表示“发现……在做某事”，wasting energy like that 作 animals 的宾语补足语。",
+        "You 在这里泛指任何人，just 加强否定语气；he adds 表示补充说明。"
+      ],
+      "expressions": [
+        {
+          "text": "waste energy",
+          "meaning_zh": "浪费能量"
+        }
+      ]
+    },
+    {
       "id": "A-08",
       "paragraph_label": "A",
-      "sentence_index": 8,
+      "sentence_index": 10,
       "sentence": "There must be a reason.",
       "translation": "爱达荷大学的约翰·拜尔斯说：“即使百分之二到三也非常惊人。” 他补充说：“你很难看到动物这样浪费能量。” 这必定有原因。",
       "structure": [
@@ -172,7 +274,7 @@
     {
       "id": "B-09",
       "paragraph_label": "B",
-      "sentence_index": 9,
+      "sentence_index": 11,
       "sentence": "But if play is not simply a developmental hiccup, as biologists once thought, why did it evolve?",
       "translation": "但如果玩耍并不只是生物学家曾认为的一次发育小波折，它为何会进化出来？",
       "structure": [
@@ -196,7 +298,7 @@
     {
       "id": "B-10",
       "paragraph_label": "B",
-      "sentence_index": 10,
+      "sentence_index": 12,
       "sentence": "The latest idea suggests that play has evolved to build big brains.",
       "translation": "最新观点认为，玩耍进化出来是为了塑造更大的大脑。",
       "structure": [
@@ -225,7 +327,7 @@
     {
       "id": "B-11",
       "paragraph_label": "B",
-      "sentence_index": 11,
+      "sentence_index": 13,
       "sentence": "In other words, playing makes you intelligent.",
       "translation": "换句话说，玩耍会使你更聪明。",
       "structure": [
@@ -244,7 +346,7 @@
     {
       "id": "B-12",
       "paragraph_label": "B",
-      "sentence_index": 12,
+      "sentence_index": 14,
       "sentence": "Playfulness, it seems, is common only among mammals, although a few of the larger-brained birds also indulge.",
       "translation": "看来，爱玩主要见于哺乳动物，尽管少数脑容量较大的鸟类也会如此。",
       "structure": [
@@ -263,7 +365,7 @@
     {
       "id": "B-13",
       "paragraph_label": "B",
-      "sentence_index": 13,
+      "sentence_index": 15,
       "sentence": "Animals at play often use unique signs - tail-wagging in dogs, for example - to indicate that activity superficially resembling adult behavior is not really in earnest.",
       "translation": "玩耍时，动物常使用独特信号——例如狗摇尾巴——表明看起来像成年行为的活动其实并非认真进行。",
       "structure": [
@@ -292,7 +394,7 @@
     {
       "id": "B-14",
       "paragraph_label": "B",
-      "sentence_index": 14,
+      "sentence_index": 16,
       "sentence": "A popular explanation of play has been that it helps juveniles develop the skills they will need to hunt, mate and socialise as adults.",
       "translation": "一种流行解释认为，玩耍帮助幼体发展成年后狩猎、交配和社交所需的技能。",
       "structure": [
@@ -316,7 +418,7 @@
     {
       "id": "B-15",
       "paragraph_label": "B",
-      "sentence_index": 15,
+      "sentence_index": 17,
       "sentence": "Another has been that it allows young animals to get in shape for adult life by improving their respiratory endurance.",
       "translation": "另一种解释是，玩耍通过提高呼吸耐力，让幼兽为成年生活做好体能准备。",
       "structure": [
@@ -340,7 +442,7 @@
     {
       "id": "B-16",
       "paragraph_label": "B",
-      "sentence_index": 16,
+      "sentence_index": 18,
       "sentence": "Both these ideas have been questioned in recent years.",
       "translation": "近年这两种观点都受到质疑。",
       "structure": [
@@ -359,7 +461,7 @@
     {
       "id": "C-17",
       "paragraph_label": "C",
-      "sentence_index": 17,
+      "sentence_index": 19,
       "sentence": "Take the exercise theory.",
       "translation": "以运动理论为例。",
       "structure": [
@@ -378,7 +480,7 @@
     {
       "id": "C-18",
       "paragraph_label": "C",
-      "sentence_index": 18,
+      "sentence_index": 20,
       "sentence": "If play evolved to build muscle or as a kind of endurance training, then you would expect to see permanent benefits.",
       "translation": "如果玩耍是为了增肌或耐力训练而进化的，那么应当能看到持久的益处。",
       "structure": [
@@ -402,56 +504,199 @@
     {
       "id": "C-19",
       "paragraph_label": "C",
-      "sentence_index": 19,
-      "sentence": "But Byers points out that the benefits of increased exercise disappear rapidly after training stops, so any improvement in endurance resulting from juvenile play would be lost by adulthood. \"If the function of play was to get into shape,\" says Byers, \"the optimum time for playing would depend on when it was most advantageous for the young of a particular species to do so.",
-      "translation": "但拜尔斯指出，锻炼停止后增强运动带来的好处很快消失，因此幼年玩耍带来的耐力提升到成年时会丧失。 拜尔斯说：“若玩耍的功能是塑形，那么最佳玩耍时间取决于某个物种幼体何时最适合这样做。 但实际并非如此。”",
+      "sentence_index": 21,
+      "sentence": "But Byers points out that the benefits of increased exercise disappear rapidly after training stops, so any improvement in endurance resulting from juvenile play would be lost by adulthood.",
+      "translation": "但拜尔斯指出，训练一停止，加强锻炼带来的好处就会迅速消失，因此幼年玩耍带来的任何耐力提升到成年时都会丧失。",
       "structure": [
         {
-          "text": "But Byers points out that the benefits of increased exercise disappear rapidly after training stops, so any improvement in endurance resulting from juvenile play would be lost by adulthood. \"If the function of play was to get into shape,\" says Byers, \"the optimum time for playing would depend on when it was most advantageous for the young of a particular species to do so.",
-          "role": "main_clause",
+          "text": "Byers",
+          "role": "subject",
           "level": 1
         },
         {
-          "text": "If the function of play was to get into shape",
-          "role": "adverbial_clause",
+          "text": "points out",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "that the benefits of increased exercise disappear rapidly after training stops",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "after training stops",
+          "role": "time_clause",
+          "level": 3
+        },
+        {
+          "text": "so any improvement in endurance resulting from juvenile play would be lost by adulthood",
+          "role": "result_clause",
+          "level": 1
+        },
+        {
+          "text": "resulting from juvenile play",
+          "role": "participial_phrase",
           "level": 2
         }
       ],
       "difficult_points": [
-        "that 引导的从句需要结合前面的动词或名词确定其内容关系。",
-        "条件或时间从句交代主句成立的前提和时间。",
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。"
+        "points out 后接 that 宾语从句；after training stops 是从句里的时间状语从句。",
+        "so 引出结果：既然好处会消失，幼年玩耍带来的耐力提升到成年时也就没有了。",
+        "resulting from juvenile play 是现在分词短语，后置修饰 improvement；would be lost 表示推断。"
       ],
-      "expressions": []
+      "expressions": [
+        {
+          "text": "point out",
+          "meaning_zh": "指出"
+        },
+        {
+          "text": "result from",
+          "meaning_zh": "由……产生"
+        },
+        {
+          "text": "by adulthood",
+          "meaning_zh": "到成年时"
+        }
+      ]
+    },
+    {
+      "id": "C-19b",
+      "paragraph_label": "C",
+      "sentence_index": 22,
+      "sentence": "\"If the function of play was to get into shape,\" says Byers, \"the optimum time for playing would depend on when it was most advantageous for the young of a particular species to do so.",
+      "translation": "拜尔斯说：“如果玩耍的功能是让身体强健，那么最佳的玩耍时间就应取决于某个物种的幼崽何时最适合这样做。",
+      "structure": [
+        {
+          "text": "If the function of play was to get into shape",
+          "role": "conditional_clause",
+          "level": 2
+        },
+        {
+          "text": "says Byers",
+          "role": "reporting_clause",
+          "level": 1
+        },
+        {
+          "text": "the optimum time for playing",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "would depend on",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "when it was most advantageous for the young of a particular species to do so",
+          "role": "object_clause",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "If 从句与主句 would depend 构成虚拟语气，表示与事实相反的假设。",
+        "when 引导的从句作介词 on 的宾语，是名词性从句；从句里 it 是形式主语，真正的主语是 for the young ... to do so。",
+        "这段引语没有结束，引号到下一句 But it doesn't work like that. 末尾才闭合。"
+      ],
+      "expressions": [
+        {
+          "text": "get into shape",
+          "meaning_zh": "使身体强健"
+        },
+        {
+          "text": "depend on",
+          "meaning_zh": "取决于"
+        },
+        {
+          "text": "the optimum time",
+          "meaning_zh": "最佳时机"
+        }
+      ]
     },
     {
       "id": "C-20",
       "paragraph_label": "C",
-      "sentence_index": 20,
-      "sentence": "But it doesn't work like that.\" Across species, play tends to peak about halfway through the suckling stage and then decline.",
-      "translation": "跨物种来看，玩耍往往在哺乳阶段中期达到高峰，之后下降。",
+      "sentence_index": 23,
+      "sentence": "But it doesn't work like that.\"",
+      "translation": "但事实并非如此。”",
       "structure": [
         {
-          "text": "But it doesn't work like that.\" Across species, play tends to peak about halfway through the suckling stage and then decline.",
-          "role": "main_clause",
+          "text": "But",
+          "role": "discourse_marker",
           "level": 1
         },
         {
-          "text": "But it doesn't work like that.\" Across species",
-          "role": "coordinated_clause",
-          "level": 2
+          "text": "doesn't work",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "like that",
+          "role": "adverbial",
+          "level": 1
         }
       ],
       "difficult_points": [
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。",
-        "注意本句的介词短语和非谓语成分不构成新的主句。"
+        "it 指上一句假设的情况；doesn't work like that 意为“事实并不是这样”。",
+        "句末的引号表示拜尔斯从上一句开始的引语到此结束。"
       ],
-      "expressions": []
+      "expressions": [
+        {
+          "text": "work like that",
+          "meaning_zh": "像那样运作"
+        }
+      ]
+    },
+    {
+      "id": "C-20b",
+      "paragraph_label": "C",
+      "sentence_index": 24,
+      "sentence": "Across species, play tends to peak about halfway through the suckling stage and then decline.",
+      "translation": "就各个物种而言，玩耍往往在哺乳期进行到一半左右时达到高峰，然后减少。",
+      "structure": [
+        {
+          "text": "Across species",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "play",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "tends to peak about halfway through the suckling stage",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "and then decline",
+          "role": "coordinate_predicate",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "tend to do 表示“往往会”；to 后面并列 peak 和 decline 两个动词原形。",
+        "halfway through the suckling stage 表示“哺乳期进行到一半时”，about 表示大约。"
+      ],
+      "expressions": [
+        {
+          "text": "tend to",
+          "meaning_zh": "往往"
+        },
+        {
+          "text": "peak",
+          "meaning_zh": "达到高峰"
+        },
+        {
+          "text": "the suckling stage",
+          "meaning_zh": "哺乳期"
+        }
+      ]
     },
     {
       "id": "D-21",
       "paragraph_label": "D",
-      "sentence_index": 21,
+      "sentence_index": 25,
       "sentence": "Then there's the skills-training hypothesis.",
       "translation": "接着看技能训练假说。",
       "structure": [
@@ -470,7 +715,7 @@
     {
       "id": "D-22",
       "paragraph_label": "D",
-      "sentence_index": 22,
+      "sentence_index": 26,
       "sentence": "At first glance, playing animals do appear to be practising the complex manoeuvres they will need in adulthood.",
       "translation": "乍看之下，玩耍的动物似乎确实在练习成年后需要的复杂动作。",
       "structure": [
@@ -489,7 +734,7 @@
     {
       "id": "D-23",
       "paragraph_label": "D",
-      "sentence_index": 23,
+      "sentence_index": 27,
       "sentence": "But a closer inspection reveals this interpretation as too simplistic.",
       "translation": "但更仔细的观察显示，这种解释过于简单。",
       "structure": [
@@ -513,7 +758,7 @@
     {
       "id": "D-24",
       "paragraph_label": "D",
-      "sentence_index": 24,
+      "sentence_index": 28,
       "sentence": "In one study, behavioural ecologist Tim Caro, from the University of California, looked at the predatory play of kittens and their predatory behaviour when they reached adulthood.",
       "translation": "加州大学的行为生态学家蒂姆·卡罗在一项研究中，考察了小猫的捕食性玩耍以及它们成年后的捕食行为。",
       "structure": [
@@ -537,7 +782,7 @@
     {
       "id": "D-25",
       "paragraph_label": "D",
-      "sentence_index": 25,
+      "sentence_index": 29,
       "sentence": "He found that the way the cats played had no significant effect on their hunting prowess in later life.",
       "translation": "他发现，猫玩耍的方式对其日后捕猎本领没有显著影响。",
       "structure": [
@@ -561,7 +806,7 @@
     {
       "id": "E-26",
       "paragraph_label": "E",
-      "sentence_index": 26,
+      "sentence_index": 30,
       "sentence": "Earlier this year, Sergio Pellis of Lethbridge University, Canada, reported that there is a strong positive link between brain size and playfulness among mammals in general.",
       "translation": "今年早些时候，加拿大莱斯布里奇大学的塞尔焦·佩利斯报告说，哺乳动物整体的脑大小与爱玩程度之间有很强的正相关。",
       "structure": [
@@ -585,7 +830,7 @@
     {
       "id": "E-27",
       "paragraph_label": "E",
-      "sentence_index": 27,
+      "sentence_index": 31,
       "sentence": "Comparing measurements for fifteen orders of mammal, he and his team found larger brains (for a given body size) are linked to greater playfulness.",
       "translation": "他和团队比较了十五个哺乳动物目的数据，发现按相同体型计，更大的大脑与更强的玩耍性相关。",
       "structure": [
@@ -604,7 +849,7 @@
     {
       "id": "E-28",
       "paragraph_label": "E",
-      "sentence_index": 28,
+      "sentence_index": 32,
       "sentence": "The converse was also found to be true.",
       "translation": "反过来这一关系也成立。",
       "structure": [
@@ -623,26 +868,98 @@
     {
       "id": "E-29",
       "paragraph_label": "E",
-      "sentence_index": 29,
-      "sentence": "Robert Barton of Durham University believes that, because large brains are more sensitive to developmental stimuli than smaller brains, they require more play to help mould them for adulthood. “I concluded it's to do with learning, and with the importance of environmental data to the brain during development,” he says.",
-      "translation": "达勒姆大学的罗伯特·巴顿认为，大脑越大，对发育刺激越敏感，因此比小脑更需要玩耍来塑造成年状态。 他说：“我的结论是，这与学习有关，也与发育时环境数据对大脑的重要性有关。”",
+      "sentence_index": 33,
+      "sentence": "Robert Barton of Durham University believes that, because large brains are more sensitive to developmental stimuli than smaller brains, they require more play to help mould them for adulthood.",
+      "translation": "达勒姆大学的罗伯特·巴顿认为，由于较大的大脑比较小的大脑对发育期刺激更敏感，所以需要更多玩耍来帮助它们为成年阶段塑形。",
       "structure": [
         {
-          "text": "Robert Barton of Durham University believes that, because large brains are more sensitive to developmental stimuli than smaller brains, they require more play to help mould them for adulthood. “I concluded it's to do with learning, and with the importance of environmental data to the brain during development,” he says.",
+          "text": "Robert Barton of Durham University",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "believes",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "that, because large brains are more sensitive to developmental stimuli than smaller brains, they require more play to help mould them for adulthood",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "because large brains are more sensitive to developmental stimuli than smaller brains",
+          "role": "reason_clause",
+          "level": 3
+        },
+        {
+          "text": "to help mould them for adulthood",
+          "role": "purpose_infinitive",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "believes 后接 that 宾语从句；that 后先插入 because 原因状语从句，从句的主干是 they require more play。",
+        "they 和 them 都指 large brains；help mould 中 help 后接不带 to 的动词原形。",
+        "more sensitive to ... than smaller brains 是比较结构，比较大小不同的大脑对刺激的敏感程度。"
+      ],
+      "expressions": [
+        {
+          "text": "be sensitive to",
+          "meaning_zh": "对……敏感"
+        },
+        {
+          "text": "developmental stimuli",
+          "meaning_zh": "发育期刺激"
+        },
+        {
+          "text": "mould ... for",
+          "meaning_zh": "为……塑造"
+        }
+      ]
+    },
+    {
+      "id": "E-29b",
+      "paragraph_label": "E",
+      "sentence_index": 34,
+      "sentence": "“I concluded it's to do with learning, and with the importance of environmental data to the brain during development,” he says.",
+      "translation": "他说：“我的结论是，这和学习有关，也和发育期间环境信息对大脑的重要性有关。”",
+      "structure": [
+        {
+          "text": "I concluded",
           "role": "main_clause",
+          "level": 1
+        },
+        {
+          "text": "it's to do with learning, and with the importance of environmental data to the brain during development",
+          "role": "object_clause",
+          "level": 2
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
           "level": 1
         }
       ],
       "difficult_points": [
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。",
-        "注意本句的介词短语和非谓语成分不构成新的主句。"
+        "concluded 后省略了 that，it's to do with ... 是它的宾语从句。",
+        "be to do with 表示“与……有关”；and with ... 承接前面的 with learning，再补充一个相关因素。"
       ],
-      "expressions": []
+      "expressions": [
+        {
+          "text": "be to do with",
+          "meaning_zh": "与……有关"
+        },
+        {
+          "text": "environmental data",
+          "meaning_zh": "环境信息"
+        }
+      ]
     },
     {
       "id": "F-30",
       "paragraph_label": "F",
-      "sentence_index": 30,
+      "sentence_index": 35,
       "sentence": "According to Byers, the timing of the playful stage in young animals provides an important clue to what's going on.",
       "translation": "拜尔斯认为，幼兽玩耍阶段出现的时间为理解这一过程提供了重要线索。",
       "structure": [
@@ -661,7 +978,7 @@
     {
       "id": "F-31",
       "paragraph_label": "F",
-      "sentence_index": 31,
+      "sentence_index": 36,
       "sentence": "If you plot the amount of time a juvenile devotes to play each day over the course of its development, you discover a pattern typically associated with a 'sensitive period' - a brief development window during which the brain can actually be modified in ways that are not possible earlier or later in life.",
       "translation": "如果绘制幼体在发育中每天投入玩耍的时间，会发现一种通常与“敏感期”相关的模式：在这个短暂的发育窗口，大脑会以生命早晚阶段无法实现的方式真正被改变。",
       "structure": [
@@ -687,7 +1004,7 @@
     {
       "id": "F-32",
       "paragraph_label": "F",
-      "sentence_index": 32,
+      "sentence_index": 37,
       "sentence": "Think of the relative ease with which young children - but not infants or adults - absorb language.",
       "translation": "想想幼儿——但不是婴儿或成人——吸收语言时相对轻松的情形。",
       "structure": [
@@ -711,7 +1028,7 @@
     {
       "id": "F-33",
       "paragraph_label": "F",
-      "sentence_index": 33,
+      "sentence_index": 38,
       "sentence": "Other researchers have found that play in cats, rats and mice is at its most intense just as this \"window of opportunity\" reaches its peak.",
       "translation": "其他研究者发现，猫、鼠等动物的玩耍最强烈时，正好是这个“机会窗口”达到峰值之际。",
       "structure": [
@@ -740,7 +1057,7 @@
     {
       "id": "G-34",
       "paragraph_label": "G",
-      "sentence_index": 34,
+      "sentence_index": 39,
       "sentence": "\"People have not paid enough attention to the amount of the brain activated by play,\" says Marc Bekoff from Colorado University.",
       "translation": "科罗拉多大学的马克·贝科夫说：“人们没有足够重视玩耍激活的大脑范围。”",
       "structure": [
@@ -759,7 +1076,7 @@
     {
       "id": "G-35",
       "paragraph_label": "G",
-      "sentence_index": 35,
+      "sentence_index": 40,
       "sentence": "Bekoff studied coyote pups at play and found that the kind of behaviour involved was markedly more variable and unpredictable than that of adults.",
       "translation": "贝科夫研究了玩耍的郊狼幼崽，发现其中的行为比成年动物的行为明显更多变、更不可预测。",
       "structure": [
@@ -788,7 +1105,7 @@
     {
       "id": "G-36",
       "paragraph_label": "G",
-      "sentence_index": 36,
+      "sentence_index": 41,
       "sentence": "Such behaviour activates many different parts of the brain, he reasons.",
       "translation": "他认为，这类行为会激活大脑的许多不同部分。",
       "structure": [
@@ -807,50 +1124,205 @@
     {
       "id": "G-37",
       "paragraph_label": "G",
-      "sentence_index": 37,
-      "sentence": "Bekoff likens it to a behavioural kaleidoscope, with animals at play jumping rapidly between activities. \"They use behaviour from a lot of different contexts - predation, aggression, reproduction,\" he says. \"Their developing brain is getting all sorts of stimulation.",
-      "translation": "贝科夫把它比作行为万花筒：玩耍的动物会在活动之间迅速转换。 他说：“它们使用来自许多不同情境的行为——捕食、攻击、繁殖。” 他说：“它们正在发育的大脑得到各种刺激。",
+      "sentence_index": 42,
+      "sentence": "Bekoff likens it to a behavioural kaleidoscope, with animals at play jumping rapidly between activities.",
+      "translation": "贝科夫把它比作行为的万花筒：玩耍中的动物会在不同活动之间快速切换。",
       "structure": [
         {
-          "text": "Bekoff likens it to a behavioural kaleidoscope, with animals at play jumping rapidly between activities. \"They use behaviour from a lot of different contexts - predation, aggression, reproduction,\" he says. \"Their developing brain is getting all sorts of stimulation.",
-          "role": "main_clause",
+          "text": "Bekoff",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "likens",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "to a behavioural kaleidoscope",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "with animals at play jumping rapidly between activities",
+          "role": "with_absolute_construction",
+          "level": 2
+        },
+        {
+          "text": "jumping rapidly between activities",
+          "role": "participial_phrase",
+          "level": 3
+        }
+      ],
+      "difficult_points": [
+        "liken A to B 表示“把 A 比作 B”，it 指上文提到的玩耍行为。",
+        "with + 名词 + doing 是独立结构，描述动物玩耍时快速切换活动的伴随状态。"
+      ],
+      "expressions": [
+        {
+          "text": "liken ... to",
+          "meaning_zh": "把……比作"
+        },
+        {
+          "text": "at play",
+          "meaning_zh": "在玩耍中"
+        }
+      ]
+    },
+    {
+      "id": "G-37b",
+      "paragraph_label": "G",
+      "sentence_index": 43,
+      "sentence": "\"They use behaviour from a lot of different contexts - predation, aggression, reproduction,\" he says.",
+      "translation": "“它们使用来自许多不同情境的行为——捕食、攻击、繁殖，”他说。",
+      "structure": [
+        {
+          "text": "They",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "use",
+          "role": "verb",
+          "level": 1
+        },
+        {
+          "text": "behaviour from a lot of different contexts",
+          "role": "object",
+          "level": 1
+        },
+        {
+          "text": "predation, aggression, reproduction",
+          "role": "apposition",
+          "level": 2
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
           "level": 1
         }
       ],
       "difficult_points": [
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。",
-        "注意本句的介词短语和非谓语成分不构成新的主句。"
+        "破折号后的 predation, aggression, reproduction 列举 contexts 的具体内容。",
+        "behaviour from ... contexts 指原本属于不同情境的行为；They 指玩耍中的动物。"
       ],
       "expressions": [
         {
-          "text": "at play",
-          "meaning_zh": "在玩耍时"
+          "text": "a lot of",
+          "meaning_zh": "许多"
+        },
+        {
+          "text": "predation",
+          "meaning_zh": "捕食"
+        }
+      ]
+    },
+    {
+      "id": "G-37c",
+      "paragraph_label": "G",
+      "sentence_index": 44,
+      "sentence": "\"Their developing brain is getting all sorts of stimulation.",
+      "translation": "“它们正在发育的大脑得到了各种各样的刺激。",
+      "structure": [
+        {
+          "text": "Their developing brain",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "is getting",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "all sorts of stimulation",
+          "role": "object",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "developing 是现在分词作前置定语，意为“正在发育的”。",
+        "is getting 是现在进行时，all sorts of 意为“各种各样的”；原文这句引语没有结束引号。"
+      ],
+      "expressions": [
+        {
+          "text": "all sorts of",
+          "meaning_zh": "各种各样的"
         }
       ]
     },
     {
       "id": "H-38",
       "paragraph_label": "H",
-      "sentence_index": 38,
-      "sentence": "Not only is more of the brain involved in play than was suspected, but it also seems to activate higher cognitive processes. \"There's enormous cognitive involvement in play\", says Bekoff.",
-      "translation": "玩耍涉及的大脑区域不仅比原先猜想的更多，它似乎还会激活更高层次的认知过程。 贝科夫说：“玩耍中有巨大的认知投入。”",
+      "sentence_index": 45,
+      "sentence": "Not only is more of the brain involved in play than was suspected, but it also seems to activate higher cognitive processes.",
+      "translation": "参与玩耍的大脑区域不仅比原先猜想的更多，而且玩耍似乎还会激活更高层次的认知过程。",
       "structure": [
         {
-          "text": "Not only is more of the brain involved in play than was suspected, but it also seems to activate higher cognitive processes. \"There's enormous cognitive involvement in play\", says Bekoff.",
-          "role": "main_clause",
+          "text": "Not only is more of the brain involved in play",
+          "role": "inverted_clause",
+          "level": 1
+        },
+        {
+          "text": "than was suspected",
+          "role": "comparison_clause",
+          "level": 2
+        },
+        {
+          "text": "but it also seems to activate higher cognitive processes",
+          "role": "coordinate_clause",
           "level": 1
         }
       ],
       "difficult_points": [
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。",
-        "注意本句的介词短语和非谓语成分不构成新的主句。"
+        "Not only 放在句首时，后面的分句要部分倒装，所以是 is more of the brain involved。",
+        "than was suspected 是比较从句，省略了主语，意为“比原先猜想的”。",
+        "not only ... but also ... 连接两个分句；后半句的 it 指 play。"
       ],
-      "expressions": []
+      "expressions": [
+        {
+          "text": "not only ... but also",
+          "meaning_zh": "不仅……而且"
+        },
+        {
+          "text": "cognitive processes",
+          "meaning_zh": "认知过程"
+        }
+      ]
+    },
+    {
+      "id": "H-38b",
+      "paragraph_label": "H",
+      "sentence_index": 46,
+      "sentence": "\"There's enormous cognitive involvement in play\", says Bekoff.",
+      "translation": "“玩耍中有大量的认知参与，”贝科夫说。",
+      "structure": [
+        {
+          "text": "There's enormous cognitive involvement in play",
+          "role": "existential_clause",
+          "level": 1
+        },
+        {
+          "text": "says Bekoff",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "There's 是 there is 的缩写，构成 there be 存在句。",
+        "says Bekoff 是倒装的引述分句；原文的逗号放在了引号外面。"
+      ],
+      "expressions": [
+        {
+          "text": "cognitive involvement",
+          "meaning_zh": "认知参与"
+        }
+      ]
     },
     {
       "id": "H-39",
       "paragraph_label": "H",
-      "sentence_index": 39,
+      "sentence_index": 47,
       "sentence": "He points out that play often involves complex assessments of playmates, ideas of reciprocity and the use of specialised signals and rules.",
       "translation": "他指出，玩耍常涉及对玩伴的复杂评估、互惠观念以及专门信号和规则的使用。",
       "structure": [
@@ -879,7 +1351,7 @@
     {
       "id": "H-40",
       "paragraph_label": "H",
-      "sentence_index": 40,
+      "sentence_index": 48,
       "sentence": "He believes that play creates a brain that has greater behavioural flexibility and improved potential for learning later in life.",
       "translation": "他相信，玩耍造就了行为更灵活、日后学习潜力更强的大脑。",
       "structure": [
@@ -908,7 +1380,7 @@
     {
       "id": "H-41",
       "paragraph_label": "H",
-      "sentence_index": 41,
+      "sentence_index": 49,
       "sentence": "The idea is backed up by the work of Stephen Siviy of Gettysburg College.",
       "translation": "斯蒂芬·西维在葛底斯堡学院的研究支持这一观点。",
       "structure": [
@@ -927,7 +1399,7 @@
     {
       "id": "H-42",
       "paragraph_label": "H",
-      "sentence_index": 42,
+      "sentence_index": 50,
       "sentence": "Siviy studied how bouts of play affected the brain's levels of a particular chemical associated with the stimulation and growth of nerve cells.",
       "translation": "西维研究了几次玩耍如何影响大脑中某种与神经细胞刺激和生长有关的化学物质水平。",
       "structure": [
@@ -946,26 +1418,79 @@
     {
       "id": "H-43",
       "paragraph_label": "H",
-      "sentence_index": 43,
-      "sentence": "He was surprised by the extent of the activation. \"Play just lights everything up,\" he says.",
-      "translation": "激活的程度令他惊讶。",
+      "sentence_index": 51,
+      "sentence": "He was surprised by the extent of the activation.",
+      "translation": "激活的程度令他吃惊。",
       "structure": [
         {
-          "text": "He was surprised by the extent of the activation. \"Play just lights everything up,\" he says.",
-          "role": "main_clause",
+          "text": "He",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "was surprised",
+          "role": "passive_predicate",
+          "level": 1
+        },
+        {
+          "text": "by the extent of the activation",
+          "role": "prepositional_phrase",
           "level": 1
         }
       ],
       "difficult_points": [
-        "先确定句子的主干，再把修饰成分分层理解，避免逐词硬译。",
-        "注意本句的介词短语和非谓语成分不构成新的主句。"
+        "be surprised by 表示“对……感到吃惊”。",
+        "the extent of the activation 指上文实验中大脑被激活的范围和程度。"
       ],
-      "expressions": []
+      "expressions": [
+        {
+          "text": "be surprised by",
+          "meaning_zh": "对……感到吃惊"
+        },
+        {
+          "text": "the extent of",
+          "meaning_zh": "……的程度"
+        }
+      ]
+    },
+    {
+      "id": "H-43b",
+      "paragraph_label": "H",
+      "sentence_index": 52,
+      "sentence": "\"Play just lights everything up,\" he says.",
+      "translation": "“玩耍简直把一切都点亮了，”他说。",
+      "structure": [
+        {
+          "text": "Play",
+          "role": "subject",
+          "level": 1
+        },
+        {
+          "text": "just lights everything up",
+          "role": "verb_phrase",
+          "level": 1
+        },
+        {
+          "text": "he says",
+          "role": "reporting_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "light up 是动词短语，宾语 everything 放在 light 和 up 之间，意为“使……全部亮起来”，这里指大脑各区域都被激活。",
+        "just 加强语气，意为“简直”。"
+      ],
+      "expressions": [
+        {
+          "text": "light up",
+          "meaning_zh": "使亮起来；激活"
+        }
+      ]
     },
     {
       "id": "H-44",
       "paragraph_label": "H",
-      "sentence_index": 44,
+      "sentence_index": 53,
       "sentence": "By allowing link-ups between brain areas that might not normally communicate with each other, play may enhance creativity.",
       "translation": "他说：“玩耍会把一切都点亮。” 玩耍让平时可能不会相互沟通的脑区建立联系，因此可能提升创造力。",
       "structure": [
@@ -989,7 +1514,7 @@
     {
       "id": "I-45",
       "paragraph_label": "I",
-      "sentence_index": 45,
+      "sentence_index": 54,
       "sentence": "What might further experimentation suggest about the way children are raised in many societies today?",
       "translation": "进一步实验会对今天许多社会的儿童养育方式提出什么启示？",
       "structure": [
@@ -1008,7 +1533,7 @@
     {
       "id": "I-46",
       "paragraph_label": "I",
-      "sentence_index": 46,
+      "sentence_index": 55,
       "sentence": "We already know that rat pups denied the chance to play grow smaller brain components and fail to develop the ability to apply social rules when they interact with their peers.",
       "translation": "我们已经知道，被剥夺玩耍机会的鼠崽，大脑组成部分会变小，也无法在与同伴互动时形成运用社会规则的能力。",
       "structure": [
@@ -1033,7 +1558,7 @@
     {
       "id": "I-47",
       "paragraph_label": "I",
-      "sentence_index": 47,
+      "sentence_index": 56,
       "sentence": "With schooling beginning earlier and becoming increasingly exam-orientated, play is likely to get even less of a look-in.",
       "translation": "随着入学年龄提前、教育日益面向考试，玩耍很可能会更没有立足之地。",
       "structure": [
@@ -1052,7 +1577,7 @@
     {
       "id": "I-48",
       "paragraph_label": "I",
-      "sentence_index": 48,
+      "sentence_index": 57,
       "sentence": "Who knows what the result of that will be?",
       "translation": "谁知道那会造成什么结果呢？",
       "structure": [

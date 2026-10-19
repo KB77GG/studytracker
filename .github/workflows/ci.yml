@@ -43,6 +43,7 @@ jobs:
             tests.test_grammar_graph_draft \
             tests.test_grammar_item_candidates \
             tests.test_reading_jijing_text_fixes \
+            tests.test_reading_study_glossary \
             -v
       - name: Guard legacy spelling correction queue
         run: node tests/test_dictation_spell_queue.js

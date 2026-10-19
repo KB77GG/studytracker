@@ -466,8 +466,8 @@
       "id": "C-01",
       "paragraph_label": "C",
       "sentence_index": 10,
-      "sentence": "The first mistake was to hire a rather untrustworthy Brazilian to scout for the best location in the Amazon, This man recommended a damp, rocky, and infertile series of hillsides near the Tapajos river, a tributary of the wide and mighty Amazon.",
-      "translation": "第一个错误是雇用了一个相当不可靠的巴西人去物色亚马逊地区的最佳地点；这个人推荐了塔帕若斯河附近一片潮湿、多石且贫瘠的丘陵地带——塔帕若斯河是浩瀚壮阔的亚马逊河的一条支流。",
+      "sentence": "The first mistake was to hire a rather untrustworthy Brazilian to scout for the best location in the Amazon.",
+      "translation": "第一个错误是雇用了一个相当不可靠的巴西人去物色亚马逊地区的最佳地点。",
       "structure": [
         {
           "text": "The first mistake",
@@ -488,7 +488,26 @@
           "text": "to scout for the best location in the Amazon",
           "role": "non_finite_clause",
           "level": 2
-        },
+        }
+      ],
+      "difficult_points": [
+        "句子主干是 The first mistake was to hire...，不定式作表语，说明这个错误的具体内容。",
+        "to scout for... 是不定式，表示雇用此人的目的；scout for 意为“物色、勘察寻找”。"
+      ],
+      "expressions": [
+        {
+          "text": "scout for",
+          "meaning_zh": "物色；勘察寻找"
+        }
+      ]
+    },
+    {
+      "id": "C-01b",
+      "paragraph_label": "C",
+      "sentence_index": 11,
+      "sentence": "This man recommended a damp, rocky, and infertile series of hillsides near the Tapajos river, a tributary of the wide and mighty Amazon.",
+      "translation": "这个人推荐了塔帕若斯河附近一片潮湿、多石且贫瘠的丘陵地带；塔帕若斯河是浩瀚壮阔的亚马逊河的一条支流。",
+      "structure": [
         {
           "text": "This man recommended a damp, rocky, and infertile series of hillsides near the Tapajos river",
           "role": "main_clause",
@@ -501,15 +520,10 @@
         }
       ],
       "difficult_points": [
-        "句子主干是 The first mistake was to hire...，不定式作表语说明这个错误的具体内容。",
-        "in the Amazon 后本应用句号，原文却用逗号连接 This man recommended...，属于逗号拼接的标点错误，此处按原文保留。",
-        "a tributary of the wide and mighty Amazon 是同位语，补充说明 Tapajos river 的身份。"
+        "damp, rocky, and infertile 三个形容词并列修饰 series of hillsides。",
+        "a tributary of the wide and mighty Amazon 是同位语，补充说明 Tapajos river。"
       ],
       "expressions": [
-        {
-          "text": "scout for",
-          "meaning_zh": "物色；勘察寻找"
-        },
         {
           "text": "a tributary of",
           "meaning_zh": "……的支流"
@@ -519,7 +533,7 @@
     {
       "id": "C-02",
       "paragraph_label": "C",
-      "sentence_index": 11,
+      "sentence_index": 12,
       "sentence": "In 1928, Ford blindly acquired a 10,000-square-kilometre concession and immediately ordered an immense amount of infrastructure to be built— at huge cost.",
       "translation": "1928年，福特盲目地获得了一块一万平方公里的特许经营地，并立即下令兴建大量基础设施——耗资巨大。",
       "structure": [
@@ -577,7 +591,7 @@
     {
       "id": "C-03",
       "paragraph_label": "C",
-      "sentence_index": 12,
+      "sentence_index": 13,
       "sentence": "To this end, earth-moving equipment arrived, tractors, stump-pullers, trains, prefabricated living quarters, and food-making equipment.",
       "translation": "为此，各种设备被运抵：推土设备、拖拉机、除根机、火车、预制住房以及食品加工设备。",
       "structure": [
@@ -620,7 +634,7 @@
     {
       "id": "C-04",
       "paragraph_label": "C",
-      "sentence_index": 13,
+      "sentence_index": 14,
       "sentence": "The surface jungle was cleared, scores of Ford's employees were relocated, and out of this wilderness sprang an instant slice of America, complete with a modern hospital, library, hotels, ice cream makers, and row upon row of prefabricated houses positioned along nicely paved streets.",
       "translation": "地表的丛林被清理干净，大批福特的员工被迁移到此，一片瞬间成形的“美国缩影”就此从这片荒野中拔地而起——配备了现代化医院、图书馆、旅馆、冰淇淋机，以及沿着铺设整齐的街道排列的一排排预制房屋。",
       "structure": [
@@ -673,7 +687,7 @@
     {
       "id": "D-01",
       "paragraph_label": "D",
-      "sentence_index": 14,
+      "sentence_index": 15,
       "sentence": "The second big mistake was that, incredibly, Ford never thought to consult trained horticulturists.",
       "translation": "第二个重大错误是，令人难以置信的是，福特竟从未想过去咨询专业的园艺师。",
       "structure": [
@@ -726,7 +740,7 @@
     {
       "id": "D-02",
       "paragraph_label": "D",
-      "sentence_index": 15,
+      "sentence_index": 16,
       "sentence": "He naively assumed that his own company engineers, who had proven their worth in the production of cars, would prove equally adept at this agricultural endeavour.",
       "translation": "他天真地以为，自己公司里那些已经在汽车生产中证明了自身能力的工程师，同样也能胜任这项农业事业。",
       "structure": [
@@ -780,7 +794,7 @@
     {
       "id": "D-03",
       "paragraph_label": "D",
-      "sentence_index": 16,
+      "sentence_index": 17,
       "sentence": "Thus, they planted the rubber trees thickly together, believing that they would nourish in their home environment.",
       "translation": "因此，他们把橡胶树密密地种在一起，以为它们会像在原生环境中一样茁壮成长。",
       "structure": [
@@ -828,7 +842,7 @@
     {
       "id": "D-04",
       "paragraph_label": "D",
-      "sentence_index": 17,
+      "sentence_index": 18,
       "sentence": "However, in the Amazonian jungle, wild rubber trees are actually few and far between — a defence against the prodigious insect life which chews, drills, sucks, and bites.",
       "translation": "然而，在亚马逊丛林中，野生橡胶树实际上分布得很稀疏——这是抵御各种啃咬、钻蛀、吸食昆虫的一种自我保护机制。",
       "structure": [
@@ -882,7 +896,7 @@
     {
       "id": "D-05",
       "paragraph_label": "D",
-      "sentence_index": 18,
+      "sentence_index": 19,
       "sentence": "In such environments, monocultural farming approaches are dubious at best.",
       "translation": "在这样的环境中，单一作物种植的方式充其量也只是效果存疑。",
       "structure": [
@@ -920,7 +934,7 @@
     {
       "id": "D-06",
       "paragraph_label": "D",
-      "sentence_index": 19,
+      "sentence_index": 20,
       "sentence": "Ford's young rubber trees had no sooner appeared from the ground than they were attacked by caterpillars, ants, red spiders, and most significantly, South American leaf blight, which, to this day, limits the number of rubber plantations in this, the tree's native land.",
       "translation": "福特种的幼小橡胶树刚从地里冒出来，就遭到了毛毛虫、蚂蚁、红蜘蛛，尤其是南美叶疫病的侵袭；时至今日，这种叶疫病仍然限制着橡胶树原产地——这里能开辟的橡胶种植园数量。",
       "structure": [
@@ -973,7 +987,7 @@
     {
       "id": "E-01",
       "paragraph_label": "E",
-      "sentence_index": 20,
+      "sentence_index": 21,
       "sentence": "The next problem was based on cultural differences.",
       "translation": "接下来的问题源于文化差异。",
       "structure": [
@@ -1007,7 +1021,7 @@
     {
       "id": "E-02",
       "paragraph_label": "E",
-      "sentence_index": 21,
+      "sentence_index": 22,
       "sentence": "The newly planted fields needed hundreds of local workers, who, although well paid, were expected to follow Ford's patronising vision of a healthy lifestyle.",
       "translation": "新开垦的田地需要数百名当地工人，尽管薪水不错，但他们被要求遵从福特那套居高临下式的“健康生活”理念。",
       "structure": [
@@ -1061,7 +1075,7 @@
     {
       "id": "E-03",
       "paragraph_label": "E",
-      "sentence_index": 22,
+      "sentence_index": 23,
       "sentence": "Instead of the local custom of working before and after the roastingly hot middle of the day, Ford's workers were forced to do the standard company 9-to-5 shift.",
       "translation": "当地习俗是在酷热的正午前后工作，但福特却强迫工人们遵循公司标准的朝九晚五班次。",
       "structure": [
@@ -1104,7 +1118,7 @@
     {
       "id": "E-04",
       "paragraph_label": "E",
-      "sentence_index": 23,
+      "sentence_index": 24,
       "sentence": "Similarly, they had to eat American food and take part in weekend activities considered sufficiently wholesome, such as poetry reading and square-dancing.",
       "translation": "同样，他们还必须吃美式食物，并参加被认为足够“健康得体”的周末活动，比如诗歌朗诵和方块舞。",
       "structure": [
@@ -1157,7 +1171,7 @@
     {
       "id": "E-05",
       "paragraph_label": "E",
-      "sentence_index": 24,
+      "sentence_index": 25,
       "sentence": "Alcohol was strictly forbidden at work, in the housing estates, or within Fordlandia's sphere of influence.",
       "translation": "无论是在工作场所、住宅区，还是在福特兰迪亚的势力范围内，酒精都被严格禁止。",
       "structure": [
@@ -1195,7 +1209,7 @@
     {
       "id": "E-06",
       "paragraph_label": "E",
-      "sentence_index": 25,
+      "sentence_index": 26,
       "sentence": "After a year denied their local customs, the disgruntled workers had had enough, and a riot followed, leaving the hapless American staff scurrying into the jungle to escape injury.",
       "translation": "在被剥夺当地习俗满一年后，心怀不满的工人们再也无法忍受，一场暴乱随之爆发，吓得倒霉的美国员工们仓皇逃入丛林以躲避伤害。",
       "structure": [
@@ -1249,7 +1263,7 @@
     {
       "id": "E-07",
       "paragraph_label": "E",
-      "sentence_index": 26,
+      "sentence_index": 27,
       "sentence": "It was all finally quelled with the arrival of the Brazilian army.",
       "translation": "最终，随着巴西军队的到来，这场骚乱被彻底平息。",
       "structure": [
@@ -1283,7 +1297,7 @@
     {
       "id": "F-01",
       "paragraph_label": "F",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "After three years, and no significant quantity of rubber to show for it all, Ford did what he should have done from the beginning—hired a trained horticulturist, who ultimately concluded that, in whatever manner the rubber trees were planted, the land was not appropriate for their cultivation.",
       "translation": "三年过去，却没有产出多少橡胶作为回报，福特终于做了他本该从一开始就做的事——雇用了一位受过专业训练的园艺师；这位园艺师最终得出结论：无论用什么方式种植橡胶树，这片土地都不适合种植橡胶。",
       "structure": [
@@ -1352,7 +1366,7 @@
     {
       "id": "F-02",
       "paragraph_label": "F",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "With such humiliating news, anyone less stubborn would have given up, yet Ford purchased another tract of land some fifty miles downstream of the Tapajos river—flatter, drier, better drained, and more suitable for machinery — and started all over again.",
       "translation": "面对如此令人难堪的消息，换作不那么固执的人早就放弃了，然而福特却在塔帕若斯河下游大约五十英里处又买下了一片土地——那里更平坦、更干燥、排水更好，也更适合机械作业——然后一切从头再来。",
       "structure": [
@@ -1406,7 +1420,7 @@
     {
       "id": "F-03",
       "paragraph_label": "F",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "This time, Ford imported blight-resistant Malaysian rubber trees, and much more horticultural expertise.",
       "translation": "这一次，福特进口了抗叶疫病的马来西亚橡胶树，还引进了更多的园艺专业知识。",
       "structure": [
@@ -1446,12 +1460,12 @@
         }
       ]
     },
-    {"id": "F-04", "paragraph_label": "F", "sentence_index": 30, "sentence": "Still, 10 years later, in 1942, the operation could only produce a paltry 750 tons of latex rubber.", "translation": "然而十年之后，也就是1942年，这项经营也只能生产区区750吨乳胶橡胶。", "structure": [{"text": "Still", "role": "discourse_marker", "level": 1}, {"text": "10 years later, in 1942", "role": "adverbial", "level": 1}, {"text": "the operation", "role": "subject", "level": 1}, {"text": "could only produce", "role": "verb_phrase", "level": 1}, {"text": "a paltry 750 tons of latex rubber", "role": "object", "level": 1}], "difficult_points": ["Still 放在句首表示转折，意思是“然而、尽管如此”。", "in 1942 是对 10 years later 的补充说明；a paltry 表示数量“少得可怜”。"], "expressions": [{"text": "a paltry", "meaning_zh": "少得可怜的"}]},
-    {"id": "F-04b", "paragraph_label": "F", "sentence_index": 31, "sentence": "Ford's factories were hoping for almost 40,000.", "translation": "而福特的工厂原本期望的产量接近四万吨。", "structure": [{"text": "Ford's factories", "role": "subject", "level": 1}, {"text": "were hoping for", "role": "verb_phrase", "level": 1}, {"text": "almost 40,000", "role": "object", "level": 1}], "difficult_points": ["were hoping for 用过去进行时表示当时一直怀有的期望。", "40,000 承前省略了单位 tons，完整的说法是 almost 40,000 tons。"], "expressions": [{"text": "hope for", "meaning_zh": "期望得到"}]},
+    {"id": "F-04", "paragraph_label": "F", "sentence_index": 31, "sentence": "Still, 10 years later, in 1942, the operation could only produce a paltry 750 tons of latex rubber.", "translation": "然而十年之后，也就是1942年，这项经营也只能生产区区750吨乳胶橡胶。", "structure": [{"text": "Still", "role": "discourse_marker", "level": 1}, {"text": "10 years later, in 1942", "role": "adverbial", "level": 1}, {"text": "the operation", "role": "subject", "level": 1}, {"text": "could only produce", "role": "verb_phrase", "level": 1}, {"text": "a paltry 750 tons of latex rubber", "role": "object", "level": 1}], "difficult_points": ["Still 放在句首表示转折，意思是“然而、尽管如此”。", "in 1942 是对 10 years later 的补充说明；a paltry 表示数量“少得可怜”。"], "expressions": [{"text": "a paltry", "meaning_zh": "少得可怜的"}]},
+    {"id": "F-04b", "paragraph_label": "F", "sentence_index": 32, "sentence": "Ford's factories were hoping for almost 40,000.", "translation": "而福特的工厂原本期望的产量接近四万吨。", "structure": [{"text": "Ford's factories", "role": "subject", "level": 1}, {"text": "were hoping for", "role": "verb_phrase", "level": 1}, {"text": "almost 40,000", "role": "object", "level": 1}], "difficult_points": ["were hoping for 用过去进行时表示当时一直怀有的期望。", "40,000 承前省略了单位 tons，完整的说法是 almost 40,000 tons。"], "expressions": [{"text": "hope for", "meaning_zh": "期望得到"}]},
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "The final nail in the coffin was the development of synthetic rubber, and in 1945, it was time to admit defeat, although it was not Ford who did so.",
       "translation": "压垮骆驼的最后一根稻草是合成橡胶的问世；到了1945年，是时候承认失败了，尽管承认失败的并不是福特本人。",
       "structure": [
@@ -1510,7 +1524,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 33,
+      "sentence_index": 34,
       "sentence": "By that time he was old and ill and had relinquished control of his company to his grandson, Henry Ford II, who closed down the entire rubber operation.",
       "translation": "到那时，他已年老体衰，并已将公司的控制权交给了孙子小亨利·福特，是后者关闭了整个橡胶经营项目。",
       "structure": [
@@ -1564,7 +1578,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 34,
+      "sentence_index": 35,
       "sentence": "The holdings were sold back to the Brazilian government for a pittance, leaving a loss of over $20 million (which would be over 10 times that much in today's terms) — a complete and utter financial disaster.",
       "translation": "这些资产以极低的价格卖回给了巴西政府，造成了超过两千万美元的亏损（按今天的价值计算将是这个数字的十倍以上）——完全是一场彻头彻尾的财务灾难。",
       "structure": [

@@ -34,15 +34,15 @@
     },
     {
       "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
-      "sentence": "But the choice of your university has a large infiuence on your future.",
+      "sentence": "But the choice of your university has a large influence on your future.",
       "translation": "但是，你对大学的选择会对未来产生很大影响。",
       "structure": [
         {"text": "the choice of your university", "role": "subject", "level": 1},
         {"text": "has", "role": "verb", "level": 1},
-        {"text": "a large infiuence", "role": "object", "level": 1},
+        {"text": "a large influence", "role": "object", "level": 1},
         {"text": "on your future", "role": "prepositional_complement", "level": 2}
       ],
-      "difficult_points": ["of your university 修饰 choice，表示所选择的大学。", "原文 infiuence 为拼写异常，语义按 influence 理解。"],
+      "difficult_points": ["of your university 修饰 choice，表示所选择的大学。", "have a large influence on 意为“对……有很大影响”。"],
       "expressions": [{"text": "have an influence on", "meaning_zh": "对……产生影响"}]
     },
     {
@@ -136,28 +136,28 @@
     },
     {
       "id": "B-01", "paragraph_label": "B", "sentence_index": 11,
-      "sentence": "The debate, which first fiared during the 1950s, was reignited in August, when AACSB International. the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research.",
+      "sentence": "The debate, which first flared during the 1950s, was reignited in August, when AACSB International, the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research.",
       "translation": "这场争论最早在20世纪50年代爆发，并于8月再度燃起；当时，全球最受认可的商学院认证机构 AACSB International 宣布，将考虑改变其评估研究的方式。",
       "structure": [
         {"text": "The debate", "role": "subject", "level": 1},
-        {"text": "which first fiared during the 1950s", "role": "relative_clause", "level": 2},
+        {"text": "which first flared during the 1950s", "role": "relative_clause", "level": 2},
         {"text": "was reignited in August", "role": "passive_predicate", "level": 1},
-        {"text": "when AACSB International. the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research", "role": "time_clause", "level": 2}
+        {"text": "when AACSB International, the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research", "role": "time_clause", "level": 2}
       ],
-      "difficult_points": ["which 从句补充说明 debate 最早出现的时间。", "when 引导时间从句；机构名称后的句点是源文异常，后面的名词短语实际是同位语。", "it evaluates research 是省略关系词的定语从句，修饰 the way。"],
+      "difficult_points": ["which 从句补充说明 debate 最早出现的时间。", "when 引导时间从句；AACSB International 后面的 the most widely recognised... 是它的同位语。", "it evaluates research 是省略关系词的定语从句，修饰 the way。"],
       "expressions": [{"text": "reignite a debate", "meaning_zh": "重新引发争论"}, {"text": "consider doing", "meaning_zh": "考虑做某事"}]
     },
     {
       "id": "B-02", "paragraph_label": "B", "sentence_index": 12,
-      "sentence": "The news followed rather damning criticism in 2002 from Jeffrey Pfefier. a Stanford professor, and Christina Fong of Washington University, which questioned whether business education in its current guise was sustainable.",
-      "translation": "在这则消息之前，2002年斯坦福大学教授 Jeffrey Pfefier 与华盛顿大学的 Christina Fong 曾提出相当尖锐的批评，质疑当时形态下的商科教育能否持续。",
+      "sentence": "The news followed rather damning criticism in 2002 from Jeffrey Pfeffer, a Stanford professor, and Christina Fong of Washington University, which questioned whether business education in its current guise was sustainable.",
+      "translation": "在这则消息之前，2002年斯坦福大学教授 Jeffrey Pfeffer 与华盛顿大学的 Christina Fong 曾提出相当尖锐的批评，质疑当时形态下的商科教育能否持续。",
       "structure": [
         {"text": "The news", "role": "subject", "level": 1},
         {"text": "followed rather damning criticism in 2002", "role": "predicate", "level": 1},
-        {"text": "from Jeffrey Pfefier. a Stanford professor, and Christina Fong of Washington University", "role": "source_modifier", "level": 2},
+        {"text": "from Jeffrey Pfeffer, a Stanford professor, and Christina Fong of Washington University", "role": "source_modifier", "level": 2},
         {"text": "which questioned whether business education in its current guise was sustainable", "role": "relative_clause", "level": 2}
       ],
-      "difficult_points": ["followed 在时间关系上表示这则消息出现在批评之后。", "Pfefier 后的句点是源文异常，a Stanford professor 实际是同位语。", "whether 引导 questioned 的宾语从句。"],
+      "difficult_points": ["followed 在时间关系上表示这则消息出现在批评之后。", "a Stanford professor 是 Jeffrey Pfeffer 的同位语；which 指这次批评。", "whether 引导 questioned 的宾语从句。"],
       "expressions": [{"text": "damning criticism", "meaning_zh": "严厉且破坏性的批评"}, {"text": "in its current guise", "meaning_zh": "以其当前形态"}]
     },
     {
@@ -239,15 +239,15 @@
     },
     {
       "id": "C-04", "paragraph_label": "C", "sentence_index": 19,
-      "sentence": "A psychology professor must publish competi tive research in the top neuroscience journals.",
+      "sentence": "A psychology professor must publish competitive research in the top neuroscience journals.",
       "translation": "一位心理学教授必须在顶尖神经科学期刊上发表有竞争力的研究。",
       "structure": [
         {"text": "A psychology professor", "role": "subject", "level": 1},
         {"text": "must publish", "role": "modal_predicate", "level": 1},
-        {"text": "competi tive research", "role": "object", "level": 1},
+        {"text": "competitive research", "role": "object", "level": 1},
         {"text": "in the top neuroscience journals", "role": "place_adverbial", "level": 1}
       ],
-      "difficult_points": ["must 表示在该学术体系中的必要要求。", "原文 competi tive 被异常断开，语义按 competitive 理解并保留原文写法。"],
+      "difficult_points": ["must 表示在该学术体系中的必要要求。", "competitive research 意为“有竞争力的研究”；in the top neuroscience journals 说明发表的场所。"],
       "expressions": [{"text": "publish research", "meaning_zh": "发表研究成果"}]
     },
     {
@@ -289,15 +289,15 @@
     },
     {
       "id": "C-08", "paragraph_label": "C", "sentence_index": 23,
-      "sentence": "So it seems legitimate to ask for,'what purpose it is undertaken?",
+      "sentence": "So it seems legitimate to ask for what purpose it is undertaken?",
       "translation": "因此，追问开展这些研究究竟是为了什么，似乎是合理的。",
       "structure": [
         {"text": "it", "role": "dummy_subject", "level": 1},
         {"text": "seems legitimate", "role": "linking_predicate", "level": 1},
         {"text": "to ask", "role": "real_subject_infinitive", "level": 2},
-        {"text": "for,'what purpose it is undertaken", "role": "embedded_question", "level": 3}
+        {"text": "for what purpose it is undertaken", "role": "embedded_question", "level": 3}
       ],
-      "difficult_points": ["it 是形式主语，真正主语是后面的 to ask。", "it is undertaken 使用被动语态，其中 it 指 research。", "for 后的逗号和引号为源文异常，理解为询问 for what purpose。"],
+      "difficult_points": ["it 是形式主语，真正主语是后面的 to ask。", "it is undertaken 使用被动语态，其中 it 指 research。", "for what purpose it is undertaken 是间接疑问句，作 ask 的宾语，所以用陈述语序 it is undertaken；句末用问号不规范，应为句号。"],
       "expressions": [{"text": "it seems legitimate to", "meaning_zh": "做……似乎是合理的"}, {"text": "for what purpose", "meaning_zh": "出于什么目的"}]
     },
     {
@@ -605,19 +605,31 @@
     },
     {
       "id": "G-07", "paragraph_label": "G", "sentence_index": 48,
-      "sentence": "A paper in a 2006 issue of Strategy & Leadership commented that\"research is not designed with managers' needs in mind, nor is it communicated in the journals they read. For the most part, it has become a self-referential closed system irrelevant to corporate performance.\"",
-      "translation": "《Strategy & Leadership》2006年的一期论文评论道：“研究在设计时并未考虑管理者的需求，也没有通过他们阅读的期刊传播。总体而言，它已成为一个自我指涉、与企业绩效无关的封闭体系。”",
+      "sentence": "A paper in a 2006 issue of Strategy & Leadership commented that \"research is not designed with managers' needs in mind, nor is it communicated in the journals they read.",
+      "translation": "《Strategy & Leadership》2006年某期的一篇论文评论道：“研究在设计时并未考虑管理者的需求，也没有通过他们阅读的期刊传播。",
       "structure": [
         {"text": "A paper in a 2006 issue of Strategy & Leadership commented", "role": "reporting_clause", "level": 1},
-        {"text": "that\"research is not designed with managers' needs in mind", "role": "reported_content", "level": 2},
-        {"text": "nor is it communicated in the journals they read", "role": "inverted_parallel_clause", "level": 2},
-        {"text": "it has become a self-referential closed system irrelevant to corporate performance", "role": "second_reported_clause", "level": 2}
+        {"text": "that \"research is not designed with managers' needs in mind", "role": "quoted_clause", "level": 2},
+        {"text": "nor is it communicated in the journals they read", "role": "inverted_parallel_clause", "level": 2}
       ],
-      "difficult_points": ["that 后引出论文评论的直接引语，原文在 that 与引号之间缺少空格。", "否定词 nor 置于句首触发部分倒装，形成 nor is it communicated。", "they read 是省略关系词的定语从句，修饰 journals；irrelevant ... 后置修饰 system。"],
-      "expressions": [{"text": "with someone's needs in mind", "meaning_zh": "考虑到某人的需求"}, {"text": "for the most part", "meaning_zh": "总体上；在很大程度上"}, {"text": "irrelevant to", "meaning_zh": "与……无关"}]
+      "difficult_points": ["commented that 后面接的是加了引号的原话：作者转述时直接引用了论文原文。", "否定词 nor 放在分句开头，后面要部分倒装，所以是 nor is it communicated。", "they read 是省略关系代词的定语从句，修饰 journals。"],
+      "expressions": [{"text": "with someone's needs in mind", "meaning_zh": "考虑到某人的需求"}, {"text": "be communicated in", "meaning_zh": "通过……传播"}]
     },
     {
-      "id": "G-08", "paragraph_label": "G", "sentence_index": 49,
+      "id": "G-07b", "paragraph_label": "G", "sentence_index": 49,
+      "sentence": "For the most part, it has become a self-referential closed system irrelevant to corporate performance.\"",
+      "translation": "总体而言，它已成为一个自我指涉的封闭体系，与企业绩效毫不相干。”",
+      "structure": [
+        {"text": "For the most part", "role": "adverbial", "level": 1},
+        {"text": "has become", "role": "linking_predicate", "level": 1},
+        {"text": "a self-referential closed system irrelevant to corporate performance", "role": "subject_complement", "level": 1},
+        {"text": "irrelevant to corporate performance", "role": "adjective_postmodifier", "level": 2}
+      ],
+      "difficult_points": ["主语 it 指上一句的 research；has become 是现在完成时，表示到目前为止已经形成的状态。", "irrelevant to corporate performance 是形容词短语，后置修饰 system，意为“与企业绩效无关的”。", "self-referential 意为“自我指涉的”，指研究只引用、回应研究本身；句末引号表示论文引语结束。"],
+      "expressions": [{"text": "for the most part", "meaning_zh": "总体上；在很大程度上"}, {"text": "irrelevant to", "meaning_zh": "与……无关"}]
+    },
+    {
+      "id": "G-08", "paragraph_label": "G", "sentence_index": 50,
       "sentence": "The AACSB demands that this segregation must change for the future of higher education.",
       "translation": "AACSB 要求，为了高等教育的未来，这种割裂局面必须改变。",
       "structure": [
@@ -629,7 +641,7 @@
       "expressions": [{"text": "the future of higher education", "meaning_zh": "高等教育的未来"}]
     },
     {
-      "id": "G-09", "paragraph_label": "G", "sentence_index": 50,
+      "id": "G-09", "paragraph_label": "G", "sentence_index": 51,
       "sentence": "If students must invest thousands of dollars for an education as part of their career path, the academics which serve the students should be more fully incorporated into the professional world.",
       "translation": "既然学生必须投入数千美元接受教育，并将其作为职业道路的一部分，那么服务学生的学者就应当更充分地融入职业世界。",
       "structure": [
@@ -642,7 +654,7 @@
       "expressions": [{"text": "invest ... for an education", "meaning_zh": "为接受教育投入……"}, {"text": "as part of", "meaning_zh": "作为……的一部分"}, {"text": "be incorporated into", "meaning_zh": "被纳入；融入"}]
     },
     {
-      "id": "G-10", "paragraph_label": "G", "sentence_index": 51,
+      "id": "G-10", "paragraph_label": "G", "sentence_index": 52,
       "sentence": "This means that universities must focus on other strengths outside of research, such as professional networks, technology skills, and connections with top business firms around the world.",
       "translation": "这意味着大学必须关注研究之外的其他优势，例如职业网络、技术技能，以及与全球顶尖企业的联系。",
       "structure": [
@@ -654,7 +666,7 @@
       "expressions": [{"text": "focus on other strengths", "meaning_zh": "关注其他优势"}, {"text": "connections with", "meaning_zh": "与……的联系"}]
     },
     {
-      "id": "G-11", "paragraph_label": "G", "sentence_index": 52,
+      "id": "G-11", "paragraph_label": "G", "sentence_index": 53,
       "sentence": "Though many universities resisted the report, today's world continues to change.",
       "translation": "尽管许多大学抵制这份报告，当今世界仍在不断变化。",
       "structure": [
@@ -666,7 +678,7 @@
       "expressions": [{"text": "resist the report", "meaning_zh": "抵制该报告"}, {"text": "continue to change", "meaning_zh": "持续变化"}]
     },
     {
-      "id": "G-12", "paragraph_label": "G", "sentence_index": 53,
+      "id": "G-12", "paragraph_label": "G", "sentence_index": 54,
       "sentence": "The universities which prepare students for our changing future have little choice but to change with new trends and new standards.",
       "translation": "那些要帮助学生为不断变化的未来做好准备的大学，几乎别无选择，只能顺应新趋势和新标准作出改变。",
       "structure": [

@@ -71,10 +71,10 @@
     },
     {
       "id": "B-02", "paragraph_label": "B", "sentence_index": 6,
-      "sentence": "Seven wars ago.",
+      "sentence": "Seven years ago.",
       "translation": "七年前。",
-      "structure": [{"text": "Seven wars ago", "role": "fragmented_time_adverbial", "level": 1}],
-      "difficult_points": ["这是源文保留的残句，语义上应与下一句连读。", "wars 很可能是 years 的 OCR 错误，正常理解为“七年前”。"],
+      "structure": [{"text": "Seven years ago", "role": "fragmented_time_adverbial", "level": 1}],
+      "difficult_points": ["Seven years ago. 是省略了主谓的残句，交代时间，应与下一句连读。", "ago 放在时间段后面，表示“……以前”。"],
       "expressions": [{"text": "seven years ago", "meaning_zh": "七年前（按语义还原）"}]
     },
     {
@@ -110,7 +110,7 @@
         {"text": "and while many of the critics in the scientific establishment who vilified him disappeared from view", "role": "coordinated_clause", "level": 1},
         {"text": "who vilified him", "role": "relative_clause", "level": 2}
       ],
-      "difficult_points": ["It 回指此前的负面称号和批评。", "who vilified him 修饰 critics。", "源句中的 while 形式不完整，可按“与此同时”理解并保留原文。"],
+      "difficult_points": ["It 回指此前的负面称号和批评。", "who vilified him 修饰 critics。", "while 引导的从句没有对应的主句，句子不完整，可按“与此同时”理解。"],
       "expressions": [{"text": "deter somebody", "meaning_zh": "阻止某人"}, {"text": "disappear from view", "meaning_zh": "淡出视野"}]
     },
     {
@@ -166,14 +166,14 @@
     },
     {
       "id": "C-06", "paragraph_label": "C", "sentence_index": 14,
-      "sentence": "The result is a radical new view of life in the oceans, the modem answer to Charles Darwin's I 9th-century voyage on the HMS Beagle.",
+      "sentence": "The result is a radical new view of life in the oceans, the modern answer to Charles Darwin's 19th-century voyage on the HMS Beagle.",
       "translation": "其结果是形成了一种看待海洋生命的全新激进视角，堪称对查尔斯·达尔文十九世纪乘“小猎犬号”航行的现代回应。",
       "structure": [
         {"text": "The result", "role": "subject", "level": 1},
         {"text": "is a radical new view of life in the oceans", "role": "linking_predicate", "level": 1},
-        {"text": "the modem answer to Charles Darwin's I 9th-century voyage on the HMS Beagle", "role": "apposition", "level": 1}
+        {"text": "the modern answer to Charles Darwin's 19th-century voyage on the HMS Beagle", "role": "apposition", "level": 1}
       ],
-      "difficult_points": ["逗号后的名词短语是前面 a radical new view 的同位说明。", "modem 和 I 9th-century 是源文 OCR 异常，语义应为 modern 和 19th-century。"],
+      "difficult_points": ["逗号后的名词短语是前面 a radical new view 的同位说明。", "Charles Darwin's 19th-century voyage 中 19th-century 是复合形容词，意为“19世纪的”。"],
       "expressions": [{"text": "a radical new view of", "meaning_zh": "对……的全新激进视角"}, {"text": "the modern answer to", "meaning_zh": "对……的现代回应"}]
     },
     {
@@ -202,7 +202,7 @@
     },
     {
       "id": "C-09", "paragraph_label": "C", "sentence_index": 17,
-      "sentence": "He calls his approach\"metagenomics\".",
+      "sentence": "He calls his approach \"metagenomics\".",
       "translation": "他把这种方法称为“宏基因组学”。",
       "structure": [
         {"text": "He", "role": "subject", "level": 1},
@@ -210,7 +210,7 @@
         {"text": "his approach", "role": "object", "level": 1},
         {"text": "\"metagenomics\"", "role": "object_complement", "level": 1}
       ],
-      "difficult_points": ["call + 宾语 + 名称是宾语补足语结构，表示“把……称为……”。", "approach 与引号之间缺少空格是源文排版异常。"],
+      "difficult_points": ["call + 宾语 + 名称是宾语补足语结构，表示“把……称为……”。", "引号表示 metagenomics 是他为这种方法取的名称。"],
       "expressions": [{"text": "call ... metagenomics", "meaning_zh": "把……称为宏基因组学"}]
     },
     {
@@ -326,13 +326,13 @@
     },
     {
       "id": "E-03", "paragraph_label": "E", "sentence_index": 27,
-      "sentence": "'I did all the major ocean passages.\" he said.",
+      "sentence": "'I did all the major ocean passages,' he said.",
       "translation": "他说：“所有主要的远洋航程我都参加了。”",
       "structure": [
         {"text": "I did all the major ocean passages", "role": "reported_content", "level": 2},
         {"text": "he said", "role": "reporting_clause", "level": 1}
       ],
-      "difficult_points": ["did 在此不是助动词，而是“完成、经历”的实义动词。", "开头单引号、结尾双引号及句号位置不一致，均为源文标点异常。"],
+      "difficult_points": ["did 在此不是助动词，而是“完成、经历”的实义动词。", "引语在前、he said 在后，是直接引语的常见格式；引语末尾的逗号放在引号内。"],
       "expressions": [{"text": "ocean passage", "meaning_zh": "远洋航程"}]
     },
     {
@@ -374,15 +374,15 @@
     },
     {
       "id": "F-03", "paragraph_label": "F", "sentence_index": 31,
-      "sentence": "Each gene contains the instructions used to make the proteins that build and operate living thing'-, and Waiter's bounty doubles the number known to science.",
+      "sentence": "Each gene contains the instructions used to make the proteins that build and operate living things, and Venter's bounty doubles the number known to science.",
       "translation": "每个基因都包含制造蛋白质所需的指令，而这些蛋白质构建并维持生物体的运作；文特尔的这批成果使科学界已知的基因数量翻了一番。",
       "structure": [
         {"text": "Each gene contains the instructions", "role": "main_clause", "level": 1},
         {"text": "used to make the proteins", "role": "participle_attributive", "level": 2},
-        {"text": "that build and operate living thing'-", "role": "relative_clause", "level": 3},
-        {"text": "and Waiter's bounty doubles the number known to science", "role": "coordinated_clause", "level": 1}
+        {"text": "that build and operate living things", "role": "relative_clause", "level": 3},
+        {"text": "and Venter's bounty doubles the number known to science", "role": "coordinated_clause", "level": 1}
       ],
-      "difficult_points": ["used to make 是过去分词短语，修饰 instructions，并非“过去常常”。", "that 修饰 proteins，build 与 operate 是并列谓语。", "living thing'- 和 Waiter's 是源文 OCR 异常，语义应为 living things 和 Venter's。"],
+      "difficult_points": ["used to make 是过去分词短语，修饰 instructions，并非“过去常常”。", "that 修饰 proteins，build 与 operate 是并列谓语。", "and 连接两个分句；Venter's bounty 指文特尔这次考察获得的大量成果，the number known to science 指科学界已知的基因数量。"],
       "expressions": [{"text": "contain the instructions used to", "meaning_zh": "包含用于……的指令"}, {"text": "double the number", "meaning_zh": "使数量翻倍"}]
     },
     {
@@ -412,30 +412,30 @@
     },
     {
       "id": "G-01", "paragraph_label": "G", "sentence_index": 34,
-      "sentence": "When it conn's to climate change, the expedition has thrown up another key insight.",
+      "sentence": "When it comes to climate change, the expedition has thrown up another key insight.",
       "translation": "谈到气候变化，这次考察又带来了一项关键认识。",
       "structure": [
-        {"text": "When it conn's to climate change", "role": "topic_adverbial_clause", "level": 1},
+        {"text": "When it comes to climate change", "role": "topic_adverbial_clause", "level": 1},
         {"text": "the expedition", "role": "subject", "level": 1},
         {"text": "has thrown up another key insight", "role": "predicate", "level": 1}
       ],
-      "difficult_points": ["conn's 是源文 OCR 异常，按固定表达 comes to 理解。", "throw up 在此不是“呕吐”，而是“产生、带来”。"],
+      "difficult_points": ["When it comes to 意为“谈到……”，to 是介词，后接名词 climate change。", "throw up 在此不是“呕吐”，而是“产生、带来”。"],
       "expressions": [{"text": "when it comes to", "meaning_zh": "谈到；就……而言"}, {"text": "throw up an insight", "meaning_zh": "带来一种认识"}]
     },
     {
       "id": "G-02", "paragraph_label": "G", "sentence_index": 35,
-      "sentence": "Some parts of the ocean have more carbon-hungry organisms than others, and it used to he thought that populations reflected local nutrient levels.",
+      "sentence": "Some parts of the ocean have more carbon-hungry organisms than others, and it used to be thought that populations reflected local nutrient levels.",
       "translation": "海洋中有些区域的碳吸收型生物比其他区域更多，过去人们认为这些种群数量反映了当地的营养水平。",
       "structure": [
         {"text": "Some parts of the ocean have more carbon-hungry organisms than others", "role": "main_clause", "level": 1},
-        {"text": "and it used to he thought", "role": "coordinated_passive_clause", "level": 1},
+        {"text": "and it used to be thought", "role": "coordinated_passive_clause", "level": 1},
         {"text": "that populations reflected local nutrient levels", "role": "subject_clause", "level": 2}
       ],
-      "difficult_points": ["more ... than others 构成比较，others 指海洋中的其他区域。", "it 是形式主语，that 从句是真正被认为的内容。", "he 是源文 OCR 错误，应按 be 理解。"],
+      "difficult_points": ["more ... than others 构成比较，others 指海洋中的其他区域。", "it 是形式主语，that 从句是真正被认为的内容。", "it used to be thought that... 意为“过去人们认为……”，used to 表示过去的情况。"],
       "expressions": [{"text": "it used to be thought that", "meaning_zh": "过去人们认为……"}, {"text": "reflect local nutrient levels", "meaning_zh": "反映当地营养水平"}]
     },
     {"id": "G-03", "paragraph_label": "G", "sentence_index": 36, "sentence": "Venter has found that this may not be the case.", "translation": "文特尔发现，情况可能并非如此。", "structure": [{"text": "Venter", "role": "subject", "level": 1}, {"text": "has found", "role": "verb_phrase", "level": 1}, {"text": "that this may not be the case", "role": "object_clause", "level": 2}], "difficult_points": ["that 从句作 has found 的宾语；this 回指上一句提到的传统看法。", "may not be the case 表示“情况可能并非如此”，是常用的委婉否定。"], "expressions": [{"text": "may not be the case", "meaning_zh": "情况可能并非如此"}]},
-    {"id": "G-03b", "paragraph_label": "G", "sentence_index": 37, "sentence": "The culprit could be bacterial viruses phages - which keep microbe levels low in some seas.", "translation": "罪魁祸首可能是细菌病毒，即噬菌体，它们使某些海域的微生物数量保持在较低水平。", "structure": [{"text": "The culprit", "role": "subject", "level": 1}, {"text": "could be", "role": "linking_predicate", "level": 1}, {"text": "bacterial viruses phages", "role": "predicative", "level": 1}, {"text": "which keep microbe levels low in some seas", "role": "nonrestrictive_relative_clause", "level": 2}], "difficult_points": ["bacterial viruses phages 原文缺少标点，意思是“细菌病毒，即噬菌体”。", "破折号后的 which 引导非限制性定语从句，补充说明 phages；keep + 宾语 + 形容词 表示“使……保持……”。"], "expressions": [{"text": "the culprit", "meaning_zh": "罪魁祸首"}, {"text": "keep … low", "meaning_zh": "使……保持在低水平"}]},
+    {"id": "G-03b", "paragraph_label": "G", "sentence_index": 37, "sentence": "The culprit could be bacterial viruses - phages - which keep microbe levels low in some seas.", "translation": "罪魁祸首可能是细菌病毒，即噬菌体，它们使某些海域的微生物数量保持在较低水平。", "structure": [{"text": "The culprit", "role": "subject", "level": 1}, {"text": "could be", "role": "linking_predicate", "level": 1}, {"text": "bacterial viruses - phages", "role": "predicative", "level": 1}, {"text": "which keep microbe levels low in some seas", "role": "nonrestrictive_relative_clause", "level": 2}], "difficult_points": ["两个破折号之间的 phages 解释 bacterial viruses，意为“细菌病毒，即噬菌体”。", "破折号后的 which 引导非限制性定语从句，补充说明 phages；keep + 宾语 + 形容词 表示“使……保持……”。"], "expressions": [{"text": "the culprit", "meaning_zh": "罪魁祸首"}, {"text": "keep … low", "meaning_zh": "使……保持在低水平"}]},
     {
       "id": "G-04", "paragraph_label": "G", "sentence_index": 38,
       "sentence": "\"If we can understand this relationship more, and find out how to inhibit the viruses, or make the bacteria resistant, we would have a lot more organisms capturing carbon dioxide,\" says Venter.",
@@ -486,14 +486,14 @@
     },
     {
       "id": "H-04", "paragraph_label": "H", "sentence_index": 42,
-      "sentence": "\"They turn out to be one of the most abundant and important, gene families on the planet,\" he said.",
+      "sentence": "\"They turn out to be one of the most abundant and important gene families on the planet,\" he said.",
       "translation": "他说：“事实证明，它们是地球上数量最丰富、最重要的基因家族之一。”",
       "structure": [
         {"text": "They", "role": "subject", "level": 2},
-        {"text": "turn out to be one of the most abundant and important, gene families on the planet", "role": "predicate", "level": 2},
+        {"text": "turn out to be one of the most abundant and important gene families on the planet", "role": "predicate", "level": 2},
         {"text": "he said", "role": "reporting_clause", "level": 1}
       ],
-      "difficult_points": ["They 回指上一句中的 proteorhodopsins。", "turn out to be 表示研究后发现事实如此。", "important 后的逗号属于源文异常，不影响 abundant 和 important 共同修饰 gene families。"],
+      "difficult_points": ["They 回指上一句中的 proteorhodopsins。", "turn out to be 表示研究后发现事实如此。", "abundant 和 important 共同修饰 gene families；one of the most... 后接复数名词。"],
       "expressions": [{"text": "turn out to be", "meaning_zh": "结果证明是"}, {"text": "one of the most abundant", "meaning_zh": "数量最丰富的……之一"}]
     },
     {

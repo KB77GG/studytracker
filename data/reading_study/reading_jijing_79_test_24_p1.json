@@ -68,17 +68,17 @@
       "id": "A-04",
       "paragraph_label": "A",
       "sentence_index": 4,
-      "sentence": "In Mexico and Greece, for example, it is customary in close businesses between noon and about 4:00 pm - siesta time.",
+      "sentence": "In Mexico and Greece, for example, it is customary to close businesses between noon and about 4:00 pm - siesta time.",
       "translation": "例如在墨西哥和希腊，中午到下午4点左右——也就是午睡时间——习惯上会关闭商店。",
       "structure": [
         {"text": "In Mexico and Greece, for example", "role": "adverbial", "level": 1},
         {"text": "it is customary", "role": "main_clause", "level": 1},
-        {"text": "in close businesses", "role": "complement", "level": 2},
+        {"text": "to close businesses", "role": "complement", "level": 2},
         {"text": "between noon and about 4:00 pm - siesta time", "role": "prepositional_phrase", "level": 1}
       ],
       "difficult_points": [
-        "it is customary 中 it 是形式主语，真正的内容由后面的短语体现。",
-        "in close businesses 疑为原文错字，语义上应指“关闭商店”这一习俗（close 作动词）。",
+        "it is customary to close businesses 中 it 是形式主语，真正的主语是不定式 to close businesses。",
+        "close 在此作动词，意为“关闭”；between noon and about 4:00 pm 说明时间段。",
         "破折号后的 siesta time 是对前面时间段的补充说明。"
       ],
       "expressions": [
@@ -132,7 +132,7 @@
       "id": "B-01",
       "paragraph_label": "B",
       "sentence_index": 7,
-      "sentence": "By some estimate, the average American collects an annual 'sleep debt' of 500 hours -subtracting from an assumed norm of eight hours a night.",
+      "sentence": "By some estimate, the average American collects an annual 'sleep debt' of 500 hours - subtracting from an assumed norm of eight hours a night.",
       "translation": "据估计，普通美国人每年会积累500小时的“睡眠债”——这是以每晚睡眠8小时为假定标准计算而少睡的时间。",
       "structure": [
         {"text": "By some estimate", "role": "adverbial", "level": 1},
@@ -143,7 +143,7 @@
       "difficult_points": [
         "By some estimate 表示“据估计”，引出下文的具体数字。",
         "subtracting from... 是现在分词短语，说明这500小时是相对于每晚8小时标准而言少睡的部分。",
-        "短横线紧贴 subtracting，是原文排版留下的间距错误。"
+        "破折号后的 subtracting from... 说明睡眠债的算法：与每晚8小时的标准相比少睡的时间。"
       ],
       "expressions": [
         {"text": "sleep debt", "meaning_zh": "睡眠债；睡眠不足的累积"},
@@ -213,15 +213,15 @@
       "id": "B-05",
       "paragraph_label": "B",
       "sentence_index": 11,
-      "sentence": "he says sleepiness is a leading cause of auto accidents, second only to drunkenness.",
+      "sentence": "He says sleepiness is a leading cause of auto accidents, second only to drunkenness.",
       "translation": "他说，嗜睡是引发车祸的主要原因之一，仅次于酒后驾车。",
       "structure": [
-        {"text": "he says", "role": "main_clause", "level": 1},
+        {"text": "He says", "role": "main_clause", "level": 1},
         {"text": "sleepiness is a leading cause of auto accidents", "role": "noun_clause", "level": 2},
         {"text": "second only to drunkenness", "role": "complement", "level": 3}
       ],
       "difficult_points": [
-        "he 首字母小写是原文排印错误，指代上一句的 William Anthony。",
+        "He 指上一句的 William Anthony；says 后省略了引导宾语从句的 that。",
         "second only to 表示“仅次于”，说明嗜睡在车祸原因排名中的位置。"
       ],
       "expressions": [
@@ -233,16 +233,16 @@
       "id": "B-06",
       "paragraph_label": "B",
       "sentence_index": 12,
-      "sentence": "All that drowsiness costs an estimated &18 billion annually in lost productivity.",
+      "sentence": "All that drowsiness costs an estimated $18 billion annually in lost productivity.",
       "translation": "所有这些嗜睡状况估计每年造成180亿美元的生产力损失。",
       "structure": [
         {"text": "All that drowsiness", "role": "subject", "level": 1},
         {"text": "costs", "role": "verb_phrase", "level": 1},
-        {"text": "an estimated &18 billion annually", "role": "object", "level": 1},
+        {"text": "an estimated $18 billion annually", "role": "object", "level": 1},
         {"text": "in lost productivity", "role": "prepositional_phrase", "level": 2}
       ],
       "difficult_points": [
-        "&18 billion 中的 & 符号是原文的排印错误，按语境应为货币符号 $（美元）。",
+        "$18 billion 读作 eighteen billion dollars，即180亿美元。",
         "in lost productivity 说明这笔损失具体体现在哪个方面。"
       ],
       "expressions": [
@@ -522,7 +522,7 @@
       "id": "D-07",
       "paragraph_label": "D",
       "sentence_index": 27,
-      "sentence": "One US distributor, is opening a 2,000-square-foot nap facility that provides beds for up to 20 of its 225 workers at a time.",
+      "sentence": "One US distributor is opening a 2,000-square-foot nap facility that provides beds for up to 20 of its 225 workers at a time.",
       "translation": "美国一家分销公司正在建造一个2000平方英尺的小睡设施，可同时为其225名员工中的20人提供床位。",
       "structure": [
         {"text": "One US distributor", "role": "subject", "level": 1},
@@ -530,7 +530,7 @@
         {"text": "that provides beds for up to 20 of its 225 workers at a time", "role": "relative_clause", "level": 2}
       ],
       "difficult_points": [
-        "distributor 和 is 之间的逗号为原文排印错误，正常不应有逗号分隔主谓。",
+        "主语 One US distributor 与谓语 is opening 之间不用逗号隔开；is opening 用现在进行时表示正在进行的安排。",
         "that 引导定语从句，修饰 nap facility，说明该设施的具体功能。",
         "at a time 表示“每次、一次性”，说明同时能容纳的人数。"
       ],
@@ -542,7 +542,7 @@
       "id": "D-08",
       "paragraph_label": "D",
       "sentence_index": 28,
-      "sentence": "A company in Japan sets up tents in business offices provides eyeshades and ear plugs and encourages employees to snooze in the middle of the work day.",
+      "sentence": "A company in Japan sets up tents in business offices, provides eyeshades and ear plugs and encourages employees to snooze in the middle of the work day.",
       "translation": "日本一家公司在办公室里搭起帐篷，提供眼罩和耳塞，并鼓励员工在工作日中途小憩。",
       "structure": [
         {"text": "A company in Japan", "role": "subject", "level": 1},
@@ -552,7 +552,7 @@
         {"text": "to snooze in the middle of the work day", "role": "non_finite_clause", "level": 2}
       ],
       "difficult_points": [
-        "offices 与 provides 之间原文缺少逗号，三个并列谓语 sets up、provides、encourages 应各自独立。",
+        "sets up、provides 和 encourages 是三个并列谓语，共用主语 A company in Japan。",
         "encourage sb to do sth 表示“鼓励某人做某事”。"
       ],
       "expressions": [
@@ -663,17 +663,17 @@
       "id": "E-03",
       "paragraph_label": "E",
       "sentence_index": 34,
-      "sentence": "With eleven million Americans telecommuting and another forty million winking out of their bonus full- or part-time, office hours are basically as long as you can stay awake.",
+      "sentence": "With eleven million Americans telecommuting and another forty million working out of their homes full- or part-time, office hours are basically as long as you can stay awake.",
       "translation": "有1100万美国人远程办公，另外还有4000万人以全职或兼职的方式在家中工作，工作时间基本上取决于你能保持清醒多久。",
       "structure": [
         {"text": "With eleven million Americans telecommuting", "role": "prepositional_phrase", "level": 1},
-        {"text": "and another forty million winking out of their bonus full- or part-time", "role": "coordinated_prepositional_phrase", "level": 2},
+        {"text": "and another forty million working out of their homes full- or part-time", "role": "coordinated_prepositional_phrase", "level": 2},
         {"text": "office hours are basically", "role": "main_clause", "level": 1},
         {"text": "as long as you can stay awake", "role": "comparative_clause", "level": 2}
       ],
       "difficult_points": [
         "With + 名词 + 现在分词 是独立主格结构，说明伴随的背景情况。",
-        "winking out of their bonus full- or part-time 是原文的错字，根据语境应指人们在家中以全职或兼职方式工作。",
+        "working out of their homes 意为“在家工作”；full- or part-time 中 full- 与 part-time 共用 time。",
         "as long as you can stay awake 字面意为“只要你能保持清醒”，此处引申为“工作时间几乎没有上限”。"
       ],
       "expressions": [
@@ -704,15 +704,15 @@
       "id": "E-05",
       "paragraph_label": "E",
       "sentence_index": 36,
-      "sentence": "So, with Americans sleeping, less and working, longer hours, some employers are warming up to the idea that a little nap in the middle of the day can be good for business.",
+      "sentence": "So, with Americans sleeping less and working longer hours, some employers are warming up to the idea that a little nap in the middle of the day can be good for business.",
       "translation": "因此，随着美国人睡得更少、工作时间更长，一些雇主开始逐渐认同这样一种观点：工作日中的小憩片刻有益于企业经营。",
       "structure": [
-        {"text": "with Americans sleeping, less and working, longer hours", "role": "prepositional_phrase", "level": 1},
+        {"text": "with Americans sleeping less and working longer hours", "role": "prepositional_phrase", "level": 1},
         {"text": "some employers are warming up to the idea", "role": "main_clause", "level": 1},
         {"text": "that a little nap in the middle of the day can be good for business", "role": "noun_clause", "level": 2}
       ],
       "difficult_points": [
-        "sleeping, less and working, longer hours 中的逗号为原文排印错误，正常应写作 sleeping less and working longer hours。",
+        "sleeping less 与 working longer hours 并列，less 和 longer 分别修饰两个动作。",
         "with + 名词 + 分词 是独立主格结构，说明这一趋势产生的背景。",
         "that 引导同位语从句，具体说明 the idea 的内容。"
       ],

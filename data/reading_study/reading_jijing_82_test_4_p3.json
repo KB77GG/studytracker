@@ -99,19 +99,19 @@
       "id": "B-04",
       "paragraph_label": "B",
       "sentence_index": 5,
-      "sentence": "But it wasn't until the eighteenth and nineteenth centuries that salicylates the chemical found in the willow tree became the subject of serious scientific investigation.",
+      "sentence": "But it wasn't until the eighteenth and nineteenth centuries that salicylates, the chemical found in the willow tree, became the subject of serious scientific investigation.",
       "translation": "但直到18、19世纪，柳树中所含的化学物质水杨酸盐才成为严肃科学研究的对象。",
       "structure": [
         {"text": "it wasn't until the eighteenth and nineteenth centuries", "role": "main_clause", "level": 1},
-        {"text": "that salicylates the chemical found in the willow tree became the subject of serious scientific investigation", "role": "cleft_clause", "level": 2},
-        {"text": "salicylates the chemical", "role": "subject", "level": 3},
+        {"text": "that salicylates, the chemical found in the willow tree, became the subject of serious scientific investigation", "role": "cleft_clause", "level": 2},
+        {"text": "salicylates, the chemical", "role": "subject", "level": 3},
         {"text": "found in the willow tree", "role": "participial_phrase", "level": 4},
         {"text": "became", "role": "verb_phrase", "level": 3},
         {"text": "the subject of serious scientific investigation", "role": "complement", "level": 3}
       ],
       "difficult_points": [
         "it wasn't until...that... 是强调句型，强调“直到18、19世纪才……”。",
-        "salicylates 和 the chemical 之间原文缺少逗号，the chemical found in the willow tree 是对 salicylates 的同位语说明。",
+        "the chemical found in the willow tree 是 salicylates 的同位语，两边用逗号隔开。",
         "found in the willow tree 是过去分词短语，修饰 the chemical。"
       ],
       "expressions": [
@@ -317,16 +317,16 @@
       "id": "E-02",
       "paragraph_label": "E",
       "sentence_index": 15,
-      "sentence": "Aspirin is continued shelf life was ensured because for the first 70 years of its life, huge amounts of money were put into promoting it as an ordinary everyday analgesic.",
+      "sentence": "Aspirin's continued shelf life was ensured because for the first 70 years of its life, huge amounts of money were put into promoting it as an ordinary everyday analgesic.",
       "translation": "阿司匹林得以持续畅销，是因为在它问世后的头70年里，人们投入了大量资金将它作为一种日常止痛药加以推广。",
       "structure": [
-        {"text": "Aspirin is continued shelf life", "role": "subject", "level": 1},
+        {"text": "Aspirin's continued shelf life", "role": "subject", "level": 1},
         {"text": "was ensured", "role": "verb_phrase", "level": 1},
         {"text": "because for the first 70 years of its life, huge amounts of money were put into promoting it as an ordinary everyday analgesic", "role": "adverbial_clause", "level": 2},
         {"text": "were put into promoting it as an ordinary everyday analgesic", "role": "verb_phrase", "level": 3}
       ],
       "difficult_points": [
-        "Aspirin is continued shelf life 是原文的错字，应为 Aspirin's continued shelf life（阿司匹林得以持续畅销），is 应为所有格 's。",
+        "主语是 Aspirin's continued shelf life，意为“阿司匹林持续在售的寿命”；was ensured 是被动语态。",
         "were put into doing 表示“被投入用于做某事”，是被动结构。",
         "its 指代 Aspirin，life 指阿司匹林作为商品存在的时间。"
       ],
@@ -339,7 +339,7 @@
       "id": "E-03",
       "paragraph_label": "E",
       "sentence_index": 16,
-      "sentence": "In the 1070s other analgesics, such as ibuprofen and paracetamol, were entering the market, and the pharmaceutical companies then focused on publicising these new drugs.",
+      "sentence": "In the 1970s other analgesics, such as ibuprofen and paracetamol, were entering the market, and the pharmaceutical companies then focused on publicising these new drugs.",
       "translation": "20世纪70年代，布洛芬、扑热息痛等其他止痛药开始进入市场，制药公司便转而集中精力宣传这些新药。",
       "structure": [
         {"text": "other analgesics", "role": "subject", "level": 1},
@@ -348,7 +348,7 @@
         {"text": "and the pharmaceutical companies then focused on publicising these new drugs", "role": "coordinated_clause", "level": 1}
       ],
       "difficult_points": [
-        "In the 1070s 中的年代为原文错字，根据上下文应为 In the 1970s（20世纪70年代）。",
+        "In the 1970s 意为“在20世纪70年代”；were entering 是过去进行时，表示当时陆续进入市场。",
         "such as ibuprofen and paracetamol 是插入的同位语，举例说明 other analgesics 具体所指。",
         "focused on publicising 中 publicising 是动名词，作介词 on 的宾语。"
       ],
@@ -443,15 +443,15 @@
       "id": "F-03",
       "paragraph_label": "F",
       "sentence_index": 21,
-      "sentence": "But the commercial markets are just as likely to kill off'certain products when something more attractive comes along.",
+      "sentence": "But the commercial markets are just as likely to kill off certain products when something more attractive comes along.",
       "translation": "但当有更具吸引力的产品出现时，商业市场同样很可能会淘汰掉某些产品。",
       "structure": [
         {"text": "the commercial markets", "role": "subject", "level": 1},
-        {"text": "are just as likely to kill off'certain products", "role": "verb_phrase", "level": 1},
+        {"text": "are just as likely to kill off certain products", "role": "verb_phrase", "level": 1},
         {"text": "when something more attractive comes along", "role": "adverbial_clause", "level": 2}
       ],
       "difficult_points": [
-        "kill off'certain 中的撇号是原文排印错误，正常应写作 kill off certain（淘汰某些），中间没有撇号。",
+        "kill off 意为“淘汰、消灭”，certain products 是它的宾语。",
         "just as likely to 呼应上一句“市场有助于产品存在”，形成对比：市场同样可能淘汰产品。",
         "something more attractive 指代任何更具吸引力的新产品或新事物。"
       ],
@@ -464,17 +464,17 @@
       "id": "F-04",
       "paragraph_label": "F",
       "sentence_index": 22,
-      "sentence": "In the case of aspirin, a potential 'wonder drug* was around for over 70 years without anybody investigating the way in which it achieved its effects, because they were making more than enough money out of it as it was.",
+      "sentence": "In the case of aspirin, a potential 'wonder drug' was around for over 70 years without anybody investigating the way in which it achieved its effects, because they were making more than enough money out of it as it was.",
       "translation": "就阿司匹林而言，这种潜在的“奇效药”已经存在了70多年，却一直没有人去研究它产生疗效的具体方式，因为人们仅凭它现有的状态就已经从中赚取了足够多的钱。",
       "structure": [
-        {"text": "a potential 'wonder drug*", "role": "subject", "level": 1},
+        {"text": "a potential 'wonder drug'", "role": "subject", "level": 1},
         {"text": "was around for over 70 years", "role": "verb_phrase", "level": 1},
         {"text": "without anybody investigating the way", "role": "prepositional_phrase", "level": 2},
         {"text": "in which it achieved its effects", "role": "relative_clause", "level": 3},
         {"text": "because they were making more than enough money out of it as it was", "role": "adverbial_clause", "level": 2}
       ],
       "difficult_points": [
-        "'wonder drug* 中的星号是原文的印刷错误，应为闭合的单引号 'wonder drug'。",
+        "'wonder drug' 加引号表示借用的说法，意为“神药”。",
         "without anybody investigating 是介词 without 后接动名词复合结构，anybody 是动名词的逻辑主语。",
         "in which it achieved its effects 是定语从句，修饰 the way，说明药物起效的具体途径。",
         "as it was 意为“就它当时（未经研究）的状态而言”，补充说明赚钱不需要额外研究。"
@@ -689,40 +689,25 @@
       "id": "H-03",
       "paragraph_label": "H",
       "sentence_index": 33,
-      "sentence": "'If I were the Department of Health.",
-      "translation": "“如果我是卫生部……",
+      "sentence": "'If I were the Department of Health, I would say \"this is a very inexpensive drug.",
+      "translation": "“如果我是卫生部，我会说，‘这是一种非常廉价的药物。",
       "structure": [
-        {"text": "If I were the Department of Health", "role": "conditional_clause", "level": 1}
+        {"text": "If I were the Department of Health", "role": "conditional_clause", "level": 2},
+        {"text": "I would say", "role": "main_clause", "level": 1},
+        {"text": "this is a very inexpensive drug", "role": "direct_speech", "level": 2}
       ],
       "difficult_points": [
-        "were 是虚拟语气，表示与事实相反的假设：说话人假设自己是卫生部。",
-        "原文此处以句号结束，属于排印错误；根据语境，这本是一个未说完的条件从句，应与下一句相连（“如果我是卫生部，我会说……”）。"
+        "were 是虚拟语气，If I were... 表示与事实相反的假设：说话人假设自己是卫生部。",
+        "would say 与 If I were 呼应，构成完整的虚拟条件句；双引号里是设想中卫生部会说的话，引号在后文才闭合。"
       ],
       "expressions": [
         {"text": "if I were", "meaning_zh": "如果我是……（虚拟语气）"}
       ]
     },
     {
-      "id": "H-04",
-      "paragraph_label": "H",
-      "sentence_index": 34,
-      "sentence": "I would say \"this is a very inexpensive drug.",
-      "translation": "我会说，‘这是一种非常廉价的药物。",
-      "structure": [
-        {"text": "I", "role": "subject", "level": 1},
-        {"text": "would say", "role": "verb_phrase", "level": 1},
-        {"text": "\"this is a very inexpensive drug", "role": "direct_quote", "level": 2}
-      ],
-      "difficult_points": [
-        "would say 与上一句的 If I were 呼应，构成完整的虚拟语气条件句，但原文用句号将其拆分成独立的两句。",
-        "引号内的内容是设想中卫生部会说的话，此处的双引号在原文中只有开引号未及时闭合，直到 H-05 才闭合。"
-      ],
-      "expressions": []
-    },
-    {
       "id": "H-05",
       "paragraph_label": "H",
-      "sentence_index": 35,
+      "sentence_index": 34,
       "sentence": "There may be a lot of other things we could do with it.\"",
       "translation": "或许我们还能用它做很多其他的事情。’”",
       "structure": [
@@ -740,7 +725,7 @@
     {
       "id": "H-06",
       "paragraph_label": "H",
-      "sentence_index": 36,
+      "sentence_index": 35,
       "sentence": "We should put a lot more money into trying to find out.'",
       "translation": "我们应该投入更多资金去弄清楚这一点。”",
       "structure": [
@@ -760,7 +745,7 @@
     {
       "id": "I-01",
       "paragraph_label": "I",
-      "sentence_index": 37,
+      "sentence_index": 36,
       "sentence": "Jeffreys' book which not only tells the tale of a 'wonder drug' but also explores the nature of innovation and the role of big business, public money and regulation reminds us why such research is so important.",
       "translation": "杰弗里斯的这本书不仅讲述了一种“奇效药”的故事，还探讨了创新的本质以及大企业、公共资金和监管所扮演的角色，提醒着我们这类研究为何如此重要。",
       "structure": [
