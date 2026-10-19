@@ -34,14 +34,14 @@
     },
     {
       "id": "B-01", "paragraph_label": "B", "sentence_index": 3,
-      "sentence": "Dubbing, although seemingly more accessible to movie watches, comes with many disadvantages.",
+      "sentence": "Dubbing, although seemingly more accessible to movie watchers, comes with many disadvantages.",
       "translation": "配音虽然看似更容易被电影观众接受，却也伴随着许多缺点。",
       "structure": [
         {"text": "Dubbing", "role": "subject", "level": 1},
-        {"text": "although seemingly more accessible to movie watches", "role": "reduced_concessive_clause", "level": 2},
+        {"text": "although seemingly more accessible to movie watchers", "role": "reduced_concessive_clause", "level": 2},
         {"text": "comes with many disadvantages", "role": "predicate", "level": 1}
       ],
-      "difficult_points": ["although 后省略了 it is，构成让步性的省略结构。", "原文 movie watches 应为 movie watchers 的拼写异常，指电影观众。"],
+      "difficult_points": ["although 后省略了 it is，构成让步性的省略结构。", "movie watchers 意为“电影观众”；comes with 意为“伴随着”。"],
       "expressions": [{"text": "be accessible to", "meaning_zh": "容易被……理解或接受"}, {"text": "come with disadvantages", "meaning_zh": "伴随缺点"}]
     },
     {
@@ -196,29 +196,29 @@
     },
     {
       "id": "D-04", "paragraph_label": "D", "sentence_index": 16,
-      "sentence": "Although these themes are universal, one could speculate that a Western audience might not like or identify with them as much, give the increasing urbanisation and materialism of their own society.",
+      "sentence": "Although these themes are universal, one could speculate that a Western audience might not like or identify with them as much, given the increasing urbanisation and materialism of their own society.",
       "translation": "尽管这些主题具有普遍性，但考虑到西方社会自身日益加剧的城市化和物质主义，人们可以推测西方观众未必会同样喜欢或认同这些主题。",
       "structure": [
         {"text": "Although these themes are universal", "role": "concessive_clause", "level": 2},
         {"text": "one could speculate", "role": "main_clause", "level": 1},
         {"text": "that a Western audience might not like or identify with them as much", "role": "object_clause", "level": 2},
-        {"text": "give the increasing urbanisation and materialism of their own society", "role": "cause_adverbial", "level": 2}
+        {"text": "given the increasing urbanisation and materialism of their own society", "role": "cause_adverbial", "level": 2}
       ],
-      "difficult_points": ["them 指上一句所概括的影片主题；like 与 identify with 是并列谓语。", "as much 表示西方观众的喜爱或认同程度可能没有那么高。", "原文 give 按语境应为 given，表示“考虑到”。"],
+      "difficult_points": ["them 指上一句所概括的影片主题；like 与 identify with 是并列谓语。", "as much 表示西方观众的喜爱或认同程度可能没有那么高。", "given 在此是介词，意为“考虑到”，后接名词短语。"],
       "expressions": [{"text": "speculate that", "meaning_zh": "推测"}, {"text": "identify with", "meaning_zh": "认同；产生共鸣"}, {"text": "increasing urbanisation", "meaning_zh": "日益加剧的城市化"}]
     },
-    {"id": "E-01", "paragraph_label": "E", "sentence_index": 17, "sentence": "The most immediate translation issue relates to the movie's title, 'Lo Scopone Scientifico', translates as 'Scientific Scopone', whereas the English title is, 'The Scientific Card Player'.", "translation": "最直接的翻译问题与片名有关：《Lo Scopone Scientifico》直译为“科学斯科波内”，而英文片名却是《科学纸牌玩家》。", "structure": [{"text": "The most immediate translation issue", "role": "subject", "level": 1}, {"text": "relates to", "role": "verb_phrase", "level": 1}, {"text": "the movie's title", "role": "object", "level": 1}, {"text": "'Lo Scopone Scientifico'", "role": "apposition", "level": 2}, {"text": "translates as 'Scientific Scopone'", "role": "predicate_fragment", "level": 2}, {"text": "whereas the English title is, 'The Scientific Card Player'", "role": "contrast_clause", "level": 2}], "difficult_points": ["片名 'Lo Scopone Scientifico' 是 title 的同位语；后面的 translates as… 缺少关系代词 which，语法上不完整，应理解为 which translates as…，按原文保留。", "whereas 引导对比状语从句，对比意大利文直译和实际的英文片名。"], "expressions": [{"text": "relate to", "meaning_zh": "与……有关"}, {"text": "translate as", "meaning_zh": "译作"}]},
+    {"id": "E-01", "paragraph_label": "E", "sentence_index": 17, "sentence": "The most immediate translation issue relates to the movie's title, 'Lo Scopone Scientifico', translates as 'Scientific Scopone', whereas the English title is, 'The Scientific Card Player'.", "translation": "最直接的翻译问题与片名有关：《Lo Scopone Scientifico》直译为“科学斯科波内”，而英文片名却是《科学纸牌玩家》。", "structure": [{"text": "The most immediate translation issue", "role": "subject", "level": 1}, {"text": "relates to", "role": "verb_phrase", "level": 1}, {"text": "the movie's title", "role": "object", "level": 1}, {"text": "'Lo Scopone Scientifico'", "role": "apposition", "level": 2}, {"text": "translates as 'Scientific Scopone'", "role": "predicate_fragment", "level": 2}, {"text": "whereas the English title is, 'The Scientific Card Player'", "role": "contrast_clause", "level": 2}], "difficult_points": ["片名 'Lo Scopone Scientifico' 是 title 的同位语；后面的 translates as… 缺少关系代词 which，应理解为 which translates as…。", "whereas 引导对比状语从句，对比意大利文直译和实际的英文片名。"], "expressions": [{"text": "relate to", "meaning_zh": "与……有关"}, {"text": "translate as", "meaning_zh": "译作"}]},
     {"id": "E-01b", "paragraph_label": "E", "sentence_index": 18, "sentence": "'Scopone' is the name of a traditional Italian card game of great antiquity.", "translation": "“Scopone”是一种历史非常悠久的意大利传统纸牌游戏的名字。", "structure": [{"text": "'Scopone'", "role": "subject", "level": 1}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "the name of a traditional Italian card game of great antiquity", "role": "predicative", "level": 1}, {"text": "of great antiquity", "role": "prepositional_phrase", "level": 2}], "difficult_points": ["of great antiquity 是“of + 抽象名词”结构，相当于形容词 very ancient，修饰 card game。", "'Scopone' 加引号表示这是一个词本身，作主语。"], "expressions": [{"text": "of great antiquity", "meaning_zh": "历史非常悠久的"}]},
     {
       "id": "E-02", "paragraph_label": "E", "sentence_index": 19,
-      "sentence": "Obviously, the translators could not use this name, obscure to the Westren viewers, but they insert a blander and inappropriate term.",
+      "sentence": "Obviously, the translators could not use this name, obscure to the Western viewers, but they insert a blander and inappropriate term.",
       "translation": "显然，译者不能使用这个西方观众不熟悉的名称，但他们换上的说法却更平淡，而且并不恰当。",
       "structure": [
         {"text": "the translators could not use this name", "role": "main_clause", "level": 1},
-        {"text": "obscure to the Westren viewers", "role": "adjective_supplement", "level": 2},
+        {"text": "obscure to the Western viewers", "role": "adjective_supplement", "level": 2},
         {"text": "but they insert a blander and inappropriate term", "role": "contrast_clause", "level": 1}
       ],
-      "difficult_points": ["obscure to... 是形容词短语，补充说明 this name 对观众而言生僻。", "原文 Westren 应为 Western；insert 使用一般现在时，与前面的 could not 在时态上不一致，均按原文保留。"],
+      "difficult_points": ["obscure to... 是形容词短语，补充说明 this name 对观众而言生僻。", "but 引出转折；insert 用一般现在时，与前面的 could not 时态不一致，规范写法应为 inserted。"],
       "expressions": [{"text": "be obscure to", "meaning_zh": "对……而言生僻"}, {"text": "an inappropriate term", "meaning_zh": "不恰当的说法"}]
     },
     {
@@ -235,13 +235,13 @@
     },
     {
       "id": "E-04", "paragraph_label": "E", "sentence_index": 21,
-      "sentence": "Subtitles such as, 'Let's start with a million' regularly jump out.",
+      "sentence": "Subtitles such as 'Let's start with a million' regularly jump out.",
       "translation": "像“我们从一百万开始下注”这样的字幕经常显得格外突兀。",
       "structure": [
-        {"text": "Subtitles such as, 'Let's start with a million'", "role": "subject", "level": 1},
+        {"text": "Subtitles such as 'Let's start with a million'", "role": "subject", "level": 1},
         {"text": "regularly jump out", "role": "predicate", "level": 1}
       ],
-      "difficult_points": ["such as 后引出具体字幕例子；原文 such as 后多了逗号。", "jump out 在此不是“跳出来”，而是指内容显眼、突兀。"],
+      "difficult_points": ["such as 后直接接举例，不加逗号；引号里是字幕原文。", "jump out 在此不是“跳出来”，而是指内容显眼、突兀。"],
       "expressions": [{"text": "such as", "meaning_zh": "例如"}, {"text": "jump out", "meaning_zh": "显得醒目或突兀"}]
     },
     {
@@ -305,26 +305,26 @@
     },
     {
       "id": "F-04", "paragraph_label": "F", "sentence_index": 27,
-      "sentence": "However, it is a simple expression comprising only two words, one of which is literally intended('old').",
+      "sentence": "However, it is a simple expression comprising only two words, one of which is literally intended ('old').",
       "translation": "不过，这个表达结构简单，只有两个词，其中一个词 old 仍取其字面意义。",
       "structure": [
         {"text": "it is a simple expression", "role": "main_clause", "level": 1},
         {"text": "comprising only two words", "role": "present_participle_modifier", "level": 2},
-        {"text": "one of which is literally intended('old')", "role": "nonrestrictive_relative_clause", "level": 2}
+        {"text": "one of which is literally intended ('old')", "role": "nonrestrictive_relative_clause", "level": 2}
       ],
-      "difficult_points": ["comprising... 修饰 expression，说明它只由两个词构成。", "one of which 中 which 指 two words；原文 intended('old') 缺空格，语义是 old 取字面义。"],
+      "difficult_points": ["comprising... 修饰 expression，说明它只由两个词构成。", "one of which 中 which 指 two words；括号中的 old 就是那个取字面义的词。"],
       "expressions": [{"text": "comprise", "meaning_zh": "由……组成"}, {"text": "be literally intended", "meaning_zh": "按字面含义使用"}]
     },
     {
       "id": "F-05", "paragraph_label": "F", "sentence_index": 28,
-      "sentence": "I would speculate that the same idiom occurs in Italian (that is, the direct translation of'old' and 'bag' in Italian carries the same idiomatic meaning).",
+      "sentence": "I would speculate that the same idiom occurs in Italian (that is, the direct translation of 'old' and 'bag' in Italian carries the same idiomatic meaning).",
       "translation": "我推测意大利语中也有相同的习语，也就是说，把 old 和 bag 直接译成意大利语后，仍具有相同的习语含义。",
       "structure": [
         {"text": "I would speculate", "role": "main_clause", "level": 1},
         {"text": "that the same idiom occurs in Italian", "role": "object_clause", "level": 2},
-        {"text": "that is, the direct translation of'old' and 'bag' in Italian carries the same idiomatic meaning", "role": "parenthetical_explanation", "level": 2}
+        {"text": "that is, the direct translation of 'old' and 'bag' in Italian carries the same idiomatic meaning", "role": "parenthetical_explanation", "level": 2}
       ],
-      "difficult_points": ["that 从句是 speculate 的宾语；would 使推测语气更审慎。", "括号中 that is 引出改述；原文 of'old' 之间缺少空格。"],
+      "difficult_points": ["that 从句是 speculate 的宾语；would 使推测语气更审慎。", "括号中 that is 引出改述，意为“也就是说”。"],
       "expressions": [{"text": "speculate that", "meaning_zh": "推测"}, {"text": "direct translation", "meaning_zh": "直接翻译"}, {"text": "carry the same meaning", "meaning_zh": "具有相同含义"}]
     },
     {
@@ -402,14 +402,14 @@
     },
     {
       "id": "G-05", "paragraph_label": "G", "sentence_index": 35,
-      "sentence": "The strategy used is thus Paraphrasing, where different expressions specific to the source language (Italian) and target language(English) are required.",
+      "sentence": "The strategy used is thus Paraphrasing, where different expressions specific to the source language (Italian) and target language (English) are required.",
       "translation": "因此这里使用的是“释义改写”策略，即源语言（意大利语）和目标语言（英语）需要采用各自特有但效果相近的不同表达。",
       "structure": [
         {"text": "The strategy used", "role": "subject", "level": 1},
         {"text": "is thus Paraphrasing", "role": "linking_predicate", "level": 1},
-        {"text": "where different expressions specific to the source language (Italian) and target language(English) are required", "role": "relative_clause", "level": 2}
+        {"text": "where different expressions specific to the source language (Italian) and target language (English) are required", "role": "relative_clause", "level": 2}
       ],
-      "difficult_points": ["used 是过去分词，修饰 strategy；where 从句解释 Paraphrasing 的做法。", "specific to... 修饰 expressions；原文 language(English) 之间缺少空格。"],
+      "difficult_points": ["used 是过去分词，修饰 strategy；where 从句解释 Paraphrasing 的做法。", "specific to... 修饰 expressions，括号里分别注明源语言和目标语言。"],
       "expressions": [{"text": "be specific to", "meaning_zh": "为……所特有"}, {"text": "source language", "meaning_zh": "源语言"}, {"text": "target language", "meaning_zh": "目标语言"}]
     },
     {
@@ -471,7 +471,7 @@
         {"text": "so the strategy used here is Regination", "role": "result_clause", "level": 1},
         {"text": "where the subtitler leaves the word in the original language", "role": "relative_clause", "level": 2}
       ],
-      "difficult_points": ["Being unique to Italy 逻辑上修饰 scopa，但形式上与紧随其后的 there 存在悬垂结构。", "used here 修饰 strategy；where 从句解释该策略如何操作。", "Regination 是源文给出的策略名称，英文保留原样。"],
+      "difficult_points": ["Being unique to Italy 逻辑上修饰 scopa，但形式上与紧随其后的 there 存在悬垂结构。", "used here 修饰 strategy；where 从句解释该策略如何操作。", "Regination 是原文给出的策略名称，指字幕中保留原语词汇。"],
       "expressions": [{"text": "be unique to", "meaning_zh": "为……所独有"}, {"text": "equivalent word", "meaning_zh": "对应词"}, {"text": "leave the word in the original language", "meaning_zh": "保留原语言中的词"}]
     },
     {

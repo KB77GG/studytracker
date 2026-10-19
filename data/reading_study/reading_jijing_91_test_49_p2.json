@@ -130,15 +130,15 @@
       "id": "B-03",
       "paragraph_label": "B",
       "sentence_index": 7,
-      "sentence": "They cooked cacao seeds, the crushed them into a soft paste.",
+      "sentence": "They cooked cacao seeds, then crushed them into a soft paste.",
       "translation": "他们把可可豆煮熟，然后将其捣成软膏状的糊。",
       "structure": [
         {"text": "They", "role": "subject", "level": 1},
         {"text": "cooked cacao seeds", "role": "verb_phrase", "level": 1},
-        {"text": "the crushed them into a soft paste", "role": "coordinated_clause", "level": 1}
+        {"text": "then crushed them into a soft paste", "role": "coordinated_clause", "level": 1}
       ],
       "difficult_points": [
-        "原文 the crushed 为 then crushed 的笔误，指“然后将其捣碎”。",
+        "cooked 与 crushed 是并列谓语，then 表示先后顺序。",
         "them 指代前面的 cacao seeds。"
       ],
       "expressions": [
@@ -557,18 +557,18 @@
       "id": "C-06",
       "paragraph_label": "C",
       "sentence_index": 30,
-      "sentence": "Spain later began planting cacao in its colonies in the Americans in order to satisfy the large demand for chocolate.",
+      "sentence": "Spain later began planting cacao in its colonies in the Americas in order to satisfy the large demand for chocolate.",
       "translation": "此后，西班牙开始在其美洲殖民地种植可可，以满足人们对巧克力的巨大需求。",
       "structure": [
         {"text": "Spain", "role": "subject", "level": 1},
-        {"text": "later began planting cacao in its colonies in the Americans", "role": "verb_phrase", "level": 1},
-        {"text": "planting cacao in its colonies in the Americans", "role": "non_finite_clause", "level": 2},
+        {"text": "later began planting cacao in its colonies in the Americas", "role": "verb_phrase", "level": 1},
+        {"text": "planting cacao in its colonies in the Americas", "role": "non_finite_clause", "level": 2},
         {"text": "in order to satisfy the large demand for chocolate", "role": "non_finite_clause", "level": 2}
       ],
       "difficult_points": [
         "began doing 表示“开始做某事”，动名词作宾语。",
         "in order to 引导目的状语，说明西班牙种植可可的目的。",
-        "the Americans 为原文用词，此处实际指“美洲（the Americas）”这一地域。"
+        "the Americas 指美洲（南北美洲的统称），注意与 Americans（美国人）区分。"
       ],
       "expressions": [
         {"text": "in order to", "meaning_zh": "为了；以便"},
@@ -929,20 +929,20 @@
       "id": "D-15",
       "paragraph_label": "D",
       "sentence_index": 50,
-      "sentence": "They are trying to make sure that cacao can be grown in a way that is fair to the timers and safe for the environment.",
-      "translation": "他们正努力确保可可的种植方式，既能公平对待农民（原文误作 timers），又不损害环境。",
+      "sentence": "They are trying to make sure that cacao can be grown in a way that is fair to the farmers and safe for the environment.",
+      "translation": "他们正努力确保可可的种植方式既能公平对待农民，又不损害环境。",
       "structure": [
         {"text": "They", "role": "subject", "level": 1},
         {"text": "are trying to make sure", "role": "verb_phrase", "level": 1},
         {"text": "to make sure", "role": "non_finite_clause", "level": 2},
         {"text": "that cacao can be grown in a way", "role": "noun_clause", "level": 2},
-        {"text": "that is fair to the timers and safe for the environment", "role": "relative_clause", "level": 3}
+        {"text": "that is fair to the farmers and safe for the environment", "role": "relative_clause", "level": 3}
       ],
       "difficult_points": [
         "try to do 表示“努力做某事”。",
         "make sure that... 引出确保的具体内容。",
         "that is fair... 引导定语从句，修饰 a way，与前一个引导宾语从句的 that 层级不同。",
-        "timers 为原文用词，根据语境应为 farmers（农民）的笔误。"
+        "be fair to sb 意为“对某人公平”，safe for the environment 意为“对环境无害”。"
       ],
       "expressions": [
         {"text": "make sure that ...", "meaning_zh": "确保……"}

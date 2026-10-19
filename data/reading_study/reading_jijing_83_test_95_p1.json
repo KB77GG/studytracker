@@ -729,7 +729,7 @@
       "id": "D-01",
       "paragraph_label": "D",
       "sentence_index": 20,
-      "sentence": "Thirty years after the Alex studies began; Pepperberg and a changing collection of assistants were still giving him English lessons.",
+      "sentence": "Thirty years after the Alex studies began, Pepperberg and a changing collection of assistants were still giving him English lessons.",
       "translation": "在“亚历克斯”研究启动三十年后，佩珀伯格和一批不断更替的助手仍在给他上英语课。",
       "structure": [
         {
@@ -750,7 +750,7 @@
       ],
       "difficult_points": [
         "after 内含时间从句 the Alex studies began。",
-        "分号位于时间状语之后是源文标点异常。"
+        "Thirty years after... 是时间状语，后接逗号与主句隔开；were still giving 是过去进行时。"
       ],
       "expressions": [
         {
@@ -1677,11 +1677,11 @@
       "id": "G-06",
       "paragraph_label": "G",
       "sentence_index": 45,
-      "sentence": "\"What'ssame?\" she asked.",
+      "sentence": "\"What's same?\" she asked.",
       "translation": "“什么是相同的？”她问道。",
       "structure": [
         {
-          "text": "What'ssame?",
+          "text": "What's same?",
           "role": "reported_question",
           "level": 2
         },
@@ -1692,7 +1692,7 @@
         }
       ],
       "difficult_points": [
-        "What'ssame 是源文将 What's 与 same 连写的异常。",
+        "What's same? 即 What is same?，问两样东西的相同之处，口语中省略了 the。",
         "问题省略了 between them 等成分，实际问两物品相同之处。"
       ],
       "expressions": []
@@ -2024,17 +2024,36 @@
       "id": "H-05",
       "paragraph_label": "H",
       "sentence_index": 56,
-      "sentence": "\"Talk clearly!\"\"Don't be a smart aleck,\" Pepperberg said, shaking her head at him.",
-      "translation": "“说清楚点！”“别自作聪明，”佩珀伯格说着，对他摇了摇头。",
+      "sentence": "\"Talk clearly!\"",
+      "translation": "“说清楚点！”",
       "structure": [
         {
           "text": "Talk clearly!",
-          "role": "reported_command",
-          "level": 2
-        },
+          "role": "imperative_clause",
+          "level": 1
+        }
+      ],
+      "difficult_points": [
+        "Talk clearly! 是祈使句，省略了主语 you，引号表示这是别人说的话。",
+        "clearly 是副词，修饰 talk，意为“清楚地”。"
+      ],
+      "expressions": [
+        {
+          "text": "talk clearly",
+          "meaning_zh": "说清楚"
+        }
+      ]
+    },
+    {
+      "id": "H-05b",
+      "paragraph_label": "H",
+      "sentence_index": 57,
+      "sentence": "\"Don't be a smart aleck,\" Pepperberg said, shaking her head at him.",
+      "translation": "“别自作聪明，”佩珀伯格说着，对他摇了摇头。",
+      "structure": [
         {
           "text": "Don't be a smart aleck",
-          "role": "reported_command",
+          "role": "imperative_clause",
           "level": 2
         },
         {
@@ -2049,8 +2068,8 @@
         }
       ],
       "difficult_points": [
-        "源文把两个相邻引语的引号连写，必须整体保留。",
-        "shaking 分词短语说明 Pepperberg 说话时摇头的伴随动作。"
+        "Don't be a smart aleck 是否定祈使句；smart aleck 指自作聪明、爱耍嘴皮子的人。",
+        "shaking her head at him 是现在分词短语，说明 Pepperberg 说话时摇头的伴随动作。"
       ],
       "expressions": [
         {
@@ -2066,7 +2085,7 @@
     {
       "id": "H-06",
       "paragraph_label": "H",
-      "sentence_index": 57,
+      "sentence_index": 58,
       "sentence": "\"He knows all this, and he gets bored, so he interrupts the others, or he gives the wrong answer just to be obstinate.",
       "translation": "“这些他全都懂，可他会觉得无聊，所以就会打断别人，或者干脆为了唱反调而故意答错。",
       "structure": [
@@ -2109,7 +2128,7 @@
     {
       "id": "H-07",
       "paragraph_label": "H",
-      "sentence_index": 58,
+      "sentence_index": 59,
       "sentence": "At this stage, he's like a teenager; he's moody, and I'm never sure what he'll do.\"",
       "translation": "到了这个阶段，他就像个青少年：情绪多变，我永远拿不准他接下来会做什么。”",
       "structure": [

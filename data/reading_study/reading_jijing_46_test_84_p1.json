@@ -21,14 +21,14 @@
     },
     {
       "id": "A-02", "paragraph_label": "A", "sentence_index": 2,
-      "sentence": "Answers include young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, (China's rise.",
+      "sentence": "Answers include young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, China's rise.",
       "translation": "答案包括年轻且不断增长的人口、下降的债务、扩张中的城市、新兴的中产消费群体、不断演变的市场，当然还有中国的崛起。",
       "structure": [
         {"text": "Answers", "role": "subject", "level": 1},
         {"text": "include", "role": "predicate", "level": 1},
-        {"text": "young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, (China's rise", "role": "compound_object", "level": 1}
+        {"text": "young and swelling populations, decreased debt, growing cities, emerging middle-class consumer sectors, evolving markets and, of course, China's rise", "role": "compound_object", "level": 1}
       ],
-      "difficult_points": ["include 后接多个并列名词短语，共同列举经济活力的来源。", "young、swelling、decreased、growing、emerging 和 evolving 分别作前置修饰语；China 前的左括号是源文异常。"],
+      "difficult_points": ["include 后接多个并列名词短语，共同列举经济活力的来源。", "young、swelling、decreased、growing、emerging 和 evolving 分别作前置修饰语；of course 是插入语。"],
       "expressions": [{"text": "middle-class consumer sectors", "meaning_zh": "中产阶级消费群体"}, {"text": "China's rise", "meaning_zh": "中国的崛起"}]
     },
     {
@@ -84,14 +84,14 @@
     },
     {
       "id": "B-01", "paragraph_label": "B", "sentence_index": 7,
-      "sentence": "Which Asian nation is doing host when it comes to women's advancement?",
+      "sentence": "Which Asian nation is doing best when it comes to women's advancement?",
       "translation": "谈到女性发展，哪个亚洲国家表现最好？",
       "structure": [
         {"text": "Which Asian nation", "role": "interrogative_subject", "level": 1},
-        {"text": "is doing host", "role": "predicate", "level": 1},
+        {"text": "is doing best", "role": "predicate", "level": 1},
         {"text": "when it comes to women's advancement", "role": "topic_adverbial_clause", "level": 2}
       ],
-      "difficult_points": ["Which Asian nation 是疑问主语，因此主句核心是在询问国家。", "when it comes to 表示“谈到……时”；doing host 应为源文中的用词异常，结合语境理解为“表现最好”。"],
+      "difficult_points": ["Which Asian nation 是疑问主语，因此主句核心是在询问国家。", "when it comes to 意为“谈到……时”，to 是介词，后接名词 women's advancement；doing best 意为“表现最好”。"],
       "expressions": [{"text": "when it comes to", "meaning_zh": "谈到；就……而言"}, {"text": "women's advancement", "meaning_zh": "女性发展与进步"}]
     },
     {
@@ -350,15 +350,15 @@
     },
     {
       "id": "D-06", "paragraph_label": "D", "sentence_index": 32,
-      "sentence": "In 2003, the number of children per Japanese woman fell to a record low of 1.29 versus about. 2 in the early 1970s.",
+      "sentence": "In 2003, the number of children per Japanese woman fell to a record low of 1.29 versus about 2 in the early 1970s.",
       "translation": "2003年，日本平均每名女性的子女数降至创纪录的1.29人，而20世纪70年代初约为2人。",
       "structure": [
         {"text": "In 2003", "role": "time_adverbial", "level": 1},
         {"text": "the number of children per Japanese woman", "role": "subject", "level": 1},
         {"text": "fell to a record low of 1.29", "role": "predicate_complement", "level": 1},
-        {"text": "versus about. 2 in the early 1970s", "role": "comparison_phrase", "level": 1}
+        {"text": "versus about 2 in the early 1970s", "role": "comparison_phrase", "level": 1}
       ],
-      "difficult_points": ["the number of 是主语中心，谓语用单数形式 fell。", "versus 引出与20世纪70年代初数据的对比；about 后的句点是源文异常。"],
+      "difficult_points": ["the number of 是主语中心，谓语用单数形式 fell。", "versus 意为“与……相对”，引出与20世纪70年代初数据的对比。"],
       "expressions": [{"text": "fall to a record low", "meaning_zh": "降至历史最低点"}, {"text": "in the early 1970s", "meaning_zh": "20世纪70年代初"}]
     },
     {
@@ -395,20 +395,20 @@
         {"text": "that for many women, the decision to delay childbirth is a form of rebellion against societal expectations", "role": "object_clause", "level": 2},
         {"text": "to have children and become housewives", "role": "infinitive_modifier", "level": 3}
       ],
-      "difficult_points": ["has been slow to realise 表示日本长期以来迟迟未能认识到某事。", "that 引导宾语从句；to delay childbirth 修饰 decision。", "to have children 与 become housewives 并列，说明 societal expectations 的内容；句末逗号是源文异常。"],
+      "difficult_points": ["has been slow to realise 表示日本长期以来迟迟未能认识到某事。", "that 引导宾语从句；to delay childbirth 修饰 decision。", "to have children 与 become housewives 并列，说明 societal expectations 的内容；句末的逗号是原文写法，意思与下一句相连。"],
       "expressions": [{"text": "be slow to realise", "meaning_zh": "迟迟没有意识到"}, {"text": "delay childbirth", "meaning_zh": "推迟生育"}, {"text": "a form of rebellion against", "meaning_zh": "对……的一种反抗"}]
     },
     {
       "id": "E-01", "paragraph_label": "E", "sentence_index": 36,
-      "sentence": "It may be 2005, yet having children is a career-ending decision for millions of bright, ambit ions, and well-educated Japanese,",
+      "sentence": "It may be 2005, yet having children is a career-ending decision for millions of bright, ambitious, and well-educated Japanese,",
       "translation": "尽管已经是2005年，但对数百万聪明、有抱负且受过良好教育的日本女性来说，生育仍是一个会终结职业生涯的决定，",
       "structure": [
         {"text": "It may be 2005", "role": "concessive_clause", "level": 1},
         {"text": "yet having children", "role": "gerund_subject", "level": 1},
         {"text": "is a career-ending decision", "role": "predicate_complement", "level": 1},
-        {"text": "for millions of bright, ambit ions, and well-educated Japanese", "role": "affected_party_adverbial", "level": 1}
+        {"text": "for millions of bright, ambitious, and well-educated Japanese", "role": "affected_party_adverbial", "level": 1}
       ],
-      "difficult_points": ["yet 引出与时代背景相反的现实，表示强烈转折。", "having children 是动名词短语作主语；career-ending 是复合形容词。", "ambit ions 是源文拼写断裂，Japanese 在语境中指日本女性；句末逗号保留源文异常。"],
+      "difficult_points": ["yet 引出与时代背景相反的现实，表示强烈转折。", "having children 是动名词短语作主语；career-ending 是复合形容词。", "bright, ambitious, and well-educated 三个形容词并列修饰 Japanese，这里指日本女性；句末的逗号是原文写法，意思与下一句相连。"],
       "expressions": [{"text": "career-ending decision", "meaning_zh": "终结职业生涯的决定"}, {"text": "well-educated", "meaning_zh": "受过良好教育的"}]
     },
     {
@@ -420,7 +420,7 @@
         {"text": "Japan's birth rate will drop", "role": "main_clause", "level": 1},
         {"text": "and economic growth will lag", "role": "coordinate_clause", "level": 1}
       ],
-      "difficult_points": ["Until corrected 是省略结构，可理解为 until this situation is corrected。", "and 连接两个并列结果：生育率下降与经济增长落后；句末逗号为源文异常。"],
+      "difficult_points": ["Until corrected 是省略结构，可理解为 until this situation is corrected。", "and 连接两个并列结果：生育率下降与经济增长滞后；句末的逗号是原文写法，意思与下一句相连。"],
       "expressions": [{"text": "birth rate", "meaning_zh": "生育率"}, {"text": "economic growth will lag", "meaning_zh": "经济增长将会滞后"}]
     },
     {

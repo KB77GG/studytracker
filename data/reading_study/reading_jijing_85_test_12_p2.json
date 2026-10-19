@@ -262,7 +262,7 @@
       "id": "C-04",
       "paragraph_label": "C",
       "sentence_index": 8,
-      "sentence": "\"It was a fine day and the bridge was on the route of a major charity walk,\" one of the pedestrians recounted what ho saw that day.",
+      "sentence": "\"It was a fine day and the bridge was on the route of a major charity walk,\" one of the pedestrians recounted what he saw that day.",
       "translation": "“那天天气很好，大桥正好是一场大型慈善步行活动的路线所经之处，”一位行人回忆起自己当天所见。",
       "structure": [
         {
@@ -281,13 +281,13 @@
           "level": 1
         },
         {
-          "text": "what ho saw that day",
+          "text": "what he saw that day",
           "role": "noun_clause",
           "level": 2
         }
       ],
       "difficult_points": [
-        "ho 是源文本中的拼写错误，应为 he，此处按原文保留。",
+        "引语在前，one of the pedestrians recounted... 交代说话人；recount 意为“讲述”。",
         "what 引导宾语从句，作 recounted 的宾语，指这位行人当天的所见所闻。"
       ],
       "expressions": [
@@ -330,7 +330,7 @@
       "id": "C-06",
       "paragraph_label": "C",
       "sentence_index": 10,
-      "sentence": "Then if began to sway sideways, just slightly.",
+      "sentence": "Then it began to sway sideways, just slightly.",
       "translation": "然后，桥开始轻微地左右摇晃。",
       "structure": [
         {
@@ -339,7 +339,7 @@
           "level": 1
         },
         {
-          "text": "if began to sway sideways",
+          "text": "it began to sway sideways",
           "role": "main_clause",
           "level": 1
         },
@@ -350,7 +350,7 @@
         }
       ],
       "difficult_points": [
-        "if 是源文本中的拼写错误，应为 it，此处按原文保留。",
+        "it 指桥；begin to do 表示开始做某事。",
         "just slightly 补充说明摇晃的程度很轻微，为下文摇晃加剧作铺垫。"
       ],
       "expressions": [
@@ -499,11 +499,11 @@
       "id": "C-10",
       "paragraph_label": "C",
       "sentence_index": 14,
-      "sentence": "In older to fully investigate and resolve the issue the decision was taken to close the bridge on 12th June 2000.",
+      "sentence": "In order to fully investigate and resolve the issue the decision was taken to close the bridge on 12th June 2000.",
       "translation": "为了彻底调查并解决这一问题，当局决定于2000年6月12日关闭这座桥。",
       "structure": [
         {
-          "text": "In older to fully investigate and resolve the issue",
+          "text": "In order to fully investigate and resolve the issue",
           "role": "non_finite_clause",
           "level": 1
         },
@@ -519,7 +519,7 @@
         }
       ],
       "difficult_points": [
-        "older 是源文本中的拼写错误，应为 order（in order to），此处按原文保留。",
+        "In order to 表示目的，fully 修饰 investigate and resolve。",
         "the decision was taken to do 是被动结构，相当于 it was decided to do。"
       ],
       "expressions": [
@@ -658,11 +658,11 @@
       "id": "D-04",
       "paragraph_label": "D",
       "sentence_index": 18,
-      "sentence": "Because there was a significant wind blowing on the opening days(force 3-4) and the bridge had been decorated with large flags, the engineers first thought that winds might be exerting excessive force on the many large flags and banners, but it was rapidly concluded that wind buffeting had not contributed significantly to vibration of the bridge.",
+      "sentence": "Because there was a significant wind blowing on the opening days (force 3-4) and the bridge had been decorated with large flags, the engineers first thought that winds might be exerting excessive force on the many large flags and banners, but it was rapidly concluded that wind buffeting had not contributed significantly to vibration of the bridge.",
       "translation": "由于开幕当天刮着较大的风（3-4级）而且桥上还装饰着大型旗帜，工程师起初认为可能是风力对众多大旗和横幅施加了过大的力，但很快便得出结论：风的吹袭对桥梁振动并没有显著影响。",
       "structure": [
         {
-          "text": "Because there was a significant wind blowing on the opening days(force 3-4)",
+          "text": "Because there was a significant wind blowing on the opening days (force 3-4)",
           "role": "adverbial_clause",
           "level": 1
         },
@@ -694,7 +694,7 @@
       ],
       "difficult_points": [
         "Because 引导原因状语从句，其中并列了刮风和悬挂旗帜两个原因。",
-        "(force 3-4) 补充说明风力等级，源文本此处与括号间缺少空格，按原文保留。",
+        "括号中的 force 3-4 说明风力等级，意为“3至4级风”。",
         "it was rapidly concluded that... 是形式主语的被动结构，真正内容是 that 引导的从句。"
       ],
       "expressions": [
@@ -712,11 +712,11 @@
       "id": "D-05",
       "paragraph_label": "D",
       "sentence_index": 19,
-      "sentence": "But after measurements were made in university laboratories of the effects of people?walking on swaying platforms and after large-scale experiments with crowds of pedestrians were conducted on the bridge itself, a new understanding and a new theory were developed.",
+      "sentence": "But after measurements were made in university laboratories of the effects of people walking on swaying platforms and after large-scale experiments with crowds of pedestrians were conducted on the bridge itself, a new understanding and a new theory were developed.",
       "translation": "但在大学实验室对人们在摇晃平台上行走的影响进行测量，并在桥上对人群展开大规模实验之后，人们形成了新的认识，提出了新的理论。",
       "structure": [
         {
-          "text": "But after measurements were made in university laboratories of the effects of people?walking on swaying platforms",
+          "text": "But after measurements were made in university laboratories of the effects of people walking on swaying platforms",
           "role": "adverbial_clause",
           "level": 1
         },
@@ -732,7 +732,7 @@
         }
       ],
       "difficult_points": [
-        "people?walking 中的问号是源文本的乱码/OCR错误，实际应为 people walking，此处按原文保留。",
+        "the effects of people walking on swaying platforms 中 people walking... 是动名词复合结构，people 是 walking 的逻辑主语。",
         "after 引导的两个并列时间状语从句都使用被动语态（were made / were conducted），强调实验本身而非施动者。"
       ],
       "expressions": [
@@ -780,7 +780,7 @@
       "id": "E-02",
       "paragraph_label": "E",
       "sentence_index": 21,
-      "sentence": "It is well known that a suspension bridge has tendency to sway when troops march over it in lockstep, which is why troops arc required to break step when crossing such a bridge.",
+      "sentence": "It is well known that a suspension bridge has tendency to sway when troops march over it in lockstep, which is why troops are required to break step when crossing such a bridge.",
       "translation": "众所周知，当军队齐步走过悬索桥时，桥会有摇晃的倾向，这就是为什么部队过桥时必须要求不再齐步走的原因。",
       "structure": [
         {
@@ -799,7 +799,7 @@
           "level": 3
         },
         {
-          "text": "which is why troops arc required to break step when crossing such a bridge",
+          "text": "which is why troops are required to break step when crossing such a bridge",
           "role": "relative_clause",
           "level": 2
         },
@@ -811,8 +811,8 @@
       ],
       "difficult_points": [
         "It 是形式主语，真正的主语是 that 引导的从句。",
-        "has tendency 此处省略了冠词 a（正确应为 has a tendency），此处按原文保留。",
-        "arc 是源文本中的拼写错误，应为 are，此处按原文保留。",
+        "has tendency to sway 中 tendency 前通常加冠词 a，即 has a tendency to do。",
+        "troops are required to break step 意为“部队被要求打乱步伐、不再齐步走”。",
         "which 引导非限制性定语从句，指代前面整件事（军队齐步走导致桥晃动）。"
       ],
       "expressions": [
@@ -860,7 +860,7 @@
         }
       ],
       "difficult_points": [
-        "引语中 If 从句与主句之间缺少逗号，属源文本排版问题，按原文保留，不做增补。",
+        "If 从句较长，与主句 we tend to... 之间通常加逗号。",
         "by spreading our legs further apart 是介词+动名词短语，说明补偿动作的具体方式。",
         "this 指代前面提到的分开双腿这一补偿动作。"
       ],
@@ -967,7 +967,7 @@
       "id": "E-06",
       "paragraph_label": "E",
       "sentence_index": 25,
-      "sentence": "\"It's rather like walking on a rolling ship deck you move one way and then the other to compensate for the roll.\"",
+      "sentence": "\"It's rather like walking on a rolling ship deck: you move one way and then the other to compensate for the roll.\"",
       "translation": "“这就像走在颠簸摇晃的船甲板上，你会一会儿倒向这边，一会儿倒向那边，以抵消船身的摇摆。”",
       "structure": [
         {
@@ -987,7 +987,7 @@
         }
       ],
       "difficult_points": [
-        "源文本在 deck 与 you 之间缺少标点（应有句号或分号），按原文保留，不做增补。",
+        "冒号后的 you move one way and then the other 具体解释为什么像走在摇晃的甲板上。",
         "one way...the other 表示一会儿这样，一会儿那样，描述身体左右摆动的动作。",
         "to compensate for the roll 是不定式作目的状语，说明身体摆动的目的。"
       ],
@@ -1117,7 +1117,7 @@
       "id": "E-10",
       "paragraph_label": "E",
       "sentence_index": 29,
-      "sentence": "The movement becomes excessive and continues to increase until people begin to have difficulty in walking they may even have to hold on to the rails.",
+      "sentence": "The movement becomes excessive and continues to increase until people begin to have difficulty in walking; they may even have to hold on to the rails.",
       "translation": "晃动变得过度，并持续加剧，直到人们开始难以正常行走，甚至不得不抓住扶手。",
       "structure": [
         {
@@ -1143,7 +1143,7 @@
       ],
       "difficult_points": [
         "until 引导的时间状语从句说明晃动持续加剧的终点。",
-        "源文本在 walking 与 they 之间缺少标点（应有分号或句号），按原文保留，不做增补。"
+        "分号连接两个意思相关的分句；hold on to 意为“紧紧抓住”。"
       ],
       "expressions": [
         {

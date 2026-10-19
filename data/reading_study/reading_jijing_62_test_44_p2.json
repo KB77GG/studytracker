@@ -279,15 +279,15 @@
     },
     {
       "id": "D-03", "paragraph_label": "D", "sentence_index": 24,
-      "sentence": "SECURE's staff coached this villager on how to protect his cotton crop by using a toolkit of natural methods chat India's Center for\nSustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university.",
+      "sentence": "SECURE's staff coached this villager on how to protect his cotton crop by using a toolkit of natural methods that India's Center for Sustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university.",
       "translation": "SECURE 的工作人员指导这位村民如何使用一套天然方法来保护棉花；这套工具由印度可持续农业中心与安得拉邦州立大学的科学家合作编制。",
       "structure": [
         {"text": "SECURE's staff coached this villager", "role": "main_clause", "level": 1},
         {"text": "on how to protect his cotton crop", "role": "prepositional_complement", "level": 2},
         {"text": "by using a toolkit of natural methods", "role": "means_adverbial", "level": 2},
-        {"text": "chat India's Center for\nSustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university", "role": "relative_clause", "level": 3}
+        {"text": "that India's Center for Sustainable Agriculture put together in collaboration with scientists at Andhra Pradesh's state university", "role": "relative_clause", "level": 3}
       ],
-      "difficult_points": ["how to protect 是疑问词加不定式，作介词 on 的宾语。", "by using 表示保护作物所采用的方式。", "chat 是源文 OCR 错误，应按 that 理解；该定语从句修饰 toolkit，原文中的换行必须保留。"],
+      "difficult_points": ["how to protect 是疑问词加不定式，作介词 on 的宾语。", "by using 表示保护作物所采用的方式。", "that 引导定语从句修饰 toolkit，并在从句中作 put together 的宾语；put together 意为“编制、汇集”。"],
       "expressions": [{"text": "coach somebody on how to", "meaning_zh": "指导某人如何……"}, {"text": "put together in collaboration with", "meaning_zh": "与……合作编制"}]
     },
     {
@@ -511,14 +511,14 @@
     },
     {
       "id": "H-04", "paragraph_label": "H", "sentence_index": 43,
-      "sentence": "The villagers rescued their indentured children and gave them special six-month \"catch-up,\" courses to return to school.",
+      "sentence": "The villagers rescued their indentured children and gave them special six-month \"catch-up\" courses to return to school.",
       "translation": "村民们解救了被契约束缚做工的孩子，并为他们提供为期六个月的特别“补习”课程，帮助他们重返学校。",
       "structure": [
         {"text": "The villagers rescued their indentured children", "role": "main_clause", "level": 1},
-        {"text": "and gave them special six-month \"catch-up,\" courses", "role": "coordinated_predicate", "level": 1},
+        {"text": "and gave them special six-month \"catch-up\" courses", "role": "coordinated_predicate", "level": 1},
         {"text": "to return to school", "role": "purpose_clause", "level": 2}
       ],
-      "difficult_points": ["indentured children 指因债务或契约被迫劳动的儿童。", "gave them ... courses 是双宾语结构，them 指 children。", "catch-up 后引号内的逗号是源文标点，to return 表示课程目的。"],
+      "difficult_points": ["indentured children 指因债务或契约被迫劳动的儿童。", "gave them ... courses 是双宾语结构，them 指 children。", "catch-up 加引号指“补习”课程；to return to school 表示课程目的。"],
       "expressions": [{"text": "catch-up courses", "meaning_zh": "补习课程"}, {"text": "return to school", "meaning_zh": "重返学校"}]
     },
     {

@@ -169,14 +169,22 @@
     },
     {
       "id": "D-04", "paragraph_label": "D", "sentence_index": 21,
-      "sentence": "These 'comfort foods' become a source of pleasure and reassurance a fact that fast-food chains work hard to promote Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's', like those of the chain's 'heavy users', the customers who eat there four or five times a week.",
-      "translation": "这些“慰藉食物”会成为快乐和安心的来源，而快餐连锁店努力宣传的正是这一事实。童年对开心乐园餐的记忆，可能转化为成年后频繁光顾麦当劳，就像该连锁店的“重度用户”那样——这些顾客每周会在那里吃四五次。",
-      "structure": [{"text": "These 'comfort foods' become a source of pleasure and reassurance", "role": "main_clause", "level": 1}, {"text": "a fact that fast-food chains work hard to promote", "role": "apposition", "level": 2}, {"text": "Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's'", "role": "coordinate_statement", "level": 1}, {"text": "the customers who eat there four or five times a week", "role": "apposition", "level": 2}],
-      "difficult_points": ["a fact 是前半句结论的同位语，that 从句修饰 fact。", "原文 promote 与 Childhood 之间缺少句号，McDonald's 后也多出撇号，因此两层意思合并保留。", "those 指 frequent visits；the customers... 是 heavy users 的同位语，who 修饰 customers。"],
-      "expressions": [{"text": "comfort foods", "meaning_zh": "慰藉食物"}, {"text": "a source of pleasure and reassurance", "meaning_zh": "快乐与安心的来源"}, {"text": "translate into", "meaning_zh": "转化为"}, {"text": "heavy users", "meaning_zh": "高频消费者；重度用户"}]
+      "sentence": "These 'comfort foods' become a source of pleasure and reassurance, a fact that fast-food chains work hard to promote.",
+      "translation": "这些“慰藉食物”会成为快乐和安心的来源，而快餐连锁店努力宣传的正是这一事实。",
+      "structure": [{"text": "These 'comfort foods' become a source of pleasure and reassurance", "role": "main_clause", "level": 1}, {"text": "a fact that fast-food chains work hard to promote", "role": "apposition", "level": 2}],
+      "difficult_points": ["a fact 是对前半句的同位说明，that 从句修饰 fact，并在从句中作 promote 的宾语。", "comfort foods 加引号，指能带来心理安慰的食物。"],
+      "expressions": [{"text": "comfort foods", "meaning_zh": "慰藉食物"}, {"text": "a source of pleasure and reassurance", "meaning_zh": "快乐与安心的来源"}]
     },
     {
-      "id": "E-01", "paragraph_label": "E", "sentence_index": 22,
+      "id": "D-04b", "paragraph_label": "D", "sentence_index": 22,
+      "sentence": "Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's, like those of the chain's 'heavy users', the customers who eat there four or five times a week.",
+      "translation": "童年对开心乐园餐的记忆，可能转化为成年后频繁光顾麦当劳，就像该连锁店的“重度用户”那样——这些顾客每周会在那里吃四五次。",
+      "structure": [{"text": "Childhood memories of Happy Meals can translate into frequent adult visits to McDonald's", "role": "main_clause", "level": 1}, {"text": "the customers who eat there four or five times a week", "role": "apposition", "level": 2}],
+      "difficult_points": ["translate into 意为“转化为”；McDonald's 指麦当劳餐厅。", "those 指 frequent visits；the customers who... 是 heavy users 的同位语，who 修饰 customers。"],
+      "expressions": [{"text": "translate into", "meaning_zh": "转化为"}, {"text": "heavy users", "meaning_zh": "高频消费者；重度用户"}]
+    },
+    {
+      "id": "E-01", "paragraph_label": "E", "sentence_index": 23,
       "sentence": "The human craving for flavour has been a large unacknowledged and unexamined force in history.",
       "translation": "人类对风味的渴望一直是历史上一股强大却未获承认、未经审视的力量。",
       "structure": [{"text": "The human craving for flavour", "role": "subject", "level": 1}, {"text": "has been", "role": "linking_verb", "level": 1}, {"text": "a large unacknowledged and unexamined force in history", "role": "subject_complement", "level": 1}],
@@ -184,7 +192,7 @@
       "expressions": [{"text": "craving for", "meaning_zh": "对……的强烈渴望"}, {"text": "an unacknowledged force", "meaning_zh": "未被承认的力量"}]
     },
     {
-      "id": "E-02", "paragraph_label": "E", "sentence_index": 23,
+      "id": "E-02", "paragraph_label": "E", "sentence_index": 24,
       "sentence": "Royal empires have been built, unexplored lands have been traversed, great religions and philosophies have been forever changed by the spice trade.",
       "translation": "帝国因香料贸易而建立，未知土地因此被穿越，伟大的宗教和哲学也被永久改变。",
       "structure": [{"text": "Royal empires have been built", "role": "passive_clause", "level": 1}, {"text": "unexplored lands have been traversed", "role": "coordinate_passive_clause", "level": 1}, {"text": "great religions and philosophies have been forever changed by the spice trade", "role": "coordinate_passive_clause", "level": 1}],
@@ -192,7 +200,7 @@
       "expressions": [{"text": "unexplored lands", "meaning_zh": "未探索的土地"}, {"text": "be forever changed by", "meaning_zh": "被……永久改变"}, {"text": "the spice trade", "meaning_zh": "香料贸易"}]
     },
     {
-      "id": "E-03", "paragraph_label": "E", "sentence_index": 24,
+      "id": "E-03", "paragraph_label": "E", "sentence_index": 25,
       "sentence": "In 1492, Christopher Columbus set sail in order to try to find new seasonings and thus to make his fortune with this most desired commodity of that time.",
       "translation": "1492年，克里斯托弗·哥伦布启航，试图寻找新的调味料，并借助当时最受渴求的商品发家致富。",
       "structure": [{"text": "In 1492, Christopher Columbus set sail", "role": "main_clause", "level": 1}, {"text": "in order to try to find new seasonings", "role": "purpose_adverbial", "level": 2}, {"text": "and thus to make his fortune", "role": "coordinate_purpose_adverbial", "level": 2}, {"text": "with this most desired commodity of that time", "role": "means_adverbial", "level": 3}],
@@ -200,7 +208,7 @@
       "expressions": [{"text": "set sail", "meaning_zh": "启航"}, {"text": "in order to", "meaning_zh": "为了"}, {"text": "make one's fortune", "meaning_zh": "发家致富"}, {"text": "desired commodity", "meaning_zh": "备受渴求的商品"}]
     },
     {
-      "id": "E-04", "paragraph_label": "E", "sentence_index": 25,
+      "id": "E-04", "paragraph_label": "E", "sentence_index": 26,
       "sentence": "Today, the influence of flavour in the world marketplace is no less decisive.",
       "translation": "如今，风味在全球市场中的影响力依然同样具有决定性。",
       "structure": [{"text": "Today", "role": "time_adverbial", "level": 1}, {"text": "the influence of flavour in the world marketplace", "role": "subject", "level": 1}, {"text": "is no less decisive", "role": "linking_predicate", "level": 1}],
@@ -208,7 +216,7 @@
       "expressions": [{"text": "the influence of", "meaning_zh": "……的影响"}, {"text": "no less decisive", "meaning_zh": "同样具有决定性"}, {"text": "world marketplace", "meaning_zh": "全球市场"}]
     },
     {
-      "id": "E-05", "paragraph_label": "E", "sentence_index": 26,
+      "id": "E-05", "paragraph_label": "E", "sentence_index": 27,
       "sentence": "The rise and fall of corporate empires – soft-drink companies, snack-food companies, and fast-food chains – is frequently determined by how their products taste.",
       "translation": "企业帝国——软饮料公司、零食公司和快餐连锁店——的兴衰，往往取决于其产品的味道。",
       "structure": [{"text": "The rise and fall of corporate empires", "role": "subject", "level": 1}, {"text": "soft-drink companies, snack-food companies, and fast-food chains", "role": "apposition", "level": 2}, {"text": "is frequently determined", "role": "passive_predicate", "level": 1}, {"text": "by how their products taste", "role": "means_clause", "level": 2}],
@@ -216,7 +224,7 @@
       "expressions": [{"text": "the rise and fall of", "meaning_zh": "……的兴衰"}, {"text": "be determined by", "meaning_zh": "由……决定"}, {"text": "fast-food chains", "meaning_zh": "快餐连锁店"}]
     },
     {
-      "id": "F-01", "paragraph_label": "F", "sentence_index": 27,
+      "id": "F-01", "paragraph_label": "F", "sentence_index": 28,
       "sentence": "The flavor industry emerged in the mid-1800s, as processed foods began to be manufactured on a large scale.",
       "translation": "19世纪中期，随着加工食品开始大规模生产，香精香料行业应运而生。",
       "structure": [{"text": "The flavor industry emerged in the mid-1800s", "role": "main_clause", "level": 1}, {"text": "as processed foods began to be manufactured on a large scale", "role": "time_cause_clause", "level": 2}],
@@ -224,7 +232,7 @@
       "expressions": [{"text": "emerge", "meaning_zh": "兴起；出现"}, {"text": "processed foods", "meaning_zh": "加工食品"}, {"text": "on a large scale", "meaning_zh": "大规模地"}]
     },
     {
-      "id": "F-02", "paragraph_label": "F", "sentence_index": 28,
+      "id": "F-02", "paragraph_label": "F", "sentence_index": 29,
       "sentence": "Recognizing the need for flavor additives, the early food processors turned to perfume companies that had years of experience working with essential oils and volatile aromas.",
       "translation": "早期食品加工商意识到需要风味添加剂，于是求助于那些拥有多年精油和挥发性香气处理经验的香水公司。",
       "structure": [{"text": "Recognizing the need for flavor additives", "role": "present_participle_adverbial", "level": 2}, {"text": "the early food processors turned to perfume companies", "role": "main_clause", "level": 1}, {"text": "that had years of experience working with essential oils and volatile aromas", "role": "relative_clause", "level": 2}],
@@ -232,7 +240,7 @@
       "expressions": [{"text": "recognize the need for", "meaning_zh": "意识到对……的需求"}, {"text": "turn to", "meaning_zh": "求助于"}, {"text": "have years of experience doing", "meaning_zh": "拥有多年做某事的经验"}, {"text": "essential oils", "meaning_zh": "精油"}]
     },
     {
-      "id": "F-03", "paragraph_label": "F", "sentence_index": 29,
+      "id": "F-03", "paragraph_label": "F", "sentence_index": 30,
       "sentence": "The great perfume houses of England, France, and the Netherlands produced many of the first flavor compounds.",
       "translation": "英国、法国和荷兰的大型香水公司生产了最早的一批风味化合物。",
       "structure": [{"text": "The great perfume houses of England, France, and the Netherlands", "role": "subject", "level": 1}, {"text": "produced many of the first flavor compounds", "role": "predicate", "level": 1}],
@@ -240,7 +248,7 @@
       "expressions": [{"text": "perfume houses", "meaning_zh": "香水公司"}, {"text": "flavor compounds", "meaning_zh": "风味化合物"}]
     },
     {
-      "id": "F-04", "paragraph_label": "F", "sentence_index": 30,
+      "id": "F-04", "paragraph_label": "F", "sentence_index": 31,
       "sentence": "In the early part of the 20th century, Germany's powerful chemical industry assumed the lead in flavour production.",
       "translation": "20世纪初，实力雄厚的德国化学工业在风味生产领域取得领先地位。",
       "structure": [{"text": "In the early part of the 20th century", "role": "time_adverbial", "level": 1}, {"text": "Germany's powerful chemical industry", "role": "subject", "level": 1}, {"text": "assumed the lead in flavour production", "role": "predicate", "level": 1}],
@@ -248,7 +256,7 @@
       "expressions": [{"text": "assume the lead in", "meaning_zh": "在……中取得领先"}, {"text": "chemical industry", "meaning_zh": "化学工业"}]
     },
     {
-      "id": "F-05", "paragraph_label": "F", "sentence_index": 31,
+      "id": "F-05", "paragraph_label": "F", "sentence_index": 32,
       "sentence": "Legend has it that a German scientist discovered methyl anthranilate, one of the first artificial flavours, by accident while mixing chemicals in his laboratory.",
       "translation": "传说一位德国科学家在实验室混合化学品时，偶然发现了邻氨基苯甲酸甲酯——最早的人造香料之一。",
       "structure": [{"text": "Legend has it", "role": "reporting_clause", "level": 1}, {"text": "that a German scientist discovered methyl anthranilate", "role": "object_clause", "level": 2}, {"text": "one of the first artificial flavours", "role": "apposition", "level": 3}, {"text": "by accident while mixing chemicals in his laboratory", "role": "manner_time_adverbial", "level": 3}],
@@ -256,7 +264,7 @@
       "expressions": [{"text": "Legend has it that", "meaning_zh": "传说"}, {"text": "by accident", "meaning_zh": "偶然地"}, {"text": "artificial flavours", "meaning_zh": "人造香料"}]
     },
     {
-      "id": "F-06", "paragraph_label": "F", "sentence_index": 32,
+      "id": "F-06", "paragraph_label": "F", "sentence_index": 33,
       "sentence": "Suddenly, the lab was filled with the sweet smell of grapes.",
       "translation": "突然，实验室里充满了葡萄的甜香。",
       "structure": [{"text": "Suddenly", "role": "time_adverbial", "level": 1}, {"text": "the lab", "role": "subject", "level": 1}, {"text": "was filled with the sweet smell of grapes", "role": "passive_predicate", "level": 1}],
@@ -264,17 +272,17 @@
       "expressions": [{"text": "be filled with", "meaning_zh": "充满"}, {"text": "the sweet smell of", "meaning_zh": "……的甜香"}]
     },
     {
-      "id": "F-07", "paragraph_label": "F", "sentence_index": 33,
+      "id": "F-07", "paragraph_label": "F", "sentence_index": 34,
       "sentence": "Methyl anthranilate later became the chief flavoring compound of manufactured grape juice.",
       "translation": "邻氨基苯甲酸甲酯后来成为工业生产葡萄汁的主要调味化合物。",
       "structure": [{"text": "Methyl anthranilate", "role": "subject", "level": 1}, {"text": "later became", "role": "linking_verb", "level": 1}, {"text": "the chief flavoring compound of manufactured grape juice", "role": "subject_complement", "level": 1}],
       "difficult_points": ["became 是系动词，说明该化合物后来获得的工业用途。", "manufactured 修饰 grape juice，指工业生产的葡萄汁。"],
       "expressions": [{"text": "the chief flavoring compound", "meaning_zh": "主要调味化合物"}, {"text": "manufactured grape juice", "meaning_zh": "工业生产的葡萄汁"}]
     },
-    {"id": "G-01", "paragraph_label": "G", "sentence_index": 34, "sentence": "The quality that people seek most of all in a food, its flavour, is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons.", "translation": "人们在食物中最看重的品质——风味——通常含量极其微小，无法用盎司或茶匙这类传统烹饪单位来衡量。", "structure": [{"text": "The quality that people seek most of all in a food", "role": "subject", "level": 1}, {"text": "that people seek most of all in a food", "role": "relative_clause", "level": 2}, {"text": "its flavour", "role": "apposition", "level": 2}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "predicative", "level": 1}, {"text": "too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "adjective_phrase", "level": 2}], "difficult_points": ["that 引导定语从句修饰 quality；its flavour 是同位语，点明这种品质就是风味。", "too … to be measured 表示“太……以至于无法被衡量”。"], "expressions": [{"text": "most of all", "meaning_zh": "最重要的是"}, {"text": "too infinitesimal to", "meaning_zh": "微小到无法……"}]},
-    {"id": "G-01b", "paragraph_label": "G", "sentence_index": 35, "sentence": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components, detecting chemical aromas in amounts as low as one part per billion.", "translation": "如今先进的光谱仪、气相色谱仪和顶空蒸气分析仪能绘制出食物风味成分的详细图谱，检测出含量低至十亿分之一的化学香气。", "structure": [{"text": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers", "role": "subject", "level": 1}, {"text": "provide", "role": "verb", "level": 1}, {"text": "a detailed map of a food's flavour components", "role": "object", "level": 1}, {"text": "detecting chemical aromas in amounts as low as one part per billion", "role": "present_participle_adverbial", "level": 2}], "difficult_points": ["主语是三种仪器的并列，谓语用复数 provide。", "detecting… 是现在分词短语作伴随状语，说明这些仪器的检测能力；as low as 表示“低至”。"], "expressions": [{"text": "provide a detailed map of", "meaning_zh": "绘制……的详细图谱"}, {"text": "one part per billion", "meaning_zh": "十亿分之一"}]},
+    {"id": "G-01", "paragraph_label": "G", "sentence_index": 35, "sentence": "The quality that people seek most of all in a food, its flavour, is usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons.", "translation": "人们在食物中最看重的品质——风味——通常含量极其微小，无法用盎司或茶匙这类传统烹饪单位来衡量。", "structure": [{"text": "The quality that people seek most of all in a food", "role": "subject", "level": 1}, {"text": "that people seek most of all in a food", "role": "relative_clause", "level": 2}, {"text": "its flavour", "role": "apposition", "level": 2}, {"text": "is", "role": "linking_verb", "level": 1}, {"text": "usually present in a quantity too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "predicative", "level": 1}, {"text": "too infinitesimal to be measured by any traditional culinary terms such as ounces or teaspoons", "role": "adjective_phrase", "level": 2}], "difficult_points": ["that 引导定语从句修饰 quality；its flavour 是同位语，点明这种品质就是风味。", "too … to be measured 表示“太……以至于无法被衡量”。"], "expressions": [{"text": "most of all", "meaning_zh": "最重要的是"}, {"text": "too infinitesimal to", "meaning_zh": "微小到无法……"}]},
+    {"id": "G-01b", "paragraph_label": "G", "sentence_index": 36, "sentence": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers provide a detailed map of a food's flavour components, detecting chemical aromas in amounts as low as one part per billion.", "translation": "如今先进的光谱仪、气相色谱仪和顶空蒸气分析仪能绘制出食物风味成分的详细图谱，检测出含量低至十亿分之一的化学香气。", "structure": [{"text": "Today's sophisticated spectrometers, gas chromatograph, and headspace vapor analyzers", "role": "subject", "level": 1}, {"text": "provide", "role": "verb", "level": 1}, {"text": "a detailed map of a food's flavour components", "role": "object", "level": 1}, {"text": "detecting chemical aromas in amounts as low as one part per billion", "role": "present_participle_adverbial", "level": 2}], "difficult_points": ["主语是三种仪器的并列，谓语用复数 provide。", "detecting… 是现在分词短语作伴随状语，说明这些仪器的检测能力；as low as 表示“低至”。"], "expressions": [{"text": "provide a detailed map of", "meaning_zh": "绘制……的详细图谱"}, {"text": "one part per billion", "meaning_zh": "十亿分之一"}]},
     {
-      "id": "G-02", "paragraph_label": "G", "sentence_index": 36,
+      "id": "G-02", "paragraph_label": "G", "sentence_index": 37,
       "sentence": "The human nose, however, is still more sensitive than any machine yet invented.",
       "translation": "然而，人类鼻子的灵敏度仍高于迄今发明的任何机器。",
       "structure": [{"text": "The human nose", "role": "subject", "level": 1}, {"text": "however", "role": "sentence_adverbial", "level": 1}, {"text": "is still more sensitive than any machine", "role": "linking_predicate", "level": 1}, {"text": "yet invented", "role": "past_participle_modifier", "level": 2}],
@@ -282,7 +290,7 @@
       "expressions": [{"text": "be more sensitive than", "meaning_zh": "比……更灵敏"}, {"text": "any machine yet invented", "meaning_zh": "迄今发明的任何机器"}]
     },
     {
-      "id": "G-03", "paragraph_label": "G", "sentence_index": 37,
+      "id": "G-03", "paragraph_label": "G", "sentence_index": 38,
       "sentence": "A nose can detect aromas present in quantities of a few parts per trillion.",
       "translation": "鼻子能够检测出浓度仅为万亿分之几的香气。",
       "structure": [{"text": "A nose can detect aromas", "role": "main_clause", "level": 1}, {"text": "present in quantities of a few parts per trillion", "role": "adjective_modifier", "level": 2}],
@@ -290,7 +298,7 @@
       "expressions": [{"text": "be present in quantities of", "meaning_zh": "以……的含量存在"}, {"text": "parts per trillion", "meaning_zh": "万亿分之几"}]
     },
     {
-      "id": "G-04", "paragraph_label": "G", "sentence_index": 38,
+      "id": "G-04", "paragraph_label": "G", "sentence_index": 39,
       "sentence": "Complex aromas, such as those of coffee or roasted meat, may be composed of gases from nearly a thousand different chemicals.",
       "translation": "复杂香气，例如咖啡或烤肉的香气，可能由近一千种不同化学物质产生的气体组成。",
       "structure": [{"text": "Complex aromas", "role": "subject", "level": 1}, {"text": "such as those of coffee or roasted meat", "role": "example_supplement", "level": 2}, {"text": "may be composed of gases", "role": "passive_predicate", "level": 1}, {"text": "from nearly a thousand different chemicals", "role": "prepositional_modifier", "level": 2}],
@@ -298,11 +306,11 @@
       "expressions": [{"text": "be composed of", "meaning_zh": "由……组成"}, {"text": "roasted meat", "meaning_zh": "烤肉"}, {"text": "nearly a thousand", "meaning_zh": "近一千种"}]
     },
     {
-      "id": "G-05", "paragraph_label": "G", "sentence_index": 39,
-      "sentence": "The chemical that provides the dominant flavour of bell pepper can be tasted in amounts as low as 0.02 parts per billion; one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools",
+      "id": "G-05", "paragraph_label": "G", "sentence_index": 40,
+      "sentence": "The chemical that provides the dominant flavour of bell pepper can be tasted in amounts as low as 0.02 parts per billion; one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools.",
       "translation": "赋予甜椒主要风味的化学物质，即使含量低至十亿分之0.02也能被尝出；只需一滴，就足以为填满五个普通大小游泳池的水增添味道。",
       "structure": [{"text": "The chemical", "role": "subject", "level": 1}, {"text": "that provides the dominant flavour of bell pepper", "role": "relative_clause", "level": 2}, {"text": "can be tasted in amounts as low as 0.02 parts per billion", "role": "passive_predicate", "level": 1}, {"text": "one drop is sufficient to add flavour to the amount of water needed to fill five average-sized swimming pools", "role": "coordinate_clause", "level": 1}],
-      "difficult_points": ["that 修饰 chemical，说明它提供甜椒的主要风味。", "as low as 强调人类能感知的极低浓度；分号后用一滴与巨大水量作直观比较。", "needed to fill... 是过去分词短语修饰 water；原文句末没有句号。"],
+      "difficult_points": ["that 修饰 chemical，说明它提供甜椒的主要风味。", "as low as 强调人类能感知的极低浓度；分号后用一滴与巨大水量作直观比较。", "needed to fill... 是过去分词短语，修饰 water。"],
       "expressions": [{"text": "the dominant flavour of", "meaning_zh": "……的主要风味"}, {"text": "in amounts as low as", "meaning_zh": "含量低至"}, {"text": "be sufficient to", "meaning_zh": "足以"}, {"text": "average-sized", "meaning_zh": "普通大小的"}]
     }
   ]

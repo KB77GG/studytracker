@@ -463,14 +463,14 @@
     },
     {
       "id": "K-08", "paragraph_label": "K", "sentence_index": 39,
-      "sentence": "When Electrolux introduced the original Trilobite in 2001, it was voted among the 100 most innovative designs (though whether the judges were dedicated couch potatoes, and thus biased, we were not aide to discover).",
+      "sentence": "When Electrolux introduced the original Trilobite in 2001, it was voted among the 100 most innovative designs (though whether the judges were dedicated couch potatoes, and thus biased, we were not able to discover).",
       "translation": "2001年伊莱克斯推出初代 Trilobite 时，它被评入100项最具创新性的设计之列（不过，那些评委是否都是铁杆“沙发土豆”、因而有所偏袒，我们未能查明）。",
       "structure": [
         {"text": "When Electrolux introduced the original Trilobite in 2001", "role": "time_clause", "level": 2},
         {"text": "it was voted among the 100 most innovative designs", "role": "main_clause", "level": 1},
-        {"text": "though whether the judges were dedicated couch potatoes, and thus biased, we were not aide to discover", "role": "parenthetical_concessive_clause", "level": 2}
+        {"text": "though whether the judges were dedicated couch potatoes, and thus biased, we were not able to discover", "role": "parenthetical_concessive_clause", "level": 2}
       ],
-      "difficult_points": ["it 指 the original Trilobite，was voted among 表示被评入某一行列。", "whether... 是 discover 的宾语，但为强调而前置。", "原文的 aide 很可能是 able 的录入异常，按要求保留；couch potatoes 幽默地指久坐懒动的人。"],
+      "difficult_points": ["it 指 the original Trilobite，was voted among 表示被评入某一行列。", "whether... 是 discover 的宾语，但为强调而前置。", "we were not able to discover 意为“我们未能查明”；couch potatoes 幽默地指久坐看电视的人。"],
       "expressions": [{"text": "be voted among", "meaning_zh": "被评入……之列"}, {"text": "couch potato", "meaning_zh": "终日懒坐看电视的人"}, {"text": "and thus biased", "meaning_zh": "因而有所偏袒"}]
     },
     {
@@ -507,27 +507,27 @@
     },
     {
       "id": "M-02", "paragraph_label": "M", "sentence_index": 43,
-      "sentence": "Look no further; this mouth, the Honda Motor Company showcased its second-generation humanoid robot, Asimo.",
-      "translation": "不用再找了；就在这个“mouth”（原文如此），本田汽车公司展示了第二代人形机器人 Asimo。",
+      "sentence": "Look no further; this month, the Honda Motor Company showcased its second-generation humanoid robot, Asimo.",
+      "translation": "不用再找了；就在这个月，本田汽车公司展示了第二代人形机器人 Asimo。",
       "structure": [
         {"text": "Look no further", "role": "imperative_clause", "level": 1},
-        {"text": "this mouth", "role": "time_adverbial", "level": 1},
+        {"text": "this month", "role": "time_adverbial", "level": 1},
         {"text": "the Honda Motor Company", "role": "subject", "level": 1},
         {"text": "showcased its second-generation humanoid robot, Asimo", "role": "predicate_object", "level": 1}
       ],
-      "difficult_points": ["Look no further 是固定表达，表示不用再寻找。", "原文 mouth 很可能是 month 的录入异常，按源文保留，译文予以提示。", "Asimo 是 its second-generation humanoid robot 的同位语。"],
+      "difficult_points": ["Look no further 是固定表达，表示不用再寻找。", "this month 是时间状语，意为“就在这个月”；Look no further 与后面的分句用分号隔开。", "Asimo 是 its second-generation humanoid robot 的同位语。"],
       "expressions": [{"text": "look no further", "meaning_zh": "不用再找了"}, {"text": "showcase", "meaning_zh": "展示"}, {"text": "humanoid robot", "meaning_zh": "人形机器人"}]
     },
     {
       "id": "M-03", "paragraph_label": "M", "sentence_index": 44,
-      "sentence": "The machine has come along way since its first incarnation five years ago.",
+      "sentence": "The machine has come a long way since its first incarnation five years ago.",
       "translation": "自五年前问世第一代以来，这台机器已经取得了很大进步。",
       "structure": [
         {"text": "The machine", "role": "subject", "level": 1},
-        {"text": "has come along way", "role": "predicate", "level": 1},
+        {"text": "has come a long way", "role": "predicate", "level": 1},
         {"text": "since its first incarnation five years ago", "role": "time_adverbial", "level": 1}
       ],
-      "difficult_points": ["原文 along way 很可能是 a long way 的连写异常，按源文保留。", "has come 使用现在完成时，概括从五年前到现在的发展。", "incarnation 在产品语境中指某一代或某个版本。"],
+      "difficult_points": ["come a long way 意为“取得很大进步”。", "has come 使用现在完成时，概括从五年前到现在的发展。", "incarnation 在产品语境中指某一代或某个版本。"],
       "expressions": [{"text": "since its first incarnation", "meaning_zh": "自第一代问世以来"}]
     },
     {

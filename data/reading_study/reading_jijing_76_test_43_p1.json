@@ -102,7 +102,7 @@
       "difficult_points": [
         "两个逗号间的 or... 和 a state... 都是对 Clinical depression 的同位解释。",
         "is said to affect 是“据称会影响”的被动报道结构。",
-        "up to almost 20% 表示比例最高接近20%，原文搭配略显冗余但需保留。"
+        "up to almost 20% 表示比例最高接近20%，up to 与 almost 意思有些重复。"
       ],
       "expressions": [
         {"text": "be said to", "meaning_zh": "据称"},
@@ -141,21 +141,21 @@
       "id": "B-03",
       "paragraph_label": "B",
       "sentence_index": 6,
-      "sentence": "World Health Organisation projections indicate that clinical depression may become the second most significant cause of disability' on a global scale by 2020.",
+      "sentence": "World Health Organisation projections indicate that clinical depression may become the second most significant cause of disability on a global scale by 2020.",
       "translation": "世界卫生组织的预测显示，到2020年，临床抑郁症可能会成为全球第二大致残原因。",
       "structure": [
         {"text": "World Health Organisation projections", "role": "subject", "level": 1},
         {"text": "indicate", "role": "predicate", "level": 1},
-        {"text": "that clinical depression may become the second most significant cause of disability' on a global scale by 2020", "role": "object_clause", "level": 2},
+        {"text": "that clinical depression may become the second most significant cause of disability on a global scale by 2020", "role": "object_clause", "level": 2},
         {"text": "clinical depression", "role": "embedded_subject", "level": 3},
-        {"text": "may become the second most significant cause of disability'", "role": "embedded_predicate", "level": 3},
+        {"text": "may become the second most significant cause of disability", "role": "embedded_predicate", "level": 3},
         {"text": "on a global scale", "role": "scope_adverbial", "level": 3},
         {"text": "by 2020", "role": "deadline_adverbial", "level": 3}
       ],
       "difficult_points": [
         "that 引导 indicate 的宾语从句，完整说明预测的内容。",
         "by 2020 表示“不晚于2020年”的时间界限。",
-        "disability 后的撇号属于源文异常，不影响其“致残原因”的含义。"
+        "the second most significant cause 意为“第二大原因”，序数词加最高级。"
       ],
       "expressions": [
         {"text": "on a global scale", "meaning_zh": "在全球范围内"},
@@ -421,12 +421,12 @@
       "id": "E-04",
       "paragraph_label": "E",
       "sentence_index": 17,
-      "sentence": "In extreme cases, where an individual exhibits behaviour which Indicates that they may cause physical harm to themselves, psychiatric hospitalisation may be necessary as a form of intensive therapy.",
+      "sentence": "In extreme cases, where an individual exhibits behaviour which indicates that they may cause physical harm to themselves, psychiatric hospitalisation may be necessary as a form of intensive therapy.",
       "translation": "在极端情况下，如果一个人表现出的行为显示其可能伤害自己的身体，那么住进精神病院可能是必要的，可作为一种强化治疗。",
       "structure": [
         {"text": "In extreme cases", "role": "condition_adverbial", "level": 1},
-        {"text": "where an individual exhibits behaviour which Indicates that they may cause physical harm to themselves", "role": "supplementary_relative_clause", "level": 2},
-        {"text": "which Indicates that they may cause physical harm to themselves", "role": "relative_clause", "level": 3},
+        {"text": "where an individual exhibits behaviour which indicates that they may cause physical harm to themselves", "role": "supplementary_relative_clause", "level": 2},
+        {"text": "which indicates that they may cause physical harm to themselves", "role": "relative_clause", "level": 3},
         {"text": "that they may cause physical harm to themselves", "role": "object_clause", "level": 4},
         {"text": "psychiatric hospitalisation", "role": "subject", "level": 1},
         {"text": "may be necessary", "role": "predicate", "level": 1},
@@ -434,9 +434,9 @@
       ],
       "difficult_points": [
         "where 从句补充说明 extreme cases 具体指什么情形。",
-        "which 修饰 behaviour，而 that 从句则作 Indicates 的宾语，说明行为显示出的风险。",
+        "which 修饰 behaviour，而 that 从句则作 indicates 的宾语，说明行为显示出的风险。",
         "they 和 themselves 均回指不限定性别的 an individual。",
-        "Indicates 的大写属于源文异常，应按普通动词 indicates 理解。"
+        "may be necessary 表示推测性的必要；as a form of intensive therapy 说明住院的性质。"
       ],
       "expressions": [
         {"text": "in extreme cases", "meaning_zh": "在极端情况下"},

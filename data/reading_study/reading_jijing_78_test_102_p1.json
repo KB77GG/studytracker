@@ -37,15 +37,15 @@
     },
     {
       "id": "A-03", "paragraph_label": "A", "sentence_index": 3,
-      "sentence": "The bank has given a cautions assessment that the region may have reached a turning point.",
+      "sentence": "The bank has given a cautious assessment that the region may have reached a turning point.",
       "translation": "该银行谨慎地评估认为，这一地区可能已经到达转折点。",
       "structure": [
         {"text": "The bank", "role": "subject", "level": 1},
-        {"text": "has given a cautions assessment", "role": "predicate", "level": 1},
+        {"text": "has given a cautious assessment", "role": "predicate", "level": 1},
         {"text": "that the region may have reached a turning point", "role": "appositive_clause", "level": 2},
         {"text": "may have reached", "role": "modal_perfect_predicate", "level": 3}
       ],
-      "difficult_points": ["that 从句说明 assessment 的具体内容。", "may have reached 表示对已经发生之事的推测；cautions 应为 cautious，是源文拼写异常。"],
+      "difficult_points": ["that 从句说明 assessment 的具体内容。", "may have reached 表示对已经发生之事的推测；cautious 意为“谨慎的”。"],
       "expressions": [{"text": "reach a turning point", "meaning_zh": "到达转折点"}, {"text": "give an assessment", "meaning_zh": "作出评估"}]
     },
     {
@@ -106,15 +106,15 @@
     },
     {
       "id": "B-03", "paragraph_label": "B", "sentence_index": 8,
-      "sentence": "If these collapses had not occurred, he observes, the level of gross domestic product for each citizen of the 48 nations of sub -Saharan Africa would have been third higher.",
+      "sentence": "If these collapses had not occurred, he observes, the level of gross domestic product for each citizen of the 48 nations of sub-Saharan Africa would have been a third higher.",
       "translation": "他指出，如果这些崩溃没有发生，撒哈拉以南非洲48个国家的人均国内生产总值水平本会高出三分之一。",
       "structure": [
         {"text": "If these collapses had not occurred", "role": "counterfactual_condition_clause", "level": 1},
         {"text": "he observes", "role": "parenthetical_reporting_clause", "level": 1},
-        {"text": "the level of gross domestic product for each citizen of the 48 nations of sub -Saharan Africa", "role": "subject", "level": 1},
-        {"text": "would have been third higher", "role": "counterfactual_main_predicate", "level": 1}
+        {"text": "the level of gross domestic product for each citizen of the 48 nations of sub-Saharan Africa", "role": "subject", "level": 1},
+        {"text": "would have been a third higher", "role": "counterfactual_main_predicate", "level": 1}
       ],
-      "difficult_points": ["had not occurred 与 would have been 构成对过去事实相反的第三类条件句。", "he observes 是插入式报道语；third higher 应理解为 a third higher，sub -Saharan 的空格也是源文异常。"],
+      "difficult_points": ["had not occurred 与 would have been 构成对过去事实相反的第三类条件句。", "he observes 是插入语；a third higher 意为“高出三分之一”。"],
       "expressions": [{"text": "gross domestic product", "meaning_zh": "国内生产总值"}, {"text": "would have been", "meaning_zh": "本来会是"}]
     },
     {
@@ -145,7 +145,7 @@
         {"text": "because the economic fundamentals- new investment and the ability to stave off inflation, among other factors-are absent", "role": "reason_clause", "level": 2},
         {"text": "new investment and the ability to stave off inflation, among other factors", "role": "apposition", "level": 3}
       ],
-      "difficult_points": ["两个过去分词 driven 和 spurred 构成嵌套修饰：前者说明增长期，后者说明商品繁荣。", "破折号之间列举 economic fundamentals；源文破折号两侧空格不规范但需保留。", "stave off 表示阻止或延缓通胀。"],
+      "difficult_points": ["两个过去分词 driven 和 spurred 构成嵌套修饰：前者说明增长期，后者说明商品繁荣。", "两个破折号之间列举 economic fundamentals 的内容：新投资和抵御通胀的能力等。", "stave off 表示阻止或延缓通胀。"],
       "expressions": [{"text": "commodities boom", "meaning_zh": "大宗商品繁荣"}, {"text": "economic fundamentals", "meaning_zh": "经济基本面"}, {"text": "stave off inflation", "meaning_zh": "抵御通货膨胀"}]
     },
     {
@@ -164,7 +164,7 @@
     },
     {
       "id": "C-04", "paragraph_label": "C", "sentence_index": 12,
-      "sentence": "For sub–Saharan countries rich in oil and other resources, a boom period may even undermine efforts to institute sound economic practices..",
+      "sentence": "For sub–Saharan countries rich in oil and other resources, a boom period may even undermine efforts to institute sound economic practices.",
       "translation": "对于石油及其他资源丰富的撒哈拉以南国家而言，繁荣期甚至可能削弱推行稳健经济做法的努力。",
       "structure": [
         {"text": "For sub–Saharan countries rich in oil and other resources", "role": "scope_adverbial", "level": 1},
@@ -173,7 +173,7 @@
         {"text": "may even undermine efforts", "role": "predicate", "level": 1},
         {"text": "to institute sound economic practices", "role": "infinitive_postmodifier", "level": 2}
       ],
-      "difficult_points": ["rich in... 后置修饰 countries。", "to institute... 修饰 efforts，说明努力的目标；句末双句点是源文异常。"],
+      "difficult_points": ["rich in... 后置修饰 countries。", "to institute... 是不定式，修饰 efforts，说明努力的目标；institute 在此作动词，意为“建立、推行”。"],
       "expressions": [{"text": "undermine efforts to", "meaning_zh": "削弱做……的努力"}, {"text": "institute sound economic practices", "meaning_zh": "推行稳健的经济做法"}]
     },
     {
@@ -221,7 +221,7 @@
     },
     {
       "id": "D-03", "paragraph_label": "D", "sentence_index": 16,
-      "sentence": "They include revamped trade measures, better-apportioned aid, and sustained military intervention in certain instances, to avert what he sees as a rapidly accelerating divergence of the world's poorest, primarily in Africa, from the rest of the world, even other developing nations such India and China.",
+      "sentence": "They include revamped trade measures, better-apportioned aid, and sustained military intervention in certain instances, to avert what he sees as a rapidly accelerating divergence of the world's poorest, primarily in Africa, from the rest of the world, even other developing nations such as India and China.",
       "translation": "这些方案包括改革后的贸易措施、更合理分配的援助，以及在特定情况下持续进行军事干预，目的在于避免他所认为的差距迅速扩大：世界最贫困的人群（主要在非洲）与世界其他地区、甚至印度和中国等其他发展中国家日益分化。",
       "structure": [
         {"text": "They", "role": "subject", "level": 1},
@@ -230,9 +230,9 @@
         {"text": "what he sees as a rapidly accelerating divergence of the world's poorest, primarily in Africa, from the rest of the world", "role": "fused_relative_object", "level": 3},
         {"text": "he sees as a rapidly accelerating divergence", "role": "embedded_clause", "level": 4},
         {"text": "primarily in Africa", "role": "parenthetical_postmodifier", "level": 4},
-        {"text": "even other developing nations such India and China", "role": "supplementary_example", "level": 3}
+        {"text": "even other developing nations such as India and China", "role": "supplementary_example", "level": 3}
       ],
-      "difficult_points": ["to avert 表示列举这些政策的目的。", "what he sees as... 是融合关系结构，整体作 avert 的宾语。", "divergence of A from B 表示A与B之间日益拉开的差距；such India 缺少 as，是源文异常。"],
+      "difficult_points": ["to avert 表示列举这些政策的目的。", "what he sees as... 是融合关系结构，整体作 avert 的宾语。", "divergence of A from B 表示 A 与 B 之间日益拉开的差距；such as 引出举例。"],
       "expressions": [{"text": "military intervention", "meaning_zh": "军事干预"}, {"text": "in certain instances", "meaning_zh": "在特定情况下"}, {"text": "avert a divergence", "meaning_zh": "避免差距扩大"}]
     },
     {
@@ -250,21 +250,21 @@
     },
     {
       "id": "E-02", "paragraph_label": "E", "sentence_index": 18,
-      "sentence": "moreover, a democratic government, he adds, often makes the aftermath of a boom worse.",
+      "sentence": "Moreover, a democratic government, he adds, often makes the aftermath of a boom worse.",
       "translation": "他补充说，而且民主政府往往会让经济繁荣后的局面变得更糟。",
       "structure": [
-        {"text": "moreover", "role": "conjunctive_adverb", "level": 1},
+        {"text": "Moreover", "role": "conjunctive_adverb", "level": 1},
         {"text": "a democratic government", "role": "subject", "level": 1},
         {"text": "he adds", "role": "parenthetical_reporting_clause", "level": 1},
         {"text": "often makes the aftermath of a boom worse", "role": "complex_transitive_predicate", "level": 1},
         {"text": "worse", "role": "object_complement", "level": 2}
       ],
-      "difficult_points": ["he adds 是插入式报道语，不影响主句结构。", "make + object + worse 是复合宾语结构；句首 moreover 小写为源文异常。"],
+      "difficult_points": ["he adds 是插入式报道语，不影响主句结构。", "make + 宾语 + 形容词 worse 是复合宾语结构；Moreover 意为“而且”。"],
       "expressions": [{"text": "the aftermath of", "meaning_zh": "……的后果或后续局面"}, {"text": "make ... worse", "meaning_zh": "使……恶化"}]
     },
     {
       "id": "E-03", "paragraph_label": "E", "sentence_index": 19,
-      "sentence": "\"Instead of democracy disciplining governments to manage these resource booms well, what happens is that the resource revenues corrupt the normal functioning of democracy-unless you stop ( them from) corrupting the normal function of democracy with sufficient checks and balances\", he said at a talk ion January at the Carnegie Council in New York City.",
+      "sentence": "\"Instead of democracy disciplining governments to manage these resource booms well, what happens is that the resource revenues corrupt the normal functioning of democracy-unless you stop (them from) corrupting the normal function of democracy with sufficient checks and balances\", he said at a talk in January at the Carnegie Council in New York City.",
       "translation": "他一月份在纽约卡内基伦理委员会的一次演讲中说：“实际情况并非民主制度约束政府妥善管理资源繁荣，而是资源收入破坏了民主的正常运作——除非通过充分的制衡机制阻止它们这样做。”",
       "structure": [
         {"text": "Instead of democracy disciplining governments to manage these resource booms well", "role": "rejected_alternative_prepositional_phrase", "level": 2},
@@ -273,10 +273,10 @@
         {"text": "what happens", "role": "fused_relative_subject", "level": 2},
         {"text": "is", "role": "linking_verb", "level": 2},
         {"text": "that the resource revenues corrupt the normal functioning of democracy", "role": "subject_complement_clause", "level": 3},
-        {"text": "unless you stop ( them from) corrupting the normal function of democracy with sufficient checks and balances", "role": "exception_condition_clause", "level": 3},
-        {"text": "he said at a talk ion January at the Carnegie Council in New York City", "role": "reporting_clause", "level": 1}
+        {"text": "unless you stop (them from) corrupting the normal function of democracy with sufficient checks and balances", "role": "exception_condition_clause", "level": 3},
+        {"text": "he said at a talk in January at the Carnegie Council in New York City", "role": "reporting_clause", "level": 1}
       ],
-      "difficult_points": ["Instead of 后接带独立逻辑主语 democracy 的动名词结构。", "what happens 是融合关系结构作主语，that 从句作 is 的表语。", "unless 引出例外条件；stop them from doing 表示阻止它们做某事。", "( them from) 和 ion January 均属源文排版或拼写异常。"],
+      "difficult_points": ["Instead of 后接带独立逻辑主语 democracy 的动名词结构。", "what happens 是融合关系结构作主语，that 从句作 is 的表语。", "unless 引出例外条件；stop them from doing 表示阻止它们做某事。", "括号中的 them from 是作者补充的词，使 stop them from corrupting 的结构完整。"],
       "expressions": [{"text": "instead of", "meaning_zh": "并非；而不是"}, {"text": "the normal functioning of", "meaning_zh": "……的正常运作"}, {"text": "checks and balances", "meaning_zh": "制衡机制"}]
     },
     {
@@ -295,26 +295,26 @@
     },
     {
       "id": "F-02", "paragraph_label": "F", "sentence_index": 21,
-      "sentence": "He cites the Democratic Republic of the Congo, which took in $ 200 million from mineral exports in 2006 yet collected only $86000 in royalties for its treasury.",
+      "sentence": "He cites the Democratic Republic of the Congo, which took in $200 million from mineral exports in 2006 yet collected only $86000 in royalties for its treasury.",
       "translation": "他以刚果民主共和国为例：该国2006年从矿产出口中获得2亿美元，却仅为国库收取了8.6万美元的特许权使用费。",
       "structure": [
         {"text": "He cites the Democratic Republic of the Congo", "role": "main_clause", "level": 1},
-        {"text": "which took in $ 200 million from mineral exports in 2006", "role": "nonrestrictive_relative_clause", "level": 2},
+        {"text": "which took in $200 million from mineral exports in 2006", "role": "nonrestrictive_relative_clause", "level": 2},
         {"text": "yet collected only $86000 in royalties for its treasury", "role": "coordinated_relative_predicate", "level": 2}
       ],
-      "difficult_points": ["which 回指 the Democratic Republic of the Congo，并引出补充信息。", "yet 连接反差强烈的两项收入数据；金额中的空格格式为源文原样。"],
+      "difficult_points": ["which 回指 the Democratic Republic of the Congo，并引出补充信息。", "yet 连接反差强烈的两项收入数据，意为“然而”。"],
       "expressions": [{"text": "cite ... as an example", "meaning_zh": "引用……为例"}, {"text": "take in", "meaning_zh": "获得收入"}, {"text": "collect royalties", "meaning_zh": "收取特许权使用费"}]
     },
     {
       "id": "F-03", "paragraph_label": "F", "sentence_index": 22,
-      "sentence": "\"If a nation gets these points right, \" he argues, \"It's going to develop.",
+      "sentence": "\"If a nation gets these points right,\" he argues, \"It's going to develop.",
       "translation": "他认为：“如果一个国家把这些要点做对了，它就会发展。”",
       "structure": [
         {"text": "If a nation gets these points right", "role": "condition_clause", "level": 2},
         {"text": "he argues", "role": "interrupted_reporting_clause", "level": 1},
         {"text": "It's going to develop", "role": "quoted_main_clause", "level": 2}
       ],
-      "difficult_points": ["he argues 插入在一段连续引语中，将条件从句与主句分开。", "get these points right 表示正确处理这些关键事项；本句结尾引号尚未闭合是跨句引语的源文格式。"],
+      "difficult_points": ["he argues 插入在一段连续引语中，将条件从句与主句分开。", "get these points right 表示正确处理这些关键事项；这段引语延续到下一句。"],
       "expressions": [{"text": "get ... right", "meaning_zh": "把……做对"}, {"text": "be going to develop", "meaning_zh": "将会发展"}]
     },
     {

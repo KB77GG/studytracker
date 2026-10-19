@@ -322,7 +322,7 @@
     },
     {
       "id": "F-02", "paragraph_label": "F", "sentence_index": 26,
-      "sentence": "'Instead of universals. you get standard engineering solutions that languages adopt again and again, and then you get outliers.' says Evans.",
+      "sentence": "'Instead of universals, you get standard engineering solutions that languages adopt again and again, and then you get outliers,' says Evans.",
       "translation": "埃文斯说：“得到的不是普遍规律，而是各种语言反复采用的标准工程式解决方案，此外还会出现一些离群的例外。”",
       "structure": [
         {"text": "Instead of universals", "role": "contrastive_adverbial", "level": 2},
@@ -331,7 +331,7 @@
         {"text": "and then you get outliers", "role": "coordinate_clause", "level": 1},
         {"text": "says Evans", "role": "reporting_clause", "level": 1}
       ],
-      "difficult_points": ["源文在 universals 后使用句点且 says 前另有句点，属于原始排版，英文保持不改。", "that 引导定语从句修饰 solutions；you 是泛指，并非特定读者。", "outliers 指不符合常见倾向的语言例外。"],
+      "difficult_points": ["引语在前，says Evans 在后，采用主谓倒装；引语末尾用逗号，放在引号内。", "that 引导定语从句修饰 solutions；you 是泛指，并非特定读者。", "outliers 指不符合常见倾向的语言例外。"],
       "expressions": [{"text": "instead of", "meaning_zh": "而不是"}, {"text": "again and again", "meaning_zh": "反复地"}, {"text": "standard engineering solutions", "meaning_zh": "标准化的工程式解决方案"}, {"text": "outlier", "meaning_zh": "离群的例外"}]
     },
     {
@@ -349,14 +349,14 @@
     },
     {
       "id": "F-04", "paragraph_label": "F", "sentence_index": 28,
-      "sentence": "There- are no absolutely universal traits of language, they say, only tendencies.",
+      "sentence": "There are no absolutely universal traits of language, they say, only tendencies.",
       "translation": "他们说，语言并不存在绝对普遍的特征，只有各种倾向。",
       "structure": [
-        {"text": "There- are no absolutely universal traits of language", "role": "existential_clause", "level": 1},
+        {"text": "There are no absolutely universal traits of language", "role": "existential_clause", "level": 1},
         {"text": "they say", "role": "parenthetical_clause", "level": 2},
         {"text": "only tendencies", "role": "elliptical_contrast", "level": 1}
       ],
-      "difficult_points": ["源文 There 后的连字符属于原始文本异常，英文原样保留。", "they say 是插入语；only tendencies 省略了 there are，与前面的 no... 构成对比。"],
+      "difficult_points": ["There are no... 是存在句的否定形式，absolutely universal 修饰 traits。", "they say 是插入语；only tendencies 省略了 there are，与前面的 no... 构成对比。"],
       "expressions": [{"text": "universal traits", "meaning_zh": "普遍特征"}, {"text": "only tendencies", "meaning_zh": "只有倾向而非绝对规律"}]
     },
     {
@@ -411,7 +411,7 @@
     },
     {
       "id": "G-04", "paragraph_label": "G", "sentence_index": 33,
-      "sentence": "For example, the fact that before we learn to speak we perceive the world as a place full of things causing actions (agents) and things having actions done to them (patients)explains why most languages deploy these grammatical categories.",
+      "sentence": "For example, the fact that before we learn to speak we perceive the world as a place full of things causing actions (agents) and things having actions done to them (patients) explains why most languages deploy these grammatical categories.",
       "translation": "例如，在学会说话之前，我们就把世界理解为一个充满“施事者”和“受事者”的地方；前者引发动作，后者承受动作。这一事实解释了为什么多数语言都会采用这些语法范畴。",
       "structure": [
         {"text": "For example", "role": "example_adverbial", "level": 1},
@@ -420,7 +420,7 @@
         {"text": "before we learn to speak", "role": "time_clause", "level": 3},
         {"text": "explains why most languages deploy these grammatical categories", "role": "predicate", "level": 1}
       ],
-      "difficult_points": ["长主语中心是 the fact，that 从句说明这一事实的具体内容，真正谓语是 explains。", "things causing actions 与 things having actions done to them 并列；后者是 have something done 结构的变体。", "源文在 (patients) 与 explains 之间缺少空格，英文原样保留。"],
+      "difficult_points": ["长主语中心是 the fact，that 从句说明这一事实的具体内容，真正谓语是 explains。", "things causing actions 与 things having actions done to them 并列；后者是 have something done 结构的变体。", "括号里的 agents 与 patients 是语言学术语，分别指施事者和受事者。"],
       "expressions": [{"text": "perceive ... as ...", "meaning_zh": "把……理解为……"}, {"text": "have actions done to", "meaning_zh": "承受动作"}, {"text": "deploy grammatical categories", "meaning_zh": "采用语法范畴"}]
     },
     {
