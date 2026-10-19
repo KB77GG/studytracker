@@ -58,6 +58,8 @@ QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
 COORDINATING_MARKS = frozenset({"for", "so", "yet"})
+# A coordinate clause needs a subject of its own; without one it is a coordinated predicate.
+CLAUSE_SUBJECT_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "expl"})
 
 
 def single_quote_role(sentence, index):
@@ -358,11 +360,18 @@ def main_verb(ctx):
 
 
 def type_matches(view, head, kind):
-    """A finite head with the clause dep; a coordinate clause has no subordinator of its own."""
+    """A finite head with the clause dep; a coordinate clause has its own subject and no
+    subordinator ("and that ..." is a noun clause, "and usually refer to ..." a predicate).
+    An adverbial clause led by "for" ("for they shared ...") is coordinate as taught."""
     if not (finite(head, view) and head.dep in CLAUSE_DEPS[kind]):
         return False
-    marks = {c.text.lower() for c in view.children(head) if c.dep == "mark"}
-    return kind != "coordinate" or marks <= COORDINATING_MARKS  # "and that ..." is a noun clause
+    children = view.children(head)
+    marks = {c.text.lower() for c in children if c.dep == "mark"}
+    if kind == "adverbial":
+        return "for" not in marks
+    if kind != "coordinate":
+        return True
+    return marks <= COORDINATING_MARKS and any(c.dep in CLAUSE_SUBJECT_DEPS for c in children)
 
 
 def boundary_reasons(ctx, head, tokens, kind):

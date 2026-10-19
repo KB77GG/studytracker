@@ -1085,6 +1085,44 @@ class CodexReviewFixTests(unittest.TestCase):
             item = by_template(items, template)[0]
             self.assertIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], template)
 
+    def test_coordinated_predicate_is_not_coordinate_clause(self):
+        rows = [
+            ("They", "nsubj", 1, "PRON", "PRP"),
+            ("sort", "ROOT", 1, "VERB", "VBP"),
+            ("data", "dobj", 1, "NOUN", "NNS"),
+            ("and", "cc", 1, "CCONJ", "CC"),
+            ("usually", "advmod", 5, "ADV", "RB"),
+            ("refer", "conj", 1, "VERB", "VBP"),
+            ("to", "prep", 5, "ADP", "IN"),
+            ("types", "pobj", 6, "NOUN", "NNS"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [
+            ("They sort data", "main_clause", 1),
+            ("usually refer to types", "coordinated_clause", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        for template in ("clause_boundary", "clause_type_classify"):
+            item = by_template(items, template)[0]
+            self.assertIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], template)
+
+    def test_for_clause_is_not_adverbial(self):
+        rows = [
+            ("We", "nsubj", 1, "PRON", "PRP"),
+            ("stayed", "ROOT", 1, "VERB", "VBD"),
+            ("for", "mark", 4, "SCONJ", "IN"),
+            ("it", "nsubj", 4, "PRON", "PRP"),
+            ("rained", "advcl", 1, "VERB", "VBD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [("We stayed", "main_clause", 1), ("for it rained", "cause_clause", 2)]
+        items, _ = generate(sentence, view, tags)
+        for template in ("clause_boundary", "clause_type_classify"):
+            item = by_template(items, template)[0]
+            self.assertIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], template)
+
     def test_s_quote_closes_a_pending_quoted_term(self):
         sentence = "They built 'megacities' and traded in 1990's markets."
         span = {"start": 11, "end": 22, "text": sentence[11:22]}

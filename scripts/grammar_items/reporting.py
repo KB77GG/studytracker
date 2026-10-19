@@ -29,14 +29,16 @@ REGRESSION_CASES = (
 # Expected whole-sentence hits; None means "report only" (plan v0.2 B1).
 INDEPENDENT_FILTERS = (
     # 36 in plan v0.1; +1 after the v0.2 review marked 71_1_p2 E-01 as predicate_fragment (F4);
-    # -1 after the 2026-10-19 re-split joined ielts4_test4_p1 C-14's cut "that U.S." to C-15.
-    (R.TAGGED_FRAGMENT, 36),
+    # -1 after the 2026-10-19 re-split joined ielts4_test4_p1 C-14's cut "that U.S." to C-15;
+    # -4 after the 2026-10-19 source fixes joined four fragments to the sentence they continue.
+    (R.TAGGED_FRAGMENT, 32),
     (R.CLAUSE_ATTACHED_TO_CONJUNCTION, 2),
     (R.GLUED_SENTENCE_BOUNDARY, 0),
     # 51 in plan v0.2; after the 2026-10-19 re-split only an embedded quotation of three
     # sentences remains (9_81_p1 F-02), which cannot be split without breaking its sentence.
     (R.MULTI_SENTENCE_UNIT, 1),
-    (R.SUSPECTED_SPLIT_WORD, None),
+    # 6 before the 2026-10-19 source fixes rejoined the split words (competi tive, calcu lated ...).
+    (R.SUSPECTED_SPLIT_WORD, 0),
     # 14 units before the 2026-10-19 source fixes removed the stray leading periods.
     (R.LEADING_STRAY_PUNCTUATION, 0),
     # 6 before the 2026-10-19 source fixes restored the characters lost as NUL.
