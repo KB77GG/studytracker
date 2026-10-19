@@ -39,7 +39,8 @@ INDEPENDENT_FILTERS = (
     (R.SUSPECTED_SPLIT_WORD, None),
     # 14 units before the 2026-10-19 source fixes removed the stray leading periods.
     (R.LEADING_STRAY_PUNCTUATION, 0),
-    (R.CONTROL_CHARACTER, None),
+    # 6 before the 2026-10-19 source fixes restored the characters lost as NUL.
+    (R.CONTROL_CHARACTER, 0),
 )
 RESPLIT_ID = re.compile(r"^[A-Z]-\d+[b-z]$")
 NODE_IDS = (
@@ -234,7 +235,7 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。",
             "v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。",
-            "v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），只报告不设预期。",
+            "v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），原文修复后预期为 0。",
             "拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。",
             "无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。",
             "字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。",
