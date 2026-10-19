@@ -85,6 +85,28 @@ class QuestionFixTest(unittest.TestCase):
         self.assertEqual(groups, self.groups())
 
 
+class AtEndFixTest(unittest.TestCase):
+    """at_end fixes add a missing final full stop, where find is part of replace."""
+
+    FIX = {**FIX, "find": "own good", "replace": "own good.", "at_end": True}
+
+    def test_appends_once(self):
+        text, changed = fixes_mod.apply_fix("too posh for its own good", self.FIX)
+        self.assertEqual((text, changed), ("too posh for its own good.", True))
+        self.assertEqual(fixes_mod.apply_fix(text, self.FIX), (text, False))
+
+    def test_only_matches_the_paragraph_end(self):
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_fix("its own good is here", self.FIX)
+
+    def test_cannot_edit_question_data(self):
+        paragraphs = [{"label": "A", "text": "its own good"}]
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_passage_fixes(
+                "p1", paragraphs, {"p1": [{**self.FIX, "questions": True}]}, []
+            )
+
+
 class RepositoryStateTest(unittest.TestCase):
     def test_every_fix_is_applied_to_static_files(self):
         fixes = fixes_mod.load_fixes()
@@ -97,6 +119,7 @@ class RepositoryStateTest(unittest.TestCase):
             "missing_space",
             "stray_leading_period",
             "lost_character",
+            "punctuation",
             "typo",
         }
         for passage_fixes in fixes_mod.load_fixes().values():
@@ -104,6 +127,10 @@ class RepositoryStateTest(unittest.TestCase):
                 with self.subTest(fix=fix["find"]):
                     self.assertIn(fix["reason"], reasons)
                     self.assertNotEqual(fix["find"], fix["replace"])
+                    if fix.get("at_end"):
+                        self.assertFalse(fix.get("questions"))
+                        self.assertTrue(fix["replace"].startswith(fix["find"]))
+                        continue
                     # Otherwise an applied fix still matches and a rerun applies it twice.
                     self.assertNotIn(fix["find"], fix["replace"])
 
