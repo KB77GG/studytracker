@@ -116,7 +116,7 @@
 | 数据 | validator 0 错误；`--check` 0 条未应用；临时库先导入 main 的完整快照，再导入本分支：updated=56 / skipped=261 / failed=0 |
 | Ruff | 改动的 Python 文件 check 和 format 均通过 |
 
-### 第二轮遗留（需要另行决定）
+### 第二轮遗留（NUL 字符、CO 下标、fagging、阅读页标签四项已在第三轮处理）
 
 - **NUL 字符**：`reading_jijing_29_test_63_p3` 5 句、`reading_jijing_84_test_73_p2` C-17 1 句，原文中 `$` 等字符变成了 NUL（如 `yuan (\x001.9 trillion)`）；同样的问题还出现在 `29_63`、`50_30`、`75_57`、`84_73` 的题目文字和 `ielts18_test3` 的一处 `more\x02knowledgeable`。修原文需要逐处猜回丢失的字符，本轮只在出题时排除。
 - **CO 缺下标**：`reading_jijing_29_test_63_p1` 全文 4 处 `CO` 应为 `CO₂`，难点里已有说明。
@@ -124,6 +124,89 @@
 - **阅读页标签**：`interrogative_clause`、`elliptical_clause`、`question_clause` 这几个已有角色名会被词汇表兜底成“状语从句”显示，属于 `api/reading_study_glossary.py` 的存量问题；本轮新写的标注没有用这些名字。
 - `reading_jijing_92_test_58_p2` H-01 的小标题和正文连在一句里（已按 heading 排除出题）。
 
+## 第三轮（2026-10-19，乱码、CO₂、fagging、阅读页标签）
+
+逐句记录：`docs/READING_STUDY_RESPLIT_2026-10_ROUND3.md`（由脚本生成）。
+
+### 原文
+
+| 项目 | 处理 | 结果 |
+|---|---|---|
+| 乱码（NUL 字符） | 按上下文补回丢失的字符：`29_63_p3` 的 5 处都是 `$`（`16 trillion yuan ($1.9 trillion)` 可以核对汇率）；`84_73_p2` C-17 是逗号（`From age six to 18, British children`）；`75_57_p2` 段落里的 `1989 and 1993.`；`50_30_p2` 题干里的 `rats' learning` | 全部机经 static 和阅读解析里不再有控制字符。`29_63_p3` F-02、F-04、G-02 的翻译原先猜成“元”，改为“美元” |
+| CO₂ | 实际不止 4 处：`29_63_p1` 全文 9 个 `CO` 缺下标，丢失的 9 个 `2` 散落在别处（`agriculture, 2 say`、`atmosphere. 2 It has`、`enough 2 to raise`、`release 2 CO . 2`、`our 2 future` 等）。统一写成语料里通用的 `CO2`，删掉散落的 `2`；`by around 2 to 5` 同时补上丢失的单位，改为 `2°C to 5°C`（原翻译已按“度”理解） | 10 句阅读解析更新；难点里“下标错置，必须保留”的说明全部改写 |
+| fagging | 改为 logging | 1 句 |
+| 题目数据 | 这些错字在题目数据（题干、答案依据、定位词）里也有复制，学生能看到其中的题干和答案依据，例如题干 `Peat bogs never release CO . 2`。修订表新增可选字段：`questions: true` 时同一修订也改该篇题目数据，`paragraph_label: null` 表示只出现在题目数据里。构建脚本和修补脚本同步支持；补了 3 项测试 | 修订表 63 → 93 条；从 raw 重建 171 篇，段落和题目数据都与 static 完全一致 |
+
+另外 `29_63_p1` E-01 的 `and because …` 原标为 coordinated_cause_clause（会显示成“并列分句”），改为原因状语从句；B-06 的 `exemplification`（词汇表查不到）改为介词短语。
+
+### 阅读页标签
+
+`api/reading_study_glossary.py` 原来把所有不认识的 `*_clause` 一律显示成“状语从句”。现在只在 role 名字能确定含义时改判，以关系词开头的（`time_clause`、`purpose_clause` 等）和其他已有规则全部不变：
+
+| 新标签 | 处数 | role（处数） | 例子 |
+|---|---:|---|---|
+| 时间状语从句 | 58 | `temporal_clause`（25）、`reduced_time_clause`（25）、`reduced_time_condition_clause`（2）、`elliptical_time_clause`（2）、`temporal_causal_clause`（1）、`standalone_time_clause`（1）… | as microorganisms within soil digest dead animals  |
+| 不定式 | 53 | `infinitive_clause`（41）、`bare_infinitive_clause`（6）、`extraposed_infinitive_clause`（3）、`interrogative_infinitive_clause`（1）、`infinitive_result_clause`（1）、`for_to_infinitive_clause`（1） | so as to produce the necessary emphases |
+| 名词性从句 | 47 | `complement_clause`（22）、`nominal_clause`（18）、`whether_clause`（4）、`adjective_complement_clause`（2）、`fact_clause`（1） | we changed our outlook |
+| 疑问句 | 45 | `interrogative_clause`（39）、`first_interrogative_clause`（2）、`third_interrogative_clause`（1）、`second_interrogative_clause`（1）、`question_clause`（1）、`alternative_question_clause`（1） | are you hoping |
+| 省略结构 | 39 | `elliptical_clause`（36）、`elliptical_passive_clause`（1）、`elliptical_disclaimer_clause`（1）、`elliptical_comment_clause`（1） | Unlikely |
+| 祈使句 | 35 | `imperative_clause`（35） | run them through the cogs and wheels of the langua |
+| 分句 | 35 | `clause`（30）、`first_clause`（4）、`second_clause`（1） | we are denied the pattern we expect |
+| 分词短语 | 26 | `present_participle_clause`（7）、`participle_clause`（6）、`present_participial_clause`（4）、`past_participle_clause`（4）、`accompanying_participle_clause`（3）、`supplementary_participle_clause`（1）… | bringing a range of benefits |
+| 主句 | 21 | `independent_clause`（6）、`run_on_clause`（5）、`second_independent_clause`（3）、`first_independent_clause`（3）、`run_on_passive_clause`（2）、`comma_spliced_clause`（1）… | they do not actually exist |
+| 条件状语从句 | 13 | `reduced_conditional_clause`（3）、`elliptical_conditional_clause`（3）、`elliptical_condition_clause`（2）、`reduced_condition_clause`（1）、`malformed_condition_clause`（1）、`hypothetical_conditional_clause`（1）… | if mishandled |
+| 原因状语从句 | 9 | `causal_clause`（7）、`predicate_with_reason_clause`（1）、`alternative_reason_clause`（1） | Since soil grows 95% of our food, and sustains hum |
+| 动名词 | 9 | `gerund_clause`（9） | skyscrapers not being built between the two urban  |
+| 让步状语从句 | 6 | `elliptical_concessive_clause`（3）、`reduced_concessive_clause`（2）、`parenthetical_concessive_clause`（1） | if not advanced |
+| 介词短语 | 2 | `prepositional_participial_clause`（1）、`prepositional_clause`（1） | Despite arising in the last half century |
+| 对比状语从句 | 2 | `elliptical_contrast_clause`（2） | less so for the gut |
+| 结果状语从句 | 2 | `first_result_clause`（1）、`alternative_result_clause`（1） | the pearl may be seriously deformed |
+| 非谓语结构 | 1 | `non_finite_passive_clause`（1） | to be completed |
+| 比较状语从句 | 1 | `elliptical_comparative_clause`（1） | As today |
+| 倒装 | 1 | `inversion_clause`（1） | Here is |
+| 感叹句 | 1 | `exclamatory_clause`（1） | what a story it is |
+| 方式状语从句 | 1 | `reduced_manner_clause`（1） | As shown in Table 1 |
+
+共 72 个 role、407 处标注，原来都显示为“状语从句”。
+
+- 名字本身含混的 role 仍显示“状语从句”，需要逐条改标注才能修：`contrastive_clause`（30 处，既有 whilst 从句也有 but 并列句）、`passive_clause`（21）、`supplementary_clause`（8）、`alternative_clause`（7）、`contrasting_clause`（5）等，共约 85 处。
+- 新增 `tests/test_reading_study_glossary.py`（7 项，已加入 CI 轻量测试列表），并重新生成 `docs/GRAMMAR_GRAPH_V0_REVIEW.md`（只有各知识点的句数变化）。
+- 标签在导入时写进数据库，所以要部署后重新导入才会在阅读页生效。
+
+### 出题器
+
+- `control_character` 预期值改为 0（原文修复后实际为 0）。
+- 新的标签会改变概念归类：新增 7 个句子带“第一层出现名词性从句”（level_one_subordinate）这条整句排除原因，其余模板统计变化都在个位数。
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 模板 | 第二轮后 | 第三轮后 |
+|---|---|---|
+| main_verb_tap | 5954 / 384 / 6388 | 5957 / 383 / 6386 |
+| clause_boundary | 4790 / 2412 / 2773 | 4793 / 2409 / 2772 |
+| clause_type_classify | 11596 / 3200 / 1412 | 11598 / 3197 / 1411 |
+| adverbial_relation | 403 / 637 / 2644 | 404 / 636 / 2643 |
+| subject_span | 5399 / 743 / 6584 | 5404 / 742 / 6580 |
+| finite_or_not | 12802 / 1575 / 6576 | 12805 / 1573 / 6574 |
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 改动句子出的题 | 17 句生成的 52 道自动通过题逐题核对，全部正确 |
+| 复抽 30 题 | 新抽查表，种子 20261023：30 道全部正确 |
+| 回归例句 | 78 项与第二轮完全一致 |
+| 可复现 | 连续两次生成逐字节一致；`review_batch_v0_2.jsonl` `710d32d4ac5a…`，`review_batch_v0_2.xlsx` `07bd14e82681…`，`generation_report_v0_2.json` `f0586841c34d…` |
+| 测试 | 只装 Flask 的 CI 列表 148 项运行（新增词汇表 7 项、修订表 3 项），1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
+| 数据 | validator 0 错误；`--check` 0 条未应用；从 raw 重建与 static 完全一致（含题目数据）；临时库先导入 main 的完整快照再导入本分支：updated=187 / skipped=130 / failed=0（59 篇数据文件有改动，另外 128 篇是标签变化） |
+| Ruff | 改动的 Python 文件通过；构建脚本仍有原有的 UP017 和格式问题（见 S4） |
+
+### 第三轮遗留
+
+- 阅读解析的难点里还记着约 88 句“原文有误、按原样保留”的说明，例如 `wax`（way）、`DINA`（DNA）、`tills`（this）、`Jiving`（living）、`chat`（that）、`ear ownership`（car）。其中一部分并不是错误（美式拼写、作者原文的语法），需要逐条判断。
+- 前两轮的原文修订没有同步改题目数据，答案依据里仍是修订前的文字（例如粘连的句子）。需要的话可以给这些修订加 `questions: true`。
+- `ielts18_test3` 的定位词数据里有一处 `more\x02knowledgeable`，不在页面上显示；它属于剑桥真题数据，不走机经修订表。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第二轮后预期 updated=56）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第三轮后预期 updated=187；词汇表标签要在部署后的新代码下导入才会生效）。

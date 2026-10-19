@@ -1,7 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 Claude 按用户决定完成第二轮：claim mat 等 30 条原文修订、14 个段首句点修复并排除、51 个多句单元处理完毕（34 个拆句、9 个改原文、7 个规则误报、1 个保留）；另修括号显示和“并列的从句”误判。第一轮修复（f9aebc7）的 Codex 复审提示已交给用户，第二轮需另行复审。未合并 main、未部署。
+> 最近更新：2026-10-19 Claude 完成第三轮：乱码（NUL）、CO₂ 下标、fagging 修原文（含题目数据），阅读页把不认识的 *_clause 一律显示成“状语从句”的问题按 role 名字修正（72 个 role、407 处）。第一轮修复（f9aebc7）的 Codex 复审提示已交给用户；第二、三轮合并复审的提示随本轮更新。未合并 main、未部署。
+
+## 2026-10-19 语法候选题 v0.2 第三轮（Claude，待复审）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第三轮”一节；逐句记录 `docs/READING_STUDY_RESPLIT_2026-10_ROUND3.md`（脚本生成）。
+- **用户决定**：乱码 6 句修掉；CO 缺下标、fagging、阅读页“问句/省略句显示成状语从句”也修。
+- **原文**：修订表 63 → 93 条（本轮 30 条）。NUL 按上下文补回（29_63_p3 五处为 `$`，84_73_p2 为逗号，另有 75_57_p2 段落和 50_30_p2 题干各一处）；29_63_p1 实际是 9 个 CO 缺下标、9 个 `2` 散落他处，统一改为 `CO2` 并删散落的 `2`，`2 to 5` 补为 `2°C to 5°C`；fagging → logging。修订表新增可选字段 `questions: true`（同时改该篇题目数据）和 `paragraph_label: null`（只在题目数据里），`scripts/reading_jijing_text_fixes.py` 与构建脚本同步支持并有测试；从 raw 重建 171 篇，段落和题目数据都与 static 一致。
+- **阅读解析**：17 句更新（含 29_63_p3 三处“元”改“美元”的翻译、过时的“必须保留”说明改写）；E-01 的 because 从句改标原因状语从句。
+- **阅读页标签**：`api/reading_study_glossary.py` 新增 `_unflavored_clause`，只改以前兜底成“状语从句”且名字能确定含义的 role（疑问句、祈使句、感叹句、省略结构、不定式、分词、动名词、名词性从句、主句、名字中间带关系词的状语从句等）；以关系词开头的 role 不变。新增 `tests/test_reading_study_glossary.py` 并加入 `.github/workflows/ci.yml` 的轻量测试列表。重新生成 `docs/GRAMMAR_GRAPH_V0_REVIEW.md`（只有句数变化）。
+- **出题器**：`control_character` 预期 0；统计变化为个位数，候选 49,901，抽查表 360 行。
+- **验证**：17 句的 52 道自动通过题逐题核对全对；种子 20261023 复抽 30 题全对；回归 78 项不变；两次生成逐字节一致。Flask-only CI 列表 148 ran / 1 skipped，Node 通过，`tests.test_reading_study` 22 通过，validator 0 错误，`--check` 0。临时库先导入 main 完整快照再导入本分支：updated=187 / skipped=130 / failed=0（59 篇数据改动 + 128 篇标签变化）。
+- **遗留待用户决定**：难点里还记着约 88 句“原文有误、按原样保留”（如 wax、DINA、tills、Jiving、chat），需逐条判断哪些真是错误；前两轮修订未同步改题目数据；约 85 处名字含混的 role（contrastive_clause 等）仍显示“状语从句”，需逐条改标注；ielts18_test3 定位词里的 `\x02`（不显示、不属机经修订表）。
+- **部署注意**：本轮改了后端 `api/reading_study_glossary.py`。标签在导入时写入数据库，必须先部署新代码、再运行 `scripts/import_reading_study.py`，预期 updated=187。
+- **仅云端会话可见**：批次与核对脚本、临时 SQLite 在会话 scratchpad，不提交。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。
+- **下一步**：Codex 复审（第一轮提示审 f9aebc7；第二、三轮用更新后的提示）→ 老师盲审 → 用户授权上线。
 
 ## 2026-10-19 语法候选题 v0.2 第二轮（Claude，待复审）
 
