@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 Claude 按 Codex 独立审核修复语法候选题 v0.2：F1–F5 已修，S1–S3 采纳，S4 不修并说明原因；另修 T3/T4 从句目标截短。修复仍由同一方自查，建议复核后再交老师。未合并 main、未部署。
+> 最近更新：2026-10-19 Codex 对 v0.2 审核修复独立复审：不通过，1 阻断、3 应修、3 建议。只审到 f9aebc7，后续 Claude 提交未合入；仅报告，未修改被审核文件，未部署。以下旧节保留为历史自查记录，其“全部修复”等结论以本次复审为准。
+
+## 2026-10-19 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md`。包含15项实际结果与命令、F1–F5/S1–S4关闭状态、30边界题+30自动通过题逐题表、19句漏网下界、双次SHA与复现方法。原审核/修复记录保持原样。
+- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，按授权fetch后 `git merge --ff-only f9aebc7`，审核HEAD **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，范围 **8f273e9..f9aebc7**。不得合入Claude此后的提交或rebase，本分支与其分叉是预期。开始/检查完成时干净，本轮只写本节、WORKLOG与新增复审报告；编写本节时待文档commit/push，随后核对远端并补CI结果。
+- **原桌面树**：`/Users/zhouxin/Desktop/studytracker` 仍是 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`；7 modified /22 untracked入口保留（路径见下方v0.1节），本轮没有写入或切分支。
+- **结论**：T6遗漏0、9例已修、6299共同T1答案不变，但3个T1干扰项越界仍auto_pass（R1阻断）；数字引语范围真实回归（R2）；新抽样坏句及19句漏网OCR（R3）；短语同规则实验为933新增降级，不能复现自查2333（R4）。F3/F4/F5/S2/S3已解决，S4兼容理由接受，F1/F2/S1不能全关闭。
+- **验证**：`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_grammar_graph_draft -v` 65 passed；新Flask-only环境完整CI列表133 ran/132 passed/1 skipped、Node exit0；5改动Python文件Ruff check及format --check（显式清空extend-exclude）通过；validator317 valid/0 errors、text fixes --check 0未应用；pip check无冲突。完整命令见报告。
+- **复现/导入**：Mac Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1CPU；f9aebc7原样导出冷/热两次四文件字节一致，JSONL/XLSX等于提交版，报告仅Python版本行差异；13条回归对象完全等于修复前且符合计划。临时SQLite先导入本次origin/main完整快照 **cc6323e0cfa85342a34711480eac9def9c3fefaf** 的代码/static/data，再导f9aebc7：updated25/skipped292/failed0，未触及真实数据库。
+- **抽查**：seed20261020；边界T3/T4各15为26明确不完整、1误降、3两可。每工作表auto_pass各5为28完整正确、1源句不适合、1高亮缺右括号；7表/360行/四项下拉/盲审格式通过并只读渲染。
+- **仅本机材料**：`/tmp/studytracker-grammar-v02-fixes-audit.GgWLmI` 含审计脚本、日志、原样源码副本、缓存、两次生成、SQLite和预览；`.venv-grammar-tools`保留。它们不提交，另一台电脑按报告方法重新生成，不应假定能访问临时目录。
+- **部署/外部状态**：未推main、未部署、未开PR、未操作生产服务器或生产库；后端/前端/小程序上传提审发布均未发生，没有大模型API调用。
+- **未验证/下一步**：教师360题审核未完成；claim mat、14段首句点、51多句单元的f9aebc7后续修复未审且未合入。实现方先处理报告R1–R4，再另行授权独立验证；本轮没有代码/原文修复授权。不要凭旧自查结论直接入库。
 
 ## 2026-10-19 语法候选题 v0.2 审核修复（Claude，待复核）
 

@@ -4,7 +4,14 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude）
+## 2026-10-19 — 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
+
+- 任务树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 的 `codex/grammar-item-candidates` 仅快进到 **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，审 `8f273e9..f9aebc7`；没有合入Claude后续提交或rebase。只新增 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md` 并更新两份交接，桌面main既有脏状态保留。
+- 1阻断、3应修、3建议：T1干扰项3题越界仍自动通过；数字引语引入真实截短回归；新抽样OCR坏句、19句漏网下界（16句44自动题）；短语同规则扩展只复现933降级、非2333。T6遗漏0、9例补齐降级、6299共同T1答案不变；F3/F4/F5/S2/S3解决，S4兼容理由接受。
+- 65测试通过；Flask-only完整CI列表133运行/132通过/1跳过，Node通过；5改动Python Ruff check/format通过；validator0错误，textfix0未应用；完整main快照到当前临时SQLite导入updated25/skipped292/failed0。Mac冷/热两次四交付逐字节一致，报告对提交版仅Python版本行不同；13回归对象与基线完全一致。seed20261020两套各30题已逐题审核；七工作表盲审格式通过。
+- 编写时三份文档待commit/push；授权只推任务分支，提交不带skip标记，随后补记CI。未改被审核代码/数据，未推main、部署、PR、生产操作或大模型API调用。临时证据只在本机；下一步处理R1–R4后再审，教师审核和Claude后续提交均未验收。
+
+## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude，历史自查）
 
 - 按 Codex 审核修完 F1–F5，采纳 S1–S3，S4 说明不修（生产 Python 3.10）。另把 T3/T4 从句目标纳入边界检查。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`。
 - 两次生成逐字节一致，复抽 30 题全部正确，CI 列表 133 项通过（1 跳过），模拟导入 updated=25。未推 main、未部署。下一步：复核修复后交老师盲审；OCR 错字 `claim mat`、14 个段首 `. `、51 个多句单元待用户决定。
