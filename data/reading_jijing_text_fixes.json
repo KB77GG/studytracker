@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "机经阅读原文的人工修订：补句间缺失的空格、改明显错字。由 build_reading_test_practice.py --source jijing 和 apply_reading_jijing_text_fixes.py 应用。",
+  "description": "机经阅读原文的人工修订：补句间缺失的空格、删段首残留句点、改明显错字。由 build_reading_test_practice.py --source jijing 和 scripts/reading_jijing_text_fixes.py 应用。",
   "fixes": [
     {
       "passage_id": "reading_jijing_10_test_78_p3",
@@ -265,6 +265,246 @@
       "find": "fuel.\"After ",
       "replace": "fuel.\" After ",
       "reason": "missing_space_between_sentences"
+    },
+    {
+      "passage_id": "reading_jijing_27_test_33_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-09",
+      "find": "claim mat the image",
+      "replace": "claim that the image",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-01",
+      "find": ". If current trends continue",
+      "replace": "If current trends continue",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": ". Despite gun battles",
+      "replace": "Despite gun battles",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": "and Galloping inflation",
+      "replace": "and galloping inflation",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-01",
+      "find": ". the prerequisites to prevent",
+      "replace": "The prerequisites to prevent",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "D",
+      "sentence_id": "D-01",
+      "find": ". Perhaps the most incisive",
+      "replace": "Perhaps the most incisive",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-01",
+      "find": ". To encourage reform",
+      "replace": "To encourage reform",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_78_test_102_p1",
+      "paragraph_label": "H",
+      "sentence_id": "H-01",
+      "find": ". These measures, he says",
+      "replace": "These measures, he says",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": ". As in New Delhi",
+      "replace": "As in New Delhi",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": "how water resources and managed",
+      "replace": "how water resources are managed",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "B",
+      "sentence_id": "B-01",
+      "find": ". That the problem is well-known",
+      "replace": "That the problem is well-known",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "C",
+      "sentence_id": "C-01",
+      "find": ". Scientists expect water scarcity",
+      "replace": "Scientists expect water scarcity",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "D",
+      "sentence_id": "D-01",
+      "find": ". Because lack of access",
+      "replace": "Because lack of access",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": ". The world's water problems",
+      "replace": "The world's water problems",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "F",
+      "sentence_id": "F-01",
+      "find": ". Much of the Americas",
+      "replace": "Much of the Americas",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "H",
+      "sentence_id": "H-01",
+      "find": ". Lots of water, but not always",
+      "replace": "Lots of water, but not always",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "paragraph_label": "I",
+      "sentence_id": "I-01",
+      "find": ". Waters run away",
+      "replace": "Waters run away",
+      "reason": "stray_leading_period"
+    },
+    {
+      "passage_id": "reading_jijing_73_test_5_p1",
+      "paragraph_label": "H",
+      "sentence_id": "H-02",
+      "find": "challenge.' Perhaps you could store the summer's heat in water somehow.",
+      "replace": "challenge. 'Perhaps you could store the summer's heat in water somehow.'",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_38_test_22_p3",
+      "paragraph_label": "G",
+      "sentence_id": "G-07",
+      "find": "commented that\"research",
+      "replace": "commented that \"research",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": "his brother. Will, were",
+      "replace": "his brother, Will, were",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_65_test_69_p2",
+      "paragraph_label": "H",
+      "sentence_id": "H-03",
+      "find": "Free Flight. James Fallows",
+      "replace": "Free Flight, James Fallows",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_69_test_40_p2",
+      "paragraph_label": "E",
+      "sentence_id": "E-04",
+      "find": "brutal months. Saving the energy",
+      "replace": "brutal months, saving the energy",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_71_test_1_p2",
+      "paragraph_label": "B",
+      "sentence_id": "B-03",
+      "find": "American ranffian saying. 'Je voudrais",
+      "replace": "American ruffian saying 'Je voudrais",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_72_test_15_p2",
+      "paragraph_label": "F",
+      "sentence_id": "F-02",
+      "find": "more friends. And who have",
+      "replace": "more friends, and who have",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_73_test_5_p3",
+      "paragraph_label": "D",
+      "sentence_id": "D-03",
+      "find": "In fact. Hooker knew",
+      "replace": "In fact, Hooker knew",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_76_test_43_p3",
+      "paragraph_label": "A",
+      "sentence_id": "A-07",
+      "find": "(\"Do\"vs. \"Don",
+      "replace": "(\"Do\" vs. \"Don",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_9_test_81_p2",
+      "paragraph_label": "A",
+      "sentence_id": "A-02",
+      "find": "environmental management. an educational",
+      "replace": "environmental management, an educational",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_9_test_81_p2",
+      "paragraph_label": "A",
+      "sentence_id": "A-02",
+      "find": "direct anil indirect",
+      "replace": "direct and indirect",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_9_test_81_p2",
+      "paragraph_label": "A",
+      "sentence_id": "A-02",
+      "find": "(Ayala. I996)",
+      "replace": "(Ayala, 1996)",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_9_test_81_p2",
+      "paragraph_label": "B",
+      "sentence_id": "B-01",
+      "find": "Queensland. Australia.",
+      "replace": "Queensland, Australia.",
+      "reason": "typo"
     }
   ]
 }

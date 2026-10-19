@@ -605,19 +605,31 @@
     },
     {
       "id": "G-07", "paragraph_label": "G", "sentence_index": 48,
-      "sentence": "A paper in a 2006 issue of Strategy & Leadership commented that\"research is not designed with managers' needs in mind, nor is it communicated in the journals they read. For the most part, it has become a self-referential closed system irrelevant to corporate performance.\"",
-      "translation": "《Strategy & Leadership》2006年的一期论文评论道：“研究在设计时并未考虑管理者的需求，也没有通过他们阅读的期刊传播。总体而言，它已成为一个自我指涉、与企业绩效无关的封闭体系。”",
+      "sentence": "A paper in a 2006 issue of Strategy & Leadership commented that \"research is not designed with managers' needs in mind, nor is it communicated in the journals they read.",
+      "translation": "《Strategy & Leadership》2006年某期的一篇论文评论道：“研究在设计时并未考虑管理者的需求，也没有通过他们阅读的期刊传播。",
       "structure": [
         {"text": "A paper in a 2006 issue of Strategy & Leadership commented", "role": "reporting_clause", "level": 1},
-        {"text": "that\"research is not designed with managers' needs in mind", "role": "reported_content", "level": 2},
-        {"text": "nor is it communicated in the journals they read", "role": "inverted_parallel_clause", "level": 2},
-        {"text": "it has become a self-referential closed system irrelevant to corporate performance", "role": "second_reported_clause", "level": 2}
+        {"text": "that \"research is not designed with managers' needs in mind", "role": "quoted_clause", "level": 2},
+        {"text": "nor is it communicated in the journals they read", "role": "inverted_parallel_clause", "level": 2}
       ],
-      "difficult_points": ["that 后引出论文评论的直接引语，原文在 that 与引号之间缺少空格。", "否定词 nor 置于句首触发部分倒装，形成 nor is it communicated。", "they read 是省略关系词的定语从句，修饰 journals；irrelevant ... 后置修饰 system。"],
-      "expressions": [{"text": "with someone's needs in mind", "meaning_zh": "考虑到某人的需求"}, {"text": "for the most part", "meaning_zh": "总体上；在很大程度上"}, {"text": "irrelevant to", "meaning_zh": "与……无关"}]
+      "difficult_points": ["commented that 后面接的是加了引号的原话：作者转述时直接引用了论文原文。", "否定词 nor 放在分句开头，后面要部分倒装，所以是 nor is it communicated。", "they read 是省略关系代词的定语从句，修饰 journals。"],
+      "expressions": [{"text": "with someone's needs in mind", "meaning_zh": "考虑到某人的需求"}, {"text": "be communicated in", "meaning_zh": "通过……传播"}]
     },
     {
-      "id": "G-08", "paragraph_label": "G", "sentence_index": 49,
+      "id": "G-07b", "paragraph_label": "G", "sentence_index": 49,
+      "sentence": "For the most part, it has become a self-referential closed system irrelevant to corporate performance.\"",
+      "translation": "总体而言，它已成为一个自我指涉的封闭体系，与企业绩效毫不相干。”",
+      "structure": [
+        {"text": "For the most part", "role": "adverbial", "level": 1},
+        {"text": "has become", "role": "linking_predicate", "level": 1},
+        {"text": "a self-referential closed system irrelevant to corporate performance", "role": "subject_complement", "level": 1},
+        {"text": "irrelevant to corporate performance", "role": "adjective_postmodifier", "level": 2}
+      ],
+      "difficult_points": ["主语 it 指上一句的 research；has become 是现在完成时，表示到目前为止已经形成的状态。", "irrelevant to corporate performance 是形容词短语，后置修饰 system，意为“与企业绩效无关的”。", "self-referential 意为“自我指涉的”，指研究只引用、回应研究本身；句末引号表示论文引语结束。"],
+      "expressions": [{"text": "for the most part", "meaning_zh": "总体上；在很大程度上"}, {"text": "irrelevant to", "meaning_zh": "与……无关"}]
+    },
+    {
+      "id": "G-08", "paragraph_label": "G", "sentence_index": 50,
       "sentence": "The AACSB demands that this segregation must change for the future of higher education.",
       "translation": "AACSB 要求，为了高等教育的未来，这种割裂局面必须改变。",
       "structure": [
@@ -629,7 +641,7 @@
       "expressions": [{"text": "the future of higher education", "meaning_zh": "高等教育的未来"}]
     },
     {
-      "id": "G-09", "paragraph_label": "G", "sentence_index": 50,
+      "id": "G-09", "paragraph_label": "G", "sentence_index": 51,
       "sentence": "If students must invest thousands of dollars for an education as part of their career path, the academics which serve the students should be more fully incorporated into the professional world.",
       "translation": "既然学生必须投入数千美元接受教育，并将其作为职业道路的一部分，那么服务学生的学者就应当更充分地融入职业世界。",
       "structure": [
@@ -642,7 +654,7 @@
       "expressions": [{"text": "invest ... for an education", "meaning_zh": "为接受教育投入……"}, {"text": "as part of", "meaning_zh": "作为……的一部分"}, {"text": "be incorporated into", "meaning_zh": "被纳入；融入"}]
     },
     {
-      "id": "G-10", "paragraph_label": "G", "sentence_index": 51,
+      "id": "G-10", "paragraph_label": "G", "sentence_index": 52,
       "sentence": "This means that universities must focus on other strengths outside of research, such as professional networks, technology skills, and connections with top business firms around the world.",
       "translation": "这意味着大学必须关注研究之外的其他优势，例如职业网络、技术技能，以及与全球顶尖企业的联系。",
       "structure": [
@@ -654,7 +666,7 @@
       "expressions": [{"text": "focus on other strengths", "meaning_zh": "关注其他优势"}, {"text": "connections with", "meaning_zh": "与……的联系"}]
     },
     {
-      "id": "G-11", "paragraph_label": "G", "sentence_index": 52,
+      "id": "G-11", "paragraph_label": "G", "sentence_index": 53,
       "sentence": "Though many universities resisted the report, today's world continues to change.",
       "translation": "尽管许多大学抵制这份报告，当今世界仍在不断变化。",
       "structure": [
@@ -666,7 +678,7 @@
       "expressions": [{"text": "resist the report", "meaning_zh": "抵制该报告"}, {"text": "continue to change", "meaning_zh": "持续变化"}]
     },
     {
-      "id": "G-12", "paragraph_label": "G", "sentence_index": 53,
+      "id": "G-12", "paragraph_label": "G", "sentence_index": 54,
       "sentence": "The universities which prepare students for our changing future have little choice but to change with new trends and new standards.",
       "translation": "那些要帮助学生为不断变化的未来做好准备的大学，几乎别无选择，只能顺应新趋势和新标准作出改变。",
       "structure": [

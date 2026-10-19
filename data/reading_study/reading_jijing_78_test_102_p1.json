@@ -9,16 +9,16 @@
   "sentences": [
     {
       "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
-      "sentence": ". Despite gun battles in the capital of Chad, rioting in Kenya, and Galloping inflation in Zimbabwe, the economies of sub-Saharan Africa are, as a whole, in better shape than they were a few years ago.",
+      "sentence": "Despite gun battles in the capital of Chad, rioting in Kenya, and galloping inflation in Zimbabwe, the economies of sub-Saharan Africa are, as a whole, in better shape than they were a few years ago.",
       "translation": "尽管乍得首都发生枪战、肯尼亚出现骚乱、津巴布韦通货膨胀迅猛，但撒哈拉以南非洲的经济总体上比几年前状况更好。",
       "structure": [
-        {"text": "Despite gun battles in the capital of Chad, rioting in Kenya, and Galloping inflation in Zimbabwe", "role": "concessive_prepositional_phrase", "level": 1},
+        {"text": "Despite gun battles in the capital of Chad, rioting in Kenya, and galloping inflation in Zimbabwe", "role": "concessive_prepositional_phrase", "level": 1},
         {"text": "the economies of sub-Saharan Africa", "role": "subject", "level": 1},
         {"text": "are, as a whole, in better shape", "role": "predicate", "level": 1},
         {"text": "as a whole", "role": "parenthetical_adverbial", "level": 2},
         {"text": "than they were a few years ago", "role": "comparison_clause", "level": 2}
       ],
-      "difficult_points": ["Despite 后接三个并列名词短语，构成让步背景。", "than 从句将当前经济状况与几年前比较；句首句点及 Galloping 的大写均为源文异常。"],
+      "difficult_points": ["Despite 后接三个并列名词短语，构成让步背景。", "than 从句将当前经济状况与几年前比较；as a whole 是插入语，意为“总体上”。"],
       "expressions": [{"text": "as a whole", "meaning_zh": "总体上"}, {"text": "in better shape", "meaning_zh": "状况更好"}]
     },
     {
@@ -119,17 +119,17 @@
     },
     {
       "id": "C-01", "paragraph_label": "C", "sentence_index": 9,
-      "sentence": ". the prerequisites to prevent the next crash are not in place, according to a World Bank study issued in January, Is Africa's Recent Growth Robust?",
+      "sentence": "The prerequisites to prevent the next crash are not in place, according to a World Bank study issued in January, Is Africa's Recent Growth Robust?",
       "translation": "世界银行一月份发布的研究《非洲近期的增长稳健吗？》指出，防止下一次崩溃的必要条件尚未具备。",
       "structure": [
-        {"text": "the prerequisites to prevent the next crash", "role": "subject", "level": 1},
+        {"text": "The prerequisites to prevent the next crash", "role": "subject", "level": 1},
         {"text": "to prevent the next crash", "role": "infinitive_postmodifier", "level": 2},
         {"text": "are not in place", "role": "predicate", "level": 1},
         {"text": "according to a World Bank study issued in January", "role": "source_adverbial", "level": 1},
         {"text": "issued in January", "role": "past_participle_postmodifier", "level": 2},
         {"text": "Is Africa's Recent Growth Robust?", "role": "study_title", "level": 2}
       ],
-      "difficult_points": ["to prevent... 修饰 prerequisites，说明这些必要条件的用途。", "Is Africa's Recent Growth Robust? 是研究标题；句首句点和小写 the 为源文异常。"],
+      "difficult_points": ["to prevent... 修饰 prerequisites，说明这些必要条件的用途。", "Is Africa's Recent Growth Robust? 是这份世界银行研究报告的标题，补充说明 study。"],
       "expressions": [{"text": "prerequisites to", "meaning_zh": "……的先决条件"}, {"text": "be in place", "meaning_zh": "已经具备"}, {"text": "according to", "meaning_zh": "根据"}]
     },
     {
@@ -195,7 +195,7 @@
     },
     {
       "id": "D-01", "paragraph_label": "D", "sentence_index": 14,
-      "sentence": ". Perhaps the most incisive analysis of the volatility question comes from Paul Collier, a longtime specialist in African economics at the University of Oxford and author of the recent book The Bottom Billion.",
+      "sentence": "Perhaps the most incisive analysis of the volatility question comes from Paul Collier, a longtime specialist in African economics at the University of Oxford and author of the recent book The Bottom Billion.",
       "translation": "对于经济波动问题，最为深刻的分析或许来自保罗·科利尔；他长期研究非洲经济，任职于牛津大学，也是新近出版的《最底层的十亿人》一书作者。",
       "structure": [
         {"text": "Perhaps the most incisive analysis of the volatility question", "role": "subject", "level": 1},
@@ -203,7 +203,7 @@
         {"text": "a longtime specialist in African economics at the University of Oxford", "role": "apposition", "level": 2},
         {"text": "and author of the recent book The Bottom Billion", "role": "coordinated_apposition", "level": 2}
       ],
-      "difficult_points": ["两个同位成分共同补充 Paul Collier 的身份。", "句首独立句点属于源文异常；The Bottom Billion 是书名。"],
+      "difficult_points": ["两个同位成分共同补充 Paul Collier 的身份。", "The Bottom Billion 是书名，紧跟在 the recent book 后面说明是哪本书。"],
       "expressions": [{"text": "incisive analysis", "meaning_zh": "深刻敏锐的分析"}, {"text": "come from", "meaning_zh": "来自"}]
     },
     {
@@ -330,7 +330,7 @@
     },
     {
       "id": "G-01", "paragraph_label": "G", "sentence_index": 24,
-      "sentence": ". To encourage reform, Collier recommends that the G8 nations agree to accept these measures as voluntary guidelines for multinationals doing business in Africa- companies, for instance, would only enter new contracts through auctions monitored by an international verification group.",
+      "sentence": "To encourage reform, Collier recommends that the G8 nations agree to accept these measures as voluntary guidelines for multinationals doing business in Africa- companies, for instance, would only enter new contracts through auctions monitored by an international verification group.",
       "translation": "为了推动改革，科利尔建议八国集团同意将这些措施作为在非洲经营的跨国公司的自愿准则；例如，企业只能通过由国际核查小组监督的拍卖来签订新合同。",
       "structure": [
         {"text": "To encourage reform", "role": "purpose_infinitive", "level": 1},
@@ -340,7 +340,7 @@
         {"text": "companies, for instance, would only enter new contracts through auctions", "role": "example_clause", "level": 2},
         {"text": "monitored by an international verification group", "role": "past_participle_postmodifier", "level": 3}
       ],
-      "difficult_points": ["To encourage... 是目的状语；that 从句说明 recommends 的内容。", "破折号后用 companies 的具体做法解释 voluntary guidelines。", "monitored by... 修饰 auctions；句首句点和 Africa 后的连字符为源文格式。"],
+      "difficult_points": ["To encourage... 是目的状语；that 从句说明 recommends 的内容。", "破折号后用 companies 的具体做法解释 voluntary guidelines。", "monitored by... 修饰 auctions；Africa 后的连字符在原文中起破折号的作用。"],
       "expressions": [{"text": "encourage reform", "meaning_zh": "推动改革"}, {"text": "voluntary guidelines", "meaning_zh": "自愿准则"}, {"text": "enter new contracts", "meaning_zh": "签订新合同"}]
     },
     {
@@ -360,7 +360,7 @@
     },
     {
       "id": "H-01", "paragraph_label": "H", "sentence_index": 26,
-      "sentence": ". These measures, he says, are more important than elevating aid levels, an approach emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono.",
+      "sentence": "These measures, he says, are more important than elevating aid levels, an approach emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono.",
       "translation": "他说，这些措施比提高援助水平更重要；提高援助正是哥伦比亚大学经济学家杰弗里·D·萨克斯以及波诺等明星活动人士所强调的方法。",
       "structure": [
         {"text": "These measures", "role": "subject", "level": 1},
@@ -370,7 +370,7 @@
         {"text": "an approach emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono", "role": "apposition", "level": 2},
         {"text": "emphasized by economist Jeffrey D. Sachs of Columbia University and celebrity activists such as Bono", "role": "past_participle_postmodifier", "level": 3}
       ],
-      "difficult_points": ["he says 是插入语；more important than 后以动名词短语作比较对象。", "an approach 同位解释 elevating aid levels；句首句点为源文异常。"],
+      "difficult_points": ["he says 是插入语；more important than 后以动名词短语作比较对象。", "an approach 同位解释 elevating aid levels。"],
       "expressions": [{"text": "elevate aid levels", "meaning_zh": "提高援助水平"}, {"text": "an approach emphasized by", "meaning_zh": "由……强调的方法"}]
     },
     {

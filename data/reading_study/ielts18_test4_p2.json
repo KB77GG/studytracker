@@ -1201,8 +1201,8 @@
       "id": "F-03",
       "paragraph_label": "F",
       "sentence_index": 25,
-      "sentence": "She has also expressed concerns that her theories are being misappropriated in schools by being conflated with the self-esteem movement: 'For me the growth mindset is a tool for learning and improvement. It's not just a vehicle for making children feel good.'",
-      "translation": "她还表达了担忧：她的理论在学校中被与自尊运动混为一谈，从而遭到误用。她说：“对我来说，成长型思维是学习和进步的工具。它不只是让孩子感觉良好的载体。”",
+      "sentence": "She has also expressed concerns that her theories are being misappropriated in schools by being conflated with the self-esteem movement: 'For me the growth mindset is a tool for learning and improvement.",
+      "translation": "她还担心，自己的理论在学校里被与自尊运动混为一谈，因而遭到误用：“对我来说，成长型思维是学习和进步的工具。",
       "structure": [
         {
           "text": "She",
@@ -1228,18 +1228,12 @@
           "text": "'For me the growth mindset is a tool for learning and improvement",
           "role": "quoted_clause",
           "level": 2
-        },
-        {
-          "text": "It's not just a vehicle for making children feel good",
-          "role": "quoted_clause",
-          "level": 2
         }
       ],
       "difficult_points": [
-        "concerns 后的 that 从句说明她担忧的具体内容。",
-        "are being misappropriated 是现在进行时被动语态，强调她认为误用正在发生。",
-        "by being conflated with 表示误用的方式，即被与自尊运动混同。",
-        "冒号后的两句直接引语解释她眼中成长型思维的真正用途。"
+        "concerns 后的 that 从句是同位语从句，说明她担忧的具体内容。",
+        "are being misappropriated 是现在进行时的被动语态，强调误用正在发生；by being conflated with 说明误用的方式。",
+        "冒号后引出她本人的话，这段引语到下一句末尾才结束。"
       ],
       "expressions": [
         {
@@ -1253,17 +1247,47 @@
         {
           "text": "a tool for learning and improvement",
           "meaning_zh": "学习和进步的工具"
+        }
+      ]
+    },
+    {
+      "id": "F-03b",
+      "paragraph_label": "F",
+      "sentence_index": 26,
+      "sentence": "It's not just a vehicle for making children feel good.'",
+      "translation": "它并不只是让孩子自我感觉良好的手段。”",
+      "structure": [
+        {
+          "text": "a vehicle for making children feel good",
+          "role": "subject_complement",
+          "level": 1
         },
+        {
+          "text": "making children feel good",
+          "role": "gerund_phrase",
+          "level": 2
+        }
+      ],
+      "difficult_points": [
+        "It 指上一句的 growth mindset；It's 是 It is 的缩写，not just 意为“不只是”。",
+        "making children feel good 是动名词短语作 for 的宾语；make + 宾语 + 动词原形 表示“使……”。",
+        "句末单引号表示她的引语到此结束。"
+      ],
+      "expressions": [
         {
           "text": "a vehicle for",
           "meaning_zh": "……的载体；手段"
+        },
+        {
+          "text": "make sb feel good",
+          "meaning_zh": "让某人感觉良好"
         }
       ]
     },
     {
       "id": "G-01",
       "paragraph_label": "G",
-      "sentence_index": 26,
+      "sentence_index": 27,
       "sentence": "But there is another factor at work here.",
       "translation": "但这里还有另一个因素在起作用。",
       "structure": [
@@ -1302,7 +1326,7 @@
     {
       "id": "G-02",
       "paragraph_label": "G",
-      "sentence_index": 27,
+      "sentence_index": 28,
       "sentence": "The failure to translate the growth mindset into the classroom might reflect a misunderstanding of the nature of teaching and learning itself.",
       "translation": "未能把成长型思维转化到课堂实践中，可能反映了对教学与学习本质本身的误解。",
       "structure": [
@@ -1351,7 +1375,7 @@
     {
       "id": "G-03",
       "paragraph_label": "G",
-      "sentence_index": 28,
+      "sentence_index": 29,
       "sentence": "Growth mindset supporters David Yeager and Gregory Walton claim that interventions should be delivered in a subtle way to maximise their effectiveness.",
       "translation": "成长型思维的支持者大卫·耶格和格雷戈里·沃尔顿声称，干预应以微妙的方式实施，以最大化其效果。",
       "structure": [
@@ -1396,7 +1420,7 @@
     {
       "id": "G-04",
       "paragraph_label": "G",
-      "sentence_index": 29,
+      "sentence_index": 30,
       "sentence": "They say that if adolescents perceive a teacher's intervention as conveying that they are in need of help, this could undo its intended effects.",
       "translation": "他们说，如果青少年把教师的干预理解为在传达他们需要帮助的信息，这可能会抵消干预原本想达到的效果。",
       "structure": [
@@ -1455,7 +1479,7 @@
     {
       "id": "H-01",
       "paragraph_label": "H",
-      "sentence_index": 30,
+      "sentence_index": 31,
       "sentence": "A lot of what drives students is their innate beliefs and how they perceive themselves.",
       "translation": "驱动学生的很大一部分因素，是他们内在的信念以及他们如何看待自己。",
       "structure": [
@@ -1509,7 +1533,7 @@
     {
       "id": "H-02",
       "paragraph_label": "H",
-      "sentence_index": 31,
+      "sentence_index": 32,
       "sentence": "There is a strong correlation between self-perception and achievement, but there is evidence to suggest that the actual effect of achievement on self-perception is stronger than the other way round.",
       "translation": "自我认知与成就之间存在很强的相关性，但有证据表明，成就对自我认知的实际影响比反过来的影响更强。",
       "structure": [
@@ -1563,7 +1587,7 @@
     {
       "id": "H-03",
       "paragraph_label": "H",
-      "sentence_index": 32,
+      "sentence_index": 33,
       "sentence": "To stand up in a classroom and successfully deliver a good speech is a genuine achievement, and that is likely to be more powerfully motivating than vague notions of 'motivation' itself.",
       "translation": "站在教室里并成功发表一场出色演讲，本身就是一项真正的成就，而这很可能比“动机”本身这种模糊概念更能激励人。",
       "structure": [
@@ -1612,7 +1636,7 @@
     {
       "id": "I-01",
       "paragraph_label": "I",
-      "sentence_index": 33,
+      "sentence_index": 34,
       "sentence": "Recent evidence would suggest that growth mindset interventions are not the elixir of student learning that its proponents claim it to be.",
       "translation": "近期证据似乎表明，成长型思维干预并不是其支持者所声称的学生学习灵丹妙药。",
       "structure": [
@@ -1657,7 +1681,7 @@
     {
       "id": "I-02",
       "paragraph_label": "I",
-      "sentence_index": 34,
+      "sentence_index": 35,
       "sentence": "The growth mindset appears to be a viable construct in the lab, which, when administered in the classroom via targeted interventions, doesn't seem to work.",
       "translation": "成长型思维在实验室中似乎是一个可行的理论构念，但当它通过有针对性的干预被应用于课堂时，似乎并不起作用。",
       "structure": [
@@ -1711,7 +1735,7 @@
     {
       "id": "I-03",
       "paragraph_label": "I",
-      "sentence_index": 35,
+      "sentence_index": 36,
       "sentence": "It is hard to dispute that having faith in the capacity to change is a good attribute for students.",
       "translation": "很难否认，相信自己有改变的能力对学生来说是一种良好品质。",
       "structure": [
@@ -1760,7 +1784,7 @@
     {
       "id": "I-04",
       "paragraph_label": "I",
-      "sentence_index": 36,
+      "sentence_index": 37,
       "sentence": "Paradoxically, however, that aspiration is not well served by direct interventions that try to instil it.",
       "translation": "然而，矛盾的是，试图灌输这种信念的直接干预并不能很好地服务于这一愿望。",
       "structure": [
@@ -1819,7 +1843,7 @@
     {
       "id": "J-01",
       "paragraph_label": "J",
-      "sentence_index": 37,
+      "sentence_index": 38,
       "sentence": "Motivational posters and talks are often a waste of time, and might well give students a deluded notion of what success actually means.",
       "translation": "励志海报和演讲往往是在浪费时间，而且很可能会让学生对成功真正意味着什么产生一种误导性的认识。",
       "structure": [
@@ -1873,7 +1897,7 @@
     {
       "id": "J-02",
       "paragraph_label": "J",
-      "sentence_index": 38,
+      "sentence_index": 39,
       "sentence": "Teaching concrete skills such as how to write an effective introduction to an essay then praising students' effort in getting there is probably a far better way of improving confidence than telling them how unique they are, or indeed how capable they are of changing their own brains.",
       "translation": "教授具体技能，例如如何为一篇文章写出有效的引言，然后表扬学生在做到这一点过程中付出的努力，可能比告诉他们自己多么独特，或者说多么有能力改变自己的大脑，更能提升信心。",
       "structure": [
@@ -1936,7 +1960,7 @@
     {
       "id": "J-03",
       "paragraph_label": "J",
-      "sentence_index": 39,
+      "sentence_index": 40,
       "sentence": "Perhaps growth mindset works best as a philosophy and not an intervention.",
       "translation": "也许成长型思维作为一种理念时效果最好，而不是作为一种干预手段。",
       "structure": [

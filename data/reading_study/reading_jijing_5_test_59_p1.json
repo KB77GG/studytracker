@@ -9,16 +9,16 @@
   "sentences": [
     {
       "id": "A-01", "paragraph_label": "A", "sentence_index": 1,
-      "sentence": "In 1894 Dr John Kellogg and his brother. Will, were supervising a hospital and health spa in Michigan.",
+      "sentence": "In 1894 Dr John Kellogg and his brother, Will, were supervising a hospital and health spa in Michigan.",
       "translation": "1894年，约翰·凯洛格博士和他的弟弟威尔当时正在管理密歇根州的一家医院兼健康疗养中心。",
       "structure": [
         {"text": "In 1894", "role": "time_adverbial", "level": 1},
-        {"text": "Dr John Kellogg and his brother. Will", "role": "subject", "level": 1},
+        {"text": "Dr John Kellogg and his brother, Will", "role": "subject", "level": 1},
         {"text": "were supervising", "role": "verb_phrase", "level": 1},
         {"text": "a hospital and health spa", "role": "object", "level": 1},
         {"text": "in Michigan", "role": "prepositional_phrase", "level": 1}
       ],
-      "difficult_points": ["原文在 brother 后误用了句号，Will 实际是对 his brother 的同位说明。", "were supervising 使用过去进行时，交代当时持续进行的管理工作。"],
+      "difficult_points": ["Will 是 his brother 的同位语，用两个逗号隔开，说明弟弟的名字。", "were supervising 使用过去进行时，交代当时持续进行的管理工作。"],
       "expressions": [{"text": "health spa", "meaning_zh": "健康疗养中心"}]
     },
     {

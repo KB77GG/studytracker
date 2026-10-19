@@ -57,12 +57,19 @@ class RepositoryStateTest(unittest.TestCase):
         self.assertEqual(fixes_mod.patch_static_files(fixes, write=False), 0)
 
     def test_fix_reasons_are_known(self):
-        reasons = {"missing_space_between_sentences", "missing_space", "typo"}
+        reasons = {
+            "missing_space_between_sentences",
+            "missing_space",
+            "stray_leading_period",
+            "typo",
+        }
         for passage_fixes in fixes_mod.load_fixes().values():
             for fix in passage_fixes:
                 with self.subTest(fix=fix["find"]):
                     self.assertIn(fix["reason"], reasons)
                     self.assertNotEqual(fix["find"], fix["replace"])
+                    # Otherwise an applied fix still matches and a rerun applies it twice.
+                    self.assertNotIn(fix["find"], fix["replace"])
 
 
 if __name__ == "__main__":

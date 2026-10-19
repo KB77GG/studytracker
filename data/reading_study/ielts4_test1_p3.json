@@ -324,16 +324,36 @@
       "id": "I-31",
       "paragraph_label": "I",
       "sentence_index": 31,
-      "sentence": "For example, we asked: What goes with soft? A circle or a square? Which shape goes with hard?",
-      "translation": "例如，我们问道：“什么与 soft（柔软）相配？圆形还是方形？哪种形状与 hard（坚硬）相配？”",
-      "structure": [{"text": "For example", "role": "parenthesis", "level": 1}, {"text": "we asked", "role": "main_clause", "level": 1}, {"text": "What goes with soft?", "role": "direct_question", "level": 2}, {"text": "A circle or a square?", "role": "alternative_question", "level": 2}, {"text": "Which shape goes with hard?", "role": "direct_question", "level": 2}],
-      "difficult_points": ["冒号后的三个问句是对实验任务的直接示例。", "go with 在此表示“与……相配、联系起来”。"],
+      "sentence": "For example, we asked: What goes with soft?",
+      "translation": "例如，我们问道：什么和 soft（柔软）相配？",
+      "structure": [{"text": "For example", "role": "parenthesis", "level": 1}, {"text": "we asked", "role": "main_clause", "level": 1}, {"text": "What goes with soft?", "role": "quoted_question", "level": 2}],
+      "difficult_points": ["冒号后直接给出实验中提出的问题，没有加引号。", "What goes with soft? 中 what 作主语，go with 表示“与……相配、联系起来”。"],
       "expressions": [{"text": "for example", "meaning_zh": "例如"}, {"text": "go with", "meaning_zh": "与……相配；与……联系"}]
+    },
+    {
+      "id": "I-31b",
+      "paragraph_label": "I",
+      "sentence_index": 32,
+      "sentence": "A circle or a square?",
+      "translation": "圆形还是方形？",
+      "structure": [{"text": "A circle or a square?", "role": "quoted_question", "level": 1}],
+      "difficult_points": ["这是省略的选择疑问句，完整说法是 Is it a circle or a square?", "它承接上一问，给出可以与 soft 相配的两个选项。"],
+      "expressions": []
+    },
+    {
+      "id": "I-31c",
+      "paragraph_label": "I",
+      "sentence_index": 33,
+      "sentence": "Which shape goes with hard?",
+      "translation": "哪种形状和 hard（坚硬）相配？",
+      "structure": [{"text": "Which shape", "role": "subject", "level": 1}, {"text": "goes with", "role": "verb_phrase", "level": 1}, {"text": "hard", "role": "object", "level": 1}],
+      "difficult_points": ["Which shape 是疑问词 which 修饰名词作主语，所以直接用陈述语序 goes with。", "这一问与第一问相对，把 soft 换成了 hard。"],
+      "expressions": []
     },
     {
       "id": "J-32",
       "paragraph_label": "J",
-      "sentence_index": 32,
+      "sentence_index": 34,
       "sentence": "All our subjects deemed the circle soft and the square hard.",
       "translation": "我们所有的受试者都认为圆形柔软、方形坚硬。",
       "structure": [{"text": "All our subjects", "role": "subject", "level": 1}, {"text": "deemed", "role": "verb_phrase", "level": 1}, {"text": "the circle soft and the square hard", "role": "object_complement", "level": 1}],
@@ -343,7 +363,7 @@
     {
       "id": "J-33",
       "paragraph_label": "J",
-      "sentence_index": 33,
+      "sentence_index": 35,
       "sentence": "A full 94% ascribed happy to the circle, instead of sad.",
       "translation": "整整94%的受试者把 happy（快乐）归给圆形，而不是 sad（悲伤）。",
       "structure": [{"text": "A full 94%", "role": "subject", "level": 1}, {"text": "ascribed happy to the circle", "role": "verb_phrase", "level": 1}, {"text": "instead of sad", "role": "prepositional_phrase", "level": 1}],
@@ -353,7 +373,7 @@
     {
       "id": "J-34",
       "paragraph_label": "J",
-      "sentence_index": 34,
+      "sentence_index": 36,
       "sentence": "But other pairs revealed less agreement: 79% matched fast to slow and weak to strong, respectively.",
       "translation": "但其他词对显示出较少的一致性：79%的受试者分别把 fast 与 slow、weak 与 strong 配对。",
       "structure": [{"text": "But", "role": "conjunctive_adverb", "level": 1}, {"text": "other pairs", "role": "subject", "level": 1}, {"text": "revealed", "role": "verb_phrase", "level": 1}, {"text": "less agreement", "role": "object", "level": 1}, {"text": "79% matched fast to slow and weak to strong, respectively", "role": "explanation", "level": 1}],
@@ -363,7 +383,7 @@
     {
       "id": "J-35",
       "paragraph_label": "J",
-      "sentence_index": 35,
+      "sentence_index": 37,
       "sentence": "And only 51% linked deep to circle and shallow to square.",
       "translation": "而只有51%的受试者把 deep 与圆形、shallow 与方形联系起来。",
       "structure": [{"text": "And only 51%", "role": "subject", "level": 1}, {"text": "linked deep to circle and shallow to square", "role": "verb_phrase", "level": 1}],
@@ -373,7 +393,7 @@
     {
       "id": "J-36",
       "paragraph_label": "J",
-      "sentence_index": 36,
+      "sentence_index": 38,
       "sentence": "(See Fig. 2.)",
       "translation": "（见图2。）",
       "structure": [{"text": "(See Fig. 2.)", "role": "parenthesis", "level": 1}],
@@ -383,7 +403,7 @@
     {
       "id": "J-37",
       "paragraph_label": "J",
-      "sentence_index": 37,
+      "sentence_index": 39,
       "sentence": "When we tested four totally blind volunteers using the same list, we found that their choices closely resembled those made by the sighted subjects.",
       "translation": "当我们用同一份清单测试四名完全失明的志愿者时，发现他们的选择与视力正常受试者所做的选择非常相似。",
       "structure": [{"text": "When we tested four totally blind volunteers using the same list", "role": "adverbial_clause", "level": 1}, {"text": "using the same list", "role": "participial_phrase", "level": 2}, {"text": "we", "role": "subject", "level": 1}, {"text": "found", "role": "verb_phrase", "level": 1}, {"text": "that their choices closely resembled those made by the sighted subjects", "role": "that_clause", "level": 2}, {"text": "made by the sighted subjects", "role": "participial_phrase", "level": 3}],
@@ -393,7 +413,7 @@
     {
       "id": "J-38",
       "paragraph_label": "J",
-      "sentence_index": 38,
+      "sentence_index": 40,
       "sentence": "One man, who had been blind since birth, scored extremely well.",
       "translation": "其中一名男子从出生起就失明，但他的得分非常好。",
       "structure": [{"text": "One man", "role": "subject", "level": 1}, {"text": "who had been blind since birth", "role": "relative_clause", "level": 2}, {"text": "scored extremely well", "role": "verb_phrase", "level": 1}],
@@ -403,7 +423,7 @@
     {
       "id": "J-39",
       "paragraph_label": "J",
-      "sentence_index": 39,
+      "sentence_index": 41,
       "sentence": "He made only one match differing from the consensus, assigning \"far\" to square and \"near\" to circle.",
       "translation": "他只有一组配对不同于多数人的共识：把“远”配给方形，把“近”配给圆形。",
       "structure": [{"text": "He", "role": "subject", "level": 1}, {"text": "made only one match differing from the consensus", "role": "verb_phrase", "level": 1}, {"text": "differing from the consensus", "role": "participial_phrase", "level": 2}, {"text": "assigning \"far\" to square and \"near\" to circle", "role": "participial_phrase", "level": 2}],
@@ -413,7 +433,7 @@
     {
       "id": "J-40",
       "paragraph_label": "J",
-      "sentence_index": 40,
+      "sentence_index": 42,
       "sentence": "In fact, only a small majority of sighted subjects – 53% – had paired far and near to the opposite partners.",
       "translation": "事实上，只有一小部分多数派视力正常受试者——53%——把 far 和 near 配给了相反的图形。",
       "structure": [{"text": "In fact", "role": "conjunctive_adverb", "level": 1}, {"text": "only a small majority of sighted subjects", "role": "subject", "level": 1}, {"text": "53%", "role": "parenthesis", "level": 2}, {"text": "had paired far and near to the opposite partners", "role": "verb_phrase", "level": 1}],
@@ -423,7 +443,7 @@
     {
       "id": "J-41",
       "paragraph_label": "J",
-      "sentence_index": 41,
+      "sentence_index": 43,
       "sentence": "Thus, we concluded that the blind interpret abstract shapes as sighted people do.",
       "translation": "因此，我们得出结论：盲人对抽象图形的理解方式与视力正常者相同。",
       "structure": [{"text": "Thus", "role": "conjunctive_adverb", "level": 1}, {"text": "we", "role": "subject", "level": 1}, {"text": "concluded", "role": "verb_phrase", "level": 1}, {"text": "that the blind interpret abstract shapes as sighted people do", "role": "that_clause", "level": 2}, {"text": "as sighted people do", "role": "comparative_clause", "level": 3}],
