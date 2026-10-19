@@ -21,6 +21,7 @@
 | 原文修订表 | 93 → 641 条（本轮 548 条；282 条同时改题目数据，10 条是段末补句号） |
 | 不改原文、改写说明 | 119（不是错误 20、原文分段或句末标点 12、作者原文的语法或用词 70、无法确定 17） |
 | 记下但不改（说明已清楚） | 18 |
+| 追加修订（第七节） | 2 句、2 处；修订表再加 2 条，共 643 条 |
 
 ## 一、改原文
 
@@ -611,7 +612,7 @@
 | 48_21_p3 | F-01 | What is the reaction of glacier region? | glacier region 前通常加冠词 the，或用复数 glacier regions。 |
 | 48_21_p3 | G-01 | The latest research result of National Institute of Water and Atmospheric (NIWA) Research shows that glaciers line keeps moving up because of the impacts of global warming. | glaciers line 通常写作 the glacier line；机构全称是 National Institute of Water and Atmospheric Research（NIWA）。 |
 | 48_21_p3 | H-02 | The trend of sea level rise will bring a threat to the groundwater system for its hyper-saline groundwater and then pose a possibility to decrease the agricultural production. | its 的指代和 pose a possibility to decrease 的搭配都不自然，大意是海平面上升可能使农业减产。 |
-| 50_30_p2 | F-03 | The former is a specialist, catching 30,000 or so seeds in scattered locations that it will recover over the months of winter, the Mexican jay will also cache food but is much less dependent upon this than the nutcracker. | 前后两个独立分句之间只用逗号连接，规范写法应用分号或句号隔开。 |
+| 50_30_p2 | F-03 | The former is a specialist, caching 30,000 or so seeds in scattered locations that it will recover over the months of winter, the Mexican jay will also cache food but is much less dependent upon this than the nutcracker. | 前后两个独立分句之间只用逗号连接，规范写法应用分号或句号隔开。 |
 | 50_30_p3 | B-03 | Banks want a quick sell on these places, Janet says. | a quick sell 在此指快速出售，更常见的说法是 a quick sale。 |
 | 53_83_p1 | C-01 | M-Pesa's is simple. | M-Pesa's 后省略了名词（如 system），意思是 M-Pesa 的操作方式很简单。 |
 | 53_83_p3 | D-04 | If manufactured locally, the cost of his LED lamp could plummet to $22, as they will not incur heavy import duties. | as 引导原因状语从句；they 泛指本地生产的灯，与前面的单数 lamp 不一致。 |
@@ -685,5 +686,14 @@
 | 78_102_p3 | C-05 | dubbed RE 处截断 |
 | 92_58_p2 | H-01 | 小标题与正文连在一句（出题器按 heading 排除） |
 
-另外，抽查中看到 `50_30_p2` F-02、F-03 的 `catching` 按语境应为 `caching`（贮藏种子），难点里没有记录，本轮未改。
+## 七、追加修订
+
+抽查中看到 `50_30_p2` F 段的 `catching` 按语境应为 `caching`（贮藏种子；同句后文 `cache food`、G 段 `cacher`、`caches` 都是这个词），难点里原来没有记录。用户看过清单后决定一并修改。
+
+| 文章 | 句子 | 改动 | 类别 |
+|---|---|---|---|
+| 50_30_p2 | F-02 | `seed catching behavior` → `seed caching behavior` | 错字 |
+| 50_30_p2 | F-03 | `specialist, catching` → `specialist, caching` | 错字 |
+
+两条都同时改题目数据（11 个引用原句的字符串）。题目数据里定位词的同义词 `catching` 是单独一个词，修订表的替换窗口至少两个词，没有改；这类同义词不在页面显示，见修订记录第四轮遗留。阅读解析：F-02 增加表达 seed caching behavior，F-03 改写难点第 1 条；F-03 两个独立分句用逗号连接的问题仍按第四节保留。
 

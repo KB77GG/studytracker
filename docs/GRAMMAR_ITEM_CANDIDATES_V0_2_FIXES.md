@@ -225,6 +225,7 @@
 | 新字段 `at_end` | 段末缺句号无法用现有机制表达（`find` 必然包含在 `replace` 里，重跑会重复追加）。新增可选字段 `at_end: true`：只替换段落末尾的 `find`，段落已经以 `replace` 结尾时跳过，与 `questions` 互斥。`scripts/reading_jijing_text_fixes.py` 加了 3 项测试；修订表测试的原因白名单加入 `punctuation` |
 | 题目数据 | 修订窗口自动扩展到段内唯一、至少两个词，并要求在题目数据里只出现在词边界上，避免 `lor → for` 之类误改 `color`。题目数据共 1,065 个字符串改动（332 种不同改动）逐条核对，都是预期的替换 |
 | static | 42 个机经文件更新；`--check` 0；从 raw 重建 171 篇，段落和题目数据都与 static 完全一致 |
+| 追加 | 用户看过清单后决定把 `50_30_p2` F-02、F-03 的 `catching` 改为 `caching`（清单第七节）：修订表再加 2 条，共 643 条，都同时改题目数据（11 个字符串）；阅读解析同步这两句。交付文件只有报告里的语料哈希变化，题目统计和抽查表不变 |
 
 ### 阅读解析
 
@@ -261,7 +262,7 @@
 | 改动句子出的题 | 第一、二组 140 句的 449 道新 auto_pass、第三组 66 句的 208 道新 auto_pass 逐题核对；发现的 5 道错题全部来自上面两处存量问题，规则修正后已降级，其余全部正确 |
 | 复抽 30 题 | 种子 20261025、20261026 各抽 30 道 auto_pass，全部正确 |
 | 回归例句 | 78 项状态和原因与第三轮一致；76_43_p2 H-02 因原文 `high- rise` 改为 `high-rise`，偏移量和题号变化 |
-| 可复现 | 规则改完后连续两次生成，四份交付文件和全量候选池逐字节一致；`review_batch_v0_2.jsonl` `0c727e740e89…`，`review_batch_v0_2.xlsx` `3fa09b550cfc…`，`generation_report_v0_2.json` `e2560a6cfc07…` |
+| 可复现 | 规则改完后连续两次生成，四份交付文件和全量候选池逐字节一致；`review_batch_v0_2.jsonl` `0c727e740e89…`，`review_batch_v0_2.xlsx` `3fa09b550cfc…`，`generation_report_v0_2.json` `ad5178ea7a54…`（追加 catching 修订后） |
 | 测试 | 只装 Flask 的 CI 列表 153 项运行、1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过；出题器、修订表、词汇表、知识图谱测试 85 项通过 |
 | 数据 | validator 0 错误；`--check` 0；从 raw 重建与 static 完全一致；临时库先导入 main 的完整快照再导入本分支：updated=227 / skipped=90 / failed=0（133 篇数据文件与 main 不同，另外 94 篇只是标签变化） |
 | Ruff | 改动的 Python 文件 check 和 format 通过 |
@@ -270,7 +271,8 @@
 
 - 第一、二轮的 63 条原文修订仍没有 `questions: true`，题目数据里的答案依据还是修订前的文字。
 - 名字含混的 role（`contrastive_clause` 等约 85 处）仍显示“状语从句”。
-- 清单第五、六节的句子疑有错误但无法确定，保留原文；`50_30_p2` F-02、F-03 的 `catching`（应为 caching）难点里没有记录，未改。
+- 清单第五、六节的句子疑有错误但无法确定，保留原文。
+- 题目数据里定位词的同义词（`locating_words` 的 `synonym`，多为单个词）有 10 处仍是修订前的写法：`1070s`、`coee`、`stablize`、`Green Peace`、`Refer-ence`、`unsuccessfull`、`hypothrsie…`、`may be you`、`Street Angel(1937)`、`catching`。修订表的替换窗口至少两个词，改不到这些单词；后端和小程序都不读取这个字段，页面不显示。
 - 修订和改写由同一方完成并自查，需要独立复审。
 
 ## 线上状态
