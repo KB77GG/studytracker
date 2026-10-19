@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "机经阅读原文的人工修订：补句间缺失的空格、删段首残留句点、改明显错字。由 build_reading_test_practice.py --source jijing 和 scripts/reading_jijing_text_fixes.py 应用。",
+  "description": "机经阅读原文的人工修订：补句间缺失的空格、删段首残留句点、补回转码丢失的字符、改明显错字；questions 为 true 时同时修改该篇题目数据里引用的相同文字，paragraph_label 为 null 表示只出现在题目数据里。由 build_reading_test_practice.py --source jijing 和 scripts/reading_jijing_text_fixes.py 应用。",
   "fixes": [
     {
       "passage_id": "reading_jijing_10_test_78_p3",
@@ -505,6 +505,276 @@
       "find": "Queensland. Australia.",
       "replace": "Queensland, Australia.",
       "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-03",
+      "find": "carbon dioxide (CO ) every year",
+      "replace": "carbon dioxide (CO2) every year",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-03",
+      "find": "agriculture, 2 say some scientists",
+      "replace": "agriculture, say some scientists",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-05",
+      "find": "CO is a greenhouse gas",
+      "replace": "CO2 is a greenhouse gas",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-06",
+      "find": "2 It has accumulated",
+      "replace": "It has accumulated",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-01",
+      "find": "atmospheric CO concentrations to double",
+      "replace": "atmospheric CO2 concentrations to double",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-02",
+      "find": "enough 2 to raise global temperatures by around 2 to 5.",
+      "replace": "enough to raise global temperatures by around 2°C to 5°C.",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-01",
+      "find": "half of the CO we produce",
+      "replace": "half of the CO2 we produce",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-02",
+      "find": "atmospheric CO has doubled since 2001, suggesting 2 that",
+      "replace": "atmospheric CO2 has doubled since 2001, suggesting that",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-02",
+      "find": "could now be 2 stretched",
+      "replace": "could now be stretched",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-03",
+      "find": "natural CO \"sinks\"",
+      "replace": "natural CO2 \"sinks\"",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "E",
+      "sentence_id": "E-03",
+      "find": "starting to release 2\nCO . 2",
+      "replace": "starting to release CO2.",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-04",
+      "find": "cut CO emissions",
+      "replace": "cut CO2 emissions",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-04",
+      "find": "atmospheric CO concentrations--and thus 2 temperatures",
+      "replace": "atmospheric CO2 concentrations--and thus temperatures",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": "G",
+      "sentence_id": "G-05",
+      "find": "hot our 2 future world",
+      "replace": "hot our future world",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "thus  2 temperatures",
+      "replace": "thus temperatures",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "atmospheric CO concentrations",
+      "replace": "atmospheric CO2 concentrations",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "Peat bogs never release CO . 2",
+      "replace": "Peat bogs never release CO2.",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "natural CO 'sinks'",
+      "replace": "natural CO2 'sinks'",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "actually starting to release 2",
+      "replace": "actually starting to release CO2.",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "hot our  2 future",
+      "replace": "hot our future",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": "A",
+      "sentence_id": "A-02",
+      "find": "yuan (\u00001.9 trillion)",
+      "replace": "yuan ($1.9 trillion)",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": "A",
+      "sentence_id": "A-03",
+      "find": "Some\u0000265 billion",
+      "replace": "Some $265 billion",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": "F",
+      "sentence_id": "F-02",
+      "find": "to \u000090 billion in 2005",
+      "replace": "to $90 billion in 2005",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": "F",
+      "sentence_id": "F-04",
+      "find": "triple to \u0000300 billion",
+      "replace": "triple to $300 billion",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": "G",
+      "sentence_id": "G-02",
+      "find": "another \u0000220 billion",
+      "replace": "another $220 billion",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_29_test_63_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "more than\u0000300 billion",
+      "replace": "more than $300 billion",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_84_test_73_p2",
+      "paragraph_label": "C",
+      "sentence_id": "C-17",
+      "find": "to 18\u0000British children",
+      "replace": "to 18, British children",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_75_test_57_p2",
+      "paragraph_label": "I",
+      "sentence_id": null,
+      "find": "1989\u0000and 1993 .",
+      "replace": "1989 and 1993.",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_50_test_30_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "rats\u0000learning",
+      "replace": "rats' learning",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_83_test_95_p2",
+      "paragraph_label": "D",
+      "sentence_id": "D-04",
+      "find": "cattle ranching, fagging, oil",
+      "replace": "cattle ranching, logging, oil",
+      "reason": "typo",
+      "questions": true
     }
   ]
 }

@@ -50,6 +50,41 @@ class ApplyFixTest(unittest.TestCase):
         self.assertEqual(paragraphs[0]["text"], 'as these." Manufacturers')
 
 
+class QuestionFixTest(unittest.TestCase):
+    """Fixes marked "questions" also edit the passage's quoted question data."""
+
+    FIX = {**FIX, "find": "(\x001.9", "replace": "($1.9", "questions": True}
+
+    def groups(self):
+        return [
+            {"title": "t (\x001.9 trillion)", "questions": [{"central_sentences": ["(\x001.9 x"]}]}
+        ]
+
+    def test_paragraph_and_question_copies_are_fixed(self):
+        paragraphs, groups = [{"label": "A", "text": "yuan (\x001.9 trillion)"}], self.groups()
+        changed = fixes_mod.apply_passage_fixes("p1", paragraphs, {"p1": [self.FIX]}, groups)
+        self.assertEqual(changed, 1)
+        self.assertEqual(paragraphs[0]["text"], "yuan ($1.9 trillion)")
+        self.assertEqual(groups[0]["title"], "t ($1.9 trillion)")
+        self.assertEqual(groups[0]["questions"][0]["central_sentences"], ["($1.9 x"])
+        again = fixes_mod.apply_passage_fixes("p1", paragraphs, {"p1": [self.FIX]}, groups)
+        self.assertEqual(again, 0)
+
+    def test_question_only_fix(self):
+        fix = {**self.FIX, "paragraph_label": None}
+        groups = self.groups()
+        self.assertEqual(fixes_mod.apply_passage_fixes("p1", [], {"p1": [fix]}, groups), 1)
+        self.assertEqual(fixes_mod.apply_passage_fixes("p1", [], {"p1": [fix]}, groups), 0)
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_passage_fixes("p1", [], {"p1": [fix]}, [{"title": "unrelated"}])
+
+    def test_fix_without_questions_flag_leaves_question_data(self):
+        paragraphs, groups = [{"label": "A", "text": "yuan (\x001.9 trillion)"}], self.groups()
+        fix = {key: value for key, value in self.FIX.items() if key != "questions"}
+        fixes_mod.apply_passage_fixes("p1", paragraphs, {"p1": [fix]}, groups)
+        self.assertEqual(groups, self.groups())
+
+
 class RepositoryStateTest(unittest.TestCase):
     def test_every_fix_is_applied_to_static_files(self):
         fixes = fixes_mod.load_fixes()
@@ -61,6 +96,7 @@ class RepositoryStateTest(unittest.TestCase):
             "missing_space_between_sentences",
             "missing_space",
             "stray_leading_period",
+            "lost_character",
             "typo",
         }
         for passage_fixes in fixes_mod.load_fixes().values():

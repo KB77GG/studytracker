@@ -668,11 +668,16 @@
       "id": "C-17",
       "paragraph_label": "C",
       "sentence_index": 17,
-      "sentence": "From age six to 18\u0000British children received, on average, 106 minutes of PE a week.",
+      "sentence": "From age six to 18, British children received, on average, 106 minutes of PE a week.",
       "translation": "从6岁到18岁，英国儿童平均每周只能上106分钟的体育课。",
       "structure": [
         {
-          "text": "From age six to 18\u0000British children",
+          "text": "From age six to 18",
+          "role": "prepositional_phrase",
+          "level": 1
+        },
+        {
+          "text": "British children",
           "role": "subject",
           "level": 1
         },
