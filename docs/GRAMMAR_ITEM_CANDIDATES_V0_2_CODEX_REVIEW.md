@@ -364,8 +364,12 @@ Flask-only 环境除 pip 自带组件外仅安装 Flask 及其传递依赖，缺
 4. 第 12 项在 e8019c2 的原样临时导出副本生成，以满足只读边界；环境、输入、源码与正式 worktree 一致，四份原交付未被覆盖。这不是更换算法或模型。
 5. 所有要求的检查均已实际执行；没有用自查结论代替本次运行，没有因失败自行修代码。
 
-本轮仅三份审核/交接 Markdown 将提交并推送 `codex/grammar-item-candidates`；提交信息不带 `[skip ci]`。GitHub CI 结果在推送后补记。审核用临时文件与环境仍仅本机可见，未部署，未操作生产。
+本轮仅三份审核/交接 Markdown 提交并推送 `codex/grammar-item-candidates`；审核正文提交为 `5d41fbe1a4015e6be80c1efdb939de2d682646fe`，已核对远端同 SHA。本节与 CI 结果由后续纯文档提交补记；最终 HEAD 以 `git rev-parse HEAD` 和远端分支核对，不能把正文提交误当最终提交。两次提交信息均不带 `[skip ci]`。审核用临时文件与环境仍仅本机可见，未部署，未操作生产。
 
 ## GitHub CI
 
-待本审核记录首次提交推送后记录实际运行链接、提交 SHA、test/lint 结果；不以本地测试冒充 GitHub CI。
+- 已实际运行：[CI 39180295957](https://github.com/KB77GG/studytracker/actions/runs/39180295957)，提交 `5d41fbe1a4015e6be80c1efdb939de2d682646fe`，2026-10-19 08:20 CST 完成，整体 **success**。
+- **test job success**：Python 3.13.16 上轻量测试 125 ran / 124 passed / 1 skipped（缺 openpyxl），Node 拼写队列步骤 success。
+- **lint job failure（advisory）**：Ruff check 对仓库未在 v0.2 修改的文件报存量问题，exit 1；该 job 配有 continue-on-error，因此不阻断整体 CI。后续 Ruff format step 是 **skipped**，不可写成通过。日志告警路径与 v0.2 改动文件交集为空；本机显式覆盖 exclude 后发现的构建脚本问题另见 S4。
+- 实际命令：`gh run list --branch codex/grammar-item-candidates --workflow ci.yml --limit 3 --json databaseId,headSha,status,conclusion,url`、`gh run view 39180295957 --json status,conclusion,headSha,jobs,url`、`gh run view 39180295957 --log`。日志保存于本机 `$AUDIT/github-ci-39180295957.log`。
+- CI 通过只确认现有自动测试，不推翻 F1–F5 的审核结论。随后补记文档不改变被审源码；其最终推送的 CI 仍需在最终回复前确认，不使用 skip 标记。

@@ -9,7 +9,7 @@
 - 任务树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 的 `codex/grammar-item-candidates` 已按授权快进至 `e8019c2ddcb23fa9e585d48bd824f31b0cd3e1b9`；审核范围 `e970dd6..e8019c2`。仅新增审核记录并更新两份交接，未改被审核代码/数据，桌面 main 既有脏状态保留。
 - `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_CODEX_REVIEW.md`：1阻断（完整动词单位仍截断，至少9道自动题漏成分）、4应修（抽样OCR坏句、两处新标注范围、报告缺项）、4建议。59句全读；seed20261019抽30题为29正确/1不适合；另15风险题4确定定语/1两可/10状语。7处段落字面拼接差异均为基线空白，未隐瞒为通过。
 - 本地57测试通过；Flask-only完整CI列表125运行/124通过/1跳过，Node通过；validator0错误；临时SQLite导入updated25/skipped292/failed0；171篇内存重建一致。Ruff构建脚本存量UP017/format未通过，其他8改动Python文件通过。冷/热缓存两次生成四文件字节一致，JSONL/XLSX对齐提交版，报告仅Python版本行不同；回归、盲审表与7表渲染通过。
-- 本轮三份文档提交推送只到任务分支，消息不带skip-ci标记；推送后补记GitHub CI。未推main、部署、开PR或操作生产；临时探针/缓存/SQLite只在本机。下一步先处理审核F1–F5，再重生成复核，教师360题审核仍待完成。
+- 审核正文 `5d41fbe1a4015e6be80c1efdb939de2d682646fe` 已提交推送到任务分支并核对远端；本条由后续纯文档提交补记。GitHub CI [39180295957](https://github.com/KB77GG/studytracker/actions/runs/39180295957) 整体success，test/Node成功，advisory lint失败、format跳过。后续文档提交同样不带skip-ci标记并核对CI。未推main、部署、开PR或操作生产；临时探针/缓存/SQLite只在本机。下一步先处理审核F1–F5，再重生成复核，教师360题审核仍待完成。
 
 ## 2026-10-18 — 语法候选题 v0.2 已执行（Claude）
 

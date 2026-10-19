@@ -6,7 +6,8 @@
 ## 2026-10-19 语法候选题 v0.2 独立审核（不通过，仅报告）
 
 - **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_CODEX_REVIEW.md`，包含 15 项结果、实际命令、59 句逐句覆盖、30 题与 15 道关系副词题明细、双次生成 SHA-256、问题位置和建议。
-- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`。按用户命令 fetch + merge --ff-only，审核 HEAD 为 `e8019c2ddcb23fa9e585d48bd824f31b0cd3e1b9`，范围 `e970dd6..e8019c2`。开始及所有测试/生成结束后 tracked/untracked 干净；本轮随后仅新增审核记录、修改本交接和 WORKLOG。三份文档将提交推送到指定分支，消息不带 `[skip ci]`；GitHub CI 在推送后补记。
+- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`。按用户命令 fetch + merge --ff-only，审核 HEAD 为 `e8019c2ddcb23fa9e585d48bd824f31b0cd3e1b9`，范围 `e970dd6..e8019c2`。审核正文提交 **`5d41fbe1a4015e6be80c1efdb939de2d682646fe` 已 commit/push** 并核对远端同 SHA。该提交仅三份获准文档，提交后工作树干净；本段由后续纯文档提交补记 CI 状态，编写时仅这三份文档有本轮改动。最终 HEAD 用 `git rev-parse HEAD` / `git ls-remote origin refs/heads/codex/grammar-item-candidates` 核对；两个提交均无 skip-ci 标记。
+- **GitHub CI**：审核正文的 [39180295957](https://github.com/KB77GG/studytracker/actions/runs/39180295957) 整体success，test job success（125 ran /124 passed /1 skipped，Node success）；lint job failure为仓库存量advisory、format step skipped，非全绿。通过 `gh run view 39180295957 --json status,conclusion,headSha,jobs,url` 及 `--log` 核实。后续纯文档提交仍触发CI，最终回复前核对其结果，不通过skip标记绕过。
 - **原桌面树**：`/Users/zhouxin/Desktop/studytracker`，`main@6ded77d24586327ad94e151e172ae4811b4a2eed`，behind 73；既有 7 modified / 22 untracked 入口均未改（路径清单见下方 v0.1 工作树节），没有将任务树成果误写为桌面树已有。
 - **问题**：阻断 F1 是 T6 动词单位受原 span 截断，至少 9 道 auto_pass 漏 aux/neg/to/prt。应修 F2 为抽样中的 `calcu lated` OCR 坏句（基线遗留）；F3 为 F-36c 从句漏引语内容；F4 为 E-01 同位语范围包含 translates 谓语；F5 为 B4 报告缺关系副词逐句列表及修复前句数。其余四项建议见审核记录；没有擅自修复。
 - **核验**：33 条修订、28→59 / 新增31、997 原句除 index 外字节不变；内存重建171篇与 static完全一致；临时库 updated25 / skipped292 / failed0；validator317 valid / 0 errors。完整段落字面拼接有7处基线已有空白差异，统一空白后相同，未假称逐字通过。59句全读，30题 seed20261019 得29正确/1不适合，15道关系副词风险题中4确定定语/1两可/10状语。
