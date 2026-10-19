@@ -57,22 +57,36 @@ QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
 
 
 def single_quote_role(sentence, index):
-    """'open' / 'close' for a straight single quote used as a quote mark, else None."""
+    """'open' / 'close' for a straight single quote used as a quote mark, else None.
+
+    Apostrophes are None: inside a word (it's) and before digits ('80s). An s' before a
+    lower-case word is 'ambiguous': a possessive (students' books) or the end of a
+    quoted term ('megacities' and); balance_single_quotes decides from context.
+    """
     before = sentence[index - 1] if index else " "
     after = sentence[index + 1] if index + 1 < len(sentence) else " "
+    if after.isdigit():
+        return None
+    if before in "sS" and after == " " and sentence[index + 2 : index + 3].islower():
+        return "ambiguous"
     if (before.isspace() or before in '(“"‘—–-') and after.isalnum():
         return "open"
     if (before.isalnum() or before in ".,!?;:)") and not after.isalnum():
         return "close"
-    return None  # An apostrophe inside a word, such as it's.
+    return None
 
 
 def balance_single_quotes(sentence, start, end, low, high):
-    roles = [single_quote_role(sentence, i) for i in range(start, end) if sentence[i] == "'"]
-    opened, closed = roles.count("open"), roles.count("close")
+    opened = closed = 0
+    for i in range(start, end):
+        role = single_quote_role(sentence, i) if sentence[i] == "'" else None
+        if role == "ambiguous":
+            role = "close" if opened > closed else None  # Closes a pending quote only.
+        opened += role == "open"
+        closed += role == "close"
     if opened > closed:
         for i in range(end, high):
-            if sentence[i] == "'" and single_quote_role(sentence, i) == "close":
+            if sentence[i] == "'" and single_quote_role(sentence, i) in ("close", "ambiguous"):
                 return start, i + 1
     if closed > opened:
         for i in range(start - 1, low - 1, -1):
@@ -111,14 +125,24 @@ def item_id(source, template, start, end, variant):
     return "gi_v02_" + sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
-def verb_unit(view, head, start, end):
-    """The head verb plus its aux/auxpass/neg/prt children inside [start, end)."""
+def verb_unit(view, head, start=None, end=None):
+    """The head verb plus its aux/auxpass/neg/prt children.
+
+    With bounds, children outside [start, end) are dropped; this is only kept for the
+    T1 answer, which plan v0.2 freezes. Displayed units use the unbounded form.
+    """
     children = (
         c
         for c in view.children(head)
-        if c.dep in VERB_UNIT_DEPS and start <= c.start and c.end <= end
+        if c.dep in VERB_UNIT_DEPS and (start is None or (start <= c.start and c.end <= end))
     )
     return sorted([head, *children], key=lambda t: t.i)
+
+
+def outside_span(tokens, span):
+    """Plan v0.2 review F1: a unit reaching past the tag span must not auto-pass."""
+    outside = any(t.start < span.start or t.end > span.end for t in tokens)
+    return [R.VERB_UNIT_OUTSIDE_SPAN] if outside else []
 
 
 def unit_target(sentence, tokens):
@@ -290,7 +314,7 @@ def main_distractors(ctx, unit):
                 continue
             if token.dep in VERB_UNIT_DEPS and token.head in indexes:
                 continue  # An auxiliary shown as part of its head's unit.
-            unit_tokens = verb_unit(ctx.view, token, span.start, span.end)
+            unit_tokens = verb_unit(ctx.view, token)
             parts = [t for t in unit_tokens if t.i not in excluded]
             value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
@@ -308,7 +332,7 @@ def main_verb(ctx):
         return None, reasons
     unit = verb_unit(ctx.view, root, span.start, span.end)
     distractors = main_distractors(ctx, unit)
-    reasons = main_checks(ctx, span)
+    reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
     item = ctx.emit(
         TEMPLATES[0],
         "G-L01" if distractors else "G-S01",
@@ -327,6 +351,12 @@ def main_verb(ctx):
         extra={"verb_unit_tokens": [t.i for t in unit]},
     )
     return item, []
+
+
+def boundary_reasons(ctx, head, tokens, kind):
+    """Clause targets must match the parser subtree, as T2 already requires (review F3)."""
+    subtree = trim_tokens(ctx.view.subtree(head), kind == "coordinate")
+    return [] if token_bounds(subtree) == token_bounds(tokens) else [R.BOUNDARY_MISMATCH]
 
 
 def target_analysis(ctx, span, kind):
@@ -353,9 +383,7 @@ def clause_boundaries(ctx):
             if head:
                 if head.dep not in CLAUSE_DEPS[kind] or not finite(head, ctx.view):
                     reasons.append(R.CLAUSE_TYPE_MISMATCH)
-                subtree = trim_tokens(ctx.view.subtree(head), kind == "coordinate")
-                if token_bounds(subtree) != token_bounds(tokens):
-                    reasons.append(R.BOUNDARY_MISMATCH)
+                reasons.extend(boundary_reasons(ctx, head, tokens, kind))
             if kind == "adverbial":
                 reasons.extend(relative_adverb_risk(ctx.view, span))
             answer = close_quotes(
@@ -392,6 +420,8 @@ def classify_clauses(ctx):
             )
             if not matches:
                 reasons.append(R.CLAUSE_TYPE_MISMATCH)
+            if kind != "phrase":
+                reasons.extend(boundary_reasons(ctx, head, tokens, kind))
         if kind == "adverbial":
             reasons.extend(relative_adverb_risk(ctx.view, span))
         option = TYPE_OPTIONS[-1] if kind == "phrase" else CLAUSE_LABELS[kind]
@@ -445,6 +475,8 @@ def adverbial_relations(ctx):
         elif SUBORDINATOR_RELATIONS[word] != relation:
             reasons.append(R.SUBORDINATOR_MISMATCH)
         reasons.extend(relative_adverb_risk(ctx.view, span))
+        if head:
+            reasons.extend(boundary_reasons(ctx, head, tokens, "adverbial"))
         ctx.emit(
             TEMPLATES[3],
             "G-C11",
@@ -539,6 +571,8 @@ def finite_or_not(ctx, main_item, main_rejections):
             matches, option = not finite(head, ctx.view), FINITE_OPTIONS[2]
         if not matches:
             reasons.append(R.FINITENESS_MISMATCH)
+        unit = verb_unit(ctx.view, head)
+        reasons.extend(outside_span(unit, span))
         participle = (
             variant == "non_finite"
             and not span.role.startswith("gerund")
@@ -550,7 +584,7 @@ def finite_or_not(ctx, main_item, main_rejections):
             "句中【】里的动词在句子里是什么身份？",
             span,
             head,
-            target=unit_target(ctx.sentence, verb_unit(ctx.view, head, span.start, span.end)),
+            target=unit_target(ctx.sentence, unit),
             options=FINITE_OPTIONS,
             option=option,
             reasons=reasons,

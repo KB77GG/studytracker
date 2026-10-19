@@ -28,10 +28,12 @@ REGRESSION_CASES = (
 )
 # Expected whole-sentence hits; None means "report only" (plan v0.2 B1).
 INDEPENDENT_FILTERS = (
-    (R.TAGGED_FRAGMENT, 36),
+    # 36 in plan v0.1; +1 after the v0.2 review marked 71_1_p2 E-01 as predicate_fragment (F4).
+    (R.TAGGED_FRAGMENT, 37),
     (R.CLAUSE_ATTACHED_TO_CONJUNCTION, 2),
     (R.GLUED_SENTENCE_BOUNDARY, 0),
     (R.MULTI_SENTENCE_UNIT, None),
+    (R.SUSPECTED_SPLIT_WORD, None),
 )
 RESPLIT_ID = re.compile(r"^[A-Z]-\d+[b-z]$")
 NODE_IDS = (
@@ -128,24 +130,44 @@ def independent_hits(rows):
 
 
 def relative_adverb_stats(candidates):
+    """Plan v0.2 B4: counts plus one row per flagged target (review finding F5)."""
     flagged = [i for i in candidates if R.POSSIBLE_RELATIVE_ADVERB in i["reasons"]]
-    targets = {
-        (i["source"]["passage_id"], i["source"]["sentence_id"], i["evidence"]["tag_span"]["start"])
-        for i in flagged
-    }
+    targets = {}
+    for item in flagged:
+        source, tag = item["source"], item["evidence"]["tag_span"]
+        key = (source["passage_id"], source["sentence_id"], tag["start"], tag["end"])
+        row = targets.setdefault(
+            key,
+            {
+                "passage_id": source["passage_id"],
+                "sentence_id": source["sentence_id"],
+                "target": source["sentence"][tag["start"] : tag["end"]],
+                "templates": [],
+                "item_ids": [],
+            },
+        )
+        row["templates"] = sorted({*row["templates"], item["template"]})
+        row["item_ids"] = sorted({*row["item_ids"], item["item_id"]})
     return {
         "items_by_template": dict(sorted(Counter(i["template"] for i in flagged).items())),
         "distinct_targets": len(targets),
+        "targets": [targets[key] for key in sorted(targets)],
     }
 
 
 def resplit_stats(all_results):
+    """Sentences before/after the v0.2 re-split; splitting only adds <id>b, <id>c ... rows."""
     ids = sorted(
         f"{s['passage_id']} {s['sentence_id']}"
         for s, _ in all_results
         if RESPLIT_ID.match(s["sentence_id"])
     )
-    return {"sentences": len(all_results), "new_sentence_ids": ids}
+    return {
+        "sentences_before": len(all_results) - len(ids),
+        "sentences_after": len(all_results),
+        "added": len(ids),
+        "new_sentence_ids": ids,
+    }
 
 
 def build_report(root, environment, seed, candidates, rejections, all_results, batch_stats):
@@ -203,6 +225,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 只报告不设预期。",
             "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
             "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
+            "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
+            "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。",
+            "拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。",
             "无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。",
             "字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。",
             "分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。",

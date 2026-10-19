@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5935 | 367 | 6386 |
-| clause_boundary | 4773 | 2400 | 2784 |
-| clause_type_classify | 12929 | 1796 | 1430 |
-| adverbial_relation | 446 | 589 | 2661 |
-| subject_span | 5374 | 737 | 6577 |
-| finite_or_not | 12755 | 1553 | 6572 |
+| main_verb_tap | 5922 | 377 | 6389 |
+| clause_boundary | 4772 | 2397 | 2791 |
+| clause_type_classify | 11540 | 3176 | 1437 |
+| adverbial_relation | 396 | 637 | 2668 |
+| subject_span | 5370 | 737 | 6581 |
+| finite_or_not | 12738 | 1561 | 6575 |
 
 ## 范围
 
@@ -19,9 +19,9 @@
 {
   "passages": 317,
   "sentences": 12688,
-  "candidates": 49654,
-  "sentence_rejections": 1430,
-  "template_rejections": 17830
+  "candidates": 49623,
+  "sentence_rejections": 1437,
+  "template_rejections": 17819
 }
 ```
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "2cd5c6e61e73d40210bf694262bb7144223a2812e15636a07704f6dbd728eef5",
+  "reading_study_sha256": "8702bd2293d4070b0433e89b2864b09f826b810c94ee7fdaffd036a37e582933",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -47,11 +47,11 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2765,
-    "needs_review": 158
+    "auto_pass": 2760,
+    "needs_review": 163
   },
   "G-S02": {
-    "auto_pass": 5374,
+    "auto_pass": 5370,
     "needs_review": 737
   },
   "G-C02": {
@@ -59,36 +59,36 @@
     "needs_review": 644
   },
   "G-C03": {
-    "auto_pass": 12929,
-    "needs_review": 1796
+    "auto_pass": 11540,
+    "needs_review": 3176
   },
   "G-C04": {
     "auto_pass": 1796,
     "needs_review": 328
   },
   "G-C08": {
-    "auto_pass": 1145,
-    "needs_review": 739
+    "auto_pass": 1144,
+    "needs_review": 738
   },
   "G-C10": {
     "auto_pass": 1261,
-    "needs_review": 689
+    "needs_review": 687
   },
   "G-C11": {
-    "needs_review": 589,
-    "auto_pass": 446
+    "needs_review": 637,
+    "auto_pass": 396
   },
   "G-N01": {
-    "auto_pass": 10893,
-    "needs_review": 1492
+    "auto_pass": 10880,
+    "needs_review": 1499
   },
   "G-N04": {
-    "auto_pass": 1862,
-    "needs_review": 61
+    "auto_pass": 1858,
+    "needs_review": 62
   },
   "G-L01": {
-    "auto_pass": 3170,
-    "needs_review": 209
+    "auto_pass": 3162,
+    "needs_review": 214
   }
 }
 ```
@@ -97,21 +97,22 @@
 
 ```json
 {
-  "no_main_verb_tag": 12183,
-  "coordinated_main_verbs": 3978,
-  "split_subject": 3762,
+  "no_main_verb_tag": 12174,
+  "coordinated_main_verbs": 3974,
+  "split_subject": 3760,
   "coordinated_main_clauses": 3576,
+  "boundary_mismatch": 3052,
   "clause_type_mismatch": 1896,
-  "span_not_constituent": 1411,
-  "ambiguous_span_location": 1371,
+  "span_not_constituent": 1405,
+  "ambiguous_span_location": 1364,
   "multiple_targets_same_type": 1354,
-  "boundary_mismatch": 1291,
   "no_relation_label": 1231,
-  "finiteness_mismatch": 666,
+  "finiteness_mismatch": 665,
+  "verb_unit_outside_span": 578,
   "subject_mismatch": 562,
   "parser_root_outside_verb_span": 550,
   "unbalanced_quotes_or_brackets": 427,
-  "subordinator_unknown": 322,
+  "subordinator_unknown": 321,
   "unknown_span": 313,
   "existential": 304,
   "too_short": 254,
@@ -124,10 +125,11 @@
   "multi_sentence_unit": 51,
   "too_long": 49,
   "subject_after_verb": 44,
-  "tagged_fragment": 36,
+  "tagged_fragment": 37,
   "heading": 32,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
+  "suspected_split_word": 6,
   "clause_attached_to_conjunction": 2
 }
 ```
@@ -136,7 +138,7 @@
 
 ```json
 {
-  "reading_jijing": 15966,
+  "reading_jijing": 15935,
   "reading_test": 33688
 }
 ```
@@ -145,9 +147,9 @@
 
 ```json
 {
-  "easy": 16805,
-  "hard": 18495,
-  "medium": 14354
+  "easy": 16804,
+  "hard": 18486,
+  "medium": 14333
 }
 ```
 
@@ -167,31 +169,31 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1131,
+          "pool_size": 1129,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 356,
+          "pool_size": 353,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 468,
+          "pool_size": 466,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1942,
+          "pool_size": 1938,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1058,
+          "pool_size": 1056,
           "sample_size": 9
         },
         {
@@ -223,7 +225,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 539,
+          "pool_size": 538,
           "sample_size": 6
         },
         {
@@ -255,37 +257,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 987,
+          "pool_size": 938,
           "sample_size": 4
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1560,
-          "sample_size": 6
+          "pool_size": 1248,
+          "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1158,
+          "pool_size": 1012,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2282,
-          "sample_size": 9
+          "pool_size": 2220,
+          "sample_size": 10
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 4199,
+          "pool_size": 3633,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2743,
+          "pool_size": 2489,
           "sample_size": 11
         }
       ]
@@ -299,37 +301,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 68,
+          "pool_size": 67,
           "sample_size": 8
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 80,
-          "sample_size": 9
+          "pool_size": 62,
+          "sample_size": 8
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 92,
-          "sample_size": 10
+          "pool_size": 83,
+          "sample_size": 11
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 47,
-          "sample_size": 5
+          "pool_size": 46,
+          "sample_size": 6
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 80,
-          "sample_size": 9
+          "pool_size": 64,
+          "sample_size": 8
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 79,
+          "pool_size": 74,
           "sample_size": 9
         }
       ]
@@ -343,19 +345,19 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1014,
+          "pool_size": 1013,
           "sample_size": 9
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 341,
+          "pool_size": 340,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 401,
+          "pool_size": 399,
           "sample_size": 4
         },
         {
@@ -387,37 +389,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1636,
+          "pool_size": 1634,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1298,
+          "pool_size": 1294,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1093,
+          "pool_size": 1090,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2950,
+          "pool_size": 2946,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3376,
+          "pool_size": 3374,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2402,
+          "pool_size": 2400,
           "sample_size": 10
         }
       ]
@@ -435,7 +437,1446 @@
     "clause_boundary": 87,
     "clause_type_classify": 109
   },
-  "distinct_targets": 109
+  "distinct_targets": 109,
+  "targets": [
+    {
+      "passage_id": "ielts10_test1_p3",
+      "sentence_id": "D-04",
+      "target": "when threatened with a loss",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_2234a7824b3b"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test1_p3",
+      "sentence_id": "I-03",
+      "target": "when the flight captain makes a clearly wrong-headed decision",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_bc3af7aac9e1"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test1_p3",
+      "sentence_id": "K-01",
+      "target": "where it is due",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_606c938e562c",
+        "gi_v02_f4d048911b02"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test3_p1",
+      "sentence_id": "A-01",
+      "target": "when primitive man set out",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_b3ae78072853",
+        "gi_v02_c1f39530c292"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test3_p2",
+      "sentence_id": "C-04",
+      "target": "when it's already scrambling to withdraw and preserve the ones already there",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_2fbd19531069",
+        "gi_v02_98ca768f5c4f"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test3_p2",
+      "sentence_id": "F-01",
+      "target": "when they're busy packing up for the winter",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_20afb7529d35",
+        "gi_v02_a69db5269459"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test3_p2",
+      "sentence_id": "F-03",
+      "target": "when it is the natural world's supreme light absorber",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_388f37bc2e12",
+        "gi_v02_39cf2c9af4a9"
+      ]
+    },
+    {
+      "passage_id": "ielts10_test4_p2",
+      "sentence_id": "C-02",
+      "target": "when he had an accident",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_43dfea81a23c",
+        "gi_v02_a8dad5eb6b53"
+      ]
+    },
+    {
+      "passage_id": "ielts11_test2_p3",
+      "sentence_id": "C-03",
+      "target": "when they were actually seeing an acclaimed masterpiece",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_89b37849e8c8"
+      ]
+    },
+    {
+      "passage_id": "ielts11_test2_p3",
+      "sentence_id": "H-01",
+      "target": "when we see a handwritten letter",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_48578aaf7d01"
+      ]
+    },
+    {
+      "passage_id": "ielts11_test3_p2",
+      "sentence_id": "E-03",
+      "target": "when it's time for takeoff on their big journey",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_a2078dec2b9c"
+      ]
+    },
+    {
+      "passage_id": "ielts11_test3_p2",
+      "sentence_id": "E-03",
+      "target": "when it's appropriate to land",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_a6c54fca22bb"
+      ]
+    },
+    {
+      "passage_id": "ielts11_test4_p2",
+      "sentence_id": "C-05",
+      "target": "when compared with the magnificent technology created by man and the visual beauties of the universe",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_047170928ae7",
+        "gi_v02_12a8205667cb"
+      ]
+    },
+    {
+      "passage_id": "ielts12_test5_p1",
+      "sentence_id": "B-05",
+      "target": "when you release the pressure",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_63ea22b3611a",
+        "gi_v02_f5239933274c"
+      ]
+    },
+    {
+      "passage_id": "ielts12_test6_p2",
+      "sentence_id": "D-02",
+      "target": "when in pursuit of their prey",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_68f6dbcbd69c"
+      ]
+    },
+    {
+      "passage_id": "ielts12_test6_p3",
+      "sentence_id": "C-09",
+      "target": "when bilinguals have to switch from categorizing objects by colour (red or green) to categorizing them by shape (circle or triangle)",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_921aebca6e19"
+      ]
+    },
+    {
+      "passage_id": "ielts12_test6_p3",
+      "sentence_id": "C-09",
+      "target": "when having to make rapid changes of strategy",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_d9397e041a44"
+      ]
+    },
+    {
+      "passage_id": "ielts13_test2_p1",
+      "sentence_id": "C-08",
+      "target": "when shipping cinnamon over a journey of eight days from Ceylon to India",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_897a86f7ec2c",
+        "gi_v02_910b944d83b6"
+      ]
+    },
+    {
+      "passage_id": "ielts13_test2_p1",
+      "sentence_id": "D-04",
+      "target": "when they overran and occupied their factories",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_7ad11545f2d7",
+        "gi_v02_a4d77c406f87"
+      ]
+    },
+    {
+      "passage_id": "ielts13_test2_p2",
+      "sentence_id": "C-02",
+      "target": "when they beat other players",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_ad2c05353503"
+      ]
+    },
+    {
+      "passage_id": "ielts13_test4_p2",
+      "sentence_id": "C-05",
+      "target": "when plants grow",
+      "templates": [
+        "adverbial_relation",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_62bfd8bd4be7",
+        "gi_v02_acc74fb5ee8b"
+      ]
+    },
+    {
+      "passage_id": "ielts14_test1_p1",
+      "sentence_id": "N-03",
+      "target": "when they first played with dolls representing characters in the story",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_5e22fe2a7d1d",
+        "gi_v02_7d08a3a24897"
+      ]
+    },
+    {
+      "passage_id": "ielts14_test3_p1",
+      "sentence_id": "G-02",
+      "target": "when they wrote about the emergence of a cognitive (high-IQ) elite",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0a23855be4fa",
+        "gi_v02_41472f7b163f"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test2_p2",
+      "sentence_id": "A-03",
+      "target": "when the last living specimen died at Cincinnati Zoo",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_326b1e2f8291",
+        "gi_v02_3431ede772c1"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test2_p2",
+      "sentence_id": "F-02",
+      "target": "when they think about de-extinction",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_e5830b008ce1",
+        "gi_v02_f8051d9265b1"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test2_p3",
+      "sentence_id": "D-06",
+      "target": "when they were in the 'powerful' role of teasers",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0db9efd17ea5",
+        "gi_v02_609ed269216f"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test2_p3",
+      "sentence_id": "E-03",
+      "target": "when displaying a dominant versus submissive laugh",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_55f2fe7c626b",
+        "gi_v02_dd32bfb07940"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test2_p3",
+      "sentence_id": "E-04",
+      "target": "when the context allows",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_d4b6fa013c61",
+        "gi_v02_d72e2be60b67"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test3_p1",
+      "sentence_id": "A-05",
+      "target": "when he was sent to France to fight in the First World War",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_7e154808e972",
+        "gi_v02_ceed8ff62376"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test3_p1",
+      "sentence_id": "F-04",
+      "target": "when his contract expired",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_5ec67d9caa22",
+        "gi_v02_95c1cbe1dd45"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test3_p2",
+      "sentence_id": "B-03",
+      "target": "when he moved to the United Arab Emirates and saw large-scale water processing",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_3ba041009eca",
+        "gi_v02_80176ec02a2b"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test3_p3",
+      "sentence_id": "H-02",
+      "target": "when other features are not",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_16d17f856826",
+        "gi_v02_3f2edd9fa68b"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test4_p1",
+      "sentence_id": "C-02",
+      "target": "when their other crops failed",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_016fd994d53a"
+      ]
+    },
+    {
+      "passage_id": "ielts15_test4_p2",
+      "sentence_id": "H-01",
+      "target": "when Spain conquered the volcanic islands in the 15th century",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_652f7333e8dc",
+        "gi_v02_7be3533cea95"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test1_p1",
+      "sentence_id": "G-01",
+      "target": "when they have just missed out on a kill",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_ce0ac148441f"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test2_p1",
+      "sentence_id": "F-01",
+      "target": "when 'White Horse Hill' is mentioned in documents from the nearby Abbey of Abingdon",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_b4388794abb6",
+        "gi_v02_f392d8a913a6"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test3_p2",
+      "sentence_id": "G-03",
+      "target": "when we think of Scandinavian expansion",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_49dabecbd20a"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test4_p1",
+      "sentence_id": "C-02",
+      "target": "when the qanat method was not a practical alternative",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_3d24f8414552",
+        "gi_v02_be90febb191e"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test4_p2",
+      "sentence_id": "C-02",
+      "target": "when we innovate",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_8e10c80c6e50"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test4_p2",
+      "sentence_id": "G-02",
+      "target": "when reading",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_118f549eeca3",
+        "gi_v02_9a7574e389e4"
+      ]
+    },
+    {
+      "passage_id": "ielts16_test4_p2",
+      "sentence_id": "I-02",
+      "target": "when applied to critical thought in the reading brain",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_15ea166e44c4"
+      ]
+    },
+    {
+      "passage_id": "ielts17_test1_p2",
+      "sentence_id": "F-05",
+      "target": "when the stadium is not in use",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_09b482419693",
+        "gi_v02_1c8f44166823"
+      ]
+    },
+    {
+      "passage_id": "ielts17_test2_p3",
+      "sentence_id": "F-03",
+      "target": "when turning on oval tracks",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_ac28feed8e39",
+        "gi_v02_d369d34317e8"
+      ]
+    },
+    {
+      "passage_id": "ielts17_test3_p1",
+      "sentence_id": "F-03",
+      "target": "when he published his Mammals of Australia between 1848 and 1863",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_77a16e9ac1bf",
+        "gi_v02_a91ed9ca00fc"
+      ]
+    },
+    {
+      "passage_id": "ielts17_test4_p3",
+      "sentence_id": "C-01",
+      "target": "when he was six years old",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_3d0f4607ec49",
+        "gi_v02_ae15e82dda2f"
+      ]
+    },
+    {
+      "passage_id": "ielts18_test1_p2",
+      "sentence_id": "F-01",
+      "target": "when other seedlings have become established",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_12eb0e6c2a1c",
+        "gi_v02_6de35c2e1cd2",
+        "gi_v02_c80d0eec94bf"
+      ]
+    },
+    {
+      "passage_id": "ielts18_test3_p2",
+      "sentence_id": "B-03",
+      "target": "when the engines backfired",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_3c70bc3761ed",
+        "gi_v02_c8d6a75d8c64",
+        "gi_v02_d22f74703b02"
+      ]
+    },
+    {
+      "passage_id": "ielts18_test3_p2",
+      "sentence_id": "E-02",
+      "target": "when they should go forward",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_2192579f8df4",
+        "gi_v02_6f8804a4a2c9",
+        "gi_v02_bdb48705398a"
+      ]
+    },
+    {
+      "passage_id": "ielts18_test4_p2",
+      "sentence_id": "D-02",
+      "target": "when they applaud the benefits of a growth mindset",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_4dc0825bf402",
+        "gi_v02_ae055a381d4e"
+      ]
+    },
+    {
+      "passage_id": "ielts19_test1_p3",
+      "sentence_id": "G-04",
+      "target": "when scanning and processing written information",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_60eff7dd3516",
+        "gi_v02_ffc659439aef"
+      ]
+    },
+    {
+      "passage_id": "ielts19_test2_p2",
+      "sentence_id": "E-01",
+      "target": "when they're under pressure",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_69c4b3c21365",
+        "gi_v02_8bdfc44fa6c0"
+      ]
+    },
+    {
+      "passage_id": "ielts20_test2_p2",
+      "sentence_id": "F-39",
+      "target": "when we should be focusing on the thing we should be getting on with",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_04d87142654c",
+        "gi_v02_2f2ca74cb7df"
+      ]
+    },
+    {
+      "passage_id": "ielts20_test2_p2",
+      "sentence_id": "F-41",
+      "target": "when we procrastinate",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_63ade38709dd",
+        "gi_v02_755efcc1472a"
+      ]
+    },
+    {
+      "passage_id": "ielts20_test2_p3",
+      "sentence_id": "B-08",
+      "target": "when DeJesus announced calls",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_182bc77bff80",
+        "gi_v02_ddc661d8a41f"
+      ]
+    },
+    {
+      "passage_id": "ielts20_test2_p3",
+      "sentence_id": "F-32",
+      "target": "when the hundred-mile-an-hour fastball, which is difficult to hit and control, entered the game",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_42564e300883",
+        "gi_v02_dc3a6ecd6050"
+      ]
+    },
+    {
+      "passage_id": "ielts20_test4_p3",
+      "sentence_id": "A-02",
+      "target": "when such predators were largely exterminated",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_39a07a233cdb",
+        "gi_v02_f252be3f87cd"
+      ]
+    },
+    {
+      "passage_id": "ielts4_test2_p1",
+      "sentence_id": "D-19",
+      "target": "when a small community finds itself alongside a larger, wealthier society",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_1ab1acbb8299",
+        "gi_v02_88334279fca2",
+        "gi_v02_e10472003655"
+      ]
+    },
+    {
+      "passage_id": "ielts4_test2_p2",
+      "sentence_id": "G-31",
+      "target": "when conventional medicine seems not to offer the answer",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_1822b538098a",
+        "gi_v02_78edb489fe98",
+        "gi_v02_ce1ff6547306"
+      ]
+    },
+    {
+      "passage_id": "ielts4_test2_p3",
+      "sentence_id": "D-24",
+      "target": "when they reached adulthood.",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_44399fba3ab2",
+        "gi_v02_828954cb9539"
+      ]
+    },
+    {
+      "passage_id": "ielts4_test2_p3",
+      "sentence_id": "I-46",
+      "target": "when they interact with their peers.",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0c72255dbcc0",
+        "gi_v02_ea393cfaada4"
+      ]
+    },
+    {
+      "passage_id": "ielts4_test3_p3",
+      "sentence_id": "C-09",
+      "target": "when a language has not been described before",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_d2a958ea6e8a"
+      ]
+    },
+    {
+      "passage_id": "ielts5_test2_p1",
+      "sentence_id": "D-10",
+      "target": "when, as a young chemistry student in Belgium, he embarked on research into phenolic resins",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_5f020b6981a4",
+        "gi_v02_823bf71c9286"
+      ]
+    },
+    {
+      "passage_id": "ielts5_test2_p2",
+      "sentence_id": "B-12",
+      "target": "when the punchline is either a nonsense or, though appearing silly, has a clever second meaning",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_87ed5a9d2305",
+        "gi_v02_e22803a64985"
+      ]
+    },
+    {
+      "passage_id": "ielts5_test4_p1",
+      "sentence_id": "C-38",
+      "target": "when tourism has penetrated their homelands",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_783887450784",
+        "gi_v02_97596db61ae8"
+      ]
+    },
+    {
+      "passage_id": "ielts6_test1_p2",
+      "sentence_id": "H-04",
+      "target": "when America began to deregulate its transportation industry",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_04654647925b",
+        "gi_v02_7391c9386b42"
+      ]
+    },
+    {
+      "passage_id": "ielts6_test2_p2",
+      "sentence_id": "K-37",
+      "target": "when they need it",
+      "templates": [
+        "adverbial_relation",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_1f41dc73d4f3",
+        "gi_v02_a26029f2d6e9"
+      ]
+    },
+    {
+      "passage_id": "ielts6_test4_p2",
+      "sentence_id": "A-01",
+      "target": "when their mothers can read and write",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_57dddc4b865f",
+        "gi_v02_68d6ef46aba4",
+        "gi_v02_8014e7c3aa8d"
+      ]
+    },
+    {
+      "passage_id": "ielts7_test2_p1",
+      "sentence_id": "B-08",
+      "target": "when it was built in 1968",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_1316a023e923",
+        "gi_v02_957212f217d6"
+      ]
+    },
+    {
+      "passage_id": "ielts7_test4_p2",
+      "sentence_id": "G-01",
+      "target": "when, in the months leading up to MSC's final decision, salmon runs throughout western Alaska completely collapsed",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0aff123f79be",
+        "gi_v02_3d890b164cbc",
+        "gi_v02_7e478f16ad90"
+      ]
+    },
+    {
+      "passage_id": "ielts7_test4_p3",
+      "sentence_id": "C-06",
+      "target": "when the subjects were required to proofread written material under conditions of no noise",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0e063fdeb711",
+        "gi_v02_86638c9670a3",
+        "gi_v02_e2c514b1afeb"
+      ]
+    },
+    {
+      "passage_id": "ielts8_test4_p2",
+      "sentence_id": "J-02",
+      "target": "when Sri Lanka's flourishing coconut groves were plagued by leaf-mining hispides",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_388471339b2f",
+        "gi_v02_508cfa56eabd",
+        "gi_v02_91269ceab6c6"
+      ]
+    },
+    {
+      "passage_id": "ielts9_test1_p1",
+      "sentence_id": "I-03",
+      "target": "when she decided the new colour flattered her",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_978b04977909",
+        "gi_v02_9c545b9e6af9"
+      ]
+    },
+    {
+      "passage_id": "ielts9_test2_p2",
+      "sentence_id": "E-04",
+      "target": "when it is seen just outside the Sun's disc",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_32095591a49e",
+        "gi_v02_38f1dd48aa50",
+        "gi_v02_8ad1b408e9f0"
+      ]
+    },
+    {
+      "passage_id": "ielts9_test3_p3",
+      "sentence_id": "B-12",
+      "target": "when still a student",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_a26dd219e32f",
+        "gi_v02_f68d7d773186"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_10_test_78_p2",
+      "sentence_id": "B-17",
+      "target": "when one normally focuses and listens to one another",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_408e960a87a7",
+        "gi_v02_aab7af3aefff"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_13_test_6_p1",
+      "sentence_id": "H-04",
+      "target": "when in fact this officer has functioned as 'Minister for Sickness and the Construction of Hospitals'",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_345f41f7478b",
+        "gi_v02_748f4e77f787",
+        "gi_v02_fbb3bf1a5a47"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_14_test_23_p2",
+      "sentence_id": "G-05",
+      "target": "when in actual fact they are simply based on an unthinking and directionless material count",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0395b4cf7d2d",
+        "gi_v02_1cc83fd4e466",
+        "gi_v02_456f088a9576"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_16_test_97_p2",
+      "sentence_id": "F-36b",
+      "target": "when I really know it's not going to happen",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_4100dc63ab4c",
+        "gi_v02_dcfc4beae473",
+        "gi_v02_eb95d63a0d2f"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_24_test_56_p2",
+      "sentence_id": "I-06",
+      "target": "when the decision is not crucial",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0ad2afd4b319",
+        "gi_v02_25e57b23fe04",
+        "gi_v02_481f3f71ff3a"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_24_test_56_p3",
+      "sentence_id": "C-04",
+      "target": "when supplies of fruit were depleted",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_38d49297c962",
+        "gi_v02_690b3c1f3509",
+        "gi_v02_7de3c89f34ea"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_38_test_22_p1",
+      "sentence_id": "H-02",
+      "target": "when custodial sentences are handed down to mothers caring for children",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_3e2c62bcb77f",
+        "gi_v02_7211479b4b64",
+        "gi_v02_f5f354897846"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_38_test_22_p3",
+      "sentence_id": "B-01",
+      "target": "when AACSB International. the most widely recognised global accrediting agency for business schools, announced it would consider changing the way it evaluates research",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_749abf062e90",
+        "gi_v02_a250b556e86b",
+        "gi_v02_c0b31ee16ce8"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p1",
+      "sentence_id": "C-01",
+      "target": "when he was in his forties",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_5ed90cb62276",
+        "gi_v02_8debe64ef90b",
+        "gi_v02_a63300ee0f7f"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_44_test_29_p3",
+      "sentence_id": "A-01",
+      "target": "when they returned from school",
+      "templates": [
+        "adverbial_relation",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_54094ea3e4e3",
+        "gi_v02_60344ae1f1fe"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_44_test_29_p3",
+      "sentence_id": "A-02",
+      "target": "when fathers had gone off to war, and mothers had gone into industry",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_695f59a749f1",
+        "gi_v02_8b229a84a21f",
+        "gi_v02_e4433836e04c"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_46_test_84_p1",
+      "sentence_id": "E-03",
+      "target": "when he said",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_a61003ab901b",
+        "gi_v02_bf1532fb5bb5",
+        "gi_v02_c15b484dcbf4"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_48_test_21_p3",
+      "sentence_id": "D-03",
+      "target": "when the development of global warming is accompanied by the falling snow line",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_350cda42e817",
+        "gi_v02_3f496362b055",
+        "gi_v02_c19e452a622b"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_50_test_30_p2",
+      "sentence_id": "D-05",
+      "target": "when she is still feeding on them",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_1bd1a43134c9",
+        "gi_v02_80ad8496544d",
+        "gi_v02_f2c2d182baea"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_53_test_83_p3",
+      "sentence_id": "A-02",
+      "target": "when their monthly fuel quota of four litres dried up in just a fortnight",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_44a78fb23d4e",
+        "gi_v02_6801bb94f7a3",
+        "gi_v02_89fd2d11daf3"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "sentence_id": "C-03",
+      "target": "when drops of mercury from a shattered thermometer produced a photographic image",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_472b3e5a82b7",
+        "gi_v02_cde790ece7e7"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "sentence_id": "C-06",
+      "target": "when he used bits of adhesive office paper",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_ca9a2c9d5af1",
+        "gi_v02_da26758657bc"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "sentence_id": "I-02",
+      "target": "when it launched a new beer",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_388494a8a9d5",
+        "gi_v02_ee5f6d0ec66b"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p2",
+      "sentence_id": "H-06",
+      "target": "when profit-taking by retailers or packers is a more likely scenario",
+      "templates": [
+        "adverbial_relation",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_4142410319af",
+        "gi_v02_b07f25ed1389"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_62_test_44_p3",
+      "sentence_id": "B-03",
+      "target": "when Sainsbury introduced shopping baskets into its 1950s stores",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_39369274a5f7",
+        "gi_v02_71034136d4f2",
+        "gi_v02_8da689cf2443"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_6_test_71_p1",
+      "sentence_id": "D-01",
+      "target": "when the first fashion store 'Ravissant' opened in Mumbai",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_01a3207497b7",
+        "gi_v02_09f114e61e92",
+        "gi_v02_4c4f9ee2d2df"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_72_test_15_p2",
+      "sentence_id": "B-05",
+      "target": "when he returns",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_7bb5b8a57f2e",
+        "gi_v02_fb1b20bf8dbc"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_72_test_15_p2",
+      "sentence_id": "D-05",
+      "target": "when pretending a banana is a telephone",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_d05f2b63ecad",
+        "gi_v02_fe742e071627"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_79_test_24_p1",
+      "sentence_id": "C-04",
+      "target": "when not on duty",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_c3e7cf202979",
+        "gi_v02_e0b9121ca0dc"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_81_test_93_p1",
+      "sentence_id": "C-05",
+      "target": "when children stayed up late",
+      "templates": [
+        "adverbial_relation",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_11bfd7277fab",
+        "gi_v02_f18cf9ccea5d"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_82_test_4_p3",
+      "sentence_id": "F-03",
+      "target": "when something more attractive comes along",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_80e0b92aedf6",
+        "gi_v02_b84b561ef465"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_83_test_95_p1",
+      "sentence_id": "A-02",
+      "target": "when animals still were considered automatons",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0c2f6ba1c549",
+        "gi_v02_250fba7ae9d9",
+        "gi_v02_cbe99dd2e12a"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_84_test_73_p2",
+      "sentence_id": "D-24",
+      "target": "when they leave school",
+      "templates": [
+        "adverbial_relation",
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_0087e03e6b6b",
+        "gi_v02_488a091a620c",
+        "gi_v02_48ee07de62a6"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p2",
+      "sentence_id": "C-06",
+      "target": "when they switch from VCRs to DVD players",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_4548d50d85df",
+        "gi_v02_905c6477311a"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p2",
+      "sentence_id": "K-02",
+      "target": "when researchers presented people with evidence",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_5e937f86caff",
+        "gi_v02_77c598c7a0ba"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_88_test_98_p3",
+      "sentence_id": "C-01",
+      "target": "when their techniques are revealed",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_488f7901926d",
+        "gi_v02_c6f1e2319329"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p1",
+      "sentence_id": "B-04",
+      "target": "when they witness a film character gets shot",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_00107f31b110",
+        "gi_v02_b48b6bbf8a83"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p1",
+      "sentence_id": "C-02",
+      "target": "when Professor Simon Baron-Cohen and his colleagues used fMRls on six synaesthetes and discovered",
+      "templates": [
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_4757cfc9ef28"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p2",
+      "sentence_id": "B-02",
+      "target": "when people increasingly demand more water than is available or safe for use",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_48df6847046a",
+        "gi_v02_671ca54d1f25"
+      ]
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p3",
+      "sentence_id": "E-05",
+      "target": "when three freak waves hit the beach",
+      "templates": [
+        "clause_boundary",
+        "clause_type_classify"
+      ],
+      "item_ids": [
+        "gi_v02_20bd5c1b2c28",
+        "gi_v02_2965428387ff"
+      ]
+    }
+  ]
 }
 ```
 
@@ -443,7 +1884,9 @@
 
 ```json
 {
-  "sentences": 12688,
+  "sentences_before": 12657,
+  "sentences_after": 12688,
+  "added": 31,
   "new_sentence_ids": [
     "reading_jijing_10_test_78_p3 E-04b",
     "reading_jijing_10_test_78_p3 P-01b",
@@ -484,7 +1927,7 @@
 
 ### tagged_fragment
 
-实际 36 句；计划预期 36 句。
+实际 37 句；计划预期 37 句。
 
 - `ielts17_test2_p3` F-07：No.
 - `ielts17_test3_p2` A-04：Primarily because its unique properties – such as remaining solid at room temperature – make it an ideal ingredient for long-term preservation, allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future.
@@ -518,6 +1961,7 @@
 - `reading_jijing_62_test_44_p2` B-05：When cotton production started spreading through Andhra Pradesh state.
 - `reading_jijing_65_test_69_p2` F-01：In The Environment Game, a vision of a utopia that would be at once high-tech and environmentalist.
 - `reading_jijing_65_test_69_p3` E-02：Surveyor J. that had landed in a crater on April 19. 1967.
+- `reading_jijing_71_test_1_p2` E-01：The most immediate translation issue relates to the movie's title, 'Lo Scopone Scientifico', translates as 'Scientific Scopone', whereas the English title is, 'The Scientific Card Player'.
 - `reading_jijing_73_test_5_p1` K-01：Standing on a roof catwalk, peering down inside at people as small as termites below.
 - `reading_jijing_73_test_5_p1` K-03：like that termite fungus, further extending the whole 'organic machine' metaphor.
 - `reading_jijing_73_test_5_p2` F-05：Many incidents of attacks on people involving villagers squatting or bending over to cut grass for fodder or building material.
@@ -587,6 +2031,16 @@
 - `reading_jijing_9_test_81_p1` F-02：Test subject was given an argument "All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate".
 - `reading_jijing_9_test_81_p2` A-02：In addition to providing the traditional resort-leisure product, it has been argued that ecotourism resort management should have a particular focus on best-practice environmental management. an educational and interpretive component, and direct anil indirect contributions to the conservation of the natural and cultural environment (Ayala. I996).
 - `reading_jijing_9_test_81_p2` B-01：Conran Cove Island Resort is a large integrated ecotourism-based resort located south of Brisbane on the Gold Coast, Queensland. Australia.
+### suspected_split_word
+
+实际 6 句；计划未设预期，只报告。
+
+- `reading_jijing_38_test_22_p3` C-04：A psychology professor must publish competi tive research in the top neuroscience journals.
+- `reading_jijing_46_test_84_p1` E-01：It may be 2005, yet having children is a career-ending decision for millions of bright, ambit ions, and well-educated Japanese,
+- `reading_jijing_85_test_12_p3` C-05：The researchers had calcu lated that revenues from the sale of fruits could far exceed those from a one- off sale of trees to loggers.
+- `reading_jijing_9_test_81_p2` I-03：The resort has embraced and has effectively implemented contem porary environmental management practices.
+- `reading_jijing_9_test_81_p2` I-04：It has been argued that the successful implemen tation of the principles of sustainability should promote long-term social, economic and envi ronmental benefits, while ensuring and enhancing the prospects of continued viability for the tourism enterprise.
+- `reading_jijing_9_test_81_p2` I-08：However, the number of interstate and international tourists visiting the resort is small, with the principal visitor markets com prising locals and residents front nearby towns and the Gold Coast region.
 
 ## 回归例句逐模板结果
 
@@ -728,6 +2182,9 @@ For instance, studies show that most people will not accept a bet in which there
 - 整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 只报告不设预期。
 - v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。
 - v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。
+- v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
+- v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。
+- 拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。
 - 无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。
 - 字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。
 - 分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。

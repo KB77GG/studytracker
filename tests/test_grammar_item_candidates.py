@@ -15,13 +15,20 @@ from zipfile import ZipFile
 from scripts.grammar_items import spans as roles
 from scripts.grammar_items.checks import Reason as R
 from scripts.grammar_items.checks import (
+    corpus_vocabulary,
     glued_sentence_boundary,
     multi_sentence_unit,
     sentence_reasons,
+    suspected_split_word,
     unbalanced,
 )
 from scripts.grammar_items.parse_view import ParseView, Token, finite, trim_tokens
-from scripts.grammar_items.reporting import independent_hits, template_counts
+from scripts.grammar_items.reporting import (
+    independent_hits,
+    relative_adverb_stats,
+    resplit_stats,
+    template_counts,
+)
 from scripts.grammar_items.review_batch import (
     HEADERS,
     SHEET_NAMES,
@@ -34,7 +41,13 @@ from scripts.grammar_items.review_batch import (
     write_workbook,
 )
 from scripts.grammar_items.spans import classification_kind, locate_spans
-from scripts.grammar_items.templates import TEMPLATES, close_quotes, generate_templates, item_id
+from scripts.grammar_items.templates import (
+    TEMPLATES,
+    close_quotes,
+    generate_templates,
+    item_id,
+    single_quote_role,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -875,6 +888,154 @@ class V02Tests(unittest.TestCase):
         self.assertEqual(clause[0]["target"]["text"], "was born")
         distractors = by_template(items, "main_verb_tap")[0]["distractors"]
         self.assertEqual([d["text"] for d in distractors], ["was born"])
+
+
+class CodexReviewFixTests(unittest.TestCase):
+    """Fixes for the independent v0.2 review (F1, F2, F5, S1)."""
+
+    def test_split_word_uses_corpus_vocabulary(self):
+        vocabulary = corpus_vocabulary(["It was calculated carefully.", "They calculated it."])
+        self.assertTrue(suspected_split_word("They had calcu lated that it works.", vocabulary))
+        self.assertFalse(suspected_split_word("They had calculated that it works.", vocabulary))
+        common = corpus_vocabulary(["red and red and red ."])
+        self.assertFalse(suspected_split_word("red and red", common))
+        reasons = sentence_reasons("They had calcu lated it.", [], None, vocabulary)
+        self.assertIn(R.SUSPECTED_SPLIT_WORD, reasons)
+        self.assertNotIn(R.SUSPECTED_SPLIT_WORD, sentence_reasons("calcu lated", [], None))
+
+    def interrupted_items(self):
+        sentence, view = tree(
+            [
+                ("They", "nsubj", 6, "PRON", "PRP"),
+                ("do", "aux", 6, "AUX", "VBP"),
+                ("not", "neg", 6, "PART", "RB"),
+                (",", "punct", 6, "PUNCT", ","),
+                ("however", "advmod", 6, "ADV", "RB"),
+                (",", "punct", 6, "PUNCT", ","),
+                ("handle", "ROOT", 6, "VERB", "VB"),
+                ("it", "dobj", 6, "PRON", "PRP"),
+                (".", "punct", 6, "PUNCT", "."),
+            ]
+        )
+        tags = [("They", "subject", 1), ("handle", "verb", 1), ("it", "object", 1)]
+        return generate(sentence, view, tags)[0]
+
+    def test_verb_unit_outside_tag_span_is_shown_and_downgraded(self):
+        items = self.interrupted_items()
+        t6 = by_template(items, "finite_or_not")[0]
+        self.assertEqual([p["text"] for p in t6["target"]["parts"]], ["do not", "handle"])
+        self.assertIn(R.VERB_UNIT_OUTSIDE_SPAN, t6["reasons"])
+        self.assertEqual(t6["status"], "needs_review")
+
+    def test_t1_answer_unchanged_but_downgraded(self):
+        t1 = by_template(self.interrupted_items(), "main_verb_tap")[0]
+        self.assertEqual([s["text"] for s in t1["answer"]["spans"]], ["handle"])
+        self.assertIn(R.VERB_UNIT_OUTSIDE_SPAN, t1["reasons"])
+
+    def test_inversion_and_particle_outside_tag_span(self):
+        cases = {
+            "inversion": (
+                [
+                    ("Only", "advmod", 1, "ADV", "RB"),
+                    ("then", "advmod", 4, "ADV", "RB"),
+                    ("did", "aux", 4, "AUX", "VBD"),
+                    ("they", "nsubj", 4, "PRON", "PRP"),
+                    ("take", "ROOT", 4, "VERB", "VB"),
+                    ("action", "dobj", 4, "NOUN", "NN"),
+                    (".", "punct", 4, "PUNCT", "."),
+                ],
+                [("they", "subject", 1), ("take", "verb", 1), ("action", "object", 1)],
+                ["did", "take"],
+            ),
+            "particle": (
+                [
+                    ("People", "nsubj", 2, "NOUN", "NNS"),
+                    ("can", "aux", 2, "AUX", "MD"),
+                    ("put", "ROOT", 2, "VERB", "VB"),
+                    ("it", "dobj", 2, "PRON", "PRP"),
+                    ("down", "prt", 2, "ADP", "RP"),
+                    ("to", "prep", 2, "ADP", "IN"),
+                    ("luck", "pobj", 5, "NOUN", "NN"),
+                    (".", "punct", 2, "PUNCT", "."),
+                ],
+                [("People", "subject", 1), ("can put", "verb_phrase", 1), ("it", "object", 1)],
+                ["can put", "down"],
+            ),
+        }
+        for name, (rows, tags, parts) in cases.items():
+            with self.subTest(name):
+                sentence, view = tree(rows)
+                items, _ = generate(sentence, view, tags)
+                t6 = by_template(items, "finite_or_not")[0]
+                self.assertEqual([p["text"] for p in t6["target"]["parts"]], parts)
+                self.assertEqual(t6["status"], "needs_review")
+                t1 = by_template(items, "main_verb_tap")[0]
+                self.assertIn(R.VERB_UNIT_OUTSIDE_SPAN, t1["reasons"])
+
+    def test_report_lists_relative_adverb_targets_and_resplit_counts(self):
+        src = source("People save money when prices rise .")
+        item = {
+            "item_id": "gi_v02_x",
+            "template": "adverbial_relation",
+            "source": src,
+            "reasons": [R.POSSIBLE_RELATIVE_ADVERB],
+            "evidence": {"tag_span": {"start": 18, "end": 34}},
+        }
+        stats = relative_adverb_stats([item, {**item, "template": "clause_boundary"}])
+        self.assertEqual(stats["distinct_targets"], 1)
+        self.assertEqual(stats["targets"][0]["target"], "when prices rise")
+        self.assertEqual(
+            stats["targets"][0]["templates"], ["adverbial_relation", "clause_boundary"]
+        )
+        rows = [(source("x", sid=sid), []) for sid in ("A-01", "A-02", "A-02b", "A-02c")]
+        resplit = resplit_stats(rows)
+        self.assertEqual((resplit["sentences_before"], resplit["sentences_after"]), (2, 4))
+        self.assertEqual(resplit["added"], 2)
+
+    def test_truncated_clause_target_is_not_auto_pass(self):
+        sentence, view = tree(
+            [
+                ("Prices", "nsubj", 1, "NOUN", "NNS"),
+                ("rose", "ROOT", 1, "VERB", "VBD"),
+                ("because", "mark", 4, "SCONJ", "IN"),
+                ("demand", "nsubj", 4, "NOUN", "NN"),
+                ("grew", "advcl", 1, "VERB", "VBD"),
+                ("quickly", "advmod", 4, "ADV", "RB"),
+                ("abroad", "advmod", 4, "ADV", "RB"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("Prices", "subject", 1),
+            ("rose", "verb", 1),
+            ("because demand grew", "reason_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        for template in ("clause_boundary", "clause_type_classify", "adverbial_relation"):
+            item = by_template(items, template)[0]
+            self.assertIn(R.BOUNDARY_MISMATCH, item["reasons"], template)
+            self.assertEqual(item["status"], "needs_review")
+
+    def test_apostrophes_are_not_quote_marks(self):
+        self.assertIsNone(single_quote_role("in the '80s", 7))
+        self.assertIsNone(single_quote_role("it's", 2))
+        self.assertEqual(single_quote_role("students' books", 8), "ambiguous")
+        self.assertEqual(single_quote_role("James' car", 5), "ambiguous")
+        sentence = "the 'merchant of death', someone"
+        self.assertEqual(single_quote_role(sentence, 4), "open")
+        self.assertEqual(single_quote_role(sentence, 22), "close")
+        quoted = "'The students' books'"
+        span = {"start": 1, "end": 20, "text": quoted[1:20]}
+        self.assertIs(close_quotes(quoted, span, 0, len(quoted)), span)
+
+    def test_s_quote_closes_a_pending_quoted_term(self):
+        sentence = "They built 'megacities' and traded in 1990's markets."
+        span = {"start": 11, "end": 22, "text": sentence[11:22]}
+        closed = close_quotes(sentence, span, 0, len(sentence))
+        self.assertEqual(closed["text"], "'megacities'")
+        possessive = "Their students' books were new."
+        span = {"start": 6, "end": 15, "text": possessive[6:15]}
+        self.assertIs(close_quotes(possessive, span, 0, len(possessive)), span)
 
 
 if __name__ == "__main__":

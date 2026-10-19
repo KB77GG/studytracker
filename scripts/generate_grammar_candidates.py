@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.grammar_items.checks import sentence_reasons
+from scripts.grammar_items.checks import corpus_vocabulary, sentence_reasons
 from scripts.grammar_items.parse_view import ParseCache, load_parser
 from scripts.grammar_items.reporting import (
     build_report,
@@ -31,6 +31,12 @@ from scripts.grammar_items.templates import generate_templates
 def collect(root, nlp, cache, limit=None):
     candidates, rejections, results = [], [], []
     files = sorted((root / "data/reading_study").glob("*.json"))
+    # Split-word detection compares against the whole corpus, even with --limit.
+    vocabulary = corpus_vocabulary(
+        s["sentence"]
+        for path in files
+        for s in json.loads(path.read_text(encoding="utf-8"))["sentences"]
+    )
     for index, path in enumerate(files[:limit], 1):
         passage = json.loads(path.read_text(encoding="utf-8"))
         for sentence in passage["sentences"]:
@@ -50,7 +56,7 @@ def collect(root, nlp, cache, limit=None):
                     file=sys.stderr,
                 )
                 view = None
-            reasons = sentence_reasons(sentence["sentence"], spans, view)
+            reasons = sentence_reasons(sentence["sentence"], spans, view, vocabulary)
             results.append((source, reasons))
             if reasons:
                 rejections.append(

@@ -1,6 +1,7 @@
 """The exhaustive plan reason codes and whole-sentence checks (no ID rules)."""
 
 import re
+from collections import Counter
 from enum import StrEnum
 
 # Plan v0.2 section B1: a sentence end glued to the next sentence ("these."Manufacturers).
@@ -8,6 +9,10 @@ GLUED_BOUNDARY = re.compile(r"(?<=\S)[.!?][\"”’')\]]?(?=[A-Z])")
 INITIALS = re.compile(r"\b(?:[A-Z]\.)+[A-Z]$")
 # Plan v0.2 section B1: a properly spaced sentence end inside one unit.
 SPACED_BOUNDARY = re.compile(r"[a-z0-9][.!?][\"”’')\]]?\s+[\"“‘'(]?[A-Z]")
+# Words as plain alphabetic runs; used for the corpus vocabulary and split-word check.
+WORD = re.compile(r"[A-Za-z]+")
+# A rare pair whose concatenation is a known word, e.g. "calcu lated" (OCR split).
+SPLIT_WORD_MAX_PART_COUNT = 2
 ABBREVIATION = re.compile(
     r"\b(Mr|Mrs|Ms|Dr|St|Prof|Jr|Sr|No|Co|Inc|Ltd|vs|etc|U\.S|U\.K|e\.g|i\.e|a\.m|p\.m)"
     r"[.!?][\"”’')\]]?\s+[A-Z]$"
@@ -27,6 +32,7 @@ class Reason(StrEnum):
     CLAUSE_ATTACHED_TO_CONJUNCTION = "clause_attached_to_conjunction"
     GLUED_SENTENCE_BOUNDARY = "glued_sentence_boundary"
     MULTI_SENTENCE_UNIT = "multi_sentence_unit"
+    SUSPECTED_SPLIT_WORD = "suspected_split_word"
     PARSE_FAILURE = "parse_failure"
     AMBIGUOUS_SPAN_LOCATION = "ambiguous_span_location"
     PARSER_ROOT_OUTSIDE_VERB_SPAN = "parser_root_outside_verb_span"
@@ -51,6 +57,7 @@ class Reason(StrEnum):
     RELATION_LABEL_OUT_OF_SCOPE = "relation_label_out_of_scope"
     NO_DISTRACTOR = "no_distractor"
     POSSIBLE_RELATIVE_ADVERB = "possible_relative_adverb"
+    VERB_UNIT_OUTSIDE_SPAN = "verb_unit_outside_span"
 
 
 def unbalanced(sentence):
@@ -91,12 +98,29 @@ def multi_sentence_unit(sentence):
     )
 
 
+def corpus_vocabulary(sentences):
+    """Lower-cased word counts over the whole corpus (deterministic, parser-free)."""
+    return Counter(w.lower() for sentence in sentences for w in WORD.findall(sentence))
+
+
+def suspected_split_word(sentence, vocabulary):
+    words = list(WORD.finditer(sentence))
+    for left, right in zip(words, words[1:], strict=False):
+        if sentence[left.end() : right.start()] != " ":
+            continue
+        a, b = left.group().lower(), right.group().lower()
+        rare = max(vocabulary[a], vocabulary[b]) <= SPLIT_WORD_MAX_PART_COUNT
+        if rare and vocabulary[a + b] >= 1:
+            return True
+    return False
+
+
 def clause_attached_to_conjunction(view):
     clause_deps = {"advcl", "conj", "ccomp", "relcl", "csubj", "csubjpass", "acl"}
     return any(t.dep in clause_deps and view.tokens[t.head].dep == "cc" for t in view.tokens)
 
 
-def sentence_reasons(sentence, spans, view):
+def sentence_reasons(sentence, spans, view, vocabulary=None):
     checks = {
         Reason.HEADING: any(s.concept == "heading" for s in spans),
         Reason.UNKNOWN_SPAN: any(s.concept == "unknown" for s in spans),
@@ -109,6 +133,8 @@ def sentence_reasons(sentence, spans, view):
         Reason.GLUED_SENTENCE_BOUNDARY: glued_sentence_boundary(sentence),
         Reason.MULTI_SENTENCE_UNIT: multi_sentence_unit(sentence),
         Reason.PARSE_FAILURE: view is None,
+        Reason.SUSPECTED_SPLIT_WORD: vocabulary is not None
+        and suspected_split_word(sentence, vocabulary),
     }
     if view is not None:
         checks.update(
