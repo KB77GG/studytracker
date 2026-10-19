@@ -1,7 +1,25 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 Codex 对语法候选题 v0.2 首次独立审核，结论 **不通过：1 阻断、4 应修、4 建议**。本轮只写审核与交接，未修被审核代码/数据；以下最新节覆盖旧节“已全部完成、可交老师”的结论。未合并 main、未部署。
+> 最近更新：2026-10-19 Claude 按 Codex 独立审核修复语法候选题 v0.2：F1–F5 已修，S1–S3 采纳，S4 不修并说明原因；另修 T3/T4 从句目标截短。修复仍由同一方自查，建议复核后再交老师。未合并 main、未部署。
+
+## 2026-10-19 语法候选题 v0.2 审核修复（Claude，待复核）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`（逐条处理、前后统计、验证、遗留）。Codex 审核记录 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_CODEX_REVIEW.md` 不改。
+- **分支**：`claude/word-memorization-system-eval-55v2y5`，先快进到 Codex 的 `8f273e9`，再提交修复。`codex/grammar-item-candidates` 可直接快进到本分支。
+- **修复**：
+  - F1：T6 目标和 T1 干扰项用完整动词单位；单位有成分在原标注外时 T1/T6 加 `verb_unit_outside_span` 降为 needs_review（T1 答案按计划不变）。Codex 列出的 9 道全部降级并显示完整单位。
+  - F2：新整句过滤 `suspected_split_word`（全库词表规则，非 ID 黑名单），命中 6 句，均为 OCR 断词；原文未改。
+  - F3 / F4 / S2 / S3：4 句阅读解析标注修改（16_97_p2 F-36c、71_1_p2 E-01、18_53_p2 E-01c、73_5_p1 H-01b），都在原本要更新的 25 篇内。
+  - F5：报告新增关系副词逐条目标列表和拆句前后句数（12,657 → 12,688，新增 31）。
+  - S1：单引号识别区分年代缩写、词中撇号；`s'` 后接小写词按上下文判断（范围内有未配对开引号才算结束引号），全库引号范围与 Codex 审核版一致。S4 不修：改 `datetime.UTC` 需 Python 3.11+，生产是 3.10.12。
+  - 计划外同类修正：T3 从句类目标和 T4 目标必须与句法树从句范围一致，否则 `boundary_mismatch` 降级；T3 1,382 道、T4 49 道仅因此降级。短语和非谓语目标不查。
+- **统计**：候选 49,623 道；auto_pass T1 5922 / T2 4772 / T3 11540 / T4 396 / T5 5370 / T6 12738。抽查表仍为 360 行。
+- **验证**：两次生成 7 个文件逐字节一致；回归例句与修复前一致；按 Codex 方法（种子 20261019）在新抽查表复抽 30 道 auto_pass，全部正确。出题器测试 50 项；Flask-only CI 列表 133 ran / 1 skipped；Node 通过；`tests.test_reading_study` 22 项通过；validator 0 错误；text fixes `--check` 0 未应用；改动的 Python 文件 Ruff check / format 通过。临时库先导入 main 完整快照再导入本分支：updated=25 / skipped=292 / failed=0。
+- **遗留待用户决定**：`27_33_p1` B-09 的 OCR 错字 `claim mat`（应为 that，可作第 34 条修订）；3 篇机经 14 个段首句以 `. ` 开头（原文抽取问题）；51 个多句单元是否重拆。
+- **仅云端会话可见**：分析脚本、解析缓存与临时 SQLite 在会话 scratchpad，不提交；`output/grammar_items/` 被 git 忽略，需重跑生成脚本获得。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。线上待办同下方 2026-10-18 v0.2 节，需用户另行授权。
+- **下一步**：让 Codex 或老师复核本轮修复；通过后把 `data/grammar_items/review_batch_v0_2.xlsx` 交老师盲审。
 
 ## 2026-10-19 语法候选题 v0.2 独立审核（不通过，仅报告）
 

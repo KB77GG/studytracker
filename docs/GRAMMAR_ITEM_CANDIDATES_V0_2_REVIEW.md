@@ -1,5 +1,7 @@
 # 语法候选题 v0.2 — 执行与自查记录
 
+> 后续（2026-10-19）：Codex 独立审核结论为不通过，修复记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`。下文统计和“可以交给老师”的结论以修复记录为准。
+
 - 执行方：Claude（云端会话，分支 `claude/word-memorization-system-eval-55v2y5`）。用户改为由 Claude 直接执行 v0.2 计划，没有交给 Codex。
 - **独立性说明**：本轮由同一方实现和检查，没有 v0.1 那样的第二方交叉审核。如需独立复核，可以让 Codex 按
   `docs/GRAMMAR_ITEM_CANDIDATES_PLAN_V0_2.md` 第 D 节检查。
