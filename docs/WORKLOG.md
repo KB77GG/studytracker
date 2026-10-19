@@ -9,7 +9,7 @@
 - 任务树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 的 `codex/grammar-item-candidates` 仅快进到 **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，审 `8f273e9..f9aebc7`；没有合入Claude后续提交或rebase。只新增 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md` 并更新两份交接，桌面main既有脏状态保留。
 - 1阻断、3应修、3建议：T1干扰项3题越界仍自动通过；数字引语引入真实截短回归；新抽样OCR坏句、19句漏网下界（16句44自动题）；短语同规则扩展只复现933降级、非2333。T6遗漏0、9例补齐降级、6299共同T1答案不变；F3/F4/F5/S2/S3解决，S4兼容理由接受。
 - 65测试通过；Flask-only完整CI列表133运行/132通过/1跳过，Node通过；5改动Python Ruff check/format通过；validator0错误，textfix0未应用；完整main快照到当前临时SQLite导入updated25/skipped292/failed0。Mac冷/热两次四交付逐字节一致，报告对提交版仅Python版本行不同；13回归对象与基线完全一致。seed20261020两套各30题已逐题审核；七工作表盲审格式通过。
-- 编写时三份文档待commit/push；授权只推任务分支，提交不带skip标记，随后补记CI。未改被审核代码/数据，未推main、部署、PR、生产操作或大模型API调用。临时证据只在本机；下一步处理R1–R4后再审，教师审核和Claude后续提交均未验收。
+- 正文 **0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8 已commit/push** 至任务分支并核对远端。CI [39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728) 整体success，test/Node成功，lint存量advisory失败、format跳过；日志问题路径与本轮被审改动文件无交集。本条由后续纯文档提交补记，两次均不带skip标记，最终回复前再核对最后提交CI。未改被审核代码/数据，未推main、部署、PR、生产操作或大模型API调用。临时证据只在本机；下一步处理R1–R4后再审，教师审核和Claude后续提交均未验收。
 
 ## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude，历史自查）
 

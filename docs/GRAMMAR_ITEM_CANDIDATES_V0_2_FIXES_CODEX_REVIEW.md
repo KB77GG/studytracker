@@ -79,7 +79,7 @@
 
 ### R3 — 应修：OCR 断词过滤漏过新的交付坏句
 
-- 位置：`scripts/grammar_items/checks.py:106`；抽样题 **`gi_v02_4f3d9fb9f71c`**，主句谓语 Excel 行51，`reading_jijing_65_test_69_p2` G-02。该句有 `cow less steaks and chicken less drumsticks`，应按语境写作 cowless/chickenless（或保留合法连字符）。主句答案 should be allowed 正确，原文仍不适合直接出题。
+- 位置：`scripts/grammar_items/checks.py:106`；抽样题 **`gi_v02_4f3d9fb9f71c`**，主句谓语数据行51 / Excel 行52，`reading_jijing_65_test_69_p2` G-02。该句有 `cow less steaks and chicken less drumsticks`，应按语境写作 cowless/chickenless（或保留合法连字符）。主句答案 should be allowed 正确，原文仍不适合直接出题。
 - 复现：按下文种子/顺序抽样；以 `/usr/share/dict/words` 检索相邻词拼接后为词、至少一片段非词的组合，再检查全库标注中的排印提示、逐句独立读语境，并对照同篇 static 原文。没有只依赖 Claude 已列的 6 例。确定的 19 句列表见下节；19/19 的坏字符串都在相应 static JSON 中。
 - 规则 `max(freq(a), freq(b)) <= 2 and freq(a+b) >= 1` 极保守：fun 的高频挡住 fun gicide，al 挡住 nas al，peasant 在全库从未正确拼写使 peas ant 无法命中。这是规则召回的结构性限制。19 句中 16 句仍生成共 44 道 auto_pass；这只是本次人工确认的下界，不是完整漏网总数估计。
 - 建议改法：另行授权修复已确认的源文本，并给高风险拼写增加可审计词典/词形与上下文复核；不要把“两个片段都极罕见”当唯一来源质量保障，也不要按句 ID 黑名单封堵。扩大规则前仍需评估真实词组误伤，不可无差别拼接。
@@ -109,7 +109,7 @@
 
 ### A3 — 建议：目标内部括号应成对保留
 
-- 位置：`templates.py:98`（只补引号）、`:362`（trim）；题 **`gi_v02_eec00568cf99`**，ielts20_test3_p2 A-01，T3 Excel 行12。
+- 位置：`templates.py:98`（只补引号）、`:362`（trim）；题 **`gi_v02_eec00568cf99`**，ielts20_test3_p2 A-01，T3 数据行12 / Excel 行13。
 - 复现：raw `[97,160)` 含完整 `at the world-renowned Zoological Society of London (London Zoo)`；目标 `[97,159)` 少最后右括号，显示 `【at ... (London Zoo】)`。答案“不是从句”正确，内部标点范围不完整。属于基线已有展示问题，非此次新回归。
 - 建议改法：在不越过 raw span 的前提下保留目标内部的成对括号；与“整个引语本来跨出从句”的12处既有情况不同，此处右括号在原标注内，可以安全补回。
 
@@ -349,4 +349,8 @@ Flask-only仅装Flask及传递依赖；缺openpyxl的写表测试按设计跳过
 
 ## 提交与 GitHub CI
 
-待本报告提交推送后，以实际 run 的 headSha/status/conclusion/jobs 补记。最终文档提交同样不带skip标记，并在最终回复前核对CI；不把advisory lint失败写成全部绿色。
+- 审核正文提交 **`0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8` 已 commit/push** 至 `origin/codex/grammar-item-candidates`，`git ls-remote` 确认远端相同。该提交只含三份获准文档，没有skip标记。
+- [GitHub CI 39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728)：headSha等于上述提交，completed / **success**；test job **success**，133 ran /132 passed /1 skipped，Node spelling queue **success**。
+- lint job **failure**，Ruff check报仓库存量问题，format step **skipped**。从日志提取错误路径，与本次被审核的改动文件集合交集为空；CI配置将lint设为continue-on-error。不能把整体success写成全部检查通过。本轮5个Python文件的显式Ruff check/format均通过。
+- 核实命令：`gh run view 39208956728 --json status,conclusion,headSha,jobs,url`、`gh run view 39208956728 --log`；完整日志存本机 `$AUDIT/github-ci-first.log`。
+- 本节及交接由后续纯文档提交补记，另校正正文两处Excel行号（题号及抽样表未变）。该后续提交也不带skip标记，最终回复前核对其远端HEAD和CI。被审核代码/数据始终保持f9aebc7；最后HEAD以 `git rev-parse HEAD` 和 `git ls-remote origin refs/heads/codex/grammar-item-candidates` 为准。

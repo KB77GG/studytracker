@@ -6,7 +6,8 @@
 ## 2026-10-19 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
 
 - **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md`。包含15项实际结果与命令、F1–F5/S1–S4关闭状态、30边界题+30自动通过题逐题表、19句漏网下界、双次SHA与复现方法。原审核/修复记录保持原样。
-- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，按授权fetch后 `git merge --ff-only f9aebc7`，审核HEAD **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，范围 **8f273e9..f9aebc7**。不得合入Claude此后的提交或rebase，本分支与其分叉是预期。开始/检查完成时干净，本轮只写本节、WORKLOG与新增复审报告；编写本节时待文档commit/push，随后核对远端并补CI结果。
+- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，按授权fetch后 `git merge --ff-only f9aebc7`，审核HEAD **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，范围 **8f273e9..f9aebc7**。不得合入Claude此后的提交或rebase，本分支与其分叉是预期。开始/检查完成时干净，只写三份获准文档；正文提交 **0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8 已commit/push** 并确认远端同SHA。编写此补记时仅三文档本轮改动，随后纯文档commit/push；最终HEAD用 `git rev-parse HEAD` / `git ls-remote origin refs/heads/codex/grammar-item-candidates` 核对，不能把正文SHA误当最后提交。
+- **GitHub CI**：正文 [39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728) completed/success，headSha核对一致；test成功（133 ran/132 passed/1 skipped）、Node成功；lint失败为存量advisory，format跳过，非全绿。日志错误路径与本轮被审改动文件无交集。本补记仍不带skip标记，最终回复前核对最后文档提交CI。
 - **原桌面树**：`/Users/zhouxin/Desktop/studytracker` 仍是 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`；7 modified /22 untracked入口保留（路径见下方v0.1节），本轮没有写入或切分支。
 - **结论**：T6遗漏0、9例已修、6299共同T1答案不变，但3个T1干扰项越界仍auto_pass（R1阻断）；数字引语范围真实回归（R2）；新抽样坏句及19句漏网OCR（R3）；短语同规则实验为933新增降级，不能复现自查2333（R4）。F3/F4/F5/S2/S3已解决，S4兼容理由接受，F1/F2/S1不能全关闭。
 - **验证**：`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_grammar_graph_draft -v` 65 passed；新Flask-only环境完整CI列表133 ran/132 passed/1 skipped、Node exit0；5改动Python文件Ruff check及format --check（显式清空extend-exclude）通过；validator317 valid/0 errors、text fixes --check 0未应用；pip check无冲突。完整命令见报告。
