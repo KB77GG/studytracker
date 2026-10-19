@@ -6,22 +6,22 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5922 | 377 | 6389 |
-| clause_boundary | 4772 | 2397 | 2791 |
-| clause_type_classify | 11540 | 3176 | 1437 |
-| adverbial_relation | 396 | 637 | 2668 |
-| subject_span | 5370 | 737 | 6581 |
-| finite_or_not | 12738 | 1561 | 6575 |
+| main_verb_tap | 5954 | 384 | 6388 |
+| clause_boundary | 4790 | 2412 | 2773 |
+| clause_type_classify | 11596 | 3200 | 1412 |
+| adverbial_relation | 403 | 637 | 2644 |
+| subject_span | 5399 | 743 | 6584 |
+| finite_or_not | 12802 | 1575 | 6576 |
 
 ## 范围
 
 ```json
 {
   "passages": 317,
-  "sentences": 12688,
-  "candidates": 49623,
-  "sentence_rejections": 1437,
-  "template_rejections": 17819
+  "sentences": 12726,
+  "candidates": 49895,
+  "sentence_rejections": 1412,
+  "template_rejections": 17905
 }
 ```
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "8702bd2293d4070b0433e89b2864b09f826b810c94ee7fdaffd036a37e582933",
+  "reading_study_sha256": "607c296cc6f6fa98c190717c296d4d000f91c611e62a66a498427b69495faca5",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -47,48 +47,48 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2760,
-    "needs_review": 163
+    "auto_pass": 2775,
+    "needs_review": 168
   },
   "G-S02": {
-    "auto_pass": 5370,
-    "needs_review": 737
+    "auto_pass": 5399,
+    "needs_review": 743
   },
   "G-C02": {
-    "auto_pass": 571,
-    "needs_review": 644
+    "auto_pass": 565,
+    "needs_review": 656
   },
   "G-C03": {
-    "auto_pass": 11540,
-    "needs_review": 3176
+    "auto_pass": 11596,
+    "needs_review": 3200
   },
   "G-C04": {
-    "auto_pass": 1796,
+    "auto_pass": 1804,
     "needs_review": 328
   },
   "G-C08": {
-    "auto_pass": 1144,
-    "needs_review": 738
+    "auto_pass": 1155,
+    "needs_review": 742
   },
   "G-C10": {
-    "auto_pass": 1261,
-    "needs_review": 687
+    "auto_pass": 1266,
+    "needs_review": 686
   },
   "G-C11": {
     "needs_review": 637,
-    "auto_pass": 396
+    "auto_pass": 403
   },
   "G-N01": {
-    "auto_pass": 10880,
-    "needs_review": 1499
+    "auto_pass": 10934,
+    "needs_review": 1513
   },
   "G-N04": {
-    "auto_pass": 1858,
+    "auto_pass": 1868,
     "needs_review": 62
   },
   "G-L01": {
-    "auto_pass": 3162,
-    "needs_review": 214
+    "auto_pass": 3179,
+    "needs_review": 216
   }
 }
 ```
@@ -97,40 +97,41 @@
 
 ```json
 {
-  "no_main_verb_tag": 12174,
-  "coordinated_main_verbs": 3974,
-  "split_subject": 3760,
-  "coordinated_main_clauses": 3576,
-  "boundary_mismatch": 3052,
-  "clause_type_mismatch": 1896,
-  "span_not_constituent": 1405,
-  "ambiguous_span_location": 1364,
-  "multiple_targets_same_type": 1354,
-  "no_relation_label": 1231,
-  "finiteness_mismatch": 665,
-  "verb_unit_outside_span": 578,
-  "subject_mismatch": 562,
-  "parser_root_outside_verb_span": 550,
-  "unbalanced_quotes_or_brackets": 427,
+  "no_main_verb_tag": 12237,
+  "coordinated_main_verbs": 4004,
+  "split_subject": 3782,
+  "coordinated_main_clauses": 3594,
+  "boundary_mismatch": 3056,
+  "clause_type_mismatch": 1934,
+  "span_not_constituent": 1408,
+  "ambiguous_span_location": 1369,
+  "multiple_targets_same_type": 1361,
+  "no_relation_label": 1232,
+  "finiteness_mismatch": 671,
+  "verb_unit_outside_span": 592,
+  "subject_mismatch": 568,
+  "parser_root_outside_verb_span": 562,
+  "unbalanced_quotes_or_brackets": 430,
   "subordinator_unknown": 321,
-  "unknown_span": 313,
+  "unknown_span": 309,
   "existential": 304,
-  "too_short": 254,
+  "too_short": 261,
   "possible_relative_adverb": 228,
   "level_one_subordinate": 225,
   "subordinator_ambiguous": 210,
-  "fragment": 186,
-  "multiple_main_verbs": 180,
+  "fragment": 185,
+  "multiple_main_verbs": 177,
   "span_not_found": 153,
-  "multi_sentence_unit": 51,
-  "too_long": 49,
+  "too_long": 47,
   "subject_after_verb": 44,
-  "tagged_fragment": 37,
+  "tagged_fragment": 36,
   "heading": 32,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
+  "control_character": 6,
   "suspected_split_word": 6,
-  "clause_attached_to_conjunction": 2
+  "clause_attached_to_conjunction": 2,
+  "multi_sentence_unit": 1
 }
 ```
 
@@ -138,8 +139,8 @@
 
 ```json
 {
-  "reading_jijing": 15935,
-  "reading_test": 33688
+  "reading_jijing": 16012,
+  "reading_test": 33883
 }
 ```
 
@@ -147,9 +148,9 @@
 
 ```json
 {
-  "easy": 16804,
-  "hard": 18486,
-  "medium": 14333
+  "easy": 16925,
+  "hard": 18582,
+  "medium": 14388
 }
 ```
 
@@ -169,13 +170,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1129,
+          "pool_size": 1138,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 353,
+          "pool_size": 356,
           "sample_size": 3
         },
         {
@@ -187,19 +188,19 @@
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1938,
+          "pool_size": 1949,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1056,
+          "pool_size": 1061,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 980,
+          "pool_size": 984,
           "sample_size": 8
         }
       ]
@@ -213,7 +214,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 468,
+          "pool_size": 472,
           "sample_size": 5
         },
         {
@@ -225,25 +226,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 538,
+          "pool_size": 536,
           "sample_size": 6
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 776,
+          "pool_size": 779,
           "sample_size": 8
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1461,
+          "pool_size": 1464,
           "sample_size": 15
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 981,
+          "pool_size": 991,
           "sample_size": 10
         }
       ]
@@ -257,37 +258,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 938,
+          "pool_size": 946,
           "sample_size": 4
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1248,
+          "pool_size": 1255,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1012,
+          "pool_size": 1011,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2220,
+          "pool_size": 2233,
           "sample_size": 10
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3633,
+          "pool_size": 3646,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2489,
+          "pool_size": 2505,
           "sample_size": 11
         }
       ]
@@ -307,32 +308,32 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 62,
+          "pool_size": 63,
           "sample_size": 8
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
           "pool_size": 83,
-          "sample_size": 11
+          "sample_size": 10
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 46,
+          "pool_size": 48,
           "sample_size": 6
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 64,
+          "pool_size": 66,
           "sample_size": 8
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 74,
-          "sample_size": 9
+          "pool_size": 76,
+          "sample_size": 10
         }
       ]
     },
@@ -345,37 +346,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1013,
+          "pool_size": 1021,
           "sample_size": 9
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 340,
+          "pool_size": 342,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 399,
+          "pool_size": 398,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1781,
+          "pool_size": 1793,
           "sample_size": 17
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 964,
+          "pool_size": 969,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 873,
+          "pool_size": 876,
           "sample_size": 8
         }
       ]
@@ -389,38 +390,38 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1634,
-          "sample_size": 6
+          "pool_size": 1645,
+          "sample_size": 7
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1294,
+          "pool_size": 1302,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1090,
+          "pool_size": 1091,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2946,
+          "pool_size": 2964,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3374,
+          "pool_size": 3390,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2400,
-          "sample_size": 10
+          "pool_size": 2410,
+          "sample_size": 9
         }
       ]
     }
@@ -628,7 +629,7 @@
         "clause_type_classify"
       ],
       "item_ids": [
-        "gi_v02_921aebca6e19"
+        "gi_v02_f89b8ee38f1f"
       ]
     },
     {
@@ -1885,9 +1886,41 @@
 ```json
 {
   "sentences_before": 12657,
-  "sentences_after": 12688,
-  "added": 31,
+  "sentences_after": 12726,
+  "added": 69,
   "new_sentence_ids": [
+    "ielts18_test4_p2 F-03b",
+    "ielts19_test4_p3 H-02b",
+    "ielts20_test2_p3 I-51b",
+    "ielts20_test4_p2 B-11b",
+    "ielts20_test4_p2 C-16b",
+    "ielts20_test4_p2 C-16c",
+    "ielts20_test4_p2 D-19b",
+    "ielts20_test4_p2 D-19c",
+    "ielts20_test4_p2 E-23b",
+    "ielts4_test1_p3 I-31b",
+    "ielts4_test1_p3 I-31c",
+    "ielts4_test2_p1 E-27b",
+    "ielts4_test2_p2 B-06b",
+    "ielts4_test2_p3 A-07b",
+    "ielts4_test2_p3 A-07c",
+    "ielts4_test2_p3 C-19b",
+    "ielts4_test2_p3 C-20b",
+    "ielts4_test2_p3 E-29b",
+    "ielts4_test2_p3 G-37b",
+    "ielts4_test2_p3 G-37c",
+    "ielts4_test2_p3 H-38b",
+    "ielts4_test2_p3 H-43b",
+    "ielts4_test4_p1 I-45b",
+    "ielts5_test2_p2 A-02b",
+    "ielts5_test2_p2 A-05b",
+    "ielts5_test4_p2 J-45b",
+    "ielts6_test2_p1 A-01b",
+    "ielts7_test1_p3 C-11b",
+    "ielts7_test2_p1 I-44b",
+    "ielts7_test3_p1 D-03b",
+    "ielts8_test3_p1 I-03b",
+    "ielts8_test3_p3 A-03b",
     "reading_jijing_10_test_78_p3 E-04b",
     "reading_jijing_10_test_78_p3 P-01b",
     "reading_jijing_14_test_23_p1 G-02b",
@@ -1897,11 +1930,15 @@
     "reading_jijing_16_test_97_p2 F-36c",
     "reading_jijing_16_test_97_p2 F-36d",
     "reading_jijing_16_test_97_p2 F-36e",
+    "reading_jijing_16_test_97_p2 G-44b",
     "reading_jijing_18_test_53_p2 E-01b",
     "reading_jijing_18_test_53_p2 E-01c",
+    "reading_jijing_22_test_90_p2 G-24b",
     "reading_jijing_23_test_46_p1 B-04b",
     "reading_jijing_24_test_56_p1 D-01b",
+    "reading_jijing_26_test_72_p1 G-11b",
     "reading_jijing_38_test_22_p1 E-03b",
+    "reading_jijing_38_test_22_p3 G-07b",
     "reading_jijing_44_test_29_p1 H-03b",
     "reading_jijing_46_test_84_p1 B-09b",
     "reading_jijing_53_test_83_p2 B-03b",
@@ -1909,10 +1946,12 @@
     "reading_jijing_65_test_69_p1 I-03b",
     "reading_jijing_71_test_1_p2 E-01b",
     "reading_jijing_73_test_5_p1 H-01b",
+    "reading_jijing_73_test_5_p1 H-02b",
     "reading_jijing_76_test_43_p2 E-04b",
     "reading_jijing_78_test_102_p2 G-01b",
     "reading_jijing_78_test_102_p3 E-03b",
     "reading_jijing_82_test_4_p1 F-04b",
+    "reading_jijing_83_test_95_p1 C-03b",
     "reading_jijing_85_test_12_p1 C-05b",
     "reading_jijing_85_test_12_p1 C-05c",
     "reading_jijing_88_test_98_p2 D-02b",
@@ -1927,13 +1966,12 @@
 
 ### tagged_fragment
 
-实际 37 句；计划预期 37 句。
+实际 36 句；计划预期 36 句。
 
 - `ielts17_test2_p3` F-07：No.
 - `ielts17_test3_p2` A-04：Primarily because its unique properties – such as remaining solid at room temperature – make it an ideal ingredient for long-term preservation, allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future.
 - `ielts4_test4_p1` A-04：At the 1908 Olympics, John Hayes of the U.S.
 - `ielts4_test4_p1` A-05：team ran the marathon in a time of 2:55:18.
-- `ielts4_test4_p1` C-14：But with the right training we can go much further with that one third than we've been going." Yessis believes that U.S.
 - `ielts4_test4_p1` E-22："Many athletes are not getting the best nutrition, even though supplements," Yessis insists.
 - `ielts4_test4_p1` I-42：Raglin, a sports psychologist at Indiana University.
 - `ielts6_test1_p1` E-04：'A start of this much, each free-swimming period has to be this fast, with a certain stroke frequency and stroke length, with turns done in these times.'
@@ -1978,59 +2016,9 @@
 
 ### multi_sentence_unit
 
-实际 51 句；计划未设预期，只报告。
+实际 1 句；计划预期 1 句。
 
-- `ielts18_test4_p2` F-03：She has also expressed concerns that her theories are being misappropriated in schools by being conflated with the self-esteem movement: 'For me the growth mindset is a tool for learning and improvement. It's not just a vehicle for making children feel good.'
-- `ielts19_test4_p3` H-02：These were the traits that were prevalent in human life for tens of thousands of years. So presumably these traits are still strong in us now.
-- `ielts20_test2_p3` I-51：He later told me, "This is part of a movement to use algorithms to take the hard choices of living out of life." Perhaps he's right.
-- `ielts20_test4_p2` B-11：She knows that they’re essential and that the job is far from over. ‘We know that in 20, 30, 40 years, we'll need to go back in there and adjust to the changing environment,’ she says.
-- `ielts20_test4_p2` C-16：The programme has seen moderate success, mainly in areas with less subsidence. ‘Unfortunately, traditional infrastructure is often single-solution focused,’ says Tol. ‘For long-term success, it’s critical that we transition towards multifunctional approaches that embed natural processes and that engage and benefit communities and local decision-makers.’
-- `ielts20_test4_p2` D-19：The modifications were made by the Buoyant Foundation Project, a not-for-profit organisation that has been researching and retrofitting amphibious houses since 2006. ‘When I started this,’ explains founder Elizabeth English, ‘climate change was not on the tip of everybody’s tongue, but this technology is becoming necessary in places that didn’t previously need it.’ It’s much cheaper than permanently elevating houses, English explains – about a third of what it would cost to completely replace a building’s foundations.
-- `ielts20_test4_p2` E-23：Most of the country is less than a metre above sea level and 80 per cent of its land lies on floodplains. ‘Almost 35 million people living on the coastal belt of Bangladesh are currently affected by soil and water salinity,’ says Raisa Chowdhury of the international development organisation ICCO Cooperation.
-- `ielts4_test1_p3` I-31：For example, we asked: What goes with soft? A circle or a square? Which shape goes with hard?
-- `ielts4_test2_p1` E-27："They cannot refuse to speak English if most commercial activity is in English." But are languages worth saving?
-- `ielts4_test2_p2` B-06："We've had a tradition of doctors being fairly powerful and I guess they are pretty loath to allow any pretenders to their position to come into it." In many other industrialized countries, orthodox and alternative medicines have worked "hand in glove" for years.
-- `ielts4_test2_p3` A-07：Playful young animals use around two or three per cent of their energy cavorting, and in children that figure can be closer to fifteen per cent. "Even two or three per cent is huge," says John Byers of Idaho University. "You just don't find animals wasting energy like that," he adds.
-- `ielts4_test2_p3` C-19：But Byers points out that the benefits of increased exercise disappear rapidly after training stops, so any improvement in endurance resulting from juvenile play would be lost by adulthood. "If the function of play was to get into shape," says Byers, "the optimum time for playing would depend on when it was most advantageous for the young of a particular species to do so.
-- `ielts4_test2_p3` C-20：But it doesn't work like that." Across species, play tends to peak about halfway through the suckling stage and then decline.
-- `ielts4_test2_p3` E-29：Robert Barton of Durham University believes that, because large brains are more sensitive to developmental stimuli than smaller brains, they require more play to help mould them for adulthood. “I concluded it's to do with learning, and with the importance of environmental data to the brain during development,” he says.
-- `ielts4_test2_p3` G-37：Bekoff likens it to a behavioural kaleidoscope, with animals at play jumping rapidly between activities. "They use behaviour from a lot of different contexts - predation, aggression, reproduction," he says. "Their developing brain is getting all sorts of stimulation.
-- `ielts4_test2_p3` H-38：Not only is more of the brain involved in play than was suspected, but it also seems to activate higher cognitive processes. "There's enormous cognitive involvement in play", says Bekoff.
-- `ielts4_test2_p3` H-43：He was surprised by the extent of the activation. "Play just lights everything up," he says.
-- `ielts4_test4_p1` B-10："Was there someone like [sprinter] Michael Johnson in the 1920s?" Dapena asks.
-- `ielts4_test4_p1` C-14：But with the right training we can go much further with that one third than we've been going." Yessis believes that U.S.
-- `ielts4_test4_p1` I-45：We've got a long way to go." For the foreseeable future, records will be made to be broken.
-- `ielts5_test2_p2` A-02：The left.' No, not funny.
-- `ielts5_test2_p2` A-05：The outside.' Hah!
-- `ielts5_test4_p2` J-45：'It was a very expensive and time-consuming process that took around six months to complete.' Though the project cost A$1.6 million (nearly £700,000), the alternative - re-cladding the entire building - would have cost ten times as much.
-- `ielts6_test2_p1` A-01：In fact, Newman believes the main reason for adopting one sort of transport over another is politics: 'The more democratic the process, the more public transport is favored.' He considers Portland, Oregon, a perfect example of this.
-- `ielts7_test1_p3` C-11：In suggestopedia, as he called his method, consciousness is shifted away from the curriculum to focus on something peripheral. The curriculum then becomes peripheral and is dealt with by the reserve capacity of the brain.
-- `ielts7_test2_p1` I-44：'With the eaves extending out on all sides like balancing poles,' says Mr Ishida, 'the building responds to even the most powerful jolt of an earthquake with a graceful swaying, never an abrupt shaking.' Here again, Japanese master builders of a thousand years ago anticipated concepts of modern structural engineering.
-- `ielts7_test3_p1` D-03：The ants therefore cultivate these fungi in their nests, bringing them leaves to feed on, and then use them as a source of food. Farmer ants secrete antibiotics to control other fungi that might act as 'weeds', and spread waste to fertilise the crop.
-- `ielts8_test3_p1` I-03：Diels also hopes to see the birth of 'interactive meteorology' - not just forecasting the weather but controlling it. 'If we could discharge clouds, we might affect the weather,' he says.
-- `ielts8_test3_p3` A-03：'Nothing lives forever!' However, in this statement we think of artificially produced, technical objects, products which are subjected to natural wear and tear during use.
-- `reading_jijing_16_test_97_p2` G-44：That is, they discount future time investments relatively steeply." Why do we perceive a greater "surplus" of time in the future than in the present?
-- `reading_jijing_22_test_90_p2` G-24：It's just not cut-and-dried." The findings could be of help in slowing down the ongoing increase in childhood obesity, but for the time being, parents should be observant of their children's wake-sleep cycles, and take steps to ensure they are getting enough sleep, the researchers advised.
-- `reading_jijing_26_test_72_p1` G-11："One thing we can be sure of is that black Sigatoka won't lose in this battle." Poor farmers, who cannot afford chemicals, have it even worse.
-- `reading_jijing_32_test_20_p2` B-01：1. Valid assessment considers cultural and linguistic diversity as well as differences in communication and behavioural factors.
-- `reading_jijing_32_test_20_p2` C-01：2. The existence of limitations in adaptive skills occurs within the context of community environments typical of the individual's age-peers and is indexed to the person's individualised needs for support.
-- `reading_jijing_32_test_20_p2` D-01：3. Specific adaptive limitations often co-exist with strengths in other adaptive skills or other personal capabilities.
-- `reading_jijing_32_test_20_p2` E-01：4. With appropriate support over a sustained period, the life functioning of the person with mental retardation will generally improve.
-- `reading_jijing_38_test_22_p3` G-07：A paper in a 2006 issue of Strategy & Leadership commented that"research is not designed with managers' needs in mind, nor is it communicated in the journals they read. For the most part, it has become a self-referential closed system irrelevant to corporate performance."
-- `reading_jijing_48_test_21_p3` G-02：Further losses of ice can be reflected in Mt. Cook Region.
-- `reading_jijing_5_test_59_p1` A-01：In 1894 Dr John Kellogg and his brother. Will, were supervising a hospital and health spa in Michigan.
-- `reading_jijing_65_test_69_p2` H-03：In his recent book Free Flight. James Fallows, a pilot as well as a writer, describes serious attempts by both state and private entrepreneurs in the USA to promote an 'air taxi' system within the price range of today's middle class and perhaps tomorrow's global population.
-- `reading_jijing_69_test_40_p2` E-04：This adaptation helps the bristlecone photosynthesize during particularly brutal months. Saving the energy of constant needle replacement and providing a stable supply of chlorophyll.
-- `reading_jijing_71_test_1_p2` B-03：In addition, the dubbed voices may seem detached or inappropriate to the characters, or otherwise, the absurdity of having an undereducated American ranffian saying. 'Je voudrais déclarer un vol' becomes too much, affecting appreciation of the film.
-- `reading_jijing_72_test_15_p2` F-02：They found that children who socially interact with more adults, who have more friends. And who have more older siblings tend to pass TOM tasks at a slightly earlier age than other children.
-- `reading_jijing_73_test_5_p1` H-02：But then his eyes lit up at the challenge.' Perhaps you could store the summer's heat in water somehow.
-- `reading_jijing_73_test_5_p3` D-03：In fact. Hooker knew well enough what might happen.
-- `reading_jijing_76_test_43_p3` A-07：Differences and similarities between children's compliance with requests and prohibitions ("Do"vs. "Don't" demand contexts) were also explored.
-- `reading_jijing_83_test_95_p1` C-03：Scrub jays know that other jays are thieves and that stashed food can spoil; sheep can recognize faces; chimpanzees use a variety of tools to probe termite mounds and even use weapons to hunt small mammals; dolphins can imitate human postures; the archerfish, which stuns insects with a sudden blast of water, can learn how to aim its squirt simply by watching an experienced fish perform the task. And Alex the parrot turned out to be a surprisingly good talker.
-- `reading_jijing_83_test_95_p1` G-08："What's different?" Pepperberg asked.
 - `reading_jijing_9_test_81_p1` F-02：Test subject was given an argument "All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate".
-- `reading_jijing_9_test_81_p2` A-02：In addition to providing the traditional resort-leisure product, it has been argued that ecotourism resort management should have a particular focus on best-practice environmental management. an educational and interpretive component, and direct anil indirect contributions to the conservation of the natural and cultural environment (Ayala. I996).
-- `reading_jijing_9_test_81_p2` B-01：Conran Cove Island Resort is a large integrated ecotourism-based resort located south of Brisbane on the Gold Coast, Queensland. Australia.
 ### suspected_split_word
 
 实际 6 句；计划未设预期，只报告。
@@ -2041,6 +2029,20 @@
 - `reading_jijing_9_test_81_p2` I-03：The resort has embraced and has effectively implemented contem porary environmental management practices.
 - `reading_jijing_9_test_81_p2` I-04：It has been argued that the successful implemen tation of the principles of sustainability should promote long-term social, economic and envi ronmental benefits, while ensuring and enhancing the prospects of continued viability for the tourism enterprise.
 - `reading_jijing_9_test_81_p2` I-08：However, the number of interstate and international tourists visiting the resort is small, with the principal visitor markets com prising locals and residents front nearby towns and the Gold Coast region.
+### leading_stray_punctuation
+
+实际 0 句；计划预期 0 句。
+
+### control_character
+
+实际 6 句；计划未设预期，只报告。
+
+- `reading_jijing_29_test_63_p3` A-02：Last month's official revision of China's gross domestic product revealed an economy worth 16 trillion yuan ( 1.9 trillion) in 2004, 17% more than previously thought.
+- `reading_jijing_29_test_63_p3` A-03：Some 265 billion of the increase - 93% of it - was ascribed to the services sector.
+- `reading_jijing_29_test_63_p3` F-02：Chinese families spend more on education than on anything except housing - the market for courses, books and materials more than doubled from 2002 levels, to  90 billion in 2005.
+- `reading_jijing_29_test_63_p3` F-04：The World Travel & Tourism Council predicts that China's annual tourism market will more than triple to  300 billion within a decade.
+- `reading_jijing_29_test_63_p3` G-02：In reality, it is bigger still, since the GDP revision cannot capture activities such as kerbside lending and tax-dodging cash transactions in property or entertainment--all of which Dong Tao, chief Asia economist at CSFB, another bank, reckons add another  220 billion to the economy.
+- `reading_jijing_84_test_73_p2` C-17：From age six to 18 British children received, on average, 106 minutes of PE a week.
 
 ## 回归例句逐模板结果
 
@@ -2179,11 +2181,13 @@ For instance, studies show that most people will not accept a bet in which there
 
 - 候选题按 item_id 计数；模板 rejected 含每个整句拒绝一次，以及该模板的目标/选句拒绝记录。
 - 原因码按候选题及拒绝记录计数；整句拒绝在 JSONL 中只记录一条，保留全部原因。
-- 整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 只报告不设预期。
+- 整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 在 2026-10-19 重新拆句后预期为 1（一处无法拆开的嵌入引语）。
 - v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。
 - v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。
+- v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。
+- v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），只报告不设预期。
 - 拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。
 - 无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。
 - 字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。

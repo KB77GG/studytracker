@@ -764,9 +764,20 @@ class V02Tests(unittest.TestCase):
 
     def test_multi_sentence_unit(self):
         self.assertTrue(multi_sentence_unit("It failed. They tried again."))
-        self.assertTrue(multi_sentence_unit("ice can be reflected in Mt. Cook Region."))
         self.assertFalse(multi_sentence_unit("He met Dr. Smith yesterday."))
         self.assertFalse(multi_sentence_unit("'All music has a message.' he says."))
+
+    def test_multi_sentence_unit_known_non_ends(self):
+        # False hits found when the 51 units were re-split (2026-10-19).
+        self.assertFalse(multi_sentence_unit("ice can be reflected in Mt. Cook Region."))
+        self.assertFalse(
+            multi_sentence_unit('requests ("Do" vs. "Don\'t" demand contexts) were explored.')
+        )
+        self.assertFalse(multi_sentence_unit("1. Valid assessment considers cultural diversity."))
+        self.assertFalse(multi_sentence_unit('"What\'s different?" Pepperberg asked.'))
+        self.assertFalse(multi_sentence_unit('"Was there someone like him?" Dapena asks.'))
+        self.assertTrue(multi_sentence_unit('"Is it?" Perhaps he\'s right.'))
+        self.assertTrue(multi_sentence_unit("It rose by 2. Then it fell."))
 
     def test_new_filters_are_sentence_reasons(self):
         reasons = sentence_reasons("It failed. They tried again.Then it worked.", [], None)
@@ -903,6 +914,20 @@ class CodexReviewFixTests(unittest.TestCase):
         self.assertIn(R.SUSPECTED_SPLIT_WORD, reasons)
         self.assertNotIn(R.SUSPECTED_SPLIT_WORD, sentence_reasons("calcu lated", [], None))
 
+    def test_leading_stray_punctuation(self):
+        def reasons(sentence):
+            return sentence_reasons(sentence, [], None)
+
+        self.assertIn(R.LEADING_STRAY_PUNCTUATION, reasons(". To encourage reform, he spoke."))
+        self.assertIn(R.LEADING_STRAY_PUNCTUATION, reasons(", and then it rained."))
+        self.assertNotIn(R.LEADING_STRAY_PUNCTUATION, reasons("... I think this is fine."))
+        self.assertNotIn(R.LEADING_STRAY_PUNCTUATION, reasons("To encourage reform, he spoke."))
+
+    def test_control_character(self):
+        reasons = sentence_reasons("It cost \x00220 billion in total.", [], None)
+        self.assertIn(R.CONTROL_CHARACTER, reasons)
+        self.assertNotIn(R.CONTROL_CHARACTER, sentence_reasons("It cost $220 billion.", [], None))
+
     def interrupted_items(self):
         sentence, view = tree(
             [
@@ -1027,6 +1052,38 @@ class CodexReviewFixTests(unittest.TestCase):
         quoted = "'The students' books'"
         span = {"start": 1, "end": 20, "text": quoted[1:20]}
         self.assertIs(close_quotes(quoted, span, 0, len(quoted)), span)
+
+    def test_close_quotes_reattaches_bracket_within_raw_span(self):
+        sentence = "The stepwell of Rani Ki Vav (Queen's Stepwell) is famous."
+        close = sentence.index(")")
+        span = {"start": 0, "end": close, "text": sentence[:close]}
+        closed = close_quotes(sentence, span, 0, close + 1)
+        self.assertEqual(closed["text"], "The stepwell of Rani Ki Vav (Queen's Stepwell)")
+        self.assertIs(close_quotes(sentence, span, 0, close), span)
+
+    def test_coordinated_subordinate_clause_is_not_coordinate(self):
+        rows = [
+            ("He", "nsubj", 1, "PRON", "PRP"),
+            ("said", "ROOT", 1, "VERB", "VBD"),
+            ("that", "mark", 4, "SCONJ", "IN"),
+            ("it", "nsubj", 4, "PRON", "PRP"),
+            ("rained", "ccomp", 1, "VERB", "VBD"),
+            ("and", "cc", 4, "CCONJ", "CC"),
+            ("that", "mark", 8, "SCONJ", "IN"),
+            ("it", "nsubj", 8, "PRON", "PRP"),
+            ("snowed", "conj", 4, "VERB", "VBD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [
+            ("He", "subject", 1),
+            ("said", "verb", 1),
+            ("and that it snowed", "coordinated_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        for template in ("clause_boundary", "clause_type_classify"):
+            item = by_template(items, template)[0]
+            self.assertIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], template)
 
     def test_s_quote_closes_a_pending_quoted_term(self):
         sentence = "They built 'megacities' and traded in 1990's markets."

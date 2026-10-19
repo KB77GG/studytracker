@@ -9,13 +9,25 @@ GLUED_BOUNDARY = re.compile(r"(?<=\S)[.!?][\"”’')\]]?(?=[A-Z])")
 INITIALS = re.compile(r"\b(?:[A-Z]\.)+[A-Z]$")
 # Plan v0.2 section B1: a properly spaced sentence end inside one unit.
 SPACED_BOUNDARY = re.compile(r"[a-z0-9][.!?][\"”’')\]]?\s+[\"“‘'(]?[A-Z]")
+# A unit opening with a stray mark (". To encourage"), left by a stripped paragraph label;
+# a leading ellipsis ("... I think") is a quotation cut, not a stray mark.
+LEADING_STRAY_PUNCTUATION = re.compile(r"^(?!\.\.\.)[.,;:!?]\s")
+# Encoding damage such as NUL for a lost "$" ("yuan (\x001.9 trillion)"); Excel rejects these.
+CONTROL_CHARACTER = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 # Words as plain alphabetic runs; used for the corpus vocabulary and split-word check.
 WORD = re.compile(r"[A-Za-z]+")
 # A rare pair whose concatenation is a known word, e.g. "calcu lated" (OCR split).
 SPLIT_WORD_MAX_PART_COUNT = 2
 ABBREVIATION = re.compile(
-    r"\b(Mr|Mrs|Ms|Dr|St|Prof|Jr|Sr|No|Co|Inc|Ltd|vs|etc|U\.S|U\.K|e\.g|i\.e|a\.m|p\.m)"
-    r"[.!?][\"”’')\]]?\s+[A-Z]$"
+    r"\b(Mr|Mrs|Ms|Dr|St|Mt|Prof|Jr|Sr|No|Co|Inc|Ltd|vs|etc|U\.S|U\.K|e\.g|i\.e|a\.m|p\.m)"
+    r"[.!?][\"”’')\]]?\s+[\"“‘'(]?[A-Z]$"
+)
+# Not sentence ends (2026-10-19 re-split review): a leading list number ("1. Valid ..."), and
+# a quoted question or exclamation followed by its speaker ("...?" Pepperberg asked.).
+LIST_MARKER = re.compile(r"\d{1,2}\.\s+[A-Z]")
+QUOTED_ATTRIBUTION = re.compile(
+    r"[?!][\"”’']\s+(?:[A-Z][\w.'’-]*\s+){1,3}"
+    r"(?:says|said|asks|asked|adds|added|explains|explained|replies|replied|wonders|wondered)\b"
 )
 
 
@@ -33,6 +45,8 @@ class Reason(StrEnum):
     GLUED_SENTENCE_BOUNDARY = "glued_sentence_boundary"
     MULTI_SENTENCE_UNIT = "multi_sentence_unit"
     SUSPECTED_SPLIT_WORD = "suspected_split_word"
+    LEADING_STRAY_PUNCTUATION = "leading_stray_punctuation"
+    CONTROL_CHARACTER = "control_character"
     PARSE_FAILURE = "parse_failure"
     AMBIGUOUS_SPAN_LOCATION = "ambiguous_span_location"
     PARSER_ROOT_OUTSIDE_VERB_SPAN = "parser_root_outside_verb_span"
@@ -91,11 +105,16 @@ def glued_sentence_boundary(sentence):
     )
 
 
+def sentence_end(sentence, match):
+    if ABBREVIATION.search(sentence[max(0, match.start() - 6) : match.end()]):
+        return False
+    if match.start() == 0 and LIST_MARKER.match(sentence):
+        return False
+    return not QUOTED_ATTRIBUTION.match(sentence, match.start() + 1)
+
+
 def multi_sentence_unit(sentence):
-    return any(
-        not ABBREVIATION.search(sentence[max(0, m.start() - 6) : m.end()])
-        for m in SPACED_BOUNDARY.finditer(sentence)
-    )
+    return any(sentence_end(sentence, m) for m in SPACED_BOUNDARY.finditer(sentence))
 
 
 def corpus_vocabulary(sentences):
@@ -135,6 +154,8 @@ def sentence_reasons(sentence, spans, view, vocabulary=None):
         Reason.PARSE_FAILURE: view is None,
         Reason.SUSPECTED_SPLIT_WORD: vocabulary is not None
         and suspected_split_word(sentence, vocabulary),
+        Reason.LEADING_STRAY_PUNCTUATION: bool(LEADING_STRAY_PUNCTUATION.match(sentence)),
+        Reason.CONTROL_CHARACTER: bool(CONTROL_CHARACTER.search(sentence)),
     }
     if view is not None:
         checks.update(
