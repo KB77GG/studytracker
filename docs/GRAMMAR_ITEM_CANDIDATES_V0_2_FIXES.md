@@ -53,12 +53,77 @@
 | 数据 | `validate_reading_study.py` 0 错误；`reading_jijing_text_fixes.py --check` 显示 0 条未应用。临时库先用 main 的完整快照导入，再导入本分支，结果 updated=25 / skipped=292 / failed=0。4 句标注修改都落在原本就要更新的 25 篇里 |
 | Ruff | 本轮改动的 5 个 Python 文件 check 和 format 均通过 |
 
-## 遗留（规则查不出来，需要另行决定）
+## 第一轮遗留（已在第二轮处理）
 
-- **真词错字**：`reading_jijing_27_test_33_p1` B-09 的 `claim mat the image` 应为 `claim that`。`mat` 是真实单词，断词规则查不出来。如果同意，可以作为第 34 条加进 `data/reading_jijing_text_fixes.json`，同时改阅读解析的句子；这样上线时会多更新 1 篇。
-- **段首多余句点**：3 篇机经（`29_63_p1`、`78_102_p1`、`92_58_p2`）共 14 个段落的第一句以 `. ` 开头，例如 `. To encourage reform …`。这来自原文抽取，学生在阅读页也会看到。可以修原文（14 条修订），也可以加一条整句过滤，需要用户决定。
-- 51 个“一条里含多句”的单元仍然只在出题时排除，是否重新拆句待用户决定。
+第一轮留下三项待用户决定：`claim mat` 错字、14 个段首多余句点、51 个“一条里含多句”的单元。用户 2026-10-19 决定：加修订、修原文并排除、重新拆句，处理结果见下一节。
+
+## 第二轮（2026-10-19，用户决定的三项）
+
+逐句记录：`docs/READING_STUDY_RESPLIT_2026-10_ROUND2.md`（由脚本生成，列出原句、原文修改、修改后的句子和翻译）。
+
+### 原文与阅读解析
+
+| 项目 | 处理 | 结果 |
+|---|---|---|
+| claim mat | 修订表加 `claim mat the image` → `claim that the image`；B-09 补了 claim 的宾语从句标注，删掉“必须保留 mat”的说明 | 1 句 |
+| 段首多余句点 | 原文中段落标号被删后留下了 `. `，修订表加 14 条，删掉句点；`. the prerequisites` 同时改成大写 The。同一批句子里另有 2 处明显错字一并修订：`Galloping` → `galloping`、`resources and managed` → `resources are managed` | 14 句；难点里“句首句点为源文异常”之类的过时说明全部改写 |
+| 51 个多句单元 | 逐个判断后分四类处理 | 见下表 |
+
+| 51 个单元的分类 | 数量 | 处理 |
+|---|---:|---|
+| 确实是多句 | 34 | 拆成 72 句（新增 38 句），重新写翻译、结构、难点和表达。`ielts4_test4_p1` C-14 的末尾 `Yessis believes that U.S.` 是旧拆句在缩写处断开造成的，并到 C-15 句首 |
+| 原文把逗号误写成句点 | 9 | 不拆句，修订表改原文（如 `his brother. Will, were` → `his brother, Will, were`、`In fact. Hooker` → `In fact, Hooker`），顺带修正同句的 `ranffian`、`anil`、`I996` 等错字；`challenge.' Perhaps` 改为 `challenge. 'Perhaps` 并补上段末缺的右引号 |
+| 规则误报 | 7 | 不改数据，改规则：4 个列表编号（`1. Valid …`）、2 个“引语问句 + 说话人”（`"What's different?" Pepperberg asked.`）、1 个 `Mt. Cook` |
+| 一句里嵌着三句引语 | 1 | `reading_jijing_9_test_81_p1` F-02 的三段论作为同位语嵌在句中，拆开会破坏句子，保留并继续排除出题 |
+
+- 修订表从 33 条增加到 63 条（本轮 30 条）。新增测试：每条修订的 find 不得包含在 replace 里，否则重复运行会改两次（本轮曾有一条这样的修订，已合并成一条）。
+- 句子数 12,688 → 12,726。97 个句子对象有变化，其余 1,469 个同文件句子除 `sentence_index` 外逐字节不变；`json.dumps(indent=2)` 格式的文件仍保持该格式，其他文件保留原有排版。
+- 从 raw 重建全部 171 篇机经，段落文字与修补后的 static 完全一致；static 的改动只涉及段落 text 行。
+
+### 出题器
+
+| 改动 | 原因 | 结果 |
+|---|---|---|
+| 新增整句过滤 `leading_stray_punctuation` | 用户要求“修原文，并且排除” | 原文修复后命中 0，作为以后数据的防线 |
+| `multi_sentence_unit` 修正误报 | 列表编号、引语问句后接说话人、`Mt.`、缩写后接引号（`"Do" vs. "Don't"`） | 命中 51 → 1，报告预期值设为 1 |
+| 新增整句过滤 `control_character` | 生成抽查表时发现 6 句含 NUL 字符（原文转码丢失的 `$` 等），Excel 拒收 | 排除 6 句，只报告不设预期 |
+| 补回被切掉的括号 | 逐题核对时发现，答案或目标末尾的 `)` 会和引号一样被当作标点切掉，如 `the stepwell of Rani Ki Vav (Queen's Stepwell`。沿用补引号的做法，范围不超出原标注 | 括号不成对的题从 155 道降到 2 道（均为 needs_review）；其中 122 道自动通过题的显示范围补全 |
+| 并列分句目标不得带从属连词 | 逐题核对时发现 `and because …`、`and that …` 这类“并列的从句”被当成并列分句出题，答案错误 | 23 道从自动通过降为待人审；`92_58_p2` C-01 的标注同时改为原因状语从句 |
+| tagged_fragment 预期 37 → 36 | C-14 的残句 `that U.S.` 已并入 C-15 | 与实际一致 |
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 模板 | 第一轮修复后 | 第二轮后 |
+|---|---|---|
+| main_verb_tap | 5922 / 377 / 6389 | 5954 / 384 / 6388 |
+| clause_boundary | 4772 / 2397 / 2791 | 4790 / 2412 / 2773 |
+| clause_type_classify | 11540 / 3176 / 1437 | 11596 / 3200 / 1412 |
+| adverbial_relation | 396 / 637 / 2668 | 403 / 637 / 2644 |
+| subject_span | 5370 / 737 / 6581 | 5399 / 743 / 6584 |
+| finite_or_not | 12738 / 1561 / 6575 | 12802 / 1575 / 6576 |
+
+候选题 49,623 → 49,895；整句排除 1,437 → 1,412。抽查表仍是 360 行。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 新句子出的题 | 97 个变动句子生成的 276 道自动通过题逐题人工核对。发现上面两类问题（括号、并列的从句）后改规则、重新生成；其余答案全部正确 |
+| 复抽 30 题 | 新抽查表，种子 20261021，每个工作表 5 道 auto_pass：30 道全部正确 |
+| 回归例句 | 78 个模板结果与第一轮修复后完全一致 |
+| 可复现 | 连续两次生成，7 个文件逐字节一致；`review_batch_v0_2.jsonl` `c6a5948b4760…`，`review_batch_v0_2.xlsx` `e836d8f7e2e3…`，`generation_report_v0_2.json` `f94e1688dab8…` |
+| 测试 | 出题器测试 55 项、原文修订测试 8 项；只装 Flask 的 CI 列表 138 项运行，1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
+| 数据 | validator 0 错误；`--check` 0 条未应用；临时库先导入 main 的完整快照，再导入本分支：updated=56 / skipped=261 / failed=0 |
+| Ruff | 改动的 Python 文件 check 和 format 均通过 |
+
+### 第二轮遗留（需要另行决定）
+
+- **NUL 字符**：`reading_jijing_29_test_63_p3` 5 句、`reading_jijing_84_test_73_p2` C-17 1 句，原文中 `$` 等字符变成了 NUL（如 `yuan (\x001.9 trillion)`）；同样的问题还出现在 `29_63`、`50_30`、`75_57`、`84_73` 的题目文字和 `ielts18_test3` 的一处 `more\x02knowledgeable`。修原文需要逐处猜回丢失的字符，本轮只在出题时排除。
+- **CO 缺下标**：`reading_jijing_29_test_63_p1` 全文 4 处 `CO` 应为 `CO₂`，难点里已有说明。
+- **真词 OCR 错字**：`reading_jijing_83_test_95_p2` D-04 的 `fagging` 应为 `logging`，规则查不出来。
+- **阅读页标签**：`interrogative_clause`、`elliptical_clause`、`question_clause` 这几个已有角色名会被词汇表兜底成“状语从句”显示，属于 `api/reading_study_glossary.py` 的存量问题；本轮新写的标注没有用这些名字。
+- `reading_jijing_92_test_58_p2` H-01 的小标题和正文连在一句里（已按 heading 排除出题）。
 
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（预期 updated=25）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第二轮后预期 updated=56）。
