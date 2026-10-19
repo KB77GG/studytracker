@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-18 语法候选题 v0.2 已由 Claude 执行完毕：28 句机经原文和阅读解析已修复，`data/grammar_items/review_batch_v0_2.xlsx` 可交老师盲审。分支 `claude/word-memorization-system-eval-55v2y5`，未合并 main、未部署；阅读解析线上生效需另行授权并在服务器重新导入。
+> 最近更新：2026-10-19 Codex 对语法候选题 v0.2 首次独立审核，结论 **不通过：1 阻断、4 应修、4 建议**。本轮只写审核与交接，未修被审核代码/数据；以下最新节覆盖旧节“已全部完成、可交老师”的结论。未合并 main、未部署。
+
+## 2026-10-19 语法候选题 v0.2 独立审核（不通过，仅报告）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_CODEX_REVIEW.md`，包含 15 项结果、实际命令、59 句逐句覆盖、30 题与 15 道关系副词题明细、双次生成 SHA-256、问题位置和建议。
+- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`。按用户命令 fetch + merge --ff-only，审核 HEAD 为 `e8019c2ddcb23fa9e585d48bd824f31b0cd3e1b9`，范围 `e970dd6..e8019c2`。开始及所有测试/生成结束后 tracked/untracked 干净；本轮随后仅新增审核记录、修改本交接和 WORKLOG。三份文档将提交推送到指定分支，消息不带 `[skip ci]`；GitHub CI 在推送后补记。
+- **原桌面树**：`/Users/zhouxin/Desktop/studytracker`，`main@6ded77d24586327ad94e151e172ae4811b4a2eed`，behind 73；既有 7 modified / 22 untracked 入口均未改（路径清单见下方 v0.1 工作树节），没有将任务树成果误写为桌面树已有。
+- **问题**：阻断 F1 是 T6 动词单位受原 span 截断，至少 9 道 auto_pass 漏 aux/neg/to/prt。应修 F2 为抽样中的 `calcu lated` OCR 坏句（基线遗留）；F3 为 F-36c 从句漏引语内容；F4 为 E-01 同位语范围包含 translates 谓语；F5 为 B4 报告缺关系副词逐句列表及修复前句数。其余四项建议见审核记录；没有擅自修复。
+- **核验**：33 条修订、28→59 / 新增31、997 原句除 index 外字节不变；内存重建171篇与 static完全一致；临时库 updated25 / skipped292 / failed0；validator317 valid / 0 errors。完整段落字面拼接有7处基线已有空白差异，统一空白后相同，未假称逐字通过。59句全读，30题 seed20261019 得29正确/1不适合，15道关系副词风险题中4确定定语/1两可/10状语。
+- **精确命令**：`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_grammar_graph_draft -v` →57 passed；`.venv-grammar-tools/bin/python scripts/reading_jijing_text_fixes.py --check` →0未应用；`.venv-grammar-tools/bin/python scripts/validate_reading_study.py` →0错误。Flask-only 完整CI列表125 ran /124 passed /1 openpyxl skip，Node拼写exit0。完整列表、导入与Ruff命令见审核记录“实际运行命令”。Ruff显式检查全部9个改动Python文件，构建脚本存量两处UP017与format失败，另外8文件通过。
+- **复现**：现有独立环境Python3.13.3 / spaCy3.8.16 / trf3.8.0 / torch2.14.1 CPU。为保持被审核文件只读，从e8019c2原样git archive到 `/tmp/studytracker-grammar-v02-codex-audit.R7RDty/source`，执行 `.venv-grammar-tools/bin/python /tmp/studytracker-grammar-v02-codex-audit.R7RDty/source/scripts/generate_grammar_candidates.py --seed 20261018` 两次，首次冷缓存。四文件双跑字节一致；JSONL/XLSX与提交版一致，报告仅Python版本行不同。全量候选49654；回归全部符合计划；7 sheets/360行/盲审/四项下拉与渲染核验通过。
+- **仅本机文件**：上述临时目录中的 `audit_data.py`、`import_check.py`、`samples.py`、`probe_rules.py`、`verify_final.py`、`render.mjs`、日志、59句导出、抽样JSON、SQLite和临时源码/解析缓存/预览，均用于复查证据，不提交；本机 `.venv-grammar-tools` 保持。提交文档给出方法与题号，另一台电脑可按相同输入重现，不应假定能访问 `/tmp`。
+- **部署/外部状态**：没有生产服务器/真实数据库操作，没有main push、PR、部署；后端、前端、小程序上传/提审/发布均未发生。临时库导入不能写成线上已导入。没有调用大模型API。
+- **下一步与未验证项**：先由实现方根据审核记录确认并修复 F1–F5，再授权重新生成和独立验收。老师360题尚未完成；不要依据旧自查结论直接认定可入库。需改原数据或扩展过滤规则的事项另行确认范围，本次只审核授权不含修复。
 
 ## 2026-10-18 语法候选题 v0.2（已执行，抽查表待老师盲审）
 
