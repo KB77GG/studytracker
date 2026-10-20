@@ -1,7 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 已按用户授权合并指定的1f03c84，保留第一轮Codex独立复审及Claude第二至四轮记录，正在独立复审；未合并main、未部署。以下各轮结论均限其审核范围。
+> 最近更新：2026-10-20 第二至四轮独立复审在第13项例数要求处受阻，已停止并等待用户确认；只有部分检查完成，不能视为质量验收。指定1f03c84已合并，双方交接保留，未合并main、未部署。
+
+## 2026-10-20 第二至四轮独立复审（Codex，等待例数口径确认）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND2_4_CODEX_REVIEW.md`，逐项区分21项的已完成/未完成部分，列出38个仅有1例的role及可复现计数代码。第一轮复审已完成，不重做；其结论见上一轮专属报告。
+- **阻塞B0**：用户第13项要求每个role至少2个语料例子。以旧新resolver对同一1f03c84语料比较，当前71个role/403处变化，其中38个role仅1例。已向用户请求“少于2例时审核全部现有例子并列限制”，尚未确认；遵照“做不到就停”，没有重复/合成实例凑数，也没有继续后续审核。代码/数据问题数量未评定，不能当作零问题。
+- **Git / 路径**：执行树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`。从干净的 `eca7404592a5c76329e4a4594befb1a042e8d952` fetch并合并用户指定的 **1f03c846c192d939ade43a5902204cb1bea6f9a5**；合并提交 **1cdc4e5eeac7eef3c9562282306679abd6510af1**，只解决CODEX_HANDOFF/WORKLOG冲突并保留双方内容，没有rebase。被审核代码/数据与1f03c84完全一致；没有合并origin/main。编写本节时仅三份获准报告/交接有本轮未提交改动，准备commit/push并补CI。
+- **完成检查**：指定四模块unittest **85 passed**；validator exit0（317文件OK，Coverage317/387、70missing）；text fixes --check **0未应用**。保护路径diff为空，api仅glossary变化；stat197files/12420+/4729-，完整范围和语言内容审核尚未完成。精确命令在报告内。
+- **生成状态**：在1f03c84原样git archive临时副本启动冷解析；B0确认后暂停并结束，exit130，最后进度125篇/4875句。不是生成器失败，不是完整生成；没有双次SHA。没有残留暂停的解析进程。
+- **仅本机资料**：`/tmp/studytracker-grammar-round2-4-audit.H4JlOk` 含原样源码副本、上述日志、roles-changed.json和不完整解析缓存；只供恢复，未提交。任务树 `.venv-grammar-tools` 保留。原桌面项目 `/Users/zhouxin/Desktop/studytracker` 未写入、未覆盖其他工作。
+- **外部/发布**：未推main、未部署、未开PR、未操作生产服务器或生产库、未调用大模型API；小程序未上传/提审/发布。没有模拟导入，不能沿用上轮updated25或Claude的227当本轮实测。
+- **下一步**：先取得B0例数例外确认，再从本报告21项进度继续完整审核；不能以已过85项测试替代未做的逐条/逐句/抽样工作。若用户维持每role至少2个真实语料例子的原要求，需补足语料后再审。
 
 ## 2026-10-19 语法候选题 v0.2 第四轮（Claude，待复审）
 
