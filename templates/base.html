@@ -137,6 +137,7 @@
         {% endwith %}
         {% block content_dashboard %}{% endblock %}
       </main>
+      {% include "_icp_footer.html" %}
     </div>
   </div>
   {% else %}
@@ -164,6 +165,7 @@
     {% endwith %}
     {% block content_public %}{% endblock %}
   </main>
+  {% include "_icp_footer.html" %}
   {% endif %}
 
 
