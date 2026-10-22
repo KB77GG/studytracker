@@ -314,6 +314,8 @@ body:has(.tasks-page) .header-actions{
 }
 .task-filter-bar button{ min-height:36px; padding:7px 11px; border:1px solid var(--tasks-line-strong); border-radius:8px; background:transparent; color:var(--tasks-sage-dark); font-size:12px; font-weight:850; cursor:pointer; }
 .task-filter-bar button:hover{ background:var(--tasks-sage-soft); }
+.task-filter-actions{ display:flex; gap:6px; }
+.task-filter-actions button{ white-space:nowrap; }
 .task-filter-bar .filter-student-suggestion{
   width:100%;
   min-height:44px;

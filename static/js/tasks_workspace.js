@@ -1,10 +1,64 @@
-/* Direction 2 task workspace behavior. The legacy task script owns the
-   server-backed controls; this module only coordinates the new shell. */
+/* Task workspace filters, student autocomplete and date navigation. */
 (function () {
   'use strict';
 
   const strip = document.getElementById('taskDateStrip');
   const choices = document.getElementById('taskDateChoices');
+
+  const composingInputs = new Set();
+  const isComposing = event => composingInputs.has(event.target) || event.isComposing || event.keyCode === 229;
+
+  function setupTaskFilters() {
+    const fields = {
+      q: document.getElementById('taskQuickSearch'),
+      student: document.getElementById('filterStudent'),
+      category: document.getElementById('filterCategory'),
+      status: document.getElementById('filterStatus'),
+      due_date: document.getElementById('filterDueDate')
+    };
+    for (const name of ['category', 'status']) {
+      if (fields[name]?.dataset.selected) fields[name].value = fields[name].dataset.selected;
+    }
+
+    function apply() {
+      if (composingInputs.size) return;
+      const params = new URLSearchParams(window.location.search);
+      for (const [name, input] of Object.entries(fields)) {
+        const value = String(input?.value || '').trim();
+        if (value) params.set(name, value);
+        else params.delete(name);
+      }
+      params.delete('student_name');
+      params.delete('task_id');
+      params.set('page', '1');
+      window.location.assign(`${window.location.pathname}?${params.toString()}`);
+    }
+
+    window.applyTaskFilters = apply;
+    // Typing (including IME composition) must never navigate away from the field.
+    for (const input of [fields.q, fields.student]) {
+      input?.addEventListener('compositionstart', () => composingInputs.add(input));
+      input?.addEventListener('compositionend', () => composingInputs.delete(input));
+    }
+    fields.q?.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' || isComposing(event)) return;
+      event.preventDefault();
+      apply();
+    });
+    for (const name of ['category', 'status', 'due_date']) {
+      fields[name]?.addEventListener('change', apply);
+    }
+    document.getElementById('filterApply')?.addEventListener('click', apply);
+    document.getElementById('filterClear')?.addEventListener('click', () => {
+      for (const input of Object.values(fields)) {
+        if (input) input.value = '';
+      }
+      composingInputs.clear();
+      window.taskSelectedDate = '';
+      document.querySelectorAll('.task-date-choice.is-active').forEach(choice => choice.classList.remove('is-active'));
+      apply();
+    });
+  }
 
   function setupStudentFilterAutocomplete() {
     const input = document.getElementById('filterStudent');
@@ -103,26 +157,34 @@
       setExpanded(true);
     }
 
-    input.addEventListener('input', render);
+    input.addEventListener('input', event => {
+      if (!isComposing(event)) render();
+    });
+    input.addEventListener('compositionstart', () => setExpanded(false));
+    input.addEventListener('compositionend', render);
     input.addEventListener('focus', () => {
       if (normalize(input.value)) render();
     });
     input.addEventListener('blur', () => window.setTimeout(() => setExpanded(false), 120));
     input.addEventListener('keydown', event => {
+      if (isComposing(event)) return;
       if (event.key === 'Escape') {
         setExpanded(false);
         return;
       }
       if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) return;
       if (listbox.hidden) render();
-      if (!matches.length) return;
       if (event.key === 'Enter') {
+        event.preventDefault();
         if (activeIndex >= 0) {
-          event.preventDefault();
           choose(matches[activeIndex]);
+        } else {
+          setExpanded(false);
+          window.applyTaskFilters?.();
         }
         return;
       }
+      if (!matches.length) return;
       event.preventDefault();
       const delta = event.key === 'ArrowDown' ? 1 : -1;
       const nextIndex = activeIndex < 0
@@ -133,6 +195,7 @@
     clearButton?.addEventListener('click', () => setExpanded(false));
   }
 
+  setupTaskFilters();
   setupStudentFilterAutocomplete();
   if (!strip || !choices) return;
 

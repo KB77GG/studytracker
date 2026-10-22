@@ -6,7 +6,7 @@
 <label class="suite-header-search tasks-header-search" for="taskQuickSearch">
   <i class="fas fa-search" aria-hidden="true"></i>
   <span class="sr-only">搜索任务</span>
-  <input id="taskQuickSearch" type="search" value="{{ task_filters.query }}" placeholder="搜索学生、任务内容、材料名称">
+  <input id="taskQuickSearch" type="search" value="{{ task_filters.query }}" placeholder="学生、任务、材料，回车查询">
   <kbd>⌘ K</kbd>
 </label>
 {% endblock %}
@@ -130,7 +130,7 @@
         <input
           id="filterStudent"
           value="{{ task_filters.student }}"
-          placeholder="选择学生"
+          placeholder="姓名或拼音，回车查询"
           autocomplete="off"
           role="combobox"
           aria-autocomplete="list"
@@ -198,7 +198,10 @@
       </select>
     </label>
     <label>截止日期<input id="filterDueDate" type="date" value="{{ task_filters.due_date }}"></label>
-    <button id="filterClear" type="button"><i class="fas fa-undo" aria-hidden="true"></i> 重置</button>
+    <div class="task-filter-actions">
+      <button id="filterApply" type="button"><i class="fas fa-search" aria-hidden="true"></i> 查询</button>
+      <button id="filterClear" type="button"><i class="fas fa-undo" aria-hidden="true"></i> 重置</button>
+    </div>
     <span id="filterStat" aria-live="polite">显示 {{ task_page.start }}–{{ task_page.end }} / 共 {{ task_page.total }} 条</span>
   </div>
 
@@ -744,7 +747,7 @@
       </tr>
       {% endfor %}
       {% if not items %}
-      <tr class="task-table-empty"><td colspan="13">当前筛选条件下没有任务。可以重置筛选，或直接布置新任务。</td></tr>
+      <tr class="task-table-empty"><td colspan="13">当前范围内没有匹配任务。请检查顶部搜索词、学生和截止日期，或重置筛选后切换本月／本年查看历史记录。</td></tr>
       {% endif %}
     </tbody>
   </table>
@@ -5401,57 +5404,6 @@
     setupInlineEdit('.accuracy-input', 'accuracy');
     setupInlineEdit('.progress-input', 'completion_rate');
 
-    // === 服务端筛选：只渲染当前页，避免数百行 DOM 阻塞浏览器 ===
-    (function () {
-      const studentInp = document.getElementById('filterStudent');
-      const catSel = document.getElementById('filterCategory');
-      const statusSel = document.getElementById('filterStatus');
-      const dueDateInp = document.getElementById('filterDueDate');
-      const quickSearchInp = document.getElementById('taskQuickSearch');
-      const clearBtn = document.getElementById('filterClear');
-      if (catSel?.dataset.selected) catSel.value = catSel.dataset.selected;
-      if (statusSel?.dataset.selected) statusSel.value = statusSel.dataset.selected;
-
-      function apply() {
-        const params = new URLSearchParams(window.location.search);
-        const setParam = (name, value) => {
-          const cleanValue = String(value || '').trim();
-          if (cleanValue) params.set(name, cleanValue);
-          else params.delete(name);
-        };
-        setParam('q', quickSearchInp?.value);
-        setParam('student', studentInp?.value);
-        setParam('category', catSel?.value);
-        setParam('status', statusSel?.value);
-        setParam('due_date', dueDateInp?.value);
-        params.delete('student_name');
-        params.delete('task_id');
-        params.set('page', '1');
-        window.location.assign(`${window.location.pathname}?${params.toString()}`);
-      }
-
-      window.applyTaskFilters = apply;
-
-      let timer = null;
-      const applyDebounced = () => {
-        clearTimeout(timer);
-        timer = setTimeout(apply, 350);
-      };
-      studentInp?.addEventListener('input', applyDebounced);
-      quickSearchInp?.addEventListener('input', applyDebounced);
-      catSel && catSel.addEventListener('change', apply);
-      statusSel && statusSel.addEventListener('change', apply);
-      dueDateInp && dueDateInp.addEventListener('change', apply);
-      clearBtn && clearBtn.addEventListener('click', () => {
-        if (studentInp) studentInp.value = '';
-        if (catSel) catSel.value = '';
-        if (statusSel) statusSel.value = '';
-        if (dueDateInp) dueDateInp.value = '';
-        window.taskSelectedDate = '';
-        document.querySelectorAll('.task-date-choice.is-active').forEach(choice => choice.classList.remove('is-active'));
-        apply();
-      });
-    })();
     // === 计时逻辑：开始 / 暂停 / 结束（可多段累计） ===
     (function () {
       const intervals = new Map(); // 行 -> intervalId
