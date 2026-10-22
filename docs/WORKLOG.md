@@ -4,6 +4,12 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-22 — 任务姓名筛选跳屏修复已部署
+
+- 独立工作树 `/Users/zhouxin/.codex/worktrees/task-name-filter/studytracker`、分支 `codex/task-name-filter`，基线 `e5f40bcc`。完成上轮中断的修复，移除输入停顿 350ms 自动整页跳转；姓名/搜索改为选候选、回车或查询按钮提交，保护中文组字；重置补清顶部搜索词，空状态提示检查日期和范围。
+- 用户授权上线后，四文件业务提交 `fc07c1c7cd7844c9a245b8507812e7403276d97d` 已原子推送任务分支和 main。Node 13 项全通过，JS/Jinja 语法、部署 spelling queue 与 diff check 通过；CI `39760251182` / Deploy `39760251251` success。生产 18:04:29 CST 起 active/running、NRestarts=0，5002 / 单 worker / gthread / 6 threads，login 200、部署后 error journal 空；三源码生产哈希及公网 JS/CSS 均匹配。
+- Chrome 输入停顿焦点和值保留、候选/查询返回 8 条、顶部搜索 Enter、重置全部条件均验证；原用户页已显示目标学生记录。真实 OS 中文候选窗及 Safari/移动端未测。没有业务数据/schema、小程序或旧主树脏内容变更；交接文档以独立 `[skip ci]` 提交同步，截图仅本机。后续正常使用观察，历史记录需按日期/周月年筛选。
+
 ## 2026-10-22 — ICP 备案页脚已提交推送并自动部署
 
 - 已补全 `studytracker.xin` 的 **苏ICP备2025214908号-1** 与工信部链接，覆盖登录/课堂/学生入口及公共/后台基础模板。用户明确授权后，三模板提交 `5e7d3d675af318e18e5fd2b8e7d79a2d332adb13` 从独立 `codex/icp-footer` 非强制推送 main。

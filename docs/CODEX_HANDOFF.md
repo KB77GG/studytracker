@@ -1,7 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-22 ICP 备案页脚已提交、推送 main 并自动部署成功，公网及 5002 验收通过；阿里云仍待自动复查。
+> 最近更新：2026-10-22 任务姓名筛选跳屏修复已推送 main 并部署，Chrome 与生产 5002 验收通过。此前 ICP 备案整改已部署，阿里云仍待自动复查。
+
+## 2026-10-22 任务姓名输入跳屏与筛选重置（已上线）
+
+- 用户报告姓名输入中断、记录不显示，随后明确要求上线。独立工作树 `/Users/zhouxin/.codex/worktrees/task-name-filter/studytracker`，分支 `codex/task-name-filter`，基线 `e5f40bcc4bea6a56e166902d4bb1bfd746c5912b`。接续时仅本任务的三文件未提交改动；完成剩余旧事件移除并新增行为回归后，业务提交 **`fc07c1c7cd7844c9a245b8507812e7403276d97d`** 已原子、非强制推送到任务分支及 main。旧主树 `/Users/zhouxin/Desktop/studytracker` 的既有未提交内容未触碰。
+- 根因：姓名与顶部搜索框 `input` 停顿 350ms 就 `location.assign`，中文组字/连续输入会被整页跳转打断；组合查询同时保留顶部搜索词及精确日期，而旧重置遗漏顶部 `q`。现在输入只更新本地候选，选中候选、回车或点击新增“查询”才提交；composition/keyCode 229 不触发提交或候选选择。类别/状态/日期仍即选即查，重置清除全部筛选词；保留所选周/月/年范围及每页数量，页码回到 1。空结果提示说明日期和组合筛选限制。
+- 代码仅 `templates/tasks.html`、`static/js/tasks_workspace.js`、`static/tasks_workspace.css`，新增 `tests/test_tasks_filter_input.js`。`node --test tests/test_tasks_filter_input.js tests/test_tasks_workspace_structure.js` → **13 passed / 0 failed**；`node --check static/js/tasks_workspace.js`、`node tests/test_dictation_spell_queue.js`、借用 Desktop `.venv/bin/python` 的 Jinja `Environment().parse()` 和 `git diff --check` 均通过。行为测试还加载模板旧筛选块（若重现）以捕获双重监听回归。
+- [CI 39760251182](https://github.com/KB77GG/studytracker/actions/runs/39760251182) / [Deploy 39760251251](https://github.com/KB77GG/studytracker/actions/runs/39760251251) 均 success。生产运行 HEAD `fc07c1c7`，tracked clean；服务自 **2026-10-22 18:04:29 CST** active/running，NRestarts=0，配置 `127.0.0.1:5002 / workers=1 / gthread / threads=6`。5002 `/login` HTTP 200；部署后 error journal 无条目。
+- 本机与生产三个源文件 SHA-256 一致：tasks.html=`dd8b176e232f4683ad5b578ff7ea11569d48782fa4f9aa0076b34234c702b65d`；JS=`ff90548b504cf1fbfcbbc3e1edd665c51423379d4cb6a7929d39b6cff81b957e`；CSS=`c6a1c6db608fb2afc15dec2f1acf5a1ea8844da4d1087db5234a2b164f6e74ca`。公网 JS/CSS 同哈希。Chrome 实测输入拼音后跨工具停顿仍保持焦点和值、姓名查询及候选选择返回目标学生 8 条记录、顶部搜索 Enter 可得空结果、重置后 q/student/date 均清空且恢复 390 条本周任务。用户原标签已打开清除额外条件的目标学生列表。证据截图仅本机 `/Users/zhouxin/.codex/visualizations/2026/10/22/01a16307-6c9a-78b3-a24b-7978163499c4/task-name-filter-live.png`，不提交学生界面截图。
+- 没有改业务 Python/schema、生产配置或小程序，没有手工业务数据写入；自动部署执行既有标准步骤。中文 IME 事件序列已用 Node 模拟验证，未做真实操作系统输入法候选窗、Safari/移动端真机验收。本交接与 WORKLOG 另以 `[skip ci]` 文档提交同步，业务代码已上线；最终文档 HEAD 以 git log 为准。下一步正常使用并观察真实中文输入，查历史记录时明确调整日期/周月年范围。
 
 ## 2026-10-22 ICP 备案页脚整改（已推送并部署）
 
