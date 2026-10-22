@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-15 词汇“忘了”后端已备份、迁移、提交、推送、部署并只读验收；固定小程序候选仍仅本机，待用户自行上传。
+> 最近更新：2026-10-22 ICP 备案页脚已提交、推送 main 并自动部署成功，公网及 5002 验收通过；阿里云仍待自动复查。
+
+## 2026-10-22 ICP 备案页脚整改（已推送并部署）
+
+- 用户要求处理阿里云备案风险，随后明确授权提交并推送 main。Chrome 备案控制台确认 `studytracker.xin` 的问题是底部缺少正确备案号或工信部链接；网站号 **苏ICP备2025214908号-1**，主体号不带 `-1`。控制台截止 **2026-10-23 00:00 CST**，短信为 09:00，已在更早期限前完成。阿里云页面说明到期自动复查；本轮尚未取得复查通过结果。
+- 独立工作树 `/Users/zhouxin/.codex/worktrees/icp-footer/studytracker`，分支 `codex/icp-footer`，干净基线 `cc6323e0cfa85342a34711480eac9def9c3fefaf`。业务提交 **`5e7d3d675af318e18e5fd2b8e7d79a2d332adb13`** 仅含 `templates/base.html`、`templates/auth/_entrance_shell.html`、新增 `templates/_icp_footer.html` 三模板，已非强制推送 `origin/main`。本交接及 WORKLOG 另以纯文档 `[skip ci]` 提交同步，准确文档 HEAD 以 `git log` 为准。旧主树 `/Users/zhouxin/Desktop/studytracker` 既有脏内容未改，仅刷新远端跟踪引用。
+- 普通 HTML 页脚显示完整网站号，链接 `https://beian.miit.gov.cn/`，新窗口加 `noopener noreferrer`。覆盖公共基础页、登录/课堂/学生入口共享认证壳和后台。先于 16:42 CST 热更新确保及时整改，旧模板备份 `/root/backups/studytracker/icp-footer-20261022-164219/`；正式自动部署于 **16:52:36 CST** 重启服务并将三模板纳入版本控制，后续部署不再丢失引用。
+- [CI 39750969543](https://github.com/KB77GG/studytracker/actions/runs/39750969543) 与 [Deploy 39750969448](https://github.com/KB77GG/studytracker/actions/runs/39750969448) 均 success。生产 HEAD 为 `5e7d3d675af318e18e5fd2b8e7d79a2d332adb13`，tracked clean，原 17 个 untracked 备份/静态快照/调度入口保留；service active/running，NRestarts=0。
+- 验证：三模板 Jinja 语法通过；匿名/已登录 base 和共享 entrance shell 三种渲染各有一个正确链接。正式部署后 5002 的 `/`、`/login`、`/classroom`、`/practices`，以及公网 HTTP/HTTPS 主域名与 HTTP www 入口，**7 个 GET 全部最终 200**，编号与 href 均正确。Chrome 已检查登录页可见页脚，并点击抵达工信部 `https://beian.miit.gov.cn/#/Integrated/index`。`git diff --check` 通过。
+- 生产与本地 SHA-256 一致：`_icp_footer.html`=`8fd4f7eff188f72da2fc6ec21df73e422984531707e77f67b94234ef8f1b2651`，`base.html`=`e92fd46e1b6d527b959789d3efb9ce3f7acc6b352cfbf16694147986897a9faa`，`auth/_entrance_shell.html`=`fc988098b4e573cb55763df1797b932edc401b69e1f7e98d992dfcea588aa36c`。截图 `/Users/zhouxin/.codex/visualizations/2026/10/22/01a162bd-1745-7fc0-8ddf-a976b885692f/icp-footer-live.png` 仅本机；生产旧模板备份仅服务器。
+- 本轮未修改数据库/schema、业务 Python、生产配置或小程序；未上传/提审/发布小程序。既有自动部署会执行其常规迁移脚本，本轮没有新增迁移或人工业务数据写入。剩余外部事项是阿里云到期自动复查；没有申请延期、提交虚假通过声明或创建监控自动化。
 
 ## 2026-10-15 词汇“忘了”后端已上线，小程序待用户上传
 

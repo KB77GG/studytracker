@@ -4,6 +4,12 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-22 — ICP 备案页脚已提交推送并自动部署
+
+- 已补全 `studytracker.xin` 的 **苏ICP备2025214908号-1** 与工信部链接，覆盖登录/课堂/学生入口及公共/后台基础模板。用户明确授权后，三模板提交 `5e7d3d675af318e18e5fd2b8e7d79a2d332adb13` 从独立 `codex/icp-footer` 非强制推送 main。
+- CI `39750969543` / Deploy `39750969448` 均 success，生产 HEAD/三模板 SHA 与提交一致，tracked clean、17 个既有 untracked 保留；16:52:36 CST 起服务 active/running、NRestarts=0。三类本地渲染通过，部署后 5002 四入口和公开域名三入口全 200，备案号及链接正确，Chrome 实际跳转到工信部。
+- 16:42 CST 先热更新的旧模板备份 `/root/backups/studytracker/icp-footer-20261022-164219/` 保留；正式部署后修复已纳入仓库。本交接及 CODEX_HANDOFF 以 `[skip ci]` 纯文档提交同步，无需再次部署。未改数据库/schema、小程序或旧主树脏内容；阿里云仍待到期自动复查，控制台期限 10 月 23 日 00:00，比短信 09:00 早。
+
 ## 2026-10-15 — 词汇“忘了”后端已部署；小程序待用户上传
 
 - 已审业务 `3990007cd8ab36eb2eff918153c244487499b9d2` 从 `/Users/zhouxin/.codex/worktrees/9ee5/studytracker` 非强制推送任务分支和 main，CI `38666056690`、Deploy `38666056649` success；生产 HEAD 相同、9 个源码 SHA 一致、tracked clean/原 17 untracked 保留，5002 单 worker/gthread/6 threads active，回环 302、未认证复习 GET 401、错误日志 0。
