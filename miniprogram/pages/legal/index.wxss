@@ -1,0 +1,131 @@
+page {
+  min-height: 100%;
+  background: #f5fbfa;
+  color: #15253b;
+}
+
+.legal-page {
+  min-height: 100vh;
+  padding: 32rpx 28rpx 64rpx;
+  box-sizing: border-box;
+}
+
+.legal-hero,
+.legal-content {
+  box-sizing: border-box;
+  border: 1rpx solid #dcebe8;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 12rpx 34rpx rgba(34, 82, 76, 0.08);
+}
+
+.legal-hero {
+  padding: 38rpx 34rpx;
+  background: linear-gradient(145deg, #ffffff 0%, #e9f7f4 100%);
+}
+
+.legal-kicker,
+.legal-title,
+.legal-date,
+.legal-intro,
+.section-title,
+.section-paragraph,
+.official-title,
+.official-desc,
+.legal-footer {
+  display: block;
+}
+
+.legal-kicker {
+  color: #087f77;
+  font-size: 20rpx;
+  font-weight: 900;
+  letter-spacing: 3rpx;
+}
+
+.legal-title {
+  margin-top: 12rpx;
+  color: #0b1830;
+  font-size: 46rpx;
+  font-weight: 900;
+}
+
+.legal-date {
+  margin-top: 10rpx;
+  color: #748497;
+  font-size: 23rpx;
+}
+
+.legal-intro {
+  margin-top: 24rpx;
+  color: #43546a;
+  font-size: 27rpx;
+  line-height: 1.75;
+}
+
+.legal-content {
+  margin-top: 24rpx;
+  padding: 34rpx;
+}
+
+.legal-section + .legal-section {
+  margin-top: 38rpx;
+  padding-top: 34rpx;
+  border-top: 1rpx solid #edf2f3;
+}
+
+.section-title {
+  color: #0b1830;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.section-paragraph {
+  margin-top: 16rpx;
+  color: #45566b;
+  font-size: 27rpx;
+  line-height: 1.82;
+}
+
+.official-guide {
+  margin-top: 40rpx;
+  padding: 28rpx;
+  border-radius: 22rpx;
+  background: #edf8f6;
+}
+
+.official-title {
+  color: #116d66;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.official-desc {
+  margin-top: 12rpx;
+  color: #55716e;
+  font-size: 24rpx;
+  line-height: 1.65;
+}
+
+.official-button {
+  min-height: 72rpx;
+  margin: 22rpx 0 0;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  background: #087f77;
+  color: #ffffff;
+  font-size: 25rpx;
+  font-weight: 900;
+  line-height: 72rpx;
+}
+
+.official-button::after {
+  border: none;
+}
+
+.legal-footer {
+  margin-top: 44rpx;
+  color: #93a0ae;
+  text-align: center;
+  font-size: 22rpx;
+}
