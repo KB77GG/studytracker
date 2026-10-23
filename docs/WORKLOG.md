@@ -4,6 +4,24 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-23 — 词汇范围校验和老师端书末提醒已部署
+
+- 用户授权上线后，从独立 `codex/vocabulary-load-error` rebase 最新主线，7 文件业务提交 `9ae4ed9a3a58838beded8850258b313f4be72e43` 已原子推送任务分支及 main；保留姓名筛选修复。老师布置到书末时提示换书/选复习范围，越界发布会显示实际最大词序号并阻止空任务生成。
+- Python **118 passed / 10 subtests**、Node **16 passed**、CI 同款 unittest **68 passed**；spelling queue / 目标 Ruff / diff check 通过。主线 CI `39877445261`、任务 CI `39877445165`、Deploy `39877445234` 全 success；生产 08:20:12 CST 起 active/running、5002/单worker/gthread/6线程、NRestarts=0、error journal 空，六源码哈希与本机一致。
+- 发布前私有 SQLite 备份 `/root/backups/studytracker/vocabulary-range-20261023-9ae4ed9a/app.db` 已验 quick_check。生产只读校验144–174拦截/121–143通过、真实任务页200并含书末提示，公网login200；原三任务/关联计划/已结算复习与备份逐字段一致，当前库quick_check=ok/FK0。未代答或改真实任务范围，无新增schema。
+- 后端/网页已上线，交接以 `[skip ci]` 文档提交同步；正式小程序发布树本机仍缺失，3页文件和1客户端测试候选仅本机，未上传/提审/发布。原无效任务仍待教师指定有效范围；提醒发生在布置时，没有创建自动通知任务。详细命令、哈希、备份和验收边界见 CODEX_HANDOFF 顶部。
+
+## 2026-10-23 — 词汇失效复核：连续三天沿用越界范围
+
+- 生产只读确认：反馈对象 10 月 19 日完成词书末段 121–143，随后 20/21/22 日均布置 144–174、实际 0 词。重复的是无效范围；重复学习本身不会使编号累加。用户补图确认原书，但未指定有效范围，生产任务和复习记录未改。
+- 生产已更新到别项修复 `fc07c1c`，词汇 end+1 与空队列逻辑仍旧，本任务修复仍仅在 `codex/vocabulary-load-error@e5f40bcc` 本地未提交；本轮只更新交接，无代码/测试变化，未 commit/push/deploy。正式小程序源码仍须另行找回后移植。
+
+## 2026-10-22 — 词汇小组加载失败定位与本地修复
+
+- 生产只读确认：词汇任务指定 144–174，而所选词书实际只有 1–143，导致队列连续 409；此前自主复习已结算，未丢失。老师端无界 end+1 建议与缺少范围校验共同允许了此类任务。未改生产任务、成绩、数据库或服务。
+- 独立 `/Users/zhouxin/.codex/worktrees/vocabulary-load-error/studytracker`，`codex/vocabulary-load-error@e5f40bcc`：新增实际词库范围校验、书末续学提示；空队列返回可操作说明；主线客户端显示联系老师并修复按钮纵向拉长。旧脏主树保留。Python **90 passed / 10 subtests**、Node **11 passed**、学习页 JS/WXML/WXSS 编译与 diff check 通过；新代码 Ruff 通过，旧 group service 仅既有 I001。
+- 全部仅本机未提交，未 push/deploy/上传。原任务正确书名/范围待用户回答；历史固定小程序发布树在本机缺失，不能从本主线候选直接全量上传，需要找到实际发布源码后移植并真机验证。精确变更清单、命令与边界见 `CODEX_HANDOFF.md` 顶部。
+
 ## 2026-10-22 — 任务姓名筛选跳屏修复已部署
 
 - 独立工作树 `/Users/zhouxin/.codex/worktrees/task-name-filter/studytracker`、分支 `codex/task-name-filter`，基线 `e5f40bcc`。完成上轮中断的修复，移除输入停顿 350ms 自动整页跳转；姓名/搜索改为选候选、回车或查询按钮提交，保护中文组字；重置补清顶部搜索词，空状态提示检查日期和范围。

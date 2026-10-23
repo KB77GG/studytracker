@@ -1,7 +1,40 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-22 任务姓名筛选跳屏修复已推送 main 并部署，Chrome 与生产 5002 验收通过。此前 ICP 备案整改已部署，阿里云仍待自动复查。
+> 最近更新：2026-10-23 词汇范围校验和老师网页书末提醒已提交、推送并部署成功，生产只读验收通过；小程序提示/按钮候选仍仅本机，原任务有效范围仍未指定。旧记录按时间保留。
+
+## 2026-10-23 词汇范围校验与老师端书末提醒已上线
+
+- 用户明确要求“把那部分修复上线”。工作树 `/Users/zhouxin/.codex/worktrees/vocabulary-load-error/studytracker`、分支 `codex/vocabulary-load-error`；原基线 `e5f40bcc`，发布前 fetch 并 rebase 到 `170add3e`，保留前一任务的姓名筛选修复。业务提交 **`9ae4ed9a3a58838beded8850258b313f4be72e43`** 已非强制原子推送任务分支及 main；本交接与 WORKLOG 随后以 `[skip ci]` 纯文档提交同步，准确文档 HEAD 以 `git log` 为准。旧脏主树未切分支、未覆盖。
+- 本次业务提交仅 7 文件：`app.py`、`templates/tasks.html`、`services/dictation_assignment_range.py`、`services/vocabulary_group_learning.py`、`tests/test_task_assignment_routes.py`、`tests/test_vocabulary_group_learning_api.py`、`tests/test_dictation_range_hint.js`。老师布置到书末时提示换书或手动选复习范围；超界/反向/空词库/无效数字在创建 Task/PlanItem 前被拦截，并显示实际最后词序号。范围按真实 sequence 校验，不静默截断、不自动换书、不修改既有任务。学生空队列 API 保留原 409/error code，增加可操作 message 和 retryable=false。
+- 部署前重跑：`TZ=UTC PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --disable-warnings --tb=short -p no:cacheprovider tests/test_task_assignment_routes.py tests/test_vocabulary_group_learning_api.py tests/test_task_assignment_history.py tests/test_task_assignment_deduplication.py tests/test_vocabulary_group_learning.py tests/test_task_date_gate.py tests/test_miniprogram_vocabulary_learning.py` → **118 passed / 10 subtests passed**。`node --test tests/test_dictation_range_hint.js tests/test_tasks_workspace_structure.js tests/test_tasks_filter_input.js` → **16 passed**；`node tests/test_dictation_spell_queue.js` exit 0；CI 同款 9 模块 unittest **68 passed**；新 service/两 Python 测试 Ruff 与 diff check 通过。group service 的旧 I001 未扩大。
+- [主线 CI 39877445261](https://github.com/KB77GG/studytracker/actions/runs/39877445261)、[任务分支 CI 39877445165](https://github.com/KB77GG/studytracker/actions/runs/39877445165)、[Deploy 39877445234](https://github.com/KB77GG/studytracker/actions/runs/39877445234) 均 success。生产 HEAD **9ae4ed9a**，服务自 **2026-10-23 08:20:12 CST** active/running，NRestarts=0，`127.0.0.1:5002 / workers=1 / gthread / threads=6`，部署后 error journal 空。自动部署执行原有迁移脚本，本次没有新增 schema/迁移或手工业务数据写入。
+- 发布前使用 SQLite backup API 从只读连接创建私有备份 `/root/backups/studytracker/vocabulary-range-20261023-9ae4ed9a/app.db`，206,819,328 字节，SHA-256 `7a1fcbb77cb4a1c7e0ba6de984819ca40eeafaf0fea7409e6d785b19f84e4a5a`，quick_check=ok，目录0700/文件0600。备份只在服务器，含真实数据，不能提交；后续有新答案时不能直接覆盖恢复。代码回退基线为 `fc07c1c7cd7844c9a245b8507812e7403276d97d`，不得因此回滚学生新数据。
+- 生产 Python 3.10 轻量 Flask + 模型 + **只读** SQLite 验证：真实《wl 库 3-2》144–174 返回“最后一个词的序号为143”，121–143合法；最近越界历史得到 exhausted=true / next_start=null。使用仅保留在进程内的临时 staff 会话进行 5002 `/tasks?period=month&page_size=10` GET：200、2.773秒，真实渲染含正确书末提示、中文发布错误和保留的查询按钮；未发送发布 POST 或真实学生队列 GET。公网 `/login` 200。三项原任务、关联 PlanItem 和既有 settled review 与备份逐字段一致；当前库 quick_check=ok、foreign_key_check=0。
+- 本机/服务器六源码 SHA 一致：app.py=`d93702683580c54eb9377e4bffbc9090e1ec19e059c3471de3ea923fb7691661`；新 range service=`ad88e0b292780b550719cda868a0a9d7f2cda53c9978e5034ab3bed9dfdf4c8e`；group service=`b0e870765bf327b78f39866244208aeb9f758454d882d6636ae2c371d2692c22`；tasks.html=`29a88ac888c96d3b5c34c83ce6a1f965a5c914b3f0f4612125a84aa349f50e28`；既有 workspace JS=`ff90548b504cf1fbfcbbc3e1edd665c51423379d4cb6a7929d39b6cff81b957e`、CSS=`c6a1c6db608fb2afc15dec2f1acf5a1ea8844da4d1087db5234a2b164f6e74ca`。
+- 小程序候选 **没有纳入本次业务提交或上传/提审/发布**。仍仅本机 3 modified：`miniprogram/pages/student/vocabulary-learning/index.js/.wxml/.wxss`；1 untracked：`tests/test_vocabulary_learning_load_error.js`。它们与发布前备份哈希逐字一致。正式 `/Users/zhouxin/Desktop/studytracker-release` 仍不在本机，不能从本主线目录全量上传；应从实际发布机器找回源码，移植空范围提示与按钮 flex 修复，再完整编译/真机验收。老师网页提醒和后端拦截已经生效，不依赖这次小程序发版。
+- 临时本机副本与只读验收脚本位于 `/private/tmp/studytracker-vocab-deploy-n3iufts7`，不含生产数据库或会话令牌。rebase 时精确暂存的四个客户端文件已恢复并验 SHA；两份交接冲突已合并保留双方记录。所有业务/交接已推送后，只有上述小程序候选仍仅本机。
+- 未完成的业务决定：用户确认了词书但没有指定新的有效词汇范围；原无效任务保持不变，不可误报为学生已经能做旧任务。下一步按教师安排选择 1–143 内复习范围或换书，再处理原任务；本轮不发送额外通知，不创建提醒自动化。完整微信运行时/iOS/Android验收仍待前端源码找回后进行。
+
+## 2026-10-23 词汇任务仍失效的只读复核
+
+- 本工作树仍为 `codex/vocabulary-load-error@e5f40bcc`，既有 10 modified / 3 untracked 保留；本轮只更新两份交接文档，不改业务代码，未重复跑无变化的测试。生产已由另一个任务部署至 `fc07c1c`（任务姓名输入修复），`app.py` 仍使用无界 end+1 建议，group service 仍返回旧空词汇错误，本次词汇修复没有上线。
+- 匿名化历史证据：同一反馈对象在 10 月 19 日完成《wl 库 3-2》121–143；10 月 20、21、22 日的三个任务都配置为 144–174，状态 pending、实际选词数全部为 0；词书范围仍是 1–143。这确认同一越界范围被连续布置，而非“单词重复作答导致编号自动累加”。第一个越界起点与 end+1 自动建议一致，数据库本身不能证明每次通过哪个界面动作提交。
+- 生产 journal 进一步对应 10 月 22 日新任务：22:18:31 CST preflight 200，随后的 queue 在 22:18:31/33/35/36 均返回 409、45 字节，与旧 `empty_vocabulary_task` 响应一致，确认最新反馈仍是同一类空范围问题。
+- 用户补图已确认《wl 库 3-2》，但没有给出新的有效范围，也未授权提交/推送/上线；不能推断为整本或下一本书。原任务和复习记录保持原样，前次自主复习仍 settled。后续应按教学意图选本书有效复习范围，或换书继续新词；本地修复与发布源码缺失边界仍见下节。两份交接仅本机可见。
+
+## 2026-10-22 词汇范围越界导致小组学习失败（仅本机候选）
+
+- 工作树 `/Users/zhouxin/.codex/worktrees/vocabulary-load-error/studytracker`，分支 `codex/vocabulary-load-error`，基线/HEAD `e5f40bcc`（完整值以 `git rev-parse HEAD` 为准），从已 fetch 的 `origin/main` 建立，开工干净。当前所有修复未 commit/push/deploy。旧主树 `/Users/zhouxin/Desktop/studytracker` 仍为 `main@5a142e86`、ahead 1 / behind 144；原 2 modified 和 21 untracked 入口未改，只刷新远端引用。
+- 只读生产日志与 SQLite（`mode=ro`、`PRAGMA query_only=ON`）确认：2026-10-21 21:08:50 CST 自主复习结算成功，21:08:52 起及截图对应 21:09:42 的小组队列持续返回 409。匿名化根因是指定《wl 库 3-2》144–174，而实际只有 1–143，选词数 0、未创建 learning flow；已结算 review 保留。生产 HEAD `5e7d3d6`，tracked clean。没有调用真实学生的可写队列 GET、代答、改任务、写生产库或重启服务；学生身份、任务 ID、令牌和答案不写本交接。
+- 根因链：教师端范围建议直接取上次 end+1，书末仍会建议无效起点；任务发布未验证实际词库范围；客户端把 `empty_vocabulary_task` 统一显示为重试错误；纵向错误面板中的按钮使用 `flex:1` 导致拉长。
+- 新增 `services/dictation_assignment_range.py`：按实际 sequence 校验词书存在、整数/正序/上界/非空，不信任缓存 word_count，不静默截断；按最新布置和真实序号生成有界续学建议（支持序号空洞）。`app.py` 仅接入校验并用 helper 替换原 hint 循环，在创建 Task/PlanItem 前返回带中文 message 的 400。`templates/tasks.html` 显示书末提示、清掉自动填入的失效起点、保留手选复习范围，发布错误优先展示 message。
+- `services/vocabulary_group_learning.py` 保留 409/原 error code 并增加 `retryable=false` 和明确 message。主线小程序学习页 JS/WXML/WXSS 将空范围显示为联系老师并返回任务，网络故障仍可重试；按钮设为 `flex:none`，横向导航原有专用 flex 规则保留。
+- 未提交 tracked：`app.py`、`templates/tasks.html`、`services/vocabulary_group_learning.py`、`miniprogram/pages/student/vocabulary-learning/index.js/.wxml/.wxss`、`tests/test_task_assignment_routes.py`、`tests/test_vocabulary_group_learning_api.py`、本文件、`docs/WORKLOG.md`。未跟踪：上述新 service、`tests/test_dictation_range_hint.js`、`tests/test_vocabulary_learning_load_error.js`。仅这些文件属于本轮。
+- 验证（cwd 为本工作树）：`TZ=UTC PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m pytest -q --disable-warnings --tb=short -p no:cacheprovider tests/test_task_assignment_routes.py tests/test_vocabulary_group_learning_api.py tests/test_task_assignment_history.py tests/test_task_assignment_deduplication.py tests/test_vocabulary_group_learning.py` → **90 passed / 10 subtests passed**。修前两主要测试文件 **31 passed**；新增回归覆盖 144–174/143 词、部分越界、空结束、负/反向/非法值、序号空洞、最后一词可发布、不产生 Task/PlanItem/flow/record，以及书末建议。
+- `node --test tests/test_dictation_range_hint.js tests/test_vocabulary_learning_load_error.js tests/test_vocabulary_feedback.js tests/test_tasks_workspace_structure.js` → **11 passed**。学习页 `node --check`、微信官方 `wcc -o /dev/null` WXML / `wcsc -lc -o /dev/null` WXSS 编译和 `git diff --check` 通过。新 service 和两个 Python 测试 Ruff 通过；`services/vocabulary_group_learning.py` 仅 I001 import 排序告警，已用 HEAD 原文 stdin 检查确认是既有问题，未改无关导入。
+- **重要发布边界**：本机不存在历史固定发布树 `/Users/zhouxin/Desktop/studytracker-release`，也不存在此前“忘了”前端候选树 `9ee5`；主线学习页不包含截图中的诊断编号和若干已上线客户端增量。因此这三个前端文件只是基于主线的最小补丁候选，**不可把整个主线小程序目录直接当成最新发布包上传**。须先找到另一台机器上的真实发布源码，精确移植改动、编译和真机验证。当前没有完整微信运行时/iOS/Android验收。
+- 待办：用户补图确认原词书为《wl 库 3-2》，有效范围仍未指定；不能自行推断成整本、下一本书或修改日期/成绩。获得正确意图后再准备该任务的精确更正（保持既有复习记录）；如需上线，按用户明确授权提交/推送后端，前端从真实发布源码手动发版。本轮没有生产 schema 变化或迁移，所有代码和交接仅本机可见。
 
 ## 2026-10-22 任务姓名输入跳屏与筛选重置（已上线）
 
