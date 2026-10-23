@@ -630,7 +630,12 @@ def _initialize_flow(user, task, now):
     goal = normalize_goal(task.vocabulary_goal)
     assigned = _assigned_words(task)
     if not assigned:
-        raise VocabularyGroupLearningError("empty_vocabulary_task", 409)
+        raise VocabularyGroupLearningError(
+            "empty_vocabulary_task",
+            409,
+            retryable=False,
+            message="任务范围内没有单词，请联系老师调整词书或词汇范围。",
+        )
     group_size = group_size_for_goal(goal)
     book_id = task.dictation_book_id
     candidates = DictationWord.query.filter_by(book_id=book_id).order_by(DictationWord.id.asc()).all()

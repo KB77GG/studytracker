@@ -27,6 +27,7 @@ from models import (
     VocabularyTaskReview,
     db,
 )
+from services.dictation_assignment_range import build_dictation_range_hints, dictation_range_error
 from services.task_deletion import task_reference_columns
 
 
@@ -155,6 +156,74 @@ class LegacyTaskAssignmentRouteTest(unittest.TestCase):
         self.assertNotIn("token=", second.get_data(as_text=True))
         with self.app.app_context():
             self.assertEqual(Task.query.count(), 1)
+
+    def _range_book(self, sequences=range(1, 144)):
+        with self.app.app_context():
+            # A stale cached count must not allow an invalid assignment.
+            book = DictationBook(title="范围回归词书", word_count=999, created_by=self.staff_id)
+            db.session.add(book)
+            db.session.flush()
+            db.session.add_all([
+                DictationWord(book_id=book.id, sequence=seq, word=f"word{seq}", translation="词")
+                for seq in sequences
+            ])
+            db.session.commit()
+            return book.id
+
+    def test_invalid_word_range_never_creates_task_or_plan_item(self):
+        book_id = self._range_book()
+        for start, end in [(144, 174), (120, 174), (144, ""), (0, 10), (30, 10), ("oops", 20)]:
+            with self.subTest(start=start, end=end):
+                response = self._post(
+                    task_source="material", material_id=f"dictation-{book_id}",
+                    vocabulary_goal="reading", dictation_word_start=start, dictation_word_end=end,
+                )
+                self.assertEqual(response.status_code, 400, response.get_data(as_text=True))
+                self.assertEqual(response.get_json()["error"], "invalid_dictation_range")
+                self.assertTrue(response.get_json()["message"])
+                with self.app.app_context():
+                    self.assertEqual(Task.query.count(), 0)
+                    self.assertEqual(PlanItem.query.count(), 0)
+
+    def test_last_word_and_open_ended_ranges_can_be_assigned(self):
+        book_id = self._range_book()
+        for index, (start, end) in enumerate([(143, 143), (142, "")]):
+            with self.subTest(start=start, end=end):
+                response = self._post(
+                    task_source="material", material_id=f"dictation-{book_id}",
+                    vocabulary_goal="reading", dictation_word_start=start, dictation_word_end=end,
+                    student_name=f"范围学生{index}", idempotency_key=f"range-{index}",
+                )
+                self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+                with self.app.app_context():
+                    task = db.session.get(Task, response.get_json()["task"]["id"])
+                    self.assertEqual(task.dictation_word_start, start)
+                    self.assertEqual(task.dictation_word_end, end or None)
+
+    def test_range_validation_uses_sequences_and_rejects_empty_gap(self):
+        book_id = self._range_book([1, 5])
+        empty_book_id = self._range_book([])
+        with self.app.app_context():
+            self.assertIsNone(dictation_range_error(book_id, 5, 5))
+            self.assertIsNone(dictation_range_error(book_id, None, None))
+            self.assertIsNotNone(dictation_range_error(book_id, 2, 4))
+            self.assertIsNotNone(dictation_range_error(empty_book_id, 1, None))
+            self.assertIsNotNone(dictation_range_error(999999, 1, None))
+
+    def test_range_hints_stop_at_book_end_and_skip_sequence_gaps(self):
+        book_id = self._range_book([1, 5, 143])
+        with self.app.app_context():
+            tasks = [
+                Task(student_name=name, dictation_book_id=book_id, dictation_word_start=1,
+                     dictation_word_end=end, date="2026-10-21")
+                for name, end in [("end", 143), ("invalid", 174), ("all", None), ("gap", 1), ("gap", 5)]
+            ]
+            hints = build_dictation_range_hints(tasks)
+            for name in ["end", "invalid", "all"]:
+                self.assertIsNone(hints[name][str(book_id)]["next_start"])
+                self.assertTrue(hints[name][str(book_id)]["exhausted"])
+            self.assertEqual(hints["gap"][str(book_id)]["next_start"], 5)
+            self.assertFalse(hints["gap"][str(book_id)]["exhausted"])
 
     def test_staff_writing_catalog_exposes_both_assignable_layers(self):
         self._login()

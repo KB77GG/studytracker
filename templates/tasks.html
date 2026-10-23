@@ -4715,6 +4715,12 @@
           startInput.value = hint.next_start;
           startInput.dataset.autofill = "1";
         }
+      } else if (hint.exhausted) {
+        text += '，已到词书末尾，请换书或手动选择复习范围';
+        if (startInput.dataset.autofill === "1") {
+          startInput.value = '';
+          startInput.dataset.autofill = "0";
+        }
       }
       hintEl.textContent = text;
     }
@@ -4808,7 +4814,7 @@
               window.__renderTaskDuplicateError?.(data.error);
               return;
             }
-            throw new Error(data.error || 'publish_failed');
+            throw new Error(data.message || data.error || 'publish_failed');
           }
           window.location.assign(data.redirect || '/tasks');
         }).catch(error => {

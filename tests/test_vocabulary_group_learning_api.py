@@ -200,6 +200,21 @@ class VocabularyGroupLearningApiTest(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         proxy.assert_called_once_with("28th June", preferred_providers=["dashscope"])
 
+    def test_empty_assigned_range_is_actionable_and_does_not_create_a_flow(self):
+        task_id = self._task("listening", start=5, end=35)
+        result = self.client.get(
+            f"/api/miniprogram/student/tasks/{task_id}/vocabulary-queue?supports_correction=1",
+            headers=self.headers,
+        )
+        self.assertEqual(result.status_code, 409)
+        payload = result.get_json()
+        self.assertEqual(payload["error"], "empty_vocabulary_task")
+        self.assertFalse(payload["retryable"])
+        self.assertIn("联系老师", payload["message"])
+        with self.app.app_context():
+            self.assertEqual(VocabularyLearningFlow.query.filter_by(task_id=task_id).count(), 0)
+            self.assertEqual(DictationRecord.query.filter_by(task_id=task_id).count(), 0)
+
     def test_existing_history_shows_forgotten_action_and_keeps_raw_answer(self):
         with self.app.app_context():
             word = db.session.query(DictationWord).order_by(DictationWord.id).first()

@@ -59,6 +59,10 @@ from api.teacher_practice_catalog import (
 )
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
+from services.dictation_assignment_range import (
+    build_dictation_range_hints,
+    dictation_range_error,
+)
 from services.task_assignment_catalogs import (
     intensive_listening_catalog,
     listening_test_catalog,
@@ -3933,6 +3937,18 @@ def tasks_page():
                     writing_snapshot.get("planned_minutes") or 0
                 )
 
+        if material_id and material_id.startswith("dictation-"):
+            range_error = dictation_range_error(
+                int(material_id.split("-")[1]),
+                request.form.get("dictation_word_start"),
+                request.form.get("dictation_word_end"),
+            )
+            if range_error:
+                if request.accept_mimetypes.best == "application/json":
+                    return jsonify(ok=False, error="invalid_dictation_range", message=range_error), 400
+                flash(range_error)
+                return redirect(url_for("tasks_page"))
+
         # Validate: need either a category or a verified library resource.
         if not student:
             flash("请填写学生姓名")
@@ -4436,28 +4452,12 @@ def tasks_page():
         })
 
     # Dictation range hints: latest assigned range per student & dictation book
-    dictation_range_hints = {}
     dictation_tasks = (
         Task.query.filter(Task.dictation_book_id.isnot(None))
         .order_by(Task.id.desc())
         .all()
     )
-    for t in dictation_tasks:
-        student_key = (t.student_name or "").strip()
-        if not student_key or not t.dictation_book_id:
-            continue
-        student_map = dictation_range_hints.setdefault(student_key, {})
-        book_key = str(t.dictation_book_id)
-        if book_key in student_map:
-            continue
-        start_val = int(t.dictation_word_start or 1)
-        end_val = int(t.dictation_word_end) if t.dictation_word_end else None
-        student_map[book_key] = {
-            "start": start_val,
-            "end": end_val,
-            "next_start": (end_val + 1) if end_val else None,
-            "last_date": t.date,
-        }
+    dictation_range_hints = build_dictation_range_hints(dictation_tasks)
 
     # --- 待审核提交 (Pending Reviews) ---
     # 1. PlanItem (新版)
