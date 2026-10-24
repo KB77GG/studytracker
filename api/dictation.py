@@ -41,6 +41,7 @@ from dictation_answers import (
     serialize_answer_variants,
     strip_part_of_speech_prefix,
 )
+from dictation_numeric import classify_numeric_dictation
 from services.dictation_audio import word_tts_playback_url
 from services.dictation_review import DictationReviewError, submit_dictation_answer
 from services.vocabulary_mastery import (
@@ -1106,7 +1107,13 @@ def schedule_prewarm_for_book(book_id: int) -> None:
     threading.Thread(target=runner, daemon=True).start()
 
 
-def _proxy_tts_for_word(word: str, preferred_providers: list[str] | None = None):
+def _proxy_tts_for_word(
+    word: str,
+    preferred_providers: list[str] | None = None,
+    *,
+    spoken_text: str | None = None,
+    allow_legacy_cache: bool = True,
+):
     """Proxy TTS audio with a quality-gated hybrid of Youdao and Kokoro.
 
     Youdao serves a clean human recording (MPEG v1) for base dictionary words
@@ -1115,7 +1122,10 @@ def _proxy_tts_for_word(word: str, preferred_providers: list[str] | None = None)
     artifact on some isolated words. So: prefer a Youdao v1 recording; when
     Youdao would only give v2, use the pre-baked Kokoro cache instead.
     """
-    tts_text = _dictation_tts_text(word)
+    # Keep the source word as the cache identity, but include the reviewed
+    # spoken form in its existing text hash. Numeric prompts must not fall
+    # back to clips generated from the source digits under older rules.
+    tts_text = _dictation_tts_text(spoken_text if spoken_text is not None else word)
 
     # Structured prompts such as dates, prices, times and postcodes are not
     # dictionary headwords. Give their explicitly selected provider first
@@ -1147,7 +1157,7 @@ def _proxy_tts_for_word(word: str, preferred_providers: list[str] | None = None)
 
     # 2. Youdao only offers a synth voice here → use the pre-baked Kokoro cache.
     for _provider, cache_path in _dictation_tts_cache_candidates(
-        word, tts_text, providers=["kokoro"], include_legacy=True
+        word, tts_text, providers=["kokoro"], include_legacy=allow_legacy_cache
     ):
         if not cache_path.exists():
             continue
@@ -1194,6 +1204,17 @@ def word_tts(word_id):
         if os.path.exists(full_path):
             return send_file(full_path, mimetype="audio/mpeg")
     raw_text = strip_part_of_speech_prefix(word.word)
+    # Only new numeric-question URLs opt in. Existing task snapshots and
+    # their cached audio keep the legacy behavior, as do bound recordings.
+    if request.args.get("numeric") == "1":
+        numeric = classify_numeric_dictation(raw_text)
+        if numeric:
+            return _proxy_tts_for_word(
+                raw_text,
+                preferred_providers=["dashscope"],
+                spoken_text=numeric["tts_text"],
+                allow_legacy_cache=False,
+            )
     has_numeric_content = any(char.isdigit() for char in raw_text)
     text = (
         raw_text

@@ -23,6 +23,7 @@ from dictation_answers import (
     parse_answer_variants,
     parse_vocabulary_word_variants,
 )
+from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
 from models import (
     DictationBook,
     DictationRecord,
@@ -326,6 +327,7 @@ def build_meaning_recall_options(word, candidates, seed: str, limit: int = 4) ->
 
 def _question_for(word, dimension, goal, stage, candidates):
     seed = f"v2:{word.id}:{word.sense_id}:{dimension}:{goal}:{stage}"
+    numeric = None
     if dimension == "context_use":
         result = build_context_question(
             word,
@@ -353,6 +355,8 @@ def _question_for(word, dimension, goal, stage, candidates):
             # falls back to TTS without exposing answer text in the snapshot.
             "audio_tts_url": f"/dictation/words/{word.id}/tts",
         }
+        if listening_mode and classify_numeric_dictation(word.word):
+            prompt["audio_tts_url"] += "?numeric=1"
         if not listening_mode:
             prompt["word"] = canonical_vocabulary_word(word.word, word.accepted_answers)
         answer = meaning
@@ -380,11 +384,25 @@ def _question_for(word, dimension, goal, stage, candidates):
             "phonetic": word.phonetic,
             "audio_tts_url": f"/dictation/words/{word.id}/tts",
         }
-        variants = _english_word_variants(word)
-        if not variants:
-            return None
-        answer = variants[0]
-        answer_type = "english"
+        numeric = classify_numeric_dictation(word.word)
+        if numeric:
+            # Freeze the source answer and its policy in the private snapshot.
+            # The public prompt exposes only a category/hint, never the answer
+            # or the expanded text sent to TTS.
+            answer = numeric["canonical"]
+            answer_type = "numeric"
+            prompt.update(
+                instruction="听音填写数字、日期或完整答案",
+                input_hint=numeric["input_hint"],
+                audio_tts_url=f"/dictation/words/{word.id}/tts?numeric=1",
+            )
+            prompt["phonetic"] = None
+        else:
+            variants = _english_word_variants(word)
+            if not variants:
+                return None
+            answer = variants[0]
+            answer_type = "english"
         options = []
 
     question_id = hashlib.sha256(
@@ -403,13 +421,15 @@ def _question_for(word, dimension, goal, stage, candidates):
             "prompt": prompt,
             "options": options,
             "answer_type": answer_type,
+            **({"numeric_kind": numeric["kind"]} if numeric else {}),
         },
         {
             "answer": answer,
             "accepted_answers": [variant for variant in variants[1:]]
             if answer_type == "english"
-            else parse_answer_variants(word.accepted_answers),
+            else ([] if numeric else parse_answer_variants(word.accepted_answers)),
             "answer_type": answer_type,
+            **({"numeric_kind": numeric["kind"], "numeric_rule_version": 1} if numeric else {}),
         },
     )
 
@@ -655,11 +675,21 @@ def get_vocabulary_task_queue(user: User, task_id: int, now: datetime | None = N
                 task,
                 sense.id,
                 mastery,
-                dimensions,
+                ("audio_form_recall",)
+                if goal != "listening" and classify_numeric_dictation(word.word)
+                else dimensions,
                 now,
                 claimed,
                 allow_early=target_source == VocabularyTaskReview.SOURCE_ASSIGNED,
             )
+            if (
+                target_source == VocabularyTaskReview.SOURCE_ASSIGNED
+                and classify_numeric_dictation(word.word)
+                and "audio_form_recall" not in candidate_dimensions
+            ):
+                # Explicit teacher selection must remain answerable even when
+                # a prior comprehensive bootstrap scheduled stage zero later.
+                candidate_dimensions.append("audio_form_recall")
             for dimension in candidate_dimensions:
                 question = _question_for(
                     word,
@@ -751,6 +781,10 @@ def _find_item(user: User, task_id: int, payload: dict) -> VocabularyTaskReview 
 def _grade_recall(item: VocabularyTaskReview, answer: str) -> bool:
     expected = _safe_json(item.answer_payload_json)
     answer_type = expected.get("answer_type")
+    if answer_type == "numeric":
+        return is_numeric_answer_correct(
+            answer, expected.get("answer") or "", expected.get("numeric_kind")
+        )
     if answer_type == "chinese":
         return is_chinese_answer_correct(answer, expected.get("answer") or "")
     return is_english_answer_correct(

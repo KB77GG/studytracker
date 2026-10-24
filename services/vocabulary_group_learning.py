@@ -21,6 +21,7 @@ from dictation_answers import (
     is_chinese_answer_correct,
     is_english_answer_correct,
 )
+from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
 from models import (
     DictationRecord,
     DictationWord,
@@ -218,6 +219,7 @@ def _task_owner(task: Task, user: User) -> bool:
 def _familiarity_snapshot(word: DictationWord) -> dict:
     """Return approved/material fields only; familiarity is not a mastery event."""
 
+    numeric = classify_numeric_dictation(word.word)
     return {
         "word_id": word.id,
         "word": canonical_vocabulary_word(word.word, word.accepted_answers) or word.word,
@@ -227,7 +229,7 @@ def _familiarity_snapshot(word: DictationWord) -> dict:
         "example_en": word.example_en,
         "example_zh": word.example_zh,
         "usage_note": word.usage_note,
-        "audio_tts_url": f"/dictation/words/{word.id}/tts",
+        "audio_tts_url": f"/dictation/words/{word.id}/tts" + ("?numeric=1" if numeric else ""),
     }
 
 
@@ -283,6 +285,29 @@ def _build_group_specs(
     used_score_keys,
     diagnostics,
 ):
+    # A selected numeric answer always needs an audible recall task, even if
+    # the teacher chose a general reading/writing goal. Reuse the listening
+    # builder only for those words; keep ordinary vocabulary's goal unchanged.
+    if goal != "listening":
+        numeric_words = [word for word in group_words if classify_numeric_dictation(word.word)]
+        if numeric_words:
+            numeric_ids = {word.id for word in numeric_words}
+            ordinary_words = [word for word in group_words if word.id not in numeric_ids]
+            ordinary = _build_group_specs(
+                user, ordinary_words, group_index, goal, candidates, used_score_keys, diagnostics
+            )
+            numeric = _build_group_specs(
+                user, numeric_words, group_index, "listening", candidates, used_score_keys, diagnostics
+            )
+            if goal == "comprehensive":
+                # This goal preserves its builder's order later. Separate a
+                # numeric word's meaning and dictation questions here too.
+                for phase in PHASE_ORDER:
+                    previous = ordinary[phase][-1]["sense_id"] if ordinary[phase] else ensure_word_sense(group_words[-1]).id
+                    numeric[phase] = stable_question_order(
+                        numeric[phase], f"numeric:{group_index}:{phase}", previous
+                    )
+            return {phase: ordinary[phase] + numeric[phase] for phase in PHASE_ORDER}
     if goal == "comprehensive":
         return _build_comprehensive_group_specs(
             user,
@@ -1306,12 +1331,17 @@ def _forgotten_items(flow):
                 "word": (canonical_vocabulary_word(word.word, word.accepted_answers) or word.word) if word else None,
                 "meaning": (word.core_meaning_zh or word.translation) if word else None,
                 "revealed_answer": _revealed_answer(question),
-                "audio_tts_url": f"/dictation/words/{question.word_id}/tts",
+                "audio_tts_url": _question_audio_url(question),
                 "first_response_kind": question.first_response_kind or "answer",
                 "retry_response_kind": question.retry_response_kind if question.retry_attempt_id else None,
             }
         )
     return items
+
+
+def _question_audio_url(question):
+    prompt = _json_dict(question.question_snapshot_json).get("prompt") or {}
+    return prompt.get("audio_tts_url") or f"/dictation/words/{question.word_id}/tts"
 
 
 def _saved_response(flow, record):
@@ -1340,7 +1370,7 @@ def _saved_response(flow, record):
             "example_en": word.example_en if word else None,
             "example_zh": word.example_zh if word else None,
             "usage_note": word.usage_note if word else None,
-            "audio_tts_url": f"/dictation/words/{question.word_id}/tts",
+            "audio_tts_url": _question_audio_url(question),
         },
     }
 
@@ -1587,6 +1617,10 @@ def _grade_question(question, answer: str) -> bool:
     expected = _json_dict(question.answer_payload_json)
     if question.dimension == "context_use":
         return grade_context_answer(snapshot, expected, answer)
+    if expected.get("answer_type") == "numeric":
+        return is_numeric_answer_correct(
+            answer, expected.get("answer") or "", expected.get("numeric_kind")
+        )
     if expected.get("answer_type") == "chinese":
         return is_chinese_answer_correct(answer, expected.get("answer") or "")
     return is_english_answer_correct(

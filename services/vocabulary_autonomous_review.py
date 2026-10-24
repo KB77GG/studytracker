@@ -23,6 +23,7 @@ from dictation_answers import (
     is_chinese_answer_correct,
     is_english_answer_correct,
 )
+from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
 from models import (
     DictationWord,
     StudentVocabularyMastery,
@@ -331,6 +332,8 @@ def _candidate_is_eligible(
         meaning = str(word.core_meaning_zh or word.translation or "").strip()
         from services.vocabulary_mastery import _english_word_variants
 
+        if dimension == "audio_form_recall" and classify_numeric_dictation(word.word):
+            return True
         return bool(meaning if dimension == "form_recall" else True) and bool(
             _english_word_variants(word)
         )
@@ -781,17 +784,27 @@ def _answer_feedback(
             "usage_note": None,
             "audio_tts_url": None,
         }
-    canonical = canonical_vocabulary_word(word.word, word.accepted_answers)
+    expected = _safe_json(item.answer_payload_json)
+    is_numeric = expected.get("answer_type") == "numeric"
+    canonical = (
+        str(expected.get("answer") or "")
+        if is_numeric
+        else canonical_vocabulary_word(word.word, word.accepted_answers)
+    )
+    audio_tts_url = f"/dictation/words/{word.id}/tts"
+    if is_numeric:
+        snapshot = _safe_json(item.question_snapshot_json)
+        audio_tts_url = (snapshot.get("prompt") or {}).get("audio_tts_url") or audio_tts_url
     return {
         "word": canonical,
-        "syllables": _feedback_syllables(canonical),
+        "syllables": canonical if is_numeric else _feedback_syllables(canonical),
         "phonetic": word.phonetic,
         "core_meaning_zh": word.core_meaning_zh or word.translation,
         "usage_pattern": word.usage_pattern,
         "example_en": word.example_en,
         "example_zh": word.example_zh,
         "usage_note": word.usage_note,
-        "audio_tts_url": f"/dictation/words/{word.id}/tts",
+        "audio_tts_url": audio_tts_url,
     }
 
 
@@ -1007,6 +1020,11 @@ def _review_item_skip_reason(item: VocabularyReviewItem) -> str | None:
         if not answer_option_id or answer_option_id not in normalized_options:
             return "missing_options"
     elif answer_type in {"chinese", "english", "english_text"}:
+        if not text(answer_payload.get("answer"), 200):
+            return "missing_answer"
+    elif answer_type == "numeric":
+        if mode != "audio_to_en":
+            return "invalid_question"
         if not text(answer_payload.get("answer"), 200):
             return "missing_answer"
     else:
@@ -1448,6 +1466,10 @@ def submit_review_answer(
         is_correct = grade_context_answer(snapshot, expected, answer)
     elif expected.get("answer_type") == "chinese":
         is_correct = is_chinese_answer_correct(answer, expected.get("answer") or "")
+    elif expected.get("answer_type") == "numeric":
+        is_correct = is_numeric_answer_correct(
+            answer, expected.get("answer") or "", kind=expected.get("numeric_kind")
+        )
     else:
         is_correct = is_english_answer_correct(
             answer,
@@ -1594,6 +1616,10 @@ def submit_review_correction(
         is_correct = grade_context_answer(snapshot, expected, answer)
     elif expected.get("answer_type") == "chinese":
         is_correct = is_chinese_answer_correct(answer, expected.get("answer") or "")
+    elif expected.get("answer_type") == "numeric":
+        is_correct = is_numeric_answer_correct(
+            answer, expected.get("answer") or "", kind=expected.get("numeric_kind")
+        )
     else:
         is_correct = is_english_answer_correct(
             answer,
