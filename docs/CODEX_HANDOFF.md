@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-23 词汇范围校验和老师网页书末提醒已提交、推送并部署成功，生产只读验收通过；小程序提示/按钮候选仍仅本机，原任务有效范围仍未指定。旧记录按时间保留。
+> 最近更新：2026-10-24 数字听写后台已上线并完成真实音频验证；小程序待另一台电脑后天发布。
+
+
+## 2026-10-24 数字听写后台已部署，小程序待另一台电脑发布
+
+- 发布工作树 `/Users/zhouxin/Documents/Codex/2026-10-24/task-2/numeric-dictation-release`，分支 `codex/numeric-dictation-release`，从最新主线 `99dc19ad` 建立干净目录；只复制已测后台 5 运行文件+4 测试文件。业务 **`1cac6c0ce3544dbc7d982f24885da652ad29725c`** 已非强制原子推送 main/任务分支，生产实际 HEAD 与五文件 SHA 全匹配。候选树 `numeric-dictation-fix@9ae4ed9a` 原有 9 modified/7 untracked 为本任务上一轮内容，保留；旧 Desktop 脏树不动。此后仅以 `[skip ci]` 文档提交同步交接/证据/待发前端补丁，最终文档 HEAD 看 git log。
+- CI `40105560862` / `40105560891` 与 Deploy `40105560898` 全 success。生产服务 2026-10-24 23:08:23 CST 起 active、NRestarts0、5002/单 worker/gthread/6 threads，login200，音频验收后 warning/error journal0。一致性备份 `/root/backups/studytracker/numeric-dictation-20261024T150621.422224Z/app.db`，212156416 bytes、SHA `e6bf28a400000b588843ba2b504483d5c9bb8651f061f8a4382bedfa8d0b59f3`、quick_check ok；不在Git保存真实库。
+- 原三本 book199/200/201 的2511条/259章已上线。本次生产只读建题2511全过，旧英文过滤142条全覆盖。新数字-only/部分范围/混合及四goal兜底、已有任务冻结已测；本地205 passed/206 subtests，生产Python3.10内存SQLite20 tests OK。未创建学生任务/作答/通知，词书/词条/task摘要不变；期间3条其他词库正常新作答引起对应学习状态更新，冻结题目/标准答案不变，无删除。不能把活跃库说成逐字不变。
+- 真实音频7样例HTTP200、完整解码及本机afplay全通过，离线Whisper small内容核对吻合（号码前导零/日期/小数等）。6条新DashScope缓存与HTTP哈希相同，金额1条使用已有绑定录音；没有全库预热或新服务。初次沙盒播放器失败，正常设备权限后7项exit0；无安全配置更改。**没有人工主观听感评价**，未做微信真机真实学生提交。
+- 小程序本次未上传/提审/发布。用户确认待发代码在另一台电脑桌面，后天处理；该机实际目录和Git状态待核。旧学习页可接受numeric的audio_to_en/原生字符串/冻结音频URL，仅提示旧；自主复习基线 `miniprogram/pages/student/vocabulary-review/index.js:187` 错用未定义 `attempt_id`，而175行声明 `attemptId`，非空答案提交时抛ReferenceError且未发请求。补为 `attempt_id: attemptId`，与两页提示和8项行为测试打入 `docs/design/numeric-dictation-20261024/client-pending.patch`，本发布树apply --check过，未应用。实际线上小程序包版本未核；若同基线，自主复习仍阻断，不能宣称全部入口可用。
+- 详细复现/发布步骤/音频表/结构化证据/兼容回滚均在 `docs/design/numeric-dictation-20261024/README.md`。回滚包仅关闭新题生成并保留numeric读取/判分/反馈/音频，134 passed/198 subtests及8冻结快照三项专项通过；未执行回滚，不得直接回旧代码/恢复旧DB。下一步在另一台电脑核现有脏变更、应用前端增量、11项Node回归、微信开发者工具发布并真机验学习/自主复习。后台已经完成，无需再触发部署或给学生推送。
 
 ## 2026-10-23 词汇范围校验与老师端书末提醒已上线
 

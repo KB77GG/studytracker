@@ -1,0 +1,22 @@
+{
+  "source_base_commit": "9ae4ed9a3a58838beded8850258b313f4be72e43",
+  "source_tree": "/Users/zhouxin/Documents/Codex/2026-10-24/task-2/numeric-dictation-fix",
+  "validation_tree": "/Users/zhouxin/Documents/Codex/2026-10-24/task-2/prepared/numeric-rollback-validation-8qpmdlfw",
+  "full_candidate_sha256": {
+    "dictation_numeric.py": "04a56c35326545774c37e1c3efc70621c747a0d68f63fc4bdb81584035239d2b",
+    "api/dictation.py": "7e4cb7b84fddb47f132266607d8e2bf9120b7f4d8adece3165edede19926f473",
+    "services/vocabulary_mastery.py": "c90ef503d36acfd504562fe8d068d32de63e2fa1dcb67416f2c2c72197f293d2",
+    "services/vocabulary_group_learning.py": "cff3f6e39b1dddbd6b456b720b518c79e7724f53d65e7fb8f79f2a2d972d1371",
+    "services/vocabulary_autonomous_review.py": "3dc2b817caaf1c6bfcc94aa62cf5829561ed4a54c8cc174c2261db1fe1e99e44"
+  },
+  "compatibility_sha256": {
+    "dictation_numeric.py": "04a56c35326545774c37e1c3efc70621c747a0d68f63fc4bdb81584035239d2b",
+    "api/dictation.py": "7e4cb7b84fddb47f132266607d8e2bf9120b7f4d8adece3165edede19926f473",
+    "services/vocabulary_mastery.py": "f416730feaa2e6251897ea493d5dded48d17a6b07f83f2e82bd1c9e2a92e8cf1",
+    "services/vocabulary_group_learning.py": "fa3312a15cff22c5fe881f135700ca8e27be1f59b7d57ca77bfccf2a28e959fb",
+    "services/vocabulary_autonomous_review.py": "a74c81137fc0a8db2f8818e6fa7b13e493fc9e3e94b1abb958e41df8ac0f4286"
+  },
+  "full_candidate_fingerprint": "866e4d8f4b52ad1972e0f3fcd4ac987217933feacc783268810d523b8be33e53",
+  "patch_sha256": "4361e41b8d2742b791eaa22fa488e89f62158358a5d1c4aa4a3d284b57fe64c3",
+  "deployed_commit": "1cac6c0ce3544dbc7d982f24885da652ad29725c"
+}

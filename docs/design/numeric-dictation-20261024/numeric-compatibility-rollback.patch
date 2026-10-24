@@ -1,0 +1,180 @@
+diff --git a/services/vocabulary_mastery.py b/services/vocabulary_mastery.py
+--- a/services/vocabulary_mastery.py
++++ b/services/vocabulary_mastery.py
+@@ -23,7 +23,7 @@
+     parse_answer_variants,
+     parse_vocabulary_word_variants,
+ )
+-from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
++from dictation_numeric import is_numeric_answer_correct
+ from models import (
+     DictationBook,
+     DictationRecord,
+@@ -327,7 +327,6 @@
+ 
+ def _question_for(word, dimension, goal, stage, candidates):
+     seed = f"v2:{word.id}:{word.sense_id}:{dimension}:{goal}:{stage}"
+-    numeric = None
+     if dimension == "context_use":
+         result = build_context_question(
+             word,
+@@ -355,8 +354,6 @@
+             # falls back to TTS without exposing answer text in the snapshot.
+             "audio_tts_url": f"/dictation/words/{word.id}/tts",
+         }
+-        if listening_mode and classify_numeric_dictation(word.word):
+-            prompt["audio_tts_url"] += "?numeric=1"
+         if not listening_mode:
+             prompt["word"] = canonical_vocabulary_word(word.word, word.accepted_answers)
+         answer = meaning
+@@ -384,25 +381,11 @@
+             "phonetic": word.phonetic,
+             "audio_tts_url": f"/dictation/words/{word.id}/tts",
+         }
+-        numeric = classify_numeric_dictation(word.word)
+-        if numeric:
+-            # Freeze the source answer and its policy in the private snapshot.
+-            # The public prompt exposes only a category/hint, never the answer
+-            # or the expanded text sent to TTS.
+-            answer = numeric["canonical"]
+-            answer_type = "numeric"
+-            prompt.update(
+-                instruction="听音填写数字、日期或完整答案",
+-                input_hint=numeric["input_hint"],
+-                audio_tts_url=f"/dictation/words/{word.id}/tts?numeric=1",
+-            )
+-            prompt["phonetic"] = None
+-        else:
+-            variants = _english_word_variants(word)
+-            if not variants:
+-                return None
+-            answer = variants[0]
+-            answer_type = "english"
++        variants = _english_word_variants(word)
++        if not variants:
++            return None
++        answer = variants[0]
++        answer_type = "english"
+         options = []
+ 
+     question_id = hashlib.sha256(
+@@ -421,15 +404,13 @@
+             "prompt": prompt,
+             "options": options,
+             "answer_type": answer_type,
+-            **({"numeric_kind": numeric["kind"]} if numeric else {}),
+         },
+         {
+             "answer": answer,
+             "accepted_answers": [variant for variant in variants[1:]]
+             if answer_type == "english"
+-            else ([] if numeric else parse_answer_variants(word.accepted_answers)),
++            else parse_answer_variants(word.accepted_answers),
+             "answer_type": answer_type,
+-            **({"numeric_kind": numeric["kind"], "numeric_rule_version": 1} if numeric else {}),
+         },
+     )
+ 
+@@ -675,21 +656,11 @@
+                 task,
+                 sense.id,
+                 mastery,
+-                ("audio_form_recall",)
+-                if goal != "listening" and classify_numeric_dictation(word.word)
+-                else dimensions,
++                dimensions,
+                 now,
+                 claimed,
+                 allow_early=target_source == VocabularyTaskReview.SOURCE_ASSIGNED,
+             )
+-            if (
+-                target_source == VocabularyTaskReview.SOURCE_ASSIGNED
+-                and classify_numeric_dictation(word.word)
+-                and "audio_form_recall" not in candidate_dimensions
+-            ):
+-                # Explicit teacher selection must remain answerable even when
+-                # a prior comprehensive bootstrap scheduled stage zero later.
+-                candidate_dimensions.append("audio_form_recall")
+             for dimension in candidate_dimensions:
+                 question = _question_for(
+                     word,
+diff --git a/services/vocabulary_group_learning.py b/services/vocabulary_group_learning.py
+--- a/services/vocabulary_group_learning.py
++++ b/services/vocabulary_group_learning.py
+@@ -21,7 +21,7 @@
+     is_chinese_answer_correct,
+     is_english_answer_correct,
+ )
+-from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
++from dictation_numeric import is_numeric_answer_correct
+ from models import (
+     DictationRecord,
+     DictationWord,
+@@ -219,7 +219,6 @@
+ def _familiarity_snapshot(word: DictationWord) -> dict:
+     """Return approved/material fields only; familiarity is not a mastery event."""
+ 
+-    numeric = classify_numeric_dictation(word.word)
+     return {
+         "word_id": word.id,
+         "word": canonical_vocabulary_word(word.word, word.accepted_answers) or word.word,
+@@ -229,7 +228,7 @@
+         "example_en": word.example_en,
+         "example_zh": word.example_zh,
+         "usage_note": word.usage_note,
+-        "audio_tts_url": f"/dictation/words/{word.id}/tts" + ("?numeric=1" if numeric else ""),
++        "audio_tts_url": f"/dictation/words/{word.id}/tts",
+     }
+ 
+ 
+@@ -285,29 +284,6 @@
+     used_score_keys,
+     diagnostics,
+ ):
+-    # A selected numeric answer always needs an audible recall task, even if
+-    # the teacher chose a general reading/writing goal. Reuse the listening
+-    # builder only for those words; keep ordinary vocabulary's goal unchanged.
+-    if goal != "listening":
+-        numeric_words = [word for word in group_words if classify_numeric_dictation(word.word)]
+-        if numeric_words:
+-            numeric_ids = {word.id for word in numeric_words}
+-            ordinary_words = [word for word in group_words if word.id not in numeric_ids]
+-            ordinary = _build_group_specs(
+-                user, ordinary_words, group_index, goal, candidates, used_score_keys, diagnostics
+-            )
+-            numeric = _build_group_specs(
+-                user, numeric_words, group_index, "listening", candidates, used_score_keys, diagnostics
+-            )
+-            if goal == "comprehensive":
+-                # This goal preserves its builder's order later. Separate a
+-                # numeric word's meaning and dictation questions here too.
+-                for phase in PHASE_ORDER:
+-                    previous = ordinary[phase][-1]["sense_id"] if ordinary[phase] else ensure_word_sense(group_words[-1]).id
+-                    numeric[phase] = stable_question_order(
+-                        numeric[phase], f"numeric:{group_index}:{phase}", previous
+-                    )
+-            return {phase: ordinary[phase] + numeric[phase] for phase in PHASE_ORDER}
+     if goal == "comprehensive":
+         return _build_comprehensive_group_specs(
+             user,
+diff --git a/services/vocabulary_autonomous_review.py b/services/vocabulary_autonomous_review.py
+--- a/services/vocabulary_autonomous_review.py
++++ b/services/vocabulary_autonomous_review.py
+@@ -23,7 +23,7 @@
+     is_chinese_answer_correct,
+     is_english_answer_correct,
+ )
+-from dictation_numeric import classify_numeric_dictation, is_numeric_answer_correct
++from dictation_numeric import is_numeric_answer_correct
+ from models import (
+     DictationWord,
+     StudentVocabularyMastery,
+@@ -332,8 +332,6 @@
+         meaning = str(word.core_meaning_zh or word.translation or "").strip()
+         from services.vocabulary_mastery import _english_word_variants
+ 
+-        if dimension == "audio_form_recall" and classify_numeric_dictation(word.word):
+-            return True
+         return bool(meaning if dimension == "form_recall" else True) and bool(
+             _english_word_variants(word)
+         )

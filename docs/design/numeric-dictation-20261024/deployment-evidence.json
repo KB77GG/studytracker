@@ -1,0 +1,184 @@
+{
+  "production_head": "1cac6c0ce3544dbc7d982f24885da652ad29725c",
+  "deploy_run": "https://github.com/KB77GG/studytracker/actions/runs/40105560898",
+  "ci_runs": [
+    "https://github.com/KB77GG/studytracker/actions/runs/40105560862",
+    "https://github.com/KB77GG/studytracker/actions/runs/40105560891"
+  ],
+  "service": {
+    "active": true,
+    "started_cst": "2026-10-24 23:08:23",
+    "NRestarts": 0,
+    "login_http": 200,
+    "warning_journal_entries": 0
+  },
+  "backup": {
+    "backup": "/root/backups/studytracker/numeric-dictation-20261024T150621.422224Z/app.db",
+    "bytes": 212156416,
+    "sha256": "e6bf28a400000b588843ba2b504483d5c9bb8651f061f8a4382bedfa8d0b59f3",
+    "quick_check": "ok"
+  },
+  "local_tests": {
+    "passed": 205,
+    "subtests_passed": 206
+  },
+  "production_memory_tests_passed": 20,
+  "catalog_questions": 2511,
+  "formerly_filtered_now_covered": 142,
+  "schema_migration": false,
+  "student_tasks_created": 0,
+  "audio_samples": [
+    {
+      "id": 25897,
+      "word": "463 Beacon",
+      "kind": "literal",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "ac74290040fdc705efba0fed0bb2df2e65ccdd9efda3bb156f9041de58d6fab9",
+      "duration": "2.400000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "463 beacon",
+      "human_listening": false
+    },
+    {
+      "id": 25898,
+      "word": "June 27",
+      "kind": "date",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "6860746a9dfb03fc7c4b91193f3cdb688eb069bde32c73d0ebe5fd32843f909c",
+      "duration": "1.360000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "June 27th",
+      "human_listening": false
+    },
+    {
+      "id": 25906,
+      "word": "7:00",
+      "kind": "time",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "4eb716defa4ed17d3bd811ce45792ade86b061cb07875dc4b26de493d2686708",
+      "duration": "0.880000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "7 o'clock",
+      "human_listening": false
+    },
+    {
+      "id": 25946,
+      "word": "0217856361",
+      "kind": "digit_sequence",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "2df443960ab8dc067971e3f2efccd9422e656d571ea57239a154b20b8eab80ee",
+      "duration": "4.400000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "0217856361",
+      "human_listening": false
+    },
+    {
+      "id": 25949,
+      "word": "16.50",
+      "kind": "number",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "bc8703a1cfc47fc14c419c8b37c77bdd81b369f31a32d812300e78d4d5b25c33",
+      "duration": "2.240000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "16.50",
+      "human_listening": false
+    },
+    {
+      "id": 26359,
+      "word": "1.3%",
+      "kind": "percentage",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "48c6fe1d531d729a2072163dd090ed2538d49152bbd557db02a676363cba6c7c",
+      "duration": "1.680000",
+      "source": "new DashScope cache, hash matches HTTP body",
+      "asr": "1.3%",
+      "human_listening": false
+    },
+    {
+      "id": 21281,
+      "word": "14 pounds",
+      "kind": "currency",
+      "http_status": 200,
+      "decode_exit": 0,
+      "playback_exit": 0,
+      "sha256": "ba80b36e003606f4903aed1058fa84b2e31f780a9db601d70c351f118f3f62ed",
+      "duration": "1.280000",
+      "source": "existing bound recording",
+      "asr": "14 pounds.",
+      "human_listening": false
+    }
+  ],
+  "live_activity_comparison": {
+    "dictation_record": {
+      "updated_rows": 0,
+      "added_rows": 3,
+      "deleted_rows": 0,
+      "changed_columns": {},
+      "new_records_in_imported_books": 0,
+      "new_record_dates": [
+        {
+          "created_at": "2026-10-24 15:06:25.777357"
+        },
+        {
+          "created_at": "2026-10-24 15:10:49.536922"
+        },
+        {
+          "created_at": "2026-10-24 15:11:04.354747"
+        }
+      ]
+    },
+    "student_vocabulary_mastery": {
+      "updated_rows": 3,
+      "added_rows": 0,
+      "deleted_rows": 0,
+      "changed_columns": {
+        "form_recall_stage": 2,
+        "form_recall_next_due_at": 3,
+        "context_use_next_due_at": 2,
+        "form_recall_last_answered_at": 3,
+        "updated_at": 3
+      }
+    },
+    "vocabulary_learning_flow": {
+      "updated_rows": 2,
+      "added_rows": 0,
+      "deleted_rows": 0,
+      "changed_columns": {
+        "phase": 2,
+        "phase_index": 2,
+        "state_version": 2,
+        "updated_at": 2,
+        "viewed_word_ids_json": 1
+      }
+    },
+    "vocabulary_learning_question": {
+      "updated_rows": 3,
+      "added_rows": 0,
+      "deleted_rows": 0,
+      "changed_columns": {
+        "mastery_applied": 3,
+        "first_attempt_id": 3,
+        "first_is_correct": 3,
+        "first_answer": 3,
+        "updated_at": 3,
+        "correction_attempt_id": 1,
+        "correction_is_correct": 1,
+        "correction_answer": 1,
+        "correction_count": 1
+      },
+      "frozen_question_or_answer_changed": false
+    }
+  }
+}

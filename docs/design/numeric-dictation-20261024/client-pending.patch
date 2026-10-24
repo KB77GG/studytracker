@@ -1,0 +1,205 @@
+diff --git a/miniprogram/pages/student/vocabulary-learning/index.wxml b/miniprogram/pages/student/vocabulary-learning/index.wxml
+index 68f5b364..53225188 100644
+--- a/miniprogram/pages/student/vocabulary-learning/index.wxml
++++ b/miniprogram/pages/student/vocabulary-learning/index.wxml
+@@ -77,7 +77,8 @@
+             <view class="play-icon"></view>
+             <text>{{audioButtonLabel}}</text>
+           </button>
+-          <text class="mode-copy">{{currentQuestion.mode === 'audio_to_en' ? '听音 → 拼写英文表达' : '听音 → 选择中文释义'}}</text>
++          <text class="mode-copy">{{currentQuestion.question.answer_type === 'numeric' ? (currentQuestion.question.prompt.instruction || '听音 → 输入数字、日期或号码') : (currentQuestion.mode === 'audio_to_en' ? '听音 → 拼写英文表达' : '听音 → 选择中文释义')}}</text>
++          <text class="hint" wx:if="{{currentQuestion.question.answer_type === 'numeric' && currentQuestion.question.prompt.input_hint}}">{{currentQuestion.question.prompt.input_hint}}</text>
+           <view class="options" wx:if="{{isMeaningChoice}}">
+             <view wx:for="{{meaningOptions}}" wx:key="id"
+                   class="option {{selectedOption === item.id ? 'selected' : ''}}"
+@@ -105,7 +106,8 @@
+ 
+         <input wx:if="{{!showResult && !isMeaningChoice && currentQuestion.mode !== 'context_choice'}}"
+                class="answer-input" value="{{inputValue}}" bindinput="onInput"
+-               bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
++               bindconfirm="submitAnswer" confirm-type="done"
++               placeholder="{{currentQuestion.question.answer_type === 'numeric' ? '输入听到的答案，保留必要符号' : '输入答案'}}" />
+         <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
+           <text>{{isCorrect ? '✓ 答对了' : (phase === 'retry' ? '✗ 仍需巩固' : '✗ 首答需要加强')}}</text>
+           <text class="result-line">你的答案：{{submittedAnswer}}</text>
+diff --git a/miniprogram/pages/student/vocabulary-review/index.js b/miniprogram/pages/student/vocabulary-review/index.js
+index 2c4177bc..4214cd58 100644
+--- a/miniprogram/pages/student/vocabulary-review/index.js
++++ b/miniprogram/pages/student/vocabulary-review/index.js
+@@ -184,7 +184,7 @@ Page({
+                 sense_id: item.sense_id,
+                 dimension: item.dimension,
+                 answer,
+-                attempt_id,
++                attempt_id: attemptId,
+                 input_mode: 'native'
+             }
+         }).then((res) => {
+diff --git a/miniprogram/pages/student/vocabulary-review/index.wxml b/miniprogram/pages/student/vocabulary-review/index.wxml
+index 5af95f10..d69a3269 100644
+--- a/miniprogram/pages/student/vocabulary-review/index.wxml
++++ b/miniprogram/pages/student/vocabulary-review/index.wxml
+@@ -34,7 +34,8 @@
+           <view class="play-icon"></view>
+           <text>{{audioButtonLabel}}</text>
+         </button>
+-        <text class="mode">{{currentItem.mode === 'audio_to_en' ? '听音 → 拼写英文表达' : '听音 → 选择中文释义'}}</text>
++        <text class="mode">{{currentItem.question.answer_type === 'numeric' ? (currentItem.question.prompt.instruction || '听音 → 输入数字、日期或号码') : (currentItem.mode === 'audio_to_en' ? '听音 → 拼写英文表达' : '听音 → 选择中文释义')}}</text>
++        <text class="mode" wx:if="{{currentItem.question.answer_type === 'numeric' && currentItem.question.prompt.input_hint}}">{{currentItem.question.prompt.input_hint}}</text>
+         <view class="options" wx:if="{{isMeaningChoice}}">
+           <view wx:for="{{meaningOptions}}" wx:key="id"
+                 class="option {{selectedOption === item.id ? 'selected' : ''}}"
+@@ -66,7 +67,8 @@
+ 
+       <input wx:if="{{!showResult && !isMeaningChoice && currentItem.mode !== 'context_choice'}}"
+              class="answer-input" value="{{inputValue}}" bindinput="onInput"
+-             bindconfirm="submitAnswer" confirm-type="done" placeholder="输入答案" />
++             bindconfirm="submitAnswer" confirm-type="done"
++             placeholder="{{currentItem.question.answer_type === 'numeric' ? '输入听到的答案，保留必要符号' : '输入答案'}}" />
+       <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
+         <text>{{isCorrect ? '✓ 答对了' : '✗ 需要加强'}}</text>
+         <text class="submitted">你的答案：{{submittedAnswer}}</text>
+diff --git a/tests/test_vocabulary_numeric_client.js b/tests/test_vocabulary_numeric_client.js
+new file mode 100644
+index 00000000..d90cb254
+--- /dev/null
++++ b/tests/test_vocabulary_numeric_client.js
+@@ -0,0 +1,138 @@
++const assert = require('node:assert/strict')
++const fs = require('node:fs')
++const path = require('node:path')
++const vm = require('node:vm')
++const test = require('node:test')
++
++const root = path.resolve(__dirname, '..')
++
++function loadPage(kind) {
++    const file = path.join(root, 'miniprogram/pages/student', kind, 'index.js')
++    const requests = []
++    let definition
++    const context = {
++        Page(value) { definition = value },
++        getApp: () => ({ globalData: {} }),
++        wx: { showToast() {} },
++        console,
++        require(specifier) {
++            if (specifier.endsWith('/request.js')) {
++                return {
++                    request(url, options) {
++                        requests.push({ url, options })
++                        return Promise.resolve({ ok: true, is_correct: true, attempt_id: 'fake-attempt' })
++                    }
++                }
++            }
++            if (specifier.endsWith('/dictation-audio.js')) return { createReliableAudioPlayer() {} }
++            return require(path.resolve(path.dirname(file), specifier))
++        }
++    }
++    vm.runInNewContext(fs.readFileSync(file, 'utf8'), context, { filename: file })
++    const page = Object.assign({}, definition, {
++        data: JSON.parse(JSON.stringify(definition.data)),
++        setData(patch, callback) {
++            Object.assign(this.data, patch)
++            if (callback) callback()
++        },
++        playAudio() {}
++    })
++    return { page, requests }
++}
++
++function question(answerType = 'numeric') {
++    return {
++        learning_question_id: 1,
++        queue_item_id: 2,
++        review_item_id: 3,
++        question_id: 'numeric-fixture',
++        word_id: 4,
++        sense_id: 5,
++        dimension: 'audio_form_recall',
++        mode: 'audio_to_en',
++        question: {
++            answer_type: answerType,
++            numeric_kind: 'phone',
++            prompt: { instruction: '听音填写号码', input_hint: '保留前导零。' }
++        }
++    }
++}
++
++function displayQuestion(page, kind, item) {
++    if (kind === 'vocabulary-learning') {
++        page.data.taskId = 9
++        page.applyQueue({
++            phase: 'active_recall',
++            queue_token: 'test-queue-token',
++            current_question: item,
++            familiarity: [],
++            group_number: 1,
++            group_count: 1,
++            total_word_count: 1
++        })
++    } else {
++        page.data.sessionId = 9
++        page.data.sessionToken = 'test-session-token'
++        page.data.items = [item]
++        page.showItem(0)
++    }
++}
++
++const numericAnswers = [
++    '0217856361', '7:00', '16.50', '03/04', '27 June', '2026-06-27',
++    '£16.50', '$1,200.50', '40%', '+44 020 7946 0385', '463 Beacon'
++]
++
++for (const kind of ['vocabulary-learning', 'vocabulary-review']) {
++    test(`${kind}: native numeric answers reach the existing submission unchanged`, async () => {
++        for (const answer of numericAnswers) {
++            const { page, requests } = loadPage(kind)
++            displayQuestion(page, kind, question())
++            page.onInput({ detail: { value: answer } })
++            assert.equal(page.data.inputValue, answer)
++            assert.equal(page.answerValue(), answer)
++            page.submitAnswer()
++            await new Promise(resolve => setImmediate(resolve))
++            assert.equal(requests.length, 1)
++            assert.equal(requests[0].options.data.answer, answer)
++            assert.equal(requests[0].options.data.input_mode, 'native')
++            assert.equal(requests[0].options.data.attempt_id,
++                kind === 'vocabulary-review' ? 'wx-vocabulary-review:9:3' : 'vocabulary-group:9:first:1')
++            assert.equal(page.data.showResult, true)
++        }
++    })
++
++    test(`${kind}: mixed numeric then English questions reset input without changing English`, async () => {
++        const { page, requests } = loadPage(kind)
++        displayQuestion(page, kind, question())
++        page.onInput({ detail: { value: '00123' } })
++        displayQuestion(page, kind, question('english'))
++        assert.equal(page.data.inputValue, '')
++        page.onInput({ detail: { value: "well-known B2B company's MP3" } })
++        assert.equal(page.answerValue(), "well-known B2B company's MP3")
++        page.submitAnswer()
++        await new Promise(resolve => setImmediate(resolve))
++        assert.equal(requests[0].options.data.answer, "well-known B2B company's MP3")
++        assert.equal(requests[0].options.data.input_mode, 'native')
++        assert.equal(page.data.showResult, true)
++    })
++
++    test(`${kind}: replayed numeric attempts remain read-only in the answer field`, () => {
++        const { page } = loadPage(kind)
++        displayQuestion(page, kind, question())
++        page.data.showResult = true
++        page.data.inputValue = '007'
++        page.onInput({ detail: { value: '7' } })
++        assert.equal(page.data.inputValue, '007')
++    })
++
++    test(`${kind}: numeric guidance uses public metadata without revealing answers`, () => {
++        const wxml = fs.readFileSync(path.join(root, 'miniprogram/pages/student', kind, 'index.wxml'), 'utf8')
++        assert.match(wxml, /question\.answer_type === 'numeric'/)
++        assert.match(wxml, /question\.prompt\.instruction/)
++        assert.match(wxml, /question\.prompt\.input_hint/)
++        assert.match(wxml, /输入听到的答案，保留必要符号/)
++        assert.doesNotMatch(wxml, /answer_payload|canonical|numeric_value/)
++        assert.doesNotMatch(wxml, /type="(?:number|digit)"/)
++    })
++}
