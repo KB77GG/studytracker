@@ -1,8 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-24 数字听写后台已上线并完成真实音频验证；小程序待另一台电脑后天发布。
+> 最近更新：2026-10-25 模考成绩明细入口已提交、推送并上线，线上首屏和逐题复盘验收通过；数字听写既有发布状态见下文。
 
+
+## 2026-10-25 模考成绩明细入口已部署
+
+- 用户明确要求“部署上线吧”。工作树 `/Users/zhouxin/.codex/worktrees/mock-exam-detail-entry/studytracker`、分支 `codex/mock-exam-detail-entry`，从 `origin/main@1de662f0` 建立。业务提交 **`aa394ef09da2e1e84d71df71dc6b5439ee436857`** 已非强制原子推送 main 和任务分支；只改 `templates/admin/mock_exams_index.html`。本交接与 WORKLOG 用随后独立 `[skip ci]` 文档提交同步，最终文档 HEAD 看 git log。旧 Desktop 主树 `main@5a142e86` 既有脏内容保留，未切分支或覆盖。
+- 根因：50 场模考撑高 grid，操作区 `margin-top:auto` 把唯一复盘按钮推到约 3570px。修复为模考页局部 `margin-top:0`、模考名称直链现有成绩页、主按钮“查看成绩明细”和同步操作说明；不改全局布局、后台权限/判分、数据库 schema 或小程序。
+- 本地原验证 Node 后台结构 3/3、Python 模板 7/7、Chrome 合成 50 场桌面和 390×844 窄屏通过。发布前独立复审一致，`git diff --check`、`node tests/test_dictation_spell_queue.js` 均 exit 0；使用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_miniprogram_guest_access tests.test_miniprogram_dictation_grouping tests.test_inventory_toefl_materials tests.test_organize_toefl_materials tests.test_extract_toefl_answer_keys tests.test_map_toefl_answers_to_practice_docs tests.test_import_toefl_official_reading tests.test_reading_vocab_grading tests.test_stats_utils -v` → **68 tests OK**。未跑全量 ML 套件。
+- [主线 CI 40172013242](https://github.com/KB77GG/studytracker/actions/runs/40172013242)、[任务 CI 40172013298](https://github.com/KB77GG/studytracker/actions/runs/40172013298)、[Deploy 40172013321](https://github.com/KB77GG/studytracker/actions/runs/40172013321) 顶层均 success；test/拼写门禁全过，仓库 advisory Ruff job 仍有既有失败，未改 Python。GitHub 连接器 commit runs 只查询 PR 触发运行，push 运行列表使用 gh，具体 jobs 使用连接器复核。
+- 生产 HEAD **aa394ef0**，模板 SHA-256 **`cd5fae7fa24b612a17d155cbd384c380d2e8a48181f6ffd11fd71460ce5d4464`** 与本地一致，tracked clean。服务自 **2026-10-25 15:14:48 CST** active/running，NRestarts=0；`127.0.0.1:5002 / workers=1 / gthread / threads=6`。本机回环与公网 `/login` 均 200，重启后 warning 及以上 journal 无记录。发布沿既有自动脚本（含既有迁移步骤）；本轮无新增迁移、手工数据库操作、答题提交或学生通知，未审计生产库前后差异。
+- 线上 Chrome 1440×727：50 个名称直链，“查看成绩明细”按钮 top=525.4px / bottom=565.4px，首屏可见；点击已有模考名称进入正确成绩页，再点复盘到达逐题页面，16 组学生答案/正确答案表头存在。验收使用独立标签页，未点击换口令/停用；用户原标签页保留当前查看的成绩列表。小程序未改、未上传/提审/发布。
+- 临时本地合成服务 5097 已停止，脚本及截图位于 `/tmp/studytracker-mock-detail.2vQipm/`；线上截图 `deployed-desktop.png` 含真实页面内容，只保留本机，不加入 Git。业务及这两份交接均已发布/同步后，无本任务待发布源码或阻塞项；下一步正常使用观察。
 
 ## 2026-10-24 数字听写后台已部署，小程序待另一台电脑发布
 

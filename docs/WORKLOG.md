@@ -4,6 +4,18 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-25 — 模考成绩明细入口已上线
+
+- 用户授权后，将独立 `codex/mock-exam-detail-entry` 的单模板修复提交为 `aa394ef09da2e1e84d71df71dc6b5439ee436857`，非强制原子推送 main/任务分支；原 Desktop 脏树不动。发布前 68 项轻量 unittest、拼写队列门禁及 diff check 通过，保留上轮模板 7 项/Node 3 项/桌面窄屏验收。
+- 主线 CI40172013242、任务 CI40172013298、Deploy40172013321 均 success；advisory Ruff 仍报告仓库存量问题。生产 HEAD/模板 SHA 匹配，15:14:48 CST 起 active/running、5002/单worker/gthread/6线程、NRestarts0；公网/回环 login200，重启后 warning journal 空。
+- 线上 50 行列表的“查看成绩明细”按钮已在首屏 525–565px，模考名称直链及后续逐题复盘点击通过；截图仅本机 `/tmp/studytracker-mock-detail.2vQipm/deployed-desktop.png`，不入 Git。两份交接以独立 `[skip ci]` 文档提交同步，无需再次部署；无小程序变更、无新增数据库迁移或手工学生数据操作。
+
+## 2026-10-25 — 模考成绩入口被长列表推到底部，本地修复完成
+
+- 从最新主线 `1de662f0` 建立独立 `mock-exam-detail-entry/studytracker`，分支 `codex/mock-exam-detail-entry`；旧 Desktop 脏树不动。线上 50 场列表使“成绩 / 复盘”按钮落到约 3570px，现有成绩与逐题解析正常可读。
+- 只改模考列表模板：操作区取消自动顶部外边距，名称直接链接成绩列表，主按钮标为“查看成绩明细”。独立复审、Node 3 项、模板 Python 7 项、diff check 通过；Chrome 合成 50 场桌面按钮 525–565px 可见，窄屏名称直达与行切换导航通过。
+- 用户浏览器已打开原先选中场次的逐题复盘。临时预览验证后停止，截图与脚本在 `/tmp/studytracker-mock-detail.2vQipm/`。未 commit/push/deploy；本次三个文件仅本机可见，小程序未改。下一步等待明确发布授权，发布前重新核对远端。
+
 ## 2026-10-24 — 数字听写后台已部署，真实音频验证完成，小程序待发布
 
 - 用户确认后从干净发布树 `task-2/numeric-dictation-release@99dc19ad` 发布5后台运行文件+4测试文件，业务 `1cac6c0c` 原子推送main/任务分支；CI两项与Deploy40105560898成功。生产23:08:23 CST重启后active、NRestarts0、login200、warning/error0；备份/哈希见CODEX_HANDOFF和发布证据。
