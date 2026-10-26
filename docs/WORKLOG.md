@@ -4,11 +4,12 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
-## 2026-10-20 — 第二至四轮独立复审受阻（Codex）
+## 2026-10-26 — 第二至四轮独立复审完成（Codex，不通过）
 
-- 任务树 `codex/grammar-item-candidates` 已合并指定1f03c84，合并提交1cdc4e5e；两份交接冲突保留双方内容，没有rebase或合并main。只新增本轮复审记录并更新交接，未改被审核代码/数据。
-- 第13项每role至少2例无法满足：旧新resolver在当前语料的变化为71role/403处，其中38role仅1例。依用户“做不到就停”停止，已请求“少于2例审全部现有例子”的口径确认，尚未得到答复。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND2_4_CODEX_REVIEW.md`；未完成验收，不对代码质量作通过或零问题结论。
-- 已运行四指定模块85测试通过、validator exit0、原文修订check0；全量生成在125篇进度后主动中止exit130，没有完整双跑SHA，后续语言审核/抽样/模拟导入均未完成。临时证据只在本机 `/tmp/studytracker-grammar-round2-4-audit.H4JlOk`。准备提交推送报告并补记CI；不推main、不部署、不开PR，不操作生产，不调用大模型API。
+- 固定`f9aebc7..1f03c84`，任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`；只改本轮审核报告及两份交接。桌面main原有7 modified/22 untracked未动。
+- 新增0阻断/5应修/3建议；上轮T1越界干扰项阻断仍有两题。问题包括源文清单遗漏、34个题目残留字段、11处教学说明/标注子例、4role错误标签和报告基数。21项与全部逐条/逐句/role/抽样明细已写报告，未修被审代码/数据。
+- 用户同意单例role全审，已解除10月20日B0；旧tmp证据已丢失，26日在持久审计目录重新冷/热双跑。四文件一致，JSONL/XLSX对齐，报告仅Python版本差异；85专项、Flask-only153运行/1跳过、reading22和Node通过；Ruff只有builder存量问题。171篇内存重建一致，完整main临时SQLite再导入updated227/skipped90/failed0。所有路径/命令/SHA见审核报告及CODEX_HANDOFF。
+- 本条编写时三文档待提交推送，随后补CI实测；不带skip-ci标记。未推main、部署、开PR、生产操作或小程序发布。下一步由实现方修B1/N1–N5后再审，不把教师盲审或上线视为已完成。
 
 ## 2026-10-19 — 第四轮追加：catching → caching（Claude）
 
