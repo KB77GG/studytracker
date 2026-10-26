@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5989 | 387 | 6368 |
-| clause_boundary | 4764 | 2497 | 2695 |
-| clause_type_classify | 11591 | 3291 | 1334 |
-| adverbial_relation | 414 | 643 | 2568 |
-| subject_span | 5431 | 749 | 6564 |
-| finite_or_not | 12894 | 1580 | 6550 |
+| main_verb_tap | 5922 | 454 | 6368 |
+| clause_boundary | 4700 | 2561 | 2695 |
+| clause_type_classify | 11455 | 3427 | 1334 |
+| adverbial_relation | 404 | 653 | 2568 |
+| subject_span | 5371 | 809 | 6564 |
+| finite_or_not | 12742 | 1732 | 6550 |
 
 ## 范围
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "0ae023e20a43ef95d43d99a8ffb72bcc0a41fd534f96e8487eed1fd2fe9ab0c9",
+  "reading_study_sha256": "357a32f8a2bb45452827d09c65ac28f0eaa0789fe3b840d14dc9f3c6ae7a9a1a",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -47,48 +47,48 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2788,
-    "needs_review": 168
+    "auto_pass": 2743,
+    "needs_review": 213
   },
   "G-S02": {
-    "auto_pass": 5431,
-    "needs_review": 749
+    "auto_pass": 5371,
+    "needs_review": 809
   },
   "G-C02": {
-    "needs_review": 733,
-    "auto_pass": 493
+    "needs_review": 736,
+    "auto_pass": 490
   },
   "G-C03": {
-    "auto_pass": 11591,
-    "needs_review": 3291
+    "auto_pass": 11455,
+    "needs_review": 3427
   },
   "G-C04": {
-    "auto_pass": 1821,
-    "needs_review": 325
+    "auto_pass": 1797,
+    "needs_review": 349
   },
   "G-C08": {
-    "auto_pass": 1172,
-    "needs_review": 746
+    "auto_pass": 1156,
+    "needs_review": 762
   },
   "G-C10": {
-    "auto_pass": 1278,
-    "needs_review": 693
+    "auto_pass": 1257,
+    "needs_review": 714
   },
   "G-C11": {
-    "needs_review": 643,
-    "auto_pass": 414
+    "needs_review": 653,
+    "auto_pass": 404
   },
   "G-N01": {
-    "auto_pass": 11010,
-    "needs_review": 1518
+    "auto_pass": 10878,
+    "needs_review": 1650
   },
   "G-N04": {
-    "auto_pass": 1884,
-    "needs_review": 62
+    "auto_pass": 1864,
+    "needs_review": 82
   },
   "G-L01": {
-    "auto_pass": 3201,
-    "needs_review": 219
+    "auto_pass": 3179,
+    "needs_review": 241
   }
 }
 ```
@@ -108,6 +108,7 @@
   "multiple_targets_same_type": 1361,
   "no_relation_label": 1234,
   "finiteness_mismatch": 664,
+  "source_quality": 631,
   "verb_unit_outside_span": 590,
   "subject_mismatch": 570,
   "parser_root_outside_verb_span": 558,
@@ -122,6 +123,7 @@
   "multiple_main_verbs": 180,
   "fragment": 163,
   "span_not_found": 151,
+  "list_item": 52,
   "subject_after_verb": 44,
   "too_long": 43,
   "heading": 32,
@@ -168,25 +170,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1149,
+          "pool_size": 1119,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 370,
+          "pool_size": 359,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 477,
+          "pool_size": 460,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1951,
+          "pool_size": 1944,
           "sample_size": 16
         },
         {
@@ -198,7 +200,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 983,
+          "pool_size": 981,
           "sample_size": 8
         }
       ]
@@ -212,31 +214,31 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 462,
+          "pool_size": 448,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 571,
+          "pool_size": 543,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 543,
+          "pool_size": 523,
           "sample_size": 6
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 757,
+          "pool_size": 756,
           "sample_size": 8
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1456,
+          "pool_size": 1455,
           "sample_size": 15
         },
         {
@@ -256,37 +258,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 946,
+          "pool_size": 914,
           "sample_size": 4
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1286,
-          "sample_size": 6
+          "pool_size": 1228,
+          "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1026,
+          "pool_size": 991,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2211,
-          "sample_size": 9
+          "pool_size": 2206,
+          "sample_size": 10
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3634,
+          "pool_size": 3631,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2488,
+          "pool_size": 2485,
           "sample_size": 11
         }
       ]
@@ -300,20 +302,20 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 70,
-          "sample_size": 8
+          "pool_size": 69,
+          "sample_size": 9
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 67,
+          "pool_size": 63,
           "sample_size": 8
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 87,
-          "sample_size": 11
+          "pool_size": 82,
+          "sample_size": 10
         },
         {
           "source_kind": "reading_test",
@@ -344,25 +346,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1031,
+          "pool_size": 1005,
           "sample_size": 9
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 355,
+          "pool_size": 344,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 404,
+          "pool_size": 390,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1796,
+          "pool_size": 1789,
           "sample_size": 17
         },
         {
@@ -374,7 +376,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 876,
+          "pool_size": 874,
           "sample_size": 8
         }
       ]
@@ -388,38 +390,38 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1668,
-          "sample_size": 7
+          "pool_size": 1622,
+          "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1346,
+          "pool_size": 1289,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1117,
+          "pool_size": 1080,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2966,
+          "pool_size": 2958,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3387,
+          "pool_size": 3385,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2410,
-          "sample_size": 9
+          "pool_size": 2408,
+          "sample_size": 10
         }
       ]
     }
@@ -1909,6 +1911,37 @@
 }
 ```
 
+## 整句复核标记
+
+```json
+{
+  "source_quality": {
+    "sentences": 150,
+    "items_by_template": {
+      "adverbial_relation": 30,
+      "clause_boundary": 108,
+      "clause_type_classify": 195,
+      "finite_or_not": 171,
+      "main_verb_tap": 66,
+      "subject_span": 61
+    },
+    "only_reason": 441
+  },
+  "list_item": {
+    "sentences": 14,
+    "items_by_template": {
+      "adverbial_relation": 1,
+      "clause_boundary": 3,
+      "clause_type_classify": 13,
+      "finite_or_not": 15,
+      "main_verb_tap": 10,
+      "subject_span": 10
+    },
+    "only_reason": 48
+  }
+}
+```
+
 ## 重新拆句
 
 ```json
@@ -2222,6 +2255,7 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。
 - v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
+- v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
 - v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。
 - v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），原文修复后预期为 0。
