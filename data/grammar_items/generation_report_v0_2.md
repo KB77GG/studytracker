@@ -6,22 +6,22 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5987 | 384 | 6374 |
-| clause_boundary | 4755 | 2497 | 2711 |
-| clause_type_classify | 11582 | 3290 | 1350 |
-| adverbial_relation | 411 | 643 | 2584 |
-| subject_span | 5428 | 747 | 6570 |
-| finite_or_not | 12886 | 1578 | 6557 |
+| main_verb_tap | 5989 | 387 | 6368 |
+| clause_boundary | 4764 | 2497 | 2695 |
+| clause_type_classify | 11591 | 3291 | 1334 |
+| adverbial_relation | 414 | 643 | 2568 |
+| subject_span | 5431 | 749 | 6564 |
+| finite_or_not | 12894 | 1580 | 6550 |
 
 ## 范围
 
 ```json
 {
   "passages": 317,
-  "sentences": 12745,
-  "candidates": 50188,
-  "sentence_rejections": 1350,
-  "template_rejections": 18046
+  "sentences": 12744,
+  "candidates": 50230,
+  "sentence_rejections": 1334,
+  "template_rejections": 18075
 }
 ```
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "d9480bf485c7bf5f416212b3bea38581af0051fb9bec0c6a6895b5fe1715212c",
+  "reading_study_sha256": "bfd88826712ac620d44f1afa8f02e63e07aa171853e84c4497d576d0d0392db1",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -47,48 +47,48 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2785,
+    "auto_pass": 2788,
     "needs_review": 168
   },
   "G-S02": {
-    "auto_pass": 5428,
-    "needs_review": 747
+    "auto_pass": 5431,
+    "needs_review": 749
   },
   "G-C02": {
-    "needs_review": 732,
-    "auto_pass": 492
+    "needs_review": 733,
+    "auto_pass": 493
   },
   "G-C03": {
-    "auto_pass": 11582,
-    "needs_review": 3290
+    "auto_pass": 11591,
+    "needs_review": 3291
   },
   "G-C04": {
-    "auto_pass": 1819,
+    "auto_pass": 1821,
     "needs_review": 325
   },
   "G-C08": {
-    "auto_pass": 1169,
-    "needs_review": 747
+    "auto_pass": 1172,
+    "needs_review": 746
   },
   "G-C10": {
-    "auto_pass": 1275,
+    "auto_pass": 1278,
     "needs_review": 693
   },
   "G-C11": {
     "needs_review": 643,
-    "auto_pass": 411
+    "auto_pass": 414
   },
   "G-N01": {
-    "auto_pass": 11002,
-    "needs_review": 1516
+    "auto_pass": 11009,
+    "needs_review": 1518
   },
   "G-N04": {
-    "auto_pass": 1884,
+    "auto_pass": 1885,
     "needs_review": 62
   },
   "G-L01": {
-    "auto_pass": 3202,
-    "needs_review": 216
+    "auto_pass": 3201,
+    "needs_review": 219
   }
 }
 ```
@@ -97,35 +97,35 @@
 
 ```json
 {
-  "no_main_verb_tag": 12378,
-  "coordinated_main_verbs": 4040,
-  "split_subject": 3827,
-  "coordinated_main_clauses": 3600,
-  "boundary_mismatch": 3066,
-  "clause_type_mismatch": 2235,
+  "no_main_verb_tag": 12408,
+  "coordinated_main_verbs": 4048,
+  "split_subject": 3837,
+  "coordinated_main_clauses": 3603,
+  "boundary_mismatch": 3068,
+  "clause_type_mismatch": 2234,
   "span_not_constituent": 1378,
-  "ambiguous_span_location": 1373,
+  "ambiguous_span_location": 1376,
   "multiple_targets_same_type": 1361,
   "no_relation_label": 1234,
-  "finiteness_mismatch": 665,
-  "verb_unit_outside_span": 587,
-  "subject_mismatch": 569,
+  "finiteness_mismatch": 664,
+  "verb_unit_outside_span": 590,
+  "subject_mismatch": 570,
   "parser_root_outside_verb_span": 558,
   "unbalanced_quotes_or_brackets": 397,
-  "subordinator_unknown": 323,
-  "existential": 304,
-  "unknown_span": 304,
+  "subordinator_unknown": 322,
+  "existential": 305,
+  "unknown_span": 274,
   "too_short": 262,
   "possible_relative_adverb": 234,
   "level_one_subordinate": 232,
-  "subordinator_ambiguous": 215,
+  "subordinator_ambiguous": 216,
   "multiple_main_verbs": 180,
-  "fragment": 165,
+  "fragment": 163,
   "span_not_found": 151,
   "subject_after_verb": 44,
   "too_long": 43,
   "heading": 32,
-  "tagged_fragment": 32,
+  "tagged_fragment": 30,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
   "clause_attached_to_conjunction": 2,
@@ -137,8 +137,8 @@
 
 ```json
 {
-  "reading_jijing": 16327,
-  "reading_test": 33861
+  "reading_jijing": 16358,
+  "reading_test": 33872
 }
 ```
 
@@ -146,9 +146,9 @@
 
 ```json
 {
-  "easy": 16988,
-  "hard": 18707,
-  "medium": 14493
+  "easy": 17010,
+  "hard": 18714,
+  "medium": 14506
 }
 ```
 
@@ -168,37 +168,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1148,
+          "pool_size": 1149,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 371,
+          "pool_size": 370,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 475,
+          "pool_size": 477,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1949,
+          "pool_size": 1951,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1060,
+          "pool_size": 1059,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 984,
+          "pool_size": 983,
           "sample_size": 8
         }
       ]
@@ -212,25 +212,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 460,
+          "pool_size": 462,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 569,
+          "pool_size": 571,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 540,
+          "pool_size": 543,
           "sample_size": 6
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 756,
+          "pool_size": 757,
           "sample_size": 8
         },
         {
@@ -242,7 +242,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 974,
+          "pool_size": 975,
           "sample_size": 10
         }
       ]
@@ -256,25 +256,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 943,
+          "pool_size": 946,
           "sample_size": 4
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1285,
+          "pool_size": 1286,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1023,
+          "pool_size": 1026,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2210,
+          "pool_size": 2211,
           "sample_size": 9
         },
         {
@@ -286,7 +286,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2487,
+          "pool_size": 2488,
           "sample_size": 11
         }
       ]
@@ -300,7 +300,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 68,
+          "pool_size": 70,
           "sample_size": 8
         },
         {
@@ -312,7 +312,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 86,
+          "pool_size": 87,
           "sample_size": 11
         },
         {
@@ -344,7 +344,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1030,
+          "pool_size": 1031,
           "sample_size": 9
         },
         {
@@ -362,7 +362,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1794,
+          "pool_size": 1796,
           "sample_size": 17
         },
         {
@@ -388,25 +388,25 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1664,
+          "pool_size": 1668,
           "sample_size": 7
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1345,
+          "pool_size": 1346,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1116,
+          "pool_size": 1117,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2964,
+          "pool_size": 2966,
           "sample_size": 12
         },
         {
@@ -1913,9 +1913,11 @@
 
 ```json
 {
-  "sentences_before": 12652,
-  "sentences_after": 12745,
-  "added": 93,
+  "sentences_before": 12657,
+  "sentences_after": 12744,
+  "added": 94,
+  "removed": 7,
+  "net_change": 87,
   "new_sentence_ids": [
     "ielts18_test4_p2 F-03b",
     "ielts19_test4_p3 H-02b",
@@ -1985,6 +1987,7 @@
     "reading_jijing_38_test_22_p3 G-07b",
     "reading_jijing_40_test_75_p1 G-01b",
     "reading_jijing_44_test_29_p1 H-03b",
+    "reading_jijing_44_test_29_p3 M-01b",
     "reading_jijing_46_test_84_p1 B-09b",
     "reading_jijing_46_test_84_p2 G-04b",
     "reading_jijing_46_test_84_p2 H-03b",
@@ -2018,12 +2021,11 @@
 
 ### tagged_fragment
 
-实际 32 句；计划预期 32 句。
+实际 30 句；计划预期 30 句。
 
 - `ielts17_test2_p3` F-07：No.
 - `ielts17_test3_p2` A-04：Primarily because its unique properties – such as remaining solid at room temperature – make it an ideal ingredient for long-term preservation, allowing many packaged foods on supermarket shelves to have 'best before' dates of months, even years, into the future.
 - `ielts4_test4_p1` E-22："Many athletes are not getting the best nutrition, even though supplements," Yessis insists.
-- `ielts4_test4_p1` I-42：Raglin, a sports psychologist at Indiana University.
 - `ielts6_test1_p1` E-04：'A start of this much, each free-swimming period has to be this fast, with a certain stroke frequency and stroke length, with turns done in these times.'
 - `reading_jijing_10_test_78_p1` C-16：Introduced Category 1: INTERPERSONAL ROLES.
 - `reading_jijing_10_test_78_p1` D-26：Introduced Category 2: INFORMATIONAL ROLES.
@@ -2049,7 +2051,6 @@
 - `reading_jijing_65_test_69_p2` F-01：In The Environment Game, a vision of a utopia that would be at once high-tech and environmentalist.
 - `reading_jijing_71_test_1_p2` E-01：The most immediate translation issue relates to the movie's title, 'Lo Scopone Scientifico', translates as 'Scientific Scopone', whereas the English title is, 'The Scientific Card Player'.
 - `reading_jijing_73_test_5_p1` K-01：Standing on a roof catwalk, peering down inside at people as small as termites below.
-- `reading_jijing_73_test_5_p1` K-03：like that termite fungus, further extending the whole 'organic machine' metaphor.
 - `reading_jijing_73_test_5_p2` F-05：Many incidents of attacks on people involving villagers squatting or bending over to cut grass for fodder or building material.
 - `reading_jijing_85_test_12_p1` C-08：The company is the recipe is in a vault somewhere and in my sole owner of the intellectual property.
 ### clause_attached_to_conjunction
@@ -2221,10 +2222,10 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。
 - v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
-- v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。
+- v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
 - v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。
 - v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），原文修复后预期为 0。
-- 拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。
+- 拆句前句数是 v0.2 第一次重新拆句前的固定基线（12657）；新增为现存的 <原ID>b 等句子数，删除为合并掉的句子数（基线 + 新增 − 拆句后），net_change 为净变化。
 - 无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。
 - 字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。
 - 分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。
