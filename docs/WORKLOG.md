@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-26 — 第二至四轮独立复审完成（Codex，不通过）
+
+- 固定`f9aebc7..1f03c84`，任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`；只改本轮审核报告及两份交接。桌面main原有7 modified/22 untracked未动。
+- 新增0阻断/5应修/3建议；上轮T1越界干扰项阻断仍有两题。问题包括源文清单遗漏、34个题目残留字段、11处教学说明/标注子例、4role错误标签和报告基数。21项与全部逐条/逐句/role/抽样明细已写报告，未修被审代码/数据。
+- 用户同意单例role全审，已解除10月20日B0；旧tmp证据已丢失，26日在持久审计目录重新冷/热双跑。四文件一致，JSONL/XLSX对齐，报告仅Python版本差异；85专项、Flask-only153运行/1跳过、reading22和Node通过；Ruff只有builder存量问题。171篇内存重建一致，完整main临时SQLite再导入updated227/skipped90/failed0。所有路径/命令/SHA见审核报告及CODEX_HANDOFF。
+- 正文已commit/push **9827b8513bb44615d5a79a2574258ee8138317e1**，CI [40261776632](https://github.com/KB77GG/studytracker/actions/runs/40261776632) test/Node通过，lint存量advisory失败、format跳过，整体success。本条由后续纯文档提交补记，不带skip-ci标记并核对最终CI。未推main、部署、开PR、生产操作或小程序发布。下一步由实现方修B1/N1–N5后再审，不把教师盲审或上线视为已完成。
+
 ## 2026-10-19 — 第四轮追加：catching → caching（Claude）
 
 - 用户决定把清单里记下未改的 `50_30_p2` F-02、F-03 `catching` 改为 `caching`：修订表 643 条（含题目数据 11 处），阅读解析同步两句，清单加第七节。题目统计不变，两次生成一致，模拟导入仍为 updated=227。Codex 复审提示词覆盖到本次提交。未推 main、未部署。
@@ -22,6 +29,13 @@
 
 - 按用户决定：加 claim mat 等原文修订（共 30 条），修复并排除 14 个段首句点，51 个多句单元处理完毕（34 拆句、9 改原文、7 改规则、1 保留）。逐题核对新句子的题后，又补回被切掉的括号、并修正“并列的从句”误判为并列分句。记录见 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md`、`docs/READING_STUDY_RESPLIT_2026-10_ROUND2.md`。
 - 两次生成一致，复抽 30 题全对，CI 列表 138 项通过（1 跳过），模拟导入 updated=56。未推 main、未部署。第一轮修复的 Codex 复审提示已交用户；第二轮待另行复审。
+
+## 2026-10-19 — 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
+
+- 任务树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 的 `codex/grammar-item-candidates` 仅快进到 **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，审 `8f273e9..f9aebc7`；没有合入Claude后续提交或rebase。只新增 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md` 并更新两份交接，桌面main既有脏状态保留。
+- 1阻断、3应修、3建议：T1干扰项3题越界仍自动通过；数字引语引入真实截短回归；新抽样OCR坏句、19句漏网下界（16句44自动题）；短语同规则扩展只复现933降级、非2333。T6遗漏0、9例补齐降级、6299共同T1答案不变；F3/F4/F5/S2/S3解决，S4兼容理由接受。
+- 65测试通过；Flask-only完整CI列表133运行/132通过/1跳过，Node通过；5改动Python Ruff check/format通过；validator0错误，textfix0未应用；完整main快照到当前临时SQLite导入updated25/skipped292/failed0。Mac冷/热两次四交付逐字节一致，报告对提交版仅Python版本行不同；13回归对象与基线完全一致。seed20261020两套各30题已逐题审核；七工作表盲审格式通过。
+- 正文 **0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8 已commit/push** 至任务分支并核对远端。CI [39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728) 整体success，test/Node成功，lint存量advisory失败、format跳过；日志问题路径与本轮被审改动文件无交集。本条由后续纯文档提交补记，两次均不带skip标记，最终回复前再核对最后提交CI。未改被审核代码/数据，未推main、部署、PR、生产操作或大模型API调用。临时证据只在本机；下一步处理R1–R4后再审，教师审核和Claude后续提交均未验收。
 
 ## 2026-10-19 — 语法候选题 v0.2 审核修复（Claude）
 

@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-19 Claude 完成第四轮：难点里记录的原文错误逐条分类处理（486 句改原文、119 句改写说明），并修出题器两处存量误判（并列谓语、for 分句）。用户看过清单后追加修正 `catching` → `caching`。第二、三、四轮合并交 Codex 复审（第一轮 f9aebc7 的提示另行）。未合并 main、未部署。
+> 最近更新：2026-10-26 第二至四轮独立复审完成，结论不通过。新增0阻断/5应修/3建议，上一轮1阻断仍未关闭；正文已提交推任务分支，CI test通过、lint存量advisory失败；本次补记结果。被审代码/数据固定1f03c84，未部署。
+
+## 2026-10-26 第二至四轮独立复审（Codex，不通过）
+
+- **事实源**：[完整复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND2_4_CODEX_REVIEW.md)，含21项结果/命令、610条修订、三轮全部变化句ID、72role真实实例、150道题和50处题目字段抽查、34个残留字段、207条清单外关键词命中、双跑SHA。第一轮修复复审已完成，仍见独立的FIXES_CODEX_REVIEW，不重复执行。
+- **结论**：新增5应修为源文问题清单及同篇专名遗漏、题目字段未同步、11处教学内容子例、4role展示标签错误、resplit报告基数错误/统计口径不清。新增阻断0，继承阻断仍有两道T1越界干扰项自动通过，不能交付为验收通过。修复权限不在本轮，代码/数据均未改。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，本轮起始HEAD `57bc1c515413d5d937855f3ed54e591d73c5ca93`。此前已按授权合并精确`1f03c846c192d939ade43a5902204cb1bea6f9a5`，合并提交`1cdc4e5eeac7eef3c9562282306679abd6510af1`，两边交接均保留；未合并main或后续Claude提交，未rebase。本次只改三份获准文档；正文已commit/push **9827b8513bb44615d5a79a2574258ee8138317e1** 并核对远端同SHA。本节CI补记由后续纯文档提交承载，最终HEAD以git log -1为准。相对1f另有既有第一轮复审报告，非本轮越界新增。
+- **另一工作树**：`/Users/zhouxin/Desktop/studytracker`为main，HEAD `6ded77d24586327ad94e151e172ae4811b4a2eed`，既有7 modified（design-qa、两份交接、style及3个模板）/22 untracked入口完整保留，本轮没有写它。下一位须重新git status确认，勿把任务树报告当作桌面树已合入。
+- **验证**：工具环境运行`python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`：85通过；Flask-only执行CI完整列表153运行/1跳过；`tests.test_reading_study`22通过，Node拼写队列exit0；validator317文件0错误（coverage仍缺70），textfix --check 0未应用。9改动Python的Ruff仅builder原有UP017/format不通过，其余8通过。完整精确路径、命令和存量对比见报告。
+- **生成/数据**：26日从空缓存冷解析12745句，再暖缓存第二次，四文件双跑字节一致；JSONL/XLSX对齐提交版，两报告仅Python3.11.15/3.13.3一行不同。50188题、auto5987/4755/11582/411/5428/12886，78回归状态/原因不变；图谱脚本生成一致。171篇raw内存重建paragraphs/groups一致。临时SQLite完整`cc6323e0cfa85342a34711480eac9def9c3fefaf` main先created317，1f再updated227/skipped90/failed0；独立分区133数据+94标签+90不变。
+- **例外/限制**：用户已确认单例role审全部，38个单例全部审核，B0已关闭。Python3.10只做语法/API兼容分析，未用3.10解释器运行。提示IELTS仅改难点与已要求的A-04/A-05合并不一致，报告如实列明。旧`/tmp/...H4JlOk`在26日已丢失，本次重新建立运行证据，不能再指向它恢复。
+- **仅本机证据**：`/Users/zhouxin/.codex/audits/grammar-v02-round2-4-20261026`含原样快照、脚本、缓存、JSON明细、日志、SQLite；未入Git。`.venv-grammar-tools`保留。跨电脑可取得报告内全部样本/问题/哈希，但需重新生成全候选，不能宣称本机缓存已推送。
+- **发布/外部**：未推main、未部署、未开PR，未操作生产服务器/库，未调用大模型API；小程序未上传/提审/发布。正文CI [40261776632](https://github.com/KB77GG/studytracker/actions/runs/40261776632) test/Node成功，lint存量advisory失败、format跳过，workflow整体success。本次补记提交不带skip-ci，同样推任务分支并在最终汇报核对其CI。
+- **下一步**：交给实现方依据B1/N1–N5修复，再独立复审；教学错误修正、源文不适合出题的处理和老师盲审均未完成，不得把本次运行通过当上线许可。下一位先核对git status/log及最新CI，再读取报告问题表；无须重复B0提问。
 
 ## 2026-10-19 语法候选题 v0.2 第四轮（Claude，待复审）
 
@@ -45,6 +58,20 @@
 - **仅云端会话可见**：批次脚本（`resplit/batch_m1.py` 等）、核对脚本和临时 SQLite 在会话 scratchpad，不提交。
 - **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。上线时 Reading Study 导入预期 updated=56（不再是 25）。
 - **下一步**：Codex 复审两轮修复 → 老师盲审 `data/grammar_items/review_batch_v0_2.xlsx` → 用户授权后上线。
+
+## 2026-10-19 语法候选题 v0.2 审核修复独立复审（Codex，不通过）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES_CODEX_REVIEW.md`。包含15项实际结果与命令、F1–F5/S1–S4关闭状态、30边界题+30自动通过题逐题表、19句漏网下界、双次SHA与复现方法。原审核/修复记录保持原样。
+- **Git / 工作树**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，按授权fetch后 `git merge --ff-only f9aebc7`，审核HEAD **f9aebc765b9d78a1bc29a91baa294623ce743e2c**，范围 **8f273e9..f9aebc7**。不得合入Claude此后的提交或rebase，本分支与其分叉是预期。开始/检查完成时干净，只写三份获准文档；正文提交 **0eedc0b7827f331ad4eacb81e4d89fdd569ae8d8 已commit/push** 并确认远端同SHA。编写此补记时仅三文档本轮改动，随后纯文档commit/push；最终HEAD用 `git rev-parse HEAD` / `git ls-remote origin refs/heads/codex/grammar-item-candidates` 核对，不能把正文SHA误当最后提交。
+- **GitHub CI**：正文 [39208956728](https://github.com/KB77GG/studytracker/actions/runs/39208956728) completed/success，headSha核对一致；test成功（133 ran/132 passed/1 skipped）、Node成功；lint失败为存量advisory，format跳过，非全绿。日志错误路径与本轮被审改动文件无交集。本补记仍不带skip标记，最终回复前核对最后文档提交CI。
+- **原桌面树**：`/Users/zhouxin/Desktop/studytracker` 仍是 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`；7 modified /22 untracked入口保留（路径见下方v0.1节），本轮没有写入或切分支。
+- **结论**：T6遗漏0、9例已修、6299共同T1答案不变，但3个T1干扰项越界仍auto_pass（R1阻断）；数字引语范围真实回归（R2）；新抽样坏句及19句漏网OCR（R3）；短语同规则实验为933新增降级，不能复现自查2333（R4）。F3/F4/F5/S2/S3已解决，S4兼容理由接受，F1/F2/S1不能全关闭。
+- **验证**：`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_grammar_graph_draft -v` 65 passed；新Flask-only环境完整CI列表133 ran/132 passed/1 skipped、Node exit0；5改动Python文件Ruff check及format --check（显式清空extend-exclude）通过；validator317 valid/0 errors、text fixes --check 0未应用；pip check无冲突。完整命令见报告。
+- **复现/导入**：Mac Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1CPU；f9aebc7原样导出冷/热两次四文件字节一致，JSONL/XLSX等于提交版，报告仅Python版本行差异；13条回归对象完全等于修复前且符合计划。临时SQLite先导入本次origin/main完整快照 **cc6323e0cfa85342a34711480eac9def9c3fefaf** 的代码/static/data，再导f9aebc7：updated25/skipped292/failed0，未触及真实数据库。
+- **抽查**：seed20261020；边界T3/T4各15为26明确不完整、1误降、3两可。每工作表auto_pass各5为28完整正确、1源句不适合、1高亮缺右括号；7表/360行/四项下拉/盲审格式通过并只读渲染。
+- **仅本机材料**：`/tmp/studytracker-grammar-v02-fixes-audit.GgWLmI` 含审计脚本、日志、原样源码副本、缓存、两次生成、SQLite和预览；`.venv-grammar-tools`保留。它们不提交，另一台电脑按报告方法重新生成，不应假定能访问临时目录。
+- **部署/外部状态**：未推main、未部署、未开PR、未操作生产服务器或生产库；后端/前端/小程序上传提审发布均未发生，没有大模型API调用。
+- **未验证/下一步**：教师360题审核未完成；claim mat、14段首句点、51多句单元的f9aebc7后续修复未审且未合入。实现方先处理报告R1–R4，再另行授权独立验证；本轮没有代码/原文修复授权。不要凭旧自查结论直接入库。
 
 ## 2026-10-19 语法候选题 v0.2 审核修复（Claude，待复核）
 
