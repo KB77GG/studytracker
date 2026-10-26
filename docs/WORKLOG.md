@@ -9,7 +9,7 @@
 - 固定`f9aebc7..1f03c84`，任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`；只改本轮审核报告及两份交接。桌面main原有7 modified/22 untracked未动。
 - 新增0阻断/5应修/3建议；上轮T1越界干扰项阻断仍有两题。问题包括源文清单遗漏、34个题目残留字段、11处教学说明/标注子例、4role错误标签和报告基数。21项与全部逐条/逐句/role/抽样明细已写报告，未修被审代码/数据。
 - 用户同意单例role全审，已解除10月20日B0；旧tmp证据已丢失，26日在持久审计目录重新冷/热双跑。四文件一致，JSONL/XLSX对齐，报告仅Python版本差异；85专项、Flask-only153运行/1跳过、reading22和Node通过；Ruff只有builder存量问题。171篇内存重建一致，完整main临时SQLite再导入updated227/skipped90/failed0。所有路径/命令/SHA见审核报告及CODEX_HANDOFF。
-- 本条编写时三文档待提交推送，随后补CI实测；不带skip-ci标记。未推main、部署、开PR、生产操作或小程序发布。下一步由实现方修B1/N1–N5后再审，不把教师盲审或上线视为已完成。
+- 正文已commit/push **9827b8513bb44615d5a79a2574258ee8138317e1**，CI [40261776632](https://github.com/KB77GG/studytracker/actions/runs/40261776632) test/Node通过，lint存量advisory失败、format跳过，整体success。本条由后续纯文档提交补记，不带skip-ci标记并核对最终CI。未推main、部署、开PR、生产操作或小程序发布。下一步由实现方修B1/N1–N5后再审，不把教师盲审或上线视为已完成。
 
 ## 2026-10-19 — 第四轮追加：catching → caching（Claude）
 

@@ -1664,4 +1664,9 @@ T5括号边界探针曾以原subject原子span为上界，产生11处假越界�
 
 ## Git / CI / 交接状态
 
-最终记录CI结果与提交状态将在本报告提交并推送后补入；被审核代码、数据和四份交付保持1f03c84。唯一作者改动是本报告、CODEX_HANDOFF与WORKLOG。未推main、未部署、未开PR，未操作生产服务器/生产数据库，未上传/提审/发布小程序。
+审核正文提交 **9827b8513bb44615d5a79a2574258ee8138317e1** 已推送到 `codex/grammar-item-candidates`，`git ls-remote`核对同SHA。GitHub [CI 40261776632](https://github.com/KB77GG/studytracker/actions/runs/40261776632) 已完成：
+
+- **test：success**；轻量单测与Node拼写队列均成功。
+- **lint：failure（advisory）**；Ruff check报存量问题，后续format步骤skipped。其continue-on-error使workflow整体success，不将整体绿色写成lint通过。改动Python文件的本地对照结果见第18项。
+
+本段及两份交接由后续纯文档提交补记，同样不带skip-ci标记；最终提交SHA及其CI结果在最终用户汇报提供，并可用 `git log -1` / `gh run list --branch codex/grammar-item-candidates --workflow ci.yml` 查询。被审核代码、数据和四份交付保持1f03c84。唯一作者改动是本报告、CODEX_HANDOFF与WORKLOG。未推main、未部署、未开PR，未操作生产服务器/生产数据库，未上传/提审/发布小程序。
