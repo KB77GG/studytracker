@@ -387,13 +387,14 @@
       "sentence": "This is because, according to Archimedes' principle of displacement, floating objects displace their own weight in water.",
       "translation": "这是因为，根据阿基米德的排水原理，漂浮物体所排开的水与其自身等重。",
       "structure": [
-        {"text": "This is because", "role": "main_clause", "level": 1},
-        {"text": "according to Archimedes' principle of displacement", "role": "prepositional_phrase", "level": 2},
-        {"text": "floating objects displace their own weight in water", "role": "adverbial_clause", "level": 2}
+        {"text": "This", "role": "subject", "level": 1},
+        {"text": "is", "role": "linking_verb", "level": 1},
+        {"text": "because, according to Archimedes' principle of displacement, floating objects displace their own weight in water", "role": "predicative_clause", "level": 2},
+        {"text": "according to Archimedes' principle of displacement", "role": "prepositional_phrase", "level": 3}
       ],
       "difficult_points": [
         "This 回指上一句吊舱无论载船与否都同重这一现象。",
-        "because 引出原因，according to ... 是插入其中的依据说明。",
+        "This is because... 中 because 引导表语从句，说明原因；according to ... 是插入其中的依据说明。",
         "displace their own weight in water 指排开与自身重量相等的水，而不是排开物体自身。"
       ],
       "expressions": [
