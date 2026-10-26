@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-26 Claude 完成第五轮：处理 Codex 第一轮（R1–R4）与第二至四轮（B1、N1–N5、A1–A3）复审的问题，提交在 `claude/word-memorization-system-eval-55v2y5`，待 Codex 复审。未合并 main、未部署。
+> 最近更新：2026-10-26 Codex 完成第五轮独立复审（固定1f03c84..f565da2）：原R1/B1阻断关闭，结论仍不通过，新0阻断/4应修/2建议。只改审核记录和交接，未部署。
+
+## 2026-10-26 第五轮独立复审（Codex，不通过）
+
+- **事实源**：[完整报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND5_CODEX_REVIEW.md)，含19项检查、16个前审编号关闭状态、43新增/22旧修订、155变化句覆盖、15角色29实例、83新增+两组30抽查、58破折号变化、双跑SHA和实际命令。
+- **结论**：原R1/B1干扰项越界阻断已关闭；新增0阻断/4应修/2建议。Q1为4处新教学说明不准确；Q2为9_81_p2至少6个题目字段仍有docs not/capac ity；Q3为5_59_p1的Post- It与Peroy Spender排印错误；Q4为新增池实际69自动/14待复核，以及“83题全部正确”的错误自查声明。残缺句自动池策略仍待用户决定；没有修被审文件。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`；起始e91d0cc，按授权快进到`f565da265f74faf5d745267c701c9f32e1c4c009`。本轮只写三份允许文档；提交前只有这三项未提交/未跟踪，未改代码、数据、配置、交付文件。最终HEAD与远端以本节CI补记及git log/status为准。
+- **另一工作树**：`/Users/zhouxin/Desktop/studytracker`仍main/`6ded77d24586327ad94e151e172ae4811b4a2eed`，既有7 modified和22 untracked入口未动；不要把本报告误认为桌面树已合入。
+- **验证命令/结果**：任务树`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`：93通过；独立Flask-only按CI完整列表161运行/1跳过；桌面venv运行`python -m unittest tests.test_reading_study -v`：22通过；Node拼写队列通过。`scripts/validate_reading_study.py`317文件0错误（覆盖仍317/387）、`scripts/reading_jijing_text_fixes.py --check`0。8改动Python文件Ruff仅builder存量2UP017与format失败，其余7通过。全部绝对路径及精确命令见报告。
+- **生成/数据**：AUDIT=`/Users/zhouxin/.codex/audits/grammar-v02-round5-20261026`；source完整f565、baseline完整1f、main完整65f1859。复用上轮本机已验证缓存并解析变化句后，`scripts/generate_grammar_candidates.py --seed 20261018`双跑四文件相同；JSONL/XLSX对齐提交，两报告仅Python3.11.15/3.13.3。50230题、增83删41、仅3共同题状态改变；13×6回归全等，图谱重生成相同。171篇raw内存重建content/groups相同；本机SQLite先main完整快照created317再f565 updated233/skipped84/failed0，独立135数据+98标签+84不变。
+- **仅本机材料**：AUDIT中的脚本、日志、全量候选池、缓存、SQLite不提交（用户只授权三文档）；报告包含跨机器复现算法、基线、位置和明细。上一轮审计目录保留。
+- **部署/外部状态**：未推main、未部署后端/前端、未开PR、未操作生产数据库/服务器，未上传/提审/发布小程序，未调用大模型API。只推codex任务分支，不将代码测试成功说成内容验收通过。
+- **未完成/下一步**：由实现方按报告处理Q1–Q4，A5/A6为有证据的边界/存量建议；老师360题盲审及生产发布均未做。先核对分支和脏状态，再按具体问题修改，不能据本报告直接上线。
+- **提交/CI**：本节随报告正文提交，不带skip-ci标记；推送后补记实际SHA与GitHub test/lint分开结果。
 
 ## 2026-10-26 语法候选题 v0.2 第五轮（Claude，待复审）
 
