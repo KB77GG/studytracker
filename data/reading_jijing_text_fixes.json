@@ -152,7 +152,8 @@
       "sentence_id": "E-01",
       "find": "Scientifico',translates",
       "replace": "Scientifico', translates",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_71_test_1_p3",
@@ -256,7 +257,8 @@
       "sentence_id": "D-10",
       "find": "cards.That's",
       "replace": "cards. That's",
-      "reason": "missing_space_between_sentences"
+      "reason": "missing_space_between_sentences",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_91_test_49_p1",
@@ -272,7 +274,8 @@
       "sentence_id": "B-09",
       "find": "claim mat the image",
       "replace": "claim that the image",
-      "reason": "typo"
+      "reason": "typo",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_29_test_63_p1",
@@ -416,7 +419,8 @@
       "sentence_id": "G-07",
       "find": "commented that\"research",
       "replace": "commented that \"research",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_5_test_59_p1",
@@ -957,7 +961,8 @@
       "sentence_id": "E-04",
       "find": "years' says",
       "replace": "years,' says",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_11_test_103_p3",
@@ -991,7 +996,8 @@
       "sentence_id": "H-01",
       "find": "it's financial",
       "replace": "its financial",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_11_test_103_p3",
@@ -1025,6 +1031,15 @@
       "find": "peas ant",
       "replace": "peasant",
       "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_13_test_6_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "Street Angel(1937)",
+      "replace": "Street Angel (1937)",
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_13_test_6_p3",
@@ -1203,7 +1218,8 @@
       "sentence_id": "B-05",
       "find": "reset'children's sleeping",
       "replace": "reset' children's sleeping",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_22_test_90_p2",
@@ -1281,7 +1297,17 @@
       "sentence_id": "E-02",
       "find": "while pigs'brains",
       "replace": "while pigs' brains",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_24_test_56_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "DINA",
+      "replace": "DNA",
+      "reason": "typo",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_24_test_56_p2",
@@ -2162,6 +2188,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_46_test_84_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "(China’s rise",
+      "replace": "China’s rise",
+      "reason": "punctuation",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_46_test_84_p2",
       "paragraph_label": "A",
       "sentence_id": "A-02",
@@ -2288,6 +2323,15 @@
       "find": "joints efforts",
       "replace": "joint efforts",
       "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_48_test_21_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "6oC",
+      "replace": "6°C",
+      "reason": "typo",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_50_test_30_p1",
@@ -2482,7 +2526,8 @@
       "sentence_id": "G-05",
       "find": "a cigarette,you're",
       "replace": "a cigarette, you're",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_56_test_64_p3",
@@ -2608,6 +2653,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_5_test_59_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "fair-trade coee",
+      "replace": "fair-trade coffee",
+      "reason": "lost_character",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_5_test_59_p3",
       "paragraph_label": "A",
       "sentence_id": "A-03",
@@ -2658,7 +2712,8 @@
       "sentence_id": "E-02",
       "find": "they' may",
       "replace": "they may",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_62_test_44_p1",
@@ -2975,7 +3030,8 @@
       "sentence_id": "D-03",
       "find": "trees'response to",
       "replace": "trees' response to",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_69_test_40_p2",
@@ -3166,7 +3222,8 @@
       "sentence_id": "E-01",
       "find": "a tiger's afraid",
       "replace": "a tiger's fear",
-      "reason": "typo"
+      "reason": "typo",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_73_test_5_p2",
@@ -3261,7 +3318,8 @@
       "sentence_id": "B-03",
       "find": "disability' on",
       "replace": "disability on",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_76_test_43_p1",
@@ -3551,7 +3609,8 @@
       "sentence_id": "H-06",
       "find": "killer Edison's had hoped",
       "replace": "killer Edison had hoped",
-      "reason": "typo"
+      "reason": "typo",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_82_test_4_p3",
@@ -3644,7 +3703,8 @@
       "sentence_id": "G-45",
       "find": "family's life park",
       "replace": "family's life: park",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_84_test_73_p2",
@@ -3652,7 +3712,8 @@
       "sentence_id": "G-45",
       "find": "to nearbyfriends'",
       "replace": "to nearby friends'",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_84_test_73_p3",
@@ -3989,6 +4050,24 @@
       "find": "60 dieeerent",
       "replace": "60 different",
       "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-01",
+      "find": "causes dierent senses",
+      "replace": "causes different senses",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_92_test_58_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-01",
+      "find": "syn(\"with\")",
+      "replace": "syn (\"with\")",
+      "reason": "missing_space",
       "questions": true
     },
     {
@@ -4346,7 +4425,8 @@
       "sentence_id": "D-01",
       "find": "of course don't",
       "replace": "of course, don't",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_14_test_23_p2",
@@ -4375,6 +4455,15 @@
       "reason": "missing_space"
     },
     {
+      "passage_id": "reading_jijing_18_test_53_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "modem version",
+      "replace": "modern version",
+      "reason": "typo",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_18_test_53_p2",
       "paragraph_label": "B",
       "sentence_id": "B-03",
@@ -4389,7 +4478,8 @@
       "sentence_id": "C-04",
       "find": "was,'less intrusive",
       "replace": "was 'less intrusive",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_18_test_53_p2",
@@ -4397,7 +4487,8 @@
       "sentence_id": "D-02",
       "find": "schools,'their report",
       "replace": "schools,' their report",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_18_test_53_p2",
@@ -4466,7 +4557,8 @@
       "sentence_id": "E-03",
       "find": "individuals'potential, Once again",
       "replace": "individuals' potential. Once again",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_22_test_90_p3",
@@ -4492,6 +4584,15 @@
       "sentence_id": "D-02",
       "find": "Green Peace is",
       "replace": "Greenpeace is",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_23_test_46_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "Green Peace",
+      "replace": "Greenpeace",
       "reason": "typo",
       "questions": true
     },
@@ -4582,6 +4683,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_32_test_20_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "book Centuries of Childhood’",
+      "replace": "book ‘Centuries of Childhood’",
+      "reason": "punctuation",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_32_test_20_p3",
       "paragraph_label": "E",
       "sentence_id": "E-06",
@@ -4624,6 +4734,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_40_test_75_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "Brock-lesby",
+      "replace": "Brocklesby",
+      "reason": "typo",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_40_test_75_p2",
       "paragraph_label": "C",
       "sentence_id": "C-02",
@@ -4655,6 +4774,60 @@
       "sentence_id": "C-04",
       "find": "or may be you",
       "replace": "or maybe you",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "stressed end'",
+      "replace": "stressed out'",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "self-certificaion",
+      "replace": "self-certification",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "hypothrsie",
+      "replace": "hypothesise",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "hypothesise'is",
+      "replace": "hypothesise 'is",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "Refer-ence",
+      "replace": "Reference",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_40_test_75_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "may be you should",
+      "replace": "maybe you should",
       "reason": "missing_space",
       "questions": true
     },
@@ -4792,7 +4965,8 @@
       "sentence_id": "F-02",
       "find": "Clark's nutcracker(Nucifraga",
       "replace": "Clark's nutcracker (Nucifraga",
-      "reason": "missing_space"
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_50_test_30_p2",
@@ -4802,6 +4976,16 @@
       "replace": "specialist, caching",
       "reason": "typo",
       "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_50_test_30_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "catching",
+      "replace": "caching",
+      "reason": "typo",
+      "questions": true,
+      "exact": true
     },
     {
       "passage_id": "reading_jijing_53_test_83_p2",
@@ -4862,6 +5046,24 @@
       "sentence_id": "C-02",
       "find": "gave US cornflakes",
       "replace": "gave us cornflakes",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "risk-talking",
+      "replace": "risk-taking",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_5_test_59_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "unsuccessfull",
+      "replace": "unsuccessful",
       "reason": "typo",
       "questions": true
     },
@@ -4965,6 +5167,15 @@
       "sentence_id": "G-02",
       "find": "cow less steaks and chicken less drumsticks",
       "replace": "cowless steaks and chickenless drumsticks",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_65_test_69_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "stablize",
+      "replace": "stabilize",
       "reason": "typo",
       "questions": true
     },
@@ -5090,6 +5301,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_71_test_1_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "ranffian saying. ‘Je",
+      "replace": "ruffian saying ‘Je",
+      "reason": "typo",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_72_test_15_p2",
       "paragraph_label": "A",
       "sentence_id": "A-05",
@@ -5130,6 +5350,15 @@
       "find": "into it. like that",
       "replace": "into it, like that",
       "reason": "punctuation",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_73_test_5_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "23\"C",
+      "replace": "23°C",
+      "reason": "typo",
       "questions": true
     },
     {
@@ -5300,7 +5529,8 @@
       "sentence_id": "D-04",
       "find": "McDonald's', like",
       "replace": "McDonald's, like",
-      "reason": "punctuation"
+      "reason": "punctuation",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_78_test_102_p2",
@@ -5417,6 +5647,16 @@
       "find": "Department of Health.",
       "replace": "Department of Health,",
       "reason": "punctuation"
+    },
+    {
+      "passage_id": "reading_jijing_82_test_4_p3",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "1070s",
+      "replace": "1970s",
+      "reason": "typo",
+      "questions": true,
+      "exact": true
     },
     {
       "passage_id": "reading_jijing_83_test_95_p1",
@@ -5602,6 +5842,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_9_test_81_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "ocean bloke",
+      "replace": "ocean broke",
+      "reason": "typo",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_9_test_81_p3",
       "paragraph_label": "A",
       "sentence_id": "A-01",
@@ -5615,6 +5864,15 @@
       "sentence_id": "A-02",
       "find": "University of bologna",
       "replace": "University of Bologna",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_81_test_93_p2",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "educa-tion",
+      "replace": "education",
       "reason": "typo",
       "questions": true
     }
