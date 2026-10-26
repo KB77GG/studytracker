@@ -6,22 +6,22 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5922 | 454 | 6368 |
-| clause_boundary | 4700 | 2561 | 2695 |
-| clause_type_classify | 11455 | 3427 | 1334 |
-| adverbial_relation | 404 | 653 | 2568 |
-| subject_span | 5371 | 809 | 6564 |
-| finite_or_not | 12742 | 1732 | 6550 |
+| main_verb_tap | 5926 | 452 | 6368 |
+| clause_boundary | 4705 | 2559 | 2692 |
+| clause_type_classify | 11465 | 3422 | 1331 |
+| adverbial_relation | 404 | 653 | 2565 |
+| subject_span | 5377 | 806 | 6563 |
+| finite_or_not | 12749 | 1730 | 6550 |
 
 ## 范围
 
 ```json
 {
   "passages": 317,
-  "sentences": 12744,
-  "candidates": 50230,
-  "sentence_rejections": 1334,
-  "template_rejections": 18075
+  "sentences": 12746,
+  "candidates": 50248,
+  "sentence_rejections": 1331,
+  "template_rejections": 18083
 }
 ```
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "357a32f8a2bb45452827d09c65ac28f0eaa0789fe3b840d14dc9f3c6ae7a9a1a",
+  "reading_study_sha256": "b5d17e8c949a0ce5e005c05dfea7ecbff5a802404bc6129f462953521f0d6c6b",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -48,47 +48,47 @@
 {
   "G-S01": {
     "auto_pass": 2743,
-    "needs_review": 213
+    "needs_review": 214
   },
   "G-S02": {
-    "auto_pass": 5371,
-    "needs_review": 809
+    "auto_pass": 5377,
+    "needs_review": 806
   },
   "G-C02": {
     "needs_review": 736,
     "auto_pass": 490
   },
   "G-C03": {
-    "auto_pass": 11455,
-    "needs_review": 3427
+    "auto_pass": 11465,
+    "needs_review": 3422
   },
   "G-C04": {
-    "auto_pass": 1797,
-    "needs_review": 349
+    "auto_pass": 1796,
+    "needs_review": 352
   },
   "G-C08": {
-    "auto_pass": 1156,
-    "needs_review": 762
+    "auto_pass": 1161,
+    "needs_review": 758
   },
   "G-C10": {
-    "auto_pass": 1257,
-    "needs_review": 714
+    "auto_pass": 1258,
+    "needs_review": 713
   },
   "G-C11": {
     "needs_review": 653,
     "auto_pass": 404
   },
   "G-N01": {
-    "auto_pass": 10878,
-    "needs_review": 1650
+    "auto_pass": 10884,
+    "needs_review": 1649
   },
   "G-N04": {
-    "auto_pass": 1864,
-    "needs_review": 82
+    "auto_pass": 1865,
+    "needs_review": 81
   },
   "G-L01": {
-    "auto_pass": 3179,
-    "needs_review": 241
+    "auto_pass": 3183,
+    "needs_review": 238
   }
 }
 ```
@@ -97,22 +97,22 @@
 
 ```json
 {
-  "no_main_verb_tag": 12408,
-  "coordinated_main_verbs": 4048,
-  "split_subject": 3837,
+  "no_main_verb_tag": 12411,
+  "coordinated_main_verbs": 4053,
+  "split_subject": 3838,
   "coordinated_main_clauses": 3603,
-  "boundary_mismatch": 3068,
+  "boundary_mismatch": 3070,
   "clause_type_mismatch": 2234,
   "span_not_constituent": 1378,
-  "ambiguous_span_location": 1376,
+  "ambiguous_span_location": 1377,
   "multiple_targets_same_type": 1361,
   "no_relation_label": 1234,
   "finiteness_mismatch": 664,
-  "source_quality": 631,
-  "verb_unit_outside_span": 590,
-  "subject_mismatch": 570,
-  "parser_root_outside_verb_span": 558,
-  "unbalanced_quotes_or_brackets": 397,
+  "source_quality": 616,
+  "verb_unit_outside_span": 592,
+  "subject_mismatch": 572,
+  "parser_root_outside_verb_span": 560,
+  "unbalanced_quotes_or_brackets": 394,
   "subordinator_unknown": 322,
   "existential": 305,
   "unknown_span": 274,
@@ -123,7 +123,7 @@
   "multiple_main_verbs": 180,
   "fragment": 163,
   "span_not_found": 151,
-  "list_item": 52,
+  "list_item": 55,
   "subject_after_verb": 44,
   "too_long": 43,
   "heading": 32,
@@ -139,7 +139,7 @@
 
 ```json
 {
-  "reading_jijing": 16358,
+  "reading_jijing": 16376,
   "reading_test": 33872
 }
 ```
@@ -148,8 +148,8 @@
 
 ```json
 {
-  "easy": 17010,
-  "hard": 18714,
+  "easy": 17014,
+  "hard": 18728,
   "medium": 14506
 }
 ```
@@ -170,19 +170,19 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1119,
+          "pool_size": 1121,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 359,
+          "pool_size": 362,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 460,
+          "pool_size": 459,
           "sample_size": 4
         },
         {
@@ -214,13 +214,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 448,
+          "pool_size": 449,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 543,
+          "pool_size": 547,
           "sample_size": 6
         },
         {
@@ -258,13 +258,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 914,
+          "pool_size": 916,
           "sample_size": 4
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1228,
+          "pool_size": 1236,
           "sample_size": 5
         },
         {
@@ -346,13 +346,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1005,
+          "pool_size": 1008,
           "sample_size": 9
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 344,
+          "pool_size": 347,
           "sample_size": 3
         },
         {
@@ -390,19 +390,19 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1622,
+          "pool_size": 1624,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1289,
+          "pool_size": 1297,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1080,
+          "pool_size": 1077,
           "sample_size": 4
         },
         {
@@ -1916,28 +1916,28 @@
 ```json
 {
   "source_quality": {
-    "sentences": 150,
+    "sentences": 149,
     "items_by_template": {
       "adverbial_relation": 30,
       "clause_boundary": 108,
-      "clause_type_classify": 195,
-      "finite_or_not": 171,
-      "main_verb_tap": 66,
-      "subject_span": 61
+      "clause_type_classify": 193,
+      "finite_or_not": 167,
+      "main_verb_tap": 62,
+      "subject_span": 56
     },
-    "only_reason": 441
+    "only_reason": 418
   },
   "list_item": {
-    "sentences": 14,
+    "sentences": 15,
     "items_by_template": {
       "adverbial_relation": 1,
       "clause_boundary": 3,
       "clause_type_classify": 13,
-      "finite_or_not": 15,
-      "main_verb_tap": 10,
-      "subject_span": 10
+      "finite_or_not": 16,
+      "main_verb_tap": 11,
+      "subject_span": 11
     },
-    "only_reason": 48
+    "only_reason": 50
   }
 }
 ```
@@ -1947,10 +1947,10 @@
 ```json
 {
   "sentences_before": 12657,
-  "sentences_after": 12744,
-  "added": 94,
+  "sentences_after": 12746,
+  "added": 96,
   "removed": 7,
-  "net_change": 87,
+  "net_change": 89,
   "new_sentence_ids": [
     "ielts18_test4_p2 F-03b",
     "ielts19_test4_p3 H-02b",
@@ -2016,6 +2016,8 @@
     "reading_jijing_29_test_63_p2 D-03b",
     "reading_jijing_32_test_20_p1 B-03b",
     "reading_jijing_32_test_20_p1 F-05b",
+    "reading_jijing_32_test_20_p3 A-01b",
+    "reading_jijing_32_test_20_p3 A-01c",
     "reading_jijing_38_test_22_p1 E-03b",
     "reading_jijing_38_test_22_p3 G-07b",
     "reading_jijing_40_test_75_p1 G-01b",
