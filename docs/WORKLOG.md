@@ -9,7 +9,7 @@
 - 固定`1f03c84..f565da265f74faf5d745267c701c9f32e1c4c009`，任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`；仅新增ROUND5_CODEX_REVIEW并更新两份交接。桌面main原有7 modified/22 untracked未动。
 - 原R1/B1阻断关闭；新0阻断/4应修/2建议。应修为4处教学说明、6个题目旧文字字段、2句原文排印和自查结论/计数。83新增实际69自动/14待复核；自动题核心答案未见新错，残缺原句适用性仍待决定。
 - 19项检查与逐条/逐句/逐题明细已完成；93专项、Flask-only161运行/1跳过、reading22、Node通过，Ruff仅builder存量问题；四文件双跑一致，报告仅Python版本差异。171篇raw重建一致；main65f1859完整快照临时导入后updated233/skipped84/failed0。辅助证据仅AUDIT本机，报告含SHA与复现命令。
-- 只提交/推送codex分支三份文档并核对CI；未改被审代码数据、未推main/部署/PR/生产操作/小程序发布。下一步实现方修Q1–Q4再审；CI结果在推送后补记。
+- 审核正文已commit/push `1f0f13c2caab748625459acda2f7288ef1d5c96b`；[CI 40269208625](https://github.com/KB77GG/studytracker/actions/runs/40269208625) test/Node成功，lint存量advisory失败、format跳过，整体success。本条由后续纯文档CI补记提交承载，最终HEAD/CI见最终汇报。仅三份文档，未改被审代码数据、未推main/部署/PR/生产操作/小程序发布；下一步实现方修Q1–Q4再审。
 
 ## 2026-10-26 — 语法候选题 v0.2 第五轮（Claude）
 

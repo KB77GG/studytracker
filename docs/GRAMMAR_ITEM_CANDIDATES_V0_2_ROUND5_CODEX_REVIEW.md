@@ -636,4 +636,8 @@ main取到`65f1859683c94ef41c938319515702e12709e96c`，与Claude一致。SQLite�
 
 ## 提交与GitHub CI
 
-报告正文完成后将仅提交三份获准文档，推送codex/grammar-item-candidates；不带skip-ci标记。最终SHA及远端CI结果在提交后补记到本节/交接，并在用户最终回复明确区分test与lint。
+审核正文已提交并推送：`1f0f13c2caab748625459acda2f7288ef1d5c96b`，分支`codex/grammar-item-candidates`，远端已核对同SHA。实际仅三份文档变化；相对f565排除这三份后的git diff为空，提交消息无skip-ci。
+
+GitHub [CI 40269208625](https://github.com/KB77GG/studytracker/actions/runs/40269208625)，head为上述审核提交：**test success**（轻量测试、Node队列均成功）；**lint failure**（advisory Ruff check失败，format步骤跳过）；整个workflow为success，因为lint配置continue-on-error。本地8改动Python文件只发现builder既有UP017/format，其余7通过；没有因CI的绿色整体结论隐去lint失败。
+
+本节及交接的CI补记由后续纯文档提交承载，仍只推同一任务分支、不带skip-ci；最终HEAD及其第二次CI将在用户最终汇报给出。未部署、未开PR、未进行任何生产写入。
