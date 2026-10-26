@@ -65,6 +65,18 @@ DASH = re.compile(r"—|(?<!\d)–|–(?!\d)|(?<!\d) - | - (?!\d)")
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
 COORDINATING_MARKS = frozenset({"for", "so", "yet"})
+# Forms of be, and the complements that make a clause after it an ordinary adverbial
+# ("It was cold because ...") rather than the be's own complement ("That was because ...").
+BE_FORMS = frozenset(
+    {"be", "is", "are", "was", "were", "been", "being", "am", "'s", "’s", "'re", "’re"}
+)
+BE_COMPLEMENT_DEPS = frozenset({"attr", "acomp", "oprd", "ccomp", "xcomp", "prep", "dobj"})
+# Words that may stand between that be and its clause ("it's usually because ...").
+BE_CLAUSE_ADVERBS = frozenset(
+    {"not", "n't", "only", "just", "simply", "merely", "solely", "partly", "largely", "mainly"}
+    | {"mostly", "probably", "perhaps", "possibly", "presumably", "maybe", "usually", "often"}
+    | {"always", "precisely", "exactly", "really", "also", "still"}
+)
 # A coordinate clause needs a subject of its own; without one it is a coordinated predicate.
 CLAUSE_SUBJECT_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "expl"})
 
@@ -382,6 +394,22 @@ def main_verb(ctx):
     return item, []
 
 
+def predicative_clause(view, head):
+    """An advcl right after a be with no complement of its own ("that could be because ...",
+    "it's only because ...") is that be's complement, a predicative clause, not an adverbial
+    one (review V1). A clause in front ("If we are kind, it's ...") is an ordinary adverbial."""
+    if head.dep != "advcl":
+        return False
+    verb = view.tokens[head.head]
+    if verb.text.lower() not in BE_FORMS or verb.pos not in {"AUX", "VERB"}:
+        return False
+    if any(c.dep in BE_COMPLEMENT_DEPS for c in view.children(verb) if c.i != head.i):
+        return False
+    first = min(t.i for t in view.subtree(head))
+    between = view.tokens[verb.i + 1 : first]
+    return first > verb.i and all(t.text.lower() in BE_CLAUSE_ADVERBS for t in between)
+
+
 def type_matches(view, head, kind):
     """A finite head with the clause dep; a coordinate clause has its own subject and no
     subordinator ("and that ..." is a noun clause, "and usually refer to ..." a predicate).
@@ -391,7 +419,7 @@ def type_matches(view, head, kind):
     children = view.children(head)
     marks = {c.text.lower() for c in children if c.dep == "mark"}
     if kind == "adverbial":
-        return "for" not in marks
+        return "for" not in marks and not predicative_clause(view, head)
     if kind != "coordinate":
         return True
     return marks <= COORDINATING_MARKS and any(c.dep in CLAUSE_SUBJECT_DEPS for c in children)
@@ -521,6 +549,8 @@ def adverbial_relations(ctx):
         reasons.extend(relative_adverb_risk(ctx.view, span))
         if head:
             reasons.extend(boundary_reasons(ctx, head, tokens, "adverbial"))
+            if predicative_clause(ctx.view, head):
+                reasons.append(R.CLAUSE_TYPE_MISMATCH)
         ctx.emit(
             TEMPLATES[3],
             "G-C11",

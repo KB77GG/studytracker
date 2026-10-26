@@ -1209,6 +1209,102 @@ class CodexReviewFixTests(unittest.TestCase):
         self.assertEqual(t1["status"], "auto_pass")
 
 
+class PredicativeClauseTests(unittest.TestCase):
+    """Review V1: a because clause that is be's complement is not an adverbial clause."""
+
+    def reason_tree(self, middle):
+        rows = [("That", "nsubj", 2, "PRON", "DT"), ("could", "aux", 2, "AUX", "MD")]
+        rows += [("be", "ROOT", 2, "AUX", "VB")] + middle
+        start = len(rows)
+        rows += [
+            ("because", "mark", start + 2, "SCONJ", "IN"),
+            ("ice", "nsubj", start + 2, "NOUN", "NN"),
+            ("melted", "advcl", 2, "VERB", "VBD"),
+            (".", "punct", 2, "PUNCT", "."),
+        ]
+        return tree(rows)
+
+    def clause_items(self, sentence, view, predicate):
+        tags = [
+            ("That", "subject", 1),
+            (predicate, "verb_phrase", 1),
+            ("because ice melted", "reason_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        return [
+            i
+            for i in items
+            if i["template"] in {"clause_boundary", "clause_type_classify", "adverbial_relation"}
+        ]
+
+    def test_because_clause_after_bare_be_is_not_auto_pass(self):
+        # "The researchers say that could be because many of those artefacts have ..." (H-04);
+        # an adverb such as "only" may stand between ("it's only because ...").
+        sentence, view = self.reason_tree([("only", "advmod", 2, "ADV", "RB")])
+        items = self.clause_items(sentence, view, "could be")
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertEqual(item["status"], "needs_review", item["template"])
+        sentence, view = self.reason_tree([])
+        items = self.clause_items(sentence, view, "could be")
+        self.assertEqual(
+            {i["template"] for i in items},
+            {"clause_boundary", "clause_type_classify", "adverbial_relation"},
+        )
+        for item in items:
+            self.assertEqual(item["status"], "needs_review", item["template"])
+            self.assertIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"])
+
+    def test_because_clause_after_be_with_complement_stays_adverbial(self):
+        sentence, view = self.reason_tree([("cold", "acomp", 2, "ADJ", "JJ")])
+        items = self.clause_items(sentence, view, "could be cold")
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertNotIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], item["template"])
+            self.assertEqual(item["status"], "auto_pass", item["template"])
+
+    def test_because_clause_after_other_verb_stays_adverbial(self):
+        sentence, view = tree(
+            [
+                ("That", "nsubj", 1, "PRON", "DT"),
+                ("failed", "ROOT", 1, "VERB", "VBD"),
+                ("because", "mark", 4, "SCONJ", "IN"),
+                ("ice", "nsubj", 4, "NOUN", "NN"),
+                ("melted", "advcl", 1, "VERB", "VBD"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        items = self.clause_items(sentence, view, "failed")
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertEqual(item["status"], "auto_pass", item["template"])
+
+    def test_fronted_clause_on_bare_be_stays_adverbial(self):
+        # "When the opponent's king is checkmated, the game is over, ..." (over parsed as advmod).
+        sentence, view = tree(
+            [
+                ("When", "mark", 2, "SCONJ", "WRB"),
+                ("ice", "nsubj", 2, "NOUN", "NN"),
+                ("melted", "advcl", 5, "VERB", "VBD"),
+                (",", "punct", 5, "PUNCT", ","),
+                ("it", "nsubj", 5, "PRON", "PRP"),
+                ("was", "ROOT", 5, "AUX", "VBD"),
+                ("over", "advmod", 5, "ADV", "RB"),
+                (".", "punct", 5, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("When ice melted", "time_clause", 2),
+            ("it", "subject", 1),
+            ("was over", "verb_phrase", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        clause = [i for i in items if i["template"] in {"clause_boundary", "adverbial_relation"}]
+        self.assertEqual(len(clause), 2)
+        for item in clause:
+            self.assertNotIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], item["template"])
+
+
 MAIN_ROWS = [
     ("The", "det", 1, "DET", "DT"),
     ("plans", "nsubj", 4, "NOUN", "NNS"),
