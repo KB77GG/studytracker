@@ -1170,3 +1170,83 @@
 | 9_81_p1 | F-02 | Test subject was given an argument "All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate". | 原句问题：rabbit hibernate 的规范写法是 rabbits hibernate 或 a rabbit hibernates。 | 加前缀 |
 | 9_81_p1 | G-03 | Though these experiments changed the original belief on thought processing, how much does it result from all factors needs further discussion. | 原句问题：how much does it result from all factors 作整个句子的主语，是名词性从句，但用了疑问语序；规范写法是 how much it results from all factors。 | 加前缀 |
 | 9_81_p2 | B-04 | South Stradbroke Island is separated from the mainland by the Broadwater, a stretch of sea .' kilometres wide. | 原句问题：kilometres wide 前的数字残缺，只能看出是“若干公里宽”；a stretch of sea... kilometres wide 是 the Broadwater 的同位语。 | 加前缀，改写语序 |
+
+## 十一、第八轮补充（2026-10-26，第六、七轮复审 U1、U2、U4、U5、A8）
+
+### 改原文
+
+修订表 702 → 725 条。32_20_p3 的开头两句在原始数据里放在 `sub_title`，构建时被丢掉，用新的 `at_start` 修订补回 A 段开头（阅读解析新增 A-01、A-01b，原 A-01 改为 A-01c）；91_49_p1、23_46_p1 两处引号能确定，直接改原文，阅读解析同步，不再需要“原句问题”说明。
+
+| 文章 | 段落 / 句子 | 改动 | 范围 |
+|---|---|---|---|
+| 91_49_p1 | C 段 C-01 | `processing." There's` → `processing. "There's` | 原文 |
+| 91_49_p1 | 题目数据 | `processing.” There’s` → `processing. “There’s` | 只改题目数据 |
+| 23_46_p1 | B 段 B-04b | `compiled.` → `compiled.'` | 原文（段末补） |
+| 32_20_p3 | A 段 A-01、A-01b | 段首 `The various findings` 前补回 `The field of weight loss is like the ancient fable about the blind men and the elephant. Each man investigates a different part of the animal and reports back, only to discover their findings are bafflingly incompatible.` | 原文（段首补回，题目数据本来就引用这两句） |
+| 77_16_p3 | E 段（该篇暂无阅读解析） | `unpre-pared` → `unprepared` | 原文和题目数据 |
+| 77_16_p3 | F 段（该篇暂无阅读解析） | `e-busi-ness` → `e-business` | 原文和题目数据 |
+| 77_16_p3 | G 段（该篇暂无阅读解析） | `under-mining` → `undermining` | 原文和题目数据 |
+| 77_16_p3 | J 段（该篇暂无阅读解析） | `legiti-mately` → `legitimately` | 原文 |
+| 26_72_p2 | C 段（该篇暂无阅读解析） | `post- glacial` → `post-glacial` | 原文和题目数据 |
+| 26_72_p3 | B 段（该篇暂无阅读解析） | `modern- day` → `modern-day` | 原文和题目数据 |
+| 26_72_p3 | E 段（该篇暂无阅读解析） | `post- classical` → `post-classical` | 原文和题目数据 |
+| 47_86_p3 | H 段（该篇暂无阅读解析） | `sacri-lice` → `sacrifice` | 原文 |
+| 52_62_p1 | F 段（该篇暂无阅读解析） | `mountain- climbing` → `mountain-climbing` | 原文和题目数据 |
+| 52_62_p2 | G 段（该篇暂无阅读解析） | `Noil-Rapid` → `Non-Rapid` | 原文 |
+| 49_105_p1 | H 段（该篇暂无阅读解析） | `your- shoulder` → `your shoulder` | 原文和题目数据 |
+| 57_37_p1 | B 段（该篇暂无阅读解析） | `attention- absorbing` → `attention-absorbing` | 原文和题目数据 |
+| 31_99_p1 | I 段（该篇暂无阅读解析） | `Urbana- Champaign` → `Urbana-Champaign` | 原文和题目数据 |
+| 77_16_p1 | F 段（该篇暂无阅读解析） | `Terra- Cotta` → `Terra-Cotta` | 原文和题目数据 |
+| 60_101_p2 | A 段（该篇暂无阅读解析） | `love-bate` → `love-hate` | 原文和题目数据 |
+| 60_101_p2 | F 段（该篇暂无阅读解析） | `built- in` → `built-in` | 原文和题目数据 |
+| 60_101_p2 | G 段（该篇暂无阅读解析） | `attention-al` → `attentional` | 原文 |
+| 23_46_p3 | J 段（该篇暂无阅读解析） | `long- lasting` → `long-lasting` | 原文 |
+| 28_76_p3 | C 段（该篇暂无阅读解析） | `leaf- eaters` → `leaf-eaters` | 原文和题目数据 |
+
+### 说明加前缀（U1，9 条）
+
+| 文章 | 句子 | 原句 | 现在的说明 |
+|---|---|---|---|
+| 11_103_p1 | D-04 | Some structures resembling the mineralized casts of terrestrial bacteria and their appendages fibrils or by-products occur in the rims of carbonate globules and pre-terrestrial aqueous alteration regions. | 原句问题：their appendages fibrils or by-products 缺少必要标点，列举关系含混；翻译按可辨的并列项目处理。 |
+| 11_103_p2 | F-04 | But human-induced climate change has brought humanity to a position where it important not to exclude thinking thoroughly about this topic and its possibilities despite the potential drawbacks. | 原句问题：it important 中缺少 is；not to exclude thinking 是较拗口的双重否定表达。 |
+| 11_103_p2 | F-05 | If, over the coming years, the science US about an ever-increased climate sensitivity of the planet and this isn't unrealistic – then we may be best served by not having to start our thinking from scratch. | 原句问题：If 从句中 science 与 US 之间缺少 tells 一类谓语；US 应按上下文理解为 us。 |
+| 18_53_p1 | D-01 | After 1714, as an attempt to find a solution to the problem, the British government offered a tremendous amount of £20,000, which were to be managed by the magnificently named 'Board of Longitude'. | 原句问题：which 指 a tremendous amount of £20,000 这笔款项；一笔钱作主语时谓语通常用单数，规范写法是 which was to be managed，原文用了 were。 |
+| 44_29_p2 | E-03 | However, efforts to minimise the population of water hyacinth need to be continual and consistent; experts warning that unless control methods are upheld, the problem can easily reoccur. | 原句问题：分号后应是能独立成句的分句，experts warning that... 却没有限定谓语；规范写法是 experts warn that...，或把分号改为逗号、写成 with experts warning that...（独立主格）。 |
+| 46_84_p1 | E-01 | It may be 2005, yet having children is a career-ending decision for millions of bright, ambitious, and well-educated Japanese, | 原句问题：句末的逗号是原文写法，意思与下一句相连；bright, ambitious, and well-educated 三个形容词并列修饰 Japanese，这里指日本女性。 |
+| 65_69_p2 | D-04 | And long before all fossil fuels are exhausted, their rising prices may compel industrial society not only to become more energy efficient but also to find alternative energy sources sufficient for the demands of an advanced technological civilization nuclear fission, nuclear fusion, solar energy, chemical photosynthesis, geothermal, biomass or some yet unknown source of energy. | 原句问题：civilization 后缺少冒号或破折号之类的标点，随后是一串 alternative energy sources 的例子。 |
+| 71_1_p2 | H-05 | Being unique to Italy, there is no equivalent word in English, so the strategy used here is Regination, where the subtitler leaves the word in the original language. | 原句问题：Being unique to Italy 逻辑上修饰 scopa，但形式上与紧随其后的 there 存在悬垂结构。 |
+| 76_43_p3 | C-06 | He indicated that noncompliance means growth in some way, may have benefit for children. | 原句问题：逗号后的 may have benefit 前缺少 and 或主语，规范写法可以是 ...means growth in some way and may have benefit for children；语意上主语仍是 noncompliance。 |
+
+### 说明去掉前缀（U2，13 条：合法写法或风格建议）
+
+| 文章 | 句子 | 原句 | 现在的说明 |
+|---|---|---|---|
+| 13_6_p1 | B-03 | The government saw the solution in the providing of Physical Education programmes in schools, delivered by better prepared and specifically educated PE teachers. | see the solution in 表示认为解决方案在于某事；the providing of 是在动名词前加 the、后接 of 的名词化用法，语法上成立但不常用，更常见的说法是 the provision of。 |
+| 16_97_p1 | B-08 | But at the annual meeting of the Society of Vertebrate Paleontology in Mexico City last October, paleoecologist John Alroy of the University of California at Santa Barbara argued that, in fact, hunting-driven extinction is not only plausible, it was unavoidable. | not only plausible, it was unavoidable 省略了 but，是新闻文体常见的递进写法；is plausible 说的是这一观点现在看来合理，was unavoidable 说的是当时的灭绝无法避免，时间参照不同，所以时态不同。 |
+| 18_53_p1 | C-02 | A comparison with the local time (easily identified by checking the position of the Sun) would indicate the time difference between the home time and the local time, and thus the distance from home was obtained. | would indicate 表示过去通常的做法（比较之后就能得出时差），was obtained 陈述由此得到的结果；两部分分别说步骤和结果，动词形式不必一致。 |
+| 18_53_p2 | F-09 | They should be having the time of their lives at school not just worrying about tests. | not just worrying about tests 与前面的 having the time of their lives 形成对比；在 school 后加逗号停顿，读起来会更清楚。 |
+| 22_90_p2 | D-12 | During school time, the average amount of sleep was a little over nine hours on average. | the average amount 与 on average 意思重复，去掉其中一个会更简洁。 |
+| 24_56_p3 | C-05 | The immediate impact on sailors' health and incidence of scurvy on board ship was, however, limited as Lind and other physicians remained convinced that the curative effect was acid based. | acid based 作表语，意为“以酸为基础的”；作表语时连字符可加可不加（acid-based）；remain convinced that 表示仍坚信。 |
+| 48_21_p3 | K-04 | Further researches will try to find out how rising temperatures would affect the ratio of sex reversal in their growth. | research 一般作不可数名词，复数 researches 较少见（英式英语中可以用）；their 指海龟。 |
+| 53_83_p3 | C-06 | A. K. Lakhina, the chairman of India's Rural Electrification Corporation, says the Indian government recognises the potential of LED lighting powered by solar technology, but expressed reservations about its high costs. | says 是新闻里常见的现在时转述，表示他现在的说法；expressed 用过去时，指他在某次谈话中表达的保留意见；时态不同但意思清楚；its 指 LED lighting。 |
+| 62_44_p1 | E-01 | Controversy surrounds the practice of Reiki, some in opposition as they say that Reiki may offer only a perceived improvement in health and therefore only a 'placebo' effect. | 逗号后的 some in opposition 没有动词，是附在句末的独立结构（相当于 with some in opposition），说明有人持反对态度；它不是独立分句，不需要补 are。 |
+| 62_44_p3 | F-01 | Advertisers play on our need to be safe (commercials for insurance), to belong (make a customer feel they are in the group in fashion ads) and for self-esteem (aspirational adverts). | need 后可以接不定式（to be safe、to belong），也可以接 for 短语（for self-esteem）；三项形式不同，但都作 need 的补足成分，写成同一种形式会更整齐。 |
+| 62_44_p3 | H-05 | The seller, therefore, attempts to tease out what these conditions are and then explains how their products' benefit can meet these requirements. | products' benefit 指这些产品带来的好处，benefit 用单数也说得通；如果要强调多项好处，可以写成 benefits。 |
+| 71_1_p2 | E-02 | Obviously, the translators could not use this name, obscure to the Western viewers, but they insert a blander and inappropriate term. | could not 说明译者受到的限制（西方观众不熟悉这个名称），insert 用一般现在时描述译文里的做法，评论译本时常用现在时；but 引出转折。 |
+| 76_43_p1 | B-01 | Clinical depression, or 'major depressive disorder', a state of extreme sadness or despair, is said to affect up to almost 20% of the population at some point in their lives prior to the age of 40. | up to almost 20% 中 up to 表示上限，almost 表示接近，合起来是“最多接近 20%”。 |
+
+### 保留前缀、改写说明（U2、A8，7 条）
+
+27_33_p2 A-03 改正缺陷理由；48_21_p3 K-02 等 5 条改为不断言唯一写法；ielts4_test4_p1 E-22 不再说 even though 后面一定要接完整分句。
+
+| 文章 | 句子 | 原句 | 现在的说明 |
+|---|---|---|---|
+| ielts4_test4_p1 | E-22 | "Many athletes are not getting the best nutrition, even though supplements," Yessis insists. | 原句问题：even though 后面一般接分句；这里只有名词 supplements，也不能按常规省略补出，说法不完整；可能的意思是 even though they take supplements（即使服用了补充剂），不宜模仿。 |
+| 27_33_p2 | A-03 | Most countries have some private schools for the children of the wealthy; England is able to more than triple the average number globally. | 原句问题：is able to more than triple the average number 字面意思是“能够使平均数增至三倍多”，按上下文要表达的是英国的私立学校数量是全球平均数的三倍多，规范说法是 England has more than three times the global average；triple 本身可以作动词。 |
+| 48_21_p3 | K-02 | Experts have surprisingly realized that animals have unconventional adaptation to global warming. | 原句问题：adaptation 前没有冠词、也不是复数：若指具体的适应方式，通常说 unconventional adaptations 或 an unconventional adaptation；若理解为不可数的“适应”，原句也说得通。 |
+| 50_30_p3 | B-03 | Banks want a quick sell on these places, Janet says. | 原句问题：a quick sell 把 sell 用作名词，是口语说法，书面语一般说 a quick sale（快速出售）。 |
+| 53_83_p1 | C-01 | M-Pesa's is simple. | 原句问题：M-Pesa's 后省略了名词，要靠上文才能补出（如 M-Pesa's system）；单独看这一句，意思不完整。 |
+| 62_44_p3 | C-05 | The smell is both the most evocative and subliminal sense. | 原句问题：The smell 一般指某种气味；表示“嗅觉”这种感官时，通常说 smell 或 the sense of smell，这里按嗅觉理解。 |
+| 65_69_p2 | E-05 | Thanks to the growth of agricultural productivity, reforestation and 're-wilding' has been under way in the industrial countries for generations. | 原句问题：主语是 reforestation 和 're-wilding' 两项，按两件事算，谓语应为 have been；作者也可能把两者当作同一个过程，才用了单数 has；has been under way 表示一项过程已经开展并持续至今。 |
+
+第十节的表是第七轮时的文字；这里列出的句子以本节为准。现在带前缀的说明共 251 条。
