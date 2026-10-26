@@ -1,0 +1,683 @@
+diff --git a/miniprogram/pages/student/home/index.js b/miniprogram/pages/student/home/index.js
+--- a/miniprogram/pages/student/home/index.js
++++ b/miniprogram/pages/student/home/index.js
+@@ -114,10 +114,11 @@
+                 return
+             }
+ 
+-            if (this.data.tasks[taskIndex].readOnly) {
++            if (this.data.tasks[taskIndex].readOnly || this.data.tasks[taskIndex].webPractice) {
+                 wx.removeStorageSync('activeTimer')
+                 getApp().globalData.activeTimer = null
+-                this.setData({ activeTimerId: null })
++                if (this.data.timerInterval) clearInterval(this.data.timerInterval)
++                this.setData({ activeTimerId: null, timerInterval: null })
+                 return
+             }
+ 
+@@ -583,6 +584,7 @@
+                 readingPassageNumber: t.reading_passage_number || null,
+                 readingToken: t.reading_token || '',
+                 readingUrl: t.reading_url || null,
++                webPractice: t.web_practice || null,
+                 timerStatus: 'idle',
+                 elapsedSeconds: actualSeconds,
+                 displayTime: this.formatTime(actualSeconds),
+@@ -603,10 +605,11 @@
+         })
+ 
+         const activeTimer = getApp().globalData.activeTimer
+-        if (activeTimer && tasks.some(task => task.id === activeTimer.taskId && task.readOnly)) {
++        if (activeTimer && tasks.some(task => task.id === activeTimer.taskId && (task.readOnly || task.webPractice))) {
+             wx.removeStorageSync('activeTimer')
+             getApp().globalData.activeTimer = null
+-            this.setData({ activeTimerId: null })
++            if (this.data.timerInterval) clearInterval(this.data.timerInterval)
++            this.setData({ activeTimerId: null, timerInterval: null })
+         }
+     },
+ 
+@@ -679,7 +682,7 @@
+         }
+         const taskId = e.currentTarget.dataset.id
+         const task = this.data.tasks.find(t => t.id === taskId)
+-        if (task && task.readOnly) {
++        if (task && (task.readOnly || task.webPractice)) {
+             // Historical completed tasks remain viewable through the generic
+             // detail page, which contains the saved result/teacher feedback.
+             // Future and expired tasks use the same read-only detail surface
+@@ -766,7 +769,7 @@
+     // Update timer display every second
+     updateTimerDisplay() {
+         const tasks = this.data.tasks.map(task => {
+-            if (!task.readOnly && task.id === this.data.activeTimerId && task.timerStatus === 'running') {
++            if (!task.readOnly && !task.webPractice && task.id === this.data.activeTimerId && task.timerStatus === 'running') {
+                 const elapsed = task.elapsedSeconds + 1
+                 const planned = task.planned_minutes * 60
+                 const isOvertime = elapsed > planned
+@@ -793,6 +796,10 @@
+         const taskId = e.currentTarget.dataset.id
+         if (!taskId) return
+         const task = this.data.tasks.find(item => item.id === taskId)
++        if (task && task.webPractice) {
++            wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
++            return
++        }
+         if (task && task.readOnly) {
+             wx.showToast({ title: task.statusText || task.availabilityLabel || '当前仅可查看', icon: 'none' })
+             return
+@@ -820,6 +827,10 @@
+ 
+         // Dictation Routing
+         const task = this.data.tasks.find(t => t.id === taskId)
++        if (task && task.webPractice) {
++            wx.navigateTo({ url: `/pages/student/task/index?id=${taskId}` })
++            return
++        }
+         if (task && task.readOnly) {
+             wx.showToast({ title: task.statusText || task.availabilityLabel || '当前仅可查看', icon: 'none' })
+             return
+@@ -942,7 +953,7 @@
+     pauseTimer(e) {
+         const taskId = e.currentTarget.dataset.id
+         const task = this.data.tasks.find(item => item.id === taskId)
+-        if (!task || task.readOnly) return
++        if (!task || task.readOnly || task.webPractice) return
+ 
+         if (this.data.timerInterval) {
+             clearInterval(this.data.timerInterval)
+@@ -963,7 +974,7 @@
+     resumeTimer(e) {
+         const taskId = e.currentTarget.dataset.id
+         const task = this.data.tasks.find(item => item.id === taskId)
+-        if (!task || task.readOnly) return
++        if (!task || task.readOnly || task.webPractice) return
+ 
+         // Restart interval
+         if (this.data.timerInterval) {
+@@ -992,7 +1003,7 @@
+         const taskId = e.currentTarget.dataset.id
+         const task = this.data.tasks.find(t => t.id === taskId)
+ 
+-        if (!task || task.readOnly) return
++        if (!task || task.readOnly || task.webPractice) return
+ 
+         try {
+             // Call backend to stop session - use miniprogram API
+diff --git a/miniprogram/pages/student/home/index.wxml b/miniprogram/pages/student/home/index.wxml
+--- a/miniprogram/pages/student/home/index.wxml
++++ b/miniprogram/pages/student/home/index.wxml
+@@ -97,6 +97,7 @@
+             <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
+             <view class="task-content">
+               <text class="task-name">{{item.task_name}}</text>
++              <text class="web-practice-note" wx:if="{{item.webPractice}}">去刷题网页练习</text>
+               <view class="task-sub">
+                 <text class="assigner-tag {{item.assignedByRole}}" wx:if="{{item.assignedByLabel}}">{{item.assignedByLabel}}</text>
+                 <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
+@@ -109,7 +110,7 @@
+           </view>
+         </view>
+ 
+-        <view class="timer-section" wx:if="{{!item.isDone && !item.readOnly}}">
++        <view class="timer-section" wx:if="{{!item.isDone && !item.readOnly && !item.webPractice}}">
+           <view class="timer-display {{item.timerStatus}}">
+             <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">{{item.displayTime}} / {{item.plannedTime}}</text>
+           </view>
+diff --git a/miniprogram/pages/student/home/index.wxss b/miniprogram/pages/student/home/index.wxss
+--- a/miniprogram/pages/student/home/index.wxss
++++ b/miniprogram/pages/student/home/index.wxss
+@@ -782,3 +782,10 @@
+     flex-direction: column;
+   }
+ }
++.web-practice-note {
++  display: block;
++  margin-top: 8rpx;
++  color: #20756f;
++  font-size: 24rpx;
++  line-height: 1.5;
++}
+diff --git a/miniprogram/pages/student/task/index.js b/miniprogram/pages/student/task/index.js
+--- a/miniprogram/pages/student/task/index.js
++++ b/miniprogram/pages/student/task/index.js
+@@ -46,6 +46,7 @@
+     },
+ 
+     checkTimer() {
++        if (this.data.task.web_practice) return
+         // Check if there's a running timer for this task
+         const activeTimer = app.globalData.activeTimer
+         if (activeTimer && activeTimer.taskId === this.data.taskId) {
+@@ -127,6 +128,19 @@
+         try {
+             const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
+             if (res.ok && res.task) {
++                if (res.task.web_practice) {
++                    this.stopTimerDisplay()
++                    if (app.globalData.activeTimer && app.globalData.activeTimer.taskId === this.data.taskId) {
++                        app.globalData.activeTimer = null
++                        wx.removeStorageSync('activeTimer')
++                    }
++                    this.setData({
++                        task: res.task,
++                        statusText: res.task.status_label || this.getStatusText(res.task.status),
++                        showAudio: false
++                    })
++                    return
++                }
+                 if (res.task.read_only) {
+                     this.stopTimerDisplay()
+                     const baseUrl = getApp().globalData.baseUrl
+@@ -269,8 +283,21 @@
+         return map[status] || '未知'
+     },
+ 
++    copyWebPracticeLink() {
++        const practice = this.data.task.web_practice
++        if (!practice || !practice.url) {
++            wx.showToast({ title: '练习链接暂不可用，请联系老师', icon: 'none' })
++            return
++        }
++        wx.setClipboardData({
++            data: practice.url,
++            success: () => wx.showToast({ title: '已复制，请在浏览器打开', icon: 'none' }),
++            fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' })
++        })
++    },
++
+     startRecord() {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         this.setData({ recording: true, recordDuration: 0 })
+         recorderManager.start({
+             duration: 600000, // 最长10分钟
+@@ -279,7 +306,7 @@
+     },
+ 
+     stopRecord() {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         this.setData({ recording: false })
+         recorderManager.stop()
+     },
+@@ -291,14 +318,14 @@
+     },
+ 
+     deleteAudio(e) {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         const index = e.currentTarget.dataset.index
+         const audioFiles = this.data.audioFiles.filter((_, i) => i !== index)
+         this.setData({ audioFiles })
+     },
+ 
+     chooseImage() {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         wx.chooseImage({
+             count: 9 - this.data.images.length,
+             sizeType: ['compressed'],
+@@ -320,13 +347,14 @@
+     },
+ 
+     deleteImage(e) {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         const index = e.currentTarget.dataset.index
+         const images = this.data.images.filter((_, i) => i !== index)
+         this.setData({ images })
+     },
+ 
+     pauseTimer() {
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning || this.data.timerPaused) return
+ 
+         // Clear interval
+@@ -343,6 +371,7 @@
+     },
+ 
+     resumeTimer() {
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning || !this.data.timerPaused) return
+ 
+         // Resume interval
+@@ -359,7 +388,7 @@
+     },
+ 
+     async stopTimer() {
+-        if (this.data.task.read_only) return
++        if (this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning) return
+ 
+         const res = await wx.showModal({
+@@ -407,6 +436,10 @@
+     },
+ 
+     async submitTask() {
++        if (this.data.task.web_practice) {
++            wx.showToast({ title: '请去刷题网页完成练习', icon: 'none' })
++            return
++        }
+         if (this.data.task.read_only) {
+             wx.showToast({ title: this.data.task.status_label || this.data.task.task_status_label || this.data.task.availability_label || '当前仅可查看', icon: 'none' })
+             return
+diff --git a/miniprogram/pages/student/task/index.wxml b/miniprogram/pages/student/task/index.wxml
+--- a/miniprogram/pages/student/task/index.wxml
++++ b/miniprogram/pages/student/task/index.wxml
+@@ -24,8 +24,16 @@
+     <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>
+   </view>
+ 
++  <view class="web-practice-card" wx:if="{{task.web_practice}}">
++    <text class="web-practice-title">去刷题网页练习</text>
++    <text class="web-practice-copy">{{task.web_practice.instruction || '请前往刷题网页练习，完成后结果会同步至家长端。'}}</text>
++    <text class="web-practice-copy">复制本任务链接，在电脑或平板浏览器打开，登录学生账号后完成练习。</text>
++    <button class="btn-submit" wx:if="{{task.web_practice.url}}" bindtap="copyWebPracticeLink">复制练习链接</button>
++    <text class="web-practice-copy" wx:else>练习链接暂不可用，请联系老师。</text>
++  </view>
++
+   <!-- Timer Display -->
+-  <view class="timer-card" wx:if="{{timerRunning && !task.read_only}}">
++  <view class="timer-card" wx:if="{{timerRunning && !task.read_only && !task.web_practice}}">
+     <view class="timer-header">
+       <text class="timer-icon">⏱️</text>
+       <text class="timer-label">当前计时</text>
+@@ -43,7 +51,7 @@
+ 
+ 
+   <!-- 学习材料区域 -->
+-  <view class="material-card" wx:if="{{task.material}}">
++  <view class="material-card" wx:if="{{task.material && !task.web_practice}}">
+     <view class="section-title">📚 学习材料</view>
+     
+     <!--
+@@ -132,7 +140,7 @@
+       </view>
+     </view>
+     
+-    <view class="info-row" wx:if="{{task.accuracy !== null}}">
++    <view class="info-row" wx:if="{{task.accuracy !== null && (!task.web_practice || task.web_practice.kind !== 'writing_practice')}}">
+       <text class="label">正确率</text>
+       <text class="value highlight">{{task.accuracy}}%</text>
+     </view>
+@@ -168,7 +176,7 @@
+   </view>
+ 
+   <!-- 图片上传区域 -->
+-  <view class="upload-section">
++  <view class="upload-section" wx:if="{{!task.web_practice}}">
+     <text class="section-title">📷 作业照片</text>
+     <view class="image-grid">
+       <view class="image-item" wx:for="{{images}}" wx:key="index">
+@@ -182,18 +190,18 @@
+   </view>
+ 
+   <!-- 备注 -->
+-  <view class="upload-section">
++  <view class="upload-section" wx:if="{{!task.web_practice}}">
+     <text class="section-title">💬 备注（可选）</text>
+     <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300" disabled="{{task.read_only || task.status === 'submitted' || task.status === 'completed'}}"></textarea>
+   </view>
+ 
+   <!-- 提交按钮 -->
+-  <view class="action-buttons" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">
++  <view class="action-buttons" wx:if="{{!task.web_practice && !task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">
+     <button class="btn-submit" bindtap="submitTask" disabled="{{submitting}}">
+       {{submitting ? '提交中...' : '提交任务'}}
+     </button>
+   </view>
+-  <view class="action-buttons" wx:elif="{{task.status === 'submitted'}}">
++  <view class="action-buttons" wx:elif="{{!task.web_practice && task.status === 'submitted'}}">
+     <button class="btn-submit" disabled>已提交，等待老师审核</button>
+   </view>
+ 
+diff --git a/miniprogram/pages/student/task/index.wxss b/miniprogram/pages/student/task/index.wxss
+--- a/miniprogram/pages/student/task/index.wxss
++++ b/miniprogram/pages/student/task/index.wxss
+@@ -510,3 +510,13 @@
+   color: #1F6C65;
+   transform: scale(0.98);
+ }
++.web-practice-card {
++  padding: 30rpx;
++  margin-bottom: 30rpx;
++  border-radius: 20rpx;
++  background: #eaf6f4;
++}
++.web-practice-title,
++.web-practice-copy { display: block; }
++.web-practice-title { color: #20756f; font-size: 30rpx; font-weight: 700; }
++.web-practice-copy { margin: 16rpx 0; color: #456c68; font-size: 26rpx; line-height: 1.6; }
+diff --git a/miniprogram/pages/parent/task-detail/index.js b/miniprogram/pages/parent/task-detail/index.js
+--- a/miniprogram/pages/parent/task-detail/index.js
++++ b/miniprogram/pages/parent/task-detail/index.js
+@@ -35,6 +35,27 @@
+     const hour = String(date.getHours()).padStart(2, '0')
+     const minute = String(date.getMinutes()).padStart(2, '0')
+     return `${month}-${day} ${hour}:${minute}`
++}
++
++const writingMetric = (value, suffix = '') => {
++    if (value === null || value === undefined || value === '') return '未留存'
++    const number = Number(value)
++    return Number.isFinite(number) && number >= 0 ? `${compactAccuracy(number)}${suffix}` : '未留存'
++}
++
++const normalizeWritingResult = (source, kind) => {
++    if (!source || !['writing_typing', 'writing_mother_topic'].includes(kind)) return null
++    const duration = Number(source.duration_seconds)
++    const hasDuration = source.duration_seconds !== null && source.duration_seconds !== undefined && Number.isFinite(duration) && duration >= 0
++    return {
++        ...source,
++        bandText: source.band ? `Band ${source.band}` : '未留存',
++        wordCountText: `${writingMetric(source.typed_word_count)} / ${writingMetric(source.target_word_count)}`,
++        speedText: writingMetric(source.speed_wpm, ' 词/分钟'),
++        durationText: hasDuration ? `${Math.floor(duration / 60)} 分 ${Math.floor(duration % 60)} 秒` : '未留存',
++        completedTimeText: formatAttemptTime(source.completed_at),
++        typedText: typeof source.typed_text === 'string' ? source.typed_text : ''
++    }
+ }
+ 
+ const normalizeAttemptOverview = (source) => {
+@@ -157,6 +178,9 @@
+                 : ''
+         }))
+         detail.showAccuracy = detail.accuracy !== null && detail.accuracy !== undefined
++        detail.accuracyLabel = detail.kind === 'writing_typing' ? '打字准确率' : '正确率'
++        detail.isWebPractice = ['writing_typing', 'writing_mother_topic', 'question_type_practice'].includes(detail.kind)
++        detail.writingResult = normalizeWritingResult(detail.writing_result, detail.kind)
+         detail.evidence = this.normalizeEvidence(detail.evidence)
+         detail.attemptOverview = normalizeAttemptOverview(detail.attempt_overview)
+         const summary = detail.summary || {}
+diff --git a/miniprogram/pages/parent/task-detail/index.wxml b/miniprogram/pages/parent/task-detail/index.wxml
+--- a/miniprogram/pages/parent/task-detail/index.wxml
++++ b/miniprogram/pages/parent/task-detail/index.wxml
+@@ -23,12 +23,42 @@
+       </view>
+       <view class="score-row" wx:if="{{detail.showAccuracy}}">
+         <text class="score-value">{{detail.accuracy}}%</text>
+-        <text class="score-label">正确率</text>
++        <text class="score-label">{{detail.accuracyLabel}}</text>
+       </view>
+       <text class="summary-copy">{{detail.summary_text}}</text>
+     </view>
+ 
+-    <view class="summary-card" wx:if="{{detail.summary.assigned_total || detail.summary.pending_total}}">
++    <view class="writing-result-card" wx:if="{{detail.writingResult}}">
++      <text class="section-title">{{detail.kind === 'writing_typing' ? '写作打字练习结果' : '母题学习记录'}}</text>
++      <view class="writing-metrics">
++        <block wx:if="{{detail.kind === 'writing_typing'}}">
++          <view class="summary-item">
++            <text class="writing-metric-value">{{detail.writingResult.bandText}}</text>
++            <text class="summary-label">练习范文档位</text>
++          </view>
++          <view class="summary-item">
++            <text class="writing-metric-value">{{detail.writingResult.wordCountText}}</text>
++            <text class="summary-label">已输入 / 目标词数</text>
++          </view>
++          <view class="summary-item">
++            <text class="writing-metric-value">{{detail.writingResult.speedText}}</text>
++            <text class="summary-label">打字速度</text>
++          </view>
++        </block>
++        <view class="summary-item">
++          <text class="writing-metric-value">{{detail.writingResult.durationText}}</text>
++          <text class="summary-label">练习用时</text>
++        </view>
++      </view>
++      <text class="writing-result-note" wx:if="{{detail.writingResult.completedTimeText}}">完成于 {{detail.writingResult.completedTimeText}}</text>
++      <text class="writing-result-note" wx:if="{{detail.kind === 'writing_typing'}}">范文档位是练习材料的等级；打字准确率反映输入与范文的一致程度，不是学生的雅思写作成绩。</text>
++      <view class="writing-text-block" wx:if="{{detail.kind === 'writing_typing'}}">
++        <text class="answer-label">学生输入原文</text>
++        <text class="writing-typed-text" user-select>{{detail.writingResult.typedText || '本次未输入文字'}}</text>
++      </view>
++    </view>
++
++    <view class="summary-card" wx:if="{{detail.kind !== 'writing_typing' && detail.kind !== 'writing_mother_topic' && (detail.summary.assigned_total || detail.summary.pending_total)}}">
+       <view class="summary-grid">
+         <view class="summary-item" wx:for="{{summaryMetrics}}" wx:key="label">
+           <text class="summary-value">{{item.value}}</text>
+@@ -166,9 +196,9 @@
+ 
+     <view class="empty-filter" wx:elif="{{detail.items.length}}">该分类下暂无记录</view>
+ 
+-    <view class="submission-card" wx:if="{{!detail.items.length}}">
+-      <text class="submission-title">本次暂无逐题记录</text>
+-      <text class="submission-copy">这类任务以作业提交或老师批改为主，可查看下方提交材料和反馈。</text>
++    <view class="submission-card" wx:if="{{!detail.items.length && !detail.writingResult}}">
++      <text class="submission-title">{{detail.isWebPractice ? '练习记录' : '本次暂无逐题记录'}}</text>
++      <text class="submission-copy">{{detail.isWebPractice ? detail.summary_text : '这类任务以作业提交或老师批改为主，可查看下方提交材料和反馈。'}}</text>
+     </view>
+ 
+     <view class="evidence-section" wx:if="{{detail.evidence.image.length || detail.evidence.audio.length}}">
+diff --git a/miniprogram/pages/parent/task-detail/index.wxss b/miniprogram/pages/parent/task-detail/index.wxss
+--- a/miniprogram/pages/parent/task-detail/index.wxss
++++ b/miniprogram/pages/parent/task-detail/index.wxss
+@@ -8,6 +8,7 @@
+ 
+ .hero-card,
+ .summary-card,
++.writing-result-card,
+ .attempt-overview-card,
+ .note-card,
+ .detail-card,
+@@ -27,6 +28,18 @@
+   padding: 30rpx;
+ }
+ 
++.writing-result-card { padding: 28rpx; }
++.writing-metrics {
++  display: grid;
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++  gap: 28rpx 16rpx;
++  margin: 26rpx 0;
++}
++.writing-metric-value { display: block; color: #20756f; font-size: 28rpx; font-weight: 700; }
++.writing-result-note { display: block; margin-top: 16rpx; color: #758188; font-size: 23rpx; line-height: 1.7; }
++.writing-text-block { margin-top: 24rpx; padding-top: 24rpx; border-top: 1rpx solid #eef2f2; }
++.writing-typed-text { display: block; margin-top: 12rpx; color: #314148; font-size: 26rpx; line-height: 1.8; white-space: pre-wrap; word-break: break-word; }
++
+ .hero-meta,
+ .hero-status-row,
+ .detail-head,
+diff --git a/miniprogram/pages/parent/home/index.wxml b/miniprogram/pages/parent/home/index.wxml
+--- a/miniprogram/pages/parent/home/index.wxml
++++ b/miniprogram/pages/parent/home/index.wxml
+@@ -183,7 +183,7 @@
+             <view class="feed-footer">
+               <view class="feed-result-summary" wx:if="{{item.result_summary}}">{{item.result_summary}}</view>
+               <view class="feed-score" wx:if="{{item.accuracy !== null}}">
+-                正确率 <text class="highlight">{{item.accuracy}}%</text>
++                {{item.result_kind === 'writing_typing' ? '打字准确率' : '正确率'}} <text class="highlight">{{item.accuracy}}%</text>
+               </view>
+               <view class="feed-score" wx:elif="{{item.completion_rate !== null}}">
+                 完成率 <text class="highlight">{{item.completion_rate}}%</text>
+diff --git a/tests/test_web_practice_client.js b/tests/test_web_practice_client.js
+--- /dev/null
++++ b/tests/test_web_practice_client.js
+@@ -0,0 +1,184 @@
++const assert = require('node:assert/strict')
++const fs = require('node:fs')
++const path = require('node:path')
++const test = require('node:test')
++const vm = require('node:vm')
++
++const ROOT = path.resolve(__dirname, '..')
++const PRACTICES = ['writing_practice', 'question_type_practice']
++
++function loadPage(pageName, response = {}) {
++    let definition
++    const calls = { requests: [], navigation: [], clipboard: [], toasts: [], removed: [], cleared: [], intervals: 0, chooseImage: 0, recordings: 0 }
++    const app = { globalData: { baseUrl: 'https://studytracker.xin', guestMode: false, activeTimer: null } }
++    const recorder = { onStop() {}, start() { calls.recordings++ }, stop() {} }
++    const audio = { onPlay() {}, onPause() {}, onStop() {}, onEnded() {}, onError() {}, destroy() {} }
++    const sandbox = {
++        console: { log() {}, error() {} }, Date, Promise,
++        getApp: () => app,
++        Page: value => { definition = value },
++        setInterval: () => { calls.intervals++; return 99 },
++        clearInterval: id => calls.cleared.push(id),
++        setTimeout: () => 1,
++        clearTimeout() {},
++        require: name => {
++            if (name.endsWith('/utils/request.js')) return { request: async (url, options) => { calls.requests.push({ url, options }); return response } }
++            if (name.endsWith('/utils/demo-data.js')) return { buildStudentTasks: () => [], buildParentTaskDetail: () => ({}) }
++            if (name.endsWith('/utils/subscribe.js')) return { getSubscribeSummary: async () => ({}), requestTemplateSubscribe: async () => ({}) }
++            throw new Error(`Unexpected require ${name}`)
++        },
++        wx: {
++            navigateTo: options => calls.navigation.push(options.url),
++            redirectTo: options => calls.navigation.push(options.url),
++            getStorageSync: () => null,
++            setStorageSync() {},
++            removeStorageSync: key => calls.removed.push(key),
++            showToast: value => calls.toasts.push(value.title),
++            showLoading() {}, hideLoading() {}, stopPullDownRefresh() {},
++            showModal: async () => ({ confirm: true }),
++            getRecorderManager: () => recorder,
++            createInnerAudioContext: () => audio,
++            chooseImage: () => calls.chooseImage++,
++            setClipboardData: options => { calls.clipboard.push(options.data); options.success() }
++        }
++    }
++    const file = path.join(ROOT, `miniprogram/pages/${pageName}/index.js`)
++    vm.runInNewContext(fs.readFileSync(file, 'utf8'), sandbox, { filename: file })
++    const page = Object.assign({}, definition)
++    page.data = JSON.parse(JSON.stringify(definition.data))
++    page.setData = function (values, callback) { Object.assign(this.data, values); if (callback) callback() }
++    return { page, calls, app }
++}
++
++function practice(kind) {
++    return { kind, label: '网页练习', instruction: '请前往刷题网页练习，完成后结果会同步至家长端。', url: kind === 'writing_practice' ? 'https://studytracker.xin/writing/t1-001?task_id=42' : 'https://studytracker.xin/practice/question-types/task/42?token=synthetic' }
++}
++
++function task(kind, extra = {}) {
++    return { id: 42, date: '2026-10-26', task_name: '合成练习', module: '雅思写作', status: 'pending', planned_minutes: 20, web_practice: practice(kind), ...extra }
++}
++
++for (const kind of PRACTICES) {
++    test(`${kind}: home preserves website binding and opens instructions without generic timer`, async () => {
++        const { page, calls } = loadPage('student/home')
++        page.data.currentDate = '2026-10-26'
++        page.applyTaskData([task(kind)])
++        assert.equal(page.data.tasks[0].webPractice.url, practice(kind).url)
++        const event = { currentTarget: { dataset: { id: 42 } } }
++        page.goToTaskDetail(event)
++        await page.startTimer(event)
++        page.startSpellTask(event)
++        assert.deepEqual(calls.navigation, Array(3).fill('/pages/student/task/index?id=42'))
++        assert.equal(calls.requests.length, 0)
++        assert.equal(calls.intervals, 0)
++    })
++
++    test(`${kind}: detail copies the exact assignment and blocks ordinary upload / submit / timer`, async () => {
++        const source = task(kind)
++        const { page, calls, app } = loadPage('student/task', { ok: true, task: source })
++        page.data.taskId = 42
++        page.data.timerInterval = 77
++        app.globalData.activeTimer = { taskId: 42, startTime: Date.now() }
++        await page.fetchTaskDetail()
++        assert.equal(page.data.task.web_practice.url, source.web_practice.url)
++        assert.equal(app.globalData.activeTimer, null)
++        assert.equal(page.data.timerRunning, false)
++        assert.ok(calls.cleared.includes(77))
++        assert.equal(calls.navigation.length, 0)
++        page.copyWebPracticeLink()
++        assert.deepEqual(calls.clipboard, [source.web_practice.url])
++        page.chooseImage()
++        page.startRecord()
++        page.checkTimer()
++        await page.stopTimer()
++        await page.submitTask()
++        assert.equal(calls.chooseImage, 0)
++        assert.equal(calls.recordings, 0)
++        assert.equal(calls.intervals, 0)
++        assert.deepEqual(calls.requests.map(row => row.url), ['/miniprogram/student/tasks/42'])
++    })
++}
++
++test('home clears a saved generic timer when the assignment is a website task', () => {
++    const { page, app, calls } = loadPage('student/home')
++    app.globalData.activeTimer = { taskId: 42, startTime: Date.now(), sessionId: 9 }
++    page.data.timerInterval = 7
++    page.applyTaskData([task('writing_practice')])
++    page.restoreTimerIfNeeded()
++    assert.equal(app.globalData.activeTimer, null)
++    assert.equal(page.data.timerInterval, null)
++    assert.ok(calls.cleared.includes(7))
++    assert.equal(calls.intervals, 0)
++})
++
++test('missing website links remain guarded and future / expired task access stays read only', async () => {
++    for (const status of ['future', 'expired']) {
++        const source = task('writing_practice', { read_only: true, availability_status: status })
++        source.web_practice.url = null
++        const { page, calls } = loadPage('student/task', { ok: true, task: source })
++        page.data.taskId = 42
++        await page.fetchTaskDetail()
++        assert.equal(page.data.task.read_only, true)
++        page.copyWebPracticeLink()
++        await page.submitTask()
++        assert.equal(calls.clipboard.length, 0)
++        assert.equal(calls.requests.length, 1)
++        assert.ok(calls.toasts.includes('练习链接暂不可用，请联系老师'))
++    }
++})
++
++test('ordinary reading tasks keep their native practice route', () => {
++    const { page, calls } = loadPage('student/home')
++    page.applyTaskData([{ id: 7, module: '阅读', task_name: '剑雅阅读', status: 'pending', reading_test_id: 'ielts21_test1', reading_token: 'synthetic', planned_minutes: 20 }])
++    page.goToTaskDetail({ currentTarget: { dataset: { id: 7 } } })
++    assert.equal(calls.navigation[0], '/pages/student/reading/cambridge/index?taskId=7&token=synthetic')
++})
++
++test('parent typing results retain genuine zero accuracy, raw text and measured metrics', () => {
++    const { page } = loadPage('parent/task-detail')
++    page.applyDetail({ kind: 'writing_typing', accuracy: 0, summary: {}, items: [], writing_result: { band: '7', typed_word_count: 2, target_word_count: 200, speed_wpm: 1.5, duration_seconds: 80, completed_at: '2026-10-26T03:00:00', typed_text: 'wrong words' } })
++    assert.equal(page.data.detail.showAccuracy, true)
++    assert.equal(page.data.detail.accuracyLabel, '打字准确率')
++    assert.equal(page.data.detail.accuracy, 0)
++    assert.equal(page.data.detail.writingResult.wordCountText, '2 / 200')
++    assert.equal(page.data.detail.writingResult.speedText, '1.5 词/分钟')
++    assert.equal(page.data.detail.writingResult.durationText, '1 分 20 秒')
++    assert.equal(page.data.detail.writingResult.bandText, 'Band 7')
++    assert.equal(page.data.detail.writingResult.typedText, 'wrong words')
++})
++
++test('parent unfinished and legacy tasks do not invent metrics or a zero score', () => {
++    const { page } = loadPage('parent/task-detail')
++    for (const kind of ['writing_typing', 'writing_mother_topic', 'question_type_practice']) {
++        page.applyDetail({ kind, accuracy: null, summary: {}, items: [], writing_result: null, summary_text: '暂无已提交的练习结果' })
++        assert.equal(page.data.detail.showAccuracy, false)
++        assert.equal(page.data.detail.writingResult, null)
++        assert.equal(page.data.detail.isWebPractice, true)
++    }
++    page.applyDetail({ kind: 'writing_mother_topic', accuracy: null, summary: {}, items: [], writing_result: { duration_seconds: 120, completed_at: '2026-10-26T03:00:00' } })
++    assert.equal(page.data.detail.showAccuracy, false)
++    assert.equal(page.data.detail.writingResult.durationText, '2 分 0 秒')
++})
++
++test('parent question-type results retain submitted answers and wrong-answer filtering', () => {
++    const { page } = loadPage('parent/task-detail')
++    page.applyDetail({ kind: 'question_type_practice', accuracy: 50, summary: { assigned_total: 2, attempted_total: 2, correct_total: 1, wrong_total: 1 }, items: [{ id: 'q1', number: 1, student_answer: 'A', correct_answer: 'B', result_status: 'wrong' }, { id: 'q2', number: 2, student_answer: 'C', correct_answer: 'C', result_status: 'correct' }] })
++    page.setFilter({ currentTarget: { dataset: { filter: 'wrong' } } })
++    assert.equal(page.data.detail.accuracyLabel, '正确率')
++    assert.equal(page.data.visibleItems.length, 1)
++    assert.equal(page.data.visibleItems[0].student_answer, 'A')
++    assert.equal(page.data.visibleItems[0].correct_answer, 'B')
++})
++
++test('templates expose website guidance and distinguish model band from student score', () => {
++    const read = name => fs.readFileSync(path.join(ROOT, `miniprogram/pages/${name}/index.wxml`), 'utf8')
++    assert.ok(read('student/home').includes('去刷题网页练习'))
++    assert.ok(read('student/task').includes('复制练习链接'))
++    const parent = read('parent/task-detail')
++    assert.ok(parent.includes('练习范文档位'))
++    assert.ok(parent.includes('不是学生的雅思写作成绩'))
++    assert.ok(parent.includes('学生输入原文'))
++    const parentHome = read('parent/home')
++    assert.ok(parentHome.includes("item.result_kind === 'writing_typing' ? '打字准确率' : '正确率'"))
++    assert.ok(parentHome.includes('wx:if="{{item.accuracy !== null}}"'))
++})

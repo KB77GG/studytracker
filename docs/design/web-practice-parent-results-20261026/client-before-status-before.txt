@@ -1,0 +1,111 @@
+## codex/miniprogram-release...origin/main [behind 61]
+ M api/miniprogram.py
+ M api/practice_history.py
+ M design-qa.md
+ M docs/CODEX_HANDOFF.md
+ M docs/WORKLOG.md
+ M miniprogram/app.wxss
+ M miniprogram/components/vocabulary-feedback-card/index.js
+ M miniprogram/components/vocabulary-feedback-card/index.wxml
+ M miniprogram/components/vocabulary-feedback-card/index.wxss
+ M miniprogram/pages/index/index.js
+ M miniprogram/pages/index/index.wxss
+ M miniprogram/pages/parent/task-detail/index.js
+ M miniprogram/pages/parent/task-detail/index.wxml
+ M miniprogram/pages/parent/task-detail/index.wxss
+ M miniprogram/pages/student/dictation/practice/index.js
+ M miniprogram/pages/student/dictation/practice/index.wxml
+ M miniprogram/pages/student/dictation/practice/index.wxss
+ M miniprogram/pages/student/dictation/review/index.wxss
+ M miniprogram/pages/student/dictation/spell/index.js
+ M miniprogram/pages/student/dictation/spell/index.wxml
+ M miniprogram/pages/student/dictation/spell/index.wxss
+ M miniprogram/pages/student/hammer/index.js
+ M miniprogram/pages/student/hammer/index.wxml
+ M miniprogram/pages/student/hammer/index.wxss
+ M miniprogram/pages/student/home/index.js
+ M miniprogram/pages/student/home/index.wxml
+ M miniprogram/pages/student/home/index.wxss
+ M miniprogram/pages/student/listening/cambridge/index.js
+ M miniprogram/pages/student/listening/cambridge/index.wxml
+ M miniprogram/pages/student/listening/cambridge/index.wxss
+ M miniprogram/pages/student/listening/practice/index.js
+ M miniprogram/pages/student/listening/practice/index.wxml
+ M miniprogram/pages/student/listening/practice/index.wxss
+ M miniprogram/pages/student/material-choice/practice/index.js
+ M miniprogram/pages/student/material-choice/practice/index.wxml
+ M miniprogram/pages/student/material-choice/practice/index.wxss
+ M miniprogram/pages/student/reading/cambridge/index.js
+ M miniprogram/pages/student/reading/cambridge/index.wxml
+ M miniprogram/pages/student/reading/cambridge/index.wxss
+ M miniprogram/pages/student/speaking/practice/index.js
+ M miniprogram/pages/student/speaking/practice/index.wxml
+ M miniprogram/pages/student/speaking/practice/index.wxss
+ M miniprogram/pages/student/task/index.js
+ M miniprogram/pages/student/task/index.wxml
+ M miniprogram/pages/student/task/index.wxss
+ M miniprogram/pages/student/vocabulary-learning/index.js
+ M miniprogram/pages/student/vocabulary-learning/index.wxml
+ M miniprogram/pages/student/vocabulary-learning/index.wxss
+ M miniprogram/pages/student/vocabulary-review/index.js
+ M miniprogram/pages/student/vocabulary-review/index.wxml
+ M miniprogram/pages/student/vocabulary-review/index.wxss
+ M miniprogram/pages/teacher/feedback/index.wxss
+ M miniprogram/pages/teacher/grading/index.wxss
+ M miniprogram/pages/teacher/home/index.wxss
+ M miniprogram/pages/teacher/homework/index.js
+ M miniprogram/pages/teacher/homework/index.wxml
+ M miniprogram/pages/teacher/homework/index.wxss
+ M miniprogram/pages/teacher/students/index.wxss
+ M miniprogram/utils/demo-data.js
+ M miniprogram/utils/dictation-audio.js
+ M miniprogram/utils/request.js
+ M miniprogram/utils/vocabulary-feedback.js
+ M miniprogram/utils/vocabulary-interaction.js
+ M services/listening_training.py
+ M services/vocabulary_autonomous_review.py
+ M templates/tasks.html
+ M tests/test_dictation_audio.js
+ M tests/test_listening_cloze_progress_api.py
+ M tests/test_listening_practice_client.js
+ M tests/test_listening_training_mode.py
+ M tests/test_miniprogram_parent_report.py
+ M tests/test_miniprogram_task_visibility.py
+ M tests/test_miniprogram_vocabulary_learning.py
+ M tests/test_vocabulary_autonomous_review.py
+ M tests/test_vocabulary_feedback.js
+?? docs/vocabulary-performance-after.json
+?? docs/vocabulary-performance-before.json
+?? docs/vocabulary-performance-client-after.json
+?? docs/vocabulary-production-diagnostic.json
+?? miniprogram/images/icons/vocabulary-check-outline.svg
+?? miniprogram/images/icons/vocabulary-flag-outline.svg
+?? miniprogram/images/icons/vocabulary-speaker-wave-outline.svg
+?? miniprogram/images/icons/vocabulary-speaker-wave-white.svg
+?? miniprogram/images/icons/vocabulary-xmark-outline.svg
+?? miniprogram/styles/vocabulary-forgot.wxss
+?? miniprogram/styles/vocabulary-theme.wxss
+?? miniprogram/utils/listening-segment-audio.js
+?? miniprogram/utils/vocabulary-forgot.js
+?? miniprogram/utils/vocabulary-performance.js
+?? miniprogram/utils/vocabulary-review-normalize.js
+?? miniprogram/utils/vocabulary-review-submit.js
+?? scripts/benchmark_vocabulary_review.py
+?? scripts/benchmark_vocabulary_review_client.js
+?? scripts/check_miniprogram_no_undef.sh
+?? services/practice_attempt_reporting.py
+?? tests/test_listening_practice_races.js
+?? tests/test_listening_segment_audio.js
+?? tests/test_miniprogram_input_visibility.py
+?? tests/test_miniprogram_task_date_gate_release.py
+?? tests/test_miniprogram_teacher_attempt_history.py
+?? tests/test_staff_attempt_history.py
+?? tests/test_student_home_grace_client.js
+?? tests/test_vocabulary_forgot_client.js
+?? tests/test_vocabulary_learning_client.js
+?? tests/test_vocabulary_numeric_client.js
+?? tests/test_vocabulary_review_navigation.js
+?? tests/test_vocabulary_review_performance.js
+?? tests/test_vocabulary_review_performance.py
+?? tests/test_vocabulary_review_submit.js
+?? "\345\260\217\347\250\213\345\272\217\344\270\212\344\274\240\350\257\264\346\230\216.md"

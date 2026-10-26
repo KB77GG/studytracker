@@ -1,8 +1,29 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-25 模考成绩明细入口已提交、推送并上线，线上首屏和逐题复盘验收通过；数字听写既有发布状态见下文。
+> 最近更新：2026-10-26；网页练习与家长结果后台80f215b5已提交、推送、部署并验收；小程序仍待用户重新上传、提审和发布。
 
+
+## 2026-10-26 网页练习与家长结果后台已部署，小程序待用户重新发布
+
+- 用户明确授权“部署上线吧，我还需要重新发布小程序对吗”。业务提交 **`80f215b5b94a90e592c4669c2bee41f7c55eb562`** 已非强制原子推送 `main` 和 `codex/web-practice-parent-results`。范围仅5运行文件+3测试，backend SHA与上轮审阅完全一致；无models/schema/依赖/生产配置变更。后端本轮正式生效，小程序不会随push自动更新。
+- 实施树 `/Users/zhouxin/.codex/worktrees/web-practice-parent-results/studytracker`，分支`codex/web-practice-parent-results`，从65f18596推进至业务80f215b5；随后本两交接及 `docs/design/web-practice-parent-results-20261026/`（含本任务前端增量、manifest、验收/部署报告、只读探针）以独立 `[skip ci]` 文档提交同步，最终文档HEAD以`git log -1`为准，不重复部署。开工6 modified/6 untracked入口均为前轮任务；同步完成后只有`.tmp/`原文冻结与临时验证仍未跟踪，仅本机，无未提交业务源码。
+- [main CI40328912509](https://github.com/KB77GG/studytracker/actions/runs/40328912509)、[分支CI40328912836](https://github.com/KB77GG/studytracker/actions/runs/40328912836)、[Deploy40328912486](https://github.com/KB77GG/studytracker/actions/runs/40328912486) 均success，test与拼写门禁通过；仓库advisory Ruff仍有既有failure，目标Ruff通过。发布前主回归172 passed/31subtests、CI同款68 tests OK，独立40 passed/23subtests、5运行文件SHA复核GO。
+- 生产 `/root/apps/studytracker` 实际HEAD80f215b5、tracked clean，五运行文件SHA与审阅逐字相同。服务自**2026-10-26 21:15:23 CST** active/running，NRestarts0，`127.0.0.1:5002 / workers=1 / gthread / threads=6`保持；回环/公网login200、未认证parent API401、部署后warning以上journal0。生产Python3.10两测试模块使用合成内存SQLite **20 tests OK**；没有真实学生写入。
+- 独立真实库只读探针 `mode=ro+query_only`：写作/专项各1条有active parent link既有任务，家长GET均200、kind/summary正确、无可写token；未绑定家长均403。选定Task/attempt原列前后SHA一致；student GET=0、POST=0，未上传脚本、未读生产密钥、未import app.py或运行重模型推理。部署走既有自动脚本（含7个原有迁移步骤），本功能无新迁移，没有手工生产SQL或旧成绩回填。精确命令/范围/结果见[部署报告](design/web-practice-parent-results-20261026/DEPLOYMENT.md)。
+- 固定小程序树仍 `/Users/zhouxin/Desktop/studytracker-release`、`codex/miniprogram-release@d03a2749eb99cde041cdae18305b624956d46e90`，76 modified/35 untracked入口原样保留；本轮11目标SHA和补丁反向检查再次一致，Node窄集11/11。**小程序源码未commit/push、未上传/提审/发布**，实际修改仍仅本机；本任务增量patch随后台文档同步可跨电脑取得，但不等于完整小程序发布包。唯一上传目录 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`，AppID `wx75cdd8fc1ca68c69`、root `./`。
+- 桌面旧资料树仍 `/Users/zhouxin/Desktop/studytracker`、`main@6ded77d24586327ad94e151e172ae4811b4a2eed`，7 modified/22 untracked入口；本轮仅两份交接，原业务/数据/素材未改，不用于发布。发布业务完成时本地origin/main=80f215b5，旧主树behind84、固定树behind62；后续文档提交再推进远端，不改这两个树的HEAD。
+- **下一步**：后端无需再部署。用户从固定目录上传体验版，核写作/听力专项/阅读专项→网页完成→家长结果，再提审发布；完整GUI/真机/新客户端线上联调仍未验，旧精听250ms限制继续保留。部署前已打开、未绑定的旧打字attempt需刷新从原任务重新开始，localStorage草稿保留而旧用时不继承；旧历史无绑定继续只显示原Task结果及明细缺失提示，不猜测归属。微信提醒送达依赖订阅授权。没有任何小程序已上线的证据。
+
+## 2026-10-26 网页写作/题型练习本机验收（发布前记录，后台现已上线）
+
+- 生产只读核实已有后台 `/tasks`「写作练习」可布置真题打字/母题，题型专项同样已有布置入口；生产HEAD `aa394ef09da2e1e84d71df71dc6b5439ee436857`、tracked clean、service active，四个相关文件SHA与最新主线一致。创建任务沿现有微信订阅提醒逻辑，送达依赖授权。本轮没有给真实学生布置/提交/推送消息，也没有生产SQL、迁移或重启。
+- 本轮新增：学生小程序首页/详情明确「去刷题网页练习」，可复制绑定任务链接；禁止两类任务走普通计时/上传/提交，服务端Task与PlanItem备用路径也拦截。写作start持久绑定attempt到Task快照，阻止同题旧记录串新任务及并发覆盖；母题保存完成时长。家长报告及近况读取打字准确率、词数/速度/用时/原文，题型专项读取保存的逐题答案/判定，保留多选部分分和真实0分；未提交不显示默认0分或泄漏答案，范文Band不当学生雅思成绩。旧写作无绑定只显示已有Task结果并注明明细缺失，不猜测最近记录。
+- **后端实施树** `/Users/zhouxin/.codex/worktrees/web-practice-parent-results/studytracker`，`codex/web-practice-parent-results@65f1859683c94ef41c938319515702e12709e96c`，从fetch后的origin/main建立，开工clean。当前6 modified：`api/miniprogram.py`、`api/writing_library.py`、`services/writing_assignments.py`、`tests/test_writing_library_routes.py`、本两交接；6 untracked入口：`services/web_practice_tasks.py`、`services/web_practice_reporting.py`、`tests/test_miniprogram_web_practice.py`、`tests/test_parent_web_practice_report.py`、`docs/design/web-practice-parent-results-20261026/`（审阅/补丁/哈希）、`.tmp/`（发布树原文冻结/本轮验证）。五个运行文件SHA保存在审阅目录。无schema变更，无新迁移。
+- **固定小程序树** `/Users/zhouxin/Desktop/studytracker-release`，`codex/miniprogram-release@d03a2749eb99cde041cdae18305b624956d46e90`、本地origin/main behind61；原75 modified/34 untracked入口，现76/35。仅叠加学生home/task三文件、家长task-detail三文件、家长home WXML共10前端文件，新增 `tests/test_web_practice_client.js`，另滚动更新两份交接。原精听/数字/词汇改动不变；更新交接前101无关脏文件SHA全部一致。完整原dirty路径与SHA、目标原文见后端树 `.tmp/client-before/`，可交接的清单/增量patch在审阅目录，禁止把旧固定树后端代码当本轮后端。
+- **桌面资料树** `/Users/zhouxin/Desktop/studytracker` 保持 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，fetch后behind83，仍7 modified/22 untracked入口；既有业务/数据/素材全部保留，本轮只滚动两份交接。原modified/untracked路径用途见本文件历史基线及现git status，未pull/切分支。三个树成果必须分开看。
+- 验证：后端13测试文件组合 **172 passed/31 subtests**；覆盖真实网页start/finish/专项submit→家长API、权限/隔离、绑定重放/并发、日期门禁、Task/PlanItem别名写入禁止。独立复审复现并关闭PlanItem备用入口绕过，最后独立20 passed/23subtests无新阻断。小程序实际固定树Node **185/185**，最终家长首页一行标签追加后窄集 **11/11**；3JS语法、4WXML官方编译、整包WXSS、Ruff、Python3.10语法及diff检查通过。所有精确命令、计数、SHA和限制见[本轮验收记录](/Users/zhouxin/.codex/worktrees/web-practice-parent-results/studytracker/docs/design/web-practice-parent-results-20261026/README.md)；后端组合必须在实施树用主资料树`.venv/bin/python`、`TZ=UTC`运行，不能用旧发布树后端替代。
+- **发布/下一步**：本轮全部仅本机可见，未commit/push/deploy，未上传/提审/发布小程序；已有生产功能仍是aa394ef0。本轮未验证完整微信GUI、真机或新后端线上联调，旧精听250ms模型问题仍保留，不能宣称整包已正式验收。先获用户明确发布授权，核最新远端后发布本轮后端，再从唯一固定小程序目录编译/真机验写作、听力/阅读专项和家长结果，由用户手动上传发布。没有新增数据库迁移需求；不要回填旧写作关联或把自主练习猜成某次布置成绩。
 
 ## 2026-10-25 模考成绩明细入口已部署
 

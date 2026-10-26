@@ -1,0 +1,62 @@
+{
+  "root": "/Users/zhouxin/Desktop/studytracker-release",
+  "head": "d03a2749eb99cde041cdae18305b624956d46e90",
+  "targets": {
+    "miniprogram/pages/student/home/index.js": "42a97ba0dfff320f01bf17fb6b649b17972431c04965ba29c8801970b996d10e",
+    "miniprogram/pages/student/home/index.wxml": "1dbd19d1308a744c819ee1f66e5058ce33eec2ba2497682947be55b0b85e5e6b",
+    "miniprogram/pages/student/home/index.wxss": "64f3619ef8ee50775f1277a99d5b3bb67a46afb6cf40f842d2264c0f18d3d0d6",
+    "miniprogram/pages/student/task/index.js": "cc468d0aa25b2b148c56fc0fe5a0d19d21bbd6cc0e57cf29058cc1df92da3b09",
+    "miniprogram/pages/student/task/index.wxml": "f3d7794772a497aaa2c12961c850f21e7e8b08bcc9881d243b7c1c7150042f8a",
+    "miniprogram/pages/student/task/index.wxss": "32f0bdd162c6cca485ec112c7078b13ce62759580bf36f9e67173320ff120429",
+    "miniprogram/pages/parent/task-detail/index.js": "d7e76ecdb9b8cd7172a082c1b9e26181efe9f9b59b5f033c6d2fcc0f544ce8c5",
+    "miniprogram/pages/parent/task-detail/index.wxml": "c1cd1a2cf47a2faf869ded7b87a6481c84df5b60ee4e09144bf4003f5653e70b",
+    "miniprogram/pages/parent/task-detail/index.wxss": "189d4faadd2efef2401693f1e1cc3386ed7fd1722d09bf08de2575a708c480d3",
+    "miniprogram/pages/parent/home/index.wxml": "b07668831a859944bc2d23e953224a2929105195d7746527a3af96736a2e75c5",
+    "tests/test_web_practice_client.js": "9a66871e39660a764f8af089b392296fc9e3d069b8090998803fdc550cff2931"
+  },
+  "unchanged_unrelated_dirty_files": 101,
+  "unexpected_changed_dirty_files": [],
+  "node_test_command": "node --test tests/*.js",
+  "node_tests_passed": 185,
+  "node_tests_failed": 0,
+  "node_behavior_command": "node --test tests/test_web_practice_client.js",
+  "node_behavior_tests_passed": 11,
+  "syntax": "node --check on 3 changed page JS passed",
+  "wxml": "wcc -o /dev/null on 3 changed page WXML passed",
+  "wxss": "rg --files miniprogram -g *.wxss -0 | xargs -0 wcsc -lc -o /dev/null passed",
+  "diff_check": "git diff --check passed",
+  "not_verified": [
+    "WeChat GUI full project compile",
+    "iOS/Android physical devices",
+    "online backend integration"
+  ],
+  "published": false,
+  "wxml_compiler": "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc",
+  "wxss_compiler": "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcsc",
+  "syntax_commands": [
+    "node --check miniprogram/pages/student/home/index.js",
+    "node --check miniprogram/pages/student/task/index.js",
+    "node --check miniprogram/pages/parent/task-detail/index.js"
+  ],
+  "wxml_command": "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc -o /dev/null miniprogram/pages/student/home/index.wxml miniprogram/pages/student/task/index.wxml miniprogram/pages/parent/task-detail/index.wxml",
+  "wxss_command": "rg --files miniprogram -g '*.wxss' -0 | xargs -0 /Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcsc -lc -o /dev/null",
+  "commands_working_directory": "/Users/zhouxin/Desktop/studytracker-release",
+  "parent_home_readonly_audit": {
+    "writing_typing_score_label": "Existing index.wxml:185-186 displays generic 正确率 for both 0 and 96.5; no IELTS label.",
+    "mother_topic_null": "applyStats retains raw response. accuracy:null hides score and can show completion_rate; does not coerce null to zero.",
+    "code_changed": false,
+    "resolution": "Generic label corrected by final_label_change; mother null behavior unchanged."
+  },
+  "final_label_change": {
+    "path": "miniprogram/pages/parent/home/index.wxml",
+    "change": "writing_typing recent feed uses 打字准确率; null suppression and all other labels unchanged",
+    "focused_command": "node --test tests/test_web_practice_client.js",
+    "focused_passed": 11,
+    "focused_failed": 0,
+    "wxml_command": "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc -o /dev/null miniprogram/pages/parent/home/index.wxml",
+    "wxml_exit_code": 0,
+    "full_suite_note": "185/185 passed before final one-line label correction; final focused 11/11 and changed WXML compiler rerun passed",
+    "original_nine_snapshots_unchanged": true
+  },
+  "increment_patch_sha256": "e042b0efbca77ef6d1508f2f204b45a06d5430259b091e00d25bd9de4926abf6"
+}

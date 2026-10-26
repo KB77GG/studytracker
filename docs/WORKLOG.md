@@ -4,6 +4,18 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-26 — 网页练习与家长结果后台已上线，小程序待重发
+
+- 用户明确授权后，实施树仅8后台文件提交80f215b5，原子推送main/任务分支，CI40328912509/40328912836及Deploy40328912486成功；本次无新schema，原自动部署步骤保留。
+- 本地172+31subtests/CI68、独立40+23、生产Python3.10内存20项全部通过；生产业务HEAD/5SHA一致，21:15:23 CST起active、NRestarts0、5002/单worker/gthread6、login200、warning journal0。真实库只读写作/专项各1条家长GET200、未绑定403、行SHA不变，无学生写入/通知。详见[部署报告](design/web-practice-parent-results-20261026/DEPLOYMENT.md)。
+- 后台代码与本次交接/前端增量补丁已同步远端；固定小程序树d03a2749仍76 modified/35 untracked，本机11目标SHA不变、Node11/11，未commit源码或上传/提审/发布。用户仍需从固定miniprogram目录体验版/真机验证后发版；旧进行中未绑定打字页需刷新重开，旧精听验收限制不变。旧主树6ded77d2仍7/22，只更新两份交接。
+
+## 2026-10-26 — 网页写作/题型任务提示与家长结果本机完成
+
+- 只读核实生产aa394ef0已有写作/专项布置，未给学生发任务或通知。最新65f18596建立`web-practice-parent-results`干净实施树，补小程序网页指引契约、Task/PlanItem通用提交门禁、写作attempt归属及家长专属结果；历史缺绑定明确降级。
+- 固定发布树只叠加10前端+1新测试，原101无关脏文件SHA不变（交接更新前）；实际Node185/185，末次标签修订11/11，官方WXML/WXSS通过。后台最终172 passed/31subtests，独立复审关闭备用PlanItem绕过。详见[验收记录](/Users/zhouxin/.codex/worktrees/web-practice-parent-results/studytracker/docs/design/web-practice-parent-results-20261026/README.md)。
+- 三树交接已同步更新：实施树65f18596当前6 modified/6 untracked入口；固定d03a2749当前76/35，旧资料树6ded77d2仍7/22。全部仅本机，未commit/push/deploy或微信上传提审发布；无schema/生产库写入。下一步明确授权后先部署后台，再从固定小程序树完整编译/真机验收并由用户发版。
+
 ## 2026-10-25 — 模考成绩明细入口已上线
 
 - 用户授权后，将独立 `codex/mock-exam-detail-entry` 的单模板修复提交为 `aa394ef09da2e1e84d71df71dc6b5439ee436857`，非强制原子推送 main/任务分支；原 Desktop 脏树不动。发布前 68 项轻量 unittest、拼写队列门禁及 diff check 通过，保留上轮模板 7 项/Node 3 项/桌面窄屏验收。
