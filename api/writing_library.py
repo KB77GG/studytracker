@@ -8,6 +8,17 @@ from flask import Blueprint, abort, jsonify, redirect, render_template, request,
 from flask_login import current_user
 
 from models import StudentProfile, User, WritingTypingAttempt, db, utcnow_naive
+from services.writing_assignments import (
+    RESOURCE_EXERCISE,
+    RESOURCE_MOTHER_TOPIC,
+    WritingAssignmentError,
+    assigned_task,
+    bind_typing_attempt,
+    complete_task,
+    record_topic_completion,
+    require_student_task,
+    typing_attempt_task,
+)
 from services.writing_library import (
     BANDS,
     catalog_summary,
@@ -17,14 +28,6 @@ from services.writing_library import (
     load_mother_topics,
     mother_topic_summary,
     typing_metrics,
-)
-from services.writing_assignments import (
-    RESOURCE_EXERCISE,
-    RESOURCE_MOTHER_TOPIC,
-    WritingAssignmentError,
-    assigned_task,
-    complete_task,
-    require_student_task,
 )
 
 writing_library_bp = Blueprint("writing_library", __name__, url_prefix="/writing")
@@ -253,9 +256,10 @@ def start_typing(exercise_id: str):
     if band not in BANDS:
         return jsonify(ok=False, error="invalid_band"), 400
     task_id = payload.get("task_id")
+    assigned = None
     if task_id and student:
         try:
-            require_student_task(
+            assigned = require_student_task(
                 task_id,
                 student=student,
                 resource_type=RESOURCE_EXERCISE,
@@ -274,6 +278,13 @@ def start_typing(exercise_id: str):
         started_at=utcnow_naive(),
     )
     db.session.add(attempt)
+    if assigned:
+        db.session.flush()
+        try:
+            bind_typing_attempt(assigned, attempt)
+        except WritingAssignmentError as exc:
+            db.session.rollback()
+            return jsonify(ok=False, error=str(exc)), 409
     db.session.commit()
     return jsonify(ok=True, client_only=False, attempt_id=attempt.id, band=band)
 
@@ -294,28 +305,17 @@ def finish_typing(exercise_id: str, attempt_id: int):
     if not attempt:
         return jsonify(ok=False, error="attempt_not_found"), 404
     payload = request.get_json(silent=True) or {}
-    assigned = None
-    if payload.get("task_id"):
-        try:
-            assigned = require_student_task(
-                payload["task_id"],
-                student=student,
-                resource_type=RESOURCE_EXERCISE,
-                resource_id=exercise["id"],
-            )
-        except WritingAssignmentError as exc:
-            return jsonify(ok=False, error=str(exc)), 409
+    try:
+        assigned = typing_attempt_task(
+            attempt, student=student, task_id=payload.get("task_id")
+        )
+    except WritingAssignmentError as exc:
+        return jsonify(ok=False, error=str(exc)), 409
     if attempt.status == WritingTypingAttempt.STATUS_COMPLETED:
-        if assigned and assigned.status not in {"done", "completed", "finished"}:
-            complete_task(
-                assigned,
-                submitted_at=attempt.completed_at or utcnow_naive(),
-                duration_seconds=attempt.duration_seconds,
-                accuracy=attempt.accuracy,
-                note=f"写作打字完成：Band {attempt.band}，准确率 {attempt.accuracy:.1f}%",
-            )
-            db.session.commit()
-        return jsonify(ok=True, attempt=_attempt_payload(attempt), idempotent=True)
+        return jsonify(
+            ok=True, attempt=_attempt_payload(attempt), idempotent=True,
+            task_completed=bool(assigned and assigned.status in {"done", "completed", "finished"}),
+        )
 
     typed_text = str(payload.get("typed_text") or "")
     if len(typed_text) > 20000:
@@ -338,13 +338,17 @@ def finish_typing(exercise_id: str, attempt_id: int):
     attempt.speed_wpm = metrics["speed_wpm"]
     attempt.accuracy = metrics["accuracy"]
     if assigned:
-        complete_task(
-            assigned,
-            submitted_at=now,
-            duration_seconds=metrics["duration_seconds"],
-            accuracy=metrics["accuracy"],
-            note=f"写作打字完成：Band {attempt.band}，准确率 {metrics['accuracy']:.1f}%",
-        )
+        try:
+            complete_task(
+                assigned,
+                submitted_at=now,
+                duration_seconds=metrics["duration_seconds"],
+                accuracy=metrics["accuracy"],
+                note=f"写作打字完成：Band {attempt.band}，准确率 {metrics['accuracy']:.1f}%",
+            )
+        except WritingAssignmentError as exc:
+            db.session.rollback()
+            return jsonify(ok=False, error=str(exc)), 409
     db.session.commit()
     return jsonify(
         ok=True,
@@ -362,6 +366,12 @@ def complete_topic_task(topic_id: str, task_id: int):
     topic = get_mother_topic(topic_id)
     if not topic:
         return jsonify(ok=False, error="topic_not_found"), 404
+    existing = assigned_task(
+        task_id, student=student, resource_type=RESOURCE_MOTHER_TOPIC,
+        resource_id=topic["id"],
+    )
+    if existing and existing.status in {"done", "completed", "finished"}:
+        return jsonify(ok=True, task={"id": existing.id, "status": "done"}, idempotent=True)
     try:
         task = require_student_task(
             task_id,
@@ -377,11 +387,16 @@ def complete_topic_task(topic_id: str, task_id: int):
     except (TypeError, ValueError):
         duration_seconds = 0
     now = utcnow_naive()
-    complete_task(
-        task,
-        submitted_at=now,
-        duration_seconds=duration_seconds,
-        note="已完成大作文母题学习：逻辑链、表达与迁移题",
-    )
+    record_topic_completion(task, submitted_at=now, duration_seconds=duration_seconds)
+    try:
+        complete_task(
+            task,
+            submitted_at=now,
+            duration_seconds=duration_seconds,
+            note="已完成大作文母题学习：逻辑链、表达与迁移题",
+        )
+    except WritingAssignmentError as exc:
+        db.session.rollback()
+        return jsonify(ok=False, error=str(exc)), 409
     db.session.commit()
     return jsonify(ok=True, task={"id": task.id, "status": "done"})

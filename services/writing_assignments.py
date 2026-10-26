@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Any
 from urllib.parse import quote
 
-from models import PlanItem, StudentProfile, Task, db
+from models import PlanItem, StudentProfile, Task, WritingTypingAttempt, db
 from services.task_date_gate import TaskDateGateError, assert_task_write_allowed
 from services.writing_library import (
     get_exercise,
@@ -130,6 +130,85 @@ def snapshot_from_task(task: Task | None) -> dict[str, Any] | None:
     return snapshot
 
 
+def typing_attempt_ids(task: Task) -> list[int]:
+    """Return only server-created attempt bindings, never infer by resource/date."""
+
+    values = (snapshot_from_task(task) or {}).get("writing_attempt_ids", [])
+    if not isinstance(values, list):
+        return []
+    return list(dict.fromkeys(value for value in values if type(value) is int and value > 0))
+
+
+def bind_typing_attempt(task: Task, attempt: WritingTypingAttempt) -> None:
+    """Persist the association in the same transaction as attempt creation."""
+
+    snapshot = snapshot_from_task(task)
+    if (
+        not snapshot
+        or snapshot["writing_resource_type"] != RESOURCE_EXERCISE
+        or snapshot["writing_resource_id"] != attempt.exercise_id
+        or not attempt.id
+        or attempt.student_profile.full_name != task.student_name
+    ):
+        raise WritingAssignmentError("writing_task_not_found")
+    snapshot["writing_attempt_ids"] = [*typing_attempt_ids(task), attempt.id]
+    # A concurrent start must not silently overwrite another attempt's binding.
+    changed = Task.query.filter_by(
+        id=task.id, question_ids=task.question_ids, status=task.status
+    ).update({Task.question_ids: dump_snapshot(snapshot)}, synchronize_session=False)
+    if changed != 1:
+        raise WritingAssignmentError("writing_task_changed_retry")
+    db.session.expire(task, ["question_ids"])
+
+
+def typing_attempt_task(
+    attempt: WritingTypingAttempt,
+    *,
+    student: StudentProfile,
+    task_id: Any = None,
+) -> Task | None:
+    """Find an attempt's original task, even if a finish omits its task ID."""
+
+    candidates = Task.query.filter_by(
+        student_name=student.full_name, grading_mode=TASK_TYPE
+    ).all()
+    bound = [task for task in candidates if attempt.id in typing_attempt_ids(task)]
+    if len(bound) > 1:
+        raise WritingAssignmentError("writing_attempt_task_mismatch")
+    task = bound[0] if bound else None
+    if task_id:
+        requested = assigned_task(
+            task_id, student=student, resource_type=RESOURCE_EXERCISE,
+            resource_id=attempt.exercise_id,
+        )
+        if not requested or not task or requested.id != task.id:
+            raise WritingAssignmentError("writing_attempt_task_mismatch")
+    if task:
+        snapshot = snapshot_from_task(task)
+        if (
+            snapshot["writing_resource_type"] != RESOURCE_EXERCISE
+            or snapshot["writing_resource_id"] != attempt.exercise_id
+        ):
+            raise WritingAssignmentError("writing_attempt_task_mismatch")
+        # Completed retries are read-only, including after the task's cutoff.
+        if attempt.status != WritingTypingAttempt.STATUS_COMPLETED:
+            require_student_task(
+                task.id, student=student, resource_type=RESOURCE_EXERCISE,
+                resource_id=attempt.exercise_id,
+            )
+    return task
+
+
+def record_topic_completion(task: Task, *, submitted_at: datetime, duration_seconds: int) -> None:
+    snapshot = snapshot_from_task(task)
+    if snapshot and snapshot["writing_resource_type"] == RESOURCE_MOTHER_TOPIC:
+        snapshot["writing_topic_result"] = {
+            "completed_at": submitted_at.isoformat() + "Z",
+            "duration_seconds": max(0, int(duration_seconds)),
+        }
+        task.question_ids = dump_snapshot(snapshot)
+
+
 def assignment_url(task: Task, *, absolute: bool = False) -> str | None:
     snapshot = snapshot_from_task(task)
     if not snapshot:
@@ -195,7 +274,7 @@ def require_student_task(
     try:
         assert_task_write_allowed(task)
     except TaskDateGateError as exc:
-        raise WritingAssignmentError(exc.code) from exc
+        raise WritingAssignmentError(exc.error) from exc
     return task
 
 
@@ -207,6 +286,14 @@ def complete_task(
     accuracy: float | None = None,
     note: str = "",
 ) -> None:
+    # A second tab may have loaded the same pending task before the first tab
+    # committed. Claim completion before flushing either attempt's result.
+    with db.session.no_autoflush:
+        changed = Task.query.filter_by(id=task.id, status=task.status).update(
+            {Task.status: "done"}, synchronize_session=False
+        )
+    if changed != 1:
+        raise WritingAssignmentError("writing_task_changed_retry")
     elapsed = max(0, int(duration_seconds or 0))
     task.status = "done"
     task.completion_rate = 100.0

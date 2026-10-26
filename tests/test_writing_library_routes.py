@@ -1,5 +1,6 @@
 """Access control and server-owned attempt tests for the web writing library."""
 
+import json
 from datetime import date, timedelta
 
 import pytest
@@ -7,8 +8,14 @@ from flask import Flask
 from flask_login import LoginManager
 
 from api.writing_library import writing_library_bp
-from models import StudentProfile, Task, WritingTypingAttempt, db
-from services.writing_assignments import build_snapshot, dump_snapshot
+from models import StudentProfile, Task, WritingTypingAttempt, db, utcnow_naive
+from services.writing_assignments import (
+    WritingAssignmentError,
+    build_snapshot,
+    complete_task,
+    dump_snapshot,
+    typing_attempt_ids,
+)
 from services.writing_library import get_exercise
 
 
@@ -240,3 +247,179 @@ def test_one_student_cannot_complete_another_students_writing_task(writing_app, 
     assert completed.status_code == 409
     with writing_app.app_context():
         assert db.session.get(Task, task_id).status == "pending"
+
+
+def _start_assigned(client, task_id):
+    response = client.post(
+        "/writing/api/t2-010/typing/start", json={"band": "6.0", "task_id": task_id}
+    )
+    assert response.status_code == 200
+    return response.get_json()["attempt_id"]
+
+
+def _finish(client, attempt_id, **extra):
+    return client.post(
+        f"/writing/api/t2-010/typing/{attempt_id}/finish",
+        json={"band": "6.0", "typed_text": "saved student text", **extra},
+    )
+
+
+def test_start_binds_multiple_attempts_and_finish_can_recover_omitted_task_id(
+    writing_app, writing_client
+):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    first = _start_assigned(writing_client, task_id)
+    second = _start_assigned(writing_client, task_id)
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        assert typing_attempt_ids(task) == [first, second]
+        assert task.status == "pending"
+    response = _finish(writing_client, first)
+    assert response.status_code == 200
+    assert response.get_json()["task_completed"] is True
+    delayed = _finish(writing_client, second, task_id=task_id)
+    assert delayed.status_code == 409
+    assert delayed.get_json()["error"] == "task_completed_read_only"
+    with writing_app.app_context():
+        assert db.session.get(WritingTypingAttempt, first).status == "completed"
+        assert db.session.get(WritingTypingAttempt, second).status == "in_progress"
+
+
+@pytest.mark.parametrize("complete_first", [False, True])
+def test_attempt_cannot_complete_another_assignment_of_same_exercise(
+    writing_app, writing_client, complete_first
+):
+    _verify(writing_client)
+    original = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    repeated_task = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    attempt_id = _start_assigned(writing_client, original)
+    if complete_first:
+        assert _finish(writing_client, attempt_id, task_id=original).status_code == 200
+    response = _finish(writing_client, attempt_id, task_id=repeated_task)
+    assert response.status_code == 409
+    assert response.get_json()["error"] == "writing_attempt_task_mismatch"
+    with writing_app.app_context():
+        task = db.session.get(Task, repeated_task)
+        assert task.status == "pending"
+        assert task.student_submitted is False
+        assert typing_attempt_ids(task) == []
+
+
+@pytest.mark.parametrize("complete_first", [False, True])
+def test_unbound_or_legacy_attempt_is_never_guessed_onto_a_task(
+    writing_app, writing_client, complete_first
+):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    attempt_id = writing_client.post(
+        "/writing/api/t2-010/typing/start", json={"band": "6.0"}
+    ).get_json()["attempt_id"]
+    if complete_first:
+        assert _finish(writing_client, attempt_id).status_code == 200
+    response = _finish(writing_client, attempt_id, task_id=task_id)
+    assert response.status_code == 409
+    assert response.get_json()["error"] == "writing_attempt_task_mismatch"
+    with writing_app.app_context():
+        assert db.session.get(Task, task_id).status == "pending"
+        assert typing_attempt_ids(db.session.get(Task, task_id)) == []
+
+
+def test_bound_attempt_replay_after_cutoff_is_read_only(writing_app, writing_client):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    attempt_id = _start_assigned(writing_client, task_id)
+    finished = _finish(writing_client, attempt_id, task_id=task_id)
+    assert finished.status_code == 200
+    first_result = finished.get_json()["attempt"]
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        task.date = (date.today() - timedelta(days=3)).isoformat()
+        db.session.commit()
+        original_note = task.student_note
+        original_timestamp = task.submitted_at
+    replay = _finish(writing_client, attempt_id, task_id=task_id, typed_text="replacement")
+    assert replay.status_code == 200
+    assert replay.get_json()["idempotent"] is True
+    assert replay.get_json()["attempt"] == first_result
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        assert task.student_note == original_note
+        assert task.submitted_at == original_timestamp
+        assert db.session.get(WritingTypingAttempt, attempt_id).typed_text == "saved student text"
+
+
+def test_omitted_task_id_does_not_bypass_assignment_cutoff(writing_app, writing_client):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    attempt_id = _start_assigned(writing_client, task_id)
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        task.date = (date.today() - timedelta(days=3)).isoformat()
+        db.session.commit()
+    response = _finish(writing_client, attempt_id)
+    assert response.status_code == 409
+    assert response.get_json()["error"] == "task_expired"
+    with writing_app.app_context():
+        assert db.session.get(Task, task_id).status == "pending"
+        assert db.session.get(WritingTypingAttempt, attempt_id).status == "in_progress"
+
+
+def test_mother_topic_retains_completion_summary_on_replay(writing_app, writing_client):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "mother_topic", "t01")
+    endpoint = f"/writing/api/topics/t01/tasks/{task_id}/complete"
+    assert writing_client.post(endpoint, json={"duration_seconds": 420}).status_code == 200
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        original_snapshot = task.question_ids
+        result = json.loads(original_snapshot)["writing_topic_result"]
+        assert result["duration_seconds"] == 420
+        assert result["completed_at"].endswith("Z")
+    repeated = writing_client.post(endpoint, json={"duration_seconds": 9999})
+    assert repeated.get_json()["idempotent"] is True
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        assert task.question_ids == original_snapshot
+        assert task.actual_seconds == 420
+
+
+def test_stale_completion_cannot_overwrite_another_tab_result(writing_app):
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    with writing_app.app_context():
+        stale = db.session.get(Task, task_id)
+        Task.query.filter_by(id=task_id).update(
+            {Task.status: "done", Task.accuracy: 73.5}, synchronize_session=False
+        )
+        # Same interleaving as a second transaction committing after this one
+        # read pending state, without refreshing the stale ORM object.
+        assert stale.status == "pending"
+        with pytest.raises(WritingAssignmentError, match="writing_task_changed_retry"):
+            complete_task(stale, submitted_at=utcnow_naive(), accuracy=1)
+        db.session.refresh(stale)
+        assert stale.status == "done"
+        assert stale.accuracy == 73.5
+
+
+@pytest.mark.parametrize(
+    ("day_delta", "status", "error"),
+    [(-3, "pending", "task_expired"), (1, "pending", "task_not_open"), (0, "done", "task_completed_read_only")],
+)
+def test_start_rejects_closed_assignment_without_creating_attempt(
+    writing_app, writing_client, day_delta, status, error
+):
+    _verify(writing_client)
+    task_id = _assigned_writing_task(writing_app, "exercise", "t2-010")
+    with writing_app.app_context():
+        task = db.session.get(Task, task_id)
+        task.date = (date.today() + timedelta(days=day_delta)).isoformat()
+        task.status = status
+        db.session.commit()
+    response = writing_client.post(
+        "/writing/api/t2-010/typing/start", json={"band": "6.0", "task_id": task_id}
+    )
+    assert response.status_code == 409
+    assert response.get_json()["error"] == error
+    with writing_app.app_context():
+        assert WritingTypingAttempt.query.count() == 0
+        assert typing_attempt_ids(db.session.get(Task, task_id)) == []

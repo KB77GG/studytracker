@@ -45,6 +45,8 @@ from .stats_utils import (
     summarize_weekly,
 )
 from services.vocabulary_attempt_reporting import dictation_attempt_display
+from services.web_practice_reporting import web_practice_task_report
+from services.web_practice_tasks import web_practice_payload, web_practice_required
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -1861,6 +1863,7 @@ def get_student_today_tasks():
         }.get(status, status)
         task_payload = {
             "id": task.id,
+            "web_practice": web_practice_payload(task),
             "date": task.date,
             "is_carryover": False,
             "assigned_by_role": creator_roles.get(task.created_by, ""),
@@ -2012,6 +2015,7 @@ def get_task_detail(task_id):
             "ok": True,
             "task": {
                 "id": task.id,
+                "web_practice": web_practice_payload(task),
                 "task_name": f"{task.category} - {task.detail}" if task.detail else task.category,
                 "module": task.category or "其他",
                 "exam_system": "",
@@ -2652,6 +2656,9 @@ def submit_task(task_id):
     from services.vocabulary_mastery import is_vocabulary_v2_task
     current_task = Task.query.get(task_id)
     if current_task and current_task.student_name == user.student_profile.full_name:
+        web_only = web_practice_required(current_task)
+        if web_only:
+            return jsonify(web_only), 409
         blocked = _task_gate_response(current_task)
         if blocked:
             return blocked
@@ -2750,6 +2757,9 @@ def submit_task(task_id):
         # 验证该任务是否属于当前学生
         if item.plan.student_id != user.student_profile.id:
             return jsonify({"ok": False, "error": "forbidden"}), 403
+        web_only = web_practice_required(item)
+        if web_only:
+            return jsonify(web_only), 409
         blocked = _task_gate_response(item)
         if blocked:
             return blocked
@@ -2795,6 +2805,9 @@ def start_timer(task_id):
         # Verify ownership
         if task.student_name != user.student_profile.full_name:
             return jsonify({"ok": False, "error": "forbidden"}), 403
+        web_only = web_practice_required(task)
+        if web_only:
+            return jsonify(web_only), 409
         blocked = _task_gate_response(task)
         if blocked:
             return blocked
@@ -2836,6 +2849,9 @@ def start_timer(task_id):
     # Verify ownership
     if item.plan.student_id != user.student_profile.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
+    web_only = web_practice_required(item)
+    if web_only:
+        return jsonify(web_only), 409
     blocked = _task_gate_response(item)
     if blocked:
         return blocked
@@ -2874,6 +2890,9 @@ def stop_timer(task_id, session_id):
     if session_id == task_id:
         task = Task.query.get(task_id)
         if task and not task.plan_item and task.student_name == user.student_profile.full_name:
+            web_only = web_practice_required(task)
+            if web_only:
+                return jsonify(web_only), 409
             blocked = _task_gate_response(task)
             if blocked:
                 return blocked
@@ -2900,6 +2919,9 @@ def stop_timer(task_id, session_id):
     if not requested_item or requested_item.id != session.plan_item.id:
         return jsonify({"ok": False, "error": "forbidden"}), 403
     task_or_item = requested_task or requested_item
+    web_only = web_practice_required(task_or_item)
+    if web_only:
+        return jsonify(web_only), 409
 
     if session.ended_at:
         return jsonify({
@@ -3397,6 +3419,11 @@ def _parent_generic_task_report(task):
 
 
 def _parent_task_report(task, include_items=False):
+    web_report = web_practice_task_report(
+        task, include_items=include_items, clean_text=_parent_clean_question_text,
+    )
+    if web_report is not None:
+        return web_report
     listening_submission = ListeningTestSubmission.query.filter_by(task_id=task.id).first()
     reading_submission = ReadingTestSubmission.query.filter_by(task_id=task.id).first()
     if task.dictation_book_id:
@@ -3455,11 +3482,11 @@ def get_parent_task_detail(task_id):
         "title": _task_display_title(task),
         "state": state,
         "state_label": state_label,
-        "accuracy": task.accuracy,
+        "accuracy": report.get("accuracy", task.accuracy),
         "completion_rate": task.completion_rate,
         "student_note": task.student_note or "",
         "teacher_note": task.feedback_text or task.note or "",
-        "submitted_at": task.submitted_at.isoformat() if task.submitted_at else None,
+        "submitted_at": report.get("submitted_at", task.submitted_at.isoformat() if task.submitted_at else None),
         "evidence": _task_evidence_files(task),
     })
     return jsonify({"ok": True, "detail": report})
@@ -3536,7 +3563,7 @@ def get_parent_stats():
             "date": t.date,
             "category": t.category,
             "detail": t.detail,
-            "accuracy": t.accuracy,
+            "accuracy": task_report.get("accuracy", t.accuracy),
             "completion_rate": t.completion_rate,
             "teacher_note": t.feedback_text or t.note,
             "result_summary": task_report["summary_text"],
