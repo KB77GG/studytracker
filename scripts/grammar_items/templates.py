@@ -198,6 +198,16 @@ def relative_adverb_risk(view, span):
     return [R.POSSIBLE_RELATIVE_ADVERB] if risky else []
 
 
+def noun_attached_risk(view, head):
+    """An adverbial-clause target the parser attaches to a noun ("the century before the
+    Dictionary was published", "the decades since ...", "'green deserts', as Ellwood describes
+    them") modifies that noun; calling it an adverbial clause is debatable, so it goes to review."""
+    if head is None or head.dep != "advcl":
+        return []
+    parent = view.tokens[head.head]
+    return [R.NOUN_ATTACHED_CLAUSE] if parent.pos in {"NOUN", "PROPN", "NUM", "PRON"} else []
+
+
 def difficulty(view, spans):
     level = max((s.level for s in spans), default=1)
     if view.word_count <= 20 and level <= 2:
@@ -458,6 +468,7 @@ def clause_boundaries(ctx):
                 reasons.extend(boundary_reasons(ctx, head, tokens, kind))
             if kind == "adverbial":
                 reasons.extend(relative_adverb_risk(ctx.view, span))
+                reasons.extend(noun_attached_risk(ctx.view, head))
             answer = close_quotes(
                 ctx.sentence, span_from_tokens(ctx.sentence, tokens), span.start, span.end
             )
@@ -496,6 +507,7 @@ def classify_clauses(ctx):
                 reasons.extend(boundary_reasons(ctx, head, tokens, kind))
         if kind == "adverbial":
             reasons.extend(relative_adverb_risk(ctx.view, span))
+            reasons.extend(noun_attached_risk(ctx.view, head))
         option = TYPE_OPTIONS[-1] if kind == "phrase" else CLAUSE_LABELS[kind]
         ctx.emit(
             TEMPLATES[2],
@@ -547,6 +559,7 @@ def adverbial_relations(ctx):
         elif SUBORDINATOR_RELATIONS[word] != relation:
             reasons.append(R.SUBORDINATOR_MISMATCH)
         reasons.extend(relative_adverb_risk(ctx.view, span))
+        reasons.extend(noun_attached_risk(ctx.view, head))
         if head:
             reasons.extend(boundary_reasons(ctx, head, tokens, "adverbial"))
             if predicative_clause(ctx.view, head):

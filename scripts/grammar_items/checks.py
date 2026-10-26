@@ -81,6 +81,7 @@ class Reason(StrEnum):
     NO_DISTRACTOR = "no_distractor"
     POSSIBLE_RELATIVE_ADVERB = "possible_relative_adverb"
     VERB_UNIT_OUTSIDE_SPAN = "verb_unit_outside_span"
+    NOUN_ATTACHED_CLAUSE = "noun_attached_clause"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

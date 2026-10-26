@@ -260,6 +260,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "整句规则在全库独立统计，不受其他过滤顺序影响；multi_sentence_unit 在 2026-10-19 重新拆句后预期为 1（一处无法拆开的嵌入引语）。",
             "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
             "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
+            "v0.2：状语从句目标被解析器挂在名词上（the century before ...、'deserts', as ...）时，T2/T3/T4 一律 "
+            "needs_review（noun_attached_clause）；紧跟在没有补足成分的 be 后的 because / when 等从句是表语从句，"
+            "按 clause_type_mismatch 处理。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"

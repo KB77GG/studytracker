@@ -1279,6 +1279,41 @@ class PredicativeClauseTests(unittest.TestCase):
         for item in items:
             self.assertEqual(item["status"], "auto_pass", item["template"])
 
+    def test_clause_attached_to_a_noun_is_not_auto_pass(self):
+        # "For the century before Johnson's Dictionary was published, there had been concern."
+        sentence, view = tree(
+            [
+                ("For", "prep", 8, "ADP", "IN"),
+                ("the", "det", 2, "DET", "DT"),
+                ("century", "pobj", 0, "NOUN", "NN"),
+                ("before", "mark", 5, "SCONJ", "IN"),
+                ("ice", "nsubj", 5, "NOUN", "NN"),
+                ("melted", "advcl", 2, "VERB", "VBD"),
+                (",", "punct", 8, "PUNCT", ","),
+                ("there", "expl", 8, "PRON", "EX"),
+                ("was", "ROOT", 8, "VERB", "VBD"),
+                ("concern", "attr", 8, "NOUN", "NN"),
+                (".", "punct", 8, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("For the century", "prepositional_phrase", 1),
+            ("before ice melted", "time_clause", 2),
+            ("there", "subject", 1),
+            ("was", "verb", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        clause = [
+            i
+            for i in items
+            if i["template"] in {"clause_boundary", "clause_type_classify", "adverbial_relation"}
+            and "before" in (i["target"] or i["answer"]["spans"][0])["text"]
+        ]
+        self.assertEqual(len(clause), 3)
+        for item in clause:
+            self.assertEqual(item["status"], "needs_review", item["template"])
+            self.assertIn(R.NOUN_ATTACHED_CLAUSE, item["reasons"])
+
     def test_fronted_clause_on_bare_be_stays_adverbial(self):
         # "When the opponent's king is checkmated, the game is over, ..." (over parsed as advmod).
         sentence, view = tree(
