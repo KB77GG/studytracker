@@ -14,6 +14,8 @@ In question data ``find`` only matches as whole words, also with curly apostroph
 just the strings that equal ``find``, such as a one-word locating synonym.
 ``"at_end": true`` replaces ``find`` at the very end of the paragraph, for adding a
 missing final full stop (there ``find`` is part of ``replace``).
+``"at_start": true`` likewise replaces ``find`` at the very start, for restoring opening
+text the raw data lost (``replace`` ends with ``find``).
 ``"summary": true`` edits the passage's Chinese summary (one string covering all
 paragraphs; ``paragraph_label`` names the paragraph it summarises) instead of the text.
 
@@ -60,6 +62,12 @@ def apply_fix(text: str, fix: dict) -> tuple[str, bool]:
         if text.endswith(find):
             return text[: len(text) - len(find)] + replace, True
         raise TextFixError(f"{where}: paragraph does not end with {find!r}")
+    if fix.get("at_start"):
+        if text.startswith(replace):
+            return text, False
+        if text.startswith(find):
+            return replace + text[len(find) :], True
+        raise TextFixError(f"{where}: paragraph does not start with {find!r}")
     count = text.count(find)
     if count == 1:
         return text.replace(find, replace), True
@@ -113,8 +121,9 @@ def question_variants(find: str, replace: str) -> list[tuple[str, str]]:
 
 
 def check_fix_kind(passage_id: str, fix: dict) -> None:
-    if fix.get("questions") and fix.get("at_end"):
-        raise TextFixError(f"{passage_id}: an at_end fix cannot also edit question data")
+    for flag in ("at_end", "at_start"):
+        if fix.get("questions") and fix.get(flag):
+            raise TextFixError(f"{passage_id}: an {flag} fix cannot also edit question data")
     if fix.get("exact") and (fix["paragraph_label"] is not None or not fix.get("questions")):
         raise TextFixError(f"{passage_id}: an exact fix edits question data only")
     if fix.get("summary") and (fix["paragraph_label"] is None or fix.get("questions")):
