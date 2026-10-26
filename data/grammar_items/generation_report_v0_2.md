@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "f25f71fa4ae825e9a2b1789d8ac34396ca6c096a2a64c844e6774052b9269d81",
+  "reading_study_sha256": "8744a42e86c57399b2b592959b1044f7dcd3550ddfd0a066713ffebeffc5435a",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
