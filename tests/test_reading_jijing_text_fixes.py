@@ -84,6 +84,53 @@ class QuestionFixTest(unittest.TestCase):
         fixes_mod.apply_passage_fixes("p1", paragraphs, {"p1": [fix]}, groups)
         self.assertEqual(groups, self.groups())
 
+    def test_question_data_matches_whole_words_only(self):
+        groups = [{"title": "out side and the out sidecar"}]
+        self.assertEqual(fixes_mod.replace_in_place(groups, "out side", "outside"), (1, True))
+        self.assertEqual(groups[0]["title"], "outside and the out sidecar")
+        groups = [{"analysis": "根据Pridcaux的模型"}]
+        fixes_mod.replace_in_place(groups, "Pridcaux", "Prideaux")
+        self.assertEqual(groups[0]["analysis"], "根据Prideaux的模型")
+
+    def test_curly_apostrophe_copy_is_fixed(self):
+        fix = {**FIX, "find": "China's the rise", "replace": "China's rise", "questions": True}
+        paragraphs = [{"label": "A", "text": "in China's the rise"}]
+        groups = [{"title": "(China’s the rise"}, {"title": "China's the rise"}]
+        fixes_mod.apply_passage_fixes("p1", paragraphs, {"p1": [fix]}, groups)
+        self.assertEqual([g["title"] for g in groups], ["(China’s rise", "China's rise"])
+
+    def test_exact_fix_replaces_whole_strings_only(self):
+        fix = {**FIX, "paragraph_label": None, "find": "catching", "replace": "caching"}
+        fix.update(questions=True, exact=True)
+        groups = [{"synonym": "catching", "sentence": "seed catching behaviour"}]
+        self.assertEqual(fixes_mod.apply_passage_fixes("p1", [], {"p1": [fix]}, groups), 1)
+        self.assertEqual(groups, [{"synonym": "caching", "sentence": "seed catching behaviour"}])
+        self.assertEqual(fixes_mod.apply_passage_fixes("p1", [], {"p1": [fix]}, groups), 0)
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_passage_fixes("p1", [], {"p1": [{**fix, "paragraph_label": "A"}]}, [])
+
+
+class SummaryFixTest(unittest.TestCase):
+    """summary fixes edit the paragraph's Chinese summary, not its text."""
+
+    FIX = {**FIX, "find": "中的CO浓度", "replace": "中的二氧化碳浓度", "summary": True}
+
+    def test_summary_is_fixed_and_paragraph_kept(self):
+        content = {"summary": "{'A': '大气中的CO浓度将增加'}", "paragraphs": []}
+        content["paragraphs"].append({"label": "A", "text": "CO2 levels"})
+        fixes = {"p1": [self.FIX]}
+        changed = fixes_mod.apply_passage_fixes("p1", content["paragraphs"], fixes, [], content)
+        self.assertEqual(changed, 1)
+        self.assertEqual(content["summary"], "{'A': '大气中的二氧化碳浓度将增加'}")
+        self.assertEqual(content["paragraphs"][0]["text"], "CO2 levels")
+        self.assertEqual(fixes_mod.apply_passage_fixes("p1", [], fixes, [], content), 0)
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_passage_fixes("p1", [], fixes, [], {"summary": "无关"})
+
+    def test_summary_fix_cannot_edit_question_data(self):
+        with self.assertRaises(fixes_mod.TextFixError):
+            fixes_mod.apply_passage_fixes("p1", [], {"p1": [{**self.FIX, "questions": True}]}, [])
+
 
 class AtEndFixTest(unittest.TestCase):
     """at_end fixes add a missing final full stop, where find is part of replace."""

@@ -9,8 +9,13 @@ survive rebuilds from raw:
 A fix edits one paragraph. With ``"questions": true`` the same replacement is also
 made in that passage's question data (titles, central sentences, locating words),
 which quote the passage; ``"paragraph_label": null`` marks a fix found only there.
+In question data ``find`` only matches as whole words, also with curly apostrophes
+(’) where the fix has straight ones; ``"exact": true`` (question data only) replaces
+just the strings that equal ``find``, such as a one-word locating synonym.
 ``"at_end": true`` replaces ``find`` at the very end of the paragraph, for adding a
 missing final full stop (there ``find`` is part of ``replace``).
+``"summary": true`` edits the passage's Chinese summary (one string covering all
+paragraphs; ``paragraph_label`` names the paragraph it summarises) instead of the text.
 
 - ``build_reading_test_practice.py --source jijing`` applies them while building;
 - this script patches the existing ``static/reading_jijing/*.json`` in place.
@@ -24,6 +29,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -62,39 +68,89 @@ def apply_fix(text: str, fix: dict) -> tuple[str, bool]:
     raise TextFixError(f"{where}: {find!r} occurs {count} times")
 
 
-def replace_in_place(node, find: str, replace: str) -> tuple[int, bool]:
-    """Replace in every string of nested lists/dicts. Returns (count, replace seen)."""
+# Latin letters and digits; Chinese text right next to an English name is still a boundary.
+WORD_CHAR = "0-9A-Za-zÀ-ÖØ-öø-ÿ"
+
+
+def word_pattern(find: str) -> re.Pattern:
+    """find, matching only where its letter/digit ends are not inside a longer word."""
+    pattern = re.escape(find)
+    if find[:1].isalnum():
+        pattern = f"(?<![{WORD_CHAR}])" + pattern
+    if find[-1:].isalnum():
+        pattern += f"(?![{WORD_CHAR}])"
+    return re.compile(pattern)
+
+
+def replace_in_place(node, find: str, replace: str, exact: bool = False) -> tuple[int, bool]:
+    """Replace in every string of nested lists/dicts, as whole words ("out side" leaves
+    "out sidecar"), or with exact only strings equal to find. Returns (count, replace seen)."""
+    pattern = None if exact else word_pattern(find)
     count, seen = 0, False
     items = node.items() if isinstance(node, dict) else enumerate(node)
     for key, value in list(items):
         if isinstance(value, str):
-            count += value.count(find)
-            node[key] = value.replace(find, replace)
-            seen = seen or replace in node[key]
+            if exact:
+                hits = int(value == find)
+                node[key] = replace if hits else value
+                seen = seen or node[key] == replace
+            else:
+                node[key], hits = pattern.subn(lambda _match: replace, value)
+                seen = seen or replace in node[key]
+            count += hits
         elif isinstance(value, (dict, list)):
-            sub_count, sub_seen = replace_in_place(value, find, replace)
+            sub_count, sub_seen = replace_in_place(value, find, replace, exact)
             count, seen = count + sub_count, seen or sub_seen
     return count, seen
 
 
+def question_variants(find: str, replace: str) -> list[tuple[str, str]]:
+    """The fix as written and, for straight apostrophes, the curly form question data uses."""
+    pairs = [(find, replace)]
+    if "'" in find:
+        pairs.append((find.replace("'", "’"), replace.replace("'", "’")))
+    return pairs
+
+
+def check_fix_kind(passage_id: str, fix: dict) -> None:
+    if fix.get("questions") and fix.get("at_end"):
+        raise TextFixError(f"{passage_id}: an at_end fix cannot also edit question data")
+    if fix.get("exact") and (fix["paragraph_label"] is not None or not fix.get("questions")):
+        raise TextFixError(f"{passage_id}: an exact fix edits question data only")
+    if fix.get("summary") and (fix["paragraph_label"] is None or fix.get("questions")):
+        raise TextFixError(f"{passage_id}: a summary fix edits the summary only")
+
+
 def apply_passage_fixes(
-    passage_id: str, paragraphs: list[dict], fixes: dict, groups: list | None = None
+    passage_id: str,
+    paragraphs: list[dict],
+    fixes: dict,
+    groups: list | None = None,
+    content: dict | None = None,
 ) -> int:
-    """Apply all fixes for one passage in place. Returns how many changed text."""
+    """Apply all fixes for one passage in place. Returns how many changed text.
+
+    content is the passage content holding the summary; without it summary fixes wait.
+    """
     by_label = {row.get("label"): row for row in paragraphs}
     changed = 0
     for fix in fixes.get(passage_id, []):
-        did_change = False
-        if fix["paragraph_label"] is not None:
-            row = by_label.get(fix["paragraph_label"])
+        check_fix_kind(passage_id, fix)
+        did_change, label = False, fix["paragraph_label"]
+        if fix.get("summary"):
+            if content is not None:
+                content["summary"], did_change = apply_fix(content.get("summary") or "", fix)
+        elif label is not None:
+            row = by_label.get(label)
             if row is None:
-                raise TextFixError(f"{passage_id}: no paragraph {fix['paragraph_label']!r}")
+                raise TextFixError(f"{passage_id}: no paragraph {label!r}")
             row["text"], did_change = apply_fix(row["text"], fix)
-        if fix.get("questions") and fix.get("at_end"):
-            raise TextFixError(f"{passage_id}: an at_end fix cannot also edit question data")
         if fix.get("questions") and groups is not None:
-            count, seen = replace_in_place(groups, fix["find"], fix["replace"])
-            if fix["paragraph_label"] is None and not count and not seen:
+            count = seen = 0
+            for find, replace in question_variants(fix["find"], fix["replace"]):
+                hits, found = replace_in_place(groups, find, replace, fix.get("exact", False))
+                count, seen = count + hits, seen or found
+            if label is None and not count and not seen:
                 raise TextFixError(f"{passage_id}: {fix['find']!r} not in question data")
             did_change = did_change or count > 0
         changed += did_change
@@ -109,7 +165,13 @@ def patch_static_files(fixes: dict, static_dir: Path = STATIC_DIR, write: bool =
         path = static_dir / f"{test_id}.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         changed = sum(
-            apply_passage_fixes(p["id"], p["content"]["paragraphs"], fixes, p.get("groups"))
+            apply_passage_fixes(
+                p["id"],
+                p["content"]["paragraphs"],
+                fixes,
+                p.get("groups"),
+                p["content"],
+            )
             for p in payload["passages"]
         )
         if changed and write:

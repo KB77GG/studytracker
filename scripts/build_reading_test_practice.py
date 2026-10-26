@@ -283,7 +283,7 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
         passage_id = passage_id_for(book, test_no, passage_no, source)
         content = build_passage_content(part)
         groups = [build_group(group, passage_id) for group in part.get("question") or []]
-        apply_passage_fixes(passage_id, content["paragraphs"], text_fixes, groups)
+        apply_passage_fixes(passage_id, content["paragraphs"], text_fixes, groups, content)
         tests[tid]["passages"].append(
             {
                 "id": passage_id,
