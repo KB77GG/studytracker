@@ -1013,9 +1013,13 @@ class CodexReviewFixTests(unittest.TestCase):
             stats["targets"][0]["templates"], ["adverbial_relation", "clause_boundary"]
         )
         rows = [(source("x", sid=sid), []) for sid in ("A-01", "A-02", "A-02b", "A-02c")]
-        resplit = resplit_stats(rows)
+        resplit = resplit_stats(rows, baseline=2)
         self.assertEqual((resplit["sentences_before"], resplit["sentences_after"]), (2, 4))
-        self.assertEqual(resplit["added"], 2)
+        self.assertEqual((resplit["added"], resplit["removed"], resplit["net_change"]), (2, 0, 2))
+        # A-03 merged into A-02 and A-01 split in two: one removed, one added (review N5).
+        rows = [(source("x", sid=sid), []) for sid in ("A-01", "A-01b", "A-02")]
+        resplit = resplit_stats(rows, baseline=3)
+        self.assertEqual((resplit["added"], resplit["removed"], resplit["net_change"]), (1, 1, 0))
 
     def test_truncated_clause_target_is_not_auto_pass(self):
         sentence, view = tree(

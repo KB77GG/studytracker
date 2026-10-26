@@ -30,8 +30,9 @@ REGRESSION_CASES = (
 INDEPENDENT_FILTERS = (
     # 36 in plan v0.1; +1 after the v0.2 review marked 71_1_p2 E-01 as predicate_fragment (F4);
     # -1 after the 2026-10-19 re-split joined ielts4_test4_p1 C-14's cut "that U.S." to C-15;
-    # -4 after the 2026-10-19 source fixes joined four fragments to the sentence they continue.
-    (R.TAGGED_FRAGMENT, 32),
+    # -4 after the 2026-10-19 source fixes joined four fragments to the sentence they continue;
+    # -2 after the 2026-10-26 fixes joined 73_5_p1 K-03 ("like that ...") and ielts4_test4_p1 I-42.
+    (R.TAGGED_FRAGMENT, 30),
     (R.CLAUSE_ATTACHED_TO_CONJUNCTION, 2),
     (R.GLUED_SENTENCE_BOUNDARY, 0),
     # 51 in plan v0.2; after the 2026-10-19 re-split only an embedded quotation of three
@@ -45,6 +46,8 @@ INDEPENDENT_FILTERS = (
     (R.CONTROL_CHARACTER, 0),
 )
 RESPLIT_ID = re.compile(r"^[A-Z]-\d+[b-z]$")
+# Sentences in data/reading_study before the first v0.2 re-split (the plan v0.2 baseline).
+RESPLIT_BASELINE_SENTENCES = 12657
 NODE_IDS = (
     "G-S01",
     "G-S02",
@@ -164,17 +167,21 @@ def relative_adverb_stats(candidates):
     }
 
 
-def resplit_stats(all_results):
-    """Sentences before/after the v0.2 re-split; splitting only adds <id>b, <id>c ... rows."""
+def resplit_stats(all_results, baseline=RESPLIT_BASELINE_SENTENCES):
+    """Sentences against the fixed v0.2 baseline. Splits add <id>b, <id>c ... rows and merges
+    drop the later sentence, so removed = baseline + added - after (review N5)."""
     ids = sorted(
         f"{s['passage_id']} {s['sentence_id']}"
         for s, _ in all_results
         if RESPLIT_ID.match(s["sentence_id"])
     )
+    after = len(all_results)
     return {
-        "sentences_before": len(all_results) - len(ids),
-        "sentences_after": len(all_results),
+        "sentences_before": baseline,
+        "sentences_after": after,
         "added": len(ids),
+        "removed": baseline + len(ids) - after,
+        "net_change": after - baseline,
         "new_sentence_ids": ids,
     }
 
@@ -235,10 +242,11 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
             "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
-            "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），只报告不设预期。",
+            "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。",
             "v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。",
             "v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），原文修复后预期为 0。",
-            "拆句前句数 = 拆句后句数 − 新增 ID 数：重新拆句只新增 <原ID>b 等句子，不删除句子。",
+            f"拆句前句数是 v0.2 第一次重新拆句前的固定基线（{RESPLIT_BASELINE_SENTENCES}）；新增为现存的 <原ID>b 等句子数，"
+            "删除为合并掉的句子数（基线 + 新增 − 拆句后），net_change 为净变化。",
             "无白名单目标的 T2/T3/T4 不生成题，也不虚构拒绝原因。T6(a) 单独记录主句选句拒绝。",
             "字符偏移均为原句 [start,end)；evidence 中的 token 范围也是左闭右开。",
             "分类答案使用固定选项文字；抽样 JSONL 的 pool_status 不写入工作簿。",
