@@ -729,7 +729,7 @@
 
 ### 不改原文、改写说明
 
-共 120 句、124 条说明：不是错误 17、原文分段、截断或片段 11、作者原文的语法或用词 83、无法确定 13。其中 18 条是仍用“源文……”旧说法的信息性说明（复审归为不据此认定源文错误），按同样口径改写。
+共 120 句、124 条说明：不是错误 17、原文分段、截断或片段 11、作者原文的语法或用词 81、无法确定 15。其中 18 条是仍用“源文……”旧说法的信息性说明（复审归为不据此认定源文错误），按同样口径改写。
 
 #### 不是错误
 
@@ -773,7 +773,6 @@
 
 | 文章 | 句子 | 原句 | 改写后的说明 |
 |---|---|---|---|
-| ielts4_test4_p1 | E-22 | "Many athletes are not getting the best nutrition, even though supplements," Yessis insists. | even though supplements 是口语化的省略说法，意思是 even though they take supplements（即使服用了补充剂）。 |
 | 10_78_p2 | E-35b | Gloria Mark set office workers as his subjects. | Gloria Mark 是女性，规范写法是 her subjects；原文写作 his。 |
 | 10_78_p3 | I-02 | They do not necessarily prevent a child from access, but may prevent people with a disability," he told The Journal. | prevent a child from access 的规范写法是 prevent a child from gaining access（阻止孩子接触药物）。 |
 | 11_103_p1 | D-01 | The Martian meteorite found in Earth aroused doubts to the above analysis. | aroused doubts to 的规范写法是 raised doubts about（使人对……产生怀疑）。 |
@@ -787,8 +786,7 @@
 | 22_90_p2 | F-17 | The study authors mentioned that reduced sleep duration has become a hallmark of modern society, with people generally sleeping one to two hours less than a few decades ago and children were no exception to this. | with 结构补充现代社会的睡眠现状；and 后的 children were 与 with people sleeping 不平行，规范写法是 with ... children being no exception。 |
 | 22_90_p3 | G-02 | He has recently designed a two month long in house team building programme for senior management and will soon be delivering the first of a series of 8 workshops and activities. | two month long 和 in house 都作复合修饰语，规范写法是加连字符：two-month-long、in-house。 |
 | 22_90_p3 | G-08 | One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view. | 本句没有限定谓语，是一个句子片段；规范写法是 One initiative, for example, requires... |
-| 22_90_p3 | G-08 | One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view. | to which ... to view 介词重复，规范写法是 which all staff members will be invited to view（所有员工都将受邀观看）。 |
-| 24_56_p2 | A-04 | Yet recent research strongly suggests that, psychologically, this assumption is wrong, with 5% lower percentage announcing they are happy. | 5% lower percentage 说法不太自然，意思是“比例低 5 个百分点”。 |
+| 22_90_p3 | G-08 | One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view. | to which ... to view 不规范：view 是及物动词，可以直接以 which 作宾语，规范写法是 a theatrical performance which all staff members will be invited to view；be invited to view 中的 to 是不定式标记，要保留，多余的是 which 前的 to。 |
 | 24_56_p3 | C-05 | The immediate impact on sailors' health and incidence of scurvy on board ship was, however, limited as Lind and other physicians remained convinced that the curative effect was acid based. | remain convinced that 表示仍坚信；acid based 的规范写法是加连字符 acid-based，意为以酸为基础的。 |
 | 24_56_p3 | H-02 | This stage is, in essence, a safety net which involves continued monitoring of the drug, its properties and side-effects through which any long term adverse reactions, which remained undetected in the pre-launch clinical testing time frame can be discovered. | 第二个 which 修饰 adverse reactions；规范写法是在 time frame 后加逗号把这个从句括起来，can be discovered 才是 through which 从句的谓语。 |
 | 27_33_p3 | D-02 | Wicks has built the filters into a ladder through which all decisions have the potential to be coloured, the first step being programming – from the day we are born, there is an amount of conditioning that means we accept or reject certain points of view almost a reflex action. | almost a reflex action 前少了 as，规范写法是 almost as a reflex action（几乎像反射动作一样）。 |
@@ -861,11 +859,13 @@
 
 | 文章 | 句子 | 原句 | 改写后的说明 |
 |---|---|---|---|
+| ielts4_test4_p1 | E-22 | "Many athletes are not getting the best nutrition, even though supplements," Yessis insists. | even though 后面应接完整的分句，这里只有名词 supplements，说法不完整；可能的意思是 even though they take supplements（即使服用了补充剂），但这不是规范的省略，不宜模仿。 |
 | ielts9_test2_p2 | F-03 | Reasonably accurate for the time, that is quite close to today's value of methods in accuracy. | today's value of methods in accuracy 说法不太通顺，大意是：与今天用更精确的方法测得的数值相当接近。 |
 | 11_103_p2 | F-01 | The main reason why geoengineering is countenanced by the mainstream scientific community is that most researchers have little faith in the of politicians to agree – and then bring in the necessary carbon cuts. | have little faith in the of politicians 中 the 后缺少中心名词（如 ability 或 willingness），无法确定原词，大意是“对政治人物缺乏信心”。 |
 | 11_103_p2 | F-03 | As Dr Martin Sommerkorn, a climate change advisor says.' | As Dr Martin Sommerkorn... says 意为“正如……所说”，原文这里单独成句，没有连接要引述的内容。 |
 | 11_103_p2 | F-03 | As Dr Martin Sommerkorn, a climate change advisor says.' | a climate change advisor 是 Dr Martin Sommerkorn 的同位语；句末的单引号前面没有对应的开引号。 |
 | 22_90_p3 | G-06 | Previously the organisation has taken a more formalised approach to staff development training relying on methods such as psychometric testing discussions, motivational conferences and formal appraisals. | psychometric testing discussions 可以理解为“心理测评讨论”；也可能原本是 psychometric testing、discussions 两项，中间少了逗号。 |
+| 24_56_p2 | A-04 | Yet recent research strongly suggests that, psychologically, this assumption is wrong, with 5% lower percentage announcing they are happy. | 5% lower percentage 说法不太自然；前后文没有给出两组比例，无法确定是比例相对低 5%，还是低 5 个百分点。 |
 | 27_33_p3 | C-01 | Garen Filke, Managing Director of a large paper supply company, has put Hewings' steps to the test, and although he referred to the results as 'potentially encouraging', there remains the feeling that the focus on who is causing the problem, and this in itself is the main reason for any implemented solution to falter if not fail. | there remains 是存在句；that 后的从句不完整，the focus on who is causing the problem 后缺少谓语就接了 and，大意是“人们总把焦点放在谁造成了问题上”。 |
 | 48_21_p3 | J-01 | Agriculturists also find ways to tackle the problems that may bring to the soil. | that 从句里的 bring 缺少主语，大意是“（全球变暖）可能给土壤带来的问题”。 |
 | 62_44_p2 | B-05 | When cotton production started spreading through Andhra Pradesh state. | When 引导的时间状语从句单独成句，没有主句；从意思看，它交代棉花种植开始在安得拉邦扩展的时间背景。 |
@@ -876,3 +876,30 @@
 | 81_93_p1 | G-03 | Fallone insists that his own second-grader get ten hours a night, even when it meant dropping soccer - season that practice did not start until 7:30 — too late for her to fit in dinner and time to wind down before she needed to be snoozing. | soccer - season that practice 不通顺，大意是“放弃那个赛季的足球训练，因为训练要到 7:30 才开始”；破折号后的 too late 说明时间太晚。 |
 
 另外 5 句翻译里夹带的说明移回难点，改成正常译文：`10_78_p3` F-01、`24_56_p3` C-02、`26_72_p1` B-02、D-10、`76_43_p3` D-07。
+
+## 九、第六轮补充（2026-10-26，第五轮复审 Q1–Q3）
+
+第五轮复审又指出 9_81 两篇题目数据里仍有抄错的引用、5_59_p1 两处排印错误和 4 条说明不准确。本轮另把题目数据里引用正文的句子（中心句、定位句、解析里引号括起来的英文）逐词和改后的正文比对，并按“行尾断字留下的连字符”扫描全部机经正文。
+
+| 文章 | 段落 / 句子 | 改动 | 范围 |
+|---|---|---|---|
+| 5_59_p1 | C 段 C-06 | `Post- It Notes` → `Post-it Notes` | 原文和题目数据 |
+| 5_59_p1 | 题目数据 | `Post-It Notes` → `Post-it Notes` | 只改题目数据 |
+| 5_59_p1 | C 段 C-04 | `Peroy Spender` → `Percy Spencer` | 原文和题目数据 |
+| 9_81_p2 | 题目数据 | `capac ity` → `capacity` | 只改题目数据 |
+| 9_81_p2 | 题目数据 | `docs not` → `does not` | 只改题目数据 |
+| 9_81_p3 | 题目数据 | `newand` → `new and` | 只改题目数据 |
+| 9_81_p3 | 题目数据 | `becoming modem` → `becoming modern` | 只改题目数据 |
+| 72_15_p1 | C 段（该篇暂无阅读解析） | `crea-tures` → `creatures` | 原文和题目数据 |
+| 77_16_p3 | J 段（该篇暂无阅读解析） | `cam-paign` → `campaign` | 原文和题目数据 |
+| 77_16_p3 | G 段（该篇暂无阅读解析） | `impos-sible` → `impossible` | 原文和题目数据 |
+| 77_16_p3 | G 段（该篇暂无阅读解析） | `prom-ising` → `promising` | 原文和题目数据 |
+| 26_72_p2 | D 段（该篇暂无阅读解析） | `terres-trial` → `terrestrial` | 原文 |
+| 23_46_p2 | B 段（该篇暂无阅读解析） | `gaso-line` → `gasoline` | 原文和题目数据 |
+| 47_86_p1 | B 段（该篇暂无阅读解析） | `In-stead` → `Instead` | 原文和题目数据 |
+| 63_9_p2 | A 段（该篇暂无阅读解析） | `Oeco-phylla` → `Oecophylla` | 原文 |
+| 26_72_p3 | F 段（该篇暂无阅读解析） | `Yu- kichi` → `Yukichi` | 原文和题目数据 |
+
+`83_95_p1` G 段鹦鹉 Alex 说的 `"Co-lor."` 用连字符表示分音节发音，不是断字，保留。`84_73_p1` 有一条中心句引用了正文里没有的一段文字，属于数据源本身的问题，不是错字，本轮不改。
+
+说明改正（第八节相应条目已同步）：`ielts4_test4_p1` E-22 的 even though supplements 改为“不完整、不宜模仿”（归入无法确定）；`22_90_p3` G-08 说明 view 是及物动词、be invited to view 的 to 是不定式标记；`24_56_p2` A-04 不再断定是“低 5 个百分点”（归入无法确定）；`32_20_p1` B-03 改正 for 分句位置的说法；`83_95_p2` F-01 把 the local government targeting the right markets 说明为动名词复合结构（role 改为 gerund_phrase）。`5_59_p1` C-04、C-06 的句子、结构、难点和译名随原文同步。
