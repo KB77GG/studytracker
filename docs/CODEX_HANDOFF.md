@@ -1,7 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-26 Claude 完成第八轮：处理第六、七轮复审 U1–U6、A7–A8，提交在 `claude/word-memorization-system-eval-55v2y5`，待 Codex 复审。未合并 main、未部署。
+> 最近更新：2026-10-27 Codex 完成第八轮独立复审，结论不通过：0阻断、3应修、2建议。仅审核及交接文档；未合并main、未部署。
+
+## 2026-10-27 语法候选题 v0.2 第八轮独立复审（Codex，不通过）
+
+- **事实源**：[完整审核报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND8_CODEX_REVIEW.md)，含14项命令/结果、29条说明与23条新修订逐项覆盖、全部指定抽查表、13句×6模板回归和双跑SHA。新0阻断/3应修：V1为ielts16_test3_p2 H-04的表语because从句错归状语（3道auto）；V2为pre-modem、Fischer-Price、Witthof三处可核实排印残留（后一来源8道auto）；V3为错误声称Q27解析不显示，实际网页复盘会显示。V1/V2是新发现的存量问题，非本轮引入。另2建议为列表启发式合成边界和at_start/at_end互斥校验。
+- **关闭情况**：U1/U2/U3/U6点名修复关闭；U4原文恢复关闭但V3显示范围记录未关闭；U5指定19处关闭但全库查漏仍有V2；A7在FIXES更正、旧交接口径在本次获准交接更新中纠正；A8的E-22措辞关闭、T2多解仍待处理。第五轮A5闭合破折号回归关闭；旧A3/A6的已点名案例和排除机制关闭，不承诺全自动池原句零缺陷。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；起始26fc46d80d0d716b0ee6922935b45eb9af9fcdef，按授权快进到精确`5eb9922607a191b405b9c0139886b3a583ddae53`，只审26fc46d..5eb；不合main、不rebase。开工干净；提交前只新增本报告与改这两份交接，未改被审代码/数据/交付文件。正文与CI补记将依授权仅commit/push本分支，最终SHA以git log/最终汇报为准。
+- **另一工作树**：`/Users/zhouxin/Desktop/studytracker`仍main/`6ded77d24586327ad94e151e172ae4811b4a2eed`，behind85；既有7 modified/22 untracked入口未动。modified为design-qa.md、两交接、static/style.css、templates/listening/index.html、test_practice.html、templates/login.html；untracked为.tmp/、artifacts/、data/idictation_vocab_books/、idictation_zyz_vocab/、reading_study的browse.html/preview.html、toefl_practice的ets-practice-2至5、docs/design/及两dictation说明、prototypes/、两词书导入脚本、static/brand/auth-staircase-hero.png、templates/auth/和4个测试。不要把任务树结果当作桌面main已拥有。
+- **精确验证**：任务树`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`：101通过；新Flask-only按ci.yml完整13模块169运行/168通过/1按设计跳过；Node拼写队列通过；桌面venv（仅借解释器，cwd仍任务树）`-m unittest tests.test_reading_study -v`22通过；validator0错误、text-fixes --check=0；6改动Python Ruff check/format（extend-exclude=[]）通过。完整实际命令见报告。
+- **复现/数据**：Mac Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1CPU；仓库外5eb完整快照双跑，复用本机已验证缓存、解析变化句，四文件彼此一致；JSONL/XLSX等于提交版，两报告仅Python版本行差。50248候选；+21/−3、34恢复/13降级、仅U6那1题其他字段变化；已标记句auto泄漏0；78回归不变、7过滤吻合。raw171篇content含summary/groups一致、3篇20段拼接一致、图谱字节一致。完整main676569c先导317篇再导5eb，本机SQLite updated233/skipped84/failed0。
+- **抽查安排**：新表56旧题/304新题，按工作表+行号359行换题，仅T1序号14原位保留。表内30局部答案成立但2题多目标；34恢复+14新增auto+U6共49给定答案成立；13新降合理；7新增needs分为1答案成立/3边界或答案错/3分析需统一；auto随机50来源198题，0明显源句残缺，但有V1的3题类别/题干前提错误。所有待审题单列，不能写成“全部自动题正确”。
+- **发布/外部状态**：未推main、未PR、未部署后端/前端、未触碰生产服务器/数据库、未上传/提审/发布小程序、未调用大模型API。辅助证据`/Users/zhouxin/.codex/audits/grammar-v02-round8-20261026`仅本机（快照、脚本、日志、SQLite）；跨电脑以已push的报告为准。GitHub CI提交后补记，test与advisory lint分开。
+- **下一步**：实现方处理V1–V3并补回归/来源证据；A8多解及V4/V5按优先级决定，再独立验收。老师使用新版本并按题号迁移已有结果，不按旧行号复制。部署仍需用户另行授权。
 
 ## 2026-10-26 语法候选题 v0.2 第八轮（Claude，待复审）
 
@@ -32,7 +44,7 @@
 - **用户决定**：残缺句、明显语病句和列表片段出的题不进自动通过池（第二至四轮 A3、第五轮 A6）。做法是这些句子的题全部降为 needs_review，不拒绝整句；通用规则，没有句子 ID 名单。
 - **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第七轮”一节；原文清单第十节（255 条加前缀说明的全表）。
 - **处理**：出题器新增 `source_quality`（阅读解析有难点以“原句问题：”开头）和 `list_item`（句子以列表符号或编号开头），在 `checks.review_reasons()`，经 `collect()` → `generate_templates()` → `Context.emit` 加到每道题；报告新增 `sentence_review`。阅读解析 85 篇 251 句、255 条说明加前缀（54 条把缺陷子句前移、8 条改写语序），只改 difficult_points。
-- **结果**：候选 50,230 和题号不变，489 道 auto_pass → needs_review（441 只因原句问题、48 只因列表项，来自 142 句）；auto_pass 5922 / 4700 / 11455 / 404 / 5371 / 12742（合计 40,594）。抽查表同种子重抽，333 / 360 行换题。复审点名过的同类题全部不再自动通过。
+- **结果**：候选 50,230 和题号不变，489 道 auto_pass → needs_review（441 只因原句问题、48 只因列表项，来自 142 句）；auto_pass 5922 / 4700 / 11455 / 404 / 5371 / 12742（合计 40,594）。抽查表同种子重抽，333道新题、27道保留；按工作表与行号比较360行全部换题（本次独立复审交接纠正旧口径）。复审点名过的同类题全部不再自动通过。
 - **验证**：两次生成逐字节一致（report json `e62e5c0e19c9…`、jsonl `329cd9d5fd2a…`、xlsx `360a8110ac40…`）；新测试 4 项修改前失败；专项 97、CI 列表 165 / 1 跳过、Node、reading 22 通过；validator 0、`--check` 0、raw 重建一致；模拟导入 updated=233 / skipped=84 / failed=0。
 - **遗留**：判断依据是说明，没写说明的缺陷句仍可能自动通过；8 句（28 道）句末无句号的引导句、脚注编号等未处理；第六轮其余遗留不变。
 - **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库；origin/main 现为 676569c，与本分支只在两份交接文档重叠。

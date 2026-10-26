@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-27 — 第八轮独立复审完成（Codex，不通过）
+
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`从26fc46d按授权快进到固定5eb9922607a191b405b9c0139886b3a583ddae53；仅新增ROUND8_CODEX_REVIEW、更新两交接。桌面main已有7 modified/22 untracked未动。
+- 新0阻断/3应修/2建议：表语because错归状语的3道auto，pre-modem/Fischer-Price/Witthof三处残留，Q27错误解析实际网页显示而文档称不显示。U1/U2/U3/U6点名关闭；U4恢复已验收但显示记录须改；U5指定19处关闭但仍有查漏；A7旧交接口径本次纠正，A8多解仍开放。
+- 101专项、Flask-only169运行/1跳过、reading22、Node、6文件Ruff通过；validator0、--check0；171篇raw重建与20段拼接全等，图谱全等；两次四文件一致、报告仅Python版本差；完整main676569c到本轮本机SQLite导入233/84/0。生成50248、+21/−3、34升/13降；所有指定抽查与SHA/命令入报告。新表56旧题/304新题，359行变动；随机50来源198题0明显原句缺陷，但3题分类错。
+- 未改被审文件、未推main/部署/PR/生产操作/小程序发布。正文与CI补记随后按授权commit/push限定分支；CI将分test与advisory lint补记。辅助证据仅本机AUDIT，跨电脑以已push报告为准。下一步实现方处理V1–V3后再审。
+
 ## 2026-10-26 — 语法候选题 v0.2 第八轮（Claude）
 
 - 处理第六、七轮复审 U1–U6、A7–A8：原句问题前缀补 9 去 13、改写 25 条说明；字母编号列表识别；破折号区间回归；32_20_p3 补回被丢掉的开头两句（新增修订 at_start）；19 处排印和 2 处引号（修订表 702 → 725）。
