@@ -29,8 +29,11 @@ LIST_MARKER = re.compile(r"\d{1,2}\.\s+[A-Z]")
 # list items, still get items, but none passes automatically. A reading note that describes a
 # defect of the sentence itself opens with this prefix.
 SOURCE_PROBLEM_PREFIX = "原句问题："
-# A bulleted or numbered list item ("- is calm, and ...", "• The S.K.I. ...", "2) Restriction ...").
-LIST_ITEM = re.compile(r"^\s*(?:[-–—•*]|\(?\d{1,2}[.)])\s")
+# A bulleted or numbered list item ("- is calm, and ...", "• The S.K.I. ...", "2) Restriction ...",
+# "(iv) ...", "a) ..."). An em dash is left out: it can open a line of dialogue.
+LIST_ITEM = re.compile(r"^\s*(?:[-–•*·‣◦▪●○■□−]|\(?\d{1,3}[.)]|\(?[a-z][.)]|\(?[ivx]{1,4}\))\s")
+# A capital letter labelling an item ("B. SOC requires ..."), not an initial ("A. K. Lakhina").
+LETTER_LABEL = re.compile(r"^\s*\(?([A-Z])[.)]\s+(?![A-Z]\.)")
 QUOTED_ATTRIBUTION = re.compile(
     r"[?!][\"”’']\s+(?:[A-Z][\w.'’-]*\s+){1,3}"
     r"(?:says|said|asks|asked|adds|added|explains|explained|replies|replied|wonders|wondered)\b"
@@ -147,12 +150,24 @@ def clause_attached_to_conjunction(view):
     return any(t.dep in clause_deps and view.tokens[t.head].dep == "cc" for t in view.tokens)
 
 
-def review_reasons(sentence, difficult_points=()):
-    """Whole-sentence reasons that send every item of the sentence to review, not rejection."""
+def list_letters(sentences):
+    """Capital letters that label list items in one passage: a label counts only when the
+    passage also has the letter before or after it ("A. ..." and "B. ..."), so a lone initial
+    such as "K. Anders Ericsson" is not a list."""
+    labels = {m.group(1) for m in map(LETTER_LABEL.match, sentences) if m}
+    return frozenset(
+        letter for letter in labels if {chr(ord(letter) - 1), chr(ord(letter) + 1)} & labels
+    )
+
+
+def review_reasons(sentence, difficult_points=(), letters=frozenset()):
+    """Whole-sentence reasons that send every item of the sentence to review, not rejection.
+    letters is list_letters() of the sentence's passage."""
     reasons = []
     if any(str(point).startswith(SOURCE_PROBLEM_PREFIX) for point in difficult_points):
         reasons.append(Reason.SOURCE_QUALITY)
-    if LIST_ITEM.match(sentence):
+    label = LETTER_LABEL.match(sentence)
+    if LIST_ITEM.match(sentence) or (label and label.group(1) in letters):
         reasons.append(Reason.LIST_ITEM)
     return reasons
 

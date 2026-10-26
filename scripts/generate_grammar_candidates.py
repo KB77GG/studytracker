@@ -14,7 +14,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.grammar_items.checks import corpus_vocabulary, review_reasons, sentence_reasons
+from scripts.grammar_items.checks import (
+    corpus_vocabulary,
+    list_letters,
+    review_reasons,
+    sentence_reasons,
+)
 from scripts.grammar_items.parse_view import ParseCache, load_parser
 from scripts.grammar_items.reporting import (
     build_report,
@@ -39,6 +44,7 @@ def collect(root, nlp, cache, limit=None):
     )
     for index, path in enumerate(files[:limit], 1):
         passage = json.loads(path.read_text(encoding="utf-8"))
+        letters = list_letters(s["sentence"] for s in passage["sentences"])
         for sentence in passage["sentences"]:
             source = {
                 "source_kind": passage["source_kind"],
@@ -73,7 +79,7 @@ def collect(root, nlp, cache, limit=None):
                     source,
                     spans,
                     view,
-                    review_reasons(sentence["sentence"], sentence["difficult_points"]),
+                    review_reasons(sentence["sentence"], sentence["difficult_points"], letters),
                 )
                 candidates.extend(items)
                 rejections.extend(rejected)

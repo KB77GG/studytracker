@@ -18,6 +18,7 @@ from scripts.grammar_items.checks import Reason as R
 from scripts.grammar_items.checks import (
     corpus_vocabulary,
     glued_sentence_boundary,
+    list_letters,
     multi_sentence_unit,
     review_reasons,
     sentence_reasons,
@@ -1166,6 +1167,16 @@ class CodexReviewFixTests(unittest.TestCase):
         end = ranged.index(" – a")
         span = {"start": 0, "end": end, "text": ranged[:end]}
         self.assertIs(close_quotes(ranged, span, 0, len(ranged)), span)
+        # A digit on one side only does not make a range (review U6, 29_63_p3 A-03).
+        share = "Some $265 billion of the increase - 93% of it - was ascribed to services."
+        end = share.index(" - was")
+        span = {"start": 0, "end": end, "text": share[:end]}
+        closed = close_quotes(share, span, 0, len(share))
+        self.assertEqual(closed["text"], "Some $265 billion of the increase - 93% of it -")
+        year = "Sales in 2010–a turning point–doubled again."
+        end = year.index("–doubled")
+        span = {"start": 0, "end": end, "text": year[:end]}
+        self.assertEqual(close_quotes(year, span, 0, len(year))["text"], year[: end + 1])
 
     def test_t1_distractor_outside_its_tag_span_is_downgraded(self):
         sentence, view = tree(
@@ -1227,6 +1238,11 @@ class SentenceReviewTests(unittest.TestCase):
             "* peat: a brown deposit formed by the partial decomposition of vegetation",
             "1. Valid assessment considers cultural and linguistic diversity.",
             "2) Restriction from participation shall continue until an evaluation.",
+            "100. The last rule applies to every member.",
+            "a) The first option is cheaper.",
+            "(iv) The fourth option is slower.",
+            "· The plans may not work out.",
+            "− The plans may not work out.",
         ):
             self.assertEqual(review_reasons(item), [R.LIST_ITEM], item)
         for sentence in (
@@ -1234,12 +1250,30 @@ class SentenceReviewTests(unittest.TestCase):
             "In 5–10 years the plans may work out.",
             "1990s cities grew fast.",
             "-based materials were used.",
+            "— We agreed, she said.",  # An em dash can open dialogue.
+            "e.g. the plans may not work out.",
         ):
             self.assertEqual(review_reasons(sentence), [], sentence)
         self.assertEqual(
             review_reasons("- The plans may not work out.", points[:1]),
             [R.SOURCE_QUALITY, R.LIST_ITEM],
         )
+
+    def test_letter_labels_need_a_neighbouring_letter(self):
+        passage = [
+            "A. Participation by individuals with Down Syndrome is limited.",
+            "B. SOC requires temporary restriction of individuals from participation.",
+            "A. K. Lakhina says the government recognises the potential.",
+            "K. Anders Ericsson thinks anyone can become an expert.",
+        ]
+        letters = list_letters(passage)
+        self.assertEqual(letters, frozenset({"A", "B"}))
+        self.assertEqual(review_reasons(passage[1], (), letters), [R.LIST_ITEM])
+        self.assertEqual(review_reasons(passage[0], (), letters), [R.LIST_ITEM])
+        self.assertEqual(review_reasons(passage[2], (), letters), [])  # Initials, not a label.
+        self.assertEqual(review_reasons(passage[3], (), letters), [])
+        self.assertEqual(list_letters(passage[2:]), frozenset())
+        self.assertEqual(review_reasons(passage[1]), [])  # Needs the passage's letters.
 
     def test_review_reasons_send_every_item_to_review(self):
         sentence, view = tree(MAIN_ROWS)
