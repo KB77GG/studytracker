@@ -57,8 +57,9 @@ def span_from_tokens(sentence, tokens):
 QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
 # The digits after the apostrophe in a decade such as '60s.
 DECADE = re.compile(r"\d0s\b")
-# Dashes around an inserted phrase ("processes - melting, refining - take place").
-DASH = re.compile(r"[—–]| - ")
+# Dashes around an inserted phrase ("processes - melting, refining - take place"); a dash
+# between digits is a range ("5–10"), not one of the pair.
+DASH = re.compile(r"—|(?<!\d)–(?!\d)|(?<!\d) - (?!\d)")
 # Trimming also drops a closing bracket ("Rani Ki Vav (Queen's Stepwell"); same bounded repair.
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.

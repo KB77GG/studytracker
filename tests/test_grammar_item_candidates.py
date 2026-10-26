@@ -1158,6 +1158,11 @@ class CodexReviewFixTests(unittest.TestCase):
         end = blast.index("—can")
         span = {"start": 0, "end": end, "text": blast[:end]}
         self.assertEqual(close_quotes(blast, span, 0, end + 1)["text"], blast[: end + 1])
+        # A range dash between digits is not one of the pair (review A5).
+        ranged = "The 5–10 range – a useful convention – matters."
+        end = ranged.index(" – a")
+        span = {"start": 0, "end": end, "text": ranged[:end]}
+        self.assertIs(close_quotes(ranged, span, 0, len(ranged)), span)
 
     def test_t1_distractor_outside_its_tag_span_is_downgraded(self):
         sentence, view = tree(
