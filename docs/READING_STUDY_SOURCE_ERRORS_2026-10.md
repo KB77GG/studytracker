@@ -697,3 +697,182 @@
 
 两条都同时改题目数据（11 个引用原句的字符串）。题目数据里定位词的同义词 `catching` 是单独一个词，修订表的替换窗口至少两个词，没有改；这类同义词不在页面显示，见修订记录第四轮遗留。阅读解析：F-02 增加表达 seed caching behavior，F-03 改写难点第 1 条；F-03 两个独立分句用逗号连接的问题仍按第四节保留。
 
+## 八、第五轮补充（2026-10-26）
+
+第二至四轮复审（`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND2_4_CODEX_REVIEW.md` 附录 H）用更宽的检索词在全库难点里找到清单一至七节之外的 108 条“待分类”源文记录。本轮按同样的标准全部处理：能确定的错误改原文，其余保留原文、改写说明；另用“异常、不自然、悬垂、逗号拼接”等词和全库连字符、ff 连字扫描复查。复审点名的 OCR 断词、同篇专名和摘要也在这里列出。
+
+### 改原文
+
+| 文章 | 句子 | 改动 | 原因 |
+|---|---|---|---|
+| 11_103_p2 | E-06 | `non-fossil- fuel` → `non-fossil-fuel` | missing_space |
+| 14_23_p2 | D-04 | `spacio-visual` → `spatio-visual` | typo |
+| 18_53_p2 | I-02 | `The family's minister` → `The families minister` | typo |
+| 26_72_p1 | A-05 | `hunter- gatherers` → `hunter-gatherers` | missing_space |
+| 29_63_p1 | C 段摘要 | `大气中的CO浓度` → `大气中的二氧化碳浓度` | lost_character |
+| 44_29_p3 | M-01 | `happens- is outgoing` → `happens - is outgoing` | missing_space |
+| 53_83_p3 | F-03 | `transmission, and distribution` → `transmission and distribution` | punctuation |
+| 62_44_p3 | I-01 | `Salesperson says` → `Salesperson, says` | punctuation |
+| 62_44_p3 | I-01 | `speak rather listen` → `speak rather than listen` | typo |
+| 65_69_p2 | G-02 | `cow less steaks and chicken less drumsticks` → `cowless steaks and chickenless drumsticks` | typo |
+| 65_69_p3 | B-05 | `tyre- marks` → `tyre-marks` | missing_space |
+| 73_5_p1 | K-02+K-03 | `into it. like that` → `into it, like that` | punctuation |
+| 77_16_p2 | A-01 | `and may be even` → `and maybe even` | typo |
+| 78_102_p3 | E-03b | `multicore-away` → `multicore—away` | punctuation |
+| 84_73_p3 | E-06 | `nas al` → `nasal` | typo |
+| 92_58_p1 | B-01 | `causes dierent senses` → `causes different senses` | typo |
+| 92_58_p1 | B-01 | `syn("with")` → `syn ("with")` | missing_space |
+| 9_81_p2 | B-01 | `Conran Cove` → `Couran Cove` | typo |
+| 9_81_p2 | I-05 | `Pridcaux` → `Prideaux` | typo |
+
+同时调整句子单元：`73_5_p1` K-02 与 K-03 合并（K-03 以小写 like 开头，承接上句）；`ielts4_test4_p1` I-41 与 I-42 合并（原先在人名缩写 John S. 处被误拆，原文本身没有错误）；`44_29_p3` M-01 拆成两个列表项（M-01、M-01b）。
+
+### 不改原文、改写说明
+
+共 120 句、124 条说明：不是错误 17、原文分段、截断或片段 11、作者原文的语法或用词 83、无法确定 13。其中 18 条是仍用“源文……”旧说法的信息性说明（复审归为不据此认定源文错误），按同样口径改写。
+
+#### 不是错误
+
+| 文章 | 句子 | 原句 | 改写后的说明 |
+|---|---|---|---|
+| 10_78_p3 | C-02 | Designs for over-the-counter medicines, where characteristics such as attractiveness and distinguish-ability are regarded as significant, are usually commissioned from design agencies. | are commissioned from 表示设计工作委托给外部机构；distinguish-ability 是作者用连字符拼出的词，意为辨识度。 |
+| 13_6_p3 | B-07 | In any event, the ubiquity of the pottery, and the consistent repetition of the same types in different sizes, suggests production on an industrial scale. | 句首语义上包含两项证据，作者把它们看作一个整体，所以谓语用单数 suggests。 |
+| 16_97_p1 | B-06 | The overkill model emerged in the 1960s, when it was put forth by Paul S. Martin of the University of Arizona. | University of 与 Arizona 之间原文是换行，这里按空格处理，University of Arizona 是一个校名。 |
+| 16_97_p3 | B-03 | Recent content analyses of video games show that as many as 89% of games contain some violent content, but there is no form of aggressive content for 70% of popular games. | but 后是 there be 句型；作者区分了 violent（暴力）和 aggressive（攻击性）两种内容，所以 89% 与 70% 并不矛盾。 |
+| 27_33_p2 | C-05 | It would seem to the average person that a £50,000 minimum total cost of second level education is a lot to pay for a five-percent-better chance. | five-percent-better 是用连字符连成的复合形容词，意为“好百分之五的”。 |
+| 27_33_p3 | C-02 | With over 30 years of management experience, Filke holds that looking at the problem as an organic entity in itself, without reference to who may be at fault, or at least exacerbating the issue, is the only way to find a lasting solution. | who may be at fault 是介词 to 的宾语；or at least exacerbating the issue 承前省略了 who may be，意为“或者至少在加剧问题的人”。 |
+| 27_33_p3 | C-03 | Finger-pointing and blaming leads to an uncomfortable work environment where problems grow, and ultimately have a detrimental effect on the productivity of the workplace. | Finger-pointing and blaming 语义上是并列主语，作者把它们看作一种整体行为，所以谓语用单数 leads。 |
+| 29_63_p2 | E-08 | "Canals can do that. | 引语延续到下一句，所以本句末尾没有结束引号。 |
+| 29_63_p2 | H-02 | The Olympic Delivery Authority says: "It's being looked at and the final solution could well involve some transportation by water. | could well 表示很可能；引语延续到下一句，本句末尾没有结束引号。 |
+| 29_63_p3 | E-05 | It can offer its new rich everything from cosmetic surgeons to pet salons. | It 指 China；the new rich 是形容词作名词，表示新富阶层，原文写作 its new rich。 |
+| 53_83_p2 | G-04 | Other people may be able to replace part or all of their journey to work - or any journeys, for that matter - with low-cost transport such as a bicycle, or even by just walking. | 破折号内的 for that matter 把范围扩展到任何出行；with low-cost transport 和 by just walking 是两种替代方式，一个用 with，一个用 by。 |
+| 62_44_p3 | I-04 | All the while, the salesperson presents with a demeanour that takes it for granted that the sale will be made. | that 引导定语从句修饰 demeanour；“姿态认定……”是把态度拟人化，实际是说销售员表现得好像交易必然成交。 |
+| 78_102_p1 | H-02 | Collier insists that first Angola receives tens of billions of dollars in oil revenue and whether it gets a few hundred million more or less in aid is really second-order. | first 在这里相当于“首先要看到”，先强调石油收入的规模，再说援助多少只是次要问题。 |
+| 78_102_p2 | E-03 | In 1492, Christopher Columbus set sail in order to try to find new seasonings and thus to make his fortune with this most desired commodity of that time. | Christopher 与 Columbus 之间原文是换行，这里按空格处理，二者是同一个人名。 |
+| 81_93_p1 | C-02 | Sleep is important for health, bringing a range of benefits that, as Shakespeare put it, "knits up the ravelled sleave of care". | that 修饰 benefits；as Shakespeare put it 是插入语，引语出自《麦克白》，sleave 是莎士比亚原句的写法，指乱丝，不是 sleeve。 |
+| 83_95_p1 | F-06 | "That's never been the point. | 现在完成时强调这从来都不是研究目的；引语跨句延续，到后面才结束。 |
+| 83_95_p1 | H-06 | "He knows all this, and he gets bored, so he interrupts the others, or he gives the wrong answer just to be obstinate. | 引语在本句末尾没有结束，延续到下一句。 |
+
+#### 原文分段、截断或片段
+
+| 文章 | 句子 | 原句 | 改写后的说明 |
+|---|---|---|---|
+| ielts4_test2_p3 | G-37c | "Their developing brain is getting all sorts of stimulation. | is getting 是现在进行时，all sorts of 意为“各种各样的”；这句引语在原文中没有结束引号，引语到本句为止。 |
+| ielts9_test4_p1 | E-04 | This was achieved with the help of the chemist André | 化学家的全名 André-Louis Debierne 被分在两段：本段末是 André，下一段开头接 -Louis Debierne。 |
+| ielts9_test4_p1 | F-01 | -Louis Debierne, one of Pierre Curie's pupils. | 本片段承接上一段末尾的 André，合起来是人名 André-Louis Debierne。 |
+| 10_78_p3 | H-06 | "Many child-resistant packs | 这句引语被分在两段：本片段要和下一段开头的 are based on strength 连起来读。 |
+| 16_97_p3 | E-08 | Steven Johnson, author of | 这一句在 author of 处被分段，书名在下一段开头，两段要连起来读。 |
+| 26_72_p1 | B-02 | But "it holds a lesson for other crops, too," says Emile Frison, top banana at the International Network for the Improvement of Banana and Plantain in | top banana 是双关式表达，意为“负责人”；句末 in 后面是机构所在地，被分到了下一段。 |
+| 26_72_p1 | D-10 | "When some pest or disease comes along, severe epidemics can occur," says Geoff Hawtin, director of the Rome-based | Rome-based 后面的机构名称被分到了下一段。 |
+| 72_15_p2 | I-01 | A different explanation has been put forward by Harris. | 本段与 H 段内容相近，是原文中重复出现的段落。 |
+| 73_5_p1 | K-01 | Standing on a roof catwalk, peering down inside at people as small as termites below. | 本句只有两个并列的现在分词短语，没有主语和谓语，是作者描写站在通道上俯视情景的片段。 |
+| 83_95_p2 | G-05 | A variety of specially tailored tours, including the Brimstone Hill Fortress, and a trip to a neighboring island. | 本句只有名词短语，没有谓语，是列举旅游项目的片段，可理解为“还有多种专门定制的旅游项目”。 |
+| 92_58_p2 | E-03 | The minimum water each person requires for drinking, hygiene, and growing food. | 本句只有名词短语，没有谓语，是对上一句最低用水量的补充说明，可理解为“这是每个人用于……所需的最低水量”。 |
+
+#### 作者原文的语法或用词
+
+| 文章 | 句子 | 原句 | 改写后的说明 |
+|---|---|---|---|
+| ielts4_test4_p1 | E-22 | "Many athletes are not getting the best nutrition, even though supplements," Yessis insists. | even though supplements 是口语化的省略说法，意思是 even though they take supplements（即使服用了补充剂）。 |
+| 10_78_p2 | E-35b | Gloria Mark set office workers as his subjects. | Gloria Mark 是女性，规范写法是 her subjects；原文写作 his。 |
+| 10_78_p3 | I-02 | They do not necessarily prevent a child from access, but may prevent people with a disability," he told The Journal. | prevent a child from access 的规范写法是 prevent a child from gaining access（阻止孩子接触药物）。 |
+| 11_103_p1 | D-01 | The Martian meteorite found in Earth aroused doubts to the above analysis. | aroused doubts to 的规范写法是 raised doubts about（使人对……产生怀疑）。 |
+| 11_103_p1 | D-05 | The size and shape of the objects is consistent with Earthly fossilized nanobacteria but the existence of nanobacteria itself is still controversial. | The size and shape 是并列主语，规范写法是复数谓语 are；原文写作 is。 |
+| 11_103_p1 | E-07 | According to the valuation of the scientists, the climate of Mars gradually transits from warm and wet to cold and dry after magnetic field vanished. | after magnetic field vanished 的规范写法是 after the magnetic field vanished；transit 一般不表示“转变”，这里规范的说法是 changes 或 shifts。 |
+| 11_103_p2 | B-05 | The idea is modelled on historical volcanic explosions, such as that of Mount Pinatubo in the Philippines in 1991; which led to a short-term cooling of global temperatures by 0.5°c. | which 引导的从句修饰 that of Mount Pinatubo，规范写法是在 1991 后用逗号而不是分号；by 0.5°c 表示下降幅度（摄氏度规范写作 °C）。 |
+| 14_23_p2 | G-02 | Serious chess-playing machines began to emerge in the 1970s and 1980s, but their abilities were far below that of the top human players. | that 代替前面的 abilities，规范写法是复数 those（those of the top human players）。 |
+| 18_53_p1 | B-01 | The longitude is a term that can be used to measure the distance that one has covered from one's home to another place around the world without the limitations of naturally occurring baseline like the equator. | without... 表示这种衡量不依赖赤道之类的天然基线；baseline 是可数名词，规范写法是 a naturally occurring baseline 或复数 baselines。 |
+| 18_53_p2 | E-02 | It is patently absurd that even the structure and content of education is shaped by the demands of the tests. | structure and content 是并列主语，规范写法是复数谓语 are；原文写作 is。 |
+| 18_53_p2 | F-09 | They should be having the time of their lives at school not just worrying about tests. | 规范写法是在 school 后加逗号：at school, not just worrying about tests；not just... 与前面的 having the time of their lives 形成对比。 |
+| 22_90_p2 | F-17 | The study authors mentioned that reduced sleep duration has become a hallmark of modern society, with people generally sleeping one to two hours less than a few decades ago and children were no exception to this. | with 结构补充现代社会的睡眠现状；and 后的 children were 与 with people sleeping 不平行，规范写法是 with ... children being no exception。 |
+| 22_90_p3 | G-02 | He has recently designed a two month long in house team building programme for senior management and will soon be delivering the first of a series of 8 workshops and activities. | two month long 和 in house 都作复合修饰语，规范写法是加连字符：two-month-long、in-house。 |
+| 22_90_p3 | G-08 | One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view. | 本句没有限定谓语，是一个句子片段；规范写法是 One initiative, for example, requires... |
+| 22_90_p3 | G-08 | One initiative, for example, requiring the writing, organisation and delivery of a theatrical performance to which all staff members will be invited to view. | to which ... to view 介词重复，规范写法是 which all staff members will be invited to view（所有员工都将受邀观看）。 |
+| 24_56_p2 | A-04 | Yet recent research strongly suggests that, psychologically, this assumption is wrong, with 5% lower percentage announcing they are happy. | 5% lower percentage 说法不太自然，意思是“比例低 5 个百分点”。 |
+| 24_56_p3 | C-05 | The immediate impact on sailors' health and incidence of scurvy on board ship was, however, limited as Lind and other physicians remained convinced that the curative effect was acid based. | remain convinced that 表示仍坚信；acid based 的规范写法是加连字符 acid-based，意为以酸为基础的。 |
+| 24_56_p3 | H-02 | This stage is, in essence, a safety net which involves continued monitoring of the drug, its properties and side-effects through which any long term adverse reactions, which remained undetected in the pre-launch clinical testing time frame can be discovered. | 第二个 which 修饰 adverse reactions；规范写法是在 time frame 后加逗号把这个从句括起来，can be discovered 才是 through which 从句的谓语。 |
+| 27_33_p3 | D-02 | Wicks has built the filters into a ladder through which all decisions have the potential to be coloured, the first step being programming – from the day we are born, there is an amount of conditioning that means we accept or reject certain points of view almost a reflex action. | almost a reflex action 前少了 as，规范写法是 almost as a reflex action（几乎像反射动作一样）。 |
+| 27_33_p3 | E-02 | Tate argues that a decision should be made after a consideration of all alternatives, and a hierarchical structure that then takes responsibility for the decision and, most importantly, follows that decision through to verify whether the problem has indeed been resolved. | and 后的 a hierarchical structure 没有与前面平行的谓语，大意是“还应有一个层级结构为决定负责”，规范写法可补出 there should be。 |
+| 29_63_p2 | B-04 | "With a fleet of 11000 vessels and a capacity equalling 10000 trains or 440000 trucks, inland waterways can make transport in Europe more efficient, reliable and environmental friendly," says Jacques Barrot, vice-president of the European Commission in charge of transport. | make + 宾语 + 形容词构成宾补；environmental friendly 的规范写法是 environmentally friendly（环保的）。 |
+| 32_20_p1 | E-01 | The concerns of reformers gradually had some impact upon the working condition of children. | working condition 在这里泛指儿童的劳动条件，更常见的写法是复数 working conditions。 |
+| 32_20_p1 | G-03 | By the end of the 19th century in Britain, the situation changed dramatically, and schools became the core to the concept of a 'normal' childhood. | became the core to... 的常见说法是 the core of，意为成为这一观念的核心。 |
+| 46_84_p1 | C-04 | The more extensive women's participation at all areas of economic activities, the higher the probability for stronger economic growth. | 两个部分都省略了系动词 is；at all areas 的规范写法是 in all areas。 |
+| 48_21_p1 | C-04 | As long as there are enough layers of nacre (the secreted fluid covering the irritant) to create a gorgeous, gem-quality pearl; the size of the nucleus wouldn't make a difference to beauty or durability. | the secreted fluid covering the irritant 是 nacre 的同位解释；条件从句和主句之间规范的标点是逗号，原文用了分号。 |
+| 48_21_p1 | E-02 | Mussels must reach a mature age, which may take up almost three years, and then be transplanted an irritant. | be transplanted an irritant 不合规范，规范写法是 have an irritant transplanted（被植入刺激物）。 |
+| 48_21_p1 | E-06 | At the end of a 5- to 10-year circle, only half of the oysters may have made it through. | make it through 是习惯表达，表示成功熬过艰难过程；circle 按意思应为 cycle（周期）。 |
+| 48_21_p1 | F-01 | Imitation pearls are of another different story. | are of another different story 不合规范，常见说法是 are another story 或 are a different story（是另一回事）。 |
+| 48_21_p3 | D-01 | Global warming is not only affecting agriculture production. | agriculture production 的规范写法是 agricultural production（农业生产）。 |
+| 48_21_p3 | K-02 | Experts have surprisingly realized that animals have unconventional adaptation to global warming. | adaptation 在这里指具体的适应方式，规范写法是 unconventional adaptations 或 an unconventional adaptation。 |
+| 48_21_p3 | K-04 | Further researches will try to find out how rising temperatures would affect the ratio of sex reversal in their growth. | their 指海龟；research 通常不可数，规范写法是 research，原文写作 researches。 |
+| 48_21_p3 | M-01 | However, New Zealand's effort counts only a tip of the iceberg. | a tip of the iceberg 的常见说法是 the tip of the iceberg（冰山一角）。 |
+| 48_21_p3 | M-02 | So far, global warming has been a world issue that still hangs in an ambiguous future. | that 修饰 a world issue；hangs in an ambiguous future 不是常见搭配，大意是“未来走向仍不确定”。 |
+| 53_83_p3 | A-02 | Inside his mud-and-clay home, Ganpat Jadhav's three children used to study in the dim, smoky glow of a kerosene lamp, when their monthly fuel quota of four litres dried up in just a fortnight, they had to strain their eyes using the light from a cooking fire. | 两个独立分句只用逗号连接，规范写法是在 lamp 后用句号或分号，when 从句属于后一个分句。 |
+| 53_83_p3 | C-05 | However, the remote locations of the village will make reaching this goal difficult. | 上文说的是多个村庄，规范写法是 the villages。 |
+| 53_83_p3 | C-06 | A. K. Lakhina, the chairman of India's Rural Electrification Corporation, says the Indian government recognises the potential of LED lighting powered by solar technology, but expressed reservations about its high costs. | says 与 expressed 时态不一致，规范写法是两者统一（says ... but expresses，或 said ... but expressed）；its 指 LED lighting。 |
+| 53_83_p3 | F-04 | LED systems require far less maintenance, a longer life, and as villagers jokingly say, "no electricity bills". | require 管不到 a longer life，规范写法是 require far less maintenance, have a longer life and...。 |
+| 56_64_p2 | F-01 | Using phenomenal computing power to reconstruct and analyse microbial DNA, with a single stage of the calculations taking more than a million hours of supercomputer time, a flood of discoveries has come from the latest phase of the expedition. | Using 短语按语义说的是研究团队的工作，但主句的主语是 discoveries，这是悬垂修饰；规范写法是让主句以研究者为主语。 |
+| 56_64_p3 | M-05 | In women, the skin around the eyes is the first to go, in men it's the hands. | 两个独立分句只用逗号连接，规范写法是用分号：...the first to go; in men it's the hands。 |
+| 5_59_p2 | G-06 | It is estimated that only between 18-37% of fair-trade output is actually sold as fair trade. | between 18-37% 表示 18% 到 37% 之间，规范写法是 between 18% and 37%。 |
+| 62_44_p1 | B-01 | According to Reiki philosophy, only by undergoing an attunement process performed by a Reiki Master is an individual able to access, then channel this positive energy within, this ability once established is considered to be enduring. | 两个独立分句只用逗号连接，规范写法是在 within 后用分号或句号；后半句的主语是 this ability。 |
+| 62_44_p1 | E-01 | Controversy surrounds the practice of Reiki, some in opposition as they say that Reiki may offer only a perceived improvement in health and therefore only a 'placebo' effect. | 逗号后的 some in opposition 省略了谓语，规范写法是 some are in opposition（一些人持反对态度）。 |
+| 62_44_p2 | B-01 | The story began about 30 years ago, a handful of families migrated from the Guntur district of Andhra Pradesh, southeast India, into Punukula, a community of around 900 people farming plots of between two and 10 acres. | 两个独立分句只用逗号连接，规范写法是在 ago 后用冒号或句号。 |
+| 62_44_p3 | B-01 | We spend more time in them than we mean to, we buy 75 percent of our food from them and end up with products that we did not realize we wanted. | them 指 supermarkets；前两个独立分句只用逗号连接，规范写法是在 mean to 后用分号。 |
+| 62_44_p3 | H-05 | The seller, therefore, attempts to tease out what these conditions are and then explains how their products' benefit can meet these requirements. | products' benefit 的规范写法是 their products' benefits（产品的各项好处）。 |
+| 62_44_p3 | J-05 | If the buyer wants detail, the seller provides it, if they are more interested in the feel of the product, the seller will focus on this. | 两个 if 条件句只用逗号连接，规范写法是在 provides it 后用分号或句号。 |
+| 65_69_p1 | F-04 | 'It tends to involve short fragments between, say, 5 or 15 seconds. | between 要与 and 搭配，规范写法是 between, say, 5 and 15 seconds；say 是插入语，意为“比如”。 |
+| 65_69_p3 | J-03 | Simple as they may seem, they provide the first example of extraterrestrial archaeology and perhaps more significant for the history of the discipline formational archaeology, the study of environmental and cultural forces upon the life history of human artefacts in space. | perhaps more significant for the history of the discipline 是插入语，规范写法是前后加逗号；formational archaeology 与 extraterrestrial archaeology 并列，都是 the first example of 的对象，末尾同位语解释它的含义。 |
+| 71_1_p2 | D-01 | The movie is set in the late 1960s, at a time when the wealth and materialism of American society was very high, contrasting the relative poverty of Italian village life. | 并列主语 wealth and materialism 的规范谓语是复数 were；原文写作 was。 |
+| 73_5_p2 | A-04 | Tigers can and do kill almost everything they meet in the jungle, they will kill even attack elephants and rhino. | 两个独立分句只用逗号连接，规范写法是在 jungle 后用分号或句号。 |
+| 73_5_p2 | E-05 | A tiger is less than 1m tall but they may be up to 3m long from head to tail. | they 指前面的 A tiger，规范写法是单数 it may be up to 3m long。 |
+| 73_5_p2 | E-11 | This is especially true of a solitary hunter such as the tiger and may explain why lions-particularly young lionesses who tend to encourage one another to take risks are more dangerous than tigers. | 规范写法是用一对破折号把插入说明括起来：lions – particularly young lionesses who tend to encourage one another to take risks – are more dangerous。 |
+| 73_5_p3 | E-03 | Conservationists' understandable concern for the fate of Ascension's handful of unique species has, he says, blinded them to something quite astonishing the fact that the introduced species have been a roaring success. | the fact... 是 something quite astonishing 的同位语，规范写法是在两者之间加冒号或破折号。 |
+| 76_43_p1 | E-01 | Clinical depression was originally solely attributed to chemical imbalance in the brain, and while anti-depressant drugs which work to optimise levels of 'feel good' chemicals – serotonin and norepinephrine – are still commonly prescribed today, experts now believe that onset of depression may be caused by a number, and often combination of, physiological and socio-psychological factors. | a number, and often combination of 的规范写法是 a number of, and often a combination of, ...（多种因素，而且往往是几种因素共同作用）。 |
+| 76_43_p2 | A-04 | However, the truth is not as simple as that Romano-British culture – and that included architecture along with language, religion, political organization and the arts – survived long after the Roman withdrawal. | 规范写法是在 not as simple as that 后加冒号，后面的内容说明事实为什么没有那么简单。 |
+| 76_43_p3 | B-01 | A number of parents were not easy to be aware of the compliance, some even overlooked their children's noncompliance. | 两个独立分句只用逗号连接，规范写法是在 compliance 后用分号或句号。 |
+| 76_43_p3 | B-01 | A number of parents were not easy to be aware of the compliance, some even overlooked their children's noncompliance. | were not easy to be aware of 不合规范，规范写法是 found it hard to be aware of，意为父母“不容易意识到”。 |
+| 76_43_p3 | B-02 | Despite good education, these children did not follow the words from their parents on several occasion, especially boys in certain ages. | several occasion 的规范写法是 several occasions；in certain ages 的规范写法是 at certain ages。 |
+| 76_43_p3 | B-03 | Fortunately, this rate was acceptable, some parents could be patient with the noncompliance. | 两个独立分句只用逗号连接，规范写法是在 acceptable 后用分号或句号。 |
+| 76_43_p3 | C-07 | Many Experts held different viewpoints in recent years, they tried drilling compliance into children. | 两个独立分句只用逗号连接，规范写法是在 recent years 后用分号或句号。 |
+| 76_43_p3 | C-08 | His collaborator Wallace Friesen believed that Organizing a child's daily activities so that they occur in the same order each day as much as possible. | that 后只有动名词短语 Organizing...，缺少谓语；大意是“应尽可能让孩子每天按相同顺序进行日常活动”，规范写法可在句末补出 is helpful 之类的谓语。 |
+| 76_43_p3 | C-15 | For children, without setting these expectations on a daily basis by making them part of a regular routine, they can become very upset. | 严格地说，without setting... 的逻辑主语应是句子主语 they（孩子），但设定预期的其实是照护者，这是悬垂修饰；规范写法是 if these expectations are not set...。 |
+| 76_43_p3 | D-01 | Doctor Steven Walson addressed that organizing fun activities to occur after frequently refused activities. | addressed that 后只有动名词短语，没有谓语；大意是建议把有趣的活动安排在常被拒绝的活动之后，规范写法可用 suggested organizing...。 |
+| 76_43_p3 | D-03 | By arranging your day so that things often refused to occur right before highly preferred activities, you are able to eliminate defiant behavior and motivate your child's behavior of doing the undesirable activity. | so that 从句里的 to 多余：things often refused 意为“常被拒绝的事情”，规范写法是 so that things often refused occur right before highly preferred activities。 |
+| 76_43_p3 | D-05 | However, you can word your request in a way so that your child assumes that you have to do the non-preferred activity before moving on to the next preferred activity. | 按上下文，必须先做不喜欢的活动的是孩子，规范写法是 he or she has to do...；原文用了 you。 |
+| 76_43_p3 | E-01 | Psychologist Paul Edith insisted praise is the best way to make children comply with. | comply with 后需要宾语，规范写法是 make children comply（去掉 with）或 comply with rules。 |
+| 77_16_p2 | D-02 | First, a system must: sense or infer where its owner is and what he or she is doing. | must 后直接接动词原形 sense or infer，规范写法不需要冒号。 |
+| 78_102_p2 | A-05 | Taste buds offers a limited means of detection, however, compared with the human olfactory system, which can perceive thousands of different chemical aromas. | 复数主语 Taste buds 的规范谓语是 offer；原文写作 offers。 |
+| 83_95_p1 | B-04 | We see the love in our dogs' eyes and know that, of course, they has thoughts and emotions. | that 从句作 know 的宾语；they 的规范谓语是 have，原文写作 has。 |
+| 83_95_p2 | A-02 | It is recognised as being particularly conducive to enriching and enhancing the standing of tourism, on the basis that this form of tourism respects the natural heritage and local populations and are in keeping with the carrying capacity of the sites. | 从句中 respects 与 are 并列作谓语，主语 this form of tourism 是单数，规范写法是 is in keeping with。 |
+| 83_95_p2 | E-04 | They have passion for local community empowerment, loves photography and writes to laud current local conservation efforts, create environmental awareness and promote ecotourism. | 主语 They 是复数，规范写法是 love、write；原文写作 loves、writes。 |
+| 83_95_p2 | F-01 | In Indonesia, ecotourism started to become an important concept from 1995, in order to strengthen the domestic travelling movement, the local government targeting the right markets is a prerequisite for successful ecotourism. | 句子包含两个独立分句，中间只用逗号连接，规范写法是在 1995 后用句号或分号。 |
+| 83_95_p2 | G-01 | On the other hand, ecotourism provide as many services as traditional tourism. | 主语 ecotourism 是单数，规范写法是 provides；原文写作 provide。 |
+| 85_12_p1 | F-08 | Since then, he has been developing a new automated bottling machine that can control the amount of foam produced in the liquid, so that bottles can be filled more effectively- "I love coming up with new ideas." | produced in the liquid 是过去分词短语，修饰 foam；effectively 后面接的是他的原话，规范写法是用破折号或冒号引出引语。 |
+| 85_12_p2 | H-04 | While the Imperial College test platform was too short that only seven or eight steps could be measured at one time, the "walking on the spot" test did not accurately replicate forward walking, although many footsteps could be observed using this method. | too 与 that 不搭配，规范写法是 so short that（太短，以至于……）。 |
+| 92_58_p3 | E-01 | There is a growing trend that people prefer having to relax near seaside instead of living unhealthily in cities. | instead of 后接动名词 living；prefer having to relax 不合规范，规范写法是 prefer to relax（更愿意放松）。 |
+| 92_58_p3 | F-03 | A Royal Surf Carnival was held at Bondi Beach for Queen Elizabeth II during her first visited in Australia in 1954. | during 引出时间背景；her first visited in Australia 的规范写法是 her first visit to Australia（她首次访问澳大利亚）。 |
+| 92_58_p3 | F-07 | However, the shortage of houses occurs when lots of people crushed to the seaside. | when 引导时间状语从句；crushed 按意思应为 rushed（涌向）。 |
+| 92_58_p3 | F-09 | However, people still choose Bondi as the satisfied destination rather than Manly. | rather than 引出被排除的选择 Manly；satisfied 用来形容人，修饰 destination 时规范写法是 satisfying。 |
+| 92_58_p3 | G-04 | The valley running down to the beach is the famous world over for its view of distinctive red-tiled roofs. | the famous world over 的规范写法是 famous the world over（闻名全世界）。 |
+| 92_58_p3 | H-06 | People protest for their human rights of having a pure seaside and argue for health life in Bondi. | of having... 说明 human rights 的具体内容；health life 的规范写法是 a healthy life。 |
+| 9_81_p1 | E-03 | And after they were given some evidence opposing the position, the Korean started to modified or decreased their support. | started to modified or decreased 的规范写法是 started to modify or decrease（开始改变或降低支持）。 |
+| 9_81_p1 | F-02 | Test subject was given an argument "All animals with furs hibernate. Rabbit has fur. Therefore, rabbit hibernate". | rabbit hibernate 的规范写法是 rabbits hibernate 或 a rabbit hibernates。 |
+
+#### 无法确定
+
+| 文章 | 句子 | 原句 | 改写后的说明 |
+|---|---|---|---|
+| ielts9_test2_p2 | F-03 | Reasonably accurate for the time, that is quite close to today's value of methods in accuracy. | today's value of methods in accuracy 说法不太通顺，大意是：与今天用更精确的方法测得的数值相当接近。 |
+| 11_103_p2 | F-01 | The main reason why geoengineering is countenanced by the mainstream scientific community is that most researchers have little faith in the of politicians to agree – and then bring in the necessary carbon cuts. | have little faith in the of politicians 中 the 后缺少中心名词（如 ability 或 willingness），无法确定原词，大意是“对政治人物缺乏信心”。 |
+| 11_103_p2 | F-03 | As Dr Martin Sommerkorn, a climate change advisor says.' | As Dr Martin Sommerkorn... says 意为“正如……所说”，原文这里单独成句，没有连接要引述的内容。 |
+| 11_103_p2 | F-03 | As Dr Martin Sommerkorn, a climate change advisor says.' | a climate change advisor 是 Dr Martin Sommerkorn 的同位语；句末的单引号前面没有对应的开引号。 |
+| 22_90_p3 | G-06 | Previously the organisation has taken a more formalised approach to staff development training relying on methods such as psychometric testing discussions, motivational conferences and formal appraisals. | psychometric testing discussions 可以理解为“心理测评讨论”；也可能原本是 psychometric testing、discussions 两项，中间少了逗号。 |
+| 27_33_p3 | C-01 | Garen Filke, Managing Director of a large paper supply company, has put Hewings' steps to the test, and although he referred to the results as 'potentially encouraging', there remains the feeling that the focus on who is causing the problem, and this in itself is the main reason for any implemented solution to falter if not fail. | there remains 是存在句；that 后的从句不完整，the focus on who is causing the problem 后缺少谓语就接了 and，大意是“人们总把焦点放在谁造成了问题上”。 |
+| 48_21_p3 | J-01 | Agriculturists also find ways to tackle the problems that may bring to the soil. | that 从句里的 bring 缺少主语，大意是“（全球变暖）可能给土壤带来的问题”。 |
+| 62_44_p2 | B-05 | When cotton production started spreading through Andhra Pradesh state. | When 引导的时间状语从句单独成句，没有主句；从意思看，它交代棉花种植开始在安得拉邦扩展的时间背景。 |
+| 62_44_p2 | C-08 | Eventually, farmers were mixing sometimes having to spray their cotton as frequently as two times a week. | were mixing 后缺少宾语，大意是农民不断混配农药，有时不得不每周喷两次药。 |
+| 73_5_p2 | A-04 | Tigers can and do kill almost everything they meet in the jungle, they will kill even attack elephants and rhino. | can and do kill 中 do 用于强调事实；后半句 kill even attack 不通顺，大意是“甚至会攻击大象和犀牛”。 |
+| 76_43_p3 | C-02 | When they are growing up. | When 引导的时间状语从句单独成句，没有主句；从意思看，它说明前一句的情况发生在孩子成长期间。 |
+| 76_43_p3 | D-07 | Instead of the word your request like this, "As soon as you are done cleaning your room we will be able to play that really fun game you wanted to play." | Instead of the word your request like this 不通顺，大意是“改成这样措辞”，规范写法可以是 Instead, word your request like this。 |
+| 81_93_p1 | G-03 | Fallone insists that his own second-grader get ten hours a night, even when it meant dropping soccer - season that practice did not start until 7:30 — too late for her to fit in dinner and time to wind down before she needed to be snoozing. | soccer - season that practice 不通顺，大意是“放弃那个赛季的足球训练，因为训练要到 7:30 才开始”；破折号后的 too late 说明时间太晚。 |
+
+另外 5 句翻译里夹带的说明移回难点，改成正常译文：`10_78_p3` F-01、`24_56_p3` C-02、`26_72_p1` B-02、D-10、`76_43_p3` D-07。

@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-26 第二至四轮独立复审完成，结论不通过。新增0阻断/5应修/3建议，上一轮1阻断仍未关闭；正文已提交推任务分支，CI test通过、lint存量advisory失败；本次补记结果。被审代码/数据固定1f03c84，未部署。
+> 最近更新：2026-10-26 Claude 完成第五轮：处理 Codex 第一轮（R1–R4）与第二至四轮（B1、N1–N5、A1–A3）复审的问题，提交在 `claude/word-memorization-system-eval-55v2y5`，待 Codex 复审。未合并 main、未部署。
+
+## 2026-10-26 语法候选题 v0.2 第五轮（Claude，待复审）
+
+- **事实源**：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md` 的“第五轮”一节（逐条对应复审编号）；原文清单 `docs/READING_STUDY_SOURCE_ERRORS_2026-10.md` 第八节；两份复审记录已并入本分支（合并提交 `4afeea0`）。
+- **出题器**：主句谓语题的干扰项越出来源标注时降级（阻断 B1/R1，3 道）；数字开头的引语恢复成对（R2）；目标内成对破折号在原标注内补回（A2）；`resplit` 改用固定基线 12,657 并报告 removed / net_change（N5）；`tagged_fragment` 预期 30。
+- **原文与题目数据**：修订表 643 → 686 条；`scripts/reading_jijing_text_fixes.py` 在题目数据里整词替换、兼容弯撇号，新增 `exact`（整串替换）和 `summary`（改中文摘要）；题目数据 180 个字符串同步（N2）；剩余 OCR 断词、同篇专名、摘要 CO、清单外可确定的错误改原文（R3、N1、A3）。
+- **阅读解析**：清单外 108 条源文记录全部分类处理，另统一 18 条旧说法和 5 句译文（N1）；11 处教学错误、4 个 role 标签改正（N3、N4）；`api/reading_study_glossary.py` 让 15 个 `ellip*` role 显示“省略结构”。句子 12,745 → 12,744。
+- **验证**：新增 83 道题逐题核对、种子 20261028 抽 30 题全对；回归一致；两次生成逐字节一致（jsonl `4098cdd88d26…`、xlsx `72cab3ba0c50…`、report json `bf148c672b49…`）；Flask-only CI 列表 161 ran / 1 skipped，Node、`tests.test_reading_study` 22、专项 93 通过；validator 0、`--check` 0、raw 重建一致；临时库先导入 `origin/main` 65f1859 完整快照再导入本分支：updated=233 / skipped=84 / failed=0（135 数据 + 98 标签）。
+- **main 已前进**：`origin/main` 有 12 个本分支没有的提交，与本分支只在 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 重叠。
+- **遗留**：残缺句是否排除出自动通过池需用户决定（复审 A3）；IELTS 原文的同类排印问题不在修订表范围；约 85 处含混 role；截短题目引用的大小写；ielts18_test3 的 `\x02` 等存量问题。
+- **仅云端会话可见**：转换、扫描、核对脚本和临时 SQLite 在会话 scratchpad，不提交；`output/grammar_items/` 被忽略，需重跑生成脚本获得。
+- **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库。上线需用户授权：合并 main 并部署 → 备份数据库 → `scripts/import_reading_study.py`，预期 updated=233。
+- **下一步**：Codex 复审第五轮（`1f03c84..` 本轮最后提交）→ 老师盲审 → 用户授权上线。
 
 ## 2026-10-26 第二至四轮独立复审（Codex，不通过）
 
