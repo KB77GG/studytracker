@@ -687,4 +687,6 @@ raw内存重建采用build_tests(raw, 'jijing')；只将localize_image替换为�
 
 ## GitHub CI补记
 
-审核正文提交/推送后在此记录实际run、head SHA和test/lint结果；未把此前Claude的CI当作本轮CI。
+审核正文已提交并推送：`e573761fd5de1433f28510a4cb07d88dc831ad85`，远端codex分支核对同SHA。[CI 40342252504](https://github.com/KB77GG/studytracker/actions/runs/40342252504)已完成，headSha核对一致：test成功（165运行、164通过、1跳过），Node拼写队列步骤成功；lint的Ruff check为存量advisory失败，format步骤跳过，工作流整体success。日志报错路径与本轮5个Python改动文件无交集，不能把整体success写成所有job全绿。
+
+本补记仅改本报告和两份交接，随后纯文档提交并推送同一codex分支，不含skip标记；最终HEAD与对应CI在最终用户汇报中给出。辅助证据只在本机，三份文档已通过Git同步；后端/前端/数据库/小程序仍未部署或发布。

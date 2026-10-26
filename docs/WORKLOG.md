@@ -9,7 +9,7 @@
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`按授权从bf36b967快进到固定4a43124，审f565da2..4a43124。只新增ROUND6_7_CODEX_REVIEW并更新两交接；桌面main既有7 modified/22 untracked未动。
 - 新0阻断/6应修/2建议：原句缺陷漏标、合法表达误标、字母列表遗漏、32_20_p3缺失引用、19处排印残留、数字区间规则使1道auto T5丢闭破折号。Q1–Q4点名关闭；A5/A6/旧A3不能全关闭。
 - 97专项、Flask-only165运行/1跳过、reading22、Node、Ruff通过；validator0、textcheck0、171篇raw重建一致、图谱一致；两次四文件字节一致，报告仅Python版本差异；完整main676569c到本轮临时SQLite导入233/84/0。255说明逐条及四组抽查明细、SHA/命令均入报告。333是新题数，360行全部换题。
-- 本条随正文提交，随后只push本分支并补记GitHub CI；未修被审文件、未推main/部署/PR/生产操作/小程序发布。下一步实现方处理U1–U6，再审；辅助证据仅AUDIT本机。
+- 正文已commit/push `e573761fd5de1433f28510a4cb07d88dc831ad85`；[CI 40342252504](https://github.com/KB77GG/studytracker/actions/runs/40342252504) test/Node成功（165运行/1跳过），lint存量advisory失败、format跳过，整体success。本条由后续纯文档CI补记提交承载，最终HEAD/CI见最终汇报。未修被审文件、未推main/部署/PR/生产操作/小程序发布；下一步实现方处理U1–U6，再审；辅助证据仅AUDIT本机。
 
 ## 2026-10-26 — 语法候选题 v0.2 第七轮（Claude）
 
