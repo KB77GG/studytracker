@@ -472,7 +472,7 @@ flowchart TD
 
 #### G-N03 动名词作主语和宾语（Gerunds）
 
-- **阶段**：第二阶段 · **题源**：部分可自动，306 句真题（标注概念：gerund_phrase）
+- **阶段**：第二阶段 · **题源**：部分可自动，307 句真题（标注概念：gerund_phrase）
 - **学习目标**：识别动名词短语，判断它作主语还是宾语。
 - **掌握证据**：点出动名词短语；判断它作主语还是宾语
 - **常见错误**：与现在分词混淆
@@ -485,7 +485,7 @@ flowchart TD
 
 #### G-N04 分词短语（Participial phrases）
 
-- **阶段**：第一阶段 · **题源**：可自动出题，2,012 句真题（标注概念：participial_phrase）
+- **阶段**：第一阶段 · **题源**：可自动出题，2,011 句真题（标注概念：participial_phrase）
 - **学习目标**：理解 -ing 表主动或进行、-ed 表被动或完成，判断分词短语是作后置定语还是作状语。
 - **掌握证据**：划出分词短语；判断它修饰名词还是交代背景；把后置分词还原成定语从句（the results published → that were published）
 - **常见错误**：把后置过去分词当成主句谓语（The results published last year showed… 中选 published）
@@ -657,9 +657,9 @@ flowchart TD
 | `noun_clause` | 名词性从句 | 2,491（19.5%） | G-C08 名词性从句及其成分 |
 | `adverbial_clause` | 状语从句 | 2,670（21.0%） | G-C10 状语从句：识别与边界、G-C11 状语从句的逻辑关系 |
 | `prepositional_phrase` | 介词短语 | 2,636（20.7%） | G-P02 介词短语及其修饰对象 |
-| `participial_phrase` | 分词短语 | 2,012（15.8%） | G-N04 分词短语 |
+| `participial_phrase` | 分词短语 | 2,011（15.8%） | G-N04 分词短语 |
 | `infinitive_phrase` | 不定式 | 693（5.4%） | G-N02 不定式的功能 |
-| `gerund_phrase` | 动名词 | 306（2.4%） | G-N03 动名词作主语和宾语 |
+| `gerund_phrase` | 动名词 | 307（2.4%） | G-N03 动名词作主语和宾语 |
 | `non_finite_clause` | 非谓语结构 | 709（5.6%） | G-N01 区分谓语与非谓语 |
 | `apposition` | 同位语 | 1,054（8.3%） | G-P05 同位语 |
 | `parenthesis` | 插入语 | 512（4.0%） | G-P06 插入语 |

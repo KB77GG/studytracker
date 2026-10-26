@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "bfd88826712ac620d44f1afa8f02e63e07aa171853e84c4497d576d0d0392db1",
+  "reading_study_sha256": "0ae023e20a43ef95d43d99a8ffb72bcc0a41fd534f96e8487eed1fd2fe9ab0c9",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -79,11 +79,11 @@
     "auto_pass": 414
   },
   "G-N01": {
-    "auto_pass": 11009,
+    "auto_pass": 11010,
     "needs_review": 1518
   },
   "G-N04": {
-    "auto_pass": 1885,
+    "auto_pass": 1884,
     "needs_review": 62
   },
   "G-L01": {
@@ -1661,8 +1661,8 @@
         "clause_type_classify"
       ],
       "item_ids": [
-        "gi_v02_ca9a2c9d5af1",
-        "gi_v02_da26758657bc"
+        "gi_v02_7d5f808294d0",
+        "gi_v02_8d650adc7c17"
       ]
     },
     {
