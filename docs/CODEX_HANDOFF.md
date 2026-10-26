@@ -10,6 +10,7 @@
 - **结果**：候选 50,248（+21 / −3，都在改动的三句）；34 道恢复自动通过、13 道降为待复核，内容变化只有 U6 那 1 道；auto_pass 5926 / 4705 / 11465 / 404 / 5377 / 12749。恢复题和新增自动题逐题核对正确。抽查表随池子变化重抽（56 道仍在表里）。
 - **验证**：两次生成逐字节一致（report json `64c628fe0dc6…`、jsonl `ba6bbe12e9f7…`、xlsx `4d18539cfee9…`）；新测试在旧代码上失败；专项 101、CI 列表 169 / 1 跳过、Node、reading 22 通过；validator 0、`--check` 0、raw 重建一致；模拟导入 updated=233 / skipped=84 / failed=0。
 - **部署/外部状态**：未推 main、未开 PR、未部署，未操作生产服务器或数据库；origin/main 仍为 676569c，与本分支只在两份交接文档重叠。
+- **CI**：7aa4840 的 [CI 40346883046](https://github.com/KB77GG/studytracker/actions/runs/40346883046) test 成功；lint 是存量 advisory 失败、format 跳过，整体 success。
 - **下一步**：Codex 复审第八轮（`26fc46d..` 本轮最后提交）→ 老师盲审（用新抽查表）→ 用户授权上线。
 
 ## 2026-10-26 语法候选题 v0.2 第六、七轮独立复审（Codex，不通过）
