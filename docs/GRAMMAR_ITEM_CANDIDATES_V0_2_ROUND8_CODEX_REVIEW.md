@@ -81,7 +81,7 @@ E-02共有11候选，8 auto/3 needs；8道auto为 `gi_v02_dbe60c543fc1`、`gi_v0
 
 位置：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_FIXES.md:455`，把32_20_p3的summary、target_para和第27题解析一起描述为“数据源原样（不显示）”。summary和target_para确实不由当前网页/小程序阅读页显示，但第27题analysis及central_sentences会在网页复盘卡显示。
 
-调用链：`templates/reading/test_practice.html:987`、`:1248` → `static/js/practice_renderers.js:674`读取analysis，`:679`读取central_sentences，`:698`/`:700`渲染“解析”“答案依据”。用真实第27题调用纯函数renderReviewCard，analysisVisible与centralVisible均为true。小程序原生阅读页未找到对这两个展示字段的消费，不能把网页结论也套成“不显示”。这次没有运行服务器或打开生产页面。
+调用链：`templates/reading/test_practice.html:987`、`:1248` → `static/js/practice_renderers.js:674`读取analysis，`:679`读取central_sentences，`:698`/`:700`渲染“解析”“答案依据”。用真实第27题调用纯函数renderReviewCard，analysisVisible与centralVisible均为true。小程序原生阅读页未找到对这两个展示字段的消费，不能把网页结论也套成“不显示”。提交后的网页代码复核也确认提交成功会在test_practice.html:1463切换review模式，practice_modes.js的review能力允许显示正确性/解析；并非仅存在一个未调用函数。这次没有运行服务器或打开生产页面。
 
 第27题答案E与现显示段落一致，但解析用A段“盲人摸象”支撑E，已有披露；本报告不把已知错误解析重新算一个新数据问题。**新增问题是暴露范围声明不实**，可能使后续审核跳过学生确实能看到的内容。
 
@@ -566,4 +566,10 @@ console.log(html.includes(renderer.escapeHtml(q.analysis))); // true
 
 ## 提交与GitHub CI
 
-审核正文提交后推送限定分支，再补记CI。CI的test为门禁，lint为仓库存量advisory，两者必须分别报告；不能把整体success写成lint通过。最终提交SHA及CI链接以本节补记和最终汇报为准。
+审核正文提交 `5483d2571e4805dbbfee0c9efa33bdffd3986abe` 已push到 `origin/codex/grammar-item-candidates`。该提交的 [GitHub CI 40360754191](https://github.com/KB77GG/studytracker/actions/runs/40360754191) 已完成：
+
+- **test：success**。GitHub日志实际169项运行、168通过、1跳过；Node spelling queue步骤success。
+- **lint：failure（存量advisory）**。Ruff check失败，format步骤skipped；与本轮6个改动Python文件单独check/format全通过应分开看。
+- workflow整体success是因为lint允许失败，不代表lint通过。
+
+实际取证：`gh run view 40360754191 --json headSha,status,conclusion,url,jobs`，分别读取job `121705201615`（test）和`121705200708`（lint）的`--log`；完整JSON/日志保存于AUDIT的ci-body文件。该CI补记独立commit/push，最终HEAD及其CI在最终用户汇报中提供；补记仍只改三份授权文档，未改被审内容。
