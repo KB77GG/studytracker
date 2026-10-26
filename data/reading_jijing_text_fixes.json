@@ -269,6 +269,23 @@
       "reason": "missing_space_between_sentences"
     },
     {
+      "passage_id": "reading_jijing_91_test_49_p1",
+      "paragraph_label": "C",
+      "sentence_id": "C-01",
+      "find": "processing.\" There's",
+      "replace": "processing. \"There's",
+      "reason": "punctuation"
+    },
+    {
+      "passage_id": "reading_jijing_91_test_49_p1",
+      "paragraph_label": null,
+      "sentence_id": null,
+      "find": "processing.” There’s",
+      "replace": "processing. “There’s",
+      "reason": "punctuation",
+      "questions": true
+    },
+    {
       "passage_id": "reading_jijing_27_test_33_p1",
       "paragraph_label": "B",
       "sentence_id": "B-09",
@@ -4597,6 +4614,15 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_23_test_46_p1",
+      "paragraph_label": "B",
+      "sentence_id": "B-04b",
+      "find": "compiled.",
+      "replace": "compiled.'",
+      "reason": "punctuation",
+      "at_end": true
+    },
+    {
       "passage_id": "reading_jijing_24_test_56_p2",
       "paragraph_label": "F",
       "sentence_id": "F-01",
@@ -4706,6 +4732,15 @@
       "find": "high- insulin-secretors",
       "replace": "high-insulin-secretors",
       "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_32_test_20_p3",
+      "paragraph_label": "A",
+      "sentence_id": "A-01",
+      "find": "The various findings",
+      "replace": "The field of weight loss is like the ancient fable about the blind men and the elephant. Each man investigates a different part of the animal and reports back, only to discover their findings are bafflingly incompatible. The various findings",
+      "reason": "lost_text",
+      "at_start": true
     },
     {
       "passage_id": "reading_jijing_38_test_22_p3",
@@ -5976,12 +6011,56 @@
       "questions": true
     },
     {
+      "passage_id": "reading_jijing_77_test_16_p3",
+      "paragraph_label": "E",
+      "sentence_id": null,
+      "find": "unpre-pared",
+      "replace": "unprepared",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_77_test_16_p3",
+      "paragraph_label": "F",
+      "sentence_id": null,
+      "find": "e-busi-ness",
+      "replace": "e-business",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_77_test_16_p3",
+      "paragraph_label": "G",
+      "sentence_id": null,
+      "find": "under-mining",
+      "replace": "undermining",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_77_test_16_p3",
+      "paragraph_label": "J",
+      "sentence_id": null,
+      "find": "legiti-mately",
+      "replace": "legitimately",
+      "reason": "typo"
+    },
+    {
       "passage_id": "reading_jijing_26_test_72_p2",
       "paragraph_label": "D",
       "sentence_id": null,
       "find": "terres-trial",
       "replace": "terrestrial",
       "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_26_test_72_p2",
+      "paragraph_label": "C",
+      "sentence_id": null,
+      "find": "post- glacial",
+      "replace": "post-glacial",
+      "reason": "missing_space",
+      "questions": true
     },
     {
       "passage_id": "reading_jijing_23_test_46_p2",
@@ -6015,6 +6094,128 @@
       "sentence_id": null,
       "find": "Yu- kichi",
       "replace": "Yukichi",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_26_test_72_p3",
+      "paragraph_label": "B",
+      "sentence_id": null,
+      "find": "modern- day",
+      "replace": "modern-day",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_26_test_72_p3",
+      "paragraph_label": "E",
+      "sentence_id": null,
+      "find": "post- classical",
+      "replace": "post-classical",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_47_test_86_p3",
+      "paragraph_label": "H",
+      "sentence_id": null,
+      "find": "sacri-lice",
+      "replace": "sacrifice",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_52_test_62_p1",
+      "paragraph_label": "F",
+      "sentence_id": null,
+      "find": "mountain- climbing",
+      "replace": "mountain-climbing",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_52_test_62_p2",
+      "paragraph_label": "G",
+      "sentence_id": null,
+      "find": "Noil-Rapid",
+      "replace": "Non-Rapid",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_49_test_105_p1",
+      "paragraph_label": "H",
+      "sentence_id": null,
+      "find": "your- shoulder",
+      "replace": "your shoulder",
+      "reason": "punctuation",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_57_test_37_p1",
+      "paragraph_label": "B",
+      "sentence_id": null,
+      "find": "attention- absorbing",
+      "replace": "attention-absorbing",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_31_test_99_p1",
+      "paragraph_label": "I",
+      "sentence_id": null,
+      "find": "Urbana- Champaign",
+      "replace": "Urbana-Champaign",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_77_test_16_p1",
+      "paragraph_label": "F",
+      "sentence_id": null,
+      "find": "Terra- Cotta",
+      "replace": "Terra-Cotta",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_60_test_101_p2",
+      "paragraph_label": "A",
+      "sentence_id": null,
+      "find": "love-bate",
+      "replace": "love-hate",
+      "reason": "typo",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_60_test_101_p2",
+      "paragraph_label": "F",
+      "sentence_id": null,
+      "find": "built- in",
+      "replace": "built-in",
+      "reason": "missing_space",
+      "questions": true
+    },
+    {
+      "passage_id": "reading_jijing_60_test_101_p2",
+      "paragraph_label": "G",
+      "sentence_id": null,
+      "find": "attention-al",
+      "replace": "attentional",
+      "reason": "typo"
+    },
+    {
+      "passage_id": "reading_jijing_23_test_46_p3",
+      "paragraph_label": "J",
+      "sentence_id": null,
+      "find": "long- lasting",
+      "replace": "long-lasting",
+      "reason": "missing_space"
+    },
+    {
+      "passage_id": "reading_jijing_28_test_76_p3",
+      "paragraph_label": "C",
+      "sentence_id": null,
+      "find": "leaf- eaters",
+      "replace": "leaf-eaters",
       "reason": "missing_space",
       "questions": true
     }
