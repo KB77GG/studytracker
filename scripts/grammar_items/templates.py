@@ -220,6 +220,8 @@ class Context:
     source: dict
     spans: tuple
     view: object
+    # Whole-sentence review reasons (checks.review_reasons), added to every item emitted.
+    review_reasons: tuple = ()
     candidates: list = field(default_factory=list)
     rejections: list = field(default_factory=list)
 
@@ -265,7 +267,9 @@ class Context:
         identity = target or char_span(self.sentence, span.start, span.end)
         parser_evidence = evidence(self.view, span, head)
         parser_evidence.update(extra or {})
-        reasons = sorted(set(reasons) | set(ambiguous(span, self.sentence, target)))
+        reasons = sorted(
+            set(reasons) | set(self.review_reasons) | set(ambiguous(span, self.sentence, target))
+        )
         item = {
             "item_id": item_id(
                 self.source,
@@ -634,8 +638,8 @@ def finite_or_not(ctx, main_item, main_rejections):
         )
 
 
-def generate_templates(source, spans, view):
-    ctx = Context(source, spans, view)
+def generate_templates(source, spans, view, review_reasons=()):
+    ctx = Context(source, spans, view, tuple(review_reasons))
     main_item, main_rejections = main_verb(ctx)
     clause_boundaries(ctx)
     classify_clauses(ctx)

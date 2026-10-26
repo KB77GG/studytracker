@@ -167,6 +167,24 @@ def relative_adverb_stats(candidates):
     }
 
 
+def sentence_review_stats(candidates):
+    """Round 7: items sent to review by a whole-sentence reason; only_reason counts the items
+    that would otherwise have passed automatically."""
+    result = {}
+    for reason in (R.SOURCE_QUALITY, R.LIST_ITEM):
+        flagged = [i for i in candidates if reason in i["reasons"]]
+        result[reason] = {
+            "sentences": len(
+                {(i["source"]["passage_id"], i["source"]["sentence_id"]) for i in flagged}
+            ),
+            "items_by_template": dict(sorted(Counter(i["template"] for i in flagged).items())),
+            "only_reason": sum(
+                not set(i["reasons"]) - {R.SOURCE_QUALITY, R.LIST_ITEM} for i in flagged
+            ),
+        }
+    return result
+
+
 def resplit_stats(all_results, baseline=RESPLIT_BASELINE_SENTENCES):
     """Sentences against the fixed v0.2 baseline. Splits add <id>b, <id>c ... rows and merges
     drop the later sentence, so removed = baseline + added - after (review N5)."""
@@ -228,6 +246,7 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
         "candidate_difficulty": dict(sorted(Counter(i["difficulty"] for i in candidates).items())),
         "independent_sentence_filters": independent_hits(all_results),
         "possible_relative_adverb": relative_adverb_stats(candidates),
+        "sentence_review": sentence_review_stats(candidates),
         "resplit": resplit_stats(all_results),
         "regression_cases": benchmark_results(candidates, rejections, sources),
         "review_batch": {
@@ -242,6 +261,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
             "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
+            "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
+            "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
+            "这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。",
             "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。",
             "v0.2：leading_stray_punctuation 排除以孤立标点开头的句子（段落标号被删后残留的句点），原文修复后预期为 0。",
             "v0.2：control_character 排除含控制字符的句子（原文转码时丢失的字符，如 $ 变成 NUL），原文修复后预期为 0。",
@@ -280,6 +302,7 @@ def markdown_report(report):
         ("candidate_difficulty", "难度分布"),
         ("review_batch", "抽查清单"),
         ("possible_relative_adverb", "关系副词风险"),
+        ("sentence_review", "整句复核标记"),
         ("resplit", "重新拆句"),
     ):
         lines.extend(

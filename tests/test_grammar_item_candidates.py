@@ -12,12 +12,14 @@ from hashlib import sha256
 from pathlib import Path
 from zipfile import ZipFile
 
+from scripts.generate_grammar_candidates import collect
 from scripts.grammar_items import spans as roles
 from scripts.grammar_items.checks import Reason as R
 from scripts.grammar_items.checks import (
     corpus_vocabulary,
     glued_sentence_boundary,
     multi_sentence_unit,
+    review_reasons,
     sentence_reasons,
     suspected_split_word,
     unbalanced,
@@ -27,6 +29,7 @@ from scripts.grammar_items.reporting import (
     independent_hits,
     relative_adverb_stats,
     resplit_stats,
+    sentence_review_stats,
     template_counts,
 )
 from scripts.grammar_items.review_batch import (
@@ -1193,6 +1196,134 @@ class CodexReviewFixTests(unittest.TestCase):
         tags[2] = ("to close the gate", "infinitive_complement", 2)
         t1 = by_template(generate(sentence, view, tags)[0], "main_verb_tap")[0]
         self.assertEqual(t1["status"], "auto_pass")
+
+
+MAIN_ROWS = [
+    ("The", "det", 1, "DET", "DT"),
+    ("plans", "nsubj", 4, "NOUN", "NNS"),
+    ("may", "aux", 4, "AUX", "MD"),
+    ("not", "neg", 4, "PART", "RB"),
+    ("work", "ROOT", 4, "VERB", "VB"),
+    ("out", "prt", 4, "ADP", "RP"),
+    ("when", "mark", 8, "SCONJ", "IN"),
+    ("prices", "nsubj", 8, "NOUN", "NNS"),
+    ("rise", "advcl", 4, "VERB", "VBP"),
+    ("today", "npadvmod", 8, "NOUN", "NN"),
+    (".", "punct", 4, "PUNCT", "."),
+]
+
+
+class SentenceReviewTests(unittest.TestCase):
+    """Round 7: defective source sentences and list items never pass automatically."""
+
+    def test_review_reasons(self):
+        points = ["原句问题：主语是复数，规范写法是 rise。", "when 引导时间状语从句。"]
+        self.assertEqual(review_reasons("The plans may not work out.", points), [R.SOURCE_QUALITY])
+        # Only a note opening with the prefix counts.
+        self.assertEqual(review_reasons("The plans may not work out.", ["见原句问题：无"]), [])
+        for item in (
+            "- is calm, and is not excitable when something unexpected happens",
+            "• The S.K.I. Bicycle Courier Service first started in the Sudan.",
+            "* peat: a brown deposit formed by the partial decomposition of vegetation",
+            "1. Valid assessment considers cultural and linguistic diversity.",
+            "2) Restriction from participation shall continue until an evaluation.",
+        ):
+            self.assertEqual(review_reasons(item), [R.LIST_ITEM], item)
+        for sentence in (
+            "1.5 million people moved to the city in 2010.",
+            "In 5–10 years the plans may work out.",
+            "1990s cities grew fast.",
+            "-based materials were used.",
+        ):
+            self.assertEqual(review_reasons(sentence), [], sentence)
+        self.assertEqual(
+            review_reasons("- The plans may not work out.", points[:1]),
+            [R.SOURCE_QUALITY, R.LIST_ITEM],
+        )
+
+    def test_review_reasons_send_every_item_to_review(self):
+        sentence, view = tree(MAIN_ROWS)
+        spans = locate_spans(
+            sentence, [{"text": t, "role": r, "level": lv} for t, r, lv in main_tags()]
+        )
+        plain, _ = generate_templates(source(sentence), spans, view)
+        flagged, _ = generate_templates(source(sentence), spans, view, [R.SOURCE_QUALITY])
+        self.assertIn("auto_pass", {i["status"] for i in plain})
+        self.assertEqual([i["item_id"] for i in flagged], [i["item_id"] for i in plain])
+        for item in flagged:
+            self.assertEqual(item["status"], "needs_review")
+            self.assertIn(R.SOURCE_QUALITY, item["reasons"])
+
+    def test_report_counts_sentence_review_items(self):
+        first, second = source("x"), source("y", sid="A-02")
+        items = [
+            {"template": "main_verb_tap", "source": first, "reasons": [R.SOURCE_QUALITY]},
+            {
+                "template": "finite_or_not",
+                "source": first,
+                "reasons": [R.AMBIGUOUS_SPAN_LOCATION, R.SOURCE_QUALITY],
+            },
+            {
+                "template": "main_verb_tap",
+                "source": second,
+                "reasons": [R.LIST_ITEM, R.SOURCE_QUALITY],
+            },
+        ]
+        stats = sentence_review_stats(items)
+        self.assertEqual(
+            stats[R.SOURCE_QUALITY],
+            {
+                "sentences": 2,
+                "items_by_template": {"finite_or_not": 1, "main_verb_tap": 2},
+                "only_reason": 2,
+            },
+        )
+        self.assertEqual(
+            stats[R.LIST_ITEM],
+            {"sentences": 1, "items_by_template": {"main_verb_tap": 1}, "only_reason": 1},
+        )
+
+    def test_collect_reads_notes_and_list_markers(self):
+        sentence, view = tree(MAIN_ROWS)
+        listed, listed_view = tree(
+            [("-", "punct", 5, "PUNCT", ":")] + [(t, d, h + 1, p, g) for t, d, h, p, g in MAIN_ROWS]
+        )
+        structure = [{"text": t, "role": r, "level": lv} for t, r, lv in main_tags()]
+        note = "when 引导时间状语从句。"
+        rows = [
+            ("A-01", sentence, [note, "may not 是情态动词加否定。"]),
+            ("A-02", sentence, [note, "原句问题：句末缺少下文。"]),
+            ("A-03", listed, [note, "may not 是情态动词加否定。"]),
+        ]
+        passage = {
+            "source_kind": "reading_test",
+            "test_id": "test",
+            "passage_id": "test_p1",
+            "sentences": [
+                {"id": sid, "sentence": text, "structure": structure, "difficult_points": points}
+                for sid, text, points in rows
+            ],
+        }
+
+        class Cache:
+            def parse(self, text, nlp):
+                return {sentence: view, listed: listed_view}[text]
+
+        with tempfile.TemporaryDirectory() as folder:
+            data = Path(folder) / "data/reading_study"
+            data.mkdir(parents=True)
+            (data / "test_p1.json").write_text(json.dumps(passage), encoding="utf-8")
+            candidates, rejections, _ = collect(Path(folder), None, Cache())
+        self.assertFalse([r for r in rejections if r["scope"] == "sentence"])
+        by_sentence = {}
+        for item in candidates:
+            by_sentence.setdefault(item["source"]["sentence_id"], []).append(item)
+        self.assertIn("auto_pass", {i["status"] for i in by_sentence["A-01"]})
+        for sid, reason in (("A-02", R.SOURCE_QUALITY), ("A-03", R.LIST_ITEM)):
+            self.assertEqual(len(by_sentence[sid]), len(by_sentence["A-01"]))
+            for item in by_sentence[sid]:
+                self.assertEqual(item["status"], "needs_review")
+                self.assertIn(reason, item["reasons"])
 
 
 if __name__ == "__main__":

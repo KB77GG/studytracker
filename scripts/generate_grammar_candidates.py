@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.grammar_items.checks import corpus_vocabulary, sentence_reasons
+from scripts.grammar_items.checks import corpus_vocabulary, review_reasons, sentence_reasons
 from scripts.grammar_items.parse_view import ParseCache, load_parser
 from scripts.grammar_items.reporting import (
     build_report,
@@ -69,7 +69,12 @@ def collect(root, nlp, cache, limit=None):
                     }
                 )
             else:
-                items, rejected = generate_templates(source, spans, view)
+                items, rejected = generate_templates(
+                    source,
+                    spans,
+                    view,
+                    review_reasons(sentence["sentence"], sentence["difficult_points"]),
+                )
                 candidates.extend(items)
                 rejections.extend(rejected)
         if index % 25 == 0:
