@@ -1132,6 +1132,47 @@ class CodexReviewFixTests(unittest.TestCase):
         span = {"start": 6, "end": 15, "text": possessive[6:15]}
         self.assertIs(close_quotes(possessive, span, 0, len(possessive)), span)
 
+    def test_quote_starting_with_a_number_is_a_quote_mark(self):
+        self.assertIsNone(single_quote_role("in the '60s and '70s", 7))
+        sentence = "labels ranging from '15 volts (slight)' to '450 volts (danger)' were used."
+        self.assertEqual(single_quote_role(sentence, sentence.index("'15")), "open")
+        end = sentence.index("' were")
+        span = {"start": 0, "end": end, "text": sentence[:end]}
+        closed = close_quotes(sentence, span, 0, end + 1)
+        self.assertEqual(
+            closed["text"], "labels ranging from '15 volts (slight)' to '450 volts (danger)'"
+        )
+
+    def test_t1_distractor_outside_its_tag_span_is_downgraded(self):
+        sentence, view = tree(
+            [
+                ("They", "nsubj", 1, "PRON", "PRP"),
+                ("wanted", "ROOT", 1, "VERB", "VBD"),
+                ("to", "aux", 3, "PART", "TO"),
+                ("close", "xcomp", 1, "VERB", "VB"),
+                ("the", "det", 5, "DET", "DT"),
+                ("gate", "dobj", 3, "NOUN", "NN"),
+                (".", "punct", 1, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("They", "subject", 1),
+            ("wanted", "predicate", 1),
+            ("close the gate", "infinitive_complement", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        t1 = by_template(items, "main_verb_tap")[0]
+        self.assertEqual([s["text"] for s in t1["answer"]["spans"]], ["wanted"])
+        self.assertEqual([d["text"] for d in t1["distractors"]], ["to close"])
+        self.assertIn(R.VERB_UNIT_OUTSIDE_SPAN, t1["reasons"])
+        self.assertEqual(t1["status"], "needs_review")
+        finite_items = by_template(items, "finite_or_not")
+        main = next(i for i in finite_items if i["evidence"]["variant"] == "main")
+        self.assertEqual(main["status"], "auto_pass")  # The root's own unit is inside its tag.
+        tags[2] = ("to close the gate", "infinitive_complement", 2)
+        t1 = by_template(generate(sentence, view, tags)[0], "main_verb_tap")[0]
+        self.assertEqual(t1["status"], "auto_pass")
+
 
 if __name__ == "__main__":
     unittest.main()

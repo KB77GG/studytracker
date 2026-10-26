@@ -1,5 +1,6 @@
 """Six annotation-led question templates with independent parser checks."""
 
+import re
 from dataclasses import dataclass, field
 from hashlib import sha1
 
@@ -54,6 +55,8 @@ def span_from_tokens(sentence, tokens):
 
 
 QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
+# The digits after the apostrophe in a decade such as '60s.
+DECADE = re.compile(r"\d0s\b")
 # Trimming also drops a closing bracket ("Rani Ki Vav (Queen's Stepwell"); same bounded repair.
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
@@ -65,13 +68,14 @@ CLAUSE_SUBJECT_DEPS = frozenset({"nsubj", "nsubjpass", "csubj", "csubjpass", "ex
 def single_quote_role(sentence, index):
     """'open' / 'close' for a straight single quote used as a quote mark, else None.
 
-    Apostrophes are None: inside a word (it's) and before digits ('80s). An s' before a
-    lower-case word is 'ambiguous': a possessive (students' books) or the end of a
-    quoted term ('megacities' and); balance_single_quotes decides from context.
+    Apostrophes are None: inside a word (it's) and in a decade ('80s); a quote may still
+    start with a number ('15 volts ...'). An s' before a lower-case word is 'ambiguous':
+    a possessive (students' books) or the end of a quoted term ('megacities' and);
+    balance_single_quotes decides from context.
     """
     before = sentence[index - 1] if index else " "
     after = sentence[index + 1] if index + 1 < len(sentence) else " "
-    if after.isdigit():
+    if DECADE.match(sentence, index + 1):
         return None
     if before in "sS" and after == " " and sentence[index + 2 : index + 3].islower():
         return "ambiguous"
@@ -307,8 +311,13 @@ def main_checks(ctx, span):
 
 
 def main_distractors(ctx, unit):
-    """Verbs inside deeper clause/non-finite spans, each shown as its full verb unit."""
-    targets = {}
+    """Verbs inside deeper clause/non-finite spans, each shown as its full verb unit.
+
+    Returns the distractors and the review reasons: a unit reaching past the span it was
+    found in ("to" before an infinitive tagged from "close", a "not" the parser hung on
+    "identified") means the tags and the parse disagree, as for the main unit.
+    """
+    targets, reasons = {}, []
     excluded = {t.i for t in unit}
     for span in ctx.spans:
         if span.level < 2 or not (clause_kind(span) or span.role in NON_FINITE_ROLES):
@@ -322,10 +331,11 @@ def main_distractors(ctx, unit):
                 continue  # An auxiliary shown as part of its head's unit.
             unit_tokens = verb_unit(ctx.view, token)
             parts = [t for t in unit_tokens if t.i not in excluded]
+            reasons += outside_span(parts, span)
             value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
                 value["roles"].append(span.role)
-    return [targets[index] for index in sorted(targets)]
+    return [targets[index] for index in sorted(targets)], reasons
 
 
 def main_verb(ctx):
@@ -337,8 +347,9 @@ def main_verb(ctx):
         ctx.reject(TEMPLATES[0], reasons, span)
         return None, reasons
     unit = verb_unit(ctx.view, root, span.start, span.end)
-    distractors = main_distractors(ctx, unit)
+    distractors, distractor_reasons = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
+    reasons += distractor_reasons
     item = ctx.emit(
         TEMPLATES[0],
         "G-L01" if distractors else "G-S01",
@@ -559,7 +570,9 @@ def subject_boundary(ctx):
 def finite_targets(ctx, main_item, main_rejections):
     if main_item:
         span, _ = main_selection(ctx)
-        yield span, ctx.view.root, "main", main_item["reasons"]
+        # finite_or_not redoes the unit check for the root; T1's distractor check is not ours.
+        reasons = [r for r in main_item["reasons"] if r != R.VERB_UNIT_OUTSIDE_SPAN]
+        yield span, ctx.view.root, "main", reasons
     else:
         ctx.reject(TEMPLATES[5], main_rejections, variant="main", node="G-N01")
     for span in ctx.spans:
