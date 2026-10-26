@@ -57,6 +57,8 @@ def span_from_tokens(sentence, tokens):
 QUOTE_PAIRS = {'"': '"', "“": "”", "‘": "’"}
 # The digits after the apostrophe in a decade such as '60s.
 DECADE = re.compile(r"\d0s\b")
+# Dashes around an inserted phrase ("processes - melting, refining - take place").
+DASH = re.compile(r"[—–]| - ")
 # Trimming also drops a closing bracket ("Rani Ki Vav (Queen's Stepwell"); same bounded repair.
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
@@ -106,7 +108,7 @@ def balance_single_quotes(sentence, start, end, low, high):
 
 
 def close_quotes(sentence, span, low, high):
-    """Re-attach a quote mark or bracket that trimming split off, staying inside [low, high)."""
+    """Re-attach a quote mark, bracket or closing dash that trimming split off, inside [low, high)."""
     if not span:
         return span
     start, end = span["start"], span["end"]
@@ -125,6 +127,10 @@ def close_quotes(sentence, span, low, high):
         if after >= 0:
             end = after + len(closing)
     start, end = balance_single_quotes(sentence, start, end, low, high)
+    if len(DASH.findall(sentence, start, end)) % 2:
+        after = DASH.search(sentence, end, high)
+        if after and not sentence[end : after.start()].strip():
+            end = after.start() + len(after.group().rstrip())
     if (start, end) == (span["start"], span["end"]):
         return span
     return char_span(sentence, start, end)

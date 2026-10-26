@@ -1143,6 +1143,18 @@ class CodexReviewFixTests(unittest.TestCase):
             closed["text"], "labels ranging from '15 volts (slight)' to '450 volts (danger)'"
         )
 
+    def test_close_quotes_reattaches_closing_dash_within_raw_span(self):
+        sentence = "Several processes - melting, refining - take place in the furnace."
+        end = sentence.index(" - take")
+        span = {"start": 0, "end": end, "text": sentence[:end]}
+        closed = close_quotes(sentence, span, 0, sentence.index("take"))
+        self.assertEqual(closed["text"], "Several processes - melting, refining -")
+        self.assertIs(close_quotes(sentence, span, 0, end), span)  # The dash is outside the tag.
+        blast = "The icy blast—the so-called katabatic wind—can reach 300 km/hr."
+        end = blast.index("—can")
+        span = {"start": 0, "end": end, "text": blast[:end]}
+        self.assertEqual(close_quotes(blast, span, 0, end + 1)["text"], blast[: end + 1])
+
     def test_t1_distractor_outside_its_tag_span_is_downgraded(self):
         sentence, view = tree(
             [
