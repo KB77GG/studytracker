@@ -558,6 +558,9 @@ def resolve_role(role: str) -> dict:
             key = "coordinate_clause"
         elif _match("phrase", r):
             key = "generic_phrase"
+        elif _match("ellip", r):
+            # elliptical_question / elliptical_response ...: name the form, not 语法成分.
+            key, zh_override, en_override = "generic_phrase", "省略结构", "Elliptical Clause"
 
     base = CONCEPTS.get(key)
     if not base:

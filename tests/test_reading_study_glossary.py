@@ -34,6 +34,10 @@ class UnflavoredClauseTest(unittest.TestCase):
         self.assertEqual(label("elliptical_clause"), ("generic_phrase", "省略结构"))
         self.assertEqual(label("elliptical_time_clause"), ("adverbial_clause", "时间状语从句"))
         self.assertEqual(label("elliptical_adverbial_clause"), ("adverbial_clause", "状语从句"))
+        # Other elliptical_* roles used to fall back to 语法成分.
+        self.assertEqual(label("elliptical_question"), ("generic_phrase", "省略结构"))
+        self.assertEqual(label("ellipsis"), ("generic_phrase", "省略结构"))
+        self.assertEqual(label("elliptical_predicate"), ("verb_phrase", "谓语"))
 
     def test_non_finite_and_noun_clauses(self):
         self.assertEqual(label("infinitive_clause")[0], "infinitive_phrase")
