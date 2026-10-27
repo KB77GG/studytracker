@@ -88,6 +88,7 @@ class Reason(StrEnum):
     COORDINATE_CUE_MISSING = "coordinate_cue_missing"
     PARTICLE_OUTSIDE_UNIT = "particle_outside_unit"
     NESTED_COORDINATION = "nested_coordination"
+    SHARED_AUXILIARY = "shared_auxiliary"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

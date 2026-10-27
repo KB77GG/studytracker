@@ -1686,6 +1686,55 @@ class NestedCoordinationTests(unittest.TestCase):
         self.assertNotIn(R.NESTED_COORDINATION, by_template(items, "clause_boundary")[0]["reasons"])
 
 
+class SharedAuxiliaryTests(unittest.TestCase):
+    """Review Z2: "can be ground ... and the seeds roasted" shares can be; roasted is no non-finite."""
+
+    def identity(self, rows, tags, text):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        return next(i for i in by_template(items, "finite_or_not") if i["target"]["text"] == text)
+
+    def test_participle_sharing_auxiliaries_goes_to_review(self):
+        rows = [
+            ("Pods", "nsubjpass", 3, "NOUN", "NNS"),
+            ("can", "aux", 3, "AUX", "MD"),
+            ("be", "auxpass", 3, "AUX", "VB"),
+            ("ground", "ROOT", 3, "VERB", "VBN"),
+            ("and", "cc", 3, "CCONJ", "CC"),
+            ("seeds", "nsubjpass", 6, "NOUN", "NNS"),
+            ("roasted", "conj", 3, "VERB", "VBN"),
+            (".", "punct", 3, "PUNCT", "."),
+        ]
+        tags = [
+            ("Pods", "subject", 1),
+            ("can be ground", "verb_phrase", 1),
+            ("seeds roasted", "past_participial_phrase", 2),
+        ]
+        item = self.identity(rows, tags, "roasted")
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.SHARED_AUXILIARY, item["reasons"])
+
+    def test_result_participle_unaffected(self):
+        # "Costs had fallen, thereby cutting prices." - an -ing result form stays non-finite.
+        rows = [
+            ("Costs", "nsubj", 2, "NOUN", "NNS"),
+            ("had", "aux", 2, "AUX", "VBD"),
+            ("fallen", "ROOT", 2, "VERB", "VBN"),
+            (",", "punct", 2, "PUNCT", ","),
+            ("thereby", "advmod", 5, "ADV", "RB"),
+            ("cutting", "conj", 2, "VERB", "VBG"),
+            ("prices", "dobj", 5, "NOUN", "NNS"),
+            (".", "punct", 2, "PUNCT", "."),
+        ]
+        tags = [
+            ("Costs", "subject", 1),
+            ("had fallen", "verb_phrase", 1),
+            ("thereby cutting prices", "present_participle_result", 2),
+        ]
+        item = self.identity(rows, tags, "cutting")
+        self.assertNotIn(R.SHARED_AUXILIARY, item["reasons"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 

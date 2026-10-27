@@ -254,6 +254,22 @@ def verb_unit(view, head, start=None, end=None):
     return sorted([head, *children], key=lambda t: t.i)
 
 
+def shared_auxiliary(view, head):
+    """A past participle coordinated with a verb that has its own auxiliaries and has none of
+    its own may share them: "the pods can be ground ... and the seeds roasted", "they must be
+    recalled ..., updated ... and stored" (review Z2). It is then part of a predicate, not a
+    non-finite form; "..., thereby cutting costs" (-ing) and "to look ... and memorize" (to)
+    are left alone."""
+    if head.dep != "conj" or head.tag != "VBN":
+        return False
+    if any(c.dep in {"aux", "auxpass"} for c in view.children(head)):
+        return False
+    first = head
+    while first.dep == "conj" and first.head != first.i:
+        first = view.tokens[first.head]
+    return any(c.dep in {"aux", "auxpass"} and c.text.lower() != "to" for c in view.children(first))
+
+
 def loose_particle(view, tokens):
     """A shown verb whose particle the parser left out of the unit (review Y3): "dates back
     to the 1970s" shows only dates, "wrote down" only wrote; "lived up to" has up tagged RP but
@@ -898,6 +914,7 @@ def finite_or_not(ctx, main_item, main_rejections):
             option = FINITE_OPTIONS[1]
         else:
             matches, option = not finite(head, ctx.view), FINITE_OPTIONS[2]
+            reasons.extend([R.SHARED_AUXILIARY] if shared_auxiliary(ctx.view, head) else [])
         if not matches:
             reasons.append(R.FINITENESS_MISMATCH)
         unit = verb_unit(ctx.view, head)
