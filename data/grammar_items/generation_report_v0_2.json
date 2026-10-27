@@ -17,23 +17,23 @@
     "torch": "2.14.1",
     "openpyxl": "3.1.5",
     "seed": 20261018,
-    "reading_study_sha256": "8744a42e86c57399b2b592959b1044f7dcd3550ddfd0a066713ffebeffc5435a",
+    "reading_study_sha256": "55b808e1a69cfb7fc06670a6ac3bb36d2861923f229183875ed309ea3a747f37",
     "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
   },
   "counts_by_template": {
     "main_verb_tap": {
-      "auto_pass": 5925,
-      "needs_review": 454,
+      "auto_pass": 5912,
+      "needs_review": 467,
       "rejected": 6367
     },
     "clause_boundary": {
-      "auto_pass": 4683,
-      "needs_review": 2579,
+      "auto_pass": 4680,
+      "needs_review": 2582,
       "rejected": 2694
     },
     "clause_type_classify": {
-      "auto_pass": 11444,
-      "needs_review": 3443,
+      "auto_pass": 11401,
+      "needs_review": 3486,
       "rejected": 1331
     },
     "adverbial_relation": {
@@ -42,60 +42,60 @@
       "rejected": 2561
     },
     "subject_span": {
-      "auto_pass": 5376,
-      "needs_review": 808,
+      "auto_pass": 5366,
+      "needs_review": 818,
       "rejected": 6562
     },
     "finite_or_not": {
-      "auto_pass": 12745,
-      "needs_review": 1730,
+      "auto_pass": 12743,
+      "needs_review": 1732,
       "rejected": 6549
     }
   },
   "counts_by_node": {
     "G-S01": {
-      "auto_pass": 2743,
-      "needs_review": 214
+      "auto_pass": 2737,
+      "needs_review": 220
     },
     "G-S02": {
-      "auto_pass": 5376,
-      "needs_review": 808
+      "auto_pass": 5366,
+      "needs_review": 818
     },
     "G-C02": {
       "needs_review": 736,
       "auto_pass": 490
     },
     "G-C03": {
-      "auto_pass": 11444,
-      "needs_review": 3443
+      "auto_pass": 11401,
+      "needs_review": 3486
     },
     "G-C04": {
-      "auto_pass": 1796,
-      "needs_review": 352
+      "auto_pass": 1795,
+      "needs_review": 353
     },
     "G-C08": {
       "auto_pass": 1160,
       "needs_review": 762
     },
     "G-C10": {
-      "auto_pass": 1237,
-      "needs_review": 729
+      "auto_pass": 1235,
+      "needs_review": 731
     },
     "G-C11": {
       "needs_review": 657,
       "auto_pass": 399
     },
     "G-N01": {
-      "auto_pass": 10880,
-      "needs_review": 1649
+      "auto_pass": 10878,
+      "needs_review": 1651
     },
     "G-N04": {
       "auto_pass": 1865,
       "needs_review": 81
     },
     "G-L01": {
-      "auto_pass": 3182,
-      "needs_review": 240
+      "auto_pass": 3175,
+      "needs_review": 247
     }
   },
   "reason_counts": {
@@ -110,7 +110,7 @@
     "multiple_targets_same_type": 1363,
     "no_relation_label": 1230,
     "finiteness_mismatch": 664,
-    "source_quality": 616,
+    "source_quality": 624,
     "verb_unit_outside_span": 594,
     "subject_mismatch": 573,
     "parser_root_outside_verb_span": 562,
@@ -119,12 +119,14 @@
     "existential": 305,
     "unknown_span": 274,
     "too_short": 262,
-    "possible_relative_adverb": 234,
+    "possible_relative_adverb": 236,
     "level_one_subordinate": 232,
     "subordinator_ambiguous": 216,
     "multiple_main_verbs": 180,
     "fragment": 163,
     "span_not_found": 151,
+    "multiple_independent_clauses": 119,
+    "coordinate_function_overlap": 82,
     "noun_attached_clause": 56,
     "list_item": 55,
     "subject_after_verb": 44,
@@ -426,10 +428,10 @@
   "possible_relative_adverb": {
     "items_by_template": {
       "adverbial_relation": 34,
-      "clause_boundary": 89,
-      "clause_type_classify": 111
+      "clause_boundary": 90,
+      "clause_type_classify": 112
     },
-    "distinct_targets": 111,
+    "distinct_targets": 112,
     "targets": [
       {
         "passage_id": "ielts10_test1_p3",
@@ -734,6 +736,19 @@
         "item_ids": [
           "gi_v02_e5830b008ce1",
           "gi_v02_f8051d9265b1"
+        ]
+      },
+      {
+        "passage_id": "ielts15_test2_p3",
+        "sentence_id": "A-01",
+        "target": "when babies begin to laugh and smile in response to stimuli",
+        "templates": [
+          "clause_boundary",
+          "clause_type_classify"
+        ],
+        "item_ids": [
+          "gi_v02_7b4122b362c5",
+          "gi_v02_7e2180fd8faf"
         ]
       },
       {
@@ -1902,16 +1917,16 @@
   },
   "sentence_review": {
     "source_quality": {
-      "sentences": 149,
+      "sentences": 151,
       "items_by_template": {
         "adverbial_relation": 30,
-        "clause_boundary": 108,
-        "clause_type_classify": 193,
-        "finite_or_not": 167,
+        "clause_boundary": 111,
+        "clause_type_classify": 196,
+        "finite_or_not": 169,
         "main_verb_tap": 62,
         "subject_span": 56
       },
-      "only_reason": 418
+      "only_reason": 422
     },
     "list_item": {
       "sentences": 15,
@@ -4895,31 +4910,31 @@
           {
             "source_kind": "reading_jijing",
             "difficulty": "hard",
-            "pool_size": 362,
+            "pool_size": 360,
             "sample_size": 3
           },
           {
             "source_kind": "reading_jijing",
             "difficulty": "medium",
-            "pool_size": 459,
+            "pool_size": 458,
             "sample_size": 4
           },
           {
             "source_kind": "reading_test",
             "difficulty": "easy",
-            "pool_size": 1943,
+            "pool_size": 1940,
             "sample_size": 16
           },
           {
             "source_kind": "reading_test",
             "difficulty": "hard",
-            "pool_size": 1059,
+            "pool_size": 1058,
             "sample_size": 9
           },
           {
             "source_kind": "reading_test",
             "difficulty": "medium",
-            "pool_size": 981,
+            "pool_size": 975,
             "sample_size": 8
           }
         ]
@@ -4957,13 +4972,13 @@
           {
             "source_kind": "reading_test",
             "difficulty": "hard",
-            "pool_size": 1449,
+            "pool_size": 1447,
             "sample_size": 15
           },
           {
             "source_kind": "reading_test",
             "difficulty": "medium",
-            "pool_size": 970,
+            "pool_size": 969,
             "sample_size": 10
           }
         ]
@@ -4977,37 +4992,37 @@
           {
             "source_kind": "reading_jijing",
             "difficulty": "easy",
-            "pool_size": 914,
+            "pool_size": 913,
             "sample_size": 4
           },
           {
             "source_kind": "reading_jijing",
             "difficulty": "hard",
-            "pool_size": 1233,
+            "pool_size": 1224,
             "sample_size": 5
           },
           {
             "source_kind": "reading_jijing",
             "difficulty": "medium",
-            "pool_size": 988,
+            "pool_size": 985,
             "sample_size": 4
           },
           {
             "source_kind": "reading_test",
             "difficulty": "easy",
-            "pool_size": 2201,
+            "pool_size": 2199,
             "sample_size": 10
           },
           {
             "source_kind": "reading_test",
             "difficulty": "hard",
-            "pool_size": 3628,
+            "pool_size": 3608,
             "sample_size": 16
           },
           {
             "source_kind": "reading_test",
             "difficulty": "medium",
-            "pool_size": 2480,
+            "pool_size": 2472,
             "sample_size": 11
           }
         ]
@@ -5071,7 +5086,7 @@
           {
             "source_kind": "reading_jijing",
             "difficulty": "hard",
-            "pool_size": 347,
+            "pool_size": 345,
             "sample_size": 3
           },
           {
@@ -5083,19 +5098,19 @@
           {
             "source_kind": "reading_test",
             "difficulty": "easy",
-            "pool_size": 1788,
+            "pool_size": 1786,
             "sample_size": 17
           },
           {
             "source_kind": "reading_test",
             "difficulty": "hard",
-            "pool_size": 969,
+            "pool_size": 968,
             "sample_size": 9
           },
           {
             "source_kind": "reading_test",
             "difficulty": "medium",
-            "pool_size": 874,
+            "pool_size": 869,
             "sample_size": 8
           }
         ]
@@ -5133,13 +5148,13 @@
           {
             "source_kind": "reading_test",
             "difficulty": "hard",
-            "pool_size": 3385,
+            "pool_size": 3384,
             "sample_size": 13
           },
           {
             "source_kind": "reading_test",
             "difficulty": "medium",
-            "pool_size": 2408,
+            "pool_size": 2407,
             "sample_size": 10
           }
         ]
@@ -5153,6 +5168,7 @@
     "v0.2：动词目标和干扰项都显示完整动词单位（含助动词、否定词、小品词），target.parts 为连续片段。",
     "v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。",
     "v0.2：状语从句目标被解析器挂在名词上（the century before ...、'deserts', as ...）时，T2/T3/T4 一律 needs_review（noun_attached_clause）；紧跟在没有补足成分的 be 后的 because / when 等从句是表语从句，按 clause_type_mismatch 处理。",
+    "v0.2：并列首项本身是从属从句（带 as / because / that 等引导词或以 wh 词开头）时，T3 的“并列分句”不是唯一答案，needs_review（coordinate_function_overlap，只加在 T3）；冒号或分号两边各有一个完整分句时，T1 / T5 needs_review（multiple_independent_clauses，T6 不连带）；“数词 + 时间单位 + old”加逗号后的 when 从句按 possible_relative_adverb 处理。",
     "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
     "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。",
     "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。",
