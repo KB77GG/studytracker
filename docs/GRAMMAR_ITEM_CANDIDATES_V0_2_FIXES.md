@@ -671,7 +671,7 @@
 
 **连字符规则在剑桥的额外命中：41 道 auto 降级，都是 T1。**
 - 1 道是复审没列出的同类答案错误：5_3_p3 A-03 的 T1 答案是 `re`（原文 re-entered），降级成立。它的 T6 本来就待复核。
-- 40 道的主句答案正确，但干扰项是复合形容词的后半截，比如 water-borne 的 borne、problem-solving 的 solving、self-driving 的 driving、so-called 的 called、solar-powered 的 powered。高亮的是半个词，和 X1 的 road-tested 同理，降级成立。
+- 40 道的主句答案正确，但干扰项是复合形容词的后半截，比如 water-borne 的 borne、problem-solving 的 solving、self-driving 的 driving、so-called 的 called、solar-powered 的 powered。高亮的是半个词，和 X1 的 road-tested 同理，降级成立。（第十二轮更正：其中 16_4_p2 G-02 的 word-spot、20_1_p1 I-05 的 hand-raising 是真正的连字符动词，不是复合形容词；其余 38 道才是复合修饰语。）
   - 另一种处理是从干扰项里去掉这些片段、题目保留自动通过，但那会改动干扰项内容，本轮按复审的最小改法只降级。
 - 另有 7 道剑桥题本来就待复核，这次多了这个原因（T6 的 to pre、to re、to co、re，以及 ice-forming、well-defined、Abundance-Based 三个干扰项片段）。
 
@@ -756,6 +756,63 @@
 - W5 的保守误降、V4 / V5 未改；机经暂缓的各项不变。
 - 修订和自查仍由同一方完成。
 
+## 第十二轮（2026-10-27，用户决定 A8 改题干、删掉复合形容词片段干扰项）
+
+依据：用户对第十一轮遗留两项的决定。其一，并列分句的边界题题干写明是哪个连词后面的分句（如“划出 and 后面的并列分句”），答案不变。其二，删掉复合形容词片段干扰项。第十一轮的 Codex 复审尚未进行，本轮改动与第十一轮一起复审。
+
+| 事项 | 处理 |
+|---|---|
+| A8 题干（543e385） | 新增 `coordinate_prompt()`：取目标答案前面最近的英文词，是 and / but / or / nor / yet 时，题干写成“划出 and 后面的并列分句（从第一个词划到最后一个词）。”。同一个词在句中（不分大小写、整词）出现不止一次时，写明是第几个：“划出第 2 个 and 后面的并列分句……”，句首的 And 也算在内。目标前没有这样的连词时（用分号、逗号连接，或连词和目标之间隔着插入语），找不到可写的连词，保留原题干并降为待复核（`coordinate_cue_missing`）。其他从句的边界题题干不变 |
+| 删掉复合形容词片段干扰项（6a29f87） | 新增 `compound_adjective()`：主句谓语题找干扰项时，动词 token 位于连字符词内，并且这个词充当修饰语或系动词补语（amod / acomp / attr / compound / nmod / npadvmod，或与形容词并列），就不当干扰项。按复审 X1 / X2 的说法：真正的连字符动词（to re-establish、to be road-tested、then word-spot through …、hand-raising chicks）不受影响，仍按 `hyphenated_word_split` 待复核。back-up air conditioning、supermarket check-out lasers 是名词充当修饰语，也属于这一类，X2 的两道因此删掉了错误的干扰项 |
+
+### 结果
+
+**题干改动：** T2 共 970 道（剑桥 631、机经 339），题号、答案、状态都不变。
+- 剑桥 345 道自动通过的并列分句题全部写明了连词，其中 77 道带序号：第 1 个 31、第 2 个 40、第 3 个 3、第 4 / 5 个各 1，另有“第 1 个 but”1 道。
+- 抽 22 道（14 道带序号、8 道不带）核对连词和序号，都指向目标前那个连词；`And believe it or not, …, and it grew …` 句首的 And 算作第 1 个，题干写“第 2 个 and”。
+
+**找不到连词：** 剑桥 158 道、机经 98 道加了 `coordinate_cue_missing`。它们原来就都待复核，没有一道只因这个原因待复核。
+
+**删掉的干扰项：** 主句谓语题 57 道（剑桥 43、机经 14）。
+- 剑桥 40 道恢复自动通过，逐题核对主句答案和剩下的干扰项，都正确：
+  - 38 道是复合修饰语：water-borne、problem-solving、slow-growing、so-called、built-in、self-driving、mixed-ability 等；
+  - 2 道是 X2 的 back-up、check-out。
+- 另 3 道仍因别的原因待复核：11_1_p3 D-07、13_4_p3 C-02、7_4_p2 E-01。
+- 机经 13 道恢复自动通过，1 道仍待复核。
+
+**仍是 `hyphenated_word_split` 的题：** 剑桥 20 道、机经 31 道，都是真正的连字符动词或原文把破折号写成连字符，都待复核。
+
+**17 道回归题：** X1 的 13 道仍待复核；X2 的 2 道删掉错误干扰项后自动通过；X3 的 2 道不变。
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 题型 | 第十一轮 | 第十二轮 |
+|---|---|---|
+| 主句谓语 main_verb_tap | 5841 / 538 / 6367 | 5894 / 485 / 6367 |
+| 其余五种 | 不变 | 不变 |
+
+- 候选 50,243，题号集合不变。
+- 除 status / reasons 外，只有 T2 的 prompt_zh（970 道）和 T1 的 distractors（57 道）变化。
+- 状态变化只有 needs → auto 53 道（剑桥 40、机经 13）。
+- auto_pass 40,423 → 40,476，其中剑桥 27,927 → 27,967。
+- 抽查表随池子变化重抽：16 个题号仍在表里，按 (工作表, 行号) 有 1 行还是同一道题。现在剑桥 231 行（自动 196、待复核 35），机经 129 行。六张表各 60 行，四项下拉，盲审；从句边界表里的并列分句题已显示新题干。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `28b56e618f9c…`、`generation_report_v0_2.md` `ae7e3f9e1e2e…`、`review_batch_v0_2.jsonl` `28122fc26650…`、`review_batch_v0_2.xlsx` `6c3eba51af41…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
+| 测试 | 新增 6 项。<br>· 并列分句题干 4 项：在旧代码上 3 项断言失败；“其他从句题干不变”是控制例，旧代码上也通过。<br>· 复合形容词 2 项：water-borne 那项在旧代码上断言失败；word-spot 那项是控制例，旧代码上也通过。<br>出题器等专项 128 项通过；只装 Flask 的 CI 列表 196 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十二轮遗留
+
+- 连词和目标之间隔着插入语的并列分句（如 `and, for a significant number of other countries, it ranks …`），本轮按找不到连词处理、降为待复核；以后可以放宽到跳过插入语。
+- 真正的连字符动词没有合并成完整动词单位，相关 T1 / T6 仍待复核。
+- W5、V4 / V5、机经暂缓各项不变；老师盲审是否只审剑桥，仍待用户决定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十一轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十二轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
