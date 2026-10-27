@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-26；网页练习与家长结果后台80f215b5已提交、推送、部署并验收；小程序仍待用户重新上传、提审和发布。
+> 最近更新：2026-10-27；自动学生/家长账号创建修复2d0dbdb6已提交、推送并部署，CI及只读线上验收通过；无小程序变更。
+
+## 2026-10-27 自动学生/家长账号创建修复已部署
+
+- 用户明确授权“没问题就部署吧”。实施树 `/Users/zhouxin/.codex/worktrees/auto-student-parent-fix/studytracker`、分支 `codex/auto-student-parent-fix`，原detached65f18596、4 modified/1 untracked为前轮任务内容；只提交app/CI/新测试三文件，rebase到最新主线676569c6后业务提交 **`2d0dbdb6cce48a98095e0fce8d75edff2420850b`**。先任务分支CI通过，再非强制推main部署；原已审三文件SHA保持不变。
+- 运行时只补ParentStudentLink导入和扩大原try/rollback覆盖首次flush及Profile/Link写入；不改账号命名/密码/权限/登录契约，不合并/改绑身份。13项真实app合成内存回归覆盖完整创建、重名、各阶段失败回滚/重试、旧新登录和模拟微信；新主线干净依赖环境组合 **81 tests OK**（13专项+原CI68），Node拼写、目标F821、新测试Ruff/格式、Python3.10语法、diff检查通过，独立复审通过。
+- [分支CI40503784820](https://github.com/KB77GG/studytracker/actions/runs/40503784820)、[main CI40504015846](https://github.com/KB77GG/studytracker/actions/runs/40504015846)、[Deploy40504015784](https://github.com/KB77GG/studytracker/actions/runs/40504015784) 均success。新增account-provisioning和原test均成功；advisory Ruff有既有failure，日志不再含目标F821，未扩大清理。
+- 生产 `/root/apps/studytracker` HEAD2d0dbdb6、tracked clean，app/CI/测试三SHA一致；服务 **2026-10-27 20:29:04 CST** 起active/running、NRestarts0，5002/单worker/gthread/6threads保持。回环/公网login200、匿名家长children401、自动创建接口GET405，重启后warning及以上journal0。发布前只读schema核对user/profile/link必要列齐全，未读取身份记录或创建真实账号。
+- 沿既有自动部署（含七个已有迁移步骤和启动检查），本功能无新增schema、迁移或手工生产SQL/身份改动。没有真实微信或生产自动创建端到端测试，不据此声称历史生产曾发生故障。同名独立Profile按姓名关联的既有歧义、并发冲突可能返回db_error的边界保留；多进程压力/全量ML未验。精确命令、SHA与限制见[验证与部署记录](design/auto-student-parent-fix-20261027.md)。
+- 两份旧本机交接在Git stash和 `/private/tmp/studytracker-auto-accounts-deploy-20261027/` 历史备份保留，勿整体apply到新交接。当前本两交接及验证记录随随后独立 `[skip ci]` 文档提交同步main/任务分支，最终文档HEAD见git log；提交后实施树clean，无待发布业务源码。
+- 旧桌面资料树 `/Users/zhouxin/Desktop/studytracker` 仍main6ded77d24586327ad94e151e172ae4811b4a2eed、原7 modified/22 untracked入口，本轮仅滚动两份交接镜像；原业务/数据/素材不动，不用于部署。固定小程序树未触碰，无本任务上传/提审/发布。业务和规范交接可从远端取得，旧资料树脏内容仍仅本机。下一步正常观察，无本任务发布阻塞；另做同名身份治理须独立授权。
 
 
 ## 2026-10-26 网页练习与家长结果后台已部署，小程序待用户重新发布
