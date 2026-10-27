@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-27 — 第九轮报告追加 W1–W4 修订方案 v0.1（Codex，未实施）
+
+- 按用户希望给Claude看的请求，在完整ROUND9_CODEX_REVIEW追加版本化方案：四项接入点、三句难点文字、42道基线题回归、反例及验收。重点写明T1原因会继承到T6，修主句不唯一时需隔离；T3分类轴重叠不连带T2；W4不整句降级。四项仍开放，原不通过结论不变。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`起始61c03529干净同步；本轮仅报告、CODEX_HANDOFF及本日志三文件，随方案提交/推同分支。桌面main原有7 modified/22 untracked未动；未修代码数据、未重生成、未部署或操作生产。
+- 重核42题/30句在原76aeb12审计快照均auto且对象一致，调用链和三句原说明与方案描述对应；文档diff检查通过、原报告只追加。新规则尚未实现或测试；前次61c03529的CI test成功、lint存量advisory失败，本方案最后提交CI另验后汇报。
+- 方案和交接通过任务分支供跨电脑审阅，本机AUDIT辅助材料不随Git发布。下一步Claude复核方案，然后在实施授权下修复、验证并独立复审。
+
 ## 2026-10-27 — 第九轮独立复审完成（Codex，剑桥不通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`，从3b7efb3授权快进固定76aeb1251d951393d256dd8900a2340644ba332e；只写ROUND9_CODEX_REVIEW及两交接，桌面main既有7 modified/22 untracked未动。正文已commit/push `3a3bb6a1920c778fd1772e769332ce32b19f149f`；本CI补记随后独立提交/推送，最后HEAD见git log。

@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-27 Codex完成第九轮独立复审，按剑桥题判定不通过；V1/V3点名关闭，新0阻断/4应修/2建议。仅写审核报告及交接，机经继续暂缓，未部署。
+> 最近更新：2026-10-27 第九轮完整复审报告追加 W1–W4 修订方案 v0.1，供 Claude 评议；尚未实施，四项应修仍开放，原“不通过”结论不变。本次仅更新三份文档，机经继续暂缓，未部署。
+
+## 2026-10-27 W1–W4 修订方案 v0.1（Codex，待实现与复核）
+
+- **用户请求与交付**：用户问能否修四项应修，并希望把一个版本放进完整报告供 Claude 看。已在[第九轮报告附录](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND9_CODEX_REVIEW.md#w1-w4-proposal-v01)写出具体接入位置、三句难点建议文字、42道题的回归范围、控制例及验收要求。本次是方案版本，没有修改被审代码、数据或交付文件，没有将问题标为已关闭。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，开工干净且与远端同步，起始HEAD `61c0352937daad1cf79968e424d7d99544f038e5`；运行基线仍是 `76aeb1251d951393d256dd8900a2340644ba332e`。本轮只更新 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND9_CODEX_REVIEW.md`、本文件和 `docs/WORKLOG.md`，随本方案提交并推同一任务分支；最后HEAD以git log为准，不改写历史。
+- **方案重点**：W1仅T3复核分类轴重叠；W2仅T1/T5检查主句不唯一，必须隔离当前T6对T1原因的继承；W3两句通过准确难点及既有source_quality待审；W4按完整年龄短语提示类别歧义、保留同句其他题。第一版修自动池准入，待审题仍需老师定稿，不声称降级即完成正确题改写；不按ID写规则、不批量改原文。
+- **本次验证**：重新读取调用链和三句原始难点；在既有审计快照全量池中重核42个不同题号/30句均auto且对象相等。`git diff --check`通过；核对相对起始HEAD仅三份文档改变、旧报告内容未改而只追加附录。没有实施新规则或重跑全量生成，前节测试结论属于原复审，不是新实现验证。
+- **本机证据与外部状态**：辅助材料仍在 `/Users/zhouxin/.codex/audits/grammar-v02-round9-20261027`，仅本机。上一HEAD61c03529的[CI 40426443967](https://github.com/KB77GG/studytracker/actions/runs/40426443967) test成功，lint存量advisory失败、format跳过，整体success。本方案提交不带skip-ci，提交后另核对该SHA的CI并在最终汇报提供链接；不能用上一CI冒充本次CI。三份文档通过任务分支共享给另一台电脑，未主动向外部会话发送消息。
+- **其他工作树/发布**：`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed，既有7 modified/22 untracked入口未动。未推main、未PR、未部署后端/前端、未操作生产数据库或服务器、未上传/提审/发布小程序、未调用大模型API。
+- **下一步**：Claude先审阅附录的范围和反例，特别是W1作用域、W2的ccomp误挂与T6隔离、W3教学措辞。实施须在相应授权下另行提交，按附录逐题差分与验证后再独立复审；本次文档交付没有扩大只审核的写代码授权。
 
 ## 2026-10-27 语法候选题 v0.2 第九轮独立复审（Codex，不通过）
 
