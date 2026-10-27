@@ -532,3 +532,11 @@ $O/flask-only/bin/python -m unittest tests.test_miniprogram_guest_access tests.t
 - 基线3257477的[CI40523350786](https://github.com/KB77GG/studytracker/actions/runs/40523350786)整体success；test成功，lint advisory失败、format跳过。本次报告提交后另核精确head，不以基线代替本次CI。
 - 与提示不一致处：无未执行的必检项。生成在仓库外完整快照执行以保护被审文件；沿用已验证解析缓存，已说明；main远端前进，导入按指定固定基线。未知全池错误率、词类口径边界、非并列T2的既有A8多解均未被本次120抽样消除。
 - 下一位先读本报告，按用户下一步授权处理AA1/AA2并补正常系表、真动词provided/assuming等控制；不要按题号加黑名单。老师盲审范围和上线仍待用户决定，本轮未替老师提交任何判定。
+
+### 精确报告提交的CI补记
+
+报告正文及两交接已commit/push `3319b01d9f379d4570de5dc9aa59800e6b0e654b` 到 `codex/grammar-item-candidates`，提交不含skip-ci。[CI40529170164](https://github.com/KB77GG/studytracker/actions/runs/40529170164)核对head完全相同、整体completed/success：
+
+- **test：completed/success**。212项运行、1跳过，Node拼写队列步骤成功。
+- **lint：completed/failure（advisory）**。112条代码诊断与被审325的基线CI逐条完全相同；format步骤因check失败跳过。这不是全部lint通过；本轮4个改动Python的本地check/format另已通过。
+- 此CI补记再次普通commit/push同一任务分支，最终SHA及最后一轮Actions结果在最终回复报告；没有amend/rebase。交接同步更新。辅助材料仅本机，报告/交接已在GitHub；工作树没有被审文件修改，未部署。

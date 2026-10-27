@@ -6,10 +6,10 @@
 
 ## 2026-10-27 — 第十四轮独立复审完成（Codex，剑桥不通过）
 
-- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，8a82138干净快进固定3257477。只新增ROUND14报告、改两交接，被审代码/数据/交付文件零改动；桌面树既有7modified/22untracked未动。本条随报告授权commit/push任务分支，精确SHA/CI随后补记。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，8a82138干净快进固定3257477。只新增ROUND14报告、改两交接，被审代码/数据/交付文件零改动；桌面树既有7modified/22untracked未动。正文及交接已commit/push `3319b01d9f379d4570de5dc9aa59800e6b0e654b`，无skip-ci；此CI补记再普通commit/push同分支，最终HEAD以git log为准。
 - 0阻断/2应修/1建议：AA1被动单位仅be（4auto，其中2明确漏encountered、2被动/系表需复核）；AA2 given that的T6仍auto非谓语（1题）。AA3连词判定词形过宽建议。Z1/Z2/Z4–Z6点名关闭，Z3点名T1关闭、同类T6尚未统一；机经3项单列暂缓。
 - 专项144、Flask-only212运行/1跳过、reading22、Node、4文件Ruff通过；validator0/--check0/raw171及图谱一致。双跑4文件全等；两报告与提交仅Python版本差。50243候选、auto40333/剑桥27854；78回归/7过滤不变；完整676569c→325临时导入236/81/0。新测旧码4断言失败/1接口错误/2控制通过。
-- seed20261103的120剑桥auto逐题表：119局部可成立、1漏词，另1保留既有A8非并列歧义；62题新角度定向逐题判断，不把命中数当错误数。文档含精确SHA、范围与限制。提交后精确head CI另核；未推main/PR/部署/生产操作/小程序发布。下一步按用户授权处理AA1/AA2，盲审范围待定。
+- seed20261103的120剑桥auto逐题表：119局部可成立、1漏词，另1保留既有A8非并列歧义；62题新角度定向逐题判断，不把命中数当错误数。文档含精确SHA、范围与限制。正文精确head的[CI40529170164](https://github.com/KB77GG/studytracker/actions/runs/40529170164)整体success，test成功（212运行/1跳过、Node成功）；lint advisory存量112条与325基线逐条相同、format跳过。末次补记CI另核。未推main/PR/部署/生产操作/小程序发布。下一步按用户授权处理AA1/AA2，盲审范围待定。
 
 ## 2026-10-27 — 语法候选题 v0.2 第十四轮（Claude）
 
