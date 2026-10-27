@@ -91,6 +91,7 @@ class Reason(StrEnum):
     SHARED_AUXILIARY = "shared_auxiliary"
     LEXICAL_CONJUNCTION = "lexical_conjunction"
     PARTICIPLE_AFTER_BE = "participle_after_be"
+    LINKING_VERB_AS_AUXILIARY = "linking_verb_as_auxiliary"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

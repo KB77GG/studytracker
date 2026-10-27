@@ -50,6 +50,7 @@ T1_ONLY_REASONS = frozenset(
         R.HYPHENATED_WORD_SPLIT,
         R.PARTICLE_OUTSIDE_UNIT,
         R.PARTICIPLE_AFTER_BE,
+        R.LINKING_VERB_AS_AUXILIARY,
     }
 )
 # Adverbial particles the parser labels prt at least ten times in this corpus (by also reaches ten
@@ -59,6 +60,13 @@ PARTICLES = frozenset(
     {"up", "out", "down", "on", "off", "in", "back", "over", "away", "about", "through"}
 )
 QUOTE_MARKS = frozenset("'\"‘’“”")
+# Forms of linking verbs the parser may hang on a participle as aux / auxpass ("became immersed").
+LINKING_FORMS = frozenset(
+    {"become", "becomes", "became", "becoming", "remain", "remains", "remained", "remaining"}
+    | {"seem", "seems", "seemed", "seeming", "appear", "appears", "appeared", "appearing"}
+    | {"stay", "stays", "stayed", "staying", "grow", "grows", "grew", "growing"}
+    | {"turn", "turns", "turned", "turning", "feel", "feels", "felt", "look", "looks", "looked"}
+)
 # Participles that with a following "that" form a conjunction ("provided that they do so").
 SUBORDINATING_PARTICIPLES = frozenset(
     {"provided", "providing", "given", "granted", "assuming", "supposing", "seeing", "considering"}
@@ -296,6 +304,16 @@ def shared_auxiliary(view, head):
     while first.dep == "conj" and first.head != first.i:
         first = view.tokens[first.head]
     return any(c.dep in {"aux", "auxpass"} and c.text.lower() != "to" for c in view.children(first))
+
+
+def linking_auxiliary(view, tokens):
+    """A linking verb the parser hung on its complement as aux / auxpass (review AB1): in
+    "Perkin became immersed in ...", "remain embedded" and "became known" the unit is centred on
+    the participle, so T1 requires immersed and rejects became. become / remain link a subject
+    to a state; the item goes to review rather than certify that centre. Real auxiliaries (have
+    become, was built, got stuck) are not linking verbs and stay."""
+    linking = any(t.dep in {"aux", "auxpass"} and t.text.lower() in LINKING_FORMS for t in tokens)
+    return [R.LINKING_VERB_AS_AUXILIARY] if linking else []
 
 
 def be_participle(view, tokens):
@@ -567,7 +585,7 @@ def main_distractors(ctx, unit):
             unit_tokens = verb_unit(ctx.view, token)
             parts = [t for t in unit_tokens if t.i not in excluded]
             reasons += outside_span(parts, span) + loose_particle(ctx.view, parts)
-            reasons += be_participle(ctx.view, parts)
+            reasons += be_participle(ctx.view, parts) + linking_auxiliary(ctx.view, parts)
             value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
                 value["roles"].append(span.role)
@@ -632,6 +650,7 @@ def main_verb(ctx):
     distractors, distractor_reasons = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
     reasons += loose_particle(ctx.view, unit) + be_participle(ctx.view, unit)
+    reasons += linking_auxiliary(ctx.view, verb_unit(ctx.view, root))
     reasons += distractor_reasons + independent_clauses(ctx.view)
     item = ctx.emit(
         TEMPLATES[0],
@@ -971,7 +990,7 @@ def finite_or_not(ctx, main_item, main_rejections):
             reasons.append(R.FINITENESS_MISMATCH)
         unit = verb_unit(ctx.view, head)
         reasons.extend(outside_span(unit, span) + loose_particle(ctx.view, unit))
-        reasons.extend(be_participle(ctx.view, unit))
+        reasons.extend(be_participle(ctx.view, unit) + linking_auxiliary(ctx.view, unit))
         if conjunction_participle(ctx.view, head):
             reasons.append(R.LEXICAL_CONJUNCTION)  # "given that ..." is no verb to classify (AA2).
         participle = (

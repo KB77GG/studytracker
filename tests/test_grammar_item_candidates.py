@@ -1869,6 +1869,34 @@ class BeParticipleTests(unittest.TestCase):
                 self.assertNotIn(R.PARTICIPLE_AFTER_BE, item["reasons"], (word, item["template"]))
 
 
+class LinkingAuxiliaryTests(unittest.TestCase):
+    """Review AB1: "Perkin became immersed" with became parsed as auxpass of immersed."""
+
+    def items(self, aux, aux_dep):
+        rows = [
+            ("Perkin", "nsubjpass", 2, "PROPN", "NNP"),
+            (aux, aux_dep, 2, "VERB" if aux_dep == "auxpass" else "AUX", "VBD"),
+            ("immersed", "ROOT", 2, "VERB", "VBN"),
+            ("in", "prep", 2, "ADP", "IN"),
+            ("chemistry", "pobj", 3, "NOUN", "NN"),
+            (".", "punct", 2, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        items, _ = generate(
+            sentence, view, [("Perkin", "subject", 1), (f"{aux} immersed", "verb_phrase", 1)]
+        )
+        return by_template(items, "main_verb_tap")[0], by_template(items, "finite_or_not")[0]
+
+    def test_linking_verb_parsed_as_auxiliary_goes_to_review(self):
+        for item in self.items("became", "auxpass"):
+            self.assertEqual(item["status"], "needs_review", item["template"])
+            self.assertIn(R.LINKING_VERB_AS_AUXILIARY, item["reasons"])
+
+    def test_real_passive_auxiliary_unaffected(self):
+        for item in self.items("was", "auxpass"):
+            self.assertNotIn(R.LINKING_VERB_AS_AUXILIARY, item["reasons"], item["template"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 
