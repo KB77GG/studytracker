@@ -619,7 +619,7 @@
 | 检查 | 结果 |
 |---|---|
 | 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `274d989b44eb…`、`generation_report_v0_2.md` `c1076ca682cb…`、`review_batch_v0_2.jsonl` `e3a503b8742d…`、`review_batch_v0_2.xlsx` `386ea7e0564e…`；13 组 × 6 的回归记录不变，7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 重新渲染无变化 |
-| 测试 | 新增 7 项（W1 3、W2 2、W4 2），另在 W2 的控制例里补了引语作根的一例。修改前：W1 是 1 项断言失败 + 2 项接口错误（函数不存在），W2 整个测试模块导入失败（函数不存在），W4 是 1 项断言失败，引语控制例是 1 项断言失败。出题器、修订表、词汇表、知识图谱测试 113 项通过；只装 Flask 的 CI 列表 181 项运行、1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
+| 测试 | 新增 7 项（W1 3、W2 2、W4 2），另在 W2 的控制例里补了引语作根的一例。修改前：W1 是 1 项断言失败 + 2 项接口错误（Reason 常量不存在；第十轮复审更正，原写“函数不存在”不准确），W2 整个测试模块导入失败（函数不存在），W4 是 1 项断言失败，引语控制例是 1 项断言失败。出题器、修订表、词汇表、知识图谱测试 113 项通过；只装 Flask 的 CI 列表 181 项运行、1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
 | 数据 | 三句只改了指定的那一条 difficult_points，其他字段逐字节不变；validator 0 错误；`--check` 0；从 raw 重建 171 篇一致。临时库先导入 main 快照（65f1859，与 `origin/main` 676569c 在阅读解析、导入脚本和 models.py 上相同），再导入本分支，实测 updated=236 / skipped=81 / failed=0。与第九轮相同，原因是另两篇（15_1_p3、15_2_p3）在第九轮已经因为词汇表标签不同算作 updated |
 | 改动文件 Ruff | check 与 format --check 通过 |
 
@@ -631,6 +631,131 @@
 - W5 的保守误降、T2 多解（A8）、V4 / V5 未改。机经暂缓的各项不变：V2 排印、第 27 题解析等。
 - 修订和自查仍由同一方完成。
 
+## 第十一轮（2026-10-27，第十轮复审 X1–X4）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND10_CODEX_REVIEW.md`。复审结论是不通过，以剑桥题为准：W1–W4 点名问题和 W6 关闭，W5、A8 保留。新增 0 阻断、3 应修（X1–X3，17 道剑桥自动题，第九轮已存在）、1 建议（X4）。规则仍只看原文字符和解析结构，不读题号或句号。
+
+| 复审编号 | 问题 | 处理 |
+|---|---|---|
+| X1 | 连字符动词被分词拆开，13 道剑桥自动题的答案、高亮或干扰项只有半个词：`could / re`、`【is not pre】-set`、干扰项 `to re` / `-` / `establish`、`to be road-【tested】` | 新增 `hyphenated_word_split`：答案、目标、干扰项（含各段 parts）任一起止点紧挨词内连字符（两侧都是字母或数字、没有空格），就降为待复核。T6 按自己的高亮判断，不继承 T1 的这个原因。被解析器标成 VERB 的纯标点不再当干扰项（剑桥 3 道、机经 2 道去掉了单独的 `-`）。没有把连字符词合并成一个动词单位：复审说明 T1 答案规则冻结时先降级，改答案规则需另行批准 |
+| X2 | back-up、check-out 是名词性定语，被做成动词干扰项 back / up、check / out | 同一规则命中（干扰项的起止点在 back-up、check-out 内部），降为待复核；没有按 amod 一刀切 |
+| X3 | `%` 被当作标点裁掉，完整主语成了 `A full 94`、`... – 53` | `trim_tokens()` 保留紧跟数字的 `%`。J-40 因此也补回了闭合破折号。两道答案改为 `A full 94%`、`only a small majority of sighted subjects – 53% –`，仍自动通过 |
+| X4 | 并列首项的 and / or 被标成 mark 时会误判为从属；年龄规则对 where / why 也生效，与说明不一致 | 排除全部并列连词（and / but / or / nor / for / so / yet）；年龄规则只看 when。全库候选池无变化，与复审结论一致 |
+| 第十轮更正 | W1 负测的 2 项接口错误是 Reason 常量不存在，不是函数不存在 | 已改第十轮一节 |
+
+四项分开提交（65a77e8 X1/X2、0a1f9c5 X3、d53f8ba X4），每步各生成一次，用来归因；最后统一重新生成。
+
+### 17 道回归题
+
+| 题号 | 题型 | 句子 | 修复前 | 修复后 | 说明 |
+|---|---|---|---|---|---|
+| gi_v02_39a5639ec9f7 | T1 | 12_8_p2 G-02 | auto | needs（hyphenated_word_split） | 主答案 is 正确；干扰项 to re / establish 是半个词，单独的 `-` 已去掉 |
+| gi_v02_2612039eb0fc | T1 | 16_1_p3 M-03 | auto | needs | 主答案 are 正确；干扰项 to pre / empt，`-` 已去掉 |
+| gi_v02_9d25c9be58aa | T1 | 7_3_p3 A-04 | auto | needs | 主答案 has / been 正确；干扰项 to co / ordinate，`-` 已去掉 |
+| gi_v02_4f9aff5be0d3 | T1 | 10_1_p3 D-02 | auto | needs | 答案 are / wired 缺 hard- |
+| gi_v02_ada51e0516f7 | T6 | 10_1_p3 D-02 | auto | needs | 高亮【are】hard-【wired】 |
+| gi_v02_d3ad4b5fc6b8 | T1 | 15_2_p2 D-06 | auto | needs | 答案 could / re 缺 -establish |
+| gi_v02_facbcdde7ef5 | T6 | 15_2_p2 D-06 | auto | needs | 高亮【could】…【re】-establish |
+| gi_v02_411c43f579e8 | T1 | 4_3_p3 D-13 | auto | needs | 答案 record 缺 tape- |
+| gi_v02_7bd50392fc2c | T6 | 4_3_p3 D-13 | auto | needs | 高亮 tape-【record】 |
+| gi_v02_177f2e3cb51e | T1 | 7_4_p2 E-04 | auto | needs | 答案 is / not / pre 缺 -set |
+| gi_v02_96c3342be4bf | T6 | 7_4_p2 E-04 | auto | needs | 高亮【is not pre】-set |
+| gi_v02_9102debcb432 | T1 | 18_3_p2 F-02 | auto | needs | 主答案 shipped 正确；干扰项 to be / tested 缺 road- |
+| gi_v02_f0cf657b23e2 | T6 | 18_3_p2 F-02 | auto | needs | 高亮【to be】road-【tested】 |
+| gi_v02_1213768264f6 | T1 | 14_2_p2 I-02 | auto | needs | 主答案 have / worked 正确；干扰项 back / up 是名词定语 back-up 的一部分 |
+| gi_v02_b983993a8787 | T1 | 9_3_p3 E-28 | auto | needs | 主答案 have / become 正确；干扰项 check / out 是 check-out lasers 的一部分 |
+| gi_v02_50bd636fe569 | T5 | 4_1_p3 J-33 | auto（A full 94） | auto（A full 94%） | 答案改正 |
+| gi_v02_45648a820455 | T5 | 4_1_p3 J-40 | auto（… – 53） | auto（… – 53% –） | 答案改正，闭合破折号补回 |
+
+### 新命中、副作用与复查
+
+**连字符规则在剑桥的额外命中：41 道 auto 降级，都是 T1。**
+- 1 道是复审没列出的同类答案错误：5_3_p3 A-03 的 T1 答案是 `re`（原文 re-entered），降级成立。它的 T6 本来就待复核。
+- 40 道的主句答案正确，但干扰项是复合形容词的后半截，比如 water-borne 的 borne、problem-solving 的 solving、self-driving 的 driving、so-called 的 called、solar-powered 的 powered。高亮的是半个词，和 X1 的 road-tested 同理，降级成立。
+  - 另一种处理是从干扰项里去掉这些片段、题目保留自动通过，但那会改动干扰项内容，本轮按复审的最小改法只降级。
+- 另有 7 道剑桥题本来就待复核，这次多了这个原因（T6 的 to pre、to re、to co、re，以及 ice-forming、well-defined、Abundance-Based 三个干扰项片段）。
+
+**百分号修正的副作用（剑桥），逐题看过：**
+- 4 道 T3 的目标现在包含 `%`，因此换了题号。旧题号是待复核（解析树带 `%`、标注范围裁掉 `%`，对不上）；新题号自动通过，答案都正确：
+  - 10_1_p2 C-04 `while during the same period rail haulage decreased by 43.5%`：状语从句
+  - 13_1_p1 F-03 `while transport and accommodation account for the remaining 26%`：状语从句
+  - 20_2_p1 J-02 `of 20%`：不是从句
+  - 6_2_p2 H-26 `the use of bath seats has grown by more than 50%`：并列分句
+- 3 道从待复核变为自动通过：
+  - 10_1_p2 C-04 T6 decreased、13_1_p1 F-03 T6 account：都是从句里的谓语，正确。
+  - 6_2_p2 H-26 T2：答案补上了 `%`，边界正确。但这句前半 `the use of raised toilet seats has more than doubled ...` 也是并列分句，题干“划出句中的并列分句”却只接受后一句，属于既有的 A8 多解问题（见遗留）。
+- 答案变化另有 J-35 `And only 51%`（本来就待复核）。另有 19 道剑桥题只是解析证据里的子树范围多了 `%`，其他字段不变。
+
+**复审的扫描口径在新池上重跑（剑桥 auto）：**
+- 起止点在连字符词内部：0
+- 干扰项不含字母：0
+- 范围紧挨在 `%` / `°` 前结束：0
+
+**机经（暂缓，只列影响）：**
+- auto → needs 30 道（T1 20、T3 4、T6 4、T2 2）。其中几处是原文把破折号写成不带空格的连字符，比如 78_102_p3 A-02 `electricity-half of which ...`、92_58_p1 F-03 `people-using ...`，属于机经原文排印问题，降级是对的。
+- needs → auto 1 道：44_29_p2 H-01 的 T6 stands，是从句里的谓语，正确。
+- 答案变化 4 道：92_58_p2 H-07 `Only 1.5%` 自动通过，正确；另 3 道本来就待复核。
+- 换题号 4 道，新旧题号都是待复核。
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 题型 | 第十轮 | 第十一轮 |
+|---|---|---|
+| 主句谓语 main_verb_tap | 5912 / 467 / 6367 | 5841 / 538 / 6367 |
+| 从句边界 clause_boundary | 4680 / 2582 / 2694 | 4679 / 2583 / 2694 |
+| 从句类型 clause_type_classify | 11401 / 3486 / 1331 | 11401 / 3486 / 1331 |
+| 状语关系 adverbial_relation | 399 / 657 / 2561 | 399 / 657 / 2561 |
+| 主语范围 subject_span | 5366 / 818 / 6562 | 5366 / 818 / 6562 |
+| 动词身份 finite_or_not | 12743 / 1732 / 6549 | 12737 / 1738 / 6549 |
+
+**候选与状态：**
+- 候选仍是 50,243 道，换了 8 个题号：剑桥 4 道待复核换成 4 道自动通过的新题号，机经 4 道待复核换成 4 道待复核的新题号。
+- 共同题号的状态变化：
+  - auto → needs：剑桥 56（T1 51、T6 5），机经 30；
+  - needs → auto：剑桥 3，机经 1。
+
+**`hyphenated_word_split` 三种口径（剑桥 / 机经）：**
+
+| 口径 | 剑桥 | 机经 |
+|---|---|---|
+| 全量带此原因 | 63 | 45 |
+| 只因此原因待复核 | 56 | 30 |
+| 共同题号实际 auto → needs | 56 | 30 |
+| 本来就待复核、只多了原因（不算新增降级） | 7 | 15 |
+
+**除 status / reasons 外的字段变化：**
+- 答案 8 道（剑桥 4、机经 4）
+- 干扰项 5 道（去掉单独的 `-`）
+- 解析证据 29 道（其中 21 道只有这一处变化）
+
+**auto_pass：** 40,501 → 40,423，其中剑桥 27,976 → 27,927（−56 + 3 + 4）。
+
+**抽查表：** 随池子变化重抽，只有 13 个题号仍在表里，按 (工作表, 行号) 对比没有一行还是同一道题。现在剑桥 237 行（自动 196、待复核 41），机经 123 行。六张表各 60 行，判定列下拉仍是四项，表里不出现状态和原因（盲审）。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `d9c280216849…`、`generation_report_v0_2.md` `a404f8afc867…`、`review_batch_v0_2.jsonl` `f8b14a0de986…`、`review_batch_v0_2.xlsx` `68bac14def85…`；13 组 × 6 的回归记录不变，7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 重新渲染无变化 |
+| 测试 | 新增 9 项：连字符 4、百分号 3、X4 2。修改前的结果：<br>· 6 项断言失败；<br>· 2 项接口错误：一项缺 `split_word` 函数，一项缺 `HYPHENATED_WORD_SPLIT` 常量，后者是“复合形容词作为整体不受影响”的控制例，其余断言在旧代码上能通过；<br>· 1 项控制例通过：普通句末标点照旧裁掉。<br>出题器、修订表、词汇表、知识图谱测试 122 项通过；只装 Flask 的 CI 列表 190 项运行、1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
+| 数据 | 本轮没有改阅读解析；validator 0 错误；`--check` 0；从 raw 重建 171 篇一致；临时库先导入 main 快照再导入本分支：updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十一轮遗留
+
+- **A8（T2 并列分句多解）仍未处理，需要决定改法。** 剑桥现有 345 道自动通过的“划出句中的并列分句”题：句中至少有两个并列分句，题干却没说划哪一个，只接受标注的那一个。本轮 X3 修正后，6_2_p2 H-26 又多了一道这样的自动题。可选改法：
+  1. 题干写明连词，例如“划出 and 后面的并列分句”，答案不变；
+  2. 全部降为待复核。
+
+  第一种改动题干，需要用户同意。
+- **连字符词：**
+  - 40 道复合形容词片段干扰项是按最小改法降级的，也可以改成去掉这些干扰项、保留自动通过。
+  - 真正的连字符动词（re-establish、hard-wired、tape-record）也可以合并成一个完整的动词单位，改正 T1 答案。
+
+  两者都会改动题目内容，需要另行同意。
+- W5 的保守误降、V4 / V5 未改；机经暂缓的各项不变。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十一轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
