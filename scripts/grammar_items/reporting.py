@@ -270,6 +270,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "v0.2：答案、目标或干扰项的起止点落在连字符词内部（re-establish 的 re、water-borne 的 borne）时，"
             "该题 needs_review（hyphenated_word_split；T6 按自己的高亮判断）；单独的连字符不当动词干扰项；"
             "去标点时紧跟数字的 % 保留（94%）。",
+            "v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；"
+            "并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时"
+            "写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing）。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
