@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-27 Claude 完成第九轮：按用户决定先保证剑桥雅思的题，处理第八轮复审 V1 和剑桥题自查；机经问题（V2、V3 数据）暂缓。提交在 `claude/word-memorization-system-eval-55v2y5`，待 Codex 复审。未合并 main、未部署。
+> 最近更新：2026-10-27 Codex完成第九轮独立复审，按剑桥题判定不通过；V1/V3点名关闭，新0阻断/4应修/2建议。仅写审核报告及交接，机经继续暂缓，未部署。
+
+## 2026-10-27 语法候选题 v0.2 第九轮独立复审（Codex，不通过）
+
+- **事实源**：[完整复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND9_CODEX_REVIEW.md)，含10项实际命令/结果、指定60题、全部22道剑桥noun降级题、独立120题、44个并列目标判断、双跑SHA。以本节和报告的独立口径覆盖下一节Claude待审摘要，不删除历史记录。
+- **结论**：V1表语because与6句标注修复关闭；V3显示范围文档关闭。剑桥新0阻断/4应修：W1并列关系与从句功能混作互斥类别（17道T3）；W2两独立分句仍唯一主句题（10T1+7T5）；W3分号后非限定结构的两句漏标（6道局部正确auto）；W4六周龄后when类别疑点漏审（2道）。另W5保守误降9/22，W6差分统计口径为建议。本轮新增机经问题0，明确指定既有4处数据问题继续暂缓，不计剑桥分级。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；起始干净3b7efb37822f38ca973767183d54c8ca75e5e418，授权fetch/ff到固定76aeb1251d951393d256dd8900a2340644ba332e；不合main、不rebase。当前仅ROUND9_CODEX_REVIEW新文件及CODEX_HANDOFF/WORKLOG两修改，正文待本轮授权commit/push；最终提交/CI见后续补记及git log。
+- **另一工作树**：`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind85；既有7 modified/22 untracked入口（详见第八轮交接）全部保留，本轮未写入。只借其venv运行reading测试/临时库/Ruff，不把任务树结果写成桌面main已拥有。
+- **精确验证**：任务树`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`106通过；新Flask-only按ci.yml完整13模块174运行/173通过/1按设计跳过；Node拼写队列通过；桌面venv（cwd任务树）`-m unittest tests.test_reading_study -v`22通过；validator0、text fixes --check=0；4改动Python Ruff check/format（extend-exclude=[]）通过。完整命令见报告。
+- **复现与数据**：Mac Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1CPU；完整76快照双跑，复用本机已验证缓存（句文未变），四文件彼此相同；JSONL/XLSX等于提交，两报告唯一差Python版本行。50243候选/40572auto，其中剑桥28029；−22/+17、实际共同ID41状态变化（40 noun+1T5歧义）、1题roles元数据变化。固定旧标注只换规则才是7+40降级。78回归不变，7过滤吻合；raw171篇content/groups一致，图谱字节一致；完整main676569c先导317篇再导本轮，本机SQLite236/81/0。
+- **抽查口径**：指定60当前59auto局部成立/1needs有类别争议；noun22中13复核合理、9保守误降；独立120auto（seed20261030，每型20）局部成立120，但1道唯一主句前提错误，其余119此次未见新问题。源句均可阅读；W3来自定向查漏。不能把局部正确写成全池无错误，或把待审题算入自动题全正确。
+- **交付/盲审**：表内剑桥233=196auto+37needs，机经127=104auto+23needs；7表6×60行、盲审及四项下拉通过，重抽保留39旧题号。老师按题号迁移审题结果，不按旧行号续审。
+- **发布/外部状态**：未推main、未PR、未部署后端/前端、未操作生产服务器/数据库、未上传/提审/发布小程序、未调用大模型API。辅助脚本/日志/候选池/缓存/SQLite在`/Users/zhouxin/.codex/audits/grammar-v02-round9-20261027`仅本机；跨电脑以提交并推送后的报告为准。
+- **下一步**：实现方先按W1–W4处理剑桥题，保留通用规则、避免ID黑名单，再独立核验；机经按用户决定暂缓。教师360题盲审与任何上线均未完成，部署仍须另外授权。
 
 ## 2026-10-27 语法候选题 v0.2 第九轮（Claude，待复审）
 
