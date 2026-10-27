@@ -671,7 +671,7 @@
 
 **连字符规则在剑桥的额外命中：41 道 auto 降级，都是 T1。**
 - 1 道是复审没列出的同类答案错误：5_3_p3 A-03 的 T1 答案是 `re`（原文 re-entered），降级成立。它的 T6 本来就待复核。
-- 40 道的主句答案正确，但干扰项是复合形容词的后半截，比如 water-borne 的 borne、problem-solving 的 solving、self-driving 的 driving、so-called 的 called、solar-powered 的 powered。高亮的是半个词，和 X1 的 road-tested 同理，降级成立。（第十二轮更正：其中 16_4_p2 G-02 的 word-spot、20_1_p1 I-05 的 hand-raising 是真正的连字符动词，不是复合形容词；其余 38 道才是复合修饰语。）
+- 40 道的主句答案正确，但干扰项是复合形容词的后半截，比如 water-borne 的 borne、problem-solving 的 solving、self-driving 的 driving、so-called 的 called、solar-powered 的 powered。高亮的是半个词，和 X1 的 road-tested 同理，降级成立。（第十二轮更正、第十一轮复审 Y4：准确的说法是“40 道连字符词的片段干扰项”。其中 16_4_p2 G-02 的 word-spot、20_1_p1 I-05 的 hand-raising 是动词或非谓语词组，不是复合形容词；8_4_p1 E-01 的 mixed-ability 截出的是前半 mixed；其余是复合修饰语的后半截。）
   - 另一种处理是从干扰项里去掉这些片段、题目保留自动通过，但那会改动干扰项内容，本轮按复审的最小改法只降级。
 - 另有 7 道剑桥题本来就待复核，这次多了这个原因（T6 的 to pre、to re、to co、re，以及 ice-forming、well-defined、Abundance-Based 三个干扰项片段）。
 
@@ -813,6 +813,64 @@
 - W5、V4 / V5、机经暂缓各项不变；老师盲审是否只审剑桥，仍待用户决定。
 - 修订和自查仍由同一方完成。
 
+## 第十三轮（2026-10-27，第十一轮复审 Y1–Y4 与 A8 意见）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND11_CODEX_REVIEW.md`。复审对象是第十一轮（a3fbcbb），结论是不通过、以剑桥题为准：X1–X4 关闭；新增 0 阻断、3 应修（Y1–Y3，35 道剑桥自动题，第十轮已存在）、1 建议（Y4）。复审在第十二轮之前完成，第十二轮开始时 Claude 没有看到。本分支已用普通合并合入 Codex 分支（37bd950，交接文档保留双方内容），Codex 下次可以直接快进。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| Y1 | whether or not、not just because 的 not 被当成动词否定，7 道（干扰项 `not … are carrying`、高亮 `【not】 just because it 【came】`） | 新增 `correlative_not()`：紧跟 or、或位于从句自己的主语或引导词之前的 not 不进动词单位；did not come、decided not to go 不变。<br>· 3 道 T1 的干扰项改正为 are carrying、to salvage、work，仍自动通过。<br>· 4 道 T6 因高亮改正而换题号：3 道自动通过（lives、came、are carrying），1 道是 7_1_p1 C-08 的 is，因句中 is 出现多次待复核。<br>· 机经另有 1 道 T1（`... and not what would later be identified`）因此恢复自动通过，核对正确 |
+| Y2 | for 引出的并列分句只在从句类型题里按并列处理，6 道动词身份、主句谓语、主语题仍按从属 | 新增 `for_clause()`：“for + 有自己主语的限定分句”的动词，T6 降为待复核（finiteness_mismatch）；全句根带这种分句时，T1 / T5 加 multiple_independent_clauses。主句动词本身的 T6 不受影响。剑桥正好是点名的 6 道，机经 1 道 T6 |
+| Y3 | date back、wrote down 的小品词被标成 advmod，动词单位漏掉，22 道 | 新增 `particle_outside_unit`：显示的动词后面紧跟“语料里被解析器标过 prt 至少十次的词”（up、out、down、on、off、in、back、over、away、about、through），但这里标成 advmod 时，该题降为待复核；动词单位不扩大（T1 答案冻结），T6 不继承 T1 的这个原因。点名的 22 道全部降级 |
+| Y4 | “40 道都是复合形容词的后半截”说法不准 | 第十一轮一节的更正已补全（见上） |
+| A8 意见 | 只写连词仍有两种情况定位不唯一：同一连词重复出现，以及目标本身又连着两个分句 | 第一种第十二轮已经用“第 N 个 and”处理。第二种新增 `nested_coordination`：目标里还有另一个带自己主语的限定并列分句时，T2 降为待复核，剑桥 1 道自动题降级（9_3_p2 A-01，复审举的例子）。<br>复审表里其余 6 道在新题干下答案唯一，逐题核对过：<br>· 11_2_p2 D-01、6_4_p1 E-23：句中只有一个 but；<br>· 13_4_p3 B-05：and 只出现一次；<br>· 15_1_p3 D-03：第 3 个 and；<br>· 17_4_p2 B-03、B-04：第 2 个 and，跳过连接名词的那个 |
+
+### 额外命中
+
+- **Y3 在剑桥另外降了 77 道**（T1 47、T6 52，减去点名的 22 道），共 42 对“动词 + 小品词”，逐对看过：
+  - 基本都是短语动词或动词加小品词：went back、go back、spread out、opt out、carried out、stepped down、stripped away、moved away、comes down to、switched back on、stay away、bring back、drained away、moved on、roll in 等；
+  - 另有 be down to、be over、be up to 这类“系动词 + 小品词”。
+
+  只显示动词本身确实不完整，降级成立。这条规则只降级，不判断小品词是否必须进单位。
+- **Y1、Y2、A8 嵌套在剑桥没有额外命中。**
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 题型 | 第十二轮 | 第十三轮 |
+|---|---|---|
+| 主句谓语 main_verb_tap | 5894 / 485 / 6367 | 5836 / 543 / 6367 |
+| 从句边界 clause_boundary | 4679 / 2583 / 2694 | 4678 / 2584 / 2694 |
+| 主语范围 subject_span | 5366 / 818 / 6562 | 5365 / 819 / 6562 |
+| 动词身份 finite_or_not | 12737 / 1738 / 6549 | 12662 / 1813 / 6549 |
+| 从句类型、状语关系 | 不变 | 不变 |
+
+**与第十二轮比较：**
+- 候选 50,243。剑桥 4 道 T6 换题号（Y1），新题号 3 道自动通过、1 道待复核。
+- 共同题号 auto → needs：剑桥 106 道（T1 48、T6 56、T2 1、T5 1），机经 29 道；needs → auto 只有机经 1 道（Y1）。
+- 除 status / reasons 外，只有 4 道 T1 的干扰项变了（Y1，剑桥 3、机经 1）。
+- 剑桥的 106 道按原因分：Y2 6 道、Y3 99 道、A8 嵌套 1 道。
+
+**auto_pass：** 40,476 → 40,341，其中剑桥 27,967 → 27,860。
+
+**抽查表：** 重抽后 10 个题号仍在表里，(工作表, 行号) 有 1 行相同。现在剑桥 224 行（自动 196、待复核 28），机经 136 行。六张表各 60 行，四项下拉，盲审。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `0b738bbe23ea…`、`generation_report_v0_2.md` `c0464918f5d4…`、`review_batch_v0_2.jsonl` `4853a1a58089…`、`review_batch_v0_2.xlsx` `9aff2bae36ce…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
+| 测试 | 新增 9 项：Y1 3、Y2 2、Y3 2、A8 嵌套 2。修改前的结果：<br>· 5 项断言失败；<br>· 1 项接口错误：Y3 的控制例用到新的 Reason 常量；<br>· 3 项控制例通过：普通否定、because 从句、单个分句目标。<br>专项 137 项通过；只装 Flask 的 CI 列表 205 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十三轮遗留
+
+- Y3 只降级，没有把小品词并入动词单位。如果要改正这些题的答案和高亮，需要先确定哪些“动词 + 副词”算短语动词，并且要改 T1 答案规则，需另行同意。
+- Y3 只看紧挨动词的小品词，`wrote it down` 这类被宾语隔开的不在范围内。
+- Y1 只处理 not。no、never 等的作用域没有检查。
+- 第十二轮、第十一轮的遗留不变：连词与目标之间隔插入语的并列分句按找不到连词处理；W5、V4 / V5；机经暂缓；老师盲审范围待定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十二轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十三轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
