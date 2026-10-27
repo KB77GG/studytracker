@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-27 — 第十一轮独立复审完成（Codex，剑桥不通过）
+
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`，从干净525fcb4按授权fetch/ff固定a3fbcbb；只新增ROUND11_CODEX_REVIEW及更新两交接，桌面main原有7modified/22untracked未动。正在提交推送，随后核实并补记GitHub CI；未改被审代码数据。
+- X1–X4点名关闭；新0阻断/3应修（Y1否定作用域7道、Y2 for跨题型6道、Y3短语动词粒子22道）/1建议Y4描述更正。35道不同剑桥auto、23句均为存量；机经新增确认0。120随机auto有118本次未见问题、1高亮错、1既有A8；不称全部正确。A8建议先降345题，后标记具体连词位置；未实施。
+- 专项122、Flask-only190运行/1跳过、reading22、Node、5文件Ruff通过；validator0、--check0、raw171及图谱全等；两次四文件全等、两报告仅Python版本差。提示JSONL哈希一位笔误实际…986490f…已注明。50243候选、auto40423/剑桥27927，78回归和7过滤不变；main676完整快照到a3临时导入236/81/0。
+- 报告含全部逐题表、实际命令和SHA；辅助材料仅本机`/Users/zhouxin/.codex/audits/grammar-v02-round11-20261027`。未推main/PR/部署/生产操作/小程序发布；下一步实现方处理Y1–Y3、更正Y4，用户决定A8。
+
 ## 2026-10-27 — 语法候选题 v0.2 第十一轮（Claude）
 
 - 修复 Codex 第十轮复审的 X1–X4（剑桥）：
