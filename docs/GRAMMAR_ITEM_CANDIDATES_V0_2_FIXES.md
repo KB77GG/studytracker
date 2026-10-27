@@ -917,6 +917,49 @@
 - 之前各轮的遗留不变：小品词不并入单位、连字符动词不合并、插入语隔开的并列分句、W5、V4 / V5、机经暂缓、盲审范围待定。
 - 修订和自查仍由同一方完成。
 
+## 第十五轮（2026-10-27，第十四轮复审 AA1–AA3）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND14_CODEX_REVIEW.md`。复审结论是不通过，以剑桥题为准：
+- Z1、Z2、Z4–Z6 关闭；Z3 的 provided 干扰项已修，但同类 T6 未统一。
+- 新增 0 阻断、2 应修（AA1、AA2，5 道剑桥自动题，第十三轮已存在）、1 建议（AA3）。
+- 机经 3 项暂缓。
+
+本轮在 Codex 分支 c6bfb1a 上快进后修改。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| AA1 | 解析器把 be 当中心，后面的被动分词挂在别处，T1 / T6 只显示 are / is：<br>· 14_3_p2 F-06 `are infrequently encountered` 明确漏词；<br>· 14_2_p2 H-02 `is naturally ventilated, passively cooled and naturally lit` 需复核分析口径（共 4 道） | 新增 `be_participle()` / `participle_after_be`：显示的 be 有未并入单位的过去分词，且该分词依存为 dep，或依存为 acomp 并带并列过去分词时，降为待复核；不扩大单位，T6 不继承 T1 的这个原因。<br>不受影响的例子：family-owned、terrified of、`freely chosen, spontaneous ...`（与形容词并列）、表语 that 从句。<br>全库语料只有 8 处命中（两种来源、所有状态），剑桥自动题正好是点名的 4 道 |
+| AA2 | given that 已按连词不进 T1 干扰项，T6 却仍自动答“非谓语”（18_2_p3 C-03，1 道） | T6 目标是这类连词时降为待复核（`lexical_conjunction`）。剑桥自动题 1 道，另有 4 道剑桥、4 道机经本来就待复核，只多了这个原因；机经 1 道自动题降级 |
+| AA3（建议） | 只看“分词 + 作引导词的 that”，会把真动词也当连词：He granted that、I am assuming that、rather than supposing that | `conjunction_participle()` 收窄，还要求两点：<br>· 它像引导词那样挂（prep / advcl / mark，或与这样的词并列，如 `..., and given that ...`）；<br>· 没有自己的主语和助动词。<br>全库符合原条件的 20 处里保留 13 处真连词，排除 7 处（rather than supposing that、for assuming that、takes it for granted that、Seeing that 作主语等）。原来去掉的 3 个干扰项不变 |
+
+### 结果
+
+**与第十四轮比较：** 候选与题号不变，除 status / reasons 外字段不变。
+- 剑桥 auto → needs 5 道：AA1 4（T1 2、T6 2）、AA2 1（T6）。
+- 机经 auto → needs 1 道（AA2）。
+- 另有本来就待复核的题多了原因：剑桥 5 道（lexical_conjunction 4、participle_after_be 1），机经 4 道。
+
+**auto_pass：** 主句谓语 5832、动词身份 12652，其余不变；合计 40,333 → 40,327，其中剑桥 27,854 → 27,849。
+
+**抽查表：** 重抽后 26 个题号仍在表里，(工作表, 行号) 有 2 行相同。现在剑桥 227 行（自动 196、待复核 31），机经 133 行。六张表各 60 行，四项下拉，盲审。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `f775880b9a79…`、`generation_report_v0_2.md` `06b22698c682…`、`review_batch_v0_2.jsonl` `bfd4b24f41e5…`、`review_batch_v0_2.xlsx` `02e84d26c9cf…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
+| 测试 | 新增 5 项：AA1 3、AA2 1、AA3 1。修改前的结果：<br>· 3 项断言失败；<br>· 2 项接口错误：AA1 的并列分词正例和形容词控制例都用到新的 Reason 常量。<br>专项 149 项通过；只装 Flask 的 CI 列表 217 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十五轮遗留
+
+- AA1 只降级，没有把被动分词并入单位、改正答案；只认 dep 和“成串并列分词的 acomp”两种挂法。复审另列的 be to、is yet to be 等准情态结构未改。
+- AA3 收窄后，Seeing that 作主语一类已不再当连词处理；它是否算连词，需另定教学口径。
+- 机经 3 项暂缓（含连字符和 or not do 的保守误降）。
+- 之前各轮的遗留不变：`ambiguous()` 子串查重、小品词不并入单位、连字符动词不合并、插入语隔开的并列分句、W5、V4 / V5、盲审范围待定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十四轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十五轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
