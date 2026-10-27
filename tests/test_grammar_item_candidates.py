@@ -1528,6 +1528,23 @@ class CorrelativeNotTests(unittest.TestCase):
             [s["text"] for s in main["answer"]["spans"]], ["may", "not", "work", "out"]
         )
 
+    def test_negative_question_keeps_its_not(self):
+        # Review Z6: "Did not the team win?" - not stands before the subject but negates win.
+        from scripts.grammar_items import templates
+
+        _, view = tree(
+            [
+                ("Did", "aux", 4, "AUX", "VBD"),
+                ("not", "neg", 4, "PART", "RB"),
+                ("the", "det", 3, "DET", "DT"),
+                ("team", "nsubj", 4, "NOUN", "NN"),
+                ("win", "ROOT", 4, "VERB", "VB"),
+                ("?", "punct", 4, "PUNCT", "."),
+            ]
+        )
+        unit = templates.verb_unit(view, view.tokens[4])
+        self.assertEqual([t.text for t in unit], ["Did", "not", "win"])
+
 
 class ForClauseTests(unittest.TestCase):
     """Review Y2: "..., for then ... there were constant shifts" is a coordinate clause, as T3

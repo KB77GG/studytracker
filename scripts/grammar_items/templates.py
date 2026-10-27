@@ -223,13 +223,15 @@ def item_id(source, template, start, end, variant):
 
 def correlative_not(view, head, token):
     """A not the parser hangs on a verb without negating it (review Y1): "whether or not they
-    are carrying boats", "not just because it came first". It follows "or", or stands before
-    the clause's own subject or subordinator; "did not come", "decided not to go" keep theirs."""
+    are carrying boats", "not just because it came first", "not what would later be identified".
+    It follows "or", or stands before the clause's own subordinator or wh-word. Standing before
+    the subject alone is not enough: "Did not the team win?" negates win (review Z6), as do
+    "did not come" and "decided not to go"."""
     if token.dep != "neg" or token.text.lower() != "not":
         return False
     after_or = token.i > 0 and view.tokens[token.i - 1].text.lower() == "or"
     ahead = any(
-        c.i > token.i and (c.dep in CLAUSE_SUBJECT_DEPS or c.dep == "mark")
+        token.i < c.i < head.i and (c.dep == "mark" or c.text.lower() in WH_WORDS)
         for c in view.children(head)
     )
     return after_or or ahead
