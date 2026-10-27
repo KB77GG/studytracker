@@ -84,6 +84,7 @@ class Reason(StrEnum):
     NOUN_ATTACHED_CLAUSE = "noun_attached_clause"
     COORDINATE_FUNCTION_OVERLAP = "coordinate_function_overlap"
     MULTIPLE_INDEPENDENT_CLAUSES = "multiple_independent_clauses"
+    HYPHENATED_WORD_SPLIT = "hyphenated_word_split"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

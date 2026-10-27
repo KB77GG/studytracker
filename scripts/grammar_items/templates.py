@@ -41,8 +41,11 @@ VERB_UNIT_DEPS = frozenset({"aux", "auxpass", "neg", "prt"})
 # Plan v0.2 B2: when/where/why right after a noun may be a relative adverb.
 RELATIVE_ADVERBS = frozenset({"when", "where", "why"})
 AGE_UNITS = frozenset({"day", "week", "month", "year"})
-# Reasons on the T1 item that say nothing about the root verb's own identity (T6).
-T1_ONLY_REASONS = frozenset({R.VERB_UNIT_OUTSIDE_SPAN, R.MULTIPLE_INDEPENDENT_CLAUSES})
+# Reasons on the T1 item that say nothing about the root verb's own identity (T6), which
+# checks its own highlight for a split hyphenated word.
+T1_ONLY_REASONS = frozenset(
+    {R.VERB_UNIT_OUTSIDE_SPAN, R.MULTIPLE_INDEPENDENT_CLAUSES, R.HYPHENATED_WORD_SPLIT}
+)
 QUOTE_MARKS = frozenset("'\"‘’“”")
 # Words that make a clause they lead a noun, relative or adverbial clause.
 WH_WORDS = frozenset(
@@ -156,6 +159,30 @@ def close_quotes(sentence, span, low, high):
     if (start, end) == (span["start"], span["end"]):
         return span
     return char_span(sentence, start, end)
+
+
+def hyphen_inside_word(sentence, index):
+    """A hyphen at index joining two letters or digits of one word (re-establish, back-up)."""
+    return (
+        0 < index < len(sentence) - 1
+        and sentence[index] == "-"
+        and sentence[index - 1].isalnum()
+        and sentence[index + 1].isalnum()
+    )
+
+
+def split_word(sentence, spans):
+    """A highlighted part that starts or ends at a word-internal hyphen shows a fragment:
+    "re" of re-establish, "wired" of hard-wired, "back" / "up" of back-up air conditioning
+    (review X1/X2). The tokenizer splits such words; the item goes to review."""
+    parts = []
+    for span in spans:
+        parts += [span, *span.get("parts", ())] if span else []
+    edges = {edge for part in parts for edge in (part["start"], part["end"])}
+    split = any(
+        hyphen_inside_word(sentence, e) or hyphen_inside_word(sentence, e - 1) for e in edges
+    )
+    return [R.HYPHENATED_WORD_SPLIT] if split else []
 
 
 def item_id(source, template, start, end, variant):
@@ -315,8 +342,12 @@ class Context:
         identity = target or char_span(self.sentence, span.start, span.end)
         parser_evidence = evidence(self.view, span, head)
         parser_evidence.update(extra or {})
+        shown = [target, *(answer_spans or ()), *(distractors or ())]
         reasons = sorted(
-            set(reasons) | set(self.review_reasons) | set(ambiguous(span, self.sentence, target))
+            set(reasons)
+            | set(self.review_reasons)
+            | set(ambiguous(span, self.sentence, target))
+            | set(split_word(self.sentence, shown))
         )
         item = {
             "item_id": item_id(
@@ -386,6 +417,8 @@ def main_distractors(ctx, unit):
         for token in inside:
             if token.pos not in {"VERB", "AUX"} or token.i in excluded:
                 continue
+            if not any(ch.isalnum() for ch in token.text):
+                continue  # A hyphen the parser tagged VERB (re - establish) is no verb.
             if token.dep in VERB_UNIT_DEPS and token.head in indexes:
                 continue  # An auxiliary shown as part of its head's unit.
             unit_tokens = verb_unit(ctx.view, token)

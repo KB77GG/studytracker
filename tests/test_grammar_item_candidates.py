@@ -1582,6 +1582,115 @@ class AgeExpressionTests(unittest.TestCase):
             self.assertNotIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"], item["template"])
 
 
+def glued_tree(rows, glued=(), punct=()):
+    """Like tree(), but a token whose index is in glued follows the previous one without a
+    space (re-establish, 94%), and indexes in punct are punctuation whatever their POS."""
+    sentence, tokens = "", []
+    for index, (text, dep, head, pos, tag) in enumerate(rows):
+        if index and index not in glued:
+            sentence += " "
+        start = len(sentence)
+        sentence += text
+        is_punct = pos == "PUNCT" or index in punct
+        tokens.append(Token(index, text, start, len(sentence), pos, tag, dep, head, (), is_punct))
+    return sentence, ParseView(tuple(tokens))
+
+
+class HyphenatedWordTests(unittest.TestCase):
+    """Review X1/X2: the tokenizer splits re-establish, hard-wired and back-up into pieces."""
+
+    def test_span_edges_inside_a_hyphenated_word(self):
+        from scripts.grammar_items import templates
+
+        sentence = "We need back-up air in a 5-10 day window - mostly - today."
+
+        def part(text):
+            start = sentence.index(text)
+            return {"start": start, "end": start + len(text), "text": text}
+
+        for text in ("back", "up", "5"):
+            self.assertEqual(
+                templates.split_word(sentence, [part(text)]), [R.HYPHENATED_WORD_SPLIT]
+            )
+        for text in ("back-up", "back-up air", "5-10", "a 5-10 day window", "mostly"):
+            self.assertEqual(templates.split_word(sentence, [part(text)]), [], text)
+        target = {**part("need back"), "parts": [part("need"), part("back")]}
+        self.assertEqual(templates.split_word(sentence, [target]), [R.HYPHENATED_WORD_SPLIT])
+        self.assertEqual(templates.split_word(sentence, [None]), [])
+
+    def test_hyphenated_main_verb_goes_to_review(self):
+        # "... could, in theory, re-establish that forest disturbance" (15_2_p2 D-06).
+        sentence, view = glued_tree(
+            [
+                ("Pigeons", "nsubj", 2, "NOUN", "NNS"),
+                ("could", "aux", 2, "AUX", "MD"),
+                ("re", "ROOT", 2, "VERB", "VB"),
+                ("-", "punct", 2, "PUNCT", "HYPH"),
+                ("establish", "dobj", 2, "VERB", "VB"),
+                ("forests", "dobj", 4, "NOUN", "NNS"),
+                (".", "punct", 2, "PUNCT", "."),
+            ],
+            glued={3, 4, 6},
+        )
+        tags = [
+            ("Pigeons", "subject", 1),
+            ("could re-establish", "verb_phrase", 1),
+            ("forests", "object", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        for template in ("main_verb_tap", "finite_or_not"):
+            item = by_template(items, template)[0]
+            self.assertEqual(item["status"], "needs_review", template)
+            self.assertIn(R.HYPHENATED_WORD_SPLIT, item["reasons"])
+
+    def test_hyphen_tagged_verb_is_no_distractor(self):
+        # "... using its powers to re-establish ..." (12_8_p2 G-02): the parser tags the hyphen VERB.
+        sentence, view = glued_tree(
+            [
+                ("They", "nsubj", 1, "PRON", "PRP"),
+                ("wanted", "ROOT", 1, "VERB", "VBD"),
+                ("to", "aux", 3, "PART", "TO"),
+                ("re", "xcomp", 1, "VERB", "VB"),
+                ("-", "conj", 3, "VERB", "HYPH"),
+                ("establish", "conj", 3, "VERB", "VB"),
+                ("order", "dobj", 5, "NOUN", "NN"),
+                (".", "punct", 1, "PUNCT", "."),
+            ],
+            glued={4, 5, 7},
+            punct={4},
+        )
+        tags = [
+            ("They", "subject", 1),
+            ("wanted", "verb_phrase", 1),
+            ("to re-establish order", "infinitive_phrase", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        main = by_template(items, "main_verb_tap")[0]
+        self.assertNotIn("-", [d["text"] for d in main["distractors"]])
+        self.assertEqual(main["status"], "needs_review")  # "to re" / "establish" are fragments.
+        identity = next(
+            i for i in by_template(items, "finite_or_not") if i["evidence"]["variant"] == "main"
+        )
+        self.assertEqual(identity["status"], "auto_pass")  # wanted itself is a whole word.
+
+    def test_compound_adjective_in_a_subject_is_whole(self):
+        sentence, view = glued_tree(
+            [
+                ("Well", "advmod", 2, "ADV", "RB"),
+                ("-", "punct", 2, "PUNCT", "HYPH"),
+                ("known", "amod", 3, "ADJ", "JJ"),
+                ("writers", "nsubj", 4, "NOUN", "NNS"),
+                ("agree", "ROOT", 4, "VERB", "VBP"),
+                (".", "punct", 4, "PUNCT", "."),
+            ],
+            glued={1, 2, 5},
+        )
+        tags = [("Well-known writers", "subject", 1), ("agree", "verb_phrase", 1)]
+        items, _ = generate(sentence, view, tags)
+        for item in items:
+            self.assertNotIn(R.HYPHENATED_WORD_SPLIT, item["reasons"], item["template"])
+
+
 MAIN_ROWS = [
     ("The", "det", 1, "DET", "DT"),
     ("plans", "nsubj", 4, "NOUN", "NNS"),
