@@ -1465,6 +1465,70 @@ class CoordinateOverlapTests(unittest.TestCase):
         self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
 
 
+class CorrelativeNotTests(unittest.TestCase):
+    """Review Y1: the not of "whether or not" / "not just because" does not negate the verb."""
+
+    def units(self, rows, tags):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        main = by_template(items, "main_verb_tap")[0]
+        sub = [i for i in by_template(items, "finite_or_not") if i["evidence"]["variant"] != "main"]
+        return main, sub
+
+    def test_whether_or_not(self):
+        # "These gondolas always weigh the same, whether or not they are carrying boats." (E-03)
+        rows = [
+            ("Gondolas", "nsubj", 1, "NOUN", "NNS"),
+            ("weigh", "ROOT", 1, "VERB", "VBP"),
+            ("whether", "mark", 7, "SCONJ", "IN"),
+            ("or", "cc", 2, "CCONJ", "CC"),
+            ("not", "neg", 7, "PART", "RB"),
+            ("they", "nsubj", 7, "PRON", "PRP"),
+            ("are", "aux", 7, "AUX", "VBP"),
+            ("carrying", "advcl", 1, "VERB", "VBG"),
+            ("boats", "dobj", 7, "NOUN", "NNS"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        tags = [
+            ("Gondolas", "subject", 1),
+            ("weigh", "verb_phrase", 1),
+            ("whether or not they are carrying boats", "concessive_clause", 2),
+        ]
+        main, sub = self.units(rows, tags)
+        self.assertEqual([d["text"] for d in main["distractors"]], ["are carrying"])
+        self.assertEqual([p["text"] for p in sub[0]["target"]["parts"]], ["are carrying"])
+
+    def test_not_before_because(self):
+        # "But language is foremost not just because it came first." (11_4_p3 B-01)
+        rows = [
+            ("Language", "nsubj", 1, "NOUN", "NN"),
+            ("is", "ROOT", 1, "AUX", "VBZ"),
+            ("foremost", "advmod", 1, "ADV", "RB"),
+            ("not", "neg", 7, "PART", "RB"),
+            ("just", "advmod", 7, "ADV", "RB"),
+            ("because", "mark", 7, "SCONJ", "IN"),
+            ("it", "nsubj", 7, "PRON", "PRP"),
+            ("came", "advcl", 1, "VERB", "VBD"),
+            ("first", "advmod", 7, "ADV", "RB"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        tags = [
+            ("Language", "subject", 1),
+            ("is", "verb_phrase", 1),
+            ("because it came first", "reason_clause", 2),
+        ]
+        _, sub = self.units(rows, tags)
+        self.assertEqual(sub[0]["target"]["text"], "came")
+
+    def test_ordinary_negation_stays(self):
+        sentence, view = main_tree()
+        items, _ = generate(sentence, view, main_tags())
+        main = by_template(items, "main_verb_tap")[0]
+        self.assertEqual(
+            [s["text"] for s in main["answer"]["spans"]], ["may", "not", "work", "out"]
+        )
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 

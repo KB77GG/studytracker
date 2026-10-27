@@ -211,6 +211,20 @@ def item_id(source, template, start, end, variant):
     return "gi_v02_" + sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
+def correlative_not(view, head, token):
+    """A not the parser hangs on a verb without negating it (review Y1): "whether or not they
+    are carrying boats", "not just because it came first". It follows "or", or stands before
+    the clause's own subject or subordinator; "did not come", "decided not to go" keep theirs."""
+    if token.dep != "neg" or token.text.lower() != "not":
+        return False
+    after_or = token.i > 0 and view.tokens[token.i - 1].text.lower() == "or"
+    ahead = any(
+        c.i > token.i and (c.dep in CLAUSE_SUBJECT_DEPS or c.dep == "mark")
+        for c in view.children(head)
+    )
+    return after_or or ahead
+
+
 def verb_unit(view, head, start=None, end=None):
     """The head verb plus its aux/auxpass/neg/prt children.
 
@@ -220,7 +234,9 @@ def verb_unit(view, head, start=None, end=None):
     children = (
         c
         for c in view.children(head)
-        if c.dep in VERB_UNIT_DEPS and (start is None or (start <= c.start and c.end <= end))
+        if c.dep in VERB_UNIT_DEPS
+        and (start is None or (start <= c.start and c.end <= end))
+        and not correlative_not(view, head, c)
     )
     return sorted([head, *children], key=lambda t: t.i)
 
