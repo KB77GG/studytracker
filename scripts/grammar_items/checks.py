@@ -89,6 +89,8 @@ class Reason(StrEnum):
     PARTICLE_OUTSIDE_UNIT = "particle_outside_unit"
     NESTED_COORDINATION = "nested_coordination"
     SHARED_AUXILIARY = "shared_auxiliary"
+    LEXICAL_CONJUNCTION = "lexical_conjunction"
+    PARTICIPLE_AFTER_BE = "participle_after_be"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

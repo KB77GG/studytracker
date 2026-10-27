@@ -49,6 +49,7 @@ T1_ONLY_REASONS = frozenset(
         R.MULTIPLE_INDEPENDENT_CLAUSES,
         R.HYPHENATED_WORD_SPLIT,
         R.PARTICLE_OUTSIDE_UNIT,
+        R.PARTICIPLE_AFTER_BE,
     }
 )
 # Adverbial particles the parser labels prt at least ten times in this corpus (by also reaches ten
@@ -285,6 +286,27 @@ def shared_auxiliary(view, head):
     while first.dep == "conj" and first.head != first.i:
         first = view.tokens[first.head]
     return any(c.dep in {"aux", "auxpass"} and c.text.lower() != "to" for c in view.children(first))
+
+
+def be_participle(view, tokens):
+    """A shown be whose participle the parser hung elsewhere (review AA1): "are infrequently
+    encountered" (encountered as dep) shows only are; "is naturally ventilated, passively cooled
+    and naturally lit" (a participle series as acomp) only is. Whether these are passives or
+    adjectival complements is left to review; "are family-owned", "are terrified of", "is
+    freely chosen, spontaneous ..." (participles among adjectives) are not flagged."""
+    inside = {t.i for t in tokens}
+    for token in tokens:
+        if token.text.lower() not in BE_FORMS:
+            continue
+        for child in view.children(token):
+            if child.tag != "VBN" or child.i in inside:
+                continue
+            series = child.dep == "acomp" and any(
+                c.dep == "conj" and c.tag == "VBN" for c in view.children(child)
+            )
+            if child.dep == "dep" or series:
+                return [R.PARTICIPLE_AFTER_BE]
+    return []
 
 
 def loose_particle(view, tokens):
@@ -535,6 +557,7 @@ def main_distractors(ctx, unit):
             unit_tokens = verb_unit(ctx.view, token)
             parts = [t for t in unit_tokens if t.i not in excluded]
             reasons += outside_span(parts, span) + loose_particle(ctx.view, parts)
+            reasons += be_participle(ctx.view, parts)
             value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
                 value["roles"].append(span.role)
@@ -598,7 +621,7 @@ def main_verb(ctx):
     unit = verb_unit(ctx.view, root, span.start, span.end)
     distractors, distractor_reasons = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
-    reasons += loose_particle(ctx.view, unit)
+    reasons += loose_particle(ctx.view, unit) + be_participle(ctx.view, unit)
     reasons += distractor_reasons + independent_clauses(ctx.view)
     item = ctx.emit(
         TEMPLATES[0],
@@ -938,6 +961,7 @@ def finite_or_not(ctx, main_item, main_rejections):
             reasons.append(R.FINITENESS_MISMATCH)
         unit = verb_unit(ctx.view, head)
         reasons.extend(outside_span(unit, span) + loose_particle(ctx.view, unit))
+        reasons.extend(be_participle(ctx.view, unit))
         participle = (
             variant == "non_finite"
             and not span.role.startswith("gerund")

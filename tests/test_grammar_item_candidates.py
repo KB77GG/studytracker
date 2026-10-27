@@ -1769,6 +1769,56 @@ class ConjunctionParticipleTests(unittest.TestCase):
         self.assertEqual(self.distractors("provided", following), ["provided"])
 
 
+class BeParticipleTests(unittest.TestCase):
+    """Review AA1: "are infrequently encountered" with encountered hung as dep shows only are."""
+
+    def items(self, rows, verb):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, [(rows[0][0], "subject", 1), (verb, "verb_phrase", 1)])
+        return by_template(items, "main_verb_tap")[0], by_template(items, "finite_or_not")[0]
+
+    def test_participle_hung_as_dep_goes_to_review(self):
+        rows = [
+            ("Insects", "nsubj", 1, "NOUN", "NNS"),
+            ("are", "ROOT", 1, "AUX", "VBP"),
+            ("infrequently", "advmod", 3, "ADV", "RB"),
+            ("encountered", "dep", 1, "VERB", "VBN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        for item in self.items(rows, "are infrequently encountered"):
+            self.assertEqual(item["status"], "needs_review", item["template"])
+            self.assertIn(R.PARTICIPLE_AFTER_BE, item["reasons"])
+
+    def test_participle_series_goes_to_review(self):
+        # "the entire building is naturally ventilated, passively cooled and naturally lit"
+        rows = [
+            ("Buildings", "nsubj", 1, "NOUN", "NNS"),
+            ("are", "ROOT", 1, "AUX", "VBP"),
+            ("ventilated", "acomp", 1, "VERB", "VBN"),
+            ("and", "cc", 2, "CCONJ", "CC"),
+            ("cooled", "conj", 2, "VERB", "VBN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        for item in self.items(rows, "are ventilated and cooled"):
+            self.assertIn(R.PARTICIPLE_AFTER_BE, item["reasons"], item["template"])
+
+    def test_adjectival_participles_unaffected(self):
+        for word, sibling in (("terrified", None), ("chosen", ("spontaneous", "JJ"))):
+            rows = [
+                ("Pupils", "nsubj", 1, "NOUN", "NNS"),
+                ("are", "ROOT", 1, "AUX", "VBP"),
+                (word, "acomp", 1, "VERB", "VBN"),
+            ]
+            if sibling:
+                rows += [
+                    ("and", "cc", 2, "CCONJ", "CC"),
+                    (sibling[0], "conj", 2, "ADJ", sibling[1]),
+                ]
+            rows += [(".", "punct", 1, "PUNCT", ".")]
+            for item in self.items(rows, "are"):
+                self.assertNotIn(R.PARTICIPLE_AFTER_BE, item["reasons"], (word, item["template"]))
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 
