@@ -1519,6 +1519,56 @@ class IndependentClausesTests(unittest.TestCase):
             self.assertEqual(independent_clauses(view), [], sentence)
 
 
+class AgeExpressionTests(unittest.TestCase):
+    """Review W4: ", when ..." after an age may refer back to it like a relative clause."""
+
+    def clause_items(self, comma):
+        rows = [
+            ("Babies", "nsubj", 1, "NOUN", "NNS"),
+            ("laugh", "ROOT", 1, "VERB", "VBP"),
+            ("at", "prep", 1, "ADP", "IN"),
+            ("six", "nummod", 4, "NUM", "CD"),
+            ("weeks", "npadvmod", 5, "NOUN", "NNS"),
+            ("old", "pobj", 2, "ADJ", "JJ"),
+        ]
+        rows += [(",", "punct", 1, "PUNCT", ",")] if comma else []
+        start = len(rows)
+        rows += [
+            ("when", "advmod", start + 2, "SCONJ", "WRB"),
+            ("they", "nsubj", start + 2, "PRON", "PRP"),
+            ("smile", "advcl", 1, "VERB", "VBP"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [
+            ("Babies", "subject", 1),
+            ("laugh", "verb", 1),
+            ("at six weeks old", "prepositional_phrase", 1),
+            ("when they smile", "time_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        return [
+            i
+            for i in items
+            if i["template"] in {"clause_boundary", "clause_type_classify", "adverbial_relation"}
+            and (i["target"] or i["answer"]["spans"][0])["text"].startswith("when")
+        ]
+
+    def test_when_after_an_age_and_comma_is_not_auto_pass(self):
+        # "Humans start developing a sense of humour as early as six weeks old, when babies ..."
+        items = self.clause_items(comma=True)
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"], item["template"])
+            self.assertEqual(item["status"], "needs_review")
+
+    def test_when_after_an_age_without_comma_stays_adverbial(self):
+        items = self.clause_items(comma=False)
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertNotIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"], item["template"])
+
+
 MAIN_ROWS = [
     ("The", "det", 1, "DET", "DT"),
     ("plans", "nsubj", 4, "NOUN", "NNS"),

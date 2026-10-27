@@ -40,6 +40,7 @@ GENERATOR_VERSION = "grammar-items-v0.2"
 VERB_UNIT_DEPS = frozenset({"aux", "auxpass", "neg", "prt"})
 # Plan v0.2 B2: when/where/why right after a noun may be a relative adverb.
 RELATIVE_ADVERBS = frozenset({"when", "where", "why"})
+AGE_UNITS = frozenset({"day", "week", "month", "year"})
 # Reasons on the T1 item that say nothing about the root verb's own identity (T6).
 T1_ONLY_REASONS = frozenset({R.VERB_UNIT_OUTSIDE_SPAN, R.MULTIPLE_INDEPENDENT_CLAUSES})
 QUOTE_MARKS = frozenset("'\"‘’“”")
@@ -202,7 +203,24 @@ def relative_adverb_risk(view, span):
     before = [t for t in view.tokens if t.end <= span.start and not t.is_punct]
     before = [t for t in before if not t.text.isspace()]
     risky = bool(before) and before[-1].pos in {"NOUN", "PROPN", "NUM"}
-    return [R.POSSIBLE_RELATIVE_ADVERB] if risky else []
+    comma = [t for t in view.tokens if t.end <= span.start][-1:]
+    after_age = bool(comma) and comma[0].text == "," and age_expression(before[-3:])
+    return [R.POSSIBLE_RELATIVE_ADVERB] if risky or after_age else []
+
+
+def age_expression(words):
+    """An age such as "six weeks old" followed by a comma and when ("as early as six weeks old,
+    when babies begin to laugh"): the when clause may refer back to that age, like a
+    non-restrictive relative clause (review W4). "He was ten years old when he moved" has no
+    comma and stays an adverbial clause."""
+    if len(words) != 3:
+        return False
+    number, unit, old = words
+    return (
+        number.pos == "NUM"
+        and unit.text.lower().rstrip("s") in AGE_UNITS
+        and old.text.lower() == "old"
+    )
 
 
 def noun_attached_risk(view, head):
