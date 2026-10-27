@@ -483,7 +483,7 @@
 | 主语范围 subject_span | 5377 / 806 / 6563 | 5376 / 808 / 6562 |
 | 动词身份 finite_or_not | 12749 / 1730 / 6550 | 12745 / 1730 / 6549 |
 
-- 候选 50,248 → 50,243：改标的 5 句去掉 22 道、新增 17 道（新增的表语从句题都是待复核。这几句也少了几道原本正确的自动题：表语从句里的谓语动词不出动词身份题，少 4 道；16_3_p2 H-04 句中有两个名词性从句，名词性从句边界题不再出；4_3_p2 D-02 的 is 出现两次，主句谓语题转为待复核）。其余题目内容不变，只有状态变化：V1 规则 7 道、`noun_attached_clause` 40 道从 auto_pass 改为 needs_review。
+- 候选 50,248 → 50,243：改标的 5 句去掉 22 道、新增 17 道（新增的表语从句题都是待复核。这几句也少了几道原本正确的自动题：表语从句里的谓语动词不出动词身份题，少 4 道；16_3_p2 H-04 句中有两个名词性从句，名词性从句边界题不再出；4_3_p2 D-02 的 is 出现两次，主句谓语题转为待复核）。其余题目内容不变，只有状态变化：V1 规则 7 道、`noun_attached_clause` 40 道从 auto_pass 改为 needs_review。（第九轮复审 W6 更正：7 + 40 是固定旧标注、只换规则时的反事实计数，不是最终池的差分。按题号对比第八、九轮最终候选池，共同题号只有 41 道 auto_pass → needs_review：40 道 `noun_attached_clause`，1 道 T5 `ambiguous_span_location`。V1 那 7 道的旧题号已随改标被替换，不算共同题号。另有 16_3_p2 H-04 的 1 道 T1，干扰项 roles 元数据由 reason_clause 改为 predicative_clause，可见内容不变；reasons 有变化的共同题号是 61 道，不只 41 道。）
 - auto_pass 合计 40,572，其中剑桥 28,029（第八轮 28,065）。
 - 抽查表随池子变化重抽，与第八轮相比只有 39 道题仍在表里。现在 360 行里剑桥 233 行（自动 196、待复核 37），机经 127 行。
 
@@ -500,8 +500,137 @@
 
 - 机经：V2 三处排印、第 27 题错误解析（网页可见）、第八轮以前记录的机经遗留，等用户安排时再处理。
 - T2 多解（A8）、列表启发式边界（V4）、at_start / at_end 互斥校验（V5）未改。
-- 剑桥题的判断仍依赖原标注和解析器；本轮自查 60 道 + 复审历次抽查都未见错误答案，但这不证明全池没有。
+- 剑桥题的判断仍依赖原标注和解析器；本轮自查 60 道 + 复审历次抽查都未见错误答案，但这不证明全池没有。（第九轮复审另找到 W1–W4 四类剑桥自动题的问题，见第十轮。）
+
+## 第十轮（2026-10-27，第九轮复审 W1–W6，按复审附录“修订方案 v0.1”实施）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND9_CODEX_REVIEW.md`（结论不通过；0 阻断、4 应修 W1–W4、2 建议 W5–W6，全部是剑桥自动通过题）及其附录的修订方案。按方案的“最小版”实施：只给有风险的题加复核原因、降为待复核，题号、题干、选项、答案、范围、干扰项都不改；另改三句难点说明。规则只看解析结构和标点，不读 passage_id、sentence_id 或 item_id。
+
+| 复审编号 | 问题 | 处理 |
+|---|---|---|
+| W1 | 并列的从句题把“并列分句”当唯一答案，但目标同时在从属从句里（12_5_p1 C-04 `and why ...` 作宾语、D-07 `or when ...` 修饰 day、6_3_p2 A-05 共享 when 的状语等） | `coordinate_function_overlap()`，只接在从句类型题（T3）的 coordinate 分支，不改 `type_matches()`，从句边界题（T2）不受影响。沿 conj 链找到并列首项：首项不是全句的根，并且自己带从属引导词（as / because / that / if / so that 等 mark，不含 and / or）或以 wh 词开头，就加原因、降为待复核。只看首项自己的引导词，不看“有没有从属祖先”，所以引语里的正常并列（引语是 says 的 ccomp，首项没有引导词）不会命中 |
+| W2 | 冒号或分号两边各有一个完整分句，主句谓语题、主语题却只有一个答案（17_1_p2 E-06 等 10 句） | `independent_clauses()`：全句根的 ccomp / parataxis / conj 子句是限定的、有自己的主语、与根之间隔着 `;` 或 `:`、不以 wh 词或从属引导词开头、边界两侧没有引号，就给 T1、T5 加 `multiple_independent_clauses`。E-06 那种被解析成 ccomp 的前半句也能识别（正常宾语从句和谓语之间没有冒号分号）。T6 隔离：`finite_targets()` 复制主句题原因时去掉这个原因，T6 照常按自己的动词判断。没有接进 `main_selection()`，不会让 T1 被拒、连带丢掉 T6 |
+| W3 | 15_1_p3 F-04、7_3_p1 B-07 分号后是独立主格（being / being learned 不是限定谓语），说明没写成原句问题 | 两句第一条难点改写并加“原句问题：”，整句按原有规则待复核。采用复审草稿的两种改法（分号改逗号保留独立主格；或保留分号，being → was、being learned → are learned）；措辞改为“分号一般连接两个独立分句……标点不够规范”，不说独立主格本身不合法 |
+| W4 | 15_2_p3 A-01 `as early as six weeks old, when babies begin to laugh ...` 的 when 从句也可以分析成回指年龄的非限制性定语从句，从句边界题和类型题却按“状语从句”自动通过 | `age_expression()`：when 从句前紧挨着逗号，逗号前三个词是“数词 + day / week / month / year(s) + old”，就按 `possible_relative_adverb` 处理（与原来的名词前 when 共用入口，T2 / T3 / T4 都适用）。没有逗号的 `He was ten years old when he moved` 不算。A-01 第三条难点改为两种分析都说得通、不加前缀；复审草稿最后一句“若题目要求单选……需要先明确分析口径”是写给出题人的，学生在阅读页会看到，所以没有放进去 |
+| W5（建议） | `noun_attached_clause` 是保守筛选，22 道剑桥降级题里 9 道是正常状语从句 | 不改，接受保守误降（只降为待复核，不删题不改答案）；老师应按整句判断，原因码不等于错误判定 |
+| W6（建议） | 第九轮把规则反事实计数和最终池差分混写 | 第九轮一节已更正；本轮按三种口径分别统计（见下） |
+
+验收时又发现一处 W2 的漏洞并修正（5bf45ac）。原来只看被挂子句开头有没有引号，但解析器有时把冒号后引号里的句子当根，把说话人那半句挂成它的 ccomp，比如 17_1_p3 B-04 `Charles commenced his story: 'After ..., I began ...'`。复审方案把直接引语列为不应加原因的控制例，所以现在分隔符后紧跟引号也跳过。这只会减少命中：剑桥 8 道、机经 1 道去掉了这个原因，都还因其他原因待复核，状态不变。代价是 16_1_p3 I-01 `... for everyone: '...,' says Low.` 确实有两个主句，也不再带这个原因（它本来就待复核）。
+
+### 42 道回归题
+
+复审给的回归集是 42 个题号、30 句，修复前全部 auto_pass、没有复核原因。修复后全部 needs_review，各自只多了一个原因，局部答案不变（保留原标注答案，留给老师判断）。
+
+| 组 | 题号 | 题型 | 句子 | 修复后原因 | 局部答案 | 题干判断 |
+|---|---|---|---|---|---|---|
+| W1 | gi_v02_8d37d96a8c41 | T3 | 10_1_p1 E-01 | coordinate_function_overlap | 并列分句 | 在共享 as 的原因状语从句里 |
+| W1 | gi_v02_ac9f8535a872 | T3 | 10_4_p3 A-03 | coordinate_function_overlap | 并列分句 | 在共享 as 的状语从句里 |
+| W1 | gi_v02_db4a94e67ec4 | T3 | 11_2_p2 B-07 | coordinate_function_overlap | 并列分句 | 在共享 As 的状语从句里 |
+| W1 | gi_v02_5098e4ecac73 | T3 | 11_3_p3 G-07 | coordinate_function_overlap | 并列分句 | 在 watching as ... 的状语从句里 |
+| W1 | gi_v02_0bd648f0066e | T3 | 12_5_p1 C-04 | coordinate_function_overlap | 并列分句 | and why ... 作 explains 的宾语，名词性从句 |
+| W1 | gi_v02_cced38be072a | T3 | 12_5_p1 D-07 | coordinate_function_overlap | 并列分句 | or when ... 修饰 a day，定语从句 |
+| W1 | gi_v02_1a3f8293a80a | T3 | 13_4_p2 D-01 | coordinate_function_overlap | 并列分句 | 在共享 as 的状语从句里 |
+| W1 | gi_v02_4c275b496ac1 | T3 | 14_1_p3 K-03 | coordinate_function_overlap | 并列分句 | 在 It was found that ... 的主语从句里 |
+| W1 | gi_v02_d01f41961eff | T3 | 16_1_p2 E-05 | coordinate_function_overlap | 并列分句 | or what ... 作 on 的宾语，名词性从句 |
+| W1 | gi_v02_60cb6a4601fa | T3 | 16_2_p3 J-02 | coordinate_function_overlap | 并列分句 | and how ... 是 It is remarkable 的真正主语 |
+| W1 | gi_v02_48bddfc51ad7 | T3 | 18_1_p2 F-04 | coordinate_function_overlap | 并列分句 | 在共享 so that 的状语从句里 |
+| W1 | gi_v02_d661a884e51f | T3 | 20_1_p1 I-04 | coordinate_function_overlap | 并列分句 | 在共享 until 的状语从句里 |
+| W1 | gi_v02_077495b556b8 | T3 | 6_2_p2 A-02 | coordinate_function_overlap | 并列分句 | 在 reveal that ... 的宾语从句里 |
+| W1 | gi_v02_23f3ec6f71a5 | T3 | 6_3_p2 A-05 | coordinate_function_overlap | 并列分句 | and where ... 与 when ... 并列作状语 |
+| W1 | gi_v02_4919084edc4c | T3 | 7_2_p3 D-07 | coordinate_function_overlap | 并列分句 | 在共享 because 的状语从句里 |
+| W1 | gi_v02_7f0cf16fab32 | T3 | 8_2_p2 F-05 | coordinate_function_overlap | 并列分句 | 在共享 as 的状语从句里 |
+| W1 | gi_v02_8e07cbab650d | T3 | 8_3_p2 E-02 | coordinate_function_overlap | 并列分句 | 在 the fact that ... 的同位语从句里 |
+| W2 | gi_v02_5690b731fad2 | T1 | 17_1_p2 E-06 | multiple_independent_clauses | have / become | 冒号前 There have been ... 也是完整分句，主句谓语不唯一 |
+| W2 | gi_v02_3d42601b8d9c | T5 | 17_1_p2 E-06 | multiple_independent_clauses | the mixed-use facilities at Wembley and Old Trafford | 同上，完整主语不唯一 |
+| W2 | gi_v02_fa5a06f81026 | T1 | 12_8_p2 E-02 | multiple_independent_clauses | could / not / be | 分号前 This policy would also greatly boost ... 是另一主句 |
+| W2 | gi_v02_ec4d82f4d263 | T5 | 12_8_p2 E-02 | multiple_independent_clauses | the fishing industry's insistence ... | 同上 |
+| W2 | gi_v02_88f13fac6658 | T1 | 13_4_p2 B-06 | multiple_independent_clauses | costs | 冒号前 Soils also store water 是另一主句 |
+| W2 | gi_v02_e76742369569 | T5 | 13_4_p2 B-06 | multiple_independent_clauses | damage to buildings, roads and bridges ... | 同上 |
+| W2 | gi_v02_d5e448590295 | T1 | 14_3_p3 F-04 | multiple_independent_clauses | are | 冒号前 Play is process oriented 是另一主句 |
+| W2 | gi_v02_5be941a91aed | T5 | 14_3_p3 F-04 | multiple_independent_clauses | the means | 同上 |
+| W2 | gi_v02_2e69d0c43c2e | T1 | 14_3_p3 F-07 | multiple_independent_clauses | must / be | 冒号前 Play is actively engaged 是另一主句 |
+| W2 | gi_v02_cf9221c3ec44 | T5 | 14_3_p3 F-07 | multiple_independent_clauses | Players | 同上 |
+| W2 | gi_v02_45903e2a439d | T1 | 20_2_p3 A-03 | multiple_independent_clauses | was / mounted | 分号前 The contraption looked like ... 是另一主句 |
+| W2 | gi_v02_039e5b6e4241 | T1 | 4_3_p2 C-04 | multiple_independent_clauses | inch | 冒号前 Sometimes it is slow 是另一主句 |
+| W2 | gi_v02_2a33047fcd6c | T5 | 4_3_p2 C-04 | multiple_independent_clauses | vast bubbles of magma - molten rock from the mantle - | 同上 |
+| W2 | gi_v02_99249b0927cf | T1 | 5_4_p1 A-03 | multiple_independent_clauses | requires | 冒号前 The attraction of these areas is obvious 是另一主句 |
+| W2 | gi_v02_fc21ccd2630c | T1 | 6_4_p3 E-08 | multiple_independent_clauses | should / be | 分号前 curriculum work alone may only have ... 是另一主句 |
+| W2 | gi_v02_4445ed6322d4 | T1 | 8_2_p3 F-03 | multiple_independent_clauses | may / be | 冒号前 Odours are invested with cultural values 是另一主句 |
+| W2 | gi_v02_bdd363f085d7 | T5 | 8_2_p3 F-03 | multiple_independent_clauses | smells that are considered to be offensive in some cultures | 同上 |
+| W3 | gi_v02_7b702aabb705 | T2 | 15_1_p3 F-04 | source_quality | who simply enjoy travel or discovering new things | 局部答案成立；原句分号后是独立主格，整句待复核 |
+| W3 | gi_v02_9ab094841299 | T3 | 15_1_p3 F-04 | source_quality | 定语从句 | 同上 |
+| W3 | gi_v02_237c28eb99a6 | T6 | 15_1_p3 F-04 | source_quality | 从句里的谓语（enjoy） | 同上 |
+| W3 | gi_v02_604e3328ad97 | T2 | 7_3_p1 B-07 | source_quality | as the child grows up | 同上 |
+| W3 | gi_v02_c88af5a29c0e | T3 | 7_3_p1 B-07 | source_quality | 状语从句 | 同上 |
+| W3 | gi_v02_10587d4ba8fd | T6 | 7_3_p1 B-07 | source_quality | 从句里的谓语（grows up） | 同上 |
+| W4 | gi_v02_7e2180fd8faf | T2 | 15_2_p3 A-01 | possible_relative_adverb | when babies begin to laugh and smile in response to stimuli | 边界成立，但题干预设它是状语从句 |
+| W4 | gi_v02_7b4122b362c5 | T3 | 15_2_p3 A-01 | possible_relative_adverb | 状语从句 | 也可分析为回指 six weeks old 的定语从句，单选不安全 |
+
+### 新命中与复查
+
+- **W1**：剑桥另有 10 道 auto 降级。它们都在复审列出的 27 个“未确认类别错误”的并列目标里：
+  - 8 道的第二个并列项可以理解为仍在前面的从属从句里，例如 6_4_p2 J-27 `warns that ... and similar campaigns ... might not work`、7_4_p1 A-07 `wondered if ... and the men were using it`，所以互斥单选不安全，降级有道理。这 8 道是 10_1_p3 D-01、10_3_p3 F-01、15_1_p2 B-02、15_1_p3 D-03、18_3_p1 E-07、5_3_p3 G-44、6_4_p2 J-27、7_4_p1 A-07。
+  - 2 道是误伤：
+    - 4_1_p3 E-20 第三项 `and the bent spokes were taken as a sign ...`：中间一项带 they thought，三项都是独立分句。
+    - 5_1_p3 C-11 `and four factors seem to cause ...`：这是作者自己的判断，不属于 polls suggest 的内容。
+  - 解析器把这两句挂进了 that 从句，规则分不开，只能保守降级。
+  - 其余 17 个目标不受影响，仍自动通过，都是正常的主句并列。
+  - 44 个目标上的 35 道 T2 都没有加这个原因，状态不变；全库没有 T3 以外的题带这个原因。
+  - 另有 27 道剑桥题本来就待复核，这次加了这个原因，逐题看过，基本都是共享引导词的 that / whether / when / which 从句并列。4_1_p3 E-20 的另一道同样属于上面的误伤。
+- **W2**：
+  - 复审逐条看过的 109 句剑桥 auto T1 含冒号或分号，修复后只有回归集那 10 句降级，其余 99 句仍自动通过。同句的 T5 有 7 道降级，都在回归集里。T6 一道都没有带这个原因。
+  - 回归集外，剑桥只多降 1 道：12_6_p1 A-01 的 T5，即 `Two things distinguish ...: first, every single person needs food ...; and second, it is hugely dependent on nature.`。它和 E-06 是同一结构，降级成立。
+  - 另有 54 道剑桥题本来就待复核，这次加了这个原因，都是冒号或分号两侧各有完整分句。
+- **W3**：两句全部 8 道题都带 `source_quality`，其中 6 道原 auto、2 道原本已待复核，没有残留 auto。
+- **W4**：
+  - 全库只命中 A-01 这一个目标的 2 道题；同句其余 5 道 auto（T1 start、T3 in response to stimuli、T5 Humans、T6 start / begin）不变。
+  - 复审 ADJ 挂靠扫描里另外 3 个正常目标都没有加原因，仍自动通过：10_3_p3 F-04 `as landing on the moon is for us today`、11_4_p1 B-02 `than fraternal twins are`、20_1_p2 A-05 `if you hadn't seen ...`。
+- **机经（暂缓，只列影响）**：
+  - W1 降级 13 道 T3，例如 77_16_p2 C-01、91_49_p3 F-07、65_69_p2 B-04 的 `that ... , they want ... and they want ...`。
+  - W2 降级 5 道（40_75_p1 A-04 的 T1 / T5、6_71_p1 I-03 的 T1、91_49_p1 H-02 的 T1 / T5），都是冒号或分号两侧各有完整分句。
+  - 另有 48 道机经题本来就待复核，这次加了原因。
+
+### 统计（auto_pass / needs_review / rejected）
+
+| 题型 | 第九轮 | 第十轮 |
+|---|---|---|
+| 主句谓语 main_verb_tap | 5925 / 454 / 6367 | 5912 / 467 / 6367 |
+| 从句边界 clause_boundary | 4683 / 2579 / 2694 | 4680 / 2582 / 2694 |
+| 从句类型 clause_type_classify | 11444 / 3443 / 1331 | 11401 / 3486 / 1331 |
+| 状语关系 adverbial_relation | 399 / 657 / 2561 | 399 / 657 / 2561 |
+| 主语范围 subject_span | 5376 / 808 / 6562 | 5366 / 818 / 6562 |
+| 动词身份 finite_or_not | 12745 / 1730 / 6549 | 12743 / 1732 / 6549 |
+
+候选仍是 50,243 道，题号集合不变；除 status 和 reasons 外，所有字段与第九轮逐题相同（0 道有其他变化）。三种口径（剑桥 / 机经）：
+
+| 原因 | 全量带此原因 | 只因此原因待复核 | 共同题号实际 auto → needs |
+|---|---|---|---|
+| coordinate_function_overlap（新） | 54 / 28 | 27 / 13 | 27 / 13 |
+| multiple_independent_clauses（新） | 72 / 38 | 18 / 5 | 18 / 5 |
+| possible_relative_adverb | 144 / 92（第九轮 142 / 92） | 97 / 46（95 / 46） | 2 / 0 |
+| source_quality | 17 / 607（9 / 607） | 15 / 407（9 / 409） | 6 / 0 |
+
+- 实际状态变化共 71 道，全部是 auto_pass → needs_review（剑桥 53、机经 18），每道只多一个原因；没有题从待复核变回自动，也没有题少了原因。auto_pass 40,572 → 40,501，其中剑桥 28,029 → 27,976。
+- 本来就待复核、这次只是多了原因的有 131 道（剑桥 83、机经 48），不算新增降级。机经“只因 source_quality”从 409 变 407，是因为其中 2 道多了别的原因，不是原因被去掉。
+- 抽查表随池子变化重抽：360 行里只有 13 个题号仍在表里，按 (工作表, 行号) 对比没有一行还是同一道题；老师的结果须按题号迁移。现在剑桥 231 行（自动 196、待复核 35），机经 129 行。六张表各 60 行，判定列下拉仍是四项，表里不出现状态和原因（盲审）。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `274d989b44eb…`、`generation_report_v0_2.md` `c1076ca682cb…`、`review_batch_v0_2.jsonl` `e3a503b8742d…`、`review_batch_v0_2.xlsx` `386ea7e0564e…`；13 组 × 6 的回归记录不变，7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 重新渲染无变化 |
+| 测试 | 新增 7 项（W1 3、W2 2、W4 2），另在 W2 的控制例里补了引语作根的一例。修改前：W1 是 1 项断言失败 + 2 项接口错误（函数不存在），W2 整个测试模块导入失败（函数不存在），W4 是 1 项断言失败，引语控制例是 1 项断言失败。出题器、修订表、词汇表、知识图谱测试 113 项通过；只装 Flask 的 CI 列表 181 项运行、1 项按设计跳过；Node 通过；`tests.test_reading_study` 22 项通过 |
+| 数据 | 三句只改了指定的那一条 difficult_points，其他字段逐字节不变；validator 0 错误；`--check` 0；从 raw 重建 171 篇一致。临时库先导入 main 快照（65f1859，与 `origin/main` 676569c 在阅读解析、导入脚本和 models.py 上相同），再导入本分支，实测 updated=236 / skipped=81 / failed=0。与第九轮相同，原因是另两篇（15_1_p3、15_2_p3）在第九轮已经因为词汇表标签不同算作 updated |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十轮遗留
+
+- W1：that 从句后接不带 that 的并列分句时，解析结构分不清第二项是否仍在从句里，现在一律降级，已知误伤 2 句。role 字段只能表示一种身份，并列兼从属的目标没有改标；要彻底解决，需要把类型题改成两个维度，题干、选项和标注规范要一起改。
+- W2：只降级，不改题干，也不出多答案。引号边界的规则会漏掉 16_1_p3 I-01 这类“引语 + says X”的两个主句。
+- W4：只覆盖“数词 + 时间单位 + old + 逗号 + when”。`at the age of ...` 等其他写法没有覆盖。
+- W5 的保守误降、T2 多解（A8）、V4 / V5 未改。机经暂缓的各项不变：V2 排印、第 27 题解析等。
+- 修订和自查仍由同一方完成。
 
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第九轮后，以 `origin/main` 65f1859 / 676569c 为基准预期 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
