@@ -51,8 +51,9 @@ T1_ONLY_REASONS = frozenset(
         R.PARTICLE_OUTSIDE_UNIT,
     }
 )
-# Words the parser labels prt at least ten times in this corpus: when one right after a verb is
-# labelled advmod instead ("dates back to", "wrote down"), particle and adverb cannot be told apart.
+# Adverbial particles the parser labels prt at least ten times in this corpus (by also reaches ten
+# but is mostly a preposition). When one right after a verb is labelled advmod instead ("dates
+# back to", "wrote down"), the parse cannot tell particle, adverb and complement apart.
 PARTICLES = frozenset(
     {"up", "out", "down", "on", "off", "in", "back", "over", "away", "about", "through"}
 )
@@ -255,20 +256,19 @@ def verb_unit(view, head, start=None, end=None):
 
 def loose_particle(view, tokens):
     """A shown verb whose particle the parser left out of the unit (review Y3): "dates back
-    to the 1970s" shows only dates, "wrote down" only wrote. Whether such a word is a particle
-    or an ordinary adverb is not settled by the parse, so the item goes to review; the unit is
-    not extended (the T1 answer stays frozen)."""
+    to the 1970s" shows only dates, "wrote down" only wrote; "lived up to" has up tagged RP but
+    attached as prep (review Z1). The parse does not settle whether such a word is a particle, an
+    adverb or a complement, so the item goes to review; the unit is not extended (the T1 answer
+    stays frozen). Only a word right after the verb counts ("go on a hike" has on tagged IN)."""
     inside = {t.i for t in tokens}
     for token in tokens:
         if token.pos not in {"VERB", "AUX"}:
             continue
         for child in view.children(token):
-            if (
-                child.dep == "advmod"
-                and child.i == token.i + 1
-                and child.i not in inside
-                and child.text.lower() in PARTICLES
-            ):
+            if child.i != token.i + 1 or child.i in inside or child.dep == "prt":
+                continue
+            adverb = child.dep == "advmod" and child.text.lower() in PARTICLES
+            if adverb or child.tag == "RP":
                 return [R.PARTICLE_OUTSIDE_UNIT]
     return []
 

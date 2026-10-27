@@ -1616,6 +1616,38 @@ class LooseParticleTests(unittest.TestCase):
             self.assertEqual(item["status"], "needs_review", item["template"])
             self.assertIn(R.PARTICLE_OUTSIDE_UNIT, item["reasons"])
 
+    def test_rp_particle_attached_as_prep_goes_to_review(self):
+        # Review Z1: "... never lived up to expectations" - up is tagged RP but parsed as prep.
+        rows = [
+            ("Plans", "nsubj", 1, "NOUN", "NNS"),
+            ("lived", "ROOT", 1, "VERB", "VBD"),
+            ("up", "prep", 1, "ADP", "RP"),
+            ("to", "prep", 2, "ADP", "IN"),
+            ("hopes", "pobj", 3, "NOUN", "NNS"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        items, _ = generate(
+            sentence, view, [("Plans", "subject", 1), ("lived up to", "verb_phrase", 1)]
+        )
+        for template in ("main_verb_tap", "finite_or_not"):
+            self.assertIn(R.PARTICLE_OUTSIDE_UNIT, by_template(items, template)[0]["reasons"])
+
+    def test_preposition_after_a_verb_unaffected(self):
+        # "go on a hike": on is a preposition (IN), not a particle.
+        rows = [
+            ("They", "nsubj", 1, "PRON", "PRP"),
+            ("went", "ROOT", 1, "VERB", "VBD"),
+            ("on", "prep", 1, "ADP", "IN"),
+            ("a", "det", 4, "DET", "DT"),
+            ("hike", "pobj", 2, "NOUN", "NN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, [("They", "subject", 1), ("went", "verb_phrase", 1)])
+        for item in items:
+            self.assertNotIn(R.PARTICLE_OUTSIDE_UNIT, item["reasons"], item["template"])
+
     def test_particle_in_the_unit_and_plain_adverbs_unaffected(self):
         for dep, word in (("prt", "back"), ("advmod", "quickly"), ("advmod", "also")):
             for item in self.items(dep, word):
