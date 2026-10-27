@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5912 | 467 | 6367 |
-| clause_boundary | 4680 | 2582 | 2694 |
+| main_verb_tap | 5841 | 538 | 6367 |
+| clause_boundary | 4679 | 2583 | 2694 |
 | clause_type_classify | 11401 | 3486 | 1331 |
 | adverbial_relation | 399 | 657 | 2561 |
 | subject_span | 5366 | 818 | 6562 |
-| finite_or_not | 12743 | 1732 | 6549 |
+| finite_or_not | 12737 | 1738 | 6549 |
 
 ## 范围
 
@@ -47,28 +47,28 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2737,
-    "needs_review": 220
+    "auto_pass": 2734,
+    "needs_review": 223
   },
   "G-S02": {
     "auto_pass": 5366,
     "needs_review": 818
   },
   "G-C02": {
-    "needs_review": 736,
-    "auto_pass": 490
+    "needs_review": 735,
+    "auto_pass": 491
   },
   "G-C03": {
     "auto_pass": 11401,
     "needs_review": 3486
   },
   "G-C04": {
-    "auto_pass": 1795,
-    "needs_review": 353
+    "auto_pass": 1794,
+    "needs_review": 354
   },
   "G-C08": {
-    "auto_pass": 1160,
-    "needs_review": 762
+    "auto_pass": 1159,
+    "needs_review": 763
   },
   "G-C10": {
     "auto_pass": 1235,
@@ -79,16 +79,16 @@
     "auto_pass": 399
   },
   "G-N01": {
-    "auto_pass": 10878,
-    "needs_review": 1651
+    "auto_pass": 10875,
+    "needs_review": 1654
   },
   "G-N04": {
-    "auto_pass": 1865,
-    "needs_review": 81
+    "auto_pass": 1862,
+    "needs_review": 84
   },
   "G-L01": {
-    "auto_pass": 3175,
-    "needs_review": 247
+    "auto_pass": 3107,
+    "needs_review": 315
   }
 }
 ```
@@ -101,10 +101,10 @@
   "coordinated_main_verbs": 4053,
   "split_subject": 3837,
   "coordinated_main_clauses": 3603,
-  "boundary_mismatch": 3066,
+  "boundary_mismatch": 3069,
   "clause_type_mismatch": 2247,
   "ambiguous_span_location": 1381,
-  "span_not_constituent": 1378,
+  "span_not_constituent": 1367,
   "multiple_targets_same_type": 1363,
   "no_relation_label": 1230,
   "finiteness_mismatch": 664,
@@ -124,6 +124,7 @@
   "fragment": 163,
   "span_not_found": 151,
   "multiple_independent_clauses": 110,
+  "hyphenated_word_split": 108,
   "coordinate_function_overlap": 82,
   "noun_attached_clause": 56,
   "list_item": 55,
@@ -173,37 +174,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1121,
+          "pool_size": 1119,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 360,
+          "pool_size": 347,
           "sample_size": 3
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 458,
+          "pool_size": 453,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1940,
+          "pool_size": 1931,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1058,
+          "pool_size": 1031,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 975,
+          "pool_size": 960,
           "sample_size": 8
         }
       ]
@@ -229,7 +230,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 520,
+          "pool_size": 518,
           "sample_size": 6
         },
         {
@@ -247,7 +248,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 969,
+          "pool_size": 970,
           "sample_size": 10
         }
       ]
@@ -267,13 +268,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1224,
+          "pool_size": 1222,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 985,
+          "pool_size": 983,
           "sample_size": 4
         },
         {
@@ -285,13 +286,13 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3608,
+          "pool_size": 3611,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2472,
+          "pool_size": 2473,
           "sample_size": 11
         }
       ]
@@ -399,31 +400,31 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1297,
+          "pool_size": 1295,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1077,
+          "pool_size": 1076,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2954,
+          "pool_size": 2951,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3384,
+          "pool_size": 3385,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2407,
+          "pool_size": 2406,
           "sample_size": 10
         }
       ]
@@ -1953,7 +1954,7 @@
       "main_verb_tap": 11,
       "subject_span": 11
     },
-    "only_reason": 50
+    "only_reason": 48
   }
 }
 ```
@@ -2274,6 +2275,7 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：when/where/why 状语从句紧跟名词时，T2/T3/T4 一律 needs_review（possible_relative_adverb）。
 - v0.2：状语从句目标被解析器挂在名词上（the century before ...、'deserts', as ...）时，T2/T3/T4 一律 needs_review（noun_attached_clause）；紧跟在没有补足成分的 be 后的 because / when 等从句是表语从句，按 clause_type_mismatch 处理。
 - v0.2：并列首项本身是从属从句（带 as / because / that 等引导词或以 wh 词开头）时，T3 的“并列分句”不是唯一答案，needs_review（coordinate_function_overlap，只加在 T3）；冒号或分号两边各有一个完整分句时，T1 / T5 needs_review（multiple_independent_clauses，T6 不连带）；“数词 + 时间单位 + old”加逗号后的 when 从句按 possible_relative_adverb 处理。
+- v0.2：答案、目标或干扰项的起止点落在连字符词内部（re-establish 的 re、water-borne 的 borne）时，该题 needs_review（hyphenated_word_split；T6 按自己的高亮判断）；单独的连字符不当动词干扰项；去标点时紧跟数字的 % 保留（94%）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
 - v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
