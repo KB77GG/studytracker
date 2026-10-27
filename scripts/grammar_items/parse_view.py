@@ -61,11 +61,18 @@ def finite(token, view):
     )
 
 
+def unit_symbol(tokens):
+    """A % after a number belongs to it ("A full 94%"), though spaCy marks it punctuation."""
+    return (
+        len(tokens) > 1 and tokens[-1].text == "%" and any(ch.isdigit() for ch in tokens[-2].text)
+    )
+
+
 def trim_tokens(tokens, coordinate=False):
     tokens = list(tokens)
     while tokens and (tokens[0].is_punct or tokens[0].text.isspace()):
         tokens.pop(0)
-    while tokens and (tokens[-1].is_punct or tokens[-1].text.isspace()):
+    while tokens and (tokens[-1].is_punct or tokens[-1].text.isspace()) and not unit_symbol(tokens):
         tokens.pop()
     if coordinate and tokens and tokens[0].text.lower() in {"and", "but", "or"}:
         return trim_tokens(tokens[1:])

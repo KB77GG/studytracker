@@ -1691,6 +1691,61 @@ class HyphenatedWordTests(unittest.TestCase):
             self.assertNotIn(R.HYPHENATED_WORD_SPLIT, item["reasons"], item["template"])
 
 
+class PercentSubjectTests(unittest.TestCase):
+    """Review X3: spaCy marks % as punctuation; trimming it cut "A full 94%" to "A full 94"."""
+
+    def subject(self, rows, tags, glued):
+        sentence, view = glued_tree(
+            rows, glued=glued, punct={i for i, r in enumerate(rows) if r[0] == "%"}
+        )
+        items, _ = generate(sentence, view, tags)
+        return by_template(items, "subject_span")[0]
+
+    def test_percent_stays_in_the_subject(self):
+        rows = [
+            ("A", "det", 3, "DET", "DT"),
+            ("full", "amod", 3, "ADJ", "JJ"),
+            ("94", "nummod", 3, "NUM", "CD"),
+            ("%", "nsubj", 4, "NOUN", "NN"),
+            ("agreed", "ROOT", 4, "VERB", "VBD"),
+            (".", "punct", 4, "PUNCT", "."),
+        ]
+        item = self.subject(
+            rows, [("A full 94%", "subject", 1), ("agreed", "verb_phrase", 1)], {3, 5}
+        )
+        self.assertEqual(item["answer"]["spans"][0]["text"], "A full 94%")
+        self.assertEqual(item["status"], "auto_pass")
+
+    def test_percent_and_closing_dash_in_an_inserted_phrase(self):
+        # "only a small majority of sighted subjects – 53% – had paired ..." (4_1_p3 J-40).
+        rows = [
+            ("The", "det", 1, "DET", "DT"),
+            ("majority", "nsubj", 6, "NOUN", "NN"),
+            ("–", "punct", 1, "PUNCT", ":"),
+            ("53", "nummod", 4, "NUM", "CD"),
+            ("%", "appos", 1, "NOUN", "NN"),
+            ("–", "punct", 1, "PUNCT", ":"),
+            ("agreed", "ROOT", 6, "VERB", "VBD"),
+            (".", "punct", 6, "PUNCT", "."),
+        ]
+        tags = [("The majority – 53% –", "subject", 1), ("agreed", "verb_phrase", 1)]
+        item = self.subject(rows, tags, {4, 7})
+        self.assertEqual(item["answer"]["spans"][0]["text"], "The majority – 53% –")
+
+    def test_trailing_punctuation_is_still_trimmed(self):
+        sentence, view = glued_tree(
+            [
+                ("Prices", "nsubj", 1, "NOUN", "NNS"),
+                ("rose", "ROOT", 1, "VERB", "VBD"),
+                (",", "punct", 1, "PUNCT", ","),
+            ],
+            glued={2},
+        )
+        self.assertEqual([t.text for t in trim_tokens(view.tokens)], ["Prices", "rose"])
+        _, view = glued_tree([("%", "nsubj", 0, "NOUN", "NN")], punct={0})
+        self.assertEqual(trim_tokens(view.tokens), ())  # No number before it: not a unit.
+
+
 MAIN_ROWS = [
     ("The", "det", 1, "DET", "DT"),
     ("plans", "nsubj", 4, "NOUN", "NNS"),
