@@ -474,6 +474,18 @@ def main_distractors(ctx, unit):
     return [targets[index] for index in sorted(targets)], reasons
 
 
+def for_clause(view, head):
+    """A finite clause led by "for" with its own subject ("..., for they turn into myths") is
+    coordinate as taught (type_matches), so its verb is no subordinate predicate and the
+    sentence has a second main clause (review Y2)."""
+    children = view.children(head)
+    return (
+        finite(head, view)
+        and any(c.dep == "mark" and c.text.lower() == "for" for c in children)
+        and any(c.dep in CLAUSE_SUBJECT_DEPS for c in children)
+    )
+
+
 def independent_clauses(view):
     """A second main clause across a ; or : from the root ("There have been many examples ...:
     the facilities ... have become a blueprint", parsed as a ccomp of become) means neither
@@ -484,6 +496,8 @@ def independent_clauses(view):
     if root is None:
         return []
     for child in view.children(root):
+        if child.dep == "advcl" and for_clause(view, child):
+            return [R.MULTIPLE_INDEPENDENT_CLAUSES]
         if child.dep not in {"ccomp", "parataxis", "conj"} or not finite(child, view):
             continue
         if not any(c.dep in CLAUSE_SUBJECT_DEPS for c in view.children(child)):
@@ -828,7 +842,11 @@ def finite_or_not(ctx, main_item, main_rejections):
         if variant == "main":
             matches, option = head.dep == "ROOT", FINITE_OPTIONS[0]
         elif variant == "subordinate":
-            matches = finite(head, ctx.view) and head.dep in {"relcl", "advcl"}
+            matches = (
+                finite(head, ctx.view)
+                and head.dep in {"relcl", "advcl"}
+                and not for_clause(ctx.view, head)
+            )
             option = FINITE_OPTIONS[1]
         else:
             matches, option = not finite(head, ctx.view), FINITE_OPTIONS[2]

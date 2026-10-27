@@ -1529,6 +1529,54 @@ class CorrelativeNotTests(unittest.TestCase):
         )
 
 
+class ForClauseTests(unittest.TestCase):
+    """Review Y2: "..., for then ... there were constant shifts" is a coordinate clause, as T3
+    teaches."""
+
+    ROWS = [
+        ("It", "nsubj", 1, "PRON", "PRP"),
+        ("was", "ROOT", 1, "AUX", "VBD"),
+        ("calm", "acomp", 1, "ADJ", "JJ"),
+        (",", "punct", 1, "PUNCT", ","),
+        ("for", "mark", 7, "SCONJ", "IN"),
+        ("the", "det", 6, "DET", "DT"),
+        ("winds", "nsubj", 7, "NOUN", "NNS"),
+        ("dropped", "advcl", 1, "VERB", "VBD"),
+        (".", "punct", 1, "PUNCT", "."),
+    ]
+    TAGS = [
+        ("It", "subject", 1),
+        ("was", "verb_phrase", 1),
+        ("for the winds dropped", "reason_clause", 2),
+    ]
+
+    def test_for_clause_is_no_subordinate_predicate(self):
+        sentence, view = tree(self.ROWS)
+        items, _ = generate(sentence, view, self.TAGS)
+        identity = {i["evidence"]["variant"]: i for i in by_template(items, "finite_or_not")}
+        self.assertEqual(identity["subordinate"]["status"], "needs_review")
+        self.assertIn(R.FINITENESS_MISMATCH, identity["subordinate"]["reasons"])
+        self.assertEqual(identity["main"]["status"], "auto_pass")  # was is still the main verb.
+        for template in ("main_verb_tap", "subject_span"):
+            item = by_template(items, template)[0]
+            self.assertIn(R.MULTIPLE_INDEPENDENT_CLAUSES, item["reasons"], template)
+
+    def test_because_clause_unaffected(self):
+        rows = [*self.ROWS[:4], ("because", "mark", 7, "SCONJ", "IN"), *self.ROWS[5:]]
+        tags = [*self.TAGS[:2], ("because the winds dropped", "reason_clause", 2)]
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        sub = next(
+            i
+            for i in by_template(items, "finite_or_not")
+            if i["evidence"]["variant"] == "subordinate"
+        )
+        self.assertNotIn(R.FINITENESS_MISMATCH, sub["reasons"])
+        self.assertNotIn(
+            R.MULTIPLE_INDEPENDENT_CLAUSES, by_template(items, "main_verb_tap")[0]["reasons"]
+        )
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 
