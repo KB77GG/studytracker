@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5894 | 485 | 6367 |
-| clause_boundary | 4679 | 2583 | 2694 |
+| main_verb_tap | 5836 | 543 | 6367 |
+| clause_boundary | 4678 | 2584 | 2694 |
 | clause_type_classify | 11401 | 3486 | 1331 |
 | adverbial_relation | 399 | 657 | 2561 |
-| subject_span | 5366 | 818 | 6562 |
-| finite_or_not | 12737 | 1738 | 6549 |
+| subject_span | 5365 | 819 | 6562 |
+| finite_or_not | 12662 | 1813 | 6549 |
 
 ## 范围
 
@@ -47,16 +47,16 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2734,
-    "needs_review": 223
+    "auto_pass": 2723,
+    "needs_review": 234
   },
   "G-S02": {
-    "auto_pass": 5366,
-    "needs_review": 818
+    "auto_pass": 5365,
+    "needs_review": 819
   },
   "G-C02": {
-    "needs_review": 735,
-    "auto_pass": 491
+    "needs_review": 736,
+    "auto_pass": 490
   },
   "G-C03": {
     "auto_pass": 11401,
@@ -79,16 +79,16 @@
     "auto_pass": 399
   },
   "G-N01": {
-    "auto_pass": 10875,
-    "needs_review": 1654
+    "auto_pass": 10811,
+    "needs_review": 1718
   },
   "G-N04": {
-    "auto_pass": 1862,
-    "needs_review": 84
+    "auto_pass": 1851,
+    "needs_review": 95
   },
   "G-L01": {
-    "auto_pass": 3160,
-    "needs_review": 262
+    "auto_pass": 3113,
+    "needs_review": 309
   }
 }
 ```
@@ -103,13 +103,13 @@
   "coordinated_main_clauses": 3603,
   "boundary_mismatch": 3069,
   "clause_type_mismatch": 2247,
-  "ambiguous_span_location": 1381,
+  "ambiguous_span_location": 1382,
   "span_not_constituent": 1367,
   "multiple_targets_same_type": 1363,
   "no_relation_label": 1230,
-  "finiteness_mismatch": 664,
+  "finiteness_mismatch": 669,
   "source_quality": 624,
-  "verb_unit_outside_span": 594,
+  "verb_unit_outside_span": 593,
   "subject_mismatch": 573,
   "parser_root_outside_verb_span": 562,
   "unbalanced_quotes_or_brackets": 394,
@@ -124,7 +124,8 @@
   "multiple_main_verbs": 180,
   "fragment": 163,
   "span_not_found": 151,
-  "multiple_independent_clauses": 110,
+  "particle_outside_unit": 141,
+  "multiple_independent_clauses": 112,
   "coordinate_function_overlap": 82,
   "noun_attached_clause": 56,
   "list_item": 55,
@@ -135,6 +136,7 @@
   "tagged_fragment": 30,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
+  "nested_coordination": 5,
   "clause_attached_to_conjunction": 2,
   "multi_sentence_unit": 1
 }
@@ -175,13 +177,13 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1120,
+          "pool_size": 1116,
           "sample_size": 10
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 355,
+          "pool_size": 349,
           "sample_size": 3
         },
         {
@@ -193,19 +195,19 @@
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1935,
+          "pool_size": 1920,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1054,
+          "pool_size": 1033,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 973,
+          "pool_size": 961,
           "sample_size": 8
         }
       ]
@@ -243,7 +245,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1447,
+          "pool_size": 1446,
           "sample_size": 15
         },
         {
@@ -381,7 +383,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 869,
+          "pool_size": 868,
           "sample_size": 8
         }
       ]
@@ -395,37 +397,37 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 1624,
+          "pool_size": 1619,
           "sample_size": 6
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1295,
+          "pool_size": 1286,
           "sample_size": 5
         },
         {
           "source_kind": "reading_jijing",
           "difficulty": "medium",
-          "pool_size": 1076,
+          "pool_size": 1072,
           "sample_size": 4
         },
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2951,
+          "pool_size": 2931,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3385,
+          "pool_size": 3365,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2406,
+          "pool_size": 2389,
           "sample_size": 10
         }
       ]
@@ -1943,7 +1945,7 @@
       "main_verb_tap": 62,
       "subject_span": 56
     },
-    "only_reason": 422
+    "only_reason": 418
   },
   "list_item": {
     "sentences": 15,
@@ -2277,7 +2279,8 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：状语从句目标被解析器挂在名词上（the century before ...、'deserts', as ...）时，T2/T3/T4 一律 needs_review（noun_attached_clause）；紧跟在没有补足成分的 be 后的 because / when 等从句是表语从句，按 clause_type_mismatch 处理。
 - v0.2：并列首项本身是从属从句（带 as / because / that 等引导词或以 wh 词开头）时，T3 的“并列分句”不是唯一答案，needs_review（coordinate_function_overlap，只加在 T3）；冒号或分号两边各有一个完整分句时，T1 / T5 needs_review（multiple_independent_clauses，T6 不连带）；“数词 + 时间单位 + old”加逗号后的 when 从句按 possible_relative_adverb 处理。
 - v0.2：答案、目标或干扰项的起止点落在连字符词内部（re-establish 的 re、water-borne 的 borne）时，该题 needs_review（hyphenated_word_split；T6 按自己的高亮判断）；单独的连字符不当动词干扰项；去标点时紧跟数字的 % 保留（94%）。
-- v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing）。
+- v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing），目标本身又连着两个分句时 needs_review（nested_coordination）。
+- v0.2：whether or not、not just because 的 not 不进动词单位；for + 有主语的限定分句按并列处理（T6 finiteness_mismatch，T1 / T5 multiple_independent_clauses）；动词后紧跟语料里标过 prt 的词却被标成 advmod 时 needs_review（particle_outside_unit，动词单位不扩大）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
 - v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
