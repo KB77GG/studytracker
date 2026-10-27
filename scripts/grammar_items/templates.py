@@ -80,6 +80,8 @@ COORDINATING_MARKS = frozenset({"for", "so", "yet"})
 COORDINATORS = COORDINATING_MARKS | {"and", "but", "or", "nor"}
 # Conjunctions a coordinate-clause boundary prompt may name ("划出 and 后面的并列分句").
 COORDINATE_CUES = frozenset({"and", "but", "or", "nor", "yet"})
+# Jobs of a word that modifies a noun or completes a be: what a hyphenated adjective does.
+ADJECTIVE_DEPS = frozenset({"amod", "acomp", "attr", "compound", "nmod", "npadvmod"})
 # Forms of be, and the complements that make a clause after it an ordinary adverbial
 # ("It was cold because ...") rather than the be's own complement ("That was because ...").
 BE_FORMS = frozenset(
@@ -173,6 +175,21 @@ def hyphen_inside_word(sentence, index):
         and sentence[index - 1].isalnum()
         and sentence[index + 1].isalnum()
     )
+
+
+def compound_adjective(view, sentence, token):
+    """A participle inside a hyphenated adjective (water-borne, so-called, built-in, back-up air
+    conditioning, an over-ambitious and under-achieving field) belongs to that adjective; it is
+    no verb for T1 to offer (user decision on review X1/X2). A hyphenated verb (to re-establish,
+    then word-spot through the text) keeps its job and stays a split word."""
+    if not (
+        hyphen_inside_word(sentence, token.start - 1) or hyphen_inside_word(sentence, token.end)
+    ):
+        return False
+    first = token
+    while first.dep == "conj" and first.head != first.i:
+        first = view.tokens[first.head]
+    return first.dep in ADJECTIVE_DEPS or first.pos == "ADJ"
 
 
 def split_word(sentence, spans):
@@ -428,6 +445,8 @@ def main_distractors(ctx, unit):
                 continue
             if not any(ch.isalnum() for ch in token.text):
                 continue  # A hyphen the parser tagged VERB (re - establish) is no verb.
+            if compound_adjective(ctx.view, ctx.sentence, token):
+                continue
             if token.dep in VERB_UNIT_DEPS and token.head in indexes:
                 continue  # An auxiliary shown as part of its head's unit.
             unit_tokens = verb_unit(ctx.view, token)

@@ -1761,6 +1761,60 @@ class HyphenatedWordTests(unittest.TestCase):
         )
         self.assertEqual(identity["status"], "auto_pass")  # wanted itself is a whole word.
 
+    def test_compound_adjective_is_no_distractor(self):
+        # "... diseases such as water-borne cholera" (10_2_p1 E-04): borne is part of an adjective.
+        sentence, view = glued_tree(
+            [
+                ("They", "nsubj", 1, "PRON", "PRP"),
+                ("fear", "ROOT", 1, "VERB", "VBP"),
+                ("diseases", "dobj", 1, "NOUN", "NNS"),
+                ("that", "nsubj", 4, "PRON", "WDT"),
+                ("spread", "relcl", 2, "VERB", "VBP"),
+                ("as", "mark", 9, "SCONJ", "IN"),
+                ("water", "npadvmod", 8, "NOUN", "NN"),
+                ("-", "punct", 8, "PUNCT", "HYPH"),
+                ("borne", "amod", 9, "VERB", "VBN"),
+                ("germs", "advcl", 4, "NOUN", "NNS"),
+                (".", "punct", 1, "PUNCT", "."),
+            ],
+            glued={7, 8, 10},
+        )
+        tags = [
+            ("They", "subject", 1),
+            ("fear", "verb_phrase", 1),
+            ("that spread as water-borne germs", "relative_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        main = by_template(items, "main_verb_tap")[0]
+        self.assertEqual([d["text"] for d in main["distractors"]], ["spread"])
+        self.assertEqual(main["status"], "auto_pass")
+
+    def test_hyphenated_verb_in_coordination_stays_a_split_word(self):
+        # "... they sample the first line and then word-spot through the rest" (16_4_p2 G-02).
+        sentence, view = glued_tree(
+            [
+                ("Readers", "nsubj", 1, "NOUN", "NNS"),
+                ("say", "ROOT", 1, "VERB", "VBP"),
+                ("they", "nsubj", 3, "PRON", "PRP"),
+                ("sample", "ccomp", 1, "VERB", "VBP"),
+                ("and", "cc", 3, "CCONJ", "CC"),
+                ("word", "dep", 7, "NOUN", "NN"),
+                ("-", "punct", 7, "PUNCT", "HYPH"),
+                ("spot", "conj", 3, "VERB", "VBP"),
+                (".", "punct", 1, "PUNCT", "."),
+            ],
+            glued={6, 7, 8},
+        )
+        tags = [
+            ("Readers", "subject", 1),
+            ("say", "verb_phrase", 1),
+            ("they sample and word-spot", "object_clause", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        main = by_template(items, "main_verb_tap")[0]
+        self.assertIn("spot", [d["text"] for d in main["distractors"]])
+        self.assertIn(R.HYPHENATED_WORD_SPLIT, main["reasons"])
+
     def test_compound_adjective_in_a_subject_is_whole(self):
         sentence, view = glued_tree(
             [
