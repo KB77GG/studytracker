@@ -263,6 +263,10 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "v0.2：状语从句目标被解析器挂在名词上（the century before ...、'deserts', as ...）时，T2/T3/T4 一律 "
             "needs_review（noun_attached_clause）；紧跟在没有补足成分的 be 后的 because / when 等从句是表语从句，"
             "按 clause_type_mismatch 处理。",
+            "v0.2：并列首项本身是从属从句（带 as / because / that 等引导词或以 wh 词开头）时，T3 的“并列分句”"
+            "不是唯一答案，needs_review（coordinate_function_overlap，只加在 T3）；冒号或分号两边各有一个完整"
+            "分句时，T1 / T5 needs_review（multiple_independent_clauses，T6 不连带）；“数词 + 时间单位 + old”"
+            "加逗号后的 when 从句按 possible_relative_adverb 处理。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
