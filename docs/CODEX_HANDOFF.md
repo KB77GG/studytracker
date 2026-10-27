@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-27 Claude 按第九轮复审附录“修订方案 v0.1”实施 W1–W4（剑桥），42 道回归题全部离开自动通过，待 Codex 第十轮复审。机经继续暂缓，未部署。
+> 最近更新：2026-10-27 Codex 完成第十轮独立复审：W1–W4点名修复验收通过，剑桥总评仍不通过；新0阻断/3应修/1建议。机经继续暂缓，未部署。
+
+## 2026-10-27 语法候选题 v0.2 第十轮独立复审（Codex，不通过）
+
+- **事实源**：[完整复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND10_CODEX_REVIEW.md)，含12项结果/实际命令、W1–W4全部点名与新增命中逐题表、seed20261031剑桥120题、定向扫描、双跑SHA、导入解释。以本节的独立结果覆盖下一节Claude待审摘要，不删除历史。
+- **结论**：W1–W4的42道点名题全部needs；W6统计更正关闭，W5精度取舍与既有A8多解继续保留。新0阻断/3应修：X1连字符动词被拆成前缀/后缀/单独连字符（13道auto），X2名词性back-up/check-out误作动词干扰项（2道），X3完整主语截掉百分号（2道）。共17个不同剑桥auto、12句，在第九轮已存在，非本轮引入。另X4建议使and/or mark排除及年龄when入口与说明一致；当前未确认语料受害题。机经新增确认问题0，规则影响18道降级另列，不计剑桥分级。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`，起始efc030c746d043d8477fcd25f2d92b478193eec0干净；按授权fetch/ff到固定8a0660b688111319e1c8086e1b419419cde90588，不合main、不rebase。报告正文待提交时只新增ROUND10_CODEX_REVIEW，并修改本文件及WORKLOG；之后仅提交/推同一任务分支、无skip-ci，最终SHA以git log和CI补记为准。
+- **其他工作树**：`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind85；既有7 modified/22 untracked入口保持原样（详细路径见第八轮交接）。本轮未写入桌面树，只借其venv运行reading测试/本机临时库/Ruff，不把任务树成果写成桌面main已有。
+- **验证命令/结果**：任务树`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`113通过；全新Flask-only按ci.yml13模块181运行/180通过/1按设计跳过，Node拼写队列通过；桌面venv在任务树`-m unittest tests.test_reading_study -v`22通过。`scripts/validate_reading_study.py`0、`scripts/reading_jijing_text_fixes.py --check`0；4改动Python Ruff check/format（extend-exclude=[]）均通过。完整展开命令见报告第11节。
+- **复现**：Mac Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1CPU，在仓库外完整8a快照用指定venv两次`python scripts/generate_grammar_candidates.py --seed 20261018`；复用已验证缓存。四份双跑相同，JSONL/XLSX与提交相同、两报告仅Python版本行差。50,243同题号，非status/reasons零变化；71道auto→needs=剑桥53+机经18，原needs131道增加原因不算新降级。auto40,501，其中剑桥27,976；78回归、7过滤不变。
+- **内容验收**：120道随机auto给定局部答案均可成立、高亮本次未见缺漏，原句可用；但1题干扰项错（X2），1题T2多解（既有A8），其余118本次未见问题，不宣称全池正确。W1额外10降级中2保守误伤可接受、D-03另有作用域歧义；W2额外54原needs的新原因合理、104相关T6逐字段不变；引语补修只给9道原needs去掉原因，未增加auto。负测实际1断言+2缺Reason常量、W2导入错误、W4/引语各1断言失败，不能混称全部断言失败。
+- **数据/表格**：171篇raw内存重建content含summary及groups完全相同；图谱渲染字节相同。完整main676569c快照2853文件核对Git blob后先导317篇，再导8a：236 updated/81 skipped/0 failed；15_1_p3和15_2_p3确实第九轮已因词汇表标签updated。7表/6×60、盲审、四项下拉通过；剑桥231=196auto+35needs，机经129。仅13个旧题号保留、0行同题，老师结果按题号迁移。
+- **本机证据/外部状态**：`/Users/zhouxin/.codex/audits/grammar-v02-round10-20261027`保存快照/脚本/池/日志/SQLite，仅本机不随Git共享。正文及交接将按授权commit/push；GitHub CI需在同headSha核实后补记，test与advisory lint分开。未改被审代码数据、未推main/PR/部署后端或前端、未操作生产服务器/数据库、未上传/提审/发布小程序、未调用大模型API。
+- **下一步**：Claude先按报告逐题复现X1–X3，再在实施授权下修复/降级；保持T1冻结答案时优先标风险，不擅自改原文或用ID名单。独立复审后再安排老师盲审和任何上线；A8仍需明确的多答案/题干策略。本次只审核，没有实施修复。
 
 ## 2026-10-27 语法候选题 v0.2 第十轮（Claude，待复审）
 
