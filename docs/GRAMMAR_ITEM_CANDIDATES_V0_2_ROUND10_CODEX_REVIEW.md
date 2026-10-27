@@ -661,6 +661,15 @@ for i in rows:
 
 本机审计材料：`/Users/zhouxin/.codex/audits/grammar-v02-round10-20261027`。包含完整固定快照、两个生成目录、统计JSON、120题及所有降级明细、词性/边界扫描、真实与手工控制例、负测日志、临时SQLite。它们不随Git交付；本报告给出了全部已确认问题题号、抽样方法、结果和SHA。
 
-截至报告正文落盘，代码/数据仍固定8a0660b，新增只有本报告及两交接；报告将按用户授权提交并只推任务分支，不含skip-ci。GitHub CI待推送后按同一headSha核实，test与advisory lint分开补记。没有推main、PR、部署、生产操作、调用大模型API或小程序上传/提审/发布。
+审核正文与两交接已commit/push `0a57f9171337dc3d610f08bc341f292c7335606a`，只推`codex/grammar-item-candidates`，未带skip-ci；被审代码/数据仍固定8a0660b。随后本CI补记再作纯文档提交并推同一分支，最终SHA以git log/最终汇报为准。没有推main、PR、部署、生产操作、调用大模型API或小程序上传/提审/发布。
 
 与提示不一致/范围限制：无因权限或环境而省略的指定检查；使用同Mac指定环境的仓库外快照及已有解析缓存，保护被审文件。两报告的Python行差异符合预期。W1缺少and/or字面排除、W4入口不限when已记X4；W1两个负测接口错误实际为缺Reason常量，不是函数。其余数字与提示预期吻合。新增3项内容问题使总体验收不通过，但不否认W1–W4点名修复已奏效。未替用户实施修复。
+
+### GitHub CI核实（审核正文提交）
+
+[CI 40443710982](https://github.com/KB77GG/studytracker/actions/runs/40443710982)已completed，headSha为`0a57f9171337dc3d610f08bc341f292c7335606a`，与已推正文一致；整体结论success。分别看任务：
+
+- **test成功**：依赖轻量测试实际181运行、180通过、1按设计跳过；Node `Guard legacy spelling correction queue`成功。
+- **lint失败，仅advisory**：Ruff check的113条错误诊断来自48个Python路径，与被审基线8a0660b的[CI 40433831676](https://github.com/KB77GG/studytracker/actions/runs/40433831676)逐条完全相同；与本轮4个改动Python文件无交集。Ruff format步骤因前一步失败而跳过，不能宣称全仓format通过。本机4个改动文件format已单独通过。
+
+实际命令：`gh run list --branch codex/grammar-item-candidates --workflow CI --limit 3 --json databaseId,headSha,status,conclusion,url,createdAt`；`gh run view 40443710982 --json headSha,status,conclusion,url,jobs`；`gh run view 40443710982 --log`；`gh run view 40433831676 --log`。日志存AUDIT/ci-body.json、ci-body.log、ci-baseline.log，诊断比较存ci-lint-paths.json。本CI补记不修改实现，末次提交的CI仍按对应headSha单独核实后在最终回复报告；不是把上一提交CI冒充最后提交CI。

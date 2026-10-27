@@ -6,10 +6,11 @@
 
 ## 2026-10-27 — 第十轮独立复审完成（Codex，剑桥不通过）
 
-- 固定审efc030c..8a0660b；任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`从干净efc030c授权快进8a0660b。只新增ROUND10_CODEX_REVIEW、改两交接；桌面main已有7 modified/22 untracked未动。正文与交接随后按授权提交/推任务分支，无skip-ci，CI另核实补记。
+- 固定审efc030c..8a0660b；任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`从干净efc030c授权快进8a0660b。只新增ROUND10_CODEX_REVIEW、改两交接；桌面main已有7 modified/22 untracked未动。正文与交接已commit/push `0a57f9171337dc3d610f08bc341f292c7335606a`，本CI补记再单独提交/推同分支，无skip-ci，最后SHA/CI另核实。
 - W1–W4点名42题全部needs，W6更正关闭，W5/A8保留。新0阻断/3应修/1建议：X1连字符动词单位截断13题、X2名词性定语混入动词干扰项2题、X3主语百分号截断2题；17剑桥auto/12句均为旧池已存问题。机经新增确认0、18道降级仅列影响。
 - 专项113、Flask-only181运行/1跳过、reading22、Node、4Python Ruff通过；validator0、--check0、raw171篇及图谱全等。Mac双跑四文件全等、报告仅Python行差；全池同50,243ID，71降级，其他字段0变化；完整main676569c→8a本机SQLite236/81/0，另两篇此前已因标签updated的解释成立。
 - 独立随机120auto（seed20261031）：局部答案成立，但1干扰项错、1既有T2多解；其余118未见问题，不将待审题算成全对。全部指定控制和降级题、17新问题ID、实际命令及SHA在完整报告。抽查表13旧ID/0同位置，按ID迁移老师结果。
+- 正文[GitHub CI 40443710982](https://github.com/KB77GG/studytracker/actions/runs/40443710982) headSha一致、整体success：test181运行/1跳过与Node成功；lint存量advisory失败，113诊断与被审8a基线逐条相等，format跳过，本轮4Python无报错。本纯文档补记的CI会按最后head单独核实。
 - 未改被审代码数据、未推main/PR/部署/生产操作/小程序发布；本机AUDIT辅助材料不随Git同步。下一步实现方处理X1–X3再审；W5/A8不因本轮通过回归而关闭。
 
 ## 2026-10-27 — 语法候选题 v0.2 第十轮（Claude）
