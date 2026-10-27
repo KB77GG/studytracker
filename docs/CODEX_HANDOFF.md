@@ -1,7 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-27 Claude 第十五轮：按 Codex 第十四轮复审修 AA1–AA2、采纳 AA3，待 Codex 复审（可从 c6bfb1a 快进）。机经继续暂缓，未部署。
+> 最近更新：2026-10-28 Codex 第十五轮独立复审：AA1–AA3点名关闭；新AB1评分中心应修，AB2计数建议更正，剑桥结论不通过。报告与交接仅任务分支提交，未部署。
+
+## 2026-10-28 语法候选题 v0.2 第十五轮独立复审（Codex，不通过）
+
+- **事实源**：[完整ROUND15复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND15_CODEX_REVIEW.md)。含9项实际检查、AA1–AA3关闭、7个be位置/19个旧词形位置/9道连词T6/旧62题/120随机题/29非典型主语/15系动词目标逐项表、双跑SHA、临时导入。以下独立结论覆盖Claude待审摘要，保留历史。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；开工`c6bfb1a20c412e46624f31fe49081e5a8242d9d3`干净，fetch后ff-only到固定`e2903b18eb448640390ceec9c7d3a4dde787f380`。范围11文件全部在授权内；无普通merge/rebase/改写历史/合main。本轮只有本报告和HANDOFF/WORKLOG三文档待提交，所有被审文件未改；随后按授权普通commit/push本分支、无skip-ci，提交SHA以Git及最后汇报为准。
+- **结论/关闭**：AA1的4题和AA2的1道剑桥auto均正确降级，AA3收窄及真动词反例通过；三编号点名关闭。新0阻断/1应修AB1/1建议AB2：5道T1把become/remain误当助动词、强制covered/linked/embedded/known/immersed作评分中心，合理系动词答案被拒；10道同组T6身份选项可成立，仅列显示/教学口径复核，不把15题全部称答案错误。均为存量。AB2建议更正8→7及20=13+7→19=13+6两个语料计数。机经新确认0，旧暂缓不重复计数。
+- **抽查**：seed20261104，Cambridge auto每模板20=120；119局部答案/高亮可成立、1 AB1判分问题；119里另2题为既有A8提醒（1明确多解/1嵌套层级风险）。原句可阅读，能否直接唯一判分单列。新角度非典型主语29auto未见错，系动词aux/auxpass扫描15=5T1+10T6，逐题判断不混计。老师盲审范围未决定。
+- **验证**：R中G=`.venv-grammar-tools/bin/python`；`G -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`149通过；全新Flask-only按ci.yml13模块217运行=216通过+1跳过；Node `tests/test_dictation_spell_queue.js` exit0；桌面venv在R `-m unittest tests.test_reading_study -v`22通过。validator0、textfix --check0；raw171篇content整体含summary及groups全等，图谱字节一致；4改动Python Ruff check/format通过。5新测旧325代码3断言失败/2Reason常量接口错误，与自查一致。精确命令在报告§11。
+- **复现/数据**：Mac27.0.1 arm64、Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU。在仓库外完整e290快照用G两次运行`python scripts/generate_grammar_candidates.py --seed 20261018`；复用同环境缓存，另24个真实来源现解析逐字段一致。四文件两次相同；JSONL/XLSX与提交相同、两报告只Python版本一行差。50243 IDs与内容不变，只Cam5/Jij1降级；auto40327/剑桥27849。78回归/7过滤相同。完整main676569c快照2853 blobs核验后本机SQLite先导317、再236updated/81skipped/0failed，无生产连接。
+- **表格**：7表、6×60、四项下拉、盲审；剑桥227=196auto+31needs，机经133；与325保留26题号/2同位置。旧老师判断按题号核迁，不按行号；本轮未写老师判定。
+- **其他工作树/共享状态**：桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind87，原7modified/22untracked入口未动，仅借venv；详细路径见该树git status。共享origin/main实为`ee94abb30d56b3c9623c519f75c1ffa9679c65b5`；导入仍固定676569c，不擅自改基线。O=`/Users/zhouxin/.codex/audits/grammar-v02-round15-20261028`含快照/全池/缓存/辅助脚本/日志/SQLite，只本机可见。缓存对象list/tuple比较的探针误报经JSON规范化重跑消除；没有被审解析差异或代码改动。
+- **CI/发布/下一步**：被审e290的CI40544066693 test成功、lint存量advisory失败/format跳过；本轮审核提交的精确head CI推送后另核补记，不沿用基线结果。未推main、PR、后端部署、小程序上传/提审/发布或生产操作，未调用大模型API。下一位读报告，按用户后续授权处理AB1通用系动词评分中心并测试正常助动词，统一同组T6口径，更正AB2文档。盲审范围及上线仍待用户决定。
 
 ## 2026-10-27 语法候选题 v0.2 第十五轮（Claude，待复审）
 
