@@ -614,4 +614,10 @@ $P import_snapshot.py source round11 > import-round11.log
 
 与提示要求的执行差异：只有提示中的JSONL SHA一位不符，已以Git字节和两次生成独立核实；生成在仓库外的相同提交完整快照以遵守只读边界，缓存复用已披露。其余指定检查均完成，没有跳过或用自查数字替代实测。
 
-CI将在本报告及交接提交/推送后核实，test和lint分开记录；这里的本机通过不能冒充GitHub CI通过。
+审核正文及交接已提交并推送 `42b3f9f477f2bbd08665af0808cf09e0bfa1194e`，只在 `codex/grammar-item-candidates`。随后读取 [GitHub CI 40465761462](https://github.com/KB77GG/studytracker/actions/runs/40465761462)，确认 headSha 与正文提交一致：
+
+- **test：success**；190 项运行，189 项通过、1 项按设计跳过；Node 拼写队列步骤成功。
+- **lint：failure（advisory，存量）**；113 条诊断与被审 a3fbcbb 的 [CI 40446379225](https://github.com/KB77GG/studytracker/actions/runs/40446379225) 逐条一致；format 步骤跳过。不能把整体 success 写成 lint 通过。
+- workflow 整体 success。实际命令为 `gh run view 40465761462 --repo KB77GG/studytracker --json databaseId,headSha,status,conclusion,jobs,url` 和相同 run 的 `--log`；日志保存在 O/ci-review.*，按去掉时间/步骤前缀后的 error 诊断逐条比较。
+
+本次 CI 结果补记另行提交并推送同一分支，不带 skip-ci；末次 SHA 以 Git 日志为准，末次 CI 另按精确 head 核实并在最终回复报告。工作区只涉及三份获准文档，审核正文已可跨电脑获取；本机缓存、脚本与 SQLite 不随 Git 推送。
