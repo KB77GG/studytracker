@@ -83,6 +83,7 @@ class Reason(StrEnum):
     VERB_UNIT_OUTSIDE_SPAN = "verb_unit_outside_span"
     NOUN_ATTACHED_CLAUSE = "noun_attached_clause"
     COORDINATE_FUNCTION_OVERLAP = "coordinate_function_overlap"
+    MULTIPLE_INDEPENDENT_CLAUSES = "multiple_independent_clauses"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

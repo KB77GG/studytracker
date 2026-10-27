@@ -40,6 +40,9 @@ GENERATOR_VERSION = "grammar-items-v0.2"
 VERB_UNIT_DEPS = frozenset({"aux", "auxpass", "neg", "prt"})
 # Plan v0.2 B2: when/where/why right after a noun may be a relative adverb.
 RELATIVE_ADVERBS = frozenset({"when", "where", "why"})
+# Reasons on the T1 item that say nothing about the root verb's own identity (T6).
+T1_ONLY_REASONS = frozenset({R.VERB_UNIT_OUTSIDE_SPAN, R.MULTIPLE_INDEPENDENT_CLAUSES})
+QUOTE_MARKS = frozenset("'\"‘’“”")
 # Words that make a clause they lead a noun, relative or adverbial clause.
 WH_WORDS = frozenset(
     {"what", "which", "who", "whom", "whose", "when", "where", "why", "how", "whether"}
@@ -376,6 +379,34 @@ def main_distractors(ctx, unit):
     return [targets[index] for index in sorted(targets)], reasons
 
 
+def independent_clauses(view):
+    """A second main clause across a ; or : from the root ("There have been many examples ...:
+    the facilities ... have become a blueprint", parsed as a ccomp of become) means neither
+    "the main verb" nor "the subject" of the sentence is unique (review W2). The other clause
+    must be finite with its own subject and not be led by a subordinator, a wh-word or a quote
+    ("He asked the question: why ..."), so lists and explanatory phrases are unaffected."""
+    root = view.root
+    if root is None:
+        return []
+    for child in view.children(root):
+        if child.dep not in {"ccomp", "parataxis", "conj"} or not finite(child, view):
+            continue
+        if not any(c.dep in CLAUSE_SUBJECT_DEPS for c in view.children(child)):
+            continue
+        tokens = sorted(view.subtree(child), key=lambda t: t.i)
+        low, high = tokens[0].i, tokens[-1].i
+        between = range(high + 1, root.i) if child.i < root.i else range(root.i + 1, low)
+        if not any(view.tokens[i].text in {";", ":"} for i in between):
+            continue
+        lead = next(t for t in tokens if not t.is_punct)
+        if lead.text.lower() in WH_WORDS or any(c.dep == "mark" for c in view.children(child)):
+            continue
+        if any(t.text in QUOTE_MARKS for t in view.tokens[max(0, low - 1) : low + 1]):
+            continue
+        return [R.MULTIPLE_INDEPENDENT_CLAUSES]
+    return []
+
+
 def main_verb(ctx):
     span, reasons = main_selection(ctx)
     root = ctx.view.root
@@ -387,7 +418,7 @@ def main_verb(ctx):
     unit = verb_unit(ctx.view, root, span.start, span.end)
     distractors, distractor_reasons = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
-    reasons += distractor_reasons
+    reasons += distractor_reasons + independent_clauses(ctx.view)
     item = ctx.emit(
         TEMPLATES[0],
         "G-L01" if distractors else "G-S01",
@@ -626,6 +657,7 @@ def subject_boundary(ctx):
     if not head or token_bounds(trim_tokens(ctx.view.subtree(head))) != token_bounds(tokens):
         reasons.append(R.SUBJECT_MISMATCH)
     reasons.extend(ambiguous(verb, ctx.sentence))
+    reasons.extend(independent_clauses(ctx.view))
     answer = close_quotes(
         ctx.sentence, span_from_tokens(ctx.sentence, tokens), subject.start, verb.start
     )
@@ -647,8 +679,9 @@ def subject_boundary(ctx):
 def finite_targets(ctx, main_item, main_rejections):
     if main_item:
         span, _ = main_selection(ctx)
-        # finite_or_not redoes the unit check for the root; T1's distractor check is not ours.
-        reasons = [r for r in main_item["reasons"] if r != R.VERB_UNIT_OUTSIDE_SPAN]
+        # finite_or_not redoes the unit check for the root; T1's distractor check is not ours,
+        # and a second main clause does not change this verb's own identity (review W2).
+        reasons = [r for r in main_item["reasons"] if r not in T1_ONLY_REASONS]
         yield span, ctx.view.root, "main", reasons
     else:
         ctx.reject(TEMPLATES[5], main_rejections, variant="main", node="G-N01")

@@ -49,6 +49,7 @@ from scripts.grammar_items.templates import (
     TEMPLATES,
     close_quotes,
     generate_templates,
+    independent_clauses,
     item_id,
     single_quote_role,
 )
@@ -1439,6 +1440,83 @@ class CoordinateOverlapTests(unittest.TestCase):
         ]
         item, _ = self.t3(reported, tags, "they left")
         self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
+
+
+class IndependentClausesTests(unittest.TestCase):
+    """Review W2: a second main clause across ; or : makes "the main verb/subject" not unique."""
+
+    def test_clause_before_colon_parsed_as_ccomp(self):
+        # "There have been many examples of this in the UK: the mixed-use facilities ... have
+        # become a blueprint ..." (17_1_p2 E-06): the parser hangs the first clause on become.
+        sentence, view = tree(
+            [
+                ("There", "expl", 1, "PRON", "EX"),
+                ("were", "ccomp", 6, "VERB", "VBD"),
+                ("examples", "attr", 1, "NOUN", "NNS"),
+                (":", "punct", 6, "PUNCT", ":"),
+                ("the", "det", 5, "DET", "DT"),
+                ("facilities", "nsubj", 6, "NOUN", "NNS"),
+                ("became", "ROOT", 6, "VERB", "VBD"),
+                ("blueprints", "attr", 6, "NOUN", "NNS"),
+                (".", "punct", 6, "PUNCT", "."),
+            ]
+        )
+        tags = [
+            ("There were examples", "existential_clause", 1),
+            ("the facilities", "subject", 1),
+            ("became blueprints", "verb_phrase", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        for template in ("main_verb_tap", "subject_span"):
+            item = by_template(items, template)[0]
+            self.assertEqual(item["status"], "needs_review", template)
+            self.assertIn(R.MULTIPLE_INDEPENDENT_CLAUSES, item["reasons"])
+        main = next(
+            i for i in by_template(items, "finite_or_not") if i["evidence"]["variant"] == "main"
+        )
+        self.assertNotIn(R.MULTIPLE_INDEPENDENT_CLAUSES, main["reasons"])  # T6 keeps its own.
+        self.assertEqual(main["status"], "auto_pass")
+
+    def test_question_quote_and_comma_are_not_second_main_clauses(self):
+        cases = [
+            # "He asked the question: why ..."
+            [
+                ("He", "nsubj", 1, "PRON", "PRP"),
+                ("asked", "ROOT", 1, "VERB", "VBD"),
+                ("the", "det", 3, "DET", "DT"),
+                ("question", "dobj", 1, "NOUN", "NN"),
+                (":", "punct", 1, "PUNCT", ":"),
+                ("why", "advmod", 8, "SCONJ", "WRB"),
+                ("did", "aux", 8, "AUX", "VBD"),
+                ("prices", "nsubj", 8, "NOUN", "NNS"),
+                ("rise", "ccomp", 1, "VERB", "VB"),
+                ("?", "punct", 1, "PUNCT", "."),
+            ],
+            # He said: 'We will win.'
+            [
+                ("He", "nsubj", 1, "PRON", "PRP"),
+                ("said", "ROOT", 1, "VERB", "VBD"),
+                (":", "punct", 1, "PUNCT", ":"),
+                ("'", "punct", 6, "PUNCT", "``"),
+                ("We", "nsubj", 6, "PRON", "PRP"),
+                ("will", "aux", 6, "AUX", "MD"),
+                ("win", "ccomp", 1, "VERB", "VB"),
+                (".", "punct", 1, "PUNCT", "."),
+            ],
+            # A comma is not the boundary this check looks for.
+            [
+                ("Prices", "nsubj", 1, "NOUN", "NNS"),
+                ("rose", "ccomp", 5, "VERB", "VBD"),
+                (",", "punct", 5, "PUNCT", ","),
+                ("the", "det", 4, "DET", "DT"),
+                ("report", "nsubj", 5, "NOUN", "NN"),
+                ("says", "ROOT", 5, "VERB", "VBZ"),
+                (".", "punct", 5, "PUNCT", "."),
+            ],
+        ]
+        for rows in cases:
+            sentence, view = tree(rows)
+            self.assertEqual(independent_clauses(view), [], sentence)
 
 
 MAIN_ROWS = [
