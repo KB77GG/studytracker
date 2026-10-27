@@ -1503,6 +1503,19 @@ class IndependentClausesTests(unittest.TestCase):
                 ("win", "ccomp", 1, "VERB", "VB"),
                 (".", "punct", 1, "PUNCT", "."),
             ],
+            # Charles commenced his story: 'I began ...' with the quoted verb as root
+            # (17_1_p3 B-04).
+            [
+                ("Charles", "nsubj", 1, "PROPN", "NNP"),
+                ("commenced", "ccomp", 7, "VERB", "VBD"),
+                ("his", "poss", 3, "PRON", "PRP$"),
+                ("story", "dobj", 1, "NOUN", "NN"),
+                (":", "punct", 7, "PUNCT", ":"),
+                ("'", "punct", 7, "PUNCT", "``"),
+                ("I", "nsubj", 7, "PRON", "PRP"),
+                ("began", "ROOT", 7, "VERB", "VBD"),
+                (".", "punct", 7, "PUNCT", "."),
+            ],
             # A comma is not the boundary this check looks for.
             [
                 ("Prices", "nsubj", 1, "NOUN", "NNS"),

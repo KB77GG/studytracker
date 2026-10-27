@@ -414,12 +414,16 @@ def independent_clauses(view):
         tokens = sorted(view.subtree(child), key=lambda t: t.i)
         low, high = tokens[0].i, tokens[-1].i
         between = range(high + 1, root.i) if child.i < root.i else range(root.i + 1, low)
-        if not any(view.tokens[i].text in {";", ":"} for i in between):
+        seps = [i for i in between if view.tokens[i].text in {";", ":"}]
+        if not seps:
             continue
         lead = next(t for t in tokens if not t.is_punct)
         if lead.text.lower() in WH_WORDS or any(c.dep == "mark" for c in view.children(child)):
             continue
-        if any(t.text in QUOTE_MARKS for t in view.tokens[max(0, low - 1) : low + 1]):
+        # A quote on either side of the boundary: the parser may root the quoted sentence and
+        # hang the reporting clause on it ("Charles commenced his story: 'I began ...'").
+        edges = view.tokens[max(0, low - 1) : low + 1] + view.tokens[seps[-1] + 1 : seps[-1] + 2]
+        if any(t.text in QUOTE_MARKS for t in edges):
             continue
         return [R.MULTIPLE_INDEPENDENT_CLAUSES]
     return []
