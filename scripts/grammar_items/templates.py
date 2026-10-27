@@ -261,15 +261,25 @@ def verb_unit(view, head, start=None, end=None):
 
 def conjunction_participle(view, token):
     """provided / given / considering ... + that is a conjunction, not a verb (review Z3):
-    "provided that they do so by legal means". "provided an extraordinary coincidence",
-    "was provided" and "provided by mothers" stay verbs."""
+    "provided that they do so by legal means", "Given that ..., and given that ...". It must
+    hang like a subordinator (prep, advcl or mark, or coordinated with one) with no subject or
+    auxiliary of its own (review AA3): "He granted that ...", "I am assuming that ...", "rather
+    than supposing that ..." and "provided by mothers" stay verbs."""
     after = view.tokens[token.i + 1] if token.i + 1 < len(view.tokens) else None
-    return (
+    if not (
         token.text.lower() in SUBORDINATING_PARTICIPLES
         and after is not None
         and after.text.lower() == "that"
         and after.dep == "mark"
-    )
+    ):
+        return False
+    if any(
+        c.dep in CLAUSE_SUBJECT_DEPS or c.dep in {"aux", "auxpass"} for c in view.children(token)
+    ):
+        return False
+    if token.dep == "conj" and token.head != token.i:
+        return conjunction_participle(view, view.tokens[token.head])
+    return token.dep in {"prep", "advcl", "mark"}
 
 
 def shared_auxiliary(view, head):
@@ -962,6 +972,8 @@ def finite_or_not(ctx, main_item, main_rejections):
         unit = verb_unit(ctx.view, head)
         reasons.extend(outside_span(unit, span) + loose_particle(ctx.view, unit))
         reasons.extend(be_participle(ctx.view, unit))
+        if conjunction_participle(ctx.view, head):
+            reasons.append(R.LEXICAL_CONJUNCTION)  # "given that ..." is no verb to classify (AA2).
         participle = (
             variant == "non_finite"
             and not span.role.startswith("gerund")

@@ -1764,6 +1764,56 @@ class ConjunctionParticipleTests(unittest.TestCase):
         ]
         self.assertEqual(self.distractors("provided", following), ["comply"])
 
+    def test_given_that_is_not_classified_as_a_verb(self):
+        # Review AA2: "Yet given that unsustainable urban models are ..." - T6 must not auto-pass.
+        rows = [
+            ("Given", "prep", 5, "VERB", "VBN"),
+            ("that", "mark", 3, "SCONJ", "IN"),
+            ("prices", "nsubj", 3, "NOUN", "NNS"),
+            ("rose", "pcomp", 0, "VERB", "VBD"),
+            ("firms", "nsubj", 5, "NOUN", "NNS"),
+            ("profit", "ROOT", 5, "VERB", "VBP"),
+            (".", "punct", 5, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [
+            ("Given that prices rose", "past_participial_phrase", 2),
+            ("firms", "subject", 1),
+            ("profit", "verb_phrase", 1),
+        ]
+        items, _ = generate(sentence, view, tags)
+        given = next(
+            i for i in by_template(items, "finite_or_not") if i["target"]["text"] == "Given"
+        )
+        self.assertEqual(given["status"], "needs_review")
+        self.assertIn(R.LEXICAL_CONJUNCTION, given["reasons"])
+
+    def test_verbs_before_that_stay_verbs(self):
+        # Review AA3: "He granted that ...", "rather than supposing that ..." are verbs.
+        from scripts.grammar_items import templates
+
+        _, view = tree(
+            [
+                ("He", "nsubj", 1, "PRON", "PRP"),
+                ("granted", "ROOT", 1, "VERB", "VBD"),
+                ("that", "mark", 4, "SCONJ", "IN"),
+                ("it", "nsubj", 4, "PRON", "PRP"),
+                ("failed", "ccomp", 1, "VERB", "VBD"),
+            ]
+        )
+        self.assertFalse(templates.conjunction_participle(view, view.tokens[1]))
+        _, view = tree(
+            [
+                ("rather", "advmod", 1, "ADV", "RB"),
+                ("than", "prep", 1, "ADP", "IN"),
+                ("supposing", "pcomp", 1, "VERB", "VBG"),
+                ("that", "mark", 5, "SCONJ", "IN"),
+                ("they", "nsubj", 5, "PRON", "PRP"),
+                ("stayed", "ccomp", 2, "VERB", "VBD"),
+            ]
+        )
+        self.assertFalse(templates.conjunction_participle(view, view.tokens[2]))
+
     def test_provided_as_a_verb_stays(self):
         following = [("by", "agent", 3, "ADP", "IN"), ("banks", "pobj", 4, "NOUN", "NNS")]
         self.assertEqual(self.distractors("provided", following), ["provided"])
