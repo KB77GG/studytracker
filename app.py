@@ -125,6 +125,7 @@ from toefl_practice import toefl_bp
 from models import (
     AuditLogEntry,
     DictationAnswerAppeal,
+    ParentStudentLink,
     PlanEvidence,
     PlanItem,
     PlanItemSession,
@@ -2670,45 +2671,44 @@ def create_student_parent_accounts(full_name: str) -> dict[str, str]:
     student_password = f"{slug}123"
     parent_password = f"{slug}123prt"
 
-    student_user = User(
-        username=student_username,
-        role=User.ROLE_STUDENT,
-        display_name=clean_name,
-    )
-    student_user.set_password(student_password)
-    db.session.add(student_user)
-
-    parent_user = User(
-        username=parent_username,
-        role=User.ROLE_PARENT,
-        display_name=f"{clean_name}家长",
-    )
-    parent_user.set_password(parent_password)
-    db.session.add(parent_user)
-    db.session.flush()
-
-    profile_kwargs = {
-        "user_id": student_user.id,
-        "full_name": clean_name,
-        "guardian_view_token": secrets.token_urlsafe(16),
-    }
-    if hasattr(StudentProfile, "primary_parent_id"):
-        profile_kwargs["primary_parent_id"] = parent_user.id
-    elif hasattr(StudentProfile, "primary_parent"):
-        profile_kwargs["primary_parent"] = parent_user
-    profile = StudentProfile(**profile_kwargs)
-    db.session.add(profile)
-    
-    # [NEW] Create ParentStudentLink for Miniprogram support
-    link = ParentStudentLink(
-        parent_id=parent_user.id,
-        student_name=clean_name,
-        relation="家长",
-        is_active=True
-    )
-    db.session.add(link)
-
     try:
+        student_user = User(
+            username=student_username,
+            role=User.ROLE_STUDENT,
+            display_name=clean_name,
+        )
+        student_user.set_password(student_password)
+        db.session.add(student_user)
+
+        parent_user = User(
+            username=parent_username,
+            role=User.ROLE_PARENT,
+            display_name=f"{clean_name}家长",
+        )
+        parent_user.set_password(parent_password)
+        db.session.add(parent_user)
+        db.session.flush()
+
+        profile_kwargs = {
+            "user_id": student_user.id,
+            "full_name": clean_name,
+            "guardian_view_token": secrets.token_urlsafe(16),
+        }
+        if hasattr(StudentProfile, "primary_parent_id"):
+            profile_kwargs["primary_parent_id"] = parent_user.id
+        elif hasattr(StudentProfile, "primary_parent"):
+            profile_kwargs["primary_parent"] = parent_user
+        profile = StudentProfile(**profile_kwargs)
+        db.session.add(profile)
+
+        # Create ParentStudentLink for Miniprogram support.
+        link = ParentStudentLink(
+            parent_id=parent_user.id,
+            student_name=clean_name,
+            relation="家长",
+            is_active=True,
+        )
+        db.session.add(link)
         db.session.commit()
     except Exception as exc:  # noqa: BLE001
         db.session.rollback()
