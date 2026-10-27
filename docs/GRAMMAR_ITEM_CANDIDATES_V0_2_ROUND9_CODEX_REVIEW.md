@@ -646,4 +646,4 @@ Claude 优先反馈三个决定：W1 的作用域证据如何避开引语内正�
 
 已重新读取上述调用链，确认 `finite_targets()` 的原因继承、T2/T3 共享 `type_matches()` 和 W4 的三模板风险入口；逐字读取三句现有难点。对基线全量候选重核 W1/W2/W3 的17/17/6条及W4两题，得到42个不同ID、30句，全部与本机审计快照对象一致且为auto。这里验证的是**现有问题集和方案接入位置**，不是证明拟议算法已经能准确命中。
 
-文档检查：`git diff --check`；确认相对 `61c03529` 只改本报告、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`，原报告正文保持不变、只追加本附录。没有重新运行语法生成或冒称新规则测试通过。上一文档提交 `61c03529` 的 [CI 40426443967](https://github.com/KB77GG/studytracker/actions/runs/40426443967) test成功、lint存量advisory失败；本方案提交也不带skip-ci，最终SHA和该次CI在交付汇报核实。
+文档检查：`git diff --check`；确认相对 `61c03529` 只改本报告、`docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md`，原报告正文保持不变、只追加本附录。没有重新运行语法生成或冒称新规则测试通过。方案正文已提交并推送 `b316bcc702177f1302edcd5206c66c75eb9a2949`；其 [CI 40429051462](https://github.com/KB77GG/studytracker/actions/runs/40429051462) 已完成，headSha核对一致：test及Node步骤成功，lint为存量advisory失败、format跳过，工作流整体success。该CI运行的是现有实现，不能作为拟议规则已验证的证据。本CI补记随后纯文档提交并推送，仍无skip-ci；最后SHA及其CI另在交付汇报核实。

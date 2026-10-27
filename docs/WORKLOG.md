@@ -8,7 +8,7 @@
 
 - 按用户希望给Claude看的请求，在完整ROUND9_CODEX_REVIEW追加版本化方案：四项接入点、三句难点文字、42道基线题回归、反例及验收。重点写明T1原因会继承到T6，修主句不唯一时需隔离；T3分类轴重叠不连带T2；W4不整句降级。四项仍开放，原不通过结论不变。
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`起始61c03529干净同步；本轮仅报告、CODEX_HANDOFF及本日志三文件，随方案提交/推同分支。桌面main原有7 modified/22 untracked未动；未修代码数据、未重生成、未部署或操作生产。
-- 重核42题/30句在原76aeb12审计快照均auto且对象一致，调用链和三句原说明与方案描述对应；文档diff检查通过、原报告只追加。新规则尚未实现或测试；前次61c03529的CI test成功、lint存量advisory失败，本方案最后提交CI另验后汇报。
+- 重核42题/30句在原76aeb12审计快照均auto且对象一致，调用链和三句原说明与方案描述对应；文档diff检查通过、原报告只追加。方案正文已commit/push `b316bcc702177f1302edcd5206c66c75eb9a2949`，[CI 40429051462](https://github.com/KB77GG/studytracker/actions/runs/40429051462) test/Node成功、lint存量advisory失败、整体success。新规则尚未实现或测试；本CI补记再作纯文档提交/推送，最后SHA/CI另验后汇报。
 - 方案和交接通过任务分支供跨电脑审阅，本机AUDIT辅助材料不随Git发布。下一步Claude复核方案，然后在实施授权下修复、验证并独立复审。
 
 ## 2026-10-27 — 第九轮独立复审完成（Codex，剑桥不通过）

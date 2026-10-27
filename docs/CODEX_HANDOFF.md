@@ -9,7 +9,7 @@
 - **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，开工干净且与远端同步，起始HEAD `61c0352937daad1cf79968e424d7d99544f038e5`；运行基线仍是 `76aeb1251d951393d256dd8900a2340644ba332e`。本轮只更新 `docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND9_CODEX_REVIEW.md`、本文件和 `docs/WORKLOG.md`，随本方案提交并推同一任务分支；最后HEAD以git log为准，不改写历史。
 - **方案重点**：W1仅T3复核分类轴重叠；W2仅T1/T5检查主句不唯一，必须隔离当前T6对T1原因的继承；W3两句通过准确难点及既有source_quality待审；W4按完整年龄短语提示类别歧义、保留同句其他题。第一版修自动池准入，待审题仍需老师定稿，不声称降级即完成正确题改写；不按ID写规则、不批量改原文。
 - **本次验证**：重新读取调用链和三句原始难点；在既有审计快照全量池中重核42个不同题号/30句均auto且对象相等。`git diff --check`通过；核对相对起始HEAD仅三份文档改变、旧报告内容未改而只追加附录。没有实施新规则或重跑全量生成，前节测试结论属于原复审，不是新实现验证。
-- **本机证据与外部状态**：辅助材料仍在 `/Users/zhouxin/.codex/audits/grammar-v02-round9-20261027`，仅本机。上一HEAD61c03529的[CI 40426443967](https://github.com/KB77GG/studytracker/actions/runs/40426443967) test成功，lint存量advisory失败、format跳过，整体success。本方案提交不带skip-ci，提交后另核对该SHA的CI并在最终汇报提供链接；不能用上一CI冒充本次CI。三份文档通过任务分支共享给另一台电脑，未主动向外部会话发送消息。
+- **本机证据与外部状态**：辅助材料仍在 `/Users/zhouxin/.codex/audits/grammar-v02-round9-20261027`，仅本机。方案正文已commit/push `b316bcc702177f1302edcd5206c66c75eb9a2949`；其[CI 40429051462](https://github.com/KB77GG/studytracker/actions/runs/40429051462) headSha一致，test/Node成功，lint存量advisory失败、format跳过，整体success。本CI补记随后单独commit/push，最后SHA及其CI另核实，无skip-ci；CI验证的是既有实现，不是尚未落代码的方案。三份文档通过任务分支共享给另一台电脑，未主动向外部会话发送消息。
 - **其他工作树/发布**：`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed，既有7 modified/22 untracked入口未动。未推main、未PR、未部署后端/前端、未操作生产数据库或服务器、未上传/提审/发布小程序、未调用大模型API。
 - **下一步**：Claude先审阅附录的范围和反例，特别是W1作用域、W2的ccomp误挂与T6隔离、W3教学措辞。实施须在相应授权下另行提交，按附录逐题差分与验证后再独立复审；本次文档交付没有扩大只审核的写代码授权。
 
