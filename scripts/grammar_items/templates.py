@@ -58,6 +58,10 @@ PARTICLES = frozenset(
     {"up", "out", "down", "on", "off", "in", "back", "over", "away", "about", "through"}
 )
 QUOTE_MARKS = frozenset("'\"‘’“”")
+# Participles that with a following "that" form a conjunction ("provided that they do so").
+SUBORDINATING_PARTICIPLES = frozenset(
+    {"provided", "providing", "given", "granted", "assuming", "supposing", "seeing", "considering"}
+)
 # Words that make a clause they lead a noun, relative or adverbial clause.
 WH_WORDS = frozenset(
     {"what", "which", "who", "whom", "whose", "when", "where", "why", "how", "whether"}
@@ -252,6 +256,19 @@ def verb_unit(view, head, start=None, end=None):
         and not correlative_not(view, head, c)
     )
     return sorted([head, *children], key=lambda t: t.i)
+
+
+def conjunction_participle(view, token):
+    """provided / given / considering ... + that is a conjunction, not a verb (review Z3):
+    "provided that they do so by legal means". "provided an extraordinary coincidence",
+    "was provided" and "provided by mothers" stay verbs."""
+    after = view.tokens[token.i + 1] if token.i + 1 < len(view.tokens) else None
+    return (
+        token.text.lower() in SUBORDINATING_PARTICIPLES
+        and after is not None
+        and after.text.lower() == "that"
+        and after.dep == "mark"
+    )
 
 
 def shared_auxiliary(view, head):
@@ -510,6 +527,8 @@ def main_distractors(ctx, unit):
             if not any(ch.isalnum() for ch in token.text):
                 continue  # A hyphen the parser tagged VERB (re - establish) is no verb.
             if compound_adjective(ctx.view, ctx.sentence, token):
+                continue
+            if conjunction_participle(ctx.view, token):
                 continue
             if token.dep in VERB_UNIT_DEPS and token.head in indexes:
                 continue  # An auxiliary shown as part of its head's unit.

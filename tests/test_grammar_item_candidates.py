@@ -1735,6 +1735,40 @@ class SharedAuxiliaryTests(unittest.TestCase):
         self.assertNotIn(R.SHARED_AUXILIARY, item["reasons"])
 
 
+class ConjunctionParticipleTests(unittest.TestCase):
+    """Review Z3: provided in "provided that they do so" is a conjunction, not a verb distractor."""
+
+    def distractors(self, word, following):
+        rows = [
+            ("Firms", "nsubj", 1, "NOUN", "NNS"),
+            ("profit", "ROOT", 1, "VERB", "VBP"),
+            (",", "punct", 1, "PUNCT", ","),
+            (word, "prep", 1, "VERB", "VBN"),
+            *following,
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [
+            ("Firms", "subject", 1),
+            ("profit", "verb_phrase", 1),
+            (" ".join(r[0] for r in rows[3:-1]), "past_participial_phrase", 2),
+        ]
+        items, _ = generate(sentence, view, tags)
+        return [d["text"] for d in by_template(items, "main_verb_tap")[0]["distractors"]]
+
+    def test_provided_that_is_no_distractor(self):
+        following = [
+            ("that", "mark", 6, "SCONJ", "IN"),
+            ("they", "nsubj", 6, "PRON", "PRP"),
+            ("comply", "advcl", 3, "VERB", "VBP"),
+        ]
+        self.assertEqual(self.distractors("provided", following), ["comply"])
+
+    def test_provided_as_a_verb_stays(self):
+        following = [("by", "agent", 3, "ADP", "IN"), ("banks", "pobj", 4, "NOUN", "NNS")]
+        self.assertEqual(self.distractors("provided", following), ["provided"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 
