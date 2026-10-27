@@ -1465,6 +1465,64 @@ class CoordinateOverlapTests(unittest.TestCase):
         self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
 
 
+class CoordinatePromptTests(unittest.TestCase):
+    """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
+
+    def boundary(self, rows, tags):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        return by_template(items, "clause_boundary")[0]
+
+    ROWS = [
+        ("Prices", "nsubj", 1, "NOUN", "NNS"),
+        ("rose", "ROOT", 1, "VERB", "VBD"),
+        ("and", "cc", 1, "CCONJ", "CC"),
+        ("wages", "nsubj", 4, "NOUN", "NNS"),
+        ("fell", "conj", 1, "VERB", "VBD"),
+        (".", "punct", 1, "PUNCT", "."),
+    ]
+    TAGS = [("Prices", "subject", 1), ("rose", "verb", 1), ("wages fell", "coordinated_clause", 1)]
+
+    def test_prompt_names_the_conjunction(self):
+        item = self.boundary(self.ROWS, self.TAGS)
+        self.assertEqual(item["prompt_zh"], "划出 and 后面的并列分句（从第一个词划到最后一个词）。")
+        self.assertEqual(item["answer"]["spans"][0]["text"], "wages fell")
+        self.assertEqual(item["status"], "auto_pass")
+
+    def test_repeated_conjunction_gets_its_position(self):
+        rows = [
+            ("Bread", "nsubj", 3, "NOUN", "NN"),
+            ("and", "cc", 0, "CCONJ", "CC"),
+            ("milk", "conj", 0, "NOUN", "NN"),
+            ("rose", "ROOT", 3, "VERB", "VBD"),
+            ("and", "cc", 3, "CCONJ", "CC"),
+            ("wages", "nsubj", 6, "NOUN", "NNS"),
+            ("fell", "conj", 3, "VERB", "VBD"),
+            (".", "punct", 3, "PUNCT", "."),
+        ]
+        tags = [
+            ("Bread and milk", "subject", 1),
+            ("rose", "verb", 1),
+            ("wages fell", "coordinated_clause", 1),
+        ]
+        item = self.boundary(rows, tags)
+        self.assertEqual(
+            item["prompt_zh"], "划出第 2 个 and 后面的并列分句（从第一个词划到最后一个词）。"
+        )
+
+    def test_clause_without_a_conjunction_goes_to_review(self):
+        rows = [*self.ROWS[:2], (";", "punct", 1, "PUNCT", ":"), *self.ROWS[3:]]
+        item = self.boundary(rows, self.TAGS)
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.COORDINATE_CUE_MISSING, item["reasons"])
+
+    def test_other_clause_prompts_unchanged(self):
+        sentence, view = main_tree()
+        items, _ = generate(sentence, view, main_tags())
+        item = by_template(items, "clause_boundary")[0]
+        self.assertEqual(item["prompt_zh"], "划出句中的状语从句（从第一个词划到最后一个词）。")
+
+
 class IndependentClausesTests(unittest.TestCase):
     """Review W2: a second main clause across ; or : makes "the main verb/subject" not unique."""
 

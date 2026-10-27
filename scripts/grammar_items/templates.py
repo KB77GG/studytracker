@@ -78,6 +78,8 @@ BRACKET_PAIRS = {"(": ")", "[": "]"}
 COORDINATING_MARKS = frozenset({"for", "so", "yet"})
 # Every coordinating conjunction: none of them makes a first conjunct subordinate (review X4).
 COORDINATORS = COORDINATING_MARKS | {"and", "but", "or", "nor"}
+# Conjunctions a coordinate-clause boundary prompt may name ("划出 and 后面的并列分句").
+COORDINATE_CUES = frozenset({"and", "but", "or", "nor", "yet"})
 # Forms of be, and the complements that make a clause after it an ordinary adverbial
 # ("It was cold because ...") rather than the be's own complement ("That was because ...").
 BE_FORMS = frozenset(
@@ -545,6 +547,21 @@ def target_analysis(ctx, span, kind):
     return tokens, heads[0] if len(heads) == 1 else None, reasons
 
 
+def coordinate_prompt(sentence, answer):
+    """A boundary prompt naming the conjunction before the coordinate clause (review A8): the
+    first conjunct is a coordinate clause too, so "划出句中的并列分句" has two answers. When the
+    word occurs more than once, its position is given ("第 2 个 and"). A clause with no such
+    conjunction right before it (joined by a semicolon or comma) returns None: the caller keeps
+    the plain prompt and sends the item to review."""
+    words = list(re.finditer(r"[A-Za-z]+", sentence[: answer["start"]])) if answer else []
+    if not words or words[-1].group().lower() not in COORDINATE_CUES:
+        return None
+    cue = words[-1]
+    same = [m.start() for m in re.finditer(rf"\b{cue.group()}\b", sentence, flags=re.IGNORECASE)]
+    position = f"第 {same.index(cue.start()) + 1} 个 " if len(same) > 1 else " "
+    return f"划出{position}{cue.group()} 后面的并列分句（从第一个词划到最后一个词）。"
+
+
 def clause_boundaries(ctx):
     for kind, roles in CLAUSE_ROLES.items():
         spans = [s for s in ctx.spans if s.role in roles]
@@ -569,10 +586,15 @@ def clause_boundaries(ctx):
             answer = close_quotes(
                 ctx.sentence, span_from_tokens(ctx.sentence, tokens), span.start, span.end
             )
+            prompt = f"划出句中的{CLAUSE_LABELS[kind]}（从第一个词划到最后一个词）。"
+            if kind == "coordinate":
+                cued = coordinate_prompt(ctx.sentence, answer)
+                prompt = cued or prompt
+                reasons.extend([] if cued else [R.COORDINATE_CUE_MISSING])
             ctx.emit(
                 TEMPLATES[1],
                 CLAUSE_NODES[kind],
-                f"划出句中的{CLAUSE_LABELS[kind]}（从第一个词划到最后一个词）。",
+                prompt,
                 span,
                 head,
                 answer_spans=[answer] if answer else [],

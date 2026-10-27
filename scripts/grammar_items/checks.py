@@ -85,6 +85,7 @@ class Reason(StrEnum):
     COORDINATE_FUNCTION_OVERLAP = "coordinate_function_overlap"
     MULTIPLE_INDEPENDENT_CLAUSES = "multiple_independent_clauses"
     HYPHENATED_WORD_SPLIT = "hyphenated_word_split"
+    COORDINATE_CUE_MISSING = "coordinate_cue_missing"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 
