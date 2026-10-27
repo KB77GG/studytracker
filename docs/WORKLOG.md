@@ -6,10 +6,10 @@
 
 ## 2026-10-28 — 第十五轮独立复审完成（Codex，剑桥不通过）
 
-- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，c6bfb1a干净快进固定e2903b1。只新增ROUND15审核、更新两交接，被审代码/数据/交付文件未改；桌面树既有改动未碰。三文档按本次授权普通commit/push本分支、无skip-ci，精确SHA以Git/最终汇报为准。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，c6bfb1a干净快进固定e2903b1。只新增ROUND15审核、更新两交接，被审代码/数据/交付文件未改；桌面树既有改动未碰。正文三文档已commit/push dd1a5096aea0c4037ffe002dad9c816df6b4cf1b，本次CI补记再普通commit/push、无skip-ci，末次SHA以Git/最终汇报为准。
 - AA1–AA3点名关闭；新0阻断/1应修/1建议。AB1：5道T1把系动词当助动词、强制表语作评分中心；10同类T6仅复核高亮口径，不把全部称错。AB2：全库be命中7非8，旧连词条件19=13+6非20=13+7。机经新确认0。
 - 149专项、Flask-only217运行/1跳过、reading22、Node、4文件Ruff通过；validator0/--check0/raw171/图谱一致。两次生成全等，两报告与提交仅Python版本差；50243题、Cam5/Jij1降，auto40327/剑桥27849；78回归/7过滤不变；完整676569c→e290临时导入236/81/0。负测3断言失败/2接口错误。
-- seed20261104剑桥120auto：119局部可成立、1评分问题，另2既有A8提醒；非典型主语29/系动词15定向表在报告。交付表Cam227/Jij133，旧题号26/同位置2。基线CI40544066693 test成功，lint存量advisory失败；审核提交的CI待本次push后独立确认并补记。未部署/生产操作/PR/推main。下一步按授权修AB1、更正AB2，盲审范围待定。
+- seed20261104剑桥120auto：119局部可成立、1评分问题，另2既有A8提醒；非典型主语29/系动词15定向表在报告。交付表Cam227/Jij133，旧题号26/同位置2。基线CI40544066693 test成功，lint存量advisory失败；正文精确head的[CI40604479374](https://github.com/KB77GG/studytracker/actions/runs/40604479374)整体success：test217运行/1跳过及Node成功；lint advisory失败112条与e290基线逐条相同，format跳过。末次补记CI最终回复另报。未部署/生产操作/PR/推main。下一步按授权修AB1、更正AB2，盲审范围待定。
 
 ## 2026-10-27 — 语法候选题 v0.2 第十五轮（Claude）
 

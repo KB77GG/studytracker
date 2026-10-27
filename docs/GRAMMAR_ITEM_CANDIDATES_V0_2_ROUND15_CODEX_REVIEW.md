@@ -555,6 +555,7 @@ P O/import_snapshot.py O/source current
 - 检查均可执行并完成。与提示预期不同的是AB2计数（7而非8；19=13+6而非20=13+7），不是未做检查；两报告的Python版本行差为预期。未声称复审能证明整个池子无错误。
 - 任务树入口干净；本轮提交前仅3文档变更。仓库外O下有完整快照、检查脚本、全池/缓存、日志、SQLite，仅本机可见，不随Git推送；报告提供算法、题号、命令和哈希供跨机器重做。
 - 桌面工作树`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind87，已有7modified/22untracked入口未改；只借其venv。详细路径保留于该树git status和此前交接，不能把任务分支成果当作桌面main已有。
-- 基线e290的[CI40544066693](https://github.com/KB77GG/studytracker/actions/runs/40544066693)已核：test成功，lint advisory失败/format跳过；本次审核提交的精确head CI将在推送后补记，不能沿用基线CI冒充。
+- 基线e290的[CI40544066693](https://github.com/KB77GG/studytracker/actions/runs/40544066693)已核：test成功，lint advisory失败/format跳过；正文新提交的结果独立核对如下。
 - 下一位按用户授权先处理AB1的5道T1评分中心并保留正常助动词控制，统一10道T6的显示口径；按AB2更正文档计数。老师盲审范围和上线仍待用户决定。本轮没有实施这些建议。
 
+正文提交`dd1a5096aea0c4037ffe002dad9c816df6b4cf1b`及三文档已push到`codex/grammar-item-candidates`，可跨电脑获取。[精确head CI40604479374](https://github.com/KB77GG/studytracker/actions/runs/40604479374)已completed/success：**test成功**（217运行/1跳过，Node拼写队列成功）；**lint advisory失败**，112条诊断与被审e290基线逐条相同，format检查因前一步失败跳过。全局lint存量与本轮4文件Ruff通过分别报告。此CI补记再普通commit/push同分支，不amend、无skip-ci；末次提交SHA和它的精确head CI在最终回复报告。
