@@ -929,7 +929,7 @@
 | 编号 | 问题 | 处理 |
 |---|---|---|
 | AA1 | 解析器把 be 当中心，后面的被动分词挂在别处，T1 / T6 只显示 are / is：<br>· 14_3_p2 F-06 `are infrequently encountered` 明确漏词；<br>· 14_2_p2 H-02 `is naturally ventilated, passively cooled and naturally lit` 需复核分析口径（共 4 道） | 新增 `be_participle()` / `participle_after_be`：显示的 be 有未并入单位的过去分词，且该分词依存为 dep，或依存为 acomp 并带并列过去分词时，降为待复核；不扩大单位，T6 不继承 T1 的这个原因。<br>不受影响的例子：family-owned、terrified of、`freely chosen, spontaneous ...`（与形容词并列）、表语 that 从句。<br>全库语料只有 8 处命中（两种来源、所有状态），剑桥自动题正好是点名的 4 道 |
-| AA2 | given that 已按连词不进 T1 干扰项，T6 却仍自动答“非谓语”（18_2_p3 C-03，1 道） | T6 目标是这类连词时降为待复核（`lexical_conjunction`）。剑桥自动题 1 道，另有 4 道剑桥、4 道机经本来就待复核，只多了这个原因；机经 1 道自动题降级 |
+| AA2 | given that 已按连词不进 T1 干扰项，T6 却仍自动答“非谓语”（18_2_p3 C-03，1 道） | T6 目标是这类连词时降为待复核（`lexical_conjunction`）。剑桥自动题 1 道，另有 3 道剑桥、4 道机经本来就待复核，只多了这个原因；机经 1 道自动题降级 |
 | AA3（建议） | 只看“分词 + 作引导词的 that”，会把真动词也当连词：He granted that、I am assuming that、rather than supposing that | `conjunction_participle()` 收窄，还要求两点：<br>· 它像引导词那样挂（prep / advcl / mark，或与这样的词并列，如 `..., and given that ...`）；<br>· 没有自己的主语和助动词。<br>全库符合原条件的 20 处里保留 13 处真连词，排除 7 处（rather than supposing that、for assuming that、takes it for granted that、Seeing that 作主语等）。原来去掉的 3 个干扰项不变 |
 
 ### 结果
@@ -937,7 +937,7 @@
 **与第十四轮比较：** 候选与题号不变，除 status / reasons 外字段不变。
 - 剑桥 auto → needs 5 道：AA1 4（T1 2、T6 2）、AA2 1（T6）。
 - 机经 auto → needs 1 道（AA2）。
-- 另有本来就待复核的题多了原因：剑桥 5 道（lexical_conjunction 4、participle_after_be 1），机经 4 道。
+- 另有本来就待复核的题多了原因：剑桥 4 道（lexical_conjunction 3、participle_after_be 1），机经 4 道（lexical_conjunction）。
 
 **auto_pass：** 主句谓语 5832、动词身份 12652，其余不变；合计 40,333 → 40,327，其中剑桥 27,854 → 27,849。
 
