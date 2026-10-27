@@ -276,7 +276,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "目标本身又连着两个分句时 needs_review（nested_coordination）。",
             "v0.2：whether or not、not just because 的 not 不进动词单位；for + 有主语的限定分句按并列处理"
             "（T6 finiteness_mismatch，T1 / T5 multiple_independent_clauses）；动词后紧跟语料里标过 prt 的词"
-            "却被标成 advmod 时 needs_review（particle_outside_unit，动词单位不扩大）。",
+            "却被标成 advmod，或标成 RP 却未并入时 needs_review（particle_outside_unit，动词单位不扩大）。",
+            "v0.2：过去分词与带助动词的前项并列、自己没有助动词时，动词身份题不自动判非谓语"
+            "（shared_auxiliary）；provided / given / considering 等 + that 是连词，不当干扰项。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
