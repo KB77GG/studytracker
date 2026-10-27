@@ -6,9 +6,10 @@
 
 ## 2026-10-27 — 第九轮独立复审完成（Codex，剑桥不通过）
 
-- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`，从3b7efb3授权快进固定76aeb1251d951393d256dd8900a2340644ba332e；只写ROUND9_CODEX_REVIEW及两交接，桌面main既有7 modified/22 untracked未动。正文随后按授权提交/推送，CI待核实补记。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、分支`codex/grammar-item-candidates`，从3b7efb3授权快进固定76aeb1251d951393d256dd8900a2340644ba332e；只写ROUND9_CODEX_REVIEW及两交接，桌面main既有7 modified/22 untracked未动。正文已commit/push `3a3bb6a1920c778fd1772e769332ce32b19f149f`；本CI补记随后独立提交/推送，最后HEAD见git log。
 - V1/V3点名关闭；剑桥0阻断/4应修/2建议：从句功能与并列互斥单选、多个独立分句唯一主句题、两句分号非限定结构漏标、年龄表达后when疑点漏审。机经新增0、明确指定既有4处数据问题暂缓，不计本轮分级。指定60为59auto+1needs；独立120局部成立但1题前提不成立；22降级中9为保守误降。
 - 专项106、Flask-only174运行/1跳过、reading22、Node、4文件Ruff均通过；validator0、--check0；171篇raw重建及图谱全等；两次四文件字节一致、两报告仅Python版本差。50243候选、剑桥auto28029；最终共有ID41状态改变，7+40是旧标注规则反事实，另1题roles元数据改变。完整main676569c到本轮临时SQLite导入236/81/0。
+- 正文[GitHub CI 40426142680](https://github.com/KB77GG/studytracker/actions/runs/40426142680) 整体success；test174运行/1跳过、Node成功，lint存量advisory失败、format跳过，与本轮4Python文件无交集。本补记无skip-ci，最后提交CI再核实；报告及交接可跨电脑获取，AUDIT仅本机。
 - 未修改被审代码数据、未推main/PR/部署/生产操作/小程序发布；完整命令、逐题表、SHA及下一步已入报告。辅助证据只在本机AUDIT；下一步处理剑桥W1–W4后再审。
 
 ## 2026-10-27 — 语法候选题 v0.2 第九轮（Claude）

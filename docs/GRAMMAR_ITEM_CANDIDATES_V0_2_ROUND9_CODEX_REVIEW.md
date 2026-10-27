@@ -61,7 +61,7 @@
 | ielts12_test8_p2 E-02 | would ... boost | could / not / be / gi_v02_fa5a06f81026 | gi_v02_ec4d82f4d263 |
 | ielts13_test4_p2 B-06 | store | costs / gi_v02_88f13fac6658 | gi_v02_e76742369569 |
 | ielts14_test3_p3 F-04 | is | are / gi_v02_d5e448590295 | gi_v02_5be941a91aed |
-| ielts14_test3_p3 F-07 | is | must / be / gi_v02_2e69d0c43c2e | gi_v02_cf9221c3ec44 |
+| ielts14_test3_p3 F-07 | is ... engaged | must / be / gi_v02_2e69d0c43c2e | gi_v02_cf9221c3ec44 |
 | ielts17_test1_p2 E-06 | have been | have / become / gi_v02_5690b731fad2 | gi_v02_3d42601b8d9c |
 | ielts20_test2_p3 A-03 | looked | was / mounted / gi_v02_45903e2a439d | 无auto T5 |
 | ielts4_test3_p2 C-04 | is | inch / gi_v02_039e5b6e4241 | gi_v02_2a33047fcd6c |
@@ -536,4 +536,8 @@ cd "$ROOT"
 
 ## 交接、提交与CI
 
-本报告与CODEX_HANDOFF、WORKLOG同步交接；正文提交/推送及CI实测将在获准提交后补记。只推codex任务分支，不推main、不PR、不部署后端/前端，不操作生产服务器/数据库，不上传/提审/发布小程序，不调用大模型API。
+本报告与CODEX_HANDOFF、WORKLOG同步交接。正文已commit/push `3a3bb6a1920c778fd1772e769332ce32b19f149f`，远端同SHA；[GitHub CI 40426142680](https://github.com/KB77GG/studytracker/actions/runs/40426142680) 已完成、整体success。test任务成功：174运行、173通过、1按设计跳过；Node拼写队列步骤成功。lint任务Ruff check存量advisory failure，format skipped；日志错误文件与本轮4个改动Python文件无交集。本机对这4文件显式取消exclude后check/format通过。
+
+本CI补记随后独立commit/push，仍只改获准三文档、不含skip-ci标记；最后HEAD以git log及最终汇报为准，最后提交CI另行核实，不把正文SHA冒称最后SHA。提交后任务树干净；桌面main已有7 modified/22 untracked入口未动。报告与交接已通过限定分支跨电脑共享，AUDIT辅助证据仅本机。
+
+只推codex任务分支，不推main、不PR、不部署后端/前端，不操作生产服务器/数据库，不上传/提审/发布小程序，不调用大模型API。
