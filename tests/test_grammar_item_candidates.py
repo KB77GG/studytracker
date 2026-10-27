@@ -1605,6 +1605,38 @@ class LooseParticleTests(unittest.TestCase):
                 self.assertNotIn(R.PARTICLE_OUTSIDE_UNIT, item["reasons"], (dep, word))
 
 
+class NestedCoordinationTests(unittest.TestCase):
+    """Review A8 follow-up: "but B and C" leaves "the clause after but" open to B or B and C."""
+
+    def test_target_joining_two_clauses_goes_to_review(self):
+        rows = [
+            ("Prices", "nsubj", 1, "NOUN", "NNS"),
+            ("rose", "ROOT", 1, "VERB", "VBD"),
+            ("but", "cc", 1, "CCONJ", "CC"),
+            ("wages", "nsubj", 4, "NOUN", "NNS"),
+            ("fell", "conj", 1, "VERB", "VBD"),
+            ("and", "cc", 4, "CCONJ", "CC"),
+            ("jobs", "nsubj", 7, "NOUN", "NNS"),
+            ("went", "conj", 4, "VERB", "VBD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        tags = [
+            ("Prices", "subject", 1),
+            ("rose", "verb", 1),
+            ("wages fell and jobs went", "coordinated_clause", 1),
+        ]
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        item = by_template(items, "clause_boundary")[0]
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.NESTED_COORDINATION, item["reasons"])
+
+    def test_single_clause_target_unaffected(self):
+        sentence, view = tree(CoordinatePromptTests.ROWS)
+        items, _ = generate(sentence, view, CoordinatePromptTests.TAGS)
+        self.assertNotIn(R.NESTED_COORDINATION, by_template(items, "clause_boundary")[0]["reasons"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 

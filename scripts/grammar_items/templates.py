@@ -642,6 +642,20 @@ def coordinate_prompt(sentence, answer):
     return f"划出{position}{cue.group()} 后面的并列分句（从第一个词划到最后一个词）。"
 
 
+def nested_coordination(view, tokens):
+    """A coordinate target that itself joins two clauses ("but wages fell and jobs went") leaves
+    "the clause after but" open to the first of them alone (review A8 follow-up)."""
+    inside = {t.i for t in tokens}
+    nested = any(
+        t.dep == "conj"
+        and t.head in inside
+        and finite(t, view)
+        and any(c.dep in CLAUSE_SUBJECT_DEPS for c in view.children(t))
+        for t in tokens
+    )
+    return [R.NESTED_COORDINATION] if nested else []
+
+
 def clause_boundaries(ctx):
     for kind, roles in CLAUSE_ROLES.items():
         spans = [s for s in ctx.spans if s.role in roles]
@@ -671,6 +685,7 @@ def clause_boundaries(ctx):
                 cued = coordinate_prompt(ctx.sentence, answer)
                 prompt = cued or prompt
                 reasons.extend([] if cued else [R.COORDINATE_CUE_MISSING])
+                reasons.extend(nested_coordination(ctx.view, tokens))
             ctx.emit(
                 TEMPLATES[1],
                 CLAUSE_NODES[kind],
