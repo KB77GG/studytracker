@@ -40,6 +40,10 @@ GENERATOR_VERSION = "grammar-items-v0.2"
 VERB_UNIT_DEPS = frozenset({"aux", "auxpass", "neg", "prt"})
 # Plan v0.2 B2: when/where/why right after a noun may be a relative adverb.
 RELATIVE_ADVERBS = frozenset({"when", "where", "why"})
+# Words that make a clause they lead a noun, relative or adverbial clause.
+WH_WORDS = frozenset(
+    {"what", "which", "who", "whom", "whose", "when", "where", "why", "how", "whether"}
+)
 
 
 def char_span(sentence, start, end):
@@ -489,6 +493,22 @@ def clause_boundaries(ctx):
             )
 
 
+def coordinate_function_overlap(view, head):
+    """A coordinate clause whose first conjunct is subordinate - led by a subordinator ("as
+    groundwater is diverted ... and the wells no longer reach ...", "that ... and ...") or a
+    wh-word ("why ... and why ...") - usually shares that clause's job, so "coordinate clause" is
+    not the only right T3 answer (review W1). Coordination of main clauses and quoted clauses
+    without a subordinator is unaffected."""
+    first = head
+    while first.dep == "conj" and first.head != first.i:
+        first = view.tokens[first.head]
+    if first.i == head.i or first.dep == "ROOT":
+        return []
+    marks = {c.text.lower() for c in view.children(first) if c.dep == "mark"} - COORDINATING_MARKS
+    lead = next(t for t in sorted(view.subtree(first), key=lambda t: t.i) if not t.is_punct)
+    return [R.COORDINATE_FUNCTION_OVERLAP] if marks or lead.text.lower() in WH_WORDS else []
+
+
 def classify_clauses(ctx):
     for span in ctx.spans:
         kind = classification_kind(span)
@@ -505,6 +525,8 @@ def classify_clauses(ctx):
                 reasons.append(R.CLAUSE_TYPE_MISMATCH)
             if kind != "phrase":
                 reasons.extend(boundary_reasons(ctx, head, tokens, kind))
+            if kind == "coordinate":
+                reasons.extend(coordinate_function_overlap(ctx.view, head))
         if kind == "adverbial":
             reasons.extend(relative_adverb_risk(ctx.view, span))
             reasons.extend(noun_attached_risk(ctx.view, head))

@@ -1340,6 +1340,107 @@ class PredicativeClauseTests(unittest.TestCase):
             self.assertNotIn(R.CLAUSE_TYPE_MISMATCH, item["reasons"], item["template"])
 
 
+class CoordinateOverlapTests(unittest.TestCase):
+    """Review W1: a coordinate clause inside a subordinate clause also does that clause's job."""
+
+    def t3(self, rows, tags, text):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        t3 = [i for i in items if i["template"] == "clause_type_classify"]
+        return next(i for i in t3 if i["target"]["text"] == text), items
+
+    def test_second_clause_under_a_subordinator(self):
+        # "As trees became scarce and they could no longer construct wooden canoes, ..." (B-07).
+        rows = [
+            ("As", "mark", 2, "SCONJ", "IN"),
+            ("trees", "nsubj", 2, "NOUN", "NNS"),
+            ("disappeared", "advcl", 8, "VERB", "VBD"),
+            ("and", "cc", 2, "CCONJ", "CC"),
+            ("they", "nsubj", 5, "PRON", "PRP"),
+            ("left", "conj", 2, "VERB", "VBD"),
+            (",", "punct", 8, "PUNCT", ","),
+            ("people", "nsubj", 8, "NOUN", "NNS"),
+            ("ate", "ROOT", 8, "VERB", "VBD"),
+            ("fish", "dobj", 8, "NOUN", "NN"),
+            (".", "punct", 8, "PUNCT", "."),
+        ]
+        tags = [
+            ("As trees disappeared and they left", "reason_clause", 1),
+            ("they left", "coordinated_clause", 2),
+            ("people", "subject", 1),
+            ("ate fish", "verb_phrase", 1),
+        ]
+        item, items = self.t3(rows, tags, "they left")
+        self.assertEqual(item["answer"]["option"], "并列分句")
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
+        for other in items:  # T3 only; the T2 boundary question is a different requirement.
+            if other["template"] != "clause_type_classify":
+                self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, other["reasons"])
+
+    def test_second_wh_clause(self):
+        # "... explains why ... and why today it accounts for ..." (12_5_p1 C-04).
+        rows = [
+            ("Nobody", "nsubj", 1, "PRON", "NN"),
+            ("knows", "ROOT", 1, "VERB", "VBZ"),
+            ("why", "advmod", 4, "SCONJ", "WRB"),
+            ("trees", "nsubj", 4, "NOUN", "NNS"),
+            ("died", "ccomp", 1, "VERB", "VBD"),
+            ("and", "cc", 4, "CCONJ", "CC"),
+            ("why", "advmod", 8, "SCONJ", "WRB"),
+            ("they", "nsubj", 8, "PRON", "PRP"),
+            ("left", "conj", 4, "VERB", "VBD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        tags = [
+            ("Nobody", "subject", 1),
+            ("knows", "verb", 1),
+            ("why trees died and why they left", "object_clause", 2),
+            ("why they left", "coordinated_clause", 3),
+        ]
+        item, _ = self.t3(rows, tags, "why they left")
+        self.assertIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
+
+    def test_main_and_reported_coordination_unaffected(self):
+        main = [
+            ("The", "det", 1, "DET", "DT"),
+            ("trees", "nsubj", 2, "NOUN", "NNS"),
+            ("disappeared", "ROOT", 2, "VERB", "VBD"),
+            ("and", "cc", 2, "CCONJ", "CC"),
+            ("they", "nsubj", 5, "PRON", "PRP"),
+            ("left", "conj", 2, "VERB", "VBD"),
+            (".", "punct", 2, "PUNCT", "."),
+        ]
+        tags = [
+            ("The trees", "subject", 1),
+            ("disappeared", "verb", 1),
+            ("they left", "coordinated_clause", 1),
+        ]
+        item, _ = self.t3(main, tags, "they left")
+        self.assertEqual(item["status"], "auto_pass")
+        # "'We were in ... and I'm going to take you with me,' ... saying" (10_1_p3 E-05).
+        reported = [
+            ("The", "det", 1, "DET", "DT"),
+            ("trees", "nsubj", 2, "NOUN", "NNS"),
+            ("died", "ccomp", 8, "VERB", "VBD"),
+            ("and", "cc", 2, "CCONJ", "CC"),
+            ("they", "nsubj", 5, "PRON", "PRP"),
+            ("left", "conj", 2, "VERB", "VBD"),
+            (",", "punct", 8, "PUNCT", ","),
+            ("he", "nsubj", 8, "PRON", "PRP"),
+            ("said", "ROOT", 8, "VERB", "VBD"),
+            (".", "punct", 8, "PUNCT", "."),
+        ]
+        tags = [
+            ("The trees died and they left", "direct_speech", 1),
+            ("they left", "coordinated_clause", 2),
+            ("he", "subject", 1),
+            ("said", "verb", 1),
+        ]
+        item, _ = self.t3(reported, tags, "they left")
+        self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
+
+
 MAIN_ROWS = [
     ("The", "det", 1, "DET", "DT"),
     ("plans", "nsubj", 4, "NOUN", "NNS"),
