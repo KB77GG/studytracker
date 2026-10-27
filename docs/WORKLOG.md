@@ -6,11 +6,11 @@
 
 ## 2026-10-27 — 第十二、十三轮独立复审完成（Codex，剑桥不通过）
 
-- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`；按用户授权清理仅3处过时阻塞记录，1558465快进固定35e37c5。只新增ROUND12_13报告、改两交接；未改被审代码数据，桌面树既有7modified/22untracked未动。正文及交接随后提交/推此分支，无skip-ci，精确SHA/CI后补。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`；按用户授权清理仅3处过时阻塞记录，1558465快进固定35e37c5。只新增ROUND12_13报告、改两交接；未改被审代码数据，桌面树既有7modified/22untracked未动。正文及交接已commit/push `0c5ede3e4029ed0b08ae9eaddb36a0bbf020879a`；此CI补记另commit/push同分支，无skip-ci，最后HEAD以git log为准。
 - 0阻断/3应修：Z1 live up to缺up 3道、Z2共享/省略助动词误判非谓语2道、Z3 provided that连词当动词干扰项1道；共6个不同剑桥auto、5句。3建议：负测/子串重复解释、粒子保守误降解释、否定倒装边界。机经新增确认0。A8、Y1/Y2/Y4点名关闭，Y3原22降级但另有Z1。
 - 137专项、Flask-only205运行/1跳过、reading22、Node、4文件Ruff通过；validator0、--check0、raw171/图谱一致；双跑4文件全等、两报告仅Python版本差；50243候选、auto40341/剑桥27860；78回归/7过滤不变。完整676569c到35的临时导入236/81/0。R13负测实际5失败/2接口错误/2通过，已区分。
 - 完整报告含要求逐题表及seed20261102的120auto抽查（本次未见新错）、全池定向扫描。40恢复题现38auto中1仍有Z3，另2已needs；不混算“全部正确”。表格224剑桥/136机经，a3对比28题号/0同位置。
-- 辅助材料仅本机审计目录，报告/交接将commit/push以供跨电脑复核。未推main/部署/PR/生产操作/小程序发布；共享origin/main已更新，模拟导入仍固定用户指定676569c。下一步实现方处理Z1–Z3，老师盲审范围待定。
+- 辅助材料仅本机审计目录，报告/交接已commit/push可跨电脑复核；[CI40517825017](https://github.com/KB77GG/studytracker/actions/runs/40517825017)精确正文head整体success，205运行/1跳过及Node成功；lint存量112条与35基线相同、format跳过。末次补记提交CI另核。未推main/部署/PR/生产操作/小程序发布；共享origin/main已更新，模拟导入仍固定用户指定676569c。下一步实现方处理Z1–Z3，老师盲审范围待定。
 
 ## 2026-10-27 — 语法候选题 v0.2 第十三轮（Claude）
 

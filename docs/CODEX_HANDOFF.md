@@ -6,7 +6,7 @@
 ## 2026-10-27 语法候选题 v0.2 第十二、十三轮独立复审（Codex，不通过）
 
 - **事实源**：[完整复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND12_13_CODEX_REVIEW.md)，含9项实际命令、77序号/158缺cue/原7控制/40恢复/35回归/77额外/120随机题逐题表、定向扫描、双跑SHA、导入和限制。以下独立结论覆盖Claude待审摘要，历史保留。
-- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；从1558465按用户授权核对并丢弃仅3处过时阻塞记录（HANDOFF/WORKLOG修改、未跟踪ROUND11_12报告），fetch/ff到`35e37c5f6157430b8294fb877de46f621daee887`。范围1558465..35e37c5，无普通merge/rebase/改写历史；37bd950保留上一轮报告及交接正文。本轮仅新增ROUND12_13报告并更新两交接；被审代码数据无改动。报告正文及交接将提交/推送此分支，不带skip-ci；提交后精确SHA和CI在下方补记。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；从1558465按用户授权核对并丢弃仅3处过时阻塞记录（HANDOFF/WORKLOG修改、未跟踪ROUND11_12报告），fetch/ff到`35e37c5f6157430b8294fb877de46f621daee887`。范围1558465..35e37c5，无普通merge/rebase/改写历史；37bd950保留上一轮报告及交接正文。本轮仅新增ROUND12_13报告并更新两交接；被审代码数据无改动。报告正文及交接已commit/push `0c5ede3e4029ed0b08ae9eaddb36a0bbf020879a`，不带skip-ci；此CI补记再普通commit/push同分支，最终HEAD以git log为准。
 - **结论**：0阻断/3应修/3建议。Z1：live up to的up被标prep/RP而漏出单位，3道auto（其中Y1新ID lives题）；Z2：省略/共享can be、must be的roasted/updated被答成非谓语，2道auto；Z3：恢复的profit-making来源T1仍把provided that的provided当动词干扰项，1道auto。合计6个不同剑桥题、5句。Z4更正负测5失败/2接口错误/2通过及is/fish子串误重复解释；Z5保守粒子筛选不能一概说原答案错；Z6否定倒装反例只作为建议，未发现现有题受害。机经本轮新增确认0，指定Y1机经恢复合理；历史暂缓不重新计数。
 - **关闭情况**：A8本轮范围关闭，77序号全部正确、原7控制6唯一/1合理needs；158缺cue全needs，部分有nor/yet但在目标内，不能说158句都没连词。Y1的not点名关闭、Y2六题关闭、Y4描述更正关闭；Y3原22题已降级，但Z1使完整性目标仍未完全解决。40恢复题当前38auto/2needs，38中37未见错/1有Z3；120随机auto本次未见新错，不担保全池。
 - **验证**：任务树`.venv-grammar-tools/bin/python -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`137通过；全新Flask-only按ci.yml13模块205运行/204通过/1跳过；Node通过；桌面venv在任务树`-m unittest tests.test_reading_study -v`22通过。validator0、text_fixes --check0、raw171篇content+groups全等、图谱渲染字节全等、4个改动Python Ruff check/format通过。新增测试旧代码：R12为4失败/0错误/2通过；R13为5失败/2错误/2通过。完整命令及细项在报告§10。
@@ -14,7 +14,7 @@
 - **表格**：7表/6×60/四项下拉/盲审；剑桥224=196auto+28needs，机经136。相对a3保留28题号/0同位置；Claude的10/1是与第十二轮比，非本次基准。老师判定若需迁移按题号，不按旧行号；本轮未动老师表或决定盲审范围。
 - **其他工作树/共享状态**：桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d、现behind87，既有7modified/22untracked（design-qa.md、HANDOFF、WORKLOG、style.css、3模板，及.tmp/artifacts/词汇资料/原文预览/TOEFL素材/设计提案等）未动，精确入口路径见之前交接或该树git status。本轮只借其venv。共享origin/main观察值已前进到`ee94abb30d56b3c9623c519f75c1ffa9679c65b5`，所以固定676569c模拟导入，未合main。
 - **本机辅助材料**：`/Users/zhouxin/.codex/audits/grammar-v02-round12-13-20261027`含快照/脚本/全池/缓存/日志/SQLite，仅本机。一次final_probes.py误建任务树根，执行前发现并移到仓库外；无被审文件修改、无遗留或提交，报告如实披露。开始的3处阻塞记录已按本次授权清理；结束前只提交本次3文档。
-- **CI/发布/下一步**：基线35e37c5的CI40511565346 test成功、lint存量advisory失败；本轮提交后独立核精确head。未推main、PR、后端部署、小程序上传/提审/发布或生产操作，未调用大模型API。下一位在此任务分支读完整报告，按用户下一步授权修Z1–Z3并回归6题及正常控制；更正Z4、考虑Z5/Z6。老师盲审范围与上线仍待用户决定。
+- **CI/发布/下一步**：基线35e37c5的CI40511565346 test成功、lint存量advisory失败；正文精确head的[CI40517825017](https://github.com/KB77GG/studytracker/actions/runs/40517825017)已completed/success：测试日志205运行/1跳过及Node成功；lint advisory失败112条诊断与35基线逐条相同，format跳过。本CI补记单独commit/push后，末次SHA/CI在最终回复报告；可直接从Git/Actions核实。未推main、PR、后端部署、小程序上传/提审/发布或生产操作，未调用大模型API。下一位在此任务分支读完整报告，按用户下一步授权修Z1–Z3并回归6题及正常控制；更正Z4、考虑Z5/Z6。老师盲审范围与上线仍待用户决定。
 
 ## 2026-10-27 语法候选题 v0.2 第十三轮（Claude，与第十二轮一起待复审）
 

@@ -953,3 +953,9 @@ Y1全库检查另运行标准库/ParseCache脚本：逐个ielts JSON句子，遍
 被审35e37c5的[CI 40511565346](https://github.com/KB77GG/studytracker/actions/runs/40511565346)已核：test成功，lint advisory失败、format因前一步失败跳过，整体success。审核文档提交后另核精确head的CI，并分别记录test与lint；不能拿基线CI冒充审核提交CI。
 
 下一步：实现方处理Z1–Z3并回归全部6题、共享助动词与词汇化连词的正常控制；更正Z4记录，按Z5/Z6收窄或清楚解释启发式边界。A8本次限定范围验收通过；老师盲审范围及后续上线仍待用户决定。本轮未推main、未开PR、未部署后端、未上传/提审/发布小程序、未操作生产数据库或服务器、未调用大模型API。
+
+### 11.1 审核正文提交后的CI实测
+
+审核正文与交接已commit/push `0c5ede3e4029ed0b08ae9eaddb36a0bbf020879a`，仅3份授权文档。[CI 40517825017](https://github.com/KB77GG/studytracker/actions/runs/40517825017)的head与此SHA一致、运行completed/success：测试日志205项运行、1项跳过，Node步骤success；lint advisory失败，**112条Python诊断与被审35e37c5的CI逐条相同**，format因前一步失败跳过。不是新增lint回归。
+
+实际核对命令：`gh run view 40517825017 --json status,conclusion,headSha,jobs`、`gh run view 40517825017 --log`，与基线40511565346同样命令对照；比较去掉时间戳后的路径、行列、规则码和消息。此CI补记作为第二个普通文档提交推同一分支、无skip-ci；末次精确SHA与CI结果在最终回复报告，Git历史和Actions均可独立取得。任务树仅本轮三文档有变化，未部署。
