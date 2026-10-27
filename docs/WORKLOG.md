@@ -4,6 +4,16 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-27 — 语法候选题 v0.2 第十四轮（Claude）
+
+- 修 Codex 第十二、十三轮复审的 Z1–Z3：
+  - live up to 的小品词漏出单位；
+  - 共享助动词的并列过去分词被判非谓语；
+  - provided that 被当动词干扰项。
+- 采纳 Z4–Z6：更正文档；whether or not 规则不再误删否定倒装的 not。
+- 剑桥 6 道降级、1 道去掉错误干扰项；auto_pass 40,333（剑桥 27,854）。
+- 两次生成一致，CI 列表 212 项通过（1 跳过）。待 Codex 复审；盲审范围待定；未推 main、未部署。
+
 ## 2026-10-27 — 第十二、十三轮独立复审完成（Codex，剑桥不通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`、`codex/grammar-item-candidates`；按用户授权清理仅3处过时阻塞记录，1558465快进固定35e37c5。只新增ROUND12_13报告、改两交接；未改被审代码数据，桌面树既有7modified/22untracked未动。正文及交接已commit/push `0c5ede3e4029ed0b08ae9eaddb36a0bbf020879a`；此CI补记另commit/push同分支，无skip-ci，最后HEAD以git log为准。

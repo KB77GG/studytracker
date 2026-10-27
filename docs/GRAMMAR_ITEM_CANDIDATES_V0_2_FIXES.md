@@ -819,7 +819,7 @@
 
 | 编号 | 问题 | 处理 |
 |---|---|---|
-| Y1 | whether or not、not just because 的 not 被当成动词否定，7 道（干扰项 `not … are carrying`、高亮 `【not】 just because it 【came】`） | 新增 `correlative_not()`：紧跟 or、或位于从句自己的主语或引导词之前的 not 不进动词单位；did not come、decided not to go 不变。<br>· 3 道 T1 的干扰项改正为 are carrying、to salvage、work，仍自动通过。<br>· 4 道 T6 因高亮改正而换题号：3 道自动通过（lives、came、are carrying），1 道是 7_1_p1 C-08 的 is，因句中 is 出现多次待复核。<br>· 机经另有 1 道 T1（`... and not what would later be identified`）因此恢复自动通过，核对正确 |
+| Y1 | whether or not、not just because 的 not 被当成动词否定，7 道（干扰项 `not … are carrying`、高亮 `【not】 just because it 【came】`） | 新增 `correlative_not()`：紧跟 or、或位于从句自己的主语或引导词之前的 not 不进动词单位；did not come、decided not to go 不变。<br>· 3 道 T1 的干扰项改正为 are carrying、to salvage、work，仍自动通过。<br>· 4 道 T6 因高亮改正而换题号：3 道自动通过（lives、came、are carrying），1 道是 7_1_p1 C-08 的 is，待复核（第十四轮更正，复审 Z4：句中只有一个整词 is，另一处是 fish 里的子串；`ambiguous()` 按子串查重，属于保守误降，不是句中有两个 is）。<br>· 机经另有 1 道 T1（`... and not what would later be identified`）因此恢复自动通过，核对正确 |
 | Y2 | for 引出的并列分句只在从句类型题里按并列处理，6 道动词身份、主句谓语、主语题仍按从属 | 新增 `for_clause()`：“for + 有自己主语的限定分句”的动词，T6 降为待复核（finiteness_mismatch）；全句根带这种分句时，T1 / T5 加 multiple_independent_clauses。主句动词本身的 T6 不受影响。剑桥正好是点名的 6 道，机经 1 道 T6 |
 | Y3 | date back、wrote down 的小品词被标成 advmod，动词单位漏掉，22 道 | 新增 `particle_outside_unit`：显示的动词后面紧跟“语料里被解析器标过 prt 至少十次的词”（up、out、down、on、off、in、back、over、away、about、through），但这里标成 advmod 时，该题降为待复核；动词单位不扩大（T1 答案冻结），T6 不继承 T1 的这个原因。点名的 22 道全部降级 |
 | Y4 | “40 道都是复合形容词的后半截”说法不准 | 第十一轮一节的更正已补全（见上） |
@@ -831,7 +831,7 @@
   - 基本都是短语动词或动词加小品词：went back、go back、spread out、opt out、carried out、stepped down、stripped away、moved away、comes down to、switched back on、stay away、bring back、drained away、moved on、roll in 等；
   - 另有 be down to、be over、be up to 这类“系动词 + 小品词”。
 
-  只显示动词本身确实不完整，降级成立。这条规则只降级，不判断小品词是否必须进单位。
+  （第十四轮更正，复审 Z5：原写“只显示动词本身确实不完整，降级成立”说过头了。was over 的 over 是系表补足，was 作谓语本身成立；普通方向副词也不一定是短语动词的小品词。准确的说法是：解析无法区分小品词、副词和补足语，所以送审；保守降级，不等于这 77 道原答案都错。）这条规则只降级，不判断小品词是否必须进单位。
 - **Y1、Y2、A8 嵌套在剑桥没有额外命中。**
 
 ### 统计（auto_pass / needs_review / rejected）
@@ -859,7 +859,7 @@
 | 检查 | 结果 |
 |---|---|
 | 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `0b738bbe23ea…`、`generation_report_v0_2.md` `c0464918f5d4…`、`review_batch_v0_2.jsonl` `4853a1a58089…`、`review_batch_v0_2.xlsx` `9aff2bae36ce…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
-| 测试 | 新增 9 项：Y1 3、Y2 2、Y3 2、A8 嵌套 2。修改前的结果：<br>· 5 项断言失败；<br>· 1 项接口错误：Y3 的控制例用到新的 Reason 常量；<br>· 3 项控制例通过：普通否定、because 从句、单个分句目标。<br>专项 137 项通过；只装 Flask 的 CI 列表 205 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 测试 | 新增 9 项：Y1 3、Y2 2、Y3 2、A8 嵌套 2。修改前的结果（第十四轮更正，复审 Z4）：<br>· 5 项断言失败；<br>· 2 项接口错误：Y3 的控制例和 A8 嵌套的单分句控制例都用到新的 Reason 常量；<br>· 2 项控制例通过：普通否定、because 从句。<br>原写“1 项接口错误、3 项通过”有误。<br>专项 137 项通过；只装 Flask 的 CI 列表 205 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
 | 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
 | 改动文件 Ruff | check 与 format --check 通过 |
 
@@ -871,6 +871,52 @@
 - 第十二轮、第十一轮的遗留不变：连词与目标之间隔插入语的并列分句按找不到连词处理；W5、V4 / V5；机经暂缓；老师盲审范围待定。
 - 修订和自查仍由同一方完成。
 
+## 第十四轮（2026-10-27，第十二、十三轮复审 Z1–Z6）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND12_13_CODEX_REVIEW.md`。复审结论是不通过，以剑桥题为准：
+- A8、Y1、Y2、Y4 的点名问题关闭；Y3 点名的 22 道关闭，但仍有漏网。
+- 新增 0 阻断、3 应修（Z1–Z3，6 道剑桥自动题，均非本轮引入）、3 建议（Z4–Z6）。
+
+本轮在 Codex 分支 8a82138 上快进后修改。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| Z1 | live up to 的 up 被标成 RP、依存却是 prep，既不进单位，也不触发 Y3 的 advmod 规则，高亮只到 lived / lives（3 道） | `loose_particle()` 也覆盖“紧挨动词、tag 为 RP、依存不是 prt”的词，降为待复核，单位仍不扩大。go on a hike 的 on 是 IN，不受影响。剑桥正好是点名的 3 道，机经 2 道 |
+| Z2 | 共享前项助动词的并列过去分词被判为非谓语：`can be ground ... and the seeds roasted`、`must be recalled, updated, and stored`（2 道） | 新增 `shared_auxiliary()`：过去分词作 conj、自己没有助动词、并列首项有 to 以外的助动词时，T6 降为待复核。-ing 结果状语（thereby cutting）和共享 to 的不定式不受影响。剑桥 3 道：点名的 roasted、updated，以及复审认为两可的 17_1_p2 D-03 designed |
+| Z3 | 恢复自动通过的 15_4_p3 B-03 里，`provided that` 的 provided 被当作动词干扰项（1 道） | 新增 `conjunction_participle()`：provided / providing / given / granted / assuming / supposing / seeing / considering 后面紧跟作引导词的 that 时，不当干扰项；provided an …、was provided、provided by … 照旧是动词。B-03 去掉 provided 后仍自动通过，主答案 ignores 正确，剩余干扰项 are not、do 正确。机经另 2 道去掉这类干扰项 |
+| Z4（建议） | 第十三轮负测口径有误；7_1_p1 C-08 的 is“重复”其实是 fish 里的子串 | 第十三轮一节已更正；`ambiguous()` 按子串查重的行为没有改。它只会让题目多待复核，不影响自动池安全 |
+| Z5（建议） | Y3 额外命中不能一概说“只显示动词确实不完整” | 第十三轮一节已改为“解析无法区分小品词、副词和补足语，送审”；小品词表的注释写明 by 也有十次但多作介词，未收 |
+| Z6（建议） | `correlative_not()` 的“位于主语之前”会误删否定倒装 `Did not the team win?` 的 not | 改为只看紧跟 or，或位于从句引导词 / wh 词之前。全库实际被排除的 15 处（whether or not 10、not just because / not that 3、not how / not what 2）不变，候选池无变化 |
+
+### 结果
+
+**与第十三轮比较：** 候选与题号不变。
+- 剑桥 auto → needs 6 道：Z1 3（T1 1、T6 2）、Z2 3（T6）。
+- Z3 只改了 1 道剑桥 T1 的干扰项，仍自动通过。
+- 机经：auto → needs 2 道（Z1），干扰项变化 2 道（Z3）。
+- Z6 无变化。
+
+**auto_pass：** 主句谓语 5834、动词身份 12656，其余不变；合计 40,341 → 40,333，其中剑桥 27,860 → 27,854。
+
+**抽查表：** 重抽后 21 个题号仍在表里，(工作表, 行号) 有 1 行相同。现在剑桥 230 行（自动 196、待复核 34），机经 130 行。六张表各 60 行，四项下拉，盲审。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `74c949ee7e76…`、`generation_report_v0_2.md` `df38a427bacf…`、`review_batch_v0_2.jsonl` `57540dcfebb9…`、`review_batch_v0_2.xlsx` `6aef0550a2f8…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
+| 测试 | 新增 7 项：Z6 1、Z1 2、Z2 2、Z3 2。修改前的结果：<br>· 4 项断言失败；<br>· 1 项接口错误：Z2 的控制例用到新的 Reason 常量；<br>· 2 项控制例通过：go on a hike、provided by banks。<br>专项 144 项通过；只装 Flask 的 CI 列表 212 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十四轮遗留
+
+- `ambiguous()` 按子串查重（Z4）没有改：会多降一些题，不会让错题自动通过。
+- Z2 只看过去分词。共享助动词的其他形式（如省略 be 的形容词谓语）没有检查。
+- Z3 的连词判断只看“分词 + that”。given the right context 这类介词用法仍按标注作非谓语处理，这是教学口径问题，复审也建议统一。
+- 之前各轮的遗留不变：小品词不并入单位、连字符动词不合并、插入语隔开的并列分句、W5、V4 / V5、机经暂缓、盲审范围待定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十三轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十四轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
