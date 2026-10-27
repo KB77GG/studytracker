@@ -1577,6 +1577,34 @@ class ForClauseTests(unittest.TestCase):
         )
 
 
+class LooseParticleTests(unittest.TestCase):
+    """Review Y3: "dates back" with back parsed as advmod shows the verb without its particle."""
+
+    def items(self, particle_dep, word="back", following=("to", "prep", 1, "ADP", "IN")):
+        rows = [
+            ("Records", "nsubj", 1, "NOUN", "NNS"),
+            ("date", "ROOT", 1, "VERB", "VBP"),
+            (word, particle_dep, 1, "ADV", "RB"),
+            (following[0], following[1], following[2], following[3], following[4]),
+            ("1970", "pobj", 3, "NUM", "CD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        sentence, view = tree(rows)
+        tags = [("Records", "subject", 1), (f"date {word}", "verb_phrase", 1)]
+        items, _ = generate(sentence, view, tags)
+        return by_template(items, "main_verb_tap")[0], by_template(items, "finite_or_not")[0]
+
+    def test_particle_parsed_as_adverb_goes_to_review(self):
+        for item in self.items("advmod"):
+            self.assertEqual(item["status"], "needs_review", item["template"])
+            self.assertIn(R.PARTICLE_OUTSIDE_UNIT, item["reasons"])
+
+    def test_particle_in_the_unit_and_plain_adverbs_unaffected(self):
+        for dep, word in (("prt", "back"), ("advmod", "quickly"), ("advmod", "also")):
+            for item in self.items(dep, word):
+                self.assertNotIn(R.PARTICLE_OUTSIDE_UNIT, item["reasons"], (dep, word))
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 

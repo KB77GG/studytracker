@@ -86,6 +86,8 @@ class Reason(StrEnum):
     MULTIPLE_INDEPENDENT_CLAUSES = "multiple_independent_clauses"
     HYPHENATED_WORD_SPLIT = "hyphenated_word_split"
     COORDINATE_CUE_MISSING = "coordinate_cue_missing"
+    PARTICLE_OUTSIDE_UNIT = "particle_outside_unit"
+    NESTED_COORDINATION = "nested_coordination"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

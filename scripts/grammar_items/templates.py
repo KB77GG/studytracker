@@ -44,7 +44,17 @@ AGE_UNITS = frozenset({"day", "week", "month", "year"})
 # Reasons on the T1 item that say nothing about the root verb's own identity (T6), which
 # checks its own highlight for a split hyphenated word.
 T1_ONLY_REASONS = frozenset(
-    {R.VERB_UNIT_OUTSIDE_SPAN, R.MULTIPLE_INDEPENDENT_CLAUSES, R.HYPHENATED_WORD_SPLIT}
+    {
+        R.VERB_UNIT_OUTSIDE_SPAN,
+        R.MULTIPLE_INDEPENDENT_CLAUSES,
+        R.HYPHENATED_WORD_SPLIT,
+        R.PARTICLE_OUTSIDE_UNIT,
+    }
+)
+# Words the parser labels prt at least ten times in this corpus: when one right after a verb is
+# labelled advmod instead ("dates back to", "wrote down"), particle and adverb cannot be told apart.
+PARTICLES = frozenset(
+    {"up", "out", "down", "on", "off", "in", "back", "over", "away", "about", "through"}
 )
 QUOTE_MARKS = frozenset("'\"‘’“”")
 # Words that make a clause they lead a noun, relative or adverbial clause.
@@ -239,6 +249,26 @@ def verb_unit(view, head, start=None, end=None):
         and not correlative_not(view, head, c)
     )
     return sorted([head, *children], key=lambda t: t.i)
+
+
+def loose_particle(view, tokens):
+    """A shown verb whose particle the parser left out of the unit (review Y3): "dates back
+    to the 1970s" shows only dates, "wrote down" only wrote. Whether such a word is a particle
+    or an ordinary adverb is not settled by the parse, so the item goes to review; the unit is
+    not extended (the T1 answer stays frozen)."""
+    inside = {t.i for t in tokens}
+    for token in tokens:
+        if token.pos not in {"VERB", "AUX"}:
+            continue
+        for child in view.children(token):
+            if (
+                child.dep == "advmod"
+                and child.i == token.i + 1
+                and child.i not in inside
+                and child.text.lower() in PARTICLES
+            ):
+                return [R.PARTICLE_OUTSIDE_UNIT]
+    return []
 
 
 def outside_span(tokens, span):
@@ -467,7 +497,7 @@ def main_distractors(ctx, unit):
                 continue  # An auxiliary shown as part of its head's unit.
             unit_tokens = verb_unit(ctx.view, token)
             parts = [t for t in unit_tokens if t.i not in excluded]
-            reasons += outside_span(parts, span)
+            reasons += outside_span(parts, span) + loose_particle(ctx.view, parts)
             value = targets.setdefault(token.i, {**unit_target(ctx.sentence, parts), "roles": []})
             if span.role not in value["roles"]:
                 value["roles"].append(span.role)
@@ -531,6 +561,7 @@ def main_verb(ctx):
     unit = verb_unit(ctx.view, root, span.start, span.end)
     distractors, distractor_reasons = main_distractors(ctx, unit)
     reasons = main_checks(ctx, span) + outside_span(verb_unit(ctx.view, root), span)
+    reasons += loose_particle(ctx.view, unit)
     reasons += distractor_reasons + independent_clauses(ctx.view)
     item = ctx.emit(
         TEMPLATES[0],
@@ -853,7 +884,7 @@ def finite_or_not(ctx, main_item, main_rejections):
         if not matches:
             reasons.append(R.FINITENESS_MISMATCH)
         unit = verb_unit(ctx.view, head)
-        reasons.extend(outside_span(unit, span))
+        reasons.extend(outside_span(unit, span) + loose_particle(ctx.view, unit))
         participle = (
             variant == "non_finite"
             and not span.role.startswith("gerund")
