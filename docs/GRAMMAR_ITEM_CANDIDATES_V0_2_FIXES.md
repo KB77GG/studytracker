@@ -886,7 +886,7 @@
 | Z3 | 恢复自动通过的 15_4_p3 B-03 里，`provided that` 的 provided 被当作动词干扰项（1 道） | 新增 `conjunction_participle()`：provided / providing / given / granted / assuming / supposing / seeing / considering 后面紧跟作引导词的 that 时，不当干扰项；provided an …、was provided、provided by … 照旧是动词。B-03 去掉 provided 后仍自动通过，主答案 ignores 正确，剩余干扰项 are not、do 正确。机经另 2 道去掉这类干扰项 |
 | Z4（建议） | 第十三轮负测口径有误；7_1_p1 C-08 的 is“重复”其实是 fish 里的子串 | 第十三轮一节已更正；`ambiguous()` 按子串查重的行为没有改。它只会让题目多待复核，不影响自动池安全 |
 | Z5（建议） | Y3 额外命中不能一概说“只显示动词确实不完整” | 第十三轮一节已改为“解析无法区分小品词、副词和补足语，送审”；小品词表的注释写明 by 也有十次但多作介词，未收 |
-| Z6（建议） | `correlative_not()` 的“位于主语之前”会误删否定倒装 `Did not the team win?` 的 not | 改为只看紧跟 or，或位于从句引导词 / wh 词之前。全库实际被排除的 15 处（whether or not 10、not just because / not that 3、not how / not what 2）不变，候选池无变化 |
+| Z6（建议） | `correlative_not()` 的“位于主语之前”会误删否定倒装 `Did not the team win?` 的 not | 改为只看紧跟 or，或位于从句引导词 / wh 词之前。全库实际被排除的 15 处不变（紧跟 or 的 9 处：whether or not 8、or not do 1；引导词前 3 处：not just because、not that ×2；wh 词前 3 处：not how、not what ×2），候选池无变化 |
 
 ### 结果
 
