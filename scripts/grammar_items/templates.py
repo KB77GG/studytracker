@@ -76,6 +76,8 @@ DASH = re.compile(r"—|(?<!\d)–|–(?!\d)|(?<!\d) - | - (?!\d)")
 BRACKET_PAIRS = {"(": ")", "[": "]"}
 # Coordinating conjunctions that spaCy may tag as mark; a clause led by them is still coordinate.
 COORDINATING_MARKS = frozenset({"for", "so", "yet"})
+# Every coordinating conjunction: none of them makes a first conjunct subordinate (review X4).
+COORDINATORS = COORDINATING_MARKS | {"and", "but", "or", "nor"}
 # Forms of be, and the complements that make a clause after it an ordinary adverbial
 # ("It was cold because ...") rather than the be's own complement ("That was because ...").
 BE_FORMS = frozenset(
@@ -231,7 +233,12 @@ def relative_adverb_risk(view, span):
     before = [t for t in before if not t.text.isspace()]
     risky = bool(before) and before[-1].pos in {"NOUN", "PROPN", "NUM"}
     comma = [t for t in view.tokens if t.end <= span.start][-1:]
-    after_age = bool(comma) and comma[0].text == "," and age_expression(before[-3:])
+    after_age = (
+        tokens[0].text.lower() == "when"
+        and bool(comma)
+        and comma[0].text == ","
+        and age_expression(before[-3:])
+    )
     return [R.POSSIBLE_RELATIVE_ADVERB] if risky or after_age else []
 
 
@@ -239,7 +246,7 @@ def age_expression(words):
     """An age such as "six weeks old" followed by a comma and when ("as early as six weeks old,
     when babies begin to laugh"): the when clause may refer back to that age, like a
     non-restrictive relative clause (review W4). "He was ten years old when he moved" has no
-    comma and stays an adverbial clause."""
+    comma and stays an adverbial clause. Only when is checked against an age (review X4)."""
     if len(words) != 3:
         return False
     number, unit, old = words
@@ -590,7 +597,7 @@ def coordinate_function_overlap(view, head):
         first = view.tokens[first.head]
     if first.i == head.i or first.dep == "ROOT":
         return []
-    marks = {c.text.lower() for c in view.children(first) if c.dep == "mark"} - COORDINATING_MARKS
+    marks = {c.text.lower() for c in view.children(first) if c.dep == "mark"} - COORDINATORS
     lead = next(t for t in sorted(view.subtree(first), key=lambda t: t.i) if not t.is_punct)
     return [R.COORDINATE_FUNCTION_OVERLAP] if marks or lead.text.lower() in WH_WORDS else []
 

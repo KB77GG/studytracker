@@ -1441,6 +1441,29 @@ class CoordinateOverlapTests(unittest.TestCase):
         item, _ = self.t3(reported, tags, "they left")
         self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
 
+    def test_and_parsed_as_mark_is_no_subordinator(self):
+        # Review X4: a coordinator the parser hangs on the first conjunct as mark.
+        reported = [
+            ("The", "det", 1, "DET", "DT"),
+            ("trees", "nsubj", 2, "NOUN", "NNS"),
+            ("died", "ccomp", 8, "VERB", "VBD"),
+            ("and", "mark", 2, "CCONJ", "CC"),
+            ("they", "nsubj", 5, "PRON", "PRP"),
+            ("left", "conj", 2, "VERB", "VBD"),
+            (",", "punct", 8, "PUNCT", ","),
+            ("he", "nsubj", 8, "PRON", "PRP"),
+            ("said", "ROOT", 8, "VERB", "VBD"),
+            (".", "punct", 8, "PUNCT", "."),
+        ]
+        tags = [
+            ("The trees died and they left", "direct_speech", 1),
+            ("they left", "coordinated_clause", 2),
+            ("he", "subject", 1),
+            ("said", "verb", 1),
+        ]
+        item, _ = self.t3(reported, tags, "they left")
+        self.assertNotIn(R.COORDINATE_FUNCTION_OVERLAP, item["reasons"])
+
 
 class IndependentClausesTests(unittest.TestCase):
     """Review W2: a second main clause across ; or : makes "the main verb/subject" not unique."""
@@ -1535,7 +1558,7 @@ class IndependentClausesTests(unittest.TestCase):
 class AgeExpressionTests(unittest.TestCase):
     """Review W4: ", when ..." after an age may refer back to it like a relative clause."""
 
-    def clause_items(self, comma):
+    def clause_items(self, comma, marker="when"):
         rows = [
             ("Babies", "nsubj", 1, "NOUN", "NNS"),
             ("laugh", "ROOT", 1, "VERB", "VBP"),
@@ -1547,7 +1570,7 @@ class AgeExpressionTests(unittest.TestCase):
         rows += [(",", "punct", 1, "PUNCT", ",")] if comma else []
         start = len(rows)
         rows += [
-            ("when", "advmod", start + 2, "SCONJ", "WRB"),
+            (marker, "advmod", start + 2, "SCONJ", "WRB"),
             ("they", "nsubj", start + 2, "PRON", "PRP"),
             ("smile", "advcl", 1, "VERB", "VBP"),
             (".", "punct", 1, "PUNCT", "."),
@@ -1557,14 +1580,14 @@ class AgeExpressionTests(unittest.TestCase):
             ("Babies", "subject", 1),
             ("laugh", "verb", 1),
             ("at six weeks old", "prepositional_phrase", 1),
-            ("when they smile", "time_clause", 2),
+            (f"{marker} they smile", "time_clause", 2),
         ]
         items, _ = generate(sentence, view, tags)
         return [
             i
             for i in items
             if i["template"] in {"clause_boundary", "clause_type_classify", "adverbial_relation"}
-            and (i["target"] or i["answer"]["spans"][0])["text"].startswith("when")
+            and (i["target"] or i["answer"]["spans"][0])["text"].startswith(marker)
         ]
 
     def test_when_after_an_age_and_comma_is_not_auto_pass(self):
@@ -1577,6 +1600,13 @@ class AgeExpressionTests(unittest.TestCase):
 
     def test_when_after_an_age_without_comma_stays_adverbial(self):
         items = self.clause_items(comma=False)
+        self.assertEqual(len(items), 3)
+        for item in items:
+            self.assertNotIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"], item["template"])
+
+    def test_only_when_is_checked_against_an_age(self):
+        # Review X4: the age rule was validated for when only.
+        items = self.clause_items(comma=True, marker="where")
         self.assertEqual(len(items), 3)
         for item in items:
             self.assertNotIn(R.POSSIBLE_RELATIVE_ADVERB, item["reasons"], item["template"])
