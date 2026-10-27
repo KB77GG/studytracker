@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5832 | 547 | 6367 |
+| main_verb_tap | 5822 | 557 | 6367 |
 | clause_boundary | 4678 | 2584 | 2694 |
 | clause_type_classify | 11401 | 3486 | 1331 |
 | adverbial_relation | 399 | 657 | 2561 |
 | subject_span | 5365 | 819 | 6562 |
-| finite_or_not | 12652 | 1823 | 6549 |
+| finite_or_not | 12641 | 1834 | 6549 |
 
 ## 范围
 
@@ -47,8 +47,8 @@
 ```json
 {
   "G-S01": {
-    "auto_pass": 2722,
-    "needs_review": 235
+    "auto_pass": 2721,
+    "needs_review": 236
   },
   "G-S02": {
     "auto_pass": 5365,
@@ -79,16 +79,16 @@
     "auto_pass": 399
   },
   "G-N01": {
-    "auto_pass": 10806,
-    "needs_review": 1723
+    "auto_pass": 10795,
+    "needs_review": 1734
   },
   "G-N04": {
     "auto_pass": 1846,
     "needs_review": 100
   },
   "G-L01": {
-    "auto_pass": 3110,
-    "needs_review": 312
+    "auto_pass": 3101,
+    "needs_review": 321
   }
 }
 ```
@@ -134,6 +134,7 @@
   "too_long": 43,
   "heading": 32,
   "tagged_fragment": 30,
+  "linking_verb_as_auxiliary": 22,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
   "lexical_conjunction": 9,
@@ -186,7 +187,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 349,
+          "pool_size": 348,
           "sample_size": 3
         },
         {
@@ -198,19 +199,19 @@
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 1920,
+          "pool_size": 1917,
           "sample_size": 16
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1032,
+          "pool_size": 1028,
           "sample_size": 9
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 959,
+          "pool_size": 957,
           "sample_size": 8
         }
       ]
@@ -406,7 +407,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "hard",
-          "pool_size": 1285,
+          "pool_size": 1284,
           "sample_size": 5
         },
         {
@@ -418,19 +419,19 @@
         {
           "source_kind": "reading_test",
           "difficulty": "easy",
-          "pool_size": 2929,
+          "pool_size": 2927,
           "sample_size": 12
         },
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3362,
+          "pool_size": 3357,
           "sample_size": 13
         },
         {
           "source_kind": "reading_test",
           "difficulty": "medium",
-          "pool_size": 2386,
+          "pool_size": 2383,
           "sample_size": 10
         }
       ]
@@ -1948,7 +1949,7 @@
       "main_verb_tap": 62,
       "subject_span": 56
     },
-    "only_reason": 418
+    "only_reason": 417
   },
   "list_item": {
     "sentences": 15,
@@ -2284,7 +2285,7 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：答案、目标或干扰项的起止点落在连字符词内部（re-establish 的 re、water-borne 的 borne）时，该题 needs_review（hyphenated_word_split；T6 按自己的高亮判断）；单独的连字符不当动词干扰项；去标点时紧跟数字的 % 保留（94%）。
 - v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing），目标本身又连着两个分句时 needs_review（nested_coordination）。
 - v0.2：whether or not、not just because 的 not 不进动词单位；for + 有主语的限定分句按并列处理（T6 finiteness_mismatch，T1 / T5 multiple_independent_clauses）；动词后紧跟语料里标过 prt 的词却被标成 advmod，或标成 RP 却未并入时 needs_review（particle_outside_unit，动词单位不扩大）。
-- v0.2：过去分词与带助动词的前项并列、自己没有助动词时，动词身份题不自动判非谓语（shared_auxiliary）；provided / given / considering 等 + that 且像引导词那样挂、没有自己的主语和助动词时是连词，不当干扰项，动词身份题 needs_review（lexical_conjunction）；be 后面的过去分词挂成 dep 或成串并列的 acomp 时 needs_review（participle_after_be）。
+- v0.2：过去分词与带助动词的前项并列、自己没有助动词时，动词身份题不自动判非谓语（shared_auxiliary）；provided / given / considering 等 + that 且像引导词那样挂、没有自己的主语和助动词时是连词，不当干扰项，动词身份题 needs_review（lexical_conjunction）；be 后面的过去分词挂成 dep 或成串并列的 acomp 时 needs_review（participle_after_be）；become / remain 等系动词被解析成助动词时 needs_review（linking_verb_as_auxiliary）。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
 - v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
