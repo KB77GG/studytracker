@@ -691,10 +691,13 @@ def predicative_clause(view, head):
 def prepositional_target(view, head):
     """A T4 target headed by a preposition with a noun-phrase object ("until the point where
     ... reduces productivity", "before the next harvest") or a subjectless -ing complement
-    ("after listening to ...") is a prepositional phrase, not the adverbial clause the prompt
-    names, even when a relative clause sits inside it (review AC1). A preposition taking a full
-    clause ("until after they've happened", or "after training stops" with stops parsed as a
-    noun) stays, as do conjunction-led elliptical clauses ("if sustained")."""
+    ("after listening to ...") may not be the adverbial clause the prompt names (review AC1),
+    so it goes to review. This is a signal, not a verdict (review AD1): the hits also include
+    compound conjunctions ("by the time ...", "in case ...") and after + -ing, which some
+    grammars call a non-finite clause; the project groups finite clauses apart from phrases
+    and non-finite forms, and a teacher settles the label. A preposition taking a full clause
+    ("until after they've happened", or "after training stops" with stops parsed as a noun)
+    stays, as do conjunction-led elliptical clauses ("if sustained")."""
     if head is None or head.dep != "prep":
         return []
 
