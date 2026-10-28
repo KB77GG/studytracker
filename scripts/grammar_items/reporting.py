@@ -282,6 +282,9 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "助动词时是连词，不当干扰项，动词身份题 needs_review（lexical_conjunction）；be 后面的过去分词"
             "挂成 dep 或成串并列的 acomp 时 needs_review（participle_after_be）；become / remain 等系动词被解析成"
             "助动词时 needs_review（linking_verb_as_auxiliary）。",
+            "v0.2：状语从句关系题（T4）的目标中心是介词、后接名词短语（until the point where ...）或没有"
+            "主语的 -ing 形式（after listening to ...）时，目标是介词短语而非从句，needs_review"
+            "（prepositional_target）；介词后接完整从句（until after they've happened）不受影响。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
