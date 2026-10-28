@@ -1030,7 +1030,7 @@
 | 机经 | 3 | 2 | 1 |
 
 - 剑桥那 11 道本来就待复核的题：by the time ×3、in order to ×5、in case、at exactly the same time as、In the years that have followed。其中 by the time、in case、at the same time as 在教学上常作为复合连词，规则只是把它们一并送复核，不判它们错。
-- 机经 2 道降级：before the next harvest（纯介词短语）、after listening to and observing Alex（介词 + 动名词）。
+- 机经 2 道降级：before the next harvest（纯介词短语）、after listening to and observing Alex（介词 + 动名词）。（第十七轮复审 AD1 补充：after + -ing 也有非限定从句的分析，这里只是送复核，不判定类别错误。）
 
 改阅读解析后，与第十六轮比较：
 
@@ -1073,6 +1073,54 @@
   - 盲审范围待定。
 - 修订和自查仍由同一方完成。
 
+## 第十八轮（2026-10-28，第十七轮复审 AD1）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND17_CODEX_REVIEW.md`。复审结论是有条件通过，以剑桥题为准：
+- AC1、AC2 关闭。
+- 新增 0 阻断、0 应修、1 建议（AD1）。
+- 机经新增 0 项。
+
+“有条件”指保留 needs_review 隔离和人工验收边界；剑桥 27,824 道自动题并没有逐题人工审定，也不能据此直接上线。
+
+本轮在 Codex 分支 f7e072b 上快进后修改。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| AD1（建议） | `prepositional_target` 的函数说明和计数说明写成“目标是介词短语而非从句”。实际命中里还有 by the time / in case 这类复合连词，以及 after + -ing（有的语法书称为非限定从句），不能据解析标签断言类别必错 | 两处说明改为：目标可能是介词结构、复合连词或非限定结构，是否属于题干所说的状语从句由人工判断；只送复核，不判定类别错误。并写明项目暂按传统口径区分限定从句与短语 / 非谓语。规则本身不变。第十七轮一节对 after + -ing 的描述补了一句说明 |
+
+### 结果
+
+- 候选池、抽查表 JSONL / XLSX 与第十七轮逐字节相同。
+- 两份报告只有计数说明那一行变化。
+- auto_pass 仍为 40,298，其中剑桥 27,824。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：<br>· `generation_report_v0_2.json` `ed9185402c42…`<br>· `generation_report_v0_2.md` `ff8266ac1881…`<br>· `review_batch_v0_2.jsonl` `782ecd3c5b34…`（未变）<br>· `review_batch_v0_2.xlsx` `3a36f72b67d8…`（未变）<br>`GRAMMAR_GRAPH_V0_REVIEW.md` 重新渲染无变化 |
+| 测试 | 没有新增测试（只改说明文字）。专项 155 项通过；只装 Flask 的 CI 列表 223 项运行、1 项按设计跳过 |
+| 数据 | 未改阅读解析；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 仍待用户决定
+
+1. 是否授权恢复 A-03 原文的 10⁹。复审 §8 建议：
+   - 正文用 Unicode 上标 10⁹，显示不稳定时退用 10^9；
+   - 同步 static 原文、阅读解析的 sentence、structure 和难点；
+   - 重新解析、生成并导入。
+   
+   复审还提醒：剑桥原始抓取文件不在仓库里，将来如果从原始数据重建，要防止 109 回流。
+2. 老师盲审范围。
+3. T1 答案规则（小品词、被动分词、系动词的判分中心）。
+4. 非并列 T2 多目标。例如 ielts15_test3_p3 G-02 的“划出句中的定语从句”，句中还有一个没标的定语从句，答案不唯一。这是已披露的存量问题，第十二轮改题干只覆盖了并列分句。可选做法：
+   - 题干写明定位；
+   - 接受多个答案；
+   - 统一送复核。
+5. 上线授权。
+
+修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十七轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十八轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。

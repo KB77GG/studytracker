@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-28 — 语法候选题 v0.2 第十八轮（Claude，AD1 措辞）
+
+- 在 Codex f7e072b（第十七轮复审：有条件通过，0 阻断 / 0 应修 / 1 建议）上快进。
+- AD1：`prepositional_target` 的说明改为“送复核信号，类别由人工判断”；规则和题目不变。候选池、抽查表与第十七轮逐字节相同，报告只变计数说明一行。
+- 复审循环已收敛。待用户决定：10⁹ 恢复、盲审范围、T1 答案规则、非并列 T2 多目标、上线授权。
+- 未部署、未推 main、未开 PR。
+
 ## 2026-10-28 — 第十七轮独立复审完成（Codex，剑桥有条件通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，dd9f6e7干净ff-only到固定29701e7；只新增ROUND17审核、更新两交接，被审文件及桌面既有改动未碰。正文三文档已commit/push 2d746a2c4da97748bf361581c087ff1309d20b27，本CI补记再普通commit/push本分支，无skip-ci、不amend。
