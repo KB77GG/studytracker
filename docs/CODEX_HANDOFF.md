@@ -13,7 +13,7 @@
 - **生成/导入**：Mac27.0.1 arm64、Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU；仓库外完整297快照用G连续两次generate --seed 20261018，4文件双跑全等，JSONL/XLSX与提交相同，两报告仅Python版本一行差。50241候选、auto40298/剑桥27824；E-02删3增1；共同Cam6/Jij2降级，其他字段0变；78回归/7过滤相同。完整676569c快照2853 blobs核验，两个独立本机SQLite分别先导main再dd9/297，均236updated/81skipped/0failed，2篇旧数据已因标签差异updated的解释成立。
 - **表格**：7表、6×60、四项下拉、盲审；Cam232=196auto+36needs/Jij128；旧题号10、同位置0。旧老师判定须按题号核对，不能按行号迁移。盲审范围待定。
 - **其他树/本机资料**：桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind87，既有7modified/22untracked入口未动，只借venv；具体路径见其git status。共享origin/main=ee94abb30d56b3c9623c519f75c1ffa9679c65b5；导入仍固定676569c。O=`/Users/zhouxin/.codex/audits/grammar-v02-round17-20261028`含快照/缓存/全池/脚本/日志/SQLite，仅本机可见。
-- **提交/CI/发布**：本条写入时仅本报告、HANDOFF、WORKLOG共3文档有改动；准备按用户授权普通commit/push本分支、无skip-ci，随后核验精确head CI。被审297的CI40612434680 test223运行/1跳过及Node成功，lint advisory失败112条，format跳过。未推main、开PR、部署后端、生产操作、小程序上传/提审/发布或调用大模型API。最终SHA和精确CI在补记/最终回复报告。
+- **提交/CI/发布**：正文三文档已commit/push `2d746a2c4da97748bf361581c087ff1309d20b27`，可跨电脑获取；任务树当时干净同步。本CI补记仍只改这3文档，再普通commit/push、无skip-ci、不amend。[精确head CI40624557217](https://github.com/KB77GG/studytracker/actions/runs/40624557217)整体success：test223运行/1跳过及Node成功；lint advisory失败112条与被审297基线逐条相同，format跳过。未推main、开PR、部署后端、生产操作、小程序上传/提审/发布或调用大模型API。最终SHA和精确CI在补记/最终回复报告。
 - **下一步**：读报告的关闭范围和AD1；如获授权再按§8恢复10⁹，重生成并核对阅读页/导入，明确非并列T2多目标和教学口径、安排老师盲审。其他任务已上线状态不算本轮部署。
 
 ## 2026-10-28 语法候选题 v0.2 第十七轮（Claude，待复审）

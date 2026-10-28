@@ -501,7 +501,7 @@ AST比较dd9和297取得4个新增测试；每项独立子进程加载旧checks/
 
 ## 11. CI、交接、限制与下一步
 
-被审head29701e7的[CI40612434680](https://github.com/KB77GG/studytracker/actions/runs/40612434680)整体success；test成功（223运行/1跳过、Node成功），lint advisory失败112条、format步骤跳过。全局lint与本轮4文件Ruff通过分开报告。审核文档提交后将核验精确head的test和lint并补记；此处不以被审head的成功代替最终审核提交的CI。
+被审head29701e7的[CI40612434680](https://github.com/KB77GG/studytracker/actions/runs/40612434680)整体success；test成功（223运行/1跳过、Node成功），lint advisory失败112条、format步骤跳过。全局lint与本轮4文件Ruff通过分开报告。审核正文与交接三文档已commit/push到本分支，精确head为 `2d746a2c4da97748bf361581c087ff1309d20b27`；[CI40624557217](https://github.com/KB77GG/studytracker/actions/runs/40624557217)已completed/success。**test成功：223运行/1跳过，Node成功；lint advisory失败：112条诊断与297基线逐条相同，format步骤跳过。** 本CI补记仅改相同三文档，再普通commit/push，不amend、无skip-ci；末次提交及它的精确head CI在最终回复报告。
 
 - 本轮按任务优先级只对剑桥做120随机题和定向扫描，机经只核验新规则3题；不是机经全量人工审定。
 - 必做8项均完成，没有跳过或变更用户基线。使用仓库外快照避免覆盖交付文件；使用同环境缓存生成两遍，另24句现解析。报告版本行差异如预期。

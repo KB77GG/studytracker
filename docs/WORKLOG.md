@@ -6,10 +6,10 @@
 
 ## 2026-10-28 — 第十七轮独立复审完成（Codex，剑桥有条件通过）
 
-- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，dd9f6e7干净ff-only到固定29701e7；只新增ROUND17审核、更新两交接，被审文件及桌面既有改动未碰。本记录及审核将按授权普通commit/push本分支，无skip-ci。
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，dd9f6e7干净ff-only到固定29701e7；只新增ROUND17审核、更新两交接，被审文件及桌面既有改动未碰。正文三文档已commit/push 2d746a2c4da97748bf361581c087ff1309d20b27，本CI补记再普通commit/push本分支，无skip-ci、不amend。
 - AC1/AC2本轮修复关闭；新增0阻断/0应修/1建议AD1（复核原因的措辞）；机经新增0。E-02新T3外层PP答案成立，A-03全12题needs，恢复10⁹仍待授权。不能把有条件通过当作全库人工验收/上线许可。
 - 155专项、全新Flask-only223运行/1跳过、reading22、Node、Ruff通过；validator0/--check0/raw171/图谱一致；4新测旧码2断言失败/2接口错误。双生成全等、与提交两报告仅Python版本差；50241候选/auto40298/剑桥27824；78回归/7过滤不变；完整676569c分别导dd9/297均236/81/0，2篇早已因标签updated。
-- seed20261106剑桥120auto逐题表（1旧多解提醒）和新扫描32题/17目标见报告；24句现解析核缓存一致。表Cam232/Jij128，旧题号10/同位置0。被审基线CI40612434680 test成功，lint存量advisory失败112条，待核验审核提交精确CI。未部署/生产操作/PR/推main，盲审范围待定。下一步按授权恢复原文、统一教学口径和人工验收。
+- seed20261106剑桥120auto逐题表（1旧多解提醒）和新扫描32题/17目标见报告；24句现解析核缓存一致。表Cam232/Jij128，旧题号10/同位置0。正文精确head的[CI40624557217](https://github.com/KB77GG/studytracker/actions/runs/40624557217)整体success，test223运行/1跳过和Node成功；lint advisory失败112条与被审297基线逐条相同，format跳过。末次补记提交的精确CI最终回复另报。未部署/生产操作/PR/推main，盲审范围待定。下一步按授权恢复原文、统一教学口径和人工验收。
 
 ## 2026-10-28 — 语法候选题 v0.2 第十七轮（Claude，待复审）
 
