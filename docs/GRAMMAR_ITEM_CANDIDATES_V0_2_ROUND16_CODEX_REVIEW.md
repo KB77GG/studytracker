@@ -509,3 +509,11 @@ pdftoppm -f 9 -l 9 -scale-to 1600 -singlefile -png tmp/pdfs/cambridge11-excerpt.
 - O内快照、全池、缓存、脚本、日志、SQLite、PDF页只本机可见；三份正式文档commit并push后才可跨电脑获取。没有生产服务器/数据库、部署、main推送、PR、小程序上传/提审/发布、LLM API操作。
 - 所有8项必检均已完成，没有无法完成而绕过的项目。执行位置在仓库外完整快照，复用缓存并补49句现解析；使用固定main676而不追随共享origin/main移动，均如实列出。
 - 发现问题只记录不修。下一位先读AC1/AC2：按后续授权统一T4类别门槛并保留合法省略控制；依据官方原版修上标或用通用source_quality送审，不用ID黑名单。AB1/AB2无需重做；老师盲审范围、系表等教学口径及上线仍待用户决定。
+## 13. 提交后的CI与同步补记
+
+正文及两份交接已普通commit/push到`codex/grammar-item-candidates`：**`1f9943a20edbdeb94ac8f2a394fc2435438a5fdd`**。该精确head的[CI40609642310](https://github.com/KB77GG/studytracker/actions/runs/40609642310)已completed/success：
+
+- **test成功**：219项运行、1项按设计跳过，Node拼写队列步骤成功。
+- **lint advisory失败**：112条诊断与被审8e04的CI40605965839逐条相同；format步骤因前一项失败而跳过。与本轮4个改动Python本地Ruff check/format通过分别报告。
+
+本次CI补记仅再改相同三文档，普通commit/push同分支，无skip-ci、不amend。最后补记提交的SHA与它自己的精确CI在最终回复中报告，避免把正文提交CI冒充末次CI。正文、审核表和交接已可跨电脑获取；O内探针/缓存/SQLite/PDF仍只本机可见。未推main、未开PR、未部署或操作生产；桌面树既有改动未碰。
