@@ -1006,6 +1006,73 @@
   - 盲审范围待定。
 - 修订和自查仍由同一方完成。
 
+## 第十七轮（2026-10-28，第十六轮复审 AC1–AC2）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND16_CODEX_REVIEW.md`。复审结论是不通过，以剑桥题为准：
+- AB1、AB2 关闭。
+- 新增 0 阻断、2 应修（AC1、AC2），都是存量问题，不是第十六轮引入的。
+- 机经新增 0 项。
+
+本轮在 Codex 分支 dd9f6e7 上快进后修改。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| AC1 | ielts14_test2_p3 E-02 的 T4 自动通过，题干称 `until the point where any further increase in order reduces productivity` 为状语从句。它是 until + 名词短语 the point（带 where 定语从句），整体是介词短语。T4 以前只查表语从句，不核对目标是不是从句 | 出题器：新增 `prepositional_target()` / `prepositional_target`。T4 目标中心是介词，并且后接名词短语（pobj），或者后接没有主语和助动词的 -ing 形式（pcomp + VBG）时，降为待复核。<br>以下控制例不受影响：<br>· 介词后接完整从句，如 until after they've happened；<br>· 解析器把从句挂成 pcomp 名词，如 after training stops；<br>· 连词引导的省略从句，如 if sustained、although treated。<br>阅读解析：E-02 外层 role 由 temporal_clause 改为 prepositional_phrase；第 4 条难点写明 until 在这里是介词、where 从句修饰 point。句子、译文、表达不变 |
+| AC2 | ielts11_test1_p1 A-03 的原句把剑桥原版的 10⁹ hectares 排成了 109 hectares（上标丢失），6 道题仍自动通过 | 没有改剑桥原文和句子（恢复 10⁹ 需要用户另行授权）。第 1 条难点改为以“原句问题：”开头，说明原版是 10⁹（十亿）、应按“约十亿公顷”理解；出题器据此把该句 12 道题全部送复核（source_quality）。难点仍为 4 条 |
+
+### 结果
+
+规则单独生效时（先不改阅读解析），候选、题号和其他字段都不变，只有 T4 的 status / reasons 变化。
+
+| 来源 | 全量带此原因 | 只因此原因待复核 | 本来就待复核、只多了原因 |
+|---|---:|---:|---:|
+| 剑桥 | 12 | 1（E-02） | 11 |
+| 机经 | 3 | 2 | 1 |
+
+- 剑桥那 11 道本来就待复核的题：by the time ×3、in order to ×5、in case、at exactly the same time as、In the years that have followed。其中 by the time、in case、at the same time as 在教学上常作为复合连词，规则只是把它们一并送复核，不判它们错。
+- 机经 2 道降级：before the next harvest（纯介词短语）、after listening to and observing Alex（介词 + 动名词）。
+
+改阅读解析后，与第十六轮比较：
+
+- **候选** 50,243 → 50,241，变化都在 E-02。去掉 3 个题号：
+  - T4 `gi_v02_cf28b13ef739`（原自动）；
+  - T2 `gi_v02_b8929c66e100`（原待复核）；
+  - “状语从句”版 T3 `gi_v02_e4ae9c9ac17d`（原待复核）。
+
+  新增 1 道 T3 `gi_v02_67b08c4eb2c2`，答案“不是从句（短语或非谓语）”，自动通过。T6 少了 1 条拒绝记录：从句目标没有了，原来那条记录因为 until 不是限定动词而拒绝。
+- **共同题号的状态变化：**
+  - 剑桥 6 道自动 → 待复核，就是 A-03 被点名的 6 道（T1 1、T3 1、T4 1、T5 1、T6 2）；
+  - 机经 2 道自动 → 待复核（上面那 2 道）。
+
+  除 status / reasons 外，其他字段都没有变化。
+- **prepositional_target 最终命中：** 剑桥 11 道（E-02 的 T4 已不存在）、机经 3 道；只因此原因待复核的是机经 2 道。
+- **source_quality：** 剑桥 17 → 29 道，只因此原因的 15 → 21 道。A-03 的 12 道里，6 道原本就待复核，只多了这个原因。
+- **auto_pass：** 主句谓语 5821、从句边界 4678、从句类型 11401、状语关系 395、主语 5364、动词身份 12639。合计 40,306 → 40,298，其中剑桥 27,830 → 27,824（E-02 T4 −1、A-03 −6、新 T3 +1）。
+- **抽查表：** 重抽后 10 个题号仍在表里。现在剑桥 232 行（自动 196、待复核 36），机经 128 行。六张表各 60 行。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：<br>· `generation_report_v0_2.json` `c4a2d04be11b…`<br>· `generation_report_v0_2.md` `9a0fd8a29803…`<br>· `review_batch_v0_2.jsonl` `782ecd3c5b34…`<br>· `review_batch_v0_2.xlsx` `3a36f72b67d8…`<br>回归记录（13 × 6）和 7 项整句过滤不变。`GRAMMAR_GRAPH_V0_REVIEW.md` 重新渲染后，介词短语句数 2,637 → 2,638 |
+| 测试 | 新增 4 项。修改前：<br>· 2 项断言失败（两道介词短语题仍是 auto_pass）；<br>· 2 项接口错误：控制例用到新的 Reason 常量。<br>修改后：专项 155 项通过；只装 Flask 的 CI 列表 223 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | validator 0、`--check` 0、raw 重建 171 篇一致。<br>模拟导入 updated=236 / skipped=81 / failed=0。两篇改动的阅读解析在第十六轮数据下已经计入 updated，因为 main 的词汇表代码生成的标签和当前不同，所以总数不变 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十七轮遗留
+
+- A-03 原文仍显示 109。恢复 10⁹（或 10^9 / 1,000,000,000）要改 `static/reading_tests/ielts11_test1_reading.json` 以及阅读解析的句子、结构和难点，需要用户另行同意。改好后可以去掉那条“原句问题：”说明，6 道题恢复自动。
+- 新增的 E-02 T3（不是从句）请复审确认。
+- 之前各轮的遗留不变：
+  - AB1 系动词判分中心；
+  - according to / given + 名词短语的口径；
+  - `ambiguous()` 子串查重；
+  - 小品词、连字符动词、被动分词不并入单位；
+  - 插入语隔开的并列分句；
+  - W5、V4 / V5、机经暂缓；
+  - 盲审范围待定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十六轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十七轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。

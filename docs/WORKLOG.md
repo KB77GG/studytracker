@@ -4,6 +4,14 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-28 — 语法候选题 v0.2 第十七轮（Claude，待复审）
+
+- 分支 `claude/word-memorization-system-eval-55v2y5`，在 Codex dd9f6e7 上快进后修改。
+- AC1：T4 新增 `prepositional_target`（介词 + 名词短语 / 无主语 -ing 送复核）；E-02 外层改为介词短语。
+- AC2：A-03 难点加“原句问题：”说明 10⁹ 被排成 109，该句题目全部送复核；剑桥原文没改，等用户授权。
+- 剑桥 auto 27,830 → 27,824，全库 40,306 → 40,298；两次生成一致；测试、validator、导入模拟（236 / 81 / 0）通过。
+- 未部署、未推 main、未开 PR。origin/main 已到 ee94abb（账号修复，其他任务），本轮不合并。下一步：Codex 第十七轮复审。
+
 ## 2026-10-28 — 第十六轮独立复审完成（Codex，剑桥不通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，0308aab干净ff-only到固定8e04e17；只新增ROUND16审核、更新两交接，被审文件及桌面既有改动未碰。正文三文档已commit/push 1f9943a20edbdeb94ac8f2a394fc2435438a5fdd，本CI补记再普通commit/push本分支，无skip-ci。
