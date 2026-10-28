@@ -1,7 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-28 语法候选题 v0.2 第十七轮（Claude）：AC1/AC2 已处理，待 Codex 复审，未部署。
+> 最近更新：2026-10-28 第十七轮独立复审（Codex）：有条件通过，AC1/AC2本轮修复关闭；仅审核文档，未部署。
+
+## 2026-10-28 语法候选题 v0.2 第十七轮独立复审（Codex，有条件通过）
+
+- **事实源**：[完整ROUND17复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND17_CODEX_REVIEW.md)，含8项检查、15规则命中/8控制/E-02新题/12道AC2/120随机题/32定向题逐项表、恢复10⁹建议、双跑SHA及临时导入。以下结论覆盖Claude待审摘要，保留历史。
+- **任务树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；开工dd9f6e7cf7c2d4b6acbf93db1a82aa2c7df29c97干净，fetch后ff-only到固定29701e71ca953452dd3e06e3bd233ea9d0ac331f。范围14文件在授权内，禁止路径全无改动；两份阅读JSON只改指定role/难点，排版字节保持。没有普通merge/rebase/改写历史/合main。
+- **结论/关闭**：有条件通过。AC1关闭：15条规则信号与8控制复现，E-02新T3的外层PP答案成立。AC2隔离修复关闭：12题全needs，原文仍109、恢复10⁹待授权。新增0阻断/0应修/1建议AD1：不要把送复核信号一概写成“必不是从句”；机经新确认0。不是全库人工验收或上线许可。
+- **抽查/扫描**：seed20261106剑桥auto每模板20=120；120局部答案/高亮可成立，1道非并列T2旧多目标问题单列，不能称全部唯一判分。新角度扫描内容名词+that的定语/内容从句，32题/17目标人工核对无新类别错。24种实际句子现解析与缓存逐字段一致；缓存复用不是全库从零解析。
+- **验证**：G=任务树.venv-grammar-tools/bin/python；`G -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v` 155通过。全新Flask-only按ci.yml13模块223运行=222通过+1跳过，Node拼写队列成功，桌面venv在任务树运行reading22通过。validator0、textfix --check0、raw171篇content含summary+groups内存重建全等、图谱字节一致；4Python Ruff check/format通过；4新测旧dd9代码2断言失败/2Reason接口错误。精确命令见报告§10。
+- **生成/导入**：Mac27.0.1 arm64、Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU；仓库外完整297快照用G连续两次generate --seed 20261018，4文件双跑全等，JSONL/XLSX与提交相同，两报告仅Python版本一行差。50241候选、auto40298/剑桥27824；E-02删3增1；共同Cam6/Jij2降级，其他字段0变；78回归/7过滤相同。完整676569c快照2853 blobs核验，两个独立本机SQLite分别先导main再dd9/297，均236updated/81skipped/0failed，2篇旧数据已因标签差异updated的解释成立。
+- **表格**：7表、6×60、四项下拉、盲审；Cam232=196auto+36needs/Jij128；旧题号10、同位置0。旧老师判定须按题号核对，不能按行号迁移。盲审范围待定。
+- **其他树/本机资料**：桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind87，既有7modified/22untracked入口未动，只借venv；具体路径见其git status。共享origin/main=ee94abb30d56b3c9623c519f75c1ffa9679c65b5；导入仍固定676569c。O=`/Users/zhouxin/.codex/audits/grammar-v02-round17-20261028`含快照/缓存/全池/脚本/日志/SQLite，仅本机可见。
+- **提交/CI/发布**：本条写入时仅本报告、HANDOFF、WORKLOG共3文档有改动；准备按用户授权普通commit/push本分支、无skip-ci，随后核验精确head CI。被审297的CI40612434680 test223运行/1跳过及Node成功，lint advisory失败112条，format跳过。未推main、开PR、部署后端、生产操作、小程序上传/提审/发布或调用大模型API。最终SHA和精确CI在补记/最终回复报告。
+- **下一步**：读报告的关闭范围和AD1；如获授权再按§8恢复10⁹，重生成并核对阅读页/导入，明确非并列T2多目标和教学口径、安排老师盲审。其他任务已上线状态不算本轮部署。
 
 ## 2026-10-28 语法候选题 v0.2 第十七轮（Claude，待复审）
 
