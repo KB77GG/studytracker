@@ -92,6 +92,7 @@ class Reason(StrEnum):
     LEXICAL_CONJUNCTION = "lexical_conjunction"
     PARTICIPLE_AFTER_BE = "participle_after_be"
     LINKING_VERB_AS_AUXILIARY = "linking_verb_as_auxiliary"
+    PREPOSITIONAL_TARGET = "prepositional_target"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

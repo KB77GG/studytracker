@@ -688,6 +688,26 @@ def predicative_clause(view, head):
     return first > verb.i and all(t.text.lower() in BE_CLAUSE_ADVERBS for t in between)
 
 
+def prepositional_target(view, head):
+    """A T4 target headed by a preposition with a noun-phrase object ("until the point where
+    ... reduces productivity", "before the next harvest") or a subjectless -ing complement
+    ("after listening to ...") is a prepositional phrase, not the adverbial clause the prompt
+    names, even when a relative clause sits inside it (review AC1). A preposition taking a full
+    clause ("until after they've happened", or "after training stops" with stops parsed as a
+    noun) stays, as do conjunction-led elliptical clauses ("if sustained")."""
+    if head is None or head.dep != "prep":
+        return []
+
+    def gerund(token):
+        return token.tag == "VBG" and not any(
+            c.dep in CLAUSE_SUBJECT_DEPS or c.dep in {"aux", "auxpass"}
+            for c in view.children(token)
+        )
+
+    phrase = any(c.dep == "pobj" or (c.dep == "pcomp" and gerund(c)) for c in view.children(head))
+    return [R.PREPOSITIONAL_TARGET] if phrase else []
+
+
 def type_matches(view, head, kind):
     """A finite head with the clause dep; a coordinate clause has its own subject and no
     subordinator ("and that ..." is a noun clause, "and usually refer to ..." a predicate).
@@ -885,6 +905,7 @@ def adverbial_relations(ctx):
             reasons.extend(boundary_reasons(ctx, head, tokens, "adverbial"))
             if predicative_clause(ctx.view, head):
                 reasons.append(R.CLAUSE_TYPE_MISMATCH)
+            reasons.extend(prepositional_target(ctx.view, head))
         ctx.emit(
             TEMPLATES[3],
             "G-C11",

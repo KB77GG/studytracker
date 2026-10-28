@@ -1897,6 +1897,109 @@ class LinkingAuxiliaryTests(unittest.TestCase):
             self.assertNotIn(R.LINKING_VERB_AS_AUXILIARY, item["reasons"], item["template"])
 
 
+class PrepositionalTargetTests(unittest.TestCase):
+    """Review AC1: "until the point where ..." is a prepositional phrase, not a time clause."""
+
+    def relation(self, rows, subject, predicate, target, role="temporal_clause", extra=()):
+        sentence, view = tree(rows)
+        tags = [(subject, "subject", 1), (predicate, "verb_phrase", 1), (target, role, 2)]
+        tags = sorted(tags + list(extra), key=lambda tag: sentence.index(tag[0]))
+        items, _ = generate(sentence, view, tags)
+        return by_template(items, "adverbial_relation")[0]
+
+    def test_preposition_with_noun_object_goes_to_review(self):
+        rows = [
+            ("Gains", "nsubj", 1, "NOUN", "NNS"),
+            ("fall", "ROOT", 1, "VERB", "VBP"),
+            ("until", "prep", 1, "ADP", "IN"),
+            ("the", "det", 4, "DET", "DT"),
+            ("point", "pobj", 2, "NOUN", "NN"),
+            ("where", "advmod", 7, "SCONJ", "WRB"),
+            ("order", "nsubj", 7, "NOUN", "NN"),
+            ("reduces", "relcl", 4, "VERB", "VBZ"),
+            ("output", "dobj", 7, "NOUN", "NN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        relative = [("where order reduces output", "relative_clause", 3)]
+        target = "until the point where order reduces output"
+        item = self.relation(rows, "Gains", "fall", target, extra=relative)
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+        rows = [
+            ("Prices", "nsubj", 1, "NOUN", "NNS"),
+            ("fall", "ROOT", 1, "VERB", "VBP"),
+            ("before", "prep", 1, "ADP", "IN"),
+            ("the", "det", 4, "DET", "DT"),
+            ("harvest", "pobj", 2, "NOUN", "NN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        item = self.relation(rows, "Prices", "fall", "before the harvest")
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+
+    def test_preposition_with_subjectless_gerund_goes_to_review(self):
+        # "But after listening to and observing Alex, it was difficult to argue ..."
+        rows = [
+            ("But", "cc", 7, "CCONJ", "CC"),
+            ("after", "prep", 7, "ADP", "IN"),
+            ("listening", "pcomp", 1, "VERB", "VBG"),
+            ("to", "prep", 2, "ADP", "IN"),
+            ("Alex", "pobj", 3, "PROPN", "NNP"),
+            (",", "punct", 7, "PUNCT", ","),
+            ("it", "nsubj", 7, "PRON", "PRP"),
+            ("was", "ROOT", 7, "AUX", "VBD"),
+            ("hard", "acomp", 7, "ADJ", "JJ"),
+            (".", "punct", 7, "PUNCT", "."),
+        ]
+        item = self.relation(rows, "it", "was hard", "after listening to Alex")
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+
+    def test_preposition_taking_a_clause_stays(self):
+        # "... until after they've happened" (K-02) and "after training stops", where the parser
+        # makes stops a noun with training as its subject (C-19).
+        rows = [
+            ("Nobody", "nsubj", 1, "PRON", "NN"),
+            ("knows", "ROOT", 1, "VERB", "VBZ"),
+            ("until", "prep", 1, "ADP", "IN"),
+            ("after", "mark", 6, "SCONJ", "IN"),
+            ("they", "nsubj", 6, "PRON", "PRP"),
+            ("'ve", "aux", 6, "AUX", "VBP"),
+            ("happened", "pcomp", 2, "VERB", "VBN"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        item = self.relation(rows, "Nobody", "knows", "until after they 've happened")
+        self.assertNotIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+        self.assertEqual(item["status"], "auto_pass", item["reasons"])
+        rows = [
+            ("Benefits", "nsubj", 1, "NOUN", "NNS"),
+            ("vanish", "ROOT", 1, "VERB", "VBP"),
+            ("after", "prep", 1, "ADP", "IN"),
+            ("training", "nsubj", 4, "NOUN", "NN"),
+            ("stops", "pcomp", 2, "NOUN", "NNS"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        item = self.relation(rows, "Benefits", "vanish", "after training stops")
+        self.assertNotIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+        self.assertEqual(item["status"], "auto_pass", item["reasons"])
+
+    def test_conjunction_led_elliptical_clause_stays(self):
+        # "if sustained over a long time" (C-03): if is a mark, not a preposition.
+        rows = [
+            ("Damage", "nsubj", 1, "NOUN", "NN"),
+            ("occurs", "ROOT", 1, "VERB", "VBZ"),
+            ("if", "mark", 3, "SCONJ", "IN"),
+            ("sustained", "advcl", 1, "VERB", "VBN"),
+            ("over", "prep", 3, "ADP", "IN"),
+            ("years", "pobj", 4, "NOUN", "NNS"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        target = "if sustained over years"
+        item = self.relation(rows, "Damage", "occurs", target, role="conditional_clause")
+        self.assertNotIn(R.PREPOSITIONAL_TARGET, item["reasons"])
+        self.assertEqual(item["status"], "auto_pass", item["reasons"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 
