@@ -5182,7 +5182,7 @@
     "v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing），目标本身又连着两个分句时 needs_review（nested_coordination）。",
     "v0.2：whether or not、not just because 的 not 不进动词单位；for + 有主语的限定分句按并列处理（T6 finiteness_mismatch，T1 / T5 multiple_independent_clauses）；动词后紧跟语料里标过 prt 的词却被标成 advmod，或标成 RP 却未并入时 needs_review（particle_outside_unit，动词单位不扩大）。",
     "v0.2：过去分词与带助动词的前项并列、自己没有助动词时，动词身份题不自动判非谓语（shared_auxiliary）；provided / given / considering 等 + that 且像引导词那样挂、没有自己的主语和助动词时是连词，不当干扰项，动词身份题 needs_review（lexical_conjunction）；be 后面的过去分词挂成 dep 或成串并列的 acomp 时 needs_review（participle_after_be）；become / remain 等系动词被解析成助动词时 needs_review（linking_verb_as_auxiliary）。",
-    "v0.2：状语从句关系题（T4）的目标中心是介词、后接名词短语（until the point where ...）或没有主语的 -ing 形式（after listening to ...）时，目标是介词短语而非从句，needs_review（prepositional_target）；介词后接完整从句（until after they've happened）不受影响。",
+    "v0.2：状语从句关系题（T4）的目标中心是介词、后接名词短语（until the point where ...、by the time ...）或没有主语的 -ing 形式（after listening to ...）时，目标可能是介词结构、复合连词或非限定结构，是否属于题干所说的状语从句由人工判断，needs_review（prepositional_target，只送复核，不判定类别错误；项目暂按传统口径把限定从句与短语 / 非谓语分开）；介词后接完整从句（until after they've happened）不受影响。",
     "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
     "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。",
     "v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。",
