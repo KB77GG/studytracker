@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5822 | 557 | 6367 |
-| clause_boundary | 4678 | 2584 | 2694 |
+| main_verb_tap | 5821 | 558 | 6367 |
+| clause_boundary | 4678 | 2583 | 2694 |
 | clause_type_classify | 11401 | 3486 | 1331 |
-| adverbial_relation | 399 | 657 | 2561 |
-| subject_span | 5365 | 819 | 6562 |
-| finite_or_not | 12641 | 1834 | 6549 |
+| adverbial_relation | 395 | 660 | 2561 |
+| subject_span | 5364 | 820 | 6562 |
+| finite_or_not | 12639 | 1836 | 6548 |
 
 ## 范围
 
@@ -19,9 +19,9 @@
 {
   "passages": 317,
   "sentences": 12746,
-  "candidates": 50243,
+  "candidates": 50241,
   "sentence_rejections": 1331,
-  "template_rejections": 18078
+  "template_rejections": 18077
 }
 ```
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "55b808e1a69cfb7fc06670a6ac3bb36d2861923f229183875ed309ea3a747f37",
+  "reading_study_sha256": "c4fd0e662431a2831e682ea4c4eef0b934b3c5336f0c474c388f035cfb378316",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -51,8 +51,8 @@
     "needs_review": 236
   },
   "G-S02": {
-    "auto_pass": 5365,
-    "needs_review": 819
+    "auto_pass": 5364,
+    "needs_review": 820
   },
   "G-C02": {
     "needs_review": 736,
@@ -72,23 +72,23 @@
   },
   "G-C10": {
     "auto_pass": 1235,
-    "needs_review": 731
+    "needs_review": 730
   },
   "G-C11": {
-    "needs_review": 657,
-    "auto_pass": 399
+    "needs_review": 660,
+    "auto_pass": 395
   },
   "G-N01": {
-    "auto_pass": 10795,
-    "needs_review": 1734
+    "auto_pass": 10793,
+    "needs_review": 1736
   },
   "G-N04": {
     "auto_pass": 1846,
     "needs_review": 100
   },
   "G-L01": {
-    "auto_pass": 3101,
-    "needs_review": 321
+    "auto_pass": 3100,
+    "needs_review": 322
   }
 }
 ```
@@ -102,13 +102,13 @@
   "split_subject": 3837,
   "coordinated_main_clauses": 3603,
   "boundary_mismatch": 3069,
-  "clause_type_mismatch": 2247,
+  "clause_type_mismatch": 2245,
   "ambiguous_span_location": 1382,
   "span_not_constituent": 1367,
   "multiple_targets_same_type": 1363,
   "no_relation_label": 1230,
-  "finiteness_mismatch": 669,
-  "source_quality": 624,
+  "finiteness_mismatch": 668,
+  "source_quality": 636,
   "verb_unit_outside_span": 593,
   "subject_mismatch": 573,
   "parser_root_outside_verb_span": 562,
@@ -137,6 +137,7 @@
   "linking_verb_as_auxiliary": 22,
   "parser_root_inside_subordinate_span": 22,
   "subordinator_mismatch": 18,
+  "prepositional_target": 14,
   "lexical_conjunction": 9,
   "nested_coordination": 5,
   "participle_after_be": 5,
@@ -151,7 +152,7 @@
 ```json
 {
   "reading_jijing": 16376,
-  "reading_test": 33867
+  "reading_test": 33865
 }
 ```
 
@@ -160,7 +161,7 @@
 ```json
 {
   "easy": 17003,
-  "hard": 18734,
+  "hard": 18732,
   "medium": 14506
 }
 ```
@@ -205,7 +206,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1028,
+          "pool_size": 1027,
           "sample_size": 9
         },
         {
@@ -313,7 +314,7 @@
         {
           "source_kind": "reading_jijing",
           "difficulty": "easy",
-          "pool_size": 67,
+          "pool_size": 65,
           "sample_size": 8
         },
         {
@@ -337,7 +338,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 65,
+          "pool_size": 63,
           "sample_size": 8
         },
         {
@@ -381,7 +382,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 968,
+          "pool_size": 967,
           "sample_size": 9
         },
         {
@@ -425,7 +426,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3357,
+          "pool_size": 3355,
           "sample_size": 13
         },
         {
@@ -1940,16 +1941,16 @@
 ```json
 {
   "source_quality": {
-    "sentences": 151,
+    "sentences": 152,
     "items_by_template": {
-      "adverbial_relation": 30,
+      "adverbial_relation": 33,
       "clause_boundary": 111,
-      "clause_type_classify": 196,
-      "finite_or_not": 169,
-      "main_verb_tap": 62,
-      "subject_span": 56
+      "clause_type_classify": 199,
+      "finite_or_not": 173,
+      "main_verb_tap": 63,
+      "subject_span": 57
     },
-    "only_reason": 417
+    "only_reason": 423
   },
   "list_item": {
     "sentences": 15,
@@ -2286,6 +2287,7 @@ For instance, studies show that most people will not accept a bet in which there
 - v0.2：连字符复合修饰语里的分词（water-borne 的 borne、built-in）不当主句谓语题的干扰项；并列分句的边界题题干写明是哪个连词后面的分句（“划出 and 后面的并列分句”，同一连词出现多次时写明第几个），目标前没有 and / but / or / nor / yet 时 needs_review（coordinate_cue_missing），目标本身又连着两个分句时 needs_review（nested_coordination）。
 - v0.2：whether or not、not just because 的 not 不进动词单位；for + 有主语的限定分句按并列处理（T6 finiteness_mismatch，T1 / T5 multiple_independent_clauses）；动词后紧跟语料里标过 prt 的词却被标成 advmod，或标成 RP 却未并入时 needs_review（particle_outside_unit，动词单位不扩大）。
 - v0.2：过去分词与带助动词的前项并列、自己没有助动词时，动词身份题不自动判非谓语（shared_auxiliary）；provided / given / considering 等 + that 且像引导词那样挂、没有自己的主语和助动词时是连词，不当干扰项，动词身份题 needs_review（lexical_conjunction）；be 后面的过去分词挂成 dep 或成串并列的 acomp 时 needs_review（participle_after_be）；become / remain 等系动词被解析成助动词时 needs_review（linking_verb_as_auxiliary）。
+- v0.2：状语从句关系题（T4）的目标中心是介词、后接名词短语（until the point where ...）或没有主语的 -ing 形式（after listening to ...）时，目标是介词短语而非从句，needs_review（prepositional_target）；介词后接完整从句（until after they've happened）不受影响。
 - v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。
 - v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。这两条不拒绝整句；only_reason 是只因这两条才没有自动通过的题数。
 - v0.2：suspected_split_word 以全库词频判断（两个相邻词都极少见、拼起来是语料里出现过的词），断词改原文后预期为 0。
