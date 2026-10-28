@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-28 — 第十六轮独立复审完成（Codex，剑桥不通过）
+
+- 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，0308aab干净ff-only到固定8e04e17；只新增ROUND16审核、更新两交接，被审文件及桌面既有改动未碰。准备普通commit/push本分支，无skip-ci。
+- AB1/AB2关闭；新0阻断/2应修：AC1 until the point where…外层介词短语却在T4称状语从句（1auto）；AC2剑桥官方原版10⁹变109（6auto，1句）。均存量，非本轮引入；机经新增0。
+- 151专项、全新Flask-only219运行/1跳过、reading22、Node、Ruff通过；validator0/--check0/raw171/图谱一致；2新测旧码1断言失败/1接口错误。两次生成全等，两报告与提交仅Python版本差；50243候选/auto40306/剑桥27830；Cam19/Jij2降级；78回归/7过滤不变；完整676569c→8e04本机SQLite导入236/81/0。
+- seed20261105剑桥120auto逐题表及新角度从句前提9题、数值排印31句见报告；49句现解析核缓存一致。抽查表Cam233/Jij127，旧题号27/同位置0。被审基线CI40605965839 test成功，lint存量advisory失败；本审核精确head CI待push后补记。未部署/生产操作/PR/推main，盲审范围待定。下一步按授权处理AC1/AC2，保持通用规则。
+
 ## 2026-10-28 — 语法候选题 v0.2 第十六轮（Claude）
 
 - 修 Codex 第十五轮复审的 AB1：become / remain 被解析成助动词，使主句谓语题只认分词、不认系动词，这类题改为待复核。

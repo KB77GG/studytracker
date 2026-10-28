@@ -1,7 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-28 Claude 第十六轮：按 Codex 第十五轮复审修 AB1、更正 AB2，待 Codex 复审（可从 0308aab 快进）。机经继续暂缓，未部署。
+> 最近更新：2026-10-28 Codex 第十六轮独立复审：AB1/AB2关闭，剑桥2项新应修，未部署。
+
+## 2026-10-28 语法候选题 v0.2 第十六轮独立复审（Codex，不通过）
+
+- **事实源**：[完整ROUND16复审报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND16_CODEX_REVIEW.md)。含8项实际检查、22题AB1/7个be位置/19个旧分词位置/120随机题/9个从句前提命中及控制、双跑SHA、临时导入。以下独立结论覆盖Claude待审摘要，保留历史。
+- **任务树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`；开工`0308aabb235c467d34e0f8ffe2b58759ac25838b`干净，fetch后ff-only到固定`8e04e1712bebc222bb811c7422135a99915a10fd`。范围11文件在授权内，禁止路径全无改动。没有普通merge/rebase/改写历史/合main。此时仅新ROUND16报告和两份交接有改动，准备普通commit/push本分支、无skip-ci；其他被审文件未动，最终SHA以Git和最终回复为准。
+- **结论/关闭**：AB1、AB2均关闭。新0阻断/2应修/0单列建议：AC1 `ielts14_test2_p3 E-02` 的T4 `gi_v02_cf28b13ef739`把until+the point名词短语称为状语从句，T2/T3同目标已needs，T4漏核类别；AC2 `ielts11_test1_p1 A-03`的10⁹被写成109，官方剑桥样章第18页渲染已确认，6道auto原句不宜直接教学。共7道不同auto，均与e290逐字段相同，是新发现的存量问题。机经新确认0，旧暂缓不重复计数。
+- **抽查/扫描**：seed20261105剑桥auto各模板20=120；119局部可成立、1介词化considering既有口径待定；119中1句原文AC2、另3既有引语/隔宾语小品词/嵌套T2提醒，不称全部唯一可判。新角度扫描外层从句前提9题，1错、8省略或解析误挂可成立；to+动名词3题均成立；数值排印扩查31句、1确认。AB1点名15+额外4剑桥送审，4句主句T6保持auto。AB2实测7与19=13+6。
+- **验证**：R的G=`.venv-grammar-tools/bin/python`，`G -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v`151通过；全新Flask-only按ci.yml13模块219运行=218通过+1跳过；Node拼写队列exit0；桌面venv在R运行reading22通过。validator0、textfix --check0、raw171篇content含summary+groups内存重建一致、图谱字节一致；4改动Python Ruff check/format通过；2新测旧e290代码1断言失败/1Reason常量接口错误。完整命令见报告§10。
+- **生成/数据**：Mac27.0.1 arm64、Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU；仓库外完整8e04快照用G连续两次`python scripts/generate_grammar_candidates.py --seed 20261018`，缓存复用，另49句现解析一致。4文件双跑相同；JSONL/XLSX与提交相同，两报告仅Python版本一行差。50243候选不变、其他字段0变化，只Cam19/Jij2降级；auto40306/剑桥27830；78回归/7过滤不变。完整main676569c快照2853 blobs核验后本机SQLite先导317再236updated/81skipped/0failed。
+- **表格**：7表、6×60、四项下拉、盲审；Cam233=196auto+37needs/Jij127；旧题号27、同位置0。旧老师判定须按题号核对，不能按行号迁移。老师盲审范围待定。
+- **其他树/未提交资料**：桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、behind87，原7modified/22untracked入口未动，详细路径见其git status。共享origin/main已为`ee94abb30d56b3c9623c519f75c1ffa9679c65b5`；按用户固定676569c导入，不偷换基线。O=`/Users/zhouxin/.codex/audits/grammar-v02-round16-20261028`含快照/缓存/全池/脚本/日志/SQLite/PDF取证，仅本机可见，不入库。
+- **CI/发布/下一步**：被审8e04的CI40605965839 test成功、lint存量advisory失败；本审核三文档push后须核精确head CI，再补记。未推main、开PR、部署后端、操作生产数据库/服务器、小程序上传/提审/发布或调用大模型API。下一位先读AC1/AC2，按后续授权修T4通用类别门槛（保留合法省略控制）、依据官方原版恢复上标或走source_quality；不要按ID打补丁。三文档commit/push后才可跨电脑获取，最终状态见CI补记/最终回复。
 
 ## 2026-10-28 语法候选题 v0.2 第十六轮（Claude，待复审）
 
