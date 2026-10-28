@@ -1,7 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-28 语法候选题 v0.2 第十八轮（Claude）：AD1 措辞已改，复审循环已收敛，余下待用户决定；未部署。
+> 最近更新：2026-10-28 第十八轮轻量独立核验（Codex）：通过，AD1关闭；题库整体人工验收边界不变，未部署。
+
+## 2026-10-28 语法候选题 v0.2 第十八轮轻量独立核验（Codex，通过）
+
+- **事实源**：[ROUND18核验报告](GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND18_CODEX_REVIEW.md)。本轮只审说明修订，不新增题目抽查；整体沿用第十七轮有条件通过的人工验收边界。
+- **任务树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`。开工 f7e072b36f6f7845604de7aa558b28214c26120b 干净，fetch 后 ff-only 到固定 8c49cf978bc3a17810554e487416a08e8123ebe5；7 文件范围通过。只新增 ROUND18、更新本交接和 WORKLOG；未改被审代码/数据，不合 main。
+- **结果**：AD1 关闭；新增 0 阻断/0 应修/0 建议，机经新确认 0。templates 去掉该函数 docstring 后 AST 完全相同，reporting 仅一个常量不同。50,241 全池与 29701e7 逐字段/字节一致，auto 40,298/剑桥 27,824；双跑四文件全等，JSONL/XLSX与提交相同，两报告仅 Python 版本差，新旧报告仅 counting_notes[11] 一行差。
+- **验证**：G=任务树`.venv-grammar-tools/bin/python`；`G -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v` 155通过；全新 Flask-only 按 ci.yml 13模块223运行=222通过+1跳过，Node成功；两文件 Ruff check/format通过；`G scripts/render_grammar_graph_review.py`在外部快照生成与提交相同。精确命令/双SHA见报告§4–5。可选导入未重跑，236/81/0仅引用上轮实测；未做新120题抽查。
+- **环境/资料**：Mac27.0.1 arm64/Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU；匹配缓存复用。`/Users/zhouxin/.codex/audits/grammar-v02-round18-20261028`含快照/脚本/日志/产物，仅本机可见；旧快照2862 blobs独立核验。桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d、behind87，既有7modified/22untracked入口未动，只借venv跑Ruff。
+- **CI/提交**：被审8c49的[CI40625571558](https://github.com/KB77GG/studytracker/actions/runs/40625571558)整体success，test223/1跳过及Node成功；lint advisory存量112条与上轮相同、format跳过。本审核3文档将普通commit/push本分支，无skip-ci，随后核对精确head CI并补记。
+- **发布/下一步**：未推main/PR/部署/生产操作/小程序上传提审发布/大模型API；main不合并。AD1已关闭，但仍待决定10⁹、教师盲审、T1/T6单位及T3/T6教学分类口径、非并列T2多目标、上线范围与授权，详见报告§6。既有遗留不是本轮新增问题，不以说明通过宣称全库已人工验收。
 
 ## 2026-10-28 语法候选题 v0.2 第十八轮（Claude，AD1 措辞）
 
