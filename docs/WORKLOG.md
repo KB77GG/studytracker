@@ -9,7 +9,7 @@
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，f7e072b干净ff-only到固定8c49cf9。只新增ROUND18报告、更新两交接；被审代码/数据和桌面既有改动未动。
 - AD1关闭，新0阻断/0应修/0建议，机经新确认0；只通过说明修订，整体保留第十七轮人工验收条件。7文件范围符合；AST只变docstring和一个报告字符串。双生成全等、50241候选逐字段/字节等于29701e7；JSONL/XLSX不变、报告仅说明一行（本机另有Python版本差）。
 - 155专项、全新Flask-only223运行/1跳过、Node、两文件Ruff通过，图谱重生成一致；可选导入及120题抽查按轻量范围未重做。精确命令/SHA/待用户决定清单见ROUND18报告；补明既有T6单位、介词化分词等教学口径不因AD1关闭而消失。
-- 被审8c49 CI40625571558 test成功、lint advisory存量112条失败；本审核正文将普通commit/push，再核对精确head CI补记。未推main/部署/PR/生产操作/小程序发布。下一步用户定盲审及内容口径与上线范围。
+- 本审核正文已普通commit/push `28ca2e8749ea126966a14cf053b1f2e5f30d828a`，任务树当时干净同步；[正文精确head CI40627407922](https://github.com/KB77GG/studytracker/actions/runs/40627407922)整体success，test223运行/1跳过及Node成功；lint advisory失败112条与被审8c49 CI40625571558逐条相同，format跳过。此CI补记再普通commit/push相同三文档，无skip-ci，末次精确CI最终回复另报。未推main/部署/PR/生产操作/小程序发布。下一步用户定盲审及内容口径与上线范围。
 
 ## 2026-10-28 — 语法候选题 v0.2 第十八轮（Claude，AD1 措辞）
 

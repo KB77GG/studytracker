@@ -10,7 +10,7 @@
 - **结果**：AD1 关闭；新增 0 阻断/0 应修/0 建议，机经新确认 0。templates 去掉该函数 docstring 后 AST 完全相同，reporting 仅一个常量不同。50,241 全池与 29701e7 逐字段/字节一致，auto 40,298/剑桥 27,824；双跑四文件全等，JSONL/XLSX与提交相同，两报告仅 Python 版本差，新旧报告仅 counting_notes[11] 一行差。
 - **验证**：G=任务树`.venv-grammar-tools/bin/python`；`G -m unittest tests.test_grammar_item_candidates tests.test_reading_jijing_text_fixes tests.test_reading_study_glossary tests.test_grammar_graph_draft -v` 155通过；全新 Flask-only 按 ci.yml 13模块223运行=222通过+1跳过，Node成功；两文件 Ruff check/format通过；`G scripts/render_grammar_graph_review.py`在外部快照生成与提交相同。精确命令/双SHA见报告§4–5。可选导入未重跑，236/81/0仅引用上轮实测；未做新120题抽查。
 - **环境/资料**：Mac27.0.1 arm64/Python3.13.3/spaCy3.8.16/trf3.8.0/torch2.14.1 CPU；匹配缓存复用。`/Users/zhouxin/.codex/audits/grammar-v02-round18-20261028`含快照/脚本/日志/产物，仅本机可见；旧快照2862 blobs独立核验。桌面`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d、behind87，既有7modified/22untracked入口未动，只借venv跑Ruff。
-- **CI/提交**：被审8c49的[CI40625571558](https://github.com/KB77GG/studytracker/actions/runs/40625571558)整体success，test223/1跳过及Node成功；lint advisory存量112条与上轮相同、format跳过。本审核3文档将普通commit/push本分支，无skip-ci，随后核对精确head CI并补记。
+- **CI/提交**：本审核3文档已普通commit/push `28ca2e8749ea126966a14cf053b1f2e5f30d828a`，当时任务树干净同步，无skip-ci。[正文精确head CI40627407922](https://github.com/KB77GG/studytracker/actions/runs/40627407922)整体success，test223/1跳过及Node成功；lint advisory失败112条与被审8c49的[CI40625571558](https://github.com/KB77GG/studytracker/actions/runs/40625571558)逐条相同、format跳过。本CI补记仍只改三文档，再普通commit/push；末次SHA/精确CI最终回复另报，未改写历史。
 - **发布/下一步**：未推main/PR/部署/生产操作/小程序上传提审发布/大模型API；main不合并。AD1已关闭，但仍待决定10⁹、教师盲审、T1/T6单位及T3/T6教学分类口径、非并列T2多目标、上线范围与授权，详见报告§6。既有遗留不是本轮新增问题，不以说明通过宣称全库已人工验收。
 
 ## 2026-10-28 语法候选题 v0.2 第十八轮（Claude，AD1 措辞）
