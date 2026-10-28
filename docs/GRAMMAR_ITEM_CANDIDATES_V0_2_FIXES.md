@@ -930,7 +930,7 @@
 |---|---|---|
 | AA1 | 解析器把 be 当中心，后面的被动分词挂在别处，T1 / T6 只显示 are / is：<br>· 14_3_p2 F-06 `are infrequently encountered` 明确漏词；<br>· 14_2_p2 H-02 `is naturally ventilated, passively cooled and naturally lit` 需复核分析口径（共 4 道） | 新增 `be_participle()` / `participle_after_be`：显示的 be 有未并入单位的过去分词，且该分词依存为 dep，或依存为 acomp 并带并列过去分词时，降为待复核；不扩大单位，T6 不继承 T1 的这个原因。<br>不受影响的例子：family-owned、terrified of、`freely chosen, spontaneous ...`（与形容词并列）、表语 that 从句。<br>全库语料只有 7 处命中（两种来源、所有状态；第十六轮更正，复审 AB2：原写 8 处，把解析缓存里重复的一行算了两次），剑桥自动题正好是点名的 4 道 |
 | AA2 | given that 已按连词不进 T1 干扰项，T6 却仍自动答“非谓语”（18_2_p3 C-03，1 道） | T6 目标是这类连词时降为待复核（`lexical_conjunction`）。剑桥自动题 1 道，另有 3 道剑桥、4 道机经本来就待复核，只多了这个原因；机经 1 道自动题降级 |
-| AA3（建议） | 只看“分词 + 作引导词的 that”，会把真动词也当连词：He granted that、I am assuming that、rather than supposing that | `conjunction_participle()` 收窄，还要求两点：<br>· 它像引导词那样挂（prep / advcl / mark，或与这样的词并列，如 `..., and given that ...`）；<br>· 没有自己的主语和助动词。<br>全库符合原条件的 19 处里保留 13 处真连词，排除 6 处（rather than supposing that、for assuming that ×2、takes it for granted that ×2、Seeing that 作主语；第十六轮更正，复审 AB2：原写 20 / 7，是重复计了缓存里的一行，并把后来补上并列回溯后才保留的 `and given that` 算进了排除）。原来去掉的 3 个干扰项不变 |
+| AA3（建议） | 只看“分词 + 作引导词的 that”，会把真动词也当连词：He granted that、I am assuming that、rather than supposing that | `conjunction_participle()` 收窄，还要求两点：<br>· 它像引导词那样挂（prep / advcl / mark，或与这样的词并列，如 `..., and given that ...`）；<br>· 没有自己的主语和助动词。<br>全库符合原条件的 19 处里保留 13 处真连词，排除 6 处（rather than supposing that、for assuming that、by assuming that、takes it for granted that ×2、Seeing that 作主语；第十六轮更正，复审 AB2：原写 20 / 7，是重复计了缓存里的一行，并把后来补上并列回溯后才保留的 `and given that` 算进了排除）。原来去掉的 3 个干扰项不变 |
 
 ### 结果
 
@@ -960,6 +960,52 @@
 - 之前各轮的遗留不变：`ambiguous()` 子串查重、小品词不并入单位、连字符动词不合并、插入语隔开的并列分句、W5、V4 / V5、盲审范围待定。
 - 修订和自查仍由同一方完成。
 
+## 第十六轮（2026-10-28，第十五轮复审 AB1–AB2）
+
+依据：`docs/GRAMMAR_ITEM_CANDIDATES_V0_2_ROUND15_CODEX_REVIEW.md`。复审结论是不通过，以剑桥题为准：
+- AA1–AA3 关闭。
+- 新增 0 阻断、1 应修（AB1）、1 建议（AB2）。
+- 机经新增 0 项。
+
+本轮在 Codex 分支 0308aab 上快进后修改。
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| AB1 | become / remain 被解析成分词的 aux / auxpass，动词单位以分词为中心：<br>· T1 要求必须选 immersed / known / embedded，只选 became / remain 判错（5 道）；<br>· 另 10 道 T6 的高亮把系动词和表语混成一个“动词单位”，身份选项本身可成立，需统一教学口径 | 新增 `linking_auxiliary()` / `linking_verb_as_auxiliary`：主句谓语题的答案和干扰项、动词身份题的高亮里，有 become / remain / seem / appear / stay / grow / turn 等词形作 aux / auxpass 时，降为待复核；不改答案，T6 不继承 T1 的这个原因。have become 的 have、was built 的 was 不受影响。<br>剑桥共 19 道：<br>· 点名的 5 道 T1 和 10 道 T6；<br>· 另 4 道 T1 是干扰项里出现同样的单位（became known ×2、have become established、becomes intertwined）。<br>机经 2 道 |
+| AB2（建议） | 第十五轮写的两处全库命中数不能复现 | 第十五轮一节已更正为 7 处、19 = 13 + 6。原数字一是把解析缓存里重复的一行算了两次，二是排除数用的是补上“并列回溯”之前的规则 |
+
+### 结果
+
+**与第十五轮比较：** 候选与题号不变，除 status / reasons 外字段不变。
+- 剑桥 auto → needs 19 道（T1 9、T6 10）。
+- 机经 auto → needs 2 道（T1 1、T6 1）。
+- 另有 1 道机经题本来就待复核，只多了这个原因。
+
+**auto_pass：** 主句谓语 5822、动词身份 12641，其余不变；合计 40,327 → 40,306，其中剑桥 27,849 → 27,830。
+
+**抽查表：** 重抽后 27 个题号仍在表里，(工作表, 行号) 没有一行相同。现在剑桥 233 行（自动 196、待复核 37），机经 127 行。六张表各 60 行，四项下拉，盲审。
+
+### 验证
+
+| 检查 | 结果 |
+|---|---|
+| 可复现 | 连续两次生成逐字节一致：`generation_report_v0_2.json` `46481e4b62fa…`、`generation_report_v0_2.md` `1949bfff7306…`、`review_batch_v0_2.jsonl` `7e045267aa0e…`、`review_batch_v0_2.xlsx` `2fa84b63a738…`；回归记录和 7 项整句过滤不变；`GRAMMAR_GRAPH_V0_REVIEW.md` 无变化 |
+| 测试 | 新增 2 项。修改前的结果：<br>· 1 项断言失败；<br>· 1 项接口错误：was built 的控制例用到新的 Reason 常量。<br>专项 151 项通过；只装 Flask 的 CI 列表 219 项运行、1 项按设计跳过；Node、`tests.test_reading_study` 22 项通过 |
+| 数据 | 未改阅读解析；validator 0、`--check` 0、raw 重建 171 篇一致；模拟导入 updated=236 / skipped=81 / failed=0 |
+| 改动文件 Ruff | check 与 format --check 通过 |
+
+### 第十六轮遗留
+
+- AB1 只降级，没有把系动词改成 T1 的判分中心。要改，需要先定 T1“主句谓语动词”和 T6“动词单位”在系表结构里的教学口径，并且要改 T1 答案规则，需另行同意。
+- 之前各轮的遗留不变：
+  - according to 等介词化分词、given + 名词短语的口径；
+  - `ambiguous()` 子串查重；
+  - 小品词不并入单位、连字符动词不合并、被动分词不并入单位；
+  - 插入语隔开的并列分句；
+  - W5、V4 / V5、机经暂缓；
+  - 盲审范围待定。
+- 修订和自查仍由同一方完成。
+
 ## 线上状态
 
-未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十五轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。
+未合并 main，未部署，没有操作生产服务器或数据库。上线步骤和以前一样，需要用户另行授权：合并 main 并部署 → 服务器备份数据库 → 运行 `scripts/import_reading_study.py`（第十六轮后，以 `origin/main` 65f1859 / 676569c 为基准实测 updated=236；词汇表标签要在部署后的新代码下导入才会生效）。

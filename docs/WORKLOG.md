@@ -4,6 +4,13 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-10-28 — 语法候选题 v0.2 第十六轮（Claude）
+
+- 修 Codex 第十五轮复审的 AB1：become / remain 被解析成助动词，使主句谓语题只认分词、不认系动词，这类题改为待复核。
+- 按 AB2 更正第十五轮两处计数。
+- 剑桥 19 道降级；auto_pass 40,306（剑桥 27,830）。
+- 两次生成一致，CI 列表 219 项通过（1 跳过）。待 Codex 复审；盲审范围待定；未推 main、未部署。
+
 ## 2026-10-28 — 第十五轮独立复审完成（Codex，剑桥不通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，c6bfb1a干净快进固定e2903b1。只新增ROUND15审核、更新两交接，被审代码/数据/交付文件未改；桌面树既有改动未碰。正文三文档已commit/push dd1a5096aea0c4037ffe002dad9c816df6b4cf1b，本次CI补记再普通commit/push、无skip-ci，末次SHA以Git/最终汇报为准。
