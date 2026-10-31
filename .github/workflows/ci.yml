@@ -84,7 +84,7 @@ jobs:
             'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
             'requests>=2.31' 'PyJWT>=2.9' 'pypinyin>=0.55'
       - name: Test scheduled assignment transactions and resources
-        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series -v
+        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence -v
       - name: Test planner client behavior
         run: node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js
 

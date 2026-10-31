@@ -197,6 +197,20 @@ def preview_series():
     return jsonify(ok=True, preview=preview(_body(), current_user.id))
 
 
+@task_planner_bp.get("/api/task-planner/sequence-sources")
+def sequence_sources():
+    from services.task_planner_sequence import sequence_sources as sources
+    kind = request.args.get("kind", "")
+    selection = {}
+    if kind in {"listening_test", "intensive"}:
+        selection["section_number"] = request.args.get("section_number") or None
+    elif kind == "reading_passage":
+        selection["passage_number"] = request.args.get("passage_number") or None
+    if kind == "intensive":
+        selection["training_mode"] = request.args.get("training_mode", "system")
+    return jsonify(ok=True, **sources(kind, selection, request.args.getlist("source_scope")))
+
+
 @task_planner_bp.post("/api/task-planner/series")
 def create_series():
     from services.task_planner_series import create_series as create

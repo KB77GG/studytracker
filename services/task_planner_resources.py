@@ -40,7 +40,10 @@ from services.question_type_practice import (
     snapshot_from_task,
     validate_group,
 )
-from services.task_assignment_duplicates import resource_identity_from_payload
+from services.task_assignment_duplicates import (
+    resource_identity_from_payload,
+    validate_publish_conflicts,
+)
 
 KINDS = frozenset(
     {"question_type", "reading_passage", "listening_test", "intensive", "dictation"}
@@ -95,6 +98,9 @@ def _json_file(directory, resource_id):
     except (OSError, ValueError) as exc:
         raise ValueError("所选资源不存在或不可读取") from exc
     if not isinstance(payload, dict) or payload.get("hidden_from_catalog"):
+        raise ValueError("所选资源已下线")
+    offline = load_offline_test_ids(directory)
+    if resource_id in offline or str(payload.get("id") or "").strip() in offline:
         raise ValueError("所选资源已下线")
     return payload
 
@@ -338,9 +344,18 @@ def _listening_catalog(filters):
 
 
 def _intensive_payload(exercise_id):
-    if not parse_intensive_id(exercise_id):
+    info = parse_intensive_id(exercise_id)
+    if not info:
         raise ValueError("请选择已注册的精听资源")
+    if (
+        exercise_id in load_offline_test_ids(_root() / "static/listening")
+        or info["test_key"] in load_offline_test_ids(_roots().listening)
+    ):
+        raise ValueError("所选精听已下线")
     payload = _json_file(_root() / "static/listening", exercise_id)
+    embedded = parse_intensive_id(payload.get("id"))
+    if embedded and embedded["test_key"] in load_offline_test_ids(_roots().listening):
+        raise ValueError("所选精听已下线")
     audio = str(payload.get("audio") or "")
     audio_root = _roots().audio.resolve()
     candidate = (audio_root / audio).resolve()
@@ -752,14 +767,44 @@ def _coverage_overlap(first, second):
     return False
 
 
+@lru_cache(maxsize=512)
+def _cached_intensive_identity(directory, exercise_id, modified_ns, size):
+    del modified_ns, size
+    source = _json_file(Path(directory), exercise_id)
+    return str(source.get("id") or exercise_id).strip() or exercise_id
+
+
+def _canonical_intensive_id(exercise_id):
+    """Resolve aliases without changing already-frozen resource snapshots."""
+    if not parse_intensive_id(exercise_id):
+        return exercise_id
+    directory = _root() / "static/listening"
+    try:
+        stat = (directory / f"{exercise_id}.json").stat()
+        return _cached_intensive_identity(
+            str(directory), exercise_id, stat.st_mtime_ns, stat.st_size
+        )
+    except (OSError, ValueError):
+        return exercise_id
+
+
 def resource_overlap(first, second):
     """Overlap for two trusted planner records, including whole-vs-specialty work."""
     if _coverage_overlap(
         first.get("coverage_units", []), second.get("coverage_units", [])
     ):
         return True
-    a = resource_identity_from_payload(first.get("duplicate_payload"))
-    b = resource_identity_from_payload(second.get("duplicate_payload"))
+    first_payload = first.get("duplicate_payload") or {}
+    second_payload = second.get("duplicate_payload") or {}
+    if first.get("kind") == second.get("kind") == "intensive":
+        first_payload = dict(first_payload, listening_exercise_id=_canonical_intensive_id(
+            first_payload.get("listening_exercise_id")
+        ))
+        second_payload = dict(second_payload, listening_exercise_id=_canonical_intensive_id(
+            second_payload.get("listening_exercise_id")
+        ))
+    a = resource_identity_from_payload(first_payload)
+    b = resource_identity_from_payload(second_payload)
     if (
         not a["certain"]
         or not b["certain"]
@@ -773,14 +818,33 @@ def resource_overlap(first, second):
 
 
 def overlaps_task(prepared, task):
-    """Only cross-kind overlaps; normal same-kind policy remains in the caller."""
+    """Cross-kind overlap and canonical aliases; retain the normal repeat policy."""
     if task.cancelled_at or task.status == Task.STATUS_CANCELLED:
         return False
+    same_kind_payload = None
+    if (prepared["kind"] == "intensive" and task.listening_exercise_id
+            and task.listening_resource_type in {None, "", "intensive"}):
+        exercise_id = prepared["selection"]["exercise_id"]
+        if exercise_id == task.listening_exercise_id:
+            return False  # Keep ordinary same-file checks in the caller.
+        if _canonical_intensive_id(exercise_id) != _canonical_intensive_id(task.listening_exercise_id):
+            return False
+        return not validate_publish_conflicts(
+            [task.student_name], dict(prepared["duplicate_payload"],
+                                      listening_exercise_id=task.listening_exercise_id),
+            tasks=[task],
+        )["can_publish"]
     if (
-        prepared["kind"] == "question_type"
+        prepared["kind"] in {"question_type", "reading_passage"}
         and task.reading_test_id
         and task.grading_mode != "question_type_practice"
     ):
+        if prepared["kind"] == "reading_passage":
+            if prepared["selection"]["test_id"] == task.reading_test_id:
+                return False  # The caller already checked the same filename.
+            same_kind_payload = dict(
+                prepared["duplicate_payload"], reading_test_id=task.reading_test_id
+            )
         try:
             test_id = (
                 _reading_payload(task.reading_test_id).get("id") or task.reading_test_id
@@ -796,10 +860,16 @@ def overlaps_task(prepared, task):
             }
         ]
     elif (
-        prepared["kind"] == "question_type"
+        prepared["kind"] in {"question_type", "listening_test"}
         and task.listening_resource_type == "cambridge_test"
         and task.listening_exercise_id
     ):
+        if prepared["kind"] == "listening_test":
+            if prepared["selection"]["test_id"] == task.listening_exercise_id:
+                return False
+            same_kind_payload = dict(
+                prepared["duplicate_payload"], listening_exercise_id=task.listening_exercise_id
+            )
         try:
             test_id = (
                 _listening_payload(task.listening_exercise_id).get("id")
@@ -842,7 +912,13 @@ def overlaps_task(prepared, task):
             )
     else:
         return False
-    return _coverage_overlap(prepared.get("coverage_units", []), other)
+    if not _coverage_overlap(prepared.get("coverage_units", []), other):
+        return False
+    if same_kind_payload is not None:
+        return not validate_publish_conflicts(
+            [task.student_name], same_kind_payload, tasks=[task]
+        )["can_publish"]
+    return True
 
 
 def _plan(profile, due, creator_id):

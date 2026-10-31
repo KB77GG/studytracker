@@ -22,8 +22,10 @@ from services.task_assignment_duplicates import begin_assignment_transaction
 REQUEST_FIELDS = (
     "name", "student_id", "start_date", "end_date", "weekday_counts", "kind",
     "selection", "source_scope", "start_group_id", "wait_for_previous",
-    "planned_minutes", "note", "preview_hash",
+    "planned_minutes", "note", "preview_hash", "source_scopes", "start_resource_id",
 )
+SEQUENCE_KINDS = frozenset({"listening_test", "reading_passage", "intensive"})
+NEW_REQUEST_FIELDS = frozenset({"source_scopes", "start_resource_id"})
 
 
 def _digest(value):
@@ -89,8 +91,8 @@ def _definition(data, actor_id, now):
     planner._actor(actor_id)
     profile = planner._student(data.get("student_id"))
     kind = data.get("kind")
-    if kind not in {"question_type", "dictation"}:
-        raise planner.TaskPlannerError("连续安排目前支持题型顺序练习和词汇连续范围；其他内容请建单日安排")
+    if kind not in {"question_type", "dictation"} | SEQUENCE_KINDS:
+        raise planner.TaskPlannerError("不支持的连续安排类型")
     start = planner._date(data.get("start_date"), now)
     end = planner._date(data.get("end_date"), now)
     if not 0 <= (end - start).days <= 30:
@@ -98,7 +100,7 @@ def _definition(data, actor_id, now):
     counts = data.get("weekday_counts")
     if not isinstance(counts, list) or len(counts) != 7:
         raise planner.TaskPlannerError("请分别填写周一至周日的学习量")
-    limit = 20 if kind == "question_type" else 1200
+    limit = 1200 if kind == "dictation" else 20
     counts = [planner._integer(count, "每日学习量", 0, limit) for count in counts]
     days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
     schedule = [(day, counts[day.weekday()]) for day in days if counts[day.weekday()]]
@@ -123,10 +125,41 @@ def _definition(data, actor_id, now):
         "planned_minutes": planner._integer(data.get("planned_minutes", 20), "预计分钟", 1, 180),
         "note": note,
     }
+    if kind in SEQUENCE_KINDS:
+        scopes = data.get("source_scopes")
+        start_id = data.get("start_resource_id")
+        if (not isinstance(scopes, list) or not 1 <= len(scopes) <= 100
+                or any(not isinstance(scope, str) or not scope.strip() for scope in scopes)):
+            raise planner.TaskPlannerError("请选择1至100个明确的教材或来源")
+        if not isinstance(start_id, str) or not start_id.strip():
+            raise planner.TaskPlannerError("请选择起始篇章或套题")
+        definition.update(source_scopes=sorted(set(scopes)), start_resource_id=start_id)
     return profile, definition, schedule, selection
 
 
+def _sequence_selections(kind, data, selection, schedule):
+    from services.task_planner_sequence import sequence_sources
+
+    catalog = sequence_sources(kind, selection, data["source_scopes"])
+    items = catalog["items"]
+    ids = [item["id"] for item in items]
+    if data["start_resource_id"] not in ids:
+        raise planner.TaskPlannerError("起始内容不属于所选教材或练习范围，或已不可布置")
+    queue = items[ids.index(data["start_resource_id"]):]
+    needed = sum(count for _, count in schedule)
+    if len(queue) < needed:
+        raise planner.TaskPlannerError(f"所选起点后仅有{len(queue)}项，安排需要{needed}项，缺少{needed-len(queue)}项；请补充教材、缩短范围或调整每日数量")
+    offset = 0
+    for day, count in schedule:
+        for item in queue[offset:offset + count]:
+            yield day, 1, item.get("question_count", 0), item["selection"], [item["label"]]
+        offset += count
+
+
 def _selections(kind, data, selection, schedule):
+    if kind in SEQUENCE_KINDS:
+        yield from _sequence_selections(kind, data, selection, schedule)
+        return
     needed = sum(count for _, count in schedule)
     if kind == "question_type":
         subject = str(selection.get("subject") or "")
@@ -183,19 +216,32 @@ def _build_preview(data, actor_id, now=None):
     for day, count, questions, choice, labels in _selections(definition["kind"], data, selection, schedule):
         prepared = resources.prepare_resource(definition["kind"], choice)
         planner._conflicts(SimpleNamespace(id=None, student_id=profile.id, target_date=day), prepared, profile)
+        if any(resources.resource_overlap(prepared, previous) for previous in prepared_rows):
+            raise planner.TaskPlannerError("本次连续安排包含重复或重叠内容，请检查所选教材来源", code="duplicate_plan", status=409)
         rows.append({"target_date": day.isoformat(), "title": prepared["title"],
                      "unit_count": count, "question_count": questions, "selection": prepared["selection"],
                      "content_labels": labels})
         prepared_rows.append(prepared)
     public = {
         **definition, "rows": rows,
-        "totals": {"days": len(rows), "units": sum(row["unit_count"] for row in rows),
+        "quota_unit": _quota_unit(definition["kind"], rows),
+        "totals": {"days": len({row["target_date"] for row in rows}), "units": sum(row["unit_count"] for row in rows),
                    "questions": sum(row["question_count"] for row in rows)},
-        "warnings": (["上一条安排未发布、未完成或被退回时，本线后续安排进入待处理；需助教补做或改期，不会自动顺延。"]
+        "warnings": (["上一学习日尚有任务未发布、未完成或被退回时，本线后续日期进入待处理；同日任务不互相等待。需助教处理或取消剩余后重建，不会自动顺延。"]
                      if definition["wait_for_previous"] else []),
     }
     public["preview_hash"] = _digest({"definition": definition, "rows": rows, "prepared": prepared_rows})
     return public, prepared_rows
+
+
+def _quota_unit(kind, rows):
+    if kind == "question_type":
+        return "组"
+    if kind == "dictation":
+        return "词"
+    if kind == "listening_test" and rows and rows[0].get("selection", {}).get("section_number") is None:
+        return "套"
+    return "篇"
 
 
 def preview_series(data, actor_id, now=None):
@@ -225,7 +271,9 @@ def create_series(data, actor_id, now=None):
         key = data.get("request_key")
         if not isinstance(key, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{15,95}", key):
             raise planner.TaskPlannerError("缺少有效的连续安排请求标识，请重新预览")
-        request_hash = _digest({"actor_id": actor_id, "data": {name: data.get(name) for name in REQUEST_FIELDS}})
+        request_hash = _digest({"actor_id": actor_id, "data": {
+            name: data.get(name) for name in REQUEST_FIELDS if name not in NEW_REQUEST_FIELDS or name in data
+        }})
         existing = TaskPlannerSeries.query.filter_by(request_key=key).first()
         if existing:
             if existing.request_hash != request_hash:
@@ -246,8 +294,10 @@ def create_series(data, actor_id, now=None):
         )
         db.session.add(row)
         db.session.flush()
-        previous_id = None
+        previous_day_id, last_entry_id, last_date = None, None, None
         for index, (item, prepared) in enumerate(zip(preview["rows"], prepared_rows, strict=True)):
+            if item["target_date"] != last_date:
+                previous_day_id = last_entry_id
             entry = TaskPlannerEntry(
                 student_id=row.student_id, target_date=planner._date(item["target_date"], now),
                 kind=row.kind, title=prepared["title"][:240], selection_json=planner._dump(prepared["selection"]),
@@ -257,10 +307,10 @@ def create_series(data, actor_id, now=None):
             db.session.add(entry)
             db.session.flush()
             db.session.add(TaskPlannerSeriesItem(series_id=row.id, entry_id=entry.id,
-                                                previous_entry_id=previous_id, order_index=index,
+                                                previous_entry_id=previous_day_id, order_index=index,
                                                 unit_count=item["unit_count"]))
             planner._event(entry, "save_draft", actor_id, f"连续安排：{row.name}")
-            previous_id = entry.id
+            last_entry_id, last_date = entry.id, item["target_date"]
         db.session.commit()
         return row
     except Exception:
@@ -331,6 +381,7 @@ def list_series(student_id=None):
 def series_payload(row):
     items = _items(row.id)
     profile = db.session.get(StudentProfile, row.student_id)
+    definition = json.loads(row.definition_json)
     counts = {}
     for item in items:
         entry = db.session.get(TaskPlannerEntry, item.entry_id)
@@ -339,6 +390,7 @@ def series_payload(row):
     return {
         "id": row.id, "version": row.version, "name": row.name, "student_id": row.student_id,
         "kind": row.kind, "start_date": row.start_date.isoformat(), "end_date": row.end_date.isoformat(),
+        "quota_unit": definition.get("quota_unit") or _quota_unit(row.kind, definition.get("rows", [])),
         "weekday_counts": json.loads(row.weekday_counts_json), "wait_for_previous": row.wait_for_previous,
         "status": row.status, "entry_ids": [item.entry_id for item in items], "entry_count": len(items),
         "counts": counts, "status_counts": counts, "published_count": counts.get("published", 0),

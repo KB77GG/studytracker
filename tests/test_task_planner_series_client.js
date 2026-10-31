@@ -72,7 +72,88 @@ test('question practice preview requires an exact source and first group without
   assert.equal(payload.wait_for_previous, false);
   assert.throws(() => series.buildPayload(fields({ source_scope: '' })), /教材/);
   assert.throws(() => series.buildPayload(fields({ start_group_id: '' })), /起始题组/);
-  assert.throws(() => series.buildPayload(fields({ kind: 'listening_test' })), /目前支持题型和词汇/);
+  assert.throws(() => series.buildPayload(fields({ kind: 'unknown' })), /支持连续安排/);
+});
+
+function sequenceFields(kind, changes = {}) {
+  return fields(Object.assign({ kind, source_scopes: ['cambridge:11', 'cambridge:10'], start_resource_id: 'first-resource', section_number: '', passage_number: '', training_mode: 'system' }, changes));
+}
+
+test('whole listening and fixed Parts retain exact filters and explicit multiple sources', () => {
+  const original = sequenceFields('listening_test');
+  const whole = series.buildPayload(original);
+  assert.deepEqual(whole.selection, { section_number: null });
+  assert.deepEqual(whole.source_scopes, ['cambridge:10', 'cambridge:11']);
+  assert.equal(whole.start_resource_id, 'first-resource');
+  assert.equal(whole.source_scope, undefined);
+  assert.equal(whole.start_group_id, undefined);
+  assert.deepEqual(original.source_scopes, ['cambridge:11', 'cambridge:10']);
+  for (const section_number of ['1', 4]) assert.deepEqual(series.buildPayload(sequenceFields('listening_test', { section_number })).selection, { section_number: Number(section_number) });
+  for (const section_number of [0, 5, 1.5, 'invalid']) assert.throws(() => series.buildPayload(sequenceFields('listening_test', { section_number })), /Part 1–4/);
+});
+
+test('reading can advance through all passages or remain on a chosen Passage number', () => {
+  assert.deepEqual(series.buildPayload(sequenceFields('reading_passage')).selection, { passage_number: null });
+  for (const passage_number of ['1', 3]) assert.deepEqual(series.buildPayload(sequenceFields('reading_passage', { passage_number })).selection, { passage_number: Number(passage_number) });
+  for (const passage_number of [0, 4, 1.5, 'invalid']) assert.throws(() => series.buildPayload(sequenceFields('reading_passage', { passage_number })), /Passage 1–3/);
+});
+
+test('intensive listening preserves the training mode for all Parts and fixed Parts', () => {
+  assert.deepEqual(series.buildPayload(sequenceFields('intensive', { training_mode: '' })).selection, { section_number: null, training_mode: 'system' });
+  assert.deepEqual(series.buildPayload(sequenceFields('intensive', { section_number: '2', training_mode: 'challenge' })).selection, { section_number: 2, training_mode: 'challenge' });
+});
+
+test('resource sequences cannot preview without explicit sources and an exact starting resource', () => {
+  for (const kind of ['listening_test', 'reading_passage', 'intensive']) {
+    assert.throws(() => series.buildPayload(sequenceFields(kind, { source_scopes: [] })), /教材和起始内容/);
+    assert.throws(() => series.buildPayload(sequenceFields(kind, { start_resource_id: '' })), /教材和起始内容/);
+    assert.throws(() => series.buildPayload(sequenceFields(kind, { source_scopes: [''] })), /明确选择教材/);
+    assert.throws(() => series.buildPayload(sequenceFields(kind, { source_scopes: 'cambridge:10' })), /明确选择教材/);
+    assert.throws(() => series.buildPayload(sequenceFields(kind, { weekday_counts: [21, 1, 1, 1, 1, 1, 1] })), /0–20/);
+    const payload = series.buildPayload(sequenceFields(kind, { source_scopes: ['cambridge:10', 'cambridge:10'], weekday_counts: [20, 0, 0, 0, 0, 0, 0] }));
+    assert.deepEqual(payload.source_scopes, ['cambridge:10']);
+  }
+});
+
+test('sequence discovery uses repeated source_scope keys and empty filters for all content', () => {
+  const listening = new URLSearchParams(series.sequenceQuery(sequenceFields('listening_test')));
+  assert.deepEqual(listening.getAll('source_scope'), ['cambridge:10', 'cambridge:11']);
+  assert.equal(listening.get('section_number'), '');
+  assert.equal(listening.get('kind'), 'listening_test');
+  const reading = new URLSearchParams(series.sequenceQuery(sequenceFields('reading_passage', { passage_number: '3', source_scopes: [] })));
+  assert.equal(reading.get('passage_number'), '3');
+  assert.equal(reading.has('section_number'), false);
+  assert.deepEqual(reading.getAll('source_scope'), []);
+  const intensive = new URLSearchParams(series.sequenceQuery(sequenceFields('intensive', { section_number: '1', training_mode: 'review' })));
+  assert.equal(intensive.get('section_number'), '1');
+  assert.equal(intensive.get('training_mode'), 'review');
+  assert.throws(() => series.sequenceQuery(fields()), /听力、阅读整篇或精听/);
+});
+
+test('quota units match words, groups, whole tests and individual passages', () => {
+  assert.equal(series.kindUnit('dictation'), '词');
+  assert.equal(series.kindUnit('question_type'), '组');
+  assert.equal(series.kindUnit('listening_test', { section_number: null }), '套');
+  assert.equal(series.kindUnit('listening_test', { section_number: 1 }), '篇');
+  assert.equal(series.kindUnit('reading_passage'), '篇');
+  assert.equal(series.kindUnit('intensive'), '篇');
+  assert.match(series.quotaSummary([1, 1, 1, 1, 1, 2, 0], 'listening_test', '篇'), /周六 2篇 · 周日 休息/);
+});
+
+test('daily preview summaries distinguish multiple same-day tasks from learning days', () => {
+  const preview = { start_date: '2026-11-02', end_date: '2026-11-03', kind: 'reading_passage', quota_unit: '篇', totals: { days: 2, units: 3 }, rows: [{ target_date: '2026-11-02', unit_count: 1 }, { target_date: '2026-11-02', unit_count: 1 }, { target_date: '2026-11-03', unit_count: 1 }] };
+  assert.match(series.previewSummary(preview), /2个学习日 · 3次任务 · 共3篇/);
+  assert.match(series.previewSummary(Object.assign({}, preview, { kind: 'listening_test', quota_unit: '套' })), /共3套/);
+});
+
+test('changing selected books, fixed Part or intensive mode makes the accepted preview unusable', () => {
+  const session = series.createDraftSession(() => 'test-key');
+  const base = series.buildPayload(sequenceFields('intensive'));
+  session.accept(session.begin(base), { preview_hash: 'prepared' });
+  for (const change of [{ source_scopes: ['cambridge:12'] }, { section_number: '2' }, { training_mode: 'review' }, { start_resource_id: 'next-resource' }]) {
+    assert.throws(() => session.writePayload(series.buildPayload(sequenceFields('intensive', change))), /重新预览/);
+  }
+  assert.equal(session.writePayload(series.buildPayload(sequenceFields('intensive', { source_scopes: ['cambridge:10', 'cambridge:11'] }))).preview_hash, 'prepared');
 });
 
 test('vocabulary payload uses a first word and lets the preview determine every end word', () => {

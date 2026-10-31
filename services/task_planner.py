@@ -117,15 +117,20 @@ def _series_prerequisite(row, profile):
     if not series or series.status != "ready" or series.student_id != row.student_id:
         raise TaskPlannerError("所属学习线未确认或已取消，请检查连续安排")
     _actor(series.confirmed_by)
-    if not series.wait_for_previous or item.previous_entry_id is None:
+    if not series.wait_for_previous:
         return
-    previous = db.session.get(TaskPlannerEntry, item.previous_entry_id)
-    if (not previous or previous.student_id != profile.id or previous.status != "published"
-            or not previous.published_task_id):
-        raise TaskPlannerError("本学习线上一条安排尚未布置或已取消；请助教处理或取消后重新安排，不会自动顺延")
-    task = _prerequisite(previous.published_task_id, profile, row.target_date)
-    if not _prerequisite_complete(task, profile):
-        raise TaskPlannerError("本学习线上一条任务尚未完成或被退回；请助教处理或取消后重新安排，不会自动顺延")
+    earlier = TaskPlannerEntry.query.join(
+        TaskPlannerSeriesItem, TaskPlannerSeriesItem.entry_id == TaskPlannerEntry.id,
+    ).filter(TaskPlannerSeriesItem.series_id == series.id, TaskPlannerEntry.target_date < row.target_date)
+    last = earlier.order_by(TaskPlannerEntry.target_date.desc()).first()
+    if last is None:
+        return
+    for previous in earlier.filter(TaskPlannerEntry.target_date == last.target_date).all():
+        if (previous.student_id != profile.id or previous.status != "published" or not previous.published_task_id):
+            raise TaskPlannerError("本学习线上一学习日尚有安排未布置或已取消；请助教处理或取消后重新安排，不会自动顺延")
+        task = _prerequisite(previous.published_task_id, profile, row.target_date)
+        if not _prerequisite_complete(task, profile):
+            raise TaskPlannerError("本学习线上一学习日尚有任务未完成或被退回；请助教处理或取消后重新安排，不会自动顺延")
 
 
 def _prerequisite(task_id, profile, target_date):
@@ -402,10 +407,12 @@ def entry_payload(row):
     series_item = _series_item(row.id)
     series = db.session.get(TaskPlannerSeries, series_item.series_id) if series_item else None
     content_labels = []
+    selection = json.loads(row.selection_json)
     if series:
         frozen_rows = json.loads(series.definition_json).get("rows", [])
         content_labels = next((item.get("content_labels", []) for item in frozen_rows
-                               if item.get("target_date") == row.target_date.isoformat()), [])
+                               if item.get("target_date") == row.target_date.isoformat()
+                               and item.get("selection") == selection), [])
     today = beijing_now().date()
     message = row.last_error
     task = db.session.get(Task, row.published_task_id) if row.published_task_id else None
@@ -419,7 +426,7 @@ def entry_payload(row):
         "student_name": profile.full_name if profile else "学生档案已停用",
         "student_enabled": bool(setting and setting.enabled),
         "target_date": row.target_date.isoformat(), "kind": row.kind, "title": row.title,
-        "selection": json.loads(row.selection_json), "planned_minutes": row.planned_minutes,
+        "selection": selection, "planned_minutes": row.planned_minutes,
         "note": row.note, "status": row.status, "status_label": STATUS_LABELS[row.status],
         "error": message, "published_task_id": row.published_task_id,
         "prerequisite_task_id": row.prerequisite_task_id,

@@ -667,6 +667,171 @@ class TaskPlannerResourcesTest(unittest.TestCase):
             self.create("dictation", self.words())
         self.assertEqual(Task.query.count(), 0)
 
+    def test_frozen_intensive_is_rejected_after_exercise_or_parent_test_goes_offline(self):
+        prepared = resources.prepare_resource(
+            "intensive", {"exercise_id": "ielts10_test1_s1", "training_mode": "system"}
+        )
+        for directory, resource_id in (
+            ("listening", "ielts10_test1_s1"),
+            ("listening_tests", "ielts10_test1"),
+        ):
+            with self.subTest(directory=directory):
+                manifest = self.root / "static" / directory / "offline_tests.json"
+                self.write(manifest, {"tests": [{"id": resource_id, "status": "offline"}]})
+                self.assertEqual(resources.catalog("intensive")["total"], 0)
+                with self.assertRaisesRegex(ValueError, "已下线"):
+                    resources.revalidate_resource(prepared)
+                with self.assertRaisesRegex(ValueError, "已下线"):
+                    resources.create_resource_task(
+                        self.student, prepared, self.staff.id, "2026-11-01", 20,
+                        "Practice", "frozen-intensive-offline",
+                    )
+                self.assertEqual(Task.query.count(), 0)
+                self.assertEqual(PlanItem.query.count(), 0)
+                manifest.unlink()
+        self.assertEqual(resources.catalog("intensive")["total"], 1)
+        with self.assertRaisesRegex(ValueError, "已注册"):
+            resources.prepare_resource("intensive", {"exercise_id": "offline_tests"})
+
+    def test_same_kind_reading_alias_obeys_formal_task_repeat_policy(self):
+        from services.task_assignment_duplicates import validate_publish_conflicts
+
+        self.write(self.reading_path.parent / "reading_alias.json", self.reading)
+        _, task = self.create("reading_passage", {
+            "test_id": self.reading["id"], "passage_number": 1,
+        })
+        alias = resources.prepare_resource("reading_passage", {
+            "test_id": "reading_alias", "passage_number": 1,
+        })
+        other = resources.prepare_resource("reading_passage", {
+            "test_id": "reading_alias", "passage_number": 2,
+        })
+        self.assertTrue(resources.overlaps_task(alias, task))
+        self.assertFalse(resources.overlaps_task(other, task))
+        task.status = "done"
+        self.assertTrue(resources.overlaps_task(alias, task))
+        canonical_request = dict(alias["duplicate_payload"], reading_test_id=self.reading["id"])
+        self.assertTrue(validate_publish_conflicts(
+            [task.student_name], canonical_request, tasks=[task], force_repeat=True,
+            confirmed=True, force_reason="明确复习",
+        )["can_publish"])
+        task.status = Task.STATUS_CANCELLED
+        self.assertFalse(resources.overlaps_task(alias, task))
+
+    def test_same_kind_listening_alias_is_symmetric_and_distinguishes_sections(self):
+        self.complete_listening_test()
+        self.write(self.listening_path.parent / "listening_alias.json", self.listening)
+        _, task = self.create("listening_test", {
+            "test_id": "listening_alias", "section_number": 1,
+        })
+        original = resources.prepare_resource("listening_test", {
+            "test_id": self.listening["id"], "section_number": 1,
+        })
+        other = resources.prepare_resource("listening_test", {
+            "test_id": self.listening["id"], "section_number": 2,
+        })
+        whole = resources.prepare_resource("listening_test", {"test_id": self.listening["id"]})
+        self.assertTrue(resources.overlaps_task(original, task))
+        self.assertTrue(resources.overlaps_task(whole, task))
+        self.assertFalse(resources.overlaps_task(other, task))
+        task.listening_exercise_id = self.listening["id"]
+        alias = resources.prepare_resource("listening_test", {
+            "test_id": "listening_alias", "section_number": 1,
+        })
+        self.assertTrue(resources.overlaps_task(alias, task))
+        task.status = "done"
+        self.assertTrue(resources.overlaps_task(alias, task))
+        task.status = Task.STATUS_CANCELLED
+        self.assertFalse(resources.overlaps_task(alias, task))
+
+    def test_reading_and_listening_aliases_cannot_bypass_embedded_id_offline(self):
+        for kind, path, source, number_key in (
+            ("reading_passage", self.reading_path, self.reading, "passage_number"),
+            ("listening_test", self.listening_path, self.listening, "section_number"),
+        ):
+            with self.subTest(kind=kind):
+                self.write(path.parent / "alias.json", source)
+                prepared = resources.prepare_resource(kind, {"test_id": "alias", number_key: 1})
+                self.write(path.parent / "offline_tests.json", {
+                    "tests": [{"id": source["id"], "status": "offline"}],
+                })
+                with self.assertRaisesRegex(ValueError, "已下线"):
+                    resources.revalidate_resource(prepared)
+                self.assertEqual(resources.catalog(kind)["total"], 0)
+
+    def test_intensive_alias_respects_embedded_exercise_and_parent_offline(self):
+        source = json.loads(self.intensive_path.read_text())
+        alias_id = "ielts11_test1_s1"
+        self.write(self.intensive_path.parent / f"{alias_id}.json", source)
+        prepared = resources.prepare_resource("intensive", {"exercise_id": alias_id})
+        for directory, resource_id in (
+            ("listening", source["id"]), ("listening_tests", "ielts10_test1"),
+        ):
+            with self.subTest(directory=directory):
+                manifest = self.root / "static" / directory / "offline_tests.json"
+                self.write(manifest, {"tests": [{"id": resource_id, "status": "offline"}]})
+                with self.assertRaisesRegex(ValueError, "已下线"):
+                    resources.revalidate_resource(prepared)
+                self.assertEqual(resources.catalog("intensive")["total"], 0)
+                manifest.unlink()
+
+    def test_intensive_aliases_overlap_across_modes_without_changing_frozen_snapshot(self):
+        source = json.loads(self.intensive_path.read_text())
+        source["title"] = "Renamed copy"
+        self.write(self.intensive_path.parent / "ielts11_test1_s1.json", source)
+        original = resources.prepare_resource("intensive", {
+            "exercise_id": "ielts10_test1_s1", "training_mode": "challenge",
+        })
+        alias = resources.prepare_resource("intensive", {
+            "exercise_id": "ielts11_test1_s1", "training_mode": "review",
+        })
+        before = copy.deepcopy((original, alias))
+        self.assertNotEqual(original["content_hash"], alias["content_hash"])
+        self.assertTrue(resources.resource_overlap(original, alias))
+        self.assertTrue(resources.resource_overlap(alias, original))
+        self.assertEqual((original, alias), before)
+        self.assertEqual(original["coverage_units"], [])
+        self.assertEqual(resources.revalidate_resource(original), original)
+        source["id"] = "jfdr6_test1_s1"
+        self.write(self.intensive_path.parent / "jfdr6_test1_s1.json", source)
+        other = resources.prepare_resource("intensive", {"exercise_id": "jfdr6_test1_s1"})
+        self.assertFalse(resources.resource_overlap(original, other))
+
+    def test_formal_intensive_alias_uses_existing_repeat_and_cancellation_rules(self):
+        from services.task_assignment_duplicates import validate_publish_conflicts
+
+        source = json.loads(self.intensive_path.read_text())
+        self.write(self.intensive_path.parent / "ielts11_test1_s1.json", source)
+        _, task = self.create("intensive", {"exercise_id": "ielts10_test1_s1"})
+        alias = resources.prepare_resource("intensive", {
+            "exercise_id": "ielts11_test1_s1", "training_mode": "review",
+        })
+        self.assertTrue(resources.overlaps_task(alias, task))
+        task.listening_resource_type = None  # Legacy Tasks default to intensive.
+        self.assertTrue(resources.overlaps_task(alias, task))
+        task.status = "done"
+        self.assertTrue(resources.overlaps_task(alias, task))
+        canonical = dict(alias["duplicate_payload"], listening_exercise_id="ielts10_test1_s1")
+        self.assertTrue(validate_publish_conflicts(
+            [task.student_name], canonical, tasks=[task], force_repeat=True,
+            confirmed=True, force_reason="明确复习",
+        )["can_publish"])
+        task.status = Task.STATUS_CANCELLED
+        self.assertFalse(resources.overlaps_task(alias, task))
+
+    def test_intensive_identity_cache_reuses_reads_and_invalidates_changed_source(self):
+        source = json.loads(self.intensive_path.read_text())
+        path = self.intensive_path.parent / "ielts11_test1_s1.json"
+        self.write(path, source)
+        with patch.object(resources, "_json_file", wraps=resources._json_file) as read:
+            self.assertEqual(resources._canonical_intensive_id(path.stem), source["id"])
+            self.assertEqual(resources._canonical_intensive_id(path.stem), source["id"])
+            self.assertEqual(read.call_count, 1)
+            source["id"] = "jfdr6_test1_s1"
+            self.write(path, source)
+            self.assertEqual(resources._canonical_intensive_id(path.stem), source["id"])
+            self.assertEqual(read.call_count, 2)
+
     def test_overlap_planner_same_kind_and_whole_vs_question_group(self):
         whole1 = resources.prepare_resource(
             "reading_passage", {"test_id": "ielts10_test1_reading", "passage_number": 1}

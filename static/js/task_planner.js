@@ -191,7 +191,7 @@
         var status = LABELS[entry.status] ? entry.status : 'draft';
         top.appendChild(node('span', 'tp-status tp-status-' + status, entry.status_label || LABELS[status]));
         main.appendChild(top); main.appendChild(node('h3', '', entry.title));
-        main.appendChild(node('p', 'tp-entry-meta', '预计 ' + entry.planned_minutes + ' 分钟' + (entry.series_wait_for_previous ? ' · 等待本线上一项有效提交' : entry.prerequisite_task_id ? ' · 需先完成指定任务' : ' · 按指定日期布置')));
+        main.appendChild(node('p', 'tp-entry-meta', '预计 ' + entry.planned_minutes + ' 分钟' + (entry.series_wait_for_previous ? ' · 等待上一学习日全部任务有效提交' : entry.prerequisite_task_id ? ' · 需先完成指定任务' : ' · 按指定日期布置')));
         if (entry.series_managed) {
           var seriesLink = node('button', 'tp-text-button tp-series-link', '所属学习线：' + (entry.series_name || '连续安排'));
           seriesLink.type = 'button'; seriesLink.addEventListener('click', function () { if (seriesClient) seriesClient.showDetails(entry.series_id).catch(report); }); main.appendChild(seriesLink);
