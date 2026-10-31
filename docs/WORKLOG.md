@@ -6,10 +6,11 @@
 - 生产ae3f079d/4SHA一致、tracked clean/17原未跟踪，12:29:36 CST起active/NRestarts0；5002/单worker/gthread6保持，三页面回环200且有新代码，公网听力与JS200/哈希正确，warning日志无输出。无学生读写、schema新增或小程序变更，完整GUI/真机验收限制保留。
 - 规范交接随后独立[skip ci]同步；旧桌面main6ded77d2原7/22脏内容仅更新两交接镜像，不作发布源。功能已commit/push/deploy，学生刷新网页可用，详见CODEX_HANDOFF本轮发布条目。
 
-## 2026-10-31 — 任务安排试用版验收完成、待发布
+## 2026-10-31 — 任务安排试用版已上线
 
-- 独立task-planner-beta树完成网页预排、四类精确选材、确认/学生启停/前置/幂等执行；46专项Python+71既有回归+17Node通过，Chrome合成全流程与390px布局通过，独立复审无新增阻断。
-- 生产一致性备份已完成并quick_check=ok，原服务保持active；尚未commit/push/deploy、无生产planner表或timer。下一步按用户已授权上线并补实际证据。用法/精确验证见TASK_PLANNER_BETA.md与TASK_PLANNER_VALIDATION.md，旧脏资料树与小程序保留。
+- 独立task-planner-beta树业务f8319d9e已commit/push main和任务分支，CI41168358998/41168421301及Deploy41168421279成功；46专项Python+71既有回归+17Node、Chrome合成全流程/390px、独立复审通过。新网页人工预选后定时布置，学生默认关闭、不发微信/新增付费API。
+- 生产HEAD/7SHA匹配、12:24:45 CST active、5002/单worker/gthread6/NRestarts0；备份quick_check=ok，只增三表且0行，原表不变，公网鉴权正确。Timer enabled/active，下一次11月1日03:05；12:33手动空执行exit0，未创建真实任务。详见TASK_PLANNER_DEPLOYMENT.md/VALIDATION.md。
+- 两交接与部署报告独立[skip ci]同步；并行重做上线后，文档接到1ddddbbb，最终生产ae3f079d/12:29:36 active、planner七SHA不变、API401/timer启用。旧Desktop脏树7/22及另一重做任务交接保留，小程序未改/未上传。下一步助教选少量学生配置试用、检查首次凌晨结果；全局暂停可停timer。
 
 > 目的：更换 Codex 账号、任务或电脑后，AI agent / 人先读这里，30 秒接上进度。
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。

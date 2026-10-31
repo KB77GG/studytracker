@@ -14,17 +14,18 @@
 - 桌面旧资料树 `/Users/zhouxin/Desktop/studytracker` 仍main6ded77d24586327ad94e151e172ae4811b4a2eed，原7 modified/22 untracked入口保留，本轮只更新两交接镜像；发布业务时behind89，后续纯文档提交会继续增加。完整旧脏路径见该树10月28日记录及git status；固定小程序树和其他任务树未改。业务/规范交接可从远端取得，旧资料树镜像和旧脏内容仍仅本机。
 - 未验与下一步：IAB确认弹窗曾使自动化超时，真实确认后导航/移动端/真机音频没有完整实测；合成测试覆盖重做和刷新保护。学生刷新网页使用，若反馈异常从本分支对应版本复现，不删除历史成绩。当前无发布阻塞，无待执行部署步骤。
 
-## 2026-10-31 任务安排试用版完成验收，准备发布
+## 2026-10-31 任务安排试用版已上线，凌晨定时器已启用
 
-- 实施树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`，基线HEAD与发布前fetch核实origin/main均 `ee94abb30d56b3c9623c519f75c1ffa9679c65b5`，开工clean；当前业务与两份交接均未提交。旧资料树 `/Users/zhouxin/Desktop/studytracker` main6ded77d2原7 modified/22 untracked入口保留，仅更新交接与原计划，不从该脏树发布。固定小程序树未改。
-- 用户已授权测试版上线；完成独立网页 `/task-planner`、人工选择具体题组/阅读篇章/词汇范围/精听、草稿与确认、学生启停、可选前置、同日执行、冻结资源复核与去重、事务幂等、异常与日志。学生自动默认关闭；凌晨03:05开始、09:00前每15分钟补跑，不发微信、不新增付费API。长期教材顺序自动选下一段未纳入本版。用法与停用见 `docs/TASK_PLANNER_BETA.md`。
-- 新增模型/核心服务/资源/蓝图/CLI/systemd两文件/UI三文件/三份测试/说明与验证记录；小改api初始化、任务取消、导航、任务页及CI；没有改巨型app.py或miniprogram。完整当前路径见git status。本轮只有这套改动，未混入旧资料树内容。
-- 验证：46项专项Python（并发SQLite/回滚/权限/四类资源）、71项既有任务与日期回归、最终17项Node均通过；9目标Python Ruff、diff check、5运行文件Python3.10 AST通过。Chrome合成选书1–3→草稿→确认→立即布置→日志→学生启用完整通过，390×844无横向溢出，已恢复viewport；截图仅本机 `/private/tmp/task-planner-beta-preview.jpg`。独立复审无新增阻断，CLI不导入app/ML/通知模块。精确命令与限制见 `docs/TASK_PLANNER_VALIDATION.md`。
-- 发布前生产只读：HEAD2d0dbdb6、tracked clean、service active/running/NRestarts0，5002/单worker/gthread6保持。一致性备份 `/root/backups/studytracker/task-planner-20261031-122157/app.db`，quick_check=ok；planner表0。尚未生产增表/安装timer/重启，没有真实学生任务、作答、成绩或消息写入。
-- 下一步：提交到任务分支并过CI，再非强制推main触发既有部署；核生产HEAD、三新表、HTTP鉴权、服务配置，安装timer并dry-run。发布后必须用实际证据替换本条。当前尚未commit/push/deploy，仅本机；小程序没有本轮改动，未上传/提审/发布。学生启用交助教明确操作。
+- 用户已授权试用上线；网页入口 <https://studytracker.xin/task-planner>。人工预选题组/篇章/词汇范围/精听→草稿→确认→按日期布置，支持学生级启停及可选前置。学生开关默认关闭，不发微信、不新增付费API；长期教材顺序自动选下一段未提供。具体用法见 `docs/TASK_PLANNER_BETA.md`。
+- 实施树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`，业务HEAD **f8319d9e35bb2b5622ce283fde39aac99223cca7**，基线ee94abb3/开工clean；22文件业务已commit/push main及任务分支并部署。业务提交后clean；本两交接及部署记录以独立 `[skip ci]` 文档提交同步，最终文档HEAD以git log为准，无待发布业务代码。纯文档同步因并行主线推进被非快进保护拒绝，随后接到1ddddbbb，保留网页重做业务ae3f079d及其交接，未强推。
+- 46专项Python+71既有回归+17Node通过，目标Ruff/diff/Python3.10 AST通过，Chrome合成选书→保存→确认→立即布置→日志→学生启用与390px布局通过；独立复审无新增阻断、CLI不导入app/ML/通知。精确命令与限制见 `docs/TASK_PLANNER_VALIDATION.md`。分支CI41168358998、main CI41168421301、Deploy41168421279均success；advisory lint为仓库存量，三测试job通过。
+- 本轮初次部署生产f8319d9e、12:24:45 CST起active；并行网页重做随后部署ae3f079d。最终只读复核当前生产 `/root/apps/studytracker` HEAD=ae3f079d、tracked clean、12:29:36 CST起active/running/NRestarts0；planner七个SHA仍与本轮完全一致、API401、timer仍enabled/active，5002/单worker/gthread6保持。备份 `/root/backups/studytracker/task-planner-20261031-122157/app.db`已quick_check；只增planner三表、原表定义变化0、三表0行。HTTP login200/planner302/匿名API401/JS200。
+- systemd timer已安装并enabled/active/waiting，下一次 **2026-11-01 03:05 CST**；每日03:05–08:50每15分钟。12:33合成空执行门禁检查success/exit0、outside_window=true/发布0；尚未观察凌晨真实触发。没有给真实学生布置测试任务、启用学生或写成绩/发消息。精确部署/停用命令见 `docs/TASK_PLANNER_DEPLOYMENT.md`。
+- 旧资料树 `/Users/zhouxin/Desktop/studytracker` main6ded77d2原7 modified/22 untracked入口保留，仅本两交接与原计划本机镜像更新；另一“网页重做”任务已独立上线，完整保留其代码与交接；本轮不重复部署。固定小程序树未动，本轮无小程序上传/提审/发布，也无需为本网页功能重发小程序。
+- 下一步：助教选少量学生、准备未来两天内容、确认并开启，集中查看待处理及执行记录；实际首轮凌晨发布、所有资源真实浏览器和微信真机待试用反馈。可在页面暂停学生，全局停止用 `systemctl disable --now studytracker-task-planner.timer`。无本任务上线阻塞；未发布的旧资料树内容仍仅本机，业务与最终规范交接可从远端取得。
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-27；自动学生/家长账号创建修复2d0dbdb6已提交、推送并部署，CI及只读线上验收通过；无小程序变更。
+> 最近更新：2026-10-31；任务安排试用版业务f8319d9e已提交、推送并部署，定时器启用、学生默认关闭；无小程序变更。
 
 ## 2026-10-27 自动学生/家长账号创建修复已部署
 
