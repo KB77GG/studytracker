@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-10-31 网页“重做”已提交、推送并部署
+
+- 用户明确授权“提交部署上线”。实施树 `/Users/zhouxin/.codex/worktrees/practice-redo-button/studytracker` 建立 `codex/practice-redo-button`；从原detached ee94abb3衔接已上线的并行任务安排主线 f8319d9e，6个目标文件内容在rebase前后完全一致。业务提交 **`ae3f079dd7f268035191dfd194cbf192a69a43e4`** 已推送任务分支与main，未强推、未覆盖其他任务。
+- 功能范围：听力/阅读共享刷题模板右上“重做”（普通复盘可用），独立本地草稿标记防刷新、迟到恢复、history_attempt与pagehide回灌；保留成绩/笔记/划线，提交中禁用，存储失败回滚。精听右上“重做”保留首答记录，已做句仅本地订正、未做句继续正式首答，刷新保留新输入与难度。只读、日期、模考与听辨限制未放宽；已提交只读专项不会因本按钮重新开放。
+- 本轮开工5 modified/3 untracked均为此前本任务：3模板+两交接，`static/js/practice_redo.js`+`tests/test_practice_redo.js`+`tests/test_listening_player_redo.js`。6功能/测试文件已全部入业务提交；两份旧交接另存命名stash `practice-redo handoff before upstream rebase 20261031` 和本机 `/private/tmp/practice-redo-handoff-predeploy.patch`，不要整体apply到新主线。本两份发布交接随后以独立[skip ci]提交同步，最终文档HEAD见git log；无待部署业务源码。
+- 发布前 `node --test tests/test_practice_redo.js tests/test_listening_player_redo.js tests/test_practice_modes.js tests/test_listening_practice_navigation.js tests/test_reading_practice_navigation.js tests/test_question_type_review_readonly.js tests/test_practice_shell.js tests/test_listening_cloze.js tests/test_listening_cloze_exercise_contract.js` **78/78通过**，`node tests/test_dictation_spell_queue.js`、`git diff --check`通过。新主线重做两文件再验45/45；独立复审66/66及共享35/35均通过，无新增发布阻断。
+- 历史回归 `tests/test_cambridge_same_day_retry.py`+`tests/test_practice_history.py` **13 passed/153既有弃用告警**：旧基线原pytest命令通过；新主线默认app启动建planner表时被沙箱只读数据库限制挡住，改为合成config、sqlite内存库、临时UPLOAD_FOLDER、禁止socket联网，使用`TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python`运行`pytest.main(['-q','-p','no:cacheprovider','tests/test_cambridge_same_day_retry.py','tests/test_practice_history.py'])`后通过，无真实学生数据库操作。
+- [分支CI41168588721](https://github.com/KB77GG/studytracker/actions/runs/41168588721)、[main CI41168741418](https://github.com/KB77GG/studytracker/actions/runs/41168741418)、[Deploy41168741460](https://github.com/KB77GG/studytracker/actions/runs/41168741460)均success；CI的test、account-provisioning、task-planner成功，advisory lint延续已有failure，不是本次运行文件变更。main部署前已确认并行f8319d9e部署41168421279成功。
+- 生产 `/root/apps/studytracker` 业务HEAD=ae3f079d，tracked clean、原17 untracked保留；服务自 **2026-10-31 12:29:36 CST** active/running、NRestarts0。ExecStart通过`-c gunicorn.conf.py`加载配置；只解析bind/workers/worker_class/threads确认 `127.0.0.1:5002 / workers=1 / gthread / threads=6`。12:29起warning以上journal无输出。初验误把参数当命令行内联而断言失败，改为配置文件核对后通过，未改服务配置。
+- 只读生产验收 `ssh root@47.110.45.193 'python3 -' < /private/tmp/verify-practice-redo-release.py`通过：4运行文件SHA与审阅一致；回环听力`/listening/test/ielts20_test1`、阅读`/reading/test/ielts20_test1_reading`、精听`/listening/ielts20_test1_s1`均HTTP200且含重做代码，JS200哈希一致。公网curl验证听力页200且有resetBtn、JS200且SHA=`fb19d0ecf55183a66fa6c5a8227897104f40f4999db61cf23bbab68a8a714972`。检查未import app/运行模型、未读取或提交学生答案；不把HTML检查当完整GUI验收。
+- 发布沿既有脚本（含已有迁移与重启），本功能无新增Python/schema/依赖/生产数据库手工操作或外部服务配置。小程序无本轮改动，无需为网页重做重新发布，本轮未上传/提审/发布小程序。
+- 桌面旧资料树 `/Users/zhouxin/Desktop/studytracker` 仍main6ded77d24586327ad94e151e172ae4811b4a2eed，原7 modified/22 untracked入口保留，本轮只更新两交接镜像；发布业务时behind89，后续纯文档提交会继续增加。完整旧脏路径见该树10月28日记录及git status；固定小程序树和其他任务树未改。业务/规范交接可从远端取得，旧资料树镜像和旧脏内容仍仅本机。
+- 未验与下一步：IAB确认弹窗曾使自动化超时，真实确认后导航/移动端/真机音频没有完整实测；合成测试覆盖重做和刷新保护。学生刷新网页使用，若反馈异常从本分支对应版本复现，不删除历史成绩。当前无发布阻塞，无待执行部署步骤。
+
 ## 2026-10-31 任务安排试用版完成验收，准备发布
 
 - 实施树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`，基线HEAD与发布前fetch核实origin/main均 `ee94abb30d56b3c9623c519f75c1ffa9679c65b5`，开工clean；当前业务与两份交接均未提交。旧资料树 `/Users/zhouxin/Desktop/studytracker` main6ded77d2原7 modified/22 untracked入口保留，仅更新交接与原计划，不从该脏树发布。固定小程序树未改。
