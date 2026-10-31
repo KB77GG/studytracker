@@ -1,5 +1,11 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-10-31 — 整篇连续安排已部署
+
+- task-planner-beta@891054ea clean起步，15业务/测试/用法文件提交3da2cad1并推任务分支/main：多教材按序听力整套/固定Part、阅读全部/固定Passage、精听模式与固定Part，沿用日期/星期配额；同日多项独立任务、上学习日全部有效提交门禁，无新schema。阅读/听力/精听别名重复与下线漏洞已补，旧快照哈希不改；98 planner+71旧回归+39前端及独立复审GO。
+- Chrome合成学生完成Part1预览/保存/确认/详情/取消；整套/阅读/精听跨书预览、30天不足阻保存、390px布局通过；server已停，证据仅private/tmp。分支CI41177671648成功，Deploy41177784565一次成功；main CI41177784665成功，三个测试job通过（advisory lint延续存量问题）。生产3da2cad1/11SHA一致、14:44:24 CST起active/NRestarts0/单worker gthread6，warning日志0，schema与备份零差异。
+- 备份planner-series-20261031-143841/app.db通过quick_check；原timer启用、下次11月1日03:05。匿名新API401、四类真实目录和公网JS SHA核对通过，无真实学生数据写入/新收费API/小程序改动。两份交接随后独立[skip ci]同步，代码已commit/push/deploy；真实凌晨与学生端待试用，详见CODEX_HANDOFF顶部。
+
 ## 2026-10-31 — 连续学习线与整套听力已部署
 
 - 用户明确授权上线。task-planner-beta树从93681a57提交16文件业务4b992e79，分支CI41172481854成功后推main；main CI41172849083成功，三个测试job全过，advisory lint延续存量问题。两交接及用法发布记录随后独立[skip ci]同步，无待部署业务源码。
