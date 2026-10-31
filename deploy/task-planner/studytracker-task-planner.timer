@@ -1,0 +1,10 @@
+[Unit]
+Description=Publish opted-in StudyTracker plans each morning
+
+[Timer]
+OnCalendar=*-*-* 03..08:05,20,35,50:00 Asia/Shanghai
+Persistent=true
+Unit=studytracker-task-planner.service
+
+[Install]
+WantedBy=timers.target

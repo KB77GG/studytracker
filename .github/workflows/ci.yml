@@ -65,6 +65,29 @@ jobs:
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
 
+  task-planner:
+    runs-on: ubuntu-latest
+    env:
+      TZ: UTC
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install planner regression dependencies
+        run: |
+          python -m pip install \
+            'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
+            'requests>=2.31' 'PyJWT>=2.9' 'pypinyin>=0.55'
+      - name: Test scheduled assignment transactions and resources
+        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources -v
+      - name: Test planner client behavior
+        run: node --test tests/test_task_planner_client.js
+
   # 代码风格/静态检查：现阶段只报告，不阻断（continue-on-error）。
   lint:
     runs-on: ubuntu-latest

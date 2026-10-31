@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block page_subtitle %}LEARNING PLANNER{% endblock %}
+{% block page_title %}任务安排{% endblock %}
+{% block page_description %}提前选好学习内容，按确认的日期布置给学生{% endblock %}
+{% block header_search %}{% endblock %}
+{% block header_actions %}<a class="btn btn-secondary" href="/tasks">查看已布置任务</a>{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/task_planner.css') }}">
+<script src="{{ url_for('static', filename='js/task_planner.js') }}" defer></script>
+{% endblock %}
+{% block content_dashboard %}
+<section class="task-planner" id="taskPlanner" aria-label="任务安排工作台">
+  <div class="tp-intro"><div><span class="tp-beta">助教试用版</span><h2>把明天的安排，今天准备好。</h2><p>选好具体题型、篇章或词汇范围，保存草稿后再确认。草稿不会出现在学生列表。</p></div><button class="tp-button tp-button-primary" type="button" id="plannerNew" disabled>＋ 新建安排</button></div>
+  <div id="plannerMessage" class="tp-message" role="status" aria-live="polite" hidden></div>
+  <div class="tp-summary" aria-label="当前范围汇总">
+    <button type="button" class="tp-summary-card" data-summary="ready"><span>明日待布置</span><strong id="summaryTomorrow">—</strong><small>已确认的具体安排</small></button>
+    <button type="button" class="tp-summary-card" data-summary="draft"><span>待确认草稿</span><strong id="summaryDraft">—</strong><small>确认后才会执行</small></button>
+    <button type="button" class="tp-summary-card tp-summary-attention" data-summary="attention"><span>需要处理</span><strong id="summaryAttention">—</strong><small>查看遗漏、过期与执行失败</small></button>
+    <button type="button" class="tp-summary-card" data-summary="published"><span>已布置</span><strong id="summaryPublished">—</strong><small>可到任务管理查看进度</small></button>
+  </div>
+  <section class="tp-workspace" aria-labelledby="plannerListTitle">
+    <div class="tp-workspace-heading"><div><h2 id="plannerListTitle">未来任务安排</h2><p id="plannerSchedule">正在读取安排规则…</p></div><button type="button" class="tp-button" id="plannerRefresh">刷新</button></div>
+    <form id="plannerFilters" class="tp-filters">
+      <label class="tp-field tp-student-filter">学生<select id="plannerStudent"><option value="">全部学生</option></select></label>
+      <label class="tp-field">从<input id="plannerFrom" type="date" required></label><label class="tp-field">到<input id="plannerTo" type="date" required></label>
+      <label class="tp-field">状态<select id="plannerStatus"><option value="">全部状态</option><option value="draft">草稿</option><option value="ready">待布置</option><option value="attention">需要处理（含过期）</option><option value="published">已布置</option><option value="cancelled">已取消</option></select></label><button class="tp-button" type="submit">查看</button>
+    </form>
+    <div class="tp-quick-dates"><button type="button" data-range="tomorrow">只看明天</button><button type="button" data-range="week">未来7天</button><button type="button" data-range="today">今天</button><span id="plannerCount"></span></div>
+    <div class="tp-enrollment" id="plannerEnrollment" hidden><div><strong id="enrollmentTitle"></strong><p id="enrollmentHint"></p></div><button class="tp-button" id="plannerEnable" type="button"></button></div>
+    <div id="plannerLoading" class="tp-empty" role="status">正在读取安排…</div><div id="plannerEntries" class="tp-entry-list" aria-live="polite"></div>
+    <div id="plannerEmpty" class="tp-empty" hidden><span class="tp-empty-icon" aria-hidden="true">＋</span><h3>这个范围还没有安排</h3><p>可以先准备明天的练习，也可以一次安排未来几天。</p><button type="button" class="tp-button" id="plannerEmptyNew">新建一条安排</button></div>
+  </section>
+  <p class="tp-footnote">试用版支持人工选题后定时布置；按学生单独启用，只执行已确认的安排，不发送微信提醒。</p>
+</section>
+<dialog id="plannerEditor" class="tp-dialog" aria-labelledby="plannerEditorTitle">
+  <form id="plannerEditorForm">
+    <header class="tp-editor-header"><div><span class="tp-eyebrow">准备学习内容</span><h2 id="plannerEditorTitle">新建安排</h2></div><button class="tp-icon-button" type="button" id="plannerEditorClose" aria-label="关闭安排编辑">×</button></header>
+    <div class="tp-editor-body"><div class="tp-message" id="plannerEditorError" role="alert" hidden></div><fieldset id="plannerEditorFields">
+      <div class="tp-form-grid"><label class="tp-field">学生<select id="editorStudent" required><option value="">请选择学生</option></select></label><label class="tp-field">任务日期<input id="editorDate" type="date" required></label></div>
+      <label class="tp-field">练习内容<select id="editorKind" required></select></label>
+      <div class="tp-form-grid" id="questionTypeFields"><label class="tp-field">科目<select id="editorSubject"><option value="reading">阅读</option><option value="listening">听力</option></select></label><label class="tp-field">题型<select id="editorType"><option value="all">全部题型</option></select></label></div>
+      <div class="tp-catalog-search"><label class="tp-field">查找教材、篇章或题组<input id="editorSearch" type="search" placeholder="教材名称、Test 或篇章关键词"></label><button class="tp-button" id="editorSearchButton" type="button">查找</button></div>
+      <div class="tp-selection-bar"><strong id="editorSelectionCount">尚未选择内容</strong><button class="tp-text-button" id="editorClearSelection" type="button">清空选择</button></div>
+      <div id="editorSelected" class="tp-selected" aria-live="polite"></div><div id="editorCatalog" class="tp-catalog" aria-live="polite"></div><button id="editorLoadMore" class="tp-button tp-load-more" type="button" hidden>加载更多</button>
+      <div id="dictationFields" class="tp-resource-options" hidden><div class="tp-form-grid"><label class="tp-field">开始词序<input id="editorWordStart" type="number" min="1" step="1" value="1"></label><label class="tp-field">结束词序<input id="editorWordEnd" type="number" min="1" step="1"></label></div><label class="tp-field">学习目标<select id="editorVocabularyGoal"><option value="reading">阅读词汇</option><option value="listening">听力词汇</option><option value="writing">写作词汇</option><option value="comprehensive">综合训练</option></select></label><p id="editorBookHint" class="tp-help">选中词书后，请核对本次学习范围。</p></div>
+      <label class="tp-field" id="intensiveFields" hidden>精听训练方式<select id="editorTrainingMode"><option value="system">跟随系统</option><option value="review">复习</option><option value="basic">基础</option><option value="standard">标准</option><option value="challenge">挑战</option></select></label>
+      <div class="tp-form-grid"><label class="tp-field">预计用时（分钟）<input id="editorMinutes" type="number" min="1" max="180" step="1" value="20" required></label><label class="tp-field" id="paceField">练习节奏<select id="editorPace"><option value="training">训练节奏</option><option value="exam">考试节奏</option></select></label></div>
+      <label class="tp-field">布置条件<select id="editorPrerequisite"><option value="">按指定日期布置</option></select><span class="tp-help" id="editorPrerequisiteHint">可选已有任务作为前置；未完成时，这条安排会进入待处理。</span></label>
+      <label class="tp-field">给学生的说明（选填）<textarea id="editorNote" rows="3" maxlength="200" placeholder="例如：先独立作答，再查看解析。"></textarea></label>
+    </fieldset></div>
+    <footer class="tp-editor-footer"><p>保存后为草稿，回到列表确认才会定时布置。</p><div><button class="tp-button" type="button" id="plannerEditorCancel">取消</button><button class="tp-button tp-button-primary" type="submit" id="plannerEditorSave">保存草稿</button></div></footer>
+  </form>
+</dialog>
+{% endblock %}

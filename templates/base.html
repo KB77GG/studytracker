@@ -49,6 +49,8 @@
           href="{{ url_for('word_examples_page') }}"><i class="nav-link__icon fas fa-spell-check" aria-hidden="true"></i><span>词汇审核</span></a>
         <a class="nav-link {{ 'is-active' if endpoint == 'tasks_page' else '' }}"
           href="{{ url_for('tasks_page') }}"><i class="nav-link__icon fas fa-clipboard-list" aria-hidden="true"></i><span>任务管理</span></a>
+        <a class="nav-link {{ 'is-active' if request.path == '/task-planner' else '' }}"
+          href="/task-planner"><i class="nav-link__icon far fa-calendar-alt" aria-hidden="true"></i><span>任务安排 <small>试用</small></span></a>
         <a class="nav-link {{ 'is-active' if 'grading' in endpoint else '' }}"
           href="{{ url_for('grading_list') }}"><i class="nav-link__icon fas fa-check-double" aria-hidden="true"></i><span>批改中心</span></a>
         <a class="nav-link {{ 'is-active' if 'course_plan' in endpoint else '' }}"

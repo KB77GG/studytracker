@@ -22,6 +22,7 @@ def init_app(app):
     from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
     from api.students import api_bp
     from api.task_assignments import task_assignments_bp
+    from api.task_planner import task_planner_bp
     from api.teacher_practice_access import teacher_practice_bp
     from api.toefl_mock import toefl_mock_bp
     from api.tts import tts_bp  # TTS API
@@ -36,6 +37,7 @@ def init_app(app):
     app.register_blueprint(practice_history_bp)
     app.register_blueprint(question_type_practice_bp)
     app.register_blueprint(task_assignments_bp)
+    app.register_blueprint(task_planner_bp)
     app.register_blueprint(material_bp)  # Register material bank
     app.register_blueprint(tts_bp)  # Register TTS
     app.register_blueprint(azure_tts_bp)  # Register Azure TTS
@@ -58,5 +60,8 @@ def init_app(app):
     # tables in production. Keep this local to the feature instead of adding
     # more migration logic to the legacy app.py monolith.
     with app.app_context():
+        from models_task_planner import ensure_schema as ensure_task_planner_schema
+
+        ensure_task_planner_schema()
         WritingTypingAttempt.__table__.create(bind=db.engine, checkfirst=True)
         QuestionTypePracticeAttempt.__table__.create(bind=db.engine, checkfirst=True)

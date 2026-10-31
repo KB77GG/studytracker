@@ -102,6 +102,10 @@ def task_deletion_block_reason(
 
     available_tables = set(sa_inspect(db.session.get_bind()).get_table_names())
     for table, column in task_reference_columns():
+        # Planner links describe scheduling, not learner activity. Cancellation
+        # retains the Task tombstone, so these audit/dependency links stay valid.
+        if table.name == "task_planner_entry":
+            continue
         if table.name not in available_tables:
             continue
         linked_row = db.session.execute(

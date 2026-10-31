@@ -1,0 +1,11 @@
+[Unit]
+Description=StudyTracker confirmed task planner
+After=network.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/root/apps/studytracker
+ExecStart=/root/apps/studytracker/.venv/bin/python scripts/run_task_planner.py
+TimeoutStartSec=300
+Nice=10
