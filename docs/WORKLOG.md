@@ -1,5 +1,21 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-10-31 — 连续学习线与整套听力已部署
+
+- 用户明确授权上线。task-planner-beta树从93681a57提交16文件业务4b992e79，分支CI41172481854成功后推main；main CI41172849083成功，三个测试job全过，advisory lint延续存量问题。两交接及用法发布记录随后独立[skip ci]同步，无待部署业务源码。
+- Deploy41172849064首次CREATE新表遇数据库锁，原服务未重启；纯模型CLI `--init-schema` 成功，再重跑失败job成功。持锁来源未确定，未杀进程/改旧记录；备份planner-series-20261031-132940/app.db通过quick_check。只新增两表、旧表定义变化0、新表各0行，未创建真实学生任务/开关/消息。
+- 生产4b992e79/10SHA一致、tracked clean、13:36:02 CST起active/NRestarts0/5002单worker gthread6，warning日志0；回环鉴权/静态资源和公网新JS校验通过；生产目录84整套听力/336Section。Timer仍启用、下次11月1日03:05，dry-run发布0。小程序未改/未发布；Mac锁屏下完整GUI与390px未验，需助教试用反馈。旧Desktop和其他树未改，详情见CODEX_HANDOFF及TASK_PLANNER_SERIES。
+
+## 2026-10-31 — 连续学习线与整套听力本地增量
+
+- 在task-planner-beta树93681a57上新增同学生多线、星期配额、7/30/自定义1–31天、题型/词汇自然顺序及整批预览保存确认取消；补全套听力/Section单日选择。仅新增两表，不改变旧Task/Entry结构，未完成前置只阻塞本线；不开学生开关、不发提醒、不接付费API。
+- 72项planner Python+71项旧任务回归+31项Node通过，目标Ruff/Python3.10 AST/diff通过，独立审阅无P1/P2。合成预览首页可渲染；Mac锁屏/Chrome不可用、IAB点击无效果，新版GUI与移动布局待解锁后完成，不能沿用初版验收结论。
+- 12 modified/5 untracked（含原两份未提交交接），全部仅本机，未commit/push/deploy。线上初版与timer本轮未操作，小程序未改/未发布；文件清单、精确命令和续接步骤见CODEX_HANDOFF顶部及TASK_PLANNER_SERIES.md。
+
+## 2026-10-31 — 再次确认任务安排已部署
+
+- 只读核对本树93681a57/开工clean、生产ae3f079d/tracked clean及服务active/running；定时器enabled/active/waiting，下一次11月1日03:05 CST，回环页面302/API401正常。既有业务已commit/push/deploy，本轮只更新两交接且仅本机未提交，无代码、生产数据或小程序改动；首轮真实凌晨执行仍待试用。
+
 ## 2026-10-31 — 网页重做已上线
 
 - 用户授权后6功能/测试文件提交ae3f079d，接到并行f8319d9e主线，非强制推送任务分支与main；分支CI41168588721、main CI41168741418、Deploy41168741460成功。78前端、45重做再验、13内存历史回归与独立复审通过。

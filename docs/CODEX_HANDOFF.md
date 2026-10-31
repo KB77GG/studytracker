@@ -1,5 +1,35 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-10-31 连续安排与整套听力已上线
+
+- 用户明确授权“你上线部署看看”。实施树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`、分支 `codex/task-planner-beta`；开工HEAD93681a57，12 modified/5 untracked均为上一轮本任务成果（完整清单见下方发布前记录）。本轮仅追加CLI help文案纠正，16业务/测试/用法文件提交 **`4b992e7929b0a2de019e913300a643d0326d2c31`**，先push任务分支CI通过，再非强制push main部署；无远端主线冲突。两份既有未提交交接保留，本轮与用法发布记录一起独立 `[skip ci]` 同步；最终文档HEAD见git log。全部功能与规范交接可从远端取得，无待部署业务代码。
+- 已上线：同学生多学习线、星期配额和休息日、7/30/自选1–31天、明确题型/词汇来源与起点、逐日内容预览、整批草稿确认/取消、请求防重；听力整套/Section单日选择。听力整套/阅读整篇/精听尚不支持连续排程；前置未完成不自动顺延，助教需处理剩余安排。无需学生开启或确认，不新增付费API/微信提醒。入口 <https://studytracker.xin/task-planner>，详细范围与限制见 `docs/TASK_PLANNER_SERIES.md`。
+- 发布前本地72项planner Python+71项旧任务回归+31项Node通过（精确命令见下方记录）；独立复审GO；本轮 `node tests/test_dictation_spell_queue.js`、CLI Ruff、`git diff --cached --check`通过。[分支CI41172481854](https://github.com/KB77GG/studytracker/actions/runs/41172481854)、[main CI41172849083](https://github.com/KB77GG/studytracker/actions/runs/41172849083)成功，test/account-provisioning/task-planner均成功，advisory lint为已有failure。
+- [Deploy41172849064](https://github.com/KB77GG/studytracker/actions/runs/41172849064)首次失败于旧迁移导入app后CREATE新表遇database is locked，Git已更新但原服务未重启。用 `ssh root@47.110.45.193 'cd /root/apps/studytracker && PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_task_planner.py --init-schema'` 成功创建缺表，再 `gh run rerun 41172849064 --failed`，第二次成功。未定位持锁者，静态复核未发现init_api前自行写事务证据；未杀进程、未改服务器部署脚本。后续新增表先执行纯模型CLI，再运行导入app的旧迁移；不要吞锁错误。
+- 部署前SQLite只读源backup到 `/root/backups/studytracker/planner-series-20261031-132940/app.db`，233811968 bytes，0700/0600、quick_check=ok。生产与备份schema逐表对比只新增 `task_planner_series` / `task_planner_series_item`，旧表定义变化0；新表验收各0行，live quick_check=ok。没有真实学生任务/开关/成绩/消息写入，不删除旧表，不用整库覆盖恢复撤销发布。
+- 生产 `/root/apps/studytracker` HEAD=4b992e79、tracked clean，10运行文件SHA逐字匹配。`systemctl show studytracker -p ActiveState -p SubState -p NRestarts -p ExecMainStartTimestamp`：**2026-10-31 13:36:02 CST** 起active/running、NRestarts0；只解析gunicorn非敏感配置确认127.0.0.1:5002/workers1/gthread/threads6。`journalctl -u studytracker --since '2026-10-31 13:36:02' -p warning --no-pager -o cat`无记录。Timer enabled/active/waiting、下次11月1日03:05，未重复配置；`PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_task_planner.py --dry-run` exit0、outside_window=true、发布0，不声称观察真实凌晨触发。
+- 只读验收 `ssh root@47.110.45.193 'cd /root/apps/studytracker && PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -' < /private/tmp/verify-planner-series-release.py`通过：回环login200/planner302、匿名bootstrap/series/series-sources401，两JS与CSS200/SHA一致；生产资源84整套Test、336Section、阅读来源146/听力来源102。公网login200、series.js SHA=`71798f41cdf2cae0afac9c6696210c67d8f7ce54c8ed9f66ce640e36c592a0df`与本地一致。探针仅模型/资源模块与只读schema，不导入app/ML、无正式任务写入。
+- 未验：Mac仍锁屏，Chrome不可用，完整新GUI/390px/微信WebView及真实学生听力端到端未完成；不将服务器/接口验收替代GUI结论。现可由助教刷新页面试用，先少量学生、预览后确认并按学生开启；凌晨结果与待处理需实际观察。小程序无改动，无上传/提审/发布；网页功能无需重发小程序。
+- 旧资料树 `/Users/zhouxin/Desktop/studytracker` 仍保持main6ded77d2及原7 modified/22 untracked，本轮只借用Python环境，未更新镜像或覆盖旧内容。其他worktree未动。下一步为解锁后的合成GUI验收及助教试用反馈；线上业务无需再部署，若全局暂停沿原timer停用步骤。共享源码/两交接已随文档提交同步，临时探针只在本机/private/tmp。
+
+## 2026-10-31 连续安排与整套听力：发布前本地验收记录（现已上线）
+
+- 实施树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`、HEAD `93681a57`，未新增commit/push/deploy。开工已存在的未提交改动只有本两份交接（上一轮部署只读复核）；本轮保留其内容。旧资料树 `/Users/zhouxin/Desktop/studytracker` 的 main6ded77d2及7 modified/22 untracked未修改；只复用其Python环境和只读音频目录。其他worktree未改，不能据本树状态声称其他树已拥有本增量。
+- 根据试用反馈新增有限学习线：同学生可多线；同线周一至日分别设量、0表示休息，共用材料顺序；7天/30天/自定义1–31天，开始和结束仍受未来90天限制。题型按明确教材/试卷、题型、起始题组自然排序；词汇从明确词书/起始词序连续分配。预览列每日具体题组或词序，资源不足报错，不换书/重复/静默截短。整批保存、确认、取消均原子执行，预览摘要校验、请求键防重放。托管单条禁止编辑/确认/取消，调整需取消剩余后重建，已布置Task保留。
+- 可选等待本线上一项有效提交；默认按已确认日期继续。未发布/未完成/退回只阻塞本线，不自动顺延。旧任务次日03:00只读，不能宣称03:05后等待学生补交便自动恢复。自动开关由助教开启，无需学生确认。新增听力整套Test及单个Section单日安排与交叉去重；本次连续安排只支持题型和词汇，整套听力/阅读整篇/精听周期排程未实现。详情见 `docs/TASK_PLANNER_SERIES.md`。
+- 当前12个modified：`.github/workflows/ci.yml`、`api/task_planner.py`、`models_task_planner.py`、`services/task_planner.py`、`services/task_planner_resources.py`、`static/css/task_planner.css`、`static/js/task_planner.js`、`templates/task_planner.html`、`tests/test_task_planner_client.js`、`tests/test_task_planner_resources.py`及本两份交接。5个untracked：`services/task_planner_series.py`（有限批量安排服务）、`static/js/task_planner_series.js`（独立连续安排UI）、`tests/test_task_planner_series.py`、`tests/test_task_planner_series_client.js`、`docs/TASK_PLANNER_SERIES.md`。全部仅本机可见，尚不能从另一台电脑取得。
+- 验证：`TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series -q` **72 tests OK**；`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_auto_student_accounts tests.test_task_assignment_deduplication tests.test_task_assignment_history tests.test_task_assignment_routes tests.test_task_date_gate tests.test_task_timer_date_gate tests.test_task_date_gate_display_contract -q` **71 tests OK**；`node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js` **31/31通过**。覆盖中途失败整批回滚、重复提交、日期/配额/资源不足、权限CSRF、前置隔离、取消保留历史与自然排序；故障注入日志为测试预期，既有datetime弃用告警不影响通过。
+- `/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check --no-cache api/task_planner.py models_task_planner.py services/task_planner.py services/task_planner_resources.py services/task_planner_series.py tests/test_task_planner_resources.py tests/test_task_planner_series.py`、两个客户端 `node --check`、上述7个Python变更文件 `ast.parse(..., feature_version=(3,10))`、`git diff --check`通过。独立复审未见P1/P2，另用内存SQLite探针验证事务/事件回滚、重放、本线隔离。只读本地资源目录可列84套完整听力+336个Section；没有生产学生任务/答案写入。
+- 浏览器：合成临时库预览脚本 `/private/tmp/studytracker_planner_preview.py`（200个示例词、两名合成学生，无生产app导入），端口5097。IAB成功渲染新版首页与学习线入口、无控制台error；电脑锁屏且Chrome不可用，IAB点击/Enter未能打开弹窗，**未完成新版本创建→预览→保存→确认/取消与移动布局GUI验收**，已请求用户解锁；不可复用初版GUI通过结论。本轮结束已停止5097服务并关闭验收页；续接用 `PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /private/tmp/studytracker_planner_preview.py` 重启，数据每次新建。
+- 发布状态：本轮未访问/更改生产、未新增付费API或外部服务、未重新配置定时器。线上仍为上一轮已核的ae3f079d（含初版f8319d9e）；新后端、新网页与新增 `task_planner_series` / `task_planner_series_item` 两表均未部署，旧表不迁移。小程序无改动，未上传/提审/发布。初版真实凌晨首次执行仍待观察。
+- 下一步：用户解锁后以合成预览完成GUI（重点7天题型顺序/周末加量、词汇、全套/Section、整批确认取消和390px），核当前Git状态；再在明确发布授权下备份生产库、提交/推送并走原部署链路，确认只新增两表和原timer运行，禁止为验收给真实学生创建任务。当前未授权本增量commit/push/deploy，不因初版已上线而自动发布本增量。
+
+## 2026-10-31 用户询问部署状态：只读复核通过
+
+- 本树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`、HEAD `93681a57`；开工 `git status --short --branch` clean，`git log -5 --oneline`与下方发布记录一致。本轮仅更新本两交接，未改业务源码、数据库或其他工作树，未新增commit/push/deploy。
+- 通过 `ssh root@47.110.45.193` 在 `/root/apps/studytracker` 执行 `git rev-parse HEAD`、`git status --short --untracked-files=no`、`systemctl show studytracker -p ActiveState -p SubState -p NRestarts -p ExecMainStartTimestamp`：生产仍ae3f079d、tracked clean、12:29:36 CST起active/running、NRestarts0。执行 `systemctl show studytracker-task-planner.timer -p ActiveState -p SubState -p NextElapseUSecRealtime -p UnitFileState`：enabled/active/waiting，下一次11月1日03:05 CST。回环5002 GET `/task-planner`为302到login，匿名GET `/api/task-planner/bootstrap`为401，鉴权正常。
+- 任务安排业务此前已提交、推送和部署；本轮新复核记录仅本机未提交。未验证真实学生首次凌晨执行，未重新发布小程序。下一步仍由助教选择学生、确认内容并启用自动布置，无新增发布阻塞。
+
 ## 2026-10-31 网页“重做”已提交、推送并部署
 
 - 用户明确授权“提交部署上线”。实施树 `/Users/zhouxin/.codex/worktrees/practice-redo-button/studytracker` 建立 `codex/practice-redo-button`；从原detached ee94abb3衔接已上线的并行任务安排主线 f8319d9e，6个目标文件内容在rebase前后完全一致。业务提交 **`ae3f079dd7f268035191dfd194cbf192a69a43e4`** 已推送任务分支与main，未强推、未覆盖其他任务。
@@ -25,7 +55,7 @@
 - 下一步：助教选少量学生、准备未来两天内容、确认并开启，集中查看待处理及执行记录；实际首轮凌晨发布、所有资源真实浏览器和微信真机待试用反馈。可在页面暂停学生，全局停止用 `systemctl disable --now studytracker-task-planner.timer`。无本任务上线阻塞；未发布的旧资料树内容仍仅本机，业务与最终规范交接可从远端取得。
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-10-31；任务安排试用版业务f8319d9e已提交、推送并部署，定时器启用、学生默认关闭；无小程序变更。
+> 最近更新：2026-10-31；连续安排/整套听力业务4b992e79已提交、推送、部署，服务器/接口验收通过，完整GUI仍待解锁；无小程序变更。
 
 ## 2026-10-27 自动学生/家长账号创建修复已部署
 

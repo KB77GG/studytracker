@@ -1,6 +1,6 @@
-# 连续安排与听力整套：本地增量
+# 连续安排与听力整套
 
-2026-10-31 根据试用反馈扩展；发布状态以 `CODEX_HANDOFF.md` 的最新条目为准，本文不表示已经部署。
+2026-10-31 根据试用反馈扩展，用户明确授权后已提交、推送并部署。业务版本 `4b992e7929b0a2de019e913300a643d0326d2c31`，入口 <https://studytracker.xin/task-planner>；最新状态见 `CODEX_HANDOFF.md` 顶部。
 
 ## 操作方式
 
@@ -49,3 +49,12 @@ node --test tests/test_task_planner_client.js tests/test_task_planner_series_cli
 ```
 
 实际测试计数、浏览器结果、未验证项和发布状态记录于 `CODEX_HANDOFF.md`。测试只使用合成学生与临时数据库，不为截图中的真实学生写入任何任务。
+
+## 本轮发布验收
+
+- 分支CI [41172481854](https://github.com/KB77GG/studytracker/actions/runs/41172481854)与main CI [41172849083](https://github.com/KB77GG/studytracker/actions/runs/41172849083)成功，三个测试job通过；advisory lint延续仓库存量failure。72项planner Python、71项旧任务回归、31项Node通过。新CLI只改help文案，Ruff与既有拼写队列门禁通过。
+- [部署41172849064](https://github.com/KB77GG/studytracker/actions/runs/41172849064)第一次在 `create_plan_table.py` 导入app建新表时遇 `database is locked`，未重启原服务；执行纯模型 `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_task_planner.py --init-schema` 返回schema ready，再用 `gh run rerun 41172849064 --failed` 重跑成功。未定位首次持锁者，不据报错推断app自己持锁。后续新增planner表应在导入app的旧迁移步骤前显式运行此CLI；本次未修改服务器部署脚本或杀进程。
+- 一致性备份 `/root/backups/studytracker/planner-series-20261031-132940/app.db`，233811968 bytes，目录0700/文件0600、quick_check=ok。与备份对比只新增series及series_item两表，旧表定义变化0；新表均0行、live quick_check=ok。不要用整库恢复覆盖后续学习记录。
+- 生产业务HEAD及10个运行文件SHA匹配，服务自 **2026-10-31 13:36:02 CST** active/running、NRestarts0，5002/单worker/gthread6保持。重启后warning以上journal0；timer enabled/active/waiting、下次11月1日03:05 CST；CLI dry-run exit0/outside_window=true、发布0，不表示真实凌晨发布已验证。
+- 回环login200、planner302到login，匿名bootstrap/series/series-sources均401；两个JS和CSS200且SHA一致。公网login200、新series.js的SHA为 `71798f41cdf2cae0afac9c6696210c67d8f7ce54c8ed9f66ce640e36c592a0df`，与本地一致。生产轻量只读资源探针列84整套/336Section、阅读来源146/听力来源102，不导入app/重模型，不创建真实学生任务或发通知。
+- **未完成完整GUI与390px验收**：Mac锁屏、Chrome不可用，先前IAB只能确认首页渲染，点击未生效。真实学生首轮使用、微信WebView与全套听力端到端待助教试用；本次无小程序改动、上传、提审或发布。
