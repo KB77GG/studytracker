@@ -6,11 +6,12 @@
 {% block header_actions %}<a class="btn btn-secondary" href="/tasks">查看已布置任务</a>{% endblock %}
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/task_planner.css') }}">
+<script src="{{ url_for('static', filename='js/task_planner_series.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/task_planner.js') }}" defer></script>
 {% endblock %}
 {% block content_dashboard %}
 <section class="task-planner" id="taskPlanner" aria-label="任务安排工作台">
-  <div class="tp-intro"><div><span class="tp-beta">助教试用版</span><h2>把明天的安排，今天准备好。</h2><p>选好具体题型、篇章或词汇范围，保存草稿后再确认。草稿不会出现在学生列表。</p></div><button class="tp-button tp-button-primary" type="button" id="plannerNew" disabled>＋ 新建安排</button></div>
+  <div class="tp-intro"><div><span class="tp-beta">助教试用版</span><h2>把接下来的安排，提前准备好。</h2><p>单独选一天，也可以按教材顺序安排一周或一个月。先看每天的内容，再确认布置。</p></div><div class="tp-intro-actions"><button class="tp-button" type="button" id="plannerNew" disabled>＋ 单日安排</button><button class="tp-button tp-button-primary" type="button" id="plannerSeriesNew" disabled>＋ 连续安排</button></div></div>
   <div id="plannerMessage" class="tp-message" role="status" aria-live="polite" hidden></div>
   <div class="tp-summary" aria-label="当前范围汇总">
     <button type="button" class="tp-summary-card" data-summary="ready"><span>明日待布置</span><strong id="summaryTomorrow">—</strong><small>已确认的具体安排</small></button>
@@ -27,10 +28,11 @@
     </form>
     <div class="tp-quick-dates"><button type="button" data-range="tomorrow">只看明天</button><button type="button" data-range="week">未来7天</button><button type="button" data-range="today">今天</button><span id="plannerCount"></span></div>
     <div class="tp-enrollment" id="plannerEnrollment" hidden><div><strong id="enrollmentTitle"></strong><p id="enrollmentHint"></p></div><button class="tp-button" id="plannerEnable" type="button"></button></div>
+    <section class="tp-series-workspace" aria-labelledby="plannerSeriesTitle"><div class="tp-series-heading"><h3 id="plannerSeriesTitle">学生的学习线</h3><p>平日与周末的量在同一条线里设置；不同教材或练习可另建一条。这里显示所选学生的全部学习线。</p></div><div id="plannerSeriesList" aria-live="polite"><p class="tp-help">正在读取学习线…</p></div></section>
     <div id="plannerLoading" class="tp-empty" role="status">正在读取安排…</div><div id="plannerEntries" class="tp-entry-list" aria-live="polite"></div>
     <div id="plannerEmpty" class="tp-empty" hidden><span class="tp-empty-icon" aria-hidden="true">＋</span><h3>这个范围还没有安排</h3><p>可以先准备明天的练习，也可以一次安排未来几天。</p><button type="button" class="tp-button" id="plannerEmptyNew">新建一条安排</button></div>
   </section>
-  <p class="tp-footnote">试用版支持人工选题后定时布置；按学生单独启用，只执行已确认的安排，不发送微信提醒。</p>
+  <p class="tp-footnote">自动布置由助教按学生启用，只执行已确认的安排。连续安排支持题型与词汇；整套听力、篇章与精听可用单日安排。不发送微信提醒。</p>
 </section>
 <dialog id="plannerEditor" class="tp-dialog" aria-labelledby="plannerEditorTitle">
   <form id="plannerEditorForm">
@@ -51,4 +53,25 @@
     <footer class="tp-editor-footer"><p>保存后为草稿，回到列表确认才会定时布置。</p><div><button class="tp-button" type="button" id="plannerEditorCancel">取消</button><button class="tp-button tp-button-primary" type="submit" id="plannerEditorSave">保存草稿</button></div></footer>
   </form>
 </dialog>
+<dialog id="plannerSeriesEditor" class="tp-dialog tp-series-dialog" aria-labelledby="seriesEditorTitle">
+  <form id="seriesEditorForm">
+    <header class="tp-editor-header"><div><span class="tp-eyebrow">按顺序准备一段时间的学习</span><h2 id="seriesEditorTitle">新建连续安排</h2></div><button class="tp-icon-button" type="button" id="seriesEditorClose" aria-label="关闭连续安排">×</button></header>
+    <div class="tp-editor-body"><div class="tp-message" id="seriesEditorError" role="alert" hidden></div><fieldset id="seriesEditorFields">
+      <div class="tp-form-grid"><label class="tp-field">学生<select id="seriesStudent" required></select></label><label class="tp-field">学习线名称<input id="seriesName" maxlength="80" placeholder="例如：剑雅10阅读题型" required></label></div>
+      <div class="tp-form-grid"><label class="tp-field">开始日期<input id="seriesStart" type="date" required></label><label class="tp-field">安排多久<select id="seriesPeriod"><option value="7">连续7天</option><option value="30">连续30天</option><option value="custom">自定义日期范围</option></select></label></div>
+      <label class="tp-field">结束日期<input id="seriesEnd" type="date" required><span class="tp-help">可安排未来90天内的日期，每次最多31天，包含开始和结束当天。0配额的日期不生成任务。</span></label>
+      <label class="tp-field">练习内容<select id="seriesKind"><option value="question_type">听力 / 阅读题型专项</option><option value="dictation">词汇连续学习</option></select><span class="tp-help">整套听力、阅读篇章和精听请使用“单日安排”逐次选择。</span></label>
+      <div id="seriesQuestionFields" class="tp-resource-options"><div class="tp-form-grid"><label class="tp-field">科目<select id="seriesSubject"><option value="reading">阅读</option><option value="listening">听力</option></select></label><label class="tp-field">题型<select id="seriesType"><option value="all">全部题型</option></select></label></div><label class="tp-field">教材 / 试卷范围<select id="seriesSource" required><option value="">请选择明确的教材或试卷</option></select></label><label class="tp-field">从哪个题组开始<select id="seriesGroup" required><option value="">先选择教材 / 试卷</option></select></label><p class="tp-help">按教材、Test、篇章和题号的顺序接着往下排；平日与周末共享这一个进度。</p></div>
+      <div id="seriesVocabularyFields" class="tp-resource-options" hidden><label class="tp-field">词书<select id="seriesBook"><option value="">请选择词书</option></select></label><div class="tp-form-grid"><label class="tp-field">从第几个词开始<input id="seriesWordStart" type="number" min="1" step="1" value="1"></label><label class="tp-field">学习目标<select id="seriesVocabularyGoal"><option value="reading">阅读词汇</option><option value="listening">听力词汇</option><option value="writing">写作词汇</option><option value="comprehensive">综合训练</option></select></label></div><p class="tp-help" id="seriesBookHint">按词序连续安排，每天的范围会在预览中列出。</p></div>
+      <div class="tp-quota-section"><div class="tp-series-heading"><h3>每周各天的量 <span id="seriesQuotaUnit">（题组）</span></h3><p id="seriesQuotaHint">每次0–20组；填0表示休息。</p></div><div class="tp-weekly-quotas" id="seriesWeekdays">
+        {% for day in ['周一', '周二', '周三', '周四', '周五', '周六', '周日'] %}<label class="tp-field">{{ day }}<input id="seriesQuota{{ loop.index0 }}" type="number" min="0" max="20" step="1" value="{{ 1 if loop.index0 < 5 else 2 }}" required></label>{% endfor %}
+      </div></div>
+      <div class="tp-form-grid"><label class="tp-field">每天预计用时（分钟）<input id="seriesMinutes" type="number" min="1" max="180" value="20" required></label><label class="tp-field" id="seriesPaceField">练习节奏<select id="seriesPace"><option value="training">训练节奏</option><option value="exam">考试节奏</option></select></label></div>
+      <label class="tp-field">前一天没做时<select id="seriesWait"><option value="date">仍按日期布置后续内容</option><option value="previous">等待本线上一项有效提交</option></select><span class="tp-help" id="seriesWaitHint">默认按日期继续布置，未完成的旧任务保留原有状态。</span></label>
+      <label class="tp-field">给学生的说明（选填）<textarea id="seriesNote" rows="2" maxlength="200" placeholder="适用于这条学习线的每次安排"></textarea></label>
+    </fieldset><section class="tp-series-preview" id="seriesPreview" aria-labelledby="seriesPreviewTitle" hidden><h3 id="seriesPreviewTitle">每天会布置什么</h3><p id="seriesPreviewSummary" class="tp-help"></p><div id="seriesPreviewWarnings"></div><div id="seriesPreviewRows"></div></section></div>
+    <footer class="tp-editor-footer"><p id="seriesSaveHint">先预览并核对每天内容。保存整批草稿后，还需在学习线中确认。</p><div><button class="tp-button" type="button" id="seriesEditorCancel">取消</button><button class="tp-button" type="submit" id="seriesPreviewButton">预览每天内容</button><button class="tp-button tp-button-primary" type="button" id="seriesSaveButton" disabled>保存整批草稿</button></div></footer>
+  </form>
+</dialog>
+<dialog id="plannerSeriesDetails" class="tp-dialog tp-series-dialog" aria-labelledby="seriesDetailsTitle"><div class="tp-details-layout"><header class="tp-editor-header"><div><span class="tp-eyebrow">学习线 · 每天的具体安排</span><h2 id="seriesDetailsTitle">学习线详情</h2></div><button class="tp-icon-button" type="button" id="seriesDetailsClose" aria-label="关闭学习线详情">×</button></header><div class="tp-editor-body"><p id="seriesDetailsHint" class="tp-help"></p><div id="seriesDetailsRows"></div></div><footer class="tp-editor-footer"><p>需要临时调整时，可取消本线尚未布置的安排，再建立新安排。已布置任务会保留。</p><div id="seriesDetailsActions"></div></footer></div></dialog>
 {% endblock %}

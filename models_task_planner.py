@@ -47,7 +47,47 @@ class TaskPlannerEvent(db.Model):
     created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
 
 
+class TaskPlannerSeries(db.Model, TimestampMixin):
+    """A finite, explicitly previewed sequence sharing one weekly schedule."""
+
+    __tablename__ = "task_planner_series"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    kind = db.Column(db.String(32), nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    weekday_counts_json = db.Column(db.Text, nullable=False)
+    definition_json = db.Column(db.Text, nullable=False)
+    wait_for_previous = db.Column(db.Boolean, nullable=False, default=False)
+    status = db.Column(db.String(20), nullable=False, default="draft")
+    version = db.Column(db.Integer, nullable=False, default=1)
+    request_key = db.Column(db.String(96), nullable=False, unique=True)
+    request_hash = db.Column(db.String(64), nullable=False)
+    preview_hash = db.Column(db.String(64), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    updated_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    confirmed_by = db.Column(db.Integer, db.ForeignKey("user.id"))
+    confirmed_at = db.Column(db.DateTime)
+
+
+class TaskPlannerSeriesItem(db.Model):
+    """Links new series to unchanged, already deployed planner-entry schema."""
+
+    __tablename__ = "task_planner_series_item"
+    __table_args__ = (db.UniqueConstraint("series_id", "order_index"),)
+
+    id = db.Column(db.Integer, primary_key=True)
+    series_id = db.Column(db.Integer, db.ForeignKey("task_planner_series.id"), nullable=False, index=True)
+    entry_id = db.Column(db.Integer, db.ForeignKey("task_planner_entry.id"), nullable=False, unique=True)
+    previous_entry_id = db.Column(db.Integer, db.ForeignKey("task_planner_entry.id"))
+    order_index = db.Column(db.Integer, nullable=False)
+    unit_count = db.Column(db.Integer, nullable=False)
+
+
 def ensure_schema():
     """Only create this feature's new tables; never alter existing task data."""
-    for model in (TaskPlannerStudent, TaskPlannerEntry, TaskPlannerEvent):
+    for model in (TaskPlannerStudent, TaskPlannerEntry, TaskPlannerEvent,
+                  TaskPlannerSeries, TaskPlannerSeriesItem):
         model.__table__.create(bind=db.engine, checkfirst=True)

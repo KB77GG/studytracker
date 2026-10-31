@@ -103,6 +103,11 @@ def entries():
         query = query.filter(TaskPlannerEntry.target_date.between(start, end))
     if request.args.get("student_id"):
         query = query.filter_by(student_id=planner._integer(request.args["student_id"], "学生"))
+    if request.args.get("series_id"):
+        from models_task_planner import TaskPlannerSeriesItem
+        query = query.join(TaskPlannerSeriesItem, TaskPlannerSeriesItem.entry_id == TaskPlannerEntry.id).filter(
+            TaskPlannerSeriesItem.series_id == planner._integer(request.args["series_id"], "学习线"),
+        )
     if status and status != "attention":
         if status not in planner.STATUS_LABELS:
             raise planner.TaskPlannerError("任务状态不正确")
@@ -175,3 +180,70 @@ def entry_events(entry_id):
     rows = TaskPlannerEvent.query.filter_by(entry_id=entry_id).order_by(TaskPlannerEvent.id.desc()).limit(50).all()
     return jsonify(ok=True, events=[{"action": row.action, "detail": row.detail,
                                     "created_at": row.created_at.isoformat() + "Z"} for row in rows])
+
+
+@task_planner_bp.get("/api/task-planner/series-sources")
+def series_sources():
+    from services.task_planner_series import series_sources as sources
+    return jsonify(ok=True, **sources(
+        request.args.get("subject", "reading"), request.args.get("standard_type", "all"),
+        request.args.get("source_scope"),
+    ))
+
+
+@task_planner_bp.post("/api/task-planner/series/preview")
+def preview_series():
+    from services.task_planner_series import preview_series as preview
+    return jsonify(ok=True, preview=preview(_body(), current_user.id))
+
+
+@task_planner_bp.post("/api/task-planner/series")
+def create_series():
+    from services.task_planner_series import create_series as create
+    from services.task_planner_series import series_payload
+    row = create(_body(), current_user.id)
+    return jsonify(ok=True, series=series_payload(row)), 201
+
+
+@task_planner_bp.get("/api/task-planner/series")
+def list_series():
+    from services.task_planner_series import list_series as listing
+    from services.task_planner_series import series_payload
+    rows = listing(student_id=request.args.get("student_id"))
+    return jsonify(ok=True, series=[series_payload(row) for row in rows])
+
+
+@task_planner_bp.get("/api/task-planner/series/<int:series_id>")
+def series_details(series_id):
+    from models_task_planner import TaskPlannerSeries, TaskPlannerSeriesItem
+    from services.task_planner_series import series_payload
+    row = db.session.get(TaskPlannerSeries, series_id)
+    if not row:
+        raise planner.TaskPlannerError("学习线不存在", status=404)
+    entries = TaskPlannerEntry.query.join(
+        TaskPlannerSeriesItem, TaskPlannerSeriesItem.entry_id == TaskPlannerEntry.id,
+    ).filter(TaskPlannerSeriesItem.series_id == series_id).order_by(TaskPlannerEntry.target_date).all()
+    return jsonify(ok=True, series=series_payload(row),
+                   entries=[planner.entry_payload(entry) for entry in entries])
+
+
+@task_planner_bp.post("/api/task-planner/series/<int:series_id>/confirm")
+def confirm_series(series_id):
+    from services.task_planner_series import confirm_series as confirm
+    from services.task_planner_series import series_payload
+    data = _body()
+    if data.get("version") is None:
+        raise planner.TaskPlannerError("缺少学习线版本")
+    row = confirm(series_id, data["version"], current_user.id)
+    return jsonify(ok=True, series=series_payload(row))
+
+
+@task_planner_bp.post("/api/task-planner/series/<int:series_id>/cancel")
+def cancel_series(series_id):
+    from services.task_planner_series import cancel_series as cancel
+    from services.task_planner_series import series_payload
+    data = _body()
+    if data.get("version") is None:
+        raise planner.TaskPlannerError("缺少学习线版本")
+    row = cancel(series_id, data["version"], current_user.id)
+    return jsonify(ok=True, series=series_payload(row))

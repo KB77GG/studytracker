@@ -29,7 +29,7 @@
     return entry.target_date === today && ['ready', 'failed'].indexOf(entry.status) !== -1;
   }
   function canConfirm(entry, today) {
-    return entry.target_date >= today && ['draft', 'blocked', 'failed'].indexOf(entry.status) !== -1;
+    return !entry.series_managed && entry.target_date >= today && ['draft', 'blocked', 'failed'].indexOf(entry.status) !== -1;
   }
   function mutationFeedback(action, entry) {
     var expected = { publish: 'published', confirm: 'ready', cancel: 'cancelled' }[action];
@@ -118,6 +118,7 @@
     var gate = createGate();
     var request = createRequest(win.fetch.bind(win), function () { return state.csrf; });
     var dialog = $('plannerEditor');
+    var seriesClient = win.TaskPlannerSeriesClient && win.TaskPlannerSeriesClient.mount(doc, win, { request: request, state: state, refreshEntries: loadEntries, showMessage: showMessage, report: report });
     function node(tag, className, text) {
       var item = doc.createElement(tag);
       if (className) item.className = className;
@@ -153,7 +154,7 @@
       $('plannerEnrollment').hidden = !student;
       if (!student) return;
       $('enrollmentTitle').textContent = student.name + ' · 自动布置' + (student.enabled ? '已启用' : '未启用');
-      $('enrollmentHint').textContent = student.enabled ? '到时间只布置已确认的安排。关闭后保留草稿和已布置任务。' : '可以先保存和确认安排；启用后才会自动执行。';
+      $('enrollmentHint').textContent = student.enabled ? '到时间只布置已确认的安排。关闭后保留草稿和已布置任务。' : '助教尚未为该学生启用自动布置。可以先保存和确认安排；由助教启用后才会自动执行。';
       $('plannerEnable').textContent = student.enabled ? '暂停自动布置' : '启用自动布置';
     }
     async function loadBootstrap() {
@@ -165,6 +166,7 @@
       setOptions($('editorKind'), state.kinds, null);
       $('plannerSchedule').textContent = (data.schedule_label || '每天03:05布置') + ' · 北京时间';
       $('plannerNew').disabled = false;
+      if (seriesClient) $('plannerSeriesNew').disabled = false;
       $('editorDate').min = state.today;
       $('editorDate').max = addDays(state.today, 90);
       renderEnrollment();
@@ -189,23 +191,28 @@
         var status = LABELS[entry.status] ? entry.status : 'draft';
         top.appendChild(node('span', 'tp-status tp-status-' + status, entry.status_label || LABELS[status]));
         main.appendChild(top); main.appendChild(node('h3', '', entry.title));
-        main.appendChild(node('p', 'tp-entry-meta', '预计 ' + entry.planned_minutes + ' 分钟' + (entry.prerequisite_task_id ? ' · 需先完成指定任务' : ' · 按指定日期布置')));
+        main.appendChild(node('p', 'tp-entry-meta', '预计 ' + entry.planned_minutes + ' 分钟' + (entry.series_wait_for_previous ? ' · 等待本线上一项有效提交' : entry.prerequisite_task_id ? ' · 需先完成指定任务' : ' · 按指定日期布置')));
+        if (entry.series_managed) {
+          var seriesLink = node('button', 'tp-text-button tp-series-link', '所属学习线：' + (entry.series_name || '连续安排'));
+          seriesLink.type = 'button'; seriesLink.addEventListener('click', function () { if (seriesClient) seriesClient.showDetails(entry.series_id).catch(report); }); main.appendChild(seriesLink);
+          main.appendChild(node('p', 'tp-help', '在学习线中整体确认 / 取消；临时调整可取消未布置安排后重建。'));
+        }
         if (entry.note) main.appendChild(node('p', 'tp-entry-note', entry.note));
         if (entry.error) main.appendChild(node('p', 'tp-entry-warning', entry.error));
-        else if (entry.status === 'ready' && !entry.student_enabled) main.appendChild(node('p', 'tp-entry-warning', '已确认，学生的自动布置尚未启用。筛选该学生后可以启用。'));
+        else if (entry.status === 'ready' && !entry.student_enabled) main.appendChild(node('p', 'tp-entry-warning', '已确认，助教尚未为该学生启用自动布置。筛选该学生后可以启用。'));
         var actions = node('div', 'tp-entry-actions');
         function action(label, key, className) {
           var button = node('button', 'tp-button ' + (className || ''), label); button.type = 'button';
           button.addEventListener('click', function () { handleEntryAction(entry, key).catch(report); }); actions.appendChild(button);
         }
-        if (MUTABLE.indexOf(entry.status) !== -1) action(entry.target_date < state.today ? '改期 / 编辑' : '编辑', 'edit');
+        if (!entry.series_managed && MUTABLE.indexOf(entry.status) !== -1) action(entry.target_date < state.today ? '改期 / 编辑' : '编辑', 'edit');
         if (canConfirm(entry, state.today)) action('确认安排', 'confirm', 'tp-button-primary');
         if (canPublish(entry, state.today)) action('立即布置', 'publish', 'tp-button-primary');
         if (entry.status === 'published') {
           var link = node('a', 'tp-button', '查看任务'); link.href = '/tasks?student=' + encodeURIComponent(entry.student_name || ''); actions.appendChild(link);
         }
         action('复制安排', 'copy');
-        if (MUTABLE.indexOf(entry.status) !== -1) action('取消', 'cancel', 'tp-button-danger');
+        if (!entry.series_managed && MUTABLE.indexOf(entry.status) !== -1) action('取消', 'cancel', 'tp-button-danger');
         action('记录', 'events');
         card.appendChild(main); card.appendChild(actions); container.appendChild(card);
       });
@@ -230,6 +237,7 @@
         renderEntries((results[1].entries || []).length);
         $('plannerCount').textContent = results[0].has_more ? '仅显示前500条，请缩小日期或学生范围' : state.entries.length + ' 条安排' + ($('plannerStatus').value === 'attention' ? ' · 包含此前未处理记录' : '');
         if (results[1].has_more) $('summaryAttention').textContent = '500+';
+        if (seriesClient) await seriesClient.refresh();
       } finally {
         if (epoch === state.listEpoch) { $('plannerLoading').hidden = true; $('plannerEntries').setAttribute('aria-busy', 'false'); }
       }
@@ -246,7 +254,7 @@
       if (entry.kind === 'question_type') {
         (selection.group_ids || []).forEach(function (id, index) { state.selected.set(String(id), { id: id, label: entry.title + ' · 已选题组 ' + (index + 1) }); });
       } else {
-        var id = entry.kind === 'dictation' ? selection.book_id : entry.kind === 'intensive' ? selection.exercise_id : selection.test_id + ':' + selection.passage_number;
+        var id = entry.kind === 'dictation' ? selection.book_id : entry.kind === 'intensive' ? selection.exercise_id : entry.kind === 'listening_test' ? selection.test_id + ':' + (selection.section_number || 'all') : selection.test_id + ':' + selection.passage_number;
         state.selected.set(String(id), { id: id, label: entry.title, selection: Object.assign({}, selection) });
       }
     }
@@ -287,6 +295,7 @@
       var item = Object.assign({}, row); item.id = String(row.id);
       if (!item.selection) {
         if (kind === 'reading_passage') item.selection = { test_id: row.test_id, passage_number: row.passage_number };
+        else if (kind === 'listening_test') item.selection = { test_id: row.test_id, section_number: row.section_number || null };
         else if (kind === 'dictation') item.selection = { book_id: Number(row.id), word_start: 1, word_end: row.last_sequence, vocabulary_goal: row.vocabulary_goal || 'reading', dictation_mode: 'audio_to_en', dictation_order: 'sequence' };
         else if (kind === 'intensive') item.selection = { exercise_id: row.id, training_mode: 'system' };
       }
@@ -370,7 +379,7 @@
         win.alert(lines.join('\n') || '暂无执行记录'); return;
       }
       var confirmations = {
-        confirm: '确认在 ' + entry.target_date + ' 布置给' + entry.student_name + '？\n' + entry.title + (entry.student_enabled ? '' : '\n该学生自动布置尚未启用，确认后仍需启用。'),
+        confirm: '确认在 ' + entry.target_date + ' 布置给' + entry.student_name + '？\n' + entry.title + (entry.student_enabled ? '' : '\n助教尚未为该学生启用自动布置，确认后仍需由助教启用。'),
         publish: '现在将这条任务布置到' + entry.student_name + '的今日任务列表？\n' + entry.title,
         cancel: '取消这条尚未布置的安排？\n' + entry.title
       };

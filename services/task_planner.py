@@ -12,7 +12,13 @@ from datetime import date, time, timedelta
 from flask import current_app
 
 from models import StudentProfile, Task, User, db, utcnow_naive
-from models_task_planner import TaskPlannerEntry, TaskPlannerEvent, TaskPlannerStudent
+from models_task_planner import (
+    TaskPlannerEntry,
+    TaskPlannerEvent,
+    TaskPlannerSeries,
+    TaskPlannerSeriesItem,
+    TaskPlannerStudent,
+)
 from services import task_planner_resources as resources
 from services.task_assignment_duplicates import (
     begin_assignment_transaction,
@@ -24,6 +30,7 @@ STAFF_ROLES = {User.ROLE_ADMIN, User.ROLE_TEACHER, User.ROLE_ASSISTANT}
 KINDS = [
     {"id": "question_type", "label": "听力 / 阅读题型专项"},
     {"id": "reading_passage", "label": "阅读整篇"},
+    {"id": "listening_test", "label": "听力整套 / 单个Section"},
     {"id": "dictation", "label": "词汇指定范围"},
     {"id": "intensive", "label": "精听指定内容"},
 ]
@@ -93,6 +100,34 @@ def _date(value, now=None):
     return result
 
 
+def _series_item(entry_id):
+    return TaskPlannerSeriesItem.query.filter_by(entry_id=entry_id).first()
+
+
+def _independent_entry(row):
+    if row is not None and _series_item(row.id):
+        raise TaskPlannerError("该安排属于连续学习线，请整体确认或取消；调整内容时请取消未布置部分后重新安排", status=409)
+
+
+def _series_prerequisite(row, profile):
+    item = _series_item(row.id)
+    if not item:
+        return
+    series = db.session.get(TaskPlannerSeries, item.series_id)
+    if not series or series.status != "ready" or series.student_id != row.student_id:
+        raise TaskPlannerError("所属学习线未确认或已取消，请检查连续安排")
+    _actor(series.confirmed_by)
+    if not series.wait_for_previous or item.previous_entry_id is None:
+        return
+    previous = db.session.get(TaskPlannerEntry, item.previous_entry_id)
+    if (not previous or previous.student_id != profile.id or previous.status != "published"
+            or not previous.published_task_id):
+        raise TaskPlannerError("本学习线上一条安排尚未布置或已取消；请助教处理或取消后重新安排，不会自动顺延")
+    task = _prerequisite(previous.published_task_id, profile, row.target_date)
+    if not _prerequisite_complete(task, profile):
+        raise TaskPlannerError("本学习线上一条任务尚未完成或被退回；请助教处理或取消后重新安排，不会自动顺延")
+
+
 def _prerequisite(task_id, profile, target_date):
     if task_id in (None, ""):
         return None
@@ -157,6 +192,7 @@ def save_entry(data, actor_id, entry_id=None, expected_version=None, now=None):
         if entry_id is not None and expected_version is None:
             raise TaskPlannerError("缺少安排版本")
         row = _entry(entry_id, expected_version, editable=True) if entry_id else None
+        _independent_entry(row)
         profile = _student(data.get("student_id"))
         target = _date(data.get("target_date"), now)
         kind = str(data.get("kind") or "")
@@ -199,6 +235,7 @@ def confirm_entry(entry_id, version, actor_id, now=None):
     try:
         _actor(actor_id)
         row = _entry(entry_id, version, editable=True)
+        _independent_entry(row)
         profile = _student(row.student_id)
         _date(row.target_date.isoformat(), now)
         _prerequisite(row.prerequisite_task_id, profile, row.target_date)
@@ -221,6 +258,7 @@ def cancel_entry(entry_id, version, actor_id, now=None):
     try:
         _actor(actor_id)
         row = _entry(entry_id, version, editable=True)
+        _independent_entry(row)
         row.status, row.last_error = "cancelled", ""
         row.version, row.updated_by = row.version + 1, actor_id
         _event(row, "cancel", actor_id)
@@ -290,6 +328,7 @@ def publish_entry(entry_id, actor_id=None, expected_version=None, now=None, auto
         try:
             _actor(row.confirmed_by)
             profile = _student(row.student_id)
+            _series_prerequisite(row, profile)
             prerequisite = _prerequisite(row.prerequisite_task_id, profile, row.target_date)
             if not _prerequisite_complete(prerequisite, profile):
                 return _blocked(row, "前置任务尚未完成或被退回，请处理后重新确认", actor_id)
@@ -360,13 +399,21 @@ def run_due(now=None, dry_run=False):
 def entry_payload(row):
     profile = db.session.get(StudentProfile, row.student_id)
     setting = db.session.get(TaskPlannerStudent, row.student_id)
+    series_item = _series_item(row.id)
+    series = db.session.get(TaskPlannerSeries, series_item.series_id) if series_item else None
+    content_labels = []
+    if series:
+        frozen_rows = json.loads(series.definition_json).get("rows", [])
+        content_labels = next((item.get("content_labels", []) for item in frozen_rows
+                               if item.get("target_date") == row.target_date.isoformat()), [])
     today = beijing_now().date()
     message = row.last_error
     task = db.session.get(Task, row.published_task_id) if row.published_task_id else None
     if row.status == "published" and (task is None or task.cancelled_at):
         message = "正式任务已取消或不可用；本安排不会再次自动布置"
     if row.status in {"draft", "ready"} and row.target_date < today:
-        message = "目标日期已过，未自动补发；请改期并重新确认"
+        message = ("目标日期已过，未自动补发；请取消学习线未布置部分后重新安排" if series
+                   else "目标日期已过，未自动补发；请改期并重新确认")
     return {
         "id": row.id, "version": row.version, "student_id": row.student_id,
         "student_name": profile.full_name if profile else "学生档案已停用",
@@ -376,4 +423,9 @@ def entry_payload(row):
         "note": row.note, "status": row.status, "status_label": STATUS_LABELS[row.status],
         "error": message, "published_task_id": row.published_task_id,
         "prerequisite_task_id": row.prerequisite_task_id,
+        "series_id": series.id if series else None,
+        "series_name": series.name if series else None,
+        "series_managed": bool(series_item),
+        "series_wait_for_previous": bool(series and series.wait_for_previous),
+        "content_labels": content_labels,
     }

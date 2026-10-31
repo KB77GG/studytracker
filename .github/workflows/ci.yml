@@ -84,9 +84,9 @@ jobs:
             'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
             'requests>=2.31' 'PyJWT>=2.9' 'pypinyin>=0.55'
       - name: Test scheduled assignment transactions and resources
-        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources -v
+        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series -v
       - name: Test planner client behavior
-        run: node --test tests/test_task_planner_client.js
+        run: node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js
 
   # 代码风格/静态检查：现阶段只报告，不阻断（continue-on-error）。
   lint:

@@ -81,7 +81,7 @@ class TaskPlannerResourcesTest(unittest.TestCase):
             self.root / "static/reading_tests/ielts10_test1_reading.json"
         )
         self.write(self.reading_path, self.reading)
-        listening = {
+        self.listening = {
             "id": "ielts10_test1",
             "title": "Listening Sample",
             "sections": [
@@ -107,7 +107,8 @@ class TaskPlannerResourcesTest(unittest.TestCase):
                 }
             ],
         }
-        self.write(self.root / "static/listening_tests/ielts10_test1.json", listening)
+        self.listening_path = self.root / "static/listening_tests/ielts10_test1.json"
+        self.write(self.listening_path, self.listening)
         (self.root / "static/listening/sample.mp3").write_bytes(b"synthetic-audio")
         self.intensive_path = self.root / "static/listening/ielts10_test1_s1.json"
         self.write(
@@ -280,6 +281,261 @@ class TaskPlannerResourcesTest(unittest.TestCase):
         self.assertEqual(metadata["reading_passage_number"], 2)
         self.assertEqual(task.plan_item.access_token, task.reading_access_token)
         self.assertEqual(prepared["coverage_units"][0]["unit_number"], 2)
+
+    def complete_listening_test(self):
+        template = self.listening["sections"][0]
+        sections = []
+        for section_number in range(1, 5):
+            section = copy.deepcopy(template)
+            section["section"] = section_number
+            if section_number != 1:
+                section["audio"] = f"section{section_number}.mp3"
+            group = section["groups"][0]
+            group["group_id"] = f"l{section_number}"
+            group["questions"] = [
+                {**group["questions"][0], "id": f"l{number}", "number": number}
+                for number in range((section_number - 1) * 10 + 1, section_number * 10 + 1)
+            ]
+            sections.append(section)
+            (self.root / "static/listening" / section["audio"]).write_bytes(b"audio")
+        self.listening["sections"] = sections
+        self.write(self.listening_path, self.listening)
+
+    def test_listening_catalog_explicit_full_test_or_section_without_answers(self):
+        self.complete_listening_test()
+        result = resources.catalog("listening_test")
+        self.assertEqual(
+            [row["id"] for row in result["items"]],
+            ["ielts10_test1:all"] + [f"ielts10_test1:{n}" for n in range(1, 5)],
+        )
+        self.assertEqual(result["items"][0]["question_count"], 40)
+        self.assertEqual(
+            result["items"][0]["selection"],
+            {"test_id": "ielts10_test1", "section_number": None},
+        )
+        self.assertEqual(
+            resources.catalog("listening_test", {"scope": "test"})["total"], 1
+        )
+        self.assertEqual(
+            resources.catalog("listening_test", {"scope": "section"})["total"], 4
+        )
+        self.assertEqual(
+            resources.catalog("listening_test", {"query": "Section 2"})["total"], 1
+        )
+        self.assertNotIn("answer", json.dumps(result))
+        self.assertNotIn(str(self.root), json.dumps(result))
+        with self.assertRaises(ValueError):
+            resources.catalog("listening_test", {"scope": "unknown"})
+
+    def test_listening_task_and_plan_item_preserve_full_test_and_section_scope(self):
+        self.complete_listening_test()
+        for number in (None, 2):
+            with self.subTest(number=number):
+                prepared, task = self.create(
+                    "listening_test",
+                    {"test_id": "ielts10_test1", "section_number": number},
+                    f"listening-{number}",
+                )
+                self.assertEqual(task.listening_exercise_id, "ielts10_test1")
+                self.assertEqual(task.listening_resource_type, "cambridge_test")
+                self.assertEqual(task.grading_mode, "image")
+                self.assertEqual(task.category, "雅思-听力-整套")
+                self.assertTrue(task.listening_access_token)
+                self.assertEqual(
+                    task.plan_item.access_token, task.listening_access_token
+                )
+                self.assertEqual(
+                    task.plan_item.resource_type, "cambridge_listening_test"
+                )
+                self.assertEqual(task.plan_item.resource_id, "ielts10_test1")
+                if number is None:
+                    self.assertIsNone(task.question_ids)
+                else:
+                    self.assertEqual(
+                        json.loads(task.question_ids), {"listening_section_number": 2}
+                    )
+                metadata = json.loads(task.plan_item.resource_metadata)
+                self.assertEqual(metadata["listening_section_number"], number)
+                self.assertEqual(
+                    metadata["question_ranges"], prepared["metadata"]["question_ranges"]
+                )
+                self.assertEqual(metadata["question_count"], 40 if number is None else 10)
+        db.session.rollback()
+        self.assertEqual(Task.query.count(), 0)
+        self.assertEqual(PlanItem.query.count(), 0)
+
+    def test_listening_whole_playback_does_not_require_individual_cue_points(self):
+        self.complete_listening_test()
+        self.listening["sections"][0]["groups"][0]["questions"][0].pop("start")
+        self.write(self.listening_path, self.listening)
+        prepared = resources.prepare_resource(
+            "listening_test", {"test_id": "ielts10_test1"}
+        )
+        self.assertEqual(prepared["metadata"]["question_count"], 40)
+        self.assertEqual(resources.catalog("listening_test")["total"], 5)
+
+    def test_incomplete_listening_sources_are_not_offered_as_full_tests(self):
+        self.assertEqual(resources.catalog("listening_test", {"scope": "test"})["total"], 0)
+        with self.assertRaisesRegex(ValueError, "完整的第1–40题"):
+            resources.prepare_resource("listening_test", {"test_id": "ielts10_test1"})
+        self.complete_listening_test()
+        self.listening["sections"][3]["groups"][0]["questions"].pop()
+        self.write(self.listening_path, self.listening)
+        self.assertEqual(resources.catalog("listening_test", {"scope": "test"})["total"], 0)
+        self.assertEqual(resources.catalog("listening_test", {"scope": "section"})["total"], 4)
+        with self.assertRaisesRegex(ValueError, "完整的第1–40题"):
+            resources.prepare_resource("listening_test", {"test_id": "ielts10_test1"})
+
+    def test_listening_rejects_bad_selection_hidden_offline_and_changed_content(self):
+        for selection in (
+            {"test_id": "../private"},
+            {"test_id": "ielts10_test1", "section_number": 2},
+            {"test_id": "ielts10_test1", "section_number": True},
+            {"test_id": "ielts10_test1", "section_number": 0},
+            {"test_id": "ielts10_test1", "section_number": 5},
+        ):
+            with self.subTest(selection=selection), self.assertRaises(ValueError):
+                resources.prepare_resource("listening_test", selection)
+        self.complete_listening_test()
+        prepared = resources.prepare_resource(
+            "listening_test", {"test_id": "ielts10_test1"}
+        )
+        self.listening["sections"][0]["groups"][0]["questions"][0]["answer"] = (
+            "Different"
+        )
+        self.write(self.listening_path, self.listening)
+        with self.assertRaisesRegex(ValueError, "已变化"):
+            resources.revalidate_resource(prepared)
+        self.listening["hidden_from_catalog"] = True
+        self.write(self.listening_path, self.listening)
+        self.assertEqual(resources.catalog("listening_test")["total"], 0)
+        with self.assertRaises(ValueError):
+            resources.prepare_resource("listening_test", {"test_id": "ielts10_test1"})
+        self.listening.pop("hidden_from_catalog")
+        self.write(self.listening_path, self.listening)
+        self.write(
+            self.listening_path.parent / "offline_tests.json",
+            {
+                "tests": [{"id": "ielts10_test1", "status": "offline"}],
+            },
+        )
+        self.assertEqual(resources.catalog("listening_test")["total"], 0)
+        with self.assertRaises(ValueError):
+            resources.prepare_resource("listening_test", {"test_id": "ielts10_test1"})
+
+    def test_listening_missing_section_audio_blocks_whole_but_not_other_section(self):
+        self.complete_listening_test()
+        whole = resources.prepare_resource(
+            "listening_test", {"test_id": "ielts10_test1"}
+        )
+        first = resources.prepare_resource(
+            "listening_test",
+            {
+                "test_id": "ielts10_test1",
+                "section_number": 1,
+            },
+        )
+        (self.root / "static/listening/section2.mp3").unlink()
+        self.assertEqual(
+            [row["id"] for row in resources.catalog("listening_test")["items"]],
+            ["ielts10_test1:1", "ielts10_test1:3", "ielts10_test1:4"],
+        )
+        with self.assertRaisesRegex(ValueError, "音频不可用"):
+            resources.revalidate_resource(whole)
+        resources.revalidate_resource(first)
+
+    def test_listening_rejects_escaping_audio_empty_invalid_or_duplicate_questions(
+        self,
+    ):
+        baseline = copy.deepcopy(self.listening)
+        variants = []
+        for audio in (
+            "../../private.mp3",
+            str(self.root / "static/listening/sample.mp3"),
+        ):
+            source = copy.deepcopy(baseline)
+            source["sections"][0]["audio"] = audio
+            variants.append(source)
+        empty = copy.deepcopy(baseline)
+        empty["sections"][0]["groups"] = []
+        variants.append(empty)
+        no_answer = copy.deepcopy(baseline)
+        no_answer["sections"][0]["groups"][0]["questions"][0].pop("answer")
+        variants.append(no_answer)
+        duplicate = copy.deepcopy(baseline)
+        duplicate["sections"][0]["groups"] *= 2
+        variants.append(duplicate)
+        duplicate_section = copy.deepcopy(baseline)
+        duplicate_section["sections"] *= 2
+        variants.append(duplicate_section)
+        for source in variants:
+            with self.subTest(source=source):
+                self.write(self.listening_path, source)
+                with self.assertRaises(ValueError):
+                    resources.prepare_resource(
+                        "listening_test", {"test_id": "ielts10_test1"}
+                    )
+                self.assertEqual(resources.catalog("listening_test")["total"], 0)
+
+    def test_listening_dedupes_full_section_and_specialty_in_both_directions(self):
+        self.complete_listening_test()
+        whole, whole_task = self.create(
+            "listening_test", {"test_id": "ielts10_test1"}, "full"
+        )
+        section, section_task = self.create(
+            "listening_test",
+            {
+                "test_id": "ielts10_test1",
+                "section_number": 1,
+            },
+            "section",
+        )
+        other = resources.prepare_resource(
+            "listening_test",
+            {
+                "test_id": "ielts10_test1",
+                "section_number": 2,
+            },
+        )
+        group, group_task = self.create(
+            "question_type", self.specialty(subject="listening"), "group"
+        )
+        for left, right in (
+            (whole, section),
+            (whole, other),
+            (whole, group),
+            (section, group),
+        ):
+            self.assertTrue(resources.resource_overlap(left, right))
+            self.assertTrue(resources.resource_overlap(right, left))
+        self.assertFalse(resources.resource_overlap(other, section))
+        self.assertFalse(resources.resource_overlap(other, group))
+        self.assertTrue(resources.overlaps_task(group, whole_task))
+        self.assertTrue(resources.overlaps_task(group, section_task))
+        self.assertTrue(resources.overlaps_task(whole, group_task))
+        self.assertTrue(resources.overlaps_task(section, group_task))
+        self.assertFalse(resources.overlaps_task(other, group_task))
+        whole_task.status = "done"
+        group_task.status = "done"
+        self.assertTrue(resources.overlaps_task(group, whole_task))
+        self.assertTrue(resources.overlaps_task(whole, group_task))
+        section_task.status = Task.STATUS_CANCELLED
+        self.assertFalse(resources.overlaps_task(group, section_task))
+
+    def test_listening_overlap_normalizes_source_id_and_legacy_section_string(self):
+        self.complete_listening_test()
+        self.listening["id"] = "source-test-alias"
+        self.write(self.listening_path, self.listening)
+        whole, task = self.create("listening_test", {"test_id": "ielts10_test1"})
+        group = resources.prepare_resource(
+            "question_type", self.specialty(subject="listening")
+        )
+        self.assertTrue(resources.resource_overlap(whole, group))
+        self.assertTrue(resources.overlaps_task(group, task))
+        task.question_ids = json.dumps({"listening_section_number": "2"})
+        self.assertFalse(resources.overlaps_task(group, task))
+        task.question_ids = json.dumps({"listening_section_number": "1"})
+        self.assertTrue(resources.overlaps_task(group, task))
 
     def test_reading_rejects_bad_path_unknown_passage_hidden_and_offline(self):
         for selection in (

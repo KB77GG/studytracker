@@ -21,7 +21,7 @@ from services.task_planner import run_due  # noqa: E402
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true", help="Report eligible count without writes")
-    parser.add_argument("--init-schema", action="store_true", help="Create only the three new planner tables")
+    parser.add_argument("--init-schema", action="store_true", help="Create missing task planner tables without altering existing tables")
     args = parser.parse_args()
     app = Flask("task_planner_runner")
     app.config.from_object(Config)

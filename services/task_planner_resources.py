@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import secrets
 from datetime import date
 from functools import lru_cache
@@ -33,6 +34,7 @@ from services.question_type_practice import (
     LibraryRoots,
     build_group_index,
     build_snapshot,
+    canonical_type,
     practice_type_members,
     question_type_display_label,
     snapshot_from_task,
@@ -40,7 +42,9 @@ from services.question_type_practice import (
 )
 from services.task_assignment_duplicates import resource_identity_from_payload
 
-KINDS = frozenset({"question_type", "reading_passage", "intensive", "dictation"})
+KINDS = frozenset(
+    {"question_type", "reading_passage", "listening_test", "intensive", "dictation"}
+)
 GOALS = frozenset({"reading", "writing", "listening", "comprehensive"})
 DICTATION_MODES = frozenset({"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"})
 
@@ -221,6 +225,118 @@ def _reading_catalog():
     return items, {}
 
 
+def _listening_payload(test_id):
+    roots = _roots()
+    if test_id in load_offline_test_ids(roots.listening):
+        raise ValueError("所选听力已下线")
+    payload = _json_file(roots.listening, test_id)
+    sections = payload.get("sections")
+    if not isinstance(sections, list) or not sections:
+        raise ValueError("所选资源没有听力 Section")
+    numbers = []
+    for section in sections:
+        if not isinstance(section, dict):
+            raise ValueError("听力 Section 数据无效")
+        numbers.append(_integer(section.get("section"), "Section 序号", maximum=4))
+    if len(numbers) != len(set(numbers)):
+        raise ValueError("听力 Section 序号重复")
+    return payload
+
+
+def _listening_section_questions(section):
+    """Validate whole-section playback without requiring question timestamps."""
+    roots = _roots()
+    audio = str(section.get("audio") or "").strip()
+    audio_root = roots.audio.resolve()
+    candidate = (audio_root / audio).resolve()
+    if (
+        not audio
+        or Path(audio).is_absolute()
+        or not candidate.is_relative_to(audio_root)
+        or not candidate.is_file()
+    ):
+        raise ValueError("听力 Section 音频不可用")
+    groups = section.get("groups")
+    if not isinstance(groups, list) or not groups:
+        raise ValueError("所选听力 Section 没有题目")
+    questions = []
+    for group in groups:
+        if (
+            not isinstance(group, dict)
+            or not isinstance(group.get("questions"), list)
+            or any(not isinstance(row, dict) for row in group["questions"])
+        ):
+            raise ValueError("听力题组数据无效")
+        canonical, _subtype = canonical_type(group, "listening")
+        _status, blockers, _warnings, _assets = validate_group(
+            group,
+            subject="listening",
+            unit=section,
+            canonical=canonical,
+            static_root=roots.static,
+            audio_root=roots.audio,
+        )
+        # Whole-section playback remains valid without per-question cue points.
+        if blockers:
+            raise ValueError("所选听力题组暂不可布置")
+        questions.extend(group["questions"])
+    ids = [str(row.get("id")) for row in questions]
+    numbers = [_integer(row.get("number"), "听力题号") for row in questions]
+    if len(ids) != len(set(ids)) or len(numbers) != len(set(numbers)):
+        raise ValueError("听力 Section 题目 ID 或题号重复")
+    return numbers
+
+
+def _complete_listening_test(sections):
+    return set(sections) == {1, 2, 3, 4} and sorted(
+        number for numbers in sections.values() for number in numbers
+    ) == list(range(1, 41))
+
+
+def _listening_catalog(filters):
+    scope = str(filters.get("scope") or "all")
+    if scope not in {"all", "test", "section"}:
+        raise ValueError("请选择整套 Test 或 Section")
+    items = []
+    paths = sorted(
+        _roots().listening.glob("*.json"),
+        key=lambda path: [
+            int(part) if part.isdigit() else part
+            for part in re.split(r"(\d+)", path.stem)
+        ],
+    )
+    for path in paths:
+        try:
+            source = _listening_payload(path.stem)
+        except ValueError:
+            continue
+        valid = []
+        for section in sorted(source["sections"], key=lambda row: int(row["section"])):
+            try:
+                numbers = _listening_section_questions(section)
+            except ValueError:
+                continue
+            valid.append((int(section["section"]), numbers))
+        options = []
+        if scope != "section" and _complete_listening_test(dict(valid)):
+            options.append((None, 40))
+        if scope != "test":
+            options.extend((number, len(numbers)) for number, numbers in valid)
+        for number, count in options:
+            label = f"Section {number}" if number is not None else "整套 Test"
+            items.append(
+                {
+                    "id": f"{path.stem}:{number if number is not None else 'all'}",
+                    "label": f"{source.get('title') or path.stem} · {label}",
+                    "test_id": path.stem,
+                    "section_number": number,
+                    "question_count": count,
+                    "selection": {"test_id": path.stem, "section_number": number},
+                }
+            )
+    return items, {}
+
+
 def _intensive_payload(exercise_id):
     if not parse_intensive_id(exercise_id):
         raise ValueError("请选择已注册的精听资源")
@@ -311,6 +427,8 @@ def catalog(kind, filters=None):
     offset = _integer(filters.get("offset", 0), "偏移量", minimum=0)
     if kind == "question_type":
         items, extra = _question_catalog(filters)
+    elif kind == "listening_test":
+        items, extra = _listening_catalog(filters)
     else:
         items, extra = {
             "reading_passage": _reading_catalog,
@@ -336,8 +454,9 @@ def catalog(kind, filters=None):
 
 
 def _prepare_question(payload):
-    subject, standard_type = str(payload.get("subject") or ""), str(
-        payload.get("standard_type") or ""
+    subject, standard_type = (
+        str(payload.get("subject") or ""),
+        str(payload.get("standard_type") or ""),
     )
     allowed = practice_type_members(subject, standard_type)
     ids = payload.get("group_ids")
@@ -439,6 +558,57 @@ def _prepare_reading(payload):
     }
 
 
+def _prepare_listening(payload):
+    test_id = str(payload.get("test_id") or "").strip()
+    value = payload.get("section_number")
+    number = None if value in (None, "") else _integer(value, "Section 序号", maximum=4)
+    source = _listening_payload(test_id)
+    selected = [
+        section
+        for section in source["sections"]
+        if number is None or int(section["section"]) == number
+    ]
+    if not selected:
+        raise ValueError("所选听力 Section 不存在")
+    selected.sort(key=lambda row: int(row["section"]))
+    ranges = [
+        {
+            "section_number": int(section["section"]),
+            "question_numbers": _listening_section_questions(section),
+        }
+        for section in selected
+    ]
+    if number is None and not _complete_listening_test(
+        {row["section_number"]: row["question_numbers"] for row in ranges}
+    ):
+        raise ValueError("整套听力须包含 Section 1–4 及完整的第1–40题，请改选 Section")
+    label = f"Section {number}" if number is not None else "整套 Test"
+    return {
+        "title": f"{source.get('title') or test_id} · {label}",
+        "selection": {"test_id": test_id, "section_number": number},
+        "content_hash": _digest(source),
+        "metadata": {
+            "question_ranges": ranges,
+            "question_count": sum(len(row["question_numbers"]) for row in ranges),
+        },
+        "coverage_units": [
+            {
+                "subject": "listening",
+                "test_id": source.get("id") or test_id,
+                "unit_number": row["section_number"],
+                "whole": True,
+            }
+            for row in ranges
+        ],
+        "duplicate_payload": {
+            "source": "listening",
+            "listening_resource_type": "cambridge_test",
+            "listening_exercise_id": test_id,
+            "listening_section_number": number,
+        },
+    }
+
+
 def _prepare_intensive(payload):
     exercise_id = str(payload.get("exercise_id") or "").strip()
     source = _intensive_payload(exercise_id)
@@ -467,15 +637,17 @@ def _prepare_dictation(payload):
     book = db.session.get(DictationBook, book_id)
     if not book or book.is_deleted or not book.is_active:
         raise ValueError("词书不存在或已停用")
-    start, end = _integer(payload.get("word_start"), "起始词序"), _integer(
-        payload.get("word_end"), "结束词序"
+    start, end = (
+        _integer(payload.get("word_start"), "起始词序"),
+        _integer(payload.get("word_end"), "结束词序"),
     )
     error = dictation_range_error(book_id, start, end)
     if error:
         raise ValueError(error)
     goal = str(payload.get("vocabulary_goal") or "")
-    mode, order = str(payload.get("dictation_mode") or "audio_to_en"), str(
-        payload.get("dictation_order") or "sequence"
+    mode, order = (
+        str(payload.get("dictation_mode") or "audio_to_en"),
+        str(payload.get("dictation_order") or "sequence"),
     )
     if (
         goal not in GOALS
@@ -535,6 +707,7 @@ def prepare_resource(kind, payload):
     adapters = {
         "question_type": _prepare_question,
         "reading_passage": _prepare_reading,
+        "listening_test": _prepare_listening,
         "intensive": _prepare_intensive,
         "dictation": _prepare_dictation,
     }
@@ -628,23 +801,32 @@ def overlaps_task(prepared, task):
         and task.listening_exercise_id
     ):
         try:
+            test_id = (
+                _listening_payload(task.listening_exercise_id).get("id")
+                or task.listening_exercise_id
+            )
+        except ValueError:
+            test_id = task.listening_exercise_id
+        try:
             scope = json.loads(task.question_ids or "{}")
         except (ValueError, TypeError):
             scope = {}
+        try:
+            number = _integer(
+                scope.get("listening_section_number"), "Section 序号", maximum=4
+            )
+        except (AttributeError, ValueError):
+            number = None
         other = [
             {
                 "subject": "listening",
-                "test_id": task.listening_exercise_id,
-                "unit_number": (
-                    scope.get("listening_section_number")
-                    if isinstance(scope, dict)
-                    else None
-                ),
+                "test_id": test_id,
+                "unit_number": number,
                 "whole": True,
             }
         ]
     elif (
-        prepared["kind"] == "reading_passage"
+        prepared["kind"] in {"reading_passage", "listening_test"}
         and task.grading_mode == "question_type_practice"
     ):
         snapshot = snapshot_from_task(task) or {}
@@ -730,6 +912,30 @@ def create_resource_task(
             if prepared["metadata"].get("source") == "idictation_reading_jijing"
             else "雅思-阅读-整套"
         )
+    elif prepared["kind"] == "listening_test":
+        number = selection["section_number"]
+        resource_type, resource_id, module, name = (
+            "cambridge_listening_test",
+            selection["test_id"],
+            "听力",
+            "Section 练习" if number is not None else "整套练习",
+        )
+        fields = {
+            "listening_resource_type": "cambridge_test",
+            "listening_exercise_id": resource_id,
+            "listening_access_token": token,
+            "question_ids": (
+                json.dumps({"listening_section_number": number})
+                if number is not None
+                else None
+            ),
+            "grading_mode": "image",
+        }
+        metadata = {
+            "listening_section_number": number,
+            **prepared["metadata"],
+        }
+        category = "雅思-听力-整套"
     elif prepared["kind"] == "intensive":
         resource_type, resource_id, module, name = (
             "intensive_listening",

@@ -32,6 +32,16 @@ test('expired drafts must be rescheduled rather than confirmed', () => {
   assert.equal(planner.canConfirm({ status: 'draft', target_date: '2026-10-30' }, '2026-10-31'), false);
   assert.equal(planner.canConfirm({ status: 'draft', target_date: '2026-11-01' }, '2026-10-31'), true);
   assert.equal(planner.canConfirm({ status: 'published', target_date: '2026-11-01' }, '2026-10-31'), false);
+  assert.equal(planner.canConfirm({ status: 'draft', target_date: '2026-11-01', series_managed: true }, '2026-10-31'), false);
+});
+
+test('listening whole Test and Section selections preserve the catalog contract', () => {
+  for (const section_number of [null, 1, 4]) {
+    const selection = { test_id: 'ielts10_test1', section_number };
+    const result = planner.buildSelection('listening_test', new Map([['ielts10_test1:' + (section_number || 'all'), { selection }]]), {});
+    assert.deepEqual(result, selection);
+    assert.notEqual(result, selection);
+  }
 });
 
 test('summary counts tomorrow specifically and distinguishes unpublished expired entries', () => {
