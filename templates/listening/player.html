@@ -882,7 +882,7 @@ body {
       <div class="topbar-actions">
         <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
-        <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重置本地进度</button>
+        <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重做</button>
         <button class="practice-shell__back back-link" type="button" data-practice-back>← 返回精听列表</button>
         <button class="practice-shell__back back-link" type="button" data-practice-module-exit>退出刷题</button>
       </div>
@@ -1069,6 +1069,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   const reviewListenedSegments = new Set();
   const freeStudentName = sessionStorage.getItem('listening_student') || localStorage.getItem('listening_student') || 'guest';
   let practiceShellController = null;
+  let practiceRedoState = null;
 
   function getFreeProgressStorageKey() {
     return `listening_free_progress_${exerciseId}_${freeStudentName}`;
@@ -1173,18 +1174,9 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     initialSaved: true,
     save: () => {
       if (errorSummaryDirty) persistCurrentErrorSummary(true);
-      return taskId ? true : saveFreeProgress();
+      return savePracticeRedoState() && (taskId ? true : saveFreeProgress());
     }
   });
-
-  function clearFreeProgress() {
-    freeProgress = {};
-    try {
-      localStorage.removeItem(getFreeProgressStorageKey());
-    } catch (err) {
-      console.warn('free progress clear failed', err);
-    }
-  }
 
   function clearFreeDictationTransientState() {
     ListeningCloze.clearFreePracticeTransientState({
@@ -1196,6 +1188,93 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
       pendingFirstAttempts,
     }, !!taskId);
     currentDictationContext = null;
+  }
+
+  function getPracticeRedoStorageKey() {
+    return `${getFreeProgressStorageKey()}:redo:${taskId || 'free'}`;
+  }
+
+  function savePracticeRedoState(state = practiceRedoState) {
+    if (!state) return true;
+    try {
+      localStorage.setItem(getPracticeRedoStorageKey(), JSON.stringify(state));
+      return true;
+    } catch (_error) {
+      practiceShellController?.setStatus('保存失败，点击重试', 'error');
+      return false;
+    }
+  }
+
+  function restorePracticeRedoState() {
+    if (taskReadOnly) return;
+    try {
+      const state = JSON.parse(localStorage.getItem(getPracticeRedoStorageKey()) || 'null');
+      if (!state || !Array.isArray(state.segments)) return;
+      practiceRedoState = state;
+      const progressMap = getActiveProgressMap();
+      getSegmentLocations().forEach(location => {
+        const key = dictationStateKey(location.globalIndex);
+        const progress = getEffectiveProgress(progressMap, location.globalIndex, getPracticeText(location.seg));
+        if (state.segments.includes(key) && progress && !taskTrainingPolicy.review_only) {
+          getFirstAttemptGate(location.globalIndex, true).enterCorrection();
+          correctionSegments.add(key);
+          dictationStartedSegments.add(key);
+        }
+      });
+      Object.entries(state.levels || {}).forEach(([key, level]) => {
+        if (ListeningCloze.LEVELS.some(option => option.key === level)) dictationLevelsBySegment.set(key, level);
+      });
+      Object.entries(state.drafts || {}).forEach(([key, values]) => {
+        if (!Array.isArray(values)) return;
+        dictationDrafts.set(key, values);
+        if (values.some(value => String(value).trim())) dictationStartedSegments.add(key.split(':')[0]);
+      });
+      mode = taskTrainingPolicy.review_only ? 'sentence' : 'dictation';
+    } catch (_error) {
+      // Original first-attempt records remain usable if a redo draft is unreadable.
+    }
+  }
+
+  function redoPractice() {
+    if (!data || taskReadOnly) return;
+    const locations = getSegmentLocations();
+    const progressMap = getActiveProgressMap();
+    const unsettled = pendingFirstAttempts.size || locations.some(location =>
+      !getEffectiveProgress(progressMap, location.globalIndex, getPracticeText(location.seg))
+      && firstAttemptGates.get(dictationStateKey(location.globalIndex))?.canPost());
+    if (unsettled) {
+      alert('首答正在保存或保存尚未确认，请稍后重试或刷新确认后再重做。');
+      return;
+    }
+    if (!confirm('清空本轮作答并从第一句重新练习？已保存的首答成绩和错因笔记会保留。')) return;
+    const state = {
+      segments: locations.filter(location =>
+        getEffectiveProgress(progressMap, location.globalIndex, getPracticeText(location.seg)))
+        .map(location => dictationStateKey(location.globalIndex)),
+      drafts: {},
+    };
+    if (!savePracticeRedoState(state)) {
+      alert('无法保存重做进度，请检查浏览器存储后重试。');
+      return;
+    }
+    if (errorSummaryDirty) persistCurrentErrorSummary(true);
+    stopAutoRepeat();
+    audio.pause();
+    stopSegmentBoundaryMonitor();
+    updatePlayBtn(false);
+    clearFreeDictationTransientState();
+    dictationStartedSegments.clear();
+    correctionSegments.clear();
+    dictationDrafts.clear();
+    dictationLevelsBySegment.clear();
+    reviewListenedSegments.clear();
+    showOriginal = false;
+    showTranslation = false;
+    document.getElementById('btnShowText').classList.remove('on');
+    document.getElementById('btnShowTrans').classList.remove('on');
+    restorePracticeRedoState();
+    selectSegmentLocation(locations[0]);
+    practiceShellController?.markSaved();
   }
 
   function getSegmentSourceIndex(seg, fallbackIdx) {
@@ -1453,7 +1532,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     audio.src = `/static/listening/${data.audio}`;
     const freeResetBtn = document.getElementById('btnResetFreeProgress');
     if (freeResetBtn) {
-      freeResetBtn.style.display = taskId ? 'none' : 'inline-flex';
+      freeResetBtn.style.display = taskReadOnly ? 'none' : 'inline-flex';
     }
 
     loadErrorSummaries();
@@ -1470,12 +1549,13 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
       updatePracticeSubtitle(freeProgress, totalSegs);
     }
 
+    restorePracticeRedoState();
     updateTrainingPolicyUI();
     updateModeControls();
     buildPartTabs();
     buildSentenceList();
     const initialPending = taskId ? findFirstPendingSegmentLocation(taskProgress) : null;
-    if (initialPending) selectSegmentLocation(initialPending);
+    if (initialPending && !practiceRedoState) selectSegmentLocation(initialPending);
     else selectSegment(0);
     updateTaskCompletionPanel();
     audio.addEventListener('timeupdate', onTimeUpdate);
@@ -2064,9 +2144,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     }
 
     const draftKey = dictationDraftKey(segGlobalIdx, level);
-    const draft = correction
-      ? []
-      : (pendingAttempt?.answers || dictationDrafts.get(draftKey) || []);
+    const draft = pendingAttempt?.answers || dictationDrafts.get(draftKey) || [];
     if (level === 'challenge') {
       const input = document.createElement('textarea');
       input.className = 'challenge-input';
@@ -2123,18 +2201,27 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
 
   function saveCurrentDictationDraft() {
     const context = currentDictationContext;
-    if (!context || context.savedProgress || context.correction) return;
+    if (!context || (context.savedProgress && !context.correction)) return;
     if (context.level === 'challenge') {
       const input = document.getElementById('challengeDictationInput');
       const value = input?.value || '';
       if (value.trim()) freezeDictationLevel(context.segGlobalIdx, context.savedProgress);
       dictationDrafts.set(dictationDraftKey(context.segGlobalIdx, context.level), [value]);
+      persistPracticeRedoDrafts();
       return;
     }
     const values = Array.from(document.querySelectorAll('.dictation-area input[data-blank-index]'))
       .map(input => input.value || '');
     if (values.some(value => value.trim())) freezeDictationLevel(context.segGlobalIdx, context.savedProgress);
     dictationDrafts.set(dictationDraftKey(context.segGlobalIdx, context.level), values);
+    persistPracticeRedoDrafts();
+  }
+
+  function persistPracticeRedoDrafts() {
+    if (!practiceRedoState) return;
+    practiceRedoState.drafts = Object.fromEntries(dictationDrafts);
+    practiceRedoState.levels = Object.fromEntries(dictationLevelsBySegment);
+    savePracticeRedoState();
   }
 
   function startCurrentDictation() {
@@ -2155,6 +2242,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     correctionSegments.add(context.stateKey);
     dictationStartedSegments.add(context.stateKey);
     dictationDrafts.delete(dictationDraftKey(context.segGlobalIdx, context.level));
+    persistPracticeRedoDrafts();
     renderContent();
     startAutoRepeatSequence();
   }
@@ -2468,16 +2556,7 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   document.getElementById('btnSubmitDictation').onclick = checkDictation;
   document.getElementById('btnRetry').onclick = startCorrection;
   document.getElementById('btnNextAfterScore').onclick = goToNextSegmentOrPending;
-  document.getElementById('btnResetFreeProgress').onclick = () => {
-    if (taskId) return;
-    if (!confirm('确认清空本篇自由练习进度？已保存的本地结果会被移除。')) return;
-    clearFreeProgress();
-    clearFreeDictationTransientState();
-    applyCompletedMarkers(freeProgress);
-    buildSentenceList();
-    updatePracticeSubtitle(freeProgress, totalSegmentCount());
-    renderContent();
-  };
+  document.getElementById('btnResetFreeProgress').onclick = redoPractice;
 
   function updateModeControls() {
     const segGlobalIdx = getGlobalSegmentIndex();

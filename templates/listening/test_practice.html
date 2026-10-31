@@ -1010,6 +1010,7 @@ body[data-experience-mode="simulation"] .group::before {
         <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
       </div>
+      <button class="practice-shell__back" type="button" id="resetBtn" hidden>重做</button>
     </div>
     <div class="practice-listening-player">
     {% if exam_context %}
@@ -1130,6 +1131,7 @@ if (window.location.protocol === 'file:') {
 <script src="{{ url_for('static', filename='js/practice_renderers.js') }}"></script>
 {% include "practice/_navigation_defaults.html" %}
 <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script src="{{ url_for('static', filename='js/practice_redo.js') }}"></script>
 <script>
 const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
@@ -1173,6 +1175,11 @@ const noteStorageKey = examContext
   ? `mock_exam_notes_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
   : `listening_test_error_notes_${test.id}_${storageScope}_${practiceStorageOwner}`;
 const flagStorageKey = `${storageKey}:flags`;
+const practiceRedo = PracticeRedo.create({
+  storageKey, flagStorageKey, examContext, practiceContext, historyAttemptId,
+  taskId: listeningTaskId,
+  button: document.getElementById('resetBtn')
+});
 let flaggedQuestions = (() => {
   try { return new Set(JSON.parse(localStorage.getItem(flagStorageKey) || '[]').map(String)); }
   catch (_error) { return new Set(); }
@@ -1997,7 +2004,7 @@ function answerSnapshot() {
 }
 
 async function persistAnswers(reason = 'local') {
-  if (practiceContext?.read_only) return true;
+  if (practiceContext?.read_only || practiceRedo.suppressDraftWrites()) return true;
   const snapshot = answerSnapshot();
   try {
     localStorage.setItem(storageKey, JSON.stringify(snapshot));
@@ -2072,11 +2079,11 @@ function restoreAnswers() {
 }
 
 async function restoreServerAnswers() {
-  if (!persistenceContext?.draft_url) return;
+  if (!persistenceContext?.draft_url || historyAttemptId || practiceRedo.skipRestore()) return;
   try {
     const response = await fetch(persistenceContext.draft_url, { credentials: 'same-origin' });
     const data = await response.json();
-    if (!response.ok || !data.ok || !data.answers) return;
+    if (!response.ok || !data.ok || !data.answers || practiceRedo.skipRestore()) return;
     const local = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
     applyAnswerRows({ ...data.answers, ...local });
   } catch (_error) {
@@ -2116,6 +2123,7 @@ function applyServerResults(results) {
 
 async function syncListeningTestSubmission(baseHtml) {
   if (practiceContext?.read_only) return;
+  practiceRedo.setBusy(true);
   const resultBox = document.getElementById('resultBox');
   resultBox.innerHTML = `${baseHtml}<br><span class="muted">正在同步后台成绩...</span>`;
   try {
@@ -2138,6 +2146,7 @@ async function syncListeningTestSubmission(baseHtml) {
     if (!response.ok || !data.ok) {
       throw new Error(data.error || 'sync_failed');
     }
+    if (data.synced || data.next_url) practiceRedo.submitted();
     if (practiceContext?.task_type === 'question_type_practice' && data.next_url) {
       practiceShellController?.markSaved();
       window.location.replace(data.next_url);
@@ -2157,10 +2166,13 @@ async function syncListeningTestSubmission(baseHtml) {
   } catch (err) {
     resultBox.innerHTML = `${baseHtml}<br><span style="color: var(--error);">后台同步失败，请稍后再提交。</span>`;
     practiceShellController?.setStatus('保存失败，点击重试', 'error');
+  } finally {
+    practiceRedo.setBusy(false);
   }
 }
 
 async function loadExistingSubmission() {
+  if (practiceRedo.skipRestore()) return;
   const embeddedReview = practiceContext?.initial_review;
   if (embeddedReview?.answers && embeddedReview?.result) {
     const grade = embeddedReview.result;
@@ -2210,10 +2222,10 @@ async function loadExistingSubmission() {
       credentials: 'same-origin'
     });
     const data = await response.json();
-    if (!response.ok || !data.ok || !data.submission) return;
+    if (!response.ok || !data.ok || !data.submission || practiceRedo.skipRestore()) return;
     const submission = data.submission;
     applyAnswerRows(submission.answers || {});
-    localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
+    if (!historyAttemptId) localStorage.setItem(storageKey, JSON.stringify(answerSnapshot()));
     const results = Array.isArray(submission.results) && submission.results.length
       ? submission.results
       : Array.from(document.querySelectorAll('.answer-unit')).map(markUnit);
