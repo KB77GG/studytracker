@@ -12,6 +12,7 @@ from hashlib import sha256
 from pathlib import Path
 from zipfile import ZipFile
 
+from scripts import export_grammar_needs_review as needs_export
 from scripts.generate_grammar_candidates import collect
 from scripts.grammar_items import spans as roles
 from scripts.grammar_items.checks import Reason as R
@@ -2071,6 +2072,34 @@ class AnotherClauseTests(unittest.TestCase):
         boundary = by_template(self.items(rows, tags), "clause_boundary")[0]
         self.assertEqual(boundary["status"], "needs_review")
         self.assertIn(R.ANOTHER_CLAUSE_SAME_TYPE, boundary["reasons"])
+
+
+class NeedsReviewExportTests(unittest.TestCase):
+    """The cross-check export of needs_review items (2026-11-01)."""
+
+    def test_reason_notes_name_real_reason_codes(self):
+        self.assertLessEqual(set(needs_export.REASONS_ZH), {reason.value for reason in R})
+
+    def test_row_marks_target_and_explains_reasons(self):
+        sentence = "Prices fell because demand dropped ."
+        start = sentence.index("because")
+        target = {"start": start, "end": start + 22, "text": "because demand dropped"}
+        item = {
+            "item_id": "gi_v02_test",
+            "template": "adverbial_relation",
+            "source": source(sentence),
+            "prompt_zh": "句中【】标出的状语从句表示什么关系？",
+            "target": target,
+            "options": ["时间", "原因"],
+            "answer": {"kind": "option", "spans": [], "option": "原因"},
+            "grading": {},
+            "distractors": [],
+            "reasons": [R.SUBORDINATOR_AMBIGUOUS.value],
+        }
+        row = dict(zip(needs_export.HEADERS, needs_export.review_row(1, item), strict=True))
+        self.assertEqual(row["句子（【】标出目标）"], "Prices fell 【because demand dropped】 .")
+        self.assertEqual(row["机器答案"], "原因")
+        self.assertEqual(row["待复核原因"], needs_export.REASONS_ZH["subordinator_ambiguous"])
 
 
 class CoordinatePromptTests(unittest.TestCase):
