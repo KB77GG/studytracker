@@ -78,6 +78,30 @@
     selectedScopes(fields.source_scopes || []).forEach(function (scope) { query.append('source_scope', scope); });
     return query.toString();
   }
+  function naturalCompare(left, right) {
+    var a = String(left).toLowerCase().split(/(\d+)/), b = String(right).toLowerCase().split(/(\d+)/);
+    for (var i = 0; i < Math.min(a.length, b.length); i++) {
+      var first = /^\d+$/.test(a[i]) ? Number(a[i]) : a[i], second = /^\d+$/.test(b[i]) ? Number(b[i]) : b[i];
+      if (first === second) continue;
+      if (typeof first !== typeof second) return typeof first === 'number' ? -1 : 1;
+      return first < second ? -1 : 1;
+    }
+    return a.length - b.length;
+  }
+  function orderedBooks(books) {
+    return (books || []).slice().sort(function (left, right) { return naturalCompare(left.label, right.label) || Number(left.id) - Number(right.id); });
+  }
+  function vocabularyChoices(books, selected, startId, search) {
+    var ids = new Set((selected || []).map(String)), sorted = orderedBooks(books), query = String(search || '').trim().toLowerCase();
+    var chosen = sorted.filter(function (book) { return ids.has(String(book.id)); });
+    return { selected: chosen, visible: sorted.filter(function (book) { return !query || String(book.label).toLowerCase().indexOf(query) >= 0; }), start_id: chosen.some(function (book) { return String(book.id) === String(startId); }) ? String(startId) : '' };
+  }
+  function selectedBookIds(ids) {
+    if (!Array.isArray(ids) || !ids.length || ids.length > 100 || ids.some(function (id) { return !['string', 'number'].includes(typeof id) || !/^\d+$/.test(String(id)) || !Number.isSafeInteger(Number(id)) || Number(id) < 1; })) throw new Error('请选择1至100个有效词书分册。');
+    var result = ids.map(Number);
+    if (new Set(result).size !== result.length) throw new Error('词书分册重复，请重新选择。');
+    return result;
+  }
   function buildPayload(fields) {
     if (!Number.isInteger(Number(fields.student_id)) || Number(fields.student_id) < 1) throw new Error('请选择学生。');
     if (!String(fields.name || '').trim()) throw new Error('请为这条学习线命名。');
@@ -93,6 +117,10 @@
       if (!Number.isInteger(Number(fields.book_id)) || Number(fields.book_id) < 1) throw new Error('请选择词书。');
       if (!Number.isInteger(Number(fields.word_start)) || Number(fields.word_start) < 1) throw new Error('开始词序须为正整数。');
       selection = { book_id: Number(fields.book_id), word_start: Number(fields.word_start), vocabulary_goal: fields.vocabulary_goal, dictation_mode: 'audio_to_en', dictation_order: 'sequence' };
+      if (fields.book_ids !== undefined) {
+        selection.book_ids = selectedBookIds(fields.book_ids);
+        if (selection.book_ids.indexOf(selection.book_id) < 0) throw new Error('起始分册须在已勾选的范围内，请重新选择。');
+      }
     } else {
       if (!selectedScopes(fields.source_scopes || []).length || !String(fields.start_resource_id || '').trim()) throw new Error('请选择至少一本教材和起始内容。');
       selection = sequenceSelection(fields);
@@ -130,7 +158,7 @@
     var $ = function (id) { return doc.getElementById(id); };
     if (!$('plannerSeriesEditor')) return null;
     var request = context.request, editor = $('plannerSeriesEditor'), details = $('plannerSeriesDetails');
-    var state = { loading: 0, sources: 0, sequenceEpoch: 0, sequenceSources: [], scopes: new Set(), books: [], booksRequest: null, editorEpoch: 0, busy: false, list: [], detailEpoch: 0, detail: null };
+    var state = { loading: 0, sources: 0, sequenceEpoch: 0, sequenceSources: [], scopes: new Set(), books: [], bookIds: new Set(), booksRequest: null, editorEpoch: 0, busy: false, list: [], detailEpoch: 0, detail: null };
     var session = createDraftSession(function () { return win.crypto && win.crypto.randomUUID ? win.crypto.randomUUID() : 'series-' + Date.now() + '-' + Math.random().toString(36).slice(2); });
     function node(tag, className, text) { var el = doc.createElement(tag); if (className) el.className = className; if (text !== undefined) el.textContent = String(text); return el; }
     function options(id, items, placeholder, selected) {
@@ -153,7 +181,7 @@
       $('seriesSaveButton').textContent = value && saving ? '正在保存…' : '保存整批草稿';
     }
     function fields() {
-      return { today: context.state.today, student_id: $('seriesStudent').value, name: $('seriesName').value, start_date: $('seriesStart').value, end_date: $('seriesEnd').value, kind: $('seriesKind').value, weekday_counts: DAYS.map(function (_, i) { return $('seriesQuota' + i).value; }), planned_minutes: $('seriesMinutes').value, note: $('seriesNote').value, wait_for_previous: $('seriesWait').value === 'previous', subject: $('seriesSubject').value, standard_type: $('seriesType').value, source_scope: $('seriesSource').value, start_group_id: $('seriesGroup').value, pace: $('seriesPace').value, book_id: $('seriesBook').value, word_start: $('seriesWordStart').value, vocabulary_goal: $('seriesVocabularyGoal').value, source_scopes: Array.from(state.scopes), start_resource_id: $('seriesResource').value, section_number: $('seriesPart').value, passage_number: $('seriesPart').value, training_mode: $('seriesTrainingMode').value };
+      return { today: context.state.today, student_id: $('seriesStudent').value, name: $('seriesName').value, start_date: $('seriesStart').value, end_date: $('seriesEnd').value, kind: $('seriesKind').value, weekday_counts: DAYS.map(function (_, i) { return $('seriesQuota' + i).value; }), planned_minutes: $('seriesMinutes').value, note: $('seriesNote').value, wait_for_previous: $('seriesWait').value === 'previous', subject: $('seriesSubject').value, standard_type: $('seriesType').value, source_scope: $('seriesSource').value, start_group_id: $('seriesGroup').value, pace: $('seriesPace').value, book_id: $('seriesBook').value, book_ids: vocabularyChoices(state.books, Array.from(state.bookIds)).selected.map(function (book) { return book.id; }), word_start: $('seriesWordStart').value, vocabulary_goal: $('seriesVocabularyGoal').value, source_scopes: Array.from(state.scopes), start_resource_id: $('seriesResource').value, section_number: $('seriesPart').value, passage_number: $('seriesPart').value, training_mode: $('seriesTrainingMode').value };
     }
     function dates() {
       var preset = $('seriesPeriod').value, start = $('seriesStart').value;
@@ -216,7 +244,6 @@
       } finally { if (epoch === state.sequenceEpoch) { $('seriesResource').disabled = false; $('seriesScopes').setAttribute('aria-busy', 'false'); } }
     }
     async function loadBooks() {
-      if (state.books.length) return;
       if (state.booksRequest) return state.booksRequest;
       state.booksRequest = (async function () {
         var rows = [], offset = 0;
@@ -224,9 +251,50 @@
           var result = await request(API + '/catalog?kind=dictation&limit=100&offset=' + offset);
           rows = rows.concat(result.items || []); offset = rows.length;
         } while (offset < result.total && result.items && result.items.length);
-        state.books = rows;
+        state.books = orderedBooks(rows);
       })();
       try { await state.booksRequest; } finally { state.booksRequest = null; }
+    }
+    function bookHint() {
+      var choices = vocabularyChoices(state.books, Array.from(state.bookIds), $('seriesBook').value);
+      var book = choices.selected.find(function (row) { return String(row.id) === choices.start_id; });
+      $('seriesBookHint').textContent = book ? '起始分册共' + book.word_count + '词，词序' + (book.first_sequence || 1) + '–' + book.last_sequence + '。学完后接着安排下一本已选分册；起始分册之前的内容不安排。' : '请选择起始分册，再填写该分册的开始词序。只会安排起点之后已勾选的内容。';
+    }
+    function renderBookChoices() {
+      var choices = vocabularyChoices(state.books, Array.from(state.bookIds), $('seriesBook').value, $('seriesBookSearch').value);
+      var container = $('seriesBooks'); container.replaceChildren();
+      if (!choices.visible.length) container.appendChild(node('p', 'tp-help', '没有匹配的分册，请换一个关键词。'));
+      choices.visible.forEach(function (book) {
+        var label = node('label', 'tp-scope-choice'), checkbox = node('input');
+        checkbox.type = 'checkbox'; checkbox.value = String(book.id); checkbox.checked = state.bookIds.has(String(book.id));
+        checkbox.addEventListener('change', function () {
+          if (checkbox.checked && state.bookIds.size >= 100) { checkbox.checked = false; message('每次最多选择100个分册，请先取消部分选择。'); return; }
+          if (checkbox.checked) state.bookIds.add(String(book.id)); else state.bookIds.delete(String(book.id));
+          invalidate(); renderBookSelection();
+        });
+        var labelText = node('span', '', book.label); labelText.appendChild(node('small', '', book.word_count + '词'));
+        label.appendChild(checkbox); label.appendChild(labelText); container.appendChild(label);
+      });
+      $('seriesBooksSelectVisible').disabled = !choices.visible.length;
+    }
+    function renderBookSelection() {
+      var choices = vocabularyChoices(state.books, Array.from(state.bookIds), $('seriesBook').value);
+      state.bookIds = new Set(choices.selected.map(function (book) { return String(book.id); }));
+      options('seriesBook', choices.selected, choices.selected.length ? '请选择起始分册' : '先勾选词书分册', choices.start_id);
+      $('seriesBook').disabled = !choices.selected.length;
+      var list = $('seriesSelectedBooks'); list.replaceChildren();
+      choices.selected.forEach(function (book) { list.appendChild(node('li', '', book.label)); });
+      $('seriesSelectedBooksSection').hidden = !choices.selected.length;
+      $('seriesBooksClear').disabled = !choices.selected.length;
+      $('seriesBooksSummary').textContent = choices.selected.length ? '已选' + choices.selected.length + '个分册，共' + choices.selected.reduce(function (total, book) { return total + Number(book.word_count || 0); }, 0) + '词。下面按实际分册顺序列出；只从指定起点往后安排。' : '还没有选择分册。可搜索“四级”“WL”或书名，再勾选需要连续学习的部分。';
+      bookHint(); renderBookChoices();
+    }
+    function selectVisibleBooks() {
+      var choices = vocabularyChoices(state.books, Array.from(state.bookIds), $('seriesBook').value, $('seriesBookSearch').value);
+      var selected = new Set(state.bookIds);
+      choices.visible.forEach(function (book) { selected.add(String(book.id)); });
+      if (selected.size > 100) { message('当前结果超过100个分册，请输入更具体的书名后再选择。'); return; }
+      state.bookIds = selected; invalidate(); renderBookSelection();
     }
     function quotaFields(resetQuotas) {
       var kind = $('seriesKind').value, vocabulary = kind === 'dictation', unit = kindUnit(kind, { section_number: $('seriesPart').value });
@@ -254,11 +322,12 @@
       kindFields(true); message('');
       if (SEQUENCE_KINDS.indexOf($('seriesKind').value) >= 0) loadSequence();
       else if ($('seriesKind').value === 'question_type') loadSources(true);
+      else renderBookSelection();
     }
     async function openEditor() {
       if (state.busy) return;
       var epoch = ++state.editorEpoch;
-      state.sources++; state.sequenceEpoch++; state.scopes.clear(); state.sequenceSources = []; session.reset(); $('seriesEditorForm').reset(); message(''); invalidate();
+      state.sources++; state.sequenceEpoch++; state.scopes.clear(); state.sequenceSources = []; state.bookIds.clear(); state.books = []; session.reset(); $('seriesEditorForm').reset(); message(''); invalidate();
       options('seriesStudent', context.state.students, '请选择学生', $('plannerStudent').value);
       var bounds = dateBounds(context.state.today, context.state.today);
       $('seriesStart').min = bounds.start_min; $('seriesStart').max = bounds.start_max;
@@ -266,8 +335,8 @@
       options('seriesType', [{ id: 'all', label: '全部题型' }]); options('seriesSource', [], '请选择明确的教材或试卷'); options('seriesGroup', [], '先选择教材 / 试卷');
       kindFields(true); dates(); show(editor);
       $('seriesWaitHint').textContent = '默认按日期继续布置，未完成的旧任务保留原有状态。';
-      $('seriesBookHint').textContent = '按词序连续安排，每天的范围会在预览中列出。';
-      await Promise.all([loadSources(true), loadBooks().then(function () { if (epoch === state.editorEpoch) options('seriesBook', state.books, '请选择词书'); }).catch(function (error) { if (epoch === state.editorEpoch) message(error.message); })]);
+      renderBookSelection(); $('seriesBooks').replaceChildren(node('p', 'tp-help', '正在读取词书分册…'));
+      await Promise.all([loadSources(true), loadBooks().then(function () { if (epoch === state.editorEpoch) renderBookSelection(); }).catch(function (error) { if (epoch === state.editorEpoch) { message(error.message); $('seriesBooks').replaceChildren(node('p', 'tp-help', '分册读取失败，请关闭后重新打开。')); } })]);
     }
     function renderRows(container, rows, entries, unit) {
       container.replaceChildren();
@@ -394,12 +463,16 @@
     $('seriesSubject').addEventListener('change', function () { options('seriesType', [{ id: 'all', label: '全部题型' }]); $('seriesSource').value = ''; loadSources(true); });
     $('seriesType').addEventListener('change', function () { $('seriesSource').value = ''; loadSources(false); });
     $('seriesSource').addEventListener('change', function () { loadSources(false); });
-    $('seriesBook').addEventListener('change', function () { var book = state.books.find(function (row) { return String(row.id) === $('seriesBook').value; }); $('seriesBookHint').textContent = book ? '共' + book.word_count + '词，最大词序' + book.last_sequence + '。每天的连续范围会在预览中列出。' : '按词序连续安排，每天的范围会在预览中列出。'; });
+    $('seriesBookSearch').addEventListener('input', function (event) { event.stopPropagation(); renderBookChoices(); });
+    $('seriesBookSearch').addEventListener('change', function (event) { event.stopPropagation(); });
+    $('seriesBooksSelectVisible').addEventListener('click', selectVisibleBooks);
+    $('seriesBooksClear').addEventListener('click', function () { state.bookIds.clear(); invalidate(); renderBookSelection(); });
+    $('seriesBook').addEventListener('change', function () { var book = state.books.find(function (row) { return String(row.id) === $('seriesBook').value; }); $('seriesWordStart').value = book ? book.first_sequence || 1 : 1; bookHint(); });
     $('seriesWait').addEventListener('change', function () { $('seriesWaitHint').textContent = $('seriesWait').value === 'previous' ? '本线上一学习日的全部任务有效提交后才继续布置；同日任务互不等待。未完成时进入待处理，日期不会自动顺延，需要助教处理或重建剩余安排。' : '默认按日期继续布置，未完成的旧任务保留原有状态。'; });
     $('seriesEditorForm').addEventListener('submit', preview); $('seriesSaveButton').addEventListener('click', save);
     $('seriesDetailsClose').addEventListener('click', function () { state.detailEpoch++; close(details); });
     details.addEventListener('cancel', function () { state.detailEpoch++; });
     return { refresh: refresh, openEditor: openEditor, showDetails: showDetails };
   }
-  return { periodEnd: periodEnd, dateBounds: dateBounds, validateDateWindow: validateDateWindow, scheduleDays: scheduleDays, kindUnit: kindUnit, quotaSummary: quotaSummary, previewSummary: previewSummary, sequenceQuery: sequenceQuery, buildPayload: buildPayload, createDraftSession: createDraftSession, mount: mount };
+  return { periodEnd: periodEnd, dateBounds: dateBounds, validateDateWindow: validateDateWindow, scheduleDays: scheduleDays, kindUnit: kindUnit, quotaSummary: quotaSummary, previewSummary: previewSummary, sequenceQuery: sequenceQuery, orderedBooks: orderedBooks, vocabularyChoices: vocabularyChoices, buildPayload: buildPayload, createDraftSession: createDraftSession, mount: mount };
 });

@@ -227,3 +227,77 @@ test('weekly summary explicitly distinguishes rests, groups and words', () => {
   assert.equal(series.quotaSummary([1, 1, 1, 1, 1, 2, 0], 'question_type'), '周一 1组 · 周二 1组 · 周三 1组 · 周四 1组 · 周五 1组 · 周六 2组 · 周日 休息');
   assert.match(series.quotaSummary([10, 10, 10, 10, 10, 20, 20], 'dictation'), /周六 20词/);
 });
+
+test('split vocabulary books sort by numeric Day and chapter while preserving a stable ID tie', () => {
+  const books = [
+    { id: 10, label: '四级单词 Day10' }, { id: 2, label: '四级单词 Day2' },
+    { id: 1, label: '四级单词 Day1' }, { id: 8, label: 'WL库 1-10' },
+    { id: 9, label: 'wl库 1-2' }, { id: 7, label: 'WL库 1-2' },
+    { id: 21, label: 'Upper Intermediate 10' }, { id: 20, label: 'Upper Intermediate 2' }
+  ];
+  const before = JSON.stringify(books);
+  assert.deepEqual(series.orderedBooks(books).map(book => book.id), [20, 21, 7, 9, 8, 1, 2, 10]);
+  assert.equal(JSON.stringify(books), before);
+});
+
+test('search only filters available vocabulary choices and never adds hidden or same-prefix books', () => {
+  const books = [
+    { id: 10, label: '四级单词 Day10' }, { id: 2, label: '四级单词 Day2' },
+    { id: 1, label: '四级单词 Day1' }, { id: 9, label: 'WL库 1-2' }
+  ];
+  const result = series.vocabularyChoices(books, ['10', '1', '9'], '1', '四级');
+  assert.deepEqual(result.visible.map(book => book.id), [1, 2, 10]);
+  assert.deepEqual(result.selected.map(book => book.id), [9, 1, 10]);
+  assert.equal(result.start_id, '1');
+  assert.deepEqual(series.vocabularyChoices(books, [], '', '四级').selected, []);
+  assert.equal(series.vocabularyChoices(books, ['1'], '1', ' WL ').visible[0].id, 9);
+});
+
+test('removing a selected or unavailable starting book clears the start without silently changing it', () => {
+  const books = [{ id: 2, label: 'Day2' }, { id: 10, label: 'Day10' }];
+  assert.equal(series.vocabularyChoices(books, ['2', '10'], '2').start_id, '2');
+  assert.equal(series.vocabularyChoices(books, ['10'], '2').start_id, '');
+  const unavailable = series.vocabularyChoices(books, ['1', '10'], '1');
+  assert.equal(unavailable.start_id, '');
+  assert.deepEqual(unavailable.selected.map(book => book.id), [10]);
+  assert.deepEqual(series.vocabularyChoices(books, [], '10').selected, []);
+});
+
+function vocabularyFields(changes = {}) {
+  return fields(Object.assign({ kind: 'dictation', book_id: '2', book_ids: ['2', '10'], word_start: '41', vocabulary_goal: 'reading' }, changes));
+}
+
+test('multiple vocabulary books carry explicit IDs and a per-book starting sequence; legacy requests stay unchanged', () => {
+  const payload = series.buildPayload(vocabularyFields());
+  assert.deepEqual(payload.selection, { book_id: 2, word_start: 41, vocabulary_goal: 'reading', dictation_mode: 'audio_to_en', dictation_order: 'sequence', book_ids: [2, 10] });
+  assert.equal(payload.selection.word_end, undefined);
+  const legacy = series.buildPayload(vocabularyFields({ book_ids: undefined }));
+  assert.equal(Object.hasOwn(legacy.selection, 'book_ids'), false);
+  assert.equal(legacy.selection.book_id, 2);
+  assert.deepEqual(series.buildPayload(vocabularyFields({ book_ids: ['2'] })).selection.book_ids, [2]);
+});
+
+test('invalid, duplicate or missing vocabulary scope cannot be previewed', () => {
+  for (const book_ids of [[], null, '2', [2, '02'], [true], [-2], [2.5], ['bad'], Array.from({ length: 101 }, (_, i) => i + 1)]) {
+    assert.throws(() => series.buildPayload(vocabularyFields({ book_ids })), /分册/);
+  }
+  assert.throws(() => series.buildPayload(vocabularyFields({ book_ids: [10] })), /起始分册/);
+});
+
+test('changed vocabulary selections or starting position cannot save an earlier preview', () => {
+  let keys = 0;
+  const session = series.createDraftSession(() => 'request-' + ++keys);
+  const payload = series.buildPayload(vocabularyFields());
+  session.accept(session.begin(payload), { preview_hash: 'multi-book-preview' });
+  for (const changes of [{ book_ids: [2] }, { book_id: 10 }, { word_start: 42 }]) {
+    assert.throws(() => session.writePayload(series.buildPayload(vocabularyFields(changes))), /重新预览/);
+  }
+  session.invalidate();
+  const oldTicket = session.begin(payload);
+  session.invalidate();
+  assert.equal(session.accept(oldTicket, { preview_hash: 'stale-response' }), false);
+});
+
+test('cross-book days count the combined word quota while showing separate tasks', () => {
+  assert.equal(series.previewSummary({ kind: 'dictation', start_date: '2026-11-02', end_date: '2026-11-03', totals: { days: 2, units: 60 }, rows: [{ unit_count: 10 }, { unit_count: 20 }, { unit_count: 30 }] }), '2026-11-02 至 2026-11-03 · 2个学习日 · 3次任务 · 共60词；休息日不生成任务。');
+});

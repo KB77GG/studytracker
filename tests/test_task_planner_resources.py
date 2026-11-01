@@ -214,6 +214,25 @@ class TaskPlannerResourcesTest(unittest.TestCase):
                     "question_type", {**self.specialty(), **changes}
                 )
 
+    def test_vocabulary_catalog_sorts_split_books_before_paging_and_uses_real_bounds(self):
+        for title in ("四级单词 Day10", "四级单词 Day2", "四级单词 Day1"):
+            book = DictationBook(title=title, created_by=self.staff.id, word_count=999)
+            db.session.add(book)
+            db.session.flush()
+            db.session.add_all([
+                DictationWord(book_id=book.id, sequence=sequence, word=f"sample{sequence}")
+                for sequence in (5, 8)
+            ])
+        db.session.commit()
+        first = resources.catalog("dictation", {"query": "四级单词", "limit": 2})
+        second = resources.catalog("dictation", {"query": "四级单词", "limit": 2, "offset": 2})
+        self.assertEqual(first["total"], 3)
+        self.assertEqual([row["label"] for row in first["items"] + second["items"]],
+                         ["四级单词 Day1", "四级单词 Day2", "四级单词 Day10"])
+        for row in first["items"] + second["items"]:
+            self.assertEqual((row["word_count"], row["first_sequence"], row["last_sequence"]), (2, 5, 8))
+            self.assertEqual(row["selection"]["word_start"], 5)
+
     def test_question_snapshot_ignores_client_forgery_and_creates_matching_task(self):
         selection = {**self.specialty(), "snapshot": {"answer": "forged"}}
         prepared, task = self.create("question_type", selection)

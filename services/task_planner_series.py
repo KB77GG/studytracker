@@ -18,6 +18,7 @@ from services import task_planner as planner
 from services import task_planner_resources as resources
 from services.question_type_practice import cambridge_test_numbers, practice_type_members
 from services.task_assignment_duplicates import begin_assignment_transaction
+from services.task_planner_vocabulary import natural_key as _natural
 
 REQUEST_FIELDS = (
     "name", "student_id", "start_date", "end_date", "weekday_counts", "kind",
@@ -30,11 +31,6 @@ NEW_REQUEST_FIELDS = frozenset({"source_scopes", "start_resource_id"})
 
 def _digest(value):
     return hashlib.sha256(planner._dump(value).encode("utf-8")).hexdigest()
-
-
-def _natural(value):
-    return tuple((0, int(part)) if part.isdigit() else (1, part.lower())
-                 for part in re.split(r"(\d+)", str(value)))
 
 
 def _sort_group(row):
@@ -134,6 +130,9 @@ def _definition(data, actor_id, now):
         if not isinstance(start_id, str) or not start_id.strip():
             raise planner.TaskPlannerError("请选择起始篇章或套题")
         definition.update(source_scopes=sorted(set(scopes)), start_resource_id=start_id)
+    if kind == "dictation" and "book_ids" in selection:
+        from services.task_planner_vocabulary import selected_books
+        definition["ordered_book_ids"] = [book.id for book in selected_books(selection)]
     return profile, definition, schedule, selection
 
 
@@ -159,6 +158,10 @@ def _sequence_selections(kind, data, selection, schedule):
 def _selections(kind, data, selection, schedule):
     if kind in SEQUENCE_KINDS:
         yield from _sequence_selections(kind, data, selection, schedule)
+        return
+    if kind == "dictation" and "book_ids" in selection:
+        from services.task_planner_vocabulary import vocabulary_selections
+        yield from vocabulary_selections(selection, schedule)
         return
     needed = sum(count for _, count in schedule)
     if kind == "question_type":

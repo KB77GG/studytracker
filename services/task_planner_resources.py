@@ -391,22 +391,21 @@ def _intensive_catalog():
 
 
 def _dictation_catalog():
+    from services.task_planner_vocabulary import book_sort_key
+
     items = []
-    books = (
-        DictationBook.query.filter_by(is_deleted=False, is_active=True)
-        .order_by(DictationBook.title)
-        .all()
-    )
+    books = sorted(DictationBook.query.filter_by(is_deleted=False, is_active=True).all(), key=book_sort_key)
     stats = {
-        book_id: (count, last)
-        for book_id, count, last in db.session.query(
+        book_id: (count, first, last)
+        for book_id, count, first, last in db.session.query(
             DictationWord.book_id,
             func.count(DictationWord.id),
+            func.min(DictationWord.sequence),
             func.max(DictationWord.sequence),
         ).group_by(DictationWord.book_id)
     }
     for book in books:
-        count, last = stats.get(book.id, (0, 0))
+        count, first, last = stats.get(book.id, (0, 0, 0))
         if not count:
             continue
         goal = (
@@ -419,10 +418,11 @@ def _dictation_catalog():
                 "id": book.id,
                 "label": book.title,
                 "word_count": count,
+                "first_sequence": first,
                 "last_sequence": last,
                 "selection": {
                     "book_id": book.id,
-                    "word_start": 1,
+                    "word_start": first,
                     "word_end": last,
                     "vocabulary_goal": goal,
                     "dictation_mode": "audio_to_en",

@@ -45,6 +45,11 @@
 .tp-scope-choice span{overflow-wrap:anywhere}
 .tp-scope-choice small{display:block;color:#79877b;font-size:10px;margin-top:2px}
 .tp-scope-list>.tp-help{grid-column:1/-1;padding:8px}
+.tp-book-actions{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.tp-book-actions .tp-text-button{min-height:28px;text-align:left;line-height:1.5}
+.tp-book-list{margin:0;max-height:230px}
+.tp-book-order{max-height:150px;overflow-y:auto;margin:5px 0 0;padding-left:25px;font-size:12px;line-height:1.8;color:#426c5b;overflow-wrap:anywhere}
+.tp-book-order li{padding:2px 5px}
 .tp-details-layout{height:100%;min-height:0;display:flex;flex-direction:column;width:100%}
 .tp-series-link{margin:7px 0 5px;text-align:left;line-height:1.6}
 @media(max-width:900px){.tp-intro{align-items:start}.tp-intro-actions{flex-direction:column}.tp-series-card{flex-direction:column;align-items:start}.tp-series-card .tp-entry-actions{max-width:none;justify-content:flex-start}}
