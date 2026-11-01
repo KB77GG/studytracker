@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from reading_jijing_text_fixes import apply_passage_fixes, load_fixes
+from reading_jijing_text_fixes import CAMBRIDGE_FIXES_PATH, apply_passage_fixes, load_fixes
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "data" / "idictation_reading" / "raw.json"
@@ -252,8 +252,8 @@ def test_title_for(book: int, test_no: int, source: str) -> str:
 def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
     raw_parts = raw.get("parts") or {}
     meta = SOURCE_META.get(source, SOURCE_META["academic"])
-    # Manual fixes (glued sentences, typos) must survive rebuilds from raw.
-    text_fixes = load_fixes() if source == "jijing" else {}
+    # Manual fixes (glued sentences, typos, lost superscripts) must survive rebuilds from raw.
+    text_fixes = load_fixes() if source == "jijing" else load_fixes(CAMBRIDGE_FIXES_PATH)
     tests: dict[str, dict[str, Any]] = {}
     for entry in raw.get("entries") or []:
         if entry.get("source") and entry.get("source") != source:

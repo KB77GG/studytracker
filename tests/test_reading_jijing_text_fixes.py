@@ -178,9 +178,23 @@ class AtStartFixTest(unittest.TestCase):
 
 class RepositoryStateTest(unittest.TestCase):
     def test_every_fix_is_applied_to_static_files(self):
-        fixes = fixes_mod.load_fixes()
-        self.assertTrue(fixes)
-        self.assertEqual(fixes_mod.patch_static_files(fixes, write=False), 0)
+        for path, static_dir, suffix in fixes_mod.TABLES:
+            with self.subTest(table=path.name):
+                fixes = fixes_mod.load_fixes(path)
+                self.assertTrue(fixes)
+                self.assertEqual(
+                    fixes_mod.patch_static_files(fixes, static_dir, write=False, suffix=suffix), 0
+                )
+
+    def test_cambridge_superscript_is_restored(self):
+        # ielts11_test1_p1 A: the Cambridge original prints 10⁹ hectares (one billion).
+        fixes = fixes_mod.load_fixes(fixes_mod.CAMBRIDGE_FIXES_PATH)
+        self.assertIn("ielts11_test1_p1", fixes)
+        static = (fixes_mod.CAMBRIDGE_STATIC_DIR / "ielts11_test1_reading.json").read_text(
+            encoding="utf-8"
+        )
+        self.assertTrue("An estimated 10⁹ hectares" in static)
+        self.assertFalse("An estimated 109 hectares" in static)
 
     def test_fix_reasons_are_known(self):
         reasons = {
@@ -188,11 +202,13 @@ class RepositoryStateTest(unittest.TestCase):
             "missing_space",
             "stray_leading_period",
             "lost_character",
+            "lost_superscript",
             "punctuation",
             "typo",
             "lost_text",
         }
-        for passage_fixes in fixes_mod.load_fixes().values():
+        tables = [fixes_mod.load_fixes(path) for path, _, _ in fixes_mod.TABLES]
+        for passage_fixes in (fixes for table in tables for fixes in table.values()):
             for fix in passage_fixes:
                 with self.subTest(fix=fix["find"]):
                     self.assertIn(fix["reason"], reasons)

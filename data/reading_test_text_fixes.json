@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "description": "剑桥雅思阅读原文的人工修订，格式与 reading_jijing_text_fixes.json 相同（lost_superscript：抓取时丢了上标，如原版 10⁹ 成了 109）。由 build_reading_test_practice.py（默认 --source academic）和 scripts/reading_jijing_text_fixes.py 应用到 static/reading_tests/*_reading.json。",
+  "fixes": [
+    {
+      "passage_id": "ielts11_test1_p1",
+      "paragraph_label": "A",
+      "sentence_id": "A-03",
+      "find": "An estimated 109 hectares",
+      "replace": "An estimated 10⁹ hectares",
+      "reason": "lost_superscript"
+    }
+  ]
+}

@@ -22,8 +22,12 @@ paragraphs; ``paragraph_label`` names the paragraph it summarises) instead of th
 - ``build_reading_test_practice.py --source jijing`` applies them while building;
 - this script patches the existing ``static/reading_jijing/*.json`` in place.
 
+Cambridge passages take fixes of the same format from their own table,
+``data/reading_test_text_fixes.json`` (applied by the default ``--source academic``
+build and patched into ``static/reading_tests/*_reading.json``).
+
 Usage:
-    python scripts/reading_jijing_text_fixes.py            # patch static files
+    python scripts/reading_jijing_text_fixes.py            # patch static files (both tables)
     python scripts/reading_jijing_text_fixes.py --check    # fail if any fix is unapplied
 """
 
@@ -38,6 +42,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIXES_PATH = ROOT / "data" / "reading_jijing_text_fixes.json"
 STATIC_DIR = ROOT / "static" / "reading_jijing"
+CAMBRIDGE_FIXES_PATH = ROOT / "data" / "reading_test_text_fixes.json"
+CAMBRIDGE_STATIC_DIR = ROOT / "static" / "reading_tests"
+# (fixes table, static directory, static file name suffix after the test id)
+TABLES = (
+    (FIXES_PATH, STATIC_DIR, ""),
+    (CAMBRIDGE_FIXES_PATH, CAMBRIDGE_STATIC_DIR, "_reading"),
+)
 
 
 class TextFixError(ValueError):
@@ -166,12 +177,14 @@ def apply_passage_fixes(
     return changed
 
 
-def patch_static_files(fixes: dict, static_dir: Path = STATIC_DIR, write: bool = True) -> int:
+def patch_static_files(
+    fixes: dict, static_dir: Path = STATIC_DIR, write: bool = True, suffix: str = ""
+) -> int:
     """Patch every static test file that has fixes. Returns changed fix count."""
     total = 0
     test_ids = sorted({passage_id.rsplit("_p", 1)[0] for passage_id in fixes})
     for test_id in test_ids:
-        path = static_dir / f"{test_id}.json"
+        path = static_dir / f"{test_id}{suffix}.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         changed = sum(
             apply_passage_fixes(
@@ -196,8 +209,10 @@ def main() -> int:
         "--check", action="store_true", help="report unapplied fixes, write nothing"
     )
     args = parser.parse_args()
-    fixes = load_fixes()
-    pending = patch_static_files(fixes, write=not args.check)
+    pending = sum(
+        patch_static_files(load_fixes(path), static_dir, not args.check, suffix)
+        for path, static_dir, suffix in TABLES
+    )
     if args.check:
         print(f"{pending} fix(es) not yet applied")
         return 1 if pending else 0
