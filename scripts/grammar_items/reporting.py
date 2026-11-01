@@ -287,6 +287,10 @@ def build_report(root, environment, seed, candidates, rejections, all_results, b
             "或非限定结构，是否属于题干所说的状语从句由人工判断，needs_review（prepositional_target，只送复核，"
             "不判定类别错误；项目暂按传统口径把限定从句与短语 / 非谓语分开）；介词后接完整从句（until after "
             "they've happened）不受影响。",
+            "v0.2：定语从句 / 名词性从句 / 状语从句的边界题（T2，不含并列分句）句中还有另一个同类从句"
+            "（在目标外、嵌在目标里或包住目标，判断标准与目标相同）时，“划出句中的……从句”不止一个答案，"
+            "needs_review（another_clause_same_type，只加在 T2）；其中约一半是解析器把直接引语或冒号前主句"
+            "当成从句的误报，一并送复核。",
             "v0.2：动词单位不受原标注范围截断；有成分落在标注范围外时，T1/T6 一律 needs_review（verb_unit_outside_span），T1 答案按计划保持不变。",
             "v0.2：阅读解析里以“原句问题：”开头的说明表示原句本身有缺陷（语病、残缺、截断等），该句的题一律 "
             "needs_review（source_quality）；以列表符号或编号开头的列表项同样一律 needs_review（list_item）。"
