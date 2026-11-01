@@ -4,6 +4,30 @@
 
 ## 操作方式
 
+在“＋ 连续 / 每周安排”中选择安排方式：同一种练习按顺序继续，或组合多个练习的每周/两周轮换。单日安排仍保留，既有已确认安排不会被新规则改写。
+
+### 每周与两周轮换
+
+先选择学生、起止日期与安排名称，再把所需内容逐项“加入周安排”。每项有自己的教材范围、起点、训练方式、预计分钟和说明。可加入听力P1、阅读P1、整套听力、整套阅读，也可搭配词汇、题型或精听；最多12个练习项。
+
+每个星期可添加多个练习项及数量，没有项目表示休息。每周重复只配置一周；两周轮换配置A/B两周，开始日期所在周的周一是A周锚点，之后B/A交替。范围仍限1–31天，显示日历内的具体日期，不是无限续排。
+
+配置齐上述四种听阅练习后，可以显式点击“用听阅交替示例填写星期安排”：A周周一听力P1、周四阅读P1、周六整套听力、周日整套阅读；B周交换听阅。示例会替换星期规则，但不会自动替助教勾选教材。
+
+### 自动跳过重复内容
+
+新建连续/周安排默认开启“自动跳过已布置内容”。按当前学生的正式任务历史、已确认待布置安排（含blocked/failed）和本批先选内容判断占用，再从已勾教材/分册起点往后补足配额。包括较早未完成的正式题型任务；已取消任务/安排和未确认草稿不占用。关闭该选项则沿用原冲突提示，不自动跳过，也不等于允许强制重复。
+
+各练习项维护独立顺序，同一批按实际日期、当天项目顺序共同去重。例如周一用Test1听力P1，周六整套听力会跳过Test1，从下一套完整可用Test继续；之后P1也会避开已选整套覆盖的部分。阅读整套同理，任何一篇已占用就跳过整套，不能只发剩余两篇。词汇按词序排除，再合并当日连续可用范围，跨册或被历史占用隔开的范围生成多项任务。
+
+预览显示跳过记录、每个日期的实际材料和题数；词量/套数不足时整批不能保存。保存后资源固定，确认和执行时再次检查，若此后另有作业占用，安排进入待处理，不暗自换题。旧请求不带新选项时保持旧预览/哈希与显式补做策略；旧“任务管理”的复训入口不受影响。判断基于系统已有稳定题目/篇章/词书身份，不把自由文本说明或自主练习记录猜成布置历史。
+
+### 整套阅读
+
+选择“阅读整套 Test（P1–P3）”，每份必须是同一Test的完整三篇、实际题号1–40齐全且无重复。按套计量，学生收到同日三篇原生阅读任务，预计分钟按每篇计。三篇先全部校验，再同事务布置；任何一篇冲突或写入失败，整套阻塞或回滚。普通“全部Passage，按篇顺序”仍按篇推进，不承诺凑三篇必为一套。
+
+### 同一种练习连续安排
+
 同一学生可以有多条学习线，例如阅读判断题、听力选择题和词汇。每条线有自己的材料范围、起点、日期范围和每周任务量。
 
 同一材料平日少、周末多时，在一条线里设置星期一至日的配额，共用一个顺序；不需要为平日和周末分别维护起点。
@@ -33,6 +57,8 @@
 
 连续安排默认按已确认日期执行，也可选择等待本线上一学习日的全部任务有效完成/提交。有效状态沿用原服务：退回和部分通过不放行，词汇必须有同学生结算。同一天的多项任务一起布置，互不等待；休息日跳过，检查最近的上一学习日。
 
+周轮换安排选择等待时，检查这份周安排上一学习日的所有练习项，包括不同科目；不是每种练习各自等待。例如周一听力未完成，会阻止本份安排周四阅读。其他独立学习线仍按各自条件执行。
+
 选择等待时，上一学习日有任一安排未发布、被取消、未完成或被退回，将阻止本线后续日期的安排。其他学习线不受它直接阻塞；内容重复仍按既有去重规则拦截。
 
 旧任务到次日03:00后只读，03:05调度不能假设学生还能补交旧任务。因此阻塞时提示助教安排补做、取消未布置部分并重新排程；不悄悄改旧任务日期、不自动顺延整个日历、不自动跳过未做内容。本版不是无限自动续排器。
@@ -50,8 +76,8 @@
 ## 验收入口
 
 ```sh
-TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary -v
-node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js
+TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary tests.test_task_planner_weekly tests.test_task_planner_reading_test tests.test_task_planner_auto_skip tests.test_task_planner_bundles -v
+node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js tests/test_task_planner_weekly_client.js
 ```
 
 实际测试计数、浏览器结果、未验证项和发布状态记录于 `CODEX_HANDOFF.md`。测试只使用合成学生与临时数据库，不为截图中的真实学生写入任何任务。

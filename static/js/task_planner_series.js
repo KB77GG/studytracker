@@ -8,7 +8,7 @@
   var API = '/api/task-planner';
   var DAYS = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   var STATUSES = { draft: '整批草稿', ready: '已确认', cancelled: '已取消', published: '已布置', blocked: '需要处理', failed: '执行失败' };
-  var SEQUENCE_KINDS = ['listening_test', 'reading_passage', 'intensive'];
+  var SEQUENCE_KINDS = ['listening_test', 'reading_passage', 'reading_test', 'intensive'];
 
   function dateValue(value) {
     var date = new Date(value + 'T12:00:00Z');
@@ -50,6 +50,8 @@
   function kindUnit(kind, selection) {
     if (kind === 'dictation') return '词';
     if (kind === 'question_type') return '组';
+    if (kind === 'reading_test') return '套';
+    if (kind === 'weekly') return '项';
     if (kind === 'listening_test' && !(selection || {}).section_number) return '套';
     return '篇';
   }
@@ -57,9 +59,11 @@
     return (quotas || []).map(function (n, index) { return DAYS[index] + ' ' + (Number(n) ? n + (unit || kindUnit(kind)) : '休息'); }).join(' · ');
   }
   function previewSummary(preview) {
+    if (preview.kind === 'weekly') return preview.start_date + ' 至 ' + preview.end_date + ' · ' + preview.totals.days + '个学习日 · ' + preview.rows.length + '次任务；休息日不生成任务。';
     return preview.start_date + ' 至 ' + preview.end_date + ' · ' + preview.totals.days + '个学习日 · ' + preview.rows.length + '次任务 · 共' + preview.totals.units + (preview.quota_unit || kindUnit(preview.kind, preview.selection)) + '；休息日不生成任务。';
   }
   function sequenceSelection(fields) {
+    if (fields.kind === 'reading_test') return {};
     var reading = fields.kind === 'reading_passage', field = reading ? 'passage_number' : 'section_number';
     var value = fields[field], number = value === '' || value === null || value === undefined ? null : Number(value);
     if (number !== null && (!Number.isInteger(number) || number < 1 || number > (reading ? 3 : 4))) throw new Error(reading ? '请选择全部篇章或Passage 1–3。' : '请选择全部范围或Part 1–4。');
@@ -128,6 +132,7 @@
     var payload = { name: String(fields.name).trim(), student_id: Number(fields.student_id), kind: fields.kind, start_date: fields.start_date, end_date: fields.end_date, weekday_counts: fields.weekday_counts.map(Number), wait_for_previous: !!fields.wait_for_previous, planned_minutes: Number(fields.planned_minutes), note: fields.note || '', selection: selection };
     if (fields.kind === 'question_type') { payload.source_scope = fields.source_scope; payload.start_group_id = fields.start_group_id; }
     if (SEQUENCE_KINDS.indexOf(fields.kind) >= 0) { payload.source_scopes = selectedScopes(fields.source_scopes); payload.start_resource_id = String(fields.start_resource_id); }
+    if (fields.skip_assigned !== undefined) { if (typeof fields.skip_assigned !== 'boolean') throw new Error('自动跳过选项无效。'); payload.skip_assigned = fields.skip_assigned; }
     return payload;
   }
   // A failed write keeps its request key; editing any inputs invalidates its preview.
@@ -180,9 +185,24 @@
       $('seriesPreviewButton').textContent = value && !saving ? '正在预览…' : '预览每天内容';
       $('seriesSaveButton').textContent = value && saving ? '正在保存…' : '保存整批草稿';
     }
-    function fields() {
-      return { today: context.state.today, student_id: $('seriesStudent').value, name: $('seriesName').value, start_date: $('seriesStart').value, end_date: $('seriesEnd').value, kind: $('seriesKind').value, weekday_counts: DAYS.map(function (_, i) { return $('seriesQuota' + i).value; }), planned_minutes: $('seriesMinutes').value, note: $('seriesNote').value, wait_for_previous: $('seriesWait').value === 'previous', subject: $('seriesSubject').value, standard_type: $('seriesType').value, source_scope: $('seriesSource').value, start_group_id: $('seriesGroup').value, pace: $('seriesPace').value, book_id: $('seriesBook').value, book_ids: vocabularyChoices(state.books, Array.from(state.bookIds)).selected.map(function (book) { return book.id; }), word_start: $('seriesWordStart').value, vocabulary_goal: $('seriesVocabularyGoal').value, source_scopes: Array.from(state.scopes), start_resource_id: $('seriesResource').value, section_number: $('seriesPart').value, passage_number: $('seriesPart').value, training_mode: $('seriesTrainingMode').value };
+    function updateWaitHint() {
+      var scope = $('seriesMode').value === 'weekly' ? '此周安排上一学习日的所有练习项（包括听力、阅读等）全部有效提交后，才继续布置。' : '本线上一学习日的全部任务有效提交后，才继续布置。';
+      $('seriesWaitHint').textContent = $('seriesWait').value === 'previous' ? scope + '同日任务互不等待；未完成时进入待处理，日期不会自动顺延，需要助教处理或重建剩余安排。' : '默认按日期继续布置，未完成的旧任务保留原有状态。';
     }
+    function fields() {
+      return { today: context.state.today, student_id: $('seriesStudent').value, name: $('seriesName').value, start_date: $('seriesStart').value, end_date: $('seriesEnd').value, kind: $('seriesKind').value, weekday_counts: DAYS.map(function (_, i) { return $('seriesQuota' + i).value; }), planned_minutes: $('seriesMinutes').value, note: $('seriesNote').value, wait_for_previous: $('seriesWait').value === 'previous', subject: $('seriesSubject').value, standard_type: $('seriesType').value, source_scope: $('seriesSource').value, start_group_id: $('seriesGroup').value, pace: $('seriesPace').value, book_id: $('seriesBook').value, book_ids: vocabularyChoices(state.books, Array.from(state.bookIds)).selected.map(function (book) { return book.id; }), word_start: $('seriesWordStart').value, vocabulary_goal: $('seriesVocabularyGoal').value, source_scopes: Array.from(state.scopes), start_resource_id: $('seriesResource').value, section_number: $('seriesPart').value, passage_number: $('seriesPart').value, training_mode: $('seriesTrainingMode').value, skip_assigned: $('seriesSkipAssigned').checked };
+    }
+    var weeklyApi = win.TaskPlannerWeeklyClient;
+    var weekly = weeklyApi.mount(doc, { invalidate: invalidate, message: message, series: { validateDateWindow: validateDateWindow, kindUnit: kindUnit }, buildActivity: function (id, name) {
+      var current = fields(); current.name = String(name || '').trim(); current.weekday_counts = [1, 1, 1, 1, 1, 1, 1];
+      var item = weeklyApi.activityFromPayload(id, name, buildPayload(current));
+      var sourceSelect = current.kind === 'question_type' ? $('seriesGroup') : current.kind === 'dictation' ? $('seriesBook') : $('seriesResource');
+      item._summary = sourceSelect.selectedOptions && sourceSelect.selectedOptions[0] ? sourceSelect.selectedOptions[0].textContent : item.name;
+      if (current.kind === 'dictation') item._summary += ' · 第' + current.word_start + '词起';
+      item._summary += ' · 每次任务' + item.planned_minutes + '分钟';
+      return item;
+    } });
+    function editorPayload() { return weekly.active() ? weekly.payload(fields()) : buildPayload(fields()); }
     function dates() {
       var preset = $('seriesPeriod').value, start = $('seriesStart').value;
       $('seriesEnd').readOnly = preset !== 'custom';
@@ -308,13 +328,13 @@
       $('seriesSource').required = question; $('seriesGroup').required = question; $('seriesBook').required = vocabulary; $('seriesResource').required = sequence;
       $('seriesTrainingField').hidden = kind !== 'intensive';
       if (sequence) {
-        var reading = kind === 'reading_passage', first = kind === 'listening_test' ? '整套 Test（全部 Part）' : reading ? '全部 Passage，按篇顺序' : '全部 Part，按篇顺序';
+        var reading = kind === 'reading_passage' || kind === 'reading_test', first = kind === 'reading_test' ? '整套 Test（同一套 P1–P3）' : kind === 'listening_test' ? '整套 Test（全部 Part）' : reading ? '全部 Passage，按篇顺序' : '全部 Part，按篇顺序';
         var parts = [{ id: '', label: first }];
-        for (var n = 1; n <= (reading ? 3 : 4); n++) parts.push({ id: n, label: '只练 ' + (reading ? 'Passage ' : 'Part ') + n });
+        for (var n = 1; n <= (kind === 'reading_test' ? 0 : reading ? 3 : 4); n++) parts.push({ id: n, label: '只练 ' + (reading ? 'Passage ' : 'Part ') + n });
         options('seriesPart', parts, null, ''); $('seriesPartLabel').textContent = reading ? '阅读篇章范围' : '听力范围';
-        $('seriesSequenceHint').textContent = '按教材、Test和篇章的自然顺序安排；同一天选多' + (kind === 'listening_test' ? '套 / 篇' : '篇') + '时，每份内容分别生成任务。';
+        $('seriesSequenceHint').textContent = kind === 'reading_test' ? '只安排同一 Test 的完整 P1–P3；每套拆为同日三篇任务，不会跨 Test 拼凑。每次任务预计用时按每篇计。' : '按教材、Test和篇章的自然顺序安排；同一天选多' + (kind === 'listening_test' ? '套 / 篇' : '篇') + '时，每份内容分别生成任务。';
       }
-      quotaFields(resetQuotas);
+      quotaFields(resetQuotas); updateWaitHint();
     }
     function changeKind() {
       state.sources++; state.sequenceEpoch++; state.scopes.clear(); state.sequenceSources = [];
@@ -333,8 +353,8 @@
       $('seriesStart').min = bounds.start_min; $('seriesStart').max = bounds.start_max;
       $('seriesStart').value = periodEnd(context.state.today, 2);
       options('seriesType', [{ id: 'all', label: '全部题型' }]); options('seriesSource', [], '请选择明确的教材或试卷'); options('seriesGroup', [], '先选择教材 / 试卷');
-      kindFields(true); dates(); show(editor);
-      $('seriesWaitHint').textContent = '默认按日期继续布置，未完成的旧任务保留原有状态。';
+      kindFields(true); dates(); weekly.reset(); show(editor);
+      updateWaitHint();
       renderBookSelection(); $('seriesBooks').replaceChildren(node('p', 'tp-help', '正在读取词书分册…'));
       await Promise.all([loadSources(true), loadBooks().then(function () { if (epoch === state.editorEpoch) renderBookSelection(); }).catch(function (error) { if (epoch === state.editorEpoch) { message(error.message); $('seriesBooks').replaceChildren(node('p', 'tp-help', '分册读取失败，请关闭后重新打开。')); } })]);
     }
@@ -345,6 +365,7 @@
         var date = dateValue(row.target_date);
         item.appendChild(node('strong', 'tp-series-day-date', row.target_date + ' ' + DAYS[(date.getUTCDay() + 6) % 7]));
         var body = node('div', 'tp-series-day-body'); body.appendChild(node('p', '', row.title));
+        if (row.activity_name) body.appendChild(node('small', 'tp-help', row.activity_name));
         var contentLabels = (row.content_labels || []).filter(function (label) { return label !== row.title; });
         if (contentLabels.length) {
           var labels = node('ul', 'tp-series-content-labels');
@@ -353,14 +374,14 @@
         if (entries) {
           body.appendChild(node('span', 'tp-status tp-status-' + row.status, row.status_label || STATUSES[row.status] || row.status));
           if (row.error) body.appendChild(node('p', 'tp-entry-warning', row.error));
-        } else body.appendChild(node('small', 'tp-help', row.unit_count + unit + (row.question_count ? ' · ' + row.question_count + '题' : '') + (row.segment_count ? ' · ' + row.segment_count + '句' : '')));
+        } else body.appendChild(node('small', 'tp-help', ((row.bundle_id || unit === '套') && row.kind === 'reading_passage' ? '同套阅读 · Passage ' + row.selection.passage_number : unit === '项' ? '本日任务' : row.unit_count ? row.unit_count + unit : '同套配套篇章') + (row.question_count ? ' · ' + row.question_count + '题' : '') + (row.segment_count ? ' · ' + row.segment_count + '句' : '')));
         item.appendChild(body); container.appendChild(item);
       });
     }
     async function preview(event) {
       event.preventDefault(); if (state.busy) return;
       message(''); var payload, ticket;
-      try { payload = buildPayload(fields()); ticket = session.begin(payload); } catch (error) { message(error.message); return; }
+      try { payload = editorPayload(); ticket = session.begin(payload); } catch (error) { message(error.message); return; }
       invalidate(); ticket = session.begin(payload); busy(true, false);
       var accepted = false;
       try {
@@ -369,7 +390,8 @@
         accepted = session.accept(ticket, data);
         if (!accepted) return;
         renderRows($('seriesPreviewRows'), data.rows, false, data.quota_unit || kindUnit(payload.kind, payload.selection));
-        $('seriesPreviewSummary').textContent = previewSummary(data);
+        $('seriesPreviewSummary').textContent = previewSummary(data) + (data.kind === 'weekly' ? ' ' + weeklyApi.summary(data, kindUnit) : '');
+        weeklyApi.renderSkipped(doc, $('seriesPreviewSkipped'), data.skipped);
         $('seriesPreviewWarnings').replaceChildren();
         (data.warnings || []).forEach(function (warning) { $('seriesPreviewWarnings').appendChild(node('p', 'tp-entry-warning', warning)); });
         $('seriesPreview').hidden = false;
@@ -381,7 +403,7 @@
     async function save() {
       if (state.busy) return;
       var payload;
-      try { payload = session.writePayload(buildPayload(fields())); } catch (error) { message(error.message); return; }
+      try { payload = session.writePayload(editorPayload()); } catch (error) { message(error.message); return; }
       busy(true, true); message(''); var saved = false;
       try {
         var result = await request(API + '/series', { method: 'POST', body: payload }); saved = true;
@@ -413,7 +435,8 @@
         main.appendChild(top); main.appendChild(node('h4', '', series.name));
         main.appendChild(node('p', 'tp-help', series.start_date + ' 至 ' + series.end_date + ' · ' + series.entry_count + '次安排'));
         if (series.counts) main.appendChild(node('p', 'tp-help', '已布置 ' + (series.counts.published || 0) + ' · 草稿 ' + (series.counts.draft || 0) + ' · 待布置 ' + (series.counts.ready || 0) + ' · 需处理 ' + ((series.counts.blocked || 0) + (series.counts.failed || 0))));
-        main.appendChild(node('p', 'tp-help', quotaSummary(series.weekday_counts, series.kind, series.quota_unit)));
+        main.appendChild(node('p', 'tp-help', series.kind === 'weekly' ? weeklyApi.summary(series, kindUnit) : quotaSummary(series.weekday_counts, series.kind, series.quota_unit)));
+        if (series.skip_assigned) main.appendChild(node('p', 'tp-help', '已启用自动跳过已布置内容' + (series.skipped && series.skipped.length ? ' · 跳过' + series.skipped.length + '份' : '')));
         if (series.wait_for_previous) main.appendChild(node('p', 'tp-help', '等待上一学习日全部任务有效提交；同日任务互不等待，未完成时由助教处理。'));
         var student = context.state.students.find(function (item) { return Number(item.id) === Number(series.student_id); });
         if (series.status === 'ready' && student && !student.enabled) main.appendChild(node('p', 'tp-entry-warning', '已确认，助教尚未为该学生启用自动布置。'));
@@ -428,12 +451,14 @@
       state.list = result.series || []; renderList(); $('plannerSeriesNew').disabled = false;
     }
     async function showDetails(id) {
-      var epoch = ++state.detailEpoch; state.detail = null; $('seriesDetailsRows').replaceChildren(node('p', 'tp-help', '正在读取每天的安排…')); $('seriesDetailsActions').replaceChildren(); show(details);
+      var epoch = ++state.detailEpoch; state.detail = null; $('seriesDetailsRules').textContent = ''; $('seriesDetailsSkipped').replaceChildren(); $('seriesDetailsRows').replaceChildren(node('p', 'tp-help', '正在读取每天的安排…')); $('seriesDetailsActions').replaceChildren(); show(details);
       try {
         var result = await request(API + '/series/' + id);
         if (epoch !== state.detailEpoch) return;
         state.detail = result.series; $('seriesDetailsTitle').textContent = result.series.name;
         $('seriesDetailsHint').textContent = studentName(result.series) + ' · ' + result.series.start_date + ' 至 ' + result.series.end_date + ' · ' + (STATUSES[result.series.status] || result.series.status);
+        $('seriesDetailsRules').textContent = result.series.kind === 'weekly' ? weeklyApi.summary(result.series, kindUnit) + (result.series.cycle_anchor ? (Number(result.series.cycle_weeks) === 2 ? '；A周起点：' : '；首周起点：') + result.series.cycle_anchor : '') : '';
+        weeklyApi.renderSkipped(doc, $('seriesDetailsSkipped'), result.series.skipped);
         renderRows($('seriesDetailsRows'), result.entries, true); actions(result.series, $('seriesDetailsActions'));
       } catch (error) { if (epoch === state.detailEpoch) $('seriesDetailsRows').replaceChildren(node('p', 'tp-entry-warning', error.message)); }
     }
@@ -468,7 +493,8 @@
     $('seriesBooksSelectVisible').addEventListener('click', selectVisibleBooks);
     $('seriesBooksClear').addEventListener('click', function () { state.bookIds.clear(); invalidate(); renderBookSelection(); });
     $('seriesBook').addEventListener('change', function () { var book = state.books.find(function (row) { return String(row.id) === $('seriesBook').value; }); $('seriesWordStart').value = book ? book.first_sequence || 1 : 1; bookHint(); });
-    $('seriesWait').addEventListener('change', function () { $('seriesWaitHint').textContent = $('seriesWait').value === 'previous' ? '本线上一学习日的全部任务有效提交后才继续布置；同日任务互不等待。未完成时进入待处理，日期不会自动顺延，需要助教处理或重建剩余安排。' : '默认按日期继续布置，未完成的旧任务保留原有状态。'; });
+    $('seriesWait').addEventListener('change', updateWaitHint);
+    $('seriesMode').addEventListener('change', updateWaitHint);
     $('seriesEditorForm').addEventListener('submit', preview); $('seriesSaveButton').addEventListener('click', save);
     $('seriesDetailsClose').addEventListener('click', function () { state.detailEpoch++; close(details); });
     details.addEventListener('cancel', function () { state.detailEpoch++; });

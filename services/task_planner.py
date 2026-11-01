@@ -172,6 +172,18 @@ def _dump(value):
 
 
 def _conflicts(row, prepared, profile):
+    if row.id is not None:
+        item = _series_item(row.id)
+        series = db.session.get(TaskPlannerSeries, item.series_id) if item else None
+        if series and json.loads(series.definition_json).get("skip_assigned") is True:
+            from services.task_planner_history import strict_conflict_reason
+
+            reason = strict_conflict_reason(prepared, profile, exclude_entry_ids=(row.id,))
+            if reason:
+                raise TaskPlannerError(
+                    f"内容在预览后被其他安排占用（{reason}），请取消未布置部分后重新预览；不会自动更换已确认题目",
+                    code="duplicate_assignment", status=409,
+                )
     payload = dict(prepared["duplicate_payload"], due_date=row.target_date.isoformat())
     result = validate_publish_conflicts([profile.full_name], payload)
     if not result["can_publish"]:
@@ -330,6 +342,11 @@ def publish_entry(entry_id, actor_id=None, expected_version=None, now=None, auto
             if not time(3, 5) <= current.time().replace(tzinfo=None) < time(9):
                 raise TaskPlannerError("不在自动布置时间内", code="outside_window", status=409)
         row_id, locked_version = row.id, row.version
+        from services.task_planner_bundles import publish_reading_bundle
+
+        bundled = publish_reading_bundle(row, actor_id=actor_id, automatic=automatic)
+        if bundled is not None:
+            return bundled
         try:
             _actor(row.confirmed_by)
             profile = _student(row.student_id)
@@ -388,10 +405,20 @@ def run_due(now=None, dry_run=False):
     report["eligible"] = len(ids)
     if dry_run:
         return report
+    from services.task_planner_bundles import bundle_entry_ids
+
+    eligible, handled = set(ids), set()
     for entry_id in ids:
+        if entry_id in handled:
+            continue
         try:
             row = publish_entry(entry_id, now=current, automatic=True)
-            report[row.status if row.status in {"published", "blocked", "failed"} else "skipped"] += 1
+            affected = (set(bundle_entry_ids(row)) & eligible) - handled
+            for affected_id in affected or {entry_id}:
+                member = db.session.get(TaskPlannerEntry, affected_id)
+                status = member.status if member else "skipped"
+                report[status if status in {"published", "blocked", "failed"} else "skipped"] += 1
+                handled.add(affected_id)
         except TaskPlannerError:
             report["skipped"] += 1
         except Exception:

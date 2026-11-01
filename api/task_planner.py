@@ -236,7 +236,9 @@ def series_details(series_id):
         raise planner.TaskPlannerError("学习线不存在", status=404)
     entries = TaskPlannerEntry.query.join(
         TaskPlannerSeriesItem, TaskPlannerSeriesItem.entry_id == TaskPlannerEntry.id,
-    ).filter(TaskPlannerSeriesItem.series_id == series_id).order_by(TaskPlannerEntry.target_date).all()
+    ).filter(TaskPlannerSeriesItem.series_id == series_id).order_by(
+        TaskPlannerEntry.target_date, TaskPlannerSeriesItem.order_index,
+    ).all()
     return jsonify(ok=True, series=series_payload(row),
                    entries=[planner.entry_payload(entry) for entry in entries])
 

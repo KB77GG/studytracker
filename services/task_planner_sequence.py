@@ -9,7 +9,7 @@ from services import task_planner_resources as resources
 from services.listening_training import TRAINING_MODE_OPTIONS, VALID_TRAINING_MODES
 from services.question_type_practice import cambridge_test_numbers
 
-KINDS = frozenset({"listening_test", "reading_passage", "intensive"})
+KINDS = frozenset({"listening_test", "reading_passage", "reading_test", "intensive"})
 
 
 def _natural(value):
@@ -24,6 +24,10 @@ def _options(kind, selection):
         raise ValueError("此类型不支持整篇连续安排")
     if not isinstance(selection, dict):
         raise ValueError("连续练习选项必须为对象")
+    if kind == "reading_test":
+        if selection:
+            raise ValueError("阅读整套必须包含同一Test的全部三个Passage")
+        return {}
     key = "passage_number" if kind == "reading_passage" else "section_number"
     allowed = {key, "training_mode"} if kind == "intensive" else {key}
     if set(selection) - allowed:
@@ -191,6 +195,57 @@ def _choices(kind, resource_id, options):
             )
 
 
+def _reading_test_item(resource_id):
+    """Validate one complete Test; never assemble passages from different Tests."""
+    source = resources._reading_payload(resource_id)
+    choices = list(_choices("reading_passage", resource_id, {"passage_number": None}))
+    if len(choices) != 3 or {row[2] for row in choices} != {1, 2, 3}:
+        raise ValueError("阅读整套必须包含可用的Passage 1–3")
+    numbers = []
+    for passage in source["passages"]:
+        for group in passage["groups"]:
+            for question in group["questions"]:
+                # Imported IDs are globally unique identifiers, not exam numbers.
+                # Guessing from IDs or row positions could label incomplete work a Test.
+                numbers.append(resources._integer(question.get("number"), "阅读题号", maximum=40))
+    if len(numbers) != 40 or set(numbers) != set(range(1, 41)):
+        raise ValueError("阅读整套须包含完整且不重复的1–40题")
+    selections = [
+        resources.prepare_resource("reading_passage", row[3])["selection"]
+        for row in sorted(choices, key=lambda row: row[2])
+    ]
+    return source, {
+        "id": f"{resource_id}:all",
+        "label": f"{source.get('title') or resource_id} · 阅读整套（Passage 1–3）",
+        "task_kind": "reading_passage",
+        "selections": selections,
+        "question_count": len(numbers),
+    }
+
+
+def _reading_test_sources(requested):
+    candidates = []
+    for resource_id in _paths("reading_passage"):
+        try:
+            source, item = _reading_test_item(resource_id)
+            scope, label, order = _identity("reading_passage", resource_id, source)
+            candidates.append(((*order, _natural(item["id"])), scope, label, item))
+        except (ValueError, TypeError, AttributeError, KeyError):
+            continue
+    candidates.sort(key=lambda row: row[0])
+    sources = {}
+    for _order, scope, label, _item in candidates:
+        source = sources.setdefault(scope, {"id": scope, "label": label, "count": 0})
+        source["count"] += 1
+    if any(scope not in sources for scope in requested):
+        raise ValueError("部分所选教材不存在、已下线或没有完整阅读套题，请重新选择")
+    selected = set(requested)
+    return {
+        "sources": list(sources.values()),
+        "items": [item for _order, scope, _label, item in candidates if scope in selected],
+    }
+
+
 def sequence_sources(kind, selection, source_scopes=None):
     """Return all finite book choices; only explicitly selected books yield items.
 
@@ -199,6 +254,8 @@ def sequence_sources(kind, selection, source_scopes=None):
     """
     options = _options(kind, selection)
     requested = _scopes(source_scopes)
+    if kind == "reading_test":
+        return _reading_test_sources(requested)
     candidates, seen = [], set()
     for resource_id in _paths(kind):
         try:

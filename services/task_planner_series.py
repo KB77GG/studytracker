@@ -24,9 +24,11 @@ REQUEST_FIELDS = (
     "name", "student_id", "start_date", "end_date", "weekday_counts", "kind",
     "selection", "source_scope", "start_group_id", "wait_for_previous",
     "planned_minutes", "note", "preview_hash", "source_scopes", "start_resource_id",
+    "skip_assigned", "cycle_weeks", "activities", "week_rules",
 )
-SEQUENCE_KINDS = frozenset({"listening_test", "reading_passage", "intensive"})
-NEW_REQUEST_FIELDS = frozenset({"source_scopes", "start_resource_id"})
+SEQUENCE_KINDS = frozenset({"listening_test", "reading_passage", "reading_test", "intensive"})
+NEW_REQUEST_FIELDS = frozenset({"source_scopes", "start_resource_id", "skip_assigned",
+                                "cycle_weeks", "activities", "week_rules"})
 
 
 def _digest(value):
@@ -108,6 +110,8 @@ def _definition(data, actor_id, now):
     wait = data.get("wait_for_previous", False)
     if not isinstance(wait, bool):
         raise planner.TaskPlannerError("前置完成条件必须为true或false")
+    if "skip_assigned" in data and not isinstance(data["skip_assigned"], bool):
+        raise planner.TaskPlannerError("自动排除已布置内容必须为true或false")
     note = str(data.get("note") or "").strip()
     if len(note) > 200:
         raise planner.TaskPlannerError("说明不能超过200字")
@@ -121,6 +125,8 @@ def _definition(data, actor_id, now):
         "planned_minutes": planner._integer(data.get("planned_minutes", 20), "预计分钟", 1, 180),
         "note": note,
     }
+    if "skip_assigned" in data:
+        definition["skip_assigned"] = data["skip_assigned"]
     if kind in SEQUENCE_KINDS:
         scopes = data.get("source_scopes")
         start_id = data.get("start_resource_id")
@@ -214,7 +220,17 @@ def _selections(kind, data, selection, schedule):
 
 
 def _build_preview(data, actor_id, now=None):
+    if isinstance(data, dict) and data.get("kind") == "weekly":
+        from services.task_planner_weekly import build_weekly_preview
+        return build_weekly_preview(data, actor_id, now)
     profile, definition, schedule, selection = _definition(data, actor_id, now)
+    if definition.get("skip_assigned") or definition["kind"] == "reading_test":
+        from services.task_planner_weekly import build_allocated_preview
+        activity = {**data, "id": "main", "selection": selection,
+                    "planned_minutes": definition["planned_minutes"], "note": definition["note"]}
+        requests = [{"target_date": day, "activity_id": "main", "quantity": count,
+                     "activity": activity} for day, count in schedule]
+        return build_allocated_preview(definition, requests, profile)
     rows, prepared_rows = [], []
     for day, count, questions, choice, labels in _selections(definition["kind"], data, selection, schedule):
         prepared = resources.prepare_resource(definition["kind"], choice)
@@ -238,6 +254,10 @@ def _build_preview(data, actor_id, now=None):
 
 
 def _quota_unit(kind, rows):
+    if kind == "weekly":
+        return "项"
+    if kind == "reading_test":
+        return "套"
     if kind == "question_type":
         return "组"
     if kind == "dictation":
@@ -303,8 +323,9 @@ def create_series(data, actor_id, now=None):
                 previous_day_id = last_entry_id
             entry = TaskPlannerEntry(
                 student_id=row.student_id, target_date=planner._date(item["target_date"], now),
-                kind=row.kind, title=prepared["title"][:240], selection_json=planner._dump(prepared["selection"]),
-                prepared_json=planner._dump(prepared), planned_minutes=preview["planned_minutes"], note=preview["note"],
+                kind=item.get("kind", row.kind), title=prepared["title"][:240], selection_json=planner._dump(prepared["selection"]),
+                prepared_json=planner._dump(prepared), planned_minutes=item.get("planned_minutes", preview["planned_minutes"]),
+                note=item.get("note", preview["note"]),
                 status="draft", version=1, created_by=actor_id, updated_by=actor_id,
             )
             db.session.add(entry)
@@ -390,7 +411,7 @@ def series_payload(row):
         entry = db.session.get(TaskPlannerEntry, item.entry_id)
         if entry:
             counts[entry.status] = counts.get(entry.status, 0) + 1
-    return {
+    payload = {
         "id": row.id, "version": row.version, "name": row.name, "student_id": row.student_id,
         "kind": row.kind, "start_date": row.start_date.isoformat(), "end_date": row.end_date.isoformat(),
         "quota_unit": definition.get("quota_unit") or _quota_unit(row.kind, definition.get("rows", [])),
@@ -399,3 +420,7 @@ def series_payload(row):
         "counts": counts, "status_counts": counts, "published_count": counts.get("published", 0),
         "student_name": profile.full_name if profile else "学生档案已停用",
     }
+    for name in ("cycle_weeks", "cycle_anchor", "activities", "week_rules", "skip_assigned", "skipped"):
+        if name in definition:
+            payload[name] = definition[name]
+    return payload
