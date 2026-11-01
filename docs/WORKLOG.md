@@ -1,5 +1,11 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-01 — 听阅周轮换、自动排除历史与严格整套阅读已上线
+
+- `task-planner-beta@6dfa3762` 起步，保留原两份交接脏改动；19业务/测试/用法文件提交 `31d729fe67ae6e696c59643bb253df99555a4c02`，任务分支和main已push并部署。实现1/2周听阅混排、共同历史去重并补足、严格同Test阅读整套、3原生Task原子发布；此前“不能轮换/只会拦截重复”两条问答结论现已被实现替代。无新schema/收费API/小程序改动。
+- 160 planner＋71旧回归＋62前端共293项通过；12Python Ruff/3.10 AST、JS/Jinja/diff通过，独立复审GO。Chrome合成两周8天12任务6跳过、同14天切换每周固定重复及30天不足边界、保存确认取消与390px详情/A/B规则通过，页/视口/server均已清理。真实学生新规则凌晨与学习端仍待试用。
+- 备份 `planner-weekly-20261101-122835/app.db` 235966464字节、quick_check=ok；[分支CI41273256084](https://github.com/KB77GG/studytracker/actions/runs/41273256084)、[main CI41273366937](https://github.com/KB77GG/studytracker/actions/runs/41273366937)均success，test/account-provisioning/task-planner三个测试job通过；advisory lint为仓库存量failure，本轮12Python Ruff通过。[Deploy41273366947](https://github.com/KB77GG/studytracker/actions/runs/41273366947)一次成功。生产31d729fe/17SHA匹配、tracked clean、schema零差异，12:31:12 CST起active/NRestarts0/5002单worker gthread6，warning日志0；timer启用、下一次11月2日03:05。真实目录74来源/128完整阅读套题；内存算法40题/3任务/1套/零预览写入，公网weekly.js哈希一致。交接两文件后续单独同步，最终git状态：业务已commit/push任务分支及main/deploy；两交接随后独立 `[skip ci]` 同步，最终文档HEAD见git log，无业务脏文件；精确命令、发布范围与本机证据见 `CODEX_HANDOFF.md` 顶部。
+
 ## 2026-11-01 — 词汇多分册连续安排已部署
 
 - task-planner-beta从1dee3d99 clean起步，11业务/测试/用法文件提交7e0b66be并推任务分支/main；词汇多选/搜索结果全选/数字顺序、起始册/词序、跨册按真实词数分配，旧单册/快照兼容，无新schema。113 planner+71旧回归+46前端测试通过、独立GO；Chrome合成7天210词/10任务及30天900词/42任务预览、保存确认取消、390px和搜索选中状态通过。
