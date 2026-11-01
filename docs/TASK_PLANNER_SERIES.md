@@ -50,7 +50,7 @@
 ## 验收入口
 
 ```sh
-TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence -v
+TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary -v
 node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js
 ```
 
