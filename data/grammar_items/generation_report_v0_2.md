@@ -6,12 +6,12 @@
 
 | 题型 | auto_pass | needs_review | rejected |
 |---|---:|---:|---:|
-| main_verb_tap | 5821 | 558 | 6367 |
+| main_verb_tap | 5822 | 557 | 6367 |
 | clause_boundary | 4678 | 2583 | 2694 |
-| clause_type_classify | 11401 | 3486 | 1331 |
-| adverbial_relation | 395 | 660 | 2561 |
-| subject_span | 5364 | 820 | 6562 |
-| finite_or_not | 12639 | 1836 | 6548 |
+| clause_type_classify | 11402 | 3485 | 1331 |
+| adverbial_relation | 396 | 659 | 2561 |
+| subject_span | 5365 | 819 | 6562 |
+| finite_or_not | 12641 | 1834 | 6548 |
 
 ## 范围
 
@@ -37,7 +37,7 @@
   "torch": "2.14.1",
   "openpyxl": "3.1.5",
   "seed": 20261018,
-  "reading_study_sha256": "c4fd0e662431a2831e682ea4c4eef0b934b3c5336f0c474c388f035cfb378316",
+  "reading_study_sha256": "af6137e1a972a4ab8a203dbaa6b3c3b4e826a48566b4759f39da484f5b331939",
   "grammar_graph_sha256": "c7b35ddb68db7601ccd01e38a210ad3dd772ff507302190f68a351e408b85a29"
 }
 ```
@@ -51,16 +51,16 @@
     "needs_review": 236
   },
   "G-S02": {
-    "auto_pass": 5364,
-    "needs_review": 820
+    "auto_pass": 5365,
+    "needs_review": 819
   },
   "G-C02": {
     "needs_review": 736,
     "auto_pass": 490
   },
   "G-C03": {
-    "auto_pass": 11401,
-    "needs_review": 3486
+    "auto_pass": 11402,
+    "needs_review": 3485
   },
   "G-C04": {
     "auto_pass": 1794,
@@ -75,20 +75,20 @@
     "needs_review": 730
   },
   "G-C11": {
-    "needs_review": 660,
-    "auto_pass": 395
+    "needs_review": 659,
+    "auto_pass": 396
   },
   "G-N01": {
-    "auto_pass": 10793,
-    "needs_review": 1736
+    "auto_pass": 10795,
+    "needs_review": 1734
   },
   "G-N04": {
     "auto_pass": 1846,
     "needs_review": 100
   },
   "G-L01": {
-    "auto_pass": 3100,
-    "needs_review": 322
+    "auto_pass": 3101,
+    "needs_review": 321
   }
 }
 ```
@@ -108,7 +108,7 @@
   "multiple_targets_same_type": 1363,
   "no_relation_label": 1230,
   "finiteness_mismatch": 668,
-  "source_quality": 636,
+  "source_quality": 624,
   "verb_unit_outside_span": 593,
   "subject_mismatch": 573,
   "parser_root_outside_verb_span": 562,
@@ -206,7 +206,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 1027,
+          "pool_size": 1028,
           "sample_size": 9
         },
         {
@@ -294,7 +294,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3611,
+          "pool_size": 3612,
           "sample_size": 16
         },
         {
@@ -338,7 +338,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 63,
+          "pool_size": 64,
           "sample_size": 8
         },
         {
@@ -382,7 +382,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 967,
+          "pool_size": 968,
           "sample_size": 9
         },
         {
@@ -426,7 +426,7 @@
         {
           "source_kind": "reading_test",
           "difficulty": "hard",
-          "pool_size": 3355,
+          "pool_size": 3357,
           "sample_size": 13
         },
         {
@@ -1941,16 +1941,16 @@
 ```json
 {
   "source_quality": {
-    "sentences": 152,
+    "sentences": 151,
     "items_by_template": {
-      "adverbial_relation": 33,
+      "adverbial_relation": 30,
       "clause_boundary": 111,
-      "clause_type_classify": 199,
-      "finite_or_not": 173,
-      "main_verb_tap": 63,
-      "subject_span": 57
+      "clause_type_classify": 196,
+      "finite_or_not": 169,
+      "main_verb_tap": 62,
+      "subject_span": 56
     },
-    "only_reason": 423
+    "only_reason": 417
   },
   "list_item": {
     "sentences": 15,
