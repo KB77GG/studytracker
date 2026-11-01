@@ -93,6 +93,7 @@ class Reason(StrEnum):
     PARTICIPLE_AFTER_BE = "participle_after_be"
     LINKING_VERB_AS_AUXILIARY = "linking_verb_as_auxiliary"
     PREPOSITIONAL_TARGET = "prepositional_target"
+    ANOTHER_CLAUSE_SAME_TYPE = "another_clause_same_type"
     SOURCE_QUALITY = "source_quality"
     LIST_ITEM = "list_item"
 

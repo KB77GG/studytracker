@@ -2000,6 +2000,79 @@ class PrepositionalTargetTests(unittest.TestCase):
         self.assertEqual(item["status"], "auto_pass", item["reasons"])
 
 
+class AnotherClauseTests(unittest.TestCase):
+    """Round 17 boundary: "划出句中的状语从句" has two answers when another one is untagged."""
+
+    def items(self, rows, tags):
+        sentence, view = tree(rows)
+        items, _ = generate(sentence, view, tags)
+        return items
+
+    def adverbial_rows(self, second):
+        rows = [
+            ("We", "nsubj", 1, "PRON", "PRP"),
+            ("left", "ROOT", 1, "VERB", "VBD"),
+            ("since", "mark", 4, "SCONJ", "IN"),
+            ("it", "nsubj", 4, "PRON", "PRP"),
+            ("rained", "advcl", 1, "VERB", "VBD"),
+        ]
+        if second:
+            rows += [
+                ("because", "mark", 7, "SCONJ", "IN"),
+                ("it", "nsubj", 7, "PRON", "PRP"),
+                ("froze", "advcl", 1, "VERB", "VBD"),
+            ]
+        return rows + [(".", "punct", 1, "PUNCT", ".")]
+
+    def test_second_untagged_adverbial_clause_goes_to_review(self):
+        tags = [
+            ("We", "subject", 1),
+            ("left", "verb_phrase", 1),
+            ("since it rained", "reason_clause", 2),
+        ]
+        items = self.items(self.adverbial_rows(second=True), tags)
+        boundary = by_template(items, "clause_boundary")[0]
+        self.assertEqual(boundary["status"], "needs_review")
+        self.assertIn(R.ANOTHER_CLAUSE_SAME_TYPE, boundary["reasons"])
+        # The other templates mark the target with 【】, so they are not affected.
+        for template in ("clause_type_classify", "adverbial_relation"):
+            self.assertNotIn(R.ANOTHER_CLAUSE_SAME_TYPE, by_template(items, template)[0]["reasons"])
+
+    def test_single_adverbial_clause_stays(self):
+        tags = [
+            ("We", "subject", 1),
+            ("left", "verb_phrase", 1),
+            ("since it rained", "reason_clause", 2),
+        ]
+        boundary = by_template(
+            self.items(self.adverbial_rows(second=False), tags), "clause_boundary"
+        )[0]
+        self.assertNotIn(R.ANOTHER_CLAUSE_SAME_TYPE, boundary["reasons"])
+        self.assertEqual(boundary["status"], "auto_pass", boundary["reasons"])
+
+    def test_nested_noun_clause_goes_to_review(self):
+        # "... is that its predictability is more important than how loud it is" (nested).
+        rows = [
+            ("He", "nsubj", 1, "PRON", "PRP"),
+            ("said", "ROOT", 1, "VERB", "VBD"),
+            ("that", "mark", 4, "SCONJ", "IN"),
+            ("she", "nsubj", 4, "PRON", "PRP"),
+            ("knew", "ccomp", 1, "VERB", "VBD"),
+            ("what", "dobj", 7, "PRON", "WP"),
+            ("he", "nsubj", 7, "PRON", "PRP"),
+            ("wanted", "ccomp", 4, "VERB", "VBD"),
+            (".", "punct", 1, "PUNCT", "."),
+        ]
+        tags = [
+            ("He", "subject", 1),
+            ("said", "verb_phrase", 1),
+            ("that she knew what he wanted", "object_clause", 2),
+        ]
+        boundary = by_template(self.items(rows, tags), "clause_boundary")[0]
+        self.assertEqual(boundary["status"], "needs_review")
+        self.assertIn(R.ANOTHER_CLAUSE_SAME_TYPE, boundary["reasons"])
+
+
 class CoordinatePromptTests(unittest.TestCase):
     """Review A8 (user decision): the boundary prompt names the conjunction before the clause."""
 

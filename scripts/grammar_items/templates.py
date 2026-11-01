@@ -768,6 +768,18 @@ def nested_coordination(view, tokens):
     return [R.NESTED_COORDINATION] if nested else []
 
 
+def another_clause(view, head, kind):
+    """ "划出句中的定语从句" has a second right answer when the sentence holds another clause of
+    the same kind, by the same test the target passes: outside the target ("since ... , and
+    since ..."), nested in it ("that its predictability is more important than how loud it
+    is") or around it (round 17 review; user decision 2026-11-01). The parser also reads
+    some direct speech and colon-led main clauses as noun clauses, so about half the hits
+    are false alarms; all go to review rather than guess. Coordinate clauses name their
+    conjunction in the prompt instead."""
+    other = any(t.i != head.i and type_matches(view, t, kind) for t in view.tokens)
+    return [R.ANOTHER_CLAUSE_SAME_TYPE] if other else []
+
+
 def clause_boundaries(ctx):
     for kind, roles in CLAUSE_ROLES.items():
         spans = [s for s in ctx.spans if s.role in roles]
@@ -786,6 +798,8 @@ def clause_boundaries(ctx):
                 if not type_matches(ctx.view, head, kind):
                     reasons.append(R.CLAUSE_TYPE_MISMATCH)
                 reasons.extend(boundary_reasons(ctx, head, tokens, kind))
+                if kind != "coordinate":
+                    reasons.extend(another_clause(ctx.view, head, kind))
             if kind == "adverbial":
                 reasons.extend(relative_adverb_risk(ctx.view, span))
                 reasons.extend(noun_attached_risk(ctx.view, head))
