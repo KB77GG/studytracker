@@ -4,6 +4,15 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-11-01 — 语法候选题 v0.2 第十九轮（Claude，恢复 10⁹、统计第 4 项）
+
+- 按用户授权恢复剑桥 ielts11_test1_p1 A-03 的 10⁹：
+  - 新增剑桥原文修订表 `data/reading_test_text_fixes.json`，构建 / 修补脚本都应用；
+  - static 与阅读解析同步。
+- 6 道题恢复自动通过；剑桥 auto 27,830，全库 40,304。两次生成一致，测试、validator、导入模拟（236 / 81 / 0）通过。
+- 第 4 项：剑桥 auto 非并列 T2 有 197 道句中另有同类从句，抽样估计真多解约 100 道；处理方式待用户决定。
+- Git 之外：生产 MaterialBank 的这篇描述应仍是 109，未动。未部署、未推 main、未开 PR。
+
 ## 2026-10-28 — 第十八轮轻量独立核验（Codex，通过）
 
 - 任务树`/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker`，`codex/grammar-item-candidates`，f7e072b干净ff-only到固定8c49cf9。只新增ROUND18报告、更新两交接；被审代码/数据和桌面既有改动未动。
