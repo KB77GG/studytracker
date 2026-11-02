@@ -1,5 +1,10 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-02 — 雅思写作 AI 独立试用工具（已推功能分支，未合并 / 部署）
+
+- 需求调整：不接模考批改工作台，改做独立试用网页（题干 / 作文 / 题图 → 原稿评价、逐句精修、整篇改写、复制、本人历史）。brief 文件不在仓库，未读到。云端容器从 `a7387f5` 新建分支 `claude/ielts-writing-ai-trial`，只新增 `tools/ielts_writing_ai/`，现有文件零修改；独立进程（5055）、SQLite、`.env`、上传目录、试用码，不 import 主应用。
+- 60 项单元测试、ruff、black、JS / shell 语法检查通过；start / stop / status 和 gunicorn 模式实测通过；Playwright 用 fake 模型的完整流程和 390px 通过。没有接真实模型，没有测 Python 3.10。stop hook 要求提交后，只推到功能分支 `claude/ielts-writing-ai-trial`；未合并 main、未部署，也没有生产或小程序操作。详见 `CODEX_HANDOFF.md` 顶部。
+
 ## 2026-11-01 — 听阅周轮换、自动排除历史与严格整套阅读已上线
 
 - `task-planner-beta@6dfa3762` 起步，保留原两份交接脏改动；19业务/测试/用法文件提交 `31d729fe67ae6e696c59643bb253df99555a4c02`，任务分支和main已push并部署。实现1/2周听阅混排、共同历史去重并补足、严格同Test阅读整套、3原生Task原子发布；此前“不能轮换/只会拦截重复”两条问答结论现已被实现替代。无新schema/收费API/小程序改动。

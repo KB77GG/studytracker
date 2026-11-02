@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-02 雅思写作 AI 独立试用工具（已推功能分支，未合并、未部署）
+
+- **范围已按用户调整**：第一版是独立试用工具，**不接入**教师模考批改工作台。原计划里的 MockExamReview 集成、生产表迁移、AI 分数采纳到正式评分全部推迟，等试用满意后再讨论整合。用户提到的 `docs/design/ielts-writing-ai-review-video-brief-20261102.md` 不在 main、任何远端分支或本容器里（推测只在用户 Mac 本地），本轮没有读到；功能按用户消息实现。
+- 基线：Claude Code 云端容器（新克隆，不是 Mac 旧资料树）`/home/user/studytracker`，从 `origin/main@a7387f5` 新建本地分支 `claude/ielts-writing-ai-trial`。只新增 `tools/__init__.py`、`tools/ielts_writing_ai/**`，以及这两份交接文档；**现有文件零修改**（app/models/api/services/templates/小程序/deploy.yml/gunicorn.conf.py 均未改动）。
+- 功能：独立 Flask 应用。手动输入题干、作文、Task 1 题图后，后台并行生成原稿评价（TR/TA、CC、LR、GRA 四项分数和引文，引文会校验是否真在原文中，总分由服务端按 0.5 就近进位计算）、逐句精修（原句一律取自服务端自己的断句，字词级 diff，标签白名单）、整篇改写（按目标 Band）。支持复制、重新生成、本人历史记录（分页、删除连带删除题图）。试用码登录（只存 SHA-256、限制错误次数、可停用 / 重置并强制登出）、CSRF、严格 CSP、每日额度、后台线程池、重启后把未完成任务标记为“中断”。模型支持 deepseek / qwen / openai_compatible / fake（离线演示，带横幅）；识图可选 qwen-vl，未配置时页面会提示“未核对图表数据”。
+- 隔离：只读 `IWA_*` 变量和工具自己的 `.env`；独立 SQLite、上传目录、`iwa_session` Cookie；拒绝 `app.db` / `studytracker.db` 文件名、含其他表的库，以及 5000 / 5002 端口；gunicorn 必须用 `-c tools/ielts_writing_ai/gunicorn.conf.py`（根目录的 gunicorn.conf.py 会绑 5002），控制 socket 放在工具数据目录。子进程测试确认不会 import `app` / `models` / `config` / `api` / `services` / `toefl_practice`。
+- 精确验证（Python 3.13 临时 venv，Flask 3.1.3、gunicorn 26.2.0）：`python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **60 tests OK**（真实 ChatClient 用本地假 HTTP 服务器测试，不联网）；`ruff check tools/`、`black --check tools/`、`node --check static/iwa.js`、`bash -n bin/*.sh` 全部通过。脚本实测：start / status / 重复 start / stop、`IWA_SERVER=gunicorn` 监听 127.0.0.1:5055。Playwright Chromium 用 fake 模型走完：错误试用码、登录、Task 2 提交、三个标签、引文高亮、四种复制、重新生成、Task 1 带 PNG 题图、历史、删除、退出，390px 无横向滚动，控制台只有故意输错试用码产生的 401。
+- 过程中修掉的问题：小写单字母后的句号被当作人名缩写；纯大小写修正（i→I）被判为“无修改”；CLI 测试受外部 `IWA_DATA_DIR` 影响，曾写入本地演示库（现已清除 `IWA_*` 环境变量；只影响 scratchpad 演示数据，已重建）。
+- **未验证**：没有接真实 DeepSeek / Qwen（本容器没有 Key），提示词效果和分数校准都还没用真实作文检验；没有在 Python 3.10 上运行过（代码刻意避开了 3.11+ 语法，未实测）；Mac 本地启动没有验证。
+- **发布状态 / 下一步**：会话结束时环境的 stop hook 要求提交推送，因此业务代码和交接文档分两次提交（文档带 `[skip ci]`），只推到远端功能分支 `claude/ielts-writing-ai-trial`（精确 HEAD 见该分支的 git log）。**未合并 main、未部署**（deploy.yml 只在 main 上触发），也没有任何生产、服务器或小程序操作。在 Mac 上 `git fetch origin claude/ielts-writing-ai-trial` 后按 `tools/ielts_writing_ai/README.md` 建 venv、复制 `.env`、`user-add`、`start.sh`。先用 fake 模式熟悉界面，再填专用 `IWA_LLM_API_KEY`，用 20–30 篇有老师评分的作文校准；满意后再放到独立测试环境（独立用户 / 目录 / 子域名 + HTTPS），再讨论是否接入工作台。
+
 ## 2026-11-01 听阅周轮换、自动排除历史与严格整套阅读已上线
 
 - 实施工作树 `/Users/zhouxin/.codex/worktrees/task-planner-beta/studytracker`，分支 `codex/task-planner-beta`。本轮开工HEAD `6dfa37628d9f30be6d579a0f0ab79599db38f8bc`，只有前两轮能力核对留下的 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 未提交改动，已保留并在此归并。业务19文件已提交 **`31d729fe67ae6e696c59643bb253df99555a4c02`**，任务分支与main均已push，且业务已部署。本两份交接随后以独立 `[skip ci]` 文档提交同步任务分支/main，最终文档HEAD见git log；业务无未提交/未跟踪文件，交接同步后工作区应clean。代码和用法已远端可得，临时探针/截图仅本机。旧 `/Users/zhouxin/Desktop/studytracker` 仅借用Python环境/只读音频，其他worktree未改，不将旧资料树的既有脏状态或其他任务成果归入本树。
