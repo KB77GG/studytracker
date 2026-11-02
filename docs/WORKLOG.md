@@ -1,5 +1,18 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-02 — 助教未完成收件箱、补做顺延已上线
+
+- `task-planner-beta@a7387f5f`，保留当日诊断两份交接脏改动，新增 / 修改16个业务、测试、用法文件及两交接。实现按学习线原日期聚合未完成任务，助教预览确认“今天补做并整体顺延”或“忽略本次继续原计划”；不改旧 Task / 成绩 / 日期、其他线或自动开关。新 decision 表记录精确源关联和豁免，补做祖先链去重例外、有效提交门禁、冻结日期 / 阅读三篇 bundle、并发幂等与异常全回滚均覆盖。CI 收录新增测试，独立复审 GO。
+- 覆盖335项：原 planner160 + 新 recovery26 + 旧回归71 + Node78。含25新项的完整 planner185项27.245s通过，最终 recovery26项5.808s通过，旧71项6.418s、Node78通过；JS三文件语法、词汇队列脚本、diff检查通过。独立合成探针验证逾期顺延、跨日 / 同 key 并发、再次补做门禁、资源变更旧预览失效、continue 整套阅读三任务失败全回滚。精确命令见 CODEX_HANDOFF 顶部。
+- Chrome 合成甲补做今天并后续顺延1日、乙继续发布今天原计划、丙已有今日新任务拒绝补做；冻结版确认后读取页面结果通过，390×844无横溢、console errors=[]。截图 `/private/tmp/task-planner-recovery-{preview,mobile,confirmed}.png` 仅本机；视口恢复、测试页关闭、5097 server已停，未额外核对临时 fixture DB 磁盘清理。无真实学生写入。
+- 业务16文件已提交 `d636398e54a59ecbe123ad20f39275e24c5c2fa0`，推任务分支 / main并部署；分支CI41411725919、main CI41412040645、Deploy41412040622均success，三组测试通过，advisory lint为仓库存量failure，本次8Python Ruff通过。备份 `/root/backups/studytracker/planner-recovery-20261102-161702/app.db` 239800320 bytes / quick_check=ok；事务预建独立decision表及索引后标准部署一次成功，旧schema不变。生产20运行SHA一致、tracked clean、7匿名API401、静态资源哈希一致；16:18:42 CST起active、NRestarts0、5002单worker/gthread6，timer下次11月3日03:05，重启以来warning以上日志0。只读目录74来源128整套及独立内存3Task/40题/1套算法通过，公网recovery.js哈希一致。交接两文件随后独立 `[skip ci]` 同步任务分支与main；源码已远端可得，临时证据仅本机。小程序未改、未上传 / 提审 / 发布，无付费API或微信消息；真实学生恢复与后续凌晨结果待试用。
+
+## 2026-11-02 — 未完成后自动停排与补发诊断
+
+- task-planner-beta@a7387f5f clean开工，仅本机两交接新增记录，未改业务或生产数据、未commit/push/deploy。wait=true按原学习线前一天全部Task判断，另建补做不接回原线；blocked无法直接重试/重确认，独立临时SQLite复现次日仍阻塞。wait=false不查前日，但仍受开关/日期/重复校验约束。
+- 生产31d729fe/tracked clean，今日timer24次执行：4发布/3因上一学习日未完成blocked/0失败；明天有3个前置关系指向这些blocked。定时器正常且下次11月3日03:05；未查到今日planner手工publish事件，具体学生及操作未确认。只读聚合探针不输出姓名或改数据。
+- 这是实现前的只读诊断；后续用户已确认由助教逐项选择补做顺延或忽略本次继续，入口已按上节实现，原“待用户选择 / 补齐入口”事项已结束。未因此替具体学生调整规则；保留生产聚合事实，精确路径 / 命令 / 限制见 CODEX_HANDOFF 对应诊断节。
+
 ## 2026-11-01 — 听阅周轮换、自动排除历史与严格整套阅读已上线
 
 - `task-planner-beta@6dfa3762` 起步，保留原两份交接脏改动；19业务/测试/用法文件提交 `31d729fe67ae6e696c59643bb253df99555a4c02`，任务分支和main已push并部署。实现1/2周听阅混排、共同历史去重并补足、严格同Test阅读整套、3原生Task原子发布；此前“不能轮换/只会拦截重复”两条问答结论现已被实现替代。无新schema/收费API/小程序改动。
