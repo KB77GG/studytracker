@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}登录 · 雅思写作 AI 试用{% endblock %}
+{% block content %}
+<section class="login">
+  <div class="login__card card">
+    <h1>雅思写作 AI 试用</h1>
+    <p class="muted">输入题干和作文，查看 AI 原稿评价、逐句精修和整篇改写。</p>
+    <form id="loginForm" class="form" novalidate>
+      <label class="field">
+        <span class="field__label">试用码</span>
+        <input type="text" name="code" id="loginCode" autocomplete="off" autocapitalize="characters"
+               spellcheck="false" placeholder="IWA-XXXX-XXXX-XXXX-XXXX" required>
+      </label>
+      <p class="form-error" id="loginError" hidden></p>
+      <button type="submit" class="btn btn--primary btn--block">进入</button>
+    </form>
+    <p class="muted small">试用码由管理员发放。这是独立试用工具，与学习系统账号无关。</p>
+  </div>
+</section>
+{% endblock %}

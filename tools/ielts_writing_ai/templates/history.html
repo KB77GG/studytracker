@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}我的历史 · 雅思写作 AI 试用{% endblock %}
+{% block content %}
+<div class="page-head page-head--row">
+  <div>
+    <h1>我的历史</h1>
+    <p class="muted">只显示你自己提交的批改记录。删除后原稿、题图和 AI 结果会一并删除。</p>
+  </div>
+  <a class="btn btn--primary" href="{{ url_for('iwa.new_page') }}">新建批改</a>
+</div>
+<div class="history" id="historyList" aria-live="polite"></div>
+<div class="history__more">
+  <button type="button" class="btn btn--ghost" id="loadMore" hidden>加载更多</button>
+</div>
+{% endblock %}

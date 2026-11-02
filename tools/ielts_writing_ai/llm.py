@@ -1,0 +1,291 @@
+"""Model clients: an OpenAI-compatible chat client (stdlib urllib) and a demo fake.
+
+The real client is used for DeepSeek, Qwen (DashScope compatible mode) or any
+other OpenAI-compatible endpoint.  API keys are only ever sent as the
+Authorization header and never logged or stored.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import time
+import urllib.error
+import urllib.request
+from dataclasses import dataclass, field
+
+from . import essay as essay_lib
+
+
+class LLMError(Exception):
+    def __init__(self, code: str, message: str = ""):
+        super().__init__(message or code)
+        self.code = code
+        self.message = message or code
+
+
+@dataclass
+class LLMResult:
+    text: str
+    model: str
+    latency_ms: int
+    usage: dict = field(default_factory=dict)
+
+    def json(self) -> dict:
+        return extract_json_object(self.text)
+
+
+def extract_json_object(text: str) -> dict:
+    content = (text or "").strip()
+    fence = re.match(r"^```(?:json)?\s*(.*?)\s*```$", content, re.S)
+    if fence:
+        content = fence.group(1)
+    try:
+        value = json.loads(content)
+    except ValueError:
+        start, end = content.find("{"), content.rfind("}")
+        if start < 0 or end <= start:
+            raise LLMError("invalid_json", "模型没有返回 JSON") from None
+        try:
+            value = json.loads(content[start : end + 1])
+        except ValueError:
+            raise LLMError("invalid_json", "模型返回的 JSON 无法解析") from None
+    if not isinstance(value, dict):
+        raise LLMError("invalid_json", "模型返回的 JSON 不是对象")
+    return value
+
+
+class ChatClient:
+    """Minimal OpenAI-compatible /chat/completions client."""
+
+    retry_statuses = {429, 500, 502, 503, 504}
+
+    def __init__(self, *, provider: str, base_url: str, api_key: str, model: str, timeout: float):
+        self.provider = provider
+        self.base_url = base_url
+        self.api_key = api_key
+        self.model = model
+        self.timeout = timeout
+
+    def complete(
+        self,
+        messages: list[dict],
+        *,
+        json_mode: bool,
+        max_tokens: int,
+        temperature: float = 0.2,
+        context: dict | None = None,
+        retries: int = 1,
+    ) -> LLMResult:
+        if not self.api_key:
+            raise LLMError("missing_api_key", "未配置模型 API Key")
+        body = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+        if json_mode:
+            body["response_format"] = {"type": "json_object"}
+        payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
+        last_error: LLMError | None = None
+        for attempt in range(retries + 1):
+            started = time.monotonic()
+            request = urllib.request.Request(
+                self.base_url,
+                data=payload,
+                method="POST",
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                },
+            )
+            try:
+                with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                    raw = json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                last_error = LLMError(f"http_{exc.code}", f"模型服务返回 HTTP {exc.code}")
+                if exc.code in self.retry_statuses and attempt < retries:
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
+                raise last_error from None
+            except TimeoutError:  # socket.timeout is an alias since 3.10
+                last_error = LLMError("timeout", "模型响应超时")
+                if attempt < retries:
+                    continue
+                raise last_error from None
+            except (urllib.error.URLError, OSError) as exc:
+                last_error = LLMError("network", f"无法连接模型服务：{type(exc).__name__}")
+                if attempt < retries:
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
+                raise last_error from None
+            except ValueError:
+                raise LLMError("invalid_response", "模型服务返回了非 JSON 响应") from None
+            latency = int((time.monotonic() - started) * 1000)
+            try:
+                choice = raw["choices"][0]
+                text = choice["message"]["content"] or ""
+            except (KeyError, IndexError, TypeError):
+                raise LLMError("invalid_response", "模型响应缺少 choices") from None
+            if isinstance(text, list):  # some providers return content parts
+                text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
+            if not str(text).strip():
+                raise LLMError("empty", "模型返回为空")
+            if choice.get("finish_reason") == "length":
+                raise LLMError("truncated", "模型输出被截断，请重试")
+            usage = raw.get("usage") if isinstance(raw.get("usage"), dict) else {}
+            return LLMResult(str(text), str(raw.get("model") or self.model), latency, usage)
+        raise last_error or LLMError("unknown")
+
+
+# ---------------------------------------------------------------------------
+# Demo provider: deterministic, offline, clearly labelled as not real AI.
+# ---------------------------------------------------------------------------
+
+_DEMO_FIXES = [
+    (r"\balot\b", "a lot"),
+    (r"\bdont\b", "don't"),
+    (r"\bdoesnt\b", "doesn't"),
+    (r"\bcant\b", "can't"),
+    (r"\bi\b", "I"),
+    (r"\bmore better\b", "better"),
+    (r"\bpeoples\b", "people"),
+    (r"\s+,", ","),
+    (r" {2,}", " "),
+]
+
+
+def _demo_fix(sentence: str) -> str:
+    fixed = sentence
+    for pattern, replacement in _DEMO_FIXES:
+        fixed = re.sub(pattern, replacement, fixed)
+    if fixed and fixed[0].islower():
+        fixed = fixed[0].upper() + fixed[1:]
+    return fixed
+
+
+class FakeClient:
+    """Offline demo provider used for local trials and tests."""
+
+    provider = "fake"
+
+    def __init__(self, model: str = "fake-demo", fail_kinds: set[str] | None = None):
+        self.model = model
+        self.fail_kinds = set(fail_kinds or ())
+        self.calls: list[str] = []
+
+    def complete(
+        self, messages, *, json_mode, max_tokens, temperature=0.2, context=None, retries=1
+    ):
+        context = context or {}
+        kind = context.get("kind", "")
+        self.calls.append(kind)
+        if kind in self.fail_kinds:
+            raise LLMError("http_503", "演示模式：模拟模型服务失败")
+        builder = {
+            "evaluate": self._evaluate,
+            "refine": self._refine,
+            "rewrite": self._rewrite,
+            "describe_image": self._describe_image,
+        }.get(kind)
+        if builder is None:
+            raise LLMError("invalid_request", "未知生成类型")
+        value = builder(context)
+        text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
+        return LLMResult(text, self.model, 5, {"demo": True})
+
+    @staticmethod
+    def _evaluate(context):
+        words = int(context.get("word_count") or 0)
+        minimum = int(context.get("minimum_words") or 250)
+        base = 6.0 if words >= minimum else 5.0
+        sentences = context.get("sentences") or []
+        first = sentences[0]["text"] if sentences else ""
+        quote = " ".join(first.split()[:8])
+        crit = {
+            "task": base,
+            "coherence": base,
+            "lexical": base - 0.5,
+            "grammar": base - 0.5,
+        }
+        return {
+            "criteria": {
+                key: {
+                    "band": band,
+                    "summary": f"【演示】这是 {key} 维度的示例评语，未经过真实 AI 分析。",
+                    "strengths": ["【演示】示例优点：段落划分清楚。"],
+                    "issues": [
+                        {
+                            "quote": quote,
+                            "comment": "【演示】示例问题：这句可以表达得更具体。",
+                            "suggestion": "【演示】补充一个具体的解释或例子。",
+                        }
+                    ],
+                }
+                for key, band in crit.items()
+            },
+            "overall_comment": "【演示】这是演示模式的固定评语。连接真实模型后，这里会给出整体评价。",
+            "priorities": [
+                "【演示】优先修正基础语法错误",
+                "【演示】每个主体段补充具体例子",
+                "【演示】减少重复用词",
+            ],
+        }
+
+    @staticmethod
+    def _refine(context):
+        items = []
+        for sentence in context.get("sentences") or []:
+            revised = _demo_fix(sentence["text"])
+            changed = revised != sentence["text"]
+            items.append(
+                {
+                    "i": sentence["i"],
+                    "revised": revised,
+                    "tags": ["grammar"] if changed else [],
+                    "explanation": "【演示】按固定规则修正拼写/大小写。" if changed else "",
+                }
+            )
+        return {"sentences": items, "summary": "【演示】仅按固定规则做了少量机械修正。"}
+
+    @staticmethod
+    def _rewrite(context):
+        sentences = [
+            essay_lib.Sentence(s["i"], s["paragraph"], _demo_fix(s["text"]))
+            for s in (context.get("sentences") or [])
+        ]
+        body = essay_lib.join_sentences(sentences)
+        return {
+            "essay": body,
+            "key_changes": ["【演示】演示模式只做机械修正，不是真实的高分改写。"],
+            "band_rationale": "【演示】连接真实模型后，这里会说明改写如何达到目标分数段。",
+        }
+
+    @staticmethod
+    def _describe_image(context):
+        return "【演示】未真实识别图片。连接识图模型后，这里会给出图表类型、单位、关键数据和趋势。"
+
+
+def build_client(settings, *, vision: bool = False):
+    if vision:
+        if settings.vision_provider == "none":
+            return None
+        if settings.vision_provider == "fake":
+            return FakeClient(model=settings.vision_model or "fake-vision-demo")
+        return ChatClient(
+            provider=settings.vision_provider,
+            base_url=settings.vision_base_url,
+            api_key=settings.vision_api_key,
+            model=settings.vision_model,
+            timeout=settings.llm_timeout,
+        )
+    if settings.llm_provider == "fake":
+        return FakeClient(model=settings.llm_model or "fake-demo")
+    return ChatClient(
+        provider=settings.llm_provider,
+        base_url=settings.llm_base_url,
+        api_key=settings.llm_api_key,
+        model=settings.llm_model,
+        timeout=settings.llm_timeout,
+    )

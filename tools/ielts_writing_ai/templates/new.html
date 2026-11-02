@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}新批改 · 雅思写作 AI 试用{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>新建批改</h1>
+  <p class="muted">提交后会同时生成三份结果：原稿评价、逐句精修、整篇改写。每次批改消耗 3 次额度。</p>
+</div>
+
+<form id="newForm" class="card form new-form" novalidate>
+  <fieldset class="field">
+    <legend class="field__label">题型</legend>
+    <div class="segmented" role="radiogroup">
+      <label class="segmented__item">
+        <input type="radio" name="task_type" value="task2" checked>
+        <span>Task 2 大作文</span>
+      </label>
+      <label class="segmented__item">
+        <input type="radio" name="task_type" value="task1">
+        <span>Task 1 小作文（学术类）</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <label class="field">
+    <span class="field__label">题干</span>
+    <textarea name="prompt_text" rows="4" maxlength="3000" required
+              placeholder="粘贴完整题目，例如：Some people believe that ... To what extent do you agree or disagree?"></textarea>
+    <span class="field__error" data-error-for="prompt_text"></span>
+  </label>
+
+  <div class="field" id="imageField" hidden>
+    <span class="field__label">题图 <span class="muted">（可选，PNG / JPG / WEBP，≤ {{ iwa_max_upload_mb }} MB）</span></span>
+    <label class="dropzone" id="dropzone">
+      <input type="file" name="image" id="imageInput" accept="image/png,image/jpeg,image/webp">
+      <span class="dropzone__hint" id="dropzoneHint">点击选择图片，或把图片拖到这里</span>
+      <img class="dropzone__preview" id="imagePreview" alt="题图预览" hidden>
+    </label>
+    <button type="button" class="link-button" id="clearImage" hidden>移除图片</button>
+    <p class="field__help" id="visionHelp">
+      {% if iwa_vision %}上传后会先由识图模型提取图表数据，再用于评价和改写。{% else %}当前未配置识图模型：题图只会保存展示，评价不会核对图表数据。{% endif %}
+    </p>
+    <span class="field__error" data-error-for="image"></span>
+  </div>
+
+  <label class="field">
+    <span class="field__label">我的作文</span>
+    <textarea name="essay_text" id="essayInput" rows="16" maxlength="9000" required spellcheck="false"
+              placeholder="粘贴或输入你的英文作文，每段换行。"></textarea>
+    <span class="field__meta"><span id="wordCount">0</span> 词 · <span id="wordHint">Task 2 要求至少 250 词</span></span>
+    <span class="field__error" data-error-for="essay_text"></span>
+  </label>
+
+  <label class="field field--inline">
+    <span class="field__label">改写目标分</span>
+    <select name="target_band">
+      {% for band in target_bands %}
+      <option value="{{ band }}"{% if band == 7.0 %} selected{% endif %}>Band {{ band }}</option>
+      {% endfor %}
+    </select>
+    <span class="field__help">逐句精修和整篇改写会按这个分数段调整表达。</span>
+  </label>
+
+  <p class="form-error" id="formError" hidden></p>
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary" id="submitBtn">开始批改</button>
+    <span class="muted small">今日剩余 {{ quota.remaining }} 次</span>
+  </div>
+</form>
+{% endblock %}

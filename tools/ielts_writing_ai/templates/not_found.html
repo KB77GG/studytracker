@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}记录不存在 · 雅思写作 AI 试用{% endblock %}
+{% block content %}
+<div class="card empty">
+  <h1>记录不存在</h1>
+  <p class="muted">这条批改记录不存在，或者不属于当前试用账号。</p>
+  <a class="btn btn--primary" href="{{ url_for('iwa.history_page') }}">回到我的历史</a>
+</div>
+{% endblock %}

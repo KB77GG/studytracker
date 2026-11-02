@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block title %}雅思写作 AI 试用{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('iwa.static', filename='iwa.css') }}">
+  <script src="{{ url_for('iwa.static', filename='iwa.js') }}" defer></script>
+</head>
+<body data-page="{{ page }}" data-csrf="{{ iwa_csrf }}" data-root="{{ url_for('iwa.new_page') }}"{% block body_attrs %}{% endblock %}>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="{{ url_for('iwa.new_page') }}">
+        <span class="brand__mark" aria-hidden="true">W</span>
+        <span class="brand__text">雅思写作 AI 试用</span>
+      </a>
+      {% if iwa_user %}
+      <nav class="nav" aria-label="主导航">
+        <a href="{{ url_for('iwa.new_page') }}" class="nav__link{% if page == 'new' %} is-active{% endif %}">新批改</a>
+        <a href="{{ url_for('iwa.history_page') }}" class="nav__link{% if page == 'history' %} is-active{% endif %}">我的历史</a>
+      </nav>
+      <div class="account">
+        {% if quota %}<span class="quota" id="quotaBadge" title="今日剩余生成次数（每次批改消耗 3 次，重新生成消耗 1 次）">今日剩余 <strong>{{ quota.remaining }}</strong>/{{ quota.limit }}</span>{% endif %}
+        <span class="account__name">{{ iwa_user.name }}</span>
+        <button type="button" class="link-button" id="logoutBtn">退出</button>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+  {% if iwa_demo %}
+  <div class="demo-banner" role="note">演示模式：没有连接真实 AI，所有结果都是固定示例，只用于熟悉界面和流程。</div>
+  {% endif %}
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">试用工具 · AI 结果仅供学习参考，不计入任何正式成绩</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

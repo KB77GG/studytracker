@@ -1,0 +1,4 @@
+# Standalone trial tool dependencies (model calls use only the standard library).
+Flask>=2.3
+# Only needed when running with IWA_SERVER=gunicorn in a test environment.
+gunicorn>=21
