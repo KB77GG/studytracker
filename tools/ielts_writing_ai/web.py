@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
+import os
 import secrets
 from functools import wraps
 
@@ -19,7 +21,7 @@ from flask import (
     url_for,
 )
 
-from . import access, uploads
+from . import access, copytext, uploads
 from . import essay as essay_lib
 from .storage import KINDS, iso, utcnow
 
@@ -113,11 +115,21 @@ def require_user(api: bool):
     return decorator
 
 
+def _draft_key(user: dict | None) -> str:
+    """Opaque per-user key for browser drafts: stable for the same user, unguessable
+    for others, and does not reveal the user id."""
+    if not user:
+        return ""
+    secret = current_app.config["SECRET_KEY"].encode("utf-8")
+    return hmac.new(secret, f"iwa-draft:{user['id']}".encode(), hashlib.sha256).hexdigest()[:32]
+
+
 @bp.app_context_processor
 def inject_globals():
     settings = ctx().settings
     return {
         "iwa_user": g.get("user"),
+        "iwa_user_key": _draft_key(g.get("user")),
         "iwa_csrf": session.get("csrf", ""),
         "iwa_demo": settings.is_demo,
         "iwa_vision": settings.vision_enabled,
@@ -136,6 +148,9 @@ def security_headers(response):
         "default-src 'self'; img-src 'self' blob: data:; style-src 'self'; script-src 'self'; "
         "object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
     )
+    if response.mimetype == "text/html":
+        # Pages show essays: never let the browser cache or restore them after logout.
+        response.headers["Cache-Control"] = "no-store"
     return response
 
 
@@ -146,8 +161,19 @@ def security_headers(response):
 
 @bp.get("/healthz")
 def healthz():
-    settings = ctx().settings
-    return _json({"ok": True, "provider": settings.llm_provider, "demo": settings.is_demo})
+    app_ctx = ctx()
+    # pid/ppid let start.sh confirm the answer comes from the process it just launched
+    # (ppid covers a gunicorn worker whose master is the launched process).
+    return _json(
+        {
+            "ok": True,
+            "provider": app_ctx.settings.llm_provider,
+            "demo": app_ctx.settings.is_demo,
+            "pid": os.getpid(),
+            "ppid": os.getppid(),
+            "instance": app_ctx.lock.instance_id,
+        }
+    )
 
 
 @bp.get("/login")
@@ -292,6 +318,8 @@ def api_create_submission():
             )
         except uploads.UploadError as exc:
             return _json({"ok": False, "error": exc.code, "fields": {"image": exc.message}}, 422)
+        finally:
+            image_file.close()
 
     public_id = secrets.token_urlsafe(9)
     created = app_ctx.storage.create_submission(
@@ -322,9 +350,10 @@ def api_create_submission():
     )
 
 
-def _generation_view(generation: dict | None) -> dict | None:
+def _generation_view(generation: dict | None, submission: dict) -> dict | None:
     if not generation:
         return None
+    ready = generation["status"] == "ready" and generation.get("result")
     view = {
         "id": generation["id"],
         "status": generation["status"],
@@ -334,6 +363,12 @@ def _generation_view(generation: dict | None) -> dict | None:
         "created_at": generation["created_at"],
         "finished_at": generation.get("finished_at"),
         "latency_ms": generation.get("latency_ms"),
+        # Copy texts are built here so they always carry the page's limits/disclaimers.
+        "copy": (
+            copytext.copies_for(generation["kind"], generation["result"], generation, submission)
+            if ready
+            else None
+        ),
     }
     if generation["status"] == "failed":
         code = generation.get("error_code") or "failed"
@@ -368,7 +403,9 @@ def _submission_view(submission: dict) -> dict:
             if submission.get("image_path")
             else None
         ),
-        "generations": {kind: _generation_view(generations.get(kind)) for kind in KINDS},
+        "generations": {
+            kind: _generation_view(generations.get(kind), submission) for kind in KINDS
+        },
     }
 
 
@@ -385,9 +422,10 @@ def api_list_submissions():
     for row in rows[:20]:
         gens = row["generations"]
         evaluation = gens.get("evaluate")
-        band = None
+        band = band_state = None
         if evaluation and evaluation["status"] == "ready" and evaluation.get("result"):
             band = evaluation["result"].get("overall_band")
+            band_state = "scored" if band is not None else "not_assessable"
         items.append(
             {
                 "cursor": row["id"],
@@ -405,6 +443,7 @@ def api_list_submissions():
                 "has_image": bool(row["has_image"]),
                 "created_at": row["created_at"],
                 "overall_band": band,
+                "overall_state": band_state,
                 "statuses": {kind: (gens.get(kind) or {}).get("status") for kind in KINDS},
             }
         )

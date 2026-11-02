@@ -167,13 +167,38 @@
   }
 
   // ------------------------------------------------------------------ pages
+  // Per-user draft store (see draft.js). Null when signed out or storage is unavailable.
+  function storage() {
+    try { return window.localStorage; } catch (e) { return null; }
+  }
+  function drafts() {
+    var store = storage();
+    var userKey = body.getAttribute('data-user-key') || '';
+    return store && window.IWADraft && userKey ? window.IWADraft.create(store, userKey) : null;
+  }
+  function initDraftHygiene() {
+    var store = storage();
+    if (!store || !window.IWADraft) return;
+    window.IWADraft.purgeLegacy(store);  // pre-fix global draft key
+    var userKey = body.getAttribute('data-user-key') || '';
+    if (userKey) window.IWADraft.purgeOthers(store, userKey);  // another account used this browser
+  }
+
   function initLogout() {
     var button = document.getElementById('logoutBtn');
     if (!button) return;
     button.addEventListener('click', function () {
-      api('POST', 'api/logout', {}).then(function () { window.location.href = url('login'); });
+      var store = drafts();
+      if (store && store.hasContent() && !window.confirm('退出后，本机保存的未提交草稿会被清除。确定退出吗？')) return;
+      if (store) store.clear();
+      api('POST', 'api/logout', {}).then(function () { window.location.replace(url('login')); });
     });
   }
+
+  // A page restored from the back/forward cache after logout must not show stale content.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted && body.getAttribute('data-page') !== 'login') window.location.reload();
+  });
 
   function initLogin() {
     var form = document.getElementById('loginForm');
@@ -211,7 +236,7 @@
     var dropzone = document.getElementById('dropzone');
     var formError = document.getElementById('formError');
     var submitBtn = document.getElementById('submitBtn');
-    var DRAFT_KEY = 'iwa:new-draft';
+    var draftStore = drafts();
 
     function taskType() { return form.querySelector('input[name=task_type]:checked').value; }
     function refreshWords() {
@@ -225,22 +250,19 @@
       refreshWords();
     }
     function saveDraft() {
-      try {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify({
-          task_type: taskType(), prompt_text: form.prompt_text.value, essay_text: essay.value, target_band: form.target_band.value
-        }));
-      } catch (e) { /* storage unavailable */ }
+      if (!draftStore) return;
+      draftStore.save({
+        task_type: taskType(), prompt_text: form.prompt_text.value, essay_text: essay.value, target_band: form.target_band.value
+      });
     }
     function restoreDraft() {
-      try {
-        var draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
-        if (!draft) return;
-        var radio = form.querySelector('input[name=task_type][value="' + draft.task_type + '"]');
-        if (radio) radio.checked = true;
-        form.prompt_text.value = draft.prompt_text || '';
-        essay.value = draft.essay_text || '';
-        if (draft.target_band) form.target_band.value = draft.target_band;
-      } catch (e) { /* ignore */ }
+      var draft = draftStore && draftStore.load();
+      if (!draft) return;
+      var radio = form.querySelector('input[name=task_type][value="' + draft.task_type + '"]');
+      if (radio) radio.checked = true;
+      form.prompt_text.value = draft.prompt_text || '';
+      essay.value = draft.essay_text || '';
+      if (draft.target_band) form.target_band.value = draft.target_band;
     }
     function showImage(file) {
       if (!file) { preview.hidden = true; hint.hidden = false; clearBtn.hidden = true; return; }
@@ -271,7 +293,7 @@
       submitBtn.textContent = '提交中…';
       api('POST', 'api/submissions', data).then(function (result) {
         if (result.ok) {
-          try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* ignore */ }
+          if (draftStore) draftStore.clear();
           window.location.href = result.url;
           return;
         }
@@ -417,70 +439,80 @@
       panel.appendChild(provenance(g));
     }
 
-    // -- evaluation
-    function evaluationText(r) {
-      var lines = ['【AI 原稿评价】预估总分 Band ' + band(r.overall_band) + '（四项平均，仅供参考）', ''];
-      r.criteria.forEach(function (c) {
-        lines.push(c.label + '（' + c.short + '）Band ' + band(c.band));
-        if (c.summary) lines.push(c.summary);
-        c.strengths.forEach(function (s) { lines.push('  ✓ ' + s); });
-        c.issues.forEach(function (i) {
-          lines.push('  ✗ ' + (i.quote ? '“' + i.quote + '” ' : '') + i.comment + (i.suggestion ? ' → ' + i.suggestion : ''));
-        });
-        lines.push('');
+    // Copy texts come from the server so they always carry the result's limits.
+    function copyButton(label, text, toastLabel) {
+      return el('button', {
+        type: 'button', class: 'btn btn--ghost btn--sm', text: label, disabled: !text,
+        onclick: function () { copyText(text, toastLabel); }
       });
-      if (r.overall_comment) lines.push('总评：' + r.overall_comment, '');
-      if (r.priorities.length) {
-        lines.push('提升重点：');
-        r.priorities.forEach(function (p, index) { lines.push((index + 1) + '. ' + p); });
-      }
-      return lines.join('\n').trim();
     }
 
+    function quoteButton(entry) {
+      if (!entry.quote) return null;
+      return el('button', {
+        type: 'button', class: 'issue__quote' + (entry.quote_found ? '' : ' is-missing'),
+        title: entry.quote_found ? '在左侧原文中标出' : '',
+        onclick: function () {
+          if (!entry.quote_found) return;
+          state.highlight = entry.quote;
+          renderSource();
+          var mark = document.querySelector('#originalEssay mark');
+          if (mark) mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, ['“' + entry.quote + '”', entry.quote_found ? null : el('span', { class: 'issue__flag', text: '（未在原文中找到，不作为评分依据）' })]);
+    }
+
+    // -- evaluation
     function renderEvaluation(panel, g) {
       var r = g.result;
+      var copies = g.copy || {};
+      var notAssessable = r.overall_band === null || r.overall_band === undefined;
       panel.appendChild(el('div', { class: 'panel-actions' }, [
-        el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制评价', onclick: function () { copyText(evaluationText(r), '评价'); } }),
+        copyButton('复制评价', copies.evaluation, '评价'),
         el('span', { class: 'spacer' }),
         regenButton('evaluate')
       ]));
-      panel.appendChild(el('div', { class: 'score-hero' }, [
-        el('div', {}, [el('div', { class: 'score-hero__band', text: band(r.overall_band) }), el('div', { class: 'score-hero__label', text: 'AI 预估总分 · 四项平均' })]),
+      panel.appendChild(el('div', { class: 'score-hero' + (notAssessable ? ' is-limited' : '') }, [
+        el('div', {}, [
+          el('div', { class: 'score-hero__band' + (notAssessable ? ' is-text' : ''), text: notAssessable ? '不可评' : band(r.overall_band) }),
+          el('div', { class: 'score-hero__label', text: notAssessable ? '总分不可评 · 只保留有依据的语言反馈' : 'AI 预估总分 · 四项平均 · 仅供参考' })
+        ]),
         el('div', { class: 'score-chips' }, r.criteria.map(function (c) {
-          return el('div', { class: 'score-chip', title: c.label }, [el('b', { text: band(c.band) }), el('span', { text: c.short })]);
+          var off = c.band === null || c.band === undefined;
+          return el('div', { class: 'score-chip' + (off ? ' is-off' : ''), title: off ? (c.reason || '不可评') : c.label }, [
+            el('b', { text: off ? '—' : band(c.band) }),
+            el('span', { text: c.short + (off ? ' 不可评' : '') })
+          ]);
         }))
       ]));
-      r.warnings.forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
+      (r.warnings || []).forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
       if (r.overall_comment) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: '总评' }), el('p', { text: r.overall_comment })]));
-      if (r.priorities.length) {
+      if (r.priorities && r.priorities.length) {
         panel.appendChild(el('div', { class: 'block' }, [
           el('h3', { text: '下一步提升重点' }),
           el('ol', { class: 'priorities' }, r.priorities.map(function (p) { return el('li', { text: p }); }))
         ]));
       }
       r.criteria.forEach(function (c) {
-        var card = el('article', { class: 'criterion' }, [
-          el('div', { class: 'criterion__head' }, [el('h3', { text: c.label + '（' + c.short + '）' }), el('span', { class: 'criterion__band', text: 'Band ' + band(c.band) })]),
-          c.summary ? el('p', { text: c.summary }) : null,
-          c.strengths.length ? el('ul', { class: 'strengths' }, c.strengths.map(function (s) { return el('li', { text: s }); })) : null
+        var off = c.band === null || c.band === undefined;
+        var card = el('article', { class: 'criterion' + (off ? ' is-off' : '') }, [
+          el('div', { class: 'criterion__head' }, [
+            el('h3', { text: c.label + '（' + c.short + '）' }),
+            el('span', { class: 'criterion__band', text: off ? '不可评' : 'Band ' + band(c.band) })
+          ]),
+          off ? el('p', { class: 'criterion__reason', text: c.reason || '缺少评分依据，不评分。' }) : null,
+          c.summary ? el('p', {}, [el('strong', { text: '评分理由：' }), c.summary]) : null
         ]);
-        c.issues.forEach(function (issue) {
-          var quote = null;
-          if (issue.quote) {
-            quote = el('button', {
-              type: 'button', class: 'issue__quote' + (issue.quote_found ? '' : ' is-missing'),
-              title: issue.quote_found ? '在左侧原文中标出' : '',
-              onclick: function () {
-                if (!issue.quote_found) return;
-                state.highlight = issue.quote;
-                renderSource();
-                var mark = document.querySelector('#originalEssay mark');
-                if (mark) mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            }, ['“' + issue.quote + '”', issue.quote_found ? null : el('span', { class: 'issue__flag', text: '（未在原文中精确定位）' })]);
-          }
+        var strengths = c.strengths || [];
+        if (strengths.length) {
+          card.appendChild(el('ul', { class: 'strengths' }, strengths.map(function (s) {
+            if (typeof s === 'string') return el('li', { text: s });  // results stored before evidence rules
+            return el('li', {}, [quoteButton(s), s.comment ? el('span', { class: 'strength__comment', text: ' ' + s.comment }) : null]);
+          })));
+        }
+        (c.issues || []).forEach(function (issue) {
           card.appendChild(el('div', { class: 'issue' }, [
-            quote,
+            quoteButton(issue),
             issue.comment ? el('p', { class: 'issue__comment', text: issue.comment }) : null,
             issue.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + issue.suggestion }) : null
           ]));
@@ -490,23 +522,12 @@
     }
 
     // -- refine
-    function changeListText(r) {
-      var lines = ['【AI 逐句精修】共 ' + r.sentences.length + ' 句，修改 ' + r.changed_count + ' 句', ''];
-      r.sentences.filter(function (s) { return s.changed; }).forEach(function (s) {
-        lines.push('第 ' + (s.i + 1) + ' 句');
-        lines.push('原句：' + s.original);
-        lines.push('改句：' + s.revised);
-        if (s.explanation) lines.push('说明：' + s.explanation);
-        lines.push('');
-      });
-      return lines.join('\n').trim();
-    }
-
     function renderRefine(panel, g) {
       var r = g.result;
+      var copies = g.copy || {};
       panel.appendChild(el('div', { class: 'panel-actions' }, [
-        el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制精修全文', onclick: function () { copyText(r.refined_essay, '精修全文'); } }),
-        el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制修改清单', onclick: function () { copyText(changeListText(r), '修改清单'); } }),
+        copyButton('复制精修全文', copies.full, '精修全文'),
+        copyButton('复制修改清单', copies.changes, '修改清单'),
         el('span', { class: 'spacer' }),
         regenButton('refine')
       ]));
@@ -517,6 +538,7 @@
         el('span', { class: 'pill', text: '共 ' + r.sentences.length + ' 句 · 修改 ' + r.changed_count + ' 句' }),
         el('label', { class: 'toggle' }, [toggle, '只看有修改的句子'])
       ]));
+      (r.warnings || []).forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
       if (r.missing_count) panel.appendChild(el('p', { class: 'notice notice--warn', text: '有 ' + r.missing_count + ' 句 AI 没有返回结果，已按原句保留。' }));
       if (r.summary) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: '主要问题' }), el('p', { text: r.summary })]));
       var list = el('div', { class: 'sentences' });
@@ -530,7 +552,7 @@
             s.changed && s.tags.length ? el('div', { class: 'tags' }, s.tags.map(function (t) { return el('span', { class: 'tag', text: TAG_LABELS[t] || t }); })) : null,
             s.explanation ? el('p', { class: 'sentence__explain', text: s.explanation }) : null
           ]),
-          s.changed ? el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制', onclick: function () { copyText(s.revised, '改句'); } }) : el('span')
+          s.changed ? el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制', title: '只复制这一句改句', onclick: function () { copyText(s.revised, '改句'); } }) : el('span')
         ]));
       });
       panel.appendChild(list);
@@ -543,18 +565,10 @@
     // -- rewrite
     function renderRewrite(panel, g) {
       var r = g.result;
-      var withNotes = function () {
-        var lines = ['【AI 整篇改写】目标 Band ' + band(r.target_band) + ' · ' + r.word_count + ' 词', '', r.essay, ''];
-        if (r.key_changes.length) {
-          lines.push('关键改动：');
-          r.key_changes.forEach(function (c, index) { lines.push((index + 1) + '. ' + c); });
-        }
-        if (r.band_rationale) lines.push('', '分数说明：' + r.band_rationale);
-        return lines.join('\n').trim();
-      };
+      var copies = g.copy || {};
       panel.appendChild(el('div', { class: 'panel-actions' }, [
-        el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制改写全文', onclick: function () { copyText(r.essay, '改写全文'); } }),
-        el('button', { type: 'button', class: 'btn btn--ghost btn--sm', text: '复制改写+说明', onclick: function () { copyText(withNotes(), '改写和说明'); } }),
+        copyButton('复制改写全文', copies.essay, '改写全文'),
+        copyButton('复制改写+说明', copies.with_notes, '改写和说明'),
         el('span', { class: 'spacer' }),
         regenButton('rewrite')
       ]));
@@ -562,7 +576,7 @@
         el('span', { class: 'pill', text: '目标 Band ' + band(r.target_band) }),
         el('span', { class: 'pill', text: r.word_count + ' 词' })
       ]));
-      r.warnings.forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
+      (r.warnings || []).forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
       var essayBox = essayNode(r.essay);
       essayBox.classList.add('rewrite-essay');
       panel.appendChild(essayBox);
@@ -604,7 +618,9 @@
     function item(entry) {
       var bandBox = entry.overall_band !== null && entry.overall_band !== undefined
         ? el('div', { class: 'history-item__band' }, [el('span', {}, [band(entry.overall_band), el('small', { text: '预估' })])])
-        : el('div', { class: 'history-item__band is-pending', text: statusText(entry.statuses) || '—' });
+        : entry.overall_state === 'not_assessable'
+          ? el('div', { class: 'history-item__band is-pending', title: '有评分项缺少依据，总分不可评', text: '不可评' })
+          : el('div', { class: 'history-item__band is-pending', text: statusText(entry.statuses) || '—' });
       var node = el('article', { class: 'card history-item' }, [
         bandBox,
         el('div', {}, [
@@ -659,6 +675,7 @@
     load();
   }
 
+  initDraftHygiene();
   initLogout();
   var page = body.getAttribute('data-page');
   if (page === 'login') initLogin();

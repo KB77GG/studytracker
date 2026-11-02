@@ -18,43 +18,60 @@ def submission(**overrides):
     return value
 
 
-def criterion(band, quote="i dont agree"):
+REASON = "论点清楚但展开不足，例子与观点之间缺少解释。"
+
+
+def criterion(band, quote="i dont agree", strength_quote="Governments should invest"):
     return {
         "band": band,
-        "summary": "说明",
-        "strengths": ["a", "b"],
-        "issues": [{"quote": quote, "comment": "c", "suggestion": "s"}],
+        "summary": REASON,
+        "strengths": [{"quote": strength_quote, "comment": "立场明确"}],
+        "issues": [{"quote": quote, "comment": "缺少撇号", "suggestion": "I don't agree"}],
+    }
+
+
+def evaluation(**bands):
+    values = {"task": 6, "coherence": 6, "lexical": 6.5, "grammar": 6.5}
+    values.update(bands)
+    return {
+        "criteria": {key: criterion(value) for key, value in values.items()},
+        "overall_comment": "整体结构完整，但语言错误较多，影响清晰度。",
+        "priorities": ["p1", "p2", {"bad": 1}],
+        "overall_band": 9,  # must be ignored
     }
 
 
 class EvaluationTest(unittest.TestCase):
     def raw(self, **bands):
-        values = {"task": 6, "coherence": 6, "lexical": 6.5, "grammar": 6.5}
-        values.update(bands)
-        return {
-            "criteria": {key: criterion(value) for key, value in values.items()},
-            "overall_comment": "总评",
-            "priorities": ["p1", "p2", {"bad": 1}],
-            "overall_band": 9,  # must be ignored
-        }
+        return evaluation(**bands)
 
     def test_overall_is_computed_not_trusted(self):
         result = review.normalize_evaluation(self.raw(), submission())
         self.assertEqual(result["overall_band"], 6.5)
+        self.assertEqual(result["overall_state"], "scored")
         self.assertEqual([c["short"] for c in result["criteria"]], ["TR", "CC", "LR", "GRA"])
         self.assertEqual(result["priorities"], ["p1", "p2"])
+        self.assertTrue(result["criteria"][0]["strengths"][0]["quote_found"])
 
-    def test_task1_labels(self):
-        result = review.normalize_evaluation(self.raw(), submission(task_type="task1"))
+    def test_task1_labels_with_a_readable_chart(self):
+        result = review.normalize_evaluation(
+            self.raw(), submission(task_type="task1", image_status="ready")
+        )
         self.assertEqual(result["criteria"][0]["short"], "TA")
         self.assertEqual(result["criteria"][0]["label"], "Task Achievement")
+        self.assertEqual(result["criteria"][0]["state"], "scored")
+        self.assertIsNotNone(result["overall_band"])
 
-    def test_quote_verification(self):
+    def test_unverifiable_quote_is_flagged_but_does_not_count(self):
         raw = self.raw()
-        raw["criteria"]["lexical"] = criterion(6, quote="this sentence is invented")
+        raw["criteria"]["lexical"]["issues"].append(
+            {"quote": "this sentence is invented", "comment": "虚构"}
+        )
         result = review.normalize_evaluation(raw, submission())
-        self.assertTrue(result["criteria"][0]["issues"][0]["quote_found"])
-        self.assertFalse(result["criteria"][2]["issues"][0]["quote_found"])
+        issues = result["criteria"][2]["issues"]
+        self.assertTrue(issues[0]["quote_found"])
+        self.assertFalse(issues[1]["quote_found"])
+        self.assertTrue(any("1 条引文" in w for w in result["warnings"]))
 
     def test_missing_or_invalid_criterion_is_rejected(self):
         raw = self.raw()
@@ -66,12 +83,91 @@ class EvaluationTest(unittest.TestCase):
         with self.assertRaises(review.InvalidOutput):
             review.normalize_evaluation({"criteria": []}, submission())
 
-    def test_word_count_and_unread_image_warnings(self):
-        result = review.normalize_evaluation(
-            self.raw(), submission(task_type="task1", image_status="skipped")
+    # -- reviewer repro: completeness and evidence ------------------------------------
+
+    def test_four_nines_without_any_reason_are_rejected(self):
+        raw = {
+            "criteria": {key: {"band": 9} for key in essay.CRITERIA},
+            "overall_comment": "",
+            "priorities": [],
+        }
+        with self.assertRaises(review.InvalidOutput):
+            review.normalize_evaluation(raw, submission())
+
+    def test_reason_without_verifiable_evidence_is_rejected(self):
+        raw = self.raw()
+        raw["criteria"]["grammar"] = {
+            "band": 9,
+            "summary": REASON,
+            "strengths": [{"quote": "flawless complex structures", "comment": "完美"}],
+            "issues": [{"quote": "a sentence that is not in the essay", "comment": "x"}],
+        }
+        with self.assertRaisesRegex(review.InvalidOutput, "GRA"):
+            review.normalize_evaluation(raw, submission())
+
+    def test_bare_strength_claims_are_not_evidence(self):
+        raw = self.raw()
+        raw["criteria"]["coherence"] = {
+            "band": 9,
+            "summary": REASON,
+            "strengths": ["衔接非常自然", "段落完美"],
+            "issues": [],
+        }
+        with self.assertRaisesRegex(review.InvalidOutput, "CC"):
+            review.normalize_evaluation(raw, submission())
+
+    def test_too_short_reason_is_rejected(self):
+        raw = self.raw()
+        raw["criteria"]["lexical"]["summary"] = "很好"
+        with self.assertRaisesRegex(review.InvalidOutput, "LR"):
+            review.normalize_evaluation(raw, submission())
+
+    def test_overall_comment_and_priorities_are_required(self):
+        raw = self.raw()
+        raw["overall_comment"] = " "
+        with self.assertRaises(review.InvalidOutput):
+            review.normalize_evaluation(raw, submission())
+        raw = self.raw()
+        raw["priorities"] = []
+        with self.assertRaises(review.InvalidOutput):
+            review.normalize_evaluation(raw, submission())
+
+    # -- reviewer repro: Task 1 without a readable chart ------------------------------
+
+    def test_task1_without_readable_chart_has_no_ta_and_no_overall(self):
+        for status in ("none", "skipped", "failed", "pending"):
+            with self.subTest(status=status):
+                raw = self.raw(task=9)  # the model scores TA anyway, with invented data
+                raw["criteria"]["task"]["summary"] = "数据完全准确，覆盖所有关键特征。"
+                result = review.normalize_evaluation(
+                    raw, submission(task_type="task1", image_status=status)
+                )
+                ta = result["criteria"][0]
+                self.assertEqual(ta["state"], "not_assessable")
+                self.assertIsNone(ta["band"])
+                self.assertEqual((ta["summary"], ta["strengths"], ta["issues"]), ("", [], []))
+                self.assertIn(review.TA_UNASSESSABLE_REASONS[status], ta["reason"])
+                self.assertIsNone(result["overall_band"])
+                self.assertEqual(result["overall_state"], "not_assessable")
+                self.assertEqual([c["state"] for c in result["criteria"][1:]], ["scored"] * 3)
+                self.assertTrue(any("不给总分" in w for w in result["warnings"]))
+
+    def test_task1_model_may_return_null_task(self):
+        raw = self.raw()
+        raw["criteria"]["task"] = None
+        result = review.normalize_evaluation(raw, submission(task_type="task1"))
+        self.assertIsNone(result["overall_band"])
+
+    def test_task1_rewrite_warns_that_data_is_unverified(self):
+        body = " ".join(["word"] * 160)
+        result = review.normalize_rewrite(
+            {"essay": body}, submission(task_type="task1", image_status="skipped")
         )
-        self.assertEqual(len(result["warnings"]), 2)
-        self.assertIn("150", result["warnings"][0])
+        self.assertTrue(any("没有与题图核对" in w for w in result["warnings"]))
+        ready = review.normalize_rewrite(
+            {"essay": body}, submission(task_type="task1", image_status="ready")
+        )
+        self.assertFalse(any("题图" in w for w in ready["warnings"]))
 
 
 class RefinementTest(unittest.TestCase):

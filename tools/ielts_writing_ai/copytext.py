@@ -1,0 +1,141 @@
+"""Plain-text versions of results for the copy buttons.
+
+Built on the server (not in the browser) so that every copied text carries the
+same limits the page shows: AI-generated, not an official score, plus every
+warning (missing chart data, unverifiable quotes, short rewrite, ...).
+"""
+
+from __future__ import annotations
+
+DISCLAIMER = "AI 生成，仅供学习参考，不是正式成绩"
+
+
+def _band(value) -> str:
+    return "—" if value is None else f"{float(value):.1f}"
+
+
+def _provenance(generation: dict) -> str:
+    parts = []
+    if generation.get("model"):
+        parts.append(f"模型 {generation['model']}")
+    if generation.get("prompt_version"):
+        parts.append(f"提示词 {generation['prompt_version']}")
+    return "——" + " · ".join(parts + [DISCLAIMER])
+
+
+def _warning_lines(warnings) -> list[str]:
+    warnings = [w for w in (warnings or []) if w]
+    if not warnings:
+        return []
+    return ["限制提示："] + [f"- {w}" for w in warnings]
+
+
+def _evidence_line(entry, mark: str) -> str:
+    if isinstance(entry, str):  # results stored before evidence was required
+        return f"  {mark} {entry}（未附原文引文）"
+    quote = entry.get("quote") or ""
+    text = ""
+    if quote:
+        text = f"“{quote}”"
+        if not entry.get("quote_found"):
+            text += "（未在原文中找到，不作为评分依据）"
+        text += " "
+    elif mark == "✓":
+        text = "（未附原文引文）"
+    text += entry.get("comment") or ""
+    if entry.get("suggestion"):
+        text += f" → 建议：{entry['suggestion']}"
+    return f"  {mark} {text}".rstrip()
+
+
+def evaluation_text(result: dict, generation: dict) -> str:
+    lines = [f"【AI 原稿评价】{DISCLAIMER}"]
+    overall = result.get("overall_band")
+    if overall is not None:
+        lines.append(f"预估总分：Band {_band(overall)}（四项平均，按 0.5 就近进位）")
+    else:
+        lines.append("总分：不可评（有评分项无法评分，见下方说明）")
+    lines += _warning_lines(result.get("warnings"))
+    lines.append("")
+    for criterion in result.get("criteria") or []:
+        head = f"{criterion.get('label')}（{criterion.get('short')}）"
+        if criterion.get("state") == "not_assessable" or criterion.get("band") is None:
+            lines += [f"{head}：不可评。{criterion.get('reason') or ''}".rstrip(), ""]
+            continue
+        lines.append(f"{head} Band {_band(criterion.get('band'))}")
+        if criterion.get("summary"):
+            lines.append(f"理由：{criterion['summary']}")
+        lines += [_evidence_line(s, "✓") for s in criterion.get("strengths") or []]
+        lines += [_evidence_line(i, "✗") for i in criterion.get("issues") or []]
+        lines.append("")
+    if result.get("overall_comment"):
+        lines += [f"总评：{result['overall_comment']}", ""]
+    priorities = result.get("priorities") or []
+    if priorities:
+        lines.append("提升重点：")
+        lines += [f"{n}. {p}" for n, p in enumerate(priorities, 1)]
+        lines.append("")
+    lines.append(_provenance(generation))
+    return "\n".join(lines).strip()
+
+
+def _refine_limits(result: dict) -> list[str]:
+    limits = list(result.get("warnings") or [])
+    if result.get("missing_count"):
+        limits.append(f"有 {result['missing_count']} 句 AI 没有返回结果，已保留原句。")
+    return limits
+
+
+def refine_texts(result: dict, generation: dict, target_band) -> dict:
+    limits = _refine_limits(result)
+    full = [
+        result.get("refined_essay") or "",
+        "",
+        f"——以上为 AI 逐句精修稿（目标 Band {_band(target_band)}），{DISCLAIMER}",
+    ] + _warning_lines(limits)
+    sentences = result.get("sentences") or []
+    changes = [
+        f"【AI 逐句精修】{DISCLAIMER} · 共 {len(sentences)} 句，"
+        f"修改 {result.get('changed_count', 0)} 句"
+    ] + _warning_lines(limits)
+    changes.append("")
+    for sentence in sentences:
+        if not sentence.get("changed"):
+            continue
+        changes.append(f"第 {sentence['i'] + 1} 句")
+        changes.append(f"原句：{sentence['original']}")
+        changes.append(f"改句：{sentence['revised']}")
+        if sentence.get("explanation"):
+            changes.append(f"说明：{sentence['explanation']}")
+        changes.append("")
+    changes.append(_provenance(generation))
+    return {"full": "\n".join(full).strip(), "changes": "\n".join(changes).strip()}
+
+
+def rewrite_texts(result: dict, generation: dict) -> dict:
+    target = _band(result.get("target_band"))
+    essay = [
+        result.get("essay") or "",
+        "",
+        f"——以上为 AI 改写范文（目标 Band {target}），{DISCLAIMER}",
+    ] + _warning_lines(result.get("warnings"))
+    notes = [
+        f"【AI 整篇改写】{DISCLAIMER} · 目标 Band {target} · {result.get('word_count', 0)} 词"
+    ] + _warning_lines(result.get("warnings"))
+    notes += ["", result.get("essay") or "", ""]
+    if result.get("key_changes"):
+        notes.append("关键改动：")
+        notes += [f"{n}. {c}" for n, c in enumerate(result["key_changes"], 1)]
+        notes.append("")
+    if result.get("band_rationale"):
+        notes += [f"分数说明：{result['band_rationale']}", ""]
+    notes.append(_provenance(generation))
+    return {"essay": "\n".join(essay).strip(), "with_notes": "\n".join(notes).strip()}
+
+
+def copies_for(kind: str, result: dict, generation: dict, submission: dict) -> dict:
+    if kind == "evaluate":
+        return {"evaluation": evaluation_text(result, generation)}
+    if kind == "refine":
+        return refine_texts(result, generation, submission.get("target_band"))
+    return rewrite_texts(result, generation)

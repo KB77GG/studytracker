@@ -118,6 +118,8 @@ class Settings:
     max_workers: int = 2
     max_upload_mb: int = 5
     job_mode: str = "thread"  # "thread" in the server, "inline" in tests
+    # Seconds to wait for the single-instance lock (covers a previous process still exiting).
+    lock_wait: float = 5.0
     extra: dict = field(default_factory=dict)
 
     def __post_init__(self):
@@ -253,6 +255,7 @@ def load_settings(
         "max_workers": _as_int(get("MAX_WORKERS"), 2, minimum=1),
         "max_upload_mb": _as_int(get("MAX_UPLOAD_MB"), 5, minimum=1),
         "job_mode": get("JOB_MODE") or "thread",
+        "lock_wait": _as_float(get("LOCK_WAIT"), 5.0),
     }
     kwargs.update(overrides)
     return Settings(**kwargs)

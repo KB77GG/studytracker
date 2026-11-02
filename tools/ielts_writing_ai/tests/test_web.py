@@ -1,13 +1,45 @@
 import io
+import json
+import re
+import shutil
+import tempfile
 import unittest
 from datetime import timedelta
 from pathlib import Path
 
-from tools.ielts_writing_ai import access
-from tools.ielts_writing_ai.llm import FakeClient
+from tools.ielts_writing_ai import access, create_app, essay
+from tools.ielts_writing_ai.instance import InstanceLocked
+from tools.ielts_writing_ai.llm import FakeClient, LLMResult
 from tools.ielts_writing_ai.storage import iso, utcnow
 
-from .helpers import PNG_BYTES, TASK2_ESSAY, AppTestCase
+from .helpers import PNG_BYTES, TASK2_ESSAY, AppTestCase, settings_for
+
+
+class UnreasonedFirstClient(FakeClient):
+    """Returns the reviewer's bad output ("four 9s, no reasons") for the first N
+    evaluation calls, then a normal demo evaluation."""
+
+    def __init__(self, bad_attempts: int):
+        super().__init__()
+        self.bad_attempts = bad_attempts
+
+    def complete(
+        self, messages, *, json_mode, max_tokens, temperature=0.2, context=None, retries=1
+    ):
+        context = context or {}
+        if context.get("kind") == "evaluate" and self.bad_attempts > 0:
+            self.bad_attempts -= 1
+            self.calls.append("evaluate")
+            body = json.dumps({"criteria": {k: {"band": 9} for k in essay.CRITERIA}})
+            return LLMResult(body, self.model, 1, {})
+        return super().complete(
+            messages,
+            json_mode=json_mode,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            context=context,
+            retries=retries,
+        )
 
 
 class AuthTest(AppTestCase):
@@ -65,6 +97,30 @@ class AuthTest(AppTestCase):
         client = self.login(code)
         response = client.post("/api/submissions", data={"task_type": "task2"})
         self.assertEqual(response.status_code, 403)
+
+    def test_draft_key_is_per_user_opaque_and_stable(self):
+        _uid_a, code_a = self.add_user("A")
+        _uid_b, code_b = self.add_user("B")
+
+        def user_key(client):
+            html = client.get("/").get_data(as_text=True)
+            return re.search(r'data-user-key="([^"]*)"', html).group(1)
+
+        key_a = user_key(self.login(code_a))
+        key_b = user_key(self.login(code_b))
+        self.assertRegex(key_a, r"^[0-9a-f]{32}$")
+        self.assertNotEqual(key_a, key_b)
+        self.assertEqual(user_key(self.login(code_a)), key_a)  # same user, new login
+        login_page = self.app.test_client().get("/login").get_data(as_text=True)
+        self.assertIn('data-user-key=""', login_page)
+
+    def test_html_pages_are_not_cached(self):
+        _uid, code = self.add_user()
+        client = self.login(code)
+        for path in ("/", "/history", "/login"):
+            response = client.get(path, follow_redirects=True)
+            self.assertEqual(response.headers["Cache-Control"], "no-store", path)
+        self.assertIn('autocomplete="off"', client.get("/").get_data(as_text=True))
 
     def test_security_headers(self):
         response = self.app.test_client().get("/login")
@@ -200,6 +256,36 @@ class QuotaAndRetryTest(AppTestCase):
         )
         self.assertEqual(self.storage.usage_today(uid), 4)
 
+    def _with_client(self, client):
+        self.client_llm = client
+        self.app = self.make_app()
+        self.storage = self.app.extensions["iwa"].storage
+        uid, code = self.add_user()
+        return uid, self.login(code)
+
+    def test_incomplete_evaluation_is_retried_once_then_accepted(self):
+        uid, client = self._with_client(UnreasonedFirstClient(bad_attempts=1))
+        public_id = self.submit(client).get_json()["public_id"]
+        evaluation = client.get(f"/api/submissions/{public_id}").get_json()["submission"][
+            "generations"
+        ]["evaluate"]
+        self.assertEqual(evaluation["status"], "ready")
+        self.assertEqual(self.client_llm.calls.count("evaluate"), 2)
+        self.assertEqual(self.storage.usage_today(uid), 3)  # the retry costs no quota
+
+    def test_repeatedly_incomplete_evaluation_fails_without_a_score(self):
+        uid, client = self._with_client(UnreasonedFirstClient(bad_attempts=5))
+        public_id = self.submit(client).get_json()["public_id"]
+        evaluation = client.get(f"/api/submissions/{public_id}").get_json()["submission"][
+            "generations"
+        ]["evaluate"]
+        self.assertEqual(evaluation["status"], "failed")
+        self.assertEqual(evaluation["error"]["code"], "invalid_output")
+        self.assertIsNone(evaluation["result"])
+        self.assertIsNone(evaluation["copy"])
+        self.assertEqual(self.client_llm.calls.count("evaluate"), 2)
+        self.assertEqual(self.storage.usage_today(uid), 3)
+
     def test_failed_generation_can_be_regenerated(self):
         self.client_llm = FakeClient(fail_kinds={"rewrite"})
         self.app = self.make_app()
@@ -249,6 +335,35 @@ class QuotaAndRetryTest(AppTestCase):
         gens = client2.get(f"/api/submissions/{public_id}").get_json()["submission"]["generations"]
         self.assertEqual(gens["evaluate"]["status"], "failed")
         self.assertEqual(gens["evaluate"]["error"]["code"], "interrupted")
+
+    def test_duplicate_start_fails_without_touching_running_work(self):
+        uid, code = self.add_user()
+        client = self.login(code)
+        public_id = self.submit(client).get_json()["public_id"]
+        sub = self.storage.get_owned_submission(public_id, uid)
+        gen_id, _ = self.storage.queue_regeneration(sub["id"], "evaluate", uid, 99)
+
+        # A second server on the same database while the first is still alive.
+        with self.assertRaises(InstanceLocked):
+            create_app(settings_for(self.tmpdir), client=FakeClient())
+        self.assertEqual(self.storage.get_generation(gen_id)["status"], "queued")
+        # The first instance keeps working normally.
+        self.assertEqual(client.get(f"/api/submissions/{public_id}").status_code, 200)
+
+        # Different data dir but the same database file is still the same instance.
+        other_dir = tempfile.mkdtemp(prefix="iwa-test-other-")
+        self.addCleanup(shutil.rmtree, other_dir, ignore_errors=True)
+        with self.assertRaises(InstanceLocked):
+            create_app(
+                settings_for(other_dir, db_path=str(self.storage.db_path)), client=FakeClient()
+            )
+        self.assertEqual(self.storage.get_generation(gen_id)["status"], "queued")
+
+    def test_lock_is_released_when_the_instance_closes(self):
+        self.app.extensions["iwa"].close()
+        app = create_app(settings_for(self.tmpdir), client=FakeClient())
+        self.addCleanup(app.extensions["iwa"].close)
+        self.assertTrue(app.extensions["iwa"].lock.held)
 
 
 class ImageTest(AppTestCase):
@@ -308,7 +423,33 @@ class ImageTest(AppTestCase):
         self.assertEqual(sub["image"]["status"], "ready")
         self.assertIn("演示", sub["image"]["description"])
         self.assertEqual(vision.calls, ["describe_image"])
-        self.assertEqual(sub["generations"]["evaluate"]["status"], "ready")
+        evaluation = sub["generations"]["evaluate"]
+        self.assertEqual(evaluation["status"], "ready")
+        # A successfully read chart is the only case where TA and the overall band exist.
+        self.assertEqual(evaluation["result"]["criteria"][0]["state"], "scored")
+        self.assertIsNotNone(evaluation["result"]["overall_band"])
+        self.assertIn("预估总分", evaluation["copy"]["evaluation"])
+
+    def test_task1_without_readable_chart_is_not_scored_end_to_end(self):
+        no_image = self.submit(
+            self.client,
+            task_type="task1",
+            prompt_text="The chart below shows household spending in three countries in 2020.",
+        ).get_json()["public_id"]
+        unread_image = self.submit_image(PNG_BYTES).get_json()["public_id"]
+        for public_id in (no_image, unread_image):
+            sub = self.client.get(f"/api/submissions/{public_id}").get_json()["submission"]
+            evaluation = sub["generations"]["evaluate"]
+            result = evaluation["result"]
+            self.assertIsNone(result["overall_band"])
+            self.assertEqual(result["criteria"][0]["state"], "not_assessable")
+            self.assertIsNone(result["criteria"][0]["band"])
+            self.assertIn("总分：不可评", evaluation["copy"]["evaluation"])
+            rewrite_copy = sub["generations"]["rewrite"]["copy"]["essay"]
+            self.assertIn("没有与题图核对", rewrite_copy)
+        items = self.client.get("/api/submissions").get_json()["items"]
+        self.assertEqual({i["overall_state"] for i in items}, {"not_assessable"})
+        self.assertEqual({i["overall_band"] for i in items}, {None})
 
     def test_image_ignored_for_task2(self):
         response = self.submit(self.client, image=(io.BytesIO(PNG_BYTES), "x.png"))

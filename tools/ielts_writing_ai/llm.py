@@ -104,6 +104,7 @@ class ChatClient:
                 with urllib.request.urlopen(request, timeout=self.timeout) as response:
                     raw = json.loads(response.read().decode("utf-8"))
             except urllib.error.HTTPError as exc:
+                exc.close()  # release the connection held by the error response
                 last_error = LLMError(f"http_{exc.code}", f"模型服务返回 HTTP {exc.code}")
                 if exc.code in self.retry_statuses and attempt < retries:
                     time.sleep(1.5 * (attempt + 1))
@@ -214,7 +215,9 @@ class FakeClient:
                 key: {
                     "band": band,
                     "summary": f"【演示】这是 {key} 维度的示例评语，未经过真实 AI 分析。",
-                    "strengths": ["【演示】示例优点：段落划分清楚。"],
+                    "strengths": [
+                        {"quote": quote, "comment": "【演示】示例优点：开头直接回应题目。"}
+                    ],
                     "issues": [
                         {
                             "quote": quote,

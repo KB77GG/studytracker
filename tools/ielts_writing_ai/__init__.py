@@ -15,6 +15,7 @@ from flask import Flask, jsonify
 
 from .access import LoginLimiter
 from .config import Settings, load_settings
+from .instance import InstanceLock
 from .jobs import JobRunner
 from .llm import build_client
 from .review import Generator
@@ -30,6 +31,12 @@ class ToolContext:
     generator: Generator
     jobs: JobRunner
     limiter: LoginLimiter
+    lock: InstanceLock
+
+    def close(self) -> None:
+        """Stop background work and release the instance lock (tests, shutdown)."""
+        self.jobs.shutdown()
+        self.lock.release()
 
 
 def create_app(settings: Settings | None = None, *, client=None, vision_client=None) -> Flask:
@@ -37,9 +44,17 @@ def create_app(settings: Settings | None = None, *, client=None, vision_client=N
     settings.validate()
     settings.ensure_dirs()
 
-    storage = Storage(settings.db_path)
-    storage.init_schema()
-    interrupted = storage.fail_interrupted()
+    # Take the single-instance lock BEFORE touching task state: a duplicate start must
+    # fail without marking the running instance's queued/running work as interrupted.
+    lock = InstanceLock(settings.db_path)
+    lock.acquire(wait_seconds=settings.lock_wait)
+    try:
+        storage = Storage(settings.db_path)
+        storage.init_schema()
+        interrupted = storage.fail_interrupted()
+    except Exception:
+        lock.release()
+        raise
 
     app = Flask(__name__, static_folder=None)
     app.config.update(
@@ -66,7 +81,7 @@ def create_app(settings: Settings | None = None, *, client=None, vision_client=N
         vision_client if vision_client is not None else build_client(settings, vision=True),
     )
     jobs = JobRunner(generator, mode=settings.job_mode, max_workers=settings.max_workers)
-    app.extensions["iwa"] = ToolContext(settings, storage, generator, jobs, LoginLimiter())
+    app.extensions["iwa"] = ToolContext(settings, storage, generator, jobs, LoginLimiter(), lock)
 
     from .web import bp
 

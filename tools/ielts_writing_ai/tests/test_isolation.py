@@ -70,8 +70,12 @@ class IsolationTest(unittest.TestCase):
 
     def test_refuses_a_database_that_has_other_tables(self):
         foreign = Path(self.tmpdir) / "other.sqlite3"
-        with sqlite3.connect(foreign) as conn:
+        conn = sqlite3.connect(foreign)
+        try:
             conn.execute("CREATE TABLE mock_exam_session (id INTEGER PRIMARY KEY)")
+            conn.commit()
+        finally:
+            conn.close()
         with self.assertRaises(ConfigError):
             create_app(settings_for(self.tmpdir, db_path=str(foreign)))
 

@@ -6,9 +6,10 @@
   <meta name="robots" content="noindex, nofollow">
   <title>{% block title %}雅思写作 AI 试用{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('iwa.static', filename='iwa.css') }}">
+  <script src="{{ url_for('iwa.static', filename='draft.js') }}" defer></script>
   <script src="{{ url_for('iwa.static', filename='iwa.js') }}" defer></script>
 </head>
-<body data-page="{{ page }}" data-csrf="{{ iwa_csrf }}" data-root="{{ url_for('iwa.new_page') }}"{% block body_attrs %}{% endblock %}>
+<body data-page="{{ page }}" data-csrf="{{ iwa_csrf }}" data-root="{{ url_for('iwa.new_page') }}" data-user-key="{{ iwa_user_key }}"{% block body_attrs %}{% endblock %}>
   <header class="topbar">
     <div class="topbar__inner">
       <a class="brand" href="{{ url_for('iwa.new_page') }}">

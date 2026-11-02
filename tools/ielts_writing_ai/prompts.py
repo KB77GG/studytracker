@@ -6,7 +6,7 @@ import json
 
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-02.1"
+PROMPT_VERSION = "iwa-2026-11-02.2"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -60,16 +60,28 @@ def _task_context(submission: dict) -> dict:
                 "visual_summary was extracted from the task image by a vision model; use it to "
                 "check data accuracy, but say so if a mismatch might come from extraction."
             )
-        elif status in {"failed", "skipped", "pending"}:
-            context["visual_note"] = (
-                "A task image was provided but could not be read. Do not invent data; treat "
-                "data accuracy as unverified and mention this in the task criterion summary."
-            )
         else:
             context["visual_note"] = (
-                "No task image was provided. Judge data accuracy only against the question text."
+                "The task visual is NOT available (no image, or it could not be read). You "
+                "cannot know the real data: never state, check or invent figures, trends or "
+                "chart features beyond what the question text itself says."
             )
     return context
+
+
+def visual_available(submission: dict) -> bool:
+    return submission["task_type"] != "task1" or submission.get("image_status") == "ready"
+
+
+def with_retry_note(messages: list, problem: str) -> list:
+    """Re-ask after a rejected output, telling the model exactly what was wrong."""
+    updated = [dict(m) for m in messages]
+    note = (
+        f"\n\nIMPORTANT: your previous answer was rejected by validation ({problem}). "
+        "Return the COMPLETE JSON again, following the schema and evidence rules exactly."
+    )
+    updated[-1]["content"] = str(updated[-1]["content"]) + note
+    return updated
 
 
 def _numbered(sentences: list[essay_lib.Sentence]) -> list[dict]:
@@ -78,22 +90,31 @@ def _numbered(sentences: list[essay_lib.Sentence]) -> list[dict]:
 
 def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tuple[list, dict]:
     task_type = submission["task_type"]
-    system = " ".join(
-        [
-            EXAMINER_ROLE,
-            "Assess the ORIGINAL essay exactly as written.",
-            DESCRIPTOR_NOTES[task_type] + COMMON_DESCRIPTORS,
-            CALIBRATION,
-            "For every issue, 'quote' must be copied verbatim from the essay (a short span, "
-            "max 25 words) so it can be located; never paraphrase inside 'quote'.",
-            'Output schema: {"criteria": {"task": C, "coherence": C, "lexical": C, '
-            '"grammar": C}, "overall_comment": str, "priorities": [str, ...3-5]} where C = '
-            '{"band": number, "summary": str (2-4 sentences, why this band), '
-            '"strengths": [str, ...1-3], "issues": [{"quote": str, "comment": str, '
-            '"suggestion": str}, ...1-4]}. Do not output an overall band; it is computed '
-            "from the four criteria.",
-        ]
-    )
+    visual = visual_available(submission)
+    rules = [
+        EXAMINER_ROLE,
+        "Assess the ORIGINAL essay exactly as written.",
+        DESCRIPTOR_NOTES[task_type] + COMMON_DESCRIPTORS,
+        CALIBRATION,
+        "Evidence rules: every band must be justified. 'summary' explains why this band "
+        "(2-4 sentences). Every strength and every issue carries a 'quote' copied VERBATIM "
+        "from the essay (a short span, max 25 words) so it can be located automatically; "
+        "never paraphrase, translate or correct inside 'quote'. A criterion with no "
+        "verifiable quote will be rejected.",
+        'Output schema: {"criteria": {"task": C, "coherence": C, "lexical": C, '
+        '"grammar": C}, "overall_comment": str, "priorities": [str, ...3-5]} where C = '
+        '{"band": number, "summary": str, "strengths": [{"quote": str, "comment": str}, '
+        '...1-3], "issues": [{"quote": str, "comment": str, "suggestion": str}, ...1-4]}. '
+        "Do not output an overall band; it is computed from the criteria.",
+    ]
+    if not visual:
+        rules.append(
+            "The task visual is unavailable, so Task Achievement CANNOT be assessed: set "
+            '"task": null. Assess only coherence, lexical and grammar from the text itself; '
+            "overall_comment and priorities must address language and organisation only, "
+            "never data accuracy or coverage of the chart."
+        )
+    system = " ".join(rules)
     payload = {**_task_context(submission), "essay": submission["essay_text"]}
     user = "Evaluate this IELTS essay.\n" + json.dumps(payload, ensure_ascii=False, indent=1)
     context = {
@@ -150,7 +171,13 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
             f"academic English appropriate to Band {target:g} (not artificially ornate). "
             f"Length: {minimum}-{upper} words. One paragraph per line, separated by a blank line.",
             (
-                "Task 1: include an overview and accurate key figures; no opinion."
+                (
+                    "Task 1: include an overview and accurate key figures; no opinion."
+                    if visual_available(submission)
+                    else "Task 1: include an overview; no opinion. The visual is unavailable: use "
+                    "ONLY figures already stated in the student's essay or the question, never add "
+                    "or change data."
+                )
                 if task_type == "task1"
                 else "Task 2: answer every part of the question with a clear position."
             ),

@@ -56,65 +56,145 @@ def _text_list(value, *, limit_items: int, limit_chars: int = TEXT_LIMIT) -> lis
 # ---------------------------------------------------------------------------
 
 
+MIN_REASON_CHARS = 12  # a criterion's "why this band" must be an actual sentence
+
+# Why Task 1 Task Achievement cannot be judged, keyed by image_status.
+TA_UNASSESSABLE_REASONS = {
+    "none": "未上传题图",
+    "skipped": "未配置识图模型",
+    "failed": "题图识别失败",
+    "pending": "题图尚未识别完成",
+}
+
+
+# Task 1 TA needs the chart data; only a successfully read image provides it.
+task_criterion_assessable = prompts.visual_available
+
+
+def ta_unassessable_reason(submission: dict) -> str:
+    return TA_UNASSESSABLE_REASONS.get(submission.get("image_status") or "none", "题图不可用")
+
+
+def _meaningful(text: str) -> bool:
+    return len("".join(text.split())) >= MIN_REASON_CHARS
+
+
+def _evidence_items(value, essay: str, *, limit: int, with_suggestion: bool) -> list[dict]:
+    """Normalise strengths/issues into {quote, quote_found, comment[, suggestion]}."""
+    items = []
+    for raw in value if isinstance(value, list) else []:
+        if isinstance(raw, str):  # a bare claim with no quote: shown, but not evidence
+            raw = {"comment": raw}
+        if not isinstance(raw, dict):
+            continue
+        quote = _text(raw.get("quote"), 300)
+        comment = _text(raw.get("comment"))
+        if not (quote or comment):
+            continue
+        item = {
+            "quote": quote,
+            "quote_found": bool(quote) and essay_lib.contains_quote(essay, quote),
+            "comment": comment,
+        }
+        if with_suggestion:
+            item["suggestion"] = _text(raw.get("suggestion"))
+        items.append(item)
+    return items[:limit]
+
+
 def normalize_evaluation(raw: dict, submission: dict) -> dict:
+    """Validate a model evaluation; reject it unless every scored criterion has a real
+    reason and at least one quote that can be found verbatim in the essay."""
     task_type = submission["task_type"]
     essay = submission["essay_text"]
     criteria_raw = raw.get("criteria")
     if not isinstance(criteria_raw, dict):
         raise InvalidOutput("缺少 criteria")
+    task_ok = task_criterion_assessable(submission)
+
     criteria = []
     for key in essay_lib.CRITERIA:
-        item = criteria_raw.get(key)
-        if not isinstance(item, dict):
-            raise InvalidOutput(f"缺少评分项 {key}")
-        band = essay_lib.snap_band(item.get("band"))
-        if band is None:
-            raise InvalidOutput(f"评分项 {key} 的分数无效")
-        issues = []
-        for issue in item.get("issues") if isinstance(item.get("issues"), list) else []:
-            if not isinstance(issue, dict):
-                continue
-            quote = _text(issue.get("quote"), 300)
-            comment = _text(issue.get("comment"))
-            suggestion = _text(issue.get("suggestion"))
-            if not (quote or comment):
-                continue
-            issues.append(
+        short = essay_lib.CRITERION_SHORT[task_type][key]
+        label = essay_lib.CRITERION_LABELS[task_type][key]
+        if key == "task" and not task_ok:
+            # Whatever the model said about data accuracy/coverage is unfounded: drop it.
+            criteria.append(
                 {
-                    "quote": quote,
-                    "quote_found": bool(quote) and essay_lib.contains_quote(essay, quote),
-                    "comment": comment,
-                    "suggestion": suggestion,
+                    "key": key,
+                    "short": short,
+                    "label": label,
+                    "band": None,
+                    "state": "not_assessable",
+                    "reason": f"{ta_unassessable_reason(submission)}，无法核对图表数据，"
+                    f"{label} 不评分。",
+                    "summary": "",
+                    "strengths": [],
+                    "issues": [],
                 }
             )
+            continue
+        item = criteria_raw.get(key)
+        if not isinstance(item, dict):
+            raise InvalidOutput(f"缺少评分项 {short}")
+        band = essay_lib.snap_band(item.get("band"))
+        if band is None:
+            raise InvalidOutput(f"评分项 {short} 的分数无效")
+        summary = _text(item.get("summary"), 1200)
+        if not _meaningful(summary):
+            raise InvalidOutput(f"评分项 {short} 没有给出评分理由")
+        strengths = _evidence_items(item.get("strengths"), essay, limit=4, with_suggestion=False)
+        issues = _evidence_items(item.get("issues"), essay, limit=5, with_suggestion=True)
+        if not any(entry["quote_found"] for entry in strengths + issues):
+            raise InvalidOutput(f"评分项 {short} 没有任何能在原文中找到的证据")
         criteria.append(
             {
                 "key": key,
-                "short": essay_lib.CRITERION_SHORT[task_type][key],
-                "label": essay_lib.CRITERION_LABELS[task_type][key],
+                "short": short,
+                "label": label,
                 "band": band,
-                "summary": _text(item.get("summary"), 1200),
-                "strengths": _text_list(item.get("strengths"), limit_items=4),
-                "issues": issues[:5],
+                "state": "scored",
+                "summary": summary,
+                "strengths": strengths,
+                "issues": issues,
             }
         )
-    minimum = essay_lib.MIN_WORDS[task_type]
+
+    overall_comment = _text(raw.get("overall_comment"), 1500)
+    priorities = _text_list(raw.get("priorities"), limit_items=5)
+    if not _meaningful(overall_comment):
+        raise InvalidOutput("缺少总评")
+    if not priorities:
+        raise InvalidOutput("缺少提升重点")
+
     warnings = []
+    minimum = essay_lib.MIN_WORDS[task_type]
     if submission["word_count"] < minimum:
         warnings.append(
             f"字数 {submission['word_count']} 低于 {minimum} 词要求，实际考试中"
             f"{criteria[0]['label']}会因此受限。"
         )
-    image_status = submission.get("image_status")
-    if task_type == "task1" and image_status == "skipped":
-        warnings.append("未配置识图模型，本次评价没有核对图表数据的准确性。")
-    elif task_type == "task1" and image_status == "failed":
-        warnings.append("题图识别失败，本次评价没有核对图表数据的准确性。")
+    if not task_ok:
+        warnings.append(
+            f"{ta_unassessable_reason(submission)}：Task Achievement 无法核对数据，"
+            "不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。"
+        )
+    unverified = sum(
+        1
+        for c in criteria
+        for entry in c["strengths"] + c["issues"]
+        if entry["quote"] and not entry["quote_found"]
+    )
+    if unverified:
+        warnings.append(f"有 {unverified} 条引文没能在原文中找到，已标注，不作为评分依据。")
+
+    scored = [c["band"] for c in criteria if c["state"] == "scored"]
+    overall = essay_lib.overall_band(scored) if len(scored) == len(essay_lib.CRITERIA) else None
     return {
-        "overall_band": essay_lib.overall_band([c["band"] for c in criteria]),
+        "overall_band": overall,
+        "overall_state": "scored" if overall is not None else "not_assessable",
         "criteria": criteria,
-        "overall_comment": _text(raw.get("overall_comment"), 1500),
-        "priorities": _text_list(raw.get("priorities"), limit_items=5),
+        "overall_comment": overall_comment,
+        "priorities": priorities,
         "warnings": warnings,
     }
 
@@ -183,6 +263,11 @@ def normalize_rewrite(raw: dict, submission: dict) -> dict:
     warnings = []
     if words < minimum:
         warnings.append(f"改写稿只有 {words} 词，低于 {minimum} 词要求，可重新生成。")
+    if not task_criterion_assessable(submission):
+        warnings.append(
+            f"{ta_unassessable_reason(submission)}：改写稿中的数据只能沿用原文和题干，"
+            "没有与题图核对，可能不准确。"
+        )
     return {
         "target_band": submission["target_band"],
         "essay": essay_text,
@@ -239,6 +324,35 @@ class Generator:
                 submission_id, status="failed", description=None, error="image_missing"
             )
 
+    VALIDATION_ATTEMPTS = 2  # one silent retry for malformed/incomplete output (same quota)
+
+    def _generate_valid(self, kind: str, submission: dict, sentences):
+        messages, context = prompts.BUILDERS[kind](submission, sentences)
+        problem = None
+        for attempt in range(self.VALIDATION_ATTEMPTS):
+            if problem:
+                messages = prompts.with_retry_note(messages, problem)
+            result = self.client.complete(
+                messages,
+                json_mode=True,
+                max_tokens=prompts.MAX_TOKENS[kind],
+                temperature=self.settings.llm_temperature,
+                context={**context, "attempt": attempt},
+            )
+            try:
+                raw = result.json()
+                if kind == "evaluate":
+                    return normalize_evaluation(raw, submission), result
+                if kind == "refine":
+                    return normalize_refinement(raw, sentences), result
+                return normalize_rewrite(raw, submission), result
+            except (InvalidOutput, LLMError) as exc:
+                if isinstance(exc, LLMError) and exc.code != "invalid_json":
+                    raise
+                problem = exc.message if isinstance(exc, LLMError) else str(exc)
+                log.info("%s attempt %s rejected: %s", kind, attempt + 1, problem)
+        raise InvalidOutput(problem or "输出不合格")
+
     def run(self, generation_id: int) -> None:
         generation = self.storage.get_generation(generation_id)
         if not generation:
@@ -257,21 +371,7 @@ class Generator:
         kind = generation["kind"]
         try:
             sentences = essay_lib.split_sentences(submission["essay_text"])
-            messages, context = prompts.BUILDERS[kind](submission, sentences)
-            result = self.client.complete(
-                messages,
-                json_mode=True,
-                max_tokens=prompts.MAX_TOKENS[kind],
-                temperature=self.settings.llm_temperature,
-                context=context,
-            )
-            raw = result.json()
-            if kind == "evaluate":
-                normalized = normalize_evaluation(raw, submission)
-            elif kind == "refine":
-                normalized = normalize_refinement(raw, sentences)
-            else:
-                normalized = normalize_rewrite(raw, submission)
+            normalized, result = self._generate_valid(kind, submission, sentences)
             self.storage.finish_generation(
                 generation_id,
                 result=normalized,

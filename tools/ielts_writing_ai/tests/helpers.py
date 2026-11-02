@@ -28,7 +28,7 @@ TASK2_ESSAY = (
 
 
 def settings_for(tmpdir, **overrides):
-    values = {"data_dir": tmpdir, "job_mode": "inline", "vision_provider": "none"}
+    values = {"data_dir": tmpdir, "job_mode": "inline", "vision_provider": "none", "lock_wait": 0}
     values.update(overrides)
     return load_settings(env={}, env_file="/nonexistent/.env", **values)
 
@@ -44,11 +44,18 @@ class AppTestCase(unittest.TestCase):
         self.storage = self.app.extensions["iwa"].storage
 
     def make_app(self, **overrides):
+        """(Re)start the app on the same data dir: the previous instance is stopped
+        first, exactly like stop.sh followed by start.sh."""
+        current = getattr(self, "app", None)
+        if current is not None:
+            current.extensions["iwa"].close()
         values = {**self.settings_overrides, **overrides}
         vision = values.pop("vision_client", None)
-        return create_app(
+        app = create_app(
             settings_for(self.tmpdir, **values), client=self.client_llm, vision_client=vision
         )
+        self.addCleanup(app.extensions["iwa"].close)
+        return app
 
     def add_user(self, name="学生A", **kwargs):
         code = access.generate_code()

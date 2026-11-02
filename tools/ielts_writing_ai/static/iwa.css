@@ -207,6 +207,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
 .issue__comment { margin: 4px 0 0; }
 .issue__suggestion { margin: 4px 0 0; color: var(--ok); }
 
+.score-hero.is-limited { background: var(--warn-soft); }
+.score-hero__band.is-text { font-size: 30px; color: var(--warn); }
+.score-chip.is-off { opacity: 0.7; border-style: dashed; }
+.criterion.is-off { border-style: dashed; background: var(--surface-2); }
+.criterion.is-off .criterion__band { color: var(--warn); }
+.criterion__reason { color: var(--warn); margin: 0; }
+.strengths li { margin-top: 6px; }
+.strengths .issue__quote { font-size: 15px; }
+.strength__comment { color: var(--ink-2); }
+
 /* refine */
 .refine-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 12px; }
 .toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
