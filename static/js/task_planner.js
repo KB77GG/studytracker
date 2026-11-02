@@ -119,6 +119,7 @@
     var request = createRequest(win.fetch.bind(win), function () { return state.csrf; });
     var dialog = $('plannerEditor');
     var seriesClient = win.TaskPlannerSeriesClient && win.TaskPlannerSeriesClient.mount(doc, win, { request: request, state: state, refreshEntries: loadEntries, showMessage: showMessage, report: report });
+    var recoveryClient = win.TaskPlannerRecoveryClient && win.TaskPlannerRecoveryClient.mount(doc, win, { request: request, state: state, refreshEntries: loadEntries, showMessage: showMessage, report: report, createGate: createGate });
     function node(tag, className, text) {
       var item = doc.createElement(tag);
       if (className) item.className = className;
@@ -195,7 +196,7 @@
         if (entry.series_managed) {
           var seriesLink = node('button', 'tp-text-button tp-series-link', '所属学习线：' + (entry.series_name || '连续安排'));
           seriesLink.type = 'button'; seriesLink.addEventListener('click', function () { if (seriesClient) seriesClient.showDetails(entry.series_id).catch(report); }); main.appendChild(seriesLink);
-          main.appendChild(node('p', 'tp-help', '在学习线中整体确认 / 取消；临时调整可取消未布置安排后重建。'));
+          main.appendChild(node('p', 'tp-help', '在学习线中整体确认 / 取消。未完成作业可在上方收件箱处理；其他临时调整可取消未布置安排后重建。'));
         }
         if (entry.note) main.appendChild(node('p', 'tp-entry-note', entry.note));
         if (entry.error) main.appendChild(node('p', 'tp-entry-warning', entry.error));
@@ -226,6 +227,7 @@
     async function loadEntries() {
       if (!state.today) return;
       var epoch = ++state.listEpoch;
+      var recoveryRefresh = recoveryClient ? recoveryClient.refresh() : Promise.resolve();
       $('plannerLoading').hidden = false; $('plannerEmpty').hidden = true;
       $('plannerEntries').setAttribute('aria-busy', 'true');
       try {
@@ -237,7 +239,7 @@
         renderEntries((results[1].entries || []).length);
         $('plannerCount').textContent = results[0].has_more ? '仅显示前500条，请缩小日期或学生范围' : state.entries.length + ' 条安排' + ($('plannerStatus').value === 'attention' ? ' · 包含此前未处理记录' : '');
         if (results[1].has_more) $('summaryAttention').textContent = '500+';
-        if (seriesClient) await seriesClient.refresh();
+        await Promise.all([seriesClient ? seriesClient.refresh() : Promise.resolve(), recoveryRefresh]);
       } finally {
         if (epoch === state.listEpoch) { $('plannerLoading').hidden = true; $('plannerEntries').setAttribute('aria-busy', 'false'); }
       }

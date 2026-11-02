@@ -6,8 +6,10 @@
 {% block header_actions %}<a class="btn btn-secondary" href="/tasks">查看已布置任务</a>{% endblock %}
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/task_planner.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/task_planner_recovery.css') }}">
 <script src="{{ url_for('static', filename='js/task_planner_weekly.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/task_planner_series.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/task_planner_recovery.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/task_planner.js') }}" defer></script>
 {% endblock %}
 {% block content_dashboard %}
@@ -29,6 +31,12 @@
     </form>
     <div class="tp-quick-dates"><button type="button" data-range="tomorrow">只看明天</button><button type="button" data-range="week">未来7天</button><button type="button" data-range="today">今天</button><span id="plannerCount"></span></div>
     <div class="tp-enrollment" id="plannerEnrollment" hidden><div><strong id="enrollmentTitle"></strong><p id="enrollmentHint"></p></div><button class="tp-button" id="plannerEnable" type="button"></button></div>
+    <section id="plannerRecovery" class="tp-recovery" aria-labelledby="recoveryInboxTitle">
+      <div class="tp-recovery-heading"><div><h3 id="recoveryInboxTitle">未完成收件箱</h3><p class="tp-help">仅收集本工作台学习线发布的未完成作业；按上方学生筛选，包含昨日及更早待处理内容。每次只处理当前学习线，其他学习线保持不变。</p></div><button class="tp-button" id="recoveryInboxRefresh" type="button">刷新收件箱</button></div>
+      <div class="tp-recovery-toolbar"><div class="tp-recovery-views" role="group" aria-label="收件箱视图"><button id="recoveryViewPending" class="tp-button" type="button" aria-pressed="true">待处理</button><button id="recoveryViewResolved" class="tp-button" type="button" aria-pressed="false">已处理记录</button></div><p id="recoveryInboxSummary" class="tp-help" aria-live="polite">正在读取…</p></div>
+      <p id="recoveryInboxError" class="tp-entry-warning" role="alert" hidden></p>
+      <div id="recoveryInboxList" aria-live="polite"><p class="tp-help">正在读取未完成作业…</p></div>
+    </section>
     <section class="tp-series-workspace" aria-labelledby="plannerSeriesTitle"><div class="tp-series-heading"><h3 id="plannerSeriesTitle">学生的学习线</h3><p>平日与周末的量在同一条线里设置；不同教材或练习可另建一条。这里显示所选学生的全部学习线。</p></div><div id="plannerSeriesList" aria-live="polite"><p class="tp-help">正在读取学习线…</p></div></section>
     <div id="plannerLoading" class="tp-empty" role="status">正在读取安排…</div><div id="plannerEntries" class="tp-entry-list" aria-live="polite"></div>
     <div id="plannerEmpty" class="tp-empty" hidden><span class="tp-empty-icon" aria-hidden="true">＋</span><h3>这个范围还没有安排</h3><p>可以先准备明天的练习，也可以一次安排未来几天。</p><button type="button" class="tp-button" id="plannerEmptyNew">新建一条安排</button></div>
@@ -53,6 +61,23 @@
     </fieldset></div>
     <footer class="tp-editor-footer"><p>保存后为草稿，回到列表确认才会定时布置。</p><div><button class="tp-button" type="button" id="plannerEditorCancel">取消</button><button class="tp-button tp-button-primary" type="submit" id="plannerEditorSave">保存草稿</button></div></footer>
   </form>
+</dialog>
+<dialog id="plannerRecoveryDialog" class="tp-dialog tp-series-dialog" aria-labelledby="recoveryDialogTitle">
+  <div class="tp-details-layout">
+    <header class="tp-editor-header"><div><span class="tp-eyebrow">未完成作业 · 处理预览</span><h2 id="recoveryDialogTitle">核对处理内容</h2></div><button class="tp-icon-button" id="recoveryDialogClose" type="button" aria-label="关闭处理预览">×</button></header>
+    <div class="tp-editor-body">
+      <p id="recoveryDialogContext" class="tp-help"></p><p id="recoveryDialogScope" class="tp-recovery-scope"></p>
+      <div id="recoveryDialogMessage" class="tp-message" role="status" hidden></div>
+      <div id="recoveryPreviewContent" hidden>
+        <p id="recoveryPreviewSummary" class="tp-recovery-preview-summary"></p>
+        <section class="tp-recovery-preview-section"><h3 id="recoveryTaskHeading">未完成内容</h3><ul id="recoveryPreviewTasks" class="tp-recovery-tasks"></ul></section>
+        <section class="tp-recovery-preview-section" id="recoveryChangesSection" hidden><h3>日期将这样调整</h3><p class="tp-help">按天整体顺延，星期会变化；只修改当前学习线尚未发布的安排，以以下日期为准。</p><ul id="recoveryPreviewChanges" class="tp-recovery-date-changes"></ul></section>
+        <section class="tp-recovery-preview-section" id="recoverySkippedSection" hidden><h3>本次将放过的过去未发布安排</h3><ul id="recoveryPreviewSkipped" class="tp-series-content-labels"></ul></section>
+        <div id="recoveryPreviewWarnings"></div><div id="recoveryPreviewBlockers" role="alert"></div>
+      </div>
+    </div>
+    <footer class="tp-editor-footer"><p>确认前不会修改学生任务。已发布任务、学习记录与旧成绩保持原样。</p><div><button class="tp-button" id="recoveryDialogCancel" type="button">取消</button><button class="tp-button" id="recoveryRepreview" type="button">重新预览</button><button class="tp-button tp-button-primary" id="recoveryApply" type="button" disabled>确认处理</button></div></footer>
+  </div>
 </dialog>
 <dialog id="plannerSeriesEditor" class="tp-dialog tp-series-dialog" aria-labelledby="seriesEditorTitle">
   <form id="seriesEditorForm" novalidate>

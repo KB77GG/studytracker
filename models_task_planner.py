@@ -86,8 +86,30 @@ class TaskPlannerSeriesItem(db.Model):
     unit_count = db.Column(db.Integer, nullable=False)
 
 
+class TaskPlannerRecoveryDecision(db.Model):
+    """Append-only staff decisions; never rewrite old Task completion/history."""
+
+    __tablename__ = "task_planner_recovery_decision"
+    __table_args__ = (db.UniqueConstraint("series_id", "source_date", "source_fingerprint"),)
+
+    id = db.Column(db.Integer, primary_key=True)
+    series_id = db.Column(db.Integer, db.ForeignKey("task_planner_series.id"), nullable=False, index=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("student_profile.id"), nullable=False, index=True)
+    source_date = db.Column(db.Date, nullable=False)
+    source_fingerprint = db.Column(db.String(64), nullable=False)
+    action = db.Column(db.String(20), nullable=False)
+    applied_date = db.Column(db.Date, nullable=False)
+    request_key = db.Column(db.String(96), nullable=False, unique=True)
+    request_hash = db.Column(db.String(64), nullable=False)
+    preview_hash = db.Column(db.String(64), nullable=False)
+    snapshot_json = db.Column(db.Text, nullable=False)
+    result_json = db.Column(db.Text, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow_naive, nullable=False)
+
+
 def ensure_schema():
     """Only create this feature's new tables; never alter existing task data."""
     for model in (TaskPlannerStudent, TaskPlannerEntry, TaskPlannerEvent,
-                  TaskPlannerSeries, TaskPlannerSeriesItem):
+                  TaskPlannerSeries, TaskPlannerSeriesItem, TaskPlannerRecoveryDecision):
         model.__table__.create(bind=db.engine, checkfirst=True)

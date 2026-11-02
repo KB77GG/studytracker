@@ -41,7 +41,8 @@ def _bundle(row):
     return members, frozen
 
 
-def _validate_shape(row, members, frozen):
+def _validate_shape(row, members, frozen, allowed_statuses=None):
+    allowed_statuses = {"ready", "failed"} if allowed_statuses is None else allowed_statuses
     if len(members) != 3 or row.id not in {entry.id for entry, _index in members}:
         raise planner.TaskPlannerError("整套阅读条目不完整，请取消后重新安排")
     tests, numbers = set(), set()
@@ -49,7 +50,7 @@ def _validate_shape(row, members, frozen):
         selection = json.loads(entry.selection_json)
         if (entry.kind != "reading_passage" or entry.student_id != row.student_id
                 or entry.target_date != row.target_date
-                or entry.status not in {"ready", "failed"} or not entry.confirmed_at
+                or entry.status not in allowed_statuses or not entry.confirmed_at
                 or frozen[index].get("kind") != "reading_passage"
                 or frozen[index].get("target_date") != entry.target_date.isoformat()
                 or frozen[index].get("selection") != selection):
@@ -69,13 +70,13 @@ def bundle_entry_ids(row):
         return [row.id]
 
 
-def _prepare(row, members, frozen):
+def _prepare(row, members, frozen, now=None):
     _validate_shape(row, members, frozen)
     profile = planner._student(row.student_id)
     prepared_rows = []
     for entry, _index in members:
         planner._actor(entry.confirmed_by)
-        planner._series_prerequisite(entry, profile)
+        planner._series_prerequisite(entry, profile, now)
         prerequisite = planner._prerequisite(entry.prerequisite_task_id, profile, entry.target_date)
         if not planner._prerequisite_complete(prerequisite, profile):
             raise planner.TaskPlannerError("前置任务尚未完成或被退回，请处理后重新安排")
@@ -111,7 +112,7 @@ def _failed(row_id, locked_versions, actor_id):
     return planner._entry(row_id)
 
 
-def publish_reading_bundle(row, *, actor_id, automatic):
+def publish_reading_bundle(row, *, actor_id, automatic, now=None):
     """Return the requested native entry, or None when it has no bundle marker."""
     found = _bundle(row)
     if found is None:
@@ -119,7 +120,7 @@ def publish_reading_bundle(row, *, actor_id, automatic):
     members, frozen = found
     locked_versions = {entry.id: entry.version for entry, _index in members}
     try:
-        profile, prepared_rows = _prepare(row, members, frozen)
+        profile, prepared_rows = _prepare(row, members, frozen, now)
     except ValueError as exc:
         _block(members, f"整套阅读暂未布置：{exc}", actor_id)
         return row

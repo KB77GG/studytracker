@@ -420,7 +420,7 @@ def series_payload(row):
         "counts": counts, "status_counts": counts, "published_count": counts.get("published", 0),
         "student_name": profile.full_name if profile else "学生档案已停用",
     }
-    for name in ("cycle_weeks", "cycle_anchor", "activities", "week_rules", "skip_assigned", "skipped"):
+    for name in ("cycle_weeks", "cycle_anchor", "activities", "week_rules", "skip_assigned", "skipped", "recovery_notice"):
         if name in definition:
             payload[name] = definition[name]
     return payload

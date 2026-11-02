@@ -82,6 +82,25 @@ def catalog():
     return jsonify(ok=True, **result)
 
 
+@task_planner_bp.get("/api/task-planner/inbox")
+def recovery_inbox():
+    from services.task_planner_recovery import list_inbox
+    return jsonify(ok=True, items=list_inbox(request.args.get("student_id"), request.args.get("view", "pending")))
+
+
+@task_planner_bp.post("/api/task-planner/inbox/preview")
+def recovery_preview():
+    from services.task_planner_recovery import preview_recovery
+    return jsonify(ok=True, preview=preview_recovery(_body(), current_user.id))
+
+
+@task_planner_bp.post("/api/task-planner/inbox/apply")
+def recovery_apply():
+    from services.task_planner_recovery import apply_recovery
+    result = apply_recovery(_body(), current_user.id)
+    return jsonify(ok=True, result=result, message=result["message"])
+
+
 @task_planner_bp.get("/api/task-planner/entries")
 def entries():
     today = beijing_now().date()

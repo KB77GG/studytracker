@@ -28,15 +28,16 @@ def _json(value):
 
 
 class HistoryIndex:
-    def __init__(self, profile=None, exclude_entry_ids=()):
+    def __init__(self, profile=None, exclude_entry_ids=(), exclude_task_ids=()):
         self.records = []
         self.canonical = {}
         self.groups = None
         if profile is None:
             return
         excluded = set(exclude_entry_ids)
+        excluded_tasks = set(exclude_task_ids)
         for task in Task.query.filter_by(student_name=profile.full_name).all():
-            if task.cancelled_at or task.status == Task.STATUS_CANCELLED:
+            if task.id in excluded_tasks or task.cancelled_at or task.status == Task.STATUS_CANCELLED:
                 continue
             identity = self._identity(resource_identity_from_task(task))
             coverage = self._task_coverage(task)

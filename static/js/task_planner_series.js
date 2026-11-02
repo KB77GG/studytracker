@@ -437,6 +437,7 @@
         if (series.counts) main.appendChild(node('p', 'tp-help', '已布置 ' + (series.counts.published || 0) + ' · 草稿 ' + (series.counts.draft || 0) + ' · 待布置 ' + (series.counts.ready || 0) + ' · 需处理 ' + ((series.counts.blocked || 0) + (series.counts.failed || 0))));
         main.appendChild(node('p', 'tp-help', series.kind === 'weekly' ? weeklyApi.summary(series, kindUnit) : quotaSummary(series.weekday_counts, series.kind, series.quota_unit)));
         if (series.skip_assigned) main.appendChild(node('p', 'tp-help', '已启用自动跳过已布置内容' + (series.skipped && series.skipped.length ? ' · 跳过' + series.skipped.length + '份' : '')));
+        if (series.recovery_notice) main.appendChild(node('p', 'tp-entry-warning', series.recovery_notice));
         if (series.wait_for_previous) main.appendChild(node('p', 'tp-help', '等待上一学习日全部任务有效提交；同日任务互不等待，未完成时由助教处理。'));
         var student = context.state.students.find(function (item) { return Number(item.id) === Number(series.student_id); });
         if (series.status === 'ready' && student && !student.enabled) main.appendChild(node('p', 'tp-entry-warning', '已确认，助教尚未为该学生启用自动布置。'));
@@ -458,6 +459,7 @@
         state.detail = result.series; $('seriesDetailsTitle').textContent = result.series.name;
         $('seriesDetailsHint').textContent = studentName(result.series) + ' · ' + result.series.start_date + ' 至 ' + result.series.end_date + ' · ' + (STATUSES[result.series.status] || result.series.status);
         $('seriesDetailsRules').textContent = result.series.kind === 'weekly' ? weeklyApi.summary(result.series, kindUnit) + (result.series.cycle_anchor ? (Number(result.series.cycle_weeks) === 2 ? '；A周起点：' : '；首周起点：') + result.series.cycle_anchor : '') : '';
+        if (result.series.recovery_notice) $('seriesDetailsRules').textContent += ($('seriesDetailsRules').textContent ? ' ' : '') + result.series.recovery_notice;
         weeklyApi.renderSkipped(doc, $('seriesDetailsSkipped'), result.series.skipped);
         renderRows($('seriesDetailsRows'), result.entries, true); actions(result.series, $('seriesDetailsActions'));
       } catch (error) { if (epoch === state.detailEpoch) $('seriesDetailsRows').replaceChildren(node('p', 'tp-entry-warning', error.message)); }

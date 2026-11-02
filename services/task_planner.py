@@ -109,7 +109,7 @@ def _independent_entry(row):
         raise TaskPlannerError("该安排属于连续学习线，请整体确认或取消；调整内容时请取消未布置部分后重新安排", status=409)
 
 
-def _series_prerequisite(row, profile):
+def _series_prerequisite(row, profile, now=None):
     item = _series_item(row.id)
     if not item:
         return
@@ -122,15 +122,20 @@ def _series_prerequisite(row, profile):
     earlier = TaskPlannerEntry.query.join(
         TaskPlannerSeriesItem, TaskPlannerSeriesItem.entry_id == TaskPlannerEntry.id,
     ).filter(TaskPlannerSeriesItem.series_id == series.id, TaskPlannerEntry.target_date < row.target_date)
+    from services.task_planner_recovery import waived_entry_ids
+
+    waived = waived_entry_ids(series.id, now)
     last = earlier.order_by(TaskPlannerEntry.target_date.desc()).first()
     if last is None:
         return
     for previous in earlier.filter(TaskPlannerEntry.target_date == last.target_date).all():
+        if previous.id in waived:
+            continue
         if (previous.student_id != profile.id or previous.status != "published" or not previous.published_task_id):
             raise TaskPlannerError("本学习线上一学习日尚有安排未布置或已取消；请助教处理或取消后重新安排，不会自动顺延")
         task = _prerequisite(previous.published_task_id, profile, row.target_date)
         if not _prerequisite_complete(task, profile):
-            raise TaskPlannerError("本学习线上一学习日尚有任务未完成或被退回；请助教处理或取消后重新安排，不会自动顺延")
+            raise TaskPlannerError("本学习线上一学习日尚有任务未完成或被退回；请在未完成收件箱选择补做顺延或忽略继续，不会自动顺延")
 
 
 def _prerequisite(task_id, profile, target_date):
@@ -344,13 +349,13 @@ def publish_entry(entry_id, actor_id=None, expected_version=None, now=None, auto
         row_id, locked_version = row.id, row.version
         from services.task_planner_bundles import publish_reading_bundle
 
-        bundled = publish_reading_bundle(row, actor_id=actor_id, automatic=automatic)
+        bundled = publish_reading_bundle(row, actor_id=actor_id, automatic=automatic, now=now)
         if bundled is not None:
             return bundled
         try:
             _actor(row.confirmed_by)
             profile = _student(row.student_id)
-            _series_prerequisite(row, profile)
+            _series_prerequisite(row, profile, now)
             prerequisite = _prerequisite(row.prerequisite_task_id, profile, row.target_date)
             if not _prerequisite_complete(prerequisite, profile):
                 return _blocked(row, "前置任务尚未完成或被退回，请处理后重新确认", actor_id)
