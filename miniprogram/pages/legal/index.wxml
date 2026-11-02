@@ -1,0 +1,23 @@
+<view class="legal-page">
+  <view class="legal-hero">
+    <text class="legal-kicker">STUDYTRACKER</text>
+    <text class="legal-title">{{legal.title}}</text>
+    <text class="legal-date">{{legal.updatedAt}}</text>
+    <text class="legal-intro">{{legal.intro}}</text>
+  </view>
+
+  <view class="legal-content">
+    <view class="legal-section" wx:for="{{legal.sections}}" wx:key="title">
+      <text class="section-title">{{item.title}}</text>
+      <text class="section-paragraph" wx:for="{{item.paragraphs}}" wx:for-item="paragraph" wx:key="*this">{{paragraph}}</text>
+    </view>
+
+    <view class="official-guide" wx:if="{{legal.showOfficialGuide}}">
+      <text class="official-title">微信隐私保护指引</text>
+      <text class="official-desc">你也可以查看小程序管理后台备案并由微信展示的官方隐私保护指引。</text>
+      <button class="official-button" bindtap="openOfficialPrivacyGuide">查看《小程序隐私保护指引》</button>
+    </view>
+
+    <text class="legal-footer">感谢你使用 StudyTracker</text>
+  </view>
+</view>
