@@ -1,5 +1,28 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-02（第二轮）雅思写作 AI 试用工具：修复审阅提出的五项问题（已推功能分支，未合并、未部署）
+
+- 输入：用户在 Mac 上复核 `d15db4c6`（60 项测试通过），用合成数据复现了五个测试没覆盖的问题。审阅报告 `docs/design/iwa-trial-review-20261102/README.md` 只在用户 Mac 本地，本容器读不到，这轮按用户消息里的描述修复。基线仍是 `claude/ielts-writing-ai-trial@d15db4c`（基于 `a7387f5`）。`origin/main` 已前进到 `6904252`，这轮没有 rebase；合并时两份交接文档的顶部会冲突。
+- 五项修复：
+  1. **停止脚本误停**：PID 文件改为记录 pid、`ps lstart` 启动时间、启动方式和数据目录。start / stop / status 只信任存活、启动时间一致、命令行含 `ielts_writing_ai` 的进程，PID 复用时不发任何信号；旧格式 PID 文件不自动停止；SIGKILL 前再核验一次。
+  2. **草稿跨账号**：草稿键改为按用户的 HMAC 标识（`data-user-key`），记录里同时存 owner；页面加载时清除旧版全局键 `iwa:new-draft`，换人登录时清除其他账号的草稿，主动退出时确认后清除自己的草稿。HTML 页面加 `no-store`，退出后再回到页面会强制刷新，表单关闭浏览器的自动回填。
+  3. **Task 1 缺图**：只有题图状态为 `ready`（识图成功）时才评 TA 和总分。none / skipped / failed / pending 时 TA 显示不可评，模型给的 TA 内容整体丢弃，总分为空，只保留 CC / LR / GRA；改写稿提示数据未与题图核对；历史列表显示“不可评”。
+  4. **无理由、虚构证据**：每个评分项必须有评分理由（至少 12 个非空白字符），并且至少有一条能在原文中逐字找到的引文（优点也必须带引文）；总评和提升重点必填。不合格时内部重试一次（不额外扣额度），再不合格就判 `invalid_output`，不出任何分数。复制文本改由服务端 `copytext.py` 生成，带免责声明、限制提示和“未找到引文”标注。提示词版本升到 `iwa-2026-11-02.2`。
+  5. **重复启动中断任务**：`create_app` 先取得 `<db>.lock` 的 flock 单实例锁（`IWA_LOCK_WAIT` 默认 5 秒），再执行 `fail_interrupted`；拿不到锁就抛 `InstanceLocked`，不改动任何任务。
+- 顺带修复：
+  - `start.sh` 原来只要端口上有任何服务器响应 healthz 就判定启动成功。现在 healthz 返回 pid / ppid，只认刚启动的那个进程或它的 gunicorn worker。
+  - 模型返回 HTTP 错误时，urllib 的错误响应对象没有关闭，已修复。
+  - 测试改为每次重启前先关闭旧实例，并释放锁。
+- 精确验证（Python 3.13 临时 venv，Flask 3.1.3）：
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **86 tests OK**（新增 `test_scripts.py` 7 项、`test_copytext.py` 5 项，以及 review / web 的复现用例）；运行时 shell 里设了 `IWA_DATA_DIR`，演示库没有被写入。
+  - `node --test tools/ielts_writing_ai/tests/test_draft.js` → **8 pass**。
+  - `ruff check tools/`、`black --check tools/`、两个 JS 的 `node --check`、`bash -n bin/*.sh` 全部通过。
+  - Playwright（fake 模型）：A 写草稿后刷新能恢复；A 退出、或只清 Cookie 后 B 登录，都看不到 A 的内容，A 的键被清掉；旧版全局键被清除且没有回填；退出后按后退回到 `/login`；Task 1 无图时总分和 TA 都显示不可评，复制文本带限制提示，历史显示“不可评”；Task 2 正常评分，优点带引文；原流程回归通过。
+  - 剩下一条 ResourceWarning，来自 werkzeug 测试客户端为 5MB 上传创建的临时文件，不是工具代码。
+- **未验证**：仍未接真实模型（无 Key）；证据规则对真实模型的通过率未知，可能需要据此调整提示词或 12 字门槛；没在 Python 3.10 上实测；体验补齐项（精修改为“同色同编号双栏对应”、整篇改写对照原文的差异视图）还没做。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，也没有生产、服务器或小程序操作。用户 Mac 上的审阅资料和交接更新仍只在本机。
+- **下一步**：在 Mac 上拉取后，重跑上面两条测试命令；用 fake 模式按审阅复现脚本再验一遍；然后填专用 Key，用 20–30 篇有老师评分的作文校准（重点看证据规则的通过率和分数偏差）；体验补齐项放在校准之后。
+
 ## 2026-11-02 雅思写作 AI 独立试用工具（已推功能分支，未合并、未部署）
 
 - **范围已按用户调整**：第一版是独立试用工具，**不接入**教师模考批改工作台。原计划里的 MockExamReview 集成、生产表迁移、AI 分数采纳到正式评分全部推迟，等试用满意后再讨论整合。用户提到的 `docs/design/ielts-writing-ai-review-video-brief-20261102.md` 不在 main、任何远端分支或本容器里（推测只在用户 Mac 本地），本轮没有读到；功能按用户消息实现。
