@@ -43,6 +43,8 @@ jobs:
             -v
       - name: Guard legacy spelling correction queue
         run: node tests/test_dictation_spell_queue.js
+      - name: Test current and historical student task lists
+        run: node --test tests/test_practice_task_lists.js
 
   # 真实账号路由回归：测试在导入 app 前强制内存数据库和禁止联网。
   # 仅安装启动路由需要的轻量依赖，不加载语音/ML模型。

@@ -760,15 +760,15 @@
     <article class="practice-overview__panel practice-overview__panel--tasks">
       <div class="practice-overview__header">
         <div class="practice-overview__heading">
-          <h2 class="practice-overview__title">新任务</h2>
-          <p class="practice-overview__description">老师新布置、尚未完成的练习</p>
+          <h2 class="practice-overview__title">当前任务</h2>
+          <p class="practice-overview__description">现在可以开始或继续的练习</p>
         </div>
         <span class="practice-overview__meta" id="newTasksMeta">加载中</span>
       </div>
       <div class="practice-overview__list" id="newTasksList" aria-live="polite">
         <div class="practice-overview__empty">正在加载任务…</div>
       </div>
-      <a class="practice-overview__footer" id="newTasksMore" href="{{ url_for('practice_library') }}" hidden>查看全部任务 →</a>
+      <a class="practice-overview__footer" id="newTasksMore" href="{{ url_for('practice_library') }}#practiceAssignedTasks">查看全部任务与历史 →</a>
     </article>
 
     <article class="practice-overview__panel practice-overview__panel--history">
@@ -801,6 +801,7 @@
 
 {% endif %}
 
+<script src="{{ url_for('static', filename='js/practice_task_lists.js') }}"></script>
 <script>
 // Only run student verification JS if not in staff mode
 if (document.getElementById('loginGate')) {
@@ -911,22 +912,15 @@ if (document.getElementById('loginGate')) {
     const meta = document.getElementById('newTasksMeta');
     const more = document.getElementById('newTasksMore');
     if (!list || !meta) return;
-    const groups = (data && data.groups) || {};
-    const tasks = [...(groups.assistant || []), ...(groups.teacher || [])]
-      .filter(task => task.status !== 'done')
-      .sort((a, b) => {
-        if (a.status === 'in_progress' && b.status !== 'in_progress') return -1;
-        if (b.status === 'in_progress' && a.status !== 'in_progress') return 1;
-        return String(b.date || '').localeCompare(String(a.date || '')) || Number(b.id || 0) - Number(a.id || 0);
-      });
+    const tasks = PracticeTaskLists.fromGroups(data && data.groups).current;
     meta.textContent = `${tasks.length} 项待完成`;
+    if (more) more.hidden = false;
     if (tasks.length === 0) {
-      list.innerHTML = '<div class="practice-overview__empty">暂无新任务，可以从下方题库自由练习。</div>';
-      if (more) more.hidden = true;
+      list.innerHTML = '<div class="practice-overview__empty">当前没有待完成任务，可以从下方题库自由练习。</div>';
       return;
     }
     list.innerHTML = tasks.slice(0, 4).map(task => {
-      const locked = Boolean(task.read_only && task.availability_status !== 'completed' && task.task_date_state !== 'completed');
+      const locked = PracticeTaskLists.isLocked(task);
       const href = locked ? '#' : (task.url || '#');
       const hint = task.status === 'in_progress'
         ? ((task.completion_rate != null) ? `进度 ${task.completion_rate}% · 继续做题` : '继续做题')
@@ -941,7 +935,6 @@ if (document.getElementById('loginGate')) {
           <div class="today-task__hint">${escapeHtml(hint)}</div>
         </a>`;
     }).join('');
-    if (more) more.hidden = tasks.length <= 4;
   }
 
   function renderPracticeHistory(data) {

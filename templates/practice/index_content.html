@@ -435,6 +435,26 @@ a.practice-resource:hover {
   color: var(--muted);
   font-size: var(--fs-sm);
 }
+.practice-assigned { scroll-margin-top: 100px; }
+.practice-task-archive {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.practice-task-archive > summary {
+  padding: 14px;
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+.practice-task-archive > summary:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -3px;
+}
+.practice-task-archive__note { margin: 0; padding: 0 14px 12px; color: var(--muted); font-size: var(--fs-sm); }
+.practice-task--locked { cursor: default; }
+.practice-assigned [hidden] { display: none !important; }
 @media (max-width: 900px) {
   .practice-subjects {
     grid-template-columns: 1fr;
@@ -518,18 +538,19 @@ a.practice-resource:hover {
 
   <section class="practice-assigned" id="practiceAssignedTasks" aria-label="刷题任务">
     <div class="practice-assigned__head">
-      <h3>刷题任务</h3>
+      <h3>当前任务</h3>
       <div class="practice-assigned__meta" id="practiceAssignedMeta">加载中</div>
     </div>
-    <div class="practice-assigned__groups">
-      <article class="practice-task-group">
+    <div class="practice-task-empty" id="practiceCurrentEmpty" hidden>当前没有待完成任务，可以从下方题库自由练习。</div>
+    <div class="practice-assigned__groups" id="practiceCurrentGroups">
+      <article class="practice-task-group" id="practiceAssistantGroup">
         <h4 class="practice-task-group__title">
           助教推送教辅刷题
           <span class="practice-task-group__count" id="practiceAssistantCount">0</span>
         </h4>
         <div class="practice-task-list" id="practiceAssistantTasks"></div>
       </article>
-      <article class="practice-task-group">
+      <article class="practice-task-group" id="practiceTeacherGroup">
         <h4 class="practice-task-group__title">
           老师布置作业
           <span class="practice-task-group__count" id="practiceTeacherCount">0</span>
@@ -537,6 +558,19 @@ a.practice-resource:hover {
         <div class="practice-task-list" id="practiceTeacherTasks"></div>
       </article>
     </div>
+    <details class="practice-task-archive" id="practiceUpcoming" hidden>
+      <summary>尚未开放 <span id="practiceUpcomingCount">0</span></summary>
+      <div class="practice-task-list" id="practiceUpcomingTasks"></div>
+    </details>
+    <details class="practice-task-archive" id="practiceHistory" hidden>
+      <summary>已提交 / 已完成 <span id="practiceHistoryCount">0</span></summary>
+      <div class="practice-task-list" id="practiceHistoryTasks"></div>
+    </details>
+    <details class="practice-task-archive" id="practiceExpired" hidden>
+      <summary>未完成已截止 <span id="practiceExpiredCount">0</span></summary>
+      <p class="practice-task-archive__note">保留任务记录，不计入当前待完成；如需补做，请联系老师安排。</p>
+      <div class="practice-task-list" id="practiceExpiredTasks"></div>
+    </details>
   </section>
 
   <section class="practice-mock-reviews" id="practiceMockReviews" aria-label="我的模考">
@@ -681,6 +715,7 @@ a.practice-resource:hover {
 body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minmax(0,1fr) 330px;gap:0;width:100%;max-width:none;margin:0;padding:0;border:1px solid var(--suite-line);border-radius:12px;background:var(--suite-surface);box-shadow:var(--suite-shadow);overflow:hidden}body.admin-suite-v2 .practice-hero{display:none}body.admin-suite-v2 .practice-exam-switch{grid-column:1 / -1;grid-row:1;margin:0;padding:10px 18px;border:0;border-bottom:1px solid var(--suite-line);border-radius:0;background:#fffefa}body.admin-suite-v2 .practice-suite-filters{grid-column:1;grid-row:2 / span 3;padding:18px 16px;border-right:1px solid var(--suite-line);background:#fbf8f2}body.admin-suite-v2 .practice-suite-filters section+section{margin-top:18px;padding-top:16px;border-top:1px solid var(--suite-line)}body.admin-suite-v2 .practice-suite-filters h3{margin:0 0 9px;color:var(--suite-ink);font-size:11px;font-weight:850}body.admin-suite-v2 .practice-suite-filters button,body.admin-suite-v2 .practice-suite-filters label{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;margin:0;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:var(--suite-ink-soft);font:inherit;font-size:11px;text-align:left;text-decoration:none;cursor:pointer}body.admin-suite-v2 .practice-suite-filters button.is-active{border:1px solid #b9d8cf;background:#eff8f4;color:var(--suite-sage-dark);font-weight:800}body.admin-suite-v2 #ieltsPractice{display:none}body.admin-suite-v2 .practice-subjects{grid-column:2;grid-row:2;display:block;margin:0;padding:12px 16px;border:0;border-radius:0;background:#fff}body.admin-suite-v2 .practice-subject{margin:0 0 12px;border:1px solid var(--suite-line);border-radius:9px;box-shadow:none}body.admin-suite-v2 .practice-subject__head{padding:13px 15px}body.admin-suite-v2 .practice-resource{min-height:58px;padding:11px 14px;border-color:#eee8df}body.admin-suite-v2 .practice-suite-preview{grid-column:3;grid-row:2 / span 3;display:flex;flex-direction:column;min-width:0;padding:20px;border-left:1px solid var(--suite-line);background:#fffefa}body.admin-suite-v2 .practice-suite-preview__icon{width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;border-radius:11px;background:var(--suite-sage-soft);color:var(--suite-sage-dark);font-size:18px}body.admin-suite-v2 #toeflPractice{grid-column:2;grid-row:3;margin:0;padding:10px 18px 0}body.admin-suite-v2 .practice-toefl{grid-column:2;grid-row:4;margin:12px 16px 18px}body.admin-suite-v2 .practice-identity,body.admin-suite-v2 .practice-assigned,body.admin-suite-v2 .practice-mock-reviews{grid-column:1 / -1;order:8;margin:14px 16px}body.admin-suite-v2 .practice-identity{margin-top:20px}body.admin-suite-v2 .practice-suite-preview .suite-inspector__actions{margin-top:auto}@media(max-width:1050px){body.admin-suite-v2 .practice-page{grid-template-columns:170px minmax(0,1fr)}body.admin-suite-v2 .practice-suite-preview{grid-column:1 / -1;grid-row:auto;border-top:1px solid var(--suite-line);border-left:0}}@media(max-width:700px){body.admin-suite-v2 .practice-page{display:block}body.admin-suite-v2 .practice-suite-filters{display:none}body.admin-suite-v2 .practice-subjects,body.admin-suite-v2 .practice-suite-preview,body.admin-suite-v2 #toeflPractice,body.admin-suite-v2 .practice-toefl{margin:0;grid-column:auto;grid-row:auto;border-left:0}}
 </style>
 
+<script src="{{ url_for('static', filename='js/practice_task_lists.js') }}"></script>
 <script>
 (function () {
   const nameEl = document.getElementById('practiceIdentityName');
@@ -697,6 +732,18 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
   const teacherList = document.getElementById('practiceTeacherTasks');
   const assistantCount = document.getElementById('practiceAssistantCount');
   const teacherCount = document.getElementById('practiceTeacherCount');
+  const currentEmpty = document.getElementById('practiceCurrentEmpty');
+  const currentGroups = document.getElementById('practiceCurrentGroups');
+  const assistantGroup = document.getElementById('practiceAssistantGroup');
+  const teacherGroup = document.getElementById('practiceTeacherGroup');
+  const taskArchives = ['Upcoming', 'History', 'Expired'].map(function (name) {
+    return {
+      key: name.toLowerCase(),
+      section: document.getElementById('practice' + name),
+      count: document.getElementById('practice' + name + 'Count'),
+      list: document.getElementById('practice' + name + 'Tasks'),
+    };
+  });
   const mockReviewsSection = document.getElementById('practiceMockReviews');
   const mockReviewsMeta = document.getElementById('practiceMockReviewsMeta');
   const mockReviewList = document.getElementById('practiceMockReviewList');
@@ -723,6 +770,16 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     assistantCount.textContent = '0';
     teacherCount.textContent = '0';
     assignedMeta.textContent = '';
+    resetTaskArchives();
+  }
+
+  function resetTaskArchives() {
+    taskArchives.forEach(function (archive) {
+      archive.section.hidden = true;
+      archive.section.open = false;
+      archive.count.textContent = '0';
+      archive.list.innerHTML = '';
+    });
   }
 
   function hideMockReviews() {
@@ -802,7 +859,7 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     }
     node.innerHTML = tasks.map(function (task) {
       const url = String(task.url || '#');
-      const locked = Boolean(task.read_only && task.availability_status !== 'completed' && task.task_date_state !== 'completed');
+      const locked = PracticeTaskLists.isLocked(task);
       const href = !locked && url.startsWith('/') ? url : '#';
       const status = task.status || 'pending';
       return `
@@ -822,6 +879,7 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     if (!assignedSection || staffMode) return;
     assignedSection.style.display = 'block';
     assignedMeta.textContent = '加载中';
+    resetTaskArchives();
     try {
       const response = await fetch('/api/practice/tasks', { credentials: 'same-origin' });
       const data = await response.json();
@@ -830,18 +888,30 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
         return;
       }
       const groups = data.groups || {};
-      const assistantTasks = Array.isArray(groups.assistant) ? groups.assistant : [];
-      const teacherTasks = Array.isArray(groups.teacher) ? groups.teacher : [];
+      const assistantTasks = PracticeTaskLists.partition(groups.assistant).current;
+      const teacherTasks = PracticeTaskLists.partition(groups.teacher).current;
       assistantCount.textContent = String(assistantTasks.length);
       teacherCount.textContent = String(teacherTasks.length);
       renderTaskList(assistantList, assistantTasks);
       renderTaskList(teacherList, teacherTasks);
       const total = assistantTasks.length + teacherTasks.length;
       assignedMeta.textContent = total ? `${total} 个可做任务` : '暂无可做任务';
+      currentEmpty.hidden = total > 0;
+      currentGroups.hidden = total === 0;
+      assistantGroup.hidden = assistantTasks.length === 0;
+      teacherGroup.hidden = teacherTasks.length === 0;
+      const sections = PracticeTaskLists.fromGroups(groups);
+      taskArchives.forEach(function (archive) {
+        const tasks = sections[archive.key];
+        archive.count.textContent = String(tasks.length);
+        archive.section.hidden = tasks.length === 0;
+        renderTaskList(archive.list, tasks);
+      });
     } catch (_error) {
       assignedMeta.textContent = '任务加载失败';
-      renderTaskList(assistantList, []);
-      renderTaskList(teacherList, []);
+      currentGroups.hidden = true;
+      currentEmpty.hidden = true;
+      resetTaskArchives();
     }
   }
 
