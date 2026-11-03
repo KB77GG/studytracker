@@ -1,5 +1,23 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-03（第四轮）雅思写作 AI 试用工具：启停锁由执行进程本身持有（已推功能分支，未合并、未部署）
+
+- 输入：用户在 Mac 上复核 `18cae886`：Python 107 项、Node 8 项通过；原生 Bash 3.2 下 Flask 和 gunicorn 启停通过；严格 JSON 问题关闭。第四轮复核报告（Mac 本地 `docs/design/iwa-trial-fourth-review-20261103/README.md`）指出：杀掉持锁的包装器后，实际执行启停的子进程仍在运行，但锁已经释放。复核只在合成进程上复现，没有造成真实服务误停或数据损坏。
+- 修复：`ctl_lock.py` 取锁后把锁描述符 dup2 到 9 号，然后 `os.execvpe` 成启停脚本，PID 不变。执行逻辑的进程本身持锁，不再有单独的包装器；操作中的短命子进程继承 9 号描述符，最后一个持有者退出时内核才释放锁。`run_under_ctl_lock` 同时核对 `IWA_CTL_LOCK_HELD` 和 `IWA_CTL_LOCK_PID == $$`，所以继承来的环境变量不能绕过加锁。start.sh 启动后台服务时用 `env -u IWA_CTL_LOCK_*` 并加 `9>&-`，服务进程不持有锁，Flask 和 gunicorn 两种模式都有测试。
+- 新增回归 4 项：
+  - 杀掉启动进程后，只要操作的子进程还在，锁仍被持有，第二次取锁超时返回 75；子进程结束后锁释放。
+  - 执行操作的进程 PID 等于调用方启动的进程 PID。
+  - 继承来的锁环境变量不能绕过加锁。
+  - gunicorn 服务不持有锁。
+  - 用 18cae88 的旧包装器和旧 `_common.sh` 跑前三项：全部失败，第一项复现了复核报告的“lock freed while the operation is still running”。
+- 精确验证（Python 3.13 venv，bash 5.2）：
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **111 tests OK**，Latin-1 locale 变体和 `LANG=LC_ALL=C.UTF-8` 两种条件下都通过（test_scripts 18 项）。
+  - Node 8 pass；ruff、black、`node --check`、`bash -n` 全部通过。
+  - 演示库没有被测试写入。
+- **未验证**：Mac 原生 bash 3.2 下的 exec 持锁需要用户在 Mac 上跑 test_scripts；未接真实模型；未测 Python 3.10；体验补齐项未做。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：在 Mac 上复核；之后配置试用专用 Key，做少量合成样本的连通测试和评分校准。
+
 ## 2026-11-03（第三轮）雅思写作 AI 试用工具：严格 JSON 与 flock 启停锁（已推功能分支，未合并、未部署）
 
 - 输入：用户在 Mac 上复核 `915a0f84`，原生 Bash 3.2 下启动、状态、停止正常；Python 100 项、Node 8 项通过；3 个并发启动只产生 1 个实例；“看不清 / 空白”识图不再出分。上一轮的问题可以关闭。第三轮复核报告（Mac 本地 `docs/design/iwa-trial-third-review-20261103/README.md`）提出两处边界，本轮修复。
