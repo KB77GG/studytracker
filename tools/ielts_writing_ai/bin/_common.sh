@@ -131,20 +131,21 @@ explain_untrusted_pid() {
 # ---------------------------------------------------------------------------
 # Script-level mutual exclusion for start/stop.
 #
-# The whole start or stop run happens under an exclusive kernel flock held by
-# ctl_lock.py (Python standard library only). Taking it is one atomic system call
-# and the kernel releases it when the holder exits - even on SIGKILL - so two
-# scripts can never both hold it and there is no stale lock to take over.
+# ctl_lock.py takes an exclusive kernel flock and then exec()s this script, so the
+# lock sits on fd 9 of the very process running the start/stop logic (same PID) and
+# of every short-lived child it starts. Killing any one process cannot free the lock
+# while another part of the operation is still running; the kernel releases it when
+# the last holder exits. The background server is started with fd 9 closed.
 # ---------------------------------------------------------------------------
 CTL_LOCK_FILE="${DATA_DIR}/iwa.ctl.flock"
 CTL_LOCK_TIMEOUT="$(read_env IWA_CTL_LOCK_TIMEOUT 60)"
 
-# Call as: run_under_ctl_lock "$@"  - re-executes the calling script under the lock
-# (no-op when already running under it).
+# Call as: run_under_ctl_lock "$@"  - re-executes the calling script under the lock.
+# The PID check ignores lock variables merely inherited from some ancestor.
 run_under_ctl_lock() {
-  if [[ "${IWA_CTL_LOCK_HELD:-}" == "${CTL_LOCK_FILE}" ]]; then
+  if [[ "${IWA_CTL_LOCK_HELD:-}" == "${CTL_LOCK_FILE}" && "${IWA_CTL_LOCK_PID:-}" == "$$" ]]; then
     if [[ -d "${DATA_DIR}/iwa.ctl.lock" ]]; then
-      rm -rf "${DATA_DIR}/iwa.ctl.lock"  # directory lock left by the previous version
+      rm -rf "${DATA_DIR}/iwa.ctl.lock"  # directory lock left by an older version
     fi
     return 0
   fi

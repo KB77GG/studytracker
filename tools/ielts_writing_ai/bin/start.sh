@@ -32,13 +32,17 @@ cd "${REPO_ROOT}"
 export PYTHONIOENCODING=utf-8
 "${PYTHON}" -m tools.ielts_writing_ai check >/dev/null
 
+# The server must not hold the start/stop lock: fd 9 is closed for it (9>&-) and the
+# lock variables are removed from its environment.
 MODE="${IWA_SERVER:-flask}"
 if [[ "${MODE}" == "gunicorn" ]]; then
   # -c is mandatory: without it gunicorn would read the main app's gunicorn.conf.py (port 5002).
-  nohup "${PYTHON}" -m gunicorn -c "${TOOL_DIR}/gunicorn.conf.py" >>"${LOG_FILE}" 2>&1 &
+  nohup env -u IWA_CTL_LOCK_HELD -u IWA_CTL_LOCK_PID -u IWA_CTL_LOCK_FD \
+    "${PYTHON}" -m gunicorn -c "${TOOL_DIR}/gunicorn.conf.py" >>"${LOG_FILE}" 2>&1 9>&- &
 else
   MODE="flask"
-  nohup "${PYTHON}" -m tools.ielts_writing_ai serve >>"${LOG_FILE}" 2>&1 &
+  nohup env -u IWA_CTL_LOCK_HELD -u IWA_CTL_LOCK_PID -u IWA_CTL_LOCK_FD \
+    "${PYTHON}" -m tools.ielts_writing_ai serve >>"${LOG_FILE}" 2>&1 9>&- &
 fi
 NEW_PID=$!
 write_pid_file "${NEW_PID}" "${MODE}"

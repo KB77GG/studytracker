@@ -11,9 +11,11 @@ whose libc classifies 0x80-0xFF bytes like macOS does).
 """
 
 import fcntl
+import importlib.util
 import os
 import re
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -260,6 +262,106 @@ class ScriptSafetyTest(unittest.TestCase):
         codes = [proc.wait(timeout=60) for proc in procs]
         self.assertEqual(codes, [0] * len(procs))
         self.assertFalse(inside.exists())
+
+    def wait_until(self, predicate, timeout=10.0):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if predicate():
+                return True
+            time.sleep(0.05)
+        return predicate()
+
+    def test_killing_the_launched_process_does_not_free_a_still_running_operation(self):
+        # Fourth review: the wrapper held the lock while a separate child ran the
+        # operation; killing the wrapper freed the lock with the operation still running.
+        child_pid_file = Path(self.data_dir) / "operation-child.pid"
+        body = f'sleep 30 & echo "${{!}}" > "{child_pid_file}"; wait'
+        top = subprocess.Popen(
+            [
+                sys.executable,
+                "-I",
+                str(CTL_LOCK),
+                str(self.lock_file()),
+                "30",
+                "--",
+                DEFAULT_BASH,
+                "-c",
+                body,
+            ]
+        )
+        self.addCleanup(top.wait)
+        self.assertTrue(
+            self.wait_until(lambda: child_pid_file.exists() and child_pid_file.read_text().strip())
+        )
+        child = int(child_pid_file.read_text())
+
+        def kill_child():
+            if alive(child):
+                os.kill(child, signal.SIGKILL)
+
+        self.addCleanup(kill_child)
+        top.kill()  # SIGKILL whatever process the caller launched
+        top.wait()
+        self.assertTrue(alive(child), "part of the operation must still be running")
+        self.assertFalse(self.try_lock(), "lock freed while the operation is still running")
+        busy = subprocess.run(
+            [sys.executable, "-I", str(CTL_LOCK), str(self.lock_file()), "1", "--", "true"],
+            capture_output=True,
+        )
+        self.assertEqual(busy.returncode, 75)
+        kill_child()
+        self.assertTrue(self.wait_until(self.try_lock), "lock not released after the operation")
+
+    def test_the_operation_runs_in_the_launched_process_itself(self):
+        # exec() keeps the PID: the process the caller launched is the one doing the work,
+        # so there is no separate launcher that could die and release the lock early.
+        pid_file = Path(self.data_dir) / "operation.pid"
+        top = subprocess.Popen(
+            [
+                sys.executable,
+                "-I",
+                str(CTL_LOCK),
+                str(self.lock_file()),
+                "30",
+                "--",
+                DEFAULT_BASH,
+                "-c",
+                f'echo "$$" > "{pid_file}"; exec sleep 30',
+            ]
+        )
+        self.addCleanup(top.wait)
+        self.addCleanup(top.kill)
+        self.assertTrue(self.wait_until(lambda: pid_file.exists() and pid_file.read_text()))
+        self.assertEqual(int(pid_file.read_text()), top.pid)
+        self.assertFalse(self.try_lock())
+        top.kill()
+        top.wait()
+        self.assertTrue(self.wait_until(self.try_lock))
+
+    def test_inherited_lock_variables_do_not_bypass_the_lock(self):
+        fd = os.open(self.lock_file(), os.O_RDWR | os.O_CREAT, 0o600)
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        try:
+            env = {
+                **self.env,
+                "IWA_CTL_LOCK_TIMEOUT": "1",
+                "IWA_CTL_LOCK_HELD": str(self.lock_file()),  # e.g. leaked from an ancestor
+                "IWA_CTL_LOCK_PID": str(os.getpid()),
+            }
+            result = self.run_script("start.sh", env=env)
+            self.assertEqual(result.returncode, 75, result.stdout + result.stderr)
+            self.assertFalse(self.pid_file.exists())
+        finally:
+            os.close(fd)
+
+    @unittest.skipUnless(importlib.util.find_spec("gunicorn"), "gunicorn not installed")
+    def test_gunicorn_server_does_not_hold_the_lock(self):
+        env = {**self.env, "IWA_SERVER": "gunicorn"}
+        started = self.run_script("start.sh", env=env)
+        self.assertEqual(started.returncode, 0, started.stdout + started.stderr)
+        self.assertTrue(self.try_lock(), "the gunicorn server inherited the start/stop lock")
+        stopped = self.run_script("stop.sh", env=env)
+        self.assertEqual(stopped.returncode, 0, stopped.stdout + stopped.stderr)
 
     def test_lock_of_a_killed_holder_is_released_by_the_kernel(self):
         holder = subprocess.Popen(
