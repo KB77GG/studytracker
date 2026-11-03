@@ -35,23 +35,30 @@ class LLMResult:
         return extract_json_object(self.text)
 
 
-def extract_json_object(text: str) -> dict:
+# The whole reply must be one JSON object, optionally wrapped in a single code fence.
+# Text outside the JSON ("I can't read this, here is an example: {...}") is a
+# statement about the JSON that we cannot validate, so such replies are rejected.
+_FENCE_RE = re.compile(r"```(?:json|JSON)?[ \t]*\r?\n(.*?)\r?\n[ \t]*```", re.S)
+
+
+def parse_strict_json(text: str | None) -> dict | None:
     content = (text or "").strip()
-    fence = re.match(r"^```(?:json)?\s*(.*?)\s*```$", content, re.S)
+    fence = _FENCE_RE.fullmatch(content)
     if fence:
-        content = fence.group(1)
+        content = fence.group(1).strip()
+    if not (content.startswith("{") and content.endswith("}")):
+        return None
     try:
         value = json.loads(content)
     except ValueError:
-        start, end = content.find("{"), content.rfind("}")
-        if start < 0 or end <= start:
-            raise LLMError("invalid_json", "模型没有返回 JSON") from None
-        try:
-            value = json.loads(content[start : end + 1])
-        except ValueError:
-            raise LLMError("invalid_json", "模型返回的 JSON 无法解析") from None
-    if not isinstance(value, dict):
-        raise LLMError("invalid_json", "模型返回的 JSON 不是对象")
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def extract_json_object(text: str) -> dict:
+    value = parse_strict_json(text)
+    if value is None:
+        raise LLMError("invalid_json", "模型输出不是单独的 JSON 对象（JSON 之外不能有其他文字）")
     return value
 
 

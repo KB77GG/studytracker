@@ -129,37 +129,28 @@ explain_untrusted_pid() {
 }
 
 # ---------------------------------------------------------------------------
-# Script-level mutual exclusion for start/stop (mkdir is atomic; macOS has no
-# flock(1)). Two concurrent start.sh runs are serialised, so neither can launch
-# a duplicate or delete the PID file of the instance the other one started.
-# A lock whose holder process is gone is treated as stale and taken over.
+# Script-level mutual exclusion for start/stop.
+#
+# The whole start or stop run happens under an exclusive kernel flock held by
+# ctl_lock.py (Python standard library only). Taking it is one atomic system call
+# and the kernel releases it when the holder exits - even on SIGKILL - so two
+# scripts can never both hold it and there is no stale lock to take over.
 # ---------------------------------------------------------------------------
-CTL_LOCK_DIR="${DATA_DIR}/iwa.ctl.lock"
+CTL_LOCK_FILE="${DATA_DIR}/iwa.ctl.flock"
+CTL_LOCK_TIMEOUT="$(read_env IWA_CTL_LOCK_TIMEOUT 60)"
 
-release_ctl_lock() {
-  if [[ "$(cat "${CTL_LOCK_DIR}/owner" 2>/dev/null || true)" == "$$" ]]; then
-    rm -rf "${CTL_LOCK_DIR}"
+# Call as: run_under_ctl_lock "$@"  - re-executes the calling script under the lock
+# (no-op when already running under it).
+run_under_ctl_lock() {
+  if [[ "${IWA_CTL_LOCK_HELD:-}" == "${CTL_LOCK_FILE}" ]]; then
+    if [[ -d "${DATA_DIR}/iwa.ctl.lock" ]]; then
+      rm -rf "${DATA_DIR}/iwa.ctl.lock"  # directory lock left by the previous version
+    fi
+    return 0
   fi
-}
-
-acquire_ctl_lock() {
-  local holder
   mkdir -p "${DATA_DIR}"
-  for _ in $(seq 1 120); do
-    if mkdir "${CTL_LOCK_DIR}" 2>/dev/null; then
-      echo "$$" >"${CTL_LOCK_DIR}/owner"
-      trap release_ctl_lock EXIT
-      return 0
-    fi
-    holder="$(cat "${CTL_LOCK_DIR}/owner" 2>/dev/null || true)"
-    if [[ -n "${holder}" ]] && ! kill -0 "${holder}" 2>/dev/null; then
-      rm -rf "${CTL_LOCK_DIR}"  # previous start/stop died without releasing
-      continue
-    fi
-    sleep 0.25
-  done
-  echo "另一个启动或停止操作仍在进行（锁：${CTL_LOCK_DIR}），请稍后再试。" >&2
-  return 1
+  exec "${PYTHON}" -I "${TOOL_DIR}/ctl_lock.py" "${CTL_LOCK_FILE}" "${CTL_LOCK_TIMEOUT}" \
+    -- "${BASH}" "${0}" "$@"
 }
 
 # Remove the PID file only if it still records the given PID.

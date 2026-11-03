@@ -10,6 +10,7 @@ IWA_TEST_BASH, IWA_TEST_LOCALE and IWA_TEST_LOCPATH (e.g. a Latin-1 locale on Li
 whose libc classifies 0x80-0xFF bytes like macOS does).
 """
 
+import fcntl
 import os
 import re
 import shutil
@@ -23,6 +24,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 BIN = REPO_ROOT / "tools" / "ielts_writing_ai" / "bin"
+CTL_LOCK = REPO_ROOT / "tools" / "ielts_writing_ai" / "ctl_lock.py"
 
 
 def _utf8_locale() -> str | None:
@@ -191,6 +193,20 @@ class ScriptSafetyTest(unittest.TestCase):
 
     # -- concurrent starts ----------------------------------------------------
 
+    def lock_file(self) -> Path:
+        return Path(self.data_dir) / "iwa.ctl.flock"
+
+    def try_lock(self) -> bool:
+        """True if the control lock is free right now (taken and released at once)."""
+        fd = os.open(self.lock_file(), os.O_RDWR | os.O_CREAT, 0o600)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return True
+        except BlockingIOError:
+            return False
+        finally:
+            os.close(fd)
+
     def test_concurrent_starts_leave_exactly_one_verified_instance(self):
         procs = [
             subprocess.Popen(
@@ -200,11 +216,11 @@ class ScriptSafetyTest(unittest.TestCase):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            for _ in range(3)
+            for _ in range(5)
         ]
         outputs = []
         for proc in procs:
-            out, err = proc.communicate(timeout=90)
+            out, err = proc.communicate(timeout=120)
             outputs.append((proc.returncode, out.decode("utf-8"), err.decode("utf-8")))
         started = [o for o in outputs if "已启动" in o[1]]
         self.assertEqual(len(started), 1, outputs)
@@ -216,17 +232,71 @@ class ScriptSafetyTest(unittest.TestCase):
         )
         self.assertEqual(int(fields["pid"]), pid)
         self.assertEqual(self.run_script("status.sh").returncode, 0)
-        self.assertFalse((Path(self.data_dir) / "iwa.ctl.lock").exists())
+        # The running server must not have inherited the control lock.
+        self.assertTrue(self.try_lock())
 
-    def test_stale_control_lock_from_a_dead_script_is_taken_over(self):
-        lock = Path(self.data_dir) / "iwa.ctl.lock"
-        lock.mkdir()
-        dead = subprocess.Popen(["sleep", "0"])
-        dead.wait()
-        (lock / "owner").write_text(str(dead.pid), encoding="utf-8")
+    def test_control_lock_is_mutually_exclusive_even_with_a_leftover_lock_file(self):
+        # Third review: two scripts could both take over a leftover lock. With flock a
+        # leftover file is just a file; only one holder can be inside at any time.
+        self.lock_file().write_text("left by a crashed run", encoding="utf-8")
+        inside = Path(self.data_dir) / "inside"
+        body = f'mkdir "{inside}" || exit 9; sleep 0.15; rmdir "{inside}"'  # fails if overlapping
+        procs = [
+            subprocess.Popen(
+                [
+                    sys.executable,
+                    "-I",
+                    str(CTL_LOCK),
+                    str(self.lock_file()),
+                    "30",
+                    "--",
+                    DEFAULT_BASH,
+                    "-c",
+                    body,
+                ]
+            )
+            for _ in range(8)
+        ]
+        codes = [proc.wait(timeout=60) for proc in procs]
+        self.assertEqual(codes, [0] * len(procs))
+        self.assertFalse(inside.exists())
+
+    def test_lock_of_a_killed_holder_is_released_by_the_kernel(self):
+        holder = subprocess.Popen(
+            [sys.executable, "-I", str(CTL_LOCK), str(self.lock_file()), "30", "--", "sleep", "60"]
+        )
+        self.addCleanup(holder.wait)
+        for _ in range(50):
+            if not self.try_lock():
+                break
+            time.sleep(0.1)
+        self.assertFalse(self.try_lock())  # held
+        holder.kill()  # SIGKILL: no cleanup code runs
+        holder.wait()
+        self.assertTrue(self.try_lock())
         result = self.run_script("start.sh")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertFalse(lock.exists())
+
+    def test_busy_lock_times_out_without_any_change(self):
+        fd = os.open(self.lock_file(), os.O_RDWR | os.O_CREAT, 0o600)
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        try:
+            env = {**self.env, "IWA_CTL_LOCK_TIMEOUT": "1"}
+            for script in ("start.sh", "stop.sh"):
+                result = self.run_script(script, env=env)
+                self.assertEqual(result.returncode, 75, result.stdout + result.stderr)
+                self.assertIn("另一个启动或停止操作仍在进行", result.stderr)
+            self.assertFalse(self.pid_file.exists())
+        finally:
+            os.close(fd)
+        self.assertEqual(self.run_script("start.sh").returncode, 0)
+
+    def test_previous_version_directory_lock_is_cleaned_up(self):
+        old = Path(self.data_dir) / "iwa.ctl.lock"
+        old.mkdir()
+        (old / "owner").write_text("12345", encoding="utf-8")
+        self.assertEqual(self.run_script("start.sh").returncode, 0)
+        self.assertFalse(old.exists())
 
     # -- PID reuse ----------------------------------------------------------
 

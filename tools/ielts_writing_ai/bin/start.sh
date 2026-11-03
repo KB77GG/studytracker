@@ -9,7 +9,7 @@ REPO_ROOT="$(cd "${TOOL_DIR}/../.." && pwd)"
 # shellcheck source=_common.sh
 source "${TOOL_DIR}/bin/_common.sh"
 
-acquire_ctl_lock
+run_under_ctl_lock "$@"
 check_instance
 case "${INSTANCE_STATE}" in
   running)

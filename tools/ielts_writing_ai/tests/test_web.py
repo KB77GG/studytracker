@@ -42,6 +42,36 @@ class UnreasonedFirstClient(FakeClient):
         )
 
 
+class DisclaimerClient(FakeClient):
+    """Wraps an otherwise valid generation in a disclaimer for the first N calls of
+    each kind ("I can't really assess this, below is only an example")."""
+
+    def __init__(self, wrapped_attempts: int):
+        super().__init__()
+        self.remaining = {}
+        self.wrapped_attempts = wrapped_attempts
+
+    def complete(
+        self, messages, *, json_mode, max_tokens, temperature=0.2, context=None, retries=1
+    ):
+        result = super().complete(
+            messages,
+            json_mode=json_mode,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            context=context,
+            retries=retries,
+        )
+        kind = (context or {}).get("kind")
+        left = self.remaining.setdefault(kind, self.wrapped_attempts)
+        if left > 0:
+            self.remaining[kind] = left - 1
+            result.text = (
+                "我无法完整评估这篇作文，下面只是示例：\n```json\n" + result.text + "\n```"
+            )
+        return result
+
+
 class AuthTest(AppTestCase):
     def test_pages_and_api_require_login(self):
         client = self.app.test_client()
@@ -285,6 +315,26 @@ class QuotaAndRetryTest(AppTestCase):
         self.assertIsNone(evaluation["copy"])
         self.assertEqual(self.client_llm.calls.count("evaluate"), 2)
         self.assertEqual(self.storage.usage_today(uid), 3)
+
+    def test_disclaimer_around_valid_json_never_produces_results(self):
+        uid, client = self._with_client(DisclaimerClient(wrapped_attempts=5))
+        public_id = self.submit(client).get_json()["public_id"]
+        gens = client.get(f"/api/submissions/{public_id}").get_json()["submission"]["generations"]
+        for kind in ("evaluate", "refine", "rewrite"):
+            with self.subTest(kind=kind):
+                self.assertEqual(gens[kind]["status"], "failed")
+                self.assertEqual(gens[kind]["error"]["code"], "invalid_output")
+                self.assertIsNone(gens[kind]["result"])
+                self.assertIsNone(gens[kind]["copy"])
+        items = client.get("/api/submissions").get_json()["items"]
+        self.assertIsNone(items[0]["overall_band"])
+        self.assertEqual(self.storage.usage_today(uid), 3)
+
+    def test_disclaimer_once_then_clean_json_is_accepted_after_retry(self):
+        _uid, client = self._with_client(DisclaimerClient(wrapped_attempts=1))
+        public_id = self.submit(client).get_json()["public_id"]
+        gens = client.get(f"/api/submissions/{public_id}").get_json()["submission"]["generations"]
+        self.assertEqual({k: g["status"] for k, g in gens.items()}, dict.fromkeys(gens, "ready"))
 
     def test_failed_generation_can_be_regenerated(self):
         self.client_llm = FakeClient(fail_kinds={"rewrite"})

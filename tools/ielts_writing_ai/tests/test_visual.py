@@ -16,6 +16,15 @@ REVIEW_CANNOT_READ = (
 REVIEW_BLANK = "The uploaded picture is blank; it contains no readable chart or diagram."
 
 
+def disclaimer_wrapped(json_text: str) -> list[str]:
+    return [
+        "无法读图，下面只是示例：\n```json\n" + json_text + "\n```",
+        "I can't read this image; here is an example only:\n" + json_text,
+        json_text + "\nNote: the values above are illustrative, the image was illegible.",
+        "```json\n" + json_text + "\n```\n以上为示例数据。",
+    ]
+
+
 def reading(**overrides):
     value = {
         "readability": "sufficient",
@@ -47,6 +56,14 @@ class AssessTest(unittest.TestCase):
 
     def test_fenced_json_is_accepted(self):
         self.assertTrue(visual.assess("```json\n" + reading() + "\n```").sufficient)
+
+    def test_disclaimer_outside_valid_json_is_rejected(self):
+        # Third review: "can't read it, below is only an example" + a sufficient-looking JSON.
+        for text in disclaimer_wrapped(reading()):
+            with self.subTest(text=text[:40]):
+                result = visual.assess(text)
+                self.assertFalse(result.sufficient)
+                self.assertEqual(result.code, "unstructured")
 
     def test_review_plain_text_outputs_are_rejected(self):
         for text in (REVIEW_CANNOT_READ, REVIEW_BLANK, "", "Sure! Here is the chart."):
@@ -149,6 +166,7 @@ class VisionGateEndToEndTest(AppTestCase):
             reading(readability="partial"),
             reading(summary=REVIEW_BLANK),
             reading(data_points=[]),
+            *disclaimer_wrapped(reading()),
         ):
             with self.subTest(vision=text[:50]):
                 sub, history = self.run_with_vision(text)

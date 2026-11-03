@@ -7,7 +7,7 @@ TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=_common.sh
 source "${TOOL_DIR}/bin/_common.sh"
 
-acquire_ctl_lock
+run_under_ctl_lock "$@"
 check_instance
 case "${INSTANCE_STATE}" in
   none)

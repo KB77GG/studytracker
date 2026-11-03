@@ -10,9 +10,10 @@ anything else leaves TA and the overall band not assessable.
 
 from __future__ import annotations
 
-import json
 import re
 from dataclasses import dataclass
+
+from .llm import parse_strict_json
 
 DATA_TYPES = {"bar_chart", "line_graph", "pie_chart", "table", "mixed_chart"}
 TYPE_LABELS = {
@@ -61,18 +62,8 @@ def _clean_list(value, limit_items: int = 30) -> list[str]:
 
 
 def parse_json(text: str) -> dict | None:
-    content = (text or "").strip()
-    fence = re.match(r"^```(?:json)?\s*(.*?)\s*```$", content, re.S)
-    if fence:
-        content = fence.group(1)
-    start, end = content.find("{"), content.rfind("}")
-    if start < 0 or end <= start:
-        return None
-    try:
-        value = json.loads(content[start : end + 1])
-    except ValueError:
-        return None
-    return value if isinstance(value, dict) else None
+    """Only a reply that is entirely one JSON object (or one fenced JSON block)."""
+    return parse_strict_json(text)
 
 
 def _render(reading: dict, points: list[tuple[str, str]], features, unclear) -> str:

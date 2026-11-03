@@ -260,12 +260,28 @@ class RewriteTest(unittest.TestCase):
 
 
 class JsonExtractionTest(unittest.TestCase):
-    def test_fenced_and_wrapped_json(self):
+    def test_whole_reply_json_or_single_fence_is_accepted(self):
+        self.assertEqual(extract_json_object('{"a": 1}'), {"a": 1})
+        self.assertEqual(extract_json_object('  \n{"a": {"b": 2}}\n '), {"a": {"b": 2}})
         self.assertEqual(extract_json_object('```json\n{"a": 1}\n```'), {"a": 1})
-        self.assertEqual(extract_json_object('Here: {"a": {"b": 2}} done'), {"a": {"b": 2}})
+        self.assertEqual(extract_json_object('```\n{"a": 1}\n```'), {"a": 1})
+
+    def test_any_text_outside_the_json_is_rejected(self):
+        # Third review: a disclaimer before/after valid JSON must not be silently dropped.
+        for value in (
+            'Here: {"a": {"b": 2}} done',
+            '我无法完整评估，下面只是示例：\n{"a": 1}',
+            '我无法完整评估，下面只是示例：\n```json\n{"a": 1}\n```',
+            '{"a": 1}\n以上仅为示例，并非真实评分。',
+            '```json\n{"a": 1}\n```\nNote: this is an example.',
+            '```json\n{"a": 1}\n```\n```json\n{"b": 2}\n```',
+        ):
+            with self.subTest(value=value[:30]), self.assertRaises(LLMError) as ctx:
+                extract_json_object(value)
+            self.assertEqual(ctx.exception.code, "invalid_json")
 
     def test_invalid_json(self):
-        for value in ("no json", "[1, 2]", "{broken"):
+        for value in ("no json", "[1, 2]", "{broken", ""):
             with self.assertRaises(LLMError):
                 extract_json_object(value)
 
