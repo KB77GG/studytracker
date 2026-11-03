@@ -1,5 +1,32 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-03 雅思写作 AI 试用工具：第二轮复核修复（识图门禁、Bash 3.2、并发启动；已推功能分支，未合并、未部署）
+
+- 输入：用户上传的第二轮复核报告（Mac 本地 `docs/design/iwa-trial-recheck-20261103/README.md`，探针脚本仍只在本机）。基线 `claude/ielts-writing-ai-trial@556b368`。报告确认生产服务器 `.env` 里已有 DeepSeek Key；试用工具仍只读自己的 `IWA_LLM_API_KEY`，本轮没有配置或使用任何 Key。
+- **P1 识图门禁**：新增 `visual.py`。识图提示词要求返回结构化 JSON：readability、visual_type、data_points、main_features、unclear、summary。服务端判定是否足够：
+  - 必须是 sufficient。
+  - 图表或表格：至少 3 个带数值、能读清的数据点，并且有主要特征；读不清的部分不能多于读清的部分。
+  - 地图至少 2 处变化，流程图至少 3 个步骤。
+  - 描述里出现空白、看不清等字样一律判为不足。
+  - 非 JSON 输出算作 unstructured。
+  - 判定不足时：image_status=failed，image_error=`insufficient:原因` 或 `unstructured:原因`，读到的内容保存在 description 里；TA 和总分不可评，API 的 `image.unusable_reason`、页面、复制文本、历史都显示“题图信息不足（原因）”。
+  - fake 识图改为返回一份结构完整的演示读图结果。提示词版本 `iwa-2026-11-03.1`。
+- **P2 Bash 3.2 + UTF-8**：在 Linux 上用 `localedef` 生成 en_US.ISO-8859-1（其 libc 和 macOS 一样把 0xEF 判为字母），用 556b368 的脚本复现出与报告一致的 `INSTANCE_PID\xef: unbound variable`，stop、status、start 三个脚本都失败。修复：bin/*.sh 的全部 99 处具名展开改为 `${VAR}`。另外修复了模拟中暴露的问题：服务进程在非 UTF-8 locale 下打印中文提示会崩溃。现在 start.sh 固定 `PYTHONIOENCODING=utf-8`，命令行入口在编码不支持时用转义输出。
+- **并发启动**：start 和 stop 之间加 `<数据目录>/iwa.ctl.lock`（基于 mkdir，因为 macOS 没有 flock 命令；持锁进程已退出时自动接管）；启动失败时只删除记录自己 PID 的 PID 文件。
+- 新增测试：
+  - `test_visual.py`：10 项，其中用报告里的两段原文做端到端验证，覆盖 API、复制、历史。
+  - `test_scripts.py`：新增 4 项，包括禁止裸 `$VAR` 的静态检查；用每个可用 bash × UTF-8 locale（可选额外 locale）跑全部提示路径并严格解码 UTF-8；3 个 start 并发；接管已死持锁进程的锁。
+  - 用 556b368 的旧脚本跑新的 shell 测试：两项都失败（静态检查 + 解码错误），说明测试能抓到这个问题。
+- 精确验证（Python 3.13 venv，bash 5.2）：
+  - `IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<生成目录> python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **100 tests OK**；`LANG=LC_ALL=C.UTF-8`、不加额外 locale 时也是 **100 OK**。
+  - `node --test tools/ielts_writing_ai/tests/test_draft.js` → **8 pass**。
+  - ruff、black、两个 JS 的 `node --check`、`bash -n` 全部通过。
+  - 运行时 shell 里设了 `IWA_DATA_DIR`，演示库没有被写入。
+  - Playwright：本地脚本把识图模型替换成“图片空白”的替身，页面上 TA 和总分都显示不可评，题图下方显示原因和识图原始输出。
+- **未验证**：容器里拿不到 macOS 或 bash 3.2（GNU 和 GitHub 的源码下载都被网络策略拦截），Mac `/bin/bash` 3.2 的实测要在 Mac 上跑 test_scripts（会自动包含 /bin/bash）；未接真实模型或识图模型；识图门禁的阈值没有用真实图表校准；未测 Python 3.10；体验补齐项未做。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作；`origin/main` 仍是 6904252。
+- **下一步**：在 Mac 上拉取，用报告里的 product_probe、shell_locale_probe 和 run_suite 复跑（这些探针原来断言的是缺陷行为，需要改成断言正确行为），并在默认 UTF-8 终端下直接跑 start、status、stop。之后配置试用专用 Key 做小量连通测试，再用有老师评分的作文和真实题图校准评分与识图门禁。
+
 ## 2026-11-02（第二轮）雅思写作 AI 试用工具：修复审阅提出的五项问题（已推功能分支，未合并、未部署）
 
 - 输入：用户在 Mac 上复核 `d15db4c6`（60 项测试通过），用合成数据复现了五个测试没覆盖的问题。审阅报告 `docs/design/iwa-trial-review-20261102/README.md` 只在用户 Mac 本地，本容器读不到，这轮按用户消息里的描述修复。基线仍是 `claude/ielts-writing-ai-trial@d15db4c`（基于 `a7387f5`）。`origin/main` 已前进到 `6904252`，这轮没有 rebase；合并时两份交接文档的顶部会冲突。
