@@ -1,5 +1,10 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-03 — 写作 AI 试用工具：第三轮复核修复
+
+- 识图和文本生成都改为只接受纯 JSON 或单个 JSON 代码围栏，JSON 外有文字就拒绝；启停改为 `ctl_lock.py` 用 `fcntl.flock` 包住全过程，删除 mkdir 锁和遗留锁接管。旧 mkdir 锁压测出现 4 次重叠，新锁 0 次。
+- Python 107 项（含 Latin-1 locale 变体）、Node 8 项、lint 通过；gunicorn 启停实测正常。只推功能分支，未合并 / 部署；未接真实模型，详见 `CODEX_HANDOFF.md` 顶部。
+
 ## 2026-11-03 — 写作 AI 试用工具：第二轮复核修复
 
 - P1：识图改为返回结构化结果，服务端判定是否足够（数据点、特征、可读性、空白或看不清等字样）；纯文本、partial、unreadable、数据不足一律不评 TA 和总分，API、复制、历史联动显示原因。P2：脚本全部改用 `${VAR}`，并用 Latin-1 locale 复现并验证了 bash 3.2 的字节吞并问题；非 UTF-8 locale 下打印中文不再崩溃；start / stop 加 mkdir 互斥锁，失败时只删除自己的 PID 文件。

@@ -1,5 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-03（第三轮）雅思写作 AI 试用工具：严格 JSON 与 flock 启停锁（已推功能分支，未合并、未部署）
+
+- 输入：用户在 Mac 上复核 `915a0f84`，原生 Bash 3.2 下启动、状态、停止正常；Python 100 项、Node 8 项通过；3 个并发启动只产生 1 个实例；“看不清 / 空白”识图不再出分。上一轮的问题可以关闭。第三轮复核报告（Mac 本地 `docs/design/iwa-trial-third-review-20261103/README.md`）提出两处边界，本轮修复。
+- **严格 JSON**：`llm.parse_strict_json` 只接受整段是一个 JSON 对象，或整段只有一个 JSON 代码围栏的回复；识图（`visual.assess`）和文本生成（`extract_json_object`）共用。JSON 前后有任何文字都拒绝：识图判为 unstructured，TA 和总分不可评；文本生成判 invalid_json，静默重试一次，仍不合格就是 invalid_output，不出分。文本生成存在同类风险，所以一并收紧，删掉了原来断言“`Here: {...} done` 可以通过”的旧测试。
+- **启停锁**：删除 mkdir 锁和遗留锁接管逻辑。start.sh 和 stop.sh 通过 `run_under_ctl_lock "$@"`，用 `python -I tools/ielts_writing_ai/ctl_lock.py <数据目录>/iwa.ctl.flock <超时> -- bash <脚本>` 重新执行自己，整个启停过程持有 `fcntl.flock` 排他锁。`ctl_lock.py` 只依赖标准库，不导入 Flask；锁描述符不可继承，服务进程不持有这把锁。持锁进程被杀时由内核释放；超时退出码 75，不做任何改动（`IWA_CTL_LOCK_TIMEOUT` 默认 60 秒）；上个版本留下的 `iwa.ctl.lock` 目录会被清理。
+- 证据：
+  - 用 915a0f8 的旧 mkdir 锁做压力测试（预置持有者已死的锁 + 8 个进程同时进临界区 × 20 轮）：**4 次重叠**，并伴随 `rm -rf` 互相删除锁目录、owner 文件被删的报错，与复核报告一致。新 flock 锁同样的压测：**0 次重叠**。
+  - 用 915a0f8 的旧解析器跑新的 JSON 测试：报告里的 4 种“声明加 JSON”识图回复全部产生了 TA，新代码下全部拒绝。
+- 精确验证（Python 3.13 venv，bash 5.2）：
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **107 tests OK**。在 Latin-1 locale 变体和 `LANG=LC_ALL=C.UTF-8` 两种条件下都通过。新增：JSON 外文字拒绝的单元测试和端到端测试（识图 + 文本生成，包括重试后通过）；flock 测试包括直接互斥（8 个进程 + 遗留锁文件）、持锁进程被 SIGKILL 后释放、忙锁超时不做改动、5 个并发 start、服务进程不继承锁、清理旧目录锁。
+  - Node 8 pass；ruff、black、`node --check`、`bash -n` 全部通过。
+  - gunicorn 模式启动、状态、停止实测正常。
+  - 演示库没有被测试写入。
+- **未验证**：Mac 原生 bash 3.2 下的新锁需要用户在 Mac 上跑 test_scripts；未接真实模型，严格 JSON 对真实 DeepSeek / Qwen 的通过率未知（DeepSeek 用 json_object 模式时应该是纯 JSON）；未测 Python 3.10；体验补齐项未做。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：在 Mac 上复核这两处（用复核报告的探针改成断言正确行为）；之后配置试用专用 Key，先用少量合成样本做连通测试，重点看严格 JSON 和证据规则的通过率，再用有老师评分的作文和真实题图校准。
+
 ## 2026-11-03 雅思写作 AI 试用工具：第二轮复核修复（识图门禁、Bash 3.2、并发启动；已推功能分支，未合并、未部署）
 
 - 输入：用户上传的第二轮复核报告（Mac 本地 `docs/design/iwa-trial-recheck-20261103/README.md`，探针脚本仍只在本机）。基线 `claude/ielts-writing-ai-trial@556b368`。报告确认生产服务器 `.env` 里已有 DeepSeek Key；试用工具仍只读自己的 `IWA_LLM_API_KEY`，本轮没有配置或使用任何 Key。
