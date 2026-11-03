@@ -89,6 +89,64 @@ IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评�
 - **输出必须是纯 JSON**：评价、精修、改写和识图的回复必须整段是一个 JSON 对象，或整段只有一个 JSON 代码围栏。JSON 前后出现任何文字（例如“无法读图，下面只是示例”），整份回复都会被拒绝：文本生成会静默重试一次，仍不合格就判失败；识图则判为“题图信息不足”。
 - **复制文本**：由服务端生成，都带“AI 生成，仅供学习参考，不是正式成绩”和全部限制提示。唯一例外是单句“复制”按钮，只复制那一句改句。
 
+## 真实模型小样本验证（realcheck）
+
+`realcheck` 和网页走的是同一条生成流程：相同的提示词、严格 JSON、证据规则，以及一次静默重试。它的特点：
+
+- **不碰试用数据**：用临时数据库运行，不打开试用库，不占试用账号的额度；试用服务器可以同时开着。
+- **安全**：不打印 Key。有调用次数上限（`--max-calls`，默认 50）。第一次调用就遇到 Key 错误或网络错误时，立即停止。
+- **防止误调用**：调用付费模型必须加 `--confirm-paid`。
+
+```bash
+PY=tools/ielts_writing_ai/.venv/bin/python
+# 0. 在 .env 里配置试用专用 Key（不要发到聊天或提交到 Git）
+#    IWA_LLM_PROVIDER=deepseek
+#    IWA_LLM_API_KEY=sk-...
+$PY -m tools.ielts_writing_ai check                    # 确认 provider / model、llm_api_key_set=true
+
+# 1. 连通性：1 篇、只做评价，最多 2 次调用
+$PY -m tools.ielts_writing_ai realcheck --limit 1 --kinds evaluate --confirm-paid
+
+# 2. 内置合成样本：7 篇 × 3 类，最多 42 次调用；填入当前单价（每百万 token）可以估算费用
+$PY -m tools.ielts_writing_ai realcheck --confirm-paid --price-in <输入单价> --price-out <输出单价>
+
+# 3. 校准：用老师评过分的作文（JSONL，每行一篇）
+$PY -m tools.ielts_writing_ai realcheck --samples teacher.jsonl --confirm-paid
+```
+
+内置样本（`samples.py`）是原创的合成作文，不含学生数据：
+
+- 4 篇同题 Task 2，水平从弱到强。
+- 1 篇离题作文、1 篇字数不足的作文。
+- 1 篇没有题图的 Task 1。
+
+报告会检查这些样本的分数是否落在宽松区间内，并检查总分是否随水平升高、最强和最弱至少相差 1.5 分。这些区间只用来做合理性检查，不是真实分数。
+
+校准文件的每一行格式如下（`teacher` 里可以只填部分项；`image` 是相对于 JSONL 文件的路径，可选）：
+
+```json
+{"id": "s01", "task_type": "task2", "prompt": "题干……", "essay": "作文……", "teacher": {"overall": 6.5, "task": 6, "coherence": 6.5, "lexical": 6.5, "grammar": 6}}
+```
+
+用真实学生作文校准时，作文会发送给模型服务商。请先征得同意，并去掉姓名等个人信息。
+
+报告写在 `<数据目录>/realcheck/<时间>/`，这个目录被 git 忽略：
+
+- `report.md`、`report.json`：首轮纯 JSON 率、首轮通过校验率、最终成功率、首轮被拒原因、引文核实率、精修缺句率、改写达标率、延迟、token、合理性检查、与老师评分的误差。
+- `raw_calls.jsonl`：每次调用的原文，方便排查。
+
+**建议在邀请真实用户之前达到的指标**（建议值，可以按实际情况调整）：
+
+| 指标 | 建议值 |
+|---|---|
+| 首轮纯 JSON | ≥ 95% |
+| 最终成功率 | 100% |
+| 引文能在原文中找到 | ≥ 90% |
+| 精修缺句率 | ≤ 5% |
+| 改写达到字数下限 | ≥ 90% |
+| 内置合理性检查 | 全部通过 |
+| 与老师评分对比（≥ 20 篇） | 总分平均绝对误差 ≤ 0.5，平均偏差在 ±0.25 以内，±0.5 以内的比例 ≥ 70% |
+
 ## 测试
 
 ```bash
@@ -106,6 +164,7 @@ node --test tools/ielts_writing_ai/tests/test_draft.js
 - **数据与流程**：额度、上传校验、失败重试、原稿不被修改。
 - **进程**：重启恢复、单实例锁，以及启停脚本不会误停其他进程（PID 复用、启动时间不符、旧格式 PID 文件、端口被占用）。
 - **不依赖主应用**：用子进程检查不会 import 主应用。
+- **真实模型验证工具**：用模型替身离线测试，覆盖首轮和最终合格率、Key 错误时立即停止、调用上限、试用库不被触碰、报告里不出现 Key、与老师评分的误差统计、付费调用必须确认。
 
 `test_scripts.py` 需要 `curl` 和 `ps`（macOS 和 Linux 都自带），每次会真实启动、停止几个临时实例，大约需要 20 秒。
 

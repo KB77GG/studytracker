@@ -8,6 +8,8 @@ Commands:
   user-list
   user-disable ID | user-enable ID
   user-reset-code ID        issue a new code and sign out existing sessions
+  realcheck [--samples builtin|FILE.jsonl] [--confirm-paid] ...
+                            small-sample check of the configured model (see README)
 """
 
 from __future__ import annotations
@@ -15,7 +17,9 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from datetime import timedelta
+from pathlib import Path
 
 from . import access
 from .config import ConfigError, load_settings
@@ -123,6 +127,56 @@ def cmd_user_reset_code(settings, args) -> int:
     return 0
 
 
+def cmd_realcheck(settings, args) -> int:
+    from . import realcheck
+
+    settings.validate()
+    kinds = tuple(k.strip() for k in args.kinds.split(",") if k.strip())
+    unknown = [k for k in kinds if k not in ("evaluate", "refine", "rewrite")]
+    if unknown or not kinds:
+        print(f"--kinds 只能是 evaluate,refine,rewrite 的组合：{unknown}", file=sys.stderr)
+        return 2
+    try:
+        items = realcheck.load_samples(args.samples, args.limit)
+    except realcheck.RealCheckError as exc:
+        print(f"样本错误：{exc}", file=sys.stderr)
+        return 2
+    vision_needed = args.with_vision and any(i.get("image") for i in items)
+    worst = len(items) * len(kinds) * 2 + (len(items) if vision_needed else 0)
+    print(
+        f"模型：{settings.llm_provider} / {settings.llm_model}（Key 已配置："
+        f"{'是' if settings.llm_api_key else '否'}）；样本 {len(items)} 篇；"
+        f"最多 {min(worst, args.max_calls)} 次调用（上限 {args.max_calls}）"
+    )
+    if not settings.is_demo and not args.confirm_paid:
+        print(
+            "这会调用付费模型，并把样本作文发送给模型服务商。确认后请加 --confirm-paid 重新运行。",
+            file=sys.stderr,
+        )
+        return 2
+    if settings.vision_enabled and not args.with_vision:
+        settings.vision_provider = "none"  # do not call the vision model unless asked
+    run_data = realcheck.run(
+        settings,
+        items,
+        kinds=kinds,
+        max_calls=args.max_calls,
+        target_band=args.target_band,
+    )
+    report = realcheck.build_report(run_data, price_in=args.price_in, price_out=args.price_out)
+    out_dir = (
+        Path(args.out)
+        if args.out
+        else (settings.data_dir / "realcheck" / time.strftime("%Y%m%d-%H%M%S"))
+    )
+    path = realcheck.write_report(run_data, report, out_dir)
+    print(f"报告：{path}")
+    if report["aborted"]:
+        print(f"已中止：{report['aborted']['message']}", file=sys.stderr)
+        return 3
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m tools.ielts_writing_ai")
     parser.add_argument("--env-file", help="指定 .env 文件（默认 tools/ielts_writing_ai/.env）")
@@ -147,6 +201,18 @@ def build_parser() -> argparse.ArgumentParser:
         p = sub.add_parser(name)
         p.add_argument("id", type=int)
         p.set_defaults(func=func)
+    rc = sub.add_parser("realcheck", help="用配置的模型跑小样本验证")
+    rc.add_argument("--samples", default="builtin", help="builtin 或 JSONL 文件路径")
+    rc.add_argument("--kinds", default="evaluate,refine,rewrite")
+    rc.add_argument("--limit", type=int, default=None, help="只跑前 N 篇")
+    rc.add_argument("--max-calls", type=int, default=50, help="模型调用次数上限")
+    rc.add_argument("--target-band", type=float, default=7.0)
+    rc.add_argument("--with-vision", action="store_true", help="对带题图的样本调用识图模型")
+    rc.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
+    rc.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
+    rc.add_argument("--out", default=None, help="报告目录（默认数据目录下 realcheck/时间戳）")
+    rc.add_argument("--confirm-paid", action="store_true", help="确认调用付费模型")
+    rc.set_defaults(func=cmd_realcheck)
     return parser
 
 
