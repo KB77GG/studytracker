@@ -12,7 +12,7 @@ import logging
 from pathlib import Path
 
 from . import essay as essay_lib
-from . import prompts
+from . import prompts, visual
 from .llm import LLMError
 
 log = logging.getLogger("iwa.review")
@@ -72,7 +72,13 @@ task_criterion_assessable = prompts.visual_available
 
 
 def ta_unassessable_reason(submission: dict) -> str:
-    return TA_UNASSESSABLE_REASONS.get(submission.get("image_status") or "none", "题图不可用")
+    status = submission.get("image_status") or "none"
+    error = submission.get("image_error") or ""
+    if status == "failed" and ":" in error:
+        code, detail = error.split(":", 1)
+        if code in {"insufficient", "unstructured"}:
+            return f"题图信息不足（{detail}）"
+    return TA_UNASSESSABLE_REASONS.get(status, "题图不可用")
 
 
 def _meaningful(text: str) -> bool:
@@ -311,9 +317,23 @@ class Generator:
                 temperature=0.0,
                 context=context,
             )
-            self.storage.set_image_result(
-                submission_id, status="ready", description=_text(result.text, 2500), error=None
-            )
+            # A 200 response is not a usable reading: the server decides sufficiency.
+            reading = visual.assess(result.text)
+            if reading.sufficient:
+                self.storage.set_image_result(
+                    submission_id,
+                    status="ready",
+                    description=_text(reading.description, 2500),
+                    error=None,
+                )
+            else:
+                log.info("image for submission %s not usable: %s", submission_id, reading.reason)
+                self.storage.set_image_result(
+                    submission_id,
+                    status="failed",
+                    description=_text(reading.description, 2500) or None,
+                    error=f"{reading.code}:{reading.reason}"[:300],
+                )
         except LLMError as exc:
             log.warning("image description failed for submission %s: %s", submission_id, exc.code)
             self.storage.set_image_result(

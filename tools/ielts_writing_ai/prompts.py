@@ -6,7 +6,7 @@ import json
 
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-02.2"
+PROMPT_VERSION = "iwa-2026-11-03.1"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -197,13 +197,25 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
 
 def build_describe_image(submission: dict, image_data_url: str) -> tuple[list, dict]:
     instruction = (
-        "This image is the visual for an IELTS Academic Writing Task 1 question:\n"
+        "This image should be the visual for an IELTS Academic Writing Task 1 question:\n"
         f"{submission['prompt_text']}\n\n"
-        "Describe ONLY what the image shows, in English, max 220 words: chart/diagram type, "
-        "title, units, time periods, categories, the key figures (exact values where legible), "
-        "the main trends, highest/lowest points and notable comparisons. For maps/processes, "
-        "list the stages or changes in order. Mark any value you cannot read clearly as "
-        "'unclear'. No opinions, no essay advice."
+        "Read ONLY what the image actually shows. Never guess or estimate a value you cannot "
+        "read; list it under 'unclear' instead. Return ONLY one JSON object:\n"
+        '{"readability": "sufficient" | "partial" | "unreadable", '
+        '"visual_type": "bar_chart" | "line_graph" | "pie_chart" | "table" | "mixed_chart" | '
+        '"map" | "process" | "other" | "none", '
+        '"title": str, "units": str, "categories": [str], "periods": [str], '
+        '"data_points": [{"label": str, "value": str}], '
+        '"main_features": [str], "unclear": [str], "summary": str}\n'
+        "- readability: 'sufficient' only if you can read enough exact labels and values to "
+        "check an essay's figures and main trends; 'partial' if some key values or labels are "
+        "illegible; 'unreadable' if the image is blank, blurry, not a chart/table/map/process, "
+        "or otherwise cannot be read.\n"
+        "- data_points: values exactly as printed or read off the axis, with units, e.g. "
+        '{"label": "Museum A, 2020", "value": "140,000 visitors"}.\n'
+        "- main_features: main trends, highest/lowest, comparisons; for maps the changes; for "
+        "processes the stages in order.\n"
+        "- summary: max 120 English words, factual, no essay advice."
     )
     messages = [
         {

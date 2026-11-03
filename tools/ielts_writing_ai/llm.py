@@ -267,7 +267,27 @@ class FakeClient:
 
     @staticmethod
     def _describe_image(context):
-        return "【演示】未真实识别图片。连接识图模型后，这里会给出图表类型、单位、关键数据和趋势。"
+        # A structurally sufficient demo reading, so the demo can show a scored Task 1.
+        return json.dumps(
+            {
+                "readability": "sufficient",
+                "visual_type": "bar_chart",
+                "title": "【演示】示例数据，未真实识别图片",
+                "units": "thousand visitors",
+                "categories": ["Museum A", "Museum B", "Museum C", "Museum D"],
+                "periods": ["2020"],
+                "data_points": [
+                    {"label": "Museum A", "value": "140"},
+                    {"label": "Museum B", "value": "90"},
+                    {"label": "Museum C", "value": "200"},
+                    {"label": "Museum D", "value": "60"},
+                ],
+                "main_features": ["Museum C is the highest", "Museum D is the lowest"],
+                "unclear": [],
+                "summary": "【演示】固定示例读图结果，与上传的图片无关。",
+            },
+            ensure_ascii=False,
+        )
 
 
 def build_client(settings, *, vision: bool = False):

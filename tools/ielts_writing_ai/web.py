@@ -21,7 +21,7 @@ from flask import (
     url_for,
 )
 
-from . import access, copytext, uploads
+from . import access, copytext, review, uploads
 from . import essay as essay_lib
 from .storage import KINDS, iso, utcnow
 
@@ -399,6 +399,12 @@ def _submission_view(submission: dict) -> dict:
                 "url": url_for("iwa.api_submission_image", public_id=submission["public_id"]),
                 "status": submission["image_status"],
                 "description": submission.get("image_description") or "",
+                # Why the image cannot support TA (only set when it is not usable).
+                "unusable_reason": (
+                    review.ta_unassessable_reason(submission)
+                    if submission["image_status"] in {"failed", "skipped"}
+                    else ""
+                ),
             }
             if submission.get("image_path")
             else None

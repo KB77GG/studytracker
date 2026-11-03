@@ -376,9 +376,12 @@
         var note = document.getElementById('imageNote');
         note.classList.remove('is-warn');
         if (d.image.status === 'pending') note.textContent = '正在识别题图…';
-        else if (d.image.status === 'ready') note.textContent = '识图模型读取的图表信息（供核对）：\n' + d.image.description;
-        else if (d.image.status === 'skipped') { note.textContent = '未配置识图模型：本次评价没有核对图表数据。'; note.classList.add('is-warn'); }
-        else { note.textContent = '题图识别失败：本次评价没有核对图表数据。'; note.classList.add('is-warn'); }
+        else if (d.image.status === 'ready') note.textContent = '识图模型读到的图表信息（请核对是否与题图一致）：\n' + d.image.description;
+        else {
+          note.textContent = (d.image.unusable_reason || '题图不可用') + '：本次不评 Task Achievement，也不给总分。' +
+            (d.image.description ? '\n\n' + d.image.description : '');
+          note.classList.add('is-warn');
+        }
       } else {
         imageBlock.hidden = true;
       }

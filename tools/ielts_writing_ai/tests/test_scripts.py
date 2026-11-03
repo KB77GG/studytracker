@@ -2,9 +2,16 @@
 
 Every process touched here is created by the test itself (sleep / python decoys and
 trial servers on a temporary data dir and a free port).
+
+Scripts run under a UTF-8 locale (like a default macOS terminal) with every bash found
+on the machine; on macOS that includes /bin/bash 3.2, which reads high bytes after an
+unbraced ``$VAR`` as part of the name. Extra shells/locales can be added with
+IWA_TEST_BASH, IWA_TEST_LOCALE and IWA_TEST_LOCPATH (e.g. a Latin-1 locale on Linux,
+whose libc classifies 0x80-0xFF bytes like macOS does).
 """
 
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -16,6 +23,50 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 BIN = REPO_ROOT / "tools" / "ielts_writing_ai" / "bin"
+
+
+def _utf8_locale() -> str | None:
+    try:
+        names = subprocess.run(["locale", "-a"], capture_output=True, text=True).stdout.split()
+    except OSError:
+        return None
+    by_key = {n.lower().replace("-", ""): n for n in names}
+    for wanted in ("en_us.utf8", "c.utf8"):
+        if wanted in by_key:
+            return by_key[wanted]
+    return None
+
+
+UTF8_LOCALE = _utf8_locale()
+
+
+def _shells() -> list[str]:
+    found = []
+    for candidate in ("/bin/bash", shutil.which("bash"), os.environ.get("IWA_TEST_BASH")):
+        if candidate and os.path.exists(candidate):
+            real = os.path.realpath(candidate)
+            if real not in {os.path.realpath(f) for f in found}:
+                found.append(candidate)
+    return found
+
+
+SHELLS = _shells()
+DEFAULT_BASH = SHELLS[0] if SHELLS else "bash"
+
+
+def locale_env(name: str | None) -> dict:
+    return {"LANG": name, "LC_ALL": name} if name else {}
+
+
+def shell_variants() -> list[tuple[str, dict]]:
+    variants = [(bash, locale_env(UTF8_LOCALE)) for bash in SHELLS]
+    extra = os.environ.get("IWA_TEST_LOCALE")
+    if extra:
+        env = locale_env(extra)
+        if os.environ.get("IWA_TEST_LOCPATH"):
+            env["LOCPATH"] = os.environ["IWA_TEST_LOCPATH"]
+        variants += [(bash, env) for bash in SHELLS]
+    return variants
 
 
 def free_port() -> int:
@@ -63,19 +114,24 @@ class ScriptSafetyTest(unittest.TestCase):
                 "IWA_LOCK_WAIT": "0.5",
                 "PYTHON": sys.executable,
                 "PYTHONDONTWRITEBYTECODE": "1",
+                **locale_env(UTF8_LOCALE),
             }
         )
         return env
 
-    def run_script(self, name, env=None):
-        return subprocess.run(
-            ["bash", str(BIN / name)],
+    def run_script(self, name, env=None, bash=None):
+        # Strict UTF-8 decoding: a message cut inside a multi-byte character fails here.
+        result = subprocess.run(
+            [bash or DEFAULT_BASH, str(BIN / name)],
             cwd=REPO_ROOT,
             env=env or self.env,
             capture_output=True,
-            text=True,
-            timeout=60,
+            encoding="utf-8",
+            errors="strict",
+            timeout=90,
         )
+        self.assertNotIn("unbound variable", result.stdout + result.stderr, result.stderr)
+        return result
 
     def decoy(self, *argv):
         proc = subprocess.Popen(list(argv), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -89,6 +145,88 @@ class ScriptSafetyTest(unittest.TestCase):
             f"pid={pid}\nstarted={started}\nmode={mode}\ndata_dir={self.data_dir}\n",
             encoding="utf-8",
         )
+
+    # -- shell portability (macOS bash 3.2 + UTF-8) ---------------------------
+
+    def test_scripts_only_use_braced_variable_expansions(self):
+        unbraced = re.compile(r"\$[A-Za-z_]")
+        offenders = [
+            f"{path.name}:{number}: {line.strip()}"
+            for path in sorted(BIN.glob("*.sh"))
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+            if unbraced.search(line)
+        ]
+        self.assertEqual(offenders, [], "write ${VAR}: bash 3.2 can swallow bytes after $VAR")
+
+    def test_every_message_path_under_each_shell_and_locale(self):
+        self.assertTrue(SHELLS, "no bash found")
+        for bash, extra_env in shell_variants():
+            with self.subTest(bash=bash, locale=extra_env.get("LC_ALL")):
+                env = {**self.env, **extra_env}
+                # legacy PID file: the message that used to crash with "INSTANCE_PID\xef"
+                proc = self.decoy(
+                    sys.executable, "-c", "import time; time.sleep(60)", "ielts_writing_ai"
+                )
+                self.pid_file.write_text(f"{proc.pid}\n", encoding="utf-8")
+                for script in ("stop.sh", "status.sh", "start.sh"):
+                    result = self.run_script(script, env=env, bash=bash)
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    self.assertIn(f"手动执行 kill {proc.pid}，再删除", result.stdout)
+                self.assertIsNone(proc.poll())
+                proc.kill()
+                proc.wait()
+                self.pid_file.unlink()
+
+                # start / already running / status / stop success messages
+                started = self.run_script("start.sh", env=env, bash=bash)
+                self.assertEqual(started.returncode, 0, started.stdout + started.stderr)
+                pid = int(re.search(r"已启动（PID (\d+)）：http", started.stdout).group(1))
+                again = self.run_script("start.sh", env=env, bash=bash)
+                self.assertIn(f"已在运行（PID {pid}），地址", again.stdout)
+                status = self.run_script("status.sh", env=env, bash=bash)
+                self.assertIn(f"运行中（PID {pid}，启动于", status.stdout)
+                stopped = self.run_script("stop.sh", env=env, bash=bash)
+                self.assertIn(f"已停止（PID {pid}）", stopped.stdout)
+                self.assertFalse(self.pid_file.exists())
+
+    # -- concurrent starts ----------------------------------------------------
+
+    def test_concurrent_starts_leave_exactly_one_verified_instance(self):
+        procs = [
+            subprocess.Popen(
+                [DEFAULT_BASH, str(BIN / "start.sh")],
+                cwd=REPO_ROOT,
+                env=self.env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            for _ in range(3)
+        ]
+        outputs = []
+        for proc in procs:
+            out, err = proc.communicate(timeout=90)
+            outputs.append((proc.returncode, out.decode("utf-8"), err.decode("utf-8")))
+        started = [o for o in outputs if "已启动" in o[1]]
+        self.assertEqual(len(started), 1, outputs)
+        self.assertEqual(sum(1 for o in outputs if "已在运行" in o[1]), len(procs) - 1, outputs)
+        self.assertTrue(all(code == 0 for code, _, _ in outputs), outputs)
+        pid = int(re.search(r"已启动（PID (\d+)）", started[0][1]).group(1))
+        fields = dict(
+            line.split("=", 1) for line in self.pid_file.read_text().splitlines() if "=" in line
+        )
+        self.assertEqual(int(fields["pid"]), pid)
+        self.assertEqual(self.run_script("status.sh").returncode, 0)
+        self.assertFalse((Path(self.data_dir) / "iwa.ctl.lock").exists())
+
+    def test_stale_control_lock_from_a_dead_script_is_taken_over(self):
+        lock = Path(self.data_dir) / "iwa.ctl.lock"
+        lock.mkdir()
+        dead = subprocess.Popen(["sleep", "0"])
+        dead.wait()
+        (lock / "owner").write_text(str(dead.pid), encoding="utf-8")
+        result = self.run_script("start.sh")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(lock.exists())
 
     # -- PID reuse ----------------------------------------------------------
 
