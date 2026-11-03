@@ -1,5 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-03（第五轮后）雅思写作 AI 试用工具：真实模型小样本验证工具 realcheck（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户在 Mac 上复核 `b3ed9e1`：原生 Bash 3.2 下 Python 111 项、Node 8 项通过，异常退出时的锁问题关闭，没有新的阻断项（验收报告在 Mac 本地 `docs/design/iwa-trial-fifth-review-20261103/README.md`）。用户要求进入 DeepSeek 真实模型小样本验证。本容器没有 Key，Key 也不应该经过聊天，所以本轮只交付验证工具，**没有调用任何真实模型**。
+- 新增 `realcheck.py` 和 `samples.py`，CLI 子命令 `python -m tools.ielts_writing_ai realcheck`：
+  - 用临时数据库，通过生产的 `review.Generator` 跑样本（同样的提示词、严格 JSON、证据规则和一次重试）；不打开试用库，不占试用账号额度，可以和试用服务器同时运行。
+  - `RecordingClient` 记录每次调用：类型、第几次尝试、延迟、usage、是否纯 JSON，以及原文（不含 Key）。
+  - 第一次调用遇到 missing_api_key、http_401、http_403、network、timeout 时立即停止（退出码 3）。`--max-calls` 是硬上限，默认 50；真实模型必须加 `--confirm-paid`，否则退出码 2，且不发起调用。
+  - 报告输出 report.md、report.json、raw_calls.jsonl，内容包括：每类的首轮纯 JSON 率、首轮通过校验率（用生产校验函数重新判定首轮原文）、最终成功率、首轮被拒原因、p50 / p90 延迟、token；引文核实率；精修缺句率和改动率；改写字数达标率；分数合理性检查；与老师评分对比（平均绝对误差、偏差、±0.5 以内、完全一致）；按输入单价估算的费用。
+- 内置样本（原创合成，没有学生数据）：同题 Task 2 弱 / 中 / 好 / 强 4 篇（270 / 251 / 277 / 298 词）、离题 254 词、字数不足 97 词、无图 Task 1 172 词。预期都是宽松区间，并检查总分随水平不降、强弱相差至少 1.5。演示模型只按字数给分，在“强弱相差”和“强作文 ≥ 7”两项上失败，说明这些检查能识别没有区分度的模型。
+- README 新增使用步骤：先用 `--limit 1 --kinds evaluate` 测连通，再跑完整内置样本，最后用老师评分 JSONL 校准。同时给出建议的验收阈值：首轮纯 JSON ≥ 95%、最终 100%、引文核实 ≥ 90%、精修缺句 ≤ 5%、改写达标 ≥ 90%、合理性检查全部通过；至少 20 篇老师评分作文，总分平均绝对误差 ≤ 0.5、偏差在 ±0.25 以内、±0.5 以内 ≥ 70%。另外提醒：用学生作文校准时需要征得同意并去掉个人信息。
+- 精确验证：`test_realcheck.py` 新增 11 项（离线，使用模型替身）；`python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **122 tests OK**，Latin-1 locale 变体和 C.UTF-8 两种条件下都通过；Node 8 pass；ruff、black 通过。用 demo 模式跑了一次 CLI，报告结构完整。
+- **未验证**：DeepSeek 的真实连通性、合格率、分数偏差都需要用户在 Mac 上用试用 Key 运行后才知道；识图模型同样未验证。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步（用户在 Mac 上）**：在 `.env` 配置试用专用 DeepSeek Key → 运行 `check` → `realcheck --limit 1 --kinds evaluate --confirm-paid` → `realcheck --confirm-paid --price-in/--price-out` → 把 report.md（不要包含 Key）交回，用于调整提示词和阈值 → 准备至少 20 篇老师评分作文做校准。
+
 ## 2026-11-03（第四轮）雅思写作 AI 试用工具：启停锁由执行进程本身持有（已推功能分支，未合并、未部署）
 
 - 输入：用户在 Mac 上复核 `18cae886`：Python 107 项、Node 8 项通过；原生 Bash 3.2 下 Flask 和 gunicorn 启停通过；严格 JSON 问题关闭。第四轮复核报告（Mac 本地 `docs/design/iwa-trial-fourth-review-20261103/README.md`）指出：杀掉持锁的包装器后，实际执行启停的子进程仍在运行，但锁已经释放。复核只在合成进程上复现，没有造成真实服务误停或数据损坏。
