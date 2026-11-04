@@ -1,5 +1,37 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（论证结构复核后）雅思写作 AI 试用工具：修复论证结构复核 3 项（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `49b4c4e`，未通过，HEAD `4216d9f7`（`docs/design/ielts-writing-ai-argument-review-20261104/`，含两个探针）。已授权的“7 篇、只做评价、最多 14 次”真实验证**仍未使用**，等本次修复复核通过后再执行。本轮没有任何模型调用，没有改动评审的 `docs/design` 文件。
+- 修复（业务提交 `adf230f`）：
+  1. **枚举字段类型**：
+     - `argument._enum` 只接受列表内的字符串。数组、对象、数字、null、未知字符串一律按无效条目丢弃并计数，不再抛 `TypeError`。
+     - 还有可核实的段落时，照常保留评价；一个可核实段落都没有时，才抛 `ArgumentInvalid` 并重试一次。
+     - 新增 `review.checked()`：normalize 过程中出现的结构异常（TypeError、AttributeError、KeyError、IndexError、ValueError），都转为 `InvalidOutput("模型输出结构异常（类型）")`，详情写进 warning 日志。评价和精修会重试一次；改写的修说明遇到这种情况，保留第一版正文（retry_error=`invalid_output`）。
+     - realcheck 重放首轮输出时，任何异常都只记为被拒原因（“复核时出错（类型）”），报告一定能生成。
+  2. **强文检查**：
+     - 新增 `_argument_signals`，同时看三处：问题类型、段落判定（有 off_position 段落，算作 off_position）、立场一致性（`consistent=false`，算作 unclear_position）。`argument_forbid` 和 `argument_any_of` 都按这些信号判断，detail 里列出 `hits`。问题条数仍只数问题列表。
+     - t2-strong 新增 `argument_position`：必须找到可核实的立场句。合理性检查从 4 项变为 5 项。
+  3. **丢弃口径**：
+     - 立场、每段、每条问题各计 1 条。非对象条目、非列表的容器（例如 problems 是单个对象）都计入丢弃。
+     - `normalize` 返回 `returned`、`kept`、`dropped`、`duplicates`、`over_limit`，并且 `returned == kept + dropped + duplicates + over_limit`。
+     - 报告：
+       - 写出这个等式和丢弃率（丢弃 / 模型给出），并注明只统计最终采用的评价；
+       - 另列评价请求（含重试）中，因论证结构被整份拒绝的次数（`attempts_rejected_for_argument`），这部分不计入条目统计。
+     - README 的阈值按同一口径：丢弃率 ≤ 10%；被整份拒绝的次数在 7 篇中 ≤ 1。
+  4. 附带修复：引文先完整核实，再截短显示（论证结构 400 字、评分项证据 300 字）。真实开头后面接编造内容的引文不再被采用，这是评审备注的截断问题，已一并处理。
+- 验证：
+  - 新增 `tests/test_argument_review_20261104.py`（21 项），覆盖评审探针的全部场景及正反对照：3 个字段 × 7 种错误值；剩余有效段落时保留评价；全部无效时重试；端到端单次调用 ready；全部无效时调用 2 次并计入被拒次数；结构异常的一次重试和持续失败（invalid_output，报告能生成）；重放异常；修说明结构异常保留首稿；强文全部段落偏离判为失败、正常强文通过；立场不一致；立场句必需；8/13 丢弃率；等式守恒；旧结果兼容；长引文的两种情况。
+  - `test_argument.py` 中两处断言按新口径更新：非对象条目原来是“ignored, not counted”，现在计入丢弃。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **238 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（38 个文件）、`node --check`、`git diff --check` 都通过。
+  - 评审探针重跑（scratch 输出，`docs/` 原文件未改）：
+    - `argument_metrics_probe.py`：强文检查 forbid 为 `ok: false`（hits 为 off_position，4 个偏离段落），问题条数检查仍通过；格式错误的情况 dropped 8、returned 13、丢弃率 0.615；报告重放无异常，评价 ready、1 次调用；预算探针仍为 14 次、max_tokens 4500、retries 0。
+    - `argument_evidence_probe.py`：9 种枚举情况都正常返回，dropped 为 1；pipeline ready，调用 1 次，与对照组一致。它的截断段落**按新行为会抛 `ArgumentInvalid`**：唯一的段落引文带编造的结尾，不再被采用，因此原脚本在这里 exit 1。我在 scratch 副本里改为记录这个结果：`rejected: 论证结构分析没有给出可核实的段落中心句`。复核时需要按新预期调整这一段。
+  - 页面和复制代码没有改动（字段名不变），本轮没有重跑浏览器检查。
+- **未验证**：真实模型下的论证输出质量、丢弃率、首轮因论证结构被拒的比例、token 峰值，都要等授权的 14 次评价验证。
+- **发布状态**：业务改动 `adf230f` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：用户复核（跑 238 项测试和两个探针，探针的截断段按新预期调整）→ 通过后执行已授权的 `realcheck --kinds evaluate --max-calls 14 --confirm-paid`。重点看首轮通过率、`attempts_rejected_for_argument`、丢弃率、5 项论证合理性检查、`completion_tokens` 峰值。
+
 ## 2026-11-04 论证结构49b4c4e离线复核未通过：3项问题，真实请求0/14
 
 - 用户已确认本批条件授权：离线复核通过后，7篇内置合成作文、仅评价、最多14次实际请求；不运行精修、改写或识图。**本轮复核未通过，实际付费/外部模型请求0次**，未读取/修改Key，没有启动本批账本。条件授权仍保留，修复复核通过后可继续同一范围，无需因本轮未执行而重复征询。
