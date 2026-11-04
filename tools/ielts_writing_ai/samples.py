@@ -114,6 +114,7 @@ SAMPLES = [
             "overall_min": 7.0,
             "argument_max_problems": 1,
             "argument_forbid": ["off_position", "unclear_position"],
+            "argument_position": True,
         },
     },
     {

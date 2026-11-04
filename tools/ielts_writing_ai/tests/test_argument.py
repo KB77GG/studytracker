@@ -65,7 +65,7 @@ class NormalizeTest(unittest.TestCase):
         raw["paragraphs"].append({"role": "body", "main_point": "invented", "verdict": "supports"})
         raw["paragraphs"].append({"role": "rebuttal", "main_point": BODY_1, "verdict": "supports"})
         raw["paragraphs"].append({"role": "body", "main_point": BODY_1, "verdict": "great"})
-        raw["paragraphs"].append("not an object")  # ignored, not counted
+        raw["paragraphs"].append("not an object")  # malformed: counted as dropped
         raw["problems"] += [
             {"type": "logic_gap", "quote": BODY_1, "comment": "不在类型表里"},
             {"type": "circular", "quote": "an invented sentence", "comment": "引文不在原文"},
@@ -75,7 +75,7 @@ class NormalizeTest(unittest.TestCase):
         self.assertIsNone(result["position"])
         self.assertEqual(len(result["paragraphs"]), 4)
         self.assertEqual(len(result["problems"]), 2)
-        self.assertEqual(result["dropped"], 7)
+        self.assertEqual(result["dropped"], 8)
 
     def test_non_bool_consistency_is_unknown(self):
         raw = good_map()
@@ -321,7 +321,7 @@ class RealcheckTest(unittest.TestCase):
         )
         markdown = "\n".join(realcheck._argument_markdown(metrics))
         self.assertIn("## 论证结构（Task 2，不单独计分）", markdown)
-        self.assertIn("无法核实而丢弃 1 条", markdown)
+        self.assertIn("格式不对或无法核实而丢弃 1 + 重复 0 + 超出上限 0", markdown)
 
     def test_builtin_samples_carry_the_argument_expectations(self):
         from tools.ielts_writing_ai import samples

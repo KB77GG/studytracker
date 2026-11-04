@@ -357,11 +357,12 @@ def _first_attempt_problem(kind: str, text: str, sample: dict) -> str | None:
     submission = sample["submission"]
     try:
         if kind == "evaluate":
-            review.normalize_evaluation(raw, submission)
+            review.checked(review.normalize_evaluation, raw, submission)
         elif kind == "refine":
-            review.normalize_refinement(raw, essay_lib.split_sentences(submission["essay_text"]))
+            sentences = essay_lib.split_sentences(submission["essay_text"])
+            review.checked(review.normalize_refinement, raw, sentences)
         elif kind == "rewrite":
-            rewrite = review.normalize_rewrite(raw, submission)
+            rewrite = review.checked(review.normalize_rewrite, raw, submission)
             if not rewrite["quality_passed"]:
                 # Usable but triggers the quality retry: report it as a first-attempt miss.
                 return "质量检查：" + "；".join(
@@ -369,6 +370,8 @@ def _first_attempt_problem(kind: str, text: str, sample: dict) -> str | None:
                 )
     except review.InvalidOutput as exc:
         return str(exc)
+    except Exception as exc:  # the report must still be written for any stored output
+        return f"复核时出错（{type(exc).__name__}）"
     return None
 
 
@@ -437,13 +440,17 @@ def _argument(sample: dict) -> dict | None:
 
 
 def _argument_metrics(run_data: dict) -> dict:
-    """Task 2 argument map: how much survived verification, and what was found."""
-    evaluated = mapped = positions = paragraphs = problems = dropped = 0
+    """Task 2 argument map over the evaluations finally adopted, plus how many
+    evaluation attempts were rejected outright because of the map."""
+    evaluated = mapped = positions = paragraphs = problems = 0
+    returned = dropped = duplicates = over_limit = 0
     types = Counter()
     verdicts = Counter()
+    by_id = {}
     for sample in run_data["samples"]:
         if sample["task_type"] != "task2":
             continue
+        by_id[sample["id"]] = sample
         if not (sample["generations"].get("evaluate") or {}).get("result"):
             continue
         evaluated += 1
@@ -451,23 +458,46 @@ def _argument_metrics(run_data: dict) -> dict:
         if not argument:
             continue
         mapped += 1
+        kept = (
+            (1 if argument.get("position") else 0)
+            + len(argument.get("paragraphs") or [])
+            + len(argument.get("problems") or [])
+        )
         positions += 1 if argument.get("position") else 0
         paragraphs += len(argument.get("paragraphs") or [])
         problems += len(argument.get("problems") or [])
         dropped += argument.get("dropped") or 0
+        duplicates += argument.get("duplicates") or 0
+        over_limit += argument.get("over_limit") or 0
+        returned += argument.get("returned", kept + (argument.get("dropped") or 0))
         types.update(p["type"] for p in argument.get("problems") or [])
         verdicts.update(p["verdict"] for p in argument.get("paragraphs") or [])
-    kept = positions + paragraphs + problems
+    attempts = rejected = 0
+    for call in run_data.get("calls") or []:
+        if call["kind"] != "evaluate" or call.get("sample") not in by_id or not call.get("ok"):
+            continue
+        attempts += 1
+        problem = _first_attempt_problem("evaluate", call.get("text") or "", by_id[call["sample"]])
+        rejected += 1 if problem and "论证结构" in problem else 0
     return {
         "task2_evaluations": evaluated,
         "with_argument": mapped,
         "with_position": positions,
         "paragraphs": paragraphs,
         "problems": problems,
-        # Items the model returned but the server could not verify (quote not found,
-        # unknown type/role/verdict); over everything it returned.
-        "dropped": dropped,
-        "dropped_rate": _rate(dropped, kept + dropped),
+        # Entry accounting over the adopted evaluations; every entry the model returned
+        # (position, each paragraph, each problem) counts once:
+        # returned == kept + dropped + duplicates + over_limit.
+        "returned": returned,
+        "kept": positions + paragraphs + problems,
+        "dropped": dropped,  # malformed, unknown enum, missing text or quote not found
+        "duplicates": duplicates,
+        "over_limit": over_limit,
+        "dropped_rate": _rate(dropped, returned),
+        # Whole evaluation attempts (first tries and retries) rejected because the map
+        # was missing or had no verified paragraph; not part of the entry counts.
+        "evaluate_attempts": attempts,
+        "attempts_rejected_for_argument": rejected,
         "problem_types": dict(types.most_common()),
         "paragraph_verdicts": dict(verdicts.most_common()),
     }
@@ -630,22 +660,49 @@ def _sanity(run_data: dict) -> dict:
     return {"checks": checks, "passed": sum(1 for c in checks if c["ok"]), "total": len(checks)}
 
 
+def _argument_signals(argument: dict) -> tuple[set, dict]:
+    """Every finding category the map shows, from all three places: problem types,
+    paragraph verdicts (off_position) and an inconsistent position (unclear_position)."""
+    problems = [p["type"] for p in argument.get("problems") or []]
+    off = [p["role"] for p in argument.get("paragraphs") or [] if p["verdict"] == "off_position"]
+    position = argument.get("position")
+    consistent = position.get("consistent") if position else None
+    signals = set(problems)
+    if off:
+        signals.add("off_position")
+    if consistent is False:
+        signals.add("unclear_position")
+    detail = {
+        "problems": problems,
+        "off_position_paragraphs": off,
+        "position_consistent": consistent,
+    }
+    return signals, detail
+
+
+ARGUMENT_EXPECT_KEYS = (
+    "argument_max_problems",
+    "argument_min_problems",
+    "argument_forbid",
+    "argument_any_of",
+    "argument_position",
+)
+
+
 def _argument_checks(sample: dict, expect: dict) -> list[dict]:
-    keys = ("argument_max_problems", "argument_min_problems", "argument_forbid", "argument_any_of")
-    if not any(key in expect for key in keys):
+    if not any(key in expect for key in ARGUMENT_EXPECT_KEYS):
         return []
     argument = _argument(sample)
     if not argument:
         return [{"sample": sample["id"], "check": "有论证结构分析", "ok": False, "detail": None}]
-    found = [p["type"] for p in argument.get("problems") or []]
-    off_paragraphs = [
-        p["role"] for p in argument.get("paragraphs") or [] if p["verdict"] == "off_position"
-    ]
+    signals, detail = _argument_signals(argument)
+    found = detail["problems"]
     checks = []
 
-    def add(check, ok, detail):
-        checks.append({"sample": sample["id"], "check": check, "ok": ok, "detail": detail})
+    def add(check, ok, value):
+        checks.append({"sample": sample["id"], "check": check, "ok": ok, "detail": value})
 
+    # Counts look at the problem list only; categories look at every signal.
     if "argument_max_problems" in expect:
         limit = expect["argument_max_problems"]
         add(f"论证问题 ≤ {limit} 条（强文不应被挑出很多问题）", len(found) <= limit, found)
@@ -653,15 +710,22 @@ def _argument_checks(sample: dict, expect: dict) -> list[dict]:
         limit = expect["argument_min_problems"]
         add(f"论证问题 ≥ {limit} 条（弱文应被指出问题）", len(found) >= limit, found)
     if "argument_forbid" in expect:
-        forbidden = [t for t in found if t in expect["argument_forbid"]]
-        add(f"不应出现 {' / '.join(expect['argument_forbid'])}", not forbidden, found)
+        hits = sorted(signals & set(expect["argument_forbid"]))
+        add(
+            f"不应出现 {' / '.join(expect['argument_forbid'])}（问题类型、段落判定或立场一致性）",
+            not hits,
+            {**detail, "hits": hits},
+        )
     if "argument_any_of" in expect:
-        hit = any(t in expect["argument_any_of"] for t in found) or bool(off_paragraphs)
+        hits = sorted(signals & set(expect["argument_any_of"]))
         add(
             f"应标出 {' / '.join(expect['argument_any_of'])}（问题类型或段落判定偏离）",
-            hit,
-            {"problems": found, "off_position_paragraphs": off_paragraphs},
+            bool(hits),
+            {**detail, "hits": hits},
         )
+    if expect.get("argument_position"):
+        position = argument.get("position")
+        add("找到可核实的立场句", position is not None, position and position["quote"])
     return checks
 
 
@@ -872,11 +936,17 @@ def _argument_markdown(argument: dict | None) -> list[str]:
         "",
         "## 论证结构（Task 2，不单独计分）",
         "",
-        f"- Task 2 评价 {argument['task2_evaluations']} 篇，有论证结构分析 "
+        f"- 最终采用的 Task 2 评价 {argument['task2_evaluations']} 篇，有论证结构分析 "
         f"{argument['with_argument']} 篇，找到可核实立场句 {argument['with_position']} 篇",
+        f"- Task 2 评价请求 {argument['evaluate_attempts']} 次（含重试），其中 "
+        f"{argument['attempts_rejected_for_argument']} 次因缺少论证结构或没有可核实的段落被整份"
+        "拒绝（这些不计入下面的条目统计）",
         f"- 段落中心句 {argument['paragraphs']} 条（判定：{verdicts}）；论证问题 "
         f"{argument['problems']} 条（{types}）",
-        f"- 无法核实而丢弃 {argument['dropped']} 条，占模型给出的 {_pct(argument['dropped_rate'])}",
+        f"- 条目统计（只看最终采用的评价，立场、每段、每条问题各计 1 条）：模型给出 "
+        f"{argument['returned']} 条 = 采用 {argument['kept']} + 格式不对或无法核实而丢弃 "
+        f"{argument['dropped']} + 重复 {argument['duplicates']} + 超出上限 "
+        f"{argument['over_limit']}；**丢弃率 {_pct(argument['dropped_rate'])}**",
     ]
 
 

@@ -35,6 +35,23 @@ class InvalidOutput(Exception):
     pass
 
 
+# Model output is untrusted data. A normaliser tripping over an unexpected shape (a
+# list where a string belongs, ...) means the output is invalid, not that the service
+# failed, so it is retried / reported like any other invalid output.
+STRUCTURE_ERRORS = (TypeError, AttributeError, KeyError, IndexError, ValueError)
+
+
+def checked(normalizer, *args):
+    try:
+        return normalizer(*args)
+    except InvalidOutput:
+        raise
+    except STRUCTURE_ERRORS as exc:
+        name = getattr(normalizer, "__name__", "normalizer")
+        log.warning("%s: unexpected output structure", name, exc_info=True)
+        raise InvalidOutput(f"模型输出结构异常（{type(exc).__name__}）") from None
+
+
 def _text(value, limit: int = TEXT_LIMIT) -> str:
     if value is None:
         return ""
@@ -94,13 +111,13 @@ def _evidence_items(value, essay: str, *, limit: int, with_suggestion: bool) -> 
             raw = {"comment": raw}
         if not isinstance(raw, dict):
             continue
-        quote = _text(raw.get("quote"), 300)
+        full_quote = _text(raw.get("quote"), None)
         comment = _text(raw.get("comment"))
-        if not (quote or comment):
+        if not (full_quote or comment):
             continue
         item = {
-            "quote": quote,
-            "quote_found": bool(quote) and essay_lib.contains_quote(essay, quote),
+            "quote": full_quote[:300],  # verified in full first, then shortened
+            "quote_found": bool(full_quote) and essay_lib.contains_quote(essay, full_quote),
             "comment": comment,
         }
         if with_suggestion:
@@ -449,8 +466,8 @@ class Generator:
             try:
                 raw = result.json()
                 if kind == "evaluate":
-                    return normalize_evaluation(raw, submission), result
-                return normalize_refinement(raw, sentences), result
+                    return checked(normalize_evaluation, raw, submission), result
+                return checked(normalize_refinement, raw, sentences), result
             except (InvalidOutput, LLMError) as exc:
                 if isinstance(exc, LLMError) and exc.code != "invalid_json":
                     raise
@@ -464,7 +481,7 @@ class Generator:
         """(normalized or None, model result, problem). LLMError propagates."""
         result = self._call(messages, "rewrite", context, attempt, prompts.MAX_TOKENS["rewrite"])
         try:
-            return normalize_rewrite(result.json(), submission), result, None
+            return checked(normalize_rewrite, result.json(), submission), result, None
         except (InvalidOutput, LLMError) as exc:
             if isinstance(exc, LLMError) and exc.code != "invalid_json":
                 raise
@@ -516,7 +533,17 @@ class Generator:
                     "invalid_json",
                     "说明修正的输出不合格，保留了第一次的正文和已核实的说明。",
                 )
-            repaired = normalize_rewrite({**notes, "essay": first["essay"]}, submission)
+            try:
+                repaired = checked(
+                    normalize_rewrite, {**notes, "essay": first["essay"]}, submission
+                )
+            except InvalidOutput:
+                return self._keep(
+                    first,
+                    first_result,
+                    "invalid_output",
+                    "说明修正的输出不合格，保留了第一次的正文和已核实的说明。",
+                )
             repaired.pop("_retry_hint", None)
             if _rewrite_rank(repaired, 0) < _rewrite_rank(first, 0):
                 repaired["notes_repaired"] = True
