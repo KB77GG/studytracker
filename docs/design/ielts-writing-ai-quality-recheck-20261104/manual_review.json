@@ -1,0 +1,153 @@
+{
+  "source_commit": "7dd3153d",
+  "actual_requests": 24,
+  "review_scope": "manual read of seven final rewrites and retry outputs; no model calls",
+  "answer_quotes": {
+    "total": 34,
+    "all_exact_substrings": true
+  },
+  "answers_semantic_review": [
+    {
+      "sample": "t2-weak",
+      "verdict": "basically_matches_actual_question",
+      "note": "立场、公共交通优点及道路必要性基本对应交通投资题；未独立验证所举事实"
+    },
+    {
+      "sample": "t2-mid",
+      "verdict": "basically_matches_actual_question",
+      "note": "立场、公共交通优点及道路必要性基本对应交通投资题；未独立验证所举事实"
+    },
+    {
+      "sample": "t2-good",
+      "verdict": "basically_matches_actual_question",
+      "note": "立场、公共交通优点及道路必要性基本对应交通投资题；未独立验证所举事实"
+    },
+    {
+      "sample": "t2-strong",
+      "verdict": "basically_matches_actual_question",
+      "note": "立场、公共交通优点及道路必要性基本对应交通投资题；未独立验证所举事实"
+    },
+    {
+      "sample": "t2-off-topic",
+      "verdict": "off_topic",
+      "note": "answers全部讨论在线教育，实际题目为交通投资"
+    },
+    {
+      "sample": "t2-under-length",
+      "verdict": "basically_matches_actual_question",
+      "note": "立场、公共交通优点及道路必要性基本对应交通投资题；未独立验证所举事实"
+    },
+    {
+      "sample": "t1-no-image",
+      "verdict": "basically_matches_actual_question",
+      "note": "概述/年份/比较对应题目，但原文内部数值矛盾未在最终稿纠正"
+    }
+  ],
+  "self_scoring": {
+    "first_round_positive_claims": [
+      {
+        "sample": "t2-off-topic",
+        "text": "但整体词汇较为常见，符合7分要求。",
+        "caught": true
+      }
+    ],
+    "final_positive_band_claims_found": 0,
+    "note": "最终说明仍有其他不实声明，数值达分声明消失不代表解释全部可信。"
+  },
+  "retry_count": 3,
+  "retry_samples": [
+    "t2-off-topic",
+    "t2-under-length",
+    "t1-no-image"
+  ],
+  "findings": [
+    {
+      "id": "off_topic_still_off_topic",
+      "sample": "t2-off-topic",
+      "attempts": [
+        0,
+        1
+      ],
+      "kind": "model_semantic_failure",
+      "final_quality_passed": true,
+      "actual_answer_quote": {
+        "part": "表明自己的立场：线上学习不会取代传统课堂",
+        "quote": "In my view, although online courses offer genuine advantages, face-to-face education will remain indispensable."
+      },
+      "contradictory_rationale": "重写后围绕“政府应投资公共交通还是修建新路”这一真实问题展开，明确表态并逐段论证，避免跑题。",
+      "system_warning": "原文没有回应题目：改写稿按题目重新作答，没有保留原文的论点。",
+      "assessment": "正文和全部5条answers仍为在线学习/传统课堂，没有改答交通投资题；模型false声明被正文否定。答案引文存在不等于回应实际题目。"
+    },
+    {
+      "id": "task1_evaluation_missed_contradiction",
+      "sample": "t1-no-image",
+      "kind": "model_semantic_failure",
+      "evaluation_consistency_issues": [],
+      "conflicting_text": [
+        "Country A had the highest level of ownership in both years",
+        "Country A had risen slightly to about 75%",
+        "Country C, where ownership almost doubled to nearly 80%, overtaking Country A"
+      ],
+      "assessment": "原文内部已有比较矛盾，评价未标出；TA/总分仍正确保持不可评。"
+    },
+    {
+      "id": "task1_false_deletion_gate_then_worse_tie_choice",
+      "sample": "t1-no-image",
+      "attempt": 0,
+      "kind": "deterministic_false_positive_and_selection_loss",
+      "first_corrected_overview": "Country A had the highest level of ownership in 2000, while Country D remained the lowest in both years.",
+      "original_last_paragraph": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "first_last_paragraph": "In summary, while every country saw an increase, growth was particularly striking in Country C and much more modest in Country A.",
+      "first_change_note": "将结尾句改为 \"growth was particularly striking in Country C and much more modest in Country A\"，去掉多余的 \"the\"，使表达更自然。",
+      "first_issue_codes": [
+        "deletion_mismatch"
+      ],
+      "final_overview": "Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+      "final_issue_codes": [
+        "noop_change"
+      ],
+      "assessment": "首轮删除的是总结句中growth前的the，确实落实；检查却在整篇寻找新引文/任意the，因此误判deletion_mismatch。两轮各1个issue，<=平局选择第二轮；第二轮重现原数值比较矛盾，语义更差。其In summary→In summary的noop_change是真问题。"
+    },
+    {
+      "id": "under_length_first_cut_false_positive",
+      "sample": "t2-under-length",
+      "attempt": 0,
+      "kind": "mixed_real_failures_and_deterministic_false_positive",
+      "word_count": 218,
+      "real_issue_codes": [
+        "below_min",
+        "claim_absent"
+      ],
+      "real_claim_absent": "old people→older people，但正文仍为old people，没有older people。",
+      "false_positive_note": "将“对环境有好处”这一笼统说法具体化为因果链：\"so shifting travellers onto public transport would cut air pollution and respiratory illness in crowded urban areas\"。",
+      "matched_delete_token": "cut",
+      "assessment": "cut air pollution里的cut表示减少污染，不是删除正文指令；DELETE_RE把新句引文误作应删除内容，产生deletion_mismatch。另两个质量问题确实存在。"
+    },
+    {
+      "id": "under_length_retry_schema_mismatch",
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "kind": "model_output_schema_failure",
+      "word_count": 266,
+      "raw_key_changes_type": "list of {old,new} objects, not requested list[str]",
+      "raw_first_change": {
+        "old": "I agree that governments should spend more money on public transport than on new roads.",
+        "new": "I largely agree with this view, although I believe that a limited amount of road building is still necessary in some areas."
+      },
+      "final_issue_codes": [
+        "no_changes"
+      ],
+      "assessment": "内容已达字数且切题，但模型返回的key_changes格式不符合约定，规范化丢弃所有对象，最终缺说明。此项是格式失败，并非服务器虚构；可保留失败证据改进提示词或显式处理该格式。"
+    },
+    {
+      "id": "good_essay_unchanged_but_change_notes_claim_edits",
+      "sample": "t2-good",
+      "attempt": 0,
+      "kind": "model_change_description_failure",
+      "original_equals_rewrite": true,
+      "example_claim": "将效率论证中的对比改为 'whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space'，使逻辑更连贯。",
+      "assessment": "正文与原稿逐字完全一致，仍声称多处改为新写法。保留已经合格原文可以接受，但改动说明不能把原有文字说成新增改动。"
+    }
+  ],
+  "source_or_raw_reports_modified": false
+}

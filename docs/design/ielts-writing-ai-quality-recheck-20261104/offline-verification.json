@@ -1,0 +1,86 @@
+{
+  "suite": {
+    "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "python": "3.13.3",
+    "source_head": "7dd3153d5436a12843c16624e65aebe004100479",
+    "commands": [
+      {
+        "command": [
+          "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-v",
+          "-s",
+          "tools/ielts_writing_ai/tests",
+          "-t",
+          "."
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 18.92
+      },
+      {
+        "command": [
+          "node",
+          "--test",
+          "tools/ielts_writing_ai/tests/test_draft.js"
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 0.25
+      }
+    ],
+    "test_data_directory_untouched": true,
+    "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n"
+  },
+  "quality_recheck": {
+    "reviewed_commit": "7dd3153d",
+    "targeted_formal_tests": {
+      "passed": 17,
+      "total": 17
+    },
+    "blocking_findings": [],
+    "case_fix_preserved": true,
+    "false_330_claim_rejected": true,
+    "chinese_band_claim_rejected": true,
+    "gap_year_paraphrase_accepted": true,
+    "negated_data_claim_accepted": true,
+    "unverified_consistency_dropped": true,
+    "disclosed_boundary": {
+      "off_topic_with_real_quotes_can_pass": true,
+      "answer_map_means": "citation existence only; not semantic answer correctness",
+      "ui_copy_readme_disclose_this": true,
+      "blocking": false
+    }
+  },
+  "retry_metrics_recheck": {
+    "reviewed_head": "7dd3153d",
+    "no_network": true,
+    "tests_passed": 7,
+    "all_invalid": {
+      "requests": 42,
+      "recorded": 42,
+      "rewrite_requested": 7,
+      "quality_rate": 0.0,
+      "tokens": {
+        "prompt": 126,
+        "completion": 42
+      }
+    },
+    "retry_repairs_quality": {
+      "calls": 2,
+      "first_valid": 0,
+      "final_ready": 1,
+      "quality_rate": 1,
+      "final_word_count": 290,
+      "all_attempt_tokens": {
+        "prompt": 20,
+        "completion": 40
+      }
+    }
+  },
+  "ruff": "passed",
+  "black_files": 34,
+  "js_syntax": "passed"
+}

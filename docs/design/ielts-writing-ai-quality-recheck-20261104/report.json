@@ -1,0 +1,395 @@
+{
+  "started_at": "2026-11-04T04:23:16+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "prompt_version": "iwa-2026-11-04.2",
+  "demo": false,
+  "samples": 7,
+  "calls": 24,
+  "max_calls": 42,
+  "aborted": null,
+  "connectivity": {
+    "ok": true,
+    "error": null,
+    "response_received": true,
+    "authenticated": true,
+    "generation_ok": true,
+    "generation_error": null
+  },
+  "kinds": {
+    "evaluate": {
+      "calls": 7,
+      "first_attempts": 7,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "first_attempt_rejections": {},
+      "final_ready": 1.0,
+      "final_failures": {},
+      "latency_ms_p50": 9133,
+      "latency_ms_p90": 10476,
+      "tokens": {
+        "prompt_tokens": 6035,
+        "completion_tokens": 9673,
+        "total_tokens": 15708
+      }
+    },
+    "refine": {
+      "calls": 7,
+      "first_attempts": 7,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "first_attempt_rejections": {},
+      "final_ready": 1.0,
+      "final_failures": {},
+      "latency_ms_p50": 3090,
+      "latency_ms_p90": 7505,
+      "tokens": {
+        "prompt_tokens": 5833,
+        "completion_tokens": 5940,
+        "total_tokens": 11773
+      }
+    },
+    "rewrite": {
+      "calls": 10,
+      "first_attempts": 7,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 0.571,
+      "first_attempt_rejections": {
+        "质量检查：band_claim": 1,
+        "质量检查：below_min；claim_absent；deletion_mismatch": 1,
+        "质量检查：deletion_mismatch": 1
+      },
+      "final_ready": 1.0,
+      "final_failures": {},
+      "latency_ms_p50": 5617,
+      "latency_ms_p90": 6954,
+      "tokens": {
+        "prompt_tokens": 8665,
+        "completion_tokens": 9638,
+        "total_tokens": 18303
+      }
+    }
+  },
+  "vision_calls": 0,
+  "evidence": {
+    "scored_criteria": 27,
+    "quotes": 112,
+    "quotes_verified": 1.0
+  },
+  "refine_rewrite": {
+    "refine_sentences": 87,
+    "refine_missing_rate": 0.0,
+    "refine_changed_rate": 0.391,
+    "rewrite_requested": 7,
+    "rewrite_generated": 7,
+    "rewrite_quality_passed_count": 5,
+    "rewrite_retry_failed": 0,
+    "rewrite_quality_passed_of_requested": 0.714,
+    "rewrite_meets_min_words_of_requested": 1.0,
+    "rewrite_quality_passed_of_generated": 0.714,
+    "rewrite_meets_min_words_of_generated": 1.0,
+    "rewrite_quality_issues": {
+      "no_changes": 1,
+      "noop_change": 1
+    }
+  },
+  "sanity": {
+    "checks": [
+      {
+        "sample": "t2-weak",
+        "check": "总分 ≤ 5.5",
+        "ok": true,
+        "detail": 5.0
+      },
+      {
+        "sample": "t2-mid",
+        "check": "总分 ≥ 5.0",
+        "ok": true,
+        "detail": 6.5
+      },
+      {
+        "sample": "t2-mid",
+        "check": "总分 ≤ 7.0",
+        "ok": true,
+        "detail": 6.5
+      },
+      {
+        "sample": "t2-good",
+        "check": "总分 ≥ 6.0",
+        "ok": true,
+        "detail": 7.0
+      },
+      {
+        "sample": "t2-good",
+        "check": "总分 ≤ 8.0",
+        "ok": true,
+        "detail": 7.0
+      },
+      {
+        "sample": "t2-strong",
+        "check": "总分 ≥ 7.0",
+        "ok": true,
+        "detail": 7.5
+      },
+      {
+        "sample": "t2-off-topic",
+        "check": "TR ≤ 5.0（离题）",
+        "ok": true,
+        "detail": 4.0
+      },
+      {
+        "sample": "t2-under-length",
+        "check": "有字数不足提示",
+        "ok": true,
+        "detail": [
+          "字数 97 低于 250 词要求，实际考试中Task Response会因此受限。"
+        ]
+      },
+      {
+        "sample": "t1-no-image",
+        "check": "缺图 TA / 总分不可评",
+        "ok": true,
+        "detail": null
+      },
+      {
+        "sample": "分级样本",
+        "check": "总分随水平不降",
+        "ok": true,
+        "detail": [
+          [
+            "t2-weak",
+            5.0
+          ],
+          [
+            "t2-mid",
+            6.5
+          ],
+          [
+            "t2-good",
+            7.0
+          ],
+          [
+            "t2-strong",
+            7.5
+          ]
+        ]
+      },
+      {
+        "sample": "分级样本",
+        "check": "最强与最弱相差 ≥ 1.5",
+        "ok": true,
+        "detail": 2.5
+      }
+    ],
+    "passed": 11,
+    "total": 11
+  },
+  "calibration": null,
+  "tokens": {
+    "prompt": 20533,
+    "completion": 25251
+  },
+  "usage": {
+    "total": {
+      "calls": 24,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 20533,
+        "completion": 25251
+      },
+      "known_tokens": {
+        "prompt": 20533,
+        "completion": 25251
+      }
+    },
+    "text": {
+      "calls": 24,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 20533,
+        "completion": 25251
+      },
+      "known_tokens": {
+        "prompt": 20533,
+        "completion": 25251
+      }
+    },
+    "vision": {
+      "calls": 0,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "known_tokens": {
+        "prompt": 0,
+        "completion": 0
+      }
+    },
+    "by_model": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "calls": 24,
+        "unknown_usage_calls": 0,
+        "complete": true,
+        "tokens": {
+          "prompt": 20533,
+          "completion": 25251
+        },
+        "known_tokens": {
+          "prompt": 20533,
+          "completion": 25251
+        }
+      }
+    ]
+  },
+  "estimated_cost": 0.036461,
+  "cost_estimate": {
+    "scope": "text",
+    "covered_cost": 0.036461,
+    "coverage": "complete",
+    "vision_cost": 0.0,
+    "unknown_usage_calls": 0,
+    "note": "单价仅用于文本模型；识图费用未估算。缺少 usage 时费用未知，不能视为零账单。"
+  },
+  "per_sample": [
+    {
+      "id": "t2-weak",
+      "scores": {
+        "overall": 5.0,
+        "task": 5.5,
+        "coherence": 5.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-mid",
+      "scores": {
+        "overall": 6.5,
+        "task": 6.5,
+        "coherence": 6.5,
+        "lexical": 6.5,
+        "grammar": 6.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-good",
+      "scores": {
+        "overall": 7.0,
+        "task": 7.0,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-strong",
+      "scores": {
+        "overall": 7.5,
+        "task": 7.0,
+        "coherence": 7.5,
+        "lexical": 7.5,
+        "grammar": 7.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-off-topic",
+      "scores": {
+        "overall": 6.0,
+        "task": 4.0,
+        "coherence": 6.0,
+        "lexical": 6.5,
+        "grammar": 6.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-under-length",
+      "scores": {
+        "overall": 5.0,
+        "task": 4.0,
+        "coherence": 5.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t1-no-image",
+      "scores": {
+        "overall": null,
+        "task": null,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "statuses": {
+        "evaluate": "ready",
+        "refine": "ready",
+        "rewrite": "ready"
+      },
+      "errors": {}
+    }
+  ],
+  "audit": {
+    "source_head": "7dd3153d5436a12843c16624e65aebe004100479",
+    "actual_transport_attempts": 24,
+    "hard_limit": 42,
+    "scope": "7 builtin synthetic samples, evaluate/refine/rewrite, no vision",
+    "price_note": "USD peak cache-miss estimate, not actual bill",
+    "price_source": "https://api-docs.deepseek.com/quick_start/pricing/"
+  }
+}

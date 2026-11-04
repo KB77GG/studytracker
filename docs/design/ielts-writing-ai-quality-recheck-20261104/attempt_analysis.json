@@ -1,0 +1,165 @@
+[
+  {
+    "sample": "t2-weak",
+    "attempt": 0,
+    "word_count": 293,
+    "quality_passed": true,
+    "issues": [],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-mid",
+    "attempt": 0,
+    "word_count": 286,
+    "quality_passed": true,
+    "issues": [],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-good",
+    "attempt": 0,
+    "word_count": 277,
+    "quality_passed": true,
+    "issues": [],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-strong",
+    "attempt": 0,
+    "word_count": 300,
+    "quality_passed": true,
+    "issues": [],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-off-topic",
+    "attempt": 0,
+    "word_count": 254,
+    "quality_passed": false,
+    "issues": [
+      {
+        "code": "band_claim",
+        "message": "改写说明自称已经达到某个分数；这只是 AI 自述，没有经过评分验证"
+      }
+    ],
+    "answer_count": 3,
+    "quotes_exact": true,
+    "selected": false,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-off-topic",
+    "attempt": 1,
+    "word_count": 265,
+    "quality_passed": true,
+    "issues": [],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-under-length",
+    "attempt": 0,
+    "word_count": 218,
+    "quality_passed": false,
+    "issues": [
+      {
+        "code": "below_min",
+        "message": "改写稿只有 218 词，低于 250 词要求"
+      },
+      {
+        "code": "deletion_mismatch",
+        "message": "有 1 条说明声称删除的内容仍在改写稿中，已删除"
+      },
+      {
+        "code": "claim_absent",
+        "message": "有 1 条改动说明引用的新写法不在改写稿中，已删除"
+      }
+    ],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": false,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t2-under-length",
+    "attempt": 1,
+    "word_count": 266,
+    "quality_passed": false,
+    "issues": [
+      {
+        "code": "no_changes",
+        "message": "没有可信的改动说明"
+      }
+    ],
+    "answer_count": 5,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "dict"
+    ]
+  },
+  {
+    "sample": "t1-no-image",
+    "attempt": 0,
+    "word_count": 174,
+    "quality_passed": false,
+    "issues": [
+      {
+        "code": "deletion_mismatch",
+        "message": "有 1 条说明声称删除的内容仍在改写稿中，已删除"
+      }
+    ],
+    "answer_count": 4,
+    "quotes_exact": true,
+    "selected": false,
+    "key_changes_type": [
+      "str"
+    ]
+  },
+  {
+    "sample": "t1-no-image",
+    "attempt": 1,
+    "word_count": 173,
+    "quality_passed": false,
+    "issues": [
+      {
+        "code": "noop_change",
+        "message": "有 1 条改动说明的原文和新写法完全相同，已删除"
+      }
+    ],
+    "answer_count": 4,
+    "quotes_exact": true,
+    "selected": true,
+    "key_changes_type": [
+      "str"
+    ]
+  }
+]
