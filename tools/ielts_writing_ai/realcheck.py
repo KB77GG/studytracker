@@ -444,6 +444,7 @@ def _argument_metrics(run_data: dict) -> dict:
     evaluation attempts were rejected outright because of the map."""
     evaluated = mapped = positions = paragraphs = problems = 0
     returned = dropped = duplicates = over_limit = 0
+    self_conflicts = removed = improvements = 0
     types = Counter()
     verdicts = Counter()
     by_id = {}
@@ -467,6 +468,9 @@ def _argument_metrics(run_data: dict) -> dict:
         paragraphs += len(argument.get("paragraphs") or [])
         problems += len(argument.get("problems") or [])
         dropped += argument.get("dropped") or 0
+        self_conflicts += argument.get("self_conflicts") or 0
+        removed += argument.get("suggestions_removed") or 0
+        improvements += len(argument.get("improvements") or [])
         duplicates += argument.get("duplicates") or 0
         over_limit += argument.get("over_limit") or 0
         returned += argument.get("returned", kept + (argument.get("dropped") or 0))
@@ -489,7 +493,12 @@ def _argument_metrics(run_data: dict) -> dict:
         # (position, each paragraph, each problem) counts once:
         # returned == kept + dropped + duplicates + over_limit.
         "returned": returned,
-        "kept": positions + paragraphs + problems,
+        "kept": positions + paragraphs + problems + improvements,
+        "improvements": improvements,
+        # The model's map contradicting itself (surfaced as "需人工确认"), and suggestions
+        # removed for figures the essay never gives.
+        "self_conflicts": self_conflicts,
+        "suggestions_removed": removed,
         "dropped": dropped,  # malformed, unknown enum, missing text or quote not found
         "duplicates": duplicates,
         "over_limit": over_limit,
@@ -628,6 +637,20 @@ def _sanity(run_data: dict) -> dict:
                 }
             )
         checks += _argument_checks(sample, expect)
+        if "consistency_min" in expect:
+            result = (sample["generations"].get("evaluate") or {}).get("result") or {}
+            found = [c["quote"] for c in result.get("consistency_issues") or []]
+            checks.append(
+                {
+                    "sample": sample["id"],
+                    "check": f"指出文内数据矛盾 ≥ {expect['consistency_min']} 条（已知样本矛盾）",
+                    "ok": len(found) >= expect["consistency_min"],
+                    "detail": {
+                        "issues": found,
+                        "claims_checked": result.get("comparisons_checked"),
+                    },
+                }
+            )
         if expect.get("not_assessable"):
             ok = overall is None and s["_ta_state"] == "not_assessable"
             checks.append(
@@ -657,12 +680,17 @@ def _sanity(run_data: dict) -> dict:
                 "detail": spread,
             }
         )
-    return {"checks": checks, "passed": sum(1 for c in checks if c["ok"]), "total": len(checks)}
+    return {
+        "checks": checks,
+        "passed": sum(1 for c in checks if c["ok"] is True),
+        "total": sum(1 for c in checks if c["ok"] is not None),
+        "skipped": sum(1 for c in checks if c["ok"] is None),
+    }
 
 
 def _argument_signals(argument: dict) -> tuple[set, dict]:
     """Every finding category the map shows, from all three places: problem types,
-    paragraph verdicts (off_position) and an inconsistent position (unclear_position)."""
+    paragraph verdicts (off_position) and an inconsistent position."""
     problems = [p["type"] for p in argument.get("problems") or []]
     off = [p["role"] for p in argument.get("paragraphs") or [] if p["verdict"] == "off_position"]
     position = argument.get("position")
@@ -670,8 +698,8 @@ def _argument_signals(argument: dict) -> tuple[set, dict]:
     signals = set(problems)
     if off:
         signals.add("off_position")
-    if consistent is False:
-        signals.add("unclear_position")
+    if consistent is False:  # kept only when backed by a verified contradiction pair
+        signals.add("inconsistent_position")
     detail = {
         "problems": problems,
         "off_position_paragraphs": off,
@@ -736,7 +764,10 @@ def _off_topic_rewrite_check(sample: dict) -> dict:
     result = generation.get("result") if generation.get("status") == "ready" else None
     check = {"sample": sample["id"], "check": "离题样本：通过质量检查的改写必须已按题目重写"}
     if not result:
-        return {**check, "ok": True, "detail": "改写未生成"}
+        # Not run in this batch, or failed (counted in the rewrite metrics): this check
+        # has nothing to look at, so it is skipped rather than counted as passed.
+        detail = "本批未运行改写" if not generation else "改写未生成（见改写指标）"
+        return {**check, "ok": None, "detail": detail}
     sub = sample["submission"]
     coverage = rewrite_quality.prompt_coverage(sub.get("prompt_text", ""), result["essay"])
     overlap = rewrite_quality.original_overlap(result["essay"], sub["essay_text"])
@@ -928,7 +959,7 @@ def _pct(value) -> str:
 
 
 def _argument_markdown(argument: dict | None) -> list[str]:
-    if not argument or not argument["task2_evaluations"]:
+    if not argument or not (argument["task2_evaluations"] or argument.get("evaluate_attempts")):
         return []
     types = "；".join(f"{k} ×{v}" for k, v in argument["problem_types"].items()) or "无"
     verdicts = "；".join(f"{k} ×{v}" for k, v in argument["paragraph_verdicts"].items()) or "无"
@@ -942,8 +973,11 @@ def _argument_markdown(argument: dict | None) -> list[str]:
         f"{argument['attempts_rejected_for_argument']} 次因缺少论证结构或没有可核实的段落被整份"
         "拒绝（这些不计入下面的条目统计）",
         f"- 段落中心句 {argument['paragraphs']} 条（判定：{verdicts}）；论证问题 "
-        f"{argument['problems']} 条（{types}）",
-        f"- 条目统计（只看最终采用的评价，立场、每段、每条问题各计 1 条）：模型给出 "
+        f"{argument['problems']} 条（{types}）；可选优化 {argument.get('improvements', 0)} 条"
+        "（不是错误，不计入问题数）",
+        f"- AI 判断自相矛盾 {argument.get('self_conflicts', 0)} 处（已标需人工确认）；建议因含"
+        f"原文没有的数字被删去 {argument.get('suggestions_removed', 0)} 条",
+        f"- 条目统计（只看最终采用的评价，立场、每段、每条问题、每条可选优化各计 1 条）：模型给出 "
         f"{argument['returned']} 条 = 采用 {argument['kept']} + 格式不对或无法核实而丢弃 "
         f"{argument['dropped']} + 重复 {argument['duplicates']} + 超出上限 "
         f"{argument['over_limit']}；**丢弃率 {_pct(argument['dropped_rate'])}**",
@@ -1017,11 +1051,16 @@ def render_markdown(report: dict) -> str:
         "",
         "## 分数合理性（宽松区间，不是真实分数）",
         "",
-        f"通过 {report['sanity']['passed']} / {report['sanity']['total']}",
+        f"通过 {report['sanity']['passed']} / {report['sanity']['total']}"
+        + (
+            f"（另有 {report['sanity']['skipped']} 项本批未运行，不计入）"
+            if report["sanity"].get("skipped")
+            else ""
+        ),
         "",
     ]
     for check in report["sanity"]["checks"]:
-        mark = "✓" if check["ok"] else "✗"
+        mark = {True: "✓", False: "✗", None: "–"}[check["ok"]]
         lines.append(f"- {mark} {check['sample']}：{check['check']}（实际：{check['detail']}）")
     if report["calibration"]:
         lines += [

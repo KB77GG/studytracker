@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import logging
+import re
 from pathlib import Path
 
 from . import argument as argument_lib
@@ -126,6 +127,72 @@ def _evidence_items(value, essay: str, *, limit: int, with_suggestion: bool) -> 
     return items[:limit]
 
 
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+
+
+def _nested_in(criteria_raw: dict, key: str) -> bool:
+    return any(isinstance(item, dict) and key in item for item in criteria_raw.values())
+
+
+def _require_chinese(criteria: list[dict], overall_comment: str) -> None:
+    """Explanations are for Chinese learners: every reason and the overall comment
+    must be Chinese (English quotes inside are fine), and so must most comments.
+    The 2026-11-04 Task 1 run came back entirely in English despite the prompt."""
+    scored = [c for c in criteria if c["state"] == "scored"]
+    reasons = [c["summary"] for c in scored] + [overall_comment]
+    comments = [e["comment"] for c in scored for e in c["strengths"] + c["issues"] if e["comment"]]
+    english = [r for r in reasons if not _CJK_RE.search(r)]
+    english_comments = [c for c in comments if not _CJK_RE.search(c)]
+    if english or len(english_comments) * 2 > len(comments):
+        raise InvalidOutput("解释必须使用简体中文（评分理由、总评或多数说明是英文）")
+
+
+MAX_COMPARISONS = 8
+
+
+def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
+    """(issues, claims checked, dropped). A contradiction is reported only when its
+    claim and at least one of the figures it conflicts with are really in the essay."""
+    issues, dropped, checked = [], 0, 0
+    comparisons = raw.get("comparisons")
+    for item in comparisons if isinstance(comparisons, list) else []:
+        if not isinstance(item, dict):
+            dropped += 1
+            continue
+        claim = _text(item.get("claim"), None)
+        if not (claim and essay_lib.contains_quote(essay, claim)):
+            dropped += 1
+            continue
+        checked += 1
+        if item.get("holds") is not False:
+            continue
+        figures = [
+            f[:300]
+            for f in (item.get("figures") if isinstance(item.get("figures"), list) else [])
+            if isinstance(f, str)
+            and f.strip()
+            and essay_lib.contains_quote(essay, f.strip())
+            and essay_lib.squash(f) not in essay_lib.squash(claim)
+        ]
+        comment = _text(item.get("comment"))
+        if not (figures and comment):
+            dropped += 1  # "contradicted" without the figures that contradict it
+            continue
+        issues.append(
+            {"quote": claim[:300], "quote_found": True, "figures": figures[:3], "comment": comment}
+        )
+    # Older free list: kept only when its quote is really in the essay.
+    proposed = _evidence_items(raw.get("consistency_issues"), essay, limit=4, with_suggestion=False)
+    for entry in proposed:
+        if not (entry["quote_found"] and entry["comment"]):
+            dropped += 1
+        elif not any(
+            essay_lib.squash(i["quote"]) == essay_lib.squash(entry["quote"]) for i in issues
+        ):
+            issues.append({**entry, "figures": []})
+    return issues[:MAX_COMPARISONS], checked, dropped
+
+
 def normalize_evaluation(raw: dict, submission: dict) -> dict:
     """Validate a model evaluation; reject it unless every scored criterion has a real
     reason and at least one quote that can be found verbatim in the essay."""
@@ -185,10 +252,14 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
 
     overall_comment = _text(raw.get("overall_comment"), 1500)
     priorities = _text_list(raw.get("priorities"), limit_items=5)
+    for key in ("overall_comment", "priorities", "argument", "comparisons"):
+        if key not in raw and _nested_in(criteria_raw, key):
+            raise InvalidOutput(f"{key} 放错了位置：必须在顶层、与 criteria 同级，只出现一次")
     if not _meaningful(overall_comment):
         raise InvalidOutput("缺少总评")
     if not priorities:
         raise InvalidOutput("缺少提升重点")
+    _require_chinese(criteria, overall_comment)
 
     warnings = []
     minimum = essay_lib.MIN_WORDS[task_type]
@@ -212,15 +283,12 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         warnings.append(f"有 {unverified} 条引文没能在原文中找到，已标注，不作为评分依据。")
 
     consistency = []
+    comparisons_checked = None
     if task_type == "task1":
         # Internal consistency of the essay's own figures; judged without the chart.
-        proposed = _evidence_items(
-            raw.get("consistency_issues"), essay, limit=4, with_suggestion=False
-        )
-        # A contradiction is only reported when its quote is really in the essay;
-        # model guesses that cannot be located are dropped, never turned into findings.
-        consistency = [c for c in proposed if c["quote_found"] and c["comment"]]
-        consistency_dropped = len(proposed) - len(consistency)
+        # Every ranking/comparison claim is checked against the essay's own figures
+        # ("comparisons"); the older free list ("consistency_issues") is still read.
+        consistency, comparisons_checked, consistency_dropped = _consistency(raw, essay)
         if consistency:
             warnings.append(
                 "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否"
@@ -228,7 +296,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             )
         if consistency_dropped:
             warnings.append(
-                f"AI 另提出 {consistency_dropped} 条矛盾，但引文无法在原文中找到，已忽略。"
+                f"AI 另提出 {consistency_dropped} 条矛盾，但引文无法在原文中找到或缺少对照的数字，"
+                "已忽略。"
             )
 
     argument = None
@@ -253,6 +322,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "overall_comment": overall_comment,
         "priorities": priorities,
         "consistency_issues": consistency,
+        "comparisons_checked": comparisons_checked,
         "argument": argument,
         "warnings": warnings,
     }

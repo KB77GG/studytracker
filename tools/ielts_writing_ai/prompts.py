@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.4"
+PROMPT_VERSION = "iwa-2026-11-04.5"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -38,33 +38,108 @@ COMMON_DESCRIPTORS = (
 )
 
 ARGUMENT_CHECKLIST = (
-    "Argument check (Task 2). It explains Task Response and Coherence & Cohesion; it is NOT "
-    "a separate score. (1) Position: is there one clear position that answers the question, "
-    "kept the same in the introduction, body and conclusion? (2) Each body paragraph: does "
-    "its main point directly support that position and the question, or drift to something "
-    "else? (3) Development: is each main point explained as claim -> mechanism (why) -> "
-    "example -> result linked back to the claim? An example that is only mentioned and not "
-    "linked back, a circular restatement, or a sweeping generalisation is NOT support. "
-    "(4) Concession: if the essay concedes the other side, does it then rebut it and return "
-    "to its own position, without the concession outweighing its own argument? "
-    "(5) Conclusion: consistent with the position, no new argument. Reflect every problem "
-    "you find in the task and coherence summaries and bands."
+    "Argument check (Task 2): a diagnosis that explains Task Response and Coherence & "
+    "Cohesion; it is NOT a separate score. Judge the WHOLE essay and report only real faults. "
+    "(1) Position. A qualified position is ONE position, e.g. 'mostly public transport, but "
+    "roads where necessary' or 'partly agree': naming exceptions or admitting the other side "
+    "is sometimes needed is neither unclear nor inconsistent. Vague wording that the body or "
+    "conclusion makes clear is at most an improvement. unclear_position = after reading the "
+    "whole essay a reader still cannot tell what the writer thinks. inconsistent_position / "
+    "conclusion_inconsistent = two passages that genuinely cannot both be true; quote BOTH "
+    "('quote' and 'conflicts_with'). A conclusion that restates the main side without "
+    "repeating the exceptions (e.g. 'the lion's share of funding') is consistent. "
+    "(2) Relevance. off_position only when a paragraph argues something that serves neither "
+    "the position nor the question; a paragraph explaining an exception the qualified "
+    "position already allows, or a concession, is not off_position. "
+    "(3) Support takes several valid forms: a causal explanation (because / so / which "
+    "means / therefore), a comparison, consequences, or a personal or hypothetical example. "
+    "A named city, study or statistic is NEVER required. unsupported only when a point is "
+    "merely asserted with no reason at all; a reason that is present but brief is an "
+    "improvement, not a problem. example_not_linked only when an example is given and "
+    "nothing connects it to the point. Read the whole sentence and its neighbours first. "
+    "(4) Concession. A concession that sets the scope of the position needs no rebuttal. "
+    "concession_unanswered only when an opposing argument that weakens the position is "
+    "raised and the essay never returns to its position; concession_undermines only when "
+    "the concession outweighs the essay's own argument. "
+    "(5) Your map must agree with itself: if position.consistent is true, report no "
+    "inconsistent_position or conclusion_inconsistent; a paragraph whose verdict is "
+    "'supports' cannot also be off_position. "
+    "Optional ways to make a sound argument stronger (more detail, a sharper topic sentence, "
+    "an extra example) go in 'improvements', never in 'problems'. Never invent facts: no "
+    "statistic, percentage, year, study or named real-world case that is not in the essay; "
+    "use the essay's own reasoning or a clearly hypothetical example. Reflect real problems "
+    "in the task and coherence summaries; improvements do not lower bands."
+)
+
+CRITERION_SCHEMA = (
+    'C = {"band": number, "summary": str (Chinese), "strengths": [{"quote": str, '
+    '"comment": str (Chinese)}, ...1-3], "issues": [{"quote": str, "comment": str '
+    '(Chinese), "suggestion": str}, ...1-4]}'
 )
 
 
 def _argument_schema() -> str:
     types = " | ".join(f'"{key}"' for key in argument_lib.PROBLEM_TYPES)
     return (
-        'Also return "argument": {"position": {"quote": str (the sentence that states the '
-        'position, verbatim), "consistent": bool, "comment": str (Chinese)} or null, '
-        '"paragraphs": [{"role": "introduction" | "body" | "concession" | "conclusion", '
-        '"main_point": str (the paragraph\'s central sentence, verbatim), "verdict": '
-        '"supports" | "weak" | "off_position", "comment": str (Chinese)}, ...one per paragraph], '
-        f'"problems": [{{"type": {types}, "quote": str (verbatim), "comment": str (Chinese), '
-        '"suggestion": str (Chinese)}, ...0-6]}. If there is no clear position, set position '
-        "to null and add an unclear_position problem quoting the closest sentence. Do not "
-        "invent problems: a well-argued essay may have no problems."
+        'A = {"position": {"quote": str (the sentence that states the position, verbatim), '
+        '"consistent": bool, "comment": str (Chinese)} or null, "paragraphs": [{"p": int '
+        '(the paragraph number in essay_paragraphs), "role": "introduction" | "body" | '
+        '"concession" | "conclusion", "main_point": str (that paragraph\'s central sentence, '
+        'verbatim), "verdict": "supports" | "weak" | "off_position", "comment": str '
+        "(Chinese)}, ...exactly one per paragraph of essay_paragraphs, in order], "
+        f'"problems": [{{"type": {types}, "quote": str (verbatim), "conflicts_with": str '
+        "(verbatim; REQUIRED for inconsistent_position and conclusion_inconsistent: the other "
+        'passage it contradicts), "comment": str (Chinese), "suggestion": str (Chinese)}, '
+        '...0-6], "improvements": [{"quote": str (verbatim), "suggestion": str (Chinese)}, '
+        "...0-3]}. If there is no clear position, set position to null and add an "
+        "unclear_position problem quoting the closest sentence. Do not invent problems: a "
+        "well-argued essay may have no problems."
     )
+
+
+COMPARISON_SCHEMA = (
+    'K = {"claim": str (verbatim: a sentence or clause that ranks or compares, e.g. highest, '
+    'lowest, most, more/less than, overtook, doubled, in both years, all), "figures": [str '
+    '(verbatim figures from the essay used to check it)], "holds": bool, "comment": str '
+    "(Chinese)}"
+)
+COMPARISON_RULE = (
+    'Internal consistency (Task 1): in "comparisons" list EVERY ranking or comparison claim '
+    "in the essay and check it against the figures the essay itself gives elsewhere; "
+    "holds=false when the essay's own figures contradict it (e.g. it calls A the highest in "
+    "both years but gives C a larger figure in one year). This is about the essay agreeing "
+    "with itself only, not about the chart."
+)
+
+
+def _root_schema(task_type: str, visual: bool) -> str:
+    """One complete template for the whole answer, so nested parts cannot drift into
+    the criteria (the 2026-11-04 run once put argument inside every criterion)."""
+    task = '"task": C' if visual else '"task": null'
+    extra, nested = (
+        (', "argument": A', '"argument"')
+        if task_type == "task2"
+        else (', "comparisons": [K, ...]', '"comparisons"')
+    )
+    return " ".join(
+        [
+            "Return exactly ONE JSON object of this shape (every key at the top level, each "
+            "exactly once):",
+            f'{{"criteria": {{{task}, "coherence": C, "lexical": C, "grammar": C}}{extra}, '
+            '"overall_comment": str (Chinese), "priorities": [str (Chinese), ...3-5]}',
+            "where",
+            CRITERION_SCHEMA,
+            _argument_schema() if task_type == "task2" else COMPARISON_SCHEMA,
+            f"{nested}, overall_comment and priorities sit next to criteria, never inside a "
+            "criterion. Do not output an overall band; it is computed from the criteria.",
+        ]
+    )
+
+
+CHINESE_REMINDER = (
+    "请注意：所有解释（summary、comment、overall_comment、priorities 以及中文 suggestion）"
+    "都用简体中文书写；引文和英文改写句保持英文原样。"
+)
 
 
 CALIBRATION = (
@@ -132,23 +207,12 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "from the essay (a short span, max 25 words) so it can be located automatically; "
         "never paraphrase, translate or correct inside 'quote'. A criterion with no "
         "verifiable quote will be rejected.",
-        'Output schema: {"criteria": {"task": C, "coherence": C, "lexical": C, '
-        '"grammar": C}, "overall_comment": str, "priorities": [str, ...3-5]} where C = '
-        '{"band": number, "summary": str, "strengths": [{"quote": str, "comment": str}, '
-        '...1-3], "issues": [{"quote": str, "comment": str, "suggestion": str}, ...1-4]}. '
-        "Do not output an overall band; it is computed from the criteria.",
     ]
     if task_type == "task2":
-        rules += [ARGUMENT_CHECKLIST, _argument_schema()]
-    if task_type == "task1":
-        rules.append(
-            'Also return "consistency_issues": [{"quote": str, "comment": str}] listing places '
-            "where the essay contradicts ITSELF. Check every superlative or comparison "
-            "(highest, lowest, most, more than, overtook, doubled, in both years) against the "
-            "figures the essay itself gives elsewhere, e.g. it calls A the highest in both years "
-            "but gives C a larger figure in one year. Quote the contradicted claim verbatim. "
-            "This is about internal consistency only, not about the chart. Use [] if none."
-        )
+        rules.append(ARGUMENT_CHECKLIST)
+    else:
+        rules.append(COMPARISON_RULE)
+    rules.append(_root_schema(task_type, visual))
     if not visual:
         rules.append(
             "The task visual is unavailable, so Task Achievement CANNOT be assessed: set "
@@ -157,8 +221,21 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
             "never data accuracy or coverage of the chart."
         )
     system = " ".join(rules)
-    payload = {**_task_context(submission), "essay": submission["essay_text"]}
-    user = "Evaluate this IELTS essay.\n" + json.dumps(payload, ensure_ascii=False, indent=1)
+    payload = {**_task_context(submission)}
+    if task_type == "task2":
+        # Numbered so the argument map is bound to the real paragraphs.
+        payload["essay_paragraphs"] = [
+            {"p": n, "text": text}
+            for n, text in enumerate(essay_lib.split_paragraphs(submission["essay_text"]), 1)
+        ]
+    else:
+        payload["essay"] = submission["essay_text"]
+    user = (
+        "Evaluate this IELTS essay.\n"
+        + json.dumps(payload, ensure_ascii=False, indent=1)
+        + "\n"
+        + CHINESE_REMINDER
+    )
     context = {
         "kind": "evaluate",
         "task_type": task_type,

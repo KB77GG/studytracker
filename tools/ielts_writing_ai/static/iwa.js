@@ -473,6 +473,7 @@
         el('h3', { text: '论证结构检查' }),
         el('p', { class: 'muted small', text: 'AI 标注，引文均已在原文中核实；不单独计分，用来解释 TR / CC 的分数。点击引文可在左侧原文中定位。' })
       ]);
+      (a.notes || []).forEach(function (note) { box.appendChild(el('p', { class: 'notice notice--warn', text: note })); });
       var p = a.position;
       var consistent = p && p.consistent === true ? '前后一致' : p && p.consistent === false ? '前后不一致' : '';
       box.appendChild(el('div', { class: 'argument__position' }, p ? [
@@ -488,6 +489,7 @@
       box.appendChild(el('ol', { class: 'argument__flow' }, (a.paragraphs || []).map(function (item) {
         return el('li', { class: 'argument__step is-' + item.verdict }, [
           el('div', { class: 'argument__step-head' }, [
+            item.p ? el('span', { class: 'argument__no', text: '第 ' + item.p + ' 段' }) : null,
             el('span', { class: 'tag', text: item.role_label || item.role }),
             el('span', { class: 'tag tag--' + ({ supports: 'ok', weak: 'warn', off_position: 'bad' }[item.verdict] || 'warn'), text: item.verdict_label || item.verdict })
           ]),
@@ -501,14 +503,27 @@
         box.appendChild(el('p', { class: 'muted small', text: 'AI 没有标出明显的论证问题（不代表论证没有可改进之处）。' }));
       }
       problems.forEach(function (item) {
-        box.appendChild(el('div', { class: 'issue issue--argument' }, [
+        box.appendChild(el('div', { class: 'issue issue--argument' + (item.needs_review ? ' is-review' : '') }, [
           el('span', { class: 'tag tag--bad', text: item.label || item.type }),
+          item.needs_review ? el('span', { class: 'tag tag--warn', text: '需人工确认' }) : null,
           ' ',
           verified(item.quote),
+          item.conflicts_with ? el('p', { class: 'argument__conflict' }, ['与之矛盾：', verified(item.conflicts_with)]) : null,
           item.comment ? el('p', { class: 'issue__comment', text: item.comment }) : null,
-          item.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + item.suggestion }) : null
+          item.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + item.suggestion })
+            : item.suggestion_removed ? el('p', { class: 'muted small', text: '（建议含原文没有的具体数字，已删去）' }) : null
         ]));
       });
+      var improvements = a.improvements || [];
+      if (improvements.length) {
+        box.appendChild(el('p', { class: 'subhead', text: '可选优化（不是错误）' }));
+        improvements.forEach(function (item) {
+          box.appendChild(el('div', { class: 'issue issue--improve' }, [
+            verified(item.quote),
+            el('p', { class: 'issue__suggestion', text: item.suggestion })
+          ]));
+        });
+      }
       return box;
     }
 
@@ -543,7 +558,11 @@
           el('p', { class: 'muted small', text: '只检查作文内部的数字和比较是否前后矛盾，不代表数据与题图一致。' })
         ]);
         consistency.forEach(function (c) {
-          box.appendChild(el('div', { class: 'issue' }, [quoteButton(c), el('p', { class: 'issue__comment', text: c.comment })]));
+          box.appendChild(el('div', { class: 'issue' }, [
+            quoteButton(c),
+            (c.figures || []).length ? el('p', { class: 'argument__conflict' }, ['对照：'].concat(c.figures.map(function (f) { return verified(f); }))) : null,
+            el('p', { class: 'issue__comment', text: c.comment })
+          ]));
         });
         panel.appendChild(box);
       }

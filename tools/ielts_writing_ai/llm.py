@@ -299,7 +299,7 @@ class FakeClient:
             **(
                 {"argument": FakeClient._demo_argument(sentences)}
                 if context.get("task_type") == "task2"
-                else {}
+                else {"comparisons": []}
             ),
             "overall_comment": "【演示】这是演示模式的固定评语。连接真实模型后，这里会给出整体评价。",
             "priorities": [
@@ -321,6 +321,7 @@ class FakeClient:
             role = "introduction" if n == 0 else "conclusion" if n == len(ordered) - 1 else "body"
             paragraphs.append(
                 {
+                    "p": n + 1,
                     "role": role,
                     "main_point": text,
                     "verdict": "supports",
@@ -345,6 +346,16 @@ class FakeClient:
             },
             "paragraphs": paragraphs,
             "problems": problems,
+            "improvements": (
+                [
+                    {
+                        "quote": ordered[-1],
+                        "suggestion": "【演示】示例优化：结尾可以更简洁地重申立场（不是错误）。",
+                    }
+                ]
+                if ordered
+                else []
+            ),
         }
 
     @staticmethod

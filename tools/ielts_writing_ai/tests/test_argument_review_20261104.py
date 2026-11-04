@@ -14,7 +14,7 @@ from tools.ielts_writing_ai import argument, realcheck, review, samples
 from tools.ielts_writing_ai.llm import FakeClient
 
 from .helpers import TASK2_ESSAY, AppTestCase, settings_for
-from .test_argument import OFF, STRONG, good_map, sample
+from .test_argument import FORBID_CHECK, OFF, STRONG, good_map, sample
 from .test_review import evaluation, submission
 from .test_rewrite_recheck_20261104 import FX, SequenceClient, t1_notes
 
@@ -221,7 +221,7 @@ class StrongCheckTest(unittest.TestCase):
         for paragraph in mapped["paragraphs"]:
             paragraph["verdict"] = "off_position"
         checks = outcomes(sample("t2-strong", mapped, STRONG))
-        forbid = checks["不应出现 off_position / unclear_position"]
+        forbid = checks[FORBID_CHECK]
         self.assertFalse(forbid["ok"])
         self.assertEqual(forbid["detail"]["hits"], ["off_position"])
         self.assertEqual(len(forbid["detail"]["off_position_paragraphs"]), 4)
@@ -232,14 +232,24 @@ class StrongCheckTest(unittest.TestCase):
         checks = outcomes(sample("t2-strong", self.strong_map(), STRONG))
         self.assertTrue(all(c["ok"] for c in checks.values()), checks)
 
-    def test_inconsistent_position_counts_as_unclear_position(self):
+    def test_inconsistent_position_needs_a_verified_pair_to_count(self):
         mapped = self.strong_map()
         mapped["position"]["consistent"] = False
-        forbid = outcomes(sample("t2-strong", mapped, STRONG))[
-            "不应出现 off_position / unclear_position"
+        forbid = outcomes(sample("t2-strong", mapped, STRONG))[FORBID_CHECK]
+        # No conflicting passages were given, so the claim itself is not adopted.
+        self.assertTrue(forbid["ok"])
+        self.assertIsNone(forbid["detail"]["position_consistent"])
+        mapped["problems"] = [
+            {
+                "type": "inconsistent_position",
+                "quote": "i think this idea has advantages and disadvantages",
+                "conflicts_with": "I partly agree that university should be free",
+                "comment": "开头说有利有弊，结尾才表态。",
+            }
         ]
+        forbid = outcomes(sample("t2-strong", mapped, STRONG))[FORBID_CHECK]
         self.assertFalse(forbid["ok"])
-        self.assertEqual(forbid["detail"]["hits"], ["unclear_position"])
+        self.assertEqual(forbid["detail"]["hits"], ["inconsistent_position"])
 
     def test_strong_essay_must_have_a_verified_position(self):
         expect = dict(STRONG, argument_position=True)
@@ -275,7 +285,8 @@ class AccountingTest(unittest.TestCase):
         self.assertAlmostEqual(metrics["dropped_rate"], round(8 / 13, 3))
         markdown = "\n".join(realcheck._argument_markdown(metrics))
         self.assertIn(
-            "模型给出 13 条 = 采用 5 + 格式不对或无法核实而丢弃 8 + 重复 0 + 超出上限 0", markdown
+            "模型给出 13 条 = 采用 5 + 格式不对或无法核实而丢弃 8 + 重复 0 + 超出上限 0",
+            markdown,
         )
         self.assertIn(f"**丢弃率 {realcheck._pct(metrics['dropped_rate'])}**", markdown)
 
@@ -290,21 +301,24 @@ class AccountingTest(unittest.TestCase):
                 "x",
                 {"type": "circular", "quote": "nope", "comment": "c"},
             ]
-            + valid[1:]
+            + valid[1:],
+            improvements=[{"quote": "free education", "suggestion": "可以再具体一点"}] * 5
+            + [{"quote": "free education", "suggestion": "写上超过 80% 的学生受益"}],
         )
         raw["paragraphs"] = raw["paragraphs"] * 3 + [{"role": "body"}]
         mapped = argument.normalize(raw, TASK2_ESSAY)
-        self.assertEqual(mapped["returned"], 1 + 13 + 13)
-        self.assertEqual(mapped["duplicates"], 1)
-        self.assertEqual(mapped["dropped"], 3)  # "x", unverifiable quote, paragraph without verdict
-        self.assertEqual(
-            mapped["over_limit"], (12 - argument.MAX_PARAGRAPHS) + (10 - argument.MAX_PROBLEMS)
-        )
+        self.assertEqual(mapped["returned"], 1 + 13 + 14 + 6)
+        self.assertEqual(mapped["kept"], 1 + 4 + argument.MAX_PROBLEMS + argument.MAX_IMPROVEMENTS)
+        # paragraph without verdict, "x", unverifiable quote, two unpaired contradictions,
+        # the improvement whose only content was an unsourced figure
+        self.assertEqual(mapped["dropped"], 1 + 2 + len(argument.PAIRED_TYPES) + 1)
+        self.assertEqual(mapped["duplicates"], 8 + 1)  # same real paragraph ×8, repeat ×1
+        self.assertEqual(mapped["over_limit"], (9 - argument.MAX_PROBLEMS) + (5 - 3))
         self.assertEqual(
             mapped["returned"],
             mapped["kept"] + mapped["dropped"] + mapped["duplicates"] + mapped["over_limit"],
         )
-        self.assertEqual(mapped["kept"], 1 + argument.MAX_PARAGRAPHS + argument.MAX_PROBLEMS)
+        self.assertEqual(mapped["suggestions_removed"], 1)
 
     def test_results_stored_before_the_accounting_fields_still_report(self):
         item = sample("old", good_map(), {})

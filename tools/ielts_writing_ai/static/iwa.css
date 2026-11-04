@@ -291,6 +291,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
 .argument__step-head { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
 .argument__step-head .tag { margin: 0; }
 .issue--argument { border-left-color: var(--bad); }
+.issue--argument.is-review { border-left-style: dashed; }
+.issue--improve { border-left-color: var(--primary); }
+.argument__no { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; align-self: center; }
+.argument__conflict { margin: 4px 0 0; font-size: 14px; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 4px 8px; }
 .argument .issue__quote { overflow-wrap: anywhere; }
 
 .answers { margin: 0; padding-left: 18px; }

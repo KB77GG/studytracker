@@ -53,7 +53,7 @@ class NormalizeTest(unittest.TestCase):
         self.assertEqual(result["paragraphs"][2]["role_label"], "让步段")
         self.assertEqual(result["paragraphs"][0]["verdict_label"], "与立场关联偏弱")
         self.assertEqual(
-            [p["label"] for p in result["problems"]], ["立场不清或前后不一致", "让步后没有反驳"]
+            [p["label"] for p in result["problems"]], ["立场不清", "让步后没有回到立场"]
         )
         self.assertEqual(
             argument.problem_types(result), ["unclear_position", "concession_unanswered"]
@@ -87,7 +87,7 @@ class NormalizeTest(unittest.TestCase):
         raw["problems"] = [raw["problems"][1]] * 3 + [
             {"type": t, "quote": BODY_1, "comment": "c"} for t in argument.PROBLEM_TYPES
         ]
-        raw["paragraphs"] = raw["paragraphs"] * 3
+        raw["paragraphs"] = raw["paragraphs"] * 3  # one entry per real paragraph is kept
         result = argument.normalize(raw, TASK2_ESSAY)
         self.assertEqual(len(result["problems"]), argument.MAX_PROBLEMS)
         self.assertEqual(
@@ -97,8 +97,10 @@ class NormalizeTest(unittest.TestCase):
             ),
             1,
         )
-        self.assertEqual(len(result["paragraphs"]), argument.MAX_PARAGRAPHS)
-        self.assertEqual(result["dropped"], 0)
+        self.assertEqual([p["p"] for p in result["paragraphs"]], [1, 2, 3, 4])
+        self.assertEqual(result["duplicates"], 2 + 8)  # repeated problem ×2, paragraphs ×8
+        # The two contradiction types arrive without the conflicting passage: dropped.
+        self.assertEqual(result["dropped"], len(argument.PAIRED_TYPES))
 
     def test_missing_or_unverifiable_map_is_invalid(self):
         for raw in (None, "text", [], {"paragraphs": []}):
@@ -191,7 +193,7 @@ class CopyTextTest(unittest.TestCase):
         self.assertIn("论证结构检查（AI 标注，引文均已在原文中核实；不单独计分", text)
         self.assertIn("立场：“i dont agree with it”（前后一致）", text)
         self.assertIn("主体段【与立场关联偏弱】“Governments should invest more money”", text)
-        self.assertIn("✗ [论点缺少解释或支撑] “Governments should invest more money”", text)
+        self.assertIn("✗ [论点没有任何理由支撑] “Governments should invest more money”", text)
         self.assertIn("→ 建议：补一句原因和一个具体结果。", text)
 
     def test_copy_text_without_problems_does_not_claim_the_argument_is_perfect(self):
@@ -267,7 +269,16 @@ def sample(sample_id, mapped, expect, task_type="task2"):
     }
 
 
-STRONG = {"argument_max_problems": 1, "argument_forbid": ["off_position", "unclear_position"]}
+STRONG = {
+    "argument_max_problems": 1,
+    "argument_forbid": [
+        "off_position",
+        "unclear_position",
+        "inconsistent_position",
+        "conclusion_inconsistent",
+    ],
+}
+FORBID_CHECK = "不应出现 " + " / ".join(STRONG["argument_forbid"])
 OFF = {"argument_any_of": ["off_position", "irrelevant"]}
 
 

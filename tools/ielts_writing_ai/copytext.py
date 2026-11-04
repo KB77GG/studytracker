@@ -52,10 +52,19 @@ ARGUMENT_NOTE = "AI 标注，引文均已在原文中核实；不单独计分，
 CONSISTENT = {True: "前后一致", False: "前后不一致"}
 
 
+NEEDS_REVIEW = "需人工确认"
+
+
+def _paragraph_head(paragraph: dict) -> str:
+    number = f"第 {paragraph['p']} 段 · " if paragraph.get("p") else ""
+    return f"{number}{paragraph.get('role_label') or paragraph.get('role')}"
+
+
 def argument_lines(argument: dict | None) -> list[str]:
     if not argument:
         return []
     lines = [f"论证结构检查（{ARGUMENT_NOTE}）："]
+    lines += [f"提示：{note}" for note in argument.get("notes") or []]
     position = argument.get("position")
     if position:
         state = CONSISTENT.get(position.get("consistent"))
@@ -69,7 +78,7 @@ def argument_lines(argument: dict | None) -> list[str]:
         lines.append("各段中心句：")
     for paragraph in argument.get("paragraphs") or []:
         text = (
-            f"  · {paragraph.get('role_label') or paragraph.get('role')}"
+            f"  · {_paragraph_head(paragraph)}"
             f"【{paragraph.get('verdict_label') or paragraph.get('verdict')}】"
             f"“{paragraph['main_point']}”"
         )
@@ -80,13 +89,23 @@ def argument_lines(argument: dict | None) -> list[str]:
     if problems:
         lines.append("论证问题：")
         for problem in problems:
-            text = f"  ✗ [{problem.get('label') or problem.get('type')}] “{problem['quote']}” "
-            text += problem.get("comment") or ""
+            label = problem.get("label") or problem.get("type")
+            flag = f"（{NEEDS_REVIEW}）" if problem.get("needs_review") else ""
+            text = f"  ✗ [{label}]{flag} “{problem['quote']}”"
+            if problem.get("conflicts_with"):
+                text += f" ↔ 与之矛盾：“{problem['conflicts_with']}”"
+            text += f" {problem.get('comment') or ''}"
             if problem.get("suggestion"):
                 text += f" → 建议：{problem['suggestion']}"
+            elif problem.get("suggestion_removed"):
+                text += " →（建议含原文没有的具体数字，已删去）"
             lines.append(text.rstrip())
     else:
         lines.append("论证问题：AI 没有标出明显问题（不代表论证没有可改进之处）。")
+    improvements = argument.get("improvements") or []
+    if improvements:
+        lines.append("可选优化（不是错误，不影响上面的判断）：")
+        lines += [f"  · “{i['quote']}” → {i['suggestion']}" for i in improvements]
     return lines + [""]
 
 
@@ -113,7 +132,10 @@ def evaluation_text(result: dict, generation: dict) -> str:
     consistency = [c for c in result.get("consistency_issues") or [] if c.get("comment")]
     if consistency:
         lines.append("文内数据自洽检查（只看作文内部是否矛盾，不代表与题图一致）：")
-        lines += [_evidence_line(c, "✗") for c in consistency]
+        for issue in consistency:
+            lines.append(_evidence_line(issue, "✗"))
+            if issue.get("figures"):
+                lines.append("    对照：" + "；".join(f"“{f}”" for f in issue["figures"]))
         lines.append("")
     lines += argument_lines(result.get("argument"))
     if result.get("overall_comment"):

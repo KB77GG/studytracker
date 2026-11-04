@@ -113,7 +113,12 @@ SAMPLES = [
         "expect": {
             "overall_min": 7.0,
             "argument_max_problems": 1,
-            "argument_forbid": ["off_position", "unclear_position"],
+            "argument_forbid": [
+                "off_position",
+                "unclear_position",
+                "inconsistent_position",
+                "conclusion_inconsistent",
+            ],
             "argument_position": True,
         },
     },
@@ -136,6 +141,7 @@ SAMPLES = [
         "task_type": "task1",
         "prompt": TASK1_PROMPT,
         "essay": TASK1_NO_IMAGE,
-        "expect": {"not_assessable": True},
+        # Built-in contradiction: A "highest in both years" vs C overtaking A in 2020.
+        "expect": {"not_assessable": True, "consistency_min": 1},
     },
 ]
