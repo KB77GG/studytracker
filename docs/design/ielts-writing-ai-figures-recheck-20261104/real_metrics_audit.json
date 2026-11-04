@@ -1,0 +1,451 @@
+{
+  "source_head": "8f2d9c1cfaca4b4bd8978bf37a89cb611390318f",
+  "audit_network_calls": 0,
+  "transport": {
+    "request_attempts": 7,
+    "limit": 14,
+    "completed": true,
+    "status_counts": {
+      "200": 7
+    },
+    "finish_reasons": {
+      "stop": 7
+    },
+    "kind_counts": {
+      "evaluate": 7
+    }
+  },
+  "validation": {
+    "first_attempts": 7,
+    "json_decoded_objects": 7,
+    "json_failures": [],
+    "ready": 7,
+    "retries": 0
+  },
+  "usage": {
+    "prompt_tokens": 12079,
+    "completion_tokens": 12208,
+    "total_tokens": 24287
+  },
+  "completion_peak": 1876,
+  "completion_cap": 4500,
+  "evidence": {
+    "criteria": 27,
+    "quotes": 102,
+    "located": 102,
+    "exact": 102
+  },
+  "argument": {
+    "returned": 51,
+    "kept": 51,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 0,
+    "self_conflicts": 0,
+    "suggestions_removed": 0,
+    "positions": 6,
+    "paragraphs": 26,
+    "problems": 8,
+    "improvements": 11,
+    "raw_entry_count": 51,
+    "quotes": 51,
+    "quotes_located": 51,
+    "quotes_exact": 51,
+    "conflicts_with_quotes": 0,
+    "conflicts_with_located": 0,
+    "problem_types": {
+      "unsupported": 4,
+      "example_not_linked": 1,
+      "irrelevant": 1,
+      "off_position": 2
+    },
+    "paragraph_verdicts": {
+      "supports": 21,
+      "off_position": 5
+    }
+  },
+  "paragraph_counts": [
+    {
+      "sample": "t2-weak",
+      "original": 5,
+      "returned": 5,
+      "adopted": 5,
+      "p": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "sample": "t2-mid",
+      "original": 5,
+      "returned": 5,
+      "adopted": 5,
+      "p": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "sample": "t2-good",
+      "original": 5,
+      "returned": 5,
+      "adopted": 5,
+      "p": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "sample": "t2-strong",
+      "original": 5,
+      "returned": 5,
+      "adopted": 5,
+      "p": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "sample": "t2-off-topic",
+      "original": 5,
+      "returned": 5,
+      "adopted": 5,
+      "p": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "sample": "t2-under-length",
+      "original": 1,
+      "returned": 1,
+      "adopted": 1,
+      "p": [
+        1
+      ]
+    }
+  ],
+  "suggestions_removed_all_paths": {
+    "criteria": 1,
+    "priorities": 1,
+    "argument": 0,
+    "total": 2
+  },
+  "suggestions_removed_by_sample": [
+    {
+      "sample": "t2-weak",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    {
+      "sample": "t2-mid",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    {
+      "sample": "t2-good",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    {
+      "sample": "t2-strong",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    {
+      "sample": "t2-off-topic",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    {
+      "sample": "t2-under-length",
+      "criteria": 1,
+      "priorities": 1,
+      "argument": 0,
+      "total": 2
+    },
+    {
+      "sample": "t1-no-image",
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    }
+  ],
+  "removed_advice_texts": [
+    {
+      "sample": "t2-under-length",
+      "path": "criteria.task.issues.0.suggestion",
+      "text": "将每个论点扩展为完整段落，补充原因、后果或假设性例子，使总字数达到260词以上。",
+      "normalized_suggestion": ""
+    },
+    {
+      "sample": "t2-under-length",
+      "path": "priorities",
+      "text": "将全文扩展到260词以上，拆分为引言、两个主体段和结论四段。"
+    }
+  ],
+  "removal_interpretation": "Both removed entries are 260-word target recommendations, not fabricated statistics. This is a conservative filter false positive; no model call was repeated.",
+  "report_scope_note": "Automatic report.argument.suggestions_removed is argument-only (0); full evaluation advice removals are criteria1+priorities1+argument0=2, all in under-length sample.",
+  "sanity": {
+    "passed": 17,
+    "total": 17,
+    "skipped": [
+      {
+        "sample": "t2-off-topic",
+        "check": "离题样本：通过质量检查的改写必须已按题目重写",
+        "ok": null,
+        "detail": "本批未运行改写"
+      }
+    ],
+    "argument_passed": 5,
+    "argument_total": 5,
+    "task1_consistency_check": {
+      "sample": "t1-no-image",
+      "check": "指出文内数据矛盾 ≥ 1 条（已知样本矛盾）",
+      "ok": true,
+      "detail": {
+        "issues": [
+          "Country A had the highest level of ownership in both years"
+        ],
+        "claims_checked": 5
+      }
+    }
+  },
+  "task1": {
+    "comparisons_checked": 5,
+    "raw_comparisons": [
+      {
+        "claim": "Country A had the highest level of ownership in both years",
+        "figures": [
+          "70%",
+          "75%",
+          "nearly 80%"
+        ],
+        "holds": false,
+        "comment": "文章后文称Country C在2020年几乎翻倍至nearly 80%并overtaking Country A，而Country A 2020年仅约75%，因此A并非两年都最高，概述与主体段自相矛盾。"
+      },
+      {
+        "claim": "Country D remained the lowest",
+        "figures": [
+          "15%",
+          "35%",
+          "40%"
+        ],
+        "holds": true,
+        "comment": "D在2000年为15%、2020年约35%，均低于文中给出的其他国家对应数值，前后一致。"
+      },
+      {
+        "claim": "ownership almost doubled to nearly 80%, overtaking Country A",
+        "figures": [
+          "40%",
+          "nearly 80%",
+          "75%"
+        ],
+        "holds": true,
+        "comment": "C从约40%升至近80%，确为翻倍，且80%高于A的75%，与overtaking的表述一致。"
+      },
+      {
+        "claim": "it was still well behind the other three countries",
+        "figures": [
+          "35%",
+          "75%",
+          "65%",
+          "nearly 80%"
+        ],
+        "holds": true,
+        "comment": "D的35%低于A的75%、B的65%、C的近80%，well behind的表述与数据一致。"
+      },
+      {
+        "claim": "car ownership increased in all four countries over the period",
+        "figures": [
+          "70%",
+          "75%",
+          "55%",
+          "65%",
+          "40%",
+          "nearly 80%",
+          "15%",
+          "35%"
+        ],
+        "holds": true,
+        "comment": "四国2020年数值均高于2000年对应数值，总体趋势表述与文中数据一致。"
+      }
+    ],
+    "normalized_consistency_issues": [
+      {
+        "quote": "Country A had the highest level of ownership in both years",
+        "quote_found": true,
+        "figures": [
+          "70%",
+          "75%",
+          "nearly 80%"
+        ],
+        "comment": "文章后文称Country C在2020年几乎翻倍至nearly 80%并overtaking Country A，而Country A 2020年仅约75%，因此A并非两年都最高，概述与主体段自相矛盾。"
+      }
+    ],
+    "quote_audit": [
+      {
+        "kind": "claim",
+        "quote": "Country A had the highest level of ownership in both years",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "70%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "75%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "nearly 80%",
+        "located": true
+      },
+      {
+        "kind": "claim",
+        "quote": "Country D remained the lowest",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "15%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "35%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "40%",
+        "located": true
+      },
+      {
+        "kind": "claim",
+        "quote": "ownership almost doubled to nearly 80%, overtaking Country A",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "40%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "nearly 80%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "75%",
+        "located": true
+      },
+      {
+        "kind": "claim",
+        "quote": "it was still well behind the other three countries",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "35%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "75%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "65%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "nearly 80%",
+        "located": true
+      },
+      {
+        "kind": "claim",
+        "quote": "car ownership increased in all four countries over the period",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "70%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "75%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "55%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "65%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "40%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "nearly 80%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "15%",
+        "located": true
+      },
+      {
+        "kind": "figure",
+        "quote": "35%",
+        "located": true
+      }
+    ],
+    "ta_state": "not_assessable",
+    "overall_band": null,
+    "explanation_fields": 32,
+    "fields_containing_chinese": 32,
+    "english_only_fields": []
+  },
+  "automatic_metric_consistency": "All compared recorded metrics agree; full advice removal totals are supplementary and are not in automatic argument-only metric."
+}

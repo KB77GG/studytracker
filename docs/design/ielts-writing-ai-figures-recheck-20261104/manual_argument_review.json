@@ -1,0 +1,303 @@
+{
+  "review_type": "Independent manual audit of final outputs against original synthetic essays; not official IELTS regrading",
+  "source": "results/run_data.json and raw_calls.jsonl; source8f2d9c1c / promptiwa-2026-11-04.5",
+  "network_calls_by_reviewer": 0,
+  "overall": "Meaningful improvement: qualified positions, strong essay reasoning, legitimate concessions and Task1 numerical contradiction are now handled better. Residual context-insensitive unsupported/example labels and one numeric-filter side effect mean this is not a claim of fully reliable semantic grading.",
+  "automated_facts": {
+    "all_original_quotes_exact_substrings": true,
+    "task2_paragraph_mapping": [
+      {
+        "sample_id": "t2-weak",
+        "physical_paragraphs": 5,
+        "argument_entries": 5,
+        "problem_types": [
+          "unsupported",
+          "unsupported"
+        ],
+        "position_consistent": true,
+        "improvements": 2
+      },
+      {
+        "sample_id": "t2-mid",
+        "physical_paragraphs": 5,
+        "argument_entries": 5,
+        "problem_types": [
+          "example_not_linked"
+        ],
+        "position_consistent": true,
+        "improvements": 2
+      },
+      {
+        "sample_id": "t2-good",
+        "physical_paragraphs": 5,
+        "argument_entries": 5,
+        "problem_types": [],
+        "position_consistent": true,
+        "improvements": 2
+      },
+      {
+        "sample_id": "t2-strong",
+        "physical_paragraphs": 5,
+        "argument_entries": 5,
+        "problem_types": [],
+        "position_consistent": true,
+        "improvements": 2
+      },
+      {
+        "sample_id": "t2-off-topic",
+        "physical_paragraphs": 5,
+        "argument_entries": 5,
+        "problem_types": [
+          "irrelevant",
+          "off_position",
+          "off_position"
+        ],
+        "position_consistent": true,
+        "improvements": 1
+      },
+      {
+        "sample_id": "t2-under-length",
+        "physical_paragraphs": 1,
+        "argument_entries": 1,
+        "problem_types": [
+          "unsupported",
+          "unsupported"
+        ],
+        "position_consistent": true,
+        "improvements": 2
+      }
+    ],
+    "task1_claims_checked": 5,
+    "task1_contradictions_found": 1,
+    "task1_actual_paragraph_count": 5,
+    "task1_exact_word_figure_occurrences": 1,
+    "all_scored_summaries_and_overall_comments_contain_chinese": true
+  },
+  "findings": [
+    {
+      "sample_id": "t2-weak",
+      "classification": "improved",
+      "finding": "限定立场不再被误判矛盾",
+      "model_evidence": [
+        {
+          "quote": "I am agree with this opinion in some way but not all.",
+          "consistent": true,
+          "comment": "立场为有保留的支持：主要投向公共交通，必要时也修路。全文与结论均与此一致，属合格的限定立场。"
+        },
+        {
+          "p": 3,
+          "role": "concession",
+          "role_label": "让步段",
+          "main_point": "Secondly, new road is also important.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "承认道路的必要性，属于限定立场允许的让步，服务于'必要时也修路'的立场。"
+        }
+      ],
+      "verified_original_quotes": [
+        "I am agree with this opinion in some way but not all.",
+        "In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary."
+      ],
+      "manual_assessment": "本批承认公交优先与必要时修路相容；道路段被识别为限定立场允许的让步，没有旧批次的偏离或结尾矛盾判断。"
+    },
+    {
+      "sample_id": "t2-strong",
+      "classification": "improved",
+      "finding": "强文不再强制具名案例或重复例外",
+      "model_evidence": [
+        {
+          "quote": "I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.",
+          "consistent": true,
+          "comment": "立场为有保留的“基本同意”，第四段的让步正是该立场允许的例外，结论段重申“lion's share of funding”，与开篇一致，无矛盾。"
+        },
+        {
+          "p": 4,
+          "role": "concession",
+          "role_label": "让步段",
+          "main_point": "That said, a blanket refusal to build roads would be misguided.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "让步限定了立场范围（农村与货运），与开篇的保留一致，无需反驳。"
+        }
+      ],
+      "verified_original_quotes": [
+        "I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.",
+        "On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match."
+      ],
+      "manual_assessment": "本批problems为空，认可诱导需求因果链，明确让步无需反驳，lion's share与开头一致。更具体的道路升级和减排解释被放到可选优化，而不是逻辑错误。这是相对上一批明确好转；不表示分数已经经过教师校准。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "classification": "improved",
+      "finding": "中等作文的农村/货运例外被正确接受",
+      "model_evidence": [
+        {
+          "p": 4,
+          "role": "concession",
+          "role_label": "让步段",
+          "main_point": "On the other hand, new roads are sometimes needed.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "让步段说明道路仍有必要的具体情形，界定了立场范围，与保留立场一致。"
+        }
+      ],
+      "verified_original_quotes": [
+        "I mostly agree with this view, although I believe some road building is still necessary.",
+        "In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars."
+      ],
+      "manual_assessment": "旧批次的concession_unanswered消失，模型承认让步用于界定立场范围，环境展开也主要列为可选优化。"
+    },
+    {
+      "sample_id": "t2-weak",
+      "classification": "remaining_false_positive",
+      "finding": "公交价格和速度建议已有上下文理由，仍被标为完全无支撑",
+      "model_evidence": [
+        {
+          "type": "unsupported",
+          "label": "论点没有任何理由支撑",
+          "quote": "So goverment should make it cheap and more fast.",
+          "conflicts_with": null,
+          "p": 2,
+          "comment": "提出建议但未说明其如何解决问题，理由缺失。",
+          "suggestion": "补一句因果，说明降低票价、提高准点率会如何促使人们放弃私家车。",
+          "suggestion_removed": false,
+          "needs_review": false
+        }
+      ],
+      "verified_original_quotes": [
+        "If the bus is more better, people will use it more and the traffic will be less.",
+        "In my city the bus is always late and very crowd so people dont like to take it.",
+        "Also the train is too expensive for student.",
+        "So goverment should make it cheap and more fast."
+      ],
+      "manual_assessment": "模型评论“未说明其如何解决问题，理由缺失”忽略同一段已有服务改善→更多使用→减少拥堵，以及拥挤/晚点/价格的理由。要求进一步明确放弃私家车可以作为优化，不能据此说没有任何理由。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "classification": "remaining_overprescriptive",
+      "finding": "已衔接的地铁例子仍被要求加固定回扣句",
+      "model_evidence": [
+        {
+          "type": "example_not_linked",
+          "label": "例子没有回扣论点",
+          "quote": "For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.",
+          "conflicts_with": null,
+          "p": 2,
+          "comment": "例子本身有效，但未明确说明它与“投资公共交通优于修路”这一论点的联系。",
+          "suggestion": "在例子后补一句衔接，如“This suggests that rail investment can relieve congestion more effectively than building extra lanes.”",
+          "suggestion_removed": false,
+          "needs_review": false
+        },
+        {
+          "p": 2,
+          "role": "body",
+          "role_label": "主体段",
+          "main_point": "The main reason to invest in public transport is that it can move a large number of people efficiently.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "用效率论证支持立场，含因果解释和个人例子，论证有效。"
+        }
+      ],
+      "verified_original_quotes": [
+        "If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams.",
+        "For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour."
+      ],
+      "manual_assessment": "前句给公交改善→分流→减少拥堵的机制，紧接地铁减堵实例，联系已经明确。模型同段评论说论证有效，却把缺少显式重复“优于修路”列为example_not_linked；更适合可选优化。"
+    },
+    {
+      "sample_id": "t2-under-length",
+      "classification": "remaining_overprescriptive",
+      "finding": "农村道路理由简短，但并非完全没有理由",
+      "model_evidence": [
+        {
+          "type": "unsupported",
+          "label": "论点没有任何理由支撑",
+          "quote": "However, new roads are still useful in the countryside, where there are not many buses.",
+          "conflicts_with": null,
+          "p": 1,
+          "comment": "让步点提出后没有进一步说明政府应如何平衡，论证略显单薄。",
+          "suggestion": "加一句限定，例如：'so road building should be limited to rural areas rather than city centres.'",
+          "suggestion_removed": false,
+          "needs_review": false
+        }
+      ],
+      "verified_original_quotes": [
+        "However, new roads are still useful in the countryside, where there are not many buses.",
+        "In conclusion, public transport should be the priority, but some roads are still necessary."
+      ],
+      "manual_assessment": "where there are not many buses已经给出乡村道路必要性的理由，末句重申公交优先。模型说未进一步说明如何平衡、略显单薄，却归入“没有任何理由支撑”；这仍混淆简短与缺失。97词及未分段确实限制展开，不否定这些合理批评。"
+    },
+    {
+      "sample_id": "t1-no-image",
+      "classification": "improved",
+      "finding": "终于正确指出A/C排序矛盾，中文解释并保留缺图限制",
+      "model_evidence": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "70%",
+            "75%",
+            "nearly 80%"
+          ],
+          "comment": "文章后文称Country C在2020年几乎翻倍至nearly 80%并overtaking Country A，而Country A 2020年仅约75%，因此A并非两年都最高，概述与主体段自相矛盾。"
+        }
+      ],
+      "verified_original_quotes": [
+        "Country A had the highest level of ownership in both years",
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%.",
+        "The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A."
+      ],
+      "manual_assessment": "A约75%、C近80%足以反驳“两年均A最高”。本批对照引用和解释正确，检查作文内部数据而未声称核对题图；TA与总分仍不可评。评分理由及主要解释均中文，修复了上一批全英文和漏报。"
+    },
+    {
+      "sample_id": "t1-no-image",
+      "classification": "remaining_feedback_accuracy",
+      "finding": "评分解释仍有可直接核对的小错误",
+      "model_evidence": [
+        {
+          "coherence_summary": "文章结构清晰，四段式（引言、概述、两个主体段、结尾小结）符合Task 1常规组织，信息推进自然。衔接手段使用较丰富（Overall, while, compared with, By 2020, In summary），但部分连接略显机械，且结尾段与概述段内容重复，削弱了段落间的信息增量。整体属于衔接良好但未达7.5以上水准的水平。"
+        },
+        {
+          "quote": "had by far the lowest figure, at only 15%",
+          "quote_found": true,
+          "comment": "figure一词在文中多次出现（the lowest figure, the lowest），指代较泛，缺乏变化。",
+          "suggestion": "可改用 'the lowest level of ownership' 或 'the smallest share'，避免重复。",
+          "suggestion_removed": false
+        }
+      ],
+      "verified_original_quotes": [
+        "Country D had by far the lowest figure, at only 15%."
+      ],
+      "manual_assessment": "CC称四段式，但原文有五个实际段落，括号列举也包含五段。LR称figure一词多次出现，按独立单词计数只有一次；它还把the lowest并入figure重复的说法。此类说明应纠正；不在本轮另给专家分数，也不能凭一次样本量化评分偏差。"
+    },
+    {
+      "sample_id": "t2-under-length",
+      "classification": "filter_side_effect",
+      "finding": "260词写作目标被误作无来源统计，整条建议删除",
+      "raw_advice": [
+        {
+          "path": "criteria.task.issues.suggestion",
+          "text": "将每个论点扩展为完整段落，补充原因、后果或假设性例子，使总字数达到260词以上。"
+        },
+        {
+          "path": "priorities",
+          "text": "将全文扩展到260词以上，拆分为引言、两个主体段和结论四段。"
+        }
+      ],
+      "normalizer_removed_counts": {
+        "criteria": 1,
+        "priorities": 1,
+        "argument": 0,
+        "total": 2
+      },
+      "manual_assessment": "260词是给严重短文提出的写作目标，不是在主张一个现实统计事实；两条建议还同时包含扩展论点和分段等有效内容，现被整条删除。过滤器目前只白名单原稿字数与最低字数，尚不能识别其他合理目标字数。这是数字过滤副作用，应区分统计事实与写作目标，而非放开所有数字。"
+    }
+  ],
+  "other_samples": "Good essay has no argument problems and optional suggestions; off-topic essay is correctly recognized as education rather than transport. Some optional good-essay advice repeats a mechanism already in the text, but it is not treated as a fault and is not a main finding.",
+  "next_steps": [
+    "Use the existing weak, mid and underlength passages as context-sensitive regressions: brief or implicit support should not be called no support, and clear example adjacency need not repeat a fixed concluding formula.",
+    "Distinguish numeric claims from advice about target word count so removing an unsupported statistic does not delete useful writing instructions.",
+    "Have a teacher check scoring rationales on a broader labelled set before relying on bands; this audit does not estimate a replacement score."
+  ]
+}

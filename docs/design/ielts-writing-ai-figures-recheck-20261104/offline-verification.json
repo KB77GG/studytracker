@@ -1,0 +1,286 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "8f2d9c1cfaca4b4bd8978bf37a89cb611390318f",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 19.11
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.14
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests": 275,
+  "node_tests": 8,
+  "ruff": "passed",
+  "black": "passed, 41 files unchanged",
+  "js_syntax": "passed",
+  "diff_check": "passed",
+  "old_numeric_rows_correct": true,
+  "real_mid_80_in_criteria": [],
+  "real_mid_copy_contains_80": false,
+  "metrics_probe_passed": 18,
+  "independent_metrics": {
+    "source_head": "8f2d9c1cfaca4b4bd8978bf37a89cb611390318f",
+    "network_calls": 0,
+    "passed": 16,
+    "total": 16,
+    "checks": [
+      {
+        "name": "real mid removes both old 80-percent advice paths",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 1,
+            "total": 2
+          },
+          "remaining_80percent_advice": [],
+          "copy_contains_80percent": false,
+          "summary_warnings": [
+            "有 2 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（评分项 1 条、论证结构 1 条），避免把没有来源的数据当作改进方法。"
+          ]
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-weak",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-mid",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 1,
+            "total": 2
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-good",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 2,
+            "priorities": 0,
+            "argument": 0,
+            "total": 2
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-strong",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 1,
+            "total": 2
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-off-topic",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "all remaining advice sourced: t2-under-length",
+        "passed": true,
+        "actual": {
+          "removed": {
+            "criteria": 1,
+            "priorities": 1,
+            "argument": 0,
+            "total": 2
+          },
+          "surviving_unsourced_advice": []
+        }
+      },
+      {
+        "name": "criteria priorities problems and improvements counted together",
+        "passed": true,
+        "actual": {
+          "criteria": 1,
+          "priorities": 1,
+          "argument": 2,
+          "total": 4
+        }
+      },
+      {
+        "name": "whole percentage sourcing: The service began in 1980.",
+        "passed": true,
+        "actual": [
+          "80%"
+        ]
+      },
+      {
+        "name": "whole percentage sourcing: There are 180 buses.",
+        "passed": true,
+        "actual": [
+          "80%"
+        ]
+      },
+      {
+        "name": "whole percentage sourcing: There are 80 buses.",
+        "passed": true,
+        "actual": [
+          "80%"
+        ]
+      },
+      {
+        "name": "whole percentage sourcing: The essay reports 80% fewer emissions.",
+        "passed": true,
+        "actual": []
+      },
+      {
+        "name": "question provides legitimate 80-percent source",
+        "passed": true,
+        "actual": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        }
+      },
+      {
+        "name": "available chart only and structural word counts are sources",
+        "passed": true,
+        "actual": {
+          "ready": [],
+          "unusable": [
+            "79%"
+          ]
+        }
+      },
+      {
+        "name": "realcheck preserves per-path removals with one evaluation call",
+        "passed": true,
+        "actual": {
+          "calls": 1,
+          "normalized_removed": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 1,
+            "total": 2
+          },
+          "report_argument_removed": 1
+        }
+      },
+      {
+        "name": "evaluate-only ceiling unchanged",
+        "passed": true,
+        "actual": {
+          "calls": 14,
+          "options": [
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            },
+            {
+              "max_tokens": 4500,
+              "retries": 0
+            }
+          ]
+        }
+      }
+    ],
+    "report_scope_note": "realcheck.argument.suggestions_removed counts argument advice only. For all advice removals, aggregate each adopted evaluation result.suggestions_removed.{criteria,priorities,argument,total} from run_data.json."
+  },
+  "paid_runner_self_test": "passed: fake 14 attempts, request15 blocked, no network",
+  "old_probe_static_findings_note": "argument_review_probe findings text is hardcoded historical text. Runtime numeric correct flags and real_output_advice_coverage show both fixed."
+}

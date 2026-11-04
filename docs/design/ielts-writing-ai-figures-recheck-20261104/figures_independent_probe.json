@@ -1,0 +1,126 @@
+{
+  "source_head": "8f2d9c1cfaca4b4bd8978bf37a89cb611390318f",
+  "network_calls": 0,
+  "previous_two_regressions_fixed": true,
+  "whole_value_cases": [
+    {
+      "essay": "The city supports buses.",
+      "removed": true,
+      "correct": true
+    },
+    {
+      "essay": "The city began its bus service in 1980.",
+      "removed": true,
+      "correct": true
+    },
+    {
+      "essay": "The city operates 180 buses.",
+      "removed": true,
+      "correct": true
+    },
+    {
+      "essay": "The city operates 80 buses.",
+      "removed": true,
+      "correct": true
+    },
+    {
+      "essay": "The city reports an 80% reduction in emissions.",
+      "removed": false,
+      "correct": true
+    },
+    {
+      "essay": "The city reports an 80 per cent reduction in emissions.",
+      "removed": false,
+      "correct": true
+    }
+  ],
+  "unit_and_format_cases": [
+    {
+      "source": "We operate 80 buses.",
+      "advice": "80% 的人",
+      "unsourced": [
+        "80%"
+      ]
+    },
+    {
+      "source": "We operate 80 buses.",
+      "advice": "约 80 辆",
+      "unsourced": []
+    },
+    {
+      "source": "75% of riders.",
+      "advice": "75 percent",
+      "unsourced": []
+    },
+    {
+      "source": "75% of riders.",
+      "advice": "75％",
+      "unsourced": []
+    },
+    {
+      "source": "1,500 riders.",
+      "advice": "1500 riders",
+      "unsourced": []
+    },
+    {
+      "source": "1,500 riders.",
+      "advice": "15 riders",
+      "unsourced": [
+        "15"
+      ]
+    },
+    {
+      "source": "Nothing numeric.",
+      "advice": "补 1 个例子，第 2 段",
+      "unsourced": []
+    },
+    {
+      "source": "Nothing numeric.",
+      "advice": "2.5% 的增长",
+      "unsourced": [
+        "2.5%"
+      ]
+    }
+  ],
+  "allowed_sources": {
+    "question_chart_word_count_minimum_passed": true,
+    "unavailable_chart_numbers_rejected": true
+  },
+  "all_four_advice_paths": {
+    "removed": {
+      "criteria": 1,
+      "priorities": 1,
+      "argument": 2,
+      "total": 4
+    },
+    "copy_has_80percent": false,
+    "known_prompt_figure_preserved_everywhere": true,
+    "score_unchanged": true
+  },
+  "real_mid_replay": {
+    "removed": {
+      "criteria": 1,
+      "priorities": 0,
+      "argument": 1,
+      "total": 2
+    },
+    "json_and_copy_have_80percent": false,
+    "copy_removal_notices": 2
+  },
+  "ui_contract": "Static review confirms both criterion and argument paths display the same removal marker; no browser was run by this probe.",
+  "representation_limitations": [
+    {
+      "source": "No numeric data.",
+      "advice": "排放减少百分之8。",
+      "unsourced": [],
+      "note": "Arabic digits after Chinese prefix are parsed as a plain number; under-10 exemption applies."
+    },
+    {
+      "source": "排放下降百分之八十一。",
+      "advice": "排放下降百分之八十。",
+      "unsourced": [],
+      "note": "Chinese percentages use literal phrase containment, not normalized numeric comparison."
+    }
+  ],
+  "limitations": "This is a numeric-source heuristic. Prose commentary is excluded, ordinary small numbers are exempt, and a sourced numeric value is not proof of the associated factual claim. Chinese number forms still have limited coverage."
+}

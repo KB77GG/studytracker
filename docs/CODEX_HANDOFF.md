@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 数字过滤复核通过并完成7次实测：自动17/17，保留语义和篇幅目标问题
+
+- 本轮用户条件授权为7篇内置合成作文、仅evaluate、最多14次实际请求；离线通过后已执行，**实际7/14，全部首轮通过，无重试，批次结束**。未运行精修/改写/识图，不自动追加剩余请求。使用已有私有试用Key，无Key创建/修改，私有.env保持ignored，不在文档或暂存中。
+- 实施/复核树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`：从1b4a32af clean经fetch/ff-only到 **8f2d9c1cfaca4b4bd8978bf37a89cb611390318f**（业务67672702，prompt iwa-2026-11-04.5）。本轮没有业务源码变更，调用前后62份跟踪工具文件SHA一致。仅新增17份报告/探针/原始证据及本两交接文档，独立文档提交推功能分支，最终文档HEAD以git log为准。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，origin/main f0e04041/behind103。原7 modified/22 untracked入口保留，未动无关代码/数据；新增本机 `docs/design/iwa-figures-recheck-20261104/`（runner、results、source-state、报告），同步两份交接镜像，未提交旧main。其他worktree未操作。
+- 完整离线命令：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-figures-recheck-20261104/run_offline_tests.py` → **275 Python**（测试18.824s）、**8 Node**，Mac Python3.13.3；fake/临时库/仅回环网络，外部IWA_DATA_DIR未写入。实施树以主树.venv跑ruff、black --check tools/ielts_writing_ai（41文件）、node --check static/iwa.js（工具目录）、git diff --check通过。主流程探针18/18，新增指标探针16/16，独立来源探针通过；发送上限用替身验证14次、15次被拦截，无外部调用。
+- 旧两项关闭：1980/180/普通80不会放行80%；历史mid评分项1+论证1均删，完整复制无80%。合法题目、ready题图、字数/下限正反对照通过。中文“百分之8/八十一与八十”仍是表示形式覆盖限制，独立探针明确记录，不宣称所有数字表示都受控。
+- 付费命令：同一Python执行本机 `docs/design/iwa-figures-recheck-20261104/run_evaluate.py --confirm-paid`，7次均HTTP200/finish=stop；首轮JSON/校验/最终均7/7。102评分引文、51论证引文均逐字存在；论证51=采用51+丢弃0+重复0+超限0；6立场/26段/8问题/11可选优化，自相矛盾0。论证5/5，Task1矛盾检查通过，总17/17另skip1；输入12079+输出12208=24287token，输出峰1876/4500，p50约11.1s/p90约12.5s。价格未配置、账单未核，不报零费用。
+- 新提示效果明确改善：限定立场/合理让步被接受，强文0问题（2可选优化），Task1抓到A75%<C近80%的文内矛盾，中文解释，缺图TA/总分仍不可评；97词文只映射1个真实段落。
+- **仍需完善**：① 97词样本两条“扩写到260词以上”的合理篇幅目标被数字过滤删掉（criteria1+priorities1=total2），会连带删去有效展开/分段建议；report论证节删0仅局部口径。② 弱文已有上下文因果仍被说成无理由，中等文有效地铁例子被机械要求再回扣，短文乡村已有原因仍归unsupported；应区分无支撑、简短支撑和可选优化。③ Task1把5段称四段、figure只1次却说多次，语言评分仍需人工校准。详见README/manual_argument_review，不用自动全绿代替语义准确结论。
+- 共享交付 `docs/design/ielts-writing-ai-figures-recheck-20261104/`：自动report/run_data/raw_calls/transport、人工审阅、独立重算与便携探针、离线证据，共17文件。主agent重跑新增来源/指标探针和real_metrics_audit全部一致。结果已过实际Key精确检查，分享文件凭据模式扫描通过；只有合成作文。旧探针静态findings字段是历史文案，运行字段显示已修，README明确说明。
+- **发布状态**：仅报告/交接commit并push功能分支；没有业务修改、main合并、生产部署、前端/后端/数据库/服务器操作；没有遗留本轮测试服务，小程序未上传/提审/发布。本机runner与主树镜像仅本机可见。
+- **下一步**：Claude拉本报告，用固定原始输出做离线回归，优先区分字数目标与无来源统计，再加强同段上下文判断；不放宽强文问题数阈值。若要新批付费验证需新范围授权，本批不自动复跑。未验证：新版本精修/改写、真实识图、Python3.10、浏览器完整流程、20篇以上教师评分校准。
+
 ## 2026-11-04（判断准则复核后）雅思写作 AI 试用工具：无来源数字建议过滤两处漏洞（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `93d47ec`（报告 `1b4a32af`，`docs/design/ielts-writing-ai-judgment-review-20261104/`）。其余修复都通过（266 项测试，指标 / 流程探针 18/18），但“删除无来源数字建议”有两处 P2 漏洞，真实请求 0/14：
