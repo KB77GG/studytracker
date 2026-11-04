@@ -1,0 +1,145 @@
+test_consecutive_unfinished_makeups_reappear_and_only_latest_completion_resumes (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_consecutive_unfinished_makeups_reappear_and_only_latest_completion_resumes) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_continue_releases_only_selected_old_day_and_keeps_future_wait_rule (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_continue_releases_only_selected_old_day_and_keeps_future_wait_rule) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+ok
+test_grace_period_completion_prevents_recovery_and_0300_opens_it (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_grace_period_completion_prevents_recovery_and_0300_opens_it) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_grace_student_real_submission_resumes_without_makeup_and_old_backlog_allowed (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_grace_student_real_submission_resumes_without_makeup_and_old_backlog_allowed) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_makeup_student_submits_and_next_0305_resumes_only_its_line (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_makeup_student_submits_and_next_0305_resumes_only_its_line) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_partial_reading_only_p2_makeup_preserves_original_scores_and_attempts (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_partial_reading_only_p2_makeup_preserves_original_scores_and_attempts) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_reading_full_bundle_requires_three_real_submissions_then_resumes (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_reading_full_bundle_requires_three_real_submissions_then_resumes) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_reading_makeup_two_of_three_submitted_still_blocks_then_last_passage_recovers (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_reading_makeup_two_of_three_submitted_still_blocks_then_last_passage_recovers) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_today_published_task_blocks_makeup_without_changing_student_work (tests.test_task_planner_recovery_e2e.RecoveryJourneyE2ETest.test_today_published_task_blocks_makeup_without_changing_student_work) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_makeup_grace_window_agrees_between_miniprogram_and_web (tests.test_task_planner_recovery_student_contract_e2e.RecoveryStudentContractE2E.test_makeup_grace_window_agrees_between_miniprogram_and_web) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/api/auth_utils.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "iat": int(datetime.utcnow().timestamp()),
+/private/tmp/studytracker-recovery-e2e-20261104/api/auth_utils.py:28: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "exp": int((datetime.utcnow() + timedelta(hours=TOKEN_TTL_HOURS)).timestamp()),
+/private/tmp/studytracker-recovery-e2e-20261104/models.py:78: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  self.token_issued_at = datetime.utcnow()
+/private/tmp/studytracker-recovery-e2e-20261104/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-recovery-e2e-20261104/api/miniprogram.py:1935: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:575: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:7923: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_reading_bundle_makeup_is_visible_and_bound_to_fresh_tasks (tests.test_task_planner_recovery_student_contract_e2e.RecoveryStudentContractE2E.test_reading_bundle_makeup_is_visible_and_bound_to_fresh_tasks) ... /private/tmp/studytracker-recovery-e2e-20261104/app.py:2433: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+/private/tmp/studytracker-recovery-e2e-20261104/api/miniprogram.py:2142: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-recovery-e2e-20261104/app.py:8013: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_api_apply_returns_recoverable_conflict_without_writes (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_api_apply_returns_recoverable_conflict_without_writes) ... ok
+test_api_inbox_and_previews_enforce_cutoff_with_staff_and_csrf (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_api_inbox_and_previews_enforce_cutoff_with_staff_and_csrf) ... ok
+test_committed_request_replays_across_midnight_without_duplicate_tasks (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_committed_request_replays_across_midnight_without_duplicate_tasks) ... ok
+test_continue_is_available_at_exact_cutoff (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_continue_is_available_at_exact_cutoff) ... ok
+test_direct_continue_apply_cannot_bypass_cutoff (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_direct_continue_apply_cannot_bypass_cutoff) ... ok
+test_direct_makeup_apply_cannot_bypass_cutoff (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_direct_makeup_apply_cannot_bypass_cutoff) ... ok
+test_direct_previews_reject_both_actions_during_grace (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_direct_previews_reject_both_actions_during_grace) ... ok
+test_makeup_is_available_at_exact_cutoff (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_makeup_is_available_at_exact_cutoff) ... ok
+test_older_backlog_remains_recoverable_before_todays_cutoff (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_older_backlog_remains_recoverable_before_todays_cutoff) ... ok
+test_pending_inbox_opens_at_exact_cutoff_in_local_utc_and_naive_utc (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_pending_inbox_opens_at_exact_cutoff_in_local_utc_and_naive_utc) ... ok
+test_pending_inbox_waits_for_cutoff_even_across_beijing_midnight (tests.test_task_planner_recovery_cutoff.RecoveryCutoffTest.test_pending_inbox_waits_for_cutoff_even_across_beijing_midnight) ... ok
+test_api_auth_csrf_and_result_shapes (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_api_auth_csrf_and_result_shapes) ... ok
+test_competing_different_actions_have_only_one_winner (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_competing_different_actions_have_only_one_winner) ... ok
+test_competing_requests_use_writer_lock_and_only_one_decision_wins (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_competing_requests_use_writer_lock_and_only_one_decision_wins) ... ok
+test_continue_lists_and_audits_overdue_skip_then_publishes_today (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_continue_lists_and_audits_overdue_skip_then_publishes_today) ... ok
+test_continue_recovers_today_blocked_without_auto_enrollment_or_time_window (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_continue_recovers_today_blocked_without_auto_enrollment_or_time_window) ... ok
+test_continue_refuses_partial_cancelled_bundle (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_continue_refuses_partial_cancelled_bundle) ... ok
+test_explicit_unfinished_prerequisite_is_not_waived_by_series_decision (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_explicit_unfinished_prerequisite_is_not_waived_by_series_decision) ... ok
+test_full_reading_makeup_gets_new_atomic_bundle_and_continue_checks_all_three (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_full_reading_makeup_gets_new_atomic_bundle_and_continue_checks_all_three) ... ok
+test_inbox_excludes_manual_work_valid_submission_and_cancelled_invalid_students (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_inbox_excludes_manual_work_valid_submission_and_cancelled_invalid_students) ... ok
+test_late_returned_completed_sibling_reopens_same_day_without_waiving_it (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_late_returned_completed_sibling_reopens_same_day_without_waiving_it) ... ok
+test_legacy_single_kind_frozen_rows_without_kind_remain_recoverable (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_legacy_single_kind_frozen_rows_without_kind_remain_recoverable) ... ok
+test_makeup_three_day_gate_then_completed_new_task_resumes_shifted_plan (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_makeup_three_day_gate_then_completed_new_task_resumes_shifted_plan) ... ok
+test_overdue_makeup_moves_earliest_pending_to_tomorrow_with_uniform_delta (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_overdue_makeup_moves_earliest_pending_to_tomorrow_with_uniform_delta) ... ok
+test_partial_reading_bundle_becomes_one_native_makeup_and_future_bundle_stays_valid (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_partial_reading_bundle_becomes_one_native_makeup_and_future_bundle_stays_valid) ... ok
+test_published_today_blocks_makeup_but_continue_preserves_date_mode (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_published_today_blocks_makeup_but_continue_preserves_date_mode) ... ok
+test_resolved_record_uses_valid_vocabulary_settlement_status (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_resolved_record_uses_valid_vocabulary_settlement_status) ... ok
+test_resource_failure_is_not_cleared_by_continue_or_makeup (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_resource_failure_is_not_cleared_by_continue_or_makeup) ... ok
+test_same_request_key_replays_once_and_reuse_for_other_action_is_rejected (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_same_request_key_replays_once_and_reuse_for_other_action_is_rejected) ... ok
+test_second_makeup_write_failure_rolls_back_tasks_planitems_dates_and_decision (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_second_makeup_write_failure_rolls_back_tasks_planitems_dates_and_decision) ... ok
+test_shift_over_90_days_is_blocked_without_writes (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_shift_over_90_days_is_blocked_without_writes) ... ok
+test_source_task_wrong_student_or_date_rejected_for_both_actions (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_source_task_wrong_student_or_date_rejected_for_both_actions) ... ok
+test_state_change_and_request_key_payload_reuse_are_rejected (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_state_change_and_request_key_payload_reuse_are_rejected) ... ok
+test_success_retry_across_beijing_day_is_idempotent_and_unapplied_old_preview_is_stale (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_success_retry_across_beijing_day_is_idempotent_and_unapplied_old_preview_is_stale) ... ok
+test_unfinished_makeup_reappears_and_chain_only_exempts_ancestors (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_unfinished_makeup_reappears_and_chain_only_exempts_ancestors) ... ok
+test_unrelated_same_content_task_blocks_makeup_even_when_ancestor_is_exempt (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_unrelated_same_content_task_blocks_makeup_even_when_ancestor_is_exempt) ... ok
+test_waived_nearest_day_does_not_fall_back_to_older_unfinished_work (tests.test_task_planner_recovery.TaskPlannerRecoveryTest.test_waived_nearest_day_does_not_fall_back_to_older_unfinished_work) ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 15.338s
+
+OK

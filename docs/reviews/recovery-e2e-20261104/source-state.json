@@ -1,0 +1,18 @@
+{
+  "baseline": "f0e040416c8a68e66ba1202e558d4c1690bdc91b",
+  "worktree": "/private/tmp/studytracker-recovery-e2e-20261104",
+  "branch": "detached HEAD",
+  "entry_state": "clean",
+  "candidate_files": {
+    ".github/workflows/ci.yml": "dca0b4f6271903b80762b9c286b9050c6be4c7c2a76363d97261e2f99c47724a",
+    "services/task_planner_recovery.py": "803c591bb4ffe3ef39a483e2ef5aa249efb14d79de984744e6c7dd4cc1b7e34a",
+    "templates/task_planner.html": "c8bdaa1a91553b7edd1605ca7e8d057cd9d37d654b26ded3428f07a439f32ceb",
+    "docs/TASK_PLANNER_RECOVERY.md": "f2f4f5d4e9149d36a1a2f933c3fa604fc7ca7932a0304fdee0d80dba69b0c6db",
+    "tests/recovery_e2e_support.py": "500e24605730e93fd89834823c763bdad17b730240362d94a5aea74b7bca29ac",
+    "tests/test_task_planner_recovery_cutoff.py": "dfe21c1e048c5e3b89691015f2b792f54ccd77c9d30fad10a405e57c3a42323a",
+    "tests/test_task_planner_recovery_e2e.py": "6221f33efebce765f83a4de5b0102ac5a51f1236b5751b2baba20e1562f184d1",
+    "tests/test_task_planner_recovery_student_contract_e2e.py": "acdf9eb1fa93f586c97e4a29c1a3f1bb5ea1a9ba0251aca96f1193e00ac15ea7"
+  },
+  "app_db_exists": false,
+  "main_state": "## main...origin/main [behind 103]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py\n"
+}

@@ -1,0 +1,75 @@
+{
+  "before": {
+    "now": "2026-11-02T10:00:00+08:00",
+    "tasks": [
+      {
+        "date": "2026-11-01",
+        "id": 1,
+        "passage": 1,
+        "status": "pending",
+        "test_id": "ielts10_test1_reading"
+      },
+      {
+        "date": "2026-11-02",
+        "id": 2,
+        "passage": 1,
+        "status": "done",
+        "test_id": "ielts10_test1_reading"
+      }
+    ]
+  },
+  "2026-11-03T03:04:59+08:00": {
+    "blocked": 0,
+    "date": "2026-11-03",
+    "dry_run": false,
+    "eligible": 0,
+    "failed": 0,
+    "outside_window": true,
+    "published": 0,
+    "skipped": 0
+  },
+  "2026-11-03T03:05:00+08:00": {
+    "blocked": 0,
+    "date": "2026-11-03",
+    "dry_run": false,
+    "eligible": 1,
+    "failed": 0,
+    "published": 1,
+    "skipped": 0
+  },
+  "repeated_0305": {
+    "blocked": 0,
+    "date": "2026-11-03",
+    "dry_run": false,
+    "eligible": 0,
+    "failed": 0,
+    "published": 0,
+    "skipped": 0
+  },
+  "after": {
+    "now": "2026-11-03T03:05:00+08:00",
+    "tasks": [
+      {
+        "date": "2026-11-01",
+        "id": 1,
+        "passage": 1,
+        "status": "pending",
+        "test_id": "ielts10_test1_reading"
+      },
+      {
+        "date": "2026-11-02",
+        "id": 2,
+        "passage": 1,
+        "status": "done",
+        "test_id": "ielts10_test1_reading"
+      },
+      {
+        "date": "2026-11-03",
+        "id": 3,
+        "passage": 1,
+        "status": "pending",
+        "test_id": "ielts10_test2_reading"
+      }
+    ]
+  }
+}

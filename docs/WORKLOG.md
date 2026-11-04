@@ -1,5 +1,12 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-04 — 补做顺延独立验收及03:00修复已部署
+
+- 用户明确“部署吧”后，在隔离树 `codex/recovery-cutoff-20261104` 将8个已审阅文件提交 **40cd8225**；分支CI41833707165通过后快进push main，main CI41838677809三测试job成功，Deploy41838677873一次成功。advisory lint仍为存量failure。两交接及完整报告随后以独立[skip ci]文档提交同步；业务与报告不再仅本机。
+- 02:59提前恢复导致合法宽限提交后仍停排的缺陷已修复；只在原次日03:00截止后允许恢复，不改03:05规则。新增22+旧26=48 Python、旧前端16、Chrome真实师生补做→提交→受控次日续排→学生打开下一篇通过；完整分层证据及基线复现见 `docs/reviews/recovery-e2e-20261104/README.md`。
+- 生产40cd8225、7SHA一致、tracked clean、递归未跟踪113前后相同；21:31:05 CST起active/NRestarts0/5002单worker gthread6，重启后warning0，匿名接口/测试端点保护正常，公网login200。Timer保持enabled/active/waiting，下次11月5日03:05；只读验收不查学生表，不执行排程，无手动DB/schema或真实学生动作，小程序未改未发布。
+- 真微信设备、真实学生恢复和实际次日排程仍未验。桌面旧main6ded77d2原7/22改动保留，仅本报告镜像及两交接增量；发布树文档提交后应clean。精确命令、路径、发布及跨机状态见CODEX_HANDOFF。
+
 ## 2026-11-03 — 学生网页当前任务优先已部署
 
 - 用户授权后，隔离实施树 `codex/active-student-tasks` 提交5文件cfae76f7，分支CI通过后推main；分支CI41655000878/main CI41655448224三测试job成功，Deploy41655448219成功，advisory lint为仓库存量failure。两网页当前任务优先、三类旧/未来记录默认折叠；19Node+32Python及390px合成验收、独立发布范围复审已通过。

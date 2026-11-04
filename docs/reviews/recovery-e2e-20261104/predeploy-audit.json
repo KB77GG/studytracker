@@ -1,0 +1,96 @@
+{
+  "checked_at_utc": "2026-11-04T13:15:25.101907+00:00",
+  "scope": "Read-only files, Git, systemd, anonymous HTTP. No app import or DB access.",
+  "head": "cfae76f7a07a5702c37068cdf160a491b7fc0c6c",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "sha256": {
+    "services/task_planner_recovery.py": "8c4c375f305a89ccf63051104d99cd2fe299cb2693d9a6db947282b3a74ec5ec",
+    "templates/task_planner.html": "7900af2093d917c6c9a55de29e2bd0d691ca44a76aea472cc1e762646e8d2827",
+    "api/task_planner.py": "5a3013e6391eb1ff530865d1e1e6dd43b547c1eb05a7ee584f761c10deb0f284",
+    "services/task_date_gate.py": "3c3d0cf4e1f48e2d10ad74369c5fe22b5d32774c48cac457638d9cf10333b43e",
+    "services/task_planner.py": "03208480253503a40c039849dd159d4fc6bb579308eda642a03bb90cf58a3e26",
+    "scripts/run_task_planner.py": "05dd9989f7f8afbb3607996e73b8bd45655ff9f24dcfedb92eda31247a82f001",
+    "gunicorn.conf.py": "9f0325750a5d0e460722dc2d28abd786e77f41d7eab49bc2c8e339c63f7977dc"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "service": {
+    "MainPID": "691600",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Tue 2026-11-03 22:37:37 CST",
+    "ExecStart": "{ path=/root/apps/studytracker/.venv/bin/gunicorn ; argv[]=/root/apps/studytracker/.venv/bin/gunicorn -c gunicorn.conf.py app:app ; ignore_errors=no ; start_time=[Tue 2026-11-03 22:37:37 CST] ; stop_time=[n/a] ; pid=691600 ; code=(null) ; status=0/0 }",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "timer": {
+    "NextElapseUSecRealtime": "Thu 2026-11-05 03:05:00 CST",
+    "LastTriggerUSec": "Wed 2026-11-04 08:50:04 CST",
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "UnitFileState": "enabled"
+  },
+  "planner_last_result": {
+    "Result": "success",
+    "ExecMainStatus": "0"
+  },
+  "unit_files": {
+    "studytracker-task-planner.timer": {
+      "sha256": "408e90d4d7b78c7a0e0077f9ca8b1db36c802b9da32818faf3004422661770f5",
+      "matches_repository": true
+    },
+    "studytracker-task-planner.service": {
+      "sha256": "bc89018744813e37e2358fe063fb84428753e3612f19b63791220bb501878415",
+      "matches_repository": true
+    }
+  },
+  "warnings_since_restart": 0,
+  "http": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "location": null
+    },
+    {
+      "method": "GET",
+      "path": "/task-planner",
+      "status": 302,
+      "location": "/login?next=/task-planner"
+    },
+    {
+      "method": "GET",
+      "path": "/api/task-planner/bootstrap",
+      "status": 401,
+      "location": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/task-planner/inbox",
+      "status": 401,
+      "location": null
+    },
+    {
+      "method": "OPTIONS",
+      "path": "/api/task-planner/inbox/preview",
+      "status": 401,
+      "location": null
+    },
+    {
+      "method": "OPTIONS",
+      "path": "/api/task-planner/inbox/apply",
+      "status": 401,
+      "location": null
+    },
+    {
+      "method": "GET",
+      "path": "/__e2e",
+      "status": 404,
+      "location": null
+    }
+  ]
+}

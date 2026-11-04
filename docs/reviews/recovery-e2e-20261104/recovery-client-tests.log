@@ -1,0 +1,24 @@
+✔ inbox filtering only carries selected student and pending/resolved view (1.242042ms)
+✔ action request identifies the exact original learning day without client-supplied tasks or changes (5.131625ms)
+✔ summary counts students, learning lines and tasks without double counting repeated records (0.101792ms)
+✔ confirmation requires a complete current preview and zero blockers (0.074042ms)
+✔ resolved labels distinguish makeup from ignoring without claiming completion (0.106541ms)
+✔ missing recovery markup leaves older page initialization intact (0.463291ms)
+✔ opening preview never applies changes and displays server dates and blockers literally (1.107833ms)
+✔ network failure retries the identical accepted hash and request key, then refreshes all lists once (0.298417ms)
+✔ double confirmation creates one apply request and blocks closing until its result arrives (0.156458ms)
+✔ 409 invalidates confirmation and a fresh preview receives a fresh idempotency key (0.202041ms)
+✔ late preview for a different case cannot replace the currently selected action (0.156417ms)
+✔ student filtering rejects an earlier slower inbox response (0.245292ms)
+✔ changing students clears actionable old cards while the new inbox is loading (0.124125ms)
+✔ a late preview after closing the dialog cannot restore confirmation or perform a write (0.081083ms)
+✔ resolved inbox is read-only and displays the recorded decision (3.454125ms)
+✔ successful mutation followed by a list refresh failure is never offered for retry (0.180917ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 80.814875

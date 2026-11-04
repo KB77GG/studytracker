@@ -1,0 +1,49 @@
+{
+  "purpose": "Reproduce the shipped defect; exit 0 is not product acceptance",
+  "bug_reproduced": true,
+  "baseline": "f0e040416c8a68e66ba1202e558d4c1690bdc91b",
+  "baseline_recovery_sha256": "8c4c375f305a89ccf63051104d99cd2fe299cb2693d9a6db947282b3a74ec5ec",
+  "candidate_source_unchanged": true,
+  "clock_before": "2026-11-02T02:59:00+08:00",
+  "old_can_write": true,
+  "inbox_count": 1,
+  "preview_can_apply": true,
+  "makeup_task_ids": [
+    2
+  ],
+  "old_submit_http": 200,
+  "old_submission_status": "done",
+  "old_submission_correct": 13,
+  "run_due_clock": "2026-11-03T03:05:00+08:00",
+  "run_due": {
+    "eligible": 1,
+    "published": 0,
+    "blocked": 1,
+    "failed": 0,
+    "skipped": 0,
+    "dry_run": false,
+    "date": "2026-11-03"
+  },
+  "entries": [
+    {
+      "id": 1,
+      "date": "2026-11-01",
+      "status": "published"
+    },
+    {
+      "id": 4,
+      "date": "2026-11-02",
+      "status": "published"
+    },
+    {
+      "id": 2,
+      "date": "2026-11-03",
+      "status": "blocked"
+    },
+    {
+      "id": 3,
+      "date": "2026-11-04",
+      "status": "ready"
+    }
+  ]
+}

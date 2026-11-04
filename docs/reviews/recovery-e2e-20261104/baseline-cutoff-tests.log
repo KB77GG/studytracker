@@ -1,0 +1,34 @@
+Baseline execution record, 2026-11-04
+This is a concise reconstruction of the observed tool output, not a verbatim full stderr transcript.
+
+cwd: /private/tmp/studytracker-recovery-e2e-20261104
+HEAD: f0e04041 (detached), before changes to services/task_planner_recovery.py
+Command:
+TZ=UTC PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_task_planner_recovery_cutoff -q
+
+Observed: Ran 11 tests in 2.281s; FAILED (failures=9); process exit 1.
+Six failing test methods produced nine failures including subtests. Five methods passed.
+
+Failures:
+1. test_api_apply_returns_recoverable_conflict_without_writes: HTTP 200 != 409.
+2. test_api_inbox_and_previews_enforce_cutoff_with_staff_and_csrf: inbox contained original unfinished task during grace; expected [].
+3. test_direct_continue_apply_cannot_bypass_cutoff: TaskPlannerError not raised.
+4. test_direct_makeup_apply_cannot_bypass_cutoff: TaskPlannerError not raised.
+5. test_direct_previews_reject_both_actions_during_grace, action=makeup: TaskPlannerError not raised.
+6. test_direct_previews_reject_both_actions_during_grace, action=continue: TaskPlannerError not raised.
+7. test_pending_inbox_waits_for_cutoff_even_across_beijing_midnight, 2026-10-30T00:00:00+08:00: inbox contained task; expected [].
+8. Same test, 2026-10-30T02:59:59+08:00: inbox contained task; expected [].
+9. Same test, 2026-10-29T18:59:59+00:00: inbox contained task; expected [].
+
+Passing baseline methods:
+- test_committed_request_replays_across_midnight_without_duplicate_tasks
+- test_continue_is_available_at_exact_cutoff
+- test_makeup_is_available_at_exact_cutoff
+- test_older_backlog_remains_recoverable_before_todays_cutoff
+- test_pending_inbox_opens_at_exact_cutoff_in_local_utc_and_naive_utc
+
+Earlier exploratory run: imported TestCase caused unittest to collect 26 existing recovery methods as well, producing Ran 37 tests in 8.363s with the same nine new failures. The 26 old methods passed. Module import was corrected before the 11-method baseline recorded above; no claim that the extra 26 methods were new coverage.
+
+After candidate cutoff fix (same eleven methods): Ran 11 tests in 2.362s; OK; process exit 0.
+Targeted Ruff: All checks passed.
+All databases and accounts were synthetic; fixture cleanup completed normally. No production access or deployment.

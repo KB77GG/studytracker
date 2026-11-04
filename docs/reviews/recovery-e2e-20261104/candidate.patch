@@ -1,0 +1,1110 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index ec3302ae..079e4ce8 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -66,6 +66,8 @@ jobs:
+             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
+       - name: Test automatic student and parent accounts
+         run: python -m unittest tests.test_auto_student_accounts -v
++      - name: Test recovery assistant and student journeys with isolated data
++        run: python -m unittest tests.test_task_planner_recovery_e2e tests.test_task_planner_recovery_student_contract_e2e -v
+ 
+   task-planner:
+     runs-on: ubuntu-latest
+@@ -86,7 +88,7 @@ jobs:
+             'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
+             'requests>=2.31' 'PyJWT>=2.9' 'pypinyin>=0.55'
+       - name: Test scheduled assignment transactions and resources
+-        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary tests.test_task_planner_weekly tests.test_task_planner_reading_test tests.test_task_planner_auto_skip tests.test_task_planner_bundles tests.test_task_planner_recovery -v
++        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary tests.test_task_planner_weekly tests.test_task_planner_reading_test tests.test_task_planner_auto_skip tests.test_task_planner_bundles tests.test_task_planner_recovery tests.test_task_planner_recovery_cutoff -v
+       - name: Test planner client behavior
+         run: node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js tests/test_task_planner_weekly_client.js tests/test_task_planner_recovery_client.js
+ 
+diff --git a/docs/TASK_PLANNER_RECOVERY.md b/docs/TASK_PLANNER_RECOVERY.md
+index b861ad33..bd96b7d9 100644
+--- a/docs/TASK_PLANNER_RECOVERY.md
++++ b/docs/TASK_PLANNER_RECOVERY.md
+@@ -2,6 +2,8 @@
+ 
+ 收件箱整合在“任务安排”页，跟随学生筛选，独立于未来日期和安排状态筛选。范围是该工作台学习线已发布的作业；普通任务管理里的临时作业不自动猜测归属。昨天及更早仍未处理的未完成任务保留在待处理列表，按学生、学习线、原任务日期分组。
+ 
++原任务到次日北京时间03:00才截止；00:00–02:59:59仍在学生宽限期内，不进入待处理收件箱，也不能提前补做或忽略。03:00起可由助教处理；更早已截止的积压任务不受当天宽限期影响。自动布置仍从03:05开始，宽限期内正常提交的原任务可按既有规则继续计划。
++
+ ## 助教的两个选择
+ 
+ - **安排补做并顺延**：把本组未有效完成的任务作为今天的新补做任务布置；同一学习线尚未发布的新内容整体后移，最早落到明天。若有早于今天的未发布内容，一并保留顺序后移，不丢题。原任务及成绩不变。按天顺延会改变原先的星期分布，必须核对预览中的原日期→新日期；顺延后实际日期以每天详情为准。
+diff --git a/services/task_planner_recovery.py b/services/task_planner_recovery.py
+index e7080f03..da20a07a 100644
+--- a/services/task_planner_recovery.py
++++ b/services/task_planner_recovery.py
+@@ -25,7 +25,7 @@ from services import task_planner_bundles as bundles
+ from services import task_planner_resources as resources
+ from services import task_planner_series as series_service
+ from services.task_assignment_duplicates import begin_assignment_transaction
+-from services.task_date_gate import beijing_now, task_workflow_label
++from services.task_date_gate import beijing_now, task_date_cutoff_local, task_workflow_label
+ from services.task_planner_history import HistoryIndex
+ 
+ ACTIONS = {"makeup": "今天补做，后续顺延", "continue": "忽略本次未完成，继续计划"}
+@@ -75,6 +75,15 @@ def _unfinished(rows, profile, source_date, waived):
+     return result
+ 
+ 
++def _source_still_open(unfinished, now):
++    """A previous calendar day is not overdue until its student deadline."""
++    for _entry, task in unfinished:
++        cutoff = task_date_cutoff_local(task)
++        if cutoff is not None and now < cutoff:
++            return True
++    return False
++
++
+ def _item(line, profile, source_date, tasks, decision=None):
+     result = {"id": f"{line.id}:{source_date.isoformat()}", "series_id": line.id,
+               "student_id": profile.id, "student_name": profile.full_name, "series_name": line.name,
+@@ -119,7 +128,7 @@ def list_inbox(student_id=None, view="pending", now=None):
+                   for entry_id in json.loads(decision.snapshot_json).get("waived_entry_ids", [])}
+         for source_date in sorted({entry.target_date for entry, _link in rows if entry.target_date < today}):
+             unfinished = _unfinished(rows, profile, source_date, waived)
+-            if unfinished:
++            if unfinished and not _source_still_open(unfinished, now):
+                 output.append(_item(line, profile, source_date, [task for _entry, task in unfinished]))
+     if view == "resolved":
+         return sorted(output, key=lambda item: item["decision"]["id"], reverse=True)[:500]
+@@ -133,7 +142,8 @@ def _source(data, actor_id, now):
+         raise planner.TaskPlannerError("请选择补做或继续计划")
+     line = series_service._series(data.get("series_id"))
+     profile = planner._student(line.student_id)
+-    today = beijing_now(now).date()
++    now = beijing_now(now)
++    today = now.date()
+     try:
+         source_date = date.fromisoformat(str(data.get("source_date")))
+     except ValueError:
+@@ -147,6 +157,11 @@ def _source(data, actor_id, now):
+         if (task.student_name != profile.full_name or task.date != source_date.isoformat()
+                 or (task.plan_item and task.plan_item.plan.student_id != profile.id)):
+             raise planner.TaskPlannerError("原任务学生、日期或学习计划关联已变化，请核对任务管理")
++    if _source_still_open(unfinished, now):
++        raise planner.TaskPlannerError(
++            "原任务仍在次日03:00宽限期内，请截止后再处理未完成作业",
++            code="source_still_open", status=409,
++        )
+     return line, profile, today, source_date, rows, unfinished
+ 
+ 
+diff --git a/templates/task_planner.html b/templates/task_planner.html
+index fc22d1bf..ab6900dd 100644
+--- a/templates/task_planner.html
++++ b/templates/task_planner.html
+@@ -32,7 +32,7 @@
+     <div class="tp-quick-dates"><button type="button" data-range="tomorrow">只看明天</button><button type="button" data-range="week">未来7天</button><button type="button" data-range="today">今天</button><span id="plannerCount"></span></div>
+     <div class="tp-enrollment" id="plannerEnrollment" hidden><div><strong id="enrollmentTitle"></strong><p id="enrollmentHint"></p></div><button class="tp-button" id="plannerEnable" type="button"></button></div>
+     <section id="plannerRecovery" class="tp-recovery" aria-labelledby="recoveryInboxTitle">
+-      <div class="tp-recovery-heading"><div><h3 id="recoveryInboxTitle">未完成收件箱</h3><p class="tp-help">仅收集本工作台学习线发布的未完成作业；按上方学生筛选，包含昨日及更早待处理内容。每次只处理当前学习线，其他学习线保持不变。</p></div><button class="tp-button" id="recoveryInboxRefresh" type="button">刷新收件箱</button></div>
++      <div class="tp-recovery-heading"><div><h3 id="recoveryInboxTitle">未完成收件箱</h3><p class="tp-help">仅收集本工作台学习线发布的未完成作业；按上方学生筛选，原任务在次日03:00截止后进入待处理。每次只处理当前学习线，其他学习线保持不变。</p></div><button class="tp-button" id="recoveryInboxRefresh" type="button">刷新收件箱</button></div>
+       <div class="tp-recovery-toolbar"><div class="tp-recovery-views" role="group" aria-label="收件箱视图"><button id="recoveryViewPending" class="tp-button" type="button" aria-pressed="true">待处理</button><button id="recoveryViewResolved" class="tp-button" type="button" aria-pressed="false">已处理记录</button></div><p id="recoveryInboxSummary" class="tp-help" aria-live="polite">正在读取…</p></div>
+       <p id="recoveryInboxError" class="tp-entry-warning" role="alert" hidden></p>
+       <div id="recoveryInboxList" aria-live="polite"><p class="tp-help">正在读取未完成作业…</p></div>
+diff --git a/tests/recovery_e2e_support.py b/tests/recovery_e2e_support.py
+new file mode 100644
+index 00000000..67e785e3
+--- /dev/null
++++ b/tests/recovery_e2e_support.py
+@@ -0,0 +1,427 @@
++"""Local-only real-app acceptance fixture; no production data/config/network.
++
++Run with ``python -m tests.recovery_e2e_support --serve`` for a disposable
++loopback browser sandbox. The /__e2e controls exist only in this test module.
++Business routes, templates, database writes, grading and scheduler are real.
++Only the clock, resource directory, configuration and external I/O are replaced.
++"""
++
++from __future__ import annotations
++
++import argparse
++import importlib.util
++import json
++import secrets
++import socket
++import sys
++import tempfile
++import types
++import uuid
++from contextlib import ExitStack
++from datetime import datetime, timedelta
++from pathlib import Path
++from unittest.mock import patch
++from urllib.parse import parse_qs, urlsplit
++
++from flask import jsonify, request
++
++from models import (
++    PlanItem,
++    PracticeSubmissionAttempt,
++    ReadingTestSubmission,
++    ScoreRecord,
++    StudentProfile,
++    Task,
++    User,
++    db,
++)
++from services import task_date_gate, task_planner
++
++ROOT = Path(__file__).resolve().parents[1]
++DAY_ONE = datetime(2026, 11, 1, 10, 0, tzinfo=task_date_gate.SHANGHAI)
++
++
++class RecoverySandbox:
++    def __init__(self):
++        self.stack = ExitStack()
++        self.directory = tempfile.TemporaryDirectory(prefix="recovery-e2e-")
++        self.stack.callback(self.directory.cleanup)
++        self.root = Path(self.directory.name)
++        self.now = DAY_ONE
++        self.outbound_attempts = []
++        original_connect = socket.socket.connect
++
++        def guard_connect(sock, address):
++            if isinstance(address, tuple) and address[0] in {"127.0.0.1", "::1"}:
++                return original_connect(sock, address)
++            self.outbound_attempts.append(str(address))
++            raise AssertionError("Acceptance fixture forbids external network")
++
++        self.stack.enter_context(patch("socket.socket.connect", guard_connect))
++        self.stack.enter_context(
++            patch(
++                "requests.sessions.Session.request",
++                side_effect=AssertionError("No external requests"),
++            )
++        )
++        config = types.ModuleType("config")
++        config.Config = type(
++            "RecoveryE2EConfig",
++            (),
++            {
++                "TESTING": True,
++                "SECRET_KEY": secrets.token_urlsafe(32),
++                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{self.root}/synthetic.db",
++                "SQLALCHEMY_TRACK_MODIFICATIONS": False,
++                "UPLOAD_FOLDER": str(self.root / "uploads"),
++                "TASK_PLANNER_ROOT": str(self.root),
++            },
++        )
++        module_name = "_recovery_e2e_app_" + uuid.uuid4().hex
++        spec = importlib.util.spec_from_file_location(module_name, ROOT / "app.py")
++        self.module = importlib.util.module_from_spec(spec)
++        self.stack.callback(sys.modules.pop, module_name, None)
++        sys.modules[module_name] = self.module
++        original_config = sys.modules.get("config")
++        sys.modules["config"] = config
++        try:
++            spec.loader.exec_module(self.module)
++        finally:
++            if original_config is None:
++                sys.modules.pop("config", None)
++            else:
++                sys.modules["config"] = original_config
++        self.app = self.module.app
++        self.app.template_folder = str(ROOT / "templates")
++        self.app.static_folder = str(ROOT / "static")
++        normal_clock = task_date_gate._local_now
++        self.stack.enter_context(
++            patch.object(
++                task_date_gate,
++                "_local_now",
++                lambda value=None: normal_clock(value if value is not None else self.now),
++            )
++        )
++        sandbox = self
++
++        class Clock(datetime):
++            @classmethod
++            def utcnow(cls):
++                return sandbox.now.astimezone(task_date_gate.UTC).replace(tzinfo=None)
++
++            @classmethod
++            def now(cls, tz=None):
++                return sandbox.now.astimezone(tz) if tz else cls.utcnow()
++
++        self.stack.enter_context(patch.object(self.module, "datetime", Clock))
++        self.reading_root = self.root / "static/reading_tests"
++        self.reading_root.mkdir(parents=True)
++        for folder in ("reading_jijing", "listening_tests", "listening"):
++            (self.root / "static" / folder).mkdir(parents=True)
++        self.stack.enter_context(
++            patch.object(self.module, "_reading_test_root", lambda: self.reading_root)
++        )
++        self.stack.enter_context(
++            patch.object(
++                self.module, "_reading_jijing_root", lambda: self.root / "static/reading_jijing"
++            )
++        )
++        self.stack.enter_context(
++            patch.object(
++                self.module,
++                "send_subscribe_message",
++                side_effect=AssertionError("No notifications"),
++            )
++        )
++        for number in range(1, 7):
++            test_id = f"ielts10_test{number}_reading"
++            passages = []
++            for p, start, end in ((1, 1, 13), (2, 14, 26), (3, 27, 40)):
++                passages.append(
++                    {
++                        "passage": p,
++                        "title": f"Synthetic Passage {p}",
++                        "content": {
++                            "paragraphs": [
++                                {
++                                    "text": "This is a synthetic reading passage. Every statement below is true."
++                                }
++                            ]
++                        },
++                        "groups": [
++                            {
++                                "group_id": f"g{p}",
++                                "type": 1,
++                                "desc": "TRUE FALSE NOT GIVEN",
++                                "questions": [
++                                    {
++                                        "id": str(q),
++                                        "number": q,
++                                        "title": f"Synthetic statement {q}.",
++                                        "answer": "TRUE",
++                                        "options": [
++                                            {"key": k, "text": k}
++                                            for k in ("TRUE", "FALSE", "NOT GIVEN")
++                                        ],
++                                    }
++                                    for q in range(start, end + 1)
++                                ],
++                            }
++                        ],
++                    }
++                )
++            (self.reading_root / f"{test_id}.json").write_text(
++                json.dumps(
++                    {
++                        "id": test_id,
++                        "title": f"Synthetic Cambridge 10 Test {number}",
++                        "passages": passages,
++                    }
++                ),
++                encoding="utf-8",
++            )
++        self.password = secrets.token_urlsafe(20)
++        with self.app.app_context():
++            assert db.engine.url.database == str(self.root / "synthetic.db")
++            db.create_all()
++            self.users = {}
++            for role in ("assistant", "student", "other"):
++                user = User(
++                    username=f"e2e-{role}",
++                    display_name=f"合成验收{role}",
++                    role="student" if role == "other" else role,
++                )
++                user.set_password(self.password)
++                db.session.add(user)
++                db.session.flush()
++                self.users[role] = user.id
++            profile = StudentProfile(full_name="合成验收学生", user_id=self.users["student"])
++            other = StudentProfile(full_name="合成隔离学生", user_id=self.users["other"])
++            db.session.add_all([profile, other])
++            db.session.commit()
++            self.student_id, self.other_id = profile.id, other.id
++        self.install_browser_controls()
++        self.clients = {role: self.app.test_client() for role in self.users}
++        for role, client in self.clients.items():
++            response = client.post(
++                "/login", data={"username": f"e2e-{role}", "password": self.password}
++            )
++            assert response.status_code == 302
++        self.csrf = (
++            self.clients["assistant"].get("/api/task-planner/bootstrap").get_json()["csrf_token"]
++        )
++
++    def close(self):
++        with self.app.app_context():
++            db.session.remove()
++            db.engine.dispose()
++        self.stack.close()
++
++    def set_time(self, value):
++        self.now = datetime.fromisoformat(value) if isinstance(value, str) else value
++        assert self.now.tzinfo is not None
++
++    def staff(self, path, data, expected=200):
++        response = self.clients["assistant"].post(
++            path, json=data, headers={"X-CSRF-Token": self.csrf}
++        )
++        assert response.status_code == expected, (path, response.status_code, response.get_json())
++        return response.get_json()
++
++    def create_line(
++        self,
++        *,
++        kind="reading_passage",
++        days=3,
++        passage=1,
++        wait=True,
++        start_test=1,
++        student_id=None,
++        name="合成阅读学习线",
++    ):
++        start = self.now.date()
++        data = {
++            "name": name,
++            "kind": kind,
++            "student_id": student_id or self.student_id,
++            "start_date": start.isoformat(),
++            "end_date": (start + timedelta(days=days - 1)).isoformat(),
++            "weekday_counts": [1] * 7,
++            "selection": {} if kind == "reading_test" else {"passage_number": passage},
++            "source_scopes": ["cambridge:10"],
++            "start_resource_id": f"ielts10_test{start_test}_reading:{'all' if kind == 'reading_test' else passage}",
++            "planned_minutes": 20,
++            "wait_for_previous": wait,
++            "skip_assigned": True,
++            "request_key": str(uuid.uuid4()),
++        }
++        data["preview_hash"] = self.staff("/api/task-planner/series/preview", data)["preview"][
++            "preview_hash"
++        ]
++        line = self.staff("/api/task-planner/series", data, 201)["series"]
++        line = self.staff(
++            f"/api/task-planner/series/{line['id']}/confirm", {"version": line["version"]}
++        )["series"]
++        self.staff(
++            f"/api/task-planner/students/{student_id or self.student_id}/enable", {"enabled": True}
++        )
++        entries = self.entries(line["id"])
++        self.staff(
++            f"/api/task-planner/entries/{entries[0]['id']}/publish",
++            {"version": entries[0]["version"]},
++        )
++        return line["id"], self.entries(line["id"])
++
++    def entries(self, line_id):
++        response = self.clients["assistant"].get(f"/api/task-planner/series/{line_id}")
++        assert response.status_code == 200
++        return response.get_json()["entries"]
++
++    def inbox(self):
++        response = self.clients["assistant"].get("/api/task-planner/inbox")
++        assert response.status_code == 200
++        return response.get_json()["items"]
++
++    def recover(self, line_id, source_date, action="makeup"):
++        data = {"series_id": line_id, "source_date": source_date, "action": action}
++        preview = self.staff("/api/task-planner/inbox/preview", data)["preview"]
++        assert preview["can_apply"], preview
++        data.update(preview_hash=preview["preview_hash"], request_key=str(uuid.uuid4()))
++        return preview, self.staff("/api/task-planner/inbox/apply", data)["result"]
++
++    def tasks(self, role="student"):
++        response = self.clients[role].get("/api/practice/tasks")
++        assert response.status_code == 200, response.get_json()
++        return [row for rows in response.get_json()["groups"].values() for row in rows]
++
++    def task_link(self, task_id, role="student"):
++        row = next(task for task in self.tasks(role) if task["id"] == task_id)
++        url = urlsplit(row["url"])
++        return row, url, parse_qs(url.query)
++
++    def submit(self, task_id, *, correct=True, role="student", expected=200):
++        row, url, args = self.task_link(task_id, role)
++        client = self.clients[role]
++        page = client.get(url.path + "?" + url.query)
++        assert page.status_code == 200, (page.status_code, page.location)
++        api = "/api" + url.path
++        state = client.get(api + "/submission?" + url.query)
++        assert state.status_code == 200, state.get_json()
++        payload = {
++            "task_id": task_id,
++            "token": args["token"][0],
++            "passage_number": int(args["passage"][0]),
++            "answers": {str(q): "TRUE" if correct else "FALSE" for q in range(1, 41)},
++            "duration_seconds": 900,
++        }
++        response = client.post(api + "/submit", json=payload)
++        assert response.status_code == expected, response.get_json()
++        return response.get_json()
++
++    def run_due(self):
++        with self.app.app_context():
++            return task_planner.run_due()
++
++    def original_snapshot(self, task_ids):
++        with self.app.app_context():
++            result = {}
++            for model in (Task, ReadingTestSubmission, PracticeSubmissionAttempt):
++                query = (
++                    model.query.filter(model.id.in_(task_ids))
++                    if model is Task
++                    else model.query.filter(model.task_id.in_(task_ids))
++                )
++                result[model.__tablename__] = [
++                    tuple(str(getattr(row, column.name)) for column in model.__table__.columns)
++                    for row in query.order_by(model.id)
++                ]
++            plan_item_ids = [
++                task.plan_item_id
++                for task in Task.query.filter(Task.id.in_(task_ids))
++                if task.plan_item_id
++            ]
++            result["plan_item"] = [
++                tuple(str(getattr(row, column.name)) for column in PlanItem.__table__.columns)
++                for row in PlanItem.query.filter(PlanItem.id.in_(plan_item_ids)).order_by(
++                    PlanItem.id
++                )
++            ]
++            result["score_record"] = [
++                tuple(str(getattr(row, column.name)) for column in ScoreRecord.__table__.columns)
++                for row in ScoreRecord.query.order_by(ScoreRecord.id)
++                if any(f"（任务 #{task_id}）" in row.assessment_name for task_id in task_ids)
++            ]
++            return result
++
++    def install_browser_controls(self):
++        @self.app.get("/__e2e")
++        def control():
++            forms = "".join(
++                f'<form method="post" action="/login"><input type="hidden" name="username" value="e2e-{role}"><input type="hidden" name="password" value="{self.password}"><input type="hidden" name="next" value="{target}"><button>登录合成{label}</button></form>'
++                for role, target, label in (
++                    ("assistant", "/task-planner", "助教"),
++                    ("student", "/practices", "学生"),
++                )
++            )
++            return f'<meta charset="utf-8"><h1>隔离验收控制台</h1><p>仅合成数据；北京时间 {self.now.isoformat()}</p>{forms}<a href="/__e2e/state">状态</a>'
++
++        @self.app.post("/__e2e/time")
++        def clock():
++            self.set_time(request.get_json()["now"])
++            return jsonify(now=self.now.isoformat())
++
++        @self.app.post("/__e2e/run")
++        def run():
++            return jsonify(self.run_due())
++
++        @self.app.get("/__e2e/state")
++        def state():
++            with self.app.app_context():
++                return jsonify(
++                    now=self.now.isoformat(),
++                    tasks=[
++                        {
++                            "id": t.id,
++                            "date": t.date,
++                            "status": t.status,
++                            "passage": t.reading_passage_number,
++                            "test_id": t.reading_test_id,
++                        }
++                        for t in Task.query.order_by(Task.id)
++                    ],
++                )
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--serve", action="store_true")
++    args = parser.parse_args()
++    sandbox = RecoverySandbox()
++    try:
++        line_id, _ = sandbox.create_line()
++        sandbox.set_time("2026-11-02T10:00:00+08:00")
++        if args.serve:
++            print(
++                json.dumps(
++                    {
++                        "url": "http://127.0.0.1:5098/__e2e",
++                        "line_id": line_id,
++                        "synthetic_only": True,
++                    }
++                ),
++                flush=True,
++            )
++            sandbox.app.run(host="127.0.0.1", port=5098, use_reloader=False, threaded=False)
++        else:
++            print(
++                json.dumps(
++                    {"inbox": sandbox.inbox(), "entries": sandbox.entries(line_id)},
++                    ensure_ascii=False,
++                )
++            )
++    finally:
++        sandbox.close()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tests/test_task_planner_recovery_cutoff.py b/tests/test_task_planner_recovery_cutoff.py
+new file mode 100644
+index 00000000..395d927c
+--- /dev/null
++++ b/tests/test_task_planner_recovery_cutoff.py
+@@ -0,0 +1,183 @@
++"""Recovery may act only after the source assignment's Beijing 03:00 cutoff.
++
++These contracts bridge the recovery inbox and the existing task-date gate.
++They reuse synthetic fixture builders, but do not inherit or rerun the existing
++recovery test methods. No production app, database, or external service loads.
++"""
++
++import json
++import unittest
++import uuid
++from datetime import timedelta, timezone
++from unittest.mock import patch
++
++from models import PlanItem, Task
++from models_task_planner import TaskPlannerEntry, TaskPlannerRecoveryDecision
++from services import task_planner as planner
++from services import task_planner_recovery as recovery
++from services.task_date_gate import task_date_access
++from tests import test_task_planner_recovery as recovery_tests
++from tests.test_task_planner import NOW
++
++UTC = timezone.utc  # noqa: UP017 -- production also runs Python 3.10.
++
++
++class RecoveryCutoffTest(unittest.TestCase):
++    def setUp(self):
++        self.fixture = recovery_tests.TaskPlannerRecoveryTest(methodName="runTest")
++        self.fixture.setUp()
++        self.addCleanup(self.fixture.tearDown)
++        self.line, self.entries = self.fixture.line()
++        self.cutoff = (NOW + timedelta(days=1)).replace(hour=3, minute=0)
++        self.grace = self.cutoff - timedelta(seconds=1)
++
++    def payload(self, action):
++        return {
++            "series_id": self.line.id,
++            "source_date": NOW.date().isoformat(),
++            "action": action,
++        }
++
++    def state(self):
++        return {
++            "tasks": [(row.id, row.date, row.status, row.plan_item_id)
++                      for row in Task.query.order_by(Task.id)],
++            "plan_items": [(row.id, row.student_status, row.review_status)
++                           for row in PlanItem.query.order_by(PlanItem.id)],
++            "entries": [(row.id, str(row.target_date), row.status, row.version)
++                        for row in TaskPlannerEntry.query.order_by(TaskPlannerEntry.id)],
++            "decisions": TaskPlannerRecoveryDecision.query.count(),
++            "definition": json.loads(self.line.definition_json),
++        }
++
++    def apply_payload(self, action, now=None):
++        payload = self.payload(action)
++        preview = recovery.preview_recovery(
++            payload, self.fixture.staff_id, now=now or self.cutoff,
++        )
++        self.assertTrue(preview["can_apply"], preview["blockers"])
++        return {
++            **payload,
++            "preview_hash": preview["preview_hash"],
++            "request_key": str(uuid.uuid4()),
++        }
++
++    def test_pending_inbox_waits_for_cutoff_even_across_beijing_midnight(self):
++        before = self.state()
++        original = Task.query.one()
++        for instant in (self.cutoff.replace(hour=0), self.grace,
++                        self.grace.astimezone(UTC)):
++            with self.subTest(instant=instant.isoformat()):
++                self.assertTrue(task_date_access(original, now=instant).can_write)
++                self.assertEqual(recovery.list_inbox(now=instant), [])
++        self.assertEqual(self.state(), before)
++
++    def test_pending_inbox_opens_at_exact_cutoff_in_local_utc_and_naive_utc(self):
++        original = Task.query.one()
++        utc_cutoff = self.cutoff.astimezone(UTC)
++        for instant in (self.cutoff, utc_cutoff, utc_cutoff.replace(tzinfo=None)):
++            with self.subTest(instant=instant.isoformat()):
++                self.assertFalse(task_date_access(original, now=instant).can_write)
++                items = recovery.list_inbox(now=instant)
++                self.assertEqual(len(items), 1)
++                self.assertEqual([row["id"] for row in items[0]["tasks"]], [original.id])
++
++    def test_direct_previews_reject_both_actions_during_grace(self):
++        before = self.state()
++        for action in ("makeup", "continue"):
++            with self.subTest(action=action):
++                with self.assertRaises(planner.TaskPlannerError) as raised:
++                    recovery.preview_recovery(
++                        self.payload(action), self.fixture.staff_id, now=self.grace,
++                    )
++                self.assertEqual(raised.exception.code, "source_still_open")
++                self.assertEqual(raised.exception.status, 409)
++                self.assertIn("03:00", raised.exception.message)
++        self.assertEqual(self.state(), before)
++
++    def assert_apply_rejected_during_grace(self, action):
++        # A same-calendar-day preview obtained at cutoff must not bypass the
++        # server guard if the apply endpoint receives it while the source is open.
++        payload = self.apply_payload(action)
++        before = self.state()
++        with self.assertRaises(planner.TaskPlannerError) as raised:
++            recovery.apply_recovery(payload, self.fixture.staff_id, now=self.grace)
++        self.assertEqual(raised.exception.code, "source_still_open")
++        self.assertEqual(raised.exception.status, 409)
++        self.assertEqual(self.state(), before)
++
++    def test_direct_makeup_apply_cannot_bypass_cutoff(self):
++        self.assert_apply_rejected_during_grace("makeup")
++
++    def test_direct_continue_apply_cannot_bypass_cutoff(self):
++        self.assert_apply_rejected_during_grace("continue")
++
++    def test_api_inbox_and_previews_enforce_cutoff_with_staff_and_csrf(self):
++        self.fixture.login()
++        before = self.state()
++        with patch("services.task_date_gate._local_now", return_value=self.grace):
++            headers = self.fixture.csrf_headers()
++            response = self.fixture.client.get("/api/task-planner/inbox")
++            self.assertEqual(response.status_code, 200)
++            self.assertEqual(response.get_json()["items"], [])
++            for action in ("makeup", "continue"):
++                with self.subTest(action=action):
++                    response = self.fixture.client.post(
++                        "/api/task-planner/inbox/preview",
++                        json=self.payload(action), headers=headers,
++                    )
++                    self.assertEqual(response.status_code, 409)
++                    self.assertEqual(response.get_json()["error"], "source_still_open")
++        self.assertEqual(self.state(), before)
++
++    def test_api_apply_returns_recoverable_conflict_without_writes(self):
++        payload = self.apply_payload("makeup")
++        self.fixture.login()
++        before = self.state()
++        with patch("services.task_date_gate._local_now", return_value=self.grace):
++            response = self.fixture.client.post(
++                "/api/task-planner/inbox/apply", json=payload,
++                headers=self.fixture.csrf_headers(),
++            )
++        self.assertEqual(response.status_code, 409)
++        self.assertEqual(response.get_json()["error"], "source_still_open")
++        self.assertEqual(self.state(), before)
++
++    def assert_action_available_at_cutoff(self, action):
++        payload = self.apply_payload(action)
++        original = Task.query.one()
++        old_values = (original.id, original.date, original.status, original.plan_item_id)
++        result = recovery.apply_recovery(payload, self.fixture.staff_id, now=self.cutoff)
++        self.assertEqual(result["action"], action)
++        self.assertEqual(len(result["created_task_ids"]), 1)
++        self.assertEqual((original.id, original.date, original.status, original.plan_item_id), old_values)
++        self.assertFalse(task_date_access(original, now=self.cutoff).can_write)
++
++    def test_makeup_is_available_at_exact_cutoff(self):
++        self.assert_action_available_at_cutoff("makeup")
++
++    def test_continue_is_available_at_exact_cutoff(self):
++        self.assert_action_available_at_cutoff("continue")
++
++    def test_older_backlog_remains_recoverable_before_todays_cutoff(self):
++        instant = self.grace + timedelta(days=1)
++        self.assertEqual(len(recovery.list_inbox(now=instant)), 1)
++        payload = self.apply_payload("makeup", now=instant)
++        result = recovery.apply_recovery(payload, self.fixture.staff_id, now=instant)
++        self.assertEqual(result["applied_date"], instant.date().isoformat())
++        self.assertEqual(len(result["created_task_ids"]), 1)
++        self.assertEqual(self.entries[1].target_date, instant.date() + timedelta(days=1))
++
++    def test_committed_request_replays_across_midnight_without_duplicate_tasks(self):
++        payload = self.apply_payload("makeup")
++        original = recovery.apply_recovery(payload, self.fixture.staff_id, now=self.cutoff)
++        before = self.state()
++        replay = recovery.apply_recovery(
++            payload, self.fixture.staff_id, now=self.grace + timedelta(days=1),
++        )
++        self.assertEqual(replay, original)
++        self.assertEqual(self.state(), before)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_task_planner_recovery_e2e.py b/tests/test_task_planner_recovery_e2e.py
+new file mode 100644
+index 00000000..cb7d0a58
+--- /dev/null
++++ b/tests/test_task_planner_recovery_e2e.py
+@@ -0,0 +1,242 @@
++"""Cross-module acceptance: real assistant and student HTTP routes + scheduler.
++
++Unlike recovery unit fixtures, this suite never marks a student's task done or
++inserts settlements to stand in for completion: reading is submitted and graded
++by the real app.py route. Synthetic identities/resources and a controlled clock
++are the only data used; no production config, database or service is opened.
++"""
++
++import unittest
++import uuid
++
++from models import PlanItem, Task, db
++from models_task_planner import TaskPlannerRecoveryDecision
++from tests.recovery_e2e_support import RecoverySandbox
++
++
++class RecoveryJourneyE2ETest(unittest.TestCase):
++    def setUp(self):
++        self.s = RecoverySandbox()
++        self.addCleanup(self.s.close)
++
++    def test_makeup_student_submits_and_next_0305_resumes_only_its_line(self):
++        s = self.s
++        line, original_entries = s.create_line()
++        other_line, _ = s.create_line(passage=2, wait=False, name="独立学习线")
++        old_id = original_entries[0]["published_task_id"]
++        s.set_time("2026-11-02T03:05:00+08:00")
++        first_run = s.run_due()
++        self.assertEqual((first_run["published"], first_run["blocked"]), (1, 1))
++        old = s.original_snapshot([old_id])
++        other_entries = s.entries(other_line)
++        other_tasks = [
++            entry["published_task_id"] for entry in other_entries if entry["published_task_id"]
++        ]
++        other = s.original_snapshot(other_tasks)
++        inbox = s.inbox()
++        self.assertIn(line, [item["series_id"] for item in inbox])
++        with s.app.app_context():
++            before = (
++                Task.query.count(),
++                PlanItem.query.count(),
++                TaskPlannerRecoveryDecision.query.count(),
++            )
++        request_data = {"series_id": line, "source_date": "2026-11-01", "action": "makeup"}
++        preview = s.staff("/api/task-planner/inbox/preview", request_data)["preview"]
++        with s.app.app_context():
++            self.assertEqual(
++                before,
++                (
++                    Task.query.count(),
++                    PlanItem.query.count(),
++                    TaskPlannerRecoveryDecision.query.count(),
++                ),
++            )
++        self.assertEqual(
++            [change["to"] for change in preview["changes"]], ["2026-11-03", "2026-11-04"]
++        )
++        request_data.update(preview_hash=preview["preview_hash"], request_key=str(uuid.uuid4()))
++        applied = s.staff("/api/task-planner/inbox/apply", request_data)["result"]
++        self.assertEqual(s.staff("/api/task-planner/inbox/apply", request_data)["result"], applied)
++        self.assertEqual(s.original_snapshot([old_id]), old)
++        self.assertEqual(s.entries(other_line), other_entries)
++        self.assertEqual(s.original_snapshot(other_tasks), other)
++        new_id = applied["created_task_ids"][0]
++        rows = {row["id"]: row for row in s.tasks()}
++        self.assertEqual((rows[old_id]["can_write"], rows[new_id]["can_write"]), (False, True))
++        self.assertEqual(rows[new_id]["date"], "2026-11-02")
++        result = s.submit(new_id)
++        self.assertTrue(result["synced"])
++        self.assertEqual((result["task"]["status"], result["result"]["correct"]), ("done", 13))
++        self.assertEqual(s.original_snapshot([old_id]), old)
++        s.set_time("2026-11-03T03:04:59+08:00")
++        self.assertTrue(s.run_due()["outside_window"])
++        s.set_time("2026-11-03T03:05:00+08:00")
++        resumed = s.run_due()
++        self.assertEqual((resumed["published"], resumed["blocked"]), (2, 0))
++        self.assertEqual(s.run_due()["published"], 0)
++        entries = s.entries(line)
++        next_task = next(entry for entry in entries if entry["target_date"] == "2026-11-03")
++        self.assertEqual(next_task["status"], "published")
++        self.assertIn(
++            next_task["published_task_id"], [row["id"] for row in s.tasks() if row["can_write"]]
++        )
++        self.assertFalse(s.outbound_attempts)
++
++    def test_reading_full_bundle_requires_three_real_submissions_then_resumes(self):
++        s = self.s
++        line, entries = s.create_line(kind="reading_test", days=2)
++        old_ids = [entry["published_task_id"] for entry in entries[:3]]
++        old = s.original_snapshot(old_ids)
++        s.set_time("2026-11-02T10:00:00+08:00")
++        _, result = s.recover(line, "2026-11-01")
++        self.assertEqual(len(result["created_task_ids"]), 3)
++        counts = [
++            s.submit(task_id)["result"]["total"] for task_id in result["created_task_ids"][:2]
++        ]
++        self.assertEqual(counts, [13, 13])
++        s.set_time("2026-11-03T02:59:59+08:00")
++        third = s.submit(result["created_task_ids"][2])
++        self.assertEqual(third["result"]["total"], 14)
++        self.assertEqual(s.original_snapshot(old_ids), old)
++        s.set_time("2026-11-03T03:05:00+08:00")
++        report = s.run_due()
++        self.assertEqual((report["published"], report["blocked"]), (3, 0))
++        current = [row for row in s.tasks() if row["date"] == "2026-11-03"]
++        self.assertEqual(len(current), 3)
++        self.assertTrue(all(row["can_write"] for row in current))
++        with s.app.app_context():
++            self.assertEqual(
++                {db.session.get(Task, row["id"]).reading_test_id for row in current},
++                {"ielts10_test2_reading"},
++            )
++
++    def test_reading_makeup_two_of_three_submitted_still_blocks_then_last_passage_recovers(self):
++        s = self.s
++        line, _ = s.create_line(kind="reading_test", days=2)
++        s.set_time("2026-11-02T10:00:00+08:00")
++        _, first = s.recover(line, "2026-11-01")
++        makeup_ids = first["created_task_ids"]
++        s.submit(makeup_ids[0])
++        s.submit(makeup_ids[1])
++        submitted_originals = s.original_snapshot(makeup_ids[:2])
++        s.set_time("2026-11-03T03:05:00+08:00")
++        blocked = s.run_due()
++        self.assertEqual((blocked["published"], blocked["blocked"]), (0, 3))
++        self.assertEqual([task["id"] for task in s.inbox()[0]["tasks"]], [makeup_ids[2]])
++        _, last = s.recover(line, "2026-11-02")
++        self.assertEqual(len(last["created_task_ids"]), 1)
++        completion = s.submit(last["created_task_ids"][0])
++        self.assertEqual((completion["result"]["correct"], completion["result"]["total"]), (14, 14))
++        s.set_time("2026-11-04T03:05:00+08:00")
++        self.assertEqual(s.run_due()["published"], 3)
++        self.assertEqual(s.original_snapshot(makeup_ids[:2]), submitted_originals)
++
++    def test_partial_reading_only_p2_makeup_preserves_original_scores_and_attempts(self):
++        s = self.s
++        line, entries = s.create_line(kind="reading_test", days=2)
++        old_ids = [entry["published_task_id"] for entry in entries[:3]]
++        s.submit(old_ids[0], correct=False)
++        s.submit(old_ids[2])
++        old = s.original_snapshot(old_ids)
++        s.set_time("2026-11-02T10:00:00+08:00")
++        self.assertEqual([task["id"] for task in s.inbox()[0]["tasks"]], [old_ids[1]])
++        _, result = s.recover(line, "2026-11-01")
++        self.assertEqual(len(result["created_task_ids"]), 1)
++        new_id = result["created_task_ids"][0]
++        with s.app.app_context():
++            self.assertEqual(db.session.get(Task, new_id).reading_passage_number, 2)
++        s.submit(new_id)
++        self.assertEqual(s.original_snapshot(old_ids), old)
++        s.set_time("2026-11-03T03:05:00+08:00")
++        self.assertEqual(s.run_due()["published"], 3)
++        self.assertEqual(s.original_snapshot(old_ids), old)
++
++    def test_consecutive_unfinished_makeups_reappear_and_only_latest_completion_resumes(self):
++        s = self.s
++        line, entries = s.create_line(days=3)
++        all_old = [entries[0]["published_task_id"]]
++        for day in (2, 3, 4):
++            s.set_time(f"2026-11-{day:02d}T03:05:00+08:00")
++            blocked = s.run_due()
++            self.assertEqual(blocked["published"], 0)
++            inbox = s.inbox()
++            self.assertEqual(len(inbox), 1)
++            self.assertEqual(inbox[0]["tasks"][0]["id"], all_old[-1])
++            _, result = s.recover(line, f"2026-11-{day - 1:02d}")
++            self.assertEqual(result["task_mappings"][0]["source_task_id"], all_old[-1])
++            all_old.append(result["created_task_ids"][0])
++        old = s.original_snapshot(all_old[:-1])
++        s.submit(all_old[-1])
++        s.set_time("2026-11-05T03:05:00+08:00")
++        self.assertEqual((s.run_due()["published"], len(s.inbox())), (1, 0))
++        self.assertEqual(s.original_snapshot(all_old[:-1]), old)
++
++    def test_continue_releases_only_selected_old_day_and_keeps_future_wait_rule(self):
++        s = self.s
++        line, entries = s.create_line()
++        old_id = entries[0]["published_task_id"]
++        original = s.original_snapshot([old_id])
++        s.set_time("2026-11-02T03:05:00+08:00")
++        self.assertEqual(s.run_due()["blocked"], 1)
++        _, result = s.recover(line, "2026-11-01", action="continue")
++        self.assertEqual(s.original_snapshot([old_id]), original)
++        today = next(entry for entry in s.entries(line) if entry["target_date"] == "2026-11-02")
++        self.assertEqual(today["status"], "published")
++        self.assertEqual(len(result["published_entry_ids"]), 1)
++        s.set_time("2026-11-03T03:05:00+08:00")
++        self.assertEqual(s.run_due()["blocked"], 1)
++        self.assertEqual([item["source_date"] for item in s.inbox()], ["2026-11-02"])
++
++    def test_today_published_task_blocks_makeup_without_changing_student_work(self):
++        s = self.s
++        line, _ = s.create_line(wait=False)
++        s.set_time("2026-11-02T03:05:00+08:00")
++        self.assertEqual(s.run_due()["published"], 1)
++        old_tasks = s.tasks()
++        preview = s.staff(
++            "/api/task-planner/inbox/preview",
++            {"series_id": line, "source_date": "2026-11-01", "action": "makeup"},
++        )["preview"]
++        self.assertFalse(preview["can_apply"])
++        self.assertTrue(any("不能撤回" in blocker for blocker in preview["blockers"]))
++        self.assertEqual(s.tasks(), old_tasks)
++        today_id = next(row["id"] for row in old_tasks if row["date"] == "2026-11-02")
++        self.assertEqual(s.submit(today_id)["task"]["status"], "done")
++
++    def test_grace_period_completion_prevents_recovery_and_0300_opens_it(self):
++        s = self.s
++        line, entries = s.create_line()
++        old_id = entries[0]["published_task_id"]
++        s.set_time("2026-11-02T02:59:59+08:00")
++        self.assertTrue(next(row for row in s.tasks() if row["id"] == old_id)["can_write"])
++        self.assertEqual(s.inbox(), [])
++        for action in ("makeup", "continue"):
++            data = {"series_id": line, "source_date": "2026-11-01", "action": action}
++            response = s.clients["assistant"].post(
++                "/api/task-planner/inbox/preview", json=data, headers={"X-CSRF-Token": s.csrf}
++            )
++            self.assertEqual(response.status_code, 409, response.get_json())
++            self.assertEqual(response.get_json()["error"], "source_still_open")
++        s.set_time("2026-11-02T03:00:00+08:00")
++        self.assertFalse(next(row for row in s.tasks() if row["id"] == old_id)["can_write"])
++        rejected = s.submit(old_id, expected=403)
++        self.assertEqual(rejected["error"], "task_expired")
++        self.assertEqual(len(s.inbox()), 1)
++        _, result = s.recover(line, "2026-11-01")
++        self.assertEqual(len(result["created_task_ids"]), 1)
++
++    def test_grace_student_real_submission_resumes_without_makeup_and_old_backlog_allowed(self):
++        s = self.s
++        line, entries = s.create_line()
++        s.set_time("2026-11-02T02:59:59+08:00")
++        self.assertEqual(s.submit(entries[0]["published_task_id"])["task"]["status"], "done")
++        s.set_time("2026-11-02T03:05:00+08:00")
++        self.assertEqual(s.run_due()["published"], 1)
++        s.set_time("2026-11-04T02:59:00+08:00")
++        _, result = s.recover(line, "2026-11-02")
++        self.assertEqual(len(result["created_task_ids"]), 1)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_task_planner_recovery_student_contract_e2e.py b/tests/test_task_planner_recovery_student_contract_e2e.py
+new file mode 100644
+index 00000000..4ebbb12f
+--- /dev/null
++++ b/tests/test_task_planner_recovery_student_contract_e2e.py
+@@ -0,0 +1,126 @@
++"""Recovery through the real miniprogram API; synthetic identities and data only.
++
++This verifies the server contract used by the shipped client. It does not claim
++that a native WeChat device or WebView was exercised.
++"""
++
++import unittest
++from unittest.mock import patch
++
++from tests.recovery_e2e_support import RecoverySandbox
++
++
++class RecoveryStudentContractE2E(unittest.TestCase):
++    def setUp(self):
++        self.sandbox = RecoverySandbox()
++        self.addCleanup(self.sandbox.close)
++        from api import miniprogram
++        from api.auth_utils import issue_token
++        from models import User, db
++
++        original_root = miniprogram._static_root
++        resource_patch = patch.object(
++            miniprogram,
++            "_static_root",
++            lambda name: (
++                self.sandbox.root / "static" / name
++                if name in {"reading_tests", "reading_jijing"}
++                else original_root(name)
++            ),
++        )
++        resource_patch.start()
++        self.addCleanup(resource_patch.stop)
++        self.headers = {}
++        # Seed authentication for synthetic accounts only. The actual WeChat
++        # credential exchange needs a device; API JWT validation remains real.
++        with self.sandbox.app.app_context():
++            for role in ("student", "other"):
++                user = db.session.get(User, self.sandbox.users[role])
++                _raw, token = issue_token(user)
++                self.headers[role] = {"Authorization": "Bearer " + token}
++
++    def mp_get(self, path, role="student", status=200):
++        response = self.sandbox.clients[role].get(
++            "/api/miniprogram/student/" + path, headers=self.headers[role]
++        )
++        self.assertEqual(response.status_code, status, response.get_json())
++        return response.get_json()
++
++    def test_reading_bundle_makeup_is_visible_and_bound_to_fresh_tasks(self):
++        s = self.sandbox
++        line_id, entries = s.create_line(kind="reading_test", days=2)
++        originals = [
++            entry["published_task_id"] for entry in entries if entry["status"] == "published"
++        ]
++        self.assertEqual(len(originals), 3)
++        old_details = {task_id: self.mp_get(f"tasks/{task_id}")["task"] for task_id in originals}
++        s.set_time("2026-11-02T10:00:00+08:00")
++        _preview, result = s.recover(line_id, "2026-11-01")
++        created = result["created_task_ids"]
++        self.assertEqual(len(created), 3)
++        listed = self.mp_get("tasks/today?date=2026-11-02")
++        self.assertEqual({row["id"] for row in listed["tasks"]}, set(created))
++        new_tokens = set()
++        total_questions = 0
++        for task_id in created:
++            detail = self.mp_get(f"tasks/{task_id}")["task"]
++            passage = detail["reading_passage_number"]
++            token = detail["reading_token"]
++            new_tokens.add(token)
++            old = next(
++                row for row in old_details.values() if row["reading_passage_number"] == passage
++            )
++            self.assertNotEqual(token, old["reading_token"])
++            self.assertTrue(detail["can_write"])
++            self.assertIn("补做2026-11-01作业", detail["instructions"])
++            self.assertIsNone(detail["reading_test_result"])
++            data = self.mp_get(f"reading/cambridge/{task_id}?token={token}")
++            self.assertEqual(data["task"]["id"], task_id)
++            self.assertEqual(data["passage_number"], passage)
++            self.assertEqual(len(data["test"]["passages"]), 1)
++            self.assertIsNone(data["submission"])
++            total_questions += sum(
++                len(group["questions"])
++                for item in data["test"]["passages"]
++                for group in item["groups"]
++            )
++            self.mp_get(f"reading/cambridge/{task_id}?token={old['reading_token']}", status=403)
++            self.mp_get(f"tasks/{task_id}", role="other", status=403)
++            self.mp_get(f"reading/cambridge/{task_id}?token={token}", role="other", status=404)
++            response = s.clients["student"].post(
++                f"/api/reading/test/{detail['reading_test_id']}/submit",
++                json={"task_id": task_id, "token": old["reading_token"], "answers": {"1": "TRUE"}},
++            )
++            self.assertEqual(response.status_code, 403)
++            self.assertEqual(response.get_json()["error"], "invalid_token")
++        self.assertEqual(len(new_tokens), 3)
++        self.assertEqual(total_questions, 40)
++        self.assertEqual(self.mp_get("tasks/today?date=2026-11-02", role="other")["tasks"], [])
++        self.assertEqual(s.outbound_attempts, [])
++
++    def test_makeup_grace_window_agrees_between_miniprogram_and_web(self):
++        s = self.sandbox
++        line_id, _entries = s.create_line(days=2)
++        s.set_time("2026-11-02T10:00:00+08:00")
++        _preview, result = s.recover(line_id, "2026-11-01")
++        task_id = result["created_task_ids"][0]
++        s.set_time("2026-11-03T02:59:59+08:00")
++        before = self.mp_get("tasks/today?date=2026-11-02")
++        self.assertTrue(before["grace_period"]["active"])
++        self.assertEqual(before["grace_period"]["pending_count"], 1)
++        self.assertTrue(before["tasks"][0]["can_write"])
++        self.assertTrue(self.mp_get(f"tasks/{task_id}")["task"]["can_write"])
++        self.assertTrue(next(row for row in s.tasks() if row["id"] == task_id)["can_write"])
++        s.set_time("2026-11-03T03:00:00+08:00")
++        after = self.mp_get("tasks/today?date=2026-11-02")
++        self.assertFalse(after["grace_period"]["active"])
++        self.assertFalse(after["tasks"][0]["can_write"])
++        self.assertTrue(self.mp_get(f"tasks/{task_id}")["task"]["read_only"])
++        self.assertFalse(next(row for row in s.tasks() if row["id"] == task_id)["can_write"])
++        result = s.submit(task_id, expected=403)
++        self.assertEqual(result["error"], "task_expired")
++        self.assertEqual(s.outbound_attempts, [])
++
++
++if __name__ == "__main__":
++    unittest.main()
