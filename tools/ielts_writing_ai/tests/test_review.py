@@ -30,11 +30,42 @@ def criterion(band, quote="i dont agree", strength_quote="Governments should inv
     }
 
 
+def argument_map(**overrides):
+    value = {
+        "position": {"quote": "i dont agree with it", "consistent": True, "comment": "立场明确"},
+        "paragraphs": [
+            {
+                "role": "introduction",
+                "main_point": "i dont agree with it",
+                "verdict": "supports",
+                "comment": "开头给出立场",
+            },
+            {
+                "role": "body",
+                "main_point": "Governments should invest more money",
+                "verdict": "weak",
+                "comment": "只给结论，没有说明原因",
+            },
+        ],
+        "problems": [
+            {
+                "type": "unsupported",
+                "quote": "Governments should invest more money",
+                "comment": "没有解释为什么要投入、投入后有什么结果。",
+                "suggestion": "补一句原因和一个具体结果。",
+            }
+        ],
+    }
+    value.update(overrides)
+    return value
+
+
 def evaluation(**bands):
     values = {"task": 6, "coherence": 6, "lexical": 6.5, "grammar": 6.5}
     values.update(bands)
     return {
         "criteria": {key: criterion(value) for key, value in values.items()},
+        "argument": argument_map(),
         "overall_comment": "整体结构完整，但语言错误较多，影响清晰度。",
         "priorities": ["p1", "p2", {"bad": 1}],
         "overall_band": 9,  # must be ignored

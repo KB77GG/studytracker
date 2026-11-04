@@ -431,6 +431,48 @@ def _evidence_metrics(run_data: dict) -> dict:
     }
 
 
+def _argument(sample: dict) -> dict | None:
+    result = (sample["generations"].get("evaluate") or {}).get("result") or {}
+    return result.get("argument")
+
+
+def _argument_metrics(run_data: dict) -> dict:
+    """Task 2 argument map: how much survived verification, and what was found."""
+    evaluated = mapped = positions = paragraphs = problems = dropped = 0
+    types = Counter()
+    verdicts = Counter()
+    for sample in run_data["samples"]:
+        if sample["task_type"] != "task2":
+            continue
+        if not (sample["generations"].get("evaluate") or {}).get("result"):
+            continue
+        evaluated += 1
+        argument = _argument(sample)
+        if not argument:
+            continue
+        mapped += 1
+        positions += 1 if argument.get("position") else 0
+        paragraphs += len(argument.get("paragraphs") or [])
+        problems += len(argument.get("problems") or [])
+        dropped += argument.get("dropped") or 0
+        types.update(p["type"] for p in argument.get("problems") or [])
+        verdicts.update(p["verdict"] for p in argument.get("paragraphs") or [])
+    kept = positions + paragraphs + problems
+    return {
+        "task2_evaluations": evaluated,
+        "with_argument": mapped,
+        "with_position": positions,
+        "paragraphs": paragraphs,
+        "problems": problems,
+        # Items the model returned but the server could not verify (quote not found,
+        # unknown type/role/verdict); over everything it returned.
+        "dropped": dropped,
+        "dropped_rate": _rate(dropped, kept + dropped),
+        "problem_types": dict(types.most_common()),
+        "paragraph_verdicts": dict(verdicts.most_common()),
+    }
+
+
 def _refine_rewrite_metrics(run_data: dict) -> dict:
     sentences = missing = changed = 0
     requested = generated = meeting = quality_ok = retry_failed = content_ok = 0
@@ -555,6 +597,7 @@ def _sanity(run_data: dict) -> dict:
                     "detail": s["_warnings"][:1],
                 }
             )
+        checks += _argument_checks(sample, expect)
         if expect.get("not_assessable"):
             ok = overall is None and s["_ta_state"] == "not_assessable"
             checks.append(
@@ -585,6 +628,41 @@ def _sanity(run_data: dict) -> dict:
             }
         )
     return {"checks": checks, "passed": sum(1 for c in checks if c["ok"]), "total": len(checks)}
+
+
+def _argument_checks(sample: dict, expect: dict) -> list[dict]:
+    keys = ("argument_max_problems", "argument_min_problems", "argument_forbid", "argument_any_of")
+    if not any(key in expect for key in keys):
+        return []
+    argument = _argument(sample)
+    if not argument:
+        return [{"sample": sample["id"], "check": "有论证结构分析", "ok": False, "detail": None}]
+    found = [p["type"] for p in argument.get("problems") or []]
+    off_paragraphs = [
+        p["role"] for p in argument.get("paragraphs") or [] if p["verdict"] == "off_position"
+    ]
+    checks = []
+
+    def add(check, ok, detail):
+        checks.append({"sample": sample["id"], "check": check, "ok": ok, "detail": detail})
+
+    if "argument_max_problems" in expect:
+        limit = expect["argument_max_problems"]
+        add(f"论证问题 ≤ {limit} 条（强文不应被挑出很多问题）", len(found) <= limit, found)
+    if "argument_min_problems" in expect:
+        limit = expect["argument_min_problems"]
+        add(f"论证问题 ≥ {limit} 条（弱文应被指出问题）", len(found) >= limit, found)
+    if "argument_forbid" in expect:
+        forbidden = [t for t in found if t in expect["argument_forbid"]]
+        add(f"不应出现 {' / '.join(expect['argument_forbid'])}", not forbidden, found)
+    if "argument_any_of" in expect:
+        hit = any(t in expect["argument_any_of"] for t in found) or bool(off_paragraphs)
+        add(
+            f"应标出 {' / '.join(expect['argument_any_of'])}（问题类型或段落判定偏离）",
+            hit,
+            {"problems": found, "off_position_paragraphs": off_paragraphs},
+        )
+    return checks
 
 
 def _off_topic_rewrite_check(sample: dict) -> dict:
@@ -754,6 +832,7 @@ def build_report(
         "kinds": kinds,
         "vision_calls": len(vision_calls),
         "evidence": _evidence_metrics(run_data),
+        "argument": _argument_metrics(run_data),
         "refine_rewrite": _refine_rewrite_metrics(run_data),
         "sanity": _sanity(run_data),
         "calibration": _calibration(run_data),
@@ -767,6 +846,9 @@ def build_report(
                 "scores": {k: v for k, v in _scores(s).items() if not k.startswith("_")},
                 "teacher": s.get("teacher") or {},
                 "image_status": s["image_status"],
+                "argument_problems": [
+                    p["type"] for p in (_argument(s) or {}).get("problems") or []
+                ],
                 "statuses": {k: g["status"] for k, g in s["generations"].items()},
                 "errors": {
                     k: g["error_code"] for k, g in s["generations"].items() if g["error_code"]
@@ -779,6 +861,23 @@ def build_report(
 
 def _pct(value) -> str:
     return "—" if value is None else f"{value * 100:.0f}%"
+
+
+def _argument_markdown(argument: dict | None) -> list[str]:
+    if not argument or not argument["task2_evaluations"]:
+        return []
+    types = "；".join(f"{k} ×{v}" for k, v in argument["problem_types"].items()) or "无"
+    verdicts = "；".join(f"{k} ×{v}" for k, v in argument["paragraph_verdicts"].items()) or "无"
+    return [
+        "",
+        "## 论证结构（Task 2，不单独计分）",
+        "",
+        f"- Task 2 评价 {argument['task2_evaluations']} 篇，有论证结构分析 "
+        f"{argument['with_argument']} 篇，找到可核实立场句 {argument['with_position']} 篇",
+        f"- 段落中心句 {argument['paragraphs']} 条（判定：{verdicts}）；论证问题 "
+        f"{argument['problems']} 条（{types}）",
+        f"- 无法核实而丢弃 {argument['dropped']} 条，占模型给出的 {_pct(argument['dropped_rate'])}",
+    ]
 
 
 def render_markdown(report: dict) -> str:
@@ -842,6 +941,9 @@ def render_markdown(report: dict) -> str:
             if rr.get("rewrite_quality_issues")
             else ""
         ),
+    ]
+    lines += _argument_markdown(report.get("argument"))
+    lines += [
         "",
         "## 分数合理性（宽松区间，不是真实分数）",
         "",
@@ -868,16 +970,17 @@ def render_markdown(report: dict) -> str:
         "",
         "## 逐篇结果",
         "",
-        "| 样本 | 总分 | TR/TA | CC | LR | GRA | 状态 |",
-        "|---|---|---|---|---|---|---|",
+        "| 样本 | 总分 | TR/TA | CC | LR | GRA | 论证问题 | 状态 |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for row in report["per_sample"]:
         s = row["scores"]
         status = " ".join(f"{k}:{v}" for k, v in row["statuses"].items())
+        problems = ", ".join(row.get("argument_problems") or []) or "—"
         lines.append(
             f"| {row['id']} | {s.get('overall') or '—'} | {s.get('task') or '—'} | "
             f"{s.get('coherence') or '—'} | {s.get('lexical') or '—'} | {s.get('grammar') or '—'} "
-            f"| {status} |"
+            f"| {problems} | {status} |"
         )
     tokens = report["tokens"]
 

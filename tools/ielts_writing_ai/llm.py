@@ -296,12 +296,55 @@ class FakeClient:
                 }
                 for key, band in crit.items()
             },
+            **(
+                {"argument": FakeClient._demo_argument(sentences)}
+                if context.get("task_type") == "task2"
+                else {}
+            ),
             "overall_comment": "【演示】这是演示模式的固定评语。连接真实模型后，这里会给出整体评价。",
             "priorities": [
                 "【演示】优先修正基础语法错误",
                 "【演示】每个主体段补充具体例子",
                 "【演示】减少重复用词",
             ],
+        }
+
+    @staticmethod
+    def _demo_argument(sentences):
+        """A structurally valid demo argument map built from the essay's own sentences."""
+        firsts = {}
+        for item in sentences:
+            firsts.setdefault(item["paragraph"], item["text"])
+        ordered = [firsts[k] for k in sorted(firsts)]
+        paragraphs = []
+        for n, text in enumerate(ordered):
+            role = "introduction" if n == 0 else "conclusion" if n == len(ordered) - 1 else "body"
+            paragraphs.append(
+                {
+                    "role": role,
+                    "main_point": text,
+                    "verdict": "supports",
+                    "comment": "【演示】示例判断，未经过真实 AI 分析。",
+                }
+            )
+        problems = []
+        if len(ordered) > 2:
+            problems.append(
+                {
+                    "type": "unsupported",
+                    "quote": ordered[1],
+                    "comment": "【演示】示例问题：这一段的论点缺少解释。",
+                    "suggestion": "【演示】补充“为什么”和一个回扣论点的例子。",
+                }
+            )
+        return {
+            "position": {
+                "quote": ordered[0] if ordered else "",
+                "consistent": True,
+                "comment": "【演示】示例立场判断。",
+            },
+            "paragraphs": paragraphs,
+            "problems": problems,
         }
 
     @staticmethod

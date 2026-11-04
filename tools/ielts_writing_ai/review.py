@@ -11,6 +11,7 @@ import base64
 import logging
 from pathlib import Path
 
+from . import argument as argument_lib
 from . import essay as essay_lib
 from . import prompts, rewrite_quality, visual
 from .llm import LLMError, parse_strict_json
@@ -213,6 +214,19 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
                 f"AI 另提出 {consistency_dropped} 条矛盾，但引文无法在原文中找到，已忽略。"
             )
 
+    argument = None
+    if task_type == "task2":
+        # Argument structure explains TR/CC; it is not scored separately. Every quote
+        # is verified against the essay; a missing map is an incomplete evaluation.
+        try:
+            argument = argument_lib.normalize(raw.get("argument"), essay)
+        except argument_lib.ArgumentInvalid as exc:
+            raise InvalidOutput(str(exc)) from None
+        if argument["dropped"]:
+            warnings.append(
+                f"AI 的论证结构分析中有 {argument['dropped']} 条引文无法在原文中找到或格式不对，已忽略。"
+            )
+
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
     overall = essay_lib.overall_band(scored) if len(scored) == len(essay_lib.CRITERIA) else None
     return {
@@ -222,6 +236,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "overall_comment": overall_comment,
         "priorities": priorities,
         "consistency_issues": consistency,
+        "argument": argument,
         "warnings": warnings,
     }
 

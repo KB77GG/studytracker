@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 
+from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.3"
+PROMPT_VERSION = "iwa-2026-11-04.4"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -35,6 +36,36 @@ COMMON_DESCRIPTORS = (
     "Grammatical Range & Accuracy (grammar): range of complex structures, proportion of "
     "error-free sentences, punctuation."
 )
+
+ARGUMENT_CHECKLIST = (
+    "Argument check (Task 2). It explains Task Response and Coherence & Cohesion; it is NOT "
+    "a separate score. (1) Position: is there one clear position that answers the question, "
+    "kept the same in the introduction, body and conclusion? (2) Each body paragraph: does "
+    "its main point directly support that position and the question, or drift to something "
+    "else? (3) Development: is each main point explained as claim -> mechanism (why) -> "
+    "example -> result linked back to the claim? An example that is only mentioned and not "
+    "linked back, a circular restatement, or a sweeping generalisation is NOT support. "
+    "(4) Concession: if the essay concedes the other side, does it then rebut it and return "
+    "to its own position, without the concession outweighing its own argument? "
+    "(5) Conclusion: consistent with the position, no new argument. Reflect every problem "
+    "you find in the task and coherence summaries and bands."
+)
+
+
+def _argument_schema() -> str:
+    types = " | ".join(f'"{key}"' for key in argument_lib.PROBLEM_TYPES)
+    return (
+        'Also return "argument": {"position": {"quote": str (the sentence that states the '
+        'position, verbatim), "consistent": bool, "comment": str (Chinese)} or null, '
+        '"paragraphs": [{"role": "introduction" | "body" | "concession" | "conclusion", '
+        '"main_point": str (the paragraph\'s central sentence, verbatim), "verdict": '
+        '"supports" | "weak" | "off_position", "comment": str (Chinese)}, ...one per paragraph], '
+        f'"problems": [{{"type": {types}, "quote": str (verbatim), "comment": str (Chinese), '
+        '"suggestion": str (Chinese)}, ...0-6]}. If there is no clear position, set position '
+        "to null and add an unclear_position problem quoting the closest sentence. Do not "
+        "invent problems: a well-argued essay may have no problems."
+    )
+
 
 CALIBRATION = (
     "Calibration rules: do not inflate. Most essays by Chinese candidates at this stage sit "
@@ -107,6 +138,8 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         '...1-3], "issues": [{"quote": str, "comment": str, "suggestion": str}, ...1-4]}. '
         "Do not output an overall band; it is computed from the criteria.",
     ]
+    if task_type == "task2":
+        rules += [ARGUMENT_CHECKLIST, _argument_schema()]
     if task_type == "task1":
         rules.append(
             'Also return "consistency_issues": [{"quote": str, "comment": str}] listing places '
@@ -128,6 +161,7 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
     user = "Evaluate this IELTS essay.\n" + json.dumps(payload, ensure_ascii=False, indent=1)
     context = {
         "kind": "evaluate",
+        "task_type": task_type,
         "word_count": submission["word_count"],
         "minimum_words": essay_lib.MIN_WORDS[task_type],
         "sentences": _numbered(sentences),
@@ -211,7 +245,13 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
                     "with them, and mention the contradiction in key_changes."
                 )
                 if task_type == "task1"
-                else "Task 2: answer every part of the question with a clear position."
+                else "Task 2: answer every part of the question with one clear position, stated "
+                "in the introduction and kept to the conclusion. Fix the argument, not only the "
+                "language: every body paragraph's main point must support that position; develop "
+                "each point as claim -> why -> example -> result linked back to the claim; a "
+                "concession must be followed by a rebuttal that returns to the position. When a "
+                "key change fixes the argument, name the problem in its why (e.g. 例子未回扣论点, "
+                "分论点偏离立场, 让步后没有反驳)."
             ),
             'Output schema: {"essay": str, "original_addresses_question": bool, '
             '"answers": [{"part": str (Chinese), "quote": str (exact sentence from essay)}, '
@@ -303,7 +343,7 @@ def build_rewrite_notes(submission: dict, rewrite_essay: str, problems: str) -> 
 
 BUILDERS = {"evaluate": build_evaluate, "refine": build_refine, "rewrite": build_rewrite}
 MAX_TOKENS = {
-    "evaluate": 3000,
+    "evaluate": 4500,  # Task 2 also returns the argument map (real runs: ~1.6k without it)
     "refine": 6000,
     "rewrite": 2400,
     "rewrite_notes": 1500,

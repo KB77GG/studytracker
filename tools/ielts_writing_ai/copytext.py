@@ -48,6 +48,48 @@ def _evidence_line(entry, mark: str) -> str:
     return f"  {mark} {text}".rstrip()
 
 
+ARGUMENT_NOTE = "AI 标注，引文均已在原文中核实；不单独计分，用来解释 TR / CC 的分数"
+CONSISTENT = {True: "前后一致", False: "前后不一致"}
+
+
+def argument_lines(argument: dict | None) -> list[str]:
+    if not argument:
+        return []
+    lines = [f"论证结构检查（{ARGUMENT_NOTE}）："]
+    position = argument.get("position")
+    if position:
+        state = CONSISTENT.get(position.get("consistent"))
+        text = f"立场：“{position['quote']}”" + (f"（{state}）" if state else "")
+        if position.get("comment"):
+            text += f" {position['comment']}"
+        lines.append(text)
+    else:
+        lines.append("立场：没有找到可核实的立场句。")
+    if argument.get("paragraphs"):
+        lines.append("各段中心句：")
+    for paragraph in argument.get("paragraphs") or []:
+        text = (
+            f"  · {paragraph.get('role_label') or paragraph.get('role')}"
+            f"【{paragraph.get('verdict_label') or paragraph.get('verdict')}】"
+            f"“{paragraph['main_point']}”"
+        )
+        if paragraph.get("comment"):
+            text += f" {paragraph['comment']}"
+        lines.append(text)
+    problems = argument.get("problems") or []
+    if problems:
+        lines.append("论证问题：")
+        for problem in problems:
+            text = f"  ✗ [{problem.get('label') or problem.get('type')}] “{problem['quote']}” "
+            text += problem.get("comment") or ""
+            if problem.get("suggestion"):
+                text += f" → 建议：{problem['suggestion']}"
+            lines.append(text.rstrip())
+    else:
+        lines.append("论证问题：AI 没有标出明显问题（不代表论证没有可改进之处）。")
+    return lines + [""]
+
+
 def evaluation_text(result: dict, generation: dict) -> str:
     lines = [f"【AI 原稿评价】{DISCLAIMER}"]
     overall = result.get("overall_band")
@@ -73,6 +115,7 @@ def evaluation_text(result: dict, generation: dict) -> str:
         lines.append("文内数据自洽检查（只看作文内部是否矛盾，不代表与题图一致）：")
         lines += [_evidence_line(c, "✗") for c in consistency]
         lines.append("")
+    lines += argument_lines(result.get("argument"))
     if result.get("overall_comment"):
         lines += [f"总评：{result['overall_comment']}", ""]
     priorities = result.get("priorities") or []

@@ -86,7 +86,7 @@ SAMPLES = [
         "prompt": TRANSPORT_PROMPT,
         "essay": WEAK,
         "level": 1,
-        "expect": {"overall_max": 5.5},
+        "expect": {"overall_max": 5.5, "argument_min_problems": 1},
     },
     {
         "id": "t2-mid",
@@ -110,14 +110,18 @@ SAMPLES = [
         "prompt": TRANSPORT_PROMPT,
         "essay": STRONG,
         "level": 4,
-        "expect": {"overall_min": 7.0},
+        "expect": {
+            "overall_min": 7.0,
+            "argument_max_problems": 1,
+            "argument_forbid": ["off_position", "unclear_position"],
+        },
     },
     {
         "id": "t2-off-topic",
         "task_type": "task2",
         "prompt": TRANSPORT_PROMPT,
         "essay": OFF_TOPIC,
-        "expect": {"task_max": 5.0},
+        "expect": {"task_max": 5.0, "argument_any_of": ["off_position", "irrelevant"]},
     },
     {
         "id": "t2-under-length",

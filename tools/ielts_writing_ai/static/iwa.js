@@ -465,6 +465,53 @@
       }, ['“' + entry.quote + '”', entry.quote_found ? null : el('span', { class: 'issue__flag', text: '（未在原文中找到，不作为评分依据）' })]);
     }
 
+    // -- Task 2 argument map (every quote was verified on the server)
+    function verified(quote) { return quoteButton({ quote: quote, quote_found: true }); }
+
+    function argumentNode(a) {
+      var box = el('section', { class: 'block argument' }, [
+        el('h3', { text: '论证结构检查' }),
+        el('p', { class: 'muted small', text: 'AI 标注，引文均已在原文中核实；不单独计分，用来解释 TR / CC 的分数。点击引文可在左侧原文中定位。' })
+      ]);
+      var p = a.position;
+      var consistent = p && p.consistent === true ? '前后一致' : p && p.consistent === false ? '前后不一致' : '';
+      box.appendChild(el('div', { class: 'argument__position' }, p ? [
+        el('span', { class: 'argument__label', text: '立场' }),
+        verified(p.quote),
+        consistent ? el('span', { class: 'tag' + (p.consistent ? ' tag--ok' : ' tag--bad'), text: consistent }) : null,
+        p.comment ? el('p', { class: 'issue__comment', text: p.comment }) : null
+      ] : [
+        el('span', { class: 'argument__label', text: '立场' }),
+        el('span', { class: 'muted', text: '没有找到可核实的立场句。' })
+      ]));
+      box.appendChild(el('p', { class: 'subhead', text: '各段中心句' }));
+      box.appendChild(el('ol', { class: 'argument__flow' }, (a.paragraphs || []).map(function (item) {
+        return el('li', { class: 'argument__step is-' + item.verdict }, [
+          el('div', { class: 'argument__step-head' }, [
+            el('span', { class: 'tag', text: item.role_label || item.role }),
+            el('span', { class: 'tag tag--' + ({ supports: 'ok', weak: 'warn', off_position: 'bad' }[item.verdict] || 'warn'), text: item.verdict_label || item.verdict })
+          ]),
+          verified(item.main_point),
+          item.comment ? el('p', { class: 'issue__comment', text: item.comment }) : null
+        ]);
+      })));
+      var problems = a.problems || [];
+      box.appendChild(el('p', { class: 'subhead', text: '论证问题' + (problems.length ? '（' + problems.length + '）' : '') }));
+      if (!problems.length) {
+        box.appendChild(el('p', { class: 'muted small', text: 'AI 没有标出明显的论证问题（不代表论证没有可改进之处）。' }));
+      }
+      problems.forEach(function (item) {
+        box.appendChild(el('div', { class: 'issue issue--argument' }, [
+          el('span', { class: 'tag tag--bad', text: item.label || item.type }),
+          ' ',
+          verified(item.quote),
+          item.comment ? el('p', { class: 'issue__comment', text: item.comment }) : null,
+          item.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + item.suggestion }) : null
+        ]));
+      });
+      return box;
+    }
+
     // -- evaluation
     function renderEvaluation(panel, g) {
       var r = g.result;
@@ -507,6 +554,7 @@
           el('ol', { class: 'priorities' }, r.priorities.map(function (p) { return el('li', { text: p }); }))
         ]));
       }
+      if (r.argument) panel.appendChild(argumentNode(r.argument));
       r.criteria.forEach(function (c) {
         var off = c.band === null || c.band === undefined;
         var card = el('article', { class: 'criterion' + (off ? ' is-off' : '') }, [
