@@ -15,7 +15,9 @@ What the server enforces beyond quote checks (real run of 2026-11-04, prompt .4)
   paragraph judged "supports" is surfaced for human review, not silently kept;
 - paragraph entries are bound to the essay's real paragraphs (one entry each);
 - a suggestion with a figure that is not in the student's input (e.g. "over 80%") is
-  removed, so the tool never recommends unsourced statistics (see figures.py).
+  removed, so the tool never recommends unsourced statistics (see figures.py);
+- "no support" / "example not linked" next to support the model itself quoted from
+  the same paragraph becomes an optional improvement.
 
 Vocabulary follows the main system's model-topic library (论点 → 机制 → 例子 → 结果 →
 边界), so students meet the same concepts in both places.
@@ -41,6 +43,11 @@ PROBLEM_TYPES = {
 }
 # Claims that two passages cannot both be true: both must be quoted and verified.
 PAIRED_TYPES = ("inconsistent_position", "conclusion_inconsistent")
+# "No support" judgements: the model must quote any support it found in the same
+# paragraph ("support_found"). If it quotes verified support, the point is supported
+# (briefly) and the finding becomes an optional improvement (real run 2026-11-04:
+# reasons in the same paragraph or clause were still called "no reason at all").
+SUPPORT_CHECKED = ("unsupported", "example_not_linked")
 ROLES = {
     "introduction": "开头",
     "body": "主体段",
@@ -189,7 +196,7 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
         }
     paragraphs = [by_number[n] for n in sorted(by_number)]
 
-    problems = []
+    problems, reclassified = [], []
     entries, malformed = _entries(raw.get("problems"))
     returned += len(entries) + malformed
     dropped += malformed
@@ -206,18 +213,37 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
         if not quote:
             dropped += 1
             continue
-        if any(p["type"] == kind and p["quote"] == quote for p in problems):
+        if any(p["type"] == kind and p["quote"] == quote for p in problems) or any(
+            r["from_type"] == kind and r["quote"] == quote for r in reclassified
+        ):
             duplicates += 1  # same finding repeated; shown once, not an error
             continue
         suggestion, removed = _suggestion(item, sources)
         removed_suggestions += 1 if removed else 0
+        number = _paragraph_of(quote, real_paragraphs)
+        support = (
+            _support_found(item.get("support_found"), quote, number, essay, real_paragraphs)
+            if kind in SUPPORT_CHECKED
+            else []
+        )
+        if support:
+            reclassified.append(
+                {
+                    "quote": quote,
+                    "suggestion": suggestion or comment,
+                    "from_type": kind,
+                    "from_label": PROBLEM_TYPES[kind],
+                    "support": support,
+                }
+            )
+            continue
         problems.append(
             {
                 "type": kind,
                 "label": PROBLEM_TYPES[kind],
                 "quote": quote,
                 "conflicts_with": other,
-                "p": _paragraph_of(quote, real_paragraphs),
+                "p": number,
                 "comment": comment,
                 "suggestion": suggestion,
                 "suggestion_removed": removed,
@@ -225,7 +251,7 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
             }
         )
 
-    improvements = []
+    improvements = list(reclassified)  # shown first: they replace a problem
     entries, malformed = _entries(raw.get("improvements"))
     returned += len(entries) + malformed
     dropped += malformed
@@ -255,6 +281,11 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
     improvements = improvements[:MAX_IMPROVEMENTS]
 
     self_conflicts = _check_consistency(position, paragraphs, problems, notes)
+    if reclassified:
+        notes.append(
+            f"有 {len(reclassified)} 条“没有支撑 / 例子未回扣”的判断，AI 自己引用了同一段里的"
+            "理由或论点，已改列为可选优化：简短的支撑不等于没有支撑。"
+        )
     # Removed suggestions are reported once for the whole evaluation (review.py).
     if len(real_paragraphs) == 1:
         notes.append("原文只有 1 段，论证结构只能按整段分析（分段问题见 CC 的反馈）。")
@@ -264,6 +295,7 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
         "paragraphs": paragraphs,
         "problems": problems,
         "improvements": improvements,
+        "reclassified": len(reclassified),
         "notes": notes,
         "self_conflicts": self_conflicts,
         "suggestions_removed": removed_suggestions,
@@ -274,6 +306,19 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
         "duplicates": duplicates,
         "over_limit": over_limit,
     }
+
+
+def _support_found(value, quote, number, essay, real_paragraphs) -> list[str]:
+    """Verified spans the model quoted as support for a point: in the same paragraph,
+    and not just the problem quote itself (a reason clause inside it counts)."""
+    found = []
+    for entry in value if isinstance(value, list) else []:
+        span = _verified_quote(entry, essay)
+        if not span or essay_lib.squash(span) == essay_lib.squash(quote):
+            continue
+        if number and _paragraph_of(span, real_paragraphs, number) == number:
+            found.append(span)
+    return found[:3]
 
 
 def _check_consistency(position, paragraphs, problems, notes) -> int:

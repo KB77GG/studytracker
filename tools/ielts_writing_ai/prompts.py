@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.5"
+PROMPT_VERSION = "iwa-2026-11-04.6"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -56,7 +56,12 @@ ARGUMENT_CHECKLIST = (
     "A named city, study or statistic is NEVER required. unsupported only when a point is "
     "merely asserted with no reason at all; a reason that is present but brief is an "
     "improvement, not a problem. example_not_linked only when an example is given and "
-    "nothing connects it to the point. Read the whole sentence and its neighbours first. "
+    "nothing connects it to the point. Before reporting either, read the WHOLE paragraph "
+    "and list in 'support_found' every span that gives a reason, mechanism or example for "
+    "the point, or states the claim the example illustrates: a clause (because / so / "
+    "where / which / if ... then) or a neighbouring sentence counts, and an example right "
+    "after the claim it illustrates is linked without any closing 'this shows' sentence. "
+    "If you find any, the point is supported: put the advice in 'improvements' instead. "
     "(4) Concession. A concession that sets the scope of the position needs no rebuttal. "
     "concession_unanswered only when an opposing argument that weakens the position is "
     "raised and the essay never returns to its position; concession_undermines only when "
@@ -89,7 +94,9 @@ def _argument_schema() -> str:
         "(Chinese)}, ...exactly one per paragraph of essay_paragraphs, in order], "
         f'"problems": [{{"type": {types}, "quote": str (verbatim), "conflicts_with": str '
         "(verbatim; REQUIRED for inconsistent_position and conclusion_inconsistent: the other "
-        'passage it contradicts), "comment": str (Chinese), "suggestion": str (Chinese)}, '
+        'passage it contradicts), "support_found": [str (verbatim)] (REQUIRED for unsupported '
+        "and example_not_linked: what the same paragraph already offers for the point; [] "
+        'only if nothing), "comment": str (Chinese), "suggestion": str (Chinese)}, '
         '...0-6], "improvements": [{"quote": str (verbatim), "suggestion": str (Chinese)}, '
         "...0-3]}. If there is no clear position, set position to null and add an "
         "unclear_position problem quoting the closest sentence. Do not invent problems: a "
@@ -206,7 +213,10 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "(2-4 sentences). Every strength and every issue carries a 'quote' copied VERBATIM "
         "from the essay (a short span, max 25 words) so it can be located automatically; "
         "never paraphrase, translate or correct inside 'quote'. A criterion with no "
-        "verifiable quote will be rejected.",
+        "verifiable quote will be rejected. An issue must be an error or a clear weakness; "
+        "an equally good alternative wording is not an issue.",
+        "Counts must match the essay: paragraph_count is given (one paragraph per line); "
+        "only say a word is repeated if it really appears several times.",
     ]
     if task_type == "task2":
         rules.append(ARGUMENT_CHECKLIST)
@@ -221,7 +231,10 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
             "never data accuracy or coverage of the chart."
         )
     system = " ".join(rules)
-    payload = {**_task_context(submission)}
+    payload = {
+        **_task_context(submission),
+        "paragraph_count": len(essay_lib.split_paragraphs(submission["essay_text"])),
+    }
     if task_type == "task2":
         # Numbered so the argument map is bound to the real paragraphs.
         payload["essay_paragraphs"] = [

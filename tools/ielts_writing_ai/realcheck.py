@@ -416,9 +416,14 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
 
 
 def _evidence_metrics(run_data: dict) -> dict:
-    quotes = verified = criteria = 0
+    quotes = verified = criteria = corrections = 0
+    removed = Counter()
     for sample in run_data["samples"]:
         result = (sample["generations"].get("evaluate") or {}).get("result") or {}
+        removed.update(
+            {k: v for k, v in (result.get("suggestions_removed") or {}).items() if k != "total"}
+        )
+        corrections += len(result.get("count_corrections") or [])
         for criterion in result.get("criteria") or []:
             if criterion.get("state") != "scored":
                 continue
@@ -431,6 +436,9 @@ def _evidence_metrics(run_data: dict) -> dict:
         "scored_criteria": criteria,
         "quotes": quotes,
         "quotes_verified": _rate(verified, quotes),
+        # Every advice path of every evaluation (criteria, argument, priorities).
+        "suggestions_removed": {**dict(removed), "total": sum(removed.values())},
+        "count_corrections": corrections,
     }
 
 
@@ -444,7 +452,7 @@ def _argument_metrics(run_data: dict) -> dict:
     evaluation attempts were rejected outright because of the map."""
     evaluated = mapped = positions = paragraphs = problems = 0
     returned = dropped = duplicates = over_limit = 0
-    self_conflicts = removed = improvements = 0
+    self_conflicts = removed = improvements = reclassified = 0
     types = Counter()
     verdicts = Counter()
     by_id = {}
@@ -469,6 +477,7 @@ def _argument_metrics(run_data: dict) -> dict:
         problems += len(argument.get("problems") or [])
         dropped += argument.get("dropped") or 0
         self_conflicts += argument.get("self_conflicts") or 0
+        reclassified += argument.get("reclassified") or 0
         removed += argument.get("suggestions_removed") or 0
         improvements += len(argument.get("improvements") or [])
         duplicates += argument.get("duplicates") or 0
@@ -499,6 +508,9 @@ def _argument_metrics(run_data: dict) -> dict:
         # removed for figures the essay never gives.
         "self_conflicts": self_conflicts,
         "suggestions_removed": removed,
+        # "No support" findings next to support the model itself quoted (same paragraph),
+        # moved to optional improvements.
+        "reclassified": reclassified,
         "dropped": dropped,  # malformed, unknown enum, missing text or quote not found
         "duplicates": duplicates,
         "over_limit": over_limit,
@@ -958,6 +970,15 @@ def _pct(value) -> str:
     return "—" if value is None else f"{value * 100:.0f}%"
 
 
+def _removed_line(removed: dict) -> str:
+    labels = (("criteria", "评分项"), ("argument", "论证结构"), ("priorities", "提升重点"))
+    parts = "、".join(f"{label} {removed.get(key, 0)}" for key, label in labels)
+    return (
+        f"- 建议因含原文、题目和题图都没有的数字被删去（整份评价合计）：{removed.get('total', 0)} 条"
+        f"（{parts}）"
+    )
+
+
 def _argument_markdown(argument: dict | None) -> list[str]:
     if not argument or not (argument["task2_evaluations"] or argument.get("evaluate_attempts")):
         return []
@@ -975,8 +996,10 @@ def _argument_markdown(argument: dict | None) -> list[str]:
         f"- 段落中心句 {argument['paragraphs']} 条（判定：{verdicts}）；论证问题 "
         f"{argument['problems']} 条（{types}）；可选优化 {argument.get('improvements', 0)} 条"
         "（不是错误，不计入问题数）",
-        f"- AI 判断自相矛盾 {argument.get('self_conflicts', 0)} 处（已标需人工确认）；建议因含"
-        f"原文没有的数字被删去 {argument.get('suggestions_removed', 0)} 条",
+        f"- AI 判断自相矛盾 {argument.get('self_conflicts', 0)} 处（已标需人工确认）；“没有支撑”"
+        f"但 AI 自己引用了同段支撑、改列可选优化 {argument.get('reclassified', 0)} 条；论证部分的"
+        f"建议因含无来源数字被删去 {argument.get('suggestions_removed', 0)} 条（整份评价的合计见"
+        "“证据与内容”）",
         f"- 条目统计（只看最终采用的评价，立场、每段、每条问题、每条可选优化各计 1 条）：模型给出 "
         f"{argument['returned']} 条 = 采用 {argument['kept']} + 格式不对或无法核实而丢弃 "
         f"{argument['dropped']} + 重复 {argument['duplicates']} + 超出上限 "
@@ -1024,6 +1047,9 @@ def render_markdown(report: dict) -> str:
         "",
         f"- 评分项 {ev['scored_criteria']} 个，引文 {ev['quotes']} 条，能在原文中找到 "
         f"{_pct(ev['quotes_verified'])}",
+        _removed_line(ev.get("suggestions_removed") or {}),
+        f"- 评价中与原文不符、已附更正的计数说法（段落数、某词出现次数）："
+        f"{ev.get('count_corrections', 0)} 处",
         f"- 精修：共 {rr['refine_sentences']} 句，缺句率 {_pct(rr['refine_missing_rate'])}，"
         f"改动率 {_pct(rr['refine_changed_rate'])}",
         f"- 改写：请求 {rr['rewrite_requested']} 篇，生成 {rr['rewrite_generated']} 篇，"

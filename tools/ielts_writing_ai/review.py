@@ -156,6 +156,41 @@ def _require_chinese(criteria: list[dict], overall_comment: str) -> None:
         raise InvalidOutput("解释必须使用简体中文（评分理由、总评或多数说明是英文）")
 
 
+_CN_NUM = "一二两三四五六七八九十"
+_PARAGRAPH_CLAIM_RE = re.compile(
+    rf"([{_CN_NUM}]|\d+)\s*段式"
+    rf"|(?:共|全文共?|全文只有|全文有|分为|分成)\s*([{_CN_NUM}]|\d+)\s*个?段"
+    r"|(\d+)-paragraph"
+)
+_REPEAT_RE = re.compile(
+    r"([A-Za-z][A-Za-z'-]{1,30})[”\"’']?\s*(?:一词|这个词|这一词|这个单词|一字)?\s*"
+    r"(?:在(?:全)?文中|全文)?\s*(?:多次|反复|重复|频繁)(?:出现|使用)"
+)
+
+
+def _count_corrections(texts: list[str], essay: str) -> list[str]:
+    """Counts the explanations state that can be checked against the essay itself
+    (2026-11-04 Task 1 run: "四段式" for a five-paragraph essay, "figure 多次出现" for
+    a word used once). Wrong ones get a visible correction; the text is not edited."""
+    paragraphs = len(essay_lib.split_paragraphs(essay))
+    notes = []
+    for text in texts:
+        for match in _PARAGRAPH_CLAIM_RE.finditer(text or ""):
+            raw = next(g for g in match.groups() if g)
+            stated = int(raw) if raw.isdigit() else int(figures_lib.cn_number(raw))
+            if stated != paragraphs:
+                notes.append(
+                    f"评价中说原文是“{match.group().strip()}”，按换行计原文实际有 {paragraphs} 段，"
+                    "请以原文为准。"
+                )
+        for match in _REPEAT_RE.finditer(text or ""):
+            word = match.group(1)
+            count = len(re.findall(rf"\b{re.escape(word)}(?:s|es)?\b", essay, re.IGNORECASE))
+            if count < 2:
+                notes.append(f"评价中说“{word}”多次出现，原文中只出现 {count} 次，请以原文为准。")
+    return list(dict.fromkeys(notes))
+
+
 MAX_COMPARISONS = 8
 
 
@@ -272,6 +307,12 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     if not priorities:
         raise InvalidOutput("缺少提升重点")
     _require_chinese(criteria, overall_comment)
+    explanations = [overall_comment] + [
+        text
+        for c in criteria
+        for text in [c["summary"]] + [e["comment"] for e in c["strengths"] + c["issues"]]
+    ]
+    count_corrections = _count_corrections(explanations, essay)
     kept_priorities = [p for p in priorities if not sources.unsourced(p)]
     removed = {
         "criteria": sum(1 for c in criteria for i in c["issues"] if i.get("suggestion_removed")),
@@ -349,6 +390,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             f"（{parts}），避免把没有来源的数据当作改进方法。"
         )
 
+    warnings += count_corrections
+
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
     overall = essay_lib.overall_band(scored) if len(scored) == len(essay_lib.CRITERIA) else None
     return {
@@ -361,6 +404,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "comparisons_checked": comparisons_checked,
         "argument": argument,
         "suggestions_removed": removed,
+        "count_corrections": count_corrections,
         "warnings": warnings,
     }
 

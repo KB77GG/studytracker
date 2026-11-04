@@ -343,7 +343,7 @@ class ParagraphBindingTest(unittest.TestCase):
         self.assertNotIn("essay", payload)
         self.assertIn('"argument": A', messages[0]["content"])
         self.assertIn("never inside a criterion", messages[0]["content"])
-        self.assertEqual(prompts.PROMPT_VERSION, "iwa-2026-11-04.5")
+        self.assertEqual(prompts.PROMPT_VERSION, "iwa-2026-11-04.6")
 
     def test_prompt_states_the_reviewed_judgment_rules(self):
         for phrase in (
