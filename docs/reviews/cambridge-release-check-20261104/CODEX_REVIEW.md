@@ -95,3 +95,11 @@ git diff --check
 ## 后续
 
 先由 Claude 核对八道分歧，按题型处理问题后再确定首批题目和验收标准。主句谓语的问题涉及规则口径，建议查同类后重新抽验；其余类别也应处理已点名题。发现并处理这些题之前，不把整批 8,048 道表述为“人工验收通过”。本轮不执行上线。
+
+## 发布确认
+
+结果已在独立分支 `codex/grammar-release-check-20261104` 发布，结果提交为 `6fe2de80b92101605164be9ba5199aa4b389be6c`。重新 fetch 后，12 个交付文件的 Git blob 与字节内容全部相同，完整 tree 一致。随后只补记本段与两份交接，CSV 内容保持不变。
+
+[该结果提交的 CI](https://github.com/KB77GG/studytracker/actions/runs/41852821745) 已完成：test 通过（Python 轻量测试与 Node 拼写队列均成功）；lint 的 Ruff check 未通过，format 步骤跳过，工作流将其设为 advisory，因此整体 CI 为 success。本次只新增审核文件，没有修改 Python 代码，也未清理代码规范检查问题。CI 仅检查仓库测试，语法结论来自上述逐题复核。
+
+本轮未推 main、未部署、未开 PR、未导入生产数据库，小程序未上传或发布。最终分支提交以 Git HEAD 为准。

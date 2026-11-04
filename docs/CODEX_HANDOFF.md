@@ -11,6 +11,7 @@
 - **验证**：在本机证据目录用 bundled Node `export_reviews.mjs` 写出 7 CSV，Artifact Tool 回读一致；bundled Python `verify_reviews.py` → 593 唯一题号、顺序/四列/四判定/说明≤40字/8,048清单包含关系全部通过。结果目录执行 `shasum -a 256 -c SHA256SUMS`（原6文件）与 `shasum -a 256 -c REVIEW_SHA256SUMS`（结果7文件）全部 OK；`git diff --check`。JSON 计数与逐题结果一致。本轮只验收题目，不重复跑出题流水线/应用本地测试；GitHub CI 需按交付精确 SHA 核对，不把旧 CI 当作本轮。
 - **边界**：未改题、未合 main、未部署、未开 PR、未操作生产服务器/数据库、未导入判定、小程序未上传/提审/发布，未调用大模型 API。其他任务已有的部署状态不属于本轮语法任务。完整 8,048 道未逐题审，已验 593，道题语法判断与应用 CI 是两类证据。
 - **下一步**：Claude `git fetch origin codex/grammar-release-check-20261104`，用报告给出的 `git show` 读取合并 CSV，先复核 8 道分歧（had to 的核心、be to/系表被动、and 内容范围、including、原句排印/悬垂分词）。处理已点名题并查同类，再由用户确认验收标准及发布范围。无需合 main 即可读取结果。
+- **已发布核验**：结果提交 `6fe2de80b92101605164be9ba5199aa4b389be6c` 已发布到 GitHub 上述分支，重新 fetch 后 12 个文件的 blob/字节及完整 Git tree 与本机一致，任务树 clean。精确提交 [CI 41852821745](https://github.com/KB77GG/studytracker/actions/runs/41852821745) 整体 success：test 的 Python 与 Node 两步骤均 success；lint 的 Ruff check 为 failure，format skipped，工作流将 lint 设为 advisory。本轮没有 Python 改动，不处理已有代码规范问题；CI 不证明题目语法正确。此发布确认仅补两份交接与验收报告，再提交同一分支，CSV 不变；最后 SHA 见本分支 Git HEAD，末次 CI 单独核对后在最终答复及本机交接记录。
 
 ## 2026-11-04 剑桥首批上线题（Claude，第二十二轮）
 
