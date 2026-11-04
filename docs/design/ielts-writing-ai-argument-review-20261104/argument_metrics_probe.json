@@ -1,0 +1,104 @@
+{
+  "source_head": "49b4c4e71c47355ae38a5fc46ef9a66c00e107be",
+  "network_calls": 0,
+  "scope": "synthetic clients and temporary databases; no private configuration",
+  "strong_off_position_paragraphs": {
+    "paragraphs": [
+      "off_position",
+      "off_position",
+      "off_position",
+      "off_position"
+    ],
+    "checks": [
+      {
+        "sample": "t2-strong",
+        "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+        "ok": true,
+        "detail": []
+      },
+      {
+        "sample": "t2-strong",
+        "check": "不应出现 off_position / unclear_position",
+        "ok": true,
+        "detail": []
+      }
+    ]
+  },
+  "malformed_items_not_counted": {
+    "raw_position_plus_list_entries": 13,
+    "malformed_entries": 8,
+    "normalizer_dropped": 0,
+    "metrics": {
+      "task2_evaluations": 1,
+      "with_argument": 1,
+      "with_position": 1,
+      "paragraphs": 4,
+      "problems": 0,
+      "dropped": 0,
+      "dropped_rate": 0.0,
+      "problem_types": {},
+      "paragraph_verdicts": {
+        "supports": 3,
+        "weak": 1
+      }
+    }
+  },
+  "eval_budget": {
+    "calls": 14,
+    "max_tokens": [
+      4500
+    ],
+    "retries": [
+      0
+    ],
+    "attempts": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "sample_states": [
+      "failed",
+      "failed",
+      "failed",
+      "failed",
+      "failed",
+      "failed",
+      "failed"
+    ],
+    "metrics": {
+      "task2_evaluations": 0,
+      "with_argument": 0,
+      "with_position": 0,
+      "paragraphs": 0,
+      "problems": 0,
+      "dropped": 0,
+      "dropped_rate": null,
+      "problem_types": {},
+      "paragraph_verdicts": {}
+    }
+  },
+  "malformed_role_reporting": {
+    "calls": 1,
+    "client_would_return_valid_on_second_call": true,
+    "recorded_model_response_ok": true,
+    "recorded_role": [
+      "body"
+    ],
+    "generation": {
+      "status": "failed",
+      "error_code": "internal_error"
+    },
+    "report_exception": "TypeError: unhashable type: 'list'"
+  }
+}

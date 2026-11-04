@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 论证结构49b4c4e离线复核未通过：3项问题，真实请求0/14
+
+- 用户已确认本批条件授权：离线复核通过后，7篇内置合成作文、仅评价、最多14次实际请求；不运行精修、改写或识图。**本轮复核未通过，实际付费/外部模型请求0次**，未读取/修改Key，没有启动本批账本。条件授权仍保留，修复复核通过后可继续同一范围，无需因本轮未执行而重复征询。
+- 审阅工作树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`：开工96025a2f clean，fetch并ff-only至 **49b4c4e71c47355ae38a5fc46ef9a66c00e107be**（论证业务b2f97796；同时带入上一轮改写7a83b20f/9ac3e5cd）。本轮未改业务源码，只新增7份报告/探针和本两交接文档，独立文档提交推同一功能分支，精确交付HEAD见git log。原工具私有.env仍ignored，不进入暂存。
+- 资料工作树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，origin/main f0e04041、behind103；原7 modified/22 untracked入口保留，网页、数据和其他任务改动未动。本轮仅本机 `docs/design/iwa-argument-review-20261104/` 与两份交接镜像新增/更新；旧审阅树及其他任务树未操作。
+- Mac/Python3.13.3精确完整测试命令：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/run_offline_tests.py` → exit0，**217/217 Python**（18.790s）、**8/8 Node**。假模型、临时库、loopback-only网络护栏；外部IWA_DATA_DIR未写入。实施树运行主资料树 `.venv/bin/ruff check tools/ielts_writing_ai`、`.venv/bin/black --check tools/ielts_writing_ai`（37文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check` 全通过。
+- 两个独立离线探针均由主agent重跑确认，准确命令在 `offline-verification.json`，仅替身/临时库，不联网；探针exit0仅表示执行成功，不表示产品通过。**3项P2**：① argument的role/verdict/type为数组或对象时TypeError，评价只调用替身1次后internal_error；首轮响应确已成功且JSON合法，对照组ready；build_report重放同一输出也崩溃。② 强文4段全off_position、problems为空，“不得偏离”仍通过。③ 13条返回内容中8条非对象问题被跳过，却报dropped0/0%，与“占全部返回条目”口径不符。
+- 正常预算/输出配置验证：7篇评价均返回不合格输出时，替身恰好14次、attempt0/1、max_tokens4500、HTTP retries0。此处14次全部离线，不是使用授权额度。原217测试未覆盖上述缺陷；不能据完整套件绿色宣布复核通过。
+- 共享交付 `docs/design/ielts-writing-ai-argument-review-20261104/`：README、argument_evidence_probe.py/json、argument_metrics_probe.py/json、offline-verification.json、offline-tests.log；含修复验收条件、便携--repo命令和明确统计口径。只含合成样本，不含Key/用户数据。主资料树另有runner、source-state源文件SHA和本机结果；本机镜像与runner未随旧main提交，跨电脑使用功能分支的共享目录。
+- **部署状态**：本轮没有代码修改、main合并、生产部署、后端/前端/数据库/服务器操作；没有新起试用服务；小程序未上传/提审/发布。只提交推送审阅材料和交接到功能分支。没有新增CI通过结论，不沿用旧CI代替当前检查。
+- **下一步**：Claude先拉功能分支报告，把3项场景加为正式回归并修复：类型先检查后查字典、剩余无有效段落再触发重试、报告可正常生成；强文检查同时考虑段落偏离；格式错误计入丢弃并定义分母。随后Mac复核，通过后执行已有7篇evaluate/14次上限授权。尚未验证真实论证判断/丢弃率/token峰值、新改写提示实际效果、Python3.10、教师评分校准、真实识图；本轮未重跑浏览器全流程。
+
 ## 2026-11-04（论证结构）雅思写作 AI 试用工具：Task 2 论证结构检查（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户提出要重视论证逻辑，包括论点与论据结合、分论点紧扣主旨、让步段有效，以及二语者思维发散、逻辑框架不明的问题，并同意我给出的方案（不单独计分，用来解释 TR / CC）。基线是 `9ac3e5c`（业务 `7a83b20`，上一轮的 193 项测试）。本轮没有任何模型调用。

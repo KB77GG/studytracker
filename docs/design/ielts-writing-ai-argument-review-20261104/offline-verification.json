@@ -1,0 +1,71 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "49b4c4e71c47355ae38a5fc46ef9a66c00e107be",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 19.02
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.14
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests_passed": 217,
+  "node_tests_passed": 8,
+  "paid_requests": 0,
+  "paid_limit": 14,
+  "conditional_authorization": "Review must pass before seven evaluate-only requests plus at most seven validation retries. No refine/rewrite/vision.",
+  "review_passed": false,
+  "findings": 3,
+  "additional_checks": [
+    {
+      "command": ".venv/bin/ruff check tools/ielts_writing_ai",
+      "returncode": 0
+    },
+    {
+      "command": ".venv/bin/black --check tools/ielts_writing_ai",
+      "returncode": 0,
+      "files": 37
+    },
+    {
+      "command": "node --check tools/ielts_writing_ai/static/iwa.js",
+      "returncode": 0
+    },
+    {
+      "command": "git diff --check",
+      "returncode": 0
+    }
+  ],
+  "probe_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/argument_evidence_probe.py --repo /private/tmp/studytracker-iwa-realcheck-review-20261103 --output /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/argument_evidence_probe.json",
+    "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/argument_metrics_probe.py --repo /private/tmp/studytracker-iwa-realcheck-review-20261103 --output /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/argument_metrics_probe.json"
+  ],
+  "probe_returncodes": [
+    0,
+    0
+  ],
+  "offline_suite_command": "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-review-20261104/run_offline_tests.py",
+  "probe_exit_note": "Probes record observations; exit0 is not product acceptance."
+}

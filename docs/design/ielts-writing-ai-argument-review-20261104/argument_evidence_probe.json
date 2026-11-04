@@ -1,0 +1,107 @@
+{
+  "source_head": "49b4c4e71c47355ae38a5fc46ef9a66c00e107be",
+  "network_calls": 0,
+  "enum_cases": [
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": "unknown_enum",
+      "outcome": "normalized",
+      "dropped": 1
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": [],
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'list'"
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": {},
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'dict'"
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": "unknown_enum",
+      "outcome": "normalized",
+      "dropped": 1
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": [],
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'list'"
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": {},
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'dict'"
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": "unknown_enum",
+      "outcome": "normalized",
+      "dropped": 1
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": [],
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'list'"
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": {},
+      "outcome": "exception",
+      "exception": "TypeError",
+      "message": "unhashable type: 'dict'"
+    }
+  ],
+  "pipeline": {
+    "first_response": "otherwise valid FakeClient JSON with role: [introduction]",
+    "second_response_if_requested": "valid FakeClient JSON",
+    "actual_fake_calls": 1,
+    "recorded_response": {
+      "ok": true,
+      "error": null,
+      "json_ok": true,
+      "response_received": true,
+      "http_status": 200,
+      "usage": {
+        "demo": true
+      }
+    },
+    "recorded_first_role": [
+      "introduction"
+    ],
+    "unmodified_fake_control": {
+      "status": "ready",
+      "calls": 1
+    },
+    "status": "failed",
+    "error_code": "internal_error",
+    "error_message": "生成时发生内部错误"
+  },
+  "truncation_observation": {
+    "raw_quote_exists": false,
+    "displayed_quote_exists": true,
+    "displayed_length": 400,
+    "dropped": 0,
+    "interpretation": "Full raw quote was not verified, but no invented suffix is displayed; not a separate blocking finding."
+  }
+}
