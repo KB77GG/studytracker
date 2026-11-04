@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import random
 import subprocess
 import sys
 import tempfile
@@ -13,6 +14,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from scripts import export_grammar_needs_review as needs_export
+from scripts import select_grammar_release as release
 from scripts.generate_grammar_candidates import collect
 from scripts.grammar_items import spans as roles
 from scripts.grammar_items.checks import Reason as R
@@ -2100,6 +2102,43 @@ class NeedsReviewExportTests(unittest.TestCase):
         self.assertEqual(row["句子（【】标出目标）"], "Prices fell 【because demand dropped】 .")
         self.assertEqual(row["机器答案"], "原因")
         self.assertEqual(row["待复核原因"], needs_export.REASONS_ZH["subordinator_ambiguous"])
+
+
+class ReleaseSelectionTests(unittest.TestCase):
+    """First Cambridge release set (user decision 2026-11-04)."""
+
+    def item(self, n, template, passage, sid, status="auto_pass"):
+        return {
+            "item_id": f"gi_v02_{n:012d}",
+            "template": template,
+            "status": status,
+            "difficulty": "easy",
+            "source": {"passage_id": passage, "sentence_id": sid},
+        }
+
+    def test_pool_keeps_clean_cambridge_sentences_only(self):
+        items = [
+            self.item(1, "main_verb_tap", "ielts5_test1_p1", "A-01"),
+            self.item(2, "subject_span", "ielts5_test1_p1", "A-01", status="needs_review"),
+            self.item(3, "main_verb_tap", "ielts5_test1_p1", "A-02"),
+            self.item(4, "main_verb_tap", "reading_jijing_1_test_1_p1", "A-01"),
+        ]
+        self.assertEqual([i["item_id"] for i in release.release_pool(items)], [items[2]["item_id"]])
+
+    def test_capped_template_takes_one_item_per_sentence_and_spreads_books(self):
+        items = [
+            self.item(n * 10 + k, "finite_or_not", f"ielts{4 + n % 2}_test1_p1", f"A-{n:02d}")
+            for n in range(20)
+            for k in range(3)
+        ]
+        chosen = release.pick(items, 10, random.Random(1))
+        self.assertEqual(len(chosen), 10)
+        self.assertEqual(len({release.sentence_key(i) for i in chosen}), 10)
+        self.assertEqual(Counter(release.book(i) for i in chosen), {"ielts4": 5, "ielts5": 5})
+
+    def test_uncapped_template_is_taken_whole(self):
+        items = [self.item(n, "clause_boundary", "ielts5_test1_p1", "A-01") for n in range(3)]
+        self.assertEqual(release.pick(items, None, random.Random(1)), items)
 
 
 class CoordinatePromptTests(unittest.TestCase):
