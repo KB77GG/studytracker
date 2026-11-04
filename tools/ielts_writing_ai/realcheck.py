@@ -18,6 +18,7 @@ import dataclasses
 import hashlib
 import json
 import math
+import re
 import statistics
 import tempfile
 import time
@@ -173,6 +174,7 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
             if item["task_type"] not in essay_lib.MIN_WORDS:
                 raise RealCheckError(f"第 {number} 行 task_type 只能是 task1 / task2")
             item.setdefault("id", f"line-{number}")
+            _validate_teacher_findings(item, number)
             if item.get("image"):
                 image = (path.parent / item["image"]).resolve()
                 if not image.is_file():
@@ -183,6 +185,24 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
         raise RealCheckError("没有样本")
     _validate_sample_ids(items)
     return items[:limit] if limit else items
+
+
+def _validate_teacher_findings(item: dict, number: int) -> None:
+    """Optional teacher annotations: [{"quote": verbatim span, "note": teacher's comment}].
+    Quotes must be in the essay so they can be matched against the AI's findings."""
+    findings = item.get("teacher_findings")
+    if findings is None:
+        return
+    if not isinstance(findings, list):
+        raise RealCheckError(f"第 {number} 行 teacher_findings 必须是列表")
+    for n, entry in enumerate(findings, 1):
+        quote = entry.get("quote") if isinstance(entry, dict) else None
+        if not isinstance(quote, str) or not quote.strip():
+            raise RealCheckError(f"第 {number} 行 teacher_findings 第 {n} 条缺少 quote")
+        if not essay_lib.contains_quote(item["essay"], quote):
+            raise RealCheckError(
+                f"第 {number} 行 teacher_findings 第 {n} 条的 quote 不在作文里：{quote[:40]}"
+            )
 
 
 def _validate_sample_ids(items: list[dict]) -> None:
@@ -327,6 +347,7 @@ def _run_sample(
         "level": item.get("level"),
         "expect": item.get("expect") or {},
         "teacher": item.get("teacher") or {},
+        "teacher_findings": item.get("teacher_findings") or [],
         "submission": {
             k: submission.get(k)
             for k in (
@@ -569,6 +590,71 @@ def _argument_metrics(run_data: dict) -> dict:
         "attempts_rejected_for_argument": rejected,
         "problem_types": dict(types.most_common()),
         "paragraph_verdicts": dict(verdicts.most_common()),
+    }
+
+
+def ai_spans(result: dict) -> list[str]:
+    """Every essay span the evaluation points at as a problem or a place to improve."""
+    spans = [i.get("quote") for c in result.get("criteria") or [] for i in c.get("issues") or []]
+    argument = result.get("argument") or {}
+    for problem in argument.get("problems") or []:
+        spans += [problem.get("quote"), problem.get("conflicts_with")]
+    spans += [i.get("quote") for i in argument.get("improvements") or []]
+    spans += [c.get("quote") for c in result.get("consistency_issues") or []]
+    return [s for s in spans if s]
+
+
+def _words(text: str) -> set[str]:
+    return set(re.findall(r"[a-z0-9']+", essay_lib.squash(text)))
+
+
+def spans_overlap(a: str, b: str) -> bool:
+    """Same place in the essay: one contains the other, or they share at least half
+    of the shorter span's words. Overlap is location only, not the same judgment."""
+    sa, sb = essay_lib.squash(a).strip(" .,;:!?"), essay_lib.squash(b).strip(" .,;:!?")
+    if not sa or not sb:
+        return False
+    if sa in sb or sb in sa:
+        return True
+    wa, wb = _words(a), _words(b)
+    shorter = min(len(wa), len(wb))
+    return bool(shorter) and len(wa & wb) * 2 >= shorter
+
+
+def teacher_coverage(sample: dict) -> dict | None:
+    findings = sample.get("teacher_findings") or []
+    result = (sample["generations"].get("evaluate") or {}).get("result")
+    if not findings or not result:
+        return None
+    spans = ai_spans(result)
+    rows = [
+        {**f, "covered": any(spans_overlap(f["quote"], span) for span in spans)} for f in findings
+    ]
+    extra = [s for s in spans if not any(spans_overlap(f["quote"], s) for f in findings)]
+    return {
+        "findings": rows,
+        "covered": sum(1 for r in rows if r["covered"]),
+        "total": len(rows),
+        "ai_spans": len(spans),
+        "ai_spans_not_marked_by_teacher": len(extra),
+    }
+
+
+def _teacher_findings_metrics(run_data: dict) -> dict | None:
+    per_sample = {}
+    for sample in run_data["samples"]:
+        coverage = teacher_coverage(sample)
+        if coverage:
+            per_sample[sample["id"]] = coverage
+    if not per_sample:
+        return None
+    covered = sum(c["covered"] for c in per_sample.values())
+    total = sum(c["total"] for c in per_sample.values())
+    return {
+        "covered": covered,
+        "total": total,
+        "rate": _rate(covered, total),
+        "samples": per_sample,
     }
 
 
@@ -992,6 +1078,7 @@ def build_report(
         "refine_rewrite": _refine_rewrite_metrics(run_data),
         "sanity": _sanity(run_data),
         "calibration": _calibration(run_data),
+        "teacher_findings": _teacher_findings_metrics(run_data),
         "tokens": usage["total"]["tokens"],
         "usage": usage,
         "estimated_cost": cost,
@@ -1157,6 +1244,32 @@ def render_markdown(report: dict) -> str:
     for check in report["sanity"]["checks"]:
         mark = {True: "✓", False: "✗", None: "–"}[check["ok"]]
         lines.append(f"- {mark} {check['sample']}：{check['check']}（实际：{check['detail']}）")
+    tf = report.get("teacher_findings")
+    if tf:
+        lines += [
+            "",
+            "## 与老师批注对照（只看位置是否重合）",
+            "",
+            f"老师批注的 {tf['total']} 处里，AI 也指出了同一位置的有 {tf['covered']} 处"
+            f"（{_pct(tf['rate'])}）。位置重合不等于判断相同；AI 指出、老师没批的地方不一定"
+            "是误判，要人工看。",
+            "",
+            "| 样本 | 老师批注 | AI 覆盖 | AI 其他位置 | 没覆盖的老师批注 |",
+            "|---|---|---|---|---|",
+        ]
+        for sample_id, c in tf["samples"].items():
+            missed = (
+                "；".join(
+                    f"{f['quote'][:30]}（{f.get('note') or '—'}）"
+                    for f in c["findings"]
+                    if not f["covered"]
+                )
+                or "—"
+            )
+            lines.append(
+                f"| {sample_id} | {c['total']} | {c['covered']} | "
+                f"{c['ai_spans_not_marked_by_teacher']} | {missed} |"
+            )
     if report["calibration"]:
         lines += [
             "",

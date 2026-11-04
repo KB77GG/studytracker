@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.6"
+PROMPT_VERSION = "iwa-2026-11-04.7"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -40,6 +40,10 @@ COMMON_DESCRIPTORS = (
 ARGUMENT_CHECKLIST = (
     "Argument check (Task 2): a diagnosis that explains Task Response and Coherence & "
     "Cohesion; it is NOT a separate score. Judge the WHOLE essay and report only real faults. "
+    "(0) Question type: identify what the question requires (discuss both views AND give "
+    "an opinion; to what extent agree; whether advantages outweigh disadvantages; two "
+    "questions) and check every required part is answered in that form; a missing part "
+    "(no own opinion, no verdict on 'outweigh') is a Task Response issue. "
     "(1) Position. A qualified position is ONE position, e.g. 'mostly public transport, but "
     "roads where necessary' or 'partly agree': naming exceptions or admitting the other side "
     "is sometimes needed is neither unclear nor inconsistent. Vague wording that the body or "
@@ -215,6 +219,14 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "never paraphrase, translate or correct inside 'quote'. A criterion with no "
         "verifiable quote will be rejected. An issue must be an error or a clear weakness; "
         "an equally good alternative wording is not an issue.",
+        "Language advice: read the whole sentence before calling a structure wrong (a "
+        "correct which-clause or a natural phrase such as 'much less crowded' is not an "
+        "error, and accurate, natural wording comes before rarer words). A correction or "
+        "model sentence must keep the writer's meaning: never add facts, causes, figures, "
+        "multipliers or trends the writer did not state (do not turn 'do not have cars' "
+        "into 'cannot afford a car', or two data points into 'a steady climb'). Give a "
+        "complete, usable sentence, not a fragment. Before describing what a paragraph "
+        "or the overview says, check that it really says it.",
         "Counts must match the essay: paragraph_count is given (one paragraph per line); "
         "only say a word is repeated if it really appears several times.",
     ]

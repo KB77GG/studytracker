@@ -14,6 +14,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from .realcheck import teacher_coverage
+
 CRITERIA = ("task", "coherence", "lexical", "grammar")
 
 
@@ -207,6 +209,7 @@ def sample_view(run_data: dict, sample: dict) -> dict:
             else None
         ),
         "teacher": sample.get("teacher") or {},
+        "teacher_coverage": teacher_coverage(sample),
     }
 
 
@@ -458,6 +461,17 @@ def render_manual_review(cmp: dict) -> str:
                     )
             for note in view["count_corrections"]:
                 lines.append(f"| {tag} | 计数更正 | — | — | {_quote(note)} |  |  |")
+        coverage_a, coverage_b = a.get("teacher_coverage"), b.get("teacher_coverage")
+        if coverage_a or coverage_b:
+            rows_a = (coverage_a or {}).get("findings") or []
+            rows_b = (coverage_b or {}).get("findings") or []
+            for n, finding in enumerate(rows_a or rows_b):
+                mark_a = "是" if n < len(rows_a) and rows_a[n]["covered"] else "否"
+                mark_b = "是" if n < len(rows_b) and rows_b[n]["covered"] else "否"
+                lines.append(
+                    f"| 老师批注 | A 覆盖：{mark_a} / B 覆盖：{mark_b} | — | "
+                    f"{_quote(finding['quote'])} | {_quote(finding.get('note'))} |  |  |"
+                )
         lines.append("| 两次都漏报 | — | — | — | — |  |  |")
     return "\n".join(lines) + "\n"
 

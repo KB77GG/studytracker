@@ -58,7 +58,7 @@ class WholeValueTest(unittest.TestCase):
         sources = figures.Sources("Spending rose to 1,500 million, about 7.50 per head.")
         self.assertEqual(sources.unsourced("写成 1500 million"), [])
         self.assertEqual(sources.unsourced("约 7.5 per head"), [])
-        self.assertEqual(sources.unsourced("改成 15 million"), ["15"])
+        self.assertEqual(sources.unsourced("改成 15 million"), ["15 million"])
         self.assertEqual(sources.unsourced("用 2.5% 的增长"), ["2.5%"])
         self.assertEqual(sources.unsourced("补 1 个例子，放在第 2 段"), [])
         self.assertEqual(sources.unsourced("可以写百分之八十"), ["百分之八十"])

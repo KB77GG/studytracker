@@ -166,7 +166,7 @@ class SupportFoundTest(unittest.TestCase):
         self.assertIn('"support_found": [str (verbatim)]', messages[0]["content"])
         self.assertIn("an equally good alternative wording is not an issue", messages[0]["content"])
         self.assertIn('"paragraph_count": 5', messages[1]["content"])
-        self.assertEqual(prompts.PROMPT_VERSION, "iwa-2026-11-04.6")
+        self.assertEqual(prompts.PROMPT_VERSION, "iwa-2026-11-04.7")
 
 
 class CountClaimTest(unittest.TestCase):
