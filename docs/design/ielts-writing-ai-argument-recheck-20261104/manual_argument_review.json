@@ -1,0 +1,398 @@
+{
+  "review_type": "Independent manual textual audit; qualitative judgments, not an official IELTS regrade",
+  "source": "results/run_data.json; 8f7be6c7, prompt iwa-2026-11-04.4; seven synthetic samples, six Task 2",
+  "scope": "All six final Task 2 argument maps were read against the original essay and transport prompt. No model calls or external-source verification.",
+  "automated_facts": {
+    "all_original_evidence_strings_verified_by_exact_substring": true,
+    "sample_structure": [
+      {
+        "sample_id": "t2-weak",
+        "physical_paragraphs": 5,
+        "model_paragraph_entries": 5,
+        "position_consistent": false,
+        "problem_types": [
+          "unclear_position",
+          "off_position",
+          "example_not_linked",
+          "conclusion_inconsistent"
+        ]
+      },
+      {
+        "sample_id": "t2-mid",
+        "physical_paragraphs": 5,
+        "model_paragraph_entries": 5,
+        "position_consistent": true,
+        "problem_types": [
+          "concession_unanswered",
+          "unsupported"
+        ]
+      },
+      {
+        "sample_id": "t2-good",
+        "physical_paragraphs": 5,
+        "model_paragraph_entries": 5,
+        "position_consistent": true,
+        "problem_types": [
+          "unsupported",
+          "example_not_linked"
+        ]
+      },
+      {
+        "sample_id": "t2-strong",
+        "physical_paragraphs": 5,
+        "model_paragraph_entries": 5,
+        "position_consistent": true,
+        "problem_types": [
+          "unsupported",
+          "unsupported",
+          "conclusion_inconsistent"
+        ]
+      },
+      {
+        "sample_id": "t2-off-topic",
+        "physical_paragraphs": 5,
+        "model_paragraph_entries": 5,
+        "position_consistent": true,
+        "problem_types": [
+          "irrelevant",
+          "off_position",
+          "off_position",
+          "off_position"
+        ]
+      },
+      {
+        "sample_id": "t2-under-length",
+        "physical_paragraphs": 1,
+        "model_paragraph_entries": 5,
+        "position_consistent": true,
+        "problem_types": [
+          "unsupported",
+          "unsupported",
+          "concession_unanswered",
+          "overgeneralized"
+        ]
+      }
+    ],
+    "strong_self_conflict": {
+      "position_consistent": true,
+      "conclusion_paragraph_comment": "结论与立场一致，无新论点，但基本复述前文，未整合让步条件。",
+      "problem_type": "conclusion_inconsistent",
+      "problem_comment": "结论未纳入让步段承认的农村与货运例外，使立场表述比引言更绝对，前后略有落差。"
+    },
+    "underlength_mapping_note": "Original is one physical paragraph, but model returns five paragraph entries for sentence roles; the rubric summary itself acknowledges one paragraph. This affects displayed paragraph interpretation/counts, not quote existence."
+  },
+  "manual_findings": [
+    {
+      "sample_id": "t2-weak",
+      "finding": "部分同意被判成偏离和前后矛盾",
+      "review_judgment": "likely_false_positive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "off_position",
+          "label": "分论点偏离立场或题目",
+          "quote": "Secondly, new road is also important.",
+          "comment": "整段为修路辩护，与“优先公共交通”的主立场相冲突，且未作让步后回扣。",
+          "suggestion": "把该段改为让步段，先承认修路作用，再说明为何公共交通仍应优先。"
+        },
+        {
+          "type": "conclusion_inconsistent",
+          "label": "结尾与立场不一致",
+          "quote": "Both is important for the people and the country develop.",
+          "comment": "结论同时肯定双方，与“公共交通更重要”的主立场不一致。",
+          "suggestion": "结论只重申主立场，并说明修路是有限补充。"
+        }
+      ],
+      "original_evidence": [
+        "I am agree with this opinion in some way but not all.",
+        "But I think public transport is more important than road.",
+        "In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary."
+      ],
+      "reason": "原文从部分同意到公交优先、必要时修路的结论相容。支持必要道路并不否定公交优先；最后Both is important也不等于两者同等优先。模型截取末句而忽略前一句的优先次序，把可改善的表达清晰度升级为论点冲突。"
+    },
+    {
+      "sample_id": "t2-weak",
+      "finding": "立场表述可更明确，但不能据此认定不一致",
+      "review_judgment": "mixed",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "unclear_position",
+          "label": "立场不清或前后不一致",
+          "quote": "I am agree with this opinion in some way but not all.",
+          "comment": "开头没有明确同意程度，全文立场不清晰。",
+          "suggestion": "用一句话明确立场，如：I largely agree, though roads should not be ignored entirely."
+        }
+      ],
+      "original_evidence": [
+        "I am agree with this opinion in some way but not all.",
+        "But I think public transport is more important than road."
+      ],
+      "reason": "开头some way but not all较笼统，明确程度是合理建议；但position.consistent=false以及全文摇摆的判断没有得到全文支持。unclear_position合并清晰度与一致性，掩盖这一区别。"
+    },
+    {
+      "sample_id": "t2-weak",
+      "finding": "通勤例子存在回扣，但不能独自证明扩路是解决方式",
+      "review_judgment": "mixed",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "example_not_linked",
+          "label": "例子没有回扣论点",
+          "quote": "For example my father drive to work everyday and he spend two hour in the road.",
+          "comment": "例子只陈述事实，没有说明它如何证明“需要修路”。",
+          "suggestion": "加一句结果回扣：This wasted time shows why some new roads are still needed."
+        }
+      ],
+      "original_evidence": [
+        "If there is no new road the traffic jam will be very bad and people waste a lot of time.",
+        "For example my father drive to work everyday and he spend two hour in the road.",
+        "This is very bad for him and for the economy also."
+      ],
+      "reason": "例子前有拥堵浪费时间，后有个人和经济后果，不能说只提及事实而完全没有回扣。合理的改进点是解释为什么在该情境下需要道路而不是公交，而非机械追加一个结果句。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "finding": "限定范围的让步不必被推翻",
+      "review_judgment": "likely_overprescriptive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "concession_unanswered",
+          "label": "让步后没有反驳",
+          "quote": "On the other hand, new roads are sometimes needed.",
+          "comment": "让步段只陈述修路的必要性，没有说明为何这仍不改变'优先投资公交'的总体立场，让步未被回应。",
+          "suggestion": "在让步段末尾加一句回扣，如：\"Nevertheless, these cases are limited, and in most urban areas public transport remains the more cost-effective priority.\""
+        }
+      ],
+      "original_evidence": [
+        "I mostly agree with this view, although I believe some road building is still necessary.",
+        "In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars.",
+        "However, they should still build roads in places where public transport is not practical."
+      ],
+      "reason": "道路必要性是开头限定立场的一部分，农村公交不适用的理由已与末段例外对应。增加段尾衔接可改善流畅度，但把没有逐段反驳当作论证缺陷，可能迫使作者反驳自己的合法例外。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "finding": "环境理由可以展开，但并非毫无机制",
+      "review_judgment": "improvement_opportunity",
+      "confidence": "medium",
+      "model_problems": [
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.",
+          "comment": "环境论点只有概括性说明，缺少具体机制或例证，属于未充分展开的断言。",
+          "suggestion": "补充具体例证或数据化对比，如：\"A full bus can cut emissions per person by over 80% compared with the same number of cars.\""
+        }
+      ],
+      "original_evidence": [
+        "Cars produce a lot of air pollution and carbon emissions, which are harmful to people's health and contribute to climate change.",
+        "Public transport produces less pollution per passenger, so it is a more sustainable option in the long term."
+      ],
+      "reason": "现有说明较短，补充分流和人均排放原因有价值；但理由已有污染、健康与可持续性因果关系，不宜因缺少数字例证就认定没有支撑。建议中的80%数字没有出现在原文，且本次未核实其外部真实性。"
+    },
+    {
+      "sample_id": "t2-good",
+      "finding": "要求具体例证是提升建议，不是没有论证",
+      "review_judgment": "improvement_opportunity",
+      "confidence": "medium",
+      "model_problems": [
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "there is considerable evidence that new roads tend to fill up quickly",
+          "comment": "声称有大量证据却未给出任何具体来源或实例，属于未充分展开的断言。",
+          "suggestion": "补一个具体城市或研究实例，说明新路建成后车流量在多长时间内回升。"
+        }
+      ],
+      "original_evidence": [
+        "Moreover, there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive.",
+        "Expanding road networks may therefore offer only temporary relief before congestion returns."
+      ],
+      "reason": "considerable evidence没有给出具体例子可被建议改写，但as引出的诱导需求机制和therefore结果都已经存在；不能把具体案例作为唯一可接受的支撑。"
+    },
+    {
+      "sample_id": "t2-good",
+      "finding": "气候目标句不是一个未回扣的例子",
+      "review_judgment": "likely_false_positive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "example_not_linked",
+          "label": "例子没有回扣论点",
+          "quote": "which is increasingly important as cities attempt to meet climate targets",
+          "comment": "提到气候目标但未说明公共交通如何具体贡献，例子/机制没有回扣到减排主张。",
+          "suggestion": "加一句量化说明，如一辆满载公交可替代数十辆私家车，从而把减排机制与主张连接起来。"
+        }
+      ],
+      "original_evidence": [
+        "At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets."
+      ],
+      "reason": "完整句已将出行方式转移、污染/排放下降与气候目标连接。模型只引用which从句并标为example_not_linked，忽略前半句的作用；可增加细节，但当前分类和缺机制结论不准确。"
+    },
+    {
+      "sample_id": "t2-strong",
+      "finding": "推理链已有，具体城市案例只是可选增强",
+      "review_judgment": "likely_overprescriptive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.",
+          "comment": "以 'experience from many large cities' 概括代替具体例证，支撑停留在推理层面。",
+          "suggestion": "补一个具体城市案例及结果，如洛杉矶 405 号公路扩建后拥堵迅速回升。"
+        }
+      ],
+      "original_evidence": [
+        "Yet experience from many large cities suggests otherwise: widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones.",
+        "This phenomenon, often described as induced demand, means that road building can become an expensive treadmill."
+      ],
+      "reason": "原文明确给出扩路降低开车成本、吸引车流、新路再次拥堵的机制与结果。添加具体案例可增强表达，但以缺城市名称为由标为unsupported夸大了缺陷。没有教师评分基准，不能据此重新估计应得分数。"
+    },
+    {
+      "sample_id": "t2-strong",
+      "finding": "步行社区被错误描述为没有机制或结果",
+      "review_judgment": "likely_false_positive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place, and it cuts emissions",
+          "comment": "步行社区与减排两个论点仅被提及，未解释机制或给出结果。",
+          "suggestion": "拆句并各给一个简短机制或实例，说明车站周边如何形成高密度开发、进而减少出行距离与排放。"
+        }
+      ],
+      "original_evidence": [
+        "Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place, and it cuts emissions at a time when the transport sector remains one of the most stubborn sources of carbon."
+      ],
+      "reason": "原句已经有车站周边密集可步行社区→出行距离减少的机制/结果。减排环节还可进一步解释，也可拆长句；但评论说两个论点仅被提及、未解释机制或给出结果，与原句不符。"
+    },
+    {
+      "sample_id": "t2-strong",
+      "finding": "结尾限定程度与开头相容，模型自身判断矛盾",
+      "review_judgment": "likely_false_positive",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "conclusion_inconsistent",
+          "label": "结尾与立场不一致",
+          "quote": "On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.",
+          "comment": "结论未纳入让步段承认的农村与货运例外，使立场表述比引言更绝对，前后略有落差。",
+          "suggestion": "在结论中补上条件，如 'provided that targeted road upgrades for rural areas and freight are funded separately'。"
+        }
+      ],
+      "original_evidence": [
+        "I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.",
+        "Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.",
+        "On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match."
+      ],
+      "reason": "lion's share表示大部分而非全部资金，rarely也非绝对否定道路，结尾不重述例外不等于撤销例外。模型position.consistent=true，结尾段comment明确写结论与立场一致，却同时给conclusion_inconsistent问题，存在直接内部冲突。"
+    },
+    {
+      "sample_id": "t2-off-topic",
+      "finding": "识别在线教育作文没有回答交通投资题",
+      "review_judgment": "supported",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "irrelevant",
+          "label": "包含与论证无关的内容",
+          "quote": "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.",
+          "comment": "全文主题与题目（政府投资公共交通 vs 修建新路）完全不符，属于严重跑题。",
+          "suggestion": "立即重写全文，围绕公共交通投资与道路建设的利弊展开，确保每段都出现题目关键词。"
+        },
+        {
+          "type": "off_position",
+          "label": "分论点偏离立场或题目",
+          "quote": "The most obvious benefit of online learning is flexibility.",
+          "comment": "主体段论点与题目要求无关，无法为任何立场提供支撑。",
+          "suggestion": "改为讨论公共交通的优势，如 'Investing in public transport reduces congestion and pollution more effectively than building new roads.'"
+        },
+        {
+          "type": "off_position",
+          "label": "分论点偏离立场或题目",
+          "quote": "However, classroom learning provides things that are difficult to replicate on a screen.",
+          "comment": "让步段没有回应'修建新路'一方的论点，让步对象错误。",
+          "suggestion": "让步段应承认新建道路在货运或偏远地区的必要性，然后反驳并回到支持公共交通的立场。"
+        },
+        {
+          "type": "off_position",
+          "label": "分论点偏离立场或题目",
+          "quote": "In conclusion, online learning is a valuable supplement that makes education more accessible and flexible",
+          "comment": "结论虽与自身立场一致，但总结的是错误话题，无法与题目立场对应。",
+          "suggestion": "结论应重申：政府应优先投资公共交通，同时在有需要时适度修建道路。"
+        }
+      ],
+      "original_evidence": [
+        "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.",
+        "In my view, although online courses offer clear advantages, face-to-face education will remain essential."
+      ],
+      "reason": "题干要求公共交通与道路投资，全文实际讨论在线学习和课堂。离题判断有明确文本依据；立场自身一致与相对题目离题两者可同时成立，模型在这里有正确区分。"
+    },
+    {
+      "sample_id": "t2-under-length",
+      "finding": "展开不足有依据，强制让步反驳仍偏机械",
+      "review_judgment": "mixed",
+      "confidence": "high",
+      "model_problems": [
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "It is also cheaper for students and old people who do not have cars.",
+          "comment": "只给出断言，没有解释低价公交如何支持“政府应优先投资公交”的立场。",
+          "suggestion": "补充机制与例子：低价票让低收入者能通勤，减少购车需求，如某城市地铁票价补贴后私家车出行下降。"
+        },
+        {
+          "type": "unsupported",
+          "label": "论点缺少解释或支撑",
+          "quote": "buses and trains produce less pollution than private cars",
+          "comment": "环保理由未被展开，缺少数据或具体例子支撑。",
+          "suggestion": "加入具体说明，例如一辆满载公交车的人均排放远低于同等人数的私家车，并回扣到政府投资公交可改善空气质量。"
+        },
+        {
+          "type": "concession_unanswered",
+          "label": "让步后没有反驳",
+          "quote": "However, new roads are still useful in the countryside, where there are not many buses.",
+          "comment": "让步提出后没有反驳，读者不清楚为何最终仍应优先公交。",
+          "suggestion": "立即反驳：乡村道路可由地方小预算维护，而全国性的拥堵与排放问题更需集中投资公交。"
+        },
+        {
+          "type": "overgeneralized",
+          "label": "过度概括",
+          "quote": "so it reduces traffic jams in big cities",
+          "comment": "“减少大城市拥堵”是笼统概括，未说明条件（如班次密度、覆盖率）。",
+          "suggestion": "限定条件：只有在班次频繁、覆盖广时，公交才能有效分流通勤者，从而缓解拥堵。"
+        }
+      ],
+      "original_evidence": [
+        "Public transport can carry many people at the same time, so it reduces traffic jams in big cities.",
+        "However, new roads are still useful in the countryside, where there are not many buses.",
+        "In conclusion, public transport should be the priority, but some roads are still necessary."
+      ],
+      "reason": "97词原稿观点非常简短，展开不足和增加条件/例证的建议合理。但公交优先与乡村道路例外仍一致，未逐句反驳例外不是必然错误。载客量→减少拥堵已有简短机制，不能说完全没有机制；应区别机制简单与机制缺失。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "finding": "建议加入未附来源的精确排放比例",
+      "review_judgment": "unverified_specificity",
+      "confidence": "high",
+      "model_suggestion": "补充具体例证或数据化对比，如：\"A full bus can cut emissions per person by over 80% compared with the same number of cars.\"",
+      "automated_fact": "The model proposes over 80%; this percentage does not appear in the original essay. No source accompanies it.",
+      "reason": "不能把这种建议当作已核实的事实直接加入作文。本次没有验证该比例的外部真实性，所以不宣称数字必然错误；应改用有依据的机制说明、明确的假设情境，或先核实数据出处。"
+    }
+  ],
+  "assessment": "Data-shape and quotation checks passed, but argument judgment quality is not ready to be treated as reliable feedback without teacher review. Strong sample sanity failure reflects substantive false-positive concerns, not merely an overly tight issue-count threshold.",
+  "prompt_causality": "Inference only: the prompt requires claim->mechanism->example->result, rebuttal after concessions, and reflecting every problem in TR/CC bands. Observed comments repeatedly demand those forms even where a bounded stance or causal explanation already supports the argument. No controlled A/B test was run, so the prompt is a plausible cause rather than a proven sole cause.",
+  "next_steps": [
+    "Treat mechanisms, examples, comparisons and qualified reasoning as alternative support forms; absence of a named city/statistic is not by itself an unsupported argument.",
+    "Judge stance consistency over the whole essay; distinguish a genuine contradiction from a bounded exception, and require opposing passage pairs for inconsistency claims.",
+    "Allow a concession that defines the scope of the chosen position; demand rebuttal only when an opposing argument actually defeats or weakens that position.",
+    "Check agreement among position.consistent, paragraph verdict/comment and issue types; semantic conflicts should be surfaced rather than silently kept.",
+    "Bind paragraph maps to actual paragraph identifiers, or explicitly name the output rhetorical units rather than paragraphs.",
+    "Use these existing outputs as offline regressions; do not weaken the strong-sample sanity threshold solely to make this batch pass.",
+    "Do not invent a precise percentage or real-world study/city outcome merely to satisfy the example slot; use supported mechanisms or clearly hypothetical examples, and verify any specific factual claim before recommending it."
+  ]
+}

@@ -1,5 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 论证结构复核通过并完成8次实测：最终7/7，语义反馈仍需修正
+
+- 用户原条件授权：离线复核通过后7篇内置合成作文、仅evaluate、最多14次实际请求。旧三项经复核关闭后执行；**本批已完成，实际8/14**，不自动使用剩余6次。没有运行精修/改写/识图，没有新建或修改Key。
+- 实施/审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`：开工4216d9f7 clean，fetch并ff-only至 **8f7be6c765482685fbe20a625340d682a748f51d**（业务adf230f）。本轮不改业务源码，调用前后全部tools跟踪文件SHA一致；新增14份报告/证据与本两交接，随后独立文档提交推功能分支，最终文档HEAD见git log。私有工具.env继续Git忽略、未进入暂存。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，origin/main f0e04041、behind103；原7 modified/22 untracked入口保留。本轮只更新两交接本机镜像及新增 `docs/design/iwa-argument-recheck-20261104/` 的runner/源SHA/原始结果；这些资料树材料未提交旧main。其他worktree及无关网页/数据改动未动。
+- Mac/Python3.13.3完整测试精确命令：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-argument-recheck-20261104/run_offline_tests.py` → **238/238 Python**（18.862s）、**8/8 Node**。临时库/fake/loopback-only，外部IWA_DATA_DIR未写入。实施树用主树.venv执行ruff check/black --check tools/ielts_writing_ai（38文件）、node --check static/iwa.js（完整路径见offline-verification）、git diff --check均通过。独立27组枚举、4种输出/重试路径、11项统计检查通过；长引文完整核实后再截断。外层适配器纯内存测试14次、15次阻止、4500tokens/evaluate-only通过。
+- 精确实测命令（cwd主资料树，**已完成勿重跑**）：`PYTHONDONTWRITEBYTECODE=1 .venv/bin/python docs/design/iwa-argument-recheck-20261104/run_evaluate.py --confirm-paid` →exit0。源8f7be6c、prompt iwa-2026-11-04.4、deepseek-flash非思考；临时库、HTTP发前持久计数、禁传输重试/重定向/同批重跑，不碰试用账号额度或生产库。8次全部HTTP200/stop，鉴权正常；仅弱文重试一次。
+- **自动指标**：首轮JSON与首轮校验 **6/7=85.7%**，最终7/7。首轮弱文EOF缺大括号且字段层级错误（argument嵌入各评分项）；仅诊断性补括号，不修原始输出、不采用。不是4500token截断或Key错误。119/119评分引文、55/55论证引文存在；6立场+30段落+19问题，returned55=kept55/dropped0/duplicate0/over_limit0。论证整份拒绝0次，另1次JSON失败；新增论证检查 **4/5**，强文3问题超过≤1预期。自动合理性16/17中1项改写未运行却自动通过，实际评价相关15/16。分级5/6.5/7.5/7.5，离题TR4，缺图TA/总分null。
+- 用量全计（含首次失败/重试）：输入10028+输出17387=27415tokens；单次输出峰值2867/4500（采用结果峰值2700），p50约13.1s/p90约17.6s。未提供单价或核账单，费用未知不是零。7篇合成样本不能推出稳定成功率或评分准确度。
+- **人工审阅**：弱文有限同意被错当立场冲突；强文position/结尾段写一致、问题列表却说结尾不一致；已有因果机制被说成没有支撑，过度要求每段具名实例和让步反驳。中等作文建议未经来源的80%减排数字；应区分真实矛盾、展开不足、可选优化，勿调高强文问题上限掩盖误判。官方描述/指南来源已在README引用；人工结论不是认证考官重新打分。离题识别有依据。
+- **附加真实观察**：Task1仍漏A两年最高与C80>A75的内部矛盾（raw consistency_issues明确[]）；21个模型解释字段全英文，不符合中文提示。97词单段样本映射为5个段落条目，需区分物理段落和逻辑片段。非阻断报告边界：全Task2失败时Markdown省略论证节但JSON保留拒绝数；未运行的改写检查应标不适用。没有因此追加模型请求。
+- 共享交付 `docs/design/ielts-writing-ai-argument-recheck-20261104/`：README、自动report.md/json、run_data.json、raw_calls.jsonl、transport.json、manual_argument_review.json、real_metrics_audit.json、offline-verification.json、两套便携复验py/json与offline-tests.log，共14文件；全部合成数据，精确Key及凭据模式扫描通过。自动report.md仅调整末尾共享存储说明，指标不改。主资料树另留run_evaluate.py、run_offline_tests.py、audit_real_metrics.py、source-state.json及原始results，仅本机；共享报告和交接推功能分支。
+- **发布状态**：无业务代码改动、无main合并/生产部署/前后端/数据库/服务器操作；没有新起试用服务，小程序未上传/提审/发布。无新增CI通过结论，不能拿旧CI代替本次本机检查。
+- **下一步**：Claude拉取报告，以这8次输出做离线回归；先修论证判断准则和完整顶层schema，补反馈自洽、Task1中文/文内矛盾、段落对应检查，再商定新批次。此次14次授权批次已完成，不自动追加。未验证真实精修/改写、识图、Python3.10、完整浏览器流程、≥20篇教师评分校准。
+
 ## 2026-11-04（论证结构复核后）雅思写作 AI 试用工具：修复论证结构复核 3 项（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `49b4c4e`，未通过，HEAD `4216d9f7`（`docs/design/ielts-writing-ai-argument-review-20261104/`，含两个探针）。已授权的“7 篇、只做评价、最多 14 次”真实验证**仍未使用**，等本次修复复核通过后再执行。本轮没有任何模型调用，没有改动评审的 `docs/design` 文件。

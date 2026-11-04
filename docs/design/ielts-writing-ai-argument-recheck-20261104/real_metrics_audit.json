@@ -1,0 +1,320 @@
+{
+  "source_head": "8f7be6c765482685fbe20a625340d682a748f51d",
+  "audit_network_calls": 0,
+  "completed_batch_transport": {
+    "requests": 8,
+    "limit": 14,
+    "completed": true,
+    "raw_call_records": 8,
+    "http_status_counts": {
+      "200": 8
+    },
+    "finish_reason_counts": {
+      "stop": 8
+    },
+    "kinds": {
+      "evaluate": 8
+    }
+  },
+  "first_attempts": {
+    "requested": 7,
+    "valid_json": 6,
+    "first_valid_rate": 0.857,
+    "retry_samples": [
+      "t2-weak"
+    ]
+  },
+  "json_decode_failures": [
+    {
+      "sample": "t2-weak",
+      "attempt": 0,
+      "error": "Expecting ',' delimiter: line 1 column 9257 (char 9256)",
+      "character_position": 9256,
+      "text_length": 9256,
+      "one_added_closing_brace_parses": true,
+      "diagnostic_top_level_keys": [
+        "criteria"
+      ],
+      "diagnostic_criteria_keys": [
+        "task",
+        "coherence",
+        "lexical",
+        "grammar",
+        "overall_comment",
+        "priorities"
+      ],
+      "argument_misplaced_inside_each_criterion": [
+        "task",
+        "coherence",
+        "lexical",
+        "grammar"
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10028,
+    "completion_tokens": 17387,
+    "total_tokens": 27415
+  },
+  "completion_peak": 2867,
+  "completion_peak_of_adopted": 2700,
+  "completion_cap": 4500,
+  "argument": {
+    "returned": 55,
+    "kept": 55,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 0,
+    "raw_adopted_entry_count": 55,
+    "found_quotes": 55,
+    "exact_substring_quotes": 55,
+    "quote_count": 55,
+    "types": {
+      "unclear_position": 1,
+      "off_position": 4,
+      "example_not_linked": 2,
+      "conclusion_inconsistent": 2,
+      "concession_unanswered": 2,
+      "unsupported": 6,
+      "irrelevant": 1,
+      "overgeneralized": 1
+    },
+    "verdicts": {
+      "weak": 8,
+      "supports": 17,
+      "off_position": 5
+    },
+    "whole_argument_rejections": 0,
+    "qualification": "Zero whole argument rejections excludes the first weak reply, which failed JSON parsing before argument validation."
+  },
+  "scoring_evidence": {
+    "count": 119,
+    "found": 119,
+    "exact_substrings": 119
+  },
+  "paragraph_observations": [
+    {
+      "sample": "t2-weak",
+      "original_nonempty_paragraphs": 5,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "body",
+        "body",
+        "conclusion"
+      ]
+    },
+    {
+      "sample": "t2-mid",
+      "original_nonempty_paragraphs": 5,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "body",
+        "concession",
+        "conclusion"
+      ]
+    },
+    {
+      "sample": "t2-good",
+      "original_nonempty_paragraphs": 5,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "body",
+        "concession",
+        "conclusion"
+      ]
+    },
+    {
+      "sample": "t2-strong",
+      "original_nonempty_paragraphs": 5,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "body",
+        "concession",
+        "conclusion"
+      ]
+    },
+    {
+      "sample": "t2-off-topic",
+      "original_nonempty_paragraphs": 5,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "concession",
+        "body",
+        "conclusion"
+      ]
+    },
+    {
+      "sample": "t2-under-length",
+      "original_nonempty_paragraphs": 1,
+      "argument_paragraph_entries": 5,
+      "argument_roles": [
+        "introduction",
+        "body",
+        "body",
+        "concession",
+        "conclusion"
+      ]
+    }
+  ],
+  "sanity": {
+    "raw_passed": 16,
+    "raw_total": 17,
+    "not_run_checks_marked_passed": [
+      {
+        "sample": "t2-off-topic",
+        "check": "离题样本：通过质量检查的改写必须已按题目重写",
+        "ok": true,
+        "detail": "改写未生成"
+      }
+    ],
+    "evaluation_relevant_passed": 15,
+    "evaluation_relevant_total": 16,
+    "argument_passed": 4,
+    "argument_total": 5,
+    "argument_failures": [
+      {
+        "sample": "t2-strong",
+        "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+        "ok": false,
+        "detail": [
+          "unsupported",
+          "unsupported",
+          "conclusion_inconsistent"
+        ]
+      }
+    ]
+  },
+  "task1_consistency": {
+    "raw_key_present": true,
+    "raw_value": [],
+    "normalized_value": [],
+    "conclusion": "Known internal contradiction still missed: A highest in both years, while 2020 C nearly80% overtakes A about75%. No chart needed to detect this text-internal mismatch.",
+    "reference_quotes": [
+      "Country A had the highest level of ownership in both years",
+      "the percentage in Country A had risen slightly to about 75%",
+      "ownership almost doubled to nearly 80%, overtaking Country A"
+    ]
+  },
+  "task1_explanation_language": {
+    "count": 21,
+    "with_chinese_characters": 0,
+    "method": "Observable CJK-character presence only; manually reviewed outputs are English.",
+    "fields": [
+      {
+        "path": "/criteria/coherence/summary",
+        "contains_chinese_character": false,
+        "text": "The essay is logically organised with a clear introduction, overview, and two body paragraphs covering the two years, followed by a summary. Cohesive devices are used effectively, though some are slightly mechanical (e.g., 'In summary'). Referencing is generally clear, but there is minor repetition of 'Country' and occasional lack of variety in linking."
+      },
+      {
+        "path": "/criteria/coherence/strengths/0/comment",
+        "contains_chinese_character": false,
+        "text": "A clear overview that summarises the main trend and sets up the comparison effectively."
+      },
+      {
+        "path": "/criteria/coherence/strengths/1/comment",
+        "contains_chinese_character": false,
+        "text": "Smooth transition to the second year with appropriate linking and parallel structure."
+      },
+      {
+        "path": "/criteria/coherence/issues/0/comment",
+        "contains_chinese_character": false,
+        "text": "The concluding sentence largely repeats the overview and adds little new information; it feels somewhat redundant and mechanical."
+      },
+      {
+        "path": "/criteria/coherence/issues/1/comment",
+        "contains_chinese_character": false,
+        "text": "The phrase 'by far' is slightly informal and could be replaced with a more neutral expression like 'significantly lower'."
+      },
+      {
+        "path": "/criteria/lexical/summary",
+        "contains_chinese_character": false,
+        "text": "The vocabulary is adequate and varied, with some less common items (e.g., 'dramatic change', 'overtaking', 'modest'). However, there are occasional imprecise word choices and limited use of collocation. Spelling and word formation are generally accurate."
+      },
+      {
+        "path": "/criteria/lexical/strengths/0/comment",
+        "contains_chinese_character": false,
+        "text": "Effective use of 'dramatic change' and 'overtaking' to describe a significant trend."
+      },
+      {
+        "path": "/criteria/lexical/strengths/1/comment",
+        "contains_chinese_character": false,
+        "text": "Good use of 'experienced significant growth' and 'well behind' to convey comparison."
+      },
+      {
+        "path": "/criteria/lexical/issues/0/comment",
+        "contains_chinese_character": false,
+        "text": "'Striking' is slightly informal for academic writing; 'notable' or 'significant' would be more appropriate."
+      },
+      {
+        "path": "/criteria/lexical/issues/1/comment",
+        "contains_chinese_character": false,
+        "text": "'Grown' is less precise than 'increased' or 'risen' when referring to percentages; consider using a more specific verb."
+      },
+      {
+        "path": "/criteria/grammar/summary",
+        "contains_chinese_character": false,
+        "text": "A mix of simple and complex sentence structures is used, with a good degree of accuracy. Some sentences are error-free, but there are occasional errors in tense consistency and article usage. Punctuation is generally correct."
+      },
+      {
+        "path": "/criteria/grammar/strengths/0/comment",
+        "contains_chinese_character": false,
+        "text": "A complex sentence with a comparative structure that is accurately formed and punctuated."
+      },
+      {
+        "path": "/criteria/grammar/strengths/1/comment",
+        "contains_chinese_character": false,
+        "text": "Correct use of past perfect tense to describe changes up to a point in the past."
+      },
+      {
+        "path": "/criteria/grammar/issues/0/comment",
+        "contains_chinese_character": false,
+        "text": "The pronoun 'it' could be ambiguous (referring to Country D or the growth); consider rephrasing for clarity, e.g., 'but the country was still well behind'."
+      },
+      {
+        "path": "/criteria/grammar/issues/1/comment",
+        "contains_chinese_character": false,
+        "text": "The comparative 'more modest' is used without a clear comparison; it could be clarified as 'more modest than in Country C' or rephrased."
+      },
+      {
+        "path": "/overall_comment",
+        "contains_chinese_character": false,
+        "text": "This is a well-structured and coherent response that effectively summarises the main trends and makes relevant comparisons. The language is generally accurate and varied, though there is room for improvement in lexical precision and grammatical clarity. To achieve a higher band, focus on using more formal and precise vocabulary, ensuring consistent and clear referencing, and avoiding redundancy in the conclusion."
+      },
+      {
+        "path": "/priorities/0",
+        "contains_chinese_character": false,
+        "text": "Replace informal or imprecise words (e.g., 'striking', 'grown') with more academic alternatives (e.g., 'notable', 'increased')."
+      },
+      {
+        "path": "/priorities/1",
+        "contains_chinese_character": false,
+        "text": "Avoid repeating the overview in the conclusion; instead, use the final sentence to highlight a key comparison or overall pattern."
+      },
+      {
+        "path": "/priorities/2",
+        "contains_chinese_character": false,
+        "text": "Check pronoun references (e.g., 'it') to ensure clarity and avoid ambiguity."
+      },
+      {
+        "path": "/priorities/3",
+        "contains_chinese_character": false,
+        "text": "Use a wider range of cohesive devices and avoid mechanical linking words like 'In summary'."
+      },
+      {
+        "path": "/priorities/4",
+        "contains_chinese_character": false,
+        "text": "Review comparative structures to ensure they are complete and clear (e.g., 'more modest than in Country C')."
+      }
+    ]
+  }
+}

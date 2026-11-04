@@ -1,0 +1,61 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "8f7be6c765482685fbe20a625340d682a748f51d",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 19.08
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.26
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests_passed": 238,
+  "node_tests_passed": 8,
+  "review_passed": true,
+  "reviewed_issues_closed": 3,
+  "checks": [
+    "ruff: passed",
+    "black: 38 files clean",
+    "node --check iwa.js: passed",
+    "git diff --check: passed"
+  ],
+  "independent_checks": {
+    "enums": 27,
+    "metrics": 11,
+    "pipeline_modes": 4,
+    "full_quote_verification": "passed"
+  },
+  "adapter_selftest": {
+    "network_calls": 0,
+    "http_simulations": 14,
+    "request_15": "blocked",
+    "kind": "evaluate",
+    "max_tokens": 4500
+  },
+  "nonblocking_observations": [
+    "If all Task2 evaluations fail, JSON retains argument rejection counts but Markdown omits argument section."
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "source_head": "8f7be6c765482685fbe20a625340d682a748f51d",
+  "network_calls": 0,
+  "passed": true,
+  "enum_cases": [
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": "unknown_enum",
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": [],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": {},
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": [
+        "body"
+      ],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": {
+        "role": "body"
+      },
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": null,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": 3,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": true,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "role",
+      "input": 1.5,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": "unknown_enum",
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": [],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": {},
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": [
+        "body"
+      ],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": {
+        "role": "body"
+      },
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": null,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": 3,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": true,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "paragraphs",
+      "field": "verdict",
+      "input": 1.5,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": "unknown_enum",
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": [],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": {},
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": [
+        "body"
+      ],
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": {
+        "role": "body"
+      },
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": null,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": 3,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": true,
+      "dropped": 1,
+      "score_unchanged": true
+    },
+    {
+      "section": "problems",
+      "field": "type",
+      "input": 1.5,
+      "dropped": 1,
+      "score_unchanged": true
+    }
+  ],
+  "pipeline": [
+    {
+      "mode": "control",
+      "calls": 1,
+      "status": "ready",
+      "error_code": null,
+      "first_role": "introduction",
+      "all_responses_successful_json": true,
+      "first_attempt_valid": 1.0,
+      "rejected_for_argument": 0,
+      "report_rendered": true,
+      "argument_section_visible": true
+    },
+    {
+      "mode": "one_bad_first",
+      "calls": 1,
+      "status": "ready",
+      "error_code": null,
+      "first_role": [
+        "introduction"
+      ],
+      "all_responses_successful_json": true,
+      "first_attempt_valid": 1.0,
+      "rejected_for_argument": 0,
+      "report_rendered": true,
+      "argument_section_visible": true
+    },
+    {
+      "mode": "all_bad_first",
+      "calls": 2,
+      "status": "ready",
+      "error_code": null,
+      "first_role": [
+        "body"
+      ],
+      "all_responses_successful_json": true,
+      "first_attempt_valid": 0.0,
+      "rejected_for_argument": 1,
+      "report_rendered": true,
+      "argument_section_visible": true
+    },
+    {
+      "mode": "all_bad_always",
+      "calls": 2,
+      "status": "failed",
+      "error_code": "invalid_output",
+      "first_role": [
+        "body"
+      ],
+      "all_responses_successful_json": true,
+      "first_attempt_valid": 0.0,
+      "rejected_for_argument": 2,
+      "report_rendered": true,
+      "argument_section_visible": false
+    }
+  ],
+  "full_quote_verification": {
+    "single_false_paragraph_rejected": "论证结构分析没有给出可核实的段落中心句",
+    "position_paragraph_problem_false_suffix_dropped": true,
+    "real_long_argument_quote_display_length": 400,
+    "criterion_fake_real_quote_found": [
+      false,
+      true
+    ],
+    "criterion_display_length": 300
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "source_head": "8f7be6c765482685fbe20a625340d682a748f51d",
+  "network_calls": 0,
+  "passed": 11,
+  "total": 11,
+  "checks": [
+    {
+      "name": "strong paragraph deviation is not a false pass",
+      "passed": true,
+      "actual": [
+        {
+          "sample": "strong",
+          "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+          "ok": true,
+          "detail": []
+        },
+        {
+          "sample": "strong",
+          "check": "不应出现 off_position / unclear_position（问题类型、段落判定或立场一致性）",
+          "ok": false,
+          "detail": {
+            "problems": [],
+            "off_position_paragraphs": [
+              "introduction",
+              "body",
+              "concession",
+              "conclusion"
+            ],
+            "position_consistent": true,
+            "hits": [
+              "off_position"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "inconsistent stance is a forbidden signal",
+      "passed": true,
+      "actual": [
+        {
+          "sample": "strong",
+          "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+          "ok": true,
+          "detail": []
+        },
+        {
+          "sample": "strong",
+          "check": "不应出现 off_position / unclear_position（问题类型、段落判定或立场一致性）",
+          "ok": false,
+          "detail": {
+            "problems": [],
+            "off_position_paragraphs": [],
+            "position_consistent": false,
+            "hits": [
+              "unclear_position"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "strong stance required",
+      "passed": true,
+      "actual": [
+        {
+          "sample": "strong",
+          "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+          "ok": true,
+          "detail": []
+        },
+        {
+          "sample": "strong",
+          "check": "不应出现 off_position / unclear_position（问题类型、段落判定或立场一致性）",
+          "ok": true,
+          "detail": {
+            "problems": [],
+            "off_position_paragraphs": [],
+            "position_consistent": null,
+            "hits": []
+          }
+        },
+        {
+          "sample": "strong",
+          "check": "找到可核实的立场句",
+          "ok": false,
+          "detail": null
+        }
+      ]
+    },
+    {
+      "name": "valid strong map remains accepted",
+      "passed": true,
+      "actual": [
+        {
+          "sample": "strong",
+          "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+          "ok": true,
+          "detail": []
+        },
+        {
+          "sample": "strong",
+          "check": "不应出现 off_position / unclear_position（问题类型、段落判定或立场一致性）",
+          "ok": true,
+          "detail": {
+            "problems": [],
+            "off_position_paragraphs": [],
+            "position_consistent": true,
+            "hits": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "eight malformed entries count in denominator",
+      "passed": true,
+      "actual": {
+        "task2_evaluations": 1,
+        "with_argument": 1,
+        "with_position": 1,
+        "paragraphs": 4,
+        "problems": 0,
+        "returned": 13,
+        "kept": 5,
+        "dropped": 8,
+        "duplicates": 0,
+        "over_limit": 0,
+        "dropped_rate": 0.615,
+        "evaluate_attempts": 0,
+        "attempts_rejected_for_argument": 0,
+        "problem_types": {},
+        "paragraph_verdicts": {
+          "supports": 3,
+          "weak": 1
+        }
+      }
+    },
+    {
+      "name": "entry counts conserved with duplicates and caps",
+      "passed": true,
+      "actual": {
+        "returned": 27,
+        "kept": 15,
+        "dropped": 3,
+        "duplicates": 1,
+        "over_limit": 8
+      }
+    },
+    {
+      "name": "old enum reproducer completes and report renders",
+      "passed": true,
+      "actual": {
+        "calls": 1,
+        "status": "ready",
+        "dropped": 1,
+        "first_attempt_valid": 1.0
+      }
+    },
+    {
+      "name": "whole-map rejection retries once and counted separately",
+      "passed": true,
+      "actual": {
+        "task2_evaluations": 1,
+        "with_argument": 1,
+        "with_position": 1,
+        "paragraphs": 5,
+        "problems": 1,
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "dropped_rate": 0.0,
+        "evaluate_attempts": 2,
+        "attempts_rejected_for_argument": 1,
+        "problem_types": {
+          "unsupported": 1
+        },
+        "paragraph_verdicts": {
+          "supports": 5
+        }
+      }
+    },
+    {
+      "name": "unexpected replay exception cannot abort report",
+      "passed": true,
+      "actual": {
+        "复核时出错（RuntimeError）": 1
+      }
+    },
+    {
+      "name": "seven evaluations maximum fourteen fake requests",
+      "passed": true,
+      "actual": {
+        "calls": 14,
+        "options": [
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          }
+        ],
+        "attempts": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "name": "complete argument failures remain in JSON attempt counts",
+      "passed": true,
+      "actual": {
+        "task2_evaluations": 0,
+        "with_argument": 0,
+        "with_position": 0,
+        "paragraphs": 0,
+        "problems": 0,
+        "returned": 0,
+        "kept": 0,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "dropped_rate": null,
+        "evaluate_attempts": 12,
+        "attempts_rejected_for_argument": 12,
+        "problem_types": {},
+        "paragraph_verdicts": {}
+      }
+    }
+  ],
+  "observations": [
+    {
+      "name": "All Task 2 evaluations fail: argument Markdown section is omitted",
+      "present": false,
+      "scope": "Non-blocking display limitation: JSON retains all 12 argument rejections; general evaluation failure metrics still render."
+    }
+  ]
+}
