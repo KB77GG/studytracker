@@ -1,5 +1,38 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 雅思写作 AI 试用工具：改写质量门禁（根据 21 次真实验证；已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户推送的 `eab9bc3f`（Mac 修复 `f3aef8cd` + 完整内置样本真实验证）。deepseek-flash 跑了 21 次，无重试；JSON、校验、引文、精修都通过；分数 5.0→6.5→7.0→7.5，离题 TR 4.0。改写只有 5/7 达到字数下限，并且存在虚报字数、自称达到 Band 7、离题改写、Task 1 文内矛盾、改动说明与正文不符等问题（`docs/design/ielts-writing-ai-realcheck-20261104/README.md`）。本轮先把这些真实输出做成离线回归，再修改，**没有调用任何真实模型**。
+- 新增 `rewrite_quality.py`（纯函数），由 `normalize_rewrite` 调用：
+  - below_min：改写低于 150 / 250 词。
+  - off_prompt：与题目关键词的重合度 < 40%。
+  - count_claim：自述字数与服务端计数不符（误差 ±10 / 5% 以内、等于原稿字数或等于下限的除外），删除该条说明或该句理由。
+  - noop_change：改前改后完全相同，删除。
+  - claim_absent：声称的新写法不在正文中，删除。
+  - deletion_mismatch：声称已删除的引文或“总结段”仍在正文中，删除。
+  - band_claim：声称达到 / 符合 Band X（排除“未达到”等否定），只标出、不删除，并把理由标为“AI 自述，未经评分验证”。
+  - data_claim：Task 1 缺图时声称“数据准确”。
+  - 有问题时沿用已有的一次静默重试，重试提示用英文写明具体问题。仍有问题就保留问题较少的一版，`quality_passed=false`，`quality_issues` 和提示都完整显示；复制文本带“改写质量检查未通过”。不隐藏任何提示，也不放宽字数要求。
+- 提示词 `iwa-2026-11-04.1`：
+  - 改写：至少达到下限字数（理想 +20 到上限）；离题时按题目重新作答，并返回 `original_addresses_question=false`；改动说明必须对应正文且不写字数；理由只写“为向目标分数段靠近做了什么”，不得声称已达到；Task 1 缺图时不得声称数据准确，原文数字与比较矛盾时不重复矛盾的说法。
+  - 评价：Task 1 新增 `consistency_issues`（文内自洽，引文要核实；不影响 TA 是否可评），页面和复制文本单列“文内数据自洽检查”。
+- realcheck：改写首轮若有质量问题，记为“质量检查：<代码>”；新增 `rewrite_quality_passed` 和 `rewrite_quality_issues`，并写进报告。README 新增一条建议验收指标：改写最终通过质量检查 ≥ 90%。
+- 在 21 次真实输出上的离线验证（`tests/fixtures/realcheck_20261104.json`，合成样本）：
+  - 7 篇全部有 band_claim。
+  - t2-mid 和 t2-under-length 为 below_min；t2-under-length 的“约 270 词”被删除。
+  - t2-off-topic 的关键词重合度为 12%，判为 off_prompt。
+  - t2-strong 有 3 条空改动被删除。
+  - **t2-good 有 3 条“改动”根本没有改**（新写法不在正文中），这一条是复核报告没有列出的新发现。
+  - t1-no-image 命中 deletion_mismatch、noop_change、data_claim。
+  - 另有重试测试：先给 247 词、再给合格稿 → 通过；两次都有问题 → 保留问题较少的一版并标记，额度不变。
+- 精确验证（Python 3.13 venv）：
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **152 tests OK**（新增 `test_rewrite_quality.py` 19 项），Latin-1 locale 变体和 C.UTF-8 两种条件下都通过；Node 8 pass；ruff、black 通过。
+  - Playwright：演示模型的短改写显示“质量检查未通过”、服务端字数、“未经评分验证”标签，复制文本带提示。
+  - 演示库没有被测试写入。
+- **未验证**：新提示词对 deepseek-flash 的实际效果（字数达标率、自称达分是否消失、重试率与额外费用）需要下一批真实运行；7 篇合成样本仍不能代替教师评分校准；未测 Python 3.10。
+- **发布状态**：业务改动和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：由用户确认下一批真实验证的范围（建议同样 7 篇 × 3 类，上限 42 次；重点看改写的 `rewrite_quality_passed`、首轮质量被拒原因和重试次数）。之后用至少 20 篇教师评分作文校准。
+
 ## 2026-11-04 独立写作修复已推功能分支，完整合成验证完成（21/42请求）
 
 - 用户本轮明确授权：提交推送 `claude/ielts-writing-ai-trial`，并用现有试用Key跑7篇内置合成作文×评价/精修/改写，最多42次实际请求。实施树 `/private/tmp/studytracker-iwa-realcheck-review-20261103` 从detached `1df8f9220ef260454979e68e2e95bac6e062b46a` 建同名功能分支，10个工具源/说明/测试文件提交 **`f3aef8cd4c531385b5ad4e5135b4dee1c3beae98`** 已push并核对远端一致；没有合并main/部署。开工12 modified（10工具文件+两交接），代码提交后只剩两交接。本条和6份完整报告随独立文档提交同步，最终文档HEAD见git log；完成后实施树tracked clean，私有.env仍ignored。
