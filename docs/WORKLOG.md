@@ -4,6 +4,14 @@
 > 约定：每个项目任务结束前先做交接审计；有实质进展或状态变化时**追加一条**（新条目放最上面），记“做了什么、现场状态、下一步、坑”，不记代码细节（看 git log/diff）。
 > 注意：这里要记录 **git 之外的状态**（生产库操作、服务器上的手动步骤、外部服务状态），这些从 commit 历史里看不出来。
 
+## 2026-11-04 — 剑桥首批上线题选定（Claude）
+
+- 按用户决定从干净句子选出 8,048 道：四种题型各 1,500，从句边界 1,955、状语关系 93 全保留。
+  - 脚本：`scripts/select_grammar_release.py`；
+  - 清单：`data/grammar_items/release_v0_2_cambridge_ids.csv`。
+- 验收抽查 593 道已放进 `docs/reviews/cambridge-release-check-20261104/`，等 Codex / ChatGPT 复核。
+- 上线还缺：验收、语法练习功能开发、合 main 部署。
+
 ## 2026-11-04 — 剑桥交叉复核结果的核对（Claude，只分析）
 
 - 快进到 Codex 交叉复核分支 9df4bbd。环境重置后在 Linux 重建 grammar 工具环境，从零解析复现第二十轮题库（抽查表逐字节一致）。
