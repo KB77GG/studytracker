@@ -182,7 +182,13 @@ class SubmissionFlowTest(AppTestCase):
         self.assertTrue(all(s["original"] in TASK2_ESSAY for s in refine["sentences"]))
         self.assertGreater(refine["changed_count"], 0)
         self.assertEqual(data["quota"]["used"], 3)
-        self.assertEqual(self.client_llm.calls, ["evaluate", "refine", "rewrite"])
+        # The demo rewrite of this short essay stays under 250 words: one quality retry,
+        # then it is kept but marked as not passing, with the issue shown.
+        self.assertEqual(self.client_llm.calls, ["evaluate", "refine", "rewrite", "rewrite"])
+        rewrite = sub["generations"]["rewrite"]
+        self.assertFalse(rewrite["result"]["quality_passed"])
+        self.assertEqual([i["code"] for i in rewrite["result"]["quality_issues"]], ["below_min"])
+        self.assertIn("改写质量检查未通过", rewrite["copy"]["essay"])
         # The stored original is byte-identical after all generations ran.
         stored = self.storage.get_owned_submission(public_id, self.uid)
         self.assertEqual(stored["essay_text"], TASK2_ESSAY)

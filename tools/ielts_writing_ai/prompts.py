@@ -6,7 +6,7 @@ import json
 
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-03.1"
+PROMPT_VERSION = "iwa-2026-11-04.1"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -107,6 +107,13 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         '...1-3], "issues": [{"quote": str, "comment": str, "suggestion": str}, ...1-4]}. '
         "Do not output an overall band; it is computed from the criteria.",
     ]
+    if task_type == "task1":
+        rules.append(
+            'Also return "consistency_issues": [{"quote": str, "comment": str}] listing places '
+            "where the essay contradicts ITSELF, e.g. it calls X the highest but gives Y a larger "
+            "figure, or a stated trend disagrees with the stated numbers. Quote verbatim. This is "
+            "about internal consistency only, not about the chart. Use [] if there are none."
+        )
     if not visual:
         rules.append(
             "The task visual is unavailable, so Task Achievement CANNOT be assessed: set "
@@ -169,20 +176,36 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
             "Keep the student's position, main ideas and examples wherever they are usable; "
             "repair logic, paragraphing and development; fix all language errors. Use natural "
             f"academic English appropriate to Band {target:g} (not artificially ornate). "
-            f"Length: {minimum}-{upper} words. One paragraph per line, separated by a blank line.",
+            f"Length: at least {minimum} words, ideally {minimum + 20}-{upper}; count before "
+            "answering. One paragraph per line, separated by a blank line.",
+            "If the student's essay does not answer the question that was asked (off-topic), do "
+            "NOT polish the off-topic content: write an answer to the actual question, reusing "
+            "the student's language only where relevant, and set original_addresses_question "
+            "to false.",
+            "key_changes must describe changes that are really in your essay: quote the new "
+            "wording exactly as it appears; never list a change whose old and new wording are "
+            "identical; never claim to delete or merge text that is still there; never state "
+            "word counts.",
+            "band_rationale explains, criterion by criterion, what you changed TOWARDS the "
+            f"Band {target:g} target. It must not claim that the essay reaches, meets or achieves "
+            "any band - the rewrite has not been scored.",
             (
                 (
                     "Task 1: include an overview and accurate key figures; no opinion."
                     if visual_available(submission)
                     else "Task 1: include an overview; no opinion. The visual is unavailable: use "
                     "ONLY figures already stated in the student's essay or the question, never add "
-                    "or change data."
+                    "or change data, and never claim the figures are accurate or verified. If the "
+                    "student's own figures and comparisons contradict each other, do not repeat "
+                    "the contradictory claim: keep the figures, word the comparison so it agrees "
+                    "with them, and mention the contradiction in key_changes."
                 )
                 if task_type == "task1"
                 else "Task 2: answer every part of the question with a clear position."
             ),
-            'Output schema: {"essay": str, "key_changes": [str (Chinese), ...3-6], '
-            '"band_rationale": str (Chinese, why this version meets the target band)}.',
+            'Output schema: {"essay": str, "original_addresses_question": bool, '
+            '"key_changes": [str (Chinese), ...3-6], '
+            '"band_rationale": str (Chinese, what was changed towards the target band)}.',
         ]
     )
     payload = {

@@ -12,7 +12,7 @@ import logging
 from pathlib import Path
 
 from . import essay as essay_lib
-from . import prompts, visual
+from . import prompts, rewrite_quality, visual
 from .llm import LLMError
 
 log = logging.getLogger("iwa.review")
@@ -193,6 +193,17 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     if unverified:
         warnings.append(f"有 {unverified} 条引文没能在原文中找到，已标注，不作为评分依据。")
 
+    consistency = []
+    if task_type == "task1":
+        # Internal consistency of the essay's own figures; judged without the chart.
+        consistency = _evidence_items(
+            raw.get("consistency_issues"), essay, limit=4, with_suggestion=False
+        )
+        if any(entry["comment"] for entry in consistency):
+            warnings.append(
+                "作文里有前后矛盾的数据或比较（只检查作文内部是否自洽，不代表数据与题图一致）。"
+            )
+
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
     overall = essay_lib.overall_band(scored) if len(scored) == len(essay_lib.CRITERIA) else None
     return {
@@ -201,6 +212,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "criteria": criteria,
         "overall_comment": overall_comment,
         "priorities": priorities,
+        "consistency_issues": consistency,
         "warnings": warnings,
     }
 
@@ -265,23 +277,32 @@ def normalize_rewrite(raw: dict, submission: dict) -> dict:
     words = essay_lib.count_words(essay_text)
     if words < 60:
         raise InvalidOutput("改写结果过短")
-    minimum = essay_lib.MIN_WORDS[submission["task_type"]]
-    warnings = []
-    if words < minimum:
-        warnings.append(f"改写稿只有 {words} 词，低于 {minimum} 词要求，可重新生成。")
-    if not task_criterion_assessable(submission):
-        warnings.append(
-            f"{ta_unassessable_reason(submission)}：改写稿中的数据只能沿用原文和题干，"
-            "没有与题图核对，可能不准确。"
-        )
-    return {
+    visual = task_criterion_assessable(submission)
+    result = {
         "target_band": submission["target_band"],
         "essay": essay_text,
         "word_count": words,
         "key_changes": _text_list(raw.get("key_changes"), limit_items=6),
         "band_rationale": _text(raw.get("band_rationale"), 1500),
-        "warnings": warnings,
     }
+    # The model's own claims (word counts, "reaches Band 7", change notes) are checked
+    # against the essay; false claims are removed and every problem is reported.
+    result, issues = rewrite_quality.check(result, submission, visual_available=visual)
+    warnings = [issue.message for issue in issues]
+    if raw.get("original_addresses_question") is False:
+        warnings.append("原文没有回应题目：改写稿按题目重新作答，没有保留原文的论点。")
+    if not visual:
+        warnings.append(
+            f"{ta_unassessable_reason(submission)}：改写稿中的数据只能沿用原文和题干，"
+            "没有与题图核对，可能不准确。"
+        )
+    result.update(
+        warnings=warnings,
+        quality_passed=not issues,
+        quality_issues=[{"code": i.code, "message": i.message} for i in issues],
+        _retry_hint=rewrite_quality.retry_hint(issues),
+    )
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +370,7 @@ class Generator:
     def _generate_valid(self, kind: str, submission: dict, sentences):
         messages, context = prompts.BUILDERS[kind](submission, sentences)
         problem = None
+        best = None  # (normalized, result) with quality issues, if nothing clean arrives
         for attempt in range(self.VALIDATION_ATTEMPTS):
             if problem:
                 messages = prompts.with_retry_note(messages, problem)
@@ -362,15 +384,28 @@ class Generator:
             try:
                 raw = result.json()
                 if kind == "evaluate":
-                    return normalize_evaluation(raw, submission), result
-                if kind == "refine":
-                    return normalize_refinement(raw, sentences), result
-                return normalize_rewrite(raw, submission), result
+                    normalized = normalize_evaluation(raw, submission)
+                elif kind == "refine":
+                    normalized = normalize_refinement(raw, sentences)
+                else:
+                    normalized = normalize_rewrite(raw, submission)
             except (InvalidOutput, LLMError) as exc:
                 if isinstance(exc, LLMError) and exc.code != "invalid_json":
                     raise
                 problem = exc.message if isinstance(exc, LLMError) else str(exc)
                 log.info("%s attempt %s rejected: %s", kind, attempt + 1, problem)
+                continue
+            hint = normalized.pop("_retry_hint", "")
+            if normalized.get("quality_passed", True):
+                return normalized, result
+            # Usable but with quality issues: retry once, then keep the better attempt.
+            issues = len(normalized.get("quality_issues") or [])
+            if best is None or issues <= len(best[0].get("quality_issues") or []):
+                best = (normalized, result)
+            problem = hint or "quality issues"
+            log.info("%s attempt %s has quality issues: %s", kind, attempt + 1, problem)
+        if best is not None:
+            return best
         raise InvalidOutput(problem or "输出不合格")
 
     def run(self, generation_id: int) -> None:

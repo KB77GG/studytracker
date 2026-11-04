@@ -330,7 +330,7 @@ class FakeClient:
         return {
             "essay": body,
             "key_changes": ["【演示】演示模式只做机械修正，不是真实的高分改写。"],
-            "band_rationale": "【演示】连接真实模型后，这里会说明改写如何达到目标分数段。",
+            "band_rationale": "【演示】连接真实模型后，这里会说明为了向目标分数段靠近做了哪些修改。",
         }
 
     @staticmethod

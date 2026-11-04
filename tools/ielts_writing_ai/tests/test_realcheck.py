@@ -65,11 +65,19 @@ class RealCheckTest(unittest.TestCase):
     def test_builtin_demo_run_produces_a_complete_report(self):
         data, report = self.run_check()
         self.assertEqual(report["samples"], len(samples.SAMPLES))
-        self.assertEqual(report["calls"], len(samples.SAMPLES) * 3)
+        # The demo rewrite of the 97-word essay stays under 250 words and the off-topic
+        # rewrite stays off-topic: each triggers exactly one quality retry.
+        self.assertEqual(report["calls"], len(samples.SAMPLES) * 3 + 2)
+        retried = {c["sample"] for c in data["calls"] if c["attempt"] == 1}
+        self.assertEqual(retried, {"t2-under-length", "t2-off-topic"})
         self.assertTrue(report["connectivity"]["ok"])
         for metrics in report["kinds"].values():
             self.assertEqual(metrics["first_attempt_json_ok"], 1.0)
             self.assertEqual(metrics["final_ready"], 1.0)
+        rewrite = report["refine_rewrite"]
+        self.assertEqual(rewrite["rewrite_quality_issues"], {"below_min": 1, "off_prompt": 1})
+        self.assertAlmostEqual(rewrite["rewrite_quality_passed"], round(5 / 7, 3))
+        self.assertIn("质量检查", "".join(report["kinds"]["rewrite"]["first_attempt_rejections"]))
         self.assertEqual(report["evidence"]["quotes_verified"], 1.0)
         checks = {(c["sample"], c["check"]): c["ok"] for c in report["sanity"]["checks"]}
         self.assertTrue(checks[("t1-no-image", "缺图 TA / 总分不可评")])

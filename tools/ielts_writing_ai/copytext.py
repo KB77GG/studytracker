@@ -68,6 +68,11 @@ def evaluation_text(result: dict, generation: dict) -> str:
         lines += [_evidence_line(s, "✓") for s in criterion.get("strengths") or []]
         lines += [_evidence_line(i, "✗") for i in criterion.get("issues") or []]
         lines.append("")
+    consistency = [c for c in result.get("consistency_issues") or [] if c.get("comment")]
+    if consistency:
+        lines.append("文内数据自洽检查（只看作文内部是否矛盾，不代表与题图一致）：")
+        lines += [_evidence_line(c, "✗") for c in consistency]
+        lines.append("")
     if result.get("overall_comment"):
         lines += [f"总评：{result['overall_comment']}", ""]
     priorities = result.get("priorities") or []
@@ -112,15 +117,23 @@ def refine_texts(result: dict, generation: dict, target_band) -> dict:
     return {"full": "\n".join(full).strip(), "changes": "\n".join(changes).strip()}
 
 
+QUALITY_FAILED = "改写质量检查未通过，请对照下方提示使用，或重新生成"
+
+
 def rewrite_texts(result: dict, generation: dict) -> dict:
     target = _band(result.get("target_band"))
+    failed = result.get("quality_passed") is False
+    quality = [QUALITY_FAILED] if failed else []
     essay = [
         result.get("essay") or "",
         "",
-        f"——以上为 AI 改写范文（目标 Band {target}），{DISCLAIMER}",
+        f"——以上为 AI 改写范文（目标 Band {target}，未经评分验证），{DISCLAIMER}",
+        *quality,
     ] + _warning_lines(result.get("warnings"))
     notes = [
-        f"【AI 整篇改写】{DISCLAIMER} · 目标 Band {target} · {result.get('word_count', 0)} 词"
+        f"【AI 整篇改写】{DISCLAIMER} · 目标 Band {target}（未经评分验证）· "
+        f"{result.get('word_count', 0)} 词（服务端计数）",
+        *quality,
     ] + _warning_lines(result.get("warnings"))
     notes += ["", result.get("essay") or "", ""]
     if result.get("key_changes"):
@@ -128,7 +141,7 @@ def rewrite_texts(result: dict, generation: dict) -> dict:
         notes += [f"{n}. {c}" for n, c in enumerate(result["key_changes"], 1)]
         notes.append("")
     if result.get("band_rationale"):
-        notes += [f"分数说明：{result['band_rationale']}", ""]
+        notes += [f"AI 对目标分数段的说明（自述，未经评分验证）：{result['band_rationale']}", ""]
     notes.append(_provenance(generation))
     return {"essay": "\n".join(essay).strip(), "with_notes": "\n".join(notes).strip()}
 

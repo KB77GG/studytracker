@@ -359,7 +359,12 @@ def _first_attempt_problem(kind: str, text: str, sample: dict) -> str | None:
         elif kind == "refine":
             review.normalize_refinement(raw, essay_lib.split_sentences(submission["essay_text"]))
         elif kind == "rewrite":
-            review.normalize_rewrite(raw, submission)
+            rewrite = review.normalize_rewrite(raw, submission)
+            if not rewrite["quality_passed"]:
+                # Usable but triggers the quality retry: report it as a first-attempt miss.
+                return "质量检查：" + "；".join(
+                    sorted({i["code"] for i in rewrite["quality_issues"]})
+                )
     except review.InvalidOutput as exc:
         return str(exc)
     return None
@@ -426,7 +431,8 @@ def _evidence_metrics(run_data: dict) -> dict:
 
 def _refine_rewrite_metrics(run_data: dict) -> dict:
     sentences = missing = changed = 0
-    rewrites = meeting = 0
+    rewrites = meeting = quality_ok = 0
+    quality_codes = Counter()
     for sample in run_data["samples"]:
         refine = (sample["generations"].get("refine") or {}).get("result")
         if refine:
@@ -438,12 +444,16 @@ def _refine_rewrite_metrics(run_data: dict) -> dict:
             rewrites += 1
             minimum = essay_lib.MIN_WORDS[sample["task_type"]]
             meeting += 1 if (rewrite.get("word_count") or 0) >= minimum else 0
+            quality_ok += 1 if rewrite.get("quality_passed", True) else 0
+            quality_codes.update(i["code"] for i in rewrite.get("quality_issues") or [])
     return {
         "refine_sentences": sentences,
         "refine_missing_rate": _rate(missing, sentences),
         "refine_changed_rate": _rate(changed, sentences),
         "rewrites": rewrites,
         "rewrite_meets_min_words": _rate(meeting, rewrites),
+        "rewrite_quality_passed": _rate(quality_ok, rewrites),
+        "rewrite_quality_issues": dict(quality_codes.most_common()),
     }
 
 
@@ -761,7 +771,15 @@ def render_markdown(report: dict) -> str:
         f"{_pct(ev['quotes_verified'])}",
         f"- 精修：共 {rr['refine_sentences']} 句，缺句率 {_pct(rr['refine_missing_rate'])}，"
         f"改动率 {_pct(rr['refine_changed_rate'])}",
-        f"- 改写：{rr['rewrites']} 篇，达到字数下限 {_pct(rr['rewrite_meets_min_words'])}",
+        f"- 改写：{rr['rewrites']} 篇，达到字数下限 {_pct(rr['rewrite_meets_min_words'])}，"
+        f"最终通过质量检查 {_pct(rr.get('rewrite_quality_passed'))}"
+        + (
+            "（未通过项："
+            + "；".join(f"{k} ×{v}" for k, v in rr["rewrite_quality_issues"].items())
+            + "）"
+            if rr.get("rewrite_quality_issues")
+            else ""
+        ),
         "",
         "## 分数合理性（宽松区间，不是真实分数）",
         "",

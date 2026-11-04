@@ -240,6 +240,7 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
 /* rewrite */
 .rewrite-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
 .pill { background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 13px; }
+.pill--warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
 .rewrite-essay { border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 18px; }
 
 /* history */

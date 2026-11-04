@@ -489,6 +489,17 @@
         }))
       ]));
       (r.warnings || []).forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
+      var consistency = (r.consistency_issues || []).filter(function (c) { return c.comment; });
+      if (consistency.length) {
+        var box = el('div', { class: 'block' }, [
+          el('h3', { text: '文内数据自洽检查' }),
+          el('p', { class: 'muted small', text: '只检查作文内部的数字和比较是否前后矛盾，不代表数据与题图一致。' })
+        ]);
+        consistency.forEach(function (c) {
+          box.appendChild(el('div', { class: 'issue' }, [quoteButton(c), el('p', { class: 'issue__comment', text: c.comment })]));
+        });
+        panel.appendChild(box);
+      }
       if (r.overall_comment) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: '总评' }), el('p', { text: r.overall_comment })]));
       if (r.priorities && r.priorities.length) {
         panel.appendChild(el('div', { class: 'block' }, [
@@ -576,8 +587,9 @@
         regenButton('rewrite')
       ]));
       panel.appendChild(el('div', { class: 'rewrite-meta' }, [
-        el('span', { class: 'pill', text: '目标 Band ' + band(r.target_band) }),
-        el('span', { class: 'pill', text: r.word_count + ' 词' })
+        el('span', { class: 'pill', text: '目标 Band ' + band(r.target_band) + '（未经评分验证）' }),
+        el('span', { class: 'pill', text: r.word_count + ' 词（服务端计数）' }),
+        r.quality_passed === false ? el('span', { class: 'pill pill--warn', text: '质量检查未通过' }) : null
       ]));
       (r.warnings || []).forEach(function (w) { panel.appendChild(el('p', { class: 'notice notice--warn', text: w })); });
       var essayBox = essayNode(r.essay);
@@ -589,7 +601,7 @@
           el('ol', { class: 'priorities' }, r.key_changes.map(function (c) { return el('li', { text: c }); }))
         ]));
       }
-      if (r.band_rationale) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: '为什么是这个分数段' }), el('p', { text: r.band_rationale })]));
+      if (r.band_rationale) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: 'AI 对目标分数段的说明（自述，未经评分验证）' }), el('p', { text: r.band_rationale })]));
     }
 
     function render() {
