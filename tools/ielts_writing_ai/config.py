@@ -89,7 +89,9 @@ def _as_bool(value, default: bool) -> bool:
     return str(value).strip().lower() in {"1", "true", "yes", "on"}
 
 
-THINKING_MODES = ("off", "high")
+# DeepSeek reasoning_effort levels (xhigh maps to high on the provider side, so it is
+# not offered as a separate level).
+THINKING_MODES = ("off", "high", "max")
 
 
 @dataclass

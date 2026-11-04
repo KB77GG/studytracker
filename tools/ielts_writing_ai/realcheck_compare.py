@@ -81,12 +81,24 @@ def conditions(run: dict) -> dict:
     }
 
 
-def check_same_conditions(a: dict, b: dict) -> tuple[list[str], list[str]]:
-    """(errors, warnings). Anything but the thinking mode differing is an error."""
+def check_same_conditions(
+    a: dict, b: dict, *, allow_model_change: bool = False
+) -> tuple[list[str], list[str]]:
+    """(errors, warnings). Anything but the thinking mode differing is an error; with
+    allow_model_change the provider/model may differ too (a model comparison), but the
+    prompt version and what reached the model must still be identical."""
     errors, warnings = [], []
+    model_changed = (a["provider"], a["model"]) != (b["provider"], b["model"])
     for key, label in (("provider", "服务商"), ("model", "模型"), ("prompt_version", "提示词版本")):
-        if a[key] != b[key]:
+        if a[key] != b[key] and not (allow_model_change and key in ("provider", "model")):
             errors.append(f"{label}不同：{a[key]} vs {b[key]}")
+    if allow_model_change and model_changed:
+        warnings.append(
+            f"对照的是两个模型：{a['provider']} / {a['model']} vs {b['provider']} / {b['model']}"
+            "（提示词与实际输入相同）"
+        )
+        if a["evaluate_thinking"] != b["evaluate_thinking"]:
+            warnings.append("模型和思考模式同时不同：差异不能单独归因于其中一项")
     if "evaluate" not in a["kinds"] or "evaluate" not in b["kinds"]:
         errors.append("两次运行都必须包含原稿评价（--kinds evaluate）")
     if a["kinds"] != b["kinds"]:
@@ -112,7 +124,7 @@ def check_same_conditions(a: dict, b: dict) -> tuple[list[str], list[str]]:
             "有样本缺少实际输入的指纹（旧版报告或首次请求未发出），只核对了题目、作文和题图"
             "识别结果：" + "、".join(sorted(unknown))
         )
-    if a["evaluate_thinking"] == b["evaluate_thinking"]:
+    if a["evaluate_thinking"] == b["evaluate_thinking"] and not model_changed:
         warnings.append(
             f"两次的评价思考模式相同（{a['evaluate_thinking']}）：这是重复性对照，不是思考开关的对照"
         )
@@ -252,10 +264,10 @@ def run_summary(run: dict, price_in=None, price_out=None) -> dict:
     }
 
 
-def compare(a_dir, b_dir, *, price_in=None, price_out=None) -> dict:
+def compare(a_dir, b_dir, *, price_in=None, price_out=None, allow_model_change=False) -> dict:
     a, b = load_run(a_dir), load_run(b_dir)
     cond_a, cond_b = conditions(a), conditions(b)
-    errors, warnings = check_same_conditions(cond_a, cond_b)
+    errors, warnings = check_same_conditions(cond_a, cond_b, allow_model_change=allow_model_change)
     if errors:
         raise CompareError("两次运行的条件不同，不能对照：" + "；".join(errors))
     views_b = {s["id"]: sample_view(b["run_data"], s) for s in b["run_data"]["samples"]}
@@ -305,14 +317,18 @@ def _pct(value) -> str:
 RATE_KEYS = {"first_attempt_valid", "final_ready"}
 
 
-def _label(cond: dict) -> str:
-    return f"思考 {cond['evaluate_thinking']}"
+def _label(cond: dict, other: dict | None = None) -> str:
+    """'思考 high', or 'model · 思考 high' when the two runs use different models."""
+    thinking = f"思考 {cond['evaluate_thinking']}"
+    if other and other.get("model") and cond.get("model") and other["model"] != cond["model"]:
+        return f"{cond['model']} · {thinking}"
+    return thinking
 
 
 def render_markdown(cmp: dict) -> str:
     ca, cb = cmp["conditions"]["a"], cmp["conditions"]["b"]
     sa, sb = cmp["summary"]["a"], cmp["summary"]["b"]
-    la, lb = f"A（{_label(ca)}）", f"B（{_label(cb)}）"
+    la, lb = f"A（{_label(ca, cb)}）", f"B（{_label(cb, ca)}）"
     lines = [
         "# 评价对照：同一提示词、同一批作文",
         "",
@@ -400,8 +416,8 @@ def _quote(text) -> str:
 def render_manual_review(cmp: dict) -> str:
     """A sheet for the human comparison: every finding of both runs, with empty
     columns for the verdict. Missed problems are noted per sample."""
-    la = _label(cmp["conditions"]["a"])
-    lb = _label(cmp["conditions"]["b"])
+    la = _label(cmp["conditions"]["a"], cmp["conditions"]["b"])
+    lb = _label(cmp["conditions"]["b"], cmp["conditions"]["a"])
     lines = [
         "# 人工复核表（填写“判断”和“备注”）",
         "",

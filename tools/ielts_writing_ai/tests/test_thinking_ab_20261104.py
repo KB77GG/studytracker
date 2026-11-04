@@ -115,7 +115,9 @@ class PromptTest(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
         self.assertIn("(0) Question type", prompts.ARGUMENT_CHECKLIST)
-        self.assertEqual(prompts.PROMPT_VERSION, "iwa-2026-11-04.7")
+        self.assertGreaterEqual(
+            int(prompts.PROMPT_VERSION.rsplit(".", 1)[1]), 7
+        )  # introduced in .7
 
 
 ESSAY = (

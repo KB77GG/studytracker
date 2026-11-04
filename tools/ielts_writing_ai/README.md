@@ -76,12 +76,13 @@ DeepSeek 默认使用 `deepseek-flash` 的非思考模式。
 **原稿评价的思考模式（试验开关，默认关闭）**：
 
 ```bash
-IWA_EVALUATE_THINKING=off                # off（默认）/ high；只影响原稿评价，精修和改写不变
+IWA_EVALUATE_THINKING=off                # off（默认）/ high / max；只影响原稿评价，精修和改写不变
 IWA_EVALUATE_THINKING_MAX_TOKENS=16000   # 思考时的输出上限（暂定，需按实测校准）
 IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂定）
 ```
 
-- **目前建议保持 off**。第一次同条件对照（提示词 `.6`，7 篇，2026-11-04）：high 对部分上下文判断有改善，但中位耗时约为 off 的 2.8 倍，输出 token 约为 3.9 倍，仍有误读和无来源建议，不足以切换默认值。high 适合作为老师复核时的试验选项。
+- 思考档位：`high` 和 `max` 都会作为 `reasoning_effort` 发送。服务商把 `xhigh` 映射为 high，所以不单独提供。`max` 的输出上限和超时同样用上面两项，需要实测后再定。
+- **默认保持 off 是因为质量还没验收完，不代表 off 比 high 更准。**第一次同条件对照（提示词 `.6`，7 篇，2026-11-04）：high 对部分上下文判断有改善，但中位耗时约为 off 的 2.8 倍，输出 token 约为 3.9 倍，仍有误读和无来源建议，不足以切换默认值。high 适合作为老师复核时的试验选项。
 - 设为 `high` 时，评价请求发送 `"thinking": {"type": "enabled"}` 和 `"reasoning_effort": "high"`；关闭时和以前一样发送 `{"type": "disabled"}`。目前只支持 DeepSeek，其他服务商开启会报配置错误。
 - 思考内容（`reasoning_content`）不解析、不保存到结果里、也不给学生看；严格 JSON 校验只看正式回答。realcheck 会把它留在本机的 `raw_calls.jsonl` 里，方便复核。
 - 用户已在本机核对官方文档：`thinking: {"type": "enabled"}` 和顶层的 `reasoning_effort: "high"` 写法正确；思考内容与正式回答分开返回；`usage` 里有 `completion_tokens_details.reasoning_tokens`；思考模式下 temperature 不起作用。文档写法正确不等于已经实际连通，仍要先跑 1 次连通性测试。
@@ -145,6 +146,7 @@ IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂�
   - 数字按完整数值比较：原文里的 1980、180 不能当作 80% 的来源。百分比必须对应原文里同样的百分比；普通数字只要数值相同（`1,500` 与 `1500` 视为相同）。中文百分比按数值比较：“百分之八十”等于 80%，“百分之八十一”不能当作“百分之八十”的来源，“百分之8”也算百分比。“补 1 个例子”“第 2 段”这类 10 以下的结构性数字不受影响。
   - 英文数词也会读出来：“forty”“forty-two”“one hundred and twenty”“a hundred”都按数值比较；“1.5 million”算作 1500000，不按小于 10 放过；“twenty-first” 这样的序数词不算。倍数（“forty times as many”“three times”“40-fold”）是事实说法，来源里必须有同样的倍数，小数字也一样，原文只有普通的 40 不能作为“forty times”的来源。时间跨度（“twenty years later”“two decades”）如果等于来源中两个年份的差（例如 2000 和 2020 相差 20 年），就算有来源。“twice”“a third”这类写法目前不识别。
   - 这里检查的是数字有没有来源，不核实说法本身对不对。评分理由、说明、总评这类解释文字，以及精修、改写的正文，不在这项检查范围内。
+- **不预设分数、不强迫挑错**（提示词 `.8`）：每个评分项的问题可以是 0–4 条，没有明确的错误或不足时就留空，不得为了凑数编造问题；评分依据只在问题和优点里，所以没有问题时由优点提供原文证据（两者都没有核实过的引文，仍然拒绝）。提示里不再写“多数考生在 5.0–6.5”这类预设范围，只要求按评分标准、依据本文证据评分，不往高也不往低偏。
 - **语言建议不能改变原意**（提示词 `.7`，依据思考模式对照时的人工审阅）：
   - 判定某个结构有错之前，要读完整句：正确的 which 从句、“much less crowded”这样自然的说法都不算错误；准确、自然优先于换更少见的词。
   - 改句和示范句必须保留作者的意思，不能加入作者没写的事实、原因、数字、倍数或趋势。例如不能把 “do not have cars” 改成 “cannot afford a car”，也不能把只有两个年份的数据写成 “a steady climb”。
@@ -194,10 +196,14 @@ $PY -m tools.ielts_writing_ai realcheck --limit 1 --kinds evaluate --evaluate-th
 $PY -m tools.ielts_writing_ai realcheck --kinds evaluate --evaluate-thinking off  --max-calls 14 --confirm-paid --out <目录A> --price-in <输入单价> --price-out <输出单价>
 $PY -m tools.ielts_writing_ai realcheck --kinds evaluate --evaluate-thinking high --max-calls 14 --confirm-paid --out <目录B> --price-in <输入单价> --price-out <输出单价>
 
-# 2. 对照（不调用模型）
+# 2. 对照（不调用模型）。比较两个模型时加 --allow-model-change（提示词和实际输入仍须相同）
 $PY -m tools.ielts_writing_ai realcheck-compare <目录A> <目录B> --price-in <输入单价> --price-out <输出单价>
 ```
 
+- **建议的实验顺序**（每一步只改一个因素）：
+  1. 同一模型、同一思考档位（high），只改提示词（`.8`：允许“没有明确问题”，去掉预设分数范围），看误批是否减少；
+  2. 固定提示词，比较 high 与 max，以及另一款候选模型（`--allow-model-change`）；
+  3. 用带老师批注 / 老师分数的独立作文评估误批、漏报和分数偏差，避免只在这 7 篇内置样本上反复调参。
 - `realcheck-compare` 会先检查条件：服务商、模型、提示词版本、运行类型必须相同；每篇样本的题目、作文、目标分、题图状态和**题图识别结果**必须相同；并且**实际发送给评价模型的消息**（realcheck 为每次调用记录 sha256）必须一致。思考模式、输出上限和超时是请求选项，不在消息里，只有这几项可以不同。任何一项不符就拒绝对照。旧版报告没有消息指纹时会给出提示，只核对导出的输入。两次思考模式相同时只给提示，按重复性对照处理。
 - `compare.md` 并排列出：首轮通过率、延迟、输入 / 输出 / 思考 token、单次输出峰值与上限、截断和超时、估算费用、论证问题数、改列可选优化数、自相矛盾数、计数更正数、删除的建议数，以及逐篇分数和论证问题；样本带老师分数时，还会给出与老师的对比。
 - **哪一边更准，要看 `manual_review.md`**：它列出两次运行的以下内容，留空“判断 / 备注”列（正确 / 误判 / 过严 / 过松 / 不确定），每篇最后一行记录两次都漏掉的问题：

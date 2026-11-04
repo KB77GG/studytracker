@@ -192,7 +192,11 @@ def cmd_realcheck_compare(_settings, args) -> int:
 
     try:
         cmp = realcheck_compare.compare(
-            args.a, args.b, price_in=args.price_in, price_out=args.price_out
+            args.a,
+            args.b,
+            price_in=args.price_in,
+            price_out=args.price_out,
+            allow_model_change=args.allow_model_change,
         )
     except realcheck_compare.CompareError as exc:
         print(f"不能对照：{exc}", file=sys.stderr)
@@ -248,10 +252,15 @@ def build_parser() -> argparse.ArgumentParser:
     cmp.add_argument("--out", default=None, help="输出目录（默认 B 目录下的 compare/）")
     cmp.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     cmp.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
+    cmp.add_argument(
+        "--allow-model-change",
+        action="store_true",
+        help="对照两个不同的模型（提示词和实际输入仍须相同）",
+    )
     cmp.set_defaults(func=cmd_realcheck_compare)
     rc.add_argument(
         "--evaluate-thinking",
-        choices=["off", "high"],
+        choices=["off", "high", "max"],
         default=None,
         help="本次验证中原稿评价的思考模式（默认沿用 IWA_EVALUATE_THINKING；精修/改写不受影响）",
     )

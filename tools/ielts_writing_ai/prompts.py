@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.7"
+PROMPT_VERSION = "iwa-2026-11-04.8"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -83,7 +83,7 @@ ARGUMENT_CHECKLIST = (
 CRITERION_SCHEMA = (
     'C = {"band": number, "summary": str (Chinese), "strengths": [{"quote": str, '
     '"comment": str (Chinese)}, ...1-3], "issues": [{"quote": str, "comment": str '
-    '(Chinese), "suggestion": str}, ...1-4]}'
+    '(Chinese), "suggestion": str}, ...0-4; [] when there is no clear error or weakness]}'
 )
 
 
@@ -153,11 +153,14 @@ CHINESE_REMINDER = (
 )
 
 
+# No assumed score range for the writer (".7" told the model most candidates sit at
+# 5.0-6.5, which can pull strong essays down and push it to find faults).
 CALIBRATION = (
-    "Calibration rules: do not inflate. Most essays by Chinese candidates at this stage sit "
-    "between 5.0 and 6.5. Award 7.0+ in a criterion only when its higher-band features are "
-    "clearly and consistently present; award 8.0+ only for near-error-free, sophisticated "
-    "writing. Each criterion band is independent; use 0.5 steps between 0 and 9."
+    "Calibration rules: judge each essay only on its own evidence against the band "
+    "descriptors; do not inflate or deflate, and do not assume a typical score for the "
+    "writer. Award 7.0+ in a criterion only when its higher-band features are clearly and "
+    "consistently present; award 8.0+ only for near-error-free, sophisticated writing. "
+    "Each criterion band is independent; use 0.5 steps between 0 and 9."
 )
 
 
@@ -218,7 +221,9 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "from the essay (a short span, max 25 words) so it can be located automatically; "
         "never paraphrase, translate or correct inside 'quote'. A criterion with no "
         "verifiable quote will be rejected. An issue must be an error or a clear weakness; "
-        "an equally good alternative wording is not an issue.",
+        "an equally good alternative wording is not an issue. Report only issues you are "
+        "sure of: a criterion may have no issues at all (then its strengths carry the "
+        "evidence) - never invent one to fill the list.",
         "Language advice: read the whole sentence before calling a structure wrong (a "
         "correct which-clause or a natural phrase such as 'much less crowded' is not an "
         "error, and accurate, natural wording comes before rarer words). A correction or "
