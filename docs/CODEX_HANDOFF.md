@@ -1,5 +1,42 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（判断准则复核后）雅思写作 AI 试用工具：无来源数字建议过滤两处漏洞（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `93d47ec`（报告 `1b4a32af`，`docs/design/ielts-writing-ai-judgment-review-20261104/`）。其余修复都通过（266 项测试，指标 / 流程探针 18/18），但“删除无来源数字建议”有两处 P2 漏洞，真实请求 0/14：
+  1. 上一批 t2-mid 的“减排超过 80%”只从 argument 删去，TR 评分项的 `issues[].suggestion` 仍带着同一句，页面和完整复制文本都能看到；
+  2. 原文含 `1980` 或 `180` 时，子串匹配会把 `80%` 当成有来源。
+  用户说明：修好这两处后，可以继续已有授权（7 篇，只做评价，≤ 14 次），不用再确认。本轮没有任何模型调用，评审的 `docs/design` 文件没有改动。
+- 修复（业务提交 `6767270`）：
+  - 新增 `figures.py`：
+    - `figures()` 提取完整数值，不在更长的数字内部匹配，并标出是不是百分比（`%`、`％`、`per cent`、`percentage points`）；
+    - `Sources` 的规则：百分比必须对应来源中同样的百分比；普通数字只要数值相同（`1,500` 与 `1500` 视为相同）；小于 10 的普通数字不检查；`百分之…` 按整个短语比较；
+    - `for_submission()` 的来源包括：原文、题目、`image_status=ready` 时的题图识别结果、本篇字数、字数下限。
+  - `review.normalize_evaluation` 每次评价建一个 `Sources`，对所有建议使用同一规则：
+    - 评分项 `issues[].suggestion`：删去时置空，标 `suggestion_removed`；
+    - 论证问题的建议和可选优化：沿用 `argument.normalize(raw, essay, sources)`；
+    - 提升重点：删掉含无来源数字的那一条。
+  - 结果新增 `suggestions_removed`，格式为 `{criteria, priorities, argument, total}`。评价顶部只出一条汇总提示，写明各处删了几条；argument 里原来的重复提示去掉了。
+  - 页面评分项和复制文本显示“（建议含原文和题目都没有的具体数字，已删去）”。
+  - `argument.unsourced_figures(text, essay)` 和 `argument.normalize(raw, essay)` 保持原签名，评审探针可以直接复跑。
+- 验证：
+  - 新增 `tests/test_figure_review_20261104.py`（9 项），覆盖：
+    - 评审的 4 行数字表；
+    - 百分比与普通数字的区别；
+    - 数值写法（逗号、小数、Chinese 百分之）；
+    - 来源：题目、可用 / 不可用的题图、字数、下限；
+    - 评分项建议和提升重点被删，复制文本里没有 80% / 90%；
+    - 沿用原文数字的 Task 1 改句被保留；
+    - 所有真实 Task 2 输出里，剩下的建议都没有无来源数字。
+  - `test_argument_recheck_20261104` 的 mid 用例改为检查所有建议路径：结果 JSON 和复制文本里都没有 80%，`suggestions_removed` 为 评分项 1 + 论证 1 = 2。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **275 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（41 个文件）、`node --check`、`git diff --check` 都通过。
+  - 评审探针重跑：
+    - `argument_review_probe.py` exit 0：`criterion_80percent_advice_still_shown: []`，`copied_evaluation_still_contains_80percent: false`；数字表 4/4 正确；8 条 passing_contracts 与评审时的结果完全相同；
+    - `review_metrics_probe.py` 18/18。
+  - Playwright：用本地替身原样回放真实 mid 输出，评价面板和复制文本都不含 80%，两处显示删除说明，顶部汇总写“评分项 1 条、论证结构 1 条”。
+- **未验证**：真实模型下的建议被删比例；判断准则 `.5` 的真实效果（强文 ≤ 1 条问题、部分同意不判矛盾、Task 1 抓到 A/C 矛盾、中文校验引起的重试）。
+- **发布状态**：业务改动 `6767270` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：用户复核（275 项测试，两个探针）→ 通过后按已有授权执行：7 篇内置样本，只跑评价，最多 14 次。这个容器里没有 Key，真实调用仍由用户在 Mac 上运行。重点看：5 项论证检查加 Task 1 矛盾检查、`self_conflicts`、`suggestions_removed`（各处）、中文校验引起的重试、首轮 JSON 通过率、token 峰值。
+
 ## 2026-11-04 判断准则93d47ec复核：两处数字建议过滤未完成，新批真实请求0/14
 
 - 用户已为本轮新批次明确条件授权：离线复核通过后7篇内置合成作文、仅evaluate、最多14次实际请求，不运行精修/改写/识图。**本轮未通过，实际0/14**，未读取私有Key、未启动付费账本。该未执行批次授权保留，修复并复核通过后可继续同范围；上一批8/14已结束，不与本批混算。
