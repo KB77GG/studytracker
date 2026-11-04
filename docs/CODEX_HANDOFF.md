@@ -1,5 +1,47 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（思考模式复核后）雅思写作 AI 试用工具：改列建议过滤、思考截断与用量、复核表证据、实际输入指纹（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `bd93e1c`（报告 `98caf44d`，`docs/design/ielts-writing-ai-thinking-review-20261104/`，含 3 个探针），未通过，真实请求 0/30。
+  - 已经通过的部分：思考参数写法与官方文档一致（用户在本机核对过：`thinking:{type:enabled}`、顶层 `reasoning_effort:high`、`reasoning_content` 与正式回答分开返回、`usage.completion_tokens_details.reasoning_tokens`、思考时 temperature 不起作用）；上一轮的 260 词目标、中文百分比、计数更正都复核通过。
+  - **用户授权保留**：修复复核通过后，按原计划跑独立总账本：连通性测试 ≤ 2 次，off ≤ 14 次，high ≤ 14 次，合计 ≤ 30 次，high 的输出上限 16000。不需要再次确认。
+  本轮没有任何模型调用，评审的 `docs/design` 文件没有改动。
+- 修复（业务提交 `ef07ce2`）：
+  1. **改列时泄漏 80%**：
+     - 原建议已被删去时，不再用 comment 回填；只有原本没有建议时才用 comment 代替，而且 comment 也要先通过同样的来源检查；
+     - 改列记录和同段支撑都保留，`suggestion_removed=True` 时页面和复制文本显示“已删去”；
+     - 新增 `review._sweep_advice`：对最终结果里所有会显示的建议（评分项问题、论证问题、可选优化）再检查一遍。正常情况下什么也查不到；查到就说明有路径漏了过滤，会删去、计数，并记一条 warning 日志。
+  2. **截断与思考 token**：
+     - `ChatClient` 先判断 `finish_reason == "length"`，再判断正文是否为空；
+     - realcheck 失败的调用也从 usage 提取 `reasoning_tokens`；
+     - 每类指标新增 `reasoning_tokens_known`（已知小计，含失败调用）和 `reasoning_unreported_calls`（思考调用中没有报告的次数）。只要有一次没报告，`reasoning_tokens` 就为 None。report.md 写“已知小计 N（另有 M 次没有报告，合计不完整）”，compare 的写法相同；
+     - 截断仍不作为不合格输出重试，这一篇评价直接失败。这点已写进 README。
+  3. **复核表证据**：`sample_view` 保留 `conflicts_with`、`needs_review`、段号、建议和删除标记、论证提示、Task 1 文内矛盾的完整内容（`{quote, figures, comment}`）和 `comparisons_checked`。`manual_review.md` 新增以下行：立场判断（Task 2）、论证提示、带“（需人工确认）”和“↔ 与之矛盾：……”的论证问题（含段号）、“Task 1 文内矛盾”（含对照数字和说明）、“Task 1 比较核对”（核对了几条、指出几条）。
+  4. **实际输入指纹**：
+     - `RecordingClient` 为每次调用记录 `input_sha256`，即发给模型的消息的 sha256，不含 thinking、上限、超时等请求选项；
+     - 导出的 submission 增加 `image_description`，样本指纹也包含它和 target_band；
+     - `realcheck-compare` 要求每篇首次评价请求的消息指纹一致，否则报“实际发送给评价模型的输入不同”；旧报告缺少指纹时给出提示。
+- 验证：
+  - 新增 `tests/test_thinking_review_20261104.py`（16 项），覆盖：
+    - 评审的 80% 用例及其他组合（只有建议含 80%、comment 回填、comment 含 80% 但建议干净），结果 JSON 和复制文本都没有 80%，删除计数正确；
+    - 干净的 comment 和 260 词目标仍能作为建议；
+    - 总检查能拦住模拟的漏网路径；
+    - 本机 stub 服务器：空正文 + length、部分 JSON + length 都记为截断，并保留 usage；正常结束的空正文仍是 empty；
+    - 一次截断 + 一次成功，思考 token 合计 31800，输出 token 32000，截断 1 次；有一次没报告时只给小计和缺失次数；
+    - 复核表显示成对矛盾、需人工确认、段号、立场判断、Task 1 对照数字和说明；
+    - 指纹：消息不同时拒绝；只有思考 / 上限不同时通过；缺指纹时提示；题图识别结果进入指纹；off 和 high 的消息指纹相同。
+  - `test_thinking.py` 的 3 处断言按新行为更新：行标签、作文改动时同时报两类错误、复核表行带段号。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **320 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（45 个文件）、`node --check`、`git diff --check` 都通过。
+  - 评审探针重跑（输出在 scratch；评审文件未改）：
+    - `compare_probe.py` exit 0：题图识别结果 140 / 141 不同的对照现在被拒绝（`compare_accepted: false`，两条错误）；复核表各项都为 true。唯一例外是 `task1_issue_preserved_in_view`：探针用的是“字符串在列表中”的写法，而视图现在为了保留对照数字，改成了对象列表，所以这项为 false；实际 claim 已保留并显示（`task1_issue_rendered: true`），figures 检查也为 true。复核时需要按新的视图格式调整这一项。
+    - `evidence_probe.py` 和 `thinking_client_probe.py` 写死了修复前的行为，所以原文件在第一个相关断言处 exit 1。我在 scratch 副本里把预期改为正确行为后都是 exit 0：evidence 50 项检查通过、`fallback_defect_reproduced: false`；thinking client 中，空正文 / 部分 JSON 都报为截断，思考 token 15900 已计入，一次失败 + 一次成功合计 31800。
+- **未验证**：真实连通性，off / high 的 A/B 实际效果，16000 / 300 是否合适；浏览器全流程没有重跑（页面只多了“已删去”提示和 null 判断）。
+- **发布状态**：业务改动 `ef07ce2` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：
+  1. 用户复核（320 项测试，3 个探针按新预期调整）。
+  2. 通过后按已有授权执行：连通性测试 ≤ 2 次；off 7 篇 ≤ 14 次；high 7 篇 ≤ 14 次；然后 `realcheck-compare`，人工填写 `manual_review.md`。
+  3. 根据峰值和延迟重新设定思考的上限和超时。
+
 ## 2026-11-04 思考开关bd93e1cf复核：离线暂未通过，授权批次0/30
 
 - 用户本轮明确授权：**离线复核通过后** high连通1篇≤2次、off/high各7篇各≤14次，总计≤30次实际请求；high输出上限16000。本轮独立发现回归，未满足条件，**0/30，未读Key、未建付费账本**。授权保留，修复并复核通过后可继续同范围，无需重复询问。上一批7/14已结束，不混算。
