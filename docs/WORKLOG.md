@@ -8,7 +8,7 @@
 
 - 按用户 push 授权，在 Claude 第二十轮 93ad42e3 上建立独立分支 `codex/grammar-crossreview-20261104`；仅新增 `docs/reviews/cambridge-crossreview-20261104/` 与更新两交接，不带入旧 main 的未提交改动。
 - 完整交付 63 批、合并 CSV、ZIP、统计与 SHA；正确2457 / 答案错1374 / 有歧义2305 / 不适合96。逐字节、ID/顺序/计数/ZIP完整性核验通过；本轮不更改判定或业务代码。
-- 任务树绝对路径、基线、精确核验、其他worktree状态及接手命令见 CODEX_HANDOFF 与结果 README。未合 main、未部署、未导入生产。提交/推送精确结果以最终交接补记为准。
+- 任务树绝对路径、基线、精确核验、其他worktree状态及接手命令见 CODEX_HANDOFF 与结果 README。未合 main、未部署、未导入生产。结果提交 `27932e0fc3202f9d9f8ac766ccaf39d64e9cbdfc` 已发布并回读核验72个blob一致；CI41817186570 test成功、lint advisory失败。此补记仅两交接，结果文件不变；最后SHA见Git HEAD。
 
 ## 2026-11-01 — 语法候选题 v0.2 第二十轮（Claude，非并列 T2 多目标、导出待复核题）
 
