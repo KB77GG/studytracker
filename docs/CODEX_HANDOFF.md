@@ -1,5 +1,36 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 独立写作修复已推功能分支，完整合成验证完成（21/42请求）
+
+- 用户本轮明确授权：提交推送 `claude/ielts-writing-ai-trial`，并用现有试用Key跑7篇内置合成作文×评价/精修/改写，最多42次实际请求。实施树 `/private/tmp/studytracker-iwa-realcheck-review-20261103` 从detached `1df8f9220ef260454979e68e2e95bac6e062b46a` 建同名功能分支，10个工具源/说明/测试文件提交 **`f3aef8cd4c531385b5ad4e5135b4dee1c3beae98`** 已push并核对远端一致；没有合并main/部署。开工12 modified（10工具文件+两交接），代码提交后只剩两交接。本条和6份完整报告随独立文档提交同步，最终文档HEAD见git log；完成后实施树tracked clean，私有.env仍ignored。
+- 源修复包括真实HTTP预算与内容重试共享、正数/样本ID校验、禁重定向、Mac缺CA时certifi、当前DeepSeek非思考配置、鉴权/生成分开、失败响应usage保留、文本/视觉/未知用量和费用覆盖。旧报告“本次验证范围”是人工附注，其余新增统计来自源码；已在交付README向Claude明确。
+- 本次实测：deepseek-flash / `iwa-2026-11-03.1` / target7 / 无视觉，实际 **21/42**，均HTTP200正常结束、无重试。三类各7/7首轮JSON与校验通过；117/117引文为原稿子串，精修87/87句、缺句0。弱/中/好/强总分5.0/6.5/7.0/7.5，分差2.5；离题TR4.0；Task1缺图TA/总分不可评；宽松检查11/11。输入15,899、输出19,471token，按高峰缓存未命中口径估USD0.028135，不是账单核实。
+- **质量边界不能遗漏**：改写仅5/7达下限，t2-mid247词、t2-under-length220词（均需250），当前规范化只警告所以仍ready；后者自称约270词/达Band7。离题改写仍讲在线教育却自称Band7。Task1没有新增数字，但保留原文“A两年最高”与“2020 C80>A75”的矛盾；声称删总结段却仍有In summary，仍自称Band7/数据准确。已把这些作为下一轮提示词/质量检查依据，没有自行改门槛或消耗剩余额度重跑。7篇不能证明评分准确度，20–30篇教师校准待做。
+- 共享交付：实施树 `docs/design/ielts-writing-ai-realcheck-20261104/{README.md,report.md,report.json,run_data.json,raw_calls.jsonl,transport.json}`，6文件均无Key，全部合成数据，随同一功能分支推送。README含具体质量问题和来源区分；report.md保留自动指标，仅将末尾“仅本机”改成实际共享状态。资料树本机原始记录/runner/manifest在 `/Users/zhouxin/Desktop/studytracker/docs/design/iwa-realcheck-full-20261104/`，其results保持原始报告；本机runner不在远端。
+- 精确实测命令（cwd资料树，**已完成，不重复运行**）：`PYTHONDONTWRITEBYTECODE=1 .venv/bin/python docs/design/iwa-realcheck-full-20261104/run_full.py --confirm-paid` →exit0；同脚本 `--self-test` 纯内存7×3×2验证42次后第43次被拒，exit0。生产Generator/提示词/校验未被替换，外层仅发前持久计数/文件锁/禁重复运行/净化，临时数据库不碰试用库，21请求后完成且停止。
+- 已有离线验证仍有效，业务源未再改：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-realcheck-debug-20261103/run_offline_tests.py` →Python133/133、Node8/8，fake/loopback/临时库，外部IWA目录未写入；实施树主解释器 `-m ruff check tools/ielts_writing_ai`、`-m black --check tools/ielts_writing_ai`通过31文件。代码[CI41750425587](https://github.com/KB77GG/studytracker/actions/runs/41750425587) overall success，3个测试job通过；advisory Ruff有49个未修改文件112条存量错误，本工具目录0条。此次仅报告/交接新增，diff检查及独立原始结果复核通过。
+- 私有Key仍仅本机：实施树 `tools/ielts_writing_ai/.env` 和资料树 `.tmp/ielts-writing-ai-trial/.env`，均0600/Git忽略，备份目录0700；未提交配置/试用码/数据库/上传/系统日志。此前专用Key单篇验证1次已成功，旧Key两次失败计数均保留未改；本轮未新建/轮换凭据。未启停主/试用网页服务。
+- 资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`、behind103，origin/main仍 `f0e040416c8a68e66ba1202e558d4c1690bdc91b`；原7 modified/22 untracked入口保留，仅本机报告和两交接更新，业务没有复制到旧main。精确脏清单/源SHA见本机完整验证source-state.json。旧五审阅树/并行active-tasks树不动，其他会话生产发布记录保留。
+- 本轮**代码已commit/push功能分支，报告和规范交接同步该分支；未merge/deploy、无生产前后端/配置/数据库/进程写入，无小程序上传/提审/发布**。主资料树交接镜像与本机runner仍仅本机。下一位Claude先 `git fetch origin claude/ielts-writing-ai-trial`，确认工作区干净后同步功能分支，再读共享README与原始结果，优先补改写质量回归/提示词；后续真实调用另定范围。Python3.10、真实识图、教师校准和本轮浏览器完整流程尚未验证。
+
+## 2026-11-03 DeepSeek 控制台核对完成：服务器凭据与当前账户列表不对应
+
+- 用户已自行登录，实际登录标签页为Chrome1755905178（旧1755905174仍是登录页，已关闭）。通过官方 `/usage` → `/api_keys` 的可见页面确认当前账户列出1把Key；完整值仅创建时可见，现有列表仅掩码。已保留API Keys页供用户查看。本交接不记录账户金额、完整/部分凭据或Tracking ID。
+- 经授权SSH只读 `/root/apps/studytracker/.env`，用与受限测试一致的shlex解析在服务器内比较首尾掩码；只输出布尔结果：configuration_entries=1、parsed_nonempty=true、matches_console_mask=false、appears_placeholder=false、contains_whitespace=false。精确执行入口 `ssh root@47.110.45.193 python3 -`，stdin为标准库只读比较脚本；首次沙箱拒绝SSH，获准后exit0。**确定先前试用读取的凭据与当前登录账户列表那把不是同一把**，不能凭此判定该凭据属于哪个账户或何时撤销，也没有核对生产进程/systemd实际生效值。
+- 独立只读复核paid_smoke.py/llm.py未见普通.env解析或Bearer Header构造错误，合成内存验证修改请求正文不丢Authorization；不展开变量/特殊转义及运行时环境覆盖仍是边界。没有读取网页完整Key、创建/删除/撤销Key、改任何服务器配置，**本轮新增模型请求0**，之前两次额度仍已耗尽。
+- 资料树 `/Users/zhouxin/Desktop/studytracker` 仍main6ded77d2/behind103，当前origin/main `f0e040416c8a68e66ba1202e558d4c1690bdc91b`；本轮未fetch/merge，保留其他会话上线交接和原7 modified/22 untracked入口。审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103` 仍detached1df8f922、仅两交接modified；本轮新增资料树报告目录下console-check.json及本机两树交接，业务源码/测试未变，无需重跑业务测试。网页AX核对、SSH布尔比对exit0及两树git status/log -5为本轮证据。
+- 下一步给独立试用工具配置当前账户有效Key：旧Key若无安全备份无法从列表恢复，可由用户决定创建试用专用凭据；目前未获新建/轮换/部署或新模型调用授权。继续避免改变主系统Key。此次写作试用工作未改生产前后端/库/进程或小程序，未commit/push/deploy；并行主系统网页发布属于其他会话，见其交接。本轮材料仅本机，已登录浏览器会话不可跨机器交接。
+
+## 2026-11-03 realcheck Mac复核：两次受限尝试结束，DeepSeek鉴权401
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，detached `1df8f9220ef260454979e68e2e95bac6e062b46a`（功能分支业务2a658b2e）；开工clean，业务源码未改，结束仅本两交接modified。资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`，origin/main `6904252ea40d93731d2552afcf1419cf3a65b4da` / behind101；原7 modified、22 untracked入口保留，本轮只新增 `docs/design/iwa-realcheck-review-20261103/` 及更新两交接。旧五审阅树与并行active-tasks树未改，精确快照见报告source-state.json。
+- 用户明确授权用服务器已有DeepSeek Key，只跑1篇评价、最多2次。SSH只读指定配置，Key由本地Python管道捕获到内存，不打印/不落盘/不入报告。执行1篇内置合成t2-weak、evaluate、vision none，无学生数据。累计传输尝试2次：首次URLError未取得响应；离线发现本机默认CA文件/目录不存在、信任库0根证书，首错底层reason未记录，不能断言唯一原因；采用已有certifi完整TLS校验后最后一次到达官方API，返回HTTP401。没有模型结果或usage，不能称评分验证通过、不能把工具0 token/0费用视为账单核实；未查余额。当前Key在本次请求中鉴权未通过，不扩大断言为全部生产调用失效。
+- 原realcheck有预算缺陷：RecordingClient记complete次数，ChatClient默认网络重试1次，max_calls2可实际4请求；离线已复现。付费验证用独立审阅paid_smoke.py，禁网络重试/重定向、固定官方URL、发前持久计数+flock，第二次仅花原剩余额度1。当前总2、剩余0，**禁止再跑付费脚本或删除/重置paid/transport.json；进一步API请求需新明确授权**。当前官方模型deepseek-flash，非思考模式；原提示词/内容校验不变，未改业务默认值。脚本self-test全内存验证总2、剩余1、首网错即停等均通过，报告exact-secret检查通过。
+- 另三项离线复现：截断响应的usage丢失并误标连通失败；总token/费用漏视觉调用；JSONL重复id让首轮评价错配（实际2/2，报告50%）。本轮无源修复，详细期望/位置/证据在报告README及metrics_findings.md。预算、指标探针exit0；ruff与black check通过31文件、diff检查通过。完整离线测试结论见下一条验证补记与offline-tests.json；初次沙箱阻止本地bind日志单独保留，不能当产品失败。
+- 验证补记：原生Mac/Python3.13.3，完整Python122/122通过（18.43s），Node8/8通过，测试外部IWA_DATA_DIR未写入；隔离脚本全程假模型/loopback，首次沙箱bind受拒结果保留，获准后全套通过。无Python3.10或真实模型质量结论。
+- 精确离线复跑：主树`.venv/bin/python docs/design/iwa-realcheck-review-20261103/run_offline_tests.py`（隔离IWA/代理/临时库，假模型；本地监听需沙箱权限）；同解释器分别运行该目录`iwa-realcheck-budget-probe.py`、`metrics_probe.py`、`paid_smoke.py --self-test`。付费历史命令`paid_smoke.py --confirm-paid`和随后`--confirm-paid --resume-with-certifi`已完成，**不是可继续复跑的下一步**。原始报告paid/report.md、paid/after-ca-fix/report.md均加了失败/未知费用说明，paid/summary.json为明确最终状态。
+- 本轮仅SSH读取凭据、向官方DeepSeek发送受限合成请求；没有改生产后端/网页/数据库/配置，未启停生产进程，小程序未上传/提审/发布。Claude源码已commit/push功能分支；本轮报告/探针/两树交接仅本机，未commit/push/merge/deploy。下一步先修预算/统计，再由用户在控制台确认/创建有效Key并安全配置、重新明确授权小样本验证；不要把Key发到聊天，不要扩大到7篇或评分校准。真实质量、识图、Python3.10和本轮浏览器E2E未验证。
+
 ## 2026-11-03（第五轮后）雅思写作 AI 试用工具：真实模型小样本验证工具 realcheck（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户在 Mac 上复核 `b3ed9e1`：原生 Bash 3.2 下 Python 111 项、Node 8 项通过，异常退出时的锁问题关闭，没有新的阻断项（验收报告在 Mac 本地 `docs/design/iwa-trial-fifth-review-20261103/README.md`）。用户要求进入 DeepSeek 真实模型小样本验证。本容器没有 Key，Key 也不应该经过聊天，所以本轮只交付验证工具，**没有调用任何真实模型**。
