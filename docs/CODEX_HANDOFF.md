@@ -1,5 +1,62 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（思考模式建议后）雅思写作 AI 试用工具：原稿评价思考开关与同条件对照工具（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户建议给原稿评价试用 deepseek-flash 的思考模式。理由是剩下的问题（忽略前文已有的理由、把合理让步当成问题、要求例子机械回扣）都涉及上下文和逻辑。用户的要求：
+  - 只给评价加开关，精修和改写保持不变；
+  - 同一版 `.6` 提示词、同一批作文，对比关闭和 high；
+  - 人工比较错误批评是否减少、是否漏掉真实问题，以及与老师评分的差距；
+  - 记录耗时、完整 token 和费用，重新设定输出预算；
+  - `support_found` 只能证明同一段有这句话，不能证明它构成有效支撑。
+  用户说明：其 Mac 因 Git SSH 鉴权失败，没有拉到 `10a5af3`，所以咨询结论针对上一版；用户本机的 `CODEX_HANDOFF.md` / `WORKLOG.md` 有未提交的咨询记录，拉取时可能与本节冲突（两边都在文件顶部插入，按时间顺序合并即可）。
+  本轮没有任何模型调用。**开发容器访问不到 api-docs.deepseek.com（网络许可未包含），官方文档没有逐字核对**；字段写法按用户给出的说明实现。
+- 实现（业务提交 `90194f0`）：
+  - 配置：
+    - `IWA_EVALUATE_THINKING`：off（默认）或 high，只接受这两个值；
+    - `IWA_EVALUATE_THINKING_MAX_TOKENS`：暂定 16000；
+    - `IWA_EVALUATE_THINKING_TIMEOUT`：暂定 300 秒；
+    - 非 DeepSeek 服务商开启时报 ConfigError；`public_summary` 带上这三项，不含 Key。
+  - `ChatClient.complete(..., thinking, timeout)`：
+    - high 时发送 `thinking: {"type": "enabled"}` 和 `reasoning_effort: "high"`；off 时和以前一样发送 `{"type": "disabled"}`；
+    - 读取 `message.reasoning_content`，存入 `LLMResult.reasoning`，不参与 JSON 解析；
+    - 新增 `reasoning_tokens(usage)`，读取 `usage.completion_tokens_details.reasoning_tokens`，没有报告时返回 None，不当作 0；
+    - 非 DeepSeek 服务商收到 thinking 时直接报 `unsupported`，不发出请求。
+  - `Generator`：只有 `kind == "evaluate"` 才传 thinking，并使用思考专用的上限和超时。精修和改写不传任何新参数，所以原有测试替身不受影响。评价结果记录 `thinking`，页面和复制文本的来源一行显示“思考模式 high”。
+  - realcheck：
+    - 新增 `--evaluate-thinking off|high`；
+    - 每次调用记录 `thinking`、`max_tokens`、`reasoning_tokens`、`reasoning_chars`、`reasoning`（思考内容只留在本机 raw_calls）；
+    - 每类生成的指标新增 thinking、max_tokens、单次输出峰值、思考 token 合计和峰值、截断次数、超时次数；
+    - report.md 新增“输出预算与思考模式”一节；
+    - `write_report` 另写出 `run_data.json`。
+  - 新模块 `realcheck_compare.py` 和命令 `realcheck-compare A B [--out] [--price-in --price-out]`：
+    - 服务商、模型、提示词版本、运行类型和每篇作文的指纹（题目 + 正文 + 类型 + 题图状态的 sha256）必须一致，否则拒绝（exit 2）；思考模式相同时给出“重复性对照”提示；
+    - 输出 `compare.md` / `compare.json`：汇总表（调用、首轮通过、延迟、token、思考 token、峰值与上限、截断 / 超时、估算费用、论证问题、改列、自相矛盾、计数更正、删除的建议、合理性检查），逐篇分数与论证问题，有老师分数时附对比；
+    - 输出 `manual_review.md`：逐条列出两次运行的论证问题、改列的可选优化、TR / CC 问题、计数更正，判断和备注两列留空，每篇最后一行记录漏报。
+  - README 新增思考开关说明，以及“思考模式对照”流程：先 1 次连通性测试，再 A / B 各 7 篇只做评价（每次 ≤ 14 次调用），最后 compare。同时写明 `support_found` 不能证明支撑有效。
+- 验证：
+  - 新增 `tests/test_thinking.py`（14 项）：
+    - 配置：默认值、解析、拒绝非法值和非 DeepSeek 服务商；
+    - 本机 stub 服务器上的真实客户端：off 和 high 的请求体、reasoning_content 与思考 token、截断、非 DeepSeek 拒绝；
+    - 端到端：只有评价使用思考和独立预算，精修和改写不变；off 时不传新参数；
+    - realcheck 的记录和报告；
+    - 对照：条件一致时成功，提示词版本或作文不同时拒绝，思考模式相同时提示；
+    - CLI。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **304 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（44 个文件）、`node --check`、`git diff --check` 都通过。
+  - 用 fake 走一遍 CLI：A（off）和 B（high）各 7 篇，compare 正常生成 compare.md 和 manual_review.md。
+- **未验证**：
+  - DeepSeek 是否接受这组字段（尤其 `reasoning_effort` 的位置），以及思考时 temperature 和 JSON 模式的行为；
+  - 思考 token 是否单独报告、怎样计费；
+  - 16000 / 300 是否合适；
+  - 思考能否减少过严批评，同时不漏掉真实问题。
+  这些都要靠下一步的实测和人工复核。
+- **发布状态**：业务改动 `90194f0` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**（需要用户授权，我不发起付费调用）：
+  1. 先修好拉取（Git SSH 鉴权），复核到本提交。
+  2. 连通性测试：`realcheck --limit 1 --kinds evaluate --evaluate-thinking high --max-calls 2 --confirm-paid`。如果返回 HTTP 400，就对照官方文档调整字段。
+  3. A / B 对照：off 和 high 各 7 篇，只做评价，每次 ≤ 14 次调用，然后 `realcheck-compare`。
+  4. 人工填写 `manual_review.md`。根据两边的输出峰值和延迟，重新设定思考的上限和超时。
+  5. 再用 ≥ 20 篇老师评过分的作文校准。
+
 ## 2026-11-04（第四批真实验证后）雅思写作 AI 试用工具：篇幅目标、同段支撑、计数说法（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户的第四批真实验证（`4d454f54`，`docs/design/ielts-writing-ai-figures-recheck-20261104/`）。
