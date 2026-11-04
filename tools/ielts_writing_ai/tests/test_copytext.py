@@ -56,7 +56,8 @@ class CopyTextTest(unittest.TestCase):
             self.assertIn(copytext.DISCLAIMER, text)
             self.assertIn("没有与题图核对", text)
         self.assertTrue(copies["essay"].startswith(body))
-        self.assertIn("关键改动：", copies["with_notes"])
+        result["key_changes"] = [{"before": "a b", "after": "c d", "why": "w"}]
+        self.assertIn("1. “a b” → “c d”（w）", copytext.rewrite_texts(result, GEN)["with_notes"])
 
     def test_legacy_string_strengths_are_still_copyable(self):
         legacy = {

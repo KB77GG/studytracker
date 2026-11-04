@@ -1,34 +1,35 @@
 """Deterministic quality checks for a model rewrite.
 
-Built from the 2026-11-04 real-model run and revised after the offline review of the
-same day. The model's own claims about its rewrite are not trusted:
+History: built from the 2026-11-04 real-model run, revised after that day's offline
+review, and restructured after the second real run (iwa-2026-11-04.2), which showed
+that guessing edits from free-text notes misfires ("cut air pollution" read as a
+deletion; a removed "the" judged by other "the"s in the essay).
 
-- word counts: the count shown is always the server's. Each number in the notes is
-  classified by its clause as describing the original draft, a target/limit, or the
-  current rewrite; only target/limit mentions are exempt, and claims about the
-  original or the rewrite must match the real counts;
-- self-scoring: "this version reaches Band 7" / "已达到雅思7分" is a target, not a
-  verified score. Negated ("未达到") and intentional ("为了达到…") wording is not a
-  claim; the page always labels the rationale as unverified self-description;
-- change notes: "changed" means changed case-sensitively (i -> I is a real change);
-  identical before/after pairs, claimed new wording that is not in the essay, and
-  claimed deletions of text still present are removed;
-- answering the question: lexical overlap cannot decide this (a paraphrase can score
-  lower than an off-topic essay stuffed with keywords), so it is only an uncertainty
-  note. The verifiable part is the model's answer map - each requirement of the
-  question must point to a sentence that exists in the rewrite. That proves the
-  cited sentences exist, not that they truly answer the question;
-- Task 1 without a readable chart: positive claims that figures are accurate are
-  flagged; honest statements that accuracy cannot be confirmed are not.
+Principles:
 
-Issues trigger the existing single silent retry; if the retry still has issues,
-the better attempt is kept, marked as not passing quality, with every issue shown.
+- Change notes are structured data: ``{"before": exact text from the student's
+  essay, "after": exact text from the rewrite, "why": explanation}``. A change is
+  verified when ``before`` is in the original, ``after`` is in the rewrite, and the
+  number of occurrences shows the edit really happened (``after`` appears more often
+  in the rewrite, or ``before`` less often). Free-text notes are not verifiable and
+  are not accepted as change notes.
+- Two classes of issue. *Content* issues are about the essay itself (too short,
+  still the off-topic essay). *Notes* issues are about the model's description of
+  it (false change notes, word counts, self-scoring, answer map). Notes problems are
+  repaired without regenerating the essay, so a good essay is never replaced
+  because its notes were wrong.
+- Self-scoring ("已达到雅思 7 分") is a target, not a verified score; negated,
+  intentional and original-draft statements are not claims.
+- Answering the question cannot be verified lexically. The answer map proves cited
+  sentences exist. The one deterministic case: the model itself says the original
+  is off-topic, yet the rewrite is still mostly the original's content and shares
+  little with the question - then the rewrite is still off-topic.
 """
 
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from . import essay as essay_lib
 
@@ -36,6 +37,12 @@ UPPER_WORDS = {"task1": 220, "task2": 330}
 MIN_ANSWER_ITEMS = 2
 LOW_OVERLAP_NOTE = 0.2  # below this, only an uncertainty note (never pass/fail)
 MIN_PROMPT_TERMS = 3
+# Still-off-topic: the model flags the original as off-topic, but the rewrite keeps
+# most of the original's content words and few of the question's.
+STILL_OFF_TOPIC_ORIGINAL_OVERLAP = 0.5
+STILL_OFF_TOPIC_PROMPT_COVERAGE = 0.3
+
+CONTENT_CODES = {"below_min", "still_off_topic"}
 
 # Procedural exam instructions are not part of what the question is about.
 INSTRUCTION_SENTENCE_RE = re.compile(
@@ -54,28 +61,6 @@ GENERIC_PROMPT_WORDS = set(
     should show shown shows some such summarise summarize table than that the their there
     these they think this those to rather views what where whether which while who why will
     with would write you your""".split()
-)
-
-# One alternative per quote style, each closed by its own mark, so apostrophes inside
-# “lion's share” do not end the quotation.
-_QUOTE_STYLES = (("“", "”"), ("「", "」"), ("『", "』"), ('"', '"'), ("‘", "’"), ("'", "'"))
-_Q = (
-    "(?:"
-    + "|".join(
-        f"{re.escape(o)}([^{re.escape(c)}]{{1,240}}){re.escape(c)}" for o, c in _QUOTE_STYLES
-    )
-    + ")"
-)
-_CHANGE_VERB = r"(?:改为|改成|替换为|替换成|换成|变为|调整为|→|->|=>)"
-# "改为更简洁的“X”" - allow a few words between the verb and the new quote.
-CHANGE_PAIR_RE = re.compile(_Q + r"\s*" + _CHANGE_VERB + r"[^“「『\"‘'\n]{0,10}" + _Q)
-QUOTED_RE = re.compile(_Q)
-DELETE_RE = re.compile(r"删除|删去|去掉|移除|并入|removed?|deleted?|cut", re.IGNORECASE)
-SUMMARY_PARAGRAPH_RE = re.compile(
-    r"总结段|结尾段|结论段|summary paragraph|concluding paragraph", re.I
-)
-SUMMARY_START_RE = re.compile(
-    r"^(?:in summary|to sum up|in conclusion|to summarise|overall)\b", re.I
 )
 
 # Clause boundaries for context decisions (negation, intent, what a number refers to).
@@ -133,12 +118,24 @@ INTENT_RE = re.compile(
     re.I,
 )
 
+# Accepted spellings of the change-note fields (the model used {old, new} in the
+# 2026-11-04 run).
+CHANGE_FIELDS = {
+    "before": ("before", "old", "original", "from", "原文", "原句"),
+    "after": ("after", "new", "revised", "to", "改后", "新句"),
+    "why": ("why", "reason", "explanation", "note", "说明", "原因"),
+}
+
 
 @dataclass(frozen=True)
 class Issue:
     code: str
     message: str  # Chinese, shown to the user
     hint: str  # English, sent back to the model on retry
+
+    @property
+    def kind(self) -> str:
+        return "content" if self.code in CONTENT_CODES else "notes"
 
 
 # ---------------------------------------------------------------------------
@@ -184,23 +181,22 @@ def prompt_coverage(prompt: str, text: str) -> float | None:
     return len(terms & present) / len(terms)
 
 
-def _quoted(groups) -> str:
-    return next((g for g in groups if g is not None), "")
+def content_stems(text: str) -> set[str]:
+    return {
+        _stem(w)
+        for w in re.findall(r"[A-Za-z]+", text or "")
+        if len(w) > 3 and w.lower() not in GENERIC_PROMPT_WORDS
+    }
 
 
-def change_pairs(line: str) -> list[tuple[str, str]]:
-    n = len(_QUOTE_STYLES)
-    return [
-        (_quoted(m.groups()[:n]), _quoted(m.groups()[n:])) for m in CHANGE_PAIR_RE.finditer(line)
-    ]
-
-
-def quoted_fragments(line: str) -> list[str]:
-    return [_quoted(m.groups()) for m in QUOTED_RE.finditer(line)]
+def original_overlap(rewrite: str, original: str) -> float:
+    """Share of the rewrite's content words that come from the original essay."""
+    mine = content_stems(rewrite)
+    return len(mine & content_stems(original)) / len(mine) if mine else 0.0
 
 
 # ---------------------------------------------------------------------------
-# Claims
+# Claims in free text (why / rationale)
 # ---------------------------------------------------------------------------
 
 
@@ -256,28 +252,49 @@ def data_claim(text: str) -> bool:
     return False
 
 
-def _change_problem(line: str, essay_text: str, last_paragraph: str) -> str | None:
-    """Return a problem code if a key-change line contradicts the rewritten essay."""
-    pairs = change_pairs(line)
-    for old, new in pairs:
-        # Case- and punctuation-sensitive: "i" -> "I" is a real change.
-        if essay_lib.same_text(old, new):
-            return "noop_change"
-    for _old, new in pairs:
-        if re.search(r"[A-Za-z]", new) and not essay_lib.contains_exact(essay_text, new):
-            return "claim_absent"
-    if DELETE_RE.search(line):
-        new_parts = [new for _old, new in pairs]
-        for quoted in quoted_fragments(line):
-            if not re.search(r"[A-Za-z]", quoted):
-                continue
-            if any(essay_lib.same_text(quoted, new) for new in new_parts):
-                continue
-            if essay_lib.contains_exact(essay_text, quoted):
-                return "deletion_mismatch"
-        if SUMMARY_PARAGRAPH_RE.search(line) and SUMMARY_START_RE.search(last_paragraph):
-            return "deletion_mismatch"
-    return None
+# ---------------------------------------------------------------------------
+# Structured change notes
+# ---------------------------------------------------------------------------
+
+
+def _field(item: dict, name: str) -> str:
+    for key in CHANGE_FIELDS[name]:
+        value = item.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()[:600]
+    return ""
+
+
+def normalize_change(item) -> dict | None:
+    """A change dict (accepting known field aliases), or None for free text."""
+    if not isinstance(item, dict):
+        return None
+    return {
+        "before": _field(item, "before"),
+        "after": _field(item, "after"),
+        "why": _field(item, "why"),
+    }
+
+
+def verify_change(change: dict, original: str, rewrite: str) -> str | None:
+    """None if the change is verified, else the problem code."""
+    before, after = change["before"], change["after"]
+    if not before and not after:
+        return "change_empty"
+    if before and after and essay_lib.same_text(before, after):
+        return "noop_change"
+    if before and not essay_lib.contains_exact(original, before):
+        return "change_unlocatable"
+    if after and not essay_lib.contains_exact(rewrite, after):
+        return "change_unlocatable"
+    happened = (
+        bool(after)
+        and essay_lib.count_exact(rewrite, after) > essay_lib.count_exact(original, after)
+    ) or (
+        bool(before)
+        and essay_lib.count_exact(rewrite, before) < essay_lib.count_exact(original, before)
+    )
+    return None if happened else "change_not_made"
 
 
 def normalize_answers(value) -> list[dict]:
@@ -296,27 +313,66 @@ def normalize_answers(value) -> list[dict]:
 # Check
 # ---------------------------------------------------------------------------
 
+CHANGE_LABELS = {
+    "change_unstructured": (
+        "条改动说明不是“原文 → 改后”的结构，无法核实",
+        'Each key change must be an object {"before": exact text from the student\'s essay, '
+        '"after": exact text from your essay, "why": reason}.',
+    ),
+    "change_empty": ("条改动说明没有给出原文或改后文字", "Give before and/or after text."),
+    "noop_change": (
+        "条改动说明的原文和改后完全相同",
+        "Never list a change whose before and after are identical.",
+    ),
+    "change_unlocatable": (
+        "条改动说明引用的文字在原稿或改写稿中找不到",
+        "before must be copied exactly from the student's essay and after exactly from yours.",
+    ),
+    "change_not_made": (
+        "条改动说明描述的修改在正文中并没有发生",
+        "Only list changes that are really in your essay; if the essay needs no change, "
+        "return key_changes [] and explain in unchanged_reason.",
+    ),
+    "count_claim": ("处说明里的字数与实际字数不符", "Do not state any word counts."),
+}
+
 
 @dataclass
 class CheckResult:
     result: dict
     issues: list[Issue]
-    notes: list[str]  # informational, never decide pass/fail
+    notes: list[str] = field(default_factory=list)  # informational, never pass/fail
+
+    @property
+    def content_issues(self) -> list[Issue]:
+        return [i for i in self.issues if i.kind == "content"]
+
+    @property
+    def notes_issues(self) -> list[Issue]:
+        return [i for i in self.issues if i.kind == "notes"]
 
 
-def check(result: dict, submission: dict, *, visual_available: bool) -> CheckResult:
-    """Never invents text: removes false claims, reports issues and uncertainty notes."""
+def check(
+    result: dict,
+    submission: dict,
+    *,
+    visual_available: bool,
+    original_addresses_question: bool | None = None,
+    unchanged_reason: str = "",
+) -> CheckResult:
+    """Never invents text: removes unverifiable claims, reports issues and notes."""
     task_type = submission["task_type"]
+    original = submission.get("essay_text") or ""
     essay_text = result["essay"]
     words = result["word_count"]
     original_words = submission.get("word_count") or 0
     minimum = essay_lib.MIN_WORDS[task_type]
     upper = UPPER_WORDS[task_type]
-    paragraphs = essay_lib.split_paragraphs(essay_text)
-    last_paragraph = paragraphs[-1] if paragraphs else ""
+    prompt = submission.get("prompt_text", "")
     issues: list[Issue] = []
     notes: list[str] = []
 
+    # -- content ---------------------------------------------------------------
     if words < minimum:
         issues.append(
             Issue(
@@ -326,19 +382,44 @@ def check(result: dict, submission: dict, *, visual_available: bool) -> CheckRes
                 f"(aim for {minimum + 20}-{upper}).",
             )
         )
+    coverage = prompt_coverage(prompt, essay_text)
+    if original_addresses_question is False:
+        notes.append(
+            "AI 判断原文没有回应题目。改写稿是否已按题目重新作答，需要人工确认（见题目回应对照）。"
+        )
+        overlap = original_overlap(essay_text, original)
+        if (
+            coverage is not None
+            and coverage < STILL_OFF_TOPIC_PROMPT_COVERAGE
+            and overlap >= STILL_OFF_TOPIC_ORIGINAL_OVERLAP
+        ):
+            issues.append(
+                Issue(
+                    "still_off_topic",
+                    f"改写稿仍主要沿用离题原文的内容（与原文内容词重合 {overlap:.0%}，与题干仅 "
+                    f"{coverage:.0%}），没有按题目重新作答",
+                    "The student's essay is off-topic and your rewrite still discusses the same "
+                    "off-topic content. Write a new answer to the question that was actually asked.",
+                )
+            )
+    if coverage is not None and coverage < LOW_OVERLAP_NOTE:
+        notes.append(
+            f"改写稿与题干用词重合很少（{coverage:.0%}）。这只是词面提示，不能据此判断是否切题；"
+            "请对照“题目回应”人工确认。"
+        )
 
-    # Answering the question: a verifiable map, plus an uncertainty note only.
+    # -- answer map ---------------------------------------------------------------
     answers = normalize_answers(result.get("answers"))
-    verified = [a for a in answers if essay_lib.contains_exact(essay_text, a["quote"])]
-    if len(verified) < len(answers):
+    verified_answers = [a for a in answers if essay_lib.contains_exact(essay_text, a["quote"])]
+    if len(verified_answers) < len(answers):
         issues.append(
             Issue(
                 "answer_unverified",
-                f"有 {len(answers) - len(verified)} 条“题目要求 → 对应原句”引用的句子不在改写稿中，已删除",
+                f"有 {len(answers) - len(verified_answers)} 条“题目要求 → 对应原句”引用的句子不在改写稿中，已删除",
                 "Each answers[].quote must be copied exactly from your essay.",
             )
         )
-    if len(verified) < MIN_ANSWER_ITEMS:
+    if len(verified_answers) < MIN_ANSWER_ITEMS:
         issues.append(
             Issue(
                 "answer_map_missing",
@@ -347,22 +428,21 @@ def check(result: dict, submission: dict, *, visual_available: bool) -> CheckRes
                 "sentence of your essay that addresses it.",
             )
         )
-    coverage = prompt_coverage(submission.get("prompt_text", ""), essay_text)
-    if coverage is not None and coverage < LOW_OVERLAP_NOTE:
-        notes.append(
-            f"改写稿与题干用词重合很少（{coverage:.0%}）。这只是词面提示，不能据此判断是否切题；"
-            "请对照“题目回应”人工确认。"
-        )
 
+    # -- change notes ---------------------------------------------------------------
     kept, dropped = [], {}
-    for line in result.get("key_changes") or []:
-        problem = _change_problem(line, essay_text, last_paragraph)
-        if problem is None and false_count(line, words, original_words) is not None:
-            problem = "count_claim"
+    for item in result.get("key_changes") or []:
+        change = normalize_change(item)
+        if change is None:
+            problem = "change_unstructured"
+        else:
+            problem = verify_change(change, original, essay_text)
+            if problem is None and false_count(change["why"], words, original_words) is not None:
+                problem = "count_claim"
         if problem:
             dropped[problem] = dropped.get(problem, 0) + 1
         else:
-            kept.append(line)
+            kept.append(change)
 
     rationale_kept = []
     for part in (p for p in SENTENCE_SPLIT_RE.split(result.get("band_rationale") or "") if p):
@@ -372,34 +452,26 @@ def check(result: dict, submission: dict, *, visual_available: bool) -> CheckRes
             rationale_kept.append(part)
     rationale = "".join(rationale_kept).strip()
 
-    labels = {
-        "noop_change": (
-            "条改动说明的原文和新写法完全相同",
-            "Never list a change whose old and new wording are identical.",
-        ),
-        "claim_absent": (
-            "条改动说明引用的新写法不在改写稿中",
-            "Quote new wording exactly as it appears in your essay.",
-        ),
-        "deletion_mismatch": (
-            "条说明声称删除的内容仍在改写稿中",
-            "Do not claim to delete or merge text that is still in the essay.",
-        ),
-        "count_claim": ("处说明里的字数与实际字数不符", "Do not state any word counts."),
-    }
     for code, count in dropped.items():
-        label, hint = labels[code]
+        label, hint = CHANGE_LABELS[code]
         issues.append(Issue(code, f"有 {count} {label}，已删除", hint))
-    if not kept:
-        issues.append(
-            Issue(
-                "no_changes",
-                "没有可信的改动说明",
-                "Provide 3-6 key changes that each match the essay exactly.",
-            )
-        )
 
-    claims_text = "；".join(kept) + "；" + rationale
+    unchanged = essay_lib.same_text(essay_text, original)
+    if not kept:
+        if unchanged and unchanged_reason:
+            notes.append(f"模型认为原稿无需修改，改写稿与原稿相同：{unchanged_reason}")
+        else:
+            issues.append(
+                Issue(
+                    "no_changes",
+                    "没有可核实的改动说明",
+                    "Provide 1-6 key changes as {before, after, why} that match the two essays "
+                    "exactly, or, if no change is needed, return the essay unchanged with key_changes "
+                    "[] and unchanged_reason.",
+                )
+            )
+
+    claims_text = "；".join(c["why"] for c in kept) + "；" + rationale
     if band_claim(claims_text):
         issues.append(
             Issue(
@@ -418,7 +490,13 @@ def check(result: dict, submission: dict, *, visual_available: bool) -> CheckRes
             )
         )
 
-    cleaned = dict(result, key_changes=kept, band_rationale=rationale, answers=verified)
+    cleaned = dict(
+        result,
+        key_changes=kept,
+        band_rationale=rationale,
+        answers=verified_answers,
+        unchanged=unchanged,
+    )
     return CheckResult(cleaned, issues, notes)
 
 

@@ -13,7 +13,7 @@ from pathlib import Path
 
 from . import essay as essay_lib
 from . import prompts, rewrite_quality, visual
-from .llm import LLMError
+from .llm import LLMError, parse_strict_json
 
 log = logging.getLogger("iwa.review")
 
@@ -287,22 +287,29 @@ def normalize_rewrite(raw: dict, submission: dict) -> dict:
     if words < 60:
         raise InvalidOutput("改写结果过短")
     visual = task_criterion_assessable(submission)
+    raw_changes = raw.get("key_changes")
     result = {
         "target_band": submission["target_band"],
         "essay": essay_text,
         "word_count": words,
-        "key_changes": _text_list(raw.get("key_changes"), limit_items=6),
+        "key_changes": raw_changes[:8] if isinstance(raw_changes, list) else [],
         "band_rationale": _text(raw.get("band_rationale"), 1500),
         "answers": rewrite_quality.normalize_answers(raw.get("answers")),
     }
-    # The model's own claims (word counts, "reaches Band 7", change notes, which
-    # sentence answers which requirement) are checked against the essay; false claims
-    # are removed, every problem is reported, uncertainty notes never decide pass/fail.
-    checked = rewrite_quality.check(result, submission, visual_available=visual)
+    # The model's own claims (change notes, word counts, "reaches Band 7", which
+    # sentence answers which requirement) are verified against the two essays;
+    # unverifiable claims are removed, every problem is reported, and uncertainty
+    # notes never decide pass/fail.
+    flag = raw.get("original_addresses_question")
+    checked = rewrite_quality.check(
+        result,
+        submission,
+        visual_available=visual,
+        original_addresses_question=flag if isinstance(flag, bool) else None,
+        unchanged_reason=_text(raw.get("unchanged_reason"), 400),
+    )
     result, issues = checked.result, checked.issues
     warnings = [issue.message for issue in issues] + checked.notes
-    if raw.get("original_addresses_question") is False:
-        warnings.append("原文没有回应题目：改写稿按题目重新作答，没有保留原文的论点。")
     if not visual:
         warnings.append(
             f"{ta_unassessable_reason(submission)}：改写稿中的数据只能沿用原文和题干，"
@@ -310,11 +317,38 @@ def normalize_rewrite(raw: dict, submission: dict) -> dict:
         )
     result.update(
         warnings=warnings,
+        original_addresses_question=flag if isinstance(flag, bool) else None,
         quality_passed=not issues,
-        quality_issues=[{"code": i.code, "message": i.message} for i in issues],
+        content_passed=not checked.content_issues,
+        quality_issues=[{"code": i.code, "message": i.message, "kind": i.kind} for i in issues],
         _retry_hint=rewrite_quality.retry_hint(issues),
     )
     return result
+
+
+CROSS_CHECK_TASK_BAND = 4.5
+
+
+def rewrite_cross_notes(evaluation_result: dict | None) -> list[str]:
+    """When the evaluation scored the original's TR/TA very low, the rewrite needs a
+    human check that it really answers the question (display-only, never pass/fail)."""
+    criteria = (evaluation_result or {}).get("criteria") or []
+    task = criteria[0] if criteria else {}
+    band = task.get("band")
+    if task.get("state") == "scored" and band is not None and band <= CROSS_CHECK_TASK_BAND:
+        return [
+            f"评价给原文的 {task.get('short')} 只有 {band:g}（可能离题或展开严重不足）。"
+            "请人工确认改写稿是否完整回应了题目。"
+        ]
+    return []
+
+
+def _rewrite_rank(candidate: dict, attempt: int) -> tuple[int, int, int]:
+    """Lower is better: content problems first, then notes problems, then earlier
+    attempt - a tie never replaces an earlier essay with a later one."""
+    issues = candidate.get("quality_issues") or []
+    content = sum(1 for i in issues if i.get("kind") == "content")
+    return content, len(issues) - content, attempt
 
 
 # ---------------------------------------------------------------------------
@@ -379,59 +413,129 @@ class Generator:
 
     VALIDATION_ATTEMPTS = 2  # one silent retry for malformed/incomplete output (same quota)
 
+    def _call(self, messages, kind: str, context: dict, attempt: int, max_tokens: int):
+        return self.client.complete(
+            messages,
+            json_mode=True,
+            max_tokens=max_tokens,
+            temperature=self.settings.llm_temperature,
+            context={**context, "attempt": attempt},
+        )
+
     def _generate_valid(self, kind: str, submission: dict, sentences):
+        if kind == "rewrite":
+            return self._generate_rewrite(submission, sentences)
         messages, context = prompts.BUILDERS[kind](submission, sentences)
         problem = None
-        best = None  # (normalized, result) with quality issues, if nothing clean arrives
         for attempt in range(self.VALIDATION_ATTEMPTS):
             if problem:
                 messages = prompts.with_retry_note(messages, problem)
-            try:
-                result = self.client.complete(
-                    messages,
-                    json_mode=True,
-                    max_tokens=prompts.MAX_TOKENS[kind],
-                    temperature=self.settings.llm_temperature,
-                    context={**context, "attempt": attempt},
-                )
-            except LLMError as exc:
-                if best is None:
-                    raise
-                # The quality retry itself failed (timeout, truncation, 5xx, call
-                # budget): keep the usable draft we already have, and say why.
-                kept, kept_result = best
-                kept["retry_error"] = exc.code
-                kept["warnings"] = list(kept.get("warnings") or []) + [
-                    f"质量重试没有完成（{exc.code}），保留了第一次生成的版本。"
-                ]
-                log.info("%s quality retry failed (%s); keeping first draft", kind, exc.code)
-                return kept, kept_result
+            result = self._call(messages, kind, context, attempt, prompts.MAX_TOKENS[kind])
             try:
                 raw = result.json()
                 if kind == "evaluate":
-                    normalized = normalize_evaluation(raw, submission)
-                elif kind == "refine":
-                    normalized = normalize_refinement(raw, sentences)
-                else:
-                    normalized = normalize_rewrite(raw, submission)
+                    return normalize_evaluation(raw, submission), result
+                return normalize_refinement(raw, sentences), result
             except (InvalidOutput, LLMError) as exc:
                 if isinstance(exc, LLMError) and exc.code != "invalid_json":
                     raise
                 problem = exc.message if isinstance(exc, LLMError) else str(exc)
                 log.info("%s attempt %s rejected: %s", kind, attempt + 1, problem)
-                continue
-            hint = normalized.pop("_retry_hint", "")
-            if normalized.get("quality_passed", True):
-                return normalized, result
-            # Usable but with quality issues: retry once, then keep the better attempt.
-            issues = len(normalized.get("quality_issues") or [])
-            if best is None or issues <= len(best[0].get("quality_issues") or []):
-                best = (normalized, result)
-            problem = hint or "quality issues"
-            log.info("%s attempt %s has quality issues: %s", kind, attempt + 1, problem)
-        if best is not None:
-            return best
         raise InvalidOutput(problem or "输出不合格")
+
+    # -- rewrite: content problems regenerate, notes problems only repair notes ----
+
+    def _rewrite_attempt(self, messages, context, attempt, submission):
+        """(normalized or None, model result, problem). LLMError propagates."""
+        result = self._call(messages, "rewrite", context, attempt, prompts.MAX_TOKENS["rewrite"])
+        try:
+            return normalize_rewrite(result.json(), submission), result, None
+        except (InvalidOutput, LLMError) as exc:
+            if isinstance(exc, LLMError) and exc.code != "invalid_json":
+                raise
+            return None, result, exc.message if isinstance(exc, LLMError) else str(exc)
+
+    @staticmethod
+    def _keep(candidate, result, reason: str, message: str):
+        candidate["retry_error"] = reason
+        candidate["warnings"] = list(candidate.get("warnings") or []) + [message]
+        return candidate, result
+
+    def _generate_rewrite(self, submission: dict, sentences):
+        messages, context = prompts.build_rewrite(submission, sentences)
+        first, first_result, problem = self._rewrite_attempt(messages, context, 0, submission)
+        if first is None:  # unusable output: one full retry, nothing to keep
+            second, second_result, problem = self._rewrite_attempt(
+                prompts.with_retry_note(messages, problem), context, 1, submission
+            )
+            if second is None:
+                raise InvalidOutput(problem or "输出不合格")
+            second.pop("_retry_hint", None)
+            return second, second_result
+        hint = first.pop("_retry_hint", "")
+        if first["quality_passed"]:
+            return first, first_result
+
+        if first["content_passed"]:
+            # The essay is fine; only the notes are wrong. Keep this essay and ask for
+            # corrected notes about it - never regenerate (and possibly regress) it.
+            notes_messages, notes_context = prompts.build_rewrite_notes(
+                submission, first["essay"], hint
+            )
+            try:
+                notes_result = self._call(
+                    notes_messages, "rewrite", notes_context, 1, prompts.MAX_TOKENS["rewrite_notes"]
+                )
+            except LLMError as exc:
+                return self._keep(
+                    first,
+                    first_result,
+                    exc.code,
+                    f"说明修正没有完成（{exc.code}），保留了第一次的正文和已核实的说明。",
+                )
+            notes = parse_strict_json(notes_result.text)
+            if notes is None:
+                return self._keep(
+                    first,
+                    first_result,
+                    "invalid_json",
+                    "说明修正的输出不合格，保留了第一次的正文和已核实的说明。",
+                )
+            repaired = normalize_rewrite({**notes, "essay": first["essay"]}, submission)
+            repaired.pop("_retry_hint", None)
+            if _rewrite_rank(repaired, 0) < _rewrite_rank(first, 0):
+                repaired["notes_repaired"] = True
+                return repaired, notes_result
+            return self._keep(
+                first,
+                first_result,
+                "notes_not_improved",
+                "说明修正没有改善，保留了第一次的正文和已核实的说明。",
+            )
+
+        # The essay itself has problems (too short, still off-topic): regenerate once.
+        try:
+            second, second_result, _problem = self._rewrite_attempt(
+                prompts.with_retry_note(messages, hint), context, 1, submission
+            )
+        except LLMError as exc:
+            return self._keep(
+                first,
+                first_result,
+                exc.code,
+                f"质量重试没有完成（{exc.code}），保留了第一次生成的版本。",
+            )
+        if second is None:
+            return self._keep(
+                first,
+                first_result,
+                "invalid_output",
+                "质量重试的输出不合格，保留了第一次生成的版本。",
+            )
+        second.pop("_retry_hint", None)
+        if _rewrite_rank(second, 1) < _rewrite_rank(first, 0):
+            return second, second_result
+        return first, first_result
 
     def run(self, generation_id: int) -> None:
         generation = self.storage.get_generation(generation_id)

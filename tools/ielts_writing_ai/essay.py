@@ -164,8 +164,13 @@ def _exact_form(text: str | None) -> str:
 def contains_exact(essay: str, fragment: str) -> bool:
     """Case-sensitive containment (whitespace/quote style only normalised) - used for
     claims about what a rewrite now says, where "i" vs "I" matters."""
+    return count_exact(essay, fragment) > 0
+
+
+def count_exact(essay: str, fragment: str) -> int:
+    """Case-sensitive, non-overlapping occurrences of ``fragment`` in ``essay``."""
     needle = _exact_form(fragment).strip(" .,;:!?\"'")
-    return bool(needle) and needle in _exact_form(essay)
+    return _exact_form(essay).count(needle) if needle else 0
 
 
 def snap_band(value) -> float | None:

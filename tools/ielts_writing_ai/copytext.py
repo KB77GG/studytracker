@@ -120,6 +120,20 @@ def refine_texts(result: dict, generation: dict, target_band) -> dict:
 QUALITY_FAILED = "改写质量检查未通过，请对照下方提示使用，或重新生成"
 
 
+def change_line(change) -> str:
+    """One key change as text; structured {before, after, why} or a legacy string."""
+    if not isinstance(change, dict):
+        return str(change)
+    before, after, why = change.get("before"), change.get("after"), change.get("why")
+    if before and after:
+        text = f"“{before}” → “{after}”"
+    elif after:
+        text = f"新增“{after}”"
+    else:
+        text = f"删除“{before}”"
+    return f"{text}（{why}）" if why else text
+
+
 def rewrite_texts(result: dict, generation: dict) -> dict:
     target = _band(result.get("target_band"))
     failed = result.get("quality_passed") is False
@@ -142,7 +156,7 @@ def rewrite_texts(result: dict, generation: dict) -> dict:
         notes.append("")
     if result.get("key_changes"):
         notes.append("关键改动：")
-        notes += [f"{n}. {c}" for n, c in enumerate(result["key_changes"], 1)]
+        notes += [f"{n}. {change_line(c)}" for n, c in enumerate(result["key_changes"], 1)]
         notes.append("")
     if result.get("band_rationale"):
         notes += [f"AI 对目标分数段的说明（自述，未经评分验证）：{result['band_rationale']}", ""]

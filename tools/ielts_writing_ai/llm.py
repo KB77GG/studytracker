@@ -255,7 +255,7 @@ class FakeClient:
         builder = {
             "evaluate": self._evaluate,
             "refine": self._refine,
-            "rewrite": self._rewrite,
+            "rewrite": self._rewrite_notes if context.get("mode") == "notes" else self._rewrite,
             "describe_image": self._describe_image,
         }.get(kind)
         if builder is None:
@@ -322,22 +322,42 @@ class FakeClient:
 
     @staticmethod
     def _rewrite(context):
+        originals = context.get("sentences") or []
         sentences = [
-            essay_lib.Sentence(s["i"], s["paragraph"], _demo_fix(s["text"]))
-            for s in (context.get("sentences") or [])
+            essay_lib.Sentence(s["i"], s["paragraph"], _demo_fix(s["text"])) for s in originals
         ]
         body = essay_lib.join_sentences(sentences)
-        sentences_out = essay_lib.split_sentences(body)
-        answers = [
-            {"part": f"【演示】题目要求 {n + 1}", "quote": s.text}
-            for n, s in enumerate(sentences_out[:2])
-        ]
         return {
             "essay": body,
-            "answers": answers,
-            "key_changes": ["【演示】演示模式只做机械修正，不是真实的高分改写。"],
+            "original_addresses_question": True,
+            **FakeClient._demo_notes([s["text"] for s in originals], [s.text for s in sentences]),
+        }
+
+    @staticmethod
+    def _rewrite_notes(context):
+        original = [s.text for s in essay_lib.split_sentences(context.get("original_essay", ""))]
+        rewrite = [s.text for s in essay_lib.split_sentences(context.get("rewrite_essay", ""))]
+        return {"original_addresses_question": True, **FakeClient._demo_notes(original, rewrite)}
+
+    @staticmethod
+    def _demo_notes(original: list[str], rewrite: list[str]) -> dict:
+        """Structured, verifiable demo notes: sentence pairs that really differ."""
+        changes = [
+            {"before": old, "after": new, "why": "【演示】按固定规则修正拼写 / 大小写。"}
+            for old, new in zip(original, rewrite, strict=False)
+            if old != new
+        ][:3]
+        notes = {
+            "answers": [
+                {"part": f"【演示】题目要求 {n + 1}", "quote": text}
+                for n, text in enumerate(rewrite[:2])
+            ],
+            "key_changes": changes,
             "band_rationale": "【演示】连接真实模型后，这里会说明为了向目标分数段靠近做了哪些修改。",
         }
+        if not changes:
+            notes["unchanged_reason"] = "【演示】固定规则没有找到需要修正的地方。"
+        return notes
 
     @staticmethod
     def _describe_image(context):

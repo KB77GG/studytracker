@@ -23,7 +23,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from . import access, review
+from . import access, review, rewrite_quality
 from . import essay as essay_lib
 from . import samples as builtin_samples
 from .llm import LLMError, build_client, parse_strict_json
@@ -80,6 +80,7 @@ class RecordingClient:
             "sample": rec.sample_id,
             "kind": context.get("kind", ""),
             "attempt": int(context.get("attempt") or 0),
+            "mode": context.get("mode") or "full",  # "notes": notes-only repair of a rewrite
             "json_mode": bool(kwargs.get("json_mode")),
             "provider": self.provider,
             "model": self.model,
@@ -310,6 +311,7 @@ def _run_sample(
         "submission": {
             k: submission[k]
             for k in (
+                "prompt_text",
                 "task_type",
                 "essay_text",
                 "word_count",
@@ -431,7 +433,7 @@ def _evidence_metrics(run_data: dict) -> dict:
 
 def _refine_rewrite_metrics(run_data: dict) -> dict:
     sentences = missing = changed = 0
-    requested = generated = meeting = quality_ok = retry_failed = 0
+    requested = generated = meeting = quality_ok = retry_failed = content_ok = 0
     quality_codes = Counter()
     for sample in run_data["samples"]:
         refine = (sample["generations"].get("refine") or {}).get("result")
@@ -450,6 +452,7 @@ def _refine_rewrite_metrics(run_data: dict) -> dict:
         minimum = essay_lib.MIN_WORDS[sample["task_type"]]
         meeting += 1 if (rewrite.get("word_count") or 0) >= minimum else 0
         quality_ok += 1 if rewrite.get("quality_passed", True) else 0
+        content_ok += 1 if rewrite.get("content_passed", True) else 0
         retry_failed += 1 if rewrite.get("retry_error") else 0
         quality_codes.update(i["code"] for i in rewrite.get("quality_issues") or [])
     return {
@@ -468,6 +471,17 @@ def _refine_rewrite_metrics(run_data: dict) -> dict:
         "rewrite_quality_passed_of_generated": _rate(quality_ok, generated),
         "rewrite_meets_min_words_of_generated": _rate(meeting, generated),
         "rewrite_quality_issues": dict(quality_codes.most_common()),
+        # Essay itself OK (length, not still off-topic) even if the notes failed.
+        "rewrite_content_passed_count": content_ok,
+        "rewrite_content_passed_of_requested": _rate(content_ok, requested),
+        "rewrite_full_retries": sum(
+            1
+            for c in run_data["calls"]
+            if c["kind"] == "rewrite" and c["attempt"] == 1 and c.get("mode", "full") == "full"
+        ),
+        "rewrite_notes_repairs": sum(
+            1 for c in run_data["calls"] if c["kind"] == "rewrite" and c.get("mode") == "notes"
+        ),
     }
 
 
@@ -530,6 +544,7 @@ def _sanity(run_data: dict) -> dict:
                     "detail": s.get("task"),
                 }
             )
+            checks.append(_off_topic_rewrite_check(sample))
         if expect.get("word_warning"):
             ok = any("字数" in w for w in s["_warnings"])
             checks.append(
@@ -570,6 +585,29 @@ def _sanity(run_data: dict) -> dict:
             }
         )
     return {"checks": checks, "passed": sum(1 for c in checks if c["ok"]), "total": len(checks)}
+
+
+def _off_topic_rewrite_check(sample: dict) -> dict:
+    """The off-topic sample's rewrite may only pass quality if it no longer is the
+    off-topic essay (independent of the model's own off-topic flag)."""
+    generation = sample["generations"].get("rewrite") or {}
+    result = generation.get("result") if generation.get("status") == "ready" else None
+    check = {"sample": sample["id"], "check": "离题样本：通过质量检查的改写必须已按题目重写"}
+    if not result:
+        return {**check, "ok": True, "detail": "改写未生成"}
+    sub = sample["submission"]
+    coverage = rewrite_quality.prompt_coverage(sub.get("prompt_text", ""), result["essay"])
+    overlap = rewrite_quality.original_overlap(result["essay"], sub["essay_text"])
+    still_off = (
+        coverage is not None
+        and coverage < rewrite_quality.STILL_OFF_TOPIC_PROMPT_COVERAGE
+        and overlap >= rewrite_quality.STILL_OFF_TOPIC_ORIGINAL_OVERLAP
+    )
+    ok = not (result.get("quality_passed") and still_off)
+    detail = (
+        f"题干重合 {coverage:.0%}，原文重合 {overlap:.0%}，质量通过={result.get('quality_passed')}"
+    )
+    return {**check, "ok": ok, "detail": detail}
 
 
 def _calibration(run_data: dict) -> dict | None:
@@ -790,6 +828,8 @@ def render_markdown(report: dict) -> str:
         f"**占全部请求 {_pct(rr['rewrite_quality_passed_of_requested'])}**（验收口径，"
         f"生成失败计为未通过），占已生成 {_pct(rr['rewrite_quality_passed_of_generated'])}；"
         f"达到字数下限占全部请求 {_pct(rr['rewrite_meets_min_words_of_requested'])}"
+        + f"；正文通过（字数、未仍离题）占全部请求 {_pct(rr.get('rewrite_content_passed_of_requested'))}"
+        + f"；整篇重写重试 {rr.get('rewrite_full_retries', 0)} 次、只修说明 {rr.get('rewrite_notes_repairs', 0)} 次"
         + (
             f"；质量重试未完成 {rr['rewrite_retry_failed']} 篇"
             if rr["rewrite_retry_failed"]

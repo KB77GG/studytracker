@@ -40,11 +40,15 @@ def answers_for(text, n=2):
     ]
 
 
+WEAK_CHANGE = {"before": "I am agree", "after": "I partly agree", "why": "修正语法错误。"}
+
+
 def weak_case(**changes):
     item = FIXTURE["rewrites"]["t2-weak"]
     raw = parse_strict_json(item["raw_text"])
     raw["band_rationale"] = "为了向目标分数段靠近，重组论证并修正语言。"
     raw["answers"] = answers_for(raw["essay"])
+    raw["key_changes"] = [dict(WEAK_CHANGE)]  # structured notes (iwa-2026-11-04.3)
     raw.update(changes)
     return raw, dict(item["submission"])
 
@@ -72,7 +76,9 @@ class Finding1TopicRelevanceTest(unittest.TestCase):
                     "financial difficulties.",
                 },
             ],
-            "key_changes": ["明确两方面后果，并以规划是否充分作为判断依据。"],
+            # Same text as the submitted essay: honestly unchanged.
+            "key_changes": [],
+            "unchanged_reason": "原文已完整讨论利弊并给出判断，无需修改。",
             "band_rationale": "组织正反论证，补充具体解释；没有对改写稿另行评分。",
         }
         return check(raw, sub)
@@ -161,8 +167,11 @@ class Finding2NegatedDataClaimTest(unittest.TestCase):
 
 class Finding3CaseChangeTest(unittest.TestCase):
     def test_capitalisation_fix_is_a_real_change(self):
-        raw, sub = weak_case(key_changes=["将“i partly agree”改为“I partly agree”，修正句首大写。"])
+        raw, sub = weak_case(
+            key_changes=[{"before": "i partly agree", "after": "I partly agree", "why": "句首大写"}]
+        )
         self.assertTrue(essay.contains_exact(raw["essay"], "I partly agree"))
+        sub["essay_text"] = raw["essay"].replace("I partly agree", "i partly agree")
         result, codes = check(raw, sub)
         self.assertEqual(codes, [])
         self.assertEqual(len(result["key_changes"]), 1)
@@ -171,14 +180,16 @@ class Finding3CaseChangeTest(unittest.TestCase):
         self.assertFalse(essay.same_text("However the", "However, the"))
 
     def test_claimed_new_wording_lookup_is_case_sensitive(self):
-        raw, sub = weak_case(key_changes=["将“I partly agree”改为“i partly agree”。"])
+        raw, sub = weak_case(key_changes=[{"before": "I am agree", "after": "i partly agree"}])
         _result, codes = check(raw, sub)
-        self.assertIn("claim_absent", codes)  # "i partly agree" is not in the rewrite
+        self.assertIn("change_unlocatable", codes)  # "i partly agree" is not in the rewrite
 
 
 class Finding4WordCountTest(unittest.TestCase):
     def test_limit_valued_number_about_the_rewrite_is_still_checked(self):
-        raw, sub = weak_case(key_changes=["改写稿共330词，扩展了原稿的论据。"])
+        raw, sub = weak_case(
+            key_changes=[dict(WEAK_CHANGE, why="改写稿共330词，扩展了原稿的论据。")]
+        )
         result, codes = check(raw, sub)
         self.assertEqual(result["word_count"], 290)
         self.assertIn("count_claim", codes)

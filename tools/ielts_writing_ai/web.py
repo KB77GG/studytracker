@@ -381,8 +381,24 @@ def _generation_view(generation: dict | None, submission: dict) -> dict | None:
     return view
 
 
+def _with_cross_notes(generations: dict) -> dict:
+    """Add the evaluation's view of the original to the rewrite (display only)."""
+    evaluation = generations.get("evaluate") or {}
+    rewrite = generations.get("rewrite")
+    if not (rewrite and rewrite.get("status") == "ready" and rewrite.get("result")):
+        return generations
+    notes = review.rewrite_cross_notes(
+        evaluation.get("result") if evaluation.get("status") == "ready" else None
+    )
+    if not notes:
+        return generations
+    result = dict(rewrite["result"])
+    result["warnings"] = list(result.get("warnings") or []) + notes
+    return {**generations, "rewrite": dict(rewrite, result=result)}
+
+
 def _submission_view(submission: dict) -> dict:
-    generations = ctx().storage.latest_generations(submission["id"])
+    generations = _with_cross_notes(ctx().storage.latest_generations(submission["id"]))
     task_type = submission["task_type"]
     return {
         "public_id": submission["public_id"],

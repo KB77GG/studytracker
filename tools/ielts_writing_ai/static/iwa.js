@@ -607,7 +607,13 @@
       if (r.key_changes.length) {
         panel.appendChild(el('div', { class: 'block' }, [
           el('h3', { text: '关键改动' }),
-          el('ol', { class: 'priorities' }, r.key_changes.map(function (c) { return el('li', { text: c }); }))
+          el('p', { class: 'muted small', text: '每条改动都已核对：原文在原稿中、改后在改写稿中，并且确实发生了变化。' }),
+          el('ol', { class: 'priorities' }, r.key_changes.map(function (c) {
+            if (typeof c === 'string') return el('li', { text: c });  // results stored before structured notes
+            var body = c.before && c.after ? diffNode(c.before, c.after)
+              : el('p', { class: 'sentence__diff', text: (c.after ? '新增：' + c.after : '删除：' + c.before) });
+            return el('li', {}, [body, c.why ? el('p', { class: 'sentence__explain', text: c.why }) : null]);
+          }))
         ]));
       }
       if (r.band_rationale) panel.appendChild(el('div', { class: 'block' }, [el('h3', { text: 'AI 对目标分数段的说明（自述，未经评分验证）' }), el('p', { text: r.band_rationale })]));

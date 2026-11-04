@@ -6,7 +6,7 @@ import json
 
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.2"
+PROMPT_VERSION = "iwa-2026-11-04.3"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -110,9 +110,11 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
     if task_type == "task1":
         rules.append(
             'Also return "consistency_issues": [{"quote": str, "comment": str}] listing places '
-            "where the essay contradicts ITSELF, e.g. it calls X the highest but gives Y a larger "
-            "figure, or a stated trend disagrees with the stated numbers. Quote verbatim. This is "
-            "about internal consistency only, not about the chart. Use [] if there are none."
+            "where the essay contradicts ITSELF. Check every superlative or comparison "
+            "(highest, lowest, most, more than, overtook, doubled, in both years) against the "
+            "figures the essay itself gives elsewhere, e.g. it calls A the highest in both years "
+            "but gives C a larger figure in one year. Quote the contradicted claim verbatim. "
+            "This is about internal consistency only, not about the chart. Use [] if none."
         )
     if not visual:
         rules.append(
@@ -182,10 +184,14 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
             "NOT polish the off-topic content: write an answer to the actual question, reusing "
             "the student's language only where relevant, and set original_addresses_question "
             "to false.",
-            "key_changes must describe changes that are really in your essay: quote the new "
-            "wording exactly as it appears; never list a change whose old and new wording are "
-            "identical; never claim to delete or merge text that is still there; never state "
-            "word counts.",
+            'key_changes are structured: each item is {"before": text copied EXACTLY from the '
+            'student\'s essay, "after": text copied EXACTLY from your essay, "why": Chinese '
+            'explanation}. Use a short phrase or sentence that pinpoints the change; use "" for '
+            "before when text is added and for after when text is removed. List only changes "
+            "that are really in your essay, never identical before/after, never word counts. "
+            "If the student's essay already meets the target and you keep it unchanged, return "
+            "it unchanged with key_changes [] and explain in unchanged_reason - do not invent "
+            "changes.",
             "answers maps the question to your essay: list each requirement of the question "
             "(e.g. the position asked for, each side or part to discuss; for Task 1 the "
             "overview and the key comparisons), at least two, each with one sentence quoted "
@@ -209,7 +215,8 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
             ),
             'Output schema: {"essay": str, "original_addresses_question": bool, '
             '"answers": [{"part": str (Chinese), "quote": str (exact sentence from essay)}, '
-            '...2-6], "key_changes": [str (Chinese), ...3-6], '
+            '...2-6], "key_changes": [{"before": str, "after": str, "why": str}, ...1-6], '
+            '"unchanged_reason": str (only if the essay is unchanged), '
             '"band_rationale": str (Chinese, what was changed towards the target band; never '
             "claim a band or score was reached)}.",
         ]
@@ -258,5 +265,47 @@ def build_describe_image(submission: dict, image_data_url: str) -> tuple[list, d
     return messages, {"kind": "describe_image"}
 
 
+def build_rewrite_notes(submission: dict, rewrite_essay: str, problems: str) -> tuple[list, dict]:
+    """Ask only for corrected notes about an existing rewrite (the essay is kept)."""
+    target = submission["target_band"]
+    system = " ".join(
+        [
+            EXAMINER_ROLE,
+            "You are given a student's essay and a rewritten version of it. The rewritten "
+            "essay is FINAL: do not change it and do not return it.",
+            "Return only the notes about it, as one JSON object: "
+            '{"original_addresses_question": bool, "answers": [{"part": str (Chinese), '
+            '"quote": str (exact sentence from the rewritten essay)}, ...2-6], '
+            '"key_changes": [{"before": str (exact text from the student\'s essay), '
+            '"after": str (exact text from the rewritten essay), "why": str (Chinese)}, ...0-6], '
+            '"unchanged_reason": str (only if the two essays are identical), '
+            '"band_rationale": str (Chinese)}.',
+            "Copy before/after/quote text exactly. List only changes that really happened "
+            "between the two essays. Never state word counts. Never claim the rewrite reaches, "
+            f"meets or achieves Band {target:g} or any score.",
+            f"Problems found in the previous notes: {problems}",
+        ]
+    )
+    payload = {
+        **_task_context(submission),
+        "student_essay": submission["essay_text"],
+        "rewritten_essay": rewrite_essay,
+    }
+    user = "Write the notes for this rewrite.\n" + json.dumps(payload, ensure_ascii=False, indent=1)
+    context = {
+        "kind": "rewrite",
+        "mode": "notes",
+        "original_essay": submission["essay_text"],
+        "rewrite_essay": rewrite_essay,
+    }
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}], context
+
+
 BUILDERS = {"evaluate": build_evaluate, "refine": build_refine, "rewrite": build_rewrite}
-MAX_TOKENS = {"evaluate": 3000, "refine": 6000, "rewrite": 2400, "describe_image": 700}
+MAX_TOKENS = {
+    "evaluate": 3000,
+    "refine": 6000,
+    "rewrite": 2400,
+    "rewrite_notes": 1500,
+    "describe_image": 700,
+}
