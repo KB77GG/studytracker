@@ -1,4 +1,6 @@
-# Standalone trial tool dependencies (model calls use only the standard library).
+# Standalone trial tool dependencies (HTTP transport uses the standard library).
 Flask>=2.3
+# Trusted CA fallback for Python installations without a system certificate bundle.
+certifi>=2024.2.2
 # Only needed when running with IWA_SERVER=gunicorn in a test environment.
 gunicorn>=21

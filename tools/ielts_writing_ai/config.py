@@ -23,8 +23,8 @@ FORBIDDEN_DB_NAMES = {"app.db", "studytracker.db"}
 
 PROVIDER_PRESETS = {
     "deepseek": {
-        "base_url": "https://api.deepseek.com/v1/chat/completions",
-        "model": "deepseek-chat",
+        "base_url": "https://api.deepseek.com/chat/completions",
+        "model": "deepseek-flash",
     },
     "qwen": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",

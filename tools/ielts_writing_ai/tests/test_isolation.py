@@ -82,7 +82,10 @@ class IsolationTest(unittest.TestCase):
     def test_real_provider_requires_its_own_key(self):
         with self.assertRaises(ConfigError):
             settings_for(self.tmpdir, llm_provider="deepseek").validate()
-        settings_for(self.tmpdir, llm_provider="deepseek", llm_api_key="k").validate()
+        settings = settings_for(self.tmpdir, llm_provider="deepseek", llm_api_key="k")
+        settings.validate()
+        self.assertEqual(settings.llm_model, "deepseek-flash")
+        self.assertEqual(settings.llm_base_url, "https://api.deepseek.com/chat/completions")
 
     def test_only_iwa_env_vars_are_read(self):
         env_file = Path(self.tmpdir) / ".env"

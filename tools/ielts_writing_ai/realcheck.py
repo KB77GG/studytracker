@@ -37,6 +37,12 @@ class RealCheckError(ValueError):
     pass
 
 
+def validate_max_calls(value: int) -> int:
+    if type(value) is not int or value <= 0:
+        raise RealCheckError("max_calls / --max-calls 必须为正整数")
+    return value
+
+
 # ---------------------------------------------------------------------------
 # Recording client
 # ---------------------------------------------------------------------------
@@ -44,7 +50,7 @@ class RealCheckError(ValueError):
 
 class Recorder:
     def __init__(self, max_calls: int):
-        self.max_calls = max_calls
+        self.max_calls = validate_max_calls(max_calls)
         self.records: list[dict] = []
         self.sample_id = ""
         self.abort: LLMError | None = None
@@ -75,13 +81,29 @@ class RecordingClient:
             "kind": context.get("kind", ""),
             "attempt": int(context.get("attempt") or 0),
             "json_mode": bool(kwargs.get("json_mode")),
+            "provider": self.provider,
+            "model": self.model,
+            "ok": False,
+            "error": "client_error",
+            "usage": {},
+            "text": "",
         }
+        # Every invocation has one transport attempt: the content-validation retry
+        # uses this same budget; the underlying HTTP client must not retry silently.
+        kwargs["retries"] = 0
+        # Reserve before dispatch, also covering unexpected client exceptions.
+        rec.records.append(entry)
         started = time.monotonic()
         try:
             result = self.inner.complete(messages, **kwargs)
         except LLMError as exc:
-            entry.update(ok=False, error=exc.code, latency_ms=_ms(started), usage={}, text="")
-            rec.records.append(entry)
+            entry.update(
+                error=exc.code,
+                latency_ms=_ms(started),
+                usage=getattr(exc, "usage", None) or {},
+                response_received=getattr(exc, "response_received", False),
+                http_status=getattr(exc, "http_status", None),
+            )
             if exc.code in ABORT_CODES and rec.calls == 1:
                 rec.abort = exc  # first call failed on credentials/network: stop at once
             raise
@@ -91,10 +113,11 @@ class RecordingClient:
             latency_ms=result.latency_ms or _ms(started),
             usage=result.usage or {},
             model=result.model,
+            response_received=True,
+            http_status=200,
             text=result.text,
             json_ok=(parse_strict_json(result.text) is not None) if entry["json_mode"] else None,
         )
-        rec.records.append(entry)
         return result
 
 
@@ -122,6 +145,8 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
                 item = json.loads(line)
             except ValueError as exc:
                 raise RealCheckError(f"第 {number} 行不是合法 JSON：{exc}") from None
+            if not isinstance(item, dict):
+                raise RealCheckError(f"第 {number} 行必须是 JSON 对象")
             for field in ("task_type", "prompt", "essay"):
                 if not item.get(field):
                     raise RealCheckError(f"第 {number} 行缺少 {field}")
@@ -136,7 +161,19 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
             items.append(item)
     if not items:
         raise RealCheckError("没有样本")
+    _validate_sample_ids(items)
     return items[:limit] if limit else items
+
+
+def _validate_sample_ids(items: list[dict]) -> None:
+    seen = set()
+    for number, item in enumerate(items, 1):
+        sample_id = item.get("id")
+        if not isinstance(sample_id, str) or not sample_id.strip():
+            raise RealCheckError(f"第 {number} 个样本的 id 必须是非空字符串")
+        if sample_id in seen:
+            raise RealCheckError(f"样本 id 重复：{sample_id}")
+        seen.add(sample_id)
 
 
 # ---------------------------------------------------------------------------
@@ -167,6 +204,7 @@ def run(
 ) -> dict:
     """Run every sample and return the raw run data (see build_report)."""
     recorder = Recorder(max_calls)
+    _validate_sample_ids(items)
     text_client = RecordingClient(client or build_client(settings), recorder)
     vision = vision_client if vision_client is not None else build_client(settings, vision=True)
     vision = RecordingClient(vision, recorder) if vision is not None else None
@@ -539,17 +577,107 @@ def _calibration(run_data: dict) -> dict | None:
     return out
 
 
+def _usage_summary(calls: list[dict]) -> dict:
+    """Known subtotals remain useful, but missing usage is never a measured zero."""
+    known = {"prompt": 0, "completion": 0}
+    complete = {key: True for key in known}
+    unknown_calls = 0
+    for call in calls:
+        usage = call.get("usage") or {}
+        call_known = True
+        for short, field in (("prompt", "prompt_tokens"), ("completion", "completion_tokens")):
+            value = usage.get(field)
+            if type(value) is int and value >= 0:
+                known[short] += value
+            else:
+                complete[short] = False
+                call_known = False
+        unknown_calls += not call_known
+    return {
+        "calls": len(calls),
+        "unknown_usage_calls": unknown_calls,
+        "complete": unknown_calls == 0,
+        "tokens": {key: known[key] if complete[key] else None for key in known},
+        "known_tokens": known,
+    }
+
+
+def _connectivity(first_call: dict | None) -> dict:
+    if not first_call:
+        return {
+            "ok": False,
+            "error": None,
+            "response_received": False,
+            "authenticated": None,
+            "generation_ok": False,
+            "generation_error": None,
+        }
+    error = first_call.get("error")
+    status = first_call.get("http_status")
+    if status is None and isinstance(error, str) and error.startswith("http_"):
+        try:
+            status = int(error.removeprefix("http_"))
+        except ValueError:
+            pass
+    received = bool(first_call.get("response_received") or status or first_call["ok"])
+    authenticated = None
+    if status in {401, 403}:
+        authenticated = False
+    elif first_call["ok"] or (status is not None and 200 <= status < 300):
+        authenticated = True
+    connected = received and authenticated is True
+    return {
+        "ok": connected,
+        "error": None if connected else error,
+        "response_received": received,
+        "authenticated": authenticated,
+        "generation_ok": first_call["ok"],
+        "generation_error": error if not first_call["ok"] else None,
+    }
+
+
 def build_report(
     run_data: dict, *, price_in: float | None = None, price_out: float | None = None
 ) -> dict:
     kinds = {kind: _kind_metrics(kind, run_data) for kind in run_data["kinds"]}
-    prompt_tokens = sum(k["tokens"].get("prompt_tokens", 0) for k in kinds.values())
-    completion_tokens = sum(k["tokens"].get("completion_tokens", 0) for k in kinds.values())
+    calls = run_data["calls"]
+    text_calls = [c for c in calls if c["kind"] != "describe_image"]
     vision_calls = [c for c in run_data["calls"] if c["kind"] == "describe_image"]
-    first_call = run_data["calls"][0] if run_data["calls"] else None
-    cost = None
-    if price_in is not None and price_out is not None:
-        cost = round(prompt_tokens / 1e6 * price_in + completion_tokens / 1e6 * price_out, 4)
+    usage = {
+        "total": _usage_summary(calls),
+        "text": _usage_summary(text_calls),
+        "vision": _usage_summary(vision_calls),
+    }
+    models = {}
+    for call in calls:
+        identity = (call.get("provider", "unknown"), call.get("model", "unknown"))
+        models.setdefault(identity, []).append(call)
+    usage["by_model"] = [
+        {"provider": provider, "model": model, **_usage_summary(group)}
+        for (provider, model), group in models.items()
+    ]
+    text_cost = None
+    if price_in is not None and price_out is not None and usage["text"]["complete"]:
+        tokens = usage["text"]["tokens"]
+        text_cost = round(
+            tokens["prompt"] / 1e6 * price_in + tokens["completion"] / 1e6 * price_out, 6
+        )
+    # CLI prices describe the text model. Even complete vision usage cannot be
+    # priced with that pair without a separately supplied vision-model price.
+    cost = text_cost if not vision_calls else None
+    cost_estimate = {
+        "scope": "text",
+        "covered_cost": text_cost,
+        "coverage": (
+            "complete"
+            if cost is not None
+            else ("text_only" if text_cost is not None else "unknown")
+        ),
+        "vision_cost": None if vision_calls else 0.0,
+        "unknown_usage_calls": usage["total"]["unknown_usage_calls"],
+        "note": "单价仅用于文本模型；识图费用未估算。缺少 usage 时费用未知，不能视为零账单。",
+    }
+    first_call = calls[0] if calls else None
     return {
         "started_at": run_data["started_at"],
         "provider": run_data["settings"]["llm_provider"],
@@ -560,18 +688,17 @@ def build_report(
         "calls": len(run_data["calls"]),
         "max_calls": run_data["max_calls"],
         "aborted": run_data["aborted"],
-        "connectivity": {
-            "ok": bool(first_call and first_call["ok"]),
-            "error": first_call["error"] if first_call and not first_call["ok"] else None,
-        },
+        "connectivity": _connectivity(first_call),
         "kinds": kinds,
         "vision_calls": len(vision_calls),
         "evidence": _evidence_metrics(run_data),
         "refine_rewrite": _refine_rewrite_metrics(run_data),
         "sanity": _sanity(run_data),
         "calibration": _calibration(run_data),
-        "tokens": {"prompt": prompt_tokens, "completion": completion_tokens},
+        "tokens": usage["total"]["tokens"],
+        "usage": usage,
         "estimated_cost": cost,
+        "cost_estimate": cost_estimate,
         "per_sample": [
             {
                 "id": s["id"],
@@ -603,7 +730,11 @@ def render_markdown(report: dict) -> str:
     if report["demo"]:
         lines.append("- **演示模式（fake）：结果不代表任何真实模型**")
     conn = report["connectivity"]
-    lines.append(f"- 连通性：{'正常' if conn['ok'] else '失败（' + str(conn['error']) + '）'}")
+    auth = {True: "通过", False: "失败", None: "未知"}[conn["authenticated"]]
+    lines += [
+        f"- 传输：{'已收到模型服务响应' if conn['response_received'] else '未收到模型服务响应'}；鉴权：{auth}",
+        f"- 首个内容输出：{'已返回' if conn['generation_ok'] else '失败（' + str(conn['generation_error']) + '）'}；内容合格率另见下表。",
+    ]
     if report["aborted"]:
         lines.append(f"- **已中止**：{report['aborted']['message']}（{report['aborted']['code']}）")
     lines += [
@@ -669,9 +800,33 @@ def render_markdown(report: dict) -> str:
             f"| {status} |"
         )
     tokens = report["tokens"]
-    lines += ["", f"token：输入 {tokens['prompt']} · 输出 {tokens['completion']}"]
+
+    def token_text(value):
+        return "未知" if value is None else str(value)
+
+    lines += [
+        "",
+        f"总 token（含识图）：输入 {token_text(tokens['prompt'])} · 输出 {token_text(tokens['completion'])}",
+    ]
+    for kind, label in (("text", "文本"), ("vision", "识图")):
+        measured = report["usage"][kind]
+        counts = measured["tokens"]
+        lines.append(
+            f"- {label}：输入 {token_text(counts['prompt'])} · 输出 {token_text(counts['completion'])}；"
+            f"缺少用量的调用 {measured['unknown_usage_calls']} 次"
+        )
+    if not report["usage"]["total"]["complete"]:
+        known = report["usage"]["total"]["known_tokens"]
+        lines.append(
+            f"已知用量小计：输入 {known['prompt']} · 输出 {known['completion']}（不是完整账单用量）。"
+        )
     if report["estimated_cost"] is not None:
         lines.append(f"按输入的单价估算费用：{report['estimated_cost']}")
+    else:
+        lines.append("完整费用：未知（不能视为零费用）。")
+        covered = report["cost_estimate"]["covered_cost"]
+        if covered is not None:
+            lines.append(f"仅文本部分按输入单价估算：{covered}；识图费用未估算。")
     lines += ["", "原始调用记录见同目录 `raw_calls.jsonl`（含模型原文，仅保存在本机）。"]
     return "\n".join(lines) + "\n"
 

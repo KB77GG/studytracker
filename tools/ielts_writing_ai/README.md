@@ -61,7 +61,7 @@ tools/ielts_writing_ai/bin/stop.sh      # 只停核验通过的试用工具进�
 ```bash
 IWA_LLM_PROVIDER=deepseek          # 或 qwen / openai_compatible
 IWA_LLM_API_KEY=sk-...             # 试用工具专用 Key，建议单独申请、单独限额
-# IWA_LLM_MODEL=deepseek-chat      # qwen 默认 qwen-plus，可改 qwen-max 等
+# IWA_LLM_MODEL=deepseek-flash     # qwen 默认 qwen-plus，可改 qwen-max 等
 
 # Task 1 题图识别（可选）：先由识图模型提取图表数据，再交给文本模型评价
 IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评价会提示“未核对图表数据”
@@ -70,6 +70,8 @@ IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评�
 ```
 
 运行 `python -m tools.ielts_writing_ai check` 可以查看生效配置（不会打印 Key）。修改配置后需要先 `stop.sh` 再 `start.sh`。
+
+DeepSeek 默认使用 `deepseek-flash` 的非思考模式。HTTPS 始终校验证书和域名；系统没有根证书时，使用独立依赖中的 certifi 证书包补充。遇到证书错误不要关闭验证。客户端拒绝 HTTP 重定向，避免凭据被转发及绕过请求计数。
 
 成本控制：每人每天 `IWA_DAILY_LIMIT` 次生成（一次批改消耗 3 次，重新生成消耗 1 次，删除记录不返还）；同时进行的模型调用数不超过 `IWA_MAX_WORKERS`。
 
@@ -94,7 +96,7 @@ IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评�
 `realcheck` 和网页走的是同一条生成流程：相同的提示词、严格 JSON、证据规则，以及一次静默重试。它的特点：
 
 - **不碰试用数据**：用临时数据库运行，不打开试用库，不占试用账号的额度；试用服务器可以同时开着。
-- **安全**：不打印 Key。有调用次数上限（`--max-calls`，默认 50）。第一次调用就遇到 Key 错误或网络错误时，立即停止。
+- **安全**：不打印 Key。调用次数上限（`--max-calls`，默认 50，必须为正整数）覆盖实际 HTTP 请求：realcheck 禁止底层网络重试，只保留输出校验的一次重试。第一次调用遇到 Key 错误或网络错误时立即停止。
 - **防止误调用**：调用付费模型必须加 `--confirm-paid`。
 
 ```bash
@@ -105,7 +107,7 @@ PY=tools/ielts_writing_ai/.venv/bin/python
 $PY -m tools.ielts_writing_ai check                    # 确认 provider / model、llm_api_key_set=true
 
 # 1. 连通性：1 篇、只做评价，最多 2 次调用
-$PY -m tools.ielts_writing_ai realcheck --limit 1 --kinds evaluate --confirm-paid
+$PY -m tools.ielts_writing_ai realcheck --limit 1 --kinds evaluate --max-calls 2 --confirm-paid
 
 # 2. 内置合成样本：7 篇 × 3 类，最多 42 次调用；填入当前单价（每百万 token）可以估算费用
 $PY -m tools.ielts_writing_ai realcheck --confirm-paid --price-in <输入单价> --price-out <输出单价>
@@ -130,10 +132,14 @@ $PY -m tools.ielts_writing_ai realcheck --samples teacher.jsonl --confirm-paid
 
 用真实学生作文校准时，作文会发送给模型服务商。请先征得同意，并去掉姓名等个人信息。
 
+每行的 `id` 必须唯一；重复 ID 会在调用模型前被拒绝。
+
 报告写在 `<数据目录>/realcheck/<时间>/`，这个目录被 git 忽略：
 
 - `report.md`、`report.json`：首轮纯 JSON 率、首轮通过校验率、最终成功率、首轮被拒原因、引文核实率、精修缺句率、改写达标率、延迟、token、合理性检查、与老师评分的误差。
 - `raw_calls.jsonl`：每次调用的原文，方便排查。
+
+报告区分接口是否响应、鉴权是否通过和内容是否通过校验；生成截断不等于网络不通。已返回的失败响应用量仍计入统计，未返回用量时标为未知，不能视为实际费用为零。文本与识图用量分别统计并汇总；提供的单价只覆盖对应文本模型，未提供独立视觉价格时不会把部分估算称为全部费用。
 
 **建议在邀请真实用户之前达到的指标**（建议值，可以按实际情况调整）：
 

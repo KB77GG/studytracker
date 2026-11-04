@@ -9,19 +9,35 @@ from __future__ import annotations
 
 import json
 import re
+import ssl
 import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 
+import certifi
+
 from . import essay as essay_lib
 
 
 class LLMError(Exception):
-    def __init__(self, code: str, message: str = ""):
+    def __init__(
+        self,
+        code: str,
+        message: str = "",
+        *,
+        usage: dict | None = None,
+        response_received: bool = False,
+        http_status: int | None = None,
+    ):
         super().__init__(message or code)
         self.code = code
         self.message = message or code
+        # Keep provider accounting even when its generated content is unusable.
+        # None means unknown usage, not a confirmed zero-token request.
+        self.usage = dict(usage) if isinstance(usage, dict) else None
+        self.response_received = response_received
+        self.http_status = http_status
 
 
 @dataclass
@@ -62,6 +78,21 @@ def extract_json_object(text: str) -> dict:
     return value
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        # A model call must not silently send another request or forward its bearer key.
+        return None
+
+
+def _tls_context() -> ssl.SSLContext:
+    context = ssl.create_default_context()
+    if not context.get_ca_certs():
+        # Python.org builds on macOS may have no configured CA bundle at all.
+        # Keep certificate and hostname validation enabled, adding trusted public CAs.
+        context.load_verify_locations(cafile=certifi.where())
+    return context
+
+
 class ChatClient:
     """Minimal OpenAI-compatible /chat/completions client."""
 
@@ -73,6 +104,13 @@ class ChatClient:
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self._opener = urllib.request.build_opener(
+            _NoRedirect(), urllib.request.HTTPSHandler(context=_tls_context())
+        )
+
+    def _open(self, request):
+        """One transport attempt, with no automatic redirects or network retries."""
+        return self._opener.open(request, timeout=self.timeout)
 
     def complete(
         self,
@@ -94,10 +132,14 @@ class ChatClient:
         }
         if json_mode:
             body["response_format"] = {"type": "json_object"}
+        if self.provider == "deepseek":
+            # Flash defaults to thinking mode; this tool budgets for the final JSON.
+            body["thinking"] = {"type": "disabled"}
         payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
         last_error: LLMError | None = None
         for attempt in range(retries + 1):
             started = time.monotonic()
+            response_details = {"response_received": False, "http_status": None}
             request = urllib.request.Request(
                 self.base_url,
                 data=payload,
@@ -108,42 +150,61 @@ class ChatClient:
                 },
             )
             try:
-                with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                with self._open(request) as response:
+                    response_details.update(
+                        response_received=True, http_status=getattr(response, "status", 200)
+                    )
                     raw = json.loads(response.read().decode("utf-8"))
             except urllib.error.HTTPError as exc:
                 exc.close()  # release the connection held by the error response
-                last_error = LLMError(f"http_{exc.code}", f"模型服务返回 HTTP {exc.code}")
+                last_error = LLMError(
+                    f"http_{exc.code}",
+                    f"模型服务返回 HTTP {exc.code}",
+                    response_received=True,
+                    http_status=exc.code,
+                )
                 if exc.code in self.retry_statuses and attempt < retries:
                     time.sleep(1.5 * (attempt + 1))
                     continue
                 raise last_error from None
             except TimeoutError:  # socket.timeout is an alias since 3.10
-                last_error = LLMError("timeout", "模型响应超时")
+                last_error = LLMError("timeout", "模型响应超时", **response_details)
                 if attempt < retries:
                     continue
                 raise last_error from None
             except (urllib.error.URLError, OSError) as exc:
-                last_error = LLMError("network", f"无法连接模型服务：{type(exc).__name__}")
+                last_error = LLMError(
+                    "network", f"无法连接模型服务：{type(exc).__name__}", **response_details
+                )
                 if attempt < retries:
                     time.sleep(1.5 * (attempt + 1))
                     continue
                 raise last_error from None
             except ValueError:
-                raise LLMError("invalid_response", "模型服务返回了非 JSON 响应") from None
+                raise LLMError(
+                    "invalid_response", "模型服务返回了非 JSON 响应", **response_details
+                ) from None
             latency = int((time.monotonic() - started) * 1000)
+            usage = (
+                raw.get("usage")
+                if isinstance(raw, dict) and isinstance(raw.get("usage"), dict)
+                else None
+            )
+            response_details["usage"] = usage
             try:
                 choice = raw["choices"][0]
                 text = choice["message"]["content"] or ""
             except (KeyError, IndexError, TypeError):
-                raise LLMError("invalid_response", "模型响应缺少 choices") from None
+                raise LLMError(
+                    "invalid_response", "模型响应缺少 choices", **response_details
+                ) from None
             if isinstance(text, list):  # some providers return content parts
                 text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
             if not str(text).strip():
-                raise LLMError("empty", "模型返回为空")
+                raise LLMError("empty", "模型返回为空", **response_details)
             if choice.get("finish_reason") == "length":
-                raise LLMError("truncated", "模型输出被截断，请重试")
-            usage = raw.get("usage") if isinstance(raw.get("usage"), dict) else {}
-            return LLMResult(str(text), str(raw.get("model") or self.model), latency, usage)
+                raise LLMError("truncated", "模型输出被截断，请重试", **response_details)
+            return LLMResult(str(text), str(raw.get("model") or self.model), latency, usage or {})
         raise last_error or LLMError("unknown")
 
 

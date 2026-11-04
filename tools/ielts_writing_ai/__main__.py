@@ -137,9 +137,10 @@ def cmd_realcheck(settings, args) -> int:
         print(f"--kinds 只能是 evaluate,refine,rewrite 的组合：{unknown}", file=sys.stderr)
         return 2
     try:
+        realcheck.validate_max_calls(args.max_calls)
         items = realcheck.load_samples(args.samples, args.limit)
     except realcheck.RealCheckError as exc:
-        print(f"样本错误：{exc}", file=sys.stderr)
+        print(f"验证参数错误：{exc}", file=sys.stderr)
         return 2
     vision_needed = args.with_vision and any(i.get("image") for i in items)
     worst = len(items) * len(kinds) * 2 + (len(items) if vision_needed else 0)

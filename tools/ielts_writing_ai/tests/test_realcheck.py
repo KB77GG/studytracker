@@ -7,13 +7,14 @@ import os
 import shutil
 import tempfile
 import unittest
+import urllib.error
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
 from tools.ielts_writing_ai import __main__ as cli
 from tools.ielts_writing_ai import realcheck, samples
-from tools.ielts_writing_ai.llm import FakeClient, LLMError
+from tools.ielts_writing_ai.llm import ChatClient, FakeClient, LLMError
 
 from .helpers import PNG_BYTES, settings_for
 
@@ -36,6 +37,17 @@ class AuthFailClient(FakeClient):
     def complete(self, messages, **kwargs):
         self.calls.append((kwargs.get("context") or {}).get("kind"))
         raise LLMError("http_401", "模型服务返回 HTTP 401")
+
+
+class UsageClient(FakeClient):
+    def complete(self, messages, **kwargs):
+        result = super().complete(messages, **kwargs)
+        vision = (kwargs.get("context") or {}).get("kind") == "describe_image"
+        result.usage = {
+            "prompt_tokens": 1000 if vision else 100,
+            "completion_tokens": 100 if vision else 10,
+        }
+        return result
 
 
 class RealCheckTest(unittest.TestCase):
@@ -95,6 +107,89 @@ class RealCheckTest(unittest.TestCase):
         self.assertEqual(report["calls"], 4)
         failures = sum(sum(k["final_failures"].values()) for k in report["kinds"].values())
         self.assertGreater(failures, 0)
+
+    def http_client(self):
+        return ChatClient(
+            provider="deepseek",
+            base_url="https://api.deepseek.com/chat/completions",
+            api_key=SECRET,
+            model="synthetic-model",
+            timeout=1,
+        )
+
+    def response(self, *, content="{}", finish="stop", usage=None):
+        payload = {
+            "model": "synthetic-model",
+            "choices": [{"message": {"content": content}, "finish_reason": finish}],
+        }
+        if usage is not None:
+            payload["usage"] = usage
+        return io.BytesIO(json.dumps(payload).encode())
+
+    def test_network_failure_is_one_transport_attempt_without_hidden_retry(self):
+        client = self.http_client()
+        with mock.patch.object(
+            client, "_open", side_effect=urllib.error.URLError("injected offline failure")
+        ) as transport:
+            data, report = self.run_check(client=client, max_calls=2)
+        self.assertEqual(transport.call_count, 1)
+        self.assertEqual(len(data["calls"]), 1)
+        self.assertEqual(report["aborted"]["code"], "network")
+        self.assertFalse(report["connectivity"]["response_received"])
+        self.assertIsNone(report["connectivity"]["authenticated"])
+        priced = realcheck.build_report(data, price_in=1, price_out=1)
+        self.assertIsNone(priced["estimated_cost"])
+        self.assertEqual(priced["tokens"], {"prompt": None, "completion": None})
+        self.assertIn("未知（不能视为零费用）", realcheck.render_markdown(priced))
+
+    def test_validation_retry_shares_the_transport_budget(self):
+        for budget in (1, 2):
+            with self.subTest(budget=budget):
+                client = self.http_client()
+                with mock.patch.object(
+                    client, "_open", side_effect=lambda _request: self.response()
+                ) as transport:
+                    data, report = self.run_check(
+                        items=realcheck.load_samples("builtin", 1),
+                        client=client,
+                        kinds=("evaluate",),
+                        max_calls=budget,
+                    )
+                self.assertEqual(transport.call_count, budget)
+                self.assertEqual(report["calls"], budget)
+                self.assertEqual(data["samples"][0]["generations"]["evaluate"]["status"], "failed")
+
+    def test_invalid_budgets_are_rejected_before_dispatch(self):
+        for budget in (0, -1, 1.5, True):
+            client = FakeClient()
+            with (
+                self.subTest(budget=budget),
+                self.assertRaisesRegex(realcheck.RealCheckError, "正整数"),
+            ):
+                self.run_check(client=client, max_calls=budget)
+            self.assertEqual(client.calls, [])
+
+    def test_truncated_response_preserves_usage_and_is_not_a_connection_failure(self):
+        client = self.http_client()
+        with mock.patch.object(
+            client,
+            "_open",
+            side_effect=lambda _request: self.response(
+                finish="length", usage={"prompt_tokens": 100, "completion_tokens": 2800}
+            ),
+        ) as transport:
+            data, _report = self.run_check(
+                items=realcheck.load_samples("builtin", 1), client=client, kinds=("evaluate",)
+            )
+        self.assertEqual(transport.call_count, 1)
+        report = realcheck.build_report(data, price_in=1, price_out=1)
+        self.assertTrue(report["connectivity"]["ok"])
+        self.assertTrue(report["connectivity"]["authenticated"])
+        self.assertFalse(report["connectivity"]["generation_ok"])
+        self.assertEqual(report["connectivity"]["generation_error"], "truncated")
+        self.assertEqual(report["tokens"], {"prompt": 100, "completion": 2800})
+        self.assertEqual(report["estimated_cost"], 0.0029)
+        self.assertEqual(report["per_sample"][0]["statuses"]["evaluate"], "failed")
 
     def test_trial_database_is_never_touched(self):
         trial_db = Path(self.tmp) / "iwa.sqlite3"
@@ -158,10 +253,44 @@ class RealCheckTest(unittest.TestCase):
         self.assertEqual(data["samples"][0]["image_status"], "ready")
         self.assertEqual(report["vision_calls"], 1)
 
+    def test_vision_usage_is_included_but_text_price_does_not_price_another_model(self):
+        image = Path(self.tmp) / "chart.png"
+        image.write_bytes(PNG_BYTES)
+        item = dict(samples.SAMPLES[-1], image=str(image))
+        data, _report = self.run_check(
+            items=[item],
+            client=UsageClient(model="text-double"),
+            vision_client=UsageClient(model="vision-double"),
+            kinds=("evaluate",),
+        )
+        report = realcheck.build_report(data, price_in=1, price_out=1)
+        self.assertEqual(report["tokens"], {"prompt": 1100, "completion": 110})
+        self.assertEqual(report["usage"]["text"]["tokens"], {"prompt": 100, "completion": 10})
+        self.assertEqual(report["usage"]["vision"]["tokens"], {"prompt": 1000, "completion": 100})
+        self.assertEqual(len(report["usage"]["by_model"]), 2)
+        self.assertIsNone(report["estimated_cost"])
+        self.assertEqual(report["cost_estimate"]["covered_cost"], 0.00011)
+        self.assertEqual(report["cost_estimate"]["coverage"], "text_only")
+        markdown = realcheck.render_markdown(report)
+        self.assertIn("总 token（含识图）：输入 1100 · 输出 110", markdown)
+        self.assertIn("识图费用未估算", markdown)
+
+    def test_duplicate_sample_ids_are_rejected_before_sampling_or_running(self):
+        rows = [dict(item, id="same-id") for item in samples.SAMPLES[:2]]
+        path = Path(self.tmp) / "duplicates.jsonl"
+        path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+        with self.assertRaisesRegex(realcheck.RealCheckError, "id 重复"):
+            realcheck.load_samples(str(path), limit=1)
+        client = FakeClient()
+        with self.assertRaisesRegex(realcheck.RealCheckError, "id 重复"):
+            self.run_check(items=rows, client=client)
+        self.assertEqual(client.calls, [])
+
     def test_sample_file_errors(self):
         bad = Path(self.tmp) / "bad.jsonl"
         for content, message in (
             ("{not json", "不是合法 JSON"),
+            ("[]", "必须是 JSON 对象"),
             (json.dumps({"task_type": "task2", "prompt": "p"}), "缺少 essay"),
             (json.dumps({"task_type": "task3", "prompt": "p", "essay": "e"}), "task_type"),
             (
@@ -216,6 +345,17 @@ class RealCheckCliTest(unittest.TestCase):
         code, _out, err = self.cli([], "--kinds", "evaluate,score")
         self.assertEqual(code, 2)
         self.assertIn("--kinds", err)
+
+    def test_nonpositive_call_budget_is_rejected_by_cli(self):
+        for budget in ("0", "-1"):
+            with (
+                self.subTest(budget=budget),
+                mock.patch("tools.ielts_writing_ai.realcheck.run") as run,
+            ):
+                code, _out, err = self.cli([], "--max-calls", budget)
+            self.assertEqual(code, 2)
+            self.assertIn("正整数", err)
+            run.assert_not_called()
 
 
 if __name__ == "__main__":
