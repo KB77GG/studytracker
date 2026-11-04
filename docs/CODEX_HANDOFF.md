@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 写作试用思考模式实测完成：42bfc549复核通过，A/B共15/30，发现英文数词漏检
+
+- 本轮用户授权明确为：离线通过后 high连通≤2次、off/high各7篇各≤14次、总≤30；已完成 **15/30=1+7+7**，批次结束，不自动使用余量增加样本。只做内置合成作文评价，无精修/改写/识图/学生数据；现有独立Key只在进程中读取，未输出/分享，未新建或修改凭据。
+- 复核树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，开工从98caf44d通过HTTPS fetch+ff-only到 **42bfc5493fca663a4daec382bab871719ae68416**（ef07ce26，prompt `iwa-2026-11-04.6`）；测试/实测均基于此HEAD，tracked工具文件全量SHA前后一致。交付仅新报告目录和两交接，无业务改动。文档提交推功能分支，最终文档HEAD以git log为准，不能把其当另一轮模型源码。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，本机origin/main缓存f0e04041/behind103，原 **7 modified/23 untracked入口**完整保留。未拉main/改主树业务。同期补做顺延发布等任务已有交接原样保留，其部署状态不属于本轮IWA操作；未操作其他worktree。主树新增本机 `docs/design/iwa-thinking-ab-20261104/` runner/证据镜像及两交接增量；精确前后状态见本机source-state.json。
+- 离线：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-ab-20261104/run_offline_tests.py` → **320 Python（20.376s）、8 Node**；fake配置/临时库/仅loopback保护，外部IWA_DATA_DIR未写。实施树执行同venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（45文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check`通过。新便携evidence/compare/thinking_client recheck（--repo/--output）通过，旧80%四组合、总检查、截断/失败usage/缺失小计、证据完整性及实际输入指纹缺口均关闭；evidence共60断言。
+- 受限真实命令：主树 `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python docs/design/iwa-thinking-ab-20261104/run_ab.py --confirm-paid`。Ledger真实发送前fsync，flock覆盖全批，旧账本拒绝重用；双重30与2/14/14上限、HTTP重试0/禁止重定向、high16000/300/off4500/120。独立离线main路径验证401/无效JSON/截断smoke分别1/2/1次停止，后续0；成功路径15次，发送前账本逐次核对。模型数据通过realcheck临时SQLite运行，不写试用库、不扣试用额度。
+- 实测：所有15次HTTP200/stop，无重试/截断/超时；A/B各7/7首轮JSON+校验+最终成功。7篇首次实际消息SHA逐篇相同（high服务端输入token每篇多25，不是正文改变）。off p50/p90 **11.786/13.219s**、输入13265/输出12838；high **33.393/68.510s**、输入13440/输出49740，其中reasoning34834，不重复相加。A/B输出峰值2139/4500、12244/16000；独立smoke78761ms、13718/16000、reasoning11512。评分引文110/110、109/109，论证46/46、53/53，5项论证sanity4/5→5/5，全sanity16/17→17/17（各skip1）。便携real_metrics_audit对账本/报告/compare **275/275**，本批无失败调用，失败统计依赖离线探针验证。
+- 人工复核81条（off37/high44），自动manual_review表80行已填写，另有语言项补充。high局部更好：good承认已有机制，strong比喻不再被当口语错误；但新增短文城乡/主次漏读、Task1概述内容误读，建议仍可能改变原意。弱文问题数、自动sanity、分数上涨都不是教师准确度真值。保留默认off，high只作为可选试验；未调整16000/300。
+- **新P2未修**：high/mid/TR建议包含无来源 `forty times`（40倍）；原文/题目无该数，最终归一化/复制均保留，删除0。`figures.py:27,36,67,75`只解析阿拉伯数和中文百分比；统一扫尾也漏过。英文数词来源→阿拉伯百分比还会误删。`english_number_probe.py --repo <repo> --fixtures <bundle> --output <json>`真实fixture重放确认；只改forty为40即正确删除。探针exit0表示缺陷如实复现，不是产品已通过。没有为它追加真实调用或改业务。
+- 共享交付 `docs/design/ielts-writing-ai-thinking-ab-20261104/`：README、三阶段报告与脱敏raw_calls/run_data、compare+已填人工表、完整人工评审、transport、4套新探针/结果、独立指标审计、offline-verification/log、runner离线审计。完整reasoning只在主树忽略的results目录、umask077；共享删除reasoning正文但保留字符数/token/正式回答，secret精确扫描与结构检查通过。官方价格另算全15次约 **USD0.04770–0.09541**（缓存分项非高峰/高峰区间，非账单），原工具report未填单价仍未知。
+- 本轮IWA发布状态：**只报告/交接commit+push功能分支**；主树本机runner、完整私有结果及既有脏改动未commit。无main合并、部署、生产服务器/数据库写入；没有试用服务启停、模型配置默认改变，小程序未上传/提审/发布。浏览器全流程、Python3.10、真实识图和教师校准未验。别把其他任务已有生产发布写成此试用工具已上线。
+- 下一步：Claude拉报告，先修英文数词统一解析（数值等价、百分比/倍数边界/篇幅目标正对照）并用本次真实输出做离线fixture；处理上下文复核与建议暗加事实问题。先离线再决定新付费范围，本批账本不可重跑；要衡量评分准确度需独立老师评分样本。报告README含便携重跑命令，无需再次跑已完成A/B。
+
 ## 2026-11-04（思考模式复核后）雅思写作 AI 试用工具：改列建议过滤、思考截断与用量、复核表证据、实际输入指纹（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `bd93e1c`（报告 `98caf44d`，`docs/design/ielts-writing-ai-thinking-review-20261104/`，含 3 个探针），未通过，真实请求 0/30。

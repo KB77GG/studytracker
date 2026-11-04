@@ -1,0 +1,105 @@
+{
+  "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "observations": {
+    "different_visual_prompt": {
+      "description": "Two actual offline realcheck runs: same image/sample ID/essay, different successful vision reading changes evaluation input.",
+      "actual_evaluation_message_sha256": {
+        "a": "b1d1f60d02caedf49652f41d921dd2a352fa8721527ad83a5ea114f09fa65001",
+        "b": "019414a219c615c6607a8ba20d138ce8cde3e323366ac2c7c44cae09f90eafc5"
+      },
+      "visual_values": {
+        "a": "Museum A = 140",
+        "b": "Museum A = 141"
+      },
+      "sample_fingerprints": {
+        "a": {
+          "t1-no-image": "a646c3a269649d4c"
+        },
+        "b": {
+          "t1-no-image": "1f39941230eb96ee"
+        }
+      },
+      "errors": [
+        "同名样本的题目、作文或题图识别结果不同：t1-no-image",
+        "实际发送给评价模型的输入不同：t1-no-image"
+      ],
+      "warnings": [],
+      "compare_accepted": false,
+      "compare_rejection": "两次运行的条件不同，不能对照：同名样本的题目、作文或题图识别结果不同：t1-no-image；实际发送给评价模型的输入不同：t1-no-image",
+      "exported_submission_fields": [
+        "essay_text",
+        "image_description",
+        "image_error",
+        "image_status",
+        "prompt_text",
+        "target_band",
+        "task_type",
+        "word_count"
+      ],
+      "call_kinds": {
+        "a": [
+          "describe_image",
+          "evaluate"
+        ],
+        "b": [
+          "describe_image",
+          "evaluate"
+        ]
+      },
+      "scope": "Regression now refused even when the same sample/image yields differing vision readings."
+    },
+    "positive_controls": {
+      "changed_essay_errors": [
+        "同名样本的题目、作文或题图识别结果不同：t1-no-image"
+      ],
+      "changed_prompt_version_errors": [
+        "提示词版本不同：iwa-2026-11-04.6 vs deliberately-other-prompt"
+      ]
+    },
+    "only_thinking_options_differ": {
+      "compare_accepted": true,
+      "messages_identical": true,
+      "input_sha256": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+      "modes": [
+        "off",
+        "high"
+      ],
+      "max_tokens": [
+        4500,
+        16000
+      ],
+      "timeout_options": [
+        null,
+        300.0
+      ],
+      "warnings": []
+    },
+    "legacy_report": {
+      "errors": [],
+      "warnings": [
+        "有样本缺少实际输入的指纹（旧版报告或首次请求未发出），只核对了题目、作文和题图识别结果：t2-weak"
+      ]
+    },
+    "manual_review_completeness": {
+      "fixture_kind": "Synthetic accepted-field rendering fixture, not a judgment accuracy test",
+      "first_claim_rendered": true,
+      "paired_conflict_preserved_in_view": true,
+      "needs_review_preserved_in_view": true,
+      "paired_conflict_rendered": true,
+      "task1_issue_preserved_in_view": true,
+      "task1_issue_rendered": true,
+      "task1_figures_preserved_in_view": true,
+      "task1_figures_rendered": true,
+      "task1_comment_rendered": true,
+      "task1_comparisons_rendered": true,
+      "paragraph_rendered": true,
+      "needs_review_rendered": true,
+      "argument_note_rendered": true,
+      "position_inconsistent_rendered": true,
+      "scope": "Previously omitted evidence is now preserved and rendered for both evaluation task types."
+    }
+  },
+  "passed": true
+}

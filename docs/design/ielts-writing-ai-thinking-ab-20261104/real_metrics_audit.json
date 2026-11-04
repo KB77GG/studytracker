@@ -1,0 +1,1016 @@
+{
+  "network_calls_by_audit": 0,
+  "audit_only_reads_sanitized_bundle": "/private/tmp/studytracker-iwa-realcheck-review-20261103/docs/design/ielts-writing-ai-thinking-ab-20261104",
+  "stages": {
+    "smoke_high": {
+      "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+      "status": {
+        "samples": 1,
+        "calls": 1,
+        "first_json": 1,
+        "first_valid": 1,
+        "final_ready": 1,
+        "retried_samples": [],
+        "truncated": 0,
+        "timeouts": 0,
+        "http_statuses": {
+          "200": 1
+        }
+      },
+      "usage": {
+        "calls": 1,
+        "tokens": {
+          "prompt_tokens": 2073,
+          "completion_tokens": 13718,
+          "total_tokens": 15791,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2073
+        },
+        "known_subtotals": {
+          "prompt_tokens": 2073,
+          "completion_tokens": 13718,
+          "total_tokens": 15791,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2073
+        },
+        "unreported_calls": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 0
+        },
+        "reasoning_tokens": 11512,
+        "reasoning_known": 11512,
+        "reasoning_unreported_thinking_calls": 0,
+        "failed_reasoning_known": 0,
+        "estimated_usd_range": [
+          0.00854175,
+          0.0170835
+        ]
+      },
+      "latency_and_budget": {
+        "successful_calls_p50_ms": 78761,
+        "successful_calls_p90_ms": 78761,
+        "all_calls_sum_ms": 78761,
+        "completion_peak": 13718,
+        "output_budgets": [
+          16000
+        ],
+        "peak_budget_fraction": 0.857375
+      },
+      "evidence": {
+        "scored_criteria": 4,
+        "quotes": 20,
+        "literal_quotes": 20,
+        "normalized_quotes": 20,
+        "count_corrections": 0
+      },
+      "argument": {
+        "task2_evaluations": 1,
+        "with_argument": 1,
+        "with_position": 1,
+        "paragraphs": 5,
+        "problems": 1,
+        "improvements": 3,
+        "returned": 10,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "self_conflicts": 0,
+        "suggestions_removed": 0,
+        "reclassified": 0,
+        "kept": 10,
+        "entry_quotes": 10,
+        "entry_quotes_literal": 10,
+        "entry_quotes_verified": 10,
+        "paired_quotes": 0,
+        "paired_quotes_literal": 0,
+        "paired_quotes_verified": 0,
+        "support_quotes": 0,
+        "support_quotes_literal": 0,
+        "support_quotes_verified": 0,
+        "problem_types": {
+          "overgeneralized": 1
+        },
+        "paragraph_verdicts": {
+          "supports": 5
+        }
+      },
+      "suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "argument_sanity": {
+        "checks": {
+          "weak_has_problem": true
+        },
+        "passed": 1,
+        "total": 1
+      },
+      "all_sanity": {
+        "passed": 2,
+        "total": 2,
+        "skipped": 0
+      },
+      "samples": [
+        {
+          "id": "t2-weak",
+          "status": "ready",
+          "overall": 5.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 10,
+          "argument_kept": 10,
+          "problem_types": [
+            "overgeneralized"
+          ],
+          "reclassified": 0
+        }
+      ],
+      "first_input_sha256": {
+        "t2-weak": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231"
+      }
+    },
+    "off": {
+      "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+      "status": {
+        "samples": 7,
+        "calls": 7,
+        "first_json": 7,
+        "first_valid": 7,
+        "final_ready": 7,
+        "retried_samples": [],
+        "truncated": 0,
+        "timeouts": 0,
+        "http_statuses": {
+          "200": 7
+        }
+      },
+      "usage": {
+        "calls": 7,
+        "tokens": {
+          "prompt_tokens": 13265,
+          "completion_tokens": 12838,
+          "total_tokens": 26103,
+          "prompt_cache_hit_tokens": 7296,
+          "prompt_cache_miss_tokens": 5969
+        },
+        "known_subtotals": {
+          "prompt_tokens": 13265,
+          "completion_tokens": 12838,
+          "total_tokens": 26103,
+          "prompt_cache_hit_tokens": 7296,
+          "prompt_cache_miss_tokens": 5969
+        },
+        "unreported_calls": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 0
+        },
+        "reasoning_tokens": null,
+        "reasoning_known": null,
+        "reasoning_unreported_thinking_calls": 0,
+        "failed_reasoning_known": 0,
+        "estimated_usd_range": [
+          0.00862004,
+          0.01724008
+        ]
+      },
+      "latency_and_budget": {
+        "successful_calls_p50_ms": 11786,
+        "successful_calls_p90_ms": 13219,
+        "all_calls_sum_ms": 80728,
+        "completion_peak": 2139,
+        "output_budgets": [
+          4500
+        ],
+        "peak_budget_fraction": 0.47533333333333333
+      },
+      "evidence": {
+        "scored_criteria": 27,
+        "quotes": 110,
+        "literal_quotes": 110,
+        "normalized_quotes": 110,
+        "count_corrections": 0
+      },
+      "argument": {
+        "task2_evaluations": 6,
+        "with_argument": 6,
+        "with_position": 6,
+        "paragraphs": 26,
+        "problems": 2,
+        "improvements": 12,
+        "returned": 46,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "self_conflicts": 0,
+        "suggestions_removed": 0,
+        "reclassified": 1,
+        "kept": 46,
+        "entry_quotes": 46,
+        "entry_quotes_literal": 46,
+        "entry_quotes_verified": 46,
+        "paired_quotes": 0,
+        "paired_quotes_literal": 0,
+        "paired_quotes_verified": 0,
+        "support_quotes": 1,
+        "support_quotes_literal": 1,
+        "support_quotes_verified": 1,
+        "problem_types": {
+          "irrelevant": 1,
+          "unsupported": 1
+        },
+        "paragraph_verdicts": {
+          "supports": 21,
+          "off_position": 5
+        }
+      },
+      "suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "argument_sanity": {
+        "checks": {
+          "weak_has_problem": false,
+          "strong_at_most_one_problem": true,
+          "strong_no_false_contradiction_or_off_topic": true,
+          "strong_position_quote": true,
+          "off_topic_identified": true
+        },
+        "passed": 4,
+        "total": 5
+      },
+      "all_sanity": {
+        "passed": 16,
+        "total": 17,
+        "skipped": 1
+      },
+      "samples": [
+        {
+          "id": "t2-weak",
+          "status": "ready",
+          "overall": 5.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 8,
+          "argument_kept": 8,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-mid",
+          "status": "ready",
+          "overall": 6.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 8,
+          "argument_kept": 8,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-good",
+          "status": "ready",
+          "overall": 7.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 8,
+          "argument_kept": 8,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-strong",
+          "status": "ready",
+          "overall": 7.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 8,
+          "argument_kept": 8,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-off-topic",
+          "status": "ready",
+          "overall": 5.0,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 8,
+          "argument_kept": 8,
+          "problem_types": [
+            "irrelevant"
+          ],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-under-length",
+          "status": "ready",
+          "overall": 5.0,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 6,
+          "argument_kept": 6,
+          "problem_types": [
+            "unsupported"
+          ],
+          "reclassified": 1
+        },
+        {
+          "id": "t1-no-image",
+          "status": "ready",
+          "overall": null,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 1,
+          "comparisons_checked": 6
+        }
+      ],
+      "first_input_sha256": {
+        "t2-weak": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+        "t2-mid": "a3ed09e1155503807cec6daea797cf8b9003240873588f764c9743bb9de36f43",
+        "t2-good": "3b6077331dd7673823e42c427a5cf3af3b7e4a0d2b6f1d3714667c1b25c0b12a",
+        "t2-strong": "eb7a0956d5379e27cd2d29cfdf2230cba99483c99fd07ec9465c22b0ff977008",
+        "t2-off-topic": "b987dcc1c5cf3109072427fd62bbb1749272ae74de1e366cfa00047c31a61619",
+        "t2-under-length": "5a5910b778c0cb944e0c495ad1695b70f4ab2e9d035c88eb0b4afbf49634a70c",
+        "t1-no-image": "c7c66b78b4a0c6ccb7d4b1bdd846234ebae78cf54d27da5b88ef36b1202709c9"
+      }
+    },
+    "high": {
+      "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+      "status": {
+        "samples": 7,
+        "calls": 7,
+        "first_json": 7,
+        "first_valid": 7,
+        "final_ready": 7,
+        "retried_samples": [],
+        "truncated": 0,
+        "timeouts": 0,
+        "http_statuses": {
+          "200": 7
+        }
+      },
+      "usage": {
+        "calls": 7,
+        "tokens": {
+          "prompt_tokens": 13440,
+          "completion_tokens": 49740,
+          "total_tokens": 63180,
+          "prompt_cache_hit_tokens": 8960,
+          "prompt_cache_miss_tokens": 4480
+        },
+        "known_subtotals": {
+          "prompt_tokens": 13440,
+          "completion_tokens": 49740,
+          "total_tokens": 63180,
+          "prompt_cache_hit_tokens": 8960,
+          "prompt_cache_miss_tokens": 4480
+        },
+        "unreported_calls": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 0
+        },
+        "reasoning_tokens": 34834,
+        "reasoning_known": 34834,
+        "reasoning_unreported_thinking_calls": 0,
+        "failed_reasoning_known": 0,
+        "estimated_usd_range": [
+          0.03054288,
+          0.06108576
+        ]
+      },
+      "latency_and_budget": {
+        "successful_calls_p50_ms": 33393,
+        "successful_calls_p90_ms": 68510,
+        "all_calls_sum_ms": 295259,
+        "completion_peak": 12244,
+        "output_budgets": [
+          16000
+        ],
+        "peak_budget_fraction": 0.76525
+      },
+      "evidence": {
+        "scored_criteria": 27,
+        "quotes": 109,
+        "literal_quotes": 109,
+        "normalized_quotes": 109,
+        "count_corrections": 0
+      },
+      "argument": {
+        "task2_evaluations": 6,
+        "with_argument": 6,
+        "with_position": 6,
+        "paragraphs": 26,
+        "problems": 5,
+        "improvements": 16,
+        "returned": 53,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "self_conflicts": 0,
+        "suggestions_removed": 0,
+        "reclassified": 0,
+        "kept": 53,
+        "entry_quotes": 53,
+        "entry_quotes_literal": 53,
+        "entry_quotes_verified": 53,
+        "paired_quotes": 0,
+        "paired_quotes_literal": 0,
+        "paired_quotes_verified": 0,
+        "support_quotes": 0,
+        "support_quotes_literal": 0,
+        "support_quotes_verified": 0,
+        "problem_types": {
+          "overgeneralized": 2,
+          "irrelevant": 3
+        },
+        "paragraph_verdicts": {
+          "supports": 20,
+          "off_position": 5,
+          "weak": 1
+        }
+      },
+      "suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "argument_sanity": {
+        "checks": {
+          "weak_has_problem": true,
+          "strong_at_most_one_problem": true,
+          "strong_no_false_contradiction_or_off_topic": true,
+          "strong_position_quote": true,
+          "off_topic_identified": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "all_sanity": {
+        "passed": 17,
+        "total": 17,
+        "skipped": 1
+      },
+      "samples": [
+        {
+          "id": "t2-weak",
+          "status": "ready",
+          "overall": 5.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 11,
+          "argument_kept": 11,
+          "problem_types": [
+            "overgeneralized",
+            "overgeneralized"
+          ],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-mid",
+          "status": "ready",
+          "overall": 7.0,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 9,
+          "argument_kept": 9,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-good",
+          "status": "ready",
+          "overall": 7.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 9,
+          "argument_kept": 9,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-strong",
+          "status": "ready",
+          "overall": 8.0,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 9,
+          "argument_kept": 9,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-off-topic",
+          "status": "ready",
+          "overall": 5.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 10,
+          "argument_kept": 10,
+          "problem_types": [
+            "irrelevant",
+            "irrelevant",
+            "irrelevant"
+          ],
+          "reclassified": 0
+        },
+        {
+          "id": "t2-under-length",
+          "status": "ready",
+          "overall": 5.5,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 0,
+          "comparisons_checked": null,
+          "argument_returned": 5,
+          "argument_kept": 5,
+          "problem_types": [],
+          "reclassified": 0
+        },
+        {
+          "id": "t1-no-image",
+          "status": "ready",
+          "overall": null,
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "consistency_issues": 1,
+          "comparisons_checked": 6
+        }
+      ],
+      "first_input_sha256": {
+        "t2-weak": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+        "t2-mid": "a3ed09e1155503807cec6daea797cf8b9003240873588f764c9743bb9de36f43",
+        "t2-good": "3b6077331dd7673823e42c427a5cf3af3b7e4a0d2b6f1d3714667c1b25c0b12a",
+        "t2-strong": "eb7a0956d5379e27cd2d29cfdf2230cba99483c99fd07ec9465c22b0ff977008",
+        "t2-off-topic": "b987dcc1c5cf3109072427fd62bbb1749272ae74de1e366cfa00047c31a61619",
+        "t2-under-length": "5a5910b778c0cb944e0c495ad1695b70f4ab2e9d035c88eb0b4afbf49634a70c",
+        "t1-no-image": "c7c66b78b4a0c6ccb7d4b1bdd846234ebae78cf54d27da5b88ef36b1202709c9"
+      }
+    }
+  },
+  "ab_only_usage": {
+    "calls": 14,
+    "tokens": {
+      "prompt_tokens": 26705,
+      "completion_tokens": 62578,
+      "total_tokens": 89283,
+      "prompt_cache_hit_tokens": 16256,
+      "prompt_cache_miss_tokens": 10449
+    },
+    "known_subtotals": {
+      "prompt_tokens": 26705,
+      "completion_tokens": 62578,
+      "total_tokens": 89283,
+      "prompt_cache_hit_tokens": 16256,
+      "prompt_cache_miss_tokens": 10449
+    },
+    "unreported_calls": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 0
+    },
+    "reasoning_tokens": 34834,
+    "reasoning_known": 34834,
+    "reasoning_unreported_thinking_calls": 0,
+    "failed_reasoning_known": 0,
+    "estimated_usd_range": [
+      0.03916292,
+      0.07832584
+    ]
+  },
+  "transport": {
+    "request_attempts": 15,
+    "limit": 30,
+    "stage_counts": {
+      "smoke_high": 1,
+      "off": 7,
+      "high": 7
+    },
+    "finish_reasons": {
+      "stop": 15
+    },
+    "usage": {
+      "calls": 15,
+      "tokens": {
+        "prompt_tokens": 28778,
+        "completion_tokens": 76296,
+        "total_tokens": 105074,
+        "prompt_cache_hit_tokens": 16256,
+        "prompt_cache_miss_tokens": 12522
+      },
+      "known_subtotals": {
+        "prompt_tokens": 28778,
+        "completion_tokens": 76296,
+        "total_tokens": 105074,
+        "prompt_cache_hit_tokens": 16256,
+        "prompt_cache_miss_tokens": 12522
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 46346,
+      "reasoning_known": 46346,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 0,
+      "estimated_usd_range": [
+        0.04770467,
+        0.09540934
+      ]
+    }
+  },
+  "fee_estimate_basis": {
+    "source": "https://api-docs.deepseek.com/quick_start/pricing/",
+    "checked_by_parent_on": "2026-11-04",
+    "model": "deepseek-flash",
+    "usd_per_million_offpeak": {
+      "cache_hit": 0.003,
+      "cache_miss": 0.15,
+      "output": 0.6
+    },
+    "peak_multiplier": 2,
+    "caveat": "Estimate range only, not an invoice. Completion includes reasoning; reasoning is not added again. Smoke excluded from A/B totals."
+  },
+  "checks": {
+    "smoke_high.raw_calls_match_run_data": true,
+    "smoke_high.evaluate_only": true,
+    "smoke_high.within_stage_budget": true,
+    "smoke_high.cache_components_equal_input": true,
+    "smoke_high.token_components_equal_total": true,
+    "smoke_high.reasoning_subset_of_completion": true,
+    "smoke_high.prompt_tokens_total": true,
+    "smoke_high.completion_tokens_total": true,
+    "smoke_high.report_calls": true,
+    "smoke_high.report_reasoning_tokens": true,
+    "smoke_high.report_reasoning_tokens_known": true,
+    "smoke_high.report_reasoning_unreported_calls": true,
+    "smoke_high.report_first_attempt_json_ok": true,
+    "smoke_high.report_first_attempt_valid": true,
+    "smoke_high.report_final_ready": true,
+    "smoke_high.report_truncated": true,
+    "smoke_high.report_timeouts": true,
+    "smoke_high.latency_p50": true,
+    "smoke_high.latency_p90": true,
+    "smoke_high.completion_peak": true,
+    "smoke_high.t2-weak.removed_sum": true,
+    "smoke_high.t2-weak.returned_from_model": true,
+    "smoke_high.t2-weak.entry_partition": true,
+    "smoke_high.t2-weak.entry_quotes": true,
+    "smoke_high.t2-weak.paired_quotes": true,
+    "smoke_high.t2-weak.support_quotes": true,
+    "smoke_high.report_evidence_scored_criteria": true,
+    "smoke_high.report_evidence_quotes": true,
+    "smoke_high.report_evidence_count_corrections": true,
+    "smoke_high.report_evidence_verified": true,
+    "smoke_high.report_argument_task2_evaluations": true,
+    "smoke_high.report_argument_with_argument": true,
+    "smoke_high.report_argument_with_position": true,
+    "smoke_high.report_argument_paragraphs": true,
+    "smoke_high.report_argument_problems": true,
+    "smoke_high.report_argument_improvements": true,
+    "smoke_high.report_argument_returned": true,
+    "smoke_high.report_argument_kept": true,
+    "smoke_high.report_argument_dropped": true,
+    "smoke_high.report_argument_duplicates": true,
+    "smoke_high.report_argument_over_limit": true,
+    "smoke_high.report_argument_self_conflicts": true,
+    "smoke_high.report_argument_suggestions_removed": true,
+    "smoke_high.report_argument_reclassified": true,
+    "smoke_high.report_argument_types": true,
+    "smoke_high.report_argument_verdicts": true,
+    "smoke_high.report_removed_criteria": true,
+    "smoke_high.report_removed_priorities": true,
+    "smoke_high.report_removed_argument": true,
+    "smoke_high.sanity_weak_has_problem": true,
+    "smoke_high.sanity_denominator": true,
+    "smoke_high.sanity_pass_count": true,
+    "off.raw_calls_match_run_data": true,
+    "off.evaluate_only": true,
+    "off.within_stage_budget": true,
+    "off.cache_components_equal_input": true,
+    "off.token_components_equal_total": true,
+    "off.reasoning_subset_of_completion": true,
+    "off.prompt_tokens_total": true,
+    "off.completion_tokens_total": true,
+    "off.report_calls": true,
+    "off.report_reasoning_tokens": true,
+    "off.report_reasoning_tokens_known": true,
+    "off.report_reasoning_unreported_calls": true,
+    "off.report_first_attempt_json_ok": true,
+    "off.report_first_attempt_valid": true,
+    "off.report_final_ready": true,
+    "off.report_truncated": true,
+    "off.report_timeouts": true,
+    "off.latency_p50": true,
+    "off.latency_p90": true,
+    "off.completion_peak": true,
+    "off.t2-weak.removed_sum": true,
+    "off.t2-weak.returned_from_model": true,
+    "off.t2-weak.entry_partition": true,
+    "off.t2-weak.entry_quotes": true,
+    "off.t2-weak.paired_quotes": true,
+    "off.t2-weak.support_quotes": true,
+    "off.t2-mid.removed_sum": true,
+    "off.t2-mid.returned_from_model": true,
+    "off.t2-mid.entry_partition": true,
+    "off.t2-mid.entry_quotes": true,
+    "off.t2-mid.paired_quotes": true,
+    "off.t2-mid.support_quotes": true,
+    "off.t2-good.removed_sum": true,
+    "off.t2-good.returned_from_model": true,
+    "off.t2-good.entry_partition": true,
+    "off.t2-good.entry_quotes": true,
+    "off.t2-good.paired_quotes": true,
+    "off.t2-good.support_quotes": true,
+    "off.t2-strong.removed_sum": true,
+    "off.t2-strong.returned_from_model": true,
+    "off.t2-strong.entry_partition": true,
+    "off.t2-strong.entry_quotes": true,
+    "off.t2-strong.paired_quotes": true,
+    "off.t2-strong.support_quotes": true,
+    "off.t2-off-topic.removed_sum": true,
+    "off.t2-off-topic.returned_from_model": true,
+    "off.t2-off-topic.entry_partition": true,
+    "off.t2-off-topic.entry_quotes": true,
+    "off.t2-off-topic.paired_quotes": true,
+    "off.t2-off-topic.support_quotes": true,
+    "off.t2-under-length.removed_sum": true,
+    "off.t2-under-length.returned_from_model": true,
+    "off.t2-under-length.entry_partition": true,
+    "off.t2-under-length.entry_quotes": true,
+    "off.t2-under-length.paired_quotes": true,
+    "off.t2-under-length.support_quotes": true,
+    "off.t1-no-image.removed_sum": true,
+    "off.t1-no-image.consistency_evidence": true,
+    "off.report_evidence_scored_criteria": true,
+    "off.report_evidence_quotes": true,
+    "off.report_evidence_count_corrections": true,
+    "off.report_evidence_verified": true,
+    "off.report_argument_task2_evaluations": true,
+    "off.report_argument_with_argument": true,
+    "off.report_argument_with_position": true,
+    "off.report_argument_paragraphs": true,
+    "off.report_argument_problems": true,
+    "off.report_argument_improvements": true,
+    "off.report_argument_returned": true,
+    "off.report_argument_kept": true,
+    "off.report_argument_dropped": true,
+    "off.report_argument_duplicates": true,
+    "off.report_argument_over_limit": true,
+    "off.report_argument_self_conflicts": true,
+    "off.report_argument_suggestions_removed": true,
+    "off.report_argument_reclassified": true,
+    "off.report_argument_types": true,
+    "off.report_argument_verdicts": true,
+    "off.report_removed_criteria": true,
+    "off.report_removed_priorities": true,
+    "off.report_removed_argument": true,
+    "off.sanity_weak_has_problem": true,
+    "off.sanity_strong_at_most_one_problem": true,
+    "off.sanity_strong_no_false_contradiction_or_off_topic": true,
+    "off.sanity_strong_position_quote": true,
+    "off.sanity_off_topic_identified": true,
+    "off.sanity_denominator": true,
+    "off.sanity_pass_count": true,
+    "high.raw_calls_match_run_data": true,
+    "high.evaluate_only": true,
+    "high.within_stage_budget": true,
+    "high.cache_components_equal_input": true,
+    "high.token_components_equal_total": true,
+    "high.reasoning_subset_of_completion": true,
+    "high.prompt_tokens_total": true,
+    "high.completion_tokens_total": true,
+    "high.report_calls": true,
+    "high.report_reasoning_tokens": true,
+    "high.report_reasoning_tokens_known": true,
+    "high.report_reasoning_unreported_calls": true,
+    "high.report_first_attempt_json_ok": true,
+    "high.report_first_attempt_valid": true,
+    "high.report_final_ready": true,
+    "high.report_truncated": true,
+    "high.report_timeouts": true,
+    "high.latency_p50": true,
+    "high.latency_p90": true,
+    "high.completion_peak": true,
+    "high.t2-weak.removed_sum": true,
+    "high.t2-weak.returned_from_model": true,
+    "high.t2-weak.entry_partition": true,
+    "high.t2-weak.entry_quotes": true,
+    "high.t2-weak.paired_quotes": true,
+    "high.t2-weak.support_quotes": true,
+    "high.t2-mid.removed_sum": true,
+    "high.t2-mid.returned_from_model": true,
+    "high.t2-mid.entry_partition": true,
+    "high.t2-mid.entry_quotes": true,
+    "high.t2-mid.paired_quotes": true,
+    "high.t2-mid.support_quotes": true,
+    "high.t2-good.removed_sum": true,
+    "high.t2-good.returned_from_model": true,
+    "high.t2-good.entry_partition": true,
+    "high.t2-good.entry_quotes": true,
+    "high.t2-good.paired_quotes": true,
+    "high.t2-good.support_quotes": true,
+    "high.t2-strong.removed_sum": true,
+    "high.t2-strong.returned_from_model": true,
+    "high.t2-strong.entry_partition": true,
+    "high.t2-strong.entry_quotes": true,
+    "high.t2-strong.paired_quotes": true,
+    "high.t2-strong.support_quotes": true,
+    "high.t2-off-topic.removed_sum": true,
+    "high.t2-off-topic.returned_from_model": true,
+    "high.t2-off-topic.entry_partition": true,
+    "high.t2-off-topic.entry_quotes": true,
+    "high.t2-off-topic.paired_quotes": true,
+    "high.t2-off-topic.support_quotes": true,
+    "high.t2-under-length.removed_sum": true,
+    "high.t2-under-length.returned_from_model": true,
+    "high.t2-under-length.entry_partition": true,
+    "high.t2-under-length.entry_quotes": true,
+    "high.t2-under-length.paired_quotes": true,
+    "high.t2-under-length.support_quotes": true,
+    "high.t1-no-image.removed_sum": true,
+    "high.t1-no-image.consistency_evidence": true,
+    "high.report_evidence_scored_criteria": true,
+    "high.report_evidence_quotes": true,
+    "high.report_evidence_count_corrections": true,
+    "high.report_evidence_verified": true,
+    "high.report_argument_task2_evaluations": true,
+    "high.report_argument_with_argument": true,
+    "high.report_argument_with_position": true,
+    "high.report_argument_paragraphs": true,
+    "high.report_argument_problems": true,
+    "high.report_argument_improvements": true,
+    "high.report_argument_returned": true,
+    "high.report_argument_kept": true,
+    "high.report_argument_dropped": true,
+    "high.report_argument_duplicates": true,
+    "high.report_argument_over_limit": true,
+    "high.report_argument_self_conflicts": true,
+    "high.report_argument_suggestions_removed": true,
+    "high.report_argument_reclassified": true,
+    "high.report_argument_types": true,
+    "high.report_argument_verdicts": true,
+    "high.report_removed_criteria": true,
+    "high.report_removed_priorities": true,
+    "high.report_removed_argument": true,
+    "high.sanity_weak_has_problem": true,
+    "high.sanity_strong_at_most_one_problem": true,
+    "high.sanity_strong_no_false_contradiction_or_off_topic": true,
+    "high.sanity_strong_position_quote": true,
+    "high.sanity_off_topic_identified": true,
+    "high.sanity_denominator": true,
+    "high.sanity_pass_count": true,
+    "ab.seven_same_actual_first_inputs": true,
+    "comparison.no_condition_warning": true,
+    "comparison.off.calls": true,
+    "comparison.off.prompt_tokens": true,
+    "comparison.off.completion_tokens": true,
+    "comparison.off.reasoning_tokens": true,
+    "comparison.off.reasoning_tokens_known": true,
+    "comparison.off.reasoning_unreported_calls": true,
+    "comparison.off.latency_ms_p50": true,
+    "comparison.off.latency_ms_p90": true,
+    "comparison.off.completion_tokens_max": true,
+    "comparison.off.max_tokens": true,
+    "comparison.off.problems": true,
+    "comparison.off.reclassified": true,
+    "comparison.off.self_conflicts": true,
+    "comparison.off.suggestions_removed": true,
+    "comparison.off.sanity": true,
+    "comparison.high.calls": true,
+    "comparison.high.prompt_tokens": true,
+    "comparison.high.completion_tokens": true,
+    "comparison.high.reasoning_tokens": true,
+    "comparison.high.reasoning_tokens_known": true,
+    "comparison.high.reasoning_unreported_calls": true,
+    "comparison.high.latency_ms_p50": true,
+    "comparison.high.latency_ms_p90": true,
+    "comparison.high.completion_tokens_max": true,
+    "comparison.high.max_tokens": true,
+    "comparison.high.problems": true,
+    "comparison.high.reclassified": true,
+    "comparison.high.self_conflicts": true,
+    "comparison.high.suggestions_removed": true,
+    "comparison.high.sanity": true,
+    "transport.count_matches_rows": true,
+    "transport.global_cap": true,
+    "transport.stage_counts": true,
+    "transport.stage_caps": true,
+    "transport.every_request_completed": true,
+    "transport.business_sources_unchanged": true,
+    "transport.smoke_high.call_count": true,
+    "transport.smoke_high.usage_matches": true,
+    "transport.smoke_high.input_hash_matches": true,
+    "transport.off.call_count": true,
+    "transport.off.usage_matches": true,
+    "transport.off.input_hash_matches": true,
+    "transport.high.call_count": true,
+    "transport.high.usage_matches": true,
+    "transport.high.input_hash_matches": true
+  },
+  "checks_passed": 275,
+  "checks_total": 275,
+  "mismatches": []
+}

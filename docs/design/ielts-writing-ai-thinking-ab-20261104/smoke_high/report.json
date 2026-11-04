@@ -1,0 +1,229 @@
+{
+  "started_at": "2026-11-04T14:02:38+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "prompt_version": "iwa-2026-11-04.6",
+  "evaluate_thinking": "high",
+  "demo": false,
+  "samples": 1,
+  "calls": 1,
+  "max_calls": 2,
+  "aborted": null,
+  "connectivity": {
+    "ok": true,
+    "error": null,
+    "response_received": true,
+    "authenticated": true,
+    "generation_ok": true,
+    "generation_error": null
+  },
+  "kinds": {
+    "evaluate": {
+      "thinking": [
+        "high"
+      ],
+      "max_tokens": [
+        16000
+      ],
+      "completion_tokens_max": 13718,
+      "reasoning_tokens_known": 11512,
+      "reasoning_unreported_calls": 0,
+      "reasoning_tokens": 11512,
+      "reasoning_tokens_max": 11512,
+      "truncated": 0,
+      "timeouts": 0,
+      "calls": 1,
+      "first_attempts": 1,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "first_attempt_rejections": {},
+      "final_ready": 1.0,
+      "final_failures": {},
+      "latency_ms_p50": 78761,
+      "latency_ms_p90": 78761,
+      "tokens": {
+        "prompt_tokens": 2073,
+        "completion_tokens": 13718,
+        "total_tokens": 15791
+      }
+    }
+  },
+  "vision_calls": 0,
+  "evidence": {
+    "scored_criteria": 4,
+    "quotes": 20,
+    "quotes_verified": 1.0,
+    "suggestions_removed": {
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    "count_corrections": 0
+  },
+  "argument": {
+    "task2_evaluations": 1,
+    "with_argument": 1,
+    "with_position": 1,
+    "paragraphs": 5,
+    "problems": 1,
+    "returned": 10,
+    "kept": 10,
+    "improvements": 3,
+    "self_conflicts": 0,
+    "suggestions_removed": 0,
+    "reclassified": 0,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 0,
+    "dropped_rate": 0.0,
+    "evaluate_attempts": 1,
+    "attempts_rejected_for_argument": 0,
+    "problem_types": {
+      "overgeneralized": 1
+    },
+    "paragraph_verdicts": {
+      "supports": 5
+    }
+  },
+  "refine_rewrite": {
+    "refine_sentences": 0,
+    "refine_missing_rate": null,
+    "refine_changed_rate": null,
+    "rewrite_requested": 0,
+    "rewrite_generated": 0,
+    "rewrite_quality_passed_count": 0,
+    "rewrite_retry_failed": 0,
+    "rewrite_quality_passed_of_requested": null,
+    "rewrite_meets_min_words_of_requested": null,
+    "rewrite_quality_passed_of_generated": null,
+    "rewrite_meets_min_words_of_generated": null,
+    "rewrite_quality_issues": {},
+    "rewrite_content_passed_count": 0,
+    "rewrite_content_passed_of_requested": null,
+    "rewrite_full_retries": 0,
+    "rewrite_notes_repairs": 0
+  },
+  "sanity": {
+    "checks": [
+      {
+        "sample": "t2-weak",
+        "check": "总分 ≤ 5.5",
+        "ok": true,
+        "detail": 5.5
+      },
+      {
+        "sample": "t2-weak",
+        "check": "论证问题 ≥ 1 条（弱文应被指出问题）",
+        "ok": true,
+        "detail": [
+          "overgeneralized"
+        ]
+      }
+    ],
+    "passed": 2,
+    "total": 2,
+    "skipped": 0
+  },
+  "calibration": null,
+  "tokens": {
+    "prompt": 2073,
+    "completion": 13718
+  },
+  "usage": {
+    "total": {
+      "calls": 1,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 2073,
+        "completion": 13718
+      },
+      "known_tokens": {
+        "prompt": 2073,
+        "completion": 13718
+      }
+    },
+    "text": {
+      "calls": 1,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 2073,
+        "completion": 13718
+      },
+      "known_tokens": {
+        "prompt": 2073,
+        "completion": 13718
+      }
+    },
+    "vision": {
+      "calls": 0,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "known_tokens": {
+        "prompt": 0,
+        "completion": 0
+      }
+    },
+    "by_model": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "calls": 1,
+        "unknown_usage_calls": 0,
+        "complete": true,
+        "tokens": {
+          "prompt": 2073,
+          "completion": 13718
+        },
+        "known_tokens": {
+          "prompt": 2073,
+          "completion": 13718
+        }
+      }
+    ]
+  },
+  "estimated_cost": null,
+  "cost_estimate": {
+    "scope": "text",
+    "covered_cost": null,
+    "coverage": "unknown",
+    "vision_cost": 0.0,
+    "unknown_usage_calls": 0,
+    "note": "单价仅用于文本模型；识图费用未估算。缺少 usage 时费用未知，不能视为零账单。"
+  },
+  "per_sample": [
+    {
+      "id": "t2-weak",
+      "scores": {
+        "overall": 5.5,
+        "task": 6.0,
+        "coherence": 6.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [
+        "overgeneralized"
+      ],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    }
+  ],
+  "audit": {
+    "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+    "stage": "smoke_high",
+    "actual_transport_attempts": 1,
+    "stage_limit": 2,
+    "global_limit": 30,
+    "price_note": "Prices omitted; usage is not an actual invoice."
+  }
+}

@@ -1,0 +1,451 @@
+{
+  "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+  "limit": 30,
+  "stage_caps": {
+    "smoke_high": 2,
+    "off": 14,
+    "high": 14
+  },
+  "request_attempts": 15,
+  "stage_counts": {
+    "smoke_high": 1,
+    "off": 7,
+    "high": 7
+  },
+  "completed": true,
+  "responses": [
+    {
+      "number": 1,
+      "stage": "smoke_high",
+      "stage_number": 1,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2073,
+        "completion_tokens": 13718,
+        "total_tokens": 15791,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11512
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 2073
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 78759
+    },
+    {
+      "number": 2,
+      "stage": "off",
+      "stage_number": 1,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2048,
+        "completion_tokens": 1835,
+        "total_tokens": 3883,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1920
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 11731
+    },
+    {
+      "number": 3,
+      "stage": "off",
+      "stage_number": 2,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "a3ed09e1155503807cec6daea797cf8b9003240873588f764c9743bb9de36f43",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2032,
+        "completion_tokens": 1965,
+        "total_tokens": 3997,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 624
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 12203
+    },
+    {
+      "number": 4,
+      "stage": "off",
+      "stage_number": 3,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "3b6077331dd7673823e42c427a5cf3af3b7e4a0d2b6f1d3714667c1b25c0b12a",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2063,
+        "completion_tokens": 1637,
+        "total_tokens": 3700,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 655
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 10674
+    },
+    {
+      "number": 5,
+      "stage": "off",
+      "stage_number": 4,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "eb7a0956d5379e27cd2d29cfdf2230cba99483c99fd07ec9465c22b0ff977008",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2087,
+        "completion_tokens": 1868,
+        "total_tokens": 3955,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 679
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 11837
+    },
+    {
+      "number": 6,
+      "stage": "off",
+      "stage_number": 5,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "b987dcc1c5cf3109072427fd62bbb1749272ae74de1e366cfa00047c31a61619",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2036,
+        "completion_tokens": 1795,
+        "total_tokens": 3831,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 628
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 11783
+    },
+    {
+      "number": 7,
+      "stage": "off",
+      "stage_number": 6,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "5a5910b778c0cb944e0c495ad1695b70f4ab2e9d035c88eb0b4afbf49634a70c",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 1793,
+        "completion_tokens": 2139,
+        "total_tokens": 3932,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 385
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 13215
+    },
+    {
+      "number": 8,
+      "stage": "off",
+      "stage_number": 7,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "off",
+      "max_tokens": 4500,
+      "timeout": 120,
+      "messages_sha256": "c7c66b78b4a0c6ccb7d4b1bdd846234ebae78cf54d27da5b88ef36b1202709c9",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 1206,
+        "completion_tokens": 1599,
+        "total_tokens": 2805,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1078
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 9268
+    },
+    {
+      "number": 9,
+      "stage": "high",
+      "stage_number": 1,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "5e0b78d8727d6e0e5f9cb1a3ed86d7783caa7af288ae8bbcb2e26e28df640231",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2073,
+        "completion_tokens": 12244,
+        "total_tokens": 14317,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 10056
+        },
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 153
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 68506
+    },
+    {
+      "number": 10,
+      "stage": "high",
+      "stage_number": 2,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "a3ed09e1155503807cec6daea797cf8b9003240873588f764c9743bb9de36f43",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2057,
+        "completion_tokens": 4514,
+        "total_tokens": 6571,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2161
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 649
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 29916
+    },
+    {
+      "number": 11,
+      "stage": "high",
+      "stage_number": 3,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "3b6077331dd7673823e42c427a5cf3af3b7e4a0d2b6f1d3714667c1b25c0b12a",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2088,
+        "completion_tokens": 12116,
+        "total_tokens": 14204,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 10385
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 680
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 67206
+    },
+    {
+      "number": 12,
+      "stage": "high",
+      "stage_number": 4,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "eb7a0956d5379e27cd2d29cfdf2230cba99483c99fd07ec9465c22b0ff977008",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2112,
+        "completion_tokens": 7766,
+        "total_tokens": 9878,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 5439
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 704
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 47974
+    },
+    {
+      "number": 13,
+      "stage": "high",
+      "stage_number": 5,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "b987dcc1c5cf3109072427fd62bbb1749272ae74de1e366cfa00047c31a61619",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 2061,
+        "completion_tokens": 5168,
+        "total_tokens": 7229,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2768
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 653
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 33390
+    },
+    {
+      "number": 14,
+      "stage": "high",
+      "stage_number": 6,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "5a5910b778c0cb944e0c495ad1695b70f4ab2e9d035c88eb0b4afbf49634a70c",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 1818,
+        "completion_tokens": 2791,
+        "total_tokens": 4609,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 795
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 410
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 18481
+    },
+    {
+      "number": 15,
+      "stage": "high",
+      "stage_number": 7,
+      "status": "received",
+      "kind": "evaluate",
+      "attempt": 0,
+      "thinking": "high",
+      "max_tokens": 16000,
+      "timeout": 300,
+      "messages_sha256": "c7c66b78b4a0c6ccb7d4b1bdd846234ebae78cf54d27da5b88ef36b1202709c9",
+      "http_status": 200,
+      "usage": {
+        "prompt_tokens": 1231,
+        "completion_tokens": 5141,
+        "total_tokens": 6372,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3230
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 1231
+      },
+      "finish_reason": "stop",
+      "returned_model": "deepseek-flash",
+      "latency_ms": 29763
+    }
+  ],
+  "stages": {
+    "smoke_high": {
+      "samples": 1,
+      "ready": 1,
+      "aborted": null
+    },
+    "off": {
+      "samples": 7,
+      "ready": 7,
+      "aborted": null
+    },
+    "high": {
+      "samples": 7,
+      "ready": 7,
+      "aborted": null
+    }
+  },
+  "business_sha256_before": "e20c3705391f2f5f6492fe7c7365580eeb5893804034ea464ae20f9214bbdfcd",
+  "business_sha256_after": "e20c3705391f2f5f6492fe7c7365580eeb5893804034ea464ae20f9214bbdfcd"
+}

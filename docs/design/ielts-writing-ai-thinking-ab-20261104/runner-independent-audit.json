@@ -1,0 +1,56 @@
+{
+  "runner": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-ab-20261104/run_ab.py",
+  "real_requests": 0,
+  "real_credentials_read": false,
+  "source_edited": false,
+  "cases": [
+    {
+      "case": "401",
+      "actual_stub_sends": 1,
+      "stage_counts": {
+        "smoke_high": 1,
+        "off": 0,
+        "high": 0
+      },
+      "completed": false,
+      "reservation_present_before_every_send": true,
+      "stopped_reason": "smoke_failed_stop_before_ab"
+    },
+    {
+      "case": "invalid_json",
+      "actual_stub_sends": 2,
+      "stage_counts": {
+        "smoke_high": 2,
+        "off": 0,
+        "high": 0
+      },
+      "completed": false,
+      "reservation_present_before_every_send": true,
+      "stopped_reason": "smoke_failed_stop_before_ab"
+    },
+    {
+      "case": "empty_length",
+      "actual_stub_sends": 1,
+      "stage_counts": {
+        "smoke_high": 1,
+        "off": 0,
+        "high": 0
+      },
+      "completed": false,
+      "reservation_present_before_every_send": true,
+      "stopped_reason": "smoke_failed_stop_before_ab"
+    },
+    {
+      "case": "valid",
+      "actual_stub_sends": 15,
+      "stage_counts": {
+        "smoke_high": 1,
+        "off": 7,
+        "high": 7
+      },
+      "completed": true,
+      "reservation_present_before_every_send": true,
+      "stopped_reason": null
+    }
+  ]
+}

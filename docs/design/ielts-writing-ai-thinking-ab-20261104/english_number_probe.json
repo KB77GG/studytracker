@@ -1,0 +1,119 @@
+{
+  "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+  "fixtures": {
+    "run_data": {
+      "path": "docs/design/ielts-writing-ai-thinking-ab-20261104/high/run_data.json",
+      "sha256": "553e9baa8f67a9484448009b5a1bbebc6baad64ba157893b7857fbf1dffc98ed"
+    },
+    "raw_calls": {
+      "path": "docs/design/ielts-writing-ai-thinking-ab-20261104/high/raw_calls.jsonl",
+      "sha256": "f3b5915cbcf00f04e0c13c4ddaa5e2e1ee8a88413e0f03652f8af4cd94ead8e6"
+    },
+    "raw_calls_line": 2,
+    "sample": "t2-mid",
+    "thinking": "high",
+    "raw_path": "criteria.task.issues[1].suggestion"
+  },
+  "real_response_reproduction": {
+    "advice": "补一句比较或后果，如 “because a full bus carries about forty times as many people as a car using only a fraction of the fuel per person”，让环境论点同样“落地”。",
+    "source_contains_40_or_forty": false,
+    "numeric_source_values": [
+      "250",
+      "251"
+    ],
+    "parsed_figures": [],
+    "filter_unsourced": [],
+    "stored_result_preserves_advice": true,
+    "fresh_normalization_preserves_advice": true,
+    "suggestion_removed": false,
+    "removed_total": 0,
+    "stored_and_fresh_copy_preserve_advice": true
+  },
+  "arabic_control": {
+    "advice": "补一句比较或后果，如 “because a full bus carries about 40 times as many people as a car using only a fraction of the fuel per person”，让环境论点同样“落地”。",
+    "filter_unsourced": [
+      "40"
+    ],
+    "suggestion_removed": true,
+    "removed_total": 1,
+    "copy_preserves_advice": false
+  },
+  "percent_boundaries": [
+    {
+      "case": "arabic_unsourced_percent",
+      "source": "Public transport can reduce emissions.",
+      "suggestion": "Reduce emissions by 40 percent.",
+      "parsed_figures": [
+        [
+          "40",
+          "percent",
+          "40 percent"
+        ]
+      ],
+      "unsourced": [
+        "40 percent"
+      ],
+      "correct_behavior_should_remove": true,
+      "current_behavior_matches_requirement": true
+    },
+    {
+      "case": "english_unsourced_percent",
+      "source": "Public transport can reduce emissions.",
+      "suggestion": "Reduce emissions by forty percent.",
+      "parsed_figures": [],
+      "unsourced": [],
+      "correct_behavior_should_remove": true,
+      "current_behavior_matches_requirement": false
+    },
+    {
+      "case": "arabic_sourced_percent",
+      "source": "Emissions fell by 40 percent.",
+      "suggestion": "Reduce emissions by 40%.",
+      "parsed_figures": [
+        [
+          "40",
+          "percent",
+          "40%"
+        ]
+      ],
+      "unsourced": [],
+      "correct_behavior_should_remove": false,
+      "current_behavior_matches_requirement": true
+    },
+    {
+      "case": "english_source_arabic_advice",
+      "source": "Emissions fell by forty percent.",
+      "suggestion": "Reduce emissions by 40%.",
+      "parsed_figures": [
+        [
+          "40",
+          "percent",
+          "40%"
+        ]
+      ],
+      "unsourced": [
+        "40%"
+      ],
+      "correct_behavior_should_remove": false,
+      "current_behavior_matches_requirement": false
+    },
+    {
+      "case": "different_percent_does_not_source_forty",
+      "source": "Emissions fell by 41%.",
+      "suggestion": "Reduce emissions by forty percent.",
+      "parsed_figures": [],
+      "unsourced": [],
+      "correct_behavior_should_remove": true,
+      "current_behavior_matches_requirement": false
+    }
+  ],
+  "conclusion": {
+    "defect_reproduced": true,
+    "priority": "P2",
+    "reason": "English written numbers bypass the shared figure parser, so unsupported factual advice reaches final evaluation and copy text.",
+    "business_code_changed": false,
+    "real_model_requests": 0,
+    "network_attempts": 0,
+    "credentials_read": false
+  }
+}

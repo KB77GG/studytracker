@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "source_repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "source_head": "42bfc5493fca663a4daec382bab871719ae68416",
+    "network_attempts": 0
+  },
+  "request_scope": {
+    "evaluate": {
+      "thinking": {
+        "type": "enabled"
+      },
+      "reasoning_effort": "high",
+      "max_tokens": 16000,
+      "timeout": 300.0,
+      "transport_retries": 0
+    },
+    "refine": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "reasoning_effort": null,
+      "max_tokens": 6000,
+      "timeout": 120.0,
+      "transport_retries": 0
+    },
+    "rewrite": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "reasoning_effort": null,
+      "max_tokens": 2400,
+      "timeout": 120.0,
+      "transport_retries": 0
+    }
+  },
+  "off_budget": {
+    "max_tokens": 4500,
+    "timeout": 120.0
+  },
+  "content_validation_retry": {
+    "requests": 2,
+    "status": "ready",
+    "reasoning_not_parsed_instead_of_bad_content": true
+  },
+  "cap_includes_validation_retry": {
+    "requests": 1,
+    "error": "call_budget"
+  },
+  "first_timeout_aborts": {
+    "requests": 1,
+    "error": "timeout"
+  },
+  "first_network_aborts": {
+    "requests": 1,
+    "error": "network"
+  },
+  "first_401_aborts": {
+    "requests": 1,
+    "error": "http_401"
+  },
+  "empty_length": {
+    "provider_finish_reason": "length",
+    "actual_error": "truncated",
+    "reported_truncated": 1,
+    "provider_reasoning_tokens": 15900,
+    "reported_reasoning_tokens": 15900,
+    "completion_tokens_max": 16000,
+    "requests": 1,
+    "retry_performed": false
+  },
+  "partial_length": {
+    "provider_finish_reason": "length",
+    "actual_error": "truncated",
+    "reported_truncated": 1,
+    "provider_reasoning_tokens": 15900,
+    "reported_reasoning_tokens": 15900,
+    "completion_tokens_max": 16000,
+    "requests": 1,
+    "retry_performed": false
+  },
+  "mixed_success_failure_reasoning_complete": {
+    "provider_reasoning_total": 31800,
+    "reported_reasoning_total": 31800,
+    "completion_tokens_total_correct": 32000,
+    "truncated": 1,
+    "request_count": 2
+  },
+  "partial_usage_valid_no_reasoning_usage": {
+    "reported_total": null,
+    "known_subtotal": 15900,
+    "missing_calls": 1,
+    "report_and_compare_mark_incomplete": true,
+    "request_count": 2
+  },
+  "partial_usage_timeout": {
+    "reported_total": null,
+    "known_subtotal": 15900,
+    "missing_calls": 1,
+    "report_and_compare_mark_incomplete": true,
+    "request_count": 2
+  },
+  "all_reasoning_usage_missing": {
+    "reported_total": null,
+    "known_subtotal": null,
+    "missing_calls": 1,
+    "reported_as_zero": false
+  },
+  "conclusion": {
+    "paid_request_budget_blocker": false,
+    "findings": [],
+    "fixed": [
+      "Empty or partial final content with finish_reason=length counts as truncated.",
+      "Failed response reasoning tokens are included in complete totals.",
+      "Missing reasoning usage produces a labelled known subtotal, never a false complete total."
+    ],
+    "source_edited": false,
+    "network_attempts": 0,
+    "real_credentials_read": false
+  }
+}
