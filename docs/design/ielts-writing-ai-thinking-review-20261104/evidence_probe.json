@@ -1,0 +1,471 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "head": "bd93e1cf83fd93322fb31f0a58d8decc2f0aa87f",
+  "scope": "Offline normalizers only. No credentials, config, network, model call, or business edits.",
+  "checks": [
+    {
+      "name": "fixture_has_exactly_seven_real_outputs",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-weak",
+      "passed": true,
+      "evidence": {
+        "sha256": "8d1135e7ffdc1489ba09be78639f076356b8ef5388361748289d7ec4f3c582f1",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-weak",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-mid",
+      "passed": true,
+      "evidence": {
+        "sha256": "3b4816cecbfe274f1f816f98cd193a173536a08062c01bbc085356ed21b74043",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-mid",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-good",
+      "passed": true,
+      "evidence": {
+        "sha256": "1f04d12987d5d9c724d7c4b52abf9eaefa2c632ac9102dad9f8ed98721163d8a",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-good",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-strong",
+      "passed": true,
+      "evidence": {
+        "sha256": "cf45eb168d7094c6073aed110d581730c7a6554c974e01ad54fef82ef501a297",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-strong",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-off-topic",
+      "passed": true,
+      "evidence": {
+        "sha256": "0c4e4ef6983bb9ecdd1ab1283ddb5241f71f3229880f27ca6b575ef920f1a2b3",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-off-topic",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t2-under-length",
+      "passed": true,
+      "evidence": {
+        "sha256": "f6438605928005f93e7ed1d6582986f523b5d6ed47473aae1acdce6cfb77c11b",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t2-under-length",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fixture_raw_authentic:t1-no-image",
+      "passed": true,
+      "evidence": {
+        "sha256": "a29b9ff4352a016cff66b05fd4ce4f3b99ee3bd7824477084ced8174c23628aa",
+        "old_prompt": null
+      }
+    },
+    {
+      "name": "fixture_original_essay_prompt:t1-no-image",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "both_real_260_targets_visible_in_copy",
+      "passed": true,
+      "evidence": [
+        "将每个论点扩展为完整段落，补充原因、后果或假设性例子，使总字数达到260词以上。",
+        "将全文扩展到260词以上，拆分为引言、两个主体段和结论四段。"
+      ]
+    },
+    {
+      "name": "real_batch_removes_no_advice_after_target_fix",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "numeric_control:0",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "扩写到260词以上",
+        "unsourced": []
+      }
+    },
+    {
+      "name": "numeric_control:1",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "全文扩写到260-300 words",
+        "unsourced": []
+      }
+    },
+    {
+      "name": "numeric_control:2",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "字数达到260以上",
+        "unsourced": []
+      }
+    },
+    {
+      "name": "numeric_control:3",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "增加260次班车",
+        "unsourced": [
+          "260"
+        ]
+      }
+    },
+    {
+      "name": "numeric_control:4",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "减少百分之8",
+        "unsourced": [
+          "百分之8"
+        ]
+      }
+    },
+    {
+      "name": "numeric_control:5",
+      "passed": true,
+      "evidence": {
+        "source": "No numbers.",
+        "advice": "减少百分之八十",
+        "unsourced": [
+          "百分之八十"
+        ]
+      }
+    },
+    {
+      "name": "numeric_control:6",
+      "passed": true,
+      "evidence": {
+        "source": "Percentage is 80%.",
+        "advice": "减少百分之八十",
+        "unsourced": []
+      }
+    },
+    {
+      "name": "numeric_control:7",
+      "passed": true,
+      "evidence": {
+        "source": "降低百分之八十一",
+        "advice": "减少百分之八十",
+        "unsourced": [
+          "百分之八十"
+        ]
+      }
+    },
+    {
+      "name": "numeric_control:8",
+      "passed": true,
+      "evidence": {
+        "source": "Percentage is 81%.",
+        "advice": "减少百分之八十一",
+        "unsourced": []
+      }
+    },
+    {
+      "name": "numeric_control:9",
+      "passed": true,
+      "evidence": {
+        "source": "The year was 1980.",
+        "advice": "减少80%",
+        "unsourced": [
+          "80%"
+        ]
+      }
+    },
+    {
+      "name": "numeric_control:10",
+      "passed": true,
+      "evidence": {
+        "source": "There are 180 buses.",
+        "advice": "减少80%",
+        "unsourced": [
+          "80%"
+        ]
+      }
+    },
+    {
+      "name": "injected_valid_support_reclassified:t2-weak",
+      "passed": true,
+      "evidence": {
+        "quote": "So goverment should make it cheap and more fast.",
+        "suggestion": "补一句因果，说明降低票价、提高准点率会如何促使人们放弃私家车。",
+        "from_type": "unsupported",
+        "from_label": "论点没有任何理由支撑",
+        "support": [
+          "If the bus is more better, people will use it more and the traffic will be less."
+        ]
+      }
+    },
+    {
+      "name": "support_copy_provenance:t2-weak",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "counts_conserved:t2-weak",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "injected_valid_support_reclassified:t2-mid",
+      "passed": true,
+      "evidence": {
+        "quote": "For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.",
+        "suggestion": "在例子后补一句衔接，如“This suggests that rail investment can relieve congestion more effectively than building extra lanes.”",
+        "from_type": "example_not_linked",
+        "from_label": "例子没有回扣论点",
+        "support": [
+          "If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams."
+        ]
+      }
+    },
+    {
+      "name": "support_copy_provenance:t2-mid",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "counts_conserved:t2-mid",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "injected_valid_support_reclassified:t2-under-length",
+      "passed": true,
+      "evidence": {
+        "quote": "However, new roads are still useful in the countryside, where there are not many buses.",
+        "suggestion": "加一句限定，例如：'so road building should be limited to rural areas rather than city centres.'",
+        "from_type": "unsupported",
+        "from_label": "论点没有任何理由支撑",
+        "support": [
+          "where there are not many buses"
+        ]
+      }
+    },
+    {
+      "name": "support_copy_provenance:t2-under-length",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "counts_conserved:t2-under-length",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "bad_support_not_reclassified:same_quote",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "bad_support_not_reclassified:invented",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "bad_support_not_reclassified:different_paragraph",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "bad_support_not_reclassified:wrong_type",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "task1_actual_counts",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "task1_two_corrections_visible",
+      "passed": true,
+      "evidence": [
+        "评价中说原文是“四段式”，按换行计原文实际有 5 段，请以原文为准。",
+        "评价中说“figure”多次出现，原文中只出现 1 次，请以原文为准。"
+      ]
+    },
+    {
+      "name": "task1_ac_contradiction_preserved",
+      "passed": true,
+      "evidence": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "70%",
+            "75%",
+            "nearly 80%"
+          ],
+          "comment": "文章后文称Country C在2020年几乎翻倍至nearly 80%并overtaking Country A，而Country A 2020年仅约75%，因此A并非两年都最高，概述与主体段自相矛盾。"
+        }
+      ]
+    },
+    {
+      "name": "task1_no_image_not_assessable",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "task2_no_spurious_corrections",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fallback_control:comment_True_suggestion_True",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fallback_control:comment_False_suggestion_True",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fallback_control:comment_True_suggestion_False",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "fallback_control:comment_False_suggestion_False",
+      "passed": true,
+      "evidence": null
+    }
+  ],
+  "passed_checks": 50,
+  "new_defects": [
+    {
+      "id": "reclassified_comment_fallback_bypasses_suggestion_filter",
+      "reproduced": true,
+      "severity_suggestion": "P2",
+      "source": "tools/ielts_writing_ai/argument.py:233",
+      "synthetic_mutation": {
+        "type": "unsupported",
+        "quote": "So goverment should make it cheap and more fast.",
+        "conflicts_with": "",
+        "comment": "论证仍可补充更具体的数据，例如公交能减少80%的排放，使观点更加有力。",
+        "suggestion": "增加公交能减少80%排放的数据作为支撑。",
+        "support_found": [
+          "If the bus is more better, people will use it more and the traffic will be less."
+        ]
+      },
+      "normalized_improvement": {
+        "quote": "So goverment should make it cheap and more fast.",
+        "suggestion": "论证仍可补充更具体的数据，例如公交能减少80%的排放，使观点更加有力。",
+        "from_type": "unsupported",
+        "from_label": "论点没有任何理由支撑",
+        "support": [
+          "If the bus is more better, people will use it more and the traffic will be less."
+        ]
+      },
+      "removed_metrics": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "unsourced_advice_reappears_in_copy": true,
+      "controls": [
+        {
+          "comment_has_80": true,
+          "suggestion_has_80": true,
+          "same_verified_support": "If the bus is more better, people will use it more and the traffic will be less.",
+          "normalized_suggestion": "论证仍可补充更具体的数据，例如公交能减少80%的排放，使观点更加有力。",
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 1,
+            "total": 1
+          },
+          "80_percent_in_evaluation_copy": true
+        },
+        {
+          "comment_has_80": false,
+          "suggestion_has_80": true,
+          "same_verified_support": "If the bus is more better, people will use it more and the traffic will be less.",
+          "normalized_suggestion": "同段已有理由，可以进一步说明成本如何影响乘客的出行选择。",
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 1,
+            "total": 1
+          },
+          "80_percent_in_evaluation_copy": false
+        },
+        {
+          "comment_has_80": true,
+          "suggestion_has_80": false,
+          "same_verified_support": "If the bus is more better, people will use it more and the traffic will be less.",
+          "normalized_suggestion": "进一步说明票价如何影响乘客的出行选择。",
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "80_percent_in_evaluation_copy": false
+        },
+        {
+          "comment_has_80": false,
+          "suggestion_has_80": false,
+          "same_verified_support": "If the bus is more better, people will use it more and the traffic will be less.",
+          "normalized_suggestion": "进一步说明票价如何影响乘客的出行选择。",
+          "suggestions_removed": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "80_percent_in_evaluation_copy": false
+        }
+      ],
+      "explanation": "The primary suggestion is correctly removed, then suggestion or comment places the unfiltered comment back in the suggestion field. UI and copy render that field as advice despite the removal warning."
+    }
+  ],
+  "limits": [
+    "Historical raw outputs are byte-identical to all seven local real responses, but use prompt .5; they do not establish live .6 behavior.",
+    "support_found cases are explicitly offline mutations. Same-paragraph presence establishes provenance, not logical support.",
+    "Count corrections append warnings; they intentionally do not rewrite model comments or recalculate scores.",
+    "No independent expert scores or comprehensive semantic-quality pass are asserted."
+  ]
+}

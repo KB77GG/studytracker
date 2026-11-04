@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 思考开关bd93e1cf复核：离线暂未通过，授权批次0/30
+
+- 用户本轮明确授权：**离线复核通过后** high连通1篇≤2次、off/high各7篇各≤14次，总计≤30次实际请求；high输出上限16000。本轮独立发现回归，未满足条件，**0/30，未读Key、未建付费账本**。授权保留，修复并复核通过后可继续同范围，无需重复询问。上一批7/14已结束，不混算。
+- 实施/复核树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`：开工4d454f54 clean；SSH fetch仍publickey失败，改用现有HTTPS凭据 `git -c credential.interactive=never fetch https://github.com/KB77GG/studytracker.git claude/ielts-writing-ai-trial:refs/remotes/origin/claude/ielts-writing-ai-trial` 成功，再ff-only到 **bd93e1cf83fd93322fb31f0a58d8decc2f0aa87f**（含afdd5600/90194f02，prompt .6）。未改origin、SSH配置或密钥。本轮无业务修改，跟踪工具文件SHA核对不变；仅新增9份审阅材料和本两交接，文档提交推功能分支，最终HEAD见git log。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**/origin/main f0e04041/behind103，原7modified/22untracked入口保留。本机咨询、剑桥语法发布交接完整保留，未切分支或冲突；仅新增 `docs/design/iwa-thinking-review-20261104/` 和两交接镜像。其他worktree（含语法发布树）未操作。本机runner/source-state/run.log仅本机，未提交旧main。
+- 完整离线命令：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/run_offline_tests.py` → **304 Python**（19.865s）、**8 Node**；fake/临时库/loopback-only，外部IWA_DATA_DIR未写入。实施树以主树.venv执行ruff、black --check tools/ielts_writing_ai（44文件）、node --check tools/ielts_writing_ai/static/iwa.js、git diff --check通过。主agent重跑3套便携探针（参数--repo/--output），精确命令在offline-verification.json；exit0表示记录成功，不表示产品通过。
+- **三组需修问题**：① argument.py:233在已过滤suggestion为空后用未过滤comment回填，改列可选优化又显示无来源80%；完整normalize+copy四组正反对照确认，删除计数1但结果/复制仍有80%。② llm.py:224先判空，空正文+finish_reason=length漏记截断；realcheck失败分支未提取思考token，失败+成功实际31800报告15900（completion32000正确）。③ realcheck_compare人工表丢失Task2 conflicts_with/needs_review，以及Task1矛盾完整claim/figures/comment，无法仅凭该表全面判断准确度。业务未修，已给源码行/探针/修复方向。
+- **额外非本批触发项**：相同图像/作文但读图140→141，实际evaluate messages SHA不同，compare仍接受同条件；导出未含image_description且指纹遗漏它。本批7内置无图不触发；README单独限定范围。改作文/提示词版本会拒绝的正对照通过。
+- **已通过**：前轮真实两条260词目标保留、中文百分比和1980/180对照正确，Task1计数更正/A-C矛盾保留；7fixture逐字一致，50项正常行为通过。请求范围high仅evaluate 16000/300，off4500/120，refine6000/120与rewrite2400/120保持disabled；HTTP retries=0、校验重试进限额，首timeout/network/401一次即停。没有请求计数安全漏洞；失败时统计不可靠不能据其校准预算。
+- 已逐字核对官方文档 https://api-docs.deepseek.com/guides/thinking_mode/ 和 https://api-docs.deepseek.com/api/create-chat-completion/ ：thinking enabled + reasoning_effort high字段形状正确，temperature思考时忽略，reasoning与content分离及usage reasoning_tokens字段存在。只查文档，不等同真实连通验证。
+- 共享交付 `docs/design/ielts-writing-ai-thinking-review-20261104/`：README、3套便携probe.py/json、offline-verification.json、offline-tests.log，共9文件；只有合成/历史已提交样本，凭据模式扫描通过，未读私有Key。主树副本另含离线runner、运行日志、source-state，未分享/提交main。
+- **发布状态**：仅报告/交接commit/push功能分支；无业务/配置修改、main合并、部署、服务器/生产数据库操作，小程序未上传/提审/发布，测试服务均退出。未跑浏览器全流程、Python3.10、新版真实识图或教师校准。
+- **下一步**：Claude拉本报告，修复最终建议来源校验、完整失败用量/截断统计和人工表证据，再复核；通用带图条件指纹也已给复现。通过后使用本轮已授权的三阶段总≤30请求，建立新持久总账本、关闭HTTP自动重试，保留原始usage；旧已完成账本不能复跑。尚未得出off/high孰优的实测结论。
+
 ## 2026-11-04（思考模式建议后）雅思写作 AI 试用工具：原稿评价思考开关与同条件对照工具（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户建议给原稿评价试用 deepseek-flash 的思考模式。理由是剩下的问题（忽略前文已有的理由、把合理让步当成问题、要求例子机械回扣）都涉及上下文和逻辑。用户的要求：

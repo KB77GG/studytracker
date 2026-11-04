@@ -1,0 +1,84 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "bd93e1cf83fd93322fb31f0a58d8decc2f0aa87f",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 20.07
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.21
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests": 304,
+  "node_tests": 8,
+  "ruff": "pass",
+  "black": "pass,44files",
+  "node_check": "pass",
+  "business_diff_check": "pass",
+  "source_review": "not passed; see README and independent probes",
+  "actual_paid_requests": 0,
+  "key_read": false,
+  "official_documents": [
+    "https://api-docs.deepseek.com/guides/thinking_mode/",
+    "https://api-docs.deepseek.com/api/create-chat-completion/"
+  ],
+  "independent_probe_commands": [
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/evidence_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/evidence_probe.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/thinking_client_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/thinking_client_probe.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/compare_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-thinking-review-20261104/compare_probe.json"
+      ],
+      "returncode": 0
+    }
+  ],
+  "git_access": "HTTPS fetch succeeded with existing credentials; origin SSH config unchanged"
+}
