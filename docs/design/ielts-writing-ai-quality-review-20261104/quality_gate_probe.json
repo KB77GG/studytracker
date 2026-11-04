@@ -1,0 +1,137 @@
+{
+  "honest_weak_baseline": {
+    "words": 290,
+    "quality_passed": true,
+    "issues": [],
+    "notes": [
+      "将开头段改写为清晰的立场表达：部分同意公共交通优先，但认为新道路在必要时仍不可少，回应了题目中“to what extent”的要求。",
+      "把原文零散的观点按“支持公共交通—道路的必要性—为何公共交通优先—结论”重组为四个主体段落，每段一个中心论点，逻辑更连贯。",
+      "修正全部语法错误（如 I am agree、more better、the city is grow、Both is important 等），并替换口语化表达（如 very important problem、go work）为学术书面语。",
+      "保留学生原有例子（家乡公交晚点拥挤、学生票价高、父亲通勤两小时），但补充解释其与论点的关系，使论证更充分。",
+      "结尾段明确综合双方观点，给出有条件的结论，避免原文结论含糊的问题。"
+    ],
+    "rationale": "为了向目标分数段靠近，重组论证并修正语言。"
+  },
+  "false_count_330_whitelisted": {
+    "words": 290,
+    "quality_passed": true,
+    "issues": [],
+    "notes": [
+      "改写稿共330词，扩展了原稿的论据。"
+    ],
+    "rationale": "为了向目标分数段靠近，重组论证并修正语言。",
+    "actual_claim": "330"
+  },
+  "chinese_score_claim": {
+    "words": 290,
+    "quality_passed": true,
+    "issues": [],
+    "notes": [
+      "将开头段改写为清晰的立场表达：部分同意公共交通优先，但认为新道路在必要时仍不可少，回应了题目中“to what extent”的要求。",
+      "把原文零散的观点按“支持公共交通—道路的必要性—为何公共交通优先—结论”重组为四个主体段落，每段一个中心论点，逻辑更连贯。",
+      "修正全部语法错误（如 I am agree、more better、the city is grow、Both is important 等），并替换口语化表达（如 very important problem、go work）为学术书面语。",
+      "保留学生原有例子（家乡公交晚点拥挤、学生票价高、父亲通勤两小时），但补充解释其与论点的关系，使论证更充分。",
+      "结尾段明确综合双方观点，给出有条件的结论，避免原文结论含糊的问题。"
+    ],
+    "rationale": "本篇已达到雅思写作7分标准。"
+  },
+  "negated_data_accuracy": {
+    "words": 170,
+    "quality_passed": false,
+    "issues": [
+      "data_claim"
+    ],
+    "notes": [
+      "根据学生原稿整理段落，保留现有数字。"
+    ],
+    "rationale": "题图缺失，无法确认数据准确。"
+  },
+  "negated_data_accuracy_2": {
+    "words": 170,
+    "quality_passed": false,
+    "issues": [
+      "data_claim"
+    ],
+    "notes": [
+      "根据学生原稿整理段落，保留现有数字。"
+    ],
+    "rationale": "题图缺失，不能保证数据正确。"
+  },
+  "on_topic_gap_year_paraphrase": {
+    "words": 280,
+    "quality_passed": false,
+    "issues": [
+      "off_prompt"
+    ],
+    "notes": [
+      "明确两方面后果，并以规划是否充分作为判断依据。"
+    ],
+    "rationale": "组织正反论证，补充具体解释；没有对改写稿另行评分。",
+    "prompt": "In many countries, young people are encouraged to work or travel for a year between finishing high school and starting university studies. Discuss the advantages and disadvantages for young people who decide to do this.",
+    "essay": "Taking a gap year after graduation can be a valuable opportunity, but it also carries risks. In my view, the benefits depend on whether the break has a clear purpose and a realistic budget.\n\nOne advantage is greater maturity. A teenager who spends several months earning a salary must arrive on time, cooperate with colleagues and deal politely with customers. These responsibilities develop independence and help someone who has always relied on parents understand the demands of adult life. Visiting another country can have a similar effect: arranging accommodation, communicating in an unfamiliar language and adapting to different customs encourage confidence. Such experiences can also clarify career ambitions before an applicant commits to an expensive degree.\n\nHowever, postponing higher education can bring financial difficulties. Air fares and accommodation are costly, especially for families with limited savings. Even a temporary job may offer little security, leaving the graduate with neither useful qualifications nor enough money for tuition. Another concern is the loss of academic habits. After months away from books, returning to lectures and examinations may feel difficult. Friends will already be further ahead in their courses, which can create pressure to abandon a degree altogether.\n\nThese drawbacks do not make every gap year a mistake. A structured plan can reduce them: the participant could save a fixed amount, undertake a short placement related to a future profession and reserve regular time for reading. Parents should discuss practical expectations without treating an overseas adventure as compulsory.\n\nOverall, a planned break can broaden a teenager's perspective and strengthen independence, while an unstructured one can waste money and delay qualifications. The best choice therefore depends on personal circumstances rather than a universal rule.",
+    "coverage": 0.3333333333333333,
+    "prompt_terms": [
+      "advan",
+      "count",
+      "decid",
+      "disad",
+      "encou",
+      "finis",
+      "high",
+      "schoo",
+      "start",
+      "study",
+      "trave",
+      "unive",
+      "work",
+      "year",
+      "young"
+    ]
+  },
+  "same_answer_with_exam_instructions": {
+    "words": 280,
+    "quality_passed": false,
+    "issues": [
+      "off_prompt"
+    ],
+    "notes": [
+      "明确两方面后果，并以规划是否充分作为判断依据。"
+    ],
+    "rationale": "组织正反论证，补充具体解释；没有对改写稿另行评分。",
+    "coverage": 0.2857142857142857
+  },
+  "case_only_legitimate_change": {
+    "words": 290,
+    "quality_passed": false,
+    "issues": [
+      "noop_change",
+      "no_changes"
+    ],
+    "notes": [],
+    "rationale": "为了向目标分数段靠近，重组论证并修正语言。"
+  },
+  "task1_consistency_optional_field": {
+    "without_field": [],
+    "unverifiable": [
+      {
+        "quote": "Invented country Z has 999 percent ownership.",
+        "quote_found": false,
+        "comment": "原文存在严重数字矛盾。"
+      }
+    ],
+    "warnings": [
+      "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+      "作文里有前后矛盾的数据或比较（只检查作文内部是否自洽，不代表数据与题图一致）。"
+    ]
+  },
+  "off_topic_with_keyword_preface": {
+    "words": 273,
+    "quality_passed": true,
+    "issues": [],
+    "notes": [
+      "整理在线学习和课堂教学的优缺点。"
+    ],
+    "rationale": "按两种教学形式组织论证，没有独立评定改写分数。",
+    "coverage": 0.75
+  }
+}

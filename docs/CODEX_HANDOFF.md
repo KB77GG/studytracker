@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 改写质量门禁Mac复核未通过：8项离线边界，真实调用0
+
+- 用户转交Claude `2ed268c1` 并明确授权：**离线复核通过后**，用现有试用Key跑7篇×评价/精修/改写，最多42次实际请求。本轮复核前提未满足，新增模型请求 **0**；授权未消耗，修复后同范围复核通过即可继续，不必重复询问同一授权，但不能扩展样本或重置旧运行计数。
+- 实施/审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`；开工eab9bc3f且clean，fetch后ff-only至 **`2ed268c191d8de1ae4ff63c483e72f1a87a89d9d`**（业务53177a7b），仍clean；没有修改业务源码。报告和本两交接随后按已授权的同一功能分支同步，最终文档HEAD见git log；最终tracked clean，原私有.env ignored未改。
+- 新版自带测试在Mac通过：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-quality-review-20261104/run_offline_tests.py` →Python152/152（命令18.90s）、Node8/8（0.26s），原生Python3.13.3。隔离IWA/临时库/fake/loopback-only socket guard，外部IWA_DATA_DIR未写入。实施树主解释器 `-m ruff check tools/ielts_writing_ai`、`-m black --check tools/ielts_writing_ai`通过33文件；diff检查通过。
+- 新增纯离线探针复现8项P2：①切题gap-year同义稿280词仅33.3%关键词被拒，离题稿加一句关键词却75%且通过；②“无法确认数据准确/不能保证数据正确”被反向判data_claim；③大小写i→I被当noop删除；④实际290词自称330因白名单被放过；⑤“达到雅思写作7分标准”漏检；⑥Task1虚构引文quote_found=false仍触发确定的文内矛盾警告；⑦重试timeout/truncated/http503/预算用尽时丢失已有首稿，整份failed；⑧7篇1成功6失败，新增质量率仍100%，实际最终生成率14.3%。现有测试通过不等于这些边界已覆盖。实际HTTP42上限未见回归。
+- 共享审阅材料 `docs/design/ielts-writing-ai-quality-review-20261104/{README.md,quality_gate_probe.py,quality_gate_probe.json,retry_metrics_probe.py,retry_metrics_probe.json}`，只有合成题材/fixture/替身结果，无Key。两个探针根据自身路径定位仓库，可在Claude容器直接运行：`python docs/design/ielts-writing-ai-quality-review-20261104/quality_gate_probe.py` 与 `python docs/design/ielts-writing-ai-quality-review-20261104/retry_metrics_probe.py`；本机用主树.venv解释器复跑均exit0。**exit0表示当前缺陷复现成功；修复后须翻转断言加入正式回归。** 不要把当前探针通过当正确行为通过。
+- Task1文内自洽目前是模型提示+可选字段，不是确定性关系校验；人工注入字段只证明接收/展示，不能证明真实模型会发现原文矛盾。40%关键词阈值不宜直接决定切题；应明确条件/无条件质量率分母，保留失败样本。具体反例、位置、建议均在共享README。未运行下一批付费模型/浏览器全流程/Python3.10/教师校准；没有新版提示词通过率或费用结论。
+- 资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`、behind103，原7 modified/22 untracked入口保留；本轮仅新增 `docs/design/iwa-quality-review-20261104/`（README、两探针/JSON、离线runner/log/json、source-state.json）及两交接镜像，没有修改原网页/数据代码。旧五审阅树、并行active-tasks树未动。精确状态见本机source-state.json。
+- 本轮只有审阅报告/探针和两交接提交推送到功能分支，业务源仍是2ed268c1；未merge main、未部署、无生产前后端/配置/数据库/进程变更，无小程序上传/提审/发布，未新建/轮换Key。本机离线运行器与日志、资料树交接镜像仅本机。下一位Claude先拉取最新功能分支并读本报告，修8项边界并补正负例，再复核；复核通过后执行已获条件授权的新42次上限批次，旧21次与单篇计数不改。
+
 ## 2026-11-04 雅思写作 AI 试用工具：改写质量门禁（根据 21 次真实验证；已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户推送的 `eab9bc3f`（Mac 修复 `f3aef8cd` + 完整内置样本真实验证）。deepseek-flash 跑了 21 次，无重试；JSON、校验、引文、精修都通过；分数 5.0→6.5→7.0→7.5，离题 TR 4.0。改写只有 5/7 达到字数下限，并且存在虚报字数、自称达到 Band 7、离题改写、Task 1 文内矛盾、改动说明与正文不符等问题（`docs/design/ielts-writing-ai-realcheck-20261104/README.md`）。本轮先把这些真实输出做成离线回归，再修改，**没有调用任何真实模型**。

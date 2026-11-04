@@ -1,0 +1,53 @@
+{
+  "first_candidate": {
+    "word_count": 247,
+    "quality_passed": false,
+    "quality_codes": [
+      "below_min",
+      "band_claim"
+    ]
+  },
+  "retry_failure": {
+    "timeout": {
+      "calls": 2,
+      "status": "failed",
+      "error": "timeout",
+      "first_candidate_retained": false
+    },
+    "truncated": {
+      "calls": 2,
+      "status": "failed",
+      "error": "truncated",
+      "first_candidate_retained": false
+    },
+    "http_503": {
+      "calls": 2,
+      "status": "failed",
+      "error": "http_503",
+      "first_candidate_retained": false
+    },
+    "call_budget": {
+      "actual_client_invocations": 1,
+      "recorded_calls": 1,
+      "status": "failed",
+      "first_candidate_retained": false
+    }
+  },
+  "denominator": {
+    "samples": 7,
+    "ready": [
+      "t2-weak"
+    ],
+    "failed": [
+      "t2-mid",
+      "t2-good",
+      "t2-strong",
+      "t2-off-topic",
+      "t2-under-length",
+      "t1-no-image"
+    ],
+    "final_ready": 0.143,
+    "rewrite_quality_passed": 1.0,
+    "rewrites_denominator": 1
+  }
+}
