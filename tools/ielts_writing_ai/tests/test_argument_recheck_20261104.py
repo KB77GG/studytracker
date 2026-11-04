@@ -79,18 +79,30 @@ class RealOutputTest(unittest.TestCase):
         self.assertEqual(argument.problem_types(mapped), ["unsupported", "unsupported"])
         self.assertFalse(outcome["论证问题 ≤ 1 条"]["ok"])
 
-    def test_mid_unsourced_percentage_suggestion_is_removed(self):
-        mapped = evaluate("t2-mid")["argument"]
-        problem = next(p for p in mapped["problems"] if p["suggestion_removed"])
-        self.assertEqual(problem["type"], "unsupported")
-        raw_suggestion = next(
-            p["suggestion"]
-            for p in real("t2-mid")["argument"]["problems"]
-            if "80%" in p["suggestion"]
+    def test_mid_unsourced_percentage_is_removed_from_every_advice_path(self):
+        # Judgment review of 93d47ec: the same "over 80%" advice also came back in the
+        # TR issue suggestion and so reached the page and the copied evaluation.
+        raw = real("t2-mid")
+        raw_text = json.dumps(raw, ensure_ascii=False)
+        self.assertEqual(raw_text.count("80%"), 2)  # argument problem + TR issue
+        result = evaluate("t2-mid")
+        self.assertEqual(
+            result["suggestions_removed"],
+            {"criteria": 1, "priorities": 0, "argument": 1, "total": 2},
         )
-        mid_essay = FX["submissions"]["t2-mid"]["essay_text"]
-        self.assertEqual(argument.unsourced_figures(raw_suggestion, mid_essay), ["80%"])
-        self.assertTrue(any("具体数字" in n for n in mapped["notes"]))
+        tr_issue = next(i for i in result["criteria"][0]["issues"] if i["suggestion_removed"])
+        self.assertEqual(tr_issue["suggestion"], "")
+        problem = next(p for p in result["argument"]["problems"] if p["suggestion_removed"])
+        self.assertEqual(problem["type"], "unsupported")
+        # Nothing the page renders (the stored result) or the copy text carries has it.
+        self.assertNotIn("80%", json.dumps(result, ensure_ascii=False))
+        copied = copytext.evaluation_text(result, {})
+        self.assertNotIn("80%", copied)
+        self.assertEqual(copied.count("（建议含原文和题目都没有的具体数字，已删去）"), 2)
+        self.assertTrue(
+            any("2 条建议" in w and "评分项 1 条、论证结构 1 条" in w for w in result["warnings"])
+        )
+        self.assertNotIn("80", FX["submissions"]["t2-mid"]["essay_text"])
 
     def test_one_paragraph_essay_gets_one_paragraph_entry(self):
         mapped = evaluate("t2-under-length")["argument"]
@@ -350,7 +362,7 @@ class FigureTest(unittest.TestCase):
         essay_text = "About 75% of people use buses, compared with 40 in 2010."
         cases = {
             "补充数据，如人均排放降低 80% 以上": ["80%"],
-            "可以写百分之八十": ["百分之"],
+            "可以写百分之八十": ["百分之八十"],
             "举洛杉矶 405 号公路为例": ["405"],
             "In 2015, London introduced a charge": ["2015"],
             "第 2 段可以补 1 个例子": [],

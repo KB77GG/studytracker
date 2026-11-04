@@ -8,6 +8,7 @@ warning (missing chart data, unverifiable quotes, short rewrite, ...).
 from __future__ import annotations
 
 DISCLAIMER = "AI 生成，仅供学习参考，不是正式成绩"
+REMOVED_NOTE = "（建议含原文和题目都没有的具体数字，已删去）"
 
 
 def _band(value) -> str:
@@ -45,6 +46,8 @@ def _evidence_line(entry, mark: str) -> str:
     text += entry.get("comment") or ""
     if entry.get("suggestion"):
         text += f" → 建议：{entry['suggestion']}"
+    elif entry.get("suggestion_removed"):
+        text += f" →{REMOVED_NOTE}"
     return f"  {mark} {text}".rstrip()
 
 
@@ -98,7 +101,7 @@ def argument_lines(argument: dict | None) -> list[str]:
             if problem.get("suggestion"):
                 text += f" → 建议：{problem['suggestion']}"
             elif problem.get("suggestion_removed"):
-                text += " →（建议含原文没有的具体数字，已删去）"
+                text += f" →{REMOVED_NOTE}"
             lines.append(text.rstrip())
     else:
         lines.append("论证问题：AI 没有标出明显问题（不代表论证没有可改进之处）。")

@@ -127,11 +127,11 @@ class PipelineTest(unittest.TestCase):
         real = argument.normalize
         seen = []
 
-        def flaky(raw, essay):
+        def flaky(raw, essay, *rest):
             seen.append(1)
             if len(seen) == 1:
                 raise TypeError("unhashable type: 'list'")
-            return real(raw, essay)
+            return real(raw, essay, *rest)
 
         with (
             mock.patch.object(review.argument_lib, "normalize", side_effect=flaky),

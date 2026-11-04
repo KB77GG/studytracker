@@ -14,6 +14,7 @@ from pathlib import Path
 
 from . import argument as argument_lib
 from . import essay as essay_lib
+from . import figures as figures_lib
 from . import prompts, rewrite_quality, visual
 from .llm import LLMError, parse_strict_json
 
@@ -104,7 +105,9 @@ def _meaningful(text: str) -> bool:
     return len("".join(text.split())) >= MIN_REASON_CHARS
 
 
-def _evidence_items(value, essay: str, *, limit: int, with_suggestion: bool) -> list[dict]:
+def _evidence_items(
+    value, essay: str, *, limit: int, with_suggestion: bool, sources=None
+) -> list[dict]:
     """Normalise strengths/issues into {quote, quote_found, comment[, suggestion]}."""
     items = []
     for raw in value if isinstance(value, list) else []:
@@ -123,6 +126,12 @@ def _evidence_items(value, essay: str, *, limit: int, with_suggestion: bool) -> 
         }
         if with_suggestion:
             item["suggestion"] = _text(raw.get("suggestion"))
+            # Advice must not introduce figures the student never gave (figures.py).
+            item["suggestion_removed"] = bool(
+                sources and item["suggestion"] and sources.unsourced(item["suggestion"])
+            )
+            if item["suggestion_removed"]:
+                item["suggestion"] = ""
         items.append(item)
     return items[:limit]
 
@@ -202,6 +211,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     if not isinstance(criteria_raw, dict):
         raise InvalidOutput("缺少 criteria")
     task_ok = task_criterion_assessable(submission)
+    sources = figures_lib.for_submission(submission)
 
     criteria = []
     for key in essay_lib.CRITERIA:
@@ -234,7 +244,9 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         if not _meaningful(summary):
             raise InvalidOutput(f"评分项 {short} 没有给出评分理由")
         strengths = _evidence_items(item.get("strengths"), essay, limit=4, with_suggestion=False)
-        issues = _evidence_items(item.get("issues"), essay, limit=5, with_suggestion=True)
+        issues = _evidence_items(
+            item.get("issues"), essay, limit=5, with_suggestion=True, sources=sources
+        )
         if not any(entry["quote_found"] for entry in strengths + issues):
             raise InvalidOutput(f"评分项 {short} 没有任何能在原文中找到的证据")
         criteria.append(
@@ -260,6 +272,13 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     if not priorities:
         raise InvalidOutput("缺少提升重点")
     _require_chinese(criteria, overall_comment)
+    kept_priorities = [p for p in priorities if not sources.unsourced(p)]
+    removed = {
+        "criteria": sum(1 for c in criteria for i in c["issues"] if i.get("suggestion_removed")),
+        "priorities": len(priorities) - len(kept_priorities),
+        "argument": 0,
+    }
+    priorities = kept_priorities
 
     warnings = []
     minimum = essay_lib.MIN_WORDS[task_type]
@@ -305,13 +324,30 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         # Argument structure explains TR/CC; it is not scored separately. Every quote
         # is verified against the essay; a missing map is an incomplete evaluation.
         try:
-            argument = argument_lib.normalize(raw.get("argument"), essay)
+            argument = argument_lib.normalize(raw.get("argument"), essay, sources)
         except argument_lib.ArgumentInvalid as exc:
             raise InvalidOutput(str(exc)) from None
         if argument["dropped"]:
             warnings.append(
                 f"AI 的论证结构分析中有 {argument['dropped']} 条引文无法在原文中找到或格式不对，已忽略。"
             )
+
+        removed["argument"] = argument["suggestions_removed"]
+    removed["total"] = removed["criteria"] + removed["priorities"] + removed["argument"]
+    if removed["total"]:
+        parts = "、".join(
+            f"{label} {removed[key]} 条"
+            for key, label in (
+                ("criteria", "评分项"),
+                ("argument", "论证结构"),
+                ("priorities", "提升重点"),
+            )
+            if removed[key]
+        )
+        warnings.append(
+            f"有 {removed['total']} 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去"
+            f"（{parts}），避免把没有来源的数据当作改进方法。"
+        )
 
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
     overall = essay_lib.overall_band(scored) if len(scored) == len(essay_lib.CRITERIA) else None
@@ -324,6 +360,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "consistency_issues": consistency,
         "comparisons_checked": comparisons_checked,
         "argument": argument,
+        "suggestions_removed": removed,
         "warnings": warnings,
     }
 

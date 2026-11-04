@@ -465,6 +465,8 @@
       }, ['“' + entry.quote + '”', entry.quote_found ? null : el('span', { class: 'issue__flag', text: '（未在原文中找到，不作为评分依据）' })]);
     }
 
+    var REMOVED_NOTE = '（建议含原文和题目都没有的具体数字，已删去）';
+
     // -- Task 2 argument map (every quote was verified on the server)
     function verified(quote) { return quoteButton({ quote: quote, quote_found: true }); }
 
@@ -511,7 +513,7 @@
           item.conflicts_with ? el('p', { class: 'argument__conflict' }, ['与之矛盾：', verified(item.conflicts_with)]) : null,
           item.comment ? el('p', { class: 'issue__comment', text: item.comment }) : null,
           item.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + item.suggestion })
-            : item.suggestion_removed ? el('p', { class: 'muted small', text: '（建议含原文没有的具体数字，已删去）' }) : null
+            : item.suggestion_removed ? el('p', { class: 'muted small', text: REMOVED_NOTE }) : null
         ]));
       });
       var improvements = a.improvements || [];
@@ -595,7 +597,8 @@
           card.appendChild(el('div', { class: 'issue' }, [
             quoteButton(issue),
             issue.comment ? el('p', { class: 'issue__comment', text: issue.comment }) : null,
-            issue.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + issue.suggestion }) : null
+            issue.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + issue.suggestion })
+              : issue.suggestion_removed ? el('p', { class: 'muted small', text: REMOVED_NOTE }) : null
           ]));
         });
         panel.appendChild(card);

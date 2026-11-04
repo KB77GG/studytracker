@@ -14,8 +14,8 @@ What the server enforces beyond quote checks (real run of 2026-11-04, prompt .4)
   inconsistent position without a conflicting pair, or an off_position problem in a
   paragraph judged "supports" is surfaced for human review, not silently kept;
 - paragraph entries are bound to the essay's real paragraphs (one entry each);
-- a suggestion with a figure that is not in the essay (e.g. "over 80%") is removed,
-  so the tool never recommends unsourced statistics.
+- a suggestion with a figure that is not in the student's input (e.g. "over 80%") is
+  removed, so the tool never recommends unsourced statistics (see figures.py).
 
 Vocabulary follows the main system's model-topic library (论点 → 机制 → 例子 → 结果 →
 边界), so students meet the same concepts in both places.
@@ -23,9 +23,8 @@ Vocabulary follows the main system's model-topic library (论点 → 机制 → 
 
 from __future__ import annotations
 
-import re
-
 from . import essay as essay_lib
+from . import figures as figures_lib
 
 PROBLEM_TYPES = {
     "unclear_position": "立场不清",
@@ -57,10 +56,6 @@ MAX_PARAGRAPHS = 8
 MAX_PROBLEMS = 6
 MAX_IMPROVEMENTS = 3
 QUOTE_LIMIT = 400
-
-# A percentage, or a number of 10 or more (statistics, years, road numbers...).
-# Small counts ("补 1 个例子", "第 2 段") are structural, not data.
-_FIGURE_RE = re.compile(r"\d+(?:[.,]\d+)?\s*(?:%|％|percent|per cent)|\d{2,}(?:[.,]\d+)?|百分之")
 
 
 class ArgumentInvalid(ValueError):
@@ -110,15 +105,9 @@ def _paragraph_of(quote: str, paragraphs: list[str], hint=None) -> int | None:
 
 
 def unsourced_figures(text: str, essay: str) -> list[str]:
-    """Figures in a suggestion that the essay itself never gives."""
-    known = essay_lib.squash(essay).replace(" ", "")
-    figures = []
-    for match in _FIGURE_RE.finditer(text or ""):
-        value = match.group(0)
-        number = re.sub(r"[^\d.,]", "", value)
-        if not number or number not in known:
-            figures.append(value.strip())
-    return figures
+    """Figures in a suggestion that the essay itself never gives (whole values; a
+    percentage needs the same percentage). See figures.Sources for the full rule."""
+    return figures_lib.Sources(essay).unsourced(text)
 
 
 def _distinct(a: str, b: str) -> bool:
@@ -126,16 +115,16 @@ def _distinct(a: str, b: str) -> bool:
     return a not in b and b not in a
 
 
-def _suggestion(item: dict, essay: str) -> tuple[str, bool]:
-    """(suggestion, removed): a suggestion containing figures absent from the essay
-    is removed rather than shown as advice."""
+def _suggestion(item: dict, sources: figures_lib.Sources) -> tuple[str, bool]:
+    """(suggestion, removed): a suggestion containing figures absent from the
+    student's input is removed rather than shown as advice."""
     suggestion = _text(item.get("suggestion"))
-    if suggestion and unsourced_figures(suggestion, essay):
+    if suggestion and sources.unsourced(suggestion):
         return "", True
     return suggestion, False
 
 
-def normalize(raw, essay: str) -> dict:
+def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> dict:
     """Validate the model's argument map against the essay.
 
     Every entry the model returned (the position, each paragraph, each problem, each
@@ -154,6 +143,7 @@ def normalize(raw, essay: str) -> dict:
     if not isinstance(raw, dict):
         raise ArgumentInvalid("缺少论证结构分析（argument 必须在顶层，与 criteria 同级）")
     real_paragraphs = essay_lib.split_paragraphs(essay)
+    sources = sources or figures_lib.Sources(essay)
     returned = dropped = duplicates = removed_suggestions = 0
     notes = []
 
@@ -219,7 +209,7 @@ def normalize(raw, essay: str) -> dict:
         if any(p["type"] == kind and p["quote"] == quote for p in problems):
             duplicates += 1  # same finding repeated; shown once, not an error
             continue
-        suggestion, removed = _suggestion(item, essay)
+        suggestion, removed = _suggestion(item, sources)
         removed_suggestions += 1 if removed else 0
         problems.append(
             {
@@ -242,7 +232,7 @@ def normalize(raw, essay: str) -> dict:
     for item in entries:
         item = item if isinstance(item, dict) else {}
         quote = _verified_quote(item.get("quote"), essay)
-        suggestion, removed = _suggestion(item, essay)
+        suggestion, removed = _suggestion(item, sources)
         if not quote or not (suggestion or removed):
             dropped += 1
             continue
@@ -265,11 +255,7 @@ def normalize(raw, essay: str) -> dict:
     improvements = improvements[:MAX_IMPROVEMENTS]
 
     self_conflicts = _check_consistency(position, paragraphs, problems, notes)
-    if removed_suggestions:
-        notes.append(
-            f"有 {removed_suggestions} 条建议包含原文没有的具体数字或比例，已删去，避免把没有"
-            "来源的数据当作改进方法。"
-        )
+    # Removed suggestions are reported once for the whole evaluation (review.py).
     if len(real_paragraphs) == 1:
         notes.append("原文只有 1 段，论证结构只能按整段分析（分段问题见 CC 的反馈）。")
     kept = (1 if position else 0) + len(paragraphs) + len(problems) + len(improvements)
