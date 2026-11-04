@@ -1,7 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-11-01 语法候选题 v0.2 第二十轮（Claude）：非并列 T2 多目标送复核，导出全部待复核题给 ChatGPT 交叉复核；未部署。
+> 最近更新：2026-11-04 交回剑桥待复核 63 批、6,232 题判定，供 Claude 按题号复核；未部署。
+
+## 2026-11-04 剑桥待复核 63 批结果交回 Claude（Codex）
+
+- 用户明确要求 push 供 Claude 查看。本轮将已完成的 6,232 题交叉复核成果放入 [结果目录](reviews/cambridge-crossreview-20261104/README.md)，包含 63 份逐批 CSV、合并 CSV、ZIP、统计说明、源附件清单与 SHA 核验文件。正确 2,457 / 答案错 1,374 / 有歧义 2,305 / 不适合 96；逐题内容未重新修改。
+- 发布工作树：`/Users/zhouxin/.codex/worktrees/grammar-crossreview-20261104/studytracker`；新分支 `codex/grammar-crossreview-20261104`，从 Claude 第二十轮 HEAD `93ad42e396b2d5e867a3de82534d598eaa2baccb` 建立，开工 clean。本轮改动仅本结果目录和两份交接；交付提交 SHA 以本分支 Git HEAD 为准。提交无 skip-ci。
+- 原资料树 `/Users/zhouxin/Desktop/studytracker` 仍 main@`6ded77d24586327ad94e151e172ae4811b4a2eed`、behind 103，既有 7 modified/22 untracked 入口未加入提交；只增量补记本轮交接。旧语法审核树 `/Users/zhouxin/.codex/worktrees/grammar-item-candidates/studytracker` 仍 `codex/grammar-item-candidates`@`46a3b80d9bcb6b1f889c5bc26e96a7698267c731`，开工 clean，未切换/修改。
+- 核验：复制后与原 outputs 逐字节一致；原 63 附件 SHA、6,232 唯一 ID、逐批/合并顺序、四项计数、说明长度、ZIP 65 成员 CRC/内容通过。`cd docs/reviews/cambridge-crossreview-20261104 && shasum -a 256 -c SHA256SUMS`、`git diff --check`。原复核证据在 `/Users/zhouxin/.codex/audits/grammar-crossreview-20261104/`。只发布结果，不重新运行应用测试；CI 按精确提交另行核对，不把历史 CI 当成本轮结果。
+- 发布范围仅上述独立分支；未推 main/开 PR/部署/修改生产数据库或服务器，小程序未上传/提审/发布；未调用大模型 API。未把判定导入系统。
+- 下一步：Claude fetch 本分支，读取合并 CSV，按题目编号连接第二十轮原题并检查分歧；先列处理建议，不因本次结果发布而自动上线。README 给出不合并代码的 git show 读取命令。提交/推送结果及精确 SHA 在最终交接补记确认。
 
 ## 2026-11-01 语法候选题 v0.2 第二十轮（Claude，非并列 T2 多目标、导出待复核题）
 
