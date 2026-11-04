@@ -66,6 +66,8 @@ jobs:
             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
+      - name: Test recovery assistant and student journeys with isolated data
+        run: python -m unittest tests.test_task_planner_recovery_e2e tests.test_task_planner_recovery_student_contract_e2e -v
 
   task-planner:
     runs-on: ubuntu-latest
@@ -86,7 +88,7 @@ jobs:
             'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
             'requests>=2.31' 'PyJWT>=2.9' 'pypinyin>=0.55'
       - name: Test scheduled assignment transactions and resources
-        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary tests.test_task_planner_weekly tests.test_task_planner_reading_test tests.test_task_planner_auto_skip tests.test_task_planner_bundles tests.test_task_planner_recovery -v
+        run: python -m unittest tests.test_task_planner tests.test_task_planner_resources tests.test_task_planner_series tests.test_task_planner_sequence tests.test_task_planner_vocabulary tests.test_task_planner_weekly tests.test_task_planner_reading_test tests.test_task_planner_auto_skip tests.test_task_planner_bundles tests.test_task_planner_recovery tests.test_task_planner_recovery_cutoff -v
       - name: Test planner client behavior
         run: node --test tests/test_task_planner_client.js tests/test_task_planner_series_client.js tests/test_task_planner_weekly_client.js tests/test_task_planner_recovery_client.js
 

@@ -25,7 +25,7 @@ from services import task_planner_bundles as bundles
 from services import task_planner_resources as resources
 from services import task_planner_series as series_service
 from services.task_assignment_duplicates import begin_assignment_transaction
-from services.task_date_gate import beijing_now, task_workflow_label
+from services.task_date_gate import beijing_now, task_date_cutoff_local, task_workflow_label
 from services.task_planner_history import HistoryIndex
 
 ACTIONS = {"makeup": "今天补做，后续顺延", "continue": "忽略本次未完成，继续计划"}
@@ -75,6 +75,15 @@ def _unfinished(rows, profile, source_date, waived):
     return result
 
 
+def _source_still_open(unfinished, now):
+    """A previous calendar day is not overdue until its student deadline."""
+    for _entry, task in unfinished:
+        cutoff = task_date_cutoff_local(task)
+        if cutoff is not None and now < cutoff:
+            return True
+    return False
+
+
 def _item(line, profile, source_date, tasks, decision=None):
     result = {"id": f"{line.id}:{source_date.isoformat()}", "series_id": line.id,
               "student_id": profile.id, "student_name": profile.full_name, "series_name": line.name,
@@ -119,7 +128,7 @@ def list_inbox(student_id=None, view="pending", now=None):
                   for entry_id in json.loads(decision.snapshot_json).get("waived_entry_ids", [])}
         for source_date in sorted({entry.target_date for entry, _link in rows if entry.target_date < today}):
             unfinished = _unfinished(rows, profile, source_date, waived)
-            if unfinished:
+            if unfinished and not _source_still_open(unfinished, now):
                 output.append(_item(line, profile, source_date, [task for _entry, task in unfinished]))
     if view == "resolved":
         return sorted(output, key=lambda item: item["decision"]["id"], reverse=True)[:500]
@@ -133,7 +142,8 @@ def _source(data, actor_id, now):
         raise planner.TaskPlannerError("请选择补做或继续计划")
     line = series_service._series(data.get("series_id"))
     profile = planner._student(line.student_id)
-    today = beijing_now(now).date()
+    now = beijing_now(now)
+    today = now.date()
     try:
         source_date = date.fromisoformat(str(data.get("source_date")))
     except ValueError:
@@ -147,6 +157,11 @@ def _source(data, actor_id, now):
         if (task.student_name != profile.full_name or task.date != source_date.isoformat()
                 or (task.plan_item and task.plan_item.plan.student_id != profile.id)):
             raise planner.TaskPlannerError("原任务学生、日期或学习计划关联已变化，请核对任务管理")
+    if _source_still_open(unfinished, now):
+        raise planner.TaskPlannerError(
+            "原任务仍在次日03:00宽限期内，请截止后再处理未完成作业",
+            code="source_still_open", status=409,
+        )
     return line, profile, today, source_date, rows, unfinished
 
 
