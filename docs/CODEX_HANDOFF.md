@@ -1,5 +1,56 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（思考模式 A/B 后）雅思写作 AI 试用工具：英文数词、语言建议准则、老师批注对照（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户完成 `42bfc54` 的复核与真实 A/B（`28d24e9a`，`docs/design/ielts-writing-ai-thinking-ab-20261104/`），用了 15/30 次。
+  - 结果：off / high 都是 7/7 首轮成功；high 的中位耗时 33.4 秒（off 11.8 秒），输出 49,740 token（off 12,838），思考 token 34,834，峰值 12,244/16,000；high 自动检查 17/17，off 16/17。
+  - 人工结论：high 有局部改善，但仍有上下文误读，暂不建议切成默认。
+  - 新 P2：high 的 t2-mid 建议写了 “about forty times as many people”，英文数词绕过了数字过滤。
+  - 人工审阅的语言问题：把 “do not have cars” 改成 “cannot afford a car”；只有两个数据点却写成 “a steady climb”；把正确的 which 从句和 “much less crowded” 当成问题；给出残句。
+  - 用户另外附上 5 份批改作业的 PDF：真实学生作文和老师批注，包括 Task 1 折线图和表格、Task 2 艺术与儿童自由时间两题，批注有“走题”“例子不贴题”“太概括”“数据信息出错”“需对比”“展开”以及分项审题笔记，**没有分数**。
+  本轮没有任何模型调用，评审的 `docs/design` 文件没有改动，**学生 PDF 没有放进仓库**。
+- 修复（业务提交 `0c264f4`，提示词 `iwa-2026-11-04.7`）：
+  1. **`figures.py`**：
+     - 读出英文数词：`en_number`，支持 forty、forty-two、one hundred and twenty、a hundred、two thousand and twenty；
+     - 数字加规模词按实际数值算（1.5 million = 1500000），不再按小于 10 放过；
+     - 倍数（`MULTIPLIER`：forty times、three times、40-fold）属于事实说法，来源里必须有同样的倍数，没有小数字豁免；
+     - 时间跨度（`DURATION`：twenty years later、two decades）等于来源中两个年份之差时算有来源。否则 high Task 1 里由 2000→2020 推出的 “Twenty years later” 会被误删，加这条规则前回放确实删掉了两条；
+     - 序数词不算数字；
+     - 已知限制：twice、a third 这类写法不识别。
+  2. **提示词 `.7`**：
+     - 语言建议：先读完整句，正确的结构不算错误；准确、自然优先于换更少见的词；改句不能加入作者没写的事实、原因、数字、倍数或趋势；给完整句；描述段落内容之前先核对；
+     - 论证清单新增 “(0) Question type”：审题，漏答的部分算 TR 问题。这一条参考了老师批注里对审题的重视。
+  3. **realcheck 老师批注**：
+     - 样本可以带 `teacher_findings: [{quote, note}]`，加载时核对 quote 是否在作文里；
+     - 新增 `ai_spans`、`spans_overlap`（一段包含另一段，或共享至少一半的词）和 `teacher_coverage`；
+     - 报告新增“与老师批注对照”一节；compare 的人工复核表逐条列出老师批注，并标明 A / B 是否覆盖。只看位置，不代表判断相同。
+  4. 评价思考默认仍为 off，README 记录了这次对照的结论。
+- 验证：
+  - 新增 `tests/fixtures/realcheck_20261104e.json`（本批 off / high 共 14 次真实输出，思考正文已在共享包中去除，没有 Key）和 `test_thinking_ab_20261104.py`（10 项），覆盖：
+    - 真实的 forty times 被删，结果和复制文本里都没有；
+    - 评审的 5 行百分比表；
+    - 数词写法、倍数、规模词、篇幅目标、年份跨度；
+    - 14 次真实输出回放后，建议里都没有无来源的数字，并且只删了 high t2-mid 这一条；
+    - 提示词 `.7` 的规则；
+    - teacher_findings 的加载校验、重合判定、覆盖统计和复核表。
+  - 三处旧断言同步更新：两个测试里写死的提示词版本，以及“15 million”现在带单位显示。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **330 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（46 个文件）、`node --check`、`git diff --check` 都通过。
+  - 评审探针重跑：
+    - `evidence_recheck` 60 项通过；
+    - `thinking_client_recheck` 的 findings 为空；
+    - `compare_recheck` passed；
+    - `english_number_probe` 写死了修复前的行为，原文件 exit 1。scratch 副本改为正确预期后 exit 0：forty times 解析为倍数 40 并被删除；5 行百分比表全部符合要求；阿拉伯数字对照仍被删，显示为 “40 times”。
+- **未验证**：
+  - 提示词 `.7` 的真实效果：语言建议是否还会改变原意、审题项会不会带来新的误报；
+  - teacher_findings 还没有真实数据；
+  - 评分准确度仍需要老师给出分数的样本。
+- **学生素材**：5 份 PDF 只在本次会话的上传目录里，没有提交，也没有发给模型。如果要用作老师批注对照，需要用户先确认已获同意、去掉个人信息（例如文件名里的姓名缩写），再整理成本地 JSONL（`teacher_findings`）。整理好的文件不进 Git。另外，第 5 份 PDF 的题目和作文对不上（Task 1 题目是沙漠成因、作文写纽约人口；Task 2 题目是留学 / 实习、作文写历史研究），整理时需要换成正确的题目。
+- **发布状态**：业务改动 `0c264f4` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：
+  1. 用户复核（330 项测试；`english_number_probe` 按新预期调整）。
+  2. 用户决定这批批改素材能否使用、怎样使用。
+  3. 下一批真实验证另定范围：建议先用提示词 `.7` 跑 off 的 7 篇（≤ 14 次），检查语言建议；带老师批注的样本整理好后再跑。
+
 ## 2026-11-04 写作试用思考模式实测完成：42bfc549复核通过，A/B共15/30，发现英文数词漏检
 
 - 本轮用户授权明确为：离线通过后 high连通≤2次、off/high各7篇各≤14次、总≤30；已完成 **15/30=1+7+7**，批次结束，不自动使用余量增加样本。只做内置合成作文评价，无精修/改写/识图/学生数据；现有独立Key只在进程中读取，未输出/分享，未新建或修改凭据。
