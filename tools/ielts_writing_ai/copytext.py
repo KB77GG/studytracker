@@ -111,7 +111,8 @@ def argument_lines(argument: dict | None) -> list[str]:
     if improvements:
         lines.append("可选优化（不是错误，不影响上面的判断）：")
         for item in improvements:
-            text = f"  · “{item['quote']}” → {item['suggestion']}"
+            advice = item["suggestion"] or (REMOVED_NOTE if item.get("suggestion_removed") else "")
+            text = f"  · “{item['quote']}” → {advice}"
             if item.get("from_label"):
                 support = "；".join(f"“{q}”" for q in item.get("support") or [])
                 text += f"（原判“{item['from_label']}”，同段已有：{support}）"

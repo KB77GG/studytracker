@@ -221,10 +221,12 @@ class ChatClient:
                 ) from None
             if isinstance(text, list):  # some providers return content parts
                 text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
-            if not str(text).strip():
-                raise LLMError("empty", "模型返回为空", **response_details)
+            # The length limit is checked first: in thinking mode the budget can run out
+            # while reasoning, leaving the answer empty - that is a truncation.
             if choice.get("finish_reason") == "length":
                 raise LLMError("truncated", "模型输出被截断，请重试", **response_details)
+            if not str(text).strip():
+                raise LLMError("empty", "模型返回为空", **response_details)
             reasoning = choice["message"].get("reasoning_content") or ""
             return LLMResult(
                 str(text),

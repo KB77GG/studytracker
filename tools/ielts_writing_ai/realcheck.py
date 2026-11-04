@@ -15,6 +15,7 @@ failure. Calling a paid model requires --confirm-paid.
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import json
 import math
 import statistics
@@ -84,6 +85,9 @@ class RecordingClient:
             "json_mode": bool(kwargs.get("json_mode")),
             # Same prompt, different thinking mode is what an A/B comparison varies.
             "thinking": kwargs.get("thinking") or "off",
+            # Fingerprint of exactly what the model was sent (options such as thinking,
+            # budget and timeout are not part of it), for same-condition comparisons.
+            "input_sha256": _messages_sha(messages),
             "max_tokens": kwargs.get("max_tokens"),
             "provider": self.provider,
             "model": self.model,
@@ -101,10 +105,13 @@ class RecordingClient:
         try:
             result = self.inner.complete(messages, **kwargs)
         except LLMError as exc:
+            usage = getattr(exc, "usage", None) or {}
             entry.update(
                 error=exc.code,
                 latency_ms=_ms(started),
-                usage=getattr(exc, "usage", None) or {},
+                usage=usage,
+                # Failed responses (e.g. truncated while thinking) are billed too.
+                reasoning_tokens=reasoning_tokens(usage),
                 response_received=getattr(exc, "response_received", False),
                 http_status=getattr(exc, "http_status", None),
             )
@@ -127,6 +134,11 @@ class RecordingClient:
             reasoning=getattr(result, "reasoning", "") or "",
         )
         return result
+
+
+def _messages_sha(messages) -> str:
+    text = json.dumps(messages, ensure_ascii=False, sort_keys=True, default=str)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def _ms(started: float) -> int:
@@ -316,7 +328,7 @@ def _run_sample(
         "expect": item.get("expect") or {},
         "teacher": item.get("teacher") or {},
         "submission": {
-            k: submission[k]
+            k: submission.get(k)
             for k in (
                 "prompt_text",
                 "task_type",
@@ -325,6 +337,7 @@ def _run_sample(
                 "target_band",
                 "image_status",
                 "image_error",
+                "image_description",  # the chart reading also reaches the model
             )
         },
         "generations": {
@@ -414,6 +427,13 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
         if isinstance((c.get("usage") or {}).get("completion_tokens"), int)
     ]
     reasoning = [c["reasoning_tokens"] for c in calls if isinstance(c.get("reasoning_tokens"), int)]
+    # Thinking calls whose response did not report reasoning tokens (including calls
+    # with no response at all): with any of these the known sum is only a subtotal.
+    unreported = sum(
+        1
+        for c in calls
+        if (c.get("thinking") or "off") != "off" and not isinstance(c.get("reasoning_tokens"), int)
+    )
     budgets = sorted({c["max_tokens"] for c in calls if isinstance(c.get("max_tokens"), int)})
     return {
         "thinking": sorted({c.get("thinking") or "off" for c in calls}),
@@ -421,8 +441,12 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
         # a thinking evaluation must be set from these, not carried over.
         "max_tokens": budgets,
         "completion_tokens_max": max(completions) if completions else None,
-        # None: the provider did not report reasoning tokens (not zero).
-        "reasoning_tokens": sum(reasoning) if reasoning else None,
+        # Over every call, failed ones included. reasoning_tokens is the complete total,
+        # or None when some thinking call did not report (then see the known subtotal
+        # and the number of unreported calls); None never means zero.
+        "reasoning_tokens_known": sum(reasoning) if reasoning else None,
+        "reasoning_unreported_calls": unreported,
+        "reasoning_tokens": sum(reasoning) if reasoning and not unreported else None,
         "reasoning_tokens_max": max(reasoning) if reasoning else None,
         "truncated": sum(1 for c in calls if c.get("error") == "truncated"),
         "timeouts": sum(1 for c in calls if c.get("error") == "timeout"),
@@ -995,6 +1019,16 @@ def _pct(value) -> str:
     return "—" if value is None else f"{value * 100:.0f}%"
 
 
+def _reasoning_text(m: dict) -> str:
+    known, missing = m.get("reasoning_tokens_known"), m.get("reasoning_unreported_calls", 0)
+    if known is None:
+        return f"未报告（{missing} 次思考调用没有报告）" if missing else "未报告"
+    text = f"合计 {known}，单次最多 {m['reasoning_tokens_max']}"
+    if missing:
+        text = f"已知小计 {known}（另有 {missing} 次思考调用没有报告，合计不完整），单次最多 {m['reasoning_tokens_max']}"
+    return text
+
+
 def _removed_line(removed: dict) -> str:
     labels = (("criteria", "评分项"), ("argument", "论证结构"), ("priorities", "提升重点"))
     parts = "、".join(f"{label} {removed.get(key, 0)}" for key, label in labels)
@@ -1068,11 +1102,7 @@ def render_markdown(report: dict) -> str:
         )
     lines += ["", "## 输出预算与思考模式", ""]
     for kind, m in report["kinds"].items():
-        reasoning = (
-            "未报告"
-            if m.get("reasoning_tokens") is None
-            else f"合计 {m['reasoning_tokens']}，单次最多 {m['reasoning_tokens_max']}"
-        )
+        reasoning = _reasoning_text(m)
         lines.append(
             f"- {names.get(kind, kind)}：思考模式 {' / '.join(m.get('thinking') or ['off'])}；"
             f"输出上限 {' / '.join(str(b) for b in m.get('max_tokens') or []) or '—'}；"

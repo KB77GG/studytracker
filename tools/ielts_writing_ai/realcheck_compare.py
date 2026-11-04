@@ -35,12 +35,29 @@ def load_run(directory) -> dict:
     return {"dir": str(directory), "run_data": run_data, "report": report}
 
 
+INPUT_FIELDS = (
+    "task_type",
+    "prompt_text",
+    "essay_text",
+    "target_band",
+    "image_status",
+    "image_description",
+)
+
+
 def _fingerprint(sample: dict) -> str:
     sub = sample.get("submission") or {}
-    text = "\x1f".join(
-        str(sub.get(k) or "") for k in ("task_type", "prompt_text", "essay_text", "image_status")
-    )
+    text = "\x1f".join(str(sub.get(k) or "") for k in INPUT_FIELDS)
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+
+
+def _evaluate_input(run_data: dict, sample_id: str) -> str | None:
+    """Fingerprint of what the first evaluation request actually sent the model
+    (None in reports written before it was recorded)."""
+    for call in run_data.get("calls") or []:
+        if call["sample"] == sample_id and call["kind"] == "evaluate" and call["attempt"] == 0:
+            return call.get("input_sha256")
+    return None
 
 
 def conditions(run: dict) -> dict:
@@ -55,6 +72,9 @@ def conditions(run: dict) -> dict:
         "evaluate_thinking": settings.get("evaluate_thinking", "off"),
         "evaluate_max_tokens": (report.get("kinds", {}).get("evaluate") or {}).get("max_tokens"),
         "samples": {s["id"]: _fingerprint(s) for s in run_data.get("samples") or []},
+        "evaluate_inputs": {
+            s["id"]: _evaluate_input(run_data, s["id"]) for s in run_data.get("samples") or []
+        },
         "started_at": report.get("started_at"),
     }
 
@@ -73,7 +93,23 @@ def check_same_conditions(a: dict, b: dict) -> tuple[list[str], list[str]]:
         errors.append("样本不同：" + "、".join(sorted(set(a["samples"]) ^ set(b["samples"]))))
     changed = [k for k in a["samples"] if k in b["samples"] and a["samples"][k] != b["samples"][k]]
     if changed:
-        errors.append("同名样本的题目或作文不同：" + "、".join(sorted(changed)))
+        errors.append("同名样本的题目、作文或题图识别结果不同：" + "、".join(sorted(changed)))
+    # The decisive check: what reached the evaluation model must be identical. Only
+    # request options (thinking, output budget, timeout) may differ - they are not
+    # part of the messages.
+    inputs_a, inputs_b = a.get("evaluate_inputs") or {}, b.get("evaluate_inputs") or {}
+    shared = [k for k in a["samples"] if k in b["samples"]]
+    differing = [
+        k for k in shared if inputs_a.get(k) and inputs_b.get(k) and inputs_a[k] != inputs_b[k]
+    ]
+    if differing:
+        errors.append("实际发送给评价模型的输入不同：" + "、".join(sorted(differing)))
+    unknown = [k for k in shared if not (inputs_a.get(k) and inputs_b.get(k))]
+    if unknown:
+        warnings.append(
+            "有样本缺少实际输入的指纹（旧版报告或首次请求未发出），只核对了题目、作文和题图"
+            "识别结果：" + "、".join(sorted(unknown))
+        )
     if a["evaluate_thinking"] == b["evaluate_thinking"]:
         warnings.append(
             f"两次的评价思考模式相同（{a['evaluate_thinking']}）：这是重复性对照，不是思考开关的对照"
@@ -119,23 +155,43 @@ def sample_view(run_data: dict, sample: dict) -> dict:
             for k in CRITERIA
         },
         "position_consistent": (argument.get("position") or {}).get("consistent"),
+        "argument_notes": argument.get("notes") or [],
         "problems": [
             {
                 "type": p["type"],
                 "label": p.get("label"),
                 "quote": p["quote"],
+                "conflicts_with": p.get("conflicts_with"),
+                "needs_review": bool(p.get("needs_review")),
+                "p": p.get("p"),
                 "comment": p.get("comment"),
+                "suggestion": p.get("suggestion"),
+                "suggestion_removed": bool(p.get("suggestion_removed")),
             }
             for p in argument.get("problems") or []
         ],
         "reclassified": [
-            {"from_type": i["from_type"], "quote": i["quote"], "support": i.get("support") or []}
+            {
+                "from_type": i["from_type"],
+                "quote": i["quote"],
+                "support": i.get("support") or [],
+                "suggestion": i.get("suggestion"),
+                "suggestion_removed": bool(i.get("suggestion_removed")),
+            }
             for i in argument.get("improvements") or []
             if i.get("from_type")
         ],
         "improvements": len(argument.get("improvements") or []),
         "self_conflicts": argument.get("self_conflicts") or 0,
-        "consistency_issues": [c["quote"] for c in result.get("consistency_issues") or []],
+        "consistency_issues": [
+            {
+                "quote": c.get("quote"),
+                "figures": c.get("figures") or [],
+                "comment": c.get("comment"),
+            }
+            for c in result.get("consistency_issues") or []
+        ],
+        "comparisons_checked": result.get("comparisons_checked"),
         "count_corrections": result.get("count_corrections") or [],
         "suggestions_removed": (result.get("suggestions_removed") or {}).get("total", 0),
         "calls": len(calls),
@@ -177,6 +233,8 @@ def run_summary(run: dict, price_in=None, price_out=None) -> dict:
         "prompt_tokens": tokens.get("prompt"),
         "completion_tokens": tokens.get("completion"),
         "reasoning_tokens": evaluate.get("reasoning_tokens"),
+        "reasoning_tokens_known": evaluate.get("reasoning_tokens_known"),
+        "reasoning_unreported_calls": evaluate.get("reasoning_unreported_calls", 0),
         "completion_tokens_max": evaluate.get("completion_tokens_max"),
         "max_tokens": evaluate.get("max_tokens"),
         "truncated": evaluate.get("truncated", 0),
@@ -224,6 +282,15 @@ def _fmt(value) -> str:
     return str(value)
 
 
+def _reasoning_cell(summary: dict) -> str:
+    known, missing = summary.get("reasoning_tokens_known"), summary.get(
+        "reasoning_unreported_calls"
+    )
+    if known is None:
+        return f"—（{missing} 次未报告）" if missing else "—"
+    return f"已知 {known}（{missing} 次未报告，不完整）" if missing else str(known)
+
+
 def _band(value) -> str:
     return "—" if value is None else f"{float(value):.1f}"
 
@@ -260,7 +327,7 @@ def render_markdown(cmp: dict) -> str:
         ("评价延迟 p90 (ms)", "latency_ms_p90"),
         ("输入 token（文本，合计）", "prompt_tokens"),
         ("输出 token（文本，合计）", "completion_tokens"),
-        ("其中思考 token（评价；— 为未报告）", "reasoning_tokens"),
+        ("其中思考 token（评价，含失败调用；— 为未报告）", None),
         ("评价单次输出峰值", "completion_tokens_max"),
         ("评价输出上限", "max_tokens"),
         ("截断 / 超时", None),
@@ -274,7 +341,9 @@ def render_markdown(cmp: dict) -> str:
     ]
     lines += ["", "## 汇总", "", f"| 项目 | {la} | {lb} |", "|---|---|---|"]
     for label, key in rows:
-        if label.startswith("截断"):
+        if label.startswith("其中思考"):
+            va, vb = _reasoning_cell(sa), _reasoning_cell(sb)
+        elif label.startswith("截断"):
             va = f"{sa['truncated']} / {sa['timeouts']}"
             vb = f"{sb['truncated']} / {sb['timeouts']}"
         elif label.startswith("合理性"):
@@ -347,10 +416,33 @@ def render_manual_review(cmp: dict) -> str:
             "|---|---|---|---|---|---|---|",
         ]
         for tag, view in (("A " + la, a), ("B " + lb, b)):
-            for p in view["problems"]:
+            consistent = {True: "前后一致", False: "前后不一致", None: "不下结论 / 未判断"}
+            if view["task_type"] == "task2":
                 lines.append(
-                    f"| {tag} | 论证问题 | {p['label'] or p['type']} | {_quote(p['quote'])} | "
-                    f"{_quote(p['comment'])} |  |  |"
+                    f"| {tag} | 立场判断 | — | — | {consistent[view['position_consistent']]} |  |  |"
+                )
+            for note in view["argument_notes"]:
+                lines.append(f"| {tag} | 论证提示 | — | — | {_quote(note)} |  |  |")
+            for p in view["problems"]:
+                kind = (p["label"] or p["type"]) + ("（需人工确认）" if p["needs_review"] else "")
+                quote = _quote(p["quote"])
+                if p["conflicts_with"]:
+                    quote += f" ↔ 与之矛盾：{_quote(p['conflicts_with'])}"
+                where = f"论证问题（第 {p['p']} 段）" if p.get("p") else "论证问题"
+                lines.append(
+                    f"| {tag} | {where} | {kind} | {quote} | {_quote(p['comment'])} |  |  |"
+                )
+            for issue in view["consistency_issues"]:
+                figures = "；".join(_quote(f) for f in issue["figures"]) or "—"
+                lines.append(
+                    f"| {tag} | Task 1 文内矛盾 | — | {_quote(issue['quote'])} | "
+                    f"对照：{figures}。{_quote(issue['comment'])} |  |  |"
+                )
+            if view["task_type"] == "task1":
+                lines.append(
+                    f"| {tag} | Task 1 比较核对 | — | — | 核对了 "
+                    f"{_fmt(view['comparisons_checked'])} 条比较说法，指出矛盾 "
+                    f"{len(view['consistency_issues'])} 条 |  |  |"
                 )
             for r in view["reclassified"]:
                 support = "；".join(_quote(q) for q in r["support"])

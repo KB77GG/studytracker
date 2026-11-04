@@ -227,10 +227,20 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
             else []
         )
         if support:
+            # The improvement's advice is the (already filtered) suggestion. Only when
+            # the model gave none does its comment stand in, and then it goes through
+            # the same figure check: a removed suggestion never comes back this way.
+            if not suggestion and not removed and comment:
+                if sources.unsourced(comment):
+                    removed = True
+                    removed_suggestions += 1
+                else:
+                    suggestion = comment
             reclassified.append(
                 {
                     "quote": quote,
-                    "suggestion": suggestion or comment,
+                    "suggestion": suggestion,
+                    "suggestion_removed": removed,
                     "from_type": kind,
                     "from_label": PROBLEM_TYPES[kind],
                     "support": support,

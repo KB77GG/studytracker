@@ -248,13 +248,13 @@ class CompareTest(unittest.TestCase):
         self.assertEqual(b["estimated_cost"], round(300 / 1e6 * 1 + 9000 / 1e6 * 2, 6))
         path = realcheck_compare.write(cmp, self.tmp / "cmp")
         markdown = path.read_text(encoding="utf-8")
-        self.assertIn("| 其中思考 token（评价；— 为未报告） | — | 6000 |", markdown)
+        self.assertIn("| 其中思考 token（评价，含失败调用；— 为未报告） | — | 6000 |", markdown)
         self.assertIn("判断是否更准，看下面的人工复核表", markdown)
         sheet = (self.tmp / "cmp" / "manual_review.md").read_text(encoding="utf-8")
         self.assertIn("同段引文存在，不等于它真的构成有效支撑", sheet)
         self.assertEqual(sheet.count("| 两次都漏报 |"), 3)
-        self.assertIn("| A 思考 off | 论证问题 |", sheet)
-        self.assertIn("| B 思考 high | 论证问题 |", sheet)
+        self.assertIn("| A 思考 off | 论证问题（第 2 段） |", sheet)
+        self.assertIn("| B 思考 high | 论证问题（第 2 段） |", sheet)
 
     def test_different_conditions_are_refused(self):
         self.run_check("off", "off")
@@ -271,7 +271,10 @@ class CompareTest(unittest.TestCase):
         items = realcheck.load_samples("builtin")[:3]
         items[1] = dict(items[1], essay=items[1]["essay"] + " Extra sentence.")
         self.run_check("off2", "off", items)
-        with self.assertRaisesRegex(realcheck_compare.CompareError, "题目或作文不同：t2-mid"):
+        with self.assertRaisesRegex(
+            realcheck_compare.CompareError,
+            "题目、作文或题图识别结果不同：t2-mid；实际发送给评价模型的输入不同：t2-mid",
+        ):
             realcheck_compare.compare(self.tmp / "off", self.tmp / "off2")
         self.run_check("off3", "off")
         cmp = realcheck_compare.compare(self.tmp / "off", self.tmp / "off3")

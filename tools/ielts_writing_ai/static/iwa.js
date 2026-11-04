@@ -523,7 +523,8 @@
         improvements.forEach(function (item) {
           box.appendChild(el('div', { class: 'issue issue--improve' }, [
             verified(item.quote),
-            el('p', { class: 'issue__suggestion', text: item.suggestion }),
+            item.suggestion ? el('p', { class: 'issue__suggestion', text: item.suggestion })
+              : item.suggestion_removed ? el('p', { class: 'muted small', text: REMOVED_NOTE }) : null,
             item.from_label ? el('p', { class: 'argument__conflict' }, ['原判“' + item.from_label + '”，同段已有：'].concat((item.support || []).map(function (q) { return verified(q); }))) : null
           ]));
         });

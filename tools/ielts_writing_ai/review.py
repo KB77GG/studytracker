@@ -191,6 +191,28 @@ def _count_corrections(texts: list[str], essay: str) -> list[str]:
     return list(dict.fromkeys(notes))
 
 
+def _sweep_advice(criteria: list[dict], argument: dict | None, sources) -> dict:
+    """Final check over every piece of advice the result will show (page and copy
+    text): whatever path produced it, a figure without a source is removed here.
+    Each path filters on its own first, so finding anything is a missed path: it is
+    logged and counted under its section (review of 90194f0: a reclassified
+    improvement brought a removed "80%" back)."""
+    extra = {"criteria": 0, "argument": 0}
+    for criterion in criteria:
+        for issue in criterion["issues"]:
+            if issue.get("suggestion") and sources.unsourced(issue["suggestion"]):
+                issue.update(suggestion="", suggestion_removed=True)
+                extra["criteria"] += 1
+    if argument:
+        for entry in (argument.get("problems") or []) + (argument.get("improvements") or []):
+            if entry.get("suggestion") and sources.unsourced(entry["suggestion"]):
+                entry.update(suggestion="", suggestion_removed=True)
+                extra["argument"] += 1
+    if any(extra.values()):
+        log.warning("unsourced figures reached the final advice sweep: %s", extra)
+    return extra
+
+
 MAX_COMPARISONS = 8
 
 
@@ -374,6 +396,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             )
 
         removed["argument"] = argument["suggestions_removed"]
+    for key, extra in _sweep_advice(criteria, argument, sources).items():
+        removed[key] += extra
     removed["total"] = removed["criteria"] + removed["priorities"] + removed["argument"]
     if removed["total"]:
         parts = "、".join(
