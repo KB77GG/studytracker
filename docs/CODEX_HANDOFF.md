@@ -1,7 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
 > 这是账号无关、滚动更新的“当前状态”，不是聊天记录或永久变更日志。
-> 最近更新：2026-11-04 剑桥首批上线题选定 8,048 道，验收抽查 593 道待复核；未部署。
+> 最近更新：2026-11-04 Codex 已逐题验收 593 道剑桥首批抽查题，585 正确、8 道待处理；按建议门槛主句谓语不达标，未部署。
+
+## 2026-11-04 剑桥首批 593 道独立验收（Codex）
+
+- **结果**：[验收报告](reviews/cambridge-release-check-20261104/CODEX_REVIEW.md) 与同目录 `release_check_all_reviewed.csv`、6 份逐批 CSV。正确 585 / 答案错 1 / 有歧义 5 / 不适合 2。主句谓语 4 道、从句边界 2 道、动词身份 2 道；另三类 0。按待用户确认的“每类问题≤2道”，主句谓语不达标；不等于已批准其他题型上线。
+- **工作树/Git**：`/Users/zhouxin/.codex/worktrees/grammar-release-check-20261104/studytracker`，分支 `codex/grammar-release-check-20261104`，基线/开工 HEAD `f74238fecdcd30d297c065f81766d4e63a3039f8`，开工 clean。从 Claude 分支 fetch 后在固定提交建独立树。本轮只新增本结果目录内 10 个文件、更新两交接；源 6 CSV、题库、8,048 ID 清单和代码均未改。交付提交 SHA 以本分支 Git HEAD 为准，未使用 skip-ci。
+- **其他树**：资料树 `/Users/zhouxin/Desktop/studytracker` 仍 main@`6ded77d24586327ad94e151e172ae4811b4a2eed`，behind 103，既有 7 modified / 23 untracked 入口原样保留，只增量记录本轮交接；不得发布该旧树业务。上一交叉复核树 `/Users/zhouxin/.codex/worktrees/grammar-crossreview-20261104/studytracker`@`9df4bbdefc100fa70e3d9583fc8769fc64f394d1` 与旧语法树未操作。本轮人工证据在 `/Users/zhouxin/.codex/audits/grammar-release-check-20261104/`，本机可见，不作为另一台电脑已拥有的文件。
+- **验证**：在本机证据目录用 bundled Node `export_reviews.mjs` 写出 7 CSV，Artifact Tool 回读一致；bundled Python `verify_reviews.py` → 593 唯一题号、顺序/四列/四判定/说明≤40字/8,048清单包含关系全部通过。结果目录执行 `shasum -a 256 -c SHA256SUMS`（原6文件）与 `shasum -a 256 -c REVIEW_SHA256SUMS`（结果7文件）全部 OK；`git diff --check`。JSON 计数与逐题结果一致。本轮只验收题目，不重复跑出题流水线/应用本地测试；GitHub CI 需按交付精确 SHA 核对，不把旧 CI 当作本轮。
+- **边界**：未改题、未合 main、未部署、未开 PR、未操作生产服务器/数据库、未导入判定、小程序未上传/提审/发布，未调用大模型 API。其他任务已有的部署状态不属于本轮语法任务。完整 8,048 道未逐题审，已验 593，道题语法判断与应用 CI 是两类证据。
+- **下一步**：Claude `git fetch origin codex/grammar-release-check-20261104`，用报告给出的 `git show` 读取合并 CSV，先复核 8 道分歧（had to 的核心、be to/系表被动、and 内容范围、including、原句排印/悬垂分词）。处理已点名题并查同类，再由用户确认验收标准及发布范围。无需合 main 即可读取结果。
 
 ## 2026-11-04 剑桥首批上线题（Claude，第二十二轮）
 

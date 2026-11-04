@@ -1,0 +1,121 @@
+{
+  "input_commit": "f74238fecdcd30d297c065f81766d4e63a3039f8",
+  "reviewed": 593,
+  "unique_ids": 593,
+  "release_id_count": 8048,
+  "source_files_unchanged": true,
+  "input_order_preserved": true,
+  "merged_equals_concatenated_batches": true,
+  "notes_max_40_chars": true,
+  "counts": {
+    "正确": 585,
+    "句子不适合出题": 2,
+    "题目有歧义": 5,
+    "答案错": 1
+  },
+  "by_type": {
+    "主句谓语": {
+      "正确": 96,
+      "答案错": 1,
+      "题目有歧义": 2,
+      "句子不适合出题": 1
+    },
+    "从句边界": {
+      "正确": 98,
+      "答案错": 0,
+      "题目有歧义": 2,
+      "句子不适合出题": 0
+    },
+    "从句类型": {
+      "正确": 100,
+      "答案错": 0,
+      "题目有歧义": 0,
+      "句子不适合出题": 0
+    },
+    "状语关系": {
+      "正确": 93,
+      "答案错": 0,
+      "题目有歧义": 0,
+      "句子不适合出题": 0
+    },
+    "完整主语": {
+      "正确": 100,
+      "答案错": 0,
+      "题目有歧义": 0,
+      "句子不适合出题": 0
+    },
+    "动词身份": {
+      "正确": 98,
+      "答案错": 0,
+      "题目有歧义": 1,
+      "句子不适合出题": 1
+    }
+  },
+  "by_batch": {
+    "release_check_001": {
+      "正确": 96,
+      "句子不适合出题": 1,
+      "题目有歧义": 2,
+      "答案错": 1
+    },
+    "release_check_002": {
+      "正确": 98,
+      "题目有歧义": 2
+    },
+    "release_check_003": {
+      "正确": 100
+    },
+    "release_check_004": {
+      "正确": 100
+    },
+    "release_check_005": {
+      "正确": 99,
+      "句子不适合出题": 1
+    },
+    "release_check_006": {
+      "正确": 92,
+      "题目有歧义": 1
+    }
+  },
+  "source_checks": [
+    {
+      "batch": "release_check_001",
+      "rows": 100,
+      "source_sha256": "8520ca3de8033fe70431265d5c07ed283ef3e26cf4c70eeaff765540abf0ec4a"
+    },
+    {
+      "batch": "release_check_002",
+      "rows": 100,
+      "source_sha256": "5d852908aa82a29eae9364e875fa47fede779152c6234392f41a22ae905548f8"
+    },
+    {
+      "batch": "release_check_003",
+      "rows": 100,
+      "source_sha256": "e5d092135f00bbd2ade962b4ec8f15cda0773d4a1337f6f9750d89d148efa112"
+    },
+    {
+      "batch": "release_check_004",
+      "rows": 100,
+      "source_sha256": "06d1dcc4c004e691dbff706f7b671c6faa25710115c8da89cf056d2b3495a99e"
+    },
+    {
+      "batch": "release_check_005",
+      "rows": 100,
+      "source_sha256": "ad2acfd73f26a205902204eff98d585f9cf36b6ceb8b144ab4a4c04f5f2b9383"
+    },
+    {
+      "batch": "release_check_006",
+      "rows": 93,
+      "source_sha256": "99d75b1c16fe191c31d09a96d23227ad519e2b2d076fc21ec2af2962a785cfa3"
+    }
+  ],
+  "output_sha256": {
+    "release_check_001_reviewed.csv": "22733d5d3d5011bc63c400fa3ee8a983dcf2d533e74cd09d2cb5b266ea3ec39f",
+    "release_check_002_reviewed.csv": "18d8a2b1d59f7cc893a13eb2e1959f560d798a0b67fbd569b85f387409d3e42f",
+    "release_check_003_reviewed.csv": "284256c84b8d5ed214202be4607dcd182fa3e94cf8d942f67b943de8fdadac2a",
+    "release_check_004_reviewed.csv": "8f646019c998f55be34f4d6eca089103c15cb93ecf49432774543bf82165c92c",
+    "release_check_005_reviewed.csv": "c8b1b2b6d0dd99ebb28c73468579a591cc0ecb639629d849755c2fd9158cf5a6",
+    "release_check_006_reviewed.csv": "0efdae70a3e7fbbffc845db8bd382e82302ad0d1885a6562e8116446cb541646",
+    "release_check_all_reviewed.csv": "f40cc6c3f7a2347a2f908d42197c256bb18566f3eb7089122ada0e0f998e448b"
+  }
+}
