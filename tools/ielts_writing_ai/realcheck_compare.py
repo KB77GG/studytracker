@@ -1,0 +1,382 @@
+"""Same-condition comparison of two realcheck runs (e.g. evaluation thinking off vs high).
+
+The comparison is only meaningful when nothing but the thinking mode changed, so it
+refuses runs whose prompt version, model, kinds or essays differ (each essay is
+fingerprinted with its question). It lays the two runs side by side and writes a
+manual-review sheet; it never decides which run is "right". Whether a criticism is
+fair, whether a real problem was missed, and how far the bands are from a teacher's
+are judgments for the reviewer (and teacher scores, when samples carry them).
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+CRITERIA = ("task", "coherence", "lexical", "grammar")
+
+
+class CompareError(ValueError):
+    pass
+
+
+def load_run(directory) -> dict:
+    directory = Path(directory)
+    try:
+        run_data = json.loads((directory / "run_data.json").read_text(encoding="utf-8"))
+        report = json.loads((directory / "report.json").read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise CompareError(
+            f"{directory} 缺少 {Path(exc.filename).name}（需要 realcheck 生成的报告目录）"
+        ) from None
+    except json.JSONDecodeError as exc:
+        raise CompareError(f"{directory} 的报告不是有效 JSON：{exc}") from None
+    return {"dir": str(directory), "run_data": run_data, "report": report}
+
+
+def _fingerprint(sample: dict) -> str:
+    sub = sample.get("submission") or {}
+    text = "\x1f".join(
+        str(sub.get(k) or "") for k in ("task_type", "prompt_text", "essay_text", "image_status")
+    )
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+
+
+def conditions(run: dict) -> dict:
+    run_data, report = run["run_data"], run["report"]
+    settings = run_data.get("settings") or {}
+    return {
+        "dir": run["dir"],
+        "provider": report.get("provider"),
+        "model": report.get("model"),
+        "prompt_version": report.get("prompt_version"),
+        "kinds": run_data.get("kinds") or [],
+        "evaluate_thinking": settings.get("evaluate_thinking", "off"),
+        "evaluate_max_tokens": (report.get("kinds", {}).get("evaluate") or {}).get("max_tokens"),
+        "samples": {s["id"]: _fingerprint(s) for s in run_data.get("samples") or []},
+        "started_at": report.get("started_at"),
+    }
+
+
+def check_same_conditions(a: dict, b: dict) -> tuple[list[str], list[str]]:
+    """(errors, warnings). Anything but the thinking mode differing is an error."""
+    errors, warnings = [], []
+    for key, label in (("provider", "服务商"), ("model", "模型"), ("prompt_version", "提示词版本")):
+        if a[key] != b[key]:
+            errors.append(f"{label}不同：{a[key]} vs {b[key]}")
+    if "evaluate" not in a["kinds"] or "evaluate" not in b["kinds"]:
+        errors.append("两次运行都必须包含原稿评价（--kinds evaluate）")
+    if a["kinds"] != b["kinds"]:
+        errors.append(f"运行的类型不同：{a['kinds']} vs {b['kinds']}")
+    if set(a["samples"]) != set(b["samples"]):
+        errors.append("样本不同：" + "、".join(sorted(set(a["samples"]) ^ set(b["samples"]))))
+    changed = [k for k in a["samples"] if k in b["samples"] and a["samples"][k] != b["samples"][k]]
+    if changed:
+        errors.append("同名样本的题目或作文不同：" + "、".join(sorted(changed)))
+    if a["evaluate_thinking"] == b["evaluate_thinking"]:
+        warnings.append(
+            f"两次的评价思考模式相同（{a['evaluate_thinking']}）：这是重复性对照，不是思考开关的对照"
+        )
+    return errors, warnings
+
+
+def _evaluate_calls(run_data: dict, sample_id: str) -> list[dict]:
+    return [
+        c
+        for c in run_data.get("calls") or []
+        if c["sample"] == sample_id and c["kind"] == "evaluate"
+    ]
+
+
+def _int(value):
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
+
+
+def sample_view(run_data: dict, sample: dict) -> dict:
+    generation = sample["generations"].get("evaluate") or {}
+    result = generation.get("result") or {}
+    criteria = {c["key"]: c for c in result.get("criteria") or []}
+    argument = result.get("argument") or {}
+    calls = _evaluate_calls(run_data, sample["id"])
+    completion = [_int((c.get("usage") or {}).get("completion_tokens")) for c in calls]
+    reasoning = [_int(c.get("reasoning_tokens")) for c in calls]
+    return {
+        "id": sample["id"],
+        "task_type": sample.get("task_type"),
+        "status": generation.get("status"),
+        "error": generation.get("error_code"),
+        "overall": result.get("overall_band"),
+        "bands": {k: (criteria.get(k) or {}).get("band") for k in CRITERIA},
+        "criteria": {
+            k: {
+                "summary": (criteria.get(k) or {}).get("summary", ""),
+                "issues": [
+                    {"quote": i.get("quote"), "comment": i.get("comment")}
+                    for i in (criteria.get(k) or {}).get("issues") or []
+                ],
+            }
+            for k in CRITERIA
+        },
+        "position_consistent": (argument.get("position") or {}).get("consistent"),
+        "problems": [
+            {
+                "type": p["type"],
+                "label": p.get("label"),
+                "quote": p["quote"],
+                "comment": p.get("comment"),
+            }
+            for p in argument.get("problems") or []
+        ],
+        "reclassified": [
+            {"from_type": i["from_type"], "quote": i["quote"], "support": i.get("support") or []}
+            for i in argument.get("improvements") or []
+            if i.get("from_type")
+        ],
+        "improvements": len(argument.get("improvements") or []),
+        "self_conflicts": argument.get("self_conflicts") or 0,
+        "consistency_issues": [c["quote"] for c in result.get("consistency_issues") or []],
+        "count_corrections": result.get("count_corrections") or [],
+        "suggestions_removed": (result.get("suggestions_removed") or {}).get("total", 0),
+        "calls": len(calls),
+        "latency_ms": sum(c.get("latency_ms") or 0 for c in calls),
+        "completion_tokens": (
+            sum(v for v in completion if v is not None)
+            if any(v is not None for v in completion)
+            else None
+        ),
+        "reasoning_tokens": (
+            sum(v for v in reasoning if v is not None)
+            if any(v is not None for v in reasoning)
+            else None
+        ),
+        "teacher": sample.get("teacher") or {},
+    }
+
+
+def _cost(report: dict, price_in, price_out):
+    tokens = ((report.get("usage") or {}).get("text") or {}).get("tokens") or {}
+    if price_in is None or price_out is None:
+        return None
+    if tokens.get("prompt") is None or tokens.get("completion") is None:
+        return None
+    return round(tokens["prompt"] / 1e6 * price_in + tokens["completion"] / 1e6 * price_out, 6)
+
+
+def run_summary(run: dict, price_in=None, price_out=None) -> dict:
+    report = run["report"]
+    evaluate = report.get("kinds", {}).get("evaluate") or {}
+    tokens = ((report.get("usage") or {}).get("text") or {}).get("tokens") or {}
+    views = [sample_view(run["run_data"], s) for s in run["run_data"].get("samples") or []]
+    return {
+        "calls": report.get("calls"),
+        "first_attempt_valid": evaluate.get("first_attempt_valid"),
+        "final_ready": evaluate.get("final_ready"),
+        "latency_ms_p50": evaluate.get("latency_ms_p50"),
+        "latency_ms_p90": evaluate.get("latency_ms_p90"),
+        "prompt_tokens": tokens.get("prompt"),
+        "completion_tokens": tokens.get("completion"),
+        "reasoning_tokens": evaluate.get("reasoning_tokens"),
+        "completion_tokens_max": evaluate.get("completion_tokens_max"),
+        "max_tokens": evaluate.get("max_tokens"),
+        "truncated": evaluate.get("truncated", 0),
+        "timeouts": evaluate.get("timeouts", 0),
+        "estimated_cost": _cost(report, price_in, price_out),
+        "sanity": {k: (report.get("sanity") or {}).get(k) for k in ("passed", "total", "skipped")},
+        "problems": sum(len(v["problems"]) for v in views),
+        "reclassified": sum(len(v["reclassified"]) for v in views),
+        "self_conflicts": sum(v["self_conflicts"] for v in views),
+        "count_corrections": sum(len(v["count_corrections"]) for v in views),
+        "suggestions_removed": sum(v["suggestions_removed"] for v in views),
+    }
+
+
+def compare(a_dir, b_dir, *, price_in=None, price_out=None) -> dict:
+    a, b = load_run(a_dir), load_run(b_dir)
+    cond_a, cond_b = conditions(a), conditions(b)
+    errors, warnings = check_same_conditions(cond_a, cond_b)
+    if errors:
+        raise CompareError("两次运行的条件不同，不能对照：" + "；".join(errors))
+    views_b = {s["id"]: sample_view(b["run_data"], s) for s in b["run_data"]["samples"]}
+    samples = [
+        {"a": sample_view(a["run_data"], s), "b": views_b[s["id"]]}
+        for s in a["run_data"]["samples"]
+    ]
+    return {
+        "conditions": {"a": cond_a, "b": cond_b},
+        "warnings": warnings,
+        "summary": {
+            "a": run_summary(a, price_in, price_out),
+            "b": run_summary(b, price_in, price_out),
+        },
+        "samples": samples,
+        "prices": {"in": price_in, "out": price_out},
+    }
+
+
+def _fmt(value) -> str:
+    if value is None:
+        return "—"
+    if isinstance(value, list):
+        return " / ".join(_fmt(v) for v in value) or "—"
+    if isinstance(value, float):
+        return f"{value:g}"
+    return str(value)
+
+
+def _band(value) -> str:
+    return "—" if value is None else f"{float(value):.1f}"
+
+
+def _pct(value) -> str:
+    return "—" if value is None else f"{value * 100:.0f}%"
+
+
+RATE_KEYS = {"first_attempt_valid", "final_ready"}
+
+
+def _label(cond: dict) -> str:
+    return f"思考 {cond['evaluate_thinking']}"
+
+
+def render_markdown(cmp: dict) -> str:
+    ca, cb = cmp["conditions"]["a"], cmp["conditions"]["b"]
+    sa, sb = cmp["summary"]["a"], cmp["summary"]["b"]
+    la, lb = f"A（{_label(ca)}）", f"B（{_label(cb)}）"
+    lines = [
+        "# 评价对照：同一提示词、同一批作文",
+        "",
+        f"- 模型 {ca['provider']} / {ca['model']} · 提示词 {ca['prompt_version']} · 样本 {len(ca['samples'])} 篇",
+        f"- A：{ca['dir']}（{ca['started_at']}）",
+        f"- B：{cb['dir']}（{cb['started_at']}）",
+        "- 自动指标只说明格式、耗时和用量；**判断是否更准，看下面的人工复核表**（另见 manual_review.md）。",
+    ]
+    lines += [f"- 注意：{w}" for w in cmp["warnings"]]
+    rows = [
+        ("实际调用", "calls"),
+        ("评价首轮通过校验", "first_attempt_valid"),
+        ("评价最终成功", "final_ready"),
+        ("评价延迟 p50 (ms)", "latency_ms_p50"),
+        ("评价延迟 p90 (ms)", "latency_ms_p90"),
+        ("输入 token（文本，合计）", "prompt_tokens"),
+        ("输出 token（文本，合计）", "completion_tokens"),
+        ("其中思考 token（评价；— 为未报告）", "reasoning_tokens"),
+        ("评价单次输出峰值", "completion_tokens_max"),
+        ("评价输出上限", "max_tokens"),
+        ("截断 / 超时", None),
+        ("估算费用（按提供的单价，文本）", "estimated_cost"),
+        ("论证问题条数", "problems"),
+        ("改列可选优化（同段支撑）", "reclassified"),
+        ("AI 判断自相矛盾", "self_conflicts"),
+        ("计数说法更正", "count_corrections"),
+        ("建议因无来源数字被删", "suggestions_removed"),
+        ("合理性检查（通过 / 计入）", None),
+    ]
+    lines += ["", "## 汇总", "", f"| 项目 | {la} | {lb} |", "|---|---|---|"]
+    for label, key in rows:
+        if label.startswith("截断"):
+            va = f"{sa['truncated']} / {sa['timeouts']}"
+            vb = f"{sb['truncated']} / {sb['timeouts']}"
+        elif label.startswith("合理性"):
+            va = f"{_fmt(sa['sanity']['passed'])} / {_fmt(sa['sanity']['total'])}"
+            vb = f"{_fmt(sb['sanity']['passed'])} / {_fmt(sb['sanity']['total'])}"
+        else:
+            show = _pct if key in RATE_KEYS else _fmt
+            va, vb = show(sa[key]), show(sb[key])
+        lines.append(f"| {label} | {va} | {vb} |")
+    if cmp["prices"]["in"] is None:
+        lines.append("")
+        lines.append(
+            "未提供单价：费用未知（不能视为零）。思考 token 是否按输出计费，以服务商账单为准。"
+        )
+    lines += [
+        "",
+        "## 逐篇分数与论证问题",
+        "",
+        "| 样本 | 总分 A / B | TR A / B | CC A / B | LR A / B | GRA A / B | 论证问题 A | 论证问题 B |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for pair in cmp["samples"]:
+        a, b = pair["a"], pair["b"]
+        bands = " | ".join(f"{_band(a['bands'][k])} / {_band(b['bands'][k])}" for k in CRITERIA)
+        pa = ", ".join(p["type"] for p in a["problems"]) or "—"
+        pb = ", ".join(p["type"] for p in b["problems"]) or "—"
+        lines.append(
+            f"| {a['id']} | {_band(a['overall'])} / {_band(b['overall'])} | {bands} | {pa} | {pb} |"
+        )
+    teacher = [p for p in cmp["samples"] if p["a"]["teacher"]]
+    if teacher:
+        lines += [
+            "",
+            "## 与老师评分（总分）",
+            "",
+            "| 样本 | 老师 | A | B |",
+            "|---|---|---|---|",
+        ]
+        for pair in teacher:
+            lines.append(
+                f"| {pair['a']['id']} | {_band(pair['a']['teacher'].get('overall'))} | "
+                f"{_band(pair['a']['overall'])} | {_band(pair['b']['overall'])} |"
+            )
+    return "\n".join(lines) + "\n"
+
+
+def _quote(text) -> str:
+    return (text or "").replace("|", "／").replace("\n", " ")
+
+
+def render_manual_review(cmp: dict) -> str:
+    """A sheet for the human comparison: every finding of both runs, with empty
+    columns for the verdict. Missed problems are noted per sample."""
+    la = _label(cmp["conditions"]["a"])
+    lb = _label(cmp["conditions"]["b"])
+    lines = [
+        "# 人工复核表（填写“判断”和“备注”）",
+        "",
+        "判断建议用：正确 / 误判 / 过严 / 过松 / 不确定。改列为可选优化的条目也要看："
+        "同段引文存在，不等于它真的构成有效支撑。",
+        "每篇最后一行写两次都没有指出、但原文确实存在的问题（漏报）。",
+    ]
+    for pair in cmp["samples"]:
+        a, b = pair["a"], pair["b"]
+        lines += [
+            "",
+            f"## {a['id']}（总分 A {_band(a['overall'])} / B {_band(b['overall'])}）",
+            "",
+            "| 运行 | 位置 | 类型 | 引文 | 模型说明 | 判断 | 备注 |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for tag, view in (("A " + la, a), ("B " + lb, b)):
+            for p in view["problems"]:
+                lines.append(
+                    f"| {tag} | 论证问题 | {p['label'] or p['type']} | {_quote(p['quote'])} | "
+                    f"{_quote(p['comment'])} |  |  |"
+                )
+            for r in view["reclassified"]:
+                support = "；".join(_quote(q) for q in r["support"])
+                lines.append(
+                    f"| {tag} | 改列可选优化 | 原判 {r['from_type']} | {_quote(r['quote'])} | "
+                    f"同段支撑：{support} |  |  |"
+                )
+            for key, short in (("task", "TR/TA"), ("coherence", "CC")):
+                for issue in view["criteria"][key]["issues"]:
+                    lines.append(
+                        f"| {tag} | {short} 问题 | — | {_quote(issue['quote'])} | "
+                        f"{_quote(issue['comment'])} |  |  |"
+                    )
+            for note in view["count_corrections"]:
+                lines.append(f"| {tag} | 计数更正 | — | — | {_quote(note)} |  |  |")
+        lines.append("| 两次都漏报 | — | — | — | — |  |  |")
+    return "\n".join(lines) + "\n"
+
+
+def write(cmp: dict, out_dir) -> Path:
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "compare.json").write_text(
+        json.dumps(cmp, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
+    (out_dir / "manual_review.md").write_text(render_manual_review(cmp), encoding="utf-8")
+    path = out_dir / "compare.md"
+    path.write_text(render_markdown(cmp), encoding="utf-8")
+    return path

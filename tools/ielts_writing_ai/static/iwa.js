@@ -409,6 +409,7 @@
       var parts = [];
       if (g.model) parts.push('模型 ' + g.model);
       if (g.prompt_version) parts.push('提示词 ' + g.prompt_version);
+      if (g.result && g.result.thinking && g.result.thinking !== 'off') parts.push('思考模式 ' + g.result.thinking);
       if (g.finished_at) parts.push('生成于 ' + formatTime(g.finished_at));
       parts.push('AI 结果仅供参考');
       return el('p', { class: 'provenance', text: parts.join(' · ') });

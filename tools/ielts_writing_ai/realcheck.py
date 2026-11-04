@@ -26,7 +26,7 @@ from pathlib import Path
 from . import access, review, rewrite_quality
 from . import essay as essay_lib
 from . import samples as builtin_samples
-from .llm import LLMError, build_client, parse_strict_json
+from .llm import LLMError, build_client, parse_strict_json, reasoning_tokens
 from .storage import KINDS, Storage, utcnow
 
 ABORT_CODES = {"missing_api_key", "http_401", "http_403", "network", "timeout"}
@@ -82,6 +82,9 @@ class RecordingClient:
             "attempt": int(context.get("attempt") or 0),
             "mode": context.get("mode") or "full",  # "notes": notes-only repair of a rewrite
             "json_mode": bool(kwargs.get("json_mode")),
+            # Same prompt, different thinking mode is what an A/B comparison varies.
+            "thinking": kwargs.get("thinking") or "off",
+            "max_tokens": kwargs.get("max_tokens"),
             "provider": self.provider,
             "model": self.model,
             "ok": False,
@@ -118,6 +121,10 @@ class RecordingClient:
             http_status=200,
             text=result.text,
             json_ok=(parse_strict_json(result.text) is not None) if entry["json_mode"] else None,
+            reasoning_tokens=reasoning_tokens(result.usage),
+            reasoning_chars=len(getattr(result, "reasoning", "") or ""),
+            # Kept only in the local raw_calls.jsonl, for reviewing what the model weighed.
+            reasoning=getattr(result, "reasoning", "") or "",
         )
         return result
 
@@ -401,7 +408,24 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
             value = call.get("usage", {}).get(key)
             if isinstance(value, (int, float)):
                 usage[key] += int(value)
+    completions = [
+        c["usage"]["completion_tokens"]
+        for c in calls
+        if isinstance((c.get("usage") or {}).get("completion_tokens"), int)
+    ]
+    reasoning = [c["reasoning_tokens"] for c in calls if isinstance(c.get("reasoning_tokens"), int)]
+    budgets = sorted({c["max_tokens"] for c in calls if isinstance(c.get("max_tokens"), int)})
     return {
+        "thinking": sorted({c.get("thinking") or "off" for c in calls}),
+        # Output budget per call and the largest output actually used: the budget for
+        # a thinking evaluation must be set from these, not carried over.
+        "max_tokens": budgets,
+        "completion_tokens_max": max(completions) if completions else None,
+        # None: the provider did not report reasoning tokens (not zero).
+        "reasoning_tokens": sum(reasoning) if reasoning else None,
+        "reasoning_tokens_max": max(reasoning) if reasoning else None,
+        "truncated": sum(1 for c in calls if c.get("error") == "truncated"),
+        "timeouts": sum(1 for c in calls if c.get("error") == "timeout"),
         "calls": len(calls),
         "first_attempts": len(first),
         "first_attempt_json_ok": _rate(sum(1 for c in first if c.get("json_ok")), len(first)),
@@ -930,6 +954,7 @@ def build_report(
         "provider": run_data["settings"]["llm_provider"],
         "model": run_data["settings"]["llm_model"],
         "prompt_version": review.prompts.PROMPT_VERSION,
+        "evaluate_thinking": run_data["settings"].get("evaluate_thinking", "off"),
         "demo": run_data["settings"]["llm_provider"] == "fake",
         "samples": len(run_data["samples"]),
         "calls": len(run_data["calls"]),
@@ -1012,7 +1037,8 @@ def render_markdown(report: dict) -> str:
         "# 写作 AI 真实模型小样本验证",
         "",
         f"- 时间：{report['started_at']}",
-        f"- 模型：{report['provider']} / {report['model']} · 提示词 {report['prompt_version']}",
+        f"- 模型：{report['provider']} / {report['model']} · 提示词 {report['prompt_version']}"
+        f" · 评价思考模式 {report.get('evaluate_thinking', 'off')}",
         f"- 样本 {report['samples']} 篇 · 模型调用 {report['calls']} 次（上限 {report['max_calls']}）",
     ]
     if report["demo"]:
@@ -1039,6 +1065,19 @@ def render_markdown(report: dict) -> str:
         lines.append(
             f"| {names.get(kind, kind)} | {_pct(m['first_attempt_json_ok'])} | "
             f"{_pct(m['first_attempt_valid'])} | {_pct(m['final_ready'])} | {latency} | {reasons} |"
+        )
+    lines += ["", "## 输出预算与思考模式", ""]
+    for kind, m in report["kinds"].items():
+        reasoning = (
+            "未报告"
+            if m.get("reasoning_tokens") is None
+            else f"合计 {m['reasoning_tokens']}，单次最多 {m['reasoning_tokens_max']}"
+        )
+        lines.append(
+            f"- {names.get(kind, kind)}：思考模式 {' / '.join(m.get('thinking') or ['off'])}；"
+            f"输出上限 {' / '.join(str(b) for b in m.get('max_tokens') or []) or '—'}；"
+            f"单次输出峰值 {m.get('completion_tokens_max') or '—'}；思考 token {reasoning}；"
+            f"截断 {m.get('truncated', 0)} 次、超时 {m.get('timeouts', 0)} 次"
         )
     ev, rr = report["evidence"], report["refine_rewrite"]
     lines += [
@@ -1155,6 +1194,10 @@ def write_report(run_data: dict, report: dict, out_dir: Path) -> Path:
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     (out_dir / "report.md").write_text(render_markdown(report), encoding="utf-8")
+    # Full results for realcheck-compare (synthetic essays and model output; no key).
+    (out_dir / "run_data.json").write_text(
+        json.dumps(run_data, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
     with (out_dir / "raw_calls.jsonl").open("w", encoding="utf-8") as handle:
         for call in run_data["calls"]:
             handle.write(json.dumps(call, ensure_ascii=False) + "\n")

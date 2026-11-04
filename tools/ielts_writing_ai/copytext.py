@@ -15,12 +15,14 @@ def _band(value) -> str:
     return "—" if value is None else f"{float(value):.1f}"
 
 
-def _provenance(generation: dict) -> str:
+def _provenance(generation: dict, thinking: str | None = None) -> str:
     parts = []
     if generation.get("model"):
         parts.append(f"模型 {generation['model']}")
     if generation.get("prompt_version"):
         parts.append(f"提示词 {generation['prompt_version']}")
+    if thinking and thinking != "off":
+        parts.append(f"思考模式 {thinking}")
     return "——" + " · ".join(parts + [DISCLAIMER])
 
 
@@ -153,7 +155,7 @@ def evaluation_text(result: dict, generation: dict) -> str:
         lines.append("提升重点：")
         lines += [f"{n}. {p}" for n, p in enumerate(priorities, 1)]
         lines.append("")
-    lines.append(_provenance(generation))
+    lines.append(_provenance(generation, result.get("thinking")))
     return "\n".join(lines).strip()
 
 

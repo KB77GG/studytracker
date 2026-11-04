@@ -46,6 +46,8 @@ class LLMResult:
     model: str
     latency_ms: int
     usage: dict = field(default_factory=dict)
+    # Thinking-mode chain of thought (never parsed, never shown to students).
+    reasoning: str = ""
 
     def json(self) -> dict:
         return extract_json_object(self.text)
@@ -93,6 +95,14 @@ def _tls_context() -> ssl.SSLContext:
     return context
 
 
+def reasoning_tokens(usage: dict | None) -> int | None:
+    """Reasoning tokens if the provider reports them (OpenAI-style
+    usage.completion_tokens_details.reasoning_tokens); None means not reported."""
+    details = (usage or {}).get("completion_tokens_details")
+    value = details.get("reasoning_tokens") if isinstance(details, dict) else None
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
+
+
 class ChatClient:
     """Minimal OpenAI-compatible /chat/completions client."""
 
@@ -108,9 +118,9 @@ class ChatClient:
             _NoRedirect(), urllib.request.HTTPSHandler(context=_tls_context())
         )
 
-    def _open(self, request):
+    def _open(self, request, timeout: float | None = None):
         """One transport attempt, with no automatic redirects or network retries."""
-        return self._opener.open(request, timeout=self.timeout)
+        return self._opener.open(request, timeout=timeout or self.timeout)
 
     def complete(
         self,
@@ -121,6 +131,8 @@ class ChatClient:
         temperature: float = 0.2,
         context: dict | None = None,
         retries: int = 1,
+        thinking: str = "off",
+        timeout: float | None = None,
     ) -> LLMResult:
         if not self.api_key:
             raise LLMError("missing_api_key", "未配置模型 API Key")
@@ -133,8 +145,15 @@ class ChatClient:
         if json_mode:
             body["response_format"] = {"type": "json_object"}
         if self.provider == "deepseek":
-            # Flash defaults to thinking mode; this tool budgets for the final JSON.
-            body["thinking"] = {"type": "disabled"}
+            # Flash defaults to thinking mode. It is off unless a caller asks for it
+            # (only the evaluation, via IWA_EVALUATE_THINKING), with its own budget.
+            if thinking and thinking != "off":
+                body["thinking"] = {"type": "enabled"}
+                body["reasoning_effort"] = thinking
+            else:
+                body["thinking"] = {"type": "disabled"}
+        elif thinking and thinking != "off":
+            raise LLMError("unsupported", f"{self.provider} 不支持思考模式设置")
         payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
         last_error: LLMError | None = None
         for attempt in range(retries + 1):
@@ -150,7 +169,9 @@ class ChatClient:
                 },
             )
             try:
-                with self._open(request) as response:
+                # Only the thinking evaluation overrides the timeout.
+                opened = self._open(request) if timeout is None else self._open(request, timeout)
+                with opened as response:
                     response_details.update(
                         response_received=True, http_status=getattr(response, "status", 200)
                     )
@@ -204,7 +225,14 @@ class ChatClient:
                 raise LLMError("empty", "模型返回为空", **response_details)
             if choice.get("finish_reason") == "length":
                 raise LLMError("truncated", "模型输出被截断，请重试", **response_details)
-            return LLMResult(str(text), str(raw.get("model") or self.model), latency, usage or {})
+            reasoning = choice["message"].get("reasoning_content") or ""
+            return LLMResult(
+                str(text),
+                str(raw.get("model") or self.model),
+                latency,
+                usage or {},
+                reasoning=str(reasoning),
+            )
         raise last_error or LLMError("unknown")
 
 
@@ -245,7 +273,16 @@ class FakeClient:
         self.calls: list[str] = []
 
     def complete(
-        self, messages, *, json_mode, max_tokens, temperature=0.2, context=None, retries=1
+        self,
+        messages,
+        *,
+        json_mode,
+        max_tokens,
+        temperature=0.2,
+        context=None,
+        retries=1,
+        thinking="off",
+        timeout=None,
     ):
         context = context or {}
         kind = context.get("kind", "")

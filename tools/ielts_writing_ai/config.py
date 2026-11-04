@@ -89,6 +89,9 @@ def _as_bool(value, default: bool) -> bool:
     return str(value).strip().lower() in {"1", "true", "yes", "on"}
 
 
+THINKING_MODES = ("off", "high")
+
+
 @dataclass
 class Settings:
     data_dir: Path = DEFAULT_DATA_DIR
@@ -108,6 +111,14 @@ class Settings:
     llm_api_key: str = ""
     llm_timeout: float = 120.0
     llm_temperature: float = 0.2
+    # Thinking mode for the original-essay evaluation only (refine/rewrite unchanged).
+    # "off" keeps the tested behaviour; "high" asks DeepSeek to think before answering.
+    # Thinking needs its own output budget and timeout: the 4500-token / 120 s limits
+    # were measured without thinking and are not reused (provisional, to be calibrated
+    # with realcheck).
+    evaluate_thinking: str = "off"
+    evaluate_thinking_max_tokens: int = 16000
+    evaluate_thinking_timeout: float = 300.0
 
     vision_provider: str = "none"
     vision_base_url: str = ""
@@ -168,6 +179,12 @@ class Settings:
                 raise ConfigError("真实模型需要配置 IWA_LLM_API_KEY")
             if not self.llm_base_url or not self.llm_model:
                 raise ConfigError("需要配置 IWA_LLM_BASE_URL 与 IWA_LLM_MODEL")
+        if self.evaluate_thinking not in THINKING_MODES:
+            raise ConfigError(
+                f"IWA_EVALUATE_THINKING 只能是 {' / '.join(THINKING_MODES)}：{self.evaluate_thinking}"
+            )
+        if self.evaluate_thinking != "off" and self.llm_provider not in {"deepseek", "fake"}:
+            raise ConfigError("评价思考模式目前只支持 DeepSeek（IWA_LLM_PROVIDER=deepseek）")
         if self.vision_provider not in {"none", "fake"}:
             if not self.vision_api_key:
                 raise ConfigError(
@@ -205,6 +222,9 @@ class Settings:
             "llm_provider": self.llm_provider,
             "llm_model": self.llm_model,
             "llm_api_key_set": bool(self.llm_api_key),
+            "evaluate_thinking": self.evaluate_thinking,
+            "evaluate_thinking_max_tokens": self.evaluate_thinking_max_tokens,
+            "evaluate_thinking_timeout": self.evaluate_thinking_timeout,
             "vision_provider": self.vision_provider,
             "vision_model": self.vision_model if self.vision_enabled else "",
             "vision_api_key_set": bool(self.vision_api_key),
@@ -247,6 +267,11 @@ def load_settings(
         "llm_api_key": get("LLM_API_KEY"),
         "llm_timeout": _as_float(get("LLM_TIMEOUT"), 120.0),
         "llm_temperature": _as_float(get("LLM_TEMPERATURE"), 0.2),
+        "evaluate_thinking": (get("EVALUATE_THINKING") or "off").strip().lower(),
+        "evaluate_thinking_max_tokens": _as_int(
+            get("EVALUATE_THINKING_MAX_TOKENS"), 16000, minimum=1
+        ),
+        "evaluate_thinking_timeout": _as_float(get("EVALUATE_THINKING_TIMEOUT"), 300.0),
         "vision_provider": get("VISION_PROVIDER") or "none",
         "vision_base_url": get("VISION_BASE_URL"),
         "vision_model": get("VISION_MODEL"),

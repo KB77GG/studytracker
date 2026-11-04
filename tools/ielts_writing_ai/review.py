@@ -596,13 +596,29 @@ class Generator:
 
     VALIDATION_ATTEMPTS = 2  # one silent retry for malformed/incomplete output (same quota)
 
+    def _thinking(self, kind: str) -> str:
+        """Thinking mode applies to the evaluation only (refine/rewrite unchanged)."""
+        mode = getattr(self.settings, "evaluate_thinking", "off") or "off"
+        return mode if kind == "evaluate" else "off"
+
     def _call(self, messages, kind: str, context: dict, attempt: int, max_tokens: int):
+        options = {}
+        thinking = self._thinking(kind)
+        if thinking != "off":
+            # Separate, provisional budget and timeout: the defaults were measured
+            # without thinking (see config.Settings).
+            options = {
+                "thinking": thinking,
+                "timeout": self.settings.evaluate_thinking_timeout,
+            }
+            max_tokens = self.settings.evaluate_thinking_max_tokens
         return self.client.complete(
             messages,
             json_mode=True,
             max_tokens=max_tokens,
             temperature=self.settings.llm_temperature,
             context={**context, "attempt": attempt},
+            **options,
         )
 
     def _generate_valid(self, kind: str, submission: dict, sentences):
@@ -617,7 +633,9 @@ class Generator:
             try:
                 raw = result.json()
                 if kind == "evaluate":
-                    return checked(normalize_evaluation, raw, submission), result
+                    evaluation = checked(normalize_evaluation, raw, submission)
+                    evaluation["thinking"] = self._thinking(kind)
+                    return evaluation, result
                 return checked(normalize_refinement, raw, sentences), result
             except (InvalidOutput, LLMError) as exc:
                 if isinstance(exc, LLMError) and exc.code != "invalid_json":

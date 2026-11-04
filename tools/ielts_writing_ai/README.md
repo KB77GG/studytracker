@@ -71,7 +71,21 @@ IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评�
 
 运行 `python -m tools.ielts_writing_ai check` 可以查看生效配置（不会打印 Key）。修改配置后需要先 `stop.sh` 再 `start.sh`。
 
-DeepSeek 默认使用 `deepseek-flash` 的非思考模式。HTTPS 始终校验证书和域名；系统没有根证书时，使用独立依赖中的 certifi 证书包补充。遇到证书错误不要关闭验证。客户端拒绝 HTTP 重定向，避免凭据被转发及绕过请求计数。
+DeepSeek 默认使用 `deepseek-flash` 的非思考模式。
+
+**原稿评价的思考模式（试验开关，默认关闭）**：
+
+```bash
+IWA_EVALUATE_THINKING=off                # off（默认）/ high；只影响原稿评价，精修和改写不变
+IWA_EVALUATE_THINKING_MAX_TOKENS=16000   # 思考时的输出上限（暂定，需按实测校准）
+IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂定）
+```
+
+- 设为 `high` 时，评价请求发送 `"thinking": {"type": "enabled"}` 和 `"reasoning_effort": "high"`；关闭时和以前一样发送 `{"type": "disabled"}`。目前只支持 DeepSeek，其他服务商开启会报配置错误。
+- 思考内容（`reasoning_content`）不解析、不保存到结果里、也不给学生看；严格 JSON 校验只看正式回答。realcheck 会把它留在本机的 `raw_calls.jsonl` 里，方便复核。
+- 4500 token 的上限和 120 秒超时是在关闭思考时测出来的，开启后不沿用：思考时使用上面两项单独的设置。16000 / 300 是暂定值，需要用对照实测的输出峰值和延迟重新设定。
+- 字段写法依据的是用户查到的官方说明（`thinking=enabled`、`reasoning_effort=high`）。开发容器访问不到 api-docs.deepseek.com，没有逐字核对，所以正式对照之前先跑 1 次连通性测试（见下面的“思考模式对照”）。
+- 页面和复制文本的来源一行会标明“思考模式 high”。HTTPS 始终校验证书和域名；系统没有根证书时，使用独立依赖中的 certifi 证书包补充。遇到证书错误不要关闭验证。客户端拒绝 HTTP 重定向，避免凭据被转发及绕过请求计数。
 
 成本控制：每人每天 `IWA_DAILY_LIMIT` 次生成（一次批改消耗 3 次，重新生成消耗 1 次，删除记录不返还）；同时进行的模型调用数不超过 `IWA_MAX_WORKERS`。
 
@@ -102,7 +116,7 @@ DeepSeek 默认使用 `deepseek-flash` 的非思考模式。HTTPS 始终校验�
   - **只报告真实的论证缺陷，把“可以更好”单列**：
     - 限定立场就是一个立场。例如“部分同意”“优先公交，必要时修路”，承认例外不算立场不清，也不算前后矛盾。
     - 支撑可以有多种形式：因果解释、比较、后果、个人或假设的例子。**不要求具名城市、研究或统计数字。** 有理由但写得简短，属于可选优化，不是“没有支撑”。
-    - **先看整段再下结论**（提示词 `.6`）：判“论点没有任何理由支撑”或“例子没有回扣论点”之前，模型必须在 `support_found` 里列出同一段已有的理由、机制、例子，或例子所说明的论点。从句（because / so / where / which / if…then）和相邻句子都算；例子紧跟在论点后面就算已经回扣，不必再加一句“这说明……”。只要模型列出的支撑能在原文同一段找到、并且不只是问题引文本身，服务端就把这条改列为可选优化（显示“原判……，同段已有……”），不再算论证问题。
+    - **先看整段再下结论**（提示词 `.6`）：判“论点没有任何理由支撑”或“例子没有回扣论点”之前，模型必须在 `support_found` 里列出同一段已有的理由、机制、例子，或例子所说明的论点。从句（because / so / where / which / if…then）和相邻句子都算；例子紧跟在论点后面就算已经回扣，不必再加一句“这说明……”。只要模型列出的支撑能在原文同一段找到、并且不只是问题引文本身，服务端就把这条改列为可选优化（显示“原判……，同段已有……”），不再算论证问题。注意：这只能证明同一段确实有这句话，不能证明它构成有效支撑；是否合理仍需要模型判断和人工校准。
     - 让步如果是在界定立场的范围（立场本身就允许的例外），不需要反驳。只有对方论点削弱了立场、而文章没有回到立场时，才算“让步后没有回到立场”。
     - 让论证更强的建议（更多细节、更清楚的主题句、再加一个例子）放进 `improvements`，页面显示为“可选优化（不是错误）”，不计入问题数，也不压低分数。
   - **矛盾必须成对举证**：“立场前后矛盾”“结尾与立场矛盾”必须同时引用两处原文（`quote` 和 `conflicts_with`）。两处都要能在原文中找到，并且不是同一段文字，否则丢弃。“立场不清”（通读全文仍看不出作者的观点）和“立场前后矛盾”分为两类。
@@ -158,6 +172,30 @@ $PY -m tools.ielts_writing_ai realcheck --confirm-paid --price-in <输入单价>
 # 3. 校准：用老师评过分的作文（JSONL，每行一篇）
 $PY -m tools.ielts_writing_ai realcheck --samples teacher.jsonl --confirm-paid
 ```
+
+### 思考模式对照（同一提示词、同一批作文）
+
+判断开启思考后评价是否更准，只能做同条件对照：除了评价的思考模式，提示词、模型、作文都不变。
+
+```bash
+# 0. 连通性：1 篇、只做评价、开启思考，最多 2 次调用。确认请求被接受（没有 HTTP 400）、
+#    输出没有被截断，并看思考 token 是否单独报告
+$PY -m tools.ielts_writing_ai realcheck --limit 1 --kinds evaluate --evaluate-thinking high --max-calls 2 --confirm-paid --out <目录0>
+
+# 1. A：关闭思考；B：high。同样 7 篇、只做评价，每次最多 14 次调用
+$PY -m tools.ielts_writing_ai realcheck --kinds evaluate --evaluate-thinking off  --max-calls 14 --confirm-paid --out <目录A> --price-in <输入单价> --price-out <输出单价>
+$PY -m tools.ielts_writing_ai realcheck --kinds evaluate --evaluate-thinking high --max-calls 14 --confirm-paid --out <目录B> --price-in <输入单价> --price-out <输出单价>
+
+# 2. 对照（不调用模型）
+$PY -m tools.ielts_writing_ai realcheck-compare <目录A> <目录B> --price-in <输入单价> --price-out <输出单价>
+```
+
+- `realcheck-compare` 会先检查条件：服务商、模型、提示词版本、运行类型和每篇作文（题目和正文的指纹）必须相同，否则拒绝对照。两次思考模式相同时只给提示，按重复性对照处理。
+- `compare.md` 并排列出：首轮通过率、延迟、输入 / 输出 / 思考 token、单次输出峰值与上限、截断和超时、估算费用、论证问题数、改列可选优化数、自相矛盾数、计数更正数、删除的建议数，以及逐篇分数和论证问题；样本带老师分数时，还会给出与老师的对比。
+- **哪一边更准，要看 `manual_review.md`**：它列出两次运行的每条论证问题、改列的可选优化、TR / CC 问题和计数更正，留空“判断 / 备注”列（正确 / 误判 / 过严 / 过松 / 不确定），每篇最后一行记录两次都漏掉的问题。
+- 改列为可选优化的条目也要人工看：`support_found` 只能证明同一段确实有这句话，不能证明它构成有效支撑。开启思考也不能保证这一点。
+- JSON 通过率只是其中一项；不能用自动检查全部通过来代替人工复核和老师评分校准。
+- 思考 token 是否单独计费、是否已经包含在输出 token 里，以服务商账单为准。报告分别列出这两个数字，费用按输出 token 估算。
 
 内置样本（`samples.py`）是原创的合成作文，不含学生数据：
 

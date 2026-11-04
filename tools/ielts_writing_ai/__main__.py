@@ -130,6 +130,8 @@ def cmd_user_reset_code(settings, args) -> int:
 def cmd_realcheck(settings, args) -> int:
     from . import realcheck
 
+    if args.evaluate_thinking is not None:
+        settings.evaluate_thinking = args.evaluate_thinking
     settings.validate()
     kinds = tuple(k.strip() for k in args.kinds.split(",") if k.strip())
     unknown = [k for k in kinds if k not in ("evaluate", "refine", "rewrite")]
@@ -147,7 +149,14 @@ def cmd_realcheck(settings, args) -> int:
     print(
         f"模型：{settings.llm_provider} / {settings.llm_model}（Key 已配置："
         f"{'是' if settings.llm_api_key else '否'}）；样本 {len(items)} 篇；"
-        f"最多 {min(worst, args.max_calls)} 次调用（上限 {args.max_calls}）"
+        f"最多 {min(worst, args.max_calls)} 次调用（上限 {args.max_calls}）；评价思考模式："
+        f"{settings.evaluate_thinking}"
+        + (
+            f"（输出上限 {settings.evaluate_thinking_max_tokens}，超时 "
+            f"{settings.evaluate_thinking_timeout:g} 秒）"
+            if settings.evaluate_thinking != "off"
+            else ""
+        )
     )
     if not settings.is_demo and not args.confirm_paid:
         print(
@@ -175,6 +184,24 @@ def cmd_realcheck(settings, args) -> int:
     if report["aborted"]:
         print(f"已中止：{report['aborted']['message']}", file=sys.stderr)
         return 3
+    return 0
+
+
+def cmd_realcheck_compare(_settings, args) -> int:
+    from . import realcheck_compare
+
+    try:
+        cmp = realcheck_compare.compare(
+            args.a, args.b, price_in=args.price_in, price_out=args.price_out
+        )
+    except realcheck_compare.CompareError as exc:
+        print(f"不能对照：{exc}", file=sys.stderr)
+        return 2
+    out_dir = Path(args.out) if args.out else Path(args.b) / "compare"
+    path = realcheck_compare.write(cmp, out_dir)
+    for warning in cmp["warnings"]:
+        print(f"注意：{warning}", file=sys.stderr)
+    print(f"对照报告：{path}（人工复核表：{path.parent / 'manual_review.md'}）")
     return 0
 
 
@@ -213,6 +240,21 @@ def build_parser() -> argparse.ArgumentParser:
     rc.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
     rc.add_argument("--out", default=None, help="报告目录（默认数据目录下 realcheck/时间戳）")
     rc.add_argument("--confirm-paid", action="store_true", help="确认调用付费模型")
+    cmp = sub.add_parser(
+        "realcheck-compare", help="对照两次 realcheck（同一提示词与作文，只改评价思考模式）"
+    )
+    cmp.add_argument("a", help="第一次运行的报告目录（例如思考关闭）")
+    cmp.add_argument("b", help="第二次运行的报告目录（例如思考 high）")
+    cmp.add_argument("--out", default=None, help="输出目录（默认 B 目录下的 compare/）")
+    cmp.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
+    cmp.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
+    cmp.set_defaults(func=cmd_realcheck_compare)
+    rc.add_argument(
+        "--evaluate-thinking",
+        choices=["off", "high"],
+        default=None,
+        help="本次验证中原稿评价的思考模式（默认沿用 IWA_EVALUATE_THINKING；精修/改写不受影响）",
+    )
     rc.set_defaults(func=cmd_realcheck)
     return parser
 
