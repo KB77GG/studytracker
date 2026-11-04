@@ -1,5 +1,48 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04（论证结构）雅思写作 AI 试用工具：Task 2 论证结构检查（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户提出要重视论证逻辑，包括论点与论据结合、分论点紧扣主旨、让步段有效，以及二语者思维发散、逻辑框架不明的问题，并同意我给出的方案（不单独计分，用来解释 TR / CC）。基线是 `9ac3e5c`（业务 `7a83b20`，上一轮的 193 项测试）。本轮没有任何模型调用。
+- 实现（业务提交 `b2f9779`）：
+  1. **新增 `argument.py`**：校验模型返回的 `argument`。
+     - 立场句 `{quote, consistent, comment}`。
+     - 各段 `{role: introduction/body/concession/conclusion, main_point, verdict: supports/weak/off_position, comment}`，最多 8 条。
+     - 论证问题 `{type, quote, comment, suggestion}`，最多 6 条。`type` 来自固定的 10 类 `PROBLEM_TYPES`：unclear_position、off_position、unsupported、example_not_linked、circular、overgeneralized、concession_unanswered、concession_undermines、conclusion_inconsistent、irrelevant。
+     - 每条引文都用 `contains_quote` 核对；找不到的、类型 / 角色 / 判定不在列表里的，丢弃并计入 `dropped`，在评价里加一条提示。同类型、同引文的问题只保留一条。结果里带中文标签（`label` / `role_label` / `verdict_label`）。
+     - Task 2 缺少 `argument`，或者没有一条可核实的段落中心句时，抛 `InvalidOutput`，走原有的一次静默重试，不额外扣额度。Task 1 不做此项，结果为 `argument: null`。
+  2. **不影响分数**：分数计算没有变，测试证明有没有论证问题，四项分数和总分都一样。
+  3. **提示词 `iwa-2026-11-04.4`**：
+     - Task 2 评价加入 `ARGUMENT_CHECKLIST`，即 5 点清单：立场一致；分论点服务于立场；论点 → 机制 → 例子 → 结果并回扣；让步后反驳、不削弱立场；结尾一致。清单要求把发现反映到 TR / CC 的理由和分数里。
+     - 评价 schema 由 `PROBLEM_TYPES` 生成，并写明“不要编造问题，论证好的作文可以没有问题”。
+     - Task 2 改写要求修正论证链，并在 `why` 里写明修的是哪类问题。
+     - `MAX_TOKENS["evaluate"]` 从 3000 提到 4500。上一批真实评价每次最多 1559 个输出 token；加上 argument 后估计会多约 1000–1200，3000 可能截断。
+  4. **页面**：在“下一步提升重点”下方加“论证结构检查”一节，包括立场（前后一致 / 不一致）、各段中心句（角色和判定标签，色条区分）、论证问题（类型标签、引文、说明、建议）。点击引文会在左侧原文中标出。页面注明“AI 标注、引文已核实、不单独计分”；没有问题时写“不代表论证没有可改进之处”。复制评价时同步带上这一节。
+  5. **realcheck**：
+     - 报告新增“论证结构”一节：Task 2 评价篇数、有 argument 的篇数、立场找到数、段落判定分布、问题类型分布、丢弃数和丢弃率。逐篇表新增“论证问题”列。
+     - 内置样本 `expect` 新增 4 项合理性检查：
+       - t2-strong：问题 ≤ 1 条，且没有 off_position / unclear_position；
+       - t2-weak：至少 1 条问题；
+       - t2-off-topic：问题里有 off_position / irrelevant，或有段落判定为 off_position。
+     - 缺少 argument 时，这几项判为未通过，不会静默通过。README 的建议指标新增“论证条目丢弃 ≤ 10%”。
+  6. 演示模型（fake）会返回带【演示】标记的论证结构：取每段首句，最多 1 条示例问题。
+- 验证：
+  - 新增 `tests/test_argument.py`（24 项），覆盖：核实与标签；无法核实或未知取值的丢弃计数；非布尔的 consistent；去重和上限；缺失或无法核实时拒绝；评价集成；分数不受影响；Task 1 忽略；提示词包含清单和全部类型、Task 1 不包含；改写提示；输出预算；复制文本；端到端演示流程；缺 argument 时带原因重试一次；realcheck 各项检查和统计。
+  - `test_review.evaluation()` 补上合法的 argument。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **217 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；`node --check`、ruff、black 都通过。
+  - Playwright（fake）：浅色和深色下这一节显示正确，点击引文能定位，复制文本带这一节；390px 宽度没有横向滚动。
+  - fake 的 realcheck 只跑评价（7 次）时，报告能生成“论证结构”一节。离题样本的论证检查按预期未通过，因为 fake 不做真实分析。
+- **未验证**：
+  - deepseek-flash 能否按 schema 稳定返回 argument：首轮缺失率、引文丢弃率、立场句是否逐字。
+  - 判断本身是否准确：强文是否被挑刺、弱文和离题文能否被识别。
+  - 评价 token 增加多少，4500 上限是否够用。
+  - 改写能否真的修好论证链。
+  - 服务端只核实引文存在和取值合法，不核实判断对不对。
+- **建议的下一批真实验证**（需要用户授权，我不发起付费调用）：
+  1. 先只跑评价：`realcheck --kinds evaluate --max-calls 14 --confirm-paid`，即 7 篇，最多 7 次重试。重点看：评价首轮通过率（缺少 argument 会被拒）、“论证结构”一节的丢弃率、4 项论证合理性检查、`completion_tokens` 的峰值。
+  2. 再决定是否跑 7 × 3（上限 42），看改写的 `why` 里是否写出所修的论证问题。
+- **发布状态**：业务改动 `b2f9779` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。上一轮 `docs/design` 下的评审文件没有被改动。
+- **下一步**：用户复核（交给 ChatGPT 复刻）→ 授权后执行上面第 1 步的真实验证 → 根据丢弃率和合理性检查，调整 schema 或清单措辞。
+
 ## 2026-11-04（第二批真实验证后）雅思写作 AI 试用工具：结构化改动说明、离题判定、按问题类型处理（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：`96025a2f`。用户复核了 7dd3153，此前 8 项通过；第二批真实验证 24/42 次请求，改写重试 3/7，字数 7/7 达标，最终质量 5/7（71.4%）。人工核对发现：离题稿仍写在线教育却通过；Task 1 首稿修好了矛盾却因误判被拒，`<=` 平局规则又选了带回矛盾的重试稿；`cut air pollution` 和去掉 `the` 被删除规则误判；`{old, new}` 对象格式被丢弃；正文完全未改却声称修改。本轮没有任何模型调用，剩余额度不动。
