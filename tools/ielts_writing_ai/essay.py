@@ -150,8 +150,22 @@ def same_text(a: str | None, b: str | None) -> bool:
 
 
 def contains_quote(essay: str, quote: str) -> bool:
+    """Locate a quote leniently (case/whitespace/quote style) - used for evidence."""
     needle = squash(quote).strip(" .,;:!?\"'")
     return bool(needle) and needle in squash(essay)
+
+
+def _exact_form(text: str | None) -> str:
+    value = (text or "").replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+    value = value.replace("—", "-").replace("–", "-")
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def contains_exact(essay: str, fragment: str) -> bool:
+    """Case-sensitive containment (whitespace/quote style only normalised) - used for
+    claims about what a rewrite now says, where "i" vs "I" matters."""
+    needle = _exact_form(fragment).strip(" .,;:!?\"'")
+    return bool(needle) and needle in _exact_form(essay)
 
 
 def snap_band(value) -> float | None:

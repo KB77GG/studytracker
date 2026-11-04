@@ -136,6 +136,10 @@ def rewrite_texts(result: dict, generation: dict) -> dict:
         *quality,
     ] + _warning_lines(result.get("warnings"))
     notes += ["", result.get("essay") or "", ""]
+    if result.get("answers"):
+        notes.append("题目回应对照（AI 标注；服务端只核实引文在改写稿中，是否切题请人工判断）：")
+        notes += [f"- {a['part']}：“{a['quote']}”" for a in result["answers"]]
+        notes.append("")
     if result.get("key_changes"):
         notes.append("关键改动：")
         notes += [f"{n}. {c}" for n, c in enumerate(result["key_changes"], 1)]

@@ -252,7 +252,7 @@ class RewriteTest(unittest.TestCase):
         )
         self.assertEqual(result["essay"].count("\n\n"), 1)
         self.assertEqual(result["word_count"], 240)
-        self.assertEqual(len(result["warnings"]), 1)
+        self.assertIn("改写稿只有 240 词，低于 250 词要求", result["warnings"])
 
     def test_too_short_is_rejected(self):
         with self.assertRaises(review.InvalidOutput):

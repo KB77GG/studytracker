@@ -273,3 +273,6 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
   .sentence { grid-template-columns: minmax(0, 1fr); }
   .sentence__no { padding-top: 0; }
 }
+.answers { margin: 0; padding-left: 18px; }
+.answers li { margin: 4px 0; }
+.answers__quote { font-family: var(--font-essay); font-style: italic; }

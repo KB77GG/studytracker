@@ -6,7 +6,7 @@ import json
 
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.1"
+PROMPT_VERSION = "iwa-2026-11-04.2"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -186,6 +186,10 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
             "wording exactly as it appears; never list a change whose old and new wording are "
             "identical; never claim to delete or merge text that is still there; never state "
             "word counts.",
+            "answers maps the question to your essay: list each requirement of the question "
+            "(e.g. the position asked for, each side or part to discuss; for Task 1 the "
+            "overview and the key comparisons), at least two, each with one sentence quoted "
+            "EXACTLY from your essay that addresses it.",
             "band_rationale explains, criterion by criterion, what you changed TOWARDS the "
             f"Band {target:g} target. It must not claim that the essay reaches, meets or achieves "
             "any band - the rewrite has not been scored.",
@@ -204,8 +208,10 @@ def build_rewrite(submission: dict, sentences: list[essay_lib.Sentence]) -> tupl
                 else "Task 2: answer every part of the question with a clear position."
             ),
             'Output schema: {"essay": str, "original_addresses_question": bool, '
-            '"key_changes": [str (Chinese), ...3-6], '
-            '"band_rationale": str (Chinese, what was changed towards the target band)}.',
+            '"answers": [{"part": str (Chinese), "quote": str (exact sentence from essay)}, '
+            '...2-6], "key_changes": [str (Chinese), ...3-6], '
+            '"band_rationale": str (Chinese, what was changed towards the target band; never '
+            "claim a band or score was reached)}.",
         ]
     )
     payload = {

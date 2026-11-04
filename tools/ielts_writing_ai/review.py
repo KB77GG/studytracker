@@ -196,12 +196,21 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     consistency = []
     if task_type == "task1":
         # Internal consistency of the essay's own figures; judged without the chart.
-        consistency = _evidence_items(
+        proposed = _evidence_items(
             raw.get("consistency_issues"), essay, limit=4, with_suggestion=False
         )
-        if any(entry["comment"] for entry in consistency):
+        # A contradiction is only reported when its quote is really in the essay;
+        # model guesses that cannot be located are dropped, never turned into findings.
+        consistency = [c for c in proposed if c["quote_found"] and c["comment"]]
+        consistency_dropped = len(proposed) - len(consistency)
+        if consistency:
             warnings.append(
-                "作文里有前后矛盾的数据或比较（只检查作文内部是否自洽，不代表数据与题图一致）。"
+                "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否"
+                "自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+            )
+        if consistency_dropped:
+            warnings.append(
+                f"AI 另提出 {consistency_dropped} 条矛盾，但引文无法在原文中找到，已忽略。"
             )
 
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
@@ -284,11 +293,14 @@ def normalize_rewrite(raw: dict, submission: dict) -> dict:
         "word_count": words,
         "key_changes": _text_list(raw.get("key_changes"), limit_items=6),
         "band_rationale": _text(raw.get("band_rationale"), 1500),
+        "answers": rewrite_quality.normalize_answers(raw.get("answers")),
     }
-    # The model's own claims (word counts, "reaches Band 7", change notes) are checked
-    # against the essay; false claims are removed and every problem is reported.
-    result, issues = rewrite_quality.check(result, submission, visual_available=visual)
-    warnings = [issue.message for issue in issues]
+    # The model's own claims (word counts, "reaches Band 7", change notes, which
+    # sentence answers which requirement) are checked against the essay; false claims
+    # are removed, every problem is reported, uncertainty notes never decide pass/fail.
+    checked = rewrite_quality.check(result, submission, visual_available=visual)
+    result, issues = checked.result, checked.issues
+    warnings = [issue.message for issue in issues] + checked.notes
     if raw.get("original_addresses_question") is False:
         warnings.append("原文没有回应题目：改写稿按题目重新作答，没有保留原文的论点。")
     if not visual:
@@ -374,13 +386,26 @@ class Generator:
         for attempt in range(self.VALIDATION_ATTEMPTS):
             if problem:
                 messages = prompts.with_retry_note(messages, problem)
-            result = self.client.complete(
-                messages,
-                json_mode=True,
-                max_tokens=prompts.MAX_TOKENS[kind],
-                temperature=self.settings.llm_temperature,
-                context={**context, "attempt": attempt},
-            )
+            try:
+                result = self.client.complete(
+                    messages,
+                    json_mode=True,
+                    max_tokens=prompts.MAX_TOKENS[kind],
+                    temperature=self.settings.llm_temperature,
+                    context={**context, "attempt": attempt},
+                )
+            except LLMError as exc:
+                if best is None:
+                    raise
+                # The quality retry itself failed (timeout, truncation, 5xx, call
+                # budget): keep the usable draft we already have, and say why.
+                kept, kept_result = best
+                kept["retry_error"] = exc.code
+                kept["warnings"] = list(kept.get("warnings") or []) + [
+                    f"质量重试没有完成（{exc.code}），保留了第一次生成的版本。"
+                ]
+                log.info("%s quality retry failed (%s); keeping first draft", kind, exc.code)
+                return kept, kept_result
             try:
                 raw = result.json()
                 if kind == "evaluate":

@@ -431,7 +431,7 @@ def _evidence_metrics(run_data: dict) -> dict:
 
 def _refine_rewrite_metrics(run_data: dict) -> dict:
     sentences = missing = changed = 0
-    rewrites = meeting = quality_ok = 0
+    requested = generated = meeting = quality_ok = retry_failed = 0
     quality_codes = Counter()
     for sample in run_data["samples"]:
         refine = (sample["generations"].get("refine") or {}).get("result")
@@ -439,20 +439,34 @@ def _refine_rewrite_metrics(run_data: dict) -> dict:
             sentences += len(refine.get("sentences") or [])
             missing += refine.get("missing_count") or 0
             changed += refine.get("changed_count") or 0
-        rewrite = (sample["generations"].get("rewrite") or {}).get("result")
-        if rewrite:
-            rewrites += 1
-            minimum = essay_lib.MIN_WORDS[sample["task_type"]]
-            meeting += 1 if (rewrite.get("word_count") or 0) >= minimum else 0
-            quality_ok += 1 if rewrite.get("quality_passed", True) else 0
-            quality_codes.update(i["code"] for i in rewrite.get("quality_issues") or [])
+        generation = sample["generations"].get("rewrite")
+        if generation is None:
+            continue  # rewrite not requested for this run
+        requested += 1
+        rewrite = generation.get("result") if generation.get("status") == "ready" else None
+        if not rewrite:
+            continue  # failed generation: counts as requested but not passed
+        generated += 1
+        minimum = essay_lib.MIN_WORDS[sample["task_type"]]
+        meeting += 1 if (rewrite.get("word_count") or 0) >= minimum else 0
+        quality_ok += 1 if rewrite.get("quality_passed", True) else 0
+        retry_failed += 1 if rewrite.get("retry_error") else 0
+        quality_codes.update(i["code"] for i in rewrite.get("quality_issues") or [])
     return {
         "refine_sentences": sentences,
         "refine_missing_rate": _rate(missing, sentences),
         "refine_changed_rate": _rate(changed, sentences),
-        "rewrites": rewrites,
-        "rewrite_meets_min_words": _rate(meeting, rewrites),
-        "rewrite_quality_passed": _rate(quality_ok, rewrites),
+        # Counts, so no sample can disappear from a rate's denominator.
+        "rewrite_requested": requested,
+        "rewrite_generated": generated,
+        "rewrite_quality_passed_count": quality_ok,
+        "rewrite_retry_failed": retry_failed,
+        # Unconditional (acceptance) rates: failed generations count as not passed.
+        "rewrite_quality_passed_of_requested": _rate(quality_ok, requested),
+        "rewrite_meets_min_words_of_requested": _rate(meeting, requested),
+        # Conditional rates, only over rewrites that were generated.
+        "rewrite_quality_passed_of_generated": _rate(quality_ok, generated),
+        "rewrite_meets_min_words_of_generated": _rate(meeting, generated),
         "rewrite_quality_issues": dict(quality_codes.most_common()),
     }
 
@@ -771,8 +785,16 @@ def render_markdown(report: dict) -> str:
         f"{_pct(ev['quotes_verified'])}",
         f"- 精修：共 {rr['refine_sentences']} 句，缺句率 {_pct(rr['refine_missing_rate'])}，"
         f"改动率 {_pct(rr['refine_changed_rate'])}",
-        f"- 改写：{rr['rewrites']} 篇，达到字数下限 {_pct(rr['rewrite_meets_min_words'])}，"
-        f"最终通过质量检查 {_pct(rr.get('rewrite_quality_passed'))}"
+        f"- 改写：请求 {rr['rewrite_requested']} 篇，生成 {rr['rewrite_generated']} 篇，"
+        f"通过质量检查 {rr['rewrite_quality_passed_count']} 篇；"
+        f"**占全部请求 {_pct(rr['rewrite_quality_passed_of_requested'])}**（验收口径，"
+        f"生成失败计为未通过），占已生成 {_pct(rr['rewrite_quality_passed_of_generated'])}；"
+        f"达到字数下限占全部请求 {_pct(rr['rewrite_meets_min_words_of_requested'])}"
+        + (
+            f"；质量重试未完成 {rr['rewrite_retry_failed']} 篇"
+            if rr["rewrite_retry_failed"]
+            else ""
+        )
         + (
             "（未通过项："
             + "；".join(f"{k} ×{v}" for k, v in rr["rewrite_quality_issues"].items())

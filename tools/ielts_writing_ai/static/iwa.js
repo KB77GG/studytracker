@@ -595,6 +595,15 @@
       var essayBox = essayNode(r.essay);
       essayBox.classList.add('rewrite-essay');
       panel.appendChild(essayBox);
+      if (r.answers && r.answers.length) {
+        panel.appendChild(el('div', { class: 'block' }, [
+          el('h3', { text: '题目回应对照' }),
+          el('p', { class: 'muted small', text: 'AI 标注每个题目要求对应的句子；服务端只核实这些句子确实在改写稿中，是否真正切题请人工判断。' }),
+          el('ul', { class: 'answers' }, r.answers.map(function (a) {
+            return el('li', {}, [el('strong', { text: a.part + '：' }), el('span', { class: 'answers__quote', text: '“' + a.quote + '”' })]);
+          }))
+        ]));
+      }
       if (r.key_changes.length) {
         panel.appendChild(el('div', { class: 'block' }, [
           el('h3', { text: '关键改动' }),

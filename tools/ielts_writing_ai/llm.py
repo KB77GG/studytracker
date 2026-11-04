@@ -327,8 +327,14 @@ class FakeClient:
             for s in (context.get("sentences") or [])
         ]
         body = essay_lib.join_sentences(sentences)
+        sentences_out = essay_lib.split_sentences(body)
+        answers = [
+            {"part": f"【演示】题目要求 {n + 1}", "quote": s.text}
+            for n, s in enumerate(sentences_out[:2])
+        ]
         return {
             "essay": body,
+            "answers": answers,
             "key_changes": ["【演示】演示模式只做机械修正，不是真实的高分改写。"],
             "band_rationale": "【演示】连接真实模型后，这里会说明为了向目标分数段靠近做了哪些修改。",
         }
