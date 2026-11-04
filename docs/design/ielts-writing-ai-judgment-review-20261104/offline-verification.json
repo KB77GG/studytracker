@@ -1,0 +1,60 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "93d47ec318cb9f783a396bdf20b07624865ae355",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 19.22
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.15
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests_passed": 266,
+  "node_tests_passed": 8,
+  "review_passed": false,
+  "findings": 2,
+  "paid_requests": 0,
+  "conditional_paid_limit": 14,
+  "additional_checks": [
+    "ruff passed",
+    "black39 files clean",
+    "node --check iwa.js passed",
+    "git diff --check passed"
+  ],
+  "independent_metrics_checks": {
+    "passed": 18,
+    "total": 18
+  },
+  "offline_suite_command": "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/run_offline_tests.py",
+  "probe_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/argument_review_probe.py --repo /private/tmp/studytracker-iwa-realcheck-review-20261103 --output /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/argument_review_probe.json",
+    "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/review_metrics_probe.py --repo /private/tmp/studytracker-iwa-realcheck-review-20261103 --output /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/review_metrics_probe.json"
+  ],
+  "probe_exit_codes": [
+    0,
+    0
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "source_head": "93d47ec318cb9f783a396bdf20b07624865ae355",
+  "network_calls": 0,
+  "passing_contracts": [
+    {
+      "case": "valid_pair",
+      "problem_kept": true,
+      "dropped": 0,
+      "self_conflicts": 1
+    },
+    {
+      "case": "same_passage",
+      "problem_kept": false,
+      "dropped": 1,
+      "self_conflicts": 0
+    },
+    {
+      "case": "contained_passage",
+      "problem_kept": false,
+      "dropped": 1,
+      "self_conflicts": 0
+    },
+    {
+      "case": "invented_other",
+      "problem_kept": false,
+      "dropped": 1,
+      "self_conflicts": 0
+    },
+    {
+      "case": "missing_other",
+      "problem_kept": false,
+      "dropped": 1,
+      "self_conflicts": 0
+    },
+    {
+      "case": "off_position_vs_supports",
+      "needs_review": true
+    },
+    {
+      "case": "optional_improvement",
+      "improvements": 1,
+      "problems": 0
+    },
+    {
+      "case": "real_one_paragraph_output",
+      "paragraphs": 1,
+      "duplicates": 4
+    }
+  ],
+  "nonblocking_position_comment_observation": {
+    "consistent": null,
+    "original_comment_retained": "立场前后不一致。",
+    "notes": [
+      "AI 判断立场前后不一致，但没有给出相互矛盾的两处原文，这一判断未采用；限定条件（如“优先 A，必要时 B”）本身不算矛盾。"
+    ],
+    "assessment": "Not a separate blocker: the copied/displayed notes explicitly say the judgment is not adopted."
+  },
+  "numeric_token_probe": [
+    {
+      "essay": "The city supports buses.",
+      "suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "expected_remove": true,
+      "detected_unsourced": [
+        "80%"
+      ],
+      "actually_removed": true,
+      "displayed_suggestion": "",
+      "correct": true
+    },
+    {
+      "essay": "The city began its bus service in 1980.",
+      "suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "expected_remove": true,
+      "detected_unsourced": [],
+      "actually_removed": false,
+      "displayed_suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "correct": false
+    },
+    {
+      "essay": "The city operates 180 buses.",
+      "suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "expected_remove": true,
+      "detected_unsourced": [],
+      "actually_removed": false,
+      "displayed_suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "correct": false
+    },
+    {
+      "essay": "The city reports an 80% reduction in emissions.",
+      "suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "expected_remove": false,
+      "detected_unsourced": [],
+      "actually_removed": false,
+      "displayed_suggestion": "补充一个数字例子：公交使排放降低 80%。",
+      "correct": true
+    }
+  ],
+  "real_output_advice_coverage": {
+    "sample": "t2-mid",
+    "source": "actual previous DeepSeek output replayed unchanged",
+    "argument_suggestions_removed": 1,
+    "criterion_80percent_advice_still_shown": [
+      {
+        "criterion": "TR",
+        "quote": "Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.",
+        "suggestion": "补充一个简短例证或数据化对比，如：\"A full bus can cut emissions per person by over 80% compared with the same number of cars.\""
+      }
+    ],
+    "copied_evaluation_still_contains_80percent": true,
+    "original_essay_contains_80percent": false
+  },
+  "findings": [
+    "P2: numeric source lookup uses digit-substring matching, so 1980/180 wrongly authorizes 80% advice.",
+    "P2: only argument suggestions are filtered; actual mid fixture still exposes the same unsourced 80% in criterion advice and copied evaluation."
+  ],
+  "scope_limit": "No claim that mere matching numeric tokens proves a statistical proposition. The defect is recognizing a different number as a source and leaving an already reproduced advice path unfiltered."
+}

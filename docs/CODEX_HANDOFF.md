@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-04 判断准则93d47ec复核：两处数字建议过滤未完成，新批真实请求0/14
+
+- 用户已为本轮新批次明确条件授权：离线复核通过后7篇内置合成作文、仅evaluate、最多14次实际请求，不运行精修/改写/识图。**本轮未通过，实际0/14**，未读取私有Key、未启动付费账本。该未执行批次授权保留，修复并复核通过后可继续同范围；上一批8/14已结束，不与本批混算。
+- 实施/审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`：开工d6b98312 clean，fetch并ff-only至 **93d47ec318cb9f783a396bdf20b07624865ae355**（业务19161f1，prompt iwa-2026-11-04.5）。本轮无业务改动，仅新增7份报告/探针/离线证据与本两交接文档，独立文档提交推功能分支，精确文档HEAD见git log。原工具.env仍ignored、不暂存。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，origin/main f0e04041/behind103，原7 modified/22 untracked入口保留，未动无关网页和数据。仅新增本机 `docs/design/iwa-judgment-review-20261104/` 与更新两份交接镜像；本机runner/source-state未提交旧main。其他worktree未操作。
+- 完整离线命令：`PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python /Users/zhouxin/Desktop/studytracker/docs/design/iwa-judgment-review-20261104/run_offline_tests.py` → **266/266 Python**（19.030s），**8/8 Node**。Mac/Python3.13.3，fake/临时库/loopback-only，外部IWA_DATA_DIR未写入。实施树使用主树.venv跑ruff、black --check tools/ielts_writing_ai（39文件）、node --check tools/ielts_writing_ai/static/iwa.js、git diff --check通过。
+- 两套便携探针由主agent独立复跑，精确命令与返回码在offline-verification.json。review_metrics_probe **18/18通过**：中文/根schema拒绝及重试、Task1对照引文、统计、全失败章节、未运行检查skip、14替身调用/4500/retries0。argument探针8项主要行为通过：成对引文正反、自洽警告、可选优化不算问题、单段5条归并1条。强文旧2unsupported及Task1旧漏矛盾仍按失败记录，不把历史模型输出强行改成通过。
+- **未关闭的两项P2**：① 原样回放上一批真实t2-mid，argument移除80%建议一次，但TR issues[].suggestion仍含同一“减排超过80%”建议，copytext完整复制也保留；review._evidence_items未使用同样过滤，前端直接显示。② unsourced_figures按数字子串查整篇，原文1980或180会错误放行80%；无数字/真80%正反对照正确。需要统一建议展示路径规则并匹配完整数值/比例，不能仅改argument或把别的数字尾部当来源。这里不要求程序证明整项统计事实，仅修明确来源混淆。
+- 共享交付 `docs/design/ielts-writing-ai-judgment-review-20261104/`：README、argument_review_probe.py/json、review_metrics_probe.py/json、offline-verification.json、offline-tests.log，共7文件；纯合成/历史模型数据，凭据模式扫描通过。第一个探针exit0表示记录完成，不表示产品通过；第二个含正确行为断言。历史报告原文件未修改，未读取配置、没有模型网络请求。
+- **发布状态**：仅审阅材料和交接commit/push功能分支；无业务源码改动、main合并、生产部署、前后端/数据库/服务器操作；没有新起试用服务，小程序未上传/提审/发布。未重跑浏览器全流程，无新增CI成功结论。
+- **下一步**：Claude先拉报告，用真实中等作文回放同时断言TR/argument/复制文本不再提供80%；补1980/180不可作为80%来源及真实80%/结构性小数字正反例，修复后复核。通过后执行本轮已有7篇evaluate/最多14次授权。新提示语义效果、Task1比较检测和中文重试率仍未验证；Python3.10、真实识图、教师评分校准仍未验证。
+
 ## 2026-11-04（第三批真实验证后）雅思写作 AI 试用工具：论证判断准则、顶层 schema、Task 1 比较核对与中文校验（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户的第三批真实验证（`d6b98312`，`docs/design/ielts-writing-ai-argument-recheck-20261104/`）。8/14 次评价调用，代码和引文全部通过，论证检查 4/5，输出峰值 2867/4500 token。人工审阅发现以下问题：

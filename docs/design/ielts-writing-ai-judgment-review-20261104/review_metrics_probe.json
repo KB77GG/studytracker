@@ -1,0 +1,416 @@
+{
+  "source_head": "93d47ec318cb9f783a396bdf20b07624865ae355",
+  "network_calls": 0,
+  "passed": 18,
+  "total": 18,
+  "checks": [
+    {
+      "name": "old malformed JSON remains rejected",
+      "passed": true,
+      "actual": null
+    },
+    {
+      "name": "diagnostic nested JSON explicitly rejected",
+      "passed": true,
+      "actual": "argument 放错了位置：必须在顶层、与 criteria 同级，只出现一次"
+    },
+    {
+      "name": "old English Task1 rejected",
+      "passed": true,
+      "actual": "解释必须使用简体中文（评分理由、总评或多数说明是英文）"
+    },
+    {
+      "name": "translating old Task1 does not manufacture contradiction detection",
+      "passed": true,
+      "actual": {
+        "sample": "t1-no-image",
+        "check": "指出文内数据矛盾 ≥ 1 条（已知样本矛盾）",
+        "ok": false,
+        "detail": {
+          "issues": [],
+          "claims_checked": 0
+        }
+      }
+    },
+    {
+      "name": "Task1 comparison retains verified claim and figures only",
+      "passed": true,
+      "actual": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "about 75%",
+            "nearly 80%"
+          ],
+          "comment": "2020 年 C 约 80%，高于 A 的约 75%。"
+        }
+      ]
+    },
+    {
+      "name": "Task1 drops missing figures",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "Task1 drops invented figures",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "Task1 drops same passage as claim",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "Task1 drops invented claim",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "old strong two unsupported findings still fail unchanged threshold",
+      "passed": true,
+      "actual": {
+        "sample": "t2-strong",
+        "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+        "ok": false,
+        "detail": [
+          "unsupported",
+          "unsupported"
+        ]
+      }
+    },
+    {
+      "name": "unpaired inconsistent judgment is withheld",
+      "passed": true,
+      "actual": {
+        "consistent": null,
+        "self_conflicts": 1
+      }
+    },
+    {
+      "name": "paired judgment feeds new inconsistent_position signal",
+      "passed": true,
+      "actual": [
+        {
+          "sample": "strong",
+          "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+          "ok": true,
+          "detail": [
+            "inconsistent_position"
+          ]
+        },
+        {
+          "sample": "strong",
+          "check": "不应出现 off_position / unclear_position / inconsistent_position / conclusion_inconsistent（问题类型、段落判定或立场一致性）",
+          "ok": false,
+          "detail": {
+            "problems": [
+              "inconsistent_position"
+            ],
+            "off_position_paragraphs": [],
+            "position_consistent": false,
+            "hits": [
+              "inconsistent_position"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "new improvements participate in accounting but not problem count",
+      "passed": true,
+      "actual": {
+        "task2_evaluations": 1,
+        "with_argument": 1,
+        "with_position": 1,
+        "paragraphs": 4,
+        "problems": 0,
+        "returned": 8,
+        "kept": 8,
+        "improvements": 3,
+        "self_conflicts": 0,
+        "suggestions_removed": 0,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "dropped_rate": 0.0,
+        "evaluate_attempts": 0,
+        "attempts_rejected_for_argument": 0,
+        "problem_types": {},
+        "paragraph_verdicts": {
+          "supports": 3,
+          "weak": 1
+        }
+      }
+    },
+    {
+      "name": "english_t1 retries once through production pipeline",
+      "passed": true,
+      "actual": {
+        "calls": 2,
+        "rejections": {
+          "解释必须使用简体中文（评分理由、总评或多数说明是英文）": 1
+        }
+      }
+    },
+    {
+      "name": "nested retries once through production pipeline",
+      "passed": true,
+      "actual": {
+        "calls": 2,
+        "rejections": {
+          "overall_comment 放错了位置：必须在顶层、与 criteria 同级，只出现一次": 1
+        }
+      }
+    },
+    {
+      "name": "zero adopted argument still shows rejection section",
+      "passed": true,
+      "actual": {
+        "task2_evaluations": 0,
+        "with_argument": 0,
+        "with_position": 0,
+        "paragraphs": 0,
+        "problems": 0,
+        "returned": 0,
+        "kept": 0,
+        "improvements": 0,
+        "self_conflicts": 0,
+        "suggestions_removed": 0,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "dropped_rate": null,
+        "evaluate_attempts": 12,
+        "attempts_rejected_for_argument": 12,
+        "problem_types": {},
+        "paragraph_verdicts": {}
+      }
+    },
+    {
+      "name": "unrun rewrite is skipped not passed",
+      "passed": true,
+      "actual": {
+        "checks": [
+          {
+            "sample": "t2-weak",
+            "check": "总分 ≤ 5.5",
+            "ok": false,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-weak",
+            "check": "论证问题 ≥ 1 条（弱文应被指出问题）",
+            "ok": true,
+            "detail": [
+              "unsupported"
+            ]
+          },
+          {
+            "sample": "t2-mid",
+            "check": "总分 ≥ 5.0",
+            "ok": true,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-mid",
+            "check": "总分 ≤ 7.0",
+            "ok": true,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-good",
+            "check": "总分 ≥ 6.0",
+            "ok": true,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-good",
+            "check": "总分 ≤ 8.0",
+            "ok": true,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-strong",
+            "check": "总分 ≥ 7.0",
+            "ok": false,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-strong",
+            "check": "论证问题 ≤ 1 条（强文不应被挑出很多问题）",
+            "ok": true,
+            "detail": [
+              "unsupported"
+            ]
+          },
+          {
+            "sample": "t2-strong",
+            "check": "不应出现 off_position / unclear_position / inconsistent_position / conclusion_inconsistent（问题类型、段落判定或立场一致性）",
+            "ok": true,
+            "detail": {
+              "problems": [
+                "unsupported"
+              ],
+              "off_position_paragraphs": [],
+              "position_consistent": true,
+              "hits": []
+            }
+          },
+          {
+            "sample": "t2-strong",
+            "check": "找到可核实的立场句",
+            "ok": true,
+            "detail": "How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in."
+          },
+          {
+            "sample": "t2-off-topic",
+            "check": "TR ≤ 5.0（离题）",
+            "ok": false,
+            "detail": 6.0
+          },
+          {
+            "sample": "t2-off-topic",
+            "check": "离题样本：通过质量检查的改写必须已按题目重写",
+            "ok": null,
+            "detail": "本批未运行改写"
+          },
+          {
+            "sample": "t2-off-topic",
+            "check": "应标出 off_position / irrelevant（问题类型或段落判定偏离）",
+            "ok": false,
+            "detail": {
+              "problems": [
+                "unsupported"
+              ],
+              "off_position_paragraphs": [],
+              "position_consistent": true,
+              "hits": []
+            }
+          },
+          {
+            "sample": "t2-under-length",
+            "check": "有字数不足提示",
+            "ok": true,
+            "detail": [
+              "字数 97 低于 250 词要求，实际考试中Task Response会因此受限。"
+            ]
+          },
+          {
+            "sample": "t1-no-image",
+            "check": "指出文内数据矛盾 ≥ 1 条（已知样本矛盾）",
+            "ok": false,
+            "detail": {
+              "issues": [],
+              "claims_checked": 0
+            }
+          },
+          {
+            "sample": "t1-no-image",
+            "check": "缺图 TA / 总分不可评",
+            "ok": true,
+            "detail": null
+          },
+          {
+            "sample": "分级样本",
+            "check": "总分随水平不降",
+            "ok": true,
+            "detail": [
+              [
+                "t2-weak",
+                6.0
+              ],
+              [
+                "t2-mid",
+                6.0
+              ],
+              [
+                "t2-good",
+                6.0
+              ],
+              [
+                "t2-strong",
+                6.0
+              ]
+            ]
+          },
+          {
+            "sample": "分级样本",
+            "check": "最强与最弱相差 ≥ 1.5",
+            "ok": false,
+            "detail": 0.0
+          }
+        ],
+        "passed": 11,
+        "total": 17,
+        "skipped": 1
+      }
+    },
+    {
+      "name": "evaluation ceiling remains fourteen fake requests",
+      "passed": true,
+      "actual": {
+        "calls": 14,
+        "options": [
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          },
+          {
+            "max_tokens": 4500,
+            "retries": 0
+          }
+        ]
+      }
+    }
+  ]
+}
