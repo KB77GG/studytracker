@@ -1,0 +1,119 @@
+{
+  "source_head": "1c865eba6248a3707e5e6b406064a88a12cf0bab",
+  "source_prompt": "iwa-2026-11-04.8",
+  "full_suite": {
+    "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "python": "3.13.3",
+    "source_head": "1c865eba6248a3707e5e6b406064a88a12cf0bab",
+    "commands": [
+      {
+        "command": [
+          "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-v",
+          "-s",
+          "tools/ielts_writing_ai/tests",
+          "-t",
+          "."
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 21.27
+      },
+      {
+        "command": [
+          "node",
+          "--test",
+          "tools/ielts_writing_ai/tests/test_draft.js"
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 0.26
+      }
+    ],
+    "test_data_directory_untouched": true,
+    "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n"
+  },
+  "independent_probes": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "docs/design/iwa-prompt8-review-20261105/figures_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "docs/design/iwa-prompt8-review-20261105/figures_probe.json"
+      ],
+      "cwd": "/Users/zhouxin/Desktop/studytracker",
+      "returncode": 0,
+      "meaning": "Records verified behavior and defects; exit 0 is not unconditional product approval."
+    },
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "docs/design/iwa-prompt8-review-20261105/teacher_compare_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "docs/design/iwa-prompt8-review-20261105/teacher_compare_probe.json"
+      ],
+      "cwd": "/Users/zhouxin/Desktop/studytracker",
+      "returncode": 0,
+      "meaning": "Records verified behavior and defects; exit 0 is not unconditional product approval."
+    },
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "docs/design/iwa-prompt8-review-20261105/max_prompt_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "docs/design/iwa-prompt8-review-20261105/max_prompt_probe.json"
+      ],
+      "cwd": "/Users/zhouxin/Desktop/studytracker",
+      "returncode": 0,
+      "meaning": "Records verified behavior and defects; exit 0 is not unconditional product approval."
+    }
+  ],
+  "lint": {
+    "ruff": "passed",
+    "black": "47 files unchanged",
+    "node_check": "passed"
+  },
+  "authorization": {
+    "scope": "7 built-in synthetic essays, evaluate only, high, after offline approval",
+    "max_actual_requests": 14,
+    "max_tokens_per_request": 16000,
+    "used": 0,
+    "status": "Retained; offline review has not passed. No additional confirmation needed once repairs pass."
+  },
+  "no_credentials_read": true,
+  "no_student_materials_read": true,
+  "no_model_requests": true,
+  "known_blockers": {
+    "number_sources": 2,
+    "teacher_comparison": 3
+  },
+  "scope_note": "Teacher-comparison defects do not trigger on built-ins without teacher_findings; numeric-source defects affect normal evaluation advice.",
+  "fixtures": {
+    "only_historical_committed_synthetic_outputs": true
+  },
+  "not_validated": [
+    "Real .8 semantic quality",
+    "max real API behavior/latency",
+    "other model quality",
+    "teacher PDFs",
+    "Python 3.10 interpreter",
+    "browser full flow"
+  ],
+  "delivery_audit": {
+    "credential_pattern_matches": 0,
+    "private_key_read": false,
+    "student_files_read": false,
+    "source_code_diff_empty": true,
+    "probe_copies_identical": true,
+    "shared_file_count": 9
+  }
+}

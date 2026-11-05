@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-05 写作试用 .8 / max / 模型对照复核：未通过，新授权保留0/14
+
+- 用户本轮明确授权：**离线复核通过后**，现有试用Key，`.8` + high、7篇内置合成作文、只做评价，最多 **14次实际请求**、每次输出上限16000；不含max、其他模型、精修/改写/识图/老师素材。当前 **0/14，未读Key、未建付费账本**；数字来源校验两项回归尚未关闭，不满足付费前提。修复并复核通过后可继续同授权，无需重复确认；旧15/30 A/B账本已结束不可重用。
+- 复核树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，分支 `claude/ielts-writing-ai-trial`，开工28d24e9a clean；HTTPS fetch+ff-only到 **1c865eba6248a3707e5e6b406064a88a12cf0bab**，含0c264f4f（.7英文数词/语言准则/teacher_findings）和89ad07b0（.8空问题/取消分数预设/max/跨模型），两组一起审。全套验证基于此HEAD，未修改业务。文档报告随两交接只推功能分支，最终报告HEAD见git log，勿将报告HEAD当新模型运行源码。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed** / origin/main本机缓存f0e04041 / behind103，原7 modified/23 untracked入口保留；未pull main/切分支/覆盖既有代码。同期语法验收、恢复任务及上轮咨询记录原样保留；其他worktree未操作。新增本机 `docs/design/iwa-prompt8-review-20261105/`（离线runner、source-state、探针/日志/共享镜像）及两交接增量。
+- 通过项：实际Task1/2 prompt允许issues=0，不再预设5.0–6.5；仅有可信优点引文时评价成功，任一项无可信证据仍两次失败不出分。max CLI→Generator→HTTP序列化正确，仅evaluate16000/300；refine6000/120、rewrite2400/120仍disabled，high/off不变；非DeepSeek开启max配置与client均拒绝且0 transport。模型比较默认拒不同provider/model，allow后仍拒不同版本/实际SHA/样本，模型与档位同时改有归因提示、标签正确。版本断言用整数后缀，不是字典序。
+- 旧forty-times真实P2关闭；56项正常数字行为通过，14条历史合成真实输出逐字一致、回放仅删high/mid那条。但新 **2项P2**：①`figures.py:93–95,115–117` 把forty and fifty分别值加成90，正确40/50建议被删、错误90保留；②`:108–109,206–207` 把2000辆/2020辆数量当年份，放过虚构Twenty years later。两项均经完整normalize+copy及正反对照，不只是单元parser观察。已披露twice/a third限制没有额外算缺陷。
+- 老师批注工具新 **3项P2**（不触发于不带teacher_findings的内置批次）：①失败评价从覆盖分母消失，2篇各1批注、1成功1失败却报告1/1=100%，未标条件口径（realcheck.py:626–628,645–656,1253）；②不同段school/hospital句字符区间0–47/49–101不交叠，却因词袋公共词过半被称同一位置覆盖（:619–621）；③同文同输出只将B老师批注倒序，人工表按数组下标错配成A是/B否（realcheck_compare.py:484–486）。建议请求/成功/失败分列、原文字符位置判交叠、标注稳定ID/quote+note对齐。teacher探针http_500是替身，非真实请求。
+- 精确验证：主树 `.venv/bin/python docs/design/iwa-prompt8-review-20261105/run_offline_tests.py` → **339 Python（21.033s）、8 Node**，fake环境/临时SQLite/loopback-only、外部IWA_DATA_DIR未写；实施树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（47文件）、`node --check tools/ielts_writing_ai/static/iwa.js`通过。主agent重跑 figures_probe.py / teacher_compare_probe.py / max_prompt_probe.py（各--repo实施树 --output新JSON），均exit0：前两项是如实记录缺陷，并非产品通过。精确commands、结果、隔离说明见offline-verification.json；没有重跑全部locale、Python3.10或浏览器全流程。
+- 实验口径提醒：.6→.8还包括.7语言/审题指令和数字后处理变化，后续.8 high对比旧.6 high只能说明新版整体效果，不能把差异全部归因于取消问题下限/分数锚点。要消融这两因素，须固定同一后处理/其他指令，仅切相应提示词。此处是建议，未新增实验。老师PDF未读/未还原/未传模型，题目与原稿可靠性仍按Claude记录待补，本轮没有独立验证素材状态；teacher_findings没有教师分数不能检验分数MAE。
+- 交付 `docs/design/ielts-writing-ai-prompt8-review-20261105/`：README、3套便携probe.py/json、offline-verification.json、offline-tests.log（9文件）。原报告/旧探针不改，无学生素材/凭据/私有思考正文，凭据模式扫描通过，未读私有Key。本轮只报告和两交接commit/push功能分支，无main合并、部署、服务器/生产数据库操作，小程序未上传/提审/发布；主树runner/既有脏改动仍仅本机。
+- 下一步：Claude拉报告先修数字2项，教师3项可单独修复（素材继续暂停），每项补正反回归；原探针刻意记录当前缺陷，修复后应转成正确行为测试，不要覆盖历史文件。复核通过后使用本轮已授权0/14的新账本跑7篇high评价；max/其他模型真实调用另定范围。不要把单元测试全绿当作本次独立复核已通过。
+
 ## 2026-11-04（提示词因素分析后）雅思写作 AI 试用工具：去掉强制挑错与预设分数、思考档位 max、模型对照（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户分析，认为模型判断、提示词设计、程序校验三方面都有问题，不能归结为“思考强度不够”。用户在提示词里找到两个可疑因素：

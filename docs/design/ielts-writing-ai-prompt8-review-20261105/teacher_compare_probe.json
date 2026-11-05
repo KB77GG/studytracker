@@ -1,0 +1,137 @@
+{
+  "source_head": "1c865eba6248a3707e5e6b406064a88a12cf0bab",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "student_materials_read": false,
+  "positive_controls": {
+    "model_change": {
+      "default_rejection": "两次运行的条件不同，不能对照：服务商不同：deepseek vs qwen；模型不同：offline-A vs offline-B",
+      "allowed_warnings": [
+        "对照的是两个模型：deepseek / offline-A vs qwen / offline-B（提示词与实际输入相同）",
+        "模型和思考模式同时不同：差异不能单独归因于其中一项"
+      ],
+      "both_model_labels_in_report_and_manual_sheet": true,
+      "changed_version_errors": [
+        "提示词版本不同：iwa-2026-11-04.8 vs deliberately-different-prompt"
+      ],
+      "changed_input_errors": [
+        "实际发送给评价模型的输入不同：synthetic-one"
+      ],
+      "changed_sample_errors": [
+        "同名样本的题目、作文或题图识别结果不同：synthetic-one"
+      ]
+    },
+    "exact_contained_span_overlaps": true,
+    "unrelated_words_do_not_overlap": true,
+    "model_calls_are_fake": true
+  },
+  "observations": {
+    "failed_sample_denominator": {
+      "requested_teacher_findings": 2,
+      "generation_states": {
+        "success": "ready",
+        "failed": "failed"
+      },
+      "report_metric": {
+        "covered": 1,
+        "total": 1,
+        "rate": 1.0,
+        "samples": {
+          "success": {
+            "findings": [
+              {
+                "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+                "note": "检查交通结论的依据。",
+                "covered": true
+              }
+            ],
+            "covered": 1,
+            "total": 1,
+            "ai_spans": 5,
+            "ai_spans_not_marked_by_teacher": 0
+          }
+        }
+      },
+      "unconditional_rate": 0.5,
+      "report_lines": [
+        "老师批注的 1 处里，AI 也指出了同一位置的有 1 处（100%）。位置重合不等于判断相同；AI 指出、老师没批的地方不一定是误判，要人工看。"
+      ],
+      "failed_sample_visible_in_teacher_metric": false,
+      "defect_observed": true,
+      "priority": "P2",
+      "impact": "Coverage silently excludes failed evaluations and can display 100% for one success and one failed annotated sample."
+    },
+    "disjoint_position_false_coverage": {
+      "teacher_quote": "The school is in the city and it needs repairs.",
+      "ai_quote": "The hospital is in the village and it needs doctors.",
+      "character_offsets": {
+        "teacher": [
+          0,
+          47
+        ],
+        "ai": [
+          49,
+          101
+        ]
+      },
+      "actual_character_ranges_overlap": false,
+      "coverage": {
+        "findings": [
+          {
+            "quote": "The school is in the city and it needs repairs.",
+            "note": "检查学校修缮主张。",
+            "covered": true
+          }
+        ],
+        "covered": 1,
+        "total": 1,
+        "ai_spans": 1,
+        "ai_spans_not_marked_by_teacher": 0
+      },
+      "defect_observed": true,
+      "priority": "P2",
+      "impact": "The metric claims the same essay position was covered although the teacher and AI selected different paragraphs."
+    },
+    "annotation_order_misalignment": {
+      "comparison_warnings": [],
+      "a_findings": [
+        {
+          "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+          "note": "检查交通结论的依据。",
+          "covered": true
+        },
+        {
+          "quote": "Volcanic rocks contain minerals beneath distant mountains.",
+          "note": "这一句偏离交通题目。",
+          "covered": false
+        }
+      ],
+      "b_findings": [
+        {
+          "quote": "Volcanic rocks contain minerals beneath distant mountains.",
+          "note": "这一句偏离交通题目。",
+          "covered": false
+        },
+        {
+          "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+          "note": "检查交通结论的依据。",
+          "covered": true
+        }
+      ],
+      "manual_rows": [
+        "| 老师批注 | A 覆盖：是 / B 覆盖：否 | — | Urban tram services reduce traffic congestion during commuting hours. | 检查交通结论的依据。 |  |  |",
+        "| 老师批注 | A 覆盖：否 / B 覆盖：是 | — | Volcanic rocks contain minerals beneath distant mountains. | 这一句偏离交通题目。 |  |  |"
+      ],
+      "same_actual_input": true,
+      "expected_for_each_quote": "A and B should agree: q1 both covered; q2 neither covered.",
+      "defect_observed": true,
+      "priority": "P2",
+      "impact": "Reordering otherwise identical teacher annotations makes the manual A/B sheet claim a model difference that does not exist."
+    }
+  },
+  "confirmed_defects": [
+    "failed_sample_denominator",
+    "disjoint_position_false_coverage",
+    "annotation_order_misalignment"
+  ]
+}
