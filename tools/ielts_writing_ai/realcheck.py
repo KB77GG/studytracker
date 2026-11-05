@@ -18,7 +18,6 @@ import dataclasses
 import hashlib
 import json
 import math
-import re
 import statistics
 import tempfile
 import time
@@ -604,36 +603,82 @@ def ai_spans(result: dict) -> list[str]:
     return [s for s in spans if s]
 
 
-def _words(text: str) -> set[str]:
-    return set(re.findall(r"[a-z0-9']+", essay_lib.squash(text)))
+YES, NO, UNSURE = "yes", "no", "uncertain"
 
 
-def spans_overlap(a: str, b: str) -> bool:
-    """Same place in the essay: one contains the other, or they share at least half
-    of the shorter span's words. Overlap is location only, not the same judgment."""
-    sa, sb = essay_lib.squash(a).strip(" .,;:!?"), essay_lib.squash(b).strip(" .,;:!?")
-    if not sa or not sb:
-        return False
-    if sa in sb or sb in sa:
-        return True
-    wa, wb = _words(a), _words(b)
-    shorter = min(len(wa), len(wb))
-    return bool(shorter) and len(wa & wb) * 2 >= shorter
+def _strip(text: str) -> str:
+    return essay_lib.squash(text).strip(" .,;:!?\"'")
+
+
+def _locate(essay: str, quote: str) -> list[tuple[int, int]]:
+    """Character ranges (in the comparison form of the essay) where the quote occurs."""
+    hay, needle = essay_lib.squash(essay), _strip(quote)
+    found, start = [], hay.find(needle) if needle else -1
+    while start != -1:
+        found.append((start, start + len(needle)))
+        start = hay.find(needle, start + 1)
+    return found
+
+
+def span_relation(essay: str, a: str, b: str) -> str:
+    """Whether two quotes point at the same place in the essay: their character
+    ranges intersect. Shared words are not a shared place (review of 1c865eb).
+    'uncertain' when a quote occurs more than once and only some occurrences meet."""
+    ranges_a, ranges_b = _locate(essay, a), _locate(essay, b)
+    if not ranges_a or not ranges_b:
+        return NO
+    hits = [x[0] < y[1] and y[0] < x[1] for x in ranges_a for y in ranges_b]
+    return YES if all(hits) else UNSURE if any(hits) else NO
+
+
+def spans_overlap(a: str, b: str, essay: str | None = None) -> bool:
+    """Same place in the essay. With the essay: intersecting character ranges. Without
+    it, only when one quote contains the other."""
+    if essay:
+        return span_relation(essay, a, b) == YES
+    sa, sb = _strip(a), _strip(b)
+    return bool(sa and sb) and (sa in sb or sb in sa)
+
+
+def _relation(essay: str, a: str, b: str) -> str:
+    return span_relation(essay, a, b) if essay else (YES if spans_overlap(a, b) else NO)
 
 
 def teacher_coverage(sample: dict) -> dict | None:
+    """Per teacher annotation: did the AI point at the same place? Samples whose
+    evaluation did not succeed stay in the count, marked as not evaluated."""
     findings = sample.get("teacher_findings") or []
-    result = (sample["generations"].get("evaluate") or {}).get("result")
-    if not findings or not result:
+    if not findings:
         return None
+    essay = (sample.get("submission") or {}).get("essay_text") or ""
+    generation = sample["generations"].get("evaluate") or {}
+    result = generation.get("result") if generation.get("status") == "ready" else None
+    if not result:
+        return {
+            "evaluated": False,
+            "status": generation.get("status") or "missing",
+            "findings": [{**f, "covered": None, "coverage": "not_evaluated"} for f in findings],
+            "covered": 0,
+            "uncertain": 0,
+            "total": len(findings),
+            "ai_spans": 0,
+            "ai_spans_not_marked_by_teacher": 0,
+        }
     spans = ai_spans(result)
-    rows = [
-        {**f, "covered": any(spans_overlap(f["quote"], span) for span in spans)} for f in findings
+    rows = []
+    for finding in findings:
+        relations = [_relation(essay, finding["quote"], span) for span in spans]
+        state = YES if YES in relations else UNSURE if UNSURE in relations else NO
+        rows.append({**finding, "covered": state == YES, "coverage": state})
+    extra = [
+        span for span in spans if all(_relation(essay, f["quote"], span) == NO for f in findings)
     ]
-    extra = [s for s in spans if not any(spans_overlap(f["quote"], s) for f in findings)]
     return {
+        "evaluated": True,
+        "status": "ready",
         "findings": rows,
-        "covered": sum(1 for r in rows if r["covered"]),
+        "covered": sum(1 for r in rows if r["coverage"] == YES),
+        "uncertain": sum(1 for r in rows if r["coverage"] == UNSURE),
         "total": len(rows),
         "ai_spans": len(spans),
         "ai_spans_not_marked_by_teacher": len(extra),
@@ -648,12 +693,21 @@ def _teacher_findings_metrics(run_data: dict) -> dict | None:
             per_sample[sample["id"]] = coverage
     if not per_sample:
         return None
+    evaluated = [c for c in per_sample.values() if c["evaluated"]]
     covered = sum(c["covered"] for c in per_sample.values())
     total = sum(c["total"] for c in per_sample.values())
+    evaluated_total = sum(c["total"] for c in evaluated)
     return {
+        # Over every requested annotation: a failed evaluation counts as not covered.
         "covered": covered,
         "total": total,
         "rate": _rate(covered, total),
+        "uncertain": sum(c["uncertain"] for c in per_sample.values()),
+        # Conditional view, only over the evaluations that succeeded.
+        "evaluated_samples": len(evaluated),
+        "evaluated_total": evaluated_total,
+        "rate_evaluated": _rate(covered, evaluated_total),
+        "failed_samples": [k for k, c in per_sample.items() if not c["evaluated"]],
         "samples": per_sample,
     }
 
@@ -1125,6 +1179,54 @@ def _removed_line(removed: dict) -> str:
     )
 
 
+def _teacher_markdown(tf: dict | None) -> list[str]:
+    if not tf:
+        return []
+    lines = []
+    failed = tf.get("failed_samples") or []
+    failed_findings = sum(tf["samples"][k]["total"] for k in failed)
+    lines += [
+        "",
+        "## 与老师批注对照（只看位置是否重合）",
+        "",
+        f"老师批注共 {tf['total']} 处，来自 {len(tf['samples'])} 篇作文"
+        + (
+            f"，其中 {len(failed)} 篇评价没有成功，它们的 {failed_findings} 处批注无法对照，"
+            "计为未覆盖"
+            if failed
+            else ""
+        )
+        + f"。AI 也指出了同一位置的有 {tf['covered']} 处，占全部 {_pct(tf['rate'])}；"
+        f"只看评价成功的作文为 {tf['covered']}/{tf.get('evaluated_total', tf['total'])}"
+        f"（{_pct(tf.get('rate_evaluated', tf['rate']))}）。",
+        f"另有 {tf.get('uncertain', 0)} 处因引文在原文中出现不止一次、位置不确定，未计为覆盖。"
+        "“同一位置”指两段引文在原文中的字符区间相交；位置重合不等于判断相同，AI 指出、"
+        "老师没批的地方也不一定是误判，要人工看。",
+        "",
+        "| 样本 | 老师批注 | AI 覆盖 | 不确定 | AI 其他位置 | 没覆盖的老师批注 |",
+        "|---|---|---|---|---|---|",
+    ]
+    for sample_id, c in tf["samples"].items():
+        if not c.get("evaluated", True):
+            lines.append(
+                f"| {sample_id} | {c['total']} | 评价未成功（{c.get('status')}） | — | — | 全部 |"
+            )
+            continue
+        missed = (
+            "；".join(
+                f"{f['quote'][:30]}（{f.get('note') or '—'}）"
+                for f in c["findings"]
+                if f.get("coverage", "yes" if f["covered"] else "no") == "no"
+            )
+            or "—"
+        )
+        lines.append(
+            f"| {sample_id} | {c['total']} | {c['covered']} | {c.get('uncertain', 0)} | "
+            f"{c['ai_spans_not_marked_by_teacher']} | {missed} |"
+        )
+    return lines
+
+
 def _argument_markdown(argument: dict | None) -> list[str]:
     if not argument or not (argument["task2_evaluations"] or argument.get("evaluate_attempts")):
         return []
@@ -1244,32 +1346,7 @@ def render_markdown(report: dict) -> str:
     for check in report["sanity"]["checks"]:
         mark = {True: "✓", False: "✗", None: "–"}[check["ok"]]
         lines.append(f"- {mark} {check['sample']}：{check['check']}（实际：{check['detail']}）")
-    tf = report.get("teacher_findings")
-    if tf:
-        lines += [
-            "",
-            "## 与老师批注对照（只看位置是否重合）",
-            "",
-            f"老师批注的 {tf['total']} 处里，AI 也指出了同一位置的有 {tf['covered']} 处"
-            f"（{_pct(tf['rate'])}）。位置重合不等于判断相同；AI 指出、老师没批的地方不一定"
-            "是误判，要人工看。",
-            "",
-            "| 样本 | 老师批注 | AI 覆盖 | AI 其他位置 | 没覆盖的老师批注 |",
-            "|---|---|---|---|---|",
-        ]
-        for sample_id, c in tf["samples"].items():
-            missed = (
-                "；".join(
-                    f"{f['quote'][:30]}（{f.get('note') or '—'}）"
-                    for f in c["findings"]
-                    if not f["covered"]
-                )
-                or "—"
-            )
-            lines.append(
-                f"| {sample_id} | {c['total']} | {c['covered']} | "
-                f"{c['ai_spans_not_marked_by_teacher']} | {missed} |"
-            )
+    lines += _teacher_markdown(report.get("teacher_findings"))
     if report["calibration"]:
         lines += [
             "",

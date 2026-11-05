@@ -105,10 +105,6 @@ _TIMES_RE = re.compile(r"\s*(?:-\s*fold\b|fold\b|times\b)", re.IGNORECASE)
 _DURATION_RE = re.compile(r"\s*-?\s*(years?|decades?)\b", re.IGNORECASE)
 
 
-def _is_year(value: str) -> bool:
-    return value.isdigit() and 1000 <= int(value) <= 2100
-
-
 def en_number(text: str) -> str:
     """English number words to a value string: forty-two -> 42, a hundred -> 100."""
     total = current = 0
@@ -121,6 +117,103 @@ def en_number(text: str) -> str:
             total += (current or 1) * _EN_SCALES[word]
             current = 0
     return str(total + current)
+
+
+def split_en_numbers(text: str) -> list[tuple[int, int, str]]:
+    """[(start, end, value)] for each separate number in a run of number words.
+
+    Words only combine into one number when English allows it: "forty-two",
+    "one hundred and twenty", "two thousand and twenty". Otherwise they are separate
+    numbers - "forty and fifty" is 40 and 50, never 90 (review of 1c865eb)."""
+    numbers, total, group, last, start, end = [], 0, 0, None, None, None
+
+    def flush():
+        if start is not None and last not in (None, "and"):
+            numbers.append((start, end, str(total + group)))
+
+    attach = {
+        "unit": (None, "tens", "hundred", "scale", "and"),
+        "teen": (None, "hundred", "scale", "and"),
+        "tens": (None, "hundred", "scale", "and"),
+        "hundred": (None, "unit", "teen"),
+        "scale": (None, "unit", "teen", "tens", "hundred"),
+    }
+    for match in re.finditer(r"[A-Za-z]+", text):
+        word = match.group().lower()
+        if word == "a":  # "a hundred": the regex only lets "a" in before a scale word
+            flush()
+            total, group, last, start = 0, 0, None, match.start()
+            continue
+        if word == "and":
+            if last in ("hundred", "scale"):
+                last = "and"  # "one hundred and twenty": still one number
+                continue
+            flush()  # "forty and fifty": two numbers
+            total, group, last, start = 0, 0, None, None
+            continue
+        value = _EN_UNITS.get(word)
+        if value is None and word != "hundred" and word not in _EN_SCALES:
+            flush()  # not a number word: it ends the current number
+            total, group, last, start = 0, 0, None, None
+            continue
+        kind = (
+            "hundred"
+            if word == "hundred"
+            else (
+                "scale"
+                if word in _EN_SCALES
+                else "unit" if value < 10 else "teen" if value < 20 else "tens"
+            )
+        )
+        if last not in attach[kind] or (kind == "unit" and last == "tens" and group % 10):
+            flush()
+            total, group, last, start = 0, 0, None, None
+        if start is None:
+            start = match.start()
+        if kind == "hundred":
+            group = (group or 1) * 100
+        elif kind == "scale":
+            total += (group or 1) * _EN_SCALES[word]
+            group = 0
+        else:
+            group += value
+        end, last = match.end(), kind
+    flush()
+    return numbers
+
+
+# A four-digit number is a year only with positive evidence: a temporal word before
+# it ("in 2000", "from 1800 to 1900", "between 2000 and 2020"), 年 after it, or being
+# the second end of a range whose first end is a year. "2000 buses" is a quantity, so
+# it can never make "twenty years later" look sourced (review of 1c865eb).
+_YEAR_BEFORE_RE = re.compile(
+    r"\b(?:in|from|to|by|since|until|till|between|during|before|after|through|of|around)\s+$",
+    re.IGNORECASE,
+)
+_RANGE_JOIN_RE = re.compile(r"(?:\band|\bto|-|–|—|~|～|至|到)\s*$", re.IGNORECASE)
+
+
+def confirmed_years(text: str | None) -> set[int]:
+    text = text or ""
+    years, previous = set(), None  # previous: (end, was_year) of the last 4-digit match
+    for match in re.finditer(r"(?<![\d.,])\d{4}(?![\d.,]\d)", text):
+        value = int(match.group())
+        before = text[: match.start()]
+        is_year = 1000 <= value <= 2100 and (
+            bool(_YEAR_BEFORE_RE.search(before[-20:]))
+            or text[match.end() : match.end() + 1] == "年"
+            or bool(re.match(r"\s*[-–—~～]\s*\d{4}\b", text[match.end() :]))  # "2000-2020"
+            or bool(
+                previous
+                and previous[1]
+                and _RANGE_JOIN_RE.search(text[previous[0] : match.start()])
+                and len(text[previous[0] : match.start()].strip()) <= 4
+            )
+        )
+        if is_year:
+            years.add(value)
+        previous = (match.end(), is_year)
+    return years
 
 
 DECADES = "decades"  # internal: converted to a DURATION in years
@@ -179,9 +272,14 @@ def figures(text: str | None) -> list[tuple[str, str, str]]:
             continue  # "twenty-first century" is an ordinal, not a figure
         if any(start <= match.start() < end for start, end in taken):
             continue  # "million" in "1.5 million" was read with its digits
+        # A coordinated run ("forty and fifty percent") shares what follows it.
         kind, shown_end = _kind(text, match.end(), text[: match.start()])
-        value, kind = _years(en_number(match.group()), kind)
-        found.append((match.start(), value, kind, text[match.start() : shown_end].strip()))
+        parts = split_en_numbers(match.group())
+        for n, (start, end, raw_value) in enumerate(parts):
+            value, part_kind = _years(raw_value, kind)
+            last = n == len(parts) - 1
+            shown = text[match.start() + start : shown_end if last else match.start() + end]
+            found.append((match.start() + start, value, part_kind, shown.strip()))
     return [(value, kind, shown) for _pos, value, kind, shown in sorted(found)]
 
 
@@ -203,7 +301,7 @@ class Sources:
         self.values.update(_value(str(n)) for n in numbers if n is not None)
         # Spans between two years the input gives ("2000 ... 2020" -> 20 years), so
         # "twenty years later" is derived from the source, not invented.
-        years = sorted({int(float(v)) for v in self.values if _is_year(v)})
+        years = sorted(confirmed_years(self.text))
         self.year_spans = {str(b - a) for i, a in enumerate(years) for b in years[i + 1 :]}
 
     def unsourced(self, text: str | None) -> list[str]:

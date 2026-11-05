@@ -14,6 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from . import essay as essay_lib
 from .realcheck import teacher_coverage
 
 CRITERIA = ("task", "coherence", "lexical", "grammar")
@@ -77,6 +78,11 @@ def conditions(run: dict) -> dict:
         "evaluate_inputs": {
             s["id"]: _evaluate_input(run_data, s["id"]) for s in run_data.get("samples") or []
         },
+        # Annotations are not model input, so they are checked separately.
+        "teacher_findings": {
+            s["id"]: sorted(finding_key(f) for f in s.get("teacher_findings") or [])
+            for s in run_data.get("samples") or []
+        },
         "started_at": report.get("started_at"),
     }
 
@@ -118,6 +124,13 @@ def check_same_conditions(
     ]
     if differing:
         errors.append("实际发送给评价模型的输入不同：" + "、".join(sorted(differing)))
+    notes_a, notes_b = a.get("teacher_findings") or {}, b.get("teacher_findings") or {}
+    different_notes = [k for k in shared if notes_a.get(k, []) != notes_b.get(k, [])]
+    if different_notes:
+        warnings.append(
+            "两次运行的老师批注不同（复核表按“引文 + 批注”逐条对齐，缺的一边标“无此批注”）："
+            + "、".join(sorted(different_notes))
+        )
     unknown = [k for k in shared if not (inputs_a.get(k) and inputs_b.get(k))]
     if unknown:
         warnings.append(
@@ -409,6 +422,32 @@ def render_markdown(cmp: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def finding_key(finding: dict) -> str:
+    """Identity of a teacher annotation: its quote and note, never its position in
+    the list (review of 1c865eb: a reordered list paired the wrong rows)."""
+    return essay_lib.squash(finding.get("quote")) + "\x1f" + (finding.get("note") or "").strip()
+
+
+def _aligned_findings(a: dict, b: dict) -> list[tuple[dict, dict | None, dict | None]]:
+    rows_a = ((a.get("teacher_coverage") or {}).get("findings")) or []
+    rows_b = ((b.get("teacher_coverage") or {}).get("findings")) or []
+    by_key_b = {finding_key(r): r for r in rows_b}
+    aligned, seen = [], set()
+    for row in rows_a:
+        key = finding_key(row)
+        seen.add(key)
+        aligned.append((row, row, by_key_b.get(key)))
+    aligned += [(row, None, row) for row in rows_b if finding_key(row) not in seen]
+    return aligned
+
+
+def _coverage_mark(row: dict | None) -> str:
+    if row is None:
+        return "无此批注"
+    state = row.get("coverage") or ("yes" if row.get("covered") else "no")
+    return {"yes": "是", "no": "否", "uncertain": "不确定", "not_evaluated": "未评价"}[state]
+
+
 def _quote(text) -> str:
     return (text or "").replace("|", "／").replace("\n", " ")
 
@@ -477,17 +516,11 @@ def render_manual_review(cmp: dict) -> str:
                     )
             for note in view["count_corrections"]:
                 lines.append(f"| {tag} | 计数更正 | — | — | {_quote(note)} |  |  |")
-        coverage_a, coverage_b = a.get("teacher_coverage"), b.get("teacher_coverage")
-        if coverage_a or coverage_b:
-            rows_a = (coverage_a or {}).get("findings") or []
-            rows_b = (coverage_b or {}).get("findings") or []
-            for n, finding in enumerate(rows_a or rows_b):
-                mark_a = "是" if n < len(rows_a) and rows_a[n]["covered"] else "否"
-                mark_b = "是" if n < len(rows_b) and rows_b[n]["covered"] else "否"
-                lines.append(
-                    f"| 老师批注 | A 覆盖：{mark_a} / B 覆盖：{mark_b} | — | "
-                    f"{_quote(finding['quote'])} | {_quote(finding.get('note'))} |  |  |"
-                )
+        for finding, row_a, row_b in _aligned_findings(a, b):
+            lines.append(
+                f"| 老师批注 | A 覆盖：{_coverage_mark(row_a)} / B 覆盖：{_coverage_mark(row_b)} | — | "
+                f"{_quote(finding['quote'])} | {_quote(finding.get('note'))} |  |  |"
+            )
         lines.append("| 两次都漏报 | — | — | — | — |  |  |")
     return "\n".join(lines) + "\n"
 
