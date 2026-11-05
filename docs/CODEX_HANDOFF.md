@@ -1,5 +1,50 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-05（提示词 .8 复核后）雅思写作 AI 试用工具：并列数词、年份上下文、老师批注分母 / 位置 / 对齐（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `1c865eb`（报告 `c482e092`，`docs/design/ielts-writing-ai-prompt8-review-20261105/`，含 3 个探针）。
+  - `.8` 提示词、max 透传、跨模型对照的主路径通过；339 项 Python、8 项 Node 通过。
+  - 发现 5 项 P2 程序逻辑问题，真实请求 0/14：
+    1. “forty and fifty” 被解析为 90；
+    2. 2000 辆、2020 辆公交被当成年份，放过了“20 年后”；
+    3. 老师批注覆盖率排除了失败篇，可能显示 100%；
+    4. 词语相似被判为同一位置；
+    5. 批注顺序变化导致 A/B 错配。
+  - 用户授权保留：修复复核通过后，可以执行 `.8` + high、7 篇、只做评价、≤ 14 次，建立新账本，不重跑旧账本。max 和其他模型的真实批次不在这次授权内。
+  本轮没有任何模型调用，评审的 `docs/design` 文件没有改动，学生材料没有读取。
+- 修复（业务提交 `7af8397`）：
+  1. **`figures.split_en_numbers`**：只有英语里能组成一个数时才合并。“and” 只在 hundred 或规模词之后才算连接，其余情况拆成几个数；连续的十位词（“forty fifty”）也拆开。并列的数共用后面的单位：“forty and fifty percent” 是两个百分比。
+  2. **`figures.confirmed_years`**：四位数（1000–2100）只有在下面几种情况才算年份：
+     - 前面 20 个字符内有时间介词（in / from / to / by / since / until / till / between / during / before / after / through / of / around）；
+     - 后面接“年”；
+     - 是 2000-2020 这样的连字符区间；
+     - 前一个已确认的年份通过 and / to / - 等连到它。
+     `Sources.year_spans` 只由这些年份推出。“2000 and 2020 buses”“the 2000 figure”“2200/2220 辆”都不算年份。
+  3. **分母**：`teacher_coverage` 对评价没有成功的作文返回 `evaluated: False`，批注标为 `not_evaluated`。`_teacher_findings_metrics` 的 `total` / `rate` 改为全部请求的口径，另外给出 `evaluated_total`、`rate_evaluated`、`failed_samples`、`uncertain`。报告这一节抽成 `_teacher_markdown`，写明失败篇和两种比例。
+  4. **位置**：新增 `span_relation(essay, a, b)`，在原文中定位两段引文的字符区间（用 squash 后的文本），相交才算 `yes`；引文出现多次、只有部分相交时为 `uncertain`，不计为覆盖。`spans_overlap(a, b)` 保留两个参数的写法，这时只认包含关系，不再用词袋；`teacher_coverage` 使用 `submission.essay_text`，取不到原文时退回包含关系。
+  5. **对齐**：新增 `finding_key`（squash 后的 quote 加 note）；复核表按 key 对齐 A / B，缺的一边标“无此批注”，覆盖状态显示是 / 否 / 不确定 / 未评价。`conditions` 记录每篇的批注 key，`check_same_conditions` 发现批注集合不同时给出提示（顺序不同不提示）。
+  6. README 更新了数字和老师批注的说明。
+- 验证：
+  - 新增 `tests/test_prompt8_review_20261105.py`（12 项），覆盖：
+    - 并列数词：通过 normalize 和复制文本验证，正确的 forty and fifty 被保留，错误的 90 被删；
+    - 一个数的各种写法仍能正确合并；阿拉伯数字来源对应英文数词建议；
+    - 年份：数量不算年份，各种有上下文的写法算年份，时间跨度判断正确；
+    - 位置：不同段落不算重合；区间相交算重合；重复引文记为不确定；
+    - 分母：1/2 = 50%，成功评价的条件比例为 1/1，报告写出失败篇；
+    - 对齐：倒序后仍然对齐；缺失的批注会提示。
+  - `python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **351 tests OK**，在 `IWA_TEST_LOCALE=en_US.ISO-8859-1` 和 `LC_ALL=C.UTF-8` 两种条件下都通过；Node 8 pass；ruff、black（48 个文件）、`node --check`、`git diff --check` 都通过。
+  - 评审探针重跑（输出在 scratch）：
+    - `figures_probe` exit 0，56 项基线检查通过，`new_findings_reproduced: []`；
+    - `teacher_compare_probe` exit 0，`confirmed_defects: []`，三项 `defect_observed` 都为 false：失败篇 1/2 = 0.5，位置不同时覆盖为 0，倒序时 A / B 都是“是 / 是”和“否 / 否”；
+    - `max_prompt_probe` exit 0。
+    - 探针字段 `report_lines` 为空：探针按旧措辞“老师批注的”搜索，新措辞是“老师批注共 N 处……”。复核时可以按新措辞调整。
+- **未验证**：真实 `.8` + high 的效果；英文数词的其他写法（twice、a third 等仍是已知限制）；年份规则只覆盖上面几种中英文写法。
+- **发布状态**：业务改动 `7af8397` 和本交接分两次提交，只推到 `claude/ielts-writing-ai-trial`（精确 HEAD 见 git log）；未合并 main、未部署，没有生产、服务器或小程序操作。
+- **下一步**：
+  1. 用户复核（351 项测试，3 个探针）。
+  2. 通过后按授权执行 `.8` + high、7 篇、≤ 14 次（新账本），人工比较误批和漏报。
+  3. 老师批注样本仍然需要批改前的原稿和第 5 份的正确题目。
+
 ## 2026-11-05 写作试用 .8 / max / 模型对照复核：未通过，新授权保留0/14
 
 - 用户本轮明确授权：**离线复核通过后**，现有试用Key，`.8` + high、7篇内置合成作文、只做评价，最多 **14次实际请求**、每次输出上限16000；不含max、其他模型、精修/改写/识图/老师素材。当前 **0/14，未读Key、未建付费账本**；数字来源校验两项回归尚未关闭，不满足付费前提。修复并复核通过后可继续同授权，无需重复确认；旧15/30 A/B账本已结束不可重用。
