@@ -1,5 +1,11 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-05 — 写作 .8 五项修复复验：老师三项通过，数字两类仍存
+
+- 复核树c482e092快进597b2124；351Python/8Node、ruff/black48及JS检查通过，未改业务。老师分母/定位/对齐三项及max工具回归通过。
+- 数字两类仍存P2：one hundred and two hundred→10200；from/to/of后的2000/2020 buses误当年份推出20年。完整normalize+copy正反证据在 `docs/design/ielts-writing-ai-prompt8-recheck-20261105/`，只推功能分支报告与两交接。
+- 离线前提未满足，现有high7evaluate授权仍0/14；未读Key/建真实账本，准备runner入口禁用。main旧7/23脏入口保留，无部署/生产/小程序操作。精确路径、命令、未验项和下一步见CODEX_HANDOFF顶部。
+
 ## 2026-11-05 — 写作 AI 试用工具：修复提示词 .8 复核的 5 项问题
 
 - 数字：“forty and fifty”按 40 和 50 计数，不再相加；只有能确认是年份的数字才用来推算时间跨度（2000 辆公交不算年份）。

@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-05 写作 .8 修复复验：老师批注三项通过，数字两类仍未关闭（0/14）
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`：从c482e092 clean，HTTPS fetch+ff-only到 **597b2124d50257ffa69a40009bef5a0d5bc78202**（业务7af8397f）；本轮未改业务、旧报告或历史探针。新报告与两交接随功能分支文档提交，最终报告HEAD见git log；源码验证固定597b2124。
+- **仍未满足离线通过前提**。五个原精确例子均关闭，但两个数字类别在常见变体中复现：①`figures.py:147–150,173–176` 将one hundred and two hundred读成10200、one thousand and two thousand读成3000，合法100/200或1000/2000建议被删、错误合并值被保留；②`:189–190,202–210,304–305` 把rose from 2000 to 2020 buses、fleet of 2000/2020 buses等数量认成年份，虚构Twenty years later进入结果与复制。均完整normalize+copy并有正反控制，属于原两类修复不完整，不扩展到twice/a third等已披露限制。
+- 老师批注三项通过：失败篇留分母（1/2，多失败1/7，全失败0/5），成功口径另列；唯一实际区间相交才覆盖、重复定位部分相交为不确定；重排正确配对、缺批注明示/警告、失败标未评价。新版报告措辞已直接验证。max/.8空issues/可信引文和跨模型输入保护仍通过；数字56历史基线+12正常补充断言通过，14条历史合成输出回放仍符合预期。
+- 精确验证：主树 `.venv/bin/python docs/design/iwa-prompt8-recheck-20261105/run_offline_tests.py` → **351 Python（21.194s）、8 Node**；fake环境、临时SQLite、回环网络限制，外部IWA_DATA_DIR未写。审阅树执行主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（48文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check`均通过。主agent重跑figures_recheck.py、teacher_recheck.py、max_prompt_probe.py（--repo审阅树 --output新JSON）exit0；figures是如实记录仍存P2，不是产品通过。teacher日志http_500是替身。未跑浏览器全流程、Python3.10或全部locale，无新版真实质量结论。
+- **现有付费授权保留0/14**：离线通过后 `.8`+high、7篇内置合成、仅evaluate、每次≤16000token；不含max/其他模型/精修/改写/识图/老师素材。本轮未读Key、未建真实账本、未发模型请求；修复通过后继续同授权无需重复确认，旧A/B账本已结束不可重用。本机 `run_high.py` 仅准备，`PAID_ENABLED=False`，入口在读.env/建账本前拒绝；不能把准备工具误当已获离线通过。
+- 共享交付 `docs/design/ielts-writing-ai-prompt8-recheck-20261105/`：README、3套便携probe.py/json、offline-verification.json、offline-tests.log（9文件）。无凭据/学生材料/私有思考正文；只做凭据模式扫描，未读取Key做精确比对。本轮仅报告与两交接commit/push功能分支；未合并main/部署/访问生产/写DB，小程序未上传、提审、发布。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed** / origin/main缓存f0e04041 / behind103，原7 modified/23 untracked入口及同期其他任务记录保留。本轮新增本机 `docs/design/iwa-prompt8-recheck-20261105/`（runner、source-state、证据/共享镜像）和两交接增量；本机运行器及旧脏改动未提交，不能从此旧main部署。其他worktree未动。
+- 下一步：只补齐两类数字规则并正反回归；通过再用新账本跑授权14次以内high评价。`.6→.8`还含.7语言/审题和数字后处理，真实比较只能说明整体版本变化，不能把效果全部归因于取消问题下限/分数锚点。老师原稿/第5题仍待确认，本轮未读素材。
+
 ## 2026-11-05（提示词 .8 复核后）雅思写作 AI 试用工具：并列数词、年份上下文、老师批注分母 / 位置 / 对齐（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `1c865eb`（报告 `c482e092`，`docs/design/ielts-writing-ai-prompt8-review-20261105/`，含 3 个探针）。

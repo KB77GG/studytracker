@@ -1,0 +1,144 @@
+{
+  "source_head": "597b2124d50257ffa69a40009bef5a0d5bc78202",
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "review_passed": false,
+  "actual_model_requests": 0,
+  "key_read": false,
+  "student_materials_read": false,
+  "private_reasoning_read": false,
+  "authorization": {
+    "limit": 14,
+    "used": 0,
+    "condition": "offline review passes",
+    "mode": "high",
+    "kinds": [
+      "evaluate"
+    ],
+    "samples": 7,
+    "max_tokens": 16000,
+    "prior_batch_ledger_reused": false
+  },
+  "full_suite": {
+    "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "python": "3.13.3",
+    "source_head": "597b2124d50257ffa69a40009bef5a0d5bc78202",
+    "commands": [
+      {
+        "command": [
+          "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-v",
+          "-s",
+          "tools/ielts_writing_ai/tests",
+          "-t",
+          "."
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 21.41
+      },
+      {
+        "command": [
+          "node",
+          "--test",
+          "tools/ielts_writing_ai/tests/test_draft.js"
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 0.25
+      }
+    ],
+    "test_data_directory_untouched": true,
+    "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n"
+  },
+  "results": {
+    "python_tests": 351,
+    "python_seconds": 21.194,
+    "node_tests": 8,
+    "ruff": "passed",
+    "black_files_unchanged": 48,
+    "javascript_syntax": "passed",
+    "diff_check": "passed"
+  },
+  "static_commands": [
+    {
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff",
+        "check",
+        "tools/ielts_writing_ai"
+      ],
+      "exit": 0
+    },
+    {
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/black",
+        "--check",
+        "tools/ielts_writing_ai"
+      ],
+      "exit": 0
+    },
+    {
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "command": [
+        "node",
+        "--check",
+        "tools/ielts_writing_ai/static/iwa.js"
+      ],
+      "exit": 0
+    },
+    {
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0
+    }
+  ],
+  "probe_commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/figures_recheck.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/figures_recheck.json"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/teacher_recheck.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/teacher_recheck.json"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/max_prompt_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-recheck-20261105/max_prompt_probe.json"
+      ],
+      "exit": 0
+    }
+  ],
+  "limits": [
+    "Full browser flow, Python3.10 and all locales not rerun.",
+    "No paid run; prompt .8 high quality not measured.",
+    "figures probe exit0 means successfully recorded observations, not product approval.",
+    "teacher probe http_500 is synthetic."
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "source_head": "597b2124d50257ffa69a40009bef5a0d5bc78202",
+  "prompt_version": "iwa-2026-11-04.8",
+  "xhigh_rejected_by_settings": true,
+  "max_scope": {
+    "evaluate": {
+      "thinking": {
+        "type": "enabled"
+      },
+      "reasoning_effort": "max",
+      "max_tokens": 16000,
+      "timeout": 300.0,
+      "retries": 0
+    },
+    "refine": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "reasoning_effort": null,
+      "max_tokens": 6000,
+      "timeout": 120.0,
+      "retries": 0
+    },
+    "rewrite": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "reasoning_effort": null,
+      "max_tokens": 2400,
+      "timeout": 120.0,
+      "retries": 0
+    }
+  },
+  "empty_issues_with_verified_strengths": {
+    "status": "ready",
+    "criteria": 4,
+    "issues": 0
+  },
+  "high_budget": {
+    "max_tokens": 16000,
+    "timeout": 300.0
+  },
+  "off_budget": {
+    "max_tokens": 4500,
+    "timeout": 120.0
+  },
+  "evidence_rejections": [
+    {
+      "scenario": "one_criterion_no_evidence",
+      "status": "failed",
+      "requests_including_retry": 2,
+      "score_produced": false
+    },
+    {
+      "scenario": "one_criterion_fabricated_quote",
+      "status": "failed",
+      "requests_including_retry": 2,
+      "score_produced": false
+    }
+  ],
+  "cli_to_report": {
+    "returncode": 0,
+    "mode_override": "off -> max",
+    "request_reasoning_effort": "max",
+    "report_label": "max",
+    "calls": 1
+  },
+  "other_provider_boundaries": [
+    {
+      "provider": "qwen",
+      "config_rejected": true,
+      "client_error": "unsupported",
+      "transport_calls": 0
+    },
+    {
+      "provider": "openai_compatible",
+      "config_rejected": true,
+      "client_error": "unsupported",
+      "transport_calls": 0
+    }
+  ],
+  "cross_model_labels": {
+    "a": "deepseek-flash · 思考 max",
+    "b": "qwen-plus · 思考 off",
+    "report_and_manual_match": true,
+    "attribution_warning_present": true
+  },
+  "prompt_rules": [
+    {
+      "task": "task1",
+      "zero_issues_explicitly_allowed": true,
+      "verified_quote_still_required": true,
+      "population_score_prior_removed": true,
+      "seven_and_eight_band_thresholds_retained": true
+    },
+    {
+      "task": "task2",
+      "zero_issues_explicitly_allowed": true,
+      "verified_quote_still_required": true,
+      "population_score_prior_removed": true,
+      "seven_and_eight_band_thresholds_retained": true
+    }
+  ],
+  "version_assertions": {
+    "comparison": "integer suffix, not lexicographic",
+    "suffix_10_passes_minimum_8": true,
+    "production_bug": false,
+    "maintenance_note": "A future version scheme that resets the suffix may require test updates."
+  },
+  "conclusion": {
+    "findings": [],
+    "network_attempts": 0,
+    "credentials_read": false,
+    "student_material_read": false,
+    "private_reasoning_read": false,
+    "business_code_modified": false,
+    "real_model_quality_not_measured": true
+  }
+}
