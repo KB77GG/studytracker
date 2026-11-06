@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-04.8"
+PROMPT_VERSION = "iwa-2026-11-06.9"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -76,7 +76,9 @@ ARGUMENT_CHECKLIST = (
     "Optional ways to make a sound argument stronger (more detail, a sharper topic sentence, "
     "an extra example) go in 'improvements', never in 'problems'. Never invent facts: no "
     "statistic, percentage, year, study or named real-world case that is not in the essay; "
-    "use the essay's own reasoning or a clearly hypothetical example. Reflect real problems "
+    "use the essay's own reasoning or a hypothetical example described in words only - no "
+    "number, count, percentage, year or multiplier the essay does not give (write 'a full "
+    "bus replaces many cars', not 'a bus carrying forty passengers'). Reflect real problems "
     "in the task and coherence summaries; improvements do not lower bands."
 )
 
@@ -101,8 +103,9 @@ def _argument_schema() -> str:
         'passage it contradicts), "support_found": [str (verbatim)] (REQUIRED for unsupported '
         "and example_not_linked: what the same paragraph already offers for the point; [] "
         'only if nothing), "comment": str (Chinese), "suggestion": str (Chinese)}, '
-        '...0-6], "improvements": [{"quote": str (verbatim), "suggestion": str (Chinese)}, '
-        "...0-3]}. If there is no clear position, set position to null and add an "
+        '...0-6], "improvements": [{"quote": str (verbatim), "suggestion": str (Chinese: what '
+        "to add or sharpen; the key is 'suggestion', not 'comment')}, ...0-3]}. If there is "
+        "no clear position, set position to null and add an "
         "unclear_position problem quoting the closest sentence. Do not invent problems: a "
         "well-argued essay may have no problems."
     )
@@ -111,8 +114,9 @@ def _argument_schema() -> str:
 COMPARISON_SCHEMA = (
     'K = {"claim": str (verbatim: a sentence or clause that ranks or compares, e.g. highest, '
     'lowest, most, more/less than, overtook, doubled, in both years, all), "figures": [str '
-    '(verbatim figures from the essay used to check it)], "holds": bool, "comment": str '
-    "(Chinese)}"
+    "(verbatim figures from the essay that decide the claim - for holds=false the ones that "
+    'contradict it, first; at most 4, not every figure in the essay)], "holds": bool, '
+    '"comment": str (Chinese)}'
 )
 COMPARISON_RULE = (
     'Internal consistency (Task 1): in "comparisons" list EVERY ranking or comparison claim '
@@ -124,27 +128,42 @@ COMPARISON_RULE = (
 
 
 def _root_schema(task_type: str, visual: bool) -> str:
-    """One complete template for the whole answer, so nested parts cannot drift into
-    the criteria (the 2026-11-04 run once put argument inside every criterion)."""
+    """One complete template for the whole answer. The four criteria sit at the top level
+    next to everything else: inside a wrapping "criteria" object, real runs (2026-11-04
+    weak; 2026-11-06 under-length, twice) forgot the brace that closes it and wrote
+    argument / overall_comment / priorities inside it."""
     task = '"task": C' if visual else '"task": null'
-    extra, nested = (
-        (', "argument": A', '"argument"')
-        if task_type == "task2"
-        else (', "comparisons": [K, ...]', '"comparisons"')
-    )
+    extra = '"argument": A' if task_type == "task2" else '"comparisons": [K, ...]'
     return " ".join(
         [
-            "Return exactly ONE JSON object of this shape (every key at the top level, each "
-            "exactly once):",
-            f'{{"criteria": {{{task}, "coherence": C, "lexical": C, "grammar": C}}{extra}, '
+            "Return exactly ONE JSON object of this shape - these keys only, all at the top "
+            "level, each exactly once, in this order:",
+            f'{{{task}, "coherence": C, "lexical": C, "grammar": C, {extra}, '
             '"overall_comment": str (Chinese), "priorities": [str (Chinese), ...3-5]}',
             "where",
             CRITERION_SCHEMA,
             _argument_schema() if task_type == "task2" else COMPARISON_SCHEMA,
-            f"{nested}, overall_comment and priorities sit next to criteria, never inside a "
-            "criterion. Do not output an overall band; it is computed from the criteria.",
+            "Close each C completely (its issues list, then the C object) before the next "
+            "key; nothing else goes inside a C. Do not output an overall band; it is computed "
+            "from the criteria.",
         ]
     )
+
+
+def evaluate_shape(submission: dict) -> tuple[tuple[str, ...], dict[str, str]]:
+    """(top-level keys, key -> where it belongs) of an evaluation, for jsonshape.diagnose."""
+    task2 = submission["task_type"] == "task2"
+    root = (*essay_lib.CRITERIA, "argument" if task2 else "comparisons")
+    root += ("overall_comment", "priorities")
+    homes = dict.fromkeys(essay_lib.CRITERIA, "criteria")  # older nested form, still accepted
+    homes.update(dict.fromkeys(("band", "summary", "strengths", "issues"), "评分项"))
+    if task2:
+        homes.update(
+            dict.fromkeys(("position", "paragraphs", "problems", "improvements"), "argument")
+        )
+    else:
+        homes.update(dict.fromkeys(("claim", "holds"), "comparisons"))
+    return root, homes
 
 
 CHINESE_REMINDER = (
@@ -230,10 +249,22 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "model sentence must keep the writer's meaning: never add facts, causes, figures, "
         "multipliers or trends the writer did not state (do not turn 'do not have cars' "
         "into 'cannot afford a car', or two data points into 'a steady climb'). Give a "
-        "complete, usable sentence, not a fragment. Before describing what a paragraph "
-        "or the overview says, check that it really says it.",
+        "complete, usable sentence, not a fragment, and one that works in place: put back "
+        "instead of the quote it must leave a correct sentence - if the surrounding "
+        "sentence would still be wrong (e.g. a stand-alone Because-clause), quote the whole "
+        "sentence and correct the whole sentence. Call something a grammar error only when "
+        "it is one: clauses joined by and/but may have different subjects, and an -ing "
+        "clause whose subject is clear from the sentence is not dangling. A more precise "
+        "wording (e.g. 'the figure for Country B' instead of 'Country B' for a percentage) "
+        "is a precision point: present it as one, in the issue and in priorities, never as "
+        "a grammar error. Before describing what a paragraph or the overview says, check "
+        "that it really says it.",
         "Counts must match the essay: paragraph_count is given (one paragraph per line); "
         "only say a word is repeated if it really appears several times.",
+        "overall_comment and priorities summarise your own findings: never call something "
+        "missing or weak there (e.g. 'only assertions, no mechanism', 'only touched on') "
+        "that your criteria or argument analysis says the essay already does. A priority may "
+        "suggest going further, but then say what is already there.",
     ]
     if task_type == "task2":
         rules.append(ARGUMENT_CHECKLIST)

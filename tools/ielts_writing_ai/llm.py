@@ -317,6 +317,8 @@ class FakeClient:
             "lexical": base - 0.5,
             "grammar": base - 0.5,
         }
+        # The older nested "criteria" form, still accepted next to the top-level form
+        # prompt .9 asks for (tests and reviewer probes read raw["criteria"]).
         return {
             "criteria": {
                 key: {

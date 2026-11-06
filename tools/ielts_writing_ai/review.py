@@ -15,7 +15,7 @@ from pathlib import Path
 from . import argument as argument_lib
 from . import essay as essay_lib
 from . import figures as figures_lib
-from . import prompts, rewrite_quality, visual
+from . import jsonshape, prompts, rewrite_quality, visual
 from .llm import LLMError, parse_strict_json
 
 log = logging.getLogger("iwa.review")
@@ -52,6 +52,13 @@ def checked(normalizer, *args):
         name = getattr(normalizer, "__name__", "normalizer")
         log.warning("%s: unexpected output structure", name, exc_info=True)
         raise InvalidOutput(f"模型输出结构异常（{type(exc).__name__}）") from None
+
+
+def json_problem(kind: str, text: str | None, submission: dict) -> str:
+    """Why a reply is not one JSON object, precisely enough to fix on the retry (a
+    bare "text outside the JSON" made the 2026-11-06 retry repeat the same error)."""
+    root, homes = prompts.evaluate_shape(submission) if kind == "evaluate" else ((), {})
+    return "JSON 结构错误：" + jsonshape.diagnose(text, root, homes)
 
 
 def _text(value, limit: int = TEXT_LIMIT) -> str:
@@ -143,6 +150,20 @@ def _nested_in(criteria_raw: dict, key: str) -> bool:
     return any(isinstance(item, dict) and key in item for item in criteria_raw.values())
 
 
+def _criteria_raw(raw: dict) -> dict:
+    """The four criteria: at the top level (prompt .9) or, as before, inside a
+    "criteria" object - one or the other, never both."""
+    flat = [key for key in essay_lib.CRITERIA if key in raw]
+    nested = raw.get("criteria")
+    if flat and nested is not None:
+        raise InvalidOutput("评分项只能出现一次：要么都在最外层，要么都在 criteria 里")
+    if flat:
+        return {key: raw.get(key) for key in essay_lib.CRITERIA}
+    if not isinstance(nested, dict):
+        raise InvalidOutput("缺少评分项（task / coherence / lexical / grammar）")
+    return nested
+
+
 def _require_chinese(criteria: list[dict], overall_comment: str) -> None:
     """Explanations are for Chinese learners: every reason and the overall comment
     must be Chinese (English quotes inside are fine), and so must most comments.
@@ -214,6 +235,18 @@ def _sweep_advice(criteria: list[dict], argument: dict | None, sources) -> dict:
 
 
 MAX_COMPARISONS = 8
+MAX_FIGURES = 4
+
+
+def _decisive_figures(figures: list[str], comment: str) -> list[str]:
+    """The figures the comment actually compares (in the model's order). The model may
+    list every figure in the essay: on 2026-11-06 it listed all eight and the first three
+    (all from the other year) were shown, while its comment rightly compared the 2020
+    figures. Without any match, the model's own first figures are kept."""
+    unique = list(dict.fromkeys(figures))
+    mentioned = {value for value, _kind, _shown in figures_lib.figures(comment)}
+    decisive = [f for f in unique if {v for v, _k, _s in figures_lib.figures(f)} & mentioned]
+    return (decisive or unique)[:MAX_FIGURES]
 
 
 def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
@@ -245,7 +278,12 @@ def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
             dropped += 1  # "contradicted" without the figures that contradict it
             continue
         issues.append(
-            {"quote": claim[:300], "quote_found": True, "figures": figures[:3], "comment": comment}
+            {
+                "quote": claim[:300],
+                "quote_found": True,
+                "figures": _decisive_figures(figures, comment),
+                "comment": comment,
+            }
         )
     # Older free list: kept only when its quote is really in the essay.
     proposed = _evidence_items(raw.get("consistency_issues"), essay, limit=4, with_suggestion=False)
@@ -264,9 +302,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     reason and at least one quote that can be found verbatim in the essay."""
     task_type = submission["task_type"]
     essay = submission["essay_text"]
-    criteria_raw = raw.get("criteria")
-    if not isinstance(criteria_raw, dict):
-        raise InvalidOutput("缺少 criteria")
+    criteria_raw = _criteria_raw(raw)
     task_ok = task_criterion_assessable(submission)
     sources = figures_lib.for_submission(submission)
 
@@ -323,7 +359,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     priorities = _text_list(raw.get("priorities"), limit_items=5)
     for key in ("overall_comment", "priorities", "argument", "comparisons"):
         if key not in raw and _nested_in(criteria_raw, key):
-            raise InvalidOutput(f"{key} 放错了位置：必须在顶层、与 criteria 同级，只出现一次")
+            raise InvalidOutput(f"{key} 放错了位置：必须在最外层、与评分项同级，只出现一次")
     if not _meaningful(overall_comment):
         raise InvalidOutput("缺少总评")
     if not priorities:
@@ -664,7 +700,10 @@ class Generator:
             except (InvalidOutput, LLMError) as exc:
                 if isinstance(exc, LLMError) and exc.code != "invalid_json":
                     raise
-                problem = exc.message if isinstance(exc, LLMError) else str(exc)
+                if isinstance(exc, LLMError):
+                    problem = json_problem(kind, result.text, submission)
+                else:
+                    problem = str(exc)
                 log.info("%s attempt %s rejected: %s", kind, attempt + 1, problem)
         raise InvalidOutput(problem or "输出不合格")
 
@@ -678,7 +717,9 @@ class Generator:
         except (InvalidOutput, LLMError) as exc:
             if isinstance(exc, LLMError) and exc.code != "invalid_json":
                 raise
-            return None, result, exc.message if isinstance(exc, LLMError) else str(exc)
+            if isinstance(exc, LLMError):
+                return None, result, json_problem("rewrite", result.text, submission)
+            return None, result, str(exc)
 
     @staticmethod
     def _keep(candidate, result, reason: str, message: str):

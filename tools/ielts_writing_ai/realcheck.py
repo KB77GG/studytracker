@@ -24,7 +24,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from . import access, review, rewrite_quality
+from . import access, jsonshape, review, rewrite_quality
 from . import essay as essay_lib
 from . import samples as builtin_samples
 from .llm import LLMError, build_client, parse_strict_json, reasoning_tokens
@@ -393,6 +393,8 @@ def _first_attempt_problem(kind: str, text: str, sample: dict) -> str | None:
     """Why the first attempt was rejected (re-runs the production validators)."""
     raw = parse_strict_json(text)
     if raw is None:
+        if jsonshape.unwrap(text).startswith("{"):
+            return "JSON 括号或结构错误"  # the details: metrics["json_problems"]
         return "JSON 之外有文字或不是 JSON 对象"
     submission = sample["submission"]
     try:
@@ -421,6 +423,19 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
     first = [c for c in calls if c["attempt"] == 0]
     first_valid = 0
     rejections = Counter()
+    # Every attempt whose reply was not one JSON object, with what exactly was wrong
+    # (the same diagnosis the retry note gives the model).
+    json_problems = [
+        {
+            "sample": c["sample"],
+            "attempt": c["attempt"],
+            "problem": review.json_problem(
+                kind, c.get("text"), (by_sample.get(c["sample"]) or {}).get("submission") or {}
+            ),
+        }
+        for c in calls
+        if c["ok"] and c.get("json_mode") and parse_strict_json(c.get("text")) is None
+    ]
     for call in first:
         if not call["ok"]:
             rejections[f"调用失败：{call['error']}"] += 1
@@ -475,6 +490,7 @@ def _kind_metrics(kind: str, run_data: dict) -> dict:
         "first_attempt_json_ok": _rate(sum(1 for c in first if c.get("json_ok")), len(first)),
         "first_attempt_valid": _rate(first_valid, len(first)),
         "first_attempt_rejections": dict(rejections.most_common()),
+        "json_problems": json_problems,
         "final_ready": _rate(len(ready), len(finals)),
         "final_failures": dict(final_errors),
         "latency_ms_p50": _percentile(ok_latency, 0.5),
@@ -1289,6 +1305,11 @@ def render_markdown(report: dict) -> str:
             f"| {names.get(kind, kind)} | {_pct(m['first_attempt_json_ok'])} | "
             f"{_pct(m['first_attempt_valid'])} | {_pct(m['final_ready'])} | {latency} | {reasons} |"
         )
+    for kind, m in report["kinds"].items():
+        for item in m.get("json_problems") or []:
+            lines.append(
+                f"- {names.get(kind, kind)} · {item['sample']} 第 {item['attempt'] + 1} 次：{item['problem']}"
+            )
     lines += ["", "## 输出预算与思考模式", ""]
     for kind, m in report["kinds"].items():
         reasoning = _reasoning_text(m)

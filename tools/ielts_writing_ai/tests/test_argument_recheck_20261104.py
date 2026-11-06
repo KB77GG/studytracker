@@ -342,7 +342,8 @@ class ParagraphBindingTest(unittest.TestCase):
         self.assertEqual([p["p"] for p in payload["essay_paragraphs"]], [1, 2, 3, 4, 5])
         self.assertNotIn("essay", payload)
         self.assertIn('"argument": A', messages[0]["content"])
-        self.assertIn("never inside a criterion", messages[0]["content"])
+        # .9 moved the criteria to the top level, so nothing can be nested in "criteria".
+        self.assertIn("all at the top level", messages[0]["content"])
         self.assertGreaterEqual(
             int(prompts.PROMPT_VERSION.rsplit(".", 1)[1]), 5
         )  # introduced in .5

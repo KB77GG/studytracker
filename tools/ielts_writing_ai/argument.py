@@ -267,6 +267,11 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
     dropped += malformed
     for item in entries:
         item = item if isinstance(item, dict) else {}
+        if not _text(item.get("suggestion")) and _text(item.get("comment")):
+            # An improvement is advice by definition, and the model sometimes names the
+            # field 'comment' (2026-11-06: all three of one essay, real quotes). The same
+            # quote and figure checks apply to it.
+            item = {**item, "suggestion": item["comment"]}
         quote = _verified_quote(item.get("quote"), essay)
         suggestion, removed = _suggestion(item, sources)
         if not quote or not (suggestion or removed):
