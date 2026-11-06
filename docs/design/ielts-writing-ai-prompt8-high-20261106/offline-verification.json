@@ -1,0 +1,63 @@
+{
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "review_passed": true,
+  "full_suite": {
+    "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "python": "3.13.3",
+    "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+    "commands": [
+      {
+        "command": [
+          "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-v",
+          "-s",
+          "tools/ielts_writing_ai/tests",
+          "-t",
+          "."
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 21.36
+      },
+      {
+        "command": [
+          "node",
+          "--test",
+          "tools/ielts_writing_ai/tests/test_draft.js"
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+        "returncode": 0,
+        "elapsed_seconds": 0.15
+      }
+    ],
+    "test_data_directory_untouched": true,
+    "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n"
+  },
+  "static_checks": {
+    "ruff": "passed",
+    "black": "49 files unchanged",
+    "node_check": "passed",
+    "git_diff_check": "passed"
+  },
+  "numerical_checks": {
+    "historical": 68,
+    "individual_correct_behavior": 37,
+    "remaining_review_findings": 0
+  },
+  "teacher_checks": "passed",
+  "max_prompt_checks": "passed",
+  "paid_budget_audit": "runner-selftest.json and runner-independent-audit.json",
+  "limits": [
+    "Disclosed conservative year/quantity heuristic remains.",
+    "twice/a third unsupported.",
+    "No full browser rerun or Python3.10 or full locale matrix this turn."
+  ],
+  "tests_command": [
+    "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+    "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-finalcheck-20261106/run_offline_tests.py"
+  ]
+}

@@ -1,0 +1,634 @@
+{
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "prompt_version": "iwa-2026-11-04.8",
+  "network_calls_by_audit": 0,
+  "reads_sanitized_results_only": true,
+  "student_materials_read": false,
+  "summary": {
+    "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+    "status": {
+      "samples": 7,
+      "calls": 9,
+      "first_json": 5,
+      "first_valid": 5,
+      "final_ready": 6,
+      "retried_samples": [
+        "t2-off-topic",
+        "t2-under-length"
+      ],
+      "truncated": 0,
+      "timeouts": 0,
+      "http_statuses": {
+        "200": 9
+      }
+    },
+    "usage": {
+      "calls": 9,
+      "tokens": {
+        "prompt_tokens": 19545,
+        "completion_tokens": 54635,
+        "total_tokens": 74180,
+        "prompt_cache_hit_tokens": 12288,
+        "prompt_cache_miss_tokens": 7257
+      },
+      "known_subtotals": {
+        "prompt_tokens": 19545,
+        "completion_tokens": 54635,
+        "total_tokens": 74180,
+        "prompt_cache_hit_tokens": 12288,
+        "prompt_cache_miss_tokens": 7257
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 37518,
+      "reasoning_known": 37518,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 0
+    },
+    "latency_and_budget": {
+      "successful_calls_p50_ms": 33598,
+      "successful_calls_p90_ms": 70986,
+      "all_calls_sum_ms": 343975,
+      "completion_peak": 11629,
+      "output_budgets": [
+        16000
+      ],
+      "peak_budget_fraction": 0.7268125
+    },
+    "evidence": {
+      "scored_criteria": 23,
+      "quotes": 77,
+      "literal_quotes": 75,
+      "normalized_quotes": 77,
+      "count_corrections": 0
+    },
+    "argument": {
+      "task2_evaluations": 5,
+      "with_argument": 5,
+      "with_position": 4,
+      "paragraphs": 25,
+      "problems": 5,
+      "improvements": 10,
+      "returned": 48,
+      "dropped": 4,
+      "duplicates": 0,
+      "over_limit": 0,
+      "self_conflicts": 0,
+      "suggestions_removed": 1,
+      "reclassified": 0,
+      "kept": 44,
+      "entry_quotes": 44,
+      "entry_quotes_literal": 44,
+      "entry_quotes_verified": 44,
+      "paired_quotes": 0,
+      "paired_quotes_literal": 0,
+      "paired_quotes_verified": 0,
+      "support_quotes": 0,
+      "support_quotes_literal": 0,
+      "support_quotes_verified": 0,
+      "problem_types": {
+        "overgeneralized": 1,
+        "unclear_position": 1,
+        "off_position": 2,
+        "irrelevant": 1
+      },
+      "paragraph_verdicts": {
+        "supports": 20,
+        "off_position": 5
+      }
+    },
+    "suggestions_removed": {
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 1,
+      "total": 1
+    },
+    "argument_sanity": {
+      "checks": {
+        "weak_has_problem": true,
+        "strong_at_most_one_problem": true,
+        "strong_no_false_contradiction_or_off_topic": true,
+        "strong_position_quote": true,
+        "off_topic_identified": true
+      },
+      "passed": 5,
+      "total": 5
+    },
+    "all_sanity": {
+      "passed": 16,
+      "total": 17,
+      "skipped": 1
+    },
+    "samples": [
+      {
+        "id": "t2-weak",
+        "status": "ready",
+        "overall": 5.5,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 10,
+        "argument_kept": 10,
+        "problem_types": [
+          "overgeneralized"
+        ],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-mid",
+        "status": "ready",
+        "overall": 7.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 9,
+        "argument_kept": 9,
+        "problem_types": [],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-good",
+        "status": "ready",
+        "overall": 8.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 9,
+        "argument_kept": 6,
+        "problem_types": [],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-strong",
+        "status": "ready",
+        "overall": 8.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 1,
+          "total": 1
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 9,
+        "argument_kept": 8,
+        "problem_types": [],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-off-topic",
+        "status": "ready",
+        "overall": 6.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 11,
+        "argument_kept": 11,
+        "problem_types": [
+          "unclear_position",
+          "off_position",
+          "off_position",
+          "irrelevant"
+        ],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-under-length",
+        "status": "failed",
+        "overall": null,
+        "suggestions_removed": {},
+        "consistency_issues": 0,
+        "comparisons_checked": null
+      },
+      {
+        "id": "t1-no-image",
+        "status": "ready",
+        "overall": null,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 1,
+        "comparisons_checked": 13
+      }
+    ],
+    "first_input_sha256": {
+      "t2-weak": "fd546f9b4171e0e2160c60ceabe42717d2ba2e200986640a200f8262b69d2c4b",
+      "t2-mid": "1ae5909137bf8b047e346a5a716bcdc14ad69087e5ecc529777ac700ef0ee8e6",
+      "t2-good": "4fbe287f4f19b32da6999b18ca5963af1dd8fea113d7a98924900be0bcb1b269",
+      "t2-strong": "f66257f80a7f3adc3a98ad2b5221f6730f247a2289f80d2f05adff23525de9ce",
+      "t2-off-topic": "c36000cd45b0aa4098754183c74dce2cccb5f2bd11bf34a8edfbf8a589d22e98",
+      "t2-under-length": "0814fde94eabe7ea659bc1f1b550640ffcbba283abe52b463b28a2a5175619dc",
+      "t1-no-image": "a9f8f47860e01640e90ea8ad273729cc4576faa1007ec20b85d4ec7b035bde29"
+    }
+  },
+  "transport": {
+    "request_attempts": 9,
+    "limit": 14,
+    "sample_counts": {
+      "t2-weak": 1,
+      "t2-mid": 1,
+      "t2-good": 1,
+      "t2-strong": 1,
+      "t2-off-topic": 2,
+      "t2-under-length": 2,
+      "t1-no-image": 1
+    },
+    "finish_reasons": {
+      "stop": 9
+    },
+    "http_statuses": {
+      "200": 9
+    }
+  },
+  "json_failure_diagnostics": [
+    {
+      "sample": "t2-off-topic",
+      "attempt": 0,
+      "message": "Extra data",
+      "position": 6345,
+      "length": 6713,
+      "line": 1,
+      "column": 6346,
+      "at_eof": false,
+      "raw_unchanged": true,
+      "transport_ok": true,
+      "completion_tokens": 4903,
+      "reasoning_tokens": 2695,
+      "valid_prefix": {
+        "end": 6345,
+        "root_keys": [
+          "criteria",
+          "argument",
+          "improvements",
+          "overall_comment"
+        ],
+        "remaining_prefix": ",\"priorities\":[\"最紧急：彻底解决审题问题。这篇作文回答的是“在线"
+      }
+    },
+    {
+      "sample": "t2-under-length",
+      "attempt": 0,
+      "message": "Expecting ',' delimiter",
+      "position": 5250,
+      "length": 5250,
+      "line": 1,
+      "column": 5251,
+      "at_eof": true,
+      "raw_unchanged": true,
+      "transport_ok": true,
+      "completion_tokens": 4399,
+      "reasoning_tokens": 2433,
+      "one_brace_diagnostic": {
+        "parses": true,
+        "root_keys": [
+          "criteria"
+        ],
+        "criteria_keys": [
+          "task",
+          "coherence",
+          "lexical",
+          "grammar",
+          "argument",
+          "overall_comment",
+          "priorities"
+        ]
+      }
+    },
+    {
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "message": "Expecting ',' delimiter",
+      "position": 4196,
+      "length": 4196,
+      "line": 1,
+      "column": 4197,
+      "at_eof": true,
+      "raw_unchanged": true,
+      "transport_ok": true,
+      "completion_tokens": 6315,
+      "reasoning_tokens": 4916,
+      "one_brace_diagnostic": {
+        "parses": true,
+        "root_keys": [
+          "criteria"
+        ],
+        "criteria_keys": [
+          "task",
+          "coherence",
+          "lexical",
+          "grammar",
+          "argument",
+          "overall_comment",
+          "priorities"
+        ]
+      }
+    }
+  ],
+  "adopted_argument_drops": [
+    {
+      "sample": "t2-good",
+      "dropped": 3,
+      "suggestions_removed": 0,
+      "absent_improvements": [
+        {
+          "quote_found_in_original": true,
+          "input_fields": [
+            "comment",
+            "quote"
+          ],
+          "has_suggestion": false,
+          "has_comment_instead": true,
+          "mentions_forty_passengers": false
+        },
+        {
+          "quote_found_in_original": true,
+          "input_fields": [
+            "comment",
+            "quote"
+          ],
+          "has_suggestion": false,
+          "has_comment_instead": true,
+          "mentions_forty_passengers": false
+        },
+        {
+          "quote_found_in_original": true,
+          "input_fields": [
+            "comment",
+            "quote"
+          ],
+          "has_suggestion": false,
+          "has_comment_instead": true,
+          "mentions_forty_passengers": false
+        }
+      ]
+    },
+    {
+      "sample": "t2-strong",
+      "dropped": 1,
+      "suggestions_removed": 1,
+      "absent_improvements": [
+        {
+          "quote_found_in_original": true,
+          "input_fields": [
+            "quote",
+            "suggestion"
+          ],
+          "has_suggestion": true,
+          "has_comment_instead": false,
+          "mentions_forty_passengers": true
+        }
+      ]
+    }
+  ],
+  "literal_quote_differences": [
+    {
+      "sample": "t2-weak",
+      "criterion": "task",
+      "quote": "If more people take bus, the city will be more quiet and the air will be more clean",
+      "original": "if more people take bus, the city will be more quiet and the air will be more clean",
+      "difference": "case_only",
+      "normalization_match": true
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "grammar",
+      "quote": "If more people take bus, the city will be more quiet and the air will be more clean",
+      "original": "if more people take bus, the city will be more quiet and the air will be more clean",
+      "difference": "case_only",
+      "normalization_match": true
+    }
+  ],
+  "discarded_usage_already_in_total": {
+    "invalid_json_calls": {
+      "calls": 3,
+      "tokens": {
+        "prompt_tokens": 6476,
+        "completion_tokens": 15617,
+        "total_tokens": 22093,
+        "prompt_cache_hit_tokens": 5248,
+        "prompt_cache_miss_tokens": 1228
+      },
+      "known_subtotals": {
+        "prompt_tokens": 6476,
+        "completion_tokens": 15617,
+        "total_tokens": 22093,
+        "prompt_cache_hit_tokens": 5248,
+        "prompt_cache_miss_tokens": 1228
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 10044,
+      "reasoning_known": 10044,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 0
+    },
+    "ultimately_failed_sample_calls": {
+      "calls": 2,
+      "tokens": {
+        "prompt_tokens": 4170,
+        "completion_tokens": 10714,
+        "total_tokens": 14884,
+        "prompt_cache_hit_tokens": 3584,
+        "prompt_cache_miss_tokens": 586
+      },
+      "known_subtotals": {
+        "prompt_tokens": 4170,
+        "completion_tokens": 10714,
+        "total_tokens": 14884,
+        "prompt_cache_hit_tokens": 3584,
+        "prompt_cache_miss_tokens": 586
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 7349,
+      "reasoning_known": 7349,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 0
+    }
+  },
+  "fees": {
+    "unknown": true,
+    "reason": "No prices supplied; tokens are not an invoice."
+  },
+  "previous_high_descriptive_comparison": {
+    "old_prompt": "iwa-2026-11-04.6",
+    "new_prompt": "iwa-2026-11-04.8",
+    "same_synthetic_samples_and_questions": true,
+    "old": {
+      "calls": 7,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "latency_ms_p50": 33393,
+      "latency_ms_p90": 68510,
+      "completion_tokens_max": 12244,
+      "reasoning_tokens": 34834
+    },
+    "new": {
+      "calls": 9,
+      "first_attempt_json_ok": 0.714,
+      "first_attempt_valid": 0.714,
+      "final_ready": 0.857,
+      "latency_ms_p50": 33598,
+      "latency_ms_p90": 70986,
+      "completion_tokens_max": 11629,
+      "reasoning_tokens": 37518
+    },
+    "old_usage": {
+      "prompt": 13440,
+      "completion": 49740
+    },
+    "new_usage": {
+      "prompt": 19545,
+      "completion": 54635
+    },
+    "caveat": "Descriptive version comparison only: prompts and numeric postprocessing changed; not a single-factor causal test or teacher scoring calibration."
+  },
+  "checks": {
+    "high.raw_calls_match_run_data": true,
+    "high.evaluate_only": true,
+    "high.within_stage_budget": true,
+    "high.cache_components_equal_input": true,
+    "high.token_components_equal_total": true,
+    "high.reasoning_subset_of_completion": true,
+    "high.prompt_tokens_total": true,
+    "high.completion_tokens_total": true,
+    "high.report_calls": true,
+    "high.report_reasoning_tokens": true,
+    "high.report_reasoning_tokens_known": true,
+    "high.report_reasoning_unreported_calls": true,
+    "high.report_first_attempt_json_ok": true,
+    "high.report_first_attempt_valid": true,
+    "high.report_final_ready": true,
+    "high.report_truncated": true,
+    "high.report_timeouts": true,
+    "high.latency_p50": true,
+    "high.latency_p90": true,
+    "high.completion_peak": true,
+    "high.t2-weak.removed_sum": true,
+    "high.t2-weak.returned_from_model": true,
+    "high.t2-weak.entry_partition": true,
+    "high.t2-weak.entry_quotes": true,
+    "high.t2-weak.paired_quotes": true,
+    "high.t2-weak.support_quotes": true,
+    "high.t2-mid.removed_sum": true,
+    "high.t2-mid.returned_from_model": true,
+    "high.t2-mid.entry_partition": true,
+    "high.t2-mid.entry_quotes": true,
+    "high.t2-mid.paired_quotes": true,
+    "high.t2-mid.support_quotes": true,
+    "high.t2-good.removed_sum": true,
+    "high.t2-good.returned_from_model": true,
+    "high.t2-good.entry_partition": true,
+    "high.t2-good.entry_quotes": true,
+    "high.t2-good.paired_quotes": true,
+    "high.t2-good.support_quotes": true,
+    "high.t2-strong.removed_sum": true,
+    "high.t2-strong.returned_from_model": true,
+    "high.t2-strong.entry_partition": true,
+    "high.t2-strong.entry_quotes": true,
+    "high.t2-strong.paired_quotes": true,
+    "high.t2-strong.support_quotes": true,
+    "high.t2-off-topic.removed_sum": true,
+    "high.t2-off-topic.returned_from_model": true,
+    "high.t2-off-topic.entry_partition": true,
+    "high.t2-off-topic.entry_quotes": true,
+    "high.t2-off-topic.paired_quotes": true,
+    "high.t2-off-topic.support_quotes": true,
+    "high.t2-under-length.removed_sum": true,
+    "high.t1-no-image.removed_sum": true,
+    "high.t1-no-image.consistency_evidence": true,
+    "high.report_evidence_scored_criteria": true,
+    "high.report_evidence_quotes": true,
+    "high.report_evidence_count_corrections": true,
+    "high.report_evidence_verified": true,
+    "high.report_argument_task2_evaluations": true,
+    "high.report_argument_with_argument": true,
+    "high.report_argument_with_position": true,
+    "high.report_argument_paragraphs": true,
+    "high.report_argument_problems": true,
+    "high.report_argument_improvements": true,
+    "high.report_argument_returned": true,
+    "high.report_argument_kept": true,
+    "high.report_argument_dropped": true,
+    "high.report_argument_duplicates": true,
+    "high.report_argument_over_limit": true,
+    "high.report_argument_self_conflicts": true,
+    "high.report_argument_suggestions_removed": true,
+    "high.report_argument_reclassified": true,
+    "high.report_argument_types": true,
+    "high.report_argument_verdicts": true,
+    "high.report_removed_criteria": true,
+    "high.report_removed_priorities": true,
+    "high.report_removed_argument": true,
+    "high.sanity_weak_has_problem": true,
+    "high.sanity_strong_at_most_one_problem": true,
+    "high.sanity_strong_no_false_contradiction_or_off_topic": true,
+    "high.sanity_strong_position_quote": true,
+    "high.sanity_off_topic_identified": true,
+    "high.sanity_denominator": true,
+    "high.sanity_pass_count": true,
+    "transport.actual_count": true,
+    "transport.hard_limit": true,
+    "transport.sample_counts": true,
+    "transport.completed": true,
+    "transport.business_source_unchanged": true,
+    "transport.high_only": true,
+    "transport.evaluate_only": true,
+    "transport.max_tokens": true,
+    "transport.timeout": true,
+    "transport.sample_per_call": true,
+    "transport.attempt_per_call": true,
+    "transport.usage_per_call": true,
+    "transport.input_sha256_per_call": true,
+    "transport.http_status_per_call": true,
+    "transport.initial_inputs": true,
+    "transport.ready": true,
+    "report.no_teacher_or_calibration": true,
+    "report.fee_unknown": true,
+    "report.tokens_include_content_rejected_calls": true,
+    "report.first_rejection_count": true,
+    "evidence.literal_difference_count": true
+  },
+  "checks_passed": 104,
+  "checks_total": 104,
+  "mismatches": []
+}

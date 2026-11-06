@@ -1,0 +1,2418 @@
+{
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "scope": "Offline redacted historical synthetic fixtures and pure normalizers. No Key, student material, reasoning, config, model or network access. Historical files untouched.",
+  "historical_baseline": {
+    "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+    "scope": "Offline pure normalizers and committed redacted synthetic fixtures only. No config, Key, student PDF, reasoning, model or network access.",
+    "old_P2_closed": true,
+    "baseline_checks": [
+      {
+        "case": "historical_real_call_success",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_source_has_no_40",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "old_real_forty_times_removed",
+        "passed": true,
+        "evidence": {
+          "advice": "补一句比较或后果，如 “because a full bus carries about forty times as many people as a car using only a fraction of the fuel per person”，让环境论点同样“落地”。",
+          "source_sentence": null,
+          "source_figures": [],
+          "advice_figures": [
+            [
+              "40",
+              "multiplier",
+              "forty times"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "forty times"
+          ],
+          "normalized_issue": {
+            "quote": "Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.",
+            "quote_found": true,
+            "comment": "环境段只有两句话的推理，没有具体化（例如按人均排放比较或举一个城市空气改善的情形），论证展开明显弱于第二段，使整体论证深度不均衡。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        }
+      },
+      {
+        "case": "same_real_advice_arabic_control_removed",
+        "passed": true,
+        "evidence": {
+          "advice": "补一句比较或后果，如 “because a full bus carries about 40 times as many people as a car using only a fraction of the fuel per person”，让环境论点同样“落地”。",
+          "source_sentence": null,
+          "source_figures": [],
+          "advice_figures": [
+            [
+              "40",
+              "multiplier",
+              "40 times"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "40 times"
+          ],
+          "normalized_issue": {
+            "quote": "Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.",
+            "quote_found": true,
+            "comment": "环境段只有两句话的推理，没有具体化（例如按人均排放比较或举一个城市空气改善的情形），论证展开明显弱于第二段，使整体论证深度不均衡。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        }
+      },
+      {
+        "case": "arabic_unsourced_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "Reduce emissions by 40 percent.",
+          "parsed": [
+            [
+              "40",
+              "percent",
+              "40 percent"
+            ]
+          ],
+          "missing": [
+            "40 percent"
+          ]
+        }
+      },
+      {
+        "case": "english_unsourced_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "Reduce emissions by forty percent.",
+          "parsed": [
+            [
+              "40",
+              "percent",
+              "forty percent"
+            ]
+          ],
+          "missing": [
+            "forty percent"
+          ]
+        }
+      },
+      {
+        "case": "arabic_sourced_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Emissions fell by 40 percent.",
+          "advice": "Reduce emissions by 40%.",
+          "parsed": [
+            [
+              "40",
+              "percent",
+              "40%"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "english_source_arabic_advice",
+        "passed": true,
+        "evidence": {
+          "source": "Emissions fell by forty percent.",
+          "advice": "Reduce emissions by 40%.",
+          "parsed": [
+            [
+              "40",
+              "percent",
+              "40%"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "different_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Emissions fell by 41%.",
+          "advice": "Reduce emissions by forty percent.",
+          "parsed": [
+            [
+              "40",
+              "percent",
+              "forty percent"
+            ]
+          ],
+          "missing": [
+            "forty percent"
+          ]
+        }
+      },
+      {
+        "case": "arabic_source_english_advice",
+        "passed": true,
+        "evidence": {
+          "source": "The value is 42%.",
+          "advice": "Use forty-two percent.",
+          "parsed": [
+            [
+              "42",
+              "percent",
+              "forty-two percent"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "english_compound_number",
+        "passed": true,
+        "evidence": {
+          "source": "The count was 120.",
+          "advice": "There were one hundred and twenty passengers.",
+          "parsed": [
+            [
+              "120",
+              "plain",
+              "one hundred and twenty"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "scale_equivalent",
+        "passed": true,
+        "evidence": {
+          "source": "There were 1500000 residents.",
+          "advice": "There were 1.5 million residents.",
+          "parsed": [
+            [
+              "1500000",
+              "plain",
+              "1.5 million"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "unsourced_scaled_number",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "There are 1.5 million passengers.",
+          "parsed": [
+            [
+              "1500000",
+              "plain",
+              "1.5 million"
+            ]
+          ],
+          "missing": [
+            "1.5 million"
+          ]
+        }
+      },
+      {
+        "case": "plain_not_multiplier",
+        "passed": true,
+        "evidence": {
+          "source": "There are 40 buses.",
+          "advice": "A train carries forty times as many people.",
+          "parsed": [
+            [
+              "40",
+              "multiplier",
+              "forty times"
+            ]
+          ],
+          "missing": [
+            "forty times"
+          ]
+        }
+      },
+      {
+        "case": "multiplier_equivalent",
+        "passed": true,
+        "evidence": {
+          "source": "It has 40 times the capacity.",
+          "advice": "It offers forty-fold capacity.",
+          "parsed": [
+            [
+              "40",
+              "multiplier",
+              "forty-fold"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "small_multiplier_no_exemption",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "It carries three times as many people.",
+          "parsed": [
+            [
+              "3",
+              "multiplier",
+              "three times"
+            ]
+          ],
+          "missing": [
+            "three times"
+          ]
+        }
+      },
+      {
+        "case": "english_word_target",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "Expand to two hundred and sixty words.",
+          "parsed": [
+            [
+              "260",
+              "length",
+              "two hundred and sixty"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "arabic_word_target",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "扩写到260词以上。",
+          "parsed": [
+            [
+              "260",
+              "length",
+              "260"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "english_year_span",
+        "passed": true,
+        "evidence": {
+          "source": "Ownership in 2000 and 2020.",
+          "advice": "Twenty years later, ownership rose.",
+          "parsed": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "arabic_year_span",
+        "passed": true,
+        "evidence": {
+          "source": "Ownership in 2000 and 2020.",
+          "advice": "20 years later, ownership rose.",
+          "parsed": [
+            [
+              "20",
+              "duration",
+              "20 years"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "decade_span",
+        "passed": true,
+        "evidence": {
+          "source": "Ownership in 2000 and 2020.",
+          "advice": "Over the two decades, ownership rose.",
+          "parsed": [
+            [
+              "20",
+              "duration",
+              "two decades"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "wrong_year_span",
+        "passed": true,
+        "evidence": {
+          "source": "Ownership in 2000 and 2020.",
+          "advice": "Thirty years later, ownership rose.",
+          "parsed": [
+            [
+              "30",
+              "duration",
+              "Thirty years"
+            ]
+          ],
+          "missing": [
+            "Thirty years"
+          ]
+        }
+      },
+      {
+        "case": "new_year_rejected",
+        "passed": true,
+        "evidence": {
+          "source": "Ownership in 2000 and 2020.",
+          "advice": "In 1990, ownership rose.",
+          "parsed": [
+            [
+              "1990",
+              "plain",
+              "1990"
+            ]
+          ],
+          "missing": [
+            "1990"
+          ]
+        }
+      },
+      {
+        "case": "year_not_percent",
+        "passed": true,
+        "evidence": {
+          "source": "The service opened in 1980.",
+          "advice": "Reduce emissions by eighty percent.",
+          "parsed": [
+            [
+              "80",
+              "percent",
+              "eighty percent"
+            ]
+          ],
+          "missing": [
+            "eighty percent"
+          ]
+        }
+      },
+      {
+        "case": "count_not_percent",
+        "passed": true,
+        "evidence": {
+          "source": "There are 180 buses.",
+          "advice": "Reduce emissions by eighty percent.",
+          "parsed": [
+            [
+              "80",
+              "percent",
+              "eighty percent"
+            ]
+          ],
+          "missing": [
+            "eighty percent"
+          ]
+        }
+      },
+      {
+        "case": "chinese_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Emissions fell by 80%.",
+          "advice": "降低百分之八十。",
+          "parsed": [
+            [
+              "80",
+              "percent",
+              "百分之八十"
+            ]
+          ],
+          "missing": []
+        }
+      },
+      {
+        "case": "chinese_small_percent",
+        "passed": true,
+        "evidence": {
+          "source": "Buses help.",
+          "advice": "降低百分之8。",
+          "parsed": [
+            [
+              "8",
+              "percent",
+              "百分之8"
+            ]
+          ],
+          "missing": [
+            "百分之8"
+          ]
+        }
+      },
+      {
+        "case": "different_chinese_percent",
+        "passed": true,
+        "evidence": {
+          "source": "降低百分之八十一。",
+          "advice": "降低百分之八十。",
+          "parsed": [
+            [
+              "80",
+              "percent",
+              "百分之八十"
+            ]
+          ],
+          "missing": [
+            "百分之八十"
+          ]
+        }
+      },
+      {
+        "case": "real_fixture_exact:off:t2-weak",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-weak",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t2-mid",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-mid",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t2-good",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-good",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t2-strong",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-strong",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t2-off-topic",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-off-topic",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t2-under-length",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t2-under-length",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:off:t1-no-image",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:off:t1-no-image",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-weak",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-weak",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-mid",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-mid",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-good",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-good",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-strong",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-strong",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-off-topic",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-off-topic",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t2-under-length",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t2-under-length",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_fixture_exact:high:t1-no-image",
+        "passed": true,
+        "evidence": null
+      },
+      {
+        "case": "real_replay_removals:high:t1-no-image",
+        "passed": true,
+        "evidence": null
+      }
+    ],
+    "passed_baseline_checks": 56,
+    "historical_replay": [
+      {
+        "mode": "off",
+        "sample": "t2-weak",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t2-mid",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t2-good",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t2-strong",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t2-off-topic",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t2-under-length",
+        "removed": 0
+      },
+      {
+        "mode": "off",
+        "sample": "t1-no-image",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t2-weak",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t2-mid",
+        "removed": 1
+      },
+      {
+        "mode": "high",
+        "sample": "t2-good",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t2-strong",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t2-off-topic",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t2-under-length",
+        "removed": 0
+      },
+      {
+        "mode": "high",
+        "sample": "t1-no-image",
+        "removed": 0
+      }
+    ],
+    "findings": [
+      {
+        "id": "english_conjunction_merges_independent_counts",
+        "priority": "P2",
+        "reproduced": false,
+        "source_lines": [
+          "tools/ielts_writing_ai/figures.py:93",
+          "tools/ielts_writing_ai/figures.py:115"
+        ],
+        "correct_requirement": "Respect independent counts in 'forty and fifty passengers respectively'; keep equivalent 40/50 advice and reject an invented 90 count.",
+        "observed": "The parser adds forty and fifty to 90. Full evaluation deletes both legitimate forms and retains the invented sum in copy text.",
+        "cases": {
+          "valid_arabic_advice_deleted": {
+            "advice": "The buses carry 40 and 50 passengers respectively.",
+            "source_sentence": "The two buses carry forty and fifty passengers respectively.",
+            "source_figures": [
+              [
+                "2",
+                "plain",
+                "two"
+              ],
+              [
+                "40",
+                "plain",
+                "forty"
+              ],
+              [
+                "50",
+                "plain",
+                "fifty"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "40",
+                "plain",
+                "40"
+              ],
+              [
+                "50",
+                "plain",
+                "50"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [],
+            "normalized_issue": {
+              "quote": "The two buses carry forty and fifty passengers respectively.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "The buses carry 40 and 50 passengers respectively.",
+              "suggestion_removed": false
+            },
+            "removed_counts": {
+              "criteria": 0,
+              "priorities": 0,
+              "argument": 0,
+              "total": 0
+            },
+            "advice_in_copy": true,
+            "removed_note_in_copy": false
+          },
+          "valid_english_advice_deleted": {
+            "advice": "The buses carry forty and fifty passengers respectively.",
+            "source_sentence": "The two buses carry 40 and 50 passengers respectively.",
+            "source_figures": [
+              [
+                "2",
+                "plain",
+                "two"
+              ],
+              [
+                "40",
+                "plain",
+                "40"
+              ],
+              [
+                "50",
+                "plain",
+                "50"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "40",
+                "plain",
+                "forty"
+              ],
+              [
+                "50",
+                "plain",
+                "fifty"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [],
+            "normalized_issue": {
+              "quote": "The two buses carry 40 and 50 passengers respectively.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "The buses carry forty and fifty passengers respectively.",
+              "suggestion_removed": false
+            },
+            "removed_counts": {
+              "criteria": 0,
+              "priorities": 0,
+              "argument": 0,
+              "total": 0
+            },
+            "advice_in_copy": true,
+            "removed_note_in_copy": false
+          },
+          "invented_sum_advice_kept": {
+            "advice": "One bus carries 90 passengers.",
+            "source_sentence": "The two buses carry forty and fifty passengers respectively.",
+            "source_figures": [
+              [
+                "2",
+                "plain",
+                "two"
+              ],
+              [
+                "40",
+                "plain",
+                "forty"
+              ],
+              [
+                "50",
+                "plain",
+                "fifty"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "1",
+                "plain",
+                "One"
+              ],
+              [
+                "90",
+                "plain",
+                "90"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [
+              "90"
+            ],
+            "normalized_issue": {
+              "quote": "The two buses carry forty and fifty passengers respectively.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "",
+              "suggestion_removed": true
+            },
+            "removed_counts": {
+              "criteria": 1,
+              "priorities": 0,
+              "argument": 0,
+              "total": 1
+            },
+            "advice_in_copy": false,
+            "removed_note_in_copy": true
+          },
+          "digit_source_does_not_allow_sum": {
+            "advice": "One bus carries 90 passengers.",
+            "source_sentence": "The two buses carry 40 and 50 passengers respectively.",
+            "source_figures": [
+              [
+                "2",
+                "plain",
+                "two"
+              ],
+              [
+                "40",
+                "plain",
+                "40"
+              ],
+              [
+                "50",
+                "plain",
+                "50"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "1",
+                "plain",
+                "One"
+              ],
+              [
+                "90",
+                "plain",
+                "90"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [
+              "90"
+            ],
+            "normalized_issue": {
+              "quote": "The two buses carry 40 and 50 passengers respectively.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "",
+              "suggestion_removed": true
+            },
+            "removed_counts": {
+              "criteria": 1,
+              "priorities": 0,
+              "argument": 0,
+              "total": 1
+            },
+            "advice_in_copy": false,
+            "removed_note_in_copy": true
+          },
+          "valid_compound_control": {
+            "advice": "The train carries 120 passengers.",
+            "source_sentence": "The train carries one hundred and twenty passengers.",
+            "source_figures": [
+              [
+                "120",
+                "plain",
+                "one hundred and twenty"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "120",
+                "plain",
+                "120"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [],
+            "normalized_issue": {
+              "quote": "The train carries one hundred and twenty passengers.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "The train carries 120 passengers.",
+              "suggestion_removed": false
+            },
+            "removed_counts": {
+              "criteria": 0,
+              "priorities": 0,
+              "argument": 0,
+              "total": 0
+            },
+            "advice_in_copy": true,
+            "removed_note_in_copy": false
+          }
+        }
+      },
+      {
+        "id": "non_year_counts_create_year_span",
+        "priority": "P2",
+        "reproduced": false,
+        "source_lines": [
+          "tools/ielts_writing_ai/figures.py:108",
+          "tools/ielts_writing_ai/figures.py:206",
+          "tools/ielts_writing_ai/figures.py:219"
+        ],
+        "correct_requirement": "Derive time spans from source calendar years, not arbitrary counts whose values lie between 1000 and 2100.",
+        "observed": "2000/2020 buses in different cities create year_spans={20}; a fabricated twenty-years-later sentence remains visible. Genuine year span and wrong-span controls behave as intended.",
+        "cases": {
+          "non_year_counts_allow_duration": {
+            "advice": "Twenty years later, there were 2020 buses.",
+            "source_sentence": "There are 2000 buses in City A and 2020 buses in City B.",
+            "source_figures": [
+              [
+                "2000",
+                "plain",
+                "2000"
+              ],
+              [
+                "2020",
+                "plain",
+                "2020"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "20",
+                "duration",
+                "Twenty years"
+              ],
+              [
+                "2020",
+                "plain",
+                "2020"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [
+              "Twenty years"
+            ],
+            "normalized_issue": {
+              "quote": "There are 2000 buses in City A and 2020 buses in City B.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "",
+              "suggestion_removed": true
+            },
+            "removed_counts": {
+              "criteria": 1,
+              "priorities": 0,
+              "argument": 0,
+              "total": 1
+            },
+            "advice_in_copy": false,
+            "removed_note_in_copy": true
+          },
+          "genuine_years_allow_duration": {
+            "advice": "Twenty years later, public transport was more reliable.",
+            "source_sentence": "Public transport was compared in 2000 and 2020.",
+            "source_figures": [
+              [
+                "2000",
+                "plain",
+                "2000"
+              ],
+              [
+                "2020",
+                "plain",
+                "2020"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "20",
+                "duration",
+                "Twenty years"
+              ]
+            ],
+            "source_year_spans": [
+              "20"
+            ],
+            "missing": [],
+            "normalized_issue": {
+              "quote": "Public transport was compared in 2000 and 2020.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "Twenty years later, public transport was more reliable.",
+              "suggestion_removed": false
+            },
+            "removed_counts": {
+              "criteria": 0,
+              "priorities": 0,
+              "argument": 0,
+              "total": 0
+            },
+            "advice_in_copy": true,
+            "removed_note_in_copy": false
+          },
+          "wrong_span_still_rejected": {
+            "advice": "Thirty years later, public transport was more reliable.",
+            "source_sentence": "Public transport was compared in 2000 and 2020.",
+            "source_figures": [
+              [
+                "2000",
+                "plain",
+                "2000"
+              ],
+              [
+                "2020",
+                "plain",
+                "2020"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "30",
+                "duration",
+                "Thirty years"
+              ]
+            ],
+            "source_year_spans": [
+              "20"
+            ],
+            "missing": [
+              "Thirty years"
+            ],
+            "normalized_issue": {
+              "quote": "Public transport was compared in 2000 and 2020.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "",
+              "suggestion_removed": true
+            },
+            "removed_counts": {
+              "criteria": 1,
+              "priorities": 0,
+              "argument": 0,
+              "total": 1
+            },
+            "advice_in_copy": false,
+            "removed_note_in_copy": true
+          },
+          "other_counts_do_not_allow_duration": {
+            "advice": "Twenty years later, there were 2200 buses.",
+            "source_sentence": "There are 2200 buses in City A and 2220 buses in City B.",
+            "source_figures": [
+              [
+                "2200",
+                "plain",
+                "2200"
+              ],
+              [
+                "2220",
+                "plain",
+                "2220"
+              ]
+            ],
+            "advice_figures": [
+              [
+                "20",
+                "duration",
+                "Twenty years"
+              ],
+              [
+                "2200",
+                "plain",
+                "2200"
+              ]
+            ],
+            "source_year_spans": [],
+            "missing": [
+              "Twenty years"
+            ],
+            "normalized_issue": {
+              "quote": "There are 2200 buses in City A and 2220 buses in City B.",
+              "quote_found": true,
+              "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+              "suggestion": "",
+              "suggestion_removed": true
+            },
+            "removed_counts": {
+              "criteria": 1,
+              "priorities": 0,
+              "argument": 0,
+              "total": 1
+            },
+            "advice_in_copy": false,
+            "removed_note_in_copy": true
+          }
+        }
+      }
+    ],
+    "limits": [
+      "No new model outputs or claims of prompt .8 accuracy; historical outputs are from .6.",
+      "twice/a third are already disclosed unsupported forms; not reported as new defects.",
+      "Parser checks provenance of numbers, not general factual or logical truth. The two findings are concrete numeric parsing/derivation errors, not demands for a semantic oracle.",
+      "Only own new evidence files were written; business code and historical reports remain unchanged."
+    ],
+    "network_attempts": 0
+  },
+  "additional_passing_checks": [
+    {
+      "case": "original_forty_fifty_cases_closed",
+      "passed": true,
+      "evidence": {
+        "valid_arabic_advice_deleted": {
+          "advice": "The buses carry 40 and 50 passengers respectively.",
+          "source_sentence": "The two buses carry forty and fifty passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "40",
+              "plain",
+              "forty"
+            ],
+            [
+              "50",
+              "plain",
+              "fifty"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "40",
+              "plain",
+              "40"
+            ],
+            [
+              "50",
+              "plain",
+              "50"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The two buses carry forty and fifty passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The buses carry 40 and 50 passengers respectively.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "valid_english_advice_deleted": {
+          "advice": "The buses carry forty and fifty passengers respectively.",
+          "source_sentence": "The two buses carry 40 and 50 passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "40",
+              "plain",
+              "40"
+            ],
+            [
+              "50",
+              "plain",
+              "50"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "40",
+              "plain",
+              "forty"
+            ],
+            [
+              "50",
+              "plain",
+              "fifty"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The two buses carry 40 and 50 passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The buses carry forty and fifty passengers respectively.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "invented_sum_advice_kept": {
+          "advice": "One bus carries 90 passengers.",
+          "source_sentence": "The two buses carry forty and fifty passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "40",
+              "plain",
+              "forty"
+            ],
+            [
+              "50",
+              "plain",
+              "fifty"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "1",
+              "plain",
+              "One"
+            ],
+            [
+              "90",
+              "plain",
+              "90"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "90"
+          ],
+          "normalized_issue": {
+            "quote": "The two buses carry forty and fifty passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "digit_source_does_not_allow_sum": {
+          "advice": "One bus carries 90 passengers.",
+          "source_sentence": "The two buses carry 40 and 50 passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "40",
+              "plain",
+              "40"
+            ],
+            [
+              "50",
+              "plain",
+              "50"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "1",
+              "plain",
+              "One"
+            ],
+            [
+              "90",
+              "plain",
+              "90"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "90"
+          ],
+          "normalized_issue": {
+            "quote": "The two buses carry 40 and 50 passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "valid_compound_control": {
+          "advice": "The train carries 120 passengers.",
+          "source_sentence": "The train carries one hundred and twenty passengers.",
+          "source_figures": [
+            [
+              "120",
+              "plain",
+              "one hundred and twenty"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "120",
+              "plain",
+              "120"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The train carries one hundred and twenty passengers.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The train carries 120 passengers.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        }
+      }
+    },
+    {
+      "case": "original_quantity_without_preposition_case_closed",
+      "passed": true,
+      "evidence": {
+        "non_year_counts_allow_duration": {
+          "advice": "Twenty years later, there were 2020 buses.",
+          "source_sentence": "There are 2000 buses in City A and 2020 buses in City B.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "There are 2000 buses in City A and 2020 buses in City B.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "genuine_years_allow_duration": {
+          "advice": "Twenty years later, public transport was more reliable.",
+          "source_sentence": "Public transport was compared in 2000 and 2020.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ]
+          ],
+          "source_year_spans": [
+            "20"
+          ],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "Public transport was compared in 2000 and 2020.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "Twenty years later, public transport was more reliable.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "wrong_span_still_rejected": {
+          "advice": "Thirty years later, public transport was more reliable.",
+          "source_sentence": "Public transport was compared in 2000 and 2020.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "30",
+              "duration",
+              "Thirty years"
+            ]
+          ],
+          "source_year_spans": [
+            "20"
+          ],
+          "missing": [
+            "Thirty years"
+          ],
+          "normalized_issue": {
+            "quote": "Public transport was compared in 2000 and 2020.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "other_counts_do_not_allow_duration": {
+          "advice": "Twenty years later, there were 2200 buses.",
+          "source_sentence": "There are 2200 buses in City A and 2220 buses in City B.",
+          "source_figures": [
+            [
+              "2200",
+              "plain",
+              "2200"
+            ],
+            [
+              "2220",
+              "plain",
+              "2220"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2200",
+              "plain",
+              "2200"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "There are 2200 buses in City A and 2220 buses in City B.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        }
+      }
+    },
+    {
+      "case": "ordinary_number:forty-two",
+      "passed": true,
+      "evidence": {
+        "text": "forty-two",
+        "values": [
+          "42"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:one hundred and twenty",
+      "passed": true,
+      "evidence": {
+        "text": "one hundred and twenty",
+        "values": [
+          "120"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:one hundred and twenty-five",
+      "passed": true,
+      "evidence": {
+        "text": "one hundred and twenty-five",
+        "values": [
+          "125"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:one thousand two hundred",
+      "passed": true,
+      "evidence": {
+        "text": "one thousand two hundred",
+        "values": [
+          "1200"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:two thousand and twenty",
+      "passed": true,
+      "evidence": {
+        "text": "two thousand and twenty",
+        "values": [
+          "2020"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:a hundred",
+      "passed": true,
+      "evidence": {
+        "text": "a hundred",
+        "values": [
+          "100"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:one million two hundred and thirty-four thousand five hundred and sixty-seven",
+      "passed": true,
+      "evidence": {
+        "text": "one million two hundred and thirty-four thousand five hundred and sixty-seven",
+        "values": [
+          "1234567"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:forty and fifty",
+      "passed": true,
+      "evidence": {
+        "text": "forty and fifty",
+        "values": [
+          "40",
+          "50"
+        ]
+      }
+    },
+    {
+      "case": "ordinary_number:forty fifty",
+      "passed": true,
+      "evidence": {
+        "text": "forty fifty",
+        "values": [
+          "40",
+          "50"
+        ]
+      }
+    },
+    {
+      "case": "coordinated_percent_unit_preserved",
+      "passed": true,
+      "evidence": null
+    }
+  ],
+  "passed_baseline_checks": 56,
+  "passed_additional_checks": 12,
+  "original_exact_examples_closed": true,
+  "findings": [
+    {
+      "id": "conjunction_after_scale_still_merges_independent_counts",
+      "priority": "P2",
+      "reproduced": false,
+      "source_lines": [
+        "tools/ielts_writing_ai/figures.py:147",
+        "tools/ielts_writing_ai/figures.py:173",
+        "tools/ielts_writing_ai/figures.py:176"
+      ],
+      "assessment": "Tens example fixed, same defect persists for coordinated hundreds/thousands: 100 and 200 becomes 10200, 1000 and 2000 becomes 3000. Legitimate advice is deleted and invented values survive full normalization and copy. Normal genuine compound numbers work.",
+      "cases": {
+        "hundreds_valid_digits": {
+          "advice": "The buses carry 100 and 200 passengers respectively.",
+          "source_sentence": "The two buses carry one hundred and two hundred passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "100",
+              "plain",
+              "one hundred"
+            ],
+            [
+              "200",
+              "plain",
+              "two hundred"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "100",
+              "plain",
+              "100"
+            ],
+            [
+              "200",
+              "plain",
+              "200"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The two buses carry one hundred and two hundred passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The buses carry 100 and 200 passengers respectively.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "hundreds_valid_words": {
+          "advice": "The buses carry one hundred and two hundred passengers respectively.",
+          "source_sentence": "The two buses carry 100 and 200 passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "100",
+              "plain",
+              "100"
+            ],
+            [
+              "200",
+              "plain",
+              "200"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "100",
+              "plain",
+              "one hundred"
+            ],
+            [
+              "200",
+              "plain",
+              "two hundred"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The two buses carry 100 and 200 passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The buses carry one hundred and two hundred passengers respectively.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "hundreds_invented_merged_value": {
+          "advice": "One bus carries 10200 passengers.",
+          "source_sentence": "The two buses carry one hundred and two hundred passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "100",
+              "plain",
+              "one hundred"
+            ],
+            [
+              "200",
+              "plain",
+              "two hundred"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "1",
+              "plain",
+              "One"
+            ],
+            [
+              "10200",
+              "plain",
+              "10200"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "10200"
+          ],
+          "normalized_issue": {
+            "quote": "The two buses carry one hundred and two hundred passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "hundreds_digit_source_blocks_merged_value": {
+          "advice": "One bus carries 10200 passengers.",
+          "source_sentence": "The two buses carry 100 and 200 passengers respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "100",
+              "plain",
+              "100"
+            ],
+            [
+              "200",
+              "plain",
+              "200"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "1",
+              "plain",
+              "One"
+            ],
+            [
+              "10200",
+              "plain",
+              "10200"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "10200"
+          ],
+          "normalized_issue": {
+            "quote": "The two buses carry 100 and 200 passengers respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "thousands_valid_digits": {
+          "advice": "The two fleets contain 1000 and 2000 buses respectively.",
+          "source_sentence": "The two fleets contain one thousand and two thousand buses respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "1000",
+              "plain",
+              "one thousand"
+            ],
+            [
+              "2000",
+              "plain",
+              "two thousand"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "1000",
+              "plain",
+              "1000"
+            ],
+            [
+              "2000",
+              "plain",
+              "2000"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The two fleets contain one thousand and two thousand buses respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The two fleets contain 1000 and 2000 buses respectively.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        },
+        "thousands_invented_sum": {
+          "advice": "One fleet contains 3000 buses.",
+          "source_sentence": "The two fleets contain one thousand and two thousand buses respectively.",
+          "source_figures": [
+            [
+              "2",
+              "plain",
+              "two"
+            ],
+            [
+              "1000",
+              "plain",
+              "one thousand"
+            ],
+            [
+              "2000",
+              "plain",
+              "two thousand"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "1",
+              "plain",
+              "One"
+            ],
+            [
+              "3000",
+              "plain",
+              "3000"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "3000"
+          ],
+          "normalized_issue": {
+            "quote": "The two fleets contain one thousand and two thousand buses respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true
+        },
+        "genuine_compound_sentence": {
+          "advice": "The train carries 125 passengers.",
+          "source_sentence": "The train carries one hundred and twenty-five passengers.",
+          "source_figures": [
+            [
+              "125",
+              "plain",
+              "one hundred and twenty-five"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "125",
+              "plain",
+              "125"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The train carries one hundred and twenty-five passengers.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "The train carries 125 passengers.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false
+        }
+      }
+    },
+    {
+      "id": "quantity_prepositions_still_confirm_fake_years",
+      "priority": "P2",
+      "reproduced": false,
+      "source_lines": [
+        "tools/ielts_writing_ai/figures.py:189",
+        "tools/ielts_writing_ai/figures.py:202",
+        "tools/ielts_writing_ai/figures.py:304"
+      ],
+      "assessment": "The context rule treats from/to/of/between as positive year evidence even with explicit buses units. Normal count descriptions still authorize an invented 20-year duration. Genuine years and wrong-duration controls remain correct.",
+      "cases": {
+        "quantity_rose_from_to": {
+          "advice": "Twenty years later, there were 2020 buses.",
+          "source_sentence": "The number of buses rose from 2000 to 2020 buses.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "The number of buses rose from 2000 to 2020 buses.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true,
+          "confirmed_years_from_source_sentence": []
+        },
+        "quantity_fleet_of": {
+          "advice": "Twenty years later, there were 2020 buses.",
+          "source_sentence": "The sample consisted of 2000 buses and another fleet of 2020 buses.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "The sample consisted of 2000 buses and another fleet of 2020 buses.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true,
+          "confirmed_years_from_source_sentence": []
+        },
+        "quantity_between_range": {
+          "advice": "Twenty years later, there were 2020 buses.",
+          "source_sentence": "Between 2000 and 2020 buses were recorded in the two cities.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ],
+            [
+              "2",
+              "plain",
+              "two"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "Between 2000 and 2020 buses were recorded in the two cities.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true,
+          "confirmed_years_from_source_sentence": []
+        },
+        "quantity_without_temporal_adjacent_word": {
+          "advice": "Twenty years later, there were 2020 buses.",
+          "source_sentence": "In numbers of buses, City A and City B recorded 2000 and 2020 respectively.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "source_year_spans": [],
+          "missing": [
+            "Twenty years"
+          ],
+          "normalized_issue": {
+            "quote": "In numbers of buses, City A and City B recorded 2000 and 2020 respectively.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true,
+          "confirmed_years_from_source_sentence": []
+        },
+        "genuine_in_years": {
+          "advice": "Twenty years later, public transport was more reliable.",
+          "source_sentence": "Public transport was compared in 2000 and 2020.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ]
+          ],
+          "source_year_spans": [
+            "20"
+          ],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "Public transport was compared in 2000 and 2020.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "Twenty years later, public transport was more reliable.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false,
+          "confirmed_years_from_source_sentence": [
+            2000,
+            2020
+          ]
+        },
+        "genuine_from_to_years": {
+          "advice": "Twenty years later, public transport was more reliable.",
+          "source_sentence": "The study ran from 2000 to 2020.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "20",
+              "duration",
+              "Twenty years"
+            ]
+          ],
+          "source_year_spans": [
+            "20"
+          ],
+          "missing": [],
+          "normalized_issue": {
+            "quote": "The study ran from 2000 to 2020.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "Twenty years later, public transport was more reliable.",
+            "suggestion_removed": false
+          },
+          "removed_counts": {
+            "criteria": 0,
+            "priorities": 0,
+            "argument": 0,
+            "total": 0
+          },
+          "advice_in_copy": true,
+          "removed_note_in_copy": false,
+          "confirmed_years_from_source_sentence": [
+            2000,
+            2020
+          ]
+        },
+        "wrong_duration_with_years": {
+          "advice": "Thirty years later, public transport was more reliable.",
+          "source_sentence": "The study ran from 2000 to 2020.",
+          "source_figures": [
+            [
+              "2000",
+              "plain",
+              "2000"
+            ],
+            [
+              "2020",
+              "plain",
+              "2020"
+            ]
+          ],
+          "advice_figures": [
+            [
+              "30",
+              "duration",
+              "Thirty years"
+            ]
+          ],
+          "source_year_spans": [
+            "20"
+          ],
+          "missing": [
+            "Thirty years"
+          ],
+          "normalized_issue": {
+            "quote": "The study ran from 2000 to 2020.",
+            "quote_found": true,
+            "comment": "建议用下面的完整句准确描述这组公交数量或时间数据。",
+            "suggestion": "",
+            "suggestion_removed": true
+          },
+          "removed_counts": {
+            "criteria": 1,
+            "priorities": 0,
+            "argument": 0,
+            "total": 1
+          },
+          "advice_in_copy": false,
+          "removed_note_in_copy": true,
+          "confirmed_years_from_source_sentence": [
+            2000,
+            2020
+          ]
+        }
+      }
+    }
+  ],
+  "recommendation": "Offline numeric-provenance review is not passed; do not claim the original two defect classes are closed or start a batch conditional on offline approval until resolved.",
+  "limits": [
+    "This is the same two defect classes in adjacent normal contexts, not an unbounded expansion to exotic numeral forms.",
+    "The year rule may be heuristic, but an explicit buses quantity is not evidence of a calendar year. This test does not require general semantic truth verification.",
+    "No new paid or network requests; historical fixture replay does not establish prompt .8 model quality."
+  ],
+  "network_attempts": 0
+}

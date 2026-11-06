@@ -1,0 +1,536 @@
+{
+  "review_date": "2026-11-06",
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "prompt_version": "iwa-2026-11-04.8",
+  "method": "manual comparison of LR/GRA feedback against full synthetic source essays, including success-result language priorities; rejected raw sections separately inspected without making them accepted",
+  "external_requests_by_reviewer": 0,
+  "private_reasoning_read": false,
+  "key_read": false,
+  "business_code_changed": false,
+  "source_manifest": [
+    {
+      "role": "current_accepted_results_and_sources",
+      "path": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-finalcheck-20261106/shared-evidence/run_data.json",
+      "sha256": "82aefb43cd8310af8f18ff02959df2151c1f1b3072f1f8d493891afeb9504549"
+    },
+    {
+      "role": "current_sanitized_raw_answers",
+      "path": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-finalcheck-20261106/shared-evidence/raw_calls.jsonl",
+      "sha256": "85c41623585fa58360f00ba9a313c9c117a372c9bbe77487d6b1446ba13a076b"
+    },
+    {
+      "role": "previous_manual_review",
+      "path": "/private/tmp/studytracker-iwa-realcheck-review-20261103/docs/design/ielts-writing-ai-thinking-ab-20261104/manual_language_review.md",
+      "sha256": "d339a184ec7e209f74b474d508fd5dfb3756def8f84772a193832e3f27491007"
+    }
+  ],
+  "counts": {
+    "samples_requested": 7,
+    "ready": 6,
+    "failed": 1,
+    "actual_calls_observed_in_shared_evidence": 9,
+    "accepted_language_issues_reviewed": 10,
+    "rejected_raw_language_issues_reviewed": 3,
+    "rejected_raw_attempts": 3,
+    "accepted_language_issues_with_unsupported_new_facts_found": 0
+  },
+  "coverage": [
+    {
+      "sample": "t2-weak",
+      "words": 270,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 4,
+      "gra_issue_count": 4,
+      "model_bands_recorded_not_validated": {
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        1
+      ]
+    },
+    {
+      "sample": "t2-mid",
+      "words": 251,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 0,
+      "gra_issue_count": 0,
+      "model_bands_recorded_not_validated": {
+        "lexical": 7.0,
+        "grammar": 7.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        2
+      ]
+    },
+    {
+      "sample": "t2-good",
+      "words": 277,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 0,
+      "gra_issue_count": 0,
+      "model_bands_recorded_not_validated": {
+        "lexical": 8.0,
+        "grammar": 8.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        3
+      ]
+    },
+    {
+      "sample": "t2-strong",
+      "words": 298,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 0,
+      "gra_issue_count": 0,
+      "model_bands_recorded_not_validated": {
+        "lexical": 8.0,
+        "grammar": 8.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        4
+      ]
+    },
+    {
+      "sample": "t2-off-topic",
+      "words": 254,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 0,
+      "gra_issue_count": 0,
+      "model_bands_recorded_not_validated": {
+        "lexical": 7.0,
+        "grammar": 7.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        5,
+        6
+      ]
+    },
+    {
+      "sample": "t2-under-length",
+      "words": 97,
+      "final_status": "failed",
+      "error_code": "invalid_output",
+      "accepted_result_exists": false,
+      "lr_issue_count": 0,
+      "gra_issue_count": 0,
+      "model_bands_recorded_not_validated": {},
+      "language_criteria_reviewed": false,
+      "raw_attempts": [
+        7,
+        8
+      ]
+    },
+    {
+      "sample": "t1-no-image",
+      "words": 172,
+      "final_status": "ready",
+      "error_code": null,
+      "accepted_result_exists": true,
+      "lr_issue_count": 0,
+      "gra_issue_count": 2,
+      "model_bands_recorded_not_validated": {
+        "lexical": 7.0,
+        "grammar": 7.0
+      },
+      "language_criteria_reviewed": true,
+      "raw_attempts": [
+        9
+      ]
+    }
+  ],
+  "accepted_issue_reviews": [
+    {
+      "sample": "t2-weak",
+      "criterion": "lexical",
+      "index": 0,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=lexical].issues[0]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "If the bus is more better",
+      "quote_found": true,
+      "comment": "双重比较级 more better 是明显词形错误，应改为 better。",
+      "suggestion": "If the bus service were better, more people would use it.",
+      "suggestion_removed": false,
+      "review_status": "correct_with_modality_shift",
+      "review": "more better 确属双重比较级错误。新句语法正确，但 is/will 改为 were/would，把现实可能条件改成较假设性的条件；删除原句末尾交通减少的后果。宜标为可选整句改写，最小纠错不必改变语气。",
+      "meaning": "minor_modality_shift",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": "If the bus service is better, people will use it more and there will be less traffic."
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "lexical",
+      "index": 1,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=lexical].issues[1]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "the bus is always late and very crowd",
+      "quote_found": true,
+      "comment": "crowd 是名词/动词，此处需要形容词 crowded。",
+      "suggestion": "the bus is always late and very crowded",
+      "suggestion_removed": false,
+      "review_status": "correct_local_edit",
+      "review": "crowd 改为 crowded 正确，late 保留原意。提供的是原句中的主句片段，可作局部替换；不是因为小写或没有句号就构成语法残句。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "lexical",
+      "index": 2,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=lexical].issues[2]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "it is good for enviroment",
+      "quote_found": true,
+      "comment": "enviroment 拼写错误，应为 environment；同类拼写错误还有 goverment。",
+      "suggestion": "it is good for the environment",
+      "suggestion_removed": false,
+      "review_status": "correct_local_edit",
+      "review": "environment 拼写及 the 冠词修正正确，未添加环境收益的具体事实。原句的其他部分没有被此局部建议覆盖。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "lexical",
+      "index": 3,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=lexical].issues[3]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "many people dont have car",
+      "quote_found": true,
+      "comment": "car 应用复数 cars；dont 缺少撇号。",
+      "suggestion": "many people do not have cars",
+      "suggestion_removed": false,
+      "review_status": "correct_local_edit_context_incomplete",
+      "review": "dont/car 改为 do not/cars 正确，仍保留“没有车”，没有变成“买不起车”。但原句 Because many people... 独立成句；仅替换此引文仍不能修复整句残句。该问题已在本次 CC 另一条建议中明确处理，不能说模型完全漏检。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": true,
+      "reviewer_optional_full_sentence": "Many people do not have cars and need buses and trains to go to work and school."
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "grammar",
+      "index": 0,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=grammar].issues[0]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "I am agree with this opinion",
+      "quote_found": true,
+      "comment": "be 动词与动词原形连用，系动词错误；应为 I agree。",
+      "suggestion": "I agree with this opinion to some extent, but not entirely.",
+      "suggestion_removed": false,
+      "review_status": "correct",
+      "review": "删除多余 am 正确；to some extent, but not entirely 对应原文 in some way but not all，立场未变。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "grammar",
+      "index": 1,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=grammar].issues[1]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "goverment should spend money for public transport not for build new road",
+      "quote_found": true,
+      "comment": "介词搭配和动名词错误；spend money on + 名词/动名词，rather than 后接 building。",
+      "suggestion": "the government should spend money on public transport rather than on building new roads.",
+      "suggestion_removed": false,
+      "review_status": "correct",
+      "review": "government、spend money on、building new roads 修正可用；rather than on building 与前面的 on public transport 对应。没有添加新的交通事实。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "grammar",
+      "index": 2,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=grammar].issues[2]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "the city is grow",
+      "quote_found": true,
+      "comment": "be 动词后误用动词原形，应为 is growing。",
+      "suggestion": "the city is growing",
+      "suggestion_removed": false,
+      "review_status": "correct_local_edit_context_incomplete",
+      "review": "is grow 改为 is growing 正确；但原文完整句是 Because the city is grow and more people buy car every year.，局部替换后仍是独立 Because 从句，且 cars 尚未修。建议本身 the city is growing 是完整主谓结构，不应把它单独称为残句；未解决的是原句上下文。优先事项已提醒 Because 独立成句，仍欠此处完整可用改句。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": true,
+      "reviewer_optional_full_sentence": "New roads are also important because the city is growing and more people buy cars every year."
+    },
+    {
+      "sample": "t2-weak",
+      "criterion": "grammar",
+      "index": 3,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t2-weak].generations.evaluate.result.criteria[key=grammar].issues[3]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "a25d77b61253d9aeb9ab933a882caa4e534e33803397f18513c4daad5eb0d325",
+      "quote": "my father drive to work everyday and he spend two hour",
+      "quote_found": true,
+      "comment": "主谓一致和名词复数错误；应为 drives / spends / two hours。",
+      "suggestion": "my father drives to work every day and spends two hours on the road.",
+      "suggestion_removed": false,
+      "review_status": "correct",
+      "review": "drives/spends、two hours、every day 和 on the road 均合理，保留父亲每天开车、耗时两小时的原意。建议补出的 on the road 来自完整原句 in the road，并非新事实。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t1-no-image",
+      "criterion": "grammar",
+      "index": 0,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t1-no-image].generations.evaluate.result.criteria[key=grammar].issues[0]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "e1952a86ef8d59fd770f9422c40e5528e0175e0dc0a7fb7ce494d9d7641b397d",
+      "quote": "and Country B had grown to approximately 65%",
+      "quote_found": true,
+      "comment": "前半句主语是 the percentage in Country A，后半句主语却变成 Country B，严格说应是 the figure for Country B；当前表达让“国家”本身增长到65%，不够准确。",
+      "suggestion": "By 2020, the percentage in Country A had risen slightly to about 75%, and the figure for Country B had grown to approximately 65%.",
+      "suggestion_removed": false,
+      "review_status": "useful_precision_edit_overstated_grammar_label",
+      "review": "the figure for Country B 比 Country B had grown to 65% 更精确，替换本身可用；但两个由 and 连接的完整分句可以有不同主语。理由应聚焦“国家”代指“该国比例”的精确度，不能把主语不同本身当语法错误。成功结果 priorities[0] 将其总括为“主语偷换”，属于过度定性。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": null
+    },
+    {
+      "sample": "t1-no-image",
+      "criterion": "grammar",
+      "index": 1,
+      "source_pointer": "shared-evidence/run_data.json:samples[id=t1-no-image].generations.evaluate.result.criteria[key=grammar].issues[1]",
+      "visibility": "accepted_result_local_validation_not_published",
+      "original_essay_sha256": "e1952a86ef8d59fd770f9422c40e5528e0175e0dc0a7fb7ce494d9d7641b397d",
+      "quote": "where ownership almost doubled to nearly 80%, overtaking Country A",
+      "quote_found": true,
+      "comment": "现在分词 overtaking 的逻辑主语不清，读起来像 ownership 超过 Country A，而不是 Country C 超过 Country A。",
+      "suggestion": "The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, with Country C overtaking Country A.",
+      "suggestion_removed": false,
+      "review_status": "optional_precision_edit_overstated_grammar_label",
+      "review": "原文可按省略比较理解为 C 的拥车比例超过 A 的比例；直接定性为分词悬垂证据不足。with Country C overtaking Country A 能明确国家，却仍用国家代指其比例。更好的精确化是比较 ownership 与 the figure for Country A。建议未新增年份、数值或连续增长形状。",
+      "meaning": "preserved",
+      "unsupported_new_fact": false,
+      "context_fragment_not_repaired_by_this_edit": false,
+      "reviewer_optional_full_sentence": "The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, exceeding the figure for Country A."
+    }
+  ],
+  "rejected_raw_attempts": [
+    {
+      "line": 5,
+      "sample": "t2-off-topic",
+      "attempt": 0,
+      "json_ok": false,
+      "json_error": {
+        "message": "Extra data",
+        "position": 6345
+      },
+      "language_issue_counts": {
+        "lexical": 0,
+        "grammar": 0
+      },
+      "manual_inspection_method": "decode isolated criterion object solely for review; whole document remains rejected"
+    },
+    {
+      "line": 7,
+      "sample": "t2-under-length",
+      "attempt": 0,
+      "json_ok": false,
+      "json_error": {
+        "message": "Expecting ',' delimiter",
+        "position": 5250
+      },
+      "language_issue_counts": {
+        "lexical": 1,
+        "grammar": 0
+      },
+      "manual_inspection_method": "decode isolated criterion object solely for review; whole document remains rejected"
+    },
+    {
+      "line": 8,
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "json_ok": false,
+      "json_error": {
+        "message": "Expecting ',' delimiter",
+        "position": 4196
+      },
+      "language_issue_counts": {
+        "lexical": 2,
+        "grammar": 0
+      },
+      "manual_inspection_method": "decode isolated criterion object solely for review; whole document remains rejected"
+    }
+  ],
+  "rejected_raw_issue_reviews": [
+    {
+      "sample": "t2-under-length",
+      "attempt": 0,
+      "criterion": "lexical",
+      "index": 0,
+      "source_pointer": "shared-evidence/raw_calls.jsonl:line 7, text.criteria.lexical.issues[0]",
+      "visibility": "rejected_raw_only_not_accepted_not_published",
+      "quote": "It is also cheaper for students and old people who do not have cars.",
+      "comment": "old people 偏口语化，在学术写作中不够得体，与全文其他部分相比语域偏低。",
+      "suggestion": "改为 “It is also cheaper for students and elderly people who do not own a car.”",
+      "review_status": "optional_wording_overstated",
+      "review": "old people 是可理解的普通表达，并不是语法错误；older people/elderly people 可作语域选择。把原文一概定为“不够得体”过严。do not own a car 比 have 更具体地谈所有权，通常相近但不是必要替换；本次没有引入“负担不起”的新原因。",
+      "unsupported_new_fact": false
+    },
+    {
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "criterion": "lexical",
+      "index": 0,
+      "source_pointer": "shared-evidence/raw_calls.jsonl:line 8, text.criteria.lexical.issues[0]",
+      "visibility": "rejected_raw_only_not_accepted_not_published",
+      "quote": "It is also cheaper for students and old people who do not have cars.",
+      "comment": "词汇偏简单，old people较口语化，整体主题词汇不够丰富。",
+      "suggestion": "可使用elderly people等更正式表达，并补充与交通费用相关的主题词汇。",
+      "review_status": "optional_wording",
+      "review": "elderly people 和交通主题词可作可选词汇练习；不能只因简单常见就把原表达判错，新增词仍须服务原意。",
+      "unsupported_new_fact": false
+    },
+    {
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "criterion": "lexical",
+      "index": 1,
+      "source_pointer": "shared-evidence/raw_calls.jsonl:line 8, text.criteria.lexical.issues[1]",
+      "visibility": "rejected_raw_only_not_accepted_not_published",
+      "quote": "In conclusion, public transport should be the priority, but some roads are still necessary.",
+      "comment": "public transport在全文多次重复，词汇变化不足。",
+      "suggestion": "适当轮换使用public transit、buses and trains等表达，避免同一短语反复出现。",
+      "review_status": "optional_variation_not_proven_error",
+      "review": "public transport 是文章核心主题词，全文出现三次，重复本身不证明表达错误。public transit 可作同义选择；buses and trains 指交通方式集合，范围比 public transport 窄，须按具体语境选择，不应机械轮换。",
+      "unsupported_new_fact": false
+    }
+  ],
+  "additional_language_findings": [
+    {
+      "id": "task1_priority_misclassification",
+      "sample": "t1-no-image",
+      "pointer": "result.priorities[0]",
+      "model_text": "修正分词悬垂和主语偷换：明确“overtaking”的逻辑主语是 Country C，并把“Country B had grown”改为“the figure for Country B had grown”。",
+      "finding": "成功结果的明确教学风险：用“分词悬垂和主语偷换”概括两处可精确化的表达。并列分句主语不同是合法的；overtaking 的省略比较可理解。应改为“明确数据指标和比较对象”，避免向学生教成必须同主语的规则。",
+      "classification": "overstated_grammar_diagnosis",
+      "severity": "P2_teaching_feedback",
+      "accepted": true
+    },
+    {
+      "id": "weak_context_complete_sentence",
+      "sample": "t2-weak",
+      "pointer": "result.criteria[key=grammar].issues[2]",
+      "finding": "旧残句边界仍未完全关闭：本条只修动词，套回原句仍有独立 Because 从句。模型已在 summary/priorities 提醒句子片段，CC 也修了另一处 Because，故这是局部改句完整性，不是完全未识别残句或新造语法错误。",
+      "classification": "contextual_completeness",
+      "severity": "follow_up",
+      "accepted": true
+    },
+    {
+      "id": "range_advice_is_optional",
+      "sample": [
+        "t2-mid",
+        "t2-good",
+        "t2-strong",
+        "t1-no-image"
+      ],
+      "pointer": "result.criteria and result.priorities",
+      "finding": "mid 建议增加分词/名词性从句/倒装、strong 提醒长句清晰度、Task 1 建议同义变化，均应当作为有语境需要时的练习，不能据此认定现有句子不合法。good 明确建议避免为求难度堆砌生僻词，是正向变化。mid 与 Task 1 LR 总结仍用“高阶/少见表达有限”解释分数上限，未据此核定任何应得分。",
+      "classification": "optional_range_advice_not_error",
+      "accepted": true
+    },
+    {
+      "id": "mid_structure_inventory",
+      "sample": "t2-mid",
+      "pointer": "result.criteria[key=grammar].summary",
+      "finding": "summary 声称出现“分词结构”，但列出的 strengths 只支持 while/if/which 等结构，原稿也没有明显的独立分词状语结构；limited budgets 可作分词形容词分析。属于术语范围与证据应更具体的小问题，不把它当作新增语法误改。",
+      "classification": "minor_explanation_precision",
+      "accepted": true
+    }
+  ],
+  "old_issue_comparison": [
+    {
+      "old_issue": "mid which 指代模糊",
+      "current_observation": "本次 GRA strengths 明确说指代明确、标点正确，issues 为空。",
+      "status": "not_reproduced_in_current_accepted_result"
+    },
+    {
+      "old_issue": "good 因果 as / 长句被当错误",
+      "current_observation": "本次 GRA 赞扬句式控制，issues 为空；未要求改掉因果 as。",
+      "status": "not_reproduced_in_current_accepted_result"
+    },
+    {
+      "old_issue": "strong treadmill 太口语 / 省略关系词结构拥挤",
+      "current_observation": "本次 LR 赞扬 treadmill；GRA 明说省略关系词叠加仍清晰。剩余长句提醒应视为可选。",
+      "status": "not_reproduced_in_current_accepted_result"
+    },
+    {
+      "old_issue": "Task 1 By 2020 + had grown 被强改",
+      "current_observation": "本次肯定过去完成时恰当。",
+      "status": "not_reproduced_in_current_accepted_result"
+    },
+    {
+      "old_issue": "Task 1 并列主语不同被称省略不当",
+      "current_observation": "新理由较多聚焦国家/比例精确度，改句合理；但 priorities 仍叫“主语偷换”，未完全消除过重语法定性。",
+      "status": "partially_persists_as_overstated_label"
+    },
+    {
+      "old_issue": "under-length 无车变买不起车",
+      "current_observation": "两条原始改词建议均未出现 cannot afford；但本篇整体失败，没有成功结果，不能计为学生结果修复成功。",
+      "status": "not_reproduced_in_raw_only_final_failed"
+    },
+    {
+      "old_issue": "Task 1 只有端点却建议 steady climb",
+      "current_observation": "本次 LR issues 为空，GRA 替换未添加稳定/连续增长。",
+      "status": "not_reproduced_in_current_accepted_result"
+    },
+    {
+      "old_issue": "mid/good 正确常用词被迫升级",
+      "current_observation": "本次不再点名 much less crowded 或 difficult choice 为错误；good 明说避免堆难词。LR 总结的高阶词倾向仍须谨慎，不能靠新词数校准分数。",
+      "status": "specific_old_false_corrections_not_reproduced"
+    },
+    {
+      "old_issue": "weak Because 局部修正后仍可残句",
+      "current_observation": "本次 GRA 仍只给 the city is growing，应用回完整原句仍残缺；但总结与优先事项已识别残句。",
+      "status": "contextual_completeness_still_requires_followup"
+    }
+  ],
+  "limitations": [
+    "This is a manual review of seven synthetic essays, not teacher-score calibration. Recorded bands are model outputs, not independently validated scores.",
+    "Ready means the trial pipeline accepted a result; this local validation did not publish results to students. Failed raw attempts are not accepted feedback.",
+    "No separate browser/copy-rendering run was performed. The accepted JSON fields inspected are the feedback payload.",
+    "Absence in this batch does not establish systematic elimination or causal attribution to one prompt change; .6 to .8 also changed other prompts and post-processing.",
+    "No network request, key, private reasoning, production data, or student PDF was accessed for this review."
+  ]
+}

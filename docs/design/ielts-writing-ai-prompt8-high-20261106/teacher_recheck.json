@@ -1,0 +1,239 @@
+{
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "student_materials_read": false,
+  "positive_controls": {
+    "model_change": {
+      "default_rejection": "两次运行的条件不同，不能对照：服务商不同：deepseek vs qwen；模型不同：offline-A vs offline-B",
+      "allowed_warnings": [
+        "对照的是两个模型：deepseek / offline-A vs qwen / offline-B（提示词与实际输入相同）",
+        "模型和思考模式同时不同：差异不能单独归因于其中一项"
+      ],
+      "both_model_labels_in_report_and_manual_sheet": true,
+      "changed_version_errors": [
+        "提示词版本不同：iwa-2026-11-04.8 vs deliberately-different-prompt"
+      ],
+      "changed_input_errors": [
+        "实际发送给评价模型的输入不同：synthetic-one"
+      ],
+      "changed_sample_errors": [
+        "同名样本的题目、作文或题图识别结果不同：synthetic-one"
+      ]
+    },
+    "exact_contained_span_overlaps": true,
+    "unrelated_words_do_not_overlap": true,
+    "model_calls_are_fake": true
+  },
+  "observations": {
+    "failed_sample_denominator": {
+      "requested_teacher_findings": 2,
+      "generation_states": {
+        "success": "ready",
+        "failed": "failed"
+      },
+      "report_metric": {
+        "covered": 1,
+        "total": 2,
+        "rate": 0.5,
+        "uncertain": 0,
+        "evaluated_samples": 1,
+        "evaluated_total": 1,
+        "rate_evaluated": 1.0,
+        "failed_samples": [
+          "failed"
+        ],
+        "samples": {
+          "success": {
+            "evaluated": true,
+            "status": "ready",
+            "findings": [
+              {
+                "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+                "note": "检查交通结论的依据。",
+                "covered": true,
+                "coverage": "yes"
+              }
+            ],
+            "covered": 1,
+            "uncertain": 0,
+            "total": 1,
+            "ai_spans": 5,
+            "ai_spans_not_marked_by_teacher": 0
+          },
+          "failed": {
+            "evaluated": false,
+            "status": "failed",
+            "findings": [
+              {
+                "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+                "note": "检查交通结论的依据。",
+                "covered": null,
+                "coverage": "not_evaluated"
+              }
+            ],
+            "covered": 0,
+            "uncertain": 0,
+            "total": 1,
+            "ai_spans": 0,
+            "ai_spans_not_marked_by_teacher": 0
+          }
+        }
+      },
+      "unconditional_rate": 0.5,
+      "report_lines": [
+        "老师批注共 2 处，来自 2 篇作文，其中 1 篇评价没有成功，它们的 1 处批注无法对照，计为未覆盖。AI 也指出了同一位置的有 1 处，占全部 50%；只看评价成功的作文为 1/1（100%）。"
+      ],
+      "failed_sample_visible_in_teacher_metric": true,
+      "defect_observed": false
+    },
+    "disjoint_position_false_coverage": {
+      "teacher_quote": "The school is in the city and it needs repairs.",
+      "ai_quote": "The hospital is in the village and it needs doctors.",
+      "character_offsets": {
+        "teacher": [
+          0,
+          47
+        ],
+        "ai": [
+          49,
+          101
+        ]
+      },
+      "actual_character_ranges_overlap": false,
+      "coverage": {
+        "evaluated": true,
+        "status": "ready",
+        "findings": [
+          {
+            "quote": "The school is in the city and it needs repairs.",
+            "note": "检查学校修缮主张。",
+            "covered": false,
+            "coverage": "no"
+          }
+        ],
+        "covered": 0,
+        "uncertain": 0,
+        "total": 1,
+        "ai_spans": 1,
+        "ai_spans_not_marked_by_teacher": 1
+      },
+      "defect_observed": false
+    },
+    "annotation_order_misalignment": {
+      "comparison_warnings": [],
+      "a_findings": [
+        {
+          "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+          "note": "检查交通结论的依据。",
+          "covered": true,
+          "coverage": "yes"
+        },
+        {
+          "quote": "Volcanic rocks contain minerals beneath distant mountains.",
+          "note": "这一句偏离交通题目。",
+          "covered": false,
+          "coverage": "no"
+        }
+      ],
+      "b_findings": [
+        {
+          "quote": "Volcanic rocks contain minerals beneath distant mountains.",
+          "note": "这一句偏离交通题目。",
+          "covered": false,
+          "coverage": "no"
+        },
+        {
+          "quote": "Urban tram services reduce traffic congestion during commuting hours.",
+          "note": "检查交通结论的依据。",
+          "covered": true,
+          "coverage": "yes"
+        }
+      ],
+      "manual_rows": [
+        "| 老师批注 | A 覆盖：是 / B 覆盖：是 | — | Urban tram services reduce traffic congestion during commuting hours. | 检查交通结论的依据。 |  |  |",
+        "| 老师批注 | A 覆盖：否 / B 覆盖：否 | — | Volcanic rocks contain minerals beneath distant mountains. | 这一句偏离交通题目。 |  |  |"
+      ],
+      "same_actual_input": true,
+      "expected_for_each_quote": "A and B should agree: q1 both covered; q2 neither covered.",
+      "defect_observed": false
+    },
+    "missing_annotations": {
+      "warnings": [
+        "两次运行的老师批注不同（复核表按“引文 + 批注”逐条对齐，缺的一边标“无此批注”）：synthetic-one"
+      ],
+      "manual_rows": [
+        "| 老师批注 | A 覆盖：是 / B 覆盖：是 | — | Urban tram services reduce traffic congestion during commuting hours. | 检查交通结论的依据。 |  |  |",
+        "| 老师批注 | A 覆盖：否 / B 覆盖：无此批注 | — | Volcanic rocks contain minerals beneath distant mountains. | 这一句偏离交通题目。 |  |  |"
+      ],
+      "reverse_manual_rows": [
+        "| 老师批注 | A 覆盖：是 / B 覆盖：是 | — | Urban tram services reduce traffic congestion during commuting hours. | 检查交通结论的依据。 |  |  |",
+        "| 老师批注 | A 覆盖：无此批注 / B 覆盖：否 | — | Volcanic rocks contain minerals beneath distant mountains. | 这一句偏离交通题目。 |  |  |"
+      ],
+      "all_missing_manual_rows": [
+        "| 老师批注 | A 覆盖：是 / B 覆盖：无此批注 | — | Urban tram services reduce traffic congestion during commuting hours. | 检查交通结论的依据。 |  |  |",
+        "| 老师批注 | A 覆盖：否 / B 覆盖：无此批注 | — | Volcanic rocks contain minerals beneath distant mountains. | 这一句偏离交通题目。 |  |  |"
+      ],
+      "passed": true
+    },
+    "repeated_quote_uncertainty": {
+      "relations": {
+        "repeated_vs_one_occurrence": "uncertain",
+        "same_repeated_quote": "uncertain",
+        "unique_contained_quote": "yes",
+        "unique_disjoint_quotes": "no",
+        "all_occurrences_inside_long_span": "yes"
+      },
+      "coverage": {
+        "evaluated": true,
+        "status": "ready",
+        "findings": [
+          {
+            "quote": "Shared sentence.",
+            "note": "需澄清这一句的理由。",
+            "covered": false,
+            "coverage": "uncertain"
+          }
+        ],
+        "covered": 0,
+        "uncertain": 1,
+        "total": 1,
+        "ai_spans": 1,
+        "ai_spans_not_marked_by_teacher": 0
+      },
+      "manual_uncertainty_label": true,
+      "passed": true
+    },
+    "multiple_failed_samples": {
+      "all_requested": {
+        "covered": 1,
+        "total": 7,
+        "rate": 0.143,
+        "evaluated_total": 2,
+        "rate_evaluated": 0.5,
+        "failed_samples": [
+          "failed-two",
+          "failed-three"
+        ]
+      },
+      "all_failed": {
+        "covered": 0,
+        "total": 5,
+        "rate": 0.0,
+        "evaluated_total": 0,
+        "rate_evaluated": null,
+        "failed_samples": [
+          "failed-two",
+          "failed-three"
+        ]
+      },
+      "failed_report_message": [
+        "老师批注共 7 处，来自 3 篇作文，其中 2 篇评价没有成功，它们的 5 处批注无法对照，计为未覆盖。AI 也指出了同一位置的有 1 处，占全部 14%；只看评价成功的作文为 1/2（50%）。"
+      ],
+      "manual_not_evaluated_label": true,
+      "passed": true
+    }
+  },
+  "confirmed_defects": [],
+  "passed": true
+}

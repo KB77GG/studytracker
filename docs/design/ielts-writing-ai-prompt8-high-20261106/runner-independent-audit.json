@@ -1,0 +1,48 @@
+{
+  "runner": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt8-finalcheck-20261106/run_high.py",
+  "source_head": "cefd300cac4385fea317d2bdfca3f0e2a4ad54a4",
+  "tools_sha256": "11024db1d8c6d906d7e3c72b3919290aff95c3cf035e2dea41b748cfc56fd11b",
+  "paid_enabled": false,
+  "checks": {
+    "source_head_and_hash_match": true,
+    "wrong_head_or_hash_rejected": true,
+    "disabled_entry_does_not_read_env_or_create_results": true,
+    "rejected_before_reservation_or_transport": [
+      "system_prompt_changed",
+      "extra_message",
+      "retry_without_first_or_validation_note",
+      "third_attempt",
+      "vision",
+      "refine",
+      "max",
+      "off",
+      "budget_increase",
+      "timeout_change",
+      "model",
+      "base_url"
+    ]
+  },
+  "cases": [
+    {
+      "case": "seven_first_attempt_successes",
+      "stub_sends": 7,
+      "ledger_count": 7,
+      "ready": 7,
+      "no_smoke_or_extra_sample": true,
+      "disk_reservation_before_send": true,
+      "existing_ledger_refused": true
+    },
+    {
+      "case": "first_network_failure",
+      "stub_sends": 1,
+      "ledger_count": 1,
+      "ready": 0,
+      "no_smoke_or_extra_sample": true,
+      "disk_reservation_before_send": true,
+      "existing_ledger_refused": true
+    }
+  ],
+  "network_attempts": 0,
+  "real_ledger_created": false,
+  "env_read": false
+}

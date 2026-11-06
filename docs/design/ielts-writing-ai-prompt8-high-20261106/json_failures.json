@@ -1,0 +1,38 @@
+[
+  {
+    "sample": "t2-off-topic",
+    "attempt": 0,
+    "error": "Extra data",
+    "line": 1,
+    "column": 6346,
+    "position": 6345,
+    "context": "被压在 4.5–5 分附近。好消息是，你具备写好本题所需的全部语言与组织能力，只要在动笔前花 1 分钟确认题目关键词，并抛弃背过的模板，同一套“先讲一方好处—再讲另一方不可替代—最后得出结论”的结构完全可以套用到公共交通与修路的题目上。\"},\"priorities\":[\"最紧急：彻底解决审题问题。这篇作文回答的是“在线学习是否会取代课堂”，与“政府投资公共交通还是修路”毫无关系，这是本次失分的唯一根本原因。\",\"建立动笔前的固定动作：用 30 秒写下题目关键词（public ",
+    "finish_reason": "stop",
+    "completion_tokens": 4903,
+    "http_status": 200
+  },
+  {
+    "sample": "t2-under-length",
+    "attempt": 0,
+    "error": "Expecting ',' delimiter",
+    "line": 1,
+    "column": 5251,
+    "position": 5250,
+    "context": "成 elderly people，并尝试使用 investment, congestion, infrastructure 等主题词汇\",\"适当增加复杂句式的种类（条件句、让步状语从句、非限制性定语从句），在准确的基础上体现语法多样性\"]}",
+    "finish_reason": "stop",
+    "completion_tokens": 4399,
+    "http_status": 200
+  },
+  {
+    "sample": "t2-under-length",
+    "attempt": 1,
+    "error": "Expecting ',' delimiter",
+    "line": 1,
+    "column": 4197,
+    "position": 4196,
+    "context": "、让步和结论各自成段。\",\"把“cheaper for students and old people”这一点解释清楚，说明为什么更便宜。\",\"提升词汇和句式多样性，减少public transport的重复，并练习更复杂的从句结构。\"]}",
+    "finish_reason": "stop",
+    "completion_tokens": 6315,
+    "http_status": 200
+  }
+]

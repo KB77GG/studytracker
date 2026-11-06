@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-06 写作 .8 数字复验通过；high真实批次结束9/14，评价成功6/7
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从450e8d60 clean经HTTPS fetch+ff-only到 **cefd300cac4385fea317d2bdfca3f0e2a4ad54a4**（业务fc1b2176）。本轮未改业务或.env，默认off未变。报告与两交接仅推功能分支，最终文档HEAD见git log；实测源码固定cefd300c，工具72文件合并SHA **11024db1d8c6d906d7e3c72b3919290aff95c3cf035e2dea41b748cfc56fd11b**，实测前后一致。
+- 离线前提通过：主树 `.venv/bin/python docs/design/iwa-prompt8-finalcheck-20261106/run_offline_tests.py` → **357 Python（21.109s）、8 Node**；fake配置、临时库、非回环网络拦截、外部IWA_DATA_DIR未写。主venv在审阅树执行ruff check/black --check tools/ielts_writing_ai（49文件）、node --check static/iwa.js、git diff --check通过。历史68数字检查+37逐例正确行为断言，百千并列/数量年份/20词及250词时长误用均关闭；老师批注/max/空issues/对照保护回归通过。保留README的无逗号年份保守误删、twice/a third限制；未重跑完整浏览器、Python3.10或全部locale。
+- **按既有授权完成真实批次，不再是0/14**：`.8`/deepseek-flash/high，7篇内置合成、仅evaluate、每次≤16000/300，新账本，共 **9/14实际HTTP请求**；6/7最终ready，首轮JSON/内容均5/7。9次200/stop，无超时/截断。离题首轮JSON根对象提前结束、priorities在外，重试成功；97词短文两次EOF缺闭合符且argument/overall/priorities错嵌criteria，最终invalid_output。诊断补括号仅在副本，不修补正式输出或伪造分数。
+- 独立104项指标对账通过。输入19545、输出54635，思考37518已包含输出；cache hit12288/miss7257，所有9次用量均计入。请求p50/p90 **33.598/70.986秒**，单次输出峰值11629/16000=72.7%；费用未知，未查账单/当前单价。评分引文规范化77/77、严格逐字75/77（同一weak引文if→If两处），非语义正确率；论证48=44采用+4丢弃，5项论证检查5/5，宽松总检查16/17、跳过1，失败项是短文未生成。
+- 人工复核：TR/CC若干过严批评减少，good/strong正式问题为空；但good三条可选优化错用comment而非suggestion被丢弃，strong仍生成无来源forty passengers被数字过滤删去，不能把反馈减少都归为模型改善。Task1正确抓2020 C≈80>A≈75，却把2000的70/55/40挂在figures支持列表；weak仍有Because残句修不完整，Task1部分语法批评实为精确化建议。短文只有被拒原始输出，不能宣称已为其提供有效改进报告。详见共享两份人工审阅；没有教师基准分、没有准确度校准。
+- 批次安全与结束：实际执行历史命令为主树 `.venv/bin/python docs/design/iwa-prompt8-finalcheck-20261106/run_high.py --confirm-paid`（**已结束，不可重跑**）。每篇最多2次/全局14，固定消息/源HEAD+SHA，发送前fsync计数、flock独占，HTTP自动重试/重定向关闭；旧账本拒复用。账本 `docs/design/iwa-prompt8-finalcheck-20261106/results/transport.json` 已completed，runner已重新PAID_ENABLED=False；**未用5次不自动追加下一批**。Key仅由runner从600权限的私有配置读取，不打印/提交；临时SQLite/上传目录，不碰试用库/额度或学生素材。完整reasoning只留本机ignored results/（owner-only），分享文件删除思考正文，保留正式回答/usage/格式错误。
+- 共享交付 `docs/design/ielts-writing-ai-prompt8-high-20261106/`：README、真实report/run_data/raw_calls/transport脱敏版、离线验证与数字正确行为探针、调用门禁自测、JSON失败位置、独立metrics脚本/JSON/说明、人工论证及语言审阅。只报告与两交接commit/push功能分支，未合main/部署/操作生产或小程序上传提审发布。新prompt与旧.6 high对比仅描述整体版本：.7语言/审题与后处理也变，且每样本仅一次运行，不能归因单因素或证明high/max优劣。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，origin/main缓存f0e04041/behind103，原7 modified/23 untracked入口及同期其他任务记录原样保留；新增本机 `docs/design/iwa-prompt8-finalcheck-20261106/`（runner、账本/私有结果、source-state、共享镜像）与两交接增量。runner/完整私有结果及旧脏改动不进Git；其他worktree未动。
+- 下一步：Claude拉本批报告，先用3份不合法JSON/错字段和上述误批离线回归，改善结构和反馈质量，保留严格解析。当前没有调整预算/默认档位、没有实施新代码或授权新付费批次；后续实测另定范围。老师素材仍待可靠原稿和第5份正确题目，本轮未读、未发送素材。
+
 ## 2026-11-06（.8 复验后）雅思写作 AI 试用工具：百 / 千并列数词、数量不算年份、字数不作时间跨度来源（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复验 `597b212`（报告 `450e8d60`，`docs/design/ielts-writing-ai-prompt8-recheck-20261105/`，含 3 个探针）。老师批注三项已关闭；数字规则剩两类遗漏，真实请求 0/14：
