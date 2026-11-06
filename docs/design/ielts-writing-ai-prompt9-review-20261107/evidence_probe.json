@@ -1,0 +1,1711 @@
+{
+  "source_head": "dc3401ea993b4c36d31d7cbc004cd1f6d22db048",
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial",
+  "sources": {
+    "docs/design/ielts-writing-ai-prompt8-high-20261106/run_data.json": "82aefb43cd8310af8f18ff02959df2151c1f1b3072f1f8d493891afeb9504549",
+    "docs/design/ielts-writing-ai-prompt8-high-20261106/raw_calls.jsonl": "85c41623585fa58360f00ba9a313c9c117a372c9bbe77487d6b1446ba13a076b"
+  },
+  "privacy": "Only committed redacted synthetic formal answers; no .env, private results or reasoning, credentials, network/model calls or business mutations.",
+  "old_attribution_correction": {
+    "raw_model_comparison": {
+      "claim": "Country A had the highest level of ownership in both years",
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "holds": false,
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "old_normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%"
+      ],
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "new_normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "about 75%",
+        "nearly 80%"
+      ],
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "correction": "原模型返回8个数，含75/80；旧程序 figures[:3] 丢掉关键2020证据。主要原因是程序截断，不能归为模型只选择了错年数字。"
+  },
+  "real_good_result": {
+    "argument": {
+      "position": {
+        "quote": "While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment",
+        "consistent": true,
+        "comment": "立场明确且为“有限同意”，后文第四段的让步与第五段的结论都在这一框架内，读完全文态度清晰一致。"
+      },
+      "paragraphs": [
+        {
+          "p": 1,
+          "role": "introduction",
+          "role_label": "开头",
+          "main_point": "While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "引入话题并给出带理由的立场句，为下文两条主体论证与让步定下框架。"
+        },
+        {
+          "p": 2,
+          "role": "body",
+          "role_label": "主体段",
+          "main_point": "The strongest argument for prioritising public transport is efficiency.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "用运力对比与“新路诱增车流”的因果机制论证效率优势，理由充分，直接支撑立场。"
+        },
+        {
+          "p": 3,
+          "role": "body",
+          "role_label": "主体段",
+          "main_point": "Public transport also brings wider social and environmental benefits.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "从公平出行与环境两个角度延伸论点，并用thereby说明对就业与服务获取的影响，属于有效支撑。"
+        },
+        {
+          "p": 4,
+          "role": "concession",
+          "role_label": "让步段",
+          "main_point": "Nevertheless, it would be unrealistic to stop road building altogether.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "让步段说明例外情形（人口稀疏地区、货运），为“有限同意”划定边界，并未削弱自身立场，无需反驳。"
+        },
+        {
+          "p": 5,
+          "role": "conclusion",
+          "role_label": "结尾",
+          "main_point": "In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "结论重申主立场并保留让步，与首段完全一致。"
+        }
+      ],
+      "problems": [],
+      "improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "开头已给出核心理由，若再用半句预告下文两条主体（效率与社会环境效益），全文结构会更加显性。"
+        },
+        {
+          "quote": "It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers",
+          "suggestion": "此处可补一句假设性说明，例如设想一位住在郊区、依靠公交去上班的工人因此获得更多就业选择，使论证从概括走向具体。"
+        },
+        {
+          "quote": "In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.",
+          "suggestion": "可在此句后加一句限定，说明这类道路投入应“按需、精准”而非大规模新建，使让步与本段结尾的targeted呼应得更紧。"
+        }
+      ],
+      "reclassified": 0,
+      "notes": [],
+      "self_conflicts": 0,
+      "suggestions_removed": 0,
+      "real_paragraphs": 5,
+      "returned": 9,
+      "kept": 9,
+      "dropped": 0,
+      "duplicates": 0,
+      "over_limit": 0
+    },
+    "warnings": []
+  },
+  "counterexample": {
+    "change": "只展开原正确comment，补出2000另外三国数值；原稿、claim、8个figures、评分全部不变。",
+    "raw_comparison": {
+      "claim": "Country A had the highest level of ownership in both years",
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "holds": false,
+      "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+    },
+    "normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%"
+      ],
+      "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+    },
+    "copy_evidence_lines": [
+      "对照：“around 70%”；“roughly 55%”；“about 40%”；“only 15%”"
+    ],
+    "correct_comment_still_visible": true,
+    "impact": "页面和复制的对照行只剩2000的70/55/40/15，决定2020矛盾的75/80又被[:4]截掉；解释正文仍正确，分数未因此改变。",
+    "scope": "真实8数输入的紧邻变体；按数字是否在comment出现筛选，无法在超过4个匹配项时保证保留决定性比较。提示词要求最多4不等于旧格式/违规输出不会进入已接受路径。",
+    "source_lines": [
+      "tools/ielts_writing_ai/review.py:241-249",
+      "tools/ielts_writing_ai/review.py:284",
+      "tools/ielts_writing_ai/copytext.py:150-151",
+      "tools/ielts_writing_ai/static/iwa.js:568"
+    ]
+  },
+  "comment_alias_matrix": [
+    {
+      "name": "comment_only_safe",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "empty_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": ""
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": "   "
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "null_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": null
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "list_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": []
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "object_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": {
+          "bad": "type"
+        }
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "integer_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": 7
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "boolean_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": true
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "both_valid_suggestion_wins",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可以保留现有论证，只把表达写得更清楚。",
+        "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "both_unsafe_removed_once",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": ""
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": []
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_empty_no_advice",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": ""
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_null_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": null
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_list_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": [
+          "可补一句解释已有机制，并保留原文的限定立场。"
+        ]
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_object_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": {
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_number_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": 80
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_boolean_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": true
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted",
+      "input_improvement": {
+        "quote": "This sentence does not occur in the essay.",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms (invented ending)",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once",
+      "input_improvement": {
+        "quote": "This sentence does not occur in the essay.",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    }
+  ],
+  "checks": [
+    {
+      "name": "raw_real_answer_included_eight_figures_and_decisive_pair",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "historical_normalized_list_is_raw_first_three",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "old_source_proves_first_three_truncation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "current_real_output_keeps_decisive_pair",
+      "passed": true,
+      "details": {
+        "quote": "Country A had the highest level of ownership in both years",
+        "quote_found": true,
+        "figures": [
+          "around 70%",
+          "about 75%",
+          "nearly 80%"
+        ],
+        "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+      }
+    },
+    {
+      "name": "current_real_copy_keeps_decisive_pair",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "flat_and_nested_real_task1_outputs_identical",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "expanded_correct_comment_keeps_both_decisive_figures",
+      "passed": false,
+      "details": {
+        "quote": "Country A had the highest level of ownership in both years",
+        "quote_found": true,
+        "figures": [
+          "around 70%",
+          "roughly 55%",
+          "about 40%",
+          "only 15%"
+        ],
+        "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+      }
+    },
+    {
+      "name": "expanded_correct_comment_copy_keeps_both_decisive_figures",
+      "passed": false,
+      "details": [
+        "对照：“around 70%”；“roughly 55%”；“about 40%”；“only 15%”"
+      ]
+    },
+    {
+      "name": "four_candidates_keeps_pair_in_output_and_copy",
+      "passed": true,
+      "details": [
+        "around 70%",
+        "roughly 55%",
+        "about 75%",
+        "nearly 80%"
+      ]
+    },
+    {
+      "name": "four_candidates_at_most_four_deduplicated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "decisive_candidates_first_keeps_pair_in_output_and_copy",
+      "passed": true,
+      "details": [
+        "about 75%",
+        "nearly 80%",
+        "around 70%",
+        "roughly 55%"
+      ]
+    },
+    {
+      "name": "decisive_candidates_first_at_most_four_deduplicated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "documented_no_numeric_match_falls_back_to_first_four",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_all_three_aliases_keep_exact_quote_and_advice",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_copy_has_all_three_advice_texts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_no_longer_drops_three_valid_improvements",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "flat_and_nested_real_good_identical",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "comment_only_safe_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "empty_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "null_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "list_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "object_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "integer_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "both_valid_suggestion_wins_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "both_unsafe_removed_once_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "unsafe_comment_only_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_empty_no_advice_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_null_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_list_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_object_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_number_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_boolean_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_strong_forty_suggestion_filtered_with_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_strong_forty_comment_filtered_with_counts",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "passed": 142,
+  "total": 144,
+  "all_checks_passed": false,
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "超过四个匹配数字时，旧年背景数据仍会占满对照列表并挤掉真正反例",
+      "file": "tools/ielts_writing_ai/review.py",
+      "lines": [
+        247,
+        248,
+        249
+      ],
+      "reproduction": {
+        "change": "只展开原正确comment，补出2000另外三国数值；原稿、claim、8个figures、评分全部不变。",
+        "raw_comparison": {
+          "claim": "Country A had the highest level of ownership in both years",
+          "figures": [
+            "around 70%",
+            "roughly 55%",
+            "about 40%",
+            "only 15%",
+            "about 75%",
+            "approximately 65%",
+            "nearly 80%",
+            "around 35%"
+          ],
+          "holds": false,
+          "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+        },
+        "normalized_issue": {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "around 70%",
+            "roughly 55%",
+            "about 40%",
+            "only 15%"
+          ],
+          "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+        },
+        "copy_evidence_lines": [
+          "对照：“around 70%”；“roughly 55%”；“about 40%”；“only 15%”"
+        ],
+        "correct_comment_still_visible": true,
+        "impact": "页面和复制的对照行只剩2000的70/55/40/15，决定2020矛盾的75/80又被[:4]截掉；解释正文仍正确，分数未因此改变。",
+        "scope": "真实8数输入的紧邻变体；按数字是否在comment出现筛选，无法在超过4个匹配项时保证保留决定性比较。提示词要求最多4不等于旧格式/违规输出不会进入已接受路径。",
+        "source_lines": [
+          "tools/ielts_writing_ai/review.py:241-249",
+          "tools/ielts_writing_ai/review.py:284",
+          "tools/ielts_writing_ai/copytext.py:150-151",
+          "tools/ielts_writing_ai/static/iwa.js:568"
+        ]
+      },
+      "qualification": "原真实输出已修复；这不是新解析崩溃或分数错误，是同类证据展示截断未完全关闭。保持模型顺序+固定[:4]不能保证完整关键证据。"
+    }
+  ],
+  "boundary": "数字是否在comment出现是启发式，不证明年份/单位/比较语义；本探针仅确认真实修复和紧邻截断变体，不审定模型评分，不扩展数字语言覆盖。comment别名的正反、过滤、引文、计数、复制均使用完整normalize路径。"
+}

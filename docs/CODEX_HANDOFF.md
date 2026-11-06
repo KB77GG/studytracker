@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 写作 .9 独立离线复核：结构通过，Task 1仍有1项P2
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净76214fe2经HTTPS fetch+ff-only到 **dc3401ea993b4c36d31d7cbc004cd1f6d22db048**（业务f21da5f，提示词iwa-2026-11-06.9）。本轮没有改业务、.env或默认档位，没有真实模型调用。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及上轮咨询记录保留，仅本轮报告/两交接增量；精确开工状态见共享offline-verification.json。
+- **剩余P2**：`review.py:249` 对comment匹配后的候选仍按原模型顺序截前4。原Task1真实8数回答只展开正确comment为“2000 A70/B55/C40/D15；2020 C80>A75”，结果与复制的对照变为70/55/40/15，75/80再次丢失。说明文字仍正确、分数未改变；这是证据列表截取问题，不是本例评分或结论错。原comment回放和四候选/关键数前置正对照通过。建议保留核实后的完整证据，UI可折叠；若限4则显式超限/待确认，别再静默截断。详见evidence_probe.json.counterexample。
+- **更正旧报告归因**：原模型实际上返回8个数，含2020的75/80；旧normalize的figures[:3]才丢掉关键数字。上批将其主要归为模型选错年不准确，应归为程序截取。原真实案例在新版已恢复70/75/80，不能因新反例否认原例修复。历史证据不改，新README及探针对照记录更正。
+- 已通过：严格解析函数与基线AST相同，diagnosis只进重试说明；flat/legacy等价、双有效组/缺项/错类型/错嵌拒绝；评价/改写两次坏JSON无分。good三条comment建议恢复；24组comment别名正反包含数字过滤、原suggestion被删不从comment复活、计数/复制。旧9条正式输出离线回放首轮5/7、最终6/7、全部token/延迟不变，准确增加3条JSON诊断；不是新版真实运行。
+- 精确验证：主树 `.venv/bin/python docs/design/iwa-prompt9-review-20261107/run_offline_tests.py` → **370 Python（21.088s）、8 Node**，fake、临时库、仅回环连接、故意设置外部IWA_DATA_DIR未写；首次沙箱禁端口导致失败，获准同运行器重跑通过。审阅树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（51文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check 76214fe2..HEAD`通过。主审逐个复跑便携json_shape/evidence/metrics探针（--repo审阅树 --output新目录JSON）：**82/82 exit0、142/144 exit1（同1项P2）、100/100 exit0**。结构探针的TypeError/AttributeError为有意坏类型的拒绝日志，非未捕获异常。未重复全部28历史探针/locale、未跑完整浏览器或Python3.10。
+- 上轮建议仍未实施：prompt仍为C/A/K伪格式，priorities仍3–5且非空；总评/优先事项仅加一致性提示，没有复用反馈ID。作为建议差异记录，不列成本轮额外缺陷。重复JSON键末值、理由对象字符串化等是旧存量，不扩展本轮修复范围；flat附criteria:null没有第二组分数。
+- 交付 `docs/design/ielts-writing-ai-prompt9-review-20261107/` 共9文件：README、三组便携探针及JSON、offline-verification、测试日志。按既有授权只提交推送报告与两规范交接到功能分支，最终报告HEAD见git log；业务源码仍dc3401ea。本机runner/source-state在主树 `docs/design/iwa-prompt9-review-20261107/`，未提交。未合main/部署/访问生产/写DB或操作小程序上传提审发布。
+- 下一步：Claude按本报告补齐Task1证据保留，正反回归后再审。`.9`真实效果仍未验证，本轮无新付费授权；旧9/14账本关闭、runner禁用、未用5次不能追加。老师素材仍待可靠原稿和第5份正确题目，未读取或发送；Key/私有reasoning未读取。
+
 ## 2026-11-06（.8 / high 实测后）雅思写作 AI 试用工具：JSON 结构诊断、评分项移到最外层、Task 1 对照数字、提示词 .9（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户的 `.8` / high 真实批次（报告 `76214fe`，`docs/design/ielts-writing-ai-prompt8-high-20261106/`）。9/14 次请求，首轮 5/7、最终 6/7；97 词短文两次 JSON 结构错误、未出分；人工复核仍有 Task 1 语法定性过重、对照数字选错年份、无来源数字被过滤等问题。该批次已结束，未用的 5 次不自动续用；**现在没有可用的付费授权**。本轮没有模型调用，没有读取 Key 或学生材料，评审的 `docs/design` 文件没有改动（跑探针时输出都写到 scratch）。
