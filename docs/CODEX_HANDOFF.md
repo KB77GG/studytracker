@@ -1,5 +1,27 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-06（.8 / high 实测后）雅思写作 AI 试用工具：JSON 结构诊断、评分项移到最外层、Task 1 对照数字、提示词 .9（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户的 `.8` / high 真实批次（报告 `76214fe`，`docs/design/ielts-writing-ai-prompt8-high-20261106/`）。9/14 次请求，首轮 5/7、最终 6/7；97 词短文两次 JSON 结构错误、未出分；人工复核仍有 Task 1 语法定性过重、对照数字选错年份、无来源数字被过滤等问题。该批次已结束，未用的 5 次不自动续用；**现在没有可用的付费授权**。本轮没有模型调用，没有读取 Key 或学生材料，评审的 `docs/design` 文件没有改动（跑探针时输出都写到 scratch）。
+- 诊断（证据来自评审共享的 `raw_calls.jsonl`）：
+  - 3 次 JSON 失败都是括号数错，位置在长块结束处：短文两次都是 `criteria` 写完少一个 `}`，`argument` / `overall_comment` / `priorities` 被套进 `criteria`（2026-11-04 weak 首轮也是同一种错）；离题首轮在 `problems` 后多一个 `}`，`improvements` 落到最外层，`priorities` 落在 JSON 之外。旧重试提示一律说“JSON 之外不能有其他文字”，与实际错误不符，短文第二次照错。
+  - Task 1 “对照数字选错年份”主要是**程序问题**：模型列出了全文 8 个数字（含决定性的 2020 年 80% / 75%），`review._consistency` 用 `figures[:3]` 截前三个，正好都是 2000 年的。
+  - good 的 3 条可选优化把建议写在 `comment`；strong 的 “a bus carrying forty passengers” 来自提示里“可以用假设的例子”。
+- 修复（业务提交 `f21da5f`）：
+  1. 新增 `jsonshape.py`：`diagnose(text, root_keys, homes)` 用一遍字符串 / 括号扫描说明错在哪（键被写进哪一层、最外层在哪个键之后提前结束、哪个键落在 JSON 之外、括号不配、字符串未结束、未闭合层数）。`review.json_problem` 用于评价和改写的重试提示；realcheck 的首轮被拒原因分成“JSON 之外有文字或不是 JSON 对象”/“JSON 括号或结构错误”，`metrics["json_problems"]` 和 `report.md` 逐次列出诊断。只做诊断，不修补、不采用，`parse_strict_json` 不变。
+  2. 提示词 `.9`（`iwa-2026-11-06.9`）把四个评分项移到最外层：`{"task", "coherence", "lexical", "grammar", "argument" | "comparisons", "overall_comment", "priorities"}`。`review._criteria_raw` 两种写法都接受（旧 `criteria` 写法照常），同时出现则拒绝。演示客户端仍输出旧写法，因为评审的 max 探针读取 `raw["criteria"]`。
+  3. `review._decisive_figures`：“对照”优先显示说明里实际提到的数字（保持模型顺序），最多 4 个；说明里一个都没提到时才取模型列出的前 4 个。
+  4. `argument.normalize`：可选优化没有 `suggestion` 但有 `comment` 时，用 `comment` 作为建议；引文核实和数字来源检查照样适用，两个都有时以 `suggestion` 为准。
+  5. 提示词 `.9` 的规则改动：假设例子只用文字、不带原文没有的数字；建议放回原位必须成句，否则引用并改整句；并列分句可以不同主语，主语清楚的 -ing 短语不算垂悬；“表达更精确”不能说成语法错误（问题说明和提升重点都适用）；总评和提升重点不得否定细项已认可的内容；Task 1 的 `figures` 只列决定判断的数字，最多 4 个；improvements 的键是 `suggestion`。
+- 验证：
+  - 新增 `tests/test_high_run_20261106.py`（13 项）和夹具 `tests/fixtures/realcheck_20261106_high.json`（本批 9 个真实回答，不含思考正文）：3 个失败回答仍被拒绝且诊断准确；重试提示带上诊断，坏回答两次仍失败；完整 realcheck 报告逐次列出诊断；两种写法得到相同评价，同时出现或键放错位置都拒绝；Task 1 真实输出显示 70% / 75% / 80%；good 的 3 条可选优化保留；`comment` 里的 forty passengers 仍被删去；`.9` 规则文本都在。
+  - 改了一处旧测试的固定文本（`never inside a criterion` 改为检查 `all at the top level`）。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **370 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 两种条件也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针：本批 `figures_verification.py`（68 + 37 通过）和 `metrics_verification.py`（104/104）exit 0；docs/design 下全部 28 个探针在新代码和 `HEAD` 上的退出码完全一致（9 个旧探针在两边都 exit 非 0，是它们写死了已修复的旧行为）；JSON 输出差异只有三类预期变化：放错位置的提示措辞、提示词版本号、一个 Task 1 用例的对照数字从 70% / 75% / 80% 变为说明实际比较的 75% / 80%。
+- 没有处理的（属于模型判断，需要真实批次和老师校准）：weak 的 everybody 全称化本轮没被指出；失败短文的原始输出里仍有 “old people 不够得体”“public transport 重复要换词” 这类过严倾向。去掉一层嵌套、给出准确诊断能否降低格式失败，只能由真实批次确认，离线无法证明。
+- 状态：业务提交 `f21da5f` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户在 Mac 上复验 `f21da5f`。如果要验证 `.9` 的效果，需要用户**新授权**一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、每次 ≤ 16000 token、新账本），重点看 JSON 首轮通过率、短文能否出分、Task 1 对照数字与语言定性。老师素材仍待批改前原稿和第 5 份的正确题目；官方样卷可用于分数校准（只用带考官分数的考生原卷，存本地不进 Git），需要时再加 realcheck 的分数对照。
+
 ## 2026-11-06 写作 .8 数字复验通过；high真实批次结束9/14，评价成功6/7
 
 - 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从450e8d60 clean经HTTPS fetch+ff-only到 **cefd300cac4385fea317d2bdfca3f0e2a4ad54a4**（业务fc1b2176）。本轮未改业务或.env，默认off未变。报告与两交接仅推功能分支，最终文档HEAD见git log；实测源码固定cefd300c，工具72文件合并SHA **11024db1d8c6d906d7e3c72b3919290aff95c3cf035e2dea41b748cfc56fd11b**，实测前后一致。
