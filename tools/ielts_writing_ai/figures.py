@@ -122,98 +122,152 @@ def en_number(text: str) -> str:
 def split_en_numbers(text: str) -> list[tuple[int, int, str]]:
     """[(start, end, value)] for each separate number in a run of number words.
 
-    Words only combine into one number when English allows it: "forty-two",
-    "one hundred and twenty", "two thousand and twenty". Otherwise they are separate
-    numbers - "forty and fifty" is 40 and 50, never 90 (review of 1c865eb)."""
-    numbers, total, group, last, start, end = [], 0, 0, None, None, None
+    A small grammar, not word-by-word addition (reviews of 1c865eb and 597b212):
+    - a group is 1-999: "forty-two", "one hundred and twenty-five", "a hundred";
+    - groups combine through strictly decreasing scale words ("one million two hundred
+      and thirty-four thousand five hundred and sixty-seven");
+    - "and" joins only the final part under 100 ("one hundred and twenty", "two
+      thousand and twenty"). Anything else after "and" - or a part followed by its own
+      "hundred" or scale word - starts a new number: "forty and fifty", "one hundred and
+      two hundred", "one thousand and two thousand" are lists, never sums.
+    """
+    words = [(m.start(), m.end(), m.group().lower()) for m in re.finditer(r"[A-Za-z]+", text)]
+    n = len(words)
 
-    def flush():
-        if start is not None and last not in (None, "and"):
-            numbers.append((start, end, str(total + group)))
+    def word(i):
+        return words[i][2] if i < n else ""
 
-    attach = {
-        "unit": (None, "tens", "hundred", "scale", "and"),
-        "teen": (None, "hundred", "scale", "and"),
-        "tens": (None, "hundred", "scale", "and"),
-        "hundred": (None, "unit", "teen"),
-        "scale": (None, "unit", "teen", "tens", "hundred"),
-    }
-    for match in re.finditer(r"[A-Za-z]+", text):
-        word = match.group().lower()
-        if word == "a":  # "a hundred": the regex only lets "a" in before a scale word
-            flush()
-            total, group, last, start = 0, 0, None, match.start()
-            continue
-        if word == "and":
-            if last in ("hundred", "scale"):
-                last = "and"  # "one hundred and twenty": still one number
-                continue
-            flush()  # "forty and fifty": two numbers
-            total, group, last, start = 0, 0, None, None
-            continue
-        value = _EN_UNITS.get(word)
-        if value is None and word != "hundred" and word not in _EN_SCALES:
-            flush()  # not a number word: it ends the current number
-            total, group, last, start = 0, 0, None, None
-            continue
-        kind = (
-            "hundred"
-            if word == "hundred"
-            else (
-                "scale"
-                if word in _EN_SCALES
-                else "unit" if value < 10 else "teen" if value < 20 else "tens"
-            )
-        )
-        if last not in attach[kind] or (kind == "unit" and last == "tens" and group % 10):
-            flush()
-            total, group, last, start = 0, 0, None, None
-        if start is None:
-            start = match.start()
-        if kind == "hundred":
-            group = (group or 1) * 100
-        elif kind == "scale":
-            total += (group or 1) * _EN_SCALES[word]
-            group = 0
+    def multiplier_at(i):
+        return word(i) == "hundred" or word(i) in _EN_SCALES
+
+    def below_hundred(i):
+        """(value, next) for tens[-unit] | teen | unit, else None."""
+        value = _EN_UNITS.get(word(i))
+        if value is None:
+            return None
+        if 20 <= value <= 90 and value % 10 == 0:
+            unit = _EN_UNITS.get(word(i + 1))
+            if unit is not None and 1 <= unit <= 9:
+                return value + unit, i + 2
+        return value, i + 1
+
+    def group(i):
+        """(value 1-999, next) or None."""
+        if word(i) == "a" and multiplier_at(i + 1):
+            if word(i + 1) != "hundred":
+                return 1, i + 1  # "a thousand": the scale is applied by the caller
+            hundreds, k = 100, i + 2
         else:
-            group += value
-        end, last = match.end(), kind
-    flush()
+            head = below_hundred(i)
+            if head is None:
+                return None
+            value, k = head
+            if word(k) != "hundred" or value > 99 or value == 0:
+                return value, k
+            hundreds, k = value * 100, k + 1
+        # The tail of a hundred group: "and twenty", "five" - unless it is followed by
+        # its own hundred / scale word, which makes it the start of another number.
+        start = k + 1 if word(k) == "and" else k
+        tail = below_hundred(start)
+        if tail and word(tail[1]) != "hundred":  # "two hundred and thirty-four thousand"
+            return hundreds + tail[0], tail[1]
+        return hundreds, k
+
+    numbers, i = [], 0
+    while i < n:
+        first = group(i)
+        if first is None:
+            i += 1  # "and", or a word that is not part of a number
+            continue
+        total, (value, j), last_scale = 0, first, None
+        while True:
+            scale = _EN_SCALES.get(word(j))
+            if scale and (last_scale is None or scale < last_scale):
+                total, last_scale, j = total + value * scale, scale, j + 1
+                if word(j) == "and":  # only a final part under 100 may follow "and"
+                    tail = below_hundred(j + 1)
+                    if tail and not multiplier_at(tail[1]):
+                        total, j = total + tail[0], tail[1]
+                    break
+                nxt = group(j)
+                if nxt is None:
+                    break
+                after = _EN_SCALES.get(word(nxt[1]))
+                if after and after >= last_scale:
+                    break  # "one thousand two thousand": a new number
+                value, j = nxt
+                if not after:
+                    total += value
+                    break
+                continue
+            total += value
+            break
+        numbers.append((words[i][0], words[j - 1][1], str(total)))
+        i = j
     return numbers
 
 
-# A four-digit number is a year only with positive evidence: a temporal word before
-# it ("in 2000", "from 1800 to 1900", "between 2000 and 2020"), 年 after it, or being
-# the second end of a range whose first end is a year. "2000 buses" is a quantity, so
-# it can never make "twenty years later" look sourced (review of 1c865eb).
+# A four-digit number is a year only with positive evidence - a temporal word before
+# it ("in 2000", "from 1800 to 1900", "between 2000 and 2020"), 年 after it, a
+# 2000-2020 range, or being joined to a year - and nothing marking it as a quantity:
+# a plural noun or a Chinese measure word right after it ("2000 buses", "from 2000 to
+# 2020 buses", "2000辆"); a quantity also makes the other end of its range a quantity.
 _YEAR_BEFORE_RE = re.compile(
     r"\b(?:in|from|to|by|since|until|till|between|during|before|after|through|of|around)\s+$",
     re.IGNORECASE,
 )
-_RANGE_JOIN_RE = re.compile(r"(?:\band|\bto|-|–|—|~|～|至|到)\s*$", re.IGNORECASE)
+_RANGE_JOIN_RE = re.compile(r"^\s*(?:and|to|-|–|—|~|～|至|到|和|与)\s*$", re.IGNORECASE)
+_NOT_PLURAL = {
+    "was", "has", "is", "its", "this", "his", "as", "us", "thus", "plus", "less",
+    "across", "always", "perhaps", "whereas", "besides", "towards", "afterwards",
+    "onwards", "upwards", "downwards", "respectively",
+}  # fmt: skip
+_IRREGULAR_PLURAL = {"people", "children", "men", "women", "staff", "police", "cattle"}
+
+
+def _counted_after(text: str, end: int) -> bool:
+    """A count noun or measure word right after a number: it is a quantity."""
+    follow = text[end : end + 40]
+    if follow[:1] and "一" <= follow[0] <= "鿿":
+        return follow[0] not in "年和与至到"
+    match = re.match(r"\s+([A-Za-z]+)", follow)
+    if not match:
+        return False
+    noun = match.group(1).lower()
+    if noun in _IRREGULAR_PLURAL:
+        return True
+    return (
+        len(noun) > 3 and noun.endswith("s") and not noun.endswith("ss") and noun not in _NOT_PLURAL
+    )
 
 
 def confirmed_years(text: str | None) -> set[int]:
     text = text or ""
-    years, previous = set(), None  # previous: (end, was_year) of the last 4-digit match
+    rows = []  # [start, end, value, evidence, quantity, joined_to_previous]
     for match in re.finditer(r"(?<![\d.,])\d{4}(?![\d.,]\d)", text):
         value = int(match.group())
-        before = text[: match.start()]
-        is_year = 1000 <= value <= 2100 and (
-            bool(_YEAR_BEFORE_RE.search(before[-20:]))
+        previous = rows[-1] if rows else None
+        joined = bool(previous and _RANGE_JOIN_RE.match(text[previous[1] : match.start()]))
+        evidence = (
+            bool(_YEAR_BEFORE_RE.search(text[max(0, match.start() - 20) : match.start()]))
             or text[match.end() : match.end() + 1] == "年"
-            or bool(re.match(r"\s*[-–—~～]\s*\d{4}\b", text[match.end() :]))  # "2000-2020"
-            or bool(
-                previous
-                and previous[1]
-                and _RANGE_JOIN_RE.search(text[previous[0] : match.start()])
-                and len(text[previous[0] : match.start()].strip()) <= 4
-            )
+            or bool(re.match(r"\s*[-–—~～]\s*\d{4}\b", text[match.end() :]))
+            or bool(joined and previous[3])
         )
-        if is_year:
-            years.add(value)
-        previous = (match.end(), is_year)
-    return years
+        rows.append(
+            [match.start(), match.end(), value, evidence, _counted_after(text, match.end()), joined]
+        )
+    for n in range(len(rows) - 1, 0, -1):  # a quantity at one end makes its range a quantity
+        if rows[n][5] and rows[n][4]:
+            rows[n - 1][4] = True
+    for n in range(1, len(rows)):
+        if rows[n][5] and rows[n - 1][4]:
+            rows[n][4] = True
+    return {
+        value
+        for _start, _end, value, evidence, quantity, _joined in rows
+        if 1000 <= value <= 2100 and evidence and not quantity
+    }
 
 
 DECADES = "decades"  # internal: converted to a DURATION in years
@@ -298,7 +352,10 @@ class Sources:
                 self.percents.add(value)
             elif kind == MULTIPLIER:
                 self.multipliers.add(value)
-        self.values.update(_value(str(n)) for n in numbers if n is not None)
+        # The task's own numbers (word count, minimum length) back word / plain targets
+        # ("expand to 250 words") but never a time span: a 20-word essay is no source
+        # for "twenty years later".
+        self.task_numbers = {_value(str(n)) for n in numbers if n is not None}
         # Spans between two years the input gives ("2000 ... 2020" -> 20 years), so
         # "twenty years later" is derived from the source, not invented.
         years = sorted(confirmed_years(self.text))
@@ -316,7 +373,7 @@ class Sources:
             elif kind == DURATION:
                 sourced = value in self.values or value in self.year_spans or float(value) < SMALL
             else:
-                sourced = value in self.values or float(value) < SMALL
+                sourced = value in self.values or value in self.task_numbers or float(value) < SMALL
             if not sourced:
                 missing.append(shown)
         return missing
