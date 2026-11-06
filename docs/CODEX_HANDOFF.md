@@ -1,5 +1,23 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-06（.8 复验后）雅思写作 AI 试用工具：百 / 千并列数词、数量不算年份、字数不作时间跨度来源（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复验 `597b212`（报告 `450e8d60`，`docs/design/ielts-writing-ai-prompt8-recheck-20261105/`，含 3 个探针）。老师批注三项已关闭；数字规则剩两类遗漏，真实请求 0/14：
+  1. “one hundred and two hundred” 被读成 10200，“one thousand and two thousand” 被读成 3000；
+  2. “rose from 2000 to 2020 buses”“fleet of 2000 / 2020 buses”“between 2000 and 2020 buses” 仍被当成年份，放过“Twenty years later”。
+  用户 14 次授权保留（`.8` + high、7 篇内置合成、只做评价、每次 ≤ 16000 token、新账本；不含 max、其他模型、精修、改写、识图、老师素材），复验通过后继续，无需重复确认。本轮没有模型调用，评审的 `docs/design` 文件没有改动（运行 max 探针会改写其 JSON 的 `source_head`，已 `git checkout` 还原），学生材料没有读取。
+- 修复（业务提交 `fc1b217`，只改 `figures.py`、README 和新测试）：
+  1. **`split_en_numbers` 改为小语法**：一组是 1–999（“forty-two”“one hundred and twenty-five”“a hundred”）；组之间通过严格从大到小的 thousand / million / billion 连接；“and” 只能接最后一段 100 以内的尾数（“two thousand and twenty”）。“and” 后面是带自己 hundred / 规模词的数，或者一组后面跟着同级或更大的规模词，都开始一个新数。结果：100 / 200、1000 / 2000、40 / 50 分开；125、1200、2020、102000、300000、1900、1234567 仍是一个数。
+  2. **`confirmed_years` 加数量判定**：数字后面紧跟复数名词（长度 > 3、以 s 结尾但不是 ss，排除 was / its / respectively 等；另有 people / children 等不规则复数）或中文量词（不是 年 / 和 / 与 / 至 / 到）就是数量。区间一端是数量，另一端也按数量处理（前后两向传播）。数量即使前面有 from / between / of 也不算年份。
+  3. **写回归时发现的同类问题**：`Sources` 把本篇字数、字数下限并入 `values`，DURATION 也能用它们做来源，所以一篇正好 20 词的作文会放过“twenty years later”。改为单独的 `task_numbers`，只给普通数字和篇幅目标用，时间跨度只认原文数值和年份差。
+- 验证：
+  - 新增 `tests/test_prompt8_recheck_20261106.py`（6 项）：并列 / 复合数词；评审表 6 例完整走 `normalize_evaluation` 加 `copytext.evaluation_text`；6 句数量为空集、5 句年份为 {2000, 2020}；“Twenty years later” 对数量来源被删、对 “from 2000 to 2020” 保留、“Thirty years” 被删；字数不作时间跨度来源。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **357 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 两种条件也 OK；`node tools/ielts_writing_ai/tests/test_draft.js` 8 项通过；`ruff check`、`black --check tools/ielts_writing_ai`、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check` 通过。
+  - 评审探针（`--repo . --output <scratch>`，原文件不改）：`figures_recheck.py` exit 0，`exact_old_cases_closed: true`、`remaining_P2: []`，两项 findings 均 `reproduced: false`，56 项历史基线 + 12 项补充全部通过；`teacher_recheck.py` exit 0、`passed: true`；`max_prompt_probe.py` exit 0。
+- 已知限制（README 已写）：年份后面直接接复数名词且没有逗号（“In 2000 sales rose”）会按数量处理，结果偏保守：由这对年份推出的时间跨度建议被删去，不会放过编造的数字。“twice”“a third”仍不识别。
+- 状态：业务提交 `fc1b217` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户在 Mac 上复验 `fc1b217`；通过后由用户执行已授权的 `.8` + high 评价（新账本，≤ 14 次）。老师素材仍待用户提供批改前原稿和第 5 份的正确题目（去标识、本地 JSONL，不进 Git）。
+
 ## 2026-11-05 写作 .8 修复复验：老师批注三项通过，数字两类仍未关闭（0/14）
 
 - 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`：从c482e092 clean，HTTPS fetch+ff-only到 **597b2124d50257ffa69a40009bef5a0d5bc78202**（业务7af8397f）；本轮未改业务、旧报告或历史探针。新报告与两交接随功能分支文档提交，最终报告HEAD见git log；源码验证固定597b2124。
