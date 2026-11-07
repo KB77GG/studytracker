@@ -1,0 +1,299 @@
+{
+  "source_head": "80b5dcf6185299a11b1d4a37bfac11f697e5f890",
+  "prompt_version": "iwa-2026-11-06.9",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "student_materials_read": false,
+  "private_reasoning_read": false,
+  "checks": {
+    "fixture_has_nine_formal_answers": true,
+    "historical_replay.unchanged_calls": true,
+    "historical_replay.unchanged_first_attempts": true,
+    "historical_replay.unchanged_first_attempt_json_ok": true,
+    "historical_replay.unchanged_first_attempt_valid": true,
+    "historical_replay.unchanged_final_ready": true,
+    "historical_replay.unchanged_final_failures": true,
+    "historical_replay.unchanged_latency_ms_p50": true,
+    "historical_replay.unchanged_latency_ms_p90": true,
+    "historical_replay.unchanged_tokens": true,
+    "historical_replay.unchanged_completion_tokens_max": true,
+    "historical_replay.unchanged_reasoning_tokens": true,
+    "historical_replay.unchanged_reasoning_tokens_known": true,
+    "historical_replay.unchanged_reasoning_unreported_calls": true,
+    "historical_replay.unchanged_reasoning_tokens_max": true,
+    "historical_replay.unchanged_truncated": true,
+    "historical_replay.unchanged_timeouts": true,
+    "historical_replay.all_usage_preserved": true,
+    "historical_replay.all_answer_text_preserved": true,
+    "historical_replay.all_transport_retries_disabled": true,
+    "historical_replay.only_evaluation_high16000": true,
+    "historical_replay.three_attempt_diagnoses": true,
+    "historical_replay.first_rejections_only_two": true,
+    "historical_replay.off_topic_outside_priorities": true,
+    "historical_replay.both_short_nested_diagnoses": true,
+    "historical_replay.retry_receives_diagnosis": true,
+    "historical_replay.short_stays_failed_without_score": true,
+    "historical_replay.only_off_topic_recovers": true,
+    "historical_replay.markdown_three_diagnoses": true,
+    "historical_replay.argument_partition": true,
+    "historical_replay.good_comment_now_preserved": true,
+    "valid_budget2.metrics": true,
+    "valid_budget2.hard_budget": true,
+    "valid_budget2.all_retry_usage_counted": true,
+    "valid_budget2.all_reasoning_counted": true,
+    "valid_budget2.api_score_gate": true,
+    "json_bad_then_good_budget2.metrics": true,
+    "json_bad_then_good_budget2.hard_budget": true,
+    "json_bad_then_good_budget2.all_retry_usage_counted": true,
+    "json_bad_then_good_budget2.all_reasoning_counted": true,
+    "json_bad_then_good_budget2.api_score_gate": true,
+    "content_bad_then_good_budget2.metrics": true,
+    "content_bad_then_good_budget2.hard_budget": true,
+    "content_bad_then_good_budget2.all_retry_usage_counted": true,
+    "content_bad_then_good_budget2.all_reasoning_counted": true,
+    "content_bad_then_good_budget2.api_score_gate": true,
+    "always_json_bad_budget2.metrics": true,
+    "always_json_bad_budget2.hard_budget": true,
+    "always_json_bad_budget2.all_retry_usage_counted": true,
+    "always_json_bad_budget2.all_reasoning_counted": true,
+    "always_json_bad_budget2.no_result_on_failure": true,
+    "always_json_bad_budget2.api_score_gate": true,
+    "always_json_bad_budget1.metrics": true,
+    "always_json_bad_budget1.hard_budget": true,
+    "always_json_bad_budget1.all_retry_usage_counted": true,
+    "always_json_bad_budget1.all_reasoning_counted": true,
+    "always_json_bad_budget1.no_result_on_failure": true,
+    "always_json_bad_budget1.api_score_gate": true,
+    "transport_truncated_budget2.metrics": true,
+    "transport_truncated_budget2.hard_budget": true,
+    "transport_truncated_budget2.all_retry_usage_counted": true,
+    "transport_truncated_budget2.all_reasoning_counted": true,
+    "transport_truncated_budget2.no_result_on_failure": true,
+    "transport_truncated_budget2.api_score_gate": true,
+    "t2-weak.flat_nested_normalized_equal": true,
+    "t2-weak.criterion_list_contract": true,
+    "t2-weak.copy_text_equal": true,
+    "t2-weak.scores_and_compare_equal": true,
+    "t2-weak.first_pass_flat_accepted": true,
+    "t2-weak.mixed_forms_rejected": true,
+    "t2-mid.flat_nested_normalized_equal": true,
+    "t2-mid.criterion_list_contract": true,
+    "t2-mid.copy_text_equal": true,
+    "t2-mid.scores_and_compare_equal": true,
+    "t2-mid.first_pass_flat_accepted": true,
+    "t2-mid.mixed_forms_rejected": true,
+    "t2-good.flat_nested_normalized_equal": true,
+    "t2-good.criterion_list_contract": true,
+    "t2-good.copy_text_equal": true,
+    "t2-good.scores_and_compare_equal": true,
+    "t2-good.first_pass_flat_accepted": true,
+    "t2-good.mixed_forms_rejected": true,
+    "t2-strong.flat_nested_normalized_equal": true,
+    "t2-strong.criterion_list_contract": true,
+    "t2-strong.copy_text_equal": true,
+    "t2-strong.scores_and_compare_equal": true,
+    "t2-strong.first_pass_flat_accepted": true,
+    "t2-strong.mixed_forms_rejected": true,
+    "t2-off-topic.flat_nested_normalized_equal": true,
+    "t2-off-topic.criterion_list_contract": true,
+    "t2-off-topic.copy_text_equal": true,
+    "t2-off-topic.scores_and_compare_equal": true,
+    "t2-off-topic.first_pass_flat_accepted": true,
+    "t2-off-topic.mixed_forms_rejected": true,
+    "t1-no-image.flat_nested_normalized_equal": true,
+    "t1-no-image.criterion_list_contract": true,
+    "t1-no-image.copy_text_equal": true,
+    "t1-no-image.scores_and_compare_equal": true,
+    "t1-no-image.first_pass_flat_accepted": true,
+    "t1-no-image.mixed_forms_rejected": true
+  },
+  "checks_passed": 100,
+  "checks_total": 100,
+  "failures": [],
+  "observations": {
+    "historical_replay": {
+      "calls": 9,
+      "first_json_rate": 0.714,
+      "first_valid_rate": 0.714,
+      "final_ready_rate": 0.857,
+      "tokens": {
+        "prompt_tokens": 19545,
+        "completion_tokens": 54635,
+        "total_tokens": 74180
+      },
+      "reasoning_tokens": 37518,
+      "diagnostics": [
+        {
+          "sample": "t2-off-topic",
+          "attempt": 0,
+          "problem": "JSON 结构错误：最外层对象在 overall_comment 之后就结束了（多了一个 } 或 ]），后面的 priorities 落在了 JSON 之外；improvements 出现在最外层，但它属于 argument：argument 提前结束了（多了一个 }）"
+        },
+        {
+          "sample": "t2-under-length",
+          "attempt": 0,
+          "problem": "JSON 结构错误：argument、overall_comment、priorities 被写进了 criteria 里面：criteria 写完后少了一个 }，这些键必须在最外层"
+        },
+        {
+          "sample": "t2-under-length",
+          "attempt": 1,
+          "problem": "JSON 结构错误：argument、overall_comment、priorities 被写进了 criteria 里面：criteria 写完后少了一个 }，这些键必须在最外层"
+        }
+      ],
+      "argument": {
+        "returned": 48,
+        "kept": 47,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0
+      },
+      "statuses": {
+        "t2-weak": "ready",
+        "t2-mid": "ready",
+        "t2-good": "ready",
+        "t2-strong": "ready",
+        "t2-off-topic": "ready",
+        "t2-under-length": "failed",
+        "t1-no-image": "ready"
+      }
+    },
+    "synthetic_metrics": {
+      "valid_budget2": {
+        "calls": 1,
+        "first_json_rate": 1.0,
+        "first_content_rate": 1.0,
+        "final_ready_rate": 1.0,
+        "json_diagnostics": 0,
+        "failure_code": null,
+        "completion_tokens": 200,
+        "reasoning_tokens": 75,
+        "first_rejections": {}
+      },
+      "json_bad_then_good_budget2": {
+        "calls": 2,
+        "first_json_rate": 0.0,
+        "first_content_rate": 0.0,
+        "final_ready_rate": 1.0,
+        "json_diagnostics": 1,
+        "failure_code": null,
+        "completion_tokens": 400,
+        "reasoning_tokens": 150,
+        "first_rejections": {
+          "JSON 括号或结构错误": 1
+        }
+      },
+      "content_bad_then_good_budget2": {
+        "calls": 2,
+        "first_json_rate": 1.0,
+        "first_content_rate": 0.0,
+        "final_ready_rate": 1.0,
+        "json_diagnostics": 0,
+        "failure_code": null,
+        "completion_tokens": 400,
+        "reasoning_tokens": 150,
+        "first_rejections": {
+          "评分项 GRA 没有任何能在原文中找到的证据": 1
+        }
+      },
+      "always_json_bad_budget2": {
+        "calls": 2,
+        "first_json_rate": 0.0,
+        "first_content_rate": 0.0,
+        "final_ready_rate": 0.0,
+        "json_diagnostics": 2,
+        "failure_code": "invalid_output",
+        "completion_tokens": 400,
+        "reasoning_tokens": 150,
+        "first_rejections": {
+          "JSON 括号或结构错误": 1
+        }
+      },
+      "always_json_bad_budget1": {
+        "calls": 1,
+        "first_json_rate": 0.0,
+        "first_content_rate": 0.0,
+        "final_ready_rate": 0.0,
+        "json_diagnostics": 1,
+        "failure_code": "call_budget",
+        "completion_tokens": 200,
+        "reasoning_tokens": 75,
+        "first_rejections": {
+          "JSON 括号或结构错误": 1
+        }
+      },
+      "transport_truncated_budget2": {
+        "calls": 1,
+        "first_json_rate": 0.0,
+        "first_content_rate": 0.0,
+        "final_ready_rate": 0.0,
+        "json_diagnostics": 0,
+        "failure_code": "truncated",
+        "completion_tokens": 16000,
+        "reasoning_tokens": 15900,
+        "first_rejections": {
+          "调用失败：truncated": 1
+        }
+      }
+    },
+    "consumer_compatibility": [
+      {
+        "sample": "t2-weak",
+        "flat_and_nested_identical": true,
+        "overall": 5.5,
+        "ta_state": "scored",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      },
+      {
+        "sample": "t2-mid",
+        "flat_and_nested_identical": true,
+        "overall": 7.0,
+        "ta_state": "scored",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      },
+      {
+        "sample": "t2-good",
+        "flat_and_nested_identical": true,
+        "overall": 8.0,
+        "ta_state": "scored",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      },
+      {
+        "sample": "t2-strong",
+        "flat_and_nested_identical": true,
+        "overall": 8.0,
+        "ta_state": "scored",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      },
+      {
+        "sample": "t2-off-topic",
+        "flat_and_nested_identical": true,
+        "overall": 6.0,
+        "ta_state": "scored",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      },
+      {
+        "sample": "t1-no-image",
+        "flat_and_nested_identical": true,
+        "overall": null,
+        "ta_state": "not_assessable",
+        "mixed_form_rejection": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+      }
+    ],
+    "prompt_design_notes": {
+      "facts": [
+        {
+          "task": "task1",
+          "flat_model_shape": true,
+          "priorities_three_to_five_still_present": true,
+          "explanatory_schema_aliases_still_present": true
+        },
+        {
+          "task": "task2",
+          "flat_model_shape": true,
+          "priorities_three_to_five_still_present": true,
+          "explanatory_schema_aliases_still_present": true
+        }
+      ],
+      "classification": "Existing unimplemented design suggestions; not a newly reproduced correctness bug or proof of model quality."
+    }
+  }
+}

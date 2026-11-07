@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 写作 .9 数字保留复验：旧P2关闭，新增先截短再核实P2
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净478461a8经HTTPS fetch+ff-only到 **80b5dcf6185299a11b1d4a37bfac11f697e5f890**（业务b8a7c1ee），提示词仍iwa-2026-11-06.9。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口保留；本轮仅报告/两交接新增，未改业务或.env。精确开工状态见共享offline-verification.json。
+- **原P2已关闭**：按完整去重保留的新契约更新旧显示断言后原144/144全部通过；真实8数、展开正确comment、关键数调序、四候选均保留75/80。正常30/31项、去重、无效/claim排除、顺序及页面/复制遗漏提示正常。不能把旧最多4断言失败当作缺陷未修。
+- **新增1项P2**：`review.py:253`先figure.strip()[:300]，`:257`才contains_quote；真实前300字符+编造尾巴在原文没有完整匹配，却在新版以唯一figure保留矛盾并进入复制。基线478461a8先完整核对、正确丢弃，同一真实长引文仍接受；短伪造也正确拒绝。无效长引文还虚增omitted（30真实+伪造应0却1，31真实+伪造应1却2）。编造尾巴被截掉、未原样展示；问题是未核实完整输入，不声称分数改变。最小修法：完整strip原串先核对，再生成短显示串，保留本轮keep-all/30上限策略。证据探针新增61项54通过，7失败均来自同一顺序问题，总198/205 exit1。
+- 精确验证：主树 `.venv/bin/python docs/design/iwa-prompt9-recheck-20261107/run_offline_tests.py` → **371 Python（21.202s，wrapper21.48s）、8 Node**；获准回环端口测试，fake、临时库、剔除外部IWA配置、仅回环网络，外部数据目录未写。审阅树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（51文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check 478461a8..HEAD`通过。主审复跑evidence_keepall_probe 198/205 exit1、ui_evidence_probe 8场景107/107 exit0；旧json_shape82/82、metrics100/100写新输出通过，历史脚本/报告未改。
+- UI探针执行真实normalize→generation_view/copytext→真实iwa.js函数体，最小DOM替身、模拟点击复制及clipboard逐字比对；验证0/30/31/35、重复/无效条目、空格大小写去重、HTML字面量。不是实际浏览器/CSS布局/系统剪贴板验收。没有跑全部31历史探针/locale、Python3.10或真实模型；本轮0次、未读Key/私有reasoning/老师素材。
+- 共享 `docs/design/ielts-writing-ai-prompt9-recheck-20261107/` 10文件：README、证据探针及JSON、UI探针py/js/JSON、结构/统计JSON、offline-verification和日志。按既有授权只提交推送报告与两规范交接到功能分支，最终报告HEAD见git log；业务源码仍80b5dcf6。本机runner/source-state在主树 `docs/design/iwa-prompt9-recheck-20261107/`，未提交。未合main/部署/访问生产/写DB或小程序上传提审发布。
+- 下一步只恢复完整引用核实顺序并补上述正反回归，再复验。`.9`真实批次仍无新授权，旧9/14账本结束且runner禁用、未用5次不追加。完整JSON示例和反馈ID建议不在本轮修复范围；教师素材仍待可靠原稿和第5份正确题目。
+
 ## 2026-11-07（.9 复核后）雅思写作 AI 试用工具：Task 1 对照保留全部已核实数字（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `dc3401e`（报告 `478461a`，`docs/design/ielts-writing-ai-prompt9-review-20261107/`，含 3 个探针）。结构 / 统计全部通过（JSON 结构探针 82/82、统计探针 100/100、370 Python、8 Node）；剩 1 个 P2：说明提到的数字超过 4 个时，`_decisive_figures` 按模型顺序取前 4 个，仍会截掉决定矛盾的 2020 年 75% / 80%（只把真实说明展开成“2000 年 A 70% 高于 B 55%、C 40%、D 15%；但 2020 年 C 80% 高于 A 75%”即可复现）。评审同时更正上份报告：Task 1 原案例是旧程序 `figures[:3]` 截掉了关键数字，不是模型选错年份。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动（探针输出都写到 scratch）。

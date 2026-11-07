@@ -1,0 +1,830 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "head": "80b5dcf6185299a11b1d4a37bfac11f697e5f890",
+  "iwa_js_sha256": "9a2f487e6df97c36a0b6104afe256844003a93abfc106b80bc92bf566e3fa65a",
+  "evidence_levels": {
+    "backend": "Executed real normalize_evaluation and web._generation_view/copytext on synthetic data.",
+    "dom": "Executed original iwa.js renderer/helper/copy function bodies in Node with a minimal DOM test double and stub clipboard.",
+    "real_browser": "Not run. No layout, browser parser, native clipboard or end-to-end authentication claim.",
+    "external": "No model calls, app startup, database, .env or private reasoning reads."
+  },
+  "summary": {
+    "cases": 8,
+    "checks": 107,
+    "passed": 107,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "name": "zero",
+      "input_count": 0,
+      "kept": [],
+      "figures_omitted": 0,
+      "copy_contrast": null
+    },
+    {
+      "name": "thirty",
+      "input_count": 30,
+      "kept": [
+        "1.5%",
+        "2.5%",
+        "3.5%",
+        "4.5%",
+        "5.5%",
+        "6.5%",
+        "7.5%",
+        "8.5%",
+        "9.5%",
+        "10.5%",
+        "11.5%",
+        "12.5%",
+        "13.5%",
+        "14.5%",
+        "15.5%",
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%",
+        "20.5%",
+        "21.5%",
+        "22.5%",
+        "23.5%",
+        "24.5%",
+        "25.5%",
+        "26.5%",
+        "27.5%",
+        "28.5%",
+        "29.5%",
+        "30.5%"
+      ],
+      "figures_omitted": 0,
+      "copy_contrast": "    对照：“1.5%”；“2.5%”；“3.5%”；“4.5%”；“5.5%”；“6.5%”；“7.5%”；“8.5%”；“9.5%”；“10.5%”；“11.5%”；“12.5%”；“13.5%”；“14.5%”；“15.5%”；“16.5%”；“17.5%”；“18.5%”；“19.5%”；“20.5%”；“21.5%”；“22.5%”；“23.5%”；“24.5%”；“25.5%”；“26.5%”；“27.5%”；“28.5%”；“29.5%”；“30.5%”"
+    },
+    {
+      "name": "thirty_one",
+      "input_count": 31,
+      "kept": [
+        "1.5%",
+        "2.5%",
+        "3.5%",
+        "4.5%",
+        "5.5%",
+        "6.5%",
+        "7.5%",
+        "8.5%",
+        "9.5%",
+        "10.5%",
+        "11.5%",
+        "12.5%",
+        "13.5%",
+        "14.5%",
+        "15.5%",
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%",
+        "20.5%",
+        "21.5%",
+        "22.5%",
+        "23.5%",
+        "24.5%",
+        "25.5%",
+        "26.5%",
+        "27.5%",
+        "28.5%",
+        "29.5%",
+        "30.5%"
+      ],
+      "figures_omitted": 1,
+      "copy_contrast": "    对照：“1.5%”；“2.5%”；“3.5%”；“4.5%”；“5.5%”；“6.5%”；“7.5%”；“8.5%”；“9.5%”；“10.5%”；“11.5%”；“12.5%”；“13.5%”；“14.5%”；“15.5%”；“16.5%”；“17.5%”；“18.5%”；“19.5%”；“20.5%”；“21.5%”；“22.5%”；“23.5%”；“24.5%”；“25.5%”；“26.5%”；“27.5%”；“28.5%”；“29.5%”；“30.5%”（另有 1 个数字未列出）"
+    },
+    {
+      "name": "thirty_five",
+      "input_count": 35,
+      "kept": [
+        "1.5%",
+        "2.5%",
+        "3.5%",
+        "4.5%",
+        "5.5%",
+        "6.5%",
+        "7.5%",
+        "8.5%",
+        "9.5%",
+        "10.5%",
+        "11.5%",
+        "12.5%",
+        "13.5%",
+        "14.5%",
+        "15.5%",
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%",
+        "20.5%",
+        "21.5%",
+        "22.5%",
+        "23.5%",
+        "24.5%",
+        "25.5%",
+        "26.5%",
+        "27.5%",
+        "28.5%",
+        "29.5%",
+        "30.5%"
+      ],
+      "figures_omitted": 5,
+      "copy_contrast": "    对照：“1.5%”；“2.5%”；“3.5%”；“4.5%”；“5.5%”；“6.5%”；“7.5%”；“8.5%”；“9.5%”；“10.5%”；“11.5%”；“12.5%”；“13.5%”；“14.5%”；“15.5%”；“16.5%”；“17.5%”；“18.5%”；“19.5%”；“20.5%”；“21.5%”；“22.5%”；“23.5%”；“24.5%”；“25.5%”；“26.5%”；“27.5%”；“28.5%”；“29.5%”；“30.5%”（另有 5 个数字未列出）"
+    },
+    {
+      "name": "duplicates_at_thirty",
+      "input_count": 36,
+      "kept": [
+        "1.5%",
+        "2.5%",
+        "3.5%",
+        "4.5%",
+        "5.5%",
+        "6.5%",
+        "7.5%",
+        "8.5%",
+        "9.5%",
+        "10.5%",
+        "11.5%",
+        "12.5%",
+        "13.5%",
+        "14.5%",
+        "15.5%",
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%",
+        "20.5%",
+        "21.5%",
+        "22.5%",
+        "23.5%",
+        "24.5%",
+        "25.5%",
+        "26.5%",
+        "27.5%",
+        "28.5%",
+        "29.5%",
+        "30.5%"
+      ],
+      "figures_omitted": 0,
+      "copy_contrast": "    对照：“1.5%”；“2.5%”；“3.5%”；“4.5%”；“5.5%”；“6.5%”；“7.5%”；“8.5%”；“9.5%”；“10.5%”；“11.5%”；“12.5%”；“13.5%”；“14.5%”；“15.5%”；“16.5%”；“17.5%”；“18.5%”；“19.5%”；“20.5%”；“21.5%”；“22.5%”；“23.5%”；“24.5%”；“25.5%”；“26.5%”；“27.5%”；“28.5%”；“29.5%”；“30.5%”"
+    },
+    {
+      "name": "duplicates_at_thirty_one",
+      "input_count": 37,
+      "kept": [
+        "1.5%",
+        "2.5%",
+        "3.5%",
+        "4.5%",
+        "5.5%",
+        "6.5%",
+        "7.5%",
+        "8.5%",
+        "9.5%",
+        "10.5%",
+        "11.5%",
+        "12.5%",
+        "13.5%",
+        "14.5%",
+        "15.5%",
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%",
+        "20.5%",
+        "21.5%",
+        "22.5%",
+        "23.5%",
+        "24.5%",
+        "25.5%",
+        "26.5%",
+        "27.5%",
+        "28.5%",
+        "29.5%",
+        "30.5%"
+      ],
+      "figures_omitted": 1,
+      "copy_contrast": "    对照：“1.5%”；“2.5%”；“3.5%”；“4.5%”；“5.5%”；“6.5%”；“7.5%”；“8.5%”；“9.5%”；“10.5%”；“11.5%”；“12.5%”；“13.5%”；“14.5%”；“15.5%”；“16.5%”；“17.5%”；“18.5%”；“19.5%”；“20.5%”；“21.5%”；“22.5%”；“23.5%”；“24.5%”；“25.5%”；“26.5%”；“27.5%”；“28.5%”；“29.5%”；“30.5%”（另有 1 个数字未列出）"
+    },
+    {
+      "name": "case_and_space_duplicates",
+      "input_count": 3,
+      "kept": [
+        "About 5%"
+      ],
+      "figures_omitted": 0,
+      "copy_contrast": "    对照：“About 5%”"
+    },
+    {
+      "name": "html_as_text",
+      "input_count": 2,
+      "kept": [
+        "<img src=x onerror=\"alert(1)\"> 42%"
+      ],
+      "figures_omitted": 0,
+      "copy_contrast": "    对照：“<img src=x onerror=\"alert(1)\"> 42%”"
+    }
+  ],
+  "dom": [
+    {
+      "name": "zero",
+      "figure_button_count": 0,
+      "contrast_text": null,
+      "contrast_html_from_dom_double": null,
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "thirty",
+      "figure_button_count": 30,
+      "contrast_text": "对照：“1.5%”“2.5%”“3.5%”“4.5%”“5.5%”“6.5%”“7.5%”“8.5%”“9.5%”“10.5%”“11.5%”“12.5%”“13.5%”“14.5%”“15.5%”“16.5%”“17.5%”“18.5%”“19.5%”“20.5%”“21.5%”“22.5%”“23.5%”“24.5%”“25.5%”“26.5%”“27.5%”“28.5%”“29.5%”“30.5%”",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“1.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“2.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“3.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“4.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“5.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“6.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“7.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“8.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“9.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“10.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“11.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“12.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“13.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“14.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“15.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“16.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“17.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“18.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“19.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“20.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“21.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“22.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“23.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“24.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“25.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“26.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“27.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“28.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“29.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“30.5%”</button></p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "thirty_one",
+      "figure_button_count": 30,
+      "contrast_text": "对照：“1.5%”“2.5%”“3.5%”“4.5%”“5.5%”“6.5%”“7.5%”“8.5%”“9.5%”“10.5%”“11.5%”“12.5%”“13.5%”“14.5%”“15.5%”“16.5%”“17.5%”“18.5%”“19.5%”“20.5%”“21.5%”“22.5%”“23.5%”“24.5%”“25.5%”“26.5%”“27.5%”“28.5%”“29.5%”“30.5%”（另有 1 个数字未列出）",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“1.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“2.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“3.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“4.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“5.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“6.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“7.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“8.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“9.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“10.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“11.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“12.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“13.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“14.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“15.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“16.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“17.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“18.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“19.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“20.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“21.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“22.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“23.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“24.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“25.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“26.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“27.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“28.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“29.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“30.5%”</button>（另有 1 个数字未列出）</p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "thirty_five",
+      "figure_button_count": 30,
+      "contrast_text": "对照：“1.5%”“2.5%”“3.5%”“4.5%”“5.5%”“6.5%”“7.5%”“8.5%”“9.5%”“10.5%”“11.5%”“12.5%”“13.5%”“14.5%”“15.5%”“16.5%”“17.5%”“18.5%”“19.5%”“20.5%”“21.5%”“22.5%”“23.5%”“24.5%”“25.5%”“26.5%”“27.5%”“28.5%”“29.5%”“30.5%”（另有 5 个数字未列出）",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“1.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“2.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“3.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“4.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“5.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“6.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“7.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“8.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“9.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“10.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“11.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“12.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“13.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“14.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“15.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“16.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“17.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“18.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“19.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“20.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“21.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“22.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“23.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“24.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“25.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“26.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“27.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“28.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“29.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“30.5%”</button>（另有 5 个数字未列出）</p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "duplicates_at_thirty",
+      "figure_button_count": 30,
+      "contrast_text": "对照：“1.5%”“2.5%”“3.5%”“4.5%”“5.5%”“6.5%”“7.5%”“8.5%”“9.5%”“10.5%”“11.5%”“12.5%”“13.5%”“14.5%”“15.5%”“16.5%”“17.5%”“18.5%”“19.5%”“20.5%”“21.5%”“22.5%”“23.5%”“24.5%”“25.5%”“26.5%”“27.5%”“28.5%”“29.5%”“30.5%”",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“1.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“2.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“3.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“4.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“5.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“6.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“7.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“8.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“9.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“10.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“11.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“12.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“13.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“14.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“15.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“16.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“17.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“18.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“19.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“20.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“21.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“22.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“23.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“24.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“25.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“26.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“27.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“28.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“29.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“30.5%”</button></p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "duplicates_at_thirty_one",
+      "figure_button_count": 30,
+      "contrast_text": "对照：“1.5%”“2.5%”“3.5%”“4.5%”“5.5%”“6.5%”“7.5%”“8.5%”“9.5%”“10.5%”“11.5%”“12.5%”“13.5%”“14.5%”“15.5%”“16.5%”“17.5%”“18.5%”“19.5%”“20.5%”“21.5%”“22.5%”“23.5%”“24.5%”“25.5%”“26.5%”“27.5%”“28.5%”“29.5%”“30.5%”（另有 1 个数字未列出）",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“1.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“2.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“3.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“4.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“5.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“6.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“7.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“8.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“9.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“10.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“11.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“12.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“13.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“14.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“15.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“16.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“17.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“18.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“19.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“20.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“21.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“22.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“23.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“24.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“25.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“26.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“27.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“28.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“29.5%”</button><button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“30.5%”</button>（另有 1 个数字未列出）</p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "case_and_space_duplicates",
+      "figure_button_count": 1,
+      "contrast_text": "对照：“About 5%”",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“About 5%”</button></p>",
+      "copied_server_text_exact": true
+    },
+    {
+      "name": "html_as_text",
+      "figure_button_count": 1,
+      "contrast_text": "对照：“<img src=x onerror=\"alert(1)\"> 42%”",
+      "contrast_html_from_dom_double": "<p class=\"argument__conflict\">对照：<button type=\"button\" class=\"issue__quote\" title=\"在左侧原文中标出\">“&lt;img src=x onerror=&quot;alert(1)&quot;&gt; 42%”</button></p>",
+      "copied_server_text_exact": true
+    }
+  ],
+  "checks": [
+    {
+      "case": "zero",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "normalized_figures_exact_order",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "omitted_count_after_unique_verified_filter",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "copy_contrast_exact",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "copy_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "zero_evidence_drops_unsupported_comparison",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "missing_chart_remains_unassessable",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "zero",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "thirty",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "thirty_one",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "thirty_five",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "duplicates_at_thirty_one",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "case_and_space_duplicates",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_exact_figure_buttons_order",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_contrast_present_iff_has_evidence",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_omission_count_and_position",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_omission_notice_iff_truncated",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_comment_retained",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_no_markup_nodes_from_data",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "copy_click_passes_exact_server_copy",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_figure_html_kept_literal",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "dom_serialization_escapes_figure_html",
+      "ok": true
+    },
+    {
+      "case": "html_as_text",
+      "check": "plain_copy_keeps_literal_markup",
+      "ok": true
+    }
+  ],
+  "failures": []
+}
