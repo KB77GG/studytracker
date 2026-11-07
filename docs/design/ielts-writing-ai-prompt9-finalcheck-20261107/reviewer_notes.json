@@ -1,0 +1,71 @@
+{
+  "review": "independent final recheck of full-quote validation order",
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "head": "f919067850cbe5fc7ebcaa4fdc2bf10633faeef7",
+  "business_commit": "600938c3",
+  "baseline": "07396358",
+  "status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial",
+  "conclusion": "本轮限定范围通过；原证据截取P2与先截短再核实P2均已关闭，未发现本次改动遗留阻断问题。",
+  "command": "PYTHONDONTWRITEBYTECODE=1 /Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/design/ielts-writing-ai-prompt9-recheck-20261107/evidence_keepall_probe.py --repo /private/tmp/studytracker-iwa-realcheck-review-20261103 --output /Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt9-finalcheck-20261107/evidence_keepall_probe.json",
+  "verification": {
+    "exit_code": 0,
+    "passed": 205,
+    "total": 205,
+    "inherited_keepall_checks": 144,
+    "additional_boundary_checks": 61,
+    "findings": 0,
+    "old_committed_probe_unmodified": true,
+    "probe_sha256": "a9c1a6d78e56508de4834ef88409726a24dd75afa1183d108dc0294b4d658f9d"
+  },
+  "reviewed_changes": [
+    {
+      "file": "tools/ielts_writing_ai/review.py",
+      "lines": [
+        253,
+        254,
+        255,
+        260,
+        261,
+        262,
+        263
+      ],
+      "observation": "完整strip字符串生成去重key并排除claim片段；contains_quote使用完整full；成功后才加入seen并把full[:300]用于显示；30上限与遗漏数只计算已完整核实的候选。"
+    },
+    {
+      "file": "tools/ielts_writing_ai/tests/test_high_run_20261106.py",
+      "observation": "新增两项覆盖真实355字符引用、真实前300字符+编造结尾、真实数字混入伪造项、30/31真实加伪造时遗漏数；独立旧205探针无需改动即全部通过。"
+    }
+  ],
+  "adjacent_paths_read_only": [
+    {
+      "file": "tools/ielts_writing_ai/review.py:125-131",
+      "path": "评分项 strengths/issues",
+      "observation": "核实传入完整full_quote；展示字段独立取[:300]，不把截短串当作核实输入。"
+    },
+    {
+      "file": "tools/ielts_writing_ai/argument.py:82-90",
+      "path": "argument引用",
+      "observation": "strip完整quote后contains_quote，再返回[:QUOTE_LIMIT]。"
+    },
+    {
+      "file": "tools/ielts_writing_ai/review.py:275-287",
+      "path": "Task1 claim",
+      "observation": "_text(..., None)保留完整claim，完整核实通过后才把claim[:300]写入展示结果。"
+    }
+  ],
+  "confirmed_behaviors": [
+    "真实8数字和展开comment的全部有效证据保留",
+    "24组comment兼容正反、引文、数字过滤、计数、复制仍通过",
+    "普通30/31条、去重、无效引用与claim排除、模型顺序、复制超限提示正常",
+    "真实长引文接受并截短显示；短伪造与真实长前缀加编造尾巴均拒绝",
+    "唯一figure无效时矛盾不采用且复制无对照",
+    "无效长引用不再虚增遗漏数：30真实+伪造为0，31真实+伪造为1"
+  ],
+  "scope_and_limits": [
+    "只读业务和既有测试；仅写本轮evidence_keepall_probe.json与reviewer_notes.json。旧探针和历史报告未改。",
+    "没有读取.env、凭据、私有reasoning、学生素材；没有任何模型或网络调用。",
+    "复制通过生产copytext路径检验；此子审未执行浏览器/CSS测试或全量测试套件，主审另行汇总。",
+    "完整引用核实只证明来源存在，不证明模型语义判断或评分准确；没有新增真实批次结论。"
+  ],
+  "publication": "本子任务仅本机产物，未commit/push/deploy；规范交接由主审统一汇总。"
+}

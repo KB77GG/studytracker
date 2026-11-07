@@ -1,0 +1,104 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+  "python": "3.13.3",
+  "source_head": "f919067850cbe5fc7ebcaa4fdc2bf10633faeef7",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 21.7
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+      "returncode": 0,
+      "elapsed_seconds": 0.15
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial\n",
+  "python_tests": 373,
+  "python_test_seconds": 21.419,
+  "node_tests": 8,
+  "checks": [
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check tools/ielts_writing_ai",
+      "returncode": 0
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/black --check tools/ielts_writing_ai",
+      "returncode": 0,
+      "files": 51
+    },
+    {
+      "command": "node --check tools/ielts_writing_ai/static/iwa.js",
+      "returncode": 0
+    },
+    {
+      "command": "git diff --check 07396358..HEAD",
+      "returncode": 0
+    }
+  ],
+  "probes": [
+    {
+      "name": "evidence_keepall_probe",
+      "passed": 205,
+      "total": 205,
+      "findings": 0,
+      "returncode": 0
+    },
+    {
+      "name": "ui_evidence_probe",
+      "passed": 107,
+      "total": 107,
+      "cases": 8,
+      "returncode": 0,
+      "environment": "Minimal DOM double executing actual JS function bodies"
+    },
+    {
+      "name": "json_shape_probe",
+      "passed": 82,
+      "total": 82,
+      "returncode": 0
+    },
+    {
+      "name": "metrics_probe",
+      "passed": 100,
+      "total": 100,
+      "returncode": 0
+    }
+  ],
+  "real_model_calls": 0,
+  "initial_state": {
+    "main_path": "/Users/zhouxin/Desktop/studytracker",
+    "main_head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+    "main_status": "## main...origin/main [behind 103]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+    "review_path": "/private/tmp/studytracker-iwa-realcheck-review-20261103",
+    "source_head": "f919067850cbe5fc7ebcaa4fdc2bf10633faeef7",
+    "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial",
+    "base_head": "073963588cbfce286fb01798dd7feba869070ef8",
+    "real_calls_this_review": 0,
+    "paid_batch_authorized": false
+  },
+  "not_tested": [
+    "New .9 real model batch",
+    "Full browser",
+    "All locales",
+    "Python 3.10"
+  ]
+}

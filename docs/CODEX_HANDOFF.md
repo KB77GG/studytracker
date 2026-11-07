@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 写作 .9 最终离线复验通过（真实批次待新授权）
+
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净07396358经HTTPS fetch+ff-only到 **f919067850cbe5fc7ebcaa4fdc2bf10633faeef7**（业务600938c3），提示词仍iwa-2026-11-06.9。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及咨询记录保留；本轮仅报告/两交接增量，没有改业务/.env/默认档位。
+- **限定复验通过，无本次范围遗留阻断**：完整去空白引文先生成去重key、核实，成功后才截300显示；真实355字符引用接受，真实300前缀+编造尾巴拒绝；唯一figure无效时矛盾不采用/复制无对照。30/31真实数字加无效长引文遗漏数分别0/1；原全部保留/顺序/去重/30上限及75/80关键数字均保持。评分项、argument、claim路径也已只读核对为完整核实后显示截短。
+- 精确验证：主树 `.venv/bin/python docs/design/iwa-prompt9-finalcheck-20261107/run_offline_tests.py` → **373 Python（21.419s，wrapper21.70s）、8 Node**，fake、临时库、剔除外部IWA配置、仅回环网络，外部数据目录未写；获准本机端口测试。审阅树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（51文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check 07396358..HEAD`均通过。
+- 主审复跑此前已提交脚本、未改任何断言：evidence_keepall205/205、ui_evidence107/107（8场景）、json_shape82/82、metrics100/100，均exit0；输出均写本轮新目录，旧探针/证据保持。UI为真实后端/JS函数+最小DOM/clipboard替身，不是实际浏览器布局/系统剪贴板。未跑全部33历史探针/locale、Python3.10或完整浏览器。
+- 共享 `docs/design/ielts-writing-ai-prompt9-finalcheck-20261107/` 共8文件：README、四探针JSON、独立reviewer_notes、offline-verification、测试日志。按既有授权只提交推送报告与两规范交接到功能分支，最终文档HEAD见git log；业务源码仍f9190678。本机runner/source-state在主树 `docs/design/iwa-prompt9-finalcheck-20261107/`，未提交。未合main/部署/访问生产/写DB或小程序上传提审发布。
+- **真实调用仍0，授权待答复**：复验通过后已向用户询问是否用现有试用Key跑 `.9`/deepseek-flash/high/7内置合成/仅evaluate，新账本总≤14实际HTTP、单次≤16000输出token；不含精修/改写/识图/其他模型/老师素材。在收到明确新授权前不得调用。旧 `.8` 9/14结束、未用5次不续用，旧runner仍禁用。没有读Key/私有reasoning/老师素材。
+- 下一步若新授权到达：固定本次已验业务源，准备独立新账本/调用守卫后运行，核首轮JSON、短文可用性、Task1证据和语法定性，完整失败用量计入；不得将离线通过当作评分校准或真实率提高。完整JSON示例/优先事项复用反馈ID建议仍未实施；教师素材仍缺可靠原稿与第5份正确题目。后续授权和实际运行状态以最新交接及批次账本更新为准。
+
 ## 2026-11-07（.9 复验后）雅思写作 AI 试用工具：Task 1 对照数字先核实完整引文再截短（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复验 `80b5dcf`（报告 `0739635`，`docs/design/ielts-writing-ai-prompt9-recheck-20261107/`，含 `evidence_keepall_probe.py` 和 `ui_evidence_probe.py`）。原数字丢失问题已关闭（原 144 项全过，页面 / 复制 107/107，结构 82/82，统计 100/100）；新 P2：`b8a7c1e` 的 `review._evidence_figures` 先 `strip()[:300]` 再 `contains_quote`，“真实的前 300 字符 + 编造结尾”被采用，还会虚增 `figures_omitted`（30 真实 + 1 伪造提示遗漏 1；31 + 1 提示 2）。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动。

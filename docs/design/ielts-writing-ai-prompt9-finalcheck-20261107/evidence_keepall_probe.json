@@ -1,0 +1,3368 @@
+{
+  "source_head": "f919067850cbe5fc7ebcaa4fdc2bf10633faeef7",
+  "source_status": "## claude/ielts-writing-ai-trial...origin/claude/ielts-writing-ai-trial",
+  "sources": {
+    "docs/design/ielts-writing-ai-prompt8-high-20261106/run_data.json": "82aefb43cd8310af8f18ff02959df2151c1f1b3072f1f8d493891afeb9504549",
+    "docs/design/ielts-writing-ai-prompt8-high-20261106/raw_calls.jsonl": "85c41623585fa58360f00ba9a313c9c117a372c9bbe77487d6b1446ba13a076b"
+  },
+  "privacy": "Only committed redacted synthetic formal answers; no .env, private results or reasoning, credentials, network/model calls or business mutations.",
+  "old_attribution_correction": {
+    "raw_model_comparison": {
+      "claim": "Country A had the highest level of ownership in both years",
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "holds": false,
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "old_normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%"
+      ],
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "new_normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+    },
+    "correction": "原模型返回8个数，含75/80；旧程序 figures[:3] 丢掉关键2020证据。主要原因是程序截断，不能归为模型只选择了错年数字。"
+  },
+  "real_good_result": {
+    "argument": {
+      "position": {
+        "quote": "While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment",
+        "consistent": true,
+        "comment": "立场明确且为“有限同意”，后文第四段的让步与第五段的结论都在这一框架内，读完全文态度清晰一致。"
+      },
+      "paragraphs": [
+        {
+          "p": 1,
+          "role": "introduction",
+          "role_label": "开头",
+          "main_point": "While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "引入话题并给出带理由的立场句，为下文两条主体论证与让步定下框架。"
+        },
+        {
+          "p": 2,
+          "role": "body",
+          "role_label": "主体段",
+          "main_point": "The strongest argument for prioritising public transport is efficiency.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "用运力对比与“新路诱增车流”的因果机制论证效率优势，理由充分，直接支撑立场。"
+        },
+        {
+          "p": 3,
+          "role": "body",
+          "role_label": "主体段",
+          "main_point": "Public transport also brings wider social and environmental benefits.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "从公平出行与环境两个角度延伸论点，并用thereby说明对就业与服务获取的影响，属于有效支撑。"
+        },
+        {
+          "p": 4,
+          "role": "concession",
+          "role_label": "让步段",
+          "main_point": "Nevertheless, it would be unrealistic to stop road building altogether.",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "让步段说明例外情形（人口稀疏地区、货运），为“有限同意”划定边界，并未削弱自身立场，无需反驳。"
+        },
+        {
+          "p": 5,
+          "role": "conclusion",
+          "role_label": "结尾",
+          "main_point": "In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport",
+          "verdict": "supports",
+          "verdict_label": "服务于立场",
+          "comment": "结论重申主立场并保留让步，与首段完全一致。"
+        }
+      ],
+      "problems": [],
+      "improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "开头已给出核心理由，若再用半句预告下文两条主体（效率与社会环境效益），全文结构会更加显性。"
+        },
+        {
+          "quote": "It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers",
+          "suggestion": "此处可补一句假设性说明，例如设想一位住在郊区、依靠公交去上班的工人因此获得更多就业选择，使论证从概括走向具体。"
+        },
+        {
+          "quote": "In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.",
+          "suggestion": "可在此句后加一句限定，说明这类道路投入应“按需、精准”而非大规模新建，使让步与本段结尾的targeted呼应得更紧。"
+        }
+      ],
+      "reclassified": 0,
+      "notes": [],
+      "self_conflicts": 0,
+      "suggestions_removed": 0,
+      "real_paragraphs": 5,
+      "returned": 9,
+      "kept": 9,
+      "dropped": 0,
+      "duplicates": 0,
+      "over_limit": 0
+    },
+    "warnings": []
+  },
+  "old_counterexample_recheck": {
+    "change": "只展开原正确comment，补出2000另外三国数值；原稿、claim、8个figures、评分全部不变。",
+    "raw_comparison": {
+      "claim": "Country A had the highest level of ownership in both years",
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "holds": false,
+      "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+    },
+    "normalized_issue": {
+      "quote": "Country A had the highest level of ownership in both years",
+      "quote_found": true,
+      "figures": [
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "about 75%",
+        "approximately 65%",
+        "nearly 80%",
+        "around 35%"
+      ],
+      "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+    },
+    "copy_evidence_lines": [
+      "对照：“around 70%”；“roughly 55%”；“about 40%”；“only 15%”；“about 75%”；“approximately 65%”；“nearly 80%”；“around 35%”"
+    ],
+    "correct_comment_still_visible": true,
+    "impact": "旧缺陷复验：应完整保留8个已核实数字，包含决定2020矛盾的75/80；本轮payload和复制均已做到。",
+    "scope": "上一轮真实8数输入的展开comment变体；本轮只修改已过时的最多4条约定，保留两项关键数字完整性正确行为断言。",
+    "source_lines": [
+      "tools/ielts_writing_ai/review.py:242-260",
+      "tools/ielts_writing_ai/copytext.py:149-151",
+      "tools/ielts_writing_ai/static/iwa.js:568-571"
+    ]
+  },
+  "boundary_cases": [
+    {
+      "name": "thirty_unique",
+      "input_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 0,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "thirty_one_unique",
+      "input_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G31 recorded 31.5%."
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 1,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。",
+          "figures_omitted": 1
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "thirty_with_duplicate_variants",
+      "input_figures": [
+        "Group G01 recorded 1.5%.",
+        "  Group G01 recorded 1.5%.  ",
+        "GROUP G01 RECORDED 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 0,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "thirty_one_with_duplicates_invalids_and_claims",
+      "input_figures": [
+        null,
+        false,
+        65,
+        [],
+        {},
+        "",
+        "   ",
+        "invented 99.9%",
+        "Country A had the highest level of ownership in both years",
+        "highest level of ownership",
+        "Group G01 recorded 1.5%.",
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G31 recorded 31.5%.",
+        "Group G31 recorded 31.5%.",
+        null,
+        false,
+        65,
+        [],
+        {},
+        "",
+        "   ",
+        "invented 99.9%",
+        "Country A had the highest level of ownership in both years",
+        "highest level of ownership"
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 1,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。",
+          "figures_omitted": 1
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "invalid_candidates_do_not_consume_capacity",
+      "input_figures": [
+        null,
+        false,
+        65,
+        [],
+        {},
+        "",
+        "   ",
+        "invented 99.9%",
+        "Country A had the highest level of ownership in both years",
+        "highest level of ownership",
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        null,
+        false,
+        65,
+        [],
+        {},
+        "",
+        "   ",
+        "invented 99.9%",
+        "Country A had the highest level of ownership in both years",
+        "highest level of ownership"
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 0,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "reverse_model_order_kept",
+      "input_figures": [
+        "Group G31 recorded 31.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G01 recorded 1.5%."
+      ],
+      "expected_figures": [
+        "Group G31 recorded 31.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G02 recorded 2.5%."
+      ],
+      "expected_omitted": 1,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G31 recorded 31.5%.",
+            "Group G30 recorded 30.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G02 recorded 2.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。",
+          "figures_omitted": 1
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G31 recorded 31.5%.”；“Group G30 recorded 30.5%.”；“Group G29 recorded 29.5%.”；“Group G28 recorded 28.5%.”；“Group G27 recorded 27.5%.”；“Group G26 recorded 26.5%.”；“Group G25 recorded 25.5%.”；“Group G24 recorded 24.5%.”；“Group G23 recorded 23.5%.”；“Group G22 recorded 22.5%.”；“Group G21 recorded 21.5%.”；“Group G20 recorded 20.5%.”；“Group G19 recorded 19.5%.”；“Group G18 recorded 18.5%.”；“Group G17 recorded 17.5%.”；“Group G16 recorded 16.5%.”；“Group G15 recorded 15.5%.”；“Group G14 recorded 14.5%.”；“Group G13 recorded 13.5%.”；“Group G12 recorded 12.5%.”；“Group G11 recorded 11.5%.”；“Group G10 recorded 10.5%.”；“Group G09 recorded 9.5%.”；“Group G08 recorded 8.5%.”；“Group G07 recorded 7.5%.”；“Group G06 recorded 6.5%.”；“Group G05 recorded 5.5%.”；“Group G04 recorded 4.5%.”；“Group G03 recorded 3.5%.”；“Group G02 recorded 2.5%.”（另有 1 个数字未列出）"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "only_invalid_or_claim_fragments",
+      "input_figures": [
+        null,
+        false,
+        65,
+        [],
+        {},
+        "",
+        "   ",
+        "invented 99.9%",
+        "Country A had the highest level of ownership in both years",
+        "highest level of ownership"
+      ],
+      "expected_figures": [],
+      "expected_omitted": 0,
+      "normalized_issues": [],
+      "copy_evidence_lines": [],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+      ]
+    },
+    {
+      "name": "not_a_list",
+      "input_figures": {
+        "figure": "Group G01 recorded 1.5%."
+      },
+      "expected_figures": [],
+      "expected_omitted": 0,
+      "normalized_issues": [],
+      "copy_evidence_lines": [],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+      ]
+    },
+    {
+      "name": "blank_list",
+      "input_figures": [],
+      "expected_figures": [],
+      "expected_omitted": 0,
+      "normalized_issues": [],
+      "copy_evidence_lines": [],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+      ]
+    },
+    {
+      "name": "short_forged_quote_rejected",
+      "input_figures": [
+        "about 75%, INVENTED: Country Z reached 99.9%."
+      ],
+      "expected_figures": [],
+      "expected_omitted": 0,
+      "normalized_issues": [],
+      "copy_evidence_lines": [],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+      ]
+    },
+    {
+      "name": "genuine_full_long_quote_kept",
+      "input_figures": [
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries."
+      ],
+      "expected_figures": [
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, "
+      ],
+      "expected_omitted": 0,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, "
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, ”"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "forged_long_quote_must_be_rejected",
+      "input_figures": [
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%,  INVENTED: Country Z reached 99.9%."
+      ],
+      "expected_figures": [],
+      "expected_omitted": 0,
+      "normalized_issues": [],
+      "copy_evidence_lines": [],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+      ]
+    },
+    {
+      "name": "thirty_valid_plus_forged_does_not_add_omitted",
+      "input_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%,  INVENTED: Country Z reached 99.9%."
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 0,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    },
+    {
+      "name": "thirty_one_valid_plus_forged_counts_only_one_omitted",
+      "input_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G31 recorded 31.5%.",
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%,  INVENTED: Country Z reached 99.9%."
+      ],
+      "expected_figures": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ],
+      "expected_omitted": 1,
+      "normalized_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "Group G01 recorded 1.5%.",
+            "Group G02 recorded 2.5%.",
+            "Group G03 recorded 3.5%.",
+            "Group G04 recorded 4.5%.",
+            "Group G05 recorded 5.5%.",
+            "Group G06 recorded 6.5%.",
+            "Group G07 recorded 7.5%.",
+            "Group G08 recorded 8.5%.",
+            "Group G09 recorded 9.5%.",
+            "Group G10 recorded 10.5%.",
+            "Group G11 recorded 11.5%.",
+            "Group G12 recorded 12.5%.",
+            "Group G13 recorded 13.5%.",
+            "Group G14 recorded 14.5%.",
+            "Group G15 recorded 15.5%.",
+            "Group G16 recorded 16.5%.",
+            "Group G17 recorded 17.5%.",
+            "Group G18 recorded 18.5%.",
+            "Group G19 recorded 19.5%.",
+            "Group G20 recorded 20.5%.",
+            "Group G21 recorded 21.5%.",
+            "Group G22 recorded 22.5%.",
+            "Group G23 recorded 23.5%.",
+            "Group G24 recorded 24.5%.",
+            "Group G25 recorded 25.5%.",
+            "Group G26 recorded 26.5%.",
+            "Group G27 recorded 27.5%.",
+            "Group G28 recorded 28.5%.",
+            "Group G29 recorded 29.5%.",
+            "Group G30 recorded 30.5%."
+          ],
+          "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。",
+          "figures_omitted": 1
+        }
+      ],
+      "copy_evidence_lines": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ],
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。"
+      ]
+    }
+  ],
+  "long_quote_regression": {
+    "source_paragraph_length": 355,
+    "valid_full_quote": "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.",
+    "forged_full_quote": "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%,  INVENTED: Country Z reached 99.9%.",
+    "forged_found_in_essay": false,
+    "true_prefix_length": 300,
+    "baseline_head": "478461a8",
+    "baseline_normalized_issues": [],
+    "baseline_warnings": [
+      "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+      "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+    ],
+    "current_normalized_issues": [],
+    "current_copy_evidence_lines": [],
+    "current_warnings": [
+      "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+      "AI 另提出 1 条矛盾，但引文无法在原文中找到或缺少对照的数字，已忽略。"
+    ],
+    "effect": "唯一候选的全文不存在，但其真实前300字符先被截出并通过核实；本应忽略的未经核实证据被采用为矛盾对照。相同输入在基线被拒绝。加入30条真实证据后，还会把该无效候选算入figures_omitted。"
+  },
+  "inherited_checks": {
+    "passed": 144,
+    "total": 144
+  },
+  "additional_checks": {
+    "passed": 61,
+    "total": 61
+  },
+  "comment_alias_matrix": [
+    {
+      "name": "comment_only_safe",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "empty_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": ""
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": "   "
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "null_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": null
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "list_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": []
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "object_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": {
+          "bad": "type"
+        }
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "integer_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": 7
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "boolean_suggestion_safe_comment",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": true
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "both_valid_suggestion_wins",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可以保留现有论证，只把表达写得更清楚。",
+        "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 7,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [],
+      "copy_optional_section": "可选优化（不是错误，不影响上面的判断）：\n  · “because it addresses the causes of traffic problems rather than merely their symptoms” → 可补一句解释已有机制，并保留原文的限定立场。\n\n"
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。",
+        "suggestion": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "both_unsafe_removed_once",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": ""
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。",
+        "suggestion": []
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 1
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 1,
+        "total": 1
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。",
+        "有 1 条建议包含原文、题目和题图里都没有的具体数字或比例，已删去（论证结构 1 条），避免把没有来源的数据当作改进方法。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_empty_no_advice",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": ""
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_null_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": null
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_list_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": [
+          "可补一句解释已有机制，并保留原文的限定立场。"
+        ]
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_object_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": {
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_number_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": 80
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "comment_boolean_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+        "comment": true
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted",
+      "input_improvement": {
+        "quote": "This sentence does not occur in the essay.",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected",
+      "input_improvement": {
+        "quote": "because it addresses the causes of traffic problems rather than merely their symptoms (invented ending)",
+        "comment": "可补一句解释已有机制，并保留原文的限定立场。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once",
+      "input_improvement": {
+        "quote": "This sentence does not occur in the essay.",
+        "comment": "建议加入调查显示80%的乘客支持公交这一证据。"
+      },
+      "normalized_improvements": [],
+      "argument_counts": {
+        "returned": 7,
+        "kept": 6,
+        "dropped": 1,
+        "duplicates": 0,
+        "over_limit": 0,
+        "suggestions_removed": 0
+      },
+      "global_suggestions_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "warnings": [
+        "AI 的论证结构分析中有 1 条引文无法在原文中找到或格式不对，已忽略。"
+      ],
+      "copy_optional_section": null
+    }
+  ],
+  "checks": [
+    {
+      "name": "raw_real_answer_included_eight_figures_and_decisive_pair",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "historical_normalized_list_is_raw_first_three",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "old_source_proves_first_three_truncation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "current_real_output_keeps_decisive_pair",
+      "passed": true,
+      "details": {
+        "quote": "Country A had the highest level of ownership in both years",
+        "quote_found": true,
+        "figures": [
+          "around 70%",
+          "roughly 55%",
+          "about 40%",
+          "only 15%",
+          "about 75%",
+          "approximately 65%",
+          "nearly 80%",
+          "around 35%"
+        ],
+        "comment": "2000年A的约70%高于其他三国；但2020年C的近80%高于A的约75%，所以“both years”不成立。"
+      }
+    },
+    {
+      "name": "current_real_copy_keeps_all_verified_figures",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "flat_and_nested_real_task1_outputs_identical",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "expanded_correct_comment_keeps_both_decisive_figures",
+      "passed": true,
+      "details": {
+        "quote": "Country A had the highest level of ownership in both years",
+        "quote_found": true,
+        "figures": [
+          "around 70%",
+          "roughly 55%",
+          "about 40%",
+          "only 15%",
+          "about 75%",
+          "approximately 65%",
+          "nearly 80%",
+          "around 35%"
+        ],
+        "comment": "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+      }
+    },
+    {
+      "name": "expanded_correct_comment_copy_keeps_both_decisive_figures",
+      "passed": true,
+      "details": [
+        "对照：“around 70%”；“roughly 55%”；“about 40%”；“only 15%”；“about 75%”；“approximately 65%”；“nearly 80%”；“around 35%”"
+      ]
+    },
+    {
+      "name": "four_candidates_keeps_pair_in_output_and_copy",
+      "passed": true,
+      "details": [
+        "around 70%",
+        "roughly 55%",
+        "about 75%",
+        "nearly 80%"
+      ]
+    },
+    {
+      "name": "four_candidates_all_unique_candidates_retained_in_order",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "decisive_candidates_first_keeps_pair_in_output_and_copy",
+      "passed": true,
+      "details": [
+        "about 75%",
+        "nearly 80%",
+        "around 70%",
+        "roughly 55%",
+        "about 40%",
+        "only 15%",
+        "approximately 65%",
+        "around 35%"
+      ]
+    },
+    {
+      "name": "decisive_candidates_first_all_unique_candidates_retained_in_order",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "no_numeric_match_still_keeps_all_verified_figures",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_all_three_aliases_keep_exact_quote_and_advice",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_copy_has_all_three_advice_texts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_good_no_longer_drops_three_valid_improvements",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "flat_and_nested_real_good_identical",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "comment_only_safe_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_only_safe_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "empty_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whitespace_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "null_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "null_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "list_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "list_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "object_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "object_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "integer_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "integer_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_suggestion_safe_comment_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "both_valid_suggestion_wins_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_valid_suggestion_wins_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_adopted_payload",
+      "passed": true,
+      "details": [
+        {
+          "quote": "because it addresses the causes of traffic problems rather than merely their symptoms",
+          "suggestion": "可补一句解释已有机制，并保留原文的限定立场。"
+        }
+      ]
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_suggestion_unsafe_comment_unused_exact_safe_advice_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_suggestion_safe_comment_no_revival_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "both_unsafe_removed_once_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "both_unsafe_removed_once_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "unsafe_comment_only_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unsafe_comment_only_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_suggestion_unsafe_comment_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "wrong_type_suggestion_unsafe_comment_filtered_removed_count_visible_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_empty_no_advice_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_empty_no_advice_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_null_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_null_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_list_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_list_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_object_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_object_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_number_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_number_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "comment_boolean_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "comment_boolean_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_comment_not_adopted_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_quote_with_invented_suffix_rejected_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_adopted_payload",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_removal_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_no_unsafe_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "bad_quote_and_unsafe_comment_drop_once_no_alias_resurrection_in_copy",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_strong_forty_suggestion_filtered_with_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_strong_forty_comment_filtered_with_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "inherited_check_count_is_144",
+      "passed": true,
+      "details": 144
+    },
+    {
+      "name": "thirty_unique_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_unique_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "thirty_unique_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ]
+    },
+    {
+      "name": "thirty_unique_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "thirty_one_unique_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_one_unique_omitted_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "thirty_one_unique_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ]
+    },
+    {
+      "name": "thirty_one_unique_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "thirty_with_duplicate_variants_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_with_duplicate_variants_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "thirty_with_duplicate_variants_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ]
+    },
+    {
+      "name": "thirty_with_duplicate_variants_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "thirty_one_with_duplicates_invalids_and_claims_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_one_with_duplicates_invalids_and_claims_omitted_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "thirty_one_with_duplicates_invalids_and_claims_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ]
+    },
+    {
+      "name": "thirty_one_with_duplicates_invalids_and_claims_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "invalid_candidates_do_not_consume_capacity_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "invalid_candidates_do_not_consume_capacity_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "invalid_candidates_do_not_consume_capacity_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ]
+    },
+    {
+      "name": "invalid_candidates_do_not_consume_capacity_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "reverse_model_order_kept_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G31 recorded 31.5%.",
+        "Group G30 recorded 30.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G02 recorded 2.5%."
+      ]
+    },
+    {
+      "name": "reverse_model_order_kept_omitted_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "reverse_model_order_kept_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G31 recorded 31.5%.”；“Group G30 recorded 30.5%.”；“Group G29 recorded 29.5%.”；“Group G28 recorded 28.5%.”；“Group G27 recorded 27.5%.”；“Group G26 recorded 26.5%.”；“Group G25 recorded 25.5%.”；“Group G24 recorded 24.5%.”；“Group G23 recorded 23.5%.”；“Group G22 recorded 22.5%.”；“Group G21 recorded 21.5%.”；“Group G20 recorded 20.5%.”；“Group G19 recorded 19.5%.”；“Group G18 recorded 18.5%.”；“Group G17 recorded 17.5%.”；“Group G16 recorded 16.5%.”；“Group G15 recorded 15.5%.”；“Group G14 recorded 14.5%.”；“Group G13 recorded 13.5%.”；“Group G12 recorded 12.5%.”；“Group G11 recorded 11.5%.”；“Group G10 recorded 10.5%.”；“Group G09 recorded 9.5%.”；“Group G08 recorded 8.5%.”；“Group G07 recorded 7.5%.”；“Group G06 recorded 6.5%.”；“Group G05 recorded 5.5%.”；“Group G04 recorded 4.5%.”；“Group G03 recorded 3.5%.”；“Group G02 recorded 2.5%.”（另有 1 个数字未列出）"
+      ]
+    },
+    {
+      "name": "reverse_model_order_kept_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "only_invalid_or_claim_fragments_normalized_values_in_order",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "only_invalid_or_claim_fragments_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "only_invalid_or_claim_fragments_no_unverified_contradiction_or_copy",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "copy": []
+      }
+    },
+    {
+      "name": "only_invalid_or_claim_fragments_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "not_a_list_normalized_values_in_order",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "not_a_list_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "not_a_list_no_unverified_contradiction_or_copy",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "copy": []
+      }
+    },
+    {
+      "name": "not_a_list_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "blank_list_normalized_values_in_order",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "blank_list_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "blank_list_no_unverified_contradiction_or_copy",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "copy": []
+      }
+    },
+    {
+      "name": "blank_list_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "short_forged_quote_rejected_normalized_values_in_order",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "short_forged_quote_rejected_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "short_forged_quote_rejected_no_unverified_contradiction_or_copy",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "copy": []
+      }
+    },
+    {
+      "name": "short_forged_quote_rejected_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "positive_long_quote_exceeds_display_limit",
+      "passed": true,
+      "details": 355
+    },
+    {
+      "name": "forged_long_quote_has_true_prefix_but_false_whole",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "genuine_full_long_quote_kept_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, "
+      ]
+    },
+    {
+      "name": "genuine_full_long_quote_kept_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "genuine_full_long_quote_kept_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, ”"
+      ]
+    },
+    {
+      "name": "genuine_full_long_quote_kept_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "forged_long_quote_must_be_rejected_normalized_values_in_order",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "forged_long_quote_must_be_rejected_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "forged_long_quote_must_be_rejected_no_unverified_contradiction_or_copy",
+      "passed": true,
+      "details": {
+        "issues": [],
+        "copy": []
+      }
+    },
+    {
+      "name": "forged_long_quote_must_be_rejected_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "thirty_valid_plus_forged_does_not_add_omitted_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_valid_plus_forged_does_not_add_omitted_omitted_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "thirty_valid_plus_forged_does_not_add_omitted_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”"
+      ]
+    },
+    {
+      "name": "thirty_valid_plus_forged_does_not_add_omitted_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "thirty_one_valid_plus_forged_counts_only_one_omitted_normalized_values_in_order",
+      "passed": true,
+      "details": [
+        "Group G01 recorded 1.5%.",
+        "Group G02 recorded 2.5%.",
+        "Group G03 recorded 3.5%.",
+        "Group G04 recorded 4.5%.",
+        "Group G05 recorded 5.5%.",
+        "Group G06 recorded 6.5%.",
+        "Group G07 recorded 7.5%.",
+        "Group G08 recorded 8.5%.",
+        "Group G09 recorded 9.5%.",
+        "Group G10 recorded 10.5%.",
+        "Group G11 recorded 11.5%.",
+        "Group G12 recorded 12.5%.",
+        "Group G13 recorded 13.5%.",
+        "Group G14 recorded 14.5%.",
+        "Group G15 recorded 15.5%.",
+        "Group G16 recorded 16.5%.",
+        "Group G17 recorded 17.5%.",
+        "Group G18 recorded 18.5%.",
+        "Group G19 recorded 19.5%.",
+        "Group G20 recorded 20.5%.",
+        "Group G21 recorded 21.5%.",
+        "Group G22 recorded 22.5%.",
+        "Group G23 recorded 23.5%.",
+        "Group G24 recorded 24.5%.",
+        "Group G25 recorded 25.5%.",
+        "Group G26 recorded 26.5%.",
+        "Group G27 recorded 27.5%.",
+        "Group G28 recorded 28.5%.",
+        "Group G29 recorded 29.5%.",
+        "Group G30 recorded 30.5%."
+      ]
+    },
+    {
+      "name": "thirty_one_valid_plus_forged_counts_only_one_omitted_omitted_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "thirty_one_valid_plus_forged_counts_only_one_omitted_copy_exactly_agrees",
+      "passed": true,
+      "details": [
+        "对照：“Group G01 recorded 1.5%.”；“Group G02 recorded 2.5%.”；“Group G03 recorded 3.5%.”；“Group G04 recorded 4.5%.”；“Group G05 recorded 5.5%.”；“Group G06 recorded 6.5%.”；“Group G07 recorded 7.5%.”；“Group G08 recorded 8.5%.”；“Group G09 recorded 9.5%.”；“Group G10 recorded 10.5%.”；“Group G11 recorded 11.5%.”；“Group G12 recorded 12.5%.”；“Group G13 recorded 13.5%.”；“Group G14 recorded 14.5%.”；“Group G15 recorded 15.5%.”；“Group G16 recorded 16.5%.”；“Group G17 recorded 17.5%.”；“Group G18 recorded 18.5%.”；“Group G19 recorded 19.5%.”；“Group G20 recorded 20.5%.”；“Group G21 recorded 21.5%.”；“Group G22 recorded 22.5%.”；“Group G23 recorded 23.5%.”；“Group G24 recorded 24.5%.”；“Group G25 recorded 25.5%.”；“Group G26 recorded 26.5%.”；“Group G27 recorded 27.5%.”；“Group G28 recorded 28.5%.”；“Group G29 recorded 29.5%.”；“Group G30 recorded 30.5%.”（另有 1 个数字未列出）"
+      ]
+    },
+    {
+      "name": "thirty_one_valid_plus_forged_counts_only_one_omitted_omission_notice_iff_required",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "baseline_rejects_same_forged_long_quote_end_to_end",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "baseline_accepts_genuine_long_quote_positive_control",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "passed": 205,
+  "total": 205,
+  "all_checks_passed": true,
+  "findings": [],
+  "boundary": "原144项只把已过时的最大4条/匹配筛选精确行/无匹配前4条改为完整去重保留；新增30/31边界、无效与重复计数、claim排除、顺序及完整长引文核实。所有材料为合成或既有脱敏正式回答；未调用模型。未做实际浏览器检查，复制使用正式copytext函数。"
+}
