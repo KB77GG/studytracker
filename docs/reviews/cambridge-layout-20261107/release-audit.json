@@ -1,0 +1,37 @@
+{
+  "checked_at_utc": "2026-11-07T13:16:39.843609+00:00",
+  "scope": "Read-only files, Git, systemd and anonymous GET; no app import or DB access.",
+  "head": "038bd8e049e3a5719d05b54150ab649c97445bed",
+  "expected_head": "038bd8e049e3a5719d05b54150ab649c97445bed",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sat 2026-11-07 21:11:46 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "files": {
+    "static/js/practice_renderers.js": {
+      "sha256": "39385b6357d0a410dc118dd5e529605a3b363f8ac121b0275b5b5232e008697f",
+      "matches": true
+    },
+    "static/css/practice_shell.css": {
+      "sha256": "6fac00ee5658267385a582809397dffdc0bc857f89bb0d43812d279264deb2ab",
+      "matches": true
+    },
+    "gunicorn.conf.py": {
+      "sha256": "9f0325750a5d0e460722dc2d28abd786e77f41d7eab49bc2c8e339c63f7977dc",
+      "matches": true
+    }
+  },
+  "warnings_since_restart": 0,
+  "failures": [],
+  "ok": true
+}

@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-07",
+  "method": "CUA browser read-only DOM geometry using all 165 real renderGroup form outputs and the actual listening template CSS; no submitted answers",
+  "local_gallery": "http://127.0.0.1:5099/layout-corpus",
+  "results": [
+    {"width":1280,"groups":165,"controls":1255,"units":1252,"ordering":[],"overflow":[],"overlap":[]},
+    {"width":1024,"groups":165,"controls":1255,"units":1252,"ordering":[],"overflow":[],"overlap":[]},
+    {"width":980,"groups":165,"controls":1255,"units":1252,"ordering":[],"overflow":[],"overlap":[]},
+    {"width":390,"groups":165,"controls":1255,"units":1252,"ordering":[],"overflow":[],"overlap":[]}
+  ],
+  "checks": {
+    "ordering": "Each practice-form field starts below the preceding field's bottom",
+    "overflow": "Each answer input stays inside its own form horizontal bounds",
+    "overlap": "No two answer input rectangles overlap within a form"
+  },
+  "visual_cases": [
+    "Production baseline C13 T1 Q35-Q39 reproduced sentence tails on next question and Q34 duplicated introduction; fixed local page visually checked at 1280px",
+    "Production baseline C18 T1 at 980px reproduced 396px+396px grid with every question in left half; fixed page at 1280/1024/980/390 uses full-width flow",
+    "Local C18 T1 Name: Sadie Jones and Year of birth: 1991 stay on their respective source lines",
+    "Local C7 T2 Q6/Q7 other drivers precede Uses of car and Q8 without false column pairing",
+    "Local C7 T4 reading Passage 2/3 at 1280px visually intact, page scrollWidth=clientWidth=1280; Table 1 loads at naturalWidth=2184 and renderedWidth=554.984375"
+  ],
+  "limits": "Geometry does not prove all glyph positions or all question semantics. Screenshots were inspected in the tool, not saved as report image artifacts. All browser interactions were read-only navigation."
+}

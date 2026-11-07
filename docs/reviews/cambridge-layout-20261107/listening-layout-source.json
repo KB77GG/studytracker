@@ -1,0 +1,3260 @@
+{
+  "baseline": "be9b122f",
+  "current_renderer_sha256": "39385b6357d0a410dc118dd5e529605a3b363f8ac121b0275b5b5232e008697f",
+  "source_raw_sha256": "3559472a4af30bb96217b30a0dd0f0c107087840896e08fc0d1d6c9455bd0b8e",
+  "source_comparison": {
+    "tests": 72,
+    "groups": 568,
+    "tables": 63,
+    "coordinate_refs": 68
+  },
+  "collect_table_differences": [],
+  "invalid_coordinate_references": [],
+  "before": {
+    "forms": 165,
+    "questions": 1252,
+    "shared_clusters": 39,
+    "shared_questions": 102,
+    "shared_multi_source_clusters": 23,
+    "checked_suffixes": 677,
+    "columns": [
+      {
+        "test": "ielts10_test1",
+        "section": 1,
+        "group": 234,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "test": "ielts10_test4",
+        "section": 1,
+        "group": 255,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts15_test1",
+        "section": 4,
+        "group": 99,
+        "questions": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 1,
+        "group": 115,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts17_test4",
+        "section": 4,
+        "group": 63,
+        "questions": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      },
+      {
+        "test": "ielts18_test1",
+        "section": 1,
+        "group": 1,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts18_test3",
+        "section": 1,
+        "group": 18,
+        "questions": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "test": "ielts18_test4",
+        "section": 1,
+        "group": 27,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts19_test2",
+        "section": 1,
+        "group": 4795,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "test": "ielts19_test4",
+        "section": 1,
+        "group": 4812,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "test": "ielts4_test1",
+        "section": 1,
+        "group": 4821,
+        "questions": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "test": "ielts4_test4",
+        "section": 1,
+        "group": 4851,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts4_test4",
+        "section": 4,
+        "group": 4856,
+        "questions": [
+          31,
+          32,
+          33,
+          34
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 1,
+        "group": 404,
+        "questions": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "test": "ielts5_test2",
+        "section": 1,
+        "group": 414,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts5_test4",
+        "section": 3,
+        "group": 431,
+        "questions": [
+          21,
+          22,
+          23,
+          24
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 1,
+        "group": 370,
+        "questions": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "test": "ielts6_test2",
+        "section": 1,
+        "group": 380,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "test": "ielts6_test3",
+        "section": 1,
+        "group": 388,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 332,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 333,
+        "questions": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts7_test2",
+        "section": 1,
+        "group": 341,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts7_test3",
+        "section": 1,
+        "group": 350,
+        "questions": [
+          1,
+          2
+        ]
+      },
+      {
+        "test": "ielts8_test2",
+        "section": 1,
+        "group": 305,
+        "questions": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 1,
+        "group": 314,
+        "questions": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 2,
+        "group": 317,
+        "questions": [
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "questions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "questions": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      }
+    ],
+    "suffix_mismatches": [
+      {
+        "test": "ielts12_test5",
+        "section": 1,
+        "group": 177,
+        "number": 8,
+        "source_line": 23,
+        "source": "- a   $817$ (can be hired)",
+        "suffix": "can be hired",
+        "rendered_row": "- a [Q8]"
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "number": 7,
+        "source_line": 15,
+        "source": "Venue:   $849$ House",
+        "suffix": "house",
+        "rendered_row": "Venue: [Q7]"
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "number": 8,
+        "source_line": 16,
+        "source": "• Performance of   $850$ dances",
+        "suffix": "dances",
+        "rendered_row": "House · Performance of [Q8]"
+      },
+      {
+        "test": "ielts12_test7",
+        "section": 4,
+        "group": 197,
+        "number": 32,
+        "source_line": 8,
+        "source": "- the effects on birds'   $897$ or mental processes, e.g. memory",
+        "suffix": "or mental processes e g memory",
+        "rendered_row": "· Claire Varian-Ramos is investigating: - the effects on birds' [Q32]"
+      },
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "number": 35,
+        "source_line": 9,
+        "source": "- She suggests this may be due to the need to locate new sources of   $711$ and to deal with new dangers.",
+        "suffix": "and to deal with new dangers",
+        "rendered_row": "- She suggests this may be due to the need to locate new sources of [Q35]"
+      },
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "number": 36,
+        "source_line": 10,
+        "source": "• Catarina Miranda focused on the  $712$ of urban and rural blackbirds.",
+        "suffix": "of urban and rural blackbirds",
+        "rendered_row": "and to deal with new dangers. · Catarina Miranda focused on the [Q36]"
+      },
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "number": 38,
+        "source_line": 13,
+        "source": "- He found that some animals respond to   $714$ by producing lower levels of hormones.",
+        "suffix": "by producing lower levels of hormones",
+        "rendered_row": ". · Jonathan Atwell studies how animals respond to urban environments. - He found that some animals respond to [Q38]"
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "number": 36,
+        "source_line": 15,
+        "source": "- to improve the survival of their young    (but little   $777$ has been noted between parents and children)",
+        "suffix": "has been noted between parents and children",
+        "rendered_row": "· Possible reasons: - to improve the survival of their young (but little [Q36]"
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "number": 38,
+        "source_line": 18,
+        "source": "- A study was carried out using GPS systems attached to the   $779$ of the lizards",
+        "suffix": "of the lizards",
+        "rendered_row": "Tracking study - A study was carried out using GPS systems attached to the [Q38]"
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "number": 39,
+        "source_line": 19,
+        "source": "- This provided information on the lizards' location and even the number of   $780$ taken",
+        "suffix": "taken",
+        "rendered_row": "of the lizards - This provided information on the lizards' location and even the number of [Q39]"
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "number": 7,
+        "source_line": 19,
+        "source": "Sports played: belongs to a   $585$ club",
+        "suffix": "club",
+        "rendered_row": "Other information Sports played: belongs to a [Q7]"
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "number": 8,
+        "source_line": 20,
+        "source": "goes   $586$ regularly",
+        "suffix": "regularly",
+        "rendered_row": "club goes [Q8]"
+      },
+      {
+        "test": "ielts14_test3",
+        "section": 1,
+        "group": 135,
+        "number": 2,
+        "source_line": 10,
+        "source": "• the $610$ room for talks   (projector and  $611$ available)",
+        "suffix": "available",
+        "rendered_row": "· the [Q1] room for talks (projector and [Q2]"
+      },
+      {
+        "test": "ielts14_test4",
+        "section": 1,
+        "group": 142,
+        "number": 6,
+        "source_line": 19,
+        "source": "will provide  $655$ if there are any problems",
+        "suffix": "if there are any problems",
+        "rendered_row": "will provide [Q6]"
+      },
+      {
+        "test": "ielts15_test1",
+        "section": 4,
+        "group": 99,
+        "number": 38,
+        "source_line": 19,
+        "source": "• low-frequency bushfires result in the growth of '$435$rainforest', which is:",
+        "suffix": "rainforest which is",
+        "rendered_row": "· low-frequency bushfires result in the growth of '[Q38]"
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 4,
+        "group": 121,
+        "number": 39,
+        "source_line": 20,
+        "source": "- outside stores, because   $542$ were bigger.",
+        "suffix": "were bigger",
+        "rendered_row": "- outside stores, because [Q39]"
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 2,
+        "group": 422,
+        "number": 14,
+        "source_line": 4,
+        "source": "• University tries to put international applicants in touch with a student from the same  $1798$ who can give information and advice on",
+        "suffix": "who can give information and advice on",
+        "rendered_row": "· University tries to put international applicants in touch with a student from the same [Q14]"
+      },
+      {
+        "test": "ielts8_test1",
+        "section": 4,
+        "group": 304,
+        "number": 39,
+        "source_line": 21,
+        "source": "-  can show vegetation problems,   $1360$ density, ocean floor etc.",
+        "suffix": "density ocean floor etc",
+        "rendered_row": "b) aerial photos - can show vegetation problems, [Q39]"
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "number": 6,
+        "source_line": 13,
+        "source": "a  $1420$ (supplied)",
+        "suffix": "supplied",
+        "rendered_row": "a [Q6]"
+      }
+    ],
+    "shared_rows": [
+      {
+        "test": "ielts11_test1",
+        "section": 1,
+        "group": 204,
+        "numbers": [
+          2,
+          3
+        ],
+        "source": [
+          {
+            "index": 4,
+            "line": 5,
+            "source": "• Cost of Main Hall for Saturday evening:  ￡ $943$ + ￡250 deposit (  $944$ payment is required)"
+          }
+        ],
+        "rendered_rows": [
+          "· Cost of Main Hall for Saturday evening: ￡ [Q2] + ￡250 deposit ( [Q3] payment is required)"
+        ]
+      },
+      {
+        "test": "ielts11_test1",
+        "section": 4,
+        "group": 208,
+        "numbers": [
+          37,
+          38
+        ],
+        "source": [
+          {
+            "index": 21,
+            "line": 25,
+            "source": "-  rate of  $968$"
+          },
+          {
+            "index": 22,
+            "line": 26,
+            "source": "• Aim: to assess 20,000 species and make a distribution  $969$ for each one"
+          }
+        ],
+        "rendered_rows": [
+          "- rate of [Q37]",
+          "· Aim: to assess 20,000 species and make a distribution [Q38] for each one"
+        ]
+      },
+      {
+        "test": "ielts11_test2",
+        "section": 1,
+        "group": 209,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 8,
+            "line": 12,
+            "source": "Hobbies: does a lot of  $977$ , and is interested in the $978$"
+          }
+        ],
+        "rendered_rows": [
+          "Hobbies: does a lot of [Q6] , and is interested in the [Q7]"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 1,
+        "group": 177,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 18,
+            "source": "• Only suitable for cyclists who have some $815$"
+          },
+          {
+            "index": 13,
+            "line": 19,
+            "source": "- Bikes can be hired from   $816$ (near the Cruise Ship Terminal)"
+          }
+        ],
+        "rendered_rows": [
+          "· Only suitable for cyclists who have some [Q6]",
+          "- Bikes can be hired from [Q7] (near the Cruise Ship Terminal) · Cyclists need: - a repair kit"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 1,
+        "group": 177,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 23,
+            "source": "- a   $817$ (can be hired)"
+          },
+          {
+            "index": 18,
+            "line": 24,
+            "source": "• There are no  $818$ or accommodation in the area"
+          }
+        ],
+        "rendered_rows": [
+          "- a [Q8]",
+          "(can be hired) · There are no [Q9] or accommodation in the area"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 4,
+        "group": 183,
+        "numbers": [
+          31,
+          32
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Many business values can result in   $833$ ."
+          },
+          {
+            "index": 1,
+            "line": 1,
+            "source": "Senior managers need to understand and deal with the potential  $834$ that may result."
+          }
+        ],
+        "rendered_rows": [
+          "Four business values Many business values can result in [Q31]",
+          ". Senior managers need to understand and deal with the potential [Q32] that may result."
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          1,
+          2
+        ],
+        "source": [
+          {
+            "index": 3,
+            "line": 7,
+            "source": "• In town centre, starting at  $843$"
+          },
+          {
+            "index": 5,
+            "line": 9,
+            "source": "A   $844$ will perform"
+          }
+        ],
+        "rendered_rows": [
+          "Opening ceremony (first day) · In town centre, starting at [Q1]",
+          "The mayor will make a speech A [Q2] will perform"
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          3,
+          4
+        ],
+        "source": [
+          {
+            "index": 6,
+            "line": 10,
+            "source": "Performance of a   $845$ about Helen Tungate (a   $846$ )"
+          }
+        ],
+        "rendered_rows": [
+          "Performance of a [Q3] about Helen Tungate (a [Q4] )"
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 9,
+            "line": 14,
+            "source": "• Videos about relationships that children have with their  $848$"
+          },
+          {
+            "index": 10,
+            "line": 15,
+            "source": "Venue:   $849$ House"
+          },
+          {
+            "index": 11,
+            "line": 16,
+            "source": "• Performance of   $850$ dances"
+          },
+          {
+            "index": 12,
+            "line": 17,
+            "source": "Venue: the   $851$ market in the town centre"
+          }
+        ],
+        "rendered_rows": [
+          "Other events · Videos about relationships that children have with their [Q6]",
+          "Venue: [Q7]",
+          "House · Performance of [Q8]",
+          "dances Venue: the [Q9] market in the town centre Time: 2 and 5 pm every day except 1st day of festival"
+        ]
+      },
+      {
+        "test": "ielts12_test7",
+        "section": 4,
+        "group": 197,
+        "numbers": [
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "source": [
+          {
+            "index": 7,
+            "line": 8,
+            "source": "- the effects on birds'   $897$ or mental processes, e.g. memory"
+          },
+          {
+            "index": 8,
+            "line": 9,
+            "source": "- the effects on bird song (usually learned from a bird's  $898$ )"
+          },
+          {
+            "index": 10,
+            "line": 11,
+            "source": "- songs learned by birds exposed to mercury are less  $899$"
+          },
+          {
+            "index": 11,
+            "line": 12,
+            "source": "- this may have a negative effect on birds'  $900$"
+          },
+          {
+            "index": 13,
+            "line": 14,
+            "source": "- allow more  $901$ for the experimenter"
+          }
+        ],
+        "rendered_rows": [
+          "· Claire Varian-Ramos is investigating: - the effects on birds' [Q32]",
+          "or mental processes, e.g. memory - the effects on bird song (usually learned from a bird's [Q33]",
+          ") · Findings: - songs learned by birds exposed to mercury are less [Q34]",
+          "- this may have a negative effect on birds' [Q35]",
+          "· Lab-based studies: - allow more [Q36] for the experimenter"
+        ]
+      },
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "numbers": [
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 8,
+            "line": 9,
+            "source": "- She suggests this may be due to the need to locate new sources of   $711$ and to deal with new dangers."
+          },
+          {
+            "index": 9,
+            "line": 10,
+            "source": "• Catarina Miranda focused on the  $712$ of urban and rural blackbirds."
+          },
+          {
+            "index": 10,
+            "line": 11,
+            "source": "- She found urban birds were often braver, but were afraid of situations that were   $713$ ."
+          },
+          {
+            "index": 12,
+            "line": 13,
+            "source": "- He found that some animals respond to   $714$ by producing lower levels of hormones."
+          },
+          {
+            "index": 13,
+            "line": 14,
+            "source": "• Sarah Partan's team found urban squirrels use their  $715$ to help them communicate."
+          }
+        ],
+        "rendered_rows": [
+          "- She suggests this may be due to the need to locate new sources of [Q35]",
+          "and to deal with new dangers. · Catarina Miranda focused on the [Q36]",
+          "of urban and rural blackbirds. - She found urban birds were often braver, but were afraid of situations that were [Q37]",
+          ". · Jonathan Atwell studies how animals respond to urban environments. - He found that some animals respond to [Q38]",
+          "by producing lower levels of hormones. · Sarah Partan's team found urban squirrels use their [Q39] to help them communicate."
+        ]
+      },
+      {
+        "test": "ielts13_test2",
+        "section": 1,
+        "group": 156,
+        "numbers": [
+          5,
+          6
+        ],
+        "source": [
+          {
+            "index": 11,
+            "line": 16,
+            "source": "- Tuesdays at 5.30 am, meet at the  $721$"
+          },
+          {
+            "index": 12,
+            "line": 17,
+            "source": "- Thursdays at 5.30 am, meet at the entrance to the  $722$"
+          }
+        ],
+        "rendered_rows": [
+          "· Weekly sessions - Tuesdays at 5.30 am, meet at the[Q5]",
+          "- Thursdays at 5.30 am, meet at the entrance to the [Q6]"
+        ]
+      },
+      {
+        "test": "ielts13_test2",
+        "section": 4,
+        "group": 162,
+        "numbers": [
+          32,
+          33
+        ],
+        "source": [
+          {
+            "index": 2,
+            "line": 2,
+            "source": "• different to semantic memory - the ability to remember general information about the   $737$ , which does not involve recalling   $738$ information"
+          }
+        ],
+        "rendered_rows": [
+          "· different to semantic memory - the ability to remember general information about the [Q32] , which does not involve recalling [Q33] information"
+        ]
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "numbers": [
+          36,
+          37
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 15,
+            "source": "- to improve the survival of their young    (but little   $777$ has been noted between parents and children)"
+          },
+          {
+            "index": 13,
+            "line": 16,
+            "source": "- to provide   $778$ for female lizards"
+          }
+        ],
+        "rendered_rows": [
+          "· Possible reasons: - to improve the survival of their young (but little [Q36]",
+          "has been noted between parents and children) - to provide [Q37] for female lizards"
+        ]
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "numbers": [
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 18,
+            "source": "- A study was carried out using GPS systems attached to the   $779$ of the lizards"
+          },
+          {
+            "index": 16,
+            "line": 19,
+            "source": "- This provided information on the lizards' location and even the number of   $780$ taken"
+          },
+          {
+            "index": 18,
+            "line": 21,
+            "source": "- This may be in order to reduce chances of  $781$"
+          }
+        ],
+        "rendered_rows": [
+          "Tracking study - A study was carried out using GPS systems attached to the [Q38]",
+          "of the lizards - This provided information on the lizards' location and even the number of [Q39]",
+          "taken - It appeared that the lizards were trying to avoid one another - This may be in order to reduce chances of [Q40]"
+        ]
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "numbers": [
+          7,
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 22,
+            "line": 19,
+            "source": "Sports played: belongs to a   $585$ club"
+          },
+          {
+            "index": 23,
+            "line": 20,
+            "source": "goes   $586$ regularly"
+          },
+          {
+            "index": 25,
+            "line": 21,
+            "source": "Medical history: injured her   $587$ last year"
+          }
+        ],
+        "rendered_rows": [
+          "Other information Sports played: belongs to a [Q7]",
+          "club goes [Q8]",
+          "regularly Medical history: injured her [Q9] last year no allergies"
+        ]
+      },
+      {
+        "test": "ielts14_test3",
+        "section": 1,
+        "group": 135,
+        "numbers": [
+          1,
+          2,
+          3
+        ],
+        "source": [
+          {
+            "index": 5,
+            "line": 10,
+            "source": "• the $610$ room for talks   (projector and  $611$ available)"
+          },
+          {
+            "index": 6,
+            "line": 11,
+            "source": "• area for coffee and an $612$"
+          }
+        ],
+        "rendered_rows": [
+          "· the [Q1] room for talks (projector and [Q2]",
+          "available) · area for coffee and an [Q3]"
+        ]
+      },
+      {
+        "test": "ielts14_test4",
+        "section": 1,
+        "group": 142,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 19,
+            "source": "will provide  $655$ if there are any problems"
+          },
+          {
+            "index": 17,
+            "line": 21,
+            "source": "in hotel rooms or  $656$"
+          }
+        ],
+        "rendered_rows": [
+          "will provide [Q6]",
+          "if there are any problems Accommodation: in hotel rooms or [Q7]"
+        ]
+      },
+      {
+        "test": "ielts14_test4",
+        "section": 4,
+        "group": 149,
+        "numbers": [
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 21,
+            "line": 23,
+            "source": "- one carrying  $682$ supplies; tablets may have been used for cleaning the  $683$"
+          }
+        ],
+        "rendered_rows": [
+          "· to find out more about wrecks of ancient Roman ships, including - one carrying [Q38] supplies; tablets may have been used for cleaning the [Q39]"
+        ]
+      },
+      {
+        "test": "ielts15_test1",
+        "section": 4,
+        "group": 99,
+        "numbers": [
+          37,
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 18,
+            "source": "- maintain the quality of the  $434$"
+          },
+          {
+            "index": 18,
+            "line": 19,
+            "source": "• low-frequency bushfires result in the growth of '$435$rainforest', which is:"
+          },
+          {
+            "index": 19,
+            "line": 20,
+            "source": "- a  $436$ ecosystem"
+          }
+        ],
+        "rendered_rows": [
+          "- maintain the quality of the [Q37]",
+          "· low-frequency bushfires result in the growth of '[Q38]",
+          "rainforest', which is: - a [Q39] ecosystem"
+        ]
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 4,
+        "group": 121,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 20,
+            "source": "- outside stores, because   $542$ were bigger."
+          },
+          {
+            "index": 18,
+            "line": 21,
+            "source": "•  $543$ that was persuasive became much more common."
+          }
+        ],
+        "rendered_rows": [
+          "- outside stores, because [Q39]",
+          "were bigger. · [Q40] that was persuasive became much more common."
+        ]
+      },
+      {
+        "test": "ielts18_test3",
+        "section": 4,
+        "group": 26,
+        "numbers": [
+          32,
+          33
+        ],
+        "source": [
+          {
+            "index": 5,
+            "line": 6,
+            "source": "• Satellites are now quite $93$ and therefore more widespread (e.g. there are constellations made up of $94$ of satellites)."
+          }
+        ],
+        "rendered_rows": [
+          "· Satellites are now quite [Q32] and therefore more widespread (e.g. there are constellations made up of [Q33] of satellites)."
+        ]
+      },
+      {
+        "test": "ielts19_test4",
+        "section": 4,
+        "group": 4820,
+        "numbers": [
+          37,
+          38
+        ],
+        "source": [
+          {
+            "index": 13,
+            "line": 13,
+            "source": "- increasing the $21788$ of recovery by attracting animals and birds, e.g., $21789$ were soon attracted to the area."
+          }
+        ],
+        "rendered_rows": [
+          "- increasing the [Q37] of recovery by attracting animals and birds, e.g., [Q38] were soon attracted to the area."
+        ]
+      },
+      {
+        "test": "ielts20_test1",
+        "section": 4,
+        "group": 4866,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 17,
+            "source": "· Instead of road transport, goods could be transported by large freight barges and electric $21993$ or, in future, by $21994$."
+          }
+        ],
+        "rendered_rows": [
+          "· Instead of road transport, goods could be transported by large freight barges and electric [Q39] or, in future, by [Q40]."
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 3,
+        "group": 411,
+        "numbers": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Students study  $1735$ during each module. A module takes  $1736$ and the work is very  $1737$ . To get a Diploma each student has to study  $1738$ and then work on  $1739$ in depth."
+          }
+        ],
+        "rendered_rows": [
+          "Modular Courses Students study [Q26] during each module. A module takes [Q27] and the work is very [Q28] . To get a Diploma each student has to study [Q29] and then work on [Q30] in depth."
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 4,
+        "group": 413,
+        "numbers": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Research indicates that many women only think about their financial future when a  $1745$ occurs.This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their  $1746$ . A good way for women to develop their  $1747$ in dealing with financial affairs would be to attend classes in  $1748$ . When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in  $1749$ . In such ways, women can have a comfortable, independent retirement."
+          }
+        ],
+        "rendered_rows": [
+          "Saving for the future Research indicates that many women only think about their financial future when a [Q36] occurs.This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their [Q37] . A good way for women to develop their [Q38] in dealing with financial affairs would be to attend classes in [Q39] . When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in [Q40] . In such ways, women can have a comfortable, independent retirement."
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 2,
+        "group": 422,
+        "numbers": [
+          13,
+          14,
+          15
+        ],
+        "source": [
+          {
+            "index": 3,
+            "line": 3,
+            "source": "- delays in sending  $1797$"
+          },
+          {
+            "index": 4,
+            "line": 4,
+            "source": "• University tries to put international applicants in touch with a student from the same  $1798$ who can give information and advice on"
+          },
+          {
+            "index": 7,
+            "line": 7,
+            "source": "- English   $1799$ and food"
+          }
+        ],
+        "rendered_rows": [
+          "· Application processing may be slowed down by - postal problems - delays in sending [Q13]",
+          "· University tries to put international applicants in touch with a student from the same [Q14]",
+          "who can give information and advice on - academic atmosphere - leisure facilities - English [Q15] and food - what to pack"
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 3,
+        "group": 377,
+        "numbers": [
+          26,
+          27,
+          28,
+          29
+        ],
+        "source": [
+          {
+            "index": 1,
+            "line": 1,
+            "source": "The Business Resource Centre contains materials such as books and manuals to be used for training. It is possible to hire  $1596$ and  $1597$ ."
+          },
+          {
+            "index": 2,
+            "line": 2,
+            "source": "There are materials for working on study skills (e.g.  $1598$ ) and other subjects include finance and  $1599$ ."
+          }
+        ],
+        "rendered_rows": [
+          "Business Centre The Business Resource Centre contains materials such as books and manuals to be used for training. It is possible to hire [Q26] and [Q27]",
+          ". There are materials for working on study skills (e.g. [Q28] ) and other subjects include finance and [Q29] ."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "numbers": [
+          7,
+          8
+        ],
+        "source": [
+          {
+            "index": 18,
+            "line": 22,
+            "source": "Conference Centre is on $1683$Park Road, next to the $1684$."
+          }
+        ],
+        "rendered_rows": [
+          "Conference Centre is on [Q7]Park Road, next to the [Q8]."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "numbers": [
+          9,
+          10
+        ],
+        "source": [
+          {
+            "index": 19,
+            "line": 23,
+            "source": "Taxi costs  £$1685$or take bus number $1686$from station."
+          }
+        ],
+        "rendered_rows": [
+          "Taxi costs £[Q9]or take bus number [Q10]from station."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 3,
+        "group": 399,
+        "numbers": [
+          22,
+          23
+        ],
+        "source": [
+          {
+            "index": 2,
+            "line": 2,
+            "source": "The Castle Road library has books on sociology, together with $1698$ and other resources relevant to the majority of $1699$ school subjects."
+          }
+        ],
+        "rendered_rows": [
+          "The Castle Road library has books on sociology, together with [Q22] and other resources relevant to the majority of [Q23] school subjects."
+        ]
+      },
+      {
+        "test": "ielts7_test4",
+        "section": 4,
+        "group": 369,
+        "numbers": [
+          35,
+          36
+        ],
+        "source": [
+          {
+            "index": 4,
+            "line": 4,
+            "source": "• Glutamate is found in foods that contain protein such as $1566$ and  $1567$ ."
+          }
+        ],
+        "rendered_rows": [
+          "· Glutamate is found in foods that contain protein such as [Q35] and [Q36] ."
+        ]
+      },
+      {
+        "test": "ielts8_test1",
+        "section": 4,
+        "group": 304,
+        "numbers": [
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 19,
+            "source": "-  BUT a two-dimensional map will always have some   $1359$"
+          },
+          {
+            "index": 17,
+            "line": 21,
+            "source": "-  can show vegetation problems,   $1360$ density, ocean floor etc."
+          },
+          {
+            "index": 19,
+            "line": 23,
+            "source": "-  used for monitoring   $1361$ conditions etc."
+          }
+        ],
+        "rendered_rows": [
+          "- BUT a two-dimensional map will always have some [Q38]",
+          "b) aerial photos - can show vegetation problems, [Q39]",
+          "density, ocean floor etc. c) Landsat pictures sent to receiving stations - used for monitoring [Q40] conditions etc."
+        ]
+      },
+      {
+        "test": "ielts8_test2",
+        "section": 3,
+        "group": 311,
+        "numbers": [
+          26,
+          27,
+          28,
+          29
+        ],
+        "source": [
+          {
+            "index": 1,
+            "line": 1,
+            "source": "Researchers go to the locations the bee eaters like to use for   $1376$ . They collect the pellets and take them to a   $1377$ . for analysis. Here   $1378$ is used to soften them, and the researchers look for the   $1379$ of Asian bees in the pellets."
+          }
+        ],
+        "rendered_rows": [
+          "Researchers go to the locations the bee eaters like to use for [Q26] . They collect the pellets and take them to a [Q27] . for analysis. Here [Q28] is used to soften them, and the researchers look for the [Q29] of Asian bees in the pellets."
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 4,
+        "group": 322,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 14,
+            "source": "- physical features of the  $1413$"
+          },
+          {
+            "index": 13,
+            "line": 15,
+            "source": "- the   $1414$ of original employees"
+          }
+        ],
+        "rendered_rows": [
+          "· copy original very closely: - physical features of the [Q39]",
+          "- the [Q40] of original employees"
+        ]
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 10,
+            "line": 13,
+            "source": "a  $1420$ (supplied)"
+          },
+          {
+            "index": 11,
+            "line": 14,
+            "source": "• Starting date: $1421$"
+          }
+        ],
+        "rendered_rows": [
+          "a [Q6]",
+          "(supplied) · Starting date: [Q7]"
+        ]
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 15,
+            "source": "• Call Jane $1422$ (Service Manager) before $1423$ tomorrow (Tel: 832009)"
+          }
+        ],
+        "rendered_rows": [
+          "· Call Jane [Q8] (Service Manager) before [Q9] tomorrow (Tel: 832009)"
+        ]
+      },
+      {
+        "test": "ielts9_test1",
+        "section": 1,
+        "group": 264,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 11,
+            "line": 15,
+            "source": "- transport home when you work   $1205$"
+          },
+          {
+            "index": 13,
+            "line": 17,
+            "source": "-   $1206$"
+          }
+        ],
+        "rendered_rows": [
+          "- transport home when you work [Q6]",
+          "· Qualities required: - [Q7]"
+        ]
+      },
+      {
+        "test": "ielts9_test1",
+        "section": 1,
+        "group": 264,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 14,
+            "line": 18,
+            "source": "- ability to   $1207$"
+          },
+          {
+            "index": 15,
+            "line": 19,
+            "source": "• Interview arranged for:Thursday  $1208$at 6 p.m."
+          }
+        ],
+        "rendered_rows": [
+          "- ability to [Q8]",
+          "· Interview arranged for: Thursday [Q9]at 6 p.m."
+        ]
+      }
+    ],
+    "split_static_rows": [
+      {
+        "test": "ielts10_test1",
+        "section": 1,
+        "group": 234,
+        "line": 2,
+        "cells": [
+          "Name:",
+          "Andrea Brown"
+        ]
+      },
+      {
+        "test": "ielts10_test1",
+        "section": 1,
+        "group": 234,
+        "line": 6,
+        "cells": [
+          "Postcode:",
+          "BH5 2OP"
+        ]
+      },
+      {
+        "test": "ielts10_test1",
+        "section": 1,
+        "group": 234,
+        "line": 7,
+        "cells": [
+          "Phone:",
+          "(mobile) 077 8664 3091"
+        ]
+      },
+      {
+        "test": "ielts10_test4",
+        "section": 1,
+        "group": 255,
+        "line": 7,
+        "cells": [
+          "Address:",
+          "Flat 4,"
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "line": 2,
+        "cells": [
+          "Type of crime:",
+          "theft"
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "line": 7,
+        "cells": [
+          "Name:",
+          "Louise Taylor"
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "line": 11,
+        "cells": [
+          "Date of birth:",
+          "14 December 1977"
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "line": 12,
+        "cells": [
+          "Occupation:",
+          "interior designer"
+        ]
+      },
+      {
+        "test": "ielts14_test1",
+        "section": 1,
+        "group": 122,
+        "line": 14,
+        "cells": [
+          "Length of stay:",
+          "two months"
+        ]
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "line": 5,
+        "cells": [
+          "Name:",
+          "Julie Anne Garcia"
+        ]
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "line": 16,
+        "cells": [
+          "Action already taken :",
+          "has taken painkillers and applied ice"
+        ]
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 1,
+        "group": 115,
+        "line": 1,
+        "cells": [
+          "Name:",
+          "Sophie Bird"
+        ]
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 1,
+        "group": 115,
+        "line": 9,
+        "cells": [
+          "When ticket was purchased:",
+          "yesterday"
+        ]
+      },
+      {
+        "test": "ielts18_test1",
+        "section": 1,
+        "group": 1,
+        "line": 0,
+        "cells": [
+          "Name:",
+          "Sadie Jones"
+        ]
+      },
+      {
+        "test": "ielts18_test1",
+        "section": 1,
+        "group": 1,
+        "line": 1,
+        "cells": [
+          "Year of birth:",
+          "1991"
+        ]
+      },
+      {
+        "test": "ielts18_test3",
+        "section": 1,
+        "group": 18,
+        "line": 0,
+        "cells": [
+          "Name:",
+          "Dan Green"
+        ]
+      },
+      {
+        "test": "ielts18_test3",
+        "section": 1,
+        "group": 18,
+        "line": 1,
+        "cells": [
+          "Email address:",
+          "dan1068@market.com"
+        ]
+      },
+      {
+        "test": "ielts4_test1",
+        "section": 1,
+        "group": 4821,
+        "line": 10,
+        "cells": [
+          "Cost:",
+          "between £5.00 and £15.00 per person"
+        ]
+      },
+      {
+        "test": "ielts4_test1",
+        "section": 1,
+        "group": 4821,
+        "line": 12,
+        "cells": [
+          "Time:",
+          "departure – 8.30 a.m"
+        ]
+      },
+      {
+        "test": "ielts4_test4",
+        "section": 1,
+        "group": 4851,
+        "line": 8,
+        "cells": [
+          "Who to invite:",
+          "--John and his wife"
+        ]
+      },
+      {
+        "test": "ielts4_test4",
+        "section": 1,
+        "group": 4851,
+        "line": 17,
+        "cells": [
+          "Check prices for:",
+          "--CD Players"
+        ]
+      },
+      {
+        "test": "ielts4_test4",
+        "section": 1,
+        "group": 4851,
+        "line": 20,
+        "cells": [
+          "Ask guests to bring:",
+          "--snacks"
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 1,
+        "group": 404,
+        "line": 3,
+        "cells": [
+          "Holiday name:",
+          "Whale Watch Experience"
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 1,
+        "group": 404,
+        "line": 6,
+        "cells": [
+          "Holiday length:",
+          "2 days"
+        ]
+      },
+      {
+        "test": "ielts5_test2",
+        "section": 1,
+        "group": 414,
+        "line": 3,
+        "cells": [
+          "Minimum joining age:",
+          "18 years"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 3,
+        "cells": [
+          "Make:",
+          "Lida"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 7,
+        "cells": [
+          "Model:",
+          "Max"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 18,
+        "cells": [
+          "Address:",
+          "20, Green Banks"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 21,
+        "cells": [
+          "Postcode:",
+          "GU8 9EW"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 25,
+        "cells": [
+          "Make:",
+          "Conti"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 28,
+        "cells": [
+          "Mileage:",
+          "maximum 70,000"
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 1,
+        "group": 420,
+        "line": 29,
+        "cells": [
+          "Colour:",
+          "metallic grey"
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 1,
+        "group": 370,
+        "line": 3,
+        "cells": [
+          "Name of club:",
+          "Kingswell"
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 1,
+        "group": 370,
+        "line": 6,
+        "cells": [
+          "Facilities available:",
+          "Golf"
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 1,
+        "group": 370,
+        "line": 10,
+        "cells": [
+          "Classes available:",
+          "• Kick-boxing"
+        ]
+      },
+      {
+        "test": "ielts6_test2",
+        "section": 1,
+        "group": 380,
+        "line": 3,
+        "cells": [
+          "Workshops organised every:",
+          "Saturday"
+        ]
+      },
+      {
+        "test": "ielts6_test3",
+        "section": 1,
+        "group": 388,
+        "line": 7,
+        "cells": [
+          "Full name of applicant:",
+          "Pieter Henes"
+        ]
+      },
+      {
+        "test": "ielts6_test3",
+        "section": 1,
+        "group": 388,
+        "line": 9,
+        "cells": [
+          "Joint account holder(s):",
+          "No"
+        ]
+      },
+      {
+        "test": "ielts6_test3",
+        "section": 1,
+        "group": 388,
+        "line": 12,
+        "cells": [
+          "Previous address:",
+          "Rielsdorf 2, Utrecht, Holland"
+        ]
+      },
+      {
+        "test": "ielts6_test3",
+        "section": 1,
+        "group": 388,
+        "line": 21,
+        "cells": [
+          "Requests:",
+          "Supply information about the bank's"
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "line": 3,
+        "cells": [
+          "Title of conference:",
+          "Future Directions in Computing"
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 332,
+        "line": 3,
+        "cells": [
+          "Distance:",
+          "147 miles"
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 333,
+        "line": 0,
+        "cells": [
+          "To:",
+          "Milton"
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 333,
+        "line": 5,
+        "cells": [
+          "Address in Milton:",
+          "Vacation Motel, 24, Kitchener Street"
+        ]
+      },
+      {
+        "test": "ielts7_test1",
+        "section": 1,
+        "group": 333,
+        "line": 6,
+        "cells": [
+          "Fare:",
+          "$35"
+        ]
+      },
+      {
+        "test": "ielts7_test2",
+        "section": 1,
+        "group": 341,
+        "line": 3,
+        "cells": [
+          "Name:",
+          "Patrick Jones"
+        ]
+      },
+      {
+        "test": "ielts7_test2",
+        "section": 1,
+        "group": 341,
+        "line": 7,
+        "cells": [
+          "Contact number:",
+          "730453"
+        ]
+      },
+      {
+        "test": "ielts7_test2",
+        "section": 1,
+        "group": 341,
+        "line": 9,
+        "cells": [
+          "Size of car engine:",
+          "1200cc",
+          "Type of car:"
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 1,
+        "group": 314,
+        "line": 0,
+        "cells": [
+          "Name:",
+          "Steven Godfrey"
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 1,
+        "group": 314,
+        "line": 4,
+        "cells": [
+          "No. of bedrooms:",
+          "four"
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 1,
+        "group": 314,
+        "line": 10,
+        "cells": [
+          "Starting:",
+          "September 1st"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 1,
+        "cells": [
+          "Characteristics of organisation:",
+          "• small"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 5,
+        "cells": [
+          "Advantage:",
+          "• can act quickly"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 14,
+        "cells": [
+          "Advantages:",
+          "• economies of scale"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 23,
+        "cells": [
+          "Characteristics of organisation:",
+          "• project orientated"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 27,
+        "cells": [
+          "Disadvantages:",
+          "• no economies of scale or special expertise"
+        ]
+      },
+      {
+        "test": "ielts9_test2",
+        "section": 4,
+        "group": 276,
+        "line": 28,
+        "cells": [
+          "Suitable employee:",
+          "• likes to work in groups"
+        ]
+      }
+    ],
+    "repeated_previous_line_candidates": [
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "number": 34,
+        "previous": "• Emilie Snell-Rood studied small urbanised mammal specimens from museums in Minnesota.",
+        "title": "· Emilie Snell-Rood studied small urbanised mammal specimens from museums in Minnesota.   - She found the size of their   【   】 had increased."
+      },
+      {
+        "test": "ielts15_test1",
+        "section": 4,
+        "group": 99,
+        "number": 36,
+        "previous": "• mid-frequency bushfires result in the growth of eucalyptus forests, because they:",
+        "title": "· mid-frequency bushfires result in the growth of eucalyptus forests, because they:   - make more  【   】 available to the trees"
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 4,
+        "group": 121,
+        "number": 38,
+        "previous": "• The displays of goods were more visible:",
+        "title": "· The displays of goods were more visible:   - inside stores because of better   【   】"
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 3,
+        "group": 399,
+        "number": 21,
+        "previous": "The School of Education Libraries",
+        "title": "The School of Education Libraries The libraries on both sites provide internet access and have a variety of 【   】 materials on education."
+      },
+      {
+        "test": "ielts9_test1",
+        "section": 4,
+        "group": 269,
+        "number": 36,
+        "previous": "The Bahamas (2000) stranding was unusual because the whales",
+        "title": "The Bahamas (2000) stranding was unusual because the whales   · were all   【   】"
+      }
+    ]
+  },
+  "after": {
+    "forms": 165,
+    "questions": 1252,
+    "shared_clusters": 39,
+    "shared_questions": 102,
+    "shared_multi_source_clusters": 23,
+    "checked_suffixes": 677,
+    "columns": [],
+    "suffix_mismatches": [],
+    "shared_rows": [
+      {
+        "test": "ielts11_test1",
+        "section": 1,
+        "group": 204,
+        "numbers": [
+          2,
+          3
+        ],
+        "source": [
+          {
+            "index": 4,
+            "line": 5,
+            "source": "• Cost of Main Hall for Saturday evening:  ￡ $943$ + ￡250 deposit (  $944$ payment is required)"
+          }
+        ],
+        "rendered_rows": [
+          "• Cost of Main Hall for Saturday evening: ￡ [Q2] + ￡250 deposit ( [Q3] payment is required)"
+        ]
+      },
+      {
+        "test": "ielts11_test1",
+        "section": 4,
+        "group": 208,
+        "numbers": [
+          37,
+          38
+        ],
+        "source": [
+          {
+            "index": 21,
+            "line": 25,
+            "source": "-  rate of  $968$"
+          },
+          {
+            "index": 22,
+            "line": 26,
+            "source": "• Aim: to assess 20,000 species and make a distribution  $969$ for each one"
+          }
+        ],
+        "rendered_rows": [
+          "- rate of [Q37]",
+          "• Aim: to assess 20,000 species and make a distribution [Q38] for each one"
+        ]
+      },
+      {
+        "test": "ielts11_test2",
+        "section": 1,
+        "group": 209,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 8,
+            "line": 12,
+            "source": "Hobbies: does a lot of  $977$ , and is interested in the $978$"
+          }
+        ],
+        "rendered_rows": [
+          "Hobbies: does a lot of [Q6] , and is interested in the [Q7]"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 1,
+        "group": 177,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 18,
+            "source": "• Only suitable for cyclists who have some $815$"
+          },
+          {
+            "index": 13,
+            "line": 19,
+            "source": "- Bikes can be hired from   $816$ (near the Cruise Ship Terminal)"
+          }
+        ],
+        "rendered_rows": [
+          "• Only suitable for cyclists who have some [Q6]",
+          "- Bikes can be hired from [Q7] (near the Cruise Ship Terminal)"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 1,
+        "group": 177,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 23,
+            "source": "- a   $817$ (can be hired)"
+          },
+          {
+            "index": 18,
+            "line": 24,
+            "source": "• There are no  $818$ or accommodation in the area"
+          }
+        ],
+        "rendered_rows": [
+          "- a [Q8] (can be hired)",
+          "• There are no [Q9] or accommodation in the area"
+        ]
+      },
+      {
+        "test": "ielts12_test5",
+        "section": 4,
+        "group": 183,
+        "numbers": [
+          31,
+          32
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Many business values can result in   $833$ ."
+          },
+          {
+            "index": 1,
+            "line": 1,
+            "source": "Senior managers need to understand and deal with the potential  $834$ that may result."
+          }
+        ],
+        "rendered_rows": [
+          "Many business values can result in [Q31] .",
+          "Senior managers need to understand and deal with the potential [Q32] that may result."
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          1,
+          2
+        ],
+        "source": [
+          {
+            "index": 3,
+            "line": 7,
+            "source": "• In town centre, starting at  $843$"
+          },
+          {
+            "index": 5,
+            "line": 9,
+            "source": "A   $844$ will perform"
+          }
+        ],
+        "rendered_rows": [
+          "• In town centre, starting at [Q1]",
+          "A [Q2] will perform"
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          3,
+          4
+        ],
+        "source": [
+          {
+            "index": 6,
+            "line": 10,
+            "source": "Performance of a   $845$ about Helen Tungate (a   $846$ )"
+          }
+        ],
+        "rendered_rows": [
+          "Performance of a [Q3] about Helen Tungate (a [Q4] )"
+        ]
+      },
+      {
+        "test": "ielts12_test6",
+        "section": 1,
+        "group": 184,
+        "numbers": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 9,
+            "line": 14,
+            "source": "• Videos about relationships that children have with their  $848$"
+          },
+          {
+            "index": 10,
+            "line": 15,
+            "source": "Venue:   $849$ House"
+          },
+          {
+            "index": 11,
+            "line": 16,
+            "source": "• Performance of   $850$ dances"
+          },
+          {
+            "index": 12,
+            "line": 17,
+            "source": "Venue: the   $851$ market in the town centre"
+          }
+        ],
+        "rendered_rows": [
+          "• Videos about relationships that children have with their [Q6]",
+          "Venue: [Q7] House",
+          "• Performance of [Q8] dances",
+          "Venue: the [Q9] market in the town centre"
+        ]
+      },
+      {
+        "test": "ielts12_test7",
+        "section": 4,
+        "group": 197,
+        "numbers": [
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "source": [
+          {
+            "index": 7,
+            "line": 8,
+            "source": "- the effects on birds'   $897$ or mental processes, e.g. memory"
+          },
+          {
+            "index": 8,
+            "line": 9,
+            "source": "- the effects on bird song (usually learned from a bird's  $898$ )"
+          },
+          {
+            "index": 10,
+            "line": 11,
+            "source": "- songs learned by birds exposed to mercury are less  $899$"
+          },
+          {
+            "index": 11,
+            "line": 12,
+            "source": "- this may have a negative effect on birds'  $900$"
+          },
+          {
+            "index": 13,
+            "line": 14,
+            "source": "- allow more  $901$ for the experimenter"
+          }
+        ],
+        "rendered_rows": [
+          "- the effects on birds' [Q32] or mental processes, e.g. memory",
+          "- the effects on bird song (usually learned from a bird's [Q33] )",
+          "- songs learned by birds exposed to mercury are less [Q34]",
+          "- this may have a negative effect on birds' [Q35]",
+          "- allow more [Q36] for the experimenter"
+        ]
+      },
+      {
+        "test": "ielts13_test1",
+        "section": 4,
+        "group": 155,
+        "numbers": [
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 8,
+            "line": 9,
+            "source": "- She suggests this may be due to the need to locate new sources of   $711$ and to deal with new dangers."
+          },
+          {
+            "index": 9,
+            "line": 10,
+            "source": "• Catarina Miranda focused on the  $712$ of urban and rural blackbirds."
+          },
+          {
+            "index": 10,
+            "line": 11,
+            "source": "- She found urban birds were often braver, but were afraid of situations that were   $713$ ."
+          },
+          {
+            "index": 12,
+            "line": 13,
+            "source": "- He found that some animals respond to   $714$ by producing lower levels of hormones."
+          },
+          {
+            "index": 13,
+            "line": 14,
+            "source": "• Sarah Partan's team found urban squirrels use their  $715$ to help them communicate."
+          }
+        ],
+        "rendered_rows": [
+          "- She suggests this may be due to the need to locate new sources of [Q35] and to deal with new dangers.",
+          "• Catarina Miranda focused on the [Q36] of urban and rural blackbirds.",
+          "- She found urban birds were often braver, but were afraid of situations that were [Q37] .",
+          "- He found that some animals respond to [Q38] by producing lower levels of hormones.",
+          "• Sarah Partan's team found urban squirrels use their [Q39] to help them communicate."
+        ]
+      },
+      {
+        "test": "ielts13_test2",
+        "section": 1,
+        "group": 156,
+        "numbers": [
+          5,
+          6
+        ],
+        "source": [
+          {
+            "index": 11,
+            "line": 16,
+            "source": "- Tuesdays at 5.30 am, meet at the  $721$"
+          },
+          {
+            "index": 12,
+            "line": 17,
+            "source": "- Thursdays at 5.30 am, meet at the entrance to the  $722$"
+          }
+        ],
+        "rendered_rows": [
+          "- Tuesdays at 5.30 am, meet at the [Q5]",
+          "- Thursdays at 5.30 am, meet at the entrance to the [Q6]"
+        ]
+      },
+      {
+        "test": "ielts13_test2",
+        "section": 4,
+        "group": 162,
+        "numbers": [
+          32,
+          33
+        ],
+        "source": [
+          {
+            "index": 2,
+            "line": 2,
+            "source": "• different to semantic memory - the ability to remember general information about the   $737$ , which does not involve recalling   $738$ information"
+          }
+        ],
+        "rendered_rows": [
+          "• different to semantic memory - the ability to remember general information about the [Q32] , which does not involve recalling [Q33] information"
+        ]
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "numbers": [
+          36,
+          37
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 15,
+            "source": "- to improve the survival of their young    (but little   $777$ has been noted between parents and children)"
+          },
+          {
+            "index": 13,
+            "line": 16,
+            "source": "- to provide   $778$ for female lizards"
+          }
+        ],
+        "rendered_rows": [
+          "- to improve the survival of their young (but little [Q36] has been noted between parents and children)",
+          "- to provide [Q37] for female lizards"
+        ]
+      },
+      {
+        "test": "ielts13_test3",
+        "section": 4,
+        "group": 169,
+        "numbers": [
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 18,
+            "source": "- A study was carried out using GPS systems attached to the   $779$ of the lizards"
+          },
+          {
+            "index": 16,
+            "line": 19,
+            "source": "- This provided information on the lizards' location and even the number of   $780$ taken"
+          },
+          {
+            "index": 18,
+            "line": 21,
+            "source": "- This may be in order to reduce chances of  $781$"
+          }
+        ],
+        "rendered_rows": [
+          "- A study was carried out using GPS systems attached to the [Q38] of the lizards",
+          "- This provided information on the lizards' location and even the number of [Q39] taken",
+          "- This may be in order to reduce chances of [Q40]"
+        ]
+      },
+      {
+        "test": "ielts14_test2",
+        "section": 1,
+        "group": 129,
+        "numbers": [
+          7,
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 22,
+            "line": 19,
+            "source": "Sports played: belongs to a   $585$ club"
+          },
+          {
+            "index": 23,
+            "line": 20,
+            "source": "goes   $586$ regularly"
+          },
+          {
+            "index": 25,
+            "line": 21,
+            "source": "Medical history: injured her   $587$ last year"
+          }
+        ],
+        "rendered_rows": [
+          "Sports played: belongs to a [Q7] club",
+          "goes [Q8] regularly",
+          "Medical history: injured her [Q9] last year"
+        ]
+      },
+      {
+        "test": "ielts14_test3",
+        "section": 1,
+        "group": 135,
+        "numbers": [
+          1,
+          2,
+          3
+        ],
+        "source": [
+          {
+            "index": 5,
+            "line": 10,
+            "source": "• the $610$ room for talks   (projector and  $611$ available)"
+          },
+          {
+            "index": 6,
+            "line": 11,
+            "source": "• area for coffee and an $612$"
+          }
+        ],
+        "rendered_rows": [
+          "• the [Q1] room for talks (projector and [Q2] available)",
+          "• area for coffee and an [Q3]"
+        ]
+      },
+      {
+        "test": "ielts14_test4",
+        "section": 1,
+        "group": 142,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 19,
+            "source": "will provide  $655$ if there are any problems"
+          },
+          {
+            "index": 17,
+            "line": 21,
+            "source": "in hotel rooms or  $656$"
+          }
+        ],
+        "rendered_rows": [
+          "will provide [Q6] if there are any problems",
+          "in hotel rooms or [Q7]"
+        ]
+      },
+      {
+        "test": "ielts14_test4",
+        "section": 4,
+        "group": 149,
+        "numbers": [
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 21,
+            "line": 23,
+            "source": "- one carrying  $682$ supplies; tablets may have been used for cleaning the  $683$"
+          }
+        ],
+        "rendered_rows": [
+          "- one carrying [Q38] supplies; tablets may have been used for cleaning the [Q39]"
+        ]
+      },
+      {
+        "test": "ielts15_test1",
+        "section": 4,
+        "group": 99,
+        "numbers": [
+          37,
+          38,
+          39
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 18,
+            "source": "- maintain the quality of the  $434$"
+          },
+          {
+            "index": 18,
+            "line": 19,
+            "source": "• low-frequency bushfires result in the growth of '$435$rainforest', which is:"
+          },
+          {
+            "index": 19,
+            "line": 20,
+            "source": "- a  $436$ ecosystem"
+          }
+        ],
+        "rendered_rows": [
+          "- maintain the quality of the [Q37]",
+          "• low-frequency bushfires result in the growth of '[Q38]rainforest', which is:",
+          "- a [Q39] ecosystem"
+        ]
+      },
+      {
+        "test": "ielts15_test4",
+        "section": 4,
+        "group": 121,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 20,
+            "source": "- outside stores, because   $542$ were bigger."
+          },
+          {
+            "index": 18,
+            "line": 21,
+            "source": "•  $543$ that was persuasive became much more common."
+          }
+        ],
+        "rendered_rows": [
+          "- outside stores, because [Q39] were bigger.",
+          "• [Q40] that was persuasive became much more common."
+        ]
+      },
+      {
+        "test": "ielts18_test3",
+        "section": 4,
+        "group": 26,
+        "numbers": [
+          32,
+          33
+        ],
+        "source": [
+          {
+            "index": 5,
+            "line": 6,
+            "source": "• Satellites are now quite $93$ and therefore more widespread (e.g. there are constellations made up of $94$ of satellites)."
+          }
+        ],
+        "rendered_rows": [
+          "• Satellites are now quite [Q32] and therefore more widespread (e.g. there are constellations made up of [Q33] of satellites)."
+        ]
+      },
+      {
+        "test": "ielts19_test4",
+        "section": 4,
+        "group": 4820,
+        "numbers": [
+          37,
+          38
+        ],
+        "source": [
+          {
+            "index": 13,
+            "line": 13,
+            "source": "- increasing the $21788$ of recovery by attracting animals and birds, e.g., $21789$ were soon attracted to the area."
+          }
+        ],
+        "rendered_rows": [
+          "- increasing the [Q37] of recovery by attracting animals and birds, e.g., [Q38] were soon attracted to the area."
+        ]
+      },
+      {
+        "test": "ielts20_test1",
+        "section": 4,
+        "group": 4866,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 17,
+            "line": 17,
+            "source": "· Instead of road transport, goods could be transported by large freight barges and electric $21993$ or, in future, by $21994$."
+          }
+        ],
+        "rendered_rows": [
+          "· Instead of road transport, goods could be transported by large freight barges and electric [Q39] or, in future, by [Q40]."
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 3,
+        "group": 411,
+        "numbers": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Students study  $1735$ during each module. A module takes  $1736$ and the work is very  $1737$ . To get a Diploma each student has to study  $1738$ and then work on  $1739$ in depth."
+          }
+        ],
+        "rendered_rows": [
+          "Students study [Q26] during each module. A module takes [Q27] and the work is very [Q28] . To get a Diploma each student has to study [Q29] and then work on [Q30] in depth."
+        ]
+      },
+      {
+        "test": "ielts5_test1",
+        "section": 4,
+        "group": 413,
+        "numbers": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 0,
+            "line": 0,
+            "source": "Research indicates that many women only think about their financial future when a  $1745$ occurs.This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their  $1746$ . A good way for women to develop their  $1747$ in dealing with financial affairs would be to attend classes in  $1748$ . When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in  $1749$ . In such ways, women can have a comfortable, independent retirement."
+          }
+        ],
+        "rendered_rows": [
+          "Research indicates that many women only think about their financial future when a [Q36] occurs.This is the worst time to make decisions. It is best for women to start thinking about pensions when they are in their [Q37] . A good way for women to develop their [Q38] in dealing with financial affairs would be to attend classes in [Q39] . When investing in stocks and shares, it is suggested that women should put a high proportion of their savings in [Q40] . In such ways, women can have a comfortable, independent retirement."
+        ]
+      },
+      {
+        "test": "ielts5_test3",
+        "section": 2,
+        "group": 422,
+        "numbers": [
+          13,
+          14,
+          15
+        ],
+        "source": [
+          {
+            "index": 3,
+            "line": 3,
+            "source": "- delays in sending  $1797$"
+          },
+          {
+            "index": 4,
+            "line": 4,
+            "source": "• University tries to put international applicants in touch with a student from the same  $1798$ who can give information and advice on"
+          },
+          {
+            "index": 7,
+            "line": 7,
+            "source": "- English   $1799$ and food"
+          }
+        ],
+        "rendered_rows": [
+          "- delays in sending [Q13]",
+          "• University tries to put international applicants in touch with a student from the same [Q14] who can give information and advice on",
+          "- English [Q15] and food"
+        ]
+      },
+      {
+        "test": "ielts6_test1",
+        "section": 3,
+        "group": 377,
+        "numbers": [
+          26,
+          27,
+          28,
+          29
+        ],
+        "source": [
+          {
+            "index": 1,
+            "line": 1,
+            "source": "The Business Resource Centre contains materials such as books and manuals to be used for training. It is possible to hire  $1596$ and  $1597$ ."
+          },
+          {
+            "index": 2,
+            "line": 2,
+            "source": "There are materials for working on study skills (e.g.  $1598$ ) and other subjects include finance and  $1599$ ."
+          }
+        ],
+        "rendered_rows": [
+          "The Business Resource Centre contains materials such as books and manuals to be used for training. It is possible to hire [Q26] and [Q27] .",
+          "There are materials for working on study skills (e.g. [Q28] ) and other subjects include finance and [Q29] ."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "numbers": [
+          7,
+          8
+        ],
+        "source": [
+          {
+            "index": 18,
+            "line": 22,
+            "source": "Conference Centre is on $1683$Park Road, next to the $1684$."
+          }
+        ],
+        "rendered_rows": [
+          "Conference Centre is on [Q7]Park Road, next to the [Q8]."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 1,
+        "group": 396,
+        "numbers": [
+          9,
+          10
+        ],
+        "source": [
+          {
+            "index": 19,
+            "line": 23,
+            "source": "Taxi costs  £$1685$or take bus number $1686$from station."
+          }
+        ],
+        "rendered_rows": [
+          "Taxi costs £[Q9]or take bus number [Q10]from station."
+        ]
+      },
+      {
+        "test": "ielts6_test4",
+        "section": 3,
+        "group": 399,
+        "numbers": [
+          22,
+          23
+        ],
+        "source": [
+          {
+            "index": 2,
+            "line": 2,
+            "source": "The Castle Road library has books on sociology, together with $1698$ and other resources relevant to the majority of $1699$ school subjects."
+          }
+        ],
+        "rendered_rows": [
+          "The Castle Road library has books on sociology, together with [Q22] and other resources relevant to the majority of [Q23] school subjects."
+        ]
+      },
+      {
+        "test": "ielts7_test4",
+        "section": 4,
+        "group": 369,
+        "numbers": [
+          35,
+          36
+        ],
+        "source": [
+          {
+            "index": 4,
+            "line": 4,
+            "source": "• Glutamate is found in foods that contain protein such as $1566$ and  $1567$ ."
+          }
+        ],
+        "rendered_rows": [
+          "• Glutamate is found in foods that contain protein such as [Q35] and [Q36] ."
+        ]
+      },
+      {
+        "test": "ielts8_test1",
+        "section": 4,
+        "group": 304,
+        "numbers": [
+          38,
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 15,
+            "line": 19,
+            "source": "-  BUT a two-dimensional map will always have some   $1359$"
+          },
+          {
+            "index": 17,
+            "line": 21,
+            "source": "-  can show vegetation problems,   $1360$ density, ocean floor etc."
+          },
+          {
+            "index": 19,
+            "line": 23,
+            "source": "-  used for monitoring   $1361$ conditions etc."
+          }
+        ],
+        "rendered_rows": [
+          "- BUT a two-dimensional map will always have some [Q38]",
+          "- can show vegetation problems, [Q39] density, ocean floor etc.",
+          "- used for monitoring [Q40] conditions etc."
+        ]
+      },
+      {
+        "test": "ielts8_test2",
+        "section": 3,
+        "group": 311,
+        "numbers": [
+          26,
+          27,
+          28,
+          29
+        ],
+        "source": [
+          {
+            "index": 1,
+            "line": 1,
+            "source": "Researchers go to the locations the bee eaters like to use for   $1376$ . They collect the pellets and take them to a   $1377$ . for analysis. Here   $1378$ is used to soften them, and the researchers look for the   $1379$ of Asian bees in the pellets."
+          }
+        ],
+        "rendered_rows": [
+          "Researchers go to the locations the bee eaters like to use for [Q26] . They collect the pellets and take them to a [Q27] . for analysis. Here [Q28] is used to soften them, and the researchers look for the [Q29] of Asian bees in the pellets."
+        ]
+      },
+      {
+        "test": "ielts8_test3",
+        "section": 4,
+        "group": 322,
+        "numbers": [
+          39,
+          40
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 14,
+            "source": "- physical features of the  $1413$"
+          },
+          {
+            "index": 13,
+            "line": 15,
+            "source": "- the   $1414$ of original employees"
+          }
+        ],
+        "rendered_rows": [
+          "- physical features of the [Q39]",
+          "- the [Q40] of original employees"
+        ]
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 10,
+            "line": 13,
+            "source": "a  $1420$ (supplied)"
+          },
+          {
+            "index": 11,
+            "line": 14,
+            "source": "• Starting date: $1421$"
+          }
+        ],
+        "rendered_rows": [
+          "a [Q6] (supplied)",
+          "• Starting date: [Q7]"
+        ]
+      },
+      {
+        "test": "ielts8_test4",
+        "section": 1,
+        "group": 323,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 12,
+            "line": 15,
+            "source": "• Call Jane $1422$ (Service Manager) before $1423$ tomorrow (Tel: 832009)"
+          }
+        ],
+        "rendered_rows": [
+          "• Call Jane [Q8] (Service Manager) before [Q9] tomorrow (Tel: 832009)"
+        ]
+      },
+      {
+        "test": "ielts9_test1",
+        "section": 1,
+        "group": 264,
+        "numbers": [
+          6,
+          7
+        ],
+        "source": [
+          {
+            "index": 11,
+            "line": 15,
+            "source": "- transport home when you work   $1205$"
+          },
+          {
+            "index": 13,
+            "line": 17,
+            "source": "-   $1206$"
+          }
+        ],
+        "rendered_rows": [
+          "- transport home when you work [Q6]",
+          "- [Q7]"
+        ]
+      },
+      {
+        "test": "ielts9_test1",
+        "section": 1,
+        "group": 264,
+        "numbers": [
+          8,
+          9
+        ],
+        "source": [
+          {
+            "index": 14,
+            "line": 18,
+            "source": "- ability to   $1207$"
+          },
+          {
+            "index": 15,
+            "line": 19,
+            "source": "• Interview arranged for:Thursday  $1208$at 6 p.m."
+          }
+        ],
+        "rendered_rows": [
+          "- ability to [Q8]",
+          "• Interview arranged for:Thursday [Q9]at 6 p.m."
+        ]
+      }
+    ],
+    "split_static_rows": [],
+    "repeated_previous_line_candidates": []
+  },
+  "boundaries": "Structure and source-line ownership only; no full semantic/image/audio review."
+}

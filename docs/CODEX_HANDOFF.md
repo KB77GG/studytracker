@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 电脑网页听力上下行错位追加修复
+
+- 用户确认发生在电脑网页，具体题号不记得；延续已明确授权的剑桥修复/部署。上一轮结构核查未覆盖全部视觉换行，本轮真实线上复现 C13T1 Q35–39 句尾移到后题、C18T1 在980px时半宽空栏及姓名/年份拆行。
+- 实施树 `/private/tmp/studytracker-cambridge-fix-20261107`，分支 `codex/cambridge-explanations-fix-20261107`，开工 **be9b122f49c5fd452dfb0b9fbc89e2f9f07cc0bc** clean。首批业务 **038bd8e049e3a5719d05b54150ab649c97445bed** 和精确断词增补 **be45283f1e337056991c1c1a59b3aba0d945cd94** 均已 commit/push 分支/main；两个提交合计6个唯一文件：`.github/workflows/ci.yml`、`static/js/practice_renderers.js`、`static/css/practice_shell.css`、`tests/test_practice_renderers.js`、`tests/test_cambridge_line_layout.js`、`tests/test_cambridge_form_layout_css.js`。题库JSON、答案、API、评分、小程序均未增量修改。报告与两交接随后独立 `[skip ci]` 同步，最终文档HEAD以git log为准；生产保持最终业务HEAD。
+- 修复：共享题干按完整、单次、保序的源ID映射恢复源行，映射不可靠则保留连续完整题干；19题/13组尾句错行→0，57静态行/21组拆行→0，5前导重复→0；32组纸面留白误识别为columns改为按题序完整纵排，同句多空保留。修正980px选择器优先级、输入框宽度与双空基线。线上复核另发现C18T1S4原raw错误分开anti/−poaching laws，经扫描文本与独立转录核实后只精确合并该相邻静态字符串，保留其他真实子项与近似文本。
+- 验证：最终 **120 Python +97 Node**（含130个真实JS输入序列化→Python评分场景）通过，新增12项源行测试+3项CSS检查。全普通/模拟144套5760题、专项5702题真实模板控件/题号/源词无异常；39共享簇102题、86源行含11静态行保序。165组1252逻辑题/1255输入框在1280/1024/980/390px实际浏览器几何无越界/相交/整题逆序，C13/C18/C7典型页及C7T4阅读两栏/原图逐屏回归。该全库几何是038bd8e0阶段；be45283f只精确合并一静态要点，另对普通/模拟/已保存专项作答/复盘4模式独立验证10控件、编号、源对象与快照不变，额外4误合并边界通过。
+- 精确验证命令与完整日志见 `docs/reviews/cambridge-layout-20261107/README.md`；源审计脚本 `listening-layout-source.py` 固定 be9b122f 对照，不能把 raw 一致当作所有源排版都正确。`node --check static/js/practice_renderers.js`、`node tests/test_dictation_spell_queue.js`、目标Ruff及`git diff --check`通过。旧cambridge-fix/release目录未覆盖；本次新目录含阶段标注的原始审计、最终测试、CI与生产证据。
+- 发布已完成：首批038bd8e0及最终be45283f均已部署验收；增补分支CI42376568920、主线CI42376753001、Deploy42376752984均成功。首批分支CI42375565088/main CI42375793132均success，Deploy42375793140成功；所有阶段CI三个测试job成功，存量advisory lint failure不计为全仓lint通过。
+- 最终生产 `/root/apps/studytracker` **be45283f1e337056991c1c1a59b3aba0d945cd94**、tracked clean/113 untracked，**21:24:12 CST**起active/running，单worker/gthread6/5002、NRestarts0、warning0；JS/CSS/config SHA一致，公网JS SHA一致。C13句尾及C18姓名/年份/980px布局已确认，最终线上C18S4完整anti-poaching要点和真正tracking子项也已逐屏确认；临时页关闭、视口恢复，两个本机预览服务已停。只读脚本 `docs/reviews/cambridge-release-20261107/verify_release.py` 不import app、不读学生表，无真实学生提交或人工生产DB写入。新增补丁不需要schema、依赖或历史成绩迁移，小程序未改/未上传/提审/发布。
+- 旧资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**；既有7 modified（design-qa.md、两交接、static/style.css、templates/listening/index.html、templates/listening/test_practice.html、templates/login.html）/23 untracked顶层入口保留，本轮只镜像两交接，未触碰IWA/其他业务。旧树不含此次修复，不可从它发布。实施树业务改动已提交，当前未提交仅新报告目录及两交接，随后文档提交应clean；旧树其他脏改动仍仅本机，修复代码/提交报告可由远端获取。
+- 未验证：全5760题逐题人工语义终审、全部音频实听、真实微信设备/真实学生完整提交；165组输入框几何不代表全体文本字形已逐屏人工检查，用户具体反馈题号仍未知。无发布阻断；最终生产已验收，报告与交接以独立文档提交同步。下一位先核git/部署HEAD，新反馈按题号复现，避免重算历史成绩或重跑旧部署。旧网页须刷新/重开。
+
 ## 2026-11-07 剑桥解析、题干与双空修复已部署
 
 - 用户明确授权“部署吧”，并要求追加题干准确性复核。实施树 **`/private/tmp/studytracker-cambridge-fix-20261107`**，分支 `codex/cambridge-explanations-fix-20261107`，审计基线40cd8225；保留前轮业务改动并快进至仅新增文档的主线ffee98a7后，业务105文件提交 **5099ac411730062949a4341a9684dd62ade50c7d**，单文件测试隔离提交 **0f51632ca3bef9ac2b438e4efc88f83f3bd59ec3**，均已push任务分支与main并部署。报告和两交接随后独立`[skip ci]`提交同步，最终文档HEAD见git log；生产保留0f51632c。修复源码与共享报告不再仅本机，另一台电脑可从远端取得。
