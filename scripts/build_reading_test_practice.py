@@ -8,14 +8,16 @@ import html
 import json
 import re
 import ssl
+import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 RAW_PATH = ROOT / "data" / "idictation_reading" / "raw.json"
 OUTPUT_DIR = ROOT / "static" / "reading_tests"
 IMAGE_DIR = OUTPUT_DIR / "images"
@@ -78,7 +80,9 @@ def analysis_text(value: Any) -> str:
         chunks = []
         for row in value:
             if isinstance(row, dict):
-                chunks.append(clean_text(row.get("content") or row.get("analysis") or row.get("text")))
+                chunks.append(
+                    clean_text(row.get("content") or row.get("analysis") or row.get("text"))
+                )
             else:
                 chunks.append(clean_text(row))
         return "\n".join(chunk for chunk in chunks if chunk)
@@ -143,7 +147,7 @@ def unwrap_part(raw_parts: dict[str, Any], source: str, part_id: int) -> dict[st
     return row.get("values") or row.get("data") or row
 
 
-def build_passage_content(part: dict[str, Any]) -> dict[str, Any]:
+def build_passage_content(part: dict[str, Any], passage_id: str = "") -> dict[str, Any]:
     content = part.get("content")
     if not isinstance(content, dict):
         return {"title": clean_text(part.get("title") or ""), "paragraphs": []}
@@ -161,16 +165,38 @@ def build_passage_content(part: dict[str, Any]) -> dict[str, Any]:
             text = clean_text(content.get(key))
             if text:
                 paragraphs.append({"label": key, "text": text})
-    return {
+    introduction = clean_text(content.get("pre-A"))
+    if introduction:
+        # This is an unnumbered introduction; keep the original A–Z labels.
+        paragraphs.insert(0, {"label": "pre-A", "text": introduction})
+    result = {
         "title": title,
         "summary": clean_text(content.get("summary")),
         "notes": clean_text(content.get("notes")),
         "paragraphs": paragraphs,
     }
+    images = []
+    for source_image in content.get("paragraph_img") or []:
+        url = source_image.get("img_url") or ""
+        if not passage_id or not is_usable_image(url):
+            continue
+        image = {
+            "url": localize_image(url, passage_id),
+            "alt": "Figure accompanying " + (title or "the reading passage"),
+        }
+        position = source_image.get("paragraph")
+        if isinstance(position, int) and position >= 0:
+            image["after_paragraph"] = position
+        images.append(image)
+    if images:
+        result["images"] = images
+    return result
 
 
 def build_question(item: dict[str, Any], group_options: list[dict[str, str]]) -> dict[str, Any]:
-    answer = clean_text(item.get("display_answer") or item.get("answer") or item.get("correct_answer"))
+    answer = clean_text(
+        item.get("display_answer") or item.get("answer") or item.get("correct_answer")
+    )
     options = []
     for index, raw in enumerate(item.get("option") or []):
         if not isinstance(raw, dict):
@@ -191,13 +217,15 @@ def build_question(item: dict[str, Any], group_options: list[dict[str, str]]) ->
         "options": options,
         "input_mode": input_mode,
         "analysis": clean_text(item.get("ai_analyze")) or analysis_text(item.get("analyze")),
-        "central_sentences": item.get("central_sentences") or item.get("ai_central_sentences") or [],
+        "central_sentences": item.get("central_sentences")
+        or item.get("ai_central_sentences")
+        or [],
         "locating_words": item.get("locating_words") or item.get("key_locating_words") or [],
     }
 
 
 def build_group_options(group: dict[str, Any]) -> list[dict[str, str]]:
-    rows = ((group.get("collect_option") or {}).get("list") or [])
+    rows = (group.get("collect_option") or {}).get("list") or []
     options = []
     for index, raw in enumerate(rows):
         if not isinstance(raw, dict):
@@ -209,9 +237,27 @@ def build_group_options(group: dict[str, Any]) -> list[dict[str, str]]:
     return options
 
 
-def build_group(group: dict[str, Any], passage_id: str) -> dict[str, Any]:
+def build_group(
+    group: dict[str, Any], passage_id: str, paragraph_titles: dict[str, Any] | None = None
+) -> dict[str, Any]:
     group_options = build_group_options(group)
     img_url = group.get("img_url") or ""
+    questions = []
+    for item in group.get("list") or []:
+        question = build_question(item, group_options)
+        # Heading exercises omit examples and may skip paragraphs. Preserve
+        # the source's explicit target instead of inferring it from row order.
+        label = clean_text(item.get("sub_essay_code"))
+        if (
+            str(group.get("type")) == "6"
+            and not question["title"]
+            and re.fullmatch(r"[A-Z]", label)
+        ):
+            question["title"] = f"Paragraph {label}"
+            named_paragraph = clean_text((paragraph_titles or {}).get(label))
+            if named_paragraph:
+                question["title"] += f" ({named_paragraph.title()})"
+        questions.append(question)
     return {
         "group_id": group.get("group_id"),
         "type": group.get("type"),
@@ -226,7 +272,7 @@ def build_group(group: dict[str, Any], passage_id: str) -> dict[str, Any]:
             "title": clean_text((group.get("collect_option") or {}).get("title")),
             "list": group_options,
         },
-        "questions": [build_question(item, group_options) for item in group.get("list") or []],
+        "questions": questions,
     }
 
 
@@ -249,6 +295,8 @@ def test_title_for(book: int, test_no: int, source: str) -> str:
 
 
 def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
+    from services.cambridge_content_corrections import apply_content_corrections
+
     raw_parts = raw.get("parts") or {}
     meta = SOURCE_META.get(source, SOURCE_META["academic"])
     tests: dict[str, dict[str, Any]] = {}
@@ -278,6 +326,10 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
             },
         )
         passage_id = passage_id_for(book, test_no, passage_no, source)
+        part_content = part.get("content")
+        paragraph_titles = (
+            part_content.get("paragraph_title") if isinstance(part_content, dict) else None
+        )
         tests[tid]["passages"].append(
             {
                 "id": passage_id,
@@ -289,12 +341,16 @@ def build_tests(raw: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
                 "question_name": clean_text(part.get("question_name")),
                 "question_number": part.get("question_number"),
                 "question_type": as_list(part.get("question_type")),
-                "content": build_passage_content(part),
-                "groups": [build_group(group, passage_id) for group in part.get("question") or []],
+                "content": build_passage_content(part, passage_id),
+                "groups": [
+                    build_group(group, passage_id, paragraph_titles)
+                    for group in part.get("question") or []
+                ],
             }
         )
     for payload in tests.values():
         payload["passages"].sort(key=lambda row: row["passage"])
+        apply_content_corrections(payload, subject="reading")
     return tests
 
 
@@ -315,7 +371,11 @@ def main() -> None:
     for tid, payload in sorted(tests.items(), key=lambda item: (item[1]["book"], item[1]["test"])):
         out_path = args.output_dir / f"{tid}.json"
         out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        question_count = sum(len(group.get("questions") or []) for passage in payload["passages"] for group in passage.get("groups") or [])
+        question_count = sum(
+            len(group.get("questions") or [])
+            for passage in payload["passages"]
+            for group in passage.get("groups") or []
+        )
         catalog.setdefault(payload["book"], []).append(
             {
                 "id": tid,
@@ -333,7 +393,9 @@ def main() -> None:
             for book, rows in sorted(catalog.items())
         ],
     }
-    (args.output_dir / "catalog.json").write_text(json.dumps(catalog_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    (args.output_dir / "catalog.json").write_text(
+        json.dumps(catalog_payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     print(f"Wrote {args.output_dir / 'catalog.json'}")
 
 

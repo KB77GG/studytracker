@@ -16,6 +16,7 @@ from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from zoneinfo import ZoneInfo
 
 from services.ielts_practice_scoring import grade_reading_test_answers
+from services.question_type_review import reading_evidence
 
 UTC = timezone.utc  # noqa: UP017 - Python 3.10-compatible replacement.
 SHANGHAI = ZoneInfo("Asia/Shanghai")
@@ -408,23 +409,50 @@ def _unit_source(container: dict, kind: str) -> dict:
     if kind == "reading":
         content = container.get("content") if isinstance(container.get("content"), dict) else {}
         paragraphs = []
+        source_positions = {}
+        source_index = -1
         for paragraph in content.get("paragraphs") or []:
             if not isinstance(paragraph, dict):
                 continue
+            if paragraph.get("label") != "pre-A":
+                source_index += 1
             text = str(paragraph.get("text") or "").strip()
             if text:
+                if paragraph.get("label") != "pre-A":
+                    source_positions[source_index] = len(paragraphs)
                 paragraphs.append(
                     {
-                        "label": str(paragraph.get("label") or "").strip(),
+                        "label": (
+                            "" if paragraph.get("label") == "pre-A"
+                            else str(paragraph.get("label") or "").strip()
+                        ),
                         "text": text,
                     }
                 )
+        images = []
+        for image in content.get("images") or []:
+            if not isinstance(image, dict):
+                continue
+            asset = re.fullmatch(
+                r"(?:/static/)?(reading_tests/images/[A-Za-z0-9][A-Za-z0-9_.-]*\.(?:png|jpe?g|webp|gif))",
+                str(image.get("url") or ""),
+                re.IGNORECASE,
+            )
+            if not asset:
+                continue
+            position = image.get("after_paragraph")
+            images.append({
+                "src": f"/static/{asset.group(1)}",
+                "alt": str(image.get("alt") or "Passage figure"),
+                "after_paragraph": source_positions.get(position) if type(position) is int else None,
+            })
         return {
             "kind": "reading",
             "title": str(
                 content.get("title") or container.get("title") or "Reading Passage"
             ).strip(),
             "paragraphs": paragraphs,
+            "images": images,
         }
 
     transcript = []
@@ -442,17 +470,10 @@ def _unit_source(container: dict, kind: str) -> dict:
 
 
 def _reading_evidence(question: dict) -> list[dict]:
-    central = question.get("central_sentences")
-    if not isinstance(central, dict):
-        return []
-    sentences = central.get("sentences") or []
-    evidence = []
-    for sentence in sentences:
-        text = sentence.get("sentence") if isinstance(sentence, dict) else sentence
-        text = str(text or "").strip()
-        if text and text not in {row["text"] for row in evidence}:
-            evidence.append({"time": "", "text": text, "translation": ""})
-    return evidence
+    return [
+        {"time": "", "text": sentence, "translation": ""}
+        for sentence in reading_evidence(question)
+    ]
 
 
 def _listening_evidence(question: dict, source: dict) -> list[dict]:

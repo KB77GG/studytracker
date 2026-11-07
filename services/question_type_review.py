@@ -19,6 +19,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from services.cambridge_answer_corrections import apply_listening_answer_corrections
+from services.cambridge_content_corrections import apply_content_corrections
+
 AUDIO_GUIDANCE_VERSION = 1
 QUESTION_CONTEXT_BEFORE_SECONDS = 3.0
 QUESTION_CONTEXT_AFTER_SECONDS = 2.0
@@ -583,7 +586,10 @@ def review_snapshot(
     """Build an authorized post-submission view without mutating the snapshot."""
 
     result = copy.deepcopy(snapshot)
+    if result.get("subject") in {"listening", "reading"}:
+        apply_content_corrections(result.get("payload") or {}, result["subject"])
     if result.get("subject") == "listening":
+        apply_listening_answer_corrections(result.get("payload") or {})
         result["payload"] = derive_listening_payload(
             result.get("payload") or {},
             static_root=static_root,

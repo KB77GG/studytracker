@@ -74,7 +74,7 @@
           "type": 1,
           "title": "",
           "question_title": "",
-          "desc": "Questions 1-5\nDo the following statements agree with the claims of the writer in Reading Passage 3?\nChoose\nTRUE if the statement agrees with the information given in the text,\nFALSE if the statement contradicts the information,\nNOT GIVEN if there is no information on this.",
+          "desc": "Questions 1-5\nDo the following statements agree with the claims of the writer in Reading Passage 1?\nChoose\nTRUE if the statement agrees with the information given in the text,\nFALSE if the statement contradicts the information,\nNOT GIVEN if there is no information on this.",
           "table": null,
           "collect": "",
           "img_url": "",
@@ -2240,7 +2240,7 @@
             {
               "id": 981,
               "number": 27,
-              "title": "",
+              "title": "Paragraph A",
               "answer": "vi",
               "answers": [
                 "vi"
@@ -2303,7 +2303,7 @@
             {
               "id": 982,
               "number": 28,
-              "title": "",
+              "title": "Paragraph B",
               "answer": "viii",
               "answers": [
                 "viii"
@@ -2346,65 +2346,36 @@
             {
               "id": 983,
               "number": 29,
-              "title": "",
+              "title": "Paragraph C",
               "answer": "ii",
               "answers": [
                 "ii"
               ],
               "options": [],
               "input_mode": "select",
-              "analysis": "C 段前三句都是客观事实铺垫，不具备段落主旨句的特征，因此不用从这三句里找解题依据。段落第四句抛出核心设问：is marketing principled？（市场营销是否有原则？）按照常规行文逻辑，后文会围绕这个问题展开解释说明。后文提到：一门学科（对应课程名称 a course title），可以在规则编纂层面有原则，就像足球、象棋有固定规则一样；但在道德伦理层面，却未必恪守原则。句中 in the sense of being codified 和 in the sense of being ethical，刚好对应两种不同含义；a subject matter 也同义替换了 a course title。综上，正确答案为 B：A course title with two meanings。",
+              "analysis": "本题为 C 段选择标题。作者从课程名称 Principles of Marketing 引出“Is marketing principled?”，并解释这里有两层含义：一门学科可以有编成体系的规则（principles），却不一定符合伦理原则（principled）。因此，本段围绕课程标题的双重含义展开，对应标题 ii：A course title with two meanings。B 段讨论纵火课程可能吸引错误类型的学生，是另一段的内容。",
               "central_sentences": [
                 {
-                  "index": 2,
-                  "length": 356,
-                  "sentence": "Naturally, the course is intended for prospective arson investigators, who can learn all the tricks of the trade for detecting whether a fire was deliberately set, discovering who did it, and establishing a chain of evidence for effective prosecution in a court of law. But wouldn't this also be the perfect course for prospective arsonists to sign up for?",
-                  "target_para": "B",
-                  "translation": "当然，这门课程是为未来的纵火调查员设计的，他们可以学习所有的专业技巧，用于检测火灾是否是蓄意纵火，发现纵火者，并建立有效的证据链以便在法庭上进行起诉。但是，这不也是未来纵火犯报名的理想课程吗？"
+                  "index": 235,
+                  "length": 138,
+                  "sentence": "There are endless ways I could have approached this assignment, but I took my cue from the title of the course: 'Principles of Marketing'.",
+                  "target_para": "C",
+                  "translation": "我可以从许多角度讲这个主题，但我从课程名称“市场营销原则”得到了启发。"
+                },
+                {
+                  "index": 439,
+                  "length": 176,
+                  "sentence": "After all, a subject matter can have principles in the sense of being codified, having rules, as with football or chess, without being principled in the sense of being ethical.",
+                  "target_para": "C",
+                  "translation": "一门学科可以像足球或国际象棋一样有成文规则，但这并不表示它在伦理意义上有原则。"
                 }
               ],
-              "locating_words": [
-                {
-                  "syn_ary": [
-                    {
-                      "synonym": "intended",
-                      "target_sen": [
-                        {
-                          "index": 27,
-                          "score": 0,
-                          "length": 8,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "  Naturally, the course is intended for prospective arson investigators, who can learn all the tricks of the trade for detecting whether a fire was deliberately set, discovering who did it, and establishing a chain of evidence for effective prosecution in a court of law.",
-                          "target_para": "B"
-                        }
-                      ]
-                    },
-                    {
-                      "synonym": "wouldn't this also be",
-                      "target_sen": [
-                        {
-                          "index": 4,
-                          "score": 0,
-                          "length": 21,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "But wouldn't this also be the perfect course for prospective arsonists to sign up for?",
-                          "target_para": "B"
-                        }
-                      ]
-                    }
-                  ],
-                  "locating_word": "meanings"
-                }
-              ]
+              "locating_words": []
             },
             {
               "id": 984,
               "number": 30,
-              "title": "",
+              "title": "Paragraph D",
               "answer": "iv",
               "answers": [
                 "iv"
@@ -2584,7 +2555,7 @@
             {
               "id": 985,
               "number": 31,
-              "title": "",
+              "title": "Paragraph E",
               "answer": "iii",
               "answers": [
                 "iii"
@@ -2606,7 +2577,7 @@
             {
               "id": 986,
               "number": 32,
-              "title": "",
+              "title": "Paragraph F",
               "answer": "vii",
               "answers": [
                 "vii"

@@ -1,6 +1,12 @@
+import copy
+import json
 import unittest
 from datetime import datetime
+from pathlib import Path
 from types import SimpleNamespace
+
+from jinja2 import Environment, FileSystemLoader
+from markupsafe import escape
 
 from services import mock_exam_review as review
 
@@ -105,6 +111,56 @@ def _result(qid, number, answer, value, awarded=1, marks=1, status="correct"):
 
 
 class QuestionIndexTest(unittest.TestCase):
+    def test_real_reading_figures_reach_shared_review_at_source_positions_without_regrading(self):
+        root = Path(__file__).resolve().parents[1]
+        template = Environment(loader=FileSystemLoader(root / "templates"), autoescape=True).get_template("exam/_review_components.html").module
+        count = 0
+        for test_id in ("ielts4_test1_reading", "ielts7_test4_reading", "ielts10_test3_reading"):
+            payload = json.loads((root / "static/reading_tests" / f"{test_id}.json").read_text())
+            passage = payload["passages"][2]
+            question = passage["groups"][0]["questions"][0]
+            results = [_result(question["id"], question["number"], "saved key", "saved response", awarded=0, status="incorrect")]
+            before = copy.deepcopy((payload, results))
+            units = review.build_review_units(results, review.build_question_index(payload, "reading"))
+            html = str(template.review_block("Reading", units, {"submitted": False}))
+            for image in passage["content"]["images"]:
+                src = "/static/" + image["url"]
+                self.assertEqual(html.count(f'src="{src}"'), 1)
+                position = image["after_paragraph"]
+                # Compare escaped paragraph fragments exactly as Jinja emits them.
+                self.assertLess(html.index(str(escape(passage["content"]["paragraphs"][position]["text"]))), html.index(src))
+                if position + 1 < len(passage["content"]["paragraphs"]):
+                    self.assertLess(html.index(src), html.index(str(escape(passage["content"]["paragraphs"][position + 1]["text"]))))
+                count += 1
+            self.assertEqual((payload, results), before)
+            self.assertEqual(units[0]["correct"], 0)
+        self.assertEqual(count, 4)
+
+    def test_review_figures_skip_intro_and_reject_remote_or_traversal_urls(self):
+        payload = _reading_payload()
+        content = payload["passages"][0]["content"]
+        content["paragraphs"].insert(0, {"label": "pre-A", "text": "Intro."})
+        content["images"] = [
+            {"url": "reading_tests/images/valid.png", "after_paragraph": 0, "alt": "Source diagram"},
+            {"url": "/static/reading_tests/images/second.jpg", "after_paragraph": 99},
+            {"url": "https://example.org/external.png", "after_paragraph": 0},
+            {"url": "//example.org/external.png", "after_paragraph": 0},
+            {"url": "reading_tests/images/../private.png", "after_paragraph": 0},
+        ]
+        source = review.build_question_index(payload, "reading")["1"]["source"]
+        self.assertEqual(source["images"], [
+            {"src": "/static/reading_tests/images/valid.png", "after_paragraph": 1, "alt": "Source diagram"},
+            {"src": "/static/reading_tests/images/second.jpg", "after_paragraph": None, "alt": "Passage figure"},
+        ])
+        root = Path(__file__).resolve().parents[1]
+        template = Environment(loader=FileSystemLoader(root / "templates"), autoescape=True).get_template("exam/_review_components.html").module
+        units = review.build_review_units([_result(1, 1, "TRUE", "FALSE", awarded=0)], review.build_question_index(payload, "reading"))
+        html = str(template.review_block("Reading", units, {"submitted": False}))
+        self.assertLess(html.index("Intro."), html.index(str(escape(content["paragraphs"][1]["text"]))))
+        self.assertLess(html.index(str(escape(content["paragraphs"][1]["text"]))), html.index('/static/reading_tests/images/valid.png'))
+        self.assertNotIn("example.org", html)
+        self.assertNotIn("../private.png", html)
+
     def test_listening_sections_are_labelled(self):
         index = review.build_question_index(_listening_payload(), "listening")
         self.assertEqual(index["1"]["unit_label"], "Section 1 · Self-drive tours")
@@ -154,6 +210,54 @@ class QuestionIndexTest(unittest.TestCase):
         self.assertEqual(reading["1"]["question_stem"], "Rooftop farms are becoming more common.")
         self.assertEqual(reading["1"]["evidence"][0]["text"], "Rooftop farms are expanding.")
         self.assertEqual(reading["1"]["source"]["paragraphs"][0]["label"], "A")
+
+
+    def test_list_shaped_reading_evidence_is_visible_without_changing_saved_grade(self):
+        payload = _reading_payload()
+        question = payload["passages"][0]["groups"][0]["questions"][0]
+        question["central_sentences"] = [
+            {"sentence": "Rooftop farms are expanding."},
+            {"sentence": "Rooftop farms are expanding."},
+            "Another supporting sentence.",
+        ]
+        results = [_result(1, 1, "TRUE", "FALSE", awarded=0, status="incorrect")]
+        before = copy.deepcopy((payload, results))
+        rows = review.build_review_units(results, review.build_question_index(payload, "reading"))
+        evidence = rows[0]["groups"][0]["rows"][0]["evidence"]
+        self.assertEqual([item["text"] for item in evidence], [
+            "Rooftop farms are expanding.", "Another supporting sentence.",
+        ])
+        self.assertEqual((payload, results), before)
+
+    def test_real_cambridge_18_q1_keeps_its_list_shaped_evidence(self):
+        source = Path(__file__).resolve().parents[1] / "static/reading_tests/ielts18_test1_reading.json"
+        payload = json.loads(source.read_text())
+        question = payload["passages"][0]["groups"][0]["questions"][0]
+        evidence = review.build_question_index(payload, "reading")[str(question["id"])]["evidence"]
+        self.assertTrue(any("lettuces" in item["text"] for item in evidence))
+
+    def test_cambridge_18_q33_q34_review_stems_identify_their_own_blank(self):
+        source = Path(__file__).resolve().parents[1] / "static/listening_tests/ielts18_test1.json"
+        payload = json.loads(source.read_text())
+        index = review.build_question_index(payload, "listening")
+        stems = {
+            question["number"]: index[str(question["id"])]["question_stem"]
+            for group in payload["sections"][3]["groups"] for question in group["questions"]
+            if question["number"] in (33, 34)
+        }
+        self.assertIn("made use of", stems[33])
+        self.assertNotIn("quickly to reduce", stems[33])
+        self.assertIn("quickly to reduce", stems[34])
+        self.assertNotIn("made use of", stems[34])
+        self.assertEqual(stems[33].count("【"), 1)
+        self.assertEqual(stems[34].count("【"), 1)
+
+    def test_intro_text_is_preserved_without_showing_internal_label(self):
+        payload = _reading_payload()
+        payload["passages"][0]["content"]["paragraphs"].insert(0, {"label": "pre-A", "text": "Introductory context."})
+        paragraphs = review.build_question_index(payload, "reading")["1"]["source"]["paragraphs"]
+        self.assertEqual(paragraphs[0], {"label": "", "text": "Introductory context."})
+        self.assertEqual(paragraphs[1]["label"], "A")
 
 
 class WritingReviewTest(unittest.TestCase):

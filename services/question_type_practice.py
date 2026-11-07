@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from practice_tables import normalize_practice_tables
+from services.cambridge_content_corrections import apply_content_corrections
 from services.practice_library_offline import load_offline_test_ids
 from services.question_type_review import derive_listening_payload
 
@@ -1023,6 +1024,8 @@ def public_snapshot(
     """Return the pre-submission payload without any solution or review data."""
 
     public = copy.deepcopy(snapshot)
+    if public.get("subject") in {SUBJECT_LISTENING, SUBJECT_READING}:
+        apply_content_corrections(public["payload"], public["subject"])
     if public.get("subject") == SUBJECT_LISTENING and static_root:
         public["payload"] = derive_listening_payload(
             public["payload"],

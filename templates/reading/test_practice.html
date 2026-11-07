@@ -233,6 +233,8 @@ h1 { margin: 0; font-size: 22px; line-height: 1.25; color: var(--ink); }
   border-radius: 14px;
   background: #fff;
 }
+.passage-figure { margin: 18px 0; }
+.passage-image { display: block; max-width: 100%; height: auto; margin: 0 auto; }
 .option-bank {
   margin: 12px 0 18px;
   padding: 14px;
@@ -908,16 +910,9 @@ function effectiveGroupOptions(question, group) {
 }
 
 function displayQuestionPrompt(question, group) {
-  const title = String(question?.title || "").trim();
-  if (title) return title;
-  const instruction = groupInstruction(group);
-  if (/heading\s+for\s+each\s+(?:paragraph|section)/.test(instruction)) {
-    const index = Math.max(0, (group?.questions || []).findIndex((item) => String(item.id) === String(question.id)));
-    const passage = passageForQuestion(question.id);
-    const label = String(passage?.content?.paragraphs?.[index]?.label || String.fromCharCode(65 + index)).trim();
-    return `${instruction.includes("section") ? "Section" : "Paragraph"} ${label}`;
-  }
-  return "";
+  // Heading targets come from the source paragraph code. Row order cannot
+  // identify them when the paper gives one or more paragraphs as examples.
+  return String(question?.title || "").trim();
 }
 
 function shouldUseGroupOptions(question, group) {
@@ -951,10 +946,13 @@ function passageForQuestion(id) {
   );
 }
 
-function questionControl(question, group) {
+function questionControl(question, group, separator = "") {
   const value = answers[question.id] || "";
   const groupOptions = effectiveGroupOptions(question, group);
   const answerLabel = `Question ${question.number} answer`;
+  if (separator) {
+    return `<span data-qid="${question.id}" data-kind="text-parts" data-separator="${escapeHtml(separator)}" data-original-value="${escapeHtml(value)}" data-original-parts="${escapeHtml(JSON.stringify(PracticeRenderers.multiBlankParts(value, separator).map(part => part.trim())))}">${PracticeRenderers.renderMultiBlankInputs(question, separator, value, "answer-control")}</span>`;
+  }
   if (shouldUseGroupOptions(question, group)) {
     return `<select class="answer-control" data-qid="${question.id}" aria-label="${escapeHtml(answerLabel)}">
       <option value="">选择</option>
@@ -994,27 +992,28 @@ function reviewCard(question, result = null, value = "") {
   return PracticeRenderers.renderReviewCard(question, result, value);
 }
 
-function inlineControl(question, group) {
+function inlineControl(question, group, separator = "") {
   return `<span class="inline-answer" data-inline-qid="${question.id}">
     <span class="blank-number">${escapeHtml(question.number)}</span>
-    ${questionControl(question, group)}
+    ${questionControl(question, group, separator)}
     <span class="result-pill"></span>
   </span>`;
 }
 
 function replacePlaceholders(text, group, context = { seenIds: new Set() }, allowStructure = false) {
   const questions = new Map((group.questions || []).map((question) => [String(question.id), question]));
+  const repeated = PracticeRenderers.collapseRepeatedBlanks(text);
   const render = allowStructure
     ? PracticeTable.withStructuredPlaceholders
     : PracticeTable.withPlaceholders;
-  return render(text, (qid) => {
+  return render(repeated.text, (qid) => {
     const question = questions.get(String(qid));
     if (!question) return '<span class="duplicate-blank">____</span>';
     if (context.seenIds.has(String(qid))) {
       return `<span class="duplicate-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
     }
     context.seenIds.add(String(qid));
-    return inlineControl(question, group);
+    return inlineControl(question, group, repeated.separators[qid] || "");
   });
 }
 
@@ -1063,7 +1062,7 @@ function renderGroup(group) {
   const structuredRenderer = isForm
     ? PracticeRenderers.renderForm(
         group,
-        question => questionControl(question, group),
+        (question, _inline, separator) => questionControl(question, group, separator),
         question => reviewCard(question)
       )
     : isMatching
@@ -1075,7 +1074,7 @@ function renderGroup(group) {
       : "";
   return `<section class="group">
     ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ""}
-    ${group.desc ? `<div class="desc">${escapeHtml(group.desc)}</div>` : ""}
+    ${group.desc ? `<div class="desc">${escapeHtml(PracticeRenderers.groupDescription(group))}</div>` : ""}
     ${structuredRenderer}
     ${!structuredRenderer && (group.img_local || group.img_url) ? `<img class="question-image" src="${escapeHtml(group.img_local ? `/static/${group.img_local}` : group.img_url)}" alt="题目图片">` : ""}
     ${!structuredRenderer ? renderOptionBank(group) : ""}
@@ -1087,6 +1086,19 @@ function renderGroup(group) {
 }
 
 function renderPassage(passage) {
+  const paragraphs = passage.content?.paragraphs || [];
+  const images = passage.content?.images || [];
+  const renderFigure = image => `<figure class="passage-figure"><img class="passage-image" src="/static/${escapeHtml(image.url)}" alt="${escapeHtml(image.alt || 'Passage figure')}" loading="lazy"></figure>`;
+  let sourceParagraphIndex = -1;
+  const paragraphMarkup = paragraphs.map(para => {
+    if (para.label !== 'pre-A') sourceParagraphIndex += 1;
+    const figures = para.label === 'pre-A' ? '' : images
+      .filter(image => image.after_paragraph === sourceParagraphIndex)
+      .map(renderFigure).join('');
+    return `<p class="paragraph">${para.label && para.label !== "pre-A" ? `<span class="paragraph-label">${escapeHtml(para.label)}</span>` : ""}${escapeHtml(para.text)}</p>${figures}`;
+  }).join('');
+  const trailingFigures = images.filter(image => !Number.isInteger(image.after_paragraph)
+    || image.after_paragraph < 0 || image.after_paragraph > sourceParagraphIndex).map(renderFigure).join('');
   const passageMeta = experienceCapabilities.simulationMode
     ? ""
     : `<div class="passage-meta">
@@ -1096,9 +1108,8 @@ function renderPassage(passage) {
   document.getElementById("passagePanel").innerHTML = `
     <h2 class="passage-title">${escapeHtml(passage.content?.title || passage.title)}</h2>
     ${passageMeta}
-    ${(passage.content?.paragraphs || []).map((para) => `
-      <p class="paragraph">${para.label ? `<span class="paragraph-label">${escapeHtml(para.label)}</span>` : ""}${escapeHtml(para.text)}</p>
-    `).join("")}
+    ${paragraphMarkup}
+    ${trailingFigures}
   `;
   document.getElementById("questionPanel").innerHTML = `
     <div class="review-chrome" data-capability="canShowCorrectness">
@@ -1182,7 +1193,10 @@ function bindInputs() {
 function handleAnswerChange(event) {
   if (practiceContext?.read_only) return;
   const target = event.target;
-  if (target.matches(".choice-stack input")) {
+  const multiBlank = target.closest('[data-kind="text-parts"]');
+  if (multiBlank) {
+    answers[multiBlank.dataset.qid] = PracticeRenderers.multiBlankValue(multiBlank);
+  } else if (target.matches(".choice-stack input")) {
     const stack = target.closest(".choice-stack");
     if (target.type === "checkbox") {
       answers[stack.dataset.qid] = Array.from(stack.querySelectorAll("input:checked"))

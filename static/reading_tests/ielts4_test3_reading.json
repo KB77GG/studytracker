@@ -435,103 +435,24 @@
               ],
               "options": [],
               "input_mode": "text",
-              "analysis": "正确答案是\"The Shoe Shine Collective\"。题目中的线索词是\"Dominican Republic\"和\"Type of project\"。在原文中，\"Dominican Republic\"直接对应于\"Dominican Republic\"，而\"Type of project\"对应于\"project\"或\"program\"。在原文中，明确提到\"The Shoe Shine Collective\"是一个在多米尼加共和国实施的项目。因此，答案是\"The Shoe Shine Collective\"。",
+              "analysis": "本题填写表格中快递服务（courier service）所在的国家。原文说明 S.K.I. Bicycle Courier Service 最早在 the Sudan 开展，随后又说类似项目在 Bangalore, India 开展。因此应填 Sudan and India，共三个词，符合题目要求。多米尼加共和国的 Shoe Shine Collective 是表格下一行的擦鞋项目，不是本题询问的快递服务。",
               "central_sentences": [
                 {
-                  "index": 478,
-                  "length": 125,
-                  "sentence": "Another successful project, The Shoe Shine Collective, was a partnership program with the Y.W.C.A. in the Dominican Republic.",
-                  "target_para": 7,
-                  "translation": "另一个成功的项目是“擦鞋集体”，这是与多米尼加共和国的基督教女青年会合作的项目。"
-                }
-              ],
-              "locating_words": [
-                {
-                  "syn_ary": [
-                    {
-                      "synonym": "Dominican Republic",
-                      "target_sen": [
-                        {
-                          "index": 7,
-                          "score": 0,
-                          "length": 18,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "in the Dominican Republic.",
-                          "target_para": 7
-                        }
-                      ]
-                    }
-                  ],
-                  "locating_word": "Dominican Republic"
+                  "index": 154,
+                  "length": 62,
+                  "sentence": "The S.K.I. Bicycle Courier Service first started in the Sudan.",
+                  "target_para": 10,
+                  "translation": "S.K.I.自行车快递服务最早在苏丹开展。"
                 },
                 {
-                  "syn_ary": [
-                    {
-                      "synonym": "project",
-                      "target_sen": [
-                        {
-                          "index": 21,
-                          "score": 0,
-                          "length": 7,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "• Another successful project, The Shoe Shine Collective, was a partnership program with the Y.W.C.A.",
-                          "target_para": 7
-                        },
-                        {
-                          "index": 8,
-                          "score": 0,
-                          "length": 7,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "In this project, participants were lent money to purchase shoe shine boxes.",
-                          "target_para": 7
-                        }
-                      ]
-                    },
-                    {
-                      "synonym": "program",
-                      "target_sen": [
-                        {
-                          "index": 10,
-                          "score": 0,
-                          "length": 7,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "A similar program was taken up in Bangalore, India.",
-                          "target_para": 7
-                        },
-                        {
-                          "index": 75,
-                          "score": 0,
-                          "length": 7,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "• Another successful project, The Shoe Shine Collective, was a partnership program with the Y.W.C.A.",
-                          "target_para": 7
-                        },
-                        {
-                          "index": 62,
-                          "score": 0,
-                          "length": 7,
-                          "end_time": 0,
-                          "lyc_index": 0,
-                          "start_time": 0,
-                          "target_sen": "• The Youth Skills Enterprise initiative in Zambia is a joint program with the Red Cross Society and the Y.W.C.A.",
-                          "target_para": 7
-                        }
-                      ]
-                    }
-                  ],
-                  "locating_word": "Type of project"
+                  "index": 395,
+                  "length": 51,
+                  "sentence": "A similar program was taken up in Bangalore, India.",
+                  "target_para": 10,
+                  "translation": "类似的项目也在印度班加罗尔开展。"
                 }
-              ]
+              ],
+              "locating_words": []
             },
             {
               "id": 34244,
@@ -1221,6 +1142,10 @@
         "notes": "",
         "paragraphs": [
           {
+            "label": "pre-A",
+            "text": "When Mount Pinatubo suddenly erupted on 9 June 1991, the power of volcanoes past and present again hit the headlines."
+          },
+          {
             "label": "A",
             "text": "Volcanoes are the ultimate earth-moving machinery. A violent eruption can blow the top few kilometres off a mountain, scatter fine ash practically all over the globe and hurl rock fragments into the stratosphere to darken the skies a continent away.\nBut the classic eruption - cone-shaped mountain, big bang, mushroom cloud and surges of molten lava - is only a tiny part of a global story. Volcanism, the name given to volcanic processes, really has shaped the world. Eruptions have rifted continents, raised mountain chains, constructed islands and shaped the topography of the earth. The entire ocean floor has a basement of volcanic basalt.\nVolcanoes have not only made the continents, they are also thought to have made the world's first stable atmosphere and provided all the water for the oceans, rivers and ice-caps. There are now about 600 active volcanoes. Every year they add two or three cubic kilometres of rock to the continents. Imagine a similar number of volcanoes smoking away for the last 3,500 million years. That is enough rock to explain the continental crust.\nWhat comes out of volcanic craters is mostly gas. More than 90% of this gas is water vapour from the deep earth: enough to explain, over 3,500 million years, the water in the oceans. The rest of the gas is nitrogen, carbon dioxide, sulphur dioxide, methane, ammonia and hydrogen. The quantity of these gases, again multiplied over 3,500 million years, is enough to explain the mass of the world's atmosphere. We are alive because volcanoes provided the soil, air and water we need."
           },
@@ -1282,7 +1207,7 @@
             {
               "id": 34252,
               "number": 14,
-              "title": "",
+              "title": "Paragraph A",
               "answer": "III",
               "answers": [
                 "III"
@@ -1464,7 +1389,7 @@
             {
               "id": 34253,
               "number": 15,
-              "title": "",
+              "title": "Paragraph B",
               "answer": "I",
               "answers": [
                 "I"
@@ -1554,7 +1479,7 @@
             {
               "id": 34254,
               "number": 16,
-              "title": "",
+              "title": "Paragraph C",
               "answer": "IV",
               "answers": [
                 "IV"
@@ -1773,7 +1698,7 @@
             {
               "id": 34255,
               "number": 17,
-              "title": "",
+              "title": "Paragraph D",
               "answer": "VI",
               "answers": [
                 "VI"

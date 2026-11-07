@@ -7,13 +7,15 @@ import argparse
 import json
 import re
 import ssl
+import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 RAW_PATH = ROOT / "data" / "idictation_xyy_listening" / "raw.json"
 REPORT_PATH = ROOT / "data" / "idictation_xyy_listening" / "import_report.json"
 OUTPUT_DIR = ROOT / "static" / "listening_tests"
@@ -81,19 +83,6 @@ def audio_location(value) -> dict:
         if isinstance(location, dict) and (location.get("start_time") or location.get("end_time")):
             return location
     return {}
-
-
-def is_usable_analysis(value: str) -> bool:
-    text = (value or "").strip()
-    if not text:
-        return False
-    blocked_markers = (
-        "\u5f88\u62b1\u6b49",
-        "\u65e0\u6cd5\u76f4\u63a5",
-        "\u65e0\u6cd5\u786e\u5b9a",
-        "\u4fe1\u606f\u6709\u9650",
-    )
-    return not any(marker in text for marker in blocked_markers)
 
 
 def is_usable_image(url: str) -> bool:
@@ -240,10 +229,10 @@ def build_question(
             end_time = location_span["end_time"]
             output_answer_sentence.update(location_span)
     source_analysis = analysis_text(item.get("analyze"))
-    if use_analyze_location and is_usable_analysis(source_analysis):
-        analysis = source_analysis
-    else:
-        analysis = item.get("ai_analyze") or source_analysis
+    # Timing evidence does not select explanation text. Reviewed content is
+    # applied separately to the completed test; a timing fallback must never
+    # silently replace its explanation with an unrelated source excerpt.
+    analysis = item.get("ai_analyze") or source_analysis
     return {
         "id": item.get("id"),
         "number": item.get("number"),
@@ -317,6 +306,9 @@ def build_section(exercise_id: str, part_id: int, audio: str, raw_parts: dict) -
 
 
 def build_test(test_id: str) -> dict:
+    from services.cambridge_answer_corrections import apply_listening_answer_corrections
+    from services.cambridge_content_corrections import apply_content_corrections
+
     raw = json.loads(RAW_PATH.read_text(encoding="utf-8"))
     report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
     sections = []
@@ -344,13 +336,15 @@ def build_test(test_id: str) -> dict:
     else:
         title = test_id
 
-    return {
+    payload = {
         "id": test_id,
         "title": title,
         "source": "idictation_xyy",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "sections": sections,
     }
+    apply_content_corrections(payload, subject="listening")
+    return apply_listening_answer_corrections(payload)
 
 
 def discover_test_ids() -> list[str]:

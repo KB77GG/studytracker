@@ -60,9 +60,9 @@ function reviewRuntime() {
   return context;
 }
 
-test('review focus resolves a displayed question number and plays its verified clip', () => {
+test('review focus resolves a question id and plays its verified clip', () => {
   const runtime = reviewRuntime();
-  vm.runInContext(`openReviewCard('7', true, true)`, runtime);
+  vm.runInContext(`openReviewCard('22081', true, true)`, runtime);
 
   assert.deepEqual(runtime.__calls.sections, [2]);
   assert.deepEqual(runtime.__calls.plays, [['22081', 2]]);
@@ -156,4 +156,112 @@ test('untrusted transcript text stays readable but all sentence controls are dis
   assert.match(TEMPLATE, /transcript-row\$\{timeline\.available \? '' : ' is-static'\}/);
   assert.match(TEMPLATE, /timeline\.available \? `onclick="seekTo/);
   assert.match(TEMPLATE, /<button class="small-btn" type="button" disabled>定位不可用<\/button>/);
+});
+
+const cambridge18 = JSON.parse(fs.readFileSync(
+  path.resolve(__dirname, '../static/listening_tests/ielts18_test1.json'), 'utf8'
+));
+const actualRenderers = require('../static/js/practice_renderers.js');
+const cambridgeQuestions = cambridge18.sections.flatMap((section, sectionIndex) =>
+  section.groups.flatMap(group => group.questions.map(question => ({
+    ...question,
+    sectionIndex,
+    audio_review: {
+      available: true, start: question.start, end: question.end,
+      evidence: section.transcript
+        .filter(row => Math.max(row.start, question.start) < Math.min(row.end, question.end))
+        .map(row => ({ text: row.en }))
+    }
+  })))
+);
+
+function cambridgeReviewRuntime() {
+  const replacements = new Map();
+  const calls = { plays: [], sections: [] };
+  const cards = cambridgeQuestions.map(question => ({
+    dataset: { reviewQuestion: String(question.id) },
+    classList: { toggle(_name, open) { this.open = open; } },
+    replaceWith(value) { replacements.set(String(question.id), value); }
+  }));
+  const context = {
+    allQuestions: () => cambridgeQuestions,
+    PracticeRenderers: actualRenderers,
+    escapeHtml: actualRenderers.escapeHtml,
+    CSS: { escape: String },
+    formatClock: seconds => String(seconds),
+    unitValue: unit => unit.value,
+    syncQuestionNav() {},
+    findUnitByQuestionId() { return null; },
+    switchSection: section => calls.sections.push(section),
+    playQuestionAudio: (id, section) => calls.plays.push([id, section]),
+    document: {
+      querySelector(selector) {
+        const id = /data-review-question="([^"]+)"/.exec(selector)?.[1];
+        return cards.find(card => card.dataset.reviewQuestion === id);
+      },
+      querySelectorAll: () => cards,
+      createElement() {
+        return {
+          set innerHTML(html) {
+            this.firstElementChild = {
+              html,
+              dataset: { reviewQuestion: /data-review-question="([^"]+)"/.exec(html)?.[1] },
+              classList: { toggle() {} },
+              setAttribute(name, value) { this[name] = value; }
+            };
+          }
+        };
+      }
+    }
+  };
+  vm.createContext(context);
+  vm.runInContext(`let currentQuestionId = ''; let activeSectionIndex = 0; let latestResults = [];
+    ${between('function questionAudioWindow(', '\n\nfunction reviewAudioLocator(')}
+    ${between('function questionForId(', '\n\nfunction renderReviewSummary(')}
+    ${between('function openReviewCard(', '\n\nfunction answerSnapshot(')}
+    ${between('function resultHtml(', '\n\nfunction applyServerResults(')}
+  `, context);
+  return { context, replacements, calls, cards };
+}
+
+test('real Cambridge 18 ids cannot be intercepted by another question displayed number', () => {
+  const { context, calls, cards } = cambridgeReviewRuntime();
+  assert.equal(cambridgeQuestions.find(question => question.number === 14).id, 11);
+  assert.equal(cambridgeQuestions.find(question => question.number === 11).id, 1851);
+  for (const question of cambridgeQuestions) {
+    assert.equal(context.questionForId(String(question.id)).number, question.number);
+    context.openReviewCard(String(question.id), false, true);
+    assert.deepEqual(calls.plays.at(-1), [String(question.id), question.sectionIndex]);
+    assert.deepEqual(cards.filter(card => card.classList.open).map(card => card.dataset.reviewQuestion), [String(question.id)]);
+  }
+  assert.equal(context.questionForId('999999'), undefined);
+});
+
+test('real Cambridge 18 multi-choice review replacements preserve each source question analysis and evidence', () => {
+  const { context, replacements } = cambridgeReviewRuntime();
+  for (const numbers of [[14, 15], [29, 30]]) {
+    const questions = numbers.map(number => cambridgeQuestions.find(question => question.number === number));
+    const answer = questions[0].answer;
+    const unit = { dataset: { id: questions.map(question => question.id).join(',') }, value: answer };
+    context.updateReviewCards(unit, { answer, status: 'correct' });
+    for (const question of questions) {
+      const rendered = replacements.get(String(question.id));
+      assert.equal(rendered.dataset.reviewQuestion, String(question.id));
+      assert.ok(rendered.html.includes(actualRenderers.escapeHtml(question.analysis)));
+      for (const evidence of question.audio_review.evidence) {
+        assert.ok(rendered.html.includes(actualRenderers.escapeHtml(evidence.text)));
+      }
+      assert.ok(rendered['aria-label'].includes(`第 ${question.number} 题`));
+    }
+  }
+});
+
+test('displayed-number result links resolve explicitly to ids including combined labels', () => {
+  const { context } = cambridgeReviewRuntime();
+  const html = context.resultHtml(0, 40, ['11', '14,15', '20', '29,30', '999']);
+  assert.match(html, /data-review-jump="1851">Q11</);
+  assert.match(html, /data-review-jump="11">Q14,15</);
+  assert.match(html, /data-review-jump="17">Q20</);
+  assert.match(html, /data-review-jump="20">Q29,30</);
+  assert.doesNotMatch(html, /data-review-jump="999"/);
 });

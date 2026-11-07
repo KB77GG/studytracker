@@ -1590,11 +1590,15 @@ function renderCombinedMulti(group) {
   `;
 }
 
-function controlForQuestion(question, sectionIndex, group = {}, inline = false) {
+function controlForQuestion(question, sectionIndex, group = {}, inline = false, separator = '') {
   const answer = escapeHtml(question.answer || '');
   const qn = escapeHtml(question.number);
   const answerAttr = question.answer === undefined ? '' : ` data-answer="${answer}"`;
   const baseAttrs = `data-q="${qn}"${answerAttr} data-section="${sectionIndex}" data-id="${escapeHtml(question.id || question.number)}" aria-label="Question ${qn} answer"`;
+
+  if (separator) {
+    return `<span class="answer-unit" data-kind="text-parts" data-separator="${escapeHtml(separator)}" ${baseAttrs}>${PracticeRenderers.renderMultiBlankInputs(question, separator)}</span>`;
+  }
 
   if (question.options && question.options.length) {
     const isMulti = question.response_kind === 'multiple_choice_multiple' || String(question.answer || '').includes(',') || group.type === 9;
@@ -1635,14 +1639,15 @@ function controlForQuestion(question, sectionIndex, group = {}, inline = false) 
 
 function renderCollectText(text, group, sectionIndex, context = { seenIds: new Set() }, allowStructure = false) {
   const byId = new Map((group.questions || []).map(q => [String(q.id), q]));
+  const repeated = PracticeRenderers.collapseRepeatedBlanks(text);
   const render = allowStructure
     ? PracticeTable.withStructuredPlaceholders
     : PracticeTable.withPlaceholders;
-  return render(text, (id) => {
+  return render(repeated.text, (id) => {
     const question = byId.get(String(id));
     if (question && !context.seenIds.has(String(id))) {
       context.seenIds.add(String(id));
-      return controlForQuestion(question, sectionIndex, group, true);
+      return controlForQuestion(question, sectionIndex, group, true, repeated.separators[id] || '');
     }
     if (question) {
       return `<span class="inline-answer ghost-blank" aria-hidden="true">____</span><span class="sr-only">Question ${escapeHtml(question.number)} uses the same answer blank as before</span>`;
@@ -1677,7 +1682,7 @@ function renderGroup(group, sectionIndex) {
   const structuredContent = isForm
     ? PracticeRenderers.renderForm(
         group,
-        question => controlForQuestion(question, sectionIndex, group, true),
+        (question, _inline, separator) => controlForQuestion(question, sectionIndex, group, true, separator),
         question => `${reviewAudioLocator(question, sectionIndex)}${answerTools(question, sectionIndex)}${reviewCard(question)}`
       )
     : isMap
@@ -1693,7 +1698,7 @@ function renderGroup(group, sectionIndex) {
     <article class="card group" data-question-group="${escapeHtml(group.question_group_id || '')}">
       ${groupAudioControls(group, sectionIndex)}
       ${group.title ? `<h3>${escapeHtml(group.title)}</h3>` : ''}
-      ${group.desc ? `<div class="desc">${richText(group.desc)}</div>` : ''}
+      ${group.desc ? `<div class="desc">${richText(PracticeRenderers.groupDescription(group))}</div>` : ''}
       ${group.question_title ? `<div class="question-title">${richText(group.question_title)}</div>` : ''}
       ${structuredContent}
       ${!structuredContent && img ? `<img class="question-image" src="${escapeHtml(img)}" alt="Question image">` : ''}
@@ -1870,6 +1875,7 @@ async function initializeSimulationAudio() {
 }
 
 function unitValue(unit) {
+  if (unit.dataset.kind === 'text-parts') return PracticeRenderers.multiBlankValue(unit);
   if (unit.dataset.kind === 'radio') {
     const checked = unit.querySelector('input:checked');
     return checked ? checked.value : '';
@@ -1922,7 +1928,7 @@ function applyUnitFeedback(unit, feedback) {
 
 function questionForId(id) {
   return allQuestions().find(question =>
-    String(question.id || '') === String(id) || String(question.number || '') === String(id)
+    String(question.id || question.number || '') === String(id)
   );
 }
 
@@ -2047,7 +2053,9 @@ function saveAnswers() {
 
 function applyAnswerRows(rows) {
   document.querySelectorAll('.answer-unit').forEach(unit => {
-    if (unit.dataset.kind === 'radio' || unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
+    if (unit.dataset.kind === 'text-parts') {
+      PracticeRenderers.restoreMultiBlankValue(unit, '');
+    } else if (unit.dataset.kind === 'radio' || unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
       unit.querySelectorAll('input').forEach(input => { input.checked = false; });
     } else {
       unit.value = '';
@@ -2056,7 +2064,9 @@ function applyAnswerRows(rows) {
   document.querySelectorAll('.answer-unit').forEach(unit => {
     const value = rows[unit.dataset.id];
     if (!value) return;
-    if (unit.dataset.kind === 'radio') {
+    if (unit.dataset.kind === 'text-parts') {
+      PracticeRenderers.restoreMultiBlankValue(unit, value);
+    } else if (unit.dataset.kind === 'radio') {
       const input = unit.querySelector(`input[value="${CSS.escape(value)}"]`);
       if (input) input.checked = true;
     } else if (unit.dataset.kind === 'checkboxes' || unit.dataset.kind === 'checkbox-set') {
@@ -2095,7 +2105,14 @@ function resultHtml(correct, total, wrongLabels, syncedText = '') {
   const rate = total ? Math.round(correct / total * 100) : 0;
   return `
     <strong>${correct}/${total}</strong> · 正确率 ${rate}%
-    ${wrongLabels.length ? `<br>待核对：${wrongLabels.slice(0, 16).map(label => `<button class="result-question-link" type="button" data-review-jump="${escapeHtml(label)}">Q${escapeHtml(label)}</button>`).join('、')}${wrongLabels.length > 16 ? '…' : ''}` : '<br>全部正确'}
+    ${wrongLabels.length ? `<br>待核对：${wrongLabels.slice(0, 16).map(label => {
+      const number = String(label).split(',')[0].trim();
+      const question = allQuestions().find(item => String(item.number) === number);
+      const text = `Q${escapeHtml(label)}`;
+      return question
+        ? `<button class="result-question-link" type="button" data-review-jump="${escapeHtml(question.id || question.number)}">${text}</button>`
+        : text;
+    }).join('、')}${wrongLabels.length > 16 ? '…' : ''}` : '<br>全部正确'}
     ${syncedText ? `<br>${syncedText}` : ''}
   `;
 }

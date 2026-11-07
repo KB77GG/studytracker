@@ -124,6 +124,13 @@ class QuestionTypeReviewTest(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
+    def test_unknown_review_subject_remains_an_unchanged_copy(self):
+        frozen = {"subject": "legacy-unknown", "payload": {"notes": ["kept"]}}
+        result = review_snapshot(frozen, static_root=self.static_root)
+        self.assertEqual(result, frozen)
+        self.assertIsNot(result, frozen)
+        self.assertIsNot(result["payload"], frozen["payload"])
+
     def test_review_is_derived_without_mutating_frozen_snapshot(self):
         self._write_sidecar()
         frozen = _snapshot(_payload())
@@ -406,6 +413,13 @@ class QuestionTypeReviewTest(unittest.TestCase):
             (ROOT / "static/listening_tests/ielts4_test3.json").read_text(encoding="utf-8")
         )
         invalid_payload["sections"] = [invalid_payload["sections"][0]]
+        # Keep an explicit invalid-boundary negative fixture after the real
+        # Cambridge 4 Q4 source window has been corrected.
+        invalid_payload["id"] = "invalid-window-fixture"
+        for group in invalid_payload["sections"][0]["groups"]:
+            for question in group["questions"]:
+                if question["number"] == 4:
+                    question["start"], question["end"] = 225.25, 99.76
         invalid_snapshot = _snapshot(invalid_payload)
         invalid_review = review_snapshot(
             invalid_snapshot,
@@ -528,9 +542,9 @@ class QuestionTypeReviewTest(unittest.TestCase):
             {
                 "sections": 336,
                 "questions": 3360,
-                "available_questions": 3358,
+                "available_questions": 3360,
                 "groups": 658,
-                "available_groups": 656,
+                "available_groups": 658,
             },
         )
 

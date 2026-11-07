@@ -45,6 +45,33 @@ jobs:
         run: node tests/test_dictation_spell_queue.js
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
+      - name: Test Cambridge content and review delivery
+        run: |
+          python -m unittest \
+            tests.test_cambridge_content_corrections \
+            tests.test_cambridge_answer_corrections \
+            tests.test_cambridge_listening_corrections \
+            tests.test_cambridge_reading_corrections \
+            tests.test_cambridge_reading_stems \
+            tests.test_cambridge_pair_grading \
+            tests.test_ielts_exam_payload \
+            tests.test_cambridge_review_delivery \
+            tests.test_question_type_review \
+            tests.test_question_type_practice \
+            tests.test_mock_exam_review \
+            tests.test_mock_exam_template_isolation \
+            tests.test_question_type_practice_contract -v
+          node --test \
+            tests/test_practice_renderers.js \
+            tests/test_cambridge_reading_introduction.js \
+            tests/test_cambridge_reading_figures.js \
+            tests/test_cambridge_stem_controls.js \
+            tests/test_listening_review_audio.js \
+            tests/test_question_type_review_readonly.js \
+            tests/test_listening_clip_player.js \
+            tests/test_practice_scoring.js \
+            tests/test_listening_practice_navigation.js \
+            tests/test_reading_practice_navigation.js
 
   # 真实账号路由回归：测试在导入 app 前强制内存数据库和禁止联网。
   # 仅安装启动路由需要的轻量依赖，不加载语音/ML模型。

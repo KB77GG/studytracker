@@ -57,8 +57,61 @@
     return cells;
   }
 
+  function questionTitle(question) {
+    const numbers = new Set([question?.number, question?.source_number].filter(value => value != null).map(String));
+    return String(question && question.title || "").replace(/【\s*(\d+)\s*】/g, (marker, number) => numbers.has(number) ? "【 】" : marker);
+  }
+
+  function groupDescription(group) {
+    const text = String(group?.desc || "");
+    const numbers = (group?.questions || []).map(question => Number(question.number)).filter(Number.isFinite);
+    if (!numbers.length) return text;
+    return text.replace(/^(\s*Questions?\s+)(\d+)(?:\s*(?:[-–—]|to|and)\s*(\d+))?(\s*:?[ \t]*)(?=\r?\n|$)/i,
+      (header, prefix, first, last, suffix) => {
+        const start = Math.min(...numbers), end = Math.max(...numbers);
+        if (Number(first) === start && Number(last || first) === end) return header;
+        return `${prefix}${start}${end !== start ? `–${end}` : ""}${suffix}`;
+      });
+  }
+
+  function collapseRepeatedBlanks(value) {
+    const separators = {};
+    const text = String(value || "").replace(/\$(\d+)\$([^$\n]{1,80})\$\1\$/g, (match, id, separator) => {
+      if (!/\b(?:and|or|to)\s*$/i.test(separator)) return match;
+      separators[id] = separator.trim();
+      return `$${id}$`;
+    });
+    return { text, separators };
+  }
+
+  function multiBlankParts(value, separator) {
+    const raw = String(value || "");
+    const joiner = String(separator).match(/\b(and|or|to)\s*$/i)?.[1] || "and";
+    const parts = raw.split(new RegExp(`\\s*\\b${joiner}\\b\\s*`, "i"));
+    return parts.length === 2 ? parts : [raw, ""];
+  }
+
+  function renderMultiBlankInputs(question, separator, value = "", inputClass = "answer-input") {
+    const parts = multiBlankParts(value, separator);
+    return parts.map((part, index) => `<input class="${escapeHtml(inputClass)}" data-answer-part="${index}" value="${escapeHtml(part)}" aria-label="Question ${escapeHtml(question.number)} answer ${index + 1} of 2" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off">`).join(` ${escapeHtml(separator)} `);
+  }
+
+  function multiBlankValue(unit) {
+    const values = Array.from(unit.querySelectorAll('[data-answer-part]')).map(input => input.value.trim());
+    if (unit.dataset.originalParts === JSON.stringify(values)) return unit.dataset.originalValue || "";
+    const joiner = String(unit.dataset.separator).match(/\b(and|or|to)\s*$/i)?.[1] || "and";
+    return values.some(Boolean) ? values.join(` ${joiner.toLowerCase()} `) : "";
+  }
+
+  function restoreMultiBlankValue(unit, value) {
+    const parts = multiBlankParts(value, unit.dataset.separator);
+    unit.querySelectorAll('[data-answer-part]').forEach((input, index) => { input.value = parts[index] || ""; });
+    unit.dataset.originalValue = String(value || "");
+    unit.dataset.originalParts = JSON.stringify(parts.map(part => part.trim()));
+  }
+
   function usefulTitle(question) {
-    return String(question && question.title || "")
+    return questionTitle(question)
       .replace(/【\s*】/g, "")
       .replace(/\[\s*\]/g, "")
       .trim()
@@ -157,32 +210,37 @@
   }
 
   function questionTemplate(question, controlHtml) {
-    const title = String(question && question.title || "");
-    const questionNumber = String(question && question.number || "").replace(/\D/g, "");
-    const cleanNumberBeforeBlank = (value) => questionNumber
-      ? value.replace(new RegExp(`\\s+${questionNumber}\\s*$`), "")
-      : value;
-    if (/【\s*】/.test(title)) {
-      const [before, after] = title.split(/【\s*】/, 2);
-      return `${escapeHtml(cleanNumberBeforeBlank(before))}${controlHtml}${escapeHtml(after || "")}`;
-    }
-    if (/\[\s*\]/.test(title)) {
-      const [before, after] = title.split(/\[\s*\]/, 2);
-      return `${escapeHtml(cleanNumberBeforeBlank(before))}${controlHtml}${escapeHtml(after || "")}`;
-    }
+    const title = questionTitle(question).replace(/(?:【\s*】|\[\s*\])\s*(?:and|or|to)\s*(?:【\s*】|\[\s*\])/i, "【 】");
+    const match = /【\s*】|\[\s*\]/.exec(title);
+    const questionNumber = String(question?.source_number || question?.number || "").replace(/\D/g, "");
+    const cleanNumberBeforeBlank = (value) => questionNumber ? value.replace(new RegExp(`\\s+${questionNumber}\\s*$`), "") : value;
+    if (match) return `${escapeHtml(cleanNumberBeforeBlank(title.slice(0, match.index)))}${controlHtml}${escapeHtml(title.slice(match.index + match[0].length))}`;
     return title.trim() ? `${escapeHtml(title)} ${controlHtml}` : controlHtml;
   }
 
   function targetTemplate(field, controlHtml) {
     const question = field && field.question || {};
     const marker = `$${question.id}$`;
-    const raw = targetSource(field);
+    const raw = collapseRepeatedBlanks(targetSource(field)).text;
     const markerIndex = raw.indexOf(marker);
     if (markerIndex < 0) return controlHtml;
-    const questionNumber = String(question.number || "").replace(/\D/g, "");
+    const questionNumber = String(question.source_number || question.number || "").replace(/\D/g, "");
     let before = raw.slice(0, markerIndex);
     if (questionNumber) before = before.replace(new RegExp(`\\s+${questionNumber}\\s*$`), "");
     return `${escapeHtml(before)}${controlHtml}${escapeHtml(raw.slice(markerIndex + marker.length))}`;
+  }
+
+  function preferTargetTemplate(field) {
+    if (!usefulTitle(field.question)) return true;
+    const source = String(field.target?.text || "");
+    const ids = Array.from(source.matchAll(/\$(\d+)\$/g)).map(match => match[1]);
+    if (ids.length !== 1 || ids[0] !== String(field.question.id)) return false;
+    const words = text => plainText(text).replace(/\$\d+\$|【\s*】|\[\s*\]/g, " ").toLowerCase().match(/[a-z]+/g) || [];
+    const titleWords = words(questionTitle(field.question));
+    const sourceWords = words(source);
+    // The collect cell sometimes includes a book/film name, a preceding
+    // bullet, or a trailing fixed fact omitted by the extracted title.
+    return titleWords.length > 0 && titleWords.every(word => sourceWords.includes(word)) && sourceWords.some(word => !titleWords.includes(word));
   }
 
   function sharedStemKey(question) {
@@ -194,6 +252,24 @@
   function sharedFormClusters(fields) {
     const clusters = [];
     for (let start = 0; start < (fields || []).length;) {
+      // Untitled source items can share one complete sentence in collect.
+      // Resolve all of that sentence's distinct IDs together instead of
+      // repeating it once per question and leaking the other $id$ markers.
+      const first = fields[start];
+      let sourceEnd = start + 1;
+      while (!usefulTitle(first.question) && first.targetIndex >= 0 && sourceEnd < fields.length &&
+        !usefulTitle(fields[sourceEnd].question) && fields[sourceEnd].targetIndex === first.targetIndex) sourceEnd += 1;
+      if (sourceEnd - start > 1) {
+        const sourceFields = fields.slice(start, sourceEnd);
+        const source = targetSource(first);
+        const ids = Array.from(source.matchAll(/\$(\d+)\$/g)).map(match => match[1]);
+        if (ids.length === sourceFields.length && ids.every((id, index) => id === String(sourceFields[index].question.id))) {
+          const title = source.replace(/\$\d+\$/g, "【 】");
+          clusters.push({ startIndex: start, fields: sourceFields, key: title, title });
+          start = sourceEnd;
+          continue;
+        }
+      }
       const key = sharedStemKey(fields[start].question);
       let end = start + 1;
       while (key && end < fields.length && sharedStemKey(fields[end].question) === key) end += 1;
@@ -212,7 +288,7 @@
     const parts = String(title || "").split(/【\s*】|\[\s*\]/g);
     const renderPart = (part, field) => {
       let cleanPart = part;
-      const questionNumber = String(field && field.question && field.question.number || "").replace(/\D/g, "");
+      const questionNumber = String(field?.question?.source_number || field?.question?.number || "").replace(/\D/g, "");
       if (questionNumber) cleanPart = cleanPart.replace(new RegExp(`\\s+${questionNumber}\\s*$`), "");
       const anchor = field ? `<span class="practice-form__shared-anchor practice-question-anchor" data-question-id="${escapeHtml(field.question.id || field.question.number)}" data-question-number="${escapeHtml(field.question.number)}">${renderControl(field.question, true)}</span>` : "";
       return `${escapeHtml(cleanPart)}${anchor}`;
@@ -276,7 +352,7 @@
     const usedLabels = new Set(fields.map((field) => normalizeLabel(field.label)).filter(Boolean));
     const questionMarkers = new Set((group.questions || []).map((question) => `$${question.id}$`));
     const promptCellIndexes = new Set(
-      fields.filter((field) => !usefulTitle(field.question)).flatMap(targetPrefixIndexes)
+      fields.filter(preferTargetTemplate).flatMap(targetPrefixIndexes)
     );
     const duplicateIndexes = duplicateQuestionPrefixIndexes(fields);
     const facts = [];
@@ -286,7 +362,7 @@
       if (Array.from(questionMarkers).some((marker) => cell.raw.includes(marker))) return;
       let text = cell.text.replace(/\[\[LABEL:([^\]]+)\]\]/g, "$1").trim();
       if (!text || /^[-–—]+$/.test(text) || /^(?:Example|Answer)$/i.test(text)) return;
-      if (usedLabels.has(normalizeLabel(text)) || /:\s*$/.test(text)) return;
+      if (usedLabels.has(normalizeLabel(text))) return;
       if (text.length > 150) return;
       facts.push({ index, text });
     });
@@ -400,7 +476,7 @@
       emittedSourceIndexes.add(index);
       return true;
     };
-    const renderPrelude = (field, sharedPrompt = "") => {
+    const renderPrelude = (field, sharedPrompt = "", usesTarget = false) => {
       const labelCell = field.labelIndex >= 0 ? field.cells[field.labelIndex] : null;
       const isSectionLabel = Boolean(
         field.label &&
@@ -415,6 +491,9 @@
       const beforeEntries = field.beforeFacts
         .map((text, index) => ({ index: field.beforeFactIndexes[index], text }))
         .filter(({ index }) => !duplicateIndexes.has(index));
+      if (!usesTarget) targetPrefixIndexes(field).forEach(index => {
+        if (!duplicateIndexes.has(index) && index !== field.labelIndex) beforeEntries.push({ index, text: field.cells[index].text });
+      });
       const visibleBeforeEntries = beforeEntries.filter((entry) => {
         if (sharedPrompt && sharedPrompt.includes(normalizedPrompt(entry.text))) {
           claimSourceIndex(entry.index);
@@ -449,17 +528,19 @@
     const renderField = (field) => {
       const number = escapeHtml(field.question.number);
       const id = escapeHtml(field.question.id || field.question.number);
-      const control = renderControl(field.question, true);
-      const { prelude, isSectionLabel, contextEntries } = renderPrelude(field);
+      const titlePair = questionTitle(field.question).match(/(?:【\s*】|\[\s*\])\s*(and|or|to)\s*(?:【\s*】|\[\s*\])/i);
+      const separator = titlePair?.[1]?.toLowerCase() || collapseRepeatedBlanks(targetSource(field)).separators[String(field.question.id)] || "";
+      const control = renderControl(field.question, true, separator);
+      const usesTarget = preferTargetTemplate(field);
+      if (usesTarget) targetPrefixIndexes(field).forEach(claimSourceIndex);
+      const { prelude, isSectionLabel, contextEntries } = renderPrelude(field, "", usesTarget);
       const context = contextEntries.filter((entry) => claimSourceIndex(entry.index)).map(({ text }) => text);
       const directLabelTextValue = directLabelText(field, isSectionLabel);
       const directLabel = directLabelTextValue && claimSourceIndex(field.labelIndex)
         ? `<span class="practice-form__prompt">${escapeHtml(directLabelTextValue)}:</span> `
         : "";
       if (!directLabelTextValue && !isSectionLabel && field.labelIndex >= 0) claimSourceIndex(field.labelIndex);
-      const questionContent = usefulTitle(field.question)
-        ? questionTemplate(field.question, control)
-        : targetTemplate(field, control);
+      const questionContent = usesTarget ? targetTemplate(field, control) : questionTemplate(field.question, control);
       return `
         ${prelude}
         <div class="practice-form__field practice-question-anchor" data-question-id="${id}" data-question-number="${number}">
@@ -470,7 +551,8 @@
     };
     const renderSharedCluster = (cluster) => {
       const first = cluster.fields[0];
-      const sharedPrompt = normalizedPrompt(first.question.title);
+      const title = cluster.title || first.question.title;
+      const sharedPrompt = normalizedPrompt(title);
       const preludes = [];
       const contextEntries = [];
       const directLabels = [];
@@ -493,7 +575,7 @@
       const context = contextEntries
         .filter((entry) => claimSourceIndex(entry.index))
         .map(({ text }) => text);
-      const shared = sharedQuestionTemplate(first.question.title, cluster.fields, renderControl);
+      const shared = sharedQuestionTemplate(title, cluster.fields, renderControl);
       const directLabelHtml = directLabels
         .map((label) => `<span class="practice-form__prompt">${escapeHtml(label)}:</span> `)
         .join("");
@@ -701,19 +783,25 @@
   }
 
   return {
+    collapseRepeatedBlanks,
     escapeHtml,
     fieldMeta,
     formFields,
+    groupDescription,
     initMapViewers,
     isFormGroup,
     hasCompletePlaceholderLayout,
     isMapGroup,
     isMatchingGroup,
     plainText,
+    multiBlankParts,
+    multiBlankValue,
+    renderMultiBlankInputs,
     renderForm,
     renderMap,
     renderMatching,
     renderReviewCard,
+    restoreMultiBlankValue,
     sharedFormClusters,
     staticFacts,
     targetSource,

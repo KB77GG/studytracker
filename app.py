@@ -59,6 +59,7 @@ from api.teacher_practice_catalog import (
 )
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
 from services.task_assignment_history import load_previous_day_assignments
+from services.question_type_review import derive_listening_payload
 from services.dictation_assignment_range import (
     build_dictation_range_hints,
     dictation_range_error,
@@ -7803,6 +7804,7 @@ def listening_test_practice(test_id):
         resource_kind="listening",
         resource_id=_safe_id,
     )
+    test = derive_listening_payload(test, static_root=Path(app.static_folder), audio_root=_listening_root())
     return render_template(
         "listening/test_practice.html",
         test=test,
@@ -7818,7 +7820,7 @@ def api_listening_test_practice(test_id):
     data, _test_path, _safe_id = _load_listening_test_payload(test_id)
     if not data:
         return jsonify({"error": "听力 Test 不存在"}), 404
-    return jsonify(data)
+    return jsonify(derive_listening_payload(data, static_root=Path(app.static_folder), audio_root=_listening_root()))
 
 
 @app.route("/reading/tests")

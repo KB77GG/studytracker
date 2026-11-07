@@ -392,8 +392,7 @@ test('shared multi-blank form stems render once with controls in placeholder ord
   const samples = [
     ['ielts13_test3.json', 3, 38, [38, 39, 40]],
     ['ielts5_test1.json', 3, 36, [36, 37, 38, 39, 40]],
-    ['ielts8_test1.json', 3, 38, [38, 39, 40]],
-    ['ielts18_test1.json', 3, 33, [33, 34]]
+    ['ielts8_test1.json', 3, 38, [38, 39, 40]]
   ]
 
   for (const [filename, sectionIndex, firstNumber, expectedNumbers] of samples) {
@@ -441,6 +440,25 @@ test('shared multi-blank form stems render once with controls in placeholder ord
       )
     }
   }
+})
+
+test('Cambridge 18 Q33-Q34 keep separate complete source stems and one input each', () => {
+  const book = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', 'static', 'listening_tests', 'ielts18_test1.json'),
+    'utf8'
+  ))
+  const group = book.sections[3].groups[0]
+  const html = renderers.renderForm(group, question => `<input data-single-q="${question.number}">`)
+  assert.ok(html.includes('made use of <input data-single-q="33"> to help guide the elephants into an open plain'))
+  assert.ok(html.includes('this process had to be completed quickly to reduce <input data-single-q="34">'))
+  assert.equal((html.match(/data-single-q="33"/g) || []).length, 1)
+  assert.equal((html.match(/data-single-q="34"/g) || []).length, 1)
+  assert.equal((html.match(/elephants were immobilised with tranquilisers/g) || []).length, 1)
+  assert.ok(html.indexOf('data-single-q="33"') < html.indexOf('elephants were immobilised with tranquilisers'))
+  assert.ok(html.indexOf('elephants were immobilised with tranquilisers') < html.indexOf('data-single-q="34"'))
+  const sourceIds = Array.from(group.collect.matchAll(/\$(\d+)\$/g), match => Number(match[1]))
+  const displayedNumbers = Array.from(html.matchAll(/data-single-q="(\d+)"/g), match => Number(match[1]))
+  assert.deepEqual(displayedNumbers, sourceIds.map(id => group.questions.find(question => question.id === id).number))
 })
 
 test('form rows join without array separators around shared stems', () => {
@@ -540,9 +558,9 @@ test('shared form cluster invariant covers listening data and excludes reading f
     readingClusters += renderers.sharedFormClusters(renderers.formFields(group)).length
   })
 
-  assert.equal(repeatedClusters.length, 38)
-  assert.equal(listeningSections.size, 31)
-  assert.equal(listeningQuestions, 100)
+  assert.equal(repeatedClusters.length, 39)
+  assert.equal(listeningSections.size, 32)
+  assert.equal(listeningQuestions, 102)
   assert.equal(readingClusters, 0)
 })
 

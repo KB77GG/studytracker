@@ -1,3 +1,7 @@
+{% macro source_figure(image) -%}
+<figure class="review-source-figure"><img src="{{ image.src }}" alt="{{ image.alt }}" loading="lazy"></figure>
+{%- endmacro %}
+
 {% macro review_block(title, units, section) -%}
 <div class="card review-card">
   <div class="review-card__head">
@@ -20,13 +24,16 @@
     {% for unit in units %}
     <div class="review-unit">
       <h3>{{ unit.label }} <small>{{ unit.correct }}/{{ unit.total }} 分，错 {{ unit.wrong }} 题</small></h3>
-      {% if unit.source.kind == 'reading' and unit.source.paragraphs %}
+      {% if unit.source.kind == 'reading' and (unit.source.paragraphs or unit.source.images) %}
       <details class="review-source">
         <summary>查看本 Passage 完整原文 · {{ unit.source.title }}</summary>
         <div class="review-source__body">
           {% for paragraph in unit.source.paragraphs %}
+          {% set paragraph_index = loop.index0 %}
           <p>{% if paragraph.label %}<strong>{{ paragraph.label }}</strong> {% endif %}{{ paragraph.text }}</p>
+          {% for image in unit.source.images|default([]) if image.after_paragraph == paragraph_index %}{{ source_figure(image) }}{% endfor %}
           {% endfor %}
+          {% for image in unit.source.images|default([]) if image.after_paragraph is none %}{{ source_figure(image) }}{% endfor %}
         </div>
       </details>
       {% elif unit.source.kind == 'listening' and unit.source.transcript %}

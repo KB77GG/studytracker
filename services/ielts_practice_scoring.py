@@ -9,7 +9,10 @@ the only authority for persisted scores and gives tests a small import target.
 
 from __future__ import annotations
 
+import copy
 import re
+
+from services.cambridge_answer_corrections import apply_listening_answer_corrections
 
 READING_FULL_JUDGMENT_ANSWERS = {"YES", "NO", "NOT GIVEN", "TRUE", "FALSE"}
 READING_SHORT_JUDGMENT_ANSWERS = {"Y", "N", "NG", "T", "F"}
@@ -443,6 +446,7 @@ def grade_listening_test_answers(
     section_number: int | None = None,
 ) -> dict:
     answers = answers if isinstance(answers, dict) else {}
+    payload = apply_listening_answer_corrections(copy.deepcopy(payload))
     grade = _grade_units(_listening_units(payload, section_number=section_number), answers)
     grade["ielts_score"] = ielts_listening_band(grade["correct"]) if grade["total"] >= 40 else None
     return grade
