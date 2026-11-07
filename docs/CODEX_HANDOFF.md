@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 写作 .9 / high 实测因服务异常中断：5/14，原授权最多余9次
+
+- 用户明确授权“运行，最多14次请求”。范围固定 `.9`（iwa-2026-11-06.9）/deepseek-flash/high、7篇内置合成、只做evaluate、每次≤16000输出token/300秒，每原样本最多2次；不含精修、改写、识图、其他模型/档位、老师或学生素材。旧 `.8` 9/14是另一已结束批次，不混用。
+- 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，执行源HEAD **9b09562dad8b2e5f348ad8f9d649777543ef52d5**；业务源f9190678/修复600938c3。75工具文件SHA **f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc** 前后相同。本轮不改业务或.env/默认off。
+- 离线前提已通过，报告9b09562d已commit/push并HTTPS回读：373Python/8Node、lint51，证据205/205、页面复制107/107、结构82/82、统计100/100。详情及精确测试命令在上一条和 `docs/design/ielts-writing-ai-prompt9-finalcheck-20261107/`，不把离线通过当作实测效果。
+- 实际命令（已中断，**不要重跑**）：主树 `.venv/bin/python docs/design/iwa-prompt9-high-20261107/run_high.py --confirm-paid`。发送前持久记账 **5/14**：weak/mid/good三次HTTP500；strong一次HTTP200但完成元数据/usage不可得；off-topic等待响应时Ctrl-C，退出130、服务端处理结果未知。短文和Task1未请求；没有第二次尝试。第5次仍占预算，不能退回。原账本 `docs/design/iwa-prompt9-high-20261107/results/transport.json` 保持原样，runner已PAID_ENABLED=False。
+- **没有可用的质量结果**：realcheck在整批返回后才保存run_data/report/raw_calls，中断时这些文件尚未写出；第四次响应不能进一步诊断。token/思考token/费用、JSON率、内容通过率、分数、语义质量均未知，不能用0代替。0个可用评价文件不等于服务端零生成/零计费。
+- 服务侧证据：2026-11-07 07:34 UTC（北京时间15:34）官方状态页记录Web/API部分中断，修复后Monitoring（更新07:11 UTC），涉及Flash API；https://status.deepseek.com/ 和 https://status.deepseek.com/incidents/7219383236287 。500为服务错误，未观察到401/402，不能归为Key错误；公告只佐证同一时段异常，不证明每次请求精确原因。
+- 独立中断审计及主审复跑 **36/36**：主树 `.venv/bin/python docs/design/iwa-prompt9-high-20261107/shared-evidence/interruption_audit.py --bundle docs/design/iwa-prompt9-high-20261107/shared-evidence --output docs/design/iwa-prompt9-high-20261107/shared-evidence/interruption_audit.json`，禁网络、只读共享文件。共享transport仅多末尾换行，原/共享SHA对应关系已明确；所有输入未改。运行前scope自测都是fake，不是付费请求。
+- 共享 `docs/design/ielts-writing-ai-prompt9-high-20261107/` 9文件：README、中断/服务状态、传输账本、两个离线守卫自测、独立审计py/json/md。报告和两交接按既有授权只推功能分支，最终文档HEAD见git log。本机 `docs/design/iwa-prompt9-high-20261107/` 的run_high.py、runner_scope_probe.py、source-state.json、过程脚本、ignored results和共享镜像不提交；正常metrics框架未执行/不分享。Key不输出/提交，临时数据库，不占试用库额度；未访问生产/写生产DB，未合main/部署，小程序未上传/提审/发布。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口保留，本轮仅报告/两交接增量；旧脏文件不暂存。审阅树开工clean，本次只新增上述报告目录并改两交接，无业务变更。
+- **下一步**：待服务恢复后，如继续原批次，先做关联旧账本的续跑守卫，累计全局≤14、每原样本≤2；目前最多还可9次（前5样本各1，短文/Task1各2），不得重置成新14次。原runner拒旧账本且当前禁用，不可直接重跑；续跑尚未实现/验证。本次还暴露需要连续5xx停止及逐请求保存正文/用量的运行记录改进，尚未实施。`.9`真实效果、评分校准仍未验证；老师素材仍缺原稿和第5份正确题目。
+
 ## 2026-11-07 写作 .9 最终离线复验通过（真实批次待新授权）
 
 - 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净07396358经HTTPS fetch+ff-only到 **f919067850cbe5fc7ebcaa4fdc2bf10633faeef7**（业务600938c3），提示词仍iwa-2026-11-06.9。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及咨询记录保留；本轮仅报告/两交接增量，没有改业务/.env/默认档位。

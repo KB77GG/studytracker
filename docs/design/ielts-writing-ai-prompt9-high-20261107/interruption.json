@@ -1,0 +1,28 @@
+{
+  "observed_utc": "2026-11-07T07:35:14.342650+00:00",
+  "process_exit_code": 130,
+  "run_state": "interrupted_due_to_persistent_service_errors",
+  "authorized_max_requests": 14,
+  "reserved_actual_attempts": 5,
+  "remaining_under_same_authorization": 9,
+  "responses_http500": 3,
+  "response_http200_without_completion_metadata": 1,
+  "inflight_interrupted_unknown_outcome": 1,
+  "provider_usage_reported": false,
+  "token_usage": null,
+  "cost": null,
+  "completed_evaluations_available": 0,
+  "quality_assessment_possible": false,
+  "ledger_retained_unchanged": true,
+  "ledger_sha256": "bdc7f42522044d0b3dfaa6921e14d0127e4e80e51793c9082346694105bc98e4",
+  "tools_sha256_after": "f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc",
+  "tools_unchanged": true,
+  "source_head": "9b09562dad8b2e5f348ad8f9d649777543ef52d5",
+  "runner_disabled": true,
+  "results_files": [
+    "run.lock",
+    "transport.json"
+  ],
+  "no_raw_response_artifacts": "run_data/report/raw_calls are saved after realcheck returns; interruption preceded return. Transport ledger alone persisted.",
+  "resume_rule": "Do not rerun or reset old ledger. Only continue after service recovery with a linked continuation guard enforcing original global 14 and original per-sample 2 limits; at most 9 further HTTP attempts. No new 14-request batch is implied."
+}

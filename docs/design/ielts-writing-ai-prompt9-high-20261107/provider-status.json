@@ -1,0 +1,17 @@
+{
+  "checked_utc": "2026-11-07T07:34:01Z",
+  "incident_url": "https://status.deepseek.com/incidents/7219383236287",
+  "status_url": "https://status.deepseek.com/",
+  "incident": "DeepSeek Web/API Partially Unavailable",
+  "stage": "Monitoring / Partial Outage",
+  "announced_update_utc": "2026-11-07T07:11:00Z",
+  "affected": [
+    "DeepSeek V4 Pro API",
+    "DeepSeek V4.1 Flash API",
+    "Chat services",
+    "Search API"
+  ],
+  "summary": "Official page says a fix has been implemented and is being monitored. This corroborates a service issue but does not independently prove the precise cause of every request outcome.",
+  "error_reference": "https://api-docs.deepseek.com/quick_start/error_codes/",
+  "http500_definition": "Server error; distinct from 401 authentication and 402 insufficient balance."
+}

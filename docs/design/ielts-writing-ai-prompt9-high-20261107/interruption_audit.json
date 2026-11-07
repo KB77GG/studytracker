@@ -1,0 +1,138 @@
+{
+  "source_head": "9b09562dad8b2e5f348ad8f9d649777543ef52d5",
+  "tools_sha256": "f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc",
+  "prompt_version": "iwa-2026-11-06.9",
+  "audit_network_calls": 0,
+  "reads_private_results": false,
+  "reads_credentials": false,
+  "actual_request_attempts": 5,
+  "original_authorized_limit": 14,
+  "remaining_max_under_same_authorization": 9,
+  "per_sample_continuation_limits": {
+    "t2-weak": {
+      "already_attempted": 1,
+      "remaining_max": 1,
+      "next_original_sample_attempt_index": 1
+    },
+    "t2-mid": {
+      "already_attempted": 1,
+      "remaining_max": 1,
+      "next_original_sample_attempt_index": 1
+    },
+    "t2-good": {
+      "already_attempted": 1,
+      "remaining_max": 1,
+      "next_original_sample_attempt_index": 1
+    },
+    "t2-strong": {
+      "already_attempted": 1,
+      "remaining_max": 1,
+      "next_original_sample_attempt_index": 1
+    },
+    "t2-off-topic": {
+      "already_attempted": 1,
+      "remaining_max": 1,
+      "next_original_sample_attempt_index": 1
+    },
+    "t2-under-length": {
+      "already_attempted": 0,
+      "remaining_max": 2,
+      "next_original_sample_attempt_index": 0
+    },
+    "t1-no-image": {
+      "already_attempted": 0,
+      "remaining_max": 2,
+      "next_original_sample_attempt_index": 0
+    }
+  },
+  "transport": {
+    "http_status_counts": {
+      "500": 3,
+      "200": 1,
+      "unknown": 1
+    },
+    "http500_latency_ms": [
+      15165,
+      15144,
+      15134
+    ],
+    "http200_completion_metadata": "unknown",
+    "fifth_response_outcome": "unknown",
+    "process_exit_code": 130
+  },
+  "token_usage": null,
+  "reasoning_tokens": null,
+  "fees": null,
+  "first_json_rate": null,
+  "first_content_pass_rate": null,
+  "final_ready_rate": null,
+  "scores": null,
+  "completed_evaluation_artifacts_available": 0,
+  "unknown_explanation": "No usage, formal replies or final evaluation artifacts survived the interrupted run. HTTP 200 alone does not prove a completed valid evaluation. Unknown is not zero.",
+  "source_unchanged": true,
+  "ledger_hashes": {
+    "shared_exact_bytes": "bafcf7695479e20b8a4f59553c2056b611df224a87e120e8ef6c2789ed3880f2",
+    "shared_without_one_export_newline": "bdc7f42522044d0b3dfaa6921e14d0127e4e80e51793c9082346694105bc98e4",
+    "declared_source_bytes": "bdc7f42522044d0b3dfaa6921e14d0127e4e80e51793c9082346694105bc98e4",
+    "export_difference": "The shared export adds one final newline; removing only that byte matches the declared source ledger SHA-256."
+  },
+  "provider_status_record": {
+    "checked_utc": "2026-11-07T07:34:01Z",
+    "incident_url": "https://status.deepseek.com/incidents/7219383236287",
+    "status_url": "https://status.deepseek.com/",
+    "incident": "DeepSeek Web/API Partially Unavailable",
+    "stage": "Monitoring / Partial Outage",
+    "announced_update_utc": "2026-11-07T07:11:00Z",
+    "affected": [
+      "DeepSeek V4 Pro API",
+      "DeepSeek V4.1 Flash API",
+      "Chat services",
+      "Search API"
+    ],
+    "summary": "Official page says a fix has been implemented and is being monitored. This corroborates a service issue but does not independently prove the precise cause of every request outcome.",
+    "error_reference": "https://api-docs.deepseek.com/quick_start/error_codes/",
+    "http500_definition": "Server error; distinct from 401 authentication and 402 insufficient balance."
+  },
+  "continuation_rule": "No new 14-request batch is authorized. Preserve this ledger; any later continuation must link prior five reservations, enforce total <=14 and per-original-sample <=2, keep source/model/prompt/scope unchanged, and make at most nine further HTTP attempts. This audit does not implement or launch continuation.",
+  "checks": {
+    "authorization.fixed_cap14": true,
+    "authorization.five_attempts_counted": true,
+    "authorization.remaining9": true,
+    "authorization.cap_not_exceeded": true,
+    "authorization.sequence_numbers": true,
+    "authorization.expected_sample_set": true,
+    "authorization.per_sample_counts": true,
+    "authorization.per_sample_at_most2": true,
+    "authorization.remaining_sample_cap_sum": true,
+    "authorization.first_attempts_only": true,
+    "scope.high_evaluate_flash": true,
+    "scope.high16000_timeout300": true,
+    "scope.original_input_hashes": true,
+    "source.head": true,
+    "source.tools_unchanged": true,
+    "source.prompt9": true,
+    "source.guard_baseline": true,
+    "transport.http500_three": true,
+    "transport.first_three_http_errors": true,
+    "transport.fourth_http200_metadata_unknown": true,
+    "transport.one_http200_unknown_completion": true,
+    "transport.fifth_no_response_metadata": true,
+    "transport.one_unknown_response": true,
+    "interruption.exit130": true,
+    "interruption.incomplete": true,
+    "interruption.runner_disabled": true,
+    "accounting.no_provider_usage": true,
+    "accounting.tokens_fees_unknown_not_zero": true,
+    "quality.no_artifacts": true,
+    "quality.no_evaluation_artifacts_claim": true,
+    "ledger.source_hash_matches_without_export_newline": true,
+    "ledger.old_preserved": true,
+    "guard.existing_ledger_refused": true,
+    "guard.global_and_sample_cap_test_recorded": true,
+    "provider.incident_attribution_caveat": true,
+    "inputs.unchanged_after_audit": true
+  },
+  "checks_passed": 36,
+  "checks_total": 36,
+  "mismatches": []
+}
