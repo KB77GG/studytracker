@@ -250,13 +250,16 @@ def _evidence_figures(item: dict, essay: str, claim: str) -> tuple[list[str], in
     for figure in raw:
         if not isinstance(figure, str) or not figure.strip():
             continue
-        figure = figure.strip()[:300]
-        key = essay_lib.squash(figure)
+        full = figure.strip()
+        key = essay_lib.squash(full)
         if key in seen or key in essay_lib.squash(claim):
             continue
-        if essay_lib.contains_quote(essay, figure):
+        # The whole span is verified, and only then shortened for display: shortening
+        # first accepted "a real 300-character prefix + an invented ending" (and
+        # counted it in figures_omitted) - recheck 2026-11-07.
+        if essay_lib.contains_quote(essay, full):
             seen.add(key)
-            kept.append(figure)
+            kept.append(full[:300])
     return kept[:MAX_FIGURES], max(0, len(kept) - MAX_FIGURES)
 
 

@@ -297,6 +297,49 @@ class Task1FiguresTest(unittest.TestCase):
         text = copytext.evaluation_text({"criteria": [], "consistency_issues": issues}, {})
         self.assertIn(f"（另有 {35 - review.MAX_FIGURES} 个数字未列出）", text)
 
+    # Recheck of b8a7c1e (docs/design/ielts-writing-ai-prompt9-recheck-20261107): figures
+    # were shortened to 300 characters BEFORE being verified, so a real prefix with an
+    # invented ending was accepted and counted towards "另有 N 个数字未列出".
+    def test_a_long_figure_is_verified_in_full_then_shortened(self):
+        paragraph = SUBS["t1-no-image"]["essay_text"].split("\n")[6]
+        self.assertGreater(len(paragraph), 300)
+        issue, _text = self.contradiction(figures=[paragraph])
+        self.assertEqual(issue["figures"], [paragraph[:300]])
+
+        forged = paragraph[:300] + " and Country E reached 99% in 2020."
+        nested = raw("t1-no-image")
+        item = next(c for c in nested["comparisons"] if c["holds"] is False)
+        item["figures"] = [forged]
+        result = review.normalize_evaluation(nested, SUBS["t1-no-image"])
+        self.assertEqual(result["consistency_issues"], [])  # its only evidence is invalid
+        self.assertNotIn("对照：", copytext.evaluation_text(result, {}))
+
+        issue, text = self.contradiction(figures=REAL_FIGURES + [forged, "invented 99%"])
+        self.assertEqual(issue["figures"], REAL_FIGURES)
+        self.assertNotIn("Country E", text)
+
+    def test_an_invalid_long_figure_is_not_counted_as_omitted(self):
+        filler = "The chart shows a steady pattern across many categories over time, " * 6
+        values = [f"{n}.5%" for n in range(1, 32)]
+        essay = f"Values were {', '.join(values)}. {filler.strip()} Country A was the highest."
+        forged = filler[:300] + "with an ending the essay never had."
+        self.assertNotIn(forged, essay)
+        for count, omitted in ((30, 0), (31, 1)):
+            with self.subTest(real=count):
+                raw_value = {
+                    "comparisons": [
+                        {
+                            "claim": "Country A was the highest",
+                            "figures": values[:count] + [forged],
+                            "holds": False,
+                            "comment": "其他国家更高。",
+                        }
+                    ]
+                }
+                issues, _checked, _dropped = review._consistency(raw_value, essay)
+                self.assertEqual(issues[0]["figures"], values[: review.MAX_FIGURES])
+                self.assertEqual(issues[0].get("figures_omitted", 0), omitted)
+
 
 class ImprovementFieldTest(unittest.TestCase):
     def test_real_good_improvements_written_as_comment_are_kept(self):
