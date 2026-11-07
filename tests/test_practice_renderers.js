@@ -47,7 +47,7 @@ test('form renderer keeps one control per question and strips OCR question-numbe
   assert.ok(!html.includes('Name of company:  9<input'))
   assert.ok(!html.includes('&nbsp;'))
   assert.ok(!html.includes('Question 7'))
-  assert.ok(html.includes('data-layout="columns"'))
+  assert.ok(html.includes('data-layout="flow"'))
 })
 
 test('continuous notes keep static lines with their section instead of making question cards', () => {

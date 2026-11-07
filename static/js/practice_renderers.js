@@ -238,6 +238,12 @@
     const words = text => plainText(text).replace(/\$\d+\$|【\s*】|\[\s*\]/g, " ").toLowerCase().match(/[a-z]+/g) || [];
     const titleWords = words(questionTitle(field.question));
     const sourceWords = words(source);
+    const previous = field.cells[field.targetIndex - 1];
+    // Some extracted titles repeat the immediately preceding source line.
+    // Keep that line in its own source position and use only this target's
+    // complete line; do not deduplicate unrelated equal text elsewhere.
+    if (previous && previous.line < field.target.line && !/\$\d+\$/.test(previous.raw)
+      && titleWords.join(" ") === words(`${previous.text} ${source}`).join(" ")) return true;
     // The collect cell sometimes includes a book/film name, a preceding
     // bullet, or a trailing fixed fact omitted by the extracted title.
     return titleWords.length > 0 && titleWords.every(word => sourceWords.includes(word)) && sourceWords.some(word => !titleWords.includes(word));
@@ -293,30 +299,61 @@
       const anchor = field ? `<span class="practice-form__shared-anchor practice-question-anchor" data-question-id="${escapeHtml(field.question.id || field.question.number)}" data-question-number="${escapeHtml(field.question.number)}">${renderControl(field.question, true)}</span>` : "";
       return `${escapeHtml(cleanPart)}${anchor}`;
     };
-    const sourceGroups = [];
-    let groupStart = 0;
-    for (let index = 1; index <= cluster.length; index += 1) {
-      const previous = cluster[index - 1];
-      const next = cluster[index];
-      const changedSourceCell = index === cluster.length || previous.targetIndex < 0 || next.targetIndex < 0 || previous.targetIndex !== next.targetIndex;
-      if (!changedSourceCell) continue;
-
-      let groupContent = "";
-      for (let partIndex = groupStart; partIndex < index; partIndex += 1) {
-        groupContent += renderPart(parts[partIndex], cluster[partIndex]);
-      }
-      // The text after the last marker belongs to the next source cell when
-      // the marker groups are split across cells. Keep it with that next
-      // group, and append it only once at the end of the final group.
-      if (index === cluster.length) groupContent += escapeHtml(parts[index] || "");
-      sourceGroups.push(`<div class="practice-form__shared-source">${groupContent}</div>`);
-      groupStart = index;
-    }
+    // Without a complete, ordered source mapping, the shared title has no
+    // trustworthy line boundaries. Preserve it as one continuous sentence.
+    const content = cluster.map((field, index) => renderPart(parts[index], field)).join("")
+      + escapeHtml(parts[cluster.length] || "");
     return {
-      content: sourceGroups.join(""),
-      sourceGroupCount: sourceGroups.length,
+      content: `<div class="practice-form__shared-source">${content}</div>`,
+      sourceGroupCount: 1,
       extras: cluster.map((field) => field.question).filter(Boolean)
     };
+  }
+
+  function sharedSourceRows(cluster) {
+    const fields = cluster.fields;
+    if (!fields.length || fields.some(field => !field.target || field.targetIndex < 0)) return null;
+    const cells = fields[0].cells;
+    const firstLine = fields[0].target.line;
+    const lastLine = fields[fields.length - 1].target.line;
+    if (fields.some((field, index) => index && field.target.line < fields[index - 1].target.line)) return null;
+    const entries = cells.map((cell, index) => ({ cell, index }))
+      .filter(({ cell }) => cell.line >= firstLine && cell.line <= lastLine);
+    const ids = entries.flatMap(({ cell }) => Array.from(cell.raw.matchAll(/\$(\d+)\$/g)).map(match => match[1]));
+    const expected = fields.map(field => String(field.question.id));
+    // A source span is authoritative only when it contains exactly this
+    // cluster, in order, once each. Otherwise retain the title fallback.
+    if (ids.length !== expected.length || ids.some((id, index) => id !== expected[index])) return null;
+    const rows = [];
+    for (const entry of entries) {
+      if (!rows.length || rows[rows.length - 1][0].cell.line !== entry.cell.line) rows.push([]);
+      rows[rows.length - 1].push(entry);
+    }
+    return { entries, rows };
+  }
+
+  function renderSharedSourceRows(source, fields, renderControl) {
+    const byId = new Map(fields.map(field => [String(field.question.id), field]));
+    let sourceGroupCount = 0;
+    const content = source.rows.map(entries => {
+      const text = entries.map(({ cell }) => cell.text).join(" ");
+      if (!/\$\d+\$/.test(text)) return flowFact(text);
+      sourceGroupCount += 1;
+      let offset = 0;
+      let html = "";
+      for (const match of text.matchAll(/\$(\d+)\$/g)) {
+        const field = byId.get(match[1]);
+        const question = field.question;
+        let before = text.slice(offset, match.index);
+        const number = String(question.source_number || question.number || "").replace(/\D/g, "");
+        if (number) before = before.replace(new RegExp(`\\s+${number}\\s*$`), "");
+        html += `${escapeHtml(before)}<span class="practice-form__shared-anchor practice-question-anchor" data-question-id="${escapeHtml(question.id || question.number)}" data-question-number="${escapeHtml(question.number)}">${renderControl(question, true)}</span>`;
+        offset = match.index + match[0].length;
+      }
+      html += escapeHtml(text.slice(offset));
+      return `<div class="practice-form__shared-source">${html}</div>`;
+    }).join("");
+    return { content, sourceGroupCount, extras: fields.map(field => field.question) };
   }
 
   function duplicateQuestionPrefixIndexes(fields) {
@@ -456,10 +493,20 @@
   function flowFact(text) {
     const value = String(text || "").trim();
     if (!value) return "";
-    const isBullet = /^[·•\-–—]/.test(value);
+    const isBullet = /^[·•\-–—−]/.test(value);
     const isSubheading = !isBullet && !/[:：?？]/.test(value) && value.length <= 64;
     const className = isSubheading ? "practice-form__subheading" : "practice-form__line";
     return `<div class="${className}">${escapeHtml(value)}</div>`;
+  }
+
+  function flowFactEntries(entries, cells) {
+    const rows = [];
+    for (const entry of entries.slice().sort((left, right) => left.index - right.index)) {
+      const previous = rows.length && rows[rows.length - 1];
+      if (previous && cells[previous[0].index]?.line === cells[entry.index]?.line) previous.push(entry);
+      else rows.push([entry]);
+    }
+    return rows.map(row => flowFact(row.map(entry => entry.text).join(" "))).join("");
   }
 
   function renderForm(group, renderControl, renderExtras) {
@@ -467,7 +514,6 @@
     const facts = staticFactEntries(group, fields);
     const duplicateIndexes = duplicateQuestionPrefixIndexes(fields);
     const sharedClusters = new Map(sharedFormClusters(fields).map((cluster) => [cluster.startIndex, cluster]));
-    const hasPaperColumns = fields.some((field) => field.cells.some((cell) => cell.column === "right"));
     let activeSection = "";
     const emittedSourceIndexes = new Set();
     const claimSourceIndex = (index) => {
@@ -501,7 +547,7 @@
         }
         return claimSourceIndex(entry.index);
       });
-      let prelude = visibleBeforeEntries.map((entry) => flowFact(entry.text)).join("");
+      let prelude = flowFactEntries(visibleBeforeEntries, field.cells);
       if (isSectionLabel && sectionKey !== activeSection) {
         if (sharedPrompt && sharedPrompt.includes(sectionKey)) {
           claimSourceIndex(field.labelIndex);
@@ -518,10 +564,7 @@
         return entry.index < 0 || !emittedSourceIndexes.has(entry.index);
       });
       if (isSectionLabel && visibleContextEntries.length) {
-        prelude += visibleContextEntries
-          .filter((entry) => claimSourceIndex(entry.index))
-          .map((entry) => flowFact(entry.text))
-          .join("");
+        prelude += flowFactEntries(visibleContextEntries.filter((entry) => claimSourceIndex(entry.index)), field.cells);
       }
       return { prelude, isSectionLabel, contextEntries: visibleContextEntries };
     };
@@ -539,29 +582,36 @@
       const directLabel = directLabelTextValue && claimSourceIndex(field.labelIndex)
         ? `<span class="practice-form__prompt">${escapeHtml(directLabelTextValue)}:</span> `
         : "";
+      const labelBeforeContext = directLabel && contextEntries.length
+        && contextEntries.every(entry => entry.index > field.labelIndex);
       if (!directLabelTextValue && !isSectionLabel && field.labelIndex >= 0) claimSourceIndex(field.labelIndex);
       const questionContent = usesTarget ? targetTemplate(field, control) : questionTemplate(field.question, control);
       return `
         ${prelude}
         <div class="practice-form__field practice-question-anchor" data-question-id="${id}" data-question-number="${number}">
-          ${!isSectionLabel && context.length ? `<div class="practice-form__context">${context.map(escapeHtml).join(" · ")}</div>` : ""}
-          <div class="practice-form__content">${directLabel}${questionContent}</div>
+          ${!isSectionLabel && context.length ? `<div class="practice-form__context">${labelBeforeContext ? directLabel : ""}${context.map(escapeHtml).join(" · ")}</div>` : ""}
+          <div class="practice-form__content">${labelBeforeContext ? "" : directLabel}${questionContent}</div>
           ${typeof renderExtras === "function" ? renderExtras(field.question) : ""}
         </div>`;
     };
     const renderSharedCluster = (cluster) => {
       const first = cluster.fields[0];
       const title = cluster.title || first.question.title;
-      const sharedPrompt = normalizedPrompt(title);
+      const source = sharedSourceRows(cluster);
+      if (source) source.entries.forEach(({ index }) => claimSourceIndex(index));
+      const sharedPrompt = source ? "" : normalizedPrompt(title);
       const preludes = [];
       const contextEntries = [];
       const directLabels = [];
       const directLabelKeys = new Set();
       cluster.fields.forEach((field) => {
-        const result = renderPrelude(field, sharedPrompt);
+        const result = renderPrelude(field, sharedPrompt, Boolean(source));
         preludes.push(result.prelude);
         if (!result.isSectionLabel) contextEntries.push(...result.contextEntries);
-        const labelText = directLabelText(field, result.isSectionLabel);
+        // A label inferred only from the concatenated title is not another
+        // source heading. Source rows already retain their actual labels.
+        const labelText = source && field.labelIndex < 0 ? ""
+          : directLabelText(source ? { ...field, question: { ...field.question, title: "" } } : field, result.isSectionLabel);
         if (labelText && claimSourceIndex(field.labelIndex)) {
           const key = normalizedPrompt(labelText);
           if (!directLabelKeys.has(key)) {
@@ -575,7 +625,9 @@
       const context = contextEntries
         .filter((entry) => claimSourceIndex(entry.index))
         .map(({ text }) => text);
-      const shared = sharedQuestionTemplate(title, cluster.fields, renderControl);
+      const shared = source
+        ? renderSharedSourceRows(source, cluster.fields, renderControl)
+        : sharedQuestionTemplate(title, cluster.fields, renderControl);
       const directLabelHtml = directLabels
         .map((label) => `<span class="practice-form__prompt">${escapeHtml(label)}:</span> `)
         .join("");
@@ -601,11 +653,10 @@
         index += 1;
       }
     }
-    const factHtml = facts
-      .filter((entry) => claimSourceIndex(entry.index))
-      .map((entry) => flowFact(entry.text))
-      .join("");
-    return `<div class="practice-form" data-renderer="form-completion" data-layout="${hasPaperColumns ? "columns" : "flow"}">${rows.join("")}${factHtml}</div>`;
+    const factHtml = flowFactEntries(facts.filter((entry) => claimSourceIndex(entry.index)), fields[0]?.cells || []);
+    // Paper label/value spacing is not a two-question grid. Keep question
+    // reading order vertical; genuine same-sentence blanks stay together.
+    return `<div class="practice-form" data-renderer="form-completion" data-layout="flow">${rows.join("")}${factHtml}</div>`;
   }
 
   function isFormGroup(group) {
