@@ -1,5 +1,7 @@
 import json
+import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 from services.ielts_practice_scoring import grade_reading_test_answers
@@ -21,19 +23,50 @@ from services.question_type_practice import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-AUDIO_ROOT = Path("/Users/zhouxin/Desktop/studytracker/static/listening")
 
 
 class QuestionTypePracticeServiceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        audio_temp = tempfile.TemporaryDirectory(prefix="question-type-practice-audio-")
+        cls.addClassCleanup(audio_temp.cleanup)
+        audio_root = Path(audio_temp.name)
+        # These tests exercise the real content/catalog/snapshot contract. The
+        # resource gate checks file existence, not audio decoding; keep its
+        # fixtures isolated from untracked media on a developer's machine.
+        for source in (ROOT / "static/listening_tests").glob("*.json"):
+            payload = json.loads(source.read_text(encoding="utf-8"))
+            for section in payload.get("sections", []):
+                if audio := section.get("audio"):
+                    audio_path = audio_root / audio
+                    audio_path.parent.mkdir(parents=True, exist_ok=True)
+                    audio_path.touch()
         cls.roots = LibraryRoots(
             listening=ROOT / "static/listening_tests",
             reading=ROOT / "static/reading_tests",
             static=ROOT / "static",
-            audio=AUDIO_ROOT if AUDIO_ROOT.exists() else ROOT / "static/listening",
+            audio=audio_root,
         )
         cls.rows = build_group_index(cls.roots)
+
+    def test_missing_audio_files_block_real_listening_groups_and_default_selection(self):
+        with tempfile.TemporaryDirectory(prefix="question-type-practice-missing-audio-") as empty:
+            rows = build_group_index(replace(self.roots, audio=Path(empty)))
+        listening = [row for row in rows if row["subject"] == "listening"]
+        self.assertTrue(listening)
+        self.assertEqual(len(listening), sum(row["subject"] == "listening" for row in self.rows))
+        for row in listening:
+            with self.subTest(group=row["question_group_id"]):
+                self.assertEqual(row["safety_status"], "blocked")
+                self.assertFalse(row["audio_exists"])
+                self.assertIn("Section 音频文件不存在", row["blockers"])
+                self.assertFalse(row["supports_specialty_practice"])
+        self.assertEqual(filter_groups(rows, subject="listening", standard_type="all", count=20), [])
+        self.assertEqual(catalog_unit_groups(rows, subject="listening", standard_type="all"), [])
+        self.assertEqual(
+            [row for row in rows if row["subject"] == "reading"],
+            [row for row in self.rows if row["subject"] == "reading"],
+        )
 
     def test_chinese_display_labels_cover_canonical_types_without_changing_codes(self):
         self.assertEqual(set(TYPE_LABELS), set(TYPE_DISPLAY_LABELS))
