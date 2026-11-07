@@ -1,0 +1,216 @@
+{
+  "runner": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt9-high-20261107/resume_high.py",
+  "runner_sha256": "16f6ff8bd2da915911a83484e782f34e2a71003793260e9ff7bbdfc8e46951fb",
+  "source_head": "f921edf0dbbde4d11ef393fcc22837d52414e1b9",
+  "tools_sha256": "f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc",
+  "old_ledger_sha256": "bdc7f42522044d0b3dfaa6921e14d0127e4e80e51793c9082346694105bc98e4",
+  "paid_enabled": false,
+  "checks": {
+    "disabled_before_env_or_output": true,
+    "same_original_run_lock_before_reading_env_static": true,
+    "exact_original_sha_and_five_sample_counts": true,
+    "changed_old_ledger_rejected": true,
+    "changed_initial_messages_rejected": true,
+    "wrong_scope_before_reservation": [
+      "changed_prompt",
+      "third_local_attempt",
+      "rewrite",
+      "vision",
+      "max",
+      "off",
+      "token16001",
+      "timeout301",
+      "temperature",
+      "model",
+      "base_url"
+    ]
+  },
+  "cases": [
+    {
+      "scenario": "success",
+      "new_http_sends": 7,
+      "cumulative_http_sends": 12,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 2,
+        "t2-good": 2,
+        "t2-strong": 2,
+        "t2-off-topic": 2,
+        "t2-under-length": 1,
+        "t1-no-image": 1
+      },
+      "ready": 7,
+      "circuit": null,
+      "raw_bodies_saved": 7,
+      "sample_data_saved": 7,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "maximum_validation",
+      "new_http_sends": 9,
+      "cumulative_http_sends": 14,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 2,
+        "t2-good": 2,
+        "t2-strong": 2,
+        "t2-off-topic": 2,
+        "t2-under-length": 2,
+        "t1-no-image": 2
+      },
+      "ready": 2,
+      "circuit": null,
+      "raw_bodies_saved": 9,
+      "sample_data_saved": 7,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "http500_first",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 0,
+      "circuit": "http_500",
+      "raw_bodies_saved": 1,
+      "sample_data_saved": 1,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "http500_second",
+      "new_http_sends": 2,
+      "cumulative_http_sends": 7,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 2,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 1,
+      "circuit": "http_500",
+      "raw_bodies_saved": 2,
+      "sample_data_saved": 2,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "html200",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 0,
+      "circuit": "invalid_response",
+      "raw_bodies_saved": 1,
+      "sample_data_saved": 1,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "missing_choices",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 0,
+      "circuit": "invalid_response",
+      "raw_bodies_saved": 1,
+      "sample_data_saved": 1,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "http429",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 0,
+      "circuit": "http_429",
+      "raw_bodies_saved": 1,
+      "sample_data_saved": 1,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "network",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": 0,
+      "circuit": "network",
+      "raw_bodies_saved": 0,
+      "sample_data_saved": 1,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    },
+    {
+      "scenario": "interrupt",
+      "new_http_sends": 1,
+      "cumulative_http_sends": 6,
+      "sample_counts": {
+        "t2-weak": 2,
+        "t2-mid": 1,
+        "t2-good": 1,
+        "t2-strong": 1,
+        "t2-off-topic": 1,
+        "t2-under-length": 0,
+        "t1-no-image": 0
+      },
+      "ready": null,
+      "circuit": "unexpected_client_exception",
+      "raw_bodies_saved": 0,
+      "sample_data_saved": 0,
+      "old_ledger_unchanged": true,
+      "repeat_refused": true
+    }
+  ],
+  "network_attempts": 0,
+  "env_read": false,
+  "private_responses_read": false,
+  "real_ledger_written": false,
+  "business_code_modified": false,
+  "passed": true
+}

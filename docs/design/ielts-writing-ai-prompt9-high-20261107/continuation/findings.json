@@ -1,0 +1,474 @@
+{
+  "review_scope": "manual offline review of continuation_only redacted formal answers",
+  "source_files_sha256": {
+    "run_data.json": "24232fd2354e7fde94f83c3e1749963c1da41db1aaff0c50c504386eadd2aa29",
+    "raw_calls.jsonl": "6579596a0565657962347f83ee5fb45633f8f9d61fb98c53f5c5c32d280bf862",
+    "report.json": "446824ca683ddfef1bd9c122ad5c27188c647301d6365405612bb99b70dfac93"
+  },
+  "source_head": "f921edf0dbbde4d11ef393fcc22837d52414e1b9",
+  "read_scope": [
+    "run_data.json",
+    "raw_calls.jsonl",
+    "report.json"
+  ],
+  "no_private_reasoning_or_credentials_or_model_calls": true,
+  "phase": "continuation_only",
+  "ready_count": 4,
+  "samples_count": 7,
+  "formal_call_records": 8,
+  "summary": "4/7篇有最终结果。Task1关键75/80证据及语法精确化分类改善；短文重试后终于可用，限定立场和单段/字数不足判断正确。仍有Task1删末段变149词、概述内容误读、短文漏读已有结果/回扣、good重复已有限定和语法术语解释不一致。不能据引文存在或问题少认定语义全面通过。",
+  "model_scores_not_gold": [
+    {
+      "sample_id": "t2-weak",
+      "status": "failed",
+      "error_code": "truncated",
+      "observed_model_scores_not_gold": null
+    },
+    {
+      "sample_id": "t2-mid",
+      "status": "failed",
+      "error_code": "call_budget",
+      "observed_model_scores_not_gold": null
+    },
+    {
+      "sample_id": "t2-good",
+      "status": "ready",
+      "error_code": null,
+      "observed_model_scores_not_gold": {
+        "overall": 8.0,
+        "TR": 8.0,
+        "CC": 8.0,
+        "LR": 8.0,
+        "GRA": 8.0
+      }
+    },
+    {
+      "sample_id": "t2-strong",
+      "status": "failed",
+      "error_code": "call_budget",
+      "observed_model_scores_not_gold": null
+    },
+    {
+      "sample_id": "t2-off-topic",
+      "status": "ready",
+      "error_code": null,
+      "observed_model_scores_not_gold": {
+        "overall": 6.0,
+        "TR": 2.0,
+        "CC": 7.0,
+        "LR": 7.5,
+        "GRA": 7.5
+      }
+    },
+    {
+      "sample_id": "t2-under-length",
+      "status": "ready",
+      "error_code": null,
+      "observed_model_scores_not_gold": {
+        "overall": 5.5,
+        "TR": 5.0,
+        "CC": 5.0,
+        "LR": 6.0,
+        "GRA": 6.0
+      }
+    },
+    {
+      "sample_id": "t1-no-image",
+      "status": "ready",
+      "error_code": null,
+      "observed_model_scores_not_gold": {
+        "overall": null,
+        "TA": null,
+        "CC": 7.0,
+        "LR": 7.5,
+        "GRA": 7.5
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "T1-DELETE-LENGTH",
+      "sample_id": "t1-no-image",
+      "scope": "ready",
+      "classification": "actionable_advice_violates_length_constraint",
+      "priority": "P2",
+      "assessment": "当前首条优先建议允许直接删掉结尾，却没提醒补足。按本次报告可复现的词与数字计数，172−23=149，会低于150词最低要求。合并或重写可以是安全选择，不能无条件推荐纯删除。",
+      "model_evidence": {
+        "priority_1": "删去或改写结尾的“In summary”段：第二段已经给出概述，末段不含新数据只是重述，删去后结构更紧凑；如需保留，就要写出带具体数据的对照。",
+        "CC_suggestion": "删去这一结尾段，把其中“增长幅度差异”的评述并入第二段概述；若需保留对比，可改为在末段补一句带数据的具体对照，例如 \"Country C rose by about 40 percentage points, while Country A rose by only around 5 points.\"",
+        "counts": {
+          "before": 172,
+          "removed": 23,
+          "after": 149,
+          "pattern": "\\b[A-Za-z0-9]+(?:['’\\-][A-Za-z0-9]+)*\\b"
+        }
+      },
+      "original_context": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A."
+    },
+    {
+      "id": "T1-OVERVIEW-MISREAD",
+      "sample_id": "t1-no-image",
+      "scope": "ready",
+      "classification": "clear_context_false_positive",
+      "priority": "P2",
+      "assessment": "第二段只说均增长、增幅不同、A两年最高及D最低，没有写C增幅最大/A最小。结尾有重复“均增长”，但也新增具体涨幅对比。称这些对比已在第二段是可核查误读；可建议整合概述，不能捏造重复依据。",
+      "model_evidence": {
+        "quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "quote_found": true,
+        "comment": "结尾段没有提供任何新数据，只是复述第二段概述里的“都增长”与“C 增幅大、A 增幅小”，形成第二个总结，削弱了整体结构的紧凑度。",
+        "suggestion": "删去这一结尾段，把其中“增长幅度差异”的评述并入第二段概述；若需保留对比，可改为在末段补一句带数据的具体对照，例如 \"Country C rose by about 40 percentage points, while Country A rose by only around 5 points.\"",
+        "suggestion_removed": false
+      },
+      "original_context": [
+        "Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+        "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A."
+      ]
+    },
+    {
+      "id": "T1-EVIDENCE-AND-PRECISION",
+      "sample_id": "t1-no-image",
+      "scope": "ready",
+      "classification": "confirmed_improvement",
+      "priority": null,
+      "assessment": "A在两年最高与2020 C近80>A约75的矛盾被正确指出，figures保留75/80，TA和总分仍不可评。Country B作百分比主语明确归为精确性而非语法错误；where...overtaking...明确说无悬垂修饰。此批相关旧误批未重现。",
+      "model_evidence": {
+        "consistency": [
+          {
+            "quote": "Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+            "quote_found": true,
+            "figures": [
+              "about 75%",
+              "nearly 80%",
+              "around 70%"
+            ],
+            "comment": "文中说 A 在两年中都是最高，但同文给出的 2020 年数据是 A 约 75%、C 接近 80%，而且后文自己写了 C “overtaking Country A”，概述与主体段自相矛盾。"
+          }
+        ],
+        "TA": {
+          "key": "task",
+          "short": "TA",
+          "label": "Task Achievement",
+          "band": null,
+          "state": "not_assessable",
+          "reason": "未上传题图，无法核对图表数据，Task Achievement 不评分。",
+          "summary": "",
+          "strengths": [],
+          "issues": []
+        },
+        "LR_issue": {
+          "quote": "and Country B had grown to approximately 65%",
+          "quote_found": true,
+          "comment": "这里说的是百分比数字的增长，却用“Country B”作主语，语义上略有错位，精确度不如使用“the figure for Country B”。这属于用词精确性问题，不是语法错误。",
+          "suggestion": "and the figure for Country B had grown to approximately 65%",
+          "suggestion_removed": false
+        },
+        "GRA_strength": {
+          "quote": "The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A.",
+          "quote_found": true,
+          "comment": "被动结构、where 定语从句和现在分词状语在同一句中组合得当，主语关系清楚，没有悬垂修饰。"
+        }
+      },
+      "original_context": [
+        "Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries."
+      ]
+    },
+    {
+      "id": "T1-ARITHMETIC-AND-OPTIONAL-STYLE",
+      "sample_id": "t1-no-image",
+      "scope": "ready",
+      "classification": "reasonable_optional_advice_with_limits",
+      "priority": null,
+      "assessment": "建议中的C约增40个百分点、A约增5个百分点能由作文自身40→近80和70→约75推算；不是另编外部统计。优先事项最后一条明说“在保持零错误的基础上进一步丰富”，可作为可选练习，与已有句式变化不构成直接矛盾，但不能把再加分词结构当硬性提分要求。",
+      "model_evidence": {
+        "CC_suggestion": "删去这一结尾段，把其中“增长幅度差异”的评述并入第二段概述；若需保留对比，可改为在末段补一句带数据的具体对照，例如 \"Country C rose by about 40 percentage points, while Country A rose by only around 5 points.\"",
+        "priority_5": "在保持零错误的基础上进一步丰富句式，例如适当增加带数据的比较句和分词状语，让句型变化更明显。"
+      },
+      "original_context": [
+        "In 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C. Country D had by far the lowest figure, at only 15%.",
+        "By 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries."
+      ]
+    },
+    {
+      "id": "GOOD-SUPPORT",
+      "sample_id": "t2-good",
+      "scope": "ready",
+      "classification": "confirmed_supported_assessment",
+      "priority": null,
+      "assessment": "评价承认诱发需求的as因果、社会/环境收益、农村货运例外及限定立场；正式TR/CC问题为空有具体解释支撑，并非单看空列表。总评也没有再把全篇说成只有断言。",
+      "model_evidence": {
+        "TR_summary": "全文完整回答了“在多大程度上同意”：引言用“largely agree”给出限定立场，结论一致重申；两个主体段分别从效率/新增道路诱发更多车流、社会与环境效益展开，每段都有“主张—机制解释—结论”的推进；第四段让步说明了例外范围（人口稀疏地区、货运、绕行道路），使“targeted”有实质内容。整体属于充分展开、有支撑的回应。",
+        "overall": "这是一篇组织严谨、语言准确的高分作文。立场是限定式的（大部分投入给公交，但不完全停止修路），引言提出、结论重申，第四段让步正好界定了例外，前后一致。两个主体段不是空泛断言，而是给出机制解释（道路容量固定、新路诱发更多车流；公交带来可负担出行与减排），属于有效展开。语言上词汇面广、搭配自然，句式多样且几乎无误。若要再进一步，可给让步段补上“何时修路优先”的判断标准，并让效率段的容量对比更形象。",
+        "argument_problem_count": 0
+      },
+      "original_context": [
+        "The strongest argument for prioritising public transport is efficiency. Roads are an inherently limited resource: a lane of motorway can carry only a fixed number of private vehicles per hour, whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space. Moreover, there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive. Expanding road networks may therefore offer only temporary relief before congestion returns.",
+        "Public transport also brings wider social and environmental benefits. It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers, thereby widening their access to jobs and services. At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets.",
+        "Nevertheless, it would be unrealistic to stop road building altogether. In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks. Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds."
+      ]
+    },
+    {
+      "id": "GOOD-REPEATED-BOUNDARY",
+      "sample_id": "t2-good",
+      "scope": "ready",
+      "classification": "partly_redundant_optional_advice",
+      "priority": "P2",
+      "assessment": "TR已说人口稀疏、货运、绕行道路使targeted有实质内容，但优先事项和优化再次要求用这些已存在条件让targeted落到实处。更操作化的优先标准可以选写；当前例子主要重复原文，不能暗示原来没有限定。",
+      "model_evidence": {
+        "TR_summary": "全文完整回答了“在多大程度上同意”：引言用“largely agree”给出限定立场，结论一致重申；两个主体段分别从效率/新增道路诱发更多车流、社会与环境效益展开，每段都有“主张—机制解释—结论”的推进；第四段让步说明了例外范围（人口稀疏地区、货运、绕行道路），使“targeted”有实质内容。整体属于充分展开、有支撑的回应。",
+        "priority_1": "立场与让步已经很清晰（“largely agree”加上“unrealistic to stop road building altogether”），下一步可以补上判断标准：说明在什么条件下修路仍优先于公交，让“targeted”落到实处。",
+        "improvement": {
+          "quote": "Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.",
+          "suggestion": "可以在让步段补一句判断标准，说明在什么情况下修路仍值得优先（例如人口稀疏、货运需求集中），让“targeted”更具体，让步也更有说服力。"
+        }
+      },
+      "original_context": "Nevertheless, it would be unrealistic to stop road building altogether. In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks. Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds."
+    },
+    {
+      "id": "GOOD-GRAMMAR-TERMS",
+      "sample_id": "t2-good",
+      "scope": "ready",
+      "classification": "internally_inconsistent_explanation",
+      "priority": "P2",
+      "assessment": "shifting journeys...在这里是整句主语（动名词/gerund-participial clause作主语），不是状语。GRA总述误称“现在分词状语”，同项strength却正确说“动名词短语作主语”；这是解释不一致，不据此反推学生分数错误。",
+      "model_evidence": {
+        "GRA_summary": "句式多样：whereas 引导的对比从句、现在分词状语（shifting journeys...）、which 定语从句、although 让步句、比较结构；绝大多数句子无语法错误，主谓一致与标点规范，几乎没有影响理解的失误。",
+        "GRA_strength": {
+          "quote": "shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions",
+          "quote_found": true,
+          "comment": "动名词短语作主语，主谓一致（reduces）正确，结构紧凑。"
+        }
+      },
+      "original_context": "Public transport also brings wider social and environmental benefits. It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers, thereby widening their access to jobs and services. At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets."
+    },
+    {
+      "id": "GOOD-DUMMY-IT",
+      "sample_id": "t2-good",
+      "scope": "ready",
+      "classification": "incorrect_grammatical_explanation",
+      "priority": "P2",
+      "assessment": "it would be unrealistic to stop road building altogether中的it是形式主语，对应后面的to不定式；并非回指前文公交优先主张。过渡本身合理，但引用真实不证明这条语法/指代解释正确。",
+      "model_evidence": {
+        "quote": "Nevertheless, it would be unrealistic to stop road building altogether.",
+        "quote_found": true,
+        "comment": "用 Nevertheless 自然转入让步段，“it”回指前文讨论的公交优先主张，指代明确。"
+      },
+      "original_context": "Nevertheless, it would be unrealistic to stop road building altogether. In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks. Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds."
+    },
+    {
+      "id": "GOOD-CANNOT-DRIVE",
+      "sample_id": "t2-good",
+      "scope": "ready",
+      "classification": "optional_precision_not_proven_error",
+      "priority": null,
+      "assessment": "cannot drive后以students/elderly/lower-income workers举例，不必然断言这些群体所有人都不会开车。澄清无车可用可作选择，但将其视为已经出现的普遍概括过强，也应避免无依据地改变“不会/不能开车”为“没有车”。",
+      "model_evidence": {
+        "quote": "It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers",
+        "suggestion": "例子与“cannot drive”的对应稍显笼统，可改成“many of whom do not have access to a car”这类表述，避免暗示这些群体全都不会开车。"
+      },
+      "original_context": "Public transport also brings wider social and environmental benefits. It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers, thereby widening their access to jobs and services. At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets."
+    },
+    {
+      "id": "SHORT-REAL-LIMITS",
+      "sample_id": "t2-under-length",
+      "scope": "ready",
+      "classification": "supported_with_visible_result",
+      "priority": null,
+      "assessment": "这次第二次正式输出通过并生成可用评价；97词、单自然段、需要进一步展开是实在的问题。限定立场、乡村理由与末尾公交优先均被认可，连接词没有被机械地判错；语法意见也承认基本无误。",
+      "model_evidence": {
+        "TR_summary": "立场清楚且贯穿全文：支持公共交通优先，但承认乡村道路仍有必要，所有内容都切题。主要问题是篇幅只有97词，远低于250词的最低要求，每个论点只用一句话带过，没有展开解释或举例，因此属于典型的“未充分展开”，任务完成度受到明显限制。",
+        "CC_summary": "理由的排列顺序合理（支持理由→让步→结论），连接词 so、also、In addition、However、In conclusion 使用自然，没有机械堆砌。但全文只有一个段落，没有段落划分，引言、主体、让步和结论全部挤在一起，结构层次只能靠连接词提示，因此连贯与衔接受到限制。",
+        "position": {
+          "quote": "I agree that governments should spend more money on public transport than on new roads.",
+          "consistent": true,
+          "comment": "立场明确为“同意公共交通优先”，结尾又用“but some roads are still necessary”把范围限定在乡村等公交覆盖不足的地区，这属于有保留的同意，是一个立场，不是自相矛盾。"
+        },
+        "warnings": [
+          "字数 97 低于 250 词要求，实际考试中Task Response会因此受限。"
+        ]
+      },
+      "original_context": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary."
+    },
+    {
+      "id": "SHORT-IGNORED-RESULT",
+      "sample_id": "t2-under-length",
+      "scope": "ready",
+      "classification": "context_underread",
+      "priority": "P2",
+      "assessment": "环境句紧接which is good for the environment and for public health，已有结果。优化却说“目前只有一句断言”，再建议环境与健康结果，忽略同一句现有内容。TR“没有展开解释或举例/也没有结果”也过于绝对：载客量→减拥堵、污染少→环境健康和乡村公交少→道路有用均是简短解释。篇幅及展开不足仍成立。",
+      "model_evidence": {
+        "TR_issue": {
+          "quote": "Public transport can carry many people at the same time, so it reduces traffic jams in big cities.",
+          "quote_found": true,
+          "comment": "这是全文唯一展开的论证方式：一句因果就结束，没有说明“为什么载客多就能缓解拥堵”（例如一辆公交车替代大量私家车占用的道路空间），也没有举例或结果，三个理由都停留在这一深度，加上全文仅97词，内容明显不足。",
+          "suggestion": "Public transport can carry many people at the same time, so it eases traffic jams in big cities, where a single bus or train can take the place of a large number of private cars.",
+          "suggestion_removed": false
+        },
+        "environment_improvement": {
+          "quote": "In addition, buses and trains produce less pollution than private cars",
+          "suggestion": "第二步：给环境论点补一个假设例子或结果（例如如果更多人改乘公交，城市空气质量和居民健康都会改善），目前这一论点只有一句断言。"
+        }
+      },
+      "original_context": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary."
+    },
+    {
+      "id": "SHORT-RETURN-TO-POSITION",
+      "sample_id": "t2-under-length",
+      "scope": "ready",
+      "classification": "redundant_context_underread",
+      "priority": "P2",
+      "assessment": "让步后紧接结论“public transport should be the priority, but some roads are still necessary”。模型自己已认可该结论与立场一致，优先事项/优化又要求让步后加一句公交仍应优先；更明确权衡可选，但不能表示原稿尚未回到立场。",
+      "model_evidence": {
+        "TR_conclusion_strength": {
+          "quote": "In conclusion, public transport should be the priority, but some roads are still necessary.",
+          "quote_found": true,
+          "comment": "结论重申主张同时保留让步，与开头立场一致，没有自相矛盾。"
+        },
+        "priority_3": "让步之后回到立场：在“However, new roads are still useful in the countryside”之后再解释一句，说明为什么整体上仍应优先投资公共交通。",
+        "improvement": {
+          "quote": "However, new roads are still useful in the countryside, where there are not many buses",
+          "suggestion": "第三步：让步之后加一句回到立场，说明因此新建道路应限于公交难以覆盖的地区，整体上仍应优先投资公共交通。"
+        }
+      },
+      "original_context": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary."
+    },
+    {
+      "id": "SHORT-LANGUAGE-STYLE",
+      "sample_id": "t2-under-length",
+      "scope": "ready",
+      "classification": "optional_style_overpresented",
+      "priority": null,
+      "assessment": "old people可作普通表达，不是语法错；older/elderly people及cheaper than driving可作为语域/比较对象精确化。仅因词常见或没有被动/条件句，不足以判定句子有错误。GRA issues为空、总结承认基本无误是正确的边界；每理由3–4句、特定段数均应视为扩写路线而非唯一合格格式。",
+      "model_evidence": {
+        "LR_issue": {
+          "quote": "It is also cheaper for students and old people who do not have cars.",
+          "quote_found": true,
+          "comment": "old people 偏口语，正式写作中更常用 elderly people；另外 cheaper 的比较对象没有写明（比开私家车便宜），读者需要自行补足。",
+          "suggestion": "It is also cheaper than driving for students and elderly people who do not own a car.",
+          "suggestion_removed": false
+        },
+        "GRA_summary": "全文句子基本无误，简单句与少量复合句（so 并列、which 定语从句、where 定语从句）混用，标点和大小写正确。但句式类型有限，没有条件句、被动语态或分词结构，加上篇幅过短，难以展示更广的语法范围。",
+        "priorities": [
+          "把全文扩充到250词以上：每个理由写3–4句（先陈述观点，再解释原因或机制，最后给例子或结果）；现在每个论点只有一句话。",
+          "分段：引言（改写题目并表明立场）、主体段（拥堵与费用；污染与健康）、让步段（乡村道路）、结论段；现在所有内容挤在同一段里。",
+          "丰富句式：在现有 which、where 从句之外，加入条件句或被动语态，例如 If governments invested more in public transport, congestion in big cities would fall.",
+          "提升用词精确度：用 elderly people 替换 old people，并在 cheaper 后明确比较对象（cheaper than driving），同时尝试 ease congestion、a sustainable option 等表达。"
+        ]
+      },
+      "original_context": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary."
+    },
+    {
+      "id": "OFF-TOPIC",
+      "sample_id": "t2-off-topic",
+      "scope": "ready",
+      "classification": "supported_with_unsupported_cause_attribution",
+      "priority": null,
+      "assessment": "全文确实在答在线教育题，与交通投资题无关；TR低且CC独立认可内部组织，是合理区分。不能从离题本身推定“很可能套用了背好的范文”，来源/动机无证据。优先事项“否则整段不计分”应明确只谈任务相关性，不能让学生误以为语言表现也不计。",
+      "model_evidence": {
+        "TR_issue": {
+          "quote": "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.",
+          "quote_found": true,
+          "comment": "开头引入的是线上学习与传统课堂的争论，而题目问的是政府在公共交通与新建道路之间的投资取舍，全文未出现 government、transport、roads、funding 等任何核心概念，属于完全跑题（很可能是套用了准备好的另一道题的范文）。",
+          "suggestion": "Some people think that governments should spend money on improving public transport rather than building new roads. In my view, public transport deserves most of the funding, although new roads are still needed in some areas.",
+          "suggestion_removed": false
+        },
+        "CC_summary": "段落划分清晰，每段一个中心意思，从优势到局限再到结论的推进顺畅；衔接词使用自然，which 从句、代词指代准确，很少出现机械堆砌。组织层面的这些优点确实存在，只是它们服务于一个与题目无关的话题。",
+        "priority_2": "把现成论证“换对象”：第 2 段的灵活性、覆盖偏远人群、材料更新快等思路，可以改成公共交通的覆盖面与效率论证（没有私家车的人也能出行、一辆满载的公交车替代许多小汽车），否则整段不计分。"
+      },
+      "original_context": {
+        "prompt": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "opening": "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms. In my view, although online courses offer clear advantages, face-to-face education will remain essential."
+      }
+    }
+  ],
+  "rejected_formal_output_diagnostics": [
+    {
+      "sample_id": "t2-weak",
+      "attempt": 0,
+      "reported_error": "truncated",
+      "formal_text_length": 0,
+      "accepted_score": null,
+      "note": "共享正式text为空且报truncated，没有可作语义审阅的评价；不读取或推测私有思考内容。"
+    },
+    {
+      "sample_id": "t2-mid",
+      "attempt": 0,
+      "raw_json_valid": true,
+      "root_keys": [
+        "task",
+        "coherence",
+        "lexical",
+        "grammar",
+        "argument",
+        "overall_comment",
+        "priorities"
+      ],
+      "criterion_fields": {
+        "task": {
+          "type": "float",
+          "value": 7.0
+        },
+        "coherence": {
+          "type": "float",
+          "value": 7.5
+        },
+        "lexical": {
+          "type": "float",
+          "value": 7.0
+        },
+        "grammar": {
+          "type": "float",
+          "value": 7.5
+        }
+      },
+      "actual_problem": "task键存在，但四项全部是裸数字而非包含band/summary/strengths/issues的对象；缺少的是评分项结构和理由证据，不是缺task键。",
+      "final_status": "failed",
+      "final_error_code": "call_budget",
+      "accepted_score": null,
+      "note": "原字段7/7.5/7/7.5不能当成正式采用分数；最终call_budget也不能替代说明首次内容为何被拒。"
+    },
+    {
+      "sample_id": "t2-strong",
+      "attempt": 0,
+      "raw_json_valid": false,
+      "strict_error": "Expecting ',' delimiter: line 1 column 3173 (char 3172)",
+      "formal_prefix": "{\"task\": 8, \"coherence\": 8, \"lexical\": 8, \"grammar\": 8, \"argument\": {\"position\":",
+      "argument_child_keys": [
+        "position",
+        "paragraphs",
+        "problems",
+        "improvements",
+        "overall_comment",
+        "priorities"
+      ],
+      "actual_problem": "完整原回答缺结束大括号；可直接解码的argument子对象把overall_comment/priorities也包含进去了，与报告括号诊断一致。四评分项此外也均为裸8；即使补括号仍缺完整评分项对象。未修补正式JSON、未把子对象用于出分。",
+      "report_diagnosis": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层",
+      "accepted_score": null,
+      "final_error_code": "call_budget"
+    },
+    {
+      "sample_id": "t2-under-length",
+      "attempt": 0,
+      "raw_json_valid": false,
+      "strict_error": "Expecting ',' delimiter: line 1 column 5451 (char 5450)",
+      "grammar_child_keys": [
+        "band",
+        "summary",
+        "strengths",
+        "issues",
+        "argument",
+        "overall_comment",
+        "priorities"
+      ],
+      "actual_problem": "第一次正式回答括号错位，argument/overall_comment/priorities嵌入grammar；正式结果不采用。第二次原样JSON通过，下面对短文的语义判断只针对第二次最终result。",
+      "report_diagnosis": "JSON 结构错误：lexical 被写进了 coherence 里面：coherence 写完后少了一个 }，这些键必须在最外层；grammar 被写进了 lexical 里面：lexical 写完后少了一个 }，这些键必须在最外层；argument、overall_comment、priorities 被写进了 grammar 里面：grammar 写完后少了一个 }，这些键必须在最外层"
+    }
+  ],
+  "limits": [
+    "未给独立专家分数；单次合成样本与此续跑阶段不能证明评分准确率。",
+    "四份ready的语义意见与weak/mid/strong被拒回答严格分开；没有把裸数字或修补JSON变为分数。",
+    "只解码原文本中自足的argument/grammar子对象来定位括号嵌套；根JSON没有修改，也不用于正式输出。",
+    "语义判断为人工审阅意见，完整同段为可核查事实；没有浏览器/复制交互测试。",
+    "仅写manual_review.md和findings.json；原三文件未修改，未改业务、commit、push或部署。"
+  ]
+}

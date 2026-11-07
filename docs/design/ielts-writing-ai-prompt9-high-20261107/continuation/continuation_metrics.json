@@ -1,0 +1,776 @@
+{
+  "audit_network_calls": 0,
+  "reads_sanitized_only": true,
+  "source_head": "f921edf0dbbde4d11ef393fcc22837d52414e1b9",
+  "tools_sha256": "f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc",
+  "continuation": {
+    "source_head": "f921edf0dbbde4d11ef393fcc22837d52414e1b9",
+    "status": {
+      "samples": 7,
+      "calls": 8,
+      "first_json": 4,
+      "first_valid": 3,
+      "final_ready": 4,
+      "retried_samples": [
+        "t2-under-length"
+      ],
+      "truncated": 1,
+      "timeouts": 0,
+      "http_statuses": {
+        "200": 8
+      }
+    },
+    "usage": {
+      "calls": 8,
+      "tokens": {
+        "prompt_tokens": 19322,
+        "completion_tokens": 62453,
+        "total_tokens": 81775,
+        "prompt_cache_hit_tokens": 14720,
+        "prompt_cache_miss_tokens": 4602
+      },
+      "known_subtotals": {
+        "prompt_tokens": 19322,
+        "completion_tokens": 62453,
+        "total_tokens": 81775,
+        "prompt_cache_hit_tokens": 14720,
+        "prompt_cache_miss_tokens": 4602
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 50389,
+      "reasoning_known": 50389,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 16000
+    },
+    "latency_and_budget": {
+      "successful_calls_p50_ms": 34642,
+      "successful_calls_p90_ms": 82300,
+      "all_calls_sum_ms": 376118,
+      "completion_peak": 16000,
+      "output_budgets": [
+        16000
+      ],
+      "peak_budget_fraction": 1.0
+    },
+    "evidence": {
+      "count_corrections": 0,
+      "scored_criteria": 15,
+      "quotes": 47,
+      "literal_quotes": 47,
+      "normalized_quotes": 47
+    },
+    "argument": {
+      "task2_evaluations": 3,
+      "with_argument": 3,
+      "with_position": 3,
+      "paragraphs": 11,
+      "problems": 2,
+      "improvements": 8,
+      "returned": 24,
+      "dropped": 0,
+      "duplicates": 0,
+      "over_limit": 0,
+      "self_conflicts": 0,
+      "suggestions_removed": 0,
+      "reclassified": 0,
+      "kept": 24,
+      "entry_quotes": 24,
+      "entry_quotes_literal": 24,
+      "entry_quotes_verified": 24,
+      "paired_quotes": 0,
+      "paired_quotes_literal": 0,
+      "paired_quotes_verified": 0,
+      "support_quotes": 0,
+      "support_quotes_literal": 0,
+      "support_quotes_verified": 0,
+      "problem_types": {
+        "irrelevant": 2
+      },
+      "paragraph_verdicts": {
+        "supports": 6,
+        "off_position": 5
+      }
+    },
+    "suggestions_removed": {
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    "argument_sanity": {
+      "checks": {
+        "weak_has_problem": null,
+        "strong_at_most_one_problem": null,
+        "strong_no_false_contradiction_or_off_topic": null,
+        "strong_position_quote": null,
+        "off_topic_identified": true
+      },
+      "passed": 1,
+      "total_available": 1,
+      "unavailable": 4,
+      "planned": 5
+    },
+    "all_sanity": {
+      "passed": 7,
+      "total": 10,
+      "skipped": 1
+    },
+    "samples": [
+      {
+        "id": "t2-weak",
+        "status": "failed",
+        "overall": null,
+        "suggestions_removed": {},
+        "consistency_issues": 0,
+        "comparisons_checked": null
+      },
+      {
+        "id": "t2-mid",
+        "status": "failed",
+        "overall": null,
+        "suggestions_removed": {},
+        "consistency_issues": 0,
+        "comparisons_checked": null
+      },
+      {
+        "id": "t2-good",
+        "status": "ready",
+        "overall": 8.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 9,
+        "argument_kept": 9,
+        "problem_types": [],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-strong",
+        "status": "failed",
+        "overall": null,
+        "suggestions_removed": {},
+        "consistency_issues": 0,
+        "comparisons_checked": null
+      },
+      {
+        "id": "t2-off-topic",
+        "status": "ready",
+        "overall": 6.0,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 10,
+        "argument_kept": 10,
+        "problem_types": [
+          "irrelevant",
+          "irrelevant"
+        ],
+        "reclassified": 0
+      },
+      {
+        "id": "t2-under-length",
+        "status": "ready",
+        "overall": 5.5,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 0,
+        "comparisons_checked": null,
+        "argument_returned": 5,
+        "argument_kept": 5,
+        "problem_types": [],
+        "reclassified": 0
+      },
+      {
+        "id": "t1-no-image",
+        "status": "ready",
+        "overall": null,
+        "suggestions_removed": {
+          "criteria": 0,
+          "priorities": 0,
+          "argument": 0,
+          "total": 0
+        },
+        "consistency_issues": 1,
+        "comparisons_checked": 6
+      }
+    ],
+    "first_input_sha256": {
+      "t2-weak": "b5fdffecf0325b106e1ea0d52fc1cb52039737ffac3f57bae0f9163b661cfaae",
+      "t2-mid": "650e6240c710b888d79d34808b081fc1db3eb534c6f19ba2e97af40b1da5a2de",
+      "t2-good": "e697477d57f32f473ea7e37473be2ff0fa0785fdbf2c74d97204b22e238ee4ed",
+      "t2-strong": "b66ea64f5b80f6722a42a13e4863b92c0e91dd613c5f0b645b115a413cefc54b",
+      "t2-off-topic": "59a7066afa220d62886bd0bca3b424141151d596754403448919c283fd9a2647",
+      "t2-under-length": "7811ddc8f0621f6889eb4ba592cbaebf780c077ab964804bf2dd3736066b79f1",
+      "t1-no-image": "1f50d3d80206dcd21f00a0021d8bc080b929c4387a971c2e3958fcea48e33a3f"
+    }
+  },
+  "cumulative": {
+    "actual_requests": 13,
+    "original_limit": 14,
+    "remaining_global": 1,
+    "sample_counts": {
+      "t2-weak": 2,
+      "t2-mid": 2,
+      "t2-good": 2,
+      "t2-strong": 2,
+      "t2-off-topic": 2,
+      "t2-under-length": 2,
+      "t1-no-image": 1
+    },
+    "known_usage_subtotal": {
+      "calls": 8,
+      "tokens": {
+        "prompt_tokens": 19322,
+        "completion_tokens": 62453,
+        "total_tokens": 81775,
+        "prompt_cache_hit_tokens": 14720,
+        "prompt_cache_miss_tokens": 4602
+      },
+      "known_subtotals": {
+        "prompt_tokens": 19322,
+        "completion_tokens": 62453,
+        "total_tokens": 81775,
+        "prompt_cache_hit_tokens": 14720,
+        "prompt_cache_miss_tokens": 4602
+      },
+      "unreported_calls": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 0
+      },
+      "reasoning_tokens": 50389,
+      "reasoning_known": 50389,
+      "reasoning_unreported_thinking_calls": 0,
+      "failed_reasoning_known": 16000
+    },
+    "usage_unknown_calls": 5,
+    "complete_token_usage": null,
+    "complete_reasoning_tokens": null,
+    "fees": null,
+    "original_batch_first_json_rate": null,
+    "original_batch_first_content_rate": null,
+    "final_available_evaluation_coverage": {
+      "numerator": 4,
+      "denominator": 7
+    },
+    "note": "Old five attempts remain in HTTP budget; absent usage is unknown, not zero. Continuation first-attempt rates use local attempt0, not original cumulative attempt0."
+  },
+  "per_sample": [
+    {
+      "id": "t2-weak",
+      "status": "failed",
+      "final_error_code": "truncated",
+      "reason": "length at16000, all reported completion tokens are reasoning; no formal answer",
+      "new_calls": 1,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {},
+      "overall": null,
+      "consistency_issues": []
+    },
+    {
+      "id": "t2-mid",
+      "status": "failed",
+      "final_error_code": "call_budget",
+      "reason": "task is 7.0, not a criterion object; validation retry blocked by original per-sample cap2",
+      "new_calls": 1,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {},
+      "overall": null,
+      "consistency_issues": []
+    },
+    {
+      "id": "t2-good",
+      "status": "ready",
+      "final_error_code": null,
+      "reason": null,
+      "new_calls": 1,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {
+        "task": 8.0,
+        "coherence": 8.0,
+        "lexical": 8.0,
+        "grammar": 8.0
+      },
+      "overall": 8.0,
+      "consistency_issues": []
+    },
+    {
+      "id": "t2-strong",
+      "status": "failed",
+      "final_error_code": "call_budget",
+      "reason": "formal reply is invalid JSON; validation retry blocked by original per-sample cap2",
+      "new_calls": 1,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {},
+      "overall": null,
+      "consistency_issues": []
+    },
+    {
+      "id": "t2-off-topic",
+      "status": "ready",
+      "final_error_code": null,
+      "reason": null,
+      "new_calls": 1,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {
+        "task": 2.0,
+        "coherence": 7.0,
+        "lexical": 7.5,
+        "grammar": 7.5
+      },
+      "overall": 6.0,
+      "consistency_issues": []
+    },
+    {
+      "id": "t2-under-length",
+      "status": "ready",
+      "final_error_code": null,
+      "reason": "first reply invalid JSON; second reply accepted",
+      "new_calls": 2,
+      "cumulative_calls": 2,
+      "remaining_for_this_sample": 0,
+      "scores": {
+        "task": 5.0,
+        "coherence": 5.0,
+        "lexical": 6.0,
+        "grammar": 6.0
+      },
+      "overall": 5.5,
+      "consistency_issues": []
+    },
+    {
+      "id": "t1-no-image",
+      "status": "ready",
+      "final_error_code": null,
+      "reason": null,
+      "new_calls": 1,
+      "cumulative_calls": 1,
+      "remaining_for_this_sample": 1,
+      "scores": {
+        "task": null,
+        "coherence": 7.0,
+        "lexical": 7.5,
+        "grammar": 7.5
+      },
+      "overall": null,
+      "consistency_issues": [
+        {
+          "quote": "Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+          "quote_found": true,
+          "figures": [
+            "about 75%",
+            "nearly 80%",
+            "around 70%"
+          ],
+          "comment": "文中说 A 在两年中都是最高，但同文给出的 2020 年数据是 A 约 75%、C 接近 80%，而且后文自己写了 C “overtaking Country A”，概述与主体段自相矛盾。"
+        }
+      ]
+    }
+  ],
+  "formal_reply_diagnostics": [
+    {
+      "sample": "t2-weak",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": false,
+      "client_error": "truncated",
+      "strict_json": null,
+      "json_error": null,
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t2-mid",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": true,
+      "json_error": null,
+      "malformed_criterion_fields": [
+        {
+          "field": "task",
+          "type": "float",
+          "value": 7.0
+        },
+        {
+          "field": "coherence",
+          "type": "float",
+          "value": 7.5
+        },
+        {
+          "field": "lexical",
+          "type": "float",
+          "value": 7.0
+        },
+        {
+          "field": "grammar",
+          "type": "float",
+          "value": 7.5
+        }
+      ]
+    },
+    {
+      "sample": "t2-good",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": true,
+      "json_error": null,
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t2-strong",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": false,
+      "json_error": {
+        "message": "Expecting ',' delimiter",
+        "position": 3172,
+        "length": 3172,
+        "at_eof": true
+      },
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t2-off-topic",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": true,
+      "json_error": null,
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t2-under-length",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": false,
+      "json_error": {
+        "message": "Expecting ',' delimiter",
+        "position": 5450,
+        "length": 5450,
+        "at_eof": true
+      },
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t2-under-length",
+      "local_attempt": 1,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": true,
+      "json_error": null,
+      "malformed_criterion_fields": []
+    },
+    {
+      "sample": "t1-no-image",
+      "local_attempt": 0,
+      "transport_status": 200,
+      "client_ok": true,
+      "client_error": null,
+      "strict_json": true,
+      "json_error": null,
+      "malformed_criterion_fields": []
+    }
+  ],
+  "product_json_diagnostics": [
+    {
+      "sample": "t2-strong",
+      "attempt": 0,
+      "problem": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层"
+    },
+    {
+      "sample": "t2-under-length",
+      "attempt": 0,
+      "problem": "JSON 结构错误：lexical 被写进了 coherence 里面：coherence 写完后少了一个 }，这些键必须在最外层；grammar 被写进了 lexical 里面：lexical 写完后少了一个 }，这些键必须在最外层；argument、overall_comment、priorities 被写进了 grammar 里面：grammar 写完后少了一个 }，这些键必须在最外层"
+    }
+  ],
+  "latency_definitions": {
+    "product_client_ok_only": {
+      "calls": 7,
+      "p50_ms": 34642,
+      "p90_ms": 82300
+    },
+    "all_eight_including_truncated": {
+      "calls": 8,
+      "p50_ms": 34642,
+      "p90_ms": 96374
+    },
+    "all_eight_transport_only": {
+      "p50_ms": 34638,
+      "p90_ms": 96372
+    }
+  },
+  "not_adopted_usage_already_in_stage_total": {
+    "calls": 4,
+    "tokens": {
+      "prompt_tokens": 10084,
+      "completion_tokens": 35733,
+      "total_tokens": 45817,
+      "prompt_cache_hit_tokens": 8192,
+      "prompt_cache_miss_tokens": 1892
+    },
+    "known_subtotals": {
+      "prompt_tokens": 10084,
+      "completion_tokens": 35733,
+      "total_tokens": 45817,
+      "prompt_cache_hit_tokens": 8192,
+      "prompt_cache_miss_tokens": 1892
+    },
+    "unreported_calls": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 0
+    },
+    "reasoning_tokens": 31623,
+    "reasoning_known": 31623,
+    "reasoning_unreported_thinking_calls": 0,
+    "failed_reasoning_known": 16000
+  },
+  "failed_samples_usage_already_in_stage_total": {
+    "calls": 3,
+    "tokens": {
+      "prompt_tokens": 7760,
+      "completion_tokens": 32768,
+      "total_tokens": 40528,
+      "prompt_cache_hit_tokens": 6272,
+      "prompt_cache_miss_tokens": 1488
+    },
+    "known_subtotals": {
+      "prompt_tokens": 7760,
+      "completion_tokens": 32768,
+      "total_tokens": 40528,
+      "prompt_cache_hit_tokens": 6272,
+      "prompt_cache_miss_tokens": 1488
+    },
+    "unreported_calls": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 0
+    },
+    "reasoning_tokens": 30789,
+    "reasoning_known": 30789,
+    "reasoning_unreported_thinking_calls": 0,
+    "failed_reasoning_known": 16000
+  },
+  "literal_quote_differences": [],
+  "sanity": [
+    {
+      "sample": "t2-weak",
+      "check": "评价已生成",
+      "ok": false
+    },
+    {
+      "sample": "t2-mid",
+      "check": "评价已生成",
+      "ok": false
+    },
+    {
+      "sample": "t2-good",
+      "check": "总分 ≥ 6.0",
+      "ok": true
+    },
+    {
+      "sample": "t2-good",
+      "check": "总分 ≤ 8.0",
+      "ok": true
+    },
+    {
+      "sample": "t2-strong",
+      "check": "评价已生成",
+      "ok": false
+    },
+    {
+      "sample": "t2-off-topic",
+      "check": "TR ≤ 5.0（离题）",
+      "ok": true
+    },
+    {
+      "sample": "t2-off-topic",
+      "check": "离题样本：通过质量检查的改写必须已按题目重写",
+      "ok": null
+    },
+    {
+      "sample": "t2-off-topic",
+      "check": "应标出 off_position / irrelevant（问题类型或段落判定偏离）",
+      "ok": true
+    },
+    {
+      "sample": "t2-under-length",
+      "check": "有字数不足提示",
+      "ok": true
+    },
+    {
+      "sample": "t1-no-image",
+      "check": "指出文内数据矛盾 ≥ 1 条（已知样本矛盾）",
+      "ok": true
+    },
+    {
+      "sample": "t1-no-image",
+      "check": "缺图 TA / 总分不可评",
+      "ok": true
+    }
+  ],
+  "checks": {
+    "continuation.raw_calls_match_run_data": true,
+    "continuation.evaluate_only": true,
+    "continuation.within_stage_budget": true,
+    "continuation.cache_components_equal_input": true,
+    "continuation.token_components_equal_total": true,
+    "continuation.reasoning_subset_of_completion": true,
+    "continuation.prompt_tokens_total": true,
+    "continuation.completion_tokens_total": true,
+    "continuation.report_calls": true,
+    "continuation.report_reasoning_tokens": true,
+    "continuation.report_reasoning_tokens_known": true,
+    "continuation.report_reasoning_unreported_calls": true,
+    "continuation.report_first_attempt_json_ok": true,
+    "continuation.report_first_attempt_valid": true,
+    "continuation.report_final_ready": true,
+    "continuation.report_truncated": true,
+    "continuation.report_timeouts": true,
+    "continuation.latency_p50": true,
+    "continuation.latency_p90": true,
+    "continuation.completion_peak": true,
+    "continuation.t2-weak.removed_sum": true,
+    "continuation.t2-mid.removed_sum": true,
+    "continuation.t2-good.removed_sum": true,
+    "continuation.t2-good.returned_from_model": true,
+    "continuation.t2-good.entry_partition": true,
+    "continuation.t2-good.entry_quotes": true,
+    "continuation.t2-good.paired_quotes": true,
+    "continuation.t2-good.support_quotes": true,
+    "continuation.t2-strong.removed_sum": true,
+    "continuation.t2-off-topic.removed_sum": true,
+    "continuation.t2-off-topic.returned_from_model": true,
+    "continuation.t2-off-topic.entry_partition": true,
+    "continuation.t2-off-topic.entry_quotes": true,
+    "continuation.t2-off-topic.paired_quotes": true,
+    "continuation.t2-off-topic.support_quotes": true,
+    "continuation.t2-under-length.removed_sum": true,
+    "continuation.t2-under-length.returned_from_model": true,
+    "continuation.t2-under-length.entry_partition": true,
+    "continuation.t2-under-length.entry_quotes": true,
+    "continuation.t2-under-length.paired_quotes": true,
+    "continuation.t2-under-length.support_quotes": true,
+    "continuation.t1-no-image.removed_sum": true,
+    "continuation.t1-no-image.consistency_evidence": true,
+    "continuation.report_evidence_scored_criteria": true,
+    "continuation.report_evidence_quotes": true,
+    "continuation.report_evidence_count_corrections": true,
+    "continuation.report_evidence_verified": true,
+    "continuation.report_argument_task2_evaluations": true,
+    "continuation.report_argument_with_argument": true,
+    "continuation.report_argument_with_position": true,
+    "continuation.report_argument_paragraphs": true,
+    "continuation.report_argument_problems": true,
+    "continuation.report_argument_improvements": true,
+    "continuation.report_argument_returned": true,
+    "continuation.report_argument_kept": true,
+    "continuation.report_argument_dropped": true,
+    "continuation.report_argument_duplicates": true,
+    "continuation.report_argument_over_limit": true,
+    "continuation.report_argument_self_conflicts": true,
+    "continuation.report_argument_suggestions_removed": true,
+    "continuation.report_argument_reclassified": true,
+    "continuation.report_argument_types": true,
+    "continuation.report_argument_verdicts": true,
+    "continuation.report_removed_criteria": true,
+    "continuation.report_removed_priorities": true,
+    "continuation.report_removed_argument": true,
+    "continuation.sanity_denominator": true,
+    "continuation.sanity_pass_count": true,
+    "link.original_ledger_hash": true,
+    "link.business_hash_unchanged": true,
+    "link.source_labels": true,
+    "budget.original5": true,
+    "budget.new8": true,
+    "budget.cumulative13": true,
+    "budget.limit14": true,
+    "budget.continuation_max9": true,
+    "budget.remaining1": true,
+    "budget.global_sequence": true,
+    "budget.sample_counts": true,
+    "budget.sample_max2": true,
+    "budget.local_global_attempts": true,
+    "budget.completed": true,
+    "scope.high_flash_evaluate": true,
+    "transport.sample": true,
+    "transport.attempt": true,
+    "transport.usage": true,
+    "transport.input_sha256": true,
+    "transport.http_status": true,
+    "transport.all8http200": true,
+    "transport.new_first_inputs_unchanged": true,
+    "report.stage_not_original": true,
+    "report.no_fees": true,
+    "report.no_teacher_or_calibration": true,
+    "report.all_sanity_recomputed": true,
+    "usage.kind_prompt_tokens": true,
+    "usage.kind_completion_tokens": true,
+    "usage.kind_total_tokens": true,
+    "usage.old_unknown5": true,
+    "usage.reasoning_record_consistency": true,
+    "report.json_diagnostic_attempts": true,
+    "report.first_rejection_denominator": true,
+    "failure.mid_task_numeric": true,
+    "failure.weak_all_reasoning": true,
+    "score.t2-weak.failure_without_score": true,
+    "score.t2-weak.arithmetic": true,
+    "score.t2-mid.failure_without_score": true,
+    "score.t2-mid.arithmetic": true,
+    "score.t2-good.failure_without_score": true,
+    "score.t2-good.arithmetic": true,
+    "score.t2-strong.failure_without_score": true,
+    "score.t2-strong.arithmetic": true,
+    "score.t2-off-topic.failure_without_score": true,
+    "score.t2-off-topic.arithmetic": true,
+    "score.t2-under-length.failure_without_score": true,
+    "score.t2-under-length.arithmetic": true,
+    "score.t1-no-image.failure_without_score": true,
+    "score.t1-no-image.arithmetic": true,
+    "failure.mid_strong_final_budget": true,
+    "failure.under_length_retry_succeeds": true
+  },
+  "checks_passed": 119,
+  "checks_total": 119,
+  "mismatches": []
+}

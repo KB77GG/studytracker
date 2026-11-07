@@ -1,0 +1,42 @@
+{
+  "source_head": "f921edf0dbbde4d11ef393fcc22837d52414e1b9",
+  "tools_sha256": "f0e3cec234a5b3fb09e923be9cf649223efa793267771755ea89785e451039bc",
+  "original_ledger_sha256": "bdc7f42522044d0b3dfaa6921e14d0127e4e80e51793c9082346694105bc98e4",
+  "paid_enabled": false,
+  "real_requests": 0,
+  "env_read": false,
+  "checks": {
+    "success": {
+      "new_sends": 7,
+      "cumulative": 12,
+      "ready": 7,
+      "old_ledger_unchanged": true,
+      "raw_and_sample_checkpoints": true,
+      "repeat_refused": true
+    },
+    "validation_retry": {
+      "new_sends": 9,
+      "cumulative": 14,
+      "ready": 2,
+      "old_ledger_unchanged": true,
+      "raw_and_sample_checkpoints": true,
+      "repeat_refused": true
+    },
+    "http500": {
+      "new_sends": 1,
+      "cumulative": 6,
+      "ready": 0,
+      "old_ledger_unchanged": true,
+      "raw_and_sample_checkpoints": true,
+      "repeat_refused": true
+    },
+    "html200": {
+      "new_sends": 1,
+      "cumulative": 6,
+      "ready": 0,
+      "old_ledger_unchanged": true,
+      "raw_and_sample_checkpoints": true,
+      "repeat_refused": true
+    }
+  }
+}
