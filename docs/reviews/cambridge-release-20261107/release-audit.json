@@ -1,0 +1,480 @@
+{
+  "checked_at_utc": "2026-11-07T11:23:39.667265+00:00",
+  "scope": "Read-only files, Git, systemd and anonymous GET; no app import or DB access.",
+  "head": "0f51632ca3bef9ac2b438e4efc88f83f3bd59ec3",
+  "expected_head": "0f51632ca3bef9ac2b438e4efc88f83f3bd59ec3",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sat 2026-11-07 19:16:57 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "files": {
+    "app.py": {
+      "sha256": "295f90b809815e1c201867893f38eddf3e236c097b2754101af54f984249564e",
+      "matches": true
+    },
+    "data/cambridge_content_corrections/listening.json": {
+      "sha256": "cba0929a237b7c46a53ec51ea6bb62c0efc34de044c64c9db536051f588a600a",
+      "matches": true
+    },
+    "data/cambridge_content_corrections/listening_answers.json": {
+      "sha256": "b46ad60168814ef2582782d148c98a3c40ec76b6f9652a9c799b2c347475c028",
+      "matches": true
+    },
+    "data/cambridge_content_corrections/reading.json": {
+      "sha256": "470bc343ff67496a64d87b1a254beb44b7b3758104d53e3ca8dac2ba723d7cfc",
+      "matches": true
+    },
+    "services/cambridge_answer_corrections.py": {
+      "sha256": "37683f9c44b084fc1e0b0894a5470e1e4a3ab5504d9041b5b5a12b0536020407",
+      "matches": true
+    },
+    "services/cambridge_content_corrections.py": {
+      "sha256": "c5d12d94845cabac2a6afaf1b97594cee2f95198da2d48d8b1cc152360e40e59",
+      "matches": true
+    },
+    "services/ielts_exam_payload.py": {
+      "sha256": "24f604d8dc866269eba531e7709453a96664b5e83713eb82288e41bb08e000a0",
+      "matches": true
+    },
+    "services/ielts_practice_scoring.py": {
+      "sha256": "e160344c7fa8f94bc58b6082d39cd74d11665d9090bf32af6b86e107278605fb",
+      "matches": true
+    },
+    "services/mock_exam_review.py": {
+      "sha256": "6db8ea9b3e3d2d9bd48b269e5a9457c8e488afc7b078e0fdc216a29d77e6e58b",
+      "matches": true
+    },
+    "services/question_type_practice.py": {
+      "sha256": "2938aef6bda34ae23649b679ca0498952d79b7cda812ca296f7fc074a16a558c",
+      "matches": true
+    },
+    "services/question_type_review.py": {
+      "sha256": "35d86cc96c199b57e233d073c1a76535d10794da0bea33207848ca2ca2ce4623",
+      "matches": true
+    },
+    "static/js/practice_renderers.js": {
+      "sha256": "7963a5964c8551efbbaa542b93d55f51d22ba5edfa027cdff031379b7e8d5d2f",
+      "matches": true
+    },
+    "static/listening_tests/ielts10_test2.json": {
+      "sha256": "544f9ff3908739d400294267d56ee5fe6da873864174014cb9fd0a8a380bb253",
+      "matches": true
+    },
+    "static/listening_tests/ielts10_test3.json": {
+      "sha256": "8cafe6d943edcd8b1e4a2f736492d0deb2a4d20dae51c2a81e5651631bc5407a",
+      "matches": true
+    },
+    "static/listening_tests/ielts10_test4.json": {
+      "sha256": "26d4efabd7b092d99d78bd9b0e759a141926b986f56131669b789b43fd2c7774",
+      "matches": true
+    },
+    "static/listening_tests/ielts11_test1.json": {
+      "sha256": "257e4c71d868bb993db267d07503e14bc17bd182632d8fd1d2e660796b172960",
+      "matches": true
+    },
+    "static/listening_tests/ielts11_test2.json": {
+      "sha256": "dbab8bd33672dd9a9fc5a1695073e473a917026088e2081ce520cf2c609f41b1",
+      "matches": true
+    },
+    "static/listening_tests/ielts11_test4.json": {
+      "sha256": "39022f0fcf235febab5ce24159fba99703b27bcc9fdc0d420f8324f1867712d3",
+      "matches": true
+    },
+    "static/listening_tests/ielts12_test6.json": {
+      "sha256": "bca259702cb7f54e9bd73fe093951759760e5030fb330fe2a3a19310109565f6",
+      "matches": true
+    },
+    "static/listening_tests/ielts12_test7.json": {
+      "sha256": "e62024031f60fc2ef7d660c3c516ad451b9d62ff94bb2885233900b59e096906",
+      "matches": true
+    },
+    "static/listening_tests/ielts13_test1.json": {
+      "sha256": "76a0c12eb83299eaaa68da187199acd62a773c98c68989cd25294f10350eb5d3",
+      "matches": true
+    },
+    "static/listening_tests/ielts13_test2.json": {
+      "sha256": "1d2ea23feb04a02e27db8e0e6deeb55e7089ade80c508f042cc944380de9607c",
+      "matches": true
+    },
+    "static/listening_tests/ielts13_test3.json": {
+      "sha256": "44cac7db17e8fa8a1d9e8708b56b55a91c5a02826cb2fb82d3e28a22ac67dc4b",
+      "matches": true
+    },
+    "static/listening_tests/ielts15_test4.json": {
+      "sha256": "3fd17988cc76c48d70b734a0462a80fdcc815b7c9dcbb5f940ca120dd8e1c411",
+      "matches": true
+    },
+    "static/listening_tests/ielts16_test1.json": {
+      "sha256": "97b65283ef703be0560e07995d7a6ba3a6d45dc3fcf2ba03620cc6d807339f6d",
+      "matches": true
+    },
+    "static/listening_tests/ielts16_test3.json": {
+      "sha256": "8009ff4da2f8772407d6ca96205b65b3236b56b50154beb5a2f72ed8122e510e",
+      "matches": true
+    },
+    "static/listening_tests/ielts17_test2.json": {
+      "sha256": "a767857f2aade20c7c53a8619be3b7ba93c54f090c4616126ef7c03e1106eb86",
+      "matches": true
+    },
+    "static/listening_tests/ielts18_test1.json": {
+      "sha256": "e56847ddd31c567f024163f65769ce3cbaa589e40f6661619bc30690377f0641",
+      "matches": true
+    },
+    "static/listening_tests/ielts18_test3.json": {
+      "sha256": "abc4e870ed7a9632c54e4bdf7ed5ad8576c54b19f58aaab5252d70d00c0343f9",
+      "matches": true
+    },
+    "static/listening_tests/ielts4_test1.json": {
+      "sha256": "9d680fbee48827a6e84d772dfd94dbd6cbea6c20410bf02f994d2452428c5c20",
+      "matches": true
+    },
+    "static/listening_tests/ielts4_test3.json": {
+      "sha256": "203ca34c7681a7f68ed7e11795310272987a09310ae8e35eafd01aa01161986b",
+      "matches": true
+    },
+    "static/listening_tests/ielts5_test1.json": {
+      "sha256": "f41cefd747ffc0ebe2f1a5a461495e186ac9e8bcf43fdfa988c17634ecafa743",
+      "matches": true
+    },
+    "static/listening_tests/ielts5_test3.json": {
+      "sha256": "fd00b0dc153ca6c218fcc542a3d80312382100638601a0b2597412231328e950",
+      "matches": true
+    },
+    "static/listening_tests/ielts6_test1.json": {
+      "sha256": "b043844d2ec74f83782bd5e1a8a5246a9b83e6395415dd3bd304c3b3df5d5610",
+      "matches": true
+    },
+    "static/listening_tests/ielts6_test2.json": {
+      "sha256": "93a6a2482fe3f1ee860b9ac1eab61fbdbf50fd174324b3d0772cbeeeaaa4bae4",
+      "matches": true
+    },
+    "static/listening_tests/ielts6_test4.json": {
+      "sha256": "d35db1e279344c1737bfd838dc16344d9ea8b6a536ea1427e5157e47b053b09e",
+      "matches": true
+    },
+    "static/listening_tests/ielts7_test1.json": {
+      "sha256": "0e4ccd25b9e4e26b24aa12e7bf3fde68a630e6cdcd8383e1d2fd91c9a045333a",
+      "matches": true
+    },
+    "static/listening_tests/ielts7_test2.json": {
+      "sha256": "e3b26ebc6726444ab1901d1d9245c0f56cdccaf566265336a137f39680579058",
+      "matches": true
+    },
+    "static/reading_tests/ielts10_test1_reading.json": {
+      "sha256": "25de7fb51adebb40b34942a24e19dbdc23c5260f4a7048b92bec824d01cb7cfd",
+      "matches": true
+    },
+    "static/reading_tests/ielts10_test2_reading.json": {
+      "sha256": "33615c7375f248f2f19c7f1f1b7ac6d752ad5007ced70e4148919e50b8224a13",
+      "matches": true
+    },
+    "static/reading_tests/ielts10_test3_reading.json": {
+      "sha256": "2a55fdb42e3bb01b12d90d747f24eb15d3e0676f355fca65ae332d2e67a149df",
+      "matches": true
+    },
+    "static/reading_tests/ielts11_test2_reading.json": {
+      "sha256": "61a7f9a4d05e8c760c21e22365a89aa357e93597b772209ef6c5488ed9c28000",
+      "matches": true
+    },
+    "static/reading_tests/ielts11_test4_reading.json": {
+      "sha256": "42643bb32e1587e60ee3f1922f72912a22e3eaa5d1770f3a03c9f6dd0350ac89",
+      "matches": true
+    },
+    "static/reading_tests/ielts12_test5_reading.json": {
+      "sha256": "1322abf7e781b220d2cbb5ad20a6b9f9e3f182815f6a0d3dcb3f5af3124d9f13",
+      "matches": true
+    },
+    "static/reading_tests/ielts12_test6_reading.json": {
+      "sha256": "7b910db6239bdab77e5b74039803a6a894462c37446d2ecc0ae5023c3bf3c0b4",
+      "matches": true
+    },
+    "static/reading_tests/ielts12_test7_reading.json": {
+      "sha256": "0867c06c1b44a871e1a01d3959a310346609882a723b9addbe53f4bbe676657c",
+      "matches": true
+    },
+    "static/reading_tests/ielts12_test8_reading.json": {
+      "sha256": "ebaf1c6ca736a65e4c5d2da43c3907d9a941affb18d443b389626f3067b59a3e",
+      "matches": true
+    },
+    "static/reading_tests/ielts13_test1_reading.json": {
+      "sha256": "aa29ca5c9383a9f0179ef96b4f0ddff909b925640342ac7b6528770acb38804c",
+      "matches": true
+    },
+    "static/reading_tests/ielts13_test2_reading.json": {
+      "sha256": "4db168dc6a29a16f9d165064525648d0d13492b7b8455c07004b5aa7eae5cf89",
+      "matches": true
+    },
+    "static/reading_tests/ielts14_test1_reading.json": {
+      "sha256": "6cb335a3b2b7d24810a57020e5a38fe50c1e25f441c38438a33ae5087617f22f",
+      "matches": true
+    },
+    "static/reading_tests/ielts14_test2_reading.json": {
+      "sha256": "6561bbc5503d6fc367ec24064fa8d95f01b560ea1751cdd3b01efde3a59f950d",
+      "matches": true
+    },
+    "static/reading_tests/ielts15_test3_reading.json": {
+      "sha256": "0f3f730986b6999ac5f87618c57b6588ba53ca7f989b204eb250148bdb576827",
+      "matches": true
+    },
+    "static/reading_tests/ielts16_test1_reading.json": {
+      "sha256": "984640540948b6eac6bf2b82ca7b15db878c3f42f678c70e122ed24fa4cedaf2",
+      "matches": true
+    },
+    "static/reading_tests/ielts16_test4_reading.json": {
+      "sha256": "31966387dc480420a4218cbf1b422fddc27c2daa71f01e9fc51c59958c2bde97",
+      "matches": true
+    },
+    "static/reading_tests/ielts18_test3_reading.json": {
+      "sha256": "ebd1aedf5494e42886954f005adb64f4d83d08cfa662b5cc61f02f647f2ef3ec",
+      "matches": true
+    },
+    "static/reading_tests/ielts20_test3_reading.json": {
+      "sha256": "b13d41fc655d08aa9543547769d48da8a168e2fce18893d0cf0a46b12eca3387",
+      "matches": true
+    },
+    "static/reading_tests/ielts20_test4_reading.json": {
+      "sha256": "5fa91233713216b4c2a7651ef0b652cdb4ad3f56452245876d5af5acdbd55360",
+      "matches": true
+    },
+    "static/reading_tests/ielts4_test1_reading.json": {
+      "sha256": "c1c1405eee32a8e9ce30fb712e10299032d94c4341ba0ee8a69d34d54425fb27",
+      "matches": true
+    },
+    "static/reading_tests/ielts4_test3_reading.json": {
+      "sha256": "0ac82ff2ab54181131061347ff5fc4d4bdfa237faa92612f34e222233eb26ea9",
+      "matches": true
+    },
+    "static/reading_tests/ielts4_test4_reading.json": {
+      "sha256": "cb9bf65d6c11f454fe9db96293ecf767f3ea7e3a68de2c02e2ee913c0f99b010",
+      "matches": true
+    },
+    "static/reading_tests/ielts5_test3_reading.json": {
+      "sha256": "978437c266bd45ea847e059b741e552ea94f2958b0351def1445526f22154353",
+      "matches": true
+    },
+    "static/reading_tests/ielts5_test4_reading.json": {
+      "sha256": "935ce0b25ae0149c2579340d4fadbc290375178d61ba3877c89b2479d47f7136",
+      "matches": true
+    },
+    "static/reading_tests/ielts6_test1_reading.json": {
+      "sha256": "af6c94594e6cb6a0dc832d276a74488d00f237f1cead71e68c511ad92ec802a4",
+      "matches": true
+    },
+    "static/reading_tests/ielts6_test2_reading.json": {
+      "sha256": "875d6b14e6387ad0c175ea666587e0e51a97d1adfd644243f6fd3786110e2de4",
+      "matches": true
+    },
+    "static/reading_tests/ielts6_test3_reading.json": {
+      "sha256": "9efcc1d610432d272c4653af8fadc39e451b85680c75397ca91c0e77a7dbe0c9",
+      "matches": true
+    },
+    "static/reading_tests/ielts6_test4_reading.json": {
+      "sha256": "b59bcbc401346595608b16e45d5cb9714d119b6cb8137cc39bbab2bf3bc263cf",
+      "matches": true
+    },
+    "static/reading_tests/ielts7_test1_reading.json": {
+      "sha256": "7e07774e78331f7510061d1013c043fb16c5f776d6f1ba7de605f040b0ef8987",
+      "matches": true
+    },
+    "static/reading_tests/ielts7_test2_reading.json": {
+      "sha256": "256610f0559d171a86caa16682aee5b79a25a4e8ba320dd4ede02387a9deb2e5",
+      "matches": true
+    },
+    "static/reading_tests/ielts7_test3_reading.json": {
+      "sha256": "ee4129bb7f0dbe9c24d86b42b03aa82a30d500d65c9bda1f7638691c7c09fe01",
+      "matches": true
+    },
+    "static/reading_tests/ielts7_test4_reading.json": {
+      "sha256": "193e6ebcfa8a01fcbc64c919d8fbae5ad542bdf415b6d97abd9c84c68936ec8f",
+      "matches": true
+    },
+    "static/reading_tests/ielts8_test1_reading.json": {
+      "sha256": "6b34079356ffd9c20455da2c9d2e8fc8bbcc91062768daa8c2f786a2f54b228d",
+      "matches": true
+    },
+    "static/reading_tests/ielts8_test2_reading.json": {
+      "sha256": "d81951d6eac5fd6c98539363479e52d5f7fb15c0a34a6f588d0b03289b5eb86a",
+      "matches": true
+    },
+    "static/reading_tests/ielts8_test3_reading.json": {
+      "sha256": "cb10370520a7ae48ee81535a464d99edcac97258c5893b2c31f485307ee29190",
+      "matches": true
+    },
+    "static/reading_tests/ielts8_test4_reading.json": {
+      "sha256": "e2f6e705cad6bd18d498155a6a1018f1f214323a94af9f0129755fad21f03711",
+      "matches": true
+    },
+    "static/reading_tests/ielts9_test1_reading.json": {
+      "sha256": "90abb1198a2a8e12f7b4242bb75538ae6de079391836d8c949b234f225275975",
+      "matches": true
+    },
+    "static/reading_tests/ielts9_test2_reading.json": {
+      "sha256": "3b82bfcfb93112ac8de869cc7fd4b35d35e703fb4a4be99aa27f7cccc24e20e0",
+      "matches": true
+    },
+    "static/reading_tests/ielts9_test4_reading.json": {
+      "sha256": "8c24204f0adaa877db75dbed0294e33e4220229151e95f565d9d729f28bb8789",
+      "matches": true
+    },
+    "static/reading_tests/images/ielts10_test3_p3_essay_10_3_3.jpg": {
+      "sha256": "2f5474337470470fbe03f16a3d14bb7d521d22d5280cc59ab0d34de04e7bb10c",
+      "matches": true
+    },
+    "static/reading_tests/images/ielts4_test1_p3_essay_4_1_3_1.png": {
+      "sha256": "b127cd430e07ace8bcde8af97f478b2b225c64c94649af02e2fac86c365bdeee",
+      "matches": true
+    },
+    "static/reading_tests/images/ielts4_test1_p3_essay_4_1_3_2.png": {
+      "sha256": "703003baafe78a850caecf10ce3c48567bd82eee317fe93ab5e4b174819c289c",
+      "matches": true
+    },
+    "static/reading_tests/images/ielts7_test4_p3_essay_7_4_3.png": {
+      "sha256": "730424b44d7e625a10f2d9bce6774f4d9b2aa878b1f8287aa88b6658841c019c",
+      "matches": true
+    },
+    "templates/exam/_review_assets.html": {
+      "sha256": "10a0a918d91dc968e422593ba64ba77db61f24c53fd56ca1ca8deb0687209932",
+      "matches": true
+    },
+    "templates/exam/_review_components.html": {
+      "sha256": "3bb3e71c6fe24e8944902888b65806362ffef6b13cf57674f2cc89570022840a",
+      "matches": true
+    },
+    "templates/listening/test_practice.html": {
+      "sha256": "8811739eead513d3d73d9d4410ee737bef94f2fda8e186a6e7d433a8244ad9c8",
+      "matches": true
+    },
+    "templates/reading/test_practice.html": {
+      "sha256": "966f40a80798be1567b2d3ee7a856bfd89bb8f5ea9ee6919f0d89f6d7ea30369",
+      "matches": true
+    },
+    "gunicorn.conf.py": {
+      "sha256": "9f0325750a5d0e460722dc2d28abd786e77f41d7eab49bc2c8e339c63f7977dc",
+      "matches": true
+    }
+  },
+  "warnings_since_restart": 0,
+  "listening_runtime": {
+    "tests": 72,
+    "questions": 2880,
+    "with_evidence": 2880,
+    "with_clip": 2880,
+    "unavailable": [],
+    "request_seconds": [
+      0.032,
+      0.02,
+      0.025,
+      0.026,
+      0.024,
+      0.023,
+      0.025,
+      0.028,
+      0.025,
+      0.023,
+      0.022,
+      0.021,
+      0.025,
+      0.022,
+      0.02,
+      0.023,
+      0.023,
+      0.021,
+      0.021,
+      0.023,
+      0.028,
+      0.025,
+      0.021,
+      0.028,
+      0.02,
+      0.021,
+      0.024,
+      0.024,
+      0.021,
+      0.024,
+      0.029,
+      0.027,
+      0.024,
+      0.025,
+      0.022,
+      0.027,
+      0.046,
+      0.029,
+      0.035,
+      0.024,
+      0.134,
+      0.096,
+      0.083,
+      0.065,
+      0.023,
+      0.03,
+      0.062,
+      0.091,
+      0.036,
+      0.029,
+      0.037,
+      0.027,
+      0.023,
+      0.047,
+      0.046,
+      0.028,
+      0.028,
+      0.023,
+      0.024,
+      0.024,
+      0.034,
+      0.338,
+      0.024,
+      0.022,
+      0.036,
+      0.09,
+      0.034,
+      0.031,
+      0.036,
+      0.029,
+      0.038,
+      0.342
+    ],
+    "c18_multi_evidence_complete": true,
+    "ielts20_test1_section1_timeline": {
+      "available": true,
+      "basis": "source_original",
+      "expected_duration": 436.219,
+      "fingerprint": "1d3ccba6dedf556d484b5a02af5dc0b7ad4322004f99dc7422e84352a0b348e6",
+      "media_version": "production_seek_indexed_original",
+      "reason": null,
+      "version": 1
+    }
+  },
+  "reading_runtime": {
+    "tests": 72,
+    "questions": 2880,
+    "source_matches": 72,
+    "mismatches": []
+  },
+  "pages": [
+    {
+      "path": "/listening/test/ielts18_test1",
+      "status": 200,
+      "expected_content": true,
+      "seconds": 0.02
+    },
+    {
+      "path": "/reading/test/ielts6_test2_reading",
+      "status": 200,
+      "expected_content": true,
+      "seconds": 0.031
+    }
+  ],
+  "failures": [],
+  "ok": true
+}

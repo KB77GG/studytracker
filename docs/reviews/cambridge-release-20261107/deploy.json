@@ -1,0 +1,83 @@
+{
+  "conclusion": "success",
+  "headSha": "0f51632ca3bef9ac2b438e4efc88f83f3bd59ec3",
+  "jobs": [
+    {
+      "completedAt": "2026-11-07T11:16:59Z",
+      "conclusion": "success",
+      "databaseId": 128388448691,
+      "name": "deploy",
+      "startedAt": "2026-11-07T11:16:19Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-07T11:16:20Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-07T11:16:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:26Z",
+          "conclusion": "success",
+          "name": "Checkout code",
+          "number": 2,
+          "startedAt": "2026-11-07T11:16:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:30Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-11-07T11:16:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:30Z",
+          "conclusion": "success",
+          "name": "Guard legacy spelling correction queue",
+          "number": 4,
+          "startedAt": "2026-11-07T11:16:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:57Z",
+          "conclusion": "success",
+          "name": "Deploy to Server via SSH",
+          "number": 5,
+          "startedAt": "2026-11-07T11:16:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:57Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 9,
+          "startedAt": "2026-11-07T11:16:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:57Z",
+          "conclusion": "success",
+          "name": "Post Checkout code",
+          "number": 10,
+          "startedAt": "2026-11-07T11:16:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-07T11:16:57Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 11,
+          "startedAt": "2026-11-07T11:16:57Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/42367466296/job/128388448691"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/KB77GG/studytracker/actions/runs/42367466296"
+}

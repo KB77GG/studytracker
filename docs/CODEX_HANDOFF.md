@@ -1,5 +1,27 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07 剑桥解析、题干与双空修复已部署
+
+- 用户明确授权“部署吧”，并要求追加题干准确性复核。实施树 **`/private/tmp/studytracker-cambridge-fix-20261107`**，分支 `codex/cambridge-explanations-fix-20261107`，审计基线40cd8225；保留前轮业务改动并快进至仅新增文档的主线ffee98a7后，业务105文件提交 **5099ac411730062949a4341a9684dd62ade50c7d**，单文件测试隔离提交 **0f51632ca3bef9ac2b438e4efc88f83f3bd59ec3**，均已push任务分支与main并部署。报告和两交接随后独立`[skip ci]`提交同步，最终文档HEAD见git log；生产保留0f51632c。修复源码与共享报告不再仅本机，另一台电脑可从远端取得。
+- 根因及修复：剑18T1内部ID与显示题号混查造成21题串解析/错导航（12题跨Section），严格ID查题及摘要题号显式转换后全2880题错配归零。29条解析更正、3条引文、7题定位、5篇漏导语及普通听力/阅读模考依据链路一并交付。阅读heading确认42题错段、40题空标题，200道同类题采用原始明确段码；12道同题号双空（听7/读5）改为两输入但一逻辑答案/一分，保留and/or/to及原文片段。15组说明、5条新增题干错词或缺片段、数字框与共享句、4张缺失原图均已修；原图在普通/模拟/复盘正确位置展示。模拟作答JSON移除定位引文/音频依据等教学字段。
+- 精确内容范围见 `docs/reviews/cambridge-release-20261107/release-scope.json`：听力26套42题和9组说明；阅读39套205题和6组说明、5导语、3篇4图。144套/5760题ID、题号、选项及阅读原A–Z正文不变。单独审定答案清单 `listening_answers.json` 只修C4T1Q11、C6T1Q7/19/32四题的双空完整组合规则（其余5756答案不变）；新提交评分及授权展示副本应用，原冻结JSON/hash和已保存成绩不迁移、不重算。题干/解析应用器与答案更正器严格分开，未来导入保留审定清单。
+- 最终 **120 Python +82 Node** 通过，含130个真实JS输入序列化→Python评分场景；全普通/模拟144套5760题实际renderGroup核对控件ID/显示题号/缺重题/占位残留/源词。专项验证5702可发布题，原11组58题manual_review门禁保留。独立全库范围、65旧阅读冻结快照、全部84套3360听力评分对比确认仅四题规则变化。targeted Ruff py310、33修改/新增Python3.10 AST、模板JS语法和diff检查通过，不宣称全仓格式/lint通过。
+- 关键复跑命令（cwd实施树；完整命令、日志与证据见发布README）：
+
+```sh
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_cambridge_content_corrections tests.test_cambridge_answer_corrections tests.test_cambridge_listening_corrections tests.test_cambridge_reading_corrections tests.test_cambridge_reading_stems tests.test_cambridge_pair_grading tests.test_ielts_exam_payload tests.test_cambridge_review_delivery tests.test_question_type_review tests.test_question_type_practice tests.test_mock_exam_review tests.test_mock_exam_template_isolation tests.test_question_type_practice_contract -q
+node --test tests/test_practice_renderers.js tests/test_cambridge_reading_introduction.js tests/test_cambridge_reading_figures.js tests/test_cambridge_stem_controls.js tests/test_listening_review_audio.js tests/test_question_type_review_readonly.js tests/test_listening_clip_player.js tests/test_practice_scoring.js tests/test_listening_practice_navigation.js tests/test_reading_practice_navigation.js
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/cambridge-fix-20261107/verify_scope.py
+git diff --check
+```
+
+- 初次分支CI42365904819因旧测试硬编码个人Mac音频目录失败，已用独立临时存在性fixture替换，并新增缺音频时真实资源门禁阻断回归；未放宽生产检查。[分支CI42366264621](https://github.com/KB77GG/studytracker/actions/runs/42366264621)、[主线CI42367466332](https://github.com/KB77GG/studytracker/actions/runs/42367466332)均success，test/account-provisioning/task-planner三job成功；存量advisory lint仍failure。[Deploy42367466296](https://github.com/KB77GG/studytracker/actions/runs/42367466296)一次success。
+- 生产 `/root/apps/studytracker` **0f51632c**，86运行文件SHA与发布树一致，tracked clean、递归未跟踪文件数113、前后不变；**2026-11-07 19:16:57 CST**起active/running，NRestarts0，127.0.0.1:5002/workers1/gthread/threads6，验收时重启以来warning以上0。72套听力2880/2880有依据且clip可用；C18多选双依据完整；C20T1S1生产实际媒体source_original、436.219秒。72套阅读2880题API与本机规范化题库逐JSON哈希一致，页面解析查题器/漏导语检查通过。
+- 生产验收脚本 `docs/reviews/cambridge-release-20261107/verify_release.py` 只读Git/文件/HTTP/systemd/journal，不import app、不查学生表；manifest打包及SSH精确命令在README，结果在release-audit.json。公网renderer和4原图SHA一致；真实浏览器确认C6T1Q7两输入及from/to、C10T1例F后Q19–21为G/H/I、C7T4 Table1加载2184×736，console errors=[]；未输入/提交真实学生作答，临时标签关闭。本机合成作答/刷新恢复也已验，5098预览已停。
+- 本次按既有部署脚本发布/重启，无新增依赖、migration/schema、手工生产数据库/学生数据写入、重算历史成绩、外部服务设置或付费API。网页前端及后端/数据已上线；小程序代码未改、未上传/提审/发布。已打开旧页面须刷新/重开以加载新模板与JS。
+- 旧资料树 **`/Users/zhouxin/Desktop/studytracker`** 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified（design-qa.md、两交接、static/style.css、templates/listening/index.html、templates/listening/test_practice.html、templates/login.html）/23 untracked顶层入口完整保留，本轮仅两交接镜像，未切分支或覆盖业务。精确旧脏路径见该树前轮核查记录及git status；其旧业务文件不含本轮修复，不可从此树发布。此前IWA/其他工作记录保留。实施树开工业务脏改动均属本任务；发布时106个唯一业务/测试/CI文件已提交，剩两个报告目录及两交接随本轮文档提交同步，提交后应clean；其他worktree未改。
+- 当前无发布阻塞。未验证：5760题逐题人工语义终审、全部音频实听、真实微信设备或真实学生完整提交。全量规则/原文保留扫描不保证所有细小措辞无误；20题阅读原依据为空未伪造。2条旧冻结transcript逆时间及不参与运行态的target_para元数据未顺手改；未来听力整库builder重建可能改变337条未审文本，须另审diff。下一位先核Git和生产HEAD，按具体反馈在本发布分支复现，避免覆盖历史成绩；无需重复部署本修复。旧报告的未发布/答案不变均为首次本机阶段历史状态，最新事实以发布README和本节为准。
+
 ## 2026-11-04 补做顺延独立师生验收与03:00宽限期修复已部署
 
 - 用户先授权隔离验收及最小修复，随后明确“部署吧”。发布树 `/private/tmp/studytracker-recovery-e2e-20261104`，分支 **codex/recovery-cutoff-20261104**，验收基线 **f0e040416c8a68e66ba1202e558d4c1690bdc91b**；业务提交 **40cd8225db1b0a5da188b1dd99d4521dc5853328** 已push分支/main并部署。发布前两次fetch均无并行主线增量；8候选文件SHA与用户审阅版一致。业务提交仅含 `.github/workflows/ci.yml`、`services/task_planner_recovery.py`、`templates/task_planner.html`、`docs/TASK_PLANNER_RECOVERY.md`、`tests/recovery_e2e_support.py`、`tests/test_task_planner_recovery_cutoff.py`、`tests/test_task_planner_recovery_e2e.py`、`tests/test_task_planner_recovery_student_contract_e2e.py`。两交接及报告随后以独立 `[skip ci]` 文档提交同步，最终文档HEAD见git log；生产保持业务HEAD，文档提交后发布树应clean。

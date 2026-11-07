@@ -1,0 +1,2976 @@
+{
+  "baseline": "40cd8225db1b0a5da188b1dd99d4521dc5853328",
+  "raw_sha256": "0487d669ad899761572d5361cf8dd992cd69d05d8763c5474db55e61a1f28b13",
+  "coverage": {
+    "tests": 72,
+    "passages": 216,
+    "groups": 613,
+    "questions": 2880
+  },
+  "headings": [
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 19,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 20,
+      "source_code": "H",
+      "title": "Paragraph H",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "group": 272,
+      "number": 21,
+      "source_code": "I",
+      "title": "Paragraph I",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 1,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 2,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 3,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 4,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 5,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 6,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "group": 277,
+      "number": 7,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 1,
+      "group": 285,
+      "number": 1,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 1,
+      "group": 285,
+      "number": 2,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 1,
+      "group": 285,
+      "number": 3,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 1,
+      "group": 285,
+      "number": 4,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 2,
+      "group": 246,
+      "number": 20,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts11_test4_reading",
+      "passage": 3,
+      "group": 266,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 3,
+      "group": 208,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "group": 215,
+      "number": 20,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 1,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 2,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 3,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 4,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 5,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 6,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "group": 221,
+      "number": 7,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 3,
+      "group": 233,
+      "number": 33,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "group": 174,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 33,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 151,
+      "number": 34,
+      "source_code": "H",
+      "title": "Paragraph H",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 2,
+      "group": 124,
+      "number": 20,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test1_reading",
+      "passage": 2,
+      "group": 72,
+      "number": 20,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 3,
+      "group": 101,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "group": 20,
+      "number": 20,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 2,
+      "group": 9346,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts4_test3_reading",
+      "passage": 2,
+      "group": 8071,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test3_reading",
+      "passage": 2,
+      "group": 8071,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test3_reading",
+      "passage": 2,
+      "group": 8071,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test3_reading",
+      "passage": 2,
+      "group": 8071,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test4_reading",
+      "passage": 3,
+      "group": 8084,
+      "number": 28,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test4_reading",
+      "passage": 3,
+      "group": 8084,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test4_reading",
+      "passage": 3,
+      "group": 8084,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts4_test4_reading",
+      "passage": 3,
+      "group": 8084,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 2,
+      "group": 461,
+      "number": 14,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 2,
+      "group": 461,
+      "number": 15,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 2,
+      "group": 461,
+      "number": 16,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 2,
+      "group": 461,
+      "number": 17,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts5_test4_reading",
+      "passage": 1,
+      "group": 467,
+      "number": 1,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts5_test4_reading",
+      "passage": 1,
+      "group": 467,
+      "number": 2,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts5_test4_reading",
+      "passage": 1,
+      "group": 467,
+      "number": 3,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 27,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 28,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 29,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 30,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 31,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "group": 412,
+      "number": 32,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "group": 414,
+      "number": 1,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "group": 414,
+      "number": 2,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "group": 414,
+      "number": 3,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "group": 414,
+      "number": 4,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "group": 414,
+      "number": 5,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "group": 424,
+      "number": 14,
+      "source_code": "B",
+      "title": "Paragraph B (Key Point Two)",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "group": 424,
+      "number": 15,
+      "source_code": "C",
+      "title": "Paragraph C (Key Point Three)",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "group": 424,
+      "number": 16,
+      "source_code": "D",
+      "title": "Paragraph D (Key Point Four)",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "group": 424,
+      "number": 17,
+      "source_code": "E",
+      "title": "Paragraph E (Key Point Five)",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "group": 424,
+      "number": 18,
+      "source_code": "F",
+      "title": "Paragraph F (Key Point Six)",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 1,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 2,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 3,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 4,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 5,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 6,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "group": 430,
+      "number": 7,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 3,
+      "group": 435,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 3,
+      "group": 435,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 3,
+      "group": 435,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 3,
+      "group": 435,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 15,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 16,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 17,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 18,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 19,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "group": 375,
+      "number": 20,
+      "source_code": "H",
+      "title": "Paragraph H",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 3,
+      "group": 386,
+      "number": 27,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 3,
+      "group": 386,
+      "number": 28,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 3,
+      "group": 386,
+      "number": 29,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 3,
+      "group": 386,
+      "number": 30,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 15,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 16,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 17,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 18,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "group": 392,
+      "number": 19,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 14,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 15,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 16,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 17,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 18,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 2,
+      "group": 342,
+      "number": 19,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "blank_prompt"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 2,
+      "group": 348,
+      "number": 14,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 2,
+      "group": 348,
+      "number": 15,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 2,
+      "group": 348,
+      "number": 16,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 2,
+      "group": 348,
+      "number": 17,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 27,
+      "source_code": "A",
+      "title": "Paragraph A",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 28,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 29,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 30,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 31,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "group": 351,
+      "number": 32,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "correct"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 27,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 28,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 29,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 30,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 31,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test3_reading",
+      "passage": 3,
+      "group": 360,
+      "number": 32,
+      "source_code": "G",
+      "title": "Paragraph G",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 1,
+      "group": 363,
+      "number": 1,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 1,
+      "group": 363,
+      "number": 2,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 1,
+      "group": 363,
+      "number": 3,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 1,
+      "group": 363,
+      "number": 4,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 1,
+      "group": 363,
+      "number": 5,
+      "source_code": "F",
+      "title": "Paragraph F",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "group": 305,
+      "number": 14,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "group": 305,
+      "number": 15,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "group": 305,
+      "number": 16,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "group": 305,
+      "number": 17,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 3,
+      "group": 336,
+      "number": 27,
+      "source_code": "B",
+      "title": "Paragraph B",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 3,
+      "group": 336,
+      "number": 28,
+      "source_code": "C",
+      "title": "Paragraph C",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 3,
+      "group": 336,
+      "number": 29,
+      "source_code": "D",
+      "title": "Paragraph D",
+      "baseline_status": "wrong_paragraph"
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 3,
+      "group": 336,
+      "number": 30,
+      "source_code": "E",
+      "title": "Paragraph E",
+      "baseline_status": "wrong_paragraph"
+    }
+  ],
+  "structural_errors": [],
+  "raw_display_differences": [
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 1,
+      "group": 285,
+      "field": "desc",
+      "reviewed": true
+    },
+    {
+      "test": "ielts12_test5_reading",
+      "passage": 1,
+      "group": 204,
+      "field": "desc",
+      "reviewed": true
+    },
+    {
+      "test": "ielts13_test2_reading",
+      "passage": 1,
+      "group": 181,
+      "field": "desc",
+      "reviewed": true
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 3,
+      "group": 153,
+      "field": "desc",
+      "reviewed": true
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 3,
+      "group": 464,
+      "field": "desc",
+      "reviewed": true
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 1,
+      "group": 331,
+      "field": "desc",
+      "reviewed": true
+    }
+  ],
+  "paired_blanks": [
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 2,
+      "group": 281,
+      "number": 23,
+      "id": 1325,
+      "occurrences": 2,
+      "answer": "books and activities"
+    },
+    {
+      "test": "ielts4_test1_reading",
+      "passage": 2,
+      "group": 8053,
+      "number": 21,
+      "id": 34179,
+      "occurrences": 2,
+      "answer": "bowhead and humpback"
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 2,
+      "group": 385,
+      "number": 26,
+      "id": 1775,
+      "occurrences": 2,
+      "answer": "farmers and consumers"
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 3,
+      "group": 329,
+      "number": 33,
+      "id": 1522,
+      "occurrences": 2,
+      "answer": "Jupiter and Saturn"
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 3,
+      "group": 329,
+      "number": 35,
+      "id": 1524,
+      "occurrences": 2,
+      "answer": "sensors and circuits"
+    }
+  ],
+  "word_limit_candidates": [
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 1,
+      "group": 271,
+      "number": 10,
+      "limit": 1,
+      "answer": "4 sides / four sides",
+      "numeric_allowance": true,
+      "paired": false
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 2,
+      "group": 281,
+      "number": 23,
+      "limit": 2,
+      "answer": "books and activities",
+      "numeric_allowance": false,
+      "paired": true
+    },
+    {
+      "test": "ielts10_test4_reading",
+      "passage": 1,
+      "group": 295,
+      "number": 2,
+      "limit": 1,
+      "answer": "10 times / ten times",
+      "numeric_allowance": true,
+      "paired": false
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 3,
+      "group": 329,
+      "number": 33,
+      "limit": 2,
+      "answer": "Jupiter and Saturn",
+      "numeric_allowance": false,
+      "paired": true
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 3,
+      "group": 329,
+      "number": 35,
+      "limit": 2,
+      "answer": "sensors and circuits",
+      "numeric_allowance": false,
+      "paired": true
+    }
+  ],
+  "omitted_passage_context": [
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "A millennium ago, stepwells were fundamental to life in the driest parts of India. Richard Cox travelled to north-western India to document these spectacular monuments from a bygone era.",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "What have been the trends and what are the prospects for European transport systems?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Why are so few companies truly innovative?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "A Cambridge professor says that a change in drinking habits was the reason for the Industrial Revolution in Britain. Anjana Ahuja reports",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 1,
+      "field": "notes",
+      "source": [
+        "*Joseph Lister was the first doctor to use antiseptic techniques during surgical operation to prevent infections."
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "The fact that people go to the Louvre museum in Paris to see the original painting Mona Lisa when they can see a reproduction anywhere leads us to question some assumptions about the role of museums of fine art in today's world",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Canadian writer Jay Ingram investigates the mystery of why leaves turn red in the fall",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Ancient voyagers who settled the far-flung islands of the Pacific Ocean",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test3_reading",
+      "passage": 3,
+      "field": "paragraph_img",
+      "source": [
+        {
+          "img_url": "https://xyy-img.oss-cn-beijing.aliyuncs.com/essay/essay_10_3_3.jpg",
+          "paragraph": 2
+        }
+      ],
+      "restored_by_release": true
+    },
+    {
+      "test": "ielts10_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Drought, housing expansion, and oversupply of tinder make for bigger, hotter fires in the western United States",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test4_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Your personality isn't necessarily set in stone. With a little experimentation, people can reshape their temperaments and inject passion, optimism, joy and courage into their lives",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts10_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Evolution isn't supposed to run backwards—yet an increasing number of examples show that it does and that it can sometimes represent the future of a species",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts11_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "A unique engineering achievement",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts11_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Mark Rowe reports on the increasingly ambitious geo-engineering projects being explored by scientists",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts11_test2_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "How a sixteenth-century warship was recovered from the seabed",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts11_test3_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The history of the world's most luxurious fabric, from ancient China to the present day",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Synthesis of an online debate",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 1,
+      "field": "notes",
+      "source": [
+        "* The personal names in the next refer to the authors of written contributions to the online debate."
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test6_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "An explorer's encounter with the ruined city of Machu Picchu, the most famous\nicon of the Inca civilisation",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "An airborne reintroduction programme has helped conservationists take significant steps to protect the endangered Galápagos tortoise.",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test7_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Neuroscientist Jonah Lehrer considers the emotional power of music",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts12_test8_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "It's time to start returning vanished native animals to Britain, says John Vesty",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "This most common of emotions is turning out to be more interesting than we thought",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Can computers really create works of art?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "The positive and negative effects of the chemical known as the 'love hormone'",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Experts from Harvard Business School give advice to managers",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "New research sheds light on the disappearance of an ancient society",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test4_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "More than a third of the Earth's top layer is at risk. Is there hope for our planet's most precious resource?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test4_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "*Humus: the part of the soil formed from dead plant material"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "The Happiness Industry: How the Government and Big Business Sold Us Well-Being\nBy William Davies",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts13_test4_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "*'Behaviourism': a branch of psychology which is concerned with observable behaviour"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test1_reading",
+      "passage": 1,
+      "field": "notes",
+      "source": [
+        "[1] Lego: coloured plastic building blocks and other pieces that can be joined together"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "How Dutch engineer Luud Schimmelpennink helped to devise urban bike-sharing schemes",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Born in Scotland, Henderson emigrated to Canada in 1855 and became a well-known landscape photographer",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Answers to the problem of excessive electricity use by skyscrapers and large public buildings can be found in ingenious but forgotten architectural designs of the 19th and early-20th centuries",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test2_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* pathogens: microorganisms that can cause disease"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test3_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Zoologist Ross Piper looks at the potential of insects in pharmaceutical research",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts14_test4_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Scientist David Hone makes the case for zoos",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts15_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "The findings of psychological scientists reveal the importance of humour",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The British sculptor Henry Moore was a leading figure in the 20th-century art world",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts15_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Some people think that fairy tales are just stories to amuse children, but their universal and enduring appeal may be due to more serious reasons",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts15_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The Arid Valleys of Southern Peru Are Welcoming the Return of a Native Plant",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test2_reading",
+      "passage": 1,
+      "field": "notes",
+      "source": [
+        "*Iron Age: a period (in Britain 800 BCE – 43 CE) that is characterised by the use of iron tools",
+        "*Bronze Age: a period (in Britain c. 2,500 BCE – 800 BCE) that is characterised by the development of bronze tools",
+        "**Neolithic: a period (in Britain c. 4,000 BCE – c. 2,500 BCE) that is significant for the spread of agricultural practices, and the use of stone tools",
+        "***Celtic: an ancient people who migrated from Europe to Britain before the Romans"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test2_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/paper/16_28.png?dy_height=20",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Wendy Moore reviews Ed Yong's book about microbes",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test3_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "*Iron Age: a period (in Britain 800 BCE – 43 CE) that is characterised by the use of iron tools",
+        "*Bronze Age: a period (in Britain c. 2,500 BCE – 800 BCE) that is characterised by the development of bronze tools",
+        "**Neolithic: a period (in Britain c. 4,000 BCE – c. 2,500 BCE) that is significant for the spread of agricultural practices, and the use of stone tools",
+        "***Celtic: an ancient people who migrated from Europe to Britain before the Romans"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "A photoreceptor molecule in plant cells has been found to have a second job as a thermometer after dark – allowing plants to read seasonal temperature changes. Scientists say the discovery could help breed crops that are more resilient to the temperatures expected to result from climate change",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The Romans, who once controlled areas of Europe, North Africa and Asia Minor, adopted the construction techniques of other civilizations to build tunnels in their territories",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts16_test4_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "What are the implications of the way we read today?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test1_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* amphitheatre: (especially in Greek and Roman architecture) an open circular or oval building with a central space surrounded by tiers of seats for spectators, for the presentation of dramatic or sporting events"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Anna Keay reviews Charles Spencer's book about the hunt for King Charles II during the English Civil War of the seventeenth century",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test2_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* mutations: changes in an organism's genetic structure that can be passed down to later generations"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Two scientists consider the origins of discoveries and other innovative behavior",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Katharine L. Shester reviews a book by Jason Barr about the development of New York City",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "How Madagascar's bats are helping to save the rainforest",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts17_test4_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* guild: an association of artisans or merchants which oversees the practice of their craft or trade in a particular area"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test1_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "In Paris, urban farmers are trying a soil-free approach to agriculture that uses less space and fewer resources. Could it help cities face the threats to our food supplies?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "How managing low-quality wood (also known as low-use wood) for bioenergy can encourage sustainable forest management",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Satellites, rocket shards and collision debris are creating major traffic risks in orbit around the planet. Researchers are working to reduce these threats",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Powerful artificial intelligence (AI) needs to be reliably aligned with human values, but does this mean AI will eventually have to police those values?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Leonardo da Vinci's ideal city was centuries ahead of its time",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Concrete is everywhere, but it's bad for the planet, generating large amounts of carbon dioxide – alternatives are being developed",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test3_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "The successes and failures of the Doble brothers and their steam cars",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts18_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "by Mott T Greene",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts19_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "In the first and second millennia BCE, pirates sailed around the Mediterranean, attacking ships and avoiding pursuers",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts19_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Brian Southwell looks at how human brains verify information and discusses some of the challenges of battling widespread falsehoods",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts19_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Once the stuff of science fiction, technology that enables people to talk using different languages is now here. But how effective is it?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts19_test4_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Bacteria from the ocean floor can beat superbugs and cancer. But habitats are at risk from the hunger for marine minerals",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts19_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "A psychologist gives his view on how humans became self-centred",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Mark Rowe investigates attempts to reintroduce elms to Britain",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "A psychologist explains why we put off important tasks and how we can break this habit",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test2_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "*strike: a strike is when the batter swings at a ball and misses or when the batter does not swing at a ball that passes through the strike zone."
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "A US perspective on the development of the frozen food industry",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Three leaders in their fields answer questions about our relationships with robots",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts20_test3_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "* terraforming: modifying a planet's atmosphere to suit human needs",
+        "** singularity: the point when robots will be able to start creating ever more sophisticated versions of themselves"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test1_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Between 1908 and 1924, Gwendoline and Margaret Davies amassed one of the largest collections of late-nineteenth and early-twentieth-century French paintings in Britain",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Located in southern Africa just below the Limpopo River, the kingdom of Mapungubwe, flourished between the 11th and 13th century CE",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test2_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* palisade: typically a row of closely placed, high vertical wooden or iron posts used as a means of defence"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test4_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* slum: a very densely populated area in which the infrastructure is incomplete and services inadequate or non-existent"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "A review of Peter Bellerby's book The Globemakers",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts21_test4_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "* cartographer: someone involved in the science or pactice of drawing maps",
+        "** plaster of Paris: a quick-setting plaster consisting of a fine white powder that hardens when moistened and allowed to dry"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts4_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "An examination of the functioning of the senses in cetaceans, the group of mammals comprising whales, dolphins and porpoises",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts4_test1_reading",
+      "passage": 3,
+      "field": "paragraph_img",
+      "source": [
+        {
+          "img_url": "https://xyy-img.oss-cn-beijing.aliyuncs.com/essay/essay_4_1_3_1.png",
+          "paragraph": 1
+        },
+        {
+          "img_url": "https://xyy-img.oss-cn-beijing.aliyuncs.com/essay/essay_4_1_3_2.png?dy_height=25",
+          "paragraph": 9
+        }
+      ],
+      "restored_by_release": true
+    },
+    {
+      "test": "ielts4_test2_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Many minority languages are on the danger list",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts4_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Does play help develop bigger, better brains?\nBryant Furlow investigates",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts4_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Limits to human sporting performance are not yet in sight",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test2_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The birth of modern plastics",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "John McCrone reviews recent research on humour",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test2_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "1 lingua franca: a language which is used for communication between groups of people who speak different languages"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "New Zealand's National Party spokesman on education, Dr Lockwood Smith, recently visited the US and Britain. Here he reports on the findings of his trip and what they could mean for New Zealand's education policy",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_5_3_2.jpg?dy_height=10",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts5_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "It is becoming acceptable again to talk of computers performing human tasks such as problem-solving and pattern-recognition",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "The vast expansion in international trade owes much to a revolution in the business of moving freight",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* hold: ship's storage area below deck"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_6_1_2.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "The threat posed by climate change in the Arctic and the problems faced by Canada's Inuit people",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test1_reading",
+      "passage": 3,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_6_1_3.png?dy_height=6",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_6_2_1.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test2_reading",
+      "passage": 3,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_6_2_3.png?dy_height=7",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 2,
+      "field": "paragraph_title",
+      "source": {
+        "A": "KEY POINT ONE",
+        "B": "KEY POINT TWO",
+        "C": "KEY POINT THREE",
+        "D": "KEY POINT FOUR",
+        "E": "KEY POINT FIVE",
+        "F": "KEY POINT SIX",
+        "pre-A": "THE CHALLENGE"
+      },
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "　　In government laboratories and elsewhere, scientists are seeking a drug able to prolong life and youthful vigor. Studies of caloric restriction are showing the way",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test3_reading",
+      "passage": 3,
+      "field": "notes",
+      "source": [
+        "* calorie: a measure of the energy value of food"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Doctoring sales\nPharmaceuticals is one of the most profitable industries in North America. But do the drug industry's sales and marketing strategies go too far?",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts6_test4_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Persistent bullying is one of the worst experiences a child can face. How can it be prevented? Peter Smith, Professor of Psychology at the University of Sheffield, directed the Sheffield Anti-Bullying Intervention Project, funded by the Department for Education. Here he reports on his findings.",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_1_1.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* underground stores of water"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test1_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_1_2.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_2_1.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test2_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_2_2.png?dy_height=8",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 1,
+      "field": "notes",
+      "source": [
+        "* aphids: small insects of a different species from ants"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_3_1.png?dy_height=6",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "1  New World: the American continent, as opposed to the so-called Old World of Europe, Asia and Africa",
+        "2  modern Native American: an American descended from the groups that were native to America",
+        "3  Inuit and Aleut: two of the ethnic groups native to the northern regions of North America (i.e. northern Canada and Greenland)",
+        "4  DNA: the substance in which genetic information is stored",
+        "5  crown/root: parts of the tooth",
+        "6  incisor/premolar/molar: kinds of teeth"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test3_reading",
+      "passage": 3,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_3_3.png?dy_height=6",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test4_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "No one knows exactly how the pyramids were built. Marcus Chown reckons the answer could be 'hanging in the air'.",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test4_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_4_1.png?dy_height=6",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test4_reading",
+      "passage": 2,
+      "field": "notes",
+      "source": [
+        "* spawners: fish that have released eggs",
+        "** spawn: release eggs",
+        "*** MSC: a joint venture between WWF (World Wildlife Fund) and Unilever, a Dutch-based multi-national"
+      ],
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test4_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_7_4_2.png?dy_height=6",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts7_test4_reading",
+      "passage": 3,
+      "field": "paragraph_img",
+      "source": [
+        {
+          "img_url": "https://xyy-img.oss-cn-beijing.aliyuncs.com/essay/essay_7_4_3.png",
+          "paragraph": 3
+        }
+      ],
+      "restored_by_release": true
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "Our conception of time depends on the way we measure it",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_8_1_1.png?dy_height=8",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts8_test1_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Can human beings communicate by thought alone? For more than a century the issue of telepathy has divided the scientific community, and even today it still sparks bitter controversy among top academics ",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts8_test2_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "The meaning and power of smell\nThe sense of smell, or olfaction, is powerful. Odours affect us on a physical, psychological and social level. For the most part, however, we breathe in the aromas which surround us without being consciously aware of their importance to us. It is only when the faculty of smell is impaired for some reason that we begin to realise the essential role the sense of smell plays in our sense of well-being",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts8_test4_reading",
+      "passage": 3,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_8_4_3.png",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 1,
+      "field": "sub_title",
+      "source": "The man who invented synthetic dyes",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "The Search for Extra-terrestrial Intelligence",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test1_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_9_1_2.png?dy_height=10",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test2_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "June 2004 saw the first passage, known as a 'transit', of the planet Venus across the face of the Sun in 122 years. Transits have helped shape our view of the whole Universe, as Heather Cooper and Nigel Henbest explain",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test2_reading",
+      "passage": 2,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_9_2_2.jpg?dy_height=8",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 2,
+      "field": "sub_title",
+      "source": "Undersea turbines which produce electricity from the tides are set to become an important source of renewable energy for Britain. It is still too early to predict the extent of the impact they may have, but all the signs are that they will play a significant role in the future",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test3_reading",
+      "passage": 3,
+      "field": "sub_title",
+      "source": "Information theory—the big ideaInformation theory lies at the heart of everything— from DVD players and the genetic code of DNA to the physics of the universe at its most fundamental. It has been central to the development of the science of communication, which enables data to be sent electronically and has therefore had a major impact on our lives",
+      "restored_by_release": false
+    },
+    {
+      "test": "ielts9_test4_reading",
+      "passage": 1,
+      "field": "image",
+      "source": "https://duy-ielts-public.oss-cn-hangzhou.aliyuncs.com/exercises/imgs/essay/essay_9_4_1.png?dy_height=8",
+      "restored_by_release": false
+    }
+  ],
+  "boundary": "Structure and source-field comparison cover the full bank; candidate review is not a semantic certification of all 2880 questions.",
+  "heading_baseline_counts": {
+    "correct": 118,
+    "wrong_paragraph": 42,
+    "blank_prompt": 40
+  },
+  "omitted_context_counts": {
+    "sub_title": 85,
+    "notes": 23,
+    "paragraph_img": 3,
+    "image": 19,
+    "paragraph_title": 1
+  }
+}

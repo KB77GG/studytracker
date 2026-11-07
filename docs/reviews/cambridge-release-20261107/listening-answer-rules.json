@@ -1,0 +1,78 @@
+{
+  "status": "implemented separately from editorial corrections; future submissions only",
+  "implementation": "services/cambridge_answer_corrections.py",
+  "manifest": "data/cambridge_content_corrections/listening_answers.json",
+  "scope": [
+    {
+      "test": "ielts4_test1",
+      "number": 11,
+      "id": 21802,
+      "parts": [
+        [
+          "coal"
+        ],
+        [
+          "firewood"
+        ]
+      ],
+      "order": "either",
+      "source": "Cambridge IELTS 4 p152; both required for one mark"
+    },
+    {
+      "test": "ielts6_test1",
+      "number": 7,
+      "id": 1578,
+      "parts": [
+        [
+          "10",
+          "10 am"
+        ],
+        [
+          "4.30",
+          "4.30 pm",
+          "4:30",
+          "4:30 pm"
+        ]
+      ],
+      "order": "fixed from/to",
+      "source": "Cambridge IELTS 6 p11, p151; printed from/to and both times in answer key"
+    },
+    {
+      "test": "ielts6_test1",
+      "number": 19,
+      "id": 1590,
+      "parts": [
+        [
+          "Monday"
+        ],
+        [
+          "Thursday"
+        ]
+      ],
+      "order": "either (preserves existing accepted reverse)",
+      "source": "Cambridge IELTS 6 p13, p151; both days required"
+    },
+    {
+      "test": "ielts6_test1",
+      "number": 32,
+      "id": 1602,
+      "parts": [
+        [
+          "metal"
+        ],
+        [
+          "leather"
+        ]
+      ],
+      "order": "either",
+      "source": "Cambridge IELTS 6 p16, p151; key IN EITHER ORDER"
+    }
+  ],
+  "notes": [
+    "Every slash alternative in the new manifest is a complete pair; no single part is sufficient.",
+    "Existing case/punctuation normalization equates 4.30 and 4:30, am and a.m., pm and p.m.; no broad new normalization added.",
+    "Q7 new alternatives use the existing reasonable spaced AM/PM forms, optional AM/PM, to/and/space joiners; from/to order is fixed.",
+    "Source IDs, numbers, options, other 5756 listening/reading question scoring fields, and all saved historical results remain unchanged.",
+    "answers is derived solely from answer by splitting slash variants; editorial helper does not accept either field."
+  ]
+}

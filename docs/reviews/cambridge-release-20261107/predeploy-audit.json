@@ -1,0 +1,24 @@
+{
+  "checked_at_utc": "2026-11-07T09:33:09.551234+00:00",
+  "scope": "Read-only files, Git, systemd and anonymous GET; no app import or DB access.",
+  "head": "40cd8225db1b0a5da188b1dd99d4521dc5853328",
+  "expected_head": "40cd8225db1b0a5da188b1dd99d4521dc5853328",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Wed 2026-11-04 21:31:05 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "files": {},
+  "warnings_since_restart": 0,
+  "failures": [],
+  "ok": true
+}
