@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07（.9 复核后）雅思写作 AI 试用工具：Task 1 对照保留全部已核实数字（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `dc3401e`（报告 `478461a`，`docs/design/ielts-writing-ai-prompt9-review-20261107/`，含 3 个探针）。结构 / 统计全部通过（JSON 结构探针 82/82、统计探针 100/100、370 Python、8 Node）；剩 1 个 P2：说明提到的数字超过 4 个时，`_decisive_figures` 按模型顺序取前 4 个，仍会截掉决定矛盾的 2020 年 75% / 80%（只把真实说明展开成“2000 年 A 70% 高于 B 55%、C 40%、D 15%；但 2020 年 C 80% 高于 A 75%”即可复现）。评审同时更正上份报告：Task 1 原案例是旧程序 `figures[:3]` 截掉了关键数字，不是模型选错年份。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动（探针输出都写到 scratch）。
+- 修复（业务提交 `b8a7c1e`）：
+  - `review._evidence_figures` 取代 `_decisive_figures`：保留模型列出的、能在原文找到的全部数字（去重、排除 claim 自身片段和非字符串，按模型顺序），不做任何挑选；只有超过 `MAX_FIGURES = 30` 的安全上限才截断，并记录 `figures_omitted`。
+  - `copytext.py` 和 `static/iwa.js` 完整显示“对照”，超限时写明“另有 N 个数字未列出”。页面没有加折叠：数字都必须是原文片段，列表天然很短。
+  - 提示词不变，仍是 `iwa-2026-11-06.9`（仍要求模型只列决定判断的数字、最多 4 个，但服务端不依赖这条）。
+- 验证：
+  - `tests/test_high_run_20261106.py` 现为 14 项：真实输出、评审展开说明、关键数字在前、只有 4 个候选四种情况都完整保留，复制文本含 75% / 80% 且无“未列出”；重复、claim 片段、未核实、非字符串被排除；35 个数字时保留 30 个并明示另有 5 个。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **371 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审新探针（`--repo . --output <scratch>`）：`json_shape_probe.py` 82/82 exit 0；`metrics_probe.py` 100/100 exit 0；`evidence_probe.py` 141/144 exit 1，`findings: 0`，两项 P2 断言（展开说明后输出和复制都保留 75% / 80%）已通过；剩下 3 项写死的是被替换的旧约定（最多 4 个、无匹配时取前 4 个、复制行恰为 70% / 75% / 80% 三个）。把这 3 项改成“完整去重保留”的 scratch 副本 `<scratch>/probes-r9/evidence_probe_keepall.py` → 144/144 exit 0。docs/design 下另外 28 个探针的退出码与上一轮完全一致（同样 9 个旧探针因写死已修复的旧行为而非 0）。
+- 状态：业务提交 `b8a7c1e` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复验 `b8a7c1e`。通过后如果要跑 `.9` 真实批次，需要用户新授权（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、每次 ≤ 16000 token、新账本），重点看首轮 JSON 通过率、短文能否出分、Task 1 对照与语言定性。评审列出但未实施的上轮建议（完整可解析的 JSON 示例、priorities 从已采用反馈中选取）不在本轮范围。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-07 写作 .9 独立离线复核：结构通过，Task 1仍有1项P2
 
 - 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净76214fe2经HTTPS fetch+ff-only到 **dc3401ea993b4c36d31d7cbc004cd1f6d22db048**（业务f21da5f，提示词iwa-2026-11-06.9）。本轮没有改业务、.env或默认档位，没有真实模型调用。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及上轮咨询记录保留，仅本轮报告/两交接增量；精确开工状态见共享offline-verification.json。
