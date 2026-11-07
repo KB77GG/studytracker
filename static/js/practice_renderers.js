@@ -506,7 +506,21 @@
       if (previous && cells[previous[0].index]?.line === cells[entry.index]?.line) previous.push(entry);
       else rows.push([entry]);
     }
-    return rows.map(row => flowFact(row.map(entry => entry.text).join(" "))).join("");
+    const html = [];
+    for (let index = 0; index < rows.length; index += 1) {
+      const row = rows[index], next = rows[index + 1];
+      // C18 T1 source erratum: the printed compound anti-poaching was
+      // extracted as two static rows. Join only this reviewed exact pair.
+      if (row.length === 1 && next?.length === 1
+        && row[0].text === "• strict enforcement of anti"
+        && next[0].text === "− poaching laws"
+        && next[0].index === row[0].index + 1
+        && cells[next[0].index]?.line === cells[row[0].index]?.line + 1) {
+        html.push(flowFact("• strict enforcement of anti-poaching laws"));
+        index += 1;
+      } else html.push(flowFact(row.map(entry => entry.text).join(" ")));
+    }
+    return html.join("");
   }
 
   function renderForm(group, renderControl, renderExtras) {

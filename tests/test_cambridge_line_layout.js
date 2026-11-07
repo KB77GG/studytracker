@@ -126,11 +126,26 @@ test('C7 T2 independent paper columns become complete blocks in question reading
   assert.equal(html.split('Uses of car').length - 1, 1);
 });
 
-test('Unicode minus source bullets remain note lines instead of subheadings', () => {
+test('C18 T1 joins the reviewed anti-poaching erratum and keeps genuine minus bullets', () => {
   const html = render(groupAt('ielts18_test1', 4, 31));
-  assert.match(html, /practice-form__line">− poaching laws/);
+  assert.match(html, /practice-form__line">• strict enforcement of anti-poaching laws<\/div>/);
+  assert.equal(html.split('poaching laws').length - 1, 1);
+  assert.doesNotMatch(html, />− poaching laws/);
   assert.match(html, /practice-form__line">− tracking devices were fitted/);
   assert.doesNotMatch(html, /practice-form__subheading">− /);
+});
+
+test('similar or separated static lines are not guessed to be anti-prefix compounds', () => {
+  for (const source of [
+    '• strict enforcement of anti\n− poaching regulations',
+    '• enforcement of anti\n− poaching laws',
+    '• strict enforcement of anti\n- poaching laws',
+    '• strict enforcement of anti\n• An intervening note\n− poaching laws'
+  ]) {
+    const html = render({ type: 5, collect: `${source}\n• prompt $1$`, questions: [{ id: 1, number: 1, title: '• prompt 【 】' }] });
+    assert.doesNotMatch(html, /anti-poaching/);
+    for (const line of source.split('\n')) assert.ok(plain(html).includes(line), line);
+  }
 });
 
 test('incomplete, reversed or foreign-ID source spans retain the reviewed title fallback', () => {
