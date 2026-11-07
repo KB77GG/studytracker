@@ -146,7 +146,9 @@ def evaluation_text(result: dict, generation: dict) -> str:
         for issue in consistency:
             lines.append(_evidence_line(issue, "✗"))
             if issue.get("figures"):
-                lines.append("    对照：" + "；".join(f"“{f}”" for f in issue["figures"]))
+                omitted = issue.get("figures_omitted") or 0
+                more = f"（另有 {omitted} 个数字未列出）" if omitted else ""
+                lines.append("    对照：" + "；".join(f"“{f}”" for f in issue["figures"]) + more)
         lines.append("")
     lines += argument_lines(result.get("argument"))
     if result.get("overall_comment"):

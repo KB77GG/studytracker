@@ -565,7 +565,10 @@
         consistency.forEach(function (c) {
           box.appendChild(el('div', { class: 'issue' }, [
             quoteButton(c),
-            (c.figures || []).length ? el('p', { class: 'argument__conflict' }, ['对照：'].concat(c.figures.map(function (f) { return verified(f); }))) : null,
+            (c.figures || []).length ? el('p', { class: 'argument__conflict' }, ['对照：'].concat(
+              c.figures.map(function (f) { return verified(f); }),
+              c.figures_omitted ? ['（另有 ' + c.figures_omitted + ' 个数字未列出）'] : []
+            )) : null,
             el('p', { class: 'issue__comment', text: c.comment })
           ]));
         });

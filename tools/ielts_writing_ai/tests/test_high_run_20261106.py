@@ -228,23 +228,74 @@ class FlatCriteriaTest(unittest.TestCase):
             review.normalize_evaluation({"overall_comment": "x"}, SUBS["t2-good"])
 
 
+REAL_FIGURES = [
+    "around 70%",
+    "roughly 55%",
+    "about 40%",
+    "only 15%",
+    "about 75%",
+    "approximately 65%",
+    "nearly 80%",
+    "around 35%",
+]
+# The review of f21da5f (docs/design/ielts-writing-ai-prompt9-review-20261107) only
+# spelled out the model's correct comment: with six figures named, "the first four
+# mentioned ones" kept 70 / 55 / 40 / 15 and cut the decisive 2020 figures 75 / 80.
+EXPANDED = (
+    "2000年A的70%高于B的55%、C的40%和D的15%；但2020年C的80%高于A的75%，所以both years不成立。"
+)
+
+
 class Task1FiguresTest(unittest.TestCase):
-    def test_both_years_claim_shows_the_figures_its_comment_compares(self):
+    def contradiction(self, **changes):
         nested = raw("t1-no-image")
         item = next(c for c in nested["comparisons"] if c["holds"] is False)
-        self.assertEqual(item["figures"][:3], ["around 70%", "roughly 55%", "about 40%"])
+        item.update(changes)
         result = review.normalize_evaluation(nested, SUBS["t1-no-image"])
-        issue = result["consistency_issues"][0]
-        self.assertEqual(issue["figures"], ["around 70%", "about 75%", "nearly 80%"])
-        text = copytext.evaluation_text(result, {})
-        self.assertIn("对照：“around 70%”；“about 75%”；“nearly 80%”", text)
+        return result["consistency_issues"][0], copytext.evaluation_text(result, {})
 
-    def test_without_a_matching_figure_the_model_order_is_kept(self):
-        figures = ["10%", "20%", "30%", "40%", "50%", "10%"]
-        self.assertEqual(review._decisive_figures(figures, "这一说法与数据矛盾。"), figures[:4])
-        self.assertEqual(
-            review._decisive_figures(figures, "C 的 50% 高于 A 的 20%"), ["20%", "50%"]
+    def test_every_verified_figure_is_kept_in_the_model_order(self):
+        cases = {
+            "real comment": {},
+            "expanded comment": {"comment": EXPANDED},
+            "decisive figures first": {"figures": REAL_FIGURES[4:] + REAL_FIGURES[:4]},
+            "four figures": {"figures": ["around 70%", "about 75%", "nearly 80%", "only 15%"]},
+        }
+        for name, changes in cases.items():
+            with self.subTest(name):
+                issue, text = self.contradiction(**changes)
+                expected = changes.get("figures", REAL_FIGURES)
+                self.assertEqual(issue["figures"], expected)
+                self.assertNotIn("figures_omitted", issue)
+                self.assertIn("对照：" + "；".join(f"“{f}”" for f in expected), text)
+                self.assertIn("“about 75%”", text)
+                self.assertIn("“nearly 80%”", text)
+                self.assertNotIn("未列出", text)
+
+    def test_duplicates_claim_parts_and_unverified_spans_are_left_out(self):
+        issue, _text = self.contradiction(
+            figures=["nearly 80%", " nearly 80% ", "invented 99%", 75, "", "about 75%"]
         )
+        self.assertEqual(issue["figures"], ["nearly 80%", "about 75%"])
+
+    def test_over_the_safety_bound_is_said_not_hidden(self):
+        values = [f"{n}.5%" for n in range(1, 36)]
+        essay = "Values were " + ", ".join(values) + ". Country A was the highest."
+        raw_value = {
+            "comparisons": [
+                {
+                    "claim": "Country A was the highest",
+                    "figures": values,
+                    "holds": False,
+                    "comment": "其他国家更高。",
+                }
+            ]
+        }
+        issues, _checked, _dropped = review._consistency(raw_value, essay)
+        self.assertEqual(issues[0]["figures"], values[: review.MAX_FIGURES])
+        self.assertEqual(issues[0]["figures_omitted"], 35 - review.MAX_FIGURES)
+        text = copytext.evaluation_text({"criteria": [], "consistency_issues": issues}, {})
+        self.assertIn(f"（另有 {35 - review.MAX_FIGURES} 个数字未列出）", text)
 
 
 class ImprovementFieldTest(unittest.TestCase):

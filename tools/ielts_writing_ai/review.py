@@ -235,18 +235,29 @@ def _sweep_advice(criteria: list[dict], argument: dict | None, sources) -> dict:
 
 
 MAX_COMPARISONS = 8
-MAX_FIGURES = 4
+# A safety bound only: every figure must be a span of the essay, so real lists are short.
+MAX_FIGURES = 30
 
 
-def _decisive_figures(figures: list[str], comment: str) -> list[str]:
-    """The figures the comment actually compares (in the model's order). The model may
-    list every figure in the essay: on 2026-11-06 it listed all eight and the first three
-    (all from the other year) were shown, while its comment rightly compared the 2020
-    figures. Without any match, the model's own first figures are kept."""
-    unique = list(dict.fromkeys(figures))
-    mentioned = {value for value, _kind, _shown in figures_lib.figures(comment)}
-    decisive = [f for f in unique if {v for v, _k, _s in figures_lib.figures(f)} & mentioned]
-    return (decisive or unique)[:MAX_FIGURES]
+def _evidence_figures(item: dict, essay: str, claim: str) -> tuple[list[str], int]:
+    """(verified figures, number left out over MAX_FIGURES). Every figure that is really
+    in the essay is kept, once, in the model's order - nothing is chosen. Choosing cut the
+    decisive ones twice: figures[:3] kept only the 2000 figures of a 2020 contradiction
+    (real run 2026-11-06), and "the first four the comment mentions" did the same when
+    the comment named six (review 2026-11-07)."""
+    raw = item.get("figures") if isinstance(item.get("figures"), list) else []
+    kept, seen = [], set()
+    for figure in raw:
+        if not isinstance(figure, str) or not figure.strip():
+            continue
+        figure = figure.strip()[:300]
+        key = essay_lib.squash(figure)
+        if key in seen or key in essay_lib.squash(claim):
+            continue
+        if essay_lib.contains_quote(essay, figure):
+            seen.add(key)
+            kept.append(figure)
+    return kept[:MAX_FIGURES], max(0, len(kept) - MAX_FIGURES)
 
 
 def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
@@ -265,26 +276,15 @@ def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
         checked += 1
         if item.get("holds") is not False:
             continue
-        figures = [
-            f[:300]
-            for f in (item.get("figures") if isinstance(item.get("figures"), list) else [])
-            if isinstance(f, str)
-            and f.strip()
-            and essay_lib.contains_quote(essay, f.strip())
-            and essay_lib.squash(f) not in essay_lib.squash(claim)
-        ]
+        figures, omitted = _evidence_figures(item, essay, claim)
         comment = _text(item.get("comment"))
         if not (figures and comment):
             dropped += 1  # "contradicted" without the figures that contradict it
             continue
-        issues.append(
-            {
-                "quote": claim[:300],
-                "quote_found": True,
-                "figures": _decisive_figures(figures, comment),
-                "comment": comment,
-            }
-        )
+        issue = {"quote": claim[:300], "quote_found": True, "figures": figures, "comment": comment}
+        if omitted:
+            issue["figures_omitted"] = omitted  # said on the page and in the copy
+        issues.append(issue)
     # Older free list: kept only when its quote is really in the essay.
     proposed = _evidence_items(raw.get("consistency_issues"), essay, limit=4, with_suggestion=False)
     for entry in proposed:
