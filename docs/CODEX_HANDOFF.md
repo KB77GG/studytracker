@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-07（.9 复验后）雅思写作 AI 试用工具：Task 1 对照数字先核实完整引文再截短（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复验 `80b5dcf`（报告 `0739635`，`docs/design/ielts-writing-ai-prompt9-recheck-20261107/`，含 `evidence_keepall_probe.py` 和 `ui_evidence_probe.py`）。原数字丢失问题已关闭（原 144 项全过，页面 / 复制 107/107，结构 82/82，统计 100/100）；新 P2：`b8a7c1e` 的 `review._evidence_figures` 先 `strip()[:300]` 再 `contains_quote`，“真实的前 300 字符 + 编造结尾”被采用，还会虚增 `figures_omitted`（30 真实 + 1 伪造提示遗漏 1；31 + 1 提示 2）。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动。
+- 修复（业务提交 `600938c`，只改 `review._evidence_figures`）：用完整去空白原串去重和核实，通过后才截到 300 字符显示，与 `_evidence_items`、`argument._verified_quote`、claim 的顺序一致（这三处已核对，本来就是先核实后截短）。保留全部保留、去重、按模型顺序、30 个上限和“另有 N 个数字未列出”。
+- 验证：
+  - `tests/test_high_run_20261106.py` 新增 2 项（现 16 项）：真实的 355 字符段落被接受并截到 300；前 300 字符真实加编造结尾作为唯一证据时，这条矛盾不显示、复制无“对照”；与真实数字混在一起时只去掉伪造项；伪造长引文不计入遗漏数（30 + 1 → 0，31 + 1 → 1）。只回退 `review.py` 时这些断言 3 处失败，修复后通过。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **373 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针（`--repo . --output <scratch>`）：`evidence_keepall_probe.py` **205/205** exit 0，`findings: 0`；`ui_evidence_probe.py` 107/107 exit 0；`json_shape_probe.py` 82/82、`metrics_probe.py` 100/100 exit 0。docs/design 下全部 33 个探针中非 0 的 10 个与上一轮完全相同：9 个旧探针写死了已修复的旧行为，另 1 个 `prompt9-review-20261107/evidence_probe.py` 写死“最多 4 个”的旧约定，已被这次的 `evidence_keepall_probe.py` 取代。
+- 状态：业务提交 `600938c` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。提示词仍为 `iwa-2026-11-06.9`。
+- 下一步：用户复验 `600938c`。通过后如果要跑 `.9` 真实批次，需要用户新授权（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、每次 ≤ 16000 token、新账本）。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-07 写作 .9 数字保留复验：旧P2关闭，新增先截短再核实P2
 
 - 审阅树 `/private/tmp/studytracker-iwa-realcheck-review-20261103`，`claude/ielts-writing-ai-trial`，从干净478461a8经HTTPS fetch+ff-only到 **80b5dcf6185299a11b1d4a37bfac11f697e5f890**（业务b8a7c1ee），提示词仍iwa-2026-11-06.9。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口保留；本轮仅报告/两交接新增，未改业务或.env。精确开工状态见共享offline-verification.json。
