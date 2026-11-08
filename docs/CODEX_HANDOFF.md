@@ -1,5 +1,21 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08（.10 删除建议复验后）雅思写作 AI 试用工具：否定、单引号、重复扣词、无效目标（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复验 `7639dd5`（报告 `c82ebbf`，`docs/design/ielts-writing-ai-prompt10-recheck-20261108/`，新增 `intent_probe.py`、`target_probe.py`）。上轮反例全部关闭（删除 189/189、结构 175/175、统计 120/120），但新探针发现 4 处 P2：① “别删去这一段”“Don’t delete”“shouldn't delete”仍被当成删除；② 单引号 'In summary' 不算引文，删两个词被算成删整句；③ 末段恰好是末句时“删去最后一段；删去最后一句”扣两次（126，应为 149）；④ 五段作文里“删去第九段”退回去用问题引文，给出确定的 149。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
+- 修复（业务提交 `9576333`，只改 `deletion.py`）：
+  1. 否定在整个小句上匹配，起点在删除动词之前就算（原来只看动词前的子串，`别(?=删)` 的前瞻永远看不到动词）；弯撇号按直撇号处理，加入 `n't` 缩写、`cannot`、切勿、`勿(?=删…)`；单字“删”也算删除动词（排除增删、删改、删减）。
+  2. 引号识别加入 '…' 和 ‘…’：开引号前、闭引号后不能紧挨字母或数字，所以 don't、it's、the writer's 里的撇号不算引号。
+  3. `Deletion.words` 改为把段、句、引文都换成原文中的词位置（`_Layout`），合并后计数；引文优先取已删范围内的那一处。只在同一条建议内合并，不跨建议累计。
+  4. `_named` 区分“没有指明”和“指明了但不存在”（越界的第 N 段 → `invalid`）；无效或矛盾的目标、引用了原文里没有的话时都不回退到问题引文，只给“无法确定”的提醒。
+- 验证：
+  - `tests/test_prompt9_run_20261107.py` 新增 `DeletionRecheckTest` 4 项（现 24 项）：七种否定说法、单字“删”；四种单引号写法和两种撇号；同一段两种说法只扣一次，首段加末段正确扣成 131；第九段 / paragraph 9 / 原文没有的引文只给“无法确定”，第五段照常算出 149。只把 `deletion.py` 换回旧版时这些测试 15 处失败。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **397 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针（`--repo . --output <scratch>`）：`intent_probe.py` **178/178**、`target_probe.py` **112/112**；`deletion_probe.py` 189/189、`schema_probe.py`、`metrics_probe.py` 120/120 均 exit 0。docs/design 下 40 个探针 29 个 exit 0，非 0 的 11 个与上一轮相同（9 个旧探针写死已修复的旧行为；`prompt9-review-20261107` 的两个写死 `.9` 平铺形状和“最多 4 个”）。
+- 限制：仍是规则判断，覆盖评审列出的说法和上面的边界，不保证覆盖所有表达；定位不了时宁可不给数字。
+- 状态：业务提交 `9576333` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复验 `9576333`。通过后验证 `.10` 需要用户新授权一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、新账本），并请用户决定输出上限是否从 16000 调高。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-08 写作 .10 删除判断复验：旧探针全过，新增四处P2
 
 - 审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地 `codex/iwa-prompt10-review-20261108`，由干净075f5af3经HTTPS fetch与ff-only至 **371aeeb8c443586a08dbc4ce427957dc8b41bc4c**；业务 **7639dd5a3dc3e51020899e403cc939f54e3bdc82**。提示词仍iwa-2026-11-08.10。78个工具文件SHA **4c5a1348da55e294ba121b541c47c775d914103eede1d5d41ba010a431c22f4d** 前后一致，本轮没有业务/配置修改、模型调用或Key/私有思考/学生材料读取。
