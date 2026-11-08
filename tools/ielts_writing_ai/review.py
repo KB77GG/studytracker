@@ -13,6 +13,7 @@ import re
 from pathlib import Path
 
 from . import argument as argument_lib
+from . import deletion as deletion_lib
 from . import essay as essay_lib
 from . import figures as figures_lib
 from . import jsonshape, prompts, rewrite_quality, visual
@@ -300,63 +301,10 @@ def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
     return issues[:MAX_COMPARISONS], checked, dropped
 
 
-_DELETE_RE = re.compile(
-    r"删去|删除|删掉|去掉|拿掉|省去|省略|\b(?:delete|remove|cut|drop|omit)\b", re.IGNORECASE
-)
-_PARAGRAPH_RE = re.compile(r"段|paragraph", re.IGNORECASE)
-_SENTENCE_RE = re.compile(r"句|sentence", re.IGNORECASE)
-_QUOTED_RE = re.compile(r"[“\"]([^”\"]{2,300})[”\"]")
-
-
 def _deletion_target(advice: str, quote: str | None, essay: str) -> str | None:
-    """The paragraph or sentence that advice to delete one would remove: the one that
-    holds the item's quote, or a passage the advice itself quotes. None for anything
-    else (word-level edits usually replace rather than shorten)."""
-    if not (advice and _DELETE_RE.search(advice)):
-        return None
-    candidates = [quote] if quote else []
-    candidates += _QUOTED_RE.findall(advice)
-    found = [c for c in candidates if c and essay_lib.contains_quote(essay, c)]
-    if not found:
-        return None
-    if _PARAGRAPH_RE.search(advice):
-        units = essay_lib.split_paragraphs(essay)
-    elif _SENTENCE_RE.search(advice):
-        units = [s.text for s in essay_lib.split_sentences(essay)]
-    else:
-        return None
-    return next((u for u in units if essay_lib.contains_quote(u, found[0])), None)
-
-
-def _deletion_notes(criteria, argument, priorities: list[str], essay: str, minimum: int) -> int:
-    """Advice to delete a paragraph or sentence is checked against the minimum length:
-    2026-11-07, "delete the 23-word conclusion" would take a 172-word Task 1 to 149
-    (minimum 150) without a word about it. The advice is kept; a note is added."""
-    total = essay_lib.count_words(essay)
-
-    def note(advice: str, quote: str | None) -> str | None:
-        target = _deletion_target(advice, quote, essay)
-        after = total - essay_lib.count_words(target) if target else None
-        if after is None or after >= minimum:
-            return None
-        return (
-            f"{advice}（注意：按本工具计数，删去整段 / 整句后约剩 {after} 词，低于 {minimum} "
-            "词下限，应改写或合并，并保持字数。）"
-        )
-
-    added = 0
-    entries = [i for c in criteria for i in c["issues"]]
-    if argument:
-        entries += list(argument.get("problems") or []) + list(argument.get("improvements") or [])
-    for entry in entries:
-        updated = note(entry.get("suggestion") or "", entry.get("quote"))
-        if updated:
-            entry["suggestion"], added = updated, added + 1
-    for n, text in enumerate(priorities):
-        updated = note(text, None)
-        if updated:
-            priorities[n], added = updated, added + 1
-    return added
+    """The text a deletion advice removes, when it can be located (diagnostics)."""
+    found = deletion_lib.analyse(advice, quote, essay)
+    return "\n".join(found.texts(essay)) if found and not found.unsure else None
 
 
 def normalize_evaluation(raw: dict, submission: dict) -> dict:
@@ -502,11 +450,20 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         removed["argument"] = argument["suggestions_removed"]
     for key, extra in _sweep_advice(criteria, argument, sources).items():
         removed[key] += extra
-    length_notes = _deletion_notes(criteria, argument, priorities, essay, minimum)
-    if length_notes:
-        warnings.append(
-            f"有 {length_notes} 条建议提到删去整段或整句；删去后会低于 {minimum} 词下限，"
+    length = deletion_lib.annotate(criteria, argument, priorities, essay, minimum)
+    sure, unsure = length["sure"], length["unsure"]
+    if sure:
+        message = (
+            f"有 {sure} 条建议提到删去整段或整句；删去后会低于 {minimum} 词下限，"
             "已在这些建议后补充提醒。"
+        )
+        if unsure:
+            message += f"另有 {unsure} 条无法确定要删哪一部分，已提醒先核对字数。"
+        warnings.append(message)
+    elif unsure:
+        warnings.append(
+            f"有 {unsure} 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 "
+            f"{minimum} 词下限，已提醒先核对字数。"
         )
     removed["total"] = removed["criteria"] + removed["priorities"] + removed["argument"]
     if removed["total"]:
@@ -539,7 +496,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "argument": argument,
         "suggestions_removed": removed,
         "count_corrections": count_corrections,
-        "length_notes": length_notes,
+        "length_notes": length["sure"],  # "cannot tell which part" notes: warnings only
         "warnings": warnings,
     }
 

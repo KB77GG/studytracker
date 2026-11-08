@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
-from tools.ielts_writing_ai import copytext, prompts, review
+from tools.ielts_writing_ai import copytext, deletion, prompts, review
 from tools.ielts_writing_ai import essay as essay_lib
 from tools.ielts_writing_ai.llm import LLMResult, parse_strict_json
 
@@ -153,8 +153,8 @@ class DeletionLengthTest(unittest.TestCase):
 
     def notes(self, essay, advice, quote=None, minimum=250):
         criteria = [{"issues": [{"quote": quote, "suggestion": advice}]}]
-        added = review._deletion_notes(criteria, None, [], essay, minimum)
-        return added, criteria[0]["issues"][0]["suggestion"]
+        counts = deletion.annotate(criteria, None, [], essay, minimum)
+        return counts["sure"], criteria[0]["issues"][0]["suggestion"]
 
     def test_cases(self):
         long_paragraph = " ".join(["word"] * 240) + "."
@@ -179,6 +179,118 @@ class DeletionLengthTest(unittest.TestCase):
                 self.assertTrue(shown.startswith(advice))
         added, shown = self.notes(essay, "删去这一段。", short, minimum=240)
         self.assertEqual(added, 0)
+
+
+# Review of db148ca (docs/design/ielts-writing-ai-prompt10-review-20261108): negated and
+# word-only deletions were counted as whole-unit deletions, and the issue's quote was
+# used even when the advice named another paragraph. Real 172-word Task 1: the first
+# paragraph has 18 words, the last 23 (minimum 150).
+class DeletionIntentTargetTest(unittest.TestCase):
+    sub = SUBS["t1-no-image"]
+    essay = sub["essay_text"]
+    paragraphs = essay_lib.split_paragraphs(essay)
+    first, last = paragraphs[0], paragraphs[-1]
+
+    def check(self, advice, quote, remaining, channel="issue"):
+        """remaining: the number the note must show, None for no note."""
+        raw = parse_strict_json(text("t1-no-image"))
+        raw["coherence"]["issues"] = [
+            {"quote": quote or self.first, "comment": "说明。", "suggestion": advice}
+        ]
+        raw["priorities"] = [advice if channel == "priority" else "保持段落清晰。"]
+        if channel == "priority":
+            raw["coherence"]["issues"] = []
+        result = review.normalize_evaluation(raw, self.sub)
+        coherence = next(c for c in result["criteria"] if c["key"] == "coherence")
+        shown = (
+            result["priorities"][0]
+            if channel == "priority"
+            else coherence["issues"][0]["suggestion"]
+        )
+        copied = copytext.evaluation_text(result, {})
+        self.assertTrue(shown.startswith(advice))
+        if remaining is None:
+            self.assertNotIn("约剩", shown)
+            self.assertNotIn("约剩", copied)
+            self.assertFalse(any("条建议提到删去" in w for w in result["warnings"]))
+        else:
+            self.assertIn(f"约剩 {remaining} 词", shown)
+            self.assertEqual(copied.count(f"约剩 {remaining} 词"), 1)
+            self.assertEqual(result["length_notes"], 1)
+
+    def test_layout(self):
+        counts = [essay_lib.count_words(p) for p in self.paragraphs]
+        self.assertEqual((sum(counts), counts[0], counts[-1]), (172, 18, 23))
+
+    def test_negated_or_quoted_deletions_delete_nothing(self):
+        for advice in (
+            "不要删去这一段，应保留其比较信息。",
+            "Do not delete this paragraph; retain the comparison.",
+            "不要采用“删除这一段”的意见，应保留其中的比较信息。",
+            "无需删除这一段，改写即可。",
+            "Rewrite this paragraph rather than delete it.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, None)
+
+    def test_word_only_deletions_count_the_words(self):
+        for advice in (
+            "删去这一句中的“In summary”两个词，保留其余内容。",
+            'Remove only "In summary" from this sentence, keeping the rest.',
+            "删去“In summary”两个词。",
+            "删去句子开头的“In summary”。",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, None)  # 172 - 2 = 170
+
+    def test_the_named_target_wins_over_the_issue_quote(self):
+        cases = [
+            ("删去结尾的“In summary”这一段。", self.first, 149),
+            ('Delete the final paragraph beginning "In summary".', self.first, 149),
+            ("删去“The bar chart compares”这一引言段。", self.last, None),  # 172 - 18 = 154
+            ("删除最后这一段。", "Country A", 149),  # the quote occurs several times
+            ("Delete the conclusion.", self.first, 149),
+            ("删去第一段。", self.last, None),
+        ]
+        for advice, quote, remaining in cases:
+            with self.subTest(advice=advice):
+                self.check(advice, quote, remaining)
+        self.check(
+            "保留“In summary”这一段，删去“The bar chart compares”这一引言段。",
+            None,
+            None,
+            channel="priority",
+        )
+        self.check("删去结尾的“In summary”这一段。", None, 149, channel="priority")
+
+    def test_whole_units_still_counted_from_the_issue_quote(self):
+        for advice in (
+            "删去这一结尾段。",
+            "Delete this paragraph.",
+            "删除这一整句。",
+            "Remove this sentence.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, 149)
+        self.check("删除这一段。", self.first, None)  # 154
+        self.check("最后，删除这一段。", self.first, None)  # "最后" as "finally"
+
+    def test_targets_that_cannot_be_pinned_down_get_no_number(self):
+        for advice, quote in (
+            ("删去“Country A”所在的这一段。", None),  # several paragraphs
+            ("删去首段和结尾段。", self.first),  # two positions in one clause
+            ("删去第二段的最后一句。", self.first),  # a sentence of which paragraph?
+        ):
+            with self.subTest(advice=advice):
+                found = deletion.analyse(advice, quote, self.essay)
+                self.assertIsNotNone(found)
+                self.assertTrue(found.unsure)
+                updated, kind = deletion.note(advice, quote, self.essay, 150)
+                self.assertEqual(kind, "unsure")
+                self.assertIn("无法确定要删的是哪一部分", updated)
+                self.assertNotIn("约剩", updated)
+        updated, kind = deletion.note("删去首段和结尾段。", self.first, self.essay, 100)
+        self.assertEqual((updated, kind), (None, ""))  # cannot matter: no note
 
 
 if __name__ == "__main__":
