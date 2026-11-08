@@ -213,8 +213,8 @@ class Task1ComparisonTest(unittest.TestCase):
         sub = FX["submissions"]["t1-no-image"]
         messages, _ = prompts.build_evaluate(sub, essay.split_sentences(sub["essay_text"]))
         self.assertIn(prompts.COMPARISON_RULE, messages[0]["content"])
-        self.assertIn('"comparisons": [K, ...]', messages[0]["content"])
-        self.assertNotIn('"argument": A', messages[0]["content"])
+        self.assertIn('"comparisons": [{"claim":', messages[0]["content"])  # .10 example
+        self.assertNotIn('"argument":', messages[0]["content"])
         self.assertTrue(messages[1]["content"].endswith(prompts.CHINESE_REMINDER))
 
 
@@ -341,9 +341,9 @@ class ParagraphBindingTest(unittest.TestCase):
         payload = json.loads(messages[1]["content"].split("\n", 1)[1].rsplit("\n", 1)[0])
         self.assertEqual([p["p"] for p in payload["essay_paragraphs"]], [1, 2, 3, 4, 5])
         self.assertNotIn("essay", payload)
-        self.assertIn('"argument": A', messages[0]["content"])
-        # .9 moved the criteria to the top level, so nothing can be nested in "criteria".
-        self.assertIn("all at the top level", messages[0]["content"])
+        self.assertIn('"argument": {"position":', messages[0]["content"])
+        # argument sits next to criteria, never inside it (.10: shown as a full example).
+        self.assertIn("sit next to criteria, never inside it", messages[0]["content"])
         self.assertGreaterEqual(
             int(prompts.PROMPT_VERSION.rsplit(".", 1)[1]), 5
         )  # introduced in .5

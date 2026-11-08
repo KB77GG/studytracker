@@ -189,14 +189,12 @@ class RealcheckReportTest(unittest.TestCase):
 
 
 class FlatCriteriaTest(unittest.TestCase):
-    def test_prompt_asks_for_the_criteria_at_the_top_level(self):
+    def test_prompt_shows_one_nested_shape(self):
+        # .9 asked for the criteria at the top level; .10 went back to "criteria" with a
+        # complete example after the top-level form produced "task": 7.0 (2026-11-07).
         for sample_id, shape in (
-            ("t2-weak", '{"task": C, "coherence": C, "lexical": C, "grammar": C, "argument": A,'),
-            (
-                "t1-no-image",
-                '{"task": null, "coherence": C, "lexical": C, "grammar": C, '
-                '"comparisons": [K, ...],',
-            ),
+            ("t2-weak", '{"criteria": {"task": {"band": -1,'),
+            ("t1-no-image", '{"criteria": {"task": null, "coherence": {"band": -1,'),
         ):
             with self.subTest(sample=sample_id):
                 sub = SUBS[sample_id]
@@ -204,7 +202,6 @@ class FlatCriteriaTest(unittest.TestCase):
                     sub, essay_lib.split_sentences(sub["essay_text"])
                 )
                 self.assertIn(shape, messages[0]["content"])
-                self.assertNotIn('"criteria":', messages[0]["content"])
 
     def test_flat_and_nested_give_the_same_evaluation(self):
         for sample_id in ("t2-good", "t1-no-image"):

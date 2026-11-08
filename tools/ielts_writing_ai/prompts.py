@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-06.9"
+PROMPT_VERSION = "iwa-2026-11-08.10"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -127,25 +127,93 @@ COMPARISON_RULE = (
 )
 
 
+ROOT_TEXT_RULES = (
+    "overall_comment = str (Chinese); priorities = [str (Chinese), ...3-5, the most useful "
+    "first]."
+)
+# Placeholders in the example can never pass validation if copied: no band is -1 and
+# no quote is "<...>", so a copied example is rejected, never scored.
+EXAMPLE_BAND = -1
+
+
+def _example_criterion() -> dict:
+    return {
+        "band": EXAMPLE_BAND,
+        "summary": "<中文评分理由，2-4 句>",
+        "strengths": [{"quote": "<原文逐字引文>", "comment": "<中文说明>"}],
+        "issues": [{"quote": "<原文逐字引文>", "comment": "<中文说明>", "suggestion": "<改法>"}],
+    }
+
+
+def evaluate_example(task_type: str, visual: bool) -> dict:
+    """A complete, parseable answer with placeholders: the exact nesting to copy."""
+    criteria = {key: _example_criterion() for key in essay_lib.CRITERIA}
+    if not visual:
+        criteria["task"] = None
+    example: dict = {"criteria": criteria}
+    if task_type == "task2":
+        example["argument"] = {
+            "position": {"quote": "<立场句，逐字>", "consistent": True, "comment": "<中文>"},
+            "paragraphs": [
+                {
+                    "p": 1,
+                    "role": "introduction",
+                    "main_point": "<该段中心句，逐字>",
+                    "verdict": "supports",
+                    "comment": "<中文>",
+                }
+            ],
+            "problems": [
+                {
+                    "type": "<上面列出的问题类型之一>",
+                    "quote": "<原文逐字引文>",
+                    "comment": "<中文>",
+                    "suggestion": "<中文>",
+                }
+            ],
+            "improvements": [{"quote": "<原文逐字引文>", "suggestion": "<中文>"}],
+        }
+    else:
+        example["comparisons"] = [
+            {
+                "claim": "<比较或排序说法，逐字>",
+                "figures": ["<原文数字，逐字>"],
+                "holds": True,
+                "comment": "<中文>",
+            }
+        ]
+    example["overall_comment"] = "<中文总评>"
+    example["priorities"] = ["<中文提升重点>", "<中文提升重点>", "<中文提升重点>"]
+    return example
+
+
 def _root_schema(task_type: str, visual: bool) -> str:
-    """One complete template for the whole answer. The four criteria sit at the top level
-    next to everything else: inside a wrapping "criteria" object, real runs (2026-11-04
-    weak; 2026-11-06 under-length, twice) forgot the brace that closes it and wrote
-    argument / overall_comment / priorities inside it."""
-    task = '"task": C' if visual else '"task": null'
-    extra = '"argument": A' if task_type == "task2" else '"comparisons": [K, ...]'
+    """The whole answer as one complete, parseable example plus the field rules.
+
+    History: .8 described the shape with C / A placeholders inside "criteria"; real runs
+    forgot the brace that closes criteria (2026-11-04 weak, 2026-11-06 under-length x2).
+    .9 moved the criteria to the top level: brace errors did not go away (2026-11-07
+    under-length left three criteria unclosed, strong left argument unclosed) and two
+    of seven answers wrote the criteria as bare numbers ("task": 7.0). .10 goes back to
+    "criteria" and shows the full nesting as real JSON."""
+    nested = "argument" if task_type == "task2" else "comparisons"
+    example = json.dumps(evaluate_example(task_type, visual), ensure_ascii=False)
     return " ".join(
         [
-            "Return exactly ONE JSON object of this shape - these keys only, all at the top "
-            "level, each exactly once, in this order:",
-            f'{{{task}, "coherence": C, "lexical": C, "grammar": C, {extra}, '
-            '"overall_comment": str (Chinese), "priorities": [str (Chinese), ...3-5]}',
-            "where",
+            "Return exactly ONE JSON object nested exactly like this complete example. "
+            "Replace every <...> placeholder and every band -1 with your own content; copy "
+            "nothing else from it; lists have as many items as the rules allow (issues may "
+            "be [], paragraphs has exactly one entry per paragraph):",
+            example,
+            "Field rules:",
+            ROOT_TEXT_RULES,
             CRITERION_SCHEMA,
             _argument_schema() if task_type == "task2" else COMPARISON_SCHEMA,
-            "Close each C completely (its issues list, then the C object) before the next "
-            "key; nothing else goes inside a C. Do not output an overall band; it is computed "
-            "from the criteria.",
+            "Inside criteria every criterion is an object with band, summary, strengths and "
+            "issues - never a bare number. Close each criterion object, then the criteria "
+            f"object, before {nested}; {nested}, overall_comment and priorities sit next to "
+            "criteria, never inside it. Do not output an overall band; it is computed from "
+            "the criteria.",
         ]
     )
 
@@ -153,9 +221,10 @@ def _root_schema(task_type: str, visual: bool) -> str:
 def evaluate_shape(submission: dict) -> tuple[tuple[str, ...], dict[str, str]]:
     """(top-level keys, key -> where it belongs) of an evaluation, for jsonshape.diagnose."""
     task2 = submission["task_type"] == "task2"
-    root = (*essay_lib.CRITERIA, "argument" if task2 else "comparisons")
+    # The criteria belong in "criteria"; the .9 top-level form is still accepted.
+    root = ("criteria", *essay_lib.CRITERIA, "argument" if task2 else "comparisons")
     root += ("overall_comment", "priorities")
-    homes = dict.fromkeys(essay_lib.CRITERIA, "criteria")  # older nested form, still accepted
+    homes = dict.fromkeys(essay_lib.CRITERIA, "criteria")
     homes.update(dict.fromkeys(("band", "summary", "strengths", "issues"), "评分项"))
     if task2:
         homes.update(
