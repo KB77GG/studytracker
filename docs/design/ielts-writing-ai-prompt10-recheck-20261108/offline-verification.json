@@ -1,0 +1,100 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "branch": "codex/iwa-prompt10-review-20261108",
+  "source_head": "371aeeb8c443586a08dbc4ce427957dc8b41bc4c",
+  "business_commit": "7639dd5a3dc3e51020899e403cc939f54e3bdc82",
+  "base_head": "075f5af3ce44d4cb6cb10726244607bc039ba55f",
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial",
+  "main_repo": "/Users/zhouxin/Desktop/studytracker",
+  "main_head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+  "main_status": "## main...origin/main [behind 111]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+  "tool_files": 78,
+  "tools_sha256": "4c5a1348da55e294ba121b541c47c775d914103eede1d5d41ba010a431c22f4d",
+  "real_requests": 0,
+  "paid_authorization": "none for .10; earlier batch closed",
+  "tools_sha256_after": "4c5a1348da55e294ba121b541c47c775d914103eede1d5d41ba010a431c22f4d",
+  "tools_unchanged": true,
+  "offline_suite": {
+    "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+    "python": "3.13.3",
+    "source_head": "371aeeb8c443586a08dbc4ce427957dc8b41bc4c",
+    "commands": [
+      {
+        "command": [
+          "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-v",
+          "-s",
+          "tools/ielts_writing_ai/tests",
+          "-t",
+          "."
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+        "returncode": 0,
+        "elapsed_seconds": 21.5
+      },
+      {
+        "command": [
+          "node",
+          "--test",
+          "tools/ielts_writing_ai/tests/test_draft.js"
+        ],
+        "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+        "returncode": 0,
+        "elapsed_seconds": 0.21
+      }
+    ],
+    "test_data_directory_untouched": true,
+    "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial\n"
+  },
+  "suite_counts": {
+    "python": 387,
+    "node": 8
+  },
+  "python_test_elapsed_seconds": 21.255,
+  "lint": {
+    "ruff": "pass",
+    "black": "53 files unchanged",
+    "javascript": "node --check pass",
+    "diff": "git diff --check 075f5af3..HEAD pass"
+  },
+  "probes": {
+    "old_deletion": {
+      "passed": 189,
+      "total": 189,
+      "findings": 0,
+      "exit": 0
+    },
+    "old_schema": {
+      "passed": 175,
+      "total": 175,
+      "exit": 0
+    },
+    "old_metrics": {
+      "passed": 120,
+      "total": 120,
+      "exit": 0
+    },
+    "intent": {
+      "passed": 146,
+      "total": 178,
+      "cases": 22,
+      "findings": 2,
+      "exit": 1
+    },
+    "target": {
+      "passed": 92,
+      "total": 112,
+      "cases": 17,
+      "findings": 2,
+      "exit": 1
+    }
+  },
+  "limits": [
+    "No real model, credentials, private reasoning or student data",
+    "No multi-locale, Python3.10, all-history or browser layout rerun",
+    "Report artifacts and handoff only"
+  ]
+}

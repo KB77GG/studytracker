@@ -1,0 +1,947 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "source_head": "371aeeb8c443586a08dbc4ce427957dc8b41bc4c",
+  "baseline": "46220092",
+  "scope": "synthetic offline JSON examples/shape/diagnosis only; no .env, model reasoning, network, or databases",
+  "legacy_contract_checks": 82,
+  "contract_adaptations": [
+    {
+      "context": "task2/none",
+      "before": [
+        "prompt contains flat-only C shorthand",
+        "diagnostic root excludes criteria"
+      ],
+      "now": [
+        "prompt embeds complete nested JSON",
+        "diagnostic root supports criteria plus flat fields"
+      ]
+    },
+    {
+      "context": "task1/none",
+      "before": [
+        "prompt contains flat-only C shorthand",
+        "diagnostic root excludes criteria"
+      ],
+      "now": [
+        "prompt embeds complete nested JSON",
+        "diagnostic root supports criteria plus flat fields"
+      ]
+    },
+    {
+      "context": "task1/ready",
+      "before": [
+        "prompt contains flat-only C shorthand",
+        "diagnostic root excludes criteria"
+      ],
+      "now": [
+        "prompt embeds complete nested JSON",
+        "diagnostic root supports criteria plus flat fields"
+      ]
+    }
+  ],
+  "new_prompt10_checks": 93,
+  "limitations": [
+    "No real-model acceptance-rate or IELTS scoring calibration measured",
+    "Task1 ready context is synthetic; vision sufficiency gate is outside this probe"
+  ],
+  "passed": 175,
+  "total": 175,
+  "checks": [
+    {
+      "name": "strict: object",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: object",
+      "passed": true,
+      "detail": "JSON 本身合法"
+    },
+    {
+      "name": "strict: json fence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: json fence",
+      "passed": true,
+      "detail": "JSON 本身合法"
+    },
+    {
+      "name": "strict: bare fence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: bare fence",
+      "passed": true,
+      "detail": "JSON 本身合法"
+    },
+    {
+      "name": "strict: prefix disclaimer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: prefix disclaimer",
+      "passed": true,
+      "detail": "回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict: suffix disclaimer",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: suffix disclaimer",
+      "passed": true,
+      "detail": "最外层对象在 a 之后就结束了，JSON 后面还有其他文字"
+    },
+    {
+      "name": "strict: two objects",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: two objects",
+      "passed": true,
+      "detail": "最外层对象在 a 之后就结束了，JSON 后面还有其他文字"
+    },
+    {
+      "name": "strict: two fences",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: two fences",
+      "passed": true,
+      "detail": "最外层对象在 a 之后就结束了，JSON 后面还有其他文字"
+    },
+    {
+      "name": "strict: array",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: array",
+      "passed": true,
+      "detail": "回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict: trailing comma",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: trailing comma",
+      "passed": true,
+      "detail": "JSON 语法错误（Illegal trailing comma before end of object，第 7 个字符）"
+    },
+    {
+      "name": "strict: missing brace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: missing brace",
+      "passed": true,
+      "detail": "到结尾还有 1 层括号没有闭合（最外层）"
+    },
+    {
+      "name": "strict: mismatched bracket",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnosis does not alter acceptance: mismatched bracket",
+      "passed": true,
+      "detail": "第 10 个字符处括号不配对（应为 ]，实际是 }）；到结尾还有 1 层括号没有闭合（最外层）"
+    },
+    {
+      "name": "flat/nested equivalent: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt complete nested root: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnostic root: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "flat/nested equivalent: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt complete nested root: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnostic root: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "flat/nested equivalent: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt complete nested root: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diagnostic root: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject two real groups of criteria",
+      "passed": true,
+      "detail": "评分项只能出现一次：要么都在最外层，要么都在 criteria 里"
+    },
+    {
+      "name": "reject flat with empty nested object",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject one flat criterion with complete legacy",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject missing scored criterion: task",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: task/NoneType",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: task/bool",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: task/int",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: task/str",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: task/list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject missing scored criterion: coherence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: coherence/NoneType",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: coherence/bool",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: coherence/int",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: coherence/str",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: coherence/list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject missing scored criterion: lexical",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: lexical/NoneType",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: lexical/bool",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: lexical/int",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: lexical/str",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: lexical/list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject missing scored criterion: grammar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: grammar/NoneType",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: grammar/bool",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: grammar/int",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: grammar/str",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed criterion: grammar/list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject misplaced root key: overall_comment",
+      "passed": true,
+      "detail": "overall_comment 放错了位置：必须在最外层、与评分项同级，只出现一次"
+    },
+    {
+      "name": "reject misplaced root key: priorities",
+      "passed": true,
+      "detail": "priorities 放错了位置：必须在最外层、与评分项同级，只出现一次"
+    },
+    {
+      "name": "reject misplaced root key: argument",
+      "passed": true,
+      "detail": "argument 放错了位置：必须在最外层、与评分项同级，只出现一次"
+    },
+    {
+      "name": "reject misplaced root key: comparisons",
+      "passed": true,
+      "detail": "comparisons 放错了位置：必须在最外层、与评分项同级，只出现一次"
+    },
+    {
+      "name": "reject malformed root: NoneType",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed root: list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed root: bool",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reject malformed root: str",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "specific diagnosis 0",
+      "passed": true,
+      "detail": "JSON 结构错误：argument 被写进了 task 里面：task 写完后少了一个 }，这些键必须在最外层"
+    },
+    {
+      "name": "diagnosed answer stays rejected 0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "specific diagnosis 1",
+      "passed": true,
+      "detail": "JSON 结构错误：最外层对象在 overall_comment 之后就结束了（多了一个 } 或 ]），后面的 priorities 落在了 JSON 之外"
+    },
+    {
+      "name": "diagnosed answer stays rejected 1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "specific diagnosis 2",
+      "passed": true,
+      "detail": "JSON 结构错误：第 13 个字符处括号不配对（应为 ]，实际是 }）；到结尾还有 1 层括号没有闭合（最外层）"
+    },
+    {
+      "name": "diagnosed answer stays rejected 2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "specific diagnosis 3",
+      "passed": true,
+      "detail": "JSON 结构错误：有字符串没有结束（引号不配对或回复被截断）"
+    },
+    {
+      "name": "diagnosed answer stays rejected 3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "quoted key text not mistaken for a structural key",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "two malformed replies remain failed without repair",
+      "passed": true,
+      "detail": "JSON 结构错误：到结尾还有 1 层括号没有闭合（最外层）"
+    },
+    {
+      "name": "retry receives structural diagnosis",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "clean second reply can succeed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "even valid JSON in diagnosis is not adopted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "rewrite diagnosis never repairs two malformed replies",
+      "passed": true,
+      "detail": "JSON 结构错误：有字符串没有结束（引号不配对或回复被截断）"
+    },
+    {
+      "name": "strict parser unchanged against 46220092",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "text coercion helper unchanged against 46220092",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example is one exact parseable object: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example root and criterion keys: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example task availability comes from production context: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example scored objects have full fields and invalid sentinel bands: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt explains object fields and 3-5 priorities: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "copied example cannot score: task2/none",
+      "passed": true,
+      "detail": "评分项 TR 的分数无效"
+    },
+    {
+      "name": "only fixing example bands cannot score: task2/none",
+      "passed": true,
+      "detail": "评分项 TR 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "placeholder quotes fail evidence after valid bands/reasons: task2/none",
+      "passed": true,
+      "detail": "评分项 TR 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "filled nested example positive control: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled example assessability/overall control: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled flat/nested equality: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "generator rejects two copied examples: task2/none/raw",
+      "passed": true,
+      "detail": "评分项 TR 的分数无效"
+    },
+    {
+      "name": "generator rejects two copied examples: task2/none/bands only",
+      "passed": true,
+      "detail": "评分项 TR 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "generator recovers with populated second example: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "single fenced populated example positive control: task2/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example is one exact parseable object: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example root and criterion keys: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example task availability comes from production context: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example scored objects have full fields and invalid sentinel bands: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt explains object fields and 3-5 priorities: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "copied example cannot score: task1/none",
+      "passed": true,
+      "detail": "评分项 CC 的分数无效"
+    },
+    {
+      "name": "only fixing example bands cannot score: task1/none",
+      "passed": true,
+      "detail": "评分项 CC 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "placeholder quotes fail evidence after valid bands/reasons: task1/none",
+      "passed": true,
+      "detail": "评分项 CC 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "filled nested example positive control: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled example assessability/overall control: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled flat/nested equality: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "generator rejects two copied examples: task1/none/raw",
+      "passed": true,
+      "detail": "评分项 CC 的分数无效"
+    },
+    {
+      "name": "generator rejects two copied examples: task1/none/bands only",
+      "passed": true,
+      "detail": "评分项 CC 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "generator recovers with populated second example: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "single fenced populated example positive control: task1/none",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example is one exact parseable object: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example root and criterion keys: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example task availability comes from production context: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "example scored objects have full fields and invalid sentinel bands: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "prompt explains object fields and 3-5 priorities: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "copied example cannot score: task1/ready",
+      "passed": true,
+      "detail": "评分项 TA 的分数无效"
+    },
+    {
+      "name": "only fixing example bands cannot score: task1/ready",
+      "passed": true,
+      "detail": "评分项 TA 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "placeholder quotes fail evidence after valid bands/reasons: task1/ready",
+      "passed": true,
+      "detail": "评分项 TA 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "filled nested example positive control: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled example assessability/overall control: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "filled flat/nested equality: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "generator rejects two copied examples: task1/ready/raw",
+      "passed": true,
+      "detail": "评分项 TA 的分数无效"
+    },
+    {
+      "name": "generator rejects two copied examples: task1/ready/bands only",
+      "passed": true,
+      "detail": "评分项 TA 没有任何能在原文中找到的证据"
+    },
+    {
+      "name": "generator recovers with populated second example: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "single fenced populated example positive control: task1/ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/nested/task",
+      "passed": true,
+      "detail": "评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/nested/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/nested/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/nested/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task2/none/nested",
+      "passed": true,
+      "detail": "评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task2/none/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task2/none/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/flat/task",
+      "passed": true,
+      "detail": "评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/flat/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/flat/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task2/none/flat/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task2/none/flat",
+      "passed": true,
+      "detail": "评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task2/none/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task2/none/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/nested/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/nested/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/nested/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task1/none/nested",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task1/none/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task1/none/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/flat/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/flat/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/none/flat/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task1/none/flat",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task1/none/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task1/none/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "unavailable Task1 ignores model TA but gives no TA/overall",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/nested/task",
+      "passed": true,
+      "detail": "评分项 TA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/nested/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/nested/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/nested/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task1/ready/nested",
+      "passed": true,
+      "detail": "评分项 TA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task1/ready/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task1/ready/nested",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/flat/task",
+      "passed": true,
+      "detail": "评分项 TA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/flat/coherence",
+      "passed": true,
+      "detail": "评分项 CC 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/flat/lexical",
+      "passed": true,
+      "detail": "评分项 LR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "bare numeric precise rejection: task1/ready/flat/grammar",
+      "passed": true,
+      "detail": "评分项 GRA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "two bare-number replies never score: task1/ready/flat",
+      "passed": true,
+      "detail": "评分项 TA 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象"
+    },
+    {
+      "name": "numeric rejection forwarded to retry: task1/ready/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "numeric rejection accepts corrected retry: task1/ready/flat",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict model path rejects prose+JSON: evaluate",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict model path rejects fence+prose: evaluate",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict model path rejects prose+JSON: refine",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict model path rejects fence+prose: refine",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict model path rejects prose+JSON: rewrite",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "strict model path rejects fence+prose: rewrite",
+      "passed": true,
+      "detail": "JSON 结构错误：回复不是以 { 开头的 JSON 对象（JSON 前面有其他文字）"
+    },
+    {
+      "name": "parser and fence rule module unchanged from baseline",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "non_regression_observations": [
+    {
+      "name": "duplicate JSON key keeps its last value",
+      "accepted": true,
+      "overall_band": 6.5,
+      "provenance": "parse_strict_json AST unchanged; json.loads last-value behavior already existed in 46220092",
+      "new_regression": false
+    },
+    {
+      "name": "mapping reason stringified by existing _text",
+      "accepted": true,
+      "provenance": "_text and criterion summary path predate .9",
+      "new_regression": false
+    },
+    {
+      "name": "flat with null legacy marker",
+      "accepted": true,
+      "impact": "no second set of criterion scores; null treated like absent marker",
+      "new_shape_only": true
+    }
+  ]
+}

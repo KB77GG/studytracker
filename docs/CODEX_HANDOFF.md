@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08 写作 .10 删除判断复验：旧探针全过，新增四处P2
+
+- 审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地 `codex/iwa-prompt10-review-20261108`，由干净075f5af3经HTTPS fetch与ff-only至 **371aeeb8c443586a08dbc4ce427957dc8b41bc4c**；业务 **7639dd5a3dc3e51020899e403cc939f54e3bdc82**。提示词仍iwa-2026-11-08.10。78个工具文件SHA **4c5a1348da55e294ba121b541c47c775d914103eede1d5d41ba010a431c22f4d** 前后一致，本轮没有业务/配置修改、模型调用或Key/私有思考/学生材料读取。
+- 上轮原探针未改并复跑：删除189/189 findings0、schema175/175、metrics120/120；原两类P2的原场景关闭。新增意图探针22场景146/178（8反例、14正对照）；目标探针17场景92/112（8反例、9正对照）。52失败断言合计四处P2，不是52个问题，全部normalize→copy且原稿/分数不变。
+- **P2-1 否定失效**：deletion.py:35/168的“别”前瞻需要动词但只收到动词前片段；“别删去这一段”、Don’t、shouldn't仍被认为删末段，172→误报149。**P2-2 单引号失效**：:39/101/122只屏蔽双引号，Remove only 'In summary' from this sentence本应删2词剩170，却算整句剩149；引用后拒绝的单引号删除意见同样误报。对应不要/Do not/ASCII Don't/双引号正对照通过。
+- **P2-3 重叠重复扣词**：:83–90/209只累加文本，末段等于末句23词，“删末段；删末句”172→126，正确149；段+段内2词误147；中英、评分项、重点、Task2优化复现。需原文位置区间并集，不跨不同可选建议累计。**P2-4 越界目标回退**：:142–151/191将第九段（全文5段）丢成未指定，回退问题引文末段报149；必须区分未指定与无效目标，无效时不给确定数字。有效位置冲突/重复引文/混合单元已有保守提示通过。
+- 精确套件命令：主树 `.venv/bin/python docs/design/iwa-prompt10-recheck-20261108/run_offline_tests.py` → **387 Python（21.255s/wrapper21.50s）+8 Node**，获准回环端口；fake、临时库、外部IWA配置剔除、外部连接禁止，外部数据目录未写。审阅树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（53文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check 075f5af3..HEAD`均通过。五探针由主审独立复跑，精确命令在新README。未重复38历史探针/三locale/Python3.10/浏览器布局，不能声称真实格式率或评分质量改善。
+- 共享 `docs/design/ielts-writing-ai-prompt10-recheck-20261108/` **10文件**：README、原三探针新JSON、两新探针py/json、offline-verification、完整日志。报告/探针及两交接按既有授权仅推远端 `claude/ielts-writing-ai-trial`，最终文档HEAD见git log；本地分支仍codex。主树 `docs/design/iwa-prompt10-recheck-20261108/` runner/source-state/过程资料只留本机，不提交；旧报告/探针未改。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，7 modified/23 untracked入口及其他任务交接保留，本轮只增报告/两交接，不暂存旧脏改动。旧失效IWA worktree保留，未修复/删除。没有合main/部署/生产访问或DB写入、小程序上传提审发布，其他生产状态本轮未验证。
+- 下一步Claude修四处并补正反回归：先处理否定/引用边界，区分无目标与无效目标，再用原文区间去重计数。保持原JSON/指标契约；先复验再讨论新真实批次，本轮没有`.10`付费授权、没有新账本或调16000上限。旧`.9`13/14批次已结束，余次不转入新批；老师素材仍缺原稿/第5份正确题目。
+
 ## 2026-11-08（.10 复核后）雅思写作 AI 试用工具：删除建议按小句判断意图、范围和目标（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `db148ca`（报告 `075f5af`，`docs/design/ielts-writing-ai-prompt10-review-20261108/`，含 `schema_probe.py`、`deletion_probe.py`、`metrics_probe.py`）。JSON 示例与裸数字拒绝原因通过（175/175）；删除字数检查有两处 P2：① “不要删这一段”“只删句中的 In summary 两个词”被当成删整段 / 整句，误报剩 149 词；② 建议明确删结尾、问题引文却在首段时按首段算（漏报），引文多处出现时取到别的段（报 136）。结果和复制文本都受影响。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
