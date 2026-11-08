@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08 写作 .10 独立离线复核：JSON通过，删除字数检查仍有两类P2
+
+- 新审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地分支 `codex/iwa-prompt10-review-20261108` 跟踪 `origin/claude/ielts-writing-ai-trial`，源HEAD **6d999807228c61a313812a80fb6dbfb27406c666**（业务 **db148cae2ef56876f6e08e082afd2884a221a1b7**），基线46220092。旧 `/private/tmp/studytracker-iwa-realcheck-review-20261103` 的.git不存在，注册为prunable；原目录/私有资料保留，未修复/删除/迁移。当前不可再把旧树当有效Git仓库运行历史runner。
+- **本轮未改业务或配置、无模型调用**。工具77文件SHA **d36883485cc848b8927d7de226c16aa285fab47f4385ac328a9e7ebff09193cf** 前后一致。完整嵌套JSON示例/裸数字拒因与严格解析通过；原Task1两条172→149提示已修。
+- **P2-1：删除意图/范围误判**。review.py:315/322仅搜删除词与段/句：“不要删去这一段”实际172、或“删去这一句中的In summary两个词，保留其余”实际170，却都追加整删后149及顶部确定的不足提示，复制也带出。中英和引用后否定均复现。
+- **P2-2：删除目标绑错**。review.py:317–328总用issue.quote/首个found的首个匹配段。首段引文+明确删结尾，应149提醒却计算154不提醒；反向误报149；重复Country A+“最后一段”错选概述段报136。完整normalize→evaluation_text复现，不是模型随机输出或分数变化。应确认肯定的整单元删除，绑定明确动作目标；重复/冲突不能消歧时不生成确定的错误数字。
+- 完整验证：主树 `.venv/bin/python docs/design/iwa-prompt10-review-20261108/run_offline_tests.py` → **381 Python（21.221s，wrapper21.52s）/8 Node**；首次沙箱禁回环端口，获准同fake/临时库/仅回环网络运行器重跑通过，外部测试数据目录未写。主venv在新审阅树 `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（52文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check 46220092..HEAD`通过。未重复全历史探针/三locale/Python3.10/浏览器布局。
+- 独立且主审逐一复跑三便携探针：schema175/175 exit0（旧82按.10契约+新93；旧文件未改）；metrics120/120 exit0（8真实fixture及7输入一致，4ready回放分数/引用/论证/报告指标不变，仅length_notes/两条提醒）；deletion24场景149/189 exit1，40失败来自10反例/上述两类P2，非40个问题。真实两条/各渠道/明确整删/安全删除/正好下限/数字过滤顺序等对照通过。精确通用命令见共享README，当前deletion非零是有效发现，不应翻转预期掩盖。
+- 共享 `docs/design/ielts-writing-ai-prompt10-review-20261108/` 9文件：README、三个便携探针py/json、offline-verification和完整测试日志。按既有授权仅报告及两规范交接推远端 `claude/ielts-writing-ai-trial`；本地审阅分支仍codex/iwa-prompt10-review-20261108，最终文档HEAD见git log。主树本机目录 `docs/design/iwa-prompt10-review-20261108/` 的runner/source-state/首次沙箱失败日志和共享镜像不提交。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及剑桥发布等其他交接均保留；本轮只报告/两交接增量，不暂存原脏文件。没有读取Key/私有思考/老师材料，没有访问生产、部署、写生产DB、小程序上传提审发布，未合并main；既有其他项目发布状态本轮未复核。
+- 下一步Claude按两类P2修复并补正反回归，先保持JSON/指标通过契约，再复验。`.9`退步与平铺同时发生是观察，不能当隔离因果证明；`.10`真实格式改善/评分准确度未验证。当前没有`.10`付费授权，旧13/14批次已结束，未用1次不自动转新批；16000上限未改，不准备新账本或调用。教师素材仍待可靠原稿/第5份正确题目。
+
 ## 2026-11-08（.9 / high 实测后）雅思写作 AI 试用工具：恢复 criteria 嵌套 + 完整 JSON 示例（提示词 .10）、删除建议核对字数（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户的 `.9` / high 真实批次（报告 `4622009`，`docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/`）。累计 13/14 次请求（前 5 次因服务 500 / 人工中断用量未知，续跑 8 次均 HTTP 200），4/7 可用：good、离题、短文（重试后）、Task 1 语言评价；失败：weak 16000 token 全部用于思考、没有正文（`finish_reason=length`），mid 评分项是裸数字，strong 括号错误加裸数字。人工复核：Task 1 建议删去 23 词结尾段会使 172 词降到 149（下限 150），CC 评语误读第二段内容。批次已结束，剩下的 1 次不续用；**现在没有可用的付费授权**。本轮没有模型调用、没有读取 Key 或学生材料，评审的 `docs/design` 文件没有改动。
