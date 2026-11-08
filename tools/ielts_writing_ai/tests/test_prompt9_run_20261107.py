@@ -181,11 +181,9 @@ class DeletionLengthTest(unittest.TestCase):
         self.assertEqual(added, 0)
 
 
-# Review of db148ca (docs/design/ielts-writing-ai-prompt10-review-20261108): negated and
-# word-only deletions were counted as whole-unit deletions, and the issue's quote was
-# used even when the advice named another paragraph. Real 172-word Task 1: the first
-# paragraph has 18 words, the last 23 (minimum 150).
-class DeletionIntentTargetTest(unittest.TestCase):
+class DeletionCase:
+    """Shared helpers: the real 172-word Task 1, checked through normalize and copy."""
+
     sub = SUBS["t1-no-image"]
     essay = sub["essay_text"]
     paragraphs = essay_lib.split_paragraphs(essay)
@@ -218,6 +216,24 @@ class DeletionIntentTargetTest(unittest.TestCase):
             self.assertEqual(copied.count(f"约剩 {remaining} 词"), 1)
             self.assertEqual(result["length_notes"], 1)
 
+    def unsure(self, advice, quote):
+        updated, kind = deletion.note(advice, quote, self.essay, 150)
+        self.assertEqual(kind, "unsure")
+        self.assertNotIn("约剩", updated)
+        raw = parse_strict_json(text("t1-no-image"))
+        raw["coherence"]["issues"] = [{"quote": quote, "comment": "说明。", "suggestion": advice}]
+        raw["priorities"] = ["保持段落清晰。"]
+        result = review.normalize_evaluation(raw, self.sub)
+        coherence = next(c for c in result["criteria"] if c["key"] == "coherence")
+        self.assertIn("无法确定要删的是哪一部分", coherence["issues"][0]["suggestion"])
+        self.assertNotIn("约剩", copytext.evaluation_text(result, {}))
+
+
+# Review of db148ca (docs/design/ielts-writing-ai-prompt10-review-20261108): negated and
+# word-only deletions were counted as whole-unit deletions, and the issue's quote was
+# used even when the advice named another paragraph. Real 172-word Task 1: the first
+# paragraph has 18 words, the last 23 (minimum 150).
+class DeletionIntentTargetTest(DeletionCase, unittest.TestCase):
     def test_layout(self):
         counts = [essay_lib.count_words(p) for p in self.paragraphs]
         self.assertEqual((sum(counts), counts[0], counts[-1]), (172, 18, 23))
@@ -297,19 +313,7 @@ class DeletionIntentTargetTest(unittest.TestCase):
 # Don’t / shouldn't were not read as negation, single quotes were not quotation marks,
 # one passage reached by two descriptions was counted twice, and a paragraph that does
 # not exist (第九段) fell back to the issue's quote.
-class DeletionRecheckTest(DeletionIntentTargetTest):
-    def unsure(self, advice, quote):
-        updated, kind = deletion.note(advice, quote, self.essay, 150)
-        self.assertEqual(kind, "unsure")
-        self.assertNotIn("约剩", updated)
-        raw = parse_strict_json(text("t1-no-image"))
-        raw["coherence"]["issues"] = [{"quote": quote, "comment": "说明。", "suggestion": advice}]
-        raw["priorities"] = ["保持段落清晰。"]
-        result = review.normalize_evaluation(raw, self.sub)
-        coherence = next(c for c in result["criteria"] if c["key"] == "coherence")
-        self.assertIn("无法确定要删的是哪一部分", coherence["issues"][0]["suggestion"])
-        self.assertNotIn("约剩", copytext.evaluation_text(result, {}))
-
+class DeletionRecheckTest(DeletionCase, unittest.TestCase):
     def test_common_negations(self):
         for advice in (
             "别删去这一段，应保留比较信息。",
@@ -356,6 +360,69 @@ class DeletionRecheckTest(DeletionIntentTargetTest):
         self.unsure("Delete paragraph 9.", self.last)
         self.unsure("删去“a sentence the essay never had”这一段。", self.last)
         self.check("删去第五段。", self.first, 149)  # the last of five paragraphs
+
+
+# Final check of 9576333 (docs/design/ielts-writing-ai-prompt10-finalcheck-20261108): a
+# partial deletion lost its paragraph and was merged into an already deleted one, a
+# negation in another sentence or of another word cancelled a deletion, and "第 2 段" /
+# "the ninth paragraph" fell back to the issue's quote. The reading was rebuilt around
+# "exact or no number": each action is located on its own, then positions are merged.
+class DeletionActionTest(DeletionCase, unittest.TestCase):
+    def test_partial_deletions_keep_their_paragraph(self):
+        cases = [
+            ("删去最后一段；删去第二段中的“Country A”两个词。", 147),
+            ('Delete the last paragraph; remove only "Country A" from the second paragraph.', 147),
+            ("删去第二段；删去最后一段中的“Country A”两个词。", 134),
+            ("删去第二段中的“Country A”两个词；删去最后一段。", 147),
+            ("删去最后一段；删去最后一段中的“Country A”两个词。", 149),  # really overlapping
+            ("删去第二段；删去第二段中的“Country A”两个词。", 136),
+        ]
+        for advice, remaining in cases:
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, remaining)
+
+    def test_the_threshold_case_keeps_its_reminder(self):
+        essay = "Clearly, " + self.essay
+        self.assertEqual(essay_lib.count_words(essay), 173)
+        advice = "删去最后一段；删去第二段中的“Country A”两个词。"
+        updated, kind = deletion.note(advice, self.last, essay, 150)
+        self.assertEqual(kind, "sure")
+        self.assertIn("约剩 148 词", updated)
+
+    def test_negation_belongs_to_its_own_verb(self):
+        for advice in (
+            "Do not remove the introduction. Delete the conclusion.",
+            "Delete the conclusion. Do not remove the introduction.",
+            "This paragraph is not necessary and you should delete the conclusion.",
+            "You do not need the conclusion so remove the conclusion.",
+            "Ignore 'do not delete this paragraph' and delete the conclusion.",
+            "不要重复概述而应删去结尾段。",
+            "不要保留这一段并删去结尾段。",
+            "把这一段删去。",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, 149)
+        for advice in ("避免把这一段删去。", "Do not remove the words 'In summary'."):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, None)
+
+    def test_ordinals_in_any_common_format(self):
+        for advice in ("删去第 2 段。", "Delete the 2nd paragraph.", "Delete paragraph two."):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, 136)
+        for advice in ("删去第 9 段。", "Delete the ninth paragraph.", "Delete the 9th paragraph."):
+            with self.subTest(advice=advice):
+                self.unsure(advice, self.last)
+
+    def test_anything_not_read_exactly_gets_no_number(self):
+        for advice in (
+            "删去关于汽车的那一段。",  # an unknown description of the target
+            "Delete the paragraph about cars.",
+            "删去“Country A”两个词。",  # found in several places
+        ):
+            with self.subTest(advice=advice):
+                self.unsure(advice, self.last)
+        self.check("删去后结构更紧凑。", self.last, None)  # names nothing to delete
 
 
 if __name__ == "__main__":

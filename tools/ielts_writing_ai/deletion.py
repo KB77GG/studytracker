@@ -1,22 +1,30 @@
 """Advice that deletes text, checked against the minimum length.
 
 2026-11-07: "delete the 23-word conclusion" would have taken a 172-word Task 1 to 149
-(minimum 150) without a word about it. The first check (.10) only looked for a deletion
-verb next to 段 / 句, so "do not delete this paragraph" or "remove only 'In summary' from
-this sentence" were counted as whole-unit deletions, and the issue's own quote was used
-even when the advice named another paragraph (review 2026-11-08).
+(minimum 150) without a word about it. Three reviews of keyword-based readings
+(2026-11-08) kept finding neighbouring gaps - negations that belonged to another verb,
+partial deletions that lost their paragraph, ordinals in an unexpected format that fell
+back to the issue's quote - so the reading now follows one rule: a number is given only
+when every deletion in the advice is located exactly; otherwise at most a reminder to
+check the length, never a guessed count.
 
-Each clause of the advice is now read on its own:
-- intent: a deletion verb outside quotation marks, with no negation before it
-  (不要采用“删除这一段”的意见 quotes someone else's advice and deletes nothing);
-- scope: what the verb deletes - in Chinese the head noun ends the phrase
-  (结尾的“In summary”这一段 is a paragraph, 句子结尾的“respectively” is one word), in
-  English it comes first after the verb (the paragraph beginning "In summary" is a
-  paragraph, only "In summary" from this sentence is two words);
-- target: a stated position (结尾 / 最后一段 / final paragraph, 首段 / 引言, 第 N 段) and
-  passages the clause quotes come first; the issue's quote is used only when the clause
-  names neither. A target that cannot be pinned down (conflicting, or a passage found in
-  more than one place) gets no number, only "cannot tell which part" when it matters.
+1. Actions. Quoted passages are masked first (paired “…” "…" ‘…’ '…'; an apostrophe
+   between letters is not a quotation mark), so quoted advice deletes nothing. Every
+   deletion verb outside quotes is one action; sentences, clauses and words such as
+   因为 / 并 / because / and end its object.
+2. Negation belongs to the verb it stands right before: 不要删去, 别删, 避免把这一段删去,
+   don't / shouldn't / cannot delete, rather than delete. "This paragraph is not
+   necessary and you should delete the conclusion" deletes the conclusion.
+3. The object is read token by token against a closed list (determiners, positions,
+   ordinals in any common format, unit nouns, quoted passages, a few particles). An
+   object with anything else in it is not reliable. An object with no passage, unit or
+   position names nothing to delete ("删去后结构更紧凑") and is ignored.
+4. Each action becomes word positions in the essay: a whole paragraph / sentence, or a
+   quoted passage found exactly once within the unit the action names ("第二段中的
+   'Country A'"). Positions of all actions are merged, so the same words count once.
+5. A target that is stated but does not resolve to exactly one place - out of range,
+   conflicting, a passage found nowhere or in several places - is never replaced by the
+   issue's quote. The issue's quote is used only for "this paragraph / 这一段".
 The advice text itself is never changed; a note is appended after it.
 """
 
@@ -31,247 +39,407 @@ _VERB_RE = re.compile(
     r"删去|删除|删掉|去掉|拿掉|省去|省略|(?<!增)删(?![改减])|\b(?:delete|remove|cut|drop|omit)\b",
     re.I,
 )
-# Matched on the whole clause (with ’ read as '), and counted when it starts before the
-# verb: the lookahead of 别(?=删) has to see the verb (recheck 2026-11-08).
-_NEGATION_RE = re.compile(
-    r"不要|不用|不必|无需|无须|不需要|不应|不宜|不该|不能|不可|没必要|不建议|避免|而不是|切勿|"
-    r"别(?=删|去掉|拿掉|省)|勿(?=删|去掉|拿掉|省)|"
-    r"\b(?:do not|dont|never|avoid|no need to|instead of|rather than|not|cannot)\b|"
-    r"\b[a-z]+n't\b",
-    re.I,
-)
-# Paired quotation marks. A straight or closing single quote between two letters is an
-# apostrophe (don't, the city's), never a quotation mark.
 _QUOTE_RE = re.compile(
     r"“([^”]{1,300})”|\"([^\"]{1,300})\"|‘(.{1,300}?)’(?![A-Za-z0-9])|"
     r"(?<![A-Za-z0-9])'(?=\S)(.{1,300}?)(?<=\S)'(?![A-Za-z0-9])"
 )
-_CLAUSE_RE = re.compile(r"[。；;！!？?，,：:\n]")
 _HOLE_RE = re.compile("\x00(\\d+)\x00")
-_CJK_RE = re.compile(r"[一-鿿]")
+# Sentence and clause boundaries; an English full stop only before a space or the end.
+_BOUNDARY_RE = re.compile(r"[。；;！!？?，,：:\n]|(?<!e\.g)(?<!i\.e)\.(?=\s|$)")
+_CN_STOP_RE = re.compile(
+    r"因为|由于|以便|以免|使得|使|让|来|并且|并|然后|再|而|但|如果|若|否则|从而|这样"
+)
+_EN_STOP_RE = re.compile(
+    r"\b(?:because|since|so|to|and|but|while|if|for|as|or|then|which means)\b", re.I
+)
+_EN_ALTERNATIVE_RE = re.compile(r"^\s*or\s+(?:rewrite|shorten|merge|condense)\s+", re.I)
+_CN_ALTERNATIVE_RE = re.compile(r"^或(?:改写|重写|合并|压缩|精简|修改|改)")
 
-# Chinese: the head noun closes the phrase.
-_CN_TAIL_PASSAGE_RE = re.compile(r"(?:\x00\d+\x00|个词|词语|单词|短语|这个词)(?:即可|就好|吧)?\s*$")
-_CN_TAIL_UNIT_RE = re.compile(r"(段落?|句子?|结论|引言)(?:即可|就好|吧)?\s*$")
-_CN_PARTIAL_RE = re.compile(r"句中|句首|句末|句里|段中|段里|中的|里的")
-# English: the head noun comes first after the verb.
-_EN_HEAD_RE = re.compile(
-    r"\x00\d+\x00|\b(words?|phrases?)\b|\b(paragraphs?|sentences?|conclusion|introduction)\b",
+# Negation right before the verb (a few adverbs, or a 把-phrase, may stand between).
+_CN_NEGATION_RE = re.compile(
+    r"(?:不要|不用|不必|无需|无须|不需要|不应|不宜|不该|不能|不可|没必要|不建议|避免|而不是|"
+    r"切勿|千万别|别|勿|不)(?:再|直接|随意|随便|轻易|急于|全部|就)?(?:把[^，。；,;\x00]{1,15})?\s*$"
+)
+_EN_NEGATION_RE = re.compile(
+    r"\b(?:not|never|dont|cannot|[a-z]+n't|avoid|no need to|instead of|rather than)"
+    r"\s+(?:[a-z']+\s+){0,2}$",
     re.I,
 )
-_PARAGRAPH_WORD_RE = re.compile(r"段|结论|引言|\b(?:paragraphs?|conclusion|introduction)\b", re.I)
-_SENTENCE_WORD_RE = re.compile(r"句|\bsentences?\b", re.I)
 
-_LAST_PARAGRAPH_RE = re.compile(
-    r"结尾|结论|末段|最末段|最后(?:这)?一?段|\b(?:final|last|concluding) paragraph\b|\bconclusion\b",
-    re.I,
+_CN_TOKEN_RE = re.compile(
+    r"\x00\d+\x00|第\s*\d+|第[一二三四五六七八九十]+|这一|这个|这|该|本|此|那|整个|整|全|"
+    r"结尾|最后|末尾|最末|末|首|开头|开篇|引言|结论|段落|段|句子|句|中的|里的|中|里|的|个|"
+    r"两|三|几|一|词语|单词|短语|词|即可|就好|就行|也可以|亦可|吧|掉|了|也|还|直接|整体|\s+"
 )
-_FIRST_PARAGRAPH_RE = re.compile(
-    r"首段|开头(?:这)?一?段|第一段|引言|\b(?:first|opening|introductory) paragraph\b|\bintroduction\b",
-    re.I,
-)
-_NTH_PARAGRAPH_RE = re.compile(
-    r"第([二三四五六七八九十]|\d+)段|\bparagraph (\d+)\b|\b(second|third|fourth|fifth|sixth) paragraph\b",
-    re.I,
-)
-_LAST_SENTENCE_RE = re.compile(r"最后一句|结尾句|末句|\b(?:final|last) sentence\b", re.I)
-_FIRST_SENTENCE_RE = re.compile(r"第一句|首句|开头一句|\b(?:first|opening) sentence\b", re.I)
-_CN_NUMBERS = {"二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
-_EN_ORDINALS = {"second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6}
+_EN_WORDS = {
+    "the", "this", "that", "a", "an", "whole", "entire", "your", "its", "writer's",
+    "essay's", "student's", "beginning", "starting", "begins", "starts", "with", "of",
+    "essay", "also", "then", "only", "from", "in", "which", "entirely", "completely",
+    "altogether", "simply", "just",
+}  # fmt: skip
+_EN_TOKEN_RE = re.compile(r"\x00\d+\x00|[A-Za-z0-9']+")
+
+_ORDINALS = {
+    "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6,
+    "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10, "one": 1, "two": 2, "three": 3,
+    "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+}  # fmt: skip
+_CN_DIGITS = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+_LAST = {"结尾", "最后", "末尾", "最末", "末", "结论", "final", "last", "concluding", "closing",
+         "conclusion"}  # fmt: skip
+_FIRST = {"首", "开头", "开篇", "引言", "opening", "introductory", "introduction"}
+_PARAGRAPH_NOUNS = {"段", "段落", "结论", "引言", "paragraph", "paragraphs", "conclusion",
+                    "introduction"}  # fmt: skip
+_SENTENCE_NOUNS = {"句", "句子", "sentence", "sentences"}
+_PARTIAL = {"中的", "里的", "中", "里", "个", "词", "词语", "单词", "短语", "only", "from", "in",
+            "word", "words", "phrase", "phrases"}  # fmt: skip
+_DEMONSTRATIVES = {"这一", "这个", "这", "该", "本", "此", "整个", "整", "this", "that", "the",
+                   "whole", "entire"}  # fmt: skip
+
+
+class Unreliable(Exception):
+    """The advice deletes something that cannot be located exactly."""
 
 
 @dataclass
 class Deletion:
-    """What an advice deletes: whole units (("paragraph" | "sentence", index)), quoted
-    passages, and the unit kind of a whole-unit deletion that could not be pinned down."""
+    """What an advice deletes: word positions in the essay (merged), the texts they come
+    from (diagnostics), and whether some deletion could not be located (no number)."""
 
-    units: set = field(default_factory=set)
-    passages: list = field(default_factory=list)
-    unsure: str | None = None
+    positions: set = field(default_factory=set)
+    parts: list = field(default_factory=list)
+    unsure: bool = False
+    units: set = field(default_factory=set)  # (("paragraph" | "sentence"), index)
+    passages: list = field(default_factory=list)  # quoted passages deleted as words
 
     def texts(self, essay: str) -> list[str]:
-        paragraphs = essay_lib.split_paragraphs(essay)
-        sentences = [s.text for s in essay_lib.split_sentences(essay)]
-        units = [paragraphs[i] if k == "paragraph" else sentences[i] for k, i in sorted(self.units)]
-        return units + list(self.passages)
+        return list(self.parts)
 
     def words(self, essay: str) -> int:
-        """Words deleted, each counted once: everything is mapped to word positions in
-        the essay and merged ("删去最后一段；删去最后一句" when the last paragraph is one
-        sentence deletes 23 words, not 46 - recheck 2026-11-08)."""
-        layout = _Layout(essay)
-        deleted: set[int] = set()
-        for kind, index in self.units:
-            deleted |= layout.unit(kind, index)
-        for passage in self.passages:
-            deleted |= layout.passage(passage, deleted)
-        return len(deleted)
+        return len(self.positions)
 
 
 class _Layout:
-    """Word positions of the essay's paragraphs, sentences and passages."""
+    """Word positions of the essay, its paragraphs and its sentences."""
 
     def __init__(self, essay: str):
         text = essay_lib.normalize_newlines(essay)
         self.words = [(m.start(), m.group().lower()) for m in essay_lib.WORD_RE.finditer(text)]
-        self.paragraphs, offset = [], 0
+        spans, offset = [], 0
         for line in text.split("\n"):
             if line.strip():
                 start = offset + len(line) - len(line.lstrip())
-                self.paragraphs.append((start, start + len(line.strip())))
+                spans.append((start, start + len(line.strip())))
             offset += len(line) + 1
+        self.paragraphs = [self._between(a, b) for a, b in spans]
         self.sentences, cursor = [], {}
         for sentence in essay_lib.split_sentences(essay):
-            low, high = self.paragraphs[sentence.paragraph]
+            low, high = spans[sentence.paragraph]
             start = text.find(sentence.text, cursor.get(sentence.paragraph, low), high)
-            if start < 0:
-                start, end = low, high  # not found as such: its whole paragraph
-            else:
-                end = start + len(sentence.text)
-                cursor[sentence.paragraph] = end
-            self.sentences.append((start, end))
+            if start < 0:  # not found as such: its whole paragraph
+                self.sentences.append(set(self.paragraphs[sentence.paragraph]))
+                continue
+            cursor[sentence.paragraph] = start + len(sentence.text)
+            self.sentences.append(self._between(start, start + len(sentence.text)))
 
     def _between(self, start: int, end: int) -> set[int]:
         return {i for i, (pos, _w) in enumerate(self.words) if start <= pos < end}
 
-    def unit(self, kind: str, index: int) -> set[int]:
-        spans = self.paragraphs if kind == "paragraph" else self.sentences
-        return self._between(*spans[index])
+    def units(self, kind: str) -> list[set[int]]:
+        return self.paragraphs if kind == "paragraph" else self.sentences
 
-    def passage(self, passage: str, deleted: set[int]) -> set[int]:
-        """One occurrence of the passage: inside what is already deleted if it is
-        there, else the first one."""
+    def occurrences(self, passage: str) -> list[set[int]]:
         wanted = [w.lower() for w in essay_lib.WORD_RE.findall(passage)]
-        if not wanted:
-            return set()
         words = [w for _pos, w in self.words]
-        hits = [
+        return [
             set(range(i, i + len(wanted)))
             for i in range(len(words) - len(wanted) + 1)
-            if words[i : i + len(wanted)] == wanted
+            if wanted and words[i : i + len(wanted)] == wanted
         ]
-        return next((h for h in hits if h <= deleted), hits[0] if hits else set())
+
+    def text_of(self, positions: set[int]) -> str:
+        ordered = sorted(positions)
+        return " ".join(self.words[i][1] for i in ordered)
 
 
-def _clauses(advice: str) -> list[tuple[str, list[str]]]:
-    """[(clause with each quoted passage replaced by a hole, the passages)]."""
+def _mask(advice: str) -> tuple[str, list[str]]:
     quoted: list[str] = []
 
     def hole(match):
         quoted.append(next(g for g in match.groups() if g is not None))
         return f"\x00{len(quoted) - 1}\x00"
 
-    masked = _QUOTE_RE.sub(hole, advice)
-    return [
-        (clause, [quoted[int(n)] for n in _HOLE_RE.findall(clause)])
-        for clause in _CLAUSE_RE.split(masked)
-    ]
+    return _QUOTE_RE.sub(hole, advice), quoted
 
 
-def _scope(clause: str, verb_end: int) -> str | None:
-    """ "passage", "paragraph", "sentence", "mixed" (both unit words) or None."""
-    tail = clause[verb_end:]
-    if _CJK_RE.search(clause):
-        if _CN_TAIL_PASSAGE_RE.search(tail):
-            return "passage"
-        unit = _CN_TAIL_UNIT_RE.search(tail)
-        if unit:
-            kind = "sentence" if unit.group(1).startswith("句") else "paragraph"
-        elif _CN_PARTIAL_RE.search(tail) or _HOLE_RE.search(tail):
-            return "passage"
+def _actions(masked: str) -> list[tuple[str, str]]:
+    """[(text before the verb within its clause, the verb's object)]."""
+    out = []
+    for segment in _BOUNDARY_RE.split(masked):
+        verbs = list(_VERB_RE.finditer(segment))
+        for n, verb in enumerate(verbs):
+            before = segment[verbs[n - 1].end() if n else 0 : verb.start()]
+            after = segment[verb.end() : verbs[n + 1].start() if n + 1 < len(verbs) else None]
+            out.append((before, after))
+    return out
+
+
+def _negated(before: str) -> bool:
+    text = before.replace("’", "'")
+    return bool(_CN_NEGATION_RE.search(text) or _EN_NEGATION_RE.search(text))
+
+
+def _object(before: str, after: str) -> str:
+    """The object of the verb: what follows it, cut at a clause word; for 把X删去 the X."""
+    chinese = bool(re.search(r"[一-鿿]", before + after))
+    if chinese:
+        after = _CN_ALTERNATIVE_RE.sub("", after.strip())
+        stop = _CN_STOP_RE.search(after)
+        obj = after[: stop.start()] if stop else after
+        ba = before.rfind("把")
+        if not obj.strip() and ba >= 0:
+            obj = before[ba + 1 :]
+        return obj
+    after = _EN_ALTERNATIVE_RE.sub("", after)
+    stop = _EN_STOP_RE.search(after)
+    return after[: stop.start()] if stop else after
+
+
+def _tokens(obj: str) -> list[str]:
+    """The object's tokens, or Unreliable if anything is outside the closed list."""
+    if re.search(r"[一-鿿]", _HOLE_RE.sub("", obj)):
+        pos, tokens = 0, []
+        while pos < len(obj):
+            match = _CN_TOKEN_RE.match(obj, pos)
+            if not match:
+                raise Unreliable(obj[pos:])
+            if match.group().strip():
+                tokens.append(re.sub(r"\s+", "", match.group()))
+            pos = match.end()
+        return tokens
+    tokens = []
+    for match in _EN_TOKEN_RE.finditer(obj.replace("’", "'")):
+        token = match.group()
+        low = token.lower()
+        if (
+            _HOLE_RE.fullmatch(token)
+            or low in _EN_WORDS
+            or low in _ORDINALS
+            or low in _LAST
+            or low in _FIRST
+            or low in _PARAGRAPH_NOUNS
+            or low in _SENTENCE_NOUNS
+            or low in _PARTIAL
+            or re.fullmatch(r"\d+(?:st|nd|rd|th)?", low)
+        ):
+            tokens.append(token if _HOLE_RE.fullmatch(token) else low)
         else:
-            return None
-    else:
-        head = _EN_HEAD_RE.search(tail)
-        if not head or not head.group(2):
-            return "passage" if head else None
-        kind = "sentence" if head.group(2).lower().startswith("sentence") else "paragraph"
-    other = _PARAGRAPH_WORD_RE if kind == "sentence" else _SENTENCE_WORD_RE
-    return "mixed" if other.search(_HOLE_RE.sub(" ", tail)) else kind
+            raise Unreliable(token)
+    leftover = _EN_TOKEN_RE.sub("", obj.replace("’", "'"))
+    if re.search(r"[^\s\-–—]", leftover):
+        raise Unreliable(leftover)
+    return tokens
 
 
-def _named(clause: str, kind: str, count: int):
-    """The unit index a clause names: an int, None (none named), "conflict" (several)
-    or "invalid" (one that does not exist, e.g. 第九段 in a five-paragraph essay)."""
-    text = _HOLE_RE.sub(" ", clause)
-    named, invalid = set(), False
-    if kind == "paragraph":
-        if _LAST_PARAGRAPH_RE.search(text):
+def _number(token: str) -> int | None:
+    token = re.sub(r"\s+", "", token)
+    if token.startswith("第"):
+        rest = token[1:]
+        if rest.isdigit():
+            return int(rest)
+        if rest == "十":
+            return 10
+        if len(rest) == 2 and rest[0] == "十":
+            return 10 + _CN_DIGITS.get(rest[1], 0)
+        return _CN_DIGITS.get(rest)
+    match = re.fullmatch(r"(\d+)(?:st|nd|rd|th)?", token)
+    if match:
+        return int(match.group(1))
+    return _ORDINALS.get(token)
+
+
+def _position(tokens: list[str], count: int) -> int | None:
+    """The 0-based unit index the tokens name, None if none; Unreliable if several
+    different ones or one that does not exist."""
+    named = set()
+    for n, token in enumerate(tokens):
+        if token in _LAST:
             named.add(count - 1)
-        if _FIRST_PARAGRAPH_RE.search(text):
+        elif token in _FIRST or token == "first":
             named.add(0)
-        for cn, digits, english in _NTH_PARAGRAPH_RE.findall(text):
-            n = _CN_NUMBERS.get(cn) or (int(cn) if cn.isdigit() else 0)
-            n = n or (int(digits) if digits else 0) or _EN_ORDINALS.get(english.lower(), 0)
-            if 1 <= n <= count:
-                named.add(n - 1)
-            else:
-                invalid = True
-    else:
-        if _LAST_SENTENCE_RE.search(text):
-            named.add(count - 1)
-        if _FIRST_SENTENCE_RE.search(text):
-            named.add(0)
-    if invalid:
-        return "invalid"
+        else:
+            number = _number(token)
+            if number is None:
+                continue
+            # "paragraph 9" / "the ninth paragraph" / "第九段"; a bare "two" in
+            # "两个词" is not a position.
+            follows_unit = n and tokens[n - 1] in _PARAGRAPH_NOUNS | _SENTENCE_NOUNS
+            precedes_unit = n + 1 < len(tokens) and tokens[n + 1] in _PARAGRAPH_NOUNS | (
+                _SENTENCE_NOUNS
+            )
+            if not (token.startswith("第") or follows_unit or precedes_unit):
+                continue
+            if not 1 <= number <= count:
+                raise Unreliable(f"no such unit: {token}")
+            named.add(number - 1)
     if len(named) > 1:
-        return "conflict"
+        raise Unreliable("several positions")
     return named.pop() if named else None
 
 
-def _negated(clause: str, verb_start: int) -> bool:
-    text = clause.replace("’", "'")
-    return any(m.start() < verb_start for m in _NEGATION_RE.finditer(text))
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+_NAMING_RE = re.compile(
+    r"段|句|结论|引言|结尾|开头|开篇|首|末|最后|第|"
+    r"\b(?:paragraphs?|sentences?|conclusion|introduction|final|last|first|opening|"
+    r"concluding|closing|introductory|\d+(?:st|nd|rd|th)|"
+    r"second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b",
+    re.I,
+)
 
 
-def _where(units: list[str], text: str) -> set[int]:
-    return {i for i, unit in enumerate(units) if essay_lib.contains_quote(unit, text)}
+def _names_something(obj: str, quoted: list[str]) -> bool:
+    """Whether the object names anything to delete: a quoted essay passage, a unit or a
+    position. Anything that does must then be read exactly."""
+    holes = [quoted[int(n)] for n in _HOLE_RE.findall(obj)]
+    return any(_english_words(h) for h in holes) or bool(_NAMING_RE.search(_HOLE_RE.sub(" ", obj)))
+
+
+def _english_words(passage: str) -> bool:
+    return bool(essay_lib.WORD_RE.search(passage))
+
+
+_FILLERS = {"即可", "就好", "就行", "也可以", "亦可", "吧", "掉", "了", "也", "还"}
+_PASSAGE_HEADS = {"词", "词语", "单词", "短语", "word", "words", "phrase", "phrases"}
+
+
+def _head_is_passage(tokens: list[str], chinese: bool) -> bool:
+    """What the verb deletes: in Chinese the head noun ends the phrase (结尾的“X”这一段
+    is a paragraph, 句子开头的“X” is X); in English the first noun after the verb does
+    (the paragraph beginning "X" is a paragraph, "X" from this sentence is X)."""
+    if chinese:
+        content = [t for t in tokens if t not in _FILLERS]
+        return bool(content) and (
+            bool(_HOLE_RE.fullmatch(content[-1])) or content[-1] in _PASSAGE_HEADS
+        )
+    for token in tokens:
+        if _HOLE_RE.fullmatch(token) or token in _PASSAGE_HEADS:
+            return True
+        if token in _PARAGRAPH_NOUNS or token in _SENTENCE_NOUNS:
+            return False
+    return False
+
+
+def _resolve(tokens, quoted, quote, layout, chinese):
+    """(word positions one action deletes, what they are), (None, None) if it names
+    nothing to delete; Unreliable if it cannot be located exactly."""
+    holes = [quoted[int(m.group(1))] for t in tokens if (m := _HOLE_RE.fullmatch(t))]
+    holes = [h for h in holes if _english_words(h)]  # a Chinese description is not a quote
+    words = [t for t in tokens if not _HOLE_RE.fullmatch(t)]
+    paragraph = any(t in _PARAGRAPH_NOUNS for t in words)
+    sentence = any(t in _SENTENCE_NOUNS for t in words)
+    partial = any(t in _PARTIAL for t in words) and not chinese  # Chinese: the head noun
+    has_position = any(t in _LAST or t in _FIRST or _number(t) for t in words)
+    if not (holes or paragraph or sentence or has_position):
+        return None, None  # "删去后结构更紧凑": nothing named
+    if holes and (partial or not (paragraph or sentence) or _head_is_passage(tokens, chinese)):
+        return _passages(holes, words, paragraph, sentence, quote, layout), ("passage", holes)
+    if not (paragraph or sentence):
+        raise Unreliable("a position without a unit")
+    if paragraph and sentence:
+        raise Unreliable("both paragraph and sentence")
+    kind = "paragraph" if paragraph else "sentence"
+    units = layout.units(kind)
+    named = (
+        _position(words, len(units)) if kind == "paragraph" else _sentence_position(words, units)
+    )
+    candidates = None
+    for hole in holes:
+        where = _units_with(hole, units, layout)
+        candidates = where if candidates is None else candidates & where
+    if named is not None:
+        candidates = {named} if candidates is None else candidates & {named}
+    if candidates is None:  # "这一段" / "this paragraph": the issue's own quote
+        if not quote:
+            return None, None  # an unverified issue quote: nothing to count
+        candidates = _units_with(quote, units, layout)
+        if not candidates:
+            return None, None
+    if len(candidates) != 1:
+        raise Unreliable("not exactly one unit")
+    index = candidates.pop()
+    return set(units[index]), (kind, index)
+
+
+def _sentence_position(words, units) -> int | None:
+    if any(t in _LAST for t in words):
+        return len(units) - 1
+    if any(t in _FIRST or t == "first" for t in words):
+        return 0
+    if any(_number(t) for t in words):
+        raise Unreliable("the Nth sentence of what?")
+    return None
+
+
+def _units_with(text: str, units: list[set[int]], layout: _Layout) -> set[int]:
+    hits = layout.occurrences(text)
+    return {i for i, unit in enumerate(units) for hit in hits if hit <= unit}
+
+
+def _passages(holes, words, paragraph, sentence, quote, layout) -> set[int]:
+    """Quoted words, each found exactly once inside the unit the action names."""
+    scope = None  # word positions the passage must lie in; None: the whole essay
+    if paragraph:
+        named = _position(words, len(layout.paragraphs))
+        if named is not None:
+            scope = layout.paragraphs[named]
+        elif any(t in _DEMONSTRATIVES for t in words):
+            scope = _quote_unit(quote, layout.paragraphs, layout)
+    elif sentence:
+        scope = _quote_unit(quote, layout.sentences, layout)
+    deleted: set[int] = set()
+    for hole in holes:
+        hits = [h for h in layout.occurrences(hole) if scope is None or h <= scope]
+        if len(hits) != 1:
+            raise Unreliable(f"{hole!r} found {len(hits)} times")
+        deleted |= hits[0]
+    return deleted
+
+
+def _quote_unit(quote, units, layout) -> set[int]:
+    where = _units_with(quote, units, layout) if quote else set()
+    if len(where) != 1:
+        raise Unreliable("the unit of the issue's quote")
+    return set(units[where.pop()])
 
 
 def analyse(advice: str | None, quote: str | None, essay: str) -> Deletion | None:
-    """What the advice deletes, or None when it deletes nothing that can be located."""
+    """What the advice deletes, or None when it deletes nothing that can be named."""
     if not advice or not _VERB_RE.search(advice):
         return None
-    paragraphs = essay_lib.split_paragraphs(essay)
-    sentences = [s.text for s in essay_lib.split_sentences(essay)]
-    quote_ok = bool(quote) and essay_lib.contains_quote(essay, quote)
+    masked, quoted = _mask(advice)
+    layout = _Layout(essay)
     result, found = Deletion(), False
-    for clause, quoted in _clauses(advice):
-        verb = _VERB_RE.search(clause)
-        if not verb or _negated(clause, verb.start()):
+    for before, after in _actions(masked):
+        if _negated(before):
             continue
-        passages = [p for p in quoted if essay_lib.contains_quote(essay, p)]
-        scope = _scope(clause, verb.end())
-        if scope == "passage":
-            result.passages += passages
-            found = found or bool(passages)
+        obj = _object(before, after)
+        if not _names_something(obj, quoted):
+            continue  # "删去后结构更紧凑"
+        chinese = bool(_CJK_RE.search(_HOLE_RE.sub("", obj)))
+        try:
+            positions, what = _resolve(_tokens(obj), quoted, quote, layout, chinese)
+        except Unreliable:
+            result.unsure = found = True
             continue
-        if scope == "mixed":  # "删去第二段的最后一句"
-            result.unsure, found = "sentence", True
+        if positions is None:
             continue
-        if scope is None:
-            continue  # "删去后结构更紧凑": nothing to delete is named
-        units = paragraphs if scope == "paragraph" else sentences
-        named = _named(clause, scope, len(units))
-        candidates = None
-        for passage in passages:
-            where = _where(units, passage)
-            candidates = where if candidates is None else candidates & where
-        if named in ("conflict", "invalid"):
-            candidates = set()  # a stated target is never replaced by another one
-        elif named is not None:
-            candidates = {named} if candidates is None else candidates & {named}
-        elif quoted and not passages:
-            candidates = set()  # it quotes a passage that is not in the essay
-        if candidates is None:  # the clause names nothing: the issue's own quote
-            if not quote_ok:
-                continue
-            candidates = _where(units, quote)
-        if len(candidates) == 1:
-            result.units.add((scope, candidates.pop()))
-        else:
-            result.unsure = scope
         found = True
+        result.positions |= positions
+        result.parts.append(layout.text_of(positions))
+        if what[0] == "passage":
+            result.passages += what[1]
+        else:
+            result.units.add(what)
     return result if found else None
 
 
@@ -280,15 +448,9 @@ def note(advice: str, quote: str | None, essay: str, minimum: int) -> tuple[str 
     found = analyse(advice, quote, essay)
     if found is None:
         return None, ""
-    total = essay_lib.count_words(essay)
-    remaining = total - found.words(essay)
+    remaining = essay_lib.count_words(essay) - found.words(essay)
     if found.unsure:
-        units = (
-            essay_lib.split_paragraphs(essay)
-            if found.unsure == "paragraph"
-            else [s.text for s in essay_lib.split_sentences(essay)]
-        )
-        largest = max((essay_lib.count_words(u) for u in units), default=0)
+        largest = max((len(p) for p in _Layout(essay).paragraphs), default=0)
         if remaining - largest >= minimum:
             return None, ""
         return (
