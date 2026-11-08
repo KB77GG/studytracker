@@ -1,5 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08（.10 复核后）雅思写作 AI 试用工具：删除建议按小句判断意图、范围和目标（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `db148ca`（报告 `075f5af`，`docs/design/ielts-writing-ai-prompt10-review-20261108/`，含 `schema_probe.py`、`deletion_probe.py`、`metrics_probe.py`）。JSON 示例与裸数字拒绝原因通过（175/175）；删除字数检查有两处 P2：① “不要删这一段”“只删句中的 In summary 两个词”被当成删整段 / 整句，误报剩 149 词；② 建议明确删结尾、问题引文却在首段时按首段算（漏报），引文多处出现时取到别的段（报 136）。结果和复制文本都受影响。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
+- 修复（业务提交 `7639dd5`）：新增 `deletion.py`，`review.py` 只负责接入（`review._deletion_target` 保留给评审探针做诊断）。建议按标点拆成小句，引号里的内容先换成占位符：
+  1. 意图：引号外有删除动词、动词前没有否定词才算删除；
+  2. 范围：中文看短语结尾（以段 / 句 / 结论 / 引言结尾是删整段 / 整句，以引文或“两个词”结尾是删词），英文看动词后先出现的是 paragraph / sentence 还是引文 / words；删词按被引用的词计数；
+  3. 目标：小句明确的位置（结尾 / 最后一段 / final paragraph / conclusion，首段 / 引言，第 N 段）和引用的原文优先，两者都没有才用问题引文；副词“最后，……”不算位置；
+  4. 目标矛盾、引用原文出现在多处、段句混合（“第二段的最后一句”）时不给数字，只在删去最长单元可能低于下限时提醒“无法确定要删的是哪一部分，没有计算字数”。
+  顶部提示沿用原话“有 N 条建议提到删去整段或整句……”；结果字段不变（“无法确定”只写进建议和顶部提示，第一版加的 `length_notes_unsure` 字段已去掉，因为评审的回放探针要求结果只多 `length_notes`）。
+- 验证：
+  - `tests/test_prompt9_run_20261107.py` 新增 `DeletionIntentTargetTest` 6 项（现 14 项），覆盖评审全部 10 个反例，并加了“无需删除”“rather than delete”“句子开头的‘In summary’”“Delete the conclusion.”“删去第一段”、副词“最后，”、引文多处出现、位置冲突、段句混合，以及删后仍达标时不提醒。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **387 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审新探针（`--repo . --output <scratch>`）：`deletion_probe.py` **189/189**、`findings: 0`；`metrics_probe.py` **120/120**；`schema_probe.py` exit 0。docs/design 下 38 个探针 27 个 exit 0，非 0 的 11 个与上一轮相同（9 个旧探针写死已修复的旧行为，`prompt9-review-20261107` 的 `json_shape_probe.py` / `evidence_probe.py` 写死 `.9` 平铺形状和“最多 4 个”；按新约定改的 scratch 副本 `<scratch>/probes-r10/json_shape_probe_nested.py` 仍 82/82）。
+- 限制：这仍是规则判断，覆盖评审列出的说法和上面的边界，不保证覆盖所有中文 / 英文表达；定位不了时宁可不给数字。
+- 状态：业务提交 `7639dd5` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复验 `7639dd5`。通过后验证 `.10` 需要用户新授权一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、新账本），并请用户决定输出上限是否从 16000 调高。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-08 写作 .10 独立离线复核：JSON通过，删除字数检查仍有两类P2
 
 - 新审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地分支 `codex/iwa-prompt10-review-20261108` 跟踪 `origin/claude/ielts-writing-ai-trial`，源HEAD **6d999807228c61a313812a80fb6dbfb27406c666**（业务 **db148cae2ef56876f6e08e082afd2884a221a1b7**），基线46220092。旧 `/private/tmp/studytracker-iwa-realcheck-review-20261103` 的.git不存在，注册为prunable；原目录/私有资料保留，未修复/删除/迁移。当前不可再把旧树当有效Git仓库运行历史runner。
