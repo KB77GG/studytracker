@@ -1,5 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08（.9 / high 实测后）雅思写作 AI 试用工具：恢复 criteria 嵌套 + 完整 JSON 示例（提示词 .10）、删除建议核对字数（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户的 `.9` / high 真实批次（报告 `4622009`，`docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/`）。累计 13/14 次请求（前 5 次因服务 500 / 人工中断用量未知，续跑 8 次均 HTTP 200），4/7 可用：good、离题、短文（重试后）、Task 1 语言评价；失败：weak 16000 token 全部用于思考、没有正文（`finish_reason=length`），mid 评分项是裸数字，strong 括号错误加裸数字。人工复核：Task 1 建议删去 23 词结尾段会使 172 词降到 149（下限 150），CC 评语误读第二段内容。批次已结束，剩下的 1 次不续用；**现在没有可用的付费授权**。本轮没有模型调用、没有读取 Key 或学生材料，评审的 `docs/design` 文件没有改动。
+- 诊断（证据来自共享 `raw_calls.jsonl`）：mid 是 `{"task":7.0,"coherence":7.5,...}`，strong 是 `{"task": 8, ...}` 且 argument 少一个 `}`；短文首轮 coherence、lexical、grammar 都是写完 `]` 漏了 `}`。也就是说 `.9` 把评分项移到最外层后，括号错误没有减少，还多了一种“评分项写成数字”的错误（之前四批、几十次调用用 `criteria` 嵌套都没出现过）。
+- 修复（业务提交 `db148ca`）：
+  1. 提示词 `.10`（`iwa-2026-11-08.10`）回到 `criteria` 嵌套，并给出一份完整、可解析的 JSON 示例（`prompts.evaluate_example`，按 Task 1 / 2 和有无题图生成）。占位值照抄必然被拒：分数是 -1，引文是 `<...>` 占位符；测试确认照抄示例（即使把分数改成 6.0）也不会通过校验。字段规则（C / A / K）保留，并补回 `priorities` 3–5 条（第一版示例漏掉了，评审 metrics 探针的观察项发现）。`evaluate_shape` 的最外层键加入 `criteria`。两种写法仍都接受，同时出现则拒绝。
+  2. `review.normalize_evaluation`：评分项是数字时拒绝原因为“评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象”，重试提示用同一句。
+  3. `review._deletion_notes`：建议里有删除动词（删去 / 删除 / 去掉 / delete / remove 等），并且说的是段 / 句 / paragraph / sentence 时，找到引文所在（或建议用引号点名）的那一段 / 句，按 `essay.count_words` 算删去后的字数；低于下限时建议照样保留，后面补“按本工具计数，删去整段 / 整句后约剩 N 词，低于 M 词下限，应改写或合并，并保持字数”，评价顶部也提示，结果里记 `length_notes`。适用于评分项问题、论证问题、可选优化和提升重点。只改个别词的建议不检查。
+  4. weak 的思考用完上限：README 记录（同一篇 2026-11-06 用了 9526），输出上限本轮未改。CC 误读段落内容属于模型判断，没有程序修复。
+- 验证：
+  - 新增 `tests/test_prompt9_run_20261107.py`（8 项）和夹具 `tests/fixtures/realcheck_20261107_prompt9.json`（本批续跑 8 个真实回答，不含思考正文）：mid / 嵌套形式的裸数字都给出准确原因，重试提示带上原因；strong 和短文首轮的括号诊断；4 篇可用回答仍能通过；示例原样出现在提示中且可解析、照抄不会得分；真实 Task 1 两条删结尾建议（CC 建议和提升重点第 1 条）都补上“约剩 149 词”，复制文本里也有；合成用例覆盖段 / 句 / 引号点名 / 非删除 / 只删一个词 / 引文不在原文 / 删后仍达标。
+  - 更新三处写死 `.9` 平铺形状的旧断言（`test_high_run_20261106`、`test_argument_recheck_20261104` 两处）。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **381 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针：本批 `continuation_metrics.py` 和 `interruption_audit.py`、上轮 `evidence_keepall_probe.py`、`ui_evidence_probe.py`、`metrics_probe.py`（100/100，priorities 3–5 观察项恢复为 true）都 exit 0。`prompt9-review-20261107/json_shape_probe.py` 有 6 项写死 `.9` 约定（提示里不能出现 `"criteria":`、最外层键集合不含 `criteria`），exit 1；这两项改成 `.10` 约定的 scratch 副本 `<scratch>/probes-r10/json_shape_probe_nested.py` → 82/82。其余非 0 的 10 个探针与上一轮相同（写死已修复的旧行为或 `.9` 时的旧约定）。JSON 输出差异只有版本号、Task 1 删结尾建议新增的字数提醒，以及上述 6 项。
+- 状态：业务提交 `db148ca` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复验 `db148ca`。验证 `.10` 需要用户新授权一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、新账本），并请用户决定 weak 这类长思考的输出上限是否从 16000 调高。重点看首轮 JSON 通过率、评分项是否还会写成数字、短文能否出分。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-07 写作 .9 续跑结束：累计13/14，最终4/7可用
 
 - 用户要求“继续跑完？”，沿用原14次授权；旧5次保留计数，新增8次实际HTTP，累计 **13/14**，7样本均已处理，4ready/3failed。批次结束、resume_high.py已禁用；未用1次仅落在已成功Task1的原样本配额内，不自动追加重做或下一批，不能挪给已用满2次的weak/mid/strong。
