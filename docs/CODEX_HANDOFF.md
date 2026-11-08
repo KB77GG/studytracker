@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08 写作 .10 第二次删除复验：原四项关闭，仍有三类P2
+
+- 审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地 `codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；干净c82ebbfc经HTTPS fetch/ff-only至 **03d2d4c4a44c110e67c4d89967d08b3088bfde61**，业务 **95763337**。提示词仍iwa-2026-11-08.10；78个tracked工具文件SHA **b07c3243f909598cad0a5482ed4a72a4152e7432b34ad39b3b45429111ee14b2** 前后一致，未改业务/配置、读取Key/私有思考/学生材料或调用模型。
+- 原五探针未改、主审独立重跑全过：删除189/189、schema175/175、metrics120/120、intent178/178、target112/112，四处原P2原场景关闭。新intent27场景186/217、target20场景102/128；57失败断言归并三类P2。全部normalize→copy，输入/评分不变。共享报告 `docs/design/ielts-writing-ai-prompt10-finalcheck-20261108/README.md`。
+- **P2-1 局部位置丢失，新回归**：deletion.py:245–248只保存引文，不存第二段限定，:141–153优先把同词绑定已删除区域。172词删末段23词+第二段Country A两词应147，实际149；只给首段加clearly成173词时应148，新版错算150而完全不提醒。13场景新旧模块进程内对照确认旧数正确/新数错；旧实现盲加文本碰巧算对，不代表旧定位正确，不能整套回退。
+- **P2-2 否定跨动作，原有遗漏**：:49不拆英文句点、:239–241每小句只看首动词、:222–224任意前置否定生效。`Do not remove the introduction. Delete the conclusion.`、`This paragraph is not necessary and you should delete the conclusion.`均漏149提醒；换分号正常。**P2-3 显式序号未解析仍回退，原有遗漏**：:73–80/193–219/266–269把第 2 段/2nd、第 9 段/ninth/9th当无位置，误删问题引文末段报149。应136或无确定数字；canonical第二段/第九段正对照已过。
+- 完整隔离命令：主树 `.venv/bin/python docs/design/iwa-prompt10-finalcheck-20261108/run_offline_tests.py` → **397 Python（21.277s、wrapper21.55s）+8 Node**；首轮沙箱回环绑定失败，获准同runner重跑通过。fake/临时库/外部IWA配置清除/非回环连接禁止，外部测试数据目录未写。审阅树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（53文件）、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check c82ebbfc..03d2d4c4`通过。新三脚本lint通过，主审复跑7探针与13场景对比。未重跑全部40历史探针、三locale、Python3.10或浏览器流程；不能声称真实模型格式/判断质量改善。
+- 共享目录14文件（README、两新探针py/json、新旧对比py/json、原五探针新JSON、验证JSON/日志）与两交接仅提交推送功能分支，最终文档HEAD见git log。主树本机runner/source-state/首次沙箱日志位于 `docs/design/iwa-prompt10-finalcheck-20261108/`，不提交。旧评审文件未改；浏览器咨询笔记仍仅本机，不混入本次提交。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7 modified/23 untracked入口及其他任务资料保留，本轮只增报告/两交接。未合main、部署、访问生产/写库、小程序上传提审发布；旧失效IWA树保留。产品代码此前已push，本轮只同步复核材料。
+- 下一步：按动作绑定否定/目标；先解析局部原文区间再做并集；显式位置解析失败不得回退。若短期无法覆盖复合建议，统一保守提示、不报伪精确词数。三类修复或保守退路先离线复验；`.10`仍无新付费调用授权/账本，16000上限未调，旧`.9`结束批次不续用；教师材料前提不变。
+
 ## 2026-11-08（.10 删除建议复验后）雅思写作 AI 试用工具：否定、单引号、重复扣词、无效目标（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复验 `7639dd5`（报告 `c82ebbf`，`docs/design/ielts-writing-ai-prompt10-recheck-20261108/`，新增 `intent_probe.py`、`target_probe.py`）。上轮反例全部关闭（删除 189/189、结构 175/175、统计 120/120），但新探针发现 4 处 P2：① “别删去这一段”“Don’t delete”“shouldn't delete”仍被当成删除；② 单引号 'In summary' 不算引文，删两个词被算成删整句；③ 末段恰好是末句时“删去最后一段；删去最后一句”扣两次（126，应为 149）；④ 五段作文里“删去第九段”退回去用问题引文，给出确定的 149。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。

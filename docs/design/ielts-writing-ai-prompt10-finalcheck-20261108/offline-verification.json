@@ -1,0 +1,65 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "python": "3.13.3",
+  "source_head": "03d2d4c4a44c110e67c4d89967d08b3088bfde61",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 21.55
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 0.21
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial\n",
+  "product_files_unchanged": true,
+  "product_file_count": 78,
+  "product_sha256": "b07c3243f909598cad0a5482ed4a72a4152e7432b34ad39b3b45429111ee14b2",
+  "python_tests": 397,
+  "node_tests": 8,
+  "additional_checks": [
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check tools/ielts_writing_ai",
+      "returncode": 0
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/black --check tools/ielts_writing_ai",
+      "returncode": 0,
+      "files": 53
+    },
+    {
+      "command": "node --check tools/ielts_writing_ai/static/iwa.js",
+      "returncode": 0
+    },
+    {
+      "command": "git diff --check c82ebbfc..03d2d4c4",
+      "returncode": 0
+    }
+  ],
+  "limitations": [
+    "No new model requests, external API or production access.",
+    "Tests ran on macOS Python 3.13.3 with fake provider, temporary storage and loopback-only audit guard.",
+    "First sandbox attempt failed on loopback socket permissions; approved rerun passed.",
+    "No rerun of all 40 historic probes, alternate locales, Python 3.10 or full browser flow."
+  ]
+}

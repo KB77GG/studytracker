@@ -1,0 +1,1767 @@
+{
+  "source_head": "03d2d4c4a44c110e67c4d89967d08b3088bfde61",
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial",
+  "source_files": {
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/run_data.json": "24232fd2354e7fde94f83c3e1749963c1da41db1aaff0c50c504386eadd2aa29",
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/raw_calls.jsonl": "6579596a0565657962347f83ee5fb45633f8f9d61fb98c53f5c5c32d280bf862"
+  },
+  "privacy_scope": "Committed redacted synthetic formal answers only; no private results, .env, credentials, reasoning bodies, network or model calls.",
+  "real_regression": {
+    "before_words": 172,
+    "paragraph_words": [
+      18,
+      36,
+      36,
+      59,
+      23
+    ],
+    "after_delete_last": 149,
+    "length_notes": 2,
+    "CC_advice": "删去这一结尾段，把其中“增长幅度差异”的评述并入第二段概述；若需保留对比，可改为在末段补一句带数据的具体对照，例如 \"Country C rose by about 40 percentage points, while Country A rose by only around 5 points.\"（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+    "priority_1": "删去或改写结尾的“In summary”段：第二段已经给出概述，末段不含新数据只是重述，删去后结构更紧凑；如需保留，就要写出带具体数据的对照。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+    "warnings": [
+      "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+      "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+      "有 2 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+    ],
+    "copy_note_occurrences": 2
+  },
+  "cases": [
+    {
+      "name": "whole_paragraph_cn",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删去这一结尾段。",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "whole_paragraph_en",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "Delete this paragraph.",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "whole_sentence_cn",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删除这一整句。",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "删除这一整句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删除这一整句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "whole_sentence_en",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "Remove this sentence.",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "priority_explicit_quote_cn",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "priority",
+      "input_quote": null,
+      "input_advice": "删去结尾的“In summary”这一段。",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. 删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "priority_explicit_quote_en",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "priority",
+      "input_quote": null,
+      "input_advice": "Delete the paragraph beginning \"In summary\".",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "Delete the paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Delete the paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "safe_whole_paragraph_removal",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+      "input_advice": "删除这一段。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 18,
+      "actual_remaining_if_requested_edit_applied": 154,
+      "normalized_advice": "删除这一段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删除这一段。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+        "selected_target_words": 18,
+        "after_selected_target": 154
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "at_exact_minimum",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删除这一段。",
+      "essay_words": 173,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 150,
+      "normalized_advice": "删除这一段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删除这一段。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 150
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "rewrite_not_deletion",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "把这一段改写得更紧凑，保留主要比较。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": null,
+      "actual_remaining_if_requested_edit_applied": null,
+      "normalized_advice": "把这一段改写得更紧凑，保留主要比较。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：把这一段改写得更紧凑，保留主要比较。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": null,
+        "selected_target_words": null,
+        "after_selected_target": null
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "word_edit_without_context_word",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删去“In summary”两个词。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 2,
+      "actual_remaining_if_requested_edit_applied": 170,
+      "normalized_advice": "删去“In summary”两个词。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去“In summary”两个词。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary",
+        "selected_target_words": 2,
+        "after_selected_target": 170
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "unverified_issue_quote",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "This quote is absent from the essay.",
+      "input_advice": "删去这一段。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": null,
+      "actual_remaining_if_requested_edit_applied": null,
+      "normalized_advice": "删去这一段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “This quote is absent from the essay.”（未在原文中找到，不作为评分依据） 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去这一段。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": null,
+        "selected_target_words": null,
+        "after_selected_target": null
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note",
+      "group": "positive",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "Delete this paragraph and claim that 87% support this view.",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": null,
+      "actual_remaining_if_requested_edit_applied": null,
+      "normalized_advice": "",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "negative_cn",
+      "group": "intent_scope",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "不要删去这一段，应保留其比较信息。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 0,
+      "actual_remaining_if_requested_edit_applied": 172,
+      "normalized_advice": "不要删去这一段，应保留其比较信息。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：不要删去这一段，应保留其比较信息。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": null,
+        "selected_target_words": null,
+        "after_selected_target": null
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "negative_en",
+      "group": "intent_scope",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "Do not delete this paragraph; retain the comparison.",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 0,
+      "actual_remaining_if_requested_edit_applied": 172,
+      "normalized_advice": "Do not delete this paragraph; retain the comparison.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Do not delete this paragraph; retain the comparison."
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": null,
+        "selected_target_words": null,
+        "after_selected_target": null
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "quoted_rejected_advice",
+      "group": "intent_scope",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "不要采用“删除这一段”的意见，应保留其中的比较信息。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 0,
+      "actual_remaining_if_requested_edit_applied": 172,
+      "normalized_advice": "不要采用“删除这一段”的意见，应保留其中的比较信息。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：不要采用“删除这一段”的意见，应保留其中的比较信息。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": null,
+        "selected_target_words": null,
+        "after_selected_target": null
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "word_only_inside_sentence_cn",
+      "group": "intent_scope",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删去这一句中的“In summary”两个词，保留其余内容。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 2,
+      "actual_remaining_if_requested_edit_applied": 170,
+      "normalized_advice": "删去这一句中的“In summary”两个词，保留其余内容。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去这一句中的“In summary”两个词，保留其余内容。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary",
+        "selected_target_words": 2,
+        "after_selected_target": 170
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "word_only_inside_sentence_en",
+      "group": "intent_scope",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "Remove only \"In summary\" from this sentence, keeping the rest.",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 2,
+      "actual_remaining_if_requested_edit_applied": 170,
+      "normalized_advice": "Remove only \"In summary\" from this sentence, keeping the rest.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Remove only \"In summary\" from this sentence, keeping the rest."
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary",
+        "selected_target_words": 2,
+        "after_selected_target": 170
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn",
+      "group": "target_binding",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+      "input_advice": "删去结尾的“In summary”这一段。",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en",
+      "group": "target_binding",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+      "input_advice": "Delete the final paragraph beginning \"In summary\".",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "Delete the final paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Delete the final paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote",
+      "group": "target_binding",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "input_advice": "删去“The bar chart compares”这一引言段。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 18,
+      "actual_remaining_if_requested_edit_applied": 154,
+      "normalized_advice": "删去“The bar chart compares”这一引言段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删去“The bar chart compares”这一引言段。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+        "selected_target_words": 18,
+        "after_selected_target": 154
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote",
+      "group": "target_binding",
+      "sample_id": "t1-no-image",
+      "channel": "priority",
+      "input_quote": null,
+      "input_advice": "保留“In summary”这一段，删去“The bar chart compares”这一引言段。",
+      "essay_words": 172,
+      "expected_notes": 0,
+      "expected_after_if_warned": null,
+      "actual_requested_removal_words": 18,
+      "actual_remaining_if_requested_edit_applied": 154,
+      "normalized_advice": "保留“In summary”这一段，删去“The bar chart compares”这一引言段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "1. 保留“In summary”这一段，删去“The bar chart compares”这一引言段。"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.",
+        "selected_target_words": 18,
+        "after_selected_target": 154
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph",
+      "group": "target_binding",
+      "sample_id": "t1-no-image",
+      "channel": "criterion",
+      "input_quote": "Country A",
+      "input_advice": "删除最后这一段。",
+      "essay_words": 172,
+      "expected_notes": 1,
+      "expected_after_if_warned": 149,
+      "actual_requested_removal_words": 23,
+      "actual_remaining_if_requested_edit_applied": 149,
+      "normalized_advice": "删除最后这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “Country A” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：删除最后这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "selected_target_words": 23,
+        "after_selected_target": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "argument_problem_positive",
+      "group": "positive",
+      "sample_id": "t2-good",
+      "channel": "argument_problem",
+      "input_quote": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+      "input_advice": "Delete this paragraph.",
+      "essay_words": 277,
+      "expected_notes": 1,
+      "expected_after_if_warned": 228,
+      "actual_requested_removal_words": 49,
+      "actual_remaining_if_requested_edit_applied": 228,
+      "normalized_advice": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。",
+        "  ✗ [过度概括] “As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.” 这处文字可以酌情调整，但需要保留文章已经给出的关键比较。 → 建议：Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+        "selected_target_words": 49,
+        "after_selected_target": 228
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "argument_improvement_positive",
+      "group": "positive",
+      "sample_id": "t2-good",
+      "channel": "argument_improvement",
+      "input_quote": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+      "input_advice": "Delete this paragraph.",
+      "essay_words": 277,
+      "expected_notes": 1,
+      "expected_after_if_warned": 228,
+      "actual_requested_removal_words": 49,
+      "actual_remaining_if_requested_edit_applied": 228,
+      "normalized_advice": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。",
+        "  · “As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.” → Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）"
+      ],
+      "helper_diagnostic_not_used_as_oracle": {
+        "selected_target": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.",
+        "selected_target_words": 49,
+        "after_selected_target": 228
+      },
+      "failed_checks": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "real_input_counts",
+      "passed": true,
+      "details": [
+        18,
+        36,
+        36,
+        59,
+        23
+      ]
+    },
+    {
+      "name": "real_two_advice_notes",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_CC_note_149_retains_advice",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_priority_note_149",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_copy_both_notes",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_top_warning_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "program_generated_numbers_not_removed_as_unsourced",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_input_unchanged",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real_scores_unchanged",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_paragraph_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_paragraph_cn:correct_remaining_count",
+      "passed": true,
+      "details": "删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_paragraph_cn:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "whole_paragraph_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_paragraph_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_paragraph_en:correct_remaining_count",
+      "passed": true,
+      "details": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_paragraph_en:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "whole_paragraph_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_cn:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_sentence_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_cn:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_sentence_cn:correct_remaining_count",
+      "passed": true,
+      "details": "删除这一整句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_sentence_cn:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "whole_sentence_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_sentence_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_sentence_en:correct_remaining_count",
+      "passed": true,
+      "details": "Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_sentence_en:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "whole_sentence_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_cn:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "priority_explicit_quote_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_cn:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "priority_explicit_quote_cn:correct_remaining_count",
+      "passed": true,
+      "details": "删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "priority_explicit_quote_cn:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "priority_explicit_quote_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_en:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "priority_explicit_quote_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "priority_explicit_quote_en:correct_remaining_count",
+      "passed": true,
+      "details": "Delete the paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "priority_explicit_quote_en:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_explicit_quote_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "priority_explicit_quote_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_whole_paragraph_removal:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "safe_whole_paragraph_removal:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_whole_paragraph_removal:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "safe_whole_paragraph_removal:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删除这一段。"
+    },
+    {
+      "name": "safe_whole_paragraph_removal:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "safe_whole_paragraph_removal:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "safe_whole_paragraph_removal:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "at_exact_minimum:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "at_exact_minimum:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "at_exact_minimum:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "at_exact_minimum:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删除这一段。"
+    },
+    {
+      "name": "at_exact_minimum:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "at_exact_minimum:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "at_exact_minimum:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rewrite_not_deletion:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "rewrite_not_deletion:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rewrite_not_deletion:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "rewrite_not_deletion:no_false_whole_unit_count",
+      "passed": true,
+      "details": "把这一段改写得更紧凑，保留主要比较。"
+    },
+    {
+      "name": "rewrite_not_deletion:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rewrite_not_deletion:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "rewrite_not_deletion:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_without_context_word:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "word_edit_without_context_word:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_without_context_word:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "word_edit_without_context_word:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删去“In summary”两个词。"
+    },
+    {
+      "name": "word_edit_without_context_word:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_without_context_word:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "word_edit_without_context_word:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unverified_issue_quote:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "unverified_issue_quote:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unverified_issue_quote:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "unverified_issue_quote:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删去这一段。"
+    },
+    {
+      "name": "unverified_issue_quote:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unverified_issue_quote:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "unverified_issue_quote:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:no_false_whole_unit_count",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 1,
+        "priorities": 0,
+        "argument": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "numeric_guard_runs_before_length_note:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_cn:no_false_whole_unit_count",
+      "passed": true,
+      "details": "不要删去这一段，应保留其比较信息。"
+    },
+    {
+      "name": "negative_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "negative_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_en:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_en:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_en:no_false_whole_unit_count",
+      "passed": true,
+      "details": "Do not delete this paragraph; retain the comparison."
+    },
+    {
+      "name": "negative_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "negative_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quoted_rejected_advice:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "quoted_rejected_advice:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quoted_rejected_advice:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "quoted_rejected_advice:no_false_whole_unit_count",
+      "passed": true,
+      "details": "不要采用“删除这一段”的意见，应保留其中的比较信息。"
+    },
+    {
+      "name": "quoted_rejected_advice:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quoted_rejected_advice:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "quoted_rejected_advice:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_cn:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "word_only_inside_sentence_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_cn:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "word_only_inside_sentence_cn:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删去这一句中的“In summary”两个词，保留其余内容。"
+    },
+    {
+      "name": "word_only_inside_sentence_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "word_only_inside_sentence_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_en:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "word_only_inside_sentence_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_en:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "word_only_inside_sentence_en:no_false_whole_unit_count",
+      "passed": true,
+      "details": "Remove only \"In summary\" from this sentence, keeping the rest."
+    },
+    {
+      "name": "word_only_inside_sentence_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_only_inside_sentence_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "word_only_inside_sentence_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:correct_remaining_count",
+      "passed": true,
+      "details": "删去结尾的“In summary”这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_cn:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:correct_remaining_count",
+      "passed": true,
+      "details": "Delete the final paragraph beginning \"In summary\".（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "explicit_target_last_despite_first_quote_en:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:no_false_whole_unit_count",
+      "passed": true,
+      "details": "删去“The bar chart compares”这一引言段。"
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "explicit_target_first_despite_last_quote:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:notes",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:no_false_whole_unit_count",
+      "passed": true,
+      "details": "保留“In summary”这一段，删去“The bar chart compares”这一引言段。"
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "priority_retained_quote_before_deleted_quote:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:correct_remaining_count",
+      "passed": true,
+      "details": "删除最后这一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "repeated_quote_explicit_final_paragraph:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "task2_positive_control_below_250",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_problem_positive:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "argument_problem_positive:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_problem_positive:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "argument_problem_positive:correct_remaining_count",
+      "passed": true,
+      "details": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "argument_problem_positive:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_problem_positive:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_problem_positive:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "argument_problem_positive:input_not_mutated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_improvement_positive:notes",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "argument_improvement_positive:copy_note_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_improvement_positive:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "argument_improvement_positive:correct_remaining_count",
+      "passed": true,
+      "details": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 228 词，低于 250 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "argument_improvement_positive:correct_count_copied",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_improvement_positive:advice_preserved_or_intentionally_filtered",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "argument_improvement_positive:numeric_filter_count",
+      "passed": true,
+      "details": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "argument_improvement_positive:input_not_mutated",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "passed": 189,
+  "total": 189,
+  "all_checks_passed": true,
+  "findings": [],
+  "limits": [
+    "Expected targets/removal counts are stated from the actual instruction and original text, not copied from _deletion_target.",
+    "Only explicit whole-unit/word-only/negative/bound-target examples and the requested duplicate-quote case; not claiming full natural-language coverage.",
+    "All visible evidence runs normalize_evaluation and production evaluation_text; no browser rendering or full-suite claim.",
+    "A length annotation does not validate the teaching advice itself. Scores and source text remain unchanged."
+  ]
+}

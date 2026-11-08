@@ -1,0 +1,742 @@
+{
+  "source_head": "03d2d4c4a44c110e67c4d89967d08b3088bfde61",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "fixture_sha256": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06",
+  "cases": [
+    {
+      "name": "control_second_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去第二段。",
+      "expected_remaining": 136,
+      "actual_remainders": [
+        136
+      ],
+      "displayed": [
+        "删去第二段。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 36
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_fifth_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去第五段。",
+      "expected_remaining": 149,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去第五段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_english_second",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "Delete the second paragraph.",
+      "expected_remaining": 136,
+      "actual_remainders": [
+        136
+      ],
+      "displayed": [
+        "Delete the second paragraph.（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 36
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_paragraph_sentence_overlap",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去最后一段；删去最后一句。",
+      "expected_remaining": 149,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_partial_same_last_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去最后一段；删去最后一段中的“Country A”两个词。",
+      "expected_remaining": 149,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去最后一段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_partial_same_second_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去第二段；删去第二段中的“Country A”两个词。",
+      "expected_remaining": 136,
+      "actual_remainders": [
+        136
+      ],
+      "displayed": [
+        "删去第二段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 36
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_distinct_whole_paragraphs",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去首段；删去最后一段。",
+      "expected_remaining": 131,
+      "actual_remainders": [
+        131
+      ],
+      "displayed": [
+        "删去首段；删去最后一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            0
+          ],
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 41
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_independent_channels",
+      "group": "control",
+      "channel": "both",
+      "advice": "删去最后一段。",
+      "expected_remaining": 149,
+      "actual_remainders": [
+        149,
+        149
+      ],
+      "displayed": [
+        "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_missing_ninth_cn",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "删去第九段。",
+      "expected_remaining": null,
+      "actual_remainders": [],
+      "displayed": [
+        "删去第九段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": "paragraph",
+        "deleted_word_count": 0
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "control_missing_ninth_en",
+      "group": "control",
+      "channel": "criterion",
+      "advice": "Delete paragraph 9.",
+      "expected_remaining": null,
+      "actual_remainders": [],
+      "displayed": [
+        "Delete paragraph 9.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": "paragraph",
+        "deleted_word_count": 0
+      },
+      "checks_failed": []
+    },
+    {
+      "name": "partial_second_not_last_cn",
+      "group": "partial_position_lost",
+      "channel": "criterion",
+      "advice": "删去最后一段；删去第二段中的“Country A”两个词。",
+      "expected_remaining": 147,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "partial_second_not_last_cn.correct_remainder",
+        "partial_second_not_last_cn.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "partial_second_not_last_en",
+      "group": "partial_position_lost",
+      "channel": "criterion",
+      "advice": "Delete the last paragraph; remove only \"Country A\" from the second paragraph.",
+      "expected_remaining": 147,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "Delete the last paragraph; remove only \"Country A\" from the second paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "partial_second_not_last_en.correct_remainder",
+        "partial_second_not_last_en.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "partial_last_not_second",
+      "group": "partial_position_lost",
+      "channel": "criterion",
+      "advice": "删去第二段；删去最后一段中的“Country A”两个词。",
+      "expected_remaining": 134,
+      "actual_remainders": [
+        136
+      ],
+      "displayed": [
+        "删去第二段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 36
+      },
+      "checks_failed": [
+        "partial_last_not_second.correct_remainder",
+        "partial_last_not_second.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "partial_first_in_advice",
+      "group": "partial_position_lost",
+      "channel": "criterion",
+      "advice": "删去第二段中的“Country A”两个词；删去最后一段。",
+      "expected_remaining": 147,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去第二段中的“Country A”两个词；删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "partial_first_in_advice.correct_remainder",
+        "partial_first_in_advice.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "partial_priority",
+      "group": "partial_position_lost",
+      "channel": "priority",
+      "advice": "删去最后一段；删去第二段中的“Country A”两个词。",
+      "expected_remaining": 147,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "partial_priority.correct_remainder",
+        "partial_priority.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "spaced_existing_paragraph",
+      "group": "ordinal_falls_back",
+      "channel": "criterion",
+      "advice": "删去第 2 段。",
+      "expected_remaining": 136,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去第 2 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "spaced_existing_paragraph.correct_remainder",
+        "spaced_existing_paragraph.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "spaced_nonexistent_paragraph",
+      "group": "ordinal_falls_back",
+      "channel": "criterion",
+      "advice": "删去第 9 段。",
+      "expected_remaining": null,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "删去第 9 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "spaced_nonexistent_paragraph.correct_remainder",
+        "spaced_nonexistent_paragraph.copy_matches_expected",
+        "spaced_nonexistent_paragraph.annotation_count",
+        "spaced_nonexistent_paragraph.no_numeric_fallback"
+      ]
+    },
+    {
+      "name": "english_nonexistent_ninth",
+      "group": "ordinal_falls_back",
+      "channel": "criterion",
+      "advice": "Delete the ninth paragraph.",
+      "expected_remaining": null,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "Delete the ninth paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "english_nonexistent_ninth.correct_remainder",
+        "english_nonexistent_ninth.copy_matches_expected",
+        "english_nonexistent_ninth.annotation_count",
+        "english_nonexistent_ninth.no_numeric_fallback"
+      ]
+    },
+    {
+      "name": "english_numeric_existing",
+      "group": "ordinal_falls_back",
+      "channel": "criterion",
+      "advice": "Delete the 2nd paragraph.",
+      "expected_remaining": 136,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "Delete the 2nd paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "english_numeric_existing.correct_remainder",
+        "english_numeric_existing.copy_matches_expected"
+      ]
+    },
+    {
+      "name": "english_numeric_nonexistent",
+      "group": "ordinal_falls_back",
+      "channel": "criterion",
+      "advice": "Delete the 9th paragraph.",
+      "expected_remaining": null,
+      "actual_remainders": [
+        149
+      ],
+      "displayed": [
+        "Delete the 9th paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": null,
+        "deleted_word_count": 23
+      },
+      "checks_failed": [
+        "english_numeric_nonexistent.correct_remainder",
+        "english_numeric_nonexistent.copy_matches_expected",
+        "english_numeric_nonexistent.annotation_count",
+        "english_numeric_nonexistent.no_numeric_fallback"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "Explicit location of a partial deletion is lost before union accounting",
+      "locations": [
+        "tools/ielts_writing_ai/deletion.py:245-248",
+        "tools/ielts_writing_ai/deletion.py:141-153"
+      ],
+      "cause": "The passage branch stores only the quote, discarding its paragraph qualifier. Layout.passage then selects an occurrence already in deleted words, even when the advice explicitly points to another paragraph.",
+      "example": "Delete last paragraph (23 words) plus Country A in paragraph 2 (two distinct words): 172-23-2=147, but normalized suggestion and copy both claim149.",
+      "controls": "Same passage inside the already removed last paragraph remains149; same passage inside removed second paragraph remains136; distinct whole paragraphs remain131.",
+      "recommendation": "Resolve each action to original offsets while its explicit position is available; union those offsets. If a passage occurrence is ambiguous, preserve uncertainty rather than selecting an occurrence for minimum deletion."
+    },
+    {
+      "priority": "P2",
+      "title": "Unrecognized explicit ordinals still silently fall back to the issue quote",
+      "locations": [
+        "tools/ielts_writing_ai/deletion.py:73-80",
+        "tools/ielts_writing_ai/deletion.py:193-219",
+        "tools/ielts_writing_ai/deletion.py:266-269"
+      ],
+      "cause": "Only a small set of ordinal spellings produces named/invalid. A space-formatted Chinese ordinal or English numeric ordinal is returned as None, indistinguishable from no named target.",
+      "example": "In five paragraphs, 删去第 9 段 and Delete the ninth paragraph both claim149 by deleting the final paragraph. 删去第 2 段 should leave136 but also claims149.",
+      "controls": "Canonical 第九段 and paragraph9 now yield uncertainty; 第二段 and second paragraph correctly leave136.",
+      "recommendation": "First detect that any explicit positional expression is present; unsupported or invalid positions must not fall back. Normalize ordinary spaces and ordinal notation separately from target existence."
+    }
+  ],
+  "checks": {
+    "source_layout": true,
+    "repeated_country_a_has_unique_occurrence_in_each_target": true,
+    "control_second_paragraph.correct_remainder": true,
+    "control_second_paragraph.copy_matches_expected": true,
+    "control_second_paragraph.advice_retained": true,
+    "control_second_paragraph.annotation_count": true,
+    "control_second_paragraph.input_not_mutated": true,
+    "control_second_paragraph.scores_not_changed": true,
+    "control_fifth_paragraph.correct_remainder": true,
+    "control_fifth_paragraph.copy_matches_expected": true,
+    "control_fifth_paragraph.advice_retained": true,
+    "control_fifth_paragraph.annotation_count": true,
+    "control_fifth_paragraph.input_not_mutated": true,
+    "control_fifth_paragraph.scores_not_changed": true,
+    "control_english_second.correct_remainder": true,
+    "control_english_second.copy_matches_expected": true,
+    "control_english_second.advice_retained": true,
+    "control_english_second.annotation_count": true,
+    "control_english_second.input_not_mutated": true,
+    "control_english_second.scores_not_changed": true,
+    "control_paragraph_sentence_overlap.correct_remainder": true,
+    "control_paragraph_sentence_overlap.copy_matches_expected": true,
+    "control_paragraph_sentence_overlap.advice_retained": true,
+    "control_paragraph_sentence_overlap.annotation_count": true,
+    "control_paragraph_sentence_overlap.input_not_mutated": true,
+    "control_paragraph_sentence_overlap.scores_not_changed": true,
+    "control_partial_same_last_paragraph.correct_remainder": true,
+    "control_partial_same_last_paragraph.copy_matches_expected": true,
+    "control_partial_same_last_paragraph.advice_retained": true,
+    "control_partial_same_last_paragraph.annotation_count": true,
+    "control_partial_same_last_paragraph.input_not_mutated": true,
+    "control_partial_same_last_paragraph.scores_not_changed": true,
+    "control_partial_same_second_paragraph.correct_remainder": true,
+    "control_partial_same_second_paragraph.copy_matches_expected": true,
+    "control_partial_same_second_paragraph.advice_retained": true,
+    "control_partial_same_second_paragraph.annotation_count": true,
+    "control_partial_same_second_paragraph.input_not_mutated": true,
+    "control_partial_same_second_paragraph.scores_not_changed": true,
+    "control_distinct_whole_paragraphs.correct_remainder": true,
+    "control_distinct_whole_paragraphs.copy_matches_expected": true,
+    "control_distinct_whole_paragraphs.advice_retained": true,
+    "control_distinct_whole_paragraphs.annotation_count": true,
+    "control_distinct_whole_paragraphs.input_not_mutated": true,
+    "control_distinct_whole_paragraphs.scores_not_changed": true,
+    "control_independent_channels.correct_remainder": true,
+    "control_independent_channels.copy_matches_expected": true,
+    "control_independent_channels.advice_retained": true,
+    "control_independent_channels.annotation_count": true,
+    "control_independent_channels.input_not_mutated": true,
+    "control_independent_channels.scores_not_changed": true,
+    "control_missing_ninth_cn.correct_remainder": true,
+    "control_missing_ninth_cn.copy_matches_expected": true,
+    "control_missing_ninth_cn.advice_retained": true,
+    "control_missing_ninth_cn.annotation_count": true,
+    "control_missing_ninth_cn.input_not_mutated": true,
+    "control_missing_ninth_cn.scores_not_changed": true,
+    "control_missing_ninth_cn.no_numeric_fallback": true,
+    "control_missing_ninth_en.correct_remainder": true,
+    "control_missing_ninth_en.copy_matches_expected": true,
+    "control_missing_ninth_en.advice_retained": true,
+    "control_missing_ninth_en.annotation_count": true,
+    "control_missing_ninth_en.input_not_mutated": true,
+    "control_missing_ninth_en.scores_not_changed": true,
+    "control_missing_ninth_en.no_numeric_fallback": true,
+    "partial_second_not_last_cn.correct_remainder": false,
+    "partial_second_not_last_cn.copy_matches_expected": false,
+    "partial_second_not_last_cn.advice_retained": true,
+    "partial_second_not_last_cn.annotation_count": true,
+    "partial_second_not_last_cn.input_not_mutated": true,
+    "partial_second_not_last_cn.scores_not_changed": true,
+    "partial_second_not_last_en.correct_remainder": false,
+    "partial_second_not_last_en.copy_matches_expected": false,
+    "partial_second_not_last_en.advice_retained": true,
+    "partial_second_not_last_en.annotation_count": true,
+    "partial_second_not_last_en.input_not_mutated": true,
+    "partial_second_not_last_en.scores_not_changed": true,
+    "partial_last_not_second.correct_remainder": false,
+    "partial_last_not_second.copy_matches_expected": false,
+    "partial_last_not_second.advice_retained": true,
+    "partial_last_not_second.annotation_count": true,
+    "partial_last_not_second.input_not_mutated": true,
+    "partial_last_not_second.scores_not_changed": true,
+    "partial_first_in_advice.correct_remainder": false,
+    "partial_first_in_advice.copy_matches_expected": false,
+    "partial_first_in_advice.advice_retained": true,
+    "partial_first_in_advice.annotation_count": true,
+    "partial_first_in_advice.input_not_mutated": true,
+    "partial_first_in_advice.scores_not_changed": true,
+    "partial_priority.correct_remainder": false,
+    "partial_priority.copy_matches_expected": false,
+    "partial_priority.advice_retained": true,
+    "partial_priority.annotation_count": true,
+    "partial_priority.input_not_mutated": true,
+    "partial_priority.scores_not_changed": true,
+    "spaced_existing_paragraph.correct_remainder": false,
+    "spaced_existing_paragraph.copy_matches_expected": false,
+    "spaced_existing_paragraph.advice_retained": true,
+    "spaced_existing_paragraph.annotation_count": true,
+    "spaced_existing_paragraph.input_not_mutated": true,
+    "spaced_existing_paragraph.scores_not_changed": true,
+    "spaced_nonexistent_paragraph.correct_remainder": false,
+    "spaced_nonexistent_paragraph.copy_matches_expected": false,
+    "spaced_nonexistent_paragraph.advice_retained": true,
+    "spaced_nonexistent_paragraph.annotation_count": false,
+    "spaced_nonexistent_paragraph.input_not_mutated": true,
+    "spaced_nonexistent_paragraph.scores_not_changed": true,
+    "spaced_nonexistent_paragraph.no_numeric_fallback": false,
+    "english_nonexistent_ninth.correct_remainder": false,
+    "english_nonexistent_ninth.copy_matches_expected": false,
+    "english_nonexistent_ninth.advice_retained": true,
+    "english_nonexistent_ninth.annotation_count": false,
+    "english_nonexistent_ninth.input_not_mutated": true,
+    "english_nonexistent_ninth.scores_not_changed": true,
+    "english_nonexistent_ninth.no_numeric_fallback": false,
+    "english_numeric_existing.correct_remainder": false,
+    "english_numeric_existing.copy_matches_expected": false,
+    "english_numeric_existing.advice_retained": true,
+    "english_numeric_existing.annotation_count": true,
+    "english_numeric_existing.input_not_mutated": true,
+    "english_numeric_existing.scores_not_changed": true,
+    "english_numeric_nonexistent.correct_remainder": false,
+    "english_numeric_nonexistent.copy_matches_expected": false,
+    "english_numeric_nonexistent.advice_retained": true,
+    "english_numeric_nonexistent.annotation_count": false,
+    "english_numeric_nonexistent.input_not_mutated": true,
+    "english_numeric_nonexistent.scores_not_changed": true,
+    "english_numeric_nonexistent.no_numeric_fallback": false,
+    "fixture_bytes_unchanged": true
+  },
+  "checks_passed": 102,
+  "checks_total": 128,
+  "failures": [
+    "partial_second_not_last_cn.correct_remainder",
+    "partial_second_not_last_cn.copy_matches_expected",
+    "partial_second_not_last_en.correct_remainder",
+    "partial_second_not_last_en.copy_matches_expected",
+    "partial_last_not_second.correct_remainder",
+    "partial_last_not_second.copy_matches_expected",
+    "partial_first_in_advice.correct_remainder",
+    "partial_first_in_advice.copy_matches_expected",
+    "partial_priority.correct_remainder",
+    "partial_priority.copy_matches_expected",
+    "spaced_existing_paragraph.correct_remainder",
+    "spaced_existing_paragraph.copy_matches_expected",
+    "spaced_nonexistent_paragraph.correct_remainder",
+    "spaced_nonexistent_paragraph.copy_matches_expected",
+    "spaced_nonexistent_paragraph.annotation_count",
+    "spaced_nonexistent_paragraph.no_numeric_fallback",
+    "english_nonexistent_ninth.correct_remainder",
+    "english_nonexistent_ninth.copy_matches_expected",
+    "english_nonexistent_ninth.annotation_count",
+    "english_nonexistent_ninth.no_numeric_fallback",
+    "english_numeric_existing.correct_remainder",
+    "english_numeric_existing.copy_matches_expected",
+    "english_numeric_nonexistent.correct_remainder",
+    "english_numeric_nonexistent.copy_matches_expected",
+    "english_numeric_nonexistent.annotation_count",
+    "english_numeric_nonexistent.no_numeric_fallback"
+  ],
+  "scope": "Each optional suggestion is independent; cases intentionally do not sum deletions across channels. Public synthetic essays only."
+}

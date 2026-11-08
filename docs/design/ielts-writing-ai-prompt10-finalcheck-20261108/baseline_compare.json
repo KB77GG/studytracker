@@ -1,0 +1,956 @@
+{
+  "source_head": "03d2d4c4a44c110e67c4d89967d08b3088bfde61",
+  "baseline_head": "c82ebbfcee25cbfcb17a42aeebb9370b980b2c2a",
+  "baseline_module_sha256": "0923735451a07227a4d155769589015f68f3f0860634ccabd1ec4004cfa54b0f",
+  "method": "Only deletion module changed in process; current review normalization and copy formatter remain fixed.",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "product_and_fixture_hashes": {
+    "tools/ielts_writing_ai/deletion.py": "42ec0681a74990a2cafd08426020fcf551d158ab0bd6ad8592c71edd4bdf35ea",
+    "tools/ielts_writing_ai/review.py": "c593aaadecd3169b480d702c45051c41cf845bb86d2cc174fdb840521b37cf06",
+    "tools/ielts_writing_ai/copytext.py": "f176bdaecc14c58d9161787bdd4ad5a8f3f4c402c94f17e1d3c926aa60d683dd",
+    "tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06"
+  },
+  "files_unchanged": true,
+  "results": [
+    {
+      "name": "partial_second_not_last_cn",
+      "advice": "删去最后一段；删去第二段中的“Country A”两个词。",
+      "expected_remaining": 147,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 147 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          147
+        ],
+        "copy_remainders": [
+          147
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 25
+        }
+      },
+      "current": {
+        "shown": "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "observable_regression",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "partial_second_not_last_en",
+      "advice": "Delete the last paragraph; remove only \"Country A\" from the second paragraph.",
+      "expected_remaining": 147,
+      "expected_unsure": false,
+      "old": {
+        "shown": "Delete the last paragraph; remove only \"Country A\" from the second paragraph.（注意：按本工具计数，按建议删去后约剩 147 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          147
+        ],
+        "copy_remainders": [
+          147
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 25
+        }
+      },
+      "current": {
+        "shown": "Delete the last paragraph; remove only \"Country A\" from the second paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "observable_regression",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "threshold_partial_other_paragraph_173",
+      "advice": "删去最后一段；删去第二段中的“Country A”两个词。",
+      "expected_remaining": 148,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 148 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 173,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          148
+        ],
+        "copy_remainders": [
+          148
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 25
+        }
+      },
+      "current": {
+        "shown": "删去最后一段；删去第二段中的“Country A”两个词。",
+        "source_word_count": 173,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [],
+        "copy_remainders": [],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "observable_regression",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "partial_last_not_second",
+      "advice": "删去第二段；删去最后一段中的“Country A”两个词。",
+      "expected_remaining": 134,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去第二段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 134 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          134
+        ],
+        "copy_remainders": [
+          134
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              1
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 38
+        }
+      },
+      "current": {
+        "shown": "删去第二段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          136
+        ],
+        "copy_remainders": [
+          136
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              1
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 36
+        }
+      },
+      "classification": "observable_regression",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "partial_first_in_advice",
+      "advice": "删去第二段中的“Country A”两个词；删去最后一段。",
+      "expected_remaining": 147,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去第二段中的“Country A”两个词；删去最后一段。（注意：按本工具计数，按建议删去后约剩 147 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          147
+        ],
+        "copy_remainders": [
+          147
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 25
+        }
+      },
+      "current": {
+        "shown": "删去第二段中的“Country A”两个词；删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "observable_regression",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "true_partial_overlap",
+      "advice": "删去最后一段；删去最后一段中的“Country A”两个词。",
+      "expected_remaining": 149,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去最后一段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 147 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          147
+        ],
+        "copy_remainders": [
+          147
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 25
+        }
+      },
+      "current": {
+        "shown": "删去最后一段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [
+            "Country A"
+          ],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "fixed",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "true_unit_overlap",
+      "advice": "删去最后一段；删去最后一句。",
+      "expected_remaining": 149,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 126 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          126
+        ],
+        "copy_remainders": [
+          126
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ],
+            [
+              "sentence",
+              7
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 46
+        }
+      },
+      "current": {
+        "shown": "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ],
+            [
+              "sentence",
+              7
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "fixed",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "different_whole_units",
+      "advice": "删去首段；删去最后一段。",
+      "expected_remaining": 131,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去首段；删去最后一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          131
+        ],
+        "copy_remainders": [
+          131
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              0
+            ],
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 41
+        }
+      },
+      "current": {
+        "shown": "删去首段；删去最后一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          131
+        ],
+        "copy_remainders": [
+          131
+        ],
+        "unsure": false,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              0
+            ],
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 41
+        }
+      },
+      "classification": "unchanged_correct",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "negation_across_period",
+      "advice": "Do not remove the introduction. Delete the conclusion.",
+      "expected_remaining": 149,
+      "expected_unsure": false,
+      "old": {
+        "shown": "Do not remove the introduction. Delete the conclusion.",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [],
+        "copy_remainders": [],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": null
+      },
+      "current": {
+        "shown": "Do not remove the introduction. Delete the conclusion.",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [],
+        "copy_remainders": [],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": null
+      },
+      "classification": "preexisting_gap",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "spaced_existing_ordinal",
+      "advice": "删去第 2 段。",
+      "expected_remaining": 136,
+      "expected_unsure": false,
+      "old": {
+        "shown": "删去第 2 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "current": {
+        "shown": "删去第 2 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "preexisting_gap",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "spaced_nonexistent_ordinal",
+      "advice": "删去第 9 段。",
+      "expected_remaining": null,
+      "expected_unsure": true,
+      "old": {
+        "shown": "删去第 9 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "current": {
+        "shown": "删去第 9 段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "preexisting_gap",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "english_ninth",
+      "advice": "Delete the ninth paragraph.",
+      "expected_remaining": null,
+      "expected_unsure": true,
+      "old": {
+        "shown": "Delete the ninth paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "current": {
+        "shown": "Delete the ninth paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "classification": "preexisting_gap",
+      "scores_unchanged_between_versions": true
+    },
+    {
+      "name": "canonical_nonexistent_ordinal",
+      "advice": "删去第九段。",
+      "expected_remaining": null,
+      "expected_unsure": true,
+      "old": {
+        "shown": "删去第九段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [
+          149
+        ],
+        "copy_remainders": [
+          149
+        ],
+        "unsure": false,
+        "matches_desired_behavior": false,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [
+            [
+              "paragraph",
+              4
+            ]
+          ],
+          "passages": [],
+          "unsure": null,
+          "word_count": 23
+        }
+      },
+      "current": {
+        "shown": "删去第九段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+        "source_word_count": 172,
+        "same_source_baseline_scores_unchanged": true,
+        "actual_remainders": [],
+        "copy_remainders": [],
+        "unsure": true,
+        "matches_desired_behavior": true,
+        "raw_and_submission_unchanged": true,
+        "bands": [
+          null,
+          7.0,
+          7.5,
+          7.5
+        ],
+        "overall_band": null,
+        "analysis": {
+          "units": [],
+          "passages": [],
+          "unsure": "paragraph",
+          "word_count": 0
+        }
+      },
+      "classification": "fixed",
+      "scores_unchanged_between_versions": true
+    }
+  ],
+  "all_inputs_unchanged": true,
+  "all_scores_unchanged": true,
+  "all_same_source_baseline_scores_unchanged": true,
+  "caveat": "Old partial deletion results are numerically correct in the distinct-position examples because old words() blindly sums texts. The old module also discards the qualifier and has no sound positional resolution; this is an observable output regression, not proof that the old targeting logic was correct."
+}
