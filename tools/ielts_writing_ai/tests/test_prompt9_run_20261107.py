@@ -293,5 +293,70 @@ class DeletionIntentTargetTest(unittest.TestCase):
         self.assertEqual((updated, kind), (None, ""))  # cannot matter: no note
 
 
+# Recheck of 7639dd5 (docs/design/ielts-writing-ai-prompt10-recheck-20261108): 别删 /
+# Don’t / shouldn't were not read as negation, single quotes were not quotation marks,
+# one passage reached by two descriptions was counted twice, and a paragraph that does
+# not exist (第九段) fell back to the issue's quote.
+class DeletionRecheckTest(DeletionIntentTargetTest):
+    def unsure(self, advice, quote):
+        updated, kind = deletion.note(advice, quote, self.essay, 150)
+        self.assertEqual(kind, "unsure")
+        self.assertNotIn("约剩", updated)
+        raw = parse_strict_json(text("t1-no-image"))
+        raw["coherence"]["issues"] = [{"quote": quote, "comment": "说明。", "suggestion": advice}]
+        raw["priorities"] = ["保持段落清晰。"]
+        result = review.normalize_evaluation(raw, self.sub)
+        coherence = next(c for c in result["criteria"] if c["key"] == "coherence")
+        self.assertIn("无法确定要删的是哪一部分", coherence["issues"][0]["suggestion"])
+        self.assertNotIn("约剩", copytext.evaluation_text(result, {}))
+
+    def test_common_negations(self):
+        for advice in (
+            "别删去这一段，应保留比较信息。",
+            "千万别删这一段。",
+            "切勿删除这一段。",
+            "Don’t delete this paragraph.",
+            "You shouldn't delete this paragraph.",
+            "You shouldn’t delete this paragraph.",
+            "You cannot simply delete this paragraph.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, None)
+        self.check("删这一段。", self.last, 149)  # the bare verb is a deletion too
+
+    def test_single_quotes_and_apostrophes(self):
+        for advice in (
+            "Remove only 'In summary' from this sentence.",
+            "Remove only ‘In summary’ from this sentence.",
+            "Ignore the advice 'delete this paragraph' and keep it.",
+            "Ignore the advice ‘delete this paragraph’ and keep it.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, None)
+        for advice in (
+            "Delete this paragraph; it's only a summary.",
+            "Delete the writer's final paragraph.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.first if "final" in advice else self.last, 149)
+
+    def test_the_same_words_are_deleted_once(self):
+        self.assertEqual(len(essay_lib.split_sentences(self.last)), 1)
+        for advice in (
+            "删去最后一段；删去最后一句。",
+            "删去最后一段；删去“In summary”两个词。",
+            "Delete the final paragraph; also delete the last sentence.",
+        ):
+            with self.subTest(advice=advice):
+                self.check(advice, self.last, 149)
+        self.check("删去首段；删去结尾段。", self.last, 131)  # 172 - 18 - 23
+
+    def test_a_stated_target_that_does_not_exist_is_not_replaced(self):
+        self.unsure("删去第九段。", self.last)
+        self.unsure("Delete paragraph 9.", self.last)
+        self.unsure("删去“a sentence the essay never had”这一段。", self.last)
+        self.check("删去第五段。", self.first, 149)  # the last of five paragraphs
+
+
 if __name__ == "__main__":
     unittest.main()

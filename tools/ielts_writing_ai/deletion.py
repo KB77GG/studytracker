@@ -28,15 +28,24 @@ from dataclasses import dataclass, field
 from . import essay as essay_lib
 
 _VERB_RE = re.compile(
-    r"删去|删除|删掉|去掉|拿掉|省去|省略|\b(?:delete|remove|cut|drop|omit)\b", re.I
-)
-_NEGATION_RE = re.compile(
-    r"不要|不用|不必|无需|无须|不需要|不应|不宜|不该|不能|不可|没必要|不建议|避免|而不是|"
-    r"别(?=删|去掉|拿掉)|"
-    r"\b(?:do not|don't|dont|never|avoid|no need to|instead of|rather than|not)\b",
+    r"删去|删除|删掉|去掉|拿掉|省去|省略|(?<!增)删(?![改减])|\b(?:delete|remove|cut|drop|omit)\b",
     re.I,
 )
-_QUOTE_RE = re.compile(r"“([^”]{1,300})”|\"([^\"]{1,300})\"")
+# Matched on the whole clause (with ’ read as '), and counted when it starts before the
+# verb: the lookahead of 别(?=删) has to see the verb (recheck 2026-11-08).
+_NEGATION_RE = re.compile(
+    r"不要|不用|不必|无需|无须|不需要|不应|不宜|不该|不能|不可|没必要|不建议|避免|而不是|切勿|"
+    r"别(?=删|去掉|拿掉|省)|勿(?=删|去掉|拿掉|省)|"
+    r"\b(?:do not|dont|never|avoid|no need to|instead of|rather than|not|cannot)\b|"
+    r"\b[a-z]+n't\b",
+    re.I,
+)
+# Paired quotation marks. A straight or closing single quote between two letters is an
+# apostrophe (don't, the city's), never a quotation mark.
+_QUOTE_RE = re.compile(
+    r"“([^”]{1,300})”|\"([^\"]{1,300})\"|‘(.{1,300}?)’(?![A-Za-z0-9])|"
+    r"(?<![A-Za-z0-9])'(?=\S)(.{1,300}?)(?<=\S)'(?![A-Za-z0-9])"
+)
 _CLAUSE_RE = re.compile(r"[。；;！!？?，,：:\n]")
 _HOLE_RE = re.compile("\x00(\\d+)\x00")
 _CJK_RE = re.compile(r"[一-鿿]")
@@ -62,12 +71,12 @@ _FIRST_PARAGRAPH_RE = re.compile(
     re.I,
 )
 _NTH_PARAGRAPH_RE = re.compile(
-    r"第([二三四五六七八九]|\d+)段|\bparagraph (\d+)\b|\b(second|third|fourth|fifth|sixth) paragraph\b",
+    r"第([二三四五六七八九十]|\d+)段|\bparagraph (\d+)\b|\b(second|third|fourth|fifth|sixth) paragraph\b",
     re.I,
 )
 _LAST_SENTENCE_RE = re.compile(r"最后一句|结尾句|末句|\b(?:final|last) sentence\b", re.I)
 _FIRST_SENTENCE_RE = re.compile(r"第一句|首句|开头一句|\b(?:first|opening) sentence\b", re.I)
-_CN_NUMBERS = {"二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+_CN_NUMBERS = {"二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
 _EN_ORDINALS = {"second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6}
 
 
@@ -87,7 +96,61 @@ class Deletion:
         return units + list(self.passages)
 
     def words(self, essay: str) -> int:
-        return sum(essay_lib.count_words(t) for t in self.texts(essay))
+        """Words deleted, each counted once: everything is mapped to word positions in
+        the essay and merged ("删去最后一段；删去最后一句" when the last paragraph is one
+        sentence deletes 23 words, not 46 - recheck 2026-11-08)."""
+        layout = _Layout(essay)
+        deleted: set[int] = set()
+        for kind, index in self.units:
+            deleted |= layout.unit(kind, index)
+        for passage in self.passages:
+            deleted |= layout.passage(passage, deleted)
+        return len(deleted)
+
+
+class _Layout:
+    """Word positions of the essay's paragraphs, sentences and passages."""
+
+    def __init__(self, essay: str):
+        text = essay_lib.normalize_newlines(essay)
+        self.words = [(m.start(), m.group().lower()) for m in essay_lib.WORD_RE.finditer(text)]
+        self.paragraphs, offset = [], 0
+        for line in text.split("\n"):
+            if line.strip():
+                start = offset + len(line) - len(line.lstrip())
+                self.paragraphs.append((start, start + len(line.strip())))
+            offset += len(line) + 1
+        self.sentences, cursor = [], {}
+        for sentence in essay_lib.split_sentences(essay):
+            low, high = self.paragraphs[sentence.paragraph]
+            start = text.find(sentence.text, cursor.get(sentence.paragraph, low), high)
+            if start < 0:
+                start, end = low, high  # not found as such: its whole paragraph
+            else:
+                end = start + len(sentence.text)
+                cursor[sentence.paragraph] = end
+            self.sentences.append((start, end))
+
+    def _between(self, start: int, end: int) -> set[int]:
+        return {i for i, (pos, _w) in enumerate(self.words) if start <= pos < end}
+
+    def unit(self, kind: str, index: int) -> set[int]:
+        spans = self.paragraphs if kind == "paragraph" else self.sentences
+        return self._between(*spans[index])
+
+    def passage(self, passage: str, deleted: set[int]) -> set[int]:
+        """One occurrence of the passage: inside what is already deleted if it is
+        there, else the first one."""
+        wanted = [w.lower() for w in essay_lib.WORD_RE.findall(passage)]
+        if not wanted:
+            return set()
+        words = [w for _pos, w in self.words]
+        hits = [
+            set(range(i, i + len(wanted)))
+            for i in range(len(words) - len(wanted) + 1)
+            if words[i : i + len(wanted)] == wanted
+        ]
+        return next((h for h in hits if h <= deleted), hits[0] if hits else set())
 
 
 def _clauses(advice: str) -> list[tuple[str, list[str]]]:
@@ -95,7 +158,7 @@ def _clauses(advice: str) -> list[tuple[str, list[str]]]:
     quoted: list[str] = []
 
     def hole(match):
-        quoted.append(match.group(1) or match.group(2))
+        quoted.append(next(g for g in match.groups() if g is not None))
         return f"\x00{len(quoted) - 1}\x00"
 
     masked = _QUOTE_RE.sub(hole, advice)
@@ -128,9 +191,10 @@ def _scope(clause: str, verb_end: int) -> str | None:
 
 
 def _named(clause: str, kind: str, count: int):
-    """The unit index a clause names: an int, None (none named) or "conflict"."""
+    """The unit index a clause names: an int, None (none named), "conflict" (several)
+    or "invalid" (one that does not exist, e.g. 第九段 in a five-paragraph essay)."""
     text = _HOLE_RE.sub(" ", clause)
-    named = set()
+    named, invalid = set(), False
     if kind == "paragraph":
         if _LAST_PARAGRAPH_RE.search(text):
             named.add(count - 1)
@@ -141,14 +205,23 @@ def _named(clause: str, kind: str, count: int):
             n = n or (int(digits) if digits else 0) or _EN_ORDINALS.get(english.lower(), 0)
             if 1 <= n <= count:
                 named.add(n - 1)
+            else:
+                invalid = True
     else:
         if _LAST_SENTENCE_RE.search(text):
             named.add(count - 1)
         if _FIRST_SENTENCE_RE.search(text):
             named.add(0)
+    if invalid:
+        return "invalid"
     if len(named) > 1:
         return "conflict"
     return named.pop() if named else None
+
+
+def _negated(clause: str, verb_start: int) -> bool:
+    text = clause.replace("’", "'")
+    return any(m.start() < verb_start for m in _NEGATION_RE.finditer(text))
 
 
 def _where(units: list[str], text: str) -> set[int]:
@@ -165,7 +238,7 @@ def analyse(advice: str | None, quote: str | None, essay: str) -> Deletion | Non
     result, found = Deletion(), False
     for clause, quoted in _clauses(advice):
         verb = _VERB_RE.search(clause)
-        if not verb or _NEGATION_RE.search(clause[: verb.start()]):
+        if not verb or _negated(clause, verb.start()):
             continue
         passages = [p for p in quoted if essay_lib.contains_quote(essay, p)]
         scope = _scope(clause, verb.end())
@@ -184,10 +257,12 @@ def analyse(advice: str | None, quote: str | None, essay: str) -> Deletion | Non
         for passage in passages:
             where = _where(units, passage)
             candidates = where if candidates is None else candidates & where
-        if named == "conflict":
-            candidates = set()
+        if named in ("conflict", "invalid"):
+            candidates = set()  # a stated target is never replaced by another one
         elif named is not None:
             candidates = {named} if candidates is None else candidates & {named}
+        elif quoted and not passages:
+            candidates = set()  # it quotes a passage that is not in the essay
         if candidates is None:  # the clause names nothing: the issue's own quote
             if not quote_ok:
                 continue
