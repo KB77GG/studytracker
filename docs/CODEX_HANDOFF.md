@@ -1,5 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-08（.10 删除建议第二次复验后）雅思写作 AI 试用工具：删除识别按动作逐个定位，读不准就不给数字（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户第二次复验 `9576333`（报告 `d783134`，`docs/design/ielts-writing-ai-prompt10-finalcheck-20261108/`，新增 `intent_probe.py`、`target_probe.py`、`baseline_compare.py`）。上一轮四处原场景已关闭，但仍有三类 P2：① 局部删词丢失段落位置，被并入已删的末段（“删末段 + 删第二段的 Country A”应 147，算成 149；173 词例子应剩 148，算成 150，提醒消失，属新回归）；② 另一句或另一个词的否定抑制了删除（“Do not remove the introduction. Delete the conclusion.”）；③ “第 2 段”“the ninth paragraph”“9th”等序号写法仍回退到问题引文。评审建议不要继续补关键词，改为先定位每个动作、再合并，读不准时只提醒不报数。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
+- 修复（业务提交 `2518853`，重写 `deletion.py` 的识别部分；对外接口、结果字段、提示原话不变，诊断用的 `Deletion.units` / `passages` 保留）：
+  1. 动作：先遮住成对引号；引号外每个删除动词是一个动作，句号（英文句点后接空白）/ 分号 / 逗号和 because / and / to / 因为 / 并 / 使 等词结束宾语；“删去或改写 X”的“或改写”跳过，“把 X 删去”取 X。
+  2. 否定只认紧挨着动词的（中间最多几个副词或一个“把”字短语；英文最多两个词）。
+  3. 宾语逐词对照封闭清单（`_CN_TOKEN_RE` / `_EN_WORDS` 等），清单外即 `Unreliable`；宾语里没有原文引文、单位或位置的动作直接忽略。删词 / 删整段按中心词判断：中文看短语结尾，英文看动词后先出现的名词。
+  4. 每个动作换成原文词位置（`_Layout`）：整段 / 整句，或在点名的段 / 句里恰好出现一次的引文；所有动作的位置取并集后计数。
+  5. 明确但不存在、矛盾、找不到或多处出现的目标抛 `Unreliable`，不回退问题引文；只有没点名任何位置和引文时（“这一段 / this paragraph”）才用问题引文。整条建议里任一动作 `Unreliable`，就只给“无法确定”的提醒（删去最长一段也不会低于下限时不提醒）。
+- 验证：
+  - `tests/test_prompt9_run_20261107.py` 新增 `DeletionActionTest` 5 项：局部删词保留段落（147 / 134 / 149 / 136）、173 词阈值例子剩 148 且有提醒、否定只管自己的动词（含“把这一段删去”正例、“避免把这一段删去”反例）、各种序号写法（136 / 无法确定）、清单外描述和多处出现的引文只给“无法确定”。旧代码上 21 处失败。测试辅助改为混入类 `DeletionCase`，去掉了继承导致的重复执行（所以总数从 397 变为 396）。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **396 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针（`--repo . --output <scratch>`）：本轮 `intent_probe.py` **217/217**、`target_probe.py` **128/128**、`baseline_compare.py` 13 个场景全部正确（含 173 词剩 148）；上一轮意图 178/178、目标 112/112；最早的删除 189/189、结构 175/175、统计 120/120。docs/design 下 43 个探针 32 个 exit 0，非 0 的 11 个与上一轮相同（写死已修复旧行为或 `.9` 时旧约定）。
+- 限制：仍是规则判断，清单之外的说法一律按读不准处理（只提醒、不报数），不保证覆盖所有表达。
+- 状态：业务提交 `2518853` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复验 `2518853`。通过后验证 `.10` 需要用户新授权一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、新账本），并请用户决定输出上限是否从 16000 调高。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-08 写作 .10 第二次删除复验：原四项关闭，仍有三类P2
 
 - 审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地 `codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；干净c82ebbfc经HTTPS fetch/ff-only至 **03d2d4c4a44c110e67c4d89967d08b3088bfde61**，业务 **95763337**。提示词仍iwa-2026-11-08.10；78个tracked工具文件SHA **b07c3243f909598cad0a5482ed4a72a4152e7432b34ad39b3b45429111ee14b2** 前后一致，未改业务/配置、读取Key/私有思考/学生材料或调用模型。
