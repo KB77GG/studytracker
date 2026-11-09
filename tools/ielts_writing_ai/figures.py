@@ -35,7 +35,10 @@ from . import essay as essay_lib
 SMALL = 10
 MAX_WORD_TARGET = 600
 _NUMBER_RE = re.compile(r"\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?")
-_PERCENT_RE = re.compile(r"\s*(?:%|％|per\s*cent|percentage\s+points?)", re.IGNORECASE)
+_PERCENT_RE = re.compile(r"\s*(?:%|％|per\s*cent)", re.IGNORECASE)
+# A difference between two percentages ("5 percentage points", "5 个百分点"): sourced
+# when it is the gap between two percentages the input gives (70% -> 75% = 5 points).
+_POINTS_RE = re.compile(r"[\s-]*(?:个\s*)?(?:百分点|percentage[\s-]+points?)", re.IGNORECASE)
 _WORD_UNIT_RE = re.compile(
     r"\s*(?:(?:-|–|—|~|～|到|至|to)\s*\d+\s*)?(?:个)?(?:单词|词|字(?!母)|words?\b)",
     re.IGNORECASE,
@@ -49,12 +52,13 @@ _CN_DIGITS = dict(
 )
 _CN_UNITS = {"十": 10, "百": 100, "千": 1000}
 
-PERCENT, LENGTH, PLAIN, MULTIPLIER, DURATION = (
+PERCENT, LENGTH, PLAIN, MULTIPLIER, DURATION, POINTS = (
     "percent",
     "length",
     "plain",
     "multiplier",
     "duration",
+    "points",
 )
 
 
@@ -281,6 +285,9 @@ def _years(value: str, kind: str) -> tuple[str, str]:
 
 def _kind(text: str, end: int, before: str) -> tuple[str, int]:
     """(kind, end of the figure as written) from what follows the number."""
+    points = _POINTS_RE.match(text, end)
+    if points:
+        return POINTS, points.end()
     percent = _PERCENT_RE.match(text, end)
     if percent:
         return PERCENT, percent.end()
@@ -346,12 +353,21 @@ class Sources:
         self.values = set()
         self.percents = set()
         self.multipliers = set()
+        self.points = set()
         for value, kind, _shown in figures(self.text):
             self.values.add(value)
             if kind == PERCENT:
                 self.percents.add(value)
             elif kind == MULTIPLIER:
                 self.multipliers.add(value)
+            elif kind == POINTS:
+                self.points.add(value)
+        # Gaps between two percentages the input gives ("70% ... 75%" -> 5 points), so a
+        # derived "5 percentage points" is sourced (the .12 run removed one as invented).
+        percents = sorted({float(v) for v in self.percents})
+        self.point_spans = {
+            _value(str(round(b - a, 2))) for i, a in enumerate(percents) for b in percents[i + 1 :]
+        }
         # The task's own numbers (word count, minimum length) back word / plain targets
         # ("expand to 250 words") but never a time span: a 20-word essay is no source
         # for "twenty years later".
@@ -370,6 +386,8 @@ class Sources:
                 sourced = float(value) <= MAX_WORD_TARGET
             elif kind == MULTIPLIER:  # no small-number exemption: "three times" is a fact
                 sourced = value in self.multipliers
+            elif kind == POINTS:  # no small-number exemption either: it is a data claim
+                sourced = value in self.points or value in self.point_spans
             elif kind == DURATION:
                 sourced = value in self.values or value in self.year_spans or float(value) < SMALL
             else:
