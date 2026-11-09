@@ -1,0 +1,20 @@
+{
+  "source_head": "ebde13793633427331e4733afb45d604a7330d29",
+  "tools_sha256": "f9c9a837603af518b23e2c1aa14d943bf3ba25413dc5b644041549d15daa6261",
+  "paid_enabled": false,
+  "checks": {
+    "old_ledger_refused": true,
+    "cap14": true,
+    "request15_blocked": true,
+    "wrong_scope_and_input_blocked": true,
+    "disk_reservation_before_send": true,
+    "sample_cap2": true,
+    "pipeline_seven_ready_with_fourteen_sends": true,
+    "retries_counted": true,
+    "temporary_database_only": true,
+    "redirect_disabled": true
+  },
+  "real_requests": 0,
+  "real_ledger_created": false,
+  "env_read": false
+}

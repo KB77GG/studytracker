@@ -1,0 +1,20 @@
+{
+  "checked_date": "2026-11-09",
+  "source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "model": "deepseek-flash",
+  "currency": "CNY",
+  "per_million_tokens": {
+    "offpeak": {
+      "cache_hit": 0.02,
+      "cache_miss": 1.0,
+      "output": 4.0
+    },
+    "peak": {
+      "cache_hit": 0.04,
+      "cache_miss": 2.0,
+      "output": 8.0
+    }
+  },
+  "peak_hours_beijing": "Weekdays except Chinese public holidays:09:00-12:00,14:00-18:00; all other times offpeak",
+  "note": "Estimate from reported usage only; not account billing. Reasoning tokens are already included in completion_tokens."
+}

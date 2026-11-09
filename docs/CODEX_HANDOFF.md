@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09 写作 .10/high/32000 真实批次结束：8/14请求，6/7可用
+
+- 用户明确确认新批次：7篇内置合成，仅evaluate，deepseek-flash/high/32000/300秒，总最多14实际HTTP。本轮实际 **8/14**，mid2次、其余各1次，7篇已结束、6ready/1failed；runner已PAID_ENABLED=False，旧账本拒重跑，剩6次不自动追加下一批。运行源独立树`/private/tmp/studytracker-iwa-prompt10-review-20261108`，分支`codex/iwa-prompt10-review-20261108`，clean0afe55da快进 **ebde13793633427331e4733afb45d604a7330d29**（只改交接），提示词iwa-2026-11-08.10。
+- 78工具tracked文件合并SHA **f9c9a837603af518b23e2c1aa14d943bf3ba25413dc5b644041549d15daa6261** 前后相同，无产品/.env/默认开关改动。旧临时配置路径消失，使用已记录的主树`.tmp/ielts-writing-ai-trial/.env`600权限备份，Key只在进程内使用，未输出/复制/更改；不是主系统Key。临时库和内置样本，不碰试用库/学生资料。
+- 本机精确执行`.venv/bin/python docs/design/iwa-prompt10-high-20261109/run_high.py --confirm-paid`已结束，不可重跑。发送前持久化计数、每篇2/全局14、flock、固定消息与官方endpoint、禁HTTP重试/重定向；响应先保存再解析、逐样本checkpoint；服务/网络错误断路。执行前runner10自测和独立11流程/10越界均通过（真实0），执行后独立metrics125/125主审复跑通过。源未变未重复上一轮383Python/8Node全套/浏览器。
+- 首轮JSON/内容均 **6/7**，最终 **6/7**。mid两次argument少闭合，overall_comment/priorities落入argument，明确诊断后仍同错；严格拒绝，没有mid分数。截断0、超时0，最长HTTP88.699秒（客户端88.701），输出峰值14056低于旧16000，不能将改善归因于调高上限。输入23709、输出48739（含思考33475）、usage缺失0，HTTP耗时合计311.852秒。官方空闲时段usage估算 **0.201981元**，非账户账单；缓存命中17024/未命中6685，不重复计算思考。
+- 分数：weak5.5、mid失败、good8、strong8、off-topic6（TR2.5）、97词短文5.5、无图Task1仅CC/LR/GRA7/7/7.5。引文73/73，论证41给出=41采用，建议删除/计数更正0。合理性12/14，跳过1；失败weak论证列表为空和mid无结果，分级单调/强弱分差因mid缺失未执行，不代表评分已校准。
+- 人工：短文/限定立场/Because修句/Task1 A-C矛盾正确；Task1两条条件删减提示只写172/150，没有剩余数字。仍有off-topic GRA把离题与句式复杂度混成因果、短文old people不礼貌定性过严/“没有说明”过度绝对、weak everybody过度概括漏报、strong carbon精确表达过严。mid未采用原文另误读已有被动语态，只作回归，不声称已展示或扣分。
+- 共享14文件在`docs/design/ielts-writing-ai-prompt10-high-20261109/`：报告/正式回答/账本/指标审计/人工复核/守卫离线JSON/费用。已移除思考正文并经实际Key精确扫描；完整私有response*.bin、raw_calls、run_data在本机ignored `docs/design/iwa-prompt10-high-20261109/results/`，runner/exporter/授权与过程资料仅本机不提交。可复跑命令：主venv `metrics_audit.py --repo <审阅树> --evidence <共享目录> --output /tmp/iwa10-metrics-audit.json`，125/125。
+- 报告和两交接按既有授权仅推功能分支claude/ielts-writing-ai-trial（最终文档HEAD见git log）。主资料树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d24586327ad94e151e172ae4811b4a2eed，原7 modified/23 untracked入口和其他任务保留。未合main/部署/生产访问或写库/小程序上传提审发布。下一步用mid两份失败及明确误批做离线回归，维持严格解析；已经发送json_object，不能再将启用JSON模式当新方案。新真实批次需新授权，老师材料仍缺可靠原稿/第5份正确题目。
+
 ## 2026-11-09（32000 上限复核）雅思写作 AI 试用工具：上限改动核对通过，300 秒超时余量约 1 分钟（只改交接，未调用模型）
 
 - 拉取 `0afe55d`（业务 `ab984f6`：`config.py` 默认值与 `load_settings` 回退值 16000 → 32000，`.env.example`、README、`tests/test_thinking.py` 同步）。改动一致；其余测试里的 16000 是历史回放数据，不需要改。本机复跑 `$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → 383 OK，Node 8 项、ruff、black 通过。
