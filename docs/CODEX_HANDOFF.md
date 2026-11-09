@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09 写作 .11 离线复核：结构通过，新增一项 CC 评分边界冲突
+
+- 独立审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地分支 `codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；从clean436ad2f2经fetch/ff-only至 **19169e627dabe68add012f8d38fd8f0052baa8e4**（业务8510ea8e）。80个工具tracked文件SHA **816f422d3332da6c6ec07baa7a494505880d86a42e14d77bb6f323d1050a66e1** 前后相同。提示词iwa-2026-11-09.11；未改产品/配置、旧探针，未读Key/私有思考/学生素材，真实调用0。上一批8/14已结束，不续用余6次，无新付费授权。
+- **P2** `prompts.py:260–263` 将所有argument quality排除出Coherence理由，与同提示`:38–41/81–82`论证诊断解释TR/CC、真实问题反映两项summary冲突。6篇Task2构造消息均复现、.10基线没有；反馈探针97/103，6失败归并1根因。官方IELTS writing-test-resources及academic-format-writing核对：CC包括观点组织和论证逻辑推进。只证明指令冲突，不声称真实模型已经误扣/漏扣。建议TR评回应/立场/展开支撑，CC评组织/推进/衔接，LR/GRA用自身语言证据；两处笼统措辞都改，勿把每个论证问题强制同时用于TR/CC。
+- 结构125/125：3schema合法、占位拒绝、8fixture与公开响应逐字一致、mid两坏回复严格拒绝且替身只2次重试带诊断、high32000/300/json_object保持；6有效含Task1各8随机键序整个结果相同。llm/review/jsonshape/argument/visual/config与基线逐字相同。历史更正：.8/.9/.10有6份缺brace回复，另有1份.8离题多brace，不能称全部括号错误同一种；position仍对象/root仍以priorities列表结尾，示例闭合峰值4→2属实，真实改善未验证。
+- 样本例子建议：通用化在线提示、保留离线fixture；四个旧例子还需连同lion's share、公交限定立场、A/C比较例子审计。much less crowded是原稿逐字，其他三个为旧反馈/改法；原句扫描不足。7篇已反复用于调优，应定位开发回归集，移除例子不能恢复独立性，另用未参与调优的新题材/老师基准评泛化与分数。本轮只建议未删例子，素材仍缺批改前原稿/第5份正确题目。
+- 精确套件：主树 `.venv/bin/python docs/design/iwa-prompt11-review-20261109/run_offline_tests.py` → **388 Python（21.320s/wrapper21.57s）+8 Node**；fake/临时库、剔外部IWA与代理、禁非回环连接。初次沙箱禁端口失败，获准同runner重跑通过，外部数据目录未写。主审独立复跑共享structure/feedback探针125/125、97/103，原schema175/175、reminder341/341、metrics_reminder120/120；ruff/black54、JS语法、git diff --check通过。未重复三locale/Python3.10/全部48历史probe/浏览器；不把旧契约失效当新增回归。
+- 报告12文件在 `docs/design/ielts-writing-ai-prompt11-review-20261109/`（README、两新便携probe及JSON/说明、原3probe本次JSON、完整套件JSON/日志），与本节两交接按已有授权仅同步功能分支，最终报告HEAD见git log。本机runner、source-state、首次沙箱日志和过程审计在 `docs/design/iwa-prompt11-review-20261109/`不提交。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7modified/23untracked顶层入口及其他任务保留；本轮仅新报告目录与两交接增量，另将共享报告镜像到独立树。未合并/推main、未部署、未访问生产或写数据库、小程序未上传/提审/发布。下一位先修CC/TR边界及历史表述，按用户决定处理旧例子后复验；新真实批次需新授权。
+
 ## 2026-11-09（.10 / high / 32000 实测后）雅思写作 AI 试用工具：对象以普通字段结尾、评分理由只用本项证据（提示词 .11；已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户的 `.10` / high / 32000 真实批次（报告 `436ad2f`，`docs/design/ielts-writing-ai-prompt10-high-20261109/`）。8/14 次请求，首轮与最终 6/7；截断 0、超时 0，最长 88.7 秒，输出峰值 14056（低于原 16000，所以不能证明提高上限带来改善）；按官方单价估算约 0.20 元（不是账单）。mid 两次 JSON 结构错误、没有出分。人工复核：离题文的 GRA 理由说“因内容跑题，句式复杂度……”；短文把 old people 说成“不够礼貌”、把简短的因果说明说成“没有展开”；strong 把 carbon 简称当错误；weak 漏报 everybody 过度概括。批次已结束，剩余 6 次不续用；**现在没有可用的付费授权**。本轮没有模型调用，评审的 `docs/design` 文件没有改动。

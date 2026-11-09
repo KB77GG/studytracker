@@ -1,0 +1,705 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "head": "19169e627dabe68add012f8d38fd8f0052baa8e4",
+  "baseline": "436ad2f2",
+  "prompt_version": "iwa-2026-11-09.11",
+  "actual_model_calls": 0,
+  "passed": 125,
+  "total": 125,
+  "checks": [
+    {
+      "name": "fixture_matches_public_response.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fixture_matches_public_response.8",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.llm.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.review.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.jsonshape.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.argument.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.visual.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "runtime_unchanged.config.py",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.parseable.task2.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.correct_roots.task2.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task2.True.task",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task2.True.coherence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task2.True.lexical",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task2.True.grammar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.max_closing_run.task2.True",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "schema.argument_order.task2.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.example_is_actual_prompt.task2.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task2.True.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task2.True.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.parseable.task1.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.correct_roots.task1.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.False.task",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.False.coherence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.False.lexical",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.False.grammar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.max_closing_run.task1.False",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "schema.example_is_actual_prompt.task1.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task1.False.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task1.False.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.parseable.task1.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.correct_roots.task1.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.True.task",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.True.coherence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.True.lexical",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.criterion_order.task1.True.grammar",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.max_closing_run.task1.True",
+      "passed": true,
+      "detail": 2
+    },
+    {
+      "name": "schema.example_is_actual_prompt.task1.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task1.True.False",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "schema.copied_placeholder_rejected.task1.True.True",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.plain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.one_fence",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.whitespace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.prose_prefix",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.prose_suffix",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.two_objects",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.two_fences",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.bare_list",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "strict.missing_brace",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-weak.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t2-weak",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-good.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t2-good",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-strong.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t2-strong",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-off-topic.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t2-off-topic",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t2-under-length.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t2-under-length",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.3",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "key_order_equivalent.t1-no-image.7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "legacy_flat_equivalent.t1-no-image",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "all_six_usable_replies_including_task1_reordered",
+      "passed": true,
+      "detail": [
+        "t2-weak",
+        "t2-good",
+        "t2-strong",
+        "t2-off-topic",
+        "t2-under-length",
+        "t1-no-image"
+      ]
+    },
+    {
+      "name": "mid.original_rejected.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "mid.diagnosis.1",
+      "passed": true,
+      "detail": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层"
+    },
+    {
+      "name": "mid.exact_single_gap.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "mid.one_brace_explains_syntax.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "mid.original_rejected.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "mid.diagnosis.2",
+      "passed": true,
+      "detail": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层"
+    },
+    {
+      "name": "mid.exact_single_gap.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "mid.one_brace_explains_syntax.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.two_invalid_mid_never_scored",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.exactly_two_attempts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.retry_receives_exact_diagnosis",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.high_limits.1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.high_limits.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "pipeline.valid_retry_adopted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "history.six_missing_brace_responses_in_three_batches",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "history.extra_brace_counterexample_also_exists",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "history": [
+    {
+      "fixture": "realcheck_20261106_high.json",
+      "sample": "t2-off-topic",
+      "attempt": 1,
+      "diagnosis": "JSON 结构错误：最外层对象在 overall_comment 之后就结束了（多了一个 } 或 ]），后面的 priorities 落在了 JSON 之外；improvements 出现在最外层，但它属于 argument：argument 提前结束了（多了一个 }）",
+      "missing_brace": false,
+      "extra_brace": true
+    },
+    {
+      "fixture": "realcheck_20261106_high.json",
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "diagnosis": "JSON 结构错误：argument、overall_comment、priorities 被写进了 criteria 里面：criteria 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    },
+    {
+      "fixture": "realcheck_20261106_high.json",
+      "sample": "t2-under-length",
+      "attempt": 2,
+      "diagnosis": "JSON 结构错误：argument、overall_comment、priorities 被写进了 criteria 里面：criteria 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    },
+    {
+      "fixture": "realcheck_20261107_prompt9.json",
+      "sample": "t2-strong",
+      "attempt": 1,
+      "diagnosis": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    },
+    {
+      "fixture": "realcheck_20261107_prompt9.json",
+      "sample": "t2-under-length",
+      "attempt": 1,
+      "diagnosis": "JSON 结构错误：lexical 被写进了 coherence 里面：coherence 写完后少了一个 }，这些键必须在最外层；grammar 被写进了 lexical 里面：lexical 写完后少了一个 }，这些键必须在最外层；argument、overall_comment、priorities 被写进了 grammar 里面：grammar 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    },
+    {
+      "fixture": "realcheck_20261109_prompt10.json",
+      "sample": "t2-mid",
+      "attempt": 1,
+      "diagnosis": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    },
+    {
+      "fixture": "realcheck_20261109_prompt10.json",
+      "sample": "t2-mid",
+      "attempt": 2,
+      "diagnosis": "JSON 结构错误：overall_comment、priorities 被写进了 argument 里面：argument 写完后少了一个 }，这些键必须在最外层",
+      "missing_brace": true,
+      "extra_brace": false
+    }
+  ],
+  "limits": [
+    "Reordering compatibility and unchanged strict parsing are verified offline; no model reliability improvement is established.",
+    "Historical wording 'all six brace errors' omits a distinct extra-brace error in the .8 off-topic response; six is the missing-brace subset."
+  ]
+}

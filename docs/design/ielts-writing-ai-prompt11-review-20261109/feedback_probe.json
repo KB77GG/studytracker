@@ -1,0 +1,609 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "head": "19169e627dabe68add012f8d38fd8f0052baa8e4",
+  "baseline": "436ad2f2",
+  "prompt_version": "iwa-2026-11-09.11",
+  "actual_model_requests": 0,
+  "total_checks": 103,
+  "passed": 97,
+  "checks": [
+    {
+      "name": "t2-weak.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-weak.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-mid.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t2-good.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-good.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-good.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-good.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-good.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-good.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-good.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-good.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-strong.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-off-topic.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.no_conflicting_cc_rules",
+      "passed": false
+    },
+    {
+      "name": "t2-under-length.baseline_has_no_same_conflict",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.new_rule_no_literal_transported by",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_1",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_2",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_3",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_4",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_5",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_6",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_7",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.general_rule_8",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.new_rule_no_literal_old people",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.new_rule_no_literal_elderly",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.new_rule_no_literal_carbon emissions",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.new_rule_no_literal_everybody",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.new_rule_no_literal_transported by",
+      "passed": true
+    }
+  ],
+  "contexts": [
+    {
+      "sample_id": "t2-weak",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t2-mid",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t2-good",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t2-strong",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t2-off-topic",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t2-under-length",
+      "task_type": "task2",
+      "cc_conflict": true,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "a bus carrying forty passengers",
+        "the figure for Country B",
+        "the lion's share of funding",
+        "mostly public transport, but roads where necessary"
+      ]
+    },
+    {
+      "sample_id": "t1-no-image",
+      "task_type": "task1",
+      "cc_conflict": false,
+      "baseline_cc_conflict": false,
+      "known_development_examples_in_system": [
+        "much less crowded",
+        "cannot afford a car",
+        "the figure for Country B"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "P2-CC-contradictory-instructions",
+      "source": "tools/ielts_writing_ai/prompts.py:260-263;38-39;81-82",
+      "evidence": {
+        "blanket_exclusion": "task relevance and argument quality belong to Task Response and are never a reason for a Coherence, Lexical or Grammar band",
+        "argument_explains_cc": "a diagnosis that explains Task Response and Coherence & Cohesion",
+        "argument_reflects_cc": "Reflect real problems in the task and coherence summaries"
+      },
+      "reproduced": true,
+      "introduced_since_baseline": true,
+      "limit": "Contradictory generated instructions only; no claim about actual model score changes."
+    }
+  ],
+  "sample_exposure": [
+    {
+      "phrase": "much less crowded",
+      "exact_original_matches": [
+        "t2-mid"
+      ],
+      "fixture_files_with_exact_text": [
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104b.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104c.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104d.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261109_prompt10.json"
+      ],
+      "interpretation": "original phrase"
+    },
+    {
+      "phrase": "cannot afford a car",
+      "exact_original_matches": [],
+      "fixture_files_with_exact_text": [
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json"
+      ],
+      "interpretation": "prior feedback or topic-specific example; not an exact original phrase"
+    },
+    {
+      "phrase": "a bus carrying forty passengers",
+      "exact_original_matches": [],
+      "fixture_files_with_exact_text": [
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json"
+      ],
+      "interpretation": "prior feedback or topic-specific example; not an exact original phrase"
+    },
+    {
+      "phrase": "the figure for Country B",
+      "exact_original_matches": [],
+      "fixture_files_with_exact_text": [
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261109_prompt10.json"
+      ],
+      "interpretation": "prior feedback or topic-specific example; not an exact original phrase"
+    },
+    {
+      "phrase": "the lion's share of funding",
+      "exact_original_matches": [
+        "t2-strong"
+      ],
+      "fixture_files_with_exact_text": [
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104b.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104c.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104d.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json",
+        "tools/ielts_writing_ai/tests/fixtures/realcheck_20261109_prompt10.json"
+      ],
+      "interpretation": "original phrase"
+    },
+    {
+      "phrase": "mostly public transport, but roads where necessary",
+      "exact_original_matches": [],
+      "fixture_files_with_exact_text": [],
+      "interpretation": "prior feedback or topic-specific example; not an exact original phrase"
+    }
+  ],
+  "limits": [
+    "Presence tests prove instructions are emitted, not that the model obeys them.",
+    "The seven repeatedly reviewed samples are a development/regression set.",
+    "Removing their literal phrases cannot retroactively make that set independent.",
+    "No API, private reasoning, credentials or student materials were read."
+  ]
+}
