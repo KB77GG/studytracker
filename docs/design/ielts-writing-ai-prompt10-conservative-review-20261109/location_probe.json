@@ -1,0 +1,974 @@
+{
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "fixture_sha256": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06",
+  "cases": [
+    {
+      "name": "control_last_paragraph",
+      "group": "control",
+      "advice": "删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 149,
+      "shown": "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_spaced_second",
+      "group": "control",
+      "advice": "删去第 2 段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 136,
+      "shown": "删去第 2 段。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_english_ordinal",
+      "group": "control",
+      "advice": "Delete the second paragraph.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 136,
+      "shown": "Delete the second paragraph.（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_unit_overlap",
+      "group": "control",
+      "advice": "删去最后一段；删去最后一句。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 149,
+      "shown": "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_scoped_partial_other_paragraph",
+      "group": "control",
+      "advice": "删去最后一段；删去第二段中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 147,
+      "shown": "删去最后一段；删去第二段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 147 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        147
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 25,
+        "remaining": 147
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_scoped_partial_same_paragraph",
+      "group": "control",
+      "advice": "删去最后一段；删去最后一段中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 149,
+      "shown": "删去最后一段；删去最后一段中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_partial_this_sentence",
+      "group": "control",
+      "advice": "Delete the last paragraph; remove only \"Country A\" from this sentence.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 149,
+      "shown": "Delete the last paragraph; remove only \"Country A\" from this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_unknown_description",
+      "group": "control",
+      "advice": "删去复杂的段落。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去复杂的段落。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "actual_remainders": [],
+      "uncertainty": true,
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "deleted_words": 0,
+        "remaining": 172
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_missing_ninth",
+      "group": "control",
+      "advice": "删去第九段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去第九段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "actual_remainders": [],
+      "uncertainty": true,
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "deleted_words": 0,
+        "remaining": 172
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_missing_nineteenth",
+      "group": "control",
+      "advice": "删去第十九段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去第十九段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "actual_remainders": [],
+      "uncertainty": true,
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "deleted_words": 0,
+        "remaining": 172
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_repeated_unscoped_quote",
+      "group": "control",
+      "advice": "删去“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去“Country A”两个词。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "actual_remainders": [],
+      "uncertainty": true,
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "deleted_words": 0,
+        "remaining": 172
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "control_partial_last_sentence_matches_quote",
+      "group": "control",
+      "advice": "删去最后一段；删去最后一句中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 149,
+      "shown": "删去最后一段；删去最后一句中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "first_sentence_has_no_such_words_cn",
+      "group": "sentence_location_lost",
+      "advice": "删去最后一段；删去第一句中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去最后一段；删去第一句中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "first_sentence_has_no_such_words_cn.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "first_sentence_has_no_such_words_en",
+      "group": "sentence_location_lost",
+      "advice": "Delete the last paragraph; remove only \"Country A\" from the first sentence.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "Delete the last paragraph; remove only \"Country A\" from the first sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "first_sentence_has_no_such_words_en.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "third_sentence_distinct_position",
+      "group": "sentence_location_lost",
+      "advice": "删去最后一段；删去第三句中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 147,
+      "shown": "删去最后一段；删去第三句中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "third_sentence_distinct_position.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "last_sentence_not_issue_quote",
+      "group": "sentence_location_lost",
+      "advice": "删去第二段；删去最后一句中的“Country A”两个词。",
+      "issue_quote": "Country A had the highest level of ownership in both years, while Country D remained the lowest.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 134,
+      "shown": "删去第二段；删去最后一句中的“Country A”两个词。（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": [
+        "last_sentence_not_issue_quote.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "third_sentence_threshold_173",
+      "group": "sentence_location_lost",
+      "advice": "删去最后一段；删去第三句中的“Country A”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 173,
+      "expected_remaining_or_unsure": 148,
+      "shown": "删去最后一段；删去第三句中的“Country A”两个词。",
+      "actual_remainders": [],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "Country A"
+        ],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 150
+      },
+      "failed_checks": [
+        "third_sentence_threshold_173.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "sentence_priority_is_conservative",
+      "group": "control",
+      "advice": "删去最后一段；删去第三句中的“Country A”两个词。",
+      "issue_quote": null,
+      "channel": "priority",
+      "source_words": 172,
+      "expected_remaining_or_unsure": 147,
+      "shown": "删去最后一段；删去第三句中的“Country A”两个词。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "actual_remainders": [],
+      "uncertainty": true,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": true,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "two_paragraphs_quantity_en",
+      "group": "quantity_as_position",
+      "advice": "Delete two paragraphs.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "Delete two paragraphs.（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": [
+        "two_paragraphs_quantity_en.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "two_paragraphs_quantity_digit",
+      "group": "quantity_as_position",
+      "advice": "Delete 2 paragraphs.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "Delete 2 paragraphs.（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": [
+        "two_paragraphs_quantity_digit.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "two_paragraphs_quantity_cn",
+      "group": "quantity_as_position",
+      "advice": "删去两段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去两段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "two_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "three_paragraphs_quantity_cn",
+      "group": "quantity_as_position",
+      "advice": "删去三个段落。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去三个段落。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "three_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "quantity_priority_en",
+      "group": "quantity_as_position",
+      "advice": "Delete two paragraphs.",
+      "issue_quote": null,
+      "channel": "priority",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "Delete two paragraphs.（注意：按本工具计数，按建议删去后约剩 136 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        136
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            1
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 36,
+        "remaining": 136
+      },
+      "failed_checks": [
+        "quantity_priority_en.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "missing_twentieth",
+      "group": "unparsed_ordinal_fallback",
+      "advice": "删去第二十段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去第二十段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "missing_twentieth.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "missing_twenty_first",
+      "group": "unparsed_ordinal_fallback",
+      "advice": "删去第二十一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "channel": "criterion",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去第二十一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "actual_remainders": [
+        149
+      ],
+      "uncertainty": false,
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "deleted_words": 23,
+        "remaining": 149
+      },
+      "failed_checks": [
+        "missing_twenty_first.correct_count_or_explicit_uncertainty"
+      ]
+    },
+    {
+      "name": "unparsed_ordinal_priority_is_conservative",
+      "group": "unparsed_ordinal_fallback",
+      "advice": "删去第二十段。",
+      "issue_quote": null,
+      "channel": "priority",
+      "source_words": 172,
+      "expected_remaining_or_unsure": null,
+      "shown": "删去第二十段。",
+      "actual_remainders": [],
+      "uncertainty": false,
+      "analysis": null,
+      "failed_checks": [
+        "unparsed_ordinal_priority_is_conservative.correct_count_or_explicit_uncertainty"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "group": "sentence_location_lost",
+      "title": "Partial deletion ignores its explicit sentence location",
+      "locations": [
+        "tools/ielts_writing_ai/deletion.py:388-405",
+        "tools/ielts_writing_ai/deletion.py:397-398"
+      ],
+      "cause": "Unlike paragraph scope, the sentence branch always resolves the issue quote and never checks first/last/ordinal sentence qualifiers. Explicit targets are silently overwritten.",
+      "example": "173-word essay: delete final paragraph23 plus Country A in sentence3 (two separate words), expected148 or uncertainty; current merges into final sentence and computes150, so the warning disappears.",
+      "failed_cases": [
+        "first_sentence_has_no_such_words_cn",
+        "first_sentence_has_no_such_words_en",
+        "third_sentence_distinct_position",
+        "last_sentence_not_issue_quote",
+        "third_sentence_threshold_173"
+      ]
+    },
+    {
+      "priority": "P2",
+      "group": "quantity_as_position",
+      "title": "Number of paragraphs is interpreted as a paragraph ordinal or falls back",
+      "locations": [
+        "tools/ielts_writing_ai/deletion.py:263-287",
+        "tools/ielts_writing_ai/deletion.py:361-364"
+      ],
+      "cause": "Cardinal two/2 preceding plural paragraphs becomes index1; Chinese 两/三 is accepted but not a position, so the issue quote is used. Neither gives a unique target for deleting multiple paragraphs.",
+      "example": "Delete two paragraphs produces136 by deleting paragraph2; 删去两段 produces149 by deleting the quoted last paragraph. Both should remain uncertain.",
+      "failed_cases": [
+        "two_paragraphs_quantity_en",
+        "two_paragraphs_quantity_digit",
+        "two_paragraphs_quantity_cn",
+        "three_paragraphs_quantity_cn",
+        "quantity_priority_en"
+      ]
+    },
+    {
+      "priority": "P2",
+      "group": "unparsed_ordinal_fallback",
+      "title": "An accepted Chinese ordinal that cannot be converted falls back to the issue quote",
+      "locations": [
+        "tools/ielts_writing_ai/deletion.py:69-74",
+        "tools/ielts_writing_ai/deletion.py:244-258",
+        "tools/ielts_writing_ai/deletion.py:361-364"
+      ],
+      "cause": "The tokenizer accepts 第二十/第二十一 but _number supports only single digits or 十-prefix teens. None is treated as no explicit position, so paragraph5 replaces nonexistent paragraph20/21.",
+      "example": "删去第二十段 in a five-paragraph essay confidently reports149. The canonical 第十九段 control is uncertain.",
+      "failed_cases": [
+        "missing_twentieth",
+        "missing_twenty_first",
+        "unparsed_ordinal_priority_is_conservative"
+      ]
+    }
+  ],
+  "checks": {
+    "fixture_172_words": true,
+    "five_paragraphs_eight_sentences": true,
+    "third_sentence_has_country_a_but_first_has_none": true,
+    "control_last_paragraph.correct_count_or_explicit_uncertainty": true,
+    "control_last_paragraph.copy_matches_result": true,
+    "control_last_paragraph.advice_not_filtered": true,
+    "control_last_paragraph.annotation_count": true,
+    "control_last_paragraph.no_number_when_unsure": true,
+    "control_last_paragraph.input_unchanged": true,
+    "control_last_paragraph.scores_unchanged": true,
+    "control_spaced_second.correct_count_or_explicit_uncertainty": true,
+    "control_spaced_second.copy_matches_result": true,
+    "control_spaced_second.advice_not_filtered": true,
+    "control_spaced_second.annotation_count": true,
+    "control_spaced_second.no_number_when_unsure": true,
+    "control_spaced_second.input_unchanged": true,
+    "control_spaced_second.scores_unchanged": true,
+    "control_english_ordinal.correct_count_or_explicit_uncertainty": true,
+    "control_english_ordinal.copy_matches_result": true,
+    "control_english_ordinal.advice_not_filtered": true,
+    "control_english_ordinal.annotation_count": true,
+    "control_english_ordinal.no_number_when_unsure": true,
+    "control_english_ordinal.input_unchanged": true,
+    "control_english_ordinal.scores_unchanged": true,
+    "control_unit_overlap.correct_count_or_explicit_uncertainty": true,
+    "control_unit_overlap.copy_matches_result": true,
+    "control_unit_overlap.advice_not_filtered": true,
+    "control_unit_overlap.annotation_count": true,
+    "control_unit_overlap.no_number_when_unsure": true,
+    "control_unit_overlap.input_unchanged": true,
+    "control_unit_overlap.scores_unchanged": true,
+    "control_scoped_partial_other_paragraph.correct_count_or_explicit_uncertainty": true,
+    "control_scoped_partial_other_paragraph.copy_matches_result": true,
+    "control_scoped_partial_other_paragraph.advice_not_filtered": true,
+    "control_scoped_partial_other_paragraph.annotation_count": true,
+    "control_scoped_partial_other_paragraph.no_number_when_unsure": true,
+    "control_scoped_partial_other_paragraph.input_unchanged": true,
+    "control_scoped_partial_other_paragraph.scores_unchanged": true,
+    "control_scoped_partial_same_paragraph.correct_count_or_explicit_uncertainty": true,
+    "control_scoped_partial_same_paragraph.copy_matches_result": true,
+    "control_scoped_partial_same_paragraph.advice_not_filtered": true,
+    "control_scoped_partial_same_paragraph.annotation_count": true,
+    "control_scoped_partial_same_paragraph.no_number_when_unsure": true,
+    "control_scoped_partial_same_paragraph.input_unchanged": true,
+    "control_scoped_partial_same_paragraph.scores_unchanged": true,
+    "control_partial_this_sentence.correct_count_or_explicit_uncertainty": true,
+    "control_partial_this_sentence.copy_matches_result": true,
+    "control_partial_this_sentence.advice_not_filtered": true,
+    "control_partial_this_sentence.annotation_count": true,
+    "control_partial_this_sentence.no_number_when_unsure": true,
+    "control_partial_this_sentence.input_unchanged": true,
+    "control_partial_this_sentence.scores_unchanged": true,
+    "control_unknown_description.correct_count_or_explicit_uncertainty": true,
+    "control_unknown_description.copy_matches_result": true,
+    "control_unknown_description.advice_not_filtered": true,
+    "control_unknown_description.annotation_count": true,
+    "control_unknown_description.no_number_when_unsure": true,
+    "control_unknown_description.input_unchanged": true,
+    "control_unknown_description.scores_unchanged": true,
+    "control_missing_ninth.correct_count_or_explicit_uncertainty": true,
+    "control_missing_ninth.copy_matches_result": true,
+    "control_missing_ninth.advice_not_filtered": true,
+    "control_missing_ninth.annotation_count": true,
+    "control_missing_ninth.no_number_when_unsure": true,
+    "control_missing_ninth.input_unchanged": true,
+    "control_missing_ninth.scores_unchanged": true,
+    "control_missing_nineteenth.correct_count_or_explicit_uncertainty": true,
+    "control_missing_nineteenth.copy_matches_result": true,
+    "control_missing_nineteenth.advice_not_filtered": true,
+    "control_missing_nineteenth.annotation_count": true,
+    "control_missing_nineteenth.no_number_when_unsure": true,
+    "control_missing_nineteenth.input_unchanged": true,
+    "control_missing_nineteenth.scores_unchanged": true,
+    "control_repeated_unscoped_quote.correct_count_or_explicit_uncertainty": true,
+    "control_repeated_unscoped_quote.copy_matches_result": true,
+    "control_repeated_unscoped_quote.advice_not_filtered": true,
+    "control_repeated_unscoped_quote.annotation_count": true,
+    "control_repeated_unscoped_quote.no_number_when_unsure": true,
+    "control_repeated_unscoped_quote.input_unchanged": true,
+    "control_repeated_unscoped_quote.scores_unchanged": true,
+    "control_partial_last_sentence_matches_quote.correct_count_or_explicit_uncertainty": true,
+    "control_partial_last_sentence_matches_quote.copy_matches_result": true,
+    "control_partial_last_sentence_matches_quote.advice_not_filtered": true,
+    "control_partial_last_sentence_matches_quote.annotation_count": true,
+    "control_partial_last_sentence_matches_quote.no_number_when_unsure": true,
+    "control_partial_last_sentence_matches_quote.input_unchanged": true,
+    "control_partial_last_sentence_matches_quote.scores_unchanged": true,
+    "first_sentence_has_no_such_words_cn.correct_count_or_explicit_uncertainty": false,
+    "first_sentence_has_no_such_words_cn.copy_matches_result": true,
+    "first_sentence_has_no_such_words_cn.advice_not_filtered": true,
+    "first_sentence_has_no_such_words_cn.annotation_count": true,
+    "first_sentence_has_no_such_words_cn.no_number_when_unsure": true,
+    "first_sentence_has_no_such_words_cn.input_unchanged": true,
+    "first_sentence_has_no_such_words_cn.scores_unchanged": true,
+    "first_sentence_has_no_such_words_en.correct_count_or_explicit_uncertainty": false,
+    "first_sentence_has_no_such_words_en.copy_matches_result": true,
+    "first_sentence_has_no_such_words_en.advice_not_filtered": true,
+    "first_sentence_has_no_such_words_en.annotation_count": true,
+    "first_sentence_has_no_such_words_en.no_number_when_unsure": true,
+    "first_sentence_has_no_such_words_en.input_unchanged": true,
+    "first_sentence_has_no_such_words_en.scores_unchanged": true,
+    "third_sentence_distinct_position.correct_count_or_explicit_uncertainty": false,
+    "third_sentence_distinct_position.copy_matches_result": true,
+    "third_sentence_distinct_position.advice_not_filtered": true,
+    "third_sentence_distinct_position.annotation_count": true,
+    "third_sentence_distinct_position.no_number_when_unsure": true,
+    "third_sentence_distinct_position.input_unchanged": true,
+    "third_sentence_distinct_position.scores_unchanged": true,
+    "last_sentence_not_issue_quote.correct_count_or_explicit_uncertainty": false,
+    "last_sentence_not_issue_quote.copy_matches_result": true,
+    "last_sentence_not_issue_quote.advice_not_filtered": true,
+    "last_sentence_not_issue_quote.annotation_count": true,
+    "last_sentence_not_issue_quote.no_number_when_unsure": true,
+    "last_sentence_not_issue_quote.input_unchanged": true,
+    "last_sentence_not_issue_quote.scores_unchanged": true,
+    "third_sentence_threshold_173.correct_count_or_explicit_uncertainty": false,
+    "third_sentence_threshold_173.copy_matches_result": true,
+    "third_sentence_threshold_173.advice_not_filtered": true,
+    "third_sentence_threshold_173.annotation_count": true,
+    "third_sentence_threshold_173.no_number_when_unsure": true,
+    "third_sentence_threshold_173.input_unchanged": true,
+    "third_sentence_threshold_173.scores_unchanged": true,
+    "sentence_priority_is_conservative.correct_count_or_explicit_uncertainty": true,
+    "sentence_priority_is_conservative.copy_matches_result": true,
+    "sentence_priority_is_conservative.advice_not_filtered": true,
+    "sentence_priority_is_conservative.annotation_count": true,
+    "sentence_priority_is_conservative.no_number_when_unsure": true,
+    "sentence_priority_is_conservative.input_unchanged": true,
+    "sentence_priority_is_conservative.scores_unchanged": true,
+    "two_paragraphs_quantity_en.correct_count_or_explicit_uncertainty": false,
+    "two_paragraphs_quantity_en.copy_matches_result": true,
+    "two_paragraphs_quantity_en.advice_not_filtered": true,
+    "two_paragraphs_quantity_en.annotation_count": true,
+    "two_paragraphs_quantity_en.no_number_when_unsure": true,
+    "two_paragraphs_quantity_en.input_unchanged": true,
+    "two_paragraphs_quantity_en.scores_unchanged": true,
+    "two_paragraphs_quantity_digit.correct_count_or_explicit_uncertainty": false,
+    "two_paragraphs_quantity_digit.copy_matches_result": true,
+    "two_paragraphs_quantity_digit.advice_not_filtered": true,
+    "two_paragraphs_quantity_digit.annotation_count": true,
+    "two_paragraphs_quantity_digit.no_number_when_unsure": true,
+    "two_paragraphs_quantity_digit.input_unchanged": true,
+    "two_paragraphs_quantity_digit.scores_unchanged": true,
+    "two_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty": false,
+    "two_paragraphs_quantity_cn.copy_matches_result": true,
+    "two_paragraphs_quantity_cn.advice_not_filtered": true,
+    "two_paragraphs_quantity_cn.annotation_count": true,
+    "two_paragraphs_quantity_cn.no_number_when_unsure": true,
+    "two_paragraphs_quantity_cn.input_unchanged": true,
+    "two_paragraphs_quantity_cn.scores_unchanged": true,
+    "three_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty": false,
+    "three_paragraphs_quantity_cn.copy_matches_result": true,
+    "three_paragraphs_quantity_cn.advice_not_filtered": true,
+    "three_paragraphs_quantity_cn.annotation_count": true,
+    "three_paragraphs_quantity_cn.no_number_when_unsure": true,
+    "three_paragraphs_quantity_cn.input_unchanged": true,
+    "three_paragraphs_quantity_cn.scores_unchanged": true,
+    "quantity_priority_en.correct_count_or_explicit_uncertainty": false,
+    "quantity_priority_en.copy_matches_result": true,
+    "quantity_priority_en.advice_not_filtered": true,
+    "quantity_priority_en.annotation_count": true,
+    "quantity_priority_en.no_number_when_unsure": true,
+    "quantity_priority_en.input_unchanged": true,
+    "quantity_priority_en.scores_unchanged": true,
+    "missing_twentieth.correct_count_or_explicit_uncertainty": false,
+    "missing_twentieth.copy_matches_result": true,
+    "missing_twentieth.advice_not_filtered": true,
+    "missing_twentieth.annotation_count": true,
+    "missing_twentieth.no_number_when_unsure": true,
+    "missing_twentieth.input_unchanged": true,
+    "missing_twentieth.scores_unchanged": true,
+    "missing_twenty_first.correct_count_or_explicit_uncertainty": false,
+    "missing_twenty_first.copy_matches_result": true,
+    "missing_twenty_first.advice_not_filtered": true,
+    "missing_twenty_first.annotation_count": true,
+    "missing_twenty_first.no_number_when_unsure": true,
+    "missing_twenty_first.input_unchanged": true,
+    "missing_twenty_first.scores_unchanged": true,
+    "unparsed_ordinal_priority_is_conservative.correct_count_or_explicit_uncertainty": false,
+    "unparsed_ordinal_priority_is_conservative.copy_matches_result": true,
+    "unparsed_ordinal_priority_is_conservative.advice_not_filtered": true,
+    "unparsed_ordinal_priority_is_conservative.annotation_count": true,
+    "unparsed_ordinal_priority_is_conservative.no_number_when_unsure": true,
+    "unparsed_ordinal_priority_is_conservative.input_unchanged": true,
+    "unparsed_ordinal_priority_is_conservative.scores_unchanged": true,
+    "fixture_bytes_unchanged": true
+  },
+  "checks_passed": 173,
+  "checks_total": 186,
+  "failures": [
+    "first_sentence_has_no_such_words_cn.correct_count_or_explicit_uncertainty",
+    "first_sentence_has_no_such_words_en.correct_count_or_explicit_uncertainty",
+    "third_sentence_distinct_position.correct_count_or_explicit_uncertainty",
+    "last_sentence_not_issue_quote.correct_count_or_explicit_uncertainty",
+    "third_sentence_threshold_173.correct_count_or_explicit_uncertainty",
+    "two_paragraphs_quantity_en.correct_count_or_explicit_uncertainty",
+    "two_paragraphs_quantity_digit.correct_count_or_explicit_uncertainty",
+    "two_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty",
+    "three_paragraphs_quantity_cn.correct_count_or_explicit_uncertainty",
+    "quantity_priority_en.correct_count_or_explicit_uncertainty",
+    "missing_twentieth.correct_count_or_explicit_uncertainty",
+    "missing_twenty_first.correct_count_or_explicit_uncertainty",
+    "unparsed_ordinal_priority_is_conservative.correct_count_or_explicit_uncertainty"
+  ],
+  "contract": "Correct exact result or explicit uncertainty is accepted. Unsupported descriptions are not required to become exact. Each suggestion is independent."
+}

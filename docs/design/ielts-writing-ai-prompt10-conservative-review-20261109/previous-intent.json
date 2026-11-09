@@ -1,0 +1,1618 @@
+{
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "source_hashes": {
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/run_data.json": "24232fd2354e7fde94f83c3e1749963c1da41db1aaff0c50c504386eadd2aa29",
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/raw_calls.jsonl": "6579596a0565657962347f83ee5fb45633f8f9d61fb98c53f5c5c32d280bf862",
+    "tools/ielts_writing_ai/deletion.py": "5b0001d86798cfd76ef31e9fd4b35cadc4cfe1a5de04c84decc2a1af9fb61978"
+  },
+  "privacy": "Committed synthetic formal outputs only; no secrets, private reasoning, model or network calls.",
+  "fixture_words": 172,
+  "cases": [
+    {
+      "id": "affirmative/criterion",
+      "group": "control",
+      "advice": "Delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "affirmative/priority",
+      "group": "control",
+      "advice": "Delete the conclusion.",
+      "channel": "priority",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_ascii/criterion",
+      "group": "control",
+      "advice": "Don't delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "Don't delete the conclusion.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Don't delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_curly/criterion",
+      "group": "control",
+      "advice": "Don’t delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "Don’t delete the conclusion.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Don’t delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_shouldnt/criterion",
+      "group": "control",
+      "advice": "You shouldn't delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "You shouldn't delete the conclusion.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：You shouldn't delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn/criterion",
+      "group": "control",
+      "advice": "别删去结尾段。",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "别删去结尾段。",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：别删去结尾段。"
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cannot/criterion",
+      "group": "control",
+      "advice": "You cannot delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "You cannot delete the conclusion.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：You cannot delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_then_positive_period/criterion",
+      "group": "sentence_boundary",
+      "advice": "Do not remove the introduction. Delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_then_positive_period/priority",
+      "group": "sentence_boundary",
+      "advice": "Do not remove the introduction. Delete the conclusion.",
+      "channel": "priority",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_then_positive_semicolon/criterion",
+      "group": "control",
+      "advice": "Do not remove the introduction; delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Do not remove the introduction; delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Do not remove the introduction; delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "positive_then_negative_period/criterion",
+      "group": "sentence_boundary",
+      "advice": "Delete the conclusion. Do not remove the introduction.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Delete the conclusion. Do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Delete the conclusion. Do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "positive_then_negative_semicolon/criterion",
+      "group": "control",
+      "advice": "Delete the conclusion; do not remove the introduction.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Delete the conclusion; do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Delete the conclusion; do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "quoted_words_then_positive_period/criterion",
+      "group": "sentence_boundary",
+      "advice": "Do not remove the words 'In summary'. Delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Do not remove the words 'In summary'. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Do not remove the words 'In summary'. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "neutral_then_positive_period/criterion",
+      "group": "control",
+      "advice": "The conclusion repeats the overview. Delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "The conclusion repeats the overview. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：The conclusion repeats the overview. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_property_not_action/criterion",
+      "group": "unrelated_negation",
+      "advice": "This paragraph is not necessary and you should delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_property_not_action/priority",
+      "group": "unrelated_negation",
+      "advice": "This paragraph is not necessary and you should delete the conclusion.",
+      "channel": "priority",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_need_not_action/criterion",
+      "group": "unrelated_negation",
+      "advice": "You do not need the conclusion so remove the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "You do not need the conclusion so remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：You do not need the conclusion so remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_retain_not_action/criterion",
+      "group": "unrelated_negation",
+      "advice": "There is no need to retain the conclusion so delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "There is no need to retain the conclusion so delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：There is no need to retain the conclusion so delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn_retain_not_action/criterion",
+      "group": "unrelated_negation",
+      "advice": "不要保留这一段并删去结尾段。",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "不要保留这一段并删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：不要保留这一段并删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn_repeat_not_action/criterion",
+      "group": "unrelated_negation",
+      "advice": "不要重复概述而应删去结尾段。",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "不要重复概述而应删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：不要重复概述而应删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn_separate/criterion",
+      "group": "control",
+      "advice": "不要保留这一段，删去结尾段。",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "不要保留这一段，删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：不要保留这一段，删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "rejected_single_quote/criterion",
+      "group": "control",
+      "advice": "Ignore 'delete the conclusion' and keep it.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "Ignore 'delete the conclusion' and keep it.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Ignore 'delete the conclusion' and keep it."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "rejected_curly_quote/criterion",
+      "group": "control",
+      "advice": "Ignore ‘delete the conclusion’ and keep it.",
+      "channel": "criterion",
+      "expected_removed_words": 0,
+      "expected_remaining": 172,
+      "expected_note": 0,
+      "shown": "Ignore ‘delete the conclusion’ and keep it.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Ignore ‘delete the conclusion’ and keep it."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "quoted_negation_then_positive/criterion",
+      "group": "control",
+      "advice": "Ignore 'do not delete this paragraph' and delete the conclusion.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Ignore 'do not delete this paragraph' and delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Ignore 'do not delete this paragraph' and delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "possessive_apostrophe/criterion",
+      "group": "control",
+      "advice": "Remove the writer's concluding paragraph.",
+      "channel": "criterion",
+      "expected_removed_words": 23,
+      "expected_remaining": 149,
+      "expected_note": 1,
+      "shown": "Remove the writer's concluding paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Remove the writer's concluding paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "phrase_single_quote/criterion",
+      "group": "control",
+      "advice": "Remove only 'In summary' from this sentence.",
+      "channel": "criterion",
+      "expected_removed_words": 2,
+      "expected_remaining": 170,
+      "expected_note": 0,
+      "shown": "Remove only 'In summary' from this sentence.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Remove only 'In summary' from this sentence."
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "phrase_curly_quote/criterion",
+      "group": "control",
+      "advice": "Remove only ‘In summary’ from this sentence.",
+      "channel": "criterion",
+      "expected_removed_words": 2,
+      "expected_remaining": 170,
+      "expected_note": 0,
+      "shown": "Remove only ‘In summary’ from this sentence.",
+      "length_notes": 0,
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 应先核对这条建议实际删去的内容，再确认是否低于字数下限。 → 建议：Remove only ‘In summary’ from this sentence."
+      ],
+      "diagnostic_not_oracle": {
+        "removed_words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "fixture_counts",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "affirmative/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "affirmative/criterion:not_unsure",
+      "passed": true,
+      "observed": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "affirmative/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/priority:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "affirmative/priority:exact_remaining",
+      "passed": true,
+      "observed": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "affirmative/priority:not_unsure",
+      "passed": true,
+      "observed": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "affirmative/priority:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/priority:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "affirmative/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_ascii/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "negative_ascii/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Don't delete the conclusion."
+    },
+    {
+      "name": "negative_ascii/criterion:not_unsure",
+      "passed": true,
+      "observed": "Don't delete the conclusion."
+    },
+    {
+      "name": "negative_ascii/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_ascii/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_ascii/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_ascii/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_ascii/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_curly/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "negative_curly/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Don’t delete the conclusion."
+    },
+    {
+      "name": "negative_curly/criterion:not_unsure",
+      "passed": true,
+      "observed": "Don’t delete the conclusion."
+    },
+    {
+      "name": "negative_curly/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_curly/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_curly/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_curly/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_curly/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_shouldnt/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "negative_shouldnt/criterion:exact_remaining",
+      "passed": true,
+      "observed": "You shouldn't delete the conclusion."
+    },
+    {
+      "name": "negative_shouldnt/criterion:not_unsure",
+      "passed": true,
+      "observed": "You shouldn't delete the conclusion."
+    },
+    {
+      "name": "negative_shouldnt/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_shouldnt/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_shouldnt/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_shouldnt/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_shouldnt/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "negative_cn/criterion:exact_remaining",
+      "passed": true,
+      "observed": "别删去结尾段。"
+    },
+    {
+      "name": "negative_cn/criterion:not_unsure",
+      "passed": true,
+      "observed": "别删去结尾段。"
+    },
+    {
+      "name": "negative_cn/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cannot/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "negative_cannot/criterion:exact_remaining",
+      "passed": true,
+      "observed": "You cannot delete the conclusion."
+    },
+    {
+      "name": "negative_cannot/criterion:not_unsure",
+      "passed": true,
+      "observed": "You cannot delete the conclusion."
+    },
+    {
+      "name": "negative_cannot/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cannot/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cannot/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cannot/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cannot/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_then_positive_period/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_period/criterion:not_unsure",
+      "passed": true,
+      "observed": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_period/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/priority:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_then_positive_period/priority:exact_remaining",
+      "passed": true,
+      "observed": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_period/priority:not_unsure",
+      "passed": true,
+      "observed": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_period/priority:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/priority:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_period/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Do not remove the introduction; delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:not_unsure",
+      "passed": true,
+      "observed": "Do not remove the introduction; delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_then_positive_semicolon/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_period/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "positive_then_negative_period/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Delete the conclusion. Do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "positive_then_negative_period/criterion:not_unsure",
+      "passed": true,
+      "observed": "Delete the conclusion. Do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "positive_then_negative_period/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_period/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_period/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_period/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_period/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Delete the conclusion; do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:not_unsure",
+      "passed": true,
+      "observed": "Delete the conclusion; do not remove the introduction.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "positive_then_negative_semicolon/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Do not remove the words 'In summary'. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:not_unsure",
+      "passed": true,
+      "observed": "Do not remove the words 'In summary'. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_words_then_positive_period/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:exact_remaining",
+      "passed": true,
+      "observed": "The conclusion repeats the overview. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:not_unsure",
+      "passed": true,
+      "observed": "The conclusion repeats the overview. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "neutral_then_positive_period/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_property_not_action/criterion:exact_remaining",
+      "passed": true,
+      "observed": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_property_not_action/criterion:not_unsure",
+      "passed": true,
+      "observed": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_property_not_action/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/priority:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_property_not_action/priority:exact_remaining",
+      "passed": true,
+      "observed": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_property_not_action/priority:not_unsure",
+      "passed": true,
+      "observed": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_property_not_action/priority:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/priority:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_property_not_action/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_need_not_action/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_need_not_action/criterion:exact_remaining",
+      "passed": true,
+      "observed": "You do not need the conclusion so remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_need_not_action/criterion:not_unsure",
+      "passed": true,
+      "observed": "You do not need the conclusion so remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_need_not_action/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_need_not_action/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_need_not_action/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_need_not_action/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_need_not_action/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_retain_not_action/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_retain_not_action/criterion:exact_remaining",
+      "passed": true,
+      "observed": "There is no need to retain the conclusion so delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_retain_not_action/criterion:not_unsure",
+      "passed": true,
+      "observed": "There is no need to retain the conclusion so delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_retain_not_action/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_retain_not_action/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_retain_not_action/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_retain_not_action/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_retain_not_action/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:exact_remaining",
+      "passed": true,
+      "observed": "不要保留这一段并删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:not_unsure",
+      "passed": true,
+      "observed": "不要保留这一段并删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_retain_not_action/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:exact_remaining",
+      "passed": true,
+      "observed": "不要重复概述而应删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:not_unsure",
+      "passed": true,
+      "observed": "不要重复概述而应删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_repeat_not_action/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_separate/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "negative_cn_separate/criterion:exact_remaining",
+      "passed": true,
+      "observed": "不要保留这一段，删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_separate/criterion:not_unsure",
+      "passed": true,
+      "observed": "不要保留这一段，删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "negative_cn_separate/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_separate/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_separate/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_separate/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_cn_separate/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_single_quote/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "rejected_single_quote/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Ignore 'delete the conclusion' and keep it."
+    },
+    {
+      "name": "rejected_single_quote/criterion:not_unsure",
+      "passed": true,
+      "observed": "Ignore 'delete the conclusion' and keep it."
+    },
+    {
+      "name": "rejected_single_quote/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_single_quote/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_single_quote/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_single_quote/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_single_quote/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_curly_quote/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "rejected_curly_quote/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Ignore ‘delete the conclusion’ and keep it."
+    },
+    {
+      "name": "rejected_curly_quote/criterion:not_unsure",
+      "passed": true,
+      "observed": "Ignore ‘delete the conclusion’ and keep it."
+    },
+    {
+      "name": "rejected_curly_quote/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_curly_quote/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_curly_quote/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_curly_quote/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "rejected_curly_quote/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Ignore 'do not delete this paragraph' and delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:not_unsure",
+      "passed": true,
+      "observed": "Ignore 'do not delete this paragraph' and delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_negation_then_positive/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "possessive_apostrophe/criterion:note_count",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "possessive_apostrophe/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Remove the writer's concluding paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "possessive_apostrophe/criterion:not_unsure",
+      "passed": true,
+      "observed": "Remove the writer's concluding paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "possessive_apostrophe/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "possessive_apostrophe/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "possessive_apostrophe/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "possessive_apostrophe/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "possessive_apostrophe/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_single_quote/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "phrase_single_quote/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Remove only 'In summary' from this sentence."
+    },
+    {
+      "name": "phrase_single_quote/criterion:not_unsure",
+      "passed": true,
+      "observed": "Remove only 'In summary' from this sentence."
+    },
+    {
+      "name": "phrase_single_quote/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_single_quote/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_single_quote/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_single_quote/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_single_quote/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_curly_quote/criterion:note_count",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "phrase_curly_quote/criterion:exact_remaining",
+      "passed": true,
+      "observed": "Remove only ‘In summary’ from this sentence."
+    },
+    {
+      "name": "phrase_curly_quote/criterion:not_unsure",
+      "passed": true,
+      "observed": "Remove only ‘In summary’ from this sentence."
+    },
+    {
+      "name": "phrase_curly_quote/criterion:copy_count",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_curly_quote/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_curly_quote/criterion:no_figure_removal",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_curly_quote/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "phrase_curly_quote/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    }
+  ],
+  "passed": 217,
+  "total": 217,
+  "all_checks_passed": true,
+  "findings": [],
+  "limits": [
+    "Targeted common advice syntax, not exhaustive natural-language analysis.",
+    "All scenarios use production normalize_evaluation and evaluation_text; no browser rendering.",
+    "Expected deletion is specified from the literal advice, never inferred from product helper output."
+  ]
+}

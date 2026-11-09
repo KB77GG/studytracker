@@ -1,0 +1,694 @@
+{
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "fixture_sha256": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06",
+  "old_metrics": {
+    "checks_passed": 120,
+    "checks_total": 120,
+    "failures": []
+  },
+  "cases": [
+    {
+      "name": "single_last_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "single_last_sentence",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一句。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "distinct_first_and_last",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去第一段；删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 131,
+      "actual_remainders": [
+        131
+      ],
+      "shown": [
+        "删去第一段；删去最后一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            0
+          ],
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 41
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "repeat_same_paragraph",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段；删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一段；删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "same_advice_two_channels",
+      "group": "control",
+      "channel": "criterion_priority",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149,
+        149
+      ],
+      "shown": [
+        "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+        "删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 2,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 2 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "paragraph_sentence_overlap",
+      "group": "overlapping_actions",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段；删去最后一句。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "sentence_paragraph_overlap",
+      "group": "overlapping_actions",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一句；删去最后一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一句；删去最后一段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "paragraph_passage_overlap",
+      "group": "overlapping_actions",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段；删去“In summary”两个词。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一段；删去“In summary”两个词。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ]
+        ],
+        "passages": [
+          "In summary"
+        ],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "english_overlap",
+      "group": "overlapping_actions",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "Delete the last paragraph; delete the last sentence.",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "Delete the last paragraph; delete the last sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "priority_overlap",
+      "group": "overlapping_actions",
+      "channel": "priority",
+      "sample": "t1-no-image",
+      "advice": "删去最后一段；删去最后一句。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": 149,
+      "actual_remainders": [
+        149
+      ],
+      "shown": [
+        "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            7
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 23
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "improvement_overlap",
+      "group": "overlapping_actions",
+      "channel": "improvement",
+      "sample": "t2-good",
+      "advice": "删去最后一段；删去最后一句。",
+      "issue_quote": "In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport, since it offers a more lasting solution to congestion while also delivering social and environmental gains.",
+      "source_words": 277,
+      "expected_remainder": 244,
+      "actual_remainders": [
+        244
+      ],
+      "shown": [
+        "删去最后一段；删去最后一句。（注意：按本工具计数，按建议删去后约剩 244 词，低于 250 词下限，应改写或合并，并保持字数。）"
+      ],
+      "length_notes": 1,
+      "warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 250 词下限，已在这些建议后补充提醒。"
+      ],
+      "analysis": {
+        "units": [
+          [
+            "paragraph",
+            4
+          ],
+          [
+            "sentence",
+            12
+          ]
+        ],
+        "passages": [],
+        "unsure": false,
+        "words_summed_by_product": 33
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "outside_existing_paragraph_range",
+      "group": "out_of_range_target",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去第九段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去第九段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "out_of_range_priority_with_quote",
+      "group": "out_of_range_target",
+      "channel": "priority",
+      "sample": "t1-no-image",
+      "advice": "删去第九段“In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.”这一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去第九段“In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.”这一段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "two_named_units_same_clause_unsure",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去首段和末段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去首段和末段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "mixed_location_unsure",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去第二段的最后一句。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去第二段的最后一句。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "repeated_quote_unsure",
+      "group": "control",
+      "channel": "criterion",
+      "sample": "t1-no-image",
+      "advice": "删去这一段。",
+      "issue_quote": "Country A",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去这一段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    },
+    {
+      "name": "contradictory_position_and_quote",
+      "group": "control",
+      "channel": "priority",
+      "sample": "t1-no-image",
+      "advice": "删去第一段“In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.”这一段。",
+      "issue_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "source_words": 172,
+      "expected_remainder": null,
+      "actual_remainders": [],
+      "shown": [
+        "删去第一段“In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.”这一段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "length_notes": 0,
+      "warnings": [
+        "未上传题图：Task Achievement 无法核对数据，不评分，也不给总分；只保留 CC / LR / GRA 的语言反馈。",
+        "AI 指出作文里有前后矛盾的数据或比较，引文已在原文中核实（只检查作文内部是否自洽，不是逐个数字的程序化校验，也不代表数据与题图一致）。",
+        "有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。"
+      ],
+      "analysis": {
+        "units": [],
+        "passages": [],
+        "unsure": true,
+        "words_summed_by_product": 0
+      },
+      "failed_checks": []
+    }
+  ],
+  "findings": [],
+  "checks": {
+    "old_metrics_120": true,
+    "source_counts": true,
+    "last_paragraph_is_last_sentence": true,
+    "single_last_paragraph.correct_numeric_remainder": true,
+    "single_last_paragraph.copy_numeric_remainder": true,
+    "single_last_paragraph.advice_retained": true,
+    "single_last_paragraph.length_notes_are_advice_count": true,
+    "single_last_paragraph.raw_and_source_unchanged": true,
+    "single_last_paragraph.scores_unchanged": true,
+    "single_last_sentence.correct_numeric_remainder": true,
+    "single_last_sentence.copy_numeric_remainder": true,
+    "single_last_sentence.advice_retained": true,
+    "single_last_sentence.length_notes_are_advice_count": true,
+    "single_last_sentence.raw_and_source_unchanged": true,
+    "single_last_sentence.scores_unchanged": true,
+    "distinct_first_and_last.correct_numeric_remainder": true,
+    "distinct_first_and_last.copy_numeric_remainder": true,
+    "distinct_first_and_last.advice_retained": true,
+    "distinct_first_and_last.length_notes_are_advice_count": true,
+    "distinct_first_and_last.raw_and_source_unchanged": true,
+    "distinct_first_and_last.scores_unchanged": true,
+    "repeat_same_paragraph.correct_numeric_remainder": true,
+    "repeat_same_paragraph.copy_numeric_remainder": true,
+    "repeat_same_paragraph.advice_retained": true,
+    "repeat_same_paragraph.length_notes_are_advice_count": true,
+    "repeat_same_paragraph.raw_and_source_unchanged": true,
+    "repeat_same_paragraph.scores_unchanged": true,
+    "same_advice_two_channels.correct_numeric_remainder": true,
+    "same_advice_two_channels.copy_numeric_remainder": true,
+    "same_advice_two_channels.advice_retained": true,
+    "same_advice_two_channels.length_notes_are_advice_count": true,
+    "same_advice_two_channels.raw_and_source_unchanged": true,
+    "same_advice_two_channels.scores_unchanged": true,
+    "paragraph_sentence_overlap.correct_numeric_remainder": true,
+    "paragraph_sentence_overlap.copy_numeric_remainder": true,
+    "paragraph_sentence_overlap.advice_retained": true,
+    "paragraph_sentence_overlap.length_notes_are_advice_count": true,
+    "paragraph_sentence_overlap.raw_and_source_unchanged": true,
+    "paragraph_sentence_overlap.scores_unchanged": true,
+    "sentence_paragraph_overlap.correct_numeric_remainder": true,
+    "sentence_paragraph_overlap.copy_numeric_remainder": true,
+    "sentence_paragraph_overlap.advice_retained": true,
+    "sentence_paragraph_overlap.length_notes_are_advice_count": true,
+    "sentence_paragraph_overlap.raw_and_source_unchanged": true,
+    "sentence_paragraph_overlap.scores_unchanged": true,
+    "paragraph_passage_overlap.correct_numeric_remainder": true,
+    "paragraph_passage_overlap.copy_numeric_remainder": true,
+    "paragraph_passage_overlap.advice_retained": true,
+    "paragraph_passage_overlap.length_notes_are_advice_count": true,
+    "paragraph_passage_overlap.raw_and_source_unchanged": true,
+    "paragraph_passage_overlap.scores_unchanged": true,
+    "english_overlap.correct_numeric_remainder": true,
+    "english_overlap.copy_numeric_remainder": true,
+    "english_overlap.advice_retained": true,
+    "english_overlap.length_notes_are_advice_count": true,
+    "english_overlap.raw_and_source_unchanged": true,
+    "english_overlap.scores_unchanged": true,
+    "priority_overlap.correct_numeric_remainder": true,
+    "priority_overlap.copy_numeric_remainder": true,
+    "priority_overlap.advice_retained": true,
+    "priority_overlap.length_notes_are_advice_count": true,
+    "priority_overlap.raw_and_source_unchanged": true,
+    "priority_overlap.scores_unchanged": true,
+    "improvement_overlap.correct_numeric_remainder": true,
+    "improvement_overlap.copy_numeric_remainder": true,
+    "improvement_overlap.advice_retained": true,
+    "improvement_overlap.length_notes_are_advice_count": true,
+    "improvement_overlap.raw_and_source_unchanged": true,
+    "improvement_overlap.scores_unchanged": true,
+    "outside_existing_paragraph_range.correct_numeric_remainder": true,
+    "outside_existing_paragraph_range.copy_numeric_remainder": true,
+    "outside_existing_paragraph_range.advice_retained": true,
+    "outside_existing_paragraph_range.length_notes_are_advice_count": true,
+    "outside_existing_paragraph_range.raw_and_source_unchanged": true,
+    "outside_existing_paragraph_range.scores_unchanged": true,
+    "outside_existing_paragraph_range.uncertainty_not_fabricated_count": true,
+    "out_of_range_priority_with_quote.correct_numeric_remainder": true,
+    "out_of_range_priority_with_quote.copy_numeric_remainder": true,
+    "out_of_range_priority_with_quote.advice_retained": true,
+    "out_of_range_priority_with_quote.length_notes_are_advice_count": true,
+    "out_of_range_priority_with_quote.raw_and_source_unchanged": true,
+    "out_of_range_priority_with_quote.scores_unchanged": true,
+    "out_of_range_priority_with_quote.uncertainty_not_fabricated_count": true,
+    "two_named_units_same_clause_unsure.correct_numeric_remainder": true,
+    "two_named_units_same_clause_unsure.copy_numeric_remainder": true,
+    "two_named_units_same_clause_unsure.advice_retained": true,
+    "two_named_units_same_clause_unsure.length_notes_are_advice_count": true,
+    "two_named_units_same_clause_unsure.raw_and_source_unchanged": true,
+    "two_named_units_same_clause_unsure.scores_unchanged": true,
+    "two_named_units_same_clause_unsure.uncertainty_not_fabricated_count": true,
+    "mixed_location_unsure.correct_numeric_remainder": true,
+    "mixed_location_unsure.copy_numeric_remainder": true,
+    "mixed_location_unsure.advice_retained": true,
+    "mixed_location_unsure.length_notes_are_advice_count": true,
+    "mixed_location_unsure.raw_and_source_unchanged": true,
+    "mixed_location_unsure.scores_unchanged": true,
+    "mixed_location_unsure.uncertainty_not_fabricated_count": true,
+    "repeated_quote_unsure.correct_numeric_remainder": true,
+    "repeated_quote_unsure.copy_numeric_remainder": true,
+    "repeated_quote_unsure.advice_retained": true,
+    "repeated_quote_unsure.length_notes_are_advice_count": true,
+    "repeated_quote_unsure.raw_and_source_unchanged": true,
+    "repeated_quote_unsure.scores_unchanged": true,
+    "repeated_quote_unsure.uncertainty_not_fabricated_count": true,
+    "contradictory_position_and_quote.correct_numeric_remainder": true,
+    "contradictory_position_and_quote.copy_numeric_remainder": true,
+    "contradictory_position_and_quote.advice_retained": true,
+    "contradictory_position_and_quote.length_notes_are_advice_count": true,
+    "contradictory_position_and_quote.raw_and_source_unchanged": true,
+    "contradictory_position_and_quote.scores_unchanged": true,
+    "contradictory_position_and_quote.uncertainty_not_fabricated_count": true,
+    "fixture_bytes_unchanged": true
+  },
+  "checks_passed": 112,
+  "checks_total": 112,
+  "failures": [],
+  "scope_note": "Each suggestion is checked on its own; no assumption is made that separate optional suggestions across channels must be cumulatively applied."
+}

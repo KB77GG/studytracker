@@ -1,0 +1,2175 @@
+{
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "source_hashes": {
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/run_data.json": "24232fd2354e7fde94f83c3e1749963c1da41db1aaff0c50c504386eadd2aa29",
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/raw_calls.jsonl": "6579596a0565657962347f83ee5fb45633f8f9d61fb98c53f5c5c32d280bf862",
+    "tools/ielts_writing_ai/deletion.py": "5b0001d86798cfd76ef31e9fd4b35cadc4cfe1a5de04c84decc2a1af9fb61978"
+  },
+  "privacy": "Committed synthetic samples only; no credentials, private reasoning, models or network.",
+  "long_quote_length": 371,
+  "cases": [
+    {
+      "id": "simple_delete/criterion",
+      "group": "control",
+      "advice": "Delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "sure",
+      "shown": "Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_delete/criterion",
+      "group": "control",
+      "advice": "Do not delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "Do not delete the conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Do not delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_adverb/criterion",
+      "group": "control",
+      "advice": "You should not simply delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "You should not simply delete the conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：You should not simply delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "property_long_positive/criterion",
+      "group": "control",
+      "advice": "This paragraph is not necessary and you should delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "sure",
+      "shown": "This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：This paragraph is not necessary and you should delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "period_independent/criterion",
+      "group": "control",
+      "advice": "Do not remove the introduction. Delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "sure",
+      "shown": "Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Do not remove the introduction. Delete the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "but_independent/criterion",
+      "group": "control",
+      "advice": "Do not delete the introduction but remove the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "sure",
+      "shown": "Do not delete the introduction but remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Do not delete the introduction but remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "explicit_two_verbs/criterion",
+      "group": "control",
+      "advice": "Delete the final paragraph and delete the first paragraph.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "sure",
+      "shown": "Delete the final paragraph and delete the first paragraph.（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the final paragraph and delete the first paragraph.（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 41,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "cn_explicit_two_verbs/criterion",
+      "group": "control",
+      "advice": "删去最后一段并删去第一段。",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "sure",
+      "shown": "删去最后一段并删去第一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：删去最后一段并删去第一段。（注意：按本工具计数，按建议删去后约剩 131 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 41,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "unknown_object/criterion",
+      "group": "control",
+      "advice": "Delete the paragraph about cars.",
+      "channel": "criterion",
+      "allowed_states": [
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "unsure",
+      "shown": "Delete the paragraph about cars.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "length_notes": 0,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the paragraph about cars.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 0,
+        "unsure": true
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "unsupported_partial/criterion",
+      "group": "control",
+      "advice": "Delete only part of the final paragraph.",
+      "channel": "criterion",
+      "allowed_states": [
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "unsure",
+      "shown": "Delete only part of the final paragraph.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "length_notes": 0,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete only part of the final paragraph.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 0,
+        "unsure": true
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "unsupported_exception/criterion",
+      "group": "control",
+      "advice": "Delete the final paragraph except the last sentence.",
+      "channel": "criterion",
+      "allowed_states": [
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "unsure",
+      "shown": "Delete the final paragraph except the last sentence.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "length_notes": 0,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the final paragraph except the last sentence.（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 0,
+        "unsure": true
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "cn_coordinated_conservative/criterion",
+      "group": "control",
+      "advice": "删去最后一段和第一段。",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "unsure",
+      "shown": "删去最后一段和第一段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）",
+      "length_notes": 0,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 150 词下限，已提醒先核对字数。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：删去最后一段和第一段。（注意：如按建议删去整段 / 整句，请先确认删后仍不少于 150 词；本工具无法确定要删的是哪一部分，没有计算字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 0,
+        "unsure": true
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "coordinated_last_first/criterion",
+      "group": "truncated_object",
+      "advice": "Delete the final paragraph and the first paragraph.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "sure",
+      "shown": "Delete the final paragraph and the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the final paragraph and the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "coordinated_last_first/criterion:only_correct_number",
+        "coordinated_last_first/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "coordinated_last_first/priority",
+      "group": "truncated_object",
+      "advice": "Delete the final paragraph and the first paragraph.",
+      "channel": "priority",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "sure",
+      "shown": "Delete the final paragraph and the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Delete the final paragraph and the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "coordinated_last_first/priority:only_correct_number",
+        "coordinated_last_first/priority:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "coordinated_intro_conclusion/criterion",
+      "group": "truncated_object",
+      "advice": "Delete the introduction and conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 131,
+      "actual_state": "none",
+      "shown": "Delete the introduction and conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the introduction and conclusion."
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 18,
+        "unsure": false
+      },
+      "failed_checks": [
+        "coordinated_intro_conclusion/criterion:allowed_state"
+      ]
+    },
+    {
+      "id": "alternative_objects/criterion",
+      "group": "truncated_object",
+      "advice": "Delete the final paragraph or the first paragraph.",
+      "channel": "criterion",
+      "allowed_states": [
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Delete the final paragraph or the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the final paragraph or the first paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "alternative_objects/criterion:allowed_state",
+        "alternative_objects/criterion:only_correct_number",
+        "alternative_objects/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "shared_negation/criterion",
+      "group": "negation_scope",
+      "advice": "Do not delete the introduction or remove the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Do not delete the introduction or remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Do not delete the introduction or remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "shared_negation/criterion:allowed_state",
+        "shared_negation/criterion:only_correct_number",
+        "shared_negation/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "shared_negation/priority",
+      "group": "negation_scope",
+      "advice": "Do not delete the introduction or remove the conclusion.",
+      "channel": "priority",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Do not delete the introduction or remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Do not delete the introduction or remove the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "shared_negation/priority:allowed_state",
+        "shared_negation/priority:only_correct_number",
+        "shared_negation/priority:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "shared_negation_cn/criterion",
+      "group": "negation_scope",
+      "advice": "不要删除首段或删去结尾段。",
+      "channel": "criterion",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "不要删除首段或删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：不要删除首段或删去结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "shared_negation_cn/criterion:allowed_state",
+        "shared_negation_cn/criterion:only_correct_number",
+        "shared_negation_cn/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "repeated_negation/criterion",
+      "group": "control",
+      "advice": "Do not delete the introduction and do not remove the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "Do not delete the introduction and do not remove the conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Do not delete the introduction and do not remove the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "repeated_negation_cn/criterion",
+      "group": "control",
+      "advice": "不要删除首段，也不要删去结尾段。",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "不要删除首段，也不要删去结尾段。",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：不要删除首段，也不要删去结尾段。"
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "property_short_positive/criterion",
+      "group": "negation_scope",
+      "advice": "This paragraph is not needed so delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "none",
+      "shown": "This paragraph is not needed so delete the conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：This paragraph is not needed so delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": [
+        "property_short_positive/criterion:allowed_state"
+      ]
+    },
+    {
+      "id": "property_short_necessary/criterion",
+      "group": "negation_scope",
+      "advice": "This paragraph is not necessary so delete the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure",
+        "unsure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "none",
+      "shown": "This paragraph is not necessary so delete the conclusion.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：This paragraph is not necessary so delete the conclusion."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": [
+        "property_short_necessary/criterion:allowed_state"
+      ]
+    },
+    {
+      "id": "quoted_short_double/criterion",
+      "group": "control",
+      "advice": "Ignore the advice \"delete the conclusion\" and keep it.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "Ignore the advice \"delete the conclusion\" and keep it.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Ignore the advice \"delete the conclusion\" and keep it."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "quoted_short_single/criterion",
+      "group": "control",
+      "advice": "Ignore the advice 'delete the conclusion' and keep it.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "none",
+      "shown": "Ignore the advice 'delete the conclusion' and keep it.",
+      "length_notes": 0,
+      "copy_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Ignore the advice 'delete the conclusion' and keep it."
+      ],
+      "diagnostic_not_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "quoted_long_double/criterion",
+      "group": "quote_limit",
+      "advice": "Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "quoted_long_double/criterion:allowed_state",
+        "quoted_long_double/criterion:only_correct_number",
+        "quoted_long_double/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "quoted_long_double/priority",
+      "group": "quote_limit",
+      "advice": "Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.",
+      "channel": "priority",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "1. Ignore the advice \"delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.\" and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "quoted_long_double/priority:allowed_state",
+        "quoted_long_double/priority:only_correct_number",
+        "quoted_long_double/priority:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "quoted_long_single/criterion",
+      "group": "quote_limit",
+      "advice": "Ignore the advice 'delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.' and keep the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Ignore the advice 'delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.' and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Ignore the advice 'delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.' and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "quoted_long_single/criterion:allowed_state",
+        "quoted_long_single/criterion:only_correct_number",
+        "quoted_long_single/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "quoted_long_curly/criterion",
+      "group": "quote_limit",
+      "advice": "Ignore the advice “delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.” and keep the conclusion.",
+      "channel": "criterion",
+      "allowed_states": [
+        "none",
+        "unsure"
+      ],
+      "remaining_if_sure": null,
+      "actual_state": "sure",
+      "shown": "Ignore the advice “delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.” and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Ignore the advice “delete the conclusion because it restates the overview without adding a useful comparison. The summary already explains the main differences between the countries and the body paragraphs give the relevant figures for each year. A shorter response could be easier to follow, provided that the introduction and body paragraphs continue to describe the key features clearly.” and keep the conclusion.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": [
+        "quoted_long_curly/criterion:allowed_state",
+        "quoted_long_curly/criterion:only_correct_number",
+        "quoted_long_curly/criterion:copy_only_correct_number"
+      ]
+    },
+    {
+      "id": "apostrophe_positive/criterion",
+      "group": "control",
+      "advice": "Delete the writer's final paragraph.",
+      "channel": "criterion",
+      "allowed_states": [
+        "sure"
+      ],
+      "remaining_if_sure": 149,
+      "actual_state": "sure",
+      "shown": "Delete the writer's final paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "copy_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 请先判断建议实际删除的内容，无法可靠判断时不能声称确定的剩余字数。 → 建议：Delete the writer's final paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_oracle": {
+        "deleted_words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "fixture_counts",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "long_quote_exceeds_mask_limit",
+      "passed": true,
+      "observed": 371
+    },
+    {
+      "name": "simple_delete/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "simple_delete/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "simple_delete/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "simple_delete/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "simple_delete/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "simple_delete/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "simple_delete/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "simple_delete/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "negative_delete/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "negative_delete/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_delete/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "negative_adverb/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "negative_adverb/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "negative_adverb/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "property_long_positive/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "property_long_positive/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_long_positive/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "period_independent/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "period_independent/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "period_independent/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "but_independent/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "but_independent/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "but_independent/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "explicit_two_verbs/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "131"
+      ]
+    },
+    {
+      "name": "explicit_two_verbs/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "explicit_two_verbs/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "131"
+      ]
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_explicit_two_verbs/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "unsure",
+        "allowed": [
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "unknown_object/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "unknown_object/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unknown_object/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "unsure",
+        "allowed": [
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "unsupported_partial/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "unsupported_partial/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_partial/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "unsure",
+        "allowed": [
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "unsupported_exception/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "unsupported_exception/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "unsupported_exception/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "unsure",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "cn_coordinated_conservative/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "coordinated_last_first/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "coordinated_last_first/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "coordinated_last_first/priority:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "coordinated_last_first/priority:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_last_first/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "coordinated_intro_conclusion/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "alternative_objects/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "alternative_objects/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "alternative_objects/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "shared_negation/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "shared_negation/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "shared_negation/priority:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "shared_negation/priority:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "shared_negation_cn/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "shared_negation_cn/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "shared_negation_cn/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "repeated_negation/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "repeated_negation/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "repeated_negation_cn/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "repeated_negation_cn/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "repeated_negation_cn/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "property_short_positive/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "property_short_positive/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_positive/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "sure",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "property_short_necessary/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "property_short_necessary/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "property_short_necessary/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "quoted_short_double/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "quoted_short_double/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_double/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "none",
+        "allowed": [
+          "none"
+        ]
+      }
+    },
+    {
+      "name": "quoted_short_single/criterion:only_correct_number",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "name": "quoted_short_single/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_short_single/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "quoted_long_double/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "quoted_long_double/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "quoted_long_double/priority:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "quoted_long_double/priority:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_double/priority:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "quoted_long_single/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "quoted_long_single/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_single/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:allowed_state",
+      "passed": false,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "none",
+          "unsure"
+        ]
+      }
+    },
+    {
+      "name": "quoted_long_curly/criterion:only_correct_number",
+      "passed": false,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "quoted_long_curly/criterion:copy_only_correct_number",
+      "passed": false,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "quoted_long_curly/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:allowed_state",
+      "passed": true,
+      "observed": {
+        "actual": "sure",
+        "allowed": [
+          "sure"
+        ]
+      }
+    },
+    {
+      "name": "apostrophe_positive/criterion:only_correct_number",
+      "passed": true,
+      "observed": [
+        "149"
+      ]
+    },
+    {
+      "name": "apostrophe_positive/criterion:copy_only_correct_number",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:copy_keeps_warning",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:advice_preserved",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:no_numeric_filter",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:input_unchanged",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "apostrophe_positive/criterion:scores_unchanged",
+      "passed": true,
+      "observed": null
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "Coordinated or alternative objects are silently truncated before the closed-list check",
+      "file": "tools/ielts_writing_ai/deletion.py",
+      "lines": [
+        49,
+        52,
+        192,
+        204,
+        205
+      ],
+      "description": "and/or may join another target rather than start an irrelevant clause. The second target is discarded, so the apparently exact answer is 149 instead of 131, or a required reminder disappears. The alternative must be unsure. An unsure reminder is accepted for these new constructions.",
+      "cases": [
+        "coordinated_last_first/criterion",
+        "coordinated_last_first/priority",
+        "coordinated_intro_conclusion/criterion",
+        "alternative_objects/criterion"
+      ]
+    },
+    {
+      "priority": "P2",
+      "title": "Negation is neither propagated across coordinated negative verbs nor separated from short property clauses",
+      "file": "tools/ielts_writing_ai/deletion.py",
+      "lines": [
+        63,
+        65,
+        175,
+        181,
+        187,
+        189
+      ],
+      "description": "Do not delete A or remove B is parsed as deleting B, while not needed so delete B is skipped. Repeated-negation, but-positive, long-property and sentence-boundary controls pass. The issue is action scope, not an unenumerated synonym.",
+      "cases": [
+        "shared_negation/criterion",
+        "shared_negation/priority",
+        "shared_negation_cn/criterion",
+        "property_short_positive/criterion",
+        "property_short_necessary/criterion"
+      ]
+    },
+    {
+      "priority": "P2",
+      "title": "Quoted commands longer than 300 characters become executable deletion actions",
+      "file": "tools/ielts_writing_ai/deletion.py",
+      "lines": [
+        42,
+        43,
+        44,
+        165,
+        172
+      ],
+      "description": "The masking regex ignores a complete paired quote when its text exceeds 300 characters. An explicitly rejected quoted recommendation then adds a definite 149-word warning. The 371-character quoted comment survives normalisation without truncation; short quotes and possessive-apostrophe controls pass.",
+      "cases": [
+        "quoted_long_double/criterion",
+        "quoted_long_double/priority",
+        "quoted_long_single/criterion",
+        "quoted_long_curly/criterion"
+      ]
+    }
+  ],
+  "passed": 211,
+  "total": 242,
+  "all_checks_passed": false,
+  "limits": [
+    "New ambiguous structures explicitly allow conservative unsure results.",
+    "Only established simple syntax requires an exact count.",
+    "All cases run normalize_evaluation and production evaluation_text; no browser or real model.",
+    "The tests specify the literal advice outcome rather than using helper output as their oracle."
+  ]
+}

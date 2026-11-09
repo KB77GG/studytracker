@@ -1,0 +1,66 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "python": "3.13.3",
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 21.33
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 0.26
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial\n",
+  "product_files_unchanged": true,
+  "product_file_count": 78,
+  "product_sha256": "d7fceb25aaad413622cfc3b2880198ce12f4d9d4efb6acb1ff6617691ff3fbf7",
+  "python_tests": 396,
+  "python_suite_seconds": 21.113,
+  "node_tests": 8,
+  "additional_checks": [
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/ruff check tools/ielts_writing_ai",
+      "returncode": 0
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/black --check tools/ielts_writing_ai",
+      "returncode": 0,
+      "files": 53
+    },
+    {
+      "command": "node --check tools/ielts_writing_ai/static/iwa.js",
+      "returncode": 0
+    },
+    {
+      "command": "git diff --check d783134e..60f17341",
+      "returncode": 0
+    }
+  ],
+  "limitations": [
+    "No new model requests, external API or production access.",
+    "macOS Python3.13.3, fake provider, temporary storage, only loopback sockets allowed.",
+    "Initial sandbox loopback permission failure was rerun with approval using the same runner.",
+    "No rerun of all43 historic probes, all locale variants, Python3.10 or browser layout."
+  ]
+}

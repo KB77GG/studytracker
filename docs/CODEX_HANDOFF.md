@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09 写作 .10 保守删除重写复验：旧场景全过，仍有六类错误精确化/漏提醒
+
+- 独立审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，`codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；由clean d783134e经HTTPS fetch/ff-only至 **60f17341a14750668a467e802691ec94c418e9c7**，业务 **25188533**。提示词仍iwa-2026-11-08.10。78个工具tracked文件SHA **d7fceb25aaad413622cfc3b2880198ce12f4d9d4efb6acb1ff6617691ff3fbf7** 前后一致；本轮没有改产品/配置、读Key/私有思考/学生资料或调用模型。
+- 原7探针未改且主审重跑全部通过：删除189、schema175、metrics120、旧intent178/target112、上轮intent217/target128；原baseline_compare当前13场景全正确（含173→148），上一轮三类原场景关闭。396Python测试减少符合去掉继承重复6项/新增5项的变化。
+- 新探针明确接受正确数字或unsure，不要求复杂表达精确解析。action30场景 **211/242**（13失败/17正对照），location26场景 **173/186**（13失败/13正对照），44失败断言归并六类P2，均normalize→copy且原稿/输入/分数不变。报告 `docs/design/ielts-writing-ai-prompt10-conservative-review-20261109/README.md`。
+- P2-1 `deletion.py:52–54/192–205`在and/or前截断宾语：删末段and首段应131或unsure，报149；intro and conclusion漏提醒。P2-2 `:63–65/175–189`共享否定没传给后动词，Do not delete A or remove B误报149；not needed so delete反被当否定。P2-3 `:42–44/165–172`引用遮蔽限300，371字符完整且明确拒绝的引文内删除命令被当动作，误报149。短引用/撇号/重复否定正对照通过。
+- P2-4 `:397–398`句内局部删除忽略first/last/第N句、直接用issue.quote；173词删末段+第三句两词应148或unsure，实际150无提醒，段落限定修复正常。P2-5 `:263–287/361–364`Delete two paragraphs当第二段136，删两段回退末段149；数量没有唯一目标。P2-6 `:69–74/244–258/361–364`接受第二十/二十一词元但无法转数又回退149；无issue quote时直接忽略；第十九段正对照正常。不要求扩所有词形，解析失败必须保留不确定。
+- 套件命令主树 `.venv/bin/python docs/design/iwa-prompt10-conservative-review-20261109/run_offline_tests.py` → **396 Python（21.113s/wrapper21.33s）+8 Node**。首轮沙箱回环绑定失败，获准同runner重跑通过；fake/临时库、外部IWA配置剔除、非回环连接禁止，外部测试数据目录未写。审阅树主venvruff check/black --check tools/ielts_writing_ai（53文件）、node --check tools/ielts_writing_ai/static/iwa.js、git diff --check d783134e..60f17341通过；两新探针lint通过。未重跑全部43历史探针/全部locale/Python3.10/浏览器流程，不声称真实模型改善。
+- 建议停止扩自由文本解析：试用版可暂取消自然语言推算精确删后词数，保留原文字数和“若采纳删减建议，请核对修改后字数”的条件提醒；若保留精确值，只允许整条完整匹配少量单动作/单数固定句式，任何未消费内容或不完整引用不报数。结构化target会增加格式负担，且结构正确不证明语义一致或删除合理。本轮只提建议，未实施替代方案。
+- 共享目录15文件（README、两新探针py/json、原7探针及baseline新JSON、验证JSON/日志）与两交接仅提交推送功能分支，最终文档HEAD见git log。本机runner/source-state/原始与首次沙箱日志在 `docs/design/iwa-prompt10-conservative-review-20261109/`不提交；旧探针未改。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed** 原7 modified/23 untracked入口保留，本轮只增报告/两交接，其他任务不动。未合main/部署/访问生产/写库/小程序上传提审发布，旧失效IWA树保留。下一位先选择保守提示或窄完整匹配实现并复验；`.10`无新付费授权/账本，16000未调，旧批次余次不续用；老师素材仍缺可靠原稿/第5份正确题目。
+
 ## 2026-11-08（.10 删除建议第二次复验后）雅思写作 AI 试用工具：删除识别按动作逐个定位，读不准就不给数字（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户第二次复验 `9576333`（报告 `d783134`，`docs/design/ielts-writing-ai-prompt10-finalcheck-20261108/`，新增 `intent_probe.py`、`target_probe.py`、`baseline_compare.py`）。上一轮四处原场景已关闭，但仍有三类 P2：① 局部删词丢失段落位置，被并入已删的末段（“删末段 + 删第二段的 Country A”应 147，算成 149；173 词例子应剩 148，算成 150，提醒消失，属新回归）；② 另一句或另一个词的否定抑制了删除（“Do not remove the introduction. Delete the conclusion.”）；③ “第 2 段”“the ninth paragraph”“9th”等序号写法仍回退到问题引文。评审建议不要继续补关键词，改为先定位每个动作、再合并，读不准时只提醒不报数。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。

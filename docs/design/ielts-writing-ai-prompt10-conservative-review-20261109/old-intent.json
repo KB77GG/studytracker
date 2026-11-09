@@ -1,0 +1,1397 @@
+{
+  "source_head": "60f17341a14750668a467e802691ec94c418e9c7",
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial",
+  "source_files_sha256": {
+    "docs/design/ielts-writing-ai-prompt10-review-20261108/deletion_probe.py": "c7641f1d4216f696ac4077e67729533038442b2436a2a9b8f26bb7fca4610a4b",
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/run_data.json": "24232fd2354e7fde94f83c3e1749963c1da41db1aaff0c50c504386eadd2aa29",
+    "docs/design/ielts-writing-ai-prompt9-high-20261107/continuation/raw_calls.jsonl": "6579596a0565657962347f83ee5fb45633f8f9d61fb98c53f5c5c32d280bf862",
+    "tools/ielts_writing_ai/deletion.py": "5b0001d86798cfd76ef31e9fd4b35cadc4cfe1a5de04c84decc2a1af9fb61978"
+  },
+  "privacy_scope": "Committed redacted synthetic formal responses only; no credentials, reasoning, models or network.",
+  "historical_probe": {
+    "exit_code": 0,
+    "passed": 189,
+    "total": 189,
+    "all_checks_passed": true
+  },
+  "sample_counts": {
+    "words": 172,
+    "last_paragraph_words": 23,
+    "quoted_phrase_words": 2
+  },
+  "cases": [
+    {
+      "id": "whole_paragraph_en",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 23,
+      "expected_remaining": 149,
+      "expected_length_notes": 1,
+      "normalized_advice": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary while every country saw an increase the growth was particularly striking in country c and much more modest in country a"
+        ],
+        "words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "whole_sentence_en",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Remove this sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 23,
+      "expected_remaining": 149,
+      "expected_length_notes": 1,
+      "normalized_advice": "Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary while every country saw an increase the growth was particularly striking in country c and much more modest in country a"
+        ],
+        "words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "whole_paragraph_cn",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "删去这一结尾段。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 23,
+      "expected_remaining": 149,
+      "expected_length_notes": 1,
+      "normalized_advice": "删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）",
+      "length_notes": 1,
+      "top_length_warnings": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ],
+      "copy_relevant_lines": [
+        "- 有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。",
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary while every country saw an increase the growth was particularly striking in country c and much more modest in country a"
+        ],
+        "words": 23,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "不要删掉这段。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "不要删掉这段。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：不要删掉这段。"
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_do_not",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Do not delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Do not delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Do not delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_should_not",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "You should not delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "You should not delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：You should not delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_dont_ascii",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Don't delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Don't delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Don't delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_dont_curly",
+      "group": "negation",
+      "sample": "t1-no-image",
+      "input_advice": "Don’t delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Don’t delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Don’t delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_shouldnt_ascii",
+      "group": "negation",
+      "sample": "t1-no-image",
+      "input_advice": "You shouldn't delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "You shouldn't delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：You shouldn't delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_shouldnt_curly",
+      "group": "negation",
+      "sample": "t1-no-image",
+      "input_advice": "You shouldn’t delete this paragraph.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "You shouldn’t delete this paragraph.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：You shouldn’t delete this paragraph."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_ascii_double",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Remove only \"In summary\" from this sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "Remove only \"In summary\" from this sentence.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove only \"In summary\" from this sentence."
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_curly_double",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Remove only “In summary” from this sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "Remove only “In summary” from this sentence.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove only “In summary” from this sentence."
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_ascii_single",
+      "group": "single_quote",
+      "sample": "t1-no-image",
+      "input_advice": "Remove only 'In summary' from this sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "Remove only 'In summary' from this sentence.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove only 'In summary' from this sentence."
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_curly_single",
+      "group": "single_quote",
+      "sample": "t1-no-image",
+      "input_advice": "Remove only ‘In summary’ from this sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "Remove only ‘In summary’ from this sentence.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove only ‘In summary’ from this sentence."
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_cn_double",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "删去句中的“In summary”两个词。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "删去句中的“In summary”两个词。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：删去句中的“In summary”两个词。"
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "two_words_cn_single",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "删去句中的‘In summary’两个词。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "删去句中的‘In summary’两个词。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：删去句中的‘In summary’两个词。"
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    },
+    {
+      "id": "rejected_advice_double",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Ignore the advice \"delete this paragraph\" and keep it.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Ignore the advice \"delete this paragraph\" and keep it.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Ignore the advice \"delete this paragraph\" and keep it."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "rejected_advice_single",
+      "group": "single_quote",
+      "sample": "t1-no-image",
+      "input_advice": "Ignore the advice 'delete this paragraph' and keep it.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Ignore the advice 'delete this paragraph' and keep it.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Ignore the advice 'delete this paragraph' and keep it."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "rejected_advice_curly_single",
+      "group": "single_quote",
+      "sample": "t1-no-image",
+      "input_advice": "Ignore the advice ‘delete this paragraph’ and keep it.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "Ignore the advice ‘delete this paragraph’ and keep it.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Ignore the advice ‘delete this paragraph’ and keep it."
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn_unnecessary",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "无需删除这一段，应保留比较信息。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "无需删除这一段，应保留比较信息。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：无需删除这一段，应保留比较信息。"
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "negative_cn_bie",
+      "group": "negation",
+      "sample": "t1-no-image",
+      "input_advice": "别删去这一段，应保留比较信息。",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 0,
+      "expected_remaining": 172,
+      "expected_length_notes": 0,
+      "normalized_advice": "别删去这一段，应保留比较信息。",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：别删去这一段，应保留比较信息。"
+      ],
+      "diagnostic_not_used_as_oracle": null,
+      "failed_checks": []
+    },
+    {
+      "id": "word_edit_then_negative",
+      "group": "control",
+      "sample": "t1-no-image",
+      "input_advice": "Remove only \"In summary\" from this sentence; don't delete the whole sentence.",
+      "input_quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+      "expected_removed_words_from_literal_instruction": 2,
+      "expected_remaining": 170,
+      "expected_length_notes": 0,
+      "normalized_advice": "Remove only \"In summary\" from this sentence; don't delete the whole sentence.",
+      "length_notes": 0,
+      "top_length_warnings": [],
+      "copy_relevant_lines": [
+        "  ✗ “In summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.” 这段内容需要保留关键比较，因此应先判断具体删改范围。 → 建议：Remove only \"In summary\" from this sentence; don't delete the whole sentence."
+      ],
+      "diagnostic_not_used_as_oracle": {
+        "texts": [
+          "in summary"
+        ],
+        "words": 2,
+        "unsure": false
+      },
+      "failed_checks": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "historical_189_closed",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "fixture_counts",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:note_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_paragraph_en:exact_note_in_output",
+      "passed": true,
+      "details": "Delete this paragraph.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_paragraph_en:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_paragraph_en:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_en:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:note_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_sentence_en:exact_note_in_output",
+      "passed": true,
+      "details": "Remove this sentence.（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_sentence_en:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_sentence_en:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_sentence_en:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:note_count",
+      "passed": true,
+      "details": 1
+    },
+    {
+      "name": "whole_paragraph_cn:exact_note_in_output",
+      "passed": true,
+      "details": "删去这一结尾段。（注意：按本工具计数，按建议删去后约剩 149 词，低于 150 词下限，应改写或合并，并保持字数。）"
+    },
+    {
+      "name": "whole_paragraph_cn:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:top_warning",
+      "passed": true,
+      "details": [
+        "有 1 条建议提到删去整段或整句；删去后会低于 150 词下限，已在这些建议后补充提醒。"
+      ]
+    },
+    {
+      "name": "whole_paragraph_cn:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "whole_paragraph_cn:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_cn:exact_note_in_output",
+      "passed": true,
+      "details": "不要删掉这段。"
+    },
+    {
+      "name": "negative_cn:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_cn:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_do_not:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_do_not:exact_note_in_output",
+      "passed": true,
+      "details": "Do not delete this paragraph."
+    },
+    {
+      "name": "negative_do_not:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_do_not:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_do_not:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_do_not:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_do_not:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_do_not:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_should_not:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_should_not:exact_note_in_output",
+      "passed": true,
+      "details": "You should not delete this paragraph."
+    },
+    {
+      "name": "negative_should_not:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_should_not:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_should_not:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_should_not:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_should_not:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_should_not:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_ascii:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_dont_ascii:exact_note_in_output",
+      "passed": true,
+      "details": "Don't delete this paragraph."
+    },
+    {
+      "name": "negative_dont_ascii:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_ascii:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_dont_ascii:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_ascii:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_ascii:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_ascii:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_curly:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_dont_curly:exact_note_in_output",
+      "passed": true,
+      "details": "Don’t delete this paragraph."
+    },
+    {
+      "name": "negative_dont_curly:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_curly:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_dont_curly:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_curly:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_curly:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_dont_curly:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_ascii:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_shouldnt_ascii:exact_note_in_output",
+      "passed": true,
+      "details": "You shouldn't delete this paragraph."
+    },
+    {
+      "name": "negative_shouldnt_ascii:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_ascii:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_shouldnt_ascii:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_ascii:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_ascii:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_ascii:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_curly:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_shouldnt_curly:exact_note_in_output",
+      "passed": true,
+      "details": "You shouldn’t delete this paragraph."
+    },
+    {
+      "name": "negative_shouldnt_curly:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_curly:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_shouldnt_curly:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_curly:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_curly:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_shouldnt_curly:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_double:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_ascii_double:exact_note_in_output",
+      "passed": true,
+      "details": "Remove only \"In summary\" from this sentence."
+    },
+    {
+      "name": "two_words_ascii_double:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_double:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_ascii_double:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_double:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_double:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_double:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_double:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_curly_double:exact_note_in_output",
+      "passed": true,
+      "details": "Remove only “In summary” from this sentence."
+    },
+    {
+      "name": "two_words_curly_double:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_double:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_curly_double:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_double:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_double:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_double:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_single:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_ascii_single:exact_note_in_output",
+      "passed": true,
+      "details": "Remove only 'In summary' from this sentence."
+    },
+    {
+      "name": "two_words_ascii_single:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_single:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_ascii_single:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_single:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_single:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_ascii_single:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_single:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_curly_single:exact_note_in_output",
+      "passed": true,
+      "details": "Remove only ‘In summary’ from this sentence."
+    },
+    {
+      "name": "two_words_curly_single:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_single:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_curly_single:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_single:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_single:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_curly_single:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_double:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_cn_double:exact_note_in_output",
+      "passed": true,
+      "details": "删去句中的“In summary”两个词。"
+    },
+    {
+      "name": "two_words_cn_double:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_double:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_cn_double:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_double:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_double:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_double:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_single:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "two_words_cn_single:exact_note_in_output",
+      "passed": true,
+      "details": "删去句中的‘In summary’两个词。"
+    },
+    {
+      "name": "two_words_cn_single:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_single:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "two_words_cn_single:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_single:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_single:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "two_words_cn_single:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_double:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "rejected_advice_double:exact_note_in_output",
+      "passed": true,
+      "details": "Ignore the advice \"delete this paragraph\" and keep it."
+    },
+    {
+      "name": "rejected_advice_double:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_double:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "rejected_advice_double:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_double:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_double:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_double:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_single:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "rejected_advice_single:exact_note_in_output",
+      "passed": true,
+      "details": "Ignore the advice 'delete this paragraph' and keep it."
+    },
+    {
+      "name": "rejected_advice_single:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_single:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "rejected_advice_single:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_single:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_single:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_single:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_curly_single:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "rejected_advice_curly_single:exact_note_in_output",
+      "passed": true,
+      "details": "Ignore the advice ‘delete this paragraph’ and keep it."
+    },
+    {
+      "name": "rejected_advice_curly_single:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_curly_single:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "rejected_advice_curly_single:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_curly_single:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_curly_single:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "rejected_advice_curly_single:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_unnecessary:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_cn_unnecessary:exact_note_in_output",
+      "passed": true,
+      "details": "无需删除这一段，应保留比较信息。"
+    },
+    {
+      "name": "negative_cn_unnecessary:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_unnecessary:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_cn_unnecessary:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_unnecessary:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_unnecessary:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_unnecessary:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_bie:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "negative_cn_bie:exact_note_in_output",
+      "passed": true,
+      "details": "别删去这一段，应保留比较信息。"
+    },
+    {
+      "name": "negative_cn_bie:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_bie:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "negative_cn_bie:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_bie:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_bie:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_cn_bie:scores_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_then_negative:note_count",
+      "passed": true,
+      "details": 0
+    },
+    {
+      "name": "word_edit_then_negative:exact_note_in_output",
+      "passed": true,
+      "details": "Remove only \"In summary\" from this sentence; don't delete the whole sentence."
+    },
+    {
+      "name": "word_edit_then_negative:copy_contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_then_negative:top_warning",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "word_edit_then_negative:advice_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_then_negative:no_numeric_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_then_negative:source_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "word_edit_then_negative:scores_unmodified",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "passed": 178,
+  "total": 178,
+  "all_checks_passed": true,
+  "findings": [],
+  "limits": [
+    "This is a targeted intent/scope check, not exhaustive natural-language coverage or semantic grading.",
+    "The expected removal is specified from the literal instruction; helper diagnostics are not the oracle.",
+    "All product findings go through normalize_evaluation and production evaluation_text. The probes do not render a browser or replace a full suite.",
+    "The Chinese single-quote short edit checks absence of a false warning, not successful recognition of that edit."
+  ]
+}
