@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09（.10 删除识别保守复核后）雅思写作 AI 试用工具：不再推算删后字数，只提醒核对（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `2518853`（报告 `d5dfbfc`，`docs/design/ielts-writing-ai-prompt10-conservative-review-20261109/`，新增 `action_probe.py`、`location_probe.py`）。上一轮原场景全部关闭，但仍有 6 类 P2：“two paragraphs”被当成第二段；“A and / or B”丢掉后半目标；句内位置被问题引文覆盖（173 词例子应剩 148，算成 150，提醒消失）；共享否定；超过 300 字符的引用失去遮蔽；无法解析的序号回退。复核和用户都建议：试用版暂时取消从自由文本建议推算删后字数，保留原文字数，只提示核对。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
+- 修复（业务提交 `23a8b03`）：
+  - `deletion.py` 重写为只做两件事：`mentions_deletion` 判断建议是否提到删除（中文：删 / 去掉 / 拿掉 / 省去 / 省略 / 砍掉；英文：delete / omit 任意位置，remove / cut / drop 只认指令位置，即句首、please 后、you + 情态动词 / do not 后，所以示范句 “can cut traffic”“dropped sharply” 不算；精简 / 压缩不算）；`may_matter` 判断删去最长一段是否就可能低于下限（或本来就低于）。两者都满足时，建议后面补“（提示：这条建议提到删减。如果按删减修改，请核对修改后的字数：原文 N 词，字数下限 M 词。本工具不推算删后字数。）”，评价顶部也提示。
+  - 提示只写原文字数和下限两个确定的数，不判断删不删、删哪里；否定（“不要删去”）也可能得到这句条件提示，这是有意的取舍。
+  - 删除 `review._deletion_target`、`deletion.analyse` 及全部推算代码；`result["length_notes"]` 改为补了提示的建议条数。README 已改写这一节。
+- 验证：
+  - `tests/test_prompt9_run_20261107.py` 的删除测试全部改为新约定（`DeletionReminderTest` 4 项，文件现 10 项）：真实 Task 1 的 CC 建议和提升重点第 1 条得到提示（“压缩段落数量”不提示），原建议完整保留，复制里两处；四轮复核的 17 个难例只得到提示、从不出现删后数字；改写建议和英文示范句不触发；360 词（最长段 120）提示、400 词（最长段 100）不提示、97 词提示。旧的数字断言测试已删除（所以总数从 396 变为 383）。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **383 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针：验证“推算删后字数”的 9 个探针按新约定已不适用，它们会退出非 0：8 个调用已删除的 `deletion.analyse` / `review._deletion_target`（`prompt10-review` 的 `deletion_probe.py`，`prompt10-recheck` 的 intent / target，`prompt10-finalcheck` 的 intent / target / `baseline_compare.py`，`prompt10-conservative-review` 的 action / location），`prompt10-review` 的 `metrics_probe.py` 只有找旧提醒文字的 2 项失败（`length.copy_has_both_notes`、`length.copy_has_warning`），其余 118 项通过。`schema_probe.py` 仍 exit 0。其余非 0 的 11 个与上一轮相同。新约定需要新的复核探针。
+- 状态：业务提交 `23a8b03` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复核 `23a8b03` 的新约定（建议覆盖：提到删除就提示、示范句不误触、只在可能影响时提示、任何情况下都不出现删后数字）。通过后验证 `.10` 需要用户新授权一批真实调用（建议同条件：deepseek-flash、high、7 篇内置合成、只做评价、新账本），并请用户决定输出上限是否从 16000 调高。老师素材仍待批改前原稿和第 5 份的正确题目。
+
 ## 2026-11-09 写作 .10 保守删除重写复验：旧场景全过，仍有六类错误精确化/漏提醒
 
 - 独立审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，`codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；由clean d783134e经HTTPS fetch/ff-only至 **60f17341a14750668a467e802691ec94c418e9c7**，业务 **25188533**。提示词仍iwa-2026-11-08.10。78个工具tracked文件SHA **d7fceb25aaad413622cfc3b2880198ce12f4d9d4efb6acb1ff6617691ff3fbf7** 前后一致；本轮没有改产品/配置、读Key/私有思考/学生资料或调用模型。
