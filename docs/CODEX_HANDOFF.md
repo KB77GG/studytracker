@@ -1,5 +1,21 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09（.10 / high / 32000 实测后）雅思写作 AI 试用工具：对象以普通字段结尾、评分理由只用本项证据（提示词 .11；已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户的 `.10` / high / 32000 真实批次（报告 `436ad2f`，`docs/design/ielts-writing-ai-prompt10-high-20261109/`）。8/14 次请求，首轮与最终 6/7；截断 0、超时 0，最长 88.7 秒，输出峰值 14056（低于原 16000，所以不能证明提高上限带来改善）；按官方单价估算约 0.20 元（不是账单）。mid 两次 JSON 结构错误、没有出分。人工复核：离题文的 GRA 理由说“因内容跑题，句式复杂度……”；短文把 old people 说成“不够礼貌”、把简短的因果说明说成“没有展开”；strong 把 carbon 简称当错误；weak 漏报 everybody 过度概括。批次已结束，剩余 6 次不续用；**现在没有可用的付费授权**。本轮没有模型调用，评审的 `docs/design` 文件没有改动。
+- 诊断：mid 两次都是 `..."}], "overall_comment"`，即 improvements 列表闭合后漏掉关闭 argument 的 `}`；5 篇成功的都是 `"}]}, "overall_comment"`。真实运行至今 6 次括号错误位置相同（列表刚闭合就漏掉外层对象的 `}`）：`.8` 短文 criteria ×2、`.9` 短文三个评分项和 strong 的 argument、`.10` mid 的 argument ×2；good 在 improvements 后多写一个普通字段时闭合正确。具体诊断后重试仍同错，说明只靠重试提示不够。
+- 修复（业务提交 `8510ea8`，提示词 `iwa-2026-11-09.11`）：
+  1. 每个对象以普通字段结尾：评分项 band、strengths、issues、summary；argument paragraphs、problems、improvements、position（示例、字段规则同步，并要求保持示例的键顺序）。示例里连续闭合的括号最多 2 个（`.10` 有 4 个连写）。解析与键顺序无关，旧顺序的回答照常接受。这是由失败位置归纳的假设，需要真实批次验证。
+  2. 通用判断规则：各评分项理由只用本项特征（切题、论证属于 TR，不解释 CC / LR / GRA）；语言反馈分错误 / 不清或不准确 / 可选替换三类，准确中性的日常用语不算错也不算不礼貌，可选说法不列为问题；说缺少某种结构前先核对原文；展开简短不说成没有展开。
+  3. 刻意不把内置样本的词句写进规则：内置样本也是 realcheck 的测试集。README 记录了 `.6`–`.9` 已有几条取自样本的例子（much less crowded、cannot afford a car、a bus carrying forty passengers、the figure for Country B），评估这 7 篇的改善时要考虑这一点；是否删掉这些例子留给用户决定。
+  4. weak 漏报过度概括属于模型判断，本轮没有程序修复。
+- 验证：
+  - 新增 `tests/test_prompt10_run_20261109.py`（5 项）和夹具 `tests/fixtures/realcheck_20261109_prompt10.json`（本批 8 个真实回答，不含思考正文）：mid 两次仍被拒、诊断准确、缺口正好在 improvements 之后；6 篇可用回答按新顺序重排后结果完全相同；三种示例都以普通字段结尾、连续闭合 ≤ 2；新规则在 Task 1 / 2 提示里都有；提示里没有本批样本里的词句（old people、elderly、carbon emissions、everybody、transported by）。更新一处写死 argument 以 position 开头的旧断言。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **388 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针：docs/design 下 48 个探针 24 个 exit 0（含 `.10` `schema_probe.py`、本批 `metrics_audit.py`、条件提示的 `reminder_probe.py` / `metrics_reminder_probe.py`）。新增非 0 的 4 个都写死了旧默认上限 16000（`prompt8-recheck` / `prompt8-review` 的 `max_prompt_probe.py`，`thinking-ab-20261104` 的 `compare_recheck.py`、`thinking_client_recheck.py`），由 `ab984f6` 改为 32000 引起，与本轮无关；其余非 0 的 20 个与上一轮相同（写死已修复旧行为、`.9` 旧约定或已取消的删后推算）。
+- 状态：业务提交 `8510ea8` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复核 `8510ea8`。验证 `.11` 需要用户新授权一批（建议同条件：deepseek-flash、high、32000 / 300 秒、7 篇内置合成、只做评价、新账本），重点看括号错误是否减少和三类定性问题；因内置样本也是测试集，评分是否更准还需要老师批改的独立作文（素材仍待批改前原稿和第 5 份的正确题目）。
+
 ## 2026-11-09 写作 .10/high/32000 真实批次结束：8/14请求，6/7可用
 
 - 用户明确确认新批次：7篇内置合成，仅evaluate，deepseek-flash/high/32000/300秒，总最多14实际HTTP。本轮实际 **8/14**，mid2次、其余各1次，7篇已结束、6ready/1failed；runner已PAID_ENABLED=False，旧账本拒重跑，剩6次不自动追加下一批。运行源独立树`/private/tmp/studytracker-iwa-prompt10-review-20261108`，分支`codex/iwa-prompt10-review-20261108`，clean0afe55da快进 **ebde13793633427331e4733afb45d604a7330d29**（只改交接），提示词iwa-2026-11-08.10。
