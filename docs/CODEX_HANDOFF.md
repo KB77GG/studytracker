@@ -1,5 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-10（.12 实测分析后）雅思写作 AI 试用工具：百分点按两个百分比之差判断来源；换模型对照的准备情况（已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户转来 `.12` 真实批次的分析（报告 `docs/design/iwa-prompt12-real-20261109/` 仅在用户本机，未推送，Claude 未看到原始回答）。结论分三类：模型判断错误（原文已有 although 仍建议“加让步从句”；改句把并列改成错误因果）、复杂输出不稳定（字段放错、多写括号）、程序规则过机械（由 70%→75% 推出的“5 个百分点”被删）。high / 32000 下输出峰值 13506、无截断；建议暂停零散规则，先做只换模型的对照：`deepseek-v4-pro` + high，保持 `.12` / 32000 / 同一批作文；按同用量估算 Flash 约 0.24 元、Pro 约 0.81 元（用户核对的官方价格，非账单）。
+- 修复（业务提交 `661180f`）：`figures.py` 新增 `POINTS` 类（percentage points / 百分点 / 5-percentage-point，英文数词同样适用）。`Sources.point_spans` 为来源中任意两个百分比之差；百分点等于其中之一或来源本身写过该百分点数时算有来源，小数字不豁免；普通“5%”规则不变。“percentage points” 不再归入 PERCENT。
+- 验证：新增 `tests/test_percentage_points_20261110.py`（3 项，用真实 Task 1 作文走规范化与复制：5 个百分点、5 percentage points、5-percentage-point、forty percentage points 保留；7 个百分点、7 percentage points、5% 删除；差值计算与来源自带百分点）。`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **395 OK**（另两种 locale 条件 OK），Node 8 项、ruff、black、`git diff --check` 通过。docs/design 下 52 个探针退出码与上一轮相同（新增的 `prompt12-review` `boundary_probe.py` / `exposure_probe.py` exit 0），所有探针输出明细无变化。真实回答里的原句未见，待用户推送脱敏报告后补成离线回归。
+- 换模型对照的程序准备：不需要改代码。模型由 `IWA_LLM_MODEL` 决定，无白名单；DeepSeek 服务商下思考参数照常发送；`realcheck-compare A B --allow-model-change` 可做跨模型对照（同条件检查会提示模型不同）。费用需按 Pro 的官方单价传 `--price-in / --price-out`。
+- 状态：业务提交 `661180f` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。没有新的付费授权。
+- 下一步：用户决定对照范围与授权（见 Claude 回复中的建议：两个模型同一批作文、同条件，先定好判定标准；开发样本只看格式稳定性，判断质量以未参与调优的作文为主）。
+
 ## 2026-11-09 写作 .12 离线复验通过，四处老师批注位置已由用户确认
 
 - 独立审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地分支 `codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；clean fba35562经fetch/ff-only到 **135a301359e6758641a1cdadf1f540e614fc58f8**（业务e370b0c9）。源提示词iwa-2026-11-10.12，81工具tracked文件SHA **f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd** 前后一致，未改产品/配置/旧probe，实际模型请求0。
