@@ -341,7 +341,7 @@ class ParagraphBindingTest(unittest.TestCase):
         payload = json.loads(messages[1]["content"].split("\n", 1)[1].rsplit("\n", 1)[0])
         self.assertEqual([p["p"] for p in payload["essay_paragraphs"]], [1, 2, 3, 4, 5])
         self.assertNotIn("essay", payload)
-        self.assertIn('"argument": {"position":', messages[0]["content"])
+        self.assertIn('"argument": {"paragraphs":', messages[0]["content"])  # .11: position last
         # argument sits next to criteria, never inside it (.10: shown as a full example).
         self.assertIn("sit next to criteria, never inside it", messages[0]["content"])
         self.assertGreaterEqual(

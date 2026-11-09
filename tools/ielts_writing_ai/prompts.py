@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-08.10"
+PROMPT_VERSION = "iwa-2026-11-09.11"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -83,17 +83,16 @@ ARGUMENT_CHECKLIST = (
 )
 
 CRITERION_SCHEMA = (
-    'C = {"band": number, "summary": str (Chinese), "strengths": [{"quote": str, '
-    '"comment": str (Chinese)}, ...1-3], "issues": [{"quote": str, "comment": str '
-    '(Chinese), "suggestion": str}, ...0-4; [] when there is no clear error or weakness]}'
+    'C = {"band": number, "strengths": [{"quote": str, "comment": str (Chinese)}, ...1-3], '
+    '"issues": [{"quote": str, "comment": str (Chinese), "suggestion": str}, ...0-4; [] '
+    'when there is no clear error or weakness], "summary": str (Chinese)}'
 )
 
 
 def _argument_schema() -> str:
     types = " | ".join(f'"{key}"' for key in argument_lib.PROBLEM_TYPES)
     return (
-        'A = {"position": {"quote": str (the sentence that states the position, verbatim), '
-        '"consistent": bool, "comment": str (Chinese)} or null, "paragraphs": [{"p": int '
+        'A = {"paragraphs": [{"p": int '
         '(the paragraph number in essay_paragraphs), "role": "introduction" | "body" | '
         '"concession" | "conclusion", "main_point": str (that paragraph\'s central sentence, '
         'verbatim), "verdict": "supports" | "weak" | "off_position", "comment": str '
@@ -104,7 +103,9 @@ def _argument_schema() -> str:
         "and example_not_linked: what the same paragraph already offers for the point; [] "
         'only if nothing), "comment": str (Chinese), "suggestion": str (Chinese)}, '
         '...0-6], "improvements": [{"quote": str (verbatim), "suggestion": str (Chinese: what '
-        "to add or sharpen; the key is 'suggestion', not 'comment')}, ...0-3]}. If there is "
+        "to add or sharpen; the key is 'suggestion', not 'comment')}, ...0-3], "
+        '"position": {"quote": str (the sentence that states the position, verbatim), '
+        '"consistent": bool, "comment": str (Chinese)} or null}. If there is '
         "no clear position, set position to null and add an "
         "unclear_position problem quoting the closest sentence. Do not invent problems: a "
         "well-argued essay may have no problems."
@@ -137,11 +138,12 @@ EXAMPLE_BAND = -1
 
 
 def _example_criterion() -> dict:
+    # Ends with a plain field (summary), not a list - see _root_schema.
     return {
         "band": EXAMPLE_BAND,
-        "summary": "<中文评分理由，2-4 句>",
         "strengths": [{"quote": "<原文逐字引文>", "comment": "<中文说明>"}],
         "issues": [{"quote": "<原文逐字引文>", "comment": "<中文说明>", "suggestion": "<改法>"}],
+        "summary": "<中文评分理由，2-4 句>",
     }
 
 
@@ -153,7 +155,6 @@ def evaluate_example(task_type: str, visual: bool) -> dict:
     example: dict = {"criteria": criteria}
     if task_type == "task2":
         example["argument"] = {
-            "position": {"quote": "<立场句，逐字>", "consistent": True, "comment": "<中文>"},
             "paragraphs": [
                 {
                     "p": 1,
@@ -172,6 +173,8 @@ def evaluate_example(task_type: str, visual: bool) -> dict:
                 }
             ],
             "improvements": [{"quote": "<原文逐字引文>", "suggestion": "<中文>"}],
+            # Ends with a plain field (position), not a list - see _root_schema.
+            "position": {"quote": "<立场句，逐字>", "consistent": True, "comment": "<中文>"},
         }
     else:
         example["comparisons"] = [
@@ -192,10 +195,13 @@ def _root_schema(task_type: str, visual: bool) -> str:
 
     History: .8 described the shape with C / A placeholders inside "criteria"; real runs
     forgot the brace that closes criteria (2026-11-04 weak, 2026-11-06 under-length x2).
-    .9 moved the criteria to the top level: brace errors did not go away (2026-11-07
-    under-length left three criteria unclosed, strong left argument unclosed) and two
-    of seven answers wrote the criteria as bare numbers ("task": 7.0). .10 goes back to
-    "criteria" and shows the full nesting as real JSON."""
+    .9 moved the criteria to the top level: brace errors did not go away and two of
+    seven answers wrote the criteria as bare numbers ("task": 7.0). .10 went back to
+    "criteria" with the full nesting as real JSON; mid still left argument unclosed
+    twice (2026-11-09). All six brace errors in real runs were the same: a brace missing
+    right after a list closed (issues / improvements], then the object's }). From .11
+    every object ends with a plain field instead - summary closes a criterion, position
+    closes argument - so no more than two brackets ever close in a row."""
     nested = "argument" if task_type == "task2" else "comparisons"
     example = json.dumps(evaluate_example(task_type, visual), ensure_ascii=False)
     return " ".join(
@@ -209,8 +215,11 @@ def _root_schema(task_type: str, visual: bool) -> str:
             ROOT_TEXT_RULES,
             CRITERION_SCHEMA,
             _argument_schema() if task_type == "task2" else COMPARISON_SCHEMA,
-            "Inside criteria every criterion is an object with band, summary, strengths and "
-            "issues - never a bare number. Close each criterion object, then the criteria "
+            "Inside criteria every criterion is an object with band, strengths, issues and "
+            "summary - never a bare number. Keep the key order of the example: every object "
+            "ends with a plain field after its lists (summary ends a criterion, position ends "
+            "argument), so close the list, write that field, then close the object. Close "
+            "each criterion object, then the criteria "
             f"object, before {nested}; {nested}, overall_comment and priorities sit next to "
             "criteria, never inside it. Do not output an overall band; it is computed from "
             "the criteria.",
@@ -248,7 +257,10 @@ CALIBRATION = (
     "descriptors; do not inflate or deflate, and do not assume a typical score for the "
     "writer. Award 7.0+ in a criterion only when its higher-band features are clearly and "
     "consistently present; award 8.0+ only for near-error-free, sophisticated writing. "
-    "Each criterion band is independent; use 0.5 steps between 0 and 9."
+    "Each criterion band is independent; use 0.5 steps between 0 and 9. Explain each "
+    "band with that criterion's own features only: task relevance and argument quality "
+    "belong to Task Response and are never a reason for a Coherence, Lexical or Grammar "
+    "band (an off-topic essay can still use varied, accurate grammar)."
 )
 
 
@@ -309,9 +321,18 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "from the essay (a short span, max 25 words) so it can be located automatically; "
         "never paraphrase, translate or correct inside 'quote'. A criterion with no "
         "verifiable quote will be rejected. An issue must be an error or a clear weakness; "
-        "an equally good alternative wording is not an issue. Report only issues you are "
+        "an equally good alternative wording is not an issue. Call development brief when "
+        "a point is explained briefly; say it is not explained only when no reason or "
+        "example is given at all. Report only issues you are "
         "sure of: a criterion may have no issues at all (then its strengths carry the "
         "evidence) - never invent one to fill the list.",
+        "Language feedback has three kinds - say which one it is: an error (wrong form, "
+        "word or meaning), wording that is unclear or imprecise, and an optional "
+        "alternative (style, register, variety). Accurate, neutral everyday wording is "
+        "neither an error nor impolite; a more formal or more varied alternative is "
+        "optional, is not an issue, and if mentioned must be called optional. Before "
+        "saying the essay lacks a structure (passives, conditionals, relative clauses ...), "
+        "check that it does not already use one. "
         "Language advice: read the whole sentence before calling a structure wrong (a "
         "correct which-clause or a natural phrase such as 'much less crowded' is not an "
         "error, and accurate, natural wording comes before rarer words). A correction or "
