@@ -1,0 +1,965 @@
+{
+  "head": "135a301359e6758641a1cdadf1f540e614fc58f8",
+  "baseline": "fba355629aa8db942d666844caaf85e249159330",
+  "prompt_version": "iwa-2026-11-10.12",
+  "actual_model_requests": 0,
+  "scope": "Published synthetic development samples and code only; no teacher material.",
+  "passed": 155,
+  "total": 155,
+  "failed": [],
+  "checks": [
+    {
+      "name": "seven_development_samples",
+      "passed": true
+    },
+    {
+      "name": "nineteen_predeclared_phrases",
+      "passed": true
+    },
+    {
+      "name": "samples_unchanged",
+      "passed": true
+    },
+    {
+      "name": "all_eight_historical_fixtures_retained",
+      "passed": true
+    },
+    {
+      "name": "fixture_path_set_unchanged",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261104.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261104b.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261104c.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261104d.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261104e.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261106_high.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261107_prompt9.json",
+      "passed": true
+    },
+    {
+      "name": "fixture_unchanged.realcheck_20261109_prompt10.json",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-weak.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-weak.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-weak.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-weak",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-weak",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-mid.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-mid.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-mid.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-mid",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-mid",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-good.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-good.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-good.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-good",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-good",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-strong.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-strong.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-strong.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-strong",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-strong",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-off-topic.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-off-topic.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-off-topic.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-off-topic",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-off-topic",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t2-under-length.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-under-length.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t2-under-length.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t2-under-length",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t2-under-length",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "evaluation_rules_changed.t1-no-image.evaluate",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t1-no-image.refine",
+      "passed": true
+    },
+    {
+      "name": "system_examples_removed.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "user_input_unchanged.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "context_unchanged.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "question_retained.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "essay_retained.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "non_evaluation_messages_unchanged.t1-no-image.rewrite",
+      "passed": true
+    },
+    {
+      "name": "rewrite_notes_unchanged.t1-no-image",
+      "passed": true
+    },
+    {
+      "name": "input_not_mutated.t1-no-image",
+      "passed": true
+    },
+    {
+      "name": "image_builder_unchanged",
+      "passed": true
+    },
+    {
+      "name": "no_runtime_module_changed_except_prompt",
+      "passed": true
+    }
+  ],
+  "fixture_blobs": [
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104.json",
+      "blob": "f54ca699c78e50dc5a654afb13744afdd167aacb"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104b.json",
+      "blob": "9d52b06e971e3712f1078497d49600e21ab72e30"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104c.json",
+      "blob": "bbd192dc7170b3274d6a3bbc5f6ff73f8ae1d183"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104d.json",
+      "blob": "ff59d7a08364527c1af7e8747a5be3392d64b1e8"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json",
+      "blob": "228a01e5d31c1a7d28e965c12756600188703286"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json",
+      "blob": "8143f7f329446e84eca99acee7a8e2f7de6b30dd"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json",
+      "blob": "4168821fb184430a84d714da8d266356028177ea"
+    },
+    {
+      "path": "tools/ielts_writing_ai/tests/fixtures/realcheck_20261109_prompt10.json",
+      "blob": "8c17eaca6e8f83471c792c4e933cae3e7707ef30"
+    }
+  ],
+  "observations": [
+    {
+      "sample": "t2-weak",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "6d3003339b57f7ff1a2e16e533b7e329c43b0241d907d2b1cf39cd8d0582a60d",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-weak",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "ef7541e062beb0e7861b35e003b366f42b900c7c99a004c21e5ea828f5f9c289",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-weak",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "cd53d3798207b697e981678f54b96ee508811f31bd9c1cebac03a954c7940b4c",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-mid",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "1c20e06ab791fb162a1adc93b9d5d0ea8559ad860215645a51da32c81c58c232",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-mid",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "d42923936c1b2c63b360b8365c56460769b49b055db610686e7a0baf79d16e8e",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-mid",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "b9c8162950f49b2c41b7b19e1c9c1e1a0600998664bf97b0099ae13ac7fe3569",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-good",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "d4e67e8d28eacba16ae492d9aaa9aeed099c9df7f764f31891b8ff7bc5dce2ce",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-good",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "79744bfdf4571df8fd6bd817065c48a284fd2acdf13f5ca552f29a73699bfddd",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-good",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "3c625adf57659054897402ae8166f51812895b3f96c4cf48ea9bbdd97d538f95",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-strong",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "45cd4520636b789770b56063cf8a1425410497550d60fc71f1321540eaf58ca8",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-strong",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "74cafdf861b7dbef7d0d9207dae2db65c9e0b98515ee7b1e69c665c5b0bca1d2",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-strong",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "7cc4c4add5a0e47d8f1436e041bfa7b0a3b09e71520751e8e4cd6a6aaa41e964",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-off-topic",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "ac87097cd2633f8cad656ad421f4c44d34219e1d1bf83d10a01048c5a9f69a49",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-off-topic",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "a477230291e36406eea45b8febf731ad305ed87744eb88ffa71a2a090477ff1d",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-off-topic",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "50221e13a877f61f979c9f81efd45bb98eb62ce467dc7c76649fa44f1d49fc6e",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-under-length",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "forty passengers",
+        "full bus",
+        "Country B",
+        "lion's share",
+        "public transport",
+        "roads where necessary",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07",
+      "user_input_sha256": "6a6a8880d22598262d90271bc53048bebc8358a7605139fd342c16a69eff6789",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-under-length",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "df027a7b90b12e48763e7eddda318a750ff3c092cb9aa4c2106af2b27db6382f",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t2-under-length",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "b09be59088f160f4e166d1b527b09290f85b2283fc2955d46c23c2728f2d7ba7",
+      "user_input_sha256": "885512e59864bcf03e9e44bfbc3f06342e28122da7d2d6eabb5c4a193930bd70",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t1-no-image",
+      "kind": "evaluate",
+      "baseline_system_phrase_hits": [
+        "much less crowded",
+        "do not have cars",
+        "cannot afford a car",
+        "a steady climb",
+        "Country B",
+        "in both years",
+        "only assertions",
+        "touched on"
+      ],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "9f66444b3ce3a9bbd65f52f5bb301bad22028d3dea855c1c9c020b110bf34005",
+      "user_input_sha256": "7a6c2f02b99c15c668531a13c5deea85798405e45b89a8dc10d42a96fa05cfaf",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t1-no-image",
+      "kind": "refine",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "32cbd64c75750f138f425d3f1e8e3b1618af86c4174386fcaaeb56667d6ca72b",
+      "user_input_sha256": "f63c009dba11dee9b10f1840b6cb07250558656805ae1b4802632ac1163681ef",
+      "limit": "No literal overlap is not proof of semantic independence."
+    },
+    {
+      "sample": "t1-no-image",
+      "kind": "rewrite",
+      "baseline_system_phrase_hits": [],
+      "current_system_phrase_hits": [],
+      "five_word_overlap_with_essay": [],
+      "system_sha256": "682ff2057f5c156f60f412e7e728084ecb5210bfb73dcfe2fb95d45fc2783ec7",
+      "user_input_sha256": "6b708097f168ef717fc257f6cb175abfdc7777c69cfb7c415d54fa55c277ad52",
+      "limit": "No literal overlap is not proof of semantic independence."
+    }
+  ]
+}

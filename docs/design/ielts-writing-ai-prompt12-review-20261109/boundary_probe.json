@@ -1,0 +1,851 @@
+{
+  "head": "135a301359e6758641a1cdadf1f540e614fc58f8",
+  "baseline": "fba35562",
+  "prompt_version": "iwa-2026-11-10.12",
+  "real_model_requests": 0,
+  "passed": 199,
+  "total": 199,
+  "failed": [],
+  "findings": [],
+  "observations": [
+    {
+      "sample": "t2-weak",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t2-mid",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t2-good",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t2-strong",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t2-off-topic",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t2-under-length",
+      "task": "task2",
+      "system_sha256": "96d6c74a1c0ce93d02f79f9d10dc354cd83dc5d2b6cc676ae0e31c7acebf5a07"
+    },
+    {
+      "sample": "t1-no-image",
+      "task": "task1",
+      "system_sha256": "9f66444b3ce3a9bbd65f52f5bb301bad22028d3dea855c1c9c020b110bf34005"
+    },
+    {
+      "sample": "task1-ready-control",
+      "task": "task1",
+      "system_sha256": "03d19f45fd058b47a02040c712b71bee4e2f2c8746ff728aa35784ac5e830cc4"
+    }
+  ],
+  "checks": [
+    {
+      "name": "t2-weak.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-weak.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-mid.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-good.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-good.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-good.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-good.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-good.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-good.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-good.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-good.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-good.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-good.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-good.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-good.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-good.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-good.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-good.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-good.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-good.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-good.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-good.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-strong.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-off-topic.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.tr_features",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.per_finding_mapping",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.no_mechanical_duplication",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.no_ta_boundary",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.baseline_conflict_present",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t2-under-length.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.ta_features",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.no_argument_check",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.no_tr_boundary",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.visual_guard",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "t1-no-image.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.input_unmodified",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.user_message_unchanged",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.context_unchanged",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.correct_task_boundary",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.one_boundary",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.language_evidence",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.cc_positive_features",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.old_conflict_absent.0",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.old_conflict_absent.1",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.old_conflict_absent.2",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.old_conflict_absent.3",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.0",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.1",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.2",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.3",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.4",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.generic_feedback_preserved.5",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.ta_features",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.no_argument_check",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.no_tr_boundary",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.visual_guard",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.refine_unchanged",
+      "passed": true
+    },
+    {
+      "name": "task1-ready-control.rewrite_unchanged",
+      "passed": true
+    },
+    {
+      "name": "schema_unchanged.task2.True",
+      "passed": true
+    },
+    {
+      "name": "schema_unchanged.task1.True",
+      "passed": true
+    },
+    {
+      "name": "schema_unchanged.task1.False",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.llm.py",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.review.py",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.argument.py",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.jsonshape.py",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.config.py",
+      "passed": true
+    },
+    {
+      "name": "runtime_unchanged.samples.py",
+      "passed": true
+    }
+  ],
+  "limit": "Prompt construction and unchanged runtime only; not evidence of real model grading accuracy."
+}

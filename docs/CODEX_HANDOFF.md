@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09 写作 .12 离线复验通过，四处老师批注位置已由用户确认
+
+- 独立审阅树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，本地分支 `codex/iwa-prompt10-review-20261108` 跟踪远端 `claude/ielts-writing-ai-trial`；clean fba35562经fetch/ff-only到 **135a301359e6758641a1cdadf1f540e614fc58f8**（业务e370b0c9）。源提示词iwa-2026-11-10.12，81工具tracked文件SHA **f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd** 前后一致，未改产品/配置/旧probe，实际模型请求0。
+- 原P2关闭：TR内容回应与展开支撑、CC组织逻辑推进、Task1 TA概述/特征数据、LR/GRA语言证据按任务进入实际消息；论证检查开头/结尾均按对应证据映射，不再一边禁CC一边要求两项理由。新边界199/199，7篇加Task1 ready正对照；旧反馈103/103、reproduced=false，旧结构125/125。
+- 样本清理155/155：7篇evaluate/refine/rewrite共21组system无19已知短语，5词连续重合扫描无命中但不证明语义独立；user题干/原稿/context保留，8旧fixture及samples.py不变；精修/改写/说明重试/识图消息未变。七篇仍开发回归集，不能因去例子重新称独立验证，真实JSON/判断改善未证实。
+- 全套精确命令主树`.venv/bin/python docs/design/iwa-prompt12-review-20261109/run_offline_tests.py` → **392 Python（21.498s/wrapper21.80s）+8 Node**。经批准沙箱外回环端口，fake/临时库、剔外部IWA及代理、禁非回环连接，外部测试数据目录未写。主审复跑上述四probe及原reminder341/341、metrics_reminder120/120；ruff/black55、JS语法、diff检查通过。未重复三locale/Python3.10/全部50probe/浏览器，不声称真实模型验证。
+- **老师材料最新状态**：用户说文件在本地，并明确“批注位置没问题”；`teacher-t2-01`四处位置按用户确认记录，不再待位置确认，也不是本agent逐句独立复验。交接所指Claude scratch文件未入Git，仓库/建议~/iwa-calibration未找到，尚未收到可定位的具体路径；未读学生正文或老师评语，未加载/发送。后续定位文件即可，不重复问已确认的批注。一篇仅能看个案差异，只有总分不能算四项分误差，不代表校准完成。
+- 共享13文件在`docs/design/ielts-writing-ai-prompt12-review-20261109/`（README、两新便携probe/JSON/说明、四旧probe本次JSON、完整测试JSON/日志），与两规范交接按已有授权仅同步功能分支，最终报告HEAD见git log。本机runner/source-state/过程审计在`docs/design/iwa-prompt12-review-20261109/`不提交；老师材料不入Git。
+- 主资料树`/Users/zhouxin/Desktop/studytracker`仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**，原7modified/23untracked顶层入口和其他任务保留，本轮仅新报告及交接增量。未合并/推main、未部署、未访问生产/写库，小程序未上传/提审/发布。
+- 下一步可准备新真实批次，但**当前未授权**：旧8/14已关闭、不追加余6次；批注确认不等于付费或外发授权。建议7开发evaluate/high32000/300最多14次，老师文件定位后若获另行授权可加1篇最多2次，分别标记且合计计账。不把老师样本悄悄加进原14次计划，本轮不创建付费账本或runner。
+
 ## 2026-11-10（.11 复核后）雅思写作 AI 试用工具：评分项边界按官方标准划分、在线提示去掉开发样本例子（提示词 .12；已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `8510ea8`（报告 `fba3556`，`docs/design/ielts-writing-ai-prompt11-review-20261109/`，含 `structure_probe.py`、`feedback_probe.py`）。结构改动通过（125/125）；1 处 P2：`.11` 新规则把论证质量全部归到 TR、禁止用来解释 CC，与同一提示里的论证检查（解释 TR 和 CC）和官方标准（CC 包括观点组织与逻辑推进，见 ielts.org writing-test-resources / academic-format-writing）冲突。评审建议：旧样本例子移出在线提示、保留在离线回归；7 篇定位为开发回归集。还更正了历史说法：7 次括号错误中 6 次是缺 `}`，`.8` 离题那次是提前关闭对象。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动。
