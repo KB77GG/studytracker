@@ -301,12 +301,6 @@ def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
     return issues[:MAX_COMPARISONS], checked, dropped
 
 
-def _deletion_target(advice: str, quote: str | None, essay: str) -> str | None:
-    """The text a deletion advice removes, when it can be located (diagnostics)."""
-    found = deletion_lib.analyse(advice, quote, essay)
-    return "\n".join(found.texts(essay)) if found and not found.unsure else None
-
-
 def normalize_evaluation(raw: dict, submission: dict) -> dict:
     """Validate a model evaluation; reject it unless every scored criterion has a real
     reason and at least one quote that can be found verbatim in the essay."""
@@ -450,20 +444,13 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         removed["argument"] = argument["suggestions_removed"]
     for key, extra in _sweep_advice(criteria, argument, sources).items():
         removed[key] += extra
-    length = deletion_lib.annotate(criteria, argument, priorities, essay, minimum)
-    sure, unsure = length["sure"], length["unsure"]
-    if sure:
-        message = (
-            f"有 {sure} 条建议提到删去整段或整句；删去后会低于 {minimum} 词下限，"
-            "已在这些建议后补充提醒。"
-        )
-        if unsure:
-            message += f"另有 {unsure} 条无法确定要删哪一部分，已提醒先核对字数。"
-        warnings.append(message)
-    elif unsure:
+    # No remaining length is computed from advice text (see deletion.py); advice that
+    # mentions deleting gets a conditional reminder with the essay's own count.
+    length_notes = deletion_lib.annotate(criteria, argument, priorities, essay, minimum)
+    if length_notes:
         warnings.append(
-            f"有 {unsure} 条建议提到删去整段或整句，但无法确定要删哪一部分，删后可能低于 "
-            f"{minimum} 词下限，已提醒先核对字数。"
+            f"有 {length_notes} 条建议提到删减。如果按删减修改，请核对修改后的字数（原文 "
+            f"{essay_lib.count_words(essay)} 词，字数下限 {minimum} 词）；本工具不推算删后字数。"
         )
     removed["total"] = removed["criteria"] + removed["priorities"] + removed["argument"]
     if removed["total"]:
@@ -496,7 +483,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "argument": argument,
         "suggestions_removed": removed,
         "count_corrections": count_corrections,
-        "length_notes": length["sure"],  # "cannot tell which part" notes: warnings only
+        "length_notes": length_notes,  # advice that got the recount reminder
         "warnings": warnings,
     }
 
