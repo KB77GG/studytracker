@@ -1,6 +1,7 @@
 """Regressions from the .10 / high / 32000 real run (8/14 requests, 6/7 usable;
 docs/design/ielts-writing-ai-prompt10-high-20261109): mid left argument unclosed twice
-(the sixth real brace error, all of them a brace missing right after a list closed),
+(six of the seven real brace errors were a brace missing right after a list closed; the
+seventh closed argument too early),
 and adopted feedback explained a grammar band by the essay being off-topic, called
 neutral wording impolite and called brief development "not explained". The fixture
 holds the 8 real replies (reasoning text not included)."""
@@ -67,7 +68,7 @@ class StructureTest(unittest.TestCase):
             )["criteria"]
         )
 
-    def test_every_object_in_the_example_ends_with_a_plain_field(self):
+    def test_criteria_and_argument_end_after_their_lists(self):
         self.assertGreaterEqual(int(prompts.PROMPT_VERSION.rsplit(".", 1)[1]), 11)
         for task_type, visual in (("task2", True), ("task1", False), ("task1", True)):
             with self.subTest(task=task_type, visual=visual):
@@ -82,7 +83,7 @@ class StructureTest(unittest.TestCase):
                 # At most two brackets close in a row (.10 had ]}} and }]}} runs).
                 self.assertLessEqual(max(closing_runs(json.dumps(example))), 2)
         content = system("t2-mid")
-        self.assertIn("every object ends with a plain field after its lists", content)
+        self.assertIn("a criterion ends with summary and argument ends with position", content)
         self.assertIn(
             json.dumps(prompts.evaluate_example("task2", True), ensure_ascii=False), content
         )
@@ -93,7 +94,7 @@ class JudgementRulesTest(unittest.TestCase):
         for sample_id in ("t2-off-topic", "t1-no-image"):
             content = system(sample_id)
             for text in (
-                "Explain each band with that criterion's own features only",
+                "Criterion boundaries:",
                 "an off-topic essay can still use varied, accurate grammar",
                 "Language feedback has three kinds",
                 "Accurate, neutral everyday wording is neither an error nor impolite",

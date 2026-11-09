@@ -384,7 +384,7 @@ class PromptNineTest(unittest.TestCase):
         task2, task1 = self.system("t2-strong"), self.system("t1-no-image")
         for text in (
             "hypothetical example described in words only",
-            "not 'a bus carrying forty passengers'",
+            "no number, count, percentage, year or multiplier the essay does not give",
             "the key is 'suggestion', not 'comment'",
         ):
             self.assertIn(text, task2)

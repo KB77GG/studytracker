@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-09.11"
+PROMPT_VERSION = "iwa-2026-11-10.12"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -38,20 +38,20 @@ COMMON_DESCRIPTORS = (
 )
 
 ARGUMENT_CHECKLIST = (
-    "Argument check (Task 2): a diagnosis that explains Task Response and Coherence & "
-    "Cohesion; it is NOT a separate score. Judge the WHOLE essay and report only real faults. "
+    "Argument check (Task 2): a diagnosis whose findings explain Task Response or Coherence "
+    "& Cohesion, whichever each one evidences; it is NOT a separate score. Judge the WHOLE essay and report only real faults. "
     "(0) Question type: identify what the question requires (discuss both views AND give "
     "an opinion; to what extent agree; whether advantages outweigh disadvantages; two "
     "questions) and check every required part is answered in that form; a missing part "
     "(no own opinion, no verdict on 'outweigh') is a Task Response issue. "
-    "(1) Position. A qualified position is ONE position, e.g. 'mostly public transport, but "
-    "roads where necessary' or 'partly agree': naming exceptions or admitting the other side "
+    "(1) Position. A qualified position is ONE position, e.g. 'mostly X, but Y where "
+    "necessary' or 'partly agree': naming exceptions or admitting the other side "
     "is sometimes needed is neither unclear nor inconsistent. Vague wording that the body or "
     "conclusion makes clear is at most an improvement. unclear_position = after reading the "
     "whole essay a reader still cannot tell what the writer thinks. inconsistent_position / "
     "conclusion_inconsistent = two passages that genuinely cannot both be true; quote BOTH "
     "('quote' and 'conflicts_with'). A conclusion that restates the main side without "
-    "repeating the exceptions (e.g. 'the lion's share of funding') is consistent. "
+    "repeating the exceptions is consistent. "
     "(2) Relevance. off_position only when a paragraph argues something that serves neither "
     "the position nor the question; a paragraph explaining an exception the qualified "
     "position already allows, or a concession, is not off_position. "
@@ -77,9 +77,9 @@ ARGUMENT_CHECKLIST = (
     "an extra example) go in 'improvements', never in 'problems'. Never invent facts: no "
     "statistic, percentage, year, study or named real-world case that is not in the essay; "
     "use the essay's own reasoning or a hypothetical example described in words only - no "
-    "number, count, percentage, year or multiplier the essay does not give (write 'a full "
-    "bus replaces many cars', not 'a bus carrying forty passengers'). Reflect real problems "
-    "in the task and coherence summaries; improvements do not lower bands."
+    "number, count, percentage, year or multiplier the essay does not give. Reflect each "
+    "real problem in the summary of the criterion it evidences; improvements do not lower "
+    "bands."
 )
 
 CRITERION_SCHEMA = (
@@ -114,7 +114,7 @@ def _argument_schema() -> str:
 
 COMPARISON_SCHEMA = (
     'K = {"claim": str (verbatim: a sentence or clause that ranks or compares, e.g. highest, '
-    'lowest, most, more/less than, overtook, doubled, in both years, all), "figures": [str '
+    'lowest, most, more/less than, overtook, doubled, throughout, all), "figures": [str '
     "(verbatim figures from the essay that decide the claim - for holds=false the ones that "
     'contradict it, first; at most 4, not every figure in the essay)], "holds": bool, '
     '"comment": str (Chinese)}'
@@ -122,8 +122,9 @@ COMPARISON_SCHEMA = (
 COMPARISON_RULE = (
     'Internal consistency (Task 1): in "comparisons" list EVERY ranking or comparison claim '
     "in the essay and check it against the figures the essay itself gives elsewhere; "
-    "holds=false when the essay's own figures contradict it (e.g. it calls A the highest in "
-    "both years but gives C a larger figure in one year). This is about the essay agreeing "
+    "holds=false when the essay's own figures contradict it (e.g. it calls one item the "
+    "highest throughout but gives another a larger figure at some point). This is about the "
+    "essay agreeing "
     "with itself only, not about the chart."
 )
 
@@ -198,10 +199,12 @@ def _root_schema(task_type: str, visual: bool) -> str:
     .9 moved the criteria to the top level: brace errors did not go away and two of
     seven answers wrote the criteria as bare numbers ("task": 7.0). .10 went back to
     "criteria" with the full nesting as real JSON; mid still left argument unclosed
-    twice (2026-11-09). All six brace errors in real runs were the same: a brace missing
-    right after a list closed (issues / improvements], then the object's }). From .11
-    every object ends with a plain field instead - summary closes a criterion, position
-    closes argument - so no more than two brackets ever close in a row."""
+    twice (2026-11-09). Six of the seven brace errors in real runs had the same shape: a
+    brace missing right after a list closed (issues / improvements], then the object's
+    }); the seventh (2026-11-06 off-topic) closed argument too early. From .11 a criterion
+    ends with summary (a string) and argument with position (an object ending in its
+    comment, or null), so in the example no more than two brackets close in a row. The
+    root object still ends with the priorities list."""
     nested = "argument" if task_type == "task2" else "comparisons"
     example = json.dumps(evaluate_example(task_type, visual), ensure_ascii=False)
     return " ".join(
@@ -216,9 +219,9 @@ def _root_schema(task_type: str, visual: bool) -> str:
             CRITERION_SCHEMA,
             _argument_schema() if task_type == "task2" else COMPARISON_SCHEMA,
             "Inside criteria every criterion is an object with band, strengths, issues and "
-            "summary - never a bare number. Keep the key order of the example: every object "
-            "ends with a plain field after its lists (summary ends a criterion, position ends "
-            "argument), so close the list, write that field, then close the object. Close "
+            "summary - never a bare number. Keep the key order of the example: a criterion "
+            "ends with summary and argument ends with position, after their lists, so close "
+            "the list, write that field, then close the object. Close "
             "each criterion object, then the criteria "
             f"object, before {nested}; {nested}, overall_comment and priorities sit next to "
             "criteria, never inside it. Do not output an overall band; it is computed from "
@@ -257,10 +260,34 @@ CALIBRATION = (
     "descriptors; do not inflate or deflate, and do not assume a typical score for the "
     "writer. Award 7.0+ in a criterion only when its higher-band features are clearly and "
     "consistently present; award 8.0+ only for near-error-free, sophisticated writing. "
-    "Each criterion band is independent; use 0.5 steps between 0 and 9. Explain each "
-    "band with that criterion's own features only: task relevance and argument quality "
-    "belong to Task Response and are never a reason for a Coherence, Lexical or Grammar "
-    "band (an off-topic essay can still use varied, accurate grammar)."
+    "Each criterion band is independent; use 0.5 steps between 0 and 9."
+)
+
+# What evidences which criterion (IELTS writing assessment criteria, checked 2026-11-09:
+# ielts.org writing-test-resources / academic-format-writing). .11 put all argument quality
+# under Task Response, which contradicted the argument check feeding Coherence & Cohesion;
+# logical progression and the organisation of ideas are Coherence & Cohesion features.
+CRITERION_BOUNDARIES = {
+    "task2": (
+        "Criterion boundaries: assess task fulfilment, position, relevance, and the "
+        "development and support of ideas under Task Response; assess the organisation of "
+        "ideas, logical progression, paragraphing, cohesive links and referencing under "
+        "Coherence & Cohesion. Map each argument finding to the criterion feature it "
+        "actually evidences (a point with no reason is Task Response; a paragraph that "
+        "breaks the line of reasoning is Coherence & Cohesion), without repeating the same "
+        "finding mechanically in both."
+    ),
+    "task1": (
+        "Criterion boundaries: assess the overview, the selection and accuracy of key "
+        "features and data under Task Achievement; assess the organisation of information, "
+        "logical progression, paragraphing, cohesive links and referencing under "
+        "Coherence & Cohesion."
+    ),
+}
+LANGUAGE_BOUNDARY = (
+    "Justify Lexical Resource and Grammatical Range & Accuracy with lexical and grammatical "
+    "evidence only: never infer a language weakness from off-topic content, missing data or "
+    "weak support (an off-topic essay can still use varied, accurate grammar)."
 )
 
 
@@ -316,6 +343,7 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "Assess the ORIGINAL essay exactly as written.",
         DESCRIPTOR_NOTES[task_type] + COMMON_DESCRIPTORS,
         CALIBRATION,
+        CRITERION_BOUNDARIES[task_type] + " " + LANGUAGE_BOUNDARY,
         "Evidence rules: every band must be justified. 'summary' explains why this band "
         "(2-4 sentences). Every strength and every issue carries a 'quote' copied VERBATIM "
         "from the essay (a short span, max 25 words) so it can be located automatically; "
@@ -334,25 +362,25 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         "saying the essay lacks a structure (passives, conditionals, relative clauses ...), "
         "check that it does not already use one. "
         "Language advice: read the whole sentence before calling a structure wrong (a "
-        "correct which-clause or a natural phrase such as 'much less crowded' is not an "
+        "correct relative clause or a natural comparative phrase is not an "
         "error, and accurate, natural wording comes before rarer words). A correction or "
         "model sentence must keep the writer's meaning: never add facts, causes, figures, "
-        "multipliers or trends the writer did not state (do not turn 'do not have cars' "
-        "into 'cannot afford a car', or two data points into 'a steady climb'). Give a "
+        "multipliers or trends the writer did not state (do not turn a stated fact into a "
+        "different cause, or two data points into a continuous trend). Give a "
         "complete, usable sentence, not a fragment, and one that works in place: put back "
         "instead of the quote it must leave a correct sentence - if the surrounding "
         "sentence would still be wrong (e.g. a stand-alone Because-clause), quote the whole "
         "sentence and correct the whole sentence. Call something a grammar error only when "
         "it is one: clauses joined by and/but may have different subjects, and an -ing "
         "clause whose subject is clear from the sentence is not dangling. A more precise "
-        "wording (e.g. 'the figure for Country B' instead of 'Country B' for a percentage) "
+        "wording (e.g. naming the measured figure instead of the thing it belongs to) "
         "is a precision point: present it as one, in the issue and in priorities, never as "
         "a grammar error. Before describing what a paragraph or the overview says, check "
         "that it really says it.",
         "Counts must match the essay: paragraph_count is given (one paragraph per line); "
         "only say a word is repeated if it really appears several times.",
         "overall_comment and priorities summarise your own findings: never call something "
-        "missing or weak there (e.g. 'only assertions, no mechanism', 'only touched on') "
+        "missing or weak there (e.g. calling a point unexplained or barely mentioned) "
         "that your criteria or argument analysis says the essay already does. A priority may "
         "suggest going further, but then say what is already there.",
     ]

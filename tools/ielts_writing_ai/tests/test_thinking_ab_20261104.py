@@ -109,7 +109,7 @@ class PromptTest(unittest.TestCase):
             "read the whole sentence before calling a structure wrong",
             "must keep the writer's meaning",
             "never add facts, causes, figures, multipliers or trends",
-            "'a steady climb'",
+            "two data points into a continuous trend",
             "complete, usable sentence",
             "check that it really says it",
         ):

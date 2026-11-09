@@ -262,7 +262,8 @@ class PromptTest(unittest.TestCase):
     def test_task1_consistency_check_names_superlatives_against_own_figures(self):
         sub = dict(FX["submissions"]["t1-no-image"])
         messages, _ = prompts.build_evaluate(sub, essay.split_sentences(sub["essay_text"]))
-        self.assertIn("in both years", messages[0]["content"])
+        # .12: the example no longer uses the sample's own claim ("in both years").
+        self.assertIn("the highest throughout", messages[0]["content"])
 
     def test_real_t1_evaluation_missed_the_contradiction(self):
         # Documented model limitation (2nd run): the field came back empty.
