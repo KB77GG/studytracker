@@ -119,7 +119,7 @@ class Settings:
     # were measured without thinking and are not reused (provisional, to be calibrated
     # with realcheck).
     evaluate_thinking: str = "off"
-    evaluate_thinking_max_tokens: int = 16000
+    evaluate_thinking_max_tokens: int = 32000
     evaluate_thinking_timeout: float = 300.0
 
     vision_provider: str = "none"
@@ -271,7 +271,7 @@ def load_settings(
         "llm_temperature": _as_float(get("LLM_TEMPERATURE"), 0.2),
         "evaluate_thinking": (get("EVALUATE_THINKING") or "off").strip().lower(),
         "evaluate_thinking_max_tokens": _as_int(
-            get("EVALUATE_THINKING_MAX_TOKENS"), 16000, minimum=1
+            get("EVALUATE_THINKING_MAX_TOKENS"), 32000, minimum=1
         ),
         "evaluate_thinking_timeout": _as_float(get("EVALUATE_THINKING_TIMEOUT"), 300.0),
         "vision_provider": get("VISION_PROVIDER") or "none",

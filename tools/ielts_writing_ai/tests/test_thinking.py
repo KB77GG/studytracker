@@ -29,7 +29,7 @@ class SettingsTest(unittest.TestCase):
         s = self.settings()
         self.assertEqual(s.evaluate_thinking, "off")
         self.assertEqual(
-            (s.evaluate_thinking_max_tokens, s.evaluate_thinking_timeout), (16000, 300.0)
+            (s.evaluate_thinking_max_tokens, s.evaluate_thinking_timeout), (32000, 300.0)
         )
         s = self.settings(EVALUATE_THINKING="HIGH", EVALUATE_THINKING_MAX_TOKENS="20000")
         self.assertEqual((s.evaluate_thinking, s.evaluate_thinking_max_tokens), ("high", 20000))
@@ -85,13 +85,13 @@ class ClientTest(unittest.TestCase):
         }
         StubHandler.responses = [(status, payload)]
         result = self.client.complete(
-            [], json_mode=True, max_tokens=16000, thinking="high", timeout=30
+            [], json_mode=True, max_tokens=32000, thinking="high", timeout=30
         )
         body = StubHandler.requests[0]["body"]
         self.assertEqual(body["thinking"], {"type": "enabled"})
         self.assertEqual(body["reasoning_effort"], "high")
         self.assertEqual(body["response_format"], {"type": "json_object"})
-        self.assertEqual(body["max_tokens"], 16000)
+        self.assertEqual(body["max_tokens"], 32000)
         self.assertEqual(result.json(), {"a": 1})  # only the content is parsed
         self.assertEqual(result.reasoning, "先看整段……")
         self.assertEqual(reasoning_tokens(result.usage), 700)
@@ -217,11 +217,11 @@ class CompareTest(unittest.TestCase):
     def test_report_records_thinking_budget_and_reasoning(self):
         data, report = self.run_check("high", "high")
         call = data["calls"][0]
-        self.assertEqual((call["thinking"], call["max_tokens"]), ("high", 16000))
+        self.assertEqual((call["thinking"], call["max_tokens"]), ("high", 32000))
         self.assertEqual((call["reasoning_tokens"], call["reasoning"]), (2000, "思考过程"))
         evaluate = report["kinds"]["evaluate"]
         self.assertEqual(evaluate["thinking"], ["high"])
-        self.assertEqual(evaluate["max_tokens"], [16000])
+        self.assertEqual(evaluate["max_tokens"], [32000])
         self.assertEqual(
             (evaluate["completion_tokens_max"], evaluate["reasoning_tokens"]), (3000, 6000)
         )

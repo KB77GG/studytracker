@@ -77,7 +77,7 @@ DeepSeek 默认使用 `deepseek-flash` 的非思考模式。
 
 ```bash
 IWA_EVALUATE_THINKING=off                # off（默认）/ high / max；只影响原稿评价，精修和改写不变
-IWA_EVALUATE_THINKING_MAX_TOKENS=16000   # 思考时的输出上限（暂定，需按实测校准）
+IWA_EVALUATE_THINKING_MAX_TOKENS=32000   # 思考与正式回答的总输出上限（仍需实测校准）
 IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂定）
 ```
 
@@ -86,7 +86,9 @@ IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂�
 - 设为 `high` 时，评价请求发送 `"thinking": {"type": "enabled"}` 和 `"reasoning_effort": "high"`；关闭时和以前一样发送 `{"type": "disabled"}`。目前只支持 DeepSeek，其他服务商开启会报配置错误。
 - 思考内容（`reasoning_content`）不解析、不保存到结果里、也不给学生看；严格 JSON 校验只看正式回答。realcheck 会把它留在本机的 `raw_calls.jsonl` 里，方便复核。
 - 用户已在本机核对官方文档：`thinking: {"type": "enabled"}` 和顶层的 `reasoning_effort: "high"` 写法正确；思考内容与正式回答分开返回；`usage` 里有 `completion_tokens_details.reasoning_tokens`；思考模式下 temperature 不起作用。文档写法正确不等于已经实际连通，仍要先跑 1 次连通性测试。
-- 4500 token 的上限和 120 秒超时是在关闭思考时测出来的，开启后不沿用：思考时使用上面两项单独的设置。16000 / 300 是暂定值，需要用对照实测的输出峰值和延迟重新设定。
+- 4500 token 的上限和 120 秒超时是在关闭思考时测出来的，开启后不沿用：思考时使用上面两项单独的设置。用户于 2026-11-09 授权将思考输出上限从 16000 调到 32000，超时暂保留 300 秒；high / max 共用这项上限，默认思考开关仍为 off，精修和改写不变。提高的是思考与正式回答的总预算，不保证不再截断，也不保证评分更准。按实际用量计费，允许的最大输出成本随上限提高。
+- `.env` 或进程环境里显式设置的 `IWA_EVALUATE_THINKING_MAX_TOKENS` 仍优先；已有 16000 设置不会被程序覆盖。下一批验证应显式使用 `IWA_EVALUATE_THINKING_MAX_TOKENS=32000`，并以 `check` 及报告的实际请求上限为准。此次调整不代表授权新一批付费调用。
+- 2026-11-09 已核对 [DeepSeek Chat Completions 官方文档](https://api-docs.deepseek.com/api/create-chat-completion/)：32000 在 `max_tokens` 的允许范围内。该上限与 `reasoning_effort` 是不同参数；本次不提高思考档位。
 - 页面和复制文本的来源一行会标明“思考模式 high”。HTTPS 始终校验证书和域名；系统没有根证书时，使用独立依赖中的 certifi 证书包补充。遇到证书错误不要关闭验证。客户端拒绝 HTTP 重定向，避免凭据被转发及绕过请求计数。
 
 成本控制：每人每天 `IWA_DAILY_LIMIT` 次生成（一次批改消耗 3 次，重新生成消耗 1 次，删除记录不返还）；同时进行的模型调用数不超过 `IWA_MAX_WORKERS`。
@@ -223,7 +225,7 @@ $PY -m tools.ielts_writing_ai realcheck-compare <目录A> <目录B> --price-in <
 - JSON 通过率只是其中一项；不能用自动检查全部通过来代替人工复核和老师评分校准。
 - 思考 token 是否单独计费、是否已经包含在输出 token 里，以服务商账单为准。报告分别列出这两个数字，费用按输出 token 估算。
 - 思考 token 按每次调用的 `usage.completion_tokens_details.reasoning_tokens` 统计，**失败的调用也算**（例如思考用完了上限）。只要有一次思考调用没有报告，报告就写“已知小计 N（另有 M 次没有报告，合计不完整）”，不会把小计当作合计。
-- 输出达到上限（`finish_reason=length`）一律记为截断，即使正文为空（思考用完了上限）。截断不会作为不合格输出重试，这一篇评价直接失败，所以上限要按实测峰值留足余量。2026-11-07 的 weak 把 16000 token 全部用于思考、没有输出正文（同一篇在 2026-11-06 用了 9526）；上限是否提高要按实测另定，目前没有改。
+- 输出达到上限（`finish_reason=length`）一律记为截断，即使正文为空（思考用完了上限）。截断不会作为不合格输出重试，这一篇评价直接失败，所以上限要按实测峰值留足余量。2026-11-07 的 weak 把 16000 token 全部用于思考、没有输出正文（同一篇在 2026-11-06 用了 9526）；2026-11-09 按用户授权把默认上限提高到 32000，尚未运行新的真实批次验证效果。
 
 内置样本（`samples.py`）是原创的合成作文，不含学生数据：
 
