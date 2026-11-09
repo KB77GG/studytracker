@@ -1,5 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-10（.11 复核后）雅思写作 AI 试用工具：评分项边界按官方标准划分、在线提示去掉开发样本例子（提示词 .12；已推功能分支，未合并、未部署，未调用真实模型）
+
+- 输入：用户复核 `8510ea8`（报告 `fba3556`，`docs/design/ielts-writing-ai-prompt11-review-20261109/`，含 `structure_probe.py`、`feedback_probe.py`）。结构改动通过（125/125）；1 处 P2：`.11` 新规则把论证质量全部归到 TR、禁止用来解释 CC，与同一提示里的论证检查（解释 TR 和 CC）和官方标准（CC 包括观点组织与逻辑推进，见 ielts.org writing-test-resources / academic-format-writing）冲突。评审建议：旧样本例子移出在线提示、保留在离线回归；7 篇定位为开发回归集。还更正了历史说法：7 次括号错误中 6 次是缺 `}`，`.8` 离题那次是提前关闭对象。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动。
+- 修复（业务提交 `e370b0c`，提示词 `iwa-2026-11-10.12`）：
+  1. 新增 `prompts.CRITERION_BOUNDARIES`（按 task1 / task2）和 `LANGUAGE_BOUNDARY`，替换 `.11` 的冲突句：TR 管回应题目、立场、观点相关性和展开支撑；CC 管观点与段落组织、逻辑推进、分段、衔接与指代；Task 1 的 TA 管概述、关键特征、数据选择与准确性；LR / GRA 只用语言证据，不因离题、缺数据或论证薄弱推出语言弱。`ARGUMENT_CHECKLIST` 开头改为“每条发现解释它实际体现的 TR 或 CC”，结尾改为“写进它对应的评分项理由”，不机械重复。
+  2. 在线提示里取自开发样本或其反馈的例子全部通用化：much less crowded、do not have cars → cannot afford a car、a steady climb、a full bus / forty passengers、the figure for Country B、the lion's share of funding、“mostly public transport, but roads where necessary”、COMPARISON 里的 “in both years” 与 “A 两年都最高”例子、“only assertions / only touched on”。原句和坏回答仍在离线夹具和回归测试里。
+  3. 历史表述更正（`prompts._root_schema` 文档、README、`test_prompt10_run_20261109` 文档）：6/7 次括号错误是列表闭合后缺 `}`；评分项以 summary 结尾、argument 以 position（对象或 null）结尾，根对象仍以 priorities 列表结尾。
+- 验证：
+  - 新增 `tests/test_prompt11_review_20261109.py`（4 项）：7 篇内置样本的在线提示都含对应任务的边界规则、不含 `.11` 的冲突句；19 个开发样本词句在 7 篇在线提示里都不出现；替换后的通用说法都在。更新 4 处写死旧例子或旧措辞的断言（`test_high_run_20261106`、`test_rewrite_recheck_20261104`、`test_thinking_ab_20261104`、`test_prompt10_run_20261109`）。
+  - 精确命令（scratch venv `V=/tmp/claude-0/-home-user-studytracker/1947cfd2-84d7-586c-b503-a9bbbb79c145/scratchpad/venv/bin`）：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **392 OK**；`IWA_TEST_LOCALE=en_US.ISO-8859-1 IWA_TEST_LOCPATH=<scratch>/locales` 和 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 也 OK；Node 8 项通过；`ruff check`、`black --check`、`node --check static/iwa.js`、`git diff --check` 通过。
+  - 评审探针：本轮 `feedback_probe.py` 103/103、CC 冲突发现 `reproduced: false`；`structure_probe.py` 125/125。docs/design 下 50 个探针 26 个 exit 0，其余 24 个的退出码与上一轮完全相同（写死已修复旧行为、`.9` 旧约定、已取消的删后推算、旧默认上限 16000）。
+- 边界：内置 7 篇只能作开发回归（历史问题与格式稳定性）；删掉例子不能恢复独立性，评分准确度需要未参与修改的新题材作文和老师基准。第一份老师批改作文（`teacher-t2-01`）已整理成本地 JSONL，待用户核对批注位置并授权运行。
+- 状态：业务提交 `e370b0c` 和本交接提交只推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产、未写生产 DB，小程序未上传 / 提审 / 发布。
+- 下一步：用户复核 `e370b0c`。之后的真实批次需要新授权：建议 `.12` / high / 32000 / 300 秒，7 篇开发样本（看括号错误与三类定性）加上老师批改作文 `teacher-t2-01`（看与老师的差距），只做评价、新账本。
+
 ## 2026-11-09 雅思写作 AI 试用工具：第一份老师批改作文整理成本地校准样本（不进 Git，未调用模型）
 
 - 用户提供一篇 Task 2 学生作文的电子原稿（docx，4 段 306 词，限时 40 分钟，题目为商务面谈利弊）和老师评语（总分 6.5，无四项分数）。原稿没有姓名等个人信息；用户此前已确认使用学生材料获得同意。
