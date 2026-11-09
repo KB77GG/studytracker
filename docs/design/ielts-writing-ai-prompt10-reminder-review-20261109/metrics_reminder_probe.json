@@ -1,0 +1,310 @@
+{
+  "source_head": "e5ae8308e96aabca609a601eabaf5ce25592ec14",
+  "prompt_version": "iwa-2026-11-08.10",
+  "network_calls": 0,
+  "actual_model_requests": 0,
+  "reads_private_reasoning": false,
+  "observations": {
+    "fixture": [
+      {
+        "sample": "t2-weak",
+        "attempt": 0,
+        "formal_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "formal_text_characters": 0,
+        "error": "truncated"
+      },
+      {
+        "sample": "t2-mid",
+        "attempt": 0,
+        "formal_text_sha256": "a2a7a4f7b4670d0fc5e1d769ed07c852fdbd8c16f60c8988f9c1aacac88daa70",
+        "formal_text_characters": 2666,
+        "error": null
+      },
+      {
+        "sample": "t2-good",
+        "attempt": 0,
+        "formal_text_sha256": "a7d10ecee3bab547e91ee6fc93d84a927de244385e4af502ee7a17df80b0aebb",
+        "formal_text_characters": 5545,
+        "error": null
+      },
+      {
+        "sample": "t2-strong",
+        "attempt": 0,
+        "formal_text_sha256": "db2eb12a9127882d2594b3f67435e74e9c537cef6e3ce8039f69818347d24f4f",
+        "formal_text_characters": 3172,
+        "error": null
+      },
+      {
+        "sample": "t2-off-topic",
+        "attempt": 0,
+        "formal_text_sha256": "ce2d49f9fcd1cf72a3b6ce7a3c60c2ab9ada6b1a7ab8cd32c7ab2ffb5005bcdc",
+        "formal_text_characters": 6928,
+        "error": null
+      },
+      {
+        "sample": "t2-under-length",
+        "attempt": 0,
+        "formal_text_sha256": "34f80d6d42fda3b6e36ea1233f4b7f8bbb00d6dd9dd3793e2719bd4cd9ce4fa8",
+        "formal_text_characters": 5450,
+        "error": null
+      },
+      {
+        "sample": "t2-under-length",
+        "attempt": 1,
+        "formal_text_sha256": "3e94a83d305a1fa0f45a93637f29e1aa326bf9cae1773d223201f859bc3c676d",
+        "formal_text_characters": 4843,
+        "error": null
+      },
+      {
+        "sample": "t1-no-image",
+        "attempt": 0,
+        "formal_text_sha256": "3e71972b1671206321f5c1b2bcfda17e7d266931f904dd2077958b485aa56d61",
+        "formal_text_characters": 4982,
+        "error": null
+      }
+    ],
+    "replay": {
+      "t2-weak": {
+        "status": "failed",
+        "error": "truncated",
+        "responses_consumed": 1,
+        "guard_rejections": 0,
+        "length_notes": null,
+        "changed_paths": []
+      },
+      "t2-mid": {
+        "status": "failed",
+        "error": "call_budget",
+        "responses_consumed": 1,
+        "guard_rejections": 1,
+        "length_notes": null,
+        "changed_paths": []
+      },
+      "t2-good": {
+        "status": "ready",
+        "error": null,
+        "responses_consumed": 1,
+        "guard_rejections": 0,
+        "length_notes": 0,
+        "changed_paths": [
+          "/length_notes"
+        ]
+      },
+      "t2-strong": {
+        "status": "failed",
+        "error": "call_budget",
+        "responses_consumed": 1,
+        "guard_rejections": 1,
+        "length_notes": null,
+        "changed_paths": []
+      },
+      "t2-off-topic": {
+        "status": "ready",
+        "error": null,
+        "responses_consumed": 1,
+        "guard_rejections": 0,
+        "length_notes": 0,
+        "changed_paths": [
+          "/length_notes"
+        ]
+      },
+      "t2-under-length": {
+        "status": "ready",
+        "error": null,
+        "responses_consumed": 2,
+        "guard_rejections": 0,
+        "length_notes": 0,
+        "changed_paths": [
+          "/length_notes"
+        ]
+      },
+      "t1-no-image": {
+        "status": "ready",
+        "error": null,
+        "responses_consumed": 1,
+        "guard_rejections": 0,
+        "length_notes": 2,
+        "changed_paths": [
+          "/criteria/1/issues/0/suggestion",
+          "/length_notes",
+          "/priorities/0",
+          "/warnings/2"
+        ]
+      }
+    },
+    "report": {
+      "historical_prompt": "iwa-2026-11-06.9",
+      "current_validator_prompt": "iwa-2026-11-08.10",
+      "historical_calls": 8,
+      "first_json": 0.571,
+      "first_content": 0.429,
+      "final_ready": 0.571,
+      "tokens": {
+        "prompt_tokens": 19322,
+        "completion_tokens": 62453,
+        "total_tokens": 81775
+      },
+      "reasoning_tokens": 50389,
+      "rejections": {
+        "JSON 括号或结构错误": 2,
+        "调用失败：truncated": 1,
+        "评分项 TR 写成了数字 7.0：每个评分项必须是包含 band、summary、strengths、issues 的对象": 1
+      },
+      "interpretation": "Historical .9 outputs replayed offline, not a live .10 run; first rates remain continuation-only, not the interrupted original full-batch rates."
+    },
+    "length_notes": {
+      "before_words": 172,
+      "minimum_words": 150,
+      "notes": 2,
+      "copy_advice_mentions": 2,
+      "counts_are_advice_entries_not_distinct_deletions": true,
+      "scores_original_and_report_metrics_unchanged": true
+    },
+    "prompt": {
+      "variants": [
+        {
+          "task": "task2",
+          "visual": true,
+          "priorities_rule_restored": true
+        },
+        {
+          "task": "task1",
+          "visual": false,
+          "priorities_rule_restored": true
+        },
+        {
+          "task": "task1",
+          "visual": true,
+          "priorities_rule_restored": true
+        }
+      ],
+      "priorities_scope": "3–5 is restored in the prompt; the existing validator still permits fewer priorities. No new enforcement was claimed or added.",
+      "causality": "The .9 run coincided with bare-number/brace failures; these samples do not establish that flattening caused regression. This offline replay cannot establish that .10 improves model compliance."
+    }
+  },
+  "checks": {
+    "fixture.eight_shared_calls": true,
+    "fixture.seven_samples": true,
+    "fixture.eight_attempts": true,
+    "fixture.t2-weak.submission_exact": true,
+    "fixture.t2-weak.attempt_count": true,
+    "fixture.t2-weak.0.exact_reply_and_accounting": true,
+    "fixture.t2-mid.submission_exact": true,
+    "fixture.t2-mid.attempt_count": true,
+    "fixture.t2-mid.0.exact_reply_and_accounting": true,
+    "fixture.t2-good.submission_exact": true,
+    "fixture.t2-good.attempt_count": true,
+    "fixture.t2-good.0.exact_reply_and_accounting": true,
+    "fixture.t2-strong.submission_exact": true,
+    "fixture.t2-strong.attempt_count": true,
+    "fixture.t2-strong.0.exact_reply_and_accounting": true,
+    "fixture.t2-off-topic.submission_exact": true,
+    "fixture.t2-off-topic.attempt_count": true,
+    "fixture.t2-off-topic.0.exact_reply_and_accounting": true,
+    "fixture.t2-under-length.submission_exact": true,
+    "fixture.t2-under-length.attempt_count": true,
+    "fixture.t2-under-length.0.exact_reply_and_accounting": true,
+    "fixture.t2-under-length.1.exact_reply_and_accounting": true,
+    "fixture.t1-no-image.submission_exact": true,
+    "fixture.t1-no-image.attempt_count": true,
+    "fixture.t1-no-image.0.exact_reply_and_accounting": true,
+    "replay.t2-weak.status": true,
+    "replay.t2-weak.failure_code": true,
+    "replay.t2-weak.submission_unchanged": true,
+    "replay.t2-weak.budget_options": true,
+    "replay.t2-mid.status": true,
+    "replay.t2-mid.failure_code": true,
+    "replay.t2-mid.submission_unchanged": true,
+    "replay.t2-mid.budget_options": true,
+    "replay.t2-mid.guard_blocks_extra_response": true,
+    "replay.mid_retry_accurate_reason": true,
+    "replay.t2-good.status": true,
+    "replay.t2-good.failure_code": true,
+    "replay.t2-good.submission_unchanged": true,
+    "replay.t2-good.budget_options": true,
+    "replay.t2-good.scores_unchanged": true,
+    "replay.t2-good.evidence_and_argument_accounting": true,
+    "replay.t2-good.only_expected_changes": true,
+    "replay.t2-good.repeat_normalization_stable": true,
+    "replay.t2-strong.status": true,
+    "replay.t2-strong.failure_code": true,
+    "replay.t2-strong.submission_unchanged": true,
+    "replay.t2-strong.budget_options": true,
+    "replay.t2-strong.guard_blocks_extra_response": true,
+    "replay.t2-off-topic.status": true,
+    "replay.t2-off-topic.failure_code": true,
+    "replay.t2-off-topic.submission_unchanged": true,
+    "replay.t2-off-topic.budget_options": true,
+    "replay.t2-off-topic.scores_unchanged": true,
+    "replay.t2-off-topic.evidence_and_argument_accounting": true,
+    "replay.t2-off-topic.only_expected_changes": true,
+    "replay.t2-off-topic.repeat_normalization_stable": true,
+    "replay.t2-under-length.status": true,
+    "replay.t2-under-length.failure_code": true,
+    "replay.t2-under-length.submission_unchanged": true,
+    "replay.t2-under-length.budget_options": true,
+    "replay.t2-under-length.scores_unchanged": true,
+    "replay.t2-under-length.evidence_and_argument_accounting": true,
+    "replay.t2-under-length.only_expected_changes": true,
+    "replay.t2-under-length.repeat_normalization_stable": true,
+    "replay.t1-no-image.status": true,
+    "replay.t1-no-image.failure_code": true,
+    "replay.t1-no-image.submission_unchanged": true,
+    "replay.t1-no-image.budget_options": true,
+    "replay.t1-no-image.scores_unchanged": true,
+    "replay.t1-no-image.evidence_and_argument_accounting": true,
+    "replay.t1-no-image.only_expected_changes": true,
+    "replay.t1-no-image.repeat_normalization_stable": true,
+    "replay.consumes_exact_eight_responses": true,
+    "replay.exhausted_mid_strong_no_third": true,
+    "replay.saved_call_text_and_usage_unchanged": true,
+    "report.unchanged_connectivity": true,
+    "report.unchanged_evidence": true,
+    "report.unchanged_argument": true,
+    "report.unchanged_refine_rewrite": true,
+    "report.unchanged_sanity": true,
+    "report.unchanged_tokens": true,
+    "report.unchanged_usage": true,
+    "report.unchanged_per_sample": true,
+    "report.unchanged_calibration": true,
+    "report.unchanged_teacher_findings": true,
+    "report.unchanged_evaluate_thinking": true,
+    "report.unchanged_evaluate_max_tokens": true,
+    "report.unchanged_evaluate_completion_tokens_max": true,
+    "report.unchanged_evaluate_reasoning_tokens_known": true,
+    "report.unchanged_evaluate_reasoning_unreported_calls": true,
+    "report.unchanged_evaluate_reasoning_tokens": true,
+    "report.unchanged_evaluate_reasoning_tokens_max": true,
+    "report.unchanged_evaluate_truncated": true,
+    "report.unchanged_evaluate_timeouts": true,
+    "report.unchanged_evaluate_calls": true,
+    "report.unchanged_evaluate_first_attempts": true,
+    "report.unchanged_evaluate_first_attempt_json_ok": true,
+    "report.unchanged_evaluate_first_attempt_valid": true,
+    "report.unchanged_evaluate_json_problems": true,
+    "report.unchanged_evaluate_final_ready": true,
+    "report.unchanged_evaluate_final_failures": true,
+    "report.unchanged_evaluate_latency_ms_p50": true,
+    "report.unchanged_evaluate_latency_ms_p90": true,
+    "report.unchanged_evaluate_tokens": true,
+    "report.only_rejection_label_changes": true,
+    "length.task1_counts": true,
+    "length.two_notes": true,
+    "length.copy_has_both_notes": true,
+    "length.copy_has_warning": true,
+    "length.task1_not_assessable_preserved": true,
+    "prompt.task2_True.priorities_3to5": true,
+    "prompt.task2_True.three_example_priorities": true,
+    "prompt.task2_True.nested_example_present": true,
+    "prompt.task1_False.priorities_3to5": true,
+    "prompt.task1_False.three_example_priorities": true,
+    "prompt.task1_False.nested_example_present": true,
+    "prompt.task1_True.priorities_3to5": true,
+    "prompt.task1_True.three_example_priorities": true,
+    "prompt.task1_True.nested_example_present": true,
+    "inputs.shared_and_fixture_bytes_unchanged": true
+  },
+  "checks_passed": 120,
+  "checks_total": 120,
+  "failures": []
+}

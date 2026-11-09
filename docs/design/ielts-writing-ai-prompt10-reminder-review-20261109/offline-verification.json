@@ -1,0 +1,56 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+  "python": "3.13.3",
+  "source_head": "e5ae8308e96aabca609a601eabaf5ce25592ec14",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 21.52
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt10-review-20261108",
+      "returncode": 0,
+      "elapsed_seconds": 0.26
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-prompt10-review-20261108...origin/claude/ielts-writing-ai-trial\n M tools/ielts_writing_ai/.env.example\n M tools/ielts_writing_ai/README.md\n M tools/ielts_writing_ai/config.py\n M tools/ielts_writing_ai/tests/test_thinking.py\n",
+  "verified_business_commit": "ab984f68c6c83699b46a5d7963e152710d82fcff",
+  "product_files_changed": [
+    "tools/ielts_writing_ai/.env.example",
+    "tools/ielts_writing_ai/README.md",
+    "tools/ielts_writing_ai/config.py",
+    "tools/ielts_writing_ai/tests/test_thinking.py"
+  ],
+  "checks": {
+    "python": 383,
+    "node": 8,
+    "reminder_probe": "341/341",
+    "metrics_new_contract": "120/120",
+    "schema": "175/175",
+    "ruff": "passed",
+    "black": "53 files unchanged",
+    "js_syntax": "passed",
+    "diff_check": "passed"
+  },
+  "actual_model_calls": 0,
+  "private_config_read": false,
+  "tests_match_committed_files": true
+}

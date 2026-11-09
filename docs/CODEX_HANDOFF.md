@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09 写作 .10 条件提示复核通过，思考输出默认上限提高到32000
+
+- 独立树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，分支`codex/iwa-prompt10-review-20261108`；开工clean d5dfbfc8经HTTPS fetch/ff-only到e5ae8308（删除业务23a8b031）。用户“调高”已执行为业务 **ab984f68**：config两默认16000→32000、样例/README/既有思考测试同步，共4文件；无其他产品改动。提示词仍iwa-2026-11-08.10。
+- 新条件提醒复核 **341/341**：原六类误算场景、示例句、评分项/提升重点/论证问题/可选优化、字数门槛、结果/复制、输入和分数保留均过。程序不再推算删后字数；否定/引用内容可能条件提醒是接受取舍；不保证AI原建议自身无虚报数字。共享报告`docs/design/ielts-writing-ai-prompt10-reminder-review-20261109/README.md`。
+- 原schema未改175/175；metrics副本仅两旧提示断言改新契约及观察字段后120/120，其他118条保留。主审独立复跑；旧探针原文件未改。不以已取消的analyse接口失败判回归。
+- 主树精确套件命令`.venv/bin/python docs/design/iwa-prompt10-reminder-review-20261109/run_offline_tests.py`→ **383 Python（21.232s/wrapper21.52s）+8 Node**，fake/临时库/禁非回环网络/剔除IWA外部配置；初次沙箱本地端口限制，获准同runner重跑通过，外部数据目录未写。审阅树主venvruff check/black --check tools/ielts_writing_ai（53文件）、node --check tools/ielts_writing_ai/static/iwa.js、git diff --check通过。未重跑三locale/Python3.10/全部历史探针/浏览器。
+- 32000为思考+正式回答总输出，high/max共用；默认off、非思考4500、精修/改写、300秒网络超时不变。官方api-docs.deepseek.com/api/create-chat-completion及guides/thinking_mode已核允许范围。本地HTTP替身/报告预算传递通过；历史16000fixture不变。显式.env/环境值仍覆盖缺省，本轮未读取或更改私有.env/Key；未来验证显式IWA_EVALUATE_THINKING_MAX_TOKENS=32000并核check/报告，不能声称已有私有配置已改。
+- 本轮无真实模型调用/新账本/新付费授权。下一步可申请独立7篇合成、只评价、deepseek-flash/high/32000/最多14次验证，检查截断/超时、格式和质量；这是待授权方案。老师素材前提不变。
+- 业务4文件、共享8文件和两交接仅同步功能分支claude/ielts-writing-ai-trial（最终文档HEAD见git log）。主资料树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d24586327ad94e151e172ae4811b4a2eed，原7 modified/23 untracked入口及其他任务保留；本机runner/source-state/首次沙箱日志在`docs/design/iwa-prompt10-reminder-review-20261109/`未提交。未合main/部署/访问生产/写DB/小程序上传提审发布。
+
 ## 2026-11-09（.10 删除识别保守复核后）雅思写作 AI 试用工具：不再推算删后字数，只提醒核对（已推功能分支，未合并、未部署，未调用真实模型）
 
 - 输入：用户复核 `2518853`（报告 `d5dfbfc`，`docs/design/ielts-writing-ai-prompt10-conservative-review-20261109/`，新增 `action_probe.py`、`location_probe.py`）。上一轮原场景全部关闭，但仍有 6 类 P2：“two paragraphs”被当成第二段；“A and / or B”丢掉后半目标；句内位置被问题引文覆盖（173 词例子应剩 148，算成 150，提醒消失）；共享否定；超过 300 字符的引用失去遮蔽；无法解析的序号回退。复核和用户都建议：试用版暂时取消从自由文本建议推算删后字数，保留原文字数，只提示核对。本轮没有模型调用、没有付费授权，评审的 `docs/design` 文件没有改动，提示词仍是 `iwa-2026-11-08.10`。
