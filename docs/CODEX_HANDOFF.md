@@ -1,5 +1,12 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-09（32000 上限复核）雅思写作 AI 试用工具：上限改动核对通过，300 秒超时余量约 1 分钟（只改交接，未调用模型）
+
+- 拉取 `0afe55d`（业务 `ab984f6`：`config.py` 默认值与 `load_settings` 回退值 16000 → 32000，`.env.example`、README、`tests/test_thinking.py` 同步）。改动一致；其余测试里的 16000 是历史回放数据，不需要改。本机复跑 `$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → 383 OK，Node 8 项、ruff、black 通过。
+- 超时余量（用已提交的 25 次思考调用估算：`docs/design/ielts-writing-ai-thinking-ab-20261104/`、`ielts-writing-ai-prompt8-high-20261106/`、`ielts-writing-ai-prompt9-high-20261107/continuation/` 的 `raw_calls.jsonl`）：输出速度 140–184 token / 秒，中位约 162。用满 32000 约需 175–228 秒，300 秒超时余量约 1 分钟；服务变慢时（如 2026-11-07 的中断时段）可能先超时、来不及用完上限。下一批应同时看截断数和超时数，并记录最长一次的延迟；超时 300 秒本轮未改。
+- 最坏情况下单次输出费用随上限翻倍；实际按用量计费。
+- 状态：只改交接与工作日志，推功能分支；无模型调用、无新授权、未合并 main、未部署。下一步不变：等用户授权 `.10` + high + 32000 的新一批（7 篇内置合成、只做评价、新账本）。
+
 ## 2026-11-09 写作 .10 条件提示复核通过，思考输出默认上限提高到32000
 
 - 独立树 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，分支`codex/iwa-prompt10-review-20261108`；开工clean d5dfbfc8经HTTPS fetch/ff-only到e5ae8308（删除业务23a8b031）。用户“调高”已执行为业务 **ab984f68**：config两默认16000→32000、样例/README/既有思考测试同步，共4文件；无其他产品改动。提示词仍iwa-2026-11-08.10。
