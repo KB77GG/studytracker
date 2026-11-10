@@ -1,0 +1,21 @@
+{
+  "source_head": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+  "prompt_version": "iwa-2026-11-10.12",
+  "checks": {
+    "teacher_hash_and_structure_gate": true,
+    "teacher_metadata_not_in_messages": true,
+    "full_16_pipeline": true,
+    "group_caps_14_and_2": true,
+    "durable_reservation_before_send": true,
+    "raw_and_sample_checkpoints": true,
+    "repeated_group_refused": true,
+    "temporary_db_only": true,
+    "cross_group_circuit_blocks_b": true,
+    "scope_and_attempt_gate": true,
+    "redirects_disabled": true
+  },
+  "real_requests": 0,
+  "env_read": false,
+  "real_teacher_read": false,
+  "paid_enabled": false
+}

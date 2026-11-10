@@ -1,0 +1,1262 @@
+{
+  "source_head": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+  "input_sha256": {
+    "run_data.json": "e50579831cc58b9ce88860a4139b6c6a9558b073b75d70e114e4c9240f08ff6f",
+    "report.json": "d2f9eb003fb4a1bd0521a4a9db54f91527fb2ae3077b710078030c5c7d913490",
+    "transport.json": "edebee25489cc8453e224607bc068ce08ea3dbca4c3b0fa2935775d793dbb9f0",
+    "formal_responses.json": "f57a9ce5ca56719151ef9f850b7ab553df38c15908d0021ee7fed8c6fe5173f9"
+  },
+  "actual_requests": 9,
+  "requested_samples": 7,
+  "processed_samples": 7,
+  "ready": 6,
+  "unconditional_ready_rate": 0.857,
+  "first_json": 6,
+  "first_valid": 5,
+  "first_attempts": 7,
+  "first_attempt_validation": [
+    {
+      "sample": "t2-weak",
+      "json_ok": true,
+      "valid": true,
+      "problem": null
+    },
+    {
+      "sample": "t2-mid",
+      "json_ok": true,
+      "valid": true,
+      "problem": null
+    },
+    {
+      "sample": "t2-good",
+      "json_ok": true,
+      "valid": false,
+      "problem": "缺少总评"
+    },
+    {
+      "sample": "t2-strong",
+      "json_ok": false,
+      "valid": false,
+      "problem": "invalid_json"
+    },
+    {
+      "sample": "t2-off-topic",
+      "json_ok": true,
+      "valid": true,
+      "problem": null
+    },
+    {
+      "sample": "t2-under-length",
+      "json_ok": true,
+      "valid": true,
+      "problem": null
+    },
+    {
+      "sample": "t1-no-image",
+      "json_ok": true,
+      "valid": true,
+      "problem": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 29322,
+    "completion_tokens": 56708,
+    "total_tokens": 86030
+  },
+  "reasoning_known": 39165,
+  "reasoning_missing": 0,
+  "usage_missing": 0,
+  "truncated": 0,
+  "timeouts": 0,
+  "max_transport_latency_ms": 84834,
+  "sanity_failures": [
+    {
+      "sample": "t2-strong",
+      "check": "评价已生成",
+      "ok": false,
+      "detail": "评价失败，无法检查"
+    }
+  ],
+  "checks": [
+    {
+      "name": "sanitized_inputs",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "unique_sample_ids",
+      "ok": true,
+      "actual": 7,
+      "expected": 7
+    },
+    {
+      "name": "requested_samples",
+      "ok": true,
+      "actual": 7,
+      "expected": 7
+    },
+    {
+      "name": "http_budget",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "ledger_total",
+      "ok": true,
+      "actual": 9,
+      "expected": 9
+    },
+    {
+      "name": "sequential_reservations",
+      "ok": true,
+      "actual": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "name": "per_sample_cap2",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "ledger_per_sample.t2-weak",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "ledger_per_sample.t2-mid",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "ledger_per_sample.t2-good",
+      "ok": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "ledger_per_sample.t2-strong",
+      "ok": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "ledger_per_sample.t2-off-topic",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "ledger_per_sample.t2-under-length",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "ledger_per_sample.t1-no-image",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "evaluation_only",
+      "ok": true,
+      "actual": [
+        "evaluate"
+      ],
+      "expected": [
+        "evaluate"
+      ]
+    },
+    {
+      "name": "call_count",
+      "ok": true,
+      "actual": 9,
+      "expected": 9
+    },
+    {
+      "name": "report_calls",
+      "ok": true,
+      "actual": 9,
+      "expected": 9
+    },
+    {
+      "name": "report_samples",
+      "ok": true,
+      "actual": 7,
+      "expected": 7
+    },
+    {
+      "name": "report_max_calls",
+      "ok": true,
+      "actual": 14,
+      "expected": 14
+    },
+    {
+      "name": "transport_options",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "recorded_options",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "no_vision",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "call_alignment.1",
+      "ok": true,
+      "actual": [
+        "t2-weak",
+        0
+      ],
+      "expected": [
+        "t2-weak",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.1",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3390,
+        "completion_tokens": 13506,
+        "total_tokens": 16896,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11293
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 3262
+      },
+      "expected": {
+        "prompt_tokens": 3390,
+        "completion_tokens": 13506,
+        "total_tokens": 16896,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11293
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 3262
+      }
+    },
+    {
+      "name": "messages_alignment.1",
+      "ok": true,
+      "actual": "bfa1a90557da505e10ee17036f97dc5bc6c77e52332906ea5729c9bf570840c3",
+      "expected": "bfa1a90557da505e10ee17036f97dc5bc6c77e52332906ea5729c9bf570840c3"
+    },
+    {
+      "name": "formal_text_alignment.1",
+      "ok": true,
+      "actual": "{\"criteria\":{\"task\":{\"band\":6.0,\"strengths\":[{\"quote\":\"I am agree with this opinion in some way but not all.\",\"comment\":\"开头提出有保留的立场，既不完全同意也不完全反对，为后文平衡讨论公交与道路奠定基础。\"},{\"quote\":\"For example my father drive to work everyday and he spend two hour in the road.\",\"comment\":\"用个人例子支持“道路建设也重要”的分论点，使论证有具体场景。\"},{\"quote\":\"In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary.\",\"comment\":\"结论重申“公交优先、必要时修路”的限定立场，回应了 to what extent 的要求。\"}],\"issues\":[{\"quote\":\"people will use it more and the traffic will be less\",\"comment\":\"论证较简略，只断言公交变好会减少交通，却没有解释人们为何会改乘公交（如准点、舒适、便宜等机制）。\",\"suggestion\":\"补充一层因果，例如：If buses were more reliable and comfortable, many car users would switch to them, which would reduce congestion.\"},{\"quote\":\"so everybody can be more healthy and happy\",\"comment\":\"结论过度概括，把公交改善直接推及“人人更健康快乐”，缺少限定，削弱论证严谨性。\",\"suggestion\":\"改为有限定、可支撑的表达，例如：This could improve public health and quality of life, especially for people who rely on public transport.\"}],\"summary\":\"全文回应题目，提出“公交优先但必要时也修路”的保留立场，并用无车人群、公交晚点、学生票价、父亲通勤等理由和例子支撑。主要问题是部分因果链较简略，个别结论过度概括，因此为6分而非7分。\"},\"coherence\":{\"band\":6.0,\"strengths\":[{\"quote\":\"Firstly, public transport is good for people.\",\"comment\":\"用 Firstly 明确标示第一个主体段的功能，段落中心清楚。\"},{\"quote\":\"But I think public transport is more important than road.\",\"comment\":\"用转折句把前一段对道路的让步拉回到自己的立场，整体推进清楚。\"}],\"issues\":[{\"quote\":\"Also if more people take bus\",\"comment\":\"连接词以 Also、So 等基础词为主，句间关系有时靠简单叠加，衔接显得机械，缺少更精细的连接方式。\",\"suggestion\":\"可改用更明确的连接，例如：Moreover, if more people took the bus, the city would be quieter and the air cleaner, which could improve people's health and well-being.\"}],\"summary\":\"五段结构清楚，段落功能明确，整体推进从公交好处到道路必要再到公交优先，结论收束合理。但连接词以 Firstly、Secondly、Also、So 为主，略显机械，个别指代和句间衔接不够精细，故为6分。\"},\"lexical\":{\"band\":5.0,\"strengths\":[{\"quote\":\"the traffic jam will be very bad and people waste a lot of time\",\"comment\":\"能使用 traffic jam、waste a lot of time 等常见话题搭配，基本表达交通拥堵与时间浪费。\"}],\"issues\":[{\"quote\":\"Some people think goverment should spend money for public transport not for build new road.\",\"comment\":\"goverment 拼写错误；spend money for ... not for build 搭配和形式不当，应为 spend money on ... rather than building ...。\",\"suggestion\":\"Some people think the government should spend money on public transport rather than building new roads.\"},{\"quote\":\"In my city the bus is always late and very crowd so people dont like to take it.\",\"comment\":\"crowd 是名词或动词，这里需要形容词 crowded；dont 缺撇号。\",\"suggestion\":\"In my city the bus is always late and very crowded, so people do not like to take it.\"},{\"quote\":\"The public transport can carry many people in one time and it is good for enviroment.\",\"comment\":\"in one time 表意不清，宜用 at the same time；enviroment 拼写错误。\",\"suggestion\":\"Public transport can carry many people at the same time and it is good for the environment.\"},{\"quote\":\"Both is important for the people and the country develop.\",\"comment\":\"country develop 中 develop 词性错误，这里需要名词 development。\",\"suggestion\":\"Both are important for the people and the development of the country.\"}],\"summary\":\"词汇足以完成基本表达，能使用 public transport、traffic jam、pollution 等话题词。但范围有限，重复较多，拼写和词形错误明显（goverment、enviroment、crowd），符合5分。\"},\"grammar\":{\"band\":5.0,\"strengths\":[{\"quote\":\"If there is no new road the traffic jam will be very bad and people waste a lot of time.\",\"comment\":\"能写出 if 条件句并表达预测结果，体现一定的复杂结构意识。\"}],\"issues\":[{\"quote\":\"I am agree with this opinion in some way but not all.\",\"comment\":\"agree 是动词，前面不用 be 动词；in some way but not all 的搭配也不自然。\",\"suggestion\":\"I agree with this opinion in some ways but not entirely.\"},{\"quote\":\"Because many people dont have car and they need bus and train to go work and school.\",\"comment\":\"Because 从句不能单独成句，造成句子片段；car、bus、train 等可数名词也缺少冠词或复数。\",\"suggestion\":\"This is because many people do not have a car and they need buses and trains to go to work and school.\"},{\"quote\":\"If the bus is more better, people will use it more and the traffic will be less.\",\"comment\":\"more better 是双重比较级错误；the traffic will be less 表达不自然。\",\"suggestion\":\"If the bus is better, people will use it more and there will be less traffic.\"},{\"quote\":\"For example my father drive to work everyday and he spend two hour in the road.\",\"comment\":\"主谓一致错误：my father drive 应为 drives，he spend 应为 spends；two hour 应为 two hours；in the road 宜改为 on the road，且 For example 后宜加逗号。\",\"suggestion\":\"For example, my father drives to work every day and he spends two hours on the road.\"}],\"summary\":\"文章尝试使用 because、if 条件句和并列复合句，但语法错误频繁，包括主谓一致、比较级、句子片段、冠词与复数等问题。错误影响流畅度但基本不妨碍理解，故为5分。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I am agree with this opinion in some way but not all.\",\"verdict\":\"supports\",\"comment\":\"引出交通投入话题，并提出有保留的立场，为后文分情况讨论作铺垫。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"Firstly, public transport is good for people.\",\"verdict\":\"supports\",\"comment\":\"从无车人群需要公交、本城公交晚点拥挤、学生票价高等角度支持公交投入。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Secondly, new road is also important.\",\"verdict\":\"supports\",\"comment\":\"用城市增长、购车增加和父亲通勤耗时说明道路建设也有必要性，属于让步性支持。\"},{\"p\":4,\"role\":\"body\",\"main_point\":\"But I think public transport is more important than road.\",\"verdict\":\"supports\",\"comment\":\"从道路带来更多车辆和污染、公交运力与环保优势说明公交应优先。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary.\",\"verdict\":\"supports\",\"comment\":\"结论重申公交优先但必要时修路的限定立场，与前文一致。\"}],\"problems\":[{\"type\":\"overgeneralized\",\"quote\":\"so everybody can be more healthy and happy\",\"comment\":\"把公交改善直接推及所有人更健康快乐，缺少条件和限定，论证显得过度概括。\",\"suggestion\":\"加入限定并保留原意，例如：This could improve public health and quality of life, especially for people who rely on public transport.\"}],\"improvements\":[{\"quote\":\"If the bus is more better, people will use it more and the traffic will be less.\",\"suggestion\":\"可补充机制：公交更准点、舒适或便宜，才会让私家车用户改乘，从而减少拥堵；这样因果链更完整。\"},{\"quote\":\"This is very bad for him and for the economy also.\",\"suggestion\":\"可简单解释时间浪费如何影响工作效率或经济活动，使“对经济也不好”这一判断有依据。\"},{\"quote\":\"But I think public transport is more important than road.\",\"suggestion\":\"可把比较标准说得更清楚：公交每人运力更高、污染更少，因此同样投入下缓解拥堵和污染的效果更明显。\"}],\"position\":{\"quote\":\"I am agree with this opinion in some way but not all.\",\"consistent\":true,\"comment\":\"立场有保留但全文一致：主体段承认道路必要，第4段明确公交更重要，结论仍保留“必要时修路”，未自相矛盾。\"}},\"overall_comment\":\"文章结构完整，立场清晰且有保留，五段推进合理，并使用了个人例子支持观点。主要失分在语言：拼写、词形、主谓一致、比较级和句子片段错误频繁，词汇范围有限。论证有具体内容，但部分因果链偏短，个别结论过度概括。先清理基础语法与拼写，再把理由展开一层，分数会明显提升。\",\"priorities\":[\"先系统修正基础语法：主谓一致（he spend→he spends）、比较级（more better→better）、句子完整性（Because 从句不能单独成句）、冠词和复数。\",\"提高词汇准确性与拼写：government、environment、crowded；固定搭配 spend money on、at the same time、on the road。\",\"把论证再展开一层：解释公交改善如何让私家车用户改乘、如何减少拥堵和污染，并用限定语避免“everybody can be more healthy and happy”这类过度概括。\",\"丰富衔接与指代：减少 Firstly、Secondly、Also、So 的机械重复，明确 it 等代词所指，使句间关系更精细。\"]}",
+      "expected": "{\"criteria\":{\"task\":{\"band\":6.0,\"strengths\":[{\"quote\":\"I am agree with this opinion in some way but not all.\",\"comment\":\"开头提出有保留的立场，既不完全同意也不完全反对，为后文平衡讨论公交与道路奠定基础。\"},{\"quote\":\"For example my father drive to work everyday and he spend two hour in the road.\",\"comment\":\"用个人例子支持“道路建设也重要”的分论点，使论证有具体场景。\"},{\"quote\":\"In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary.\",\"comment\":\"结论重申“公交优先、必要时修路”的限定立场，回应了 to what extent 的要求。\"}],\"issues\":[{\"quote\":\"people will use it more and the traffic will be less\",\"comment\":\"论证较简略，只断言公交变好会减少交通，却没有解释人们为何会改乘公交（如准点、舒适、便宜等机制）。\",\"suggestion\":\"补充一层因果，例如：If buses were more reliable and comfortable, many car users would switch to them, which would reduce congestion.\"},{\"quote\":\"so everybody can be more healthy and happy\",\"comment\":\"结论过度概括，把公交改善直接推及“人人更健康快乐”，缺少限定，削弱论证严谨性。\",\"suggestion\":\"改为有限定、可支撑的表达，例如：This could improve public health and quality of life, especially for people who rely on public transport.\"}],\"summary\":\"全文回应题目，提出“公交优先但必要时也修路”的保留立场，并用无车人群、公交晚点、学生票价、父亲通勤等理由和例子支撑。主要问题是部分因果链较简略，个别结论过度概括，因此为6分而非7分。\"},\"coherence\":{\"band\":6.0,\"strengths\":[{\"quote\":\"Firstly, public transport is good for people.\",\"comment\":\"用 Firstly 明确标示第一个主体段的功能，段落中心清楚。\"},{\"quote\":\"But I think public transport is more important than road.\",\"comment\":\"用转折句把前一段对道路的让步拉回到自己的立场，整体推进清楚。\"}],\"issues\":[{\"quote\":\"Also if more people take bus\",\"comment\":\"连接词以 Also、So 等基础词为主，句间关系有时靠简单叠加，衔接显得机械，缺少更精细的连接方式。\",\"suggestion\":\"可改用更明确的连接，例如：Moreover, if more people took the bus, the city would be quieter and the air cleaner, which could improve people's health and well-being.\"}],\"summary\":\"五段结构清楚，段落功能明确，整体推进从公交好处到道路必要再到公交优先，结论收束合理。但连接词以 Firstly、Secondly、Also、So 为主，略显机械，个别指代和句间衔接不够精细，故为6分。\"},\"lexical\":{\"band\":5.0,\"strengths\":[{\"quote\":\"the traffic jam will be very bad and people waste a lot of time\",\"comment\":\"能使用 traffic jam、waste a lot of time 等常见话题搭配，基本表达交通拥堵与时间浪费。\"}],\"issues\":[{\"quote\":\"Some people think goverment should spend money for public transport not for build new road.\",\"comment\":\"goverment 拼写错误；spend money for ... not for build 搭配和形式不当，应为 spend money on ... rather than building ...。\",\"suggestion\":\"Some people think the government should spend money on public transport rather than building new roads.\"},{\"quote\":\"In my city the bus is always late and very crowd so people dont like to take it.\",\"comment\":\"crowd 是名词或动词，这里需要形容词 crowded；dont 缺撇号。\",\"suggestion\":\"In my city the bus is always late and very crowded, so people do not like to take it.\"},{\"quote\":\"The public transport can carry many people in one time and it is good for enviroment.\",\"comment\":\"in one time 表意不清，宜用 at the same time；enviroment 拼写错误。\",\"suggestion\":\"Public transport can carry many people at the same time and it is good for the environment.\"},{\"quote\":\"Both is important for the people and the country develop.\",\"comment\":\"country develop 中 develop 词性错误，这里需要名词 development。\",\"suggestion\":\"Both are important for the people and the development of the country.\"}],\"summary\":\"词汇足以完成基本表达，能使用 public transport、traffic jam、pollution 等话题词。但范围有限，重复较多，拼写和词形错误明显（goverment、enviroment、crowd），符合5分。\"},\"grammar\":{\"band\":5.0,\"strengths\":[{\"quote\":\"If there is no new road the traffic jam will be very bad and people waste a lot of time.\",\"comment\":\"能写出 if 条件句并表达预测结果，体现一定的复杂结构意识。\"}],\"issues\":[{\"quote\":\"I am agree with this opinion in some way but not all.\",\"comment\":\"agree 是动词，前面不用 be 动词；in some way but not all 的搭配也不自然。\",\"suggestion\":\"I agree with this opinion in some ways but not entirely.\"},{\"quote\":\"Because many people dont have car and they need bus and train to go work and school.\",\"comment\":\"Because 从句不能单独成句，造成句子片段；car、bus、train 等可数名词也缺少冠词或复数。\",\"suggestion\":\"This is because many people do not have a car and they need buses and trains to go to work and school.\"},{\"quote\":\"If the bus is more better, people will use it more and the traffic will be less.\",\"comment\":\"more better 是双重比较级错误；the traffic will be less 表达不自然。\",\"suggestion\":\"If the bus is better, people will use it more and there will be less traffic.\"},{\"quote\":\"For example my father drive to work everyday and he spend two hour in the road.\",\"comment\":\"主谓一致错误：my father drive 应为 drives，he spend 应为 spends；two hour 应为 two hours；in the road 宜改为 on the road，且 For example 后宜加逗号。\",\"suggestion\":\"For example, my father drives to work every day and he spends two hours on the road.\"}],\"summary\":\"文章尝试使用 because、if 条件句和并列复合句，但语法错误频繁，包括主谓一致、比较级、句子片段、冠词与复数等问题。错误影响流畅度但基本不妨碍理解，故为5分。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I am agree with this opinion in some way but not all.\",\"verdict\":\"supports\",\"comment\":\"引出交通投入话题，并提出有保留的立场，为后文分情况讨论作铺垫。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"Firstly, public transport is good for people.\",\"verdict\":\"supports\",\"comment\":\"从无车人群需要公交、本城公交晚点拥挤、学生票价高等角度支持公交投入。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Secondly, new road is also important.\",\"verdict\":\"supports\",\"comment\":\"用城市增长、购车增加和父亲通勤耗时说明道路建设也有必要性，属于让步性支持。\"},{\"p\":4,\"role\":\"body\",\"main_point\":\"But I think public transport is more important than road.\",\"verdict\":\"supports\",\"comment\":\"从道路带来更多车辆和污染、公交运力与环保优势说明公交应优先。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary.\",\"verdict\":\"supports\",\"comment\":\"结论重申公交优先但必要时修路的限定立场，与前文一致。\"}],\"problems\":[{\"type\":\"overgeneralized\",\"quote\":\"so everybody can be more healthy and happy\",\"comment\":\"把公交改善直接推及所有人更健康快乐，缺少条件和限定，论证显得过度概括。\",\"suggestion\":\"加入限定并保留原意，例如：This could improve public health and quality of life, especially for people who rely on public transport.\"}],\"improvements\":[{\"quote\":\"If the bus is more better, people will use it more and the traffic will be less.\",\"suggestion\":\"可补充机制：公交更准点、舒适或便宜，才会让私家车用户改乘，从而减少拥堵；这样因果链更完整。\"},{\"quote\":\"This is very bad for him and for the economy also.\",\"suggestion\":\"可简单解释时间浪费如何影响工作效率或经济活动，使“对经济也不好”这一判断有依据。\"},{\"quote\":\"But I think public transport is more important than road.\",\"suggestion\":\"可把比较标准说得更清楚：公交每人运力更高、污染更少，因此同样投入下缓解拥堵和污染的效果更明显。\"}],\"position\":{\"quote\":\"I am agree with this opinion in some way but not all.\",\"consistent\":true,\"comment\":\"立场有保留但全文一致：主体段承认道路必要，第4段明确公交更重要，结论仍保留“必要时修路”，未自相矛盾。\"}},\"overall_comment\":\"文章结构完整，立场清晰且有保留，五段推进合理，并使用了个人例子支持观点。主要失分在语言：拼写、词形、主谓一致、比较级和句子片段错误频繁，词汇范围有限。论证有具体内容，但部分因果链偏短，个别结论过度概括。先清理基础语法与拼写，再把理由展开一层，分数会明显提升。\",\"priorities\":[\"先系统修正基础语法：主谓一致（he spend→he spends）、比较级（more better→better）、句子完整性（Because 从句不能单独成句）、冠词和复数。\",\"提高词汇准确性与拼写：government、environment、crowded；固定搭配 spend money on、at the same time、on the road。\",\"把论证再展开一层：解释公交改善如何让私家车用户改乘、如何减少拥堵和污染，并用限定语避免“everybody can be more healthy and happy”这类过度概括。\",\"丰富衔接与指代：减少 Firstly、Secondly、Also、So 的机械重复，明确 it 等代词所指，使句间关系更精细。\"]}"
+    },
+    {
+      "name": "call_alignment.2",
+      "ok": true,
+      "actual": [
+        "t2-mid",
+        0
+      ],
+      "expected": [
+        "t2-mid",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.2",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3374,
+        "completion_tokens": 6242,
+        "total_tokens": 9616,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4413
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 686
+      },
+      "expected": {
+        "prompt_tokens": 3374,
+        "completion_tokens": 6242,
+        "total_tokens": 9616,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4413
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 686
+      }
+    },
+    {
+      "name": "messages_alignment.2",
+      "ok": true,
+      "actual": "e47522c958312b40e2f3ccbb7160cf0cfe3a3ada1865b716fd6c013efc82d0c7",
+      "expected": "e47522c958312b40e2f3ccbb7160cf0cfe3a3ada1865b716fd6c013efc82d0c7"
+    },
+    {
+      "name": "formal_text_alignment.2",
+      "ok": true,
+      "actual": "{\"criteria\":{\"task\":{\"band\":7,\"strengths\":[{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"comment\":\"开头即给出有保留的明确立场（大体同意，但认为仍需修路），符合 to what extent 的要求，并在结尾保持一致。\"},{\"quote\":\"For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\",\"comment\":\"用个人经历的具体例子支撑“公交能减少拥堵”的论点，例子与论点直接相关，不是空洞断言。\"},{\"quote\":\"However, they should still build roads in places where public transport is not practical.\",\"comment\":\"结论重申主立场并保留限定条件，与开头一致，且回应了题目“rather than”的比较要求。\"}],\"issues\":[],\"summary\":\"三个主体段都围绕“公交优先”展开并给出理由，效率段还有个人例子支撑；立场在开头与结尾一致，并限定了“某些地区仍需修路”的范围，全篇没有跑题段落。不足在于环境段与让步段各仅两三句、展开偏短，论证深度停留在“有理由但不够充分”的水平，因此评为 7 分而非更高。\"},\"coherence\":{\"band\":7,\"strengths\":[{\"quote\":\"The main reason to invest in public transport is that it can move a large number of people efficiently.\",\"comment\":\"段首主题句明确点出本段论点，读者能立即把握段落功能，段落推进清晰。\"},{\"quote\":\"On the other hand, new roads are sometimes needed.\",\"comment\":\"用转折连接词把让步段与前面的两个支持段区分开，全文“引入—支持—让步—结论”的推进逻辑清楚。\"},{\"quote\":\"Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\",\"comment\":\"句内因果衔接（so）与指代（it）使用自然，句子之间衔接顺畅。\"}],\"issues\":[],\"summary\":\"五段结构清晰，每段有可识别的主题句，支持段与让步段界线分明；连接手段使用恰当（The main reason、Another advantage、On the other hand、However、In conclusion），指代清楚，没有明显误用。连接方式整体偏“列举式”，段落内部句间衔接较简单，因此稳在 7 分而未达更高档。\"},\"lexical\":{\"band\":7,\"strengths\":[{\"quote\":\"If buses and trains are frequent, cheap and reliable\",\"comment\":\"三个形容词并列准确概括公交应具备的条件，搭配自然、语义具体。\"},{\"quote\":\"Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\",\"comment\":\"carbon emissions、sustainable、per passenger 等话题词汇使用准确，体现了一定的词汇资源。\"},{\"quote\":\"governments should give priority to public transport\",\"comment\":\"give priority to 是地道的学术搭配，替换了简单的 choose，显示出一定的词汇变化。\"}],\"issues\":[],\"summary\":\"词汇足以清晰、准确地表达观点，并使用了 carbon emissions、sustainable、profitable、give priority to 等恰当的话题搭配，拼写无误。但用词以常见词为主，少见明显的低频或不常见词汇，个别表达（如 a lot of）语域略偏口语，因此为 7 分。\"},\"grammar\":{\"band\":7.5,\"strengths\":[{\"quote\":\"If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams.\",\"comment\":\"条件状语从句加非限制性定语从句，结构完整、逻辑关系清楚，且无错误。\"},{\"quote\":\"For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\",\"comment\":\"时间状语从句后接比较结构，时态（opened / became）一致，句子自然准确。\"},{\"quote\":\"However, they should still build roads in places where public transport is not practical.\",\"comment\":\"where 引导的定语从句使用正确，标点与句末位置规范。\"}],\"issues\":[],\"summary\":\"全文几乎找不到语法或标点错误，句子结构完整，条件句、定语从句、时间状语从句、比较结构均有出现，属于“频繁出现无错句”的水平。但句子仍以简单句和并列句为主，复杂结构的种类与密度不足以达到 8 分所要求的“广泛句式范围”，故给 7.5。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"verdict\":\"supports\",\"comment\":\"改写题目背景并给出有保留的立场，为下文两个支持段与一个让步段定下框架。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The main reason to invest in public transport is that it can move a large number of people efficiently.\",\"verdict\":\"supports\",\"comment\":\"以运力效率为理由，用火车与汽车的对比说明机制，并以本地地铁线的例子佐证，论证完整。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Another advantage is the environment.\",\"verdict\":\"supports\",\"comment\":\"从污染与碳排放切入，用“人均排放更低”解释为何公交更可持续，理由存在但仅两三句，展开偏短。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"On the other hand, new roads are sometimes needed.\",\"verdict\":\"supports\",\"comment\":\"让步段给出两个理由（农村客流不足、货运依赖公路），限定了“必要时修路”的范围，与开头立场一致，属于设定范围而非削弱自身观点。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, I agree that governments should give priority to public transport because it is more efficient and better for the environment.\",\"verdict\":\"supports\",\"comment\":\"重申主立场并保留“不适用公交之处仍修路”的限定，与前文完全一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Another advantage is the environment.\",\"suggestion\":\"这段已有“人均排放更低”的因果解释，可在其后补一句具体后果或一个假设性例子（例如某城市提高公交使用率后空气质量的改善），不需给出统计数字，使环境论点与前一段展开程度相当。\"},{\"quote\":\"In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars.\",\"suggestion\":\"让步段已给出理由，可再补一句判断标准（如按人口密度与货运需求决定是否修路），把“必要时修路”变成可操作的条件，使让步与立场衔接更紧。\"},{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"suggestion\":\"开头立场已清楚，可在其后用一句话预告“效率与环境”两个理由，让读者在进入主体段前就知道全文路线。\"}],\"position\":{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"consistent\":true,\"comment\":\"立场为“以公交优先为主、必要时修路为辅”的单一有保留立场，两个支持段与让步段都在这一框架内展开，结论也未改变立场，前后一致。\"}},\"overall_comment\":\"这是一篇结构规范、立场明确的作文：开头给出有保留的立场，两个支持段分别从运力效率与环境论证公交优先，让步段说明农村与货运情况下仍需修路，结论与开头完全一致。效率段有具体例子支撑，语言准确几乎无误，条件句、定语从句与比较结构使用自然，接近无错句水平。主要不足是环境段与让步段各仅两三句，展开偏短，词汇以常见词为主、句式以简单句和并列句为主，因此总分约在 Band 7.0。\",\"priorities\":[\"把环境段和让步段各再展开一到两句（补充具体后果或假设性例子），使四个论点的发展程度更均衡——目前两段都已有理由，只是偏短。\",\"丰富词汇的多样性与语域：减少 a lot of 一类口语表达，增加更精确的搭配（如 substantial amounts of pollution、traffic congestion 与 traffic jams 交替使用）。\",\"提高句式多样性，在已有条件句和定语从句之外，加入让步状语从句、分词结构或名词化主语，改变简单句与并列句偏多的节奏。\",\"在让步段给出“何时必须修路”的判断标准（人口密度、货运需求），使限定条件更具体，进一步强化“有保留立场”的说服力。\"]}",
+      "expected": "{\"criteria\":{\"task\":{\"band\":7,\"strengths\":[{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"comment\":\"开头即给出有保留的明确立场（大体同意，但认为仍需修路），符合 to what extent 的要求，并在结尾保持一致。\"},{\"quote\":\"For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\",\"comment\":\"用个人经历的具体例子支撑“公交能减少拥堵”的论点，例子与论点直接相关，不是空洞断言。\"},{\"quote\":\"However, they should still build roads in places where public transport is not practical.\",\"comment\":\"结论重申主立场并保留限定条件，与开头一致，且回应了题目“rather than”的比较要求。\"}],\"issues\":[],\"summary\":\"三个主体段都围绕“公交优先”展开并给出理由，效率段还有个人例子支撑；立场在开头与结尾一致，并限定了“某些地区仍需修路”的范围，全篇没有跑题段落。不足在于环境段与让步段各仅两三句、展开偏短，论证深度停留在“有理由但不够充分”的水平，因此评为 7 分而非更高。\"},\"coherence\":{\"band\":7,\"strengths\":[{\"quote\":\"The main reason to invest in public transport is that it can move a large number of people efficiently.\",\"comment\":\"段首主题句明确点出本段论点，读者能立即把握段落功能，段落推进清晰。\"},{\"quote\":\"On the other hand, new roads are sometimes needed.\",\"comment\":\"用转折连接词把让步段与前面的两个支持段区分开，全文“引入—支持—让步—结论”的推进逻辑清楚。\"},{\"quote\":\"Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\",\"comment\":\"句内因果衔接（so）与指代（it）使用自然，句子之间衔接顺畅。\"}],\"issues\":[],\"summary\":\"五段结构清晰，每段有可识别的主题句，支持段与让步段界线分明；连接手段使用恰当（The main reason、Another advantage、On the other hand、However、In conclusion），指代清楚，没有明显误用。连接方式整体偏“列举式”，段落内部句间衔接较简单，因此稳在 7 分而未达更高档。\"},\"lexical\":{\"band\":7,\"strengths\":[{\"quote\":\"If buses and trains are frequent, cheap and reliable\",\"comment\":\"三个形容词并列准确概括公交应具备的条件，搭配自然、语义具体。\"},{\"quote\":\"Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\",\"comment\":\"carbon emissions、sustainable、per passenger 等话题词汇使用准确，体现了一定的词汇资源。\"},{\"quote\":\"governments should give priority to public transport\",\"comment\":\"give priority to 是地道的学术搭配，替换了简单的 choose，显示出一定的词汇变化。\"}],\"issues\":[],\"summary\":\"词汇足以清晰、准确地表达观点，并使用了 carbon emissions、sustainable、profitable、give priority to 等恰当的话题搭配，拼写无误。但用词以常见词为主，少见明显的低频或不常见词汇，个别表达（如 a lot of）语域略偏口语，因此为 7 分。\"},\"grammar\":{\"band\":7.5,\"strengths\":[{\"quote\":\"If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams.\",\"comment\":\"条件状语从句加非限制性定语从句，结构完整、逻辑关系清楚，且无错误。\"},{\"quote\":\"For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\",\"comment\":\"时间状语从句后接比较结构，时态（opened / became）一致，句子自然准确。\"},{\"quote\":\"However, they should still build roads in places where public transport is not practical.\",\"comment\":\"where 引导的定语从句使用正确，标点与句末位置规范。\"}],\"issues\":[],\"summary\":\"全文几乎找不到语法或标点错误，句子结构完整，条件句、定语从句、时间状语从句、比较结构均有出现，属于“频繁出现无错句”的水平。但句子仍以简单句和并列句为主，复杂结构的种类与密度不足以达到 8 分所要求的“广泛句式范围”，故给 7.5。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"verdict\":\"supports\",\"comment\":\"改写题目背景并给出有保留的立场，为下文两个支持段与一个让步段定下框架。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The main reason to invest in public transport is that it can move a large number of people efficiently.\",\"verdict\":\"supports\",\"comment\":\"以运力效率为理由，用火车与汽车的对比说明机制，并以本地地铁线的例子佐证，论证完整。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Another advantage is the environment.\",\"verdict\":\"supports\",\"comment\":\"从污染与碳排放切入，用“人均排放更低”解释为何公交更可持续，理由存在但仅两三句，展开偏短。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"On the other hand, new roads are sometimes needed.\",\"verdict\":\"supports\",\"comment\":\"让步段给出两个理由（农村客流不足、货运依赖公路），限定了“必要时修路”的范围，与开头立场一致，属于设定范围而非削弱自身观点。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, I agree that governments should give priority to public transport because it is more efficient and better for the environment.\",\"verdict\":\"supports\",\"comment\":\"重申主立场并保留“不适用公交之处仍修路”的限定，与前文完全一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Another advantage is the environment.\",\"suggestion\":\"这段已有“人均排放更低”的因果解释，可在其后补一句具体后果或一个假设性例子（例如某城市提高公交使用率后空气质量的改善），不需给出统计数字，使环境论点与前一段展开程度相当。\"},{\"quote\":\"In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars.\",\"suggestion\":\"让步段已给出理由，可再补一句判断标准（如按人口密度与货运需求决定是否修路），把“必要时修路”变成可操作的条件，使让步与立场衔接更紧。\"},{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"suggestion\":\"开头立场已清楚，可在其后用一句话预告“效率与环境”两个理由，让读者在进入主体段前就知道全文路线。\"}],\"position\":{\"quote\":\"I mostly agree with this view, although I believe some road building is still necessary.\",\"consistent\":true,\"comment\":\"立场为“以公交优先为主、必要时修路为辅”的单一有保留立场，两个支持段与让步段都在这一框架内展开，结论也未改变立场，前后一致。\"}},\"overall_comment\":\"这是一篇结构规范、立场明确的作文：开头给出有保留的立场，两个支持段分别从运力效率与环境论证公交优先，让步段说明农村与货运情况下仍需修路，结论与开头完全一致。效率段有具体例子支撑，语言准确几乎无误，条件句、定语从句与比较结构使用自然，接近无错句水平。主要不足是环境段与让步段各仅两三句，展开偏短，词汇以常见词为主、句式以简单句和并列句为主，因此总分约在 Band 7.0。\",\"priorities\":[\"把环境段和让步段各再展开一到两句（补充具体后果或假设性例子），使四个论点的发展程度更均衡——目前两段都已有理由，只是偏短。\",\"丰富词汇的多样性与语域：减少 a lot of 一类口语表达，增加更精确的搭配（如 substantial amounts of pollution、traffic congestion 与 traffic jams 交替使用）。\",\"提高句式多样性，在已有条件句和定语从句之外，加入让步状语从句、分词结构或名词化主语，改变简单句与并列句偏多的节奏。\",\"在让步段给出“何时必须修路”的判断标准（人口密度、货运需求），使限定条件更具体，进一步强化“有保留立场”的说服力。\"]}"
+    },
+    {
+      "name": "call_alignment.3",
+      "ok": true,
+      "actual": [
+        "t2-good",
+        0
+      ],
+      "expected": [
+        "t2-good",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.3",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3405,
+        "completion_tokens": 9214,
+        "total_tokens": 12619,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7092
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 717
+      },
+      "expected": {
+        "prompt_tokens": 3405,
+        "completion_tokens": 9214,
+        "total_tokens": 12619,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7092
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 717
+      }
+    },
+    {
+      "name": "messages_alignment.3",
+      "ok": true,
+      "actual": "eb01a8b7f494253cd256cd59326dc50c1ac6c4ca4fd803287ca802a256d39758",
+      "expected": "eb01a8b7f494253cd256cd59326dc50c1ac6c4ca4fd803287ca802a256d39758"
+    },
+    {
+      "name": "formal_text_alignment.3",
+      "ok": true,
+      "actual": "{\"criteria\": {\"task\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"I largely agree that public transport deserves the greater share of investment\", \"comment\": \"开头就给出清晰的限定立场（大体同意，但保留余地），而不是含糊其辞；结尾用让步句复述同一立场，全文立场一致。\"}, {\"quote\": \"because it addresses the causes of traffic problems rather than merely their symptoms\", \"comment\": \"把立场与理由直接挂钩，用“治本而非治标”的对比解释为什么公交更值得投资，属于有效的因果论证。\"}, {\"quote\": \"there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive\", \"comment\": \"这是文章最有力的论证：借用“新增道路诱发更多车流”的机制，说明修路只能带来短期缓解，理由与结论衔接紧密。\"}, {\"quote\": \"In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.\", \"comment\": \"让步段用人口密度和货运需求限定立场适用范围，既不是跑题，也没有削弱主论点，符合“限定式立场”的写法。\"}], \"issues\": [], \"summary\": \"文章完整回应题目，开头提出“大体同意、但保留有限修路”的限定立场，结论与之完全一致；两个主体段分别从运力效率和“新增道路诱发需求”的机制、以及社会与环境收益展开，理由和例子都落到实处。让步段限定了立场的适用边界，属于合格的限定而非前后矛盾。任务完成度高，仅让步段与“花钱”这一成本角度可再充实，故定为 8 分。\"}, \"coherence\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"Expanding road networks may therefore offer only temporary relief before congestion returns.\", \"comment\": \"段末用 therefore 收束，把前面的机制论证归结为“短期缓解”，段落内部逻辑完整。\"}, {\"quote\": \"Nevertheless, it would be unrealistic to stop road building altogether.\", \"comment\": \"用 Nevertheless 明确转入让步，段与段之间的推进关系一目了然，读者不会误以为立场动摇。\"}, {\"quote\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\", \"comment\": \"结论段先承让步、再重申主张，与首段形成闭环，衔接自然而不机械。\"}], \"issues\": [], \"summary\": \"全文按“引入—效率理由—社会与环境理由—让步—结论”推进，五段各司其职，主题句明确，读者能顺畅跟上论证链条。连接词（Moreover、therefore、At the same time、Nevertheless）使用适度，没有堆砌感，指代也清楚。信息组织与分段得体，达到 8 分。\"}, \"lexical\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"a well-run rail or bus rapid transit line\", \"comment\": \"使用“bus rapid transit”这类较专业、较不常见的话题词汇，且修饰语搭配自然，显示出词汇的宽度与精确性。\"}, {\"quote\": \"thereby widening their access to jobs and services\", \"comment\": \"widen access to 是地道的搭配，配合 thereby + -ing 准确表达结果，用词精准而非泛泛而谈。\"}, {\"quote\": \"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\", \"comment\": \"bypass、congested、a sensible use of funds 等表达贴合“交通投资”话题，语域恰当，没有生硬堆砌大词。\"}], \"issues\": [], \"summary\": \"词汇覆盖面广且贴合话题，能自如使用 bus rapid transit、sparsely populated、greenhouse gas emissions、bypasses 等较不常见的词组，搭配准确（meet climate targets、widen access to jobs、a sensible use of funds），拼写与词形基本无误。整体接近“灵活而精确”的 8 分水平，个别表达仍属常见搭配，尚未达到 9 分的丰富与精细。\"}, \"grammar\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"whereas a well-run rail or bus rapid transit line can move many times that number of people\", \"comment\": \"用 whereas 构成对比复合句，两个分句结构对称、主语清晰，比较关系表达准确。\"}, {\"quote\": \"shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions\", \"comment\": \"动名词短语作主语，主谓一致正确，both...and 并列结构无误，句子控制力强。\"}, {\"quote\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport, since it offers a more lasting solution\", \"comment\": \"让步状语从句与 since 原因从句并用，逗号与句号位置正确，长句读来不费力。\"}], \"issues\": [], \"summary\": \"全文几乎无语法错误，句式涵盖定语从句、让步与原因状语从句、非谓语结构和冒号引出解释等多种复杂形式，且使用准确、标点规范。错误极少，句子清晰可读，达到 8 分；但句式类型较为规整，尚未体现 9 分要求的全面灵活与高度精密。\"}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"I largely agree that public transport deserves the greater share of investment\", \"verdict\": \"supports\", \"comment\": \"交代背景后直接亮出限定立场，并用一句因果说明理由，为下文两个主体段定下方向。\"}, {\"p\": 2, \"role\": \"body\", \"main_point\": \"The strongest argument for prioritising public transport is efficiency.\", \"verdict\": \"supports\", \"comment\": \"先比运力，再用“新增道路诱发更多车流”的机制说明修路只能短期见效，理由充分，直接支撑“公交优先”。\"}, {\"p\": 3, \"role\": \"body\", \"main_point\": \"Public transport also brings wider social and environmental benefits.\", \"verdict\": \"supports\", \"comment\": \"从社会公平与环境两个角度扩展，给出受惠人群与减排后果，例子与论点紧邻，衔接清楚。\"}, {\"p\": 4, \"role\": \"concession\", \"main_point\": \"Nevertheless, it would be unrealistic to stop road building altogether.\", \"verdict\": \"supports\", \"comment\": \"用低密度地区与货运需求限定立场范围，说明修路在某些情形下仍合理，属于对限定式立场的补充而非反驳。\"}, {\"p\": 5, \"role\": \"conclusion\", \"main_point\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\", \"verdict\": \"supports\", \"comment\": \"先承认让步，再重申主主张，与首段立场一致，没有出现结论与正文冲突。\"}], \"problems\": [], \"improvements\": [{\"quote\": \"It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers\", \"suggestion\": \"把“cannot drive”细化为“没有驾照或负担不起私家车的人”，这样学生这一例子才与“不会开车”严格对应；再补半句说明这类人为何依赖公交（如通勤距离远、无其他替代方式）。\"}, {\"quote\": \"In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.\", \"suggestion\": \"补一句机制性理由，例如需求密度低导致班次稀疏、等待时间过长，使“这些地区修路仍有必要”的限定更有说服力，同时把这段从三句扩展到能独立成立的段落。\"}, {\"quote\": \"governments should concentrate their spending on public transport\", \"suggestion\": \"题目问的是“钱该花在哪”，可加一句成本或资金效率的权衡（如公交前期投入大，但人均运力成本更低、长期维护更省），正面回应 spending 这一维度。\"}], \"position\": {\"quote\": \"I largely agree that public transport deserves the greater share of investment\", \"consistent\": true, \"comment\": \"立场是“大体同意公交优先，但在低密度地区和货运等情形下仍需有限修路”，属于一个限定式立场；第4段的让步只是限定适用范围，结论段的让步句也与之一致，没有自相矛盾。\"}}, \"overall_comment\": \"这是一篇结构完整、论证扎实的高分作文：开头亮出“公交优先但保留有限修路”的限定立场，两个主体段分别用运力对比与“新增道路诱发车流”的机制、以及社会公平与环境收益展开论证，让步段明确限定立场边界，结论回扣开头，全文立场始终一致。语言上词汇贴合话题、搭配准确，复杂句式使用自如且几乎无语法错误，达到 8 分水平。若要继续提升，可把让步段写得更充实，并补一句对“政府花钱”这一成本角度的权衡，使论证与题目措辞贴得更紧。\"}\n, \"priorities\": [\"让步段（第4段）目前只有三句，可加一句机制性理由（如人口密度低导致班次稀疏、等待时间长），让“修路仍合理”这一限定更有说服力。\", \"题目核心是政府“怎么花钱”，可补一句成本或资金效率的比较（公交前期投入大但人均运力成本更低），直接回应 spending 这一角度。\", \"第3段把学生与“不会开车的人”并列，可改为“没有驾照或负担不起私家车的人”，使举例范围更严谨。\", \"语言已接近无误，可继续精进句式多样性（适度使用名词化或倒装），并为每个主体段补一个假设性例子，使论证更具画面感。\"]}",
+      "expected": "{\"criteria\": {\"task\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"I largely agree that public transport deserves the greater share of investment\", \"comment\": \"开头就给出清晰的限定立场（大体同意，但保留余地），而不是含糊其辞；结尾用让步句复述同一立场，全文立场一致。\"}, {\"quote\": \"because it addresses the causes of traffic problems rather than merely their symptoms\", \"comment\": \"把立场与理由直接挂钩，用“治本而非治标”的对比解释为什么公交更值得投资，属于有效的因果论证。\"}, {\"quote\": \"there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive\", \"comment\": \"这是文章最有力的论证：借用“新增道路诱发更多车流”的机制，说明修路只能带来短期缓解，理由与结论衔接紧密。\"}, {\"quote\": \"In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.\", \"comment\": \"让步段用人口密度和货运需求限定立场适用范围，既不是跑题，也没有削弱主论点，符合“限定式立场”的写法。\"}], \"issues\": [], \"summary\": \"文章完整回应题目，开头提出“大体同意、但保留有限修路”的限定立场，结论与之完全一致；两个主体段分别从运力效率和“新增道路诱发需求”的机制、以及社会与环境收益展开，理由和例子都落到实处。让步段限定了立场的适用边界，属于合格的限定而非前后矛盾。任务完成度高，仅让步段与“花钱”这一成本角度可再充实，故定为 8 分。\"}, \"coherence\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"Expanding road networks may therefore offer only temporary relief before congestion returns.\", \"comment\": \"段末用 therefore 收束，把前面的机制论证归结为“短期缓解”，段落内部逻辑完整。\"}, {\"quote\": \"Nevertheless, it would be unrealistic to stop road building altogether.\", \"comment\": \"用 Nevertheless 明确转入让步，段与段之间的推进关系一目了然，读者不会误以为立场动摇。\"}, {\"quote\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\", \"comment\": \"结论段先承让步、再重申主张，与首段形成闭环，衔接自然而不机械。\"}], \"issues\": [], \"summary\": \"全文按“引入—效率理由—社会与环境理由—让步—结论”推进，五段各司其职，主题句明确，读者能顺畅跟上论证链条。连接词（Moreover、therefore、At the same time、Nevertheless）使用适度，没有堆砌感，指代也清楚。信息组织与分段得体，达到 8 分。\"}, \"lexical\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"a well-run rail or bus rapid transit line\", \"comment\": \"使用“bus rapid transit”这类较专业、较不常见的话题词汇，且修饰语搭配自然，显示出词汇的宽度与精确性。\"}, {\"quote\": \"thereby widening their access to jobs and services\", \"comment\": \"widen access to 是地道的搭配，配合 thereby + -ing 准确表达结果，用词精准而非泛泛而谈。\"}, {\"quote\": \"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\", \"comment\": \"bypass、congested、a sensible use of funds 等表达贴合“交通投资”话题，语域恰当，没有生硬堆砌大词。\"}], \"issues\": [], \"summary\": \"词汇覆盖面广且贴合话题，能自如使用 bus rapid transit、sparsely populated、greenhouse gas emissions、bypasses 等较不常见的词组，搭配准确（meet climate targets、widen access to jobs、a sensible use of funds），拼写与词形基本无误。整体接近“灵活而精确”的 8 分水平，个别表达仍属常见搭配，尚未达到 9 分的丰富与精细。\"}, \"grammar\": {\"band\": 8.0, \"strengths\": [{\"quote\": \"whereas a well-run rail or bus rapid transit line can move many times that number of people\", \"comment\": \"用 whereas 构成对比复合句，两个分句结构对称、主语清晰，比较关系表达准确。\"}, {\"quote\": \"shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions\", \"comment\": \"动名词短语作主语，主谓一致正确，both...and 并列结构无误，句子控制力强。\"}, {\"quote\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport, since it offers a more lasting solution\", \"comment\": \"让步状语从句与 since 原因从句并用，逗号与句号位置正确，长句读来不费力。\"}], \"issues\": [], \"summary\": \"全文几乎无语法错误，句式涵盖定语从句、让步与原因状语从句、非谓语结构和冒号引出解释等多种复杂形式，且使用准确、标点规范。错误极少，句子清晰可读，达到 8 分；但句式类型较为规整，尚未体现 9 分要求的全面灵活与高度精密。\"}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"I largely agree that public transport deserves the greater share of investment\", \"verdict\": \"supports\", \"comment\": \"交代背景后直接亮出限定立场，并用一句因果说明理由，为下文两个主体段定下方向。\"}, {\"p\": 2, \"role\": \"body\", \"main_point\": \"The strongest argument for prioritising public transport is efficiency.\", \"verdict\": \"supports\", \"comment\": \"先比运力，再用“新增道路诱发更多车流”的机制说明修路只能短期见效，理由充分，直接支撑“公交优先”。\"}, {\"p\": 3, \"role\": \"body\", \"main_point\": \"Public transport also brings wider social and environmental benefits.\", \"verdict\": \"supports\", \"comment\": \"从社会公平与环境两个角度扩展，给出受惠人群与减排后果，例子与论点紧邻，衔接清楚。\"}, {\"p\": 4, \"role\": \"concession\", \"main_point\": \"Nevertheless, it would be unrealistic to stop road building altogether.\", \"verdict\": \"supports\", \"comment\": \"用低密度地区与货运需求限定立场范围，说明修路在某些情形下仍合理，属于对限定式立场的补充而非反驳。\"}, {\"p\": 5, \"role\": \"conclusion\", \"main_point\": \"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\", \"verdict\": \"supports\", \"comment\": \"先承认让步，再重申主主张，与首段立场一致，没有出现结论与正文冲突。\"}], \"problems\": [], \"improvements\": [{\"quote\": \"It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers\", \"suggestion\": \"把“cannot drive”细化为“没有驾照或负担不起私家车的人”，这样学生这一例子才与“不会开车”严格对应；再补半句说明这类人为何依赖公交（如通勤距离远、无其他替代方式）。\"}, {\"quote\": \"In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks.\", \"suggestion\": \"补一句机制性理由，例如需求密度低导致班次稀疏、等待时间过长，使“这些地区修路仍有必要”的限定更有说服力，同时把这段从三句扩展到能独立成立的段落。\"}, {\"quote\": \"governments should concentrate their spending on public transport\", \"suggestion\": \"题目问的是“钱该花在哪”，可加一句成本或资金效率的权衡（如公交前期投入大，但人均运力成本更低、长期维护更省），正面回应 spending 这一维度。\"}], \"position\": {\"quote\": \"I largely agree that public transport deserves the greater share of investment\", \"consistent\": true, \"comment\": \"立场是“大体同意公交优先，但在低密度地区和货运等情形下仍需有限修路”，属于一个限定式立场；第4段的让步只是限定适用范围，结论段的让步句也与之一致，没有自相矛盾。\"}}, \"overall_comment\": \"这是一篇结构完整、论证扎实的高分作文：开头亮出“公交优先但保留有限修路”的限定立场，两个主体段分别用运力对比与“新增道路诱发车流”的机制、以及社会公平与环境收益展开论证，让步段明确限定立场边界，结论回扣开头，全文立场始终一致。语言上词汇贴合话题、搭配准确，复杂句式使用自如且几乎无语法错误，达到 8 分水平。若要继续提升，可把让步段写得更充实，并补一句对“政府花钱”这一成本角度的权衡，使论证与题目措辞贴得更紧。\"}\n, \"priorities\": [\"让步段（第4段）目前只有三句，可加一句机制性理由（如人口密度低导致班次稀疏、等待时间长），让“修路仍合理”这一限定更有说服力。\", \"题目核心是政府“怎么花钱”，可补一句成本或资金效率的比较（公交前期投入大但人均运力成本更低），直接回应 spending 这一角度。\", \"第3段把学生与“不会开车的人”并列，可改为“没有驾照或负担不起私家车的人”，使举例范围更严谨。\", \"语言已接近无误，可继续精进句式多样性（适度使用名词化或倒装），并为每个主体段补一个假设性例子，使论证更具画面感。\"]}"
+    },
+    {
+      "name": "call_alignment.4",
+      "ok": true,
+      "actual": [
+        "t2-good",
+        1
+      ],
+      "expected": [
+        "t2-good",
+        1
+      ]
+    },
+    {
+      "name": "usage_alignment.4",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3437,
+        "completion_tokens": 5787,
+        "total_tokens": 9224,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4159
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 237
+      },
+      "expected": {
+        "prompt_tokens": 3437,
+        "completion_tokens": 5787,
+        "total_tokens": 9224,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4159
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 237
+      }
+    },
+    {
+      "name": "messages_alignment.4",
+      "ok": true,
+      "actual": "da4ddec9b3fa99dbbaec6c029ba519bcf1a790a19184c74f4c67f9c0b838aa53",
+      "expected": "da4ddec9b3fa99dbbaec6c029ba519bcf1a790a19184c74f4c67f9c0b838aa53"
+    },
+    {
+      "name": "formal_text_alignment.4",
+      "ok": true,
+      "actual": "{\"criteria\":{\"task\":{\"band\":8.0,\"strengths\":[{\"quote\":\"I largely agree that public transport deserves the greater share of investment\",\"comment\":\"开头段直接给出有保留的立场（largely agree），并用 because 说明理由，全文立场清晰一致。\"},{\"quote\":\"Expanding road networks may therefore offer only temporary relief before congestion returns.\",\"comment\":\"用因果关系（新路刺激更多驾驶）延伸效率论证，并推出后果，属于有效的论证支持。\"},{\"quote\":\"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\",\"comment\":\"让步段给出具体限定（偏远地区、货运、绕城公路），把立场范围说清楚，回应了题目的“rather than”对立面。\"}],\"issues\":[],\"summary\":\"文章完整回应题目要求：表明“大体同意但有例外”的立场，并在正文中从效率、社会与环境三个角度展开，最后用让步段限定范围，结论回扣立场。每个论点都有原因或后果作为支撑，没有跑题或空泛断言，故给 8 分。若要更高，可在保持逻辑的前提下加入更具体的例证。\"},\"coherence\":{\"band\":8.0,\"strengths\":[{\"quote\":\"The strongest argument for prioritising public transport is efficiency.\",\"comment\":\"主题句明确，段落功能一目了然，读者能迅速把握该段论证方向。\"},{\"quote\":\"Nevertheless, it would be unrealistic to stop road building altogether.\",\"comment\":\"用 Nevertheless 自然转入让步段，段落之间形成“主张—让步—结论”的清晰推进。\"},{\"quote\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"comment\":\"结论句用 although 把让步与主立场一并收束，衔接自然，不机械重复。\"}],\"issues\":[],\"summary\":\"全文五段分段合理：引入、两个支持段、让步段、结论，逻辑顺序清楚。连接词（Moreover、therefore、At the same time、Nevertheless）种类较多且使用准确，没有堆砌感；指代（their、this number of people、which）基本清晰。整体衔接自然，故给 8 分。\"},\"lexical\":{\"band\":8.0,\"strengths\":[{\"quote\":\"Roads are an inherently limited resource\",\"comment\":\"inherently limited resource 属较少见的准确搭配，体现出对抽象概念的精确表达能力。\"},{\"quote\":\"shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions\",\"comment\":\"shift journeys from...to、greenhouse gas emissions 等搭配准确自然，话题词汇到位。\"},{\"quote\":\"In sparsely populated regions, buses and trains are rarely viable\",\"comment\":\"sparsely populated、viable 用词精准，且与上下文语域一致。\"}],\"issues\":[],\"summary\":\"词汇覆盖面广且使用准确，既有话题术语（bus rapid transit、freight、bypasses、climate targets），也有得体的抽象表达（temporary relief、affordable mobility）。拼写与词形无误，搭配自然，偶有可更丰富的空间但不构成缺陷，故给 8 分。\"},\"grammar\":{\"band\":8.0,\"strengths\":[{\"quote\":\"whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space\",\"comment\":\"使用 whereas 引导的对比从句，并在从句内嵌套复杂名词短语，结构控制良好。\"},{\"quote\":\"such as students, the elderly and lower-income workers, thereby widening their access to jobs and services\",\"comment\":\"分词状语 thereby widening 使用自然，主语一致，无悬垂问题。\"},{\"quote\":\"which is increasingly important as cities attempt to meet climate targets\",\"comment\":\"非限定性定语从句加 as 时间/原因状语，句式有变化且标点正确。\"}],\"issues\":[],\"summary\":\"句式多样，包含对比从句、非限定性定语从句、分词状语和冒号列举，句子长度与节奏有变化。全文基本无语法错误，标点使用规范（如冒号引出解释），故给 8 分。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I largely agree that public transport deserves the greater share of investment\",\"verdict\":\"supports\",\"comment\":\"改写题目背景后立即亮明有保留的立场，并预告理由（解决成因而非症状），为下文定调。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The strongest argument for prioritising public transport is efficiency.\",\"verdict\":\"supports\",\"comment\":\"以运力对比与“新路诱发更多车流”的因果链支撑效率论点，并用 therefore 推出结论，论证完整。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Public transport also brings wider social and environmental benefits.\",\"verdict\":\"supports\",\"comment\":\"给出社会公平与环境两条理由，各自附带简短说明（扩大就业与服务可及性、减少污染与排放），方向一致。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"Nevertheless, it would be unrealistic to stop road building altogether.\",\"verdict\":\"supports\",\"comment\":\"让步段说明偏远地区与货运的现实限制，并给出“精准修路”的条件性立场，属于对自身立场的限定而非偏离。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"verdict\":\"supports\",\"comment\":\"结论承认有限修路的合理性，同时重申公交优先，与开头立场一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Moreover, there is considerable evidence that new roads tend to fill up quickly\",\"suggestion\":\"可在此后补一个不涉及具体数据的假设情景（例如某位司机因新路更顺畅而放弃公交、重新开车），让“诱发需求”的机制更直观。\"},{\"quote\":\"Public transport also brings wider social and environmental benefits.\",\"suggestion\":\"这一段包含两条理由，可各用一两句展开，或分成两句分别说明“就业可及性”与“减排”的具体作用，使论证更饱满。\"},{\"quote\":\"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\",\"suggestion\":\"让步之后可加一句回扣立场，说明为何在多数城市这些例外仍不足以改变“公交优先”的总体判断，使论证闭环更紧。\"}],\"position\":{\"quote\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"consistent\":true,\"comment\":\"立场自开头至结尾保持为“总体同意公交优先、少数情况例外”，中间的让步段与该限定一致，无自相矛盾。\"}},\"overall_comment\":\"这是一篇结构清晰、语言准确的 Task 2 作文：开头给出有保留的立场，正文分效率与社会环境两个层面展开，并用让步段限定适用范围，结论收束有力。四项评分标准均达到 8 分水平——论证有因有果、衔接自然、词汇精准、句式多样且几乎无语法错误。可提升之处在于增加具体例证、让步后回扣立场，以及把段落中较简略的理由再展开一层。\",\"priorities\":[\"为每个理由补一个具体例证或假设情景（如“新路诱发更多驾驶”的司机例子），让论证更有说服力。\",\"让步段后加一句回扣主立场，说明这些例外为何不改变“公交优先”的总体判断。\",\"第 3 段两条理由（社会公平与环境）各自再展开一句，避免论点并列而论证偏薄。\",\"继续保持现有词汇与句式多样性，注意 which 等指代对象的明确性。\"]}",
+      "expected": "{\"criteria\":{\"task\":{\"band\":8.0,\"strengths\":[{\"quote\":\"I largely agree that public transport deserves the greater share of investment\",\"comment\":\"开头段直接给出有保留的立场（largely agree），并用 because 说明理由，全文立场清晰一致。\"},{\"quote\":\"Expanding road networks may therefore offer only temporary relief before congestion returns.\",\"comment\":\"用因果关系（新路刺激更多驾驶）延伸效率论证，并推出后果，属于有效的论证支持。\"},{\"quote\":\"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\",\"comment\":\"让步段给出具体限定（偏远地区、货运、绕城公路），把立场范围说清楚，回应了题目的“rather than”对立面。\"}],\"issues\":[],\"summary\":\"文章完整回应题目要求：表明“大体同意但有例外”的立场，并在正文中从效率、社会与环境三个角度展开，最后用让步段限定范围，结论回扣立场。每个论点都有原因或后果作为支撑，没有跑题或空泛断言，故给 8 分。若要更高，可在保持逻辑的前提下加入更具体的例证。\"},\"coherence\":{\"band\":8.0,\"strengths\":[{\"quote\":\"The strongest argument for prioritising public transport is efficiency.\",\"comment\":\"主题句明确，段落功能一目了然，读者能迅速把握该段论证方向。\"},{\"quote\":\"Nevertheless, it would be unrealistic to stop road building altogether.\",\"comment\":\"用 Nevertheless 自然转入让步段，段落之间形成“主张—让步—结论”的清晰推进。\"},{\"quote\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"comment\":\"结论句用 although 把让步与主立场一并收束，衔接自然，不机械重复。\"}],\"issues\":[],\"summary\":\"全文五段分段合理：引入、两个支持段、让步段、结论，逻辑顺序清楚。连接词（Moreover、therefore、At the same time、Nevertheless）种类较多且使用准确，没有堆砌感；指代（their、this number of people、which）基本清晰。整体衔接自然，故给 8 分。\"},\"lexical\":{\"band\":8.0,\"strengths\":[{\"quote\":\"Roads are an inherently limited resource\",\"comment\":\"inherently limited resource 属较少见的准确搭配，体现出对抽象概念的精确表达能力。\"},{\"quote\":\"shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions\",\"comment\":\"shift journeys from...to、greenhouse gas emissions 等搭配准确自然，话题词汇到位。\"},{\"quote\":\"In sparsely populated regions, buses and trains are rarely viable\",\"comment\":\"sparsely populated、viable 用词精准，且与上下文语域一致。\"}],\"issues\":[],\"summary\":\"词汇覆盖面广且使用准确，既有话题术语（bus rapid transit、freight、bypasses、climate targets），也有得体的抽象表达（temporary relief、affordable mobility）。拼写与词形无误，搭配自然，偶有可更丰富的空间但不构成缺陷，故给 8 分。\"},\"grammar\":{\"band\":8.0,\"strengths\":[{\"quote\":\"whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space\",\"comment\":\"使用 whereas 引导的对比从句，并在从句内嵌套复杂名词短语，结构控制良好。\"},{\"quote\":\"such as students, the elderly and lower-income workers, thereby widening their access to jobs and services\",\"comment\":\"分词状语 thereby widening 使用自然，主语一致，无悬垂问题。\"},{\"quote\":\"which is increasingly important as cities attempt to meet climate targets\",\"comment\":\"非限定性定语从句加 as 时间/原因状语，句式有变化且标点正确。\"}],\"issues\":[],\"summary\":\"句式多样，包含对比从句、非限定性定语从句、分词状语和冒号列举，句子长度与节奏有变化。全文基本无语法错误，标点使用规范（如冒号引出解释），故给 8 分。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I largely agree that public transport deserves the greater share of investment\",\"verdict\":\"supports\",\"comment\":\"改写题目背景后立即亮明有保留的立场，并预告理由（解决成因而非症状），为下文定调。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The strongest argument for prioritising public transport is efficiency.\",\"verdict\":\"supports\",\"comment\":\"以运力对比与“新路诱发更多车流”的因果链支撑效率论点，并用 therefore 推出结论，论证完整。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Public transport also brings wider social and environmental benefits.\",\"verdict\":\"supports\",\"comment\":\"给出社会公平与环境两条理由，各自附带简短说明（扩大就业与服务可及性、减少污染与排放），方向一致。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"Nevertheless, it would be unrealistic to stop road building altogether.\",\"verdict\":\"supports\",\"comment\":\"让步段说明偏远地区与货运的现实限制，并给出“精准修路”的条件性立场，属于对自身立场的限定而非偏离。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"verdict\":\"supports\",\"comment\":\"结论承认有限修路的合理性，同时重申公交优先，与开头立场一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Moreover, there is considerable evidence that new roads tend to fill up quickly\",\"suggestion\":\"可在此后补一个不涉及具体数据的假设情景（例如某位司机因新路更顺畅而放弃公交、重新开车），让“诱发需求”的机制更直观。\"},{\"quote\":\"Public transport also brings wider social and environmental benefits.\",\"suggestion\":\"这一段包含两条理由，可各用一两句展开，或分成两句分别说明“就业可及性”与“减排”的具体作用，使论证更饱满。\"},{\"quote\":\"Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\",\"suggestion\":\"让步之后可加一句回扣立场，说明为何在多数城市这些例外仍不足以改变“公交优先”的总体判断，使论证闭环更紧。\"}],\"position\":{\"quote\":\"In conclusion, although some road investment is still justified, governments should concentrate their spending on public transport\",\"consistent\":true,\"comment\":\"立场自开头至结尾保持为“总体同意公交优先、少数情况例外”，中间的让步段与该限定一致，无自相矛盾。\"}},\"overall_comment\":\"这是一篇结构清晰、语言准确的 Task 2 作文：开头给出有保留的立场，正文分效率与社会环境两个层面展开，并用让步段限定适用范围，结论收束有力。四项评分标准均达到 8 分水平——论证有因有果、衔接自然、词汇精准、句式多样且几乎无语法错误。可提升之处在于增加具体例证、让步后回扣立场，以及把段落中较简略的理由再展开一层。\",\"priorities\":[\"为每个理由补一个具体例证或假设情景（如“新路诱发更多驾驶”的司机例子），让论证更有说服力。\",\"让步段后加一句回扣主立场，说明这些例外为何不改变“公交优先”的总体判断。\",\"第 3 段两条理由（社会公平与环境）各自再展开一句，避免论点并列而论证偏薄。\",\"继续保持现有词汇与句式多样性，注意 which 等指代对象的明确性。\"]}"
+    },
+    {
+      "name": "call_alignment.5",
+      "ok": true,
+      "actual": [
+        "t2-strong",
+        0
+      ],
+      "expected": [
+        "t2-strong",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.5",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3429,
+        "completion_tokens": 3732,
+        "total_tokens": 7161,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1826
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 741
+      },
+      "expected": {
+        "prompt_tokens": 3429,
+        "completion_tokens": 3732,
+        "total_tokens": 7161,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1826
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 741
+      }
+    },
+    {
+      "name": "messages_alignment.5",
+      "ok": true,
+      "actual": "32825d17b4c29738309f1e4da129fce260ae64dd88f6c262a9fd1f0ec158cbda",
+      "expected": "32825d17b4c29738309f1e4da129fce260ae64dd88f6c262a9fd1f0ec158cbda"
+    },
+    {
+      "name": "formal_text_alignment.5",
+      "ok": true,
+      "actual": "{\"criteria\":{\"task\":{\"band\":8,\"strengths\":[{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"comment\":\"开头就给出清晰且有分寸的立场：不是绝对否定修路，而是把资金“决定性”地偏向公共交通，并限定例外。全文立场始终与之一致。\"},{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"用“诱增需求”这一机制解释了为何扩建道路未必缓解拥堵，属于因果解释型论证，而非单纯断言。\"},{\"quote\":\"Road spending disproportionately benefits those who own cars\",\"comment\":\"从分配公平角度扩展理由，并紧接着说明公交如何把机会扩展到无车人群，论证有延展、有支撑。\"}],\"issues\":[],\"summary\":\"全文完整回应题目：既讨论了修路的理由并加以反驳，也从拥堵根源、分配公平与环境三方面论证公交投入，最后用“例外情境”限定立场，结尾重申主立场，与首段一致。每个主体段都有因果机制或后果链条支撑，没有空洞断言，属“well-developed response”。唯一可再充实的是让步段，但目前两句话已足以界定立场范围，不构成明显缺陷。\"},\"coherence\":{\"band\":8,\"strengths\":[{\"quote\":\"Yet experience from many large cities suggests otherwise\",\"comment\":\"用转折衔接承接上句“修路的理由”，使段落内部的辩论推进自然、方向清晰。\"},{\"quote\":\"Equally important are the distributional consequences.\",\"comment\":\"主题句简短有力，把第二层理由（分配公平）与上一段的拥堵理由并列推进，段落之间逻辑递进清楚。\"},{\"quote\":\"That said, a blanket refusal to build roads would be misguided.\",\"comment\":\"“That said”与结尾“On balance, therefore”形成让步—收束的完整链条，衔接手段自然，不显机械。\"}],\"issues\":[],\"summary\":\"五段结构清晰：引入并表态—反驳修路逻辑—补充分配与环境理由—让步限定—总结。指代（this phenomenon、such contexts、it）明确，衔接词使用得当且不过量。信息推进流畅，读者可顺畅跟随论证，达到高分段的连贯水平。\"},\"lexical\":{\"band\":8,\"strengths\":[{\"quote\":\"the number of people a corridor can carry without a proportional increase in the space consumed\",\"comment\":\"用“corridor”“the space consumed”等较精确的表达描述运力与空间关系，搭配自然，显示出较好的词汇控制力。\"},{\"quote\":\"public transport should receive the lion's share of funding\",\"comment\":\"恰当使用习语“the lion's share”，语域合适，属于不常见词汇的灵活运用。\"},{\"quote\":\"in such contexts targeted upgrades may represent genuine value for money\",\"comment\":\"“targeted upgrades”“value for money”等搭配准确，体现较好的词汇丰富度与地道性。\"}],\"issues\":[{\"quote\":\"one of the most stubborn sources of carbon\",\"comment\":\"表达不够精确（precision）：作者指的是碳排放，而“sources of carbon”字面指碳的来源，与上下文（transport sector 的排放）不完全对应。这属于用词精确性问题，不是语法错误。\",\"suggestion\":\"改为：the transport sector remains one of the most stubborn sources of carbon emissions.\"}],\"summary\":\"词汇范围广，涵盖政策与经济类术语（induced demand、distributional consequences、freight logistics），搭配大多准确，偶有习语点缀且语域统一。仅有一处指称不够精确（carbon 与 carbon emissions），属少量不准确，不影响整体理解。整体接近“skilful use of uncommon items”，故定在8分。\"},\"grammar\":{\"band\":8,\"strengths\":[{\"quote\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"comment\":\"以名词性从句作主语，并嵌入 not only...but also 结构，句式复杂且完全正确，开篇即展示句型掌控力。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"动名词主语＋非限定性定语从句＋until 时间状语从句＋as...as 比较结构，多重从属关系组织得当。\"},{\"quote\":\"allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place\",\"comment\":\"使用 allow...to do 结构与表结果的 -ing 状语，且省略关系词的定语从句（people need to travel）准确，标点与逻辑主语均正确。\"}],\"issues\":[],\"summary\":\"全文句式多样，涵盖名词性从句、定语从句、让步与比较结构、分词状语，且几乎无误；标点使用规范，未发现明显语法或句法错误。句子普遍完整、无残句，属“frequent error-free sentences”，达到8分水平。\"},\"summary\":\"\"},\"grammar_note\":\"ignore\"},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"verdict\":\"supports\",\"comment\":\"引出话题并明确表态，同时预设了例外情形，为第四段让步埋下伏笔，立场从首段起就清晰。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The case for new roads rests largely on the assumption that congestion is a shortage of capacity.\",\"verdict\":\"supports\",\"comment\":\"先承认修路论的前提，再用“诱增需求”机制加以反驳，并对比公交的运力优势，直接服务于主立场。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Equally important are the distributional consequences.\",\"verdict\":\"supports\",\"comment\":\"从受益群体、城市形态与减排三个层面补充理由，层层递进，属有效支撑。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"That said, a blanket refusal to build roads would be misguided.\",\"verdict\":\"supports\",\"comment\":\"让步并限定立场适用范围（乡村与货运），与首段的“例外”说法一致，不构成对自身立场的削弱。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.\",\"verdict\":\"supports\",\"comment\":\"总结主立场并回扣前两段的核心论据，与全文一致，未出现前后矛盾的表述。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\",\"suggestion\":\"让步段只有两句话，可再补一个假设性情景（例如某偏远地区人口分散、公交难以覆盖，因此只能依靠升级公路）来说明“例外”为何成立，使让步更具体，同时仍受首段限定的约束。\"},{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"suggestion\":\"可在此后加一句假设性说明，描述新车道被新增车流填满后通勤时间并未缩短的情形，让“expensive treadmill”的比喻落到具体后果上，论证更具画面感。\"}],\"position\":{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"consistent\":true,\"comment\":\"立场为“以公交为主、修路限于确无替代方案的情形”，属有条件的单一立场；第四段让步与第五段结论都在此框架内，前后一致。\"}},\"overall_comment\":\"这是一篇结构完整、论证质量较高的作文：首段即给出有条件的主立场，主体段分别从“诱增需求”的因果机制、分配公平与城市形态、减排等方面展开，第四段作有限让步，结尾回扣立场，五段之间推进顺畅。词汇与句式都较为成熟，术语与习语使用得当，几乎未见语法错误。可以改进之处不在论证框架，而在细节：个别表达（carbon 与 carbon emissions）需要更精确，让步段与“expensive treadmill”处可各加一句具体情景，使抽象推理更有落点。\",\"priorities\":[\"修正用词精确性：把“sources of carbon”改为“sources of carbon emissions”，确保指称与上下文一致。\",\"让步段再展开一步：用一个假设性情景说明乡村或货运为何确实需要公路，使“例外”更有说服力。\",\"在解释“induced demand”后补一句具体后果（如新车道很快被新增车流填满、通勤时间未缩短），让比喻落到实处。\",\"保持现有优势：首段的有条件立场、机制型因果解释与自然的衔接手段都可继续沿用。\"]}",
+      "expected": "{\"criteria\":{\"task\":{\"band\":8,\"strengths\":[{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"comment\":\"开头就给出清晰且有分寸的立场：不是绝对否定修路，而是把资金“决定性”地偏向公共交通，并限定例外。全文立场始终与之一致。\"},{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"用“诱增需求”这一机制解释了为何扩建道路未必缓解拥堵，属于因果解释型论证，而非单纯断言。\"},{\"quote\":\"Road spending disproportionately benefits those who own cars\",\"comment\":\"从分配公平角度扩展理由，并紧接着说明公交如何把机会扩展到无车人群，论证有延展、有支撑。\"}],\"issues\":[],\"summary\":\"全文完整回应题目：既讨论了修路的理由并加以反驳，也从拥堵根源、分配公平与环境三方面论证公交投入，最后用“例外情境”限定立场，结尾重申主立场，与首段一致。每个主体段都有因果机制或后果链条支撑，没有空洞断言，属“well-developed response”。唯一可再充实的是让步段，但目前两句话已足以界定立场范围，不构成明显缺陷。\"},\"coherence\":{\"band\":8,\"strengths\":[{\"quote\":\"Yet experience from many large cities suggests otherwise\",\"comment\":\"用转折衔接承接上句“修路的理由”，使段落内部的辩论推进自然、方向清晰。\"},{\"quote\":\"Equally important are the distributional consequences.\",\"comment\":\"主题句简短有力，把第二层理由（分配公平）与上一段的拥堵理由并列推进，段落之间逻辑递进清楚。\"},{\"quote\":\"That said, a blanket refusal to build roads would be misguided.\",\"comment\":\"“That said”与结尾“On balance, therefore”形成让步—收束的完整链条，衔接手段自然，不显机械。\"}],\"issues\":[],\"summary\":\"五段结构清晰：引入并表态—反驳修路逻辑—补充分配与环境理由—让步限定—总结。指代（this phenomenon、such contexts、it）明确，衔接词使用得当且不过量。信息推进流畅，读者可顺畅跟随论证，达到高分段的连贯水平。\"},\"lexical\":{\"band\":8,\"strengths\":[{\"quote\":\"the number of people a corridor can carry without a proportional increase in the space consumed\",\"comment\":\"用“corridor”“the space consumed”等较精确的表达描述运力与空间关系，搭配自然，显示出较好的词汇控制力。\"},{\"quote\":\"public transport should receive the lion's share of funding\",\"comment\":\"恰当使用习语“the lion's share”，语域合适，属于不常见词汇的灵活运用。\"},{\"quote\":\"in such contexts targeted upgrades may represent genuine value for money\",\"comment\":\"“targeted upgrades”“value for money”等搭配准确，体现较好的词汇丰富度与地道性。\"}],\"issues\":[{\"quote\":\"one of the most stubborn sources of carbon\",\"comment\":\"表达不够精确（precision）：作者指的是碳排放，而“sources of carbon”字面指碳的来源，与上下文（transport sector 的排放）不完全对应。这属于用词精确性问题，不是语法错误。\",\"suggestion\":\"改为：the transport sector remains one of the most stubborn sources of carbon emissions.\"}],\"summary\":\"词汇范围广，涵盖政策与经济类术语（induced demand、distributional consequences、freight logistics），搭配大多准确，偶有习语点缀且语域统一。仅有一处指称不够精确（carbon 与 carbon emissions），属少量不准确，不影响整体理解。整体接近“skilful use of uncommon items”，故定在8分。\"},\"grammar\":{\"band\":8,\"strengths\":[{\"quote\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"comment\":\"以名词性从句作主语，并嵌入 not only...but also 结构，句式复杂且完全正确，开篇即展示句型掌控力。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"动名词主语＋非限定性定语从句＋until 时间状语从句＋as...as 比较结构，多重从属关系组织得当。\"},{\"quote\":\"allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place\",\"comment\":\"使用 allow...to do 结构与表结果的 -ing 状语，且省略关系词的定语从句（people need to travel）准确，标点与逻辑主语均正确。\"}],\"issues\":[],\"summary\":\"全文句式多样，涵盖名词性从句、定语从句、让步与比较结构、分词状语，且几乎无误；标点使用规范，未发现明显语法或句法错误。句子普遍完整、无残句，属“frequent error-free sentences”，达到8分水平。\"},\"summary\":\"\"},\"grammar_note\":\"ignore\"},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"verdict\":\"supports\",\"comment\":\"引出话题并明确表态，同时预设了例外情形，为第四段让步埋下伏笔，立场从首段起就清晰。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The case for new roads rests largely on the assumption that congestion is a shortage of capacity.\",\"verdict\":\"supports\",\"comment\":\"先承认修路论的前提，再用“诱增需求”机制加以反驳，并对比公交的运力优势，直接服务于主立场。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Equally important are the distributional consequences.\",\"verdict\":\"supports\",\"comment\":\"从受益群体、城市形态与减排三个层面补充理由，层层递进，属有效支撑。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"That said, a blanket refusal to build roads would be misguided.\",\"verdict\":\"supports\",\"comment\":\"让步并限定立场适用范围（乡村与货运），与首段的“例外”说法一致，不构成对自身立场的削弱。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.\",\"verdict\":\"supports\",\"comment\":\"总结主立场并回扣前两段的核心论据，与全文一致，未出现前后矛盾的表述。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\",\"suggestion\":\"让步段只有两句话，可再补一个假设性情景（例如某偏远地区人口分散、公交难以覆盖，因此只能依靠升级公路）来说明“例外”为何成立，使让步更具体，同时仍受首段限定的约束。\"},{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"suggestion\":\"可在此后加一句假设性说明，描述新车道被新增车流填满后通勤时间并未缩短的情形，让“expensive treadmill”的比喻落到具体后果上，论证更具画面感。\"}],\"position\":{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"consistent\":true,\"comment\":\"立场为“以公交为主、修路限于确无替代方案的情形”，属有条件的单一立场；第四段让步与第五段结论都在此框架内，前后一致。\"}},\"overall_comment\":\"这是一篇结构完整、论证质量较高的作文：首段即给出有条件的主立场，主体段分别从“诱增需求”的因果机制、分配公平与城市形态、减排等方面展开，第四段作有限让步，结尾回扣立场，五段之间推进顺畅。词汇与句式都较为成熟，术语与习语使用得当，几乎未见语法错误。可以改进之处不在论证框架，而在细节：个别表达（carbon 与 carbon emissions）需要更精确，让步段与“expensive treadmill”处可各加一句具体情景，使抽象推理更有落点。\",\"priorities\":[\"修正用词精确性：把“sources of carbon”改为“sources of carbon emissions”，确保指称与上下文一致。\",\"让步段再展开一步：用一个假设性情景说明乡村或货运为何确实需要公路，使“例外”更有说服力。\",\"在解释“induced demand”后补一句具体后果（如新车道很快被新增车流填满、通勤时间未缩短），让比喻落到实处。\",\"保持现有优势：首段的有条件立场、机制型因果解释与自然的衔接手段都可继续沿用。\"]}"
+    },
+    {
+      "name": "call_alignment.6",
+      "ok": true,
+      "actual": [
+        "t2-strong",
+        1
+      ],
+      "expected": [
+        "t2-strong",
+        1
+      ]
+    },
+    {
+      "name": "usage_alignment.6",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3536,
+        "completion_tokens": 2985,
+        "total_tokens": 6521,
+        "prompt_tokens_details": {
+          "cached_tokens": 3328
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1259
+        },
+        "prompt_cache_hit_tokens": 3328,
+        "prompt_cache_miss_tokens": 208
+      },
+      "expected": {
+        "prompt_tokens": 3536,
+        "completion_tokens": 2985,
+        "total_tokens": 6521,
+        "prompt_tokens_details": {
+          "cached_tokens": 3328
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1259
+        },
+        "prompt_cache_hit_tokens": 3328,
+        "prompt_cache_miss_tokens": 208
+      }
+    },
+    {
+      "name": "messages_alignment.6",
+      "ok": true,
+      "actual": "db73500ca117f6988f5aa900be31b6df193d0838a09a96c815879a6d71a845d4",
+      "expected": "db73500ca117f6988f5aa900be31b6df193d0838a09a96c815879a6d71a845d4"
+    },
+    {
+      "name": "formal_text_alignment.6",
+      "ok": true,
+      "actual": "{\"criteria\":{\"task\":{\"band\":8.0,\"strengths\":[{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"comment\":\"开头就给出清晰且有保留条件的立场（大幅偏向公共交通，仅在别无现实选择的特殊情况下修路），并在全文一贯维持，回应了'to what extent'的要求。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"用因果链解释'induced demand'，把'新路无法缓解拥堵'的理由讲透，属于充分展开而非空泛断言。\"},{\"quote\":\"Road spending disproportionately benefits those who own cars, whereas frequent and affordable buses and trains extend opportunity to people who cannot or prefer not to drive.\",\"comment\":\"第二个主体段从分配公平角度展开，并通过对比说明公共交通的更广受益面，论据相关且直接支撑立场。\"},{\"quote\":\"Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\",\"comment\":\"给出让步并为修路划出适用范围，与开头的限定立场一致，没有跑题。\"}],\"issues\":[],\"summary\":\"全文完整回应了'在多大程度上同意'，立场清晰且有条件限定，并贯穿开头、主体与结尾。两个主体段分别用'诱导需求'与'分配公平'两条独立理由展开，让步段为修路划定边界，论证充分、相关。篇幅充足，没有偏题段落，达到7.5-8的水平。\"},\"coherence\":{\"band\":8.0,\"strengths\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"用'This phenomenon'回指上一句陈述的机制，指代明确，衔接自然而不机械。\"},{\"quote\":\"Public transport, by contrast, increases the number of people a corridor can carry\",\"comment\":\"'by contrast'清晰标示转折对比，段落内部逻辑推进顺畅。\"},{\"quote\":\"That said, a blanket refusal to build roads would be misguided.\",\"comment\":\"'That said'自然引出让步段，标示立场调整，衔接词使用恰当而非堆砌。\"}],\"issues\":[],\"summary\":\"五段结构清晰：引入＋两个正面论证段＋让步段＋结论，段落功能分明，逻辑逐层推进。衔接手段（Yet、by contrast、That said、On balance）使用自然、指向明确，指代（this phenomenon、such contexts）准确。信息组织能让读者顺畅跟随，达到7.5-8。\"},\"lexical\":{\"band\":8.5,\"strengths\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"使用'induced demand'这一领域术语和'expensive treadmill'的生动比喻，词汇广度高、搭配地道。\"},{\"quote\":\"the distributional consequences\",\"comment\":\"'distributional consequences'、'disproportionately benefits'等较少见且精准的表达，显示高阶词汇控制。\"},{\"quote\":\"public transport should receive the lion's share of funding\",\"comment\":\"结尾用'lion's share'这一地道习语，语域与语境匹配，用词自然。\"}],\"issues\":[{\"quote\":\"one of the most stubborn sources of carbon\",\"comment\":\"属措辞不够精准：严格说交通部门排放的是carbon emissions（温室气体），而非直接'carbon'本身，简写在此略显笼统。\",\"suggestion\":\"改为 one of the most stubborn sources of carbon emissions。\"}],\"summary\":\"词汇范围广且精准，包含术语（induced demand、distributional consequences）、地道搭配（weighted decisively、genuine value for money）与习语（lion's share），拼写与词形无误。仅'来源 of carbon'一处可更精确，属轻微改进，不影响整体高水平表现，达到8-8.5。\"},\"grammar\":{\"band\":8.5,\"strengths\":[{\"quote\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"comment\":\"名词性从句作主语，配合not only...but also结构，复杂句使用准确流畅。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"动名词作主语＋非限定性定语从句＋until时间状语从句叠加，结构多样且无错误。\"},{\"quote\":\"Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place\",\"comment\":\"allow...to do结构＋分词状语＋省略关系词的定语从句，句式变化丰富，标点使用正确。\"}],\"issues\":[],\"summary\":\"句式多样，包含名词性从句、非限定性定语从句、分词状语与比较结构，且几乎无语法错误，标点规范。复杂结构运用自如，错误极少，属于8分以上的语法控制水平。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"verdict\":\"supports\",\"comment\":\"引入话题并给出有保留条件的明确立场，为全文定调。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The case for new roads rests largely on the assumption that congestion is a shortage of capacity.\",\"verdict\":\"supports\",\"comment\":\"用'诱导需求'机制论证修路难以治堵，并对比公共交通的运载优势，理由充分。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Equally important are the distributional consequences.\",\"verdict\":\"supports\",\"comment\":\"从分配公平与城市形态、减排角度展开，直接支撑偏向公共交通的立场。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"That said, a blanket refusal to build roads would be misguided.\",\"verdict\":\"supports\",\"comment\":\"让步并为修路划出适用范围，与开头限定立场一致，未削弱主线。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.\",\"verdict\":\"supports\",\"comment\":\"总结主立场并概括理由，与全文一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"suggestion\":\"可在机制解释后补一个假想情境（如某城市加宽主干道后车流很快回满），使'诱导需求'更具体可感，但现有因果链已足够清楚。\"},{\"quote\":\"Equally important are the distributional consequences.\",\"suggestion\":\"可点明受益群体的具体类别（如无车家庭、低收入通勤者），进一步收紧段首主题句与后文例证之间的对应。\"}],\"position\":{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"consistent\":true,\"comment\":\"立场有条件限定，主体段的论证、让步段与结论均与该立场一致，没有相互矛盾之处。\"}},\"overall_comment\":\"这是一篇论证成熟、结构清晰的高分作文：立场明确且有条件限定，'诱导需求'与'分配公平'两条理由展开充分，让步段恰到好处，结论呼应全文。语言上词汇广而精准，复杂句式多样且几乎无错。主要提升空间在于把个别抽象论点（如分配公平的受益群体、诱导需求）落得更具体。\"},\"priorities\":[\"可为主要论点补充更具体的例证或假想情境，让'诱导需求'与'分配公平'更具画面感。\",\"继续打磨少数措辞的精准度，如'sources of carbon'改为'sources of carbon emissions'。\",\"保持现有的条件式立场与让步写法，注意让步段不要压过主线论证。\"]}",
+      "expected": "{\"criteria\":{\"task\":{\"band\":8.0,\"strengths\":[{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"comment\":\"开头就给出清晰且有保留条件的立场（大幅偏向公共交通，仅在别无现实选择的特殊情况下修路），并在全文一贯维持，回应了'to what extent'的要求。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"用因果链解释'induced demand'，把'新路无法缓解拥堵'的理由讲透，属于充分展开而非空泛断言。\"},{\"quote\":\"Road spending disproportionately benefits those who own cars, whereas frequent and affordable buses and trains extend opportunity to people who cannot or prefer not to drive.\",\"comment\":\"第二个主体段从分配公平角度展开，并通过对比说明公共交通的更广受益面，论据相关且直接支撑立场。\"},{\"quote\":\"Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\",\"comment\":\"给出让步并为修路划出适用范围，与开头的限定立场一致，没有跑题。\"}],\"issues\":[],\"summary\":\"全文完整回应了'在多大程度上同意'，立场清晰且有条件限定，并贯穿开头、主体与结尾。两个主体段分别用'诱导需求'与'分配公平'两条独立理由展开，让步段为修路划定边界，论证充分、相关。篇幅充足，没有偏题段落，达到7.5-8的水平。\"},\"coherence\":{\"band\":8.0,\"strengths\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"用'This phenomenon'回指上一句陈述的机制，指代明确，衔接自然而不机械。\"},{\"quote\":\"Public transport, by contrast, increases the number of people a corridor can carry\",\"comment\":\"'by contrast'清晰标示转折对比，段落内部逻辑推进顺畅。\"},{\"quote\":\"That said, a blanket refusal to build roads would be misguided.\",\"comment\":\"'That said'自然引出让步段，标示立场调整，衔接词使用恰当而非堆砌。\"}],\"issues\":[],\"summary\":\"五段结构清晰：引入＋两个正面论证段＋让步段＋结论，段落功能分明，逻辑逐层推进。衔接手段（Yet、by contrast、That said、On balance）使用自然、指向明确，指代（this phenomenon、such contexts）准确。信息组织能让读者顺畅跟随，达到7.5-8。\"},\"lexical\":{\"band\":8.5,\"strengths\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"comment\":\"使用'induced demand'这一领域术语和'expensive treadmill'的生动比喻，词汇广度高、搭配地道。\"},{\"quote\":\"the distributional consequences\",\"comment\":\"'distributional consequences'、'disproportionately benefits'等较少见且精准的表达，显示高阶词汇控制。\"},{\"quote\":\"public transport should receive the lion's share of funding\",\"comment\":\"结尾用'lion's share'这一地道习语，语域与语境匹配，用词自然。\"}],\"issues\":[{\"quote\":\"one of the most stubborn sources of carbon\",\"comment\":\"属措辞不够精准：严格说交通部门排放的是carbon emissions（温室气体），而非直接'carbon'本身，简写在此略显笼统。\",\"suggestion\":\"改为 one of the most stubborn sources of carbon emissions。\"}],\"summary\":\"词汇范围广且精准，包含术语（induced demand、distributional consequences）、地道搭配（weighted decisively、genuine value for money）与习语（lion's share），拼写与词形无误。仅'来源 of carbon'一处可更精确，属轻微改进，不影响整体高水平表现，达到8-8.5。\"},\"grammar\":{\"band\":8.5,\"strengths\":[{\"quote\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"comment\":\"名词性从句作主语，配合not only...but also结构，复杂句使用准确流畅。\"},{\"quote\":\"widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones\",\"comment\":\"动名词作主语＋非限定性定语从句＋until时间状语从句叠加，结构多样且无错误。\"},{\"quote\":\"Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place\",\"comment\":\"allow...to do结构＋分词状语＋省略关系词的定语从句，句式变化丰富，标点使用正确。\"}],\"issues\":[],\"summary\":\"句式多样，包含名词性从句、非限定性定语从句、分词状语与比较结构，且几乎无语法错误，标点规范。复杂结构运用自如，错误极少，属于8分以上的语法控制水平。\"}},\"argument\":{\"paragraphs\":[{\"p\":1,\"role\":\"introduction\",\"main_point\":\"How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in.\",\"verdict\":\"supports\",\"comment\":\"引入话题并给出有保留条件的明确立场，为全文定调。\"},{\"p\":2,\"role\":\"body\",\"main_point\":\"The case for new roads rests largely on the assumption that congestion is a shortage of capacity.\",\"verdict\":\"supports\",\"comment\":\"用'诱导需求'机制论证修路难以治堵，并对比公共交通的运载优势，理由充分。\"},{\"p\":3,\"role\":\"body\",\"main_point\":\"Equally important are the distributional consequences.\",\"verdict\":\"supports\",\"comment\":\"从分配公平与城市形态、减排角度展开，直接支撑偏向公共交通的立场。\"},{\"p\":4,\"role\":\"concession\",\"main_point\":\"That said, a blanket refusal to build roads would be misguided.\",\"verdict\":\"supports\",\"comment\":\"让步并为修路划出适用范围，与开头限定立场一致，未削弱主线。\"},{\"p\":5,\"role\":\"conclusion\",\"main_point\":\"On balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.\",\"verdict\":\"supports\",\"comment\":\"总结主立场并概括理由，与全文一致。\"}],\"problems\":[],\"improvements\":[{\"quote\":\"This phenomenon, often described as induced demand, means that road building can become an expensive treadmill.\",\"suggestion\":\"可在机制解释后补一个假想情境（如某城市加宽主干道后车流很快回满），使'诱导需求'更具体可感，但现有因果链已足够清楚。\"},{\"quote\":\"Equally important are the distributional consequences.\",\"suggestion\":\"可点明受益群体的具体类别（如无车家庭、低收入通勤者），进一步收紧段首主题句与后文例证之间的对应。\"}],\"position\":{\"quote\":\"I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\",\"consistent\":true,\"comment\":\"立场有条件限定，主体段的论证、让步段与结论均与该立场一致，没有相互矛盾之处。\"}},\"overall_comment\":\"这是一篇论证成熟、结构清晰的高分作文：立场明确且有条件限定，'诱导需求'与'分配公平'两条理由展开充分，让步段恰到好处，结论呼应全文。语言上词汇广而精准，复杂句式多样且几乎无错。主要提升空间在于把个别抽象论点（如分配公平的受益群体、诱导需求）落得更具体。\"},\"priorities\":[\"可为主要论点补充更具体的例证或假想情境，让'诱导需求'与'分配公平'更具画面感。\",\"继续打磨少数措辞的精准度，如'sources of carbon'改为'sources of carbon emissions'。\",\"保持现有的条件式立场与让步写法，注意让步段不要压过主线论证。\"]}"
+    },
+    {
+      "name": "call_alignment.7",
+      "ok": true,
+      "actual": [
+        "t2-off-topic",
+        0
+      ],
+      "expected": [
+        "t2-off-topic",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.7",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3378,
+        "completion_tokens": 6554,
+        "total_tokens": 9932,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3949
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 690
+      },
+      "expected": {
+        "prompt_tokens": 3378,
+        "completion_tokens": 6554,
+        "total_tokens": 9932,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3949
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 690
+      }
+    },
+    {
+      "name": "messages_alignment.7",
+      "ok": true,
+      "actual": "ce98a6882c6ec11ab0e9a1c20efcd4c02d4b8a17c2fcb9447754fba89dae86e7",
+      "expected": "ce98a6882c6ec11ab0e9a1c20efcd4c02d4b8a17c2fcb9447754fba89dae86e7"
+    },
+    {
+      "name": "formal_text_alignment.7",
+      "ok": true,
+      "actual": "{\"criteria\": {\"task\": {\"band\": 3.0, \"strengths\": [{\"quote\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"comment\": \"若单看这篇文章本身，作者在开头就给出了明确且前后一致的立场，并配有理由，说明具备写“立场+论证”的基本能力；但这一立场回答的是另一道题，无法计入本题的任务完成度。\"}], \"issues\": [{\"quote\": \"Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.\", \"comment\": \"全文从第一句起就转向“线上学习是否会取代传统课堂”，而题目要求讨论“政府应把钱投入公共交通还是修建新道路”。题目要求的两个部分，也就是对政府支出优先方向的表态和论证，完全没有回应，属于整体离题。\", \"suggestion\": \"开头应直接切入交通话题，例如：Some people argue that governments should invest in public transport rather than building new roads; I largely agree, although new roads are still necessary in some areas.\"}, {\"quote\": \"The most obvious benefit of online learning is flexibility.\", \"comment\": \"三个主体段全部围绕线上与线下教学的优缺点展开，government、public transport、roads 等关键词一次也没有出现，任何一段都没有为回答本题服务。\", \"suggestion\": \"主体段应改写为与交通投入相关的论证，例如：Investing in public transport helps far more people than building new roads, because a bus or a train can carry many more passengers than a private car.\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"comment\": \"结论同样回到线上学习，没有就“政府该把预算优先给公交还是新路”给出判断，题目要求的最终表态缺失。\", \"suggestion\": \"结论应重申对交通投入的立场，例如：In conclusion, governments should prioritise public transport, since it serves more residents and reduces congestion more effectively than new roads.\"}], \"summary\": \"文章语言与结构都不错，但回答的是“线上学习与传统课堂”这一完全不同的题目，与本题的公共交通/新道路话题没有任何交集，题目的两个要求（表态与论证）均未回应、属于整体离题，因此 Task Response 只能落在很低分段。\"}, \"coherence\": {\"band\": 7.0, \"strengths\": [{\"quote\": \"The most obvious benefit of online learning is flexibility.\", \"comment\": \"每个主体段都有清晰的段首主题句，段落中心明确，读者能一眼看出该段要说什么。\"}, {\"quote\": \"However, classroom learning provides things that are difficult to replicate on a screen.\", \"comment\": \"用 However 明确标示转折，从“线上优点”转入“课堂不可替代之处”，全文推进方向清楚。\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement\", \"comment\": \"结论段有明确信号词，并与开头立场呼应，整体布局完整。\"}], \"issues\": [{\"quote\": \"In addition, digital materials can be updated quickly\", \"comment\": \"段落内部的衔接主要依靠 also、In addition、Furthermore 这类递进副词依次罗列，衔接手段类型偏单一；指代、关键词复现等更隐性的衔接方式使用较少，略显机械。\", \"suggestion\": \"可减少递进副词的堆叠，改用指代或关键词复现来衔接，例如把该句改为 This flexibility also means that digital materials can be updated quickly and shared with every learner at once.\"}, {\"quote\": \"which are an important part of education, particularly for children\", \"comment\": \"这里的 which 指代不清：读者无法确定它指 social skills，还是前面 by working together, discussing ideas and building friendships 这一串活动，影响了上下文的指代清晰度。\", \"suggestion\": \"把指代对象写明，例如：Students also develop social skills by working together, discussing ideas and building friendships, and these skills are an important part of education, particularly for children.\"}], \"summary\": \"文章分段合理，每段有清晰中心，整体推进顺序自然，衔接词足以引导读者，达到 7 分水平；但段内衔接偏依赖递进副词罗列，个别关系代词指代不够明确，未达到 8 分所要求的“衔接处理得完全自然”。\"}, \"lexical\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"difficult to replicate on a screen\", \"comment\": \"replicate 属于较不常见的动词，与 on a screen 搭配自然，显示出一定的词汇灵活性。\"}, {\"quote\": \"study at their own pace\", \"comment\": \"at their own pace 是地道的固定搭配，使用准确。\"}, {\"quote\": \"Completion rates for many free online courses are notoriously low\", \"comment\": \"Completion rates 与 notoriously low 搭配自然，notoriously 的使用精准且不落俗套。\"}], \"issues\": [{\"quote\": \"which suggests that self-discipline is a serious obstacle\", \"comment\": \"表意不够准确：构成障碍的应是“缺乏自律”，而“自律”本身不是障碍，词义搭配上出现逻辑偏差。\", \"suggestion\": \"改为：which suggests that a lack of self-discipline is a serious obstacle.\"}], \"summary\": \"词汇覆盖面较广，能使用 replicate、notoriously、at their own pace 等较不常见且搭配自然的表达，拼写与词形基本无误，具备 7 分以上特征；个别词组在语义搭配上不够精确，因此未达到 8 分要求的“精准且老练”。\"}, \"grammar\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"Online courses can also reach learners in remote areas who would otherwise have no access to good teachers.\", \"comment\": \"定语从句与虚拟含义的 would otherwise 结合使用，结构复杂且准确。\"}, {\"quote\": \"Students also develop social skills by working together, discussing ideas and building friendships\", \"comment\": \"介词后并列动名词结构，形式一致、控制良好。\"}, {\"quote\": \"For many people, these features make online study cheaper and more convenient than attending a college in person.\", \"comment\": \"比较结构使用自然，than 后接动名词，句子完整无误。\"}], \"issues\": [], \"summary\": \"全文句式以复杂句为主，定语从句、比较结构、并列动名词等使用准确，基本没有语法或标点错误，句子普遍无错，达到 7 分以上水平；但结构类型集中在这几类，尚未展现出 8 分所要求的广泛而老练的句式变化。\"}}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"verdict\": \"off_position\", \"comment\": \"开头给出的是“线上学习不会取代传统课堂”的立场，而题目问的是政府应投资公共交通还是修建新道路，立场句与题目要求完全不对应。\"}, {\"p\": 2, \"role\": \"body\", \"main_point\": \"The most obvious benefit of online learning is flexibility.\", \"verdict\": \"off_position\", \"comment\": \"该段论证线上学习灵活、便宜、可覆盖偏远地区，全部服务于另一个题目，对本题的政府支出方向没有任何论证作用。\"}, {\"p\": 3, \"role\": \"body\", \"main_point\": \"However, classroom learning provides things that are difficult to replicate on a screen.\", \"verdict\": \"off_position\", \"comment\": \"该段讨论课堂中的即时反馈与社交能力培养，仍属线上与线下教学之争，与交通投入的题目无关。\"}, {\"p\": 4, \"role\": \"body\", \"main_point\": \"Furthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates.\", \"verdict\": \"off_position\", \"comment\": \"该段以线上课程完成率低论证自律问题，同样没有触及公共交通或道路建设。\"}, {\"p\": 5, \"role\": \"conclusion\", \"main_point\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"verdict\": \"off_position\", \"comment\": \"结论重申线上学习是补充而非替代，缺少对“政府应优先投资公交还是修路”的判断，题目要求的表态缺席。\"}], \"problems\": [{\"type\": \"irrelevant\", \"quote\": \"Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.\", \"comment\": \"整篇文章论述的是“线上学习能否取代传统课堂”，与题目“政府应把钱用于改善公共交通而不是修建新道路”没有关联；题目要求的两个部分，也就是对政府支出优先方向表态和说明理由，均未回应，属于整体离题。\", \"suggestion\": \"重写全文，围绕公共交通与新道路的取舍表态并用交通效率、受益人群、城市拥堵等理由展开论证，例如先说明公交能以更低成本服务更多通勤者，再承认偏远地区仍需新建道路。\"}, {\"type\": \"off_position\", \"quote\": \"Furthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates.\", \"comment\": \"该段继续论证线上学习的动机问题，既不服务于本题立场，也不回应题目，使得全文没有任何一段实际作答。\", \"suggestion\": \"将该段改为对另一方的让步，例如承认在人口稀少地区新建道路仍有必要，但指出这类情况只是例外，整体预算仍应优先投向公共交通。\"}], \"improvements\": [{\"quote\": \"For many people, these features make online study cheaper and more convenient than attending a college in person.\", \"suggestion\": \"在新的题目下，可以保留这种比较式论证的思路，但把比较对象换成公共交通与新建道路，说明同样一笔预算投向公交能惠及更多没有私家车的居民，从而使论证更贴合题目。\"}, {\"quote\": \"Teachers can notice immediately when a student is confused and adapt their explanations.\", \"suggestion\": \"这里“具体场景+后果”的写法很有效，可以照搬到新题目中，例如具体描述通勤者挤在拥堵道路上的情景，再说明公交扩容如何直接缓解这一状况。\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"suggestion\": \"结论段可保留“先承认对方价值、再给出判断”的结构，但内容要回到政府支出：明确政府应把主要预算投入公共交通，同时保留少数必要的新路建设。\"}], \"position\": {\"quote\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"consistent\": true, \"comment\": \"这个立场在全文和结论中被一致贯彻，本身并不矛盾；问题不在于立场是否清楚或一致，而在于它回答的是另一道题，与本题的公共交通/新道路之争毫无关系。\"}}, \"overall_comment\": \"这篇作文语言水平相当不错：句式准确、词汇自然、段落清晰，但内容完全回答了另一道题（线上学习是否会取代传统课堂），而题目问的是政府应把钱花在改善公共交通还是修建新道路上。由于对题目的两个要求（表态与论证）均未回应，Task Response 会跌到很低分段，整体分数因此被严重拉低——这正是审题失误最典型的代价。写作能力本身不是问题，问题在于没有回答被问到的问题。\", \"priorities\": [\"审题第一：动笔前确认题目问的是“公共交通 vs 新道路”的政府支出取舍，全文每个段落都要围绕这一话题，避免整体离题。\", \"开头与结尾都要明确表态：政府应优先投资公共交通到什么程度，并说明哪些情况下新建道路仍然必要，使立场贯穿全文。\", \"主体段要用交通相关的理由支撑，例如公交的载客量、受益人群、道路拥堵与土地占用等，可以沿用现有“具体场景+后果”的论证方式。\", \"语言层面保持现有水平即可；若想再提高，可增加段内衔接手段的多样性，并让关系代词的指代对象更明确。\"]}",
+      "expected": "{\"criteria\": {\"task\": {\"band\": 3.0, \"strengths\": [{\"quote\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"comment\": \"若单看这篇文章本身，作者在开头就给出了明确且前后一致的立场，并配有理由，说明具备写“立场+论证”的基本能力；但这一立场回答的是另一道题，无法计入本题的任务完成度。\"}], \"issues\": [{\"quote\": \"Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.\", \"comment\": \"全文从第一句起就转向“线上学习是否会取代传统课堂”，而题目要求讨论“政府应把钱投入公共交通还是修建新道路”。题目要求的两个部分，也就是对政府支出优先方向的表态和论证，完全没有回应，属于整体离题。\", \"suggestion\": \"开头应直接切入交通话题，例如：Some people argue that governments should invest in public transport rather than building new roads; I largely agree, although new roads are still necessary in some areas.\"}, {\"quote\": \"The most obvious benefit of online learning is flexibility.\", \"comment\": \"三个主体段全部围绕线上与线下教学的优缺点展开，government、public transport、roads 等关键词一次也没有出现，任何一段都没有为回答本题服务。\", \"suggestion\": \"主体段应改写为与交通投入相关的论证，例如：Investing in public transport helps far more people than building new roads, because a bus or a train can carry many more passengers than a private car.\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"comment\": \"结论同样回到线上学习，没有就“政府该把预算优先给公交还是新路”给出判断，题目要求的最终表态缺失。\", \"suggestion\": \"结论应重申对交通投入的立场，例如：In conclusion, governments should prioritise public transport, since it serves more residents and reduces congestion more effectively than new roads.\"}], \"summary\": \"文章语言与结构都不错，但回答的是“线上学习与传统课堂”这一完全不同的题目，与本题的公共交通/新道路话题没有任何交集，题目的两个要求（表态与论证）均未回应、属于整体离题，因此 Task Response 只能落在很低分段。\"}, \"coherence\": {\"band\": 7.0, \"strengths\": [{\"quote\": \"The most obvious benefit of online learning is flexibility.\", \"comment\": \"每个主体段都有清晰的段首主题句，段落中心明确，读者能一眼看出该段要说什么。\"}, {\"quote\": \"However, classroom learning provides things that are difficult to replicate on a screen.\", \"comment\": \"用 However 明确标示转折，从“线上优点”转入“课堂不可替代之处”，全文推进方向清楚。\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement\", \"comment\": \"结论段有明确信号词，并与开头立场呼应，整体布局完整。\"}], \"issues\": [{\"quote\": \"In addition, digital materials can be updated quickly\", \"comment\": \"段落内部的衔接主要依靠 also、In addition、Furthermore 这类递进副词依次罗列，衔接手段类型偏单一；指代、关键词复现等更隐性的衔接方式使用较少，略显机械。\", \"suggestion\": \"可减少递进副词的堆叠，改用指代或关键词复现来衔接，例如把该句改为 This flexibility also means that digital materials can be updated quickly and shared with every learner at once.\"}, {\"quote\": \"which are an important part of education, particularly for children\", \"comment\": \"这里的 which 指代不清：读者无法确定它指 social skills，还是前面 by working together, discussing ideas and building friendships 这一串活动，影响了上下文的指代清晰度。\", \"suggestion\": \"把指代对象写明，例如：Students also develop social skills by working together, discussing ideas and building friendships, and these skills are an important part of education, particularly for children.\"}], \"summary\": \"文章分段合理，每段有清晰中心，整体推进顺序自然，衔接词足以引导读者，达到 7 分水平；但段内衔接偏依赖递进副词罗列，个别关系代词指代不够明确，未达到 8 分所要求的“衔接处理得完全自然”。\"}, \"lexical\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"difficult to replicate on a screen\", \"comment\": \"replicate 属于较不常见的动词，与 on a screen 搭配自然，显示出一定的词汇灵活性。\"}, {\"quote\": \"study at their own pace\", \"comment\": \"at their own pace 是地道的固定搭配，使用准确。\"}, {\"quote\": \"Completion rates for many free online courses are notoriously low\", \"comment\": \"Completion rates 与 notoriously low 搭配自然，notoriously 的使用精准且不落俗套。\"}], \"issues\": [{\"quote\": \"which suggests that self-discipline is a serious obstacle\", \"comment\": \"表意不够准确：构成障碍的应是“缺乏自律”，而“自律”本身不是障碍，词义搭配上出现逻辑偏差。\", \"suggestion\": \"改为：which suggests that a lack of self-discipline is a serious obstacle.\"}], \"summary\": \"词汇覆盖面较广，能使用 replicate、notoriously、at their own pace 等较不常见且搭配自然的表达，拼写与词形基本无误，具备 7 分以上特征；个别词组在语义搭配上不够精确，因此未达到 8 分要求的“精准且老练”。\"}, \"grammar\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"Online courses can also reach learners in remote areas who would otherwise have no access to good teachers.\", \"comment\": \"定语从句与虚拟含义的 would otherwise 结合使用，结构复杂且准确。\"}, {\"quote\": \"Students also develop social skills by working together, discussing ideas and building friendships\", \"comment\": \"介词后并列动名词结构，形式一致、控制良好。\"}, {\"quote\": \"For many people, these features make online study cheaper and more convenient than attending a college in person.\", \"comment\": \"比较结构使用自然，than 后接动名词，句子完整无误。\"}], \"issues\": [], \"summary\": \"全文句式以复杂句为主，定语从句、比较结构、并列动名词等使用准确，基本没有语法或标点错误，句子普遍无错，达到 7 分以上水平；但结构类型集中在这几类，尚未展现出 8 分所要求的广泛而老练的句式变化。\"}}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"verdict\": \"off_position\", \"comment\": \"开头给出的是“线上学习不会取代传统课堂”的立场，而题目问的是政府应投资公共交通还是修建新道路，立场句与题目要求完全不对应。\"}, {\"p\": 2, \"role\": \"body\", \"main_point\": \"The most obvious benefit of online learning is flexibility.\", \"verdict\": \"off_position\", \"comment\": \"该段论证线上学习灵活、便宜、可覆盖偏远地区，全部服务于另一个题目，对本题的政府支出方向没有任何论证作用。\"}, {\"p\": 3, \"role\": \"body\", \"main_point\": \"However, classroom learning provides things that are difficult to replicate on a screen.\", \"verdict\": \"off_position\", \"comment\": \"该段讨论课堂中的即时反馈与社交能力培养，仍属线上与线下教学之争，与交通投入的题目无关。\"}, {\"p\": 4, \"role\": \"body\", \"main_point\": \"Furthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates.\", \"verdict\": \"off_position\", \"comment\": \"该段以线上课程完成率低论证自律问题，同样没有触及公共交通或道路建设。\"}, {\"p\": 5, \"role\": \"conclusion\", \"main_point\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"verdict\": \"off_position\", \"comment\": \"结论重申线上学习是补充而非替代，缺少对“政府应优先投资公交还是修路”的判断，题目要求的表态缺席。\"}], \"problems\": [{\"type\": \"irrelevant\", \"quote\": \"Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms.\", \"comment\": \"整篇文章论述的是“线上学习能否取代传统课堂”，与题目“政府应把钱用于改善公共交通而不是修建新道路”没有关联；题目要求的两个部分，也就是对政府支出优先方向表态和说明理由，均未回应，属于整体离题。\", \"suggestion\": \"重写全文，围绕公共交通与新道路的取舍表态并用交通效率、受益人群、城市拥堵等理由展开论证，例如先说明公交能以更低成本服务更多通勤者，再承认偏远地区仍需新建道路。\"}, {\"type\": \"off_position\", \"quote\": \"Furthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates.\", \"comment\": \"该段继续论证线上学习的动机问题，既不服务于本题立场，也不回应题目，使得全文没有任何一段实际作答。\", \"suggestion\": \"将该段改为对另一方的让步，例如承认在人口稀少地区新建道路仍有必要，但指出这类情况只是例外，整体预算仍应优先投向公共交通。\"}], \"improvements\": [{\"quote\": \"For many people, these features make online study cheaper and more convenient than attending a college in person.\", \"suggestion\": \"在新的题目下，可以保留这种比较式论证的思路，但把比较对象换成公共交通与新建道路，说明同样一笔预算投向公交能惠及更多没有私家车的居民，从而使论证更贴合题目。\"}, {\"quote\": \"Teachers can notice immediately when a student is confused and adapt their explanations.\", \"suggestion\": \"这里“具体场景+后果”的写法很有效，可以照搬到新题目中，例如具体描述通勤者挤在拥堵道路上的情景，再说明公交扩容如何直接缓解这一状况。\"}, {\"quote\": \"In conclusion, online learning is a valuable supplement that makes education more accessible and flexible\", \"suggestion\": \"结论段可保留“先承认对方价值、再给出判断”的结构，但内容要回到政府支出：明确政府应把主要预算投入公共交通，同时保留少数必要的新路建设。\"}], \"position\": {\"quote\": \"In my view, although online courses offer clear advantages, face-to-face education will remain essential.\", \"consistent\": true, \"comment\": \"这个立场在全文和结论中被一致贯彻，本身并不矛盾；问题不在于立场是否清楚或一致，而在于它回答的是另一道题，与本题的公共交通/新道路之争毫无关系。\"}}, \"overall_comment\": \"这篇作文语言水平相当不错：句式准确、词汇自然、段落清晰，但内容完全回答了另一道题（线上学习是否会取代传统课堂），而题目问的是政府应把钱花在改善公共交通还是修建新道路上。由于对题目的两个要求（表态与论证）均未回应，Task Response 会跌到很低分段，整体分数因此被严重拉低——这正是审题失误最典型的代价。写作能力本身不是问题，问题在于没有回答被问到的问题。\", \"priorities\": [\"审题第一：动笔前确认题目问的是“公共交通 vs 新道路”的政府支出取舍，全文每个段落都要围绕这一话题，避免整体离题。\", \"开头与结尾都要明确表态：政府应优先投资公共交通到什么程度，并说明哪些情况下新建道路仍然必要，使立场贯穿全文。\", \"主体段要用交通相关的理由支撑，例如公交的载客量、受益人群、道路拥堵与土地占用等，可以沿用现有“具体场景+后果”的论证方式。\", \"语言层面保持现有水平即可；若想再提高，可增加段内衔接手段的多样性，并让关系代词的指代对象更明确。\"]}"
+    },
+    {
+      "name": "call_alignment.8",
+      "ok": true,
+      "actual": [
+        "t2-under-length",
+        0
+      ],
+      "expected": [
+        "t2-under-length",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.8",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3135,
+        "completion_tokens": 3628,
+        "total_tokens": 6763,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2049
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 447
+      },
+      "expected": {
+        "prompt_tokens": 3135,
+        "completion_tokens": 3628,
+        "total_tokens": 6763,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2049
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 447
+      }
+    },
+    {
+      "name": "messages_alignment.8",
+      "ok": true,
+      "actual": "dd6861ec12b8bca7000fa049a5363ca0fb4328634d24de6580438c3a23c8946f",
+      "expected": "dd6861ec12b8bca7000fa049a5363ca0fb4328634d24de6580438c3a23c8946f"
+    },
+    {
+      "name": "formal_text_alignment.8",
+      "ok": true,
+      "actual": "{\"criteria\": {\"task\": {\"band\": 5.0, \"strengths\": [{\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"comment\": \"开头第一句就明确表态，立场清楚，直接回应了 to what extent 的问题。\"}, {\"quote\": \"buses and trains produce less pollution than private cars, which is good for the environment and for public health\", \"comment\": \"给出与题目直接相关的理由（环保与公共健康），并做了因果说明，不是与题目无关的内容。\"}, {\"quote\": \"However, new roads are still useful in the countryside, where there are not many buses.\", \"comment\": \"补充了一个限定条件，使立场变成“以公共交通为主，但保留必要道路”，结论句与之保持一致，没有自相矛盾。\"}], \"issues\": [{\"quote\": \"In conclusion, public transport should be the priority, but some roads are still necessary.\", \"comment\": \"全文只有 97 词，远低于 250 词下限，且写完这一句就结束了。篇幅严重不足导致每个理由都只有一句话，没有展开，Task Response 因此被明显限制，无法进入 6 分档。\"}], \"summary\": \"考生回答了题目的所有部分：表明了立场、给出两三个相关理由，并做了让步。但全文仅 97 词，远低于 250 词的要求，观点只以单句形式点到，没有解释和例证支撑，属于“部分回应任务”。因此 Task Response 只能给 5.0。\"}, \"coherence\": {\"band\": 5.0, \"strengths\": [{\"quote\": \"In addition, buses and trains produce less pollution than private cars\", \"comment\": \"用 In addition 增添理由，用 However 转折，用 In conclusion 收束，衔接词选择准确、不堆砌。\"}, {\"quote\": \"so it reduces traffic jams in big cities\", \"comment\": \"用 so 明确表达因果关系，句内逻辑推进清楚；which is good for... 的指代也清晰。\"}], \"issues\": [{\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"comment\": \"全文只有一个段落，把引言、理由、让步和结论全部塞在一段里，没有分段，读者无法从版面上看出论证层次，这直接限制了连贯与衔接的分数。\"}], \"summary\": \"句与句之间有清晰的逻辑推进，连接词使用自然且不机械。但整篇文章只有一个段落，缺少段落划分，论证结构在版面上无法体现，属于“有组织但缺少层次推进”。因此 Coherence & Cohesion 给 5.0。\"}, \"lexical\": {\"band\": 5.5, \"strengths\": [{\"quote\": \"reduces traffic jams in big cities\", \"comment\": \"traffic jams、public transport、pollution 等话题词汇使用准确，搭配自然。\"}, {\"quote\": \"public transport should be the priority\", \"comment\": \"priority 一词用得有分量，准确地表达了“优先事项”的意思，不只是重复题目词汇。\"}], \"issues\": [], \"summary\": \"词汇总体准确，拼写和词形没有错误，话题词使用恰当。但词汇范围有限，多为日常基础词（good, useful, cheaper），几乎没有较少见的表达，成篇也因篇幅太短而无法展示变化。因此 Lexical Resource 给 5.5。\"}, \"grammar\": {\"band\": 6.0, \"strengths\": [{\"quote\": \"which is good for the environment and for public health\", \"comment\": \"非限制性定语从句使用正确，指代前面的整句话，说明考生具备一定的复杂句式能力。\"}, {\"quote\": \"new roads are still useful in the countryside, where there are not many buses\", \"comment\": \"用 where 引导定语从句，句子结构完整、标点正确，全文基本没有语法错误。\"}], \"issues\": [], \"summary\": \"全文以简单句为主，混合了 so 引导的结果句、which/where 引导的定语从句，句式有一定变化，且未发现明显语法、拼写或标点错误，句子基本无错。但受篇幅限制，可展示的句式种类有限。因此 Grammatical Range & Accuracy 给 6.0。\"}}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"I agree that governments should spend more money on public transport than on new roads.\", \"verdict\": \"supports\", \"comment\": \"这一段实际承担了引言、理由、让步和结论四重功能：先表明立场，再用运力、价格、环保三点支持，然后以乡下道路作让步，最后收束。方向始终服务于立场，但每一点都只有一句话，没有展开。\"}], \"problems\": [], \"improvements\": [{\"quote\": \"Public transport can carry many people at the same time, so it reduces traffic jams in big cities.\", \"suggestion\": \"可在此后补充一句具体说明，例如解释“一辆公交车可以替代数十辆私家车，因此道路占用减少”，把因果链说完整，而不只是给出结论。\"}, {\"quote\": \"However, new roads are still useful in the countryside, where there are not many buses.\", \"suggestion\": \"让步句可以再说明为什么乡下无法只靠公交（人口分散、线路稀疏），这样限定条件更有说服力，也更能支持“公共交通优先、但保留必要道路”的立场。\"}, {\"quote\": \"In addition, buses and trains produce less pollution than private cars\", \"suggestion\": \"可补一个假设性例子（例如如果更多人改乘地铁，市中心的尾气排放就会明显下降），把环保理由与“政府应优先投资公交”的建议直接挂钩。\"}], \"position\": {\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"consistent\": true, \"comment\": \"立场明确且贯穿全文：主体部分论证公交优先，让步句只是界定适用范围，结论句“public transport should be the priority, but some roads are still necessary”与开头立场一致，没有矛盾。\"}}, \"overall_comment\": \"这是一篇立场清楚、方向正确的短文：表态明确，理由切题，还做了让步，语言准确、几乎没有语法错误。但全文仅 97 词，且只有一个段落，每个理由都停留在单句层面，没有解释和例证展开，这使 Task Response 和 Coherence & Cohesion 被明显压低。下一步的重点是“把已有的观点写长、写透、分好段”，而不是换更难的词。\", \"priorities\": [\"把篇幅扩展到 250 词以上：每个理由按“观点句 + 为什么 + 例子/后果”三步展开，这是当前最大的失分点。\", \"分段：改成引言（表态）—主体段一（运力与成本）—主体段二（环保，或让步段）—结论四段结构，让论证层次在版面上可见。\", \"把已有的让步（乡下道路仍有用）写成一个完整段落，说明人口分散、公交线路稀疏，使“公交优先但保留必要道路”的立场更有说服力。\", \"在保持准确的前提下适度提升词汇与句式变化，例如用 relieve congestion 替代 reduces traffic jams，用 If governments invested more in..., ... 这样的条件句。\"]}",
+      "expected": "{\"criteria\": {\"task\": {\"band\": 5.0, \"strengths\": [{\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"comment\": \"开头第一句就明确表态，立场清楚，直接回应了 to what extent 的问题。\"}, {\"quote\": \"buses and trains produce less pollution than private cars, which is good for the environment and for public health\", \"comment\": \"给出与题目直接相关的理由（环保与公共健康），并做了因果说明，不是与题目无关的内容。\"}, {\"quote\": \"However, new roads are still useful in the countryside, where there are not many buses.\", \"comment\": \"补充了一个限定条件，使立场变成“以公共交通为主，但保留必要道路”，结论句与之保持一致，没有自相矛盾。\"}], \"issues\": [{\"quote\": \"In conclusion, public transport should be the priority, but some roads are still necessary.\", \"comment\": \"全文只有 97 词，远低于 250 词下限，且写完这一句就结束了。篇幅严重不足导致每个理由都只有一句话，没有展开，Task Response 因此被明显限制，无法进入 6 分档。\"}], \"summary\": \"考生回答了题目的所有部分：表明了立场、给出两三个相关理由，并做了让步。但全文仅 97 词，远低于 250 词的要求，观点只以单句形式点到，没有解释和例证支撑，属于“部分回应任务”。因此 Task Response 只能给 5.0。\"}, \"coherence\": {\"band\": 5.0, \"strengths\": [{\"quote\": \"In addition, buses and trains produce less pollution than private cars\", \"comment\": \"用 In addition 增添理由，用 However 转折，用 In conclusion 收束，衔接词选择准确、不堆砌。\"}, {\"quote\": \"so it reduces traffic jams in big cities\", \"comment\": \"用 so 明确表达因果关系，句内逻辑推进清楚；which is good for... 的指代也清晰。\"}], \"issues\": [{\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"comment\": \"全文只有一个段落，把引言、理由、让步和结论全部塞在一段里，没有分段，读者无法从版面上看出论证层次，这直接限制了连贯与衔接的分数。\"}], \"summary\": \"句与句之间有清晰的逻辑推进，连接词使用自然且不机械。但整篇文章只有一个段落，缺少段落划分，论证结构在版面上无法体现，属于“有组织但缺少层次推进”。因此 Coherence & Cohesion 给 5.0。\"}, \"lexical\": {\"band\": 5.5, \"strengths\": [{\"quote\": \"reduces traffic jams in big cities\", \"comment\": \"traffic jams、public transport、pollution 等话题词汇使用准确，搭配自然。\"}, {\"quote\": \"public transport should be the priority\", \"comment\": \"priority 一词用得有分量，准确地表达了“优先事项”的意思，不只是重复题目词汇。\"}], \"issues\": [], \"summary\": \"词汇总体准确，拼写和词形没有错误，话题词使用恰当。但词汇范围有限，多为日常基础词（good, useful, cheaper），几乎没有较少见的表达，成篇也因篇幅太短而无法展示变化。因此 Lexical Resource 给 5.5。\"}, \"grammar\": {\"band\": 6.0, \"strengths\": [{\"quote\": \"which is good for the environment and for public health\", \"comment\": \"非限制性定语从句使用正确，指代前面的整句话，说明考生具备一定的复杂句式能力。\"}, {\"quote\": \"new roads are still useful in the countryside, where there are not many buses\", \"comment\": \"用 where 引导定语从句，句子结构完整、标点正确，全文基本没有语法错误。\"}], \"issues\": [], \"summary\": \"全文以简单句为主，混合了 so 引导的结果句、which/where 引导的定语从句，句式有一定变化，且未发现明显语法、拼写或标点错误，句子基本无错。但受篇幅限制，可展示的句式种类有限。因此 Grammatical Range & Accuracy 给 6.0。\"}}, \"argument\": {\"paragraphs\": [{\"p\": 1, \"role\": \"introduction\", \"main_point\": \"I agree that governments should spend more money on public transport than on new roads.\", \"verdict\": \"supports\", \"comment\": \"这一段实际承担了引言、理由、让步和结论四重功能：先表明立场，再用运力、价格、环保三点支持，然后以乡下道路作让步，最后收束。方向始终服务于立场，但每一点都只有一句话，没有展开。\"}], \"problems\": [], \"improvements\": [{\"quote\": \"Public transport can carry many people at the same time, so it reduces traffic jams in big cities.\", \"suggestion\": \"可在此后补充一句具体说明，例如解释“一辆公交车可以替代数十辆私家车，因此道路占用减少”，把因果链说完整，而不只是给出结论。\"}, {\"quote\": \"However, new roads are still useful in the countryside, where there are not many buses.\", \"suggestion\": \"让步句可以再说明为什么乡下无法只靠公交（人口分散、线路稀疏），这样限定条件更有说服力，也更能支持“公共交通优先、但保留必要道路”的立场。\"}, {\"quote\": \"In addition, buses and trains produce less pollution than private cars\", \"suggestion\": \"可补一个假设性例子（例如如果更多人改乘地铁，市中心的尾气排放就会明显下降），把环保理由与“政府应优先投资公交”的建议直接挂钩。\"}], \"position\": {\"quote\": \"I agree that governments should spend more money on public transport than on new roads.\", \"consistent\": true, \"comment\": \"立场明确且贯穿全文：主体部分论证公交优先，让步句只是界定适用范围，结论句“public transport should be the priority, but some roads are still necessary”与开头立场一致，没有矛盾。\"}}, \"overall_comment\": \"这是一篇立场清楚、方向正确的短文：表态明确，理由切题，还做了让步，语言准确、几乎没有语法错误。但全文仅 97 词，且只有一个段落，每个理由都停留在单句层面，没有解释和例证展开，这使 Task Response 和 Coherence & Cohesion 被明显压低。下一步的重点是“把已有的观点写长、写透、分好段”，而不是换更难的词。\", \"priorities\": [\"把篇幅扩展到 250 词以上：每个理由按“观点句 + 为什么 + 例子/后果”三步展开，这是当前最大的失分点。\", \"分段：改成引言（表态）—主体段一（运力与成本）—主体段二（环保，或让步段）—结论四段结构，让论证层次在版面上可见。\", \"把已有的让步（乡下道路仍有用）写成一个完整段落，说明人口分散、公交线路稀疏，使“公交优先但保留必要道路”的立场更有说服力。\", \"在保持准确的前提下适度提升词汇与句式变化，例如用 relieve congestion 替代 reduces traffic jams，用 If governments invested more in..., ... 这样的条件句。\"]}"
+    },
+    {
+      "name": "call_alignment.9",
+      "ok": true,
+      "actual": [
+        "t1-no-image",
+        0
+      ],
+      "expected": [
+        "t1-no-image",
+        0
+      ]
+    },
+    {
+      "name": "usage_alignment.9",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 2238,
+        "completion_tokens": 5060,
+        "total_tokens": 7298,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3125
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2110
+      },
+      "expected": {
+        "prompt_tokens": 2238,
+        "completion_tokens": 5060,
+        "total_tokens": 7298,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3125
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2110
+      }
+    },
+    {
+      "name": "messages_alignment.9",
+      "ok": true,
+      "actual": "ee8769eb0eb1c49bd3d60c667832ab1a3564b7a4343141ef11557fc5d6b1c078",
+      "expected": "ee8769eb0eb1c49bd3d60c667832ab1a3564b7a4343141ef11557fc5d6b1c078"
+    },
+    {
+      "name": "formal_text_alignment.9",
+      "ok": true,
+      "actual": "{\"criteria\": {\"task\": null, \"coherence\": {\"band\": 7, \"strengths\": [{\"quote\": \"Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably.\", \"comment\": \"第二段用 Overall 明确引出概述，先给总体趋势再给极端值（最高/最低），符合 Task 1 的信息组织习惯。\"}, {\"quote\": \"In 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C.\", \"comment\": \"以时间为主线分段（2000 年一段、2020 年一段），并用 compared with 把同一年份的数据横向并联，信息推进清晰。\"}, {\"quote\": \"Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\", \"comment\": \"also 承接前一句的变化，but 转折回总排名，连接词使用自然、不机械，指代（it）清楚。\"}], \"issues\": [{\"quote\": \"Country A had the highest level of ownership in both years\", \"comment\": \"概述说 A 两年都最高，但第四段写 Country C「nearly 80%」并「overtaking Country A」，而 A 只有「about 75%」。概述与分述段落自相矛盾，破坏了全文信息的一致性。\"}, {\"quote\": \"In summary, while every country saw an increase, the growth was particularly striking in Country C\", \"comment\": \"结尾段前半句基本重复第二段概述（所有国家都增长），信息增量小；只有后半句的幅度对比是新的。整段与概述功能重叠，显得收尾冗余。\"}], \"summary\": \"分段清楚、时间线明确，概述—分述—收尾的结构完整，连接词自然且指代清晰，达到 7 分。但概述中「A 两年都最高」与第四段 C 反超 A 的数据互相矛盾，属于组织上的前后不一致；末段又与概述重复，削弱了推进感，因此不能给到 8 分。\"}, \"lexical\": {\"band\": 7, \"strengths\": [{\"quote\": \"by far the lowest figure\", \"comment\": \"by far 强化最高级，搭配自然，是较地道的程度表达。\"}, {\"quote\": \"the most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A\", \"comment\": \"dramatic change、almost doubled、overtaking 一组词义精准，能灵活描述变化幅度与排名互换，而非只会说 increase。\"}, {\"quote\": \"well behind the other three countries\", \"comment\": \"用 well behind 表示差距，比简单的 lower than 更精确、更有弹性。\"}], \"issues\": [{\"quote\": \"Country B had grown to approximately 65%\", \"comment\": \"指称不够精确：增长的是百分比/比例，不是「国家」。这类以国家名代替其数据的说法在数据描述中会显得含糊。\"}], \"summary\": \"词汇量足以灵活表达趋势与差距（dramatic、almost doubled、overtaking、well behind），拼写与搭配基本准确，符合 7 分。少数指称略欠精确（把国家当作增长的百分比），但未造成理解障碍，尚未达到 8 分所需的广泛、娴熟用词。\"}, \"grammar\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"although the size of the rise varied considerably\", \"comment\": \"让步状语从句使用正确，且置于句末，句式有变化。\"}, {\"quote\": \"where ownership almost doubled to nearly 80%, overtaking Country A\", \"comment\": \"非限制性关系从句加现在分词状语，结构完整、逻辑主语清楚（ownership/C 的增长），不是悬垂结构。\"}, {\"quote\": \"while every country saw an increase, the growth was particularly striking in Country C\", \"comment\": \"while 引导的对比从句与主句搭配正确，比较结构（more modest、well behind）也使用自然。\"}], \"issues\": [], \"summary\": \"全文句子几乎无语法错误，标点规范，已出现让步从句、关系从句、分词状语、过去完成时与多种比较结构，复杂句比例不低。但整体仍以短句并列为主，句型丰富度未达到 8 分所要求的「广泛且娴熟」，故给 7.5。\"}}, \"comparisons\": [{\"claim\": \"car ownership increased in all four countries over the period\", \"figures\": [\"around 70%\", \"about 75%\", \"roughly 55%\", \"approximately 65%\", \"about 40%\", \"nearly 80%\", \"only 15%\", \"around 35%\"], \"holds\": true, \"comment\": \"四国数据在文中均为后一年高于前一年（70→75、55→65、40→近 80、15→35），说法与文中数字一致。\"}, {\"claim\": \"Country A had the highest level of ownership in both years\", \"figures\": [\"about 75%\", \"nearly 80%\"], \"holds\": false, \"comment\": \"文中 A 在 2020 年约为 75%，而 C 达到近 80% 并「overtaking Country A」，因此 2020 年最高者不是 A，概述与后文自相矛盾。\"}, {\"claim\": \"Country D remained the lowest\", \"figures\": [\"only 15%\", \"around 35%\"], \"holds\": true, \"comment\": \"D 在 2000 年为 15%（低于 40%），2020 年为 35%（低于 65%、75%、近 80%），两年都是最低，说法成立。\"}, {\"claim\": \"ownership almost doubled to nearly 80%\", \"figures\": [\"about 40%\", \"nearly 80%\"], \"holds\": true, \"comment\": \"从约 40% 到近 80%，接近翻倍，与文中数字相符。\"}, {\"claim\": \"The most dramatic change was seen in Country C\", \"figures\": [\"about 75%\", \"approximately 65%\", \"nearly 80%\", \"around 35%\"], \"holds\": true, \"comment\": \"按文中数字，C 增幅约 40 个百分点，A 约 5、B 约 10、D 约 20，C 增幅最大，说法成立。\"}, {\"claim\": \"much more modest in Country A\", \"figures\": [\"around 70%\", \"about 75%\"], \"holds\": true, \"comment\": \"A 从约 70% 到约 75%，仅小幅上升，与「更平缓」一致。\"}, {\"claim\": \"by far the lowest figure, at only 15%\", \"figures\": [\"only 15%\", \"about 40%\"], \"holds\": true, \"comment\": \"15% 远低于次低的约 40%，by far 成立。\"}, {\"claim\": \"it was still well behind the other three countries\", \"figures\": [\"around 35%\", \"approximately 65%\", \"about 75%\", \"nearly 80%\"], \"holds\": true, \"comment\": \"D 的 35% 明显低于 65%、75%、近 80%，「仍远落后于其他三国」与文中数字一致。\"}], \"overall_comment\": \"文章结构规范：引入、概述、2000 年、2020 年、收尾五段，时间线清楚，连接自然，词汇与句式都有一定变化，语法准确度是全文最强的一项。主要问题在组织的一致性——概述称 Country A 两年都最高，但第四段写 Country C 以近 80% 反超 A 的约 75%；另外末段与概述功能重叠，收尾显得冗余。个别表达以国家名代替其百分比（B had grown to approximately 65%），影响数据描述的精确度。\", \"priorities\": [\"把概述与分述数据对齐：既然第四段已写 C 以近 80% 反超 A 的约 75%，概述就应改为「A 在 2000 年最高，2020 年被 C 反超，D 两年都最低」。\", \"末段已有「C 增幅最显著、A 最平缓」这一有价值的对比，可以把重复的「every country saw an increase」删去，只保留幅度对比，或直接并入概述，避免与第二段功能重叠。\", \"数据描述时精确指称对象：写「the figure for Country B had grown to approximately 65%」而不是「Country B had grown」，让百分比始终有明确的主语。\", \"语法已经很准确，可以在此基础上进一步丰富句型，例如用名词化（a rise of about 5 percentage points）或更精确的程度副词，让信息密度更高。\"]}",
+      "expected": "{\"criteria\": {\"task\": null, \"coherence\": {\"band\": 7, \"strengths\": [{\"quote\": \"Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably.\", \"comment\": \"第二段用 Overall 明确引出概述，先给总体趋势再给极端值（最高/最低），符合 Task 1 的信息组织习惯。\"}, {\"quote\": \"In 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C.\", \"comment\": \"以时间为主线分段（2000 年一段、2020 年一段），并用 compared with 把同一年份的数据横向并联，信息推进清晰。\"}, {\"quote\": \"Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\", \"comment\": \"also 承接前一句的变化，but 转折回总排名，连接词使用自然、不机械，指代（it）清楚。\"}], \"issues\": [{\"quote\": \"Country A had the highest level of ownership in both years\", \"comment\": \"概述说 A 两年都最高，但第四段写 Country C「nearly 80%」并「overtaking Country A」，而 A 只有「about 75%」。概述与分述段落自相矛盾，破坏了全文信息的一致性。\"}, {\"quote\": \"In summary, while every country saw an increase, the growth was particularly striking in Country C\", \"comment\": \"结尾段前半句基本重复第二段概述（所有国家都增长），信息增量小；只有后半句的幅度对比是新的。整段与概述功能重叠，显得收尾冗余。\"}], \"summary\": \"分段清楚、时间线明确，概述—分述—收尾的结构完整，连接词自然且指代清晰，达到 7 分。但概述中「A 两年都最高」与第四段 C 反超 A 的数据互相矛盾，属于组织上的前后不一致；末段又与概述重复，削弱了推进感，因此不能给到 8 分。\"}, \"lexical\": {\"band\": 7, \"strengths\": [{\"quote\": \"by far the lowest figure\", \"comment\": \"by far 强化最高级，搭配自然，是较地道的程度表达。\"}, {\"quote\": \"the most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A\", \"comment\": \"dramatic change、almost doubled、overtaking 一组词义精准，能灵活描述变化幅度与排名互换，而非只会说 increase。\"}, {\"quote\": \"well behind the other three countries\", \"comment\": \"用 well behind 表示差距，比简单的 lower than 更精确、更有弹性。\"}], \"issues\": [{\"quote\": \"Country B had grown to approximately 65%\", \"comment\": \"指称不够精确：增长的是百分比/比例，不是「国家」。这类以国家名代替其数据的说法在数据描述中会显得含糊。\"}], \"summary\": \"词汇量足以灵活表达趋势与差距（dramatic、almost doubled、overtaking、well behind），拼写与搭配基本准确，符合 7 分。少数指称略欠精确（把国家当作增长的百分比），但未造成理解障碍，尚未达到 8 分所需的广泛、娴熟用词。\"}, \"grammar\": {\"band\": 7.5, \"strengths\": [{\"quote\": \"although the size of the rise varied considerably\", \"comment\": \"让步状语从句使用正确，且置于句末，句式有变化。\"}, {\"quote\": \"where ownership almost doubled to nearly 80%, overtaking Country A\", \"comment\": \"非限制性关系从句加现在分词状语，结构完整、逻辑主语清楚（ownership/C 的增长），不是悬垂结构。\"}, {\"quote\": \"while every country saw an increase, the growth was particularly striking in Country C\", \"comment\": \"while 引导的对比从句与主句搭配正确，比较结构（more modest、well behind）也使用自然。\"}], \"issues\": [], \"summary\": \"全文句子几乎无语法错误，标点规范，已出现让步从句、关系从句、分词状语、过去完成时与多种比较结构，复杂句比例不低。但整体仍以短句并列为主，句型丰富度未达到 8 分所要求的「广泛且娴熟」，故给 7.5。\"}}, \"comparisons\": [{\"claim\": \"car ownership increased in all four countries over the period\", \"figures\": [\"around 70%\", \"about 75%\", \"roughly 55%\", \"approximately 65%\", \"about 40%\", \"nearly 80%\", \"only 15%\", \"around 35%\"], \"holds\": true, \"comment\": \"四国数据在文中均为后一年高于前一年（70→75、55→65、40→近 80、15→35），说法与文中数字一致。\"}, {\"claim\": \"Country A had the highest level of ownership in both years\", \"figures\": [\"about 75%\", \"nearly 80%\"], \"holds\": false, \"comment\": \"文中 A 在 2020 年约为 75%，而 C 达到近 80% 并「overtaking Country A」，因此 2020 年最高者不是 A，概述与后文自相矛盾。\"}, {\"claim\": \"Country D remained the lowest\", \"figures\": [\"only 15%\", \"around 35%\"], \"holds\": true, \"comment\": \"D 在 2000 年为 15%（低于 40%），2020 年为 35%（低于 65%、75%、近 80%），两年都是最低，说法成立。\"}, {\"claim\": \"ownership almost doubled to nearly 80%\", \"figures\": [\"about 40%\", \"nearly 80%\"], \"holds\": true, \"comment\": \"从约 40% 到近 80%，接近翻倍，与文中数字相符。\"}, {\"claim\": \"The most dramatic change was seen in Country C\", \"figures\": [\"about 75%\", \"approximately 65%\", \"nearly 80%\", \"around 35%\"], \"holds\": true, \"comment\": \"按文中数字，C 增幅约 40 个百分点，A 约 5、B 约 10、D 约 20，C 增幅最大，说法成立。\"}, {\"claim\": \"much more modest in Country A\", \"figures\": [\"around 70%\", \"about 75%\"], \"holds\": true, \"comment\": \"A 从约 70% 到约 75%，仅小幅上升，与「更平缓」一致。\"}, {\"claim\": \"by far the lowest figure, at only 15%\", \"figures\": [\"only 15%\", \"about 40%\"], \"holds\": true, \"comment\": \"15% 远低于次低的约 40%，by far 成立。\"}, {\"claim\": \"it was still well behind the other three countries\", \"figures\": [\"around 35%\", \"approximately 65%\", \"about 75%\", \"nearly 80%\"], \"holds\": true, \"comment\": \"D 的 35% 明显低于 65%、75%、近 80%，「仍远落后于其他三国」与文中数字一致。\"}], \"overall_comment\": \"文章结构规范：引入、概述、2000 年、2020 年、收尾五段，时间线清楚，连接自然，词汇与句式都有一定变化，语法准确度是全文最强的一项。主要问题在组织的一致性——概述称 Country A 两年都最高，但第四段写 Country C 以近 80% 反超 A 的约 75%；另外末段与概述功能重叠，收尾显得冗余。个别表达以国家名代替其百分比（B had grown to approximately 65%），影响数据描述的精确度。\", \"priorities\": [\"把概述与分述数据对齐：既然第四段已写 C 以近 80% 反超 A 的约 75%，概述就应改为「A 在 2000 年最高，2020 年被 C 反超，D 两年都最低」。\", \"末段已有「C 增幅最显著、A 最平缓」这一有价值的对比，可以把重复的「every country saw an increase」删去，只保留幅度对比，或直接并入概述，避免与第二段功能重叠。\", \"数据描述时精确指称对象：写「the figure for Country B had grown to approximately 65%」而不是「Country B had grown」，让百分比始终有明确的主语。\", \"语法已经很准确，可以在此基础上进一步丰富句型，例如用名词化（a rise of about 5 percentage points）或更精确的程度副词，让信息密度更高。\"]}"
+    },
+    {
+      "name": "first_attempt_count",
+      "ok": true,
+      "actual": 7,
+      "expected": 7
+    },
+    {
+      "name": "first_json_rate",
+      "ok": true,
+      "actual": 0.857,
+      "expected": 0.857
+    },
+    {
+      "name": "first_valid_rate",
+      "ok": true,
+      "actual": 0.714,
+      "expected": 0.714
+    },
+    {
+      "name": "final_ready_rate",
+      "ok": true,
+      "actual": 0.857,
+      "expected": 0.857
+    },
+    {
+      "name": "thinking_modes",
+      "ok": true,
+      "actual": [
+        "high"
+      ],
+      "expected": [
+        "high"
+      ]
+    },
+    {
+      "name": "token_budget",
+      "ok": true,
+      "actual": [
+        32000
+      ],
+      "expected": [
+        32000
+      ]
+    },
+    {
+      "name": "kind_usage_totals",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 29322,
+        "completion_tokens": 56708,
+        "total_tokens": 86030
+      },
+      "expected": {
+        "prompt_tokens": 29322,
+        "completion_tokens": 56708,
+        "total_tokens": 86030
+      }
+    },
+    {
+      "name": "reasoning_known",
+      "ok": true,
+      "actual": 39165,
+      "expected": 39165
+    },
+    {
+      "name": "reasoning_missing",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "reasoning_total",
+      "ok": true,
+      "actual": 39165,
+      "expected": 39165
+    },
+    {
+      "name": "reasoning_peak",
+      "ok": true,
+      "actual": 11293,
+      "expected": 11293
+    },
+    {
+      "name": "output_peak",
+      "ok": true,
+      "actual": 13506,
+      "expected": 13506
+    },
+    {
+      "name": "report_token_total.prompt",
+      "ok": true,
+      "actual": 29322,
+      "expected": 29322
+    },
+    {
+      "name": "report_known_token_total.prompt",
+      "ok": true,
+      "actual": 29322,
+      "expected": 29322
+    },
+    {
+      "name": "report_token_total.completion",
+      "ok": true,
+      "actual": 56708,
+      "expected": 56708
+    },
+    {
+      "name": "report_known_token_total.completion",
+      "ok": true,
+      "actual": 56708,
+      "expected": 56708
+    },
+    {
+      "name": "unknown_usage_calls",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "truncated",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "timeouts",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "audit_max_latency",
+      "ok": true,
+      "actual": 84834,
+      "expected": 84834
+    },
+    {
+      "name": "latency_ms_p50",
+      "ok": true,
+      "actual": 40654,
+      "expected": 40654
+    },
+    {
+      "name": "latency_ms_p90",
+      "ok": true,
+      "actual": 84835,
+      "expected": 84835
+    },
+    {
+      "name": "argument.task2_evaluations",
+      "ok": true,
+      "actual": 5,
+      "expected": 5
+    },
+    {
+      "name": "argument.with_argument",
+      "ok": true,
+      "actual": 5,
+      "expected": 5
+    },
+    {
+      "name": "argument.with_position",
+      "ok": true,
+      "actual": 5,
+      "expected": 5
+    },
+    {
+      "name": "argument.paragraphs",
+      "ok": true,
+      "actual": 21,
+      "expected": 21
+    },
+    {
+      "name": "argument.problems",
+      "ok": true,
+      "actual": 3,
+      "expected": 3
+    },
+    {
+      "name": "argument.improvements",
+      "ok": true,
+      "actual": 15,
+      "expected": 15
+    },
+    {
+      "name": "argument.returned",
+      "ok": true,
+      "actual": 44,
+      "expected": 44
+    },
+    {
+      "name": "argument.dropped",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.duplicates",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.over_limit",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.self_conflicts",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.suggestions_removed",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.reclassified",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "argument.kept",
+      "ok": true,
+      "actual": 44,
+      "expected": 44
+    },
+    {
+      "name": "argument_accounting",
+      "ok": true,
+      "actual": 44,
+      "expected": 44
+    },
+    {
+      "name": "argument_drop_rate",
+      "ok": true,
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "name": "argument_types",
+      "ok": true,
+      "actual": {
+        "overgeneralized": 1,
+        "irrelevant": 1,
+        "off_position": 1
+      },
+      "expected": {
+        "overgeneralized": 1,
+        "irrelevant": 1,
+        "off_position": 1
+      }
+    },
+    {
+      "name": "argument_verdicts",
+      "ok": true,
+      "actual": {
+        "supports": 16,
+        "off_position": 5
+      },
+      "expected": {
+        "supports": 16,
+        "off_position": 5
+      }
+    },
+    {
+      "name": "evidence.scored_criteria",
+      "ok": true,
+      "actual": 23,
+      "expected": 23
+    },
+    {
+      "name": "evidence.quotes",
+      "ok": true,
+      "actual": 81,
+      "expected": 81
+    },
+    {
+      "name": "evidence.quotes_verified",
+      "ok": true,
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "name": "evidence.suggestions_removed",
+      "ok": true,
+      "actual": {
+        "criteria": 0,
+        "priorities": 1,
+        "argument": 0,
+        "total": 1
+      },
+      "expected": {
+        "criteria": 0,
+        "priorities": 1,
+        "argument": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "evidence.count_corrections",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "sample_scores.t2-weak",
+      "ok": true,
+      "actual": {
+        "overall": 5.5,
+        "task": 6.0,
+        "coherence": 6.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "expected": {
+        "overall": 5.5,
+        "task": 6.0,
+        "coherence": 6.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      }
+    },
+    {
+      "name": "sample_scores.t2-mid",
+      "ok": true,
+      "actual": {
+        "overall": 7.0,
+        "task": 7.0,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      },
+      "expected": {
+        "overall": 7.0,
+        "task": 7.0,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      }
+    },
+    {
+      "name": "sample_scores.t2-good",
+      "ok": true,
+      "actual": {
+        "overall": 8.0,
+        "task": 8.0,
+        "coherence": 8.0,
+        "lexical": 8.0,
+        "grammar": 8.0
+      },
+      "expected": {
+        "overall": 8.0,
+        "task": 8.0,
+        "coherence": 8.0,
+        "lexical": 8.0,
+        "grammar": 8.0
+      }
+    },
+    {
+      "name": "sample_scores.t2-strong",
+      "ok": true,
+      "actual": {
+        "overall": null
+      },
+      "expected": {
+        "overall": null
+      }
+    },
+    {
+      "name": "sample_scores.t2-off-topic",
+      "ok": true,
+      "actual": {
+        "overall": 6.5,
+        "task": 3.0,
+        "coherence": 7.0,
+        "lexical": 7.5,
+        "grammar": 7.5
+      },
+      "expected": {
+        "overall": 6.5,
+        "task": 3.0,
+        "coherence": 7.0,
+        "lexical": 7.5,
+        "grammar": 7.5
+      }
+    },
+    {
+      "name": "sample_scores.t2-under-length",
+      "ok": true,
+      "actual": {
+        "overall": 5.5,
+        "task": 5.0,
+        "coherence": 5.0,
+        "lexical": 5.5,
+        "grammar": 6.0
+      },
+      "expected": {
+        "overall": 5.5,
+        "task": 5.0,
+        "coherence": 5.0,
+        "lexical": 5.5,
+        "grammar": 6.0
+      }
+    },
+    {
+      "name": "sample_scores.t1-no-image",
+      "ok": true,
+      "actual": {
+        "overall": null,
+        "task": null,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      },
+      "expected": {
+        "overall": null,
+        "task": null,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      }
+    },
+    {
+      "name": "sanity_passed",
+      "ok": true,
+      "actual": 11,
+      "expected": 11
+    },
+    {
+      "name": "sanity_total",
+      "ok": true,
+      "actual": 12,
+      "expected": 12
+    },
+    {
+      "name": "sanity_skipped",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_flag.0",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.1",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.2",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.3",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.4",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.5",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.6",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "sanity_flag.7",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.8",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "sanity_flag.9",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.10",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.11",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "sanity_flag.12",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "input_files_unchanged",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "passed": 127,
+  "total": 127,
+  "failures": [],
+  "limitations": [
+    "Arithmetic and production-validator replay, not independent human scoring.",
+    "Completed and aborted batches retain requested-group denominator separately.",
+    "Only sanitized shared evidence read; no private reasoning or credentials."
+  ]
+}

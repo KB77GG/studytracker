@@ -1,0 +1,234 @@
+{
+  "source_head": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+  "tools_sha256": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+  "real_requests": 0,
+  "private_env_read": false,
+  "real_teacher_file_read": false,
+  "scenarios": {
+    "success_both": {
+      "actual_fake_sends": 8,
+      "groups": {
+        "A": {
+          "request_attempts": 7,
+          "completed": true,
+          "ready": 7,
+          "circuit": null
+        },
+        "B": {
+          "request_attempts": 1,
+          "completed": true,
+          "ready": 1,
+          "circuit": null
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "retry_both": {
+      "actual_fake_sends": 16,
+      "groups": {
+        "A": {
+          "request_attempts": 14,
+          "completed": true,
+          "ready": 7,
+          "circuit": null
+        },
+        "B": {
+          "request_attempts": 2,
+          "completed": true,
+          "ready": 1,
+          "circuit": null
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "first_500": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "http_500"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "second_500": {
+      "actual_fake_sends": 2,
+      "groups": {
+        "A": {
+          "request_attempts": 2,
+          "completed": false,
+          "ready": 1,
+          "circuit": "http_500"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "http429": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "http_429"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "http401": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "http_401"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "timeout": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "timeout"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "invalid_json": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "invalid_response"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "missing_choices": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "invalid_response"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "interrupt": {
+      "actual_fake_sends": 1,
+      "groups": {
+        "A": {
+          "request_attempts": 1,
+          "completed": false,
+          "ready": 0,
+          "circuit": "unexpected_client_exception"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "second_interrupt": {
+      "actual_fake_sends": 2,
+      "groups": {
+        "A": {
+          "request_attempts": 2,
+          "completed": false,
+          "ready": 0,
+          "circuit": "unexpected_client_exception"
+        },
+        "B": {
+          "blocked_by_shared_circuit": true
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    },
+    "b_500": {
+      "actual_fake_sends": 8,
+      "groups": {
+        "A": {
+          "request_attempts": 7,
+          "completed": true,
+          "ready": 7,
+          "circuit": null
+        },
+        "B": {
+          "request_attempts": 1,
+          "completed": true,
+          "ready": 0,
+          "circuit": "http_500"
+        }
+      },
+      "teacher_metadata_not_sent": true,
+      "responses_persisted_before_validation": true,
+      "duplicate_ledgers_refused": true
+    }
+  },
+  "scope_rejections": 10,
+  "invalid_teacher_rejections": {
+    "wrong_sha": true,
+    "wrong_id": true,
+    "wrong_task": true,
+    "missing_findings": true,
+    "too_many_findings": true,
+    "image": true,
+    "two_rows": true,
+    "missing_file": true
+  },
+  "blocking_findings": []
+}

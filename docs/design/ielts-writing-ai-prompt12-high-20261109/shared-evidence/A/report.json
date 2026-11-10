@@ -1,0 +1,452 @@
+{
+  "started_at": "2026-11-09T15:16:18+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "prompt_version": "iwa-2026-11-10.12",
+  "evaluate_thinking": "high",
+  "demo": false,
+  "samples": 7,
+  "calls": 9,
+  "max_calls": 14,
+  "aborted": null,
+  "connectivity": {
+    "ok": true,
+    "error": null,
+    "response_received": true,
+    "authenticated": true,
+    "generation_ok": true,
+    "generation_error": null
+  },
+  "kinds": {
+    "evaluate": {
+      "thinking": [
+        "high"
+      ],
+      "max_tokens": [
+        32000
+      ],
+      "completion_tokens_max": 13506,
+      "reasoning_tokens_known": 39165,
+      "reasoning_unreported_calls": 0,
+      "reasoning_tokens": 39165,
+      "reasoning_tokens_max": 11293,
+      "truncated": 0,
+      "timeouts": 0,
+      "calls": 9,
+      "first_attempts": 7,
+      "first_attempt_json_ok": 0.857,
+      "first_attempt_valid": 0.714,
+      "first_attempt_rejections": {
+        "缺少总评": 1,
+        "JSON 括号或结构错误": 1
+      },
+      "json_problems": [
+        {
+          "sample": "t2-strong",
+          "attempt": 0,
+          "problem": "JSON 结构错误：最外层对象在 grammar_note 之后就结束了（多了一个 } 或 ]），后面的 argument、overall_comment、priorities 落在了 JSON 之外；paragraphs 出现在最外层，但它属于 argument：argument 提前结束了（多了一个 }）；problems 出现在最外层，但它属于 argument：argument 提前结束了（多了一个 }）"
+        },
+        {
+          "sample": "t2-strong",
+          "attempt": 1,
+          "problem": "JSON 结构错误：最外层对象在 overall_comment 之后就结束了（多了一个 } 或 ]），后面的 priorities 落在了 JSON 之外"
+        }
+      ],
+      "final_ready": 0.857,
+      "final_failures": {
+        "invalid_output": 1
+      },
+      "latency_ms_p50": 40654,
+      "latency_ms_p90": 84835,
+      "tokens": {
+        "prompt_tokens": 29322,
+        "completion_tokens": 56708,
+        "total_tokens": 86030
+      }
+    }
+  },
+  "vision_calls": 0,
+  "evidence": {
+    "scored_criteria": 23,
+    "quotes": 81,
+    "quotes_verified": 1.0,
+    "suggestions_removed": {
+      "criteria": 0,
+      "priorities": 1,
+      "argument": 0,
+      "total": 1
+    },
+    "count_corrections": 0
+  },
+  "argument": {
+    "task2_evaluations": 5,
+    "with_argument": 5,
+    "with_position": 5,
+    "paragraphs": 21,
+    "problems": 3,
+    "returned": 44,
+    "kept": 44,
+    "improvements": 15,
+    "self_conflicts": 0,
+    "suggestions_removed": 0,
+    "reclassified": 0,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 0,
+    "dropped_rate": 0.0,
+    "evaluate_attempts": 8,
+    "attempts_rejected_for_argument": 0,
+    "problem_types": {
+      "overgeneralized": 1,
+      "irrelevant": 1,
+      "off_position": 1
+    },
+    "paragraph_verdicts": {
+      "supports": 16,
+      "off_position": 5
+    }
+  },
+  "refine_rewrite": {
+    "refine_sentences": 0,
+    "refine_missing_rate": null,
+    "refine_changed_rate": null,
+    "rewrite_requested": 0,
+    "rewrite_generated": 0,
+    "rewrite_quality_passed_count": 0,
+    "rewrite_retry_failed": 0,
+    "rewrite_quality_passed_of_requested": null,
+    "rewrite_meets_min_words_of_requested": null,
+    "rewrite_quality_passed_of_generated": null,
+    "rewrite_meets_min_words_of_generated": null,
+    "rewrite_quality_issues": {},
+    "rewrite_content_passed_count": 0,
+    "rewrite_content_passed_of_requested": null,
+    "rewrite_full_retries": 0,
+    "rewrite_notes_repairs": 0
+  },
+  "sanity": {
+    "checks": [
+      {
+        "sample": "t2-weak",
+        "check": "总分 ≤ 5.5",
+        "ok": true,
+        "detail": 5.5
+      },
+      {
+        "sample": "t2-weak",
+        "check": "论证问题 ≥ 1 条（弱文应被指出问题）",
+        "ok": true,
+        "detail": [
+          "overgeneralized"
+        ]
+      },
+      {
+        "sample": "t2-mid",
+        "check": "总分 ≥ 5.0",
+        "ok": true,
+        "detail": 7.0
+      },
+      {
+        "sample": "t2-mid",
+        "check": "总分 ≤ 7.0",
+        "ok": true,
+        "detail": 7.0
+      },
+      {
+        "sample": "t2-good",
+        "check": "总分 ≥ 6.0",
+        "ok": true,
+        "detail": 8.0
+      },
+      {
+        "sample": "t2-good",
+        "check": "总分 ≤ 8.0",
+        "ok": true,
+        "detail": 8.0
+      },
+      {
+        "sample": "t2-strong",
+        "check": "评价已生成",
+        "ok": false,
+        "detail": "评价失败，无法检查"
+      },
+      {
+        "sample": "t2-off-topic",
+        "check": "TR ≤ 5.0（离题）",
+        "ok": true,
+        "detail": 3.0
+      },
+      {
+        "sample": "t2-off-topic",
+        "check": "离题样本：通过质量检查的改写必须已按题目重写",
+        "ok": null,
+        "detail": "本批未运行改写"
+      },
+      {
+        "sample": "t2-off-topic",
+        "check": "应标出 off_position / irrelevant（问题类型或段落判定偏离）",
+        "ok": true,
+        "detail": {
+          "problems": [
+            "irrelevant",
+            "off_position"
+          ],
+          "off_position_paragraphs": [
+            "introduction",
+            "body",
+            "body",
+            "body",
+            "conclusion"
+          ],
+          "position_consistent": true,
+          "hits": [
+            "irrelevant",
+            "off_position"
+          ]
+        }
+      },
+      {
+        "sample": "t2-under-length",
+        "check": "有字数不足提示",
+        "ok": true,
+        "detail": [
+          "字数 97 低于 250 词要求，实际考试中Task Response会因此受限。"
+        ]
+      },
+      {
+        "sample": "t1-no-image",
+        "check": "指出文内数据矛盾 ≥ 1 条（已知样本矛盾）",
+        "ok": true,
+        "detail": {
+          "issues": [
+            "Country A had the highest level of ownership in both years"
+          ],
+          "claims_checked": 8
+        }
+      },
+      {
+        "sample": "t1-no-image",
+        "check": "缺图 TA / 总分不可评",
+        "ok": true,
+        "detail": null
+      }
+    ],
+    "passed": 11,
+    "total": 12,
+    "skipped": 1
+  },
+  "calibration": null,
+  "teacher_findings": null,
+  "tokens": {
+    "prompt": 29322,
+    "completion": 56708
+  },
+  "usage": {
+    "total": {
+      "calls": 9,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 29322,
+        "completion": 56708
+      },
+      "known_tokens": {
+        "prompt": 29322,
+        "completion": 56708
+      }
+    },
+    "text": {
+      "calls": 9,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 29322,
+        "completion": 56708
+      },
+      "known_tokens": {
+        "prompt": 29322,
+        "completion": 56708
+      }
+    },
+    "vision": {
+      "calls": 0,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "known_tokens": {
+        "prompt": 0,
+        "completion": 0
+      }
+    },
+    "by_model": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "calls": 9,
+        "unknown_usage_calls": 0,
+        "complete": true,
+        "tokens": {
+          "prompt": 29322,
+          "completion": 56708
+        },
+        "known_tokens": {
+          "prompt": 29322,
+          "completion": 56708
+        }
+      }
+    ]
+  },
+  "estimated_cost": null,
+  "cost_estimate": {
+    "scope": "text",
+    "covered_cost": null,
+    "coverage": "unknown",
+    "vision_cost": 0.0,
+    "unknown_usage_calls": 0,
+    "note": "单价仅用于文本模型；识图费用未估算。缺少 usage 时费用未知，不能视为零账单。"
+  },
+  "per_sample": [
+    {
+      "id": "t2-weak",
+      "scores": {
+        "overall": 5.5,
+        "task": 6.0,
+        "coherence": 6.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [
+        "overgeneralized"
+      ],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-mid",
+      "scores": {
+        "overall": 7.0,
+        "task": 7.0,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-good",
+      "scores": {
+        "overall": 8.0,
+        "task": 8.0,
+        "coherence": 8.0,
+        "lexical": 8.0,
+        "grammar": 8.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-strong",
+      "scores": {
+        "overall": null
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [],
+      "statuses": {
+        "evaluate": "failed"
+      },
+      "errors": {
+        "evaluate": "invalid_output"
+      }
+    },
+    {
+      "id": "t2-off-topic",
+      "scores": {
+        "overall": 6.5,
+        "task": 3.0,
+        "coherence": 7.0,
+        "lexical": 7.5,
+        "grammar": 7.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [
+        "irrelevant",
+        "off_position"
+      ],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t2-under-length",
+      "scores": {
+        "overall": 5.5,
+        "task": 5.0,
+        "coherence": 5.0,
+        "lexical": 5.5,
+        "grammar": 6.0
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    },
+    {
+      "id": "t1-no-image",
+      "scores": {
+        "overall": null,
+        "task": null,
+        "coherence": 7.0,
+        "lexical": 7.0,
+        "grammar": 7.5
+      },
+      "teacher": {},
+      "image_status": "none",
+      "argument_problems": [],
+      "statuses": {
+        "evaluate": "ready"
+      },
+      "errors": {}
+    }
+  ],
+  "audit": {
+    "source_head": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+    "tools_sha256": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+    "actual_transport_attempts": 9,
+    "group": "A",
+    "limit": 14,
+    "total_authorized_limit": 16,
+    "requested_samples": 7,
+    "scope": "authorized group only; evaluation/high/32000/300; no extra smoke",
+    "actual_requests": 9,
+    "completed": true,
+    "circuit": null,
+    "truncated_calls": 0,
+    "timeout_calls": 0,
+    "max_transport_latency_ms": 84834,
+    "usage_missing_calls": 0
+  }
+}

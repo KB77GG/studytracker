@@ -1,5 +1,29 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-10 百分点复核：原5pp修复，新增零差/精度边界；整理A正式证据与Pro对照方案
+
+- 并发同步：首推被远端新文档67ef85d1拒绝，已fetch核实仅新增留出集提案及两交接，业务源码不变；合并保留双方记录。提案所述6篇双评委/10篇AI资料在Claude侧，本轮未读PDF/未确认本机材料或新增外发授权。提案38独立评价/模型若每次都允许1重试，理论需152文字请求再加2识图；若坚持100文字封顶，须定义未完成样本及公平停机，不可称保证全部跑完。当前56建议只针对7开发集，不覆盖新增资料；最终范围仍待用户选择。
+- 工作树：主资料树`/Users/zhouxin/Desktop/studytracker`仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind111，原7modified/23untracked顶层入口与其他任务保留。新树`/private/tmp/studytracker-iwa-percentage-review-20261110`、分支`codex/iwa-percentage-review-20261110`，从远端clean **57c825b48474ddd7f4ff6ac7444bcdd9b8032203**（业务661180f3）建树；旧执行树`/private/tmp/studytracker-iwa-prompt10-review-20261108`保持 **817c4c4be172fa5603048a12085e60e4c99dfa38** clean，未切换/更新，原B运行源不受影响。
+- 82工具tracked文件组合SHA **92c35bd2e31eb5f3d285768e92bf46ddcbeeb18123ac79d52bbcd4cc85f51f8e** 复核前后相同，提示词仍iwa-2026-11-10.12；没有业务、私有配置/Key、学生材料、旧探针改动或新增模型调用。未合main/部署/访问生产或写库，小程序未上传/提审/发布。
+- 原“5个百分点”直接用本机A真实合成正式回复回放：priority与复制恢复，删除数1→0，其他评价/分数/矛盾/条件提醒不变，普通5%仍拒。新探针33断言20通过、13失败归并两P2：70%→70%的0因set去重丢失；round(...,2)把5.125变5.12、0.004变0，精确值被删而错误exact值可通过。都过normalize/copy，精度为合成边界非本次真实输出。建议保留观测重复与十进制精确减法，不补关键词。跨对象“任意差”符合既有source-only契约，是语义限制不另报新缺陷；不因无法解析任意语义无限阻塞模型对照。
+- Pro纯mock请求27/27：模型名无白名单，Generator→ChatClient实际发送deepseek-v4-pro/high/32000/json_object/timeout300，精修改写不变。只证客户端不证真实服务。compare现有人工表不匿名且漏GRA/LR、summary、suggestion、总评/priorities；一套价格套两模型且不拆缓存；同条件检查不锁预算/超时/源码。因此真实对照需完整匿名正式回答、独立锁条件及按各模型hit/miss/output计费，不直接拿现有表作为完整验收。
+- 精确隔离套件：主树`.venv/bin/python docs/design/iwa-percentage-review-20261110/run_offline_tests.py` → **395Python（21.279s/wrapper21.50）+8Node**；首次沙箱禁回环端口，获准同runner复跑通过，fake/临时库/禁非回环、外部数据目录未写。ruff/black56、JS语法/diff通过；主审两新probe复跑20/33及27/27，公开A包两审计127/127与124/124复跑通过。未重跑三locale/Python3.10/52旧probe/浏览器。具体便携命令见共享README。
+- 本次新增共享9文件`docs/design/ielts-writing-ai-percentage-review-20261110/`，以及上一批A共享16文件`docs/design/ielts-writing-ai-prompt12-high-20261109/`（14证据/审计逐字复制，省略7冗余sample检查点，保留raw_calls/正式回答/完整输入/账本/人工/费用/计数）。A历史测量源仍817c4c4，不用本次重放覆盖当时误删。包无真实学生/Key/思考正文；reasoning整数计数保留并说明。Claude可从共享证据补although、错误因果、5pp离线回归。原ignored private响应/思考、runner及过程资料仍仅本机，不提交。
+- 付费状态与建议：旧A9/14已结束不续；旧B仍Flash/high最多2次，0/2，约定文件~/iwa-calibration/teacher.jsonl仍不存在，原授权保留不擅改Pro。本轮用户转来方案未视为新付费授权。建议第一阶段7开发×2模型×每篇独立2轮=28评价，含一次校验重试最多 **56实际请求**，四独立run保留相同ID、随机/交错模型顺序，重试不算独立轮。开发集可验格式和历史反馈回归，不证泛化；老师与3–5新作文另分层。若合并8/11/13篇，上限64/88/104，待明确授权和材料，不自动执行。
+- 文档同步：上述25共享文件与两规范交接按已有授权仅提交/推送`claude/ielts-writing-ai-trial`，最终文档HEAD见git log及本机回读确认；新树仅这些文档改动，产品未改。主树原未提交业务仍仅本机。下一位先修两处精确算术再复验，或在模型比较中明确排除这些边界；完整盲审材料与分模型费用在发起新批次前准备，不需要为此扩大生产功能。
+
+## 2026-11-09 写作 .12：A 真实批次完成，B 已授权但缺文件
+
+- 模型咨询新增官方核对：当前Flash=V4.1-Flash-1017，另一独立候选deepseek-v4-pro=V4-Pro-0813；建议固定high/.12/32000/300先只换模型做对照，尚未验证Pro准确性。high/max是档位，Pro目前不识图；思考模式temperature不生效。相同A token按Pro空闲价格约0.80953260元，非实际用量/账单/费用上限。文档来源与建议写入本轮README；未改模型/配置或调用，B原Flash授权不变。此咨询与两交接仅本机，未commit/push/deploy。
+- 后续根因咨询已记录在本轮README：正式回复中的从句误读/新增错误因果属于模型判断错误；可推导5个百分点误删属于程序字面来源规则，“数十辆”是模型无依据输出与校验漏拦共同作用。结构错误只证明当前模型+复杂生成任务组合不稳定，未隔离因果。high/32000无截断排除本批上限耗尽，不证明思考充分或max能解决。建议固定提示/验收，用少量独立样本做候选模型同条件对照再决定更换或简化任务；仅咨询，未实现/新增调用/改配置/新授权，B仍0/2待文件。本轮交接及咨询增量仅本机未commit/push/deploy；下列工作树与验证事实不变。
+- 用户“都”明确授权 A：7开发样本最多14次；B：teacher-t2-01最多2次，合计16，均仅evaluate/deepseek-flash/high/32000/300秒。A实际 **9/14**，7篇处理、6ready/1failed，批次已结束，不追加剩5次；B **0/2** 尚未开始，已有授权保留，不重复问付费、四处批注位置或外发同意。runner已PAID_ENABLED=False，A账本拒绝重跑。
+- 执行源 `/private/tmp/studytracker-iwa-prompt10-review-20261108`，分支 `codex/iwa-prompt10-review-20261108`，前后clean **817c4c4be172fa5603048a12085e60e4c99dfa38**；81工具SHA **f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd** 前后不变，提示词iwa-2026-11-10.12。未改产品或独立试用.env；只在内存使用已授权Key。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind111，原7modified/23untracked入口和其他任务保留。
+- A精确命令：主树`.venv/bin/python docs/design/iwa-prompt12-real-20261109/run_groups.py --group A --confirm-paid`，已执行结束。独立临时SQLite，不碰试用库/生产；固定源与消息、每篇2/组14+2/总16、先fsync计数再HTTP、先保存响应再校验、无网络重试/重定向，共享熔断。runner_selftest11项、runner_independent_audit12流程/10越界/8无效老师文件通过（全离线），主审复跑通过。结果独立metrics127/127、补充组别/源码/论证/合理性集合124/124，均由主审复跑；精确命令见本轮README。产品未变，不重复上轮392Python/8Node或浏览器。
+- 首轮JSON **6/7**、首轮校验 **5/7**、最终 **6/7**。good首轮JSON可解析，但argument/overall_comment在criteria中、只报“缺少总评”，重试成功；strong两轮均多闭合括号，字段在根对象外，均拒绝，不采用分数。mid本次首轮成功。输入29322、输出56708含思考39165，usage齐全；截断/超时0，HTTP最长84.834秒（客户端84.835），输出峰值13506。按官方空闲时段与缓存用量估算 **0.23633448元**，非账单，不能重复加思考token。
+- 引文81/81、论证44给出=44采用；宽松检查11/12另1跳过，strong失败使其细项和完整等级序列未执行。人工观察：weak过度概括本次捕获、离题不再混入GRA理由、短文不再误批old people；仍误读已有从句/模板化连接词和低频词建议、改句新造因果。短文“数十辆”未滤；Task1从70%→75%可得的5percentage points被删，不能把字面未匹配直接等同编造。Task1缺图TA/总分不可评、A75/C80矛盾与一条172/150条件提醒正确；不推算剩余字数。七篇仍开发集，非校准或跨提示词受控A/B。
+- 本机报告 `docs/design/iwa-prompt12-real-20261109/README.md`、`manual_review_A.md`、指标审计及`shared-evidence/A/`为正式合成回复/统计。ignored `private/A/`保存原始响应与私有思考、权限0700；共享14文件已扫描实际Key无匹配、无reasoning/reasoning_content字段。新运行资料及两交接 **仅本机、未commit/push**；功能分支仍817c4c4，暂保持源HEAD供B按相同账本规则运行。未合main、部署、访问生产/写库或小程序上传提审发布。
+- **B阻塞及下一步**：`~/iwa-calibration/teacher.jsonl`未存在，Downloads/Documents也未找到；Mac锁屏不能代下载，已向用户请求保存或完整路径。预期SHA256前缀f4f05e6055d39817，四处位置为用户确认而非本agent独立复核。文件到位先核hash/单条id/task/四处引文，不猜写原稿；维持源817c4c4，确认A completed无circuit后只启用runner执行`--group B --confirm-paid`最多2次，结束关闭。teacher评分/批注不进模型提示，B材料/结果不入Git。B完成再汇总两组并同步合成报告到功能分支；一篇只作个案对照，不称评分校准。不得重跑A、挪用A余量或额外smoke。
+
 ## 2026-11-10 雅思写作 AI 试用工具：换模型对照与留出集验证计划（提案，待用户确认；未调用模型）
 
 - 用户提供机构内部两份 2026 年 6 月点评合辑（大作文、小作文 PDF）：4 篇 Task 2 和 2 篇 Task 1 教师范文，每篇两位评委的四项分、总分和评语，另有 10 篇标称 9–7 分的 AI 参考文章和 2 张题图。Claude 已读完，PDF 有文字层、题图可提取。资料只在 Claude 会话的上传目录和 scratch，不进 Git；交接和计划里不含作文原文、评委姓名或评语原文。

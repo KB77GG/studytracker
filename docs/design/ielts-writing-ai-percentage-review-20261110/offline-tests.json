@@ -1,0 +1,35 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-percentage-review-20261110",
+  "python": "3.13.3",
+  "source_head": "57c825b48474ddd7f4ff6ac7444bcdd9b8032203",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-percentage-review-20261110",
+      "returncode": 0,
+      "elapsed_seconds": 21.5
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-percentage-review-20261110",
+      "returncode": 0,
+      "elapsed_seconds": 0.21
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-percentage-review-20261110...origin/claude/ielts-writing-ai-trial\n"
+}

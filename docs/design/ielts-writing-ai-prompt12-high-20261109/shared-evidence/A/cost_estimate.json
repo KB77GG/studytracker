@@ -1,0 +1,18 @@
+{
+  "group": "A",
+  "currency": "CNY",
+  "source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "time_basis": "2026-11-09 evening Asia/Shanghai, off-peak",
+  "cache_hit_tokens": 20224,
+  "cache_miss_tokens": 9098,
+  "output_tokens_includes_reasoning": 56708,
+  "rates_per_million": {
+    "cache_hit": 0.02,
+    "cache_miss": 1,
+    "output": 4
+  },
+  "estimated_cost": 0.23633448,
+  "estimate_not_bill": true,
+  "calls": 9,
+  "latency_ms_sum": 376477
+}

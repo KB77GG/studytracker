@@ -1,0 +1,168 @@
+{
+  "source_data": "A synthetic development set only",
+  "copied_files": [
+    {
+      "file": "shared-evidence/A/run_data.json",
+      "bytes": 177286,
+      "sha256": "e50579831cc58b9ce88860a4139b6c6a9558b073b75d70e114e4c9240f08ff6f",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/formal_responses.json",
+      "bytes": 85597,
+      "sha256": "f57a9ce5ca56719151ef9f850b7ab553df38c15908d0021ee7fed8c6fe5173f9",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/raw_calls.jsonl",
+      "bytes": 87529,
+      "sha256": "a54db2edc2754fda6683544e23f9d7d19d3a8031f1d6583cf4a1a8814bfbb367",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/transport.json",
+      "bytes": 10181,
+      "sha256": "edebee25489cc8453e224607bc068ce08ea3dbca4c3b0fa2935775d793dbb9f0",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/report.md",
+      "bytes": 5502,
+      "sha256": "4bfd813f0267fb12fca93d445d74d7b2187e5e385da22f6642897f1158be8bfb",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/report.json",
+      "bytes": 10816,
+      "sha256": "d2f9eb003fb4a1bd0521a4a9db54f91527fb2ae3077b710078030c5c7d913490",
+      "source_byte_identical": true
+    },
+    {
+      "file": "shared-evidence/A/cost_estimate.json",
+      "bytes": 470,
+      "sha256": "d90edf2a55df419ffa618b5f48339378927431fa58ec873cfed174bf6f7223df",
+      "source_byte_identical": true
+    },
+    {
+      "file": "manual_review_A.md",
+      "bytes": 12337,
+      "sha256": "460744c80aabaa153327a88dc6274872b609be8563e09cd82220e90e677fe6f4",
+      "source_byte_identical": true
+    },
+    {
+      "file": "metrics_audit.py",
+      "bytes": 17647,
+      "sha256": "f1da2b97a04f25af1b302f5e759a020586c181f6372597d60cea6f68dd18249c",
+      "source_byte_identical": true
+    },
+    {
+      "file": "metrics_audit_A.json",
+      "bytes": 189226,
+      "sha256": "1cdf66d4c1f7fd491e04aefcb5e1e076b443f055b785cb245235dca9a3708308",
+      "source_byte_identical": true
+    },
+    {
+      "file": "metrics_supplement.py",
+      "bytes": 11850,
+      "sha256": "c6388e5810158fc153c9cb1a9412f632381ff0a3b9de7cd71e7375bdaf1a3a1f",
+      "source_byte_identical": true
+    },
+    {
+      "file": "metrics_supplement_A.json",
+      "bytes": 51770,
+      "sha256": "f73472ab04a89b4f9e4c3a7b4dbb04626846d3097c64367efc8bb9462a59f4af",
+      "source_byte_identical": true
+    },
+    {
+      "file": "runner-selftest.json",
+      "bytes": 636,
+      "sha256": "bb7f92b79a762d141e9ec3b1bc071cc129977f2c214f65b7a1f58bac1ad0f9c5",
+      "source_byte_identical": true
+    },
+    {
+      "file": "runner_independent_audit.json",
+      "bytes": 5942,
+      "sha256": "f9d8846c3047ac1a6aa41f6c369be2aed50c99c2861367d9cb7923f0b5b00db9",
+      "source_byte_identical": true
+    }
+  ],
+  "omitted_redundant_checkpoints": [
+    "sample-t1-no-image.json",
+    "sample-t2-good.json",
+    "sample-t2-mid.json",
+    "sample-t2-off-topic.json",
+    "sample-t2-strong.json",
+    "sample-t2-under-length.json",
+    "sample-t2-weak.json"
+  ],
+  "json_and_jsonl_parsed": [
+    "shared-evidence/A/run_data.json",
+    "shared-evidence/A/formal_responses.json",
+    "shared-evidence/A/raw_calls.jsonl",
+    "shared-evidence/A/transport.json",
+    "shared-evidence/A/report.json",
+    "shared-evidence/A/cost_estimate.json",
+    "metrics_audit_A.json",
+    "metrics_supplement_A.json",
+    "runner-selftest.json",
+    "runner_independent_audit.json"
+  ],
+  "forbidden_private_fields_or_text": [],
+  "allowed_numeric_token_counts": [
+    {
+      "path": "metrics_supplement_A.json.price_inputs_tokens.reasoning",
+      "type": "nonnegative_integer_token_count",
+      "value": 39165
+    }
+  ],
+  "credential_pattern_hits": [],
+  "sample_ids": [
+    "t1-no-image",
+    "t2-good",
+    "t2-mid",
+    "t2-off-topic",
+    "t2-strong",
+    "t2-under-length",
+    "t2-weak"
+  ],
+  "sample_teacher_fields_empty": true,
+  "did_not_read_real_credentials": true,
+  "did_not_read_private_artifacts": true,
+  "no_B_artifacts": true,
+  "committed_or_pushed_by_packager": false,
+  "package_audits_rerun": [
+    {
+      "script": "metrics_audit.py",
+      "passed": 127,
+      "total": 127,
+      "exit_code": 0,
+      "group": "A"
+    },
+    {
+      "script": "metrics_supplement.py",
+      "passed": 124,
+      "total": 124,
+      "exit_code": 0
+    }
+  ],
+  "python_scripts_parse": true,
+  "trailing_whitespace_findings": 0,
+  "package_files": [
+    "README.md",
+    "manual_review_A.md",
+    "metrics_audit.py",
+    "metrics_audit_A.json",
+    "metrics_supplement.py",
+    "metrics_supplement_A.json",
+    "package_validation.json",
+    "runner-selftest.json",
+    "runner_independent_audit.json",
+    "shared-evidence/A/cost_estimate.json",
+    "shared-evidence/A/formal_responses.json",
+    "shared-evidence/A/raw_calls.jsonl",
+    "shared-evidence/A/report.json",
+    "shared-evidence/A/report.md",
+    "shared-evidence/A/run_data.json",
+    "shared-evidence/A/transport.json"
+  ]
+}

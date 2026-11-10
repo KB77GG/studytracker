@@ -1,0 +1,207 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-percentage-review-20261110",
+  "head": "57c825b48474ddd7f4ff6ac7444bcdd9b8032203",
+  "checks": [
+    {
+      "name": "model_config_unrestricted",
+      "ok": true
+    },
+    {
+      "name": "evaluate_model",
+      "ok": true
+    },
+    {
+      "name": "evaluate_thinking",
+      "ok": true
+    },
+    {
+      "name": "evaluate_reasoning_effort",
+      "ok": true
+    },
+    {
+      "name": "evaluate_max_tokens",
+      "ok": true
+    },
+    {
+      "name": "evaluate_response_format",
+      "ok": true
+    },
+    {
+      "name": "evaluate_timeout_300",
+      "ok": true
+    },
+    {
+      "name": "refine_unchanged_off",
+      "ok": true
+    },
+    {
+      "name": "refine_ordinary_budget",
+      "ok": true
+    },
+    {
+      "name": "refine_ordinary_timeout",
+      "ok": true
+    },
+    {
+      "name": "rewrite_unchanged_off",
+      "ok": true
+    },
+    {
+      "name": "rewrite_ordinary_budget",
+      "ok": true
+    },
+    {
+      "name": "rewrite_ordinary_timeout",
+      "ok": true
+    },
+    {
+      "name": "duplicate_ids_refused_before_generation",
+      "ok": true
+    },
+    {
+      "name": "synthetic_generation_ready",
+      "ok": true
+    },
+    {
+      "name": "synthetic_generation_ready",
+      "ok": true
+    },
+    {
+      "name": "different_model_refused_without_flag",
+      "ok": true
+    },
+    {
+      "name": "different_model_allowed_with_flag",
+      "ok": true
+    },
+    {
+      "name": "reject_changed_prompt_version",
+      "ok": true
+    },
+    {
+      "name": "reject_changed_samples",
+      "ok": true
+    },
+    {
+      "name": "reject_changed_evaluate_inputs",
+      "ok": true
+    },
+    {
+      "name": "request_budget_requires_external_guard",
+      "ok": true
+    },
+    {
+      "name": "manual_omission_reproduced",
+      "ok": true
+    },
+    {
+      "name": "manual_model_identity_visible",
+      "ok": true
+    },
+    {
+      "name": "manual_TR_CC_issue_positive_controls",
+      "ok": true
+    },
+    {
+      "name": "compare_no_price_ignores_saved_cost",
+      "ok": true
+    },
+    {
+      "name": "compare_same_prices_applied_to_both",
+      "ok": true
+    }
+  ],
+  "passed": 27,
+  "total": 27,
+  "observations": {
+    "wire": [
+      {
+        "body": {
+          "model": "deepseek-v4-pro",
+          "messages": [
+            {
+              "role": "user",
+              "content": "synthetic input"
+            }
+          ],
+          "temperature": 0.2,
+          "max_tokens": 32000,
+          "response_format": {
+            "type": "json_object"
+          },
+          "thinking": {
+            "type": "enabled"
+          },
+          "reasoning_effort": "high"
+        },
+        "timeout": 300.0
+      },
+      {
+        "body": {
+          "model": "deepseek-v4-pro",
+          "messages": [
+            {
+              "role": "user",
+              "content": "synthetic input"
+            }
+          ],
+          "temperature": 0.2,
+          "max_tokens": 4500,
+          "response_format": {
+            "type": "json_object"
+          },
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "timeout": null
+      },
+      {
+        "body": {
+          "model": "deepseek-v4-pro",
+          "messages": [
+            {
+              "role": "user",
+              "content": "synthetic input"
+            }
+          ],
+          "temperature": 0.2,
+          "max_tokens": 4500,
+          "response_format": {
+            "type": "json_object"
+          },
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "timeout": null
+      }
+    ],
+    "different_budget_not_rejected": true,
+    "manual_omitted_markers": [
+      "grammar_SUMMARY_SENTINEL",
+      "grammar_ISSUE_SENTINEL",
+      "lexical_ISSUE_SENTINEL",
+      "coherence_SUGGESTION_SENTINEL",
+      "OVERALL_SENTINEL",
+      "PRIORITY_SENTINEL"
+    ],
+    "manual_is_unblinded": true,
+    "cost": {
+      "same_usage": {
+        "prompt": 1000,
+        "hit": 800,
+        "miss": 200,
+        "output": 2000
+      },
+      "realcheck_simple_prices_flash": 0.009,
+      "realcheck_simple_prices_pro": 0.0315,
+      "cache_aware_flash_if_rates_hit_002_miss_1_output_4": 0.008216,
+      "cache_aware_pro_if_rates_hit_015_miss_45_output_135": 0.02802,
+      "compare_with_pro_rates_both_sides": 0.0315
+    }
+  },
+  "real_requests": 0,
+  "read_key_env_or_student_files": false,
+  "changed_product": false
+}

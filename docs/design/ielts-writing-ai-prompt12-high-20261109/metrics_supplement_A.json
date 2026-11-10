@@ -1,0 +1,1232 @@
+{
+  "group": "A",
+  "source_head": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+  "tools_sha256": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+  "input_sha256": {
+    "run_data.json": "e50579831cc58b9ce88860a4139b6c6a9558b073b75d70e114e4c9240f08ff6f",
+    "report.json": "d2f9eb003fb4a1bd0521a4a9db54f91527fb2ae3077b710078030c5c7d913490",
+    "transport.json": "edebee25489cc8453e224607bc068ce08ea3dbca4c3b0fa2935775d793dbb9f0",
+    "formal_responses.json": "f57a9ce5ca56719151ef9f850b7ab553df38c15908d0021ee7fed8c6fe5173f9"
+  },
+  "checks": [
+    {
+      "name": "source_current_head",
+      "ok": true,
+      "actual": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+      "expected": "817c4c4be172fa5603048a12085e60e4c99dfa38"
+    },
+    {
+      "name": "source_current_clean",
+      "ok": true,
+      "actual": "",
+      "expected": ""
+    },
+    {
+      "name": "source_current_tools_sha",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "source_prompt_version",
+      "ok": true,
+      "actual": "iwa-2026-11-10.12",
+      "expected": "iwa-2026-11-10.12"
+    },
+    {
+      "name": "ledger.group",
+      "ok": true,
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "name": "ledger.source_head",
+      "ok": true,
+      "actual": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+      "expected": "817c4c4be172fa5603048a12085e60e4c99dfa38"
+    },
+    {
+      "name": "ledger.tools_sha",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "ledger.limit",
+      "ok": true,
+      "actual": 14,
+      "expected": 14
+    },
+    {
+      "name": "data_audit.group",
+      "ok": true,
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "name": "data_audit.source_head",
+      "ok": true,
+      "actual": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+      "expected": "817c4c4be172fa5603048a12085e60e4c99dfa38"
+    },
+    {
+      "name": "data_audit.tools_sha",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "data_audit.limit",
+      "ok": true,
+      "actual": 14,
+      "expected": 14
+    },
+    {
+      "name": "report_audit.group",
+      "ok": true,
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "name": "report_audit.source_head",
+      "ok": true,
+      "actual": "817c4c4be172fa5603048a12085e60e4c99dfa38",
+      "expected": "817c4c4be172fa5603048a12085e60e4c99dfa38"
+    },
+    {
+      "name": "report_audit.tools_sha",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "report_audit.limit",
+      "ok": true,
+      "actual": 14,
+      "expected": 14
+    },
+    {
+      "name": "ledger.completed",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "ledger.circuit",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "ledger.total_limit",
+      "ok": true,
+      "actual": 16,
+      "expected": 16
+    },
+    {
+      "name": "ledger.teacher_hash",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "business_sha256_before",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "business_sha256_after",
+      "ok": true,
+      "actual": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd",
+      "expected": "f0178c720a8ecbe3796952122fb219453695ef93bd6ee073df4893f5d8ce39fd"
+    },
+    {
+      "name": "ledger.prompt_version",
+      "ok": true,
+      "actual": "iwa-2026-11-10.12",
+      "expected": "iwa-2026-11-10.12"
+    },
+    {
+      "name": "report.prompt_version",
+      "ok": true,
+      "actual": "iwa-2026-11-10.12",
+      "expected": "iwa-2026-11-10.12"
+    },
+    {
+      "name": "report.model",
+      "ok": true,
+      "actual": [
+        "deepseek",
+        "deepseek-flash"
+      ],
+      "expected": [
+        "deepseek",
+        "deepseek-flash"
+      ]
+    },
+    {
+      "name": "entries_group",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "builtin_sample_order",
+      "ok": true,
+      "actual": [
+        "t2-weak",
+        "t2-mid",
+        "t2-good",
+        "t2-strong",
+        "t2-off-topic",
+        "t2-under-length",
+        "t1-no-image"
+      ],
+      "expected": [
+        "t2-weak",
+        "t2-mid",
+        "t2-good",
+        "t2-strong",
+        "t2-off-topic",
+        "t2-under-length",
+        "t1-no-image"
+      ]
+    },
+    {
+      "name": "builtin_submission.t2-weak",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "Nowadays transport is very important problem in many country. Some people think goverment should spend money for public transport not for build new road. I am agree with this opinion in some way but not all.\n\nFirstly, public transport is good for people. Because many people dont have car and they need bus and train to go work and school. If the bus is more better, people will use it more and the traffic will be less. In my city the bus is always late and very crowd so people dont like to take it. Also the train is too expensive for student. So goverment should make it cheap and more fast.\n\nSecondly, new road is also important. Because the city is grow and more people buy car every year. If there is no new road the traffic jam will be very bad and people waste a lot of time. For example my father drive to work everyday and he spend two hour in the road. This is very bad for him and for the economy also.\n\nBut I think public transport is more important than road. Because the road make more car and more pollution. The public transport can carry many people in one time and it is good for enviroment. Also if more people take bus, the city will be more quiet and the air will be more clean, so everybody can be more healthy and happy.\n\nIn conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary. Both is important for the people and the country develop.",
+        "word_count": 270,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "Nowadays transport is very important problem in many country. Some people think goverment should spend money for public transport not for build new road. I am agree with this opinion in some way but not all.\n\nFirstly, public transport is good for people. Because many people dont have car and they need bus and train to go work and school. If the bus is more better, people will use it more and the traffic will be less. In my city the bus is always late and very crowd so people dont like to take it. Also the train is too expensive for student. So goverment should make it cheap and more fast.\n\nSecondly, new road is also important. Because the city is grow and more people buy car every year. If there is no new road the traffic jam will be very bad and people waste a lot of time. For example my father drive to work everyday and he spend two hour in the road. This is very bad for him and for the economy also.\n\nBut I think public transport is more important than road. Because the road make more car and more pollution. The public transport can carry many people in one time and it is good for enviroment. Also if more people take bus, the city will be more quiet and the air will be more clean, so everybody can be more healthy and happy.\n\nIn conclusion, I think goverment should spend more money for public transport but also build some road when it is necessary. Both is important for the people and the country develop.",
+        "word_count": 270,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-weak",
+      "ok": true,
+      "actual": {
+        "overall_max": 5.5,
+        "argument_min_problems": 1
+      },
+      "expected": {
+        "overall_max": 5.5,
+        "argument_min_problems": 1
+      }
+    },
+    {
+      "name": "builtin_level.t2-weak",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "no_teacher.t2-weak",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-weak",
+      "ok": true,
+      "actual": "bfa1a90557da505e10ee17036f97dc5bc6c77e52332906ea5729c9bf570840c3",
+      "expected": "bfa1a90557da505e10ee17036f97dc5bc6c77e52332906ea5729c9bf570840c3"
+    },
+    {
+      "name": "builtin_submission.t2-mid",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "In many cities, traffic congestion has become a serious problem, and governments must decide how to use limited budgets. Some people argue that money should go to public transport instead of new roads. I mostly agree with this view, although I believe some road building is still necessary.\n\nThe main reason to invest in public transport is that it can move a large number of people efficiently. A single train can carry hundreds of passengers, while the same number of people would need hundreds of cars. If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams. For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\n\nAnother advantage is the environment. Cars produce a lot of air pollution and carbon emissions, which are harmful to people's health and contribute to climate change. Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\n\nOn the other hand, new roads are sometimes needed. In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars. Also, goods are mostly transported by trucks, and poor roads can slow down the economy.\n\nIn conclusion, I agree that governments should give priority to public transport because it is more efficient and better for the environment. However, they should still build roads in places where public transport is not practical.",
+        "word_count": 251,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "In many cities, traffic congestion has become a serious problem, and governments must decide how to use limited budgets. Some people argue that money should go to public transport instead of new roads. I mostly agree with this view, although I believe some road building is still necessary.\n\nThe main reason to invest in public transport is that it can move a large number of people efficiently. A single train can carry hundreds of passengers, while the same number of people would need hundreds of cars. If buses and trains are frequent, cheap and reliable, many drivers will choose them, which will reduce traffic jams. For example, after my city opened a new metro line, the main road to the city centre became much less crowded during rush hour.\n\nAnother advantage is the environment. Cars produce a lot of air pollution and carbon emissions, which are harmful to people's health and contribute to climate change. Public transport produces less pollution per passenger, so it is a more sustainable option in the long term.\n\nOn the other hand, new roads are sometimes needed. In rural areas, there are not enough passengers to make train lines profitable, so people depend on cars. Also, goods are mostly transported by trucks, and poor roads can slow down the economy.\n\nIn conclusion, I agree that governments should give priority to public transport because it is more efficient and better for the environment. However, they should still build roads in places where public transport is not practical.",
+        "word_count": 251,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-mid",
+      "ok": true,
+      "actual": {
+        "overall_min": 5.0,
+        "overall_max": 7.0
+      },
+      "expected": {
+        "overall_min": 5.0,
+        "overall_max": 7.0
+      }
+    },
+    {
+      "name": "builtin_level.t2-mid",
+      "ok": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "no_teacher.t2-mid",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-mid",
+      "ok": true,
+      "actual": "e47522c958312b40e2f3ccbb7160cf0cfe3a3ada1865b716fd6c013efc82d0c7",
+      "expected": "e47522c958312b40e2f3ccbb7160cf0cfe3a3ada1865b716fd6c013efc82d0c7"
+    },
+    {
+      "name": "builtin_submission.t2-good",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.\n\nThe strongest argument for prioritising public transport is efficiency. Roads are an inherently limited resource: a lane of motorway can carry only a fixed number of private vehicles per hour, whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space. Moreover, there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive. Expanding road networks may therefore offer only temporary relief before congestion returns.\n\nPublic transport also brings wider social and environmental benefits. It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers, thereby widening their access to jobs and services. At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets.\n\nNevertheless, it would be unrealistic to stop road building altogether. In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks. Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\n\nIn conclusion, although some road investment is still justified, governments should concentrate their spending on public transport, since it offers a more lasting solution to congestion while also delivering social and environmental gains.",
+        "word_count": 277,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "As urban populations grow, governments face a difficult choice about where to direct transport spending. While some advocate building more roads to ease congestion, I largely agree that public transport deserves the greater share of investment, because it addresses the causes of traffic problems rather than merely their symptoms.\n\nThe strongest argument for prioritising public transport is efficiency. Roads are an inherently limited resource: a lane of motorway can carry only a fixed number of private vehicles per hour, whereas a well-run rail or bus rapid transit line can move many times that number of people in the same space. Moreover, there is considerable evidence that new roads tend to fill up quickly, as cheaper and faster journeys encourage more people to drive. Expanding road networks may therefore offer only temporary relief before congestion returns.\n\nPublic transport also brings wider social and environmental benefits. It gives affordable mobility to those who cannot drive, such as students, the elderly and lower-income workers, thereby widening their access to jobs and services. At the same time, shifting journeys from cars to trains and buses reduces both air pollution and greenhouse gas emissions, which is increasingly important as cities attempt to meet climate targets.\n\nNevertheless, it would be unrealistic to stop road building altogether. In sparsely populated regions, buses and trains are rarely viable, and freight still relies heavily on trucks. Targeted road improvements, such as bypasses around congested towns, can therefore remain a sensible use of funds.\n\nIn conclusion, although some road investment is still justified, governments should concentrate their spending on public transport, since it offers a more lasting solution to congestion while also delivering social and environmental gains.",
+        "word_count": 277,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-good",
+      "ok": true,
+      "actual": {
+        "overall_min": 6.0,
+        "overall_max": 8.0
+      },
+      "expected": {
+        "overall_min": 6.0,
+        "overall_max": 8.0
+      }
+    },
+    {
+      "name": "builtin_level.t2-good",
+      "ok": true,
+      "actual": 3,
+      "expected": 3
+    },
+    {
+      "name": "no_teacher.t2-good",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-good",
+      "ok": true,
+      "actual": "eb01a8b7f494253cd256cd59326dc50c1ac6c4ca4fd803287ca802a256d39758",
+      "expected": "eb01a8b7f494253cd256cd59326dc50c1ac6c4ca4fd803287ca802a256d39758"
+    },
+    {
+      "name": "builtin_submission.t2-strong",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in. Although there is an intuitive appeal to building new roads whenever traffic worsens, I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\n\nThe case for new roads rests largely on the assumption that congestion is a shortage of capacity. Yet experience from many large cities suggests otherwise: widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones. This phenomenon, often described as induced demand, means that road building can become an expensive treadmill. Public transport, by contrast, increases the number of people a corridor can carry without a proportional increase in the space consumed, and a single metro line can relieve pressure on an entire network of streets.\n\nEqually important are the distributional consequences. Road spending disproportionately benefits those who own cars, whereas frequent and affordable buses and trains extend opportunity to people who cannot or prefer not to drive. Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place, and it cuts emissions at a time when the transport sector remains one of the most stubborn sources of carbon.\n\nThat said, a blanket refusal to build roads would be misguided. Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\n\nOn balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.",
+        "word_count": 298,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "How a government allocates its transport budget shapes not only how quickly people travel, but also the kind of cities they live in. Although there is an intuitive appeal to building new roads whenever traffic worsens, I am convinced that investment should be weighted decisively towards public transport, with road construction reserved for cases where no realistic alternative exists.\n\nThe case for new roads rests largely on the assumption that congestion is a shortage of capacity. Yet experience from many large cities suggests otherwise: widening a motorway lowers the cost of driving, which in turn draws additional traffic until the new lanes are as clogged as the old ones. This phenomenon, often described as induced demand, means that road building can become an expensive treadmill. Public transport, by contrast, increases the number of people a corridor can carry without a proportional increase in the space consumed, and a single metro line can relieve pressure on an entire network of streets.\n\nEqually important are the distributional consequences. Road spending disproportionately benefits those who own cars, whereas frequent and affordable buses and trains extend opportunity to people who cannot or prefer not to drive. Well-designed transit also allows denser, more walkable neighbourhoods to develop around stations, reducing the distances people need to travel in the first place, and it cuts emissions at a time when the transport sector remains one of the most stubborn sources of carbon.\n\nThat said, a blanket refusal to build roads would be misguided. Rural communities and freight logistics depend on reliable highways, and in such contexts targeted upgrades may represent genuine value for money.\n\nOn balance, therefore, public transport should receive the lion's share of funding, because it tackles congestion at its root and produces broader social and environmental returns that new roads rarely match.",
+        "word_count": 298,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-strong",
+      "ok": true,
+      "actual": {
+        "overall_min": 7.0,
+        "argument_max_problems": 1,
+        "argument_forbid": [
+          "off_position",
+          "unclear_position",
+          "inconsistent_position",
+          "conclusion_inconsistent"
+        ],
+        "argument_position": true
+      },
+      "expected": {
+        "overall_min": 7.0,
+        "argument_max_problems": 1,
+        "argument_forbid": [
+          "off_position",
+          "unclear_position",
+          "inconsistent_position",
+          "conclusion_inconsistent"
+        ],
+        "argument_position": true
+      }
+    },
+    {
+      "name": "builtin_level.t2-strong",
+      "ok": true,
+      "actual": 4,
+      "expected": 4
+    },
+    {
+      "name": "no_teacher.t2-strong",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-strong",
+      "ok": true,
+      "actual": "32825d17b4c29738309f1e4da129fce260ae64dd88f6c262a9fd1f0ec158cbda",
+      "expected": "32825d17b4c29738309f1e4da129fce260ae64dd88f6c262a9fd1f0ec158cbda"
+    },
+    {
+      "name": "builtin_submission.t2-off-topic",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms. In my view, although online courses offer clear advantages, face-to-face education will remain essential.\n\nThe most obvious benefit of online learning is flexibility. Students can watch lectures at any time and study at their own pace, which is especially useful for adults who work full-time or have family responsibilities. Online courses can also reach learners in remote areas who would otherwise have no access to good teachers. In addition, digital materials can be updated quickly, and learners can replay difficult explanations as many times as they need, which is impossible in a traditional lecture. For many people, these features make online study cheaper and more convenient than attending a college in person.\n\nHowever, classroom learning provides things that are difficult to replicate on a screen. Teachers can notice immediately when a student is confused and adapt their explanations. Students also develop social skills by working together, discussing ideas and building friendships, which are an important part of education, particularly for children.\n\nFurthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates. Completion rates for many free online courses are notoriously low, which suggests that self-discipline is a serious obstacle.\n\nIn conclusion, online learning is a valuable supplement that makes education more accessible and flexible, but it is unlikely to replace traditional classrooms, which offer interaction, support and motivation that technology cannot fully provide.",
+        "word_count": 254,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "Online learning has grown rapidly over the past decade, and many people now believe that it will eventually replace traditional classrooms. In my view, although online courses offer clear advantages, face-to-face education will remain essential.\n\nThe most obvious benefit of online learning is flexibility. Students can watch lectures at any time and study at their own pace, which is especially useful for adults who work full-time or have family responsibilities. Online courses can also reach learners in remote areas who would otherwise have no access to good teachers. In addition, digital materials can be updated quickly, and learners can replay difficult explanations as many times as they need, which is impossible in a traditional lecture. For many people, these features make online study cheaper and more convenient than attending a college in person.\n\nHowever, classroom learning provides things that are difficult to replicate on a screen. Teachers can notice immediately when a student is confused and adapt their explanations. Students also develop social skills by working together, discussing ideas and building friendships, which are an important part of education, particularly for children.\n\nFurthermore, many learners find it hard to stay motivated without the structure of a timetable and the presence of classmates. Completion rates for many free online courses are notoriously low, which suggests that self-discipline is a serious obstacle.\n\nIn conclusion, online learning is a valuable supplement that makes education more accessible and flexible, but it is unlikely to replace traditional classrooms, which offer interaction, support and motivation that technology cannot fully provide.",
+        "word_count": 254,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-off-topic",
+      "ok": true,
+      "actual": {
+        "task_max": 5.0,
+        "argument_any_of": [
+          "off_position",
+          "irrelevant"
+        ]
+      },
+      "expected": {
+        "task_max": 5.0,
+        "argument_any_of": [
+          "off_position",
+          "irrelevant"
+        ]
+      }
+    },
+    {
+      "name": "builtin_level.t2-off-topic",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "no_teacher.t2-off-topic",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-off-topic",
+      "ok": true,
+      "actual": "ce98a6882c6ec11ab0e9a1c20efcd4c02d4b8a17c2fcb9447754fba89dae86e7",
+      "expected": "ce98a6882c6ec11ab0e9a1c20efcd4c02d4b8a17c2fcb9447754fba89dae86e7"
+    },
+    {
+      "name": "builtin_submission.t2-under-length",
+      "ok": true,
+      "actual": {
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "task_type": "task2",
+        "essay_text": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary.",
+        "word_count": 97,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task2",
+        "prompt_text": "Some people think that governments should spend money on improving public transport rather than building new roads. To what extent do you agree or disagree?",
+        "essay_text": "I agree that governments should spend more money on public transport than on new roads. Public transport can carry many people at the same time, so it reduces traffic jams in big cities. It is also cheaper for students and old people who do not have cars. In addition, buses and trains produce less pollution than private cars, which is good for the environment and for public health. However, new roads are still useful in the countryside, where there are not many buses. In conclusion, public transport should be the priority, but some roads are still necessary.",
+        "word_count": 97,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t2-under-length",
+      "ok": true,
+      "actual": {
+        "word_warning": true
+      },
+      "expected": {
+        "word_warning": true
+      }
+    },
+    {
+      "name": "builtin_level.t2-under-length",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "no_teacher.t2-under-length",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t2-under-length",
+      "ok": true,
+      "actual": "dd6861ec12b8bca7000fa049a5363ca0fb4328634d24de6580438c3a23c8946f",
+      "expected": "dd6861ec12b8bca7000fa049a5363ca0fb4328634d24de6580438c3a23c8946f"
+    },
+    {
+      "name": "builtin_submission.t1-no-image",
+      "ok": true,
+      "actual": {
+        "prompt_text": "The bar chart below shows the percentage of households that owned a car in four countries in 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "task_type": "task1",
+        "essay_text": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.\n\nOverall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.\n\nIn 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C. Country D had by far the lowest figure, at only 15%.\n\nBy 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\n\nIn summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "word_count": 172,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      },
+      "expected": {
+        "task_type": "task1",
+        "prompt_text": "The bar chart below shows the percentage of households that owned a car in four countries in 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "essay_text": "The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.\n\nOverall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.\n\nIn 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C. Country D had by far the lowest figure, at only 15%.\n\nBy 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\n\nIn summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.",
+        "word_count": 172,
+        "target_band": 7.0,
+        "image_status": "none",
+        "image_error": null,
+        "image_description": null
+      }
+    },
+    {
+      "name": "builtin_expect.t1-no-image",
+      "ok": true,
+      "actual": {
+        "not_assessable": true,
+        "consistency_min": 1
+      },
+      "expected": {
+        "not_assessable": true,
+        "consistency_min": 1
+      }
+    },
+    {
+      "name": "builtin_level.t1-no-image",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "no_teacher.t1-no-image",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "initial_messages.t1-no-image",
+      "ok": true,
+      "actual": "ee8769eb0eb1c49bd3d60c667832ab1a3564b7a4343141ef11557fc5d6b1c078",
+      "expected": "ee8769eb0eb1c49bd3d60c667832ab1a3564b7a4343141ef11557fc5d6b1c078"
+    },
+    {
+      "name": "argument.evaluate_attempts",
+      "ok": true,
+      "actual": 8,
+      "expected": 8
+    },
+    {
+      "name": "argument.attempts_rejected_for_argument",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "sanity_expected_row_count",
+      "ok": true,
+      "actual": 13,
+      "expected": 13
+    },
+    {
+      "name": "sanity_required.t2-weak.总分 ≤",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-weak.论证问题 ≥",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-mid.总分 ≥",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-mid.总分 ≤",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-good.总分 ≥",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-good.总分 ≤",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-strong.评价已生成",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-off-topic.TR ≤",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-off-topic.离题样本：",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-off-topic.应标出 ",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t2-under-length.有字数不足提示",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t1-no-image.指出文内数据矛盾",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "sanity_required.t1-no-image.缺图 TA / 总分不可评",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "formal_usage.1",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3390,
+        "completion_tokens": 13506,
+        "total_tokens": 16896,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11293
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 3262
+      },
+      "expected": {
+        "prompt_tokens": 3390,
+        "completion_tokens": 13506,
+        "total_tokens": 16896,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11293
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 3262
+      }
+    },
+    {
+      "name": "cache_accounting.1",
+      "ok": true,
+      "actual": 3390,
+      "expected": 3390
+    },
+    {
+      "name": "cache_detail.1",
+      "ok": true,
+      "actual": 128,
+      "expected": 128
+    },
+    {
+      "name": "reasoning_within_output.1",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.1",
+      "ok": true,
+      "actual": 16896,
+      "expected": 16896
+    },
+    {
+      "name": "formal_usage.2",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3374,
+        "completion_tokens": 6242,
+        "total_tokens": 9616,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4413
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 686
+      },
+      "expected": {
+        "prompt_tokens": 3374,
+        "completion_tokens": 6242,
+        "total_tokens": 9616,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4413
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 686
+      }
+    },
+    {
+      "name": "cache_accounting.2",
+      "ok": true,
+      "actual": 3374,
+      "expected": 3374
+    },
+    {
+      "name": "cache_detail.2",
+      "ok": true,
+      "actual": 2688,
+      "expected": 2688
+    },
+    {
+      "name": "reasoning_within_output.2",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.2",
+      "ok": true,
+      "actual": 9616,
+      "expected": 9616
+    },
+    {
+      "name": "formal_usage.3",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3405,
+        "completion_tokens": 9214,
+        "total_tokens": 12619,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7092
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 717
+      },
+      "expected": {
+        "prompt_tokens": 3405,
+        "completion_tokens": 9214,
+        "total_tokens": 12619,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7092
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 717
+      }
+    },
+    {
+      "name": "cache_accounting.3",
+      "ok": true,
+      "actual": 3405,
+      "expected": 3405
+    },
+    {
+      "name": "cache_detail.3",
+      "ok": true,
+      "actual": 2688,
+      "expected": 2688
+    },
+    {
+      "name": "reasoning_within_output.3",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.3",
+      "ok": true,
+      "actual": 12619,
+      "expected": 12619
+    },
+    {
+      "name": "formal_usage.4",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3437,
+        "completion_tokens": 5787,
+        "total_tokens": 9224,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4159
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 237
+      },
+      "expected": {
+        "prompt_tokens": 3437,
+        "completion_tokens": 5787,
+        "total_tokens": 9224,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4159
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 237
+      }
+    },
+    {
+      "name": "cache_accounting.4",
+      "ok": true,
+      "actual": 3437,
+      "expected": 3437
+    },
+    {
+      "name": "cache_detail.4",
+      "ok": true,
+      "actual": 3200,
+      "expected": 3200
+    },
+    {
+      "name": "reasoning_within_output.4",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.4",
+      "ok": true,
+      "actual": 9224,
+      "expected": 9224
+    },
+    {
+      "name": "formal_usage.5",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3429,
+        "completion_tokens": 3732,
+        "total_tokens": 7161,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1826
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 741
+      },
+      "expected": {
+        "prompt_tokens": 3429,
+        "completion_tokens": 3732,
+        "total_tokens": 7161,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1826
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 741
+      }
+    },
+    {
+      "name": "cache_accounting.5",
+      "ok": true,
+      "actual": 3429,
+      "expected": 3429
+    },
+    {
+      "name": "cache_detail.5",
+      "ok": true,
+      "actual": 2688,
+      "expected": 2688
+    },
+    {
+      "name": "reasoning_within_output.5",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.5",
+      "ok": true,
+      "actual": 7161,
+      "expected": 7161
+    },
+    {
+      "name": "formal_usage.6",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3536,
+        "completion_tokens": 2985,
+        "total_tokens": 6521,
+        "prompt_tokens_details": {
+          "cached_tokens": 3328
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1259
+        },
+        "prompt_cache_hit_tokens": 3328,
+        "prompt_cache_miss_tokens": 208
+      },
+      "expected": {
+        "prompt_tokens": 3536,
+        "completion_tokens": 2985,
+        "total_tokens": 6521,
+        "prompt_tokens_details": {
+          "cached_tokens": 3328
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1259
+        },
+        "prompt_cache_hit_tokens": 3328,
+        "prompt_cache_miss_tokens": 208
+      }
+    },
+    {
+      "name": "cache_accounting.6",
+      "ok": true,
+      "actual": 3536,
+      "expected": 3536
+    },
+    {
+      "name": "cache_detail.6",
+      "ok": true,
+      "actual": 3328,
+      "expected": 3328
+    },
+    {
+      "name": "reasoning_within_output.6",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.6",
+      "ok": true,
+      "actual": 6521,
+      "expected": 6521
+    },
+    {
+      "name": "formal_usage.7",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3378,
+        "completion_tokens": 6554,
+        "total_tokens": 9932,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3949
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 690
+      },
+      "expected": {
+        "prompt_tokens": 3378,
+        "completion_tokens": 6554,
+        "total_tokens": 9932,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3949
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 690
+      }
+    },
+    {
+      "name": "cache_accounting.7",
+      "ok": true,
+      "actual": 3378,
+      "expected": 3378
+    },
+    {
+      "name": "cache_detail.7",
+      "ok": true,
+      "actual": 2688,
+      "expected": 2688
+    },
+    {
+      "name": "reasoning_within_output.7",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.7",
+      "ok": true,
+      "actual": 9932,
+      "expected": 9932
+    },
+    {
+      "name": "formal_usage.8",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 3135,
+        "completion_tokens": 3628,
+        "total_tokens": 6763,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2049
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 447
+      },
+      "expected": {
+        "prompt_tokens": 3135,
+        "completion_tokens": 3628,
+        "total_tokens": 6763,
+        "prompt_tokens_details": {
+          "cached_tokens": 2688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2049
+        },
+        "prompt_cache_hit_tokens": 2688,
+        "prompt_cache_miss_tokens": 447
+      }
+    },
+    {
+      "name": "cache_accounting.8",
+      "ok": true,
+      "actual": 3135,
+      "expected": 3135
+    },
+    {
+      "name": "cache_detail.8",
+      "ok": true,
+      "actual": 2688,
+      "expected": 2688
+    },
+    {
+      "name": "reasoning_within_output.8",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.8",
+      "ok": true,
+      "actual": 6763,
+      "expected": 6763
+    },
+    {
+      "name": "formal_usage.9",
+      "ok": true,
+      "actual": {
+        "prompt_tokens": 2238,
+        "completion_tokens": 5060,
+        "total_tokens": 7298,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3125
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2110
+      },
+      "expected": {
+        "prompt_tokens": 2238,
+        "completion_tokens": 5060,
+        "total_tokens": 7298,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3125
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2110
+      }
+    },
+    {
+      "name": "cache_accounting.9",
+      "ok": true,
+      "actual": 2238,
+      "expected": 2238
+    },
+    {
+      "name": "cache_detail.9",
+      "ok": true,
+      "actual": 128,
+      "expected": 128
+    },
+    {
+      "name": "reasoning_within_output.9",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "total_tokens.9",
+      "ok": true,
+      "actual": 7298,
+      "expected": 7298
+    },
+    {
+      "name": "input_files_unchanged",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "passed": 124,
+  "total": 124,
+  "failures": [],
+  "price_inputs_tokens": {
+    "input_cache_hit": 20224,
+    "input_cache_miss": 9098,
+    "output": 56708,
+    "reasoning": 39165,
+    "non_reasoning_output": 17543
+  },
+  "started_at_utc": "2026-11-09T15:16:18+00:00",
+  "task2_attempt_rejections": [
+    {
+      "sample": "t2-good",
+      "attempt": 0,
+      "problem": "缺少总评"
+    },
+    {
+      "sample": "t2-strong",
+      "attempt": 0,
+      "problem": "invalid_json"
+    },
+    {
+      "sample": "t2-strong",
+      "attempt": 1,
+      "problem": "invalid_json"
+    }
+  ],
+  "sanity_checks_unavailable": [
+    {
+      "sample": "t2-strong",
+      "expectations_not_evaluated": [
+        "overall_min",
+        "argument_max_problems",
+        "argument_forbid",
+        "argument_position"
+      ]
+    },
+    {
+      "sample": "分级样本",
+      "expectations_not_evaluated": [
+        "总分随水平不降",
+        "最强与最弱相差 ≥ 1.5"
+      ]
+    }
+  ],
+  "limitations": [
+    "A only; B and its private materials were not inspected.",
+    "Usage is provider-reported; no invoice was accessed.",
+    "No independent human rescoring; quotation and accounting checks do not prove judgment accuracy."
+  ]
+}
