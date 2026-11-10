@@ -56,9 +56,22 @@
   **完全相同**的题图信息，题图只识别一次，结果写进样本文件，两个模型共用（需要小改 realcheck，见第 6 节）。
   如果本机没有配置识图，Task 1 两篇只比较 CC / LR / GRA，TA 不评。
 
-预计请求量（按 7 + 7 + 10 篇）：每个模型 7×2 + 7×2 + 10 = 38 次，加重试余量按 50 次封顶；
-两个模型合计上限 100 次，另加识图 2 次。按用户核对的官方单价和上一批的平均用量粗估，
-Flash 约 1–2 元，Pro 约 4–5 元，合计 10 元以内；这是估算，不是账单。
+请求量（2026-11-10 按复核意见更正）：一次评价最多 2 次实际请求（首轮 + 一次校验重试），
+重试不算一次独立重复。原先写的“合计上限 100 次”小于最坏情况，会让某次运行中途停下，
+两边的分母就不对称了。现在按最坏情况给每次运行单独设上限，保证都能跑完：
+
+| 组 | 篇数 × 次数 | 每个模型的评价数 | 每个模型最多请求 | 两个模型合计 |
+|---|---|---|---|---|
+| 留出集（6 篇，双评委分数） | 6 × 2 | 12 | 24 | 48，另加识图 2 次（只在第一次运行） |
+| 学生作文 `teacher-t2-01` | 1 × 2 | 2 | 4 | 8 |
+| 排序集（10 篇 AI 参考文章） | 10 × 1 | 10 | 20 | 40 |
+| 开发集（7 篇内置样本） | 7 × 2 | 14 | 28 | 56 |
+| 合计 | | 38 | 76 | 152，另加识图 2 次 |
+
+建议分两段授权：先跑前三组（最多 96 次文字请求 + 2 次识图），它们回答“准不准”，同时也给出
+23 篇新作文上的格式稳定性；开发集（56 次）只看历史问题是否复现，可以之后再决定。
+按上一批的平均用量粗估（Flash 约 0.03 元 / 请求，Pro 约 0.09 元 / 请求；留出集作文更长，
+实际会高一些），前三组约 6 元，全部约 10 元。这是估算，不是账单，也不是费用上限。
 
 ## 5. 指标与判定规则（跑之前定死）
 
@@ -101,3 +114,43 @@ Flash 约 1–2 元，Pro 约 4–5 元，合计 10 元以内；这是估算，�
 - 不同时换模型和思考档位；max 档位留到模型定下来之后单独对照。
 - 不把留出集作文、评委评语写进提示词、测试夹具或 Git。
 - 不放宽严格解析，不修补坏 JSON 出分。
+
+## 8. 准备情况与执行清单（2026-11-10 更新）
+
+步骤 0 用户已答复：合辑可以用于内部评估并发送给模型服务商。步骤 1a、1b 已完成，另按复核
+`47ccd24` 补了三项（两边各自计价并区分缓存命中、对照报告列出运行条件、盲评表包含完整评价）。
+说明见 `tools/ielts_writing_ai/README.md` 的 realcheck 一节。
+
+数据文件（不在 Git 里，由 Claude 发给用户，建议放 `~/iwa-calibration/`）：
+
+- `holdout_rated.jsonl`：6 篇（4 篇 Task 2、2 篇 Task 1），每篇两位评委（A / B）的总分和四项分，
+  以及评委指出的可核对错误 22 条（`teacher_findings`，只收能在原文定位的语言或数据错误，
+  不收“论证可以更丰富”这类意见）；Task 1 的题图在同目录 `img/` 下。
+- `holdout_ordering.jsonl`：10 篇 AI 参考文章，两道题各 5 档（标称 9 / 8.5 / 8 / 7.5 / 7），只做排序检查。
+- `teacher.jsonl`：之前的学生作文 `teacher-t2-01`。
+
+执行顺序（每条命令都要用户授权后在 Mac 上运行；`<…>` 处填官方单价）：
+
+```bash
+D=~/iwa-calibration; OUT=~/iwa-compare; COMMON="--kinds evaluate --evaluate-thinking high --confirm-paid"
+
+# 1. Flash：留出集。只有这一次识图，识别结果写到 $OUT/flash-rated/image_descriptions.json
+IWA_LLM_MODEL=deepseek-flash $PY -m tools.ielts_writing_ai realcheck --samples $D/holdout_rated.jsonl \
+  --repeat 2 --with-vision --max-calls 26 --out $OUT/flash-rated $COMMON \
+  --price-in <Flash 输入> --price-cached-in <Flash 缓存命中> --price-out <Flash 输出>
+
+# 2. Pro：同一批作文，沿用第 1 步的题图识别结果（Pro 不识图也不受影响）
+IWA_LLM_MODEL=deepseek-v4-pro $PY -m tools.ielts_writing_ai realcheck --samples $D/holdout_rated.jsonl \
+  --repeat 2 --image-descriptions $OUT/flash-rated/image_descriptions.json --max-calls 24 \
+  --out $OUT/pro-rated $COMMON --price-in <Pro 输入> --price-cached-in <Pro 缓存命中> --price-out <Pro 输出>
+
+# 3. 排序集、学生作文：两个模型各一次（--max-calls 分别为 20 和 4；学生作文加 --repeat 2）
+# 4. 对照（不调用模型）：compare.md、manual_review.md，加 --blind 生成盲评表
+$PY -m tools.ielts_writing_ai realcheck-compare $OUT/flash-rated $OUT/pro-rated --allow-model-change --blind 7
+```
+
+运行前核对：两次运行用同一份代码（`report.md` 末尾和 `compare.md` 的“运行条件”表会列出源码指纹、
+输出上限、超时和服务商返回的模型名，不一致会提示）；两个模型交替跑，不要一个模型全跑完再跑另一个；
+没有配置识图时去掉 `--with-vision` 和 `--image-descriptions`，Task 1 两篇只比较 CC / LR / GRA。
+
+仍然缺的：低分段（5–6 分）的学生作文。合辑的人工分集中在 6.5–7.5，这次对照说明不了低分段的评分是否准确。
