@@ -181,7 +181,12 @@ def cmd_realcheck(settings, args) -> int:
         max_calls=args.max_calls,
         target_band=args.target_band,
     )
-    report = realcheck.build_report(run_data, price_in=args.price_in, price_out=args.price_out)
+    report = realcheck.build_report(
+        run_data,
+        price_in=args.price_in,
+        price_out=args.price_out,
+        price_cached_in=args.price_cached_in,
+    )
     out_dir = (
         Path(args.out)
         if args.out
@@ -204,6 +209,16 @@ def cmd_realcheck_compare(_settings, args) -> int:
             args.b,
             price_in=args.price_in,
             price_out=args.price_out,
+            prices_a={
+                "in": args.price_in_a,
+                "cached_in": args.price_cached_in_a,
+                "out": args.price_out_a,
+            },
+            prices_b={
+                "in": args.price_in_b,
+                "cached_in": args.price_cached_in_b,
+                "out": args.price_out_b,
+            },
             allow_model_change=args.allow_model_change,
         )
     except realcheck_compare.CompareError as exc:
@@ -261,6 +276,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     rc.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     rc.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
+    rc.add_argument(
+        "--price-cached-in",
+        type=float,
+        default=None,
+        help="缓存命中的输入单价（每百万 token）；服务商报告命中量时分开计价",
+    )
     rc.add_argument("--out", default=None, help="报告目录（默认数据目录下 realcheck/时间戳）")
     rc.add_argument("--confirm-paid", action="store_true", help="确认调用付费模型")
     cmp = sub.add_parser(
@@ -278,6 +299,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cmp.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     cmp.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
+    for side in ("a", "b"):
+        for name, text in (
+            ("price-in", "输入单价"),
+            ("price-cached-in", "缓存命中的输入单价"),
+            ("price-out", "输出单价"),
+        ):
+            cmp.add_argument(
+                f"--{name}-{side}",
+                type=float,
+                default=None,
+                help=f"只用于 {side.upper()} 的{text}（每百万 token）；比较两个模型时用",
+            )
     cmp.add_argument(
         "--allow-model-change",
         action="store_true",

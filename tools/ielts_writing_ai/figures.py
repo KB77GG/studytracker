@@ -29,6 +29,7 @@ digit-only reader could not see). Ordinals ("twenty-first") are not figures.
 from __future__ import annotations
 
 import re
+from decimal import Decimal
 
 from . import essay as essay_lib
 
@@ -354,19 +355,24 @@ class Sources:
         self.percents = set()
         self.multipliers = set()
         self.points = set()
+        observed = []  # every percentage as often as the input gives it
         for value, kind, _shown in figures(self.text):
             self.values.add(value)
             if kind == PERCENT:
                 self.percents.add(value)
+                observed.append(Decimal(value))
             elif kind == MULTIPLIER:
                 self.multipliers.add(value)
             elif kind == POINTS:
                 self.points.add(value)
         # Gaps between two percentages the input gives ("70% ... 75%" -> 5 points), so a
         # derived "5 percentage points" is sourced (the .12 run removed one as invented).
-        percents = sorted({float(v) for v in self.percents})
+        # The subtraction is exact (70.125% -> 75.25% is 5.125 points, not 5.12), and a
+        # percentage the input gives twice ("70% ... 70%") is a gap of 0 points.
         self.point_spans = {
-            _value(str(round(b - a, 2))) for i, a in enumerate(percents) for b in percents[i + 1 :]
+            _value(format(abs(b - a), "f"))
+            for i, a in enumerate(observed)
+            for b in observed[i + 1 :]
         }
         # The task's own numbers (word count, minimum length) back word / plain targets
         # ("expand to 250 words") but never a time span: a 20-word essay is no source

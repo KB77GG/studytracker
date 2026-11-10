@@ -16,6 +16,7 @@ import random
 from pathlib import Path
 
 from . import essay as essay_lib
+from . import realcheck
 from .realcheck import teacher_coverage
 
 CRITERIA = ("task", "coherence", "lexical", "grammar")
@@ -75,6 +76,13 @@ def conditions(run: dict) -> dict:
         "kinds": run_data.get("kinds") or [],
         "evaluate_thinking": settings.get("evaluate_thinking", "off"),
         "evaluate_max_tokens": (report.get("kinds", {}).get("evaluate") or {}).get("max_tokens"),
+        "evaluate_timeout": (
+            settings.get("evaluate_thinking_timeout")
+            if settings.get("evaluate_thinking", "off") != "off"
+            else None
+        ),
+        "served_models": report.get("served_models") or [],
+        "code_sha256": report.get("code_sha256"),
         "samples": {s["id"]: _fingerprint(s) for s in run_data.get("samples") or []},
         "evaluate_inputs": {
             s["id"]: _evaluate_input(run_data, s["id"]) for s in run_data.get("samples") or []
@@ -106,6 +114,17 @@ def check_same_conditions(
         )
         if a["evaluate_thinking"] != b["evaluate_thinking"]:
             warnings.append("模型和思考模式同时不同：差异不能单独归因于其中一项")
+        for key, label in (("evaluate_max_tokens", "输出上限"), ("evaluate_timeout", "超时")):
+            if a.get(key) != b.get(key):
+                warnings.append(
+                    f"两个模型的{label}不同（{_fmt(a.get(key))} vs {_fmt(b.get(key))}）："
+                    "差异不能单独归因于模型"
+                )
+    if a.get("code_sha256") and b.get("code_sha256") and a["code_sha256"] != b["code_sha256"]:
+        warnings.append(
+            "两次运行的工具源码不同（源码指纹不一致）：校验和过滤规则可能有差别，"
+            "差异不能只归因于模型或思考模式"
+        )
     if "evaluate" not in a["kinds"] or "evaluate" not in b["kinds"]:
         errors.append("两次运行都必须包含原稿评价（--kinds evaluate）")
     if a["kinds"] != b["kinds"]:
@@ -186,6 +205,16 @@ def sample_view(run_data: dict, sample: dict) -> dict:
             }
             for k in CRITERIA
         },
+        "overall_comment": result.get("overall_comment") or "",
+        "priorities": list(result.get("priorities") or []),
+        "optional": [
+            {
+                "quote": i.get("quote"),
+                "comment": i.get("comment"),
+                "suggestion": i.get("suggestion"),
+            }
+            for i in argument.get("improvements") or []
+        ],
         "position_consistent": (argument.get("position") or {}).get("consistent"),
         "argument_notes": argument.get("notes") or [],
         "problems": [
@@ -243,20 +272,28 @@ def sample_view(run_data: dict, sample: dict) -> dict:
     }
 
 
-def _cost(report: dict, price_in, price_out):
-    tokens = ((report.get("usage") or {}).get("text") or {}).get("tokens") or {}
-    if price_in is None or price_out is None:
-        return None
-    if tokens.get("prompt") is None or tokens.get("completion") is None:
-        return None
-    return round(tokens["prompt"] / 1e6 * price_in + tokens["completion"] / 1e6 * price_out, 6)
+def _prices(given: dict | None, shared: dict, report: dict) -> dict:
+    """This run's prices: its own compare option, else the pair given for both runs,
+    else what its realcheck was run with."""
+    stored = report.get("prices") or {}
+    out = {}
+    for key in ("in", "cached_in", "out"):
+        for source in (given or {}, shared, stored):
+            if source.get(key) is not None:
+                out[key] = source[key]
+                break
+        else:
+            out[key] = None
+    return out
 
 
-def run_summary(run: dict, price_in=None, price_out=None) -> dict:
+def run_summary(run: dict, prices: dict | None = None) -> dict:
     report = run["report"]
     evaluate = report.get("kinds", {}).get("evaluate") or {}
     tokens = ((report.get("usage") or {}).get("text") or {}).get("tokens") or {}
     views = [sample_view(run["run_data"], s) for s in run["run_data"].get("samples") or []]
+    text_usage = (report.get("usage") or {}).get("text") or {}
+    cost, basis = realcheck.text_cost(text_usage, prices)
     return {
         "calls": report.get("calls"),
         "first_attempt_valid": evaluate.get("first_attempt_valid"),
@@ -272,7 +309,9 @@ def run_summary(run: dict, price_in=None, price_out=None) -> dict:
         "max_tokens": evaluate.get("max_tokens"),
         "truncated": evaluate.get("truncated", 0),
         "timeouts": evaluate.get("timeouts", 0),
-        "estimated_cost": _cost(report, price_in, price_out),
+        "estimated_cost": cost,
+        "cost_basis": basis,
+        "cache_hit_tokens": text_usage.get("cache_hit_tokens"),
         "sanity": {k: (report.get("sanity") or {}).get(k) for k in ("passed", "total", "skipped")},
         "problems": sum(len(v["problems"]) for v in views),
         "reclassified": sum(len(v["reclassified"]) for v in views),
@@ -282,12 +321,35 @@ def run_summary(run: dict, price_in=None, price_out=None) -> dict:
     }
 
 
-def compare(a_dir, b_dir, *, price_in=None, price_out=None, allow_model_change=False) -> dict:
+def compare(
+    a_dir,
+    b_dir,
+    *,
+    price_in=None,
+    price_out=None,
+    prices_a: dict | None = None,
+    prices_b: dict | None = None,
+    allow_model_change=False,
+) -> dict:
+    """prices_a / prices_b ({"in", "cached_in", "out"}, per million tokens) price each
+    run separately; price_in / price_out apply to both runs and are only accepted when
+    both used the same model. Without either, each run keeps the prices its realcheck
+    was given."""
     a, b = load_run(a_dir), load_run(b_dir)
     cond_a, cond_b = conditions(a), conditions(b)
     errors, warnings = check_same_conditions(cond_a, cond_b, allow_model_change=allow_model_change)
     if errors:
         raise CompareError("两次运行的条件不同，不能对照：" + "；".join(errors))
+    shared = {"in": price_in, "out": price_out}
+    model_changed = (cond_a["provider"], cond_a["model"]) != (cond_b["provider"], cond_b["model"])
+    if model_changed and (price_in is not None or price_out is not None):
+        raise CompareError(
+            "两个模型的单价不同，--price-in / --price-out 会把同一组价格套在两边："
+            "请用 --price-in-a / --price-out-a 和 --price-in-b / --price-out-b 分别提供，"
+            "或在各自运行 realcheck 时提供单价"
+        )
+    paid_a = _prices(prices_a, shared, a["report"])
+    paid_b = _prices(prices_b, shared, b["report"])
     views_b = {s["id"]: sample_view(b["run_data"], s) for s in b["run_data"]["samples"]}
     samples = [
         {"a": sample_view(a["run_data"], s), "b": views_b[s["id"]]}
@@ -296,12 +358,9 @@ def compare(a_dir, b_dir, *, price_in=None, price_out=None, allow_model_change=F
     return {
         "conditions": {"a": cond_a, "b": cond_b},
         "warnings": warnings,
-        "summary": {
-            "a": run_summary(a, price_in, price_out),
-            "b": run_summary(b, price_in, price_out),
-        },
+        "summary": {"a": run_summary(a, paid_a), "b": run_summary(b, paid_b)},
         "samples": samples,
-        "prices": {"in": price_in, "out": price_out},
+        "prices": {"a": paid_a, "b": paid_b},
     }
 
 
@@ -368,7 +427,8 @@ def render_markdown(cmp: dict) -> str:
         ("评价单次输出峰值", "completion_tokens_max"),
         ("评价输出上限", "max_tokens"),
         ("截断 / 超时", None),
-        ("估算费用（按提供的单价，文本）", "estimated_cost"),
+        ("输入中缓存命中的 token（— 为未报告）", "cache_hit_tokens"),
+        ("估算费用（各按自己的单价，文本）", "estimated_cost"),
         ("论证问题条数", "problems"),
         ("改列可选优化（同段支撑）", "reclassified"),
         ("AI 判断自相矛盾", "self_conflicts"),
@@ -390,11 +450,47 @@ def render_markdown(cmp: dict) -> str:
             show = _pct if key in RATE_KEYS else _fmt
             va, vb = show(sa[key]), show(sb[key])
         lines.append(f"| {label} | {va} | {vb} |")
-    if cmp["prices"]["in"] is None:
-        lines.append("")
-        lines.append(
-            "未提供单价：费用未知（不能视为零）。思考 token 是否按输出计费，以服务商账单为准。"
-        )
+    lines.append("")
+    for name, summary in (("A", sa), ("B", sb)):
+        paid = cmp["prices"][name.lower()]
+        if summary["estimated_cost"] is None:
+            lines.append(f"{name}：没有单价或用量不完整，费用未知（不能视为零）。")
+        elif summary["cost_basis"] == "cache_split":
+            lines.append(
+                f"{name}：输入 {_fmt(paid['in'])}（缓存命中 {_fmt(paid['cached_in'])}）、"
+                f"输出 {_fmt(paid['out'])}，每百万 token；输入按命中 / 未命中分别计价。"
+            )
+        else:
+            lines.append(
+                f"{name}：输入 {_fmt(paid['in'])}、输出 {_fmt(paid['out'])}，每百万 token；"
+                "全部输入按普通输入单价计算（没有缓存命中单价或服务商未报告命中量），"
+                "有缓存命中时偏高。"
+            )
+    lines.append("思考 token 已含在输出 token 里，不另加。费用是估算，以服务商账单为准。")
+    lines += [
+        "",
+        "## 运行条件",
+        "",
+        "消息指纹只保证发给模型的内容相同；下面几项不在消息里，需要自己核对是否一致。",
+        "",
+        "| 项目 | A | B |",
+        "|---|---|---|",
+    ]
+    for label, key in (
+        ("配置的模型", "model"),
+        ("服务商返回的模型名", "served_models"),
+        ("评价思考模式", "evaluate_thinking"),
+        ("评价输出上限", "evaluate_max_tokens"),
+        ("评价超时（秒）", "evaluate_timeout"),
+        ("工具源码指纹", "code_sha256"),
+        ("开始时间", "started_at"),
+    ):
+        va, vb = ca.get(key), cb.get(key)
+        if key == "code_sha256":
+            va, vb = (va or "")[:16] or None, (vb or "")[:16] or None
+        if key == "served_models":
+            va, vb = "、".join(va or []) or None, "、".join(vb or []) or None
+        lines.append(f"| {label} | {_fmt(va)} | {_fmt(vb)} |")
     lines += [
         "",
         "## 逐篇分数与论证问题",
@@ -578,12 +674,21 @@ def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
                     f"| 论证问题（{p['label'] or p['type']}） | {_quote(p['quote'])} | "
                     f"{_quote(p['comment'])} | {_quote(p.get('suggestion'))} |  |  |"
                 )
+            for item in view["optional"]:
+                lines.append(
+                    f"| 可选优化 | {_quote(item['quote'])} | {_quote(item['comment'])} | "
+                    f"{_quote(item['suggestion'])} |  |  |"
+                )
             for issue in view["consistency_issues"]:
                 figures = "；".join(_quote(f) for f in issue["figures"]) or "—"
                 lines.append(
                     f"| Task 1 文内矛盾 | {_quote(issue['quote'])} | {_quote(issue['comment'])} | "
                     f"对照：{figures} |  |  |"
                 )
+            if view["overall_comment"]:
+                lines.append(f"| 总评 | — | {_quote(view['overall_comment'])} | — |  |  |")
+            for n, text in enumerate(view["priorities"], 1):
+                lines.append(f"| 提升重点 {n} | — | — | {_quote(text)} |  |  |")
             lines.append("| ④ 漏掉评委都指出的明确错误 | — | — | — |  |  |")
             lines.append("| 其他漏报 | — | — | — |  |  |")
     return "\n".join(lines) + "\n", key

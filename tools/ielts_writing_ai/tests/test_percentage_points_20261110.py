@@ -75,5 +75,34 @@ class PercentagePointsTest(unittest.TestCase):
         self.assertEqual(stated.unsourced("a 3 percentage point gap"), [])
 
 
+class ArithmeticTest(unittest.TestCase):
+    """Review 47ccd24 (2026-11-10): the gap was rounded to two decimals and equal
+    percentages were merged before subtracting."""
+
+    def test_a_percentage_given_twice_is_a_gap_of_zero(self):
+        same = figures.Sources("Country A stood at 70% in 2000 and at 70% in 2020.")
+        for advice in ("a change of zero percentage points", "变化为 0 个百分点"):
+            with self.subTest(advice=advice):
+                self.assertEqual(same.unsourced(advice), [])
+        once = figures.Sources("Country A stood at 70% in 2000 and at 75% in 2020.")
+        self.assertEqual(once.unsourced("a change of 0 percentage points"), ["0 percentage points"])
+
+    def test_the_gap_is_exact(self):
+        precise = figures.Sources("from 70.125% to 75.25%")
+        self.assertEqual(precise.unsourced("a rise of 5.125 percentage points"), [])
+        self.assertEqual(
+            precise.unsourced("a rise of exactly 5.12 percentage points"),
+            ["5.12 percentage points"],
+        )
+        tiny = figures.Sources("from 10.001% to 10.005%")
+        self.assertEqual(tiny.unsourced("a rise of 0.004 percentage points"), [])
+        self.assertEqual(tiny.unsourced("a rise of 0 percentage points"), ["0 percentage points"])
+        # Binary floats would give 0.30000000000000004 here.
+        self.assertEqual(figures.Sources("0.1% then 0.4%").unsourced("0.3 percentage points"), [])
+        self.assertEqual(
+            figures.Sources("10.01% then 10.03%").unsourced("0.02 percentage points"), []
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

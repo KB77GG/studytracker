@@ -375,6 +375,7 @@ def run(
         "samples": results,
         "calls": recorder.records,
         "image_descriptions": readings,
+        "code_sha256": code_fingerprint(),
     }
 
 
@@ -1237,8 +1238,12 @@ def _usage_summary(calls: list[dict]) -> dict:
     known = {"prompt": 0, "completion": 0}
     complete = {key: True for key in known}
     unknown_calls = 0
+    cache_hits, cache_reported = 0, bool(calls)
     for call in calls:
         usage = call.get("usage") or {}
+        hit = _cache_hit_tokens(usage)
+        cache_hits += hit or 0
+        cache_reported = cache_reported and hit is not None
         call_known = True
         for short, field in (("prompt", "prompt_tokens"), ("completion", "completion_tokens")):
             value = usage.get(field)
@@ -1254,7 +1259,53 @@ def _usage_summary(calls: list[dict]) -> dict:
         "complete": unknown_calls == 0,
         "tokens": {key: known[key] if complete[key] else None for key in known},
         "known_tokens": known,
+        # Input tokens served from the provider's cache (billed at a lower price);
+        # None when any call did not report them.
+        "cache_hit_tokens": cache_hits if cache_reported else None,
     }
+
+
+def _cache_hit_tokens(usage: dict) -> int | None:
+    """DeepSeek reports prompt_cache_hit_tokens, OpenAI-style APIs
+    prompt_tokens_details.cached_tokens; None when neither is there."""
+    for value in (
+        usage.get("prompt_cache_hit_tokens"),
+        (usage.get("prompt_tokens_details") or {}).get("cached_tokens"),
+    ):
+        if type(value) is int and value >= 0:
+            return value
+    return None
+
+
+def text_cost(text_usage: dict, prices: dict | None) -> tuple[float | None, str | None]:
+    """(cost, basis) of the text calls. With a cache-hit price and reported cache hits
+    the input is split (hit / miss); otherwise every input token is charged the normal
+    input price, which overstates the cost when the cache was hit. Thinking tokens are
+    part of the completion tokens and are not added again."""
+    prices = prices or {}
+    tokens = (text_usage or {}).get("tokens") or {}
+    if prices.get("in") is None or prices.get("out") is None:
+        return None, None
+    if tokens.get("prompt") is None or tokens.get("completion") is None:
+        return None, None
+    hits = (text_usage or {}).get("cache_hit_tokens")
+    if prices.get("cached_in") is not None and hits is not None:
+        miss = max(tokens["prompt"] - hits, 0)
+        cost = miss * prices["in"] + hits * prices["cached_in"]
+        basis = "cache_split"
+    else:
+        cost = tokens["prompt"] * prices["in"]
+        basis = "input_at_full_price"
+    return round((cost + tokens["completion"] * prices["out"]) / 1e6, 6), basis
+
+
+def code_fingerprint() -> str:
+    """sha256 over the tool's own source files (not the tests): two runs compared as
+    "same conditions" should have been produced by the same code."""
+    digest = hashlib.sha256()
+    for path in sorted(Path(__file__).parent.glob("*.py")):
+        digest.update(path.name.encode("utf-8") + b"\0" + path.read_bytes() + b"\0")
+    return digest.hexdigest()
 
 
 def _connectivity(first_call: dict | None) -> dict:
@@ -1292,7 +1343,11 @@ def _connectivity(first_call: dict | None) -> dict:
 
 
 def build_report(
-    run_data: dict, *, price_in: float | None = None, price_out: float | None = None
+    run_data: dict,
+    *,
+    price_in: float | None = None,
+    price_out: float | None = None,
+    price_cached_in: float | None = None,
 ) -> dict:
     kinds = {kind: _kind_metrics(kind, run_data) for kind in run_data["kinds"]}
     calls = run_data["calls"]
@@ -1311,22 +1366,17 @@ def build_report(
         {"provider": provider, "model": model, **_usage_summary(group)}
         for (provider, model), group in models.items()
     ]
-    text_cost = None
-    if price_in is not None and price_out is not None and usage["text"]["complete"]:
-        tokens = usage["text"]["tokens"]
-        text_cost = round(
-            tokens["prompt"] / 1e6 * price_in + tokens["completion"] / 1e6 * price_out, 6
-        )
+    prices = {"in": price_in, "cached_in": price_cached_in, "out": price_out}
+    covered, basis = text_cost(usage["text"], prices)
     # CLI prices describe the text model. Even complete vision usage cannot be
     # priced with that pair without a separately supplied vision-model price.
-    cost = text_cost if not vision_calls else None
+    cost = covered if not vision_calls else None
     cost_estimate = {
         "scope": "text",
-        "covered_cost": text_cost,
+        "covered_cost": covered,
+        "basis": basis,
         "coverage": (
-            "complete"
-            if cost is not None
-            else ("text_only" if text_cost is not None else "unknown")
+            "complete" if cost is not None else ("text_only" if covered is not None else "unknown")
         ),
         "vision_cost": None if vision_calls else 0.0,
         "unknown_usage_calls": usage["total"]["unknown_usage_calls"],
@@ -1360,6 +1410,13 @@ def build_report(
         "usage": usage,
         "estimated_cost": cost,
         "cost_estimate": cost_estimate,
+        "prices": prices,
+        # What the provider says answered (may be a dated version of the configured
+        # model) and which code produced this run: both belong to the conditions.
+        "served_models": sorted(
+            {str(c["model"]) for c in text_calls if c.get("ok") and c.get("model")}
+        ),
+        "code_sha256": run_data.get("code_sha256"),
         "per_sample": [
             {
                 "id": s["id"],
@@ -1633,6 +1690,18 @@ def render_markdown(report: dict) -> str:
         covered = report["cost_estimate"]["covered_cost"]
         if covered is not None:
             lines.append(f"仅文本部分按输入单价估算：{covered}；识图费用未估算。")
+    basis = report["cost_estimate"].get("basis")
+    hits = report["usage"]["text"].get("cache_hit_tokens")
+    if basis == "cache_split":
+        lines.append(f"输入按缓存命中 {hits} token 与未命中分别计价；思考 token 已含在输出里。")
+    elif basis == "input_at_full_price":
+        lines.append(
+            "全部输入按普通输入单价计算（没有提供缓存命中单价，或服务商没有报告命中量），"
+            "有缓存命中时会偏高；思考 token 已含在输出里。"
+        )
+    served = "、".join(report.get("served_models") or []) or "—"
+    code = (report.get("code_sha256") or "")[:16] or "—"
+    lines.append(f"服务商返回的模型名：{served}；工具源码指纹：{code}。")
     lines += ["", "原始调用记录见同目录 `raw_calls.jsonl`（含模型原文，仅保存在本机）。"]
     return "\n".join(lines) + "\n"
 
