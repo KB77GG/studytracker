@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
 from pathlib import Path
 
 from . import essay as essay_lib
@@ -175,7 +176,11 @@ def sample_view(run_data: dict, sample: dict) -> dict:
             k: {
                 "summary": (criteria.get(k) or {}).get("summary", ""),
                 "issues": [
-                    {"quote": i.get("quote"), "comment": i.get("comment")}
+                    {
+                        "quote": i.get("quote"),
+                        "comment": i.get("comment"),
+                        "suggestion": i.get("suggestion"),
+                    }
                     for i in (criteria.get(k) or {}).get("issues") or []
                 ],
             }
@@ -525,9 +530,75 @@ def render_manual_review(cmp: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write(cmp: dict, out_dir) -> Path:
+BLIND_VERDICTS = "正确 / ① 误读原文 / ② 改句改变原意或逻辑 / ③ 可选润色说成错误 / 不确定"
+_BLIND_NAMES = {"task": "TR/TA", "coherence": "CC", "lexical": "LR", "grammar": "GRA"}
+
+
+def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
+    """(sheet, key). The same findings as the manual review plus every language issue
+    with its suggestion, but the two runs appear as 甲 / 乙 in an order shuffled per
+    sample and without any model or setting name; the key says which is which and is
+    written to a separate file, to be opened only after the verdicts are filled in."""
+    rng = random.Random(seed)
+    key = {"seed": seed, "samples": {}}
+    lines = [
+        "# 盲评复核表（不显示模型和设置；先填完再看 blind_key.json）",
+        "",
+        f"“判断”一栏填：{BLIND_VERDICTS}。",
+        "每篇最后两行写：④ 两位评委都指出、但这一方没有指出的明确错误；其他漏报。",
+    ]
+    for pair in cmp["samples"]:
+        sides = ["a", "b"]
+        rng.shuffle(sides)
+        key["samples"][pair["a"]["id"]] = {"甲": sides[0], "乙": sides[1]}
+        lines += ["", f"## {pair['a']['id']}"]
+        for name, side in zip(("甲", "乙"), sides, strict=True):
+            view = pair[side]
+            bands = "；".join(
+                f"{_BLIND_NAMES[k]} {_band(view['bands'].get(k))}" for k in _BLIND_NAMES
+            )
+            lines += [
+                "",
+                f"### {name}（总分 {_band(view['overall'])}；{bands}；状态 {view['status'] or '—'}）",
+                "",
+                "| 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
+                "|---|---|---|---|---|---|",
+            ]
+            for k, short in _BLIND_NAMES.items():
+                criterion = view["criteria"][k]
+                if criterion["summary"]:
+                    lines.append(f"| {short} 理由 | — | {_quote(criterion['summary'])} | — |  |  |")
+                for issue in criterion["issues"]:
+                    lines.append(
+                        f"| {short} 问题 | {_quote(issue['quote'])} | {_quote(issue['comment'])} | "
+                        f"{_quote(issue.get('suggestion'))} |  |  |"
+                    )
+            for p in view["problems"]:
+                lines.append(
+                    f"| 论证问题（{p['label'] or p['type']}） | {_quote(p['quote'])} | "
+                    f"{_quote(p['comment'])} | {_quote(p.get('suggestion'))} |  |  |"
+                )
+            for issue in view["consistency_issues"]:
+                figures = "；".join(_quote(f) for f in issue["figures"]) or "—"
+                lines.append(
+                    f"| Task 1 文内矛盾 | {_quote(issue['quote'])} | {_quote(issue['comment'])} | "
+                    f"对照：{figures} |  |  |"
+                )
+            lines.append("| ④ 漏掉评委都指出的明确错误 | — | — | — |  |  |")
+            lines.append("| 其他漏报 | — | — | — |  |  |")
+    return "\n".join(lines) + "\n", key
+
+
+def write(cmp: dict, out_dir, *, blind_seed: int | None = None) -> Path:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    if blind_seed is not None:
+        sheet, key = render_blind_review(cmp, blind_seed)
+        (out_dir / "blind_review.md").write_text(sheet, encoding="utf-8")
+        key["conditions"] = cmp["conditions"]
+        (out_dir / "blind_key.json").write_text(
+            json.dumps(key, ensure_ascii=False, indent=1), encoding="utf-8"
+        )
     (out_dir / "compare.json").write_text(
         json.dumps(cmp, ensure_ascii=False, indent=1), encoding="utf-8"
     )

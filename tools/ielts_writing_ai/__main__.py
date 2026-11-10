@@ -141,11 +141,19 @@ def cmd_realcheck(settings, args) -> int:
     try:
         realcheck.validate_max_calls(args.max_calls)
         items = realcheck.load_samples(args.samples, args.limit)
+        items = realcheck.expand_repeats(items, args.repeat)
+        if args.image_descriptions:
+            reused = realcheck.apply_image_descriptions(items, args.image_descriptions)
+            print(f"沿用已有的题图识别结果：{reused} 个样本（不再调用识图模型）")
     except realcheck.RealCheckError as exc:
         print(f"验证参数错误：{exc}", file=sys.stderr)
         return 2
-    vision_needed = args.with_vision and any(i.get("image") for i in items)
-    worst = len(items) * len(kinds) * 2 + (len(items) if vision_needed else 0)
+    to_read = {
+        i.get("repeat_of") or i["id"]
+        for i in items
+        if i.get("image") and not i.get("image_description")
+    }
+    worst = len(items) * len(kinds) * 2 + (len(to_read) if args.with_vision else 0)
     print(
         f"模型：{settings.llm_provider} / {settings.llm_model}（Key 已配置："
         f"{'是' if settings.llm_api_key else '否'}）；样本 {len(items)} 篇；"
@@ -202,10 +210,15 @@ def cmd_realcheck_compare(_settings, args) -> int:
         print(f"不能对照：{exc}", file=sys.stderr)
         return 2
     out_dir = Path(args.out) if args.out else Path(args.b) / "compare"
-    path = realcheck_compare.write(cmp, out_dir)
+    path = realcheck_compare.write(cmp, out_dir, blind_seed=args.blind)
     for warning in cmp["warnings"]:
         print(f"注意：{warning}", file=sys.stderr)
     print(f"对照报告：{path}（人工复核表：{path.parent / 'manual_review.md'}）")
+    if args.blind is not None:
+        print(
+            f"盲评表：{path.parent / 'blind_review.md'}（甲 / 乙对应关系在 blind_key.json，"
+            "填完判断再打开）"
+        )
     return 0
 
 
@@ -240,6 +253,12 @@ def build_parser() -> argparse.ArgumentParser:
     rc.add_argument("--max-calls", type=int, default=50, help="模型调用次数上限")
     rc.add_argument("--target-band", type=float, default=7.0)
     rc.add_argument("--with-vision", action="store_true", help="对带题图的样本调用识图模型")
+    rc.add_argument("--repeat", type=int, default=1, help="每篇作文运行几次（看波动）")
+    rc.add_argument(
+        "--image-descriptions",
+        default=None,
+        help="沿用之前一次运行保存的题图识别结果（image_descriptions.json），两次运行看同一份结果",
+    )
     rc.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     rc.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
     rc.add_argument("--out", default=None, help="报告目录（默认数据目录下 realcheck/时间戳）")
@@ -250,6 +269,13 @@ def build_parser() -> argparse.ArgumentParser:
     cmp.add_argument("a", help="第一次运行的报告目录（例如思考关闭）")
     cmp.add_argument("b", help="第二次运行的报告目录（例如思考 high）")
     cmp.add_argument("--out", default=None, help="输出目录（默认 B 目录下的 compare/）")
+    cmp.add_argument(
+        "--blind",
+        type=int,
+        default=None,
+        metavar="SEED",
+        help="另外生成盲评表：两次运行以甲 / 乙出现，每篇随机排序，不显示模型和设置",
+    )
     cmp.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     cmp.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
     cmp.add_argument(

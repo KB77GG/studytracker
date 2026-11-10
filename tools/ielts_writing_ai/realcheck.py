@@ -174,6 +174,7 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
                 raise RealCheckError(f"第 {number} 行 task_type 只能是 task1 / task2")
             item.setdefault("id", f"line-{number}")
             _validate_teacher_findings(item, number)
+            _validate_raters(item, number)
             if item.get("image"):
                 image = (path.parent / item["image"]).resolve()
                 if not image.is_file():
@@ -202,6 +203,78 @@ def _validate_teacher_findings(item: dict, number: int) -> None:
             raise RealCheckError(
                 f"第 {number} 行 teacher_findings 第 {n} 条的 quote 不在作文里：{quote[:40]}"
             )
+
+
+SCORE_KEYS = ("overall",) + CRITERION_KEYS
+
+
+def _validate_raters(item: dict, number: int) -> None:
+    """Optional fields for held-out sets:
+    - "teachers": [{"rater": "A", "overall": 7, "task": 7, ...}, ...] - several human
+      raters of the same essay; "teacher" (used for the calibration table) defaults to
+      their mean, and the report compares the AI with the raters' own disagreement;
+    - "group" + "nominal_band": essays written to descending target levels on one
+      question; only their order is checked, the nominal bands are not a score baseline;
+    - "image_description": a chart reading made earlier, used instead of calling the
+      vision model (so two runs judge exactly the same reading)."""
+    raters = item.get("teachers")
+    if raters is not None:
+        if not isinstance(raters, list) or not all(isinstance(r, dict) for r in raters):
+            raise RealCheckError(f"第 {number} 行 teachers 必须是对象列表")
+        for rater in raters:
+            for key in SCORE_KEYS:
+                if key in rater and not _is_band(rater[key]):
+                    raise RealCheckError(f"第 {number} 行 teachers 的 {key} 必须是 0–9 的数字")
+        if raters and not item.get("teacher"):
+            item["teacher"] = {
+                key: round(statistics.fmean(r[key] for r in raters if key in r), 3)
+                for key in SCORE_KEYS
+                if any(key in r for r in raters)
+            }
+    if item.get("nominal_band") is not None and not _is_band(item["nominal_band"]):
+        raise RealCheckError(f"第 {number} 行 nominal_band 必须是 0–9 的数字")
+    if item.get("group") is not None and not isinstance(item["group"], str):
+        raise RealCheckError(f"第 {number} 行 group 必须是字符串")
+    description = item.get("image_description")
+    if description is not None and not (isinstance(description, str) and description.strip()):
+        raise RealCheckError(f"第 {number} 行 image_description 必须是非空字符串")
+
+
+def _is_band(value) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 9
+
+
+def expand_repeats(items: list[dict], repeat: int) -> list[dict]:
+    """Each sample `repeat` times (ids x, x#r2, x#r3 ...), to see run-to-run variation."""
+    if type(repeat) is not int or repeat < 1:
+        raise RealCheckError("--repeat 必须为正整数")
+    out = []
+    for item in items:
+        for n in range(1, repeat + 1):
+            copy = dict(item, repeat_of=item["id"])
+            if n > 1:
+                copy["id"] = f"{item['id']}#r{n}"
+            out.append(copy)
+    return out if repeat > 1 else items
+
+
+def apply_image_descriptions(items: list[dict], path) -> int:
+    """Reuse chart readings saved by an earlier run (image_descriptions.json: sample id
+    -> reading). Returns how many samples got one."""
+    path = Path(path)
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RealCheckError(f"读不了题图识别结果文件 {path}：{exc}") from None
+    if not isinstance(stored, dict):
+        raise RealCheckError("题图识别结果文件必须是 {样本 id: 识别结果} 的对象")
+    used = 0
+    for item in items:
+        description = stored.get(item.get("repeat_of") or item["id"])
+        if item["task_type"] == "task1" and isinstance(description, str) and description.strip():
+            item["image_description"] = description
+            used += 1
+    return used
 
 
 def _validate_sample_ids(items: list[dict]) -> None:
@@ -267,23 +340,28 @@ def run(
         )
         generator = review.Generator(storage, temp_settings, text_client, vision)
         results = []
+        readings: dict[str, str] = {}  # one chart reading per essay, shared by its repeats
         for number, item in enumerate(items, 1):
             if recorder.abort is not None:
                 break
             recorder.sample_id = item["id"]
-            results.append(
-                _run_sample(
-                    item,
-                    number,
-                    storage,
-                    generator,
-                    temp_settings,
-                    user_id,
-                    kinds,
-                    target_band,
-                    use_vision=vision is not None,
-                )
+            base = item.get("repeat_of") or item["id"]
+            if base in readings and not item.get("image_description"):
+                item = dict(item, image_description=readings[base])
+            sample = _run_sample(
+                item,
+                number,
+                storage,
+                generator,
+                temp_settings,
+                user_id,
+                kinds,
+                target_band,
+                use_vision=vision is not None,
             )
+            if sample["image_status"] == "ready" and sample["submission"]["image_description"]:
+                readings.setdefault(base, sample["submission"]["image_description"])
+            results.append(sample)
     return {
         "started_at": started_at.isoformat(),
         "settings": settings.public_summary(),
@@ -296,6 +374,7 @@ def run(
         ),
         "samples": results,
         "calls": recorder.records,
+        "image_descriptions": readings,
     }
 
 
@@ -305,7 +384,10 @@ def _run_sample(
     essay = essay_lib.normalize_newlines(item["essay"]).strip()
     image_path = image_mime = None
     image_status = "none"
-    if item.get("image") and item["task_type"] == "task1":
+    reused = item.get("image_description") if item["task_type"] == "task1" else None
+    if reused:
+        pass  # an earlier reading: no image upload, no vision call
+    elif item.get("image") and item["task_type"] == "task1":
         source = Path(item["image"])
         image_mime = _image_mime(source)
         if image_mime:
@@ -326,6 +408,8 @@ def _run_sample(
         image_status=image_status,
         daily_limit=10**9,
     )
+    if reused:
+        storage.set_image_result(created["id"], status="ready", description=reused, error=None)
     if image_status == "pending":
         if use_vision:
             generator.describe_image(created["id"])
@@ -346,7 +430,12 @@ def _run_sample(
         "level": item.get("level"),
         "expect": item.get("expect") or {},
         "teacher": item.get("teacher") or {},
+        "teachers": item.get("teachers") or [],
         "teacher_findings": item.get("teacher_findings") or [],
+        "group": item.get("group"),
+        "nominal_band": item.get("nominal_band"),
+        "repeat_of": item.get("repeat_of"),
+        "image_reused": bool(reused),
         "submission": {
             k: submission.get(k)
             for k in (
@@ -1028,6 +1117,121 @@ def _calibration(run_data: dict) -> dict | None:
     return out
 
 
+def _rater_agreement(run_data: dict) -> dict | None:
+    """The AI against several human raters of the same essays. The yardstick is the
+    raters' own disagreement: being within their range (plus half a band) is as close
+    as one rater is to another."""
+    rows = {key: [] for key in SCORE_KEYS}
+    for sample in run_data["samples"]:
+        raters = sample.get("teachers") or []
+        ai = _scores(sample)
+        for key in SCORE_KEYS:
+            human = [float(r[key]) for r in raters if _is_band(r.get(key))]
+            if len(human) >= 2:
+                rows[key].append((ai.get(key), human))
+    out = {}
+    for key, values in rows.items():
+        if not values:
+            continue
+        gaps = [
+            statistics.fmean(abs(a - b) for i, a in enumerate(h) for b in h[i + 1 :])
+            for _ai, h in values
+        ]
+        scored = [(float(ai), h) for ai, h in values if ai is not None]
+        out[key] = {
+            "essays": len(values),
+            "scored": len(scored),
+            "rater_gap": round(statistics.fmean(gaps), 3),
+            "ai_gap": (
+                round(statistics.fmean(abs(ai - statistics.fmean(h)) for ai, h in scored), 3)
+                if scored
+                else None
+            ),
+            "ai_bias": (
+                round(statistics.fmean(ai - statistics.fmean(h) for ai, h in scored), 3)
+                if scored
+                else None
+            ),
+            "within_range": _rate(
+                sum(1 for ai, h in scored if min(h) - 0.5 <= ai <= max(h) + 0.5), len(scored)
+            ),
+        }
+    return out or None
+
+
+def _ordering(run_data: dict) -> dict | None:
+    """Groups of essays written to descending target levels on one question: does the
+    AI's overall band follow the order? (The nominal bands are not certified scores.)"""
+    groups: dict[str, list] = {}
+    for sample in run_data["samples"]:
+        if sample.get("group") and _is_band(sample.get("nominal_band")):
+            groups.setdefault(sample["group"], []).append(
+                (float(sample["nominal_band"]), _scores(sample).get("overall"), sample["id"])
+            )
+    out = {}
+    for name, rows in groups.items():
+        rows.sort(key=lambda r: (-r[0], r[2]))
+        scored = [(nominal, float(ai)) for nominal, ai, _id in rows if ai is not None]
+        pairs = [
+            (hi, lo)
+            for i, (n_hi, hi) in enumerate(scored)
+            for n_lo, lo in scored[i + 1 :]
+            if n_hi > n_lo
+        ]
+        top = (
+            [ai for nominal, ai in scored if nominal == max(n for n, _ in scored)] if scored else []
+        )
+        bottom = (
+            [ai for nominal, ai in scored if nominal == min(n for n, _ in scored)] if scored else []
+        )
+        out[name] = {
+            "rows": [{"id": i, "nominal": n, "ai": ai} for n, ai, i in rows],
+            "missing": len(rows) - len(scored),
+            "pairs": len(pairs),
+            "inversions": sum(1 for hi, lo in pairs if hi < lo),
+            "ties": sum(1 for hi, lo in pairs if hi == lo),
+            "spread": (
+                round(statistics.fmean(top) - statistics.fmean(bottom), 3)
+                if top and bottom
+                else None
+            ),
+        }
+    return out or None
+
+
+def _repeat_spread(run_data: dict) -> dict | None:
+    """Run-to-run variation for samples run several times (--repeat)."""
+    groups: dict[str, list] = {}
+    for sample in run_data["samples"]:
+        if sample.get("repeat_of"):
+            groups.setdefault(sample["repeat_of"], []).append(_scores(sample))
+    rows = []
+    for base, runs in groups.items():
+        if len(runs) < 2:
+            continue
+        bands = {key: [float(r[key]) for r in runs if r.get(key) is not None] for key in SCORE_KEYS}
+        rows.append(
+            {
+                "id": base,
+                "runs": len(runs),
+                "ready": sum(1 for r in runs if r["_ready"]),
+                "overall": bands["overall"],
+                "spread": {
+                    key: round(max(v) - min(v), 3) for key, v in bands.items() if len(v) >= 2
+                },
+            }
+        )
+    if not rows:
+        return None
+    overall = [r["spread"]["overall"] for r in rows if "overall" in r["spread"]]
+    return {
+        "samples": rows,
+        "overall_spread_mean": round(statistics.fmean(overall), 3) if overall else None,
+        "overall_spread_max": max(overall) if overall else None,
+        "any_failed": sum(1 for r in rows if r["ready"] < r["runs"]),
+    }
+
+
 def _usage_summary(calls: list[dict]) -> dict:
     """Known subtotals remain useful, but missing usage is never a measured zero."""
     known = {"prompt": 0, "completion": 0}
@@ -1148,6 +1352,9 @@ def build_report(
         "refine_rewrite": _refine_rewrite_metrics(run_data),
         "sanity": _sanity(run_data),
         "calibration": _calibration(run_data),
+        "rater_agreement": _rater_agreement(run_data),
+        "ordering": _ordering(run_data),
+        "repeat_spread": _repeat_spread(run_data),
         "teacher_findings": _teacher_findings_metrics(run_data),
         "tokens": usage["total"]["tokens"],
         "usage": usage,
@@ -1381,6 +1588,7 @@ def render_markdown(report: dict) -> str:
                 f"| {key} | {m['n']} | {m['mae']} | {m['bias']:+} | {_pct(m['within_0_5'])} | "
                 f"{_pct(m['exact'])} |"
             )
+    lines += _holdout_markdown(report)
     lines += [
         "",
         "## 逐篇结果",
@@ -1429,8 +1637,85 @@ def render_markdown(report: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+_SCORE_NAMES = {
+    "overall": "总分",
+    "task": "TR/TA",
+    "coherence": "CC",
+    "lexical": "LR",
+    "grammar": "GRA",
+}
+
+
+def _holdout_markdown(report: dict) -> list[str]:
+    lines = []
+    agreement = report.get("rater_agreement")
+    if agreement:
+        lines += [
+            "",
+            "## 与多位评委对比",
+            "",
+            "参照线是评委之间的差距：AI 与评委均值的差距不大于它，就和“再多一位评委”差不多。"
+            "“区间内”指 AI 的分数落在评委最低分 − 0.5 到最高分 + 0.5 之间。",
+            "",
+            "| 项目 | 作文数 | 已出分 | 评委之间平均差 | AI 与评委均值平均差 | AI 偏差（AI − 均值） | 区间内 |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for key, m in agreement.items():
+            bias = "—" if m["ai_bias"] is None else f"{m['ai_bias']:+}"
+            gap = "—" if m["ai_gap"] is None else m["ai_gap"]
+            lines.append(
+                f"| {_SCORE_NAMES[key]} | {m['essays']} | {m['scored']} | {m['rater_gap']} | {gap} | "
+                f"{bias} | {_pct(m['within_range'])} |"
+            )
+    ordering = report.get("ordering")
+    if ordering:
+        lines += [
+            "",
+            "## 排序检查（同题、不同目标档位的作文）",
+            "",
+            "标称档位不是认证分数，只看顺序：标称更高的作文，AI 总分不应更低。",
+            "",
+            "| 组 | 标称档位 → AI 总分 | 可比较的对数 | 逆序 | 同分 | 最高档 − 最低档 | 未出分 |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for name, m in ordering.items():
+            chain = "；".join(
+                f"{r['nominal']:g} → {'—' if r['ai'] is None else format(r['ai'], 'g')}"
+                for r in m["rows"]
+            )
+            spread = "—" if m["spread"] is None else f"{m['spread']:+}"
+            lines.append(
+                f"| {name} | {chain} | {m['pairs']} | {m['inversions']} | {m['ties']} | {spread} | "
+                f"{m['missing']} |"
+            )
+    spread = report.get("repeat_spread")
+    if spread:
+        lines += [
+            "",
+            "## 重复运行波动",
+            "",
+            f"同一篇作文多次运行的总分差：平均 {spread['overall_spread_mean']}，最大 "
+            f"{spread['overall_spread_max']}；有 {spread['any_failed']} 篇至少一次没有出分。"
+            "上面与老师、评委的对比把每次运行各算一次。",
+            "",
+            "| 样本 | 次数 | 出分次数 | 各次总分 | 各项最大差 |",
+            "|---|---|---|---|---|",
+        ]
+        for row in spread["samples"]:
+            parts = "；".join(f"{_SCORE_NAMES[k]} {v:g}" for k, v in row["spread"].items()) or "—"
+            overall = " / ".join(f"{v:g}" for v in row["overall"]) or "—"
+            lines.append(f"| {row['id']} | {row['runs']} | {row['ready']} | {overall} | {parts} |")
+    return lines
+
+
 def write_report(run_data: dict, report: dict, out_dir: Path) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
+    if run_data.get("image_descriptions"):
+        # Chart readings of this run, for --image-descriptions in a later run.
+        (out_dir / "image_descriptions.json").write_text(
+            json.dumps(run_data["image_descriptions"], ensure_ascii=False, indent=1),
+            encoding="utf-8",
+        )
     (out_dir / "report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
