@@ -17,6 +17,16 @@ broke its own Chinese output under macOS bash 3.2. This module runs the same pla
 - resumable: finished runs are skipped, an unfinished run directory is kept under a
   new name and its requests stay counted in the ledger.
 
+Second review (76276d9) added:
+
+- the batch lock is passed to every child run, so a run that outlives a killed batch
+  still holds it and a second batch is refused until the run has ended; a run that
+  finished on its own (exit_status.json, code 0) is accepted instead of repeated;
+- the inputs of every group (all sample fields used for scoring or review, image
+  bytes) and the frozen chart readings are pinned in batch-<stage>.json on the first
+  run and checked before anything is skipped or sent; changed data needs a new folder;
+- an existing comparison with its blind sheet is never rewritten on resume.
+
 Summaries (summary.md / summary.json) hold numbers and sample ids only.
 """
 
@@ -24,6 +34,7 @@ from __future__ import annotations
 
 import dataclasses
 import fcntl
+import hashlib
 import json
 import os
 import subprocess
@@ -31,8 +42,8 @@ import sys
 import time
 from pathlib import Path
 
+from . import blindtally, prompts, realcheck, realcheck_compare
 from . import ledger as ledger_lib
-from . import prompts, realcheck, realcheck_compare
 from .config import PROVIDER_PRESETS, load_settings
 
 REPO = Path(__file__).resolve().parents[2]
@@ -121,6 +132,7 @@ def plan(stage: str, data_dir: Path) -> list[dict]:
             {
                 "group": group,
                 "source": source,
+                "inputs_sha256": manifest(items),
                 "samples": len(items),
                 "evaluations": evaluations,
                 "worst": evaluations * 2,
@@ -130,8 +142,37 @@ def plan(stage: str, data_dir: Path) -> list[dict]:
     return rows
 
 
+def manifest(items: list[dict]) -> str:
+    """sha256 over every sample field (prompt, essay, reference scores and notes,
+    groups, levels) and the image bytes - not the image path, so the same data under
+    another folder matches."""
+    digest = hashlib.sha256()
+    for item in items:
+        record = {k: v for k, v in item.items() if k != "image"}
+        if item.get("image"):
+            record["image_sha256"] = hashlib.sha256(Path(item["image"]).read_bytes()).hexdigest()
+        digest.update(json.dumps(record, ensure_ascii=False, sort_keys=True).encode("utf-8"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def _sha_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _exit_status(path: Path) -> int | None:
+    try:
+        return json.loads((path / "exit_status.json").read_text(encoding="utf-8")).get("code")
+    except (OSError, ValueError):
+        return None
+
+
 def _done(path: Path) -> bool:
-    return (path / ".done").exists()
+    """Finished: marked by the batch, or the run itself recorded a clean end (its batch
+    was killed while it went on)."""
+    return (path / ".done").exists() or (
+        _exit_status(path) == 0 and (path / "report.json").exists()
+    )
 
 
 def remaining(rows: list[dict], out: Path) -> tuple[int, int]:
@@ -225,9 +266,12 @@ def parse_prices(values: list[str] | None) -> dict:
 
 
 class Batch:
-    def __init__(self, args, stage: str, out: Path, data_dir: Path, prices: dict, cap: int):
+    def __init__(
+        self, args, stage: str, out: Path, data_dir: Path, prices: dict, cap: int, lock_fd: int
+    ):
         self.args, self.stage, self.out, self.data_dir = args, stage, out, data_dir
         self.prices, self.cap = prices, cap
+        self.lock_fd = lock_fd
         self.ledger_path = out / f"ledger-{stage}.jsonl"
         self.log_path = out / "batch-log.txt"
         self.env_file = Path(args.env_file) if args.env_file else None
@@ -242,13 +286,26 @@ class Batch:
         return ledger_lib.summarize(ledger_lib.read(self.ledger_path))
 
     def realcheck(self, run_dir: Path, key: str, row: dict, extra: list[str], vision_cap: int):
+        stamp = run_dir / "inputs.sha256"
         if _done(run_dir):
-            self.log(f"跳过 {run_dir.name}（已完成）")
+            if not stamp.exists() or stamp.read_text().strip() != row["inputs_sha256"]:
+                raise Stop(
+                    EXIT_REFUSED,
+                    f"{run_dir.name} 已完成，但不是用当前数据跑的（或缺少数据指纹），不能沿用；"
+                    "请用新的结果目录",
+                )
+            if not (run_dir / ".done").exists():
+                (run_dir / ".done").write_text(time.strftime("%Y-%m-%dT%H:%M:%S%z") + "\n")
+                self.log(f"{run_dir.name} 在上一个批次退出后自行完成，沿用其结果")
+            else:
+                self.log(f"跳过 {run_dir.name}（已完成）")
             return
         if run_dir.exists():
             kept = run_dir.with_name(f"{run_dir.name}.incomplete-{time.strftime('%Y%m%d%H%M%S')}")
             run_dir.rename(kept)
             self.log(f"{run_dir.name} 上次没有完成，结果目录保留为 {kept.name}（其请求仍计入账本）")
+        run_dir.mkdir(parents=True)
+        stamp.write_text(row["inputs_sha256"] + "\n")
         command = [
             sys.executable,
             "-m",
@@ -285,7 +342,11 @@ class Batch:
             ]
         env = child_env(key, dry=self.args.dry, env_file=self.env_file, out=self.out)
         self.log(f"开始 {run_dir.name}（{env['IWA_LLM_MODEL']}）")
-        code = subprocess.run(command, cwd=REPO, env=env, stdin=subprocess.DEVNULL).returncode
+        # The child inherits the batch lock: if this batch is killed, the lock stays held
+        # until the child has ended, so no second batch can start the same run.
+        code = subprocess.run(
+            command, cwd=REPO, env=env, stdin=subprocess.DEVNULL, pass_fds=(self.lock_fd,)
+        ).returncode
         runs = self.used()["runs"].get(run_dir.name) or {}
         self.log(
             f"结束 {run_dir.name}：退出码 {code}；这次运行名下累计文字请求 {runs.get('text', 0)}、"
@@ -318,32 +379,43 @@ class Batch:
                 ["--images-only", "--with-vision", "--max-calls", str(row["images"])],
                 vision_cap=row["images"],
             )
-            extra += [
-                "--image-descriptions",
-                str(images_dir / "image_descriptions.json"),
-                "--require-ready-images",
-            ]
+            readings = images_dir / "image_descriptions.json"
+            self.pin(f"frozen_images.{group.name}", _sha_file(readings))
+            extra += ["--image-descriptions", str(readings), "--require-ready-images"]
         order = ["flash", "pro"] if group.first == "flash" else ["pro", "flash"]
         for key in order:
             self.realcheck(self.out / f"{group.name}-{key}", key, row, extra, vision_cap=0)
+        compare_dir = self.out / f"compare-{group.name}"
+        if (compare_dir / "blind_key.json").exists():
+            # Possibly filled in by a reviewer: never regenerated on resume.
+            self.log(f"保留已有的对照与盲评表：{compare_dir.name}")
+            return
         try:
             cmp = realcheck_compare.compare(
                 self.out / f"{group.name}-flash",
                 self.out / f"{group.name}-pro",
                 allow_model_change=True,
             )
+            realcheck_compare.write(cmp, compare_dir, blind_seed=seed)
         except realcheck_compare.CompareError as exc:
             raise Stop(EXIT_COMPARE, f"{group.name} 两次运行不能对照：{exc}") from None
-        realcheck_compare.write(cmp, self.out / f"compare-{group.name}", blind_seed=seed)
-        self.log(f"对照完成：compare-{group.name}（A = Flash，B = Pro；盲评表甲 / 乙随机）")
+        self.log(f"对照完成：{compare_dir.name}（A = Flash，B = Pro；盲评表甲 / 乙随机）")
+
+    def pin(self, name: str, value: str) -> None:
+        """Record a value in batch-<stage>.json the first time; afterwards it must match."""
+        path = self.out / f"batch-{self.stage}.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        section, _, field = name.partition(".")
+        pinned = data.setdefault(section, {})
+        if field in pinned and pinned[field] != value:
+            raise Stop(EXIT_REFUSED, f"{name} 与第一次运行时不同，不能续跑；请用新的结果目录")
+        if field not in pinned:
+            pinned[field] = value
+            path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n")
 
 
-def _record_batch(out: Path, stage: str, args, prices: dict, cap: int) -> None:
-    """batch-<stage>.json: what this stage runs with. A resumed stage must use the same
-    code, prompt, models, prices and mode; only the cap may change (it is the user's
-    authorisation) and every value used is kept."""
-    path = out / f"batch-{stage}.json"
-    current = {
+def _conditions(stage: str, args, prices: dict) -> dict:
+    return {
         "stage": stage,
         "dry": bool(args.dry),
         "code_sha256": realcheck.code_fingerprint(),
@@ -353,20 +425,51 @@ def _record_batch(out: Path, stage: str, args, prices: dict, cap: int) -> None:
         "endpoint": None if args.dry else OFFICIAL_ENDPOINT,
         "max_failure_rate": MAX_FAILURE_RATE,
     }
-    if path.exists():
-        stored = json.loads(path.read_text(encoding="utf-8"))
-        changed = [k for k in current if stored.get(k) != current[k]]
-        if changed:
-            raise Stop(
-                EXIT_REFUSED,
-                "这个结果目录的批次条件和本次不同，不能续跑：" + "、".join(changed),
-            )
-        caps = stored.get("caps") or []
-    else:
-        caps = []
+
+
+def check_batch(out: Path, stage: str, args, prices: dict, rows: list[dict]) -> dict:
+    """batch-<stage>.json holds the conditions and the data of the first run. A resume
+    must have the same code, prompt, models, prices, mode and - checked before any
+    finished run is trusted or any request is sent - the same data for every group
+    (review 76276d9). A group may be added later (the official scripts once
+    transcribed), but a pinned group may not change or disappear. Returns the record
+    to write; only the cap may change (it is the user's authorisation)."""
+    path = out / f"batch-{stage}.json"
+    current = _conditions(stage, args, prices)
+    inputs = {r["group"].name: r["inputs_sha256"] for r in rows if "skip" not in r}
+    if not path.exists():
+        return current | {"inputs": inputs, "caps": []}
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    changed = [k for k in current if stored.get(k) != current[k]]
+    if changed:
+        raise Stop(
+            EXIT_REFUSED, "这个结果目录的批次条件和本次不同，不能续跑：" + "、".join(changed)
+        )
+    pinned = stored.get("inputs") or {}
+    differs = [g for g, sha in pinned.items() if g in inputs and inputs[g] != sha]
+    vanished = [g for g in pinned if g not in inputs]
+    if differs or vanished:
+        detail = "、".join(
+            [f"{g}（数据已改动）" for g in differs] + [f"{g}（数据文件不见了）" for g in vanished]
+        )
+        raise Stop(
+            EXIT_REFUSED,
+            f"数据与第一次运行时不同：{detail}。已完成的结果不能沿用，也不再发请求；"
+            "请用新的结果目录",
+        )
+    added = [g for g in inputs if g not in pinned]
+    for group in added:
+        if any(out.glob(f"{group}-*")):
+            raise Stop(EXIT_REFUSED, f"{group} 已有运行结果，却没有记录数据指纹；请用新的结果目录")
+    return stored | {"inputs": pinned | {g: inputs[g] for g in added}}
+
+
+def record_batch(out: Path, stage: str, record: dict, cap: int) -> None:
+    caps = list(record.get("caps") or [])
     if not caps or caps[-1]["cap"] != cap:
         caps.append({"cap": cap, "time": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
-    path.write_text(json.dumps(current | {"caps": caps}, ensure_ascii=False, indent=1) + "\n")
+    path = out / f"batch-{stage}.json"
+    path.write_text(json.dumps(record | {"caps": caps}, ensure_ascii=False, indent=1) + "\n")
 
 
 def run_stage(args) -> int:
@@ -385,6 +488,7 @@ def run_stage(args) -> int:
             raise Stop(EXIT_REFUSED, "真实运行要给两个模型的单价：--price flash=… --price pro=…")
         preflight(args, stage, out)
         rows = plan(stage, data_dir)
+        record = check_batch(out, stage, args, prices, rows)
         used = ledger_lib.summarize(ledger_lib.read(out / f"ledger-{stage}.jsonl"))
         text_left, vision_left = remaining(rows, out)
         image_total = sum(r.get("images", 0) for r in rows)
@@ -404,8 +508,13 @@ def run_stage(args) -> int:
             raise Stop(EXIT_REFUSED, f"已用 + 剩余最坏 = {need}，超过授权上限 {cap}，不开始")
         if used["vision"]["reserved"] + vision_left > image_total:
             raise Stop(EXIT_REFUSED, "识图请求会超过每张图一次，不开始")
-        _record_batch(out, stage, args, prices, cap)
-        batch = Batch(args, stage, out, data_dir, prices, cap)
+        # A rehearsal without --cap uses exactly what it needs; that is not an
+        # authorisation and is recorded once only.
+        if args.cap is not None or not record.get("caps"):
+            record_batch(out, stage, record, cap)
+        else:
+            record_batch(out, stage, record, record["caps"][-1]["cap"])
+        batch = Batch(args, stage, out, data_dir, prices, cap, lock_fd)
         seed = {"main": 100, "vision": 200}[stage]
         for row in rows:
             seed += 1
@@ -562,6 +671,8 @@ def collect(out: Path) -> dict:
                 entry["blind_tally"] = {
                     k: tally.get(k) for k in ("labels", "models", "complete", "repeats_counted")
                 }
+                # A tally of a sheet that has changed since is stale, never complete.
+                entry["blind_tally"]["current"] = blindtally.current(tally_file.parent)
             if any(r.get("attempts", {}).get("requests") for r in entry["runs"].values()):
                 data["groups"][group.name] = entry
     return data
@@ -702,7 +813,12 @@ def markdown(data: dict) -> str:
                     )
         tally = entry.get("blind_tally")
         if tally:
-            state = "完整" if tally.get("complete") else "**不完整（有空格或无法识别的填写）**"
+            if not tally.get("current"):
+                state = "**已过期（盲评表在计数之后改动过，请重新计数）**"
+            elif tally.get("complete"):
+                state = "完整"
+            else:
+                state = "**不完整（缺行、空格或无法识别的填写）**"
             lines += ["", f"盲评计数（{state}）：", "", "| 项目 | Flash | Pro |", "|---|---|---|"]
             for key, label in tally["labels"].items():
                 lines.append(

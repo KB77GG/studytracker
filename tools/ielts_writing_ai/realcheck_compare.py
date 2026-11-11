@@ -207,6 +207,9 @@ def sample_view(run_data: dict, sample: dict) -> dict:
         },
         "overall_comment": result.get("overall_comment") or "",
         "priorities": list(result.get("priorities") or []),
+        # Items the program reclassified (from_type) are listed once, under
+        # "reclassified"; listing them here too counted the same advice twice
+        # (review 76276d9).
         "optional": [
             {
                 "quote": i.get("quote"),
@@ -214,6 +217,7 @@ def sample_view(run_data: dict, sample: dict) -> dict:
                 "suggestion": i.get("suggestion"),
             }
             for i in argument.get("improvements") or []
+            if not i.get("from_type")
         ],
         "position_consistent": (argument.get("position") or {}).get("consistent"),
         "argument_notes": argument.get("notes") or [],
@@ -235,6 +239,7 @@ def sample_view(run_data: dict, sample: dict) -> dict:
             {
                 "from_type": i["from_type"],
                 "quote": i["quote"],
+                "comment": i.get("comment"),
                 "support": i.get("support") or [],
                 "suggestion": i.get("suggestion"),
                 "suggestion_removed": bool(i.get("suggestion_removed")),
@@ -724,7 +729,8 @@ def feedback_rows(view: dict) -> list[tuple[str, str, str, str, str]]:
                 JUDGED,
                 f"改列可选优化（原判 {r['from_type']}）",
                 _quote(r["quote"]),
-                f"程序发现同段有支撑，改列为可选：{support}",
+                (_quote(r.get("comment")) + "（" if r.get("comment") else "（")
+                + f"程序发现同段有支撑，改列为可选：{support}）",
                 _quote(r.get("suggestion")) or "—",
             )
         )
@@ -789,25 +795,32 @@ def feedback_rows(view: dict) -> list[tuple[str, str, str, str, str]]:
     return rows
 
 
+COUNT_ROWS = ("④ 漏掉评委都指出的明确错误", "其他漏报")
+
+
 def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
     """(sheet, key). Every part of both runs' feedback (feedback_rows), but the two runs
     appear as 甲 / 乙 in an order shuffled per sample and without any model or setting
     name; the key says which is which and is written to a separate file, to be opened
-    only after the verdicts are filled in."""
+    only after the verdicts are filled in. Every row has an id, and the key lists every
+    row the sheet must contain with its kind (judged / context / count), so that a
+    missing row or side, or a required row turned into a context row, is noticed when
+    counting (review 76276d9)."""
     rng = random.Random(seed)
-    key = {"seed": seed, "samples": {}}
+    key = {"seed": seed, "samples": {}, "rows": []}
     lines = [
         "# 盲评复核表（不显示模型和设置；先填完再看 blind_key.json）",
         "",
         f"“判断”一栏填：{BLIND_VERDICTS}。标“参考”的行是判断依据，不用填。",
         "每篇最后两行填非负整数：④ 评委（或预埋清单）列出、但这一方没有指出的明确错误条数；"
-        "其他漏报条数。没有就填 0。",
+        "其他漏报条数。没有就填 0。不要删改“编号”一栏，也不要删行。",
     ]
     for pair in cmp["samples"]:
         sides = ["a", "b"]
         rng.shuffle(sides)
-        key["samples"][pair["a"]["id"]] = {"甲": sides[0], "乙": sides[1]}
-        lines += ["", f"## {pair['a']['id']}"]
+        sample_id = pair["a"]["id"]
+        key["samples"][sample_id] = {"甲": sides[0], "乙": sides[1]}
+        lines += ["", f"## {sample_id}"]
         for name, side in zip(("甲", "乙"), sides, strict=True):
             view = pair[side]
             bands = "；".join(
@@ -817,31 +830,48 @@ def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
                 "",
                 f"### {name}（总分 {_band(view['overall'])}；{bands}；状态 {view['status'] or '—'}）",
                 "",
-                "| 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
-                "|---|---|---|---|---|---|",
+                "| 编号 | 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
+                "|---|---|---|---|---|---|---|",
             ]
-            for kind, position, quote, comment, suggestion in feedback_rows(view):
+            rows = [
+                (kind, position, quote, comment, suggestion)
+                for kind, position, quote, comment, suggestion in feedback_rows(view)
+            ] + [("count", position, "—", "—", "—") for position in COUNT_ROWS]
+            for n, (kind, position, quote, comment, suggestion) in enumerate(rows, 1):
+                row_id = f"{sample_id}/{name}/{n:02d}"
+                key["rows"].append({"id": row_id, "sample": sample_id, "side": name, "kind": kind})
                 verdict = "参考" if kind == CONTEXT else ""
-                lines.append(f"| {position} | {quote} | {comment} | {suggestion} | {verdict} |  |")
-            lines.append("| ④ 漏掉评委都指出的明确错误 | — | — | — |  |  |")
-            lines.append("| 其他漏报 | — | — | — |  |  |")
+                lines.append(
+                    f"| {row_id} | {position} | {quote} | {comment} | {suggestion} | {verdict} |  |"
+                )
     return "\n".join(lines) + "\n", key
 
 
 def write(cmp: dict, out_dir, *, blind_seed: int | None = None) -> Path:
+    """Writes the comparison files. An existing blind sheet (possibly filled in by a
+    reviewer) is never overwritten: review 76276d9 found a normal resume replacing a
+    filled sheet with a blank one while the old tally still said complete."""
     out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
     if blind_seed is not None:
-        sheet, key = render_blind_review(cmp, blind_seed)
-        (out_dir / "blind_review.md").write_text(sheet, encoding="utf-8")
-        key["conditions"] = cmp["conditions"]
-        (out_dir / "blind_key.json").write_text(
-            json.dumps(key, ensure_ascii=False, indent=1), encoding="utf-8"
-        )
+        existing = [n for n in ("blind_review.md", "blind_key.json") if (out_dir / n).exists()]
+        if existing:
+            raise CompareError(
+                f"{out_dir} 里已有盲评表（{'、'.join(existing)}），不覆盖；"
+                "需要重新生成时请换一个输出目录"
+            )
+    out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "compare.json").write_text(
         json.dumps(cmp, ensure_ascii=False, indent=1), encoding="utf-8"
     )
     (out_dir / "manual_review.md").write_text(render_manual_review(cmp), encoding="utf-8")
     path = out_dir / "compare.md"
     path.write_text(render_markdown(cmp), encoding="utf-8")
+    if blind_seed is not None:
+        # Last, the key after the sheet: a folder with blind_key.json is complete.
+        sheet, key = render_blind_review(cmp, blind_seed)
+        (out_dir / "blind_review.md").write_text(sheet, encoding="utf-8")
+        key["conditions"] = cmp["conditions"]
+        (out_dir / "blind_key.json").write_text(
+            json.dumps(key, ensure_ascii=False, indent=1), encoding="utf-8"
+        )
     return path

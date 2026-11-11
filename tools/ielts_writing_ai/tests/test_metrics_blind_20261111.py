@@ -154,46 +154,86 @@ class BlindSheetEvidenceTest(unittest.TestCase):
 
 
 class TallyTest(unittest.TestCase):
-    KEY = {"samples": {"s1": {"甲": "a", "乙": "b"}}}
+    """Rows carry ids; the key lists every expected row and its kind (review 76276d9)."""
 
-    def sheet(self, rows_a, rows_b):
-        def block(name, rows):
-            return [
+    def build(self, rows_a, rows_b, *, drop=(), extra=()):
+        key = {"samples": {"s1": {"甲": "a", "乙": "b"}}, "rows": []}
+        lines = ["## s1", ""]
+        for name, rows in (("甲", rows_a), ("乙", rows_b)):
+            lines += [
                 f"### {name}（总分 6.5）",
                 "",
-                "| 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
-                "|---|---|---|---|---|---|",
-            ] + [f"| {pos} | — | — | — | {verdict} |  |" for pos, verdict in rows]
+                "| 编号 | 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
+                "|---|---|---|---|---|---|---|",
+            ]
+            for n, (kind, position, verdict) in enumerate(rows, 1):
+                row_id = f"s1/{name}/{n:02d}"
+                key["rows"].append({"id": row_id, "sample": "s1", "side": name, "kind": kind})
+                if row_id not in drop:
+                    lines.append(f"| {row_id} | {position} | — | — | — | {verdict} |  |")
+        lines += list(extra)
+        return "\n".join(lines) + "\n", key
 
-        return "\n".join(["## s1", ""] + block("甲", rows_a) + [""] + block("乙", rows_b)) + "\n"
+    GOOD = [
+        ("judged", "GRA 问题", "① 误读原文"),
+        ("context", "计数更正（程序已改）", "参考"),
+        ("count", "④ 漏掉评委都指出的明确错误", "2"),
+        ("count", "其他漏报", "0"),
+    ]
 
-    def test_counts_must_be_whole_non_negative_numbers(self):
-        good = [
-            ("GRA 问题", "① 误读原文"),
-            ("计数更正", "参考"),
-            ("④ 漏掉评委都指出的明确错误", "2"),
-            ("其他漏报", "0"),
-        ]
-        result = blindtally.tally(self.sheet(good, good), self.KEY)
-        self.assertTrue(result["complete"])
+    def test_a_complete_sheet_counts(self):
+        sheet, key = self.build(self.GOOD, self.GOOD)
+        result = blindtally.tally(sheet, key)
+        self.assertTrue(result["complete"], result["problems"])
         self.assertEqual(
             (result["models"]["a"]["misread"], result["models"]["a"]["missed_both_raters"]), (1, 2)
         )
-        for bad in ("0.5", "1–2", "-1", "两条"):
-            rows = [("GRA 问题", "正确"), ("④ 漏掉评委都指出的明确错误", bad), ("其他漏报", "0")]
-            result = blindtally.tally(self.sheet(rows, good), self.KEY)
+
+    def test_counts_must_be_whole_non_negative_numbers(self):
+        for bad in ("0.5", "1–2", "-1", "两条", "参考"):
+            rows = [
+                ("judged", "GRA 问题", "正确"),
+                ("count", "④ 漏掉评委都指出的明确错误", bad),
+                ("count", "其他漏报", "0"),
+            ]
+            sheet, key = self.build(rows, self.GOOD)
+            result = blindtally.tally(sheet, key)
             with self.subTest(value=bad):
                 self.assertFalse(result["complete"])
                 self.assertEqual(result["models"]["a"]["missed_both_raters"], 0)
-                self.assertEqual(result["models"]["a"]["unrecognized"], 1)
+
+    def test_missing_rows_sides_or_an_empty_sheet_are_incomplete(self):
+        _sheet, key = self.build(self.GOOD, self.GOOD)
+        self.assertFalse(blindtally.tally("", key)["complete"])  # empty sheet
+        cut, key = self.build(self.GOOD, self.GOOD, drop={f"s1/乙/{n:02d}" for n in range(1, 5)})
+        result = blindtally.tally(cut, key)  # the whole 乙 side removed
+        self.assertFalse(result["complete"])
+        self.assertEqual(result["missing_rows"], 4)
+        dup, key = self.build(
+            self.GOOD, self.GOOD, extra=["| s1/甲/01 | GRA 问题 | — | — | — | 正确 |  |"]
+        )
+        self.assertFalse(blindtally.tally(dup, key)["complete"])  # duplicated row
+        # A judged row may not be turned into evidence.
+        sheet, key = self.build([("judged", "GRA 问题", "参考")] + self.GOOD[2:], self.GOOD)
+        self.assertFalse(blindtally.tally(sheet, key)["complete"])
+        # An old key without a row list cannot prove completeness.
+        self.assertFalse(blindtally.tally(sheet, {"samples": key["samples"]})["complete"])
 
     def test_blank_or_ambiguous_verdicts_make_it_incomplete(self):
-        ok = [("④ 漏掉评委都指出的明确错误", "0"), ("其他漏报", "0")]
-        for rows in ([("GRA 问题", "")], [("GRA 问题", "①②")]):
-            result = blindtally.tally(self.sheet(rows + ok, ok), self.KEY)
-            with self.subTest(rows=rows):
+        for verdict in ("", "①②"):
+            sheet, key = self.build([("judged", "GRA 问题", verdict)] + self.GOOD[2:], self.GOOD)
+            with self.subTest(verdict=verdict):
+                result = blindtally.tally(sheet, key)
                 self.assertFalse(result["complete"])
                 self.assertTrue(result["problems"])
+
+    def test_later_repeats_may_stay_blank(self):
+        key = {
+            "samples": {"s1#r2": {"甲": "a", "乙": "b"}},
+            "rows": [{"id": "s1#r2/甲/01", "sample": "s1#r2", "side": "甲", "kind": "judged"}],
+        }
+        self.assertTrue(blindtally.tally("", key)["complete"])
+        self.assertFalse(blindtally.tally("", key, all_repeats=True)["complete"])
 
 
 if __name__ == "__main__":

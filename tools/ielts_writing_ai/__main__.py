@@ -245,6 +245,17 @@ def cmd_realcheck(settings, args) -> int:
     )
     path = realcheck.write_report(run_data, report, out_dir)
     print(f"报告：{path}")
+    code = _realcheck_outcome(realcheck, args, items, run_data, report)
+    # How the run ended, written last: a batch whose parent died while this run went
+    # on can accept the finished run instead of repeating it (review 76276d9).
+    (out_dir / "exit_status.json").write_text(
+        json.dumps({"code": code, "time": time.strftime("%Y-%m-%dT%H:%M:%S%z")}) + "\n",
+        encoding="utf-8",
+    )
+    return code
+
+
+def _realcheck_outcome(realcheck, args, items, run_data, report) -> int:
     if report["aborted"]:
         print(f"已中止：{report['aborted']['message']}", file=sys.stderr)
         return 3
@@ -326,7 +337,11 @@ def cmd_realcheck_compare(_settings, args) -> int:
         print(f"不能对照：{exc}", file=sys.stderr)
         return 2
     out_dir = Path(args.out) if args.out else Path(args.b) / "compare"
-    path = realcheck_compare.write(cmp, out_dir, blind_seed=args.blind)
+    try:
+        path = realcheck_compare.write(cmp, out_dir, blind_seed=args.blind)
+    except realcheck_compare.CompareError as exc:
+        print(f"不能写入：{exc}", file=sys.stderr)
+        return 2
     for warning in cmp["warnings"]:
         print(f"注意：{warning}", file=sys.stderr)
     print(f"对照报告：{path}（人工复核表：{path.parent / 'manual_review.md'}）")

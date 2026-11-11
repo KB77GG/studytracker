@@ -518,11 +518,13 @@ def _run_sample(
         daily_limit=10**9,
     )
     if frozen:
+        # The frozen state as it was read, including a failed reading's diagnostic
+        # text, so every run of the essay exports the same image input (review 76276d9).
         ready = frozen["status"] == "ready"
         storage.set_image_result(
             created["id"],
             status=frozen["status"],
-            description=frozen.get("description") if ready else None,
+            description=frozen.get("description"),
             error=None if ready else frozen.get("error"),
         )
     if image_status == "pending":
