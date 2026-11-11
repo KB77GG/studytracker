@@ -1,5 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-11（晚）雅思写作 AI 试用工具：修复执行包复核 7b222c8 的阻断项（已推功能分支；未调用真实模型，没有新的付费授权）
+
+- **输入**：复核 `7b222c8`（`docs/design/iwa-holdout-execution-review-20261111/`）：bash 执行脚本只在内存 / 最终报告里记账，中断后续跑 189/184、并发启动 212/184；识图失败会重读（4 次识图），且 Flash 与 Pro 可能看到不同的图信息；全部评价失败仍 exit 0 并写 `.done`；Mac bash 3.2 下中文紧邻裸变量输出非法 UTF-8；盲评表缺证据；评委对比分母不一致；排序跨度在端点缺失时偷换中间档；盲评计数把 `0.5` 截成 0；汇总漏算已归档尝试、整份复制 teacher 对象。
+- **业务提交 `50d557f`**：
+  - `ledger.py`（新）：每次请求发出前在 `fcntl` 锁下统计已预留数、检查上限、追加预留行并 fsync，然后才发送；返回后追加结果行（错误码、token 数）。没有结果行的预留（被杀、断电）计为已用；文字 / 识图分开限额；首行记录源码指纹与提示词版本，代码不同即拒绝；被截断的最后一行忽略，其他坏行报错。账本不含正文。realcheck 新增 `--ledger`、`--ledger-text-cap`、`--ledger-vision-cap`、`--ledger-run`。
+  - `batch.py`（新，命令 `realcheck-batch` / `realcheck-summary`）：取代 `run_comparison.sh`。结果目录文件锁（第二个批次退出码 2）；开始前核对“账本已用 + 剩余最坏 ≤ --cap”；子进程环境剔除全部 `IWA_*`，真实运行必须显式 `--env-file`、`--cap`、两模型单价，端点强制为 DeepSeek 官方地址，缺 Key 在发请求前拒绝；`batch-<阶段>.json` 记录代码、提示词、模型、单价、模式，续跑时不同即拒绝（只有上限可以变，并留历史）；第二阶段先 `--images-only` 识图（识图上限 = 图数），任何一张不可用退出码 5，可用时两个模型都 `--image-descriptions … --require-ready-images`；每次运行 `--max-failure-rate 0.5`；子进程被信号终止以 3 停止；未完成目录改名保留。汇总只含数字：质量看最终完成的运行，请求与费用从账本计入全部尝试（含结果未知，费用标“至少”），分数字段白名单导出。
+  - realcheck：同一作文的识图结果（成功或失败）只取一次并冻结给重复运行；`image_descriptions.json` 第 2 版含失败；`--images-only`、`--require-ready-images`、`--max-failure-rate`（退出码 4，按计划篇数计）。
+  - 指标：`rater_agreement` 用同一组已出分作文比较（另列 `rater_gap_all` 与失败数）；`realcheck-compare` 新增两边都出分的共同子集；排序跨度取计划两端，缺端点为 null。
+  - 盲评：`feedback_rows` 统一构造，盲评表补全立场、论证提示、段号、矛盾另一句、“需人工确认”标注、改列同段支撑、计数更正、被删建议数、评委批注（参考行）；`blindtally.py`（命令 `realcheck-tally`）要求整格非负整数，空格 / 无法识别即标不完整并退出码 1。
+- **文档提交**：`codex-run.md` 改为新命令（彩排、两阶段、退出码、续跑规则、回传清单加入账本和批次文件）；删除 `run_comparison.sh`、`summarize_comparison.py`、`tally_blind.py`；新增 `verify/batch_probe.py`（只替换传输层、保留 realcheck 的端到端探针）与 `verify/metrics_blind_probe_fixed.py`（复核方指标用例按修复后预期）。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **435 OK**（`IWA_TEST_LOCALE=en_US.ISO-8859-1` 与 `LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1` 同样 OK）；新增 `test_batch_ledger_20261111.py`（14 项：未完成预留计数、两进程并发不超限、被杀进程的请求留在账本、账本上限中止、识图失败冻结、退出码 4 / 5、批次续跑与归档、批次锁、失败停批、真实模式前置检查）和 `test_metrics_blind_20261111.py`（6 项）。Node 8、ruff、black 65 文件、`git diff --check` 通过。`verify/batch_probe.py` 全部通过：被杀于第 5 次请求后账本 5（结果未知 1），同上限重跑拒绝且 0 次新请求，上限 +5 后续跑完成、传输层总数 = 账本总数 = 61；两个批次同时启动，一个退出码 2、总请求 56 ≤ 112；全部无效 JSON 时在 dev-flash 以退出码 4 停、无 `.done`、只发 28 次。`verify/metrics_blind_probe_fixed.py` 6/6。复核方探针：`source_probe.py` 13/14（唯一失败项是“识图失败边界确实复现”，现在不再复现：识图 1 次、两边同为 failed）；`runner_realcheck_probe.py` 记录识图 2 次（原 4 次）；`runner_probe.py` 依赖已删除的 bash 脚本、`metrics_blind_probe.py` 断言旧行为、`run_offline_tests.py` 写死 Mac 路径，均未改动，由上面两个 verify 探针对应复验。其余历史探针退出码与上一轮相同。用真实数据包彩排两阶段：第一阶段 92 次、第二阶段识图 2 + 文字 8，全部完成。
+- **未变**：提示词仍 `iwa-2026-11-10.12`，评价流程与严格 JSON 未改；数据包 `iwa-holdout-20261111b.zip` 不变（sha256 `e5c7c9f0…01db`），官方样卷仍为空模板。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。
+- **授权状态**：没有新的付费授权。第一阶段上限 224（官方样卷未转录时 184）、第二阶段 16 次文字 + 2 次识图，仍待用户在复验通过后确认。
+- **下一步**：ChatGPT 复核 `50d557f` 与两个 verify 探针；通过后由用户确认上限，Codex 按 `codex-run.md` 执行。
+
 ## 2026-11-11 写作对照执行包：附件已落地，离线彩排通过，付费运行被程序缺陷阻断
 
 - 用户交付 `iwa-holdout-20261111b.zip` 并要求按说明先复核/彩排再实跑。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原7 modified/23 untracked顶层入口保留；本轮只增审阅资料及两交接。未pull/切主分支/修改业务。新审阅树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、分支 `codex/iwa-holdout-review-20261111`，源码基线 **76ab483fe0c944c1c7c0164cdf53d2bca9f1bbd7**；84工具文件组合SHA **b2db1de8522581acb3a0ab361a86c47c352455458e13e70c9a12ac3e7773815c** 与提交一致。报告提交后HEAD变、产品不变。旧IWA树47ccd240和817c4c4b未修改。

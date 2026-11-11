@@ -170,8 +170,9 @@ $PY -m tools.ielts_writing_ai realcheck-compare $OUT/flash-rated $OUT/pro-rated 
 ## 10. 执行说明（2026-11-11，取代第 8 节的命令）
 
 给 Codex 的完整执行说明在 [codex-run.md](codex-run.md)：离线复核、数据放置、官方样卷转录规则、彩排、两阶段真实运行、盲评、判定和回传。
-命令改由同目录的 `run_comparison.sh` 统一执行（两个模型轮流先跑、每次运行硬限最坏次数、开始前核对授权上限、中断后可续跑），
-`summarize_comparison.py` 生成只有数字的汇总，`tally_blind.py` 统计盲评结果。
+命令改由工具内的 `realcheck-batch` 统一执行（复核 `7b222c8` 后取代最初的 `run_comparison.sh`）：每次请求发出前在持久账本里加锁预留，
+文字与识图分开限额，同一结果目录只能有一个批次，题图先单独识别一次、两个模型共用，某组失败过半即停，中断后可续跑且已发出的请求照计；
+`realcheck-summary` 生成只有数字的汇总，`realcheck-tally` 统计盲评结果。
 
 相对第 9 节的变化：
 
