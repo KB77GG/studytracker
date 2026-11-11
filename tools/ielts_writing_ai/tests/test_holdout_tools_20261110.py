@@ -206,7 +206,15 @@ class RunTest(unittest.TestCase):
         out = self.tmp / "report-a"
         realcheck.write_report(data, realcheck.build_report(data), out)
         saved = out / "image_descriptions.json"
-        self.assertEqual(json.loads(saved.read_text(encoding="utf-8")), {"t1": reading})
+        # Version 2 (review 2026-11-11): failures are saved too, so a later run gets the
+        # same input; the reading itself is unchanged.
+        self.assertEqual(
+            json.loads(saved.read_text(encoding="utf-8")),
+            {
+                "version": 2,
+                "images": {"t1": {"status": "ready", "description": reading, "error": None}},
+            },
+        )
 
         later = realcheck.expand_repeats([self.item(T1, id="t1", image=str(image))], 2)
         self.assertEqual(realcheck.apply_image_descriptions(later, saved), 2)

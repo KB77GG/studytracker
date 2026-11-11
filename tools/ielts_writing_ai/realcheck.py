@@ -27,6 +27,7 @@ from pathlib import Path
 from . import access, jsonshape, review, rewrite_quality
 from . import essay as essay_lib
 from . import samples as builtin_samples
+from .ledger import LedgerError
 from .llm import LLMError, build_client, parse_strict_json, reasoning_tokens
 from .storage import KINDS, Storage, utcnow
 
@@ -50,11 +51,14 @@ def validate_max_calls(value: int) -> int:
 
 
 class Recorder:
-    def __init__(self, max_calls: int):
+    def __init__(self, max_calls: int, ledger=None):
         self.max_calls = validate_max_calls(max_calls)
         self.records: list[dict] = []
         self.sample_id = ""
         self.abort: LLMError | None = None
+        # A persistent batch ledger (ledger.Ledger): every request is reserved there,
+        # fsync'd, before it is sent, so a killed run still counts what it sent.
+        self.ledger = ledger
 
     @property
     def calls(self) -> int:
@@ -99,41 +103,61 @@ class RecordingClient:
         # Every invocation has one transport attempt: the content-validation retry
         # uses this same budget; the underlying HTTP client must not retry silently.
         kwargs["retries"] = 0
+        if rec.ledger is not None:
+            # Persistent reservation before dispatch; a refusal stops the whole run.
+            try:
+                entry["ledger_id"] = rec.ledger.reserve(
+                    sample=rec.sample_id,
+                    kind=entry["kind"],
+                    model=self.model,
+                    attempt=entry["attempt"],
+                )
+            except LedgerError as exc:
+                rec.abort = LLMError(exc.code, exc.message)
+                raise rec.abort from None
         # Reserve before dispatch, also covering unexpected client exceptions.
         rec.records.append(entry)
         started = time.monotonic()
         try:
-            result = self.inner.complete(messages, **kwargs)
-        except LLMError as exc:
-            usage = getattr(exc, "usage", None) or {}
+            try:
+                result = self.inner.complete(messages, **kwargs)
+            except LLMError as exc:
+                usage = getattr(exc, "usage", None) or {}
+                entry.update(
+                    error=exc.code,
+                    latency_ms=_ms(started),
+                    usage=usage,
+                    # Failed responses (e.g. truncated while thinking) are billed too.
+                    reasoning_tokens=reasoning_tokens(usage),
+                    response_received=getattr(exc, "response_received", False),
+                    http_status=getattr(exc, "http_status", None),
+                )
+                if exc.code in ABORT_CODES and rec.calls == 1:
+                    rec.abort = exc  # first call failed on credentials/network: stop at once
+                raise
             entry.update(
-                error=exc.code,
-                latency_ms=_ms(started),
-                usage=usage,
-                # Failed responses (e.g. truncated while thinking) are billed too.
-                reasoning_tokens=reasoning_tokens(usage),
-                response_received=getattr(exc, "response_received", False),
-                http_status=getattr(exc, "http_status", None),
+                ok=True,
+                error=None,
+                latency_ms=result.latency_ms or _ms(started),
+                usage=result.usage or {},
+                model=result.model,
+                response_received=True,
+                http_status=200,
+                text=result.text,
+                json_ok=(
+                    (parse_strict_json(result.text) is not None) if entry["json_mode"] else None
+                ),
+                reasoning_tokens=reasoning_tokens(result.usage),
+                reasoning_chars=len(getattr(result, "reasoning", "") or ""),
+                # Kept only in the local raw_calls.jsonl, for reviewing what the model weighed.
+                reasoning=getattr(result, "reasoning", "") or "",
             )
-            if exc.code in ABORT_CODES and rec.calls == 1:
-                rec.abort = exc  # first call failed on credentials/network: stop at once
-            raise
-        entry.update(
-            ok=True,
-            error=None,
-            latency_ms=result.latency_ms or _ms(started),
-            usage=result.usage or {},
-            model=result.model,
-            response_received=True,
-            http_status=200,
-            text=result.text,
-            json_ok=(parse_strict_json(result.text) is not None) if entry["json_mode"] else None,
-            reasoning_tokens=reasoning_tokens(result.usage),
-            reasoning_chars=len(getattr(result, "reasoning", "") or ""),
-            # Kept only in the local raw_calls.jsonl, for reviewing what the model weighed.
-            reasoning=getattr(result, "reasoning", "") or "",
-        )
-        return result
+            return result
+        finally:
+            if entry.get("ledger_id"):
+                rec.ledger.complete(
+                    entry["ledger_id"], ok=entry["ok"], error=entry["error"], usage=entry["usage"]
+                )
 
 
 def _messages_sha(messages) -> str:
@@ -258,23 +282,81 @@ def expand_repeats(items: list[dict], repeat: int) -> list[dict]:
     return out if repeat > 1 else items
 
 
-def apply_image_descriptions(items: list[dict], path) -> int:
-    """Reuse chart readings saved by an earlier run (image_descriptions.json: sample id
-    -> reading). Returns how many samples got one."""
+IMAGE_FILE_VERSION = 2
+
+
+def image_file(outcomes: dict) -> dict:
+    """image_descriptions.json: every essay's reading or failure, so a later run (the
+    other model) gets exactly the same image input, including a failure."""
+    return {"version": IMAGE_FILE_VERSION, "images": outcomes}
+
+
+def load_image_outcomes(path) -> dict:
+    """{sample id: {"status", "description", "error"}} from image_descriptions.json
+    (version 2, or the older {sample id: reading} form)."""
     path = Path(path)
     try:
         stored = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise RealCheckError(f"读不了题图识别结果文件 {path}：{exc}") from None
     if not isinstance(stored, dict):
-        raise RealCheckError("题图识别结果文件必须是 {样本 id: 识别结果} 的对象")
-    used = 0
+        raise RealCheckError("题图识别结果文件必须是 JSON 对象")
+    if stored.get("version") == IMAGE_FILE_VERSION:
+        images = stored.get("images")
+        if not isinstance(images, dict):
+            raise RealCheckError("题图识别结果文件缺少 images")
+        out = {}
+        for key, value in images.items():
+            if not (isinstance(value, dict) and value.get("status") in ("ready", "failed")):
+                raise RealCheckError(f"题图识别结果 {key} 的状态无效")
+            if value["status"] == "ready" and not (
+                isinstance(value.get("description"), str) and value["description"].strip()
+            ):
+                raise RealCheckError(f"题图识别结果 {key} 标为可用但没有内容")
+            out[key] = value
+        return out
+    return {
+        key: {"status": "ready", "description": value, "error": None}
+        for key, value in stored.items()
+        if isinstance(value, str) and value.strip()
+    }
+
+
+def apply_image_descriptions(items: list[dict], path, *, require_ready: bool = False) -> int:
+    """Reuse the chart readings (or failures) saved by an earlier run. Returns how many
+    samples got one. With require_ready, every Task 1 sample with an image must have a
+    usable reading, otherwise nothing is run."""
+    outcomes = load_image_outcomes(path)
+    used, missing = 0, []
     for item in items:
-        description = stored.get(item.get("repeat_of") or item["id"])
-        if item["task_type"] == "task1" and isinstance(description, str) and description.strip():
-            item["image_description"] = description
-            used += 1
+        if item["task_type"] != "task1":
+            continue
+        outcome = outcomes.get(item.get("repeat_of") or item["id"])
+        if require_ready and item.get("image") and (not outcome or outcome["status"] != "ready"):
+            missing.append(item["id"])
+            continue
+        if not outcome:
+            continue
+        if outcome["status"] == "ready":
+            item["image_description"] = outcome["description"]
+        else:
+            item["image_frozen"] = outcome
+        used += 1
+    if missing:
+        raise RealCheckError("这些样本没有可用的题图识别结果：" + "、".join(missing))
     return used
+
+
+def final_failures(run_data: dict, planned: int) -> int:
+    """Planned samples without a ready result for every requested kind (samples that
+    were never run, e.g. after an abort, count as failures)."""
+    kinds = run_data["kinds"]
+    ready = sum(
+        1
+        for s in run_data["samples"]
+        if all((s["generations"].get(k) or {}).get("status") == "ready" for k in kinds)
+    )
+    return planned - ready
 
 
 def _validate_sample_ids(items: list[dict]) -> None:
@@ -313,10 +395,16 @@ def run(
     kinds=KINDS,
     max_calls: int = 50,
     target_band: float = 7.0,
+    ledger=None,
 ) -> dict:
     """Run every sample and return the raw run data (see build_report)."""
-    recorder = Recorder(max_calls)
+    recorder = Recorder(max_calls, ledger)
     _validate_sample_ids(items)
+    if ledger is not None:
+        try:
+            ledger.check()
+        except LedgerError as exc:
+            raise RealCheckError(exc.message) from None
     text_client = RecordingClient(client or build_client(settings), recorder)
     vision = vision_client if vision_client is not None else build_client(settings, vision=True)
     vision = RecordingClient(vision, recorder) if vision is not None else None
@@ -340,14 +428,21 @@ def run(
         )
         generator = review.Generator(storage, temp_settings, text_client, vision)
         results = []
-        readings: dict[str, str] = {}  # one chart reading per essay, shared by its repeats
+        # One chart reading per essay - success or failure - shared by its repeats: a
+        # failed reading is not retried, so every run of the essay sees the same input
+        # and the image calls stay at one per essay (review 2026-11-11).
+        images: dict[str, dict] = {}
         for number, item in enumerate(items, 1):
             if recorder.abort is not None:
                 break
             recorder.sample_id = item["id"]
             base = item.get("repeat_of") or item["id"]
-            if base in readings and not item.get("image_description"):
-                item = dict(item, image_description=readings[base])
+            if (
+                base in images
+                and not item.get("image_description")
+                and not item.get("image_frozen")
+            ):
+                item = dict(item, image_frozen=images[base])
             sample = _run_sample(
                 item,
                 number,
@@ -359,8 +454,15 @@ def run(
                 target_band,
                 use_vision=vision is not None,
             )
-            if sample["image_status"] == "ready" and sample["submission"]["image_description"]:
-                readings.setdefault(base, sample["submission"]["image_description"])
+            if item["task_type"] == "task1" and sample["image_status"] in ("ready", "failed"):
+                images.setdefault(
+                    base,
+                    {
+                        "status": sample["image_status"],
+                        "description": sample["submission"]["image_description"],
+                        "error": sample["image_error"],
+                    },
+                )
             results.append(sample)
     return {
         "started_at": started_at.isoformat(),
@@ -374,7 +476,10 @@ def run(
         ),
         "samples": results,
         "calls": recorder.records,
-        "image_descriptions": readings,
+        "image_outcomes": images,
+        "image_descriptions": {
+            k: v["description"] for k, v in images.items() if v["status"] == "ready"
+        },
         "code_sha256": code_fingerprint(),
     }
 
@@ -385,9 +490,12 @@ def _run_sample(
     essay = essay_lib.normalize_newlines(item["essay"]).strip()
     image_path = image_mime = None
     image_status = "none"
-    reused = item.get("image_description") if item["task_type"] == "task1" else None
-    if reused:
-        pass  # an earlier reading: no image upload, no vision call
+    frozen = item.get("image_frozen") if item["task_type"] == "task1" else None
+    if not frozen and item["task_type"] == "task1" and item.get("image_description"):
+        frozen = {"status": "ready", "description": item["image_description"], "error": None}
+    reused = frozen
+    if frozen:
+        pass  # an earlier reading or failure: no image upload, no vision call
     elif item.get("image") and item["task_type"] == "task1":
         source = Path(item["image"])
         image_mime = _image_mime(source)
@@ -409,8 +517,14 @@ def _run_sample(
         image_status=image_status,
         daily_limit=10**9,
     )
-    if reused:
-        storage.set_image_result(created["id"], status="ready", description=reused, error=None)
+    if frozen:
+        ready = frozen["status"] == "ready"
+        storage.set_image_result(
+            created["id"],
+            status=frozen["status"],
+            description=frozen.get("description") if ready else None,
+            error=None if ready else frozen.get("error"),
+        )
     if image_status == "pending":
         if use_vision:
             generator.describe_image(created["id"])
@@ -1118,12 +1232,21 @@ def _calibration(run_data: dict) -> dict | None:
     return out
 
 
-def _rater_agreement(run_data: dict) -> dict | None:
+def _pair_gap(values: list[float]) -> float:
+    return statistics.fmean(abs(a - b) for i, a in enumerate(values) for b in values[i + 1 :])
+
+
+def rater_agreement(samples: list[dict], ids: set[str] | None = None) -> dict | None:
     """The AI against several human raters of the same essays. The yardstick is the
-    raters' own disagreement: being within their range (plus half a band) is as close
-    as one rater is to another."""
+    raters' own disagreement - on the *same* essays: rater_gap and ai_gap use only the
+    essays the AI scored (review 2026-11-11: a failed essay with split raters had
+    widened the yardstick without adding to the AI's error). The raters' gap over all
+    planned essays is kept separately as rater_gap_all. ids restricts the rows (two
+    models are compared on the essays both scored)."""
     rows = {key: [] for key in SCORE_KEYS}
-    for sample in run_data["samples"]:
+    for sample in samples:
+        if ids is not None and sample["id"] not in ids:
+            continue
         raters = sample.get("teachers") or []
         ai = _scores(sample)
         for key in SCORE_KEYS:
@@ -1134,15 +1257,15 @@ def _rater_agreement(run_data: dict) -> dict | None:
     for key, values in rows.items():
         if not values:
             continue
-        gaps = [
-            statistics.fmean(abs(a - b) for i, a in enumerate(h) for b in h[i + 1 :])
-            for _ai, h in values
-        ]
         scored = [(float(ai), h) for ai, h in values if ai is not None]
         out[key] = {
             "essays": len(values),
             "scored": len(scored),
-            "rater_gap": round(statistics.fmean(gaps), 3),
+            "failed": len(values) - len(scored),
+            "rater_gap_all": round(statistics.fmean(_pair_gap(h) for _ai, h in values), 3),
+            "rater_gap": (
+                round(statistics.fmean(_pair_gap(h) for _ai, h in scored), 3) if scored else None
+            ),
             "ai_gap": (
                 round(statistics.fmean(abs(ai - statistics.fmean(h)) for ai, h in scored), 3)
                 if scored
@@ -1160,9 +1283,16 @@ def _rater_agreement(run_data: dict) -> dict | None:
     return out or None
 
 
+def _rater_agreement(run_data: dict) -> dict | None:
+    return rater_agreement(run_data["samples"])
+
+
 def _ordering(run_data: dict) -> dict | None:
     """Groups of essays written to descending target levels on one question: does the
-    AI's overall band follow the order? (The nominal bands are not certified scores.)"""
+    AI's overall band follow the order? (The nominal bands are not certified scores.)
+    The spread is between the planned highest and lowest levels; when either end has
+    no score it is None - it is never taken between surviving middle levels (review
+    2026-11-11)."""
     groups: dict[str, list] = {}
     for sample in run_data["samples"]:
         if sample.get("group") and _is_band(sample.get("nominal_band")):
@@ -1179,21 +1309,20 @@ def _ordering(run_data: dict) -> dict | None:
             for n_lo, lo in scored[i + 1 :]
             if n_hi > n_lo
         ]
-        top = (
-            [ai for nominal, ai in scored if nominal == max(n for n, _ in scored)] if scored else []
-        )
-        bottom = (
-            [ai for nominal, ai in scored if nominal == min(n for n, _ in scored)] if scored else []
-        )
+        highest, lowest = rows[0][0], rows[-1][0]
+        top = [ai for nominal, ai in scored if nominal == highest]
+        bottom = [ai for nominal, ai in scored if nominal == lowest]
         out[name] = {
             "rows": [{"id": i, "nominal": n, "ai": ai} for n, ai, i in rows],
             "missing": len(rows) - len(scored),
             "pairs": len(pairs),
             "inversions": sum(1 for hi, lo in pairs if hi < lo),
             "ties": sum(1 for hi, lo in pairs if hi == lo),
+            "highest": highest,
+            "lowest": lowest,
             "spread": (
                 round(statistics.fmean(top) - statistics.fmean(bottom), 3)
-                if top and bottom
+                if top and bottom and highest > lowest
                 else None
             ),
         }
@@ -1724,17 +1853,20 @@ def _holdout_markdown(report: dict) -> list[str]:
             "## 与多位评委对比",
             "",
             "参照线是评委之间的差距：AI 与评委均值的差距不大于它，就和“再多一位评委”差不多。"
+            "两者都只算 AI 已出分的作文；没出分的作文单列，它们的评委差距另列在最后一栏，不进比较。"
             "“区间内”指 AI 的分数落在评委最低分 − 0.5 到最高分 + 0.5 之间。",
             "",
-            "| 项目 | 作文数 | 已出分 | 评委之间平均差 | AI 与评委均值平均差 | AI 偏差（AI − 均值） | 区间内 |",
-            "|---|---|---|---|---|---|---|",
+            "| 项目 | 计划篇数 | 已出分 | 未出分 | 评委之间平均差（已出分） | AI 与评委均值平均差 "
+            "| AI 偏差（AI − 均值） | 区间内 | 评委之间平均差（全部计划） |",
+            "|---|---|---|---|---|---|---|---|---|",
         ]
         for key, m in agreement.items():
             bias = "—" if m["ai_bias"] is None else f"{m['ai_bias']:+}"
             gap = "—" if m["ai_gap"] is None else m["ai_gap"]
+            rater = "—" if m["rater_gap"] is None else m["rater_gap"]
             lines.append(
-                f"| {_SCORE_NAMES[key]} | {m['essays']} | {m['scored']} | {m['rater_gap']} | {gap} | "
-                f"{bias} | {_pct(m['within_range'])} |"
+                f"| {_SCORE_NAMES[key]} | {m['essays']} | {m['scored']} | {m['failed']} | {rater} "
+                f"| {gap} | {bias} | {_pct(m['within_range'])} | {m['rater_gap_all']} |"
             )
     ordering = report.get("ordering")
     if ordering:
@@ -1742,7 +1874,8 @@ def _holdout_markdown(report: dict) -> list[str]:
             "",
             "## 排序检查（同题、不同目标档位的作文）",
             "",
-            "标称档位不是认证分数，只看顺序：标称更高的作文，AI 总分不应更低。",
+            "标称档位不是认证分数，只看顺序：标称更高的作文，AI 总分不应更低。"
+            "“最高档 − 最低档”取计划里的最高、最低标称档；任一端没出分时为“—”，不用中间档代替。",
             "",
             "| 组 | 标称档位 → AI 总分 | 可比较的对数 | 逆序 | 同分 | 最高档 − 最低档 | 未出分 |",
             "|---|---|---|---|---|---|---|",
@@ -1779,10 +1912,10 @@ def _holdout_markdown(report: dict) -> list[str]:
 
 def write_report(run_data: dict, report: dict, out_dir: Path) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    if run_data.get("image_descriptions"):
-        # Chart readings of this run, for --image-descriptions in a later run.
+    if run_data.get("image_outcomes"):
+        # Chart readings (and failures) of this run, for --image-descriptions later.
         (out_dir / "image_descriptions.json").write_text(
-            json.dumps(run_data["image_descriptions"], ensure_ascii=False, indent=1),
+            json.dumps(image_file(run_data["image_outcomes"]), ensure_ascii=False, indent=1),
             encoding="utf-8",
         )
     (out_dir / "report.json").write_text(

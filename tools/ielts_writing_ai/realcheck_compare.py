@@ -361,7 +361,32 @@ def compare(
         "summary": {"a": run_summary(a, paid_a), "b": run_summary(b, paid_b)},
         "samples": samples,
         "prices": {"a": paid_a, "b": paid_b},
+        "common_rater_agreement": common_rater_agreement(a["run_data"], b["run_data"]),
     }
+
+
+def common_rater_agreement(run_a: dict, run_b: dict) -> dict | None:
+    """Both runs against the raters on the essays *both* scored, so that a run is not
+    favoured by failing on the hard essays (review 2026-11-11). Failures are counted
+    separately in the summary."""
+    scored = []
+    for run in (run_a, run_b):
+        scored.append(
+            {
+                s["id"]
+                for s in run.get("samples") or []
+                if ((s["generations"].get("evaluate") or {}).get("result") or {}).get(
+                    "overall_band"
+                )
+                is not None
+            }
+        )
+    ids = scored[0] & scored[1]
+    a = realcheck.rater_agreement(run_a.get("samples") or [], ids)
+    b = realcheck.rater_agreement(run_b.get("samples") or [], ids)
+    if not (a or b):
+        return None
+    return {"essays": len(ids), "a": a, "b": b}
 
 
 def _fmt(value) -> str:
@@ -506,6 +531,28 @@ def render_markdown(cmp: dict) -> str:
         lines.append(
             f"| {a['id']} | {_band(a['overall'])} / {_band(b['overall'])} | {bands} | {pa} | {pb} |"
         )
+    common = cmp.get("common_rater_agreement")
+    if common:
+        lines += [
+            "",
+            f"## 与多位评委对比：两次都出分的 {common['essays']} 篇",
+            "",
+            "同一组作文上比较，避免一边因为在难题上失败而显得更准；失败篇数见上面的汇总。",
+            "",
+            "| 项目 | 评委之间平均差 | A 与评委均值平均差 | B 与评委均值平均差 | A 区间内 | B 区间内 |",
+            "|---|---|---|---|---|---|",
+        ]
+        for key in realcheck.SCORE_KEYS:
+            ma = (common["a"] or {}).get(key)
+            mb = (common["b"] or {}).get(key)
+            if not (ma or mb):
+                continue
+            ref = (ma or mb)["rater_gap"]
+            lines.append(
+                f"| {key} | {_fmt(ref)} | {_fmt((ma or {}).get('ai_gap'))} | "
+                f"{_fmt((mb or {}).get('ai_gap'))} | {_pct((ma or {}).get('within_range'))} | "
+                f"{_pct((mb or {}).get('within_range'))} |"
+            )
     teacher = [p for p in cmp["samples"] if p["a"]["teacher"]]
     if teacher:
         lines += [
@@ -630,18 +677,131 @@ BLIND_VERDICTS = "正确 / ① 误读原文 / ② 改句改变原意或逻辑 / 
 _BLIND_NAMES = {"task": "TR/TA", "coherence": "CC", "lexical": "LR", "grammar": "GRA"}
 
 
+_POSITION = {True: "前后一致", False: "前后不一致", None: "不下结论 / 未判断"}
+JUDGED = "judged"  # a row the reviewer gives a verdict on
+CONTEXT = "context"  # evidence shown for the verdicts, not judged itself
+
+
+def feedback_rows(view: dict) -> list[tuple[str, str, str, str, str]]:
+    """Every part of one run's feedback, with the evidence and the program's own
+    qualifiers, as (row kind, position, quote, explanation, suggestion). Review
+    2026-11-11: the blind sheet had dropped the other half of a contradiction, the
+    "needs review" flag, paragraph numbers, the position verdict, argument notes, the
+    same-paragraph support of reclassified items and count corrections."""
+    rows = []
+    if view["task_type"] == "task2":
+        rows.append((JUDGED, "立场判断", "—", _POSITION[view["position_consistent"]], "—"))
+    for note in view["argument_notes"]:
+        rows.append((JUDGED, "论证提示", "—", _quote(note), "—"))
+    for k, short in _BLIND_NAMES.items():
+        criterion = view["criteria"][k]
+        if criterion["summary"]:
+            rows.append((JUDGED, f"{short} 理由", "—", _quote(criterion["summary"]), "—"))
+        for issue in criterion["issues"]:
+            rows.append(
+                (
+                    JUDGED,
+                    f"{short} 问题",
+                    _quote(issue["quote"]),
+                    _quote(issue["comment"]),
+                    _quote(issue.get("suggestion")) or "—",
+                )
+            )
+    for p in view["problems"]:
+        where = f"论证问题（第 {p['p']} 段" if p.get("p") else "论证问题（"
+        kind = f"{where}，{p['label'] or p['type']}）"
+        quote = _quote(p["quote"])
+        if p["conflicts_with"]:
+            quote += f" ↔ 与之矛盾：{_quote(p['conflicts_with'])}"
+        comment = _quote(p["comment"])
+        if p["needs_review"]:
+            comment = "【程序标注：需人工确认，不是确定的错误】" + comment
+        rows.append((JUDGED, kind, quote, comment, _quote(p.get("suggestion")) or "—"))
+    for r in view["reclassified"]:
+        support = "；".join(_quote(q) for q in r["support"]) or "—"
+        rows.append(
+            (
+                JUDGED,
+                f"改列可选优化（原判 {r['from_type']}）",
+                _quote(r["quote"]),
+                f"程序发现同段有支撑，改列为可选：{support}",
+                _quote(r.get("suggestion")) or "—",
+            )
+        )
+    for item in view["optional"]:
+        rows.append(
+            (
+                JUDGED,
+                "可选优化",
+                _quote(item["quote"]),
+                _quote(item["comment"]),
+                _quote(item["suggestion"]) or "—",
+            )
+        )
+    for issue in view["consistency_issues"]:
+        figures = "；".join(_quote(f) for f in issue["figures"]) or "—"
+        rows.append(
+            (
+                JUDGED,
+                "Task 1 文内矛盾",
+                _quote(issue["quote"]),
+                f"{_quote(issue['comment'])}（对照：{figures}）",
+                "—",
+            )
+        )
+    if view["task_type"] == "task1":
+        rows.append(
+            (
+                CONTEXT,
+                "Task 1 比较核对",
+                "—",
+                f"程序核对了 {_fmt(view['comparisons_checked'])} 条比较说法，"
+                f"指出矛盾 {len(view['consistency_issues'])} 条",
+                "—",
+            )
+        )
+    for note in view["count_corrections"]:
+        rows.append((CONTEXT, "计数更正（程序已改）", "—", _quote(note), "—"))
+    if view["suggestions_removed"]:
+        rows.append(
+            (
+                CONTEXT,
+                "被删的建议",
+                "—",
+                f"程序删掉了 {view['suggestions_removed']} 条含原文没有的数字的建议",
+                "—",
+            )
+        )
+    if view["overall_comment"]:
+        rows.append((JUDGED, "总评", "—", _quote(view["overall_comment"]), "—"))
+    for n, text in enumerate(view["priorities"], 1):
+        rows.append((JUDGED, f"提升重点 {n}", "—", "—", _quote(text)))
+    for finding in (view.get("teacher_coverage") or {}).get("findings") or []:
+        rows.append(
+            (
+                CONTEXT,
+                "评委批注（供 ④ 参考）",
+                _quote(finding.get("quote")),
+                _quote(finding.get("note")),
+                f"程序按位置判断，这一方是否在同一处指出：{_coverage_mark(finding)}",
+            )
+        )
+    return rows
+
+
 def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
-    """(sheet, key). The same findings as the manual review plus every language issue
-    with its suggestion, but the two runs appear as 甲 / 乙 in an order shuffled per
-    sample and without any model or setting name; the key says which is which and is
-    written to a separate file, to be opened only after the verdicts are filled in."""
+    """(sheet, key). Every part of both runs' feedback (feedback_rows), but the two runs
+    appear as 甲 / 乙 in an order shuffled per sample and without any model or setting
+    name; the key says which is which and is written to a separate file, to be opened
+    only after the verdicts are filled in."""
     rng = random.Random(seed)
     key = {"seed": seed, "samples": {}}
     lines = [
         "# 盲评复核表（不显示模型和设置；先填完再看 blind_key.json）",
         "",
-        f"“判断”一栏填：{BLIND_VERDICTS}。",
-        "每篇最后两行写：④ 两位评委都指出、但这一方没有指出的明确错误；其他漏报。",
+        f"“判断”一栏填：{BLIND_VERDICTS}。标“参考”的行是判断依据，不用填。",
+        "每篇最后两行填非负整数：④ 评委（或预埋清单）列出、但这一方没有指出的明确错误条数；"
+        "其他漏报条数。没有就填 0。",
     ]
     for pair in cmp["samples"]:
         sides = ["a", "b"]
@@ -660,35 +820,9 @@ def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
                 "| 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
                 "|---|---|---|---|---|---|",
             ]
-            for k, short in _BLIND_NAMES.items():
-                criterion = view["criteria"][k]
-                if criterion["summary"]:
-                    lines.append(f"| {short} 理由 | — | {_quote(criterion['summary'])} | — |  |  |")
-                for issue in criterion["issues"]:
-                    lines.append(
-                        f"| {short} 问题 | {_quote(issue['quote'])} | {_quote(issue['comment'])} | "
-                        f"{_quote(issue.get('suggestion'))} |  |  |"
-                    )
-            for p in view["problems"]:
-                lines.append(
-                    f"| 论证问题（{p['label'] or p['type']}） | {_quote(p['quote'])} | "
-                    f"{_quote(p['comment'])} | {_quote(p.get('suggestion'))} |  |  |"
-                )
-            for item in view["optional"]:
-                lines.append(
-                    f"| 可选优化 | {_quote(item['quote'])} | {_quote(item['comment'])} | "
-                    f"{_quote(item['suggestion'])} |  |  |"
-                )
-            for issue in view["consistency_issues"]:
-                figures = "；".join(_quote(f) for f in issue["figures"]) or "—"
-                lines.append(
-                    f"| Task 1 文内矛盾 | {_quote(issue['quote'])} | {_quote(issue['comment'])} | "
-                    f"对照：{figures} |  |  |"
-                )
-            if view["overall_comment"]:
-                lines.append(f"| 总评 | — | {_quote(view['overall_comment'])} | — |  |  |")
-            for n, text in enumerate(view["priorities"], 1):
-                lines.append(f"| 提升重点 {n} | — | — | {_quote(text)} |  |  |")
+            for kind, position, quote, comment, suggestion in feedback_rows(view):
+                verdict = "参考" if kind == CONTEXT else ""
+                lines.append(f"| {position} | {quote} | {comment} | {suggestion} | {verdict} |  |")
             lines.append("| ④ 漏掉评委都指出的明确错误 | — | — | — |  |  |")
             lines.append("| 其他漏报 | — | — | — |  |  |")
     return "\n".join(lines) + "\n", key

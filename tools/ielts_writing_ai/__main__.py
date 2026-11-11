@@ -128,6 +128,7 @@ def cmd_user_reset_code(settings, args) -> int:
 
 
 def cmd_realcheck(settings, args) -> int:
+    from . import ledger as ledger_lib
     from . import realcheck
 
     if args.evaluate_thinking is not None:
@@ -138,15 +139,60 @@ def cmd_realcheck(settings, args) -> int:
     if unknown or not kinds:
         print(f"--kinds 只能是 evaluate,refine,rewrite 的组合：{unknown}", file=sys.stderr)
         return 2
+    if args.images_only:
+        # Read each chart once before any text model runs (review 2026-11-11): both
+        # models then get the same frozen reading via --image-descriptions.
+        if not args.with_vision or args.image_descriptions or args.repeat != 1:
+            print(
+                "--images-only 需要 --with-vision，且不能和 --image-descriptions、--repeat 同用",
+                file=sys.stderr,
+            )
+            return 2
+        kinds = ()
+    if args.max_failure_rate is not None and not 0 <= args.max_failure_rate < 1:
+        print("--max-failure-rate 必须在 0 到 1 之间（不含 1）", file=sys.stderr)
+        return 2
     try:
         realcheck.validate_max_calls(args.max_calls)
         items = realcheck.load_samples(args.samples, args.limit)
+        if args.images_only:
+            items = [i for i in items if i["task_type"] == "task1" and i.get("image")]
+            if not items:
+                raise realcheck.RealCheckError("样本里没有带题图的 Task 1")
         items = realcheck.expand_repeats(items, args.repeat)
         if args.image_descriptions:
-            reused = realcheck.apply_image_descriptions(items, args.image_descriptions)
+            reused = realcheck.apply_image_descriptions(
+                items, args.image_descriptions, require_ready=args.require_ready_images
+            )
             print(f"沿用已有的题图识别结果：{reused} 个样本（不再调用识图模型）")
+        ledger = None
+        if args.ledger:
+            if args.ledger_text_cap is None:
+                raise realcheck.RealCheckError("用 --ledger 时必须给 --ledger-text-cap")
+            ledger = ledger_lib.Ledger(
+                args.ledger,
+                text_cap=args.ledger_text_cap,
+                vision_cap=args.ledger_vision_cap,
+                run=args.ledger_run or Path(args.out or "realcheck").name,
+                code_sha256=realcheck.code_fingerprint(),
+                prompt_version=realcheck.review.prompts.PROMPT_VERSION,
+            )
+            used = ledger.check()
+            vision = (
+                f"识图已预留 {used['vision']['reserved']} / {args.ledger_vision_cap} 次"
+                if args.ledger_vision_cap
+                else "这次运行不允许识图"
+            )
+            print(
+                f"批次账本 {args.ledger}：文字已预留 {used['text']['reserved']} / "
+                f"{args.ledger_text_cap} 次，{vision}（已预留中结果未知的 "
+                f"{used['text']['unknown'] + used['vision']['unknown']} 次）"
+            )
     except realcheck.RealCheckError as exc:
         print(f"验证参数错误：{exc}", file=sys.stderr)
+        return 2
+    except ledger_lib.LedgerError as exc:  # unreadable ledger, different code, bad cap
+        print(f"批次账本错误：{exc.message}", file=sys.stderr)
         return 2
     to_read = {
         i.get("repeat_of") or i["id"]
@@ -174,13 +220,18 @@ def cmd_realcheck(settings, args) -> int:
         return 2
     if settings.vision_enabled and not args.with_vision:
         settings.vision_provider = "none"  # do not call the vision model unless asked
-    run_data = realcheck.run(
-        settings,
-        items,
-        kinds=kinds,
-        max_calls=args.max_calls,
-        target_band=args.target_band,
-    )
+    try:
+        run_data = realcheck.run(
+            settings,
+            items,
+            kinds=kinds,
+            max_calls=args.max_calls,
+            target_band=args.target_band,
+            ledger=ledger,
+        )
+    except realcheck.RealCheckError as exc:
+        print(f"验证参数错误：{exc}", file=sys.stderr)
+        return 2
     report = realcheck.build_report(
         run_data,
         price_in=args.price_in,
@@ -197,6 +248,56 @@ def cmd_realcheck(settings, args) -> int:
     if report["aborted"]:
         print(f"已中止：{report['aborted']['message']}", file=sys.stderr)
         return 3
+    if args.images_only:
+        bad = [
+            i["id"]
+            for i in items
+            if (run_data["image_outcomes"].get(i["id"]) or {}).get("status") != "ready"
+        ]
+        if bad:
+            print("这些题图没有得到可用的识别结果：" + "、".join(bad), file=sys.stderr)
+            return 5
+        return 0
+    if args.max_failure_rate is not None:
+        failed = realcheck.final_failures(run_data, len(items))
+        if failed > args.max_failure_rate * len(items):
+            print(
+                f"最终失败 {failed} / {len(items)} 篇，超过 {args.max_failure_rate:.0%}，停止",
+                file=sys.stderr,
+            )
+            return 4
+    return 0
+
+
+def cmd_realcheck_batch(_settings, args) -> int:
+    from . import batch
+
+    return batch.run_stage(args)
+
+
+def cmd_realcheck_summary(_settings, args) -> int:
+    from . import batch
+
+    print(f"汇总：{batch.write_summary(Path(args.out).expanduser())}")
+    return 0
+
+
+def cmd_realcheck_tally(_settings, args) -> int:
+    from . import blindtally
+
+    result = blindtally.run(Path(args.folder).expanduser(), all_repeats=args.all_repeats)
+    for side in ("a", "b"):
+        counts = result["models"][side]
+        shown = "，".join(f"{blindtally.LABELS[k]} {counts[k]}" for k in blindtally.LABELS)
+        print(
+            f"{side.upper()}（{result['conditions'][side]['model']}）：{shown}；"
+            f"已判断 {counts['filled']}，未填写 {counts['blank']}，无法识别 {counts['unrecognized']}"
+        )
+    if not result["complete"]:
+        print("盲评不完整，以下格子需要补填或改正：", file=sys.stderr)
+        for problem in result["problems"][:30]:
+            print(f"  {problem}", file=sys.stderr)
+        return 1
     return 0
 
 
@@ -270,6 +371,26 @@ def build_parser() -> argparse.ArgumentParser:
     rc.add_argument("--with-vision", action="store_true", help="对带题图的样本调用识图模型")
     rc.add_argument("--repeat", type=int, default=1, help="每篇作文运行几次（看波动）")
     rc.add_argument(
+        "--images-only",
+        action="store_true",
+        help="只识别题图（每张一次，结果含失败写入 image_descriptions.json），不调用文字模型",
+    )
+    rc.add_argument(
+        "--require-ready-images",
+        action="store_true",
+        help="与 --image-descriptions 同用：每篇带图的 Task 1 都必须有可用的识别结果",
+    )
+    rc.add_argument("--ledger", default=None, help="批次账本（JSONL）：每次请求前持久预留")
+    rc.add_argument("--ledger-text-cap", type=int, default=None, help="账本的文字请求总上限")
+    rc.add_argument("--ledger-vision-cap", type=int, default=0, help="账本的识图请求总上限")
+    rc.add_argument("--ledger-run", default=None, help="账本里这次运行的名字")
+    rc.add_argument(
+        "--max-failure-rate",
+        type=float,
+        default=None,
+        help="最终失败篇数占计划篇数超过这个比例时，以退出码 4 结束",
+    )
+    rc.add_argument(
         "--image-descriptions",
         default=None,
         help="沿用之前一次运行保存的题图识别结果（image_descriptions.json），两次运行看同一份结果",
@@ -297,6 +418,28 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="SEED",
         help="另外生成盲评表：两次运行以甲 / 乙出现，每篇随机排序，不显示模型和设置",
     )
+    batch_p = sub.add_parser(
+        "realcheck-batch",
+        help="Flash / Pro 对照批次：持久账本、批次锁、识图先行、失败过半停止、可续跑",
+    )
+    batch_p.add_argument("--stage", choices=("main", "vision"), required=True)
+    batch_p.add_argument("--data", default="~/iwa-calibration", help="数据文件目录")
+    batch_p.add_argument("--out", default="~/iwa-compare", help="结果目录")
+    batch_p.add_argument("--cap", type=int, default=None, help="用户授权的本阶段文字请求上限")
+    batch_p.add_argument(
+        "--price",
+        action="append",
+        help="单价（元 / 百万 token）：flash=输入,缓存命中输入,输出；pro 同样，各给一次",
+    )
+    batch_p.add_argument("--dry", action="store_true", help="演示模型彩排，不调用付费服务")
+    batch_p.set_defaults(func=cmd_realcheck_batch)
+    summary_p = sub.add_parser("realcheck-summary", help="重新生成对照批次的数字汇总")
+    summary_p.add_argument("--out", default="~/iwa-compare")
+    summary_p.set_defaults(func=cmd_realcheck_summary)
+    tally_p = sub.add_parser("realcheck-tally", help="统计填好的盲评表")
+    tally_p.add_argument("folder", help="compare-<组> 目录")
+    tally_p.add_argument("--all-repeats", action="store_true", help="重复运行也计入")
+    tally_p.set_defaults(func=cmd_realcheck_tally)
     cmp.add_argument("--price-in", type=float, default=None, help="输入单价（每百万 token）")
     cmp.add_argument("--price-out", type=float, default=None, help="输出单价（每百万 token）")
     for side in ("a", "b"):
