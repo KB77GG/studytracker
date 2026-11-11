@@ -1,0 +1,201 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-holdout-review-20261111",
+  "paid_calls": 0,
+  "network_forbidden": true,
+  "checks": [
+    {
+      "name": "metadata_does_not_change_model_messages",
+      "actual": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "expected": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "ok": true
+    },
+    {
+      "name": "model_change_does_not_change_messages",
+      "actual": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "expected": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "ok": true
+    },
+    {
+      "name": "no_private_markers_in_messages_or_context",
+      "actual": false,
+      "expected": false,
+      "ok": true
+    },
+    {
+      "name": "metadata_preserved_for_local_review",
+      "actual": 8.5,
+      "expected": 8.5,
+      "ok": true
+    },
+    {
+      "name": "flash.request_options",
+      "actual": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "expected": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "pro.request_options",
+      "actual": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "expected": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "repeat_distinct_ids",
+      "actual": [
+        "synthetic-privacy",
+        "synthetic-privacy#r2"
+      ],
+      "expected": [
+        "synthetic-privacy",
+        "synthetic-privacy#r2"
+      ],
+      "ok": true
+    },
+    {
+      "name": "repeat_input_fingerprint_equal",
+      "actual": 1,
+      "expected": 1,
+      "ok": true
+    },
+    {
+      "name": "successful_vision_once_per_essay",
+      "actual": 1,
+      "expected": 1,
+      "ok": true
+    },
+    {
+      "name": "all_successful_readings_reused",
+      "actual": 2,
+      "expected": 2,
+      "ok": true
+    },
+    {
+      "name": "successful_vision_model_messages_equal",
+      "actual": [
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd",
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+      ],
+      "expected": [
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd",
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+      ],
+      "ok": true
+    },
+    {
+      "name": "successful_vision_pro_zero_calls",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "successful_vision_compare_samples",
+      "actual": 2,
+      "expected": 2,
+      "ok": true
+    },
+    {
+      "name": "vision_failure_boundary_reproduced",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    }
+  ],
+  "passed": 14,
+  "total": 14,
+  "vision_failure_boundary": {
+    "vision_calls": 2,
+    "expected_unique_essay_reads": 1,
+    "flash_image_statuses": [
+      "failed",
+      "ready"
+    ],
+    "pro_image_statuses": [
+      "ready",
+      "ready"
+    ],
+    "flash_input_hashes": [
+      "1ed867df0a171e5469ca01779372114f855f0b6006a9028aa3ff5961a04fcad5",
+      "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+    ],
+    "pro_input_hashes": [
+      "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd",
+      "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+    ],
+    "compare_errors": [
+      "两次运行的条件不同，不能对照：同名样本的题目、作文或题图识别结果不同：synthetic-chart；实际发送给评价模型的输入不同：synthetic-chart"
+    ],
+    "text_calls_before_rejection": 4
+  }
+}

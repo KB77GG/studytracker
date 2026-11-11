@@ -1,0 +1,609 @@
+{
+  "head": "76ab483fe0c944c1c7c0164cdf53d2bca9f1bbd7",
+  "source_sha256": "174b54200bd5114b97cb041750543c66ed6d34ae1dece8e18fdd5c539b52e4ee",
+  "real_model_calls": 0,
+  "private_material_read": false,
+  "passed": 33,
+  "total": 33,
+  "checks": [
+    {
+      "name": "real.priority_retained",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "real.copy_retained",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "real.previous_removal_count",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "real.current_removal_count",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "real.criteria_unchanged",
+      "ok": true,
+      "actual": [
+        {
+          "key": "task",
+          "short": "TA",
+          "label": "Task Achievement",
+          "band": null,
+          "state": "not_assessable",
+          "reason": "未上传题图，无法核对图表数据，Task Achievement 不评分。",
+          "summary": "",
+          "strengths": [],
+          "issues": []
+        },
+        {
+          "key": "coherence",
+          "short": "CC",
+          "label": "Coherence & Cohesion",
+          "band": 7.0,
+          "state": "scored",
+          "summary": "分段清楚、时间线明确，概述—分述—收尾的结构完整，连接词自然且指代清晰，达到 7 分。但概述中「A 两年都最高」与第四段 C 反超 A 的数据互相矛盾，属于组织上的前后不一致；末段又与概述重复，削弱了推进感，因此不能给到 8 分。",
+          "strengths": [
+            {
+              "quote": "Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably.",
+              "quote_found": true,
+              "comment": "第二段用 Overall 明确引出概述，先给总体趋势再给极端值（最高/最低），符合 Task 1 的信息组织习惯。"
+            },
+            {
+              "quote": "In 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C.",
+              "quote_found": true,
+              "comment": "以时间为主线分段（2000 年一段、2020 年一段），并用 compared with 把同一年份的数据横向并联，信息推进清晰。"
+            },
+            {
+              "quote": "Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.",
+              "quote_found": true,
+              "comment": "also 承接前一句的变化，but 转折回总排名，连接词使用自然、不机械，指代（it）清楚。"
+            }
+          ],
+          "issues": [
+            {
+              "quote": "Country A had the highest level of ownership in both years",
+              "quote_found": true,
+              "comment": "概述说 A 两年都最高，但第四段写 Country C「nearly 80%」并「overtaking Country A」，而 A 只有「about 75%」。概述与分述段落自相矛盾，破坏了全文信息的一致性。",
+              "suggestion": "",
+              "suggestion_removed": false
+            },
+            {
+              "quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C",
+              "quote_found": true,
+              "comment": "结尾段前半句基本重复第二段概述（所有国家都增长），信息增量小；只有后半句的幅度对比是新的。整段与概述功能重叠，显得收尾冗余。",
+              "suggestion": "",
+              "suggestion_removed": false
+            }
+          ]
+        },
+        {
+          "key": "lexical",
+          "short": "LR",
+          "label": "Lexical Resource",
+          "band": 7.0,
+          "state": "scored",
+          "summary": "词汇量足以灵活表达趋势与差距（dramatic、almost doubled、overtaking、well behind），拼写与搭配基本准确，符合 7 分。少数指称略欠精确（把国家当作增长的百分比），但未造成理解障碍，尚未达到 8 分所需的广泛、娴熟用词。",
+          "strengths": [
+            {
+              "quote": "by far the lowest figure",
+              "quote_found": true,
+              "comment": "by far 强化最高级，搭配自然，是较地道的程度表达。"
+            },
+            {
+              "quote": "the most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A",
+              "quote_found": true,
+              "comment": "dramatic change、almost doubled、overtaking 一组词义精准，能灵活描述变化幅度与排名互换，而非只会说 increase。"
+            },
+            {
+              "quote": "well behind the other three countries",
+              "quote_found": true,
+              "comment": "用 well behind 表示差距，比简单的 lower than 更精确、更有弹性。"
+            }
+          ],
+          "issues": [
+            {
+              "quote": "Country B had grown to approximately 65%",
+              "quote_found": true,
+              "comment": "指称不够精确：增长的是百分比/比例，不是「国家」。这类以国家名代替其数据的说法在数据描述中会显得含糊。",
+              "suggestion": "",
+              "suggestion_removed": false
+            }
+          ]
+        },
+        {
+          "key": "grammar",
+          "short": "GRA",
+          "label": "Grammatical Range & Accuracy",
+          "band": 7.5,
+          "state": "scored",
+          "summary": "全文句子几乎无语法错误，标点规范，已出现让步从句、关系从句、分词状语、过去完成时与多种比较结构，复杂句比例不低。但整体仍以短句并列为主，句型丰富度未达到 8 分所要求的「广泛且娴熟」，故给 7.5。",
+          "strengths": [
+            {
+              "quote": "although the size of the rise varied considerably",
+              "quote_found": true,
+              "comment": "让步状语从句使用正确，且置于句末，句式有变化。"
+            },
+            {
+              "quote": "where ownership almost doubled to nearly 80%, overtaking Country A",
+              "quote_found": true,
+              "comment": "非限制性关系从句加现在分词状语，结构完整、逻辑主语清楚（ownership/C 的增长），不是悬垂结构。"
+            },
+            {
+              "quote": "while every country saw an increase, the growth was particularly striking in Country C",
+              "quote_found": true,
+              "comment": "while 引导的对比从句与主句搭配正确，比较结构（more modest、well behind）也使用自然。"
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "expected": [
+        {
+          "key": "task",
+          "short": "TA",
+          "label": "Task Achievement",
+          "band": null,
+          "state": "not_assessable",
+          "reason": "未上传题图，无法核对图表数据，Task Achievement 不评分。",
+          "summary": "",
+          "strengths": [],
+          "issues": []
+        },
+        {
+          "key": "coherence",
+          "short": "CC",
+          "label": "Coherence & Cohesion",
+          "band": 7.0,
+          "state": "scored",
+          "summary": "分段清楚、时间线明确，概述—分述—收尾的结构完整，连接词自然且指代清晰，达到 7 分。但概述中「A 两年都最高」与第四段 C 反超 A 的数据互相矛盾，属于组织上的前后不一致；末段又与概述重复，削弱了推进感，因此不能给到 8 分。",
+          "strengths": [
+            {
+              "quote": "Overall, car ownership increased in all four countries over the period, although the size of the rise varied considerably.",
+              "quote_found": true,
+              "comment": "第二段用 Overall 明确引出概述，先给总体趋势再给极端值（最高/最低），符合 Task 1 的信息组织习惯。"
+            },
+            {
+              "quote": "In 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C.",
+              "quote_found": true,
+              "comment": "以时间为主线分段（2000 年一段、2020 年一段），并用 compared with 把同一年份的数据横向并联，信息推进清晰。"
+            },
+            {
+              "quote": "Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.",
+              "quote_found": true,
+              "comment": "also 承接前一句的变化，but 转折回总排名，连接词使用自然、不机械，指代（it）清楚。"
+            }
+          ],
+          "issues": [
+            {
+              "quote": "Country A had the highest level of ownership in both years",
+              "quote_found": true,
+              "comment": "概述说 A 两年都最高，但第四段写 Country C「nearly 80%」并「overtaking Country A」，而 A 只有「about 75%」。概述与分述段落自相矛盾，破坏了全文信息的一致性。",
+              "suggestion": "",
+              "suggestion_removed": false
+            },
+            {
+              "quote": "In summary, while every country saw an increase, the growth was particularly striking in Country C",
+              "quote_found": true,
+              "comment": "结尾段前半句基本重复第二段概述（所有国家都增长），信息增量小；只有后半句的幅度对比是新的。整段与概述功能重叠，显得收尾冗余。",
+              "suggestion": "",
+              "suggestion_removed": false
+            }
+          ]
+        },
+        {
+          "key": "lexical",
+          "short": "LR",
+          "label": "Lexical Resource",
+          "band": 7.0,
+          "state": "scored",
+          "summary": "词汇量足以灵活表达趋势与差距（dramatic、almost doubled、overtaking、well behind），拼写与搭配基本准确，符合 7 分。少数指称略欠精确（把国家当作增长的百分比），但未造成理解障碍，尚未达到 8 分所需的广泛、娴熟用词。",
+          "strengths": [
+            {
+              "quote": "by far the lowest figure",
+              "quote_found": true,
+              "comment": "by far 强化最高级，搭配自然，是较地道的程度表达。"
+            },
+            {
+              "quote": "the most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A",
+              "quote_found": true,
+              "comment": "dramatic change、almost doubled、overtaking 一组词义精准，能灵活描述变化幅度与排名互换，而非只会说 increase。"
+            },
+            {
+              "quote": "well behind the other three countries",
+              "quote_found": true,
+              "comment": "用 well behind 表示差距，比简单的 lower than 更精确、更有弹性。"
+            }
+          ],
+          "issues": [
+            {
+              "quote": "Country B had grown to approximately 65%",
+              "quote_found": true,
+              "comment": "指称不够精确：增长的是百分比/比例，不是「国家」。这类以国家名代替其数据的说法在数据描述中会显得含糊。",
+              "suggestion": "",
+              "suggestion_removed": false
+            }
+          ]
+        },
+        {
+          "key": "grammar",
+          "short": "GRA",
+          "label": "Grammatical Range & Accuracy",
+          "band": 7.5,
+          "state": "scored",
+          "summary": "全文句子几乎无语法错误，标点规范，已出现让步从句、关系从句、分词状语、过去完成时与多种比较结构，复杂句比例不低。但整体仍以短句并列为主，句型丰富度未达到 8 分所要求的「广泛且娴熟」，故给 7.5。",
+          "strengths": [
+            {
+              "quote": "although the size of the rise varied considerably",
+              "quote_found": true,
+              "comment": "让步状语从句使用正确，且置于句末，句式有变化。"
+            },
+            {
+              "quote": "where ownership almost doubled to nearly 80%, overtaking Country A",
+              "quote_found": true,
+              "comment": "非限制性关系从句加现在分词状语，结构完整、逻辑主语清楚（ownership/C 的增长），不是悬垂结构。"
+            },
+            {
+              "quote": "while every country saw an increase, the growth was particularly striking in Country C",
+              "quote_found": true,
+              "comment": "while 引导的对比从句与主句搭配正确，比较结构（more modest、well behind）也使用自然。"
+            }
+          ],
+          "issues": []
+        }
+      ]
+    },
+    {
+      "name": "real.overall_band_unchanged",
+      "ok": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "real.overall_state_unchanged",
+      "ok": true,
+      "actual": "not_assessable",
+      "expected": "not_assessable"
+    },
+    {
+      "name": "real.consistency_issues_unchanged",
+      "ok": true,
+      "actual": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "about 75%",
+            "nearly 80%"
+          ],
+          "comment": "文中 A 在 2020 年约为 75%，而 C 达到近 80% 并「overtaking Country A」，因此 2020 年最高者不是 A，概述与后文自相矛盾。"
+        }
+      ],
+      "expected": [
+        {
+          "quote": "Country A had the highest level of ownership in both years",
+          "quote_found": true,
+          "figures": [
+            "about 75%",
+            "nearly 80%"
+          ],
+          "comment": "文中 A 在 2020 年约为 75%，而 C 达到近 80% 并「overtaking Country A」，因此 2020 年最高者不是 A，概述与后文自相矛盾。"
+        }
+      ]
+    },
+    {
+      "name": "real.length_notes_unchanged",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "real.submission_unmodified",
+      "ok": true,
+      "actual": "{\"essay_text\": \"The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.\\n\\nOverall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.\\n\\nIn 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C. Country D had by far the lowest figure, at only 15%.\\n\\nBy 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\\n\\nIn summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.\", \"image_description\": null, \"image_error\": null, \"image_status\": \"none\", \"prompt_text\": \"The bar chart below shows the percentage of households that owned a car in four countries in 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.\", \"target_band\": 7.0, \"task_type\": \"task1\", \"word_count\": 172}",
+      "expected": "{\"essay_text\": \"The bar chart compares the proportion of households with a car in four countries in 2000 and 2020.\\n\\nOverall, car ownership increased in all four countries over the period, although the size of the rise varied considerably. Country A had the highest level of ownership in both years, while Country D remained the lowest.\\n\\nIn 2000, around 70% of households in Country A owned a car, compared with roughly 55% in Country B and about 40% in Country C. Country D had by far the lowest figure, at only 15%.\\n\\nBy 2020, the percentage in Country A had risen slightly to about 75%, and Country B had grown to approximately 65%. The most dramatic change was seen in Country C, where ownership almost doubled to nearly 80%, overtaking Country A. Country D also experienced significant growth, reaching around 35%, but it was still well behind the other three countries.\\n\\nIn summary, while every country saw an increase, the growth was particularly striking in Country C and much more modest in Country A.\", \"image_description\": null, \"image_error\": null, \"image_status\": \"none\", \"prompt_text\": \"The bar chart below shows the percentage of households that owned a car in four countries in 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.\", \"target_band\": 7.0, \"task_type\": \"task1\", \"word_count\": 172}"
+    },
+    {
+      "name": "controls.keep.It rose by 5 percentage points.",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "controls.keep.It rose by five percentage points.",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "controls.keep.It saw a 5-percentage-point rise.",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "controls.keep.上升了 5 个百分点。",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "controls.reject.It rose by 5%.",
+      "ok": true,
+      "actual": [
+        "5%"
+      ],
+      "expected": [
+        "5%"
+      ]
+    },
+    {
+      "name": "controls.reject.It rose by 7 percentage points.",
+      "ok": true,
+      "actual": [
+        "7 percentage points"
+      ],
+      "expected": [
+        "7 percentage points"
+      ]
+    },
+    {
+      "name": "controls.reject.上升了 7 个百分点。",
+      "ok": true,
+      "actual": [
+        "7 个百分点"
+      ],
+      "expected": [
+        "7 个百分点"
+      ]
+    },
+    {
+      "name": "controls.explicit_zero",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "controls.two_decimal_gap",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "arithmetic.zero_difference",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "arithmetic.precise_difference",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "arithmetic.rounded_wrong_exact_difference",
+      "ok": true,
+      "actual": [
+        "5.12 percentage points"
+      ],
+      "expected": [
+        "5.12 percentage points"
+      ]
+    },
+    {
+      "name": "arithmetic.small_nonzero_difference",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    },
+    {
+      "name": "arithmetic.small_nonzero_false_zero",
+      "ok": true,
+      "actual": [
+        "zero percentage points"
+      ],
+      "expected": [
+        "zero percentage points"
+      ]
+    },
+    {
+      "name": "pipeline.retained.zero_difference",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "pipeline.copy.zero_difference",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "pipeline.retained.precise_difference",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "pipeline.copy.precise_difference",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "pipeline.retained.rounded_wrong_exact_difference",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "pipeline.copy.rounded_wrong_exact_difference",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "pipeline.retained.small_nonzero_false_zero",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "pipeline.copy.small_nonzero_false_zero",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "declared_limit.source_only",
+      "ok": true,
+      "actual": [],
+      "expected": []
+    }
+  ],
+  "arithmetic": [
+    {
+      "name": "zero_difference",
+      "source": "The figure was 70% in 2000 and 70% in 2020.",
+      "advice": "The change was zero percentage points.",
+      "derived_points": [
+        "0"
+      ],
+      "missing": [],
+      "expected_missing": []
+    },
+    {
+      "name": "precise_difference",
+      "source": "The figure rose from 70.125% to 75.25%.",
+      "advice": "The figure rose by exactly 5.125 percentage points.",
+      "derived_points": [
+        "5.125"
+      ],
+      "missing": [],
+      "expected_missing": []
+    },
+    {
+      "name": "rounded_wrong_exact_difference",
+      "source": "The figure rose from 70.125% to 75.25%.",
+      "advice": "The figure rose by exactly 5.12 percentage points.",
+      "derived_points": [
+        "5.125"
+      ],
+      "missing": [
+        "5.12 percentage points"
+      ],
+      "expected_missing": [
+        "5.12 percentage points"
+      ]
+    },
+    {
+      "name": "small_nonzero_difference",
+      "source": "The figure rose from 10.001% to 10.005%.",
+      "advice": "The figure rose by exactly 0.004 percentage points.",
+      "derived_points": [
+        "0.004"
+      ],
+      "missing": [],
+      "expected_missing": []
+    },
+    {
+      "name": "small_nonzero_false_zero",
+      "source": "The figure rose from 10.001% to 10.005%.",
+      "advice": "The figure changed by exactly zero percentage points.",
+      "derived_points": [
+        "0.004"
+      ],
+      "missing": [
+        "zero percentage points"
+      ],
+      "expected_missing": [
+        "zero percentage points"
+      ]
+    }
+  ],
+  "pipeline": [
+    {
+      "name": "zero_difference",
+      "advice": "Write that Country A changed by zero percentage points between the two years.",
+      "retained": true,
+      "copied": true,
+      "expected_retained": true,
+      "removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "precise_difference",
+      "advice": "Write that Country A rose by exactly 5.125 percentage points.",
+      "retained": true,
+      "copied": true,
+      "expected_retained": true,
+      "removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      }
+    },
+    {
+      "name": "rounded_wrong_exact_difference",
+      "advice": "Write that Country A rose by exactly 5.12 percentage points.",
+      "retained": false,
+      "copied": false,
+      "expected_retained": false,
+      "removed": {
+        "criteria": 0,
+        "priorities": 1,
+        "argument": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "small_nonzero_false_zero",
+      "advice": "Write that Country A changed by exactly zero percentage points.",
+      "retained": false,
+      "copied": false,
+      "expected_retained": false,
+      "removed": {
+        "criteria": 0,
+        "priorities": 1,
+        "argument": 0,
+        "total": 1
+      }
+    }
+  ],
+  "declared_limitation": {
+    "advice": "Country A rose by 10 percentage points.",
+    "missing": [],
+    "explanation": "10 is a numerical difference in the input, but for Country B, not A. This matches the documented source-only contract; it does not verify the claim."
+  },
+  "findings": [
+    {
+      "id": "zero_gap_lost",
+      "severity": "P2",
+      "location": "tools/ielts_writing_ai/figures.py:365-368",
+      "cause": "Unique-percentage set discards repeated equal observations, so zero is never derived.",
+      "reproduced": false
+    },
+    {
+      "id": "forced_two_decimal_gap",
+      "severity": "P2",
+      "location": "tools/ielts_writing_ai/figures.py:367",
+      "cause": "round(b-a, 2) changes the source difference, rejecting exact arithmetic and allowing rounded or zero differences as exact.",
+      "reproduced": false
+    }
+  ]
+}

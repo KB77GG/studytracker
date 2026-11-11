@@ -1,0 +1,34 @@
+{
+  "network_calls": 0,
+  "private_files_read": false,
+  "cli_validation_failure": {
+    "exit": 0,
+    "calls": 2,
+    "aborted": null,
+    "all_failed": true,
+    "persistence_at_dispatch": [
+      {
+        "directory_exists_during_request": false,
+        "files": []
+      },
+      {
+        "directory_exists_during_request": false,
+        "files": []
+      }
+    ]
+  },
+  "vision_failure_repeats": {
+    "stage_flash_call_cap": 10,
+    "expected_image_limit": 2,
+    "actual_vision_calls": 4,
+    "actual_text_calls": 4,
+    "total_calls": 8,
+    "saved_readings": 0,
+    "image_statuses": [
+      "failed",
+      "failed",
+      "failed",
+      "failed"
+    ]
+  }
+}

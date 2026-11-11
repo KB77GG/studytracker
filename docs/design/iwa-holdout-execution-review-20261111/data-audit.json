@@ -1,0 +1,363 @@
+{
+  "samples_loaded": 23,
+  "official_empty_template_rejected": true,
+  "zip_sha256": "e5c7c9f08cc0f76f347a6c7dfae2eb88eda26e6311b919cfcefca7d55fe301db",
+  "samples": [
+    {
+      "file": "teacher.jsonl",
+      "id": "teacher-t2-01",
+      "task_type": "task2",
+      "word_count": 306,
+      "teacher_score_keys": [
+        "overall"
+      ],
+      "rater_count": 0,
+      "finding_count": 4,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t2.jsonl",
+      "id": "ho-t2-0606-1",
+      "task_type": "task2",
+      "word_count": 324,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 4,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t2.jsonl",
+      "id": "ho-t2-0606-2",
+      "task_type": "task2",
+      "word_count": 428,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 4,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t2.jsonl",
+      "id": "ho-t2-0627-1",
+      "task_type": "task2",
+      "word_count": 323,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 5,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t2.jsonl",
+      "id": "ho-t2-0627-2",
+      "task_type": "task2",
+      "word_count": 391,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 2,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t1.jsonl",
+      "id": "ho-t1-0606",
+      "task_type": "task1",
+      "word_count": 217,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 1,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": true,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_rated_t1.jsonl",
+      "id": "ho-t1-0627",
+      "task_type": "task1",
+      "word_count": 242,
+      "teacher_score_keys": [
+        "coherence",
+        "grammar",
+        "lexical",
+        "overall",
+        "task"
+      ],
+      "rater_count": 2,
+      "finding_count": 6,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": true,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0606-90",
+      "task_type": "task2",
+      "word_count": 289,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0606-85",
+      "task_type": "task2",
+      "word_count": 321,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0606-80",
+      "task_type": "task2",
+      "word_count": 307,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0606-75",
+      "task_type": "task2",
+      "word_count": 300,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0606-70",
+      "task_type": "task2",
+      "word_count": 292,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0627-90",
+      "task_type": "task2",
+      "word_count": 319,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0627-85",
+      "task_type": "task2",
+      "word_count": 337,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0627-80",
+      "task_type": "task2",
+      "word_count": 302,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0627-75",
+      "task_type": "task2",
+      "word_count": 286,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_ordering.jsonl",
+      "id": "ref-0627-70",
+      "task_type": "task2",
+      "word_count": 260,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 0,
+      "finding_keys": [],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-shop-50",
+      "task_type": "task2",
+      "word_count": 290,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 8,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-shop-55",
+      "task_type": "task2",
+      "word_count": 271,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 8,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-shop-60",
+      "task_type": "task2",
+      "word_count": 275,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 6,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-community-50",
+      "task_type": "task2",
+      "word_count": 269,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 9,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-community-55",
+      "task_type": "task2",
+      "word_count": 266,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 7,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    },
+    {
+      "file": "holdout_lowband.jsonl",
+      "id": "low-community-60",
+      "task_type": "task2",
+      "word_count": 291,
+      "teacher_score_keys": [],
+      "rater_count": 0,
+      "finding_count": 6,
+      "finding_keys": [
+        "note",
+        "quote"
+      ],
+      "image_exists": false,
+      "file_mode": "0o600"
+    }
+  ],
+  "institution_source_pdf_available": false,
+  "original_transcription_accuracy_independently_verified": false,
+  "real_model_calls": 0
+}

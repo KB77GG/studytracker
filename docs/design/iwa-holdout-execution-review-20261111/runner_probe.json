@@ -1,0 +1,38 @@
+{
+  "source_head": "76ab483fe0c944c1c7c0164cdf53d2bca9f1bbd7",
+  "network_calls": 0,
+  "private_files_read": false,
+  "interrupted_resume": {
+    "first_exit": 137,
+    "restart_exit": 0,
+    "reported_budget_at_restart": "阶段 \\xbc\\x9a已用 0 次，剩余步骤最坏 184 次，授权上限 184",
+    "independent_calls": 189,
+    "authorized_cap": 184,
+    "over_cap": true,
+    "report_survived_first": false,
+    "first_invocations": 1
+  },
+  "concurrent_launch": {
+    "exits": [
+      3,
+      3
+    ],
+    "budget_lines": [
+      "阶段 \\xbc\\x9a已用 156 次，剩余步骤最坏 28 次，授权上限 184",
+      "阶段 \\xbc\\x9a已用 156 次，剩余步骤最坏 28 次，授权上限 184"
+    ],
+    "prior_calls": 156,
+    "new_independent_calls": 56,
+    "combined_calls": 212,
+    "authorized_cap": 184,
+    "both_launched": true,
+    "over_cap": true
+  },
+  "failure_cutoff": {
+    "exit": 0,
+    "groups_launched": 10,
+    "done_markers": 10,
+    "all_runs_generated_zero": true,
+    "continued_after_first_failed_group": true
+  }
+}

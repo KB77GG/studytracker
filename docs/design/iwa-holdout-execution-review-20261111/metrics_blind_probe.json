@@ -1,0 +1,185 @@
+{
+  "network_calls": 0,
+  "private_inputs_read": false,
+  "cases": {
+    "rater_population_mismatch": {
+      "whole_batch": {
+        "essays": 2,
+        "scored": 1,
+        "rater_gap": 1.0,
+        "ai_gap": 0.5,
+        "ai_bias": 0.5,
+        "within_range": 1.0
+      },
+      "same_scored_samples": {
+        "essays": 1,
+        "scored": 1,
+        "rater_gap": 0.0,
+        "ai_gap": 0.5,
+        "ai_bias": 0.5,
+        "within_range": 1.0
+      },
+      "current_ai_no_worse_than_humans": true,
+      "paired_ai_no_worse_than_humans": false
+    },
+    "missing_ranking_endpoint": {
+      "all_scored": {
+        "rows": [
+          {
+            "id": "hi",
+            "nominal": 9.0,
+            "ai": 8
+          },
+          {
+            "id": "mid",
+            "nominal": 8.0,
+            "ai": 7
+          },
+          {
+            "id": "lo",
+            "nominal": 7.0,
+            "ai": 6
+          }
+        ],
+        "missing": 0,
+        "pairs": 3,
+        "inversions": 0,
+        "ties": 0,
+        "spread": 2.0
+      },
+      "highest_failed": {
+        "rows": [
+          {
+            "id": "hi",
+            "nominal": 9.0,
+            "ai": null
+          },
+          {
+            "id": "mid",
+            "nominal": 8.0,
+            "ai": 7
+          },
+          {
+            "id": "lo",
+            "nominal": 7.0,
+            "ai": 6
+          }
+        ],
+        "missing": 1,
+        "pairs": 1,
+        "inversions": 0,
+        "ties": 0,
+        "spread": 1.0
+      },
+      "only_one_scored": {
+        "rows": [
+          {
+            "id": "hi",
+            "nominal": 9.0,
+            "ai": 8
+          },
+          {
+            "id": "lo",
+            "nominal": 7.0,
+            "ai": null
+          }
+        ],
+        "missing": 1,
+        "pairs": 0,
+        "inversions": 0,
+        "ties": 0,
+        "spread": 0.0
+      },
+      "expected_missing_endpoint_spread": null
+    },
+    "blind_evidence_omitted": {
+      "grammar_summary": true,
+      "grammar_issue": true,
+      "revised_sentence": true,
+      "conflicting_quote": false,
+      "argument_note": false,
+      "reclassification_support": false,
+      "count_correction": false,
+      "needs_manual_review": false,
+      "paragraph_number": false,
+      "position_inconsistent": false
+    },
+    "tally_non_integer": {
+      "2": {
+        "correct": 0,
+        "misread": 0,
+        "changed_meaning": 0,
+        "polish_as_error": 0,
+        "uncertain": 0,
+        "missed_both_raters": 0,
+        "missed_other": 2,
+        "filled": 1,
+        "blank": 0,
+        "unrecognized": 0
+      },
+      "": {
+        "correct": 0,
+        "misread": 0,
+        "changed_meaning": 0,
+        "polish_as_error": 0,
+        "uncertain": 0,
+        "missed_both_raters": 0,
+        "missed_other": 0,
+        "filled": 0,
+        "blank": 1,
+        "unrecognized": 0
+      },
+      "0.5": {
+        "correct": 0,
+        "misread": 0,
+        "changed_meaning": 0,
+        "polish_as_error": 0,
+        "uncertain": 0,
+        "missed_both_raters": 0,
+        "missed_other": 0,
+        "filled": 1,
+        "blank": 0,
+        "unrecognized": 0
+      },
+      "1–2": {
+        "correct": 0,
+        "misread": 0,
+        "changed_meaning": 0,
+        "polish_as_error": 0,
+        "uncertain": 0,
+        "missed_both_raters": 0,
+        "missed_other": 1,
+        "filled": 1,
+        "blank": 0,
+        "unrecognized": 0
+      },
+      "-1": {
+        "correct": 0,
+        "misread": 0,
+        "changed_meaning": 0,
+        "polish_as_error": 0,
+        "uncertain": 0,
+        "missed_both_raters": 0,
+        "missed_other": 0,
+        "filled": 0,
+        "blank": 0,
+        "unrecognized": 1
+      }
+    },
+    "summary_teacher_allowlist_absent": {
+      "private_marker_copied": true,
+      "teacher_keys_after_export": [
+        "overall",
+        "comment"
+      ],
+      "scope": "accepted-schema boundary; actual user ZIP not read by this probe"
+    },
+    "summary_ignores_archived_attempts": {
+      "current_summary_calls": 4,
+      "all_reported_attempt_calls": 24,
+      "current_summary_cost": 0.04,
+      "all_reported_attempt_cost": 0.24,
+      "archived_report_present": true
+    }
+  }
+}
