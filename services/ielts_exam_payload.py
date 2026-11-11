@@ -118,8 +118,8 @@ def _strip_forbidden(value):
             _strip_forbidden(item)
 
 
-def build_simulation_payload(payload: dict, kind: str) -> dict:
-    """Return a deep-copied, renderable payload with no grading material."""
+def build_review_payload(payload: dict, kind: str) -> dict:
+    """Keep the exam's response layout while restoring authorized review material."""
     if kind not in {"listening", "reading"}:
         raise ValueError("unsupported_ielts_payload_kind")
     safe = deepcopy(payload or {})
@@ -127,6 +127,12 @@ def build_simulation_payload(payload: dict, kind: str) -> dict:
     for unit in safe.get(container) or []:
         for group in unit.get("groups") or []:
             _annotate_group(group, kind)
+    return safe
+
+
+def build_simulation_payload(payload: dict, kind: str) -> dict:
+    """Return a deep-copied, renderable payload with no grading material."""
+    safe = build_review_payload(payload, kind)
     _strip_forbidden(safe)
     safe["simulation_payload"] = True
     return safe

@@ -32,6 +32,7 @@ function reviewRuntime() {
     { id: 22083, number: 9, sectionIndex: 0, audio_review: { available: true, start: 0, end: 8 } }
   ];
   const context = {
+    isMockExamReview: false,
     __calls: calls,
     __cards: cards,
     __questions: questions,
@@ -264,4 +265,21 @@ test('displayed-number result links resolve explicitly to ids including combined
   assert.match(html, /data-review-jump="17">Q20</);
   assert.match(html, /data-review-jump="20">Q29,30</);
   assert.doesNotMatch(html, /data-review-jump="999"/);
+});
+
+test('mock review audio enrichment preserves the original exam locator text coordinates', () => {
+  const runtime = reviewRuntime();
+  runtime.isMockExamReview = true;
+  for (const question of [
+    { id: 1, number: 1, audio_review: { available: true, start: 0, end: 8 } },
+    { id: 2, number: 2, start: 0, end: 8, audio_review: { available: false } }
+  ]) {
+    runtime.__sourceQuestion = { ...question, audio_review: undefined };
+    runtime.__reviewQuestion = question;
+    const source = vm.runInContext('reviewAudioLocator(__sourceQuestion, 0)', runtime);
+    const review = vm.runInContext('reviewAudioLocator(__reviewQuestion, 0)', runtime);
+    assert.equal(/^\s*/.exec(source)[0], /^\s*/.exec(review)[0]);
+  }
+  runtime.__reviewQuestion = { id: 1, number: 1, audio_review: { available: true, start: 0, end: 8 } };
+  assert.match(vm.runInContext('reviewAudioLocator(__reviewQuestion, 0)', runtime), /播放定位片段 0:00–0:08/);
 });

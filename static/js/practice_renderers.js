@@ -835,7 +835,7 @@
       .filter((row, index, rows) => row && rows.indexOf(row) === index);
     return `
       <div class="review-card" data-review-question="${escapeHtml(question.id || question.number)}" data-capability="canShowCorrectness">
-        <div class="review-card__status" data-status="${escapeHtml(status)}">结果：${label}</div>
+        <div class="review-card__status" data-status="${escapeHtml(status)}">第 ${escapeHtml(question.number || question.id)} 题 · 结果：${label}</div>
         <div class="review-card__answers">
           <span><strong>你的答案</strong><br>${escapeHtml(userAnswer || "未作答")}</span>
           <span><strong>正确答案</strong><br>${escapeHtml(correctAnswer || "—")}</span>

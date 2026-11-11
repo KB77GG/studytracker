@@ -553,6 +553,16 @@
     });
   }
 
+  // Embedded review restores existing marks without opening editing toolbars
+  // against a long iframe viewport. Redraw observers remain active.
+  if (window.__SELECTION_HIGHLIGHT_READ_ONLY__) {
+    ensureStyles();
+    pruneOldStores();
+    highlightRoots().forEach(observeRoot);
+    refreshAll();
+    return;
+  }
+
   document.addEventListener('mouseup', function(event) {
     if (Date.now() - lastTouchAt < 800) return;
     if (toolbar && toolbar.contains(event.target)) return;

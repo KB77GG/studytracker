@@ -465,8 +465,11 @@ body[data-experience-mode="simulation"] .group {
 .exam-finish-btn:disabled { background: #6b7280; cursor: not-allowed; }
 </style>
 {% endif %}
+{% if practice_context and practice_context.embed_review %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mock_review_paper.css') }}">
+{% endif %}
 </head>
-<body class="practice-shell-page practice-reading-page{% if exam_context %} exam-mode{% endif %}" data-reading-pane="questions">
+<body class="practice-shell-page practice-reading-page{% if exam_context %} exam-mode{% endif %}{% if practice_context and practice_context.embed_review %} mock-review-embedded{% endif %}"{% if practice_context and practice_context.embed_review %} data-review-paper-embed="true"{% endif %} data-reading-pane="questions">
 {% if exam_context %}
 <header class="exam-mode-shell">
   <div class="exam-mode-shell__left">
@@ -590,6 +593,7 @@ const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
 const practiceContext = {{ practice_context|default(none)|tojson }};
 const persistenceContext = examContext || practiceContext;
+const isMockExamReview = practiceContext?.task_type === "mock_exam_review";
 let experienceMode = PracticeModes.resolve(examContext
   ? { simulationMode: true }
   : { practiceMode: true });
@@ -616,6 +620,8 @@ const readingStorageOwner = localStorage.getItem("listening_student") || "guest"
 const readingStorageScope = assignedPassageNumber ? `passage_${assignedPassageNumber}` : "full";
 const examDraftStorageKey = examContext
   ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_reading_${testData.id}_full`
+  : isMockExamReview
+    ? `mock_exam_review_${practiceContext.session_id}_reading_${testData.id}`
   : practiceContext
     ? `question_type_answers_${practiceContext.task_id}_${testData.id}`
   : `reading_test_answers_${testData.id}_${readingStorageScope}_${readingStorageOwner}`;
@@ -735,6 +741,7 @@ async function persistExamDraft(reason = "local") {
 }
 
 function restoreExamDraft() {
+  if (practiceContext?.read_only) return;
   try {
     const saved = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}");
     if (saved && typeof saved === "object" && !Array.isArray(saved)) Object.assign(answers, saved);
@@ -917,6 +924,8 @@ function displayQuestionPrompt(question, group) {
 
 function shouldUseGroupOptions(question, group) {
   if (question.uses_group_options === true || question.response_kind === "group_select") return true;
+  // A simulation/review payload already fixes the response shape before answers are hidden.
+  if (question.response_kind) return false;
   const groupOptions = effectiveGroupOptions(question, group);
   if (!groupOptions.length) return false;
   const questionOptions = question.options || [];
@@ -989,7 +998,7 @@ function reviewCard(question, result = null, value = "") {
   if (!experienceCapabilities.canShowCorrectness) {
     return `<div data-review-slot="${escapeHtml(question.id)}"></div>`;
   }
-  return PracticeRenderers.renderReviewCard(question, result, value);
+  return PracticeRenderers.renderReviewCard(question, result, value).trim();
 }
 
 function inlineControl(question, group, separator = "") {
@@ -1099,7 +1108,7 @@ function renderPassage(passage) {
   }).join('');
   const trailingFigures = images.filter(image => !Number.isInteger(image.after_paragraph)
     || image.after_paragraph < 0 || image.after_paragraph > sourceParagraphIndex).map(renderFigure).join('');
-  const passageMeta = experienceCapabilities.simulationMode
+  const passageMeta = experienceCapabilities.simulationMode || isMockExamReview
     ? ""
     : `<div class="passage-meta">
       <span class="badge">${escapeHtml(passage.question_name)}</span>
@@ -1518,11 +1527,11 @@ async function loadExistingSubmission() {
     resultMode = true;
     document.body.classList.add("result-mode");
     setExperienceMode("review");
-    document.getElementById("practiceCrumbTail").textContent = "专项复盘";
+    document.getElementById("practiceCrumbTail").textContent = isMockExamReview ? "模考复盘" : "专项复盘";
     renderPassage(testData.passages.find((passage) => passage.id === currentPassageId) || testData.passages[0]);
     paintResults();
     updateSummary();
-    setSyncStatus("已加载题型专项原题与作答记录", "ok");
+    setSyncStatus(isMockExamReview ? "已加载模考原题与作答记录" : "已加载题型专项原题与作答记录", "ok");
     lockReadOnlyReviewControls();
     practiceShellController?.markSaved();
     syncQuestionNav();
@@ -1600,15 +1609,19 @@ document.querySelectorAll("[data-reading-pane-button]").forEach((button) => {
 });
 
 setInterval(() => {
+  const timerValue = document.getElementById("timerValue");
+  if (!timerValue) return;
   const seconds = Math.floor((Date.now() - startedAt) / 1000);
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
-  document.getElementById("timerValue").textContent = `${mm}:${ss}`;
+  timerValue.textContent = `${mm}:${ss}`;
 }, 1000);
 
-practiceShellController = PracticeShell.init({
+// The containing review page owns browser navigation; an iframe must not add
+// its own back guard to the joint browser history.
+practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
-  fallbackMode: persistenceContext ? 'task_detail' : (rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
+  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : (rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
   confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
   initialSaved: true,
   save: persistExamDraft
@@ -1727,8 +1740,14 @@ window.EXAM_CONTEXT = examContext;
 window.__PRACTICE_SOURCE__ = {{ practice_source|default('reading_test')|tojson }};
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
 window.__SELECTION_HIGHLIGHT_PATH__ = practiceContext?.highlight_path || window.location.pathname;
+window.__SELECTION_HIGHLIGHT_READ_ONLY__ = Boolean(practiceContext?.embed_review);
 </script>
+{% if not (practice_context and practice_context.embed_review) %}
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
+{% endif %}
 <script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>
+{% if practice_context and practice_context.embed_review %}
+<script src="{{ url_for('static', filename='js/mock_review_paper.js') }}" defer></script>
+{% endif %}
 </body>
 </html>

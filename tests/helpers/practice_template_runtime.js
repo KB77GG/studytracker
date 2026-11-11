@@ -8,6 +8,7 @@ function templateRuntime(subject, payload, extra = {}) {
   const source = fs.readFileSync(path.join(root, `templates/${subject}/test_practice.html`), 'utf8');
   const context = {
     test: payload, testData: payload, answers: {},
+    practiceContext: null, isMockExamReview: false,
     experienceCapabilities: { simulationMode: true, canShowCorrectness: false },
     PracticeRenderers: require('../../static/js/practice_renderers.js'),
     PracticeTable: require('../../static/js/practice_table.js'),

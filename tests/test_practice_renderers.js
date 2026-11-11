@@ -802,6 +802,12 @@ test('review cards state when frozen legacy questions have no explanation or evi
   assert.ok(html.includes('题库暂无可展示的答案依据'))
 })
 
+test('expanded review cards identify the displayed question number instead of its internal id', () => {
+  const html = renderers.renderReviewCard({ id: 1001, number: 7, answer: 'A' }, { status: 'incorrect' }, 'B')
+  assert.ok(html.includes('第 7 题 · 结果：× 错误'))
+  assert.ok(!html.includes('第 1001 题'))
+})
+
 test('review cards render the reading corpus array form of central sentences', () => {
   const html = renderers.renderReviewCard({
     id: 9,

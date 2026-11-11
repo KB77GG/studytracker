@@ -1,0 +1,75 @@
+/* Original question roots stay intact so saved highlight coordinates still match. */
+body.mock-review-embedded {
+  --practice-shell-height: 0px;
+  --practice-bottom-height: 0px;
+  min-height: 0;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  background: #fff;
+}
+body.mock-review-embedded .topbar,
+body.mock-review-embedded .topbar-inner {
+  position: static;
+  inset: auto;
+  min-height: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  background: #fff;
+}
+body.mock-review-embedded .topbar-inner { padding: 0 0 10px; }
+body.mock-review-embedded .practice-listening-topline,
+body.mock-review-embedded.practice-reading-page .topbar,
+body.mock-review-embedded .task-date-gate,
+body.mock-review-embedded .bottom-nav,
+body.mock-review-embedded .bottom-bar,
+body.mock-review-embedded #viewTabs,
+body.mock-review-embedded .review-controls,
+body.mock-review-embedded .reading-workspace-toggle,
+body.mock-review-embedded .reading-splitter,
+body.mock-review-embedded .transcript-panel,
+body.mock-review-embedded .practice-bottom-nav__flag { display: none !important; }
+body.mock-review-embedded .page {
+  height: auto;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+body.mock-review-embedded .mock-review-navigation { margin: 0 0 14px; }
+body.mock-review-embedded .layout {
+  display: grid;
+  height: auto;
+  min-height: 0;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 16px;
+}
+body.mock-review-embedded .passage-card,
+body.mock-review-embedded .question-card,
+body.mock-review-embedded .map-workspace__questions,
+body.mock-review-embedded .matching-workspace .option-bank {
+  display: block;
+  position: static;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  overscroll-behavior: auto;
+}
+body.mock-review-embedded.result-mode .review-card { display: block; }
+body.mock-review-embedded [data-review-hidden="true"] { display: none !important; }
+body.mock-review-embedded .mock-review-empty { margin: 12px 0; padding: 18px; color: #64748b; background: #f8fafc; border-radius: 10px; }
+body.mock-review-embedded .ex-hl { cursor: text; }
+@media (min-width: 900px) {
+  body.mock-review-embedded.practice-reading-page .layout { grid-template-columns: minmax(0, 45%) minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  body.mock-review-embedded .question-card,
+  body.mock-review-embedded .passage-card,
+  body.mock-review-embedded .group { padding: 12px; }
+  body.mock-review-embedded .review-summary { padding: 8px; gap: 5px; }
+  body.mock-review-embedded .mock-review-navigation { flex-wrap: wrap; }
+  body.mock-review-embedded .mock-review-navigation .question-nav { order: 3; flex-basis: 100%; }
+}

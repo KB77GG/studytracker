@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from services.ielts_exam_payload import build_simulation_payload
+from services.ielts_exam_payload import build_review_payload, build_simulation_payload
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -138,6 +138,13 @@ class IeltsExamPayloadTest(unittest.TestCase):
         self.assertEqual(second["questions"][0]["max_selections"], 2)
         self.assertEqual(forbidden_paths(safe), [])
 
+        reviewed = build_review_payload(payload, "listening")
+        self.assertEqual(build_simulation_payload(reviewed, "listening"), safe)
+        self.assertEqual(reviewed["sections"][0]["groups"][0]["response_layout"], "combined_multi")
+        self.assertEqual(reviewed["sections"][0]["groups"][1]["questions"][0]["analysis"], "secret")
+        self.assertEqual(reviewed["sections"][0]["transcript"], [{"en": "secret"}])
+        self.assertNotIn("response_layout", payload["sections"][0]["groups"][0])
+
     def test_reading_group_select_is_annotated_before_answer_removal(self):
         payload = {
             "passages": [
@@ -166,6 +173,10 @@ class IeltsExamPayloadTest(unittest.TestCase):
         self.assertTrue(question["uses_group_options"])
         self.assertEqual(question["response_kind"], "group_select")
         self.assertNotIn("answer", question)
+
+        reviewed = build_review_payload(payload, "reading")
+        self.assertEqual(build_simulation_payload(reviewed, "reading"), safe)
+        self.assertEqual(reviewed["passages"][0]["groups"][0]["questions"][0]["answer"], "A")
 
 
 if __name__ == "__main__":

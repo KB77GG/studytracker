@@ -937,8 +937,11 @@ body.practice-listening-page .practice-bottom-score .result-box {
 {% if exam_context %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
 {% endif %}
+{% if practice_context and practice_context.embed_review %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mock_review_paper.css') }}">
+{% endif %}
 </head>
-<body class="practice-shell-page practice-listening-page{% if exam_context %} exam-mode{% endif %}">
+<body class="practice-shell-page practice-listening-page{% if exam_context %} exam-mode{% endif %}{% if practice_context and practice_context.embed_review %} mock-review-embedded{% endif %}"{% if practice_context and practice_context.embed_review %} data-review-paper-embed="true"{% endif %}>
 {% if exam_context %}
 <header class="exam-mode-shell">
   <div class="exam-mode-shell__left">
@@ -1137,6 +1140,7 @@ const pageParams = new URLSearchParams(window.location.search);
 const examContext = {{ exam_context|default(none)|tojson }};
 const practiceContext = {{ practice_context|default(none)|tojson }};
 const persistenceContext = examContext || practiceContext;
+const isMockExamReview = practiceContext?.task_type === "mock_exam_review";
 let experienceMode = PracticeModes.resolve(examContext
   ? { simulationMode: true }
   : { practiceMode: true });
@@ -1168,11 +1172,15 @@ const storageScope = assignedSectionNumber ? `section_${assignedSectionNumber}` 
 const practiceStorageOwner = localStorage.getItem('listening_student') || 'guest';
 const storageKey = examContext
   ? `mock_exam_answers_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
+  : isMockExamReview
+    ? `mock_exam_review_${practiceContext.session_id}_listening_${test.id}`
   : practiceContext
     ? `question_type_answers_${practiceContext.task_id}_${test.id}`
   : `listening_test_answers_${test.id}_${storageScope}_${practiceStorageOwner}`;
 const noteStorageKey = examContext
   ? `mock_exam_notes_${examContext.exam_id}_${examContext.session_token}_listening_${test.id}_${storageScope}`
+  : isMockExamReview
+    ? `mock_exam_review_notes_${practiceContext.session_id}_listening_${test.id}`
   : `listening_test_error_notes_${test.id}_${storageScope}_${practiceStorageOwner}`;
 const flagStorageKey = `${storageKey}:flags`;
 const practiceRedo = PracticeRedo.create({
@@ -1278,17 +1286,20 @@ function questionAudioWindow(question) {
 function reviewAudioLocator(question, sectionIndex) {
   const window = questionAudioWindow(question);
   const id = escapeHtml(question.id || question.number);
+  // Keep the exam source coordinates even when review restores a richer audio window.
+  const sourceWindow = isMockExamReview
+    ? questionAudioWindow({ ...question, audio_review: undefined })
+    : window;
+  const indentation = sourceWindow.available ? "\n    " : "\n      ";
   if (!window.available) {
-    return `
-      <button class="seek-btn review-audio-locator" type="button"
+    return `${indentation}<button class="seek-btn review-audio-locator" type="button"
         data-review-audio-question="${id}" data-audio-fallback="section"
         data-capability="canShowCorrectness" hidden
         onclick="event.stopPropagation(); playQuestionAudio('${id}', ${sectionIndex})">
         定位不可用 · 播放完整 Section
       </button>`;
   }
-  return `
-    <button class="seek-btn review-audio-locator" type="button"
+  return `${indentation}<button class="seek-btn review-audio-locator" type="button"
       data-review-audio-question="${id}" data-capability="canShowCorrectness" hidden
       onclick="event.stopPropagation(); playQuestionAudio('${id}', ${sectionIndex})">
       播放定位片段 ${formatClock(window.start)}–${formatClock(window.end)}
@@ -1460,7 +1471,7 @@ function answerTools(question, sectionIndex) {
   const id = escapeHtml(question.id || question.number);
   const saved = escapeHtml(getNotes()[question.id || question.number] || '');
   return `
-    <div class="answer-note" data-capability="canShowCorrectness">
+    <div class="answer-note review-chrome" data-capability="canShowCorrectness">
       <span class="answer-pill">
         Q${escapeHtml(question.number)} 答案：<strong>${escapeHtml(question.answer || '')}</strong>
         <button class="answer-action" type="button" onclick="toggleNote('${id}')">错因笔记</button>
@@ -1469,7 +1480,7 @@ function answerTools(question, sectionIndex) {
         <textarea placeholder="记录本题错因：没听出连读 / 单词不认识 / 地图方向混淆..." oninput="saveNote('${id}', this.value)">${saved}</textarea>
       </div>
     </div>
-  `;
+  `.trim();
 }
 
 function reviewCard(question, result = null, value = '') {
@@ -1477,7 +1488,7 @@ function reviewCard(question, result = null, value = '') {
   if (!experienceCapabilities.canShowCorrectness) {
     return `<div data-review-slot="${escapeHtml(question.id || question.number)}"></div>`;
   }
-  return PracticeRenderers.renderReviewCard(question, result, value);
+  return PracticeRenderers.renderReviewCard(question, result, value).trim();
 }
 
 function playCompleteSection(sectionIndex, fallback = false) {
@@ -1503,6 +1514,7 @@ function playQuestionAudio(questionId, sectionIndex) {
 }
 
 function groupAudioControls(group, sectionIndex) {
+  if (isMockExamReview) return '';
   const window = group?.practice_audio;
   if (!window) return '';
   const label = window.available
@@ -1717,7 +1729,7 @@ function renderGroup(group, sectionIndex) {
 }
 
 function renderSection(section, sectionIndex) {
-  const typeBadges = experienceCapabilities.simulationMode
+  const typeBadges = experienceCapabilities.simulationMode || isMockExamReview
     ? ''
     : `<div class="type-badges">${(section.question_type || []).map(type => `<span class="type-badge">${escapeHtml(type)}</span>`).join('')}</div>`;
   return `
@@ -2083,6 +2095,7 @@ function applyAnswerRows(rows) {
 }
 
 function restoreAnswers() {
+  if (practiceContext?.read_only) return;
   let rows = {};
   try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
   applyAnswerRows(rows);
@@ -2196,7 +2209,9 @@ async function loadExistingSubmission() {
     const results = Array.isArray(grade.results) ? grade.results : [];
     applyAnswerRows(embeddedReview.answers);
     try {
-      localStorage.setItem(storageKey, JSON.stringify(embeddedReview.answers));
+      if (!practiceContext?.read_only) {
+        localStorage.setItem(storageKey, JSON.stringify(embeddedReview.answers));
+      }
     } catch (_error) {
       // Review remains usable when storage is restricted by an embedded webview.
     }
@@ -2204,7 +2219,7 @@ async function loadExistingSubmission() {
     document.body.classList.add('show-answers');
     document.body.classList.add('result-mode');
     setExperienceMode('review');
-    document.getElementById('practiceShellMode').textContent = '专项复盘';
+    document.getElementById('practiceShellMode').textContent = isMockExamReview ? '模考复盘' : '专项复盘';
     const wrongLabels = results
       .filter(row => row.status !== 'correct')
       .map(row => row.q);
@@ -2213,7 +2228,7 @@ async function loadExistingSubmission() {
       grade.correct_count ?? grade.correct ?? 0,
       grade.total_count ?? grade.total ?? results.length,
       wrongLabels,
-      '已加载题型专项原题与作答记录'
+      isMockExamReview ? '已加载模考原题与作答记录' : '已加载题型专项原题与作答记录'
     );
     lockReadOnlyReviewControls();
     openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
@@ -2669,9 +2684,11 @@ if (!examContext) {
   });
 }
 
-practiceShellController = PracticeShell.init({
+// The containing review page owns browser navigation; an iframe must not add
+// its own back guard to the joint browser history.
+practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",
-  fallbackMode: persistenceContext ? 'task_detail' : 'listening_tests',
+  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : 'listening_tests',
   confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
   initialSaved: true,
   save: persistAnswers
@@ -2793,8 +2810,14 @@ window.EXAM_CONTEXT = examContext;
 window.__PRACTICE_SOURCE__ = {{ practice_source|default('listening_test')|tojson }};
 window.__PRACTICE_SOURCE_REF__ = {{ practice_source_ref|default('')|tojson }};
 window.__SELECTION_HIGHLIGHT_PATH__ = practiceContext?.highlight_path || window.location.pathname;
+window.__SELECTION_HIGHLIGHT_READ_ONLY__ = Boolean(practiceContext?.embed_review);
 </script>
+{% if not (practice_context and practice_context.embed_review) %}
 <script src="{{ url_for('static', filename='js/selection-translate.js') }}" defer></script>
+{% endif %}
 <script src="{{ url_for('static', filename='js/selection-highlight.js') }}" defer></script>
+{% if practice_context and practice_context.embed_review %}
+<script src="{{ url_for('static', filename='js/mock_review_paper.js') }}" defer></script>
+{% endif %}
 </body>
 </html>

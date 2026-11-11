@@ -135,7 +135,7 @@ function pageHarness(kind, options = {}) {
   const f = fixture(options), elements = new Map(), applied = [], requests = [], answers = {}
   const submission = { answers: { '1': 'historical' }, results: [{ q: 1, status: 'correct' }], correct_count: 1, total_count: 1 }
   const noop = () => {}
-  const context = vm.createContext({ URLSearchParams, practiceRedo: f.controller,
+  const context = vm.createContext({ URLSearchParams, isMockExamReview: false, practiceRedo: f.controller,
     practiceContext: options.practiceContext || null, persistenceContext: options.persistenceContext || null,
     examContext: null, historyAttemptId: options.historyAttemptId || '',
     listeningTaskId: '', listeningTaskToken: '', readingTaskId: '', readingTaskToken: '', assignedSectionNumber: 0, assignedPassageNumber: 0,

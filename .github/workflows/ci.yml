@@ -60,6 +60,8 @@ jobs:
             tests.test_question_type_practice \
             tests.test_mock_exam_review \
             tests.test_mock_exam_template_isolation \
+            tests.test_selection_highlight_contract \
+            tests.test_practice_highlight_coordinates \
             tests.test_question_type_practice_contract -v
           node --test \
             tests/test_practice_renderers.js \
@@ -70,6 +72,9 @@ jobs:
             tests/test_cambridge_form_layout_css.js \
             tests/test_listening_review_audio.js \
             tests/test_question_type_review_readonly.js \
+            tests/test_practice_shell.js \
+            tests/test_mock_exam_review_frames.js \
+            tests/test_mock_review_paper.js \
             tests/test_listening_clip_player.js \
             tests/test_practice_scoring.js \
             tests/test_listening_practice_navigation.js \
@@ -95,6 +100,8 @@ jobs:
             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
+      - name: Test submitted mock paper review access and saved results
+        run: python -m unittest tests.test_mock_exam_student_review tests.test_mock_exam_review_workflow -v
       - name: Test recovery assistant and student journeys with isolated data
         run: python -m unittest tests.test_task_planner_recovery_e2e tests.test_task_planner_recovery_student_contract_e2e -v
 

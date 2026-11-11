@@ -43,7 +43,7 @@ test('ordinary and simulation passage display keeps introduction without its tec
   for (const simulationMode of [false, true]) {
     const panels = { passagePanel: { innerHTML: '' }, questionPanel: { innerHTML: '' } };
     const context = {
-      experienceCapabilities: { simulationMode }, experienceMode: 'training', resultMode: false,
+      isMockExamReview: false, experienceCapabilities: { simulationMode }, experienceMode: 'training', resultMode: false,
       document: { getElementById: id => panels[id] },
       escapeHtml: value => String(value || ''), renderGroup: () => '',
       bindInputs() {}, setExperienceMode() {}, lockReadOnlyReviewControls() {},

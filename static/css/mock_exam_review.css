@@ -1,0 +1,36 @@
+.exam-process.mock-review-page,
+.container.practice-student-review.mock-review-page {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+.mock-review-page .mock-review-paper.review-card {
+  padding: 0;
+  overflow: hidden;
+}
+.mock-review-paper > .review-card__head {
+  margin: 0;
+  padding: 18px 24px;
+}
+.mock-review-paper__frame {
+  display: block;
+  width: 100%;
+  height: 360px;
+  min-height: 200px;
+  border: 0;
+  background: #fff;
+}
+.mock-review-paper__status,
+.mock-review-paper > .review-empty {
+  margin: 0;
+  padding: 16px 24px;
+  color: #667;
+}
+.mock-review-paper__status[hidden] { display: none; }
+.mock-review-paper__frame[hidden] { display: none; }
+@media (max-width: 640px) {
+  .exam-process.mock-review-page,
+  .container.practice-student-review.mock-review-page { padding-inline: 8px; }
+  .mock-review-paper > .review-card__head { padding: 14px 12px; }
+}

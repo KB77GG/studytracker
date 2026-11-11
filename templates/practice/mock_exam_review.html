@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% from "exam/_review_components.html" import review_block, writing_block, teacher_review_block %}
+{% from "exam/_review_components.html" import writing_block, teacher_review_block %}
+{% from "exam/_review_papers.html" import review_paper %}
 
 {% block page_title %}我的模考复盘{% endblock %}
 {% block page_subtitle %}My Mock Exam Review{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/mock_exam_review.css') }}">{% endblock %}
 
 {% macro student_review_content() -%}
-<div class="container practice-student-review">
+<div class="container practice-student-review mock-review-page">
   <div class="header-row">
     <div>
       <h1>{{ session.student_name }} · {{ exam.name }}</h1>
@@ -24,8 +26,8 @@
     </label>
   </section>
 
-  {{ review_block('Listening', listening_units, summary.listening) }}
-  {{ review_block('Reading', reading_units, summary.reading) }}
+  {{ review_paper('Listening', 'listening', review_paper_urls.listening, summary.listening) }}
+  {{ review_paper('Reading', 'reading', review_paper_urls.reading, summary.reading) }}
   {% if has_writing %}
     {{ writing_block(writing_tasks, summary, session) }}
   {% endif %}
@@ -41,6 +43,7 @@
 </div>
 
 {% include "exam/_review_assets.html" %}
+<script src="{{ url_for('static', filename='js/mock_exam_review.js') }}" defer></script>
 <script>document.addEventListener('DOMContentLoaded',()=>PracticeShell.init({fallbackUrl: {{ url_for('practice_library')|tojson }}, fallbackMode: 'practice_library', initialSaved: true}));</script>
 {%- endmacro %}
 

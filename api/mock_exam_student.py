@@ -8,12 +8,13 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from flask import Blueprint, jsonify, redirect, render_template, request, url_for
+from flask import Blueprint, abort, jsonify, redirect, render_template, request, url_for
 
 from models import MockExam, MockExamReview, MockExamSession, db
 from services import mock_exam_review as review
 from services import mock_exam_review_workflow as review_workflow
 from services import mock_exam_runtime as runtime
+from services.ielts_exam_payload import build_review_payload
 from services.practice_navigation import safe_local_target
 from services.web_privacy import no_store
 
@@ -263,6 +264,22 @@ def student_review_context(exam: MockExam, mock_session: MockExamSession) -> dic
         "writing_tasks": writing_tasks,
         "has_writing": bool(exam.writing_test_id),
         "teacher_review": teacher_review,
+        "review_paper_urls": {
+            section: url_for(
+                "mock_exam_student.session_review_paper",
+                exam_id=exam.id,
+                token=mock_session.access_token,
+                section=section,
+                embed="1",
+                **{
+                    **_navigation_args(),
+                    "practice_return": request.full_path.rstrip("?"),
+                    "practice_source": "mock_exam_review",
+                },
+            )
+            for section in runtime.OBJECTIVE_SECTIONS
+            if getattr(mock_session, f"{section}_submitted_at", None)
+        },
     }
 
 
@@ -287,3 +304,65 @@ def session_review(exam_id: int, token: str):
         return no_store(redirect(url_for("mock_exam_process", exam_id=exam.id, token=token)))
 
     return render_student_review_page(exam, session)
+
+
+def _review_paper_context(exam, mock_session, section: str) -> dict:
+    """Reuse the saved grade and the original browser-local highlight namespace."""
+    review_url = url_for(
+        "mock_exam_student.session_review",
+        exam_id=exam.id,
+        token=mock_session.access_token,
+    )
+    return {
+        "task_type": "mock_exam_review",
+        "session_id": mock_session.id,
+        "subject": section,
+        "read_only": True,
+        "embed_review": request.args.get("embed") == "1",
+        "status_label": "已交卷模考复盘",
+        "exit_url": url_for(
+            "mock_exam_student.session_review",
+            exam_id=exam.id,
+            token=mock_session.access_token,
+            **_navigation_args(),
+        ),
+        # Exam highlighting has always used the original section pathname,
+        # including the session token. Do not merge it with ordinary practice.
+        "highlight_path": review_url.removesuffix("/review") + f"/{section}",
+        "initial_review": {
+            "answers": runtime.parse_draft(mock_session, section),
+            "result": {
+                "correct": getattr(mock_session, f"{section}_correct"),
+                "total": getattr(mock_session, f"{section}_total"),
+                "accuracy": getattr(mock_session, f"{section}_accuracy"),
+                "ielts_score": getattr(mock_session, f"{section}_ielts_score"),
+                "results": review.parse_json_list(
+                    getattr(mock_session, f"{section}_results_json")
+                ),
+            },
+        },
+    }
+
+
+@mock_exam_student_bp.get("/exam/<int:exam_id>/session/<token>/review/<section>")
+def session_review_paper(exam_id: int, token: str, section: str):
+    """Show the submitted paper in its original layout, with answers locked."""
+    if section not in runtime.OBJECTIVE_SECTIONS:
+        abort(404)
+    exam, mock_session, error = _runtime_session(exam_id, token)
+    if error:
+        abort(error[1])
+    if mock_session.status != MockExamSession.STATUS_SUBMITTED:
+        return redirect(
+            url_for("mock_exam_process", exam_id=exam.id, token=token, **_navigation_args())
+        )
+    if not getattr(mock_session, f"{section}_submitted_at", None):
+        abort(404)
+    payload = _load_payload(section, getattr(exam, f"{section}_test_id"))
+    if not payload:
+        abort(404)
+    return render_template(
+        f"{section}/test_practice.html",
+        test=build_review_payload(payload, section),
+        practice_context=_review_paper_context(exam, mock_session, section),
+    )

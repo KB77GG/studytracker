@@ -12,7 +12,7 @@ const end = source.indexOf('\nfunction ', start + 1);
 function render(passage, simulationMode) {
   const panels = { passagePanel: { innerHTML: '' }, questionPanel: { innerHTML: '' } };
   const context = {
-    experienceCapabilities: { simulationMode }, experienceMode: 'training', resultMode: false,
+    isMockExamReview: false, experienceCapabilities: { simulationMode }, experienceMode: 'training', resultMode: false,
     document: { getElementById: id => panels[id] },
     escapeHtml: value => String(value || ''), renderGroup: () => '',
     bindInputs() {}, setExperienceMode() {}, lockReadOnlyReviewControls() {},

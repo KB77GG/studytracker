@@ -1,4 +1,5 @@
-{% from "exam/_review_components.html" import review_block, writing_block, teacher_review_block %}
+{% from "exam/_review_components.html" import writing_block, teacher_review_block %}
+{% from "exam/_review_papers.html" import review_paper %}
 <!doctype html>
 <html lang="zh">
 <head>
@@ -7,6 +8,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>{{ exam.name }} · 逐题复盘</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/exam.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mock_exam_review.css') }}">
 </head>
 <body class="exam-app-bg">
   <header class="exam-topbar">
@@ -19,7 +21,7 @@
     </div>
   </header>
 
-  <main class="exam-process">
+  <main class="exam-process mock-review-page">
     <section class="exam-card">
       <header class="exam-card__head">
         <h2>本次模考复盘</h2>
@@ -43,8 +45,8 @@
       </div>
     </section>
 
-    {{ review_block('Listening', listening_units, summary.listening) }}
-    {{ review_block('Reading', reading_units, summary.reading) }}
+    {{ review_paper('Listening', 'listening', review_paper_urls.listening, summary.listening) }}
+    {{ review_paper('Reading', 'reading', review_paper_urls.reading, summary.reading) }}
     {% if has_writing %}
       {{ writing_block(writing_tasks, summary, session) }}
     {% endif %}
@@ -59,6 +61,7 @@
   </main>
 
   {% include "exam/_review_assets.html" %}
+  <script src="{{ url_for('static', filename='js/mock_exam_review.js') }}" defer></script>
   <footer class="exam-bottombar">
     <span class="exam-bottombar__brand">睿然国际教育</span>
     <button class="exam-bottombar__exit" type="button" data-practice-back>返回成绩</button>
@@ -66,6 +69,6 @@
   </footer>
   {% include "practice/_navigation_defaults.html" %}
   <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
-  <script>PracticeShell.installListContext(window.PRACTICE_NAVIGATION_DEFAULTS); PracticeShell.init({fallbackUrl: {{ url_for('mock_exam_result', exam_id=exam.id, token=session.access_token)|tojson }}, fallbackMode: 'mock_exam_process', initialSaved: true});</script>
+  <script>PracticeShell.init({fallbackUrl: {{ url_for('mock_exam_result', exam_id=exam.id, token=session.access_token)|tojson }}, fallbackMode: 'mock_exam_result', initialSaved: true});</script>
 </body>
 </html>

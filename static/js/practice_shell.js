@@ -72,6 +72,7 @@
     if (/^\/tasks(?:\/|$)/.test(pathname)) return "staff_tasks";
     if (/^\/practice\/question-types(?:\/|$)/.test(pathname)) return "question_type_catalog";
     if (/^\/practice\/mock-exams(?:\/|$)/.test(pathname)) return "mock_exam_review";
+    if (/^\/exam\/[^/]+\/session\/[^/]+\/review(?:\/|$)/.test(pathname)) return "mock_exam_review";
     if (/^\/exam\/.+\/session\//.test(pathname)) return "mock_exam_process";
     if (pathname === "/practice") return "practice_library";
     if (/^\/listening\/tests/.test(pathname)) return "listening_tests";
@@ -91,6 +92,7 @@
       question_type_catalog: "返回题型专项",
       mock_exam_process: "返回模考流程",
       mock_exam_review: "返回模考复盘",
+      mock_exam_result: "返回成绩",
       task_detail: "返回任务详情",
       practice_library: "返回练习中心",
       listening_tests: "返回剑雅听力",
@@ -354,8 +356,9 @@
 
     const stored = storedContext(win);
     const storedTarget = stored ? cleanLocalPath(stored.targetPath || "", origin, "") : "";
+    const storedSource = stored ? cleanLocalPath(contextUrl(stored, origin), origin, "") : "";
     const isFresh = stored && (Date.now() - Number(stored.capturedAt || 0)) < 4 * 60 * 60 * 1000;
-    if (isFresh && (!storedTarget || storedTarget === currentPath || samePracticeFlow(storedTarget, currentPath))) return stored;
+    if (isFresh && storedSource !== currentPath && (!storedTarget || storedTarget === currentPath || samePracticeFlow(storedTarget, currentPath))) return stored;
 
     const fallback = contextParts(fallbackUrl || settings.moduleRootUrl, origin, settings.moduleRootUrl);
     const exit = contextParts(settings.moduleExitUrl, origin, "/login");

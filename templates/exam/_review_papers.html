@@ -1,0 +1,25 @@
+{% macro review_paper(title, subject, source, section) -%}
+<section class="card review-card mock-review-paper" data-review-subject="{{ subject }}">
+  <header class="review-card__head">
+    <h2>{{ title }}</h2>
+    <div class="review-card__meta">
+      {% if section.submitted %}
+        原始分 <strong>{{ section.correct }}/{{ section.total }}</strong> ·
+        正确率 {{ '%.1f'|format(section.accuracy or 0) }}% ·
+        Band {{ section.band if section.band is not none else '—' }} ·
+        用时 {{ section.duration_text }}
+        {% if section.auto_submitted %}<span class="review-flag">到时自动交卷</span>{% endif %}
+        · 交卷 {{ section.submitted_at_text }}
+      {% else %}
+        <span class="review-muted">尚未提交</span>
+      {% endif %}
+    </div>
+  </header>
+  {% if source %}
+    <p class="mock-review-paper__status" data-review-paper-status role="status">正在加载{{ '听力' if subject == 'listening' else '阅读' }}复盘…</p>
+    <iframe class="mock-review-paper__frame" data-review-paper="{{ subject }}" data-mock-review-paper data-subject="{{ subject }}" src="{{ source }}" title="{{ title }} 原题、作答与解析" referrerpolicy="no-referrer"></iframe>
+  {% else %}
+    <p class="review-empty">本项尚未提交。</p>
+  {% endif %}
+</section>
+{%- endmacro %}

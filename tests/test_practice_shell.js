@@ -67,11 +67,23 @@ test('return labels and stable fallbacks are source-aware', () => {
   assert.equal(shell.sourceModeForPath('/tasks'), 'staff_tasks')
   assert.equal(shell.sourceModeForPath('/student/today'), 'student_today')
   assert.equal(shell.sourceModeForPath('/reading/jijing'), 'reading_jijing')
+  assert.equal(shell.sourceModeForPath('/exam/1/session/example/review'), 'mock_exam_review')
+  assert.equal(shell.sourceModeForPath('/exam/1/session/example/review/reading'), 'mock_exam_review')
+  assert.equal(shell.sourceModeForPath('/exam/1/session/example/reading'), 'mock_exam_process')
   assert.equal(shell.contextUrl({
     sourcePath: '/listening/tests',
     sourceSearchParams: '?status=todo',
     activeTab: 'cambridge-7'
   }, 'http://practice.test'), '/listening/tests?status=todo#cambridge-7')
+})
+
+test('review reload ignores a stored return pointing back to itself', () => {
+  const win = fakeWindow('/exam/1/session/example/review', '')
+  win.location.hash = ''
+  shell.captureListState(win)
+  const context = shell.resolveContext(win, '/exam/1/session/example/result', 'mock_exam_result')
+  assert.equal(shell.contextUrl(context, win.location.origin), '/exam/1/session/example/result')
+  assert.equal(shell.returnLabel(context.sourceMode), '返回成绩')
 })
 
 test('external task and student entry become the module exit without losing the immediate parent', () => {

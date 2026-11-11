@@ -7,6 +7,7 @@ from flask import Flask
 from flask_login import LoginManager, login_user, logout_user
 
 from api.mock_exam_review import mock_exam_review_bp
+from api.mock_exam_student import mock_exam_student_bp
 from models import (
     MockExam,
     MockExamReview,
@@ -69,6 +70,7 @@ class MockExamReviewWorkflowTest(unittest.TestCase):
             return "ok"
 
         self.app.register_blueprint(mock_exam_review_bp)
+        self.app.register_blueprint(mock_exam_student_bp)
         with self.app.app_context():
             db.create_all()
             self.teacher = User(
