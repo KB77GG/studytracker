@@ -1,0 +1,85 @@
+{
+  "checked_at_utc": "2026-11-11T04:19:24.751181+00:00",
+  "scope": "Read-only files, Git, systemd and anonymous GET; no app import or DB access.",
+  "head": "fb5b2747f4428ee5383b763c3cceb0e9f72178a3",
+  "expected_head": "fb5b2747f4428ee5383b763c3cceb0e9f72178a3",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Wed 2026-11-11 12:18:40 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "files": {
+    "api/mock_exam_student.py": {
+      "sha256": "7fd3e29eaaeb116ae2bfccd488b5c06a836330d747187f602e1a5c3e10375ef2",
+      "matches": true
+    },
+    "services/ielts_exam_payload.py": {
+      "sha256": "e56341c3a5d95629e1af1e647efbd71fbbe6a27d619d2e43191701c31b5c4570",
+      "matches": true
+    },
+    "static/css/mock_exam_review.css": {
+      "sha256": "97feb8603105e354bb236fd5e98eed5aa07cc7da0a05cf0bbeebab3da6e7f4ed",
+      "matches": true
+    },
+    "static/css/mock_review_paper.css": {
+      "sha256": "79f544572d5e4847048aea2fdee625a97848af1a233ad83565ae4567549afb27",
+      "matches": true
+    },
+    "static/js/mock_exam_review.js": {
+      "sha256": "5e21fc3c45f3f1ad880c505d93efb62c61d572ee214603353a0402fdda184ecf",
+      "matches": true
+    },
+    "static/js/mock_review_paper.js": {
+      "sha256": "062e5ab70d4352a3b22d36cd893b59afc1585040282a53c55d57479cd2e50ffb",
+      "matches": true
+    },
+    "static/js/practice_renderers.js": {
+      "sha256": "f7d0d33576bab297d93fe8fa2fabb7808507b19627964ed41192bdd4687663b6",
+      "matches": true
+    },
+    "static/js/practice_shell.js": {
+      "sha256": "ea2c85ab6a715f3c1ed20258031d59cb11db870b42fd226b0f3e4d4bf6b77fa0",
+      "matches": true
+    },
+    "static/js/selection-highlight.js": {
+      "sha256": "987d7465604a941b1b26202ad08c83a4338860021859719f1e8c61732cd64882",
+      "matches": true
+    },
+    "templates/exam/_review_papers.html": {
+      "sha256": "26bdb0f6bb74a8f61a5ac1f2bc632a63797a8bce5e6508080e3ba7dfa70fe227",
+      "matches": true
+    },
+    "templates/exam/review.html": {
+      "sha256": "0341656efdf66f1540544f3db4fb6e5cbdf66e9ee32d3588f65b45a6b1c5493b",
+      "matches": true
+    },
+    "templates/listening/test_practice.html": {
+      "sha256": "058e26cea2c535e8ab84d27a4974b689ff51257c1b42a90bf6a6bd13a26d0fdb",
+      "matches": true
+    },
+    "templates/practice/mock_exam_review.html": {
+      "sha256": "69aa6b48ed7d6c8bfc5a29716eef1948340cc779cd4d7ca2ed11f9166006098c",
+      "matches": true
+    },
+    "templates/reading/test_practice.html": {
+      "sha256": "b943bf032d269a7595cc2d7b19c97b5b734854dfbebaae65d290c5036d6354e9",
+      "matches": true
+    },
+    "gunicorn.conf.py": {
+      "sha256": "9f0325750a5d0e460722dc2d28abd786e77f41d7eab49bc2c8e339c63f7977dc",
+      "matches": true
+    }
+  },
+  "warnings_since_restart": 0,
+  "failures": [],
+  "ok": true
+}

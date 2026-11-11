@@ -1,5 +1,12 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-11 — 原题高亮与解析同页复盘已部署
+
+- 按用户授权发布，并按补充要求取消额外原卷按钮：既有模考复盘直接显示原题高亮、保存作答/对错及题下解析；普通刷题复盘坐标修复，“只看错题”可逆，原session与只读隔离保留。
+- 实施树 `/private/tmp/studytracker-review-highlights-20261111`，`codex/review-highlights-20261111`，业务 **fb5b2747f4428ee5383b763c3cceb0e9f72178a3** 已commit/push分支/main并部署；报告与两交接单独 `[skip ci]` 同步，文档HEAD以git log为准。旧桌面main6ded77d2原7modified/23untracked保留，仅更新两交接，旧业务仍仅本机。
+- 83 Python+342 Node通过；最后题号展示增补再验30renderer+4全144套坐标。Chrome两种学生入口、默认原题/高亮/解析、筛选/切换/刷新/返回/history和1440/390px通过。完整命令、四张截图和证据见 `docs/reviews/review-highlights-20261111/README.md`；临时预览已停。
+- 分支CI42957976383/main CI42958318865整体success且三测试job成功，存量advisory lint failure保留；Deploy42958318830成功。生产fb5b2747、12:18:40 CST起active、单worker/gthread6/5002、重启/告警0；15文件SHA及公网7静态SHA一致，匿名浏览器只读冒烟无异常/写请求。无生产学生访问、schema/人工DB写入/小程序发布。原浏览器刷新可见，14天本地标记策略不变，真机微信/真实学生完整旅程未验。
+
 ## 2026-11-07 — 电脑网页听力上下行错位追加修复
 
 - 独立树be9b122f基线修复19题尾句错行、57静态行拆分、5前导重复及32表单错误分栏；980px半宽/双空对齐同步修正。线上验收另补C18T1反偷猎法规原源断词，仅精确静态组合合行。

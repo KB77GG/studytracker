@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-11 刷题/模考原题高亮与解析同页复盘已部署
+
+- 用户明确要求“修好就部署”，并确认不要另加原卷按钮。最终两个既有学生模考复盘入口直接展示听力/阅读原题、高亮、学生答案、对错和题下解析；保留写作与教师反馈及可逆的“只看错题”。普通刷题提交/刷新复盘亦保留原高亮。早期新增“查看原卷”按钮的草案已替换，不是当前行为。
+- 实施树 `/private/tmp/studytracker-review-highlights-20261111`，分支 `codex/review-highlights-20261111`，基线 **a673a613786a397b855c2feff9c74ddca5e6f2ff**，业务HEAD **fb5b2747f4428ee5383b763c3cceb0e9f72178a3** 已commit/push任务分支与main并部署。29个业务/测试/CI文件已提交；报告目录 `docs/reviews/review-highlights-20261111/` 与两交接随后独立 `[skip ci]` 提交同步，最终文档HEAD以git log为准，提交后实施树应clean，生产保持业务HEAD。修复源码及已提交报告不再仅本机，其他电脑可从远端取得。
+- 旧资料树 `/Users/zhouxin/Desktop/studytracker` 仍 **main@6ded77d24586327ad94e151e172ae4811b4a2eed**，开工behind111；原7 modified（design-qa.md、两交接、static/style.css、templates/listening/index.html、templates/listening/test_practice.html、templates/login.html）/23 untracked顶层入口完整保留，精确旧脏路径在报告source-state.json。本轮该树仅更新两交接，未pull/切分支/改业务；旧树不含修复，不可从它发布，其他未提交业务仍仅本机。其他既有worktree未改。
+- 根因：解析卡外围缩进/动态答案工具改变高亮源文本坐标；模考总复盘未还原原题DOM与原session标记路径。现trim卡片并整体排除动态答案工具，原题使用同源自动高度工作区直接展开，保持144套原坐标。保存答案/成绩直接复用，不新增判分；只读页不保存草稿/编辑高亮/初始化导航shell，不增加子页history。整场与科目均交卷才开放；token/subject/payload校验、no-store/no-referrer保留。父子消息核对origin+window，筛选可逆、混合共享题干保留，高度有界；原阅读题型推断差异、缺timer节点和复盘返回自身一并修复。
+- 验证：主回归 **83 Python +342 Node**通过；最后补解析实际显示题号后renderer **30/30**和全144套坐标 **4/4**另验通过，不把新增一条混计前轮342。144套（72听/72读）普通→复盘、模拟→原题复盘源文本逐字一致。定向Ruff、JS语法、Python3.10 AST、dictation smoke与diff检查通过。完整精确命令/日志/脚本见报告README；主命令为 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python -W ignore::DeprecationWarning -W ignore::ResourceWarning -m unittest tests.test_practice_highlight_coordinates tests.test_selection_highlight_contract tests.test_ielts_exam_payload tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_mock_exam_review_workflow tests.test_practice_history tests.test_question_type_practice_contract tests.test_question_type_review tests.test_mock_exam_runtime -q` 及 `node --test tests/*.js`。
+- 真Chrome合成内存库：C18T1原考试页标注→既有总复盘无需按钮直接恢复，两科正确/错误作答与解析默认可见；只看错题切换、换部分/刷新、两个学生入口、返回成绩及history数量通过。1440/390px无横向溢出/内嵌纵向裁切，四张截图目视确认；页面异常和作答/草稿提交请求均0。测试只用合成学生/已交卷状态，预览缺真实音频不验播放。5097预览及浏览器已关闭。
+- 分支CI **42957976383**、[主线CI42958318865](https://github.com/KB77GG/studytracker/actions/runs/42958318865)均success，test/account-provisioning/task-planner三测试job成功；存量advisory lint failure不等于全仓lint通过。[Deploy42958318830](https://github.com/KB77GG/studytracker/actions/runs/42958318830) success。
+- 生产 `/root/apps/studytracker` **fb5b2747**，2026-11-11 **12:18:40 CST**起active/running，tracked clean/113 untracked，NRestarts0、验收时重启以来warning以上0；workers1/gthread/threads6/127.0.0.1:5002不变。14运行文件+gunicorn配置SHA全一致，公网7个JS/CSS均200且SHA一致。公网Chrome普通听读原页高亮→本地DOM复盘恢复、假token复盘404、无页面异常/写请求；私人学生模考页未在生产登录读取，由本地权限/浏览器测试及生产一致文件验证覆盖。证据release-audit.json/public-assets.json/production-browser.json。
+- 网页前后端已发布；无schema/依赖迁移、人工生产数据库写入、成绩重算或外部服务设置变更，小程序未改/未上传/提审/发布。服务器验收仅Git/文件/systemd/匿名HTTP，不import app、不查学生表；本次未调用付费模型。
+- 边界与下一步：高亮仍存原浏览器localStorage，沿用14天清理，无法恢复已清理标记或跨设备同步；学生用原作答浏览器刷新/重开既有复盘即可。未跑全仓Python，未测真实学生完整交卷、真机微信长按或全套音频。当前无发布阻塞；后续反馈按试卷/题号和原浏览器状态复现，不必重复部署，不修改历史成绩。先核Git和本节生产HEAD，避免从旧资料树发布。
+
 ## 2026-11-07 电脑网页听力上下行错位追加修复
 
 - 用户确认发生在电脑网页，具体题号不记得；延续已明确授权的剑桥修复/部署。上一轮结构核查未覆盖全部视觉换行，本轮真实线上复现 C13T1 Q35–39 句尾移到后题、C18T1 在980px时半宽空栏及姓名/年份拆行。

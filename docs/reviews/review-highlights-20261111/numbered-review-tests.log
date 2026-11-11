@@ -1,0 +1,38 @@
+✔ Cambridge 7 Test 2 Q4-Q8 become ordered semantic form fields (3.621041ms)
+✔ form renderer keeps one control per question and strips OCR question-number debris (2.311791ms)
+✔ continuous notes keep static lines with their section instead of making question cards (1.839583ms)
+✔ empty per-question titles fall back to the complete collect stem (1.941542ms)
+✔ empty titles also recover prompts split into paper-form columns (0.581333ms)
+✔ trailing source whitespace does not hide a collect stem (0.614084ms)
+✔ complete paper-form titles are not repeated as trailing or misplaced facts (1.076959ms)
+✔ same text in a different source cell remains visible (0.164375ms)
+✔ context keeps legal items in source order when another cell is suppressed (0.239959ms)
+✔ repeated context indexes emit once while equal text in another cell remains visible (0.188084ms)
+✔ label candidates with trailing values keep the complete source fact (2.382584ms)
+✔ decorated pure labels keep JFDR6 section ownership and order (1.047917ms)
+✔ legitimate adjacent-column facts remain visible (1.416625ms)
+✔ all form fixtures omit same-row title prefixes from standalone facts (109.529958ms)
+✔ all form-completion fixtures map every control to a source stem (100.547833ms)
+✔ shared multi-blank form stems render once with controls in placeholder order (2.262917ms)
+✔ Cambridge 18 Q33-Q34 keep separate complete source stems and one input each (0.712167ms)
+✔ form rows join without array separators around shared stems (0.127625ms)
+✔ shared form cluster invariant covers listening data and excludes reading forms (70.823125ms)
+✔ adjacent shared clusters retain a shared direct label once in source order (0.757208ms)
+✔ static facts and contexts never emit one source cell more than once (99.491584ms)
+✔ matching and map renderers expose dedicated workspaces without repeated option banks (0.176792ms)
+✔ type 8 without a shared option bank remains a completion task (0.147125ms)
+✔ word-bank summaries with complete inline placeholders keep their source stem (0.057458ms)
+✔ all corpus word-bank completion stems bypass the row-matching renderer (61.255167ms)
+✔ all catalogued ZYZ complete placeholder option stems keep one inline control per question (62.858583ms)
+✔ review cards use explicit textual status in addition to color (0.196417ms)
+✔ review cards state when frozen legacy questions have no explanation or evidence (0.040208ms)
+✔ expanded review cards identify the displayed question number instead of its internal id (0.032625ms)
+✔ review cards render the reading corpus array form of central sentences (0.029333ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 600.738333
