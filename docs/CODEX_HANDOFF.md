@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-11（下午）雅思写作 AI 试用工具：Flash / Pro 对照的完整执行包已交给用户转 Codex（脚本 + 说明，未改产品代码，未调用真实模型）
+
+- **用户要求**：把 IELTS 官方 2023 样卷 PDF 加入参考，并“把完整的要发给 Codex 的东西都给我，我来让他执行”。
+- **执行说明**：`docs/design/ielts-writing-ai-model-comparison-plan-20261110/codex-run.md`（范围与上限、离线复核、数据放置、官方样卷转录规则、彩排、两阶段真实运行、盲评、判定、回传清单）。同目录新增三个脚本：
+  - `run_comparison.sh`：两个模型按组轮流先跑；每次运行用 `--max-calls` 硬限最坏次数；开始前检查“本阶段已用 + 剩余最坏 ≤ CONFIRM_CAP”，超出即拒绝；中断后重跑同一条命令可续跑（未完成目录改名保留并计入已用）；每组生成 `realcheck-compare --allow-model-change --blind`；`DRY=1` 用演示模型彩排；`STAGE=vision` 跑带题图的 Task 1（未配识图时拒绝）。兼容 macOS bash 3.2。
+  - `summarize_comparison.py`：生成只含数字和样本 id 的 `summary.md / summary.json`（可提交）。
+  - `tally_blind.py`：统计填好的盲评表（正确 / ① / ② / ③ / 不确定，④ 与其他漏报按条数），默认只算每篇第一次运行，写 `blind_tally.json`。
+- **上限（待用户确认数字后才可真实运行）**：第一阶段 224 次文字请求（开发集 56、学生作文 8、留出集 Task 2 32、排序集 40、低分段 48、官方样卷 40；官方样卷未转录时 184）；第二阶段（识图配好后）留出集 Task 1 16 次 + 2 次识图。合计 240 + 2，粗估 8–10 元、最坏约 15 元。旧 B 授权由学生作文组覆盖，不再单独执行。
+- **官方样卷**：5 篇 Task 2 考生答卷（2A：官方 4 / 6.5 / 8.5；2B：5.5 / 7.5），手写扫描。Claude 逐字转录时输出被 API 内容过滤拦截（整篇复制出版物），未再尝试；数据包里是不含正文的模板 `official_template.jsonl`（题目由 pdftotext 从 PDF 文字层提取、官方总分、页码、分组），由 Codex 按 `codex-run.md` 第 3 节规则转录为 `official.jsonl`；文件不存在时脚本自动跳过该组。限制：只有总分；答卷流传广，模型可能见过。
+- **数据包** `iwa-holdout-20261111b.zip`（sha256 `e5c7c9f08cc0f76f347a6c7dfae2eb88eda26e6311b919cfcefca7d55fe301db`，已发给用户，不进 Git）：留出集拆成 `holdout_rated_t2.jsonl`（4 篇）和 `holdout_rated_t1.jsonl`（2 篇 + `img/`），另含 `holdout_ordering.jsonl`、`holdout_lowband.jsonl`、`teacher.jsonl`、`official_template.jsonl`；各文件 sha256 列在 `codex-run.md` 第 2 节。
+- **验证（Claude 侧，演示模型）**：用数据包 + 占位转录稿完整彩排两个阶段：14 次运行全部退出码 0，调用数与上限一致（每次评价 1 次调用；Task 1 Flash 2 次识图、Pro 0 次并沿用识别结果），7 组对照都生成；重跑全部跳过；真实模式下上限 100 时在任何调用前拒绝；缺单价时拒绝；空作文模板被 `load_samples` 拒绝；盲评计数在随机填写的表上正确映射回两边。`summary.md / summary.json` 中除样本 id 外不含作文词句。脚本 ruff、black、`bash -n` 通过。业务代码未变（`3ed1f59`），415 项测试不受影响。
+- **状态**：只改 `docs/design/ielts-writing-ai-model-comparison-plan-20261110/`（新增 `codex-run.md`、三个脚本，README 第 10 节、`lowband.md` 补一段）和两份交接，推 `claude/ielts-writing-ai-trial`；未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。
+- **下一步（Codex）**：按 `codex-run.md` 先离线复核和彩排，再请用户确认上限数字后跑第一阶段；识图配好后跑第二阶段；盲评后按计划第 5 节判定，回传只含数字的结果目录。
+
 ## 2026-11-11 雅思写作 AI 试用工具：用户授权四组对照一起执行；新增低分段合成作文组（待用户确认是否并入本批）；识图尚未配置（仅文档与本地数据，未改代码、未调用真实模型）
 
 - **用户答复（2026-11-11）**：① 识图“还没配置，稍后处理”；② “授权单位就是全部一起”；③ 暂时没有低分段作文，让 Claude “搜索并总结，然后创造几篇对应分数段的”。
