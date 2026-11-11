@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12 写作批次二次复核：原预算缺陷关闭，5 个 P2 仍需修复（无真实调用）
+
+- **工作树与源码**：主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原 7 modified / 23 untracked 顶层入口保留；本轮只增 `docs/design/iwa-batch-recheck-20261111/` 与两交接。本机彩排包装器 `tmp/iwa-batch-recheck-20261111/dry_run.py` 被 Git 忽略。独立审阅树 `/private/tmp/studytracker-iwa-holdout-review-20261111`，分支 `codex/iwa-holdout-review-20261111`，从 clean 7b222c8c 快进到 **d84c412a8513a049d4b3dfc6e6f29a170f741236**（业务 **50d557fdc08a38670d2f3bd8be30692cd86bd65b**）。89 工具文件组合 SHA **dff5eaaf190f17b3576d458b3e0e05967151ad48ca52e8faf53a9e595fbbd656** 与提交一致，产品未改；审阅提交后只变文档/探针。旧47ccd240与817c4c4b工作树未操作。
+- **原修复已复验**：持久请求前预留/fsync、未知请求计数、正常双启动互斥、子进程被杀后同上限拒绝、识图成功/失败冻结且每图一次、任意图失败先停文字、评价失败过半停机、评委同集合、排序端点缺失null、历史账本成本/分数白名单、原盲评证据缺口和非整数拒绝都通过。没有再观察到超过总请求上限。
+- **剩余 5 个 P2**（主审均复跑合成证据）：①批次父进程被杀后realcheck仍在跑但锁已释放，第二批可重叠执行同一组，56正常替身请求变70、dev/Pro14变28，账本70且仍≤112，不能称超预算；②续跑不固定输入，改作文后先发2个Pro请求才比较失败，已完成批次则直接沿用旧报告exit0；③盲评空表/删整侧/漏报数改“参考”可错误complete=true；④同一改列建议同时列入两条待判行，模型各1条同样错误可统计2比1；⑤正常续跑覆盖已填盲评、丢判断备注，旧tally仍complete=true。修法分别为持锁覆盖子进程生命周期、请求前校验完整输入清单、预期行ID/类型校验、一条来源反馈一次计数、人工文件不可覆盖且tally绑定表/映射。另P3：单独realcheck失败图的诊断字段在冻结重用时不一致，实际消息相同却compare拒绝；不影响新batch成功路径。
+- **精确验证**：主树 `.venv/bin/python docs/design/iwa-batch-recheck-20261111/run_offline_tests.py` → **435 Python + 8 Node**（Python3.13.3，约25秒）；独立树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`63文件、`node --check tools/ielts_writing_ai/static/iwa.js`、`git diff --check`通过。作者verify/batch_probe.py5/5、metrics_blind_probe_fixed.py6/6；新增runner_parent_lock_probe、metrics_resume与metrics_independent主审复跑，15正例通过但反例成立；source_probe34/37，两P2续跑断言和一P3失败。精确命令和原始数字见新README/各专项说明。未重复多locale、Python3.10、全历史probe或浏览器。
+- **实际附件fake彩排**：`.venv/bin/python tmp/iwa-batch-recheck-20261111/dry_run.py --repo /private/tmp/studytracker-iwa-holdout-review-20261111`，13/13检查通过，第一阶段92文字、第二阶段8文字+2识图、13运行目录/6对照组，两阶段续跑均0新增。子进程环境清IWA/代理、明确不存在.env、所有网络阻断、未读取Key；日志UTF8合法。私有原始输出仅在 `/Users/zhouxin/iwa-compare-dry-20261111-batch-recheck/`，旧彩排目录未覆盖。附件6JSONL校验和未变、official.jsonl仍不存在，官方5篇空模板未转录；机构原PDF准确性仍未独立核实。
+- **共享/发布状态**：新目录只包含脱敏报告、数字、合成探针和套件日志，与两交接按既有授权仅同步功能分支；最终审阅HEAD见git log/本机确认条。私有作文/图/盲评/映射/原始演示和ignored包装器不提交；8词片段扫描无私有正文/评语匹配、无Key形态。新增真实模型请求 **0**，没有配置修改、main合并、部署、生产或数据库操作，小程序未上传/提审/发布。
+- **下一步**：Claude按新报告修5项P2后复验，不改提示词/评分阈值来绕过执行器缺陷。通过后才确认新付费范围：第一阶段无官方184/有官方224，第二阶段16文字+2识图；本轮没有新付费授权/账本。旧B已并入学生组，不另跑。正常彩排通过不能代替异常续跑和盲评持久性验收。
+
 ## 2026-11-11（晚）雅思写作 AI 试用工具：修复执行包复核 7b222c8 的阻断项（已推功能分支；未调用真实模型，没有新的付费授权）
 
 - **输入**：复核 `7b222c8`（`docs/design/iwa-holdout-execution-review-20261111/`）：bash 执行脚本只在内存 / 最终报告里记账，中断后续跑 189/184、并发启动 212/184；识图失败会重读（4 次识图），且 Flash 与 Pro 可能看到不同的图信息；全部评价失败仍 exit 0 并写 `.done`；Mac bash 3.2 下中文紧邻裸变量输出非法 UTF-8；盲评表缺证据；评委对比分母不一致；排序跨度在端点缺失时偷换中间档；盲评计数把 `0.5` 截成 0；汇总漏算已归档尝试、整份复制 teacher 对象。

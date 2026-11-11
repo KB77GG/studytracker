@@ -1,0 +1,485 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-holdout-review-20261111",
+  "paid_calls": 0,
+  "network_forbidden": true,
+  "checks": [
+    {
+      "name": "teacher_metadata_absent_from_messages_and_context",
+      "actual": false,
+      "expected": false,
+      "ok": true
+    },
+    {
+      "name": "labels_do_not_change_model_messages",
+      "actual": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "expected": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "ok": true
+    },
+    {
+      "name": "models_and_repeats_receive_identical_messages",
+      "actual": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "expected": [
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f",
+        "73c39c8fdc65d111b2f14bb75ffb5e712609f8db1744fb79ac642f32fc9f0a4f"
+      ],
+      "ok": true
+    },
+    {
+      "name": "teacher_score_retained_locally",
+      "actual": 8.5,
+      "expected": 8.5,
+      "ok": true
+    },
+    {
+      "name": "flash.options",
+      "actual": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "expected": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "pro.options",
+      "actual": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "expected": [
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        },
+        {
+          "thinking": "high",
+          "max_tokens": 32000,
+          "timeout": 300,
+          "json_mode": true,
+          "retries": 0
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "ready_image_reused_for_both_repeats",
+      "actual": 2,
+      "expected": 2,
+      "ok": true
+    },
+    {
+      "name": "ready_image_read_once",
+      "actual": 1,
+      "expected": 1,
+      "ok": true
+    },
+    {
+      "name": "ready_image_pro_zero_vision_calls",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "ready_image_messages_equal",
+      "actual": [
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd",
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+      ],
+      "expected": [
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd",
+        "70e5fe0568b4b577491f0a21084ad2b43ee78d54339a5eaf299e4c592da59abd"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ready_image_compare_accepts",
+      "actual": 2,
+      "expected": 2,
+      "ok": true
+    },
+    {
+      "name": "unreadable_then_readable_reads_once",
+      "actual": 1,
+      "expected": 1,
+      "ok": true
+    },
+    {
+      "name": "unreadable_result_frozen_across_repeats",
+      "actual": [
+        "failed",
+        "failed"
+      ],
+      "expected": [
+        "failed",
+        "failed"
+      ],
+      "ok": true
+    },
+    {
+      "name": "unreadable_result_frozen_across_models",
+      "actual": [
+        "failed",
+        "failed"
+      ],
+      "expected": [
+        "failed",
+        "failed"
+      ],
+      "ok": true
+    },
+    {
+      "name": "unreadable_actual_messages_identical",
+      "actual": [
+        "1ed867df0a171e5469ca01779372114f855f0b6006a9028aa3ff5961a04fcad5",
+        "1ed867df0a171e5469ca01779372114f855f0b6006a9028aa3ff5961a04fcad5"
+      ],
+      "expected": [
+        "1ed867df0a171e5469ca01779372114f855f0b6006a9028aa3ff5961a04fcad5",
+        "1ed867df0a171e5469ca01779372114f855f0b6006a9028aa3ff5961a04fcad5"
+      ],
+      "ok": true
+    },
+    {
+      "name": "unreadable_frozen_comparison_accepts_identical_messages",
+      "actual": [
+        "两次运行的条件不同，不能对照：同名样本的题目、作文或题图识别结果不同：synthetic-chart"
+      ],
+      "expected": [],
+      "ok": false
+    },
+    {
+      "name": "flash.inherited_env_isolated",
+      "actual": [
+        "fake",
+        "fake-flash",
+        "high",
+        32000,
+        300.0,
+        "fake"
+      ],
+      "expected": [
+        "fake",
+        "fake-flash",
+        "high",
+        32000,
+        300,
+        "fake"
+      ],
+      "ok": true
+    },
+    {
+      "name": "pro.inherited_env_isolated",
+      "actual": [
+        "fake",
+        "fake-pro",
+        "high",
+        32000,
+        300.0,
+        "fake"
+      ],
+      "expected": [
+        "fake",
+        "fake-pro",
+        "high",
+        32000,
+        300,
+        "fake"
+      ],
+      "ok": true
+    },
+    {
+      "name": "paid_request_config_forced_without_any_request",
+      "actual": [
+        "deepseek",
+        "deepseek-v4-pro",
+        "https://api.deepseek.com/chat/completions",
+        "high",
+        32000,
+        300.0
+      ],
+      "expected": [
+        "deepseek",
+        "deepseek-v4-pro",
+        "https://api.deepseek.com/chat/completions",
+        "high",
+        32000,
+        300
+      ],
+      "ok": true
+    },
+    {
+      "name": "poisoned_data_dir_not_created",
+      "actual": false,
+      "expected": false,
+      "ok": true
+    },
+    {
+      "name": "text_cap_blocks_before_second_dispatch",
+      "actual": [
+        1,
+        "ledger_cap"
+      ],
+      "expected": [
+        1,
+        "ledger_cap"
+      ],
+      "ok": true
+    },
+    {
+      "name": "vision_cap_zero_blocks_before_dispatch",
+      "actual": [
+        0,
+        "ledger_cap"
+      ],
+      "expected": [
+        0,
+        "ledger_cap"
+      ],
+      "ok": true
+    },
+    {
+      "name": "authorized_cap_change_has_history",
+      "actual": [
+        8,
+        9
+      ],
+      "expected": [
+        8,
+        9
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_price_condition_refused",
+      "actual": 2,
+      "expected": 2,
+      "ok": true
+    },
+    {
+      "name": "images_only_failure_stops_stage",
+      "actual": 5,
+      "expected": 5,
+      "ok": true
+    },
+    {
+      "name": "images_only_failure_sends_zero_text",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "images_only_failure_reads_once",
+      "actual": 1,
+      "expected": 1,
+      "ok": true
+    },
+    {
+      "name": "failed_stage_ledger_categories",
+      "actual": [
+        0,
+        1
+      ],
+      "expected": [
+        0,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "failed_stage_has_no_done",
+      "actual": [],
+      "expected": [],
+      "ok": true
+    },
+    {
+      "name": "failed_reading_saved_to_version2_file",
+      "actual": [
+        2,
+        "failed"
+      ],
+      "expected": [
+        2,
+        "failed"
+      ],
+      "ok": true
+    },
+    {
+      "name": "failed_image_resume_refused_before_request",
+      "actual": [
+        2,
+        [],
+        1
+      ],
+      "expected": [
+        2,
+        [],
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "successful_vision_stage_counts",
+      "actual": [
+        0,
+        4,
+        1
+      ],
+      "expected": [
+        0,
+        4,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "unchanged_resume_no_calls",
+      "actual": [
+        0,
+        [],
+        0
+      ],
+      "expected": [
+        0,
+        [],
+        0
+      ],
+      "ok": true
+    },
+    {
+      "name": "completed_resume_refuses_changed_source",
+      "actual": 0,
+      "expected": 2,
+      "ok": false
+    },
+    {
+      "name": "completed_resume_no_paid_calls",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "partial_setup_stopped_after_flash",
+      "actual": [
+        3,
+        2,
+        1
+      ],
+      "expected": [
+        3,
+        2,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "partial_resume_refuses_changed_source_before_calls",
+      "actual": [
+        6,
+        2
+      ],
+      "expected": [
+        2,
+        0
+      ],
+      "ok": false
+    }
+  ],
+  "passed": 34,
+  "total": 37,
+  "observations": {
+    "failed_reading_comparison": {
+      "error": [
+        "两次运行的条件不同，不能对照：同名样本的题目、作文或题图识别结果不同：synthetic-chart"
+      ],
+      "first_description": "识图模型原始输出：The uploaded image is unreadable.",
+      "repeat_description": null,
+      "pro_description": null
+    },
+    "failed_stage": {
+      "exit": 5,
+      "launched": [
+        "rated_t1-images"
+      ],
+      "text_sent": 0,
+      "text_reserved": 0,
+      "vision_reserved": 1,
+      "stderr": "这些题图没有得到可用的识别结果：synthetic-chart\n停止：rated_t1-images 停止：有题图没有得到可用的识别结果\n"
+    },
+    "failed_stage_resume": {
+      "exit": 2,
+      "launched": [],
+      "text_sent": 0,
+      "text_reserved": 0,
+      "vision_reserved": 1,
+      "stderr": "停止：识图请求会超过每张图一次，不开始\n"
+    },
+    "completed_input_changed": {
+      "exit": 0,
+      "launched": [],
+      "text_sent": 0,
+      "text_reserved": 4,
+      "vision_reserved": 1,
+      "stderr": ""
+    },
+    "partial_input_changed": {
+      "exit": 6,
+      "launched": [
+        "rated_t1-pro"
+      ],
+      "text_sent": 2,
+      "text_reserved": 4,
+      "vision_reserved": 1,
+      "stderr": "停止：rated_t1 两次运行不能对照：两次运行的条件不同，不能对照：同名样本的题目、作文或题图识别结果不同：synthetic-chart、synthetic-chart#r2；实际发送给评价模型的输入不同：synthetic-chart、synthetic-chart#r2\n"
+    }
+  }
+}

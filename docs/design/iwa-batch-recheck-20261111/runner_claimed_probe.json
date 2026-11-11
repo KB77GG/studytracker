@@ -1,0 +1,57 @@
+{
+  "network_calls": 0,
+  "private_files_read": false,
+  "killed_and_resumed": {
+    "first_exit": 3,
+    "first_message": [
+      "停止：dev-flash 停止：进程被信号 9 终止（已发出的请求已记在账本里）"
+    ],
+    "sent_before_kill": 5,
+    "ledger_after_kill": {
+      "reserved": 5,
+      "ok": 4,
+      "failed": 0,
+      "unknown": 1
+    },
+    "restart_with_same_cap_exit": 2,
+    "restart_with_same_cap_message": [
+      "停止：已用 + 剩余最坏 = 117，超过授权上限 112，不开始"
+    ],
+    "sent_by_refused_restart": 0,
+    "restart_with_cap_plus_used_exit": 0,
+    "total_sent": 61,
+    "ledger_total": 61,
+    "cap_respected": true
+  },
+  "concurrent_launch": {
+    "exits": [
+      0,
+      2
+    ],
+    "refusal": [
+      "停止：另一个批次正在使用 /var/folders/ly/2q45cg3x51zdj5g09p6p56gh0000gn/T/iwa-batch-probe-sz41yla4/concurrent，不能同时运行"
+    ],
+    "total_sent": 56,
+    "cap": 112,
+    "cap_respected": true
+  },
+  "all_invalid": {
+    "exit": 4,
+    "message": [
+      "停止：dev-flash 停止：最终失败超过计划篇数的一半"
+    ],
+    "run_dirs": [
+      "dev-flash"
+    ],
+    "done_markers": [],
+    "total_sent": 28
+  },
+  "checks": {
+    "kill_counted_on_restart": true,
+    "killed_child_stops_batch": true,
+    "resume_within_cap_plus_used": true,
+    "second_batch_refused": true,
+    "invalid_stops_first_run": true
+  },
+  "passed": true
+}
