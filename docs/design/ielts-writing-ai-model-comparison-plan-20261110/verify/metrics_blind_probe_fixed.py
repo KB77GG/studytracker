@@ -140,10 +140,14 @@ def main():
     included = {name: token in sheet for name, token in fields.items()}
     checks["blind_evidence_complete"] = all(included.values())
 
-    minimal_key = {"samples": {"one": {"甲": "a", "乙": "b"}}}
+    # Since 76276d9 every row has an id and the key lists the expected rows.
+    minimal_key = {
+        "samples": {"one": {"甲": "a", "乙": "b"}},
+        "rows": [{"id": "one/甲/01", "sample": "one", "side": "甲", "kind": "count"}],
+    }
 
     def count_cell(value):
-        sheet = f"## one\n### 甲\n| 其他漏报 | — | — | — | {value} |  |\n"
+        sheet = f"## one\n### 甲\n| one/甲/01 | 其他漏报 | — | — | — | {value} |  |\n"
         return blindtally.tally(sheet, minimal_key)
 
     cells = {cell: count_cell(cell) for cell in ("2", "", "0.5", "1–2", "-1")}

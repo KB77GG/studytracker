@@ -1,5 +1,19 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12 雅思写作 AI 试用工具：修复批次复核 76276d9 的 5 个 P2 与 1 个 P3（已推功能分支；未调用真实模型，没有新的付费授权）
+
+- **输入**：复核 `76276d9`（`docs/design/iwa-batch-recheck-20261111/`）。原预算、识图冻结、失败停机已确认修好；剩余 P2：① 杀掉批次父进程后子进程仍在跑却不持锁，续跑重复执行（56→70 次，未超总上限）；② 续跑不核对数据，改稿后先花请求才在对照时发现、全部完成时直接沿用旧报告；③ 空表 / 整侧缺失 / 漏报行改“参考”仍算完整；④ 改列建议在“可选优化”和“改列”两处各计一次（A=2、B=1）；⑤ 续跑重写已填好的盲评表，旧计数仍显示完整。P3：冻结的失败识图丢了诊断文字，单独运行时对照误判输入不同。
+- **业务提交 `45072df`**：
+  - `batch.py`：子进程 `pass_fds` 继承批次锁；子进程写的 `exit_status.json`（0）在续跑时被沿用并补 `.done`。`manifest()` 对每组全部样本字段 + 题图字节求指纹（不含路径）；`check_batch()` 在信任任何 `.done`、发出任何请求之前核对 `batch-<阶段>.json` 的 `inputs`，不同或消失即退出码 2；新增的组（官方样卷）首次出现时记录。每个运行目录写 `inputs.sha256`，沿用已完成运行时必须一致。冻结识图文件的 sha256 记在 `frozen_images`，续跑核对。已有 `blind_key.json` 的对照不再重写。演示彩排未给 `--cap` 时不再把每次的“所需量”记成新上限。汇总里盲评计数与当前表格指纹不符时显示“已过期”。
+  - `realcheck_compare.py`：改列（`from_type`）的建议只进 `reclassified`，那一行带原说明和同段支撑；盲评表第一列为行编号，`blind_key.json` 增加 `rows`（编号、样本、侧、类型 judged / context / count）；`write()` 先写对照再最后写盲评表和对应关系，已有盲评文件时拒绝（CLI 退出码 2）。
+  - `blindtally.py`：按 `rows` 清单逐行核对（缺行、重复、未知行、整侧缺失、待判行改“参考”、漏报行位置被改都算不完整；旧版无清单的对应关系也算不完整）；结果记录 `sheet_sha256`、`key_sha256`，`current()` 判断是否过期。
+  - `realcheck.py`：冻结的失败识图保留诊断文字；CLI 结束时写 `exit_status.json`。
+- **文档提交**：`codex-run.md` 第二次修订（数据固定、批次被杀时的行为、不覆盖盲评、编号列不可删改、计数过期）；`verify/` 新增复核方三个探针的适配副本（只改内部接口调用、表格列位置、已完成运行的数据指纹，用例和预期不变），`metrics_blind_probe_fixed.py` 改为带编号的表格格式。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **445 OK**（另两种 locale 条件同样 OK）；新增 `test_batch_resume_20261112.py`（7 项，含真实进程测试：杀父进程后子进程持锁、第二批次退出码 2 且无新请求、子进程结束后续跑沿用其结果、总请求 56；数据 / 评委分数 / 题图 / 冻结识图改动在续跑前拒绝且账本不变；填好的盲评表续跑后逐字节不变、之后改表则汇总“已过期”；改列建议只一行；失败识图文字一致且可对照），`test_metrics_blind_20261111.py` 计数用例改为编号格式并加缺行 / 整侧 / 重复 / 旧版对应关系 / 重复运行用例。Node 8、ruff、black 69 文件、`git diff --check` 通过。复核方探针：`runner_parent_lock_probe.py` 原样运行——子进程存活期间锁不可得、第二批次退出码 2、无重叠、总数 28（dev-flash 14 + dev-pro 14，不再重复）；`source_probe.py`、`metrics_independent.py`、`metrics_resume.py` 因调用已改名的内部接口原样无法运行，适配副本分别 **37/37**、**18/18**（含原两项 findings 改为正向检查）、全部字段为修复后结果（盲评表与计数保留）。`verify/batch_probe.py` 5/5、`verify/metrics_blind_probe_fixed.py` 6/6。其余历史探针退出码与上一轮相同。用真实数据包彩排两阶段各两次：第二次全部跳过、账本不增（main 92 次）。
+- **未变**：提示词 `iwa-2026-11-10.12`、评价流程、数据包 `iwa-holdout-20261111b.zip`、官方样卷空模板。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。
+- **授权状态**：没有新的付费授权；第一阶段 224（官方样卷未转录时 184）、第二阶段 16 文字 + 2 识图，待复验通过后由用户确认。
+- **下一步**：ChatGPT 复核 `45072df` 与 `verify/` 下的探针；通过后由用户确认上限，Codex 按 `codex-run.md` 执行。
+
 ## 2026-11-12 写作批次二次复核：原预算缺陷关闭，5 个 P2 仍需修复（无真实调用）
 
 - **工作树与源码**：主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原 7 modified / 23 untracked 顶层入口保留；本轮只增 `docs/design/iwa-batch-recheck-20261111/` 与两交接。本机彩排包装器 `tmp/iwa-batch-recheck-20261111/dry_run.py` 被 Git 忽略。独立审阅树 `/private/tmp/studytracker-iwa-holdout-review-20261111`，分支 `codex/iwa-holdout-review-20261111`，从 clean 7b222c8c 快进到 **d84c412a8513a049d4b3dfc6e6f29a170f741236**（业务 **50d557fdc08a38670d2f3bd8be30692cd86bd65b**）。89 工具文件组合 SHA **dff5eaaf190f17b3576d458b3e0e05967151ad48ca52e8faf53a9e595fbbd656** 与提交一致，产品未改；审阅提交后只变文档/探针。旧47ccd240与817c4c4b工作树未操作。
