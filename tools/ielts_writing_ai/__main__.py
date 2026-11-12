@@ -203,7 +203,7 @@ def cmd_realcheck(settings, args) -> int:
     print(
         f"模型：{settings.llm_provider} / {settings.llm_model}"
         + (
-            f"（评价用 {settings.evaluate_model}）"
+            f"，评价用 {settings.evaluate_model}"
             if settings.evaluate_model and settings.evaluate_model != settings.llm_model
             else ""
         )
