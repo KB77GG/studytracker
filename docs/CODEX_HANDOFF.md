@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12（晚）雅思写作 AI 试用工具：评价改用 deepseek-v4-pro；官方样卷组（Pro 单模型）执行说明（已推功能分支；未调用真实模型）
+
+- **用户决定（2026-11-12）**：看过第一阶段结果后“可以换”——试用的评价改用 Pro；“分数5-6我暂时没有，就用官方的吧”——用官方样卷代替低分段真实作文；要老师抽查的 10 条。
+- **业务提交 `f2509aa`、`4097aa2`**：新增 `IWA_EVALUATE_MODEL`（只影响原稿评价，同一服务商 / 地址 / Key，只换请求里的模型名；不填用 `IWA_LLM_MODEL`；精修和改写没有对照过，继续用 Flash）。`ChatClient` / `FakeClient` 支持单次请求指定模型；生成记录、页面“模型”、realcheck 调用记录与账本记实际模型；realcheck 报告的 `model` 取评价模型；`check` 输出 `evaluate_model`。评价思考超时默认 300 → **420 秒**（Pro 最长 255 秒）。对照批次为两侧分别固定 `IWA_EVALUATE_MODEL` 和 300 秒，配置文件里的设置不会把 Flash 一侧换成 Pro。页面评价等待提示改为“通常需要 1–3 分钟”。
+- **试用配置（用户 Mac 上的 `tools/ielts_writing_ai/.env`，需手动改，改完 `stop.sh` / `start.sh`，用 `check` 确认）**：`IWA_LLM_PROVIDER=deepseek`、`IWA_LLM_MODEL=deepseek-flash`、`IWA_EVALUATE_MODEL=deepseek-v4-pro`、`IWA_EVALUATE_THINKING=high`、`IWA_EVALUATE_THINKING_MAX_TOKENS=32000`、`IWA_EVALUATE_THINKING_TIMEOUT=420`。`.env` 里若显式写着 300 要改掉。说明见工具 README“原稿评价的思考模式”一节。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **453 OK**（另两种 locale 同样 OK）；新增 `test_evaluate_model_20261112.py`（6 项：设置默认与读取、评价请求带 Pro 而精修 / 改写不带、生成记录的模型、本地桩服务器上请求体的模型名、realcheck 记录与报告、对照批次两侧不被配置文件改变）；`test_thinking.py` 默认超时期望改为 420；`test_compare_tools_20261110.py` 的条件测试显式给 A 侧 300 秒。Node 8、ruff、black、`node --check`、`git diff --check` 通过。用占位稿和演示模型彩排了官方样卷命令（20 次上限、重复 2 次、账本、失败率），报告含“与老师评分对比”“排序检查”“重复运行波动”。
+- **官方样卷组说明**：`docs/design/ielts-writing-ai-model-comparison-plan-20261110/official-run.md`。只跑 Pro（模型已选定），5 篇 × 2 次，**上限 20 次文字请求，需用户确认后才跑**（估算约 2.7 元、最坏约 5.5 元）；先由 Codex 按 `codex-run.md` 第 3 节逐字转录 5 篇手写答卷为 `~/iwa-calibration/official.jsonl`（Codex 若不能逐字转录则停下，由用户录入）；看总分偏差（尤其 4 分和 5.5 分两篇是否偏高）、两组排序、重复波动；限制：只有总分、模型可能见过。
+- **老师抽查材料**：Codex 第一阶段生成的私有 `teacher_spotcheck.private.md`，只在用户 Mac 上（`/Users/zhouxin/iwa-compare-real-20261112/` 下），含作文原文，按约定不进 Git；Claude 在云端会话里读不到。
+- **未变**：提示词 `iwa-2026-11-10.12`、评价流程与校验。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。**没有新的付费授权**。
+- **下一步**：① 用户改试用 `.env` 并重启；② 老师复核 10 条抽查（10 条里至少 7 条认可 AI 初判，才把“Pro 误批更少”当作结论）；③ 用户确认官方样卷组 20 次上限后，Codex 转录并按 `official-run.md` 执行；④ 识图配好后再跑第二阶段。
+
 ## 2026-11-12 第一阶段真实对照完成：102/184，Pro格式更稳，分数仍需校准
 
 - **授权与执行**：用户明确授权第一阶段最多184次（含重试），Flash/Pro、high、32000/300、五组仅evaluate。北京时间08:43:21—11:03:13正常退出0；账本102预留/102完成，Flash56、Pro46，0网络失败/未知/识图。28篇不同作文，每模型46次评价；本批已结束，剩余额度不自动续用，官方空模板、第二阶段、精修和改写未运行。
