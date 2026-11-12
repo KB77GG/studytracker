@@ -206,6 +206,7 @@ def child_env(key: str, *, dry: bool, env_file: Path | None, out: Path) -> dict:
             IWA_LLM_PROVIDER="fake",
             IWA_VISION_PROVIDER="fake",
             IWA_LLM_MODEL=DRY_MODELS[key],
+            IWA_EVALUATE_MODEL=DRY_MODELS[key],
         )
     else:
         env.update(
@@ -213,6 +214,9 @@ def child_env(key: str, *, dry: bool, env_file: Path | None, out: Path) -> dict:
             IWA_LLM_PROVIDER="deepseek",
             IWA_LLM_BASE_URL=OFFICIAL_ENDPOINT,
             IWA_LLM_MODEL=MODELS[key],
+            # An IWA_EVALUATE_MODEL in the configuration file must not turn the Flash
+            # side of the comparison into Pro (or the reverse).
+            IWA_EVALUATE_MODEL=MODELS[key],
         )
     env.update(THINKING)
     return env
@@ -232,7 +236,11 @@ def preflight(args, stage: str, out: Path) -> None:
         env = child_env(key, dry=False, env_file=env_file, out=out)
         settings = load_settings(env=env, env_file=env_file)
         settings.validate()
-        if settings.llm_base_url != OFFICIAL_ENDPOINT or settings.llm_model != MODELS[key]:
+        if (
+            settings.llm_base_url != OFFICIAL_ENDPOINT
+            or settings.llm_model != MODELS[key]
+            or (settings.evaluate_model or settings.llm_model) != MODELS[key]
+        ):
             raise Stop(EXIT_REFUSED, f"{key}：端点或模型不对（{settings.llm_base_url}）")
         if not settings.llm_api_key:
             raise Stop(EXIT_REFUSED, "配置文件里没有 IWA_LLM_API_KEY")

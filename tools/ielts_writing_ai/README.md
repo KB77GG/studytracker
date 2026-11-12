@@ -78,8 +78,27 @@ DeepSeek 默认使用 `deepseek-flash` 的非思考模式。
 ```bash
 IWA_EVALUATE_THINKING=off                # off（默认）/ high / max；只影响原稿评价，精修和改写不变
 IWA_EVALUATE_THINKING_MAX_TOKENS=32000   # 思考与正式回答的总输出上限（仍需实测校准）
-IWA_EVALUATE_THINKING_TIMEOUT=300        # 思考时的单次超时秒数（暂定）
+IWA_EVALUATE_THINKING_TIMEOUT=420        # 思考时的单次超时秒数（2026-11-12 起默认 420）
+IWA_EVALUATE_MODEL=deepseek-v4-pro       # 只用于原稿评价的模型；不填则用 IWA_LLM_MODEL
 ```
+
+**2026-11-12 起试用的评价改用 `deepseek-v4-pro`**（用户决定）。依据是第一阶段 Flash / Pro 对照（`docs/design/ielts-writing-ai-model-comparison-20261112-results/`）：Pro 46 次评价首轮全部通过、无重试，Flash 重试 10 次、最终失败 2 次；AI 盲评初判中 Pro 的误批明显更少（尚待老师抽查确认）；但总分误差两者相同，Pro 的 CC 平均偏高约 0.7 分，**分数仍只作参考，不能说已经校准**。Pro 每次评价中位约 2 分钟、最长 255 秒，约 0.27 元（Flash 约 0.07 元）。精修和改写没有做过对照，继续用 `IWA_LLM_MODEL`（Flash）。
+
+推荐的试用配置（`tools/ielts_writing_ai/.env`，改完 `stop.sh` 再 `start.sh`，用 `check` 确认）：
+
+```bash
+IWA_LLM_PROVIDER=deepseek
+IWA_LLM_MODEL=deepseek-flash
+IWA_EVALUATE_MODEL=deepseek-v4-pro
+IWA_EVALUATE_THINKING=high
+IWA_EVALUATE_THINKING_MAX_TOKENS=32000
+IWA_EVALUATE_THINKING_TIMEOUT=420
+```
+
+- `IWA_EVALUATE_MODEL` 走同一服务商、地址和 Key，只换请求里的模型名；页面、复制文本和记录里的“模型”显示实际用的模型（评价是 Pro，精修和改写是 Flash）。
+- 超时默认从 300 秒改为 420 秒，因为 Pro 最长一次用了 255 秒。`.env` 里显式写了 `IWA_EVALUATE_THINKING_TIMEOUT=300` 的话要改掉。
+- 一次评价约 2 分钟，页面的等待提示已改为“通常需要 1–3 分钟”。`IWA_MAX_WORKERS`（默认 2）是同时进行的模型调用数，多人同时提交时会排队。
+- 对照批次（`realcheck-batch`）不受影响：它为 Flash 和 Pro 两边分别固定模型和 300 秒超时，配置文件里的 `IWA_EVALUATE_MODEL` 不会把 Flash 那一侧换成 Pro。
 
 - 思考档位：`high` 和 `max` 都会作为 `reasoning_effort` 发送。服务商把 `xhigh` 映射为 high，所以不单独提供。`max` 的输出上限和超时同样用上面两项，需要实测后再定。
 - **默认保持 off 是因为质量还没验收完，不代表 off 比 high 更准。**第一次同条件对照（提示词 `.6`，7 篇，2026-11-04）：high 对部分上下文判断有改善，但中位耗时约为 off 的 2.8 倍，输出 token 约为 3.9 倍，仍有误读和无来源建议，不足以切换默认值。high 适合作为老师复核时的试验选项。

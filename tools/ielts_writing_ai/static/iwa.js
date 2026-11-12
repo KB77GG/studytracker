@@ -426,7 +426,9 @@
       clear(panel);
       if (!g) { panel.appendChild(el('div', { class: 'state', text: '暂无结果' })); return; }
       if (g.status === 'queued' || g.status === 'running') {
-        var waiting = state.data.image && state.data.image.status === 'pending' ? '正在识别题图，随后开始生成…' : 'AI 正在生成，通常需要 20–60 秒。可以先查看其他标签。';
+        var waiting = state.data.image && state.data.image.status === 'pending' ? '正在识别题图，随后开始生成…'
+          : kind === 'evaluate' ? 'AI 正在评价，通常需要 1–3 分钟，较长的作文可能更久。可以先查看其他标签，结果出来后会自动显示。'
+          : 'AI 正在生成，通常需要 20–60 秒。可以先查看其他标签。';
         panel.appendChild(el('div', { class: 'state' }, [el('div', { class: 'spinner', 'aria-hidden': 'true' }), el('p', { text: waiting })]));
         return;
       }

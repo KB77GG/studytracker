@@ -133,11 +133,13 @@ class ChatClient:
         retries: int = 1,
         thinking: str = "off",
         timeout: float | None = None,
+        model: str | None = None,
     ) -> LLMResult:
         if not self.api_key:
             raise LLMError("missing_api_key", "未配置模型 API Key")
+        model = model or self.model  # one request may use another model (the evaluation)
         body = {
-            "model": self.model,
+            "model": model,
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
@@ -230,7 +232,7 @@ class ChatClient:
             reasoning = choice["message"].get("reasoning_content") or ""
             return LLMResult(
                 str(text),
-                str(raw.get("model") or self.model),
+                str(raw.get("model") or model),
                 latency,
                 usage or {},
                 reasoning=str(reasoning),
@@ -285,6 +287,7 @@ class FakeClient:
         retries=1,
         thinking="off",
         timeout=None,
+        model=None,
     ):
         context = context or {}
         kind = context.get("kind", "")
@@ -301,7 +304,7 @@ class FakeClient:
             raise LLMError("invalid_request", "未知生成类型")
         value = builder(context)
         text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
-        return LLMResult(text, self.model, 5, {"demo": True})
+        return LLMResult(text, model or self.model, 5, {"demo": True})
 
     @staticmethod
     def _evaluate(context):

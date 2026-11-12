@@ -201,7 +201,13 @@ def cmd_realcheck(settings, args) -> int:
     }
     worst = len(items) * len(kinds) * 2 + (len(to_read) if args.with_vision else 0)
     print(
-        f"模型：{settings.llm_provider} / {settings.llm_model}（Key 已配置："
+        f"模型：{settings.llm_provider} / {settings.llm_model}"
+        + (
+            f"（评价用 {settings.evaluate_model}）"
+            if settings.evaluate_model and settings.evaluate_model != settings.llm_model
+            else ""
+        )
+        + "（Key 已配置："
         f"{'是' if settings.llm_api_key else '否'}）；样本 {len(items)} 篇；"
         f"最多 {min(worst, args.max_calls)} 次调用（上限 {args.max_calls}）；评价思考模式："
         f"{settings.evaluate_thinking}"

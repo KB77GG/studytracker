@@ -94,7 +94,7 @@ class RecordingClient:
             "input_sha256": _messages_sha(messages),
             "max_tokens": kwargs.get("max_tokens"),
             "provider": self.provider,
-            "model": self.model,
+            "model": kwargs.get("model") or self.model,
             "ok": False,
             "error": "client_error",
             "usage": {},
@@ -109,7 +109,7 @@ class RecordingClient:
                 entry["ledger_id"] = rec.ledger.reserve(
                     sample=rec.sample_id,
                     kind=entry["kind"],
-                    model=self.model,
+                    model=entry["model"],
                     attempt=entry["attempt"],
                 )
             except LedgerError as exc:
@@ -1473,6 +1473,19 @@ def _connectivity(first_call: dict | None) -> dict:
     }
 
 
+def run_model(run_data: dict) -> str:
+    """The model a run is about: the evaluation model when only evaluations ran (it may
+    differ from IWA_LLM_MODEL via IWA_EVALUATE_MODEL), both when they differ."""
+    settings = run_data["settings"]
+    base = settings["llm_model"]
+    evaluate = settings.get("evaluate_model") or base
+    if "evaluate" not in run_data["kinds"] or evaluate == base:
+        return base
+    if all(k == "evaluate" for k in run_data["kinds"]):
+        return evaluate
+    return f"{base}（评价 {evaluate}）"
+
+
 def build_report(
     run_data: dict,
     *,
@@ -1517,7 +1530,7 @@ def build_report(
     return {
         "started_at": run_data["started_at"],
         "provider": run_data["settings"]["llm_provider"],
-        "model": run_data["settings"]["llm_model"],
+        "model": run_model(run_data),
         "prompt_version": review.prompts.PROMPT_VERSION,
         "evaluate_thinking": run_data["settings"].get("evaluate_thinking", "off"),
         "demo": run_data["settings"]["llm_provider"] == "fake",

@@ -135,7 +135,10 @@ class ConditionsTest(Base):
         self.assertIn(report["code_sha256"][:16], markdown)
 
     def test_conditions_outside_the_messages_are_listed_and_differences_named(self):
-        a, _ = self.run_dir("a", "model-alpha", evaluate_thinking="high")
+        # The default timeout changed to 420 s on 2026-11-12; side A states its own.
+        a, _ = self.run_dir(
+            "a", "model-alpha", evaluate_thinking="high", evaluate_thinking_timeout=300
+        )
         b, _ = self.run_dir(
             "b",
             "model-beta",

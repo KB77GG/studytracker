@@ -680,13 +680,23 @@ class Generator:
         mode = getattr(self.settings, "evaluate_thinking", "off") or "off"
         return mode if kind == "evaluate" else "off"
 
+    def model_for(self, kind: str) -> str:
+        """The evaluation may use its own model (IWA_EVALUATE_MODEL); refine / rewrite
+        use the client's model."""
+        evaluate_model = getattr(self.settings, "evaluate_model", "") or ""
+        if kind == "evaluate" and evaluate_model:
+            return evaluate_model
+        return getattr(self.client, "model", "")
+
     def _call(self, messages, kind: str, context: dict, attempt: int, max_tokens: int):
         options = {}
+        if kind == "evaluate" and getattr(self.settings, "evaluate_model", ""):
+            options["model"] = self.settings.evaluate_model
         thinking = self._thinking(kind)
         if thinking != "off":
             # Separate, provisional budget and timeout: the defaults were measured
             # without thinking (see config.Settings).
-            options = {
+            options |= {
                 "thinking": thinking,
                 "timeout": self.settings.evaluate_thinking_timeout,
             }
@@ -839,7 +849,7 @@ class Generator:
         claimed = self.storage.claim_generation(
             generation_id,
             provider=getattr(self.client, "provider", "unknown"),
-            model=getattr(self.client, "model", ""),
+            model=self.model_for(generation["kind"]),
             prompt_version=prompts.PROMPT_VERSION,
         )
         if not claimed:

@@ -120,7 +120,14 @@ class Settings:
     # with realcheck).
     evaluate_thinking: str = "off"
     evaluate_thinking_max_tokens: int = 32000
-    evaluate_thinking_timeout: float = 300.0
+    # 420 s: in the 2026-11-12 comparison deepseek-v4-pro took up to 255 s per
+    # evaluation request (p90 176 s), too close to the earlier 300 s.
+    evaluate_thinking_timeout: float = 420.0
+    # The model of the original-essay evaluation only, on the same provider, endpoint
+    # and key; empty means IWA_LLM_MODEL. The 2026-11-12 comparison chose
+    # deepseek-v4-pro for the evaluation; refine / rewrite were not compared and keep
+    # IWA_LLM_MODEL.
+    evaluate_model: str = ""
 
     vision_provider: str = "none"
     vision_base_url: str = ""
@@ -227,6 +234,7 @@ class Settings:
             "evaluate_thinking": self.evaluate_thinking,
             "evaluate_thinking_max_tokens": self.evaluate_thinking_max_tokens,
             "evaluate_thinking_timeout": self.evaluate_thinking_timeout,
+            "evaluate_model": self.evaluate_model or self.llm_model,
             "vision_provider": self.vision_provider,
             "vision_model": self.vision_model if self.vision_enabled else "",
             "vision_api_key_set": bool(self.vision_api_key),
@@ -273,7 +281,8 @@ def load_settings(
         "evaluate_thinking_max_tokens": _as_int(
             get("EVALUATE_THINKING_MAX_TOKENS"), 32000, minimum=1
         ),
-        "evaluate_thinking_timeout": _as_float(get("EVALUATE_THINKING_TIMEOUT"), 300.0),
+        "evaluate_thinking_timeout": _as_float(get("EVALUATE_THINKING_TIMEOUT"), 420.0),
+        "evaluate_model": (get("EVALUATE_MODEL") or "").strip(),
         "vision_provider": get("VISION_PROVIDER") or "none",
         "vision_base_url": get("VISION_BASE_URL"),
         "vision_model": get("VISION_MODEL"),

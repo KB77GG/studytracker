@@ -29,7 +29,7 @@ class SettingsTest(unittest.TestCase):
         s = self.settings()
         self.assertEqual(s.evaluate_thinking, "off")
         self.assertEqual(
-            (s.evaluate_thinking_max_tokens, s.evaluate_thinking_timeout), (32000, 300.0)
+            (s.evaluate_thinking_max_tokens, s.evaluate_thinking_timeout), (32000, 420.0)
         )
         s = self.settings(EVALUATE_THINKING="HIGH", EVALUATE_THINKING_MAX_TOKENS="20000")
         self.assertEqual((s.evaluate_thinking, s.evaluate_thinking_max_tokens), ("high", 20000))
@@ -153,7 +153,7 @@ class GeneratorTest(AppTestCase):
         options = {o["kind"]: o for o in self.client_llm.options}
         self.assertEqual(
             options["evaluate"],
-            {"kind": "evaluate", "thinking": "high", "max_tokens": 12345, "timeout": 300.0},
+            {"kind": "evaluate", "thinking": "high", "max_tokens": 12345, "timeout": 420.0},
         )
         for kind in ("refine", "rewrite"):
             self.assertEqual(options[kind]["thinking"], "off")
