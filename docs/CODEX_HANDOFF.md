@@ -1,5 +1,23 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13 试用账号可登录，评价Pro复核材料同步功能分支（0真实调用）
+
+- **授权/工作树**：用户要求创建“测试老师”账号，并提交推送上一轮本机复核结果和交接。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked顶层入口保留；本轮只改复核目录、私有运行资料和两交接。独立树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111` 基线/远端 `85b8daad5b6da0cb5a2bbe653d9926bd75c2d334`；开工时仅上一轮两交接未提交，无业务脏改。91工具文件不改，其他工作树不操作。
+- **账号/私有配置**：使用真实 `.tmp/ielts-writing-ai-trial/.env` 及独立源码运行 `user-add --name 测试老师`，用户1，沿用CLI默认每天30次生成、无到期日。试用码输出直接落本机0600私有文件，不进聊天/报告/Git；私有helper `.tmp/ielts-writing-ai-trial/create_teacher.py` 拒绝已有账号或码文件，勿重复运行。评价Pro/high/32000/420、精修改写Flash仍不变；本轮没改Key。老师抽查与官方组均未执行。
+- **本机服务**：前次工具会话结束后服务停止，已通过`launchctl submit -l local.studytracker.iwa-trial`将私有`control.py start-live`交给macOS用户后台任务，未安装登录/开机自启动文件；仅127.0.0.1:5055。主树 `.venv/bin/python .tmp/ielts-writing-ai-trial/control.py status|stop|start`检查/停止/普通终端启动。下次登录系统如任务不存在需手动启动，不能当生产部署。
+- **验证**：`.venv/bin/python .tmp/ielts-writing-ai-trial/login_check.py` 仅访问本机登录/额度/输入页/退出，CSRF与no-store通过；登录后30/30额度，退出回登录页，数据库用户1/作文0/生成0/用量0。只记录布尔和计数到`account-check-20261113.json`，Cookie/CSRF/试用码不输出。上一轮453Python+8Node、独立6/6、Ruff/Black65/JS结果保持；本轮无代码修改，不重复全套。发布前白名单/隐私扫描与diff检查，确切结果见提交时回读；0新增付费请求。
+- **同步范围与状态**：`docs/design/iwa-evaluate-pro-review-20261112/`的10个文本文件和两份规范交接按本轮授权commit/push至`claude/ielts-writing-ai-trial`；旧运行JSON保留为11月12日快照，新账号状态另列。排除pyc、.tmp、Key/配置、试用码、库、学生正文/老师文件和模型原始输出。提交/远端HEAD以git与本机最终同步确认条为准；不推main，不部署生产后端/前端/数据库，不操作小程序上传/提审/发布。私有运行资料及主树未提交历史仍仅本机可见。
+- **下步**：用户用本机私有登录码登录试用，自行提交作文会调用收费模型；本agent未代交。老师10条抽查文件仍在`~/iwa-compare-real-20261112/teacher_spotcheck.private.md`，未获得填写结果。官方5篇模板正文空，尚无20次新授权，不能续用已关闭102/184账本；等转录和明确授权后另开批次。
+
+## 2026-11-12 评价Pro本机复核与配置启用（本轮真实调用0）
+
+- **工作树**：主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked顶层入口保留，未切分支或pull。独立树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111` 从clean66f29264快进到已推功能分支 `85b8daad5b6da0cb5a2bbe653d9926bd75c2d334`（f2509aa/4097aa2）；91个工具tracked文件与提交一致，组合SHA `822b98efed4193641893f4eb0a759a54f854caf4d583142a8aea43fdeccc2d56`。旧47ccd240/817c4c4b树未动。
+- **结果**：原稿评价Pro/high/32000/420；精修与改写Flash原参数。独立6项检查覆盖请求、并发、重试、失败模型元数据/账本、batch两侧固定模型及300秒、compare按实际评价模型核对，无阻断缺陷。单次420只适用于思考评价；off仍基础超时。
+- **私有配置与运行**：实际 `.tmp/ielts-writing-ai-trial/.env`（并非默认tools路径）已更新六个评价/模型设置；Key/端点及其他原设置原值保留，0600私有备份未提交。另固定 `IWA_DATA_DIR` 到同目录var，独立新SQLite；原没有运行中的5055服务或该树试用库，未迁移旧数据。主树 `.venv/bin/python .tmp/ielts-writing-ai-trial/control.py check|start|stop|status` 明确选择此独立源码/私有配置，清继承IWA与代理。后台启动随短工具会话退出后，改以start-live持续会话1945保持服务；最终PID64065、127.0.0.1:5055、healthz.ok=true/demo=false。新库用户/作文/生成/用量全0，尚无试用登录账号；没有提交作文或真实请求。
+- **验证**：主树 `.venv/bin/python docs/design/iwa-evaluate-pro-review-20261112/run_offline_tests.py` →453 Python+8 Node；同目录 `model_routing_probe.py` →6/6。独立树主venv `ruff check tools/ielts_writing_ai`、`black --check tools/ielts_writing_ai`（65文件）、`node --check tools/ielts_writing_ai/static/iwa.js`通过。初次沙箱23个回环权限错误，批准本机回环后同隔离runner通过，外部数据哨兵未写；测试禁外网/不读Key。未重复多locale/Python3.10/全旧探针/浏览器全流程。完整证据及命令在主树 `docs/design/iwa-evaluate-pro-review-20261112/`，含有效公开配置及运行数字，无秘密。
+- **未执行/下步**：`~/iwa-calibration/official.jsonl`仍无，5模板正文仍空；官方组20请求尚未获本轮新授权。先补齐核对原稿再新账本，不续用已结束102/184账本。老师10条抽查文件在 `/Users/zhouxin/iwa-compare-real-20261112/teacher_spotcheck.private.md`，尚无老师复核结果。official-run.md“最坏约5.5元”是平均用量×20的估算，不是32000×20的金额上限；执行时必须区分调用限额和费用估算。
+- **交接/发布审计**：本轮新增报告目录、私有配置/备份/控制脚本/var与两工作树的两交接，仅本机可见，未新commit/push；独立树当前仅两交接脏，主树既有修改保留。功能代码85b8daad是Claude已commit/push，本轮仅fetch/快进。主main未合并、生产后端/前端/数据库未部署/未访问，小程序未上传/提审/发布。未将配置、Key、学生原稿、老师抽查或完整输出提交Git。
+
 ## 2026-11-12（晚）雅思写作 AI 试用工具：评价改用 deepseek-v4-pro；官方样卷组（Pro 单模型）执行说明（已推功能分支；未调用真实模型）
 
 - **用户决定（2026-11-12）**：看过第一阶段结果后“可以换”——试用的评价改用 Pro；“分数5-6我暂时没有，就用官方的吧”——用官方样卷代替低分段真实作文；要老师抽查的 10 条。

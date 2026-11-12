@@ -1,0 +1,19 @@
+{
+  "data_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var",
+  "db_path": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/iwa.sqlite3",
+  "upload_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/uploads",
+  "bind": "127.0.0.1:5055",
+  "llm_provider": "deepseek",
+  "llm_model": "deepseek-flash",
+  "llm_api_key_set": true,
+  "evaluate_thinking": "high",
+  "evaluate_thinking_max_tokens": 32000,
+  "evaluate_thinking_timeout": 420.0,
+  "evaluate_model": "deepseek-v4-pro",
+  "vision_provider": "none",
+  "vision_model": "",
+  "vision_api_key_set": false,
+  "daily_limit": 30,
+  "max_workers": 2,
+  "cookie_secure": false
+}
