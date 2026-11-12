@@ -1,0 +1,46 @@
+{
+  "config_exists": true,
+  "deepseek_key_configured": true,
+  "vision_provider": "none",
+  "vision_explicit_key_configured": false,
+  "groups": [
+    {
+      "group": "dev",
+      "samples": 7,
+      "evaluations_per_model": 14,
+      "skipped": false
+    },
+    {
+      "group": "teacher",
+      "samples": 1,
+      "evaluations_per_model": 2,
+      "skipped": false
+    },
+    {
+      "group": "rated_t2",
+      "samples": 4,
+      "evaluations_per_model": 8,
+      "skipped": false
+    },
+    {
+      "group": "ordering",
+      "samples": 10,
+      "evaluations_per_model": 10,
+      "skipped": false
+    },
+    {
+      "group": "lowband",
+      "samples": 6,
+      "evaluations_per_model": 12,
+      "skipped": false
+    },
+    {
+      "group": "official",
+      "samples": null,
+      "evaluations_per_model": null,
+      "skipped": true
+    }
+  ],
+  "main_worst_text_calls": 184,
+  "proposed_result_dir_exists": false
+}

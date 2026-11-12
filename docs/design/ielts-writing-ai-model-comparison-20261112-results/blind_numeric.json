@@ -1,0 +1,453 @@
+{
+  "method": "First-pass AI blind review; only first independent run; uncertain separate; count category 4 means verified supplied reference list, not proven dual-rater consensus.",
+  "groups": {
+    "teacher": {
+      "unique_essays": 1,
+      "per_sample": {
+        "teacher-t2-01": {
+          "flash": {
+            "correct": 7,
+            "misread": 0,
+            "changed_meaning": 2,
+            "polish_as_error": 8,
+            "uncertain": 2,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 10,
+            "judgment_errors_1234": 10
+          },
+          "pro": {
+            "correct": 14,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 0
+          }
+        }
+      },
+      "all_first_attempts": {
+        "flash": {
+          "correct": 7,
+          "misread": 0,
+          "changed_meaning": 2,
+          "polish_as_error": 8,
+          "uncertain": 2,
+          "missed_both_raters": 0,
+          "missed_other": 0,
+          "false_positive_123": 10,
+          "judgment_errors_1234": 10
+        },
+        "pro": {
+          "correct": 14,
+          "misread": 0,
+          "changed_meaning": 0,
+          "polish_as_error": 0,
+          "uncertain": 0,
+          "missed_both_raters": 0,
+          "missed_other": 0,
+          "false_positive_123": 0,
+          "judgment_errors_1234": 0
+        }
+      },
+      "common_successful_essays": 1,
+      "common_successful_counts": {
+        "flash": {
+          "correct": 7,
+          "misread": 0,
+          "changed_meaning": 2,
+          "polish_as_error": 8,
+          "uncertain": 2,
+          "missed_both_raters": 0,
+          "missed_other": 0,
+          "false_positive_123": 10,
+          "judgment_errors_1234": 10
+        },
+        "pro": {
+          "correct": 14,
+          "misread": 0,
+          "changed_meaning": 0,
+          "polish_as_error": 0,
+          "uncertain": 0,
+          "missed_both_raters": 0,
+          "missed_other": 0,
+          "false_positive_123": 0,
+          "judgment_errors_1234": 0
+        }
+      }
+    },
+    "rated_t2": {
+      "unique_essays": 4,
+      "per_sample": {
+        "ho-t2-0606-1": {
+          "flash": {
+            "correct": 12,
+            "misread": 4,
+            "changed_meaning": 0,
+            "polish_as_error": 1,
+            "uncertain": 3,
+            "missed_both_raters": 1,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 5,
+            "judgment_errors_1234": 6
+          },
+          "pro": {
+            "correct": 14,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 2,
+            "missed_both_raters": 1,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 1
+          }
+        },
+        "ho-t2-0606-2": {
+          "flash": {
+            "correct": 0,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 1,
+            "missed_both_raters": 2,
+            "missed_other": 2,
+            "evaluation_ready": false,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 2
+          },
+          "pro": {
+            "correct": 10,
+            "misread": 1,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 4,
+            "missed_both_raters": 0,
+            "missed_other": 2,
+            "evaluation_ready": true,
+            "false_positive_123": 1,
+            "judgment_errors_1234": 1
+          }
+        },
+        "ho-t2-0627-1": {
+          "flash": {
+            "correct": 12,
+            "misread": 1,
+            "changed_meaning": 0,
+            "polish_as_error": 9,
+            "uncertain": 2,
+            "missed_both_raters": 0,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 10,
+            "judgment_errors_1234": 10
+          },
+          "pro": {
+            "correct": 17,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 0
+          }
+        },
+        "ho-t2-0627-2": {
+          "flash": {
+            "correct": 7,
+            "misread": 1,
+            "changed_meaning": 0,
+            "polish_as_error": 12,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 13,
+            "judgment_errors_1234": 13
+          },
+          "pro": {
+            "correct": 14,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 0
+          }
+        }
+      },
+      "all_first_attempts": {
+        "flash": {
+          "correct": 31,
+          "misread": 6,
+          "changed_meaning": 0,
+          "polish_as_error": 22,
+          "uncertain": 6,
+          "missed_both_raters": 3,
+          "missed_other": 5,
+          "false_positive_123": 28,
+          "judgment_errors_1234": 31
+        },
+        "pro": {
+          "correct": 55,
+          "misread": 1,
+          "changed_meaning": 0,
+          "polish_as_error": 0,
+          "uncertain": 6,
+          "missed_both_raters": 1,
+          "missed_other": 4,
+          "false_positive_123": 1,
+          "judgment_errors_1234": 2
+        }
+      },
+      "common_successful_essays": 3,
+      "common_successful_counts": {
+        "flash": {
+          "correct": 31,
+          "misread": 6,
+          "changed_meaning": 0,
+          "polish_as_error": 22,
+          "uncertain": 5,
+          "missed_both_raters": 1,
+          "missed_other": 3,
+          "false_positive_123": 28,
+          "judgment_errors_1234": 29
+        },
+        "pro": {
+          "correct": 45,
+          "misread": 0,
+          "changed_meaning": 0,
+          "polish_as_error": 0,
+          "uncertain": 2,
+          "missed_both_raters": 1,
+          "missed_other": 2,
+          "false_positive_123": 0,
+          "judgment_errors_1234": 1
+        }
+      }
+    },
+    "lowband": {
+      "unique_essays": 6,
+      "per_sample": {
+        "low-shop-50": {
+          "flash": {
+            "correct": 20,
+            "misread": 4,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 3,
+            "missed_both_raters": 1,
+            "missed_other": 24,
+            "evaluation_ready": true,
+            "false_positive_123": 4,
+            "judgment_errors_1234": 5
+          },
+          "pro": {
+            "correct": 20,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 4,
+            "missed_both_raters": 3,
+            "missed_other": 19,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 3
+          }
+        },
+        "low-shop-55": {
+          "flash": {
+            "correct": 15,
+            "misread": 2,
+            "changed_meaning": 0,
+            "polish_as_error": 6,
+            "uncertain": 0,
+            "missed_both_raters": 2,
+            "missed_other": 3,
+            "evaluation_ready": true,
+            "false_positive_123": 8,
+            "judgment_errors_1234": 10
+          },
+          "pro": {
+            "correct": 19,
+            "misread": 3,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 2,
+            "evaluation_ready": true,
+            "false_positive_123": 3,
+            "judgment_errors_1234": 3
+          }
+        },
+        "low-shop-60": {
+          "flash": {
+            "correct": 16,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 2,
+            "uncertain": 0,
+            "missed_both_raters": 1,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 2,
+            "judgment_errors_1234": 3
+          },
+          "pro": {
+            "correct": 13,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 2,
+            "uncertain": 0,
+            "missed_both_raters": 1,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 2,
+            "judgment_errors_1234": 3
+          }
+        },
+        "low-community-50": {
+          "flash": {
+            "correct": 17,
+            "misread": 5,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 1,
+            "missed_other": 15,
+            "evaluation_ready": true,
+            "false_positive_123": 5,
+            "judgment_errors_1234": 6
+          },
+          "pro": {
+            "correct": 22,
+            "misread": 2,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 3,
+            "missed_other": 18,
+            "evaluation_ready": true,
+            "false_positive_123": 2,
+            "judgment_errors_1234": 5
+          }
+        },
+        "low-community-55": {
+          "flash": {
+            "correct": 19,
+            "misread": 1,
+            "changed_meaning": 0,
+            "polish_as_error": 3,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 2,
+            "evaluation_ready": true,
+            "false_positive_123": 4,
+            "judgment_errors_1234": 4
+          },
+          "pro": {
+            "correct": 18,
+            "misread": 1,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 1,
+            "missed_other": 1,
+            "evaluation_ready": true,
+            "false_positive_123": 1,
+            "judgment_errors_1234": 2
+          }
+        },
+        "low-community-60": {
+          "flash": {
+            "correct": 7,
+            "misread": 6,
+            "changed_meaning": 0,
+            "polish_as_error": 4,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 10,
+            "judgment_errors_1234": 10
+          },
+          "pro": {
+            "correct": 14,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "evaluation_ready": true,
+            "false_positive_123": 0,
+            "judgment_errors_1234": 0
+          }
+        }
+      },
+      "all_first_attempts": {
+        "flash": {
+          "correct": 94,
+          "misread": 18,
+          "changed_meaning": 0,
+          "polish_as_error": 15,
+          "uncertain": 3,
+          "missed_both_raters": 5,
+          "missed_other": 44,
+          "false_positive_123": 33,
+          "judgment_errors_1234": 38
+        },
+        "pro": {
+          "correct": 106,
+          "misread": 6,
+          "changed_meaning": 0,
+          "polish_as_error": 2,
+          "uncertain": 4,
+          "missed_both_raters": 8,
+          "missed_other": 40,
+          "false_positive_123": 8,
+          "judgment_errors_1234": 16
+        }
+      },
+      "common_successful_essays": 6,
+      "common_successful_counts": {
+        "flash": {
+          "correct": 94,
+          "misread": 18,
+          "changed_meaning": 0,
+          "polish_as_error": 15,
+          "uncertain": 3,
+          "missed_both_raters": 5,
+          "missed_other": 44,
+          "false_positive_123": 33,
+          "judgment_errors_1234": 38
+        },
+        "pro": {
+          "correct": 106,
+          "misread": 6,
+          "changed_meaning": 0,
+          "polish_as_error": 2,
+          "uncertain": 4,
+          "missed_both_raters": 8,
+          "missed_other": 40,
+          "false_positive_123": 8,
+          "judgment_errors_1234": 16
+        }
+      }
+    }
+  }
+}

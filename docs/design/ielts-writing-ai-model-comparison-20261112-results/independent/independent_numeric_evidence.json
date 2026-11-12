@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "timestamp_resolution_seconds": 1,
+  "requests": {
+    "exit_code": 0,
+    "reservations": 102,
+    "completed": 102,
+    "authorized_cap": 184,
+    "models": {
+      "flash": {
+        "request_count": 56,
+        "evaluation_count": 46,
+        "time_bands": {
+          "peak": 38,
+          "off_peak": 18,
+          "cross_boundary": 0
+        },
+        "tokens": {
+          "prompt_tokens": 189699,
+          "completion_tokens": 458840,
+          "prompt_cache_hit_tokens": 168700
+        },
+        "estimated_cost_cny": {
+          "peak": 3.719466,
+          "lower": 3.20242008,
+          "upper": 3.20242008
+        },
+        "is_provider_bill": false,
+        "request_seconds": {
+          "n": 56,
+          "p50": 46.0,
+          "p90": 84.0,
+          "max": 116.0
+        },
+        "evaluation_seconds_including_retry": {
+          "n": 46,
+          "p50": 55.0,
+          "p90": 94.0,
+          "max": 124.0
+        },
+        "comparison_checks": 5,
+        "comparison_checks_passed": 5
+      },
+      "pro": {
+        "request_count": 46,
+        "evaluation_count": 46,
+        "time_bands": {
+          "peak": 43,
+          "off_peak": 2,
+          "cross_boundary": 1
+        },
+        "tokens": {
+          "prompt_tokens": 156869,
+          "completion_tokens": 470142,
+          "prompt_cache_hit_tokens": 133376
+        },
+        "estimated_cost_cny": {
+          "peak": 12.9452838,
+          "lower": 12.4468866,
+          "upper": 12.6137826
+        },
+        "is_provider_bill": false,
+        "request_seconds": {
+          "n": 46,
+          "p50": 115.0,
+          "p90": 176.0,
+          "max": 255.0
+        },
+        "evaluation_seconds_including_retry": {
+          "n": 46,
+          "p50": 115.0,
+          "p90": 176.0,
+          "max": 255.0
+        },
+        "comparison_checks": 5,
+        "comparison_checks_passed": 5
+      }
+    }
+  },
+  "common_repeat_pairs": {
+    "dev": {
+      "common_paired_essays": 5,
+      "flash": {
+        "mean_overall_difference": 0.1,
+        "max_overall_difference": 0.5
+      },
+      "pro": {
+        "mean_overall_difference": 0.1,
+        "max_overall_difference": 0.5
+      }
+    },
+    "teacher": {
+      "common_paired_essays": 1,
+      "flash": {
+        "mean_overall_difference": 0.0,
+        "max_overall_difference": 0.0
+      },
+      "pro": {
+        "mean_overall_difference": 0.5,
+        "max_overall_difference": 0.5
+      }
+    },
+    "rated_t2": {
+      "common_paired_essays": 3,
+      "flash": {
+        "mean_overall_difference": 0.166667,
+        "max_overall_difference": 0.5
+      },
+      "pro": {
+        "mean_overall_difference": 0.0,
+        "max_overall_difference": 0.0
+      }
+    },
+    "lowband": {
+      "common_paired_essays": 6,
+      "flash": {
+        "mean_overall_difference": 0.083333,
+        "max_overall_difference": 0.5
+      },
+      "pro": {
+        "mean_overall_difference": 0.333333,
+        "max_overall_difference": 0.5
+      }
+    }
+  },
+  "common_scoring": {
+    "teacher": {
+      "common_evaluations": 2,
+      "distinct_essays": 1,
+      "criteria": {
+        "overall": {
+          "common_evaluations": 2,
+          "flash": {
+            "mae": 0.5,
+            "bias": 0.5
+          },
+          "pro": {
+            "mae": 0.75,
+            "bias": 0.75
+          }
+        }
+      },
+      "comparison_checks": 6,
+      "comparison_checks_passed": 6
+    },
+    "rated_t2": {
+      "common_evaluations": 7,
+      "distinct_essays": 4,
+      "criteria": {
+        "overall": {
+          "common_evaluations": 7,
+          "flash": {
+            "mae": 0.285714,
+            "bias": -0.071429
+          },
+          "pro": {
+            "mae": 0.285714,
+            "bias": 0.285714
+          }
+        },
+        "task": {
+          "common_evaluations": 7,
+          "flash": {
+            "mae": 0.5,
+            "bias": -0.071429
+          },
+          "pro": {
+            "mae": 0.428571,
+            "bias": 0.285714
+          }
+        },
+        "coherence": {
+          "common_evaluations": 7,
+          "flash": {
+            "mae": 0.214286,
+            "bias": 0.214286
+          },
+          "pro": {
+            "mae": 0.714286,
+            "bias": 0.714286
+          }
+        },
+        "lexical": {
+          "common_evaluations": 7,
+          "flash": {
+            "mae": 0.357143,
+            "bias": -0.357143
+          },
+          "pro": {
+            "mae": 0.142857,
+            "bias": -0.142857
+          }
+        },
+        "grammar": {
+          "common_evaluations": 7,
+          "flash": {
+            "mae": 0.285714,
+            "bias": -0.142857
+          },
+          "pro": {
+            "mae": 0.285714,
+            "bias": 0.142857
+          }
+        }
+      },
+      "comparison_checks": 30,
+      "comparison_checks_passed": 30
+    }
+  },
+  "common_scoring_comparison_checks": 36,
+  "common_scoring_comparison_checks_passed": 36
+}

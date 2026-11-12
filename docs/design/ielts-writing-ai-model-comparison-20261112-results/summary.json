@@ -1,0 +1,2561 @@
+{
+ "stages": {
+  "main": {
+   "text": {
+    "reserved": 102,
+    "ok": 102,
+    "failed": 0,
+    "unknown": 0
+   },
+   "vision": {
+    "reserved": 0,
+    "ok": 0,
+    "failed": 0,
+    "unknown": 0
+   },
+   "caps": [
+    {
+     "cap": 184,
+     "time": "2026-11-12T08:43:21+0800"
+    }
+   ]
+  }
+ },
+ "groups": {
+  "dev": {
+   "label": "开发集（7 篇内置样本，只看格式与历史问题）",
+   "runs": {
+    "flash": {
+     "attempts": {
+      "requests": 18,
+      "text": 18,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 1.034092,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-flash"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 14,
+      "first_attempt_json_ok": 0.714,
+      "first_attempt_valid": 0.714,
+      "final_ready": 0.929,
+      "final_failures": {
+       "invalid_output": 1
+      },
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 39497,
+      "latency_ms_p90": 61498,
+      "completion_tokens_max": 16565,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.1,
+       "overall_spread_max": 0.5,
+       "any_failed": 1
+      },
+      "teacher_findings": null,
+      "per_sample": [
+       {
+        "id": "t2-weak",
+        "scores": {
+         "overall": 5.5,
+         "task": 6.0,
+         "coherence": 6.0,
+         "lexical": 5.5,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-weak#r2",
+        "scores": {
+         "overall": 5.5,
+         "task": 6.0,
+         "coherence": 6.0,
+         "lexical": 5.5,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-mid",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-mid#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-good",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-good#r2",
+        "scores": {
+         "overall": 8.0,
+         "task": 7.5,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-strong",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-strong#r2",
+        "scores": {
+         "overall": null
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "failed"
+        }
+       },
+       {
+        "id": "t2-off-topic",
+        "scores": {
+         "overall": 5.5,
+         "task": 1.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-off-topic#r2",
+        "scores": {
+         "overall": 5.5,
+         "task": 1.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-under-length",
+        "scores": {
+         "overall": 5.5,
+         "task": 5.0,
+         "coherence": 5.0,
+         "lexical": 5.5,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-under-length#r2",
+        "scores": {
+         "overall": 5.0,
+         "task": 4.5,
+         "coherence": 5.0,
+         "lexical": 5.0,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t1-no-image",
+        "scores": {
+         "overall": null,
+         "task": null,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t1-no-image#r2",
+        "scores": {
+         "overall": null,
+         "task": null,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    },
+    "pro": {
+     "attempts": {
+      "requests": 14,
+      "text": 14,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 3.951472,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-v4-pro"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 14,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 96876,
+      "latency_ms_p90": 119482,
+      "completion_tokens_max": 14023,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.083,
+       "overall_spread_max": 0.5,
+       "any_failed": 0
+      },
+      "teacher_findings": null,
+      "per_sample": [
+       {
+        "id": "t2-weak",
+        "scores": {
+         "overall": 6.0,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 5.5,
+         "grammar": 5.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-weak#r2",
+        "scores": {
+         "overall": 6.0,
+         "task": 7.0,
+         "coherence": 6.0,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-mid",
+        "scores": {
+         "overall": 8.0,
+         "task": 7.5,
+         "coherence": 8.0,
+         "lexical": 7.5,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-mid#r2",
+        "scores": {
+         "overall": 8.0,
+         "task": 7.5,
+         "coherence": 7.5,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-good",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-good#r2",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-strong",
+        "scores": {
+         "overall": 8.5,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 9.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-strong#r2",
+        "scores": {
+         "overall": 8.5,
+         "task": 8.5,
+         "coherence": 8.5,
+         "lexical": 8.5,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-off-topic",
+        "scores": {
+         "overall": 6.5,
+         "task": 1.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-off-topic#r2",
+        "scores": {
+         "overall": 6.5,
+         "task": 1.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-under-length",
+        "scores": {
+         "overall": 5.5,
+         "task": 5.0,
+         "coherence": 5.0,
+         "lexical": 6.0,
+         "grammar": 6.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t2-under-length#r2",
+        "scores": {
+         "overall": 6.0,
+         "task": 5.0,
+         "coherence": 5.0,
+         "lexical": 6.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t1-no-image",
+        "scores": {
+         "overall": null,
+         "task": null,
+         "coherence": 7.5,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "t1-no-image#r2",
+        "scores": {
+         "overall": null,
+         "task": null,
+         "coherence": 7.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    }
+   },
+   "warnings": [
+    "对照的是两个模型：deepseek / deepseek-flash vs deepseek / deepseek-v4-pro（提示词与实际输入相同）"
+   ],
+   "common_rater_agreement": null
+  },
+  "teacher": {
+   "label": "学生作文 teacher-t2-01（老师总分）",
+   "runs": {
+    "flash": {
+     "attempts": {
+      "requests": 2,
+      "text": 2,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 0.127616,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-flash"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 2,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 47662,
+      "latency_ms_p90": 51103,
+      "completion_tokens_max": 8142,
+      "calibration": {
+       "overall": {
+        "n": 2,
+        "mae": 0.5,
+        "bias": 0.5,
+        "within_0_5": 1.0,
+        "exact": 0.0
+       }
+      },
+      "rater_agreement": null,
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.0,
+       "overall_spread_max": 0.0,
+       "any_failed": 0
+      },
+      "teacher_findings": {
+       "covered": 6,
+       "total": 8,
+       "rate": 0.75,
+       "evaluated_total": 8,
+       "rate_evaluated": 0.75
+      },
+      "per_sample": [
+       {
+        "id": "teacher-t2-01",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 6.5,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "teacher-t2-01#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    },
+    "pro": {
+     "attempts": {
+      "requests": 2,
+      "text": 2,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 0.422796,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-v4-pro"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 2,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 74593,
+      "latency_ms_p90": 86790,
+      "completion_tokens_max": 8058,
+      "calibration": {
+       "overall": {
+        "n": 2,
+        "mae": 0.75,
+        "bias": 0.75,
+        "within_0_5": 0.5,
+        "exact": 0.0
+       }
+      },
+      "rater_agreement": null,
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.5,
+       "overall_spread_max": 0.5,
+       "any_failed": 0
+      },
+      "teacher_findings": {
+       "covered": 4,
+       "total": 8,
+       "rate": 0.5,
+       "evaluated_total": 8,
+       "rate_evaluated": 0.5
+      },
+      "per_sample": [
+       {
+        "id": "teacher-t2-01",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.5,
+         "lexical": 7.0,
+         "grammar": 8.0
+        },
+        "teacher": {
+         "overall": 6.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "teacher-t2-01#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {
+         "overall": 6.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    }
+   },
+   "warnings": [
+    "对照的是两个模型：deepseek / deepseek-flash vs deepseek / deepseek-v4-pro（提示词与实际输入相同）"
+   ],
+   "common_rater_agreement": null,
+   "blind_tally": {
+    "labels": {
+     "correct": "正确",
+     "misread": "① 误读原文",
+     "changed_meaning": "② 改句改变原意或逻辑",
+     "polish_as_error": "③ 可选润色说成错误",
+     "uncertain": "不确定",
+     "missed_both_raters": "④ 漏掉评委都指出的明确错误（条）",
+     "missed_other": "其他漏报（条）"
+    },
+    "models": {
+     "a": {
+      "correct": 7,
+      "misread": 0,
+      "changed_meaning": 2,
+      "polish_as_error": 8,
+      "uncertain": 2,
+      "missed_both_raters": 0,
+      "missed_other": 0,
+      "filled": 21,
+      "blank": 0,
+      "unrecognized": 0
+     },
+     "b": {
+      "correct": 14,
+      "misread": 0,
+      "changed_meaning": 0,
+      "polish_as_error": 0,
+      "uncertain": 0,
+      "missed_both_raters": 0,
+      "missed_other": 0,
+      "filled": 16,
+      "blank": 0,
+      "unrecognized": 0
+     }
+    },
+    "complete": true,
+    "repeats_counted": false,
+    "current": true
+   }
+  },
+  "rated_t2": {
+   "label": "留出集 Task 2（双评委）",
+   "runs": {
+    "flash": {
+     "attempts": {
+      "requests": 11,
+      "text": 11,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 0.836617,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-flash"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 8,
+      "first_attempt_json_ok": 0.625,
+      "first_attempt_valid": 0.625,
+      "final_ready": 0.875,
+      "final_failures": {
+       "invalid_output": 1
+      },
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 59465,
+      "latency_ms_p90": 68014,
+      "completion_tokens_max": 15077,
+      "calibration": {
+       "overall": {
+        "n": 7,
+        "mae": 0.286,
+        "bias": -0.071,
+        "within_0_5": 1.0,
+        "exact": 0.143
+       },
+       "task": {
+        "n": 7,
+        "mae": 0.5,
+        "bias": -0.071,
+        "within_0_5": 0.857,
+        "exact": 0.143
+       },
+       "coherence": {
+        "n": 7,
+        "mae": 0.214,
+        "bias": 0.214,
+        "within_0_5": 1.0,
+        "exact": 0.571
+       },
+       "lexical": {
+        "n": 7,
+        "mae": 0.357,
+        "bias": -0.357,
+        "within_0_5": 0.714,
+        "exact": 0.571
+       },
+       "grammar": {
+        "n": 7,
+        "mae": 0.286,
+        "bias": -0.143,
+        "within_0_5": 1.0,
+        "exact": 0.429
+       }
+      },
+      "rater_agreement": {
+       "overall": {
+        "essays": 8,
+        "scored": 7,
+        "failed": 1,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.286,
+        "ai_gap": 0.286,
+        "ai_bias": -0.071,
+        "within_range": 1.0
+       },
+       "task": {
+        "essays": 8,
+        "scored": 7,
+        "failed": 1,
+        "rater_gap_all": 1.0,
+        "rater_gap": 1.0,
+        "ai_gap": 0.5,
+        "ai_bias": -0.071,
+        "within_range": 1.0
+       },
+       "coherence": {
+        "essays": 8,
+        "scored": 7,
+        "failed": 1,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.286,
+        "ai_gap": 0.214,
+        "ai_bias": 0.214,
+        "within_range": 1.0
+       },
+       "lexical": {
+        "essays": 8,
+        "scored": 7,
+        "failed": 1,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.286,
+        "ai_gap": 0.357,
+        "ai_bias": -0.357,
+        "within_range": 0.714
+       },
+       "grammar": {
+        "essays": 8,
+        "scored": 7,
+        "failed": 1,
+        "rater_gap_all": 0.5,
+        "rater_gap": 0.571,
+        "ai_gap": 0.286,
+        "ai_bias": -0.143,
+        "within_range": 1.0
+       }
+      },
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.167,
+       "overall_spread_max": 0.5,
+       "any_failed": 1
+      },
+      "teacher_findings": {
+       "covered": 21,
+       "total": 30,
+       "rate": 0.7,
+       "evaluated_total": 26,
+       "rate_evaluated": 0.808
+      },
+      "per_sample": [
+       {
+        "id": "ho-t2-0606-1",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.5,
+         "lexical": 7.5,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 7.25,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0606-1#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 7.25,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0606-2",
+        "scores": {
+         "overall": null
+        },
+        "teacher": {
+         "overall": 7.0,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "failed"
+        }
+       },
+       {
+        "id": "ho-t2-0606-2#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {
+         "overall": 7.0,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-1",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.75,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-1#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.75,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 8.0,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-2#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 8.0,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    },
+    "pro": {
+     "attempts": {
+      "requests": 8,
+      "text": 8,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 2.59469,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-v4-pro"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 8,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 136701,
+      "latency_ms_p90": 213856,
+      "completion_tokens_max": 18047,
+      "calibration": {
+       "overall": {
+        "n": 8,
+        "mae": 0.312,
+        "bias": 0.312,
+        "within_0_5": 1.0,
+        "exact": 0.125
+       },
+       "task": {
+        "n": 8,
+        "mae": 0.438,
+        "bias": 0.312,
+        "within_0_5": 1.0,
+        "exact": 0.125
+       },
+       "coherence": {
+        "n": 8,
+        "mae": 0.688,
+        "bias": 0.688,
+        "within_0_5": 0.5,
+        "exact": 0.125
+       },
+       "lexical": {
+        "n": 8,
+        "mae": 0.188,
+        "bias": -0.062,
+        "within_0_5": 1.0,
+        "exact": 0.625
+       },
+       "grammar": {
+        "n": 8,
+        "mae": 0.312,
+        "bias": 0.188,
+        "within_0_5": 0.875,
+        "exact": 0.5
+       }
+      },
+      "rater_agreement": {
+       "overall": {
+        "essays": 8,
+        "scored": 8,
+        "failed": 0,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.25,
+        "ai_gap": 0.312,
+        "ai_bias": 0.312,
+        "within_range": 1.0
+       },
+       "task": {
+        "essays": 8,
+        "scored": 8,
+        "failed": 0,
+        "rater_gap_all": 1.0,
+        "rater_gap": 1.0,
+        "ai_gap": 0.438,
+        "ai_bias": 0.312,
+        "within_range": 1.0
+       },
+       "coherence": {
+        "essays": 8,
+        "scored": 8,
+        "failed": 0,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.25,
+        "ai_gap": 0.688,
+        "ai_bias": 0.688,
+        "within_range": 0.5
+       },
+       "lexical": {
+        "essays": 8,
+        "scored": 8,
+        "failed": 0,
+        "rater_gap_all": 0.25,
+        "rater_gap": 0.25,
+        "ai_gap": 0.188,
+        "ai_bias": -0.062,
+        "within_range": 1.0
+       },
+       "grammar": {
+        "essays": 8,
+        "scored": 8,
+        "failed": 0,
+        "rater_gap_all": 0.5,
+        "rater_gap": 0.5,
+        "ai_gap": 0.312,
+        "ai_bias": 0.188,
+        "within_range": 1.0
+       }
+      },
+      "ordering": null,
+      "repeat_spread": {
+       "overall_spread_mean": 0.125,
+       "overall_spread_max": 0.5,
+       "any_failed": 0
+      },
+      "teacher_findings": {
+       "covered": 21,
+       "total": 30,
+       "rate": 0.7,
+       "evaluated_total": 30,
+       "rate_evaluated": 0.7
+      },
+      "per_sample": [
+       {
+        "id": "ho-t2-0606-1",
+        "scores": {
+         "overall": 7.5,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 7.5,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 7.25,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0606-1#r2",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 8.0,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "teacher": {
+         "overall": 7.25,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0606-2",
+        "scores": {
+         "overall": 7.5,
+         "task": 8.0,
+         "coherence": 7.5,
+         "lexical": 7.5,
+         "grammar": 7.5
+        },
+        "teacher": {
+         "overall": 7.0,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0606-2#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 7.0,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-1",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.75,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-1#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {
+         "overall": 6.75,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-2",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.5
+        },
+        "teacher": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 8.0,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ho-t2-0627-2#r2",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 7.5,
+         "grammar": 8.0
+        },
+        "teacher": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.0,
+         "lexical": 8.0,
+         "grammar": 7.5
+        },
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    }
+   },
+   "warnings": [
+    "对照的是两个模型：deepseek / deepseek-flash vs deepseek / deepseek-v4-pro（提示词与实际输入相同）"
+   ],
+   "common_rater_agreement": {
+    "essays": 7,
+    "a": {
+     "overall": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.286,
+      "ai_bias": -0.071,
+      "within_range": 1.0
+     },
+     "task": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 1.0,
+      "rater_gap": 1.0,
+      "ai_gap": 0.5,
+      "ai_bias": -0.071,
+      "within_range": 1.0
+     },
+     "coherence": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.214,
+      "ai_bias": 0.214,
+      "within_range": 1.0
+     },
+     "lexical": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.357,
+      "ai_bias": -0.357,
+      "within_range": 0.714
+     },
+     "grammar": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.571,
+      "rater_gap": 0.571,
+      "ai_gap": 0.286,
+      "ai_bias": -0.143,
+      "within_range": 1.0
+     }
+    },
+    "b": {
+     "overall": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.286,
+      "ai_bias": 0.286,
+      "within_range": 1.0
+     },
+     "task": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 1.0,
+      "rater_gap": 1.0,
+      "ai_gap": 0.429,
+      "ai_bias": 0.286,
+      "within_range": 1.0
+     },
+     "coherence": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.714,
+      "ai_bias": 0.714,
+      "within_range": 0.429
+     },
+     "lexical": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.286,
+      "rater_gap": 0.286,
+      "ai_gap": 0.143,
+      "ai_bias": -0.143,
+      "within_range": 1.0
+     },
+     "grammar": {
+      "essays": 7,
+      "scored": 7,
+      "failed": 0,
+      "rater_gap_all": 0.571,
+      "rater_gap": 0.571,
+      "ai_gap": 0.286,
+      "ai_bias": 0.143,
+      "within_range": 1.0
+     }
+    }
+   },
+   "blind_tally": {
+    "labels": {
+     "correct": "正确",
+     "misread": "① 误读原文",
+     "changed_meaning": "② 改句改变原意或逻辑",
+     "polish_as_error": "③ 可选润色说成错误",
+     "uncertain": "不确定",
+     "missed_both_raters": "④ 漏掉评委都指出的明确错误（条）",
+     "missed_other": "其他漏报（条）"
+    },
+    "models": {
+     "a": {
+      "correct": 31,
+      "misread": 6,
+      "changed_meaning": 0,
+      "polish_as_error": 22,
+      "uncertain": 6,
+      "missed_both_raters": 3,
+      "missed_other": 5,
+      "filled": 73,
+      "blank": 0,
+      "unrecognized": 0
+     },
+     "b": {
+      "correct": 55,
+      "misread": 1,
+      "changed_meaning": 0,
+      "polish_as_error": 0,
+      "uncertain": 6,
+      "missed_both_raters": 1,
+      "missed_other": 4,
+      "filled": 70,
+      "blank": 0,
+      "unrecognized": 0
+     }
+    },
+    "complete": true,
+    "repeats_counted": false,
+    "current": true
+   }
+  },
+  "ordering": {
+   "label": "排序集（AI 参考文章，标称 9–7）",
+   "runs": {
+    "flash": {
+     "attempts": {
+      "requests": 13,
+      "text": 13,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 0.646504,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-flash"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 10,
+      "first_attempt_json_ok": 0.7,
+      "first_attempt_valid": 0.7,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 33943,
+      "latency_ms_p90": 51590,
+      "completion_tokens_max": 8855,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": {
+       "ref-0606": {
+        "missing": 0,
+        "pairs": 10,
+        "inversions": 0,
+        "ties": 2,
+        "highest": 9.0,
+        "lowest": 7.0,
+        "spread": 1.5,
+        "chain": [
+         [
+          9.0,
+          8.0
+         ],
+         [
+          8.5,
+          8.0
+         ],
+         [
+          8.0,
+          7.0
+         ],
+         [
+          7.5,
+          7.0
+         ],
+         [
+          7.0,
+          6.5
+         ]
+        ]
+       },
+       "ref-0627": {
+        "missing": 0,
+        "pairs": 10,
+        "inversions": 0,
+        "ties": 2,
+        "highest": 9.0,
+        "lowest": 7.0,
+        "spread": 1.0,
+        "chain": [
+         [
+          9.0,
+          8.0
+         ],
+         [
+          8.5,
+          7.5
+         ],
+         [
+          8.0,
+          7.5
+         ],
+         [
+          7.5,
+          7.0
+         ],
+         [
+          7.0,
+          7.0
+         ]
+        ]
+       }
+      },
+      "repeat_spread": null,
+      "teacher_findings": null,
+      "per_sample": [
+       {
+        "id": "ref-0606-90",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-85",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 7.5,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-80",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-75",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-70",
+        "scores": {
+         "overall": 6.5,
+         "task": 7.0,
+         "coherence": 6.5,
+         "lexical": 6.5,
+         "grammar": 6.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-90",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-85",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.5,
+         "lexical": 7.5,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-80",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 7.5,
+         "lexical": 7.5,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-75",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-70",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    },
+    "pro": {
+     "attempts": {
+      "requests": 10,
+      "text": 10,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 2.299134,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-v4-pro"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 10,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 95971,
+      "latency_ms_p90": 110410,
+      "completion_tokens_max": 10593,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": {
+       "ref-0606": {
+        "missing": 0,
+        "pairs": 10,
+        "inversions": 0,
+        "ties": 3,
+        "highest": 9.0,
+        "lowest": 7.0,
+        "spread": 1.0,
+        "chain": [
+         [
+          9.0,
+          8.5
+         ],
+         [
+          8.5,
+          8.0
+         ],
+         [
+          8.0,
+          8.0
+         ],
+         [
+          7.5,
+          8.0
+         ],
+         [
+          7.0,
+          7.5
+         ]
+        ]
+       },
+       "ref-0627": {
+        "missing": 0,
+        "pairs": 10,
+        "inversions": 0,
+        "ties": 6,
+        "highest": 9.0,
+        "lowest": 7.0,
+        "spread": 0.5,
+        "chain": [
+         [
+          9.0,
+          8.5
+         ],
+         [
+          8.5,
+          8.0
+         ],
+         [
+          8.0,
+          8.0
+         ],
+         [
+          7.5,
+          8.0
+         ],
+         [
+          7.0,
+          8.0
+         ]
+        ]
+       }
+      },
+      "repeat_spread": null,
+      "teacher_findings": null,
+      "per_sample": [
+       {
+        "id": "ref-0606-90",
+        "scores": {
+         "overall": 8.5,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.5,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-85",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-80",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-75",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 7.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0606-70",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.0,
+         "coherence": 7.5,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-90",
+        "scores": {
+         "overall": 8.5,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.5,
+         "grammar": 8.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-85",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-80",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-75",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 8.0,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "ref-0627-70",
+        "scores": {
+         "overall": 8.0,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 7.5,
+         "grammar": 8.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    }
+   },
+   "warnings": [
+    "对照的是两个模型：deepseek / deepseek-flash vs deepseek / deepseek-v4-pro（提示词与实际输入相同）"
+   ],
+   "common_rater_agreement": null
+  },
+  "lowband": {
+   "label": "低分段合成作文（标称 5–6，未经人工评分）",
+   "runs": {
+    "flash": {
+     "attempts": {
+      "requests": 12,
+      "text": 12,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 1.074638,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-flash"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 12,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 57162,
+      "latency_ms_p90": 100242,
+      "completion_tokens_max": 19522,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": {
+       "low-shop": {
+        "missing": 0,
+        "pairs": 12,
+        "inversions": 0,
+        "ties": 0,
+        "highest": 6.0,
+        "lowest": 5.0,
+        "spread": 2.0,
+        "chain": [
+         [
+          6.0,
+          7.0
+         ],
+         [
+          6.0,
+          7.0
+         ],
+         [
+          5.5,
+          6.0
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.0,
+          5.0
+         ],
+         [
+          5.0,
+          5.0
+         ]
+        ]
+       },
+       "low-community": {
+        "missing": 0,
+        "pairs": 12,
+        "inversions": 0,
+        "ties": 0,
+        "highest": 6.0,
+        "lowest": 5.0,
+        "spread": 2.0,
+        "chain": [
+         [
+          6.0,
+          7.0
+         ],
+         [
+          6.0,
+          7.0
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.0,
+          5.0
+         ],
+         [
+          5.0,
+          5.0
+         ]
+        ]
+       }
+      },
+      "repeat_spread": {
+       "overall_spread_mean": 0.083,
+       "overall_spread_max": 0.5,
+       "any_failed": 0
+      },
+      "teacher_findings": {
+       "covered": 72,
+       "total": 88,
+       "rate": 0.818,
+       "evaluated_total": 88,
+       "rate_evaluated": 0.818
+      },
+      "per_sample": [
+       {
+        "id": "low-shop-50",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.5,
+         "coherence": 5.0,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-50#r2",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.0,
+         "coherence": 5.0,
+         "lexical": 4.5,
+         "grammar": 4.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-55",
+        "scores": {
+         "overall": 6.0,
+         "task": 6.5,
+         "coherence": 6.0,
+         "lexical": 6.0,
+         "grammar": 5.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-55#r2",
+        "scores": {
+         "overall": 6.5,
+         "task": 7.0,
+         "coherence": 6.5,
+         "lexical": 6.0,
+         "grammar": 5.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-60",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-60#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 6.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-50",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.5,
+         "coherence": 5.0,
+         "lexical": 4.5,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-50#r2",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.0,
+         "coherence": 5.0,
+         "lexical": 5.0,
+         "grammar": 4.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-55",
+        "scores": {
+         "overall": 6.5,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 6.0,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-55#r2",
+        "scores": {
+         "overall": 6.5,
+         "task": 6.5,
+         "coherence": 6.5,
+         "lexical": 6.0,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-60",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-60#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    },
+    "pro": {
+     "attempts": {
+      "requests": 12,
+      "text": 12,
+      "vision": 0,
+      "unknown": 0,
+      "unknown_usage": 0,
+      "estimated_cost": 3.677192,
+      "cost_is_lower_bound": false
+     },
+     "final": {
+      "served_models": [
+       "deepseek-v4-pro"
+      ],
+      "prompt_version": "iwa-2026-11-10.12",
+      "code_sha256": "2d531eea7f8ddcd3",
+      "samples": 12,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "final_ready": 1.0,
+      "final_failures": {},
+      "truncated": 0,
+      "timeouts": 0,
+      "latency_ms_p50": 157523,
+      "latency_ms_p90": 202314,
+      "completion_tokens_max": 16538,
+      "calibration": null,
+      "rater_agreement": null,
+      "ordering": {
+       "low-shop": {
+        "missing": 0,
+        "pairs": 12,
+        "inversions": 0,
+        "ties": 0,
+        "highest": 6.0,
+        "lowest": 5.0,
+        "spread": 2.25,
+        "chain": [
+         [
+          6.0,
+          7.5
+         ],
+         [
+          6.0,
+          7.5
+         ],
+         [
+          5.5,
+          6.0
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.0,
+          5.0
+         ],
+         [
+          5.0,
+          5.5
+         ]
+        ]
+       },
+       "low-community": {
+        "missing": 0,
+        "pairs": 12,
+        "inversions": 0,
+        "ties": 0,
+        "highest": 6.0,
+        "lowest": 5.0,
+        "spread": 2.0,
+        "chain": [
+         [
+          6.0,
+          7.5
+         ],
+         [
+          6.0,
+          7.0
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.5,
+          6.5
+         ],
+         [
+          5.0,
+          5.0
+         ],
+         [
+          5.0,
+          5.5
+         ]
+        ]
+       }
+      },
+      "repeat_spread": {
+       "overall_spread_mean": 0.333,
+       "overall_spread_max": 0.5,
+       "any_failed": 0
+      },
+      "teacher_findings": {
+       "covered": 72,
+       "total": 88,
+       "rate": 0.818,
+       "evaluated_total": 88,
+       "rate_evaluated": 0.818
+      },
+      "per_sample": [
+       {
+        "id": "low-shop-50",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.0,
+         "coherence": 5.5,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-50#r2",
+        "scores": {
+         "overall": 5.5,
+         "task": 5.0,
+         "coherence": 6.0,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-55",
+        "scores": {
+         "overall": 6.0,
+         "task": 6.0,
+         "coherence": 7.0,
+         "lexical": 6.0,
+         "grammar": 5.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-55#r2",
+        "scores": {
+         "overall": 6.5,
+         "task": 6.5,
+         "coherence": 7.0,
+         "lexical": 6.0,
+         "grammar": 5.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-60",
+        "scores": {
+         "overall": 7.5,
+         "task": 8.0,
+         "coherence": 8.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-shop-60#r2",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.0,
+         "coherence": 8.0,
+         "lexical": 7.0,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-50",
+        "scores": {
+         "overall": 5.0,
+         "task": 5.5,
+         "coherence": 5.0,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-50#r2",
+        "scores": {
+         "overall": 5.5,
+         "task": 6.0,
+         "coherence": 5.5,
+         "lexical": 5.0,
+         "grammar": 5.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-55",
+        "scores": {
+         "overall": 6.5,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.0,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-55#r2",
+        "scores": {
+         "overall": 6.5,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.0,
+         "grammar": 6.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-60",
+        "scores": {
+         "overall": 7.5,
+         "task": 7.5,
+         "coherence": 8.0,
+         "lexical": 7.0,
+         "grammar": 7.5
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       },
+       {
+        "id": "low-community-60#r2",
+        "scores": {
+         "overall": 7.0,
+         "task": 7.0,
+         "coherence": 7.0,
+         "lexical": 6.5,
+         "grammar": 7.0
+        },
+        "teacher": {},
+        "statuses": {
+         "evaluate": "ready"
+        }
+       }
+      ]
+     }
+    }
+   },
+   "warnings": [
+    "对照的是两个模型：deepseek / deepseek-flash vs deepseek / deepseek-v4-pro（提示词与实际输入相同）"
+   ],
+   "common_rater_agreement": null,
+   "blind_tally": {
+    "labels": {
+     "correct": "正确",
+     "misread": "① 误读原文",
+     "changed_meaning": "② 改句改变原意或逻辑",
+     "polish_as_error": "③ 可选润色说成错误",
+     "uncertain": "不确定",
+     "missed_both_raters": "④ 漏掉评委都指出的明确错误（条）",
+     "missed_other": "其他漏报（条）"
+    },
+    "models": {
+     "a": {
+      "correct": 94,
+      "misread": 18,
+      "changed_meaning": 0,
+      "polish_as_error": 15,
+      "uncertain": 3,
+      "missed_both_raters": 5,
+      "missed_other": 44,
+      "filled": 142,
+      "blank": 0,
+      "unrecognized": 0
+     },
+     "b": {
+      "correct": 106,
+      "misread": 6,
+      "changed_meaning": 0,
+      "polish_as_error": 2,
+      "uncertain": 4,
+      "missed_both_raters": 8,
+      "missed_other": 40,
+      "filled": 130,
+      "blank": 0,
+      "unrecognized": 0
+     }
+    },
+    "complete": true,
+    "repeats_counted": false,
+    "current": true
+   }
+  }
+ }
+}

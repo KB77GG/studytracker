@@ -1,0 +1,2105 @@
+{
+  "schema_version": 1,
+  "provisional": false,
+  "authorized_text_request_cap": 184,
+  "planned_evaluations_per_model": 46,
+  "actual_reserved_requests": 102,
+  "integrity": {
+    "ledger_snapshot_stable": true,
+    "torn_final_line": 0,
+    "ledger_problem_counts": {
+      "done_without_reservation": 0
+    },
+    "cap_not_exceeded": true,
+    "summary_present": true,
+    "launcher_finished_successfully": true,
+    "all_reports_reconcile": true
+  },
+  "totals": {
+    "flash": {
+      "actual_reserved_requests": 56,
+      "first_requests": 46,
+      "retry_requests": 10,
+      "request_ok": 56,
+      "request_failed": 0,
+      "outcome_unknown": 0,
+      "usage_unknown_requests": 0,
+      "cache_unknown_requests": 0,
+      "evaluations_with_retry": 10,
+      "distinct_first_evaluations": 46,
+      "tokens_known_subtotal": {
+        "prompt_tokens": 189699,
+        "completion_tokens": 458840,
+        "prompt_cache_hit_tokens": 168700
+      },
+      "tokens_complete_total": {
+        "prompt_tokens": 189699,
+        "completion_tokens": 458840,
+        "prompt_cache_hit_tokens": 168700
+      },
+      "tokens_unreported_requests": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "prompt_cache_hit_tokens": 0
+      },
+      "completion_tokens_max_known": 19522,
+      "completed_request_wall_ms_p50": 46000,
+      "completed_request_wall_ms_p90": 84000,
+      "completed_request_wall_ms_max": 116000,
+      "time_bands": {
+        "peak": 38,
+        "off_peak": 18,
+        "cross_boundary": 0,
+        "time_unknown": 0
+      },
+      "cost_cny": {
+        "known_usage_lower": 3.20242008,
+        "known_usage_upper": 3.20242008,
+        "total_lower_bound": 3.20242008,
+        "total_upper_bound": 3.20242008,
+        "all_usage_known": true,
+        "fixed_peak_known_usage_upper_estimate": 3.719466,
+        "is_provider_bill": false
+      },
+      "reported_evaluations": 46,
+      "success_evaluations": 44,
+      "failed_evaluations": 2,
+      "first_json_success_count": 36,
+      "first_validation_success_count": 36,
+      "report_count": 5,
+      "reasoning_tokens_reported_runs": 344084,
+      "reasoning_tokens_known_reported_runs": 344084,
+      "reasoning_unreported_calls_reported_runs": 0,
+      "reasoning_tokens_max_known": 17653,
+      "failure_rate_among_reported_evaluations": 0.043478
+    },
+    "pro": {
+      "actual_reserved_requests": 46,
+      "first_requests": 46,
+      "retry_requests": 0,
+      "request_ok": 46,
+      "request_failed": 0,
+      "outcome_unknown": 0,
+      "usage_unknown_requests": 0,
+      "cache_unknown_requests": 0,
+      "evaluations_with_retry": 0,
+      "distinct_first_evaluations": 46,
+      "tokens_known_subtotal": {
+        "prompt_tokens": 156869,
+        "completion_tokens": 470142,
+        "prompt_cache_hit_tokens": 133376
+      },
+      "tokens_complete_total": {
+        "prompt_tokens": 156869,
+        "completion_tokens": 470142,
+        "prompt_cache_hit_tokens": 133376
+      },
+      "tokens_unreported_requests": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "prompt_cache_hit_tokens": 0
+      },
+      "completion_tokens_max_known": 18047,
+      "completed_request_wall_ms_p50": 115000,
+      "completed_request_wall_ms_p90": 176000,
+      "completed_request_wall_ms_max": 255000,
+      "time_bands": {
+        "peak": 43,
+        "off_peak": 2,
+        "cross_boundary": 1,
+        "time_unknown": 0
+      },
+      "cost_cny": {
+        "known_usage_lower": 12.4468866,
+        "known_usage_upper": 12.6137826,
+        "total_lower_bound": 12.4468866,
+        "total_upper_bound": 12.6137826,
+        "all_usage_known": true,
+        "fixed_peak_known_usage_upper_estimate": 12.9452838,
+        "is_provider_bill": false
+      },
+      "reported_evaluations": 46,
+      "success_evaluations": 46,
+      "failed_evaluations": 0,
+      "first_json_success_count": 46,
+      "first_validation_success_count": 46,
+      "report_count": 5,
+      "reasoning_tokens_reported_runs": 390848,
+      "reasoning_tokens_known_reported_runs": 390848,
+      "reasoning_unreported_calls_reported_runs": 0,
+      "reasoning_tokens_max_known": 15916,
+      "failure_rate_among_reported_evaluations": 0.0
+    }
+  },
+  "groups": {
+    "dev": {
+      "models": {
+        "flash": {
+          "planned_evaluations": 14,
+          "requests": {
+            "actual_reserved_requests": 18,
+            "first_requests": 14,
+            "retry_requests": 4,
+            "request_ok": 18,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 4,
+            "distinct_first_evaluations": 14,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 58648,
+              "completion_tokens": 128147,
+              "prompt_cache_hit_tokens": 55296
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 58648,
+              "completion_tokens": 128147,
+              "prompt_cache_hit_tokens": 55296
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 16565,
+            "completed_request_wall_ms_p50": 39000,
+            "completed_request_wall_ms_p90": 62000,
+            "completed_request_wall_ms_max": 94000,
+            "time_bands": {
+              "peak": 0,
+              "off_peak": 18,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 0.51704592,
+              "known_usage_upper": 0.51704592,
+              "total_lower_bound": 0.51704592,
+              "total_upper_bound": 0.51704592,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 1.03409184,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 1.034092,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 14,
+            "calls": 18,
+            "first_attempts": 14,
+            "first_attempt_json_ok": 0.714,
+            "first_attempt_valid": 0.714,
+            "final_ready": 0.929,
+            "latency_ms_p50": 39497,
+            "latency_ms_p90": 61498,
+            "completion_tokens_max": 16565,
+            "reasoning_tokens": 92143,
+            "reasoning_tokens_known": 92143,
+            "reasoning_tokens_max": 14233,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 13,
+            "failed_evaluations": 1,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 10,
+            "first_validation_success_count": 10,
+            "repeat_variation": {
+              "overall_spread_mean": 0.1,
+              "overall_spread_max": 0.5,
+              "any_failed": 1,
+              "unique_essays": 7,
+              "paired_successful_essays": 6,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 5,
+                  "mean_abs_difference": 0.1,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 5,
+                  "mean_abs_difference": 0.2,
+                  "max_abs_difference": 0.5
+                },
+                "coherence": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                },
+                "lexical": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        },
+        "pro": {
+          "planned_evaluations": 14,
+          "requests": {
+            "actual_reserved_requests": 14,
+            "first_requests": 14,
+            "retry_requests": 0,
+            "request_ok": 14,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 14,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 45412,
+              "completion_tokens": 142102,
+              "prompt_cache_hit_tokens": 33792
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 45412,
+              "completion_tokens": 142102,
+              "prompt_cache_hit_tokens": 33792
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 14023,
+            "completed_request_wall_ms_p50": 97000,
+            "completed_request_wall_ms_p90": 119000,
+            "completed_request_wall_ms_max": 132000,
+            "time_bands": {
+              "peak": 11,
+              "off_peak": 2,
+              "cross_boundary": 1,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 3.4530744,
+              "known_usage_upper": 3.6199704,
+              "total_lower_bound": 3.4530744,
+              "total_upper_bound": 3.6199704,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 3.9514716,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 3.951472,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 14,
+            "calls": 14,
+            "first_attempts": 14,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 96876,
+            "latency_ms_p90": 119482,
+            "completion_tokens_max": 14023,
+            "reasoning_tokens": 118633,
+            "reasoning_tokens_known": 118633,
+            "reasoning_tokens_max": 12045,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 14,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 14,
+            "first_validation_success_count": 14,
+            "repeat_variation": {
+              "overall_spread_mean": 0.083,
+              "overall_spread_max": 0.5,
+              "any_failed": 0,
+              "unique_essays": 7,
+              "paired_successful_essays": 7,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                },
+                "coherence": {
+                  "paired": 7,
+                  "mean_abs_difference": 0.285714,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 7,
+                  "mean_abs_difference": 0.214286,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 7,
+                  "mean_abs_difference": 0.214286,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        }
+      },
+      "common_teacher_scores": null,
+      "common_dual_raters_from_summary": null
+    },
+    "teacher": {
+      "models": {
+        "flash": {
+          "planned_evaluations": 2,
+          "requests": {
+            "actual_reserved_requests": 2,
+            "first_requests": 2,
+            "retry_requests": 0,
+            "request_ok": 2,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 2,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 6874,
+              "completion_tokens": 15676,
+              "prompt_cache_hit_tokens": 5888
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 6874,
+              "completion_tokens": 15676,
+              "prompt_cache_hit_tokens": 5888
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 8142,
+            "completed_request_wall_ms_p50": 48000,
+            "completed_request_wall_ms_p90": 51000,
+            "completed_request_wall_ms_max": 51000,
+            "time_bands": {
+              "peak": 2,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 0.12761552,
+              "known_usage_upper": 0.12761552,
+              "total_lower_bound": 0.12761552,
+              "total_upper_bound": 0.12761552,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 0.12761552,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 0.127616,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 2,
+            "calls": 2,
+            "first_attempts": 2,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 47662,
+            "latency_ms_p90": 51103,
+            "completion_tokens_max": 8142,
+            "reasoning_tokens": 11814,
+            "reasoning_tokens_known": 11814,
+            "reasoning_tokens_max": 6680,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 2,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 2,
+            "first_validation_success_count": 2,
+            "repeat_variation": {
+              "overall_spread_mean": 0.0,
+              "overall_spread_max": 0.0,
+              "any_failed": 0,
+              "unique_essays": 1,
+              "paired_successful_essays": 1,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                },
+                "task": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                },
+                "coherence": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.5,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                },
+                "grammar": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        },
+        "pro": {
+          "planned_evaluations": 2,
+          "requests": {
+            "actual_reserved_requests": 2,
+            "first_requests": 2,
+            "retry_requests": 0,
+            "request_ok": 2,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 2,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 6976,
+              "completion_tokens": 15396,
+              "prompt_cache_hit_tokens": 6400
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 6976,
+              "completion_tokens": 15396,
+              "prompt_cache_hit_tokens": 6400
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 8058,
+            "completed_request_wall_ms_p50": 75000,
+            "completed_request_wall_ms_p90": 87000,
+            "completed_request_wall_ms_max": 87000,
+            "time_bands": {
+              "peak": 2,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 0.422796,
+              "known_usage_upper": 0.422796,
+              "total_lower_bound": 0.422796,
+              "total_upper_bound": 0.422796,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 0.422796,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 0.422796,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 2,
+            "calls": 2,
+            "first_attempts": 2,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 74593,
+            "latency_ms_p90": 86790,
+            "completion_tokens_max": 8058,
+            "reasoning_tokens": 12346,
+            "reasoning_tokens_known": 12346,
+            "reasoning_tokens_max": 6544,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 2,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 2,
+            "first_validation_success_count": 2,
+            "repeat_variation": {
+              "overall_spread_mean": 0.5,
+              "overall_spread_max": 0.5,
+              "any_failed": 0,
+              "unique_essays": 1,
+              "paired_successful_essays": 1,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.5,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.5,
+                  "max_abs_difference": 0.5
+                },
+                "coherence": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.5,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.0,
+                  "max_abs_difference": 0.0
+                },
+                "grammar": {
+                  "paired": 1,
+                  "mean_abs_difference": 0.5,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        }
+      },
+      "common_teacher_scores": {
+        "overall": {
+          "common_successful_evaluations": 2,
+          "flash": {
+            "mae": 0.5,
+            "bias": 0.5,
+            "within_0_5": 1.0
+          },
+          "pro": {
+            "mae": 0.75,
+            "bias": 0.75,
+            "within_0_5": 0.5
+          },
+          "pro_mae_not_worse": false
+        }
+      },
+      "common_dual_raters_from_summary": null
+    },
+    "rated_t2": {
+      "models": {
+        "flash": {
+          "planned_evaluations": 8,
+          "requests": {
+            "actual_reserved_requests": 11,
+            "first_requests": 8,
+            "retry_requests": 3,
+            "request_ok": 11,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 3,
+            "distinct_first_evaluations": 8,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 38757,
+              "completion_tokens": 103260,
+              "prompt_cache_hit_tokens": 34172
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 38757,
+              "completion_tokens": 103260,
+              "prompt_cache_hit_tokens": 34172
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 15077,
+            "completed_request_wall_ms_p50": 59000,
+            "completed_request_wall_ms_p90": 68000,
+            "completed_request_wall_ms_max": 92000,
+            "time_bands": {
+              "peak": 11,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 0.83661688,
+              "known_usage_upper": 0.83661688,
+              "total_lower_bound": 0.83661688,
+              "total_upper_bound": 0.83661688,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 0.83661688,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 0.836617,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 8,
+            "calls": 11,
+            "first_attempts": 8,
+            "first_attempt_json_ok": 0.625,
+            "first_attempt_valid": 0.625,
+            "final_ready": 0.875,
+            "latency_ms_p50": 59465,
+            "latency_ms_p90": 68014,
+            "completion_tokens_max": 15077,
+            "reasoning_tokens": 78386,
+            "reasoning_tokens_known": 78386,
+            "reasoning_tokens_max": 13482,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 7,
+            "failed_evaluations": 1,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 5,
+            "first_validation_success_count": 5,
+            "repeat_variation": {
+              "overall_spread_mean": 0.167,
+              "overall_spread_max": 0.5,
+              "any_failed": 1,
+              "unique_essays": 4,
+              "paired_successful_essays": 3,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 3,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 3,
+                  "mean_abs_difference": 0.333333,
+                  "max_abs_difference": 0.5
+                },
+                "coherence": {
+                  "paired": 3,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 3,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 3,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {
+              "overall": {
+                "essays": 8,
+                "scored": 7,
+                "failed": 1,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.286,
+                "ai_gap": 0.286,
+                "ai_bias": -0.071,
+                "within_range": 1.0
+              },
+              "task": {
+                "essays": 8,
+                "scored": 7,
+                "failed": 1,
+                "rater_gap_all": 1.0,
+                "rater_gap": 1.0,
+                "ai_gap": 0.5,
+                "ai_bias": -0.071,
+                "within_range": 1.0
+              },
+              "coherence": {
+                "essays": 8,
+                "scored": 7,
+                "failed": 1,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.286,
+                "ai_gap": 0.214,
+                "ai_bias": 0.214,
+                "within_range": 1.0
+              },
+              "lexical": {
+                "essays": 8,
+                "scored": 7,
+                "failed": 1,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.286,
+                "ai_gap": 0.357,
+                "ai_bias": -0.357,
+                "within_range": 0.714
+              },
+              "grammar": {
+                "essays": 8,
+                "scored": 7,
+                "failed": 1,
+                "rater_gap_all": 0.5,
+                "rater_gap": 0.571,
+                "ai_gap": 0.286,
+                "ai_bias": -0.143,
+                "within_range": 1.0
+              }
+            }
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        },
+        "pro": {
+          "planned_evaluations": 8,
+          "requests": {
+            "actual_reserved_requests": 8,
+            "first_requests": 8,
+            "retry_requests": 0,
+            "request_ok": 8,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 8,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 28422,
+              "completion_tokens": 94957,
+              "prompt_cache_hit_tokens": 25856
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 28422,
+              "completion_tokens": 94957,
+              "prompt_cache_hit_tokens": 25856
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 18047,
+            "completed_request_wall_ms_p50": 136000,
+            "completed_request_wall_ms_p90": 214000,
+            "completed_request_wall_ms_max": 214000,
+            "time_bands": {
+              "peak": 8,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 2.5946898,
+              "known_usage_upper": 2.5946898,
+              "total_lower_bound": 2.5946898,
+              "total_upper_bound": 2.5946898,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 2.5946898,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 2.59469,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 8,
+            "calls": 8,
+            "first_attempts": 8,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 136701,
+            "latency_ms_p90": 213856,
+            "completion_tokens_max": 18047,
+            "reasoning_tokens": 80013,
+            "reasoning_tokens_known": 80013,
+            "reasoning_tokens_max": 15916,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 8,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 8,
+            "first_validation_success_count": 8,
+            "repeat_variation": {
+              "overall_spread_mean": 0.125,
+              "overall_spread_max": 0.5,
+              "any_failed": 0,
+              "unique_essays": 4,
+              "paired_successful_essays": 4,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 4,
+                  "mean_abs_difference": 0.125,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 4,
+                  "mean_abs_difference": 0.375,
+                  "max_abs_difference": 1.0
+                },
+                "coherence": {
+                  "paired": 4,
+                  "mean_abs_difference": 0.125,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 4,
+                  "mean_abs_difference": 0.375,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 4,
+                  "mean_abs_difference": 0.375,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [],
+            "single_run_rater_agreement": {
+              "overall": {
+                "essays": 8,
+                "scored": 8,
+                "failed": 0,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.25,
+                "ai_gap": 0.312,
+                "ai_bias": 0.312,
+                "within_range": 1.0
+              },
+              "task": {
+                "essays": 8,
+                "scored": 8,
+                "failed": 0,
+                "rater_gap_all": 1.0,
+                "rater_gap": 1.0,
+                "ai_gap": 0.438,
+                "ai_bias": 0.312,
+                "within_range": 1.0
+              },
+              "coherence": {
+                "essays": 8,
+                "scored": 8,
+                "failed": 0,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.25,
+                "ai_gap": 0.688,
+                "ai_bias": 0.688,
+                "within_range": 0.5
+              },
+              "lexical": {
+                "essays": 8,
+                "scored": 8,
+                "failed": 0,
+                "rater_gap_all": 0.25,
+                "rater_gap": 0.25,
+                "ai_gap": 0.188,
+                "ai_bias": -0.062,
+                "within_range": 1.0
+              },
+              "grammar": {
+                "essays": 8,
+                "scored": 8,
+                "failed": 0,
+                "rater_gap_all": 0.5,
+                "rater_gap": 0.5,
+                "ai_gap": 0.312,
+                "ai_bias": 0.188,
+                "within_range": 1.0
+              }
+            }
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        }
+      },
+      "common_teacher_scores": {
+        "overall": {
+          "common_successful_evaluations": 7,
+          "flash": {
+            "mae": 0.285714,
+            "bias": -0.071429,
+            "within_0_5": 1.0
+          },
+          "pro": {
+            "mae": 0.285714,
+            "bias": 0.285714,
+            "within_0_5": 1.0
+          },
+          "pro_mae_not_worse": true
+        },
+        "task": {
+          "common_successful_evaluations": 7,
+          "flash": {
+            "mae": 0.5,
+            "bias": -0.071429,
+            "within_0_5": 0.857143
+          },
+          "pro": {
+            "mae": 0.428571,
+            "bias": 0.285714,
+            "within_0_5": 1.0
+          },
+          "pro_mae_not_worse": true
+        },
+        "coherence": {
+          "common_successful_evaluations": 7,
+          "flash": {
+            "mae": 0.214286,
+            "bias": 0.214286,
+            "within_0_5": 1.0
+          },
+          "pro": {
+            "mae": 0.714286,
+            "bias": 0.714286,
+            "within_0_5": 0.428571
+          },
+          "pro_mae_not_worse": false
+        },
+        "lexical": {
+          "common_successful_evaluations": 7,
+          "flash": {
+            "mae": 0.357143,
+            "bias": -0.357143,
+            "within_0_5": 0.714286
+          },
+          "pro": {
+            "mae": 0.142857,
+            "bias": -0.142857,
+            "within_0_5": 1.0
+          },
+          "pro_mae_not_worse": true
+        },
+        "grammar": {
+          "common_successful_evaluations": 7,
+          "flash": {
+            "mae": 0.285714,
+            "bias": -0.142857,
+            "within_0_5": 1.0
+          },
+          "pro": {
+            "mae": 0.285714,
+            "bias": 0.142857,
+            "within_0_5": 0.857143
+          },
+          "pro_mae_not_worse": true
+        }
+      },
+      "common_dual_raters_from_summary": {
+        "common_successful_evaluations": 7,
+        "flash": {
+          "overall": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.286,
+            "ai_bias": -0.071,
+            "within_range": 1.0
+          },
+          "task": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 1.0,
+            "rater_gap": 1.0,
+            "ai_gap": 0.5,
+            "ai_bias": -0.071,
+            "within_range": 1.0
+          },
+          "coherence": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.214,
+            "ai_bias": 0.214,
+            "within_range": 1.0
+          },
+          "lexical": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.357,
+            "ai_bias": -0.357,
+            "within_range": 0.714
+          },
+          "grammar": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.571,
+            "rater_gap": 0.571,
+            "ai_gap": 0.286,
+            "ai_bias": -0.143,
+            "within_range": 1.0
+          }
+        },
+        "pro": {
+          "overall": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.286,
+            "ai_bias": 0.286,
+            "within_range": 1.0
+          },
+          "task": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 1.0,
+            "rater_gap": 1.0,
+            "ai_gap": 0.429,
+            "ai_bias": 0.286,
+            "within_range": 1.0
+          },
+          "coherence": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.714,
+            "ai_bias": 0.714,
+            "within_range": 0.429
+          },
+          "lexical": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.286,
+            "rater_gap": 0.286,
+            "ai_gap": 0.143,
+            "ai_bias": -0.143,
+            "within_range": 1.0
+          },
+          "grammar": {
+            "essays": 7,
+            "scored": 7,
+            "failed": 0,
+            "rater_gap_all": 0.571,
+            "rater_gap": 0.571,
+            "ai_gap": 0.286,
+            "ai_bias": 0.143,
+            "within_range": 1.0
+          }
+        },
+        "descriptive_comparisons": {
+          "overall": {
+            "pro_ai_gap_not_worse": true,
+            "flash_gap_exceeds_rater_gap": false,
+            "pro_gap_exceeds_rater_gap": false,
+            "same_scored_denominator": true
+          },
+          "task": {
+            "pro_ai_gap_not_worse": true,
+            "flash_gap_exceeds_rater_gap": false,
+            "pro_gap_exceeds_rater_gap": false,
+            "same_scored_denominator": true
+          },
+          "coherence": {
+            "pro_ai_gap_not_worse": false,
+            "flash_gap_exceeds_rater_gap": false,
+            "pro_gap_exceeds_rater_gap": true,
+            "same_scored_denominator": true
+          },
+          "lexical": {
+            "pro_ai_gap_not_worse": true,
+            "flash_gap_exceeds_rater_gap": true,
+            "pro_gap_exceeds_rater_gap": false,
+            "same_scored_denominator": true
+          },
+          "grammar": {
+            "pro_ai_gap_not_worse": true,
+            "flash_gap_exceeds_rater_gap": false,
+            "pro_gap_exceeds_rater_gap": false,
+            "same_scored_denominator": true
+          }
+        }
+      }
+    },
+    "ordering": {
+      "models": {
+        "flash": {
+          "planned_evaluations": 10,
+          "requests": {
+            "actual_reserved_requests": 13,
+            "first_requests": 10,
+            "retry_requests": 3,
+            "request_ok": 13,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 3,
+            "distinct_first_evaluations": 10,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 44762,
+              "completion_tokens": 78811,
+              "prompt_cache_hit_tokens": 37504
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 44762,
+              "completion_tokens": 78811,
+              "prompt_cache_hit_tokens": 37504
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 8855,
+            "completed_request_wall_ms_p50": 34000,
+            "completed_request_wall_ms_p90": 52000,
+            "completed_request_wall_ms_max": 55000,
+            "time_bands": {
+              "peak": 13,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 0.64650416,
+              "known_usage_upper": 0.64650416,
+              "total_lower_bound": 0.64650416,
+              "total_upper_bound": 0.64650416,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 0.64650416,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 0.646504,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 10,
+            "calls": 13,
+            "first_attempts": 10,
+            "first_attempt_json_ok": 0.7,
+            "first_attempt_valid": 0.7,
+            "final_ready": 1.0,
+            "latency_ms_p50": 33943,
+            "latency_ms_p90": 51590,
+            "completion_tokens_max": 8855,
+            "reasoning_tokens": 53708,
+            "reasoning_tokens_known": 53708,
+            "reasoning_tokens_max": 7059,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 10,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 7,
+            "first_validation_success_count": 7,
+            "repeat_variation": {
+              "overall_spread_mean": null,
+              "overall_spread_max": null,
+              "any_failed": null,
+              "unique_essays": 0,
+              "paired_successful_essays": 0,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "task": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "coherence": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "lexical": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "grammar": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                }
+              }
+            },
+            "ordering": [
+              {
+                "missing": 0,
+                "pairs": 10,
+                "inversions": 0,
+                "ties": 2,
+                "highest": 9.0,
+                "lowest": 7.0,
+                "spread": 1.5,
+                "chain": [
+                  {
+                    "nominal": 9.0,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 8.5,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 8.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 7.5,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 7.0,
+                    "ai": 6.5
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              },
+              {
+                "missing": 0,
+                "pairs": 10,
+                "inversions": 0,
+                "ties": 2,
+                "highest": 9.0,
+                "lowest": 7.0,
+                "spread": 1.0,
+                "chain": [
+                  {
+                    "nominal": 9.0,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 8.5,
+                    "ai": 7.5
+                  },
+                  {
+                    "nominal": 8.0,
+                    "ai": 7.5
+                  },
+                  {
+                    "nominal": 7.5,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 7.0,
+                    "ai": 7.0
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              }
+            ],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        },
+        "pro": {
+          "planned_evaluations": 10,
+          "requests": {
+            "actual_reserved_requests": 10,
+            "first_requests": 10,
+            "retry_requests": 0,
+            "request_ok": 10,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 10,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 34789,
+              "completion_tokens": 83043,
+              "prompt_cache_hit_tokens": 29440
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 34789,
+              "completion_tokens": 83043,
+              "prompt_cache_hit_tokens": 29440
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 10593,
+            "completed_request_wall_ms_p50": 96000,
+            "completed_request_wall_ms_p90": 110000,
+            "completed_request_wall_ms_max": 123000,
+            "time_bands": {
+              "peak": 10,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 2.299134,
+              "known_usage_upper": 2.299134,
+              "total_lower_bound": 2.299134,
+              "total_upper_bound": 2.299134,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 2.299134,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 2.299134,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 10,
+            "calls": 10,
+            "first_attempts": 10,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 95971,
+            "latency_ms_p90": 110410,
+            "completion_tokens_max": 10593,
+            "reasoning_tokens": 68507,
+            "reasoning_tokens_known": 68507,
+            "reasoning_tokens_max": 9198,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 10,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 10,
+            "first_validation_success_count": 10,
+            "repeat_variation": {
+              "overall_spread_mean": null,
+              "overall_spread_max": null,
+              "any_failed": null,
+              "unique_essays": 0,
+              "paired_successful_essays": 0,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "task": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "coherence": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "lexical": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                },
+                "grammar": {
+                  "paired": 0,
+                  "mean_abs_difference": null,
+                  "max_abs_difference": null
+                }
+              }
+            },
+            "ordering": [
+              {
+                "missing": 0,
+                "pairs": 10,
+                "inversions": 0,
+                "ties": 3,
+                "highest": 9.0,
+                "lowest": 7.0,
+                "spread": 1.0,
+                "chain": [
+                  {
+                    "nominal": 9.0,
+                    "ai": 8.5
+                  },
+                  {
+                    "nominal": 8.5,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 8.0,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 7.5,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 7.0,
+                    "ai": 7.5
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              },
+              {
+                "missing": 0,
+                "pairs": 10,
+                "inversions": 0,
+                "ties": 6,
+                "highest": 9.0,
+                "lowest": 7.0,
+                "spread": 0.5,
+                "chain": [
+                  {
+                    "nominal": 9.0,
+                    "ai": 8.5
+                  },
+                  {
+                    "nominal": 8.5,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 8.0,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 7.5,
+                    "ai": 8.0
+                  },
+                  {
+                    "nominal": 7.0,
+                    "ai": 8.0
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              }
+            ],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        }
+      },
+      "common_teacher_scores": null,
+      "common_dual_raters_from_summary": null
+    },
+    "lowband": {
+      "models": {
+        "flash": {
+          "planned_evaluations": 12,
+          "requests": {
+            "actual_reserved_requests": 12,
+            "first_requests": 12,
+            "retry_requests": 0,
+            "request_ok": 12,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 12,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 40658,
+              "completion_tokens": 132946,
+              "prompt_cache_hit_tokens": 35840
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 40658,
+              "completion_tokens": 132946,
+              "prompt_cache_hit_tokens": 35840
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 19522,
+            "completed_request_wall_ms_p50": 57000,
+            "completed_request_wall_ms_p90": 100000,
+            "completed_request_wall_ms_max": 116000,
+            "time_bands": {
+              "peak": 12,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 1.0746376,
+              "known_usage_upper": 1.0746376,
+              "total_lower_bound": 1.0746376,
+              "total_upper_bound": 1.0746376,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 1.0746376,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 1.074638,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 12,
+            "calls": 12,
+            "first_attempts": 12,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 57162,
+            "latency_ms_p90": 100242,
+            "completion_tokens_max": 19522,
+            "reasoning_tokens": 108033,
+            "reasoning_tokens_known": 108033,
+            "reasoning_tokens_max": 17653,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 12,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 12,
+            "first_validation_success_count": 12,
+            "repeat_variation": {
+              "overall_spread_mean": 0.083,
+              "overall_spread_max": 0.5,
+              "any_failed": 0,
+              "unique_essays": 6,
+              "paired_successful_essays": 6,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.25,
+                  "max_abs_difference": 0.5
+                },
+                "coherence": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                },
+                "lexical": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.166667,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.25,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [
+              {
+                "missing": 0,
+                "pairs": 12,
+                "inversions": 0,
+                "ties": 0,
+                "highest": 6.0,
+                "lowest": 5.0,
+                "spread": 2.0,
+                "chain": [
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.0
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              },
+              {
+                "missing": 0,
+                "pairs": 12,
+                "inversions": 0,
+                "ties": 0,
+                "highest": 6.0,
+                "lowest": 5.0,
+                "spread": 2.0,
+                "chain": [
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              }
+            ],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        },
+        "pro": {
+          "planned_evaluations": 12,
+          "requests": {
+            "actual_reserved_requests": 12,
+            "first_requests": 12,
+            "retry_requests": 0,
+            "request_ok": 12,
+            "request_failed": 0,
+            "outcome_unknown": 0,
+            "usage_unknown_requests": 0,
+            "cache_unknown_requests": 0,
+            "evaluations_with_retry": 0,
+            "distinct_first_evaluations": 12,
+            "tokens_known_subtotal": {
+              "prompt_tokens": 41270,
+              "completion_tokens": 134644,
+              "prompt_cache_hit_tokens": 37888
+            },
+            "tokens_complete_total": {
+              "prompt_tokens": 41270,
+              "completion_tokens": 134644,
+              "prompt_cache_hit_tokens": 37888
+            },
+            "tokens_unreported_requests": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "prompt_cache_hit_tokens": 0
+            },
+            "completion_tokens_max_known": 16538,
+            "completed_request_wall_ms_p50": 158000,
+            "completed_request_wall_ms_p90": 202000,
+            "completed_request_wall_ms_max": 255000,
+            "time_bands": {
+              "peak": 12,
+              "off_peak": 0,
+              "cross_boundary": 0,
+              "time_unknown": 0
+            },
+            "cost_cny": {
+              "known_usage_lower": 3.6771924,
+              "known_usage_upper": 3.6771924,
+              "total_lower_bound": 3.6771924,
+              "total_upper_bound": 3.6771924,
+              "all_usage_known": true,
+              "fixed_peak_known_usage_upper_estimate": 3.6771924,
+              "is_provider_bill": false,
+              "private_summary_fixed_peak_estimate": 3.677192,
+              "private_summary_marked_incomplete": false
+            }
+          },
+          "evaluation": {
+            "report_present": true,
+            "planned_evaluations": 12,
+            "calls": 12,
+            "first_attempts": 12,
+            "first_attempt_json_ok": 1.0,
+            "first_attempt_valid": 1.0,
+            "final_ready": 1.0,
+            "latency_ms_p50": 157523,
+            "latency_ms_p90": 202314,
+            "completion_tokens_max": 16538,
+            "reasoning_tokens": 111349,
+            "reasoning_tokens_known": 111349,
+            "reasoning_tokens_max": 14455,
+            "reasoning_unreported_calls": 0,
+            "truncated": 0,
+            "timeouts": 0,
+            "success_evaluations": 12,
+            "failed_evaluations": 0,
+            "unattempted_evaluations": 0,
+            "first_json_success_count": 12,
+            "first_validation_success_count": 12,
+            "repeat_variation": {
+              "overall_spread_mean": 0.333,
+              "overall_spread_max": 0.5,
+              "any_failed": 0,
+              "unique_essays": 6,
+              "paired_successful_essays": 6,
+              "issue_overlap": null,
+              "criteria": {
+                "overall": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.333333,
+                  "max_abs_difference": 0.5
+                },
+                "task": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.416667,
+                  "max_abs_difference": 1.0
+                },
+                "coherence": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.333333,
+                  "max_abs_difference": 1.0
+                },
+                "lexical": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                },
+                "grammar": {
+                  "paired": 6,
+                  "mean_abs_difference": 0.083333,
+                  "max_abs_difference": 0.5
+                }
+              }
+            },
+            "ordering": [
+              {
+                "missing": 0,
+                "pairs": 12,
+                "inversions": 0,
+                "ties": 0,
+                "highest": 6.0,
+                "lowest": 5.0,
+                "spread": 2.25,
+                "chain": [
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.5
+                  },
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.5
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.0
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.5
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              },
+              {
+                "missing": 0,
+                "pairs": 12,
+                "inversions": 0,
+                "ties": 0,
+                "highest": 6.0,
+                "lowest": 5.0,
+                "spread": 2.0,
+                "chain": [
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.5
+                  },
+                  {
+                    "nominal": 6.0,
+                    "ai": 7.0
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.5,
+                    "ai": 6.5
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.0
+                  },
+                  {
+                    "nominal": 5.0,
+                    "ai": 5.5
+                  }
+                ],
+                "complete": true,
+                "monotonic_nonincreasing": true,
+                "highest_above_lowest": true
+              }
+            ],
+            "single_run_rater_agreement": {}
+          },
+          "reconciliation": {
+            "report_calls_match_ledger": true,
+            "report_samples_match_ledger": true,
+            "report_model_matches_ledger": true,
+            "report_planned_evaluations_match": true,
+            "report_first_requests_match_ledger": true,
+            "report_evaluate_calls_match_ledger": true,
+            "report_source_matches_ledger": true,
+            "no_unknown_request_outcome": true,
+            "all_evaluations_attempted": true,
+            "first_rate_counts_recoverable": true,
+            "final_success_rate_matches": true,
+            "prompt_tokens_match": true,
+            "completion_tokens_match": true,
+            "cache_tokens_match": true,
+            "summary_requests_match_ledger": true,
+            "summary_fixed_peak_cost_matches": true,
+            "summary_quality_matches_report": true
+          }
+        }
+      },
+      "common_teacher_scores": null,
+      "common_dual_raters_from_summary": null
+    }
+  },
+  "numeric_rule_checks": {
+    "enabled_after_complete_audit": true,
+    "pro_final_failures_at_most_half_flash": true,
+    "any_model_final_failure_rate_above_10_percent": false,
+    "judgment_error_reduction_at_least_30_percent": null,
+    "type_1_2_errors_more_than_one_per_essay": null,
+    "recommend_switch_to_pro": null
+  },
+  "notes": [
+    "Counts include all reserved requests, including retries and unknown outcomes; reservations are not proof the provider received a request.",
+    "JSON/validation denominators are first attempts. Final failure rates use attempted evaluations; completion checks require all planned evaluations.",
+    "Report p50/p90 covers successful transport calls, including retries; ledger wall times cover every completed request and have one-second timestamp resolution.",
+    "Peak is Monday-Friday Beijing 09:00-12:00 and 14:00-18:00; other times are half price. No statutory-holiday calendar is inferred.",
+    "Requests spanning a price boundary are separately counted and bounded at half/full price. Unknown usage makes total upper cost null, never zero.",
+    "Missing cache usage is bounded using all-hit/all-miss input pricing. Reasoning tokens are included in completion tokens, never added twice.",
+    "Private summary.json uses fixed peak rates: a conservative usage estimate, not the provider bill; unknown usage remains unpriced.",
+    "Repeated scores are dependent measurements, not additional independent essays. Issue overlap is unavailable from the permitted numeric reports.",
+    "Teacher and dual-rater groups are score references; ordering and synthetic lowband nominal levels are not calibrated ground truth.",
+    "No acceptance threshold was predeclared for ranking inversions/spread; monotonicity and endpoint separation are descriptive checks.",
+    "Common dual-rater metrics are read from summary only; raw raters are intentionally not read. Blind judgment-error rules and recommendation remain pending separate review."
+  ]
+}

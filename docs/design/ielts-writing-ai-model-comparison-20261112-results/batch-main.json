@@ -1,0 +1,37 @@
+{
+ "stage": "main",
+ "dry": false,
+ "code_sha256": "2d531eea7f8ddcd3a922105b0feaceca39dad2774c3aa746da8a2edf9b3667f1",
+ "prompt_version": "iwa-2026-11-10.12",
+ "models": {
+  "flash": "deepseek-flash",
+  "pro": "deepseek-v4-pro"
+ },
+ "prices": {
+  "flash": {
+   "in": 2.0,
+   "cached_in": 0.04,
+   "out": 8.0
+  },
+  "pro": {
+   "in": 9.0,
+   "cached_in": 0.3,
+   "out": 27.0
+  }
+ },
+ "endpoint": "https://api.deepseek.com/chat/completions",
+ "max_failure_rate": 0.5,
+ "inputs": {
+  "dev": "4dc2e1c7da2eb01fc7f6e91a2493dac542fe288cef6116d6aeaf66395ca289c8",
+  "teacher": "097fc8eb6f34fc5960a6c30ccb603d3340e763846ef8c9977d561b0ad7421a7f",
+  "rated_t2": "33f484cb71a0c8c6724aeb229cddfd128f0ce4f4b15896b24e9795b0e63a12b3",
+  "ordering": "ddac53ae5dc38d350532f059a121f49f33dc2e09a51f52aab0f007072eb12214",
+  "lowband": "d4ae08587be870faee940b02a140413400ec912738cc77804eab1af538c205c0"
+ },
+ "caps": [
+  {
+   "cap": 184,
+   "time": "2026-11-12T08:43:21+0800"
+  }
+ ]
+}

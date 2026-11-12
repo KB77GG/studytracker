@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12 第一阶段真实对照完成：102/184，Pro格式更稳，分数仍需校准
+
+- **授权与执行**：用户明确授权第一阶段最多184次（含重试），Flash/Pro、high、32000/300、五组仅evaluate。北京时间08:43:21—11:03:13正常退出0；账本102预留/102完成，Flash56、Pro46，0网络失败/未知/识图。28篇不同作文，每模型46次评价；本批已结束，剩余额度不自动续用，官方空模板、第二阶段、精修和改写未运行。
+- **工作树/基线**：主资料树 `/Users/zhouxin/Desktop/studytracker` 保持main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原7modified/23untracked顶层入口保留；本轮只增两份审阅/结果目录、ignored包装器并更新两交接。执行树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111`，clean源码 **c0d87c911b7d9000f6fc16c2c49a00edbe5738a1**（fb733279修复），整个运行期间源码/HEAD未变。90个工具tracked文件组合SHA **ce2676e6d9a862d538c2ca9141ad0e5eb59444415951b0c55cb7eb966f23207d**；realcheck模块指纹2d531eea7f8ddcd3…为另一口径。报告提交仅改变文档/复算脚本，实际报告HEAD以git log及同步确认条为准；旧47ccd240/817c4c4b树未动。
+- **末轮复验**：主树 `.venv/bin/python docs/design/iwa-batch-binding-recheck-20261112/run_offline_tests.py` →447 Python+8 Node；原一致性17/17、独立固定/可编辑列13/13、指标18/18与6/6，实际续跑保留表/key/tally且0新子进程；Ruff/Black64/JS/diff通过。最后盲评绑定P2关闭。精确专项命令见该目录metrics_review.md；未重复多locale/Python3.10/所有旧探针/浏览器。
+- **真实数字**：Flash首轮36/46、最终44/46（两个invalid_output），Pro46/46、无重试。无截断/超时；输出峰值19522/18047。含重试评价p50为55/115秒，最长124/255秒。实际时段费用估算 **15.6493—15.8162元**；未核账户账单。原summary固定高峰估算16.6647元；Pro有1次跨09:00，按半价/全价给区间。高峰费率Flash2/.04/8、Pro9/.30/27元/百万输入未命中/命中/输出，来自本次核对的DeepSeek官方页。
+- **质量结论**：双评委共同成功7次评价/4篇独立作文总分MAE两边同为.286；Pro CC偏高+.714（Flash CC MAE .214），单教师1篇总分MAE .50/.75。首轮AI盲评11篇、452填写行（408反馈+44计数），三组绑定/完整性/新鲜度均通过；真实材料共同成功4篇①②③④行计数39/1，Pro初判误批更少，但低分预埋错误漏报5/8。行数不等于独立错误事件，争议参考未强算硬错误，④标签不表示两评委逐条共同确认。不能认定“所有换模条件满足”或评分可靠；建议Pro作老师复核的评价试用候选，本轮不改配置。教师10行抽查尚未做。
+- **私有材料**：原始作文、Key、原始回答/思考、盲评表/映射均不提交。完整输出 `/Users/zhouxin/iwa-compare-real-20261112`；三组ai_blind_notes.private.md与teacher_spotcheck.private.md仅本机。临时匿名工作区 `/private/tmp/iwa-blind-20261112`；ignored `tmp/iwa-batch-binding-recheck-20261112/`含启动/监控/合并/导出包装器。禁止再运行启动脚本或修改账本增加上限。
+- **复算与共享**：数字包 `docs/design/ielts-writing-ai-model-comparison-20261112-results/` 含README、summary、账本/条件、三组blind_tally、白名单numeric、独立复算与脱敏审计。`.venv/bin/python -B docs/design/ielts-writing-ai-model-comparison-20261112-results/independent/recheck_numeric.py --check` →102请求及36评分核对通过；numeric脚本21合成检查，真实所有报告/账本逐项一致；blind_numeric重新运行与JSON逐字相同。隐私扫描新共享目录无私有正文/评语连续8词或Key形态；最终扫描和artifact_hashes随报告保留。原始数据不随Git传播。
+- **发布/下一步**：按已有授权仅将两新目录与两规范交接commit/push到 `claude/ielts-writing-ai-trial`；提交与远端回读以本机最终确认条/实际git为准。main未合并、后端/前端/数据库未部署、生产未访问，小程序未上传/提审/发布。后续先让老师抽查私有10行并复核Pro CC偏差，再决定模型配置或校准；新付费批次需新授权。不能把AI初判当老师验收，也不要重跑已完成的184账本。
+
 ## 2026-11-12（下午）雅思写作 AI 试用工具：修复复核 869780f 的盲评绑定缺口（已推功能分支；未调用真实模型，没有新的付费授权）
 
 - **输入**：复核 `869780f`（`docs/design/iwa-batch-recheck-20261112/`）：上一轮 5 个 P2 和 1 个 P3 已确认修复，执行器通过；剩 1 个盲评完整性 P2——表与对应关系文件没有绑定：换用另一次生成的合法 `blind_key.json`（另一个种子）会把 A=1、B=0 对调成 A=0、B=1 仍显示完整，重新计数后还显示“当前”；把“④ 漏掉评委都指出的明确错误”改成合法的“其他漏报”会悄悄换类。复核方建议只补共同标识、固定列校验和明确的漏报类别，不改执行器。

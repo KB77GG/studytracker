@@ -1,0 +1,43 @@
+{
+  "authorized_stage": "main",
+  "authorized_text_request_cap": 184,
+  "authorized_vision_requests": 0,
+  "only_kind": "evaluate",
+  "authorization": "User explicitly confirmed first stage, at most 184 actual requests, including retries.",
+  "models": [
+    "deepseek-flash",
+    "deepseek-v4-pro"
+  ],
+  "thinking": "high",
+  "max_output_tokens_per_request": 32000,
+  "timeout_seconds": 300,
+  "source_head": "c0d87c911b7d9000f6fc16c2c49a00edbe5738a1",
+  "tracked_tool_sha256": "ce2676e6d9a862d538c2ca9141ad0e5eb59444415951b0c55cb7eb966f23207d",
+  "started_at": "2026-11-12T00:43:21.390455+00:00",
+  "price_source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "price_note": "Batch summary uses published peak CNY rates as a conservative estimate. Per-request time-band estimate will be reported separately; neither is a provider bill.",
+  "peak_CNY_per_million": {
+    "flash": [
+      2.0,
+      0.04,
+      8.0
+    ],
+    "pro": [
+      9.0,
+      0.3,
+      27.0
+    ]
+  },
+  "off_peak_CNY_per_million": {
+    "flash": [
+      1.0,
+      0.02,
+      4.0
+    ],
+    "pro": [
+      4.5,
+      0.15,
+      13.5
+    ]
+  }
+}

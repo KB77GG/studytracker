@@ -1,0 +1,51 @@
+{
+ "labels": {
+  "correct": "正确",
+  "misread": "① 误读原文",
+  "changed_meaning": "② 改句改变原意或逻辑",
+  "polish_as_error": "③ 可选润色说成错误",
+  "uncertain": "不确定",
+  "missed_both_raters": "④ 漏掉评委都指出的明确错误（条）",
+  "missed_other": "其他漏报（条）"
+ },
+ "models": {
+  "a": {
+   "correct": 7,
+   "misread": 0,
+   "changed_meaning": 2,
+   "polish_as_error": 8,
+   "uncertain": 2,
+   "missed_both_raters": 0,
+   "missed_other": 0,
+   "filled": 21,
+   "blank": 0,
+   "unrecognized": 0
+  },
+  "b": {
+   "correct": 14,
+   "misread": 0,
+   "changed_meaning": 0,
+   "polish_as_error": 0,
+   "uncertain": 0,
+   "missed_both_raters": 0,
+   "missed_other": 0,
+   "filled": 16,
+   "blank": 0,
+   "unrecognized": 0
+  }
+ },
+ "complete": true,
+ "problems": [],
+ "missing_rows": 0,
+ "repeats_counted": false,
+ "conditions": {
+  "a": {
+   "model": "deepseek-flash"
+  },
+  "b": {
+   "model": "deepseek-v4-pro"
+  }
+ },
+ "sheet_sha256": "22ac055ee2ae681bb9595f2da7f029c60f5fd894ba48be91d85afbbc20a0b8b8",
+ "key_sha256": "4559712fe0df7bfad6cc9e9968a5e4ccfb3075cfba59ac90373ac3a90f0b96f1"
+}

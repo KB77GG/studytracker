@@ -1,0 +1,26 @@
+2026-11-12 08:43:21 开始 dev-flash（deepseek-flash）
+2026-11-12 08:55:34 结束 dev-flash：退出码 0；这次运行名下累计文字请求 18、识图 0（结果未知 0）
+2026-11-12 08:55:34 开始 dev-pro（deepseek-v4-pro）
+2026-11-12 09:18:40 结束 dev-pro：退出码 0；这次运行名下累计文字请求 14、识图 0（结果未知 0）
+2026-11-12 09:18:40 对照完成：compare-dev（A = Flash，B = Pro；盲评表甲 / 乙随机）
+2026-11-12 09:18:40 开始 teacher-pro（deepseek-v4-pro）
+2026-11-12 09:21:22 结束 teacher-pro：退出码 0；这次运行名下累计文字请求 2、识图 0（结果未知 0）
+2026-11-12 09:21:22 开始 teacher-flash（deepseek-flash）
+2026-11-12 09:23:01 结束 teacher-flash：退出码 0；这次运行名下累计文字请求 2、识图 0（结果未知 0）
+2026-11-12 09:23:01 对照完成：compare-teacher（A = Flash，B = Pro；盲评表甲 / 乙随机）
+2026-11-12 09:23:01 开始 rated_t2-flash（deepseek-flash）
+2026-11-12 09:33:45 结束 rated_t2-flash：退出码 0；这次运行名下累计文字请求 11、识图 0（结果未知 0）
+2026-11-12 09:33:45 开始 rated_t2-pro（deepseek-v4-pro）
+2026-11-12 09:52:41 结束 rated_t2-pro：退出码 0；这次运行名下累计文字请求 8、识图 0（结果未知 0）
+2026-11-12 09:52:41 对照完成：compare-rated_t2（A = Flash，B = Pro；盲评表甲 / 乙随机）
+2026-11-12 09:52:41 开始 ordering-pro（deepseek-v4-pro）
+2026-11-12 10:09:03 结束 ordering-pro：退出码 0；这次运行名下累计文字请求 10、识图 0（结果未知 0）
+2026-11-12 10:09:03 开始 ordering-flash（deepseek-flash）
+2026-11-12 10:17:13 结束 ordering-flash：退出码 0；这次运行名下累计文字请求 13、识图 0（结果未知 0）
+2026-11-12 10:17:13 对照完成：compare-ordering（A = Flash，B = Pro；盲评表甲 / 乙随机）
+2026-11-12 10:17:13 开始 lowband-flash（deepseek-flash）
+2026-11-12 10:30:39 结束 lowband-flash：退出码 0；这次运行名下累计文字请求 12、识图 0（结果未知 0）
+2026-11-12 10:30:39 开始 lowband-pro（deepseek-v4-pro）
+2026-11-12 11:03:13 结束 lowband-pro：退出码 0；这次运行名下累计文字请求 12、识图 0（结果未知 0）
+2026-11-12 11:03:13 对照完成：compare-lowband（A = Flash，B = Pro；盲评表甲 / 乙随机）
+2026-11-12 11:03:13 阶段 main 完成。汇总：/Users/zhouxin/iwa-compare-real-20261112/summary.md
