@@ -1,0 +1,35 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-holdout-review-20261111",
+  "python": "3.13.3",
+  "source_head": "f5c3f51d603e69fe2600953f17720e33be5273e6",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-holdout-review-20261111",
+      "returncode": 0,
+      "elapsed_seconds": 30.27
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-holdout-review-20261111",
+      "returncode": 0,
+      "elapsed_seconds": 0.21
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-holdout-review-20261111...origin/claude/ielts-writing-ai-trial\n"
+}

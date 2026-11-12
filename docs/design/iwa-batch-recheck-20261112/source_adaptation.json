@@ -1,0 +1,27 @@
+{
+  "old_probe_sha256": "4c3086cb3725a385bbf5c833644654554d299fc0c9e19224f04904502f71cd15",
+  "adapted_probe_sha256": "3419d1d26baff4f453ffdec6e8003a3623bce64f973ddebb0fb29a76db2db0ba",
+  "same_37_check_names_and_expected_values": true,
+  "original_correct_expectation_passes": 34,
+  "current_passes": 37,
+  "total": 37,
+  "ast_diff": [
+    "--- original AST",
+    "+++ adapted AST",
+    "@@ -137,11 +137,11 @@",
+    "         manifest_out = tmp / 'manifest'",
+    "         manifest_out.mkdir()",
+    "         manifest_args = SimpleNamespace(dry=True)",
+    "-        batch._record_batch(manifest_out, 'vision', manifest_args, {}, 8)",
+    "-        batch._record_batch(manifest_out, 'vision', manifest_args, {}, 9)",
+    "+        batch.record_batch(manifest_out, 'vision', batch.check_batch(manifest_out, 'vision', manifest_args, {}, []), 8)",
+    "+        batch.record_batch(manifest_out, 'vision', batch.check_batch(manifest_out, 'vision', manifest_args, {}, []), 9)",
+    "         check('authorized_cap_change_has_history', [c['cap'] for c in json.loads((manifest_out / 'batch-vision.json').read_text())['caps']], [8, 9])",
+    "         try:",
+    "-            batch._record_batch(manifest_out, 'vision', manifest_args, {'flash': {'in': 2}}, 9)",
+    "+            batch.record_batch(manifest_out, 'vision', batch.check_batch(manifest_out, 'vision', manifest_args, {'flash': {'in': 2}}, []), 9)",
+    "             changed_price = 0",
+    "         except batch.Stop as exc:",
+    "             changed_price = exc.code"
+  ]
+}

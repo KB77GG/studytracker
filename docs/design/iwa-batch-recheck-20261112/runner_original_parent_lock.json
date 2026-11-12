@@ -1,0 +1,19 @@
+{
+  "source_head": "f5c3f51d603e69fe2600953f17720e33be5273e6",
+  "network_calls": 0,
+  "private_material_read": false,
+  "first_parent_exit": -9,
+  "first_child_alive_after_parent_kill": true,
+  "lock_free_while_first_child_alive": false,
+  "second_parent_running_before_release": false,
+  "two_transport_children_overlap": false,
+  "requests_before_release": 15,
+  "second_exit": 2,
+  "total_transport_calls": 28,
+  "ledger_reserved": 28,
+  "cap": 112,
+  "cap_still_respected": true,
+  "first_child_alive_at_end": false,
+  "expected_normal_transport_calls": 56,
+  "duplicate_dev_pro_calls": 14
+}

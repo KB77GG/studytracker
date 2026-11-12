@@ -1,0 +1,502 @@
+{
+  "paid_calls": 0,
+  "network_forbidden": true,
+  "checks": [
+    {
+      "name": "baseline_images_and_flash_complete",
+      "actual": [
+        3,
+        [
+          2,
+          1
+        ]
+      ],
+      "expected": [
+        3,
+        [
+          2,
+          1
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_prompt_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_prompt_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_essay_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_essay_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_teacher_overall_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_teacher_overall_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_rater_overall_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_rater_overall_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_annotation_note_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_annotation_note_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_annotation_quote_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_annotation_quote_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_target_band_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_target_band_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_group_refused_before_any_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_group_does_not_repin_manifest",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "changed_image_bytes_refused_before_dispatch",
+      "actual": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "changed_frozen_reading_refused_before_dispatch",
+      "actual": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "wrong_done_fingerprint_refused_before_dispatch",
+      "actual": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "missing_done_fingerprint_refused_before_dispatch",
+      "actual": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "same_image_bytes_other_path_same_manifest",
+      "actual": "3be04ff226fbd13bb62b755a638556e89ced3fd7553a58ae05fb6eafe467b219",
+      "expected": "3be04ff226fbd13bb62b755a638556e89ced3fd7553a58ae05fb6eafe467b219",
+      "ok": true
+    },
+    {
+      "name": "unchanged_semantics_can_resume",
+      "actual": [
+        0,
+        2,
+        [
+          2,
+          0
+        ]
+      ],
+      "expected": [
+        0,
+        2,
+        [
+          2,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "fully_completed_resume_zero_dispatch",
+      "actual": [
+        0,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        0,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "optional_absent_initial_group_runs",
+      "actual": [
+        0,
+        [
+          4,
+          0
+        ]
+      ],
+      "expected": [
+        0,
+        [
+          4,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "adding_optional_does_not_allow_old_data_change",
+      "actual": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "new_optional_group_only_new_calls",
+      "actual": [
+        0,
+        [
+          "official-pro",
+          "official-flash"
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "expected": [
+        0,
+        [
+          "official-pro",
+          "official-flash"
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "newly_pinned_official_cannot_change",
+      "actual": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "pinned_optional_cannot_disappear",
+      "actual": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        2,
+        [],
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    },
+    {
+      "name": "restored_optional_resume_zero_calls",
+      "actual": [
+        0,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": [
+        0,
+        0,
+        [
+          0,
+          0
+        ]
+      ],
+      "ok": true
+    }
+  ],
+  "passed": 30,
+  "total": 30
+}

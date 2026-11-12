@@ -1,0 +1,127 @@
+{
+  "network_calls": 0,
+  "private_inputs_read": false,
+  "checks": {
+    "common_population_exact_intersection": true,
+    "all_failed_has_no_conditional_gap": true,
+    "missing_either_endpoint_null": true,
+    "complete_endpoints_retained": true,
+    "failed_repeat_counted_separately": true,
+    "blind_sheet_omits_model_condition_names": true,
+    "full_filled_sheet_complete": true,
+    "blank_sheet_rows_incomplete": true,
+    "invalid_counts_never_complete": true,
+    "optional_repeat_blank_allowed": true,
+    "all_repeats_blank_incomplete": true,
+    "numeric_export_drops_attached_text": true,
+    "numeric_export_keeps_scores": true,
+    "ledger_counts_unknown_and_failed_archives": true,
+    "unfinished_run_no_final_quality": true,
+    "incomplete_sheets_not_complete": true,
+    "reclassified_advice_one_judged_row": true,
+    "same_advice_counted_once_per_model": true
+  },
+  "passed": true,
+  "findings": {
+    "incomplete_sheet_marked_complete": {
+      "empty": {
+        "complete": false,
+        "models": {
+          "a": {
+            "correct": 0,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 0,
+            "blank": 0,
+            "unrecognized": 0
+          },
+          "b": {
+            "correct": 0,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 0,
+            "blank": 0,
+            "unrecognized": 0
+          }
+        }
+      },
+      "missing_entire_yi": {
+        "complete": false,
+        "models": {
+          "a": {
+            "correct": 0,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 0,
+            "blank": 0,
+            "unrecognized": 0
+          },
+          "b": {
+            "correct": 2,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 4,
+            "blank": 0,
+            "unrecognized": 0
+          }
+        }
+      },
+      "count_replaced_by_reference": {
+        "complete": false,
+        "models": {
+          "a": {
+            "correct": 2,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 4,
+            "blank": 0,
+            "unrecognized": 0
+          },
+          "b": {
+            "correct": 2,
+            "misread": 0,
+            "changed_meaning": 0,
+            "polish_as_error": 0,
+            "uncertain": 0,
+            "missed_both_raters": 0,
+            "missed_other": 0,
+            "filled": 3,
+            "blank": 0,
+            "unrecognized": 1
+          }
+        }
+      }
+    },
+    "one_reclassified_advice_has_two_judged_rows": {
+      "source_improvements": 1,
+      "judged_rows_with_same_advice": 1,
+      "positions": [
+        "改列可选优化（原判 unsupported）"
+      ],
+      "changed_meaning_count_per_model": {
+        "a": 1,
+        "b": 1
+      }
+    }
+  }
+}

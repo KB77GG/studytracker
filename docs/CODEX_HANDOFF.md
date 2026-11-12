@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12 写作批次第三轮复验：原 5P2/1P3 关闭，余一处盲评绑定 P2（无真实调用）
+
+- **源码与工作树**：主资料树 `/Users/zhouxin/Desktop/studytracker` 保持 main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原7 modified/23 untracked顶层入口未动；只增本轮审阅目录与两交接。独立树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111` 从clean76276d91快进到 **f5c3f51d603e69fe2600953f17720e33be5273e6**（业务 **45072df927f4c5836e79cc420deb3ecc8371d6f7**），90工具文件组合SHA **308f020cca0038f79d709f6c0d14cb78564cb67dd8b947bfaf56d37aa7a585cb** 与提交一致。未改产品；报告提交仅改文档/合成探针。旧47ccd240与817c4c4b树未操作。
+- **已确认修复**：父死子持锁、第二批拒绝0请求，成功孤儿结果沿用+.done补写，原cap112全批56次无重复；失败孤儿不沿用且预算保留。源题干/作文/参考分/批注/图片/冻结结果/done指纹变化都在请求前拒绝；官方组首次可加、之后固定。盲评缺行/缺侧/重复/参考绕过拒绝、改列建议1比1、正常续跑与直接compare不覆盖人工文件、改表或key后过期均通过；失败图诊断保留，P3关闭。适配探针未削弱原场景。
+- **余1个P2（测量完整性，非预算回归）**：表格只按“样本/甲乙/序号/类型”认行，未绑定原始模板/映射/固定列。不同seed正常生成的合法key可误配已填表，使错误数A1/B0反转A0/B1，仍complete，重新tally后current也为true；④漏报行标签改成合法“其他漏报”，2条悄悄换类也完整。普通固定seed、未混文件续跑已安全。建议仅加模板/映射标识、不可编辑列指纹与manifest内固定count类别，不重改执行器/提示词。新metrics_consistency.py以正确期望写3个拒绝断言：14正例通过、3失败，合计14/17 exit1，修后应原样17/17。
+- **验证命令与结果**：主树 `.venv/bin/python docs/design/iwa-batch-recheck-20261112/run_offline_tests.py` → **445 Python +8 Node**（Python3.13.3、约30秒，临时数据哨兵未写）。独立树主venv Ruff/Black64文件、JS语法、diff通过。作者batch5/5/新增真实进程1/1；独立runner_lifecycle_probe20/20，source适配37/37+manifest30/30，metrics适配18/18，实际填表续跑字节均保留；主审已复跑。精确命令和证据见 `docs/design/iwa-batch-recheck-20261112/README.md` 及各专项说明。未重复多locale/Python3.10/全历史probe/浏览器，不作模型质量结论。
+- **本机附件彩排**：`.venv/bin/python tmp/iwa-batch-recheck-20261112/dry_run.py --repo /private/tmp/studytracker-iwa-holdout-review-20261111` →13/13。第一阶段92文字替身、第二阶段8文字+2识图、13run/6compare，两阶段续跑0新增。新私有输出 `/Users/zhouxin/iwa-compare-dry-20261112-review/`；包装器在ignored tmp/，原始作文/图/演示/盲评/映射留本机不提交。全fake、清外部IWA/代理、明确不存在.env、网络阻断、未读Key，日志UTF8合法；六源文件SHA未变，official.jsonl仍无，空模板未转录。
+- **同步与范围**：本目录脱敏证据及两交接按既有授权仅同步 `claude/ielts-writing-ai-trial`，提交/远端确认以git及本机确认条为准；隐私扫描无私有正文/评语连续8词或Key形态。真实调用0；未改配置、main、生产/数据库、部署或小程序上传/提审/发布。本机发布确认与private/ignored材料未提交。
+- **下一步**：仅补盲评绑定完整性并复跑新17项与现有保存/过期契约。执行器本轮范围已通过；正式比较前仍应关闭该测量缺口，再确认新付费范围：第一阶段无官方184/有官方224，第二阶段16文字+2识图。没有新付费授权，不挪用旧批余额，旧B不另跑。
+
 ## 2026-11-12 雅思写作 AI 试用工具：修复批次复核 76276d9 的 5 个 P2 与 1 个 P3（已推功能分支；未调用真实模型，没有新的付费授权）
 
 - **输入**：复核 `76276d9`（`docs/design/iwa-batch-recheck-20261111/`）。原预算、识图冻结、失败停机已确认修好；剩余 P2：① 杀掉批次父进程后子进程仍在跑却不持锁，续跑重复执行（56→70 次，未超总上限）；② 续跑不核对数据，改稿后先花请求才在对照时发现、全部完成时直接沿用旧报告；③ 空表 / 整侧缺失 / 漏报行改“参考”仍算完整；④ 改列建议在“可选优化”和“改列”两处各计一次（A=2、B=1）；⑤ 续跑重写已填好的盲评表，旧计数仍显示完整。P3：冻结的失败识图丢了诊断文字，单独运行时对照误判输入不同。

@@ -1,0 +1,64 @@
+{
+  "network_calls": 0,
+  "private_inputs_read": false,
+  "checks": {
+    "full_control_complete_and_correctly_attributed": true,
+    "empty_rejected": true,
+    "missing_side_rejected": true,
+    "judged_cannot_become_reference": true,
+    "count_cannot_become_reference": true,
+    "duplicate_row_rejected": true,
+    "unknown_row_rejected": true,
+    "old_key_without_manifest_rejected": true,
+    "fresh_tally_is_current": true,
+    "explicit_rewrite_refused_before_any_files_change": true,
+    "edited_sheet_marks_summary_stale": true,
+    "restored_sheet_current_again": true,
+    "edited_mapping_marks_summary_stale": true,
+    "restored_mapping_current_again": true,
+    "mismatched_generated_key_rejected": false,
+    "retally_mismatch_never_complete_or_current": false,
+    "valid_count_label_substitution_rejected": false
+  },
+  "passed": false,
+  "passed_checks": 14,
+  "total_checks": 17,
+  "findings": {
+    "same_shape_wrong_key_accepted": {
+      "original_mapping": {
+        "甲": "a",
+        "乙": "b"
+      },
+      "other_mapping": {
+        "甲": "b",
+        "乙": "a"
+      },
+      "row_manifest_equal": true,
+      "mixed_complete": true,
+      "expected_changed_meaning": {
+        "a": 1,
+        "b": 0
+      },
+      "mixed_changed_meaning": {
+        "a": 0,
+        "b": 1
+      },
+      "saved_mixed_complete": true,
+      "saved_mixed_current": true,
+      "summary_complete_and_current": true
+    },
+    "count_identity_not_bound": {
+      "row_id": "synthetic/甲/04",
+      "side": "a",
+      "before": {
+        "missed_both_raters": 2,
+        "missed_other": 0
+      },
+      "after": {
+        "missed_both_raters": 0,
+        "missed_other": 2
+      },
+      "complete_after_relabel": true
+    }
+  }
+}

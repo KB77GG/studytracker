@@ -1,0 +1,306 @@
+{
+  "started_at": "2026-11-12T00:17:44.346360+00:00",
+  "paid_calls": 0,
+  "synthetic_model_only": true,
+  "network_guard": true,
+  "inherited_iwa_removed": true,
+  "proxy_variables_removed": true,
+  "explicit_env_file_absent": true,
+  "code_sha256": "3a3609cfabd5ef8f8cfba4e3bb25b554453b94d63149d49deb236b1d9bbfe380",
+  "steps": [
+    {
+      "stage": "main",
+      "resume": false,
+      "exit_code": 0,
+      "seconds": 2.504,
+      "before": {
+        "text": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "after": {
+        "text": {
+          "reserved": 92,
+          "ok": 92,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "new_text": 92,
+      "new_vision": 0
+    },
+    {
+      "stage": "vision",
+      "resume": false,
+      "exit_code": 0,
+      "seconds": 0.498,
+      "before": {
+        "text": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "after": {
+        "text": {
+          "reserved": 8,
+          "ok": 8,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 2,
+          "ok": 2,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "new_text": 8,
+      "new_vision": 2
+    },
+    {
+      "stage": "main",
+      "resume": true,
+      "exit_code": 0,
+      "seconds": 0.105,
+      "before": {
+        "text": {
+          "reserved": 92,
+          "ok": 92,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "after": {
+        "text": {
+          "reserved": 92,
+          "ok": 92,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 0,
+          "ok": 0,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "new_text": 0,
+      "new_vision": 0
+    },
+    {
+      "stage": "vision",
+      "resume": true,
+      "exit_code": 0,
+      "seconds": 0.102,
+      "before": {
+        "text": {
+          "reserved": 8,
+          "ok": 8,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 2,
+          "ok": 2,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "after": {
+        "text": {
+          "reserved": 8,
+          "ok": 8,
+          "failed": 0,
+          "unknown": 0
+        },
+        "vision": {
+          "reserved": 2,
+          "ok": 2,
+          "failed": 0,
+          "unknown": 0
+        }
+      },
+      "new_text": 0,
+      "new_vision": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "main.resume=False.exit",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "main.first_run.request_counts",
+      "actual": [
+        92,
+        0
+      ],
+      "expected": [
+        92,
+        0
+      ],
+      "ok": true
+    },
+    {
+      "name": "vision.resume=False.exit",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "vision.first_run.request_counts",
+      "actual": [
+        8,
+        2
+      ],
+      "expected": [
+        8,
+        2
+      ],
+      "ok": true
+    },
+    {
+      "name": "main.resume=True.exit",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "main.resume.zero_new_calls",
+      "actual": [
+        0,
+        0
+      ],
+      "expected": [
+        0,
+        0
+      ],
+      "ok": true
+    },
+    {
+      "name": "vision.resume=True.exit",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "vision.resume.zero_new_calls",
+      "actual": [
+        0,
+        0
+      ],
+      "expected": [
+        0,
+        0
+      ],
+      "ok": true
+    },
+    {
+      "name": "all_run_providers_fake",
+      "actual": [
+        "fake"
+      ],
+      "expected": [
+        "fake"
+      ],
+      "ok": true
+    },
+    {
+      "name": "all_recorded_transports_fake",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "no_key_configured_in_any_run",
+      "actual": true,
+      "expected": true,
+      "ok": true
+    },
+    {
+      "name": "all_evaluation_generations_ready",
+      "actual": 0,
+      "expected": 0,
+      "ok": true
+    },
+    {
+      "name": "recorded_call_totals",
+      "actual": [
+        100,
+        2
+      ],
+      "expected": [
+        100,
+        2
+      ],
+      "ok": true
+    }
+  ],
+  "success": true,
+  "review_head": "f5c3f51d603e69fe2600953f17720e33be5273e6",
+  "run_directories": 13,
+  "ledger_totals": {
+    "main": {
+      "text": {
+        "reserved": 92,
+        "ok": 92,
+        "failed": 0,
+        "unknown": 0
+      },
+      "vision": {
+        "reserved": 0,
+        "ok": 0,
+        "failed": 0,
+        "unknown": 0
+      }
+    },
+    "vision": {
+      "text": {
+        "reserved": 8,
+        "ok": 8,
+        "failed": 0,
+        "unknown": 0
+      },
+      "vision": {
+        "reserved": 2,
+        "ok": 2,
+        "failed": 0,
+        "unknown": 0
+      }
+    }
+  },
+  "finished_at": "2026-11-12T00:17:47.594959+00:00",
+  "passed": 13,
+  "total": 13
+}
