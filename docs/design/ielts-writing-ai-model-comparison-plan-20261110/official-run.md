@@ -1,90 +1,92 @@
-# 给 Codex：官方样卷组（Pro 单模型）执行说明（2026-11-12）
+# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-12，第二版）
 
-用户 2026-11-12 决定：试用的评价改用 `deepseek-v4-pro`；暂时没有 5–6 分段的真实学生作文，**用官方样卷代替**。
-这一组只回答一个问题：**Pro 在 4–8.5 分整个范围里，总分偏高还是偏低、档位顺序对不对。**
-不再和 Flash 比较（模型已经选定），所以只跑 Pro，上限减半。
+用户 2026-11-12 决定：试用的评价改用 `deepseek-v4-pro`；没有 5–6 分段的真实学生作文，**用官方样卷代替**。
+用户已亲自转录了 PDF 里官方给分 5.0–6.0 的全部 5 篇手写答卷（发在给 Claude 的消息里）：
 
-## 0. 前提
+| id | 任务 | 官方分 | PDF 页 | 题图 |
+|---|---|---|---|---|
+| `official-1A-A` | Task 1A（继续教育人数柱状图） | 5.0 | 9 | `img/official-1A.png` |
+| `official-1A-B` | Task 1A（同上） | 6.0 | 10 | `img/official-1A.png` |
+| `official-1B-A` | Task 1B（广播电视受众折线图） | 6.0 | 11 | `img/official-1B.png` |
+| `official-1C-A` | Task 1C（制砖流程图） | 5.0 | 13 | `img/official-1C.png` |
+| `official-2B-A` | Task 2B（国际旅游利弊） | 5.5 | 23 | — |
 
-- 代码：功能分支上包含提交 `f2509aa`（`IWA_EVALUATE_MODEL`、评价超时默认 420 秒）的 HEAD。先跑离线测试：
-  `.venv/bin/python -m unittest discover -s tools/ielts_writing_ai/tests -t .`（应为 453 OK）。
-- **付费上限需要用户确认：最多 20 次文字请求**（5 篇 × 每篇 2 次 × 每次最多 1 次校验重试），不识图。
-  按第一阶段 Pro 的实际用量（每次评价约 0.27 元），10 次评价约 2.7 元，最坏约 5.5 元；这是估算，不是账单，也不是费用上限。
-  用户 2026-11-12 的原话是“分数5-6我暂时没有，就用官方的吧”；**跑之前请用户确认 20 次这个数字**。第一阶段剩余的额度不挪用。
+这一组只回答：**Pro 对 5–6 分的作文，总分偏高还是偏低**；1A 的两篇（5.0 / 6.0）同题，另看顺序。不再比较 Flash（模型已选定）。
 
-## 1. 转录 5 篇官方答卷
+> 第一版（只列 5 篇 Task 2）里的 `official_template.jsonl` 有错：2B 的两行配成了 2A 的题目（提取时先匹配到了 PDF 目录里的同名标题）。
+> 新数据包里的 `official_template.jsonl` 已改正；那份 Task 2 模板（4 / 6.5 / 7.5 / 8.5 分）仍无人转录，本次不用。
 
-按 [codex-run.md](codex-run.md) 第 3 节的规则，把用户提供的《IELTS Academic Writing – Sample Tasks》（IELTS.org，2023）里 5 篇 Task 2 手写答卷逐字录入
-`~/iwa-calibration/official_template.jsonl` 的 `essay` 字段，另存为 `~/iwa-calibration/official.jsonl`（不进 Git）。
+## 0. 前提与上限
 
-| id | 题 | 官方总分 | PDF 页 |
-|---|---|---|---|
-| `official-2A-A` | 2A | 4 | 18 |
-| `official-2A-B` | 2A | 6.5 | 19–20 |
-| `official-2A-C` | 2A | 8.5 | 21–22 |
-| `official-2B-A` | 2B | 5.5 | 23 |
-| `official-2B-B` | 2B | 7.5 | 25–26 |
+- 代码：功能分支 HEAD（含 `f2509aa` 的 `IWA_EVALUATE_MODEL` 与 420 秒超时）。离线测试 `.venv/bin/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` 应全部通过。
+- 试用配置（`tools/ielts_writing_ai/.env`，用户已配好）：评价 `deepseek-v4-pro` / high / 32000 / 420 秒，精修和改写 Flash。
+- **付费上限需要用户确认**，分两部分：
+  - **A. Task 2 一篇，现在就能跑**：1 篇 × 2 次 × 每次最多 1 次校验重试 = **最多 4 次文字请求**（约 0.5–1 元）。
+  - **B. Task 1 四篇，识图配好后再跑**：先识图 **4 次**（每篇一次，1A 两篇各读一次），再评价 4 篇 × 2 次 = **最多 16 次文字请求**（约 2–4 元，识图另按百炼计费）。
+  - 合计最多 **20 次文字请求 + 4 次识图**。这是估算，不是账单。第一阶段剩余的额度不挪用。
 
-要点：错误照抄不改；划掉的字不录；插入的字录在插入处；认不出写 `[?]`；`official-2B-A` 抄题的开头照录；`official-2B-B` 的标题行不录。
-如果你不能逐字转录这些出版物，就停下来告诉用户，由用户自己录入（约 1200 词），不要用摘要或改写代替。
+## 1. 数据（不进 Git）
 
-录完校验：
-
-```bash
-.venv/bin/python -c "from tools.ielts_writing_ai import realcheck; [print(i['id'], len(i['essay'].split())) for i in realcheck.load_samples('$HOME/iwa-calibration/official.jsonl')]"
-```
-
-## 2. 配置（试用配置，也是这一组用的配置）
-
-`tools/ielts_writing_ai/.env` 里应为（改完先 `check`，不要把 Key 打印出来）：
+1. 解压 Claude 发的数据包到 `~/iwa-calibration/`：`official_lowband_template.jsonl`（题目、官方分、题图、分组已填，作文为空）、`img/official-1A.png`、`img/official-1B.png`、`img/official-1C.png`，以及改正后的 `official_template.jsonl`。
+2. 把用户发给 Claude 的转录原文（从“PDF 里 5.0–6.0 分的手写稿共 5 篇”起到最后一段）原样存为 `~/iwa-calibration/official_lowband_transcript.txt`。不用删中文说明行，脚本会跳过。
+3. 填入并拆成 Task 1 / Task 2 两个文件：
 
 ```bash
-IWA_LLM_PROVIDER=deepseek
-IWA_LLM_MODEL=deepseek-flash
-IWA_EVALUATE_MODEL=deepseek-v4-pro
-IWA_EVALUATE_THINKING=high
-IWA_EVALUATE_THINKING_MAX_TOKENS=32000
-IWA_EVALUATE_THINKING_TIMEOUT=420
+.venv/bin/python docs/design/ielts-writing-ai-model-comparison-plan-20261110/fill_transcripts.py \
+  --template ~/iwa-calibration/official_lowband_template.jsonl \
+  --text ~/iwa-calibration/official_lowband_transcript.txt
 ```
 
-```bash
-.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env check
-```
+   输出 `official_lowband_t1.jsonl`（4 篇）和 `official_lowband_t2.jsonl`（1 篇），只打印 id、词数、段数和 sha256。
+   用户在转录里标的 `[seilmens?]`、`[77?]` 会还原成 `seilmens`、`77`，并写进该篇的 `transcription_note`。其余拼写和语法错误一律保留。
 
-确认输出里 `"evaluate_model": "deepseek-v4-pro"`、`"evaluate_thinking": "high"`、`"evaluate_thinking_timeout": 420.0`，`llm_base_url` 是 DeepSeek 官方地址。
-
-## 3. 运行（用户确认 20 次之后）
+## 2. A 部分：Task 2 一篇（用户确认 4 次之后）
 
 ```bash
 OUT=~/iwa-compare-official-20261112
 .venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
-  --samples ~/iwa-calibration/official.jsonl --kinds evaluate --repeat 2 \
-  --max-calls 20 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-run official-pro \
-  --max-failure-rate 0.5 --out $OUT/official-pro --confirm-paid \
+  --samples ~/iwa-calibration/official_lowband_t2.jsonl --kinds evaluate --repeat 2 \
+  --max-calls 4 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 0 \
+  --ledger-run official-t2 --max-failure-rate 0.5 --out $OUT/official-t2 --confirm-paid \
   --price-in <Pro 输入未命中缓存> --price-cached-in <Pro 输入命中缓存> --price-out <Pro 输出>
 ```
 
-- 开头一行应显示“模型：deepseek / deepseek-flash，评价用 deepseek-v4-pro”，“最多 20 次调用”。
-- 账本在每次请求发出前落盘；中断后重跑同一条命令时，账本里已有的请求都算已用，上限仍是 20（不要改大）。
-  重跑前把没完成的 `$OUT/official-pro` 改名保留。
-- 退出码：0 完成；2 参数 / 数据 / 账本有误；3 中止（首次调用就遇到 Key 或网络错误、达到账本上限）；4 最终失败超过一半。非 0 都停下来问用户。
-- 单价按 DeepSeek 官方当前价格和实际运行时段填写（第一阶段核对过：高峰 9 / 0.30 / 27，空闲半价）。
+开头一行应为“模型：deepseek / deepseek-flash，评价用 deepseek-v4-pro”“最多 4 次调用”。账本的文字上限写 20，是 A、B 两部分共用的总上限。
+
+## 3. B 部分：Task 1 四篇（识图配好、用户确认后）
+
+先只识图（每篇一次，结果含失败一并冻结）：
+
+```bash
+.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
+  --samples ~/iwa-calibration/official_lowband_t1.jsonl --images-only --with-vision \
+  --max-calls 4 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 4 \
+  --ledger-run official-t1-images --out $OUT/official-t1-images --confirm-paid
+```
+
+退出码 5 表示有图没有得到可用的识别结果：停下来告诉用户，不要跑评价。四张都可用时再评价：
+
+```bash
+.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
+  --samples ~/iwa-calibration/official_lowband_t1.jsonl --kinds evaluate --repeat 2 \
+  --image-descriptions $OUT/official-t1-images/image_descriptions.json --require-ready-images \
+  --max-calls 16 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 0 \
+  --ledger-run official-t1 --max-failure-rate 0.5 --out $OUT/official-t1 --confirm-paid \
+  --price-in <…> --price-cached-in <…> --price-out <…>
+```
+
+- 账本在每次请求发出前落盘；中断后重跑同一条命令，已发出的请求都算已用，总上限仍是 20 + 4（不要改大）。重跑前把没完成的结果目录改名保留。
+- 退出码：0 完成；2 参数 / 数据 / 账本有误；3 中止（首次调用就遇到 Key 或网络错误、达到账本上限）；4 最终失败超过一半；5 题图不可用。非 0 都停下来问用户。
+- 单价按 DeepSeek 官方当前价格和实际时段（第一阶段核对过：Pro 高峰 9 / 0.30 / 27，空闲半价）。
 
 ## 4. 看什么
 
-`$OUT/official-pro/report.md` 里：
+各 `report.md` 的“与老师评分对比”（这里的“老师”是官方总分）：平均绝对差和偏差（AI − 官方）。第一阶段 Pro 在 6.5–7.5 的作文上总分误差 0.286；
+这一组看 **5–6 分的作文是否被明显打高**（例如普遍给到 6.5 以上）。Task 1 另看 `official-1A` 的排序（5.0 那篇不应高于 6.0 那篇），以及两次运行的总分差。
 
-- **与老师评分（总分）**：这里的“老师”是官方总分。看平均绝对差和偏差（AI − 官方）。第一阶段在 6.5–7.5 的作文上 Pro 总分误差 0.286，CC 偏高；这一组主要看 **4 分和 5.5 分这两篇是否被打得明显偏高**。
-- **排序检查**：`official-2A`（4 / 6.5 / 8.5）和 `official-2B`（5.5 / 7.5）两组，标称更高的作文 AI 总分不应更低。
-- **重复运行波动**：同一篇两次总分差。
-
-限制（写进回传 README）：只有总分，没有四项分，看不出 CC 是否偏高；这些答卷流传很广，**模型很可能见过**，分数可能比在没见过的作文上准；只有 5 篇。
-
-不需要盲评：这一组没有逐条批注。如果顺手看到明显误读原文的反馈，记在私有备注里即可。
+限制（写进回传 README）：只有总分，没有四项分；这些答卷流传很广，**模型很可能见过**；只有 5 篇。不需要盲评（没有逐条批注）。
 
 ## 5. 回传
 
-新建 `docs/design/ielts-writing-ai-official-pro-20261112-results/`，只放数字：`report.json` 里 `calibration`、`ordering`、`repeat_spread`、
-`kinds.evaluate` 的格式指标、`usage`、`estimated_cost`，账本 `ledger.jsonl`（只有 id、模型、错误码、token 数），以及 README（HEAD、单价与时段、实际调用和费用、结论、限制）。
-**不要提交**转录稿、`official.jsonl`、`run_data.json`、`raw_calls.jsonl`、`report.md`（含引文）和思考内容。
-按约定更新 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md`，只推 `claude/ielts-writing-ai-trial`。
+新建 `docs/design/ielts-writing-ai-official-lowband-20261112-results/`，只放数字：各次 `report.json` 的 `calibration`、`ordering`、`repeat_spread`、`kinds.evaluate`、`usage`、`estimated_cost`，账本 `ledger.jsonl`，以及 README（HEAD、单价与时段、实际调用和费用、结论、限制）。
+**不要提交**转录稿、`official_lowband_*.jsonl`、题图、`run_data.json`、`raw_calls.jsonl`、`report.md`（含引文）和思考内容。按约定更新 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md`，只推 `claude/ielts-writing-ai-trial`。

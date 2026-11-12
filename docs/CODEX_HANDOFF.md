@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13 雅思写作 AI 试用工具：官方低分段样卷 5 篇的数据与执行说明（已推功能分支；未调用真实模型，没有新的付费授权）
+
+- **输入**：试用已在 Mac 配好并建好“测试老师”账号（见下一节 Codex 的记录）。用户亲自转录了官方 PDF 里官方分 5.0–6.0 的全部 5 篇手写答卷，发给 Claude：Task 1A Script A（5.0）、1A Script B（6.0）、1B Script A（6.0）、1C Script A（5.0）、2B Script A（5.5）。
+- **处理方式**：作文正文不经 Claude 誊写（Claude 的输出受内容过滤约束，此前整篇转录已被拦截一次），由新脚本在 Mac 上把用户的转录原文填进模板。转录稿和填好的文件都不进 Git。
+- **发现并改正的错误**：2026-11-11 发出的 `official_template.jsonl` 里，2B 的两行配成了 2A 的题目（从 PDF 文字层提取时先匹配到了目录里的同名标题）。没有人用过那份文件。改为按页面标题行（前有换页符、单独成行）提取，五道题（1A / 1B / 1C / 2A / 2B）互不相同，已人工核对开头。
+- **新数据包** `iwa-official-lowband-20261112.zip`（sha256 `9fdb41319d94109b3f290f99172f826c27f65ed7772e97abe175466735f50961`，已发给用户，不进 Git）：`official_lowband_template.jsonl`（5 篇，题目 / 官方总分 / 题图 / 1A 两篇为排序组，作文为空，sha256 `c28a6dab…795c`）、`img/official-1A.png`、`official-1B.png`、`official-1C.png`（从 PDF 提取，已人工核对是对应题图）、改正版 `official_template.jsonl`（sha256 `700a53b8…cd4`）。
+- **新脚本** `docs/design/ielts-writing-ai-model-comparison-plan-20261110/fill_transcripts.py`：读取用户原样保存的转录文本（“Task 1A · Script A · 5.0 分（第 9 页）”这样的标题行，含中文的说明行跳过，`[词?]` 还原为词并记入 `transcription_note`），填入模板，拆成 `official_lowband_t1.jsonl`（4 篇）和 `official_lowband_t2.jsonl`（1 篇），用 `realcheck.load_samples` 校验，只打印 id、词数、段数和 sha256。用同格式的合成文本测试通过，缺篇时拒绝。
+- **执行说明** `official-run.md` 第二版：只跑 Pro。A 部分 Task 2 一篇，现在可跑，**最多 4 次文字请求**；B 部分 Task 1 四篇，**识图配好后**先 `--images-only` 识图 4 次（任何一张不可用即停），再以冻结结果评价 4 篇 × 2 次，**最多 16 次文字请求**。共用一个账本：文字上限 20、识图上限 4。三条命令已用演示模型彩排（文字 10、识图 4，Task 1 出总分，1A 两篇排序检查有效）。**跑之前要用户确认上限。**
+- **未变**：产品代码与提示词（本轮只新增 docs/design 下的脚本与说明）。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。
+- **下一步**：① 用户确认 A 部分 4 次后，Codex 按 `official-run.md` 填稿并运行（另开账本，不续用已关闭的第一阶段账本）；② 识图配好、用户确认 B 部分 16 + 4 次后再跑 Task 1；③ 老师抽查 10 条仍待进行。
 ## 2026-11-13 试用账号可登录，评价Pro复核材料同步功能分支（0真实调用）
 
 - **授权/工作树**：用户要求创建“测试老师”账号，并提交推送上一轮本机复核结果和交接。主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main `6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked顶层入口保留；本轮只改复核目录、私有运行资料和两交接。独立树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111` 基线/远端 `85b8daad5b6da0cb5a2bbe653d9926bd75c2d334`；开工时仅上一轮两交接未提交，无业务脏改。91工具文件不改，其他工作树不操作。
