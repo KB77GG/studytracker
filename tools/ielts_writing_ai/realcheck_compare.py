@@ -15,8 +15,8 @@ import json
 import random
 from pathlib import Path
 
+from . import blindtally, realcheck
 from . import essay as essay_lib
-from . import realcheck
 from .realcheck import teacher_coverage
 
 CRITERIA = ("task", "coherence", "lexical", "grammar")
@@ -811,6 +811,8 @@ def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
     lines = [
         "# 盲评复核表（不显示模型和设置；先填完再看 blind_key.json）",
         "",
+        "",  # the sheet id, filled in below once every row is known
+        "",
         f"“判断”一栏填：{BLIND_VERDICTS}。标“参考”的行是判断依据，不用填。",
         "每篇最后两行填非负整数：④ 评委（或预埋清单）列出、但这一方没有指出的明确错误条数；"
         "其他漏报条数。没有就填 0。不要删改“编号”一栏，也不要删行。",
@@ -839,11 +841,29 @@ def render_blind_review(cmp: dict, seed: int = 0) -> tuple[str, dict]:
             ] + [("count", position, "—", "—", "—") for position in COUNT_ROWS]
             for n, (kind, position, quote, comment, suggestion) in enumerate(rows, 1):
                 row_id = f"{sample_id}/{name}/{n:02d}"
-                key["rows"].append({"id": row_id, "sample": sample_id, "side": name, "kind": kind})
+                row = {
+                    "id": row_id,
+                    "sample": sample_id,
+                    "side": name,
+                    "kind": kind,
+                    "fixed": blindtally.row_fingerprint(
+                        [row_id, position, quote, comment, suggestion]
+                    ),
+                }
+                if kind == "count":
+                    row["category"] = blindtally.COUNT_KEYS[position]
+                key["rows"].append(row)
                 verdict = "参考" if kind == CONTEXT else ""
                 lines.append(
                     f"| {row_id} | {position} | {quote} | {comment} | {suggestion} | {verdict} |  |"
                 )
+    # The sheet and its key carry the same id (seed, mapping and rows): a sheet counted
+    # with another key, or a key with an edited mapping, is noticed (review 869780f).
+    key["sheet_id"] = blindtally.sheet_id(key)
+    lines[2] = (
+        f"{blindtally.SHEET_ID_LABEL}{key['sheet_id']}（与同目录的 blind_key.json 配对；"
+        "只填“判断”和“备注”两列，其他列和这一行都不要改）"
+    )
     return "\n".join(lines) + "\n", key
 
 

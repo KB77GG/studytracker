@@ -6,6 +6,7 @@ blind tally truncated "0.5" and "1–2". Synthetic data only."""
 
 from __future__ import annotations
 
+import json
 import unittest
 
 from tools.ielts_writing_ai import blindtally, realcheck, realcheck_compare
@@ -156,22 +157,33 @@ class BlindSheetEvidenceTest(unittest.TestCase):
 class TallyTest(unittest.TestCase):
     """Rows carry ids; the key lists every expected row and its kind (review 76276d9)."""
 
-    def build(self, rows_a, rows_b, *, drop=(), extra=()):
-        key = {"samples": {"s1": {"甲": "a", "乙": "b"}}, "rows": []}
-        lines = ["## s1", ""]
+    def build(self, rows_a, rows_b, *, drop=(), extra=(), sample="s1"):
+        """A sheet bound to its key the way render_blind_review binds them (869780f)."""
+        key = {"seed": 0, "samples": {sample: {"甲": "a", "乙": "b"}}, "rows": []}
+        body = [f"## {sample}", ""]
         for name, rows in (("甲", rows_a), ("乙", rows_b)):
-            lines += [
+            body += [
                 f"### {name}（总分 6.5）",
                 "",
                 "| 编号 | 位置 | 引文 | 说明 | 建议 | 判断 | 备注 |",
                 "|---|---|---|---|---|---|---|",
             ]
             for n, (kind, position, verdict) in enumerate(rows, 1):
-                row_id = f"s1/{name}/{n:02d}"
-                key["rows"].append({"id": row_id, "sample": "s1", "side": name, "kind": kind})
+                row_id = f"{sample}/{name}/{n:02d}"
+                row = {
+                    "id": row_id,
+                    "sample": sample,
+                    "side": name,
+                    "kind": kind,
+                    "fixed": blindtally.row_fingerprint([row_id, position, "—", "—", "—"]),
+                }
+                if kind == "count":
+                    row["category"] = blindtally.COUNT_KEYS.get(position, "missed_other")
+                key["rows"].append(row)
                 if row_id not in drop:
-                    lines.append(f"| {row_id} | {position} | — | — | — | {verdict} |  |")
-        lines += list(extra)
+                    body.append(f"| {row_id} | {position} | — | — | — | {verdict} |  |")
+        key["sheet_id"] = blindtally.sheet_id(key)
+        lines = [f"{blindtally.SHEET_ID_LABEL}{key['sheet_id']}", ""] + body + list(extra)
         return "\n".join(lines) + "\n", key
 
     GOOD = [
@@ -228,12 +240,71 @@ class TallyTest(unittest.TestCase):
                 self.assertTrue(result["problems"])
 
     def test_later_repeats_may_stay_blank(self):
-        key = {
-            "samples": {"s1#r2": {"甲": "a", "乙": "b"}},
-            "rows": [{"id": "s1#r2/甲/01", "sample": "s1#r2", "side": "甲", "kind": "judged"}],
-        }
-        self.assertTrue(blindtally.tally("", key)["complete"])
-        self.assertFalse(blindtally.tally("", key, all_repeats=True)["complete"])
+        sheet, key = self.build(
+            self.GOOD,
+            self.GOOD,
+            sample="s1#r2",
+            drop={f"s1#r2/{side}/{n:02d}" for side in "甲乙" for n in range(1, 5)},
+        )
+        self.assertTrue(blindtally.tally(sheet, key)["complete"])
+        self.assertFalse(blindtally.tally(sheet, key, all_repeats=True)["complete"])
+
+
+class SheetKeyBindingTest(unittest.TestCase):
+    """Review 869780f: a sheet counted with another seed's key swapped the models, and
+    relabelling a count row moved its number to the other category."""
+
+    def cmp(self):
+        return {"samples": [{"a": view(id="s1"), "b": view(id="s1")}]}
+
+    def fill(self, sheet, key, verdict="②"):
+        kinds = {r["id"]: r["kind"] for r in key["rows"]}
+        out = []
+        for line in sheet.splitlines():
+            cells = line.split("|")
+            if len(cells) > 7 and cells[1].strip() in kinds:
+                kind = kinds[cells[1].strip()]
+                if kind == "count":
+                    cells[6] = " 0 "
+                elif kind == "judged":
+                    cells[6] = f" {verdict} "
+                line = "|".join(cells)
+            out.append(line)
+        return "\n".join(out) + "\n"
+
+    def test_a_key_from_another_generation_is_refused(self):
+        sheet, key = realcheck_compare.render_blind_review(self.cmp(), seed=0)
+        filled = self.fill(sheet, key)
+        self.assertTrue(blindtally.tally(filled, key)["complete"])
+        for seed in (1, 2, 3):  # whatever their mapping, other keys never fit
+            _other_sheet, other = realcheck_compare.render_blind_review(self.cmp(), seed=seed)
+            self.assertEqual([r["id"] for r in other["rows"]], [r["id"] for r in key["rows"]])
+            result = blindtally.tally(filled, other)
+            with self.subTest(seed=seed):
+                self.assertFalse(result["complete"])
+                self.assertIn("不是同一次生成的", result["problems"][0])
+        edited = json.loads(json.dumps(key))
+        edited["samples"]["s1"] = {"甲": "b", "乙": "a"}  # mapping edited in place
+        self.assertFalse(blindtally.tally(filled, edited)["complete"])
+
+    def test_fixed_columns_and_count_labels_cannot_change(self):
+        sheet, key = realcheck_compare.render_blind_review(self.cmp(), seed=0)
+        filled = self.fill(sheet, key)
+        relabelled = filled.replace("| ④ 漏掉评委都指出的明确错误 |", "| 其他漏报 |", 1)
+        self.assertNotEqual(relabelled, filled)
+        result = blindtally.tally(relabelled, key)
+        self.assertFalse(result["complete"])
+        self.assertEqual(
+            result["models"]["a"]["missed_other"] + result["models"]["b"]["missed_other"], 0
+        )
+        moved = filled.replace("| 立场判断 | — |", "| 立场判断 | edited |", 1)
+        self.assertFalse(blindtally.tally(moved, key)["complete"])
+        # The note column is free.
+        noted = "\n".join(
+            line[: line.rstrip().rfind("|")] + " a note |" if line.startswith("| s1/") else line
+            for line in filled.splitlines()
+        )
+        self.assertTrue(blindtally.tally(noted + "\n", key)["complete"])
 
 
 if __name__ == "__main__":
