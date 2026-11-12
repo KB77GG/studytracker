@@ -1,4 +1,6 @@
-# 给 Codex：Flash / Pro 对照的执行说明（2026-11-12，按复核 7b222c8、76276d9 修订）
+# 给 Codex：Flash / Pro 对照的执行说明（2026-11-12，按复核 7b222c8、76276d9、869780f 修订）
+
+**第三次修订（复核 `869780f`）**：盲评表与对应关系文件用同一个“盲评表编号”配对，每行固定列有指纹，漏报行的类别由对应关系文件决定；拿错对应关系文件或改了漏报标签都算不完整。
 
 **第二次修订（复核 `76276d9`）**：运行中的子进程继承批次锁，批次被杀后第二个批次要等它结束；第一次运行时固定每组数据和冻结识图结果的指纹，
 续跑前先核对，数据改过就拒绝；盲评表每行有编号，对应文件列出应有的行，计数按清单核对；改列建议只出现一行；续跑不再覆盖已有的盲评表。
@@ -40,7 +42,7 @@
 
 ```bash
 git fetch origin claude/ielts-writing-ai-trial && git checkout claude/ielts-writing-ai-trial && git pull --ff-only
-.venv/bin/python -m unittest discover -s tools/ielts_writing_ai/tests -t .      # 应为 445 OK
+.venv/bin/python -m unittest discover -s tools/ielts_writing_ai/tests -t .      # 应为 447 OK
 node tools/ielts_writing_ai/tests/test_draft.js
 ```
 
@@ -140,7 +142,8 @@ Claude 尝试逐字转录时输出被 API 内容过滤拦截（整篇复制出�
 
 - 必做：`rated_t2`、`teacher`、`official`、`lowband`、`rated_t1`；可选：`dev`、`ordering`。
 - 只判每篇的第一次运行；id 带 `#r2` 的段落是重复运行，可以留空（计数时默认跳过）。
-- **不要删改第一列“编号”，不要删行、加行或改“位置”**：`blind_key.json` 里记着每篇每侧应有哪些行，计数时逐行核对，缺行、重复行、整侧缺失都算不完整。
+- **只填“判断”和“备注”两列**。表头下方的“盲评表编号”和同目录 `blind_key.json` 里的编号是同一次生成的一对；`blind_key.json` 还记着每篇每侧应有的行、每行固定列（编号、位置、引文、说明、建议）的指纹，以及每个漏报行的类别。
+  计数时逐行核对：缺行、重复行、整侧缺失、固定列被改、漏报行的标签被改成另一类、或者拿另一次生成的对应关系文件来计数，都算不完整。不要在目录之间搬动盲评表或对应关系文件。
 - “判断”栏填：
   - `正确`：引文、说明和建议都对；
   - `①`：误读原文事实（例如说原文没有让步，其实有）；

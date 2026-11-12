@@ -141,13 +141,29 @@ def main():
     checks["blind_evidence_complete"] = all(included.values())
 
     # Since 76276d9 every row has an id and the key lists the expected rows.
+    # Since 869780f the sheet and key are bound (shared id, row fingerprints, the count
+    # category in the key).
     minimal_key = {
+        "seed": 0,
         "samples": {"one": {"甲": "a", "乙": "b"}},
-        "rows": [{"id": "one/甲/01", "sample": "one", "side": "甲", "kind": "count"}],
+        "rows": [
+            {
+                "id": "one/甲/01",
+                "sample": "one",
+                "side": "甲",
+                "kind": "count",
+                "category": "missed_other",
+                "fixed": blindtally.row_fingerprint(["one/甲/01", "其他漏报", "—", "—", "—"]),
+            }
+        ],
     }
+    minimal_key["sheet_id"] = blindtally.sheet_id(minimal_key)
 
     def count_cell(value):
-        sheet = f"## one\n### 甲\n| one/甲/01 | 其他漏报 | — | — | — | {value} |  |\n"
+        sheet = (
+            f"{blindtally.SHEET_ID_LABEL}{minimal_key['sheet_id']}\n## one\n### 甲\n"
+            f"| one/甲/01 | 其他漏报 | — | — | — | {value} |  |\n"
+        )
         return blindtally.tally(sheet, minimal_key)
 
     cells = {cell: count_cell(cell) for cell in ("2", "", "0.5", "1–2", "-1")}

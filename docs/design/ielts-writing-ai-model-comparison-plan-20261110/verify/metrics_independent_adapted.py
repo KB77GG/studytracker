@@ -1,5 +1,6 @@
 # Adapted copy of metrics_independent.py (review 76276d9) for the fixed code: only the calls into
-# changed internals and the sheet columns (a new 编号 column) were adapted; every case
+# changed internals, the sheet columns (a new 编号 column) and the sheet-key binding of
+# a hand-made repeat section (869780f) were adapted; every case
 # and expectation is the reviewer's. The original is not modified.
 """Offline synthetic metrics/complete-blind recheck; no keys, essays, or network.
 
@@ -181,15 +182,33 @@ def main():
         )
         strict_cells[value] = blindtally.tally(bad, key)["complete"]
     checks["invalid_counts_never_complete"] = not any(strict_cells.values())
-    repeated_sheet = complete_sheet + sheet.replace("## synthetic\n", "## synthetic#r2\n").replace(
+    # Adapted (869780f): a sheet and its key are bound by a shared id and per-row
+    # fingerprints, so the hand-made repeat section gets its own fingerprints and id.
+    second = sheet.replace("## synthetic\n", "## synthetic#r2\n").replace(
         "| synthetic/", "| synthetic#r2/"
     )
+    second = (
+        "\n".join(
+            line for line in second.splitlines() if not line.startswith(blindtally.SHEET_ID_LABEL)
+        )
+        + "\n"
+    )
+    fixed = {
+        cells[0]: blindtally.row_fingerprint(cells) for cells in blindtally._sheet_rows(second)
+    }
     repeated_key = copy.deepcopy(key)
     repeated_key["samples"]["synthetic#r2"] = key["samples"]["synthetic"]
     repeated_key["rows"] += [
-        r | {"id": r["id"].replace("synthetic/", "synthetic#r2/"), "sample": "synthetic#r2"}
+        r
+        | {
+            "id": r["id"].replace("synthetic/", "synthetic#r2/"),
+            "sample": "synthetic#r2",
+            "fixed": fixed[r["id"].replace("synthetic/", "synthetic#r2/")],
+        }
         for r in key["rows"]
     ]
+    repeated_key["sheet_id"] = blindtally.sheet_id(repeated_key)
+    repeated_sheet = (complete_sheet + second).replace(key["sheet_id"], repeated_key["sheet_id"], 1)
     checks["optional_repeat_blank_allowed"] = blindtally.tally(repeated_sheet, repeated_key)[
         "complete"
     ]

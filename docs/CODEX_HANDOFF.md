@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-12（下午）雅思写作 AI 试用工具：修复复核 869780f 的盲评绑定缺口（已推功能分支；未调用真实模型，没有新的付费授权）
+
+- **输入**：复核 `869780f`（`docs/design/iwa-batch-recheck-20261112/`）：上一轮 5 个 P2 和 1 个 P3 已确认修复，执行器通过；剩 1 个盲评完整性 P2——表与对应关系文件没有绑定：换用另一次生成的合法 `blind_key.json`（另一个种子）会把 A=1、B=0 对调成 A=0、B=1 仍显示完整，重新计数后还显示“当前”；把“④ 漏掉评委都指出的明确错误”改成合法的“其他漏报”会悄悄换类。复核方建议只补共同标识、固定列校验和明确的漏报类别，不改执行器。
+- **业务提交 `fb73327`**：
+  - `realcheck_compare.render_blind_review`：每行记录固定列（编号、位置、引文、说明、建议）的指纹 `fixed`，计数行记录 `category`；由种子、甲 / 乙映射和全部行算出 `sheet_id`，写进 `blind_key.json` 和表头下方的“盲评表编号”一行。
+  - `blindtally`：`pairing_problems()` 核对对应关系文件有编号和行清单、其内容重算的编号与记录一致、表里恰好有一个且相同的编号；逐行核对固定列指纹；计数行的类别取自清单，表里标签与清单不符即不完整；`current()` 除了哈希一致，还要求两文件配对。
+  - 执行器、续跑、不覆盖、过期检测、提示词和评价流程均未改。
+- **文档提交**：`codex-run.md` 第三次修订（只填“判断”“备注”；编号配对；不要在目录间搬动盲评文件）；`verify/metrics_independent_adapted.py` 中手工拼接的重复运行段、`verify/metrics_blind_probe_fixed.py` 的最小表按新的绑定方式构造（用例和预期不变）。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **447 OK**（另两种 locale 条件同样 OK）；新增 `SheetKeyBindingTest`（另一种子的对应关系文件一律拒绝、原地改映射拒绝、漏报标签互换拒绝且不计入另一类、改固定列拒绝、备注列可自由填写），原 `TallyTest` 改为绑定格式。Node 8、ruff、black 69 文件、`git diff --check` 通过。复核方探针原样：`metrics_consistency.py` **17/17**（原 14/17），`source_manifest_probe.py` 30/30，`runner_lifecycle_probe.py` 通过，`runner_author_checks.py --mode batch / process` 均通过；`verify/` 下五个探针全部通过。其余历史探针退出码与上一轮相同。真实数据包彩排：填好 `compare-rated_t2` 的盲评表并计数（完整），续跑后表格逐字节不变，汇总显示“完整”。
+- **未变**：数据包 `iwa-holdout-20261111b.zip`、官方样卷空模板。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。
+- **授权状态**：没有新的付费授权；第一阶段 224（官方样卷未转录时 184）、第二阶段 16 文字 + 2 识图，待复验通过后由用户确认。
+- **下一步**：ChatGPT 复核 `fb73327`；通过后由用户确认上限，Codex 按 `codex-run.md` 执行。
+
 ## 2026-11-12 写作批次第三轮复验：原 5P2/1P3 关闭，余一处盲评绑定 P2（无真实调用）
 
 - **源码与工作树**：主资料树 `/Users/zhouxin/Desktop/studytracker` 保持 main **6ded77d24586327ad94e151e172ae4811b4a2eed**、behind113，原7 modified/23 untracked顶层入口未动；只增本轮审阅目录与两交接。独立树 `/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111` 从clean76276d91快进到 **f5c3f51d603e69fe2600953f17720e33be5273e6**（业务 **45072df927f4c5836e79cc420deb3ecc8371d6f7**），90工具文件组合SHA **308f020cca0038f79d709f6c0d14cb78564cb67dd8b947bfaf56d37aa7a585cb** 与提交一致。未改产品；报告提交仅改文档/合成探针。旧47ccd240与817c4c4b树未操作。
