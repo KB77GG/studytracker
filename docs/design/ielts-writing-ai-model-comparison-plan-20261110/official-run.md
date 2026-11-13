@@ -1,4 +1,8 @@
-# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第五版）
+# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第六版）
+
+> **第六版（提示词 `.15`）只补“读数核对”这一步，不改变本轮已停止的事实，也不是新批次授权。** `.15` 起 realcheck 只有带核对记录的读数才评 TA：
+> 3.5 原来的 `--require-ready-images` 命令在 `.15` 下只会给语言反馈。下面 3.3–3.5 已改为“读图 → `image_check.md` 核对表 → `realcheck-check-images` 确认 → `--require-checked-images` 评价”。
+> 发现误读时仍按第五版停下并报告。**是否允许“改正读数后继续评价”由用户在授权新批次时决定**：同意时，改正必须写进 `--corrections` 文件（核对记录保留模型原始读数，标明已改正），不能直接改 `image_descriptions.json`；不同意时照旧停止整批。
 
 **当前状态：本轮 Task 1 已停止。** 首个 `official-1B-A` 识图请求虽然返回 `ready`，人工比图发现数值误读，实际只用了 **1 次识图、0 次文字评价**；未继续剩余三篇，也未自动重试。见[官方 Task 1 本轮报告](../ielts-writing-ai-official-t1-pro-20261113-results/README.md)。DeepSeek 识图配置已完成，但当前 `IWA_VISION_PROVIDER=none` 暂停识图；Pro 文字评价继续使用 `.14`。下面是分阶段执行规范，**不是继续本轮或重用余额的指令**。
 
@@ -132,7 +136,7 @@ PY
   --ledger-run official-t1-image-first --out "$OUT/official-t1-image-first" --confirm-paid
 ```
 
-**必须停在此处人工核图。** 对照原图核对标题、图例、坐标与单位、曲线/柱对应关系、关键数值、趋势或流程顺序。`ready` 和退出码 0 仅证明输出结构及信息量达到程序门槛，**不证明数字或图意准确**。首篇必须既为 `ready`，又经人工确认无误，才可进入下一阶段。
+**必须停在此处人工核图。** 结果目录里的 `image_check.md` 逐行列出读数和题图 sha256，用它对照原图核对标题、图例、坐标与单位、曲线/柱对应关系、关键数值、趋势或流程顺序。`ready` 和退出码 0 仅证明输出结构及信息量达到程序门槛，**不证明数字或图意准确**。首篇必须既为 `ready`，又经人工确认无误，才可进入下一阶段。
 
 任何人工核图发现误读，立即停止整批：不读余下图片、不评价、不自动重试、不手改该次结果冒充原识图输出；保留结果与账本，报告实际调用。**本轮已在此门禁停止。**
 
@@ -183,12 +187,22 @@ print("已合并4份ready结果；人工核图必须另行完成")
 PY
 ```
 
-在本批私有记录写明人工核图通过的样本 ID、核对人和时间，再执行文字评价。下面沿用同一份冻结结果，**不加 `--with-vision`**：
+人工核图通过后，用 `realcheck-check-images` 把核对写进一份新文件（不调用模型；核对人、时间和每张题图的 sha256 都记在文件里，题图之后被换就拒绝评价）。只有用户同意改正时才加 `--corrections`：
+
+```bash
+"$IWA_PY" -m tools.ielts_writing_ai --env-file "$IWA_ENV" realcheck-check-images \
+  --samples "$OUT/inputs/t1-all.jsonl" \
+  --descriptions "$OUT/image_descriptions.t1-frozen.json" \
+  --confirm official-1A-A,official-1A-B,official-1B-A,official-1C-A --by "<核对人>" \
+  --out "$OUT/image_descriptions.t1-checked.json"
+```
+
+再执行文字评价。下面沿用核对过的结果，**不加 `--with-vision`**；`--require-checked-images` 要求四篇都有核对记录：
 
 ```bash
 "$IWA_PY" -m tools.ielts_writing_ai --env-file "$IWA_ENV" realcheck \
   --samples "$OUT/inputs/t1-all.jsonl" --kinds evaluate --repeat 2 \
-  --image-descriptions "$OUT/image_descriptions.t1-frozen.json" --require-ready-images \
+  --image-descriptions "$OUT/image_descriptions.t1-checked.json" --require-checked-images \
   --max-calls 16 --ledger "$OUT/ledger-t1.jsonl" --ledger-text-cap 16 --ledger-vision-cap 4 \
   --ledger-run official-t1 --max-failure-rate 0.5 --out "$OUT/official-t1" --confirm-paid
 ```
