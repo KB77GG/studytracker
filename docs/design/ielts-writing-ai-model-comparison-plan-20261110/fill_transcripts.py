@@ -17,6 +17,8 @@ grammar errors are the evidence the official band was given for.
 Writes <template dir>/official_lowband_t1.jsonl (Task 1) and official_lowband_t2.jsonl
 (Task 2) next to the template (the image paths are relative to that folder), checks them
 with realcheck.load_samples and prints ids, word counts and sha256 only - never the text.
+Template fields such as "copied_from_question" / "copied_source" (confirmed copying of the
+question, 2026-11-13) are carried through; their word counts are printed too.
 The files contain a published sample and stay out of Git.
 """
 
@@ -78,7 +80,7 @@ def main() -> int:
             row["transcription_note"] = "；".join(scripts[row["id"]]["notes"])
         outputs.setdefault(row["task_type"], []).append(row)
     sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
-    from tools.ielts_writing_ai import realcheck  # noqa: E402
+    from tools.ielts_writing_ai import essay, realcheck  # noqa: E402
 
     for task_type, items in outputs.items():
         path = template.with_name(f"official_lowband_{task_type.replace('task', 't')}.jsonl")
@@ -90,6 +92,12 @@ def main() -> int:
         print(f"{path.name}：{len(loaded)} 篇，sha256 {digest}")
         for item in items:
             note = f"（{item['transcription_note']}）" if item.get("transcription_note") else ""
+            if item.get("copied_from_question"):
+                # Counted the way the tool counts (essay.count_words), never printed.
+                spans = essay.resolve_copied(item["essay"], item["copied_from_question"])
+                copied = sum(essay.count_words(s["text"]) for s in spans)
+                total = essay.count_words(item["essay"])
+                note += f"（已确认抄题：第 {'、'.join(str(s['p']) for s in spans)} 段 {copied} 词，自写 {total - copied} 词）"
             print(
                 f"  {item['id']}：{len(item['essay'].split())} 词，{item['essay'].count(chr(10)) + 1} 段{note}"
             )

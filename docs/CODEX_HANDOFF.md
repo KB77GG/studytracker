@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13（晚）雅思写作 AI 试用工具：复核 f46756f 的修复——抄题“相似仅提示、确认才排除”（提示词 .14）、超时校验（已推功能分支；未调用真实模型）
+
+- **输入**：Codex 对 `.13` 的复核 `docs/design/iwa-prompt13-review-20261113/`（f46756f）。段落修复与 DeepSeek 读图通过；两个 P2 都在抄题处理：按 85% 相似度整句扣除，① 合成 Task 1 自写概述句（借用题目名词但写了上升趋势）被扣掉，152 词变 138 并提示不足 150；② 官方 5.5 分样卷确认抄题 34 词只认出 18 词（210 而非 194）。P3：`IWA_VISION_TIMEOUT=inf/0/-1/nan` 未被配置校验拦住。复核建议：不再调阈值，相似只作待确认提示，只有确认的抄题区间才排除计数。
+- **业务提交 `d0650bb`**（**提示词版本 `iwa-2026-11-13.14`**）：
+  - `essay.similar_to_prompt`（原 `copied_from_prompt`，规则不变）只用于页面提示“与题目用词高度重合（程序按文字比对标出，待确认）……本工具没有因此扣字数”，**不扣字数、不发给模型**；结果字段 `similar_to_question`。
+  - **已确认的抄题**：`essay.resolve_copied` 接受 `[{"paragraph": n}]`（整段）或 `[{"quote": "逐字原文"}]`（段内一处：只出现一次、不跨段、从完整的词开始和结束、互不重叠），存进 `submission` 新增的可空列 `copied_spans`（JSON：区间 + 确认依据）。`storage.init_schema` 发现旧库缺列时 `ALTER TABLE ... ADD COLUMN`，原有行不动。只有这部分不计入字数：页面“第 N 段有 X 词已确认是照抄题目（依据：…）……原文 A 词，去掉后 B 词”（低于要求时说明）；评价输入附区间文字、`word_count_without_copied` 和说明（其余内容照常评），**确认依据不发给模型**。结果字段 `copied_from_question` 现在只表示已确认部分。
+  - realcheck 样本新增可选 `copied_from_question` + `copied_source`（必须成对；依据 1–200 字），加载时逐项校验并报行号；`run_data` 的 submission 导出 `copied_spans`；对照工具的输入指纹仅在有确认区间时加入它（旧报告指纹不变）。网页提交目前没有确认入口，只会出现“待确认”提示。
+  - `config.validate()`：`IWA_LLM_TIMEOUT`、`IWA_EVALUATE_THINKING_TIMEOUT`、`IWA_VISION_TIMEOUT` 必须在 (0, 3600] 秒，否则启动、check、realcheck 在建客户端 / 发请求 / 预留账本前报错。非数字仍回落默认值（原行为）。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **468 OK**（三种 locale 均 OK）；新增 `test_copied_question_20261113.py`（12 项：复核者的 152 词合成 Task 1 请求与页面都保持 152、只有待确认提示；Task 2 反对立场不被拿走；确认的两段即使比对漏掉也全部排除并告知模型、依据不外发、系统提示不变；段内片段；低于下限说明；14 种非法区间被拒；样本加载校验；realcheck 端到端与指纹兼容；旧库补列且重复启动无副作用；超时 inf/-inf/nan/0/-1/1e10/3601 被拒），删掉 `test_official_t2_20261113.py` 里按旧行为写的 4 项。Node 8、ruff、black、`git diff --check` 通过。**内置 7 篇 + 本地 23 篇留出集的评价消息与 `9c60a347`（`.12`）逐字节相同**。复核探针：原 `copy_probe.py` / `vision_probe.py` 复现的是已修掉的旧行为（前者因函数改名退出，后者在非法超时处被新校验拦下），新增改编版 `verify/copy_probe_adapted.py` **22/22**、`verify/vision_probe_adapted.py` **32/32**；`paragraph_probe.py` 需要 Mac 私有数据，未在此跑。历史探针全量重跑：退出码与上一轮相比只有 3 个从 0 变 1，都是“文件与 436ad2f2 相同”这类固定基线检查（`llm.py` / `argument.py` 在上一轮 ac95392 已改），无行为检查失败；其余新增探针失败均为 Mac 路径或私有数据缺失。
+- **数据**：新数据包 `iwa-official-lowband-20261113.zip`（sha256 `e0eba0ee10b6a469e898a775062114413552f8a64afc7894e9bc9584f3e11486`，发给用户，不进 Git），唯一改动是 `official-2B-A` 加 `copied_from_question: [{"paragraph": 1}, {"paragraph": 2}]` 与 `copied_source`（官方考官评语：答卷开头五行照抄题目；PDF 文字层已核对该评语存在）。`fill_transcripts.py` 现在会打印已确认抄题和自写词数（不打印正文）；`official-run.md` 第四版要求覆盖解压后重新填稿，`official-2B-A` 应显示 34 / 194 词，不符时报给用户、不改模板凑数。
+- **未变**：段落修复、DeepSeek 读图请求、评价模型与参数、校验门禁、对照批次。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。没有新的付费授权。
+- **下一步**：① Codex 复核 `.14`（可在 Mac 上用新数据包重填后跑 `paragraph_probe.py` 的实样一项，预期 34 / 194）；② 复核通过后再把 Mac 试用服务更新到 `.14`；③ 识图配置与 Task 1 单图试读、16 文字 + 4 识图仍需用户单独授权；④ 老师抽查 10 条仍待进行。
+
 ## 2026-11-13 `.13`复核：两项抄题P2阻止试用切换（0真实调用）
 
 - **工作树/基线**：主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2、原7modified/23untracked入口不动。本轮新建`/private/tmp/studytracker-iwa-prompt13-review-20261113`，分支`codex/iwa-prompt13-review-20261113`，基线/远端`fdf4704ee3ec1aa80aad5e5e9d59f04a6edbc380`（业务ac95392d）；92产品文件逐个与提交一致，未改产品。原运行树`/private/tmp/studytracker-iwa-holdout-review-20261111`保持clean9c60a347、产品`.12`，其他worktree未操作。

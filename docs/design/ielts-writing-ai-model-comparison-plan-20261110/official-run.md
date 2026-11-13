@@ -1,4 +1,4 @@
-# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第三版）
+# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第四版）
 
 用户 2026-11-12 决定：试用的评价改用 `deepseek-v4-pro`；没有 5–6 分段的真实学生作文，**用官方样卷代替**。
 用户已亲自转录了 PDF 里官方给分 5.0–6.0 的全部 5 篇手写答卷（发在给 Claude 的消息里）：
@@ -26,6 +26,11 @@
   - 合计最多 **20 次文字请求 + 4 次识图**。这是估算，不是账单。第一阶段剩余的额度不挪用。
 
 ## 1. 数据（不进 Git）
+
+> 第四版（提示词 `.14`）：数据包换成 `iwa-official-lowband-20261113.zip`（sha256 `e0eba0ee10b6a469e898a775062114413552f8a64afc7894e9bc9584f3e11486`）。唯一改动是 `official-2B-A` 一行加了
+> `"copied_from_question": [{"paragraph": 1}, {"paragraph": 2}]` 和 `"copied_source"`（官方考官评语：答卷开头五行照抄题目）。
+> 只有这样标注的抄题才不计入字数并告知模型；程序按相似度找到的句子只在页面上提示“待确认”。覆盖解压后**重新运行下面第 3 步**，
+> 输出里 `official-2B-A` 应显示“已确认抄题：第 1、2 段 34 词，自写 194 词”（复核 f46756f 按空白分词核对的数字；上次运行按工具计数的总词数 228 与之一致）。数字不同就把两种口径的数字都报给用户，不要改模板凑数。
 
 1. 解压 Claude 发的数据包到 `~/iwa-calibration/`：`official_lowband_template.jsonl`（题目、官方分、题图、分组已填，作文为空）、`img/official-1A.png`、`img/official-1B.png`、`img/official-1C.png`，以及改正后的 `official_template.jsonl`。
 2. 把用户发给 Claude 的转录原文（从“PDF 里 5.0–6.0 分的手写稿共 5 篇”起到最后一段）原样存为 `~/iwa-calibration/official_lowband_transcript.txt`。不用删中文说明行，脚本会跳过。
