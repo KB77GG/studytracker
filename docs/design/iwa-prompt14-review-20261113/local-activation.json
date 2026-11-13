@@ -1,0 +1,79 @@
+{
+  "source_head": "fd8e910b3d5f5a5385af5a99d073c3824bbe74b2",
+  "prompt_version": "iwa-2026-11-13.14",
+  "initial_settings": {
+    "data_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var",
+    "db_path": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/iwa.sqlite3",
+    "upload_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/uploads",
+    "bind": "127.0.0.1:5055",
+    "llm_provider": "deepseek",
+    "llm_model": "deepseek-flash",
+    "llm_api_key_set": true,
+    "evaluate_thinking": "high",
+    "evaluate_thinking_max_tokens": 32000,
+    "evaluate_thinking_timeout": 420.0,
+    "evaluate_model": "deepseek-v4-pro",
+    "vision_provider": "deepseek",
+    "vision_model": "deepseek-flash",
+    "vision_max_tokens": 2000,
+    "vision_timeout": 180.0,
+    "vision_api_key_set": true,
+    "daily_limit": 30,
+    "max_workers": 2,
+    "cookie_secure": false
+  },
+  "db_counts_before": {
+    "trial_user": 1,
+    "submission": 0,
+    "generation": 0,
+    "usage_event": 0
+  },
+  "db_counts_after": {
+    "trial_user": 1,
+    "submission": 0,
+    "generation": 0,
+    "usage_event": 0
+  },
+  "copied_spans_column_added": true,
+  "activation_paid_calls": 0,
+  "final": {
+    "prompt_version": "iwa-2026-11-13.14",
+    "vision_provider": "none",
+    "vision_configured_but_disabled": true,
+    "evaluate_model": "deepseek-v4-pro",
+    "db_counts_unchanged": true,
+    "health_ok": true,
+    "paid_counts": {
+      "text": {
+        "reserved": 0,
+        "ok": 0,
+        "failed": 0,
+        "unknown": 0
+      },
+      "vision": {
+        "reserved": 1,
+        "ok": 1,
+        "failed": 0,
+        "unknown": 0
+      },
+      "runs": {
+        "official-t1-first": {
+          "text": 0,
+          "vision": 1,
+          "unknown": 0,
+          "unknown_usage": 0,
+          "cache_hits_unreported": 0,
+          "models": [
+            "deepseek-flash"
+          ],
+          "prompt_tokens": 824,
+          "completion_tokens": 958,
+          "prompt_cache_hit_tokens": 0
+        }
+      }
+    },
+    "batch_closed": true
+  },
+  "final_local_pid": 92571,
+  "final_local_bind": "127.0.0.1:5055"
+}

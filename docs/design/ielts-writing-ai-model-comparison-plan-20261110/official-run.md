@@ -1,4 +1,6 @@
-# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第四版）
+# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第五版）
+
+**当前状态：本轮 Task 1 已停止。** 首个 `official-1B-A` 识图请求虽然返回 `ready`，人工比图发现数值误读，实际只用了 **1 次识图、0 次文字评价**；未继续剩余三篇，也未自动重试。见[官方 Task 1 本轮报告](../ielts-writing-ai-official-t1-pro-20261113-results/README.md)。DeepSeek 识图配置已完成，但当前 `IWA_VISION_PROVIDER=none` 暂停识图；Pro 文字评价继续使用 `.14`。下面是分阶段执行规范，**不是继续本轮或重用余额的指令**。
 
 用户 2026-11-12 决定：试用的评价改用 `deepseek-v4-pro`；没有 5–6 分段的真实学生作文，**用官方样卷代替**。
 用户已亲自转录了 PDF 里官方给分 5.0–6.0 的全部 5 篇手写答卷（发在给 Claude 的消息里）：
@@ -18,11 +20,11 @@
 
 ## 0. 前提与上限
 
-- 代码：功能分支 HEAD（含 `f2509aa` 的 `IWA_EVALUATE_MODEL` 与 420 秒超时）。离线测试 `.venv/bin/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` 应全部通过。
-- 试用配置（`tools/ielts_writing_ai/.env`，用户已配好）：评价 `deepseek-v4-pro` / high / 32000 / 420 秒，精修和改写 Flash。
+- 代码：固定在已经完成离线验证的 `.14` 源码 worktree，不因远端 HEAD 移动而隐式换版本；本机 Python 和实际私有配置路径见第 3.1 节。
+- 试用配置：评价 `deepseek-v4-pro` / high / 32000 / 420 秒，精修和改写 Flash；识图当前暂停。不要把源码树默认 `.env` 路径当作已存在的运行配置。
 - **付费上限需要用户确认**，分两部分：
-  - **A. Task 2 一篇，现在就能跑**：1 篇 × 2 次 × 每次最多 1 次校验重试 = **最多 4 次文字请求**（约 0.5–1 元）。
-  - **B. Task 1 四篇，识图配好后再跑**：先识图 **4 次**（每篇一次，1A 两篇各读一次），再评价 4 篇 × 2 次 = **最多 16 次文字请求**（约 2–4 元，识图另按百炼计费）。
+  - **A. Task 2 一篇，既有批次已闭合**：原计划 1 篇 × 2 次 × 每次最多 1 次校验重试 = **最多 4 次文字请求**（原估算约 0.5–1 元），不自动续用余额。
+  - **B. Task 1 四篇**：识图最多 **4 次**（每篇一次，1A 两篇虽共用图片也各读一次），按首篇 1 次、人工核图通过后余下 3 次执行。全部核图通过后，计划评价 4 篇 × 2 次 = **8 次评价**，计入每次最多 1 次校验重试后，累计上限仍是 **16 次文字请求**。金额是估算，识图费用另计。
   - 合计最多 **20 次文字请求 + 4 次识图**。这是估算，不是账单。第一阶段剩余的额度不挪用。
 
 ## 1. 数据（不进 Git）
@@ -37,7 +39,7 @@
 3. 填入并拆成 Task 1 / Task 2 两个文件：
 
 ```bash
-.venv/bin/python docs/design/ielts-writing-ai-model-comparison-plan-20261110/fill_transcripts.py \
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/design/ielts-writing-ai-model-comparison-plan-20261110/fill_transcripts.py \
   --template ~/iwa-calibration/official_lowband_template.jsonl \
   --text ~/iwa-calibration/official_lowband_transcript.txt
 ```
@@ -45,57 +47,157 @@
    输出 `official_lowband_t1.jsonl`（4 篇）和 `official_lowband_t2.jsonl`（1 篇），只打印 id、词数、段数和 sha256。
    用户在转录里标的 `[seilmens?]`、`[77?]` 会还原成 `seilmens`、`77`，并写进该篇的 `transcription_note`。其余拼写和语法错误一律保留。
 
-## 2. A 部分：Task 2 一篇（用户确认 4 次之后）
+## 2. A 部分历史执行示例
+
+原 A 批次已经闭合；保留以下原输出目录与账本用于审计，不重跑或挪用余额。
 
 ```bash
 OUT=~/iwa-compare-official-lowband-20261113
-.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m tools.ielts_writing_ai \
+  --env-file /Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/.env realcheck \
   --samples ~/iwa-calibration/official_lowband_t2.jsonl --kinds evaluate --repeat 2 \
   --max-calls 4 --ledger $OUT/ledger-t2.jsonl --ledger-text-cap 4 --ledger-vision-cap 0 \
-  --ledger-run official-t2 --max-failure-rate 0.5 --out $OUT/official-t2 --confirm-paid \
-  --price-in <Pro 输入未命中缓存> --price-cached-in <Pro 输入命中缓存> --price-out <Pro 输出>
+  --ledger-run official-t2 --max-failure-rate 0.5 --out $OUT/official-t2 --confirm-paid
 ```
 
 开头一行应为“模型：deepseek / deepseek-flash，评价用 deepseek-v4-pro”“最多 4 次调用”。
 **A 使用独立持久账本，文字总上限必须是 4，识图上限为 0。** `--max-calls 4` 只限制当前进程，不能替代账本的累计上限；不可预先给尚未授权的 B 留出 20 次额度。
 中断或失败后仍沿用此账本，不换目录、换账本或提高上限来重试；已发出而结果不明的请求也计入这 4 次。
+若需成本估算，另加执行时已核验数值的 `--price-in`、`--price-cached-in`、`--price-out`；不要把带尖括号的价格占位符直接当 shell 参数执行。
 
-## 3. B 部分：Task 1 四篇（识图配好、用户确认后）
+## 3. B 部分：Task 1 四篇分阶段执行
 
-识图配置（2026-11-13 起支持 DeepSeek 读图，Flash 读图、Pro 评价，同一个 Key）：在 `tools/ielts_writing_ai/.env` 加
+**本轮已因首图误读停止并关闭，不执行下列后续步骤。** 只有另行获得新一批执行的明确授权、样本和预算边界后，才使用这些步骤。不得把本轮未用的 3 次识图或 16 次文字请求视为自动续跑授权。
 
-```bash
-IWA_VISION_PROVIDER=deepseek
-# 可选：IWA_VISION_MAX_TOKENS=2000、IWA_VISION_TIMEOUT=180（默认值）
-```
+### 3.1 固定配置和同一账本
 
-`check` 应显示 `"vision_provider": "deepseek"`、`"vision_model": "deepseek-flash"`、`"vision_api_key_set": true`。读图请求会明确关闭思考。
-**建议先只跑一张图做连通和人工读数核对**（例如把 `--samples` 换成只含 `official-1B-A` 一行的文件，`--max-calls 1 --ledger-vision-cap 1`），读数对了再跑四张；这一次也计入 4 次识图上限。
+识图使用 DeepSeek Flash，文字评价使用 Pro `.14`，读图请求明确关闭思考。获准启用识图时，私有配置的 `IWA_VISION_PROVIDER=deepseek`；默认输出上限 2000、超时 180 秒。`check` 应显示 `vision_provider=deepseek`、`vision_model=deepseek-flash`、`vision_api_key_set=true`。**当前仍保持 `IWA_VISION_PROVIDER=none`，本文不要求改回。**
 
-先只识图（每篇一次，结果含失败一并冻结）：
+从首个识图请求开始就固定同一个 B 账本，三个阶段全部使用 `--ledger-text-cap 16 --ledger-vision-cap 4`。首步的 `--max-calls 1` 只限制本进程，不能把持久账本的识图总上限设成 1 再调高。A 与 B 分账，任何阶段都不换账本或提高上限。
 
-```bash
-.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
-  --samples ~/iwa-calibration/official_lowband_t1.jsonl --images-only --with-vision \
-  --max-calls 4 --ledger $OUT/ledger-t1.jsonl --ledger-text-cap 16 --ledger-vision-cap 4 \
-  --ledger-run official-t1-images --out $OUT/official-t1-images --confirm-paid
-```
-
-退出码 5 表示有图没有得到可用的识别结果：停下来告诉用户，不要跑评价。四张都可用时再评价：
+以下路径按本机布局记录：执行工作目录是固定的、已经离线验证的 `.14` 源码 worktree 根目录，使用主树 Python 和实际私有配置。**本批 B 的实际 `OUT` 是 `/Users/zhouxin/iwa-compare-official-t1-20261113`，账本为该目录的 `ledger-t1.jsonl`，状态为 closed。下面保留该路径仅用于说明和审计，不可整段复制执行。** A 的旧目录 `~/iwa-compare-official-lowband-20261113` 已闭合，不能拿来充当 B 的输出或账本。未来获得新一批明确授权后，使用批准的新目录执行同样分阶段流程，并从该批首步到最后一步始终固定同一账本；不能用新目录绕过本批停止决定。
 
 ```bash
-.venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
-  --samples ~/iwa-calibration/official_lowband_t1.jsonl --kinds evaluate --repeat 2 \
-  --image-descriptions $OUT/official-t1-images/image_descriptions.json --require-ready-images \
-  --max-calls 16 --ledger $OUT/ledger-t1.jsonl --ledger-text-cap 16 --ledger-vision-cap 4 \
-  --ledger-run official-t1 --max-failure-rate 0.5 --out $OUT/official-t1 --confirm-paid \
-  --price-in <…> --price-cached-in <…> --price-out <…>
+IWA_PY=/Users/zhouxin/Desktop/studytracker/.venv/bin/python
+IWA_ENV=/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/.env
+# 本轮 B 已 closed；以下路径只供审计，不可继续执行本轮。
+OUT=/Users/zhouxin/iwa-compare-official-t1-20261113
 ```
 
-- B 仅在单独获得 16 次文字 + 4 次识图授权后使用 `ledger-t1.jsonl`；与 A 分账，不借用 A 的剩余额度。以上文字评价沿用冻结结果，不开启识图调用。
-- 账本在每次请求发出前落盘；中断后重跑同一条命令，已发出的请求都算已用。A 累计文字最多 4，B 累计文字最多 16、识图最多 4，均不可改大。重跑前把没完成的结果目录改名保留，**账本原位保留**。
-- 退出码：0 完成；2 参数 / 数据 / 账本有误；3 中止（首次调用就遇到 Key 或网络错误、达到账本上限）；4 最终失败超过一半；5 题图不可用。非 0 都停下来问用户。
-- 单价按 DeepSeek 官方当前价格和实际时段（第一阶段核对过：Pro 高峰 9 / 0.30 / 27，空闲半价）。
+### 3.2 只准备首篇和其余三篇
+
+在私有目录内拆分输入，不改原 JSONL。写入别的目录前，将相对 `image` 路径相对于**原输入文件所在目录**解析为绝对路径，避免图路径失效。首篇只含 `official-1B-A`；余下文件只能含 `official-1A-A`、`official-1A-B`、`official-1C-A`，与首篇不重叠。
+
+```bash
+"$IWA_PY" - "$OUT" <<'PY'
+import os
+os.umask(0o077)
+import json
+from pathlib import Path
+import sys
+
+source = Path.home() / "iwa-calibration/official_lowband_t1.jsonl"
+rows = [json.loads(line) for line in source.read_text().splitlines() if line.strip()]
+expected = {"official-1A-A", "official-1A-B", "official-1B-A", "official-1C-A"}
+assert len(rows) == 4 and {r["id"] for r in rows} == expected
+for row in rows:
+    image = (source.parent / row["image"]).resolve()
+    assert image.is_file()
+    row["image"] = str(image)
+out = Path(sys.argv[1]) / "inputs"
+out.mkdir(parents=True, exist_ok=True, mode=0o700)
+groups = {
+    "t1-first.jsonl": [r for r in rows if r["id"] == "official-1B-A"],
+    "t1-remaining.jsonl": [r for r in rows if r["id"] != "official-1B-A"],
+    "t1-all.jsonl": rows,
+}
+for name, group in groups.items():
+    target = out / name
+    content = "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in group)
+    if target.exists():
+        assert target.read_text() == content, f"拒绝覆盖不同内容：{target}"
+    else:
+        target.write_text(content)
+    target.chmod(0o600)
+print("输入准备完成：首篇1、余下3、总计4；题图绝对路径已检查")
+PY
+```
+
+### 3.3 第一阶段只读首篇
+
+```bash
+"$IWA_PY" -m tools.ielts_writing_ai --env-file "$IWA_ENV" realcheck \
+  --samples "$OUT/inputs/t1-first.jsonl" --images-only --with-vision \
+  --max-calls 1 --ledger "$OUT/ledger-t1.jsonl" --ledger-text-cap 16 --ledger-vision-cap 4 \
+  --ledger-run official-t1-image-first --out "$OUT/official-t1-image-first" --confirm-paid
+```
+
+**必须停在此处人工核图。** 对照原图核对标题、图例、坐标与单位、曲线/柱对应关系、关键数值、趋势或流程顺序。`ready` 和退出码 0 仅证明输出结构及信息量达到程序门槛，**不证明数字或图意准确**。首篇必须既为 `ready`，又经人工确认无误，才可进入下一阶段。
+
+任何人工核图发现误读，立即停止整批：不读余下图片、不评价、不自动重试、不手改该次结果冒充原识图输出；保留结果与账本，报告实际调用。**本轮已在此门禁停止。**
+
+### 3.4 第二阶段只读余下三篇
+
+仅在首篇人工核图通过后运行；不再把四篇全集传给识图命令。
+
+```bash
+"$IWA_PY" -m tools.ielts_writing_ai --env-file "$IWA_ENV" realcheck \
+  --samples "$OUT/inputs/t1-remaining.jsonl" --images-only --with-vision \
+  --max-calls 3 --ledger "$OUT/ledger-t1.jsonl" --ledger-text-cap 16 --ledger-vision-cap 4 \
+  --ledger-run official-t1-images-remaining --out "$OUT/official-t1-images-remaining" --confirm-paid
+```
+
+同样人工逐份核对这三份读图；任一不是 `ready` 或出现误读，停止本批，不进入评价，不自动重试。两阶段合计最多 4 次识图，每篇恰好一次；共享同一图片的 1A 两篇仍各有一份按样本 ID 保存的结果。
+
+### 3.5 合并冻结结果并执行八次评价
+
+仅在四份结果全为 `ready` 且四份均完成人工核图之后，合并两个 `version: 2` 文件。保留每个样本结果对象原样，禁止覆盖重复 ID、缺行或将失败改成成功。以下只做本地合并与结构检查，**不能代替人工核图**：
+
+```bash
+"$IWA_PY" - "$OUT" <<'PY'
+import os
+os.umask(0o077)
+import json
+from pathlib import Path
+import sys
+
+out = Path(sys.argv[1])
+expected = {"official-1A-A", "official-1A-B", "official-1B-A", "official-1C-A"}
+images = {}
+for name in ["official-t1-image-first", "official-t1-images-remaining"]:
+    saved = json.loads((out / name / "image_descriptions.json").read_text())
+    assert saved.get("version") == 2 and isinstance(saved.get("images"), dict)
+    assert not images.keys() & saved["images"].keys(), "重复样本 ID"
+    images.update(saved["images"])
+assert set(images) == expected
+assert all(r.get("status") == "ready" and isinstance(r.get("description"), str)
+           and r["description"].strip() for r in images.values())
+target = out / "image_descriptions.t1-frozen.json"
+content = json.dumps({"version": 2, "images": images}, ensure_ascii=False, indent=2) + "\n"
+if target.exists():
+    assert target.read_text() == content, "拒绝覆盖不同冻结结果"
+else:
+    target.write_text(content)
+target.chmod(0o600)
+print("已合并4份ready结果；人工核图必须另行完成")
+PY
+```
+
+在本批私有记录写明人工核图通过的样本 ID、核对人和时间，再执行文字评价。下面沿用同一份冻结结果，**不加 `--with-vision`**：
+
+```bash
+"$IWA_PY" -m tools.ielts_writing_ai --env-file "$IWA_ENV" realcheck \
+  --samples "$OUT/inputs/t1-all.jsonl" --kinds evaluate --repeat 2 \
+  --image-descriptions "$OUT/image_descriptions.t1-frozen.json" --require-ready-images \
+  --max-calls 16 --ledger "$OUT/ledger-t1.jsonl" --ledger-text-cap 16 --ledger-vision-cap 4 \
+  --ledger-run official-t1 --max-failure-rate 0.5 --out "$OUT/official-t1" --confirm-paid
+```
+
+计划是 4 篇 × 2 次共 8 次评价；校验重试也计入累计 16 次文字请求。若需要成本估算，再按实际执行时已核验的价格添加 `--price-in`、`--price-cached-in`、`--price-out`，不把旧时段单价当当前账单。
+
+- 三阶段使用同一个 B 账本，累计文字最多 16、识图最多 4；A 的独立账本文字最多 4、识图为 0，均不可改大或互借。
+- 账本在请求前落盘；已发出而结果不明的请求也占额度。中断、失败、人工核图误读均先保留结果并停下，不能自动重跑或换目录重建账本。
+- 退出码：0 完成；2 参数 / 数据 / 账本有误；3 中止；4 最终失败超过一半；5 题图不可用。非 0 停止；退出码 0 仍须经过人工核图门禁。
 
 ## 4. 看什么
 

@@ -1,0 +1,120 @@
+{
+  "checks": [
+    {
+      "name": "prepare_success",
+      "passed": true
+    },
+    {
+      "name": "prepare_refuses_existing_output",
+      "passed": true
+    },
+    {
+      "name": "rest_before_first_refused",
+      "passed": true
+    },
+    {
+      "name": "evaluate_before_freeze_refused",
+      "passed": true
+    },
+    {
+      "name": "manifest_excludes_key",
+      "passed": true
+    },
+    {
+      "name": "first_is_1B_only",
+      "passed": true
+    },
+    {
+      "name": "snapshot_images_absolute",
+      "passed": true
+    },
+    {
+      "name": "first_one_image_zero_text",
+      "passed": true
+    },
+    {
+      "name": "first_rerun_refused",
+      "passed": true
+    },
+    {
+      "name": "rest_without_manual_approval_refused",
+      "passed": true
+    },
+    {
+      "name": "remaining_three_shared_total4",
+      "passed": true
+    },
+    {
+      "name": "rest_rerun_refused",
+      "passed": true
+    },
+    {
+      "name": "freeze_four_ready",
+      "passed": true
+    },
+    {
+      "name": "freeze_rerun_refused",
+      "passed": true
+    },
+    {
+      "name": "evaluate_without_all_manual_approval_refused",
+      "passed": true
+    },
+    {
+      "name": "evaluation_worst_case16plus4",
+      "passed": true
+    },
+    {
+      "name": "all8_evaluations_ready_frozen",
+      "passed": true
+    },
+    {
+      "name": "evaluate_rerun_refused",
+      "passed": true
+    },
+    {
+      "name": "status_after_completion",
+      "passed": true
+    },
+    {
+      "name": "input_drift_refused",
+      "passed": true
+    },
+    {
+      "name": "config_drift_refused",
+      "passed": true
+    },
+    {
+      "name": "snapshot_drift_refused",
+      "passed": true
+    },
+    {
+      "name": "no_trial_data_created",
+      "passed": true
+    },
+    {
+      "name": "snapshots_private",
+      "passed": true
+    },
+    {
+      "name": "inherited_child_retains_flock_after_parent_close",
+      "passed": true
+    },
+    {
+      "name": "lock_released_after_child_exit",
+      "passed": true
+    },
+    {
+      "name": "child_env_strips_inherited_config_and_proxy",
+      "passed": true
+    },
+    {
+      "name": "parent_network_attempts_zero",
+      "passed": true
+    }
+  ],
+  "passed": 28,
+  "total": 28,
+  "real_calls": 0,
+  "network_attempts": 0
+}

@@ -1,0 +1,203 @@
+{
+  "source_head": "fd8e910b3d5f5a5385af5a99d073c3824bbe74b2",
+  "prompt_version": "iwa-2026-11-13.14",
+  "source_code_sha256": "46569b9c10876bbe3747c765b679cce55ced0e0950f2dd2b206dd5ef6a5712f2",
+  "image_descriptions_sha256": "34855044df5bdba155a3b62f77da4500d64241d6d8407cf8cf2472d238c96fe9",
+  "sample_id": "official-1B-A",
+  "started_at_beijing": "2026-11-13T11:19:33+08:00",
+  "decision": "stop_after_first_image_manual_review_failed",
+  "structural_result": "ready",
+  "human_factual_result": "unacceptable_for_Task_Achievement_grounding",
+  "attribution": "incorrect values already occur in original model data_points; renderer reproduces the original structured reading",
+  "visual_observation_limit": "Values and time positions are approximate manual readings of graph axes and curves, not official exact numeric annotations or automated OCR.",
+  "comparisons": [
+    {
+      "series": "television",
+      "time_24h": "16:00",
+      "model_percent": 14.0,
+      "manual_visual_percent_approx": 22,
+      "manual_visual_range_percent": [
+        21,
+        23
+      ],
+      "material_mismatch": true,
+      "model_minus_manual_midpoint_percentage_points": -8.0
+    },
+    {
+      "series": "television",
+      "time_24h": "22:00",
+      "model_percent": 45.0,
+      "manual_visual_percent_approx": 40,
+      "manual_visual_range_percent": [
+        38,
+        41
+      ],
+      "material_mismatch": true,
+      "model_minus_manual_midpoint_percentage_points": 5.0
+    },
+    {
+      "series": "television",
+      "time_24h": "20:00",
+      "model_percent": 47.0,
+      "manual_visual_percent_approx": 45.5,
+      "manual_visual_range_percent": [
+        45,
+        46
+      ],
+      "material_mismatch": false,
+      "model_minus_manual_midpoint_percentage_points": 1.5
+    }
+  ],
+  "correct_high_level_features": {
+    "two_series_and_units": true,
+    "radio_morning_peak": true,
+    "television_evening_peak": true,
+    "overnight_low_audiences": true
+  },
+  "television_peak_manual_approx": {
+    "time_24h": "19:30",
+    "percent": 47
+  },
+  "counts": {
+    "text_reserved": 0,
+    "vision_reserved": 1,
+    "completed": 1,
+    "failed": 0,
+    "unknown": 0,
+    "evaluations": 0,
+    "automatic_retries": 0
+  },
+  "authorized_caps": {
+    "text": 16,
+    "vision": 4
+  },
+  "unused_authorization_not_consumed": {
+    "text": 16,
+    "vision": 3
+  },
+  "usage": {
+    "input_tokens": 824,
+    "uncached_input_tokens": 824,
+    "cached_input_tokens": 0,
+    "output_tokens": 958,
+    "total_tokens": 1782
+  },
+  "latency_ms": 5430,
+  "cost_estimate": {
+    "currency": "CNY",
+    "price_basis": "batch-supplied peak rates; estimate, not bill",
+    "per_tokens": 1000000,
+    "uncached_input_price": "2",
+    "output_price": "8",
+    "uncached_input_cost": "0.001648",
+    "output_cost": "0.007664",
+    "total": "0.009312"
+  },
+  "model": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "thinking": "off",
+    "max_tokens": 2000,
+    "timeout_seconds": 180.0
+  },
+  "checks": [
+    {
+      "check": "recorded_head_and_prompt",
+      "passed": true
+    },
+    {
+      "check": "authorized_caps16plus4",
+      "passed": true
+    },
+    {
+      "check": "one_recorded_call",
+      "passed": true
+    },
+    {
+      "check": "one_flash_image_call",
+      "passed": true
+    },
+    {
+      "check": "thinking_off_tokens2000",
+      "passed": true
+    },
+    {
+      "check": "vision_timeout180",
+      "passed": true
+    },
+    {
+      "check": "successful_transport_and_exit",
+      "passed": true
+    },
+    {
+      "check": "raw_and_run_response_same",
+      "passed": true
+    },
+    {
+      "check": "raw_json_parsed",
+      "passed": true
+    },
+    {
+      "check": "structural_ready",
+      "passed": true
+    },
+    {
+      "check": "renderer_preserved_model_description",
+      "passed": true
+    },
+    {
+      "check": "raw_model_has_14_and_45",
+      "passed": true
+    },
+    {
+      "check": "two_material_mismatches_against_manual_ranges",
+      "passed": true
+    },
+    {
+      "check": "ledger_one_image_zero_text",
+      "passed": true
+    },
+    {
+      "check": "ledger_no_unknown_or_failed",
+      "passed": true
+    },
+    {
+      "check": "ledger_exact_first_id",
+      "passed": true
+    },
+    {
+      "check": "later_paid_stages_not_started",
+      "passed": true
+    },
+    {
+      "check": "manual_first_approval_absent",
+      "passed": true
+    },
+    {
+      "check": "usage824uncached958output",
+      "passed": true
+    },
+    {
+      "check": "usage_consistent",
+      "passed": true
+    },
+    {
+      "check": "ledger_usage_matches_response",
+      "passed": true
+    },
+    {
+      "check": "decimal_cost0_009312",
+      "passed": true
+    },
+    {
+      "check": "latency5430ms",
+      "passed": true
+    },
+    {
+      "check": "first_stage1119_beijing",
+      "passed": true
+    }
+  ],
+  "passed": 24,
+  "total": 24
+}
