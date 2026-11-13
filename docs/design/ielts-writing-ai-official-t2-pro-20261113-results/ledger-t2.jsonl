@@ -1,0 +1,5 @@
+{"type": "header", "created": "2026-11-13T08:40:45+0800", "code_sha256": "608e57bb8f38a05a6689090f62d224df8d304e7f26b510338dff1778d908d739", "prompt_version": "iwa-2026-11-10.12"}
+{"type": "reserve", "id": "52c565fde3f242b8ac15333910463836", "time": "2026-11-13T08:40:45+0800", "run": "official-t2", "sample": "official-2B-A", "kind": "evaluate", "category": "text", "model": "deepseek-v4-pro", "attempt": 0, "cap": 4}
+{"type": "done", "id": "52c565fde3f242b8ac15333910463836", "time": "2026-11-13T08:42:35+0800", "ok": true, "error": null, "tokens": {"prompt_tokens": 3535, "completion_tokens": 13534, "prompt_cache_hit_tokens": 2944}}
+{"type": "reserve", "id": "b9cbc7ab87894efe940ab7e89222caa6", "time": "2026-11-13T08:42:35+0800", "run": "official-t2", "sample": "official-2B-A#r2", "kind": "evaluate", "category": "text", "model": "deepseek-v4-pro", "attempt": 0, "cap": 4}
+{"type": "done", "id": "b9cbc7ab87894efe940ab7e89222caa6", "time": "2026-11-13T08:44:32+0800", "ok": true, "error": null, "tokens": {"prompt_tokens": 3535, "completion_tokens": 13914, "prompt_cache_hit_tokens": 3456}}

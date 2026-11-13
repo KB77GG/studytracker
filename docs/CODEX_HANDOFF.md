@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13 官方 Task2 Pro 真实验证结束（2/4，识图仍未配置）
+
+- **授权/基线**：用户确认官方Task2一篇Pro评价×2、累计最多4请求；固定运行源`abf48d49a446582749a53d320a7c6e6364d0841e`，独立树`/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111`，运行前clean且远端一致。主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2、behind113，原7modified/23untracked入口保留。其余worktree未操作。
+- **实际完成**：北京时间08:40:45—08:44:32，Pro/high/32000/420、提示词iwa-2026-11-10.12；1独立样本2评价，账本2reserve/2done，0重试/失败/未知/截断/超时/识图，exit0。Task2旅游题SHA90302d18…fc274、消息指纹两次一致；新独立ledger-t2上限4文字/0图。本批结束，不自动续用剩余2次或旧批余额。Task1和识图未授权未执行。
+- **分数/费用**：官方5.5；两次TR/CC/LR/GRA=5.5/5.5/5/5→5.5、5.5/5/5/5→5.0。平均绝对差0.25、偏差−0.25、重复差0.5，只有1篇不能当2独立校准样本。输入7070（cache6400/miss670），输出27448包含思考21993，不重复计费；延迟110.574/116.195秒。空闲单价4.5/.15/13.5元每百万，独立复算0.374523元，非账单。
+- **内容复核**：现有校验2/2，48条引文定位通过但不证明判断正确。原始228词9段含前2抄题34词，同口径自写194词7段；模型把P1当有效引言，抄题区间未区分。两次raw都有P1–9，程序MAX_PARAGRAPHS8截去结论P9（各over_limit1），不是模型漏读；其他评分项仍有结论。另有已有范围限定仍被说成绝对、把介词短语当复合句、改句语义损失风险；已写公开中文概述，不贴正文。没有本轮老师独立复评。
+- **识图**：实际check vision_provider=none、model空、key_set=false，3图已本机但未调用。官方Flash支持图、Pro不支持；可复用现Key。代码vision无deepseek预设，openai_compatible不发思考禁用，硬700输出/基础120秒，评价32000/420不适用于图。建议Claude先适配独立设置并离线请求验证，再单图授权验证；未改配置，不把文档支持说成实测成功。
+- **验证/原始位置**：私有结果`/Users/zhouxin/iwa-compare-official-lowband-20261113/`，原稿/回答/思考仅本机。主树`.venv/bin/python -B docs/design/ielts-writing-ai-official-t2-pro-20261113-results/audit_export.py --private-run /Users/zhouxin/iwa-compare-official-lowband-20261113 --source /private/tmp/studytracker-iwa-holdout-review-20261111 --out docs/design/ielts-writing-ai-official-t2-pro-20261113-results`→37项通过、91产品文件与运行基线一致；另一agent独立Decimal/账本/输入复算一致。新增审计脚本Ruff/Black通过，公开文件隐私扫描、diff及发布前确切结果见报告/实际提交；产品未改不重复453全套。
+- **同步/发布**：本轮只增脱敏报告目录和更新两交接，按既有授权提交推送功能分支；最终HEAD/远端回读以Git与主树最终确认条为准。私有launcher在主树ignored tmp，仅本机，勿重跑。试用配置/账号/额度未修改，realcheck用临时库。未合并main/部署/访问生产/写生产库，小程序未上传提审发布。
+- **下步**：Claude可从报告核对4项反馈/处理缺口，先修抄题口径、有效段落截断和识图适配，保留原稿与严格校验。再单独确认识图试跑和Task1独立预算（现方案16文字+4图）；老师10条抽查仍待填写。不要凭本轮一个样本宣称已校准。
+
 ## 2026-11-13 官方低分样卷5篇已准备，A独立4次账本（0真实调用）
 
 - **范围/基线**：用户贴出5篇完整转录，按其原文录入本机，不要求重新誊录。主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2，原7modified/23untracked入口保留；独立树`/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111`从clean35e2ae01快进5134fdc3（四个docs文件），产品91文件未改。旧IWA树及运行试用账号/配置/数据库未操作。

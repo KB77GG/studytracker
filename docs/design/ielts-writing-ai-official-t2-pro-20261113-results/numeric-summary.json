@@ -1,0 +1,288 @@
+{
+  "started_at": "2026-11-13T00:40:45+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "prompt_version": "iwa-2026-11-10.12",
+  "evaluate_thinking": "high",
+  "demo": false,
+  "samples": 2,
+  "calls": 2,
+  "max_calls": 4,
+  "aborted": null,
+  "connectivity": {
+    "ok": true,
+    "error": null,
+    "response_received": true,
+    "authenticated": true,
+    "generation_ok": true,
+    "generation_error": null
+  },
+  "kinds": {
+    "evaluate": {
+      "thinking": [
+        "high"
+      ],
+      "max_tokens": [
+        32000
+      ],
+      "completion_tokens_max": 13914,
+      "reasoning_tokens_known": 21993,
+      "reasoning_unreported_calls": 0,
+      "reasoning_tokens": 21993,
+      "reasoning_tokens_max": 11119,
+      "truncated": 0,
+      "timeouts": 0,
+      "calls": 2,
+      "first_attempts": 2,
+      "first_attempt_json_ok": 1.0,
+      "first_attempt_valid": 1.0,
+      "first_attempt_rejections": {},
+      "json_problems": [],
+      "final_ready": 1.0,
+      "final_failures": {},
+      "latency_ms_p50": 110574,
+      "latency_ms_p90": 116195,
+      "tokens": {
+        "prompt_tokens": 7070,
+        "completion_tokens": 27448,
+        "total_tokens": 34518
+      }
+    }
+  },
+  "vision_calls": 0,
+  "evidence": {
+    "scored_criteria": 8,
+    "quotes": 48,
+    "quotes_verified": 1.0,
+    "suggestions_removed": {
+      "criteria": 0,
+      "priorities": 0,
+      "argument": 0,
+      "total": 0
+    },
+    "count_corrections": 0
+  },
+  "argument": {
+    "task2_evaluations": 2,
+    "with_argument": 2,
+    "with_position": 2,
+    "paragraphs": 16,
+    "problems": 4,
+    "returned": 30,
+    "kept": 28,
+    "improvements": 6,
+    "self_conflicts": 0,
+    "suggestions_removed": 0,
+    "reclassified": 0,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 2,
+    "dropped_rate": 0.0,
+    "evaluate_attempts": 2,
+    "attempts_rejected_for_argument": 0,
+    "problem_types": {
+      "irrelevant": 3,
+      "overgeneralized": 1
+    },
+    "paragraph_verdicts": {
+      "supports": 12,
+      "weak": 4
+    }
+  },
+  "calibration": {
+    "overall": {
+      "n": 2,
+      "mae": 0.25,
+      "bias": -0.25,
+      "within_0_5": 1.0,
+      "exact": 0.5
+    }
+  },
+  "ordering": {
+    "official-2B": {
+      "rows": [
+        {
+          "id": "official-2B-A",
+          "nominal": 5.5,
+          "ai": 5.5
+        },
+        {
+          "id": "official-2B-A#r2",
+          "nominal": 5.5,
+          "ai": 5.0
+        }
+      ],
+      "missing": 0,
+      "pairs": 0,
+      "inversions": 0,
+      "ties": 0,
+      "highest": 5.5,
+      "lowest": 5.5,
+      "spread": null
+    }
+  },
+  "repeat_spread": {
+    "samples": [
+      {
+        "id": "official-2B-A",
+        "runs": 2,
+        "ready": 2,
+        "overall": [
+          5.5,
+          5.0
+        ],
+        "spread": {
+          "overall": 0.5,
+          "task": 0.0,
+          "coherence": 0.5,
+          "lexical": 0.0,
+          "grammar": 0.0
+        }
+      }
+    ],
+    "overall_spread_mean": 0.5,
+    "overall_spread_max": 0.5,
+    "any_failed": 0
+  },
+  "tokens": {
+    "prompt": 7070,
+    "completion": 27448
+  },
+  "usage": {
+    "total": {
+      "calls": 2,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 7070,
+        "completion": 27448
+      },
+      "known_tokens": {
+        "prompt": 7070,
+        "completion": 27448
+      },
+      "cache_hit_tokens": 6400
+    },
+    "text": {
+      "calls": 2,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 7070,
+        "completion": 27448
+      },
+      "known_tokens": {
+        "prompt": 7070,
+        "completion": 27448
+      },
+      "cache_hit_tokens": 6400
+    },
+    "vision": {
+      "calls": 0,
+      "unknown_usage_calls": 0,
+      "complete": true,
+      "tokens": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "known_tokens": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "cache_hit_tokens": null
+    },
+    "by_model": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-v4-pro",
+        "calls": 2,
+        "unknown_usage_calls": 0,
+        "complete": true,
+        "tokens": {
+          "prompt": 7070,
+          "completion": 27448
+        },
+        "known_tokens": {
+          "prompt": 7070,
+          "completion": 27448
+        },
+        "cache_hit_tokens": 6400
+      }
+    ]
+  },
+  "estimated_cost": 0.374523,
+  "cost_estimate": {
+    "scope": "text",
+    "covered_cost": 0.374523,
+    "basis": "cache_split",
+    "coverage": "complete",
+    "vision_cost": 0.0,
+    "unknown_usage_calls": 0,
+    "note": "单价仅用于文本模型；识图费用未估算。缺少 usage 时费用未知，不能视为零账单。"
+  },
+  "prices": {
+    "in": 4.5,
+    "cached_in": 0.15,
+    "out": 13.5
+  },
+  "served_models": [
+    "deepseek-v4-pro"
+  ],
+  "code_sha256": "608e57bb8f38a05a6689090f62d224df8d304e7f26b510338dff1778d908d739",
+  "independent_essays": 1,
+  "repeated_evaluations": 2,
+  "numeric_rows": [
+    {
+      "id": "official-2B-A",
+      "status": "ready",
+      "official_overall": 5.5,
+      "bands": {
+        "task": 5.5,
+        "coherence": 5.5,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "overall": 5.5,
+      "error_ai_minus_official": 0.0,
+      "latency_ms": 110574,
+      "input_tokens": 3535,
+      "cached_input_tokens": 2944,
+      "uncached_input_tokens": 591,
+      "output_tokens_including_reasoning": 13534,
+      "reasoning_tokens": 10874,
+      "estimated_cny": 0.1858101,
+      "reserved_at": "2026-11-13T08:40:45+0800",
+      "completed_at": "2026-11-13T08:42:35+0800",
+      "input_sha256": "323052b3a61201f98b2fad64adce4f94be79aea7fb4fcdd7e1860adaea8e26be"
+    },
+    {
+      "id": "official-2B-A#r2",
+      "status": "ready",
+      "official_overall": 5.5,
+      "bands": {
+        "task": 5.5,
+        "coherence": 5.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "overall": 5.0,
+      "error_ai_minus_official": -0.5,
+      "latency_ms": 116195,
+      "input_tokens": 3535,
+      "cached_input_tokens": 3456,
+      "uncached_input_tokens": 79,
+      "output_tokens_including_reasoning": 13914,
+      "reasoning_tokens": 11119,
+      "estimated_cny": 0.1887129,
+      "reserved_at": "2026-11-13T08:42:35+0800",
+      "completed_at": "2026-11-13T08:44:32+0800",
+      "input_sha256": "323052b3a61201f98b2fad64adce4f94be79aea7fb4fcdd7e1860adaea8e26be"
+    }
+  ],
+  "source_head": "abf48d49a446582749a53d320a7c6e6364d0841e",
+  "price_currency": "CNY",
+  "price_per_tokens": 1000000,
+  "reasoning_already_in_completion": true,
+  "price_source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "official_reference_has_subscores": false
+}

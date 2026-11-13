@@ -1,0 +1,15 @@
+{
+  "user_authorized": true,
+  "scope": "official-2B-A evaluation only, 2 repeats, <=4 actual text requests including retries",
+  "text_cap": 4,
+  "vision_cap": 0,
+  "model": "deepseek-v4-pro",
+  "thinking": "high",
+  "output_tokens_per_request": 32000,
+  "timeout_seconds": 420,
+  "source_head": "abf48d49a446582749a53d320a7c6e6364d0841e",
+  "sample_file_sha256": "90302d1816aade54e2a413e6d3255e9d00d75508f8248cf93ad99eb4f14fc274",
+  "started_at": "2026-11-13T00:40:45.275605+00:00",
+  "price_source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "price_note": "Pro CNY per million tokens: miss4.5/cache0.15/output13.5 offpeak; peak9/0.30/27. Report uses offpeak; validate actual call times after run. Estimate, not bill."
+}
