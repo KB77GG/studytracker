@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS submission (
         CHECK (image_status IN ('none', 'pending', 'ready', 'failed', 'skipped')),
     image_description TEXT,
     image_error TEXT,
+    image_check TEXT,
     copied_spans TEXT,
     created_at TEXT NOT NULL
 );
@@ -86,6 +87,9 @@ CREATE TABLE IF NOT EXISTS usage_event (
 );
 CREATE INDEX IF NOT EXISTS ix_usage_user_day ON usage_event(user_id, day);
 """
+
+
+ADDED_SUBMISSION_COLUMNS = ("copied_spans", "image_check")
 
 
 def utcnow() -> datetime:
@@ -149,10 +153,12 @@ class Storage:
                 )
             conn.execute("PRAGMA journal_mode = WAL")
             conn.executescript(SCHEMA)
-            # Databases created before 2026-11-13 lack the confirmed-copying column.
+            # Columns added after the first release (nullable; existing rows unchanged):
+            # confirmed copying (2026-11-13) and the person's check of a chart reading.
             columns = {row["name"] for row in conn.execute("PRAGMA table_info(submission)")}
-            if "copied_spans" not in columns:
-                conn.execute("ALTER TABLE submission ADD COLUMN copied_spans TEXT")
+            for column in ADDED_SUBMISSION_COLUMNS:
+                if column not in columns:
+                    conn.execute(f"ALTER TABLE submission ADD COLUMN {column} TEXT")
             conn.execute(
                 "INSERT OR IGNORE INTO iwa_meta(key, value) VALUES ('schema_version', ?)",
                 (str(SCHEMA_VERSION),),
@@ -336,6 +342,30 @@ class Storage:
         with self.connect() as conn:
             conn.execute("DELETE FROM submission WHERE id = ?", (submission_id,))
 
+    def set_image_check(
+        self, submission_id: int, check: dict, *, description: str | None = None
+    ) -> bool:
+        """Record, once, that a person confirmed (optionally correcting the text) or
+        skipped checking a structurally usable chart reading. False if the reading is
+        not ready or was already checked."""
+        with self.connect() as conn:
+            cur = conn.execute(
+                "UPDATE submission SET image_check = ?,"
+                " image_description = COALESCE(?, image_description)"
+                " WHERE id = ? AND image_status = 'ready' AND image_check IS NULL",
+                (json.dumps(check, ensure_ascii=False), description, submission_id),
+            )
+            return cur.rowcount == 1
+
+    def queued_generation_ids(self, submission_id: int) -> list[int]:
+        with self.connect() as conn:
+            rows = conn.execute(
+                "SELECT id FROM generation WHERE submission_id = ? AND status = 'queued'"
+                " ORDER BY id",
+                (submission_id,),
+            ).fetchall()
+        return [int(row["id"]) for row in rows]
+
     def set_image_result(
         self, submission_id: int, *, status: str, description: str | None, error: str | None
     ) -> None:
@@ -449,13 +479,17 @@ class Storage:
             )
 
     def fail_interrupted(self) -> int:
-        """Mark work left over from a previous process as failed (call at startup)."""
+        """Mark work left over from a previous process as failed (call at startup).
+        Generations waiting for a person to check a chart reading were never started
+        and keep waiting."""
         now = iso(utcnow())
         with self.connect() as conn:
             cur = conn.execute(
                 "UPDATE generation SET status = 'failed', error_code = 'interrupted',"
                 " error_message = '服务重启导致生成中断，请重新生成', finished_at = ?"
-                " WHERE status IN ('queued', 'running')",
+                " WHERE status IN ('queued', 'running') AND NOT (status = 'queued' AND"
+                " submission_id IN (SELECT id FROM submission WHERE image_status = 'ready'"
+                " AND image_check IS NULL AND task_type = 'task1'))",
                 (now,),
             )
             conn.execute(

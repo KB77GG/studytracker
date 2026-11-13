@@ -160,11 +160,22 @@ def cmd_realcheck(settings, args) -> int:
             if not items:
                 raise realcheck.RealCheckError("样本里没有带题图的 Task 1")
         items = realcheck.expand_repeats(items, args.repeat)
+        if args.require_checked_images and not args.image_descriptions:
+            raise realcheck.RealCheckError(
+                "--require-checked-images 需要和 --image-descriptions 同用"
+            )
         if args.image_descriptions:
             reused = realcheck.apply_image_descriptions(
-                items, args.image_descriptions, require_ready=args.require_ready_images
+                items,
+                args.image_descriptions,
+                require_ready=args.require_ready_images or args.require_checked_images,
+                require_checked=args.require_checked_images,
             )
-            print(f"沿用已有的题图识别结果：{reused} 个样本（不再调用识图模型）")
+            checked = sum(1 for i in items if i.get("image_check"))
+            print(
+                f"沿用已有的题图识别结果：{reused} 个样本（不再调用识图模型），"
+                f"其中读数经人工核对的 {checked} 个（只有这些评 Task Achievement）"
+            )
         ledger = None
         if args.ledger:
             if args.ledger_text_cap is None:
@@ -251,6 +262,12 @@ def cmd_realcheck(settings, args) -> int:
     )
     path = realcheck.write_report(run_data, report, out_dir)
     print(f"报告：{path}")
+    if args.images_only and run_data.get("image_outcomes"):
+        from . import imagecheck
+
+        sheet = out_dir / "image_check.md"
+        sheet.write_text(imagecheck.sheet(items, run_data["image_outcomes"]), encoding="utf-8")
+        print(f"读数核对表：{sheet}（对照题图核对后用 realcheck-check-images 确认）")
     code = _realcheck_outcome(realcheck, args, items, run_data, report)
     # How the run ended, written last: a batch whose parent died while this run went
     # on can accept the finished run instead of repeating it (review 76276d9).
@@ -259,6 +276,42 @@ def cmd_realcheck(settings, args) -> int:
         encoding="utf-8",
     )
     return code
+
+
+def cmd_realcheck_check_images(settings, args) -> int:
+    """No model call: a sheet to compare with the images, or a confirmed readings file."""
+    from . import imagecheck, realcheck
+
+    try:
+        items = realcheck.load_samples(args.samples)
+        stored = json.loads(Path(args.descriptions).read_text(encoding="utf-8"))
+        outcomes = realcheck.load_image_outcomes(args.descriptions)
+        if args.sheet and not args.confirm:
+            Path(args.sheet).write_text(imagecheck.sheet(items, outcomes), encoding="utf-8")
+            print(f"读数核对表：{args.sheet}")
+            return 0
+        if not (args.confirm and args.by and args.out):
+            raise imagecheck.ImageCheckError(
+                "确认需要 --confirm、--by 和 --out（只要核对表用 --sheet）"
+            )
+        if stored.get("version") != realcheck.IMAGE_FILE_VERSION:
+            raise imagecheck.ImageCheckError("只能确认第 2 版 image_descriptions.json")
+        corrections = imagecheck.load_corrections(args.corrections) if args.corrections else {}
+        ids = [i.strip() for i in args.confirm.split(",") if i.strip()]
+        result = imagecheck.confirm(stored, items, ids, by=args.by, corrections=corrections)
+        text = json.dumps(result, ensure_ascii=False, indent=1) + "\n"
+        out = Path(args.out)
+        if out.exists() and out.read_text(encoding="utf-8") != text:
+            raise imagecheck.ImageCheckError(f"{out} 已存在且内容不同，不覆盖")
+        out.write_text(text, encoding="utf-8")
+    except (realcheck.RealCheckError, imagecheck.ImageCheckError, OSError, ValueError) as exc:
+        print(f"核对参数错误：{exc}", file=sys.stderr)
+        return 2
+    edited = [i for i in ids if result["images"][i]["check"]["edited"]]
+    print(
+        f"已确认 {len(ids)} 个读数（其中改正 {len(edited)} 个：{'、'.join(edited) or '无'}）：{out}"
+    )
+    return 0
 
 
 def _realcheck_outcome(realcheck, args, items, run_data, report) -> int:
@@ -401,6 +454,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="与 --image-descriptions 同用：每篇带图的 Task 1 都必须有可用的识别结果",
     )
+    rc.add_argument(
+        "--require-checked-images",
+        action="store_true",
+        help="与 --image-descriptions 同用：每篇带图的 Task 1 的读数都必须经人工核对（realcheck-check-images）",
+    )
     rc.add_argument("--ledger", default=None, help="批次账本（JSONL）：每次请求前持久预留")
     rc.add_argument("--ledger-text-cap", type=int, default=None, help="账本的文字请求总上限")
     rc.add_argument("--ledger-vision-cap", type=int, default=0, help="账本的识图请求总上限")
@@ -454,6 +512,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     batch_p.add_argument("--dry", action="store_true", help="演示模型彩排，不调用付费服务")
     batch_p.set_defaults(func=cmd_realcheck_batch)
+    check_p = sub.add_parser(
+        "realcheck-check-images",
+        help="题图读数人工核对：生成核对表，或把核对过（可改正）的读数写成新文件",
+    )
+    check_p.add_argument("--samples", required=True, help="样本 JSONL（用来找题图并核对 sha256）")
+    check_p.add_argument(
+        "--descriptions", required=True, help="--images-only 写出的 image_descriptions.json"
+    )
+    check_p.add_argument("--sheet", default=None, help="只写核对表到这个文件")
+    check_p.add_argument("--confirm", default=None, help="核对无误（或已改正）的样本 id，逗号分隔")
+    check_p.add_argument("--by", default=None, help="核对人")
+    check_p.add_argument(
+        "--corrections", default=None, help="改正文件：{样本 id: 改正后的完整读数}"
+    )
+    check_p.add_argument("--out", default=None, help="确认后的读数文件（不覆盖已有的不同文件）")
+    check_p.set_defaults(func=cmd_realcheck_check_images)
     summary_p = sub.add_parser("realcheck-summary", help="重新生成对照批次的数字汇总")
     summary_p.add_argument("--out", default="~/iwa-compare")
     summary_p.set_defaults(func=cmd_realcheck_summary)

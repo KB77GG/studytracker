@@ -24,7 +24,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from . import access, jsonshape, review, rewrite_quality
+from . import access, imagecheck, jsonshape, review, rewrite_quality
 from . import essay as essay_lib
 from . import samples as builtin_samples
 from .ledger import LedgerError
@@ -350,6 +350,10 @@ def load_image_outcomes(path) -> dict:
                 isinstance(value.get("description"), str) and value["description"].strip()
             ):
                 raise RealCheckError(f"题图识别结果 {key} 标为可用但没有内容")
+            if "check" in value:
+                problem = imagecheck.check_problem(value)
+                if problem:
+                    raise RealCheckError(f"题图识别结果 {key} 的核对记录无效：{problem}")
             out[key] = value
         return out
     return {
@@ -359,12 +363,16 @@ def load_image_outcomes(path) -> dict:
     }
 
 
-def apply_image_descriptions(items: list[dict], path, *, require_ready: bool = False) -> int:
+def apply_image_descriptions(
+    items: list[dict], path, *, require_ready: bool = False, require_checked: bool = False
+) -> int:
     """Reuse the chart readings (or failures) saved by an earlier run. Returns how many
     samples got one. With require_ready, every Task 1 sample with an image must have a
-    usable reading, otherwise nothing is run."""
+    usable reading, otherwise nothing is run; with require_checked the reading must also
+    have been confirmed by a person (realcheck-check-images) for this very image. Only
+    a confirmed reading lets Task Achievement be scored (2026-11-13)."""
     outcomes = load_image_outcomes(path)
-    used, missing = 0, []
+    used, missing, unchecked = 0, [], []
     for item in items:
         if item["task_type"] != "task1":
             continue
@@ -372,15 +380,26 @@ def apply_image_descriptions(items: list[dict], path, *, require_ready: bool = F
         if require_ready and item.get("image") and (not outcome or outcome["status"] != "ready"):
             missing.append(item["id"])
             continue
+        if require_checked and item.get("image") and not (outcome or {}).get("check"):
+            unchecked.append(item["id"])
+            continue
         if not outcome:
             continue
         if outcome["status"] == "ready":
             item["image_description"] = outcome["description"]
+            if outcome.get("check"):
+                imagecheck.require_same_image(item, outcome["check"])
+                item["image_check"] = outcome["check"]
         else:
             item["image_frozen"] = outcome
         used += 1
     if missing:
         raise RealCheckError("这些样本没有可用的题图识别结果：" + "、".join(missing))
+    if unchecked:
+        raise RealCheckError(
+            "这些样本的题图读数还没有人工核对（用 realcheck-check-images 确认）："
+            + "、".join(unchecked)
+        )
     return used
 
 
@@ -492,14 +511,15 @@ def run(
                 use_vision=vision is not None,
             )
             if item["task_type"] == "task1" and sample["image_status"] in ("ready", "failed"):
-                images.setdefault(
-                    base,
-                    {
-                        "status": sample["image_status"],
-                        "description": sample["submission"]["image_description"],
-                        "error": sample["image_error"],
-                    },
-                )
+                outcome = {
+                    "status": sample["image_status"],
+                    "description": sample["submission"]["image_description"],
+                    "error": sample["image_error"],
+                }
+                check = item.get("image_check") or (item.get("image_frozen") or {}).get("check")
+                if check:  # a confirmed reading stays confirmed
+                    outcome["check"] = check
+                images.setdefault(base, outcome)
             results.append(sample)
     return {
         "started_at": started_at.isoformat(),
@@ -565,6 +585,9 @@ def _run_sample(
             description=frozen.get("description"),
             error=None if ready else frozen.get("error"),
         )
+        check = item.get("image_check") or frozen.get("check")
+        if ready and check:
+            storage.set_image_check(created["id"], check)
     if image_status == "pending":
         if use_vision:
             generator.describe_image(created["id"])
@@ -603,6 +626,7 @@ def _run_sample(
                 "image_error",
                 "image_description",  # the chart reading also reaches the model
                 "copied_spans",  # confirmed copying, also sent to the model
+                "image_check",  # a person confirmed the chart reading (TA needs it)
             )
         },
         "generations": {

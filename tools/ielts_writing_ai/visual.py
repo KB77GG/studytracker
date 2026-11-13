@@ -6,6 +6,11 @@ image" or describe a blank picture. The vision model must return a structured
 reading, and the server - not the model - decides sufficiency from what was
 actually extracted. Only a sufficient reading upgrades the image to ``ready``;
 anything else leaves TA and the overall band not assessable.
+
+A sufficient reading is only well formed, not correct: the first real reading
+(2026-11-13) had two clearly wrong values. TA is scored only after a person has
+compared the reading with the image (prompts.visual_available); check_text gives the
+form shown for that check.
 """
 
 from __future__ import annotations
@@ -145,3 +150,27 @@ def assess(raw_text: str) -> VisualReading:
     else:
         return insufficient("没有识别出 Task 1 图表类型")
     return VisualReading(True, "ok", "", description)
+
+
+CHECK_MAX_CHARS = 2500
+
+
+def check_text(description: str | None) -> str:
+    """The reading with one data point per line, for a person to compare with the image."""
+    lines = []
+    for line in (description or "").replace("\r\n", "\n").split("\n"):
+        if line.startswith("Data: "):
+            lines.append("Data:")
+            lines += [f"- {point.strip()}" for point in line[6:].split("; ") if point.strip()]
+        else:
+            lines.append(line.rstrip())
+    return "\n".join(lines).strip()
+
+
+def same_reading(a: str | None, b: str | None) -> bool:
+    """Equal apart from layout (the check form vs. the stored form)."""
+
+    def flat(text):
+        return " ".join(check_text(text).replace("\n- ", "; ").split())
+
+    return flat(a) == flat(b)

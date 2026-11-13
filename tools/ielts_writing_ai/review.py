@@ -102,6 +102,9 @@ task_criterion_assessable = prompts.visual_available
 def ta_unassessable_reason(submission: dict) -> str:
     status = submission.get("image_status") or "none"
     error = submission.get("image_error") or ""
+    if status == "ready":  # read, but not confirmed by a person
+        check = prompts.image_check(submission) or {}
+        return "未核对题图读数" if check.get("status") == "skipped" else "题图读数尚未核对"
     if status == "failed" and ":" in error:
         code, detail = error.split(":", 1)
         if code in {"insufficient", "unstructured"}:
@@ -658,6 +661,10 @@ class Generator:
         self.settings = settings
         self.client = client
         self.vision_client = vision_client
+
+    def awaiting_image_check(self, submission_id: int) -> bool:
+        submission = self.storage.get_submission(submission_id)
+        return bool(submission) and prompts.awaiting_image_check(submission)
 
     def describe_image(self, submission_id: int) -> None:
         submission = self.storage.get_submission(submission_id)

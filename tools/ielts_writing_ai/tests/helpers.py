@@ -27,6 +27,10 @@ TASK2_ESSAY = (
 )
 
 
+# A person confirmed the chart reading: only then is Task 1 TA scored (2026-11-13).
+CONFIRMED_IMAGE = '{"status": "confirmed", "at": "2026-11-13T00:00:00Z", "edited": false}'
+
+
 def settings_for(tmpdir, **overrides):
     values = {"data_dir": tmpdir, "job_mode": "inline", "vision_provider": "none", "lock_wait": 0}
     values.update(overrides)
@@ -75,6 +79,21 @@ class AppTestCase(unittest.TestCase):
         client.csrf = response.get_json().get("csrf") if response.status_code == 200 else csrf
         client.login_response = response
         return client
+
+    def check_image(self, client, public_id, action="confirm", description=None):
+        """The user's check of the chart reading (2026-11-13); confirm keeps the
+        model's reading unless a corrected description is given."""
+        if action == "confirm" and description is None:
+            sub = client.get(f"/api/submissions/{public_id}").get_json()["submission"]
+            description = sub["image"]["check_text"]
+        payload = {"action": action}
+        if description is not None:
+            payload["description"] = description
+        return client.post(
+            f"/api/submissions/{public_id}/image-check",
+            json=payload,
+            headers={"X-IWA-CSRF": client.csrf},
+        )
 
     def submit(self, client, **fields):
         data = {

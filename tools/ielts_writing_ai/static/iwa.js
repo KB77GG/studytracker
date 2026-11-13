@@ -349,10 +349,13 @@
         state.data = result.submission;
         updateQuota(result.quota);
         render();
-        var active = Object.keys(state.data.generations).some(function (kind) {
+        // While the chart reading waits for the user's check nothing runs: no polling,
+        // so the reading being corrected is not re-rendered.
+        var awaiting = state.data.image && state.data.image.awaiting_check;
+        var active = !awaiting && (Object.keys(state.data.generations).some(function (kind) {
           var g = state.data.generations[kind];
           return g && (g.status === 'queued' || g.status === 'running');
-        }) || (state.data.image && state.data.image.status === 'pending');
+        }) || (state.data.image && state.data.image.status === 'pending'));
         if (active) schedule(2500);
       });
     }
@@ -375,16 +378,51 @@
         if (img.getAttribute('src') !== d.image.url) img.src = d.image.url;
         var note = document.getElementById('imageNote');
         note.classList.remove('is-warn');
+        renderImageCheck(d.image);
+        var check = d.image.check;
         if (d.image.status === 'pending') note.textContent = '正在识别题图…';
-        else if (d.image.status === 'ready') note.textContent = '识图模型读到的图表信息（请核对是否与题图一致）：\n' + d.image.description;
-        else {
+        else if (d.image.awaiting_check) {
+          note.textContent = '识图模型读到的数据还没有核实（格式正确不等于数值正确）。请对照上面的题图逐条核对，' +
+            '读错的数值或标签直接在下面改正，再点“读数无误，开始批改”。只有核对过的读数才用于评 Task Achievement 和总分。';
+        } else if (d.image.status === 'ready' && check && check.status === 'confirmed') {
+          note.textContent = '已核对的题图读数' + (check.edited ? '（按你的改正）' : '') + '，用于评 Task Achievement：\n' + d.image.description;
+        } else {
           note.textContent = (d.image.unusable_reason || '题图不可用') + '：本次不评 Task Achievement，也不给总分。' +
-            (d.image.description ? '\n\n' + d.image.description : '');
+            (d.image.description ? '\n\n' + (d.image.status === 'ready' ? '识图模型的读数（未核实，仅供参考）：\n' : '') + d.image.description : '');
           note.classList.add('is-warn');
         }
       } else {
         imageBlock.hidden = true;
       }
+    }
+
+    function renderImageCheck(image) {
+      var box = document.getElementById('imageCheck');
+      if (!image.awaiting_check) { box.hidden = true; clear(box); return; }
+      if (!box.hidden && box.firstChild) return; // keep what the user is editing
+      clear(box);
+      var text = el('textarea', { rows: String(Math.min(18, Math.max(6, image.check_text.split('\n').length + 1))), spellcheck: 'false', 'aria-label': '题图读数' });
+      text.value = image.check_text;
+      var send = function (payload, button) {
+        button.disabled = true;
+        api('POST', 'api/submissions/' + encodeURIComponent(publicId) + '/image-check', payload).then(function (result) {
+          button.disabled = false;
+          if (!result.ok) { toast(result.message || (result.fields && result.fields.description) || '提交失败'); return; }
+          toast(payload.action === 'confirm' ? '读数已确认，开始批改' : '已跳过核对，开始批改');
+          box.hidden = true; clear(box);
+          Object.keys(rendered).forEach(function (k) { rendered[k] = null; });
+          load();
+        });
+      };
+      var confirmButton = el('button', { type: 'button', class: 'btn btn--primary', text: '读数无误，开始批改' });
+      confirmButton.addEventListener('click', function () { send({ action: 'confirm', description: text.value }, confirmButton); });
+      var skipButton = el('button', { type: 'button', class: 'btn btn--ghost', text: '不核对，只看语言反馈' });
+      skipButton.addEventListener('click', function () {
+        if (window.confirm('跳过核对后，本次只给语言方面的反馈，不评 Task Achievement，也不给总分。继续吗？')) send({ action: 'skip' }, skipButton);
+      });
+      box.appendChild(text);
+      box.appendChild(el('div', { class: 'image-check__actions' }, [confirmButton, skipButton]));
+      box.hidden = false;
     }
 
     function regenerate(kind) {
@@ -420,11 +458,16 @@
       var panel = panels[kind];
       var dot = document.querySelector('[data-dot="' + kind + '"]');
       dot.setAttribute('data-status', g ? g.status : '');
-      var signature = g ? g.id + ':' + g.status + ':' + (kind === 'refine' ? state.onlyChanged : '') : 'none';
+      var awaitingCheck = !!(state.data.image && state.data.image.awaiting_check);
+      var signature = g ? g.id + ':' + g.status + ':' + (kind === 'refine' ? state.onlyChanged : '') + ':' + awaitingCheck : 'none';
       if (rendered[kind] === signature) return;
       rendered[kind] = signature;
       clear(panel);
       if (!g) { panel.appendChild(el('div', { class: 'state', text: '暂无结果' })); return; }
+      if (awaitingCheck && g.status === 'queued') {
+        panel.appendChild(el('div', { class: 'state' }, [el('p', { text: '请先在左侧核对题图读数，确认或跳过后开始生成（额度已在提交时计入）。' })]));
+        return;
+      }
       if (g.status === 'queued' || g.status === 'running') {
         var waiting = state.data.image && state.data.image.status === 'pending' ? '正在识别题图，随后开始生成…'
           : kind === 'evaluate' ? 'AI 正在评价，通常需要 1–3 分钟，较长的作文可能更久。可以先查看其他标签，结果出来后会自动显示。'

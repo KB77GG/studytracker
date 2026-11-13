@@ -164,6 +164,9 @@ class VisionGateEndToEndTest(AppTestCase):
             image=(io.BytesIO(PNG_BYTES), "chart.png"),
         ).get_json()["public_id"]
         sub = client.get(f"/api/submissions/{public_id}").get_json()["submission"]
+        if sub["image"]["awaiting_check"]:  # a well-formed reading: the user confirms it
+            self.assertEqual(self.check_image(client, public_id).status_code, 202)
+            sub = client.get(f"/api/submissions/{public_id}").get_json()["submission"]
         history = client.get("/api/submissions").get_json()["items"][0]
         return sub, history
 

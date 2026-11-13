@@ -479,6 +479,11 @@ class ImageTest(AppTestCase):
         self.assertEqual(sub["image"]["status"], "ready")
         self.assertIn("演示", sub["image"]["description"])
         self.assertEqual(vision.calls, ["describe_image"])
+        # A well-formed reading waits for the user's check (2026-11-13).
+        self.assertTrue(sub["image"]["awaiting_check"])
+        self.assertEqual(sub["generations"]["evaluate"]["status"], "queued")
+        self.assertEqual(self.check_image(self.client, public_id).status_code, 202)
+        sub = self.client.get(f"/api/submissions/{public_id}").get_json()["submission"]
         evaluation = sub["generations"]["evaluate"]
         self.assertEqual(evaluation["status"], "ready")
         # A successfully read chart is the only case where TA and the overall band exist.

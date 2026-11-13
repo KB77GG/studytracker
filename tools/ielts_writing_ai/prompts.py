@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-13.14"
+PROMPT_VERSION = "iwa-2026-11-13.15"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -300,12 +300,13 @@ def _task_context(submission: dict) -> dict:
         "minimum_words": essay_lib.MIN_WORDS[task_type],
     }
     if task_type == "task1":
-        status = submission.get("image_status") or "none"
-        if status == "ready" and submission.get("image_description"):
+        if visual_available(submission) and submission.get("image_description"):
+            # Only a reading a person checked against the image (.15): the first real
+            # reading was well formed but had wrong values (2026-11-13).
             context["visual_summary"] = submission["image_description"]
             context["visual_note"] = (
-                "visual_summary was extracted from the task image by a vision model; use it to "
-                "check data accuracy, but say so if a mismatch might come from extraction."
+                "visual_summary was read from the task image by a vision model and then "
+                "checked against the image by a person; use it to check data accuracy."
             )
         else:
             context["visual_note"] = (
@@ -316,8 +317,36 @@ def _task_context(submission: dict) -> dict:
     return context
 
 
+def image_check(submission: dict) -> dict | None:
+    """A person's check of the chart reading: {"status": "confirmed" | "skipped", ...}."""
+    raw = submission.get("image_check")
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw) if isinstance(raw, str) else raw
+    except ValueError:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def awaiting_image_check(submission: dict) -> bool:
+    """A well-formed reading nobody has checked or skipped yet."""
+    return (
+        submission["task_type"] == "task1"
+        and submission.get("image_status") == "ready"
+        and image_check(submission) is None
+    )
+
+
 def visual_available(submission: dict) -> bool:
-    return submission["task_type"] != "task1" or submission.get("image_status") == "ready"
+    """Task 1 data can be checked only against a reading a person confirmed: a
+    well-formed reading ("ready") can still have wrong values."""
+    if submission["task_type"] != "task1":
+        return True
+    return (
+        submission.get("image_status") == "ready"
+        and (image_check(submission) or {}).get("status") == "confirmed"
+    )
 
 
 def with_retry_note(messages: list, problem: str) -> list:

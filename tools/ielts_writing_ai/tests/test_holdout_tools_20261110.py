@@ -10,7 +10,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.ielts_writing_ai import realcheck, realcheck_compare, samples
+from tools.ielts_writing_ai import imagecheck, realcheck, realcheck_compare, samples
 from tools.ielts_writing_ai.llm import FakeClient
 
 from .helpers import PNG_BYTES, settings_for
@@ -216,8 +216,23 @@ class RunTest(unittest.TestCase):
             },
         )
 
+        # A person confirms the reading for this image before TA can be scored (2026-11-13).
+        checked = self.tmp / "checked.json"
+        checked.write_text(
+            json.dumps(
+                imagecheck.confirm(
+                    json.loads(saved.read_text(encoding="utf-8")),
+                    [self.item(T1, id="t1", image=str(image))],
+                    ["t1"],
+                    by="测试",
+                )
+            ),
+            encoding="utf-8",
+        )
         later = realcheck.expand_repeats([self.item(T1, id="t1", image=str(image))], 2)
-        self.assertEqual(realcheck.apply_image_descriptions(later, saved), 2)
+        self.assertEqual(
+            realcheck.apply_image_descriptions(later, checked, require_checked=True), 2
+        )
         second = realcheck.run(  # no vision client at all: the saved reading is used
             settings_for(str(self.tmp / "b")), later, client=FakeClient(), kinds=("evaluate",)
         )
@@ -227,9 +242,19 @@ class RunTest(unittest.TestCase):
             scores = realcheck._scores(s)
             self.assertIsNotNone(scores["task"])  # Task Achievement is assessed
         self.assertFalse(any(c["kind"] == "describe_image" for c in second["calls"]))
-        # The two runs judged the same reading, so they can be compared.
         realcheck.write_report(second, realcheck.build_report(second), self.tmp / "report-b")
-        cmp = realcheck_compare.compare(out, self.tmp / "report-b")
+        # The first run used the reading before anyone checked it (no TA): a different
+        # input, so it is not compared with a run on the checked reading.
+        with self.assertRaises(realcheck_compare.CompareError):
+            realcheck_compare.compare(out, self.tmp / "report-b")
+        # Two runs on the same checked reading can be compared.
+        third_items = realcheck.expand_repeats([self.item(T1, id="t1", image=str(image))], 2)
+        realcheck.apply_image_descriptions(third_items, checked, require_checked=True)
+        third = realcheck.run(
+            settings_for(str(self.tmp / "c")), third_items, client=FakeClient(), kinds=("evaluate",)
+        )
+        realcheck.write_report(third, realcheck.build_report(third), self.tmp / "report-c")
+        cmp = realcheck_compare.compare(self.tmp / "report-b", self.tmp / "report-c")
         self.assertEqual(len(cmp["samples"]), 2)
 
     def test_reading_file_errors(self):

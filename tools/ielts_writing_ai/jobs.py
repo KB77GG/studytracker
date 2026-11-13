@@ -37,11 +37,15 @@ class JobRunner:
         self._pool.submit(safe)
 
     def start_submission(self, submission_id: int, generation_ids: list[int], needs_image: bool):
-        """Read the task image first (if any), then fan out the three generations."""
+        """Read the task image first (if any), then fan out the three generations. A
+        well-formed reading waits for the person to check it (web: image-check), which
+        then starts the generations."""
 
         def pipeline():
             if needs_image:
                 self.generator.describe_image(submission_id)
+                if self.generator.awaiting_image_check(submission_id):
+                    return
             for generation_id in generation_ids:
                 self._submit(self.generator.run, generation_id)
 

@@ -160,6 +160,9 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
 .task-image { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
 .image-note { font-size: 13px; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); color: var(--ink-2); white-space: pre-wrap; }
 .image-note.is-warn { background: var(--warn-soft); color: var(--warn); }
+.image-check { margin-top: 8px; display: grid; gap: 8px; }
+.image-check textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.5; }
+.image-check__actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: -6px -6px 18px; padding: 0 6px; overflow-x: auto; }
 .tab { position: relative; background: none; border: 0; font: inherit; font-weight: 600; color: var(--muted); padding: 10px 14px 12px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }

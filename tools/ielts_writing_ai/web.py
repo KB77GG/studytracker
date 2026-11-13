@@ -21,7 +21,7 @@ from flask import (
     url_for,
 )
 
-from . import access, copytext, review, uploads
+from . import access, copytext, prompts, review, uploads, visual
 from . import essay as essay_lib
 from .storage import KINDS, iso, utcnow
 
@@ -410,25 +410,73 @@ def _submission_view(submission: dict) -> dict:
         "minimum_words": essay_lib.MIN_WORDS[task_type],
         "target_band": submission["target_band"],
         "created_at": submission["created_at"],
-        "image": (
-            {
-                "url": url_for("iwa.api_submission_image", public_id=submission["public_id"]),
-                "status": submission["image_status"],
-                "description": submission.get("image_description") or "",
-                # Why the image cannot support TA (only set when it is not usable).
-                "unusable_reason": (
-                    review.ta_unassessable_reason(submission)
-                    if submission["image_status"] in {"failed", "skipped"}
-                    else ""
-                ),
-            }
-            if submission.get("image_path")
-            else None
-        ),
+        "image": _image_view(submission) if submission.get("image_path") else None,
         "generations": {
             kind: _generation_view(generations.get(kind), submission) for kind in KINDS
         },
     }
+
+
+def _image_view(submission: dict) -> dict:
+    check = prompts.image_check(submission)
+    awaiting = prompts.awaiting_image_check(submission)
+    unusable = submission["image_status"] in {"failed", "skipped"} or (
+        submission["image_status"] == "ready" and not prompts.visual_available(submission)
+    )
+    return {
+        "url": url_for("iwa.api_submission_image", public_id=submission["public_id"]),
+        "status": submission["image_status"],
+        "description": submission.get("image_description") or "",
+        # Why the image cannot support TA (only set when it is not usable).
+        "unusable_reason": review.ta_unassessable_reason(submission) if unusable else "",
+        # A well-formed reading is not a checked one (2026-11-13): the generations wait
+        # until the person confirms (or corrects) it, or chooses language feedback only.
+        "awaiting_check": awaiting,
+        "check_text": visual.check_text(submission.get("image_description")) if awaiting else "",
+        "check": (
+            {"status": check.get("status"), "edited": bool(check.get("edited"))} if check else None
+        ),
+    }
+
+
+@bp.post("/api/submissions/<public_id>/image-check")
+@require_user(api=True)
+def api_image_check(public_id: str):
+    app_ctx = ctx()
+    submission = app_ctx.storage.get_owned_submission(public_id, g.user["id"])
+    if not submission:
+        return _error("not_found", "记录不存在", 404)
+    if not prompts.awaiting_image_check(submission):
+        return _error("not_awaiting", "这份题图读数已经核对过，或者不需要核对", 409)
+    payload = request.get_json(silent=True) or {}
+    check, description = _image_check_from(payload, submission.get("image_description") or "")
+    if check is None:
+        return _json({"ok": False, "error": "invalid", "fields": {"description": description}}, 422)
+    if not app_ctx.storage.set_image_check(submission["id"], check, description=description):
+        return _error("not_awaiting", "这份题图读数已经核对过，或者不需要核对", 409)
+    for generation_id in app_ctx.storage.queued_generation_ids(submission["id"]):
+        app_ctx.jobs.start_generation(generation_id)
+    return _json({"ok": True, "check": {"status": check["status"], "edited": check["edited"]}}, 202)
+
+
+def _image_check_from(payload: dict, original: str):
+    """(check, stored description) for a confirmation or a skip; (None, error) if
+    the request is not usable. An unchanged confirmation keeps the model's text."""
+    action = payload.get("action")
+    now = iso(utcnow())
+    if action == "skip":
+        return {"status": "skipped", "at": now, "edited": False}, None
+    if action != "confirm":
+        return None, "请选择核对读数或跳过核对"
+    text = essay_lib.normalize_newlines(payload.get("description") or "").strip()
+    if not text:
+        return None, "读数不能为空"
+    if len(text) > visual.CHECK_MAX_CHARS:
+        return None, f"读数最多 {visual.CHECK_MAX_CHARS} 个字符"
+    if visual.same_reading(text, original):
+        return {"status": "confirmed", "at": now, "edited": False}, None
+    check = {"status": "confirmed", "at": now, "edited": True, "model_description": original}
+    return check, text
 
 
 @bp.get("/api/submissions")
