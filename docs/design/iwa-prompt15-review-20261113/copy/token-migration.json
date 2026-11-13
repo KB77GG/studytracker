@@ -1,0 +1,83 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+  "head": "652450ca03efaa3ae794202368a2f42a88fca18a",
+  "checks": {
+    "accepted_spans_never_split_word_tokens": true,
+    "accepted_counts_match_whole_original_tokens": true,
+    "disjoint_spans_never_count_same_token_twice": true,
+    "all_candidate_failures_are_value_errors": true,
+    "exercise_accept_and_reject_paths": true,
+    "whole_token_1_151_to_150": true,
+    "whole_token_1_source_not_in_messages": true,
+    "whole_token_2_151_to_150": true,
+    "whole_token_2_source_not_in_messages": true,
+    "whole_token_3_151_to_150": true,
+    "whole_token_3_source_not_in_messages": true,
+    "migration_14_adds_only_image_check": true,
+    "migration_new_column_nullable": true,
+    "migration_old_column_contracts_unchanged": true,
+    "migration_existing_row_unchecked": true,
+    "migration_14_all_old_fields_unchanged_generation": true,
+    "migration_14_all_old_fields_unchanged_iwa_meta": true,
+    "migration_14_all_old_fields_unchanged_submission": true,
+    "migration_14_all_old_fields_unchanged_trial_user": true,
+    "migration_14_all_old_fields_unchanged_usage_event": true,
+    "migration_preserves_confirmed_copy_count": true,
+    "migration_foreign_keys_valid": true
+  },
+  "details": {
+    "token_property": {
+      "synthetic_essays": 12,
+      "candidate_spans": 2592,
+      "accepted_spans": 313,
+      "rejected_spans": 2279,
+      "accepted_disjoint_pairs": 294,
+      "boundary_errors": 0,
+      "count_errors": 0,
+      "overlap_errors": 0,
+      "unexpected_exceptions": 0
+    },
+    "whole_token_threshold": [
+      {
+        "case": 1,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      },
+      {
+        "case": 2,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      },
+      {
+        "case": 3,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      }
+    ],
+    "migration": {
+      "baseline": "cd82fc1b",
+      "starts": 2,
+      "tables": 5,
+      "rows": 6
+    }
+  },
+  "passed": 22,
+  "total": 22,
+  "failed": [],
+  "source_sha256": {
+    "essay.py": "22d338c9af4797f6a3e1fe33a18ebdb55dab1e074c42a8ef7fee59222d200194",
+    "storage.py": "116a399dc3346c446926b55eca381535a9a6561d87fc28915f7704d1366a76d3",
+    "prompts.py": "35f13832a96d6977e71c75ea35b60c92af33b6539e2bbffeb5e24726eddbed86",
+    "realcheck.py": "b53216f248014af231b6987f81e0da6a146f5e933d0fd1c3a342a1352372759e"
+  },
+  "scope": {
+    "paid_calls": 0,
+    "network_calls": 0,
+    "env_files_read": 0,
+    "private_inputs": 0,
+    "product_modified": false
+  }
+}

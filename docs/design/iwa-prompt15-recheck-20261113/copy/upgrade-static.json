@@ -1,0 +1,42 @@
+{
+  "head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+  "mode": "static read only; no control invocation, no actual database opened",
+  "checks": {
+    "old_control_root_is_prompt14": true,
+    "python_is_shared_project_venv": true,
+    "config_remains_control_sibling": true,
+    "inherited_iwa_removed": true,
+    "config_explicitly_passed": true,
+    "start_live_pid_is_private_var": true,
+    "startup_implementation_unchanged_since_14": true,
+    "essay_unchanged_since_first_15": true,
+    "product_worktree_clean": true
+  },
+  "passed": 9,
+  "total": 9,
+  "control_source_sha256": "88e4805c33a362dc982dec205ba5944dc9eea7cb35d3394c6ae3c2f89c9d93ad",
+  "control_paths": {
+    "root": "/private/tmp/studytracker-iwa-prompt14-review-20261113",
+    "python": "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+    "config_expression": "Path(__file__).with_name('.env')"
+  },
+  "source_sha256": {
+    "essay.py": "22d338c9af4797f6a3e1fe33a18ebdb55dab1e074c42a8ef7fee59222d200194",
+    "storage.py": "76ce0f75e664a1403953688d2061d0dc2aa086e5825738a93997f6aad7090927",
+    "config.py": "56e9d3bf7e29a8d025aa5b37041768efb71e17119628d516af2e2b5f1dbf424f",
+    "__init__.py": "25a92cf2c3c636fe7ec669829533f29558afd3cec06bb01a3aaab3673ce84757"
+  },
+  "restrictions": {
+    "env_values_read": false,
+    "keys_read": false,
+    "runtime_database_opened": false,
+    "service_changed": false,
+    "paid_calls": 0
+  },
+  "preflight_not_performed": [
+    "effective data_dir/db_path and PID identity",
+    "actual database row/state counts",
+    "launchd live state and service health",
+    "real environment configuration"
+  ]
+}

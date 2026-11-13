@@ -1,0 +1,128 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+  "python": "3.13.3",
+  "before": {
+    "head": "e3901a0c4312f42c7a90996f47e18b4d96d4935d",
+    "status": "## codex/iwa-prompt15-final-recheck-20261113...origin/claude/ielts-writing-ai-trial",
+    "source": {
+      "files": 95,
+      "sha256": "31fe7fd4ea5b980a1532f1292f150cab7737bf1e3dc1362d2d4ba5846fc2b53e"
+    },
+    "private_inputs_sha256": {
+      "official_lowband_t2.jsonl": "3563a2626ad0546951c8f98c787ae415fcde659b8cba476175a8be5ca981929d",
+      "teacher.jsonl": "f4f05e6055d398171ea2099f6131c85c4f8242a600e2fd70283a27decb888387",
+      "holdout_rated_t1.jsonl": "392796fe26efbaf28130cc8a0a043f84ba243bcfc878eab57777278e8a8cdf6f",
+      "holdout_rated_t2.jsonl": "b73be4e97e926125da617531736dc1e212bbb5c5559ae0aa112ae785d09edfc4",
+      "holdout_ordering.jsonl": "d6021f16e501c8f5384869f03ad2959fbec3be8cb2098ce170bb02e5daac7057",
+      "holdout_lowband.jsonl": "201fd264992085cb402038142950363f5888179443bb3cee5282c82933439795",
+      "run_data.json": "4c350a877fd50e3323c44981f4f4fe6b3ecb6c91aa8d82eb8178a49a2b246bca"
+    }
+  },
+  "after": {
+    "head": "e3901a0c4312f42c7a90996f47e18b4d96d4935d",
+    "status": "## codex/iwa-prompt15-final-recheck-20261113...origin/claude/ielts-writing-ai-trial",
+    "source": {
+      "files": 95,
+      "sha256": "31fe7fd4ea5b980a1532f1292f150cab7737bf1e3dc1362d2d4ba5846fc2b53e"
+    },
+    "private_inputs_sha256": {
+      "official_lowband_t2.jsonl": "3563a2626ad0546951c8f98c787ae415fcde659b8cba476175a8be5ca981929d",
+      "teacher.jsonl": "f4f05e6055d398171ea2099f6131c85c4f8242a600e2fd70283a27decb888387",
+      "holdout_rated_t1.jsonl": "392796fe26efbaf28130cc8a0a043f84ba243bcfc878eab57777278e8a8cdf6f",
+      "holdout_rated_t2.jsonl": "b73be4e97e926125da617531736dc1e212bbb5c5559ae0aa112ae785d09edfc4",
+      "holdout_ordering.jsonl": "d6021f16e501c8f5384869f03ad2959fbec3be8cb2098ce170bb02e5daac7057",
+      "holdout_lowband.jsonl": "201fd264992085cb402038142950363f5888179443bb3cee5282c82933439795",
+      "run_data.json": "4c350a877fd50e3323c44981f4f4fe6b3ecb6c91aa8d82eb8178a49a2b246bca"
+    }
+  },
+  "commands": [
+    {
+      "output": "confirmed-adapted.json",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-B",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/docs/design/ielts-writing-ai-model-comparison-plan-20261110/verify/confirmed_probe_adapted.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+        "--private-sample",
+        "/Users/zhouxin/iwa-calibration/official_lowband_t2.jsonl",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-final-recheck-20261113/copy/confirmed-adapted.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.24,
+      "summary": {
+        "passed": 70,
+        "total": 70
+      }
+    },
+    {
+      "output": "paragraph-original.json",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-B",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/docs/design/iwa-prompt14-review-20261113/paragraph_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+        "--private-run",
+        "/Users/zhouxin/iwa-compare-official-lowband-20261113/official-t2/run_data.json",
+        "--samples-dir",
+        "/Users/zhouxin/iwa-calibration",
+        "--baseline",
+        "abf48d49",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-final-recheck-20261113/copy/paragraph-original.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.87,
+      "summary": {
+        "passed": 70,
+        "total": 70
+      }
+    },
+    {
+      "output": "token-migration.json",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-B",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-recheck-20261113/copy/token_migration_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+        "--output",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-final-recheck-20261113/copy/token-migration.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.19,
+      "summary": {
+        "passed": 22,
+        "total": 22
+      }
+    },
+    {
+      "output": "vision-budget.json",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-B",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/docs/design/iwa-prompt14-review-20261113/vision_budget_probe.py",
+        "--source",
+        "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+        "--out",
+        "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-final-recheck-20261113/copy/vision-budget.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.49,
+      "summary": {
+        "passed": 139,
+        "total": 139
+      }
+    }
+  ],
+  "checks": {
+    "private_inputs_unchanged": true,
+    "product_source_unchanged": true,
+    "head_unchanged": true,
+    "all_commands_passed": true
+  },
+  "real_calls": 0,
+  "private_text_exported": false
+}

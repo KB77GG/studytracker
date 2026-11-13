@@ -1,0 +1,77 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+  "passed": 17,
+  "total": 17,
+  "checks": [
+    {
+      "name": "raw_unmodified",
+      "passed": true
+    },
+    {
+      "name": "unchanged_reading_not_marked_edited",
+      "passed": true
+    },
+    {
+      "name": "reading_hash_exact_utf8",
+      "passed": true
+    },
+    {
+      "name": "corrected_hash_matches_final_text",
+      "passed": true
+    },
+    {
+      "name": "correction_preserves_raw",
+      "passed": true
+    },
+    {
+      "name": "apply_good_confirmed_count",
+      "passed": true
+    },
+    {
+      "name": "run_missing_hash_zero_calls",
+      "passed": true
+    },
+    {
+      "name": "run_text_changed_after_load_zero_calls",
+      "passed": true
+    },
+    {
+      "name": "later_bad_item_rejects_entire_run_before_first_call",
+      "passed": true
+    },
+    {
+      "name": "run_image_changed_after_load_zero_calls",
+      "passed": true
+    },
+    {
+      "name": "valid_prompt_gate",
+      "passed": true
+    },
+    {
+      "name": "changed_text_prompt_gate_closed",
+      "passed": true
+    },
+    {
+      "name": "missing_hash_prompt_gate_closed",
+      "passed": true
+    },
+    {
+      "name": "audit_metadata_does_not_change_fingerprint",
+      "passed": true
+    },
+    {
+      "name": "changed_final_reading_changes_fingerprint",
+      "passed": true
+    },
+    {
+      "name": "confirmed_vs_unconfirmed_changes_fingerprint",
+      "passed": true
+    },
+    {
+      "name": "require_checked_missing_image_rejected",
+      "passed": true
+    }
+  ],
+  "network_calls": 0,
+  "scope": "Temporary synthetic image/essay, fake text model, no private files or keys."
+}

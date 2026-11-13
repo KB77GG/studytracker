@@ -1,0 +1,228 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt15-recheck-20261113",
+  "checks": [
+    {
+      "name": "waiting_has_ready_image",
+      "pass": true
+    },
+    {
+      "name": "waiting_requires_check",
+      "pass": true
+    },
+    {
+      "name": "no_generation_before_check",
+      "pass": true
+    },
+    {
+      "name": "all_three_queued",
+      "pass": true
+    },
+    {
+      "name": "quota_reserved_once",
+      "pass": true
+    },
+    {
+      "name": "csrf_enforced",
+      "pass": true
+    },
+    {
+      "name": "other_user_cannot_confirm",
+      "pass": true
+    },
+    {
+      "name": "other_user_cannot_view",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_evaluate",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_refine",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_rewrite",
+      "pass": true
+    },
+    {
+      "name": "waiting_regeneration_no_quota",
+      "pass": true
+    },
+    {
+      "name": "restart_keeps_waiting",
+      "pass": true
+    },
+    {
+      "name": "restart_keeps_queued",
+      "pass": true
+    },
+    {
+      "name": "corrected_confirm_accepted",
+      "pass": true
+    },
+    {
+      "name": "three_kinds_started",
+      "pass": true
+    },
+    {
+      "name": "corrected_reading_used_all",
+      "pass": true
+    },
+    {
+      "name": "confirmed_ta_scored",
+      "pass": true
+    },
+    {
+      "name": "confirmed_overall_scored",
+      "pass": true
+    },
+    {
+      "name": "model_original_preserved",
+      "pass": true
+    },
+    {
+      "name": "modified_description_stored",
+      "pass": true
+    },
+    {
+      "name": "confirmation_no_extra_quota",
+      "pass": true
+    },
+    {
+      "name": "repeat_confirm_refused",
+      "pass": true
+    },
+    {
+      "name": "repeat_skip_refused",
+      "pass": true
+    },
+    {
+      "name": "repeat_no_call",
+      "pass": true
+    },
+    {
+      "name": "repeat_keeps_correction",
+      "pass": true
+    },
+    {
+      "name": "skip_accepted",
+      "pass": true
+    },
+    {
+      "name": "skip_all_three_generated",
+      "pass": true
+    },
+    {
+      "name": "skip_all_prompts_without_visual",
+      "pass": true
+    },
+    {
+      "name": "skip_ta_not_assessable",
+      "pass": true
+    },
+    {
+      "name": "skip_overall_null",
+      "pass": true
+    },
+    {
+      "name": "skip_copy_states_limitation",
+      "pass": true
+    },
+    {
+      "name": "concurrent_one_winner",
+      "pass": true
+    },
+    {
+      "name": "concurrent_three_unique_generation_claims",
+      "pass": true
+    },
+    {
+      "name": "concurrent_quota_reserved_once",
+      "pass": true
+    },
+    {
+      "name": "malformed_payload_no_calls",
+      "pass": true
+    },
+    {
+      "name": "malformed_payload_no_mutation",
+      "pass": true
+    },
+    {
+      "name": "legacy_ready_result_preserved_on_open",
+      "pass": true
+    },
+    {
+      "name": "legacy_awaiting_false_after_fix",
+      "pass": true
+    },
+    {
+      "name": "legacy_confirm_refused_409",
+      "pass": true
+    },
+    {
+      "name": "legacy_no_check_stored",
+      "pass": true
+    },
+    {
+      "name": "legacy_flagged_on_page",
+      "pass": true
+    },
+    {
+      "name": "legacy_description_unchanged",
+      "pass": true
+    },
+    {
+      "name": "legacy_results_and_ids_unchanged",
+      "pass": true
+    },
+    {
+      "name": "legacy_no_new_calls",
+      "pass": true
+    }
+  ],
+  "passed": 45,
+  "total": 45,
+  "findings": [],
+  "observations": {
+    "malformed_payloads": [
+      {
+        "case": "list",
+        "status": 422
+      },
+      {
+        "case": "number",
+        "status": 422
+      },
+      {
+        "case": "description_list",
+        "status": 422
+      },
+      {
+        "case": "description_number",
+        "status": 422
+      }
+    ],
+    "legacy_correction": {
+      "before": {
+        "awaiting": false,
+        "overall": 5.0,
+        "status": "ready",
+        "version": "iwa-2026-11-13.14"
+      },
+      "confirm_status": 409,
+      "edited": null,
+      "unchecked_legacy": true,
+      "calls_after_confirm": 0,
+      "new_description_has_correction": false,
+      "generation_ids_unchanged": true,
+      "evaluation_unchanged": true,
+      "overall": 5.0,
+      "version": "iwa-2026-11-13.14"
+    }
+  },
+  "paid_calls": 0,
+  "live_service_touched": false,
+  "private_sources_read": false
+}

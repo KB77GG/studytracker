@@ -1,0 +1,21 @@
+{
+  "source_head": "e3901a0c4312f42c7a90996f47e18b4d96d4935d",
+  "python": "3.13.3",
+  "checks": {
+    "ruff_product": true,
+    "black_product_69_files": true,
+    "node_check_iwa_js": true,
+    "ruff_new_report": true,
+    "black_new_report_2_files": true
+  },
+  "python_tests": 494,
+  "node_tests": 8,
+  "outside_IWA_VISION_PROVIDER": "none",
+  "test_data_directory_untouched": true,
+  "real_calls": 0,
+  "limits": [
+    "Only default Mac locale/Python 3.13.3 rerun; author multi-locale/other Python claims not re-certified.",
+    "Initial sandbox run had 24 permission errors; same guarded script passed outside sandbox.",
+    "Actual browser chart-confirmation interaction not rerun on Mac; offline routes/JS and live login smoke cover tested scopes."
+  ]
+}

@@ -1,5 +1,19 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-13 — `.15`最终复验通过、Mac升级与复核材料共享
+
+e3901a0c/d92f0839新独立树，原排队20/20、新网页57/57、作者45/45、realcheck15/15+17/17、Mac实样70/70+段落70/70、迁移22/22、vision139/139，494Python+8Node及静态检查通过，95产品SHA不变，原5项全部关闭。完成SQLite一致性/配置备份后将Mac从.14切.15，PID31407/5055及实际cwd健康，原字段/账号/额度保持，登录退出通过；vision none、closed账本不变、0付费调用。按用户授权共享旧两轮46脱敏文件与本轮报告/探针、合并三份Claude交接；只提交功能分支，两交接最新事实/精确命令见CODEX_HANDOFF和新README。主main原7/23及其他任务保留，旧三源码树clean；私有资料/配置/库/脚本/全日志仅本机，不推main/部署生产或发布小程序。提交/push SHA以Git及主树最终确认条为准。
+
+## 2026-11-13 — `.15`修复复验：4项关闭，余旧记录排队1P2
+
+续核：用户转贴Claude同版总结后，成功fetch确认远端仍8884e9d9，无后续修复。原mixed_queue_probe再跑15/20、exit1，confirm/skip排队绕过再次复现，独立只读审查一致。仅增`iwa-prompt15-recheck-20261113/followup/`证据及更新README/两交接，未重跑全套/私有实样，旧ZIP不含续核。两源码树clean、主树7/23及他任务改动保留；保持.14/vision none和closed账本，0付费调用/升级/重启/生产操作。续核仅本机未commit/push/deploy，等新修复再复验升级。
+
+新clean树`/private/tmp/studytracker-iwa-prompt15-recheck-20261113`、8884e9d9/业务0701bcf5，95产品文件不改。492Python+8Node（外部vision none亦通过）、Ruff/Black69/JS；原realcheck15/15+相邻17/17、作者web45/45、实样70/70、原段落70/70、token迁移22/22、vision139/139。原5项中4项关闭；旧结果门禁仍可经正常重新生成排队重新开放confirm/skip，新评价与旧精修改写错配，新真实双worker/API探针15/20、5失败同一P2，主审复跑。暂不升级.14，识图none不动，0真实调用/配置库服务变化。新复验报告与两交接仅本机未commit/push/deploy，主main原7/23保留；用户改正后继续偏好、closed账本与教师未填写状态都保持。
+
+## 2026-11-13 — `.15`离线复核与“改正读数后继续”决定
+
+用户已选择核图有错先改正、确认后继续；旧closed账本不重开，本轮0真实调用。fetch652450ca到新clean树`/private/tmp/studytracker-iwa-prompt15-review-20261113`，483Python+8Node、Ruff/Black69/JS通过，真实抄题70/70、原段落70/70、新token/迁移22/22、vision预算139/139，抄题旧P2关闭。独立网页正常38/38，但旧记录改正后仍冒用旧结果；realcheck10/15复现JSONL绕过确认及读数正文未绑定2P2，另比较误拒/坏类型500两P3。原测试包装器vision覆盖导致1失败已单独记录，清覆盖全通过。主审复跑，新增脱敏报告/探针和两交接仅本机未commit/push；产品未改，.14试用/vision none不动，不部署/生产/小程序操作。教师完整版记录与他任务交接均保留，待Claude修输入/结果绑定后再升级，详见新审阅README。
+
 ## 2026-11-13 — `.14`启用与首张题图预试停止，老师材料交付
 
 新树codex/iwa-prompt14-review-20261113@fd8e910b（业务d0650bb），468Python+8Node、原三问题关闭；61/71余一quote token边界P2，whole-paragraph/本批Task1不触发。实样70/70、图/预算139/139、私有launcher fake28/28通过。更新home确认元数据34/194，Task1不变；试用库备份后迁移copied_spans，登录/额度不变。.14已启用，Pro/high/32000/420继续；首图Flash实际1vision/0text，读数14 vs约22、45 vs约40，原始模型错误，结构ready不能保证准确。人工门禁停止剩余图和评价，本批closed；费用估算0.009312元、审计24/24。已恢复vision none防止未经核对数据用于TA，最终PID92571健康。10条教师抽查Word/PDF18页已交付且仅本机，老师未判。两脱敏目录、执行说明第五版、两交接同步功能分支；原main7/23、旧两worktree保留，不动生产或小程序。详情与精确命令见handoff顶部及两README。

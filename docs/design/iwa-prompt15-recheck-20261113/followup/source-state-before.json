@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-11-13T12:24:39.080956+00:00",
+  "main": {
+    "path": "/Users/zhouxin/Desktop/studytracker",
+    "branch": "main",
+    "head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+    "status": "## main...origin/main [behind 113]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+    "other_modified_sha256": {
+      "design-qa.md": "b644c496bbf63b78d5d98559dddd32fbbfac16965a0464ce92bfe74b7d434d40",
+      "static/style.css": "9eead60c81db7e466b3ae60add3c2948d8bd478d9d2848d7a8bd910f26344b9b",
+      "templates/listening/index.html": "ef43c9cd5176a978dbe189619dd1198c1811d37478729796a69f4028abe15f7a",
+      "templates/listening/test_practice.html": "90becb856ea1015f979ee0a50fe90ee1b043272a23dc180aa51e171ead2410af",
+      "templates/login.html": "a8ad1fc4b6701fe26007d885dca8a07889a1646fa940e572370e70c55a58ce93"
+    }
+  },
+  "remote_feature_head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+  "review": {
+    "path": "/private/tmp/studytracker-iwa-prompt15-recheck-20261113",
+    "branch": "codex/iwa-prompt15-recheck-20261113",
+    "head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+    "status": "## codex/iwa-prompt15-recheck-20261113...origin/claude/ielts-writing-ai-trial",
+    "tool_file_count": 95,
+    "tool_manifest_sha256": "4a4b4bc78bac770f14d1eb716d8a5a6d89de34d93a6eaab866c19523c1b026bb"
+  },
+  "runtime_source": {
+    "path": "/private/tmp/studytracker-iwa-prompt14-review-20261113",
+    "branch": "codex/iwa-prompt14-review-20261113",
+    "head": "cd82fc1b605ee54e6534ad3eb498023788659712",
+    "status": "## codex/iwa-prompt14-review-20261113...origin/claude/ielts-writing-ai-trial [behind 5]",
+    "tool_file_count": 93,
+    "tool_manifest_sha256": "d7277b65ef7d313b1afac88d4dc04d6f12a2a987b8be1dc8763f659a8018abf7"
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-recheck-20261113",
+  "head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+  "baseline": "abf48d49a446582749a53d320a7c6e6364d0841e",
+  "baseline_prompt_version": "iwa-2026-11-10.12",
+  "prompt_version": "iwa-2026-11-13.15",
+  "checks": {
+    "official_current_metadata_confirms_two_whole_paragraphs": true,
+    "two_offline_replays": true,
+    "replay_1_current_source_matches_recorded_submission": true,
+    "replay_1_strict_json": true,
+    "replay_1_all_nine_paragraphs": true,
+    "replay_1_previous_eight": true,
+    "replay_1_accounting": true,
+    "replay_1_no_paragraph_over_limit": true,
+    "replay_1_raw_scores_unchanged": true,
+    "replay_1_old_scores_unchanged": true,
+    "replay_1_copied_counts": true,
+    "replay_1_copied_paragraphs": true,
+    "replay_1_request_own_words_194": true,
+    "replay_1_request_confirmed_whole_paragraphs": true,
+    "replay_1_confirmation_basis_not_sent": true,
+    "replay_1_all_warnings_in_copy": true,
+    "replay_1_all_paragraphs_in_copy": true,
+    "api_result_preserves_new_field": true,
+    "dom_probe_exit_zero": true,
+    "replay_1_ui_and_click": true,
+    "replay_1_legacy_field_absent_compatible": true,
+    "replay_1_realcheck_accepts": true,
+    "replay_2_current_source_matches_recorded_submission": true,
+    "replay_2_strict_json": true,
+    "replay_2_all_nine_paragraphs": true,
+    "replay_2_previous_eight": true,
+    "replay_2_accounting": true,
+    "replay_2_no_paragraph_over_limit": true,
+    "replay_2_raw_scores_unchanged": true,
+    "replay_2_old_scores_unchanged": true,
+    "replay_2_copied_counts": true,
+    "replay_2_copied_paragraphs": true,
+    "replay_2_request_own_words_194": true,
+    "replay_2_request_confirmed_whole_paragraphs": true,
+    "replay_2_confirmation_basis_not_sent": true,
+    "replay_2_all_warnings_in_copy": true,
+    "replay_2_all_paragraphs_in_copy": true,
+    "replay_2_ui_and_click": true,
+    "replay_2_legacy_field_absent_compatible": true,
+    "replay_2_realcheck_accepts": true,
+    "realcheck_aggregate_accounting": true,
+    "realcheck_aggregate_18_paragraphs": true,
+    "realcheck_two_accepts": true,
+    "private_run_unchanged": true,
+    "official_current_sample_unchanged": true,
+    "synthetic_20_sorted_retained": true,
+    "synthetic_20_accounting": true,
+    "synthetic_bad_hints_relocated": true,
+    "synthetic_duplicates_invalid_caps": true,
+    "synthetic_mixed_accounting": true,
+    "synthetic_repeated_text_hints": true,
+    "synthetic_repeated_accounting": true,
+    "synthetic_bad_container_rejected": true,
+    "builtin_actual_messages_equal": true,
+    "builtin_no_confirmed_spans": true,
+    "teacher.jsonl_actual_messages_equal": true,
+    "teacher.jsonl_no_confirmed_spans": true,
+    "teacher.jsonl_unchanged": true,
+    "holdout_rated_t1.jsonl_actual_messages_equal": true,
+    "holdout_rated_t1.jsonl_no_confirmed_spans": true,
+    "holdout_rated_t1.jsonl_unchanged": true,
+    "holdout_rated_t2.jsonl_actual_messages_equal": true,
+    "holdout_rated_t2.jsonl_no_confirmed_spans": true,
+    "holdout_rated_t2.jsonl_unchanged": true,
+    "holdout_ordering.jsonl_actual_messages_equal": true,
+    "holdout_ordering.jsonl_no_confirmed_spans": true,
+    "holdout_ordering.jsonl_unchanged": true,
+    "holdout_lowband.jsonl_actual_messages_equal": true,
+    "holdout_lowband.jsonl_no_confirmed_spans": true,
+    "holdout_lowband.jsonl_unchanged": true
+  },
+  "passed": 70,
+  "total": 70,
+  "official_replay": [
+    {
+      "repeat": 1,
+      "paragraphs": 9,
+      "before_paragraphs": 8,
+      "counts": {
+        "returned": 15,
+        "kept": 15,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0
+      },
+      "before_counts": {
+        "returned": 15,
+        "kept": 14,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 1
+      },
+      "bands": {
+        "task": 5.5,
+        "coherence": 5.5,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "overall_band": 5.5,
+      "confirmed_spans": 2,
+      "copied_words": 34,
+      "own_words": 194,
+      "manual_confirmed_copied_words": 34,
+      "manual_confirmed_own_words": 194,
+      "request_own_words": 194,
+      "opening_sentence_matching": [
+        {
+          "p": 1,
+          "words": 9,
+          "tokens": 9,
+          "matched_tokens": 9,
+          "match_ratio": 1.0,
+          "longest_run": 9,
+          "similarity_hint": true
+        },
+        {
+          "p": 1,
+          "words": 16,
+          "tokens": 17,
+          "matched_tokens": 14,
+          "match_ratio": 0.8235294117647058,
+          "longest_run": 8,
+          "similarity_hint": false
+        },
+        {
+          "p": 2,
+          "words": 9,
+          "tokens": 9,
+          "matched_tokens": 8,
+          "match_ratio": 0.8888888888888888,
+          "longest_run": 6,
+          "similarity_hint": true
+        }
+      ],
+      "sha256": {
+        "submission": "73bd2920da4531e101d1188fc682cc7126a7a2105e5a87668a2a3972dbdb5683",
+        "response_text": "c7dc46062326469abc8b5a3bd8d741e128199b932a8c3eaaeb8c8b9d6795d51b",
+        "normalized_result": "6658359daa80888684721c833de8598b630d0367f1adbbb6e46fda1d2ae412fa",
+        "new_request_messages": "0a93ffc810188fbceb162179569569e398bd4d09874568667292ab33154abb9d"
+      },
+      "ui": {
+        "paragraph_nodes": 9,
+        "all_paragraph_labels": true,
+        "all_warnings_visible": true,
+        "copy_button_enabled": true,
+        "copy_button_exact_text": true
+      }
+    },
+    {
+      "repeat": 2,
+      "paragraphs": 9,
+      "before_paragraphs": 8,
+      "counts": {
+        "returned": 15,
+        "kept": 15,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 0
+      },
+      "before_counts": {
+        "returned": 15,
+        "kept": 14,
+        "dropped": 0,
+        "duplicates": 0,
+        "over_limit": 1
+      },
+      "bands": {
+        "task": 5.5,
+        "coherence": 5.0,
+        "lexical": 5.0,
+        "grammar": 5.0
+      },
+      "overall_band": 5.0,
+      "confirmed_spans": 2,
+      "copied_words": 34,
+      "own_words": 194,
+      "manual_confirmed_copied_words": 34,
+      "manual_confirmed_own_words": 194,
+      "request_own_words": 194,
+      "opening_sentence_matching": [
+        {
+          "p": 1,
+          "words": 9,
+          "tokens": 9,
+          "matched_tokens": 9,
+          "match_ratio": 1.0,
+          "longest_run": 9,
+          "similarity_hint": true
+        },
+        {
+          "p": 1,
+          "words": 16,
+          "tokens": 17,
+          "matched_tokens": 14,
+          "match_ratio": 0.8235294117647058,
+          "longest_run": 8,
+          "similarity_hint": false
+        },
+        {
+          "p": 2,
+          "words": 9,
+          "tokens": 9,
+          "matched_tokens": 8,
+          "match_ratio": 0.8888888888888888,
+          "longest_run": 6,
+          "similarity_hint": true
+        }
+      ],
+      "sha256": {
+        "submission": "73bd2920da4531e101d1188fc682cc7126a7a2105e5a87668a2a3972dbdb5683",
+        "response_text": "67d01bca287fc09e0cb6fd21f8e34158308bdffca0b50321799a0aa5fee4e95f",
+        "normalized_result": "4c0020f381d886b707d95727b4ec67cc852243ba90df644c5b621e57e017a15d",
+        "new_request_messages": "0a93ffc810188fbceb162179569569e398bd4d09874568667292ab33154abb9d"
+      },
+      "ui": {
+        "paragraph_nodes": 9,
+        "all_paragraph_labels": true,
+        "all_warnings_visible": true,
+        "copy_button_enabled": true,
+        "copy_button_exact_text": true
+      }
+    }
+  ],
+  "realcheck": {
+    "returned": 30,
+    "kept": 30,
+    "dropped": 0,
+    "duplicates": 0,
+    "over_limit": 0,
+    "paragraphs": 18,
+    "evaluate_attempts": 2,
+    "rejected": 0
+  },
+  "synthetic": {
+    "multi": {
+      "returned": 21,
+      "kept": 21,
+      "dropped": 0,
+      "duplicates": 0,
+      "over_limit": 0
+    },
+    "mixed": {
+      "returned": 39,
+      "kept": 30,
+      "dropped": 3,
+      "duplicates": 2,
+      "over_limit": 4
+    },
+    "repeated_text": {
+      "returned": 12,
+      "kept": 12,
+      "dropped": 0,
+      "duplicates": 0,
+      "over_limit": 0
+    }
+  },
+  "message_compatibility": [
+    {
+      "group": "builtin",
+      "samples": 7,
+      "identical_messages": 7,
+      "no_confirmed_spans": 7
+    },
+    {
+      "group": "teacher.jsonl",
+      "samples": 1,
+      "identical_messages": 1,
+      "no_confirmed_spans": 1
+    },
+    {
+      "group": "holdout_rated_t1.jsonl",
+      "samples": 2,
+      "identical_messages": 2,
+      "no_confirmed_spans": 2
+    },
+    {
+      "group": "holdout_rated_t2.jsonl",
+      "samples": 4,
+      "identical_messages": 4,
+      "no_confirmed_spans": 4
+    },
+    {
+      "group": "holdout_ordering.jsonl",
+      "samples": 10,
+      "identical_messages": 10,
+      "no_confirmed_spans": 10
+    },
+    {
+      "group": "holdout_lowband.jsonl",
+      "samples": 6,
+      "identical_messages": 6,
+      "no_confirmed_spans": 6
+    }
+  ],
+  "private_input_hashes": {
+    "recorded_run": "4c350a877fd50e3323c44981f4f4fe6b3ecb6c91aa8d82eb8178a49a2b246bca",
+    "current_official_sample": "3563a2626ad0546951c8f98c787ae415fcde659b8cba476175a8be5ca981929d"
+  },
+  "scope": {
+    "paid_calls": 0,
+    "network_calls": 0,
+    "env_files_read": 0,
+    "private_content_exported": false,
+    "reasoning_used": false,
+    "ui_method": "actual renderer functions in Node VM with minimal DOM; copy click exercised; no screenshot claim"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "method": "12-token exact overlap against private essay/question fields and recorded calls.text; no reasoning fields read; key-shape scan without reading credentials",
+  "files": [
+    {
+      "file": "README.md",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    },
+    {
+      "file": "confirmed-adapted.json",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    },
+    {
+      "file": "input-integrity.json",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    },
+    {
+      "file": "paragraph-original.json",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    },
+    {
+      "file": "token-migration.json",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    },
+    {
+      "file": "vision-budget.json",
+      "private_12_word_overlap_count": 0,
+      "key_shape_found": false
+    }
+  ],
+  "passed": true,
+  "private_content_exported": false
+}

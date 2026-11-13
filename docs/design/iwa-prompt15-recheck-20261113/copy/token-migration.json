@@ -1,0 +1,83 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-recheck-20261113",
+  "head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+  "checks": {
+    "accepted_spans_never_split_word_tokens": true,
+    "accepted_counts_match_whole_original_tokens": true,
+    "disjoint_spans_never_count_same_token_twice": true,
+    "all_candidate_failures_are_value_errors": true,
+    "exercise_accept_and_reject_paths": true,
+    "whole_token_1_151_to_150": true,
+    "whole_token_1_source_not_in_messages": true,
+    "whole_token_2_151_to_150": true,
+    "whole_token_2_source_not_in_messages": true,
+    "whole_token_3_151_to_150": true,
+    "whole_token_3_source_not_in_messages": true,
+    "migration_14_adds_only_image_check": true,
+    "migration_new_column_nullable": true,
+    "migration_old_column_contracts_unchanged": true,
+    "migration_existing_row_unchecked": true,
+    "migration_14_all_old_fields_unchanged_generation": true,
+    "migration_14_all_old_fields_unchanged_iwa_meta": true,
+    "migration_14_all_old_fields_unchanged_submission": true,
+    "migration_14_all_old_fields_unchanged_trial_user": true,
+    "migration_14_all_old_fields_unchanged_usage_event": true,
+    "migration_preserves_confirmed_copy_count": true,
+    "migration_foreign_keys_valid": true
+  },
+  "details": {
+    "token_property": {
+      "synthetic_essays": 12,
+      "candidate_spans": 2592,
+      "accepted_spans": 313,
+      "rejected_spans": 2279,
+      "accepted_disjoint_pairs": 294,
+      "boundary_errors": 0,
+      "count_errors": 0,
+      "overlap_errors": 0,
+      "unexpected_exceptions": 0
+    },
+    "whole_token_threshold": [
+      {
+        "case": 1,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      },
+      {
+        "case": 2,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      },
+      {
+        "case": 3,
+        "original_words": 151,
+        "deducted": 1,
+        "payload_remaining": 150
+      }
+    ],
+    "migration": {
+      "baseline": "cd82fc1b",
+      "starts": 2,
+      "tables": 5,
+      "rows": 6
+    }
+  },
+  "passed": 22,
+  "total": 22,
+  "failed": [],
+  "source_sha256": {
+    "essay.py": "22d338c9af4797f6a3e1fe33a18ebdb55dab1e074c42a8ef7fee59222d200194",
+    "storage.py": "76ce0f75e664a1403953688d2061d0dc2aa086e5825738a93997f6aad7090927",
+    "prompts.py": "d8ec0c11d8cad61e51d554f4165adcac79cdb64c873ab7b5ec9e7493e8dc1907",
+    "realcheck.py": "88d2af22caaac498d85c0563dac6596a9ccfaca43b532b9ca16129d868ec1760"
+  },
+  "scope": {
+    "paid_calls": 0,
+    "network_calls": 0,
+    "env_files_read": 0,
+    "private_inputs": 0,
+    "product_modified": false
+  }
+}

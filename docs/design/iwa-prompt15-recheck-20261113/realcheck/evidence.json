@@ -1,0 +1,176 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt15-recheck-20261113",
+  "source_head": "8884e9d904a66afea9124339cbbb07f9b36d38fe",
+  "checks": [
+    {
+      "name": "confirmed_record_keeps_original",
+      "passed": true
+    },
+    {
+      "name": "confirmed_record_binds_original_image",
+      "passed": true
+    },
+    {
+      "name": "unchecked_no_ta",
+      "passed": true
+    },
+    {
+      "name": "require_checked_rejects_before_calls",
+      "passed": true
+    },
+    {
+      "name": "corrected_confirmed_scores_twice",
+      "passed": true
+    },
+    {
+      "name": "repeats_same_prompt",
+      "passed": true
+    },
+    {
+      "name": "confirm_does_not_mutate_raw",
+      "passed": true
+    },
+    {
+      "name": "changed_image_file_rejected",
+      "passed": true
+    },
+    {
+      "name": "inline_check_same_image_required",
+      "passed": true
+    },
+    {
+      "name": "inline_check_metadata_validated",
+      "passed": true
+    },
+    {
+      "name": "require_checked_no_image_cannot_score_ta",
+      "passed": true
+    },
+    {
+      "name": "post_check_reading_change_requires_reconfirmation",
+      "passed": true
+    },
+    {
+      "name": "metadata_only_has_same_model_input",
+      "passed": true
+    },
+    {
+      "name": "metadata_only_allows_same_input_comparison",
+      "passed": true
+    },
+    {
+      "name": "existing_confirmed_output_not_overwritten",
+      "passed": true
+    }
+  ],
+  "passed": 15,
+  "total": 15,
+  "observations": {
+    "unchecked": {
+      "exit_code": 0,
+      "calls": 1,
+      "task_bands": [
+        null
+      ],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": [
+        "fb1dd650506a3225f3986e4055d63330b274a9e95e1fce90e7cd3d249e59581e"
+      ]
+    },
+    "require_unchecked": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "confirmed_repeat": {
+      "exit_code": 0,
+      "calls": 2,
+      "task_bands": [
+        5.0,
+        5.0
+      ],
+      "has_human_checked_note": true,
+      "has_changed_90_percent": false,
+      "message_hashes": [
+        "d66f85cc92f904da28eed03c1d0ae3629874a41a4810886175f5ef4a1116ac27",
+        "d66f85cc92f904da28eed03c1d0ae3629874a41a4810886175f5ef4a1116ac27"
+      ]
+    },
+    "changed_image_file": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "inline_stale_check": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "inline_bare_status": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "require_checked_inline_without_image": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "edited_after_confirmation": {
+      "exit_code": 2,
+      "calls": 0,
+      "task_bands": [],
+      "has_human_checked_note": false,
+      "has_changed_90_percent": false,
+      "message_hashes": []
+    },
+    "compare_first": {
+      "exit_code": 0,
+      "calls": 1,
+      "task_bands": [
+        5.0
+      ],
+      "has_human_checked_note": true,
+      "has_changed_90_percent": false,
+      "message_hashes": [
+        "d66f85cc92f904da28eed03c1d0ae3629874a41a4810886175f5ef4a1116ac27"
+      ]
+    },
+    "compare_second": {
+      "exit_code": 0,
+      "calls": 1,
+      "task_bands": [
+        5.0
+      ],
+      "has_human_checked_note": true,
+      "has_changed_90_percent": false,
+      "message_hashes": [
+        "d66f85cc92f904da28eed03c1d0ae3629874a41a4810886175f5ef4a1116ac27"
+      ]
+    },
+    "metadata_only_comparison": {
+      "errors": [],
+      "warnings": [
+        "两次的评价思考模式相同（off）：这是重复性对照，不是思考开关的对照"
+      ]
+    }
+  },
+  "network_calls": 0,
+  "scope": "Synthetic fake-client CLI and comparison; no private inputs or keys; all files except this report temporary."
+}

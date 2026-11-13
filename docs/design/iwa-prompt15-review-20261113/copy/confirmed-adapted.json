@@ -1,0 +1,341 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+  "head": "652450ca03efaa3ae794202368a2f42a88fca18a",
+  "offline": true,
+  "real_calls": 0,
+  "private_text_in_output": false,
+  "checks": [
+    {
+      "name": "152_word_false_positive_no_longer_deducted",
+      "passed": true
+    },
+    {
+      "name": "similarity_not_sent_as_confirmed",
+      "passed": true
+    },
+    {
+      "name": "similarity_is_page_hint_only",
+      "passed": true
+    },
+    {
+      "name": "152_word_page_no_below_150_warning",
+      "passed": true
+    },
+    {
+      "name": "152_word_page_explicit_no_deduction",
+      "passed": true
+    },
+    {
+      "name": "normalized_line_endings_and_sorted_spans",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_empty",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_not_list",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_negative",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_zero",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_beyond_end",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_bool",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_float",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_string",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_absent",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_duplicate_quote",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_cross_paragraph",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_midword_start",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_midword_end",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_space",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_duplicate_paragraph",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_paragraph_quote_overlap",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_quote_quote_overlap",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_ambiguous_entry",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_extra_key",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_nondict",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_unknown_key",
+      "passed": true
+    },
+    {
+      "name": "resolve_reject_quote_nonstr",
+      "passed": true
+    },
+    {
+      "name": "load_reject_missing_basis",
+      "passed": true
+    },
+    {
+      "name": "load_reject_missing_span",
+      "passed": true
+    },
+    {
+      "name": "load_reject_empty_basis",
+      "passed": true
+    },
+    {
+      "name": "load_reject_long_basis",
+      "passed": true
+    },
+    {
+      "name": "load_reject_nonstr_basis",
+      "passed": true
+    },
+    {
+      "name": "load_reject_bad_span",
+      "passed": true
+    },
+    {
+      "name": "load_reject_mismatched_quote",
+      "passed": true
+    },
+    {
+      "name": "load_reject_overlap",
+      "passed": true
+    },
+    {
+      "name": "basis_length_1",
+      "passed": true
+    },
+    {
+      "name": "basis_length_200",
+      "passed": true
+    },
+    {
+      "name": "realcheck_confirmed_spans_persist_and_export",
+      "passed": true
+    },
+    {
+      "name": "realcheck_confirmed_text_reaches_payload",
+      "passed": true
+    },
+    {
+      "name": "realcheck_count_matches_selected_words",
+      "passed": true
+    },
+    {
+      "name": "confirmation_basis_does_not_reach_model",
+      "passed": true
+    },
+    {
+      "name": "official_original_is_228_words",
+      "passed": true
+    },
+    {
+      "name": "official_first_two_paragraphs_are_34_words",
+      "passed": true
+    },
+    {
+      "name": "official_payload_own_words_194",
+      "passed": true
+    },
+    {
+      "name": "official_payload_contains_exact_two_confirmed_paragraphs",
+      "passed": true
+    },
+    {
+      "name": "private_sample_unchanged",
+      "passed": true
+    },
+    {
+      "name": "forged_web_submission_accepted_as_plain_text",
+      "passed": true
+    },
+    {
+      "name": "web_does_not_store_forged_confirmation",
+      "passed": true
+    },
+    {
+      "name": "web_does_not_send_forged_confirmation",
+      "passed": true
+    },
+    {
+      "name": "web_original_word_count_retained",
+      "passed": true
+    },
+    {
+      "name": "migration_adds_one_nullable_column",
+      "passed": true
+    },
+    {
+      "name": "migration_preserves_every_field_generation",
+      "passed": true
+    },
+    {
+      "name": "migration_preserves_every_field_iwa_meta",
+      "passed": true
+    },
+    {
+      "name": "migration_preserves_every_field_submission",
+      "passed": true
+    },
+    {
+      "name": "migration_preserves_every_field_trial_user",
+      "passed": true
+    },
+    {
+      "name": "migration_preserves_every_field_usage_event",
+      "passed": true
+    },
+    {
+      "name": "migration_foreign_keys_intact",
+      "passed": true
+    },
+    {
+      "name": "whole_compound_valid_ascii_apostrophe",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_ascii_apostrophe_don",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_ascii_apostrophe_t",
+      "passed": true
+    },
+    {
+      "name": "loader_rejects_split_token_ascii_apostrophe",
+      "passed": true
+    },
+    {
+      "name": "whole_compound_valid_curly_apostrophe",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_curly_apostrophe_don",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_curly_apostrophe_t",
+      "passed": true
+    },
+    {
+      "name": "loader_rejects_split_token_curly_apostrophe",
+      "passed": true
+    },
+    {
+      "name": "whole_compound_valid_hyphenated_word",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_hyphenated_word_cost",
+      "passed": true
+    },
+    {
+      "name": "reject_partial_word_hyphenated_word_effective",
+      "passed": true
+    },
+    {
+      "name": "loader_rejects_split_token_hyphenated_word",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "passed": 70,
+    "total": 70
+  },
+  "details": {
+    "prior_false_positive": {
+      "words": 152,
+      "confirmed_words": 0,
+      "similar_words": 14,
+      "payload_has_deducted_count": false
+    },
+    "realcheck": {
+      "fake_calls": 1,
+      "confirmed_words": 7,
+      "original_words": 15,
+      "remaining_words": 8
+    },
+    "official": {
+      "sample_id": "official-2B-A",
+      "input_sha256": "3563a2626ad0546951c8f98c787ae415fcde659b8cba476175a8be5ca981929d",
+      "original_words": 228,
+      "confirmed_paragraphs": [
+        1,
+        2
+      ],
+      "confirmed_words": 34,
+      "remaining_words": 194,
+      "metadata_added_in_memory_only": true
+    },
+    "migration": {
+      "source_revision": "f46756f8",
+      "tables_compared": 5,
+      "seeded_rows": 6,
+      "starts": 2,
+      "old_fields_equal": true
+    },
+    "token_boundary": [
+      {
+        "case": "ascii_apostrophe",
+        "rejected": true
+      },
+      {
+        "case": "curly_apostrophe",
+        "rejected": true
+      },
+      {
+        "case": "hyphenated_word",
+        "rejected": true
+      }
+    ]
+  },
+  "findings": []
+}

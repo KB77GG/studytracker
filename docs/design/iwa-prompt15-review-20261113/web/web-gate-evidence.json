@@ -1,0 +1,244 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+  "checks": [
+    {
+      "name": "waiting_has_ready_image",
+      "pass": true
+    },
+    {
+      "name": "waiting_requires_check",
+      "pass": true
+    },
+    {
+      "name": "no_generation_before_check",
+      "pass": true
+    },
+    {
+      "name": "all_three_queued",
+      "pass": true
+    },
+    {
+      "name": "quota_reserved_once",
+      "pass": true
+    },
+    {
+      "name": "csrf_enforced",
+      "pass": true
+    },
+    {
+      "name": "other_user_cannot_confirm",
+      "pass": true
+    },
+    {
+      "name": "other_user_cannot_view",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_evaluate",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_refine",
+      "pass": true
+    },
+    {
+      "name": "waiting_regenerate_rewrite",
+      "pass": true
+    },
+    {
+      "name": "waiting_regeneration_no_quota",
+      "pass": true
+    },
+    {
+      "name": "restart_keeps_waiting",
+      "pass": true
+    },
+    {
+      "name": "restart_keeps_queued",
+      "pass": true
+    },
+    {
+      "name": "corrected_confirm_accepted",
+      "pass": true
+    },
+    {
+      "name": "three_kinds_started",
+      "pass": true
+    },
+    {
+      "name": "corrected_reading_used_all",
+      "pass": true
+    },
+    {
+      "name": "confirmed_ta_scored",
+      "pass": true
+    },
+    {
+      "name": "confirmed_overall_scored",
+      "pass": true
+    },
+    {
+      "name": "model_original_preserved",
+      "pass": true
+    },
+    {
+      "name": "modified_description_stored",
+      "pass": true
+    },
+    {
+      "name": "confirmation_no_extra_quota",
+      "pass": true
+    },
+    {
+      "name": "repeat_confirm_refused",
+      "pass": true
+    },
+    {
+      "name": "repeat_skip_refused",
+      "pass": true
+    },
+    {
+      "name": "repeat_no_call",
+      "pass": true
+    },
+    {
+      "name": "repeat_keeps_correction",
+      "pass": true
+    },
+    {
+      "name": "skip_accepted",
+      "pass": true
+    },
+    {
+      "name": "skip_all_three_generated",
+      "pass": true
+    },
+    {
+      "name": "skip_all_prompts_without_visual",
+      "pass": true
+    },
+    {
+      "name": "skip_ta_not_assessable",
+      "pass": true
+    },
+    {
+      "name": "skip_overall_null",
+      "pass": true
+    },
+    {
+      "name": "skip_copy_states_limitation",
+      "pass": true
+    },
+    {
+      "name": "concurrent_one_winner",
+      "pass": true
+    },
+    {
+      "name": "concurrent_three_unique_generation_claims",
+      "pass": true
+    },
+    {
+      "name": "concurrent_quota_reserved_once",
+      "pass": true
+    },
+    {
+      "name": "malformed_payload_no_calls",
+      "pass": true
+    },
+    {
+      "name": "malformed_payload_no_mutation",
+      "pass": true
+    },
+    {
+      "name": "legacy_ready_result_preserved_on_open",
+      "pass": true
+    }
+  ],
+  "passed": 38,
+  "total": 38,
+  "findings": [
+    {
+      "id": "WEB-P3-1",
+      "severity": "P3",
+      "title": "New image-check API returns 500 on non-object JSON or non-string description",
+      "cases": [
+        {
+          "case": "list",
+          "status": 500
+        },
+        {
+          "case": "number",
+          "status": 500
+        },
+        {
+          "case": "description_list",
+          "status": 500
+        },
+        {
+          "case": "description_number",
+          "status": 500
+        }
+      ]
+    },
+    {
+      "id": "WEB-P2-1",
+      "severity": "P2",
+      "title": "Correcting a migrated completed chart reading relabels it as checked but leaves all existing results bound to the old reading",
+      "evidence": {
+        "before": {
+          "awaiting": true,
+          "overall": 5.0,
+          "status": "ready",
+          "version": "iwa-2026-11-13.14"
+        },
+        "confirm_status": 202,
+        "edited": true,
+        "calls_after_confirm": 0,
+        "new_description_has_correction": true,
+        "generation_ids_unchanged": true,
+        "evaluation_unchanged": true,
+        "overall": 5.0,
+        "version": "iwa-2026-11-13.14"
+      }
+    }
+  ],
+  "observations": {
+    "malformed_payloads": [
+      {
+        "case": "list",
+        "status": 500
+      },
+      {
+        "case": "number",
+        "status": 500
+      },
+      {
+        "case": "description_list",
+        "status": 500
+      },
+      {
+        "case": "description_number",
+        "status": 500
+      }
+    ],
+    "legacy_correction": {
+      "before": {
+        "awaiting": true,
+        "overall": 5.0,
+        "status": "ready",
+        "version": "iwa-2026-11-13.14"
+      },
+      "confirm_status": 202,
+      "edited": true,
+      "calls_after_confirm": 0,
+      "new_description_has_correction": true,
+      "generation_ids_unchanged": true,
+      "evaluation_unchanged": true,
+      "overall": 5.0,
+      "version": "iwa-2026-11-13.14"
+    }
+  },
+  "paid_calls": 0,
+  "live_service_touched": false,
+  "private_sources_read": false
+}

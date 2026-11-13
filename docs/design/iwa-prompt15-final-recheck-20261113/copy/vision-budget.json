@@ -1,0 +1,728 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+  "head": "e3901a0c4312f42c7a90996f47e18b4d96d4935d",
+  "checks": [
+    {
+      "check": "LLM_TIMEOUT_inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_nan_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_nan_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_nan_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_nan_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_0_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_0_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_0_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_0_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-1_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-1_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-1_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_-1_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_3601_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_3601_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_3601_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_3601_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_1e10_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_1e10_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_1e10_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_1e10_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_0.5_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_240_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_3600_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "LLM_TIMEOUT_nonnumeric_legacy_default",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_nan_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_nan_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_nan_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_nan_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_0_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_0_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_0_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_0_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-1_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-1_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-1_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_-1_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_3601_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_3601_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_3601_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_3601_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_1e10_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_1e10_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_1e10_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_1e10_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_0.5_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_240_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_3600_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "EVALUATE_THINKING_TIMEOUT_nonnumeric_legacy_default",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-inf_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-inf_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-inf_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-inf_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_nan_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_nan_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_nan_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_nan_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_0_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_0_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_0_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_0_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-1_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-1_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-1_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_-1_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_3601_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_3601_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_3601_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_3601_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_1e10_check_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_1e10_serve_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_1e10_realcheck_preflight",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_1e10_no_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_0.5_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_240_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_3600_accepted",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "VISION_TIMEOUT_nonnumeric_legacy_default",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first_limit1_one_image_no_text",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first_exact_id",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first_counts_in_shared4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "remaining3_only",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "merge_exact4_ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "same_image_four_essay_ids_each_once",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eight_evaluations_all_ready",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "worst_case16_text_zero_vision",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "all8_inputs_frozen",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "total16plus4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "zero_transport_retries",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "pro_high32000_420_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "full_ledger_blocks_fifth_image",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "full_ledger_blocks_seventeenth_text",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "images_only_plus_frozen_rejected_without_call",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "whole4_restart_duplicates_first_and_misses_last",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_one_image_consumed_no_retry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_failure_exported",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_ready_gate_no_call_or_ledger_write",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_frozen_failure_applied_to_both",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_frozen_failure_repeat_zero_calls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_one_image_consumed_no_retry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_failure_exported",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_ready_gate_no_call_or_ledger_write",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_frozen_failure_applied_to_both",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_frozen_failure_repeat_zero_calls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_one_image_consumed_no_retry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_failure_exported",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_ready_gate_no_call_or_ledger_write",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_frozen_failure_applied_to_both",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_frozen_failure_repeat_zero_calls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_one_image_consumed_no_retry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_failure_exported",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_ready_gate_no_call_or_ledger_write",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_frozen_failure_applied_to_both",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_frozen_failure_repeat_zero_calls",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "copied_cli_export_preserves_confirmation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "copied_cli_payload_counts_exclusion_without_source",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_copied_cli_134_before_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_copied_cli_135_before_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_copied_cli_136_before_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_copied_cli_137_before_ledger",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_attempts_zero",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "passed": 139,
+  "total": 139,
+  "real_calls": 0,
+  "network_attempts": 0,
+  "observations": {
+    "synthetic_worst_case": {
+      "text_reserved": 16,
+      "vision_reserved": 4,
+      "evaluations": 8,
+      "distinct_essays": 4,
+      "image_commands": [
+        1,
+        3
+      ],
+      "text_retries": 8
+    },
+    "synthetic_copied_words": {
+      "all": 14,
+      "confirmed": 6
+    }
+  },
+  "limitations": [
+    "Synthetic data only; no real chart reading or model quality claim.",
+    "Ledger caps are caller-supplied, not immutable ledger headers; operator must retain 16/4.",
+    "Ledger does not deduplicate sample ids or provide resume; use explicit remaining-file split.",
+    "Image outcomes map ids only; bind original input/image hashes externally before paid execution."
+  ]
+}

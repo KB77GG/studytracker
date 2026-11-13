@@ -1,0 +1,330 @@
+{
+  "checked_at": "2026-11-13T14:20:37.997017+00:00",
+  "scope": "Only two local prompt15 review folders and their pre-existing delivery ZIP membership; no private source, config, key, database or service read.",
+  "source_head": "e3901a0c4312f42c7a90996f47e18b4d96d4935d",
+  "whitelist_count": 46,
+  "whitelist": [
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/README.md",
+      "bytes": 7047,
+      "sha256": "91afd77766ab30ce4aa987ebbc1633a9c4d3f487134b56bd9c62a97329cc4233"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/README.md",
+      "bytes": 7151,
+      "sha256": "28ac89d844d806e43851323ee0d1a18caa7e4aa8e26c048c3a14640cc19ac02f"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/confirmed-adapted.json",
+      "bytes": 7238,
+      "sha256": "d25c6e9a73a43e3561627a142fef6bbd0bc68beedb1e34b6bfef3a17c35e98c3"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/paragraph-original.json",
+      "bytes": 9461,
+      "sha256": "edee2d1323e771da82d3298eed2e572a1a8610a9503ca4d8a10974d5735eb4b1"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/token-migration.json",
+      "bytes": 2665,
+      "sha256": "18f2abb3a2c462ba945ccecbe0e57592ae31f0c98bbb0fd2217e226e123c07ea"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/token_migration_probe.py",
+      "bytes": 11392,
+      "sha256": "b49fadd97afde674154e1f3b148e61b87dddf74966db3ddf31c460b0264332a7"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/copy/upgrade-static.json",
+      "bytes": 1628,
+      "sha256": "62aa15df3c1d6c52a637ab2747cafdcf9995c06687c5285b5e48962e044335b5"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/final-validation.json",
+      "bytes": 625,
+      "sha256": "78012abef669a98003062c735dfa59def358aff186a88a2ab9891f8a7cd07690"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/followup/README.md",
+      "bytes": 3428,
+      "sha256": "805c9f1c00bdac48a40ad1b01c9c9265ba570f8fc8345e549b2139a5852a0541"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/followup/mixed-queue-evidence.json",
+      "bytes": 3140,
+      "sha256": "7753984a6f4355abf74fd29f7d05dc62a480f9173e04a73f917437d88e8cc045"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/followup/source-state-after.json",
+      "bytes": 2354,
+      "sha256": "99dc358bb01e3fa2e9043cd992f53714750d3e9347577dcac2f7edf2ba4ba9a6"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/followup/source-state-before.json",
+      "bytes": 2660,
+      "sha256": "db29b57d572f17e3fc2def1683755a6052e787a8946cc8c77755e1b771645a84"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/initial-state.json",
+      "bytes": 12784,
+      "sha256": "98a52f916dd8b1edaea07103ae3c7d502e31c74c5abd9319eb6d0ac9929ce0f7"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/offline-tests.json",
+      "bytes": 950,
+      "sha256": "afbacadc3653dd5779e13d3fd8126240b354299cb8c38bccbe5f76ec17633a80"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/realcheck/README.md",
+      "bytes": 4129,
+      "sha256": "253ee0cbee7f559cc0b62f6efb19a6dfd5a3981870b54e0ce95d5bf36d121597"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/realcheck/adjacent-evidence.json",
+      "bytes": 1673,
+      "sha256": "aeda80d4c638cc41551a59de0ec7ce0b837284c89dd5c404244279d0730e980f"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/realcheck/adjacent_probe.py",
+      "bytes": 6730,
+      "sha256": "cee156e644dd3b02d07c242999faeffcf8c359cdda43c716b147a0818f9ef3e2"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/realcheck/evidence.json",
+      "bytes": 4357,
+      "sha256": "4190feb6faf620fd925a16905a0e9350a1629d739e96949f767bcdecf6991dba"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/realcheck/source-state.json",
+      "bytes": 981,
+      "sha256": "79e79caed40845e118fbb973a2233da93f34ef64bd6fb650f46e96912a2cd265"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/run_offline_tests.py",
+      "bytes": 3489,
+      "sha256": "fb71f15b0c51035e6d6e23ae1936c04ef56c1b39715b3461fc64a147177e17f1"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/vision-budget.json",
+      "bytes": 16234,
+      "sha256": "25b19abd865cd7f31c5bec49283d378a1a6987ba16c9eee770aaf3b33001e434"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/web/README.md",
+      "bytes": 4924,
+      "sha256": "1ce8c4f5bce044bd6522f1209f44c3394465fd80bc41515dad468939c03048d2"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/web/author-adapted-evidence.json",
+      "bytes": 4371,
+      "sha256": "82bf3819272d4833e01db8fe4cf905e196b05e59e67c5bc08c151a7fc2f2bd03"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/web/mixed-queue-evidence.json",
+      "bytes": 3140,
+      "sha256": "7753984a6f4355abf74fd29f7d05dc62a480f9173e04a73f917437d88e8cc045"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/web/mixed_queue_probe.py",
+      "bytes": 9662,
+      "sha256": "86828c9a5311e3b5b2a4ab1de1e8645743ba6afbd011a0878f260a8ba14156df"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/web/source-hashes.json",
+      "bytes": 912,
+      "sha256": "9c6d403c8970339fd315624ddec80693dda4ed9266525fcdc2dae2fe0da79808"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/README.md",
+      "bytes": 7499,
+      "sha256": "34c7ed1ddcdd008439ad67a1b3466ca0438dc9cfa8985ab891cf2c6e7ad8a32d"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/copy/README.md",
+      "bytes": 5894,
+      "sha256": "fdc4d521642c311e10c90a5fa484d34a41078889d043a4dcb0582d80eb8d9b09"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/copy/confirmed-adapted.json",
+      "bytes": 7237,
+      "sha256": "ce5a1820c4f64645fa6df8d93274bf38a94af06fd7a5bf95bb8b8b885d506a99"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/copy/paragraph-original.json",
+      "bytes": 9460,
+      "sha256": "1a870cfc52f94cefaca5e37f8ad0cf2b3030200d14496862b42dd843b8a30648"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/copy/token-migration.json",
+      "bytes": 2664,
+      "sha256": "b5f0fcb99f0ee649913dfe1aad093adf8846f5f475c6adbc4b5eaa05db9666ef"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/copy/token_migration_probe.py",
+      "bytes": 11392,
+      "sha256": "b49fadd97afde674154e1f3b148e61b87dddf74966db3ddf31c460b0264332a7"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/final-validation.json",
+      "bytes": 420,
+      "sha256": "a618784e65d5b26518c8ad350e9139873449e110c74069ad2df1ee601c841362"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/hostile-env-offline-tests.json",
+      "bytes": 946,
+      "sha256": "74508599e3114f0f3c34e8d017225eba08151b9b6288daba05af4808ae916a5b"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/initial-state.json",
+      "bytes": 13123,
+      "sha256": "dfc81d81078407ac718d10d9c3e9f964d865c455f2347261da5953c6e7991694"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/offline-tests.json",
+      "bytes": 946,
+      "sha256": "6155f304ebba894f0f985c91bcf2684f18814f45287c630cfa415be0afcd207f"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/realcheck/README.md",
+      "bytes": 6223,
+      "sha256": "ea291eccc0725c4b5d6f7207cd1024626902418bf5a21d182d49689370739510"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/realcheck/evidence.json",
+      "bytes": 4850,
+      "sha256": "c05624e91f6d2c40c585052189a17737d838b61b8ba21cf1070f00e654f51d9e"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/realcheck/probe.py",
+      "bytes": 11037,
+      "sha256": "f8ddd9f57ee3d8864b0b322768a4ad767f114bdd4797a05b9d080ae5f3e5e948"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/realcheck/source-state.json",
+      "bytes": 874,
+      "sha256": "6fd3361e9be96c00fae6668258ecbf53d2ecf4b151f79b795d7608663d7d507d"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/run_offline_tests.py",
+      "bytes": 3479,
+      "sha256": "b3d56e15eece33877cd1f1fbf9ba540faff7bc5ff886be474718944c3a48618e"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/vision-budget.json",
+      "bytes": 16233,
+      "sha256": "77f93ec815941742b45effee98f431f7f566cfe54aa3484ff9b9727465214190"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/web/README.md",
+      "bytes": 4162,
+      "sha256": "07d544bf92b0980acf50abb5568d0f1745246f5f9a7de325316e7a284ca1d2a8"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/web/source-hashes.json",
+      "bytes": 746,
+      "sha256": "a3101150ab995864de36dfa7f77125e3f11cea18acccf65e9075274d7f5c6dbf"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/web/web-gate-evidence.json",
+      "bytes": 4968,
+      "sha256": "41a15a3f95eff48facb3c0ebdf1059c7a452ee4a937c2385ed75dda48dd3e119"
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/web/web_gate_probe.py",
+      "bytes": 15326,
+      "sha256": "ffb4fa1de03cb29dfc65524f4709da68b322bd8c66d71becf32c669b9ee331f3"
+    }
+  ],
+  "excluded": [
+    {
+      "path": "docs/design/iwa-prompt15-recheck-20261113/offline-tests.log",
+      "reason": "Full test log; omitted from original reviewed delivery archive and unnecessary for shared numeric evidence."
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/hostile-env-offline-tests.log",
+      "reason": "Full test log; omitted from original reviewed delivery archive and unnecessary for shared numeric evidence."
+    },
+    {
+      "path": "docs/design/iwa-prompt15-review-20261113/offline-tests.log",
+      "reason": "Full test log; omitted from original reviewed delivery archive and unnecessary for shared numeric evidence."
+    }
+  ],
+  "prior_delivery_archives": [
+    {
+      "archive": ".tmp/iwa-prompt15-review-delivery-20261113/iwa-prompt15-review-20261113.zip",
+      "members": 20,
+      "sha256": "e28c758bb030e6a19f877b98dd3ccde6a6fe24b4a3a3a2f1d696909f6afca74c"
+    },
+    {
+      "archive": ".tmp/iwa-prompt15-recheck-delivery-20261113/iwa-prompt15-recheck-20261113.zip",
+      "members": 22,
+      "sha256": "aaa47331fc80f562fffec10781276428df221e1011c3525cb4e6fcfea056efdf"
+    }
+  ],
+  "checks": {
+    "all_whitelisted_files_are_utf8_text": true,
+    "all_whitelisted_extensions_md_json_py": true,
+    "all_whitelisted_regular_files_no_symlinks": true,
+    "all_json_parsed": 29,
+    "credential_shape_matches": {
+      "key_shapes": [],
+      "literal_secrets": []
+    },
+    "private_json_content_fields_found": false,
+    "json_response_text_fields_are_only_64_character_hashes": true,
+    "long_json_strings_are_git_status_only": true,
+    "probe_input_literals_are_synthetic_or_import_test_fixtures": true
+  },
+  "review_notes": [
+    "Reports contain source paths, commit hashes, diagnostics, synthetic figures and aggregate official-sample counts/scores/hashes; no student identity, essay body, full model response or reasoning was observed.",
+    "No comparison against private originals was performed in this subtask; those files were deliberately not read. Pattern scans are supporting checks, not a universal secret detector.",
+    "Old .14/.15 status and failures are historical evidence. New final-recheck report must supersede their old current-state wording; do not silently rewrite their recorded results.",
+    "The three excluded .log files were not audited for publication and should remain local. ZIP archives and .tmp are not part of the commit whitelist."
+  ],
+  "portability": [
+    {
+      "files": [
+        "docs/design/iwa-prompt15-review-20261113/realcheck/probe.py",
+        "docs/design/iwa-prompt15-recheck-20261113/realcheck/adjacent_probe.py"
+      ],
+      "status": "Portable --source and --out; use an environment with project dependencies. Temporary synthetic data and blocked socket connections."
+    },
+    {
+      "files": [
+        "docs/design/iwa-prompt15-recheck-20261113/web/mixed_queue_probe.py"
+      ],
+      "status": "Portable --repo, --old-repo, --seed-probe and --out. Old checkout must be cd82fc1b; use current feature-branch verify/web_gate_probe_adapted.py as seed probe."
+    },
+    {
+      "files": [
+        "docs/design/iwa-prompt15-review-20261113/web/web_gate_probe.py"
+      ],
+      "status": "Historical first-review probe; reads a check after old completion was accepted. Fixed versions reject it with409, so this frozen probe can raise on that case. Current validation uses repository verify/web_gate_probe_adapted.py; preserve historical file unchanged."
+    },
+    {
+      "files": [
+        "docs/design/iwa-prompt15-review-20261113/copy/token_migration_probe.py",
+        "docs/design/iwa-prompt15-recheck-20261113/copy/token_migration_probe.py"
+      ],
+      "status": "Portable --repo and --output; repository must retain cd82fc1b history for git show of old schema."
+    },
+    {
+      "files": [
+        "docs/design/iwa-prompt15-review-20261113/run_offline_tests.py",
+        "docs/design/iwa-prompt15-recheck-20261113/run_offline_tests.py"
+      ],
+      "status": "Historical Mac wrappers hard-code REPO at line11. Can be shared as execution provenance; not a portable launcher without changing a local scratch copy. Core probes do not have this limitation."
+    },
+    {
+      "files": [
+        "docs/design/iwa-prompt15-review-20261113/copy/README.md",
+        "docs/design/iwa-prompt15-recheck-20261113/copy/README.md"
+      ],
+      "status": "Official sample checks require local private files and are not reproducible from shared report alone; their aggregate evidence is shareable."
+    }
+  ],
+  "product_modified": false,
+  "real_calls": 0,
+  "private_files_read": 0,
+  "committed_or_pushed_by_this_subtask": false
+}

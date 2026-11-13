@@ -1,0 +1,35 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+  "python": "3.13.3",
+  "source_head": "652450ca03efaa3ae794202368a2f42a88fca18a",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+      "returncode": 0,
+      "elapsed_seconds": 33.86
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-prompt15-review-20261113",
+      "returncode": 0,
+      "elapsed_seconds": 0.14
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-prompt15-review-20261113...origin/claude/ielts-writing-ai-trial\n"
+}
