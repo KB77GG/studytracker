@@ -1,0 +1,59 @@
+{
+  "sample_count": 5,
+  "task1_count": 4,
+  "task2_count": 1,
+  "unique_images": 3,
+  "samples": [
+    {
+      "id": "official-1A-A",
+      "band": 5.0,
+      "page": 9,
+      "paragraphs": 4,
+      "words_split": 132,
+      "uncertain_count": 0,
+      "essay_sha256": "5f8284c36da0d8840153837e0b6822d6d70bf7eb680d7d52f2a5099e6839353e"
+    },
+    {
+      "id": "official-1A-B",
+      "band": 6.0,
+      "page": 10,
+      "paragraphs": 6,
+      "words_split": 165,
+      "uncertain_count": 0,
+      "essay_sha256": "c9cdc3074fbeab698be431bab82ddde4710043e8e7a59ed9e5edb3a96c326a9a"
+    },
+    {
+      "id": "official-1B-A",
+      "band": 6.0,
+      "page": 11,
+      "paragraphs": 3,
+      "words_split": 181,
+      "uncertain_count": 0,
+      "essay_sha256": "12eaccc76c571ed5a0dbad059183216dd02139581406f8717df8c543e999b3a7"
+    },
+    {
+      "id": "official-1C-A",
+      "band": 5.0,
+      "page": 13,
+      "paragraphs": 4,
+      "words_split": 157,
+      "uncertain_count": 1,
+      "essay_sha256": "574114085e5e0ba77eb49d86439a96965047a98fd3db1f312b1b6548109afed8"
+    },
+    {
+      "id": "official-2B-A",
+      "band": 5.5,
+      "page": 23,
+      "paragraphs": 9,
+      "words_split": 228,
+      "uncertain_count": 1,
+      "essay_sha256": "9c65bd4f2ba9563a0662be38b378b2f628693f2fe7863cba30b80ba4c1caa07d"
+    }
+  ],
+  "user_text_preserved_except_two_uncertainty_markers_and_paragraph_whitespace": true,
+  "task2_fake_statuses": [
+    "ready",
+    "ready"
+  ],
+  "paid_requests": 0
+}

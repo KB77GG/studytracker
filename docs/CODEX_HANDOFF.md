@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13 官方低分样卷5篇已准备，A独立4次账本（0真实调用）
+
+- **范围/基线**：用户贴出5篇完整转录，按其原文录入本机，不要求重新誊录。主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2，原7modified/23untracked入口保留；独立树`/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111`从clean35e2ae01快进5134fdc3（四个docs文件），产品91文件未改。旧IWA树及运行试用账号/配置/数据库未操作。
+- **私有数据已落地**：`~/iwa-calibration/official_lowband_transcript.txt`、`official_lowband_template.jsonl`、`official_lowband_t1.jsonl`（4篇）、`official_lowband_t2.jsonl`（1篇），`img/official-1A.png/1B.png/1C.png`，来源metadata和manifest均仅本机0600。用户正文仅去两处[词?]外标记（保留存疑notes），错误词/数字/标点原样；空白分词132/165/181/157/228、段数4/6/3/4/9。旧official_template只修2B两行旅游题，原文备份official_template.before-tourism-fix-20261113.jsonl，旧3行不变。
+- **来源核验**：新ZIP不在本机，未取得/声称使用9fdb…包。按同一本已下载IELTS官方26页PDF（SHA f9b5b43f…b1c7af）重建题干与原始XObject题图，父/子均视检3图完整；1A共用图。题干/图页3/4/5/7，正文9/10/11/13/23，分数页最后一篇在24。确认5/6/6/5/5.5；2B旅游题，不是p6家境题。未重新逐字辨认手写稿，只核对用户转录到JSON的完整性。官方说2B开头抄题不计分；原稿保留，后续不能把空白分词总数当官方认可词数。
+- **执行说明修正**：第二版A `--max-calls4/ledger-text-cap20`重启两轮能4+4=8，超过拟授权4。新第三版A独立ledger-t2.jsonl持久4文字/0图；B获授权后独立ledger-t1.jsonl16文字/4图，不挪用A或历史批次余额。只是修docs命令，不改产品账本/提示词/评分。尚未创建真实运行账本或发模型请求。
+- **验证**：新版fill_transcripts在临时目录填后load_samples通过，正式私有目录安装前拒不同内容覆盖；主树`.venv/bin/python -B tmp/iwa-official-prep-20261113/verify_data.py` →5篇逐段/类型/总分/图片匹配、Task2×2 fake均ready，全网络禁用/不读Key。`.venv/bin/python -B docs/design/iwa-official-lowband-prep-20261113/preflight_probe.py` →解析5项、原cap20累计8、cap4重跑0新增、visioncap切换通过。Ruff/Black探针、diff检查通过；未重复453全套（产品未变）。家目录9文件SHA复核一致；公开5文件无私有正文连续8词，原文/图不进Git。
+- **发布/交接**：新增脱敏复核目录`docs/design/iwa-official-lowband-prep-20261113/`、official-run.md第三版和两交接按既有功能分支同步约定提交推送；提交/远端回读以实际git和主树最终确认条为准。私有原稿/图片/模板/输出、ignored临时安装与验证脚本不提交。main未合并/生产未访问或部署/数据库未写，小程序未上传/提审/发布。
+- **下步**：A Task2已就绪，仍须新的最多4次明确授权，Pro/high/32000/420、仅评价×2、新独立4次账本；本机私有.env在主树.tmp/ielts-writing-ai-trial，Python用主树.venv，不能误用源码树不存在的默认.env。B还未配识图，等单独16文字+4识图授权；老师10条抽查也未填写。本轮真实调用0，不续旧102/184或旧20额度。
+
 ## 2026-11-13 雅思写作 AI 试用工具：官方低分段样卷 5 篇的数据与执行说明（已推功能分支；未调用真实模型，没有新的付费授权）
 
 - **输入**：试用已在 Mac 配好并建好“测试老师”账号（见下一节 Codex 的记录）。用户亲自转录了官方 PDF 里官方分 5.0–6.0 的全部 5 篇手写答卷，发给 Claude：Task 1A Script A（5.0）、1A Script B（6.0）、1B Script A（6.0）、1C Script A（5.0）、2B Script A（5.5）。

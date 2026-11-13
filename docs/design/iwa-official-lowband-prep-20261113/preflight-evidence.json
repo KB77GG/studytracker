@@ -1,0 +1,33 @@
+{
+  "parser": {
+    "five_ids_match": true,
+    "chinese_notes_skipped": true,
+    "uncertain_words_only_changed": true,
+    "grammar_typography_kept": true,
+    "duplicate_heading_rejected": true
+  },
+  "paid_calls": 0,
+  "documented_a_command": {
+    "process_cap": 4,
+    "ledger_cap": 20,
+    "per_run_calls": [
+      4,
+      4
+    ],
+    "cumulative_calls": 8,
+    "exceeds_authorized_4": true
+  },
+  "bounded_a": {
+    "ledger_cap": 4,
+    "before_retry": 4,
+    "after_retry": 4,
+    "new_calls": 0
+  },
+  "vision_cap_0_4_0": {
+    "works": true,
+    "counts": {
+      "vision": 1,
+      "text": 1
+    }
+  }
+}

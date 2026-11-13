@@ -1,0 +1,94 @@
+{
+  "source_head": "5134fdc3fc12a62bbf9d5f6cfebba2f1ffff5e9a",
+  "pdf_sha256": "f9b5b43fbb3f070741f970ecf2adbfaaef8b2f520eb5e2d350bae39557b1c7af",
+  "pdf_pages": 26,
+  "zip_available": false,
+  "method": "user supplied transcript + reconstructed templates and native images from same local official PDF",
+  "transcription_handwriting_independently_verified": false,
+  "samples": [
+    {
+      "mapping_key": "1A-A",
+      "task_type": "task1",
+      "band": 5,
+      "question_page": 3,
+      "essay_page": 9,
+      "band_comment_page": 9
+    },
+    {
+      "mapping_key": "1A-B",
+      "task_type": "task1",
+      "band": 6,
+      "question_page": 3,
+      "essay_page": 10,
+      "band_comment_page": 10
+    },
+    {
+      "mapping_key": "1B-A",
+      "task_type": "task1",
+      "band": 6,
+      "question_page": 4,
+      "essay_page": 11,
+      "band_comment_page": 11
+    },
+    {
+      "mapping_key": "1C-A",
+      "task_type": "task1",
+      "band": 5,
+      "question_page": 5,
+      "essay_page": 13,
+      "band_comment_page": 13
+    },
+    {
+      "mapping_key": "2B-A",
+      "task_type": "task2",
+      "band": 5.5,
+      "question_page": 7,
+      "essay_page": 23,
+      "band_comment_page": 24
+    }
+  ],
+  "images": [
+    {
+      "task": "1A",
+      "pdf_page": 3,
+      "size_px": [
+        425,
+        424
+      ],
+      "sha256": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+      "visually_checked": true
+    },
+    {
+      "task": "1B",
+      "pdf_page": 4,
+      "size_px": [
+        1011,
+        693
+      ],
+      "sha256": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+      "visually_checked": true
+    },
+    {
+      "task": "1C",
+      "pdf_page": 5,
+      "size_px": [
+        1096,
+        1000
+      ],
+      "sha256": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+      "visually_checked": true
+    }
+  ],
+  "installed_file_hashes": {
+    "official_lowband_transcript.txt": "2d45786d1afe7e41bd1f49cc7a03b7b4b393a1eb9afea4f3a28f0cbd7ca3cadc",
+    "official_lowband_template.jsonl": "5cdfd44dcb1a8aaf09c7ef24a37c5400d52c6fe5f6a5d205e5cc25b5792a553d",
+    "official_lowband_t1.jsonl": "75cb167f31137b5e743b70fa923191eb2d7d958466f8a4242a3bcf68413ebacb",
+    "official_lowband_t2.jsonl": "90302d1816aade54e2a413e6d3255e9d00d75508f8248cf93ad99eb4f14fc274",
+    "official-source-metadata.json": "73935bf326400fec7d56154e50f0920d20821233371486fdd827c788b3891897",
+    "img/official-1A.png": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+    "img/official-1B.png": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+    "img/official-1C.png": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+    "official_template.jsonl": "c5f502a938a8dd6ae9f9c33e4508e999e7525684955ab4676d004a801bcf9097"
+  },
+  "paid_calls": 0
+}

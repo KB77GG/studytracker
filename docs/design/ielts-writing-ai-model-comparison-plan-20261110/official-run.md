@@ -1,4 +1,4 @@
-# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-12，第二版）
+# 给 Codex：官方低分段样卷组（Pro 单模型）执行说明（2026-11-13，第三版）
 
 用户 2026-11-12 决定：试用的评价改用 `deepseek-v4-pro`；没有 5–6 分段的真实学生作文，**用官方样卷代替**。
 用户已亲自转录了 PDF 里官方给分 5.0–6.0 的全部 5 篇手写答卷（发在给 Claude 的消息里）：
@@ -43,15 +43,17 @@
 ## 2. A 部分：Task 2 一篇（用户确认 4 次之后）
 
 ```bash
-OUT=~/iwa-compare-official-20261112
+OUT=~/iwa-compare-official-lowband-20261113
 .venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
   --samples ~/iwa-calibration/official_lowband_t2.jsonl --kinds evaluate --repeat 2 \
-  --max-calls 4 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 0 \
+  --max-calls 4 --ledger $OUT/ledger-t2.jsonl --ledger-text-cap 4 --ledger-vision-cap 0 \
   --ledger-run official-t2 --max-failure-rate 0.5 --out $OUT/official-t2 --confirm-paid \
   --price-in <Pro 输入未命中缓存> --price-cached-in <Pro 输入命中缓存> --price-out <Pro 输出>
 ```
 
-开头一行应为“模型：deepseek / deepseek-flash，评价用 deepseek-v4-pro”“最多 4 次调用”。账本的文字上限写 20，是 A、B 两部分共用的总上限。
+开头一行应为“模型：deepseek / deepseek-flash，评价用 deepseek-v4-pro”“最多 4 次调用”。
+**A 使用独立持久账本，文字总上限必须是 4，识图上限为 0。** `--max-calls 4` 只限制当前进程，不能替代账本的累计上限；不可预先给尚未授权的 B 留出 20 次额度。
+中断或失败后仍沿用此账本，不换目录、换账本或提高上限来重试；已发出而结果不明的请求也计入这 4 次。
 
 ## 3. B 部分：Task 1 四篇（识图配好、用户确认后）
 
@@ -60,7 +62,7 @@ OUT=~/iwa-compare-official-20261112
 ```bash
 .venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
   --samples ~/iwa-calibration/official_lowband_t1.jsonl --images-only --with-vision \
-  --max-calls 4 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 4 \
+  --max-calls 4 --ledger $OUT/ledger-t1.jsonl --ledger-text-cap 16 --ledger-vision-cap 4 \
   --ledger-run official-t1-images --out $OUT/official-t1-images --confirm-paid
 ```
 
@@ -70,12 +72,13 @@ OUT=~/iwa-compare-official-20261112
 .venv/bin/python -m tools.ielts_writing_ai --env-file tools/ielts_writing_ai/.env realcheck \
   --samples ~/iwa-calibration/official_lowband_t1.jsonl --kinds evaluate --repeat 2 \
   --image-descriptions $OUT/official-t1-images/image_descriptions.json --require-ready-images \
-  --max-calls 16 --ledger $OUT/ledger.jsonl --ledger-text-cap 20 --ledger-vision-cap 0 \
+  --max-calls 16 --ledger $OUT/ledger-t1.jsonl --ledger-text-cap 16 --ledger-vision-cap 4 \
   --ledger-run official-t1 --max-failure-rate 0.5 --out $OUT/official-t1 --confirm-paid \
   --price-in <…> --price-cached-in <…> --price-out <…>
 ```
 
-- 账本在每次请求发出前落盘；中断后重跑同一条命令，已发出的请求都算已用，总上限仍是 20 + 4（不要改大）。重跑前把没完成的结果目录改名保留。
+- B 仅在单独获得 16 次文字 + 4 次识图授权后使用 `ledger-t1.jsonl`；与 A 分账，不借用 A 的剩余额度。以上文字评价沿用冻结结果，不开启识图调用。
+- 账本在每次请求发出前落盘；中断后重跑同一条命令，已发出的请求都算已用。A 累计文字最多 4，B 累计文字最多 16、识图最多 4，均不可改大。重跑前把没完成的结果目录改名保留，**账本原位保留**。
 - 退出码：0 完成；2 参数 / 数据 / 账本有误；3 中止（首次调用就遇到 Key 或网络错误、达到账本上限）；4 最终失败超过一半；5 题图不可用。非 0 都停下来问用户。
 - 单价按 DeepSeek 官方当前价格和实际时段（第一阶段核对过：Pro 高峰 9 / 0.30 / 27，空闲半价）。
 
