@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13 `.13`复核：两项抄题P2阻止试用切换（0真实调用）
+
+- **工作树/基线**：主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2、原7modified/23untracked入口不动。本轮新建`/private/tmp/studytracker-iwa-prompt13-review-20261113`，分支`codex/iwa-prompt13-review-20261113`，基线/远端`fdf4704ee3ec1aa80aad5e5e9d59f04a6edbc380`（业务ac95392d）；92产品文件逐个与提交一致，未改产品。原运行树`/private/tmp/studytracker-iwa-holdout-review-20261111`保持clean9c60a347、产品`.12`，其他worktree未操作。
+- **通过**：460Python（本机3.13.3）+8Node，Ruff/Black66/JS/diff通过；首次沙箱24回环权限错误不算产品失败，获准同离线runner后全通过，fake/非回环禁用/临时数据哨兵未写。9段真实旧回答回放完整、分数5.5/5.0不改、returned=kept15；20段/重复/坏段位、UI真实render函数DOM替身及copy事件、旧字段兼容通过。7开发+23本机留出/teacher的完整messages与.12全等且无copied；5源文件SHA未变。没有重跑多locale/3.10/全部历史探针/真实浏览器。
+- **P2-1误判**：85%相似整句扣除新增观点/趋势/否定。合成Task1正常152词，含新增上升趋势的14词概述被整句标抄题，payload变138，明确不计内容/语言并警告不足150；相反下降、Task2加not反对观点同样命中。仅复现请求/提示错误，不声称真实分数变化。
+- **P2-2漏判**：本轮要修的官方实样，确认抄题34词/自写194，新规则实际18/210；漏16词句token17/match14=82.35%，两次回放均失败。不能降阈值修漏检而扩大误判。建议相似度仅待确认提示，已确认抄题用明确区间，保留原稿和新增语义；不自动整句扣数/禁止计分。
+- **识图默认通过/P3**：Flash disabled/2000/180及3000/240覆盖，Pro/high/32000/420分流不受影响；8失败类型各1次，账本重跑0新增，24检查通过，网络在opener替身层拦截。非法vision_timeout=inf会未捕获OverflowError终止；0回退120、-1/nan错归invalid_response，建议有限正值配置校验。默认合法路径未发现问题，没有真实超额或识图结果。
+- **证据/精确命令**：`docs/design/iwa-prompt13-review-20261113/README.md`列完整命令；主树`.venv/bin/python -B .../run_offline_tests.py`→460+8；`copy_probe.py --source /private/tmp/studytracker-iwa-prompt13-review-20261113 --out .../copy-evidence.json`→17/17复现且1P2；`vision_probe.py`同参数→24/24；`paragraph_probe.py --repo <新树> --private-run /Users/zhouxin/iwa-compare-official-lowband-20261113/official-t2/run_data.json --samples-dir /Users/zhouxin/iwa-calibration --output .../paragraph_probe.json`→58/60、exit1（两失败都是实样抄题18/210）；主审均复跑，原始回答/学生材料不提交。
+- **运行/权限**：未更新试用源或重启服务，未改私有.env/Key/账号/额度。沙箱外control.py status确认PID68530、5055 health正常；沙箱内因ps不可读的“不可信PID”不可当停止证据。评价仍Pro/.12/high/32000/420，精修改写Flash，vision none。0真实调用；旧Task2批2/4已结束，Task1/识图新预算未授权不运行。
+- **同步/交接**：仅本复核目录和两交接按既有授权提交推功能分支，最终提交/远端回读见Git及主树同步确认条；本机private/ignored与旧main脏改不提交。未合并main、访问生产/写生产库/部署，小程序未上传提审发布。下一步Claude保留段落/识图已通过改动，处理两项抄题P2和非法配置P3后复核，再决定本机更新及单图授权试跑。
+
 ## 2026-11-13（下午）雅思写作 AI 试用工具：官方 Task 2 实测后的三处修复——段落不截断、照抄题目标注（提示词 .13）、DeepSeek 读图（已推功能分支；未调用真实模型）
 
 - **输入**：Codex 的官方 Task 2 实测（`docs/design/ielts-writing-ai-official-t2-pro-20261113-results/`，5.5 分样卷，Pro 2/4 次，总分 5.5 / 5.0，约 0.37 元）。交给 Claude 的三点：① 9 段作文第 9 段被程序截掉（`argument.py` 8 段上限）；② 228 词中 34 词是照抄题目，评价没有区分；③ 识图未配置，现有代码只能走通用接口、读图输出上限 700、超时沿用文字 120 秒，DeepSeek 默认开思考，可能读不出结果。另有几处过严 / 定性不准的反馈，属模型判断，本轮不改提示词规则。

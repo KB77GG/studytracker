@@ -1,0 +1,361 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt13-review-20261113",
+  "head": "fdf4704ee3ec1aa80aad5e5e9d59f04a6edbc380",
+  "scope": "synthetic opener stub; sockets never connect; no .env or real key read",
+  "paid_model_calls": 0,
+  "checks_passed": 24,
+  "checks_total": 24,
+  "checks": [
+    {
+      "check": "preset_flash_and_key_reuse",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "defaults_2000_180",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "request_flash_disabled_2000_180",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "vision_no_reasoning_effort_and_no_json_response_format",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "inline_image_user_message",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "successful_reading_frozen_across_repeats",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "export_records_new_vision_budget_timeout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "ledger_success_category_and_tokens",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "override_3000_240_reaches_transport",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "evaluate_pro_high_32000_420_unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "refine_rewrite_flash_off_base_timeout",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "timeout_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "http_503_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "network_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "truncated_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "truncated_usage_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "empty_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "empty_usage_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_response_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "unstructured_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_json_one_attempt_failed_image_budget_retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invalid_provider_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "nonnumeric_values_fallback",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "nonpositive_tokens_clamped",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "observations": {
+    "export_locations": {
+      "vision_max_tokens": "run_data.json.settings and raw_calls.jsonl.max_tokens",
+      "vision_timeout": "run_data.json.settings (not duplicated in raw calls/ledger)",
+      "ledger": "category/model/outcome/token counts; request limits are persistent"
+    },
+    "routing": {
+      "evaluate": {
+        "model": "deepseek-v4-pro",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "max_tokens": 32000,
+        "timeout": 420.0
+      },
+      "refine": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "disabled"
+        },
+        "reasoning_effort": null,
+        "max_tokens": 6000,
+        "timeout": 120.0
+      },
+      "rewrite": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "disabled"
+        },
+        "reasoning_effort": null,
+        "max_tokens": 2400,
+        "timeout": 120.0
+      }
+    },
+    "failures": {
+      "timeout": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "timeout",
+        "image_status": "failed",
+        "image_error": "timeout",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {}
+      },
+      "http_503": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "http_503",
+        "image_status": "failed",
+        "image_error": "http_503",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {}
+      },
+      "network": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "network",
+        "image_status": "failed",
+        "image_error": "network",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {}
+      },
+      "truncated": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "truncated",
+        "image_status": "failed",
+        "image_error": "truncated",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {
+          "prompt_tokens": 90,
+          "completion_tokens": 17
+        }
+      },
+      "empty": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "empty",
+        "image_status": "failed",
+        "image_error": "empty",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {
+          "prompt_tokens": 90,
+          "completion_tokens": 17
+        }
+      },
+      "invalid_response": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": "invalid_response",
+        "image_status": "failed",
+        "image_error": "invalid_response",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {}
+      },
+      "unstructured": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": null,
+        "image_status": "failed",
+        "image_error": "unstructured:识图模型没有返回结构化读图结果",
+        "ledger": {
+          "reserved": 1,
+          "ok": 1,
+          "failed": 0,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {
+          "prompt_tokens": 90,
+          "completion_tokens": 17
+        }
+      },
+      "invalid_json": {
+        "transport_attempts": 1,
+        "resume_added_attempts": 0,
+        "recorded_error": null,
+        "image_status": "failed",
+        "image_error": "insufficient:识图结果没有给出可读性判定",
+        "ledger": {
+          "reserved": 1,
+          "ok": 1,
+          "failed": 0,
+          "unknown": 0
+        },
+        "resume_abort": "ledger_cap",
+        "usage_preserved": {
+          "prompt_tokens": 90,
+          "completion_tokens": 17
+        }
+      }
+    },
+    "invalid_timeout_values": {
+      "0": {
+        "validate_accepted": true,
+        "configured": 0.0,
+        "transport_timeout": 120.0,
+        "ledger": {
+          "reserved": 1,
+          "ok": 1,
+          "failed": 0,
+          "unknown": 0
+        },
+        "exception": null,
+        "image_status": "ready",
+        "image_error": null
+      },
+      "-1": {
+        "validate_accepted": true,
+        "configured": -1.0,
+        "transport_timeout": -1.0,
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "exception": null,
+        "image_status": "failed",
+        "image_error": "invalid_response"
+      },
+      "nan": {
+        "validate_accepted": true,
+        "configured": "nan",
+        "transport_timeout": "nan",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "exception": null,
+        "image_status": "failed",
+        "image_error": "invalid_response"
+      },
+      "inf": {
+        "validate_accepted": true,
+        "configured": "inf",
+        "transport_timeout": "inf",
+        "ledger": {
+          "reserved": 1,
+          "ok": 0,
+          "failed": 1,
+          "unknown": 0
+        },
+        "exception": "OverflowError"
+      }
+    }
+  },
+  "official_docs_checked": [
+    "https://api-docs.deepseek.com/guides/vision/",
+    "https://api-docs.deepseek.com/guides/thinking_mode/",
+    "https://api-docs.deepseek.com/quick_start/pricing/"
+  ]
+}

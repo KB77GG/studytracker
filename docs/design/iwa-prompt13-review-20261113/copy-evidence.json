@@ -1,0 +1,326 @@
+{
+  "source": "/private/tmp/studytracker-iwa-prompt13-review-20261113",
+  "source_head": "fdf4704ee3ec1aa80aad5e5e9d59f04a6edbc380",
+  "prompt_version": "iwa-2026-11-13.13",
+  "data_origin": "All question/essay/chart strings are synthetic and authored for this probe.",
+  "real_model_calls": 0,
+  "private_files_read": 0,
+  "purpose": "Reproduce observed code behavior, including the incorrect blanket exclusion; passing checks mean reproducibility, not that product behavior is correct.",
+  "cases": [
+    {
+      "name": "exact_copy",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "Governments should spend more money on roads than on public transport.",
+      "words": 11,
+      "token_count": 11,
+      "matched_tokens": 11,
+      "matched_share": 1.0,
+      "longest_run": 11,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "Governments should spend more money on roads than on public transport.",
+          "words": 11
+        }
+      ],
+      "adds_new_propositional_content": false,
+      "tokens_not_in_question": []
+    },
+    {
+      "name": "one_typo_copy",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "Governments should spend more mony on roads than on public transport.",
+      "words": 11,
+      "token_count": 11,
+      "matched_tokens": 10,
+      "matched_share": 0.9090909090909091,
+      "longest_run": 6,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "Governments should spend more mony on roads than on public transport.",
+          "words": 11
+        }
+      ],
+      "adds_new_propositional_content": false,
+      "tokens_not_in_question": [
+        "mony"
+      ]
+    },
+    {
+      "name": "paraphrase",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "I favour better buses because they offer an affordable alternative to driving.",
+      "words": 12,
+      "token_count": 12,
+      "matched_tokens": 1,
+      "matched_share": 0.08333333333333333,
+      "longest_run": 1,
+      "detected": [],
+      "adds_new_propositional_content": false,
+      "tokens_not_in_question": [
+        "i",
+        "favour",
+        "better",
+        "buses",
+        "because",
+        "they",
+        "offer",
+        "an",
+        "affordable",
+        "alternative",
+        "driving"
+      ]
+    },
+    {
+      "name": "short_overlap",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "Governments should spend more money.",
+      "words": 5,
+      "token_count": 5,
+      "matched_tokens": 5,
+      "matched_share": 1.0,
+      "longest_run": 5,
+      "detected": [],
+      "adds_new_propositional_content": false,
+      "tokens_not_in_question": []
+    },
+    {
+      "name": "unrelated",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "My favourite meals are cooked at home.",
+      "words": 7,
+      "token_count": 7,
+      "matched_tokens": 0,
+      "matched_share": 0.0,
+      "longest_run": 0,
+      "detected": [],
+      "adds_new_propositional_content": false,
+      "tokens_not_in_question": [
+        "my",
+        "favourite",
+        "meals",
+        "are",
+        "cooked",
+        "at",
+        "home"
+      ]
+    },
+    {
+      "name": "opposing_position",
+      "question": "Governments should spend more money on roads than on public transport. To what extent do you agree or disagree?",
+      "essay": "Governments should not spend more money on roads than on public transport.",
+      "words": 12,
+      "token_count": 12,
+      "matched_tokens": 11,
+      "matched_share": 0.9166666666666666,
+      "longest_run": 9,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "Governments should not spend more money on roads than on public transport.",
+          "words": 12
+        }
+      ],
+      "adds_new_propositional_content": true,
+      "tokens_not_in_question": [
+        "not"
+      ]
+    },
+    {
+      "name": "task1_new_increase",
+      "question": "The chart below shows the percentage of people who travelled to work by car, bus and bicycle in Newtown in 2000 and 2020.",
+      "essay": "The percentage of people who travelled to work by car increased.",
+      "words": 11,
+      "token_count": 11,
+      "matched_tokens": 10,
+      "matched_share": 0.9090909090909091,
+      "longest_run": 10,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "The percentage of people who travelled to work by car increased.",
+          "words": 11
+        }
+      ],
+      "adds_new_propositional_content": true,
+      "tokens_not_in_question": [
+        "increased"
+      ]
+    },
+    {
+      "name": "task1_new_decrease",
+      "question": "The chart below shows the percentage of people who travelled to work by car, bus and bicycle in Newtown in 2000 and 2020.",
+      "essay": "The percentage of people who travelled to work by car decreased.",
+      "words": 11,
+      "token_count": 11,
+      "matched_tokens": 10,
+      "matched_share": 0.9090909090909091,
+      "longest_run": 10,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "The percentage of people who travelled to work by car decreased.",
+          "words": 11
+        }
+      ],
+      "adds_new_propositional_content": true,
+      "tokens_not_in_question": [
+        "decreased"
+      ]
+    },
+    {
+      "name": "task1_new_data_value",
+      "question": "The chart below shows the percentage of people who travelled to work by car, bus and bicycle in Newtown in 2000 and 2020.",
+      "essay": "The percentage of people who travelled to work by car reached 70% in 2020.",
+      "words": 14,
+      "token_count": 14,
+      "matched_tokens": 12,
+      "matched_share": 0.8571428571428571,
+      "longest_run": 10,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "The percentage of people who travelled to work by car reached 70% in 2020.",
+          "words": 14
+        }
+      ],
+      "adds_new_propositional_content": true,
+      "tokens_not_in_question": [
+        "reached",
+        "70"
+      ]
+    },
+    {
+      "name": "task1_new_overview",
+      "question": "The chart below shows the percentage of people who travelled to work by car, bus and bicycle in Newtown in 2000 and 2020.",
+      "essay": "Overall, the percentage of people who travelled to work by car in Newtown increased.",
+      "words": 14,
+      "token_count": 14,
+      "matched_tokens": 12,
+      "matched_share": 0.8571428571428571,
+      "longest_run": 10,
+      "detected": [
+        {
+          "p": 1,
+          "sentence": "Overall, the percentage of people who travelled to work by car in Newtown increased.",
+          "words": 14
+        }
+      ],
+      "adds_new_propositional_content": true,
+      "tokens_not_in_question": [
+        "overall",
+        "increased"
+      ]
+    }
+  ],
+  "full_task1": {
+    "submission": {
+      "task_type": "task1",
+      "prompt_text": "The chart below shows the percentage of people who travelled to work by car, bus and bicycle in Newtown in 2000 and 2020.",
+      "essay_text": "The two sets of figures compare three commuting methods over a twenty year period in Newtown.\nOverall, the percentage of people who travelled to work by car in Newtown increased.\nCars accounted for 40% of journeys initially, rising to 70% by the end of the period. This was the largest change among the three categories, and motoring remained the leading choice in both years. By contrast, the share for buses declined from 35% to 20%, placing this mode second throughout. Cycling also became less common, falling from 25% to just 10%.\nAt the beginning, the gap between cars and buses was only five percentage points. By the final year, it had widened to fifty points. Meanwhile, the combined share for the two smaller categories dropped from 60% to 30%. These comparisons indicate a clear shift towards private vehicles, alongside reduced use of both alternatives. The ranking of the categories nevertheless stayed unchanged.",
+      "word_count": 152,
+      "target_band": 7.0,
+      "image_status": "ready",
+      "image_description": "Synthetic bar chart: commuting modes in Newtown; percentages; 2000 and 2020. Cars: 40% then 70%; buses: 35% then 20%; bicycles: 25% then 10%. Cars were the largest category in both years and increased; buses and bicycles declined."
+    },
+    "payload_copied_from_question": [
+      {
+        "p": 2,
+        "sentence": "Overall, the percentage of people who travelled to work by car in Newtown increased."
+      }
+    ],
+    "payload_word_count_without_copied": 138,
+    "payload_copied_note": "A text comparison found that the sentences in copied_from_question repeat the question almost word for word. As in the test, words copied from the question do not count towards the word count and are not the candidate's own ideas or language: do not credit them for task response, development, vocabulary or grammar, and judge length by word_count_without_copied. You may say in the feedback that the question was copied.",
+    "normalized_copied_from_question": [
+      {
+        "p": 2,
+        "words": 14
+      }
+    ],
+    "normalized_copy_warnings": [
+      "第 2 段有 1 句与题目几乎逐字相同（共 14 词，程序按文字比对标出）。考试中照抄的题目文字不计入字数，也不算考生自己的内容和语言；去掉后约 138 词，低于 150 词要求。"
+    ]
+  },
+  "checks": [
+    {
+      "name": "exact_copy_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "one_typo_copy_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "paraphrase_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "short_overlap_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "unrelated_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "opposing_position_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "task1_new_increase_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "task1_new_decrease_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "task1_new_data_value_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "task1_new_overview_observed_behavior",
+      "passed": true
+    },
+    {
+      "name": "full_t1_is_152_words",
+      "passed": true
+    },
+    {
+      "name": "full_t1_overview_is_the_only_flagged_sentence",
+      "passed": true
+    },
+    {
+      "name": "full_t1_payload_removes_all_14_overview_words",
+      "passed": true
+    },
+    {
+      "name": "payload_forbids_credit_for_new_content",
+      "passed": true
+    },
+    {
+      "name": "normalizer_repeats_14_word_exclusion",
+      "passed": true
+    },
+    {
+      "name": "normalizer_claims_underlength_after_excluding_new_overview",
+      "passed": true
+    },
+    {
+      "name": "original_essay_preserved",
+      "passed": true
+    }
+  ],
+  "checks_passed": 17,
+  "checks_total": 17,
+  "confirmed_findings": [
+    {
+      "severity": "P2",
+      "title": "Shared task vocabulary makes new stance/trend/data content lose all credit",
+      "mechanism": "The 85% token heuristic marks entire sentences. Both the prompt and normalizer treat every word and idea in those sentences as copied, even the new predicate, negation or data value absent from the question.",
+      "demonstrated_effect": "A synthetic 152-word Task 1 report loses its correct 14-word overview, sends 138 to the model as effective length, instructs the model to withhold credit, and displays an underlength warning.",
+      "not_demonstrated": "No real model was called, so the magnitude of any score change is unmeasured. Demo scores are not evidence."
+    }
+  ]
+}
