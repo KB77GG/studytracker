@@ -57,6 +57,16 @@ OUT=~/iwa-compare-official-lowband-20261113
 
 ## 3. B 部分：Task 1 四篇（识图配好、用户确认后）
 
+识图配置（2026-11-13 起支持 DeepSeek 读图，Flash 读图、Pro 评价，同一个 Key）：在 `tools/ielts_writing_ai/.env` 加
+
+```bash
+IWA_VISION_PROVIDER=deepseek
+# 可选：IWA_VISION_MAX_TOKENS=2000、IWA_VISION_TIMEOUT=180（默认值）
+```
+
+`check` 应显示 `"vision_provider": "deepseek"`、`"vision_model": "deepseek-flash"`、`"vision_api_key_set": true`。读图请求会明确关闭思考。
+**建议先只跑一张图做连通和人工读数核对**（例如把 `--samples` 换成只含 `official-1B-A` 一行的文件，`--max-calls 1 --ledger-vision-cap 1`），读数对了再跑四张；这一次也计入 4 次识图上限。
+
 先只识图（每篇一次，结果含失败一并冻结）：
 
 ```bash

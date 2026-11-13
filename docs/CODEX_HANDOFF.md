@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-13（下午）雅思写作 AI 试用工具：官方 Task 2 实测后的三处修复——段落不截断、照抄题目标注（提示词 .13）、DeepSeek 读图（已推功能分支；未调用真实模型）
+
+- **输入**：Codex 的官方 Task 2 实测（`docs/design/ielts-writing-ai-official-t2-pro-20261113-results/`，5.5 分样卷，Pro 2/4 次，总分 5.5 / 5.0，约 0.37 元）。交给 Claude 的三点：① 9 段作文第 9 段被程序截掉（`argument.py` 8 段上限）；② 228 词中 34 词是照抄题目，评价没有区分；③ 识图未配置，现有代码只能走通用接口、读图输出上限 700、超时沿用文字 120 秒，DeepSeek 默认开思考，可能读不出结果。另有几处过严 / 定性不准的反馈，属模型判断，本轮不改提示词规则。
+- **业务提交 `ac95392`**：
+  - `argument.py`：去掉 8 段上限（每段本来最多一条）；`over_limit` 只计问题和可选优化。
+  - `essay.copied_from_prompt()`：逐句与题目比对，一句至少 6 词、85% 以上按顺序与题目一致、有连续 5 词相同，才算“与题目几乎逐字相同”（容许个别拼写差异；只借用几个词不算）。`review.normalize_evaluation` 加提示（句数、词数、去掉后字数，低于要求时说明），结果新增 `copied_from_question`；`prompts.build_evaluate` 仅在找到时附 `copied_from_question`、`word_count_without_copied`、`copied_note`，系统提示不变。**提示词版本 `iwa-2026-11-13.13`**；内置 7 篇和全部留出集作文都没有被判为抄题，它们发给模型的内容与 `.12` 相同。原文不删不改。
+  - 读图：`VISION_PRESETS["deepseek"]`（`deepseek-flash`，官方地址，Key 沿用文字 Key）；ChatClient 对 DeepSeek 不开思考时明确发送 `thinking: disabled`；新增 `IWA_VISION_MAX_TOKENS`（默认 2000，原 700）、`IWA_VISION_TIMEOUT`（默认 180 秒），`describe_image` 用这两项。依据 [DeepSeek 识图说明](https://api-docs.deepseek.com/guides/vision/)：Flash 在 `/chat/completions` 接收 `image_url` base64，Pro 不支持图片。
+- **验证**：`$V/python -m unittest discover -s tools/ielts_writing_ai/tests -t .` → **460 OK**（另两种 locale 同样 OK）；新增 `test_official_t2_20261113.py`（7 项：9 段全部保留；近乎逐字的抄题句被找到且词数正确；转述、过短、打乱顺序、自写内容不算；只在找到时告诉模型且系统提示不变；页面提示两个字数；DeepSeek 读图设置复用 Key 与默认值；本地桩服务器上读图请求为 deepseek-flash、关闭思考、max_tokens 2000、含 base64 图片、超时 180 秒且读数可用）；`test_visual.py` 的识图替身接受超时参数。Node 8、ruff、black 66 文件通过。
+- **文档**：工具 README（接入真实模型一节的读图配置；评分规则一节的照抄题目与段落）、`.env.example`、`official-run.md` B 部分加读图配置和“先单张试读”建议。
+- **未变**：评价模型与参数、校验门禁、对照批次。未合并 main、未部署、未访问生产，小程序未上传 / 提审 / 发布。没有新的付费授权。
+- **下一步**：① Mac 上拉取后重启试用服务（提示词变为 `.13`）；② 若要跑 Task 1 四篇：`.env` 加 `IWA_VISION_PROVIDER=deepseek`，用户确认后先单张试读并人工核对读数，再按 `official-run.md` B 部分跑（最多 16 文字 + 4 识图）；③ 老师抽查 10 条仍待进行。
+
 ## 2026-11-13 官方 Task2 Pro 真实验证结束（2/4，识图仍未配置）
 
 - **授权/基线**：用户确认官方Task2一篇Pro评价×2、累计最多4请求；固定运行源`abf48d49a446582749a53d320a7c6e6364d0841e`，独立树`/private/tmp/studytracker-iwa-holdout-review-20261111`、`codex/iwa-holdout-review-20261111`，运行前clean且远端一致。主树`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2、behind113，原7modified/23untracked入口保留。其余worktree未操作。
