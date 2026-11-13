@@ -99,6 +99,25 @@ TA_UNASSESSABLE_REASONS = {
 task_criterion_assessable = prompts.visual_available
 
 
+def chart_reading_used(submission: dict) -> dict | None:
+    """Which chart reading a Task 1 generation got: {"checked": bool, "sha256": the
+    confirmed reading's fingerprint or None}. None for submissions without an image."""
+    if submission["task_type"] != "task1" or submission.get("image_status") in (None, "none"):
+        return None
+    checked = prompts.visual_available(submission)
+    return {
+        "checked": checked,
+        "sha256": visual.reading_sha256(submission.get("image_description")) if checked else None,
+    }
+
+
+def reading_mismatch(result: dict | None, submission: dict) -> bool:
+    """True if a stored result records a different reading than the submission now
+    has. Results from before the record existed are not judged here."""
+    used = (result or {}).get("chart_reading")
+    return used is not None and used != chart_reading_used(submission)
+
+
 def ta_unassessable_reason(submission: dict) -> str:
     status = submission.get("image_status") or "none"
     error = submission.get("image_error") or ""
@@ -905,6 +924,9 @@ class Generator:
         try:
             sentences = essay_lib.split_sentences(submission["essay_text"])
             normalized, result = self._generate_valid(kind, submission, sentences)
+            reading = chart_reading_used(submission)
+            if reading is not None:
+                normalized["chart_reading"] = reading
             self.storage.finish_generation(
                 generation_id,
                 result=normalized,

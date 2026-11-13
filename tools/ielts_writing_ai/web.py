@@ -358,6 +358,10 @@ def _generation_view(generation: dict | None, submission: dict) -> dict | None:
         "id": generation["id"],
         "status": generation["status"],
         "result": generation.get("result") if generation["status"] == "ready" else None,
+        # The result used a different chart reading (or check state) than the one the
+        # submission now has: never shown as based on the current reading.
+        "reading_mismatch": bool(ready)
+        and review.reading_mismatch(generation["result"], submission),
         "model": generation.get("model"),
         "prompt_version": generation.get("prompt_version"),
         "created_at": generation["created_at"],
@@ -418,13 +422,14 @@ def _submission_view(submission: dict) -> dict:
 
 
 def _awaiting_check(submission: dict) -> tuple[bool, bool]:
-    """(awaiting, legacy): an unchecked reading waits for the person only while its
-    generations wait. A record whose results were made before checking existed (.14)
-    keeps them as they are and cannot be confirmed afterwards: its results did not use
-    a confirmed reading, and a confirmation would not change them (review of .15)."""
+    """(awaiting, legacy): an unchecked reading waits for the person only before any
+    generation of the submission has started. A record whose results were made before
+    checking existed (.14) keeps them and cannot be confirmed afterwards, not even after
+    regenerating one kind: a confirmed reading would then be mixed with results of the
+    unchecked one (reviews of .15)."""
     if not prompts.awaiting_image_check(submission):
         return False, False
-    waiting = bool(ctx().storage.queued_generation_ids(submission["id"]))
+    waiting = ctx().storage.check_window_open(submission["id"])
     return waiting, not waiting
 
 

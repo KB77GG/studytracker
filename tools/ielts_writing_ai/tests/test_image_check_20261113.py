@@ -582,6 +582,85 @@ class WebBindingTest(WebBase):
         self.assertEqual(sum(len(v) for v in self.client_llm.sent.values()), calls)
 
 
+class MixedResultsTest(WebBase):
+    """Second review of .15: on a record that already had results, regenerating one kind
+    queued a generation, which reopened the check; a confirmed reading then fed the new
+    result while the old refine / rewrite came from the unchecked one."""
+
+    def finished_legacy(self):
+        public_id = self.submit_t1()
+        ctx = self.app.extensions["iwa"]
+        sub_id = self.storage.get_owned_submission(public_id, 1)["id"]
+        for generation_id in self.storage.queued_generation_ids(sub_id):
+            ctx.generator.run(generation_id)  # results made without any check (.14)
+        return public_id, sub_id
+
+    def test_regenerating_one_kind_does_not_reopen_the_check(self):
+        public_id, sub_id = self.finished_legacy()
+        ctx = self.app.extensions["iwa"]
+        started = []
+        ctx.jobs.start_generation = started.append  # keep the regeneration queued
+        csrf = {"X-IWA-CSRF": self.client.csrf}
+        for kind in ("evaluate", "refine"):
+            response = self.client.post(
+                f"/api/submissions/{public_id}/generations/{kind}", headers=csrf
+            )
+            self.assertEqual(response.status_code, 202)
+        self.assertEqual(len(self.storage.queued_generation_ids(sub_id)), 2)
+        self.assertFalse(self.storage.check_window_open(sub_id))
+        view = self.view(public_id)
+        self.assertFalse(view["image"]["awaiting_check"])
+        self.assertTrue(view["image"]["unchecked_legacy"])
+        self.assertEqual(view["image"]["check_text"], "")
+        for action, text in (("confirm", corrected(visual.check_text(WRONG))), ("skip", None)):
+            self.assertEqual(
+                self.check_image(self.client, public_id, action, text).status_code, 409
+            )
+        self.assertFalse(  # the storage refuses it on its own as well
+            self.storage.set_image_check(sub_id, {"status": "skipped"}, waiting_only=True)
+        )
+        for generation_id in started:  # the regenerations run on the unchecked reading
+            ctx.generator.run(generation_id)
+        view = self.view(public_id)
+        self.assertIsNone(view["image"]["check"])
+        for kind, generation in view["generations"].items():
+            with self.subTest(kind=kind):
+                self.assertEqual(generation["status"], "ready")
+                self.assertEqual(
+                    generation["result"]["chart_reading"], {"checked": False, "sha256": None}
+                )
+                self.assertFalse(generation["reading_mismatch"])
+        self.assertEqual(
+            view["generations"]["evaluate"]["result"]["criteria"][0]["state"], "not_assessable"
+        )
+        self.assertNotIn("Trains 16:00 = 22%", json.dumps(self.client_llm.sent, ensure_ascii=False))
+
+    def test_every_result_records_the_reading_it_used(self):
+        public_id = self.submit_t1()
+        sub = self.view(public_id)
+        self.check_image(self.client, public_id, description=corrected(sub["image"]["check_text"]))
+        stored = self.storage.get_owned_submission(public_id, 1)
+        used = {"checked": True, "sha256": visual.reading_sha256(stored["image_description"])}
+        view = self.view(public_id)
+        for kind, generation in view["generations"].items():
+            with self.subTest(kind=kind):
+                self.assertEqual(generation["result"]["chart_reading"], used)
+                self.assertFalse(generation["reading_mismatch"])
+        with self.storage.connect() as conn:  # the reading changes behind the results
+            conn.execute(
+                "UPDATE submission SET image_description = image_description || ' x'"
+                " WHERE public_id = ?",
+                (public_id,),
+            )
+        view = self.view(public_id)
+        self.assertTrue(all(g["reading_mismatch"] for g in view["generations"].values()))
+        # Task 2 results carry no chart record at all.
+        task2 = self.submit(self.client).get_json()["public_id"]
+        for generation in self.view(task2)["generations"].values():
+            self.assertNotIn("chart_reading", generation["result"])
+            self.assertFalse(generation["reading_mismatch"])
+
+
 class MigrationTest(unittest.TestCase):
     def test_an_old_database_gets_both_new_columns(self):
         tmp = Path(tempfile.mkdtemp(prefix="iwa-migrate2-"))

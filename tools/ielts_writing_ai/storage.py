@@ -90,6 +90,14 @@ CREATE INDEX IF NOT EXISTS ix_usage_user_day ON usage_event(user_id, day);
 
 
 ADDED_SUBMISSION_COLUMNS = ("copied_spans", "image_check")
+# A chart reading can be checked only before any generation of the submission started
+# (used inside queries on the submission table).
+CHECK_WINDOW_SQL = (
+    "(EXISTS (SELECT 1 FROM generation WHERE generation.submission_id = submission.id"
+    " AND generation.status = 'queued') AND NOT EXISTS (SELECT 1 FROM generation"
+    " WHERE generation.submission_id = submission.id AND (generation.status != 'queued'"
+    " OR generation.started_at IS NOT NULL)))"
+)
 
 
 def utcnow() -> datetime:
@@ -352,14 +360,9 @@ class Storage:
     ) -> bool:
         """Record, once, that a person confirmed (optionally correcting the text) or
         skipped checking a structurally usable chart reading. False if the reading is
-        not ready or was already checked; with waiting_only also when no generation is
-        waiting for it (a record finished before checking existed keeps its results)."""
-        waiting = (
-            " AND EXISTS (SELECT 1 FROM generation WHERE generation.submission_id ="
-            " submission.id AND generation.status = 'queued')"
-            if waiting_only
-            else ""
-        )
+        not ready or was already checked; with waiting_only also when the check window
+        is closed (see check_window_open)."""
+        waiting = f" AND {CHECK_WINDOW_SQL}" if waiting_only else ""
         with self.connect() as conn:
             cur = conn.execute(
                 "UPDATE submission SET image_check = ?,"
@@ -368,6 +371,18 @@ class Storage:
                 (json.dumps(check, ensure_ascii=False), description, submission_id),
             )
             return cur.rowcount == 1
+
+    def check_window_open(self, submission_id: int) -> bool:
+        """The reading can still be checked: generations are waiting and none of this
+        submission's generations has ever started. A record that already has results
+        (made before checking existed) stays closed even when one kind is regenerated,
+        so a confirmed reading is never mixed with results of the unchecked one."""
+        with self.connect() as conn:
+            row = conn.execute(
+                f"SELECT {CHECK_WINDOW_SQL} AS open FROM submission WHERE id = ?",
+                (submission_id,),
+            ).fetchone()
+        return bool(row and row["open"])
 
     def queued_generation_ids(self, submission_id: int) -> list[int]:
         with self.connect() as conn:

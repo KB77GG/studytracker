@@ -486,6 +486,9 @@
         ]));
         return;
       }
+      if (g.reading_mismatch) {
+        panel.appendChild(el('p', { class: 'notice notice--warn', text: '这份结果用的题图读数与当前读数（或核对状态）不同，不能当作按当前读数生成的结果。需要时请重新生成。' }));
+      }
       if (kind === 'evaluate') renderEvaluation(panel, g);
       else if (kind === 'refine') renderRefine(panel, g);
       else renderRewrite(panel, g);
