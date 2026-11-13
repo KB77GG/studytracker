@@ -64,10 +64,16 @@ IWA_LLM_API_KEY=sk-...             # 试用工具专用 Key，建议单独申请
 # IWA_LLM_MODEL=deepseek-flash     # qwen 默认 qwen-plus，可改 qwen-max 等
 
 # Task 1 题图识别（可选）：先由识图模型提取图表数据，再交给文本模型评价
-IWA_VISION_PROVIDER=qwen           # 默认 none：题图只保存展示，评价会提示“未核对图表数据”
-# IWA_VISION_MODEL=qwen-vl-max-latest
+IWA_VISION_PROVIDER=deepseek       # 默认 none；也可 qwen / openai_compatible
+# IWA_VISION_MODEL=deepseek-flash  # deepseek 的默认值；qwen 默认 qwen-vl-max-latest
 # IWA_VISION_API_KEY=              # 不填沿用 IWA_LLM_API_KEY
+# IWA_VISION_MAX_TOKENS=2000       # 读图结果的输出上限（默认 2000）
+# IWA_VISION_TIMEOUT=180           # 读图的超时秒数（默认 180）
 ```
+
+- **2026-11-13 起可以用 DeepSeek 读图**：`deepseek-flash` 能在同一个 `/chat/completions` 地址接收图片（`image_url`，base64 数据），`deepseek-v4-pro` 不能（[官方识图说明](https://api-docs.deepseek.com/guides/vision/)）。所以试用的搭配是“Flash 读图、Pro 评价”，同一个 Key。
+- 设为 `deepseek` 时，读图请求明确发送 `"thinking": {"type": "disabled"}`：DeepSeek 默认开启思考，而读图只需要一份结构化读数，不关的话输出预算可能在思考阶段就用完。读图的输出上限从 700 提高到 2000（`IWA_VISION_MAX_TOKENS`），超时单独设置（`IWA_VISION_TIMEOUT`，默认 180 秒）；评价的 32000 / 420 秒不用于读图。
+- 读图结果仍要通过服务端的“读数是否足够”判定（见“评分规则”），读不出来就不评 TA 和总分，不会用猜的数字评分。连通性和读数准确度需要先用一张题图实测、人工核对读数。
 
 运行 `python -m tools.ielts_writing_ai check` 可以查看生效配置（不会打印 Key）。修改配置后需要先 `stop.sh` 再 `start.sh`。
 
@@ -116,6 +122,11 @@ IWA_EVALUATE_THINKING_TIMEOUT=420
 
 - **每项都要有依据**：每个评分项都必须有评分理由，并且至少有一条能在学生原文中逐字找到的引文（优点和问题都带引文）。缺少理由或证据、缺少总评或提升重点的输出会被拒绝：系统自动重试一次（不额外扣额度），仍不合格就标记为失败，不显示任何分数。
 - **引文核对**：找不到的引文会在页面和复制文本里标注“未在原文中找到，不作为评分依据”。
+- **照抄题目**（提示词 `.13`，2026-11-13）：考试中照抄的题目文字不计入字数，也不算考生自己的内容和语言。程序逐句和题目比对，一句至少 6 个词、其中 85% 以上的词按顺序与题目一致、并且有连续 5 个词完全一样，才算“与题目几乎逐字相同”（允许个别拼写差异，例如官方 5.5 分样卷抄题时写错的两个词；只借用题目里几个词不算）。找到时：
+  - 原文不删不改，页面和复制文本提示“第 N 段有 K 句与题目几乎逐字相同（共 X 词）……去掉后约 Y 词”，去掉后低于字数要求时一并说明；
+  - 评价输入里附上这些句子和去掉后的字数，并说明按考试规则不把它们算作考生的内容和语言；
+  - 没有抄题的作文，发给模型的内容与 `.12` 完全相同（内置 7 篇和全部留出集作文都没有被判为抄题）。
+- **论证结构不再截掉段落**：以前最多保留 8 段，官方 5.5 分样卷有 9 段，结尾段被程序截掉。每段本来就最多一条，现在全部保留。
 - **Task 1**：只有题图被识图模型读出了足够的数据时，才评 Task Achievement 和总分。
   - 识图模型必须返回结构化结果：可读性（sufficient / partial / unreadable）、图表类型、数据点、主要特征、读不清的部分。
   - 是否“足够”由服务端判定：

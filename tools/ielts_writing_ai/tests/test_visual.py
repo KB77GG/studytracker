@@ -135,7 +135,15 @@ class StaticVision(FakeClient):
         self.text = text
 
     def complete(
-        self, messages, *, json_mode, max_tokens, temperature=0.2, context=None, retries=1
+        self,
+        messages,
+        *,
+        json_mode,
+        max_tokens,
+        temperature=0.2,
+        context=None,
+        retries=1,
+        timeout=None,  # image reading has its own timeout since 2026-11-13
     ):
         self.calls.append("describe_image")
         return LLMResult(self.text, self.model, 1, {})

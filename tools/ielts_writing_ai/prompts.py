@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-10.12"
+PROMPT_VERSION = "iwa-2026-11-13.13"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -409,6 +409,21 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         ]
     else:
         payload["essay"] = submission["essay_text"]
+    copied = essay_lib.copied_from_prompt(submission["essay_text"], submission["prompt_text"])
+    if copied:
+        # Only when found, so the messages of every other essay are unchanged (.13).
+        payload["copied_from_question"] = [{"p": c["p"], "sentence": c["sentence"]} for c in copied]
+        payload["word_count_without_copied"] = submission["word_count"] - sum(
+            c["words"] for c in copied
+        )
+        payload["copied_note"] = (
+            "A text comparison found that the sentences in copied_from_question repeat the "
+            "question almost word for word. As in the test, words copied from the question do "
+            "not count towards the word count and are not the candidate's own ideas or "
+            "language: do not credit them for task response, development, vocabulary or "
+            "grammar, and judge length by word_count_without_copied. You may say in the "
+            "feedback that the question was copied."
+        )
     user = (
         "Evaluate this IELTS essay.\n"
         + json.dumps(payload, ensure_ascii=False, indent=1)
@@ -603,5 +618,5 @@ MAX_TOKENS = {
     "refine": 6000,
     "rewrite": 2400,
     "rewrite_notes": 1500,
-    "describe_image": 700,
+    "describe_image": 2000,  # fallback; Settings.vision_max_tokens (IWA_VISION_MAX_TOKENS) is used
 }

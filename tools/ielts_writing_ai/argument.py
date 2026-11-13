@@ -59,7 +59,6 @@ VERDICTS = {
     "weak": "与立场关联偏弱",
     "off_position": "偏离立场或题目",
 }
-MAX_PARAGRAPHS = 8
 MAX_PROBLEMS = 6
 MAX_IMPROVEMENTS = 3
 QUOTE_LIMIT = 400
@@ -286,12 +285,10 @@ def normalize(raw, essay: str, sources: figures_lib.Sources | None = None) -> di
 
     if not paragraphs:
         raise ArgumentInvalid("论证结构分析没有给出可核实的段落中心句")
-    over_limit = (
-        max(0, len(paragraphs) - MAX_PARAGRAPHS)
-        + max(0, len(problems) - MAX_PROBLEMS)
-        + max(0, len(improvements) - MAX_IMPROVEMENTS)
-    )
-    paragraphs = paragraphs[:MAX_PARAGRAPHS]
+    # No cap on paragraphs: there is at most one entry per real paragraph already, and
+    # the official 5.5 sample has 9 - its conclusion was cut off by a cap of 8
+    # (2026-11-13 run).
+    over_limit = max(0, len(problems) - MAX_PROBLEMS) + max(0, len(improvements) - MAX_IMPROVEMENTS)
     problems = problems[:MAX_PROBLEMS]
     improvements = improvements[:MAX_IMPROVEMENTS]
 

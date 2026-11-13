@@ -35,6 +35,12 @@ PROVIDER_PRESETS = {
 }
 
 VISION_PRESETS = {
+    # deepseek-flash reads images on the same endpoint and key (deepseek-v4-pro does not);
+    # the client sends thinking disabled for DeepSeek, so the budget goes to the reading.
+    "deepseek": {
+        "base_url": "https://api.deepseek.com/chat/completions",
+        "model": "deepseek-flash",
+    },
     "qwen": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
         "model": "qwen-vl-max-latest",
@@ -133,6 +139,10 @@ class Settings:
     vision_base_url: str = ""
     vision_model: str = ""
     vision_api_key: str = ""
+    # The structured chart reading: 700 tokens was tight for a line graph with two
+    # series; the evaluation's 32000 / 420 s do not apply to image reading.
+    vision_max_tokens: int = 2000
+    vision_timeout: float = 180.0
 
     daily_limit: int = 30
     max_workers: int = 2
@@ -237,6 +247,8 @@ class Settings:
             "evaluate_model": self.evaluate_model or self.llm_model,
             "vision_provider": self.vision_provider,
             "vision_model": self.vision_model if self.vision_enabled else "",
+            "vision_max_tokens": self.vision_max_tokens,
+            "vision_timeout": self.vision_timeout,
             "vision_api_key_set": bool(self.vision_api_key),
             "daily_limit": self.daily_limit,
             "max_workers": self.max_workers,
@@ -287,6 +299,8 @@ def load_settings(
         "vision_base_url": get("VISION_BASE_URL"),
         "vision_model": get("VISION_MODEL"),
         "vision_api_key": get("VISION_API_KEY"),
+        "vision_max_tokens": _as_int(get("VISION_MAX_TOKENS"), 2000, minimum=1),
+        "vision_timeout": _as_float(get("VISION_TIMEOUT"), 180.0),
         "daily_limit": _as_int(get("DAILY_LIMIT"), 30, minimum=0),
         "max_workers": _as_int(get("MAX_WORKERS"), 2, minimum=1),
         "max_upload_mb": _as_int(get("MAX_UPLOAD_MB"), 5, minimum=1),

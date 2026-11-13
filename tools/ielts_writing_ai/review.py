@@ -396,6 +396,20 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             f"字数 {submission['word_count']} 低于 {minimum} 词要求，实际考试中"
             f"{criteria[0]['label']}会因此受限。"
         )
+    copied = essay_lib.copied_from_prompt(
+        submission.get("essay_text"), submission.get("prompt_text")
+    )
+    if copied:
+        copied_words = sum(c["words"] for c in copied)
+        own = submission["word_count"] - copied_words
+        where = "、".join(f"第 {p} 段" for p in sorted({c["p"] for c in copied}))
+        warning = (
+            f"{where}有 {len(copied)} 句与题目几乎逐字相同（共 {copied_words} 词，程序按文字比对标出）。"
+            f"考试中照抄的题目文字不计入字数，也不算考生自己的内容和语言；去掉后约 {own} 词"
+        )
+        if own < minimum <= submission["word_count"]:
+            warning += f"，低于 {minimum} 词要求"
+        warnings.append(warning + "。")
     if not task_ok:
         warnings.append(
             f"{ta_unassessable_reason(submission)}：Task Achievement 无法核对数据，"
@@ -484,6 +498,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "suggestions_removed": removed,
         "count_corrections": count_corrections,
         "length_notes": length_notes,  # advice that got the recount reminder
+        # Sentences repeating the question almost word for word (essay.copied_from_prompt).
+        "copied_from_question": [{"p": c["p"], "words": c["words"]} for c in copied],
         "warnings": warnings,
     }
 
@@ -642,9 +658,12 @@ class Generator:
             result = self.vision_client.complete(
                 messages,
                 json_mode=False,
-                max_tokens=prompts.MAX_TOKENS["describe_image"],
+                max_tokens=getattr(
+                    self.settings, "vision_max_tokens", prompts.MAX_TOKENS["describe_image"]
+                ),
                 temperature=0.0,
                 context=context,
+                timeout=getattr(self.settings, "vision_timeout", None),
             )
             # A 200 response is not a usable reading: the server decides sufficiency.
             reading = visual.assess(result.text)

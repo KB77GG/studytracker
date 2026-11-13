@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import math
 import re
 from dataclasses import dataclass
@@ -190,3 +191,45 @@ def overall_band(bands: list[float]) -> float | None:
         return None
     mean = sum(bands) / len(bands)
     return math.floor(mean * 2 + 0.5 + 1e-9) / 2
+
+
+# Sentences that repeat the task wording almost word for word. In the test, words
+# copied from the question are not counted and are not the candidate's own language;
+# the official 5.5 sample of Task 2B opens with the question copied, with two slips
+# ("impaction", "outweight"), so a near-verbatim match counts, not only an exact one.
+COPY_MIN_TOKENS = 6
+COPY_SHARE = 0.85
+COPY_MIN_RUN = 5
+_COPY_TOKEN_RE = re.compile(r"[a-z0-9]+")
+
+
+def _copy_tokens(text: str) -> list[str]:
+    return _COPY_TOKEN_RE.findall((text or "").lower())
+
+
+def copied_from_prompt(essay: str | None, prompt: str | None) -> list[dict]:
+    """[{"p": paragraph number, "sentence": text, "words": count}] for every sentence
+    of at least COPY_MIN_TOKENS words of which COPY_SHARE or more match the prompt in
+    order, with one run of at least COPY_MIN_RUN words. A text comparison, not a
+    judgement of intent: reusing a few words of the question does not count."""
+    question = _copy_tokens(prompt)
+    if len(question) < COPY_MIN_TOKENS:
+        return []
+    found = []
+    for sentence in split_sentences(essay):
+        tokens = _copy_tokens(sentence.text)
+        if len(tokens) < COPY_MIN_TOKENS:
+            continue
+        blocks = difflib.SequenceMatcher(
+            None, tokens, question, autojunk=False
+        ).get_matching_blocks()
+        matched = sum(b.size for b in blocks)
+        if matched >= COPY_SHARE * len(tokens) and max(b.size for b in blocks) >= COPY_MIN_RUN:
+            found.append(
+                {
+                    "p": sentence.paragraph + 1,
+                    "sentence": sentence.text,
+                    "words": count_words(sentence.text),
+                }
+            )
+    return found
