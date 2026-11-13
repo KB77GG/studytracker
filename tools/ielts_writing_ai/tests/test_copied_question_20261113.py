@@ -213,6 +213,70 @@ class ResolveTest(unittest.TestCase):
                 essay.resolve_copied(self.TEXT, entries)
 
 
+class TokenBoundaryTest(unittest.TestCase):
+    """Review cd82fc1: a quote may not stop inside a word as count_words sees it."""
+
+    CASES = {
+        "apostrophe": ("don't", ["don", "t"]),
+        "curly_apostrophe": ("don’t", ["don", "t"]),
+        "hyphen": ("cost-effective", ["cost", "effective"]),
+    }
+
+    def test_half_words_are_refused_and_whole_words_kept(self):
+        for name, (compound, halves) in self.CASES.items():
+            text = f"The {compound} approach is useful."
+            with self.subTest(case=name):
+                self.assertEqual(
+                    essay.resolve_copied(text, [{"quote": compound}]), [{"p": 1, "text": compound}]
+                )
+                self.assertEqual(
+                    essay.resolve_copied(text, [{"quote": f"The {compound}"}])[0]["text"],
+                    f"The {compound}",
+                )
+                for quote in halves + [f"The {halves[0]}", f"{halves[-1]} approach"]:
+                    with self.assertRaises(ValueError):
+                        essay.resolve_copied(text, [{"quote": quote}])
+                with self.assertRaises(ValueError):
+                    essay.resolve_copied(text, [{"quote": q} for q in halves])
+        # Punctuation next to a whole word is still a boundary.
+        self.assertEqual(
+            essay.resolve_copied("Yes, it works.", [{"quote": "it works."}])[0]["text"],
+            "it works.",
+        )
+        with self.assertRaises(ValueError):  # a letter outside WORD_RE still counts
+            essay.resolve_copied("A naïve plan.", [{"quote": "na"}])
+
+    def test_one_word_is_never_taken_off_twice(self):
+        text = "A cost-effective plan works. " + " ".join(["item"] * 147)
+        self.assertEqual(essay.count_words(text), 151)
+        tmp = Path(tempfile.mkdtemp(prefix="iwa-boundary-"))
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        row = {
+            "id": "split",
+            "task_type": "task1",
+            "prompt": "The chart compares spending on a cost-effective plan over time.",
+            "essay": text,
+            "copied_source": SOURCE,
+        }
+        path = tmp / "s.jsonl"
+        for spans, ok in (
+            ([{"quote": "cost"}, {"quote": "effective"}], False),
+            ([{"quote": "cost-effective"}], True),
+        ):
+            path.write_text(json.dumps(dict(row, copied_from_question=spans)) + "\n")
+            if not ok:
+                with self.assertRaises(realcheck.RealCheckError):
+                    realcheck.load_samples(str(path))
+                continue
+            sub = submission(text, row["prompt"], "task1", spans=spans)
+            self.assertEqual(essay.confirmed_copies(sub)["words"], 1)
+            payload = payload_of(prompts.build_evaluate(sub, essay.split_sentences(text))[0])
+            self.assertEqual(payload["word_count_without_copied"], 150)
+            warning = next(w for w in evaluated(sub)["warnings"] if "已确认" in w)
+            self.assertIn("原文 151 词，去掉后 150 词", warning)
+            self.assertNotIn("低于 150", warning)
+
+
 class LoadSamplesTest(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="iwa-copied-"))

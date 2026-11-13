@@ -252,10 +252,24 @@ def _paragraph_offsets(text: str) -> list[tuple[int, int]]:
     return offsets
 
 
+def _splits_a_word(text: str, start: int, end: int) -> bool:
+    """True when a passage [start, end) begins or ends inside a word as count_words
+    sees it (WORD_RE keeps "don't", "don’t" and "cost-effective" whole), or next to
+    any other letter or digit. Otherwise two passages could take the halves of one
+    word and count it twice (review cd82fc1: 151 words counted as 149)."""
+    for token in WORD_RE.finditer(text):
+        if token.start() >= end:
+            break
+        if token.start() < start < token.end() or token.start() < end < token.end():
+            return True
+    return (start > 0 and text[start - 1].isalnum()) or (end < len(text) and text[end].isalnum())
+
+
 def resolve_copied(essay: str, entries) -> list[dict]:
     """Confirmed copying, given as [{"paragraph": n} | {"quote": verbatim text}, ...],
     turned into [{"p": paragraph number, "text": exact passage}] in essay order. A quote
-    must lie inside one paragraph, occur once and start and end on word boundaries.
+    must lie inside one paragraph, occur once and start and end on the word boundaries
+    count_words uses, so the words of all passages add up without counting one twice.
     Raises ValueError when an entry is malformed, missing or overlaps another."""
     if not isinstance(entries, list) or not entries:
         raise ValueError("必须是非空列表")
@@ -276,7 +290,7 @@ def resolve_copied(essay: str, entries) -> list[dict]:
                 raise ValueError(f"第 {n} 项的原文在作文里找不到、跨段或出现不止一次")
             start = text.index(quote)
             end = start + len(quote)
-            if (start and text[start - 1].isalnum()) or (end < len(text) and text[end].isalnum()):
+            if _splits_a_word(text, start, end):
                 raise ValueError(f"第 {n} 项的原文没有从完整的词开始或结束")
             number = next(i for i, (a, b) in enumerate(paragraphs, 1) if a <= start < b)
         else:
