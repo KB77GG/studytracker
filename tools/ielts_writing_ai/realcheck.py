@@ -200,6 +200,14 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
             _validate_teacher_findings(item, number)
             _validate_raters(item, number)
             _validate_copied(item, number)
+            for runtime in RUNTIME_FIELDS:
+                if runtime in item:
+                    # Set only from a checked readings file (--image-descriptions), where
+                    # the record, the image and the text are verified (review of .15).
+                    raise RealCheckError(
+                        f"第 {number} 行不能直接写 {runtime}：题图核对记录只能来自"
+                        " realcheck-check-images 生成的文件（--image-descriptions）"
+                    )
             if item.get("image"):
                 image = (path.parent / item["image"]).resolve()
                 if not image.is_file():
@@ -246,6 +254,9 @@ def _copied_spans(item: dict, essay: str) -> str | None:
         return None
     spans = essay_lib.resolve_copied(essay, item["copied_from_question"])
     return json.dumps({"spans": spans, "source": item["copied_source"].strip()}, ensure_ascii=False)
+
+
+RUNTIME_FIELDS = ("image_check", "image_frozen")
 
 
 def _validate_teacher_findings(item: dict, number: int) -> None:
@@ -380,8 +391,8 @@ def apply_image_descriptions(
         if require_ready and item.get("image") and (not outcome or outcome["status"] != "ready"):
             missing.append(item["id"])
             continue
-        if require_checked and item.get("image") and not (outcome or {}).get("check"):
-            unchecked.append(item["id"])
+        if require_checked and not (item.get("image") and (outcome or {}).get("check")):
+            unchecked.append(item["id"])  # no image can never be checked either
             continue
         if not outcome:
             continue
@@ -397,7 +408,7 @@ def apply_image_descriptions(
         raise RealCheckError("这些样本没有可用的题图识别结果：" + "、".join(missing))
     if unchecked:
         raise RealCheckError(
-            "这些样本的题图读数还没有人工核对（用 realcheck-check-images 确认）："
+            "这些样本没有题图，或题图读数还没有人工核对（用 realcheck-check-images 确认）："
             + "、".join(unchecked)
         )
     return used
@@ -454,6 +465,9 @@ def run(
     ledger=None,
 ) -> dict:
     """Run every sample and return the raw run data (see build_report)."""
+    for item in items:  # before any call: every confirmation is complete and current
+        if item.get("image_check"):
+            imagecheck.verify(item, item.get("image_description"), item["image_check"])
     recorder = Recorder(max_calls, ledger)
     _validate_sample_ids(items)
     if ledger is not None:

@@ -15,6 +15,7 @@ form shown for that check.
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass
 
@@ -174,3 +175,9 @@ def same_reading(a: str | None, b: str | None) -> bool:
         return " ".join(check_text(text).replace("\n- ", "; ").split())
 
     return flat(a) == flat(b)
+
+
+def reading_sha256(description: str | None) -> str:
+    """Fingerprint of a reading as stored and sent: a confirmation is bound to it, so
+    any later change to the text needs a new confirmation (review of .15)."""
+    return hashlib.sha256((description or "").strip().encode("utf-8")).hexdigest()

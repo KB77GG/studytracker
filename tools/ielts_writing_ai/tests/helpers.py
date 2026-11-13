@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import tempfile
 import unittest
 
-from tools.ielts_writing_ai import access, create_app, load_settings
+from tools.ielts_writing_ai import access, create_app, load_settings, visual
 from tools.ielts_writing_ai.llm import FakeClient
 
 PNG_BYTES = b"\x89PNG\r\n\x1a\n" + b"\x00" * 64
@@ -28,7 +29,22 @@ TASK2_ESSAY = (
 
 
 # A person confirmed the chart reading: only then is Task 1 TA scored (2026-11-13).
-CONFIRMED_IMAGE = '{"status": "confirmed", "at": "2026-11-13T00:00:00Z", "edited": false}'
+# The confirmation is bound to the exact reading text (review of .15).
+CHART_READING = "Type: bar_chart\nData: Museum A = 140; Museum B = 90; Museum C = 200"
+
+
+def confirmed_image(description=CHART_READING):
+    return json.dumps(
+        {
+            "status": "confirmed",
+            "at": "2026-11-13T00:00:00Z",
+            "edited": False,
+            "reading_sha256": visual.reading_sha256(description),
+        }
+    )
+
+
+CONFIRMED_IMAGE = confirmed_image()
 
 
 def settings_for(tmpdir, **overrides):

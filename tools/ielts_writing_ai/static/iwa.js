@@ -381,7 +381,11 @@
         renderImageCheck(d.image);
         var check = d.image.check;
         if (d.image.status === 'pending') note.textContent = '正在识别题图…';
-        else if (d.image.awaiting_check) {
+        else if (d.image.unchecked_legacy) {
+          note.textContent = '这份记录生成于读数核对功能上线之前：结果用的是未经人工核对的识图读数，TA 和总分仅供参考。' +
+            '需要按核对过的读数评分，请重新提交。\n\n识图模型的读数（未核实）：\n' + d.image.description;
+          note.classList.add('is-warn');
+        } else if (d.image.awaiting_check) {
           note.textContent = '识图模型读到的数据还没有核实（格式正确不等于数值正确）。请对照上面的题图逐条核对，' +
             '读错的数值或标签直接在下面改正，再点“读数无误，开始批改”。只有核对过的读数才用于评 Task Achievement 和总分。';
         } else if (d.image.status === 'ready' && check && check.status === 'confirmed') {

@@ -8,18 +8,35 @@ official chart's values stay out of the repository and out of the prompts."""
 
 import io
 import json
+import os
 import shutil
 import sqlite3
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 from tools.ielts_writing_ai import __main__ as cli
-from tools.ielts_writing_ai import essay, imagecheck, prompts, realcheck, storage, visual
+from tools.ielts_writing_ai import (
+    essay,
+    imagecheck,
+    prompts,
+    realcheck,
+    realcheck_compare,
+    storage,
+    visual,
+)
 from tools.ielts_writing_ai.llm import FakeClient
 
-from .helpers import CONFIRMED_IMAGE, PNG_BYTES, AppTestCase, settings_for
+from .helpers import (
+    CHART_READING,
+    CONFIRMED_IMAGE,
+    PNG_BYTES,
+    AppTestCase,
+    confirmed_image,
+    settings_for,
+)
 from .test_visual import StaticVision, reading
 
 PROMPT = "The graph below shows the share of commuters using trains and buses at two times of day."
@@ -74,7 +91,7 @@ class GateTest(unittest.TestCase):
             "word_count": essay.count_words(ESSAY_T1),
             "target_band": 7.0,
             "image_status": "ready",
-            "image_description": "Data: Trains 16:00 = 22%",
+            "image_description": CHART_READING,
             **extra,
         }
 
@@ -107,7 +124,7 @@ class GateTest(unittest.TestCase):
         self.assertFalse(visual.same_reading(corrected(form), text))
 
 
-class WebCheckTest(AppTestCase):
+class WebBase(AppTestCase):
     def setUp(self):
         super().setUp()
         self.client_llm = Recording()
@@ -128,6 +145,8 @@ class WebCheckTest(AppTestCase):
     def view(self, public_id):
         return self.client.get(f"/api/submissions/{public_id}").get_json()["submission"]
 
+
+class WebCheckTest(WebBase):
     def test_a_wrong_reading_waits_and_the_corrected_one_is_used(self):
         public_id = self.submit_t1()
         sub = self.view(public_id)
@@ -226,7 +245,7 @@ class WebCheckTest(AppTestCase):
         self.assertEqual({g["status"] for g in sub["generations"].values()}, {"ready"})
 
 
-class RealcheckCheckTest(unittest.TestCase):
+class RealcheckBase(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="iwa-imgcheck-"))
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
@@ -287,6 +306,8 @@ class RealcheckCheckTest(unittest.TestCase):
         )
         return out
 
+
+class RealcheckCheckTest(RealcheckBase):
     def test_the_sheet_lists_each_value_with_the_image(self):
         _readings, data = self.read_images()
         sheet = imagecheck.sheet(self.items(), data["image_outcomes"])
@@ -357,9 +378,17 @@ class CliTest(unittest.TestCase):
 
     def cli(self, *argv):
         out, err = io.StringIO(), io.StringIO()
-        with redirect_stdout(out), redirect_stderr(err):
-            code = cli.main(["--env-file", str(self.env), *argv])
+        # Only the test's env file counts: an IWA_* variable of the shell running the
+        # suite (e.g. IWA_VISION_PROVIDER=none) would override it (review of .15).
+        clean = {k: v for k, v in os.environ.items() if not k.startswith("IWA_")}
+        with mock.patch.dict(os.environ, clean, clear=True):
+            with redirect_stdout(out), redirect_stderr(err):
+                code = cli.main(["--env-file", str(self.env), *argv])
         return code, out.getvalue(), err.getvalue()
+
+    def test_the_shell_environment_does_not_leak_in(self):
+        with mock.patch.dict(os.environ, {"IWA_VISION_PROVIDER": "none"}):
+            self.test_read_check_confirm_and_evaluate()
 
     def test_read_check_confirm_and_evaluate(self):
         samples = str(self.tmp / "s.jsonl")
@@ -395,6 +424,162 @@ class CliTest(unittest.TestCase):
         self.assertIn("读数经人工核对的 1 个", out)
         run_data = json.loads((self.tmp / "ev" / "run_data.json").read_text(encoding="utf-8"))
         self.assertIsNotNone(realcheck._scores(run_data["samples"][0])["task"])
+
+
+class BindingTest(RealcheckBase):
+    """Review of .15: a confirmation covers one image and one exact text, and comes
+    only from a checked readings file."""
+
+    def test_a_reading_changed_after_confirmation_needs_a_new_one(self):
+        checked = self.confirmed_file(corrections=True)
+        stored = json.loads(checked.read_text(encoding="utf-8"))
+        stored["images"]["t1"]["description"] = stored["images"]["t1"]["description"].replace(
+            "Trains 22:00 = 40%", "Trains 22:00 = 90%"
+        )
+        edited = self.tmp / "edited.json"
+        edited.write_text(json.dumps(stored), encoding="utf-8")
+        with self.assertRaises(realcheck.RealCheckError) as caught:
+            self.evaluate(edited, require_checked=True)
+        self.assertIn("读数与确认时的不同", str(caught.exception))
+        # A record from before the fingerprint existed is not a confirmation either.
+        del stored["images"]["t1"]["check"]["reading_sha256"]
+        edited.write_text(json.dumps(stored), encoding="utf-8")
+        with self.assertRaises(realcheck.RealCheckError):
+            self.evaluate(edited, require_checked=True)
+
+    def test_the_gate_itself_checks_the_text(self):
+        # Even if a stale record reached a submission, the reading is not sent as checked.
+        sub = {
+            "task_type": "task1",
+            "image_status": "ready",
+            "image_description": CHART_READING + " changed",
+            "image_check": CONFIRMED_IMAGE,
+        }
+        self.assertFalse(prompts.visual_available(sub))
+        self.assertTrue(prompts.visual_available(dict(sub, image_description=CHART_READING)))
+        self.assertFalse(
+            prompts.visual_available(
+                dict(sub, image_description="", image_check=confirmed_image(""))
+            )
+        )
+
+    def test_check_records_cannot_be_written_into_the_samples(self):
+        readings, _ = self.read_images()
+        checked = self.confirmed_file()
+        record = realcheck.load_image_outcomes(checked)["t1"]
+        row = json.loads(self.samples.read_text(encoding="utf-8"))
+        for extra in (
+            {"image_description": record["description"], "image_check": record["check"]},
+            {"image_description": "x", "image_check": {"status": "confirmed"}},
+            {"image_frozen": {"status": "ready", "description": "x", "check": record["check"]}},
+        ):
+            self.samples.write_text(json.dumps(dict(row, **extra)) + "\n", encoding="utf-8")
+            with self.subTest(extra=sorted(extra)), self.assertRaises(realcheck.RealCheckError):
+                realcheck.load_samples(str(self.samples))
+        # A Task 1 without an image can never satisfy --require-checked-images.
+        no_image = {k: v for k, v in row.items() if k != "image"}
+        self.samples.write_text(json.dumps(no_image) + "\n", encoding="utf-8")
+        with self.assertRaises(realcheck.RealCheckError) as caught:
+            realcheck.apply_image_descriptions(self.items(), readings, require_checked=True)
+        self.assertIn("没有题图", str(caught.exception))
+
+    def test_the_run_verifies_before_any_call(self):
+        checked = self.confirmed_file()
+        items = self.items()
+        realcheck.apply_image_descriptions(items, checked, require_checked=True)
+        items[0]["image_description"] += " (changed after apply)"
+        client = Recording()
+        with self.assertRaises(realcheck.RealCheckError):
+            realcheck.run(settings_for(str(self.tmp / "r")), items, client=client)
+        self.assertEqual(client.sent, {})
+
+    def test_who_checked_and_when_do_not_block_a_comparison(self):
+        readings, _ = self.read_images()
+        stored = json.loads(readings.read_text(encoding="utf-8"))
+        dirs = []
+        for name in ("甲", "乙"):
+            path = self.tmp / f"checked-{name}.json"
+            path.write_text(
+                json.dumps(imagecheck.confirm(stored, self.items(), ["t1"], by=name)),
+                encoding="utf-8",
+            )
+            items = self.items()
+            realcheck.apply_image_descriptions(items, path, require_checked=True)
+            data = realcheck.run(
+                settings_for(str(self.tmp / f"d-{name}")), items, client=FakeClient(),
+                kinds=("evaluate",),
+            )  # fmt: skip
+            out = self.tmp / f"report-{name}"
+            realcheck.write_report(data, realcheck.build_report(data), out)
+            dirs.append(out)
+        self.assertEqual(len(realcheck_compare.compare(*dirs)["samples"]), 1)
+        # Checked vs. unchecked is a different input and stays refused.
+        items = self.items()
+        realcheck.apply_image_descriptions(items, readings)
+        data = realcheck.run(
+            settings_for(str(self.tmp / "d-u")), items, client=FakeClient(), kinds=("evaluate",)
+        )
+        realcheck.write_report(data, realcheck.build_report(data), self.tmp / "report-u")
+        with self.assertRaises(realcheck_compare.CompareError):
+            realcheck_compare.compare(dirs[0], self.tmp / "report-u")
+
+
+class WebBindingTest(WebBase):
+    def test_malformed_requests_are_422_not_500(self):
+        public_id = self.submit_t1()
+        url = f"/api/submissions/{public_id}/image-check"
+        csrf = {"X-IWA-CSRF": self.client.csrf}
+        for payload in (
+            ["confirm"],
+            1,
+            {"action": "confirm", "description": ["x"]},
+            {"action": "confirm", "description": 7},
+        ):
+            with self.subTest(payload=payload):
+                response = self.client.post(url, json=payload, headers=csrf)
+                self.assertEqual(response.status_code, 422)
+        self.assertTrue(self.view(public_id)["image"]["awaiting_check"])
+        self.assertEqual(self.client_llm.sent, {})
+
+    def test_the_confirmation_is_bound_to_the_stored_text(self):
+        public_id = self.submit_t1()
+        self.check_image(self.client, public_id)
+        stored = self.storage.get_owned_submission(public_id, 1)
+        check = prompts.image_check(stored)
+        self.assertEqual(
+            check["reading_sha256"], visual.reading_sha256(stored["image_description"])
+        )
+        self.assertTrue(prompts.visual_available(stored))
+        with self.storage.connect() as conn:  # the text changes after the check
+            conn.execute(
+                "UPDATE submission SET image_description = image_description || ' x'"
+                " WHERE public_id = ?",
+                (public_id,),
+            )
+        self.assertFalse(prompts.visual_available(self.storage.get_owned_submission(public_id, 1)))
+
+    def test_a_record_finished_before_checking_keeps_its_results(self):
+        # A .14 record: the reading was used without a check and the results exist.
+        public_id = self.submit_t1()
+        generator = self.app.extensions["iwa"].generator
+        sub_id = self.storage.get_owned_submission(public_id, 1)["id"]
+        for generation_id in self.storage.queued_generation_ids(sub_id):
+            generator.run(generation_id)
+        before = self.view(public_id)
+        ids = {k: g["id"] for k, g in before["generations"].items()}
+        self.assertFalse(before["image"]["awaiting_check"])
+        self.assertTrue(before["image"]["unchecked_legacy"])
+        self.assertEqual(before["image"]["check_text"], "")
+        calls = sum(len(v) for v in self.client_llm.sent.values())
+        for action in ("confirm", "skip"):
+            response = self.check_image(
+                self.client, public_id, action, "corrected" if action == "confirm" else None
+            )
+            self.assertEqual(response.status_code, 409)
+        after = self.view(public_id)
+        self.assertEqual({k: g["id"] for k, g in after["generations"].items()}, ids)
+        self.assertIsNone(after["image"]["check"])
+        self.assertEqual(sum(len(v) for v in self.client_llm.sent.values()), calls)
 
 
 class MigrationTest(unittest.TestCase):

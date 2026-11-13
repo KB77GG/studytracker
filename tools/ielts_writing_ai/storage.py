@@ -343,16 +343,28 @@ class Storage:
             conn.execute("DELETE FROM submission WHERE id = ?", (submission_id,))
 
     def set_image_check(
-        self, submission_id: int, check: dict, *, description: str | None = None
+        self,
+        submission_id: int,
+        check: dict,
+        *,
+        description: str | None = None,
+        waiting_only: bool = False,
     ) -> bool:
         """Record, once, that a person confirmed (optionally correcting the text) or
         skipped checking a structurally usable chart reading. False if the reading is
-        not ready or was already checked."""
+        not ready or was already checked; with waiting_only also when no generation is
+        waiting for it (a record finished before checking existed keeps its results)."""
+        waiting = (
+            " AND EXISTS (SELECT 1 FROM generation WHERE generation.submission_id ="
+            " submission.id AND generation.status = 'queued')"
+            if waiting_only
+            else ""
+        )
         with self.connect() as conn:
             cur = conn.execute(
                 "UPDATE submission SET image_check = ?,"
                 " image_description = COALESCE(?, image_description)"
-                " WHERE id = ? AND image_status = 'ready' AND image_check IS NULL",
+                " WHERE id = ? AND image_status = 'ready' AND image_check IS NULL" + waiting,
                 (json.dumps(check, ensure_ascii=False), description, submission_id),
             )
             return cur.rowcount == 1

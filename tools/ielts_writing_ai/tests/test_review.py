@@ -3,7 +3,7 @@ import unittest
 from tools.ielts_writing_ai import essay, review
 from tools.ielts_writing_ai.llm import LLMError, extract_json_object
 
-from .helpers import CONFIRMED_IMAGE
+from .helpers import CHART_READING, CONFIRMED_IMAGE
 
 ESSAY = "Many peoples think that. i dont agree with it.\nGovernments should invest more money."
 
@@ -89,7 +89,12 @@ class EvaluationTest(unittest.TestCase):
     def test_task1_labels_with_a_readable_chart(self):
         result = review.normalize_evaluation(
             self.raw(),
-            submission(task_type="task1", image_status="ready", image_check=CONFIRMED_IMAGE),
+            submission(
+                task_type="task1",
+                image_status="ready",
+                image_description=CHART_READING,
+                image_check=CONFIRMED_IMAGE,
+            ),
         )
         self.assertEqual(result["criteria"][0]["short"], "TA")
         self.assertEqual(result["criteria"][0]["label"], "Task Achievement")
@@ -200,7 +205,12 @@ class EvaluationTest(unittest.TestCase):
         self.assertTrue(any("没有与题图核对" in w for w in result["warnings"]))
         ready = review.normalize_rewrite(
             {"essay": body},
-            submission(task_type="task1", image_status="ready", image_check=CONFIRMED_IMAGE),
+            submission(
+                task_type="task1",
+                image_status="ready",
+                image_description=CHART_READING,
+                image_check=CONFIRMED_IMAGE,
+            ),
         )
         self.assertFalse(any("题图" in w for w in ready["warnings"]))
 

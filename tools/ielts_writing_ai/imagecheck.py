@@ -56,7 +56,20 @@ def check_problem(outcome: dict) -> str | None:
         isinstance(check.get("model_description"), str) and check["model_description"].strip()
     ):
         return "改正过的读数必须保留识图模型的原始读数 model_description"
+    if check.get("reading_sha256") != visual.reading_sha256(outcome.get("description")):
+        return "读数与确认时的不同（确认后被改过，或记录没有读数指纹），需要重新确认"
     return None
+
+
+def verify(item: dict, description: str | None, check: dict) -> None:
+    """Everything a confirmation must satisfy before a model sees the reading: a
+    complete record, for this very image and exactly this text."""
+    from .realcheck import RealCheckError
+
+    problem = check_problem({"status": "ready", "description": description, "check": check})
+    if problem:
+        raise RealCheckError(f"样本 {item['id']} 的题图核对记录无效：{problem}")
+    require_same_image(item, check)
 
 
 def require_same_image(item: dict, check: dict) -> None:
@@ -155,6 +168,7 @@ def confirm(
             if not visual.same_reading(text, description):
                 record.update(edited=True, model_description=description)
                 description = text
+        record["reading_sha256"] = visual.reading_sha256(description)
         images[sample_id] = dict(outcome, description=description, check=record)
     return {"version": outcomes_file.get("version", 2), "images": images}
 

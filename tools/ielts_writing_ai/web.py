@@ -417,11 +417,24 @@ def _submission_view(submission: dict) -> dict:
     }
 
 
+def _awaiting_check(submission: dict) -> tuple[bool, bool]:
+    """(awaiting, legacy): an unchecked reading waits for the person only while its
+    generations wait. A record whose results were made before checking existed (.14)
+    keeps them as they are and cannot be confirmed afterwards: its results did not use
+    a confirmed reading, and a confirmation would not change them (review of .15)."""
+    if not prompts.awaiting_image_check(submission):
+        return False, False
+    waiting = bool(ctx().storage.queued_generation_ids(submission["id"]))
+    return waiting, not waiting
+
+
 def _image_view(submission: dict) -> dict:
     check = prompts.image_check(submission)
-    awaiting = prompts.awaiting_image_check(submission)
+    awaiting, legacy = _awaiting_check(submission)
     unusable = submission["image_status"] in {"failed", "skipped"} or (
-        submission["image_status"] == "ready" and not prompts.visual_available(submission)
+        submission["image_status"] == "ready"
+        and not prompts.visual_available(submission)
+        and not legacy
     )
     return {
         "url": url_for("iwa.api_submission_image", public_id=submission["public_id"]),
@@ -432,6 +445,7 @@ def _image_view(submission: dict) -> dict:
         # A well-formed reading is not a checked one (2026-11-13): the generations wait
         # until the person confirms (or corrects) it, or chooses language feedback only.
         "awaiting_check": awaiting,
+        "unchecked_legacy": legacy,
         "check_text": visual.check_text(submission.get("image_description")) if awaiting else "",
         "check": (
             {"status": check.get("status"), "edited": bool(check.get("edited"))} if check else None
@@ -446,13 +460,18 @@ def api_image_check(public_id: str):
     submission = app_ctx.storage.get_owned_submission(public_id, g.user["id"])
     if not submission:
         return _error("not_found", "记录不存在", 404)
-    if not prompts.awaiting_image_check(submission):
+    if not _awaiting_check(submission)[0]:
         return _error("not_awaiting", "这份题图读数已经核对过，或者不需要核对", 409)
-    payload = request.get_json(silent=True) or {}
-    check, description = _image_check_from(payload, submission.get("image_description") or "")
+    payload = request.get_json(silent=True)
+    check, description = _image_check_from(
+        payload if isinstance(payload, dict) else {}, submission.get("image_description") or ""
+    )
     if check is None:
         return _json({"ok": False, "error": "invalid", "fields": {"description": description}}, 422)
-    if not app_ctx.storage.set_image_check(submission["id"], check, description=description):
+    stored = app_ctx.storage.set_image_check(
+        submission["id"], check, description=description, waiting_only=True
+    )
+    if not stored:
         return _error("not_awaiting", "这份题图读数已经核对过，或者不需要核对", 409)
     for generation_id in app_ctx.storage.queued_generation_ids(submission["id"]):
         app_ctx.jobs.start_generation(generation_id)
@@ -468,15 +487,20 @@ def _image_check_from(payload: dict, original: str):
         return {"status": "skipped", "at": now, "edited": False}, None
     if action != "confirm":
         return None, "请选择核对读数或跳过核对"
-    text = essay_lib.normalize_newlines(payload.get("description") or "").strip()
+    raw = payload.get("description")
+    if not isinstance(raw, str):
+        return None, "读数必须是文字"
+    text = essay_lib.normalize_newlines(raw).strip()
     if not text:
         return None, "读数不能为空"
     if len(text) > visual.CHECK_MAX_CHARS:
         return None, f"读数最多 {visual.CHECK_MAX_CHARS} 个字符"
+    # Bound to the exact text the model will get: a later change needs a new check.
     if visual.same_reading(text, original):
-        return {"status": "confirmed", "at": now, "edited": False}, None
+        check = {"status": "confirmed", "at": now, "edited": False}
+        return dict(check, reading_sha256=visual.reading_sha256(original)), None
     check = {"status": "confirmed", "at": now, "edited": True, "model_description": original}
-    return check, text
+    return dict(check, reading_sha256=visual.reading_sha256(text)), text
 
 
 @bp.get("/api/submissions")

@@ -15,7 +15,7 @@ import json
 import random
 from pathlib import Path
 
-from . import blindtally, realcheck
+from . import blindtally, prompts, realcheck
 from . import essay as essay_lib
 from .realcheck import teacher_coverage
 
@@ -53,9 +53,12 @@ INPUT_FIELDS = (
 def _fingerprint(sample: dict) -> str:
     sub = sample.get("submission") or {}
     text = "\x1f".join(str(sub.get(k) or "") for k in INPUT_FIELDS)
-    for key in ("copied_spans", "image_check"):  # only when set: old fingerprints stay
-        if sub.get(key):
-            text += "\x1f" + sub[key]
+    if sub.get("copied_spans"):  # only when set: old fingerprints stay
+        text += "\x1f" + sub["copied_spans"]
+    if sub.get("image_check"):
+        # Whether the reading counts as confirmed changes the input; who checked it and
+        # when does not (the reading itself is already in INPUT_FIELDS).
+        text += "\x1fimage_confirmed=" + str(prompts.visual_available(sub))
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
 
 

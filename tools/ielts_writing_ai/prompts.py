@@ -6,6 +6,7 @@ import json
 
 from . import argument as argument_lib
 from . import essay as essay_lib
+from . import visual as visual_lib
 
 PROMPT_VERSION = "iwa-2026-11-13.15"
 
@@ -340,12 +341,18 @@ def awaiting_image_check(submission: dict) -> bool:
 
 def visual_available(submission: dict) -> bool:
     """Task 1 data can be checked only against a reading a person confirmed: a
-    well-formed reading ("ready") can still have wrong values."""
+    well-formed reading ("ready") can still have wrong values. The confirmation
+    covers exactly the text that is sent: a reading changed afterwards, or a record
+    without that fingerprint, counts as unconfirmed."""
     if submission["task_type"] != "task1":
         return True
+    check = image_check(submission) or {}
+    description = submission.get("image_description")
     return (
         submission.get("image_status") == "ready"
-        and (image_check(submission) or {}).get("status") == "confirmed"
+        and check.get("status") == "confirmed"
+        and bool(description and description.strip())
+        and check.get("reading_sha256") == visual_lib.reading_sha256(description)
     )
 
 
