@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import difflib
+import json
 import math
 import re
 from dataclasses import dataclass
@@ -193,10 +194,14 @@ def overall_band(bands: list[float]) -> float | None:
     return math.floor(mean * 2 + 0.5 + 1e-9) / 2
 
 
-# Sentences that repeat the task wording almost word for word. In the test, words
-# copied from the question are not counted and are not the candidate's own language;
-# the official 5.5 sample of Task 2B opens with the question copied, with two slips
-# ("impaction", "outweight"), so a near-verbatim match counts, not only an exact one.
+# Copying from the question. In the test, words copied from the question are not
+# counted and are not the candidate's own language. Review f46756f (2026-11-13) showed
+# that a text comparison cannot decide this: a sentence that borrows the question's
+# nouns but adds the writer's own trend or opinion was taken as copied (152 words
+# counted as 138), and the official 5.5 script's copied lines were only partly found
+# (18 of 34 words). So a comparison is only a hint shown to the reader; only copying
+# confirmed by a person or an examiner's comment (stored with the submission) is left
+# out of the word count and passed to the model.
 COPY_MIN_TOKENS = 6
 COPY_SHARE = 0.85
 COPY_MIN_RUN = 5
@@ -207,11 +212,11 @@ def _copy_tokens(text: str) -> list[str]:
     return _COPY_TOKEN_RE.findall((text or "").lower())
 
 
-def copied_from_prompt(essay: str | None, prompt: str | None) -> list[dict]:
-    """[{"p": paragraph number, "sentence": text, "words": count}] for every sentence
-    of at least COPY_MIN_TOKENS words of which COPY_SHARE or more match the prompt in
-    order, with one run of at least COPY_MIN_RUN words. A text comparison, not a
-    judgement of intent: reusing a few words of the question does not count."""
+def similar_to_prompt(essay: str | None, prompt: str | None) -> list[dict]:
+    """Hints only: [{"p": paragraph number, "sentence": text, "words": count}] for every
+    sentence of at least COPY_MIN_TOKENS words of which COPY_SHARE or more follow the
+    question's wording in order, with one run of at least COPY_MIN_RUN words. It never
+    decides that a sentence was copied."""
     question = _copy_tokens(prompt)
     if len(question) < COPY_MIN_TOKENS:
         return []
@@ -233,3 +238,83 @@ def copied_from_prompt(essay: str | None, prompt: str | None) -> list[dict]:
                 }
             )
     return found
+
+
+def _paragraph_offsets(text: str) -> list[tuple[int, int]]:
+    """(start, end) of each paragraph of split_paragraphs in ``text`` (normalized)."""
+    offsets, position = [], 0
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if stripped:
+            start = position + line.index(stripped)
+            offsets.append((start, start + len(stripped)))
+        position += len(line) + 1
+    return offsets
+
+
+def resolve_copied(essay: str, entries) -> list[dict]:
+    """Confirmed copying, given as [{"paragraph": n} | {"quote": verbatim text}, ...],
+    turned into [{"p": paragraph number, "text": exact passage}] in essay order. A quote
+    must lie inside one paragraph, occur once and start and end on word boundaries.
+    Raises ValueError when an entry is malformed, missing or overlaps another."""
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("必须是非空列表")
+    text = normalize_newlines(essay)
+    paragraphs = _paragraph_offsets(text)
+    spans = []
+    for n, entry in enumerate(entries, 1):
+        if isinstance(entry, dict) and set(entry) == {"paragraph"}:
+            number = entry["paragraph"]
+            if type(number) is not int or not 1 <= number <= len(paragraphs):
+                raise ValueError(f"第 {n} 项的段号不在 1–{len(paragraphs)} 之间")
+            start, end = paragraphs[number - 1]
+        elif (
+            isinstance(entry, dict) and set(entry) == {"quote"} and isinstance(entry["quote"], str)
+        ):
+            quote = entry["quote"].strip()
+            if not quote or "\n" in quote or text.count(quote) != 1:
+                raise ValueError(f"第 {n} 项的原文在作文里找不到、跨段或出现不止一次")
+            start = text.index(quote)
+            end = start + len(quote)
+            if (start and text[start - 1].isalnum()) or (end < len(text) and text[end].isalnum()):
+                raise ValueError(f"第 {n} 项的原文没有从完整的词开始或结束")
+            number = next(i for i, (a, b) in enumerate(paragraphs, 1) if a <= start < b)
+        else:
+            raise ValueError(f'第 {n} 项应为 {{"paragraph": 段号}} 或 {{"quote": "原文"}}')
+        if any(start < b and a < end for a, b, _p in spans):
+            raise ValueError(f"第 {n} 项与前面的区间重叠")
+        spans.append((start, end, number))
+    return [{"p": number, "text": text[a:b]} for a, b, number in sorted(spans)]
+
+
+def confirmed_copies(submission: dict) -> dict | None:
+    """Copying confirmed for a submission (stored as JSON in its copied_spans column):
+    {"spans": [{"p", "text", "words"}], "source": str, "words": int}, or None."""
+    raw = submission.get("copied_spans")
+    if not raw:
+        return None
+    data = json.loads(raw) if isinstance(raw, str) else raw
+    spans = [
+        {"p": span["p"], "text": span["text"], "words": count_words(span["text"])}
+        for span in data.get("spans") or []
+    ]
+    if not spans:
+        return None
+    return {
+        "spans": spans,
+        "source": data.get("source") or "",
+        "words": sum(span["words"] for span in spans),
+    }
+
+
+def unconfirmed_similar(submission: dict) -> list[dict]:
+    """similar_to_prompt hints that are not already inside confirmed copying."""
+    confirmed = confirmed_copies(submission) or {"spans": []}
+    return [
+        hint
+        for hint in similar_to_prompt(submission.get("essay_text"), submission.get("prompt_text"))
+        if not any(
+            span["p"] == hint["p"] and hint["sentence"] in span["text"]
+            for span in confirmed["spans"]
+        )
+    ]

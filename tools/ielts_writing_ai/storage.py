@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS submission (
         CHECK (image_status IN ('none', 'pending', 'ready', 'failed', 'skipped')),
     image_description TEXT,
     image_error TEXT,
+    copied_spans TEXT,
     created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_submission_user ON submission(user_id, id);
@@ -148,6 +149,10 @@ class Storage:
                 )
             conn.execute("PRAGMA journal_mode = WAL")
             conn.executescript(SCHEMA)
+            # Databases created before 2026-11-13 lack the confirmed-copying column.
+            columns = {row["name"] for row in conn.execute("PRAGMA table_info(submission)")}
+            if "copied_spans" not in columns:
+                conn.execute("ALTER TABLE submission ADD COLUMN copied_spans TEXT")
             conn.execute(
                 "INSERT OR IGNORE INTO iwa_meta(key, value) VALUES ('schema_version', ?)",
                 (str(SCHEMA_VERSION),),
@@ -243,6 +248,7 @@ class Storage:
         image_mime: str | None,
         image_status: str,
         daily_limit: int,
+        copied_spans: str | None = None,
     ) -> dict | None:
         """Create a submission with one queued generation per kind.
 
@@ -262,7 +268,7 @@ class Storage:
             cur = conn.execute(
                 "INSERT INTO submission(public_id, user_id, task_type, prompt_text, essay_text,"
                 " essay_sha256, word_count, target_band, image_path, image_mime, image_status,"
-                " created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                " copied_spans, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     public_id,
                     user_id,
@@ -275,6 +281,7 @@ class Storage:
                     image_path,
                     image_mime,
                     image_status,
+                    copied_spans,
                     iso(now),
                 ),
             )

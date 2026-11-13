@@ -82,6 +82,9 @@ def _as_int(value, default: int, *, minimum: int = 0) -> int:
         return default
 
 
+MAX_TIMEOUT = 3600.0  # seconds; one request never needs more
+
+
 def _as_float(value, default: float) -> float:
     try:
         return float(str(value).strip())
@@ -193,6 +196,15 @@ class Settings:
             raise ConfigError(f"拒绝使用主应用数据库文件名：{self.db_path.name}")
         if self.port in {5000, 5002}:
             raise ConfigError("端口 5000/5002 属于主应用，试用工具请使用其他端口")
+        for name, value in (
+            ("IWA_LLM_TIMEOUT", self.llm_timeout),
+            ("IWA_EVALUATE_THINKING_TIMEOUT", self.evaluate_thinking_timeout),
+            ("IWA_VISION_TIMEOUT", self.vision_timeout),
+        ):
+            # inf overflowed the socket timeout, 0 fell back to another default and
+            # -1 / nan surfaced as a bad response (review f46756f).
+            if not (isinstance(value, (int, float)) and 0 < value <= MAX_TIMEOUT):
+                raise ConfigError(f"{name} 必须是 0 到 {MAX_TIMEOUT:g} 秒之间的数字：{value}")
         if self.llm_provider != "fake":
             if not self.llm_api_key:
                 raise ConfigError("真实模型需要配置 IWA_LLM_API_KEY")

@@ -199,6 +199,7 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
             item.setdefault("id", f"line-{number}")
             _validate_teacher_findings(item, number)
             _validate_raters(item, number)
+            _validate_copied(item, number)
             if item.get("image"):
                 image = (path.parent / item["image"]).resolve()
                 if not image.is_file():
@@ -209,6 +210,42 @@ def load_samples(source: str, limit: int | None = None) -> list[dict]:
         raise RealCheckError("没有样本")
     _validate_sample_ids(items)
     return items[:limit] if limit else items
+
+
+COPIED_SOURCE_MAX = 200
+
+
+def _validate_copied(item: dict, number: int) -> None:
+    """Optional confirmed copying (review f46756f): "copied_from_question" lists the
+    copied paragraphs or verbatim passages, [{"paragraph": 1}, {"quote": "..."}], and
+    "copied_source" says who confirmed it (for example an examiner's comment). Only
+    these are left out of the word count and passed to the model; a text comparison
+    alone is never enough."""
+    entries, source = item.get("copied_from_question"), item.get("copied_source")
+    if entries is None and source is None:
+        return
+    where = f"第 {number} 行"
+    if entries is None:
+        raise RealCheckError(f"{where}有 copied_source 但没有 copied_from_question")
+    if not isinstance(source, str) or not source.strip() or len(source) > COPIED_SOURCE_MAX:
+        raise RealCheckError(
+            f"{where} copied_from_question 需要 copied_source（确认依据，1–{COPIED_SOURCE_MAX} 字）"
+        )
+    try:
+        essay_lib.resolve_copied(_sample_essay(item), entries)
+    except ValueError as exc:
+        raise RealCheckError(f"{where} copied_from_question：{exc}") from None
+
+
+def _sample_essay(item: dict) -> str:
+    return essay_lib.normalize_newlines(item["essay"]).strip()
+
+
+def _copied_spans(item: dict, essay: str) -> str | None:
+    if not item.get("copied_from_question"):
+        return None
+    spans = essay_lib.resolve_copied(essay, item["copied_from_question"])
+    return json.dumps({"spans": spans, "source": item["copied_source"].strip()}, ensure_ascii=False)
 
 
 def _validate_teacher_findings(item: dict, number: int) -> None:
@@ -487,7 +524,7 @@ def run(
 def _run_sample(
     item, number, storage, generator, settings, user_id, kinds, target_band, *, use_vision
 ):
-    essay = essay_lib.normalize_newlines(item["essay"]).strip()
+    essay = _sample_essay(item)
     image_path = image_mime = None
     image_status = "none"
     frozen = item.get("image_frozen") if item["task_type"] == "task1" else None
@@ -516,6 +553,7 @@ def _run_sample(
         image_mime=image_mime,
         image_status=image_status,
         daily_limit=10**9,
+        copied_spans=_copied_spans(item, essay),
     )
     if frozen:
         # The frozen state as it was read, including a failed reading's diagnostic
@@ -564,6 +602,7 @@ def _run_sample(
                 "image_status",
                 "image_error",
                 "image_description",  # the chart reading also reaches the model
+                "copied_spans",  # confirmed copying, also sent to the model
             )
         },
         "generations": {

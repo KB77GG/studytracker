@@ -53,6 +53,8 @@ INPUT_FIELDS = (
 def _fingerprint(sample: dict) -> str:
     sub = sample.get("submission") or {}
     text = "\x1f".join(str(sub.get(k) or "") for k in INPUT_FIELDS)
+    if sub.get("copied_spans"):  # only then, so earlier fingerprints are unchanged
+        text += "\x1f" + sub["copied_spans"]
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
 
 

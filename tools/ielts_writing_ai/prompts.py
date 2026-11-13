@@ -7,7 +7,7 @@ import json
 from . import argument as argument_lib
 from . import essay as essay_lib
 
-PROMPT_VERSION = "iwa-2026-11-13.13"
+PROMPT_VERSION = "iwa-2026-11-13.14"
 
 EXAMINER_ROLE = (
     "You are a senior IELTS Writing examiner and writing coach for Chinese learners. "
@@ -409,20 +409,23 @@ def build_evaluate(submission: dict, sentences: list[essay_lib.Sentence]) -> tup
         ]
     else:
         payload["essay"] = submission["essay_text"]
-    copied = essay_lib.copied_from_prompt(submission["essay_text"], submission["prompt_text"])
+    copied = essay_lib.confirmed_copies(submission)
     if copied:
-        # Only when found, so the messages of every other essay are unchanged (.13).
-        payload["copied_from_question"] = [{"p": c["p"], "sentence": c["sentence"]} for c in copied]
-        payload["word_count_without_copied"] = submission["word_count"] - sum(
-            c["words"] for c in copied
-        )
+        # Only copying a person confirmed (.14): a text comparison is never sent, since
+        # sentences that reuse the question's words often add the writer's own trend,
+        # stance or data (review f46756f). Every other essay's messages are unchanged.
+        payload["copied_from_question"] = [
+            {"p": s["p"], "text": s["text"]} for s in copied["spans"]
+        ]
+        payload["word_count_without_copied"] = submission["word_count"] - copied["words"]
         payload["copied_note"] = (
-            "A text comparison found that the sentences in copied_from_question repeat the "
-            "question almost word for word. As in the test, words copied from the question do "
-            "not count towards the word count and are not the candidate's own ideas or "
-            "language: do not credit them for task response, development, vocabulary or "
-            "grammar, and judge length by word_count_without_copied. You may say in the "
-            "feedback that the question was copied."
+            "A reviewer confirmed that the passages in copied_from_question were copied from "
+            "the question. As in the test, words copied from the question do not count "
+            "towards the word count and are not the candidate's own ideas or language: judge "
+            "length by word_count_without_copied and do not credit those passages for task "
+            "response, development, vocabulary or grammar. Everything else in the essay is "
+            "the candidate's own and is assessed as usual. You may say in the feedback that "
+            "the question was copied."
         )
     user = (
         "Evaluate this IELTS essay.\n"

@@ -301,6 +301,35 @@ def _consistency(raw: dict, essay: str) -> tuple[list[dict], int, int]:
     return issues[:MAX_COMPARISONS], checked, dropped
 
 
+def _paragraph_list(numbers) -> str:
+    return "、".join(f"第 {p} 段" for p in sorted(set(numbers)))
+
+
+def _copy_warnings(submission: dict, minimum: int, warnings: list[str]):
+    """Confirmed copying (left out of the count) and unconfirmed similar sentences
+    (a hint only: the count and the evaluation stay on the original text)."""
+    confirmed = essay_lib.confirmed_copies(submission)
+    if confirmed:
+        own = submission["word_count"] - confirmed["words"]
+        basis = f"依据：{confirmed['source']}" if confirmed["source"] else "已人工确认"
+        warning = (
+            f"{_paragraph_list(s['p'] for s in confirmed['spans'])}有 {confirmed['words']} 词"
+            f"已确认是照抄题目（{basis}）。考试中照抄的题目文字不计入字数，也不算考生自己的"
+            f"内容和语言；原文 {submission['word_count']} 词，去掉后 {own} 词"
+        )
+        if own < minimum <= submission["word_count"]:
+            warning += f"，低于 {minimum} 词要求"
+        warnings.append(warning + "。")
+    similar = essay_lib.unconfirmed_similar(submission)
+    if similar:
+        warnings.append(
+            f"{_paragraph_list(h['p'] for h in similar)}有 {len(similar)} 句与题目用词高度重合"
+            "（程序按文字比对标出，待确认）。如果是照抄题目，考试中不计入字数；如果句中有自己的"
+            "观点、趋势或数据，就照常计算。本工具没有因此扣字数，评分也按原文进行。"
+        )
+    return (confirmed or {"spans": []})["spans"], similar
+
+
 def normalize_evaluation(raw: dict, submission: dict) -> dict:
     """Validate a model evaluation; reject it unless every scored criterion has a real
     reason and at least one quote that can be found verbatim in the essay."""
@@ -396,20 +425,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             f"字数 {submission['word_count']} 低于 {minimum} 词要求，实际考试中"
             f"{criteria[0]['label']}会因此受限。"
         )
-    copied = essay_lib.copied_from_prompt(
-        submission.get("essay_text"), submission.get("prompt_text")
-    )
-    if copied:
-        copied_words = sum(c["words"] for c in copied)
-        own = submission["word_count"] - copied_words
-        where = "、".join(f"第 {p} 段" for p in sorted({c["p"] for c in copied}))
-        warning = (
-            f"{where}有 {len(copied)} 句与题目几乎逐字相同（共 {copied_words} 词，程序按文字比对标出）。"
-            f"考试中照抄的题目文字不计入字数，也不算考生自己的内容和语言；去掉后约 {own} 词"
-        )
-        if own < minimum <= submission["word_count"]:
-            warning += f"，低于 {minimum} 词要求"
-        warnings.append(warning + "。")
+    copied, similar = _copy_warnings(submission, minimum, warnings)
     if not task_ok:
         warnings.append(
             f"{ta_unassessable_reason(submission)}：Task Achievement 无法核对数据，"
@@ -498,8 +514,10 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "suggestions_removed": removed,
         "count_corrections": count_corrections,
         "length_notes": length_notes,  # advice that got the recount reminder
-        # Sentences repeating the question almost word for word (essay.copied_from_prompt).
-        "copied_from_question": [{"p": c["p"], "words": c["words"]} for c in copied],
+        # Confirmed copying, left out of the word count (essay.confirmed_copies), and
+        # sentences a text comparison found close to the question, shown as hints only.
+        "copied_from_question": [{"p": s["p"], "words": s["words"]} for s in copied],
+        "similar_to_question": [{"p": h["p"], "words": h["words"]} for h in similar],
         "warnings": warnings,
     }
 

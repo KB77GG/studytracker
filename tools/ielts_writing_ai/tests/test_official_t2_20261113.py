@@ -1,41 +1,23 @@
 """After the official Task 2 run of 2026-11-13
 (docs/design/ielts-writing-ai-official-t2-pro-20261113-results): the argument map cut a
-9-paragraph essay at 8 paragraphs; the question copied at the top of the essay was
-neither marked nor discounted; image reading could only go through a generic
-provider with a 700-token budget and the text timeout. Synthetic texts only (the
-official script itself stays out of the repository)."""
+9-paragraph essay at 8 paragraphs; image reading could only go through a generic
+provider with a 700-token budget and the text timeout. The question copied at the top
+of the essay is handled in test_copied_question_20261113 (review f46756f replaced the
+first, similarity-based attempt). Synthetic texts only (the official script itself stays
+out of the repository)."""
 
 import io
-import json
 import threading
 import unittest
 from http.server import HTTPServer
 
-from tools.ielts_writing_ai import argument, essay, prompts, review
+from tools.ielts_writing_ai import argument
 from tools.ielts_writing_ai.config import load_settings
-from tools.ielts_writing_ai.llm import ChatClient, FakeClient
+from tools.ielts_writing_ai.llm import ChatClient
 
 from .helpers import PNG_BYTES, AppTestCase
 from .test_llm import StubHandler, ok
 from .test_visual import reading
-
-QUESTION = (
-    "City parks bring many benefits to residents. At the same time, there is worry about "
-    "their cost to local councils and the space they take up. Do the advantages of city "
-    "parks outweigh the disadvantages?"
-)
-COPIED_OPENING = (
-    "City parks bring many benefits to residents. At the same time there is worry about "
-    "it's costing to local councils and the space they take up.\n"
-    "Do the advantages of city parks outweight the disadvantages?\n"
-)
-OWN_TEXT = (
-    "In my opinion parks are good for a city because people can relax there after work.\n"
-    "Firstly, children have a safe place to play and families meet their neighbours.\n"
-    "Secondly, trees clean the air and make the summer less hot in busy streets.\n"
-    "However, parks need money every year and some councils have very small budgets.\n"
-    "To sum up, I think the advantages are bigger than the problems if parks are planned well."
-)
 
 
 class ParagraphCapTest(unittest.TestCase):
@@ -60,66 +42,6 @@ class ParagraphCapTest(unittest.TestCase):
         mapped = argument.normalize(raw, text)
         self.assertEqual([p["p"] for p in mapped["paragraphs"]], list(range(1, 10)))
         self.assertEqual((mapped["real_paragraphs"], mapped["over_limit"]), (9, 0))
-
-
-class CopiedQuestionTest(unittest.TestCase):
-    def test_near_verbatim_sentences_are_found_with_their_words(self):
-        found = essay.copied_from_prompt(COPIED_OPENING + OWN_TEXT, QUESTION)
-        self.assertEqual([c["p"] for c in found], [1, 1, 2])
-        self.assertEqual(sum(c["words"] for c in found), essay.count_words(COPIED_OPENING))
-
-    def test_reusing_some_words_of_the_question_is_not_copying(self):
-        for text in (
-            "Parks bring benefits, but councils worry about what they cost.",  # paraphrase
-            "City parks bring many benefits.",  # under six words
-            "Residents bring councils many parks at the same cost time worry.",  # no long run
-            OWN_TEXT,
-        ):
-            with self.subTest(text=text[:40]):
-                self.assertEqual(essay.copied_from_prompt(text, QUESTION), [])
-        self.assertEqual(essay.copied_from_prompt(COPIED_OPENING, ""), [])
-
-    def submission(self, text):
-        return {
-            "task_type": "task2",
-            "prompt_text": QUESTION,
-            "essay_text": text,
-            "word_count": essay.count_words(text),
-            "target_band": 7.0,
-        }
-
-    def test_the_model_is_told_only_when_something_was_copied(self):
-        copied = self.submission(COPIED_OPENING + OWN_TEXT)
-        messages, _ = prompts.build_evaluate(copied, essay.split_sentences(copied["essay_text"]))
-        payload = json.loads(messages[1]["content"].split("\n", 1)[1].rsplit("\n", 1)[0])
-        self.assertEqual([c["p"] for c in payload["copied_from_question"]], [1, 1, 2])
-        self.assertEqual(payload["word_count_without_copied"], essay.count_words(OWN_TEXT))
-        self.assertIn("do not count towards the word count", payload["copied_note"])
-        own = self.submission(OWN_TEXT)
-        own_messages, _ = prompts.build_evaluate(own, essay.split_sentences(OWN_TEXT))
-        self.assertNotIn("copied_from_question", own_messages[1]["content"])
-        self.assertEqual(own_messages[0], messages[0])  # the rules themselves are unchanged
-
-    def evaluated(self, text):
-        submission = self.submission(text)
-        _messages, context = prompts.build_evaluate(submission, essay.split_sentences(text))
-        raw = FakeClient._evaluate(context)  # a valid evaluation of this essay
-        return review.normalize_evaluation(raw, submission)
-
-    def test_the_page_warns_with_both_counts(self):
-        text = COPIED_OPENING + OWN_TEXT
-        result = self.evaluated(text)
-        own = essay.count_words(OWN_TEXT)
-        warning = next(w for w in result["warnings"] if "与题目几乎逐字相同" in w)
-        self.assertIn("第 1 段、第 2 段有 3 句", warning)
-        self.assertIn(f"去掉后约 {own} 词", warning)
-        self.assertEqual(
-            sum(c["words"] for c in result["copied_from_question"]),
-            essay.count_words(COPIED_OPENING),
-        )
-        clean = self.evaluated(OWN_TEXT)
-        self.assertEqual(clean["copied_from_question"], [])
-        self.assertFalse(any("与题目几乎逐字相同" in w for w in clean["warnings"]))
 
 
 class DeepSeekVisionSettingsTest(unittest.TestCase):
