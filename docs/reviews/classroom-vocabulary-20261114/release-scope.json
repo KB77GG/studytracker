@@ -1,0 +1,32 @@
+{
+  "source_path": "/private/tmp/studytracker-classroom-vocabulary-20261114",
+  "base": "7e203341b034a4cae3b7554439c1894dd5e64fc2",
+  "feature_commit": "ca54816c54c4442e0c2ac8a8bf591fbf0d001a7f",
+  "integrated_tested_commit": "ac7e14311b8269a9fc4bf2391e6f62b85b888702",
+  "release_head": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+  "files": [
+    ".github/workflows/ci.yml",
+    "api/__init__.py",
+    "api/classroom_vocabulary.py",
+    "dictation_answers.py",
+    "services/classroom_vocabulary.py",
+    "static/css/classroom_vocabulary.css",
+    "static/js/classroom_vocabulary.js",
+    "static/js/task_dictation_preset.js",
+    "templates/classroom_vocabulary.html",
+    "templates/materials.html",
+    "templates/materials_v2.html",
+    "templates/tasks.html",
+    "tests/test_classroom_vocabulary.js",
+    "tests/test_classroom_vocabulary.py",
+    "tests/test_classroom_vocabulary_learning.py",
+    "tests/test_task_dictation_preset.js"
+  ],
+  "runtime_manifest_verified": true,
+  "local_integrated_tests": {
+    "python": 99,
+    "node": 39
+  },
+  "schema_changes": false,
+  "miniprogram_changes_in_this_feature": false
+}

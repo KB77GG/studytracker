@@ -1,5 +1,26 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-14 课堂生词后台录入已部署
+
+- 用户明确“部署吧”。业务提交 `ca54816c54c4442e0c2ac8a8bf591fbf0d001a7f`，先合入并行已发布小班任务 `63fa27f9` 得 `ac7e1431`（CI两处冲突保留双方步骤），再保留其文档 `7e203341` 得最终发布HEAD **`21fcd7d4d41025aa6741fe59fab91f00a73dbfce`**。已commit并原子push任务分支 `codex/classroom-vocabulary-20261114` 与main，后端上线成功；没有覆盖小班业务/小程序改动。
+- 实现树 `/private/tmp/studytracker-classroom-vocabulary-20261114`，当前业务HEAD21fcd7d4。相对上线前主线7e203341仅16个业务/测试/CI文件；清单 `docs/reviews/classroom-vocabulary-20261114/release-scope.json`。报告及两交接随后独立 `[skip ci]` 提交同步，最终文档HEAD以git为准；完成后该树应clean。旧主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main@`6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked入口保留，本轮只增量更新两交接，其余并行/写作记录未覆盖。旧桌面main不是发布源。
+- 入口 **https://studytracker.xin/materials/classroom-vocabulary**，也可从后台材料库“录入课堂生词”进入。Excel/WPS三列粘贴或xlsx首表上传→预览→保存→选择学生布置，默认reading，保存本身不自动发任务/微信消息。保序、词性、短语、多义/重复校验、原子保存/重试复用、权限与CSRF均沿验收版本；没有schema新增、AI/TTS批处理或真实学生资料写入。
+- 发布前复跑33Python+19Node及旧拼写队列通过；合并小班后 **99Python+39Node**通过。原168Python/19Node为前轮全面相关回归，不重复累加。独立SHA审计14课堂非共享文件未变、小班10非共享文件保持、两蓝图与两组CI步骤完整；最终12运行文件manifest冻结一致。精确命令见报告README。Python3.10语法、目标Ruff/Black及diff通过，未跑全仓测试。
+- CI：原分支43586536996、合并43587031580、最终分支43587357100、[main43587357663](https://github.com/KB77GG/studytracker/actions/runs/43587357663)均success，test/account-provisioning/task-planner三组通过；存量advisory lint仍failure，不冒称全仓lint通过。[Deploy43587357675](https://github.com/KB77GG/studytracker/actions/runs/43587357675) success（37秒）。证据 `ci-release.json`。
+- 生产只读验收：`/root/apps/studytracker` **21fcd7d4**、tracked clean、113untracked计数保持；**2026-11-14 18:53:33 CST**起active/running、NRestarts0，5002/单worker/gthread6不变。12运行文件SHA全一致，公网3个新增CSS/JS均200且SHA相同；新入口/材料库未登录302到正确login next，login200，重启后warning以上0。核验UTC10:56:49（北京18:56:49），`production-acceptance.json` ok=true；执行器 `verify_release.py` 只读文件/systemd/匿名HTTP，不import app/config、不读学生表。
+- 本轮网页前后端已发布，代码和提交报告可跨电脑从远端获取；主资料树其他脏代码和仅本机同步确认仍只在Mac。无人工生产业务DB写入、成绩重算或外部设置变更；本功能小程序代码未新增变化，未上传/提审/发布。并行小班小程序仍由其任务单独发包，本任务不声称已发布小班前端。
+- 未验证/下一步：真实教师生产导入提交、微信真机背词和真实到期复习仍待使用；已由内存真实API集成验证导入→学习→结算→到期词义复习，本轮线上验收不创建测试词书/Task。无需为课堂词表重发小程序包；老师刷新后台即可使用。如反馈问题按词表/行号排查，保留原首次成绩，不重复部署或重算。
+
+## 2026-11-14 课堂生词三列后台录入：本地实现阶段记录（发布状态见上）
+
+- 用户明确“还是在后台录入”。实现树 `/private/tmp/studytracker-classroom-vocabulary-20261114`、分支 `codex/classroom-vocabulary-20261114`，开工clean、基线/HEAD `44f3bccdc9d4cb978c6df4b4c9ab7a5b2baa1211`（fetch origin main成功，未pull主树）。现有6个业务/CI文件修改、10个新代码/测试文件及报告目录、两交接均未提交；完整清单和验收见该树 `docs/reviews/classroom-vocabulary-20261114/README.md`，Git快照见 `source-state.json`。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`、behind113，开工原7 modified/23 untracked顶层入口保留。本轮该树只改两交接；原 `design-qa.md`、`static/style.css`、`templates/listening/index.html`、`templates/listening/test_practice.html`、`templates/login.html` 和既有未跟踪资料均未触碰。其他worktree未改，切勿认为旧main已有本功能。
+- 后台材料库新增“录入课堂生词”：三列粘贴或xlsx首表→预览校验→保存→进入既有任务面板预选词书/阅读目标。保序/短语/多义、规范词性提示、空行/重复/格式错误处理、1,200词上限、教师/助教/admin权限、CSRF、原子保存和重试复用均实现；保存本身不建任务或发微信消息。原词库发布死链已接真实 `/tasks?preset_dictation_book=ID`。
+- 复用Book/Word，无schema、无模型生成或全书TTS预热；词性保存在translation前缀，学生熟悉卡正常显示。共享中文判分补齐常见词性与复合前缀，单字中文正确。缺例句沿原规则跳过语境，可正常完成词义学习及复习；不声称生成语境训练。幂等并发锁依现有生产单worker，多进程唯一性未承诺。
+- 主审精确验证（cwd实现树）：`PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -q`→33；同命令模块替换为 `tests.test_vocabulary_mastery tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_autonomous_review tests.test_dictation_review`→135；`node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js`→19。合计168Python+19Node，Ruff/Black/6文件Python3.10 AST/两JS语法/diff检查通过。新用例已接CI，未运行远端CI，未跑全仓。
+- 真实浏览器用回环5099内存合成教师库，录入/三列预览/保存/跳转/词书和reading预选/展开布置面板通过，学生栏空且未提交Task；截图/范围见报告。测试内真实学生API走熟悉→裸中文首答→100%结算→next_due复习通过。真实老师POST、浏览器文件选择器和微信真机未验；夹具分页类型错误已修，申诉接口夹具未提供，不冒称整页零错误。预览服务已停、测试页已关。
+- **本轮仅本机可见，未commit/push/merge/deploy**。无生产访问、真实数据库/外部服务配置写入，后端未部署，小程序未改/未上传/提审/发布。两树的 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 均已记录。下一位先核Git及实现树报告；发布须用户明确授权，不能从旧桌面main发布；获准后上线后台并以授权账号做真机词汇验收。
+
 ## 2026-11-14 小班作业后端已部署，源码已推送；小程序尚未发布
 
 - 用户明确“要的，你部署吧”，授权提交/push及后端部署。发布树 `/private/tmp/studytracker-small-class-homework-20261114`、`codex/small-class-homework-20261114`，从44f3bccd基线提交12个产品/测试/CI文件为 **63fa27f9cefc974ab15c76c90f96e8e1ee0468a7**，已推任务分支和main。发布前fetch确认main无漂移，未合入他任务代码。3个报告/验收文件与两交接以独立 `[skip ci]` 文档提交同步，文档HEAD以Git为准，收尾发布树应clean。修复已可从远端获取，不再仅本机。

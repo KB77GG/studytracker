@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-14",
+  "environment": "loopback synthetic Flask with in-memory SQLite; no app.py/config/production",
+  "browser": "in-app browser",
+  "checks": {
+    "materialsEntry": true,
+    "tsvPreview": true,
+    "normalizedPosWarning": true,
+    "threeColumnsPreserved": true,
+    "saveSuccess": true,
+    "assignmentLink": true,
+    "selectedBook": "dictation-1",
+    "selectedGoal": "reading",
+    "drawerOpen": true,
+    "studentInitiallyEmpty": true
+  },
+  "screenshots": [
+    "preview.jpg",
+    "assignment.jpg"
+  ],
+  "limits": [
+    "No real teacher/student data used",
+    "Task POST not exercised in browser; fixture /tasks is GET-only",
+    "Student learning/review exercised via real APIs in isolated integration test",
+    "Excel parsing exercised in Python tests; native file chooser not used",
+    "No mobile viewport or real WeChat device tested"
+  ],
+  "fixtureNotes": [
+    "Initial /tasks fixture had pages=1; corrected to pages=[] and both rendered routes returned 200",
+    "Unrelated appeals panel reports missing synthetic endpoint; not a production finding"
+  ]
+}

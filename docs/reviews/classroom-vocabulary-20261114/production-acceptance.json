@@ -1,0 +1,70 @@
+{
+  "checked_at_utc": "2026-11-14T10:56:49.647706+00:00",
+  "scope": "Read-only files, systemd, anonymous GET; no app/config import or DB access",
+  "head": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+  "expected_head": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sat 2026-11-14 18:53:33 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "files_match": {
+    "api/__init__.py": true,
+    "api/classroom_vocabulary.py": true,
+    "services/classroom_vocabulary.py": true,
+    "dictation_answers.py": true,
+    "templates/materials.html": true,
+    "templates/materials_v2.html": true,
+    "templates/tasks.html": true,
+    "templates/classroom_vocabulary.html": true,
+    "static/css/classroom_vocabulary.css": true,
+    "static/js/classroom_vocabulary.js": true,
+    "static/js/task_dictation_preset.js": true,
+    "gunicorn.conf.py": true
+  },
+  "pages": {
+    "/materials/classroom-vocabulary": {
+      "status": 302,
+      "location": "/login?next=%2Fmaterials%2Fclassroom-vocabulary",
+      "sha256": "25845c22ae9cef42df4df15440c2ecfafa9b521a2ebed965051fa4d181ed7e2d"
+    },
+    "/materials": {
+      "status": 302,
+      "location": "/login?next=%2Fmaterials",
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019"
+    },
+    "/login": {
+      "status": 200,
+      "location": null,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43"
+    }
+  },
+  "public_assets": {
+    "static/css/classroom_vocabulary.css": {
+      "status": 200,
+      "location": null,
+      "sha256": "9666f3bb6d4505a50070b236c60c8ff6f88b3b3df7494549fee240984a726d47"
+    },
+    "static/js/classroom_vocabulary.js": {
+      "status": 200,
+      "location": null,
+      "sha256": "63308a5af0b3def9b6cb6f993ec002a812ac5fdf84b5375be797bd6892b67589"
+    },
+    "static/js/task_dictation_preset.js": {
+      "status": 200,
+      "location": null,
+      "sha256": "5b8e3fcff2ba35552a84101add149e44c6b2875b3890cefccd34bfb406013522"
+    }
+  },
+  "warning_lines_since_restart": 0,
+  "ok": true
+}

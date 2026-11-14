@@ -1,0 +1,69 @@
+{
+  "implementation": {
+    "path": "/private/tmp/studytracker-classroom-vocabulary-20261114",
+    "branch": "codex/classroom-vocabulary-20261114",
+    "head": "44f3bccdc9d4cb978c6df4b4c9ab7a5b2baa1211",
+    "origin_main": "44f3bccdc9d4cb978c6df4b4c9ab7a5b2baa1211",
+    "status": "## codex/classroom-vocabulary-20261114...origin/main\n M .github/workflows/ci.yml\n M api/__init__.py\n M dictation_answers.py\n M templates/materials.html\n M templates/materials_v2.html\n M templates/tasks.html\n?? api/classroom_vocabulary.py\n?? docs/reviews/classroom-vocabulary-20261114/\n?? services/classroom_vocabulary.py\n?? static/css/classroom_vocabulary.css\n?? static/js/classroom_vocabulary.js\n?? static/js/task_dictation_preset.js\n?? templates/classroom_vocabulary.html\n?? tests/test_classroom_vocabulary.js\n?? tests/test_classroom_vocabulary.py\n?? tests/test_classroom_vocabulary_learning.py\n?? tests/test_task_dictation_preset.js",
+    "log5": "44f3bccd docs: record inline highlight review release acceptance [skip ci]\nfb5b2747 fix: 在复盘原题中直接保留高亮并展开逐题解析\na673a613 docs: record Cambridge desktop line layout acceptance [skip ci]\nbe45283f fix: 合并剑18听力反偷猎法规题干的错误断行\n038bd8e0 fix: 保留听力题干源行并修正网页表单错位",
+    "final_status": "## codex/classroom-vocabulary-20261114...origin/main\n M .github/workflows/ci.yml\n M api/__init__.py\n M dictation_answers.py\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M templates/materials.html\n M templates/materials_v2.html\n M templates/tasks.html\n?? api/classroom_vocabulary.py\n?? docs/reviews/classroom-vocabulary-20261114/\n?? services/classroom_vocabulary.py\n?? static/css/classroom_vocabulary.css\n?? static/js/classroom_vocabulary.js\n?? static/js/task_dictation_preset.js\n?? templates/classroom_vocabulary.html\n?? tests/test_classroom_vocabulary.js\n?? tests/test_classroom_vocabulary.py\n?? tests/test_classroom_vocabulary_learning.py\n?? tests/test_task_dictation_preset.js"
+  },
+  "main_reference": {
+    "path": "/Users/zhouxin/Desktop/studytracker",
+    "branch": "main",
+    "head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+    "origin_main": "44f3bccdc9d4cb978c6df4b4c9ab7a5b2baa1211",
+    "status": "## main...origin/main [behind 113]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+    "log5": "6ded77d2 feat: 剑雅20全量切换新东方纯对话精听\nfc701bfa feat: 保留剑20旧精听任务兼容快照\nb45a0fef docs: 记录45句精听覆盖上线状态 [skip ci]\n8b1c69dc fix: 保留45句精听的原轨重建能力\n9aadc152 feat: 剑20 T1S1替换为45句纯对话精听",
+    "final_status": "## main...origin/main [behind 113]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py"
+  },
+  "python_310_ast": {
+    "files": [
+      "api/classroom_vocabulary.py",
+      "services/classroom_vocabulary.py",
+      "dictation_answers.py",
+      "tests/test_classroom_vocabulary.py",
+      "tests/test_classroom_vocabulary_learning.py",
+      "docs/reviews/classroom-vocabulary-20261114/preview.py"
+    ],
+    "result": "pass"
+  },
+  "existing_main_business_sha256": {
+    "design-qa.md": "b644c496bbf63b78d5d98559dddd32fbbfac16965a0464ce92bfe74b7d434d40",
+    "static/style.css": "9eead60c81db7e466b3ae60add3c2948d8bd478d9d2848d7a8bd910f26344b9b",
+    "templates/listening/index.html": "ef43c9cd5176a978dbe189619dd1198c1811d37478729796a69f4028abe15f7a",
+    "templates/listening/test_practice.html": "90becb856ea1015f979ee0a50fe90ee1b043272a23dc180aa51e171ead2410af",
+    "templates/login.html": "a8ad1fc4b6701fe26007d885dca8a07889a1646fa940e572370e70c55a58ce93"
+  },
+  "final_feature_sha256": {
+    ".github/workflows/ci.yml": "bde8bd39e6a0c383bfe6228765a5c929f3f82af3a724cec293bab58005ac8e11",
+    "api/__init__.py": "e316b07eaff2eb9dd01a7e9d30dbf6cf95f6c128ea189d50f607c211ac46aaaf",
+    "dictation_answers.py": "db83c3ba4cbdce187c553342d430789705f4319000904d4b373edca91f0abe03",
+    "templates/materials.html": "2080d6378fe33e2dce479e27314e9dbb0f0f78786417867c0bd0c07e710943a1",
+    "templates/materials_v2.html": "eb5e1b5bd3d3e93c04dcb1af434a4c35871c98c5e9e7eeb134e751df9475ea20",
+    "templates/tasks.html": "52e489ab3e93b7f4276b3becb05cb87702a36e208ec7ba6442b541ee45f448f0",
+    "api/classroom_vocabulary.py": "320225cbde166c765324d728689a5e6f19ec34403cd4cf1373e7bd70bea81e08",
+    "services/classroom_vocabulary.py": "2c24170c1be86d8171d2d1ab1d4d63c9a8d46e9e5313b729ced5c70c0ec0b5b6",
+    "templates/classroom_vocabulary.html": "a0c5299123cb512e82c68e49939b82c7e8c1a7ec8a35906898f15da7e19a306f",
+    "static/css/classroom_vocabulary.css": "9666f3bb6d4505a50070b236c60c8ff6f88b3b3df7494549fee240984a726d47",
+    "static/js/classroom_vocabulary.js": "63308a5af0b3def9b6cb6f993ec002a812ac5fdf84b5375be797bd6892b67589",
+    "static/js/task_dictation_preset.js": "5b8e3fcff2ba35552a84101add149e44c6b2875b3890cefccd34bfb406013522",
+    "tests/test_classroom_vocabulary.py": "35e62de855161d81219561cf3d7ff39c51fb011ba9324a1196bd0200bd1919de",
+    "tests/test_classroom_vocabulary_learning.py": "78797fa2eab8cef367d30f6aa7ad35c7734a822a761ca31c9b16974a428c57ca",
+    "tests/test_classroom_vocabulary.js": "ed5016892bb41c935620abc1a3cf3e85e575fc459ff18956234e0c926db47e0d",
+    "tests/test_task_dictation_preset.js": "0e1a9ffec7af599b71892c27159a509821e5724dc062ac39e24a747203cb864f"
+  },
+  "final_checks": {
+    "python_tests": 168,
+    "node_tests": 19,
+    "scoped_ruff": "pass",
+    "scoped_black": "pass",
+    "python_310_ast": "pass",
+    "js_syntax": "pass",
+    "diff_check_both_handoffs": "pass",
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "preview_stopped": true
+  }
+}

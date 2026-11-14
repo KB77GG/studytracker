@@ -1,5 +1,13 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-14 — 课堂生词后台录入已上线
+
+用户授权部署。业务ca54816c，保留并行小班63fa27f9与其文档7e203341，最终21fcd7d4已push分支/main并部署。发布前33Python+19Node、合并后99Python+39Node通过；最终main CI43587357663三测试job通过、Deploy43587357675成功，advisory lint存量failure。生产21fcd7d4/12SHA一致、18:53:33 CST active、单worker/gthread6/5002、warning0；匿名入口登录跳转与公网3资源哈希通过，未查写学生数据。新入口 `/materials/classroom-vocabulary`：粘贴或xlsx三列→预览保存→选学生布置，小程序沿用现有背词复习。完整清单/证据/限制在实现树 `docs/reviews/classroom-vocabulary-20261114/`；报告和两交接独立skip-ci同步，旧主树7/23保留仅交接增量。课堂功能无需小程序发包；真实教师生产提交/微信真机待使用，未作人工DB/外部配置/小程序发布操作。
+
+## 2026-11-14 — 课堂生词后台三列录入（本机实现）
+
+用户确认后台录入。新隔离树 `/private/tmp/studytracker-classroom-vocabulary-20261114`、`codex/classroom-vocabulary-20261114@44f3bccd` 实现粘贴/首表xlsx预览、三列校验/词性保留、阅读词书保存与布置面板预选，修词库发布死链；不自动建任务/发消息、无schema/模型调用。主审168Python+19Node、Ruff/Black/AST/JS/diff通过，浏览器合成录入→保存→预选通过，学生API学习→结算→复习通过；真实老师POST/微信真机未验。5099内存服务已停、页已关。原主资料树6ded77d2、7modified/23untracked保留，仅两交接增量。完整清单/命令/截图在实现树 `docs/reviews/classroom-vocabulary-20261114/`。两树交接更新，全部仅本机，未commit/push/deploy/生产访问/小程序发布；待明确发布授权。
+
 ## 2026-11-14 — 小班作业后端发布验收通过
 
 用户授权部署后，发布树 `codex/small-class-homework-20261114` 从44f3bccd提交12文件为63fa27f9，已push分支/main；分支CI43586388378、main CI43586564442、Deploy43586564446 success（三测试job通过、旧advisory lint failure）。生产18:43:19 CST起active，HEAD63fa27f9、tracked clean、worker1/gthread6/5002、NRestarts0、warning0；9SHA一致、内外网6匿名GET符合预期。验收脚本及结果/README和两交接以[skip ci]同步，详见CODEX_HANDOFF顶部。旧主树6ded77d2原7/23保留，仅两交接更新。无人工学生库/名单/Task写入或真实通知；后端已部署，小程序源码已推但未上传/提审/发布，仍需补齐个案个人档案并保存名单，再以新微信包核验。修复已可远端获取，其他主树脏资料仍仅本机。

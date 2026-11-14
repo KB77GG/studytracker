@@ -1,0 +1,137 @@
+[
+  {
+    "conclusion": "success",
+    "databaseId": 43586536996,
+    "headBranch": "codex/classroom-vocabulary-20261114",
+    "headSha": "ca54816c54c4442e0c2ac8a8bf591fbf0d001a7f",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "task-planner",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "account-provisioning",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "lint",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43586536996"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 43587031580,
+    "headBranch": "codex/classroom-vocabulary-20261114",
+    "headSha": "ac7e14311b8269a9fc4bf2391e6f62b85b888702",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "account-provisioning",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "task-planner",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "lint",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43587031580"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 43587357100,
+    "headBranch": "codex/classroom-vocabulary-20261114",
+    "headSha": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "account-provisioning",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "lint",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "task-planner",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43587357100"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 43587357663,
+    "headBranch": "main",
+    "headSha": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "task-planner",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "lint",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "account-provisioning",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43587357663"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 43587357675,
+    "headBranch": "main",
+    "headSha": "21fcd7d4d41025aa6741fe59fab91f00a73dbfce",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "deploy",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43587357675"
+  }
+]
