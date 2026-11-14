@@ -1,0 +1,295 @@
+dictation audio, bounded preload, and answer display tests passed
+✔ tests/test_dictation_audio.js (283.208667ms)
+✔ tests/test_dictation_spell_queue.js (93.063708ms)
+vocabulary answer feedback tests passed
+✔ tests/test_vocabulary_feedback.js (93.486125ms)
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/vocabulary-queue?supports_correction=1',
+  method: 'GET',
+  timeout: 10000,
+  err: { errMsg: 'request:fail network' }
+}
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/vocabulary-queue?supports_correction=1',
+  method: 'GET',
+  timeout: 10000,
+  err: { errMsg: 'request:fail network' }
+}
+load vocabulary group failed { errMsg: 'request:fail network' }
+✔ learning forget saves empty input, locks the other action, shows the answer until explicit continuation (2.252208ms)
+✔ learning requires confirmation then locks navigation until the queue GET finishes (0.952208ms)
+✔ learning applies only the latest of two independent queue GET replies or errors (1.438584ms)
+✔ learning next-question tap cannot start a second queue GET while one is loading (0.170667ms)
+✔ learning queue failure blocks old answer events and the Retry control reloads without another POST (0.456125ms)
+load vocabulary group failed { errMsg: 'request:fail timeout (learning_queue)', deadline: true }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+finalize vocabulary group failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/vocabulary-queue?supports_correction=1&attempt_id=vocabulary-group%3A42%3Afirst%3A11',
+  method: 'GET',
+  timeout: 10000,
+  err: { errMsg: 'request:fail network' }
+}
+recover vocabulary group answer failed { errMsg: 'request:fail network' }
+submit autonomous vocabulary review failed {
+  ok: false,
+  statusCode: 409,
+  error: 'review_item_invalid',
+  skip_reason: 'missing_answer'
+}
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/settle',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/settle',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7?session_token=session-token',
+  method: 'GET',
+  timeout: 5000,
+  err: { errMsg: 'request:fail network' }
+}
+request fail {
+  url: 'https://studytracker.test/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+✔ learning queue deadline and unload ignore late GET replies (5.087916ms)
+✔ learning ignores late button and keyboard events after a real saved forget, then accepts the new question (0.23575ms)
+✔ learning rejects a prior render of the same question but accepts its current render (0.109792ms)
+✔ learning partial input forget at retry saves a real retry and finishes the bounded group (0.355292ms)
+✔ learning lost finalization reply restores the server settlement and zero score (0.307667ms)
+✔ learning completed read-only task reopens its saved settlement without writing (0.099083ms)
+✔ learning timeout recovers the exact saved attempt and never substitutes a newer answer (0.272084ms)
+✔ learning exact saved forget shows the answer before continuing to a later due-review gate (0.151167ms)
+✔ learning failed recovery keeps the original partial input and permits retry (0.180584ms)
+✔ learning forget accepts empty values in meaning, audio and context question modes (0.183875ms)
+✔ old server gate and ordinary wrong answer retain the correction flow (0.057958ms)
+✔ learning concurrent ordinary answer wins over requested forget and shows its saved correction (0.0555ms)
+✔ review empty forget waits for confirmation before advancing one item and the next unanswered item cannot be skipped (0.516916ms)
+✔ review keeps the forget action disabled when the server omits support (0.045583ms)
+✔ review forget accepts empty values in all supported modes and shares the submit lock (0.460666ms)
+✔ review rejected invalid source is not counted as forget or skipped locally (0.17775ms)
+✔ review concurrent ordinary answer wins and remains in the immediate correction flow (0.073917ms)
+✔ review timeout recovers a saved forget in the same batch and shows its answer before continuation (0.557291ms)
+✔ review last forget waits for confirmation then settles to zero and displays spelling, meaning and replay (0.24275ms)
+✔ review ignores late button and keyboard events after a real saved forget, then accepts the new item (0.138916ms)
+✔ review rejects a prior render of the same item but accepts its current render (0.068042ms)
+✔ lost settlement reply restores the exact settled batch without asking for today (0.197875ms)
+✔ settlement uncertainty survives page exit and reopens the original batch (0.196417ms)
+✔ summary mapping uses the server revealed answer and never exposes an option key (0.0335ms)
+✔ an explicit server count of zero wins over display rows in both student summaries (0.086208ms)
+✔ learning late input cannot overwrite the next question or a fresh render (0.110708ms)
+✔ learning late option cannot overwrite the next question or a fresh render (0.11375ms)
+✔ review late input cannot overwrite the next item or a fresh render (0.109083ms)
+✔ review late option cannot overwrite the next item or a fresh render (0.0995ms)
+✔ both student templates bind identity and render epoch to input and each choice (0.238792ms)
+✔ forgot feedback preserves the server answer and explanation across four learning dimensions (0.396583ms)
+✔ learning last forgotten answer recovered after timeout waits before its first settlement (0.199125ms)
+✔ learning recovery of an already settled forgotten answer restores the saved result without another write (0.105333ms)
+✔ review last forgotten answer recovered after timeout stays visible until explicit settlement (0.161916ms)
+✔ late confirmation controls cannot bypass another forgotten result (0.125541ms)
+✔ templates expose an explicit answer-reading action and hide the unavailable forgotten-answer appeal (0.225167ms)
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/vocabulary-learning/correction',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail network' }
+}
+submit vocabulary correction failed { errMsg: 'request:fail network' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/tasks/42/vocabulary-learning/correction',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail network' }
+}
+submit vocabulary correction failed { errMsg: 'request:fail network' }
+submit vocabulary correction failed { errMsg: 'request:fail timeout (test_correction)', deadline: true }
+submit vocabulary correction failed Error: sync construction
+    at syncPage.correctionRequestData (/private/tmp/studytracker-vocabulary-forgot-client-20261114/tests/test_vocabulary_learning_client.js:249:52)
+    at /private/tmp/studytracker-vocabulary-forgot-client-20261114/miniprogram/pages/student/vocabulary-learning/index.js:871:24
+    at /private/tmp/studytracker-vocabulary-forgot-client-20261114/miniprogram/pages/student/vocabulary-learning/index.js:194:24
+[vocabulary-performance] learning_first_visible {
+  trace_id: 'vocab-mwgjukcs-a9bb9c11',
+  development: true,
+  marks: {
+    navigation_start: 1794669442444,
+    page_onLoad: 1794669442444,
+    request_start: 1794669442444,
+    request_end: 1794669442444,
+    response_parse_end: 1794669442444,
+    normalize_end: 1794669442444,
+    scheduler_end: 1794669442444,
+    first_setData_end: 1794669442444,
+    first_visible: 1794669442444,
+    first_interactive: 1794669442444
+  },
+  metrics: {
+    response_bytes: 311,
+    returned_words: 1,
+    actual_group_words: 1,
+    actual_session_items: 0,
+    due_total: 0,
+    first_set_data_bytes: 81
+  },
+  events: [
+    { name: 'navigation_start', at_ms: 0 },
+    { name: 'page_onLoad', at_ms: 0 },
+    { name: 'request_start', at_ms: 0, endpoint: 'learning_queue' },
+    {
+      name: 'request_end',
+      at_ms: 0,
+      endpoint: 'learning_queue',
+      ok: true,
+      response_bytes: 311
+    },
+    { name: 'response_parse_end', at_ms: 0 },
+    { name: 'normalize_end', at_ms: 0, returned_words: 1 },
+    {
+      name: 'scheduler_end',
+      at_ms: 0,
+      actual_group_words: 1,
+      actual_session_items: 0
+    },
+    { name: 'first_setData_end', at_ms: 0, first_set_data_bytes: 81 },
+    {
+      name: 'first_visible',
+      at_ms: 0,
+      index: 0,
+      actual_group_words: 1
+    },
+    { name: 'first_interactive', at_ms: 0, index: 0 }
+  ]
+}
+vocabulary learning confirmation and boundary tests passed
+✔ tests/test_vocabulary_learning_client.js (689.2895ms)
+✔ vocabulary-learning: a supplied partial mixed queue keeps its frozen IDs and ignores the previous input event (4.070458ms)
+✔ vocabulary-review: a supplied partial mixed queue keeps its frozen IDs and ignores the previous input event (3.652542ms)
+✔ vocabulary-learning: native numeric answers reach the existing submission unchanged (10.420333ms)
+✔ vocabulary-learning: mixed numeric then English questions reset input without changing English (0.994125ms)
+✔ vocabulary-learning: replayed numeric attempts remain read-only in the answer field (0.618667ms)
+✔ vocabulary-learning: numeric guidance uses public metadata without revealing answers (0.272208ms)
+✔ vocabulary-review: native numeric answers reach the existing submission unchanged (6.2885ms)
+✔ vocabulary-review: mixed numeric then English questions reset input without changing English (0.659166ms)
+✔ vocabulary-review: replayed numeric attempts remain read-only in the answer field (0.49075ms)
+✔ vocabulary-review: numeric guidance uses public metadata without revealing answers (0.163084ms)
+request fail {
+  url: 'https://review.test/api/miniprogram/student/vocabulary-review/sessions/7?session_token=test-session',
+  method: 'GET',
+  timeout: 5000,
+  err: { errMsg: 'request:fail timeout' }
+}
+✔ two queued next taps stop on the unanswered fifth word (1.251625ms)
+✔ settlement locates an earlier unanswered word without posting (0.443542ms)
+✔ settlement locates a pending correction without rewriting its first result (0.213667ms)
+✔ answer, correction and settlement locks block navigation and new settlement (0.301375ms)
+✔ server incomplete response refreshes the same session and completes after the missing answer (2.510958ms)
+✔ server recovery restores an outstanding correction and keeps the first answer (0.188625ms)
+✔ repeated taps during settlement recovery send only one POST and one GET (0.196666ms)
+✔ failed recovery unlocks retry without claiming another batch or losing answers (1.29775ms)
+✔ unloading during recovery ignores late snapshots and redirects (0.168959ms)
+✔ a snapshot for another session is rejected without switching batches (0.165833ms)
+✔ a concurrently completed missing answer requires an explicit retry, not a POST loop (0.414708ms)
+✔ a successfully finished page does not settle again (0.231666ms)
+✔ review normalization skips mixed bad rows and deduplicates without leaking answers (1.420834ms)
+✔ release tracker retains only failed requests and audio errors (0.338209ms)
+✔ development tracker exposes a throttled consolidated snapshot (0.082209ms)
+✔ performance tracker is anonymous and strips audio query parameters (0.16275ms)
+✔ audio preload is serialized across calls and capped at three entries (6.377875ms)
+✔ review page source keeps the queue out of reactive data and uses partial state updates (0.490583ms)
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+submit autonomous vocabulary review failed { ok: false, statusCode: 409, error: 'review_question_changed' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://studytracker.test/api/miniprogram/student/vocabulary-review/sessions/7?session_token=session-token',
+  method: 'GET',
+  timeout: 20,
+  err: { errMsg: 'request:fail timeout' }
+}
+recover autonomous vocabulary review answer failed { errMsg: 'request:fail timeout' }
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout (review_submit)', deadline: true }
+submit autonomous vocabulary review failed { errMsg: 'request:fail abort', pageUnloaded: true }
+vocabulary review submit recovery tests passed
+✔ tests/test_vocabulary_review_submit.js (145.365791ms)
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 698.43025

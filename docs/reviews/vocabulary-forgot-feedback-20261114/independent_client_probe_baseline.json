@@ -1,0 +1,60 @@
+{
+  "client": "/Users/zhouxin/Desktop/studytracker-release",
+  "checks": 11,
+  "passed": 2,
+  "results": [
+    {
+      "name": "learning: result stays; stale submit and keyboard confirm cannot advance",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "learning: saved timeout response restores original answer before continuation",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "learning: explicit continuation and repeated old event cannot skip unanswered word",
+      "pass": false,
+      "error": "p.continueAfterResult is not a function"
+    },
+    {
+      "name": "learning: final forgotten answer is visible before settlement",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "review: result stays; stale submit and keyboard confirm cannot advance",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "review: saved timeout response restores original answer before continuation",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "review: explicit continuation and repeated old event cannot skip unanswered word",
+      "pass": true
+    },
+    {
+      "name": "review: final forgotten answer is visible before settlement",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+    },
+    {
+      "name": "learning: timeout on final retry uses retry response rather than first result",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\n'' !== 'word71'\n"
+    },
+    {
+      "name": "review: already-settled snapshot is restored without a second settlement",
+      "pass": true
+    },
+    {
+      "name": "learning: daily-review gate during timeout recovery still reveals saved forgotten answer",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    }
+  ]
+}

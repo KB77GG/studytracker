@@ -1,0 +1,51 @@
+{
+  "client": "/private/tmp/studytracker-vocabulary-forgot-feedback-20261114/docs/reviews/vocabulary-forgot-feedback-20261114/client-files",
+  "checks": 11,
+  "passed": 11,
+  "results": [
+    {
+      "name": "learning: result stays; stale submit and keyboard confirm cannot advance",
+      "pass": true
+    },
+    {
+      "name": "learning: saved timeout response restores original answer before continuation",
+      "pass": true
+    },
+    {
+      "name": "learning: explicit continuation and repeated old event cannot skip unanswered word",
+      "pass": true
+    },
+    {
+      "name": "learning: final forgotten answer is visible before settlement",
+      "pass": true
+    },
+    {
+      "name": "review: result stays; stale submit and keyboard confirm cannot advance",
+      "pass": true
+    },
+    {
+      "name": "review: saved timeout response restores original answer before continuation",
+      "pass": true
+    },
+    {
+      "name": "review: explicit continuation and repeated old event cannot skip unanswered word",
+      "pass": true
+    },
+    {
+      "name": "review: final forgotten answer is visible before settlement",
+      "pass": true
+    },
+    {
+      "name": "learning: timeout on final retry uses retry response rather than first result",
+      "pass": true
+    },
+    {
+      "name": "review: already-settled snapshot is restored without a second settlement",
+      "pass": true
+    },
+    {
+      "name": "learning: daily-review gate during timeout recovery still reveals saved forgotten answer",
+      "pass": true
+    }
+  ]
+}

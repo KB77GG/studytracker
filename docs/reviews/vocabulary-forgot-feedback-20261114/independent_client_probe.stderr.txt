@@ -1,0 +1,35 @@
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/miniprogram/student/vocabulary-review/sessions/8/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/miniprogram/student/vocabulary-review/sessions/8/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }

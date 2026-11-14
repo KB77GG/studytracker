@@ -1,0 +1,35 @@
+{
+  "source": "/Users/zhouxin/Desktop/studytracker-release",
+  "head": "d03a2749eb99cde041cdae18305b624956d46e90",
+  "target_count": 5,
+  "all_match": true,
+  "files": {
+    "miniprogram/pages/student/vocabulary-learning/index.js": {
+      "expected": "80d5e5e923a276241c448cc5369f8844d22541239c5d2d234ee315b0a7e228c8",
+      "actual": "80d5e5e923a276241c448cc5369f8844d22541239c5d2d234ee315b0a7e228c8",
+      "matches": true
+    },
+    "miniprogram/pages/student/vocabulary-learning/index.wxml": {
+      "expected": "fb060b2c4aad855c57dd2266edb938ef894539681adce411d89300da2d65a538",
+      "actual": "fb060b2c4aad855c57dd2266edb938ef894539681adce411d89300da2d65a538",
+      "matches": true
+    },
+    "miniprogram/pages/student/vocabulary-review/index.js": {
+      "expected": "e1854b4aa156f765ed2c1cee7f4379cf69b86b42f8f1d9fad13f48cde921c290",
+      "actual": "e1854b4aa156f765ed2c1cee7f4379cf69b86b42f8f1d9fad13f48cde921c290",
+      "matches": true
+    },
+    "miniprogram/pages/student/vocabulary-review/index.wxml": {
+      "expected": "e5da8df498fcb19f55e0507d67edf9ba66aa90b06fe0052b9a244e02f696f11a",
+      "actual": "e5da8df498fcb19f55e0507d67edf9ba66aa90b06fe0052b9a244e02f696f11a",
+      "matches": true
+    },
+    "tests/test_vocabulary_forgot_client.js": {
+      "expected": "e88469fcbea90a71611357050d6c5ab6bead3f275e7943c6b4036c62fb42a2a5",
+      "actual": "e88469fcbea90a71611357050d6c5ab6bead3f275e7943c6b4036c62fb42a2a5",
+      "matches": true
+    }
+  },
+  "modified_entries": 76,
+  "untracked_entries": 35
+}

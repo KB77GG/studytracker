@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc",
+      "-o",
+      "/dev/null",
+      "miniprogram/pages/student/vocabulary-learning/index.wxml"
+    ],
+    "cwd": "/Users/zhouxin/Desktop/studytracker-release",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Applications/wechatwebdevtools.app/Contents/Resources/app.asar.unpacked/node_modules/wcc-exec/wcc",
+      "-o",
+      "/dev/null",
+      "miniprogram/pages/student/vocabulary-review/index.wxml"
+    ],
+    "cwd": "/Users/zhouxin/Desktop/studytracker-release",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "miniprogram/pages/student/vocabulary-learning/index.js"
+    ],
+    "cwd": "/Users/zhouxin/Desktop/studytracker-release",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "miniprogram/pages/student/vocabulary-review/index.js"
+    ],
+    "cwd": "/Users/zhouxin/Desktop/studytracker-release",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "tests/test_vocabulary_forgot_client.js"
+    ],
+    "cwd": "/Users/zhouxin/Desktop/studytracker-release",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

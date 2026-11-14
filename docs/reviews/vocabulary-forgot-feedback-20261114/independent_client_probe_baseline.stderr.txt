@@ -1,0 +1,91 @@
+load vocabulary group failed AssertionError [ERR_ASSERTION]: unexpected request
+    at Object.request (/private/tmp/studytracker-vocabulary-forgot-feedback-20261114/docs/reviews/vocabulary-forgot-feedback-20261114/independent_client_probe.js:13:49)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:38:12
+    at new Promise (<anonymous>)
+    at request (/Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:21:12)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:251:19
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:194:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+load vocabulary group failed AssertionError [ERR_ASSERTION]: unexpected request
+    at Object.request (/private/tmp/studytracker-vocabulary-forgot-feedback-20261114/docs/reviews/vocabulary-forgot-feedback-20261114/independent_client_probe.js:13:49)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:38:12
+    at new Promise (<anonymous>)
+    at request (/Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:21:12)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:251:19
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:194:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+load vocabulary group failed AssertionError [ERR_ASSERTION]: unexpected request
+    at Object.request (/private/tmp/studytracker-vocabulary-forgot-feedback-20261114/docs/reviews/vocabulary-forgot-feedback-20261114/independent_client_probe.js:13:49)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:38:12
+    at new Promise (<anonymous>)
+    at request (/Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:21:12)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:251:19
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:194:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+request fail {
+  url: 'https://synthetic.invalid/api/miniprogram/student/vocabulary-review/sessions/8/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }
+finalize vocabulary group failed AssertionError [ERR_ASSERTION]: unexpected request
+    at Object.request (/private/tmp/studytracker-vocabulary-forgot-feedback-20261114/docs/reviews/vocabulary-forgot-feedback-20261114/independent_client_probe.js:13:49)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:38:12
+    at new Promise (<anonymous>)
+    at request (/Users/zhouxin/Desktop/studytracker-release/miniprogram/utils/request.js:21:12)
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:1008:47
+    at /Users/zhouxin/Desktop/studytracker-release/miniprogram/pages/student/vocabulary-learning/index.js:194:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+request fail {
+  url: 'https://synthetic.invalid/api/miniprogram/student/vocabulary-review/sessions/8/answers',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit autonomous vocabulary review failed { errMsg: 'request:fail timeout' }
+request fail {
+  url: 'https://synthetic.invalid/api/dictation/submit',
+  method: 'POST',
+  timeout: 15000,
+  err: { errMsg: 'request:fail timeout' }
+}
+submit vocabulary group answer failed { errMsg: 'request:fail timeout' }

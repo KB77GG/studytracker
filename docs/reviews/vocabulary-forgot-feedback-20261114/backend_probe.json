@@ -1,0 +1,299 @@
+{
+  "ok": true,
+  "database": "sqlite:///:memory:",
+  "clock": "controlled UTC; 24 elapsed hours, not next calendar midnight",
+  "cases": [
+    {
+      "goal": "reading",
+      "finalized": true,
+      "answers": 18,
+      "retry_answers": 9,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "context_use",
+          "meaning_recall"
+        ],
+        [
+          "context_use",
+          "meaning_recall"
+        ],
+        [
+          "context_use",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "meaning_recall",
+        "meaning_recall",
+        "meaning_recall"
+      ],
+      "settled_accuracy": 0.0,
+      "settlement_count": 1
+    },
+    {
+      "goal": "reading",
+      "finalized": false,
+      "answers": 18,
+      "retry_answers": 9,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "context_use",
+          "meaning_recall"
+        ],
+        [
+          "context_use",
+          "meaning_recall"
+        ],
+        [
+          "context_use",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "meaning_recall",
+        "meaning_recall",
+        "meaning_recall"
+      ],
+      "settled_accuracy": null,
+      "settlement_count": 0
+    },
+    {
+      "goal": "listening",
+      "finalized": true,
+      "answers": 12,
+      "retry_answers": 6,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "meaning_recall",
+        "meaning_recall",
+        "meaning_recall"
+      ],
+      "settled_accuracy": 0.0,
+      "settlement_count": 1
+    },
+    {
+      "goal": "listening",
+      "finalized": false,
+      "answers": 12,
+      "retry_answers": 6,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "meaning_recall",
+        "meaning_recall",
+        "meaning_recall"
+      ],
+      "settled_accuracy": null,
+      "settlement_count": 0
+    },
+    {
+      "goal": "writing",
+      "finalized": true,
+      "answers": 18,
+      "retry_answers": 9,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "context_use",
+          "form_recall"
+        ],
+        [
+          "context_use",
+          "form_recall"
+        ],
+        [
+          "context_use",
+          "form_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "form_recall",
+        "form_recall",
+        "form_recall"
+      ],
+      "settled_accuracy": 0.0,
+      "settlement_count": 1
+    },
+    {
+      "goal": "writing",
+      "finalized": false,
+      "answers": 18,
+      "retry_answers": 9,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "context_use",
+          "form_recall"
+        ],
+        [
+          "context_use",
+          "form_recall"
+        ],
+        [
+          "context_use",
+          "form_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "form_recall",
+        "form_recall",
+        "form_recall"
+      ],
+      "settled_accuracy": null,
+      "settlement_count": 0
+    },
+    {
+      "goal": "comprehensive",
+      "finalized": true,
+      "answers": 12,
+      "retry_answers": 6,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "form_recall",
+        "form_recall",
+        "form_recall"
+      ],
+      "settled_accuracy": 0.0,
+      "settlement_count": 1
+    },
+    {
+      "goal": "comprehensive",
+      "finalized": false,
+      "answers": 12,
+      "retry_answers": 6,
+      "all_results_have_revealed_answer": true,
+      "all_forgot_responses_are_wrong": true,
+      "all_forgot_responses_omit_immediate_correction": true,
+      "persisted_before_finalize": true,
+      "due_dimensions_by_synthetic_word": [
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ],
+        [
+          "audio_form_recall",
+          "context_use",
+          "form_recall",
+          "meaning_recall"
+        ]
+      ],
+      "scheduled_at": "2026-11-14T10:00:00Z",
+      "next_due_at": "2026-11-15T10:00:00Z",
+      "before_24h_review_empty": true,
+      "exact_24h_review_count": 3,
+      "review_dimensions": [
+        "form_recall",
+        "form_recall",
+        "form_recall"
+      ],
+      "settled_accuracy": null,
+      "settlement_count": 0
+    }
+  ]
+}

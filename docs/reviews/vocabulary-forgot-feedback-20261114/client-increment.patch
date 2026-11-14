@@ -1,0 +1,646 @@
+diff --git a/miniprogram/pages/student/vocabulary-learning/index.js b/miniprogram/pages/student/vocabulary-learning/index.js
+--- a/miniprogram/pages/student/vocabulary-learning/index.js
++++ b/miniprogram/pages/student/vocabulary-learning/index.js
+@@ -688,6 +688,7 @@
+     applyLearningAnswerResult(question, res, answer) {
+         const responseKind = isForgotResponse(res) ? 'forgot' : 'answer'
+         this.setData({
++            currentQuestion: question,
+             showResult: true,
+             isCorrect: !!res.is_correct,
+             responseKind,
+@@ -733,13 +734,13 @@
+                 wx.showToast({ title: '提交结果未确认，请重试', icon: 'none' })
+                 return false
+             }
+-            if (queue.recovery_only && queue.review_required) {
++            if (queue.recovery_only && queue.review_required && !isForgotResponse(saved)) {
+                 this.setData({ submitting: false })
+                 wx.showToast({ title: '本题已保存，先完成今日复习', icon: 'none' })
+                 wx.redirectTo({ url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}` })
+                 return true
+             }
+-            if (isForgotResponse(saved) || queue.completed || saved.correction_required) {
++            if ((queue.completed && queue.settlement) || (!isForgotResponse(saved) && (queue.completed || saved.correction_required))) {
+                 this.applyQueue(queue)
+             } else {
+                 this.applyLearningAnswerResult(pending.question, saved, pending.answer)
+@@ -775,7 +776,7 @@
+             question.learning_question_id, this.data.answerRenderEpoch)) return
+         if (this.data.submitting || this.data.correctionSubmitting) return
+         if (this.data.showResult) {
+-            if (responseKind === 'answer' && !this.data.correctionRequired) return this.fetchQueue()
++            if (responseKind === 'answer' && this.data.responseKind !== 'forgot' && !this.data.correctionRequired) return this.fetchQueue()
+             return
+         }
+         if (responseKind === 'forgot' && !this.data.supportsForgotResponse) return
+@@ -816,10 +817,6 @@
+         }), LEARNING_MUTATION_TIMEOUT_MS, 'learning_answer').then((res) => {
+             if (!this.isLearningPageActive()) return
+             if (!res || !res.ok) throw (res || new Error('vocabulary_group_answer_failed'))
+-            if (isForgotResponse(res)) {
+-                wx.showToast({ title: '已记为未掌握', icon: 'none' })
+-                return this.fetchQueue()
+-            }
+             this.applyLearningAnswerResult(question, res, answer)
+         }).catch((err) => {
+             if (err && err.pageUnloaded) return
+@@ -829,6 +826,17 @@
+         }).finally(() => {
+             if (this.isLearningPageActive()) this.setData({ submitting: false })
+         })
++    },
++
++    continueAfterResult(event) {
++        const question = this.data.currentQuestion
++        if (!question || !this.data.showResult || this.data.correctionRequired
++            || this.data.readOnly || this.data.submitting || this.data.finishing
++            || this.data.finished || this.data.appealSubmitting
++            || this.isLearningLoadBlocking() || this.data.loadError) return
++        if (!matchesAnswerEvent(event, question, 'learningQuestionId',
++            question.learning_question_id, this.data.answerRenderEpoch)) return
++        return this.fetchQueue()
+     },
+ 
+     onCorrectionInput(e) {
+diff --git a/miniprogram/pages/student/vocabulary-learning/index.wxml b/miniprogram/pages/student/vocabulary-learning/index.wxml
+--- a/miniprogram/pages/student/vocabulary-learning/index.wxml
++++ b/miniprogram/pages/student/vocabulary-learning/index.wxml
+@@ -160,6 +160,7 @@
+           </view>
+           <text class="result-line">你的答案：{{submittedAnswer}}</text>
+           <text class="result-line">正确答案：{{correctAnswer}}</text>
++          <text wx:if="{{responseKind === 'forgot'}}" class="result-line">已记为未掌握，后续仍会复习。请看过答案再继续。</text>
+         </view>
+         <view wx:if="{{showResult && correctionRequired}}" class="correction-panel">
+           <text class="correction-title">立即纠正（不计正式题）</text>
+@@ -180,7 +181,7 @@
+           {{correctionExhausted ? '纠正次数已达上限，已标记为待后续复习。' : '正确纠正已记录，不计入正式题；后续会按间隔再次检查。'}}
+         </view>
+         <button
+-          wx:if="{{showResult && !isCorrect && currentQuestion.mode !== 'context_choice'}}"
++          wx:if="{{showResult && responseKind !== 'forgot' && !isCorrect && currentQuestion.mode !== 'context_choice'}}"
+           class="answer-appeal-btn"
+           bindtap="submitAnswerAppeal"
+           disabled="{{appealSubmitting || appealSubmitted}}"
+@@ -205,11 +206,11 @@
+           {{submitting ? '保存中…' : '提交答案'}}
+         </button>
+       </view>
+-      <text wx:if="{{!showResult && supportsForgotResponse}}" class="forgot-note">忘了会记为未掌握，并安排后续复习</text>
+-      <button wx:if="{{showResult}}" class="primary-btn next-question-btn" bindtap="submitAnswer"
++      <text wx:if="{{!showResult && supportsForgotResponse}}" class="forgot-note">点“忘了”会显示答案、记为未掌握，并安排后续复习</text>
++      <button wx:if="{{showResult}}" class="primary-btn next-question-btn" bindtap="continueAfterResult"
+               data-learning-question-id="{{currentQuestion.learning_question_id}}" data-question-id="{{currentQuestion.question_id}}"
+               data-render-epoch="{{answerRenderEpoch}}" disabled="{{submitting || finishing || appealSubmitting || correctionRequired}}">
+-        {{correctionRequired ? '先完成纠正' : '下一题'}}
++        {{correctionRequired ? '先完成纠正' : (responseKind === 'forgot' ? '看过答案，继续' : '下一题')}}
+       </button>
+       <text class="hint" wx:if="{{phase === 'retry'}}">错题至少完成一次纠正性重试；再次答错也不会无限循环。</text>
+     </block>
+diff --git a/miniprogram/pages/student/vocabulary-review/index.js b/miniprogram/pages/student/vocabulary-review/index.js
+--- a/miniprogram/pages/student/vocabulary-review/index.js
++++ b/miniprogram/pages/student/vocabulary-review/index.js
+@@ -410,7 +410,7 @@
+             responseKind: isForgotResponse(item) ? 'forgot' : 'answer',
+             answerFeedback,
+             correctionRequired,
+-            correctionCompleted: answered && !correctionRequired,
++            correctionCompleted: answered && !correctionRequired && !isForgotResponse(item),
+             correctionInputValue: '',
+             correctionPlaceholder: this.correctionPlaceholder(item),
+             correctionPrompt: this.correctionPrompt(item),
+@@ -588,7 +588,7 @@
+             ),
+             answerFeedback,
+             correctionRequired: !!updatedItem.correction_required,
+-            correctionCompleted: !updatedItem.correction_required,
++            correctionCompleted: !updatedItem.correction_required && !isForgotResponse(updatedItem),
+             correctionIsCorrect: updatedItem.correction_is_correct === true,
+             correctionCount: Number(updatedItem.correction_count || 0),
+             correctionMaxAttempts: Number(updatedItem.correction_max_attempts || 2),
+@@ -730,13 +730,7 @@
+                 recoveredItem && !savedItem ? {
+                     inputValue: pending.answer,
+                     selectedOption: pending.selectedOption
+-                } : (savedItem && pending.kind === 'first' && isForgotResponse(savedItem) ? {
+-                    onShown: () => {
+-                        if (!this.isReviewPageActive()) return
+-                        this.setData({ submitting: false })
+-                        this.nextItem()
+-                    }
+-                } : {})
++                } : {}
+             )
+             if (savedItem) {
+                 wx.showToast({
+@@ -792,7 +786,7 @@
+         if (!matchesAnswerEvent(event, item, 'reviewItemId',
+             item.review_item_id, this.data.answerRenderEpoch)) return
+         if (this.data.showResult) {
+-            if (responseKind !== 'answer' || this.data.correctionRequired) return
++            if (responseKind !== 'answer' || this.data.responseKind === 'forgot' || this.data.correctionRequired) return
+             this.nextItem()
+             return
+         }
+@@ -840,11 +834,6 @@
+             if (!this.isReviewPageActive()) return
+             if (!res || !res.ok) throw (res || new Error('review_answer_failed'))
+             this.applyAnswerResult(item, res, answer)
+-            if (isForgotResponse(res)) {
+-                wx.showToast({ title: '已记为未掌握', icon: 'none' })
+-                this.setData({ submitting: false })
+-                return this.nextItem()
+-            }
+         }).catch((err) => {
+             console.warn('submit autonomous vocabulary review failed', err)
+             return this.handleSubmitFailure(err, pending)
+@@ -933,7 +922,10 @@
+         })
+     },
+ 
+-    nextItem() {
++    nextItem(event) {
++        const current = this.data.currentItem
++        if (!current || !matchesAnswerEvent(event, current, 'reviewItemId',
++            current.review_item_id, this.data.answerRenderEpoch)) return
+         if (this.data.submitting || this.data.correctionSubmitting || this.data.settling || this.data.finished) return
+         const item = this.queueItemAt(this.data.currentIndex)
+         // A second queued tap may arrive after showItem has already moved to
+diff --git a/miniprogram/pages/student/vocabulary-review/index.wxml b/miniprogram/pages/student/vocabulary-review/index.wxml
+--- a/miniprogram/pages/student/vocabulary-review/index.wxml
++++ b/miniprogram/pages/student/vocabulary-review/index.wxml
+@@ -109,6 +109,7 @@
+         </view>
+         <text class="submitted">你的答案：{{submittedAnswer}}</text>
+         <text class="correct-answer">正确答案：{{correctAnswer}}</text>
++        <text wx:if="{{responseKind === 'forgot'}}" class="correct-answer">已记为未掌握，后续仍会复习。请看过答案再继续。</text>
+       </view>
+       <view wx:if="{{showResult && correctionRequired}}" class="correction-panel">
+         <text class="correction-title">立即纠正（不计正式题）</text>
+@@ -145,11 +146,11 @@
+         {{submitting ? '保存中…' : '提交答案'}}
+       </button>
+     </view>
+-    <text wx:if="{{!showResult && supportsForgotResponse}}" class="forgot-note">忘了会记为未掌握，并安排后续复习</text>
++    <text wx:if="{{!showResult && supportsForgotResponse}}" class="forgot-note">点“忘了”会显示答案、记为未掌握，并安排后续复习</text>
+     <view wx:if="{{showResult}}" class="bottom-actions">
+       <button class="secondary-btn previous-btn" bindtap="previousItem" disabled="{{currentIndex === 0 || submitting || settling || correctionRequired}}">上一词</button>
+-      <button wx:if="{{showResult}}" class="primary-btn next-question-btn {{settling ? 'is-loading' : ''}}" bindtap="nextItem" disabled="{{submitting || settling || correctionRequired}}">
+-        {{correctionRequired ? '先完成纠正' : (currentIndex + 1 < totalCount ? '下一题' : (settling ? '结算中…' : '完成本批复习'))}}
++      <button wx:if="{{showResult}}" class="primary-btn next-question-btn {{settling ? 'is-loading' : ''}}" bindtap="nextItem" data-review-item-id="{{currentItem.review_item_id}}" data-question-id="{{currentItem.question_id}}" data-render-epoch="{{answerRenderEpoch}}" disabled="{{submitting || settling || correctionRequired}}">
++        {{correctionRequired ? '先完成纠正' : (settling ? '结算中…' : (responseKind === 'forgot' ? '看过答案，继续' : (currentIndex + 1 < totalCount ? '下一题' : '完成本批复习')))}}
+       </button>
+     </view>
+   </block>
+diff --git a/tests/test_vocabulary_forgot_client.js b/tests/test_vocabulary_forgot_client.js
+--- a/tests/test_vocabulary_forgot_client.js
++++ b/tests/test_vocabulary_forgot_client.js
+@@ -146,7 +146,7 @@
+     for (let turn = 0; turn < 20; turn += 1) await Promise.resolve()
+ }
+ 
+-test('learning forget saves empty input, locks the other action, then loads the next question', async () => {
++test('learning forget saves empty input, locks the other action, shows the answer until explicit continuation', async () => {
+     reset()
+     const first = learningQuestion()
+     const second = learningQuestion(12)
+@@ -167,15 +167,23 @@
+     assert.equal(requests[0].data.response_kind, 'forgot')
+     assert.equal(requests[0].data.attempt_id, 'vocabulary-group:42:first:11')
+     pendingPost.success({ statusCode: 200, data: {
+-        ok: true, response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false
++        ok: true, response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze'
+     } })
+     await saving
++    assert.equal(page.data.currentQuestion.learning_question_id, 11)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(requests.length, 1)
++    page.submitAnswer()
++    page.submitForgot()
++    assert.equal(requests.length, 1)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentQuestion.learning_question_id, 12)
+     assert.equal(page.data.submitting, false)
+     assert.equal(requests.length, 2)
+ })
+ 
+-test('learning keeps the submit lock until the saved forget queue GET finishes', async () => {
++test('learning requires confirmation then locks navigation until the queue GET finishes', async () => {
+     reset()
+     const page = pageFor('learning')
+     page.applyQueue(learningQueue(learningQuestion(11)))
+@@ -183,11 +191,14 @@
+     let heldQueue
+     const saved = { ok: true, response_kind: 'forgot', is_correct: false }
+     handlers.push(success(saved), (request) => { heldQueue = request })
+-    const first = page.submitForgot(oldEvent)
++    await page.submitForgot(oldEvent)
++    assert.equal(requests.length, 1)
++    assert.equal(page.data.showResult, true)
++    const first = page.continueAfterResult(oldEvent)
+     await flushRequestTurns()
+     assert.ok(heldQueue)
+     assert.equal(page.data.loading, true)
+-    assert.equal(page.data.submitting, true)
++    assert.equal(page.isLearningLoadBlocking(), true)
+     page.submitForgot(oldEvent)
+     page.submitAnswer(oldEvent)
+     assert.deepEqual(requests.filter((request) => request.method === 'POST').map((request) => request.data.learning_question_id), [11])
+@@ -198,6 +209,8 @@
+     handlers.push(success(saved), success(learningQueue(learningQuestion(13))))
+     await page.submitForgot(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.deepEqual(requests.filter((request) => request.method === 'POST').map((request) => request.data.learning_question_id), [11, 12])
++    assert.equal(page.data.currentQuestion.learning_question_id, 12)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentQuestion.learning_question_id, 13)
+ })
+ 
+@@ -254,6 +267,8 @@
+     const oldEvent = answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch)
+     handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }), failed())
+     await page.submitForgot(oldEvent)
++    assert.equal(page.data.showResult, true)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.equal(page.data.loading, false)
+     assert.ok(page.data.loadError)
+     assert.equal(page.data.submitting, false)
+@@ -283,7 +298,8 @@
+         }
+         let heldQueue
+         handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }), (request) => { heldQueue = request })
+-        const pending = page.submitForgot(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
++        await page.submitForgot(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
++        const pending = page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+         await flushRequestTurns()
+         assert.ok(heldQueue)
+         if (finish === 'unload') page.onUnload()
+@@ -306,6 +322,8 @@
+     handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }))
+     handlers.push(success(learningQueue(learningQuestion(12))))
+     await page.submitForgot(oldEvent)
++    assert.equal(page.data.showResult, true)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentQuestion.learning_question_id, 12)
+     page.setData({ inputValue: 'typed on the new question' })
+     page.submitForgot(oldEvent)
+@@ -316,6 +334,8 @@
+     handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }))
+     handlers.push(success(learningQueue(learningQuestion(13))))
+     await page.submitForgot(newEvent)
++    assert.equal(page.data.showResult, true)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.deepEqual(requests.filter((request) => request.method === 'POST').map((request) => request.data.learning_question_id), [11, 12])
+     assert.equal(page.data.currentQuestion.learning_question_id, 13)
+ })
+@@ -354,6 +374,11 @@
+     handlers.push(success({ ok: true, correct_count: 0, total_count: 1, accuracy: 0, forgot_items: forgot }))
+ 
+     await page.submitForgot()
++    assert.equal(page.data.finished, false)
++    assert.equal(page.data.showResult, true)
++    assert.equal(requests.length, 1)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
++    await flushRequestTurns()
+     assert.equal(page.data.finished, true)
+     assert.equal(page.data.result.accuracy, 0)
+     assert.equal(page.data.forgotItems[0].word, 'analyze')
+@@ -405,16 +430,19 @@
+                 learning_question_id: 11,
+                 attempt_id: 'vocabulary-group:42:first:11',
+                 response_kind: 'forgot',
+-                is_correct: false
++                is_correct: false, revealed_answer: 'analyze'
+             }
+         }) })
+     })
+     await page.submitForgot()
+-    assert.equal(page.data.currentQuestion.learning_question_id, 12)
++    assert.equal(page.data.currentQuestion.learning_question_id, 11)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(requests.length, 2)
+     assert.equal(page.data.submitting, false)
+ })
+ 
+-test('learning exact saved recovery respects a later due-review gate', async () => {
++test('learning exact saved forget shows the answer before continuing to a later due-review gate', async () => {
+     reset()
+     const page = pageFor('learning')
+     page.setData({ currentQuestion: learningQuestion() })
+@@ -423,10 +451,15 @@
+         ok: true, task_id: 42, recovery_only: true, review_required: true, read_only: true,
+         saved_response: {
+             learning_question_id: 11, attempt_id: 'vocabulary-group:42:first:11',
+-            response_kind: 'forgot', is_correct: false
++            response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze'
+         }
+     }))
+     await page.submitForgot()
++    assert.equal(redirects.length, 0)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    handlers.push(success({ ok: false, error: 'vocabulary_review_required' }))
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     assert.equal(redirects[0], '/pages/student/vocabulary-review/index?returnTaskId=42')
+     assert.equal(page.data.submitting, false)
+ })
+@@ -451,11 +484,13 @@
+         handlers.push((request) => {
+             assert.equal(request.data.answer, '', mode)
+             assert.equal(request.data.response_kind, 'forgot', mode)
+-            request.success({ statusCode: 200, data: { ok: true, response_kind: 'forgot', is_correct: false } })
++            request.success({ statusCode: 200, data: { ok: true, response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze' } })
+         })
+-        handlers.push(success(learningQueue(learningQuestion(12))))
+         await page.submitForgot()
+-        assert.equal(page.data.currentQuestion.learning_question_id, 12, mode)
++        assert.equal(page.data.currentQuestion.learning_question_id, 11, mode)
++        assert.equal(page.data.showResult, true, mode)
++        assert.equal(page.data.correctAnswer, 'analyze', mode)
++        assert.equal(requests.length, 1, mode)
+     }
+ })
+ 
+@@ -488,7 +523,7 @@
+     assert.equal(requests.length, 1)
+ })
+ 
+-test('review empty forget advances one item and the next unanswered item cannot be skipped', async () => {
++test('review empty forget waits for confirmation before advancing one item and the next unanswered item cannot be skipped', async () => {
+     reset()
+     const page = reviewPage([reviewItem(1), reviewItem(2)])
+     handlers.push(success({
+@@ -499,6 +534,14 @@
+     await page.submitForgot()
+     assert.equal(requests[0].data.answer, '')
+     assert.equal(requests[0].data.response_kind, 'forgot')
++    assert.equal(page.data.currentIndex, 0)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(page.data.correctionCompleted, false)
++    page.submitAnswer()
++    page.submitForgot()
++    assert.equal(page.data.currentIndex, 0)
++    page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentIndex, 1)
+     page.nextItem()
+     assert.equal(page.data.currentIndex, 1)
+@@ -535,7 +578,10 @@
+             first_response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze'
+         } })
+         await saving
+-        assert.equal(page.data.currentIndex, 1, mode)
++        assert.equal(page.data.currentIndex, 0, mode)
++        assert.equal(page.data.showResult, true, mode)
++        assert.equal(page.data.correctAnswer, 'analyze', mode)
++        assert.equal(requests.length, 1, mode)
+     }
+ })
+ 
+@@ -569,7 +615,7 @@
+     assert.equal(page.queueItems()[0].first_response_kind, 'answer')
+ })
+ 
+-test('review timeout recovers a saved forget in the same batch and advances once', async () => {
++test('review timeout recovers a saved forget in the same batch and shows its answer before continuation', async () => {
+     reset()
+     const page = reviewPage([reviewItem(1), reviewItem(2)])
+     page.setData({ inputValue: 'ana' })
+@@ -586,11 +632,16 @@
+     })
+     await page.submitForgot()
+     assert.equal(requests.length, 2)
++    assert.equal(page.data.currentIndex, 0)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(page.data.correctionCompleted, false)
++    page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentIndex, 1)
+     assert.equal(page.queueItems()[0].first_answer, 'ana')
+ })
+ 
+-test('review last forget settles to zero and displays spelling, meaning and replay', async () => {
++test('review last forget waits for confirmation then settles to zero and displays spelling, meaning and replay', async () => {
+     reset()
+     const page = reviewPage([reviewItem(1)])
+     const forgotten = [{ review_item_id: 1, word_id: 1, correct_spelling: 'analyze', meaning: '分析', revealed_answer: 'analyze', audio_tts_url: '/audio/1' }]
+@@ -600,6 +651,11 @@
+     }))
+     handlers.push(success({ ok: true, status: 'settled', total_count: 1, correct_count: 0, accuracy: 0, forgot_count: 1, forgot_items: forgotten }))
+     await page.submitForgot()
++    assert.equal(page.data.finished, false)
++    assert.equal(page.data.showResult, true)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(requests.length, 1)
++    await page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     assert.equal(page.data.finished, true)
+     assert.equal(page.data.result.correct_count, 0)
+     assert.equal(page.data.forgotCount, 1)
+@@ -615,6 +671,8 @@
+     handlers.push(success({ ok: true, attempt_id: 'wx-vocabulary-review:7:1',
+         response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false }))
+     await page.submitForgot(oldEvent)
++    assert.equal(page.data.showResult, true)
++    await page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     assert.equal(page.data.currentIndex, 1)
+     page.setData({ inputValue: 'typed on the new item' })
+     page.submitAnswer(oldEvent)
+@@ -625,6 +683,8 @@
+     handlers.push(success({ ok: true, attempt_id: 'wx-vocabulary-review:7:2',
+         response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false }))
+     await page.submitForgot(newEvent)
++    assert.equal(page.data.showResult, true)
++    await page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     assert.deepEqual(requests.filter((request) => request.method === 'POST').map((request) => request.data.review_item_id), [1, 2])
+     assert.equal(page.data.currentIndex, 2)
+ })
+@@ -644,6 +704,10 @@
+         response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false }))
+     await page.submitForgot(currentEvent)
+     assert.equal(requests.filter((request) => request.method === 'POST').length, 1)
++    assert.equal(page.data.currentIndex, 0)
++    page.nextItem(oldEvent)
++    assert.equal(page.data.currentIndex, 0)
++    page.nextItem(currentEvent)
+     assert.equal(page.data.currentIndex, 1)
+ })
+ 
+@@ -714,6 +778,8 @@
+     handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }))
+     handlers.push(success(learningQueue(learningQuestion(12))))
+     await page.submitForgot(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
++    assert.equal(page.data.showResult, true)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     page.onInput(oldInput)
+     assert.equal(page.data.inputValue, '')
+     const priorRender = inputEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch, 'prior render')
+@@ -735,6 +801,8 @@
+     handlers.push(success({ ok: true, response_kind: 'forgot', is_correct: false }))
+     handlers.push(success(learningQueue(learningQuestion(12, 'context_choice'))))
+     await page.submitForgot(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
++    assert.equal(page.data.showResult, true)
++    await page.continueAfterResult(answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch))
+     page.selectOption(oldOption)
+     assert.equal(page.data.selectedOption, '')
+     const priorRender = optionEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch, 'prior-option')
+@@ -755,6 +823,8 @@
+     handlers.push(success({ ok: true, attempt_id: 'wx-vocabulary-review:7:1',
+         response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false }))
+     await page.submitForgot(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
++    assert.equal(page.data.showResult, true)
++    await page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     page.onInput(oldInput)
+     assert.equal(page.data.inputValue, '')
+     const priorRender = inputEvent('review', page.data.currentItem, page.data.answerRenderEpoch, 'prior render')
+@@ -779,6 +849,8 @@
+     handlers.push(success({ ok: true, attempt_id: 'wx-vocabulary-review:7:1',
+         response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false }))
+     await page.submitForgot(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
++    assert.equal(page.data.showResult, true)
++    await page.nextItem(answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch))
+     page.selectOption(oldOption)
+     assert.equal(page.data.selectedOption, '')
+     const priorRender = optionEvent('review', page.data.currentItem, page.data.answerRenderEpoch, 'prior-option')
+@@ -809,3 +881,140 @@
+         }
+     }
+ })
++
++test('forgot feedback preserves the server answer and explanation across four learning dimensions', async () => {
++    for (const kind of ['learning', 'review']) {
++        for (const [dimension, mode, revealedAnswer] of [
++            ['meaning_recall', 'en_to_zh', '分析'],
++            ['form_recall', 'zh_to_en', 'analyze'],
++            ['listening', 'audio_to_en', 'analyze'],
++            ['context_use', 'context_choice', 'option-b']
++        ]) {
++            reset()
++            const question = { prompt: { meaning: '分析', word: 'analyze' }, options: [{ id: 'option-b', label: '分析这些结果' }] }
++            const item = Object.assign(kind === 'learning' ? learningQuestion(11, mode) : reviewItem(11), { mode, dimension, question })
++            const page = kind === 'learning' ? pageFor('learning') : reviewPage([item, reviewItem(12)])
++            if (kind === 'learning') page.applyQueue(learningQueue(item))
++            const oldEvent = answerEvent(kind, item, page.data.answerRenderEpoch)
++            handlers.push(success({
++                ok: true, response_kind: 'forgot', first_response_kind: 'forgot', is_correct: false,
++                attempt_id: kind === 'learning' ? 'vocabulary-group:42:first:11' : 'wx-vocabulary-review:7:11',
++                revealed_answer: revealedAnswer,
++                answer_feedback: { word: 'analyze', core_meaning_zh: '分析', example_en: 'Analyze these results.' }
++            }))
++            await page.submitForgot(oldEvent)
++            const expected = mode === 'context_choice' ? '分析这些结果' : revealedAnswer
++            assert.equal(page.data.correctAnswer, expected, `${kind}/${dimension}`)
++            assert.equal(page.data.answerFeedback.word, 'analyze')
++            assert.equal(page.data.answerFeedback.example_en, 'Analyze these results.')
++            assert.equal(page.data.showResult, true)
++            assert.equal(page.data.correctionRequired, false)
++            assert.equal(page.data.correctionCompleted, false)
++            assert.equal(page.data.submittedAnswer, '忘了')
++            page.submitAnswer(oldEvent)
++            page.submitForgot(oldEvent)
++            page.onInput(inputEvent(kind, item, page.data.answerRenderEpoch, 'late keyboard value'))
++            assert.equal(page.data.showResult, true)
++            assert.equal(page.data.correctAnswer, expected)
++            assert.equal(requests.length, 1, `${kind}/${dimension} must not fetch or settle before confirmation`)
++        }
++    }
++})
++
++test('learning last forgotten answer recovered after timeout waits before its first settlement', async () => {
++    reset()
++    const page = pageFor('learning')
++    page.applyQueue(learningQueue(learningQuestion(11), { phase: 'retry' }))
++    const saved = { learning_question_id: 11, attempt_id: 'vocabulary-group:42:retry:11', response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze' }
++    const completed = learningQueue(null, { phase: 'complete', completed: true, saved_response: saved })
++    handlers.push(failed('request:fail timeout'), success(completed))
++    await page.submitForgot()
++    assert.equal(page.data.currentQuestion.learning_question_id, 11)
++    assert.equal(page.data.phase, 'retry')
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(page.data.finished, false)
++    assert.equal(requests.length, 2)
++    assert.equal(requests.filter((request) => /\/submit$/.test(request.url)).length, 1)
++    handlers.push(success(completed), success({ ok: true, correct_count: 0, total_count: 1, accuracy: 0 }))
++    const event = answerEvent('learning', page.data.currentQuestion, page.data.answerRenderEpoch)
++    const moving = page.continueAfterResult(event)
++    page.continueAfterResult(event)
++    await moving
++    await flushRequestTurns()
++    assert.equal(page.data.finished, true)
++    assert.equal(page.data.result.accuracy, 0)
++    assert.equal(requests.filter((request) => request.url.endsWith('/tasks/42/submit')).length, 1)
++})
++
++test('learning recovery of an already settled forgotten answer restores the saved result without another write', async () => {
++    reset()
++    const page = pageFor('learning')
++    page.applyQueue(learningQueue(learningQuestion(11), { phase: 'retry' }))
++    const settlement = { ok: true, correct_count: 0, total_count: 1, accuracy: 0 }
++    handlers.push(failed('request:fail timeout'), success(learningQueue(null, {
++        completed: true, phase: 'complete', settlement,
++        saved_response: { learning_question_id: 11, attempt_id: 'vocabulary-group:42:retry:11', response_kind: 'forgot', is_correct: false, revealed_answer: 'analyze' }
++    })))
++    await page.submitForgot()
++    assert.equal(page.data.finished, true)
++    assert.equal(page.data.result.accuracy, 0)
++    assert.equal(requests.length, 2)
++    assert.equal(requests.filter((request) => request.url.endsWith('/tasks/42/submit')).length, 0)
++})
++
++test('review last forgotten answer recovered after timeout stays visible until explicit settlement', async () => {
++    reset()
++    const page = reviewPage([reviewItem(1)])
++    const saved = reviewItem(1, { first_attempt_id: 'wx-vocabulary-review:7:1', first_response_kind: 'forgot', first_is_correct: false, revealed_answer: 'analyze' })
++    handlers.push(failed('request:fail timeout'), success({ ok: true, session_id: 7, session_token: 'session-token', supports_forgot_response: true, items: [saved] }))
++    await page.submitForgot()
++    assert.equal(page.data.finished, false)
++    assert.equal(page.data.correctAnswer, 'analyze')
++    assert.equal(page.data.correctionCompleted, false)
++    assert.equal(requests.length, 2)
++    handlers.push(success({ ok: true, status: 'settled', total_count: 1, correct_count: 0, accuracy: 0 }))
++    const event = answerEvent('review', page.data.currentItem, page.data.answerRenderEpoch)
++    const settling = page.nextItem(event)
++    page.nextItem(event)
++    await settling
++    assert.equal(page.data.finished, true)
++    assert.equal(page.data.result.accuracy, 0)
++    assert.equal(requests.filter((request) => request.url.endsWith('/settle')).length, 1)
++})
++
++test('late confirmation controls cannot bypass another forgotten result', async () => {
++    reset()
++    const learning = pageFor('learning')
++    learning.applyQueue(learningQueue(learningQuestion(11)))
++    const oldLearning = answerEvent('learning', learning.data.currentQuestion, learning.data.answerRenderEpoch)
++    learning.applyQueue(learningQueue(learningQuestion(12)))
++    learning.applyLearningAnswerResult(learning.data.currentQuestion, { response_kind: 'forgot', revealed_answer: 'new answer' }, '')
++    learning.continueAfterResult(oldLearning)
++    assert.equal(learning.data.currentQuestion.learning_question_id, 12)
++    assert.equal(learning.data.correctAnswer, 'new answer')
++    const review = reviewPage([
++        reviewItem(1, { first_attempt_id: 'first-1', first_response_kind: 'forgot' }),
++        reviewItem(2, { first_attempt_id: 'first-2', first_response_kind: 'forgot', revealed_answer: 'new answer' })
++    ])
++    const oldReview = answerEvent('review', review.data.currentItem, review.data.answerRenderEpoch)
++    review.showItem(1)
++    review.nextItem(oldReview)
++    assert.equal(review.data.currentIndex, 1)
++    assert.equal(review.data.finished, false)
++    assert.equal(review.data.correctAnswer, 'new answer')
++    assert.equal(requests.length, 0)
++})
++
++test('templates expose an explicit answer-reading action and hide the unavailable forgotten-answer appeal', () => {
++    const learning = fs.readFileSync(`${__dirname}/../miniprogram/pages/student/vocabulary-learning/index.wxml`, 'utf8')
++    const review = fs.readFileSync(`${__dirname}/../miniprogram/pages/student/vocabulary-review/index.wxml`, 'utf8')
++    assert.ok(learning.includes('bindtap="continueAfterResult"'))
++    assert.ok(learning.includes("showResult && responseKind !== 'forgot' && !isCorrect"))
++    for (const source of [learning, review]) {
++        assert.ok(source.includes('看过答案，继续'))
++        assert.ok(source.includes('已记为未掌握，后续仍会复习'))
++        const nextButton = source.match(/<button\b[^>]*class="[^"]*next-question-btn[^"]*"[^>]*>/)[0]
++        assert.ok(nextButton.includes('data-question-id='))
++        assert.ok(nextButton.includes('data-render-epoch='))
++    }
++})
