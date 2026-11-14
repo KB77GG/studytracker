@@ -184,7 +184,7 @@ Page({
                 sense_id: item.sense_id,
                 dimension: item.dimension,
                 answer,
-                attempt_id,
+                attempt_id: attemptId,
                 input_mode: 'native'
             }
         }).then((res) => {

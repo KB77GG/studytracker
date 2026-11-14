@@ -13,14 +13,17 @@ from werkzeug.datastructures import FileStorage
 
 from api.classroom_vocabulary import classroom_vocabulary_bp
 from dictation_answers import is_chinese_answer_correct, strip_part_of_speech_prefix
-from models import DictationBook, DictationWord, Task, User, db
+from models import DictationBook, DictationWord, Task, User, VocabularySense, db
 from services.classroom_vocabulary import (
+    BOOK_DESCRIPTION,
     MAX_BYTES,
+    SYNONYM_BOOK_DESCRIPTION,
     ClassroomVocabularyError,
     preview_text,
     preview_workbook,
     validate_rows,
 )
+from services.vocabulary_synonyms import SYNONYM_SENSE_POS, synonym_sense_key
 
 
 def workbook_file(rows, *, second_sheet=False, active_second=False):
@@ -144,6 +147,84 @@ class ClassroomVocabularyParserTest(unittest.TestCase):
         ):
             with self.assertRaises(ClassroomVocabularyError):
                 preview_workbook(file)
+
+    def test_synonym_header_and_complete_phrases_are_preserved(self):
+        result = preview_text(
+            "原词或词组\t=\t同义替换词或词组\n"
+            " participate \t = \t take part in \n"
+            "in spite of\t＝\tdespite"
+        )
+        self.assertTrue(result["valid"], result)
+        self.assertEqual(
+            result["rows"],
+            [
+                {
+                    "line": 2,
+                    "word": "participate",
+                    "part_of_speech": "=",
+                    "meaning": "take part in",
+                },
+                {"line": 3, "word": "in spite of", "part_of_speech": "=", "meaning": "despite"},
+            ],
+        )
+        self.assertEqual(result["word_count"], 2)
+        self.assertIn("符号已统一", result["warnings"][0]["message"])
+
+    def test_mixed_csv_and_xlsx_lists_keep_original_order(self):
+        rows = [["bed", "n.", "床"], ["participate", "=", "take part in"], ["help", "v.", "帮助"]]
+        for result in (
+            preview_text("\n".join(",".join(row) for row in rows)),
+            preview_workbook(workbook_file(rows)),
+        ):
+            with self.subTest(result=result):
+                self.assertTrue(result["valid"], result)
+                self.assertEqual(
+                    [row["word"] for row in result["rows"]], ["bed", "participate", "help"]
+                )
+                self.assertEqual(result["rows"][1]["meaning"], "take part in")
+                self.assertEqual(result["rows"][1]["part_of_speech"], "=")
+
+    def test_synonym_duplicates_normalize_both_sides_but_preserve_direction(self):
+        result = preview_text("join\t=\ttake part in\nJOIN\t＝\tTAKE  PART IN")
+        self.assertFalse(result["valid"])
+        self.assertIn("第 1 行重复", result["errors"][0]["message"])
+        self.assertTrue(preview_text("join\t=\tparticipate\nparticipate\t=\tjoin")["valid"])
+        self.assertTrue(preview_text("join\t=\tparticipate\njoin\t=\ttake part in")["valid"])
+
+    def test_synonym_rejects_self_pairs_incomplete_phrases_and_annotations(self):
+        for left, right in (
+            ("Join", "join"),
+            ("take part in", "take  part in"),
+            ("join", ""),
+            ("", "participate"),
+            ("参加", "participate"),
+            ("join", "参加"),
+            ("join", "take part in / participate"),
+            ("join", "participate; enroll"),
+            ("join", "participate, enroll"),
+            ("join", "take part in (sth)"),
+            ("join (a group)", "participate"),
+            ("join", "v. participate"),
+            ("join", "x" * 101),
+            ("x" * 101, "participate"),
+            ("join", "take\npart in"),
+        ):
+            with self.subTest(left=left, right=right):
+                result = validate_rows([{"word": left, "part_of_speech": "=", "meaning": right}])
+                self.assertFalse(result["valid"], result)
+        self.assertFalse(
+            preview_text("join = take part in")["valid"], "Spaces must not delimit columns"
+        )
+
+    def test_synonym_typography_normalizes_visibly_and_plain_english_meaning_warns(self):
+        result = preview_text("one’s own\t=\tself‑owned")
+        self.assertTrue(result["valid"], result)
+        self.assertEqual(result["rows"][0]["word"], "one's own")
+        self.assertEqual(result["rows"][0]["meaning"], "self-owned")
+        self.assertEqual(len(result["warnings"]), 2)
+        ordinary = preview_text("join\tv.\tparticipate")
+        self.assertTrue(ordinary["valid"], ordinary)
+        self.assertIn("第二列改为 =", ordinary["warnings"][0]["message"])
 
 
 class ClassroomVocabularyApiTest(unittest.TestCase):
@@ -308,6 +389,146 @@ class ClassroomVocabularyApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json["error"], "save_failed")
         self.assertEqual(self.counts(), (0, 0, 0))
+
+    def test_mixed_import_saves_typed_synonym_sense_and_retry_reuses(self):
+        preview = self.client.post(
+            "/api/classroom-vocabulary/preview",
+            data={"text": "bed\tn.\t床\nparticipate\t＝\ttake part in"},
+            headers=self.headers,
+        )
+        self.assertEqual(preview.status_code, 200)
+        self.assertTrue(preview.json["valid"], preview.json)
+        payload = {"title": "课堂同义替换", "rows": preview.json["rows"]}
+        result = self.save(payload)
+        self.assertEqual(result.status_code, 200, result.json)
+        retry = self.save(payload)
+        self.assertTrue(retry.json["reused"])
+        self.assertEqual(result.json["book"]["id"], retry.json["book"]["id"])
+        with self.app.app_context():
+            book = db.session.get(DictationBook, result.json["book"]["id"])
+            self.assertEqual(book.description, SYNONYM_BOOK_DESCRIPTION)
+            self.assertEqual(book.default_vocabulary_goal, "reading")
+            ordinary, synonym = book.words.order_by(DictationWord.sequence).all()
+            self.assertEqual(
+                (ordinary.word, ordinary.translation, ordinary.sense_id), ("bed", "n. 床", None)
+            )
+            self.assertEqual((synonym.word, synonym.translation), ("participate", "= take part in"))
+            self.assertEqual(synonym.sense.part_of_speech, SYNONYM_SENSE_POS)
+            self.assertEqual(synonym.sense.definition_en, "take part in")
+            self.assertEqual(
+                synonym.sense.canonical_key, synonym_sense_key("participate", "take part in")
+            )
+            self.assertIsNone(synonym.sense.meaning_zh)
+            self.assertIsNone(synonym.accepted_answers)
+            self.assertIsNone(synonym.core_meaning_zh)
+            self.assertEqual(VocabularySense.query.count(), 1)
+        self.assertEqual(self.counts(), (1, 2, 0))
+
+    def test_synonym_sense_reuses_only_the_same_ordered_pair_across_books(self):
+        pairs = [
+            ("participate", "take part in"),
+            ("PARTICIPATE", "TAKE  PART IN"),
+            ("participate", "join"),
+            ("take part in", "participate"),
+        ]
+        ids = []
+        for index, (left, right) in enumerate(pairs):
+            response = self.save(
+                {
+                    "title": f"课堂词表{index}",
+                    "rows": [{"word": left, "part_of_speech": "=", "meaning": right}],
+                }
+            )
+            self.assertEqual(response.status_code, 200, response.json)
+            ids.append(response.json["book"]["id"])
+        with self.app.app_context():
+            senses = [
+                DictationWord.query.filter_by(book_id=book_id).one().sense_id for book_id in ids
+            ]
+            self.assertEqual(senses[0], senses[1])
+            self.assertEqual(len(set(senses)), 3)
+            self.assertEqual(VocabularySense.query.count(), 3)
+
+    def test_synonym_and_ordinary_books_do_not_merge_even_with_same_display(self):
+        payload = {
+            "title": "同名词表",
+            "rows": [{"word": "join", "part_of_speech": "=", "meaning": "participate"}],
+        }
+        with self.app.app_context():
+            old = DictationBook(
+                title=payload["title"],
+                description=BOOK_DESCRIPTION,
+                created_by=self.ids["teacher"],
+                word_count=1,
+            )
+            db.session.add(old)
+            db.session.flush()
+            db.session.add(
+                DictationWord(book_id=old.id, sequence=1, word="join", translation="= participate")
+            )
+            db.session.commit()
+            old_id = old.id
+        saved = self.save(payload)
+        self.assertEqual(saved.status_code, 200)
+        self.assertFalse(saved.json["reused"])
+        self.assertNotEqual(saved.json["book"]["id"], old_id)
+        self.assertEqual(self.counts(), (2, 2, 0))
+
+    def test_synonym_retry_requires_matching_typed_sense_not_only_display(self):
+        payload = {
+            "title": "同义替换",
+            "rows": [{"word": "join", "part_of_speech": "=", "meaning": "participate"}],
+        }
+        first = self.save(payload)
+        with self.app.app_context():
+            word = DictationWord.query.filter_by(book_id=first.json["book"]["id"]).one()
+            word.sense_id = None
+            db.session.commit()
+        retry = self.save(payload)
+        self.assertEqual(retry.status_code, 200)
+        self.assertFalse(retry.json["reused"])
+        self.assertNotEqual(retry.json["book"]["id"], first.json["book"]["id"])
+        with self.app.app_context():
+            self.assertEqual(VocabularySense.query.count(), 1)
+
+    def test_invalid_synonym_cannot_bypass_preview_or_partially_save(self):
+        payload = {
+            "title": "坏词表",
+            "rows": [*self.payload["rows"], {"word": "join", "part_of_speech": "=", "meaning": ""}],
+        }
+        self.assertEqual(self.save(payload).status_code, 400)
+        self.assertEqual(self.counts(), (0, 0, 0))
+
+    def test_inconsistent_existing_sense_is_not_reused_or_overwritten(self):
+        payload = {
+            "title": "同义替换",
+            "rows": [{"word": "join", "part_of_speech": "=", "meaning": "participate"}],
+        }
+        self.assertEqual(self.save(payload).status_code, 200)
+        with self.app.app_context():
+            sense = VocabularySense.query.one()
+            sense.definition_en = "conflicting content"
+            db.session.commit()
+        retry = self.save(payload)
+        self.assertEqual(retry.status_code, 400)
+        self.assertIn("资料不一致", retry.json["message"])
+        self.assertEqual(self.counts(), (1, 1, 0))
+        with self.app.app_context():
+            self.assertEqual(VocabularySense.query.one().definition_en, "conflicting content")
+
+    def test_synonym_database_failure_also_rolls_back_senses(self):
+        payload = {
+            "title": "同义替换",
+            "rows": [{"word": "join", "part_of_speech": "=", "meaning": "participate"}],
+        }
+        with self.assertLogs(self.app.logger, level="ERROR"):
+            with patch.object(
+                db.session, "commit", side_effect=SQLAlchemyError("synthetic failure")
+            ):
+                self.assertEqual(self.save(payload).status_code, 500)
+        self.assertEqual(self.counts(), (0, 0, 0))
+        with self.app.app_context():
+            self.assertEqual(VocabularySense.query.count(), 0)
 
 
 if __name__ == "__main__":

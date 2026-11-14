@@ -46,7 +46,7 @@ jobs:
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
       - name: Test classroom vocabulary import client and assignment preset
-        run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js
+        run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js
       - name: Test small-class homework client
         run: node --test tests/test_teacher_group_homework.js
       - name: Test Cambridge content and review delivery

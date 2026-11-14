@@ -97,10 +97,59 @@ test('previews three literal columns with the session CSRF token', async () => {
   assert.equal(request.options.body.get('text'), 'habitat\tn.\t栖息地');
   assert.equal(request.options.body.get('file'), undefined);
   assert.deepEqual(f.el('cvRows').children[0].children.map(cell => cell.textContent), ['2', 'habitat', 'n.', '栖息地']);
-  assert.equal(f.el('cvWordCount').textContent, '1 词');
+  assert.equal(f.el('cvWordCount').textContent, '1 条');
   assert.equal(f.el('cvPreviewPanel').hidden, false);
   assert.equal(f.el('cvSave').disabled, false);
   assert.equal(f.calls.length, 1, 'preview itself must not create books or assignments');
+});
+
+test('mixed vocabulary and synonym rows preserve complete phrases through preview and save', async () => {
+  const rows = [
+    { line: 1, word: 'habitat', part_of_speech: 'n.', meaning: '栖息地' },
+    { line: 2, word: 'participate', part_of_speech: '=', meaning: 'take part in' },
+    { line: 3, word: 'because of', part_of_speech: '=', meaning: 'due to' }
+  ];
+  const f = fixture([
+    preview({ rows, word_count: 3 }),
+    saved({ book: { id: 211, title: '课堂生词与同义替换', word_count: 3 } })
+  ]);
+  const input = 'habitat\tn.\t栖息地\nparticipate\t=\ttake part in\nbecause of\t＝\tdue to';
+  f.el('cvText').value = input;
+  f.el('cvTitle').value = '课堂生词与同义替换';
+  await f.controller.preview();
+  assert.equal(f.calls[0].options.body.get('text'), input, 'only the server normalizes the equals sign');
+  assert.deepEqual(f.el('cvRows').children.map(row => row.children.map(cell => cell.textContent)), [
+    ['1', 'habitat', 'n.', '栖息地'],
+    ['2', 'participate', '=', 'take part in'],
+    ['3', 'because of', '=', 'due to']
+  ]);
+  assert.equal(f.el('cvWordCount').textContent, '3 条');
+  assert.match(f.el('cvStatus').textContent, /同义替换/);
+  assert.equal(f.el('cvSave').disabled, false);
+  await f.controller.save();
+  assert.deepEqual(JSON.parse(f.calls[1].options.body), { title: '课堂生词与同义替换', rows });
+  assert.equal(f.el('cvSavedSummary').textContent, '课堂生词与同义替换 · 3 条');
+  assert.equal(f.el('cvAssign').href, '/tasks?preset_dictation_book=211');
+  assert.equal(f.calls.length, 2, 'saving a mixed list must not publish a task');
+});
+
+test('an invalid synonym row remains visible and blocks saving the whole mixed list', async () => {
+  const f = fixture([preview({
+    valid: false,
+    word_count: 2,
+    rows: [
+      { line: 1, word: 'habitat', part_of_speech: 'n.', meaning: '栖息地' },
+      { line: 2, word: 'participate', part_of_speech: '=', meaning: '' }
+    ],
+    errors: [{ line: 2, message: '同义替换不能为空' }]
+  })]);
+  await f.controller.preview();
+  assert.equal(f.el('cvRows').children.length, 2);
+  assert.deepEqual(f.el('cvRows').children[1].children.map(cell => cell.textContent), ['2', 'participate', '=', '']);
+  assert.match(f.el('cvIssues').textContent, /第 2 行：同义替换不能为空/);
+  assert.equal(f.el('cvSave').disabled, true);
+  await f.controller.save();
+  assert.equal(f.calls.length, 1);
 });
 
 test('invalid rows show their source line and cannot be saved', async () => {
