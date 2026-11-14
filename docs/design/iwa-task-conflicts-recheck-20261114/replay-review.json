@@ -1,0 +1,55 @@
+{
+  "scope_zh": "本批四篇各两轮共八份已保存最终回答的离线回放；无模型调用，不改原始批次或历史结果。",
+  "baseline_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "candidate_head": "89c32d6b59f33ea2c4d3a592edd2248836d7de81",
+  "replay_result": {
+    "passed": 203,
+    "total": 204,
+    "exit_code": 1,
+    "failed_check_ids": [
+      "finding:L9:newly_removed"
+    ]
+  },
+  "manual_review_zh": [
+    {
+      "id": "L11",
+      "sample_id": "official-1C-A",
+      "field_path": "criteria.lexical.issues[3].suggestion",
+      "result": "新删除合理",
+      "basis": "局部词汇改写保留了同答任务维度已纠正的工序时长；新规则只删除建议，评语与任务纠错保持。"
+    },
+    {
+      "id": "L9",
+      "sample_id": "official-1B-A#r2",
+      "field_path": "criteria.grammar.issues[1].suggestion",
+      "result": "仍保留，预期未达到",
+      "basis": "相关任务维度的原始纠错建议先被既有无来源数字保护过滤；冲突检查读取归一化后的空建议，没有取得被替换数字。语言建议因此仍保留同答任务评论已批评的数字。",
+      "related_task_field": "criteria.task.issues[1].suggestion",
+      "same_sentence_confirmed": true
+    }
+  ],
+  "invariants": {
+    "baseline_reproduces_original_full_results": 8,
+    "input_messages_equal_and_match_recorded_hash": 8,
+    "submission_and_raw_unchanged": 8,
+    "scores_unchanged": 8,
+    "task_criteria_unchanged": 8,
+    "other_retained_suggestions_exactly_unchanged": 80,
+    "newly_removed_suggestions": 1,
+    "closed_run_files_unchanged": 44,
+    "source_trees_clean": 2
+  },
+  "known_findings_zh": {
+    "H1": "原有未命中引文警示保持；未删除相关条目。",
+    "H2": "原有错误建议过滤保持。",
+    "H3_H4": "原有两条问题评论保持，数字规则未解决。",
+    "L1_L4_L5_L7": "趋势方向建议按设计保持。"
+  },
+  "limits_zh": [
+    "八份结果中只新增删除一条，未观察到合理建议被新增误删；不能外推为所有输入都不会误删。",
+    "本轮规则未完整覆盖作者要求的两个数值冲突实例，L9未关闭。",
+    "分数、提示词及消息完全不变；不是评分校准或教师质量验收。",
+    "规则依赖同一份模型回答提供可用的数据纠正，不核验纠正本身的真实性。",
+    "完整差异和含正文的人工证据仅在本机私有目录；公开不含原稿、确认读数或模型思考。"
+  ]
+}

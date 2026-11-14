@@ -1,0 +1,43 @@
+{
+  "source": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+  "source_head": "89c32d6b59f33ea2c4d3a592edd2248836d7de81",
+  "checks": [
+    {
+      "name": "mixed-queue",
+      "passed": 20,
+      "total": 20,
+      "exit_code": 0,
+      "evidence_file": "mixed-queue.json",
+      "evidence_sha256": "f5a2ea72be11e03517417425e8a10ea4162885b5b35cac73710577c31db7a4d1"
+    },
+    {
+      "name": "web-adjacent",
+      "passed": 57,
+      "total": 57,
+      "exit_code": 0,
+      "evidence_file": "web-adjacent.json",
+      "evidence_sha256": "c713ac7e9ccefb62ffdc6c14a1b7bb0dd0baad7cc562a57df802ffa258fa1cf5"
+    },
+    {
+      "name": "realcheck",
+      "passed": 15,
+      "total": 15,
+      "exit_code": 0,
+      "evidence_file": "realcheck.json",
+      "evidence_sha256": "1df235627ec123129bf928802700f6ebcb1f54ecda5f6cb57768d36db9f71857"
+    },
+    {
+      "name": "realcheck-adjacent",
+      "passed": 17,
+      "total": 17,
+      "exit_code": 0,
+      "evidence_file": "realcheck-adjacent.json",
+      "evidence_sha256": "5011524f03226188d8fc95247eccbbe7861607cf6852216d0724d98e150a4501"
+    }
+  ],
+  "real_calls": 0,
+  "live_service_touched": false,
+  "product_modified": false,
+  "passed": 109,
+  "total": 109
+}

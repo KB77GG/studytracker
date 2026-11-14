@@ -1,0 +1,254 @@
+{
+  "source": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+  "passed": 57,
+  "total": 57,
+  "checks": [
+    {
+      "name": "legacy.no_snapshot",
+      "pass": true
+    },
+    {
+      "name": "legacy.keeps_legacy_banner",
+      "pass": true
+    },
+    {
+      "name": "legacy.unknown_snapshot_not_claimed_mismatch",
+      "pass": true
+    },
+    {
+      "name": "legacy.two_real_workers_busy",
+      "pass": true
+    },
+    {
+      "name": "legacy.regen_evaluate_accepted",
+      "pass": true
+    },
+    {
+      "name": "legacy.regen_refine_accepted",
+      "pass": true
+    },
+    {
+      "name": "legacy.regen_rewrite_accepted",
+      "pass": true
+    },
+    {
+      "name": "legacy.latest_all_three_queued",
+      "pass": true
+    },
+    {
+      "name": "legacy.history_closes_window",
+      "pass": true
+    },
+    {
+      "name": "legacy.all_queued_still_old",
+      "pass": true
+    },
+    {
+      "name": "legacy.all_queued_confirm_409",
+      "pass": true
+    },
+    {
+      "name": "legacy.all_queued_skip_409",
+      "pass": true
+    },
+    {
+      "name": "legacy.atomic_store_rejects",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_evaluate_ready",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_evaluate_unchecked_snapshot",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_evaluate_matches_unchecked",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_refine_ready",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_refine_unchecked_snapshot",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_refine_matches_unchecked",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_rewrite_ready",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_rewrite_unchecked_snapshot",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_rewrite_matches_unchecked",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_evaluation_has_no_TA",
+      "pass": true
+    },
+    {
+      "name": "legacy.new_results_no_chart_sent",
+      "pass": true
+    },
+    {
+      "name": "legacy.banner_survives_all_regens",
+      "pass": true
+    },
+    {
+      "name": "started.fresh_window_open",
+      "pass": true
+    },
+    {
+      "name": "started.all_still_queued",
+      "pass": true
+    },
+    {
+      "name": "started.timestamp_closes_window",
+      "pass": true
+    },
+    {
+      "name": "started.confirm_409",
+      "pass": true
+    },
+    {
+      "name": "started.skip_409",
+      "pass": true
+    },
+    {
+      "name": "started.atomic_store_rejects",
+      "pass": true
+    },
+    {
+      "name": "started.no_text_calls",
+      "pass": true
+    },
+    {
+      "name": "started.missing_submission_closed",
+      "pass": true
+    },
+    {
+      "name": "checked.confirm_accepted",
+      "pass": true
+    },
+    {
+      "name": "checked.evaluate_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.evaluate_regen_accepted",
+      "pass": true
+    },
+    {
+      "name": "checked.evaluate_regen_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.refine_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.refine_regen_accepted",
+      "pass": true
+    },
+    {
+      "name": "checked.refine_regen_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.rewrite_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.rewrite_regen_accepted",
+      "pass": true
+    },
+    {
+      "name": "checked.rewrite_regen_bound",
+      "pass": true
+    },
+    {
+      "name": "checked.corrected_reading_reaches_all_calls",
+      "pass": true
+    },
+    {
+      "name": "checked.reconfirmation_refused",
+      "pass": true
+    },
+    {
+      "name": "snapshot.inflight_regen_accepted",
+      "pass": true
+    },
+    {
+      "name": "snapshot.input_was_original_confirmed_reading",
+      "pass": true
+    },
+    {
+      "name": "snapshot.inflight_result_keeps_original_hash",
+      "pass": true
+    },
+    {
+      "name": "snapshot.all_outputs_flagged_after_drift",
+      "pass": true
+    },
+    {
+      "name": "snapshot.invalidated_check_mismatches",
+      "pass": true
+    },
+    {
+      "name": "snapshot.view_never_rewrites_results",
+      "pass": true
+    },
+    {
+      "name": "skipped.accepted",
+      "pass": true
+    },
+    {
+      "name": "skipped.every_output_records_unchecked",
+      "pass": true
+    },
+    {
+      "name": "skipped.no_chart_data_sent",
+      "pass": true
+    },
+    {
+      "name": "no_image.task1_omits_snapshot",
+      "pass": true
+    },
+    {
+      "name": "no_image.task2_omits_snapshot",
+      "pass": true
+    },
+    {
+      "name": "transport.no_network_attempts",
+      "pass": true
+    }
+  ],
+  "observations": {
+    "legacy": {
+      "latest_queued": 3,
+      "historical_ready": 3,
+      "window_open": false
+    }
+  },
+  "real_calls": 0,
+  "network_attempts": 0,
+  "live_service_touched": false,
+  "private_sources_read": false,
+  "fixture_mutations": [
+    "one synthetic generation.started_at",
+    "one synthetic submission.image_description during fake request"
+  ],
+  "limitations": [
+    "No browser rendering",
+    "Pre-snapshot results remain unknown; existing .14 records retain legacy banner"
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "checked_at_utc": "2026-11-14T08:38:49.410223+00:00",
+  "scope": "Exact new review and two task handoffs; source tree before docs commit",
+  "checks": {
+    "no_private_eight_word_sequences": true,
+    "no_actual_config_or_login_secret": true,
+    "no_key_token_shapes": true,
+    "text_document_whitelist": true
+  },
+  "files": [
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/README.md",
+      "bytes": 8385,
+      "sha256": "e43f8995bc466de84286c6f763628219d5fb9b8a0e78025307383229eeb2b218",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/adjacent_baseline.json",
+      "bytes": 33745,
+      "sha256": "597729dc3120bf70c75cb89d4798ae4a8725294ce72042e1d3229df91310347b",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/adjacent_probe.json",
+      "bytes": 33854,
+      "sha256": "dd0764535382e64ded0ee9be609df330f9659f4bfbc0b18bf52c87283d82b390",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/adjacent_probe.py",
+      "bytes": 13977,
+      "sha256": "23c55e9ec3295d9542b63c4a0d10dbdce5c3885e6f280b42e39f9f29167bc008",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/adjacent_review.md",
+      "bytes": 6532,
+      "sha256": "a1f04ad2738ec33602483d747e4f8c44e66ea7e749ee3715011b7aea76826ee0",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/final-validation.json",
+      "bytes": 550,
+      "sha256": "6f164d47fc8c0fc88e5041e231c1c9b49ad034fa5d7515e3def42c3c3502fb50",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/offline-tests.json",
+      "bytes": 1354,
+      "sha256": "18e7211cf23534d8748cd06fc87edeb2b121ba91a849a49c1abd5b9b3c932372",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/README.md",
+      "bytes": 2810,
+      "sha256": "9b580d9c5c10dee20a2821b78d4a99fb26924dd092405dae444a2c811d2fa334",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/mixed-queue.json",
+      "bytes": 3017,
+      "sha256": "f5a2ea72be11e03517417425e8a10ea4162885b5b35cac73710577c31db7a4d1",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/realcheck-adjacent.json",
+      "bytes": 1679,
+      "sha256": "5011524f03226188d8fc95247eccbbe7861607cf6852216d0724d98e150a4501",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/realcheck.json",
+      "bytes": 4363,
+      "sha256": "1df235627ec123129bf928802700f6ebcb1f54ecda5f6cb57768d36db9f71857",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/summary.json",
+      "bytes": 1237,
+      "sha256": "c6d581f647e13bb6e58685971e02a8f5f4d8491ca264ca485c86c8d90322980b",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/regressions/web-adjacent.json",
+      "bytes": 5183,
+      "sha256": "c713ac7e9ccefb62ffdc6c14a1b7bb0dd0baad7cc562a57df802ffa258fa1cf5",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/replay-review.json",
+      "bytes": 2522,
+      "sha256": "ba037291531ea1e7ffdf10211017d72b6a6aaccd474066b1f38f408bc6e9fe4f",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/replay.json",
+      "bytes": 25755,
+      "sha256": "5c55c3c84d707dc6d11ac4573933a9931f4dd4ed9b3d8351b6377ec528564aca",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/replay_probe.py",
+      "bytes": 20288,
+      "sha256": "ad044c17c766351847d3f51bf5f5bad4a94ce6b310dc738a81962896f85b912d",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/root-verification.json",
+      "bytes": 630,
+      "sha256": "4469367183ec3006fa3072768856db0037749b8c933db30ceefd35dac70e6692",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/run_offline_tests.py",
+      "bytes": 3801,
+      "sha256": "76dbeab934f08cbcef2d25af6fb7d1a0d607c767a832e2ffb67fa880ad31ade0",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/service-state.json",
+      "bytes": 811,
+      "sha256": "52c3910db0ed364ef2dfb2f51c604e3e5bdc98d6408009d49ecd6817905e3d19",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/source-state-after.json",
+      "bytes": 2029,
+      "sha256": "8188af6cdc2d75feab1cae36e606db1c4072096c2760b9ea385e83a0f215d34c",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-recheck-20261114/source-state-before.json",
+      "bytes": 15699,
+      "sha256": "0ebbca34a3cd3753697a9a6a096e0b43f73dba39a816d0ef2f541b4ea97dfe00",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/CODEX_HANDOFF.md",
+      "bytes": 787052,
+      "sha256": "db26956752a1227870b3d6d45b08d32d8eb47aded9dc1751b035bd0786b65bc4",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "bytes": 246185,
+      "sha256": "c24981eca75419a823527a13c19aaf4eac35b17c9ac5bc2907233709af52241f",
+      "private_8_word_matches": 0,
+      "actual_secret_matches": 0,
+      "token_shape_matches": 0,
+      "allowed_extension": true
+    }
+  ],
+  "private_content_exported": false,
+  "model_calls": 0
+}

@@ -1,0 +1,1011 @@
+{
+  "source": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+  "checks": [
+    {
+      "name": "positive.same_entity",
+      "pass": true
+    },
+    {
+      "name": "positive.same_entity.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.same_entity.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.same_entity.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.followed_correction",
+      "pass": true
+    },
+    {
+      "name": "positive.followed_correction.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.followed_correction.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.followed_correction.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.other_sentence",
+      "pass": true
+    },
+    {
+      "name": "positive.other_sentence.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.other_sentence.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.other_sentence.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "P2.entity_collision",
+      "pass": false
+    },
+    {
+      "name": "P2.entity_collision.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "P2.entity_collision.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "P2.entity_collision.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "P2.unit_collision",
+      "pass": false
+    },
+    {
+      "name": "P2.unit_collision.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "P2.unit_collision.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "P2.unit_collision.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "P2.time_percent_collision",
+      "pass": false
+    },
+    {
+      "name": "P2.time_percent_collision.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "P2.time_percent_collision.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "P2.time_percent_collision.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "P2.ambiguous_quote_first_occurrence",
+      "pass": false
+    },
+    {
+      "name": "P2.ambiguous_quote_first_occurrence.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "P2.ambiguous_quote_first_occurrence.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "P2.ambiguous_quote_first_occurrence.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.decimal_percent",
+      "pass": true
+    },
+    {
+      "name": "positive.decimal_percent.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.decimal_percent.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.decimal_percent.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.minute_replacement",
+      "pass": true
+    },
+    {
+      "name": "positive.minute_replacement.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.minute_replacement.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.minute_replacement.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.no_checked_source",
+      "pass": true
+    },
+    {
+      "name": "positive.no_checked_source.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.no_checked_source.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.no_checked_source.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.drifted_confirmation",
+      "pass": true
+    },
+    {
+      "name": "positive.drifted_confirmation.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.drifted_confirmation.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.drifted_confirmation.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.unsourced_TA_correction",
+      "pass": true
+    },
+    {
+      "name": "positive.unsourced_TA_correction.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.unsourced_TA_correction.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.unsourced_TA_correction.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.only_adding_numbers",
+      "pass": true
+    },
+    {
+      "name": "positive.only_adding_numbers.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.only_adding_numbers.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.only_adding_numbers.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "positive.only_dropping_numbers",
+      "pass": true
+    },
+    {
+      "name": "positive.only_dropping_numbers.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "positive.only_dropping_numbers.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "positive.only_dropping_numbers.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "limitation.small_hour",
+      "pass": true
+    },
+    {
+      "name": "limitation.small_hour.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "limitation.small_hour.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "limitation.small_hour.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "limitation.swapped_set",
+      "pass": true
+    },
+    {
+      "name": "limitation.swapped_set.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "limitation.swapped_set.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "limitation.swapped_set.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "limitation.false_TA_advice",
+      "pass": true
+    },
+    {
+      "name": "limitation.false_TA_advice.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "limitation.false_TA_advice.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "limitation.false_TA_advice.counter_matches_removal",
+      "pass": true
+    },
+    {
+      "name": "P2.truncated_TA_quote",
+      "pass": false
+    },
+    {
+      "name": "P2.truncated_TA_quote.scores_unchanged",
+      "pass": true
+    },
+    {
+      "name": "P2.truncated_TA_quote.comment_preserved",
+      "pass": true
+    },
+    {
+      "name": "P2.truncated_TA_quote.counter_matches_removal",
+      "pass": true
+    }
+  ],
+  "passed": 67,
+  "total": 72,
+  "failed_cases": [
+    "P2.entity_collision",
+    "P2.unit_collision",
+    "P2.time_percent_collision",
+    "P2.ambiguous_quote_first_occurrence",
+    "P2.truncated_TA_quote"
+  ],
+  "observations": [
+    {
+      "name": "positive.same_entity",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45% at 22:00",
+      "task_suggestion": "Television reached 40% at 22:00",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45% at 22:00",
+      "chart": "Television 22:00 = 40%",
+      "expect_removed": true,
+      "actual_removed": true,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45% at 22:00",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 40% at 22:00",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 31
+    },
+    {
+      "name": "positive.followed_correction",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45% at 22:00",
+      "task_suggestion": "Television reached 40% at 22:00",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 40% at 22:00",
+      "chart": "Television 22:00 = 40%",
+      "expect_removed": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45% at 22:00",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 40% at 22:00",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 40% at 22:00",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 31
+    },
+    {
+      "name": "positive.other_sentence",
+      "text": "Television reached 45%. Radio reached 45%.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 40%",
+      "language_quote": "Radio reached 45%",
+      "language_suggestion": "Radio attracted 45%",
+      "chart": "Television = 40%; Radio = 45%",
+      "expect_removed": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 40%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Radio reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Radio attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "P2.entity_collision",
+      "text": "Men accounted for 20%, while women accounted for 20%.",
+      "task_quote": "Men accounted for 20%",
+      "task_suggestion": "Men accounted for 30%",
+      "language_quote": "women accounted for 20%",
+      "language_suggestion": "women represented 20%",
+      "chart": "Men = 30%; Women = 20%",
+      "expect_removed": false,
+      "problem": "The valid women clause is deleted although only the men clause was corrected.",
+      "actual_removed": true,
+      "pass": false,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Men accounted for 20%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Men accounted for 30%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "women accounted for 20%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 21
+    },
+    {
+      "name": "P2.unit_collision",
+      "text": "The share was 45%, while the journey lasted 45 minutes.",
+      "task_quote": "The share was 45%",
+      "task_suggestion": "The share was 40%",
+      "language_quote": "the journey lasted 45 minutes",
+      "language_suggestion": "the journey took 45 minutes",
+      "chart": "Share = 40%; Journey duration = 45 minutes",
+      "expect_removed": false,
+      "problem": "A corrected percentage deletes an unrelated valid duration of the same numeral.",
+      "actual_removed": true,
+      "pass": false,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "The share was 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "The share was 40%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "the journey lasted 45 minutes",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 17
+    },
+    {
+      "name": "P2.time_percent_collision",
+      "text": "Television peaked at 22:00, while radio reached 22%.",
+      "task_quote": "Television peaked at 22:00",
+      "task_suggestion": "Television peaked at 21:00",
+      "language_quote": "radio reached 22%",
+      "language_suggestion": "radio attracted 22%",
+      "chart": "Television peak time = 21:00; Radio = 22%",
+      "expect_removed": false,
+      "problem": "Correcting an hour deletes an unrelated valid percentage of the same numeral.",
+      "actual_removed": true,
+      "pass": false,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television peaked at 22:00",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television peaked at 21:00",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "radio reached 22%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 26
+    },
+    {
+      "name": "P2.ambiguous_quote_first_occurrence",
+      "text": "Radio reached 45% at noon. Television reached 45% at night.",
+      "task_quote": "Radio reached 45% at noon",
+      "task_suggestion": "Radio reached 40% at noon",
+      "language_quote": "reached 45%",
+      "language_suggestion": "Television attracted 45% at night",
+      "chart": "Radio noon = 40%; Television night = 45%",
+      "expect_removed": false,
+      "problem": "A repeated short quotation is assigned to its first occurrence, despite the suggestion rewriting the other entity/sentence.",
+      "actual_removed": true,
+      "pass": false,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Radio reached 45% at noon",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Radio reached 40% at noon",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 25
+    },
+    {
+      "name": "positive.decimal_percent",
+      "text": "Television reached 4.5% at 22:00.",
+      "task_quote": "Television reached 4.5%",
+      "task_suggestion": "Television reached 4.8%",
+      "language_quote": "Television reached 4.5%",
+      "language_suggestion": "Television attracted 4.5%",
+      "chart": "Television = 4.8%",
+      "expect_removed": true,
+      "actual_removed": true,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 4.5%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 4.8%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 4.5%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 23
+    },
+    {
+      "name": "positive.minute_replacement",
+      "text": "Television peaked at 22:30.",
+      "task_quote": "Television peaked at 22:30",
+      "task_suggestion": "Television peaked at 22:45",
+      "language_quote": "Television peaked at 22:30",
+      "language_suggestion": "Television was most popular at 22:30",
+      "chart": "Television peak time = 22:45",
+      "expect_removed": true,
+      "actual_removed": true,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television peaked at 22:30",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television peaked at 22:45",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television peaked at 22:30",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 26
+    },
+    {
+      "name": "positive.no_checked_source",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 40%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 40%",
+      "expect_removed": false,
+      "checked": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "not_assessable",
+      "normalized_task_issues": [],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "positive.drifted_confirmation",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 40%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 40%",
+      "expect_removed": false,
+      "drift": true,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "not_assessable",
+      "normalized_task_issues": [],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "positive.unsourced_TA_correction",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 43%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 40%",
+      "expect_removed": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "",
+          "suggestion_removed": true
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 1,
+        "priorities": 0,
+        "argument": 0,
+        "total": 1
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "positive.only_adding_numbers",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 45%, compared with radio at 30%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 45%; Radio = 30%",
+      "expect_removed": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 45%, compared with radio at 30%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "positive.only_dropping_numbers",
+      "text": "Television reached 45% at 22:00.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached its daily peak",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 45%",
+      "expect_removed": false,
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached its daily peak",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "limitation.small_hour",
+      "text": "Radio peaked at 08:00.",
+      "task_quote": "Radio peaked at 08:00",
+      "task_suggestion": "Radio peaked at 09:00",
+      "language_quote": "Radio peaked at 08:00",
+      "language_suggestion": "Radio was most popular at 08:00",
+      "chart": "Radio peak time = 09:00",
+      "expect_removed": false,
+      "limitation": "Plain values below 10 intentionally excluded; this also excludes early-hour corrections.",
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Radio peaked at 08:00",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Radio peaked at 09:00",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Radio peaked at 08:00",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Radio was most popular at 08:00",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 21
+    },
+    {
+      "name": "limitation.swapped_set",
+      "text": "Television reached 45%, while radio reached 40%.",
+      "task_quote": "Television reached 45%, while radio reached 40%",
+      "task_suggestion": "Television reached 40%, while radio reached 45%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 40%; Radio = 45%",
+      "expect_removed": false,
+      "limitation": "A numeric set swap has no lost and new numeric value, so it is outside the implemented replacement rule.",
+      "actual_removed": false,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%, while radio reached 40%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 40%, while radio reached 45%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "Television attracted 45%",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 47
+    },
+    {
+      "name": "limitation.false_TA_advice",
+      "text": "Television reached 45%, while radio reached 40%.",
+      "task_quote": "Television reached 45%",
+      "task_suggestion": "Television reached 40%",
+      "language_quote": "Television reached 45%",
+      "language_suggestion": "Television attracted 45%",
+      "chart": "Television = 45%; Radio = 40%",
+      "expect_removed": true,
+      "limitation": "The TA suggestion is itself wrong but uses an elsewhere-sourced number. This rule is internal consistency, not an independent chart fact check.",
+      "actual_removed": true,
+      "pass": true,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "Television reached 45%",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "Television reached 40%",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "Television reached 45%",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "",
+        "suggestion_removed": true,
+        "removed_reason": "task_conflict"
+      },
+      "copy_has_conflict_notice": true,
+      "copy_has_original_language_suggestion": false,
+      "task_conflicts": 1,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 22
+    },
+    {
+      "name": "P2.truncated_TA_quote",
+      "text": "The television series, which is displayed in the chart alongside the other series, is discussed here with several descriptions of its presentation and its general context, including the way it is compared across different parts of the day and the importance of identifying its largest audience before reaching a conclusion, reached 45% at 22:00.",
+      "task_quote": "The television series, which is displayed in the chart alongside the other series, is discussed here with several descriptions of its presentation and its general context, including the way it is compared across different parts of the day and the importance of identifying its largest audience before reaching a conclusion, reached 45% at 22:00.",
+      "task_suggestion": "The television series, which is displayed in the chart alongside the other series, is discussed here with several descriptions of its presentation and its general context, including the way it is compared across different parts of the day and the importance of identifying its largest audience before reaching a conclusion, reached 40% at 22:00.",
+      "language_quote": "reached 45% at 22:00",
+      "language_suggestion": "attracted 45% at 22:00",
+      "chart": "Television 22:00 = 40%",
+      "expect_removed": true,
+      "problem": "Full verified TA quotation is truncated to 300 before conflict detection, losing the replaced figure.",
+      "actual_removed": false,
+      "pass": false,
+      "task_state": "scored",
+      "normalized_task_issues": [
+        {
+          "quote": "The television series, which is displayed in the chart alongside the other series, is discussed here with several descriptions of its presentation and its general context, including the way it is compared across different parts of the day and the importance of identifying its largest audience before",
+          "quote_found": true,
+          "comment": "请核对本句涉及的数据，按题图改正对应信息。",
+          "suggestion": "The television series, which is displayed in the chart alongside the other series, is discussed here with several descriptions of its presentation and its general context, including the way it is compared across different parts of the day and the importance of identifying its largest audience before reaching a conclusion, reached 40% at 22:00.",
+          "suggestion_removed": false
+        }
+      ],
+      "normalized_language_issue": {
+        "quote": "reached 45% at 22:00",
+        "quote_found": true,
+        "comment": "这里可改用更自然的表达，保留正确的信息。",
+        "suggestion": "attracted 45% at 22:00",
+        "suggestion_removed": false
+      },
+      "copy_has_conflict_notice": false,
+      "copy_has_original_language_suggestion": true,
+      "task_conflicts": 0,
+      "unsourced_removed": {
+        "criteria": 0,
+        "priorities": 0,
+        "argument": 0,
+        "total": 0
+      },
+      "original_task_quote_chars": 345
+    }
+  ],
+  "real_calls": 0,
+  "live_service_touched": false,
+  "private_data_read": false
+}

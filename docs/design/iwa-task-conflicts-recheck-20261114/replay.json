@@ -1,0 +1,1023 @@
+{
+  "baseline_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "candidate_head": "89c32d6b59f33ea2c4d3a592edd2248836d7de81",
+  "prompt_version": "iwa-2026-11-13.15",
+  "model_calls": 0,
+  "network_attempts": 0,
+  "checks_passed": 203,
+  "checks_total": 204,
+  "responses": [
+    {
+      "sample_id": "official-1A-A",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "2ca2428a8c288a843a08311a3d421a636c2e96843bfa52b60770a7d46cd1f2e4",
+      "new_sha256": "6399ff0970752fc218c75c69f5c95b15fe602cd5c001f2c0a9b78f011d34f4c3",
+      "message_sha256": "74f142e30870d3c59a3359f716b8e2786c70275c845ceb6ae5e024ff5d8d6d76"
+    },
+    {
+      "sample_id": "official-1A-A#r2",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "8454e58635295fd9a4495c074c2ca9c5d1198e849f9b14ae79fd93fe31e61b55",
+      "new_sha256": "4b680c8fe90de2df87f495dd665efc88b1708cceb3d15f831e9a8c6bd7fd733e",
+      "message_sha256": "74f142e30870d3c59a3359f716b8e2786c70275c845ceb6ae5e024ff5d8d6d76"
+    },
+    {
+      "sample_id": "official-1A-B",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "459c1d4d3f5d9f49f2248f58170792a98aad3794e71bf9b9a96b5e07fd3a120d",
+      "new_sha256": "53956d6f90f00d9b0e5f8b8b8a380229d61a23349c2ee33948a838248df1460c",
+      "message_sha256": "90e9033d78a997c0697e9bfc4e7725ec2af9741f0f1a0e83a36be6c155f03049"
+    },
+    {
+      "sample_id": "official-1A-B#r2",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "224d74d92e666c47c6cf123ae0e0551948d74e45b5b9759cefde0966fb3e73d1",
+      "new_sha256": "cb5dca3355e4c2651ba1104d47d3f68926d0b519803d96480baa66e583e443eb",
+      "message_sha256": "90e9033d78a997c0697e9bfc4e7725ec2af9741f0f1a0e83a36be6c155f03049"
+    },
+    {
+      "sample_id": "official-1B-A",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "d0b73d59c51af16375d55ec77ec1cc25663f28d24dd968f21b0bab6da03e98aa",
+      "new_sha256": "1fddab861d2af40293d09902f1e7b5caa2a5056767d1c280f85f89e1789d948b",
+      "message_sha256": "e6acbd589d7256e6dd59d731e16c3f4a96ec52299278af0265e243edaf6ace5c"
+    },
+    {
+      "sample_id": "official-1B-A#r2",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "6e12f10a0e05b02dfcd94b3d7269deb840bd8badf8aabca21ae7c1ea260b8152",
+      "new_sha256": "3a58f6b18187dcf7a35232bf625c7bb8b4db8499733c8f3d9075b069a61ac7bf",
+      "message_sha256": "e6acbd589d7256e6dd59d731e16c3f4a96ec52299278af0265e243edaf6ace5c"
+    },
+    {
+      "sample_id": "official-1C-A",
+      "task_conflicts": 1,
+      "difference_paths": [
+        "criteria[2].issues[3].removed_reason",
+        "criteria[2].issues[3].suggestion",
+        "criteria[2].issues[3].suggestion_removed",
+        "task_conflicts",
+        "warnings[0]"
+      ],
+      "old_sha256": "099e4a936a703407886bc6881b96d5d6c7590591d2780243b669ccacdda3fd23",
+      "new_sha256": "41ab68304af1377bba06ce81cfbd3fa8136507955a37fc22ff2976f6aca02cbb",
+      "message_sha256": "edb7ab8737f878fd4e709ee90d9edac057e122400c1d84e1a9c6dd171cfeeee9"
+    },
+    {
+      "sample_id": "official-1C-A#r2",
+      "task_conflicts": 0,
+      "difference_paths": [
+        "task_conflicts"
+      ],
+      "old_sha256": "42bc7abbf89e5558bd1a49d45d2c2478b0c2574c7f89048d8f8098e8557725ce",
+      "new_sha256": "e183287b3bc2161d655edd5be1a3d000ca5bf57013c8a3d034a9b9d2f29ea061",
+      "message_sha256": "edb7ab8737f878fd4e709ee90d9edac057e122400c1d84e1a9c6dd171cfeeee9"
+    }
+  ],
+  "new_removals": [
+    {
+      "sample_id": "official-1C-A",
+      "path": "criteria[2].issues[3]",
+      "criterion": "lexical"
+    }
+  ],
+  "new_removals_count": 1,
+  "other_retained_advice_count": 80,
+  "finding_states": [
+    {
+      "id": "H1",
+      "sample_id": "official-1A-A#r2",
+      "field_path": "criteria.lexical.issues[2]",
+      "expected_state": "warned_quote",
+      "ok": true
+    },
+    {
+      "id": "H2",
+      "sample_id": "official-1A-B",
+      "field_path": "criteria.coherence.issues[2]",
+      "expected_state": "previously_removed",
+      "ok": true
+    },
+    {
+      "id": "H3",
+      "sample_id": "official-1A-B#r2",
+      "field_path": "criteria.coherence.issues[0]",
+      "expected_state": "comment_retained",
+      "ok": true
+    },
+    {
+      "id": "H4",
+      "sample_id": "official-1B-A#r2",
+      "field_path": "criteria.task.strengths[2]",
+      "expected_state": "comment_retained",
+      "ok": true
+    },
+    {
+      "id": "L1",
+      "sample_id": "official-1A-A",
+      "field_path": "criteria.coherence.issues[0]",
+      "expected_state": "trend_retained",
+      "ok": true
+    },
+    {
+      "id": "L4",
+      "sample_id": "official-1A-B#r2",
+      "field_path": "criteria.coherence.issues[1]",
+      "expected_state": "trend_retained",
+      "ok": true
+    },
+    {
+      "id": "L5",
+      "sample_id": "official-1A-B#r2",
+      "field_path": "criteria.lexical.issues[0]",
+      "expected_state": "trend_retained",
+      "ok": true
+    },
+    {
+      "id": "L7",
+      "sample_id": "official-1B-A#r2",
+      "field_path": "criteria.coherence.issues[0]",
+      "expected_state": "trend_retained",
+      "ok": true
+    },
+    {
+      "id": "L9",
+      "sample_id": "official-1B-A#r2",
+      "field_path": "criteria.grammar.issues[1]",
+      "expected_state": "newly_removed",
+      "ok": false
+    },
+    {
+      "id": "L11",
+      "sample_id": "official-1C-A",
+      "field_path": "criteria.lexical.issues[3]",
+      "expected_state": "newly_removed",
+      "ok": true
+    }
+  ],
+  "l9_diagnostic": [
+    {
+      "sample_id": "official-1B-A#r2",
+      "task_field": "criteria.task.issues[1]",
+      "language_field": "criteria.grammar.issues[1]",
+      "raw_task_suggestion_present": true,
+      "normalized_task_suggestion_present": false,
+      "task_suggestion_previously_filtered": true,
+      "unsourced_tokens_in_task_suggestion_count": 1,
+      "raw_corrected_value_count": 2,
+      "normalized_corrected_value_count": 0,
+      "retained_corrected_value_count": 1,
+      "same_sentence": true
+    }
+  ],
+  "closed_run_file_count": 44,
+  "closed_run_manifest_sha256": "e01636a06b35f5eb06c8316fd6d1c9618fae2f9b7a1ea21a4307b0411648af78",
+  "run_data_sha256": "44482563d3a5475c15dace251039733dd2e6e9073ad4dde0eef58fe110f114c4",
+  "raw_calls_sha256": "ca6ab6cf96d3009eca08a22af9c913aedd45def7ae37bb25dadabd50309a57e9",
+  "source_manifest_sha256": {
+    "baseline": "4fee4a2bcc311c53654c7fdb52f2f72af102d23b386943d6d11a214b760dce35",
+    "candidate": "9a99a88f24667dff02a6318c7a297e59ce555da0bbc731d6a3cf5bdecf45e567"
+  },
+  "checks": [
+    {
+      "check": "eight_responses",
+      "ok": true
+    },
+    {
+      "check": "prompt_version_unchanged",
+      "ok": true
+    },
+    {
+      "check": "network_attempts_zero",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[0].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[1].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[2].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[3].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:criteria[3].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[2].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[3].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:criteria[3].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-A#r2:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[0].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[0].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[0].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1A-B#r2:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[2].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:criteria[3].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[2].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:criteria[3].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1B-A#r2:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[0].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[2].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[2].issues[3]:removal_marked",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[2].issues[3]:comment_preserved",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:criteria[3].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:ids",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:baseline_exact",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:input_messages",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:prompt_context",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:recorded_message_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:submission_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:raw_hash",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:inputs_not_mutated",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:overall_band",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criterion_bands",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:task_criterion",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:source_number_removed_count",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[0].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[0].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[0].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[1].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[1].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[2].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[2].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[2].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[2].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[3].issues[0]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[3].issues[1]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[3].issues[2]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:criteria[3].issues[3]:other_advice_unchanged",
+      "ok": true
+    },
+    {
+      "check": "official-1C-A#r2:only_documented_changes",
+      "ok": true
+    },
+    {
+      "check": "finding:H1:warned_quote",
+      "ok": true
+    },
+    {
+      "check": "finding:H2:previously_removed",
+      "ok": true
+    },
+    {
+      "check": "finding:H3:comment_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:H4:comment_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:L1:trend_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:L4:trend_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:L5:trend_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:L7:trend_retained",
+      "ok": true
+    },
+    {
+      "check": "finding:L9:newly_removed",
+      "ok": false
+    },
+    {
+      "check": "finding:L11:newly_removed",
+      "ok": true
+    },
+    {
+      "check": "closed_run_all_file_hashes_unchanged",
+      "ok": true
+    },
+    {
+      "check": "baseline:product_hashes_unchanged",
+      "ok": true
+    },
+    {
+      "check": "baseline:git_clean_after",
+      "ok": true
+    },
+    {
+      "check": "candidate:product_hashes_unchanged",
+      "ok": true
+    },
+    {
+      "check": "candidate:git_clean_after",
+      "ok": true
+    }
+  ],
+  "limitations_zh": [
+    "只回放本批已有八份回答，不新增模型评分，不代表教师审查或评分校准。",
+    "新删除是否合理需结合私有原文、确认读数及完整差异逐项审阅；本脚本记录精确行为。",
+    "趋势方向及模型评论判断按设计不在此数字规则覆盖内。",
+    "旧已保存结果没有被重写；本次新归一化结果仅保存在本机私有目录。"
+  ]
+}

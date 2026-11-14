@@ -1,0 +1,23 @@
+{
+  "python": 502,
+  "node": 8,
+  "old_gates_passed": 109,
+  "old_gates_total": 109,
+  "real_replay_passed": 203,
+  "real_replay_total": 204,
+  "new_adjacent_passed": 67,
+  "new_adjacent_total": 72,
+  "root_reproduced_failures": true,
+  "ruff": "passed",
+  "black_product_files": 71,
+  "black_probes": "passed after report-runner formatting only",
+  "javascript_syntax": "passed",
+  "not_run": [
+    "multiple locales",
+    "Python 3.10",
+    "all historical probes",
+    "real browser"
+  ],
+  "upgrade_gate_passed": false,
+  "real_model_calls": 0
+}

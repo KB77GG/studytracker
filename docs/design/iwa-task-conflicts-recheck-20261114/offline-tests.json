@@ -1,0 +1,46 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+  "python": "3.13.3",
+  "source_head": "89c32d6b59f33ea2c4d3a592edd2248836d7de81",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+      "returncode": 0,
+      "elapsed_seconds": 34.33
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-task-conflicts-recheck-20261114",
+      "returncode": 0,
+      "elapsed_seconds": 0.26
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-task-conflicts-recheck-20261114...origin/claude/ielts-writing-ai-trial\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n",
+  "python_tests": 502,
+  "node_tests": 8,
+  "real_model_calls": 0,
+  "initial_sandbox": {
+    "errors": 24,
+    "type": "PermissionError binding loopback listeners",
+    "executed_python_tests_before_class_setup_errors": 482,
+    "approved_rerun_passed": true
+  },
+  "hostile_vision_environment": "none",
+  "full_logs_private": true
+}

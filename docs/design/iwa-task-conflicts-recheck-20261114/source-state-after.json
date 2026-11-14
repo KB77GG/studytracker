@@ -1,0 +1,23 @@
+{
+  "time_utc": "2026-11-14T08:38:49.262379+00:00",
+  "phase": "Verification complete, before documentation copy and commit",
+  "checks": {
+    "other_main_modified": true,
+    "immutable_inputs": true,
+    "candidate_product_97_unchanged": true,
+    "main_status_entries_unchanged": true,
+    "studytracker-iwa-prompt15-final-recheck-20261113_head_unchanged": true,
+    "studytracker-iwa-prompt15-final-recheck-20261113_clean": true,
+    "studytracker-iwa-official-t1-replay-20261114_head_unchanged": true,
+    "studytracker-iwa-official-t1-replay-20261114_clean": true
+  },
+  "candidate_head": "89c32d6b59f33ea2c4d3a592edd2248836d7de81",
+  "candidate_status": "## codex/iwa-task-conflicts-recheck-20261114...origin/claude/ielts-writing-ai-trial\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md",
+  "main_head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+  "main_status": "## main...origin/main [behind 113]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+  "other_task_modified_files_unchanged": 5,
+  "immutable_inputs_unchanged": 7,
+  "candidate_product_files_unchanged": 97,
+  "model_calls": 0,
+  "service_upgraded": false
+}

@@ -1,0 +1,30 @@
+{
+  "replay": {
+    "passed": 203,
+    "total": 204,
+    "exit_code": 1,
+    "failed_checks": [
+      {
+        "check": "finding:L9:newly_removed",
+        "ok": false
+      }
+    ],
+    "root_rerun_identical_checks": true
+  },
+  "adjacent": {
+    "passed": 67,
+    "total": 72,
+    "exit_code": 1,
+    "failed_cases": [
+      "P2.entity_collision",
+      "P2.unit_collision",
+      "P2.time_percent_collision",
+      "P2.ambiguous_quote_first_occurrence",
+      "P2.truncated_TA_quote"
+    ],
+    "root_rerun_identical_checks": true
+  },
+  "model_calls": 0,
+  "upgrade_approved_by_recheck": false,
+  "runtime_unchanged": true
+}
