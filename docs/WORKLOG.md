@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-14 — 模考防作弊实施计划（仅计划）
+
+用户确认设备为 iPad / MacBook Air、3 次或 60 秒锁定、分三期。新增 `docs/EXAM_INTEGRITY_PLAN.md` 供 Codex 实施；未改业务代码、未部署。用户 11-15 要用现有模考，授权前禁止 push main。文件在云端分支 `claude/dazzling-johnson-a16p7t` 工作区，是否已 push 以 git 为准。
+
 ## 2026-11-14 — 课堂生词后台录入已上线
 
 用户授权部署。业务ca54816c，保留并行小班63fa27f9与其文档7e203341，最终21fcd7d4已push分支/main并部署。发布前33Python+19Node、合并后99Python+39Node通过；最终main CI43587357663三测试job通过、Deploy43587357675成功，advisory lint存量failure。生产21fcd7d4/12SHA一致、18:53:33 CST active、单worker/gthread6/5002、warning0；匿名入口登录跳转与公网3资源哈希通过，未查写学生数据。新入口 `/materials/classroom-vocabulary`：粘贴或xlsx三列→预览保存→选学生布置，小程序沿用现有背词复习。完整清单/证据/限制在实现树 `docs/reviews/classroom-vocabulary-20261114/`；报告和两交接独立skip-ci同步，旧主树7/23保留仅交接增量。课堂功能无需小程序发包；真实教师生产提交/微信真机待使用，未作人工DB/外部配置/小程序发布操作。
