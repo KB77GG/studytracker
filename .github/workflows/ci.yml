@@ -45,6 +45,8 @@ jobs:
         run: node tests/test_dictation_spell_queue.js
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
+      - name: Test small-class homework client
+        run: node --test tests/test_teacher_group_homework.js
       - name: Test Cambridge content and review delivery
         run: |
           python -m unittest \
@@ -100,6 +102,8 @@ jobs:
             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
+      - name: Test verified small-class homework recipients and assignments
+        run: python -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access -v
       - name: Test submitted mock paper review access and saved results
         run: python -m unittest tests.test_mock_exam_student_review tests.test_mock_exam_review_workflow -v
       - name: Test recovery assistant and student journeys with isolated data

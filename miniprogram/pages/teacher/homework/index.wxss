@@ -536,3 +536,37 @@
   color: #fff;
   border-radius: 16px;
 }
+
+.recipient-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.recipient-name,
+.assigned-student {
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.recipient-status {
+  color: #475569;
+  font-size: 12px;
+  text-align: right;
+}
+
+.recipient-hint {
+  display: block;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.recipient-warning {
+  color: #b45309;
+}

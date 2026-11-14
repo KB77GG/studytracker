@@ -61,6 +61,7 @@ from services.scheduler_client import (
 )
 from services.vocabulary_mastery import vocabulary_goal_for_task
 from services.task_deletion import TaskDeletionError, delete_unstarted_task
+from services.teacher_homework_recipients import legacy_homework_is_group
 from services.task_date_gate import (
     TaskDateGateError,
     active_task_grace_date,
@@ -5172,6 +5173,8 @@ def _create_teacher_homework(data: dict, *, force_quick: bool = False):
     quick_context, quick_error, quick_status = validate_quick_practice_request(user, data)
     if quick_error:
         return _teacher_homework_error(quick_error, quick_status)
+    if legacy_homework_is_group(data, quick_context):
+        return _teacher_homework_error("group_assignment_required", 409)
 
     raw_teacher_id = data.get("teacher_id")
     if quick_context:

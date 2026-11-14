@@ -19,6 +19,20 @@
     </view>
   </view>
 
+  <view class="form recipient-card" wx:if="{{recipientsRequired}}">
+    <view class="section-title-row">
+      <text class="section-title">{{isGroupHomework ? '小班接收名单' : '接收学生'}}</text>
+      <button class="mini-action" size="mini" loading="{{recipientsLoading}}" disabled="{{saving || recipientsLoading}}" bindtap="loadHomeworkRecipients">刷新名单</button>
+    </view>
+    <text class="recipient-hint" wx:if="{{recipientsLoading}}">正在核实课表和学生档案…</text>
+    <view class="recipient-row" wx:for="{{recipientMembers}}" wx:key="student_name">
+      <text class="recipient-name">{{item.student_name}}</text>
+      <text class="recipient-status {{item.status !== 'ready' ? 'recipient-warning' : ''}}">{{item.statusLabel}}</text>
+    </view>
+    <text class="recipient-hint recipient-warning" wx:if="{{recipientError}}">{{recipientError}}</text>
+    <text class="recipient-hint" wx:elif="{{isGroupHomework && !recipientsLoading}}">每位学生各有一份作业，分别提交和记录完成情况。</text>
+  </view>
+
   <view class="form">
     <text class="form-label">任务日期</text>
     <picker mode="date" value="{{form.date}}" bindchange="handleDateChange">
@@ -153,7 +167,7 @@
 
   <view class="form assigned-card">
     <view class="section-title-row">
-      <text class="section-title">该学生已布置作业</text>
+      <text class="section-title">{{isGroupHomework ? '小班已布置作业' : '该学生已布置作业'}}</text>
       <text class="section-count">{{existingTasks.length}} 项</text>
     </view>
     <view class="practice-summary muted" wx:if="{{existingLoading}}">
@@ -165,6 +179,7 @@
     <view class="assigned-list" wx:else>
       <view class="assigned-item" wx:for="{{existingTasks}}" wx:key="id" wx:for-index="taskIndex">
         <view class="assigned-main">
+          <text class="assigned-student" wx:if="{{isGroupHomework}}">{{item.student_name}}</text>
           <text class="assigned-title">{{item.detail}}</text>
           <text class="assigned-meta">{{item.date}} ｜ {{item.category || '课后作业'}} ｜ {{item.planned_minutes || 0}} 分钟</text>
           <text class="assigned-mode" wx:if="{{item.source_type === 'listening_intensive'}}">训练：{{item.listening_training_mode_label || '学生自选（旧任务）'}}</text>
@@ -206,7 +221,7 @@
           <text class="status-pill">{{item.status_label}}</text>
           <view class="assigned-actions">
             <button
-              wx:if="{{item.can_append_intensive && !editingTaskId}}"
+              wx:if="{{item.can_append_intensive && !editingTaskId && !isGroupHomework}}"
               class="mini-action intensive"
               size="mini"
               data-index="{{taskIndex}}"
@@ -230,7 +245,7 @@
 
   <view class="edit-banner" wx:if="{{editingTaskId}}">
     <view class="edit-banner-main">
-      <text class="edit-banner-title">正在修改已布置作业</text>
+      <text class="edit-banner-title">{{isGroupHomework ? ('正在修改' + editingStudentName + '的作业') : '正在修改已布置作业'}}</text>
       <text class="edit-banner-desc">{{editingTaskSummary}}</text>
     </view>
     <button class="cancel-edit-btn" size="mini" bindtap="cancelEditExistingTask">取消</button>
@@ -286,5 +301,5 @@
     <view class="counter">{{form.note.length}}/200</view>
   </view>
 
-  <button class="submit-btn" loading="{{saving}}" disabled="{{saving || quickPracticeInvalid}}" bindtap="submitHomework">{{editingTaskId ? '保存修改' : '保存并提醒学生'}}</button>
+  <button class="submit-btn" loading="{{saving}}" disabled="{{saving || quickPracticeInvalid || recipientsLoading || recipientsBlocked}}" bindtap="submitHomework">{{editingTaskId ? '保存修改' : (isGroupHomework ? '向全班布置并提醒' : '保存并提醒学生')}}</button>
 </view>
