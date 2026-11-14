@@ -45,6 +45,8 @@ jobs:
         run: node tests/test_dictation_spell_queue.js
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
+      - name: Test classroom vocabulary import client and assignment preset
+        run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js
       - name: Test Cambridge content and review delivery
         run: |
           python -m unittest \
@@ -100,6 +102,8 @@ jobs:
             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
+      - name: Test classroom vocabulary import and student learning
+        run: python -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -v
       - name: Test submitted mock paper review access and saved results
         run: python -m unittest tests.test_mock_exam_student_review tests.test_mock_exam_review_workflow -v
       - name: Test recovery assistant and student journeys with isolated data

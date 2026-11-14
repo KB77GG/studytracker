@@ -5,6 +5,7 @@
 {% block page_title %}材料库{% endblock %}
 {% block page_description %}集中管理教辅材料与词库资源，高效组织与复用内容{% endblock %}
 {% block header_actions %}
+<a class="btn btn-secondary" href="/materials/classroom-vocabulary">录入课堂生词</a>
 <button type="button" class="btn btn-primary material-create-button" onclick="window.location.href='/materials/create'">
     <i class="fas fa-plus"></i>
     创建新材料
@@ -456,7 +457,7 @@
 
     // 从词库创建任务
     function createDictationTask(id) {
-        window.location.href = `/tasks/create?dictation_book_id=${id}`;
+        window.location.href = `/tasks?preset_dictation_book=${id}`;
     }
 
     // 删除词库

@@ -3,13 +3,9 @@
 import json
 import re
 
-
-_PART_OF_SPEECH_RE = re.compile(
-    r"^(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*", re.IGNORECASE
-)
+_PART_OF_SPEECH_TAG = r"(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr|num|det|art|aux|int|interj|modal)"
 _PART_OF_SPEECH_PREFIX_RE = re.compile(
-    r"^(?:(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*"
-    r"(?:(?:[/／,，;；、&])|\bor\b)?\s*)+",
+    rf"^(?:{_PART_OF_SPEECH_TAG}\.\s*" r"(?:(?:[/／,，;；、&])|\bor\b)?\s*)+",
     re.IGNORECASE,
 )
 _VARIANT_SPLIT_RE = re.compile(r"\s*(?:[/≈；;]|,(?=\s*[a-zA-Z]))\s*")
@@ -17,7 +13,7 @@ _VOCAB_VARIANT_SPLIT_RE = re.compile(
     r"\s*(?:≈|；|;|(?<=\s)/(?=\S)|(?<=\S)/(?=\s)|,(?=\s*[a-zA-Z]))\s*"
 )
 _VOCAB_POS_MARKER_RE = re.compile(
-    r"(?<![A-Za-z])(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*",
+    rf"(?<![A-Za-z]){_PART_OF_SPEECH_TAG}\.\s*",
     re.IGNORECASE,
 )
 _CJK_RE = re.compile(r"[\u3400-\u9fff]")
@@ -108,7 +104,7 @@ def _clean_vocabulary_variant(value):
     text = strip_part_of_speech_prefix(text)
     text = re.sub(r"\([^)]*\)", " ", text)
     text = re.sub(
-        r"(?:^|\s)(?:n|v|vt|vi|adj|adv|prep|conj|pron|phr)\.\s*$",
+        rf"(?:^|\s){_PART_OF_SPEECH_TAG}\.\s*$",
         "",
         text,
         flags=re.IGNORECASE,
@@ -126,8 +122,7 @@ def _clean_vocabulary_variant(value):
     if normalized.endswith("-"):
         return ""
     if not all(
-        _SAFE_VOCAB_TOKEN_RE.fullmatch(token)
-        and any(character.isalpha() for character in token)
+        _SAFE_VOCAB_TOKEN_RE.fullmatch(token) and any(character.isalpha() for character in token)
         for token in normalized.split()
     ):
         return ""
@@ -184,7 +179,7 @@ def is_english_answer_correct(answer, canonical, accepted_answers=None):
 
 def normalize_chinese_answer(value):
     text = str(value or "").strip().lower()
-    text = _PART_OF_SPEECH_RE.sub("", text)
+    text = strip_part_of_speech_prefix(text)
     text = re.sub(r"[()（）【】\[\]「」『』\"'`]", "", text)
     text = re.sub(r"[，,。.!！？?：:\s]", "", text)
     return text
@@ -205,10 +200,7 @@ def is_chinese_answer_correct(answer, translation):
         variants.add(full)
     return any(
         normalized == variant
-        or (
-            len(normalized) >= 2
-            and (normalized in variant or variant in normalized)
-        )
+        or (len(normalized) >= 2 and (normalized in variant or variant in normalized))
         for variant in variants
     )
 

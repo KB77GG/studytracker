@@ -6,6 +6,7 @@ api_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 def init_app(app):
     """Register all API blueprints."""
     from api.azure_tts import azure_tts_bp  # Azure TTS API
+    from api.classroom_vocabulary import classroom_vocabulary_bp
     from api.dictation import dictation_bp  # Dictation API
     from api.dictation_input import dictation_input_bp  # Strict spelling input policy
     from api.entrance import entrance_bp  # Entrance test API (新生入学测试)
@@ -39,6 +40,7 @@ def init_app(app):
     app.register_blueprint(task_assignments_bp)
     app.register_blueprint(task_planner_bp)
     app.register_blueprint(material_bp)  # Register material bank
+    app.register_blueprint(classroom_vocabulary_bp)
     app.register_blueprint(tts_bp)  # Register TTS
     app.register_blueprint(azure_tts_bp)  # Register Azure TTS
     app.register_blueprint(dictation_bp)  # Register Dictation
