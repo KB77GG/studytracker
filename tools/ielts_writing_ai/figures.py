@@ -403,11 +403,14 @@ class Sources:
         return missing
 
 
-def for_submission(submission: dict) -> Sources:
+def for_submission(submission: dict, *, chart_checked: bool | None = None) -> Sources:
+    """chart_checked: the chart reading was confirmed and sent to the model
+    (prompts.visual_available; the evaluation passes it since .15): an unchecked
+    reading is no source of figures. None keeps the earlier rule (any ready reading)."""
     task_type = submission.get("task_type") or "task2"
-    chart = (
-        submission.get("image_description") if submission.get("image_status") == "ready" else None
-    )
+    if chart_checked is None:
+        chart_checked = submission.get("image_status") == "ready"
+    chart = submission.get("image_description") if chart_checked else None
     return Sources(
         submission.get("essay_text"),
         submission.get("prompt_text"),

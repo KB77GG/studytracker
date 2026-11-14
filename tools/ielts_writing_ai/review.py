@@ -13,10 +13,10 @@ import re
 from pathlib import Path
 
 from . import argument as argument_lib
+from . import conflicts, jsonshape, prompts, rewrite_quality, visual
 from . import deletion as deletion_lib
 from . import essay as essay_lib
 from . import figures as figures_lib
-from . import jsonshape, prompts, rewrite_quality, visual
 from .llm import LLMError, parse_strict_json
 
 log = logging.getLogger("iwa.review")
@@ -359,7 +359,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     essay = submission["essay_text"]
     criteria_raw = _criteria_raw(raw)
     task_ok = task_criterion_assessable(submission)
-    sources = figures_lib.for_submission(submission)
+    # A chart reading is a source of figures only when it was confirmed and sent (.15).
+    sources = figures_lib.for_submission(submission, chart_checked=task_ok)
 
     criteria = []
     for key in essay_lib.CRITERIA:
@@ -496,6 +497,8 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         removed["argument"] = argument["suggestions_removed"]
     for key, extra in _sweep_advice(criteria, argument, sources).items():
         removed[key] += extra
+    # Language advice that keeps a figure Task Achievement corrected (2026-11-14 run).
+    task_conflicts = conflicts.remove_conflicting(criteria, essay)
     # No remaining length is computed from advice text (see deletion.py); advice that
     # mentions deleting gets a conditional reminder with the essay's own count.
     length_notes = deletion_lib.annotate(criteria, argument, priorities, essay, minimum)
@@ -520,6 +523,11 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             f"（{parts}），避免把没有来源的数据当作改进方法。"
         )
 
+    if task_conflicts:
+        warnings.append(
+            f"有 {task_conflicts} 条语言方面的建议保留了 {criteria[0]['short']} 部分已指出有误的数据，"
+            f"建议已删去，评语保留；改写这些句子时，数据请按 {criteria[0]['short']} 部分的改正修改。"
+        )
     warnings += count_corrections
 
     scored = [c["band"] for c in criteria if c["state"] == "scored"]
@@ -534,6 +542,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
         "comparisons_checked": comparisons_checked,
         "argument": argument,
         "suggestions_removed": removed,
+        "task_conflicts": task_conflicts,  # suggestions dropped by conflicts.py
         "count_corrections": count_corrections,
         "length_notes": length_notes,  # advice that got the recount reminder
         # Confirmed copying, left out of the word count (essay.confirmed_copies), and

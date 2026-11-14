@@ -519,6 +519,8 @@
     }
 
     var REMOVED_NOTE = '（建议含原文和题目都没有的具体数字，已删去）';
+    var CONFLICT_NOTE = '（建议保留了 TA / TR 部分已指出有误的数据，已删去；数据请按该部分的改正修改）';
+    function removedNote(item) { return item.removed_reason === 'task_conflict' ? CONFLICT_NOTE : REMOVED_NOTE; }
 
     // -- Task 2 argument map (every quote was verified on the server)
     function verified(quote) { return quoteButton({ quote: quote, quote_found: true }); }
@@ -656,7 +658,7 @@
             quoteButton(issue),
             issue.comment ? el('p', { class: 'issue__comment', text: issue.comment }) : null,
             issue.suggestion ? el('p', { class: 'issue__suggestion', text: '建议：' + issue.suggestion })
-              : issue.suggestion_removed ? el('p', { class: 'muted small', text: REMOVED_NOTE }) : null
+              : issue.suggestion_removed ? el('p', { class: 'muted small', text: removedNote(issue) }) : null
           ]));
         });
         panel.appendChild(card);

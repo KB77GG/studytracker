@@ -9,6 +9,11 @@ from __future__ import annotations
 
 DISCLAIMER = "AI 生成，仅供学习参考，不是正式成绩"
 REMOVED_NOTE = "（建议含原文和题目都没有的具体数字，已删去）"
+CONFLICT_NOTE = "（建议保留了 TA / TR 部分已指出有误的数据，已删去；数据请按该部分的改正修改）"
+
+
+def removed_note(entry: dict) -> str:
+    return CONFLICT_NOTE if entry.get("removed_reason") == "task_conflict" else REMOVED_NOTE
 
 
 def _band(value) -> str:
@@ -49,7 +54,7 @@ def _evidence_line(entry, mark: str) -> str:
     if entry.get("suggestion"):
         text += f" → 建议：{entry['suggestion']}"
     elif entry.get("suggestion_removed"):
-        text += f" →{REMOVED_NOTE}"
+        text += f" →{removed_note(entry)}"
     return f"  {mark} {text}".rstrip()
 
 
