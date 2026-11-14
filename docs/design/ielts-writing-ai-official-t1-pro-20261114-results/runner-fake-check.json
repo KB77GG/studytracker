@@ -1,0 +1,220 @@
+{
+  "checks": [
+    {
+      "name": "prepare_success",
+      "pass": true
+    },
+    {
+      "name": "prepare_never_overwrites",
+      "pass": true
+    },
+    {
+      "name": "paid_flag_absent_zero_dispatch",
+      "pass": true
+    },
+    {
+      "name": "evaluate_before_confirm_refused",
+      "pass": true
+    },
+    {
+      "name": "manifest_fixed16_3",
+      "pass": true
+    },
+    {
+      "name": "manifest_no_key_value",
+      "pass": true
+    },
+    {
+      "name": "remaining_exact3_without_reused1B",
+      "pass": true
+    },
+    {
+      "name": "input_drift_rejected_before_stage",
+      "pass": true
+    },
+    {
+      "name": "config_drift_rejected_before_stage",
+      "pass": true
+    },
+    {
+      "name": "snapshot_drift_rejected_before_stage",
+      "pass": true
+    },
+    {
+      "name": "old_closed_source_drift_rejected",
+      "pass": true
+    },
+    {
+      "name": "three_images_zero_text",
+      "pass": true
+    },
+    {
+      "name": "readremaining_no_repeat",
+      "pass": true
+    },
+    {
+      "name": "freeze_four_raw_readings",
+      "pass": true
+    },
+    {
+      "name": "seal_without_four_checks_rejected",
+      "pass": true
+    },
+    {
+      "name": "confirmation_reading_mismatch_refused",
+      "pass": true
+    },
+    {
+      "name": "original_model_reading_must_be_preserved",
+      "pass": true
+    },
+    {
+      "name": "seal_all4",
+      "pass": true
+    },
+    {
+      "name": "sealed_file_drift_rejected",
+      "pass": true
+    },
+    {
+      "name": "eight_evaluations_one_retry_each_cap16",
+      "pass": true
+    },
+    {
+      "name": "all8_ready_and_no_new_vision",
+      "pass": true
+    },
+    {
+      "name": "evaluation_records_confirmed_reading",
+      "pass": true
+    },
+    {
+      "name": "raw_output_durably_journaled_after_each_call",
+      "pass": true
+    },
+    {
+      "name": "evaluation_high_32000",
+      "pass": true
+    },
+    {
+      "name": "vision_off_2000",
+      "pass": true
+    },
+    {
+      "name": "success_closes_batch",
+      "pass": true
+    },
+    {
+      "name": "closed_rejects_every_paid_repeat",
+      "pass": true
+    },
+    {
+      "name": "closed_status_readable",
+      "pass": true
+    },
+    {
+      "name": "old_batch_all_files_unchanged",
+      "pass": true
+    },
+    {
+      "name": "no_trial_data_created",
+      "pass": true
+    },
+    {
+      "name": "all_created_run_files_private",
+      "pass": true
+    },
+    {
+      "name": "imagefail.prepare",
+      "pass": true
+    },
+    {
+      "name": "imagefail.stops_stage",
+      "pass": true
+    },
+    {
+      "name": "imagefail.no_later_dispatch",
+      "pass": true
+    },
+    {
+      "name": "imagefail.closed_and_no_retry",
+      "pass": true
+    },
+    {
+      "name": "transport.prepare",
+      "pass": true
+    },
+    {
+      "name": "transport.stops_stage",
+      "pass": true
+    },
+    {
+      "name": "transport.no_later_dispatch",
+      "pass": true
+    },
+    {
+      "name": "transport.closed_and_no_retry",
+      "pass": true
+    },
+    {
+      "name": "unknown.prepare",
+      "pass": true
+    },
+    {
+      "name": "unknown.stops_stage",
+      "pass": true
+    },
+    {
+      "name": "unknown.no_later_dispatch",
+      "pass": true
+    },
+    {
+      "name": "unknown.closed_and_no_retry",
+      "pass": true
+    },
+    {
+      "name": "unknown_reservation_retained",
+      "pass": true
+    },
+    {
+      "name": "evalfail.prepare_read_freeze",
+      "pass": true
+    },
+    {
+      "name": "evalfail.seal",
+      "pass": true
+    },
+    {
+      "name": "evalfail.final_failure_stops",
+      "pass": true
+    },
+    {
+      "name": "evalfail.only_first_eval_and_retry",
+      "pass": true
+    },
+    {
+      "name": "evalfail.closed",
+      "pass": true
+    },
+    {
+      "name": "child_retains_lock_after_parent_close",
+      "pass": true
+    },
+    {
+      "name": "lock_released_only_after_child_exit",
+      "pass": true
+    },
+    {
+      "name": "clean_child_env",
+      "pass": true
+    },
+    {
+      "name": "parent_network_attempts_zero",
+      "pass": true
+    }
+  ],
+  "passed": 53,
+  "total": 53,
+  "real_calls": 0,
+  "network_attempts": 0
+}

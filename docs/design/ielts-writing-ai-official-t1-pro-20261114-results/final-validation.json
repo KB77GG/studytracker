@@ -1,0 +1,26 @@
+{
+  "complete_audit": {
+    "passed": 277,
+    "total": 277,
+    "root_replay_same": true
+  },
+  "audit_synthetic_selfcheck": {
+    "passed": 16,
+    "total": 16
+  },
+  "runner_fake": {
+    "passed": 53,
+    "total": 53
+  },
+  "source_integrity": {
+    "passed": 20,
+    "total": 20
+  },
+  "ruff": "pass",
+  "black": "pass",
+  "product_tests": "Not repeated; product unchanged, prior 494 Python + 8 Node preserved",
+  "replay_source": "/private/tmp/studytracker-iwa-official-t1-replay-20261114",
+  "replay_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "replay_state": "detached, clean",
+  "model_calls_by_verification": 0
+}

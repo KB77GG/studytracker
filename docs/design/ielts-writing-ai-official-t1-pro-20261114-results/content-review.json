@@ -1,0 +1,154 @@
+{
+  "审查范围": {
+    "样本数": 4,
+    "每样本轮次": 2,
+    "已完成反馈数": 8,
+    "教师点检完成数": 0,
+    "说明": "对照原稿、确认读数、归一化输出及当前前端渲染规则做离线内容抽查；不代表评分校准或全覆盖认证。"
+  },
+  "计数": {
+    "明确且仍保留的评论问题": 2,
+    "已检测并明确警示的非原文引文": 1,
+    "错误建议已过滤且排除当前问题": 1,
+    "引文总数": 161,
+    "逐字匹配原稿": 159,
+    "忽略大小写和空白后匹配": 160,
+    "局部语言建议候选": 11,
+    "局部语言建议已过滤": 3,
+    "局部语言建议仍保留": 8,
+    "仍保留且明确存在跨维度或图表冲突": 6,
+    "仍保留但涉及幅度或区间解释需教师判断": 2
+  },
+  "明确问题及保护状态": [
+    {
+      "ID": "H1-non-source-quote",
+      "样本ID": "official-1A-A#r2",
+      "原始字段": "criteria.lexical.issues[2]",
+      "归一化字段": "samples[1].generations.evaluate.result.criteria[2].issues[2]",
+      "中文概述": "一条批评引文不是原稿连续片段，大小写和空白归一化后仍无法匹配；含原稿两处不同表述的拼接及词形变化。",
+      "状态": "已检测，明确警示后保留条目，不计未拦截评论问题"
+    },
+    {
+      "ID": "H2-part-category-to-total",
+      "样本ID": "official-1A-B",
+      "原始字段": "criteria.coherence.issues[2]",
+      "归一化字段": "samples[2].generations.evaluate.result.criteria[1].issues[2]",
+      "中文概述": "建议将女性某教育分项的人数序列明确写成女性总人数；确认读数中女性还有另一教育分项，总和不等于建议序列。属于新增对象含义错误。",
+      "状态": "错误建议已过滤，排除当前可见问题"
+    },
+    {
+      "ID": "H3-overall-fall-and-late-recovery",
+      "样本ID": "official-1A-B#r2",
+      "原始字段": "criteria.coherence.issues[0]",
+      "归一化字段": "samples[3].generations.evaluate.result.criteria[1].issues[0]",
+      "中文概述": "将全时段下降和后半段回升判为相矛盾；两句时间范围不同，该数列可以同时满足两种描述。此处批评的逻辑依据不成立，与图表数值是否准确是两件事。",
+      "状态": "错误评论仍保留，建议已过滤"
+    },
+    {
+      "ID": "H4-compatible-peak-description-criticized",
+      "样本ID": "official-1B-A#r2",
+      "原始字段": "criteria.task.strengths[2]",
+      "归一化字段": "samples[5].generations.evaluate.result.criteria[0].strengths[2]",
+      "中文概述": "模型称原稿对晚间峰值的数值及时间描述不准确，但所引粗略范围与确认读数相容；该批评在归一化结果中仍保留。",
+      "状态": "错误评论仍保留"
+    }
+  ],
+  "局部语言建议": [
+    {
+      "ID": "L1",
+      "样本ID": "official-1A-A",
+      "原始字段": "criteria.coherence.issues[0].suggestion",
+      "归一化字段": "samples[0].generations.evaluate.result.criteria[1].issues[0].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "局部指代改写保留了与确认图表相反的后段变化方向。"
+    },
+    {
+      "ID": "L2",
+      "样本ID": "official-1A-B",
+      "原始字段": "criteria.coherence.issues[1].suggestion",
+      "归一化字段": "samples[2].generations.evaluate.result.criteria[1].issues[1].suggestion",
+      "状态": "教学判断待复核",
+      "中文概述": "局部修正时间顺序后仍沿用较强增长措辞；增长幅度措辞含教学判断，不列明确事实错误。"
+    },
+    {
+      "ID": "L3",
+      "样本ID": "official-1A-B",
+      "原始字段": "criteria.lexical.issues[1].suggestion",
+      "归一化字段": "samples[2].generations.evaluate.result.criteria[2].issues[1].suggestion",
+      "状态": "已过滤",
+      "中文概述": "词汇建议原拟保留同答任务维度已纠正的数值，最终建议已删除。"
+    },
+    {
+      "ID": "L4",
+      "样本ID": "official-1A-B#r2",
+      "原始字段": "criteria.coherence.issues[1].suggestion",
+      "归一化字段": "samples[3].generations.evaluate.result.criteria[1].issues[1].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "局部把比例改为人数，但保留了与确认读数相反的类别趋势。"
+    },
+    {
+      "ID": "L5",
+      "样本ID": "official-1A-B#r2",
+      "原始字段": "criteria.lexical.issues[0].suggestion",
+      "归一化字段": "samples[3].generations.evaluate.result.criteria[2].issues[0].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "局部把比例改为人数，但仍沿用与确认读数相反的趋势。"
+    },
+    {
+      "ID": "L6",
+      "样本ID": "official-1B-A",
+      "原始字段": "criteria.coherence.issues[0].suggestion",
+      "归一化字段": "samples[4].generations.evaluate.result.criteria[1].issues[0].suggestion",
+      "状态": "区间解释待复核",
+      "中文概述": "晚间区间的整体方向与期间小幅反弹可能被混用；确认读数明确允许局部反弹，不据此计明确新增事实错误。"
+    },
+    {
+      "ID": "L7",
+      "样本ID": "official-1B-A#r2",
+      "原始字段": "criteria.coherence.issues[0].suggestion",
+      "归一化字段": "samples[5].generations.evaluate.result.criteria[1].issues[0].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "衔接建议沿用原稿区间上升，和同一答案任务维度给出的区间下降纠错相冲突。"
+    },
+    {
+      "ID": "L8",
+      "样本ID": "official-1B-A#r2",
+      "原始字段": "criteria.lexical.issues[2].suggestion",
+      "归一化字段": "samples[5].generations.evaluate.result.criteria[2].issues[2].suggestion",
+      "状态": "已过滤",
+      "中文概述": "词汇改写中的区间端点表达与任务纠错存在冲突风险，最终建议已删除。"
+    },
+    {
+      "ID": "L9",
+      "样本ID": "official-1B-A#r2",
+      "原始字段": "criteria.grammar.issues[1].suggestion",
+      "归一化字段": "samples[5].generations.evaluate.result.criteria[3].issues[1].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "语法建议保留同答任务维度已要求修正的峰值及时间，形成跨维度建议冲突。"
+    },
+    {
+      "ID": "L10",
+      "样本ID": "official-1B-A#r2",
+      "原始字段": "criteria.grammar.issues[2].suggestion",
+      "归一化字段": "samples[5].generations.evaluate.result.criteria[3].issues[2].suggestion",
+      "状态": "已过滤",
+      "中文概述": "语法建议原拟保留同答任务维度已纠正的早间走势，最终建议已删除。"
+    },
+    {
+      "ID": "L11",
+      "样本ID": "official-1C-A",
+      "原始字段": "criteria.lexical.issues[3].suggestion",
+      "归一化字段": "samples[6].generations.evaluate.result.criteria[2].issues[3].suggestion",
+      "状态": "明确保留冲突",
+      "中文概述": "词汇建议保留同答任务维度已明确纠正的工序时长，形成跨维度建议冲突。"
+    }
+  ],
+  "解释边界": [
+    "明确评论问题分别为把总体趋势和子区间趋势误判为矛盾，以及无依据批评与确认读数相容的粗略峰值描述。",
+    "拼接引文已被系统识别，前端明确标为未找到且不作为评分依据；相关评论及建议仍展示，不能称为未检测。",
+    "分项改成总量的错误建议已被过滤，不计入当前可见问题。",
+    "局部语言建议可能保留原稿错误，不能据此统称模型新造事实；保留建议与任务维度纠错不一致仍需处理。",
+    "原始反馈候选与当前可见问题分开统计；不同类别可能落在同一份反馈，不能将计数相加作为错误答案数。",
+    "重要信息遗漏未用教师全覆盖清单逐项验证，因此不宣称没有遗漏；未填写教师点检，也未作评分校准。"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "prompt_version": "iwa-2026-11-13.15",
+  "authorization": {
+    "new_vision_cap": 3,
+    "text_cap_including_retries": 16,
+    "samples": 4,
+    "evaluations_per_sample": 2,
+    "kind": "evaluate",
+    "reuse_existing_1b": true,
+    "closed_previous_batch_not_reopened": true
+  },
+  "review_provenance": "Codex main agent and independent agents visually checked source images; not teacher/user human confirmation.",
+  "corrected_reading_ids": [
+    "official-1B-A"
+  ],
+  "new_reading_ids_kept_unchanged": [
+    "official-1A-A",
+    "official-1A-B",
+    "official-1C-A"
+  ],
+  "runner_sha256": "f9b79df377376ba724861b24170490d78690828967480978fbc27e8178a76340",
+  "test_runner_sha256": "98d4e82fbc98dcdf52619093a7c90521a402c77422be38b599afb9921d0e0ee4",
+  "corrected_reading_characters": 1806,
+  "only_private_full_content": true,
+  "pricing_source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/"
+}

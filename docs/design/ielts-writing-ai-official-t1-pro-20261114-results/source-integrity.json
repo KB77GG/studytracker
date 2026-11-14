@@ -1,0 +1,801 @@
+{
+  "audited_at_utc": "2026-11-14T06:53:52.654207+00:00",
+  "phase": "Batch closed; final immutable source/input audit before documentation commit",
+  "baseline_path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/source-state-before.json",
+  "baseline_file_sha256": "30f1f268420c70ea906a2c0749494563ec3fb711f126fd2554ab4d323fcbdd72",
+  "product_baseline_path": "/Users/zhouxin/Desktop/studytracker/docs/design/iwa-prompt15-final-recheck-20261113/source-state-before.json",
+  "product_baseline_file_sha256": "a5c9a80add89d3d262d3b39e5c19c7e96e1c6aa75aef9fb145a0216c938dbd2c",
+  "source_path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+  "source_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "source_branch": "codex/iwa-prompt15-final-recheck-20261113",
+  "source_status": "## codex/iwa-prompt15-final-recheck-20261113...origin/claude/ielts-writing-ai-trial",
+  "main_path": "/Users/zhouxin/Desktop/studytracker",
+  "main_head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+  "main_status": "## main...origin/main [behind 113]\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py",
+  "checks": {
+    "source_head_matches_prepared": true,
+    "source_stayed_same_during_audit": true,
+    "source_clean": true,
+    "source_status_matches_baseline": true,
+    "product_file_count_95": true,
+    "product_file_list_unchanged": true,
+    "all_product_file_hashes_unchanged": true,
+    "runtime_code_fingerprint_matches_manifest": true,
+    "all_original_inputs_unchanged": true,
+    "old_closed_batch_files_unchanged": true,
+    "all_new_batch_frozen_input_snapshots_unchanged": true,
+    "other_task_modified_files_unchanged": true,
+    "main_status_paths_unchanged": true,
+    "main_has_original_7_modified": true,
+    "main_has_original_23_untracked_entries": true,
+    "main_head_unchanged": true,
+    "new_batch_closed": true,
+    "new_manifest_matches_seal": true,
+    "new_frozen_readings_match_freeze_marker": true,
+    "new_checked_readings_match_seal_marker": true
+  },
+  "checks_passed": 20,
+  "checks_total": 20,
+  "product_files": [
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/.env.example",
+      "baseline_sha256": "b6fb32e9ca0e0f18895f4a8d445e30bdefc1b4cafccd2a27006b21d4b7880e59",
+      "current_sha256": "b6fb32e9ca0e0f18895f4a8d445e30bdefc1b4cafccd2a27006b21d4b7880e59",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/.gitignore",
+      "baseline_sha256": "fbe4549411f10d462272b45e1c76679c7ab93fb688fd2aff43d69566df9d366e",
+      "current_sha256": "fbe4549411f10d462272b45e1c76679c7ab93fb688fd2aff43d69566df9d366e",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/README.md",
+      "baseline_sha256": "429daadea72ca631368abb61d0e969593c06c1f10cce1f34377de22b2bc822b8",
+      "current_sha256": "429daadea72ca631368abb61d0e969593c06c1f10cce1f34377de22b2bc822b8",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/__init__.py",
+      "baseline_sha256": "25a92cf2c3c636fe7ec669829533f29558afd3cec06bb01a3aaab3673ce84757",
+      "current_sha256": "25a92cf2c3c636fe7ec669829533f29558afd3cec06bb01a3aaab3673ce84757",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/__main__.py",
+      "baseline_sha256": "88cfb2dd4e6550dd5756aee5fdfd99765e11531c1744b5353ebaab07f60741c9",
+      "current_sha256": "88cfb2dd4e6550dd5756aee5fdfd99765e11531c1744b5353ebaab07f60741c9",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/access.py",
+      "baseline_sha256": "0ce7da7fc3fe141241546071d77d120c12f35262b9cfb2b60ad5827f53957442",
+      "current_sha256": "0ce7da7fc3fe141241546071d77d120c12f35262b9cfb2b60ad5827f53957442",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/argument.py",
+      "baseline_sha256": "d89fc50c24843620923fc73445f4cc8a071aec3a3b47f0373c6ea1d25592aead",
+      "current_sha256": "d89fc50c24843620923fc73445f4cc8a071aec3a3b47f0373c6ea1d25592aead",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/batch.py",
+      "baseline_sha256": "68cd9a53a2c02639871213fe39573dbd581e1dd2b10d5f4926f291ffd7c3d310",
+      "current_sha256": "68cd9a53a2c02639871213fe39573dbd581e1dd2b10d5f4926f291ffd7c3d310",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/bin/_common.sh",
+      "baseline_sha256": "95624d1ae979900839d68f6caa12226ce539fe0e9c63ddcb70cd14292d87b761",
+      "current_sha256": "95624d1ae979900839d68f6caa12226ce539fe0e9c63ddcb70cd14292d87b761",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/bin/start.sh",
+      "baseline_sha256": "6ba82b12194d698f732e1a7e7222e9590509846cca300527a7a055c80a9c4808",
+      "current_sha256": "6ba82b12194d698f732e1a7e7222e9590509846cca300527a7a055c80a9c4808",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/bin/status.sh",
+      "baseline_sha256": "3a62c6c03406c18f4f0127e2e6bcf6790e7d6409680f7ea94fd666b6b80e5311",
+      "current_sha256": "3a62c6c03406c18f4f0127e2e6bcf6790e7d6409680f7ea94fd666b6b80e5311",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/bin/stop.sh",
+      "baseline_sha256": "4f38e4c6d45b123c8fc2e116a69a2d96669aadc756ce3ca6e66e21011809a7cc",
+      "current_sha256": "4f38e4c6d45b123c8fc2e116a69a2d96669aadc756ce3ca6e66e21011809a7cc",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/blindtally.py",
+      "baseline_sha256": "3f91f0bdc4c442199c176cec970e3c622f184db996303cdfe104f60995637a36",
+      "current_sha256": "3f91f0bdc4c442199c176cec970e3c622f184db996303cdfe104f60995637a36",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/config.py",
+      "baseline_sha256": "56e9d3bf7e29a8d025aa5b37041768efb71e17119628d516af2e2b5f1dbf424f",
+      "current_sha256": "56e9d3bf7e29a8d025aa5b37041768efb71e17119628d516af2e2b5f1dbf424f",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/copytext.py",
+      "baseline_sha256": "f176bdaecc14c58d9161787bdd4ad5a8f3f4c402c94f17e1d3c926aa60d683dd",
+      "current_sha256": "f176bdaecc14c58d9161787bdd4ad5a8f3f4c402c94f17e1d3c926aa60d683dd",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/ctl_lock.py",
+      "baseline_sha256": "fb99bab37b9c0dff3c2f1a5ee6aa51df99d070bb6b771ac140720cd8df1697c5",
+      "current_sha256": "fb99bab37b9c0dff3c2f1a5ee6aa51df99d070bb6b771ac140720cd8df1697c5",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/deletion.py",
+      "baseline_sha256": "dc740044d4dce4a106640ce9c65cc6879adafb52a6906736e16be966e8c763d7",
+      "current_sha256": "dc740044d4dce4a106640ce9c65cc6879adafb52a6906736e16be966e8c763d7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/essay.py",
+      "baseline_sha256": "22d338c9af4797f6a3e1fe33a18ebdb55dab1e074c42a8ef7fee59222d200194",
+      "current_sha256": "22d338c9af4797f6a3e1fe33a18ebdb55dab1e074c42a8ef7fee59222d200194",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/figures.py",
+      "baseline_sha256": "174b54200bd5114b97cb041750543c66ed6d34ae1dece8e18fdd5c539b52e4ee",
+      "current_sha256": "174b54200bd5114b97cb041750543c66ed6d34ae1dece8e18fdd5c539b52e4ee",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/gunicorn.conf.py",
+      "baseline_sha256": "bbd4143503937f4196cab9dbf82c271c1e137d79f3ea85ea778e098a8c613b12",
+      "current_sha256": "bbd4143503937f4196cab9dbf82c271c1e137d79f3ea85ea778e098a8c613b12",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/imagecheck.py",
+      "baseline_sha256": "05bf0939e9089c766892b77d50ca93fdb0468b9bf3c580289e22161650ef476d",
+      "current_sha256": "05bf0939e9089c766892b77d50ca93fdb0468b9bf3c580289e22161650ef476d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/instance.py",
+      "baseline_sha256": "113c0be5d0cd1f67b413a6ffe44003017b0df0309f16262025b50ca40f373561",
+      "current_sha256": "113c0be5d0cd1f67b413a6ffe44003017b0df0309f16262025b50ca40f373561",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/jobs.py",
+      "baseline_sha256": "b3610fe72cefa8aba9cecdb001d34aadc0b94261b4d47551b0c4cbaf367e9e8a",
+      "current_sha256": "b3610fe72cefa8aba9cecdb001d34aadc0b94261b4d47551b0c4cbaf367e9e8a",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/jsonshape.py",
+      "baseline_sha256": "2841644dcae57296608c6fc0a063a08985d8e3898e8a69a00155486625174240",
+      "current_sha256": "2841644dcae57296608c6fc0a063a08985d8e3898e8a69a00155486625174240",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/ledger.py",
+      "baseline_sha256": "e75cdff89d351d2c0c4a8637dd31562a1a43b88e286e35d4c1445993604d8d13",
+      "current_sha256": "e75cdff89d351d2c0c4a8637dd31562a1a43b88e286e35d4c1445993604d8d13",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/llm.py",
+      "baseline_sha256": "73d952b1128707f4b67040b33f7856ab9f4bdd332aa6dbe8b9d47ec9b3a3d030",
+      "current_sha256": "73d952b1128707f4b67040b33f7856ab9f4bdd332aa6dbe8b9d47ec9b3a3d030",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/prompts.py",
+      "baseline_sha256": "d8ec0c11d8cad61e51d554f4165adcac79cdb64c873ab7b5ec9e7493e8dc1907",
+      "current_sha256": "d8ec0c11d8cad61e51d554f4165adcac79cdb64c873ab7b5ec9e7493e8dc1907",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/realcheck.py",
+      "baseline_sha256": "88d2af22caaac498d85c0563dac6596a9ccfaca43b532b9ca16129d868ec1760",
+      "current_sha256": "88d2af22caaac498d85c0563dac6596a9ccfaca43b532b9ca16129d868ec1760",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/realcheck_compare.py",
+      "baseline_sha256": "6587d3d3f82185b2c7e5a3abe25621e6111d32dc8390b2de2ae02c1211a84135",
+      "current_sha256": "6587d3d3f82185b2c7e5a3abe25621e6111d32dc8390b2de2ae02c1211a84135",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/requirements.txt",
+      "baseline_sha256": "9623ce79e1a49bc5a023a8d6a6118bf357ffa661ce358fca2eab992ac4438842",
+      "current_sha256": "9623ce79e1a49bc5a023a8d6a6118bf357ffa661ce358fca2eab992ac4438842",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/review.py",
+      "baseline_sha256": "d74470e441bd582354759e7ddf21bfbcfc5878f80fd95aa7a62c061a7ecf70d0",
+      "current_sha256": "d74470e441bd582354759e7ddf21bfbcfc5878f80fd95aa7a62c061a7ecf70d0",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/rewrite_quality.py",
+      "baseline_sha256": "00427ab53868b9380b8c94102dcf8ce053723db361f78082aa6d2b2a32b3dad7",
+      "current_sha256": "00427ab53868b9380b8c94102dcf8ce053723db361f78082aa6d2b2a32b3dad7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/samples.py",
+      "baseline_sha256": "f10c4db898739338cf04114a9e0520490ad15e68ffb8a2ff1861bd874902203a",
+      "current_sha256": "f10c4db898739338cf04114a9e0520490ad15e68ffb8a2ff1861bd874902203a",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/static/draft.js",
+      "baseline_sha256": "6aa109cf9d75b819cf2f64ff8cc5ff06919c706503cbe0d7d5e4e6cbd17eb76a",
+      "current_sha256": "6aa109cf9d75b819cf2f64ff8cc5ff06919c706503cbe0d7d5e4e6cbd17eb76a",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/static/iwa.css",
+      "baseline_sha256": "a6b509f3135a30a38eee33f0a859c92221373495ffb1d043baba68bc6e142d91",
+      "current_sha256": "a6b509f3135a30a38eee33f0a859c92221373495ffb1d043baba68bc6e142d91",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/static/iwa.js",
+      "baseline_sha256": "0abcdeb7c6430d2f04177384872a58d4a1e29223476c032966b4e810aa5ca1e7",
+      "current_sha256": "0abcdeb7c6430d2f04177384872a58d4a1e29223476c032966b4e810aa5ca1e7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/storage.py",
+      "baseline_sha256": "fb3bd8e4fad18fe4626f5019d115aafe47941bd644945ebf67004c42e38d4d51",
+      "current_sha256": "fb3bd8e4fad18fe4626f5019d115aafe47941bd644945ebf67004c42e38d4d51",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/base.html",
+      "baseline_sha256": "6685528a2cab37205302c720e3297bf9aef52c4f217f1c1551c320d52e4119c9",
+      "current_sha256": "6685528a2cab37205302c720e3297bf9aef52c4f217f1c1551c320d52e4119c9",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/history.html",
+      "baseline_sha256": "b1ca395a93260d31ca98ace4e81ed891e4f732e7d46280c32d90c11ad522b782",
+      "current_sha256": "b1ca395a93260d31ca98ace4e81ed891e4f732e7d46280c32d90c11ad522b782",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/login.html",
+      "baseline_sha256": "b2780aba92c019541a71930e11f49e13d548f889a5267ce1bb6e6edf99caf75c",
+      "current_sha256": "b2780aba92c019541a71930e11f49e13d548f889a5267ce1bb6e6edf99caf75c",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/new.html",
+      "baseline_sha256": "76545e48ea0f2085f0db11e10ac697f1b6a8a0e370527fc0f3eb58daead23fca",
+      "current_sha256": "76545e48ea0f2085f0db11e10ac697f1b6a8a0e370527fc0f3eb58daead23fca",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/not_found.html",
+      "baseline_sha256": "b50a4666b6cec45d4b5ecba66494552f84817f15a944cb00530c912fff85b3af",
+      "current_sha256": "b50a4666b6cec45d4b5ecba66494552f84817f15a944cb00530c912fff85b3af",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/templates/submission.html",
+      "baseline_sha256": "48e0163872009c466084f5735bce65255b8d51280b5f3fc4d6818b42f58aee20",
+      "current_sha256": "48e0163872009c466084f5735bce65255b8d51280b5f3fc4d6818b42f58aee20",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/__init__.py",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261104.json",
+      "baseline_sha256": "d0201d3032bd26ff2051f11176d00e2a5892bcd376426e86965c590dca6d31cf",
+      "current_sha256": "d0201d3032bd26ff2051f11176d00e2a5892bcd376426e86965c590dca6d31cf",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261104b.json",
+      "baseline_sha256": "3fefdf71c5718b2c5df5b777407097aa0c3dd229d3868997fdc8a4c5be2f91d6",
+      "current_sha256": "3fefdf71c5718b2c5df5b777407097aa0c3dd229d3868997fdc8a4c5be2f91d6",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261104c.json",
+      "baseline_sha256": "942dee2ef02d816cd1d6b3868eddbef64f6e7a00f230bf486692d7335835f1c9",
+      "current_sha256": "942dee2ef02d816cd1d6b3868eddbef64f6e7a00f230bf486692d7335835f1c9",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261104d.json",
+      "baseline_sha256": "f3f55abe46699d4b72c3c75ddc2116fb03e86a6fd09542058edae270e3b400e5",
+      "current_sha256": "f3f55abe46699d4b72c3c75ddc2116fb03e86a6fd09542058edae270e3b400e5",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261104e.json",
+      "baseline_sha256": "c94d07a818df431049e004c6a87bb5eef56dfdb373f75ef2aef3f2e51323182d",
+      "current_sha256": "c94d07a818df431049e004c6a87bb5eef56dfdb373f75ef2aef3f2e51323182d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261106_high.json",
+      "baseline_sha256": "1758d3db8473a809656bd47ba976cf8182495d8a1232d1e41e452ae808a6480b",
+      "current_sha256": "1758d3db8473a809656bd47ba976cf8182495d8a1232d1e41e452ae808a6480b",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261107_prompt9.json",
+      "baseline_sha256": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06",
+      "current_sha256": "283ab060ea46d8825d5dbc013ad2fcd08f3f7f25921820747a27cd5eb9004f06",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/fixtures/realcheck_20261109_prompt10.json",
+      "baseline_sha256": "f2d94b741f48b57606178d9828421583c1c8354c7d42d8a2fa09327b8aaf817a",
+      "current_sha256": "f2d94b741f48b57606178d9828421583c1c8354c7d42d8a2fa09327b8aaf817a",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/helpers.py",
+      "baseline_sha256": "2644c7bf5d0b23e629e4bd2c45e9d8d925e52b00ccd7d72a5c30771935cb5147",
+      "current_sha256": "2644c7bf5d0b23e629e4bd2c45e9d8d925e52b00ccd7d72a5c30771935cb5147",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_argument.py",
+      "baseline_sha256": "46c27ce2f9038dbda63cfa2008b2d8dd98778726235afe473e32ee455c1cbf7d",
+      "current_sha256": "46c27ce2f9038dbda63cfa2008b2d8dd98778726235afe473e32ee455c1cbf7d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_argument_recheck_20261104.py",
+      "baseline_sha256": "de24fb84fb9a6b0eacfe76247a48c772aac7c447a67b05eb99151ef5caf36beb",
+      "current_sha256": "de24fb84fb9a6b0eacfe76247a48c772aac7c447a67b05eb99151ef5caf36beb",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_argument_review_20261104.py",
+      "baseline_sha256": "394f6442f6a488de7b4515c54f27a6503b6c3355977b2378181a87f0c12b6071",
+      "current_sha256": "394f6442f6a488de7b4515c54f27a6503b6c3355977b2378181a87f0c12b6071",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_batch_ledger_20261111.py",
+      "baseline_sha256": "7c235aff900b68b9f2c5c1107bfb5a36002e26eefd116b0729dd18446e1df6e9",
+      "current_sha256": "7c235aff900b68b9f2c5c1107bfb5a36002e26eefd116b0729dd18446e1df6e9",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_batch_resume_20261112.py",
+      "baseline_sha256": "9d7aafd8a5155afd3b2feb996f92f32119b16d375b477e44b9eb3c9482b3bef0",
+      "current_sha256": "9d7aafd8a5155afd3b2feb996f92f32119b16d375b477e44b9eb3c9482b3bef0",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_compare_tools_20261110.py",
+      "baseline_sha256": "83740eabf9c0b36adbd2ff71314e3114761962e1bbfe1e0cc7c9a1bdab8887fd",
+      "current_sha256": "83740eabf9c0b36adbd2ff71314e3114761962e1bbfe1e0cc7c9a1bdab8887fd",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_copied_question_20261113.py",
+      "baseline_sha256": "ed47946e8d8a734769a295da7a90ae7208c5a8771e52a8e00c6e93e343ef9490",
+      "current_sha256": "ed47946e8d8a734769a295da7a90ae7208c5a8771e52a8e00c6e93e343ef9490",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_copytext.py",
+      "baseline_sha256": "dc69f233daac763d6fa50e22bcfab7e040e7f9b733beb041945fd0ec0c207690",
+      "current_sha256": "dc69f233daac763d6fa50e22bcfab7e040e7f9b733beb041945fd0ec0c207690",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_draft.js",
+      "baseline_sha256": "eb805a9b86c4dc2462d9bb285094ccede79df3ff6d42333779168f1432e9263f",
+      "current_sha256": "eb805a9b86c4dc2462d9bb285094ccede79df3ff6d42333779168f1432e9263f",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_essay.py",
+      "baseline_sha256": "91efe81561a216149df8d16365054470abd751ad56dd7db70616e2dbe36b09fe",
+      "current_sha256": "91efe81561a216149df8d16365054470abd751ad56dd7db70616e2dbe36b09fe",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_evaluate_model_20261112.py",
+      "baseline_sha256": "bbe8e55acb4575d4e00acb6aaa1ece949bee71d3dd9e19e64e0ae338900477a7",
+      "current_sha256": "bbe8e55acb4575d4e00acb6aaa1ece949bee71d3dd9e19e64e0ae338900477a7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_figure_review_20261104.py",
+      "baseline_sha256": "e808e672126366af003650c9d8016b3bc5166a03ef50a11753a5a9e5051fde92",
+      "current_sha256": "e808e672126366af003650c9d8016b3bc5166a03ef50a11753a5a9e5051fde92",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_figures_recheck_20261104.py",
+      "baseline_sha256": "4976fa01f7f7f5e5713513dd27eb7a50bd8a3edcde24d612e4190654f07484e8",
+      "current_sha256": "4976fa01f7f7f5e5713513dd27eb7a50bd8a3edcde24d612e4190654f07484e8",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_high_run_20261106.py",
+      "baseline_sha256": "b42f3300c1c4e8a0b79c04450dcf8e07ea7f182ecb8c58832654a126a8db6c6d",
+      "current_sha256": "b42f3300c1c4e8a0b79c04450dcf8e07ea7f182ecb8c58832654a126a8db6c6d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_holdout_tools_20261110.py",
+      "baseline_sha256": "36f422abd2dfa2a807b3f902f51baedc1ba384e45100dc7214ca9ae77760635d",
+      "current_sha256": "36f422abd2dfa2a807b3f902f51baedc1ba384e45100dc7214ca9ae77760635d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_image_check_20261113.py",
+      "baseline_sha256": "45aa225007e3d0dbf13f40079d441abff408cb07440a6d458f6ddcfc175a3d15",
+      "current_sha256": "45aa225007e3d0dbf13f40079d441abff408cb07440a6d458f6ddcfc175a3d15",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_isolation.py",
+      "baseline_sha256": "4b186dbd408a7f6fd895636f485f9e2c0c91665c74286d721221cf32311f5b2b",
+      "current_sha256": "4b186dbd408a7f6fd895636f485f9e2c0c91665c74286d721221cf32311f5b2b",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_llm.py",
+      "baseline_sha256": "001755ed361225cf406bc9c781894ccd652395a5100d698e918527fc70abd3ce",
+      "current_sha256": "001755ed361225cf406bc9c781894ccd652395a5100d698e918527fc70abd3ce",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_metrics_blind_20261111.py",
+      "baseline_sha256": "15ba32fe306f2dd1a9799c460c0b6e24dc78c1d5a484b15d9411e0a7698c0b38",
+      "current_sha256": "15ba32fe306f2dd1a9799c460c0b6e24dc78c1d5a484b15d9411e0a7698c0b38",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_official_t2_20261113.py",
+      "baseline_sha256": "780637433d485115897169cb9e43503bcdf3680db3d99aa3a4b198875c288474",
+      "current_sha256": "780637433d485115897169cb9e43503bcdf3680db3d99aa3a4b198875c288474",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_percentage_points_20261110.py",
+      "baseline_sha256": "18eaa835a681e75bccf0ee9de1cda03a6c1344c82984240de9a3ad0364ea6960",
+      "current_sha256": "18eaa835a681e75bccf0ee9de1cda03a6c1344c82984240de9a3ad0364ea6960",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt10_run_20261109.py",
+      "baseline_sha256": "a94c81aea344e70d17b8dee862b3406b5491952e56ee8b5358a1bba025810bef",
+      "current_sha256": "a94c81aea344e70d17b8dee862b3406b5491952e56ee8b5358a1bba025810bef",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt11_review_20261109.py",
+      "baseline_sha256": "cff23918282f96ba293d4d434c17490101a056a80b456d9ab39524acae20b38c",
+      "current_sha256": "cff23918282f96ba293d4d434c17490101a056a80b456d9ab39524acae20b38c",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt8_recheck_20261106.py",
+      "baseline_sha256": "236c6e32f59af41e7f082b8a496d47f07719948d14781b949bd40d8016a0d573",
+      "current_sha256": "236c6e32f59af41e7f082b8a496d47f07719948d14781b949bd40d8016a0d573",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt8_review_20261105.py",
+      "baseline_sha256": "a7d4afb3056abceb970fc3c4299da504f73acd14866ba66028e366810ee0180a",
+      "current_sha256": "a7d4afb3056abceb970fc3c4299da504f73acd14866ba66028e366810ee0180a",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt9_run_20261107.py",
+      "baseline_sha256": "0a6039aa3b7795e66280045bc95727cafeef7eabf97010b2d78cd7e4979e6c3c",
+      "current_sha256": "0a6039aa3b7795e66280045bc95727cafeef7eabf97010b2d78cd7e4979e6c3c",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_prompt_confounds_20261104.py",
+      "baseline_sha256": "2f9de70cffdf6fac4406097b4bd6d8691a74ec39a31522400444832f4c2d6c43",
+      "current_sha256": "2f9de70cffdf6fac4406097b4bd6d8691a74ec39a31522400444832f4c2d6c43",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_quality_review_20261104.py",
+      "baseline_sha256": "438ab520d00b002008b2cef0d9333f979456129c1d4025f93f29c85d8fa5a270",
+      "current_sha256": "438ab520d00b002008b2cef0d9333f979456129c1d4025f93f29c85d8fa5a270",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_realcheck.py",
+      "baseline_sha256": "848f9cda9f0bdec2e45b7509c46f3d36291c1f2d72c367d633c343c44cb5932d",
+      "current_sha256": "848f9cda9f0bdec2e45b7509c46f3d36291c1f2d72c367d633c343c44cb5932d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_review.py",
+      "baseline_sha256": "9568a9810d08badb863daecbc6421317591d1f201596d5707cbb55618635b55c",
+      "current_sha256": "9568a9810d08badb863daecbc6421317591d1f201596d5707cbb55618635b55c",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_rewrite_quality.py",
+      "baseline_sha256": "23fa4ed7b36a67ac23049aa6d86c858b62d4c372d00d72a8a9892ca5ea9328f7",
+      "current_sha256": "23fa4ed7b36a67ac23049aa6d86c858b62d4c372d00d72a8a9892ca5ea9328f7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_rewrite_recheck_20261104.py",
+      "baseline_sha256": "8509acecae405fe0a51f5ed9dd5065ba574f45a6da47e8c2ceb17731ea49c746",
+      "current_sha256": "8509acecae405fe0a51f5ed9dd5065ba574f45a6da47e8c2ceb17731ea49c746",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_scripts.py",
+      "baseline_sha256": "b19c0cccc4f39d942d1e3a49bca5fc5fd434e2f8a85ef28d675d562e156c9644",
+      "current_sha256": "b19c0cccc4f39d942d1e3a49bca5fc5fd434e2f8a85ef28d675d562e156c9644",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_thinking.py",
+      "baseline_sha256": "75c152d8eaf47b388e0064b928f2c0975471ef816266550d78e7951dd9c91c30",
+      "current_sha256": "75c152d8eaf47b388e0064b928f2c0975471ef816266550d78e7951dd9c91c30",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_thinking_ab_20261104.py",
+      "baseline_sha256": "fd8d628d97820434abc820f6012ee1c30f35c13f2b70922872fc0a4263c1b69d",
+      "current_sha256": "fd8d628d97820434abc820f6012ee1c30f35c13f2b70922872fc0a4263c1b69d",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_thinking_review_20261104.py",
+      "baseline_sha256": "fef0db42d70e1de85e2886ccd2fb16a37fee605d8d9bdff92fec4f227f7ed79b",
+      "current_sha256": "fef0db42d70e1de85e2886ccd2fb16a37fee605d8d9bdff92fec4f227f7ed79b",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_visual.py",
+      "baseline_sha256": "a523d9c3febe11a7495192e14eaf89ed36e6c507124f3aad7a8271602c78d0c3",
+      "current_sha256": "a523d9c3febe11a7495192e14eaf89ed36e6c507124f3aad7a8271602c78d0c3",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/tests/test_web.py",
+      "baseline_sha256": "ac5f7e11bf860d70ff6b186d2ec485c9164d3013a85e08273cb26b85e1dff4c7",
+      "current_sha256": "ac5f7e11bf860d70ff6b186d2ec485c9164d3013a85e08273cb26b85e1dff4c7",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/uploads.py",
+      "baseline_sha256": "3e33f67f47d989671ca0b860ecb310bc22d2f17ab7d80f207054b0b9dd5e5f9f",
+      "current_sha256": "3e33f67f47d989671ca0b860ecb310bc22d2f17ab7d80f207054b0b9dd5e5f9f",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/visual.py",
+      "baseline_sha256": "e5538e82a029a1e4c3e678df0b3f06b27fc1115743189bb9373c583b8118d1a4",
+      "current_sha256": "e5538e82a029a1e4c3e678df0b3f06b27fc1115743189bb9373c583b8118d1a4",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/web.py",
+      "baseline_sha256": "0f9de8e204df627321d0dd19392c287cfca610e4961e1106a3098adc3e4336fd",
+      "current_sha256": "0f9de8e204df627321d0dd19392c287cfca610e4961e1106a3098adc3e4336fd",
+      "unchanged": true
+    },
+    {
+      "path": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113/tools/ielts_writing_ai/wsgi.py",
+      "baseline_sha256": "4652e60f5334cb0601a30e37020693a6026133d989f4046adbe84721c6748b9b",
+      "current_sha256": "4652e60f5334cb0601a30e37020693a6026133d989f4046adbe84721c6748b9b",
+      "unchanged": true
+    }
+  ],
+  "product_manifest_sha256_baseline": "bd300233e658467b32e18be92bbfb5c6d1eeef6226396afc6d31c8408b9c28c3",
+  "product_manifest_sha256_current": "bd300233e658467b32e18be92bbfb5c6d1eeef6226396afc6d31c8408b9c28c3",
+  "runtime_code_fingerprint_sha256": "77ba535bb80b704030a4cbafeede7b4c8c9e03f64aebd39c94871150335800b6",
+  "runtime_code_fingerprint_sha256_baseline": "77ba535bb80b704030a4cbafeede7b4c8c9e03f64aebd39c94871150335800b6",
+  "immutable_inputs": [
+    {
+      "path": "/Users/zhouxin/iwa-calibration/official_lowband_t1.jsonl",
+      "baseline_sha256": "75cb167f31137b5e743b70fa923191eb2d7d958466f8a4242a3bcf68413ebacb",
+      "current_sha256": "75cb167f31137b5e743b70fa923191eb2d7d958466f8a4242a3bcf68413ebacb",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/ledger-t1.jsonl",
+      "baseline_sha256": "36967b04187eeec0916441fc3efe1c9165dfc90c6e04e4ed3997232cae6d384c",
+      "current_sha256": "36967b04187eeec0916441fc3efe1c9165dfc90c6e04e4ed3997232cae6d384c",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/batch-closed.json",
+      "baseline_sha256": "2691195c4b3796a4c305047da5e13aafc6fa12483be9dbfb55a76468b40f48a7",
+      "current_sha256": "2691195c4b3796a4c305047da5e13aafc6fa12483be9dbfb55a76468b40f48a7",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/first/image_descriptions.json",
+      "baseline_sha256": "34855044df5bdba155a3b62f77da4500d64241d6d8407cf8cf2472d238c96fe9",
+      "current_sha256": "34855044df5bdba155a3b62f77da4500d64241d6d8407cf8cf2472d238c96fe9",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-calibration/img/official-1A.png",
+      "baseline_sha256": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+      "current_sha256": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-calibration/img/official-1B.png",
+      "baseline_sha256": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+      "current_sha256": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-calibration/img/official-1C.png",
+      "baseline_sha256": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+      "current_sha256": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+      "unchanged": true
+    }
+  ],
+  "old_closed_batch": [
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/first/image_descriptions.json",
+      "baseline_sha256": "34855044df5bdba155a3b62f77da4500d64241d6d8407cf8cf2472d238c96fe9",
+      "current_sha256": "34855044df5bdba155a3b62f77da4500d64241d6d8407cf8cf2472d238c96fe9",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/manifest.json",
+      "baseline_sha256": "a937df41d28b1bb2f838995717fe583d782ce4bd0454f0efb9692be14b93b66b",
+      "current_sha256": "a937df41d28b1bb2f838995717fe583d782ce4bd0454f0efb9692be14b93b66b",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/batch-closed.json",
+      "baseline_sha256": "2691195c4b3796a4c305047da5e13aafc6fa12483be9dbfb55a76468b40f48a7",
+      "current_sha256": "2691195c4b3796a4c305047da5e13aafc6fa12483be9dbfb55a76468b40f48a7",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/iwa-compare-official-t1-20261113/ledger-t1.jsonl",
+      "baseline_sha256": "36967b04187eeec0916441fc3efe1c9165dfc90c6e04e4ed3997232cae6d384c",
+      "current_sha256": "36967b04187eeec0916441fc3efe1c9165dfc90c6e04e4ed3997232cae6d384c",
+      "unchanged": true
+    }
+  ],
+  "other_task_modified_files": [
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/design-qa.md",
+      "baseline_sha256": "b644c496bbf63b78d5d98559dddd32fbbfac16965a0464ce92bfe74b7d434d40",
+      "current_sha256": "b644c496bbf63b78d5d98559dddd32fbbfac16965a0464ce92bfe74b7d434d40",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/static/style.css",
+      "baseline_sha256": "9eead60c81db7e466b3ae60add3c2948d8bd478d9d2848d7a8bd910f26344b9b",
+      "current_sha256": "9eead60c81db7e466b3ae60add3c2948d8bd478d9d2848d7a8bd910f26344b9b",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/templates/listening/index.html",
+      "baseline_sha256": "ef43c9cd5176a978dbe189619dd1198c1811d37478729796a69f4028abe15f7a",
+      "current_sha256": "ef43c9cd5176a978dbe189619dd1198c1811d37478729796a69f4028abe15f7a",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/templates/listening/test_practice.html",
+      "baseline_sha256": "90becb856ea1015f979ee0a50fe90ee1b043272a23dc180aa51e171ead2410af",
+      "current_sha256": "90becb856ea1015f979ee0a50fe90ee1b043272a23dc180aa51e171ead2410af",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/templates/login.html",
+      "baseline_sha256": "a8ad1fc4b6701fe26007d885dca8a07889a1646fa940e572370e70c55a58ce93",
+      "current_sha256": "a8ad1fc4b6701fe26007d885dca8a07889a1646fa940e572370e70c55a58ce93",
+      "unchanged": true
+    }
+  ],
+  "new_batch_frozen_input_snapshots": [
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/img/official-1A.png",
+      "baseline_sha256": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+      "current_sha256": "5c6bdc5c0c53802d34e26da073033be2d6be31c563bd8782e828efd2f8a7983a",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/img/official-1B.png",
+      "baseline_sha256": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+      "current_sha256": "4f786118b5c34b9c20f98c51d1fcba790b5c0024a13435bc4612a2804ee51519",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/img/official-1C.png",
+      "baseline_sha256": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+      "current_sha256": "984887132a4baa468f8265687d6629f9c904b29bd060147128e227cfe6d9821f",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/all.jsonl",
+      "baseline_sha256": "b6ff5b2ab1b32d632706b2cc343dc186d328b97557f832fc8e611f069f137e67",
+      "current_sha256": "b6ff5b2ab1b32d632706b2cc343dc186d328b97557f832fc8e611f069f137e67",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/first.jsonl",
+      "baseline_sha256": "71d3a66a9092326a40f3b8dcbc0d20f15b2a331628ec3490afaf84ec95cb0b01",
+      "current_sha256": "71d3a66a9092326a40f3b8dcbc0d20f15b2a331628ec3490afaf84ec95cb0b01",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/rest.jsonl",
+      "baseline_sha256": "fa2e7d9933c80c5deb0ea3f96237e1d087e1cb77f4ec6b12a6d45cd2733885c9",
+      "current_sha256": "fa2e7d9933c80c5deb0ea3f96237e1d087e1cb77f4ec6b12a6d45cd2733885c9",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/snapshot/reused-1B-raw.json",
+      "baseline_sha256": "ec26ecdf8b8311741363fbcbce790e22ef4ae9b28e555ec580967f914078f905",
+      "current_sha256": "ec26ecdf8b8311741363fbcbce790e22ef4ae9b28e555ec580967f914078f905",
+      "unchanged": true
+    }
+  ],
+  "inspection_only": true,
+  "runner_lock_acquired": false,
+  "runner_executed": false,
+  "paid_command_executed": false,
+  "source_modified": false,
+  "database_opened": false,
+  "private_configuration_read": false,
+  "scope_note": "Final post-closure hash/status audit before documentation commit. Request counts and result quality are separately audited. A later documentation-only commit may change source HEAD without changing this product/input baseline.",
+  "prior_running_audit_sha256": "ca6f3bf2feb352ad86f7bfc07b4015ff74c7a8409935a512387b51fbc2d95595",
+  "prior_running_audit_at_utc": "2026-11-14T03:30:31.796326+00:00",
+  "new_sealed_files": [
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/manifest.json",
+      "sha256": "6e83fcf076e14ef8e8dd9389f09aca5e22bd7f8d539731c782b67f5a4380e065"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/manifest-sha256.json",
+      "sha256": "ccbee9f7285eaae664b877dd0634389484326d10dec8d6151e0833c022ede228"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/freeze.done.json",
+      "sha256": "d396013475845f7dcf13e8f1ccd25e74ef23b6d13af38619fe1c8e2fe9c86d39"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/frozen/image_descriptions.json",
+      "sha256": "b92f0f456ac724263e68b8d3b97eb9d225467790a817c8d32ce63c6c61fbef5c"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/seal.done.json",
+      "sha256": "93b9c22f54b3439c0c71ab705a0496da77cf776a5c2b705043f04b29193bc3c4"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/image_descriptions.checked.json",
+      "sha256": "0f4c8e34f5bbb8d258246104e2ae9eeabad3d20f83ca75923178216d4e7f17aa"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114/run/batch-closed.json",
+      "sha256": "83e29e6bd7b20191f5827b9bd5680d05f9c0dde48c34d855823d44c689c71621"
+    }
+  ]
+}

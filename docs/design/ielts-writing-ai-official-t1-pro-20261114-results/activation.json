@@ -1,0 +1,39 @@
+{
+  "source_head": "18f5f08ffb0019f602ad64ec2565d8bd19fb31e9",
+  "source": "/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113",
+  "backup": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/backup-before-vision-enable-20261114",
+  "pid": 38918,
+  "health_and_cwd_ok": true,
+  "original_data_unchanged": true,
+  "counts": {
+    "generation": 0,
+    "iwa_meta": 1,
+    "submission": 0,
+    "trial_user": 1,
+    "usage_event": 0
+  },
+  "only_vision_provider_setting_changed": true,
+  "session_secret_unchanged": true,
+  "settings": {
+    "data_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var",
+    "db_path": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/iwa.sqlite3",
+    "upload_dir": "/Users/zhouxin/Desktop/studytracker/.tmp/ielts-writing-ai-trial/var/uploads",
+    "bind": "127.0.0.1:5055",
+    "llm_provider": "deepseek",
+    "llm_model": "deepseek-flash",
+    "llm_api_key_set": true,
+    "evaluate_thinking": "high",
+    "evaluate_thinking_max_tokens": 32000,
+    "evaluate_thinking_timeout": 420.0,
+    "evaluate_model": "deepseek-v4-pro",
+    "vision_provider": "deepseek",
+    "vision_model": "deepseek-flash",
+    "vision_max_tokens": 2000,
+    "vision_timeout": 180.0,
+    "vision_api_key_set": true,
+    "daily_limit": 30,
+    "max_workers": 2,
+    "cookie_secure": false
+  },
+  "model_calls": 0
+}

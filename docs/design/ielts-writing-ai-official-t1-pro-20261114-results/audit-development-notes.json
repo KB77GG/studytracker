@@ -1,0 +1,64 @@
+{
+  "initial_image_audit": {
+    "passed": 75,
+    "total": 78,
+    "failure_labels": [
+      "call_1:json_flag_recomputed",
+      "call_2:json_flag_recomputed",
+      "call_3:json_flag_recomputed"
+    ],
+    "cause": "Audit draft assumed json_ok is always boolean. RecordingClient intentionally stores null when json_mode is false; the three vision responses nevertheless each parse as a single JSON object. This was an audit assumption error, not a product failure."
+  },
+  "correction": "The audit derives recorded json_ok from json_mode; false-mode vision calls correctly store null. The completed image stage independently requires each of its three responses to parse as a single object. No budget, score, usage, price or input-binding expectation was relaxed. Saved image outcome equality/hash and authorized weekend rates are also checked.",
+  "corrected_image_audit": {
+    "passed": 84,
+    "total": 84,
+    "failed": []
+  },
+  "visual_review": {
+    "reviewers": "Codex and delegated agents; not teacher/user chart or grading validation",
+    "new_1a_readings": "No material numeric/unit/legend discrepancy found; 820/220 are reasonable visual estimates and the original uncertainty note already marks estimates. Original new readings retained.",
+    "new_1c_reading": "Branch, temperatures, durations and sequence agree with independent visual review. Original new reading retained.",
+    "old_1b_reading": "Correction handled separately by main agent; not treated as a new vision request."
+  },
+  "private_text_exported": false,
+  "text_observation_contract_revision": {
+    "timing": "Prepared before the live evaluation stage completed; no evaluation outcomes were used to loosen expectations.",
+    "product_contract": "A single whole JSON object, optionally inside one complete bare/json/JSON code fence; no surrounding prose, substring extraction, or brace repair.",
+    "call_observations": [
+      "raw_single_json",
+      "accepted_single_json",
+      "single_fence_recovered",
+      "json_mode",
+      "recorded_json_ok"
+    ],
+    "independent_consistency_checks": [
+      "json_mode and json_ok",
+      "first-attempt JSON metric",
+      "JSON problem attempt identities",
+      "first-valid metric from the successful one-retry pipeline"
+    ],
+    "final_acceptance": "All eight evaluations still require ready status, four valid scored criteria, matching final raw scores, correct overall, confirmed reading hash, and at most one validation retry. A truthfully recorded initial formatting failure is an observation, not an audit disagreement.",
+    "synthetic_selfcheck": "audit_selfcheck.py; 16/16 checks, including malformed first JSON followed by successful retry, incorrect JSON flag, invalid final JSON, separate fence observation, caps, scores, reading binding and weekend prices.",
+    "historical_image_audit": "image-audit.json preserves the 84/84 completed-image snapshot; it predates this text-observation revision and was not rerun against an in-progress global ledger."
+  },
+  "completed_batch_audit": {
+    "passed": 277,
+    "total": 277,
+    "failed": [],
+    "counts": {
+      "text_reserved": 8,
+      "vision_reserved": 3,
+      "ledger_done": 11,
+      "ledger_failed": 0,
+      "ledger_unknown": 0,
+      "evaluations": 8,
+      "validation_retries": 0
+    },
+    "audit_script_sha256": "47889920cc847fd80bdfe359e94e867251fe6defae55d96460df251aeea6edd7",
+    "numeric_reconciliation_pass_is_not_scoring_calibration_pass": true,
+    "official_overall_only_not_official_criterion_labels": true,
+    "rounding_note": "The product report uses Python round(value, 3): exact MAE 0.5625 is displayed as 0.562 and exact signed bias -0.1875 as -0.188. All eight score errors are exported for independent recomputation.",
+    "teacher_validation_complete": false
+  }
+}

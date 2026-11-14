@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-14 Task1新批次完成关闭；Mac识图开启，评分质量尚未验收
+
+- **授权与源码**：用户“ 一起执行 ”授权开启本机识图，并新独立批次4篇官方Task1各评价2轮，复用纠正旧1B读数，新图上限3、文字含重试上限16。运行树`/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113`、分支`codex/iwa-prompt15-final-recheck-20261113`，调用时clean@`18f5f08ffb0019f602ad64ec2565d8bd19fb31e9`，业务d92f0839/.15、95产品SHA不变；结束后仅添加docs共享，最终文档HEAD以Git/本机同步确认条为准。
+- **工作区**：主资料树`/Users/zhouxin/Desktop/studytracker`仍main@`6ded77d24586327ad94e151e172ae4811b4a2eed`、behind113，原7modified/23untracked顶层入口保持，他任务5个修改文件SHA不变。本轮修改两交接、镜像official-run第八版、新增`docs/design/ielts-writing-ai-official-t1-pro-20261114-results/`；私有`.tmp/iwa-official-t1-20261114/`含执行器/输入快照/核图/全结果/原始思考/账本，均不提交。旧三个review树未改，不从主资料旧代码发布。
+- **Mac当前状态**：一致性备份到`.tmp/ielts-writing-ai-trial/backup-before-vision-enable-20261114/`后只改vision provider为deepseek并重启；PID38918/5055健康且源码cwd正确，登录/页面/CSRF/退出/额度30检查通过。识图Flash/off/2000/180、评价Pro/high/32000/420、精修改写Flash；原数据及secret保持，真实试用库仍1账号/0作文/0生成/0用量。批次使用独立临时库。本机识图保持开启，启用/登录本身0模型调用。
+- **实际执行**：新批次`.tmp/iwa-official-t1-20261114/run/`已closed；3新图+8文字，11done、0重试/失败/未知/截断/超时，评价北京时间11:18:19—11:36:36。新3读数核后保留，旧1B在新文件改正并保留model_description；4确认绑定图/读数SHA，8结果绑定实际读数。核图由Codex主审与独立agent完成，非教师/用户人工验收。旧`/Users/zhouxin/iwa-compare-official-t1-20261113`的closed/账本/输出不变，新旧余额均不续用。
+- **结果与费用**：官方1A-A/1A-B/1B-A/1C-A=5/6/6/5；两轮分别5/5.5、5/5、5.5/5.5、5.5/5.5。MAE0.5625、偏差−0.1875、6/8在±0.5；1A跨轮2逆序2持平，排序未通过。4独立作文不是8篇，官方仅总分标签；教师10项仍未填写。估算1.70703608元（Flash .00933968、Pro1.6976964），按实际周六空闲价和cache计、思考已含输出，非账单。不能宣称已校准或统一加分。
+- **内容抽查**：主审核对原稿/确认读数，原始模型风险中“分项改总量”建议已过滤，非连续原稿引文被标quote_found=false并带UI警示；两条保留的误批是把全期下降与后段回升判矛盾、批评与读数相容的晚间峰值。其余语言建议/教学争议按新报告分类，非老师结论；未改产品，原5项门禁缺陷关闭结论不因此重开。
+- **验证命令**：主树`.venv/bin/python -B docs/design/ielts-writing-ai-official-t1-pro-20261114-results/audit_export.py --private-root /Users/zhouxin/Desktop/studytracker/.tmp/iwa-official-t1-20261114 --source /private/tmp/studytracker-iwa-official-t1-replay-20261114 --out /private/tmp/iwa-t1-20261114-audit.json --phase complete`→277/277，主审复跑一致；文档提交会改变运行树HEAD，故另建只读复算树`/private/tmp/studytracker-iwa-official-t1-replay-20261114`（detached18f5f08、clean）并复算277/277，不改变运行源码。审计固定HEAD，不能改用文档新HEAD；同目录`audit_selfcheck.py --source <同源>`→16/16，私有`test_runner.py`→53/53，Ruff/Black通过；不变量20/20、11裸JSON、8ready/四分项/总分/读数一致。产品未改，不重复494Python/8Node全套。只读`runner.py status`可确认closed；严禁重跑付费阶段。
+- **共享与下一步**：按此前用户授权将脱敏报告、可离线审计脚本、本写作任务两交接和official-run第八版同步功能分支`claude/ielts-writing-ai-trial`；提交/push状态以最终回读为准，私有材料只留Mac。未合并main、部署生产后端/网页/数据库/外部服务，小程序未上传/提审/发布。另一机器可读公开结论；复算真实原始结果仍需本机私有材料。先由Claude分析同题排序和保留误批，等待老师10项反馈；未授权任何追加模型请求或产品修改。
+
 ## 2026-11-13 `.15`最终复验通过并已升级Mac；脱敏复核材料同步功能分支
 
 - **授权/工作树**：用户本轮明确要求一并上传Mac复核材料，故将脱敏报告、可复现探针及本任务交接提交到`claude/ielts-writing-ai-trial`；不推main。新树`/private/tmp/studytracker-iwa-prompt15-final-recheck-20261113`、分支`codex/iwa-prompt15-final-recheck-20261113`、源基线`e3901a0c4312f42c7a90996f47e18b4d96d4935d`（业务d92f0839），产品95文件SHA不变，仅报告/交接待本轮文档提交。主资料树`/Users/zhouxin/Desktop/studytracker`仍main@`6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked顶层入口及其他5个已修改文件SHA保留；旧8884e9d9、652450ca、cd82fc1b树均clean未改。完整路径和脏状态见新报告source-state-before/after.json。

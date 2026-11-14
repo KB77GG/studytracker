@@ -1,0 +1,53 @@
+{
+  "method": "Independent Decimal recomputation directly from normalized result criteria; no audit_export import",
+  "results": [
+    {
+      "id": "official-1A-A",
+      "overall": "5",
+      "error": "0"
+    },
+    {
+      "id": "official-1A-A#r2",
+      "overall": "5.5",
+      "error": "0.5"
+    },
+    {
+      "id": "official-1A-B",
+      "overall": "5",
+      "error": "-1"
+    },
+    {
+      "id": "official-1A-B#r2",
+      "overall": "5",
+      "error": "-1"
+    },
+    {
+      "id": "official-1B-A",
+      "overall": "5.5",
+      "error": "-0.5"
+    },
+    {
+      "id": "official-1B-A#r2",
+      "overall": "5.5",
+      "error": "-0.5"
+    },
+    {
+      "id": "official-1C-A",
+      "overall": "5.5",
+      "error": "0.5"
+    },
+    {
+      "id": "official-1C-A#r2",
+      "overall": "5.5",
+      "error": "0.5"
+    }
+  ],
+  "n": 8,
+  "unique_essays": 4,
+  "mae_exact": "0.5625",
+  "bias_exact": "-0.1875",
+  "within_half": 6,
+  "exact": 1,
+  "all_rounded_totals_match": true,
+  "model_calls": 0
+}
