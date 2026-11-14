@@ -47,6 +47,8 @@ jobs:
         run: node --test tests/test_practice_task_lists.js
       - name: Test classroom vocabulary import client and assignment preset
         run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js
+      - name: Test small-class homework client
+        run: node --test tests/test_teacher_group_homework.js
       - name: Test Cambridge content and review delivery
         run: |
           python -m unittest \
@@ -104,6 +106,8 @@ jobs:
         run: python -m unittest tests.test_auto_student_accounts -v
       - name: Test classroom vocabulary import and student learning
         run: python -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -v
+      - name: Test verified small-class homework recipients and assignments
+        run: python -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access -v
       - name: Test submitted mock paper review access and saved results
         run: python -m unittest tests.test_mock_exam_student_review tests.test_mock_exam_review_workflow -v
       - name: Test recovery assistant and student journeys with isolated data

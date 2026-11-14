@@ -1,5 +1,10 @@
 const { request } = require('../../../utils/request.js')
 const {
+    groupHomeworkData,
+    requiresRecipientCheck,
+    createGroupHomeworkMethods
+} = require('../../../utils/teacher-group-homework.js')
+const {
     buildIntensiveQueueItems,
     findMatchingIntensiveParts
 } = require('../../../utils/teacher-intensive-shortcut.js')
@@ -57,7 +62,9 @@ const pushErrorMessage = (code) => {
 }
 
 Page({
+    ...createGroupHomeworkMethods(request),
     data: {
+        ...groupHomeworkData,
         schedule: {
             schedule_uid: '',
             schedule_id: '',
@@ -193,6 +200,8 @@ Page({
         const courseName = schedule.course_name || '课后作业'
         this.setData({
             schedule,
+            recipientsRequired: requiresRecipientCheck(schedule),
+            recipientsBlocked: requiresRecipientCheck(schedule),
             sourceOptions,
             sourceLabels: sourceOptions.map(item => item.label),
             sourceIndex: 0,
@@ -212,7 +221,7 @@ Page({
             }
         }, () => {
             this.fetchPracticeCatalog()
-            this.fetchExistingHomework()
+            this.loadHomeworkRecipients()
         })
     },
 
@@ -979,6 +988,8 @@ Page({
     },
 
     async fetchExistingHomework() {
+        if (this.data.isGroupHomework) return this.fetchGroupHomework()
+        if (this.data.recipientsRequired && this.data.recipientsBlocked) return
         const { schedule } = this.data
         if (!schedule.student_id && !schedule.student_name) return
         this.setData({ existingLoading: true })
@@ -1191,6 +1202,7 @@ Page({
         this.setData({
             ...sourceUpdate,
             editingTaskId: task.id,
+            editingStudentName: task.student_name || '',
             editingTaskSummary: task.source_summary || task.detail || '',
             createdTasks: [],
             form: {
@@ -1207,6 +1219,7 @@ Page({
         const courseName = this.data.schedule.course_name || '课后作业'
         this.setData({
             editingTaskId: null,
+            editingStudentName: '',
             editingTaskSummary: '',
             selectedPracticeList: [],
             preserveLegacyListeningTrainingMode: false,
@@ -1224,6 +1237,7 @@ Page({
     formatHomeworkError(code) {
         let msg = code || '保存失败'
         if (msg === 'student_not_found') msg = '未找到学生档案'
+        if (msg === 'group_assignment_required') msg = '请返回课表重新进入小班作业页'
         if (msg === 'forbidden_schedule') msg = '当前课表不属于你'
         if (msg === 'forbidden_subject') msg = '快捷入口的学科权限已失效，请返回学生列表重试'
         if (msg === 'scheduler_verification_failed') msg = '课表校验失败，请稍后重试'
@@ -1313,6 +1327,7 @@ Page({
     },
 
     async updateExistingHomework() {
+        if (this.data.saving || this.data.recipientsLoading || this.data.recipientsBlocked) return
         if (this.data.quickPracticeInvalid) {
             wx.showToast({ title: '快捷入口参数无效，请返回“我的学生”重新进入', icon: 'none' })
             return
@@ -1337,13 +1352,16 @@ Page({
                 ...schedule,
                 ...item,
                 ...this.buildQuickPracticePayload(),
+                ...(this.data.isGroupHomework ? this.groupHomeworkContext() : {}),
                 date: form.date,
                 category: (item.category || form.category || '').trim(),
                 detail: (item.detail || '').trim(),
                 planned_minutes: Number(item.planned_minutes) || 0,
                 note: (form.note || '').trim()
             }
-            const updateUrl = this.data.quickPractice
+            const updateUrl = this.data.isGroupHomework
+                ? `/miniprogram/teacher/homework/group/${editingTaskId}`
+                : this.data.quickPractice
                 ? `/miniprogram/teacher/homework/quick-practice/${editingTaskId}`
                 : `/miniprogram/teacher/homework/${editingTaskId}`
             const res = await request(updateUrl, {
@@ -1351,11 +1369,15 @@ Page({
                 data: payload
             })
             if (!res || !res.ok) {
-                wx.showToast({ title: this.formatHomeworkError(res && res.error), icon: 'none' })
+                const message = this.data.isGroupHomework
+                    ? this.applyGroupHomeworkError(res || {})
+                    : this.formatHomeworkError(res && res.error)
+                wx.showToast({ title: message, icon: 'none' })
                 return
             }
             this.setData({
                 editingTaskId: null,
+                editingStudentName: '',
                 editingTaskSummary: '',
                 createdTasks: res.task ? [res.task] : [],
                 selectedPracticeList: []
@@ -1377,7 +1399,7 @@ Page({
         if (!task) return
         wx.showModal({
             title: '删除作业',
-            content: `确认删除「${task.detail || '这项作业'}」？`,
+            content: `确认删除${this.data.isGroupHomework ? `${task.student_name}的` : ''}「${task.detail || '这项作业'}」？`,
             confirmText: '删除',
             confirmColor: '#dc2626',
             success: async (modal) => {
@@ -1409,6 +1431,11 @@ Page({
     },
 
     async submitHomework() {
+        if (this.data.saving) return
+        if (this.data.recipientsLoading || this.data.recipientsBlocked) {
+            wx.showToast({ title: this.data.recipientError || '请先核实接收名单', icon: 'none' })
+            return
+        }
         if (this.data.quickPracticeInvalid) {
             wx.showToast({ title: '快捷入口参数无效，请返回“我的学生”重新进入', icon: 'none' })
             return
@@ -1432,6 +1459,11 @@ Page({
         const missingPractice = submitItems.some(item => !this.hasPracticeSelection(item))
         if (missingPractice) {
             wx.showToast({ title: '请选择练习篇目', icon: 'none' })
+            return
+        }
+
+        if (this.data.isGroupHomework) {
+            await this.submitGroupHomework(submitItems)
             return
         }
 

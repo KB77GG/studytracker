@@ -25,6 +25,7 @@ def init_app(app):
     from api.task_assignments import task_assignments_bp
     from api.task_planner import task_planner_bp
     from api.teacher_practice_access import teacher_practice_bp
+    from api.teacher_group_homework import teacher_group_homework_bp
     from api.toefl_mock import toefl_mock_bp
     from api.tts import tts_bp  # TTS API
     from api.vocab_review import vocab_review_bp
@@ -52,6 +53,7 @@ def init_app(app):
     app.register_blueprint(entrance_bp)  # Register Entrance test
     app.register_blueprint(reading_study_bp)  # Register Reading Study
     app.register_blueprint(teacher_practice_bp)
+    app.register_blueprint(teacher_group_homework_bp)
     app.register_blueprint(toefl_mock_bp)
     app.register_blueprint(mock_exam_admin_bp)  # Register mock exam review console
     app.register_blueprint(mock_exam_student_bp)  # Register student mock exam review
