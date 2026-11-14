@@ -164,18 +164,131 @@ class TaskConflictTest(unittest.TestCase):
         self.assertTrue(issues_of(result, "lexical")[0]["suggestion"])
 
     def test_small_plain_numbers_are_not_corrections(self):
-        self.assertEqual(
-            conflicts.corrected_values(
-                {"quote": "two lines", "quote_found": True, "suggestion": "three lines"}
+        text = conflicts._Essay("There were two lines. It was 5% at 22:00 and 30% later.")
+        self.assertEqual(conflicts.corrected_figures(text, "two lines", "three lines"), [])
+        fixed = conflicts.corrected_figures(text, "It was 5% at 22:00", "It was 8% at 22:00")
+        self.assertEqual([f[1:] for f in fixed], [("5", "percent")])  # a small percentage counts
+
+
+class PlacementTest(unittest.TestCase):
+    """Review of the first version (docs/design/iwa-task-conflicts-recheck-20261114):
+    the same number about another thing, a quote found twice, a quote longer than the
+    display limit, and a TA suggestion the source check had already emptied (L9)."""
+
+    def run_case(self, text, reading, ta, language):
+        sub = dict(submission(reading), essay_text=text, word_count=essay.count_words(text))
+        first = " ".join(text.split()[:3])
+        data = raw(ta_issues=[ta], lexical=[dict(language, comment="可以换一种说法。")])
+        for key in data["criteria"]:
+            data["criteria"][key]["strengths"] = [{"quote": first, "comment": "开头清楚"}]
+        result = review.normalize_evaluation(data, sub)
+        return result, issues_of(result, "lexical")[0], issues_of(result, "task")[0]
+
+    def fix(self, quote, suggestion, comment="请按题图核对这句的数据。"):
+        return {"quote": quote, "comment": comment, "suggestion": suggestion}
+
+    def test_the_same_number_about_something_else_is_kept(self):
+        cases = (
+            (
+                "Men accounted for 20%, while women accounted for 20%.",
+                "Data: Men = 30%; Women = 20%; Total = 50%",
+                self.fix("Men accounted for 20%", "Men accounted for 30%"),
+                {"quote": "women accounted for 20%", "suggestion": "women represented 20%"},
             ),
-            set(),
-        )
-        self.assertEqual(
-            conflicts.corrected_values(
-                {"quote": "at 5% and 22:00", "quote_found": True, "suggestion": "at 8% and 22:00"}
+            (
+                "The share was 45%, while the journey lasted 45 minutes.",
+                "Data: Share = 40%; Journey = 45 minutes; Other = 15%",
+                self.fix("The share was 45%", "The share was 40%"),
+                {
+                    "quote": "the journey lasted 45 minutes",
+                    "suggestion": "the journey took 45 minutes",
+                },
             ),
-            {"5"},  # a small percentage still counts
+            (
+                "Television peaked at 22:00, while radio reached 22%.",
+                "Data: Television peak = 21:00; Radio = 22%; TV = 47%",
+                self.fix("Television peaked at 22:00", "Television peaked at 21:00"),
+                {"quote": "radio reached 22%", "suggestion": "radio attracted 22%"},
+            ),
         )
+        for text, reading, ta, language in cases:
+            with self.subTest(text=text):
+                result, lexical, _ta = self.run_case(text, reading, ta, language)
+                self.assertEqual(lexical["suggestion"], language["suggestion"])
+                self.assertEqual(result["task_conflicts"], 0)
+
+    def test_a_whole_sentence_quote_may_keep_only_the_uncorrected_ones(self):
+        text = "Men accounted for 20%, while women accounted for 20%."
+        reading = "Data: Men = 30%; Women = 20%; Total = 50%"
+        ta = self.fix("Men accounted for 20%", "Men accounted for 30%")
+        for suggestion, removed in (
+            ("Men made up 30%, while women made up 20%.", False),
+            ("Men made up 20%, and women made up 20%.", True),
+        ):
+            with self.subTest(suggestion=suggestion):
+                result, lexical, _ta = self.run_case(
+                    text, reading, ta, {"quote": text, "suggestion": suggestion}
+                )
+                self.assertEqual(result["task_conflicts"], int(removed))
+                self.assertEqual(lexical["suggestion"] == "", removed)
+
+    def test_a_quote_found_twice_is_not_placed(self):
+        text = "Radio reached 45% at noon. Television reached 45% at night."
+        reading = "Data: Radio noon = 40%; Television night = 45%; Total = 85%"
+        result, lexical, _ta = self.run_case(
+            text,
+            reading,
+            self.fix("Radio reached 45% at noon", "Radio reached 40% at noon"),
+            {"quote": "reached 45%", "suggestion": "Television attracted 45% at night"},
+        )
+        self.assertEqual(result["task_conflicts"], 0)
+        self.assertTrue(lexical["suggestion"])
+        # A TA quote found twice gives no correction either.
+        result, lexical, _ta = self.run_case(
+            text,
+            reading,
+            self.fix("reached 45%", "reached 40%"),
+            {"quote": "Radio reached 45% at noon", "suggestion": "Radio attracted 45% at noon"},
+        )
+        self.assertEqual(result["task_conflicts"], 0)
+
+    def test_the_full_quote_is_used_not_the_shortened_one(self):
+        opening = "During the long period covered by the graph, " + "the viewing habits " * 15
+        sentence = opening + "of the audience changed and television reached 45% at 22:00."
+        quote = sentence.rstrip(".")
+        self.assertGreater(len(quote), 300)
+        result, lexical, ta = self.run_case(
+            sentence,
+            "Data: Television 22:00 = 40%; Radio 08:00 = 30%; Other = 15%",
+            self.fix(quote, quote.replace("45%", "40%")),
+            {
+                "quote": "television reached 45% at 22:00",
+                "suggestion": "television attracted 45% at 22:00",
+            },
+        )
+        self.assertEqual(len(ta["quote"]), 300)  # display is still shortened
+        self.assertEqual(result["task_conflicts"], 1)
+        self.assertEqual(lexical["removed_reason"], "task_conflict")
+
+    def test_an_unsourced_ta_suggestion_counts_only_through_its_comment(self):
+        text = "In the evening, television viewing climbed to 52% at 21:00."
+        reading = "Data: TV 21:00 = 47%; TV 16:00 = 22%; Radio 08:00 = 30%"
+        unsourced = "television viewing climbed to about 46% at 21:00"  # 46% is in no source
+        language = {"quote": "climbed to 52%", "suggestion": "rose sharply to 52% at 21:00"}
+        for comment, removed in (
+            ("原文写 52%，与题图不符，题图约为 47%。", True),  # L9: the comment names it
+            ("请按题图核对这句的数据。", False),  # nothing visible says 52% is wrong
+        ):
+            with self.subTest(comment=comment):
+                result, lexical, ta = self.run_case(
+                    text, reading, self.fix("climbed to 52% at 21:00", unsourced, comment), language
+                )
+                self.assertEqual(ta["suggestion"], "")  # the source check still hides it
+                self.assertTrue(ta["suggestion_removed"])
+                self.assertNotIn("removed_reason", ta)
+                self.assertEqual(result["suggestions_removed"]["criteria"], 1)
+                self.assertEqual(result["task_conflicts"], int(removed))
+                self.assertEqual(lexical["suggestion"] == "", removed)
 
 
 class UncheckedChartSourceTest(unittest.TestCase):

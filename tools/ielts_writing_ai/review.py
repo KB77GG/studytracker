@@ -136,10 +136,14 @@ def _meaningful(text: str) -> bool:
 
 
 def _evidence_items(
-    value, essay: str, *, limit: int, with_suggestion: bool, sources=None
+    value, essay: str, *, limit: int, with_suggestion: bool, sources=None, internal=None
 ) -> list[dict]:
-    """Normalise strengths/issues into {quote, quote_found, comment[, suggestion]}."""
-    items = []
+    """Normalise strengths/issues into {quote, quote_found, comment[, suggestion]}.
+
+    internal, if given, receives per kept item the full verified quote and the
+    suggestion as written, before shortening or the source check - for checks that
+    must see them (conflicts.py) but never for display."""
+    items, raw_parts = [], []
     for raw in value if isinstance(value, list) else []:
         if isinstance(raw, str):  # a bare claim with no quote: shown, but not evidence
             raw = {"comment": raw}
@@ -154,6 +158,7 @@ def _evidence_items(
             "quote_found": bool(full_quote) and essay_lib.contains_quote(essay, full_quote),
             "comment": comment,
         }
+        raw_parts.append({"quote": full_quote, "suggestion": _text(raw.get("suggestion"))})
         if with_suggestion:
             item["suggestion"] = _text(raw.get("suggestion"))
             # Advice must not introduce figures the student never gave (figures.py).
@@ -163,6 +168,8 @@ def _evidence_items(
             if item["suggestion_removed"]:
                 item["suggestion"] = ""
         items.append(item)
+    if internal is not None:
+        internal.extend(raw_parts[:limit])
     return items[:limit]
 
 
@@ -363,6 +370,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     sources = figures_lib.for_submission(submission, chart_checked=task_ok)
 
     criteria = []
+    internal = {}  # full quotes and suggestions as written, for conflicts.py only
     for key in essay_lib.CRITERIA:
         short = essay_lib.CRITERION_SHORT[task_type][key]
         label = essay_lib.CRITERION_LABELS[task_type][key]
@@ -400,7 +408,12 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
             raise InvalidOutput(f"评分项 {short} 没有给出评分理由")
         strengths = _evidence_items(item.get("strengths"), essay, limit=4, with_suggestion=False)
         issues = _evidence_items(
-            item.get("issues"), essay, limit=5, with_suggestion=True, sources=sources
+            item.get("issues"),
+            essay,
+            limit=5,
+            with_suggestion=True,
+            sources=sources,
+            internal=internal.setdefault(key, []),
         )
         if not any(entry["quote_found"] for entry in strengths + issues):
             raise InvalidOutput(f"评分项 {short} 没有任何能在原文中找到的证据")
@@ -498,7 +511,7 @@ def normalize_evaluation(raw: dict, submission: dict) -> dict:
     for key, extra in _sweep_advice(criteria, argument, sources).items():
         removed[key] += extra
     # Language advice that keeps a figure Task Achievement corrected (2026-11-14 run).
-    task_conflicts = conflicts.remove_conflicting(criteria, essay)
+    task_conflicts = conflicts.remove_conflicting(criteria, essay, internal)
     # No remaining length is computed from advice text (see deletion.py); advice that
     # mentions deleting gets a conditional reminder with the essay's own count.
     length_notes = deletion_lib.annotate(criteria, argument, priorities, essay, minimum)

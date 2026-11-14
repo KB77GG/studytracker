@@ -308,6 +308,11 @@ def _kind(text: str, end: int, before: str) -> tuple[str, int]:
 def figures(text: str | None) -> list[tuple[str, str, str]]:
     """(value, kind, as written) for every whole figure in the text: digits (with an
     optional scale word), Chinese percentages and English number words."""
+    return [(value, kind, shown) for _pos, value, kind, shown in located(text)]
+
+
+def located(text: str | None) -> list[tuple[int, str, str, str]]:
+    """figures() with the position where each figure starts in the text."""
     text = text or ""
     found, taken = [], []
     for match in _CN_PERCENT_RE.finditer(text):
@@ -342,7 +347,7 @@ def figures(text: str | None) -> list[tuple[str, str, str]]:
             last = n == len(parts) - 1
             shown = text[match.start() + start : shown_end if last else match.start() + end]
             found.append((match.start() + start, value, part_kind, shown.strip()))
-    return [(value, kind, shown) for _pos, value, kind, shown in sorted(found)]
+    return sorted(found)
 
 
 class Sources:
