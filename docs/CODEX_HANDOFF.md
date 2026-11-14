@@ -1,5 +1,24 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-14 小班作业后端已部署，源码已推送；小程序尚未发布
+
+- 用户明确“要的，你部署吧”，授权提交/push及后端部署。发布树 `/private/tmp/studytracker-small-class-homework-20261114`、`codex/small-class-homework-20261114`，从44f3bccd基线提交12个产品/测试/CI文件为 **63fa27f9cefc974ab15c76c90f96e8e1ee0468a7**，已推任务分支和main。发布前fetch确认main无漂移，未合入他任务代码。3个报告/验收文件与两交接以独立 `[skip ci]` 文档提交同步，文档HEAD以Git为准，收尾发布树应clean。修复已可从远端获取，不再仅本机。
+- [分支CI43586388378](https://github.com/KB77GG/studytracker/actions/runs/43586388378)、[主线CI43586564442](https://github.com/KB77GG/studytracker/actions/runs/43586564442) overall success；test/account-provisioning/task-planner三job通过，旧advisory lint仍failure，不宣称全仓lint通过。本轮产品未新增修改，不重复已通过的100Python+22Node全套；新增验收脚本Ruff/Black通过，发布范围/隐私/import接线由独立agent只读审计通过。
+- [Deploy43586564446](https://github.com/KB77GG/studytracker/actions/runs/43586564446) success。生产 `/root/apps/studytracker` **63fa27f9**，tracked clean/17 untracked顶层入口；2026-11-14 **18:43:19 CST**起active/running，PID737900、NRestarts0。worker1/gthread/threads6/5002未改，worker子进程1个，验收时启动后warning以上0条。9个运行文件/配置SHA与发布树全一致；内网与公网各登录200、名单GET401及group GET401，均返回预期鉴权，不冒用登录、不创建测试作业。
+- 精确验收（cwd发布树）：`ssh root@47.110.45.193 'cd /root/apps/studytracker && .venv/bin/python - 63fa27f9cefc974ab15c76c90f96e8e1ee0468a7' < docs/reviews/small-class-homework-20261114/verify_release.py > docs/reviews/small-class-homework-20261114/release-audit.json`；主审本机逐文件SHA对比9/9。脚本不import app/config、不读学生库，只读Git/文件/systemd/匿名HTTP。另`gh run view 43586564442 --json databaseId,headSha,status,conclusion,jobs`及部署run43586564446同命令确认success。SSH一次沙箱拒绝后按批准流程成功复跑。完整证据/边界在该目录README与release-audit.json。
+- 部署流水线执行其既有依赖安装/幂等迁移/服务重启，本功能无新增schema迁移。没有人工写生产个人档案/排课名单/Task/成绩、发送真实通知或改变外部配置。**后端已部署，小程序源码已commit/push，但小程序未上传/提审/发布，不能说三人真机已收到。** 真实个案仍需核实补齐独立个人档案，并保存完整排课名单；本轮没有造账号或代布置。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍旧main@`6ded77d24586327ad94e151e172ae4811b4a2eed`，本轮只追加两交接，原7 modified/23 untracked入口保留（精确清单见该主资料树本日只读诊断条）；没有pull/切分支，其他5个modified产品文件和未跟踪资料未覆盖，仍仅本机。只读基线树 `/private/tmp/studytracker-review-highlights-20261111` 仍44f3bccd/clean，其他实施/写作树未改。
+- 下一位先核Git及上述报告；后端无发布阻塞，不需重复部署。微信开发者工具须使用本发布树 `miniprogram/` 或包含本提交的最新检出，完成上传/提审/发布后做真机验收。旧微信包尚无小班名单页，合并姓名提交会被后端409保护拦截。生产学生资料修改和真实布置另循明确授权，不从旧桌面main发版。
+
+## 2026-11-14 小班作业逐人分发已修复，100 Python + 22 Node通过（仅本机）
+
+- **授权/工作树**：用户“赶紧修改吧”授权实施。新实现树 `/private/tmp/studytracker-small-class-homework-20261114`、`codex/small-class-homework-20261114@44f3bccdc9d4cb978c6df4b4c9ab7a5b2baa1211`，成功fetch origin main后新建；原先clean，现6既有产品/CI文件、6新增产品/测试文件、报告及两交接未提交，精确清单见该树 `docs/reviews/small-class-homework-20261114/README.md`。代码只在新树，不在旧桌面main。
+- **实现**：可信教师课表→完整个人名单预览与签名确认→发布前实时重验→单事务为每人每篇创建独立Task/token/完成状态。缺档案、同名、成员变化一律整批阻止，不能漏发后声称成功。支持原生排课成员数组及旧斜杠名单，不把合并排课ID绑定个人、不自动造档案。既有Task幂等键+审计回执及SQLite writer lock防重复，网络失败跨页同账号重试复用key，重复不再发提醒。逐人作业与微信提醒分别反馈，成绩/历史错题/单人改删保留；quick科目与所属学生双校验，admin可核指定老师课表，普通老师权限不扩大。旧单人入口合并名单409防误发首人。无schema新增；新逻辑独立蓝图/service/helper，巨型api/miniprogram仅import+两行委托。
+- **主资料树/他任务**：`/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`、behind113、原7 modified/23 untracked顶层入口保留；完整既有清单见主资料树 `/Users/zhouxin/Desktop/studytracker/docs/CODEX_HANDOFF.md` 本日只读诊断条。本轮主树仅两交接新增，不覆盖5个既有产品文件或未跟踪资料。只读基线树 `/private/tmp/studytracker-review-highlights-20261111`、`codex/review-highlights-20261111@44f3bccd` 保持clean；其他并行实施/写作树未修改。
+- **验证**（cwd新实现树）：`PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access tests.test_miniprogram_teacher_intensive tests.test_miniprogram_teacher_jijing tests.test_miniprogram_task_visibility -q` → **100/100**（28名单/34API/38相邻）；`node --test tests/test_teacher_group_homework.js tests/test_teacher_intensive_shortcut.js tests/test_teacher_jijing_options.js` → **22/22**。新增4Python文件Ruff/Black、6文件Python3.10 AST、两JS语法、微信wcc/wcsc实际编译、diff检查均通过，精确命令见报告。合成内存DB、外部课表/通知mock；状态和成绩夹具预置，不冒称真机微信/完整真实学习提交。跨学生quick token、缺人、旧首人误发、非法数值500、通知失败、保存中冲突回滚等反例均覆盖；远端CI未运行。
+- **外部/发布**：本轮额外SSH仅只读核排课源码字段；真实数据库/名单/个人档案/Task/通知/配置均无写入，无重启。生产最后只读核对 `/root/apps/studytracker@fb5b2747f4428ee5383b763c3cceb0e9f72178a3`、tracked clean；本轮未部署后端。**全部新增成果仅本机，未commit/push/merge/deploy，小程序未上传/提审/发布。** 另一账号同Mac可读新树，另一机器尚不可获取本轮成果。
+- **下一步/限制**：获明确发布授权后核最新main漂移、从实现树整合提交推送并验证后端，再由微信开发者工具上传/提审/发布。真实个案需另行核实/补齐个人档案及保存三人排课名单，不能只改显示名，也不自动造账号。暂未做真机，微信提醒依绑定/订阅；大批同步提醒可能先超时，重试能确认保存但不补发通知；小班隐藏旧单人加布精听按钮，正常精听群发可用。未发现剩余阻断性代码缺陷，不从旧桌面main发布。
+
 ## 2026-11-11 刷题/模考原题高亮与解析同页复盘已部署
 
 - 用户明确要求“修好就部署”，并确认不要另加原卷按钮。最终两个既有学生模考复盘入口直接展示听力/阅读原题、高亮、学生答案、对错和题下解析；保留写作与教师反馈及可逆的“只看错题”。普通刷题提交/刷新复盘亦保留原高亮。早期新增“查看原卷”按钮的草案已替换，不是当前行为。

@@ -1,5 +1,13 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-14 — 小班作业后端发布验收通过
+
+用户授权部署后，发布树 `codex/small-class-homework-20261114` 从44f3bccd提交12文件为63fa27f9，已push分支/main；分支CI43586388378、main CI43586564442、Deploy43586564446 success（三测试job通过、旧advisory lint failure）。生产18:43:19 CST起active，HEAD63fa27f9、tracked clean、worker1/gthread6/5002、NRestarts0、warning0；9SHA一致、内外网6匿名GET符合预期。验收脚本及结果/README和两交接以[skip ci]同步，详见CODEX_HANDOFF顶部。旧主树6ded77d2原7/23保留，仅两交接更新。无人工学生库/名单/Task写入或真实通知；后端已部署，小程序源码已推但未上传/提审/发布，仍需补齐个案个人档案并保存名单，再以新微信包核验。修复已可远端获取，其他主树脏资料仍仅本机。
+
+## 2026-11-14 — 小班逐人布置修复完成，待发布授权
+
+新隔离树 `/private/tmp/studytracker-small-class-homework-20261114`、`codex/small-class-homework-20261114@44f3bccd` 完成可信课表成员预览/签名确认、缺人全阻止、全组全篇目原子分发、独立Task/token/状态、幂等回执与跨页重试、逐人提醒结果、成绩/历史错题/个人改删；旧单人入口拦截合并名单防误发首人。无schema新增，不自动建档案。主审100Python+22Node、Ruff/Black/3.10 AST/JS与微信WXML/WXSS编译/diff通过；合成库及mock外部服务，非真机。清单/命令/限制见实现树 `docs/reviews/small-class-homework-20261114/README.md`。主资料树6ded77d2原7/23保留，仅两交接；其他树不改。全部仅本机，未commit/push/deploy、未生产数据写入或发真实通知，小程序未上传/提审/发布。下一步需明确授权发布，个案还需核实补齐个人档案及保存三人名单。
+
 ## 2026-11-11 — 原题高亮与解析同页复盘已部署
 
 - 按用户授权发布，并按补充要求取消额外原卷按钮：既有模考复盘直接显示原题高亮、保存作答/对错及题下解析；普通刷题复盘坐标修复，“只看错题”可逆，原session与只读隔离保留。

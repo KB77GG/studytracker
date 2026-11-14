@@ -1,0 +1,90 @@
+{
+  "checked_at": "2026-11-14T10:44:38.322080+00:00",
+  "head": "63fa27f9cefc974ab15c76c90f96e8e1ee0468a7",
+  "expected_head": "63fa27f9cefc974ab15c76c90f96e8e1ee0468a7",
+  "tracked_changes": 0,
+  "untracked_entries": 17,
+  "service": {
+    "MainPID": "737900",
+    "NRestarts": "0",
+    "ActiveState": "active",
+    "SubState": "running",
+    "ActiveEnterTimestamp": "Sat 2026-11-14 18:43:19 CST"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "worker_children": 1,
+  "warning_entries_since_start": 0,
+  "file_sha256": {
+    "api/__init__.py": "ff3e33daf41e233d31c6c57f68d3254146f9b1a87f7dcc25859df16a1fd187b2",
+    "api/miniprogram.py": "e1d07e5371e9cac7d356e5215c37306ab92f562940538b5c1ea47edc900f2abe",
+    "api/teacher_group_homework.py": "3d0da0ea3a3d1f460f56756d496b55ec1bab4f1be10a01f6f149264bcbc7eb80",
+    "services/teacher_homework_recipients.py": "20b592be7ab5bf6492038d566702ceef19a878ae18ba06917629f50b60f98f58",
+    "miniprogram/pages/teacher/homework/index.js": "fd0b54f2c8aa17278f0858e90a7f09bafb9d02df909fc158be3c2e10b32b5625",
+    "miniprogram/pages/teacher/homework/index.wxml": "4b9f02b1eb4626c825c38d4161fbe7a57e9b1287b0ec3b9f6dcb62252ece6954",
+    "miniprogram/pages/teacher/homework/index.wxss": "d2681a2640236d19b3b223f91cfab303fb0f9790aa6b5201e21805f1aed0d914",
+    "miniprogram/utils/teacher-group-homework.js": "5d38853397022336d72d260c6e2cc5e049b0bf27c418c5661e825d8763b71e2c",
+    "gunicorn.conf.py": "9f0325750a5d0e460722dc2d28abd786e77f41d7eab49bc2c8e339c63f7977dc"
+  },
+  "http": [
+    {
+      "url": "http://127.0.0.1:5002/login",
+      "status": 200,
+      "expected_status": 200,
+      "ok": true,
+      "auth_error": null
+    },
+    {
+      "url": "http://127.0.0.1:5002/api/miniprogram/teacher/homework/recipients",
+      "status": 401,
+      "expected_status": 401,
+      "ok": true,
+      "auth_error": "missing_token"
+    },
+    {
+      "url": "http://127.0.0.1:5002/api/miniprogram/teacher/homework/group",
+      "status": 401,
+      "expected_status": 401,
+      "ok": true,
+      "auth_error": "missing_token"
+    },
+    {
+      "url": "https://studytracker.xin/login",
+      "status": 200,
+      "expected_status": 200,
+      "ok": true,
+      "auth_error": null
+    },
+    {
+      "url": "https://studytracker.xin/api/miniprogram/teacher/homework/recipients",
+      "status": 401,
+      "expected_status": 401,
+      "ok": true,
+      "auth_error": "missing_token"
+    },
+    {
+      "url": "https://studytracker.xin/api/miniprogram/teacher/homework/group",
+      "status": 401,
+      "expected_status": 401,
+      "ok": true,
+      "auth_error": "missing_token"
+    }
+  ],
+  "passed": true,
+  "local_file_matches": {
+    "api/__init__.py": true,
+    "api/miniprogram.py": true,
+    "api/teacher_group_homework.py": true,
+    "services/teacher_homework_recipients.py": true,
+    "miniprogram/pages/teacher/homework/index.js": true,
+    "miniprogram/pages/teacher/homework/index.wxml": true,
+    "miniprogram/pages/teacher/homework/index.wxss": true,
+    "miniprogram/utils/teacher-group-homework.js": true,
+    "gunicorn.conf.py": true
+  },
+  "local_file_match_count": 9
+}
