@@ -1,0 +1,60 @@
+{
+  "release_head": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+  "branch": {
+    "conclusion": "success",
+    "databaseId": 43608808499,
+    "headSha": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "task-planner",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "test",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "lint",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "account-provisioning",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43608808499"
+  },
+  "main_ci": {
+    "databaseId": 43609063955,
+    "headSha": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43609063955",
+    "jobs": {
+      "test": "success",
+      "account-provisioning": "success",
+      "task-planner": "success",
+      "lint_advisory": "failure"
+    }
+  },
+  "deploy": {
+    "databaseId": 43609064011,
+    "headSha": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/KB77GG/studytracker/actions/runs/43609064011"
+  },
+  "backend_deployed": true,
+  "miniprogram_uploaded": false,
+  "miniprogram_submitted_for_review": false,
+  "miniprogram_published": false,
+  "production_business_data_written_by_agent": false,
+  "schema_change": false,
+  "verification": "production-acceptance.json",
+  "docs_sync": "Follow-up documentation-only [skip ci] commit; resolve exact document HEAD from Git"
+}

@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-14 — 课堂同义词组后台扩展上线，微信复习修复待发包
+
+继前轮部署授权追加三列同义替换，发布树75ff855d→2e82331a，13产品文件已commit/push分支与main。按=识别完整词组、可混表，typed sense隔离英英答案，默认阅读完整英文回忆/首分保留/到期复习；无schema或真实学生写入。主审185Python+28Node及浏览器合成导入/保存/预选通过；两CI43608808499/43609063955总体success（旧advisory lint failure），Deploy43609064011成功。生产23:14:39 active、9SHA一致、5002/单worker/gthread6、warning0；23:22:59只读验收ok。另修复小程序自主复习attempt_id未定义1行，已推源码、未上传/提审/发布，需后续微信发包与真机回归。报告在发布树docs/reviews/classroom-synonyms-20261114/，详细精确验证/时区fixture和浏览器限制已记；报告与两交接独立skip-ci同步。旧主资料树main6ded77d2及原7/23保持，仅两交接追加；5旧业务SHA未变。
+
 ## 2026-11-14 — 课堂生词后台录入已上线
 
 用户授权部署。业务ca54816c，保留并行小班63fa27f9与其文档7e203341，最终21fcd7d4已push分支/main并部署。发布前33Python+19Node、合并后99Python+39Node通过；最终main CI43587357663三测试job通过、Deploy43587357675成功，advisory lint存量failure。生产21fcd7d4/12SHA一致、18:53:33 CST active、单worker/gthread6/5002、warning0；匿名入口登录跳转与公网3资源哈希通过，未查写学生数据。新入口 `/materials/classroom-vocabulary`：粘贴或xlsx三列→预览保存→选学生布置，小程序沿用现有背词复习。完整清单/证据/限制在实现树 `docs/reviews/classroom-vocabulary-20261114/`；报告和两交接独立skip-ci同步，旧主树7/23保留仅交接增量。课堂功能无需小程序发包；真实教师生产提交/微信真机待使用，未作人工DB/外部配置/小程序发布操作。

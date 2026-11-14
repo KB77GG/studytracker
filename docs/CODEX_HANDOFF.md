@@ -1,5 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-14 课堂同义替换扩展已部署；小程序复习提交修复待发包
+
+- 延续本会话用户对课堂录入功能“部署吧”的授权，本轮追加“单词｜=｜同义替换，可能有词组”。实现/发布树 `/private/tmp/studytracker-classroom-vocabulary-20261114`，分支 `codex/classroom-vocabulary-20261114`，基线75ff855d，业务HEAD **`2e82331a9960b5ce09f2636daca1e36f428a2058`**；13个产品/测试/CI文件已commit/push功能分支与main并部署。发布前两次fetch确认没有并行main漂移，不合入无关代码。报告在 `docs/reviews/classroom-synonyms-20261114/`，报告及两交接随后以独立skip-ci文档提交同步，精确最终文档HEAD以Git为准。
+- 原入口 https://studytracker.xin/materials/classroom-vocabulary 已支持逐行 `=` / `＝` 自动识别、双侧完整词组、混合普通词性/中文行、TSV/CSV/XLSX、表头/规范化提示/重复自等及空值校验。typed VocabularySense保存关系，同事务/重试校验、坏元数据拒绝出题；无schema、AI/TTS批量生成或真实Task创建。默认reading给左侧、回忆右侧完整表达；复用旧context_fill显示、仍归meaning_recall，英文整体判分，不接受片段/粘连，大小写多空格宽容；不混入中文干扰项或生成伪语境/音频题。
+- 验证cwd发布树：`TZ=UTC PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers tests.test_vocabulary_mastery tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_autonomous_review tests.test_dictation_review -q` **185通过**；`node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js` **28通过**；旧拼写队列守卫、4文件Ruff/Black、7文件Python3.10 AST/diff通过。详细命令/初始时区夹具失败原因见README，不累加agent重复运行、不声称全仓测试/lint全绿。
+- 真实内存API混排导入→熟悉→错首答→正确重试→75%结算→next_due复习→错词组订正→仍75%结算通过，任务首分保留。Node执行真实学习/复习页与request封装。浏览器混排预览/保存/词书reading预选通过，未填学生/提交Task；最初内存夹具并发登录/CSRF问题刷新后恢复，申诉stub缺失404如实记录；不冒称零控制台错误。5099服务和测试页均已关闭。真实生产教师导入、微信真机、浏览器xlsx选择器未验。
+- [分支CI43608808499](https://github.com/KB77GG/studytracker/actions/runs/43608808499)、[main CI43609063955](https://github.com/KB77GG/studytracker/actions/runs/43609063955) overall success，test/account-provisioning/task-planner通过，旧advisory lint仍failure。[Deploy43609064011](https://github.com/KB77GG/studytracker/actions/runs/43609064011) success。生产只读验收 **2e82331a**、tracked clean、113untracked保持；**23:14:39 CST**起active/running、NRestarts0，5002/worker1/gthread6不变；9运行文件SHA一致、入口302/login200、公网JS200且SHA一致、warning0。检查时间23:22:59 CST，`production-acceptance.json` ok=true。只读文件/systemd/匿名HTTP，无app/config import、学生表读取或人工生产业务库/外部配置写入；部署链原有幂等迁移照常。
+- **小程序发布边界**：源码另修复 `miniprogram/pages/student/vocabulary-review/index.js` 唯一1行未定义attempt_id，改成`attempt_id: attemptId`；真实页面行为测试修复前5过2败、后7过。代码已commit/push，但**未上传/提审/发布微信包**，不能承诺此客户端修复已在真机生效；当前线上包未知。后台同义替换题显示本身复用已存在的自由输入分支。下一位从包含2e82331a的最新实现树miniprogram发包并真机验证首次学习与到期复习，保留其他任务待发前端；不要从旧桌面main上传。
+- 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`；原7modified/23untracked入口保留，本轮仅增量更新两交接，5个既有业务文件SHA一致，无pull/reset/覆盖。其他worktree未改。13产品文件全部远端可得；本报告/交接随文档提交同步后亦可跨机。旧主树其他脏文件与最后本机回读注记仍仅Mac。后端无剩余发布阻塞；不要再部署同一业务版本或改写历史学生成绩。
+
 ## 2026-11-14 课堂生词后台录入已部署
 
 - 用户明确“部署吧”。业务提交 `ca54816c54c4442e0c2ac8a8bf591fbf0d001a7f`，先合入并行已发布小班任务 `63fa27f9` 得 `ac7e1431`（CI两处冲突保留双方步骤），再保留其文档 `7e203341` 得最终发布HEAD **`21fcd7d4d41025aa6741fe59fab91f00a73dbfce`**。已commit并原子push任务分支 `codex/classroom-vocabulary-20261114` 与main，后端上线成功；没有覆盖小班业务/小程序改动。
