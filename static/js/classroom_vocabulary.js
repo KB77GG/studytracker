@@ -83,11 +83,11 @@
       });
       warnings.appendChild(list);
     }
-    el('cvWordCount').textContent = `${data.word_count} 词`;
+    el('cvWordCount').textContent = `${data.word_count} 条`;
     el('cvPreviewPanel').hidden = false;
     state.rows = data.rows || [];
     state.valid = data.valid === true && errors.length === 0 && state.rows.length > 0;
-    status(state.valid ? '预览完成，请核对词性和中文释义后保存。' : '请按提示修正词表，再次预览后保存。', !state.valid);
+    status(state.valid ? '预览完成，请核对词性、中文释义或同义替换后保存。' : '请按提示修正词表，再次预览后保存。', !state.valid);
   }
 
   async function preview() {
@@ -127,7 +127,7 @@
       });
       state.saved = true;
       el('cvPreviewPanel').hidden = true;
-      el('cvSavedSummary').textContent = `${data.book.title} · ${data.book.word_count} 词${data.reused ? '（已保存过，直接使用原词表）' : ''}`;
+      el('cvSavedSummary').textContent = `${data.book.title} · ${data.book.word_count} 条${data.reused ? '（已保存过，直接使用原词表）' : ''}`;
       // Build the local destination from the ID; never navigate to supplied HTML or URLs.
       el('cvAssign').href = '/tasks?preset_dictation_book=' + encodeURIComponent(data.book.id);
       el('cvSuccess').hidden = false;

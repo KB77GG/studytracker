@@ -13,6 +13,7 @@ import re
 from collections.abc import Iterable
 
 from dictation_answers import parse_vocabulary_word_variants
+from services.vocabulary_synonyms import is_synonym_word
 
 _WORD_BOUNDARY = r"(?<![A-Za-z]){target}(?![A-Za-z])"
 _COLLOCATION_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['-][A-Za-z]+)*'?$")
@@ -347,7 +348,9 @@ def build_context_question(
     a word with several reliable materials does not always show the same form.
     """
 
-    candidates = list(candidates or [])
+    if is_synonym_word(word):
+        return None
+    candidates = [candidate for candidate in (candidates or []) if not is_synonym_word(candidate)]
     seed = seed or f"word:{getattr(word, 'id', '')}"
     builder_specs = (
         ("example_fill", lambda: _example_fill(word, seed)),

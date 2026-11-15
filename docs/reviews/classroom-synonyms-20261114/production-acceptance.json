@@ -1,0 +1,57 @@
+{
+  "checked_at_utc": "2026-11-14T15:22:59.489568+00:00",
+  "scope": "Read-only files, systemd, anonymous GET; no app/config import or DB access",
+  "head": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+  "expected_head": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sat 2026-11-14 23:14:39 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "files_match": {
+    "services/classroom_vocabulary.py": true,
+    "services/vocabulary_synonyms.py": true,
+    "services/vocabulary_mastery.py": true,
+    "services/vocabulary_context.py": true,
+    "services/vocabulary_autonomous_review.py": true,
+    "api/classroom_vocabulary.py": true,
+    "static/js/classroom_vocabulary.js": true,
+    "templates/classroom_vocabulary.html": true,
+    "gunicorn.conf.py": true
+  },
+  "pages": {
+    "/materials/classroom-vocabulary": {
+      "status": 302,
+      "location": "/login?next=%2Fmaterials%2Fclassroom-vocabulary",
+      "sha256": "25845c22ae9cef42df4df15440c2ecfafa9b521a2ebed965051fa4d181ed7e2d"
+    },
+    "/materials": {
+      "status": 302,
+      "location": "/login?next=%2Fmaterials",
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019"
+    },
+    "/login": {
+      "status": 200,
+      "location": null,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43"
+    }
+  },
+  "public_assets": {
+    "static/js/classroom_vocabulary.js": {
+      "status": 200,
+      "location": null,
+      "sha256": "3921d6dd1d3c8d71b18d7a01961ab9f739e07e8e80e8db11d09e0c51a8bc5275"
+    }
+  },
+  "warning_lines_since_restart": 0,
+  "ok": true
+}

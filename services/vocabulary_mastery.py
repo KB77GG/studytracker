@@ -45,6 +45,7 @@ from models import (
 from services.dictation_input_policy import resolve_submission_input
 from services.dictation_review import local_date
 from services.vocabulary_context import build_context_question, grade_context_answer
+from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
 from services.task_date_gate import (
     TaskDateGateError,
     assert_task_write_allowed,
@@ -300,6 +301,8 @@ def build_meaning_recall_options(word, candidates, seed: str, limit: int = 4) ->
         ).hexdigest(),
     )
     for candidate in ordered:
+        if is_synonym_word(candidate):
+            continue
         label = " ".join(
             str(
                 getattr(candidate, "core_meaning_zh", None)
@@ -326,6 +329,8 @@ def build_meaning_recall_options(word, candidates, seed: str, limit: int = 4) ->
 
 
 def _question_for(word, dimension, goal, stage, candidates):
+    if is_synonym_word(word):
+        return build_synonym_question(word, dimension, stage)
     seed = f"v2:{word.id}:{word.sense_id}:{dimension}:{goal}:{stage}"
     numeric = None
     if dimension == "context_use":

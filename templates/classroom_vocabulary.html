@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block page_subtitle %}CLASSROOM VOCABULARY{% endblock %}
 {% block page_title %}录入课堂生词{% endblock %}
-{% block page_description %}把课堂词表变成学生的小程序背词任务{% endblock %}
+{% block page_description %}把课堂生词与同义替换变成学生的小程序学习任务{% endblock %}
 {% block header_actions %}<a class="btn btn-secondary" href="/materials">返回材料库</a>{% endblock %}
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/classroom_vocabulary.css') }}">
@@ -12,7 +12,7 @@
     <li><span>1</span>录入三列词表</li><li><span>2</span>预览并保存</li><li><span>3</span>选择学生布置</li>
   </ol>
   <section class="cv-card" aria-labelledby="cvInputHeading">
-    <h2 id="cvInputHeading">这节课学了哪些词？</h2>
+    <h2 id="cvInputHeading">这节课的生词与同义替换</h2>
     <label class="cv-label" for="cvTitle">词表名称</label>
     <input class="form-control" id="cvTitle" type="text" maxlength="200" placeholder="例如：11月14日阅读课 · 环境主题生词" autocomplete="off" required>
     <fieldset class="cv-source-picker">
@@ -21,16 +21,16 @@
       <label><input type="radio" name="cvSource" value="file"> 上传 Excel</label>
     </fieldset>
     <div id="cvTextArea">
-      <label class="cv-label" for="cvText">单词 → 词性 → 中文</label>
-      <p class="cv-hint" id="cvTextHint">在 Excel / WPS 中选中这三列，复制后粘贴到下方。可带表头，每行一个词；短语保留在同一格。</p>
-      <textarea class="form-control cv-text" id="cvText" rows="9" aria-describedby="cvTextHint" placeholder="单词&#9;词性&#9;中文&#10;habitat&#9;n.&#9;栖息地&#10;conserve&#9;v.&#9;保护；保存&#10;in contrast&#9;phr.&#9;相比之下" spellcheck="false"></textarea>
+      <label class="cv-label" for="cvText">粘贴三列：生词或同义替换</label>
+      <p class="cv-hint" id="cvTextHint">生词填「单词｜词性｜中文」，同义替换填「原词 / 词组｜=｜替换词 / 词组」。两种格式可以混在一份词表中。<br>在 Excel / WPS 中选中这三列，复制后粘贴到下方。表头可选，每行一条；词组完整放在同一格，不按空格拆分。</p>
+      <textarea class="form-control cv-text" id="cvText" rows="9" aria-describedby="cvTextHint" placeholder="habitat&#9;n.&#9;栖息地&#10;conserve&#9;v.&#9;保护；保存&#10;participate&#9;=&#9;take part in&#10;because of&#9;=&#9;due to" spellcheck="false"></textarea>
     </div>
     <div id="cvFileArea" hidden>
       <label class="cv-label" for="cvFile">选择三列词表文件</label>
       <input class="form-control-file" id="cvFile" type="file" accept=".xlsx" aria-describedby="cvFileHint">
-      <p class="cv-hint" id="cvFileHint">支持 .xlsx，读取第一个工作表。列顺序为单词、词性、中文，表头可选。</p>
+      <p class="cv-hint" id="cvFileHint">支持 .xlsx，读取第一个工作表，表头可选。三列可填「单词｜词性｜中文」或「原词 / 词组｜=｜替换词 / 词组」，可混合录入；词组完整放在同一格。</p>
     </div>
-    <p class="cv-hint cv-limit">每份词表最多 1,200 词。词性可以写 n.、v.、adj.，也可以写中文名称。</p>
+    <p class="cv-hint cv-limit">每份词表最多 1,200 条。生词的词性可写 n.、v.、adj. 或中文名称；同义替换的中间列填 =，两边各填一个单词或词组。</p>
     <button class="btn btn-primary" id="cvPreview" type="button">预览词表</button>
   </section>
   <p id="cvStatus" class="cv-status" role="status" aria-live="polite"></p>
@@ -41,7 +41,7 @@
     <p class="cv-hint">保存后可重复使用这份词表。需要修改时，调整上方内容或重新选择文件，再预览。</p>
     <div class="cv-table-wrap" tabindex="0" aria-label="词表预览，可滚动">
       <table class="cv-table">
-        <thead><tr><th scope="col">源行</th><th scope="col">单词</th><th scope="col">词性</th><th scope="col">中文</th></tr></thead>
+        <thead><tr><th scope="col">源行</th><th scope="col">单词 / 词组</th><th scope="col">词性 / =</th><th scope="col">中文 / 同义替换</th></tr></thead>
         <tbody id="cvRows"></tbody>
       </table>
     </div>

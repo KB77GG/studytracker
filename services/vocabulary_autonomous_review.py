@@ -46,6 +46,7 @@ from services.task_date_gate import (
     task_date_access,
 )
 from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
+from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
 from services.vocabulary_mastery import (
     DIMENSIONS,
     MAX_ENGLISH_ANSWER_LENGTH,
@@ -318,6 +319,8 @@ def _candidate_is_eligible(
 ) -> bool:
     """Apply cheap field checks before materializing the public question."""
 
+    if is_synonym_word(word):
+        return bool(build_synonym_question(word, dimension))
     if dimension == "meaning_recall":
         meaning = str(word.core_meaning_zh or word.translation or "").strip()
         goal = _goal_for_dimension(dimension, mastery, word)
