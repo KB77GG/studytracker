@@ -16,6 +16,10 @@
 
 用户确认设备为 iPad / MacBook Air、3 次或 60 秒锁定、分三期。新增 `docs/EXAM_INTEGRITY_PLAN.md` 供 Codex 实施；未改业务代码、未部署。用户 11-15 要用现有模考，授权前禁止 push main。文件在云端分支 `claude/dazzling-johnson-a16p7t` 工作区，是否已 push 以 git 为准。
 
+## 2026-11-15 — 九分学长140篇考前冲刺上线，每周更新启用
+
+用户明确授权发布并启用周更。发布树/private/tmp/studytracker-exam-sprint-20261115业务154a642f已commit/push分支与main，CI43710428721/43711098532 overall success（三required成功、旧advisory lint failure），Deploy43711098583成功。阅读60＋听力80完整上线，343公开文件及95媒体原子发布；生产140GET/95HEAD全过、匿名判分阅读13/13听力10/10且synced=false，公网入口/音频Range/图片通过。单worker/gthread6/5002保持。Mac稳定runtime和launchd已安装，首次exit0跳过本周已发布数据；下次2026-11-16 06:00上海时区，1800秒补查，session600/private700、无agent SSH成功。196Python/全量140POST与1600判分等本机证据保留；未来新周与锁屏后的移动端视觉未冒称验证。5096预览已停，无人工学生库写入/微信发包。两树交接与runbook/验收报告更新，另skip-ci文档提交同步；旧main6ded77d2及原7/23脏状态保留。当前无发布阻塞。
+
 ## 2026-11-14 — 课堂同义词组后台扩展上线，微信复习修复待发包
 
 继前轮部署授权追加三列同义替换，发布树75ff855d→2e82331a，13产品文件已commit/push分支与main。按=识别完整词组、可混表，typed sense隔离英英答案，默认阅读完整英文回忆/首分保留/到期复习；无schema或真实学生写入。主审185Python+28Node及浏览器合成导入/保存/预选通过；两CI43608808499/43609063955总体success（旧advisory lint failure），Deploy43609064011成功。生产23:14:39 active、9SHA一致、5002/单worker/gthread6、warning0；23:22:59只读验收ok。另修复小程序自主复习attempt_id未定义1行，已推源码、未上传/提审/发布，需后续微信发包与真机回归。报告在发布树docs/reviews/classroom-synonyms-20261114/，详细精确验证/时区fixture和浏览器限制已记；报告与两交接独立skip-ci同步。旧主资料树main6ded77d2及原7/23保持，仅两交接追加；5旧业务SHA未变。

@@ -86,6 +86,25 @@ test('review reload ignores a stored return pointing back to itself', () => {
   assert.equal(shell.returnLabel(context.sourceMode), '返回成绩')
 })
 
+test('sprint practice returns to its subject and selected part after a new-tab reload', () => {
+  assert.equal(shell.returnLabel('exam_sprint'), '返回考前冲刺')
+  assert.equal(shell.sourceModeForPath('/practice/sprint/listening'), 'exam_sprint')
+  assert.equal(shell.sourceModeForPath('/practice/sprint/reading'), 'exam_sprint')
+  const listWindow = fakeWindow('/practice/sprint/reading', '')
+  listWindow.location.hash = '#sprint-2'
+  const captured = shell.captureListState(listWindow, {
+    targetPath: '/reading/jijing/reading_jijing_5_test_59?passage=2'
+  })
+  assert.equal(captured.sourceMode, 'exam_sprint')
+  assert.equal(shell.contextUrl(captured, listWindow.location.origin), '/practice/sprint/reading#sprint-2')
+  const practiceWindow = fakeWindow('/reading/jijing/reading_jijing_5_test_59',
+    '?passage=2&practice_return=%2Fpractice%2Fsprint%2Freading%23sprint-2&practice_source=exam_sprint')
+  practiceWindow.location.hash = ''
+  const restored = shell.resolveContext(practiceWindow, '/reading/jijing', 'reading_jijing')
+  assert.equal(shell.contextUrl(restored, practiceWindow.location.origin), '/practice/sprint/reading#sprint-2')
+  assert.equal(shell.returnLabel(restored.sourceMode), '返回考前冲刺')
+})
+
 test('external task and student entry become the module exit without losing the immediate parent', () => {
   const win = fakeWindow('/student/today', '?date=2026-08-29')
   win.location.hash = ''

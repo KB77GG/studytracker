@@ -46,6 +46,7 @@
       </div>
 
       <nav class="practice-workspace__source-nav">
+        {% with sprint_subject='listening' %}{% include "practice/_exam_sprint_link.html" %}{% endwith %}
         {% for group in sections %}
         {% set is_default_group = loop.first %}
         {% set group_total = namespace(value=0) %}

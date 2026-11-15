@@ -1,0 +1,1246 @@
+{
+  "checked_at_utc": "2026-11-15T12:17:20.134297+00:00",
+  "scope": "Git/systemd/public content and anonymous loopback HTTP; no app/config/DB import",
+  "head": "154a642fabc017557b92abbefd022dc112a383a5",
+  "expected_head": "154a642fabc017557b92abbefd022dc112a383a5",
+  "tracked_clean": true,
+  "service": {
+    "ActiveState": "active",
+    "SubState": "running",
+    "NRestarts": "0",
+    "MainPID": "742608",
+    "ExecMainStartTimestamp": "Sun 2026-11-15 19:54:10 CST",
+    "WorkingDirectory": "/root/apps/studytracker"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6,
+    "actual_worker_count": 1,
+    "command_overrides_safe": true
+  },
+  "guest_posts_skipped": false,
+  "ok": true,
+  "snapshot_sha256": "0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc",
+  "snapshot_validation": {
+    "total": 140,
+    "ready": 140,
+    "imported": 124,
+    "reviewed_legacy": 16
+  },
+  "pages": {
+    "reading": {
+      "status": 200,
+      "total": 60,
+      "ready": 60,
+      "stale": false
+    },
+    "listening": {
+      "status": 200,
+      "total": 80,
+      "ready": 80,
+      "stale": false
+    }
+  },
+  "practices": [
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2102715008296194050_7e3957ada52c",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445843865602_65a0514e447d",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2051168670866575362_a41f7f54ddf5",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2119643278732689410_33b2e3206d6a",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445864837124_a946aeafef3c",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445827088386_b89d5fad92db",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445848059907_5ec548c7addc",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2065384151424483329_cf073c093d2a",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445835476994_7e4e3cf68791",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445848059906_edd6a47464bc",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2105522216008499202_8ba50c114a97",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445873225730_4b2b2ae92622",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445822894081_0911fb3cc8ed",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445856448516_c4d2718d9739",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2051173834394537985_40e69c2daec6",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2039230812471791618_6a28ae20cf9c",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2083798697532522498_963fbead5eb6",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445856448515_ddcb42162d5a",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2102653806102745089_e94d157f4568",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445831282690_fd8e3a561b4b",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445944528897_1ad05d3d1d87",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2063871798731182081_3cfe4ed4fefb",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2016777336785571842_f4f9e14e8853",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2027010525068099585_0261a1574394",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445902585857_19832aa245ea",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2098329531707379714_3ec4264f8388",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2083565165720158210_86cea517d3b5",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2070474303930433538_495e81195bc7",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2098334757042606082_e8d0ac98c751",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2059138245116624897_2f3d6ce621a0",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445944528899_8bacfa33d190",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445885808642_7e87ee40652a",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445940334594_2ffad60eb727",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2074391885423116290_26a2259463c5",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445906780161_fbe0ff29deca",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2105548009325543425_9427e1f062cf",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445885808643_00da16005810",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445927751681_2413ff235946",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445931945989_2e68ab751bd1",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2018938319750664193_d97665bc2b55",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445965500418_469daa6533eb",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2102676193108070401_1ff05fc36224",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445982277634_7324004bc3db",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445969694723_c7d9d3ede402",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2071522493547462658_3de50774bf4b",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2026548860543401986_e5aaff58576a",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445978083332_36a0bdadff9e",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2094695313828294658_cbe35dafb51c",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445957111811_cd478c2d3f48",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2104456787542487042_68122c95cfd6",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445986471939_d195312d8210",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445969694724_7b0b0d294265",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2026542514917965825_5d40192f58cb",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137446011637763_58269a4710f4",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2083032895997394946_5c1438f7d131",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2027217447373340673_c32df69e9fbf",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2029529655675551745_c47f21217ff4",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137446011637762_92c8edbdc5d6",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2017137445999054852_e7530f30e529",
+      "status": 200
+    },
+    {
+      "subject": "reading",
+      "target_id": "ninefen_2039249304562536450_acd26aca3684",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_017_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2068912409113329665_8bc75b9ccc3f_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2033383348044922882_b653c0abf300_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021773745112842241_e6f9dc293f0f_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_096_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496718794753_e2dd2f755cc8_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_050_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2068898282022174722_c8052638a4ed_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496748154881_5c5e9af131c1_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_064_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2072854547165413378_b2194ffafd6a_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021753728887521282_5a57ced88251_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021735290127351809_cb2a0625b33d_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2046844317257535489_764c9541574b_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021551562176430081_268e6fccfa4e_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021763441423384578_9e6db353a9b5_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2085632806085509121_159807d257be_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2016474115835789313_dd1f5bad984b_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2068904145055186945_14296fbcedc0_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021589615733473281_a9fdf669b0ab_p1",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496769126401_d9087477aa86_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021381937107140609_b7e67f01679e_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496819458051_8e4e4ce5311b_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2026274237989879809_e9dbcbf62028_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069246295986995201_773bf9fab307_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2029800209729028098_8c15dec131e0_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2062741476770627585_4ca7852deda7_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2072896650981474305_08b187e17f79_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_023_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2060181406923984897_9bfd3056970c_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2068963407081046018_a1e13bc2d472_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2070485901969522690_078d29212f4c_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496819458050_eda578bb6719_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2068979291950481409_c2cdbd9f2bec_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2067153891657617410_fc8abe9c494d_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2067436332804837377_599abeedf39b_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069039964009578497_25e373e84ce2_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069021353727541249_ef340bbce12e_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069286831812349954_8cacb8d687ac_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_040_p2",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069691176816001025_fdda7a09c8d1_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069684574989893634_14875ffcffcd_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2038489523866406913_dfdf506b2389_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2067534117256400897_513661a38756_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2067441244099940353_789b54b60bcc_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069706762870636545_d71e791ff97a_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069727024970252289_93f99ecea414_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2060340274211688449_1e77bb8b10c4_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2084196934542229506_b453e0d91c14_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_019_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_048_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496848818179_e4ec0876817c_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2026466417727602690_e66cb46c42b5_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2069710397398630401_defbb831d94d_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496894955522_46a20b486eb7_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496844623873_29c4f9c5edf4_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2028307689585082370_656c67593d42_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496878178306_0b616bdc4192_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2051266188833034242_1b83863d0fd9_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_039_p3",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_020_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2062079322551795714_7e2db7856d3c_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496962064387_b40b5697d571_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2080600216831590401_17a1c7bd47d8_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021786716228648961_2325080dc332_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_109_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_008_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496928509954_f39f689ffdce_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_024_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_094_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2034161453017694209_4ca1d8243908_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_006_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021826814718607362_c582e45dd560_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2026474711057793026_25571d14ed1b_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021837159608713218_7e172841bf9e_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2072850148875632642_503389f965c6_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "xiahuar_084_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2017124496953675777_2428f4596559_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2062384705468153858_8ede22d95ecc_p4",
+      "status": 200
+    },
+    {
+      "subject": "listening",
+      "target_id": "ninefen_2021838892682543105_69358da25de0_p4",
+      "status": 200
+    }
+  ],
+  "assets": {
+    "/practice/sprint/assets/814fd7c48dda4e3608a04be1b3daa6572f0e2cad50eaca224f3185c4df643d01.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 1068996
+    },
+    "/practice/sprint/assets/78f551ee4bc00ae4bd1159462b711ce46fb727a32ca49a5745f149578b221e9b.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 514841
+    },
+    "/practice/sprint/assets/afa7b78143071e514dfa8dcbaa8fc17cd0bc9a34ca6b66709f4a233acfa60c1c.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 108759
+    },
+    "/static/listening_jijing/audio/xiahuar_017_p1.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4785140
+    },
+    "/practice/sprint/assets/4ae801b51aee928a63e10c850198a6aab51ae8924b9f3f8953d00e1a52639360.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10029189
+    },
+    "/practice/sprint/assets/2ce3ffec5da8a64f2da3f94dca171d584f8b11a080090fdc812cec770007c0c4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10402845
+    },
+    "/practice/sprint/assets/1802dcb80baf9572cb85752dd8177397a91321af0d96508587cad7624e064f08.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9799730
+    },
+    "/static/listening_jijing/audio/xiahuar_096_p1.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 2449261
+    },
+    "/practice/sprint/assets/26541875f4c04734777e8c79a208e05ecf638d5713d5d598b3b02b925009245e.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8221725
+    },
+    "/static/listening_jijing/audio/xiahuar_050_p1.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4281884
+    },
+    "/practice/sprint/assets/17b0eec612349650f0cfd184ad4560d9429bf727fd62305fa33992dc406f33f0.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 7839292
+    },
+    "/practice/sprint/assets/97ef9546c6c2169037db6f55d509717595755f1c3e542161f01676c3df3a05cb.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10192193
+    },
+    "/static/listening_jijing/audio/xiahuar_064_p1.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 2669324
+    },
+    "/practice/sprint/assets/b469682978c0f533b154fc369b83841f567762c51607332abcc8be979fa02464.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8338962
+    },
+    "/practice/sprint/assets/f551d7ba3d76ea699b98f4b7af74d8102f8af31d6c27b2127d27b5de43d824bd.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8710110
+    },
+    "/practice/sprint/assets/0f918314a15a114c061f64572352206daf1da1a5d12a99aab159dd5b166d7e6b.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8866218
+    },
+    "/practice/sprint/assets/3a0ee50bae54905ca5d302041a86d74c24cd64121404b615ed473a7b0ee19102.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8108249
+    },
+    "/practice/sprint/assets/790fb92d4038141d5261b064d579e8921f09c42df703253d753d6a44b9721a11.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 7674407
+    },
+    "/practice/sprint/assets/661dfd5c3b94ffb238be62cb198f58d00dc31a3c09044ef64bb4e501a5d57084.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 7626760
+    },
+    "/practice/sprint/assets/e5e38d67c40ea297f3ab6c2eec30370f663af3e45b0803e843d28069941f20b5.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9745186
+    },
+    "/practice/sprint/assets/90b75fb2d6165ea4cea8a077d6d68ad7a3d0850123173371aecb2d52aeb9fb69.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8540210
+    },
+    "/practice/sprint/assets/57b8fda55ea6b1ee62d6e12d54669490d87b6f7cec3f1cfc6f3ec14278e881bb.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8530805
+    },
+    "/practice/sprint/assets/df6e87a495b4056789e88836cb88bfe08b689e89c23f75de78767d8cfd8ff495.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8858694
+    },
+    "/practice/sprint/assets/0b99cc23279a57ce3e25b791628a9bafdfe3d1da32a75e05cd066b0404eb199b.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 149641
+    },
+    "/practice/sprint/assets/eed2e09f81cd02b3b7f2b1a24e2a8291b0e3295da5d1ced89c0653673e644fe7.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8459961
+    },
+    "/practice/sprint/assets/c4b121c09fbeab0f7add00e50e8785e57b25d362dcc9b3d6a50ec963f584d5d0.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9977153
+    },
+    "/practice/sprint/assets/bb95b732bad0fee0266df30dde10cf393996a9169cfd6cc149de093da5af929b.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 238091
+    },
+    "/practice/sprint/assets/f1dc6f978ff766bea4c8a15f8346ca0253c5b120cfa6607c30d52656001b2ba7.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8850544
+    },
+    "/practice/sprint/assets/1fbe011a2766d319b0384ff00ff149e1aadb4ea5eb4199261c1cfce3bedb8008.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10049878
+    },
+    "/practice/sprint/assets/cbb12ba7a6e8e5c54c1623875b031041accc58bc9857210a2688db9ad071c0c1.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8001669
+    },
+    "/practice/sprint/assets/c859d9aaffb26d7600aaea32537b05bb2780d135dab0717b6e4e61c60703ae54.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 182379
+    },
+    "/practice/sprint/assets/8900589706d4a4514aaa60f1a2eb41e90adc9ce963474f85b31a3ccd1d29355c.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9693150
+    },
+    "/practice/sprint/assets/756dcdc6be5cf0895e994e304511ee3e1b888f656b4b65effe08cba4c60d7800.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 11913767
+    },
+    "/practice/sprint/assets/e9f393834c7bd917d56039152717dc846fd01276d487025e8caad345868d87eb.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9234231
+    },
+    "/static/listening_jijing/audio/xiahuar_023_p2.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 2113364
+    },
+    "/practice/sprint/assets/fd5d3e3e55c36f04a5af4d5113dd0d9d65bdcb7a0e99f699e80fb874523b5efc.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8965901
+    },
+    "/practice/sprint/assets/85c98861b84dfb8afcdb458cf1d8f98d35067f40525ca12fd4d9a799e56d6bea.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 807729
+    },
+    "/practice/sprint/assets/5ceee78d0a9c824fc2475e7660e034d98a14cd9d8a5aa91f2551ae6cf0d2dfed.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 232481
+    },
+    "/practice/sprint/assets/7d03491d784d717aeba7b1cdaaca0b7a607fe51993226361b7d8ed3bdaff7e67.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 7027406
+    },
+    "/practice/sprint/assets/0137d1bb5da4402ada214b8c389d855286af63358ef4ef05ed96e5f7f446aded.jpg": {
+      "status": 200,
+      "content_type": "image/jpeg",
+      "bytes": 137209
+    },
+    "/practice/sprint/assets/c17e3af679c8fdfd9a35ccda3129e93661cb8dcc40913ccfcd4d554bbfd1c375.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8761519
+    },
+    "/practice/sprint/assets/8825f27eda3e4e78c2e6cd148ba03aae565d76ae229724f3b0cfd7fc24a18dbb.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10185297
+    },
+    "/practice/sprint/assets/c11b8599a384fbd3a099872eb8eb9ef3ed009d266a6a8a6f4328ee5a318cc2ec.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 264353
+    },
+    "/practice/sprint/assets/c54fe95e3c4212bcce9a12b91e36fe58ebe02420124992426bcc6f96ae67790f.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8131445
+    },
+    "/practice/sprint/assets/9fde2467d604b58e3fbd00289a2ff541de80bf6b558f6e6c18c45ad213ad5b33.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8431122
+    },
+    "/practice/sprint/assets/ea63a45a44ad4c82cbaa5f41b5cd5429db58c873239eb433511f68464e0d48a5.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 187649
+    },
+    "/practice/sprint/assets/843fd3360d02346391f4b2a465fbac8b74a6c5a18c0d9911002387eae0a4f9aa.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9915086
+    },
+    "/practice/sprint/assets/40202894748e4f60e057615dd64c30909860f32a16458d8c94e1ae0c50878e04.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9475602
+    },
+    "/practice/sprint/assets/7d4c91c36c973c55b461e8a26fe9a5c782e63e8a89218bccb00e614d48c7f513.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 406374
+    },
+    "/practice/sprint/assets/7cb0cb5dfdc7b75e2ed561d95b7ed6a950e700be7a57728b3a9c10ecc356dd73.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8167808
+    },
+    "/practice/sprint/assets/feb1ef2df128bf82d63dfa26edd46db1178983942dfe4afc157424f9b62c8bf4.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 126395
+    },
+    "/practice/sprint/assets/62938ffff7015027f5d1158841fb63194cfad3e33d690c508f3776fd49aba62e.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9202257
+    },
+    "/static/listening_jijing/audio/xiahuar_040_p2.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3226940
+    },
+    "/practice/sprint/assets/2ee5d63137819576a633e76742c5ba352d25e75792366b85a1aa233487ae56e5.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 11884301
+    },
+    "/practice/sprint/assets/c3fb7be1f0f2b8a6fc82359b7abf89f8972dff50c3327e9c52f9ba90c5191e4f.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9930133
+    },
+    "/practice/sprint/assets/a2a1e059857bfadd5ea2116a4b72cbe1c315a2514cb1c2f5b8dc4fee628d6c06.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10224167
+    },
+    "/practice/sprint/assets/bb8a9828e3e02236bb7419c35afadf827dced6da66e97393d6c6c2490656e00e.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10237960
+    },
+    "/practice/sprint/assets/62de570279278603318c114478b02b8d67bddc2aaf336ab35d8c87d27d4825a0.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10755811
+    },
+    "/practice/sprint/assets/5e86d08207e2c85afbcd85e781d72ba16e3298b4ce4b4e4a58c80d9b7313cf41.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10839194
+    },
+    "/practice/sprint/assets/3a71c478f4df7e19de23340f3e416238cfdf2092cb4431fdaa74b7b9494fb960.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10817878
+    },
+    "/practice/sprint/assets/cf583c12b89af87a987e55235eafbc9dd38b769eda1ade94c10bf36a5bead987.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9724497
+    },
+    "/practice/sprint/assets/bad7fdc82bb9f2fc284ce3c5b7e523be59b205fa7519e362881ac72d205df1e8.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10934489
+    },
+    "/static/listening_jijing/audio/xiahuar_019_p3.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4032644
+    },
+    "/static/listening_jijing/audio/xiahuar_048_p3.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4173836
+    },
+    "/practice/sprint/assets/a6a67bf7be16a8edb5aaa49d07af6606e34c56187eb4668bda98759862992081.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8406045
+    },
+    "/practice/sprint/assets/4d6fcbb3012252ee132e17c82ae51b1b40202e2a402a47fe70e9b8a1b609a003.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 195654
+    },
+    "/practice/sprint/assets/572701c67ea4f798395bd688593d0fa00b76936600b2b2cf1498cce361839097.png": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 303478
+    },
+    "/practice/sprint/assets/d9e2c76a4418ff0d5573685fd350a5e405ca446496b585f99430edf170b19fe7.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10829790
+    },
+    "/practice/sprint/assets/6c563a038fefde94fca9ef1fa511ff68761b6576ffc7238654f169ee9b5b3a86.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9108843
+    },
+    "/practice/sprint/assets/127d60242f5c2cff2758a9d8c69baf4ec9d9a7368cba5e440dee257a304ba4d7.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9365888
+    },
+    "/practice/sprint/assets/b6445bb468d86ce7b37d9da6dee8626be3937ca07004ffc7bfeed2fcdfcdae20.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9309463
+    },
+    "/practice/sprint/assets/3182c00611a9bc81d8400a71cfe9c285ffb9952729d772a8176cc048d03538ac.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10707537
+    },
+    "/practice/sprint/assets/69617e5a951d4628c2a40c1a044f3da5bbe13a912268422eb9e7ce28b0f37b50.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 12155765
+    },
+    "/practice/sprint/assets/65ad8a9d38e3be455d3c78ab85a2743b04f38df6fcf07fe4e04f4cecd228296c.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9070600
+    },
+    "/static/listening_jijing/audio/xiahuar_039_p3.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4184516
+    },
+    "/static/listening_jijing/audio/xiahuar_020_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3326132
+    },
+    "/practice/sprint/assets/6759d22a0a79eb61690ac106706cd66fc69d493cceac7057fe962975a62815fa.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 11159560
+    },
+    "/practice/sprint/assets/731e42d9e2af0cb70aeb43bc97b523e96a0679bc8dca18172c88e62209441710.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8998502
+    },
+    "/practice/sprint/assets/85bab4cf2396db06aa70756961ba5eb1d77b5b6f3732d039497545f99ee4fcdf.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9777160
+    },
+    "/practice/sprint/assets/aca3cd8a29e01b6f1c8ab0dd818c579e0d6408e0ef6a3924ec8e5eb1d058d601.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8155269
+    },
+    "/static/listening_jijing/audio/xiahuar_109_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3245780
+    },
+    "/static/listening_jijing/audio/xiahuar_008_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3814756
+    },
+    "/practice/sprint/assets/dbcb9d720980ec6003e9ea04eface48102267d0a804e7692a7499382eae96734.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10110064
+    },
+    "/static/listening_jijing/audio/xiahuar_024_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3740708
+    },
+    "/static/listening_jijing/audio/xiahuar_094_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4473197
+    },
+    "/practice/sprint/assets/b561f5efaffbad6682d0fe982e7984bdee622e9245ac7dfaed4caed269c35d2e.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9122009
+    },
+    "/static/listening_jijing/audio/xiahuar_006_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 4663292
+    },
+    "/practice/sprint/assets/e83966129e96066b6f06721a809455b1bc9d0f56fcd4bfeff0463ed9dcb1a358.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10499393
+    },
+    "/practice/sprint/assets/dca870965728ef45a3bf057dfdf4055997d45e8ea23db92f158e72823189a33a.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10034832
+    },
+    "/practice/sprint/assets/eabdc92880ff4979a1868f2a250297ef3437dbde7510c786e7c76582c52b6f62.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9880605
+    },
+    "/practice/sprint/assets/0223a193122675d396e477072dee75bdb245952557ce10a85423b8933c197ecb.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 9429209
+    },
+    "/static/listening_jijing/audio/xiahuar_084_p4.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 3441769
+    },
+    "/practice/sprint/assets/78e7006cccb435f3a8493f7bc7dee5f8683124628e9ae5b2b6e71304d3f18267.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 10326358
+    },
+    "/practice/sprint/assets/fedb00eb650d93e87a16867e56db5cabb5eb41f7eb7567e671372e13eb6918df.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8654939
+    },
+    "/practice/sprint/assets/ee69f9852fe50589028e31cbb1323774c1d8350aec406b8a6056d945c78d2629.mp3": {
+      "status": 200,
+      "content_type": "audio/mpeg",
+      "bytes": 8317019
+    }
+  },
+  "practice_get_count": 140,
+  "media_head_count": 95,
+  "audio_count": 80,
+  "image_count": 15,
+  "anonymous_grading": [
+    {
+      "subject": "reading",
+      "status": 200,
+      "synced": false,
+      "correct": 13,
+      "total": 13
+    },
+    {
+      "subject": "listening",
+      "status": 200,
+      "synced": false,
+      "correct": 10,
+      "total": 10
+    }
+  ],
+  "failures": []
+}

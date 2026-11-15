@@ -1,0 +1,151 @@
+{% set practice_navigation = practice_navigation|default({
+  'identity_mode': 'guest',
+  'module_root_url': '/practice',
+  'module_exit_url': '/login',
+  'module_exit_label': '退出刷题'
+}, true) %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ subject_label }}考前冲刺 · Sage Path</title>
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% include "practice/_workspace_styles.html" %}
+<link href="{{ url_for('static', filename='css/exam_sprint.css') }}" rel="stylesheet">
+</head>
+<body class="practice-workspace-page" data-practice-hub="section">
+<div class="practice-workspace" data-practice-workspace>
+  <header class="practice-workspace__topbar">
+    <div class="practice-workspace__brand-nav">
+      <a class="practice-workspace__brand" href="{{ url_for('practice_library') }}" data-practice-module-back aria-label="返回练习中心">
+        <img src="{{ url_for('static', filename='brand/sagepath-mark.png') }}" alt="">
+        <span>Sage Path</span>
+      </a>
+      <span class="practice-workspace__context">考前冲刺</span>
+      <nav class="practice-workspace__subjects" aria-label="科目导航">
+        {% for key, label in [('listening', '听力'), ('reading', '阅读')] %}
+        <a{% if subject == key %} class="is-active" aria-current="page"{% endif %} href="{{ url_for('exam_sprint.index', subject=key) }}">{{ label }}</a>
+        {% endfor %}
+        <a href="{{ url_for('writing_library.index') }}">写作</a>
+      </nav>
+    </div>
+    <div class="practice-workspace__account">
+      <a href="{{ url_for('practice_library') }}" data-practice-module-back>返回练习中心</a>
+      <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+      {% if current_user.is_authenticated %}
+      <span aria-label="当前用户 {{ current_user.username }}">{{ current_user.username[:1]|upper }}</span>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="practice-workspace__layout">
+    <aside class="practice-workspace__sidebar practice-workspace__sidebar--scroll" id="practice-catalog" aria-label="{{ subject_label }}冲刺目录">
+      <div class="practice-workspace__sidebar-head">
+        <strong>选择题库</strong>
+        <button type="button" data-close-catalog>关闭</button>
+      </div>
+      <nav class="practice-workspace__source-nav">
+        <section class="practice-workspace__source-group" data-source-group>
+          <button class="practice-workspace__source-toggle is-active" type="button" aria-expanded="true" aria-controls="sprint-parts" data-source-toggle>
+            <span><strong>考前冲刺</strong><em>7天热榜</em></span><small>{{ view.total }} 篇</small>
+          </button>
+          <div class="practice-workspace__source-items" id="sprint-parts">
+            {% for group in view.groups %}
+            <button class="practice-workspace__source-item{% if loop.first %} is-selected{% endif %}" type="button"
+                    id="book-control-sprint-{{ group.part }}" aria-controls="book-sprint-{{ group.part }}"
+                    data-book-target="sprint-{{ group.part }}"{% if loop.first %} aria-current="page" data-default-book{% endif %}>
+              <span>{{ 'Passage' if subject == 'reading' else 'Part' }} {{ group.part }}</span>
+              <small>{{ group['items']|length }} 篇</small>
+            </button>
+            {% endfor %}
+          </div>
+        </section>
+        <section class="practice-workspace__source-group">
+          <a class="practice-workspace__source-toggle practice-workspace__source-link" href="{{ url_for(subject ~ '_test_index') }}">
+            <span><strong>剑雅真题</strong><em>返回整套{{ subject_label }}题库</em></span><small>进入</small>
+          </a>
+        </section>
+        <section class="practice-workspace__source-group">
+          <a class="practice-workspace__source-toggle practice-workspace__source-link" href="{{ url_for(subject ~ '_jijing_index') }}">
+            <span><strong>机经真题</strong><em>历年考场原题回忆</em></span><small>进入</small>
+          </a>
+        </section>
+      </nav>
+      <p class="exam-sprint__sidebar-note">每周一 06:00 更新<br>北京时间</p>
+      <span class="practice-workspace__sidebar-watermark" aria-hidden="true">{{ subject|upper }}</span>
+    </aside>
+    <button class="practice-workspace__scrim" type="button" aria-label="关闭题库目录" data-catalog-scrim hidden></button>
+
+    <main class="practice-workspace__main exam-sprint">
+      <span class="practice-workspace__page-watermark" aria-hidden="true">SAGEPATH</span>
+      <button class="practice-workspace__catalog-button" type="button" aria-controls="practice-catalog" aria-expanded="false" data-open-catalog>选择题库</button>
+      <header class="practice-workspace__page-heading exam-sprint__heading">
+        <div>
+          <p>{{ subject_label }} / 考前冲刺</p>
+          <div><h1>{{ subject_label }}考前冲刺</h1><span>7天热榜</span></div>
+        </div>
+        {% if view.available %}<span class="exam-sprint__ready-count">{{ view.ready_count }} / {{ view.total }} 篇可练习</span>{% endif %}
+      </header>
+      <section class="exam-sprint__edition" aria-label="榜单来源与更新时间">
+        <div>
+          <strong>九分学长 · 7天热榜</strong>
+          <p>根据考生近期反馈整理，仅供复习参考。</p>
+        </div>
+        <div class="exam-sprint__dates">
+          {% if view.source_updated_at_label %}<span>来源更新：{{ view.source_updated_at_label }}</span>{% endif %}
+          {% if view.updated_at_label %}<span>同步时间：{{ view.updated_at_label }}</span>{% endif %}
+          <span>每周一 06:00 更新（北京时间）</span>
+          {% if view.next_update_label %}<span>下次更新：{{ view.next_update_label }}</span>{% endif %}
+        </div>
+      </section>
+      {% if view.stale and view.available %}
+      <p class="exam-sprint__notice" role="status">本周热榜暂未更新，以下保留最近一期内容，仍可继续练习。</p>
+      {% endif %}
+      {% if not view.available %}
+      <section class="practice-workspace__empty exam-sprint__empty">
+        <h2>本期热榜正在准备</h2>
+        <p>榜单更新后会显示在这里。现在可以先练习剑雅真题或机经。</p>
+        <a class="exam-sprint__start" href="{{ url_for(subject ~ '_test_index') }}">练习剑雅真题</a>
+      </section>
+      {% else %}
+      <div class="practice-workspace__book-panels">
+        {% for group in view.groups %}
+        <section class="practice-workspace__book-panel" id="book-sprint-{{ group.part }}"
+                 aria-labelledby="book-control-sprint-{{ group.part }}" data-book-panel="sprint-{{ group.part }}"{% if not loop.first %} hidden{% endif %}>
+          <div class="exam-sprint__part-heading">
+            <h2>{{ 'Passage' if subject == 'reading' else 'Part' }} {{ group.part }}</h2>
+            <span>{{ group['items']|length }} 篇</span>
+          </div>
+          <div class="exam-sprint__list">
+            {% for item in group['items'] %}
+            <article class="exam-sprint__item">
+              <span class="exam-sprint__rank" aria-label="排名 {{ item.rank }}">{{ '%02d'|format(item.rank) }}</span>
+              <div class="exam-sprint__item-copy">
+                <h3>{{ item.title }}</h3>
+                {% if item.title_zh %}<p>{{ item.title_zh }}</p>{% endif %}
+                {% if item.heat_label %}<span class="exam-sprint__heat">{{ item.heat_label }}</span>{% endif %}
+              </div>
+              {% if item.practice_url %}
+              <a class="exam-sprint__start" href="{{ item.practice_url }}" data-practice-entry aria-label="开始练习：{{ item.title }}">开始练习</a>
+              {% else %}
+              <div class="exam-sprint__unavailable"><span>待补齐</span><small>{{ item.unavailable_reason or '练习内容正在准备' }}</small></div>
+              {% endif %}
+            </article>
+            {% else %}
+            <p class="practice-workspace__empty">本期该部分暂无热榜题目。</p>
+            {% endfor %}
+          </div>
+        </section>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/practice_workspace.js') }}"></script>
+{% include "practice/_navigation_defaults.html" %}
+<script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+<script>PracticeShell.installListContext({ ...window.PRACTICE_NAVIGATION_DEFAULTS, sourceMode: 'exam_sprint' }); PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);</script>
+</body>
+</html>

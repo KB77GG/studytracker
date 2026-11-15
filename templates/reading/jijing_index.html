@@ -45,6 +45,7 @@
       </div>
 
       <nav class="practice-workspace__source-nav">
+        {% with sprint_subject='reading' %}{% include "practice/_exam_sprint_link.html" %}{% endwith %}
         <section class="practice-workspace__source-group" data-source-group>
           <button class="practice-workspace__source-toggle is-active"
                   type="button"

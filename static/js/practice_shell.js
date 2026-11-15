@@ -71,6 +71,7 @@
     if (/^\/tasks\/question-types(?:\/|$)/.test(pathname)) return "question_type_teacher";
     if (/^\/tasks(?:\/|$)/.test(pathname)) return "staff_tasks";
     if (/^\/practice\/question-types(?:\/|$)/.test(pathname)) return "question_type_catalog";
+    if (/^\/practice\/sprint\/(?:listening|reading)(?:\/|$)/.test(pathname)) return "exam_sprint";
     if (/^\/practice\/mock-exams(?:\/|$)/.test(pathname)) return "mock_exam_review";
     if (/^\/exam\/[^/]+\/session\/[^/]+\/review(?:\/|$)/.test(pathname)) return "mock_exam_review";
     if (/^\/exam\/.+\/session\//.test(pathname)) return "mock_exam_process";
@@ -90,6 +91,7 @@
       staff_tasks: "返回任务中心",
       question_type_teacher: "返回任务中心",
       question_type_catalog: "返回题型专项",
+      exam_sprint: "返回考前冲刺",
       mock_exam_process: "返回模考流程",
       mock_exam_review: "返回模考复盘",
       mock_exam_result: "返回成绩",

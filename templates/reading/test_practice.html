@@ -492,9 +492,10 @@ body[data-experience-mode="simulation"] .group {
       <button class="practice-shell__back" type="button" data-practice-module-exit data-capability="canShowPracticeBack">退出刷题</button>
       <div class="practice-shell__title-block">
       {% set is_reading_jijing = test.source == 'idictation_reading_jijing' %}
+      {% set is_exam_sprint = test.source == 'ninefen' %}
       <div class="crumb">
         <a href="{{ url_for('practice_library') }}">阅读</a> /
-        <a href="{{ url_for('reading_jijing_index') if is_reading_jijing else url_for('reading_test_index') }}">{{ '阅读机经' if is_reading_jijing else '剑桥雅思' }}</a> /
+        <a href="{{ url_for('exam_sprint.index', subject='reading') if is_exam_sprint else url_for('reading_jijing_index') if is_reading_jijing else url_for('reading_test_index') }}">{{ '考前冲刺' if is_exam_sprint else '阅读机经' if is_reading_jijing else '剑桥雅思' }}</a> /
         <span id="practiceCrumbTail">整套练习</span>
       </div>
       <h1 id="practiceTitle">{{ test.title }}</h1>
@@ -502,7 +503,7 @@ body[data-experience-mode="simulation"] .group {
       </div>
     </div>
     <div class="topbar-actions">
-      {% if not exam_context %}
+      {% if not exam_context and test.source != 'ninefen' %}
       <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
       {% endif %}
       <div class="timer" aria-live="polite" data-capability="showElapsedTimer">
@@ -774,6 +775,7 @@ function escapeHtml(value) {
 
 function optionDisplayText(key, text) {
   const value = String(text || "").trim();
+  if (value.toUpperCase() === String(key || "").trim().toUpperCase()) return "";
   const prefix = new RegExp(`^\\s*${String(key || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[.．、)]\\s*`, "i");
   return value.replace(prefix, "");
 }
@@ -1097,7 +1099,10 @@ function renderGroup(group) {
 function renderPassage(passage) {
   const paragraphs = passage.content?.paragraphs || [];
   const images = passage.content?.images || [];
-  const renderFigure = image => `<figure class="passage-figure"><img class="passage-image" src="/static/${escapeHtml(image.url)}" alt="${escapeHtml(image.alt || 'Passage figure')}" loading="lazy"></figure>`;
+  const renderFigure = image => {
+    const url = /^\/practice\/sprint\/assets\/[a-f0-9]{64}\.(png|jpg|jpeg|webp|gif)$/.test(image.url || '') ? image.url : `/static/${image.url}`;
+    return `<figure class="passage-figure"><img class="passage-image" src="${escapeHtml(url)}" alt="${escapeHtml(image.alt || 'Passage figure')}" loading="lazy"></figure>`;
+  };
   let sourceParagraphIndex = -1;
   const paragraphMarkup = paragraphs.map(para => {
     if (para.label !== 'pre-A') sourceParagraphIndex += 1;
@@ -1344,7 +1349,7 @@ function updatePracticeHeader() {
     document.getElementById("practiceCrumbTail").textContent = "Passage 练习";
     document.getElementById("practiceTitle").textContent = `${rawTestData.title} Passage ${assignedPassageNumber}`;
     document.getElementById("practiceMeta").textContent = `1 篇 Passage · ${total} 题 · 建议 20 分钟完成`;
-    setSyncStatus("完成后会同步到这条小程序任务和报告");
+    setSyncStatus(rawTestData.source === 'ninefen' ? "答案自动保存在本机，提交后可查看判分与解析" : "完成后会同步到这条小程序任务和报告");
     return;
   }
   document.getElementById("practiceMeta").textContent = `${testData.passages.length} 篇 Passage · ${total} 题 · 建议 60 分钟完成`;
@@ -1620,8 +1625,8 @@ setInterval(() => {
 // The containing review page owns browser navigation; an iframe must not add
 // its own back guard to the joint browser history.
 practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
-  fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
-  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : (rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
+  fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'ninefen' ? '/practice/sprint/reading' : rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
+  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : (rawTestData.source === 'ninefen' ? 'exam_sprint' : rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
   confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
   initialSaved: true,
   save: persistExamDraft

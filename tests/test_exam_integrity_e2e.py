@@ -13,7 +13,7 @@ from tests.exam_integrity_e2e_support import ROOT, IntegritySandbox
 BASELINE_SHA = {
     "exam/process.html": "d403c724ce8fd41d0b094aaae344865a00acc657e9465b7584c57bf52687e0d5",
     "listening/test_practice.html": "058e26cea2c535e8ab84d27a4974b689ff51257c1b42a90bf6a6bd13a26d0fdb",
-    "reading/test_practice.html": "b943bf032d269a7595cc2d7b19c97b5b734854dfbebaae65d290c5036d6354e9",
+    "reading/test_practice.html": "498e7025c2df7a29b5b0d114eddc44071398bc7849511353e63d20f883c0d9c7",
     "exam/writing.html": "2da9eedc76cd1d4cfa024480ff888fbbe45ffe78d113bd4148c344b564edd91d",
 }
 
@@ -168,7 +168,8 @@ class ExamIntegrityRealFlowTest(unittest.TestCase):
             if suffix:
                 include = "{% if exam_context %}" + include + "{% endif %}"
             source = (ROOT / "templates" / template_name).read_text().replace(include, "")
-            # Original ecc06f23 source hashes keep this check usable in shallow CI clones.
+            # Reviewed upstream sources keep this test usable in shallow CI clones.
+            # Reading tracks main@3d8e7b57; the other three remain ecc06f23.
             self.assertEqual(
                 hashlib.sha256(source.encode()).hexdigest(), BASELINE_SHA[template_name]
             )

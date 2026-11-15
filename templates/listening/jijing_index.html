@@ -49,6 +49,7 @@
       </div>
 
       <nav class="practice-workspace__source-nav">
+        {% with sprint_subject='listening' %}{% include "practice/_exam_sprint_link.html" %}{% endwith %}
         {% for collection in collections %}
         <section class="practice-workspace__source-group" data-source-group>
           <button class="practice-workspace__source-toggle{% if loop.first %} is-active{% endif %}"
