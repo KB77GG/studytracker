@@ -57,7 +57,7 @@ INTEGRITY_EVIDENCE_DIR=/private/tmp/studytracker-exam-integrity-20261114/docs/re
 
 ## 状态与剩余限制
 
-本报告准备随审查分支提交并push；远端CI实际结果待完成后附 `ci-review.json`。此前14c64d2的55文件清单/158+86日志仍是历史快照，不冒充新修复验收。现行文件清单由当前Git相对main取得。
+修复／合并／报告已提交并仅push审查分支，验收提交 **`d306ce5b764d58314388a6ef632bab9e054b210f`** 的 [CI 43668175574](https://github.com/KB77GG/studytracker/actions/runs/43668175574) completed/success；test、account-provisioning、task-planner全通过，lint failure属于工作流既有非阻断配置，不声称全仓lint通过。实际结果附 `ci-review.json`。此CI说明随后以仅文档提交同步，该提交也等待CI；其最终SHA及对应运行以分支Git/Actions为准。此前14c64d2的55文件清单/158+86日志仍是历史快照，不冒充新修复验收。现行文件清单由当前Git相对main取得。
 
 用户真实iPad/Mac Safari、锁屏/通知/分屏/侧拉/台前调度/系统剪贴板、真实网络、微信web-view、SEB配置与线上负载仍未验。离线队列只在当前页内存，刷新/关闭可能丢失；不承诺记录无法到达服务器的所有行为。已知锁定时CSS/JS本身失败仍立即撤限制，避免破坏原考试。关键事件无2000硬上限是保留审查证据的明确取舍。
 

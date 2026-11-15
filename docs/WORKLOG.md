@@ -2,7 +2,7 @@
 
 ## 2026-11-15 — Claude 五项修复与main整合后复验通过，未部署
 
-基线14c64d2e→修复9ba38261→合并6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8，仅在 `codex/exam-integrity-review` 合入origin/main cb261016，两个交接冲突保留双方。章节页/事件上限/500ms DB失败/60秒锁定保留+离线补发/急停保阈值与BFCache去重均修；181相关Python+50主线Python+130Node、Ruff/Black/15范围审计通过。两Chrome合成验收成功：三模式完整流程、锁定自动交卷、离线补发一次、缺表已锁63.443秒后临时放行并重试、draft/交卷成功、急停2.855秒。详细命令/证据/规则修订见CODEX_HANDOFF和新报告目录。修复及合并已commit，报告文档待收尾提交push审查分支等CI；禁止push/合并到main、部署和生产访问，小程序未发。真机/SEB/第二期/托福仍待；完成CI后停止等审查。
+基线14c64d2e→修复9ba38261→合并6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8，仅在 `codex/exam-integrity-review` 合入origin/main cb261016，两个交接冲突保留双方。章节页/事件上限/500ms DB失败/60秒锁定保留+离线补发/急停保阈值与BFCache去重均修；181相关Python+50主线Python+130Node、Ruff/Black/15范围审计通过。两Chrome合成验收成功：三模式完整流程、锁定自动交卷、离线补发一次、缺表已锁63.443秒后临时放行并重试、draft/交卷成功、急停2.855秒。详细命令/证据/规则修订见CODEX_HANDOFF和新报告目录。修复/合并/报告已commit并仅push审查分支到 `d306ce5b764d58314388a6ef632bab9e054b210f`，[CI 43668175574](https://github.com/KB77GG/studytracker/actions/runs/43668175574) success，三测试job成功、现有非阻断lint failure，证据 `ci-review.json` 随本条仅文档补记；最终文档提交也等CI，HEAD由Git核对；禁止push/合并到main、部署和生产访问，小程序未发。真机/SEB/第二期/托福仍待；完成CI后停止等审查。
 
 ## 2026-11-15 — 授权同步第一期到专用审查分支，禁止部署
 

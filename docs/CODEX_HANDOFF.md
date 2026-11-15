@@ -16,7 +16,7 @@ INTEGRITY_EVIDENCE_DIR=/private/tmp/studytracker-exam-integrity-20261114/docs/re
 ```
 
 - **浏览器**：Chrome157合成临时库，三模式完整考试／off零请求／锁定自动交卷／换机／高亮导航和手机面板通过；离线补发1次约2.156秒；缺三表503，已锁保留约63.443秒后撤罩但继续重试，保留期真实draft可存、其后交卷到成绩；紧急关闭约2.855秒。两套pageerror0，服务已退出。visibility/clipboard为控制事件，不冒充OS真机。
-- **发布／下一步**：修复与合并已commit、本轮报告和两交接尚待收尾提交，尚未push本轮增量；远端CI待推送后核实。用户只授权推本审查分支，未push／合并到main，未部署／访问生产服务器和数据库／建表／重启／改外部服务／发通知。合入的主线小程序改动原样保留，本任务未上传／提审／发布。完成CI并追加真实结果后停止等Claude意见，第二期/SEB/托福不做；iPad与MacSafari等真机项仍待验。
+- **发布／下一步**：修复、合并、报告已commit并仅push本分支至 `d306ce5b764d58314388a6ef632bab9e054b210f`；[CI 43668175574](https://github.com/KB77GG/studytracker/actions/runs/43668175574) completed/success，test／account-provisioning／task-planner均成功，现有非阻断lint failure如实记录（不是全仓lint通过）。本节及 `ci-review.json` 以仅文档提交补记，最终HEAD以Git核对，其对应CI也完成后才结束。读取命令 `gh run view 43668175574 --repo KB77GG/studytracker --json databaseId,headSha,headBranch,status,conclusion,url,workflowName,event,createdAt,updatedAt,jobs`。实现和证据已可跨电脑获取，本树收尾后应clean；用户只授权推本审查分支，未push／合并到main，未部署／访问生产服务器和数据库／建表／重启／改外部服务／发通知。合入的主线小程序改动原样保留，本任务未上传／提审／发布。完成CI并追加真实结果后停止等Claude意见，第二期/SEB/托福不做；iPad与MacSafari等真机项仍待验。
 
 ## 2026-11-15 雅思诚信模式：专用审查分支同步（禁止部署）
 
