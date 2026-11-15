@@ -1,0 +1,90 @@
+{
+  "checked_at_utc": "2026-11-15T14:39:26.855037+00:00",
+  "phase": "pre",
+  "scope": "Read-only Git/files/systemd/SQLite aggregates/GET; no app import or admin pages",
+  "errors": {},
+  "head": "154a642fabc017557b92abbefd022dc112a383a5",
+  "expected_head": null,
+  "head_matches": true,
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "service": {
+    "systemd": {
+      "MainPID": "742608",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Sun 2026-11-15 19:54:10 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "direct_child_count": 1,
+    "actual_gunicorn_worker_count": 1,
+    "listening_5002": true,
+    "listening_only_expected_address": true,
+    "listener_owned_by_service": true,
+    "ok": true
+  },
+  "deployment_helper": {
+    "sha256": "6a6de931b72080b64f2029004accf18f1f983bf1f47e4a8f5dcdab6a234927e8",
+    "contains_literals": {
+      "create_all": false,
+      "create_exam_integrity_tables": false,
+      "exam_integrity_policy": false,
+      "exam_integrity_state": false,
+      "exam_integrity_event": false
+    }
+  },
+  "database_and_pages": {
+    "sqlite_open_mode": "ro",
+    "query_only": true,
+    "policy": {
+      "tables_present": {
+        "exam_integrity_policy": false,
+        "exam_integrity_state": false,
+        "exam_integrity_event": false
+      },
+      "source": "absent_policy_table_defaults_off",
+      "policy_rows": 0,
+      "off_rows": 0,
+      "monitor_rows": 0,
+      "enforce_rows": 0,
+      "unexpected_mode_rows": 0,
+      "all_exams_disabled": true
+    },
+    "policy_aggregates_and_table_presence_unchanged": true,
+    "existing_login_page": {
+      "status": 200,
+      "body_bytes": 5380,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {
+        "examName": true,
+        "examPin": true,
+        "btnLogin": true
+      }
+    },
+    "existing_chapter_page": {
+      "status": 200,
+      "body_bytes": 11200,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {
+        "cardPretest": true,
+        "cardListening": true,
+        "cardReading": true
+      }
+    },
+    "selected_session_state_and_timestamps_unchanged": true,
+    "no_response_body_or_capability_persisted": true,
+    "no_javascript_or_post_requests": true,
+    "ok": true
+  },
+  "files_match": {},
+  "public_static_assets": {},
+  "ok": true
+}

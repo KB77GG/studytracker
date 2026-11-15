@@ -1,5 +1,20 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-15 雅思诚信一期获准发布：已整合最新main并复验，待部署
+
+- **授权**：用户确认今日全部模考结束、当前无学生考试，允许一期部署；明确禁止代开监考面板、建试考或改防作弊设置。第二期不做。本节新授权取代以下历史“禁止部署”状态。
+- **工作树/基线**：`/private/tmp/studytracker-exam-integrity-20261114`，`codex/exam-integrity-review`，开工clean／已复核 `9275b7a8a460f5105e4cd8f63e015e4b85f9d4d0`。fresh fetch新增main `3d8e7b57732045ecf30bc66037c61f0a04095bc1`（冲刺模块），已合并为 `32b46bd935e0325f2300ea45558da3caac18b6d9`；api入口保留双方蓝图，两交接保留双方历史，CI自动保留两套测试。阅读默认off测试基线随main更新。旧主资料树main6ded77d2及原7M/23U保持，仅最终追加两交接；其脏业务不纳入本次发布。
+- **验证**：合并后231＋181＋24＝436 Python，131 Node，两套Chrome合成完整考试通过；验收器8安全自测及定向Ruff/Black通过。完整精确命令、日志、截图和15项范围审计在 `docs/reviews/exam-integrity-release-20261115/README.md`；27产品SHA和24生产文件manifest已冻结。以下两条为核心回归，其他精确命令同报告。
+
+```sh
+PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes tests.test_mock_exam_review tests.test_mock_exam_review_workflow tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_selection_highlight_contract tests.test_practice_highlight_coordinates tests.test_migrate_mock_exam_review tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -q
+PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly tests.test_practice_history -q
+node --test tests/test_exam_guard.js tests/test_practice_shell.js tests/test_mock_exam_review_frames.js tests/test_practice_renderers.js tests/test_mock_review_paper.js tests/test_simulation_audio.js tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js
+```
+
+- **部署前只读事实**：生产154a642f，active/running、单worker/gthread6/5002、实际worker1，tracked clean／113untracked；已有登录及章节GET200、无guard，所选会话状态/时间未变。诚信三表不存在，所有场次默认关闭。用mode=ro/query_only，不import app/config，不执行JS/POST，不输出真实学生身份/token。
+- **当前提交/发布状态**：合并已本机commit，本轮新验收报告和两交接待提交；尚未push main或部署本功能。下一步提交审查分支并等CI，再快进main触发标准部署；只读post核验生产HEAD/服务/现有页面/全场关闭，完成后停止。不会打开监考面板、建试考、修改策略或手工建表。官方依据/真机待验范围沿此前交接，小程序不上传/提审/发布、SEB/托福/第二期不做。
+
 ## 2026-11-15 Claude 审查五项修复完成，已合入main到审查分支，未部署
 
 - **工作树／提交**：`/private/tmp/studytracker-exam-integrity-20261114`、`codex/exam-integrity-review`，本轮基线14c64d2e clean；修复9ba382610e90f096388a5cf744d18dd012c88a09，合并HEAD `6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8`，main输入 `cb2610166d7654c81238f53c000e37eafa7e68e1`。只在审查分支合入main，两个交接文档冲突保留双方，其余自动合并；没有合并到main。旧主资料树main6ded77d2的7M/23U和其他任务记录保留，仅结束时同步两交接。

@@ -1,0 +1,227 @@
+{
+  "review_base": "9275b7a8a460f5105e4cd8f63e015e4b85f9d4d0",
+  "merged_main": "3d8e7b57732045ecf30bc66037c61f0a04095bc1",
+  "tested_head": "32b46bd935e0325f2300ea45558da3caac18b6d9",
+  "branch": "codex/exam-integrity-review",
+  "worktree": "/private/tmp/studytracker-exam-integrity-20261114",
+  "checks": [
+    {
+      "check": "merged pinned latest main into review",
+      "ok": true
+    },
+    {
+      "check": "unchanged app.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_student.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_review.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_admin.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_runtime.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_writing.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_review.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_review_workflow.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged static/js/practice_shell.js",
+      "ok": true
+    },
+    {
+      "check": "unchanged static/js/selection-highlight.js",
+      "ok": true
+    },
+    {
+      "check": "unchanged .github/workflows/deploy.yml",
+      "ok": true
+    },
+    {
+      "check": "legacy models unchanged",
+      "ok": true
+    },
+    {
+      "check": "all incoming-main product files preserved byte-for-byte",
+      "ok": true,
+      "paths": [
+        ".gitignore",
+        "api/exam_sprint.py",
+        "api/practice_history.py",
+        "app.py",
+        "data/exam_sprint/answers/2102715008296194050.json",
+        "data/exam_sprint/latest.json",
+        "data/exam_sprint/mappings.json",
+        "deploy/exam-sprint/com.sagepath.studytracker-exam-sprint.plist",
+        "scripts/activate_exam_sprint.py",
+        "scripts/audit_exam_sprint_matches.py",
+        "scripts/cache_exam_sprint_media.py",
+        "scripts/collect_ninefen_answers.py",
+        "scripts/install_exam_sprint_launchd.py",
+        "scripts/publish_exam_sprint.py",
+        "scripts/run_exam_sprint_weekly.py",
+        "scripts/sync_exam_sprint.py",
+        "services/exam_sprint.py",
+        "services/exam_sprint_import.py",
+        "services/exam_sprint_store.py",
+        "services/ninefen_assets.py",
+        "services/ninefen_content.py",
+        "services/ninefen_session.py",
+        "services/ninefen_source.py",
+        "static/css/exam_sprint.css",
+        "static/js/practice_shell.js",
+        "templates/listening/jijing_index.html",
+        "templates/listening/jijing_part.html",
+        "templates/listening/test_index.html",
+        "templates/practice/_exam_sprint_link.html",
+        "templates/practice/exam_sprint.html",
+        "templates/reading/jijing_index.html",
+        "templates/reading/test_index.html",
+        "tests/test_exam_sprint.py",
+        "tests/test_exam_sprint_import.py",
+        "tests/test_exam_sprint_matching.py",
+        "tests/test_exam_sprint_publish.py",
+        "tests/test_exam_sprint_routes.py",
+        "tests/test_exam_sprint_store.py",
+        "tests/test_exam_sprint_weekly.py",
+        "tests/test_ninefen_assets.py",
+        "tests/test_ninefen_content.py",
+        "tests/test_ninefen_session.py",
+        "tests/test_ninefen_source.py",
+        "tests/test_practice_history.py",
+        "tests/test_practice_shell.js"
+      ]
+    },
+    {
+      "check": "CI retains integrity and incoming synonym tests",
+      "ok": true
+    }
+  ],
+  "product_files_relative_to_merged_main": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "5c9c4a4f6c953afa43edd7d9f1788edeb0ed318fdb20ed57e89be68baf7f3429"
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "f515ad95e6b7ef31c092dfbfec098f40b669fa559d0718481fd4bd2e4ff03801"
+    },
+    {
+      "path": "api/exam_integrity.py",
+      "sha256": "d84b88a5bcb8c00deb957258c9af837ebc917723b13ada01b9a2dbfb4940d039"
+    },
+    {
+      "path": "models.py",
+      "sha256": "36745caa563757b31cbf952935e91b35e8f9ef2f05e0884479a2b55615bd6efa"
+    },
+    {
+      "path": "scripts/create_exam_integrity_tables.py",
+      "sha256": "ff0761b2224f32f5497916d6d82e7ff196f2a22311094f02b42e5289e4827e92"
+    },
+    {
+      "path": "services/exam_integrity.py",
+      "sha256": "e354fc025c0b27a1d5f34e0964df2d16882482c0cd521a77793c7a21f3be1539"
+    },
+    {
+      "path": "services/exam_integrity_rules.py",
+      "sha256": "516f7261b78656be4e0796d1cf4a38d89f925e8e81c1d43fea83201cd0b05976"
+    },
+    {
+      "path": "static/css/exam_guard.css",
+      "sha256": "d6c3d852c74272eb6fc6812d92b8660756ceac9371b086e9f78bfb58aeb5ea9f"
+    },
+    {
+      "path": "static/js/exam_guard.js",
+      "sha256": "10be774613c3f83f00b116dec383e1563e0607386519ca05ce3a33ff23ce8cd9"
+    },
+    {
+      "path": "templates/admin/_exam_integrity_summary.html",
+      "sha256": "edd074f9c6fae07277e73cb6ea5b00d7eb2afcfeed700f9056134d1fcd4a7ef1"
+    },
+    {
+      "path": "templates/admin/mock_exam_integrity.html",
+      "sha256": "75cc963b05f6f2c65f03a5486fbb035a62f2838f6eef835ea6ac3abe20e4eae2"
+    },
+    {
+      "path": "templates/admin/mock_exam_session_detail.html",
+      "sha256": "78bd4b0903f98ed6e03aca5994cb4d9cafa1b1f1883a5d29cc932491f450470e"
+    },
+    {
+      "path": "templates/admin/mock_exam_sessions.html",
+      "sha256": "998e887045b06f24f6ba54fb87f4c4d87505ecdc4ea268b8a76643ade5555764"
+    },
+    {
+      "path": "templates/admin/mock_exams_index.html",
+      "sha256": "26e00b9635037e65ac67d2802e311f5f4c3efa6d114ce4c556a3d884c0c2fd50"
+    },
+    {
+      "path": "templates/exam/_integrity_guard.html",
+      "sha256": "adb3e4ed585b6eb0e82fe619a844e458f6e653f935d9e4d0c348cb3390374dda"
+    },
+    {
+      "path": "templates/exam/integrity_guide.html",
+      "sha256": "524519005c535aeb3749e0ad7c45a1f1ac03ba5a728e037786b701cd7812fa45"
+    },
+    {
+      "path": "templates/exam/integrity_help.html",
+      "sha256": "48e0c03a05a9384539c478a1a90e52a6b35431a6ca6c49c7cac479fdb27b3600"
+    },
+    {
+      "path": "templates/exam/process.html",
+      "sha256": "507e8dc7adfa7e8ef144f64be9fcf697ff18ea0334ccefb0f4a9835efdb4d983"
+    },
+    {
+      "path": "templates/exam/writing.html",
+      "sha256": "3d4142c2638eda0bd379d724ce5b81efd327e9f7b790c015f17b1ba3b33e6575"
+    },
+    {
+      "path": "templates/listening/test_practice.html",
+      "sha256": "30adad4054c860294912614541feafda967f692859a5634f1464a2bfde4f2c4e"
+    },
+    {
+      "path": "templates/reading/test_practice.html",
+      "sha256": "1aa0189f082dcf85f98f287f0cc65b122ca92dd5f5c58f6b1c4f106bff95b753"
+    },
+    {
+      "path": "tests/exam_integrity_e2e_support.py",
+      "sha256": "dec29d6dab0664ab413de03995d168a4978d2c0414e37479467265db79eb233b"
+    },
+    {
+      "path": "tests/test_exam_guard.js",
+      "sha256": "81781593ea7f0fb657e9f0a6bc8d2f5805160c364094cf640cd3d998f6d9dc82"
+    },
+    {
+      "path": "tests/test_exam_integrity_adversarial.py",
+      "sha256": "112c811bd78a97da5ea79d5bb787854ee1c12fe4f7679775984c372e6028f4a2"
+    },
+    {
+      "path": "tests/test_exam_integrity_e2e.py",
+      "sha256": "77bf2f6b5eb681ca3bbcc7bebd0b40de8ce77f1a564c4398403a9cfc4738960a"
+    },
+    {
+      "path": "tests/test_exam_integrity_routes.py",
+      "sha256": "da1cb3804e84af6e03686c78dc2e346025467f360a5e7faabbea4552487ec5c5"
+    },
+    {
+      "path": "tests/test_exam_integrity_service.py",
+      "sha256": "cac43c5875806dec468e7127f06cb3dbeb9945b2436d7c74d4954d7a0989d7f0"
+    }
+  ],
+  "ok": true
+}

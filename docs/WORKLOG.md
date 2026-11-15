@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-15 — 诚信一期获部署授权，合最新main并全量相关复验
+
+用户确认无考试，授权一期部署但禁止代开监考/建试考/改策略。从审查9275b7a fresh fetch到main3d8e7b57（新增冲刺），合并32b46bd935e0325f2300ea45558da3caac18b6d9，双方蓝图/CI/两交接保留；阅读off测试SHA随main更新。436Python＋131Node＋两套Chrome验收及8只读验收器自测通过。生产pre只读：154a642f、active/单worker/gthread6/5002，登录章节200无guard、会话时间不变，诚信三表不存在全场off；无生产写入/管理员页面访问。报告在docs/reviews/exam-integrity-release-20261115；报告交接待提交，分支CI后再快进main发布。旧主树7M/23U保留，第二期不做。
+
 ## 2026-11-15 — Claude 五项修复与main整合后复验通过，未部署
 
 基线14c64d2e→修复9ba38261→合并6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8，仅在 `codex/exam-integrity-review` 合入origin/main cb261016，两个交接冲突保留双方。章节页/事件上限/500ms DB失败/60秒锁定保留+离线补发/急停保阈值与BFCache去重均修；181相关Python+50主线Python+130Node、Ruff/Black/15范围审计通过。两Chrome合成验收成功：三模式完整流程、锁定自动交卷、离线补发一次、缺表已锁63.443秒后临时放行并重试、draft/交卷成功、急停2.855秒。详细命令/证据/规则修订见CODEX_HANDOFF和新报告目录。修复/合并/报告已commit并仅push审查分支到 `d306ce5b764d58314388a6ef632bab9e054b210f`，[CI 43668175574](https://github.com/KB77GG/studytracker/actions/runs/43668175574) success，三测试job成功、现有非阻断lint failure，证据 `ci-review.json` 随本条仅文档补记；最终文档提交也等CI，HEAD由Git核对；禁止push/合并到main、部署和生产访问，小程序未发。真机/SEB/第二期/托福仍待；完成CI后停止等审查。
