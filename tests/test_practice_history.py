@@ -7,7 +7,7 @@ from datetime import datetime
 from flask import Flask
 from flask_login import LoginManager
 
-from api.practice_history import _test_review_url, practice_history_bp
+from api.practice_history import _source_label, _test_review_url, practice_history_bp
 from models import (
     ListeningSegmentResult,
     ListeningTestSubmission,
@@ -193,6 +193,24 @@ class PracticeHistoryApiTest(unittest.TestCase):
                 attempt_id=17,
             ),
             "/reading/jijing/reading_jijing_2026_01?history_attempt=17&passage=2",
+        )
+
+    def test_sprint_reading_history_retains_version_and_passage_in_review_url(self):
+        test_id = "ninefen_2102715008296194050_7e3957ada52c"
+        task = Task(reading_test_id=test_id)
+        self.assertEqual(_source_label(task, "reading"), "考前冲刺 · 阅读")
+        self.assertEqual(
+            _test_review_url(task, test_id, "reading", 1, attempt_id=17),
+            f"/practice/sprint/reading/{test_id}?history_attempt=17&passage=1",
+        )
+
+    def test_sprint_listening_history_uses_jijing_route_and_correct_source_label(self):
+        test_id = "ninefen_2102715008296194050_7e3957ada52c_p2"
+        task = Task(listening_resource_type="jijing", listening_exercise_id=test_id)
+        self.assertEqual(_source_label(task, "listening"), "考前冲刺 · 听力")
+        self.assertEqual(
+            _test_review_url(task, test_id, "listening", None),
+            f"/listening/jijing/{test_id}",
         )
 
     def test_sections_are_merged_into_one_daily_test_record(self):

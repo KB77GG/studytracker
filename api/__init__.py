@@ -10,6 +10,7 @@ def init_app(app):
     from api.dictation import dictation_bp  # Dictation API
     from api.dictation_input import dictation_input_bp  # Strict spelling input policy
     from api.entrance import entrance_bp  # Entrance test API (新生入学测试)
+    from api.exam_sprint import exam_sprint_bp
     from api.ielts_eval import eval_bp  # IELTS speaking eval API
     from api.listening_training import listening_training_bp
     from api.materials import material_bp  # New material bank API
@@ -37,6 +38,7 @@ def init_app(app):
     app.register_blueprint(api_bp)
     app.register_blueprint(mp_bp)
     app.register_blueprint(practice_history_bp)
+    app.register_blueprint(exam_sprint_bp)
     app.register_blueprint(question_type_practice_bp)
     app.register_blueprint(task_assignments_bp)
     app.register_blueprint(task_planner_bp)

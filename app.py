@@ -120,6 +120,7 @@ from services import mock_exam_writing as _mock_writing
 from services.ielts_exam_payload import build_simulation_payload as _build_simulation_payload
 from services.practice_navigation import navigation_defaults, safe_local_target
 from services.practice_library_offline import filter_offline_catalog_books, load_offline_test_ids
+from services.exam_sprint_store import resolve_listening_part_path, resolve_ninefen_document_path
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -1616,6 +1617,12 @@ def _reading_test_question_count(payload: dict) -> int:
 
 def _load_reading_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
     safe_id = secure_filename(test_id)
+    if safe_id.startswith("ninefen_"):
+        test_path = resolve_ninefen_document_path(app.root_path, "reading", test_id)
+        if test_path is None:
+            return None, None, safe_id
+        payload = json.loads(test_path.read_text(encoding="utf-8"))
+        return normalize_practice_tables(payload), test_path, safe_id
     for root in (_reading_test_root(), _reading_jijing_root()):
         test_path = root / f"{safe_id}.json"
         if not test_path.exists():
@@ -7573,8 +7580,8 @@ def listening_jijing_index():
 def listening_jijing_part(part_id):
     """听力机经 Part 做题页。"""
     safe_id = secure_filename(part_id)
-    part_path = _listening_jijing_root() / "parts" / f"{safe_id}.json"
-    if not part_path.exists():
+    part_path = resolve_listening_part_path(app.root_path, _listening_jijing_root(), part_id)
+    if part_path is None or not part_path.exists():
         return "机经练习不存在", 404
     part = normalize_practice_tables(json.loads(part_path.read_text(encoding="utf-8")))
     return render_template(
@@ -7646,8 +7653,8 @@ def api_listening_jijing_submission(part_id):
 @app.post("/api/listening/jijing/<part_id>/submit")
 def api_listening_jijing_submit(part_id):
     safe_id = secure_filename(part_id)
-    part_path = _listening_jijing_root() / "parts" / f"{safe_id}.json"
-    if not part_path.exists():
+    part_path = resolve_listening_part_path(app.root_path, _listening_jijing_root(), part_id)
+    if part_path is None or not part_path.exists():
         return jsonify({"ok": False, "error": "part_not_found"}), 404
     part = json.loads(part_path.read_text(encoding="utf-8"))
     data = request.get_json(silent=True) or {}

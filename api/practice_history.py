@@ -108,7 +108,9 @@ def _test_review_url(
         params["history_attempt"] = int(attempt_id)
     if kind == "reading":
         path = (
-            f"/reading/jijing/{safe_id}"
+            f"/practice/sprint/reading/{safe_id}"
+            if test_id.startswith("ninefen_")
+            else f"/reading/jijing/{safe_id}"
             if test_id.startswith("reading_jijing_")
             else f"/reading/test/{safe_id}"
         )
@@ -126,6 +128,9 @@ def _test_review_url(
 
 
 def _source_label(task: Task, kind: str) -> str:
+    resource_id = task.reading_test_id if kind == "reading" else task.listening_exercise_id
+    if (resource_id or "").startswith("ninefen_"):
+        return "考前冲刺 · 阅读" if kind == "reading" else "考前冲刺 · 听力"
     if kind == "reading":
         return (
             "阅读机经" if (task.reading_test_id or "").startswith("reading_jijing_") else "剑雅阅读"

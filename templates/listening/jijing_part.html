@@ -606,7 +606,8 @@ const listeningTaskToken = pageParams.get('token') || '';
 const part = {{ part|tojson }};
 const staticBase = "{{ url_for('static', filename='listening_jijing/') }}";
 const audio = document.getElementById('audio');
-audio.src = staticBase + part.audio.local_path;
+const isSprintAsset = value => /^\/practice\/sprint\/assets\/[a-f0-9]{64}\.(mp3|png|jpg|jpeg|webp|gif)$/.test(value || '');
+audio.src = isSprintAsset(part.audio.local_path) ? part.audio.local_path : staticBase + part.audio.local_path;
 const practiceStartedAt = Date.now();
 const jijingDraftOwner = localStorage.getItem('listening_student') || 'guest';
 const jijingDraftKey = `listening_jijing_answers_${part.id}_${jijingDraftOwner}`;
@@ -853,7 +854,7 @@ function renderUnmappedItems(group, context) {
 }
 
 function usableImage(url) {
-  return /^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || '');
+  return isSprintAsset(url) || (/^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || ''));
 }
 
 function renderGroup(group) {
