@@ -1,0 +1,89 @@
+{
+  "source": "ninefen",
+  "api_base": "https://www.9fnnn.com/api",
+  "hotlist_path": "/practice/v1/high-frequency/albums",
+  "http_status": 200,
+  "fetched_at": "2026-11-15T03:05:06.297487+00:00",
+  "source_updated_at": null,
+  "scope": "anonymous public rows only; no pagination, auth, credentials or account state",
+  "public_rows_per_part": 20,
+  "subjects": {
+    "reading": [
+      {
+        "part": 1,
+        "count": 20
+      },
+      {
+        "part": 2,
+        "count": 20
+      },
+      {
+        "part": 3,
+        "count": 20
+      }
+    ],
+    "listening": [
+      {
+        "part": 1,
+        "count": 20
+      },
+      {
+        "part": 2,
+        "count": 20
+      },
+      {
+        "part": 3,
+        "count": 20
+      },
+      {
+        "part": 4,
+        "count": 20
+      }
+    ]
+  },
+  "raw_response_path": "/private/tmp/ninefen-public-assets-20261115/albums.json",
+  "raw_response_sha256": "88f430c415b603f2a8fc7e4d0e7926175bc4209733f23243030bb8f9b1ecc3cc",
+  "exam_samples": [
+    {
+      "subject": "reading",
+      "unit_id": "2102715008296194050",
+      "path": "/practice/v1/units/2102715008296194050/exam",
+      "http_status": 200,
+      "raw_response_path": "/private/tmp/ninefen-public-assets-20261115/reading-sample.json",
+      "sha256": "c6b8b2e21947fcfb3a81ea289767da82884095ebd7f31adfb4ead4ac46c060bc",
+      "question_count": 13,
+      "nonempty_right_answers": 0,
+      "isCharge": 0,
+      "article_json_type": "str",
+      "has_audio_url": false
+    },
+    {
+      "subject": "listening",
+      "unit_id": "2017124496722989058",
+      "path": "/practice/v1/units/2017124496722989058/exam",
+      "http_status": 200,
+      "raw_response_path": "/private/tmp/ninefen-public-assets-20261115/listening-sample.json",
+      "sha256": "93039677d54e3e799466871d85543c58ce776da96cd4a7d57c363b40fadbb83e",
+      "question_count": 10,
+      "nonempty_right_answers": 0,
+      "isCharge": 0,
+      "article_json_type": "str",
+      "has_audio_url": true
+    }
+  ],
+  "verification": "15 offline unittest tests; targeted Ruff and Black pass",
+  "formal_answer_fields": "Both anonymous samples only expose rightAnswer=null and userAnswer=null; no answers/correctChoices/solution fields. analyses contain explanation/source-sentence/distractor text only.",
+  "review_flow": {
+    "question_analysis_path": "/practice/v1/question-analysis",
+    "query_parameters": [
+      "questionId",
+      "partId",
+      "groupId"
+    ],
+    "anonymous_question_analysis_http_status": 401,
+    "review_path": "/practice/v1/results/{resultId}/review",
+    "review_requires_existing_result_id": true,
+    "observed_ui_answer_source": "Review answerResults use rightAnswer/correctAnswer from result data; the explanation panel renders its answer row from answerResult, not directly from question-analysis. Authenticated question-analysis contents not inspected.",
+    "authorization": "No credentials/profile read; no writes or fake attempts created."
+  }
+}

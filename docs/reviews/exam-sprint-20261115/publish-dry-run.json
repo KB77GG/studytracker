@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "dry_run": true,
+  "public_files": 343,
+  "snapshot_sha256": "0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc",
+  "validation": {
+    "total": 140,
+    "ready": 140,
+    "imported": 124,
+    "reviewed_legacy": 16
+  },
+  "commands": [
+    "ssh -o BatchMode=yes root@47.110.45.193 '/root/apps/studytracker/.venv/bin/python /root/apps/studytracker/scripts/activate_exam_sprint.py --root /root/apps/studytracker --prepare-directories'",
+    "rsync --recursive --times --ignore-existing --safe-links --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r -e 'ssh -o BatchMode=yes' --relative --from0 --files-from=- -- /private/tmp/studytracker-exam-sprint-20261115/instance/exam_sprint/assets/ root@47.110.45.193:/root/apps/studytracker/instance/exam_sprint/assets/",
+    "rsync --recursive --times --ignore-existing --safe-links --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r -e 'ssh -o BatchMode=yes' --relative --from0 --files-from=- -- /private/tmp/studytracker-exam-sprint-20261115/instance/exam_sprint/content/ root@47.110.45.193:/root/apps/studytracker/instance/exam_sprint/content/",
+    "rsync --recursive --times --ignore-existing --safe-links --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r -e 'ssh -o BatchMode=yes' -- /private/tmp/studytracker-exam-sprint-20261115/instance/exam_sprint/current.json root@47.110.45.193:/root/apps/studytracker/instance/exam_sprint/incoming/0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc.json",
+    "ssh -o BatchMode=yes root@47.110.45.193 '/root/apps/studytracker/.venv/bin/python /root/apps/studytracker/scripts/activate_exam_sprint.py --root /root/apps/studytracker --snapshot /root/apps/studytracker/instance/exam_sprint/incoming/0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc.json --expected-sha256 0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc'"
+  ]
+}

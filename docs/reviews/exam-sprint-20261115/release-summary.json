@@ -1,0 +1,53 @@
+{
+  "business_head": "154a642fabc017557b92abbefd022dc112a383a5",
+  "feature_branch": "codex/exam-sprint-weekly-20261115",
+  "commit": true,
+  "push_feature_and_main": true,
+  "deployed": true,
+  "published_public_files": 343,
+  "snapshot_sha256": "0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc",
+  "ci": [
+    {
+      "id": 43710428721,
+      "branch": "codex/exam-sprint-weekly-20261115",
+      "conclusion": "success"
+    },
+    {
+      "id": 43711098532,
+      "branch": "main",
+      "conclusion": "success"
+    }
+  ],
+  "required_jobs": "test/account-provisioning/task-planner success; existing advisory lint failure",
+  "deploy_run": 43711098583,
+  "deploy_conclusion": "success",
+  "public_https": {
+    "reading": {
+      "status": 200,
+      "bytes": 68247
+    },
+    "listening": {
+      "status": 200,
+      "bytes": 79265
+    },
+    "audio_range": {
+      "status": 206,
+      "content_type": "audio/mpeg",
+      "bytes": 1024
+    },
+    "image": {
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 1068996
+    }
+  },
+  "unattended_ssh_probe": {
+    "command": "ssh -o BatchMode=yes -o IdentityAgent=none -o ConnectTimeout=10 root@47.110.45.193 true",
+    "exit_code": 0
+  },
+  "schedule_enabled": true,
+  "next_scheduled_at": "2026-11-16T06:00:00+08:00",
+  "production_student_records_written_by_acceptance": false,
+  "miniprogram_published": false,
+  "preview_stopped": true
+}
