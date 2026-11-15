@@ -1,0 +1,135 @@
+[
+  {
+    "name": "network outage queues visibility events and replays one original-duration leave on recovery",
+    "ok": true,
+    "leaveCount": 1,
+    "hiddenSeconds": 2.156342
+  },
+  {
+    "name": "off/enforce paper geometry stays within two pixels",
+    "ok": true,
+    "baselineGeometry": {
+      "#passagePanel": {
+        "x": 20,
+        "y": 122,
+        "width": 612,
+        "height": 689
+      },
+      "#questionPanel": {
+        "x": 648,
+        "y": 122,
+        "width": 612,
+        "height": 689
+      },
+      "#questionNav": {
+        "x": 152,
+        "y": 838,
+        "width": 1042,
+        "height": 52
+      },
+      "#passagePanel .paragraph": {
+        "x": 45,
+        "y": 189,
+        "width": 562,
+        "height": 30.25
+      },
+      "[data-qid=\"1\"]": {
+        "x": 996.890625,
+        "y": 216.390625,
+        "width": 201,
+        "height": 44
+      }
+    },
+    "activeGeometry": {
+      "#passagePanel": {
+        "x": 20,
+        "y": 122,
+        "width": 612,
+        "height": 689
+      },
+      "#questionPanel": {
+        "x": 648,
+        "y": 122,
+        "width": 612,
+        "height": 689
+      },
+      "#questionNav": {
+        "x": 152,
+        "y": 838,
+        "width": 1042,
+        "height": 52
+      },
+      "#passagePanel .paragraph": {
+        "x": 45,
+        "y": 189,
+        "width": 562,
+        "height": 30.25
+      },
+      "[data-qid=\"1\"]": {
+        "x": 996.890625,
+        "y": 216.390625,
+        "width": 201,
+        "height": 44
+      }
+    }
+  },
+  {
+    "name": "in-exam notes",
+    "ok": null,
+    "status": "not_available_in_baseline",
+    "offControls": 0,
+    "enforceControls": 0,
+    "detail": "Reading has no note editor; Listening answerTools hides error notes in simulationMode. No feature was invented for this test."
+  },
+  {
+    "name": "native answer click, question navigation and review flag remain usable",
+    "ok": true
+  },
+  {
+    "name": "native pointer selection and highlighter work under enforce",
+    "ok": true,
+    "before": {
+      "x": 45,
+      "y": 189,
+      "width": 562,
+      "height": 30.25
+    },
+    "after": {
+      "x": 45,
+      "y": 189,
+      "width": 562,
+      "height": 30.25
+    },
+    "highlightWidth": 97.3125
+  },
+  {
+    "name": "second isolated browser context receives real device conflict",
+    "ok": true
+  },
+  {
+    "name": "teacher reset lets the new device claim while old page cannot reclaim",
+    "ok": true,
+    "oldHelloBefore": 1,
+    "oldHelloAfter": 1,
+    "newHelloCount": 2
+  },
+  {
+    "name": "storage outage retains known lock for 60 seconds then releases UI while retrying and preserving drafts",
+    "ok": true,
+    "milliseconds": 63443,
+    "legacySessionCount": 3,
+    "eventMethod": "controlled visibility events, not OS app switching"
+  },
+  {
+    "name": "after table removal, native Reading and Writing submission reaches result",
+    "ok": true,
+    "readingSubmitStatus": 200,
+    "writingSubmitStatus": 200
+  },
+  {
+    "name": "extended browser console has no page errors",
+    "ok": true,
+    "browserVersion": "157.0.8103.78",
+    "consoleErrors": 0
+  }
+]

@@ -1,12 +1,22 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-15 Claude 审查五项修复（审查分支整合中，禁止部署）
+## 2026-11-15 Claude 审查五项修复完成，已合入main到审查分支，未部署
 
-- **范围与授权**：在 `/private/tmp/studytracker-exam-integrity-20261114`、`codex/exam-integrity-review` 从 `14c64d2e8bc29818e088480eb3e4d4a68d1215f0` clean 开始。用户授权修复五项、将最新 origin/main 合入本审查分支、推本分支并等CI；不授权 push／合并到 main、部署或生产服务器／数据库操作。本轮已 fetch 到 `origin/main@cb2610166d7654c81238f53c000e37eafa7e68e1`，尚待修复提交后整合。旧主资料树／其他任务业务文件不纳入本次提交。
-- **修复内容**：未交卷科目的章节页停留按离开累计，回科满10秒结算；每生2000普通事件软上限、例行心跳不写事件、关键leave/locked/unlock/device_conflict始终保留；SQLite独立连接500ms等待，不持进程事件锁排队，失败ok:false/503不伪装off；已知锁定故障最长60秒保留、内存顺序补发hidden/visible并去重，老师每卡显示离线时长；紧急关闭保留阈值。额外核对BFCache重入与旧请求/事件竞态。无旧表／模型字段变更，无原草稿／计时／交卷代码改动。
-- **规则变更依据**：用户本轮明确修改原计划3.14。已在 EXAM_INTEGRITY_PLAN 顶部记录优先修订，并同步 RUNBOOK／在线帮助；未锁请求失败继续立即放行，已知锁定才保留最多60秒；权威off立即stop，不等待60秒。排队只在当前页内存，刷新/关闭不会持久化；关键事件允许超过2000普通软上限。这些都不宣称物理防作弊或真实设备验收。
-- **本轮定向验证**：`PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service -q` 60/60；同命令 `tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial -q` 41/41；同命令 `tests.test_exam_integrity_e2e -q` 5/5；`node --test tests/test_exam_guard.js` 49/49（含BFCache和陈旧响应边界）；最终相关套件在合并后统一记录。7个变更Python文件定向Ruff/Black通过。数据库4并发锁占用复现、15学生33分钟心跳、600秒章节绕过、7/321阈值保留均纳入自动化测试。
-- **待完成／发布状态**：修复业务仍本机未提交，接下来提交、仅在本分支合入main，处理两交接文档冲突并保留双方记录，再跑全部相关回归及真实浏览器合成场景。当前没有新push或部署，没有生产查询写入／重启／外部通知；小程序未由本任务修改或上传／提审／发布。完成分支CI和交接后停止等审查，第二期不做。iPad/Safari真实切App、通知/分屏/息屏/原生剪贴板、SEB配置仍待真机。
+- **工作树／提交**：`/private/tmp/studytracker-exam-integrity-20261114`、`codex/exam-integrity-review`，本轮基线14c64d2e clean；修复9ba382610e90f096388a5cf744d18dd012c88a09，合并HEAD `6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8`，main输入 `cb2610166d7654c81238f53c000e37eafa7e68e1`。只在审查分支合入main，两个交接文档冲突保留双方，其余自动合并；没有合并到main。旧主资料树main6ded77d2的7M/23U和其他任务记录保留，仅结束时同步两交接。
+- **完成**：五项复现及BFCache/乱序补发/陈旧响应边界已修复。活动科目章节页600秒计1次600秒；每生普通事件软上限、例行心跳不插事件、关键四类始终保留；SQLite500ms等待无进程事件锁排队，503不伪装off；已知锁定连续故障最多60秒保留且不续期，FIFO补发原事件，面板每生离线时长；急停保7/321阈值及读取。旧表/旧模型/草稿/计时/交卷不改。用户明确改原3.14，已在计划顶部记录优先修订，手册/帮助同步；其他官方核对依据和真机边界沿前节。
+- **合并后精确验证**：以下命令实际通过181 Python＋50合入主线Python＋130 Node，非全仓测试。9个Python定向Ruff/Black、JS语法、diff通过。15项范围审计通过，27诚信产品SHA及精确命令在 `docs/reviews/exam-integrity-review-fixes-20261115/README.md`／`scope-audit.json`；原14c64d2证据只作历史。日志已准备随分支提交。
+
+```sh
+PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes tests.test_mock_exam_review tests.test_mock_exam_review_workflow tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_selection_highlight_contract tests.test_practice_highlight_coordinates tests.test_migrate_mock_exam_review -q
+PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -q
+node --test tests/test_exam_guard.js tests/test_practice_shell.js tests/test_mock_exam_review_frames.js tests/test_practice_renderers.js tests/test_mock_review_paper.js tests/test_simulation_audio.js tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js
+INTEGRITY_EVIDENCE_DIR=/private/tmp/studytracker-exam-integrity-20261114/docs/reviews/exam-integrity-review-fixes-20261115 node docs/reviews/exam-integrity-20261114/browser-check.cjs
+INTEGRITY_EVIDENCE_DIR=/private/tmp/studytracker-exam-integrity-20261114/docs/reviews/exam-integrity-review-fixes-20261115 node docs/reviews/exam-integrity-20261114/browser-resilience.cjs
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-integrity-review-fixes-20261115/verify_revision.py
+```
+
+- **浏览器**：Chrome157合成临时库，三模式完整考试／off零请求／锁定自动交卷／换机／高亮导航和手机面板通过；离线补发1次约2.156秒；缺三表503，已锁保留约63.443秒后撤罩但继续重试，保留期真实draft可存、其后交卷到成绩；紧急关闭约2.855秒。两套pageerror0，服务已退出。visibility/clipboard为控制事件，不冒充OS真机。
+- **发布／下一步**：修复与合并已commit、本轮报告和两交接尚待收尾提交，尚未push本轮增量；远端CI待推送后核实。用户只授权推本审查分支，未push／合并到main，未部署／访问生产服务器和数据库／建表／重启／改外部服务／发通知。合入的主线小程序改动原样保留，本任务未上传／提审／发布。完成CI并追加真实结果后停止等Claude意见，第二期/SEB/托福不做；iPad与MacSafari等真机项仍待验。
 
 ## 2026-11-15 雅思诚信模式：专用审查分支同步（禁止部署）
 

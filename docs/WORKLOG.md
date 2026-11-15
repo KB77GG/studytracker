@@ -1,8 +1,8 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
-## 2026-11-15 — Claude 审查五项修复进行中，仅审查分支
+## 2026-11-15 — Claude 五项修复与main整合后复验通过，未部署
 
-基线14c64d2e，隔离树 `/private/tmp/studytracker-exam-integrity-20261114`／`codex/exam-integrity-review`。修章节页计时、每生事件限额/心跳降噪、500ms数据库忙与503错误区分、已锁断网60秒保留/队列补发/面板离线时长、急停保阈值，并核BFCache/重放去重。60service＋41routes/adversarial＋5real-app定向通过，最终guard/全相关结果待合并后记录。用户授权仅将origin/main cb261016合入审查分支再push本分支等CI；禁止push/合main目标分支、部署或生产访问。计划顶修订、手册和在线帮助已同步新规则。代码未提交，交接完毕后等审查、不做第二期。
+基线14c64d2e→修复9ba38261→合并6066e8a7216a7cacb92c1c2ebcddac9822fd2ec8，仅在 `codex/exam-integrity-review` 合入origin/main cb261016，两个交接冲突保留双方。章节页/事件上限/500ms DB失败/60秒锁定保留+离线补发/急停保阈值与BFCache去重均修；181相关Python+50主线Python+130Node、Ruff/Black/15范围审计通过。两Chrome合成验收成功：三模式完整流程、锁定自动交卷、离线补发一次、缺表已锁63.443秒后临时放行并重试、draft/交卷成功、急停2.855秒。详细命令/证据/规则修订见CODEX_HANDOFF和新报告目录。修复及合并已commit，报告文档待收尾提交push审查分支等CI；禁止push/合并到main、部署和生产访问，小程序未发。真机/SEB/第二期/托福仍待；完成CI后停止等审查。
 
 ## 2026-11-15 — 授权同步第一期到专用审查分支，禁止部署
 
