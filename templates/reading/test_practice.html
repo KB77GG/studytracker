@@ -1749,5 +1749,5 @@ window.__SELECTION_HIGHLIGHT_READ_ONLY__ = Boolean(practiceContext?.embed_review
 {% if practice_context and practice_context.embed_review %}
 <script src="{{ url_for('static', filename='js/mock_review_paper.js') }}" defer></script>
 {% endif %}
-</body>
+{% if exam_context %}{% include "exam/_integrity_guard.html" %}{% endif %}</body>
 </html>

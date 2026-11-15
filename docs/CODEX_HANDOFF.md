@@ -1,5 +1,36 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-15 雅思诚信模式：专用审查分支同步（禁止部署）
+
+- **授权与当前状态**：用户明确授权把第一期完整实现提交并仅推送 `codex/exam-integrity-review`，等待该分支 CI 后停止、等待 Claude 审查。已从实现分支 `codex/exam-integrity-20261114` 创建指定审查分支，工作树仍为 `/private/tmp/studytracker-exam-integrity-20261114`，基线／创建时 HEAD 为 `ecc06f2393a5f3a0646f36f3a6dceda4902c1c08`。本节为提交准备；实际提交、推送与 CI 完成后补记。禁止 push／合并 main、部署或访问生产服务器／数据库，未取得此类授权。
+- **范围与脏状态**：本次纳入全部 27 个产品／测试／CI 文件（10 修改、17 新增），另含老师手册、两份交接和本任务报告／日志／截图；精确逐文件清单见 `docs/reviews/exam-integrity-20261114/REVIEW_FILES.md`。原计划已在基线提交，本轮不改。暂存前 27 个产品 SHA 全部与通过验收时的 `scope-audit.json` 一致，未再次修改业务代码。报告中的 `implementation-status.txt` 和 `main-worktree-status.txt` 是提交前快照。旧主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，原 7 modified／23 untracked 顶层入口保留，其他任务记录不覆盖；本轮只在结束时增量同步该树两交接。共享 `origin/main@cb2610166d7654c81238f53c000e37eafa7e68e1` 未合入，审查分支不承担主线整合或发布。
+- **验证证据**：以下命令在本工作树实际运行并通过，Python **158/158**、Node **86/86**；本次提交准备复核文件 SHA 未变化，不把既有日志伪称为本轮重跑。日志／浏览器 JSON／截图随分支提交。9 个新增 Python 文件定向 Ruff／Black、JS 语法、范围审计、diff-check 通过，完整命令见报告 README；未跑全仓测试或全仓 lint。浏览器为本机 Chrome 157.0.8103.78＋临时合成 SQLite，三模式完整流程、锁定自动交卷、教师解锁、2.829 秒紧急关闭、两设备换机、缺三表后 3.795 秒放行且保存／交卷成功、高亮坐标及手机按钮命中通过。
+
+```sh
+PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes tests.test_mock_exam_review tests.test_mock_exam_review_workflow tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_selection_highlight_contract tests.test_practice_highlight_coordinates tests.test_migrate_mock_exam_review -q
+node --test tests/test_exam_guard.js tests/test_practice_shell.js tests/test_mock_exam_review_frames.js tests/test_practice_renderers.js tests/test_mock_review_paper.js tests/test_simulation_audio.js
+node docs/reviews/exam-integrity-20261114/browser-check.cjs
+node docs/reviews/exam-integrity-20261114/browser-resilience.cjs
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-integrity-20261114/verify_scope.py
+git diff --check
+```
+
+- **【需核对】已核对的官方依据（2026-11-14）**：[Apple 引导式访问](https://support.apple.com/zh-cn/111795)确认设置入口、三击启动和锁定单 App；当前官方选项未列“关闭词典查询”，已删除此断言，Safari 内标签限制仍待真机。[WebKit Safari 16.4](https://webkit.org/blog/13966/webkit-features-in-safari-16-4/)确认 Screen Wake Lock 支持，代码按能力检测且失败静默，不保证一定防息屏。[SEB Config Key](https://safeexambrowser.org/developer/seb-config-key.html)说明现代 WKWebView 需 JavaScript API，不能仅靠 UA／请求头声称强校验；[SEB iOS 手册](https://safeexambrowser.org/ios/ios_usermanual_en.html)说明配置分发与锁定机制。以上是文档核对，不是设备／配置验收。
+- **与计划的具体差异及理由**：①普通心跳由 20 秒改 15 秒，配合 4 秒超时给“20 秒撤罩”留余量；遮罩状态仍 5 秒轮询。②monitor 显示规则卡但不禁 Start，只有 enforce 要求确认，符合仅记录不阻碍。③分屏只记录，不遮罩，因真机行为未核验且计划允许保守处理。④听力连 blur／设备冲突也只提示，避免遮住不可重播音频。⑤仅在三张新表补充乱序区间、解锁基准与尝试／实际阻断字段，保留精确计次和风险语义；未改旧表或旧模型。⑥状态 GET 的设备 ID 放 `X-Exam-Integrity-Device` 请求头，防止原值出现在 URL 日志。⑦新增纯规则模块、帮助模板和对抗／真实 app 测试以拆分职责；不改 app.py。⑧模考基线无笔记编辑器，笔记验收记 N/A；其他高亮／导航已验。⑨SEB 打开按钮、配置、require_seb、通用入口和强校验留在计划单独阶段，第一期只有真实下载链接与说明。⑩手册明确断网或未同步输入不能保证已保存，不建议听力直接刷新；遮罩既定提示不作为服务器保存回执。
+- **仍未做／只限本机的边界**：iPad Safari、Mac Safari、真实切 App／通知／息屏／分屏／侧拉／台前调度／系统剪贴板、真实学生试考、微信 web-view、线上负载均未验。浏览器 visibility／ClipboardEvent 部分由控制事件注入，不替代 OS 真机验收。SEB 配置与系统锁定未安装验收；第二期异常分析、抽查单和托福都未实施。
+- **部署与下一步**：本轮未访问生产服务器／数据库，未在生产建表、重启服务或改变外部设置；小程序未改、未上传／提审／发布。核对现有 deploy.yml 仅监听 main，而 CI 监听全部分支；只推审查分支不会触发该部署工作流。完成本分支 CI 后停止，下一位在该分支按计划和报告独立审查，不继续第二期、不自行合 main。只有用户日后另行明确授权并确认无正在进行模考，才讨论主线整合与部署；当前禁止执行。
+
+## 2026-11-15 雅思模考诚信模式第一期：隔离实现与本机验收完成，未发布
+
+- **工作树与基线**：实施树 `/private/tmp/studytracker-exam-integrity-20261114`，`codex/exam-integrity-20261114@ecc06f2393a5f3a0646f36f3a6dceda4902c1c08`，从计划分支新建时 clean。计划已在该基线提交；本轮 27 个产品／测试／CI 文件（10 修改、17 新增）以及老师手册、报告、两交接全部未提交。精确路径、用途和 SHA 在该树 `docs/reviews/exam-integrity-20261114/README.md`、`scope-audit.json`、`implementation-status.txt`。新代码仅在实施树，不在旧桌面 main。
+- **主资料树／并行状态**：`/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，原 7 modified／23 untracked 顶层入口保留（完整路径在报告 `main-worktree-status.txt`）；本任务仅增量更新该树两交接。收尾观察共享 `origin/main@cb2610166d7654c81238f53c000e37eafa7e68e1`，已有并行课堂同义替换 `2e82331a`，未合入本实施树，不能从旧主树直接发布；这不是本任务的生产部署核验。其他 worktree 未由本任务修改。
+- **完成内容**：雅思网页三档诚信策略、可见性计次／解锁再锁、听力仅警告、设备绑定与换机、豁免／紧急关闭、复制粘贴规则、水印／规则确认／可选常亮，手机教师监考、时间线和成绩诚信摘要；`/exam/guide`、`/exam/integrity-help` 和 `docs/EXAM_INTEGRITY_RUNBOOK.md`。只新增三表，无旧表 ALTER／旧模型关系改动；学生无DDL、独立数据库连接失败放行；`app.py` 和原保存／交卷／计时逻辑未改。正常15秒心跳＋4秒超时、遮罩5秒轮询；设备ID只通过POST正文或GET请求头，URL不带原ID；数据库仅hash。
+- **精确验证**（cwd实施树）：`PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes tests.test_mock_exam_review tests.test_mock_exam_review_workflow tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_selection_highlight_contract tests.test_practice_highlight_coordinates tests.test_migrate_mock_exam_review -q` → **158/158**；`node --test tests/test_exam_guard.js tests/test_practice_shell.js tests/test_mock_exam_review_frames.js tests/test_practice_renderers.js tests/test_mock_review_paper.js tests/test_simulation_audio.js` → **86/86**。9新Python定向Ruff/Black、JS语法、diff通过；全仓lint未跑，原api/__init__.py I001保留。真实app缺表／锁定／自动判分／默认off四模板字节不变均有测试；旧模型AST及10关键文件逐字节基线一致。
+- **浏览器证据**：`node docs/reviews/exam-integrity-20261114/browser-check.cjs` 和 `node docs/reviews/exam-integrity-20261114/browser-resilience.cjs` 最终成功，Chrome157.0.8103.78、loopback临时合成DB。三模式全旅程／off零诚信请求／锁定自动交卷／教师解锁／紧急关闭2.829秒／390px手机按钮无遮挡／两context换机／删除新三表后3.795秒放行且草稿及交卷成功／原生鼠标高亮和题号点击。JSON及最终截图在报告目录；两个CLI验收服务退出，临时5097服务已停。visibility与剪贴板部分用控制事件，不能视为OS切App或系统剪贴板真机证明。笔记基线模考页无控件，标不适用。
+- **已关闭的复核问题**：迟到visible误闭合新区间重复计次；monitor／豁免粘贴误高风险；正常学生点解锁降阈值；旧设备reset后抢回绑定；紧急关闭超时余量；手机侧栏遮挡。独立反例和浏览器复验已覆盖。
+- **发布／外部事实**：本轮**未commit、未push任何分支、未合并main、未部署**；生产诚信表未由本轮创建，无生产查询写入／重启／外部设置或通知操作。小程序未改、未上传／提审／发布；这项网页功能不需重发小程序。代码和报告仅本机可见；同Mac换账号可读，其他电脑尚取不到本轮实现。11月15日模考不因本任务发布新版本。
+- **未验证／下一步**：本机实施无未解决阻断；iPad Safari、Mac Safari、真实学生、通知／息屏／分屏侧拉／系统剪贴板／微信web-view与线上负载未验。分屏仅记录，monitor不禁Start；SEB配置／打开考试入口／require_seb强校验、第二期异常分析、托福都未做。用户尚未说“可以部署”；先保留候选并按手册准备试考，获得明确发布许可且确认无正在进行模考后才fetch整合main漂移、复跑受影响检查和发布。上线仍默认off，内部与真机验收后第一场真实考试monitor，再决定enforce。具体命令、官方资料修正和设备清单见报告／手册。
+
 ## 2026-11-14 模考防作弊：仅完成计划，未写代码、未部署
 
 - 用户要求防止学生模考时离开页面查题或用 AI。已确认的决定：学生主要用 iPad / MacBook Air；后果阶梯为第 1 次警告、累计 3 次或 60 秒锁定等老师解锁、不作废；先做第一期（系统内置检测），第二期（异常标记加抽查）紧跟，第三期为 Safe Exam Browser / 引导式访问。

@@ -2648,6 +2648,85 @@ class MockExamReviewEditSession(db.Model, TimestampMixin):
     )
 
 
+# ---- Optional exam integrity (no foreign keys to existing exam tables) ----
+
+
+class ExamIntegrityPolicy(db.Model):
+    __tablename__ = "exam_integrity_policy"
+    __table_args__ = (
+        db.UniqueConstraint("exam_kind", "exam_ref", name="uq_integrity_policy_exam"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    exam_kind = db.Column(db.String(32), nullable=False)
+    exam_ref = db.Column(db.String(64), nullable=False)
+    mode = db.Column(db.String(16), nullable=False, default="off")
+    max_leaves = db.Column(db.Integer, nullable=False, default=3)
+    max_hidden_seconds = db.Column(db.Integer, nullable=False, default=60)
+    updated_by = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+
+class ExamIntegrityState(db.Model):
+    __tablename__ = "exam_integrity_state"
+    __table_args__ = (
+        db.UniqueConstraint("exam_kind", "session_ref", name="uq_integrity_state_session"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    exam_kind = db.Column(db.String(32), nullable=False)
+    exam_ref = db.Column(db.String(64), nullable=False, index=True)
+    session_ref = db.Column(db.String(64), nullable=False)
+    device_hash = db.Column(db.String(64))
+    acked_at = db.Column(db.DateTime)
+    last_seen_at = db.Column(db.DateTime)
+    current_section = db.Column(db.String(20))
+    current_page_id = db.Column(db.String(96))
+    hidden_at = db.Column(db.DateTime)
+    hidden_page_id = db.Column(db.String(96))
+    hidden_section = db.Column(db.String(20))
+    hidden_client_ts = db.Column(db.Float)
+    last_visible_client_ts = db.Column(db.Float)
+    discard_visible_page_id = db.Column(db.String(96))
+    leave_count = db.Column(db.Integer, nullable=False, default=0)
+    hidden_seconds = db.Column(db.Float, nullable=False, default=0)
+    blur_count = db.Column(db.Integer, nullable=False, default=0)
+    copy_attempt_count = db.Column(db.Integer, nullable=False, default=0)
+    paste_attempt_count = db.Column(db.Integer, nullable=False, default=0)
+    copy_blocked_count = db.Column(db.Integer, nullable=False, default=0)
+    paste_blocked_count = db.Column(db.Integer, nullable=False, default=0)
+    device_conflict_count = db.Column(db.Integer, nullable=False, default=0)
+    device_conflict_at = db.Column(db.DateTime)
+    is_locked = db.Column(db.Boolean, nullable=False, default=False)
+    locked_reason = db.Column(db.String(120))
+    locked_at = db.Column(db.DateTime)
+    locked_section = db.Column(db.String(20))
+    unlock_count = db.Column(db.Integer, nullable=False, default=0)
+    unlocked_at = db.Column(db.DateTime)
+    unlocked_by = db.Column(db.Integer)
+    unlock_leave_count = db.Column(db.Integer, nullable=False, default=0)
+    unlock_hidden_seconds = db.Column(db.Float, nullable=False, default=0)
+    exempt = db.Column(db.Boolean, nullable=False, default=False)
+    exempt_by = db.Column(db.Integer)
+
+
+class ExamIntegrityEvent(db.Model):
+    __tablename__ = "exam_integrity_event"
+
+    id = db.Column(db.Integer, primary_key=True)
+    state_id = db.Column(db.Integer, nullable=False, index=True)
+    exam_kind = db.Column(db.String(32), nullable=False)
+    exam_ref = db.Column(db.String(64), nullable=False, index=True)
+    type = db.Column(db.String(32), nullable=False)
+    section = db.Column(db.String(20))
+    question_ref = db.Column(db.String(64))
+    duration_seconds = db.Column(db.Float)
+    detail_json = db.Column(db.Text)
+    client_ts = db.Column(db.String(64))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+
 # ---- Reading Study (阅读句子解析) ----
 
 

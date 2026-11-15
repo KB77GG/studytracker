@@ -6,6 +6,7 @@
 <div class="container">
   <div class="header-row">
     <h1>{{ exam.name }} · 成绩与复盘</h1>
+    <a href="{{ url_for('exam_integrity.dashboard', exam_id=exam.id) }}" class="btn btn-outline-secondary btn-sm">监考 / 防作弊</a>
     <a href="{{ url_for('admin_mock_exams_index') }}" class="btn btn-outline-secondary btn-sm">← 返回模考列表</a>
   </div>
 

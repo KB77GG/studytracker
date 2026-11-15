@@ -15,7 +15,7 @@
         <td><a class="suite-row-title mock-suite__results-link" href="{{ url_for('mock_exam_admin.exam_sessions', exam_id=exam.id) }}" title="查看成绩明细">{{ exam.name }}</a><span class="suite-row-sub">模考 ID {{ exam.id }}</span></td>
         <td><span class="suite-row-title">Listening {{ exam.listening_test_id }} · {{ exam.listening_minutes }}min</span><span class="suite-row-sub">Reading {{ exam.reading_test_id }} · {{ exam.reading_minutes }}min{% if exam.writing_test_id %} · Writing {{ exam.writing_minutes }}min{% endif %}</span></td>
         <td><code>{{ exam.pincode }}</code></td><td><span class="suite-badge {{ 'suite-badge--sage' if exam.is_active else '' }}">{{ '启用' if exam.is_active else '停用' }}</span></td><td>{{ exam.session_count }}</td><td>{{ exam.created_at }}</td>
-        <td><button class="suite-icon-button" type="button" data-copy-link="{{ exam.entry_url }}" title="复制链接"><i class="far fa-copy" aria-hidden="true"></i></button></td>
+        <td><a href="{{ url_for('exam_integrity.dashboard', exam_id=exam.id) }}">监考 / 防作弊</a> <button class="suite-icon-button" type="button" data-copy-link="{{ exam.entry_url }}" title="复制链接"><i class="far fa-copy" aria-hidden="true"></i></button></td>
       </tr>
       {% else %}<tr><td colspan="7"><div class="suite-empty"><i class="far fa-file-alt" aria-hidden="true"></i><strong>暂无模考</strong><span>从右上角新建第一场模考。</span></div></td></tr>{% endfor %}
     </tbody></table></div>

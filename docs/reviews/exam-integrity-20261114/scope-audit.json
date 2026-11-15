@@ -1,0 +1,167 @@
+{
+  "baseline": "ecc06f2393a5f3a0646f36f3a6dceda4902c1c08",
+  "head": "ecc06f2393a5f3a0646f36f3a6dceda4902c1c08",
+  "branch": "codex/exam-integrity-20261114",
+  "worktree": "/private/tmp/studytracker-exam-integrity-20261114",
+  "checks": [
+    {
+      "check": "unchanged app.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_student.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_review.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged api/mock_exam_admin.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_runtime.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_writing.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_review.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged services/mock_exam_review_workflow.py",
+      "ok": true
+    },
+    {
+      "check": "unchanged static/js/practice_shell.js",
+      "ok": true
+    },
+    {
+      "check": "unchanged static/js/selection-highlight.js",
+      "ok": true
+    },
+    {
+      "check": "all old model AST unchanged; exactly three new classes",
+      "ok": true
+    },
+    {
+      "check": "no mini-program or deployment configuration edits",
+      "ok": true
+    }
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "c68b239ebc660fd869230d8e510cb4846b336a8d78e80d9c84c2cdcc0448a934"
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "c4eb87bb4a100ddaed6e367d92882ac2eb1a81b13ff60a175135358cf470f8e5"
+    },
+    {
+      "path": "api/exam_integrity.py",
+      "sha256": "2121a7476d231da2226b6f3b8fba57511a7a0ada0a01f2632c637a314a27fc04"
+    },
+    {
+      "path": "models.py",
+      "sha256": "36745caa563757b31cbf952935e91b35e8f9ef2f05e0884479a2b55615bd6efa"
+    },
+    {
+      "path": "scripts/create_exam_integrity_tables.py",
+      "sha256": "ff0761b2224f32f5497916d6d82e7ff196f2a22311094f02b42e5289e4827e92"
+    },
+    {
+      "path": "services/exam_integrity.py",
+      "sha256": "52b8623d75c37505b45612cbf71315632c083e6217addb4c79891cf160b2b03e"
+    },
+    {
+      "path": "services/exam_integrity_rules.py",
+      "sha256": "f0f0ef35a96da49eba6fd7837327e8403bdeb9625abd311451e495970c8c0ecf"
+    },
+    {
+      "path": "static/css/exam_guard.css",
+      "sha256": "d6c3d852c74272eb6fc6812d92b8660756ceac9371b086e9f78bfb58aeb5ea9f"
+    },
+    {
+      "path": "static/js/exam_guard.js",
+      "sha256": "cbaca6c424f24be2e1ec82afa94c0fb77bb01c84d0c97d376b63e91d64893ab9"
+    },
+    {
+      "path": "templates/admin/_exam_integrity_summary.html",
+      "sha256": "edd074f9c6fae07277e73cb6ea5b00d7eb2afcfeed700f9056134d1fcd4a7ef1"
+    },
+    {
+      "path": "templates/admin/mock_exam_integrity.html",
+      "sha256": "c52c03294a6ff74bf5d2985a4f91954fe724f3abc7f84313895941fcbed46888"
+    },
+    {
+      "path": "templates/admin/mock_exam_session_detail.html",
+      "sha256": "78bd4b0903f98ed6e03aca5994cb4d9cafa1b1f1883a5d29cc932491f450470e"
+    },
+    {
+      "path": "templates/admin/mock_exam_sessions.html",
+      "sha256": "998e887045b06f24f6ba54fb87f4c4d87505ecdc4ea268b8a76643ade5555764"
+    },
+    {
+      "path": "templates/admin/mock_exams_index.html",
+      "sha256": "26e00b9635037e65ac67d2802e311f5f4c3efa6d114ce4c556a3d884c0c2fd50"
+    },
+    {
+      "path": "templates/exam/_integrity_guard.html",
+      "sha256": "adb3e4ed585b6eb0e82fe619a844e458f6e653f935d9e4d0c348cb3390374dda"
+    },
+    {
+      "path": "templates/exam/integrity_guide.html",
+      "sha256": "524519005c535aeb3749e0ad7c45a1f1ac03ba5a728e037786b701cd7812fa45"
+    },
+    {
+      "path": "templates/exam/integrity_help.html",
+      "sha256": "8194593ae339fcd60591869ed0b5433856231dab6cae11591bc4489aeaa77881"
+    },
+    {
+      "path": "templates/exam/process.html",
+      "sha256": "507e8dc7adfa7e8ef144f64be9fcf697ff18ea0334ccefb0f4a9835efdb4d983"
+    },
+    {
+      "path": "templates/exam/writing.html",
+      "sha256": "3d4142c2638eda0bd379d724ce5b81efd327e9f7b790c015f17b1ba3b33e6575"
+    },
+    {
+      "path": "templates/listening/test_practice.html",
+      "sha256": "30adad4054c860294912614541feafda967f692859a5634f1464a2bfde4f2c4e"
+    },
+    {
+      "path": "templates/reading/test_practice.html",
+      "sha256": "0fe71d5495d195b15b34f5ef3be010856b1dceb31684ea309526a8783ef4a712"
+    },
+    {
+      "path": "tests/exam_integrity_e2e_support.py",
+      "sha256": "dec29d6dab0664ab413de03995d168a4978d2c0414e37479467265db79eb233b"
+    },
+    {
+      "path": "tests/test_exam_guard.js",
+      "sha256": "c6562c15e0d027c6a4e0e6a722343d74a64d244b51039c88554cd1162fa1b81f"
+    },
+    {
+      "path": "tests/test_exam_integrity_adversarial.py",
+      "sha256": "0214c47e64e14c3e8d11c998445a26a5920db2294bdf34f99fdb324c4fa4227b"
+    },
+    {
+      "path": "tests/test_exam_integrity_e2e.py",
+      "sha256": "670985c25b93ab48594851760ff7c08f52273ffbd7b9dc7812e3cde345c4bb46"
+    },
+    {
+      "path": "tests/test_exam_integrity_routes.py",
+      "sha256": "261402869b04494d71c9b1f6c1f5f293340d22a68f5c4e83a5903a266bdc1eec"
+    },
+    {
+      "path": "tests/test_exam_integrity_service.py",
+      "sha256": "407d77c954045fa408eb1b8d94b6a13e7040b8d5163c97da2b955cc84f127e0f"
+    }
+  ],
+  "ok": true
+}

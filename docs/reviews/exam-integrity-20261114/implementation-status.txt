@@ -1,0 +1,32 @@
+## codex/exam-integrity-20261114...origin/claude/dazzling-johnson-a16p7t
+ M .github/workflows/ci.yml
+ M api/__init__.py
+ M docs/CODEX_HANDOFF.md
+ M docs/WORKLOG.md
+ M models.py
+ M templates/admin/mock_exam_session_detail.html
+ M templates/admin/mock_exam_sessions.html
+ M templates/admin/mock_exams_index.html
+ M templates/exam/process.html
+ M templates/exam/writing.html
+ M templates/listening/test_practice.html
+ M templates/reading/test_practice.html
+?? api/exam_integrity.py
+?? docs/EXAM_INTEGRITY_RUNBOOK.md
+?? docs/reviews/exam-integrity-20261114/
+?? scripts/create_exam_integrity_tables.py
+?? services/exam_integrity.py
+?? services/exam_integrity_rules.py
+?? static/css/exam_guard.css
+?? static/js/exam_guard.js
+?? templates/admin/_exam_integrity_summary.html
+?? templates/admin/mock_exam_integrity.html
+?? templates/exam/_integrity_guard.html
+?? templates/exam/integrity_guide.html
+?? templates/exam/integrity_help.html
+?? tests/exam_integrity_e2e_support.py
+?? tests/test_exam_guard.js
+?? tests/test_exam_integrity_adversarial.py
+?? tests/test_exam_integrity_e2e.py
+?? tests/test_exam_integrity_routes.py
+?? tests/test_exam_integrity_service.py

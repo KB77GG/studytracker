@@ -10,6 +10,7 @@ def init_app(app):
     from api.dictation import dictation_bp  # Dictation API
     from api.dictation_input import dictation_input_bp  # Strict spelling input policy
     from api.entrance import entrance_bp  # Entrance test API (新生入学测试)
+    from api.exam_integrity import exam_integrity_bp
     from api.ielts_eval import eval_bp  # IELTS speaking eval API
     from api.listening_training import listening_training_bp
     from api.materials import material_bp  # New material bank API
@@ -58,6 +59,7 @@ def init_app(app):
     app.register_blueprint(mock_exam_admin_bp)  # Register mock exam review console
     app.register_blueprint(mock_exam_student_bp)  # Register student mock exam review
     app.register_blueprint(mock_exam_review_bp)
+    app.register_blueprint(exam_integrity_bp)
     app.register_blueprint(writing_library_bp)
 
     # The project still uses check-first schema creation for additive SQLite

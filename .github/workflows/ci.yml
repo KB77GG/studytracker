@@ -49,6 +49,8 @@ jobs:
         run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js
       - name: Test small-class homework client
         run: node --test tests/test_teacher_group_homework.js
+      - name: Test optional exam guard fail-open behavior
+        run: node --test tests/test_exam_guard.js
       - name: Test Cambridge content and review delivery
         run: |
           python -m unittest \
@@ -110,6 +112,8 @@ jobs:
         run: python -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access -v
       - name: Test submitted mock paper review access and saved results
         run: python -m unittest tests.test_mock_exam_student_review tests.test_mock_exam_review_workflow -v
+      - name: Test optional exam integrity and unchanged exam journeys
+        run: python -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes -v
       - name: Test recovery assistant and student journeys with isolated data
         run: python -m unittest tests.test_task_planner_recovery_e2e tests.test_task_planner_recovery_student_contract_e2e -v
 

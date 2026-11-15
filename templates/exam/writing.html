@@ -206,5 +206,5 @@ const DRAFT_URL = {{ draft_url|tojson }};
   });
 })();
 </script>
-</body>
+{% if exam_context %}{% include "exam/_integrity_guard.html" %}{% endif %}</body>
 </html>

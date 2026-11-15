@@ -1,0 +1,12 @@
+{%- if exam_integrity_config is defined -%}
+{%- if exam_context -%}
+{%- set integrity_config = exam_integrity_config(exam_context.exam_id, exam_context.session_token, exam_context.section) -%}
+{%- elif exam is defined and session is defined -%}
+{%- set integrity_config = exam_integrity_config(exam.id, session.access_token, 'process') -%}
+{%- endif -%}
+{%- if integrity_config -%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exam_guard.css') }}">
+<script type="application/json" id="exam-integrity-config">{{ integrity_config|tojson }}</script>
+<script src="{{ url_for('static', filename='js/exam_guard.js') }}" defer></script>
+{%- endif -%}
+{%- endif -%}

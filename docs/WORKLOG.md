@@ -1,5 +1,13 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-15 — 授权同步第一期到专用审查分支，禁止部署
+
+从 `codex/exam-integrity-20261114@ecc06f2393a5f3a0646f36f3a6dceda4902c1c08` 创建 `codex/exam-integrity-review`，同一隔离树 `/private/tmp/studytracker-exam-integrity-20261114`。用户仅授权该分支 commit/push 和等待 CI，禁止 main／部署／生产访问。27 产品文件与已验收 SHA 全同；158 Python＋86 Node 和两浏览器脚本实际命令／结果、Apple/WebKit/SEB 官方核对依据、10 项计划差异及未完成真机／SEB／第二期／托福已集中记录在 CODEX_HANDOFF 顶部，全部新增文件及证据列入 REVIEW_FILES.md。当前为提交准备，推送和 CI 结果待实际完成补记；旧主资料树7M/23U保留，只同步两交接。完成本分支 CI 后停止等待审查。
+
+## 2026-11-15 — 雅思诚信模式第一期本机完成，未发布
+
+隔离树 `/private/tmp/studytracker-exam-integrity-20261114`、`codex/exam-integrity-20261114@ecc06f23` 完成27产品/测试/CI文件：三档策略、保守离开计次、听力仅警告、阅读写作锁定、设备换机/豁免/紧急关闭、剪贴板规则、手机面板及指南手册。旧模型AST和10关键旧文件不变、只新增3表、默认off四模板字节一致。158Python+86Node、两Playwright合成验收成功；三模式完整交卷复盘、锁定自动交卷、2.829秒紧急撤罩、两设备换机、临时删表后保存交卷、原生高亮/导航/手机命中通过。真实visibility/系统剪贴板、iPad/Mac Safari仍待真机，模考无笔记控件记N/A。独立反例关闭误计/误高风险/错误解锁阈值等，报告在该树 `docs/reviews/exam-integrity-20261114/`。仅本机未commit/push/合main/deploy，生产无查询写入/重启，小程序未发；今天不因本任务部署。旧桌面main6ded77d2原7/23保留，仅两交接增量；共享origin/main已漂移cb261016，发布前须整合并确认无考试。SEB/第二期/托福另阶段。
+
 ## 2026-11-14 — 模考防作弊实施计划（仅计划）
 
 用户确认设备为 iPad / MacBook Air、3 次或 60 秒锁定、分三期。新增 `docs/EXAM_INTEGRITY_PLAN.md` 供 Codex 实施；未改业务代码、未部署。用户 11-15 要用现有模考，授权前禁止 push main。文件在云端分支 `claude/dazzling-johnson-a16p7t` 工作区，是否已 push 以 git 为准。

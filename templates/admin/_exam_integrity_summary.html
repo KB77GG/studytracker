@@ -1,0 +1,8 @@
+{% if exam_integrity_summary is defined %}{% set integrity_summary = exam_integrity_summary(exam.id, session.id) %}{% if integrity_summary and integrity_summary.state_id %}
+<div class="card" style="margin:16px 0;padding:18px;">
+  <strong>考试诚信记录 · 风险{{ {'low':'低','medium':'中','high':'高'}.get(integrity_summary.risk, '待复核') }}</strong>
+  <p>离开 {{ integrity_summary.leave_count }} 次，累计 {{ integrity_summary.hidden_seconds|round|int }} 秒；复制/剪切记录 {{ integrity_summary.copy_attempt_count }} 次（拦截 {{ integrity_summary.copy_blocked_count }} 次），粘贴/拖放记录 {{ integrity_summary.paste_attempt_count }} 次（拦截 {{ integrity_summary.paste_blocked_count }} 次）；设备冲突 {{ integrity_summary.device_conflict_count }} 次，解锁 {{ integrity_summary.unlock_count }} 次。</p>
+  <p>记录用于老师复核，不自动判定作弊，不改变原成绩。{% if integrity_summary.exempt %}本场已豁免。{% endif %}</p>
+  <a href="{{ url_for('exam_integrity.dashboard', exam_id=exam.id) }}">查看监考面板与时间线</a>
+</div>
+{% endif %}{% endif %}
