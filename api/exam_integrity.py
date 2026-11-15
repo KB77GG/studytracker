@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+from datetime import datetime
 from urllib.parse import urlsplit
 
 from flask import Blueprint, abort, jsonify, render_template, request, url_for
@@ -13,6 +14,7 @@ from sqlalchemy import select
 from api.mock_exam_admin import _can_manage
 from models import MockExam, MockExamSession, db
 from services import exam_integrity as integrity
+from services.exam_integrity_rules import as_utc
 from services.web_privacy import no_store
 
 exam_integrity_bp = Blueprint("exam_integrity", __name__)
@@ -56,6 +58,9 @@ def _session_row(exam_id, *, token=None, session_id=None):
         "status",
         "current_section",
         "started_at",
+        "listening_started_at",
+        "reading_started_at",
+        "writing_started_at",
         "listening_submitted_at",
         "reading_submitted_at",
         "writing_submitted_at",
@@ -144,7 +149,12 @@ def _event_payload(data):
         if not isinstance(data["question"], (str, int)) or isinstance(data["question"], bool):
             abort(400)
         result["question"] = str(data["question"])[:80]
-    for key, upper in (("client_hidden_ms", 86400000), ("length", 1000000), ("viewport_ratio", 10)):
+    for key, upper in (
+        ("client_hidden_ms", 86400000),
+        ("queued_ms", 86400000),
+        ("length", 1000000),
+        ("viewport_ratio", 10),
+    ):
         if key in data:
             result[key] = _bounded_number(data[key], 0, upper, integer=key == "length")
     if "detail" in data:
@@ -202,11 +212,19 @@ def _student_response(exam_id, token, *, payload=None):
                 payload,
                 current_section=row["current_section"],
                 submitted_sections=submitted,
+                active_sections=[
+                    section
+                    for section in _SECTIONS - {"process"}
+                    if row[f"{section}_started_at"] and not row[f"{section}_submitted_at"]
+                ],
             )
+        if state.get("ok") is False:
+            return _json(state, 503)
         return _json({"ok": True, **state})
     except Exception:
+        # An unavailable guard must retry, rather than permanently stop as off.
         # Never roll back db.session: the optional feature owns no exam writes.
-        return _json(_off())
+        return _json({"ok": False, "error": "integrity_temporarily_unavailable"}, 503)
 
 
 @exam_integrity_bp.app_template_global()
@@ -276,7 +294,21 @@ def dashboard(exam_id):
     return render_template("admin/mock_exam_integrity.html", exam=exam, available=available)
 
 
-def _dashboard_rows(exam_id):
+def _connection_age(last_seen_at, now):
+    if not last_seen_at:
+        return {"seconds_since_seen": None, "offline_seconds": None, "never_connected": True}
+    seen = as_utc(datetime.fromisoformat(last_seen_at.replace("Z", "+00:00")))
+    age = max(0, int((now - seen).total_seconds()))
+    # Heartbeats normally arrive every 15s; allow their 4s request budget.
+    return {
+        "seconds_since_seen": age,
+        "offline_seconds": age if age > 20 else 0,
+        "never_connected": False,
+    }
+
+
+def _dashboard_rows(exam_id, now=None):
+    now = as_utc(now)
     table = MockExamSession.__table__
     with db.engine.connect() as connection:
         sessions = (
@@ -288,8 +320,10 @@ def _dashboard_rows(exam_id):
             .mappings()
             .all()
         )
-    states = integrity.admin_states(exam_id, [row["id"] for row in sessions])
+    states = integrity.admin_states(exam_id, [row["id"] for row in sessions], now=now)
     rows = [{**states.get(str(row["id"]), {}), **dict(row)} for row in sessions]
+    for row in rows:
+        row.update(_connection_age(row.get("last_seen_at"), now))
     rows.sort(
         key=lambda row: (
             not (row.get("is_locked") or row.get("has_device_conflict", False)),
@@ -305,7 +339,11 @@ def dashboard_data(exam_id):
     _require_exam(exam_id)
     try:
         return _json(
-            {"ok": True, "policy": integrity.read_policy(exam_id), "rows": _dashboard_rows(exam_id)}
+            {
+                "ok": True,
+                "policy": integrity.read_policy(exam_id, strict=True),
+                "rows": _dashboard_rows(exam_id),
+            }
         )
     except Exception:
         return _json({"ok": False, "error": "integrity_unavailable"}, 503)
@@ -350,7 +388,11 @@ def update_policy(exam_id):
 def emergency_off(exam_id):
     _require_exam(exam_id)
     _admin_json()
-    return _set_policy(exam_id, {"mode": "off"})
+    try:
+        policy = integrity.emergency_off(exam_id, actor=current_user.id)
+        return _json({"ok": True, "policy": policy})
+    except Exception:
+        return _json({"ok": False, "error": "integrity_unavailable"}, 503)
 
 
 @exam_integrity_bp.post(_BASE + "/sessions/<int:session_id>/<action>")

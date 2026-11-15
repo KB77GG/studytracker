@@ -3,6 +3,8 @@
 import os
 import sqlite3
 import tempfile
+import threading
+import time
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
@@ -12,6 +14,7 @@ from unittest.mock import patch
 
 from flask import Flask
 from sqlalchemy import inspect, select
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from models import ExamIntegrityEvent, ExamIntegrityPolicy, ExamIntegrityState, MockExam, db
@@ -126,8 +129,8 @@ class IntegrityServiceTest(unittest.TestCase):
         self.assertEqual(long["leave_count"], 1)
         self.assertEqual(long["hidden_seconds"], 10)
 
-    def test_process_and_cross_section_navigation_drop_pending_departure(self):
-        for section in ("process", "intro", "writing", "listening"):
+    def test_cross_section_navigation_drops_pending_departure(self):
+        for section in ("writing", "listening"):
             with self.subTest(section=section):
                 session = section
                 self.send("hello", session=session)
@@ -326,14 +329,14 @@ class IntegrityServiceTest(unittest.TestCase):
     def test_missing_tables_fail_open_without_ddl(self):
         for model in (ExamIntegrityEvent, ExamIntegrityState, ExamIntegrityPolicy):
             model.__table__.drop(db.engine)
-        self.assertEqual(self.state()["mode"], "off")
-        self.assertEqual(self.send("hello")["mode"], "off")
+        self.assertFalse(self.state()["ok"])
+        self.assertNotIn("mode", self.send("hello"))
         self.assertEqual(inspect(db.engine).get_table_names(), [])
 
     def test_missing_state_table_with_valid_policy_fails_open(self):
         ExamIntegrityState.__table__.drop(db.engine)
-        self.assertEqual(self.state()["mode"], "off")
-        self.assertEqual(self.send("hello")["mode"], "off")
+        self.assertFalse(self.state()["ok"])
+        self.assertNotIn("mode", self.send("hello"))
         self.assertNotIn("exam_integrity_state", inspect(db.engine).get_table_names())
 
     def test_policy_failure_does_not_rollback_pending_existing_exam_write(self):
@@ -348,7 +351,7 @@ class IntegrityServiceTest(unittest.TestCase):
         with Session(db.engine) as session:
             self.assertEqual(session.scalar(select(MockExam.name)), "Pending")
 
-    def test_event_cap_is_per_exam_across_students_and_counts_continue(self):
+    def test_event_cap_is_per_student_and_does_not_hide_another_student(self):
         self.send("hello")
         with Session(db.engine) as session, session.begin():
             state = session.scalar(select(ExamIntegrityState))
@@ -365,7 +368,7 @@ class IntegrityServiceTest(unittest.TestCase):
         result = self.send("copy_blocked", 1, session="other-student", detail={"blocked": True})
         self.assertEqual(result["copy_blocked_count"], 1)
         with Session(db.engine) as session:
-            self.assertEqual(session.query(ExamIntegrityEvent).count(), 2000)
+            self.assertEqual(session.query(ExamIntegrityEvent).count(), 2001)
 
     def test_detail_whitelist_never_records_clipboard_contents(self):
         self.send("hello")
@@ -432,8 +435,282 @@ class IntegrityServiceTest(unittest.TestCase):
         self.assertNotIn("device-first", str(self.events()))
 
     def test_unknown_events_and_missing_page_fail_open(self):
-        self.assertEqual(self.send("not-a-type")["mode"], "off")
-        self.assertEqual(self.send("hello", page="")["mode"], "off")
+        self.assertFalse(self.send("not-a-type")["ok"])
+        self.assertNotIn("mode", self.send("hello", page=""))
+
+    def test_chapter_page_preserves_active_section_for_six_hundred_seconds(self):
+        for section in ("reading", "writing", "listening"):
+            with self.subTest(section=section):
+                ref = section
+                self.send("hello", session=ref, section=section)
+                self.send("hidden", 1, session=ref, section=section)
+                chapter = service.record_event(
+                    1,
+                    ref,
+                    dict(
+                        type="hello", section="process", page_id="chapter", device_id="device-first"
+                    ),
+                    current_section=section,
+                    active_sections=(section,),
+                    now=self.now + timedelta(seconds=1),
+                )
+                self.assertIsNotNone(chapter["hidden_at"])
+                # Even chapter refreshes must preserve the original interval.
+                service.record_event(
+                    1,
+                    ref,
+                    dict(
+                        type="hello",
+                        section="process",
+                        page_id="chapter-2",
+                        device_id="device-first",
+                    ),
+                    current_section=section,
+                    active_sections=(section,),
+                    now=self.now + timedelta(seconds=400),
+                )
+                result = service.record_event(
+                    1,
+                    ref,
+                    dict(
+                        type="hello", section=section, page_id="returned", device_id="device-first"
+                    ),
+                    current_section=section,
+                    active_sections=(section,),
+                    now=self.now + timedelta(seconds=601),
+                )
+                self.assertEqual(result["leave_count"], 1)
+                self.assertEqual(result["hidden_seconds"], 600)
+                self.assertEqual(result["is_locked"], section != "listening")
+
+    def test_chapter_navigation_without_hidden_starts_interval_at_arrival(self):
+        self.send("hello")
+        service.record_event(
+            1,
+            "1",
+            dict(type="hello", section="process", page_id="chapter"),
+            current_section="reading",
+            active_sections=("reading",),
+            now=self.now + timedelta(seconds=10),
+        )
+        result = service.record_event(
+            1,
+            "1",
+            dict(type="hello", section="reading", page_id="page-a"),
+            current_section="reading",
+            active_sections=("reading",),
+            now=self.now + timedelta(seconds=610),
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertEqual(result["hidden_seconds"], 600)
+
+    def test_chapter_return_keeps_ten_second_refresh_grace(self):
+        for duration in (9.999, 10):
+            with self.subTest(duration=duration):
+                ref = str(duration)
+                self.send("hello", session=ref)
+                self.send("hidden", 1, session=ref)
+                service.record_event(
+                    1,
+                    ref,
+                    dict(type="hello", section="process", page_id="chapter"),
+                    active_sections=("reading",),
+                    now=self.now + timedelta(seconds=1),
+                )
+                result = service.record_event(
+                    1,
+                    ref,
+                    dict(type="hello", section="reading", page_id="page-a"),
+                    active_sections=("reading",),
+                    now=self.now + timedelta(seconds=1 + duration),
+                )
+                self.assertEqual(result["leave_count"], int(duration >= 10))
+
+    def test_submitted_or_unstarted_section_chapter_navigation_is_not_counted(self):
+        for submitted in ((), ("reading",)):
+            with self.subTest(submitted=submitted):
+                ref = str(submitted)
+                self.send("hello", session=ref)
+                self.send("hidden", 1, session=ref)
+                result = service.record_event(
+                    1,
+                    ref,
+                    dict(type="hello", section="process", page_id="chapter"),
+                    current_section="writing",
+                    active_sections=(),
+                    submitted_sections=submitted,
+                    now=self.now + timedelta(seconds=600),
+                )
+                self.assertIsNone(result["hidden_at"])
+                self.assertEqual(result["leave_count"], 0)
+
+    def test_delayed_old_visible_cannot_close_chapter_interval(self):
+        self.send("hello")
+        self.send("hidden", 1)
+        self.send("hello", 2, page="chapter", section="process")
+        result = self.send("visible", 3, client_hidden_ms=2000)
+        self.assertIsNotNone(result["hidden_at"])
+        self.assertEqual(result["leave_count"], 0)
+        result = self.send("hello", 601, page="returned")
+        self.assertEqual(result["hidden_seconds"], 600)
+
+    def test_fifteen_students_33_minute_heartbeats_preserve_timelines(self):
+        for student in range(15):
+            ref = str(student)
+            self.send("hello", session=ref)
+            for at in range(15, 1981, 15):
+                result = self.send("heartbeat", at, session=ref)
+                self.assertTrue(result["ok"])
+        with Session(db.engine) as session:
+            self.assertEqual(session.query(ExamIntegrityEvent).count(), 15)
+            self.assertEqual(
+                session.query(ExamIntegrityEvent).filter_by(type="heartbeat").count(), 0
+            )
+        result = self.leave(2000, 60, session="14")
+        self.assertTrue(result["is_locked"])
+        kinds = {e["type"] for e in service.event_timeline("14")}
+        self.assertTrue({"hidden", "visible", "leave", "locked"} <= kinds)
+
+    def test_critical_evidence_always_survives_student_event_cap(self):
+        self.send("hello")
+        with Session(db.engine) as session, session.begin():
+            state = session.scalar(select(ExamIntegrityState))
+            session.add_all(
+                ExamIntegrityEvent(
+                    state_id=state.id,
+                    exam_kind="ielts_mock",
+                    exam_ref="1",
+                    type="viewport",
+                    created_at=self.now,
+                )
+                for _ in range(1999)
+            )
+        self.send("viewport", 1)
+        result = self.leave(2, 60)
+        self.assertTrue(result["is_locked"])
+        service.admin_action(1, "1", "unlock", now=self.now + timedelta(seconds=63))
+        self.send("hello", 64, device_id="device-second")
+        with Session(db.engine) as session:
+            self.assertEqual(session.query(ExamIntegrityEvent).count(), 2004)
+        kinds = {e["type"] for e in self.events()}
+        self.assertTrue({"leave", "locked", "unlock", "device_conflict"} <= kinds)
+
+    def test_four_concurrent_busy_writes_fail_fast_without_authoritative_off(self):
+        self.send("hello")
+        barrier = threading.Barrier(4)
+
+        def record(_):
+            with self.app.app_context():
+                barrier.wait(timeout=3)
+                start = time.monotonic()
+                result = self.send("heartbeat", 10)
+                return time.monotonic() - start, result
+
+        with closing(sqlite3.connect(self.database)) as external:
+            external.execute("BEGIN IMMEDIATE")
+            start = time.monotonic()
+            with ThreadPoolExecutor(max_workers=4) as workers:
+                results = list(workers.map(record, range(4)))
+            elapsed = time.monotonic() - start
+            external.rollback()
+        self.assertLess(elapsed, 1.5, results)
+        for elapsed, result in results:
+            self.assertLess(elapsed, 1.25)
+            self.assertFalse(result["ok"])
+            self.assertNotIn("mode", result)
+        # Failure did not disable the policy; the next event can recover.
+        self.assertTrue(self.send("heartbeat", 11)["ok"])
+        self.assertEqual(self.state()["mode"], "enforce")
+
+    def test_short_wait_is_restored_on_pooled_connection(self):
+        with db.engine.connect() as connection:
+            before = connection.exec_driver_sql("PRAGMA busy_timeout").scalar()
+        with service._connection() as connection:
+            self.assertLessEqual(connection.exec_driver_sql("PRAGMA busy_timeout").scalar(), 1000)
+        with db.engine.connect() as connection:
+            self.assertEqual(connection.exec_driver_sql("PRAGMA busy_timeout").scalar(), before)
+
+    def test_policy_read_error_is_distinct_from_authoritative_off(self):
+        ExamIntegrityPolicy.__table__.drop(db.engine)
+        self.assertEqual(service.read_policy(1)["mode"], "off")
+        with self.assertRaises(OperationalError):
+            service.read_policy(1, strict=True)
+        self.assertFalse(self.state()["ok"])
+        self.assertNotIn("mode", self.state())
+
+    def test_emergency_off_preserves_thresholds_and_state(self):
+        service.set_policy(1, "enforce", max_leaves=7, max_hidden_seconds=321)
+        self.send("hello")
+        self.send("hidden", 1)
+        result = service.emergency_off(1, actor=99, now=self.now + timedelta(seconds=2))
+        self.assertEqual(result, {"mode": "off", "max_leaves": 7, "max_hidden_seconds": 321})
+        self.assertEqual(service.read_policy(1), result)
+        with Session(db.engine) as session:
+            state = session.scalar(select(ExamIntegrityState))
+            self.assertIsNotNone(state.hidden_at)
+            self.assertIsNotNone(state.device_hash)
+            policy = session.scalar(select(ExamIntegrityPolicy))
+            self.assertEqual(policy.updated_by, 99)
+
+    def test_queued_visibility_uses_occurrence_time_and_retries_do_not_double_count(self):
+        self.send("hello")
+        self.send("hidden", 100, client_ts=1001000, queued_ms=99000)
+        result = self.send(
+            "visible", 100.1, client_ts=1010000, queued_ms=90100, client_hidden_ms=9000
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertAlmostEqual(result["hidden_seconds"], 9)
+        self.send("hidden", 101, client_ts=1001000, queued_ms=100000)
+        result = self.send(
+            "visible", 102, client_ts=1010000, queued_ms=92000, client_hidden_ms=9000
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertAlmostEqual(result["hidden_seconds"], 9)
+        self.assertIsNone(result["hidden_at"])
+
+    def test_beacon_then_queue_replay_and_late_beacon_only_count_once(self):
+        self.send("hello")
+        self.send("hidden", 1, client_ts=1001000)
+        self.send("hidden", 20, client_ts=1001000, queued_ms=19000)
+        result = self.send(
+            "visible", 20.1, client_ts=1010100, queued_ms=10000, client_hidden_ms=9100
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertAlmostEqual(result["hidden_seconds"], 9.1)
+        self.send("hidden", 21, client_ts=1001000)
+        result = self.send("visible", 22, client_ts=1010100, queued_ms=11900, client_hidden_ms=9100)
+        self.assertEqual(result["leave_count"], 1)
+        self.assertAlmostEqual(result["hidden_seconds"], 9.1)
+        self.assertIsNone(result["hidden_at"])
+
+    def test_queued_old_visible_after_chapter_return_does_not_recount(self):
+        self.send("hello")
+        self.send("hidden", 1)
+        self.send("hello", 2, page="chapter", section="process")
+        result = self.send("hello", 601, page="page-a")
+        self.assertEqual(result["leave_count"], 1)
+        result = self.send(
+            "visible", 602, client_ts=1003000, queued_ms=599000, client_hidden_ms=2000
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertEqual(result["hidden_seconds"], 600)
+
+    def test_bfcache_hello_consumes_queued_original_hidden_and_visible(self):
+        self.send("hello")
+        self.send("hidden", 1)
+        self.send("hello", 2, page="chapter", section="process")
+        result = self.send("hello", 601, page="page-a")
+        self.assertEqual(result["leave_count"], 1)
+        self.send("hidden", 602, client_ts=1001000, queued_ms=601000)
+        result = self.send(
+            "visible", 603, client_ts=1003000, queued_ms=600000, client_hidden_ms=2000
+        )
+        self.assertEqual(result["leave_count"], 1)
+        self.assertEqual(result["hidden_seconds"], 600)
+        self.assertIsNone(result["hidden_at"])
+        result = self.leave(604, 2)
+        self.assertEqual(result["leave_count"], 2)
+        self.assertEqual(result["hidden_seconds"], 602)
 
     def test_invalid_thresholds_are_rejected(self):
         for value in (0, 101, True, "3"):

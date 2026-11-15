@@ -1,12 +1,12 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>模考监考故障处理</title>
 <style>body{font:17px/1.75 system-ui,sans-serif;margin:0;background:#f4f6fa;color:#243047}main{max-width:760px;margin:auto;padding:24px 20px 64px}article{padding:16px 20px;background:white;border:1px solid #dce2ec;border-radius:12px;margin:16px 0}h1{font-size:28px}h2{font-size:20px;margin:0}a{color:#1754a3}.urgent{border:2px solid #b43030}</style></head><body><main>
 <p>老师用 · 雅思模考</p><h1>先让学生继续考试</h1><p>在模考列表或考生列表点击“监考 / 防作弊”。首次真实模考先选“仅记录”；完成 iPad 和 MacBook 试考后，再使用“警告并锁定”。</p>
-<article class="urgent"><h2>多名学生同时异常</h2><p>点击面板顶部红色“紧急关闭本场防作弊”。联网且页面可见时，20 秒内撤掉遮罩；学生重新回到页面时会立即查询。网络或诚信接口故障时守卫会放行。考试计时和交卷继续。</p></article>
+<article class="urgent"><h2>多名学生同时异常</h2><p>点击面板顶部红色“紧急关闭本场防作弊”。联网且页面可见时，20 秒内撤掉遮罩；学生重新回到页面时会立即查询。网络或诚信接口故障时，已锁定页面最多保留遮罩60秒后临时放行并重试；收到确认的关闭状态会立即撤罩。考试计时和交卷继续。</p></article>
 <article><h2>学生显示“已锁定”或说自己没有离开</h2><p>找到该生，先点“解锁”，几秒后自动恢复，不必刷新。再查看时间线。通知、系统弹窗等可能影响浏览器状态，不能仅凭日志认定作弊；有误报时点“本场豁免”。解锁保留累计次数，之后再离开一次或累计新增 30 秒可能再次锁定。</p></article>
 <article><h2>提示已在另一台设备开始</h2><p>确认本人确实需要换设备后点“允许换设备”，请旧设备关闭考试页，新设备刷新。无痕模式、清浏览数据也可能改变设备标识。必要时对该生豁免。</p></article>
 <article><h2>遮罩不消失或页面卡住</h2><p>先解锁或豁免，再确认网络。阅读、写作在确认原页面保存提示后可刷新；断网时不要立即刷新或关闭页面，最近的输入可能还未同步。听力不能重播，请先由老师处理，避免盲目刷新中断音频。计时始终继续。</p></article>
 <article><h2>“点击继续答题”遮罩</h2><p>点击继续或重新聚焦即可。失焦不算一次离开，听力阶段不显示此遮罩。视口变窄只记录，尚不据此遮住题目。</p></article>
-<article><h2>学生断网</h2><p>维持原页面，尽快恢复网络，查看页面原有保存提示。不要清缓存、切无痕或关闭页面。离开检测故障会放行，但不能替代答案保存；老师应核实交卷结果。</p></article>
+<article><h2>学生断网</h2><p>维持原页面，尽快恢复网络，查看页面原有保存提示。不要清缓存、切无痕或关闭页面。已锁定时连续故障最多保留遮罩60秒，未锁定时临时放行；计时和交卷始终继续。离开/返回事件在当前页面内存排队，恢复网络后补发，刷新或关闭会丢失队列。老师可在每位学生卡片查看最后联系/离线时长，并核实保存与交卷结果。</p></article>
 <article><h2>监考面板打不开</h2><p>不会改变学生原有考试流程。若学生也异常，联系技术人员；不要由老师直接重启服务器。考试结束后提供发生时间、设备和现象，不要发送口令或完整会话链接。</p></article>
 <article><h2>需要彻底停用</h2><p>先关闭当前各场策略。全局硬开关由系统维护人员设置 <code>EXAM_INTEGRITY_DISABLED=1</code>，需要重启服务；维护人员必须先确认没有模考正在进行并获得部署许可。具体命令见仓库 <code>docs/EXAM_INTEGRITY_RUNBOOK.md</code>。</p></article>
 <p><a href="/exam/guide">设备设置指引</a></p></main></body></html>

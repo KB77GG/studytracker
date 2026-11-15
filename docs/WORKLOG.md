@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-15 — Claude 审查五项修复进行中，仅审查分支
+
+基线14c64d2e，隔离树 `/private/tmp/studytracker-exam-integrity-20261114`／`codex/exam-integrity-review`。修章节页计时、每生事件限额/心跳降噪、500ms数据库忙与503错误区分、已锁断网60秒保留/队列补发/面板离线时长、急停保阈值，并核BFCache/重放去重。60service＋41routes/adversarial＋5real-app定向通过，最终guard/全相关结果待合并后记录。用户授权仅将origin/main cb261016合入审查分支再push本分支等CI；禁止push/合main目标分支、部署或生产访问。计划顶修订、手册和在线帮助已同步新规则。代码未提交，交接完毕后等审查、不做第二期。
+
 ## 2026-11-15 — 授权同步第一期到专用审查分支，禁止部署
 
 从 `codex/exam-integrity-20261114@ecc06f2393a5f3a0646f36f3a6dceda4902c1c08` 创建 `codex/exam-integrity-review`，同一隔离树 `/private/tmp/studytracker-exam-integrity-20261114`。用户仅授权该分支 commit/push 和等待 CI，禁止 main／部署／生产访问。27 产品文件与已验收 SHA 全同；158 Python＋86 Node 和两浏览器脚本实际命令／结果、Apple/WebKit/SEB 官方核对依据、10 项计划差异及未完成真机／SEB／第二期／托福已集中记录在 CODEX_HANDOFF 顶部，全部新增文件及证据共55文件列入 REVIEW_FILES.md，可从远端审查分支获取。完整实现已 commit/push `c653c3ab120cb76b69535e5f4090c3a23c9b654f`，CI [43657508962](https://github.com/KB77GG/studytracker/actions/runs/43657508962) 整体 success，三组测试通过，非阻断 lint failure 如实记录于 ci-review.json；本条与证据仅文档追加后也等待该提交 CI，最终 HEAD 由 Git 读取；旧主资料树7M/23U保留，只同步两交接。完成本分支 CI 后停止等待审查。

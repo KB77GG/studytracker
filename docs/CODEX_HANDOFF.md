@@ -1,5 +1,13 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-15 Claude 审查五项修复（审查分支整合中，禁止部署）
+
+- **范围与授权**：在 `/private/tmp/studytracker-exam-integrity-20261114`、`codex/exam-integrity-review` 从 `14c64d2e8bc29818e088480eb3e4d4a68d1215f0` clean 开始。用户授权修复五项、将最新 origin/main 合入本审查分支、推本分支并等CI；不授权 push／合并到 main、部署或生产服务器／数据库操作。本轮已 fetch 到 `origin/main@cb2610166d7654c81238f53c000e37eafa7e68e1`，尚待修复提交后整合。旧主资料树／其他任务业务文件不纳入本次提交。
+- **修复内容**：未交卷科目的章节页停留按离开累计，回科满10秒结算；每生2000普通事件软上限、例行心跳不写事件、关键leave/locked/unlock/device_conflict始终保留；SQLite独立连接500ms等待，不持进程事件锁排队，失败ok:false/503不伪装off；已知锁定故障最长60秒保留、内存顺序补发hidden/visible并去重，老师每卡显示离线时长；紧急关闭保留阈值。额外核对BFCache重入与旧请求/事件竞态。无旧表／模型字段变更，无原草稿／计时／交卷代码改动。
+- **规则变更依据**：用户本轮明确修改原计划3.14。已在 EXAM_INTEGRITY_PLAN 顶部记录优先修订，并同步 RUNBOOK／在线帮助；未锁请求失败继续立即放行，已知锁定才保留最多60秒；权威off立即stop，不等待60秒。排队只在当前页内存，刷新/关闭不会持久化；关键事件允许超过2000普通软上限。这些都不宣称物理防作弊或真实设备验收。
+- **本轮定向验证**：`PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service -q` 60/60；同命令 `tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial -q` 41/41；同命令 `tests.test_exam_integrity_e2e -q` 5/5；`node --test tests/test_exam_guard.js` 49/49（含BFCache和陈旧响应边界）；最终相关套件在合并后统一记录。7个变更Python文件定向Ruff/Black通过。数据库4并发锁占用复现、15学生33分钟心跳、600秒章节绕过、7/321阈值保留均纳入自动化测试。
+- **待完成／发布状态**：修复业务仍本机未提交，接下来提交、仅在本分支合入main，处理两交接文档冲突并保留双方记录，再跑全部相关回归及真实浏览器合成场景。当前没有新push或部署，没有生产查询写入／重启／外部通知；小程序未由本任务修改或上传／提审／发布。完成分支CI和交接后停止等审查，第二期不做。iPad/Safari真实切App、通知/分屏/息屏/原生剪贴板、SEB配置仍待真机。
+
 ## 2026-11-15 雅思诚信模式：专用审查分支同步（禁止部署）
 
 - **授权与当前状态**：用户明确授权把第一期完整实现提交并仅推送 `codex/exam-integrity-review`，等待该分支 CI 后停止、等待 Claude 审查。已从实现分支 `codex/exam-integrity-20261114` 创建指定审查分支，工作树仍为 `/private/tmp/studytracker-exam-integrity-20261114`，基线／创建时 HEAD 为 `ecc06f2393a5f3a0646f36f3a6dceda4902c1c08`。完整实现已 commit 并 push 为 **`c653c3ab120cb76b69535e5f4090c3a23c9b654f`**，远端跟踪分支已建立；[实现提交 CI](https://github.com/KB77GG/studytracker/actions/runs/43657508962) **success**。本节和 `ci-review.json` 随后以仅文档提交同步，最终提交 SHA 用 `git rev-parse HEAD` 核对，对应 CI 用 `gh run list --branch codex/exam-integrity-review` 核对，不把实现 SHA 的结果冒称为其他提交的结果。禁止 push／合并 main、部署或访问生产服务器／数据库，未取得此类授权。

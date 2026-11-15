@@ -5,13 +5,14 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '../../..');
+const evidenceDir = process.env.INTEGRITY_EVIDENCE_DIR || __dirname;
 const base = 'http://127.0.0.1:5098';
 const evidence=[];
 const report=(name,detail={})=>{evidence.push({name,ok:true,...detail});console.log('PASS '+name)};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 let server,browser,lastPage;
 async function until(fn, timeout=20000){const start=Date.now();while(Date.now()-start<timeout){if(await fn())return;await wait(200)}throw Error('condition timeout')}
-async function screen(page,name){await page.screenshot({path:path.join(__dirname,name+'.png'),fullPage:true})}
+async function screen(page,name){await page.screenshot({path:path.join(evidenceDir,name+'.png'),fullPage:true})}
 async function visibility(page, duration=2150){
   // Controlled visibility events exercise the shipped guard + real HTTP + DB.
   // Headless events do not stand in for iPad/App-switch OS verification.
@@ -54,6 +55,7 @@ async function finish(page,kind){
 }
 async function state(page,info){return (await page.request.get(info.api+'/integrity/state?section=reading')).json()}
 async function run(){
+  await fs.mkdir(evidenceDir, {recursive:true});
   server=spawn(process.env.PYTHON || '/Users/zhouxin/Desktop/studytracker/.venv/bin/python',['-B','-m','tests.exam_integrity_e2e_support','--port','5098'],{cwd:root,stdio:['ignore','pipe','pipe']});
   let serverErr='';server.stderr.on('data',d=>{serverErr+=d.toString()});
   await until(async()=>{try{return (await fetch(base+'/exam/1')).ok}catch(_){return false}},15000);
@@ -131,4 +133,4 @@ async function run(){
   }
   report('browser engine',{version:browser.version()});
 }
-(async()=>{try{await run()}catch(e){console.error(e.stack);if(lastPage){await screen(lastPage,'failure');await fs.writeFile(path.join(__dirname,'failure.html'),await lastPage.content())}evidence.push({ok:false,error:e.message});process.exitCode=1}finally{await fs.writeFile(path.join(__dirname,'browser-results.json'),JSON.stringify(evidence,null,2)+'\n');if(browser)await browser.close();if(server)server.kill('SIGTERM')}})();
+(async()=>{try{await run()}catch(e){console.error(e.stack);if(lastPage){await screen(lastPage,'failure');await fs.writeFile(path.join(evidenceDir,'failure.html'),await lastPage.content())}evidence.push({ok:false,error:e.message});process.exitCode=1}finally{await fs.writeFile(path.join(evidenceDir,'browser-results.json'),JSON.stringify(evidence,null,2)+'\n');if(browser)await browser.close();if(server)server.kill('SIGTERM')}})();

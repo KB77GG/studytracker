@@ -134,7 +134,8 @@ class IntegrityAdversarialTest(unittest.TestCase):
         with db.engine.begin() as conn:
             conn.exec_driver_sql("DROP TABLE exam_integrity_event")
         result = self.send("hidden", 1)
-        self.assertEqual(result["mode"], "off")
+        self.assertFalse(result["ok"])
+        self.assertNotIn("mode", result)
         with Session(db.engine) as session:
             state = session.scalar(select(ExamIntegrityState))
             self.assertIsNone(state.hidden_at)

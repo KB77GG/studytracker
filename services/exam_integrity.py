@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import threading
 import weakref
+from contextlib import contextmanager
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -24,9 +25,11 @@ from services.exam_integrity_rules import (
 
 KIND = "ielts_mock"
 MAX_EVENTS = 2000
+BUSY_TIMEOUT_MS = 500
+_CRITICAL_EVENTS = {"leave", "locked", "unlock", "device_conflict"}
 _TABLES = (ExamIntegrityPolicy, ExamIntegrityState, ExamIntegrityEvent)
 _SCHEMA_READY = weakref.WeakSet()
-_LOCK = threading.RLock()  # Production is explicitly one worker / six threads.
+_LOCK = threading.RLock()  # Only schema creation; never hold it during event writes.
 
 
 def off_policy():
@@ -37,27 +40,66 @@ def _engine(engine=None):
     return engine if engine is not None else db.engine
 
 
+def unavailable():
+    """A transient storage failure must never look like an authoritative policy off."""
+    return {"ok": False, "error": "integrity_temporarily_unavailable"}
+
+
+@contextmanager
+def _connection(engine=None):
+    """Bound SQLite waits for this isolated operation, restoring the pooled connection."""
+    with _engine(engine).connect() as connection:
+        sqlite = connection.dialect.name == "sqlite"
+        previous = None
+        try:
+            if sqlite:
+                previous = connection.exec_driver_sql("PRAGMA busy_timeout").scalar()
+                connection.exec_driver_sql(f"PRAGMA busy_timeout={BUSY_TIMEOUT_MS}")
+                connection.commit()
+            yield connection
+        finally:
+            connection.rollback()
+            if sqlite and previous is not None:
+                connection.exec_driver_sql(f"PRAGMA busy_timeout={int(previous)}")
+                connection.commit()
+
+
+@contextmanager
+def _session(*, write=False):
+    with _connection() as connection, Session(bind=connection) as session:
+        if write:
+            with session.begin():
+                if connection.dialect.name == "sqlite":
+                    # Serialize before reading counters, without a process mutex or a
+                    # read-to-write lock upgrade. Concurrent failures each wait <=500ms.
+                    session.connection().exec_driver_sql("BEGIN IMMEDIATE")
+                yield session
+        else:
+            yield session
+
+
 def ensure_schema(engine=None):
     """Teacher-only, idempotent CREATE of exactly three independent new tables."""
     try:
         engine = _engine(engine)
         with _LOCK:
             if engine not in _SCHEMA_READY:
-                for model in _TABLES:
-                    model.__table__.create(engine, checkfirst=True)
+                with _connection(engine) as connection, connection.begin():
+                    for model in _TABLES:
+                        model.__table__.create(connection, checkfirst=True)
                 _SCHEMA_READY.add(engine)
         return True
     except Exception:
         return False
 
 
-def read_policy(exam_ref, exam_kind=KIND, engine=None):
+def read_policy(exam_ref, exam_kind=KIND, engine=None, *, strict=False):
     """A read-only independent connection must not rollback a pending exam write."""
     if os.environ.get("EXAM_INTEGRITY_DISABLED") == "1":
         return off_policy()
     try:
         table = ExamIntegrityPolicy.__table__
-        with _engine(engine).connect() as conn:
+        with _connection(engine) as conn:
             row = (
                 conn.execute(
                     select(table).where(
@@ -67,7 +109,7 @@ def read_policy(exam_ref, exam_kind=KIND, engine=None):
                 .mappings()
                 .first()
             )
-        if not row or row["mode"] not in {"monitor", "enforce"}:
+        if not row or row["mode"] not in {"off", "monitor", "enforce"}:
             return off_policy()
         return {
             "mode": row["mode"],
@@ -75,6 +117,8 @@ def read_policy(exam_ref, exam_kind=KIND, engine=None):
             "max_hidden_seconds": row["max_hidden_seconds"],
         }
     except Exception:
+        if strict:
+            raise
         return off_policy()
 
 
@@ -102,63 +146,74 @@ def _append_events(session, state, logs, now):
         select(func.count())
         .select_from(ExamIntegrityEvent)
         .where(
-            ExamIntegrityEvent.exam_kind == KIND,
-            ExamIntegrityEvent.exam_ref == state.exam_ref,
+            ExamIntegrityEvent.state_id == state.id,
         )
     )
-    for log in logs[: max(0, MAX_EVENTS - count)]:
+    for log in logs:
+        if log["type"] == "heartbeat":
+            continue
+        if count >= MAX_EVENTS and log["type"] not in _CRITICAL_EVENTS:
+            continue
         session.add(
             ExamIntegrityEvent(
                 state_id=state.id, exam_kind=KIND, exam_ref=state.exam_ref, created_at=now, **log
             )
         )
+        count += 1
 
 
 def student_state(exam_ref, session_ref, device_id="", section="process", now=None):
-    policy = read_policy(exam_ref)
-    if policy["mode"] == "off":
-        return serialize(None, policy, now=now)
     try:
-        with Session(db.engine) as session:
+        policy = read_policy(exam_ref, strict=True)
+        if policy["mode"] == "off":
+            return serialize(None, policy, now=now)
+        with _session() as session:
             state = session.scalar(_state_query(exam_ref, session_ref))
             return serialize(state, policy, device_id=device_id, section=section, now=now)
     except Exception:
-        return serialize(None, off_policy(), now=now)
+        return unavailable()
 
 
 get_state = student_state
 
 
 def record_event(
-    exam_ref, session_ref, payload, *, current_section=None, submitted_sections=(), now=None
+    exam_ref,
+    session_ref,
+    payload,
+    *,
+    current_section=None,
+    submitted_sections=(),
+    active_sections=None,
+    now=None,
 ):
     now = as_utc(now)
     try:
-        with _LOCK:
-            policy = read_policy(exam_ref)
-            if policy["mode"] == "off":
-                return serialize(None, policy, now=now)
-            with Session(db.engine) as session, session.begin():
-                state = _get_or_create(session, exam_ref, session_ref)
-                logs = transition(
-                    state,
-                    policy,
-                    payload,
-                    now=now,
-                    current_section=current_section,
-                    submitted_sections=submitted_sections,
-                )
-                _append_events(session, state, logs, now)
-                session.flush()
-                return serialize(
-                    state,
-                    policy,
-                    device_id=payload.get("device_id", ""),
-                    section=payload.get("section", "process"),
-                    now=now,
-                )
+        policy = read_policy(exam_ref, strict=True)
+        if policy["mode"] == "off":
+            return serialize(None, policy, now=now)
+        with _session(write=True) as session:
+            state = _get_or_create(session, exam_ref, session_ref)
+            logs = transition(
+                state,
+                policy,
+                payload,
+                now=now,
+                current_section=current_section,
+                submitted_sections=submitted_sections,
+                active_sections=active_sections,
+            )
+            _append_events(session, state, logs, now)
+            session.flush()
+            return serialize(
+                state,
+                policy,
+                device_id=payload.get("device_id", ""),
+                section=payload.get("section", "process"),
+                now=now,
+            )
     except Exception:
-        return serialize(None, off_policy(), now=now)
+        return unavailable()
 
 
 def set_policy(exam_ref, mode, max_leaves=3, max_hidden_seconds=60, actor=None, now=None):
@@ -177,7 +232,7 @@ def set_policy(exam_ref, mode, max_leaves=3, max_hidden_seconds=60, actor=None, 
     ):
         raise ValueError("invalid_max_hidden_seconds")
     now = as_utc(now)
-    with _LOCK, Session(db.engine) as session, session.begin():
+    with _session(write=True) as session:
         policy = session.scalar(
             select(ExamIntegrityPolicy).where(
                 ExamIntegrityPolicy.exam_kind == KIND, ExamIntegrityPolicy.exam_ref == str(exam_ref)
@@ -206,12 +261,33 @@ def set_policy(exam_ref, mode, max_leaves=3, max_hidden_seconds=60, actor=None, 
     return {"mode": mode, "max_leaves": max_leaves, "max_hidden_seconds": max_hidden_seconds}
 
 
+def emergency_off(exam_ref, actor=None, now=None):
+    """Change only mode and its audit fields; preserve the teacher's thresholds."""
+    now = as_utc(now)
+    with _session(write=True) as session:
+        policy = session.scalar(
+            select(ExamIntegrityPolicy).where(
+                ExamIntegrityPolicy.exam_kind == KIND, ExamIntegrityPolicy.exam_ref == str(exam_ref)
+            )
+        )
+        if policy is None:
+            policy = ExamIntegrityPolicy(exam_kind=KIND, exam_ref=str(exam_ref), created_at=now)
+            session.add(policy)
+        policy.mode, policy.updated_by, policy.updated_at = "off", actor, now
+        session.flush()
+        return {
+            "mode": "off",
+            "max_leaves": policy.max_leaves,
+            "max_hidden_seconds": policy.max_hidden_seconds,
+        }
+
+
 def admin_action(exam_ref, session_ref, action, actor=None, exempt=True, now=None):
     if action not in {"unlock", "reset-device", "exempt"}:
         raise ValueError("invalid_action")
     now = as_utc(now)
-    policy = read_policy(exam_ref)
-    with _LOCK, Session(db.engine) as session, session.begin():
+    policy = read_policy(exam_ref, strict=True)
+    with _session(write=True) as session:
         state = _get_or_create(session, exam_ref, session_ref)
         if action == "unlock":
             if not state.is_locked:
@@ -253,8 +329,8 @@ def admin_action(exam_ref, session_ref, action, actor=None, exempt=True, now=Non
 
 
 def admin_states(exam_ref, session_refs, now=None):
-    policy = read_policy(exam_ref)
-    with Session(db.engine) as session:
+    policy = read_policy(exam_ref, strict=True)
+    with _session() as session:
         refs = [str(ref) for ref in session_refs]
         states = {
             state.session_ref: state
@@ -276,7 +352,7 @@ def admin_states(exam_ref, session_refs, now=None):
 
 
 def event_timeline(session_ref, limit=200):
-    with Session(db.engine) as session:
+    with _session() as session:
         state = session.scalar(
             select(ExamIntegrityState).where(
                 ExamIntegrityState.exam_kind == KIND,

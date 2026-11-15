@@ -11,6 +11,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '../../..');
+const evidenceDir = process.env.INTEGRITY_EVIDENCE_DIR || __dirname;
 const base = 'http://127.0.0.1:5099';
 const evidence = [];
 const errors = [];
@@ -31,7 +32,7 @@ async function until(fn, timeout = 20000) {
   throw Error('condition timeout');
 }
 async function screen(page, name) {
-  await page.screenshot({ path: path.join(__dirname, 'resilience-' + name + '.png'), fullPage: true });
+  await page.screenshot({ path: path.join(evidenceDir, 'resilience-' + name + '.png'), fullPage: true });
 }
 async function context() {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -159,12 +160,29 @@ async function finishReadingAndWriting(p, info) {
   report('after table removal, native Reading and Writing submission reaches result', { readingSubmitStatus: 200, writingSubmitStatus: 200 });
 }
 async function run() {
+  await fs.mkdir(evidenceDir, {recursive:true});
   server = spawn(process.env.PYTHON || '/Users/zhouxin/Desktop/studytracker/.venv/bin/python', ['-B', '-m', 'tests.exam_integrity_e2e_support', '--port', '5099'], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
   server.stderr.on('data', data => { serverError += data.toString(); });
   await until(async () => { try { return (await fetch(base + '/exam/1')).ok; } catch (_) { return false; } }, 15000);
   browser = await chromium.launch({ executablePath: process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true });
   const oldContext = await context();
   const newContext = await context();
+
+  const replayPage = await page(oldContext);
+  const replayInfo = await prepareReading(replayPage, 'monitor');
+  await until(async () => (await state(replayPage, replayInfo)).state_id != null);
+  await replayPage.route('**/integrity/**', route => route.abort('internetdisconnected'));
+  await replayPage.evaluate(() => window.dispatchEvent(new Event('offline')));
+  await visibility(replayPage);
+  await wait(1000);
+  assert.equal((await state(replayPage, replayInfo)).leave_count, 0);
+  await replayPage.unroute('**/integrity/**');
+  await replayPage.evaluate(() => window.dispatchEvent(new Event('online')));
+  await until(async () => (await state(replayPage, replayInfo)).leave_count === 1);
+  const replayed = await state(replayPage, replayInfo);
+  assert.ok(replayed.hidden_seconds >= 2 && replayed.hidden_seconds < 3.5, 'replay must preserve original hidden duration');
+  report('network outage queues visibility events and replays one original-duration leave on recovery', {leaveCount: replayed.leave_count, hiddenSeconds: replayed.hidden_seconds});
+  await replayPage.close();
 
   const baseline = await page(oldContext);
   await prepareReading(baseline, 'off');
@@ -244,14 +262,29 @@ async function run() {
   const dropped = await json(await newPage.request.post(base + '/__integrity_fixture/drop-integrity-tables'));
   assert.deepEqual(dropped.integrity_tables_remaining, []);
   assert.equal(dropped.legacy_session_table_present, true);
-  await newPage.locator('#exam-integrity-root').waitFor({ state: 'detached', timeout: 20000 });
-  assert.equal((await state(newPage, info)).mode, 'off');
+  const failed = await newPage.request.get(info.api + '/integrity/state?section=reading');
+  assert.equal(failed.status(), 503);
+  assert.equal((await failed.json()).ok, false);
+  // A known lock survives a transient failure for at most 60 seconds. Keep the
+  // real timer running: this is an elapsed-time browser check, not fake time.
+  await wait(1500);
+  assert.equal(await newPage.locator('.exam-integrity-overlay').isVisible(), true);
+  await screen(newPage, 'lock-retained-during-storage-failure');
+  const holdDraft = await json(await newPage.request.put(info.api + '/draft/reading', { data: {answers: {'1': 'TRUE'}} }));
+  assert.equal(holdDraft.ok, true, 'guard outage must not reject legacy draft writes');
+  await newPage.locator('.exam-integrity-overlay').waitFor({ state: 'hidden', timeout: 70000 });
+  const releasedAfter = Date.now() - droppedAt;
+  assert.ok(releasedAfter >= 59000 && releasedAfter < 70000, 'known lock releases after bounded 60-second failure grace');
+  assert.equal(await newPage.locator('#exam-integrity-root').count(), 1, 'temporary outage must retain the guard for retry');
+  const unavailable = await newPage.request.get(info.api + '/integrity/state?section=reading');
+  assert.equal(unavailable.status(), 503);
+  assert.equal(Object.hasOwn(await unavailable.json(), 'mode'), false);
   const saved = newPage.waitForResponse(response => response.url() === info.api + '/draft/reading' && response.request().method() === 'PUT');
   await newAnswer.fill('TRUE ');
   await json(await saved);
   const draft = await json(await newPage.request.get(info.api + '/draft/reading'));
   assert.equal(draft.answers['1'].trim(), 'TRUE');
-  report('dropping only the three integrity tables removes the lock and preserves real draft saving', { milliseconds: Date.now() - droppedAt, legacySessionCount: dropped.legacy_session_count, eventMethod: 'controlled visibility events, not OS app switching' });
+  report('storage outage retains known lock for 60 seconds then releases UI while retrying and preserving drafts', { milliseconds: releasedAfter, legacySessionCount: dropped.legacy_session_count, eventMethod: 'controlled visibility events, not OS app switching' });
   await finishReadingAndWriting(newPage, info);
   assert.deepEqual(errors, []);
   report('extended browser console has no page errors', { browserVersion: browser.version(), consoleErrors: errors.length });
@@ -262,12 +295,12 @@ async function run() {
     console.error(error.stack);
     if (lastPage && !lastPage.isClosed()) {
       await screen(lastPage, 'failure').catch(() => {});
-      await fs.writeFile(path.join(__dirname, 'resilience-failure.html'), await lastPage.content()).catch(() => {});
+      await fs.writeFile(path.join(evidenceDir, 'resilience-failure.html'), await lastPage.content()).catch(() => {});
     }
     evidence.push({ ok: false, error: error.message });
     process.exitCode = 1;
   } finally {
-    await fs.writeFile(path.join(__dirname, 'browser-resilience-results.json'), JSON.stringify(evidence, null, 2) + '\n');
+    await fs.writeFile(path.join(evidenceDir, 'browser-resilience-results.json'), JSON.stringify(evidence, null, 2) + '\n');
     for (const ctx of contexts) await ctx.close().catch(() => {});
     if (browser) await browser.close();
     if (server) server.kill('SIGTERM');

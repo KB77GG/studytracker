@@ -19,12 +19,13 @@
     <button id="integrityEmergency" class="btn integrity-console__emergency" type="button">紧急关闭本场防作弊</button>
   </div>
   <p id="integrityNotice" role="status" aria-live="polite">正在读取监考状态…</p>
+  <p class="integrity-console__hint">离线时长按距最后联系的时间估算，超过 20 秒心跳宽限后显示；不代表一定离开页面，也不单独计次。</p>
   <p class="integrity-console__hint">当前关闭时，不会给已打开的学生页面加载脚本；切换为开启后，请学生在下一科开始前刷新章节页。关闭后，已加载的守卫会在 20 秒内撤去遮罩。</p>
   <div id="integrityStudents" class="integrity-console__students" aria-live="off"></div>
   <section id="integrityTimeline" hidden class="integrity-console__timeline"><h2 id="integrityTimelineTitle">事件时间线</h2><p>最近 200 条；这是复核线索，不自动判定作弊。</p><button type="button" id="integrityTimelineClose" class="btn btn-outline">收起时间线</button><ol id="integrityEvents"></ol></section>
 </section>
 <style>
-.integrity-console{max-width:1200px;margin:0 auto;color:#23362f}.integrity-console__header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.integrity-console h1{font-size:25px}.integrity-console p{line-height:1.6}.integrity-console__links{display:flex;gap:20px;margin:18px 0}.integrity-console__controls{background:white;border:1px solid #d9e2dd;padding:20px;border-radius:12px}.integrity-console form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px}.integrity-console label{display:flex;flex-direction:column;gap:5px;font-size:14px}.integrity-console input,.integrity-console select{min-height:44px;border:1px solid #b9c9bf;border-radius:6px;padding:8px;max-width:190px;background:white}.integrity-console .btn{min-height:44px;white-space:normal}.integrity-console__emergency{margin-top:18px;background:#b52c34!important;color:white!important;border:2px solid #98202a!important}.integrity-console__hint{color:#64736b;font-size:13px}.integrity-console__students{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}.integrity-student{border:1px solid #dce4df;border-radius:12px;padding:18px;background:#fff}.integrity-student.is-alert{border:2px solid #b74739;background:#fff9f5}.integrity-student h2{font-size:20px;margin:0 0 8px}.integrity-student dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.integrity-student dt{font-size:12px;color:#62746a}.integrity-student dd{margin:0;font-size:17px}.integrity-student__actions{display:flex;flex-wrap:wrap;gap:8px}.integrity-student__status{font-weight:700}.integrity-console__timeline{margin:24px 0;padding:20px;border:1px solid #c4d2c9;background:#fff;border-radius:12px}.integrity-console__timeline li{padding:10px 0;border-bottom:1px solid #e4ebe6;overflow-wrap:anywhere}.integrity-console [hidden]{display:none!important}@media(max-width:600px){.integrity-console__header{display:block}.integrity-console__controls{padding:14px}.integrity-console form{display:grid;grid-template-columns:1fr 1fr}.integrity-console label:first-child,.integrity-console form button{grid-column:1/-1}.integrity-console input,.integrity-console select{max-width:none;width:100%}.integrity-console__emergency{width:100%}.integrity-console__students{grid-template-columns:1fr}}
+.integrity-console{max-width:1200px;margin:0 auto;color:#23362f}.integrity-console__header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.integrity-console h1{font-size:25px}.integrity-console p{line-height:1.6}.integrity-console__links{display:flex;gap:20px;margin:18px 0}.integrity-console__controls{background:white;border:1px solid #d9e2dd;padding:20px;border-radius:12px}.integrity-console form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px}.integrity-console label{display:flex;flex-direction:column;gap:5px;font-size:14px}.integrity-console input,.integrity-console select{min-height:44px;border:1px solid #b9c9bf;border-radius:6px;padding:8px;max-width:190px;background:white}.integrity-console .btn{min-height:44px;white-space:normal}.integrity-console__emergency{margin-top:18px;background:#b52c34!important;color:white!important;border:2px solid #98202a!important}.integrity-console__hint{color:#64736b;font-size:13px}.integrity-console__students{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}.integrity-student{border:1px solid #dce4df;border-radius:12px;padding:18px;background:#fff}.integrity-student.is-alert{border:2px solid #b74739;background:#fff9f5}.integrity-student h2{font-size:20px;margin:0 0 8px}.integrity-student dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.integrity-student dt{font-size:12px;color:#62746a}.integrity-student dd{margin:0;font-size:17px}.integrity-student__actions{display:flex;flex-wrap:wrap;gap:8px}.integrity-student__status{font-weight:700}.integrity-student__offline{font-weight:700;padding:8px 10px;border-radius:6px;background:#fff0d7;color:#854700}.integrity-student__connection{font-size:14px;color:#53665a}.integrity-console__timeline{margin:24px 0;padding:20px;border:1px solid #c4d2c9;background:#fff;border-radius:12px}.integrity-console__timeline li{padding:10px 0;border-bottom:1px solid #e4ebe6;overflow-wrap:anywhere}.integrity-console [hidden]{display:none!important}@media(max-width:600px){.integrity-console__header{display:block}.integrity-console__controls{padding:14px}.integrity-console form{display:grid;grid-template-columns:1fr 1fr}.integrity-console label:first-child,.integrity-console form button{grid-column:1/-1}.integrity-console input,.integrity-console select{max-width:none;width:100%}.integrity-console__emergency{width:100%}.integrity-console__students{grid-template-columns:1fr}}
 /* This stylesheet is emitted only by the integrity console. Keep patrol
    controls unobstructed on phones, including when the shared drawer was open. */
 @media (max-width: 768px) {
@@ -53,7 +54,7 @@
   let pending = false;
   let actionPending = false;
   const sections = {intro:'章节页',process:'章节页',listening:'听力',reading:'阅读',writing:'写作',finished:'已完成'};
-  const eventNames = {hello:'进入页面',ack:'确认规则',hidden:'页面隐藏',visible:'返回页面',heartbeat:'心跳',heartbeat_gap:'心跳间隔较长',blur:'窗口失焦',viewport:'视口变窄',copy_blocked:'复制/剪切记录',paste_blocked:'粘贴/拖放记录',device_conflict:'设备冲突',unlock:'老师解锁',locked:'锁定',lock:'锁定',exempt:'豁免变更','reset-device':'允许换设备'};
+  const eventNames = {hello:'进入页面',ack:'确认规则',hidden:'页面隐藏',visible:'返回页面',heartbeat:'心跳',heartbeat_gap:'心跳间隔较长',blur:'窗口失焦',viewport:'视口变窄',copy_blocked:'复制/剪切记录',paste_blocked:'粘贴/拖放记录',device_conflict:'设备冲突',unlock:'老师解锁',locked:'锁定',lock:'锁定',leave:'计次离开',exempt:'豁免变更','reset-device':'允许换设备'};
   function element(tag, text, cls) { const el = document.createElement(tag); if (text !== undefined) el.textContent = String(text); if (cls) el.className = cls; return el; }
   function time(value) { if (!value) return '尚无记录'; const date = new Date(value); return Number.isNaN(date.getTime()) ? '时间未知' : date.toLocaleString('zh-CN', {hour12:false}); }
   async function call(path, body) {
@@ -63,6 +64,16 @@
     const data = await response.json();
     if (!response.ok || !data.ok) throw new Error('请求未完成');
     return data;
+  }
+  function duration(seconds) {
+    const value=Math.max(0,Math.floor(Number(seconds) || 0));
+    const hours=Math.floor(value/3600), minutes=Math.floor((value%3600)/60), rest=value%60;
+    return (hours ? hours+' 小时 ' : '')+(hours || minutes ? minutes+' 分 ' : '')+rest+' 秒';
+  }
+  function connectionText(row) {
+    if (row.never_connected || row.seconds_since_seen == null) return '离线时长：尚未连接，无法估算';
+    if (row.offline_seconds > 0) return '离线时长：'+duration(row.offline_seconds)+'（距最后联系）';
+    return '离线时长：0 秒 · 最近联系于 '+duration(row.seconds_since_seen)+'前';
   }
   function status(row) {
     if (row.exempt) return '本场豁免';
@@ -101,6 +112,7 @@
       const facts=element('dl');
       [['离开次数',row.leave_count || 0],['累计离开',Math.round(row.hidden_seconds || 0)+' 秒'],['复制/剪切',String(row.copy_attempt_count || 0)+' 次记录 / '+String(row.copy_blocked_count || 0)+' 次拦截'],['粘贴/拖放',String(row.paste_attempt_count || 0)+' 次记录 / '+String(row.paste_blocked_count || 0)+' 次拦截']].forEach(function(pair){const div=element('div');div.appendChild(element('dt',pair[0]));div.appendChild(element('dd',pair[1]));facts.appendChild(div);});
       card.appendChild(facts);
+      card.appendChild(element('p',connectionText(row),row.offline_seconds > 0 ? 'integrity-student__offline' : 'integrity-student__connection'));
       card.appendChild(element('p','最后活跃：'+time(row.last_seen_at)));
       if (row.device_conflict_count) card.appendChild(element('p','历史设备冲突：'+row.device_conflict_count+' 次'));
       const actions=element('div',undefined,'integrity-student__actions');

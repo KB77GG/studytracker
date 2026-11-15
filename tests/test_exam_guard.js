@@ -114,6 +114,24 @@ async function installed(section, mode, patch) {
   return h;
 }
 
+function controlledClock(h, start = 0) {
+  let now = start;
+  let nextId = 0;
+  const timeouts = new Map();
+  h.win.performance = { now: () => now };
+  h.win.setTimeout = (fn, ms) => { timeouts.set(++nextId, { fn, at: now + ms }); return nextId; };
+  h.win.clearTimeout = id => timeouts.delete(id);
+  return {
+    now: () => now,
+    advance(ms) {
+      now += ms;
+      for (const [id, timeout] of [...timeouts]) {
+        if (timeout.at <= now) { timeouts.delete(id); timeout.fn(); }
+      }
+    },
+  };
+}
+
 test('off and unknown modes have no DOM, network, listeners or timer side effects', () => {
   for (const mode of ['off', 'bad', undefined]) {
     const h = harness('reading', mode);
@@ -237,12 +255,27 @@ test('listening blur and narrow viewport remain nonblocking', async () => {
   h.instance.stop();
 });
 
-test('failed state request removes lock and clipboard enforcement; recovered state can restore it', async () => {
-  const h = await installed('writing', 'enforce', { is_locked: true });
+test('known lock survives failed requests for at most sixty seconds without resetting the deadline', async () => {
+  const h = harness('writing', 'enforce');
+  const clock = controlledClock(h);
+  h.setState({ is_locked: true });
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  const unrelatedTimer = h.win.setInterval(() => {}, 1000);
   h.fail();
   await h.instance.poll();
+  assert.equal(h.root().hidden, false);
+  assert.equal(find(h.root(), 'exam-integrity-overlay').hidden, false);
+  clock.advance(30000);
+  await h.instance.poll();
+  clock.advance(29999);
+  await h.instance.poll();
+  assert.equal(h.root().hidden, false);
+  clock.advance(1);
   assert.equal(h.root().hidden, true);
   assert.equal(h.doc.body.classList.contains('exam-integrity-enforce'), false);
+  await h.instance.poll();
+  assert.equal(h.root().hidden, true, 'a fourth failure cannot start another sixty-second lock');
   const event = h.doc.emit('paste', { target: h.box(), clipboardData: { getData: () => 'External text' } });
   assert.equal(event.defaultPrevented, false);
   h.recover();
@@ -250,6 +283,7 @@ test('failed state request removes lock and clipboard enforcement; recovered sta
   assert.equal(h.root().hidden, false);
   assert.equal(find(h.root(), 'exam-integrity-overlay').hidden, false);
   h.instance.stop();
+  assert.equal(h.intervals.has(unrelatedTimer), true, 'the original exam timer was never stopped');
 });
 
 test('emergency off restores Start and stops all guard requests and timers', async () => {
@@ -375,9 +409,9 @@ test('off response permanently wins over an older enforce response still in flig
   h.win.emit('blur');
   const polling = h.instance.poll();
   assert.equal(pending.length, 2);
-  pending[1]({ ok: true, json: async () => ({ mode: 'off' }) });
+  pending[1]({ ok: true, json: async () => ({ ok: true, mode: 'off' }) });
   await polling;
-  pending[0]({ ok: true, json: async () => ({ mode: 'enforce', is_locked: true }) });
+  pending[0]({ ok: true, json: async () => ({ ok: true, mode: 'enforce', is_locked: true }) });
   await flush();
   assert.equal(h.root(), undefined);
   assert.equal(h.intervals.size, 0);
@@ -389,10 +423,10 @@ test('an older but valid off response also releases a newer locked state', async
   h.win.fetch = () => new Promise(resolve => pending.push(resolve));
   h.win.emit('blur');
   const polling = h.instance.poll();
-  pending[1]({ ok: true, json: async () => ({ mode: 'enforce', is_locked: true, device_bound: true }) });
+  pending[1]({ ok: true, json: async () => ({ ok: true, mode: 'enforce', is_locked: true, device_bound: true }) });
   await polling;
   assert.equal(find(h.root(), 'exam-integrity-overlay').hidden, false);
-  pending[0]({ ok: true, json: async () => ({ mode: 'off' }) });
+  pending[0]({ ok: true, json: async () => ({ ok: true, mode: 'off' }) });
   await flush();
   assert.equal(h.root(), undefined);
 });
@@ -532,5 +566,322 @@ test('a state response confirming ownership also prevents reclaim after a lost h
   h.setState({ device_bound: false });
   await h.instance.poll();
   assert.equal(h.requests.filter(r => r.payload && r.payload.type === 'hello').length, 1);
+  h.instance.stop();
+});
+
+
+test('internal failure carrying off cannot stop retries; only an explicit successful off stops', async () => {
+  const h = await installed('reading', 'enforce');
+  h.setState({ ok: false, mode: 'off', error: 'integrity_temporarily_unavailable' });
+  await h.instance.poll();
+  assert.ok(h.root());
+  assert.equal(h.root().hidden, true);
+  assert.equal(h.intervals.size, 1);
+  const count = h.requests.length;
+  h.setState({ ok: true, mode: 'enforce' });
+  await h.instance.poll();
+  assert.ok(h.requests.length > count);
+  assert.equal(h.root().hidden, false);
+  h.setState({ ok: true, mode: 'off' });
+  await h.instance.poll();
+  assert.equal(h.root(), undefined);
+  assert.equal(h.intervals.size, 0);
+});
+
+test('an off-shaped result without ok true is not authoritative', async () => {
+  const h = await installed('reading', 'enforce');
+  h.win.fetch = async () => ({ ok: true, json: async () => ({ mode: 'off' }) });
+  await h.instance.poll();
+  assert.ok(h.root());
+  assert.equal(h.intervals.size, 1);
+  h.instance.stop();
+});
+
+test('503 retains a known lock until a successful unlock or authoritative off', async () => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h);
+  h.setState({ is_locked: true });
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  const fetch = h.win.fetch;
+  h.win.fetch = async () => ({ ok: false, status: 503, json: async () => ({ ok: false }) });
+  await h.instance.poll();
+  clock.advance(20000);
+  assert.equal(find(h.root(), 'exam-integrity-overlay').hidden, false);
+  h.win.fetch = fetch;
+  h.setState({ is_locked: false });
+  await h.instance.poll();
+  assert.equal(find(h.root(), 'exam-integrity-overlay').hidden, true);
+  h.setState({ is_locked: true });
+  await h.instance.poll();
+  h.fail();
+  await h.instance.poll();
+  clock.advance(30000);
+  assert.equal(h.root().hidden, false, 'a recovered connection starts a new failure period');
+  h.recover();
+  h.setState({ mode: 'off' });
+  await h.instance.poll();
+  assert.equal(h.root(), undefined, 'emergency off does not wait for the remaining grace period');
+});
+
+test('unlocked and listening sessions immediately release UI on network failure', async () => {
+  for (const section of ['reading', 'listening']) {
+    const h = await installed(section, 'enforce', { is_locked: section === 'listening' });
+    h.fail();
+    await h.instance.poll();
+    assert.equal(h.root().hidden, true);
+    assert.equal(h.intervals.size, 1);
+    h.instance.stop();
+  }
+});
+
+test('visibility timestamps are strictly increasing even within one clock millisecond', () => {
+  const transition = guard.visibilityTracker('same-millisecond');
+  assert.equal(transition('hidden', 1000).client_ts, 1000);
+  assert.equal(transition('visible', 1000).client_ts, 1001);
+  assert.equal(transition('hidden', 1000).client_ts, 1002);
+  assert.equal(transition('visible', 999).client_ts, 1003);
+});
+
+test('offline hidden and visible events replay in order with original times and queued duration', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 1000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  h.win.navigator.onLine = false;
+  h.win.emit('offline');
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  await flush();
+  clock.advance(600000);
+  h.doc.visibilityState = 'visible';
+  h.doc.emit('visibilitychange');
+  await flush();
+  assert.equal(h.requests.some(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)), false);
+  clock.advance(20000);
+  h.win.navigator.onLine = true;
+  h.win.emit('online');
+  await flush();
+  const replay = h.requests.filter(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)).map(r => r.payload);
+  assert.deepEqual(replay.map(e => e.type), ['hidden', 'visible']);
+  assert.deepEqual(replay.map(e => e.client_ts), [1000000, 1600000]);
+  assert.deepEqual(replay.map(e => e.queued_ms), [620000, 20000]);
+  assert.equal(replay[1].client_hidden_ms, 600000);
+  assert.equal(replay[0].page_id, replay[1].page_id);
+  await h.instance.poll();
+  assert.equal(h.requests.filter(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)).length, 2);
+  h.instance.stop();
+});
+
+test('failed visibility POST retains FIFO entries until acknowledgement, without new timestamps', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 2000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  h.fail();
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  await flush();
+  clock.advance(4000);
+  h.doc.visibilityState = 'visible';
+  h.doc.emit('visibilitychange');
+  await flush();
+  const failed = h.requests.filter(r => r.payload && r.payload.type === 'hidden').map(r => r.payload);
+  assert.ok(failed.length >= 1);
+  assert.equal(new Set(failed.map(e => e.client_ts)).size, 1);
+  const before = h.requests.length;
+  h.recover();
+  clock.advance(6000);
+  await h.instance.poll();
+  const recovered = h.requests.slice(before).filter(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)).map(r => r.payload);
+  assert.deepEqual(recovered.map(e => e.type), ['hidden', 'visible']);
+  assert.deepEqual(recovered.map(e => e.client_ts), [2000000, 2004000]);
+  assert.deepEqual(recovered.map(e => e.queued_ms), [10000, 6000]);
+  h.instance.stop();
+});
+
+test('accepted beacon remains queued until an HTTP acknowledgement, then is not resent again', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 3000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  const beacons = [];
+  h.win.navigator.sendBeacon = (url, body) => { beacons.push({ url, body }); return true; };
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  clock.advance(3000);
+  h.doc.visibilityState = 'visible';
+  h.doc.emit('visibilitychange');
+  await flush();
+  const beacon = JSON.parse(await beacons[0].body.text());
+  const replay = h.requests.filter(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)).map(r => r.payload);
+  assert.deepEqual(replay.map(e => e.type), ['hidden', 'visible']);
+  assert.equal(replay[0].client_ts, beacon.client_ts);
+  assert.equal(replay[0].page_id, beacon.page_id);
+  await h.instance.poll();
+  assert.equal(h.requests.filter(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)).length, 2);
+  h.instance.stop();
+});
+
+test('authoritative off discards pending visibility events and prevents online replay', async () => {
+  const h = await installed('reading', 'enforce');
+  h.win.navigator.onLine = false;
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  await flush();
+  h.setState({ mode: 'off' });
+  h.win.navigator.onLine = true;
+  await h.instance.poll();
+  const count = h.requests.length;
+  h.win.emit('online');
+  h.doc.visibilityState = 'visible';
+  h.doc.emit('visibilitychange');
+  await flush();
+  assert.equal(h.root(), undefined);
+  assert.equal(h.requests.length, count);
+});
+
+
+test('missing CSS cannot leave invisible clipboard restrictions active', async () => {
+  const h = harness('writing', 'enforce');
+  h.win.getComputedStyle = () => ({ getPropertyValue: () => '' });
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  const event = h.doc.emit('paste', { target: h.box(), clipboardData: { getData: () => 'External text' } });
+  assert.equal(event.defaultPrevented, false);
+  assert.equal(h.root().hidden, true);
+  h.instance.stop();
+});
+
+test('bfcache return announces the original page before replaying its hidden and visible events', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 4000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  h.win.navigator.sendBeacon = () => true;
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  const originalPage = h.requests.find(r => r.payload && r.payload.type === 'hello').payload.page_id;
+  const before = h.requests.length;
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  h.win.emit('pagehide', { persisted: true });
+  clock.advance(600000);
+  h.doc.visibilityState = 'visible';
+  h.win.emit('pageshow', { persisted: true });
+  await flush();
+  const posted = h.requests.slice(before).filter(r => r.payload).map(r => r.payload);
+  assert.deepEqual(posted.map(e => e.type), ['hello', 'hidden', 'visible']);
+  assert.equal(posted.every(e => e.page_id === originalPage), true);
+  assert.equal(posted[2].client_hidden_ms, 600000);
+  assert.equal(h.requests.filter(r => r.payload && r.payload.type === 'hello').length, 2);
+  h.instance.stop();
+});
+
+test('visible before persisted pageshow still waits for just one return hello', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 5000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  h.win.navigator.sendBeacon = () => true;
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  const before = h.requests.length;
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  h.win.emit('pagehide', { persisted: true });
+  clock.advance(600000);
+  h.doc.visibilityState = 'visible';
+  h.doc.emit('visibilitychange');
+  h.win.emit('pageshow', { persisted: true });
+  await flush();
+  const types = h.requests.slice(before).filter(r => r.payload).map(r => r.payload.type);
+  assert.deepEqual(types, ['hello', 'hidden', 'visible']);
+  assert.equal(h.requests.filter(r => r.payload && r.payload.type === 'hello').length, 2);
+  h.instance.stop();
+});
+
+test('bfcache with no visibilitychange still sends return hello while initial pageshow does not', async () => {
+  const h = await installed('reading', 'enforce');
+  h.win.emit('pageshow', { persisted: false });
+  await flush();
+  assert.equal(h.requests.filter(r => r.payload && r.payload.type === 'hello').length, 1);
+  h.win.emit('pagehide', { persisted: true });
+  h.win.emit('pageshow', { persisted: true });
+  await flush();
+  assert.equal(h.requests.filter(r => r.payload && r.payload.type === 'hello').length, 2);
+  assert.equal(h.requests.some(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)), false);
+  h.instance.stop();
+});
+
+test('failed bfcache return hello retains its visibility queue until a successful retry', async t => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h, 6000000);
+  t.mock.method(Date, 'now', () => clock.now());
+  h.win.navigator.sendBeacon = () => true;
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  h.doc.visibilityState = 'hidden';
+  h.doc.emit('visibilitychange');
+  h.win.emit('pagehide', { persisted: true });
+  clock.advance(600000);
+  h.fail();
+  h.doc.visibilityState = 'visible';
+  h.win.emit('pageshow', { persisted: true });
+  await flush();
+  assert.equal(h.requests.some(r => r.payload && ['hidden', 'visible'].includes(r.payload.type)), false);
+  const before = h.requests.length;
+  h.recover();
+  await h.instance.poll();
+  const types = h.requests.slice(before).filter(r => r.payload && ['hello', 'hidden', 'visible'].includes(r.payload.type)).map(r => r.payload.type);
+  assert.deepEqual(types, ['hello', 'hidden', 'visible']);
+  h.instance.stop();
+});
+
+test('an active response started before offline cannot reset the sixty-second outage deadline', async () => {
+  const h = harness('reading', 'enforce');
+  const clock = controlledClock(h);
+  h.setState({ is_locked: true });
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  let reply;
+  h.win.fetch = () => new Promise(resolve => { reply = resolve; });
+  h.win.emit('blur');
+  clock.advance(1000);
+  h.win.emit('offline');
+  clock.advance(1000);
+  reply({ ok: true, json: async () => ({ ok: true, mode: 'enforce', is_locked: true }) });
+  await flush();
+  assert.equal(h.root().hidden, false);
+  clock.advance(59000);
+  assert.equal(h.root().hidden, true, 'old successful response did not cancel the original failure deadline');
+  h.instance.stop();
+});
+
+test('a response delayed by suspended browser timers cannot relock after outage grace expires', async () => {
+  const h = harness('reading', 'enforce');
+  let now = 0;
+  const timeouts = new Map();
+  let nextId = 0;
+  h.win.performance = { now: () => now };
+  h.win.setTimeout = (fn, ms) => { timeouts.set(++nextId, { fn, ms }); return nextId; };
+  h.win.clearTimeout = id => timeouts.delete(id);
+  h.setState({ is_locked: true });
+  h.instance = guard.install(h.win, h.config);
+  await flush();
+  h.fail();
+  await h.instance.poll();
+  now = 1000;
+  let reply;
+  h.win.fetch = () => new Promise(resolve => { reply = resolve; });
+  h.doc.visibilityState = 'hidden';
+  const polling = h.instance.poll();
+  // No timeout callbacks run while the browser is frozen in the background.
+  now = 61000;
+  reply({ ok: true, json: async () => ({ ok: true, mode: 'enforce', is_locked: true }) });
+  await polling;
+  assert.equal(h.root().hidden, true);
+  assert.equal(h.intervals.size, 1, 'future fresh status requests are still enabled');
   h.instance.stop();
 });

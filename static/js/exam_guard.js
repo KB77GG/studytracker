@@ -14,6 +14,7 @@
 
   const ACTIVE_MODES = ['monitor', 'enforce'];
   const DEVICE_KEY = 'exam-integrity-device:v1';
+  const LOCK_FAILURE_GRACE_MS = 60000;
   const SUPPORT = '遇到问题请举手联系老师，答案已保存。计时仍在继续。';
 
   function viewState(state, section, healthy = true) {
@@ -42,12 +43,17 @@
 
   function visibilityTracker(pageId) {
     let hiddenAt = null;
+    let lastStamp = -Infinity;
     return function transition(visibility, now) {
       if (visibility === 'hidden' && hiddenAt === null) {
+        now = Math.max(now, lastStamp + 1);
+        lastStamp = now;
         hiddenAt = now;
         return { type: 'hidden', page_id: pageId, client_ts: now };
       }
       if (visibility === 'visible' && hiddenAt !== null) {
+        now = Math.max(now, lastStamp + 1);
+        lastStamp = now;
         const duration = Math.max(0, now - hiddenAt);
         hiddenAt = null;
         return { type: 'visible', page_id: pageId, client_ts: now, client_hidden_ms: duration };
@@ -97,6 +103,16 @@
     let copied = '';
     let pastePermit = null;
     let lastBlocked = null;
+    let hasServerState = false;
+    let failureStartedAt = null;
+    let failureVersion = 0;
+    let failureTimer = null;
+    let flushingVisibility = null;
+    let pageSuspended = false;
+    let sawPageHide = false;
+    let resumeHelloPending = false;
+    let resumingPage = null;
+    const visibilityQueue = [];
     const timers = [];
     const listeners = [];
     const gatedLinks = new Map();
@@ -125,14 +141,49 @@
       });
     }
 
-    function failOpen() {
-      healthy = false;
-      softBlur = false;
+    function releaseUI() {
       restoreLinks();
       if (root) root.hidden = true;
       doc.body.classList.remove('exam-integrity-enforce');
       if (previousFocus && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
       previousFocus = null;
+    }
+
+    function clearFailure() {
+      failureStartedAt = null;
+      if (failureTimer !== null) win.clearTimeout(failureTimer);
+      failureTimer = null;
+    }
+
+    function holdingKnownLock() {
+      return !stopped && hasServerState && !healthy && failureStartedAt !== null
+        && elapsedClock() - failureStartedAt < LOCK_FAILURE_GRACE_MS
+        && viewState(state, config.section, true).locked;
+    }
+
+    function failOpen() {
+      healthy = false;
+      hasServerState = false;
+      failureVersion += 1;
+      softBlur = false;
+      clearFailure();
+      releaseUI();
+    }
+
+    function temporarilyUnavailable() {
+      healthy = false;
+      softBlur = false;
+      if (failureStartedAt === null) { failureStartedAt = elapsedClock(); failureVersion += 1; }
+      if (holdingKnownLock()) {
+        if (failureTimer === null) {
+          const remaining = Math.max(0, LOCK_FAILURE_GRACE_MS - (elapsedClock() - failureStartedAt));
+          failureTimer = win.setTimeout(() => {
+            failureTimer = null;
+            if (!stopped && !healthy) releaseUI();
+          }, remaining);
+        }
+        try { render(); } catch (_error) { failOpen(); }
+      } else releaseUI();
     }
 
     function safely(fn) {
@@ -155,6 +206,7 @@
 
     function stop() {
       stopped = true;
+      visibilityQueue.length = 0;
       failOpen();
       timers.forEach(id => win.clearInterval(id));
       listeners.forEach(args => args[0].removeEventListener(args[1], args[2], args[3]));
@@ -222,8 +274,10 @@
 
     function render() {
       const styled = win.getComputedStyle(root).getPropertyValue('--exam-integrity-ready').trim() === '1';
-      const view = viewState(state, config.section, healthy && styled);
-      if (!view.enabled) { failOpen(); return; }
+      if (!styled) { failOpen(); return; }
+      const holding = holdingKnownLock();
+      const view = viewState(state, config.section, (healthy || holding) && styled);
+      if (!view.enabled) { releaseUI(); return; }
       root.hidden = false;
       doc.body.classList.toggle('exam-integrity-enforce', view.enforce);
       gateLinks(view.enforce && view.ackRequired);
@@ -242,7 +296,7 @@
         overlayMessage.textContent = '本场考试已在另一台设备开始，如需更换请联系老师。';
       } else if (view.locked) {
         overlayTitle.textContent = '本场答题已锁定';
-        overlayMessage.textContent = `锁定原因：${state.locked_reason || '离开页面达到本场限制'}。请联系老师解锁，无需刷新。`;
+        overlayMessage.textContent = `锁定原因：${state.locked_reason || '离开页面达到本场限制'}。请联系老师解锁，无需刷新。${holding ? '监考连接暂时中断，正在重试；本次断网最多保留锁定 60 秒，计时与交卷继续。' : ''}`;
       } else if (blurCover) {
         overlayTitle.textContent = '点击继续答题';
         overlayMessage.textContent = '页面暂时失去焦点，本次失焦不会计为离开。';
@@ -279,6 +333,8 @@
 
     async function request(url, options) {
       const number = ++requestNumber;
+      const version = failureVersion;
+      const startedAt = elapsedClock();
       let timeout;
       let controller;
       try {
@@ -290,19 +346,22 @@
           .then(async response => { if (!response.ok) throw new Error('integrity unavailable'); return response.json(); });
         const result = await Promise.race([fetchState, timedOut]);
         if (stopped) return result;
-        if (!result || result.ok === false || !['off', 'monitor', 'enforce'].includes(result.mode)) throw new Error('invalid state');
+        if (!result || result.ok !== true || !['off', 'monitor', 'enforce'].includes(result.mode)) throw new Error('invalid state');
         if (result.mode === 'off') { stop(); return result; }
+        if (elapsedClock() - startedAt >= 4000) throw new Error('late integrity response');
         // A prior hello may have reached the server even if its response timed out.
         if (result.mode === 'enforce' && result.device_bound && !result.device_conflict) hasClaimedDevice = true;
-        if (number < appliedNumber) return result;
+        if (number < appliedNumber || version !== failureVersion) return result;
         appliedNumber = number;
         state = result;
         healthy = true;
+        hasServerState = true;
+        clearFailure();
         render();
         wake();
         return result;
       } catch (_error) {
-        if (!stopped && number >= appliedNumber) { appliedNumber = number; failOpen(); }
+        if (!stopped && number >= appliedNumber) { appliedNumber = number; temporarilyUnavailable(); }
         return null;
       } finally { win.clearTimeout(timeout); }
     }
@@ -322,17 +381,58 @@
       try {
         const result = await send('hello');
         if (result && result.mode === 'enforce' && result.device_bound && !result.device_conflict) hasClaimedDevice = true;
+        return result;
       }
       finally { sendingHello = false; }
     }
 
-    function beacon(event) {
-      const body = JSON.stringify(payload(event.type, event));
-      try {
-        if (win.navigator.sendBeacon && win.navigator.sendBeacon(config.event_url, new win.Blob([body], { type: 'application/json' }))) return;
-      } catch (_error) { /* The visible event carries duration if the beacon was lost. */ }
-      // This request is best effort. Failure cannot change the exam's saving logic.
-      request(config.event_url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true });
+    function resumePage() {
+      if (stopped || !resumeHelloPending) return Promise.resolve(!stopped);
+      if (resumingPage) return resumingPage;
+      resumingPage = (async () => {
+        const result = await hello();
+        if (!result) return false;
+        resumeHelloPending = false;
+        return !stopped;
+      })().finally(() => { resumingPage = null; });
+      return resumingPage;
+    }
+
+    function queuedPayload(entry) {
+      return { ...entry.event, queued_ms: Math.min(86400000, Math.max(0, elapsedClock() - entry.queuedAt)) };
+    }
+
+    function flushVisibility() {
+      if (stopped || pageSuspended || !visibilityQueue.length) return Promise.resolve();
+      if (resumeHelloPending) return resumePage().then(recovered => recovered ? flushVisibility() : undefined);
+      if (flushingVisibility) return flushingVisibility;
+      flushingVisibility = (async () => {
+        while (!stopped && !pageSuspended && visibilityQueue.length) {
+          if (win.navigator.onLine === false) { temporarilyUnavailable(); break; }
+          const entry = visibilityQueue[0];
+          const result = await request(config.event_url, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(queuedPayload(entry)), keepalive: true,
+          });
+          if (!result || stopped) break;
+          visibilityQueue.shift();
+        }
+      })().finally(() => { flushingVisibility = null; });
+      return flushingVisibility;
+    }
+
+    function queueVisibility(event) {
+      const entry = { event: payload(event.type, event), queuedAt: elapsedClock() };
+      visibilityQueue.push(entry);
+      // A true return only means the browser queued a beacon, never a server ACK.
+      // Keep its original timestamp until a visible-page request confirms receipt.
+      if (event.type === 'hidden' && visibilityQueue.length === 1 && win.navigator.onLine !== false) {
+        try {
+          const body = new win.Blob([JSON.stringify(queuedPayload(entry))], { type: 'application/json' });
+          if (win.navigator.sendBeacon && win.navigator.sendBeacon(config.event_url, body)) return;
+        } catch (_error) { /* Retry this same event with its original timestamp. */ }
+      }
+      return flushVisibility();
     }
 
     function elapsedClock() {
@@ -340,23 +440,28 @@
     }
 
     async function poll() {
-      if (stopped || polling) return;
+      if (stopped || pageSuspended || polling) return;
       polling = true;
       try {
+        if (resumeHelloPending && !await resumePage()) return;
         const query = new win.URLSearchParams({ section: config.section, page_id: pageId });
         const result = await request(config.state_url + '?' + query.toString(), { method: 'GET', headers: { 'X-Exam-Integrity-Device': deviceId } });
         if (result && result.mode === 'enforce' && result.device_bound === false && !hasClaimedDevice) await hello();
+        if (result && !stopped) await flushVisibility();
         if (!stopped && doc.visibilityState === 'visible' && elapsedClock() - lastHeartbeat >= 15000) {
           lastHeartbeat = elapsedClock();
           await send('heartbeat');
         }
-      } catch (_error) { failOpen(); }
+      } catch (_error) { temporarilyUnavailable(); }
       finally { polling = false; }
     }
 
-    // A 15s refresh plus the 4s request timeout stays inside the 20s fail-open budget.
+    // Authoritative off is checked within 20s; known locks have a separate 60s outage grace.
     async function scheduledRefresh() {
-      if (stopped || polling) return;
+      if (stopped || pageSuspended || polling) return;
+      if (resumeHelloPending) { await poll(); return; }
+      if (!healthy && !holdingKnownLock()) releaseUI();
+      if (visibilityQueue.length) { await poll(); return; }
       if (doc.visibilityState === 'visible' && elapsedClock() - lastHeartbeat >= 15000) {
         polling = true;
         lastHeartbeat = elapsedClock();
@@ -434,15 +539,31 @@
       buildUI();
       listen(doc, 'visibilitychange', () => {
         const event = transition(doc.visibilityState, Date.now());
-        if (event && event.type === 'hidden') beacon(event);
+        if (event && event.type === 'hidden') queueVisibility(event);
         else if (doc.visibilityState === 'visible') {
+          pageSuspended = false;
           softBlur = false;
-          if (event) send('visible', event);
+          if (event) queueVisibility(event);
           else poll();
           wake();
           if (healthy) render();
         }
       });
+      listen(win, 'pagehide', () => {
+        pageSuspended = true;
+        sawPageHide = true;
+        resumeHelloPending = true;
+      });
+      listen(win, 'pageshow', async event => {
+        if (!event.persisted) return;
+        pageSuspended = false;
+        if (!sawPageHide) resumeHelloPending = true;
+        const visible = doc.visibilityState === 'visible' ? transition('visible', Date.now()) : null;
+        if (visible) queueVisibility(visible);
+        if (await resumePage()) await flushVisibility();
+      });
+      listen(win, 'online', () => poll());
+      listen(win, 'offline', temporarilyUnavailable);
       listen(win, 'blur', () => {
         if (!healthy) return;
         softBlur = true;
@@ -451,7 +572,7 @@
       });
       listen(win, 'focus', () => { softBlur = false; if (healthy) render(); poll(); });
       listen(doc, 'focusin', event => {
-        if (healthy && !overlay.hidden && !overlay.contains(event.target)) overlay.focus({ preventScroll: true });
+        if ((healthy || holdingKnownLock()) && !overlay.hidden && !overlay.contains(event.target)) overlay.focus({ preventScroll: true });
       });
       listen(win, 'resize', viewport);
       ['copy', 'cut'].forEach(type => listen(doc, type, copy, true));

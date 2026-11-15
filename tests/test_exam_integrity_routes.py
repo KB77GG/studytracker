@@ -275,8 +275,9 @@ class ExamIntegrityRouteTest(unittest.TestCase):
     def test_missing_tables_fail_open_and_never_create_schema(self):
         self.drop_new_tables()
         for response in (self.event(), self.client.get(self.student + "/state")):
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.get_json()["mode"], "off")
+            self.assertEqual(response.status_code, 503)
+            self.assertFalse(response.get_json()["ok"])
+            self.assertNotIn("mode", response.get_json())
         with self.app.test_request_context():
             self.assertIsNone(exam_integrity_config(self.exam_id, "test-token", "reading"))
             self.assertNotIn("exam_integrity_policy", inspect(db.engine).get_table_names())
@@ -333,9 +334,94 @@ class ExamIntegrityRouteTest(unittest.TestCase):
             with self.app.test_request_context():
                 self.assertIsNone(exam_integrity_config(self.exam_id, "test-token", "reading"))
 
-    def test_unexpected_service_failure_is_off(self):
+    def test_unexpected_service_failure_is_retryable_not_authoritative_off(self):
         with patch.object(integrity, "record_event", side_effect=RuntimeError("unavailable")):
-            self.assertEqual(self.event().get_json()["mode"], "off")
+            response = self.event()
+        self.assertEqual(response.status_code, 503)
+        self.assertFalse(response.get_json()["ok"])
+        self.assertNotIn("mode", response.get_json())
+        self.assertIn("no-store", response.headers["Cache-Control"])
+
+    def test_session_lookup_failure_is_retryable_not_authoritative_off(self):
+        with patch("api.exam_integrity._session_row", side_effect=RuntimeError("busy")):
+            for response in (self.event(), self.client.get(self.student + "/state")):
+                self.assertEqual(response.status_code, 503)
+                self.assertFalse(response.get_json()["ok"])
+                self.assertNotIn("mode", response.get_json())
+
+    def test_service_failure_result_is_preserved_and_http_503(self):
+        failure = {"ok": False, "error": "integrity_temporarily_unavailable"}
+        for name, call in (
+            ("record_event", self.event),
+            ("student_state", lambda: self.client.get(self.student + "/state")),
+        ):
+            with self.subTest(service=name), patch.object(integrity, name, return_value=failure):
+                response = call()
+                self.assertEqual(response.status_code, 503)
+                self.assertEqual(response.get_json(), failure)
+
+    def test_queued_event_metadata_is_bounded_and_forwarded(self):
+        for value in (-1, 86400001, True, float("nan"), "100"):
+            with self.subTest(value=value):
+                self.assertEqual(self.event("hidden", queued_ms=value).status_code, 400)
+        with patch.object(
+            integrity, "record_event", return_value={"ok": True, "mode": "monitor"}
+        ) as send:
+            response = self.event("hidden", queued_ms=600000, client_ts=1234)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(send.call_args.args[2]["queued_ms"], 600000)
+        self.assertEqual(send.call_args.args[2]["client_ts"], 1234)
+        self.assertEqual(send.call_args.kwargs["active_sections"], ["reading"])
+
+    def test_process_return_preserves_active_reading_departure_for_600_seconds(self):
+        self.policy()
+        actual = integrity.record_event
+        epoch = datetime(2026, 11, 14, 9)
+
+        def send_at(kind, seconds, section="reading", page="reading-page"):
+            def at_time(*args, **kwargs):
+                return actual(*args, **kwargs, now=epoch + timedelta(seconds=seconds))
+
+            with patch.object(integrity, "record_event", side_effect=at_time):
+                response = self.event(kind, section=section, page_id=page, client_ts=seconds * 1000)
+            self.assertEqual(response.status_code, 200)
+            return response.get_json()
+
+        send_at("hello", 0)
+        send_at("hidden", 1)
+        process = send_at("hello", 2, section="process", page="process-page")
+        self.assertIsNotNone(process["hidden_at"])
+        result = send_at("hello", 601, page="returned-reading-page")
+        self.assertEqual(result["leave_count"], 1)
+        self.assertEqual(result["hidden_seconds"], 600)
+        self.assertTrue(result["is_locked"])
+
+    def test_submitted_reading_to_process_discards_departure(self):
+        self.policy()
+        actual = integrity.record_event
+        epoch = datetime(2026, 11, 14, 9)
+
+        def send_at(kind, seconds, section="reading", page="reading-page"):
+            def at_time(*args, **kwargs):
+                return actual(*args, **kwargs, now=epoch + timedelta(seconds=seconds))
+
+            with patch.object(integrity, "record_event", side_effect=at_time):
+                return self.event(
+                    kind, section=section, page_id=page, client_ts=seconds * 1000
+                ).get_json()
+
+        send_at("hello", 0)
+        send_at("hidden", 1)
+        with self.app.app_context():
+            row = db.session.get(MockExamSession, self.session_id)
+            row.reading_submitted_at = epoch + timedelta(seconds=2)
+            row.current_section = "writing"
+            db.session.commit()
+        process = send_at("hello", 2, section="process", page="process-page")
+        self.assertIsNone(process["hidden_at"])
+        returned = send_at("hello", 601, page="returned-reading-page")
+        self.assertEqual(returned["leave_count"], 0)
+        self.assertEqual(returned["hidden_seconds"], 0)
 
     def test_teacher_requires_login_and_manager_role(self):
         self.assertEqual(self.client.get(self.base + "/data").status_code, 401)
@@ -420,6 +506,78 @@ class ExamIntegrityRouteTest(unittest.TestCase):
         state = self.client.get(self.student + "/state").get_json()
         self.assertEqual(state["mode"], "off")
         self.assertFalse(state["is_locked"])
+
+    def test_emergency_off_preserves_custom_thresholds_and_does_not_reenable(self):
+        self.login()
+        response = self.client.post(
+            self.base + "/policy",
+            json={"mode": "enforce", "max_leaves": 7, "max_hidden_seconds": 321},
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.base + "/emergency-off", json={})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_json()["policy"],
+            {"mode": "off", "max_leaves": 7, "max_hidden_seconds": 321},
+        )
+        with self.app.app_context():
+            policy = ExamIntegrityPolicy.query.one()
+            self.assertEqual(
+                (policy.mode, policy.max_leaves, policy.max_hidden_seconds), ("off", 7, 321)
+            )
+        self.assertEqual(self.client.get(self.student + "/state").get_json()["mode"], "off")
+        second = self.client.post(self.base + "/emergency-off", json={}).get_json()["policy"]
+        self.assertEqual(second["max_leaves"], 7)
+        self.assertEqual(second["max_hidden_seconds"], 321)
+
+    def test_dashboard_offline_duration_visible_even_when_locked_or_conflicted(self):
+        self.policy()
+        self.event()
+        self.login()
+        now = datetime.utcnow()
+        with self.app.app_context():
+            state = ExamIntegrityState.query.one()
+            state.is_locked = True
+            state.locked_section = "reading"
+            state.last_seen_at = now - timedelta(seconds=600)
+            state.device_conflict_at = now - timedelta(seconds=590)
+            db.session.add(
+                MockExamSession(
+                    exam_id=self.exam_id,
+                    student_name="Never connected",
+                    access_token="never-connected",
+                )
+            )
+            db.session.commit()
+        rows = self.client.get(self.base + "/data").get_json()["rows"]
+        row = next(item for item in rows if item["id"] == self.session_id)
+        self.assertTrue(row["is_locked"])
+        self.assertTrue(row["has_device_conflict"])
+        self.assertGreaterEqual(row["offline_seconds"], 600)
+        self.assertLess(row["offline_seconds"], 605)
+        self.assertEqual(row["seconds_since_seen"], row["offline_seconds"])
+        self.assertFalse(row["never_connected"])
+        never = next(item for item in rows if item["student_name"] == "Never connected")
+        self.assertTrue(never["never_connected"])
+        self.assertIsNone(never["offline_seconds"])
+        panel = self.client.get(self.base + "/").get_data(as_text=True)
+        self.assertIn("离线时长：", panel)
+        self.assertIn("connectionText(row)", panel)
+        self.assertIn("integrity-student__offline", panel)
+        self.assertIn("20 秒心跳宽限", panel)
+
+    def test_dashboard_recent_heartbeat_has_zero_offline_duration(self):
+        self.policy()
+        self.event()
+        self.login()
+        with self.app.app_context():
+            state = ExamIntegrityState.query.one()
+            state.last_seen_at = datetime.utcnow() - timedelta(seconds=10)
+            db.session.commit()
+        row = self.client.get(self.base + "/data").get_json()["rows"][0]
+        self.assertEqual(row["offline_seconds"], 0)
+        self.assertGreaterEqual(row["seconds_since_seen"], 10)
+        self.assertFalse(row["never_connected"])
 
     def test_dashboard_timeline_and_summary_no_token_or_hash(self):
         self.policy()

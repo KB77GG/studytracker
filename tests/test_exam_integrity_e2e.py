@@ -132,8 +132,11 @@ class ExamIntegrityRealFlowTest(unittest.TestCase):
         with s.app.app_context():
             for name in ("exam_integrity_event", "exam_integrity_state", "exam_integrity_policy"):
                 db.metadata.tables[name].drop(db.engine)
-        body = s.client.get(s.api_url + "/integrity/state").get_json()
-        self.assertEqual(body["mode"], "off")
+        response = s.client.get(s.api_url + "/integrity/state")
+        self.assertEqual(response.status_code, 503)
+        body = response.get_json()
+        self.assertFalse(body["ok"])
+        self.assertNotIn("mode", body)
         self.objective(s, "listening")
         self.objective(s, "reading")
         self.writing(s)
