@@ -1,0 +1,127 @@
+{
+  "checks": [
+    {
+      "name": "confirm.starts_as_legacy",
+      "pass": true
+    },
+    {
+      "name": "confirm.completed_record_decision_refused",
+      "pass": true
+    },
+    {
+      "name": "confirm.unrelated_submission_accepted",
+      "pass": true
+    },
+    {
+      "name": "confirm.worker_busy",
+      "pass": true
+    },
+    {
+      "name": "confirm.regenerate_accepted",
+      "pass": true
+    },
+    {
+      "name": "confirm.new_evaluation_queued",
+      "pass": true
+    },
+    {
+      "name": "confirm.old_refine_rewrite_still_ready",
+      "pass": true
+    },
+    {
+      "name": "confirm.legacy_confirmation_must_be_refused",
+      "pass": true
+    },
+    {
+      "name": "confirm.legacy_description_must_not_change",
+      "pass": true
+    },
+    {
+      "name": "confirm.legacy_check_must_remain_empty",
+      "pass": true
+    },
+    {
+      "name": "skip.starts_as_legacy",
+      "pass": true
+    },
+    {
+      "name": "skip.completed_record_decision_refused",
+      "pass": true
+    },
+    {
+      "name": "skip.unrelated_submission_accepted",
+      "pass": true
+    },
+    {
+      "name": "skip.worker_busy",
+      "pass": true
+    },
+    {
+      "name": "skip.regenerate_accepted",
+      "pass": true
+    },
+    {
+      "name": "skip.new_evaluation_queued",
+      "pass": true
+    },
+    {
+      "name": "skip.old_refine_rewrite_still_ready",
+      "pass": true
+    },
+    {
+      "name": "skip.legacy_confirmation_must_be_refused",
+      "pass": true
+    },
+    {
+      "name": "skip.legacy_description_must_not_change",
+      "pass": true
+    },
+    {
+      "name": "skip.legacy_check_must_remain_empty",
+      "pass": true
+    }
+  ],
+  "passed": 20,
+  "total": 20,
+  "observations": [
+    {
+      "action": "confirm",
+      "regen_status": 202,
+      "awaiting_after_regen": false,
+      "legacy_after_regen": true,
+      "confirmation_status": 409,
+      "check_after_request": null,
+      "old_ready_results_unchanged": {
+        "refine": true,
+        "rewrite": true
+      },
+      "new_evaluation_status": "ready",
+      "new_evaluation_prompt_version": "iwa-2026-11-13.15",
+      "old_refine_prompt_version": "iwa-2026-11-13.14",
+      "reading_has_correction": false,
+      "legacy_label_after": true,
+      "direct_db_mutations": 0
+    },
+    {
+      "action": "skip",
+      "regen_status": 202,
+      "awaiting_after_regen": false,
+      "legacy_after_regen": true,
+      "confirmation_status": 409,
+      "check_after_request": null,
+      "old_ready_results_unchanged": {
+        "refine": true,
+        "rewrite": true
+      },
+      "new_evaluation_status": "ready",
+      "new_evaluation_prompt_version": "iwa-2026-11-13.15",
+      "old_refine_prompt_version": "iwa-2026-11-13.14",
+      "reading_has_correction": false,
+      "legacy_label_after": true,
+      "direct_db_mutations": 0
+    }
+  ],
+  "real_calls": 0,
+  "direct_db_mutations": 0,
+  "scope": "Actual old-source ready record; genuine JobRunner busy workers; public regenerate and image-check routes only."
+}

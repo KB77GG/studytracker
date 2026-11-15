@@ -1,0 +1,119 @@
+{
+  "scope": "Sanitized numeric-conflict recheck and Mac activation; docs only",
+  "base_head": "68b6d4f232620bdf0f1facac0720e8744b88595c",
+  "business_commit": "3c703324",
+  "files": [
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/README.md",
+      "bytes": 7476,
+      "sha256": "4e4d65954423bf2c6a2786e9e00e90c215bcf3fe4f6c531830c5e20f6796487d"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/adjacent.json",
+      "bytes": 33646,
+      "sha256": "1e0d87cc8bc3277e60ec36f74e9145014c41117418ee803a9c8e4b096027acc1"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/login-check.json",
+      "bytes": 306,
+      "sha256": "75d3db61f09694becaac54f8406fd6a9dd32e6fee4c0b238f887a1ec3f1cdeac"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/offline-tests.json",
+      "bytes": 998,
+      "sha256": "7cfbe4344a343f87226ae06de0dfdda5acb2f59363a686c55c853c7c1dd4ed61"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/README.md",
+      "bytes": 1931,
+      "sha256": "84b14ba3f1842869384a16c4840d893f734c9d13c7401255c8372140b6308f0d"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/mixed-queue.json",
+      "bytes": 3017,
+      "sha256": "f5a2ea72be11e03517417425e8a10ea4162885b5b35cac73710577c31db7a4d1"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/realcheck-adjacent.json",
+      "bytes": 1685,
+      "sha256": "b553ea7680aa29156daa283f30adec3aa5f83de6971b932b99e88921ae8119e7"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/realcheck.json",
+      "bytes": 4369,
+      "sha256": "5e024def78284f1d47e69dfd169579c281480925be522a5652bcac62a37aa58d"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/summary.json",
+      "bytes": 3750,
+      "sha256": "019ed2a48c93d7a621574a955eeeb53f94e04a2079d6e2e4ea57124464abe935"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/regressions/web-adjacent.json",
+      "bytes": 5189,
+      "sha256": "d6cc891a14f65c8a3be4fe0b1362c334cc96b41c27d4b89aacaaa48a42d47975"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/replay-adaptation.md",
+      "bytes": 2888,
+      "sha256": "000562b8234d00031534b4ffdddc00f2cef31299a53616c67b92c28406f83aa2"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/replay-review.json",
+      "bytes": 1530,
+      "sha256": "77f36ffba1255d74ac9f5a34d135472ead5476d262580ebc4cdc100368a04889"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/replay-root.json",
+      "bytes": 25629,
+      "sha256": "6dcf9aea6ed1c06590a12f91b11ba795b42f2935a0a06d62352ff6efc9d79113"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/replay.json",
+      "bytes": 25629,
+      "sha256": "6dcf9aea6ed1c06590a12f91b11ba795b42f2935a0a06d62352ff6efc9d79113"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/replay_probe.py",
+      "bytes": 18648,
+      "sha256": "a593c4d9b3e404a83f891912192b0ec490dbc8084af93d16b543cb28caf13e71"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/root-verification.json",
+      "bytes": 683,
+      "sha256": "a16012b8c0edc0b96cd53cd09487a61efd27ed85d2e2427a6037b9b3cdbbf61c"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/service-state.json",
+      "bytes": 1774,
+      "sha256": "b057c19ff99db6294c7bdb15497590264ecfeb4627d48aa0c865cd955b10b6e4"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/share-check.json",
+      "bytes": 7500,
+      "sha256": "44fa99fe03db92e66a16bb716f1257ebec53f1d77ac9a46d6e366bae157ce2d4"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/source-state-after.json",
+      "bytes": 1892,
+      "sha256": "ca27849f189dbea92d26fdde96419992c726d82b5d7c04e3b87c456932aa7310"
+    },
+    {
+      "path": "docs/design/iwa-task-conflicts-final-recheck-20261115/source-state-before.json",
+      "bytes": 13471,
+      "sha256": "4d36040385ae34ea2b9c9386159dcfa0fec88eeea7eb61a25478318918711c42"
+    },
+    {
+      "path": "docs/CODEX_HANDOFF.md",
+      "bytes": 792822,
+      "sha256": "6ef18c169dacf73b0ccfd34e759a3ded4021ff5449c3e56e68d29dafdd48c7fb"
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "bytes": 247263,
+      "sha256": "f0abc6b26cb1314c59b5dd5ee92c0e5771f514b407d40c79020e6ca00625fc30"
+    }
+  ],
+  "manifest_self_excluded": true,
+  "model_calls": 0
+}

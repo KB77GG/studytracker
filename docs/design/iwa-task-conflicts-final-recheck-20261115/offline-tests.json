@@ -1,0 +1,35 @@
+{
+  "repo": "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+  "python": "3.13.3",
+  "source_head": "68b6d4f232620bdf0f1facac0720e8744b88595c",
+  "commands": [
+    {
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/ielts_writing_ai/tests",
+        "-t",
+        "."
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+      "returncode": 0,
+      "elapsed_seconds": 34.24
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tools/ielts_writing_ai/tests/test_draft.js"
+      ],
+      "cwd": "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+      "returncode": 0,
+      "elapsed_seconds": 0.32
+    }
+  ],
+  "test_data_directory_untouched": true,
+  "source_status": "## codex/iwa-task-conflicts-final-recheck-20261115...origin/claude/ielts-writing-ai-trial\n"
+}

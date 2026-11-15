@@ -1,0 +1,31 @@
+{
+  "replay_main_and_independent_checks_equal": true,
+  "replay": {
+    "passed": 205,
+    "total": 205
+  },
+  "adjacent": {
+    "passed": 72,
+    "total": 72
+  },
+  "regression_gates": {
+    "passed": 109,
+    "total": 109
+  },
+  "python_tests": 507,
+  "node_tests": 8,
+  "python": "3.13.3",
+  "external_IWA_VISION_PROVIDER": "none",
+  "lint": [
+    "Ruff tools/ielts_writing_ai",
+    "Black71",
+    "node --check tools/ielts_writing_ai/static/iwa.js",
+    "git diff --check"
+  ],
+  "model_calls": 0,
+  "limits": [
+    "Did not repeat other two locales or Python 3.10",
+    "HTTP login/page/logout verified; no real browser flow repeated",
+    "Teacher feedback not supplied"
+  ]
+}

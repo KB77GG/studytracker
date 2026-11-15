@@ -1,0 +1,100 @@
+{
+  "source": "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+  "head": "68b6d4f232620bdf0f1facac0720e8744b88595c",
+  "cwd": "/Users/zhouxin/Desktop/studytracker",
+  "gates": [
+    {
+      "name": "mixed-queue",
+      "passed": 20,
+      "total": 20,
+      "exit_code": 0,
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "docs/design/iwa-prompt15-recheck-20261113/web/mixed_queue_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+        "--old-repo",
+        "/private/tmp/studytracker-iwa-prompt14-review-20261113",
+        "--seed-probe",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115/docs/design/ielts-writing-ai-model-comparison-plan-20261110/verify/web_gate_probe_adapted.py",
+        "--out",
+        "/private/tmp/iwa-final-regressions/mixed-queue.json"
+      ],
+      "evidence_sha256": "f5a2ea72be11e03517417425e8a10ea4162885b5b35cac73710577c31db7a4d1"
+    },
+    {
+      "name": "web-adjacent",
+      "passed": 57,
+      "total": 57,
+      "exit_code": 0,
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "docs/design/iwa-prompt15-final-recheck-20261113/web/adjacent_probe.py",
+        "--repo",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+        "--old-repo",
+        "/private/tmp/studytracker-iwa-prompt14-review-20261113",
+        "--seed-probe",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115/docs/design/ielts-writing-ai-model-comparison-plan-20261110/verify/web_gate_probe_adapted.py",
+        "--out",
+        "/private/tmp/iwa-final-regressions/web-adjacent.json"
+      ],
+      "evidence_sha256": "d6cc891a14f65c8a3be4fe0b1362c334cc96b41c27d4b89aacaaa48a42d47975"
+    },
+    {
+      "name": "realcheck",
+      "passed": 15,
+      "total": 15,
+      "exit_code": 0,
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "docs/design/iwa-prompt15-review-20261113/realcheck/probe.py",
+        "--source",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+        "--out",
+        "/private/tmp/iwa-final-regressions/realcheck.json"
+      ],
+      "evidence_sha256": "5e024def78284f1d47e69dfd169579c281480925be522a5652bcac62a37aa58d"
+    },
+    {
+      "name": "realcheck-adjacent",
+      "passed": 17,
+      "total": 17,
+      "exit_code": 0,
+      "command": [
+        ".venv/bin/python",
+        "-B",
+        "docs/design/iwa-prompt15-recheck-20261113/realcheck/adjacent_probe.py",
+        "--source",
+        "/private/tmp/studytracker-iwa-task-conflicts-final-recheck-20261115",
+        "--out",
+        "/private/tmp/iwa-final-regressions/realcheck-adjacent.json"
+      ],
+      "evidence_sha256": "b553ea7680aa29156daa283f30adec3aa5f83de6971b932b99e88921ae8119e7"
+    }
+  ],
+  "passed": 109,
+  "total": 109,
+  "adjacent": {
+    "passed": 72,
+    "total": 72,
+    "failed_cases": []
+  },
+  "code_review": {
+    "new_blocking_findings": [],
+    "internal_quote_and_raw_suggestion_not_serialized": true,
+    "existing_source_filter_kept": true,
+    "known_limitations": [
+      "Set-based correction discovery can miss a value retained elsewhere in the same full TA quotation. This is an existing conservative boundary, like the documented swapped_set case, not a new failure of the previously agreed acceptance probes.",
+      "Type keys are existing broad numeric kinds, not full semantic entity/unit interpretation.",
+      "Mentioning a number in a TA comment is not independent verification that the model comment is factually correct."
+    ]
+  },
+  "real_calls": 0,
+  "private_data_read": false,
+  "live_service_touched": false,
+  "product_modified": false
+}

@@ -1,0 +1,42 @@
+{
+  "checks": {
+    "newly_removed_are_only_L9_L11": true,
+    "all_other_retained": true,
+    "no_internal_result_fields": true,
+    "task_criterion_unchanged": true
+  },
+  "new_removals": [
+    {
+      "sample_id": "official-1B-A#r2",
+      "path": "criteria[3].issues[1]"
+    },
+    {
+      "sample_id": "official-1C-A",
+      "path": "criteria[2].issues[3]"
+    }
+  ],
+  "other_retained_advice_count": 79,
+  "candidate_head": "68b6d4f2",
+  "original_probe_status": "diagnostic_helper_API_removed",
+  "original_error": "AttributeError: conflicts._Sentences",
+  "adaptation": "Removed only 35-line private L9 debug block. Normalization, all acceptance checks, expectations, output comparisons and source/input protection unchanged.",
+  "acceptance_block_sha256": "59e548245e8053d4eee5519d38747e209da33814592e28d360517f9e7ce0aa60",
+  "acceptance_block_exactly_unchanged": true,
+  "checks_passed": 205,
+  "checks_total": 205,
+  "count_explanation": "The original probe dynamically adds two checks for removed advice, one for retained advice; correctly removing L9 increases total 204 to 205.",
+  "l9": {
+    "raw_correction_locates_uniquely": true,
+    "source_guard_still_hides_TA_suggestion": true,
+    "visible_comment_names_both_replaced_percent_values": true,
+    "language_suggestion_removed": true,
+    "TA_result_unchanged": true
+  },
+  "l11": {
+    "raw_correction_locates_uniquely": true,
+    "language_suggestion_removed": true
+  },
+  "teacher_calibration_claimed": false,
+  "model_calls": 0,
+  "network_attempts": 0
+}
