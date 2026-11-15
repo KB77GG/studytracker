@@ -1,5 +1,13 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-15 词汇“忘了”补丁已推送，固定小程序待用户上传
+
+- **授权/同步**：用户“好了可以上传部署，我稍后来上传发布新的小程序”。本轮没有后端修改，未触发服务器部署或推main；精确5文件补丁、before/after源码、8个只读既有JS依赖与脱敏验收共56文件已commit/push到 `codex/vocabulary-forgot-feedback-20261114`，归档提交 **`2663da92492f6182a89ab6e7f64344c7159efe54`**，fetch后HEAD与远端一致。后续本状态说明独立文档提交同步，最终文档HEAD以git回读为准。远端main仍 `cb2610166d7654c81238f53c000e37eafa7e68e1`，未覆盖课堂同义词增量。
+- **位置/脏状态**：报告树 `/private/tmp/studytracker-vocabulary-forgot-feedback-20261114`，基线75ff855d、上述分支；提交后报告可跨机获取，产品顶层miniprogram未改，文档同步收尾后应clean。真实待上传项目仍 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`，所在树 `codex/miniprogram-release@d03a2749eb99cde041cdae18305b624956d46e90`、原76 modified/35 untracked入口保留，5目标SHA未变。本轮仅给该树两交接追加同步事实；完整历史未提交前端仍仅本机，本归档 `client-files` 不是完整可上传包，不能用main顶层前端覆盖固定树。旧桌面主资料树 `/Users/zhouxin/Desktop/studytracker` 仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、原7 modified/23 untracked保留，仅两交接更新。
+- **精确验证**：实际release cwd `node --test tests/test_vocabulary*.js tests/test_dictation_audio.js tests/test_dictation_spell_queue.js` 再验74/74；两页官方wcc、两JS+test的 `node --check` 均exit0，记录 `release-recheck-20261115*`。报告树cwd `node --test docs/reviews/vocabulary-forgot-feedback-20261114/client-files/tests/test_vocabulary_forgot_client.js` →41/41；`node docs/reviews/vocabulary-forgot-feedback-20261114/independent_client_probe.js docs/reviews/vocabulary-forgot-feedback-20261114/client-files` →11/11。依赖均匹配冻结SHA，独立提交范围/隐私审计通过；没有重跑无变化的117后端或全仓测试。标准patch空白context标记不改，`git apply --reverse --check --whitespace=error <report>/client-increment.patch`通过；其余暂存文件diff-check通过。
+- **微信现场**：用户已解锁，CUA确认项目路径/RC2.02.2608031，已点普通编译；只见app/ext及29页JSON构建日志，模拟器未运行页面，工具明确“未登录”。已显示二维码交用户扫码，当前未取得整包编译成功证据；74自动化及两页wcc不能替代整包/真机。详情 `ui-build-check-20261115.json`。没有上传/提审/发布，没有登录真实学生、变更生产数据/服务/配置或发通知；生产当前HEAD本轮未复验。
+- **下一步**：用户在固定项目扫码登录→普通编译→真机检查“忘了→答案/重听→明确继续”，再自行上传/提审/发布。后端无需为此补丁部署，首答分数和24小时到期排程不变；具体学生满24h仍不复习需要单独只读追踪。归档与同步交接已可从任务分支获取，实际完整发布源码和旧桌面其他脏资料仍仅本机。11月14日apply-result等是当时未提交快照，不覆盖本节同步事实。
+
 ## 2026-11-14 词汇“忘了”先看答案再继续（本机已修，待小程序发版）
 
 - **反馈/根因**：固定发布源码学习页 forgot 成功后直接 fetchQueue，复习页显示结果后立即 nextItem；超时恢复也自动推进，末题直接结算。已改为停留显示正确答案、释义/反馈和原词重听，明确点“看过答案，继续”才推进；忘记仍按未掌握计错。覆盖超时保存恢复、跨日复习门禁、末题、已结算重放与迟到按钮/键盘事件；忘记状态隐藏不可用申诉及错误的“正确纠正已记录”提示。
