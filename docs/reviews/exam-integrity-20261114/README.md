@@ -1,6 +1,6 @@
 # 雅思模考诚信模式第一期：本机实现与验收
 
-2026-11-14 开始，2026-11-15 完成本机验收，随后获用户授权仅提交并推送专用审查分支 **`codex/exam-integrity-review`**。当前为提交准备，实际提交和 CI 完成后补记。**未合并／推送 main、未部署。** 本任务未在生产建表，未访问生产核验；没有访问或写入生产学生数据、重启服务、改外部配置、发布小程序。11 月 15 日不因本任务部署任何版本。
+2026-11-14 开始，2026-11-15 完成本机验收，随后获用户授权仅提交并推送专用审查分支 **`codex/exam-integrity-review`**。完整实现已提交推送为 **`c653c3ab120cb76b69535e5f4090c3a23c9b654f`**，[实现提交 CI](https://github.com/KB77GG/studytracker/actions/runs/43657508962) **success**，三组测试任务通过。全仓 lint 为非阻断 failure；结果详见 `ci-review.json`。**未合并／推送 main、未部署。** 本任务未在生产建表，未访问生产核验；没有访问或写入生产学生数据、重启服务、改外部配置、发布小程序。11 月 15 日不因本任务部署任何版本。
 
 ## 工作树与发布边界
 
@@ -8,7 +8,7 @@
 - 原计划 `docs/EXAM_INTEGRITY_PLAN.md` 已在 ecc06f23，本轮保持其原文，实施核对结论在本报告和手册。
 - 主资料树 `/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，原 7 modified／23 untracked 顶层入口保留；本任务只在该树增量更新两份交接，不复制业务代码。现有改动路径见 `main-worktree-status.txt`。
 - 收尾观察本机 `origin/main` 已由并行任务更新到 `cb2610166d7654c81238f53c000e37eafa7e68e1`，含课堂同义替换 `2e82331a`；本实施树尚未合入。该观察不等同本任务核验生产部署状态。发布前必须重新 fetch 并整合漂移，不能从旧桌面 main 发布。
-- 用户已明确授权把完整第一期及证据提交并仅推送 `codex/exam-integrity-review`。提交／CI 状态将随本轮同步补记；逐文件清单见 `REVIEW_FILES.md`。此前原始验收报告中的状态文件是提交前快照，不代表推送后的当前状态。仍无 main／部署／生产访问授权；日后若单独授权发布，也须先确认当天没有正在进行的模考。
+- 用户已明确授权把完整第一期及证据提交并仅推送 `codex/exam-integrity-review`。完整实现提交 `c653c3ab120cb76b69535e5f4090c3a23c9b654f` 的远端 CI 已成功，本报告随后以仅文档提交同步；最终 HEAD 及其 CI 以本分支 Git／Actions 为准。逐文件清单（55 文件）见 `REVIEW_FILES.md`。此前原始验收报告中的状态文件是提交前快照，不代表推送后的当前状态。仍无 main／部署／生产访问授权；日后若单独授权发布，也须先确认当天没有正在进行的模考。
 
 ## 实现范围
 
@@ -26,7 +26,7 @@
 
 ## 验证与证据
 
-最终 **158 Python / 86 Node** 通过。新增 Python 83 项（45 service、24 routes、9 独立对抗、5 真实 app 全流程），新守卫 Node 33 项；其余为原模考、复盘、高亮、renderer、音频等相关回归。日志分别为 `python-tests.log`、`node-tests.log`。不是全仓测试；CI 已接入新测试，本次审查推送后将等待 CI 并补记真实结果。审查提交前核对 27 个产品文件 SHA 与本机验收快照完全一致，业务代码未再修改，未重复运行无变化的测试。
+最终 **158 Python / 86 Node** 通过。新增 Python 83 项（45 service、24 routes、9 独立对抗、5 真实 app 全流程），新守卫 Node 33 项；其余为原模考、复盘、高亮、renderer、音频等相关回归。日志分别为 `python-tests.log`、`node-tests.log`。不是全仓测试；CI 已接入新测试，实现提交的三组远端测试 job 已通过（见顶部链接与 JSON）；全仓 advisory lint 未通过。审查提交前核对 27 个产品文件 SHA 与本机验收快照完全一致，业务代码未再修改，未重复运行无变化的测试。
 
 在本实施树执行：
 
@@ -78,4 +78,4 @@ node docs/reviews/exam-integrity-20261114/browser-resilience.cjs
 
 ## 审查提交说明
 
-官方文档核对依据、尚待真机验证项目以及与计划的 10 项差异已集中写入 `docs/CODEX_HANDOFF.md` 顶部；原计划保持不变。只有 `codex/exam-integrity-review` 被授权推送，完成 CI 后停止等待审查。
+官方文档核对依据、尚待真机验证项目以及与计划的 10 项差异已集中写入 `docs/CODEX_HANDOFF.md` 顶部；原计划保持不变。只有 `codex/exam-integrity-review` 被授权推送。实现提交与本节所附远端 CI 结果的 SHA 一一对应；追加的文档提交也等待 CI 后停止等待审查，不再开展第二期。

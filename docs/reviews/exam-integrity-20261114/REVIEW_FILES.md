@@ -2,7 +2,7 @@
 
 比较基线：`ecc06f2393a5f3a0646f36f3a6dceda4902c1c08`；目标分支：`codex/exam-integrity-review`。
 
-共 **55 个文件**：27 个产品／测试／CI 文件、28 个文档／验收证据文件。`ci-review.json` 在首轮分支 CI 完成后写入。`docs/EXAM_INTEGRITY_PLAN.md` 已在基线，不另行修改。无 main 合并、部署配置改动或小程序改动。
+共 **55 个文件**：27 个产品／测试／CI 文件、28 个文档／验收证据文件。`ci-review.json` 记录已完成的实现提交 CI 结果；随后的文档提交不改变产品代码。`docs/EXAM_INTEGRITY_PLAN.md` 已在基线，不另行修改。无 main 合并、部署配置改动或小程序改动。
 
 ## 产品、测试与 CI
 
