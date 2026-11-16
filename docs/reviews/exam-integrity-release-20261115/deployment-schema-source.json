@@ -1,0 +1,11 @@
+{
+  "run_id": 43730767905,
+  "source": "fixed-marker checks against deployment workflow log; raw log not saved",
+  "markers": {
+    "Creating course_plan table...": true,
+    "course_plan table created": false,
+    "create_plan_table.py": false,
+    "create_mock_exam_tables.py": false,
+    "create_exam_integrity_tables.py": false
+  }
+}

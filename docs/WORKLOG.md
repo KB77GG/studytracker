@@ -1,8 +1,8 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
-## 2026-11-15 — 诚信一期获部署授权，合最新main并全量相关复验
+## 2026-11-16 — 诚信一期已部署，默认关闭及生产只读验收通过
 
-用户确认无考试，授权一期部署但禁止代开监考/建试考/改策略。从审查9275b7a fresh fetch到main3d8e7b57（新增冲刺），合并32b46bd935e0325f2300ea45558da3caac18b6d9，双方蓝图/CI/两交接保留；阅读off测试SHA随main更新。436Python＋131Node＋两套Chrome验收及8只读验收器自测通过。生产pre只读：154a642f、active/单worker/gthread6/5002，登录章节200无guard、会话时间不变，诚信三表不存在全场off；无生产写入/管理员页面访问。报告在docs/reviews/exam-integrity-release-20261115；报告交接待提交，分支CI后再快进main发布。旧主树7M/23U保留，第二期不做。
+用户确认无考试并授权一期部署。从审查9275b7a合入fresh main3d8e7b57为32b46bd9，436Python＋131Node＋两Chrome及8验收器测试通过；发布 **878209f4d180ed1a9702b44257044ed394afd731** 已commit/push审查分支和main，推main前再次fetch无漂移。分支CI43726849639/main CI43730767904整体success、三测试job成功（既有advisory lint failure），Deploy43730767905于11-15 23:36 CST成功。11-16 08:50 CST只读验收exit0：HEAD及24文件/3公网SHA一致，active/实际单worker/gthread6/5002、NRestarts0；已有登录和章节200无guard、会话状态和时间不变。诚信三表现已由标准部署旧db.create_all()建出，策略0行/所有场次off；未打开监考面板/建试考/改策略/人工迁移。证据与精确命令在docs/reviews/exam-integrity-release-20261115；验收和两交接独立skip-ci文档同步main/审查分支，不再次部署，生产仍878209f4。旧桌面main6ded77d2原7M/23U保留，仅两交接增量。真机待用户验收，小程序未发；任务完成停止，第二期/SEB/托福不做。
 
 ## 2026-11-15 — Claude 五项修复与main整合后复验通过，未部署
 

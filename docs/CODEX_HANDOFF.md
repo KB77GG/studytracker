@@ -1,8 +1,8 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-15 雅思诚信一期获准发布：已整合最新main并复验，待部署
+## 2026-11-16 雅思诚信一期已部署，生产只读验收通过
 
-- **授权**：用户确认今日全部模考结束、当前无学生考试，允许一期部署；明确禁止代开监考面板、建试考或改防作弊设置。第二期不做。本节新授权取代以下历史“禁止部署”状态。
+- **授权**：用户于2026-11-15确认当日全部模考结束、当时无学生考试，允许一期部署；明确禁止代开监考面板、建试考或改防作弊设置。第二期不做。本节新授权取代以下历史“禁止部署”状态。
 - **工作树/基线**：`/private/tmp/studytracker-exam-integrity-20261114`，`codex/exam-integrity-review`，开工clean／已复核 `9275b7a8a460f5105e4cd8f63e015e4b85f9d4d0`。fresh fetch新增main `3d8e7b57732045ecf30bc66037c61f0a04095bc1`（冲刺模块），已合并为 `32b46bd935e0325f2300ea45558da3caac18b6d9`；api入口保留双方蓝图，两交接保留双方历史，CI自动保留两套测试。阅读默认off测试基线随main更新。旧主资料树main6ded77d2及原7M/23U保持，仅最终追加两交接；其脏业务不纳入本次发布。
 - **验证**：合并后231＋181＋24＝436 Python，131 Node，两套Chrome合成完整考试通过；验收器8安全自测及定向Ruff/Black通过。完整精确命令、日志、截图和15项范围审计在 `docs/reviews/exam-integrity-release-20261115/README.md`；27产品SHA和24生产文件manifest已冻结。以下两条为核心回归，其他精确命令同报告。
 
@@ -13,7 +13,10 @@ node --test tests/test_exam_guard.js tests/test_practice_shell.js tests/test_moc
 ```
 
 - **部署前只读事实**：生产154a642f，active/running、单worker/gthread6/5002、实际worker1，tracked clean／113untracked；已有登录及章节GET200、无guard，所选会话状态/时间未变。诚信三表不存在，所有场次默认关闭。用mode=ro/query_only，不import app/config，不执行JS/POST，不输出真实学生身份/token。
-- **当前提交/发布状态**：合并已本机commit，本轮新验收报告和两交接待提交；尚未push main或部署本功能。下一步提交审查分支并等CI，再快进main触发标准部署；只读post核验生产HEAD/服务/现有页面/全场关闭，完成后停止。不会打开监考面板、建试考、修改策略或手工建表。官方依据/真机待验范围沿此前交接，小程序不上传/提审/发布、SEB/托福/第二期不做。
+- **已commit/push/deploy**：发布HEAD **`878209f4d180ed1a9702b44257044ed394afd731`**。推main前再次fetch确认仍为3d8e7b57，分支[CI 43726849639](https://github.com/KB77GG/studytracker/actions/runs/43726849639)成功后快进main；[main CI 43730767904](https://github.com/KB77GG/studytracker/actions/runs/43730767904)和[Deploy 43730767905](https://github.com/KB77GG/studytracker/actions/runs/43730767905)成功。两CI三测试job均成功，既有advisory lint failure如实保留。部署11-15 23:36 CST完成；结果JSON、精确工作流命令及post命令见报告和production-check-command.txt。
+- **生产只读验收**：11-16 08:50 CST `production-after.json` exit0/ok=true。生产HEAD878209f4、tracked clean/113untracked、24文件SHA/3公网资源SHA一致；服务active/running、自11-15 23:36:30启动、NRestarts0，配置及实际单worker、gthread6、127.0.0.1:5002保持。已有模考登录/章节GET200且无guard；选定会话状态及开始/截止/提交时间未变。仅SQLite ro/query_only和无JS/POST的GET，不保存真实token/身份/正文。
+- **数据库真实状态/计划差异**：诚信三表部署前不存在、部署后已存在，策略0行，monitor/enforce=0，所有场次仍默认off。标准部署日志出现旧create_plan_table.py的固定建表标记，该脚本原有无范围db.create_all()会创建全部已注册模型；因此早于计划所述首次打开老师面板建表。没有手工运行迁移、打开监考面板、建试考或修改任何防作弊设置；旧表/部署脚本未改。验收过程中表状态与策略汇总不变，证据deployment-schema-source.json。
+- **交接/下一步**：本次验收JSON与两交接通过独立`[skip ci]`文档提交同步main和审查分支，不再次部署；最终文档HEAD用Git核对，生产代码仍878209f4。本树收尾后clean，已发布代码和共享证据可跨电脑获取；旧桌面main6ded77d2的7M/23U仅两交接增量、其余脏业务仍仅本机。部署任务已完成并停止；用户自行开面板/建试考/设策略，真实iPad/MacSafari验收仍待。小程序未上传/提审/发布；SEB/托福/第二期不做。
 
 ## 2026-11-15 Claude 审查五项修复完成，已合入main到审查分支，未部署
 

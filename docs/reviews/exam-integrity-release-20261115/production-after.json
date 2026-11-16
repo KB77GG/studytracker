@@ -1,0 +1,140 @@
+{
+  "checked_at_utc": "2026-11-16T00:50:09.981449+00:00",
+  "phase": "post",
+  "scope": "Read-only Git/files/systemd/SQLite aggregates/GET; no app import or admin pages",
+  "errors": {},
+  "head": "878209f4d180ed1a9702b44257044ed394afd731",
+  "expected_head": "878209f4d180ed1a9702b44257044ed394afd731",
+  "head_matches": true,
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "service": {
+    "systemd": {
+      "MainPID": "743973",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Sun 2026-11-15 23:36:30 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "direct_child_count": 1,
+    "actual_gunicorn_worker_count": 1,
+    "listening_5002": true,
+    "listening_only_expected_address": true,
+    "listener_owned_by_service": true,
+    "ok": true
+  },
+  "deployment_helper": {
+    "sha256": "6a6de931b72080b64f2029004accf18f1f983bf1f47e4a8f5dcdab6a234927e8",
+    "contains_literals": {
+      "create_all": false,
+      "create_exam_integrity_tables": false,
+      "exam_integrity_policy": false,
+      "exam_integrity_state": false,
+      "exam_integrity_event": false
+    }
+  },
+  "database_and_pages": {
+    "sqlite_open_mode": "ro",
+    "query_only": true,
+    "policy": {
+      "tables_present": {
+        "exam_integrity_policy": true,
+        "exam_integrity_state": true,
+        "exam_integrity_event": true
+      },
+      "source": "stored_policy_mode_aggregates",
+      "policy_rows": 0,
+      "off_rows": 0,
+      "monitor_rows": 0,
+      "enforce_rows": 0,
+      "unexpected_mode_rows": 0,
+      "all_exams_disabled": true
+    },
+    "policy_aggregates_and_table_presence_unchanged": true,
+    "existing_login_page": {
+      "status": 200,
+      "body_bytes": 5380,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {
+        "examName": true,
+        "examPin": true,
+        "btnLogin": true
+      }
+    },
+    "existing_chapter_page": {
+      "status": 200,
+      "body_bytes": 11200,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {
+        "cardPretest": true,
+        "cardListening": true,
+        "cardReading": true
+      }
+    },
+    "selected_session_state_and_timestamps_unchanged": true,
+    "no_response_body_or_capability_persisted": true,
+    "no_javascript_or_post_requests": true,
+    "ok": true
+  },
+  "files_match": {
+    "api/__init__.py": true,
+    "api/exam_integrity.py": true,
+    "app.py": true,
+    "gunicorn.conf.py": true,
+    "models.py": true,
+    "scripts/create_exam_integrity_tables.py": true,
+    "services/exam_integrity.py": true,
+    "services/exam_integrity_rules.py": true,
+    "services/mock_exam_runtime.py": true,
+    "static/css/exam_guard.css": true,
+    "static/js/exam_guard.js": true,
+    "static/js/practice_shell.js": true,
+    "templates/admin/_exam_integrity_summary.html": true,
+    "templates/admin/mock_exam_integrity.html": true,
+    "templates/admin/mock_exam_session_detail.html": true,
+    "templates/admin/mock_exam_sessions.html": true,
+    "templates/admin/mock_exams_index.html": true,
+    "templates/exam/_integrity_guard.html": true,
+    "templates/exam/integrity_guide.html": true,
+    "templates/exam/integrity_help.html": true,
+    "templates/exam/process.html": true,
+    "templates/exam/writing.html": true,
+    "templates/listening/test_practice.html": true,
+    "templates/reading/test_practice.html": true
+  },
+  "public_static_assets": {
+    "static/css/exam_guard.css": {
+      "status": 200,
+      "body_bytes": 2656,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {},
+      "sha256_matches": true
+    },
+    "static/js/exam_guard.js": {
+      "status": 200,
+      "body_bytes": 26409,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {},
+      "sha256_matches": true
+    },
+    "static/js/practice_shell.js": {
+      "status": 200,
+      "body_bytes": 25547,
+      "body_within_limit": true,
+      "has_integrity_guard": false,
+      "markers": {},
+      "sha256_matches": true
+    }
+  },
+  "ok": true
+}

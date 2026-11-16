@@ -1,0 +1,73 @@
+{
+  "released_code_head": "878209f4d180ed1a9702b44257044ed394afd731",
+  "review_approved_head": "9275b7a8a460f5105e4cd8f63e015e4b85f9d4d0",
+  "main_before_release": "3d8e7b57732045ecf30bc66037c61f0a04095bc1",
+  "merge_commit": "32b46bd935e0325f2300ea45558da3caac18b6d9",
+  "worktree": "/private/tmp/studytracker-exam-integrity-20261114",
+  "branch": "codex/exam-integrity-review",
+  "workflows": {
+    "ci-review": {
+      "databaseId": 43726849639,
+      "headSha": "878209f4d180ed1a9702b44257044ed394afd731",
+      "headBranch": "codex/exam-integrity-review",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/43726849639",
+      "createdAt": "2026-11-15T14:53:55Z",
+      "updatedAt": "2026-11-15T14:56:34Z",
+      "jobs": {
+        "task-planner": "success",
+        "test": "success",
+        "lint": "failure",
+        "account-provisioning": "success"
+      }
+    },
+    "ci-main": {
+      "databaseId": 43730767904,
+      "headSha": "878209f4d180ed1a9702b44257044ed394afd731",
+      "headBranch": "main",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/43730767904",
+      "createdAt": "2026-11-15T15:35:49Z",
+      "updatedAt": "2026-11-15T15:39:46Z",
+      "jobs": {
+        "task-planner": "success",
+        "lint": "failure",
+        "account-provisioning": "success",
+        "test": "success"
+      }
+    },
+    "deploy": {
+      "databaseId": 43730767905,
+      "headSha": "878209f4d180ed1a9702b44257044ed394afd731",
+      "headBranch": "main",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/43730767905",
+      "createdAt": "2026-11-15T15:35:49Z",
+      "updatedAt": "2026-11-15T15:36:34Z",
+      "jobs": {
+        "deploy": "success"
+      }
+    }
+  },
+  "production_acceptance": {
+    "report": "production-after.json",
+    "ok": true,
+    "checked_at_utc": "2026-11-16T00:50:09.981449+00:00",
+    "worker_config_unchanged": true,
+    "all_exams_disabled": true,
+    "policy_rows": 0,
+    "integrity_tables_present": true
+  },
+  "schema_provenance": "Existing create_plan_table.py calls db.create_all(); its fixed output marker is present in this deploy log. No manual migration or teacher dashboard request.",
+  "no_teacher_dashboard_or_trial_or_policy_mutations": true,
+  "no_miniprogram_upload_review_or_publication": true,
+  "pending": [
+    "User iPad/Mac Safari physical-device validation",
+    "User-controlled trial and policy activation"
+  ],
+  "stopped_after_phase_one": true,
+  "documentation_followup": "Separate [skip ci] commit to main and review; production stays released_code_head."
+}
