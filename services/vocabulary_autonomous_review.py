@@ -45,8 +45,12 @@ from services.task_date_gate import (
     task_date,
     task_date_access,
 )
-from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
-from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
+from services.vocabulary_context import (
+    ContextChoiceAvailability,
+    _collocation_fill,
+    _example_fill,
+    grade_context_answer,
+)
 from services.vocabulary_mastery import (
     DIMENSIONS,
     MAX_ENGLISH_ANSWER_LENGTH,
@@ -71,6 +75,7 @@ from services.vocabulary_remediation import (
     remediation_kind_for_dimension,
     remediation_priority,
 )
+from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
 
 MAX_REVIEW_BATCH = 20
 SESSION_TOKEN_MAX_LENGTH = 96
@@ -316,6 +321,7 @@ def _candidate_is_eligible(
     mastery: StudentVocabularyMastery,
     dimension: str,
     catalog_cache: dict[int, list[DictationWord]],
+    context_choice_cache: dict[int, ContextChoiceAvailability] | None = None,
 ) -> bool:
     """Apply cheap field checks before materializing the public question."""
 
@@ -344,15 +350,17 @@ def _candidate_is_eligible(
         return True
     # Choice-based context questions need the catalog, but the catalog is
     # loaded once per book and only for words that lack a direct source.
-    candidates = _candidate_words(word, catalog_cache)
-    return bool(
-        _question_for(
-            word,
-            dimension,
-            _goal_for_dimension(dimension, mastery, word),
-            _dimension_stage(mastery, dimension),
-            candidates,
+    if context_choice_cache is None:
+        context_choice_cache = {}
+    if word.book_id not in context_choice_cache:
+        context_choice_cache[word.book_id] = ContextChoiceAvailability(
+            _candidate_words(word, catalog_cache)
         )
+    goal = _goal_for_dimension(dimension, mastery, word)
+    stage = _dimension_stage(mastery, dimension)
+    return context_choice_cache[word.book_id].has_question(
+        word,
+        seed=f"v2:{word.id}:{word.sense_id}:{dimension}:{goal}:{stage}",
     )
 
 
@@ -452,6 +460,7 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
         {int(mastery.sense_id) for mastery in rows},
     )
     catalog_cache: dict[int, list[DictationWord]] = {}
+    context_choice_cache: dict[int, ContextChoiceAvailability] = {}
     candidates_by_sense: dict[int, list[dict]] = {}
     cooled_senses = _answered_senses_on_local_date(user, now)
     planned_remediation_counts: dict[int, int] = {}
@@ -469,7 +478,9 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
             due_at = _dimension_due(mastery, dimension)
             if not due_at or due_at > now:
                 continue
-            if not _candidate_is_eligible(word, mastery, dimension, catalog_cache):
+            if not _candidate_is_eligible(
+                word, mastery, dimension, catalog_cache, context_choice_cache
+            ):
                 continue
             remediation_kind = _candidate_remediation_kind(
                 user,

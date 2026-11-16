@@ -1,6 +1,12 @@
 import importlib.util
 import unittest
+from datetime import timedelta
 from pathlib import Path
+from unittest.mock import patch
+
+from models import DictationWord, StudentVocabularyMastery, db
+from services import vocabulary_autonomous_review as review
+from services import vocabulary_context as context
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK_PATH = ROOT / "scripts" / "benchmark_vocabulary_review.py"
@@ -42,6 +48,38 @@ class VocabularyReviewPerformanceRegressionTest(unittest.TestCase):
             by_scale[1000]["claim"]["query_count"],
             by_scale[20]["claim"]["query_count"] + 24,
         )
+
+    def test_choice_only_context_preflight_does_not_build_every_due_question(self):
+        benchmark = load_benchmark_module()
+        app = benchmark._make_app()
+        with app.app_context():
+            db.create_all()
+            user, task = benchmark._seed(1000)
+            StudentVocabularyMastery.query.update(
+                {
+                    "meaning_recall_next_due_at": benchmark.BENCHMARK_NOW + timedelta(days=1),
+                    "context_use_next_due_at": benchmark.BENCHMARK_NOW - timedelta(days=1),
+                }
+            )
+            DictationWord.query.update(
+                {
+                    "example_en": "A classroom sentence without the target word.",
+                    "usage_pattern": "",
+                }
+            )
+            db.session.commit()
+            with patch.object(review, "_question_for", side_effect=AssertionError("count built a question")), patch.object(
+                context, "parse_vocabulary_word_variants", wraps=context.parse_vocabulary_word_variants
+            ) as parse:
+                result, _elapsed, query_count, _sql = benchmark._timed_call(
+                    lambda: review.review_preflight(user, task.id, now=benchmark.BENCHMARK_NOW)
+                )
+            self.assertEqual(result["due_count"], 1000)
+            self.assertTrue(result["required"])
+            self.assertLessEqual(query_count, 13)
+            # Candidate text is parsed once per catalog, not 1,000 times per
+            # due word. Keep a generous linear bound for target field checks.
+            self.assertLessEqual(parse.call_count, 12000)
 
 
 if __name__ == "__main__":

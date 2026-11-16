@@ -9,7 +9,9 @@ and ``answer`` objects separately and grades against the latter.
 from __future__ import annotations
 
 import hashlib
+import heapq
 import re
+from collections import Counter
 from collections.abc import Iterable
 
 from dictation_answers import parse_vocabulary_word_variants
@@ -332,6 +334,86 @@ def _collocation_choice(word, candidates, seed):
         options=option_values,
     )
     return public, {"answer_option_id": correct["id"], "answer_type": "option_id"}
+
+
+class ContextChoiceAvailability:
+    """Request-local catalog preparation for counting eligible review words.
+
+    This only answers whether an existing choice builder can succeed. Actual
+    questions still use the unchanged builders below. Never retain this index
+    across requests: catalog edits must be visible on the next request.
+    """
+
+    def __init__(self, candidates):
+        self._rows = []
+        self._meanings = Counter()
+        self._frames = None
+        for candidate in candidates or []:
+            if is_synonym_word(candidate):
+                continue
+            lemma = _lemma(candidate)
+            meaning = _meaning(candidate)
+            suffix = f"{getattr(candidate, 'id', '')}|{lemma}|{meaning}"
+            self._rows.append((candidate, lemma, meaning, suffix))
+            if meaning:
+                self._meanings[meaning] += 1
+        self._meaning_count = sum(self._meanings.values())
+
+    def _meaning_available(self, word, seed):
+        sentence = _text(getattr(word, "example_en", None))
+        meaning = _meaning(word)
+        if len(sentence) < 12 or not meaning or not _lemma(word):
+            return False
+        distinct = len(self._meanings) - int(meaning in self._meanings)
+        if distinct < 3:
+            return False
+        count = self._meaning_count - self._meanings[meaning]
+        if count == distinct:
+            # Every usable label is unique, so any first three are valid.
+            return True
+        prefix = f"{seed}|meaning_distractors|"
+        eligible = (
+            (index, row)
+            for index, row in enumerate(self._rows)
+            if row[0] is not word and row[2] and row[2] != meaning
+        )
+        first = heapq.nsmallest(
+            3,
+            eligible,
+            key=lambda item: (
+                hashlib.sha256((prefix + item[1][3]).encode()).digest(),
+                item[0],
+            ),
+        )
+        # Preserve the builder's first-three-then-deduplicate behavior. Taking
+        # any three distinct labels would incorrectly admit some old words.
+        return len({row[2] for _index, row in first}) == 3
+
+    def _collocation_available(self, word):
+        lemma = _lemma(word)
+        target = _first_collocation_frame(word)
+        if not lemma or not target:
+            return False
+        if self._frames is None:
+            self._frames = [
+                (candidate_lemma.lower(), frame[1])
+                for candidate, candidate_lemma, _meaning_value, _suffix in self._rows
+                if candidate_lemma and (frame := _first_collocation_frame(candidate))
+            ]
+        seen = set()
+        for candidate_lemma, frame in self._frames:
+            if candidate_lemma != lemma.lower() and frame != target[1]:
+                seen.add(frame)
+                if len(seen) == 3:
+                    return True
+        return False
+
+    def has_question(self, word, *, seed):
+        if is_synonym_word(word):
+            return False
+        # Rotation only selects the first successful builder. It cannot
+        # change whether at least one choice builder succeeds.
+        return self._meaning_available(word, seed) or self._collocation_available(word)
 
 
 def build_context_question(
