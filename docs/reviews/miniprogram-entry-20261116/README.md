@@ -58,3 +58,9 @@ PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B sc
 发布前状态保留作历史：初诊时生产878209f4、本轮未发布。现在后台已升级959c2019并通过上节验收；小程序发包状态单独跟踪。
 
 用户已授权，后台提交/推送/部署/验收均已完成；线上旧105包可受益于后台提速。前端修复须从固定目录微信工具编译、真机检查后由用户上传/提审/发布。不得从旧桌面main部署，不重算成绩、不清除任务/复习记录。应用记录`client-apply.json`，三树的`docs/CODEX_HANDOFF.md`和`docs/WORKLOG.md`记录本次边界。
+
+### 前端最终阻塞（本轮收尾）
+
+用户两次确认已解锁并保持桌面，主审独立CUA getState仍返回Native apps locked。官方CLI --help可用；islogin在沙箱中因listen EPERM 127.0.0.1:3799失败，带权限重试被中止，未获得登录状态/进程ID。没有已知正在运行的发包操作，未取得整包编译、上传、提审或发布证据，不能声称小程序已发新版。用户可在固定`/Users/zhouxin/Desktop/studytracker-release/miniprogram`打开微信工具，必要时扫码，编译→上传，再在微信公众平台核版本并提审/发布。不要继续反复要求用户解锁，也不要绕过锁屏或鉴权；这是当前工具无法完成的步骤。后台959c2019已生效，现有105包仍能获得后台提速。
+
+后台业务与先前45份诊断/验收/交接已commit/push（文档195adbc7），本阻塞记录随后独立skip-ci共享；最终文档HEAD以Git为准。原始日志尾空白与标准patch的context空白保留，不把它们算作业务diff检查失败；业务/测试定向diff和Ruff均通过。

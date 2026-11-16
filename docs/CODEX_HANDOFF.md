@@ -1,5 +1,7 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+**最终发布边界补记**：后台959c2019已部署并验收；业务与45文件报告/交接已commit/push文档195adbc7，后续仅补此状态skip-ci。小程序当前明确阻塞：用户两次确认解锁，主审CUA仍报Mac锁定；官方CLI islogin沙箱EPERM，带权限重试被中止，无登录/整包编译/上传/提审/发布证据，无已知发包进程。固定修复源码保持，用户可从`/Users/zhouxin/Desktop/studytracker-release/miniprogram`自行微信扫码/编译/上传及平台提审发布；不再反复请求解锁，不绕过鉴权。生产真实数据服务回放已通过，但尚非真机全旅程验收。详情frontend-release-blocker.json。此状态同步main/任务分支后后台树应clean，旧主资料和固定源其他脏改动仍仅本机。
+
 ## 2026-11-16 小程序加载修复后台已部署并验收；前端发包处理中
 
 - **授权/已发布**：用户明确“所有的修复都部署”。后台树`/private/tmp/studytracker-entry-backend-20261116`、`codex/miniprogram-entry-20261116`，先从878209f4快进文档main b85c4746，保留双方交接。6文件产品/测试/CI提交c0b52743，CI依赖修正后发布HEAD **959c2019b5525769cccd33dc16f4cf2ff3cf7c53**，已commit/push任务分支与main。后台已上线；报告/两交接随后以skip-ci文档同步，最终docsHEAD以Git为准。
