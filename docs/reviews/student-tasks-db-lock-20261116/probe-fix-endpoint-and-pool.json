@@ -1,0 +1,858 @@
+{
+  "synthetic_only": true,
+  "repo": "main@69a99a7 + proposed-fix-1 + proposed-fix-2 (temporary worktree)",
+  "versions": {
+    "python": "3.13.18",
+    "sqlite": "3.53.1",
+    "sqlalchemy": "2.1.8",
+    "flask": "3.1.3",
+    "werkzeug": "3.1.9",
+    "flask_sqlalchemy": "3.1.1"
+  },
+  "werkzeug_default_500_body_bytes": 265,
+  "engine_options": "none (pysqlite defaults, as config.Config)",
+  "modes": {
+    "delete": {
+      "effective_journal_mode": "delete",
+      "pool_class": "QueuePool",
+      "write_conditions": [
+        {
+          "case": "today_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_listening_empty_string_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_reading_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_listening_has_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_plain_homework",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "today",
+          "token_returned": false
+        },
+        {
+          "case": "yesterday_done_cambridge_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "completed",
+          "token_returned": true
+        },
+        {
+          "case": "two_days_ago_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "expired",
+          "token_returned": false
+        },
+        {
+          "case": "tomorrow_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "future",
+          "token_returned": false
+        },
+        {
+          "case": "outside_window_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": null,
+          "token_returned": false
+        },
+        {
+          "case": "date_without_tasks",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": null,
+          "token_returned": false
+        },
+        {
+          "case": "detail_today_pending_listening_missing_token",
+          "endpoint": "tasks/:id",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true
+        },
+        {
+          "case": "history_with_completed_task",
+          "endpoint": "task-history",
+          "status": 200,
+          "dml": {},
+          "wrote": false
+        }
+      ],
+      "concurrent_missing_token": {
+        "threads": 6,
+        "forced_interleave": {
+          "task_id": 12,
+          "statuses": {
+            "200": 6
+          },
+          "distinct_tokens_returned": 1,
+          "responses_with_token_not_in_db": 0,
+          "responses_without_token": 0,
+          "stored_token_present": true,
+          "update_statements": 6
+        },
+        "token_use_after_forced_race": {
+          "stored_token_status": 404
+        },
+        "natural_interleave": {
+          "rounds": 100,
+          "non_200_responses": 0
+        }
+      },
+      "existing_token_reads": {
+        "requests": 90,
+        "statuses": {
+          "200": 90
+        },
+        "dml": {},
+        "distinct_tokens": [
+          "synthetic-stable-token"
+        ],
+        "sqlite_data_version_changed": false,
+        "under_foreign_reserved_lock": {
+          "status": 200,
+          "bytes": 3406,
+          "content_type": "application/json",
+          "elapsed_s": 0.009
+        },
+        "under_foreign_exclusive_lock": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.023
+        }
+      },
+      "missing_token_under_write_lock": {
+        "backfill_request_during_lock": {
+          "status": 200,
+          "bytes": 1696,
+          "content_type": "application/json",
+          "elapsed_s": 5.021
+        },
+        "audit_regex_matches_for_this_one_500": {},
+        "logged_exception_summary": [],
+        "stored_token_after_failure": null,
+        "pool_connections_checked_out_after_failure": 0,
+        "same_lock_today_date_with_complete_tokens": {
+          "status": 200,
+          "bytes": 1773,
+          "content_type": "application/json",
+          "elapsed_s": 0.004
+        },
+        "same_lock_history": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.004
+        },
+        "same_lock_detail_endpoint": {
+          "status": 503,
+          "bytes": 113,
+          "content_type": "application/json",
+          "elapsed_s": 5.022,
+          "error_body_exposes_sql_text": false,
+          "error_body_exposes_bound_parameters": false
+        },
+        "dml_attempted_during_lock": {
+          "UPDATE task": 2
+        },
+        "after_lock_released": {
+          "first_status": 200,
+          "second_status": 200,
+          "token_backfilled": true,
+          "token_stable_across_reads": true,
+          "stored_matches_returned": true,
+          "dml": {
+            "UPDATE task": 1
+          }
+        }
+      },
+      "history": {
+        "scaling": [
+          {
+            "completed_tasks": 200,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.019,
+            "summary_only_bytes": 128,
+            "full_status": 200,
+            "full_elapsed_s": 0.019,
+            "full_bytes": 181017,
+            "summary_total": 200,
+            "summary_wrong_tasks": 200,
+            "dml": {}
+          },
+          {
+            "completed_tasks": 1000,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.067,
+            "summary_only_bytes": 132,
+            "full_status": 200,
+            "full_elapsed_s": 0.073,
+            "full_bytes": 905338,
+            "summary_total": 1000,
+            "summary_wrong_tasks": 1000,
+            "dml": {}
+          },
+          {
+            "completed_tasks": 3000,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.23,
+            "summary_only_bytes": 132,
+            "full_status": 200,
+            "full_elapsed_s": 0.347,
+            "full_bytes": 2720021,
+            "summary_total": 3000,
+            "summary_wrong_tasks": 3000,
+            "dml": {}
+          }
+        ],
+        "concurrent_reads": {
+          "requests": 30,
+          "statuses": {
+            "200": 30
+          },
+          "dml": {}
+        },
+        "under_foreign_reserved_lock": {
+          "status": 200,
+          "bytes": 132,
+          "content_type": "application/json",
+          "elapsed_s": 0.336,
+          "audit_regex_matches": {}
+        },
+        "under_foreign_exclusive_lock": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.016,
+          "audit_regex_matches": {
+            "OperationalError": 3,
+            "database is locked": 2
+          }
+        }
+      },
+      "failed_commit_aftermath": {
+        "idle_pooled_connections_before": 5,
+        "backfill_request_while_reader_active": {
+          "status": 200,
+          "bytes": 1697,
+          "content_type": "application/json",
+          "elapsed_s": 5.02,
+          "tasks_returned": 1
+        },
+        "audit_regex_matches_for_trigger": {},
+        "pure_read_requests_after_reader_left": [
+          {
+            "n": 1,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.007
+          },
+          {
+            "n": 2,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 3,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.007
+          },
+          {
+            "n": 4,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 5,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 6,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 7,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 8,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          }
+        ],
+        "pure_read_failures_after_reader_left": 0,
+        "audit_regex_matches_for_followups": {},
+        "token_of_failed_request_stored_afterwards": false,
+        "trigger_retry": {
+          "status": 200,
+          "token_returned": true
+        }
+      },
+      "any_handler_failed_commit": {
+        "idle_pooled_connections_before": 5,
+        "other_handler_commit": "database is locked",
+        "pure_read_requests_after_reader_left": [
+          {
+            "n": 1,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.007
+          },
+          {
+            "n": 2,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 3,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 4,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 5,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 6,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 7,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 8,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          }
+        ],
+        "pure_read_failures_after_reader_left": 0
+      }
+    },
+    "wal": {
+      "effective_journal_mode": "wal",
+      "pool_class": "QueuePool",
+      "write_conditions": [
+        {
+          "case": "today_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_listening_empty_string_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_reading_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_listening_has_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "today",
+          "token_returned": true
+        },
+        {
+          "case": "today_pending_plain_homework",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "today",
+          "token_returned": false
+        },
+        {
+          "case": "yesterday_done_cambridge_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true,
+          "task_date_state": "completed",
+          "token_returned": true
+        },
+        {
+          "case": "two_days_ago_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "expired",
+          "token_returned": false
+        },
+        {
+          "case": "tomorrow_pending_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": "future",
+          "token_returned": false
+        },
+        {
+          "case": "outside_window_listening_missing_token",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": null,
+          "token_returned": false
+        },
+        {
+          "case": "date_without_tasks",
+          "endpoint": "tasks/today",
+          "status": 200,
+          "dml": {},
+          "wrote": false,
+          "task_date_state": null,
+          "token_returned": false
+        },
+        {
+          "case": "detail_today_pending_listening_missing_token",
+          "endpoint": "tasks/:id",
+          "status": 200,
+          "dml": {
+            "UPDATE task": 1
+          },
+          "wrote": true
+        },
+        {
+          "case": "history_with_completed_task",
+          "endpoint": "task-history",
+          "status": 200,
+          "dml": {},
+          "wrote": false
+        }
+      ],
+      "concurrent_missing_token": {
+        "threads": 6,
+        "forced_interleave": {
+          "task_id": 12,
+          "statuses": {
+            "200": 6
+          },
+          "distinct_tokens_returned": 1,
+          "responses_with_token_not_in_db": 0,
+          "responses_without_token": 0,
+          "stored_token_present": true,
+          "update_statements": 6
+        },
+        "token_use_after_forced_race": {
+          "stored_token_status": 404
+        },
+        "natural_interleave": {
+          "rounds": 100,
+          "non_200_responses": 0
+        }
+      },
+      "existing_token_reads": {
+        "requests": 90,
+        "statuses": {
+          "200": 90
+        },
+        "dml": {},
+        "distinct_tokens": [
+          "synthetic-stable-token"
+        ],
+        "sqlite_data_version_changed": false,
+        "under_foreign_reserved_lock": {
+          "status": 200,
+          "bytes": 3406,
+          "content_type": "application/json",
+          "elapsed_s": 0.006
+        },
+        "under_foreign_exclusive_lock": {
+          "status": 200,
+          "bytes": 3406,
+          "content_type": "application/json",
+          "elapsed_s": 0.005
+        }
+      },
+      "missing_token_under_write_lock": {
+        "backfill_request_during_lock": {
+          "status": 200,
+          "bytes": 1696,
+          "content_type": "application/json",
+          "elapsed_s": 5.026
+        },
+        "audit_regex_matches_for_this_one_500": {},
+        "logged_exception_summary": [],
+        "stored_token_after_failure": null,
+        "pool_connections_checked_out_after_failure": 0,
+        "same_lock_today_date_with_complete_tokens": {
+          "status": 200,
+          "bytes": 1773,
+          "content_type": "application/json",
+          "elapsed_s": 0.004
+        },
+        "same_lock_history": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.004
+        },
+        "same_lock_detail_endpoint": {
+          "status": 503,
+          "bytes": 113,
+          "content_type": "application/json",
+          "elapsed_s": 5.018,
+          "error_body_exposes_sql_text": false,
+          "error_body_exposes_bound_parameters": false
+        },
+        "dml_attempted_during_lock": {
+          "UPDATE task": 2
+        },
+        "after_lock_released": {
+          "first_status": 200,
+          "second_status": 200,
+          "token_backfilled": true,
+          "token_stable_across_reads": true,
+          "stored_matches_returned": true,
+          "dml": {
+            "UPDATE task": 1
+          }
+        }
+      },
+      "history": {
+        "scaling": [
+          {
+            "completed_tasks": 200,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.02,
+            "summary_only_bytes": 128,
+            "full_status": 200,
+            "full_elapsed_s": 0.019,
+            "full_bytes": 181017,
+            "summary_total": 200,
+            "summary_wrong_tasks": 200,
+            "dml": {}
+          },
+          {
+            "completed_tasks": 1000,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.203,
+            "summary_only_bytes": 132,
+            "full_status": 200,
+            "full_elapsed_s": 0.085,
+            "full_bytes": 905338,
+            "summary_total": 1000,
+            "summary_wrong_tasks": 1000,
+            "dml": {}
+          },
+          {
+            "completed_tasks": 3000,
+            "summary_only_status": 200,
+            "summary_only_elapsed_s": 0.24,
+            "summary_only_bytes": 132,
+            "full_status": 200,
+            "full_elapsed_s": 0.401,
+            "full_bytes": 2720021,
+            "summary_total": 3000,
+            "summary_wrong_tasks": 3000,
+            "dml": {}
+          }
+        ],
+        "concurrent_reads": {
+          "requests": 30,
+          "statuses": {
+            "200": 30
+          },
+          "dml": {}
+        },
+        "under_foreign_reserved_lock": {
+          "status": 200,
+          "bytes": 132,
+          "content_type": "application/json",
+          "elapsed_s": 0.45,
+          "audit_regex_matches": {}
+        },
+        "under_foreign_exclusive_lock": {
+          "status": 200,
+          "bytes": 132,
+          "content_type": "application/json",
+          "elapsed_s": 0.205,
+          "audit_regex_matches": {}
+        }
+      },
+      "failed_commit_aftermath": {
+        "idle_pooled_connections_before": 5,
+        "backfill_request_while_reader_active": {
+          "status": 200,
+          "bytes": 1813,
+          "content_type": "application/json",
+          "elapsed_s": 0.007,
+          "tasks_returned": 1
+        },
+        "audit_regex_matches_for_trigger": {},
+        "pure_read_requests_after_reader_left": [
+          {
+            "n": 1,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.005
+          },
+          {
+            "n": 2,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 3,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 4,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.002
+          },
+          {
+            "n": 5,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 6,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 7,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 8,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          }
+        ],
+        "pure_read_failures_after_reader_left": 0,
+        "audit_regex_matches_for_followups": {},
+        "token_of_failed_request_stored_afterwards": true,
+        "trigger_retry": {
+          "status": 200,
+          "token_returned": true
+        }
+      },
+      "any_handler_failed_commit": {
+        "idle_pooled_connections_before": 5,
+        "other_handler_commit": "ok",
+        "pure_read_requests_after_reader_left": [
+          {
+            "n": 1,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.004
+          },
+          {
+            "n": 2,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 3,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 4,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 5,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 6,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 7,
+            "endpoint": "task-history",
+            "status": 200,
+            "bytes": 119,
+            "elapsed_s": 0.003
+          },
+          {
+            "n": 8,
+            "endpoint": "tasks/today",
+            "status": 200,
+            "bytes": 1791,
+            "elapsed_s": 0.003
+          }
+        ],
+        "pure_read_failures_after_reader_left": 0
+      }
+    }
+  },
+  "history_variable_limit": {
+    "simulated_variable_limit": 999,
+    "rows": [
+      {
+        "completed_tasks": 999,
+        "status": 200,
+        "bytes": 129,
+        "too_many_sql_variables_logged": false,
+        "audit_regex_matches": {}
+      },
+      {
+        "completed_tasks": 1000,
+        "status": 500,
+        "bytes": 265,
+        "too_many_sql_variables_logged": true,
+        "audit_regex_matches": {
+          "OperationalError": 3
+        }
+      }
+    ]
+  }
+}

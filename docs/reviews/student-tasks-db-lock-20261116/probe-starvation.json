@@ -1,0 +1,390 @@
+{
+  "synthetic_only": true,
+  "hypothesis_test_not_production_evidence": true,
+  "python": "3.13.18",
+  "sqlite": "3.53.1",
+  "switch_interval_s": 0.005,
+  "big_history_tasks": 3000,
+  "modes": {
+    "delete": {
+      "control": {
+        "with_cpu_bound_thread": false,
+        "writer_kind": "raw",
+        "reader_history_t+0.02": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.028
+        },
+        "reader_today_t+0.02": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.018
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 0.247
+        },
+        "writer": {
+          "outcome": "committed",
+          "commit_elapsed_s": 0.021
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "contended_raw_writer": {
+        "with_cpu_bound_thread": true,
+        "writer_kind": "raw",
+        "reader_today_t+3.0": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 2.209
+        },
+        "reader_today_t+1.5": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 3.757
+        },
+        "reader_today_t+0.4": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 4.915
+        },
+        "reader_history_t+0.8": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 4.571
+        },
+        "reader_today_t+0.8": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 4.575
+        },
+        "reader_history_t+3.0": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 2.4
+        },
+        "reader_history_t+1.5": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 3.966
+        },
+        "reader_history_t+0.4": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 5.097
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 59.617
+        },
+        "writer": {
+          "outcome": "database is locked",
+          "commit_elapsed_s": 5.078
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "control_app_writer": {
+        "with_cpu_bound_thread": false,
+        "writer_kind": "app_backfill_get",
+        "writer": {
+          "status": 200,
+          "bytes": 1813,
+          "content_type": "application/json",
+          "elapsed_s": 0.144
+        },
+        "reader_history_t+0.02": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.049
+        },
+        "reader_today_t+0.02": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.039
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 0.357
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "contended_app_writer": {
+        "with_cpu_bound_thread": true,
+        "writer_kind": "app_backfill_get",
+        "writer": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.462
+        },
+        "reader_history_t+0.4": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.28
+        },
+        "reader_today_t+0.4": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.299
+        },
+        "reader_history_t+0.8": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.05
+        },
+        "reader_today_t+0.8": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.05
+        },
+        "reader_history_t+1.5": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.021
+        },
+        "reader_today_t+1.5": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.028
+        },
+        "reader_history_t+3.0": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.036
+        },
+        "reader_today_t+3.0": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 5.043
+        },
+        "big_history": {
+          "status": 500,
+          "bytes": 265,
+          "content_type": "text/html; charset=utf-8",
+          "elapsed_s": 27.82
+        },
+        "lock_tracebacks_logged": 10,
+        "pure_read_requests_failed": 8
+      }
+    },
+    "wal": {
+      "control": {
+        "with_cpu_bound_thread": false,
+        "writer_kind": "raw",
+        "reader_today_t+0.02": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.02
+        },
+        "reader_history_t+0.02": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.043
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 0.397
+        },
+        "writer": {
+          "outcome": "committed",
+          "commit_elapsed_s": 0.001
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "contended_raw_writer": {
+        "with_cpu_bound_thread": true,
+        "writer_kind": "raw",
+        "reader_today_t+0.4": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.057
+        },
+        "reader_history_t+0.4": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.076
+        },
+        "reader_today_t+0.8": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.038
+        },
+        "reader_history_t+0.8": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.111
+        },
+        "reader_today_t+1.5": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.028
+        },
+        "reader_history_t+1.5": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.054
+        },
+        "reader_history_t+3.0": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.014
+        },
+        "reader_today_t+3.0": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.029
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 48.888
+        },
+        "writer": {
+          "outcome": "committed",
+          "commit_elapsed_s": 0.021
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "control_app_writer": {
+        "with_cpu_bound_thread": false,
+        "writer_kind": "app_backfill_get",
+        "writer": {
+          "status": 200,
+          "bytes": 1813,
+          "content_type": "application/json",
+          "elapsed_s": 0.022
+        },
+        "reader_today_t+0.02": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.021
+        },
+        "reader_history_t+0.02": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.037
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 0.303
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      },
+      "contended_app_writer": {
+        "with_cpu_bound_thread": true,
+        "writer_kind": "app_backfill_get",
+        "writer": {
+          "status": 200,
+          "bytes": 1813,
+          "content_type": "application/json",
+          "elapsed_s": 0.084
+        },
+        "reader_history_t+0.4": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.091
+        },
+        "reader_today_t+0.4": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.046
+        },
+        "reader_history_t+0.8": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.035
+        },
+        "reader_today_t+0.8": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.028
+        },
+        "reader_history_t+1.5": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.029
+        },
+        "reader_today_t+1.5": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.019
+        },
+        "reader_today_t+3.0": {
+          "status": 200,
+          "bytes": 1791,
+          "content_type": "application/json",
+          "elapsed_s": 0.03
+        },
+        "reader_history_t+3.0": {
+          "status": 200,
+          "bytes": 119,
+          "content_type": "application/json",
+          "elapsed_s": 0.065
+        },
+        "big_history": {
+          "status": 200,
+          "bytes": 2718914,
+          "content_type": "application/json",
+          "elapsed_s": 43.188
+        },
+        "lock_tracebacks_logged": 0,
+        "pure_read_requests_failed": 0
+      }
+    }
+  }
+}

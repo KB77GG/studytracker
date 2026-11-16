@@ -1,0 +1,104 @@
+{
+  "synthetic_only": true,
+  "sqlalchemy": "2.0.36",
+  "sqlite": "3.53.1",
+  "busy_timeout_s": 0.5,
+  "cases": [
+    {
+      "journal_mode": "delete",
+      "cleanup": "close_only",
+      "reset_guard": false,
+      "commit": "database is locked",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "database is locked",
+      "later_write_on_other_connection": "database is locked",
+      "reused_connection_still_in_transaction": true,
+      "value_visible_to_next_request": "from_failed_request",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "delete",
+      "cleanup": "close_only",
+      "reset_guard": true,
+      "commit": "database is locked",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "original",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "delete",
+      "cleanup": "rollback_then_close",
+      "reset_guard": false,
+      "commit": "database is locked",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "original",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "delete",
+      "cleanup": "rollback_then_close",
+      "reset_guard": true,
+      "commit": "database is locked",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "original",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "wal",
+      "cleanup": "close_only",
+      "reset_guard": false,
+      "commit": "ok",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "from_failed_request",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "wal",
+      "cleanup": "close_only",
+      "reset_guard": true,
+      "commit": "ok",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "from_failed_request",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "wal",
+      "cleanup": "rollback_then_close",
+      "reset_guard": false,
+      "commit": "ok",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "from_failed_request",
+      "read_after_connection_was_reused": "ok"
+    },
+    {
+      "journal_mode": "wal",
+      "cleanup": "rollback_then_close",
+      "reset_guard": true,
+      "commit": "ok",
+      "connections_checked_out": 0,
+      "later_read_on_other_connection": "ok",
+      "later_write_on_other_connection": "ok",
+      "reused_connection_still_in_transaction": false,
+      "value_visible_to_next_request": "from_failed_request",
+      "read_after_connection_was_reused": "ok"
+    }
+  ]
+}

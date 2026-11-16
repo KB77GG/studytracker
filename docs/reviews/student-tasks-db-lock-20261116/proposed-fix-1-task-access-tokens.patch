@@ -1,0 +1,445 @@
+diff --git a/api/miniprogram.py b/api/miniprogram.py
+index e1df7cd..e7b6996 100644
+--- a/api/miniprogram.py
++++ b/api/miniprogram.py
+@@ -60,6 +60,7 @@ from services.scheduler_client import (
+     fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
+ )
+ from services.vocabulary_mastery import vocabulary_goal_for_task
++from services.task_access_tokens import backfill_missing_access_tokens
+ from services.task_deletion import TaskDeletionError, delete_unstarted_task
+ from services.teacher_homework_recipients import legacy_homework_is_group
+ from services.task_date_gate import (
+@@ -1800,25 +1801,12 @@ def get_student_today_tasks():
+         })
+ 
+     # 只给当前可操作或已完成任务补齐访问令牌；过期未完成任务的 GET 保持真正只读。
+-    tokens_updated = False
+-    for task in tasks:
+-        access = _student_task_access(task, now)
+-        if (
+-            task.listening_exercise_id
+-            and not task.listening_access_token
+-            and access.state in {"today", "completed"}
+-        ):
+-            task.listening_access_token = secrets.token_urlsafe(16)
+-            tokens_updated = True
+-        if (
+-            task.reading_test_id
+-            and not task.reading_access_token
+-            and access.state in {"today", "completed"}
+-        ):
+-            task.reading_access_token = secrets.token_urlsafe(16)
+-            tokens_updated = True
+-    if tokens_updated:
+-        db.session.commit()
++    # 补齐失败（数据库忙）不影响列表返回：该任务本次不带令牌，下次请求再补。
++    backfill_missing_access_tokens(
++        task
++        for task in tasks
++        if _student_task_access(task, now).state in {"today", "completed"}
++    )
+ 
+     # 批量取布置人角色，避免逐条访问 task.creator 触发 N+1 查询。
+     creator_ids = {task.created_by for task in tasks if task.created_by}
+@@ -1942,20 +1930,14 @@ def get_task_detail(task_id):
+         if task.student_name != user.student_profile.full_name:
+              return jsonify({"ok": False, "error": "forbidden"}), 403
+         access = _student_task_access(task)
+-        if (
+-            task.listening_exercise_id
+-            and not task.listening_access_token
+-            and access.state in {"today", "completed"}
+-        ):
+-            task.listening_access_token = secrets.token_urlsafe(16)
+-            db.session.commit()
+-        if (
+-            task.reading_test_id
+-            and not task.reading_access_token
+-            and access.state in {"today", "completed"}
++        if access.state in {"today", "completed"} and not backfill_missing_access_tokens(
++            [task]
+         ):
+-            task.reading_access_token = secrets.token_urlsafe(16)
+-            db.session.commit()
++            return jsonify({
++                "ok": False,
++                "error": "task_access_busy",
++                "message": "系统繁忙，请稍后重试",
++            }), 503
+ 
+         workflow_status = task_workflow_status(task)
+         status = {
+diff --git a/services/task_access_tokens.py b/services/task_access_tokens.py
+new file mode 100644
+index 0000000..0372548
+--- /dev/null
++++ b/services/task_access_tokens.py
+@@ -0,0 +1,73 @@
++"""Lazy back-fill of the per-task listening/reading access tokens.
++
++Tasks normally receive their token when they are assigned.  Older rows can
++still lack one, so the student read endpoints fill it in on first view.  That
++back-fill is optional for showing the task, therefore it must
++
++* start no write transaction when nothing is missing,
++* keep the first committed token when several requests race, and
++* never turn an otherwise readable response into a 500 while SQLite is busy.
++"""
++
++from __future__ import annotations
++
++import logging
++import secrets
++
++from sqlalchemy import or_, update
++from sqlalchemy.exc import OperationalError
++
++from models import Task, db
++
++logger = logging.getLogger(__name__)
++
++_TOKEN_FIELDS = (
++    ("listening_exercise_id", "listening_access_token"),
++    ("reading_test_id", "reading_access_token"),
++)
++
++
++def missing_access_token_fields(task) -> list[str]:
++    """Token columns this task needs but does not have yet."""
++
++    return [
++        token_field
++        for resource_field, token_field in _TOKEN_FIELDS
++        if getattr(task, resource_field) and not getattr(task, token_field)
++    ]
++
++
++def backfill_missing_access_tokens(tasks) -> bool:
++    """Store a token for every missing one; ``False`` if storage was busy.
++
++    Each UPDATE only applies while the column is still empty.  A request that
++    loses the race therefore re-reads the winner's token instead of
++    overwriting it, so every client ends up holding the stored value.
++    """
++
++    pending = [
++        (task, token_field) for task in tasks for token_field in missing_access_token_fields(task)
++    ]
++    if not pending:
++        return True
++    try:
++        for task, token_field in pending:
++            column = getattr(Task, token_field)
++            db.session.execute(
++                update(Task)
++                .where(Task.id == task.id, or_(column.is_(None), column == ""))
++                .values({token_field: secrets.token_urlsafe(16)})
++                .execution_options(synchronize_session=False)
++            )
++        db.session.commit()
++    except OperationalError as error:
++        db.session.rollback()
++        # str(error) would include the bound parameters, i.e. the new token.
++        logger.warning(
++            "task access token backfill skipped: %s",
++            getattr(error, "orig", None) or type(error).__name__,
++        )
++        return False
++    for task, token_field in pending:
++        db.session.expire(task, [token_field])
++    return True
+diff --git a/tests/test_student_task_access_tokens.py b/tests/test_student_task_access_tokens.py
+new file mode 100644
+index 0000000..a19ebc5
+--- /dev/null
++++ b/tests/test_student_task_access_tokens.py
+@@ -0,0 +1,288 @@
++"""Student task GETs: token back-fill must stay cheap, convergent and non-fatal.
++
++Synthetic students and tasks on a throwaway SQLite file (a real file, because
++lock behaviour needs more than one connection).
++"""
++
++import sqlite3
++import tempfile
++import threading
++import time
++import unittest
++from collections import Counter
++from contextlib import contextmanager
++from datetime import timedelta
++from pathlib import Path
++from unittest.mock import patch
++
++import jwt
++from flask import Flask
++from sqlalchemy import event
++
++import services.task_access_tokens as task_access_tokens
++from api.miniprogram import mp_bp
++from models import StudentProfile, Task, User, db
++from services.task_date_gate import beijing_now
++
++LISTENING = dict(
++    category="雅思-听力",
++    listening_resource_type="cambridge_test",
++    listening_exercise_id="synthetic_cambridge",
++)
++READING = dict(category="雅思-阅读", reading_test_id="synthetic_reading")
++
++
++class StudentTaskAccessTokenTest(unittest.TestCase):
++    def setUp(self):
++        self.tmp = tempfile.TemporaryDirectory()
++        self.db_path = Path(self.tmp.name) / "synthetic.db"
++        self.app = Flask(__name__)
++        self.app.config.update(
++            SECRET_KEY="test-secret",
++            SQLALCHEMY_DATABASE_URI=f"sqlite:///{self.db_path}",
++            # Production keeps pysqlite's 5 s wait; the tests only shorten it.
++            SQLALCHEMY_ENGINE_OPTIONS={"connect_args": {"timeout": 0.2}},
++            SQLALCHEMY_TRACK_MODIFICATIONS=False,
++            PROPAGATE_EXCEPTIONS=False,
++        )
++        db.init_app(self.app)
++        self.app.register_blueprint(mp_bp)
++        self.app.logger.disabled = True
++        self.today = beijing_now().date()
++        self.writes = []
++        with self.app.app_context():
++            db.create_all()
++            event.listen(db.engine, "before_cursor_execute", self._record_write)
++            self.student = self._student("token_student", "令牌合成学生")
++            self.other = self._student("token_other", "另一合成学生")
++
++    def tearDown(self):
++        with self.app.app_context():
++            db.session.remove()
++            db.engine.dispose()
++        self.tmp.cleanup()
++
++    def _record_write(self, _conn, _cursor, statement, *_rest):
++        if statement.lstrip().split(" ", 1)[0].upper() not in {"SELECT", "PRAGMA"}:
++            self.writes.append(statement.split()[0].upper())
++
++    def _student(self, username, full_name):
++        user = User(username=username, password_hash="x", role=User.ROLE_STUDENT, is_active=True)
++        db.session.add(user)
++        db.session.flush()
++        db.session.add(StudentProfile(user_id=user.id, full_name=full_name))
++        db.session.commit()
++        now = int(time.time())
++        token = jwt.encode(
++            {"sub": str(user.id), "role": user.role, "iat": now, "exp": now + 3600},
++            "test-secret",
++            algorithm="HS256",
++        )
++        return {"name": full_name, "headers": {"Authorization": f"Bearer {token}"}}
++
++    def _task(self, student, day, **fields):
++        values = dict(
++            date=day.isoformat(),
++            student_name=student["name"],
++            category="课后作业",
++            detail="synthetic",
++            status="pending",
++        )
++        values.update(fields)
++        with self.app.app_context():
++            task = Task(**values)
++            db.session.add(task)
++            db.session.commit()
++            return task.id
++
++    def _stored(self, task_id):
++        raw = sqlite3.connect(self.db_path)
++        try:
++            return raw.execute(
++                "SELECT listening_access_token, reading_access_token FROM task WHERE id=?",
++                (task_id,),
++            ).fetchone()
++        finally:
++            raw.close()
++
++    def _today(self, student, day=None):
++        day = day or self.today
++        return self.app.test_client().get(
++            f"/api/miniprogram/student/tasks/today?date={day.isoformat()}",
++            headers=student["headers"],
++        )
++
++    @staticmethod
++    def _item(response, task_id):
++        return next(item for item in response.get_json()["tasks"] if item["id"] == task_id)
++
++    @contextmanager
++    def _foreign_writer(self):
++        raw = sqlite3.connect(self.db_path, isolation_level=None)
++        raw.execute("CREATE TABLE IF NOT EXISTS synthetic_lock (id INTEGER PRIMARY KEY)")
++        raw.execute("BEGIN IMMEDIATE")
++        raw.execute("INSERT INTO synthetic_lock DEFAULT VALUES")
++        try:
++            yield
++        finally:
++            raw.execute("ROLLBACK")
++            raw.close()
++
++    def test_tasks_with_tokens_are_served_without_any_write(self):
++        task_id = self._task(self.student, self.today, listening_access_token="kept", **LISTENING)
++        self._task(self.student, self.today, reading_access_token="kept-reading", **READING)
++        self.writes.clear()
++        for _ in range(5):
++            response = self._today(self.student)
++            self.assertEqual(response.status_code, 200)
++            self.assertEqual(self._item(response, task_id)["listening_token"], "kept")
++        self.assertEqual(self.writes, [])
++
++    def test_missing_token_is_backfilled_once_and_then_stable(self):
++        listening_id = self._task(self.student, self.today, **LISTENING)
++        reading_id = self._task(self.student, self.today, reading_access_token="", **READING)
++        self.writes.clear()
++        first = self._today(self.student)
++        self.assertEqual(first.status_code, 200)
++        listening_token = self._item(first, listening_id)["listening_token"]
++        reading_token = self._item(first, reading_id)["reading_token"]
++        self.assertTrue(listening_token)
++        self.assertTrue(reading_token)
++        self.assertEqual(self.writes, ["UPDATE", "UPDATE"])
++        self.assertEqual(self._stored(listening_id)[0], listening_token)
++        self.assertEqual(self._stored(reading_id)[1], reading_token)
++
++        self.writes.clear()
++        second = self._today(self.student)
++        self.assertEqual(self._item(second, listening_id)["listening_token"], listening_token)
++        self.assertEqual(self._item(second, reading_id)["reading_token"], reading_token)
++        self.assertEqual(self.writes, [])
++
++    def test_expired_future_and_plain_tasks_stay_read_only(self):
++        expired = self._task(self.student, self.today - timedelta(days=2), **LISTENING)
++        future = self._task(self.student, self.today + timedelta(days=1), **LISTENING)
++        self._task(self.student, self.today)
++        self.writes.clear()
++        for offset in (-2, 0, 1):
++            self.assertEqual(
++                self._today(self.student, self.today + timedelta(days=offset)).status_code, 200
++            )
++        self.assertEqual(self.writes, [])
++        self.assertEqual(self._stored(expired), (None, None))
++        self.assertEqual(self._stored(future), (None, None))
++
++    def test_concurrent_backfill_converges_on_the_stored_token(self):
++        task_id = self._task(self.student, self.today, **LISTENING)
++        threads = 6
++        everyone_saw_missing_token = threading.Barrier(threads)
++        original = task_access_tokens.secrets.token_urlsafe
++
++        def delayed(nbytes=None):
++            try:
++                everyone_saw_missing_token.wait(timeout=10)
++            except threading.BrokenBarrierError:
++                pass
++            return original(nbytes)
++
++        results = []
++
++        def call():
++            response = self._today(self.student)
++            results.append((response.status_code, self._item(response, task_id)["listening_token"]))
++
++        with patch.object(task_access_tokens.secrets, "token_urlsafe", side_effect=delayed):
++            workers = [threading.Thread(target=call) for _ in range(threads)]
++            for worker in workers:
++                worker.start()
++            for worker in workers:
++                worker.join(timeout=30)
++
++        stored = self._stored(task_id)[0]
++        self.assertTrue(stored)
++        self.assertEqual(Counter(status for status, _ in results), {200: threads})
++        self.assertEqual({token for _, token in results}, {stored})
++        check = self.app.test_client().get(
++            f"/api/miniprogram/student/listening/cambridge/{task_id}?token={stored}",
++            headers=self.student["headers"],
++        )
++        self.assertNotEqual(check.status_code, 403)
++
++    def test_busy_database_keeps_today_list_available(self):
++        task_id = self._task(self.student, self.today, **LISTENING)
++        plain_id = self._task(self.student, self.today)
++        with self._foreign_writer():
++            response = self._today(self.student)
++            self.assertEqual(response.status_code, 200)
++            ids = {item["id"] for item in response.get_json()["tasks"]}
++            self.assertEqual(ids, {task_id, plain_id})
++            self.assertIsNone(self._item(response, task_id)["listening_token"])
++            self.assertIsNone(self._item(response, task_id)["listening_url"])
++        self.assertEqual(self._stored(task_id), (None, None))
++
++        recovered = self._today(self.student)
++        token = self._item(recovered, task_id)["listening_token"]
++        self.assertTrue(token)
++        self.assertEqual(self._stored(task_id)[0], token)
++
++    def test_busy_database_makes_detail_retryable_without_leaking_sql(self):
++        task_id = self._task(self.student, self.today, **LISTENING)
++        url = f"/api/miniprogram/student/tasks/{task_id}"
++        with self._foreign_writer():
++            response = self.app.test_client().get(url, headers=self.student["headers"])
++        self.assertEqual(response.status_code, 503)
++        self.assertEqual(response.get_json()["error"], "task_access_busy")
++        body = response.get_data(as_text=True)
++        self.assertNotIn("UPDATE", body)
++        self.assertNotIn("parameters", body)
++
++        recovered = self.app.test_client().get(url, headers=self.student["headers"])
++        self.assertEqual(recovered.status_code, 200)
++        token = recovered.get_json()["task"]["listening_token"]
++        self.assertTrue(token)
++        self.assertEqual(self._today(self.student).get_json()["tasks"][0]["listening_token"], token)
++
++    def test_backfill_never_crosses_students_and_token_still_gates_access(self):
++        mine = self._task(self.student, self.today, **LISTENING)
++        theirs = self._task(self.other, self.today, **LISTENING)
++        response = self._today(self.student)
++        self.assertEqual([item["id"] for item in response.get_json()["tasks"]], [mine])
++        self.assertEqual(self._stored(theirs), (None, None))
++
++        forbidden = self.app.test_client().get(
++            f"/api/miniprogram/student/tasks/{theirs}", headers=self.student["headers"]
++        )
++        self.assertEqual(forbidden.status_code, 403)
++        self.assertEqual(self._stored(theirs), (None, None))
++
++        base = f"/api/miniprogram/student/listening/cambridge/{mine}?token="
++        wrong = self.app.test_client().get(base + "not-the-token", headers=self.student["headers"])
++        self.assertEqual(wrong.status_code, 403)
++        right = self.app.test_client().get(
++            base + self._stored(mine)[0], headers=self.student["headers"]
++        )
++        self.assertNotEqual(right.status_code, 403)
++
++    def test_history_is_read_only_and_unaffected_by_a_concurrent_writer(self):
++        done = self._task(
++            self.student,
++            self.today - timedelta(days=1),
++            status="done",
++            accuracy=80,
++            actual_seconds=600,
++            listening_access_token="kept",
++            **LISTENING,
++        )
++        self.writes.clear()
++        with self._foreign_writer():
++            response = self.app.test_client().get(
++                "/api/miniprogram/student/task-history", headers=self.student["headers"]
++            )
++        self.assertEqual(response.status_code, 200)
++        payload = response.get_json()
++        self.assertEqual([item["id"] for item in payload["items"]], [done])
++        self.assertEqual(payload["summary"]["completed"], 1)
++        self.assertEqual(self.writes, [])
++
++
++if __name__ == "__main__":
++    unittest.main()

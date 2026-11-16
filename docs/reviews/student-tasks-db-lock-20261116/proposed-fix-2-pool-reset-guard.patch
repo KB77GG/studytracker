@@ -1,0 +1,118 @@
+diff --git a/models.py b/models.py
+index 0269e57..4cabed8 100644
+--- a/models.py
++++ b/models.py
+@@ -4,11 +4,26 @@ from flask_login import UserMixin
+ from flask_sqlalchemy import SQLAlchemy
+ from sqlalchemy import event, text
+ from sqlalchemy.orm import Session, with_loader_criteria
++from sqlalchemy.pool import Pool
+ from werkzeug.security import check_password_hash, generate_password_hash
+ 
+ db = SQLAlchemy()
+ 
+ 
++@event.listens_for(Pool, "reset")
++def _rollback_transaction_left_open(dbapi_connection, _record, _reset_state) -> None:
++    """Never return a connection to the pool while it is still mid-transaction.
++
++    When SQLite answers COMMIT with "database is locked" the transaction stays
++    open and keeps its lock.  SQLAlchemy treats the failed commit as finished
++    and skips the usual rollback on check-in, so the idle pooled connection
++    would block every other request until it happens to be reused.
++    """
++
++    if getattr(dbapi_connection, "in_transaction", False):
++        dbapi_connection.rollback()
++
++
+ def utcnow_naive() -> datetime:
+     """Return UTC without tzinfo for the repository's legacy DateTime columns."""
+ 
+diff --git a/tests/test_sqlite_pool_reset.py b/tests/test_sqlite_pool_reset.py
+new file mode 100644
+index 0000000..13eea70
+--- /dev/null
++++ b/tests/test_sqlite_pool_reset.py
+@@ -0,0 +1,81 @@
++"""A failed COMMIT must not leave an idle pooled connection holding SQLite locks."""
++
++import sqlite3
++import tempfile
++import unittest
++from pathlib import Path
++
++from flask import Flask
++from sqlalchemy import text
++from sqlalchemy.exc import OperationalError
++
++from models import db
++
++
++class SqlitePoolResetTest(unittest.TestCase):
++    def setUp(self):
++        self.tmp = tempfile.TemporaryDirectory()
++        self.db_path = Path(self.tmp.name) / "synthetic.db"
++        raw = sqlite3.connect(self.db_path)
++        raw.execute("CREATE TABLE synthetic (id INTEGER PRIMARY KEY, v TEXT)")
++        raw.executemany("INSERT INTO synthetic (v) VALUES (?)", [("original",)] * 50)
++        raw.commit()
++        raw.close()
++        self.app = Flask(__name__)
++        self.app.config.update(
++            SQLALCHEMY_DATABASE_URI=f"sqlite:///{self.db_path}",
++            SQLALCHEMY_ENGINE_OPTIONS={"connect_args": {"timeout": 0.2}},
++            SQLALCHEMY_TRACK_MODIFICATIONS=False,
++        )
++        db.init_app(self.app)
++
++    def tearDown(self):
++        with self.app.app_context():
++            db.session.remove()
++            db.engine.dispose()
++        self.tmp.cleanup()
++
++    def _other_connection_can(self, sql):
++        raw = sqlite3.connect(self.db_path, timeout=0.2, isolation_level=None)
++        try:
++            raw.execute(sql)
++            if raw.in_transaction:
++                raw.execute("ROLLBACK")
++            return True
++        except sqlite3.OperationalError:
++            return False
++        finally:
++            raw.close()
++
++    def test_failed_commit_without_explicit_rollback_releases_its_lock(self):
++        # A reader that is still fetching keeps COMMIT waiting past the busy timeout.
++        reader = sqlite3.connect(self.db_path, timeout=0.2)
++        cursor = reader.execute("SELECT * FROM synthetic")
++        cursor.fetchone()
++
++        # A request handler that commits and lets the error propagate; the app
++        # context teardown (scoped_session.remove()) is the only clean-up.
++        with self.app.app_context():
++            db.session.execute(text("UPDATE synthetic SET v='failed request' WHERE id=1"))
++            with self.assertRaises(OperationalError):
++                db.session.commit()
++        cursor.close()
++        reader.close()
++
++        self.assertTrue(self._other_connection_can("SELECT count(*) FROM synthetic"))
++        self.assertTrue(self._other_connection_can("BEGIN IMMEDIATE"))
++        with self.app.app_context():
++            value = db.session.execute(text("SELECT v FROM synthetic WHERE id=1")).scalar()
++        self.assertEqual(value, "original")
++
++    def test_successful_commit_is_untouched(self):
++        with self.app.app_context():
++            db.session.execute(text("UPDATE synthetic SET v='saved' WHERE id=2"))
++            db.session.commit()
++        with self.app.app_context():
++            value = db.session.execute(text("SELECT v FROM synthetic WHERE id=2")).scalar()
++        self.assertEqual(value, "saved")
++
++
++if __name__ == "__main__":
++    unittest.main()
