@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-17 背词卡顿第一层补丁已部署（后台），生产健康未能从会话内独立核验
+
+- **授权**：用户看完复查报告后明确"先部署第一层补丁"。只授权这一个补丁；第 2 层（入口成本与积压解耦）、第 3 层（积压规则）以及上一轮锁核查的两份补丁**均未授权、未应用**。
+- **已发布**：产品提交 **`c7e852140cc613b708212a352ec680a0f9dcc8a2`**（`review_preflight(gate_only=True)`，三文件 +25/−6、新增 `tests/test_vocabulary_flow_backlog_gate.py` 并纳入 CI 词汇步骤）。先推审计分支 `claude/student-tasks-db-lock-audit-67jm7t`，[分支 CI 43980893811](https://github.com/KB77GG/studytracker/actions/runs/43980893811) 三个测试 job 成功后，推前再次 fetch 确认 main 仍为 69a99a7，快进 main 到 c7e8521（连同此前三个 skip-ci 文档提交，即锁核查与背词复查两份报告）。[main CI 43981304232](https://github.com/KB77GG/studytracker/actions/runs/43981304232) success；[Deploy 43981304179](https://github.com/KB77GG/studytracker/actions/runs/43981304179) success。既有 advisory lint job 仍 failure，不是全仓 lint 通过。
+- **部署日志事实**：Deploy job 在 23:40:41–23:41:05 UTC（北京 11-17 07:40–07:41）执行服务器脚本，原有幂等迁移照常运行，`Restarting studytracker service...` 后输出 `Deployment successful.`。本补丁无 schema、配置或数据改动。日志同时显示生产 venv 为 Python 3.10。
+- **未能核验（重要）**：云端会话没有服务器访问权限，公网 `studytracker.xin` 也被会话网络策略拦截（curl 返回 000）。因此**没有**独立确认生产 HEAD、服务 active/running、NRestarts、公网 200，也没有任何真实数据的耗时回放。部署成功的依据仅为 GitHub Actions 结论和部署日志。下一位在有权限的机器上请按 `docs/reviews/miniprogram-entry-20261116/verify_production_entry.py` 同样的只读方式核对 HEAD 应为 c7e8521、服务状态，以及任务进行中的取题接口耗时。
+- **部署前验证**：分支上按 CI 原样跑词汇步骤 109 项、Codex 当时的 12 模块加新测试共 216 项全过；补丁内容与此前在临时工作树验证的完全相同（北京时区全量 discover 1457 项，失败集合与 main 的 8 项存量相同；合成基准积压 2400 词背 10 词 80.4 秒→1.31 秒）。本机为 Python 3.13，未在 3.10 下实跑，补丁未使用 3.10 不支持的语法。
+- **预期效果与边界**：任务进行中的取题、标记已看、提交答案、订正不再扫描积压，线上 105 包无需发版即受益。首次进入任务的门禁检查、领取复习批次、结算和首页复习数仍随积压变慢，多人同时首次进入仍可能超过 10 秒；这是第 2 层，未做。
+- **回滚**：`git revert c7e8521` 后推 main 即可，无数据迁移需要撤销。
+- **下一步**：①有权限者做上面的只读健康核验；②部署后对比取题接口 499 数量（`audit_onset_logs.py` 思路，新时间窗）；③等用户决定第 2、3 层及锁核查两份补丁；④小程序新包仍待用户发布，与本补丁互不依赖。
+- **Git/可见性**：产品提交与报告已在 origin/main 和审计分支；本节以独立 `[skip ci]` 文档提交同步，不会再次触发部署，最终文档 HEAD 以 Git 为准。工作区收尾后 clean。
+
 ## 2026-11-16 背词"进不去/卡顿"复查：后台修复不完整，给出待批补丁，未改产品代码
 
 - **范围/状态**：同一云端会话、同一分支 `claude/student-tasks-db-lock-audit-67jm7t`，基线 `main@69a99a7`（线上后台 959c2019 之后只有文档提交）。用户说明多名学生仍反馈背词进不去或过程卡顿，Codex 已修过一次且小程序新包未发，要求复查。本轮未访问生产、未改产品代码、未部署；报告 `docs/reviews/vocabulary-flow-latency-20261116/README.md`。
