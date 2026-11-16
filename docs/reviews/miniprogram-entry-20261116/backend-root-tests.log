@@ -1,0 +1,14 @@
+======================================================================
+ERROR: test_vocabulary_context (unittest.loader._FailedTest.test_vocabulary_context)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_vocabulary_context
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+ModuleNotFoundError: No module named 'tests.test_vocabulary_context'
+
+
+----------------------------------------------------------------------
+Ran 193 tests in 13.976s
+
+FAILED (errors=1)

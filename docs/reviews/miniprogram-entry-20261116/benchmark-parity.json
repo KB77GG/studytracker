@@ -1,0 +1,85 @@
+{
+  "passed": 16,
+  "checks": [
+    {
+      "case": "meaning",
+      "field": "due_count",
+      "passed": true
+    },
+    {
+      "case": "meaning",
+      "field": "selection_sha256",
+      "passed": true
+    },
+    {
+      "case": "meaning",
+      "field": "preflight_sha256",
+      "passed": true
+    },
+    {
+      "case": "meaning",
+      "field": "batch_snapshots_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_direct",
+      "field": "due_count",
+      "passed": true
+    },
+    {
+      "case": "context_direct",
+      "field": "selection_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_direct",
+      "field": "preflight_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_direct",
+      "field": "batch_snapshots_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice",
+      "field": "due_count",
+      "passed": true
+    },
+    {
+      "case": "context_choice",
+      "field": "selection_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice",
+      "field": "preflight_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice",
+      "field": "batch_snapshots_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice_duplicates",
+      "field": "due_count",
+      "passed": true
+    },
+    {
+      "case": "context_choice_duplicates",
+      "field": "selection_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice_duplicates",
+      "field": "preflight_sha256",
+      "passed": true
+    },
+    {
+      "case": "context_choice_duplicates",
+      "field": "batch_snapshots_sha256",
+      "passed": true
+    }
+  ]
+}

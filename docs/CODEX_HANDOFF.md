@@ -1,5 +1,29 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-16 小程序加载修复后台已部署并验收；前端发包处理中
+
+- **授权/已发布**：用户明确“所有的修复都部署”。后台树`/private/tmp/studytracker-entry-backend-20261116`、`codex/miniprogram-entry-20261116`，先从878209f4快进文档main b85c4746，保留双方交接。6文件产品/测试/CI提交c0b52743，CI依赖修正后发布HEAD **959c2019b5525769cccd33dc16f4cf2ff3cf7c53**，已commit/push任务分支与main。后台已上线；报告/两交接随后以skip-ci文档同步，最终docsHEAD以Git为准。
+- **CI/验收**：首轮CI43810754369新纳入的旧反馈测试缺生产已有pyphen，补齐CI依赖后分支43817235115/main43817658023三个业务job全部success；存量advisory lint失败如实保留。Deploy43817657937 success，生产14:34:57 CST起active/running、NRestarts0、单worker/gthread6/127.0.0.1:5002。14:41只读验收HEAD/2产品SHA一致且tracked clean；两组preflight1660.488/929.347ms、summary1388.168/914.995ms，均<5秒。公网登录200/0.167785秒，匿名复习API401正常。证据及精确命令`docs/reviews/miniprogram-entry-20261116/README.md`、production-entry-verifier.md、production-entry-acceptance.json及CI/Deploy JSON。
+- **安全与限制**：两组来自故障时间窗口关联，未声称实名匹配；SQLite mode=ro/query_only和拒写authorizer，业务快照counts保持、0 changes、无待写ORM、无app/config/重模型。未造学生/任务/复习或代答、未重算成绩；部署链原有幂等迁移/重启照常，本次无新schema/人工DB/配置修改，无通知。该验收是实际生产数据只读服务回放，非微信真机全旅程；现有105包已经能调用提速后的后台。
+- **前端/本机**：固定源`/Users/zhouxin/Desktop/studytracker-release`仍codex/miniprogram-release@d03a2749、76M/37U，精确9文件修复已应用，100Node与两页官方编译通过，442其他文件SHA保持。完整源码仍仅本机，本轮补丁/manifest已归档可共享。CUA持续报告锁屏，用户两次表示已解锁，微信登录/整包编译/平台版本仍处理中；截至本记录未上传/提审/发布，不能声称微信新包已生效。候选副本非发布源，不得拿旧桌面main或后台树前端覆盖固定源。
+- **交接/脏状态**：主资料`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2、原7M/23U保留，只增两交接和报告镜像；其他未提交代码未动。后台产品6文件均已提交，当前未提交仅本任务报告/两交接，按授权skip-ci共享后应clean；没有后台待修阻塞。下一步继续固定源整包编译/上传/提审/发布；若微信需扫码需用户正常登录，不绕过锁屏/验证。最终前端结果另补。
+
+## 2026-11-16 加载故障起因追溯：旧瓶颈，近期更新有额外开销
+
+- 同一任务续查用户“为何昨天才出现”。后台完整语境选择题资格构建路径自`771d6c90`（8月27）已存在；11月14 23:10提交`2e82331a`确实增加逐候选同义词过滤。相同Mac/1000合成词，前版75ff855d→未修878209f4为6491→6974ms（约+7.4%），重复释义6551→7015ms；16资格/顺序/响应/题面比较相等。不能声称新增功能完全无关，也不能把它说成全部根因。
+- 只读保留nginx日志：11月2日起已有queue499；11月14为59/1243（4.75%），15日174/905（19.23%），均105包。为请求计数非学生人数，历史499可能含离页，不能全认定同因；旧负载瓶颈叠加新增开销越过10秒是证据支持机制，尚缺个体历史到期量/题型/并发归因。昨日17:12截图早于当晚冲刺/诚信部署。原性能测试只覆盖meaning，漏context-choice-only，候选已补。
+- 工作树/未提交/发布沿用下节：主资料main6ded77d2原7M/23U、后台codex/miniprogram-entry-20261116@878209f4既有5业务测试脚本与报告修改、固定release d03a2749原76M/37U均保持。本轮只新增主资料及后台树报告`docs/reviews/miniprogram-entry-20261116/onset-history/`、`audit_onset_logs.py`、`onset-daily-logs.json`与两交接；只读历史源副本`/private/tmp/studytracker-entry-pre-synonym-20261116`，非worktree/发布源。精确命令、基线和验证在报告README。无新产品修改、生产DB/配置写入或部署；仍仅本机、未commit/push，固定前端未上传提审发布。下一步仍待后台发布授权，不因解释原因自行回滚或发布。
+
+## 2026-11-16 小程序任务入口加载故障：本机修复完成，待发布授权
+
+- **事实/根因**：两图时间已由用户确认。昨日17:12:55词汇queue nginx499，后台17:12:58返回200；今天10:45:05 preflight499、10:45:08后台200，同窗另有复习成功。客户端10秒超时/任务详情等待preflight导致失败和空白；公共flex:1造成巨大重试按钮。后台复习计数重复解析/排序整本词书已合成复现并修复。trace仅客户端匿名时间，不是服务器请求ID；未线上profiling，实名映射未独立证实，日志同窗关联不能冒充实名确认。
+- **后台实施树**：`/private/tmp/studytracker-entry-backend-20261116`，`codex/miniprogram-entry-20261116@878209f4d180ed1a9702b44257044ed394afd731`，基线clean。本轮未提交修改`services/vocabulary_context.py`、`services/vocabulary_autonomous_review.py`、`tests/test_vocabulary_review_performance.py`；新增`tests/test_vocabulary_context_availability.py`、`scripts/benchmark_vocabulary_entry.py`、`docs/reviews/miniprogram-entry-20261116/`和两交接。请求内预处理+等价资格判断；实际题面、判分、复习资格/顺序/日期规则、schema不变。origin/main最新观察b85c4746仅他任务文档增量，未合并。
+- **固定前端已应用**：`/Users/zhouxin/Desktop/studytracker-release`，`codex/miniprogram-release@d03a2749eb99cde041cdae18305b624956d46e90`。原76M/35U→76M/37U；只改task三文件、vocabulary-learning三文件、既有未跟踪`tests/test_web_practice_client.js`，新增`miniprogram/utils/page-load.js`及`tests/test_entry_loading_client.js`，另两交接增量。442其他miniprogram/tests文件SHA保持，备份仅主目录ignored `.tmp/miniprogram-entry-20261116/client-backup/`。详情立即可见，30s总期限/10s慢提示，错误可重试/返回、加载中禁提交，迟到/卸载/跳转失败守卫；词汇GET30s且不自动重新领取，日期门禁保留，修正按钮尺寸。候选`/private/tmp/studytracker-entry-client-20261116`仅文件副本，非上传源。
+- **验证**：后台212Python全部通过（主审重跑15.297s，精确12模块命令见报告backend-validation.md），独立48,768资格等价检查0差异；1000语境选择题preflight 6993.708→168.702ms、重复释义6978.527→549.871ms，四场景名单/顺序/响应/题面答案hash16/16保持。固定前端cwd `node --test tests/test_entry_loading_client.js tests/test_vocabulary*.js tests/test_dictation_audio.js tests/test_dictation_spell_queue.js tests/test_web_practice_client.js` →100/100；两页官方wcc/wcsc、JS语法、5Python定向Ruff/diff通过。新增Python/类已格式化，既有全文件Black历史问题未扩大修复；主审首轮误引用不存在test模块的import失败已更正并留日志。非全仓/整包/真机/生产性能验收。
+- **主资料树/报告**：`/Users/zhouxin/Desktop/studytracker`仍`main@6ded77d24586327ad94e151e172ae4811b4a2eed`，原7modified/23untracked入口保留，具体路径在报告source-status-before.txt；本轮只增报告、ignored私有探针和两交接。新报告同时在主资料与后台树，精确补丁/前后SHA/固定源状态/匿名日志/验证命令齐全。私有姓名查询、数据库关联计数不入Git/交接；只读SQLite mode=ro+query_only，无业务API重放写入。
+- **发布状态**：所有本轮修复/报告仅本机、未commit/push/merge/deploy。只读生产最后确认`878209f4` active/running、NRestarts0、单worker/gthread6/5002；本轮无生产DB/schema/服务/配置写入、重启或通知。小程序未上传/提审/发布。生产改善尚未验收，不能称学生已收到修复。
+- **下一步**：用户明确授权后从后台实施树核main漂移、提交/推送部署并验收；旧105包亦可受益于后台提速。前端由用户从固定发布目录整包编译/真机后上传发布。不要从旧桌面main/后台树覆盖固定整包，不重算成绩或清除复习记录。全时段3次任务列表/历史500及数据库锁尚未与两图建立因果，作为未证实关联保留；重复释义仍有遍历成本，不承诺任意规模恒定耗时。
+
 ## 2026-11-16 雅思诚信一期已部署，生产只读验收通过
 
 - **授权**：用户于2026-11-15确认当日全部模考结束、当时无学生考试，允许一期部署；明确禁止代开监考面板、建试考或改防作弊设置。第二期不做。本节新授权取代以下历史“禁止部署”状态。

@@ -1,0 +1,783 @@
+--- a/miniprogram/pages/student/task/index.js
++++ b/miniprogram/pages/student/task/index.js
+@@ -1,5 +1,6 @@
+ const app = getApp()
+ const { request } = require('../../../utils/request.js')
++const { createLoadGuard, pageLoadError } = require('../../../utils/page-load.js')
+ const MODE_SPELLING_DRILL = 'spelling_drill'
+ 
+ const recorderManager = wx.getRecorderManager()
+@@ -8,6 +9,11 @@
+ Page({
+     data: {
+         taskId: null,
++        taskLoading: true,
++        taskLoaded: false,
++        taskRedirecting: false,
++        taskLoadSlow: false,
++        taskLoadError: '',
+         task: {},
+         statusText: '',
+         recording: false,
+@@ -37,6 +43,7 @@
+     },
+ 
+     onLoad(options) {
++        this._taskPageActive = true
+         this.reviewDone = String((options || {}).reviewDone || '') === '1'
+         this.setData({ taskId: parseInt(options.id) })
+         this.fetchTaskDetail()
+@@ -90,6 +97,9 @@
+     },
+ 
+     onUnload() {
++        this._taskPageActive = false
++        if (this._taskLoadGuard) this._taskLoadGuard.cancel()
++        this._taskLoadGuard = null
+         if (this.data.ttsContext) {
+             this.data.ttsContext.destroy()
+         }
+@@ -124,10 +134,25 @@
+     },
+ 
+     async fetchTaskDetail() {
+-        wx.showLoading({ title: '加载中...' })
++        if (this._taskPageActive === false || this._taskLoadGuard) return
++        if (!Number.isInteger(this.data.taskId) || this.data.taskId <= 0) {
++            this.setData({ taskLoading: false, taskLoadError: '任务链接无效，请返回任务列表' })
++            return
++        }
++        this._taskEntryVersion = Number(this._taskEntryVersion || 0) + 1
++        this.setData({ taskLoading: true, taskLoaded: false, taskRedirecting: false, taskLoadSlow: false, taskLoadError: '' })
++        const guard = createLoadGuard({ onSlow: () => {
++            if (this._taskLoadGuard === guard && this._taskPageActive !== false) {
++                this.setData({ taskLoadSlow: true })
++            }
++        } })
++        this._taskLoadGuard = guard
++        const isCurrent = () => this._taskPageActive !== false && this._taskLoadGuard === guard
+         try {
+-            const res = await request(`/miniprogram/student/tasks/${this.data.taskId}`)
+-            if (res.ok && res.task) {
++            const res = await guard.wait(() => request(`/miniprogram/student/tasks/${this.data.taskId}`, { timeout: 30000 }))
++            if (!isCurrent()) return
++            if (res && res.ok && res.task) {
++                this.setData({ task: res.task, statusText: res.task.status_label || this.getStatusText(res.task.status) })
+                 if (res.task.web_practice) {
+                     this.stopTimerDisplay()
+                     if (app.globalData.activeTimer && app.globalData.activeTimer.taskId === this.data.taskId) {
+@@ -158,15 +183,15 @@
+                     return
+                 }
+                 if (res.task.dictation_book_id && res.task.vocabulary_goal) {
+-                    const gate = await request(
+-                        `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-review/preflight`
+-                    )
++                    const gate = await guard.wait(() => request(
++                        `/miniprogram/student/tasks/${this.data.taskId}/vocabulary-review/preflight`, { timeout: 30000 }
++                    ))
++                    if (!isCurrent()) return
+                     if (!gate || !gate.ok) {
+-                        throw new Error((gate && gate.error) || 'vocabulary_review_preflight_failed')
++                        throw gate || new Error('vocabulary_review_preflight_failed')
+                     }
+                     if (gate && gate.required) {
+-                        wx.hideLoading()
+-                        wx.redirectTo({
++                        this.redirectTask({
+                             url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}`
+                         })
+                         return
+@@ -174,15 +199,14 @@
+                     // Opt-in vocabulary v2 tasks use the server-owned group
+                     // chain. Legacy vocabulary_goal=NULL tasks continue below
+                     // on their existing dictation/material routes.
+-                    wx.hideLoading()
+-                    wx.redirectTo({
++                    this.redirectTask({
+                         url: `/pages/student/vocabulary-learning/index?taskId=${this.data.taskId}`
+                     })
+                     return
+                 }
+                 const dictationMode = String(res.task.dictation_mode || '').trim().toLowerCase()
+                 if (res.task.dictation_book_id && dictationMode === MODE_SPELLING_DRILL) {
+-                    wx.redirectTo({
++                    this.redirectTask({
+                         url: `/pages/student/dictation/spell/index?taskId=${this.data.taskId}`
+                     })
+                     return
+@@ -191,19 +215,19 @@
+                     if (res.task.listening_resource_type === 'cambridge_test') {
+                         const token = encodeURIComponent(res.task.listening_token)
+                         const section = res.task.listening_section_number ? `&section=${res.task.listening_section_number}` : ''
+-                        wx.redirectTo({
++                        this.redirectTask({
+                             url: `/pages/student/listening/cambridge/index?taskId=${this.data.taskId}&token=${token}${section}`
+                         })
+                         return
+                     }
+                     if (res.task.listening_resource_type === 'jijing' && res.task.listening_url) {
+-                        wx.redirectTo({
++                        this.redirectTask({
+                             url: `/pages/student/webview/index?url=${encodeURIComponent(res.task.listening_url)}`
+                         })
+                         return
+                     }
+                     const token = encodeURIComponent(res.task.listening_token)
+-                    wx.redirectTo({
++                    this.redirectTask({
+                         url: `/pages/student/listening/practice/index?taskId=${this.data.taskId}&token=${token}`
+                     })
+                     return
+@@ -211,7 +235,7 @@
+                 if (res.task.reading_test_id && res.task.reading_url) {
+                     const token = encodeURIComponent(res.task.reading_token || '')
+                     const passage = res.task.reading_passage_number ? `&passage=${res.task.reading_passage_number}` : ''
+-                    wx.redirectTo({
++                    this.redirectTask({
+                         url: `/pages/student/reading/cambridge/index?taskId=${this.data.taskId}&token=${token}${passage}`
+                     })
+                     return
+@@ -230,7 +254,7 @@
+                         res.task.material.type === 'translation'
+                     )
+                 if (choiceType) {
+-                    wx.redirectTo({
++                    this.redirectTask({
+                         url: `/pages/student/material-choice/practice/index?taskId=${this.data.taskId}`
+                     })
+                     return
+@@ -261,14 +285,40 @@
+                     this.splitWords()
+                 }
+             } else {
+-                wx.showToast({ title: '获取任务详情失败', icon: 'none' })
++                throw res || new Error('task_load_failed')
+             }
+         } catch (err) {
+-            console.error(err)
+-            wx.showToast({ title: '加载失败', icon: 'none' })
++            if (isCurrent() && !(err && err.pageUnloaded)) {
++                this.setData({ taskLoadError: pageLoadError(err) })
++            }
+         } finally {
+-            wx.hideLoading()
+-        }
++            guard.finish()
++            if (isCurrent()) {
++                this._taskLoadGuard = null
++                this.setData({ taskLoading: false, taskLoadSlow: false, taskLoaded: !this.data.taskLoadError && !this.data.taskRedirecting })
++            }
++        }
++    },
++
++    redirectTask(options) {
++        const version = this._taskEntryVersion
++        this.setData({ taskRedirecting: true })
++        wx.redirectTo(Object.assign({}, options, { fail: () => {
++            if (this._taskPageActive === false || version !== this._taskEntryVersion) return
++            this.setData({ taskRedirecting: false, taskLoaded: false, taskLoadError: '打开练习失败，请重试' })
++        } }))
++    },
++
++    retryTaskLoad() {
++        return this.fetchTaskDetail()
++    },
++
++    exitTaskPage() {
++        wx.navigateBack({ delta: 1, fail: () => wx.switchTab({ url: '/pages/student/home/index' }) })
++    },
++
++    taskEntryBlocked() {
++        return this._taskPageActive === false || this.data.taskLoading || this.data.taskRedirecting || !this.data.taskLoaded || !!this.data.taskLoadError
+     },
+ 
+     getStatusText(status) {
+@@ -297,7 +347,7 @@
+     },
+ 
+     startRecord() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         this.setData({ recording: true, recordDuration: 0 })
+         recorderManager.start({
+             duration: 600000, // 最长10分钟
+@@ -306,7 +356,7 @@
+     },
+ 
+     stopRecord() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         this.setData({ recording: false })
+         recorderManager.stop()
+     },
+@@ -318,14 +368,14 @@
+     },
+ 
+     deleteAudio(e) {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         const index = e.currentTarget.dataset.index
+         const audioFiles = this.data.audioFiles.filter((_, i) => i !== index)
+         this.setData({ audioFiles })
+     },
+ 
+     chooseImage() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         wx.chooseImage({
+             count: 9 - this.data.images.length,
+             sizeType: ['compressed'],
+@@ -347,14 +397,14 @@
+     },
+ 
+     deleteImage(e) {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         const index = e.currentTarget.dataset.index
+         const images = this.data.images.filter((_, i) => i !== index)
+         this.setData({ images })
+     },
+ 
+     pauseTimer() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning || this.data.timerPaused) return
+ 
+         // Clear interval
+@@ -371,7 +421,7 @@
+     },
+ 
+     resumeTimer() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning || !this.data.timerPaused) return
+ 
+         // Resume interval
+@@ -388,7 +438,7 @@
+     },
+ 
+     async stopTimer() {
+-        if (this.data.task.read_only || this.data.task.web_practice) return
++        if (this.taskEntryBlocked() || this.data.task.read_only || this.data.task.web_practice) return
+         if (!this.data.timerRunning) return
+ 
+         const res = await wx.showModal({
+@@ -436,6 +486,7 @@
+     },
+ 
+     async submitTask() {
++        if (this.taskEntryBlocked()) return
+         if (this.data.task.web_practice) {
+             wx.showToast({ title: '请去刷题网页完成练习', icon: 'none' })
+             return
+--- a/miniprogram/pages/student/task/index.wxml
++++ b/miniprogram/pages/student/task/index.wxml
+@@ -1,4 +1,10 @@
+ <view class="container">
++  <view class="task-load-panel" wx:if="{{taskLoading || taskRedirecting || taskLoadError}}">
++    <text>{{taskLoadError || (taskLoadSlow ? '仍在加载，请稍候，也可以返回后重试' : '正在加载任务…')}}</text>
++    <button wx:if="{{taskLoadError}}" bindtap="retryTaskLoad">重试</button>
++    <button bindtap="exitTaskPage">返回任务列表</button>
++  </view>
++  <block wx:if="{{task.id}}">
+   <view class="task-header">
+     <text class="task-title">{{task.task_name}}</text>
+     <text class="task-module">{{task.module}}</text>
+@@ -19,6 +25,8 @@
+     </view>
+   </view>
+ 
++  </block>
++  <block wx:if="{{taskLoaded && !taskLoading && !taskLoadError}}">
+   <view class="date-gate-card" wx:if="{{task.read_only}}">
+     <text class="date-gate-title">{{task.status_label || task.task_status_label || statusText || task.availability_label}}</text>
+     <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>
+@@ -205,6 +213,8 @@
+     <button class="btn-submit" disabled>已提交，等待老师审核</button>
+   </view>
+ 
++  </block>
++
+   <!-- 撒花特效 Canvas -->
+   <canvas type="2d" id="confetti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: {{showConfetti ? 'block' : 'none'}}"></canvas>
+ </view>
+--- a/miniprogram/pages/student/task/index.wxss
++++ b/miniprogram/pages/student/task/index.wxss
+@@ -520,3 +520,20 @@
+ .web-practice-copy { display: block; }
+ .web-practice-title { color: #20756f; font-size: 30rpx; font-weight: 700; }
+ .web-practice-copy { margin: 16rpx 0; color: #456c68; font-size: 26rpx; line-height: 1.6; }
++
++.task-load-panel {
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  gap: 24rpx;
++  padding: 40rpx 24rpx;
++  color: #1F6C65;
++  text-align: center;
++}
++.task-load-panel button {
++  flex: none;
++  width: 100%;
++  max-width: 520rpx;
++  min-height: 88rpx;
++  margin: 0;
++}
+--- a/miniprogram/pages/student/vocabulary-learning/index.js
++++ b/miniprogram/pages/student/vocabulary-learning/index.js
+@@ -1,5 +1,6 @@
+ const app = getApp()
+ const { request } = require('../../../utils/request.js')
++const { pageLoadError } = require('../../../utils/page-load.js')
+ const { createReliableAudioPlayer } = require('../../../utils/dictation-audio.js')
+ const {
+     buildMeaningChoiceOptions,
+@@ -17,7 +18,7 @@
+     shouldRecoverLearningAnswer
+ } = require('../../../utils/vocabulary-forgot.js')
+ 
+-const LEARNING_LOAD_TIMEOUT_MS = 10000
++const LEARNING_LOAD_TIMEOUT_MS = 30000
+ const LEARNING_MUTATION_TIMEOUT_MS = 15000
+ 
+ const PHASE_LABELS = {
+@@ -33,6 +34,7 @@
+     data: {
+         loading: true,
+         loadError: '',
++        loadSlow: false,
+         taskId: null,
+         queueToken: '',
+         supportsForgotResponse: false,
+@@ -170,11 +172,17 @@
+         const deadlineMs = Math.max(1, Number(timeoutMs) || 1)
+         return new Promise((resolve, reject) => {
+             let settled = false
+-            const entry = { timerId: null, cancel: null }
++            const isEntryLoad = label === 'learning_task_access' || label === 'learning_queue'
++            if (isEntryLoad) this.setData({ loadSlow: false })
++            const entry = { timerId: null, slowTimerId: null, cancel: null }
++            if (isEntryLoad) entry.slowTimerId = setTimeout(() => {
++                if (!settled && this.isLearningPageActive() && this.data.loading) this.setData({ loadSlow: true })
++            }, 10000)
+             const finish = (handler, value) => {
+                 if (settled) return
+                 settled = true
+                 if (entry.timerId !== null) clearTimeout(entry.timerId)
++                if (entry.slowTimerId !== null) clearTimeout(entry.slowTimerId)
+                 this._learningDeadlineTimers.delete(entry)
+                 handler(value)
+             }
+@@ -209,6 +217,8 @@
+     },
+ 
+     fetchTaskAccess() {
++        const accessVersion = Number(this._learningAccessRequestVersion || 0) + 1
++        this._learningAccessRequestVersion = accessVersion
+         this.setData({ loading: true, loadError: '' })
+         return this.requestWithDeadline(
+             () => request(`/miniprogram/student/tasks/${this.data.taskId}`, {
+@@ -217,8 +227,8 @@
+             LEARNING_LOAD_TIMEOUT_MS,
+             'learning_task_access'
+         ).then((res) => {
+-            if (!this.isLearningPageActive()) return
+-            if (!res || !res.ok || !res.task) throw new Error('task_load_failed')
++            if (!this.isLearningPageActive() || accessVersion !== this._learningAccessRequestVersion) return
++            if (!res || !res.ok || !res.task) throw res || new Error('task_load_failed')
+             const task = res.task
+             this.setData({
+                 readOnly: !!task.read_only,
+@@ -236,9 +246,9 @@
+             }
+             return this.fetchQueue()
+         }).catch((err) => {
+-            if (err && err.pageUnloaded) return
++            if (!this.isLearningPageActive() || accessVersion !== this._learningAccessRequestVersion || (err && err.pageUnloaded)) return
+             console.warn('load vocabulary task failed', err)
+-            this.setData({ loading: false, loadError: '任务加载失败，请重试' })
++            this.setData({ loading: false, loadSlow: false, loadError: pageLoadError(err) })
+         })
+     },
+ 
+@@ -265,10 +275,10 @@
+             }
+             if (!res || !res.ok) {
+                 if (res && res.error === 'vocabulary_review_required') {
+-                    wx.redirectTo({ url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}` })
++                    this.redirectToReview()
+                     return
+                 }
+-                throw new Error((res && res.error) || 'vocabulary_group_load_failed')
++                throw Object.assign(new Error((res && res.error) || 'vocabulary_group_load_failed'), res || {})
+             }
+             this.applyQueue(res)
+         }).catch((err) => {
+@@ -280,20 +290,39 @@
+                 this._learningTrace.mark('request_end', {
+                     endpoint: 'learning_queue',
+                     ok: false,
+-                    error: 'learning_queue_failed'
++                    error: err && err.deadline ? 'learning_queue_timeout' : 'learning_queue_failed'
+                 })
+                 this._learningTrace.setMetric('error_load', 1)
+                 this._learningTrace.logSnapshot('learning_queue_error')
+             }
+             this.setData({
+                 loading: false,
+-                loadError: `小组学习加载失败，请重试（${this._learningTrace ? this._learningTrace.traceId : '稍后'}）`
++                loadSlow: false,
++                loadError: `${pageLoadError(err, '小组学习')}（${this._learningTrace ? this._learningTrace.traceId : '稍后'}）`
+             })
+         })
+     },
+ 
++    redirectToReview() {
++        const navigationVersion = Number(this._learningReviewNavigationVersion || 0) + 1
++        this._learningReviewNavigationVersion = navigationVersion
++        const queueVersion = this._learningQueueRequestVersion
++        const accessVersion = this._learningAccessRequestVersion
++        this.setData({ loading: true, loadSlow: false, loadError: '' })
++        wx.redirectTo({
++            url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}`,
++            fail: () => {
++                if (!this.isLearningPageActive()
++                    || navigationVersion !== this._learningReviewNavigationVersion
++                    || queueVersion !== this._learningQueueRequestVersion
++                    || accessVersion !== this._learningAccessRequestVersion) return
++                this.setData({ loading: false, loadSlow: false, loadError: '打开复习失败，请重试' })
++            }
++        })
++    },
++
+     handleMutationError(err) {
+-        const code = err && err.message
++        const code = err && (err.error || err.message)
+         const dateGateLabels = {
+             task_not_open: '尚未开放',
+             task_expired: '未完成·已截止',
+@@ -315,7 +344,7 @@
+             return true
+         }
+         if (code === 'vocabulary_review_required') {
+-            wx.redirectTo({ url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}` })
++            this.redirectToReview()
+             return true
+         }
+         if (code === 'state_conflict' || code === 'question_not_current' || code === 'queue_changed') {
+@@ -737,7 +766,7 @@
+             if (queue.recovery_only && queue.review_required && !isForgotResponse(saved)) {
+                 this.setData({ submitting: false })
+                 wx.showToast({ title: '本题已保存，先完成今日复习', icon: 'none' })
+-                wx.redirectTo({ url: `/pages/student/vocabulary-review/index?returnTaskId=${this.data.taskId}` })
++                this.redirectToReview()
+                 return true
+             }
+             if ((queue.completed && queue.settlement) || (!isForgotResponse(saved) && (queue.completed || saved.correction_required))) {
+--- a/miniprogram/pages/student/vocabulary-learning/index.wxml
++++ b/miniprogram/pages/student/vocabulary-learning/index.wxml
+@@ -5,7 +5,7 @@
+       <view class="skeleton skeleton-title"></view>
+       <view class="skeleton skeleton-line"></view>
+       <view class="skeleton skeleton-card"></view>
+-      <text class="loading-label">加载小组学习…</text>
++      <text class="loading-label">{{loadSlow ? '仍在加载小组学习，请稍候，也可以返回后重试' : '加载小组学习…'}}</text>
+     </view>
+     <button class="secondary-btn loading-exit" bindtap="exitPage">返回</button>
+   </view>
+--- a/miniprogram/pages/student/vocabulary-learning/index.wxss
++++ b/miniprogram/pages/student/vocabulary-learning/index.wxss
+@@ -393,7 +393,7 @@
+ 
+ .primary-btn,
+ .secondary-btn {
+-  flex: 1;
++  flex: none;
+   width: 100%;
+   min-height: 88rpx;
+   margin-top: 24rpx;
+--- /dev/null
++++ b/miniprogram/utils/page-load.js
+@@ -0,0 +1,47 @@
++// Bounded page-entry loading. The caller owns network requests and ignores late replies.
++function createLoadGuard(options = {}) {
++    let stopped = false
++    let rejectDeadline
++    const deadline = new Promise((resolve, reject) => { rejectDeadline = reject })
++    // A guard can be cancelled between requests without an unhandled rejection.
++    deadline.catch(() => {})
++    const slowTimer = setTimeout(() => {
++        if (!stopped && options.onSlow) options.onSlow()
++    }, options.slowMs || 10000)
++    const timeoutTimer = setTimeout(() => {
++        if (!stopped) rejectDeadline({ deadline: true, errMsg: 'request:fail timeout' })
++    }, options.timeoutMs || 30000)
++    function finish() {
++        stopped = true
++        clearTimeout(slowTimer)
++        clearTimeout(timeoutTimer)
++    }
++    return {
++        wait(factory) {
++            return Promise.race([Promise.resolve().then(() => {
++                if (stopped) throw { pageUnloaded: true, errMsg: 'request:fail abort' }
++                return factory()
++            }), deadline])
++        },
++        finish,
++        cancel() {
++            finish()
++            rejectDeadline({ pageUnloaded: true, errMsg: 'request:fail abort' })
++        }
++    }
++}
++
++function pageLoadError(error, subject = '任务') {
++    const detail = error || {}
++    const message = String(detail.errMsg || detail.message || detail.error || '')
++    const status = Number(detail.statusCode || 0)
++    if (detail.deadline || /timeout/i.test(message)) return '加载超时，请检查网络后重试'
++    if (status === 401 || detail.error === 'unauthorized') return '登录已失效，请重新登录'
++    if (status === 403) return '暂时无法访问此任务，请返回任务列表'
++    if (status === 404) return '任务不存在或已移除，请返回任务列表'
++    if (status >= 500) return '服务暂时繁忙，请稍后重试'
++    if (/request:fail|network|network_error/i.test(message)) return '网络连接失败，请检查网络后重试'
++    return `${subject}加载失败，请重试`
++}
++
++module.exports = { createLoadGuard, pageLoadError }
+--- a/tests/test_web_practice_client.js
++++ b/tests/test_web_practice_client.js
+@@ -25,6 +25,7 @@
+             if (name.endsWith('/utils/request.js')) return { request: async (url, options) => { calls.requests.push({ url, options }); return response } }
+             if (name.endsWith('/utils/demo-data.js')) return { buildStudentTasks: () => [], buildParentTaskDetail: () => ({}) }
+             if (name.endsWith('/utils/subscribe.js')) return { getSubscribeSummary: async () => ({}), requestTemplateSubscribe: async () => ({}) }
++            if (name.endsWith('/utils/page-load.js')) return require('../miniprogram/utils/page-load.js')
+             throw new Error(`Unexpected require ${name}`)
+         },
+         wx: {
+--- /dev/null
++++ b/tests/test_entry_loading_client.js
+@@ -0,0 +1,220 @@
++const assert = require('node:assert/strict')
++const fs = require('node:fs')
++const path = require('node:path')
++const vm = require('node:vm')
++const test = require('node:test')
++
++const ROOT = process.env.ENTRY_CLIENT_ROOT || path.resolve(__dirname, '..')
++const flush = async () => { for (let i = 0; i < 15; i++) await Promise.resolve() }
++
++function harness(kind) {
++    let now = 0, timerId = 0, definition
++    const timers = new Map(), requests = [], redirects = [], calls = { record: 0, image: 0, spinner: 0 }
++    const app = { globalData: { baseUrl: 'https://synthetic.test/api', token: 'synthetic-token' } }
++    const audio = { onPlay() {}, onPause() {}, onStop() {}, onEnded() {}, onError() {}, onCanplay() {}, destroy() {}, stop() {}, play() {} }
++    const wx = {
++        request: options => { requests.push(options); return { abort() {} } },
++        getStorageSync() { return '' }, removeStorageSync() {}, setStorageSync() {},
++        getRecorderManager: () => ({ onStop() {}, start() { calls.record++ }, stop() {} }),
++        createInnerAudioContext: () => audio,
++        showToast() {}, showLoading() { calls.spinner++ }, hideLoading() { calls.spinner-- },
++        showModal: async () => ({ confirm: true }),
++        redirectTo: options => redirects.push(options), reLaunch() {}, switchTab() {}, navigateBack() {},
++        chooseImage() { calls.image++ }, setInnerAudioOption() {}
++    }
++    const sandbox = {
++        console: { warn() {}, error() {}, log() {}, info() {} }, Promise, Set, Map, Date,
++        getApp: () => app, wx, Page: value => { definition = value },
++        setTimeout: (fn, ms) => { const id = ++timerId; timers.set(id, { at: now + ms, fn }); return id },
++        clearTimeout: id => timers.delete(id), setInterval: () => 99, clearInterval() {}
++    }
++    const modules = new Map()
++    function load(file) {
++        const absolute = path.resolve(file)
++        if (modules.has(absolute)) return modules.get(absolute).exports
++        const module = { exports: {} }; modules.set(absolute, module)
++        const local = Object.assign({}, sandbox, { module, exports: module.exports, require: name => load(path.resolve(path.dirname(absolute), name)) })
++        vm.runInNewContext(fs.readFileSync(absolute, 'utf8'), local, { filename: absolute })
++        return module.exports
++    }
++    load(path.join(ROOT, 'miniprogram/pages/student', kind === 'task' ? 'task/index.js' : 'vocabulary-learning/index.js'))
++    const page = { ...definition, data: JSON.parse(JSON.stringify(definition.data)) }
++    page.setData = function (data, callback) { Object.assign(this.data, data); if (callback) callback() }
++    page.data.taskId = kind === 'task' ? 42 : '42'
++    page._taskPageActive = true; page._learningPageActive = true; page._learningDeadlineTimers = new Set()
++    page.audioPlayer = { play() {}, preload: () => Promise.resolve([]), destroy() {} }
++    return {
++        page, requests, redirects, calls, timers,
++        async tick(ms) {
++            const target = now + ms
++            for (;;) {
++                const due = Array.from(timers).filter(([, timer]) => timer.at <= target).sort((a, b) => a[1].at - b[1].at)[0]
++                if (!due) break
++                now = due[1].at; timers.delete(due[0]); due[1].fn(); await flush()
++            }
++            now = target; await flush()
++        },
++        async reply(index, data, statusCode = 200) { requests[index].success({ statusCode, data }); await flush() },
++        async fail(index, errMsg = 'request:fail network') { requests[index].fail({ errMsg }); await flush() }
++    }
++}
++const task = extra => ({ ok: true, task: { id: 42, task_name: '合成任务', status: 'pending', ...extra } })
++const vocabTask = () => task({ dictation_book_id: 1, vocabulary_goal: 'reading' })
++const queue = (token = 'synthetic-queue') => ({ ok: true, task_id: 42, queue_token: token, phase: 'familiarity', familiarity: [], current_question: null })
++
++async function assertMutationBlocked(h) {
++    const count = h.requests.length
++    h.page.chooseImage(); h.page.startRecord(); await h.page.submitTask()
++    assert.equal(h.requests.length, count, 'blocked entry must not post')
++    assert.equal(h.calls.image, 0); assert.equal(h.calls.record, 0)
++}
++
++test('task entry retains fetched details during preflight, stays blocked, and accepts a 13 second response', async () => {
++    const h = harness('task'), pending = h.page.fetchTaskDetail(); await flush()
++    await assertMutationBlocked(h)
++    await h.reply(0, vocabTask())
++    assert.equal(h.page.data.task.task_name, '合成任务')
++    assert.equal(h.requests.length, 2)
++    await h.tick(10000); assert.equal(h.page.data.taskLoadSlow, true)
++    await h.page.retryTaskLoad(); assert.equal(h.requests.length, 2, 'retry while loading must not duplicate requests')
++    await assertMutationBlocked(h)
++    await h.tick(3000); await h.reply(1, { ok: true, required: false }); await pending
++    assert.equal(h.redirects[0].url, '/pages/student/vocabulary-learning/index?taskId=42')
++    assert.equal(h.page.data.taskLoadError, '')
++    await assertMutationBlocked(h)
++    assert.equal(h.calls.spinner, 0)
++})
++
++test('task total 30 second deadline, retry, and late success cannot restore the old task', async () => {
++    const h = harness('task'), old = h.page.fetchTaskDetail(); await flush()
++    await h.tick(30000); await old
++    assert.match(h.page.data.taskLoadError, /超时/); await assertMutationBlocked(h)
++    const retry = h.page.retryTaskLoad(); await flush()
++    await h.reply(1, task({ task_name: '新响应' })); await retry
++    assert.equal(h.page.data.taskLoaded, true)
++    await h.reply(0, vocabTask())
++    assert.equal(h.page.data.task.task_name, '新响应'); assert.equal(h.requests.length, 2)
++    assert.equal(h.timers.size, 0)
++})
++
++test('task details and preflight share one deadline and failure preserves visible task details', async () => {
++    const h = harness('task'), pending = h.page.fetchTaskDetail(); await flush()
++    await h.tick(20000); await h.reply(0, vocabTask()); await h.tick(10000); await pending
++    assert.match(h.page.data.taskLoadError, /超时/)
++    assert.equal(h.page.data.task.task_name, '合成任务'); await assertMutationBlocked(h)
++    await h.reply(1, { ok: true, required: false }); assert.equal(h.redirects.length, 0)
++})
++
++test('task unload cancels deadline and blocks late success and all mutations', async () => {
++    const h = harness('task'), pending = h.page.fetchTaskDetail(); await flush()
++    const before = JSON.stringify(h.page.data)
++    h.page.onUnload(); await pending; await h.reply(0, vocabTask()); await h.tick(30000)
++    assert.equal(JSON.stringify(h.page.data), before)
++    assert.equal(h.requests.length, 1); assert.equal(h.timers.size, 0); await assertMutationBlocked(h)
++})
++
++test('task server failure and failed navigation show retry instead of an editable empty form', async () => {
++    const h = harness('task'), pending = h.page.fetchTaskDetail(); await flush()
++    await h.reply(0, vocabTask()); await h.reply(1, { ok: false, error: 'server_busy' }, 503); await pending
++    assert.match(h.page.data.taskLoadError, /服务暂时繁忙/); await assertMutationBlocked(h)
++    const retry = h.page.retryTaskLoad(); await flush()
++    await h.reply(2, vocabTask()); await h.reply(3, { ok: true, required: true }); await retry
++    assert.match(h.redirects[0].url, /vocabulary-review/)
++    h.redirects[0].fail()
++    assert.match(h.page.data.taskLoadError, /打开练习失败/); await assertMutationBlocked(h)
++})
++
++test('read-only completed task loads without preflight and remains non-mutating', async () => {
++    const h = harness('task'), pending = h.page.fetchTaskDetail(); await flush()
++    await h.reply(0, task({ read_only: true, status: 'completed', dictation_book_id: 1, vocabulary_goal: 'reading' })); await pending
++    assert.equal(h.requests.length, 1); assert.equal(h.page.data.taskLoaded, true); await assertMutationBlocked(h)
++})
++
++test('learning queue shows a 10 second hint and accepts the observed 13 second success without retry', async () => {
++    const h = harness('learning'), pending = h.page.fetchQueue(); await flush()
++    assert.equal(h.requests[0].timeout, 30000)
++    await h.tick(10000); assert.equal(h.page.data.loadSlow, true); assert.equal(h.page.data.loadError, '')
++    await h.tick(3000); await h.reply(0, queue()); await pending
++    assert.equal(h.page.data.queueToken, 'synthetic-queue'); assert.equal(h.page.data.loading, false)
++    assert.equal(h.requests.length, 1); assert.equal(h.timers.size, 0)
++})
++
++test('learning queue 30 second timeout permits explicit retry and ignores the late old reply', async () => {
++    const h = harness('learning'), old = h.page.fetchQueue(); await flush()
++    await h.tick(30000); await old; assert.match(h.page.data.loadError, /超时/)
++    const retry = h.page.retry(); await flush(); await h.reply(1, task()); await h.reply(2, queue('new')); await retry
++    await h.reply(0, queue('old'))
++    assert.equal(h.page.data.queueToken, 'new'); assert.equal(h.page.data.loadError, '')
++    assert.equal(h.requests.length, 3); assert.ok(h.requests.every(x => x.method === 'GET'))
++})
++
++test('learning unload cancels slow/deadline timers and ignores a late response', async () => {
++    const h = harness('learning'), pending = h.page.fetchQueue(); await flush()
++    const before = JSON.stringify(h.page.data); h.page.onUnload(); await pending
++    await h.reply(0, queue()); await h.tick(30000)
++    assert.equal(JSON.stringify(h.page.data), before); assert.equal(h.timers.size, 0)
++})
++
++test('learning errors distinguish network and server status while date gates remain read only', async () => {
++    for (const [status, payload, expected] of [[503, { error: 'busy' }, /服务暂时繁忙/], [403, { error: 'task_not_open' }, null]]) {
++        const h = harness('learning'), pending = h.page.fetchQueue(); await flush(); await h.reply(0, payload, status); await pending
++        if (expected) assert.match(h.page.data.loadError, expected)
++        else { assert.equal(h.page.data.readOnly, true); assert.equal(h.page.data.loadError, '') }
++    }
++    const h = harness('learning'), pending = h.page.fetchQueue(); await flush(); await h.fail(0); await pending
++    assert.match(h.page.data.loadError, /网络连接失败/)
++})
++
++test('older learning task-access reply cannot launch a queue after a newer request', async () => {
++    const h = harness('learning'), old = h.page.fetchTaskAccess(); await flush()
++    const newer = h.page.fetchTaskAccess(); await flush()
++    await h.reply(1, task()); await h.reply(2, queue('new')); await newer
++    await h.reply(0, task()); await old
++    assert.equal(h.requests.length, 3); assert.equal(h.page.data.queueToken, 'new')
++})
++
++test('entry markup hides editable form until ready and error buttons do not flex-grow', () => {
++    const markup = fs.readFileSync(path.join(ROOT, 'miniprogram/pages/student/task/index.wxml'), 'utf8')
++    assert.match(markup, /<block wx:if="{{taskLoaded && !taskLoading && !taskLoadError}}">/)
++    const style = fs.readFileSync(path.join(ROOT, 'miniprogram/pages/student/vocabulary-learning/index.wxss'), 'utf8')
++    assert.match(style, /\.primary-btn,\s*\.secondary-btn\s*{\s*flex: none;/)
++    assert.match(style, /\.navigation-row button\s*{\s*flex: 1;/)
++})
++
++test('learning real date-gate payloads keep machine code when a Chinese message is present', async () => {
++    for (const error of ['task_not_open', 'task_expired', 'task_completed_read_only']) {
++        const h = harness('learning'), pending = h.page.fetchQueue(); await flush()
++        await h.reply(0, { ok: false, error, message: '该任务当前只能查看，不能继续练习' }, 403); await pending
++        assert.equal(h.page.data.readOnly, true, error)
++        assert.equal(h.page.data.loading, false, error)
++        assert.equal(h.page.data.loadError, '', error)
++        h.page.setData({ currentQuestion: { learning_question_id: 1 }, inputValue: 'synthetic' })
++        h.page.submitAnswer(); h.page.finishTask()
++        assert.equal(h.requests.length, 1, error)
++    }
++})
++
++test('learning review redirect failure shows retry, and its late callback cannot overwrite the retry', async () => {
++    const h = harness('learning'), pending = h.page.fetchQueue(); await flush()
++    await h.reply(0, { ok: false, error: 'vocabulary_review_required', message: '请先完成今日复习' }, 409); await pending
++    assert.match(h.redirects[0].url, /vocabulary-review/)
++    assert.equal(typeof h.redirects[0].fail, 'function')
++    h.redirects[0].fail({ errMsg: 'redirectTo:fail' })
++    assert.equal(h.page.data.loading, false)
++    assert.match(h.page.data.loadError, /打开复习失败/)
++    const retry = h.page.retry(); await flush()
++    await h.reply(1, task()); await h.reply(2, queue('retry-success')); await retry
++    h.redirects[0].fail({ errMsg: 'redirectTo:fail late' })
++    assert.equal(h.page.data.queueToken, 'retry-success'); assert.equal(h.page.data.loadError, '')
++    assert.equal(h.requests.length, 3)
++})
++
++test('learning mutation-required redirect also handles failure and ignores callbacks after unload', () => {
++    const h = harness('learning')
++    assert.equal(h.page.handleMutationError({ error: 'vocabulary_review_required', message: '请先完成今日复习' }), true)
++    h.redirects[0].fail(); assert.match(h.page.data.loadError, /打开复习失败/)
++    h.page.handleMutationError(new Error('vocabulary_review_required'))
++    const before = JSON.stringify(h.page.data)
++    h.page.onUnload(); h.redirects[1].fail()
++    assert.equal(JSON.stringify(h.page.data), before)
++})

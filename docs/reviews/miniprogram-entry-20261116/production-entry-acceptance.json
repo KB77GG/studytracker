@@ -1,0 +1,146 @@
+{
+  "at_utc": "2026-11-16T06:41:19.570090+00:00",
+  "read_only_service_replay": true,
+  "real_wechat_end_to_end": false,
+  "head": "959c2019b5525769cccd33dc16f4cf2ff3cf7c53",
+  "head_matches": true,
+  "product_sha256": {
+    "services/vocabulary_context.py": "e082b83db53965cc57a56ede669dc330e0ccaef4c724e727af947c76a5d5af95",
+    "services/vocabulary_autonomous_review.py": "cc92c68a023a58b088f3883a2dde71340cdb390142c0f15e6c0c3c80428a55da"
+  },
+  "product_sha_matches": true,
+  "tracked_clean": true,
+  "service": {
+    "systemd": {
+      "MainPID": "747406",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Mon 2026-11-16 14:34:57 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "actual_worker_count": 1,
+    "listener_5002_owned": true,
+    "loopback_only": true,
+    "ok": true
+  },
+  "anonymous_http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "cases": [
+    {
+      "case": "case_a",
+      "calls": {
+        "preflight": {
+          "elapsed_ms": 1660.488,
+          "result": {
+            "ok": true,
+            "required": false,
+            "review_required": false,
+            "task_flow_started": true,
+            "due_count": 2406,
+            "batch_limit": 20,
+            "remaining_due_count": 2406,
+            "active_batch_present": false,
+            "clearance_present": true
+          },
+          "safe_result_sha256": "b977786dbdeea13f86f8e96d4060f6ccdf9f28aae689ab47ac2d0f2bae94ab39"
+        },
+        "summary": {
+          "elapsed_ms": 1388.168,
+          "result": {
+            "ok": true,
+            "due_count": 2406,
+            "batch_limit": 20,
+            "review_due_count": 2406,
+            "has_active_session": false,
+            "active_batch_present": false,
+            "clearance_present": false
+          },
+          "safe_result_sha256": "ba4666b1bc5e4a99898858312fc8cffc9aac41bc806415816f34eeec481a836b"
+        }
+      },
+      "query_only": true,
+      "selected_business_counts": {
+        "student_vocabulary_mastery": 2524,
+        "vocabulary_learning_flow": 61,
+        "vocabulary_learning_question": 5035,
+        "vocabulary_review_session": 59,
+        "vocabulary_review_item": 1180,
+        "vocabulary_review_attempt": 1824,
+        "vocabulary_review_settlement": 55,
+        "dictation_record": 7459
+      },
+      "same_snapshot_counts_unchanged": true,
+      "total_changes_zero": true,
+      "no_pending_orm_mutations": true,
+      "ok": true
+    },
+    {
+      "case": "case_b",
+      "calls": {
+        "preflight": {
+          "elapsed_ms": 929.347,
+          "result": {
+            "ok": true,
+            "required": false,
+            "review_required": false,
+            "task_flow_started": true,
+            "due_count": 1816,
+            "batch_limit": 20,
+            "remaining_due_count": 1816,
+            "active_batch_present": false,
+            "clearance_present": true
+          },
+          "safe_result_sha256": "68c3dbcfabdc005085223263672f31076792441a2e0c0d4b8ae3c2238db2bf5c"
+        },
+        "summary": {
+          "elapsed_ms": 914.995,
+          "result": {
+            "ok": true,
+            "due_count": 1816,
+            "batch_limit": 20,
+            "review_due_count": 1816,
+            "has_active_session": false,
+            "active_batch_present": false,
+            "clearance_present": false
+          },
+          "safe_result_sha256": "ede174a93528a4b766e452d9061c4d7e1c1df7235e6ffcaac21d11707235e11d"
+        }
+      },
+      "query_only": true,
+      "selected_business_counts": {
+        "student_vocabulary_mastery": 1985,
+        "vocabulary_learning_flow": 52,
+        "vocabulary_learning_question": 3948,
+        "vocabulary_review_session": 28,
+        "vocabulary_review_item": 560,
+        "vocabulary_review_attempt": 807,
+        "vocabulary_review_settlement": 27,
+        "dictation_record": 3948
+      },
+      "same_snapshot_counts_unchanged": true,
+      "total_changes_zero": true,
+      "no_pending_orm_mutations": true,
+      "ok": true
+    }
+  ],
+  "all_read_calls_under_5_seconds": true,
+  "no_prohibited_imports": true,
+  "blocked_sql_attempts": 0,
+  "ok": true
+}

@@ -1,0 +1,681 @@
+account-provisioning	Test vocabulary entry performance and review eligibility	﻿2026-11-16T05:31:31.9294552Z ##[group]Run python -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review -v
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9296971Z [36;1mpython -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review -v[0m
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9353254Z shell: /usr/bin/bash -e {0}
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9353415Z env:
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9353526Z   TZ: UTC
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9353647Z   PYTHONDONTWRITEBYTECODE: 1
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9353967Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9354498Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9354879Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9355095Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9355473Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9355960Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:31.9356374Z ##[endgroup]
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:32.5476854Z test_collocations_need_three_distinct_real_frames (tests.test_vocabulary_context_availability.ContextChoiceAvailabilityTest.test_collocations_need_three_distinct_real_frames) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:32.5545449Z test_duplicate_first_three_remain_ineligible (tests.test_vocabulary_context_availability.ContextChoiceAvailabilityTest.test_duplicate_first_three_remain_ineligible) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:32.5552208Z test_hash_ties_keep_original_catalog_order (tests.test_vocabulary_context_availability.ContextChoiceAvailabilityTest.test_hash_ties_keep_original_catalog_order) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:32.5553676Z test_new_request_index_observes_catalog_edits (tests.test_vocabulary_context_availability.ContextChoiceAvailabilityTest.test_new_request_index_observes_catalog_edits) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:33.5906250Z test_randomized_choices_and_full_builder_eligibility_match (tests.test_vocabulary_context_availability.ContextChoiceAvailabilityTest.test_randomized_choices_and_full_builder_eligibility_match) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:33.8140711Z test_choice_only_context_preflight_does_not_build_every_due_question (tests.test_vocabulary_review_performance.VocabularyReviewPerformanceRegressionTest.test_choice_only_context_preflight_does_not_build_every_due_question) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:4362: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:33.8142788Z   return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore[call-arg, no-any-return, no-untyped-call]  # noqa: E501
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:33.9701345Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/default.py:1192: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:33.9702316Z   cursor.execute(statement, parameters)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:34.2717885Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:34.9179298Z test_due_and_claim_work_are_bounded_as_history_grows (tests.test_vocabulary_review_performance.VocabularyReviewPerformanceRegressionTest.test_due_and_claim_work_are_bounded_as_history_grows) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:588: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff53a8c70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:34.9180830Z   def _initialize_instance(*mixed: Any, **kwargs: Any) -> None:
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:34.9181242Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.2755346Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3644893Z test_active_review_blocks_task_queue_and_daily_settlement_clears_second_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_active_review_blocks_task_queue_and_daily_settlement_clears_second_task) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 26 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3646725Z   return self._jws.encode(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3881059Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 26 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3882050Z   decoded = self.decode_complete(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3883134Z /home/runner/work/studytracker/studytracker/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3884298Z   user = User.query.get(int(payload.get("sub", 0)))
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3954360Z /home/runner/work/studytracker/studytracker/api/vocab_review.py:150: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.3955539Z   task = Task.query.get(task_id)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.5128736Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.6463123Z test_all_bad_items_settle_with_zero_score_and_remain_recoverable (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_all_bad_items_settle_with_zero_score_and_remain_recoverable) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.6594180Z test_all_forgot_settles_zero_and_keeps_invalid_material_separate (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_all_forgot_settles_zero_and_keeps_invalid_material_separate) ... <string>:2: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff4208310>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.6595392Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.7762039Z /home/runner/work/studytracker/studytracker/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.7763166Z   value = value or datetime.utcnow()
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.7929412Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:35.9105617Z test_answer_feedback_is_returned_after_answer_and_restored_on_refresh (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_answer_feedback_is_returned_after_answer_and_restored_on_refresh) ... FAIL
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.0864901Z test_answered_active_session_stays_visible_until_settlement (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_answered_active_session_stays_visible_until_settlement) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.0951159Z test_autonomous_audio_to_en_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_audio_to_en_has_correction_and_day1_retry) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:770: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3a90310>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.0952536Z   _convert(elem) if is_dynamic else ast.Constant(elem)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.0952940Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1902674Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3b08040>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1904222Z   edges[child].add(parent)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1904530Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1923999Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff420af20>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1924803Z   edges[child].add(parent)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.1925128Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.3172255Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.4557406Z test_autonomous_context_choice_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_context_choice_has_correction_and_day1_retry) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.5939617Z test_autonomous_context_fill_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_context_fill_has_correction_and_day1_retry) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.7310952Z test_autonomous_en_to_zh_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_en_to_zh_has_correction_and_day1_retry) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.8796129Z test_autonomous_failed_delayed_retry_releases_one_related_dimension (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_failed_delayed_retry_releases_one_related_dimension) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.9281595Z test_autonomous_zh_to_en_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_zh_to_en_has_correction_and_day1_retry) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:530: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff33df790>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.9283631Z   save_states.add(state)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:36.9284079Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.0185952Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.2020400Z test_comprehensive_sense_rotates_one_dimension_per_day (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_comprehensive_sense_rotates_one_dimension_per_day) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.3996110Z test_cross_book_batch_is_real_questions_and_repeat_claim_is_idempotent (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_cross_book_batch_is_real_questions_and_repeat_claim_is_idempotent) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.5742348Z test_cross_midnight_settlement_is_blocked_after_three_am_cutoff (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_cross_midnight_settlement_is_blocked_after_three_am_cutoff) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.7026423Z test_due_batch_never_repeats_a_sense_and_error_wins (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_due_batch_never_repeats_a_sense_and_error_wins) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.7989245Z test_empty_review_queue_is_explicit (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_empty_review_queue_is_explicit) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2bb0220>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.7989957Z   edges[child].add(parent)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.8062035Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.8062379Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:37.9248793Z test_forgot_cannot_write_another_students_or_expired_session (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_cannot_write_another_students_or_expired_session) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.0528492Z test_forgot_delayed_retry_releases_related_without_correction_or_reschedule (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_delayed_retry_releases_related_without_correction_or_reschedule) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/typing.py:2394: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2b734c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.0529561Z   def cast(typ, val):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.0529762Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.1062313Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.2680344Z test_forgot_empty_partial_and_mixed_answers_restore_first_result (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_empty_partial_and_mixed_answers_restore_first_result) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5661387Z test_forgot_for_each_frozen_review_mode_is_wrong_even_with_correct_text (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_for_each_frozen_review_mode_is_wrong_even_with_correct_text) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7b790>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5662809Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5663149Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5663864Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3a93d30>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5664496Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5664849Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5665566Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3850040>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5666445Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5666775Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5667987Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3a922f0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5668582Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5668937Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5669641Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3498220>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5670282Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5670608Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5671042Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3498130>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5671703Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5672036Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5672469Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff33df6a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5672849Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5673049Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5673915Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2bb0310>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5674545Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5674885Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5675746Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2961030>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5676785Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5677133Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5677976Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff26fc8b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5678603Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5678934Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5679584Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/state.py:209: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff26fc6d0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5679974Z   self.obj = weakref.ref(obj, self._cleanup)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.5680188Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.6148711Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.6149531Z test_forgot_replay_after_other_session_commits_consumes_budget_once (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_replay_after_other_session_commits_consumes_budget_once)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.7622147Z An ORM-cached pre-answer item must not reapply a committed first. ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.7728082Z test_http_answer_settle_continue_are_idempotent_and_independent (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_answer_settle_continue_are_idempotent_and_independent) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:836: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff228e020>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.7728903Z   code = compile(module, "<werkzeug routing>", "exec")
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.7729141Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:38.9605216Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.1090060Z test_http_forgot_rejects_bad_identity_and_recovers_durable_first (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_forgot_rejects_bad_identity_and_recovers_durable_first) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.2639265Z test_http_new_day_replaces_stale_session_and_blocks_every_old_write (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_new_day_replaces_stale_session_and_blocks_every_old_write) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.3852983Z test_http_stale_rollover_lock_conflict_is_retryable (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_stale_rollover_lock_conflict_is_retryable) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.5128659Z test_http_wrong_review_requires_correction_and_keeps_false_feedback (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_wrong_review_requires_correction_and_keeps_false_feedback) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.6036392Z test_listening_meaning_review_keeps_audio_cue (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_listening_meaning_review_keeps_audio_cue) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:4169: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff448a3e0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.6037671Z   ret = self.bindparam_string(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.6037985Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.6406855Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.7956207Z test_new_day_expires_partial_session_before_claiming_current_task_review (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_new_day_expires_partial_session_before_claiming_current_task_review) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.9255058Z test_preflight_and_http_api_are_independent_from_teacher_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_preflight_and_http_api_are_independent_from_teacher_task) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.9777005Z test_previous_day_home_review_rejects_direct_answer_without_origin_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_previous_day_home_review_rejects_direct_answer_without_origin_task) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:496: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3621990>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.9778327Z   return iter(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:39.9778610Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.0475359Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.2332909Z test_published_legacy_client_can_settle_wrong_review_without_correction_ui (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_published_legacy_client_can_settle_wrong_review_without_correction_ui) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.4149364Z test_task_linked_review_remains_attributed_and_writable_until_three_am (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_task_linked_review_remains_attributed_and_writable_until_three_am) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.4231014Z test_undated_origin_task_still_blocks_answers_after_completion (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_undated_origin_task_still_blocks_answers_after_completion) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:836: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1faa4d0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.4232345Z   code = compile(module, "<werkzeug routing>", "exec")
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.4232719Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.5406471Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.6630207Z test_valid_item_cannot_be_maliciously_skipped (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_valid_item_cannot_be_maliciously_skipped) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.8039258Z test_verified_bad_item_can_settle_without_attempt_and_is_regenerated (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_verified_bad_item_can_settle_without_attempt_and_is_regenerated) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9949846Z test_wrong_is_plus_24h_and_30_60_day_intervals_are_consumed (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_wrong_is_plus_24h_and_30_60_day_intervals_are_consumed) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff228e6b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9950721Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9950960Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9951408Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff52bda80>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9951835Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9952065Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9955566Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2ed8b80>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9956510Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9956882Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9961477Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff2bb0f40>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9962033Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9962249Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9969144Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff35fcb80>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9970004Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9970217Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9976241Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3a90c70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9980893Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9981236Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9981817Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e78b80>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9982206Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9982421Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9986324Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e785e0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9986915Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9987125Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9994515Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff27273d0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9995105Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9995316Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9998989Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3176890>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9999620Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:40.9999831Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0005538Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1fabf10>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0006210Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0006419Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0009105Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff31766b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0009691Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0009905Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0013618Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/werkzeug/routing/rules.py:117: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1ceaa70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0014213Z   for item in _converter_args_re.finditer(argstr):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.0014422Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.2168999Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.3340372Z test_wrong_stage_zero_outranks_unanswered_stage_zero (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_wrong_stage_zero_outranks_unanswered_stage_zero) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.6488313Z test_all_correct_intermediate_group_enters_next_group (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_all_correct_intermediate_group_enters_next_group) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:41.8045844Z test_all_forgotten_first_and_retry_answers_finish_at_zero (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_all_forgotten_first_and_retry_answers_finish_at_zero) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:42.1354322Z test_comprehensive_forgotten_retry_defers_related_wave_to_next_review (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_forgotten_retry_defers_related_wave_to_next_review) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:42.5770343Z test_comprehensive_mixed_retry_only_normal_wrong_gets_group_related_wave (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_mixed_retry_only_normal_wrong_gets_group_related_wave) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.0355517Z test_comprehensive_same_dimension_retry_can_release_one_related_dimension (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_same_dimension_retry_can_release_one_related_dimension) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.5890991Z test_comprehensive_two_base_dimension_errors_are_capped_at_four_formal_questions (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_two_base_dimension_errors_are_capped_at_four_formal_questions) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.5940798Z test_comprehensive_uses_two_base_questions_per_word_and_fixed_progress (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_uses_two_base_questions_per_word_and_fixed_progress) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/cursor.py:723: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f605e0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.5942181Z   for idx, rec in enumerate(cursor_description):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.5942536Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.7185105Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:43.8783074Z test_comprehensive_wrong_answer_requires_idempotent_nonformal_correction (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_wrong_answer_requires_idempotent_nonformal_correction) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.1913770Z test_constrained_scheduler_handles_sparse_errors_and_tiny_pool (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_constrained_scheduler_handles_sparse_errors_and_tiny_pool) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.3029947Z test_context_choice_only_is_explicit_degraded_single_encounter (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_context_choice_only_is_explicit_degraded_single_encounter) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.3481592Z test_daily_clearance_errors_are_normalized_by_group_service (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_daily_clearance_errors_are_normalized_by_group_service) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:124: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1983f10>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.3483132Z   meth = getter(visitor)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.3483735Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.3584257Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.4673135Z test_empty_forgot_is_valid_for_listening_and_writing_prompts (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_empty_forgot_is_valid_for_listening_and_writing_prompts) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.5515416Z test_familiarity_does_not_update_mastery_and_cannot_skip (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_familiarity_does_not_update_mastery_and_cannot_skip) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:124: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff185ed40>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.5516781Z   meth = getter(visitor)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.5517088Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.5622455Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8188057Z test_familiarity_to_recall_avoids_last_seen_sense (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_familiarity_to_recall_avoids_last_seen_sense) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1cea890>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8189706Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8189974Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8194855Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff33de5c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8195621Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8195917Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8201031Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7af20>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8201571Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8201752Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8205369Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff4489300>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8205905Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8206235Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8212945Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff27ae4d0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8213483Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8213656Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8221096Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1c54130>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8221635Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8221809Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8228019Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff19d0b80>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8228560Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8228734Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8231571Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f632e0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8232216Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8232492Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8239831Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff18f26b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8240483Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8240765Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8241870Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff185f100>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8242501Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8242778Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8243521Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/result.py:262: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff162c400>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8244162Z   def __init__(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.8244437Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:44.9140411Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.0568043Z test_forgotten_first_answer_and_conflicting_replay_use_saved_winner (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_forgotten_first_answer_and_conflicting_replay_use_saved_winner) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.1454822Z test_forgotten_submission_rejects_foreign_and_expired_task_without_writing (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_forgotten_submission_rejects_foreign_and_expired_task_without_writing) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.2940070Z test_group_correction_increments_attempt_id_and_rejects_stale_replay (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_group_correction_increments_attempt_id_and_rejects_stale_replay) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.3435756Z test_group_sizes_and_last_remainder_are_server_constants (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_group_sizes_and_last_remainder_are_server_constants) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.4033422Z test_legacy_comprehensive_flow_without_formal_ordinals_keeps_old_contract (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_legacy_comprehensive_flow_without_formal_ordinals_keeps_old_contract) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/base.py:2366: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f9de40>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.4034782Z   def corresponding_column(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.4035100Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.4482300Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.5418721Z test_listening_has_no_context_questions (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_listening_has_no_context_questions) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.5869606Z test_queue_token_and_question_contract_are_required (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_queue_token_and_question_contract_are_required) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/type_api.py:1041: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff30df4c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.5870989Z   def _dialect_info(self, dialect: Dialect) -> _TypeMemoDict:
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.5871802Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.6363926Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.7760632Z test_retry_only_forgotten_item_is_in_visible_count_not_first_score_count (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_only_forgotten_item_is_in_visible_count_not_first_score_count) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.7851956Z test_retry_shuffle_respects_last_formal_phase_sense_boundary (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_shuffle_respects_last_formal_phase_sense_boundary) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:124: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3622980>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.7853260Z   meth = getter(visitor)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.7853571Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:45.9616506Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.0955462Z test_retry_wrong_can_finish_and_is_marked_for_review (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_wrong_can_finish_and_is_marked_for_review) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.1962363Z test_same_attempt_is_idempotent_and_stale_question_cannot_double_advance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_same_attempt_is_idempotent_and_stale_question_cannot_double_advance) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.2419898Z test_sqlite_lock_is_a_retryable_state_conflict (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_sqlite_lock_is_a_retryable_state_conflict) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/type_api.py:1041: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff420be20>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.2421198Z   def _dialect_info(self, dialect: Dialect) -> _TypeMemoDict:
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.2421606Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.2785135Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.3270747Z test_stable_order_avoids_adjacent_sense_and_is_deterministic (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_stable_order_avoids_adjacent_sense_and_is_deterministic) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.3816450Z test_started_task_is_blocked_after_assigned_day_ends (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_started_task_is_blocked_after_assigned_day_ends) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4638262Z test_three_context_senses_apply_once_and_choice_is_guidance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_three_context_senses_apply_once_and_choice_is_guidance) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/cursor.py:1315: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e796c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4639660Z   rows = dbapi_cursor.fetchall()
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4640001Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4640830Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/cursor.py:1315: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff4209b70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4641488Z   rows = dbapi_cursor.fetchall()
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.4641806Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.5715906Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.7668230Z test_wrong_correction_keeps_choice_pending_then_bounded_release (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_wrong_correction_keeps_choice_pending_then_bounded_release) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.7713960Z test_wrong_mastery_encounter_requires_one_retry_but_retry_does_not_advance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_wrong_mastery_encounter_requires_one_retry_but_retry_does_not_advance) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/engine/cursor.py:723: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff185e2f0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.7715828Z   for idx, rec in enumerate(cursor_description):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.7716349Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:46.9675073Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.0248785Z test_empty_assigned_range_is_actionable_and_does_not_create_a_flow (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_empty_assigned_range_is_actionable_and_does_not_create_a_flow) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 14 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.0250312Z   return self._jws.encode(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.0276624Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 14 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.0277541Z   decoded = self.decode_complete(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.0567500Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.1349820Z test_existing_history_shows_forgotten_action_and_keeps_raw_answer (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_existing_history_shows_forgotten_action_and_keeps_raw_answer) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.2010423Z test_http_comprehensive_correction_is_saved_without_formal_attempt (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_comprehensive_correction_is_saved_without_formal_attempt) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/orm/context.py:216: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff0e3f6a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.2011936Z   for opt, uncached_opt in zip(cached_options, uncached_options)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.2012362Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4512975Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1983f10>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4513814Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4514173Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4514985Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff38517b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4515692Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4516173Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4526487Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff162cd60>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4527188Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4527565Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4536537Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1d07970>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4537247Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4537576Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4538352Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff18f3a60>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4539004Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4539314Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4543543Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f9f790>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4544597Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4544909Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4547941Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff36216c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4548628Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4548950Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4551875Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff448bb50>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4552559Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4552888Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4560017Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff448a110>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4560734Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4561070Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4563367Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7aa70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4564079Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4564413Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4567212Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f78310>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4567884Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4568212Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4572078Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff10387c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4572784Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4573117Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4578146Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/util.py:1318: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff10384f0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4578890Z   def __getitem__(self, key):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.4579237Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.5264426Z /home/runner/work/studytracker/studytracker/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.5265742Z   user = User.query.get(int(payload.get("sub", 0)))
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.5629331Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.7134727Z test_http_context_choice_and_fill_share_one_mastery_encounter (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_context_choice_and_fill_share_one_mastery_encounter) ... /home/runner/work/studytracker/studytracker/api/miniprogram.py:2658: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.7135807Z   current_task = Task.query.get(task_id)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.7178111Z /home/runner/work/studytracker/studytracker/api/miniprogram.py:2674: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.7179157Z   task = Task.query.get(task_id)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.7272585Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:47.8651849Z test_http_forgotten_answer_recovers_exact_saved_attempt (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_forgotten_answer_recovers_exact_saved_attempt) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.0255232Z test_http_group_queue_requires_contract_and_finalize_is_idempotent (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_group_queue_requires_contract_and_finalize_is_idempotent) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.1394479Z test_http_mismatched_word_and_dimension_are_rejected (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_mismatched_word_and_dimension_are_rejected) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.1587250Z test_legacy_null_goal_keeps_old_queue_contract (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_legacy_null_goal_keeps_old_queue_contract) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/ast.py:295: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7a020>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.1588379Z   yield item
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.1588656Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2155827Z /home/runner/work/studytracker/studytracker/api/vocab_review.py:99: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2157214Z   task = Task.query.get(task_id)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2166813Z /home/runner/work/studytracker/studytracker/services/dictation_review.py:79: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2168321Z   value = value or datetime.utcnow()
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2347797Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2963013Z test_numeric_word_tts_uses_raw_text_and_licensed_provider (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_numeric_word_tts_uses_raw_text_and_licensed_provider) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.2964837Z   rv = self.get(ident)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.3056730Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.3624776Z test_published_legacy_client_skips_server_only_correction (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_published_legacy_client_skips_server_only_correction) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:4336: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7ba60>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.3626280Z   def bindparam_string(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.3626617Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.4354449Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.6797256Z test_all_goals_keep_numeric_only_and_mixed_comprehensive_words (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_all_goals_keep_numeric_only_and_mixed_comprehensive_words) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.8687965Z test_comprehensive_separates_numeric_meaning_feedback_from_dictation (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_comprehensive_separates_numeric_meaning_feedback_from_dictation) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:48.9177623Z test_existing_english_snapshot_is_not_reclassified (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_existing_english_snapshot_is_not_reclassified) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0413776Z test_mixed_task_preserves_english_and_skips_only_missing_meaning (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_mixed_task_preserves_english_and_skips_only_missing_meaning) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0857898Z test_numeric_only_selected_subset_finishes_with_nonempty_denominator (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_numeric_only_selected_subset_finishes_with_nonempty_denominator) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1651: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff30dc220>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0859283Z   itertools.chain(*[c.proxy_set for c in self._proxies])
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0859670Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0860481Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1651: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff30dd3f0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0861220Z   itertools.chain(*[c.proxy_set for c in self._proxies])
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.0861612Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.1655004Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.2435578Z test_numeric_with_meaning_keeps_meaning_question_and_new_audio (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_numeric_with_meaning_keeps_meaning_question_and_new_audio) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.2850600Z test_old_initialized_flow_does_not_gain_questions_or_change_snapshot (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_old_initialized_flow_does_not_gain_questions_or_change_snapshot) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1650: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1d07a60>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.2852474Z   return frozenset([self._deannotate()]).union(
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.2852854Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.3304061Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.4468397Z test_phone_wrong_zero_then_retry_preserves_original_and_audio (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_phone_wrong_zero_then_retry_preserves_original_and_audio) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.5266572Z test_selected_numeric_with_stage_zero_future_review_still_has_question (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_selected_numeric_with_stage_zero_future_review_still_has_question) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.6117889Z test_started_old_task_keeps_questions_answers_and_progress (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_started_old_task_keeps_questions_answers_and_progress) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff36e3c40>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.6119147Z   return self.data[ref(key)]
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.6119480Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.6408760Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9312359Z test_task_review_queue_and_grading_uses_same_numeric_policy (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_task_review_queue_and_grading_uses_same_numeric_policy) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff0d297b0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9313881Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9314298Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9315143Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff10e0c70>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9316526Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9316931Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9318476Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff33dee30>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9320334Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9320746Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9321567Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff10389a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9322392Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9322798Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9324542Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff3e7a7a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9325328Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9325731Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9326680Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff4209f30>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9327443Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9327838Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9328664Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff420a020>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9329604Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9330010Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9331805Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff1f9e5c0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9332587Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9332993Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9333817Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff18f05e0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9334616Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9335035Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9335903Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff18f36a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9336795Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9337215Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9338061Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff26c5210>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9338832Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9339189Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9339918Z /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/base.py:1113: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x701ff35ff6a0>
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9340724Z   def __init__(self, storage_format=None, regexp=None, **kw):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:49.9341080Z ResourceWarning: Enable tracemalloc to get the object allocation traceback
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.0163037Z ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.0895879Z test_date_ambiguity_is_not_silently_reinterpreted (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_date_ambiguity_is_not_silently_reinterpreted) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.1654125Z test_decimal_first_and_correction_do_not_use_english_punctuation_rules (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_decimal_first_and_correction_do_not_use_english_punctuation_rules) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.2366359Z test_existing_english_snapshot_remains_unchanged_and_uses_old_grader (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_existing_english_snapshot_remains_unchanged_and_uses_old_grader) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.3100846Z test_forgotten_replay_retains_frozen_numeric_answer_and_audio (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_forgotten_replay_retains_frozen_numeric_answer_and_audio) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.3959731Z test_mixed_queue_keeps_ordinary_english_on_existing_contract (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_mixed_queue_keeps_ordinary_english_on_existing_contract) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.4675118Z test_numeric_forgot_is_valid_but_numeric_non_audio_snapshot_is_invalid (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_forgot_is_valid_but_numeric_non_audio_snapshot_is_invalid) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.5570544Z test_numeric_only_queue_keeps_all_answers_and_private_metadata (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_only_queue_keeps_all_answers_and_private_metadata) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6114818Z test_numeric_without_meaning_is_only_eligible_for_audio_form (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_without_meaning_is_only_eligible_for_audio_form) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6971606Z test_phone_correction_preserves_leading_zero_and_retries_next_day (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_phone_correction_preserves_leading_zero_and_retries_next_day) ... ok
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6972327Z 
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6972449Z ======================================================================
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6973242Z FAIL: test_answer_feedback_is_returned_after_answer_and_restored_on_refresh (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_answer_feedback_is_returned_after_answer_and_restored_on_refresh)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6974061Z ----------------------------------------------------------------------
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6974388Z Traceback (most recent call last):
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6980555Z   File "/home/runner/work/studytracker/studytracker/tests/test_vocabulary_autonomous_review.py", line 1112, in test_answer_feedback_is_returned_after_answer_and_restored_on_refresh
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6981348Z     self.assertEqual(result["answer_feedback"], expected_feedback)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6981670Z     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6982816Z AssertionError: {'wor[29 chars]'analysis', 'phonetic': '/əˈnæləsɪs/', 'core_m[201 chars]tts'} != {'wor[29 chars]'anal·y·sis', 'phonetic': '/əˈnæləsɪs/', 'core[203 chars]tts'}
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6983387Z   {'audio_tts_url': '/dictation/words/1/tts',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6983673Z    'core_meaning_zh': '分析',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6983916Z    'example_en': 'The analysis supports the conclusion.',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6984241Z    'example_zh': '这项分析支持该结论。',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6984513Z    'phonetic': '/əˈnæləsɪs/',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6984716Z -  'syllables': 'analysis',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6984954Z +  'syllables': 'anal·y·sis',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6985152Z ?                    + +
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6985287Z 
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6985795Z    'usage_note': '常与 data 搭配。',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6986126Z    'usage_pattern': 'data analysis',
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6986335Z    'word': 'analysis'}
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6986450Z 
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6986570Z ----------------------------------------------------------------------
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6986851Z Ran 105 tests in 18.152s
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6996587Z 
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:50.6996784Z FAILED (failures=1)
+account-provisioning	Test vocabulary entry performance and review eligibility	2026-11-16T05:31:51.5372850Z ##[error]Process completed with exit code 1.
+lint	Ruff check (advisory)	﻿2026-11-16T05:31:20.6560329Z ##[group]Run ruff check --output-format=github .
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6560709Z [36;1mruff check --output-format=github .[0m
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6607569Z shell: /usr/bin/bash -e {0}
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6607928Z env:
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6608173Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6608522Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6608877Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6609180Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6609479Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6609800Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+lint	Ruff check (advisory)	2026-11-16T05:31:20.6610059Z ##[endgroup]
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7341071Z ##[error]add_class_feedback_image.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7350464Z ##[error]add_dictation_book_id.py:4:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7352191Z ##[error]add_dictation_mode_column.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7353731Z ##[error]add_dictation_range_columns.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7355579Z ##[error]add_dictation_range_columns.py:1:22: F401 `app.db` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `app.db`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7357056Z ##[error]add_dictation_range_columns.py:2:24: F401 `sqlalchemy.text` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `sqlalchemy.text`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7359386Z ##[error]add_explanation_column.py:4:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7360787Z ##[error]add_feedback_column.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7362134Z ##[error]add_listening_tables.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7363977Z ##[error]add_student_saved_word_table.py:7:20: F401 `models.StudentSavedWord` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.StudentSavedWord`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7365479Z ##[error]add_usage_note_audited_column.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7366829Z ##[error]add_word_enrichment_columns.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7368585Z ##[error]add_word_mastery_table.py:5:20: F401 `models.StudentWordMastery` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.StudentWordMastery`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7370030Z ##[error]api/__init__.py:8:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7371296Z ##[error]api/azure_tts.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7372529Z ##[error]api/dictation.py:6:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7374150Z ##[error]api/dictation.py:314:17: B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7375716Z ##[error]api/dictation.py:421:13: B007 Loop control variable `idx` not used within loop body
+lint	Ruff check (advisory)	  help: Rename unused `idx` to `_idx`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7377015Z ##[error]api/ielts_eval.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7378421Z ##[error]api/materials.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7379744Z ##[error]api/materials.py:5:64: F401 `models.StudentAnswer` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7381005Z ##[error]api/materials.py:5:79: F401 `models.Task` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7382601Z ##[error]api/materials.py:783:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7383927Z ##[error]api/materials.py:808:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7385392Z ##[error]api/materials.py:1001:13: F841 Local variable `first_opt` is assigned to but never used
+lint	Ruff check (advisory)	  help: Remove assignment to unused variable `first_opt`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7386951Z ##[error]api/materials.py:1002:13: F841 Local variable `last_opt` is assigned to but never used
+lint	Ruff check (advisory)	  help: Remove assignment to unused variable `last_opt`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7388678Z ##[error]api/materials.py:1140:5: F841 Local variable `opt_pattern` is assigned to but never used
+lint	Ruff check (advisory)	  help: Remove assignment to unused variable `opt_pattern`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7390074Z ##[error]api/miniprogram.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7391409Z ##[error]api/miniprogram.py:11:61: F401 `flask.url_for` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `flask.url_for`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7392860Z ##[error]api/miniprogram.py:13:30: F401 `sqlalchemy.and_` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `sqlalchemy.and_`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7394325Z ##[error]api/miniprogram.py:17:38: F401 `models.TaskCatalog` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.TaskCatalog`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7396053Z ##[error]api/miniprogram.py:68:5: F401 `services.task_date_gate.add_task_date_access` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `services.task_date_gate.add_task_date_access`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7397381Z ##[error]api/miniprogram.py:3079:9: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7398849Z ##[error]api/miniprogram.py:3608:9: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7400157Z ##[error]api/miniprogram.py:3738:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7401385Z ##[error]api/qwen.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7402846Z ##[error]api/speaking_practice.py:7:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7404287Z ##[error]api/speaking_practice.py:140:13: B007 Loop control variable `idx` not used within loop body
+lint	Ruff check (advisory)	  help: Rename unused `idx` to `_idx`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7405605Z ##[error]api/students.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7406822Z ##[error]api/tencent_soe.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7408192Z ##[error]api/tts.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7409400Z ##[error]api/tts.py:7:8: F401 `time` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `time`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7410674Z ##[error]api/tts.py:11:48: F401 `flask.send_file` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `flask.send_file`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7411971Z ##[error]api/vocab_review.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7413218Z ##[error]api/wechat.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7414459Z ##[error]api/wechat.py:126:13: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7415524Z ##[error]api/wechat.py:176:17: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7416459Z ##[error]api/wechat.py:182:17: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7417549Z ##[error]api/wechat.py:215:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7419145Z ##[error]api/wechat.py:215:29: F401 `.auth_utils.require_api_user` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `.auth_utils.require_api_user`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7420361Z ##[error]api/wechat.py:236:5: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7421653Z ##[error]api/wechat.py:276:13: F841 Local variable `phone` is assigned to but never used
+lint	Ruff check (advisory)	  help: Remove assignment to unused variable `phone`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7422982Z ##[error]api/wechat.py:342:17: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7423921Z ##[error]api/wechat.py:348:17: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7425109Z ##[error]api/wechat.py:361:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7426168Z ##[error]api/wechat.py:464:5: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7427238Z ##[error]app.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7428821Z ##[error]app.py:40:24: F401 `sqlalchemy.false` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `sqlalchemy.false`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7430151Z ##[error]app.py:128:5: F401 `models.AuditLogEntry` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7431397Z ##[error]app.py:135:5: F401 `models.PlanTemplate` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7432664Z ##[error]app.py:136:5: F401 `models.PlanTemplateItem` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7434418Z ##[error]app.py:147:5: F811 Redefinition of unused `StudySession` from line 146: `StudySession` redefined here
+lint	Ruff check (advisory)	  app.py:146:5: previous definition of `StudySession` here
+lint	Ruff check (advisory)	  help: Remove definition: `StudySession`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7435902Z ##[error]app.py:2543:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7437114Z ##[error]app.py:3775:13: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7438317Z ##[error]app.py:4351:13: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7439701Z ##[error]app.py:4496:9: E712 Avoid equality comparisons to `True`; use `Task.student_submitted:` for truth checks
+lint	Ruff check (advisory)	  help: Replace with `Task.student_submitted`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7441318Z ##[error]app.py:4617:9: E712 Avoid equality comparisons to `True`; use `Task.student_submitted:` for truth checks
+lint	Ruff check (advisory)	  help: Replace with `Task.student_submitted`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7442685Z ##[error]app.py:4641:9: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7443607Z ##[error]app.py:4837:9: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7444486Z ##[error]app.py:4999:9: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7445372Z ##[error]app.py:5004:9: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7446424Z ##[error]app.py:6150:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7447608Z ##[error]app.py:6156:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7448920Z ##[error]app.py:6710:5: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7449928Z ##[error]app.py:6875:5: E722 Do not use bare `except`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7451081Z ##[error]app.py:9676:17: B007 Loop control variable `i` not used within loop body
+lint	Ruff check (advisory)	  help: Rename unused `i` to `_i`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7452480Z ##[error]app.py:9757:39: B905 `zip()` without an explicit `strict=` parameter
+lint	Ruff check (advisory)	  help: Add explicit value for parameter `strict=`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7453771Z ##[error]check_book.py:1:22: F401 `app.db` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `app.db`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7455232Z ##[error]create_class_feedback_table.py:5:20: F401 `models.ClassFeedback` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.ClassFeedback`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7456630Z ##[error]create_dictation_tables.py:4:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7458136Z ##[error]create_dictation_tables.py:5:20: F401 `models.DictationBook` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7459621Z ##[error]create_dictation_tables.py:5:35: F401 `models.DictationWord` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7461001Z ##[error]create_dictation_tables.py:5:50: F401 `models.DictationRecord` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7462663Z ##[error]create_listening_repeat_tables.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7464094Z ##[error]create_plan_table.py:2:20: F401 `models.CoursePlan` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.CoursePlan`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7465672Z ##[error]create_schedule_snapshot_table.py:2:20: F401 `models.ScheduleSnapshot` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `models.ScheduleSnapshot`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7467084Z ##[error]create_speaking_tables.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7468505Z ##[error]debug_check.py:18:9: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7469707Z ##[error]debug_check.py:60:9: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7471001Z ##[error]debug_check.py:60:27: F401 `flask.render_template_string` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7472256Z ##[error]debug_check.py:60:51: F401 `flask.url_for` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7473533Z ##[error]debug_check.py:60:60: F401 `flask.get_flashed_messages` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7474734Z ##[error]debug_check.py:61:16: F401 `os` imported but unused
+lint	Ruff check (advisory)	  help: Remove unused import: `os`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7475892Z ##[error]debug_check.py:64:43: UP015 Unnecessary mode argument
+lint	Ruff check (advisory)	  help: Remove mode argument
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7477358Z ##[error]docs/reviews/cambridge-release-20261107/final-reading-review.py:13:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7479323Z ##[error]docs/reviews/cambridge-release-20261107/final-reading-review.py:25:5: B007 Loop control variable `test_id` not used within loop body
+lint	Ruff check (advisory)	  help: Rename unused `test_id` to `_test_id`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7481189Z ##[error]docs/reviews/cambridge-release-20261107/final-reading-review.py:87:25: B905 `zip()` without an explicit `strict=` parameter
+lint	Ruff check (advisory)	  help: Add explicit value for parameter `strict=`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7483038Z ##[error]docs/reviews/cambridge-release-20261107/presentation-stems.py:11:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7484629Z ##[error]docs/reviews/cambridge-release-20261107/verify_release.py:59:40: UP017 Use `datetime.UTC` alias
+lint	Ruff check (advisory)	  help: Convert to `datetime.UTC` alias
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7486207Z ##[error]docs/reviews/classroom-vocabulary-20261114/verify_release.py:96:40: UP017 Use `datetime.UTC` alias
+lint	Ruff check (advisory)	  help: Convert to `datetime.UTC` alias
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7487728Z ##[error]docs/reviews/recovery-e2e-20261104/verify_release.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7489386Z ##[error]docs/reviews/recovery-e2e-20261104/verify_release.py:78:36: UP017 Use `datetime.UTC` alias
+lint	Ruff check (advisory)	  help: Convert to `datetime.UTC` alias
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7490791Z ##[error]generate_word_enrichment.py:4:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7492152Z ##[error]generate_word_enrichment.py:16:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7493442Z ##[error]migrate_wechat.py:8:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7494679Z ##[error]migrate_wechat.py:14:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7495943Z ##[error]practice_tables.py:9:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7497240Z ##[error]services/listening_cloze.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7498704Z ##[error]services/practice_navigation.py:9:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7500135Z ##[error]services/vocabulary_attempt_reporting.py:3:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7501721Z ##[error]services/vocabulary_group_learning.py:9:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7503087Z ##[error]services/vocabulary_mastery.py:9:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7504433Z ##[error]tests/test_dictation_answers.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7505805Z ##[error]tests/test_import_toefl_real_exams.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7507423Z ##[error]tests/test_migrate_vocabulary_forgot_response.py:44:29: B905 `zip()` without an explicit `strict=` parameter
+lint	Ruff check (advisory)	  help: Add explicit value for parameter `strict=`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7509086Z ##[error]tests/test_miniprogram_parent_report.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7510451Z ##[error]tests/test_practice_tables.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7511779Z ##[error]tests/test_toefl_practice.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7513166Z ##[error]tests/test_vocabulary_group_learning.py:1:1: I001 Import block is un-sorted or un-formatted
+lint	Ruff check (advisory)	  help: Organize imports
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7514780Z ##[error]tests/test_vocabulary_mastery.py:855:13: F841 Local variable `settled` is assigned to but never used
+lint	Ruff check (advisory)	  help: Remove assignment to unused variable `settled`
+lint	Ruff check (advisory)	2026-11-16T05:31:20.7518574Z ##[error]Process completed with exit code 1.

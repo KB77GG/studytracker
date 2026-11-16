@@ -1,0 +1,63 @@
+{
+  "source": "/Users/zhouxin/Desktop/studytracker-release",
+  "source_branch": "codex/miniprogram-release",
+  "source_head": "d03a2749eb99cde041cdae18305b624956d46e90",
+  "candidate": "/private/tmp/studytracker-entry-client-20261116",
+  "candidate_is_git_worktree": false,
+  "files": [
+    {
+      "path": "miniprogram/pages/student/task/index.js",
+      "before_sha256": "cc468d0aa25b2b148c56fc0fe5a0d19d21bbd6cc0e57cf29058cc1df92da3b09",
+      "after_sha256": "cd6413faa8299f47958072c095bee671f7ab080acda8227c1adb94407a1fb3c6",
+      "new": false
+    },
+    {
+      "path": "miniprogram/pages/student/task/index.wxml",
+      "before_sha256": "f3d7794772a497aaa2c12961c850f21e7e8b08bcc9881d243b7c1c7150042f8a",
+      "after_sha256": "d25e860387f658e45c0ae3eb7c8b7bddef4da77f3c412a197c43390b172a38ce",
+      "new": false
+    },
+    {
+      "path": "miniprogram/pages/student/task/index.wxss",
+      "before_sha256": "32f0bdd162c6cca485ec112c7078b13ce62759580bf36f9e67173320ff120429",
+      "after_sha256": "049a4b7b6235150865ce64061492c04802f05512ebbd78e5218bc5a81e2b7d48",
+      "new": false
+    },
+    {
+      "path": "miniprogram/pages/student/vocabulary-learning/index.js",
+      "before_sha256": "80d5e5e923a276241c448cc5369f8844d22541239c5d2d234ee315b0a7e228c8",
+      "after_sha256": "d93506fa5323b9f01bc3e0e1b5e86ec4a644dcc06ec2688878fc175509b94f2a",
+      "new": false
+    },
+    {
+      "path": "miniprogram/pages/student/vocabulary-learning/index.wxml",
+      "before_sha256": "fb060b2c4aad855c57dd2266edb938ef894539681adce411d89300da2d65a538",
+      "after_sha256": "60ae20ad56f569415bc842946870869beac16b675268c44813d848ff1d655794",
+      "new": false
+    },
+    {
+      "path": "miniprogram/pages/student/vocabulary-learning/index.wxss",
+      "before_sha256": "3c164bd49bd2a28cb6c2ec5e2e56c09b72e2e17512a8bba1067910482da5dd5e",
+      "after_sha256": "bbb612dba27ab1ce506ad3078263eea3f76adb005ee943dc077b55214a7b1b9c",
+      "new": false
+    },
+    {
+      "path": "miniprogram/utils/page-load.js",
+      "before_sha256": null,
+      "after_sha256": "9f2782ee8a8c332302c49891a407699121e59d08be8aac227bbca13de3945c45",
+      "new": true
+    },
+    {
+      "path": "tests/test_web_practice_client.js",
+      "before_sha256": "9a66871e39660a764f8af089b392296fc9e3d069b8090998803fdc550cff2931",
+      "after_sha256": "fa1a318a7aa08ac31f1cccc299eb7a0e4c75d83c4e210fdfbb415c0414b497e1",
+      "new": false
+    },
+    {
+      "path": "tests/test_entry_loading_client.js",
+      "before_sha256": null,
+      "after_sha256": "39e60311888a6ba32d2ade1ce3234d728882e2994e60e231bc31d6c00f084a8b",
+      "new": true
+    }
+  ]
+}

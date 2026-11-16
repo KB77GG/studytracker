@@ -1,0 +1,280 @@
+✖ task entry retains fetched details during preflight, stays blocked, and accepts a 13 second response (3.399333ms)
+✖ learning queue shows a 10 second hint and accepts the observed 13 second success without retry (4.777375ms)
+✖ entry markup hides editable form until ready and error buttons do not flex-grow (1.158458ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76.833542
+
+✖ failing tests:
+
+test at tests/test_entry_loading_client.js:72:1
+✖ task entry retains fetched details during preflight, stays blocked, and accepts a 13 second response (3.399333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at assertMutationBlocked (/private/tmp/studytracker-entry-client-20261116/tests/test_entry_loading_client.js:69:12)
+      at async TestContext.<anonymous> (/private/tmp/studytracker-entry-client-20261116/tests/test_entry_loading_client.js:74:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_entry_loading_client.js:133:1
+✖ learning queue shows a 10 second hint and accepts the observed 13 second success without retry (4.777375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10000 !== 30000
+  
+      at TestContext.<anonymous> (/private/tmp/studytracker-entry-client-20261116/tests/test_entry_loading_client.js:135:12)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10000,
+    expected: 30000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_entry_loading_client.js:176:1
+✖ entry markup hides editable form until ready and error buttons do not flex-grow (1.158458ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /<block wx:if="{{taskLoaded && !taskLoading && !taskLoadError}}">/. Input:
+  
+  '<view class="container">\n' +
+    '  <view class="task-header">\n' +
+    '    <text class="task-title">{{task.task_name}}</text>\n' +
+    '    <text class="task-module">{{task.module}}</text>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <view class="task-info-card">\n' +
+    '    <view class="info-row">\n' +
+    '      <text class="label">计划时长</text>\n' +
+    '      <text class="value">{{task.planned_minutes}} 分钟</text>\n' +
+    '    </view>\n' +
+    '    <view class="info-row">\n' +
+    '      <text class="label">任务说明</text>\n' +
+    `      <text class="value">{{task.instructions || '暂无说明'}}</text>\n` +
+    '    </view>\n' +
+    '    <view class="info-row">\n' +
+    '      <text class="label">状态</text>\n' +
+    '      <text class="value status-{{task.status}}">{{statusText}}</text>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <view class="date-gate-card" wx:if="{{task.read_only}}">\n' +
+    '    <text class="date-gate-title">{{task.status_label || task.task_status_label || statusText || task.availability_label}}</text>\n' +
+    '    <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <view class="web-practice-card" wx:if="{{task.web_practice}}">\n' +
+    '    <text class="web-practice-title">去刷题网页练习</text>\n' +
+    `    <text class="web-practice-copy">{{task.web_practice.instruction || '请前往刷题网页练习，完成后结果会同步至家长端。'}}</text>\n` +
+    '    <text class="web-practice-copy">复制本任务链接，在电脑或平板浏览器打开，登录学生账号后完成练习。</text>\n' +
+    '    <button class="btn-submit" wx:if="{{task.web_practice.url}}" bindtap="copyWebPracticeLink">复制练习链接</button>\n' +
+    '    <text class="web-practice-copy" wx:else>练习链接暂不可用，请联系老师。</text>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- Timer Display -->\n' +
+    '  <view class="timer-card" wx:if="{{timerRunning && !task.read_only && !task.web_practice}}">\n' +
+    '    <view class="timer-header">\n' +
+    '      <text class="timer-icon">⏱️</text>\n' +
+    '      <text class="timer-label">当前计时</text>\n' +
+    '    </view>\n' +
+    '    <view class="timer-display">\n' +
+    '      <text class="timer-time">{{displayTime}}</text>\n' +
+    '      <text class="timer-target">/ {{plannedTime}}</text>\n' +
+    '    </view>\n' +
+    '    <view class="timer-actions">\n' +
+    '      <view wx:if="{{!timerPaused}}" class="timer-btn pause" catchtap="pauseTimer">暂停</view>\n' +
+    '      <view wx:if="{{timerPaused}}" class="timer-btn resume" catchtap="resumeTimer">继续</view>\n' +
+    '      <view class="timer-btn stop" catchtap="stopTimer">结束</view>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '\n' +
+    '  <!-- 学习材料区域 -->\n' +
+    '  <view class="material-card" wx:if="{{task.material && !task.web_practice}}">\n' +
+    '    <view class="section-title">📚 学习材料</view>\n' +
+    '    \n' +
+    '    <!--\n' +
+    '      grammar / reading_vocab_choice / translation 已在 fetchTaskDetail 里\n' +
+    '      redirect 到 material-choice/practice 页，那里有 radio + textarea 混合 UI。\n' +
+    '      此处保留空 view 占位，避免极少数老旧客户端落到此页时显示 nothing。\n' +
+    '    -->\n' +
+    '    <view wx:if="{{false}}"></view>\n' +
+    '\n' +
+    '    <!-- 2. 写作逻辑链 -->\n' +
+    `    <view wx:if="{{task.material.type === 'writing_logic'}}">\n` +
+    '      <view class="material-section">\n' +
+    '        <text class="subtitle">完整范文</text>\n' +
+    '        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>\n' +
+    '      </view>\n' +
+    '      <view class="material-section">\n' +
+    '        <text class="subtitle">填空练习</text>\n' +
+    '        <text class="content-text" user-select>{{task.material.questions[0].hint}}</text>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '\n' +
+    '    <!-- 3. 口语朗读 -->\n' +
+    `    <view wx:if="{{task.material.type === 'speaking_reading'}}">\n` +
+    '      <view class="material-section">\n' +
+    '        <view class="subtitle">词汇表达</view>\n' +
+    '        <view class="word-cloud">\n' +
+    '          <text class="word-tag" wx:for="{{vocabularyWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n' +
+    '            {{item}}\n' +
+    '          </text>\n' +
+    '        </view>\n' +
+    '      </view>\n' +
+    '\n' +
+    '      <view class="material-section">\n' +
+    '        <view class="subtitle">句型表达</view>\n' +
+    '        <view class="word-cloud">\n' +
+    '          <text class="word-tag" wx:for="{{sentenceWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n' +
+    '            {{item}}\n' +
+    '          </text>\n' +
+    '        </view>\n' +
+    '      </view>\n' +
+    '\n' +
+    '      <view class="material-section">\n' +
+    '        <view class="subtitle">示范段落</view>\n' +
+    '        <view class="word-cloud">\n' +
+    '          <text class="word-tag" wx:for="{{paragraphWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n' +
+    '            {{item}}\n' +
+    '          </text>\n' +
+    '        </view>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '\n' +
+    '    <!-- 4. 口语 Part 1 -->\n' +
+    `    <view wx:if="{{task.material.type === 'speaking_part1'}}">\n` +
+    '      <view class="question-list">\n' +
+    '        <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">\n' +
+    '          <text class="question-content">{{index + 1}}. {{item.content}}</text>\n' +
+    '        </view>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '\n' +
+    '    <!-- 5. 口语 Part 2 -->\n' +
+    `    <view wx:if="{{task.material.type === 'speaking_part2'}}">\n` +
+    '      <view class="topic-card">\n' +
+    '        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 老师反馈 (仅已完成显示) -->\n' +
+    `  <view class="feedback-card" wx:if="{{task.status === 'completed'}}">\n` +
+    '    <view class="section-title">👩‍🏫 老师反馈</view>\n' +
+    '    \n' +
+    '    <!-- 批注图片 -->\n' +
+    '    <view class="feedback-image" wx:if="{{task.feedback_image}}">\n' +
+    '      <text class="label">批注图片</text>\n' +
+    '      <image src="{{baseUrl}}{{task.feedback_image}}" mode="aspectFit" bindtap="previewFeedbackImage" class="annotated-image"></image>\n' +
+    '    </view>\n' +
+    '    \n' +
+    '    <!-- 语音反馈 -->\n' +
+    '    <view class="feedback-audio" wx:if="{{task.feedback_audio}}">\n' +
+    '      <text class="label">语音反馈</text>\n' +
+    '      <view class="audio-player">\n' +
+    '        <button class="btn-play-feedback" bindtap="playFeedbackAudio" size="mini">\n' +
+    "          {{playingFeedback ? '暂停' : '播放'}}\n" +
+    '        </button>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '    \n' +
+    `    <view class="info-row" wx:if="{{task.accuracy !== null && (!task.web_practice || task.web_practice.kind !== 'writing_practice')}}">\n` +
+    '      <text class="label">正确率</text>\n' +
+    '      <text class="value highlight">{{task.accuracy}}%</text>\n' +
+    '    </view>\n' +
+    '    <view class="info-row" wx:if="{{task.completion_rate !== null}}">\n' +
+    '      <text class="label">完成率</text>\n' +
+    '      <text class="value highlight">{{task.completion_rate}}%</text>\n' +
+    '    </view>\n' +
+    '    <view class="info-row" wx:if="{{task.teacher_note}}">\n' +
+    '      <text class="label">评语</text>\n' +
+    '      <text class="value">{{task.teacher_note}}</text>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 录音区域 (仅口语任务显示) -->\n' +
+    '  <view class="upload-section" wx:if="{{showAudio}}">\n' +
+    '    <text class="section-title">📢 口语录音</text>\n' +
+    `    <view class="audio-recorder" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n` +
+    `      <button class="record-btn {{recording ? 'recording' : ''}}" \n` +
+    '              bindtouchstart="startRecord" \n' +
+    '              bindtouchend="stopRecord">\n' +
+    "        {{recording ? '松开结束' : '按住录音'}}\n" +
+    '      </button>\n' +
+    '      <text class="duration" wx:if="{{recordDuration > 0}}">{{recordDuration}}秒</text>\n' +
+    '    </view>\n' +
+    '    \n' +
+    '    <view class="audio-list" wx:if="{{audioFiles.length > 0}}">\n' +
+    '      <view class="audio-item" wx:for="{{audioFiles}}" wx:key="index">\n' +
+    '        <text class="audio-name">录音 {{index + 1}}</text>\n' +
+    '        <button class="btn-play" size="mini" bindtap="playAudio" data-url="{{item}}">播放</button>\n' +
+    `        <button class="btn-delete" size="mini" bindtap="deleteAudio" data-index="{{index}}" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">删除</button>\n` +
+    '      </view>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 图片上传区域 -->\n' +
+    '  <view class="upload-section" wx:if="{{!task.web_practice}}">\n' +
+    '    <text class="section-title">📷 作业照片</text>\n' +
+    '    <view class="image-grid">\n' +
+    '      <view class="image-item" wx:for="{{images}}" wx:key="index">\n' +
+    '        <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>\n' +
+    `        <icon type="clear" size="20" class="delete-icon" bindtap="deleteImage" data-index="{{index}}" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}"></icon>\n` +
+    '      </view>\n' +
+    `      <view class="image-item add-btn" bindtap="chooseImage" wx:if="{{images.length < 9 && !task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n` +
+    '        <text>+</text>\n' +
+    '      </view>\n' +
+    '    </view>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 备注 -->\n' +
+    '  <view class="upload-section" wx:if="{{!task.web_practice}}">\n' +
+    '    <text class="section-title">💬 备注（可选）</text>\n' +
+    `    <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300" disabled="{{task.read_only || task.status === 'submitted' || task.status === 'completed'}}"></textarea>\n` +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 提交按钮 -->\n' +
+    `  <view class="action-buttons" wx:if="{{!task.web_practice && !task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n` +
+    '    <button class="btn-submit" bindtap="submitTask" disabled="{{submitting}}">\n' +
+    "      {{submitting ? '提交中...' : '提交任务'}}\n" +
+    '    </button>\n' +
+    '  </view>\n' +
+    `  <view class="action-buttons" wx:elif="{{!task.web_practice && task.status === 'submitted'}}">\n` +
+    '    <button class="btn-submit" disabled>已提交，等待老师审核</button>\n' +
+    '  </view>\n' +
+    '\n' +
+    '  <!-- 撒花特效 Canvas -->\n' +
+    `  <canvas type="2d" id="confetti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: {{showConfetti ? 'block' : 'none'}}"></canvas>\n` +
+    '</view>\n'
+  
+      at TestContext.<anonymous> (/private/tmp/studytracker-entry-client-20261116/tests/test_entry_loading_client.js:178:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at node:internal/test_runner/test:1052:31
+      at node:internal/process/task_queues:150:7
+      at AsyncResource.runInAsyncScope (node:async_hooks:226:14)
+      at AsyncResource.runMicrotask (node:internal/process/task_queues:147:8) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: `<view class="container">\n  <view class="task-header">\n    <text class="task-title">{{task.task_name}}</text>\n    <text class="task-module">{{task.module}}</text>\n  </view>\n\n  <view class="task-info-card">\n    <view class="info-row">\n      <text class="label">计划时长</text>\n      <text class="value">{{task.planned_minutes}} 分钟</text>\n    </view>\n    <view class="info-row">\n      <text class="label">任务说明</text>\n      <text class="value">{{task.instructions || '暂无说明'}}</text>\n    </view>\n    <view class="info-row">\n      <text class="label">状态</text>\n      <text class="value status-{{task.status}}">{{statusText}}</text>\n    </view>\n  </view>\n\n  <view class="date-gate-card" wx:if="{{task.read_only}}">\n    <text class="date-gate-title">{{task.status_label || task.task_status_label || statusText || task.availability_label}}</text>\n    <text class="date-gate-copy">当前仅可查看，不能答题、计时或提交。</text>\n  </view>\n\n  <view class="web-practice-card" wx:if="{{task.web_practice}}">\n    <text class="web-practice-title">去刷题网页练习</text>\n    <text class="web-practice-copy">{{task.web_practice.instruction || '请前往刷题网页练习，完成后结果会同步至家长端。'}}</text>\n    <text class="web-practice-copy">复制本任务链接，在电脑或平板浏览器打开，登录学生账号后完成练习。</text>\n    <button class="btn-submit" wx:if="{{task.web_practice.url}}" bindtap="copyWebPracticeLink">复制练习链接</button>\n    <text class="web-practice-copy" wx:else>练习链接暂不可用，请联系老师。</text>\n  </view>\n\n  <!-- Timer Display -->\n  <view class="timer-card" wx:if="{{timerRunning && !task.read_only && !task.web_practice}}">\n    <view class="timer-header">\n      <text class="timer-icon">⏱️</text>\n      <text class="timer-label">当前计时</text>\n    </view>\n    <view class="timer-display">\n      <text class="timer-time">{{displayTime}}</text>\n      <text class="timer-target">/ {{plannedTime}}</text>\n    </view>\n    <view class="timer-actions">\n      <view wx:if="{{!timerPaused}}" class="timer-btn pause" catchtap="pauseTimer">暂停</view>\n      <view wx:if="{{timerPaused}}" class="timer-btn resume" catchtap="resumeTimer">继续</view>\n      <view class="timer-btn stop" catchtap="stopTimer">结束</view>\n    </view>\n  </view>\n\n\n  <!-- 学习材料区域 -->\n  <view class="material-card" wx:if="{{task.material && !task.web_practice}}">\n    <view class="section-title">📚 学习材料</view>\n    \n    <!--\n      grammar / reading_vocab_choice / translation 已在 fetchTaskDetail 里\n      redirect 到 material-choice/practice 页，那里有 radio + textarea 混合 UI。\n      此处保留空 view 占位，避免极少数老旧客户端落到此页时显示 nothing。\n    -->\n    <view wx:if="{{false}}"></view>\n\n    <!-- 2. 写作逻辑链 -->\n    <view wx:if="{{task.material.type === 'writing_logic'}}">\n      <view class="material-section">\n        <text class="subtitle">完整范文</text>\n        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>\n      </view>\n      <view class="material-section">\n        <text class="subtitle">填空练习</text>\n        <text class="content-text" user-select>{{task.material.questions[0].hint}}</text>\n      </view>\n    </view>\n\n    <!-- 3. 口语朗读 -->\n    <view wx:if="{{task.material.type === 'speaking_reading'}}">\n      <view class="material-section">\n        <view class="subtitle">词汇表达</view>\n        <view class="word-cloud">\n          <text class="word-tag" wx:for="{{vocabularyWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n            {{item}}\n          </text>\n        </view>\n      </view>\n\n      <view class="material-section">\n        <view class="subtitle">句型表达</view>\n        <view class="word-cloud">\n          <text class="word-tag" wx:for="{{sentenceWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n            {{item}}\n          </text>\n        </view>\n      </view>\n\n      <view class="material-section">\n        <view class="subtitle">示范段落</view>\n        <view class="word-cloud">\n          <text class="word-tag" wx:for="{{paragraphWords}}" wx:key="index" bindtap="playWord" data-word="{{item}}">\n            {{item}}\n          </text>\n        </view>\n      </view>\n    </view>\n\n    <!-- 4. 口语 Part 1 -->\n    <view wx:if="{{task.material.type === 'speaking_part1'}}">\n      <view class="question-list">\n        <view class="question-item" wx:for="{{task.material.questions}}" wx:key="id">\n          <text class="question-content">{{index + 1}}. {{item.content}}</text>\n        </view>\n      </view>\n    </view>\n\n    <!-- 5. 口语 Part 2 -->\n    <view wx:if="{{task.material.type === 'speaking_part2'}}">\n      <view class="topic-card">\n        <text class="content-text" user-select>{{task.material.questions[0].content}}</text>\n      </view>\n    </view>\n  </view>\n\n  <!-- 老师反馈 (仅已完成显示) -->\n  <view class="feedback-card" wx:if="{{task.status === 'completed'}}">\n    <view class="section-title">👩‍🏫 老师反馈</view>\n    \n    <!-- 批注图片 -->\n    <view class="feedback-image" wx:if="{{task.feedback_image}}">\n      <text class="label">批注图片</text>\n      <image src="{{baseUrl}}{{task.feedback_image}}" mode="aspectFit" bindtap="previewFeedbackImage" class="annotated-image"></image>\n    </view>\n    \n    <!-- 语音反馈 -->\n    <view class="feedback-audio" wx:if="{{task.feedback_audio}}">\n      <text class="label">语音反馈</text>\n      <view class="audio-player">\n        <button class="btn-play-feedback" bindtap="playFeedbackAudio" size="mini">\n          {{playingFeedback ? '暂停' : '播放'}}\n        </button>\n      </view>\n    </view>\n    \n    <view class="info-row" wx:if="{{task.accuracy !== null && (!task.web_practice || task.web_practice.kind !== 'writing_practice')}}">\n      <text class="label">正确率</text>\n      <text class="value highlight">{{task.accuracy}}%</text>\n    </view>\n    <view class="info-row" wx:if="{{task.completion_rate !== null}}">\n      <text class="label">完成率</text>\n      <text class="value highlight">{{task.completion_rate}}%</text>\n    </view>\n    <view class="info-row" wx:if="{{task.teacher_note}}">\n      <text class="label">评语</text>\n      <text class="value">{{task.teacher_note}}</text>\n    </view>\n  </view>\n\n  <!-- 录音区域 (仅口语任务显示) -->\n  <view class="upload-section" wx:if="{{showAudio}}">\n    <text class="section-title">📢 口语录音</text>\n    <view class="audio-recorder" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n      <button class="record-btn {{recording ? 'recording' : ''}}" \n              bindtouchstart="startRecord" \n              bindtouchend="stopRecord">\n        {{recording ? '松开结束' : '按住录音'}}\n      </button>\n      <text class="duration" wx:if="{{recordDuration > 0}}">{{recordDuration}}秒</text>\n    </view>\n    \n    <view class="audio-list" wx:if="{{audioFiles.length > 0}}">\n      <view class="audio-item" wx:for="{{audioFiles}}" wx:key="index">\n        <text class="audio-name">录音 {{index + 1}}</text>\n        <button class="btn-play" size="mini" bindtap="playAudio" data-url="{{item}}">播放</button>\n        <button class="btn-delete" size="mini" bindtap="deleteAudio" data-index="{{index}}" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">删除</button>\n      </view>\n    </view>\n  </view>\n\n  <!-- 图片上传区域 -->\n  <view class="upload-section" wx:if="{{!task.web_practice}}">\n    <text class="section-title">📷 作业照片</text>\n    <view class="image-grid">\n      <view class="image-item" wx:for="{{images}}" wx:key="index">\n        <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>\n        <icon type="clear" size="20" class="delete-icon" bindtap="deleteImage" data-index="{{index}}" wx:if="{{!task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}"></icon>\n      </view>\n      <view class="image-item add-btn" bindtap="chooseImage" wx:if="{{images.length < 9 && !task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n        <text>+</text>\n      </view>\n    </view>\n  </view>\n\n  <!-- 备注 -->\n  <view class="upload-section" wx:if="{{!task.web_practice}}">\n    <text class="section-title">💬 备注（可选）</text>\n    <textarea class="note-input" placeholder="写下你的学习笔记或遇到的问题..." model:value="{{note}}" maxlength="300" disabled="{{task.read_only || task.status === 'submitted' || task.status === 'completed'}}"></textarea>\n  </view>\n\n  <!-- 提交按钮 -->\n  <view class="action-buttons" wx:if="{{!task.web_practice && !task.read_only && task.status !== 'submitted' && task.status !== 'completed'}}">\n    <button class="btn-submit" bindtap="submitTask" disabled="{{submitting}}">\n      {{submitting ? '提交中...' : '提交任务'}}\n    </button>\n  </view>\n  <view class="action-buttons" wx:elif="{{!task.web_practice && task.status === 'submitted'}}">\n    <button class="btn-submit" disabled>已提交，等待老师审核</button>\n  </view>\n\n  <!-- 撒花特效 Canvas -->\n  <canvas type="2d" id="confetti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: {{showConfetti ? 'block' : 'none'}}"></canvas>\n</view>\n`,
+    expected: /<block wx:if="{{taskLoaded && !taskLoading && !taskLoadError}}">/,
+    operator: 'match',
+    diff: 'simple'
+  }

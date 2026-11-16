@@ -1,0 +1,64 @@
+{
+  "before_sha": "75ff855d381e4f872a466b7038177382452cbe5b",
+  "introduced_synonyms_sha": "2e82331a9960b5ce09f2636daca1e36f428a2058",
+  "current_business_sha": "878209f4d180ed1a9702b44257044ed394afd731",
+  "older_eligibility_path_commit": "771d6c908",
+  "synthetic_only": true,
+  "workload_size": 1000,
+  "consecutive_single_runs": true,
+  "results": [
+    {
+      "case": "meaning",
+      "before_ms": 35.48,
+      "after_ms": 35.105,
+      "increase_ms": -0.375,
+      "increase_percent": -1.06,
+      "same_results": {
+        "due_count": true,
+        "selection_sha256": true,
+        "preflight_sha256": true,
+        "batch_snapshots_sha256": true
+      }
+    },
+    {
+      "case": "context_direct",
+      "before_ms": 174.276,
+      "after_ms": 181.279,
+      "increase_ms": 7.003,
+      "increase_percent": 4.02,
+      "same_results": {
+        "due_count": true,
+        "selection_sha256": true,
+        "preflight_sha256": true,
+        "batch_snapshots_sha256": true
+      }
+    },
+    {
+      "case": "context_choice",
+      "before_ms": 6491.036,
+      "after_ms": 6973.848,
+      "increase_ms": 482.812,
+      "increase_percent": 7.44,
+      "same_results": {
+        "due_count": true,
+        "selection_sha256": true,
+        "preflight_sha256": true,
+        "batch_snapshots_sha256": true
+      }
+    },
+    {
+      "case": "context_choice_duplicates",
+      "before_ms": 6550.779,
+      "after_ms": 7015.008,
+      "increase_ms": 464.229,
+      "increase_percent": 7.09,
+      "same_results": {
+        "due_count": true,
+        "selection_sha256": true,
+        "preflight_sha256": true,
+        "batch_snapshots_sha256": true
+      }
+    }
+  ],
+  "benchmark_script_sha256": "864c204e553ed0670d58d78293502beadbf23d69bbcfab9ff23892ec73595077"
+}

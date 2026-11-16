@@ -1,0 +1,30 @@
+{
+  "head": "959c2019b5525769cccd33dc16f4cf2ff3cf7c53",
+  "baseline": "b85c4746fd4874ac82ab87d3d797e31f97babf8f",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "51084d6162136132e8783b15e5172003714da1ba0589489f96f9d1efb7f7bd4b"
+    },
+    {
+      "path": "scripts/benchmark_vocabulary_entry.py",
+      "sha256": "864c204e553ed0670d58d78293502beadbf23d69bbcfab9ff23892ec73595077"
+    },
+    {
+      "path": "services/vocabulary_autonomous_review.py",
+      "sha256": "cc92c68a023a58b088f3883a2dde71340cdb390142c0f15e6c0c3c80428a55da"
+    },
+    {
+      "path": "services/vocabulary_context.py",
+      "sha256": "e082b83db53965cc57a56ede669dc330e0ccaef4c724e727af947c76a5d5af95"
+    },
+    {
+      "path": "tests/test_vocabulary_context_availability.py",
+      "sha256": "77aa7ef471448ac12924d11a288cb08f2397ac329f1f54e6c2fbbbf2f324010d"
+    },
+    {
+      "path": "tests/test_vocabulary_review_performance.py",
+      "sha256": "b1019062514a009a530e79699642938846357ce80cb7842c337e60dd14a55a88"
+    }
+  ]
+}

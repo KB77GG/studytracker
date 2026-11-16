@@ -1,0 +1,54 @@
+{
+  "repo": "/private/tmp/studytracker-entry-pre-synonym-20261116",
+  "synthetic_only": true,
+  "results": [
+    {
+      "case": "meaning",
+      "catalog_size": 1000,
+      "elapsed_ms": 35.48,
+      "query_count": 11,
+      "eligibility_question_builds": 0,
+      "due_count": 1000,
+      "selection_sha256": "7367c12cec4e3e189d78b003a76a89c435c9db2490947b97350678c7c67e2d53",
+      "preflight_sha256": "9c2fd2ae692b8c4f8f36e8e6bf18d9a3f1ca1a22ca6aebd860efbfdad34cc4ab",
+      "batch_size": 20,
+      "batch_snapshots_sha256": "a50efe28167216553b23dcfa0e3cced7e4266f7a82d807f2884a23af9098c158"
+    },
+    {
+      "case": "context_direct",
+      "catalog_size": 1000,
+      "elapsed_ms": 174.276,
+      "query_count": 11,
+      "eligibility_question_builds": 0,
+      "due_count": 1000,
+      "selection_sha256": "a2beebfd76966eee542ab18ac75b849b508e0bdb1c44386089da68c6222bf19e",
+      "preflight_sha256": "9c2fd2ae692b8c4f8f36e8e6bf18d9a3f1ca1a22ca6aebd860efbfdad34cc4ab",
+      "batch_size": 20,
+      "batch_snapshots_sha256": "0afd589eeb4c704345b2d1111eaf8b01f7b27231527df1f60f87197d38517b29"
+    },
+    {
+      "case": "context_choice",
+      "catalog_size": 1000,
+      "elapsed_ms": 6491.036,
+      "query_count": 12,
+      "eligibility_question_builds": 1000,
+      "due_count": 1000,
+      "selection_sha256": "a2beebfd76966eee542ab18ac75b849b508e0bdb1c44386089da68c6222bf19e",
+      "preflight_sha256": "9c2fd2ae692b8c4f8f36e8e6bf18d9a3f1ca1a22ca6aebd860efbfdad34cc4ab",
+      "batch_size": 20,
+      "batch_snapshots_sha256": "f1bf0e40c14f6776a74033bb98d62437446f1087322b5a51bd28dafccb7ca466"
+    },
+    {
+      "case": "context_choice_duplicates",
+      "catalog_size": 1000,
+      "elapsed_ms": 6550.779,
+      "query_count": 12,
+      "eligibility_question_builds": 1000,
+      "due_count": 999,
+      "selection_sha256": "9ddbd37020390fe336f327f826527f88765e0aaafa52865f01232c8542965e18",
+      "preflight_sha256": "50df19791e9e91b1a2caf483d7c06c64a982d06a7f11050b242e9a4a88c4d137",
+      "batch_size": 20,
+      "batch_snapshots_sha256": "b3c917ab8354e8eeb43217053bb7495f55e6b9d5bf53ce7708039a9576a6d1f4"
+    }
+  ]
+}

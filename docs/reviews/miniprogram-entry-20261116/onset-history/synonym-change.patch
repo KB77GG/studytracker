@@ -1,0 +1,123 @@
+diff --git a/services/vocabulary_autonomous_review.py b/services/vocabulary_autonomous_review.py
+index a54353a4..df9dab24 100644
+--- a/services/vocabulary_autonomous_review.py
++++ b/services/vocabulary_autonomous_review.py
+@@ -46,6 +46,7 @@ from services.task_date_gate import (
+     task_date_access,
+ )
+ from services.vocabulary_context import _collocation_fill, _example_fill, grade_context_answer
++from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
+ from services.vocabulary_mastery import (
+     DIMENSIONS,
+     MAX_ENGLISH_ANSWER_LENGTH,
+@@ -318,6 +319,8 @@ def _candidate_is_eligible(
+ ) -> bool:
+     """Apply cheap field checks before materializing the public question."""
+ 
++    if is_synonym_word(word):
++        return bool(build_synonym_question(word, dimension))
+     if dimension == "meaning_recall":
+         meaning = str(word.core_meaning_zh or word.translation or "").strip()
+         goal = _goal_for_dimension(dimension, mastery, word)
+diff --git a/services/vocabulary_context.py b/services/vocabulary_context.py
+index 680e4553..6ad042d7 100644
+--- a/services/vocabulary_context.py
++++ b/services/vocabulary_context.py
+@@ -13,6 +13,7 @@ import re
+ from collections.abc import Iterable
+ 
+ from dictation_answers import parse_vocabulary_word_variants
++from services.vocabulary_synonyms import is_synonym_word
+ 
+ _WORD_BOUNDARY = r"(?<![A-Za-z]){target}(?![A-Za-z])"
+ _COLLOCATION_TOKEN_RE = re.compile(r"[A-Za-z]+(?:['-][A-Za-z]+)*'?$")
+@@ -347,7 +348,9 @@ def build_context_question(
+     a word with several reliable materials does not always show the same form.
+     """
+ 
+-    candidates = list(candidates or [])
++    if is_synonym_word(word):
++        return None
++    candidates = [candidate for candidate in (candidates or []) if not is_synonym_word(candidate)]
+     seed = seed or f"word:{getattr(word, 'id', '')}"
+     builder_specs = (
+         ("example_fill", lambda: _example_fill(word, seed)),
+diff --git a/services/vocabulary_synonyms.py b/services/vocabulary_synonyms.py
+new file mode 100644
+index 00000000..839a2ade
+--- /dev/null
++++ b/services/vocabulary_synonyms.py
+@@ -0,0 +1,73 @@
++"""Explicit classroom synonym pairs using the existing recall snapshot contract.
++
++Explicit sense metadata, rather than a display-string prefix, identifies this
++material.  ``context_fill`` is the existing client's free English response
++renderer; the mastery dimension remains meaning/form recall.
++"""
++
++from __future__ import annotations
++
++import hashlib
++
++from dictation_answers import canonical_vocabulary_word
++
++SYNONYM_SENSE_PREFIX = "classroom-synonym:v1:"
++SYNONYM_SENSE_POS = "synonym"
++
++
++def synonym_sense_key(left, right):
++    pair = f"{canonical_vocabulary_word(left)}\x1f{canonical_vocabulary_word(right)}"
++    return SYNONYM_SENSE_PREFIX + hashlib.sha256(pair.encode("utf-8")).hexdigest()
++
++
++def is_synonym_word(word):
++    sense = getattr(word, "sense", None)
++    # Either marker preserves the intent if the other field was damaged.
++    # The builder requires both plus the complete pair hash before grading.
++    return bool(
++        sense
++        and (
++            getattr(sense, "part_of_speech", None) == SYNONYM_SENSE_POS
++            or str(getattr(sense, "canonical_key", "")).startswith(SYNONYM_SENSE_PREFIX)
++        )
++    )
++
++
++def build_synonym_question(word, dimension, stage=0):
++    if not is_synonym_word(word) or dimension not in {"meaning_recall", "form_recall"}:
++        return None
++    sense = word.sense
++    left = str(sense.lemma or "").strip()
++    right = str(sense.definition_en or "").strip()
++    if (
++        not left
++        or not right
++        or sense.part_of_speech != SYNONYM_SENSE_POS
++        or sense.canonical_key != synonym_sense_key(left, right)
++        or not canonical_vocabulary_word(left)
++        or not canonical_vocabulary_word(right)
++        or canonical_vocabulary_word(word.word) != canonical_vocabulary_word(left)
++    ):
++        return None
++    cue, answer = (left, right) if dimension == "meaning_recall" else (right, left)
++    seed = f"{word.id}:{sense.canonical_key}:{dimension}:{stage}"
++    return (
++        {
++            "question_id": "synonym_" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:24],
++            "dimension": dimension,
++            "kind": "synonym_recall",
++            "mode": "context_fill",
++            "prompt": {
++                "instruction": "填写课堂词表中的同义词或词组",
++                "sentence": f"{cue} = ____",
++            },
++            "options": [],
++            "answer_type": "english",
++            "input_mode": "native",
++        },
++        {
++            "answer": canonical_vocabulary_word(answer),
++            "accepted_answers": [],
++            "answer_type": "english",
++        },
++    )
