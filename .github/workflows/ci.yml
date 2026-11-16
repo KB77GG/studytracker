@@ -112,7 +112,9 @@ jobs:
       - name: Test classroom vocabulary import and student learning
         run: python -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -v
       - name: Test vocabulary entry performance and review eligibility
-        run: python -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review -v
+        run: |
+          python -m pip install 'pyphen>=0.17'
+          python -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review -v
       - name: Test verified small-class homework recipients and assignments
         run: python -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access -v
       - name: Test submitted mock paper review access and saved results
