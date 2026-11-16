@@ -1933,8 +1933,20 @@ def continue_review(
     return claim_today_review(user, now=now, origin_task_id=session.origin_task_id)
 
 
-def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -> dict:
-    """Tell a task launcher whether one finite autonomous batch is required."""
+def review_preflight(
+    user: User,
+    task_id: int,
+    *,
+    now: datetime | None = None,
+    gate_only: bool = False,
+) -> dict:
+    """Tell a task launcher whether one finite autonomous batch is required.
+
+    ``gate_only`` is for callers that only act on ``required`` (every step of an
+    in-progress learning task).  Scanning the student's whole due backlog costs
+    time proportional to its size, so it is skipped whenever the answer cannot
+    depend on it; ``due_count`` is then ``None``.
+    """
 
     now = utc_naive(now)
     task = _validate_origin_task(user, task_id)
@@ -1947,7 +1959,6 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
     )
     review_date = _review_date_for_origin_task(task, now)
     active = _active_session_for_date(user.id, review_date)
-    due_count = _due_count(user, now)
     latest_settled = (
         VocabularyReviewSession.query.filter_by(
             student_id=user.id,
@@ -1957,6 +1968,10 @@ def review_preflight(user: User, task_id: int, *, now: datetime | None = None) -
         .order_by(VocabularyReviewSession.settled_at.desc(), VocabularyReviewSession.id.desc())
         .first()
     )
+    # ``required`` below is False for a started task, and for a task whose day
+    # already has a settled batch and no active one, whatever the backlog is.
+    backlog_cannot_gate = task_flow_started or (active is None and latest_settled is not None)
+    due_count = None if gate_only and backlog_cannot_gate else _due_count(user, now)
     # A fully settled batch is a student/date-bound clearance, regardless of
     # whether it was entered from Home or from a particular task. This keeps
     # the finite-batch overload guard useful when a student has two tasks in a

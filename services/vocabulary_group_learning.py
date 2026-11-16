@@ -967,7 +967,7 @@ def _require_daily_clearance(user, task_id, now):
             **error.details,
         ) from error
     try:
-        gate = review_preflight(user, task_id, now=now)
+        gate = review_preflight(user, task_id, now=now, gate_only=True)
     except OperationalError as error:
         raise VocabularyGroupLearningError("state_conflict", 409, retryable=True) from error
     except VocabularyAutonomousReviewError as error:

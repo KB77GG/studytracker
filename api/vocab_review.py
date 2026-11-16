@@ -99,7 +99,9 @@ def get_dictation_queue(task_id):
         task = Task.query.get(task_id)
         if is_vocabulary_v2_task(task):
             if not task_date_access(task).read_only:
-                gate = review_preflight(request.current_api_user, task_id)
+                gate = review_preflight(
+                    request.current_api_user, task_id, gate_only=True
+                )
                 if gate["required"]:
                     recovered = _gated_saved_group_response(
                         request.current_api_user, task_id, gate
@@ -151,7 +153,9 @@ def get_vocabulary_queue(task_id):
         if not is_vocabulary_v2_task(task):
             raise VocabularyMasteryError("task_not_vocabulary_v2", 409)
         if not task_date_access(task).read_only:
-            gate = review_preflight(request.current_api_user, task_id)
+            gate = review_preflight(
+                request.current_api_user, task_id, gate_only=True
+            )
             if gate["required"]:
                 recovered = _gated_saved_group_response(
                     request.current_api_user, task_id, gate
