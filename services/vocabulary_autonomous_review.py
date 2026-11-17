@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import secrets
+from contextlib import closing
 from datetime import datetime, time, timedelta, timezone
 from functools import lru_cache
 
@@ -51,6 +52,7 @@ from services.vocabulary_context import (
     _example_fill,
     grade_context_answer,
 )
+from services.vocabulary_due_cache import cached_due_sense_ids
 from services.vocabulary_mastery import (
     DIMENSIONS,
     MAX_ENGLISH_ANSWER_LENGTH,
@@ -75,6 +77,7 @@ from services.vocabulary_remediation import (
     remediation_kind_for_dimension,
     remediation_priority,
 )
+from services.vocabulary_review_selection import due_metadata_pages
 from services.vocabulary_synonyms import build_synonym_question, is_synonym_word
 
 MAX_REVIEW_BATCH = 20
@@ -572,23 +575,145 @@ def _due_candidates(user: User, now: datetime | None = None) -> list[dict]:
     return result
 
 
+def _iter_due_candidates(user, now, *, only_sense_ids=None, exclude_sense_ids=None):
+    """Fresh candidates in the legacy order, with paged eligibility work."""
+
+    catalogs = {}
+    context_choices = {}
+    seen = set()
+    with closing(
+        due_metadata_pages(
+            user.id, now, only_sense_ids=only_sense_ids, exclude_sense_ids=exclude_sense_ids
+        )
+    ) as pages:
+        for rows in pages:
+            masteries = {
+                row.id: row
+                for row in StudentVocabularyMastery.query.filter(
+                    StudentVocabularyMastery.id.in_({row.mastery_id for row in rows})
+                )
+                .populate_existing()
+                .all()
+            }
+            words = {
+                row.id: row
+                for row in DictationWord.query.options(joinedload(DictationWord.book))
+                .filter(DictationWord.id.in_({row.word_id for row in rows}))
+                .populate_existing()
+                .all()
+            }
+            for row in rows:
+                if row.sense_id in seen:
+                    continue
+                mastery = masteries.get(row.mastery_id)
+                word = words.get(row.word_id)
+                if (
+                    not mastery
+                    or not word
+                    or not _candidate_is_eligible(
+                        word, mastery, row.dimension, catalogs, context_choices
+                    )
+                ):
+                    continue
+                seen.add(row.sense_id)
+                yield {
+                    "word": word,
+                    "mastery": mastery,
+                    "dimension": row.dimension,
+                    "due_at": row.due_at,
+                    "stage": row.stage,
+                    "remediation_kind": {3: "related_dimension", 2: "same_dimension"}.get(
+                        row.remediation_priority
+                    ),
+                    "overdue_seconds": max(0, int((now - row.due_at).total_seconds())),
+                    "last_answered_at": row.last_answered_at,
+                    "error_priority": row.error_priority,
+                    "untested_priority": row.untested_priority,
+                    "remediation_priority": row.remediation_priority,
+                    "dimension_priority": row.dimension_priority,
+                }
+
+
+def _has_due(user, now, *, exclude_sense_ids=None):
+    with closing(
+        _iter_due_candidates(user, now, exclude_sense_ids=exclude_sense_ids)
+    ) as candidates:
+        return next(candidates, None) is not None
+
+
+def _eligible_due_sense_ids(user, now):
+    """Exact count membership without choosing/sorting a winning dimension."""
+
+    rows = StudentVocabularyMastery.query.filter(
+        StudentVocabularyMastery.student_id == user.id,
+        or_(
+            *(
+                getattr(StudentVocabularyMastery, f"{dimension}_next_due_at") <= now
+                for dimension in DIMENSIONS
+            )
+        ),
+    ).all()
+    if not rows:
+        return frozenset()
+    cooled = _answered_senses_on_local_date(user, now)
+    rows = [mastery for mastery in rows if mastery.sense_id not in cooled]
+    words = _bulk_representative_words(rows)
+    today = local_date(now)
+    # Remediation affects membership only after its per-day budget is full.
+    # Otherwise its kind affects ordering, which a numeric count never needs.
+    budget_full = {
+        mastery.sense_id
+        for mastery in rows
+        if mastery.review_remediation_date == today
+        and int(mastery.review_remediation_count or 0) >= MAX_REMEDIATION_PER_WORD
+    }
+    latest = _latest_review_items_by_key(user.id, budget_full) if budget_full else {}
+    catalogs = {}
+    context_choices = {}
+    senses = set()
+    for mastery in rows:
+        word = words.get(mastery.id)
+        if word is None or word.sense_id is None:
+            continue
+        for dimension in DIMENSIONS:
+            due_at = _dimension_due(mastery, dimension)
+            if not due_at or due_at > now:
+                continue
+            if not _candidate_is_eligible(word, mastery, dimension, catalogs, context_choices):
+                continue
+            if mastery.sense_id in budget_full and _candidate_remediation_kind(
+                user, mastery, dimension, now, latest
+            ):
+                continue
+            senses.add(mastery.sense_id)
+            break
+    return frozenset(senses)
+
+
+def _due_sense_ids(user, now):
+    return cached_due_sense_ids(
+        user,
+        now,
+        lambda: _eligible_due_sense_ids(user, now),
+    )
+
+
 def _due_count(user: User, now: datetime | None = None) -> int:
-    return len(_due_candidates(user, now))
+    return len(_due_sense_ids(user, utc_naive(now)))
 
 
 def _session_due_counts(
     user: User,
     session: VocabularyReviewSession,
     now: datetime,
+    due_sense_ids=None,
 ) -> tuple[int, int]:
     """Return actionable count and due debt outside the frozen session."""
 
-    candidates = _due_candidates(user, now)
+    if due_sense_ids is None:
+        due_sense_ids = _due_sense_ids(user, now)
     session_senses = {item.sense_id for item in session.items}
-    outside_due = sum(
-        candidate["mastery"].sense_id not in session_senses
-        for candidate in candidates
-    )
+    outside_due = len(due_sense_ids - session_senses)
     unanswered = sum(
         item.first_attempt_id is None or _correction_required(item)
         for item in session.items
@@ -893,7 +1018,9 @@ def _public_item(
     return payload
 
 
-def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> dict:
+def _session_payload(
+    user: User, session: VocabularyReviewSession, now=None, *, due_sense_ids=None
+) -> dict:
     now = utc_naive(now)
     candidate_cache = {}
     item_rows = list(session.items)
@@ -910,7 +1037,7 @@ def _session_payload(user: User, session: VocabularyReviewSession, now=None) -> 
         _public_item(item, candidate_cache, words_by_id.get(item.word_id))
         for item in item_rows
     ]
-    due_count, remaining_due_count = _session_due_counts(user, session, now)
+    due_count, remaining_due_count = _session_due_counts(user, session, now, due_sense_ids)
     answered_count = sum(
         item["answered"] and not item["correction_required"] for item in items
     )
@@ -1097,6 +1224,40 @@ def _validated_skipped_items(
     return approved
 
 
+def _claim_candidate_signature(candidates):
+    return [
+        {
+            **{key: value for key, value in candidate.items() if key not in {"word", "mastery"}},
+            "word_id": candidate["word"].id,
+            "sense_id": candidate["mastery"].sense_id,
+        }
+        for candidate in candidates
+    ]
+
+
+def _revalidate_claim_candidates(user, now, candidates, prepared_signature):
+    """Recheck only this finite batch after its session insert holds the lock."""
+
+    senses = {candidate["mastery"].sense_id for candidate in candidates}
+    with closing(_iter_due_candidates(user, now, only_sense_ids=senses)) as current:
+        refreshed = _materialize_due_candidates(current, len(candidates))
+    if _claim_candidate_signature(refreshed) != prepared_signature:
+        raise VocabularyAutonomousReviewError("review_claim_changed", 409)
+
+
+def _begin_claim_outer_transaction():
+    """Keep the claim SAVEPOINT inside the route's real SQLite transaction."""
+
+    connection = db.session.connection()
+    if connection.dialect.name == "sqlite":
+        driver = connection.connection.driver_connection
+        if not driver.in_transaction:
+            # Python's legacy sqlite mode does not BEGIN for SELECT. Without
+            # this, releasing the first SAVEPOINT commits the empty session
+            # before revalidation, so a later rollback cannot remove it.
+            connection.exec_driver_sql("BEGIN")
+
+
 def claim_today_review(
     user: User,
     *,
@@ -1118,16 +1279,21 @@ def claim_today_review(
                 **error.details,
             ) from error
     review_date = _review_date_for_origin_task(origin_task, now)
-    _expire_stale_active_sessions(user.id, now)
     active = _active_session_for_date(user.id, review_date)
+    # Display totals are prepared before stale-session updates, attaching an
+    # origin task or inserting a claim can acquire SQLite's write lock.
+    due_sense_ids = _due_sense_ids(user, now)
     if active:
+        _expire_stale_active_sessions(user.id, now)
         if origin_task and active.origin_task_id is None:
             active.origin_task_id = origin_task.id
-        return _session_payload(user, active, now)
+        return _session_payload(user, active, now, due_sense_ids=due_sense_ids)
 
-    candidates = _due_candidates(user, now)
     batch_limit = MAX_REVIEW_BATCH
-    materialized_candidates = _materialize_due_candidates(candidates, batch_limit)
+    with closing(_iter_due_candidates(user, now)) as candidates:
+        materialized_candidates = _materialize_due_candidates(candidates, batch_limit)
+    prepared_signature = _claim_candidate_signature(materialized_candidates)
+    _expire_stale_active_sessions(user.id, now)
     if not materialized_candidates:
         return {
             "ok": True,
@@ -1162,6 +1328,7 @@ def claim_today_review(
         # The unique active claim key is the database-level race guard.  A
         # nested transaction preserves an outer request transaction so the
         # winner's session can be returned after a concurrent loser retries.
+        _begin_claim_outer_transaction()
         with db.session.begin_nested():
             db.session.add(session)
             db.session.flush()
@@ -1170,9 +1337,10 @@ def claim_today_review(
     except IntegrityError:
         active = _active_session_for_date(user.id, review_date)
         if active:
-            return _session_payload(user, active, now)
+            return _session_payload(user, active, now, due_sense_ids=due_sense_ids)
         raise VocabularyAutonomousReviewError("review_claim_conflict", 409) from None
 
+    _revalidate_claim_candidates(user, now, materialized_candidates, prepared_signature)
     for index, candidate in enumerate(materialized_candidates):
         word = candidate["word"]
         item = VocabularyReviewItem(
@@ -1196,7 +1364,7 @@ def claim_today_review(
         )
         db.session.add(item)
     db.session.flush()
-    return _session_payload(user, session, now)
+    return _session_payload(user, session, now, due_sense_ids=due_sense_ids)
 
 
 def get_review_session(user: User, session_id: int, session_token: str | None = None) -> dict:
@@ -1741,6 +1909,9 @@ def settle_review_session(
         return existing
     if session.status != VocabularyReviewSession.STATUS_ACTIVE:
         raise VocabularyAutonomousReviewError("review_session_not_active", 409)
+    # Take the (possibly cold) display snapshot before legacy correction
+    # updates or the settlement CAS can acquire the database write lock.
+    due_sense_ids_before = _due_sense_ids(user, now)
     items = (
         VocabularyReviewItem.query.filter_by(session_id=session.id, student_id=user.id)
         .order_by(VocabularyReviewItem.queue_index.asc())
@@ -1749,6 +1920,11 @@ def settle_review_session(
     )
     skipped_items = _validated_skipped_items(session, payload, items)
     skipped_ids = set(skipped_items)
+    affected_senses = {item.sense_id for item in items}
+    # Settlement only changes this batch's senses. Check the unaffected
+    # remainder before taking the write lock; its truth must not come from
+    # the short-lived display count cache.
+    outside_due_exists = _has_due(user, now, exclude_sense_ids=affected_senses)
     if not _supports_correction(payload):
         for item in items:
             _bypass_legacy_correction(item)
@@ -1872,7 +2048,9 @@ def settle_review_session(
         bucket["correct"] += int(bool(attempt.is_correct))
     total_count = len(attempts)
     accuracy = round(correct_count / total_count * 100, 1) if total_count else 0.0
-    remaining_due_count = _due_count(user, now)
+    with closing(_iter_due_candidates(user, now, only_sense_ids=affected_senses)) as candidates:
+        affected_due_senses = {candidate["mastery"].sense_id for candidate in candidates}
+    remaining_due_count = len((due_sense_ids_before - affected_senses) | affected_due_senses)
     result = {
         "ok": True,
         "independent_review": True,
@@ -1889,7 +2067,7 @@ def settle_review_session(
         "skipped_count": len(skipped_ids),
         "skipped_item_ids": sorted(skipped_ids),
         "remaining_due_count": remaining_due_count,
-        "continue_available": remaining_due_count > 0,
+        "continue_available": outside_due_exists or bool(affected_due_senses),
     }
     session.status = VocabularyReviewSession.STATUS_SETTLED
     # The write gate above guarantees that settlement stays on the batch's
@@ -1972,6 +2150,9 @@ def review_preflight(
     # already has a settled batch and no active one, whatever the backlog is.
     backlog_cannot_gate = task_flow_started or (active is None and latest_settled is not None)
     due_count = None if gate_only and backlog_cannot_gate else _due_count(user, now)
+    # Display snapshots never authorize entry. Time passing or an external
+    # edit may make their count stale within the display-only TTL.
+    has_due = False if backlog_cannot_gate or active else _has_due(user, now)
     # A fully settled batch is a student/date-bound clearance, regardless of
     # whether it was entered from Home or from a particular task. This keeps
     # the finite-batch overload guard useful when a student has two tasks in a
@@ -1982,10 +2163,7 @@ def review_preflight(
     # can redirect a student in the middle of a task when a dimension becomes
     # due by a few seconds. Keep Home's review debt/session intact, but let an
     # already-started teacher task resume until its own state machine settles.
-    required = bool(
-        not task_flow_started
-        and (active or (due_count and latest_settled is None))
-    )
+    required = bool(not task_flow_started and (active or (has_due and latest_settled is None)))
     return {
         "ok": True,
         "task_id": task.id,

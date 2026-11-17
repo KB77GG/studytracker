@@ -76,7 +76,9 @@ class VocabularyReviewPerformanceRegressionTest(unittest.TestCase):
                 )
             self.assertEqual(result["due_count"], 1000)
             self.assertTrue(result["required"])
-            self.assertLessEqual(query_count, 13)
+            # The cached numeric count is not gate authority: the fresh,
+            # paged gate adds a fixed metadata/mastery/word lookup (3 SQL).
+            self.assertLessEqual(query_count, 16)
             # Candidate text is parsed once per catalog, not 1,000 times per
             # due word. Keep a generous linear bound for target field checks.
             self.assertLessEqual(parse.call_count, 12000)
