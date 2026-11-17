@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "identities_exported": false,
+  "enrollment": {
+    "ok": true,
+    "read_only_preview": false,
+    "selected_count": 4,
+    "enrolled_count": 4,
+    "enrollment_rows_created": 4,
+    "already_applied": false,
+    "starts_at_utc": "2026-11-17T13:13:36Z",
+    "schema_version": "sources_v1",
+    "policy_parameters": {
+      "daily_limit": 20,
+      "sample_limit": 4,
+      "maintenance_limit": 10,
+      "success_interval_days": 2,
+      "failure_limit": 3,
+      "pause_days": 7,
+      "overdue_days": 7
+    },
+    "preview_valid_for_seconds": 600,
+    "global_switch_unchanged": true,
+    "historical_error_rows_imported": 0,
+    "initial_mandatory_rows_created": 0,
+    "student_identity_rows_exported": false
+  },
+  "feature_flag_written": true,
+  "service_start_command_succeeded": true
+}

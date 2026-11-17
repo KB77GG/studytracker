@@ -1,5 +1,9 @@
 # 四人错词复习试点启动记录
 
+> **已上线并开启四人试点。** 产品 `b66fa0be249e25a5e5c3ea6b95758bc96c4140d7` 已提交、推送main并部署；分支CI44076506774/main CI44084710297业务全过，Deploy44084710211成功，旧advisory lint仍失败。21:13:36北京时间入组4人并开启，21:16回读48文件匹配、4ON/名单外0、服务健康、四人只读summary最大48.071ms/入口36.864ms。没有历史错误导入，指标初始为4人/0新错。证据见`production-enabled.json`、`activation-applied.json`及`release-facts.json`。
+
+> D3已排在2026-11-20 20:00，D14为12-01 20:00，上海时区、原生heartbeat返回当前对话；需本机保持唤醒和应用运行。原生任务ID automation-3/automation-4，任务定义只在本机应用保存。未自动扩大或改变教学规则，也未发新小程序包。
+
 工作树 `/private/tmp/studytracker-vocabulary-error-pilot-20261117`，分支 `codex/vocabulary-error-pilot-20261117`，本轮基线 `513c732f`。用户委托自主审核、选择4–6人并小范围上线；本报告只输出匿名汇总，私有名单留服务器，不通知学生或老师。
 
 ## 规则与评估
@@ -18,7 +22,7 @@
 
 [最终词汇回归](validation/README.md)：双Python各396/396，原349+新增47；不是全仓全部测试。[并发](performance/concurrency-results.md)、[事务独审](core/final-transaction-selection-review.md)、[迁移](core/validation.md)、[指标](metrics/README.md)。最终源码小复测240请求全成功，既有1.144秒多轮限制不因单次变快抹去。
 
-生产SQLite只读确认DELETE、启用前0enrollment；迁移默认dry-run，显式apply仅重建新checkpoint表并保留引用/增加索引，不改旧学习表。默认OFF发布→迁移→OFF回读→精确四人入组→开关/重启→ON回读。当前本段为发布前状态，提交/CI/生产事实完成后追加；尚不能据此称已启用。
+生产SQLite只读确认DELETE、启用前0enrollment；迁移默认dry-run，显式apply仅重建新checkpoint表并保留引用/增加索引，不改旧学习表。默认OFF发布→迁移→OFF回读→精确四人入组→开关/重启→ON回读。该顺序已全部执行，最新事实见顶部及生产JSON。
 
 [只读验收调用](live-verification.md)明确用`--expected-size 4`。实际上线信息、命令和脱敏结果将放本目录；固定小程序源未上传/提审/发布，当前后台兼容现有客户端，不代替真机验收。
 
@@ -31,3 +35,9 @@
 `http-before.json`读取15份留存日志，按UTC日期汇总四类GET端点，非试点四人专属数据。2026-11-17 UTC 00:00–11:30（北京时间08:00–19:30）728请求、0个499/0个5xx；没有request_time，无法由日志给响应时间分位数。之前7个完整UTC日的请求/499分别为1029/5、912/2、768/31、944/2、1488/64、1034/210、1116/59；均0个5xx。多个后台补丁已上线，不能把改善单独归因于尚未启用的新规则。
 
 最终启用操作为短暂停服务→四人事务入组（再次核无旧active）→原子修改单一全局flag→finally恢复服务，随后ON只读验收。原因是全局OFF时原领取路径不查询新队列表，若先入组后长时间等重启，中间仍可能创建旧批次；停服覆盖这个短窗口，失败保持OFF并恢复服务，不扩大OFF产品查询。
+
+## 启用回读中的保守校验
+
+首次ON回读在.env与worker同一秒切换时拒绝通过：文件mtime比按/proc整秒boot时间推算的worker启动时刻晚0.808554秒，见runtime-timestamp-diagnostic.json。服务/实际flag/四人范围本身均符合，但未跳过时间判定；执行一次额外受控restart，21:15:58启动后21:16全部回读通过。不能把首次失败隐写成首次全部成功。
+
+396双版本验证后仅有管理/诊断和记录变化：selector增加人数不足时的只读汇总并格式化，双版本3项重跑；manager加锁内callback，新15+原16双版本31项通过。生产验收器11、日志9、停启6各双版本通过，教师JS6通过；这些单独记录，不与396重复相加冒称一轮总数。最新manifest覆盖48源码/测试/运维文件。

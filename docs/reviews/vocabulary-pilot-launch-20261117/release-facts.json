@@ -1,0 +1,48 @@
+{
+  "release_commit": "b66fa0be249e25a5e5c3ea6b95758bc96c4140d7",
+  "branch": "codex/vocabulary-error-pilot-20261117",
+  "runs": {
+    "branch_ci": 44076506774,
+    "main_ci": 44084710297,
+    "deployment": 44084710211
+  },
+  "business_jobs": "test/account-provisioning/task-planner passed",
+  "advisory_lint": "existing nonblocking failure",
+  "activation_at_utc": "2026-11-17T13:13:36Z",
+  "enabled_students": 4,
+  "other_enabled_students": 0,
+  "historical_import": 0,
+  "parameters": {
+    "daily": 20,
+    "sample": 4,
+    "maintenance": 10,
+    "success_interval_days": 2,
+    "failure_days": 3,
+    "pause_days": 7,
+    "overdue_days": 7
+  },
+  "manifest_files": 48,
+  "production_runtime_verified_at_utc": "2026-11-17T13:16:14.228128+00:00",
+  "checkpoints_schema": "sources_v1",
+  "mini_program_new_upload_or_publication": false,
+  "followups": [
+    {
+      "id": "automation-3",
+      "at_shanghai": "2026-11-20 20:00",
+      "status": "ACTIVE",
+      "kind": "heartbeat"
+    },
+    {
+      "id": "automation-4",
+      "at_shanghai": "2026-12-01 20:00",
+      "status": "ACTIVE",
+      "kind": "heartbeat"
+    }
+  ],
+  "limitations": [
+    "No student impersonation, answers, claims or settlement; production checks are read-only service replay plus anonymous HTTP.",
+    "Extreme optional partial pool 6-way synthetic tail 1.144s; strict all-path 1s criterion not met.",
+    "Local followup needs computer awake and desktop app running.",
+    "Graduation D7 efficacy/coverage requires future natural student activity."
+  ]
+}

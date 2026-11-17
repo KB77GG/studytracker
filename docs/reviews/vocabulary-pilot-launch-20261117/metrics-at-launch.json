@@ -1,0 +1,224 @@
+{
+  "ok": true,
+  "as_of_utc": "2026-11-17T13:16:50.734624Z",
+  "cohort_to_date": true,
+  "student_count": 4,
+  "error_abilities": 0,
+  "formal_reviews_per_error_ability": {
+    "n": 0,
+    "sum": 0,
+    "mean": null,
+    "p50": null,
+    "p90": null,
+    "max": null
+  },
+  "error_abilities_never_reviewed": 0,
+  "success_resets": {
+    "definition": "success_count>0 to 0 caused by an error; repeated 0-to-0 and new cycles excluded",
+    "total": 0,
+    "review_triggered": 0,
+    "learning_triggered": 0,
+    "by_trigger": {
+      "review_error": 0,
+      "learning_error": 0,
+      "sample_error": 0,
+      "maintenance_error": 0,
+      "other": 0
+    },
+    "abilities_reset_at_least_twice": {
+      "numerator": 0,
+      "denominator": 0,
+      "ratio": null
+    },
+    "abilities_review_reset_at_least_twice": {
+      "numerator": 0,
+      "denominator": 0,
+      "ratio": null
+    }
+  },
+  "weekly_pauses": {
+    "week_start": "2026-11-16",
+    "week_end": "2026-11-22",
+    "student_words": 0,
+    "events": 0,
+    "per_student_words": {
+      "n": 4,
+      "sum": 0,
+      "mean": 0.0,
+      "p50": 0.0,
+      "p90": 0.0,
+      "max": 0
+    },
+    "per_teacher_student_words": {
+      "n": 0,
+      "sum": 0,
+      "mean": null,
+      "p50": null,
+      "p90": null,
+      "max": null
+    }
+  },
+  "retention": {
+    "graduation_d7": {
+      "opportunities": 0,
+      "due": 0,
+      "not_yet_due": 0,
+      "observed": 0,
+      "on_time_observed": 0,
+      "correct": 0,
+      "on_time_correct": 0,
+      "unobserved": 0,
+      "missed": 0,
+      "pending_today": 0,
+      "late_observed": 0,
+      "early_observed": 0,
+      "status_answered_without_event": 0,
+      "delay_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "elapsed_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      }
+    },
+    "first_correct_d7": {
+      "opportunities": 0,
+      "due": 0,
+      "not_yet_due": 0,
+      "observed": 0,
+      "on_time_observed": 0,
+      "correct": 0,
+      "on_time_correct": 0,
+      "unobserved": 0,
+      "missed": 0,
+      "pending_today": 0,
+      "late_observed": 0,
+      "early_observed": 0,
+      "status_answered_without_event": 0,
+      "delay_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "elapsed_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      }
+    },
+    "first_correct_d30": {
+      "opportunities": 0,
+      "due": 0,
+      "not_yet_due": 0,
+      "observed": 0,
+      "on_time_observed": 0,
+      "correct": 0,
+      "on_time_correct": 0,
+      "unobserved": 0,
+      "missed": 0,
+      "pending_today": 0,
+      "late_observed": 0,
+      "early_observed": 0,
+      "status_answered_without_event": 0,
+      "delay_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "elapsed_days": {
+        "n": 0,
+        "sum": 0,
+        "mean": null,
+        "p50": null,
+        "p90": null,
+        "max": null
+      },
+      "first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_first_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      },
+      "on_time_coverage": {
+        "numerator": 0,
+        "denominator": 0,
+        "ratio": null
+      }
+    }
+  },
+  "interpretation": {
+    "reference_accuracy_band": [
+      0.8,
+      0.85
+    ],
+    "automatic_rule_change": false,
+    "warning": "Small observed samples and incomplete coverage do not justify automatic rule changes."
+  }
+}

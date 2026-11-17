@@ -1,0 +1,111 @@
+{
+  "read_only": true,
+  "identities_exported": false,
+  "real_wechat_end_to_end": false,
+  "enabled_expected": false,
+  "at_utc": "2026-11-17T12:38:08.531774+00:00",
+  "expected_size": 4,
+  "head_matches": true,
+  "tracked_clean": true,
+  "manifest_files_verified": 48,
+  "service": {
+    "ok": true,
+    "actual_worker_count": 1,
+    "configuration": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "listener_owned": true,
+    "loopback_only": true,
+    "restart_count": 0,
+    "launch_matches_config": true
+  },
+  "runtime": {
+    "effective_flag_matches_mode": true,
+    "parameters_match": true,
+    "parameters": {
+      "DAILY_LIMIT": 20,
+      "SAMPLE_LIMIT": 4,
+      "MAINTENANCE_LIMIT": 10,
+      "SUCCESS_INTERVAL_DAYS": 2,
+      "FAILURE_LIMIT": 3,
+      "PAUSE_DAYS": 7,
+      "OVERDUE_DAYS": 7
+    },
+    "explicit_process_flag_count": 0,
+    "dotenv_flag_present": false,
+    "dotenv_flag_matches_mode": true,
+    "dotenv_precedes_worker_start": true,
+    "worker_started_after_sources": true,
+    "worker_started_at_utc": "2026-11-17T12:36:59.800000+00:00",
+    "ok": true
+  },
+  "anonymous_http": {
+    "loopback": [
+      {
+        "route": "/login",
+        "status": 200,
+        "ok": true
+      },
+      {
+        "route": "/api/miniprogram/student/vocabulary-review/summary",
+        "status": 401,
+        "ok": true
+      }
+    ],
+    "public": [
+      {
+        "route": "/login",
+        "status": 200,
+        "ok": true
+      },
+      {
+        "route": "/api/miniprogram/student/vocabulary-review/summary",
+        "status": 401,
+        "ok": true
+      }
+    ]
+  },
+  "schema": {
+    "schema_version": "legacy",
+    "checkpoint_rows": 0,
+    "missing_indexes": [
+      "ix_vocab_checkpoint_select",
+      "ix_vocab_error_paused"
+    ],
+    "migration_required": true
+  },
+  "enrollment": {
+    "selected_count": 4,
+    "selected_enabled": 0,
+    "other_enabled": 0,
+    "selected_started": 0,
+    "ok": true
+  },
+  "journal_mode": "delete",
+  "schema_snapshot_zero_writes": true,
+  "replay": {
+    "sample_count": 4,
+    "all_ok": true,
+    "calls_ms": {
+      "summary": {
+        "n": 4,
+        "p50": 467.962,
+        "max": 785.958,
+        "total": 1833.217
+      },
+      "preflight": {
+        "n": 4,
+        "p50": 24.737,
+        "max": 85.482,
+        "total": 142.637
+      }
+    },
+    "all_calls_under_5_seconds": true
+  },
+  "blocked_sql_attempts": 0,
+  "prohibited_imports_absent": true,
+  "ok": true
+}
