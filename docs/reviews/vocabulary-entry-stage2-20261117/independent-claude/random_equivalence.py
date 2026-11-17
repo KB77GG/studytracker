@@ -91,7 +91,7 @@ def main() -> None:
                 db.session.add(sense)
                 db.session.flush()
                 rows = []
-                for copy in range(rng.choice([1, 1, 1, 2])):
+                for _copy in range(rng.choice([1, 1, 1, 2])):
                     blank = rng.random() < 0.08          # cannot produce a meaning question
                     with_example = rng.random() < 0.7
                     word = DictationWord(
@@ -198,7 +198,7 @@ def main() -> None:
             stats["trials_with_remediation"] += any(row[4] for row in legacy_projection)
             stats["trials_with_cooled"] += cooled
             if problems:
-                first = next((i for i, (a, b) in enumerate(zip(legacy_projection, fresh_projection)) if a != b),
+                first = next((i for i, (a, b) in enumerate(zip(legacy_projection, fresh_projection, strict=False)) if a != b),
                              min(len(legacy_projection), len(fresh_projection)))
                 stats["mismatches"].append({
                     "trial": trial, "size": size, "problems": problems, "legacy_len": len(legacy_projection),
