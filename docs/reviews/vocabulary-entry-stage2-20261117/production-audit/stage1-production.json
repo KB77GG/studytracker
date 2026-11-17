@@ -1,0 +1,11 @@
+{
+  "status": "not_executed_approval_interrupted",
+  "ok": false,
+  "production_script_execution_confirmed": false,
+  "gate_only_probe_executed": false,
+  "log_windows_compared": false,
+  "initial_attempt": "sandbox SSH rejected with Operation not permitted; exit 255",
+  "escalated_attempt": "approval wait interrupted after 748.5 seconds; no cell or session identifier returned",
+  "local_process_inventory": "ps denied by sandbox; no further approval or production query requested",
+  "note": "This is a local execution-status record, not a production acceptance result. Earlier successful direct health readback is recorded separately in README.md."
+}

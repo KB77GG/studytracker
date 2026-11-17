@@ -1,0 +1,938 @@
+{
+  "synthetic_only": true,
+  "repo": "/private/tmp/studytracker-stage2-baseline-20261117",
+  "python": "3.10.20",
+  "sqlite": "3.53.1",
+  "flows": [
+    {
+      "backlog": 0,
+      "cold": {
+        "kind": "summary_cold",
+        "status": 200,
+        "elapsed_s": 0.0037040410097688437,
+        "backlog_s": 0.0011458341032266617,
+        "backlog_calls": 1,
+        "sql": 3,
+        "eligibility_checks": 0,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 0,
+        "total_count": null
+      },
+      "warm": {
+        "kind": "summary_warm",
+        "status": 200,
+        "elapsed_s": 0.0010009999386966228,
+        "backlog_s": 0.00021750014275312424,
+        "backlog_calls": 1,
+        "sql": 3,
+        "eligibility_checks": 0,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 0,
+        "total_count": null
+      },
+      "requests": [
+        {
+          "request": "home: review summary",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 0.8,
+          "max_ms": 0.8,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.245,
+          "median_sql_statements": 3
+        },
+        {
+          "request": "task page: preflight",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 3.7,
+          "max_ms": 3.7,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.056,
+          "median_sql_statements": 7
+        },
+        {
+          "request": "learning: first queue (enter)",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 41.8,
+          "max_ms": 41.8,
+          "backlog_recomputations_per_request": 2,
+          "share_of_time_in_backlog_recompute": 0.009,
+          "median_sql_statements": 183
+        },
+        {
+          "request": "learning: mark word viewed",
+          "count": 10,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.9,
+          "max_ms": 6.3,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 16
+        },
+        {
+          "request": "learning: submit answer",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.6,
+          "max_ms": 33.1,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 20
+        },
+        {
+          "request": "learning: next queue",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 5.6,
+          "max_ms": 8.3,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 26
+        }
+      ],
+      "eligibility_by_request": {
+        "home: review summary": [
+          0
+        ],
+        "learning: first queue (enter)": [
+          0
+        ],
+        "learning: mark word viewed": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: next queue": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: submit answer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "task page: preflight": [
+          0
+        ]
+      },
+      "non_2xx": 0
+    },
+    {
+      "backlog": 500,
+      "cold": {
+        "kind": "summary_cold",
+        "status": 200,
+        "elapsed_s": 0.12012866605073214,
+        "backlog_s": 0.1183261249680072,
+        "backlog_calls": 1,
+        "sql": 6,
+        "eligibility_checks": 500,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 500,
+        "total_count": null
+      },
+      "warm": {
+        "kind": "summary_warm",
+        "status": 200,
+        "elapsed_s": 0.02467616694048047,
+        "backlog_s": 0.022953582927584648,
+        "backlog_calls": 1,
+        "sql": 6,
+        "eligibility_checks": 500,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 500,
+        "total_count": null
+      },
+      "requests": [
+        {
+          "request": "home: review summary",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 23.8,
+          "max_ms": 23.8,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.942,
+          "median_sql_statements": 6
+        },
+        {
+          "request": "task page: preflight",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 24.6,
+          "max_ms": 24.6,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.914,
+          "median_sql_statements": 10
+        },
+        {
+          "request": "review: claim batch",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 146.7,
+          "max_ms": 146.7,
+          "backlog_recomputations_per_request": 2,
+          "share_of_time_in_backlog_recompute": 0.763,
+          "median_sql_statements": 39
+        },
+        {
+          "request": "review: answer",
+          "count": 20,
+          "statuses": [
+            200
+          ],
+          "median_ms": 3.1,
+          "max_ms": 6.4,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 15
+        },
+        {
+          "request": "review: settle",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 29.2,
+          "max_ms": 29.2,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.737,
+          "median_sql_statements": 35
+        },
+        {
+          "request": "learning: first queue (enter)",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 29.1,
+          "max_ms": 29.1,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 181
+        },
+        {
+          "request": "learning: mark word viewed",
+          "count": 10,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.1,
+          "max_ms": 28.0,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 16
+        },
+        {
+          "request": "learning: submit answer",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.6,
+          "max_ms": 13.8,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 20
+        },
+        {
+          "request": "learning: next queue",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 5.3,
+          "max_ms": 5.6,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 26
+        }
+      ],
+      "eligibility_by_request": {
+        "home: review summary": [
+          500
+        ],
+        "learning: first queue (enter)": [
+          0
+        ],
+        "learning: mark word viewed": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: next queue": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: submit answer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "review: answer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "review: claim batch": [
+          1000
+        ],
+        "review: settle": [
+          480
+        ],
+        "task page: preflight": [
+          500
+        ]
+      },
+      "non_2xx": 0
+    },
+    {
+      "backlog": 2400,
+      "cold": {
+        "kind": "summary_cold",
+        "status": 200,
+        "elapsed_s": 0.4650369160808623,
+        "backlog_s": 0.4596601251978427,
+        "backlog_calls": 1,
+        "sql": 6,
+        "eligibility_checks": 2400,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 2400,
+        "total_count": null
+      },
+      "warm": {
+        "kind": "summary_warm",
+        "status": 200,
+        "elapsed_s": 0.4644989580847323,
+        "backlog_s": 0.4590335830580443,
+        "backlog_calls": 1,
+        "sql": 6,
+        "eligibility_checks": 2400,
+        "ok": true,
+        "error": null,
+        "required": null,
+        "due_count": 2400,
+        "total_count": null
+      },
+      "requests": [
+        {
+          "request": "home: review summary",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 467.1,
+          "max_ms": 467.1,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.988,
+          "median_sql_statements": 6
+        },
+        {
+          "request": "task page: preflight",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 468.2,
+          "max_ms": 468.2,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.987,
+          "median_sql_statements": 10
+        },
+        {
+          "request": "review: claim batch",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 1020.9,
+          "max_ms": 1020.9,
+          "backlog_recomputations_per_request": 2,
+          "share_of_time_in_backlog_recompute": 0.873,
+          "median_sql_statements": 39
+        },
+        {
+          "request": "review: answer",
+          "count": 20,
+          "statuses": [
+            200
+          ],
+          "median_ms": 3.2,
+          "max_ms": 4.1,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 15
+        },
+        {
+          "request": "review: settle",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 469.8,
+          "max_ms": 469.8,
+          "backlog_recomputations_per_request": 1,
+          "share_of_time_in_backlog_recompute": 0.978,
+          "median_sql_statements": 35
+        },
+        {
+          "request": "learning: first queue (enter)",
+          "count": 1,
+          "statuses": [
+            200
+          ],
+          "median_ms": 29.7,
+          "max_ms": 29.7,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 181
+        },
+        {
+          "request": "learning: mark word viewed",
+          "count": 10,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.2,
+          "max_ms": 4.6,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 16
+        },
+        {
+          "request": "learning: submit answer",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 4.6,
+          "max_ms": 16.3,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 20
+        },
+        {
+          "request": "learning: next queue",
+          "count": 30,
+          "statuses": [
+            200
+          ],
+          "median_ms": 5.4,
+          "max_ms": 6.3,
+          "backlog_recomputations_per_request": 0,
+          "share_of_time_in_backlog_recompute": 0.0,
+          "median_sql_statements": 26
+        }
+      ],
+      "eligibility_by_request": {
+        "home: review summary": [
+          2400
+        ],
+        "learning: first queue (enter)": [
+          0
+        ],
+        "learning: mark word viewed": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: next queue": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "learning: submit answer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "review: answer": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "review: claim batch": [
+          4800
+        ],
+        "review: settle": [
+          2380
+        ],
+        "task page: preflight": [
+          2400
+        ]
+      },
+      "non_2xx": 0
+    }
+  ],
+  "concurrent_first_open": [
+    {
+      "students": 1,
+      "rows": [
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 0.47028162493370473,
+            "backlog_s": 0.4640638339333236,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 1.0672898748889565,
+            "backlog_s": 0.899774125078693,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        }
+      ]
+    },
+    {
+      "students": 6,
+      "rows": [
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 2.3371327079366893,
+            "backlog_s": 2.294900333043188,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 8.194795333780348,
+            "backlog_s": 4.92273945803754,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        },
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 2.5226239999756217,
+            "backlog_s": 2.493142625084147,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 9.431181791936979,
+            "backlog_s": 3.2534222931135446,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        },
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 2.9608163330703974,
+            "backlog_s": 2.9304488331545144,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 8.058304166886955,
+            "backlog_s": 3.9627657090313733,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        },
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 3.44114066590555,
+            "backlog_s": 3.3708809160161763,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 6.522327957907692,
+            "backlog_s": 4.715444708010182,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        },
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 3.865786167094484,
+            "backlog_s": 3.8355917499866337,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 7.608723625075072,
+            "backlog_s": 4.055575082078576,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        },
+        {
+          "preflight": {
+            "kind": "preflight_cold",
+            "status": 200,
+            "elapsed_s": 1.4790970419999212,
+            "backlog_s": 1.4657942079938948,
+            "backlog_calls": 1,
+            "sql": 10,
+            "eligibility_checks": 2400,
+            "ok": true,
+            "error": null,
+            "required": true,
+            "due_count": 2400,
+            "total_count": null
+          },
+          "claim": {
+            "kind": "claim_after_preflight",
+            "status": 200,
+            "elapsed_s": 7.996581457788125,
+            "backlog_s": 4.807614084100351,
+            "backlog_calls": 2,
+            "sql": 39,
+            "eligibility_checks": 4800,
+            "ok": true,
+            "error": null,
+            "required": null,
+            "due_count": 2400,
+            "total_count": 20
+          }
+        }
+      ]
+    }
+  ],
+  "all_requests_successful": true
+}

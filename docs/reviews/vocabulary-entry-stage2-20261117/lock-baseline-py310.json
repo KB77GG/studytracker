@@ -1,0 +1,78 @@
+{
+  "synthetic_only": true,
+  "due_backlog_words": 2400,
+  "requests": [
+    {
+      "request": "home: review summary",
+      "count": 1,
+      "median_request_ms": 478.2,
+      "median_write_lock_held_ms": 0.0,
+      "max_write_lock_held_ms": 0.0,
+      "backlog_scans_per_request": 1
+    },
+    {
+      "request": "task page: preflight",
+      "count": 1,
+      "median_request_ms": 490.3,
+      "median_write_lock_held_ms": 0.0,
+      "max_write_lock_held_ms": 0.0,
+      "backlog_scans_per_request": 1
+    },
+    {
+      "request": "review: claim batch",
+      "count": 1,
+      "median_request_ms": 1089.6,
+      "median_write_lock_held_ms": 483.7,
+      "max_write_lock_held_ms": 483.7,
+      "backlog_scans_per_request": 2
+    },
+    {
+      "request": "review: answer",
+      "count": 20,
+      "median_request_ms": 3.6,
+      "median_write_lock_held_ms": 1.6,
+      "max_write_lock_held_ms": 24.0,
+      "backlog_scans_per_request": 0
+    },
+    {
+      "request": "review: settle",
+      "count": 1,
+      "median_request_ms": 486.1,
+      "median_write_lock_held_ms": 483.3,
+      "max_write_lock_held_ms": 483.3,
+      "backlog_scans_per_request": 1
+    },
+    {
+      "request": "learning: first queue (enter)",
+      "count": 1,
+      "median_request_ms": 40.1,
+      "median_write_lock_held_ms": 32.3,
+      "max_write_lock_held_ms": 32.3,
+      "backlog_scans_per_request": 0
+    },
+    {
+      "request": "learning: mark word viewed",
+      "count": 10,
+      "median_request_ms": 4.5,
+      "median_write_lock_held_ms": 2.0,
+      "max_write_lock_held_ms": 3.1,
+      "backlog_scans_per_request": 0
+    },
+    {
+      "request": "learning: submit answer",
+      "count": 30,
+      "median_request_ms": 5.3,
+      "median_write_lock_held_ms": 2.1,
+      "max_write_lock_held_ms": 11.7,
+      "backlog_scans_per_request": 0
+    },
+    {
+      "request": "learning: next queue",
+      "count": 30,
+      "median_request_ms": 5.8,
+      "median_write_lock_held_ms": 0.0,
+      "max_write_lock_held_ms": 0.0,
+      "backlog_scans_per_request": 0
+    }
+  ]
+}

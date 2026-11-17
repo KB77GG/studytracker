@@ -1,0 +1,23 @@
+{
+  "read_only_finite_selection": true,
+  "real_claim_executed": false,
+  "cases": [
+    {
+      "case": "case_a",
+      "sample_size": 20,
+      "elapsed_ms": 223.481,
+      "query_only": true,
+      "total_changes_zero": true,
+      "no_pending_orm": true
+    },
+    {
+      "case": "case_b",
+      "sample_size": 20,
+      "elapsed_ms": 339.92,
+      "query_only": true,
+      "total_changes_zero": true,
+      "no_pending_orm": true
+    }
+  ],
+  "blocked_sql_attempts": 0
+}
