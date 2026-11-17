@@ -1,0 +1,214 @@
+{
+  "python": "3.10.20",
+  "synthetic_only": true,
+  "database": "SQLite in-memory, one thread",
+  "history_sql_and_fetched_rows_equal": true,
+  "history_cases": [
+    {
+      "unrelated_legacy_masteries": 0,
+      "current_error_abilities": 10,
+      "metrics": [
+        {
+          "path": "summary",
+          "sql_statements": 9,
+          "fetched_rows": 15,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 5.615,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "task_preflight",
+          "sql_statements": 12,
+          "fetched_rows": 17,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 4.324,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "claim_10",
+          "sql_statements": 79,
+          "fetched_rows": 212,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 21.475,
+          "first_dml_to_commit_ms": 14.212
+        },
+        {
+          "path": "first_correct_answer",
+          "sql_statements": 26,
+          "fetched_rows": 12,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 29.644,
+          "first_dml_to_commit_ms": 25.719
+        },
+        {
+          "path": "settle_10",
+          "sql_statements": 32,
+          "fetched_rows": 52,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 6.869,
+          "first_dml_to_commit_ms": 4.444
+        },
+        {
+          "path": "task_queue_first",
+          "sql_statements": 35,
+          "fetched_rows": 50,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 12.69,
+          "first_dml_to_commit_ms": 5.536
+        },
+        {
+          "path": "task_queue_existing",
+          "sql_statements": 16,
+          "fetched_rows": 14,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 3.223,
+          "first_dml_to_commit_ms": 0
+        }
+      ]
+    },
+    {
+      "unrelated_legacy_masteries": 2400,
+      "current_error_abilities": 10,
+      "metrics": [
+        {
+          "path": "summary",
+          "sql_statements": 9,
+          "fetched_rows": 15,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 5.549,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "task_preflight",
+          "sql_statements": 12,
+          "fetched_rows": 17,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 4.342,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "claim_10",
+          "sql_statements": 79,
+          "fetched_rows": 212,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 24.839,
+          "first_dml_to_commit_ms": 17.466
+        },
+        {
+          "path": "first_correct_answer",
+          "sql_statements": 26,
+          "fetched_rows": 12,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 7.505,
+          "first_dml_to_commit_ms": 4.81
+        },
+        {
+          "path": "settle_10",
+          "sql_statements": 32,
+          "fetched_rows": 52,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 6.602,
+          "first_dml_to_commit_ms": 4.163
+        },
+        {
+          "path": "task_queue_first",
+          "sql_statements": 35,
+          "fetched_rows": 50,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 10.787,
+          "first_dml_to_commit_ms": 4.532
+        },
+        {
+          "path": "task_queue_existing",
+          "sql_statements": 16,
+          "fetched_rows": 14,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 3.06,
+          "first_dml_to_commit_ms": 0
+        }
+      ]
+    },
+    {
+      "unrelated_legacy_masteries": 10000,
+      "current_error_abilities": 10,
+      "metrics": [
+        {
+          "path": "summary",
+          "sql_statements": 9,
+          "fetched_rows": 15,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 4.801,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "task_preflight",
+          "sql_statements": 12,
+          "fetched_rows": 17,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 4.641,
+          "first_dml_to_commit_ms": 0
+        },
+        {
+          "path": "claim_10",
+          "sql_statements": 79,
+          "fetched_rows": 212,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 21.206,
+          "first_dml_to_commit_ms": 14.594
+        },
+        {
+          "path": "first_correct_answer",
+          "sql_statements": 26,
+          "fetched_rows": 12,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 7.495,
+          "first_dml_to_commit_ms": 4.922
+        },
+        {
+          "path": "settle_10",
+          "sql_statements": 32,
+          "fetched_rows": 52,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 6.686,
+          "first_dml_to_commit_ms": 4.252
+        },
+        {
+          "path": "task_queue_first",
+          "sql_statements": 35,
+          "fetched_rows": 50,
+          "legacy_mastery_statements": 2,
+          "elapsed_ms": 10.729,
+          "first_dml_to_commit_ms": 4.213
+        },
+        {
+          "path": "task_queue_existing",
+          "sql_statements": 16,
+          "fetched_rows": 14,
+          "legacy_mastery_statements": 0,
+          "elapsed_ms": 3.802,
+          "first_dml_to_commit_ms": 0
+        }
+      ]
+    }
+  ],
+  "capacity_cases": [
+    {
+      "daily_limit": 20,
+      "available_error_abilities": 44,
+      "materialized_items": 20,
+      "batch_limit": 20
+    },
+    {
+      "daily_limit": 30,
+      "available_error_abilities": 44,
+      "materialized_items": 30,
+      "batch_limit": 30
+    },
+    {
+      "daily_limit": 40,
+      "available_error_abilities": 44,
+      "materialized_items": 40,
+      "batch_limit": 40
+    }
+  ]
+}

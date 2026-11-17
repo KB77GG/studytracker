@@ -22,3 +22,5 @@ node --check miniprogram/pages/student/vocabulary-review/index.js
 `prepare_patch.py`核451来源SHA，只有4产品变化，447完全一致；输出manifest、patch、最终4文件及测试。这里只是增量归档，不是完整小程序包，不能用后台树或该files目录覆盖固定整包。`apply_fixed_client.py`默认只核对；--apply先核所有451SHA、备份4原文件到/tmp，才复制5目标文件并复核447非目标。
 
 应用/固定源复验事实由根收尾追加。尚无本轮整包编译、真机、上传、提审或发布证据。用户真正发包目录始终是 `/Users/zhouxin/Desktop/studytracker-release/miniprogram`。
+
+固定源已应用并复核：4产品+1新测试，447非目标SHA不变；备份在 `/private/tmp/studytracker-error-policy-client-before-20261117`。实际上传目录再次115/115、两JS语法、两页官方wcc/wcsc均通过，证据apply-result.json/fixed-source-tests.log。仍未微信整包编译、真机、上传/提审/发布。

@@ -1,0 +1,35 @@
+{
+  "read_only_preview": true,
+  "selection": "recent_28d_activity_preview_only",
+  "selected_count": 20,
+  "active_student_count": 20,
+  "invalid_or_inactive_count": 0,
+  "unfinished_review_count": 2,
+  "already_enrolled_count": 0,
+  "eligible_new_enrollment_count": 18,
+  "schema_ready": true,
+  "missing_table_count": 0,
+  "existing_policy_rows": {
+    "vocabulary_review_policy_enrollment": 0,
+    "vocabulary_error_queue": 0,
+    "vocabulary_policy_checkpoint": 0,
+    "vocabulary_policy_allocation": 0,
+    "vocabulary_policy_event": 0
+  },
+  "starts_at_utc": "2026-11-17T06:02:37Z",
+  "database_identity": "025ecfc9cf30141b4c3e8e165f1f99edcde0d158640ae5ef042c091558cbe552",
+  "policy_parameters": {
+    "daily_limit": 20,
+    "sample_limit": 4,
+    "maintenance_limit": 10,
+    "success_interval_days": 2,
+    "failure_limit": 3,
+    "pause_days": 7,
+    "overdue_days": 7
+  },
+  "historical_error_rows_to_import": 0,
+  "initial_mandatory_rows_to_create": 0,
+  "global_switch_unchanged": true,
+  "identity_rows_exported": false,
+  "preview_digest": "aff67b84febdcb644a20839b21f1558fd6c0d575e9d504ea5884297202ab4b2d"
+}

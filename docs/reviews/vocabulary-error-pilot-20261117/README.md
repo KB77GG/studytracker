@@ -1,6 +1,6 @@
 # 错词复习试点实现与发布验收
 
-状态：B2参数已确认；B3代码和默认关闭验收已完成首轮，发布收尾中。尚未启用学生、导入历史错误或发布新小程序。最终部署事实以本报告末尾及 `production-after.json` 为准。
+状态：本会话已确认B2方案的B3默认关闭版本已部署并完成生产回读。未启用学生、未导入历史错误，小程序精确增量已应用但未上传/提审/发布。后续审计分支新增C2建议未确认，C3完整验收未完成，不能据本报告直接启用试点。
 
 实施树 `/private/tmp/studytracker-vocabulary-error-pilot-20261117`，分支 `codex/vocabulary-error-pilot-20261117`，基线 `f414a126`（main309397dd加三份模拟文档）。原桌面main与固定小程序均有其他未提交工作，未整包覆盖。
 
@@ -53,4 +53,14 @@ TZ=UTC PYTHONWARNINGS=ignore /private/tmp/studytracker-stage2-py310/bin/python -
 
 部署前13:28CST只读验收通过：生产7742a802、active/running、NRestarts0、单worker/gthread6/5002、公网200/匿名401；五新表尚不存在，原schema摘要已冻结。两例真实历史数据preflight399/533ms、暖summary1.9/1.3ms；0写入、无app/config或重模型导入。`production-before.json` 不保留学生标识、答案或逐学生数量。
 
-本报告收尾时追加：发布提交、CI/部署run、生产回读、默认关闭与五空表、预演和固定源应用状态。
+产品提交188d29f6，发布HEAD **79dd34f4f07ff435e882908b5454f46fd8dff4f5** 已push任务分支与main。分支CI [44025269334](https://github.com/KB77GG/studytracker/actions/runs/44025269334)、main CI [44026399459](https://github.com/KB77GG/studytracker/actions/runs/44026399459)三个业务job均通过，旧非阻断lint失败如实保留；[Deploy44026399460](https://github.com/KB77GG/studytracker/actions/runs/44026399460)成功。
+
+13:46:47CST服务重启，13:48:36生产只读验收ok：HEAD/23SHA一致、tracked clean、active/running/NRestarts0、单worker/gthread6/5002、公网200/匿名401；5新表全部0行，旧schema摘要与部署前完全一致，总开关env/.env和代码默认off。两历史学生数据preflight586/600ms，暖summary1.77/1.26ms；0写入、无身份/答案输出、不import app/config或重模型。前后是不同时间的只读单次观测，不把毫秒差当因果性能比较。
+
+14:02CST默认预演：最近28天20活跃，18满足新入组前提、2有旧active批次，0已入组；初始队列0、历史导入0，参数20/4/10/2/3/7/7。仅预演，不含--apply；摘要已过期，不能拿它直接启用，指定试点后重新预演。`production-preview.json`只有汇总与不含身份的digest。
+
+固定小程序4产品文件+1测试已精确应用，447非目标SHA保持，实际固定源115/115、官方两页wcc/wcsc与两JS语法复验通过。固定源完整其他未提交代码仍仅本机；本轮增量归档随后台分支可跨机取得，但不是完整小程序包。未整包编译/真机/上传/提审/发布。
+
+发布前fresh fetch另看到审计分支45167aad的C节：三日练到答对不清零只是新的待确认建议，没有替换本次已确认规则。已保留原文在计划，并补独立C3差距报告 `independent/new-plan-gap.md`：双Python七路径在0/2400/10000无关旧mastery的SQL/fetch行数相同，但未纳CI/未覆盖所有题型；daily_limit30/40会物化30/40，锁内新队列扫描与完整1/3/6并发、ON/OFF、写锁及试点前后一周499仍待。当前默认20且OFF没有这些启用风险；启用任何试点前须明确最终规则并补对应验收，不宣称C2/C3完成。
+
+交接同步到各树CODEX_HANDOFF/WORKLOG；本次生产回读和后续说明通过单独[skip ci]文档提交共享，不重复部署，最终文档HEAD以Git为准。
