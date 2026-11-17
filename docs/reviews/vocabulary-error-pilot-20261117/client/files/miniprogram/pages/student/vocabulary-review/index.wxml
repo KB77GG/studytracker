@@ -1,0 +1,181 @@
+<view class="review-page-shell">
+<view class="review-page">
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-shell">
+      <view class="skeleton skeleton-title"></view>
+      <view class="skeleton skeleton-line"></view>
+      <view class="skeleton skeleton-card"></view>
+      <text class="loading-label">加载今日复习</text>
+    </view>
+    <button class="secondary-btn loading-exit" bindtap="exitPage">返回</button>
+  </view>
+
+  <view class="error" wx:elif="{{loadError}}">
+    <text>{{loadError}}</text>
+    <button class="secondary-btn" wx:if="{{conflictingReviewMode}}" bindtap="resumeOtherReview">继续这批复习</button>
+    <button class="secondary-btn" wx:else bindtap="retry">重试</button>
+    <button class="secondary-btn" wx:if="{{conflictingReviewMode}}" bindtap="exitPage">返回</button>
+  </view>
+
+  <view class="empty" wx:elif="{{empty && !finished}}">
+    <image class="empty-icon" src="/images/icons/vocabulary-check-outline.svg" mode="aspectFit" aria-label="完成" />
+    <text class="empty-title">{{reviewPolicyEnabled ? (remainingDueCount > 0 ? '还有待加载的复习题' : (reviewMode === 'maintenance' ? '今天暂无自选巩固' : '今天暂无必做复习')) : '今日没有待复习的词'}}</text>
+    <text class="empty-desc">{{reviewPolicyEnabled ? (remainingDueCount > 0 ? '部分题目暂时无法使用，请继续加载其余题目。' : '可以返回首页继续学习。自选巩固不会阻止新任务。') : '到期词会自动进入这里；老师任务不会被复习词占用。'}}</text>
+    <button class="primary-btn" wx:if="{{reviewPolicyEnabled && remainingDueCount > 0}}" bindtap="retry">继续加载</button>
+    <button class="primary-btn" bindtap="exitPage">返回</button>
+  </view>
+
+  <block wx:elif="{{!finished}}">
+    <view class="header">
+      <view class="header-copy">
+        <text class="header-kicker">{{reviewPolicyEnabled ? (reviewMode === 'maintenance' ? '自选巩固' : '今日必做') : '今日复习'}}</text>
+        <text class="header-title">{{reviewPolicyEnabled ? (reviewMode === 'maintenance' ? '轻量巩固，不影响新任务' : '错词复测与记忆抽查') : '今日词汇复习'}}</text>
+      </view>
+      <view class="header-stats">
+        <text class="progress">{{currentIndex + 1}} / {{totalCount}}</text>
+        <text class="total-count">共 {{totalCount}} {{reviewPolicyEnabled ? '题' : '词'}}</text>
+      </view>
+    </view>
+
+    <view class="progress-track" wx:if="{{totalCount}}">
+      <view class="progress-fill" style="width: {{((currentIndex + 1) / totalCount) * 100}}%;"></view>
+    </view>
+    <view class="stage-row" wx:if="{{currentItem}}">
+      <text>{{currentDimensionLabel}}</text>
+      <text>{{stageLabel}}</text>
+      <text>组内位置 {{currentIndex + 1}}</text>
+    </view>
+
+    <view class="card" wx:if="{{currentItem}}">
+      <text class="dimension">{{currentDimensionLabel}}</text>
+      <block wx:if="{{currentItem.mode === 'en_to_zh'}}">
+        <text class="prompt-word">{{currentItem.question.prompt.word}}</text>
+        <text class="mode">看英文 · 写中文释义</text>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'zh_to_en'}}">
+        <text class="prompt-meaning">{{currentItem.question.prompt.meaning}}</text>
+        <text class="mode">看中文 · 写英文表达</text>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'audio_to_en' || currentItem.mode === 'audio_to_zh'}}">
+        <view class="audio-area state-{{audioState}}">
+          <button class="audio-btn state-{{audioState}}" bindtap="playAudio" loading="{{audioState === 'loading'}}">
+            <image class="play-icon" src="/images/icons/vocabulary-speaker-wave-white.svg" mode="aspectFit" />
+          </button>
+          <text class="audio-label">{{audioButtonLabel}}</text>
+        </view>
+        <text class="mode">{{currentItem.question.answer_type === 'numeric' ? (currentItem.question.prompt.instruction || '听音 · 输入数字、日期或号码') : (currentItem.mode === 'audio_to_en' ? '听音 · 拼写英文表达' : '听音 · 选择中文释义')}}</text>
+        <text class="mode" wx:if="{{currentItem.question.answer_type === 'numeric' && currentItem.question.prompt.input_hint}}">{{currentItem.question.prompt.input_hint}}</text>
+        <view class="options" wx:if="{{isMeaningChoice && !showResult}}">
+          <view wx:for="{{meaningOptions}}" wx:key="id"
+                class="option {{selectedOption === item.id ? 'selected' : ''}}"
+                bindtap="selectOption" data-id="{{item.id}}"
+                data-review-item-id="{{currentItem.review_item_id}}"
+                data-question-id="{{currentItem.question_id}}" data-render-epoch="{{answerRenderEpoch}}">
+            {{item.label}}
+          </view>
+        </view>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'context_choice'}}">
+        <text class="prompt-text">{{currentItem.question.prompt.instruction}}</text>
+        <text class="target-word" wx:if="{{currentItem.question.prompt.target_word}}">目标词：{{currentItem.question.prompt.target_word}}</text>
+        <text class="sentence" wx:if="{{currentItem.question.prompt.sentence}}">{{currentItem.question.prompt.sentence}}</text>
+        <view class="options" wx:if="{{!showResult}}">
+          <view wx:for="{{currentItem.question.options}}" wx:key="id"
+                class="option {{selectedOption === item.id ? 'selected' : ''}}"
+                bindtap="selectOption" data-id="{{item.id}}"
+                data-review-item-id="{{currentItem.review_item_id}}"
+                data-question-id="{{currentItem.question_id}}" data-render-epoch="{{answerRenderEpoch}}">
+            {{item.label}}
+          </view>
+        </view>
+      </block>
+      <block wx:elif="{{currentItem.mode === 'context_fill'}}">
+        <text class="prompt-text">{{currentItem.question.prompt.instruction}}</text>
+        <text class="sentence">{{currentItem.question.prompt.sentence}}</text>
+        <view class="translation-block" wx:if="{{currentItem.question.prompt.translation}}">
+          <text class="translation-label">{{currentItem.question.prompt.translation_label || '中文提示'}}</text>
+          <text class="translation">{{currentItem.question.prompt.translation}}</text>
+        </view>
+      </block>
+
+      <input wx:if="{{!showResult && !isMeaningChoice && currentItem.mode !== 'context_choice'}}"
+             class="answer-input" value="{{inputValue}}" bindinput="onInput"
+             bindconfirm="submitAnswer" data-review-item-id="{{currentItem.review_item_id}}"
+             data-question-id="{{currentItem.question_id}}" data-render-epoch="{{answerRenderEpoch}}"
+             confirm-type="done" placeholder="{{currentItem.question.answer_type === 'numeric' ? '输入听到的答案，保留必要符号' : '输入答案'}}"
+             placeholder-style="color: #9AA3AE;" />
+      <view wx:if="{{showResult}}" class="result {{isCorrect ? 'correct' : 'wrong'}}">
+        <view class="result-heading">
+          <image wx:if="{{isCorrect}}" class="result-icon" src="/images/icons/vocabulary-check-outline.svg" mode="aspectFit" />
+          <image wx:else class="result-icon" src="/images/icons/vocabulary-xmark-outline.svg" mode="aspectFit" />
+          <text>{{responseKind === 'forgot' ? '已记为未掌握' : (isCorrect ? '答对了' : '需要加强')}}</text>
+        </view>
+        <text class="submitted">你的答案：{{submittedAnswer}}</text>
+        <text class="correct-answer">正确答案：{{correctAnswer}}</text>
+        <text wx:if="{{responseKind === 'forgot'}}" class="correct-answer">已记为未掌握，后续仍会复习。请看过答案再继续。</text>
+      </view>
+      <view wx:if="{{showResult && correctionRequired}}" class="correction-panel">
+        <text class="correction-title">立即纠正（不计正式题）</text>
+        <text class="correction-prompt">第 {{correctionCount + 1}} / {{correctionMaxAttempts}} 次：{{correctionPrompt}}</text>
+        <text class="correction-copy">请完成一次正确纠正；之后系统会按现有间隔延迟重测原维度。</text>
+        <text class="correction-wrong" wx:if="{{correctionCount > 0 && correctionIsCorrect === false}}">这次纠正仍不正确，请再试一次；达到上限后会安全转入后续复习。</text>
+        <input class="correction-input" value="{{correctionInputValue}}"
+               bindinput="onCorrectionInput" bindconfirm="submitCorrection"
+               confirm-type="done" placeholder="{{correctionPrompt}}"
+               placeholder-style="color: #9AA3AE;" />
+        <button class="primary-btn correction-btn {{correctionSubmitting ? 'is-loading' : ''}}" bindtap="submitCorrection"
+                disabled="{{correctionSubmitting || !correctionHasInput}}">
+          {{correctionSubmitting ? '保存纠正…' : '提交纠正'}}
+        </button>
+      </view>
+      <view wx:if="{{showResult && correctionCompleted}}" class="correction-done">
+        {{correctionExhausted ? '纠正次数已达上限，已转入后续复习。' : '正确纠正已记录；原维度会按间隔再次检查。'}}
+      </view>
+      <vocabulary-feedback-card
+        wx:if="{{showResult && answerFeedback}}"
+        feedback="{{answerFeedback}}"
+        audio-state="{{audioState}}"
+        bind:replay="playAudio"
+      />
+    </view>
+
+    <view wx:if="{{!showResult}}" class="forgot-actions">
+      <button wx:if="{{supportsForgotResponse}}" class="secondary-btn forgot-btn" bindtap="submitForgot"
+              data-review-item-id="{{currentItem.review_item_id}}" data-question-id="{{currentItem.question_id}}"
+              data-render-epoch="{{answerRenderEpoch}}" disabled="{{submitting || settling || correctionSubmitting}}">忘了</button>
+      <button class="primary-btn forgot-submit-btn {{submitting ? 'is-loading' : ''}}" bindtap="submitAnswer"
+              data-review-item-id="{{currentItem.review_item_id}}" data-question-id="{{currentItem.question_id}}"
+              data-render-epoch="{{answerRenderEpoch}}" disabled="{{submitting || settling || correctionSubmitting}}">
+        {{submitting ? '保存中…' : '提交答案'}}
+      </button>
+    </view>
+    <text wx:if="{{!showResult && supportsForgotResponse}}" class="forgot-note">点“忘了”会显示答案、记为未掌握，并安排后续复习</text>
+    <view wx:if="{{showResult}}" class="bottom-actions">
+      <button class="secondary-btn previous-btn" bindtap="previousItem" disabled="{{currentIndex === 0 || submitting || settling || correctionRequired}}">上一词</button>
+      <button wx:if="{{showResult}}" class="primary-btn next-question-btn {{settling ? 'is-loading' : ''}}" bindtap="nextItem" data-review-item-id="{{currentItem.review_item_id}}" data-question-id="{{currentItem.question_id}}" data-render-epoch="{{answerRenderEpoch}}" disabled="{{submitting || settling || correctionRequired}}">
+        {{correctionRequired ? '先完成纠正' : (settling ? '结算中…' : (responseKind === 'forgot' ? '看过答案，继续' : (currentIndex + 1 < totalCount ? '下一题' : '完成本批复习')))}}
+      </button>
+    </view>
+  </block>
+
+  <view class="summary" wx:elif="{{finished}}">
+    <text class="summary-title">本批复习完成</text>
+    <text class="summary-score">{{result.correct_count}} / {{result.total_count}} 正确</text>
+    <text class="summary-desc">正确率 {{result.accuracy}}%。自主复习不计入老师任务成绩。</text>
+    <text wx:if="{{forgotCount > 0}}" class="summary-desc">本批忘记 {{forgotCount}} 题，已安排后续复习。</text>
+    <view wx:if="{{forgotItems.length > 0}}" class="forgot-summary">
+      <text class="forgot-summary-title">本批忘记的词</text>
+      <view wx:for="{{forgotItems}}" wx:key="key" class="forgot-summary-item">
+        <view class="forgot-summary-copy">
+          <text class="forgot-summary-word">{{item.word}}</text>
+          <text class="forgot-summary-meaning">{{item.meaning}}</text>
+          <text class="forgot-summary-answer">本题正确答案：{{item.answer}}</text>
+        </view>
+        <button class="secondary-btn forgot-replay" bindtap="playForgotAudio" data-index="{{index}}" disabled="{{!item.audioSources.length}}">重听</button>
+      </view>
+    </view>
+    <button wx:if="{{remainingDueCount > 0 && !returningToTask}}" class="primary-btn" bindtap="continueReview">继续复习（还有 {{remainingDueCount}}）</button>
+    <button class="secondary-btn" bindtap="exitPage">{{returningToTask ? '返回新词任务' : '返回首页'}}</button>
+  </view>
+</view>
+</view>

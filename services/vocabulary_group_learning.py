@@ -1815,6 +1815,9 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
     )
     expected_version = int(flow.state_version or 0)
     next_phase_index = flow.phase_index + 1
+    from services.vocabulary_error_review import prepare_answer_write
+
+    prepare_answer_write(VocabularyGroupLearningError)
     try:
         with db.session.begin_nested():
             if is_first:
@@ -1881,6 +1884,13 @@ def submit_vocabulary_group_answer(user: User, payload: dict, *, now=None) -> di
         question.first_is_correct = is_correct
         question.first_answer = answer[:100]
         question.first_response_kind = response_kind
+        if question.score_eligible and not is_remediation:
+            from services.vocabulary_error_review import record_learning_answer
+
+            record_learning_answer(
+                user, question, is_correct, f"learning:{record.id}", now,
+                VocabularyGroupLearningError, response_kind=response_kind,
+            )
         if question.phase == PHASE_RECALL and question.score_eligible and not question.mastery_applied:
             already_applied = any(
                 item.mastery_applied

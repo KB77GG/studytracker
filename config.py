@@ -40,6 +40,19 @@ class Config:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = _env_bool("SESSION_COOKIE_SECURE")
 
+    # Pilot policy also requires an explicitly enabled per-student enrollment.
+    # Default-off deployment creates no queue records or changed student flow.
+    VOCABULARY_ERROR_REVIEW_ENABLED = _env_bool("VOCABULARY_ERROR_REVIEW_ENABLED")
+    # Parsed and validated by the opt-in service; OFF remains independent of
+    # policy parameters and new tables. Defaults reflect the approved pilot.
+    VOCABULARY_ERROR_REVIEW_DAILY_LIMIT = os.environ.get("VOCABULARY_ERROR_REVIEW_DAILY_LIMIT", 20)
+    VOCABULARY_ERROR_REVIEW_SAMPLE_LIMIT = os.environ.get("VOCABULARY_ERROR_REVIEW_SAMPLE_LIMIT", 4)
+    VOCABULARY_ERROR_REVIEW_MAINTENANCE_LIMIT = os.environ.get("VOCABULARY_ERROR_REVIEW_MAINTENANCE_LIMIT", 10)
+    VOCABULARY_ERROR_REVIEW_SUCCESS_INTERVAL_DAYS = os.environ.get("VOCABULARY_ERROR_REVIEW_SUCCESS_INTERVAL_DAYS", 2)
+    VOCABULARY_ERROR_REVIEW_FAILURE_LIMIT = os.environ.get("VOCABULARY_ERROR_REVIEW_FAILURE_LIMIT", 3)
+    VOCABULARY_ERROR_REVIEW_PAUSE_DAYS = os.environ.get("VOCABULARY_ERROR_REVIEW_PAUSE_DAYS", 7)
+    VOCABULARY_ERROR_REVIEW_OVERDUE_DAYS = os.environ.get("VOCABULARY_ERROR_REVIEW_OVERDUE_DAYS", 7)
+
     # Capability links may be generated behind a TLS-terminating proxy. Set
     # this to ``https`` in production; the review helper also accepts a
     # validated X-Forwarded-Proto value when this is unset.

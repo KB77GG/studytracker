@@ -1,0 +1,271 @@
+--- a/miniprogram/pages/student/home/index.js
++++ b/miniprogram/pages/student/home/index.js
+@@ -30,6 +30,11 @@
+         notebookCount: 0,
+         reviewTaskCount: 0,
+         reviewDueCount: 0,
++        reviewPolicyEnabled: false,
++        optionalReviewAvailable: false,
++        optionalReviewRemaining: 0,
++        mandatoryReviewLimit: 20,
++        optionalReviewLimit: 10,
+         isGuest: false,
+         weekdayText: '',
+         quickDates: [],
+@@ -297,21 +302,37 @@
+         })
+     },
+ 
++    goOptionalReview() {
++        if (this.data.isGuest || !this.data.reviewPolicyEnabled || !this.data.optionalReviewAvailable) return
++        wx.navigateTo({ url: '/pages/student/vocabulary-review/index?mode=maintenance' })
++    },
++
++    applyReviewSummary(res) {
++        const valid = !!(res && res.ok)
++        const enabled = valid && res.policy_enabled === true
++        const mandatoryLimit = enabled ? Math.max(1, Number(res.mandatory_limit) || 20) : 20
++        const optionalLimit = enabled ? Math.max(1, Number(res.maintenance_limit) || 10) : 10
++        this.setData({
++            reviewDueCount: valid ? Math.max(0, Number(res.review_due_count != null ? res.review_due_count : res.due_count) || 0) : 0,
++            reviewPolicyEnabled: enabled,
++            optionalReviewAvailable: enabled && res.optional_available === true,
++            optionalReviewRemaining: enabled ? Math.min(optionalLimit, Math.max(0, Number(res.maintenance_remaining) || 0)) : 0,
++            mandatoryReviewLimit: mandatoryLimit,
++            optionalReviewLimit: optionalLimit
++        })
++    },
++
+     loadReviewDueCount() {
+         if (this.data.isGuest) {
+-            this.setData({ reviewDueCount: 0 })
+-            return
+-        }
+-        request('/miniprogram/student/vocabulary-review/summary')
++            this.applyReviewSummary(null)
++            return
++        }
++        return request('/miniprogram/student/vocabulary-review/summary')
+             .then((res) => {
+-                if (res && res.ok) {
+-                    this.setData({ reviewDueCount: res.review_due_count != null ? res.review_due_count : (res.due_count || 0) })
+-                } else {
+-                    this.setData({ reviewDueCount: 0 })
+-                }
++                this.applyReviewSummary(res)
+             })
+             .catch(() => {
+-                this.setData({ reviewDueCount: 0 })
++                this.applyReviewSummary(null)
+             })
+     },
+ 
+--- a/miniprogram/pages/student/home/index.wxml
++++ b/miniprogram/pages/student/home/index.wxml
+@@ -56,12 +56,23 @@
+ 
+     <view class="review-today-card" wx:if="{{reviewDueCount > 0}}" bindtap="goReviewToday">
+       <view class="review-today-left">
+-        <view class="review-today-title">今日复习</view>
+-        <view class="review-today-desc">按间隔提取计划，完成到期训练</view>
++        <view class="review-today-title">{{reviewPolicyEnabled ? '今日必做' : '今日复习'}}</view>
++        <view class="review-today-desc">{{reviewPolicyEnabled ? ('错词复测与记忆抽查，每日最多' + mandatoryReviewLimit + '题') : '按间隔提取计划，完成到期训练'}}</view>
+       </view>
+       <view class="review-today-right">
+         <text class="review-today-num">{{reviewDueCount}}</text>
+         <text class="review-today-unit">项</text>
++        <text class="review-today-arrow">›</text>
++      </view>
++    </view>
++
++    <view class="review-today-card" wx:if="{{reviewPolicyEnabled && optionalReviewAvailable}}" bindtap="goOptionalReview">
++      <view class="review-today-left">
++        <view class="review-today-title">自选巩固</view>
++        <view class="review-today-desc">每天最多{{optionalReviewLimit}}题，不影响新任务</view>
++      </view>
++      <view class="review-today-right">
++        <text class="review-today-unit">去练习</text>
+         <text class="review-today-arrow">›</text>
+       </view>
+     </view>
+--- a/miniprogram/pages/student/vocabulary-review/index.js
++++ b/miniprogram/pages/student/vocabulary-review/index.js
+@@ -39,6 +39,7 @@
+     data: {
+         loading: true,
+         loadError: '',
++        conflictingReviewMode: '',
+         empty: false,
+         sessionId: null,
+         sessionToken: '',
+@@ -82,11 +83,14 @@
+         forgotItems: [],
+         forgotCount: 0,
+         remainingDueCount: 0,
++        reviewPolicyEnabled: false,
++        reviewMode: 'mandatory',
+         traceId: ''
+     },
+ 
+     onLoad(options) {
+         options = options || {}
++        this._requestedReviewMode = options.mode === 'maintenance' ? 'maintenance' : 'mandatory'
+         this._reviewPageActive = true
+         this._reviewQueue = []
+         this._reviewSkippedItems = []
+@@ -96,7 +100,7 @@
+         this._reviewTrace.mark('page_onLoad')
+         this.setData({ traceId: this._reviewTrace.traceId })
+         const rawReturnTaskId = String(options.returnTaskId || options.originTaskId || '')
+-        this.returnTaskId = /^\d+$/.test(rawReturnTaskId) ? rawReturnTaskId : ''
++        this.returnTaskId = this._requestedReviewMode !== 'maintenance' && /^\d+$/.test(rawReturnTaskId) ? rawReturnTaskId : ''
+         this.setData({ returningToTask: !!this.returnTaskId })
+         this.audioPlayer = createReliableAudioPlayer(wx, {
+             onStateChange: (state) => {
+@@ -225,7 +229,7 @@
+     resumePendingSettlement(marker) {
+         const token = encodeURIComponent(marker.sessionToken)
+         const url = `/miniprogram/student/vocabulary-review/sessions/${marker.sessionId}?session_token=${token}`
+-        this.setData({ loading: true, loadError: '' })
++        this.setData({ loading: true, loadError: '', conflictingReviewMode: '' })
+         return this.requestWithDeadline(
+             () => request(url, { timeout: REVIEW_LOAD_TIMEOUT_MS }),
+             REVIEW_LOAD_TIMEOUT_MS,
+@@ -291,7 +295,7 @@
+     },
+ 
+     fetchSession() {
+-        this.setData({ loading: true, loadError: '' })
++        this.setData({ loading: true, loadError: '', conflictingReviewMode: '' })
+         const url = `/miniprogram/student/vocabulary-review/today${this.sessionQuery()}`
+         if (this._reviewTrace) this._reviewTrace.mark('request_start', { endpoint: 'today' })
+         return this.requestWithDeadline(
+@@ -310,7 +314,13 @@
+                     })
+                     this._reviewTrace.mark('response_parse_end')
+                 }
++                if (res && res.error === 'review_other_mode_active' && ['mandatory', 'maintenance'].includes(res.session_mode)) {
++                    this.setData({ loading: false, conflictingReviewMode: res.session_mode,
++                        loadError: res.session_mode === 'maintenance' ? '你有一批未完成的自选巩固，可以继续这批或返回首页。' : '你有一批未完成的今日必做，请先继续这批复习。' })
++                    return
++                }
+                 if (!res || !res.ok) throw new Error((res && res.error) || 'review_load_failed')
++                this.applyPolicyPresentation(res)
+                 if (res.status === 'settled' && res.settlement) {
+                     this.applySettledSession(res)
+                     return
+@@ -597,7 +607,29 @@
+     },
+ 
+     sessionQuery() {
+-        return this.returnTaskId ? `?origin_task_id=${encodeURIComponent(this.returnTaskId)}` : ''
++        const parts = []
++        if (this.returnTaskId) parts.push(`origin_task_id=${encodeURIComponent(this.returnTaskId)}`)
++        if (this._requestedReviewMode === 'maintenance') parts.push('mode=maintenance')
++        return parts.length ? `?${parts.join('&')}` : ''
++    },
++
++    resumeOtherReview() {
++        const mode = this.data.conflictingReviewMode
++        if (!['mandatory', 'maintenance'].includes(mode)) return
++        this._requestedReviewMode = mode
++        if (mode === 'maintenance') {
++            this.returnTaskId = ''
++            this.setData({ returningToTask: false })
++        }
++        return this.fetchSession()
++    },
++
++    applyPolicyPresentation(res) {
++        const enabled = !!(res && res.policy_enabled === true)
++        const mode = enabled && res.session_mode === 'maintenance' ? 'maintenance' : 'mandatory'
++        this._requestedReviewMode = mode
++        if (mode === 'maintenance') this.returnTaskId = ''
++        this.setData({ reviewPolicyEnabled: enabled, reviewMode: mode, returningToTask: !!this.returnTaskId })
+     },
+ 
+     requestCurrentSessionSnapshot() {
+@@ -638,6 +670,7 @@
+ 
+     applySettledSession(res) {
+         if (!res || res.status !== 'settled' || !res.settlement) return false
++        this.applyPolicyPresentation(res)
+         const settled = res.settlement
+         const pending = this.readPendingSettlement()
+         if (pending && String(pending.sessionId) === String(res.session_id)) this.clearPendingSettlement()
+@@ -662,6 +695,7 @@
+ 
+     applySessionSnapshot(res, preferredReviewItemId, showOptions) {
+         if (this.applySettledSession(res)) return null
++        this.applyPolicyPresentation(res)
+         const rawItems = Array.isArray(res && res.items) ? res.items : []
+         const normalized = this.setReviewQueue(rawItems)
+         const items = normalized.items
+@@ -996,6 +1030,7 @@
+         }), REVIEW_SUBMIT_TIMEOUT_MS, 'review_settle').then((res) => {
+             if (!this.isReviewPageActive()) return
+             if (!res || !res.ok) throw (res || new Error('review_settle_failed'))
++            this.applyPolicyPresentation(res)
+             this.setData({
+                 settling: false,
+                 finished: true,
+@@ -1034,16 +1069,20 @@
+     continueReview() {
+         if (this.returnTaskId) return
+         if (!this.data.sessionId) return this.fetchSession()
+-        this.requestWithDeadline(() => request(`/miniprogram/student/vocabulary-review/sessions/${this.data.sessionId}/continue`, {
++        return this.requestWithDeadline(() => request(`/miniprogram/student/vocabulary-review/sessions/${this.data.sessionId}/continue`, {
+             method: 'POST',
+             timeout: REVIEW_LOAD_TIMEOUT_MS,
+             data: { session_token: this.data.sessionToken }
+         }), REVIEW_LOAD_TIMEOUT_MS, 'review_continue').then((res) => {
+             if (!this.isReviewPageActive()) return
+             if (!res || !res.ok) throw new Error((res && res.error) || 'review_continue_failed')
++            this.applyPolicyPresentation(res)
+             if (!res.items || !res.items.length) {
+                 this._reviewQueue = []
+-                this.setData({ empty: true, finished: false, result: res, totalCount: 0, answeredCount: 0 })
++                this._reviewSkippedItems = []
++                this.setData({ empty: true, finished: false, result: res, totalCount: 0, answeredCount: 0,
++                    sessionId: null, sessionToken: '', queueToken: '', currentItem: null,
++                    remainingDueCount: Number(res.remaining_due_count || 0) })
+                 return
+             }
+             const normalized = this.setReviewQueue(res.items)
+--- a/miniprogram/pages/student/vocabulary-review/index.wxml
++++ b/miniprogram/pages/student/vocabulary-review/index.wxml
+@@ -12,25 +12,28 @@
+ 
+   <view class="error" wx:elif="{{loadError}}">
+     <text>{{loadError}}</text>
+-    <button class="secondary-btn" bindtap="retry">重试</button>
++    <button class="secondary-btn" wx:if="{{conflictingReviewMode}}" bindtap="resumeOtherReview">继续这批复习</button>
++    <button class="secondary-btn" wx:else bindtap="retry">重试</button>
++    <button class="secondary-btn" wx:if="{{conflictingReviewMode}}" bindtap="exitPage">返回</button>
+   </view>
+ 
+   <view class="empty" wx:elif="{{empty && !finished}}">
+     <image class="empty-icon" src="/images/icons/vocabulary-check-outline.svg" mode="aspectFit" aria-label="完成" />
+-    <text class="empty-title">今日没有待复习的词</text>
+-    <text class="empty-desc">到期词会自动进入这里；老师任务不会被复习词占用。</text>
++    <text class="empty-title">{{reviewPolicyEnabled ? (remainingDueCount > 0 ? '还有待加载的复习题' : (reviewMode === 'maintenance' ? '今天暂无自选巩固' : '今天暂无必做复习')) : '今日没有待复习的词'}}</text>
++    <text class="empty-desc">{{reviewPolicyEnabled ? (remainingDueCount > 0 ? '部分题目暂时无法使用，请继续加载其余题目。' : '可以返回首页继续学习。自选巩固不会阻止新任务。') : '到期词会自动进入这里；老师任务不会被复习词占用。'}}</text>
++    <button class="primary-btn" wx:if="{{reviewPolicyEnabled && remainingDueCount > 0}}" bindtap="retry">继续加载</button>
+     <button class="primary-btn" bindtap="exitPage">返回</button>
+   </view>
+ 
+   <block wx:elif="{{!finished}}">
+     <view class="header">
+       <view class="header-copy">
+-        <text class="header-kicker">今日复习</text>
+-        <text class="header-title">今日词汇复习</text>
++        <text class="header-kicker">{{reviewPolicyEnabled ? (reviewMode === 'maintenance' ? '自选巩固' : '今日必做') : '今日复习'}}</text>
++        <text class="header-title">{{reviewPolicyEnabled ? (reviewMode === 'maintenance' ? '轻量巩固，不影响新任务' : '错词复测与记忆抽查') : '今日词汇复习'}}</text>
+       </view>
+       <view class="header-stats">
+         <text class="progress">{{currentIndex + 1}} / {{totalCount}}</text>
+-        <text class="total-count">共 {{totalCount}} 词</text>
++        <text class="total-count">共 {{totalCount}} {{reviewPolicyEnabled ? '题' : '词'}}</text>
+       </view>
+     </view>
+ 

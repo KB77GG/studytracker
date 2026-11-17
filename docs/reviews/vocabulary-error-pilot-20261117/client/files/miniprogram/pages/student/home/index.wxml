@@ -1,0 +1,171 @@
+<view class="container">
+  <view class="page-bg"></view>
+
+  <view class="guest-banner" wx:if="{{isGuest}}">
+    <text class="guest-text">访客模式浏览中 · 登录解锁全部功能</text>
+    <view class="guest-login-btn" bindtap="goLogin">登录</view>
+  </view>
+
+  <scroll-view scroll-y class="page-scroll" enhanced="true" show-scrollbar="false">
+    <view class="header-section">
+      <view class="greeting">
+        <text class="date">{{dateStr}} 星期{{weekdayText}}</text>
+        <text class="hello">{{greeting}}，{{userInfo.nickName}}</text>
+      </view>
+      <view class="header-actions">
+        <button class="sub-btn {{hasSubscribed ? 'subscribed' : ''}}" size="mini" bindtap="requestSubscribe" aria-label="{{subscribeButtonText}}">
+          <text class="sub-icon">铃</text>
+        </button>
+      </view>
+    </view>
+
+    <view class="deadline-notice">
+      <view class="deadline-notice-head">
+        <text class="deadline-notice-title">温馨提示</text>
+        <text class="deadline-notice-time">次日 03:00 截止</text>
+      </view>
+      <text class="deadline-notice-copy">每项任务可在归属日期的次日凌晨 3:00 前完成；到 3:00 即截止，无法重做或补做。</text>
+      <view
+        class="grace-task-link"
+        wx:if="{{gracePeriod.active && gracePeriod.pendingCount > 0}}"
+        bindtap="openGraceTasks"
+      >
+        <text>昨日还有 {{gracePeriod.pendingCount}} 项未完成，点击继续</text>
+        <text class="grace-task-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="progress-card" wx:if="{{tasks.length > 0}}">
+      <view class="progress-top">
+        <view>
+          <text class="progress-label">{{progressLabel}}</text>
+          <text class="progress-value">{{progress.completed}} / {{progress.total}} 项任务</text>
+        </view>
+        <view class="streak-box">
+          <text class="streak-num">{{progress.percent || 0}}</text>
+          <text class="streak-label">%</text>
+        </view>
+      </view>
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="width: {{progress.percent}}%"></view>
+      </view>
+      <text class="progress-tips" wx:if="{{progress.percent === 100}}">今日任务已完成，记得回顾错词和老师反馈。</text>
+      <text class="progress-tips" wx:elif="{{progress.percent > 0}}">保持这个节奏，完成剩余任务即可收尾。</text>
+      <text class="progress-tips" wx:else>先从一个任务开始，进入学习状态。</text>
+    </view>
+
+    <view class="review-today-card" wx:if="{{reviewDueCount > 0}}" bindtap="goReviewToday">
+      <view class="review-today-left">
+        <view class="review-today-title">{{reviewPolicyEnabled ? '今日必做' : '今日复习'}}</view>
+        <view class="review-today-desc">{{reviewPolicyEnabled ? ('错词复测与记忆抽查，每日最多' + mandatoryReviewLimit + '题') : '按间隔提取计划，完成到期训练'}}</view>
+      </view>
+      <view class="review-today-right">
+        <text class="review-today-num">{{reviewDueCount}}</text>
+        <text class="review-today-unit">项</text>
+        <text class="review-today-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="review-today-card" wx:if="{{reviewPolicyEnabled && optionalReviewAvailable}}" bindtap="goOptionalReview">
+      <view class="review-today-left">
+        <view class="review-today-title">自选巩固</view>
+        <view class="review-today-desc">每天最多{{optionalReviewLimit}}题，不影响新任务</view>
+      </view>
+      <view class="review-today-right">
+        <text class="review-today-unit">去练习</text>
+        <text class="review-today-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="section-title-row">
+      <text class="section-title">我的任务</text>
+      <picker mode="date" value="{{currentDate}}" bindchange="handleDateChange">
+        <view class="section-link">切换日期 ›</view>
+      </picker>
+    </view>
+
+    <scroll-view scroll-x class="date-strip" enhanced="true" show-scrollbar="false">
+      <view
+        class="date-chip {{item.date === currentDate ? 'active' : ''}}"
+        wx:for="{{quickDates}}"
+        wx:key="date"
+        data-date="{{item.date}}"
+        bindtap="selectQuickDate"
+      >
+        <text class="date-main">{{item.label}}</text>
+        <text class="date-sub">{{item.sub}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="task-list" wx:if="{{tasks.length > 0}}">
+      <view class="task-group-header">
+        <text class="task-group-title">{{taskGroupTitle}}</text>
+      </view>
+      <block wx:for="{{tasks}}" wx:key="id">
+      <view class="task-card {{item.isDone ? 'done' : ''}} {{item.readOnly ? 'read-only' : ''}}">
+        <view class="card-main" bindtap="goToTaskDetail" data-id="{{item.id}}">
+          <view class="card-left">
+            <view class="task-icon {{item.iconClass}}">{{item.iconText}}</view>
+            <view class="task-content">
+              <text class="task-name">{{item.task_name}}</text>
+              <text class="web-practice-note" wx:if="{{item.webPractice}}">去刷题网页练习</text>
+              <view class="task-sub">
+                <text class="assigner-tag {{item.assignedByRole}}" wx:if="{{item.assignedByLabel}}">{{item.assignedByLabel}}</text>
+                <text class="task-time">预计 {{item.planned_minutes}} 分钟</text>
+              </view>
+              <text class="task-date" wx:if="{{item.isGracePeriod}}">归属 {{item.date}} · 凌晨 3:00 前可提交</text>
+            </view>
+          </view>
+          <view class="card-right">
+            <view class="status-badge {{item.status}}">{{item.statusText}}</view>
+          </view>
+        </view>
+
+        <view class="timer-section" wx:if="{{!item.isDone && !item.readOnly && !item.webPractice}}">
+          <view class="timer-display {{item.timerStatus}}">
+            <text class="timer-text {{item.isOvertime ? 'overtime' : ''}}">{{item.displayTime}} / {{item.plannedTime}}</text>
+          </view>
+          <view class="timer-controls">
+            <view wx:if="{{item.dictationBookId}}" class="timer-btn spell" catchtap="startSpellTask" data-id="{{item.id}}">拼写</view>
+            <view wx:if="{{item.timerStatus === 'idle'}}" class="timer-btn start" catchtap="startTimer" data-id="{{item.id}}">开始</view>
+            <view wx:if="{{item.timerStatus === 'running'}}" class="timer-btn pause" catchtap="pauseTimer" data-id="{{item.id}}">暂停</view>
+            <view wx:if="{{item.timerStatus === 'paused'}}" class="timer-btn resume" catchtap="resumeTimer" data-id="{{item.id}}">继续</view>
+            <view wx:if="{{item.timerStatus === 'running' || item.timerStatus === 'paused'}}" class="timer-btn stop" catchtap="stopTimer" data-id="{{item.id}}">结束</view>
+          </view>
+        </view>
+      </view>
+      </block>
+    </view>
+
+    <view class="empty-state" wx:else>
+      <view class="empty-card">
+        <view class="empty-icon">✓</view>
+        <text class="empty-text">{{currentDate === todayStr ? '今天老师暂未布置任务' : '这一天暂未布置任务'}}</text>
+        <text class="empty-sub">空出来的时间，正好用来巩固。</text>
+      </view>
+
+      <view class="review-entry" bindtap="goNotebook">
+        <view>
+          <view class="review-title">去复习中心</view>
+          <view class="review-desc">还有内容待巩固</view>
+        </view>
+        <view class="review-stats">
+          <view>
+            <text class="review-num">{{reviewTaskCount}}</text>
+            <text class="review-label">待复盘</text>
+          </view>
+          <view>
+            <text class="review-num">{{notebookCount}}</text>
+            <text class="review-label">错词</text>
+          </view>
+        </view>
+        <view class="review-cta">立即复盘 →</view>
+      </view>
+
+      <view class="example-link" bindtap="showExampleTask">
+        <text class="example-muted">想先了解任务长什么样？</text>
+        <text class="example-action">查看示例任务</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

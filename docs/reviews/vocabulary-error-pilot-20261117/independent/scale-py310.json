@@ -1,0 +1,33 @@
+{
+  "python": "3.10.20",
+  "database": "synthetic in-memory SQLite",
+  "observations": [
+    {
+      "additional_legacy_masteries": 0,
+      "maintenance_queue_rows": 0,
+      "repetitions": 25,
+      "median_ms": 1.648,
+      "p95_ms": 4.619,
+      "sql_per_call": 8.0,
+      "legacy_mastery_queries": 0
+    },
+    {
+      "additional_legacy_masteries": 5000,
+      "maintenance_queue_rows": 5000,
+      "repetitions": 25,
+      "median_ms": 1.554,
+      "p95_ms": 1.65,
+      "sql_per_call": 8.0,
+      "legacy_mastery_queries": 0
+    },
+    {
+      "additional_legacy_masteries": 20000,
+      "maintenance_queue_rows": 20000,
+      "repetitions": 25,
+      "median_ms": 1.979,
+      "p95_ms": 2.312,
+      "sql_per_call": 8.0,
+      "legacy_mastery_queries": 0
+    }
+  ]
+}

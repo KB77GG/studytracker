@@ -31,6 +31,7 @@ def init_app(app):
     from api.toefl_mock import toefl_mock_bp
     from api.tts import tts_bp  # TTS API
     from api.vocab_review import vocab_review_bp
+    from api.vocabulary_error_reports import vocabulary_error_reports_bp
     from api.wechat import wechat_bp
     from api.writing_library import writing_library_bp
     from models import QuestionTypePracticeAttempt, WritingTypingAttempt, db
@@ -50,6 +51,7 @@ def init_app(app):
     app.register_blueprint(dictation_bp)  # Register Dictation
     app.register_blueprint(dictation_input_bp)
     app.register_blueprint(vocab_review_bp)  # Server-owned vocabulary review queue
+    app.register_blueprint(vocabulary_error_reports_bp)
     app.register_blueprint(eval_bp)  # Register IELTS eval
     app.register_blueprint(listening_training_bp)
     app.register_blueprint(speaking_bp)  # Register Speaking practice

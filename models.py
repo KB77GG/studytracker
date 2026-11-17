@@ -1662,6 +1662,161 @@ class StudentVocabularyMastery(db.Model, TimestampMixin):
         return getattr(cls, f"{dimension}_next_due_at")
 
 
+class VocabularyReviewPolicyEnrollment(db.Model, TimestampMixin):
+    """Explicit per-student opt-in; no row is enabled by a migration."""
+
+    __tablename__ = "vocabulary_review_policy_enrollment"
+
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    enabled = db.Column(db.Boolean, nullable=False, default=False, server_default="0")
+    starts_at = db.Column(db.DateTime, nullable=False)
+    state_version = db.Column(db.Integer, nullable=False, default=0, server_default="0")
+
+
+class VocabularyErrorQueue(db.Model, TimestampMixin):
+    """Mandatory error state, separate from existing mastery and answer history."""
+
+    __tablename__ = "vocabulary_error_queue"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id", "sense_id", "dimension", name="uq_vocab_error_ability"
+        ),
+        db.Index(
+            "ix_vocab_error_due", "student_id", "cohort_key", "status", "due_local_date"
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    sense_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False
+    )
+    dimension = db.Column(db.String(32), nullable=False)
+    cohort_key = db.Column(db.String(32), nullable=False)
+    representative_word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"))
+    status = db.Column(db.String(16), nullable=False, default="active")
+    due_local_date = db.Column(db.Date, nullable=False)
+    success_count = db.Column(db.Integer, nullable=False, default=0)
+    last_success_local_date = db.Column(db.Date)
+    last_attempt_local_date = db.Column(db.Date)
+    failure_streak = db.Column(db.Integer, nullable=False, default=0)
+    pause_until_local_date = db.Column(db.Date)
+    opened_at = db.Column(db.DateTime, nullable=False)
+    closed_at = db.Column(db.DateTime)
+    closed_reason = db.Column(db.String(40))
+    version = db.Column(db.Integer, nullable=False, default=0)
+
+
+class VocabularyPolicyCheckpoint(db.Model, TimestampMixin):
+    """A dated sampling opportunity; missed dates never masquerade as D7/D30."""
+
+    __tablename__ = "vocabulary_policy_checkpoint"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id",
+            "sense_id",
+            "dimension",
+            "cohort_key",
+            "interval_days",
+            name="uq_vocab_checkpoint_cohort",
+        ),
+        db.Index(
+            "ix_vocab_checkpoint_due",
+            "student_id",
+            "cohort_key",
+            "status",
+            "due_local_date",
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    sense_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False
+    )
+    dimension = db.Column(db.String(32), nullable=False)
+    cohort_key = db.Column(db.String(32), nullable=False)
+    representative_word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"))
+    anchor_at = db.Column(db.DateTime, nullable=False)
+    interval_days = db.Column(db.Integer, nullable=False)
+    due_local_date = db.Column(db.Date, nullable=False)
+    status = db.Column(db.String(16), nullable=False, default="pending")
+
+
+class VocabularyPolicyAllocation(db.Model, TimestampMixin):
+    """Durable daily capacity and links to unchanged review session/item tables."""
+
+    __tablename__ = "vocabulary_policy_allocation"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id", "local_date", "mode", "ordinal", name="uq_vocab_policy_slot"
+        ),
+        db.UniqueConstraint("item_id", name="uq_vocab_policy_item"),
+        db.UniqueConstraint(
+            "student_id",
+            "local_date",
+            "sense_id",
+            "dimension",
+            name="uq_vocab_policy_daily_ability",
+        ),
+        db.Index("ix_vocab_policy_session", "student_id", "session_id"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    local_date = db.Column(db.Date, nullable=False)
+    mode = db.Column(db.String(16), nullable=False)
+    ordinal = db.Column(db.Integer, nullable=False)
+    kind = db.Column(db.String(16), nullable=False)
+    queue_id = db.Column(db.Integer, db.ForeignKey("vocabulary_error_queue.id"))
+    checkpoint_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_policy_checkpoint.id")
+    )
+    session_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_review_session.id"), nullable=False
+    )
+    item_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_review_item.id"), nullable=False
+    )
+    sense_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False
+    )
+    dimension = db.Column(db.String(32), nullable=False)
+    status = db.Column(db.String(16), nullable=False, default="reserved")
+    answered_at = db.Column(db.DateTime)
+
+
+class VocabularyPolicyEvent(db.Model, TimestampMixin):
+    """Idempotency and teacher-visible transitions without storing answer text."""
+
+    __tablename__ = "vocabulary_policy_event"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "student_id", "source_key", name="uq_vocab_policy_event_source"
+        ),
+        db.Index("ix_vocab_policy_event_week", "student_id", "local_date", "kind"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    source_key = db.Column(db.String(192), nullable=False)
+    queue_id = db.Column(db.Integer, db.ForeignKey("vocabulary_error_queue.id"))
+    checkpoint_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_policy_checkpoint.id")
+    )
+    allocation_id = db.Column(
+        db.Integer, db.ForeignKey("vocabulary_policy_allocation.id")
+    )
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"))
+    dimension = db.Column(db.String(32))
+    kind = db.Column(db.String(32), nullable=False)
+    source = db.Column(db.String(16), nullable=False)
+    occurred_at = db.Column(db.DateTime, nullable=False)
+    local_date = db.Column(db.Date, nullable=False)
+    is_correct = db.Column(db.Boolean)
+    detail_code = db.Column(db.String(48))
+
+
 class VocabularyTaskReview(db.Model, TimestampMixin):
     """Server-owned v2 task item and first-answer snapshot."""
 
