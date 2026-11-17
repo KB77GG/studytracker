@@ -1,0 +1,228 @@
+diff --git a/services/vocabulary_autonomous_review.py b/services/vocabulary_autonomous_review.py
+index f6dbe2cd..d4a8567d 100644
+--- a/services/vocabulary_autonomous_review.py
++++ b/services/vocabulary_autonomous_review.py
+@@ -52,6 +52,7 @@ from services.vocabulary_context import (
+     _example_fill,
+     grade_context_answer,
+ )
++from services.vocabulary_due_cache import BULK_USERS_OPTION as DUE_CACHE_BULK_USERS_OPTION
+ from services.vocabulary_due_cache import cached_due_sense_ids
+ from services.vocabulary_mastery import (
+     DIMENSIONS,
+@@ -1435,7 +1436,7 @@ def _apply_review_item_state(
+             id=item.id,
+             student_id=user.id,
+             state_applied=False,
+-        ).update(
++        ).execution_options(**{DUE_CACHE_BULK_USERS_OPTION: (user.id,)}).update(
+             {VocabularyReviewItem.state_applied: True},
+             synchronize_session=False,
+         )
+diff --git a/services/vocabulary_due_cache.py b/services/vocabulary_due_cache.py
+index 98108386..64d16980 100644
+--- a/services/vocabulary_due_cache.py
++++ b/services/vocabulary_due_cache.py
+@@ -26,6 +26,9 @@ MAX_ENTRIES = 128
+ MAX_TOTAL_SENSES = 100_000
+ _EXTENSION_KEY = "vocabulary_due_display_cache"
+ _TRANSACTION_KEY = "vocabulary_due_display_writes"
++# execution_options key: student ids a bulk UPDATE/DELETE on a student table
++# is filtered to, so one student's answer does not empty everyone's snapshot.
++BULK_USERS_OPTION = "vocabulary_due_cache_users"
+ _STUDENT_TABLES = {
+     "student_vocabulary_mastery",
+     "vocabulary_review_item",
+@@ -46,7 +49,12 @@ class _DueCache:
+         self.lock = RLock()
+         self.entries = OrderedDict()
+         self.inflight = {}
+-        self.version = 0
++        # A load may only be published if nothing that can change *its own*
++        # result was written meanwhile: this student's rows, or the shared
++        # catalog. Other students' answers must not discard it, otherwise the
++        # cache never holds while a class is active.
++        self.global_version = 0
++        self.user_versions = {}
+         self.total_senses = 0
+ 
+     def _remove(self, key):
+@@ -56,11 +64,18 @@ class _DueCache:
+ 
+     def invalidate(self, users=None):
+         with self.lock:
+-            self.version += 1
++            if users is None:
++                self.global_version += 1
++            else:
++                for user_id in users:
++                    self.user_versions[user_id] = self.user_versions.get(user_id, 0) + 1
+             for key in list(self.entries):
+                 if users is None or key[1] in users:
+                     self._remove(key)
+ 
++    def _version(self, key):
++        return self.global_version, self.user_versions.get(key[1], 0)
++
+     def read(self, key, now, loader, publish_allowed):
+         while True:
+             with self.lock:
+@@ -79,7 +94,7 @@ class _DueCache:
+                 if pending is None:
+                     pending = Event()
+                     self.inflight[key] = pending
+-                    version = self.version
++                    version = self._version(key)
+                     break
+             # Coalesce simultaneous cold counts for one student. Other
+             # students never wait for this loader or share its result.
+@@ -88,7 +103,7 @@ class _DueCache:
+             senses = frozenset(int(sense_id) for sense_id in loader())
+             with self.lock:
+                 if (
+-                    self.version == version
++                    self._version(key) == version
+                     and publish_allowed()
+                     and len(senses) <= MAX_TOTAL_SENSES
+                 ):
+@@ -179,10 +194,14 @@ def _invalidate_bulk_vocabulary(execute_state):
+     if not (execute_state.is_update or execute_state.is_delete or execute_state.is_insert):
+         return
+     table = getattr(getattr(execute_state.statement, "table", None), "name", None)
+-    if table in _STUDENT_TABLES | _CATALOG_TABLES:
+-        # A bulk statement need not contain loaded per-student instances.
+-        # Conservatively invalidate the display cache, never rewrite its SQL.
++    if table in _CATALOG_TABLES:
+         _mark_writes(execute_state.session)
++    elif table in _STUDENT_TABLES:
++        # A bulk statement need not contain loaded per-student instances.
++        # Unless the caller states whose rows it is restricted to, invalidate
++        # the display cache for everyone; never rewrite its SQL.
++        users = execute_state.execution_options.get(BULK_USERS_OPTION)
++        _mark_writes(execute_state.session, {int(user) for user in users} if users else None)
+ 
+ 
+ @event.listens_for(Session, "after_transaction_end")
+diff --git a/tests/test_vocabulary_due_cache.py b/tests/test_vocabulary_due_cache.py
+index a4d5ac23..9bffe85c 100644
+--- a/tests/test_vocabulary_due_cache.py
++++ b/tests/test_vocabulary_due_cache.py
+@@ -8,8 +8,9 @@ from unittest.mock import Mock, patch
+ from flask import Flask
+ from sqlalchemy import update
+ 
+-from models import DictationBook, DictationWord, User, db
++from models import DictationBook, DictationWord, StudentVocabularyMastery, User, db
+ from services.vocabulary_due_cache import (
++    BULK_USERS_OPTION,
+     _cache,
+     _DueCache,
+     cached_due_sense_ids,
+@@ -202,6 +203,55 @@ class VocabularyDueCacheTest(unittest.TestCase):
+         cache.read(("db", 1, "day"), self.now, loader, lambda: True)
+         self.assertFalse(cache.entries)
+ 
++    def test_other_students_write_during_load_does_not_block_publication(self):
++        cache = _DueCache()
++
++        def loader():
++            cache.invalidate({2})  # a different student answers while this count loads
++            return [1]
++
++        cache.read(("db", 1, "day"), self.now, loader, lambda: True)
++        self.assertIn(("db", 1, "day"), cache.entries)
++
++    def test_catalog_write_during_load_still_prevents_publication(self):
++        cache = _DueCache()
++
++        def loader():
++            cache.invalidate()  # shared catalog edit: every student's count may change
++            return [1]
++
++        cache.read(("db", 1, "day"), self.now, loader, lambda: True)
++        self.assertFalse(cache.entries)
++
++    def test_scoped_bulk_update_only_invalidates_the_named_student(self):
++        loader = Mock(return_value=[1])
++        other_loader = Mock(return_value=[2])
++        self.load(loader)
++        self.load(other_loader, self.other)
++        statement = (
++            update(StudentVocabularyMastery)
++            .where(StudentVocabularyMastery.student_id == self.user.id)
++            .values(meaning_recall_stage=2)
++        )
++        db.session.execute(statement, execution_options={BULK_USERS_OPTION: (self.user.id,)})
++        db.session.commit()
++        self.load(loader)
++        self.load(other_loader, self.other)
++        self.assertEqual(loader.call_count, 2)
++        self.assertEqual(other_loader.call_count, 1)
++
++    def test_unscoped_bulk_update_of_student_rows_invalidates_everyone(self):
++        loader = Mock(return_value=[1])
++        other_loader = Mock(return_value=[2])
++        self.load(loader)
++        self.load(other_loader, self.other)
++        db.session.execute(update(StudentVocabularyMastery).values(meaning_recall_stage=3))
++        db.session.commit()
++        self.load(loader)
++        self.load(other_loader, self.other)
++        self.assertEqual(loader.call_count, 2)
++        self.assertEqual(other_loader.call_count, 2)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_vocabulary_flow_backlog_gate.py b/tests/test_vocabulary_flow_backlog_gate.py
+index 39b97597..16877735 100644
+--- a/tests/test_vocabulary_flow_backlog_gate.py
++++ b/tests/test_vocabulary_flow_backlog_gate.py
+@@ -362,6 +362,47 @@ class VocabularyFlowBacklogGateTest(unittest.TestCase):
+         self.assertEqual(preflight["due_count"], summary["due_count"])
+         self.assertGreater(summary["due_count"], 0)
+ 
++    def test_one_students_review_answer_keeps_other_students_counts_cached(self):
++        reader = self._student("f", BACKLOG)
++        writer = self._student("g", BACKLOG)
++        summary_url = "/api/miniprogram/student/vocabulary-review/summary"
++        loads = []
++        original = review._eligible_due_sense_ids
++
++        def counted(user, now):
++            loads.append(user.id)
++            return original(user, now)
++
++        with patch.object(review, "_eligible_due_sense_ids", side_effect=counted):
++            self.assertEqual(self._get(reader, summary_url).get_json()["due_count"], BACKLOG)
++            session = self._claim(writer)
++            before = self._get(writer, summary_url).get_json()
++            item = session["items"][0]
++            answered = self._post(
++                writer,
++                f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/answers",
++                {
++                    "session_token": session["session_token"],
++                    "review_item_id": item["review_item_id"],
++                    "question_id": item["question_id"],
++                    "word_id": item["word_id"],
++                    "sense_id": item["sense_id"],
++                    "dimension": item["dimension"],
++                    "answer": self._stored_answer(VocabularyReviewItem, item["review_item_id"]),
++                    "attempt_id": "cache-isolation-1",
++                    "input_mode": "native",
++                },
++            )
++            self.assertEqual(answered.status_code, 200, answered.get_json())
++            reader_loads_before = loads.count(reader["id"])
++            self.assertEqual(self._get(reader, summary_url).get_json()["due_count"], BACKLOG)
++            after = self._get(writer, summary_url).get_json()
++
++        # The other student's snapshot survived the answer ...
++        self.assertEqual(loads.count(reader["id"]), reader_loads_before)
++        # ... while the answering student's own numbers were recomputed.
++        self.assertEqual(after["due_count"], before["due_count"] - 1)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
