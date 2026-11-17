@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>词汇复习周清单 · 学习追踪</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/vocabulary_error_report.css') }}">
+</head>
+<body>
+  <main class="review-report">
+    <header class="report-header">
+      <div><a class="back-link" href="/tasks">← 任务管理</a><h1>词汇复习周清单</h1><p>按词汇安排共同讲解，再根据学生当天的复习负担调整新词量。</p></div>
+      <form method="get" class="week-filter">
+        <label for="reviewWeek">查看哪一周</label>
+        <div><input id="reviewWeek" type="date" name="week" value="{{ report.week_start }}" required><button type="submit">查看</button></div>
+        {% if request.args.get('profile_id') %}<input type="hidden" name="profile_id" value="{{ request.args.get('profile_id') }}">{% endif %}
+      </form>
+    </header>
+    {% if not report.enabled %}
+    <section class="report-card empty"><h2>词汇复习试点尚未开启</h2><p>开启后，这里会显示本周讲解清单和布置任务时需要留意的学生负担。</p></section>
+    {% else %}
+    <section class="report-card">
+      <div class="section-heading"><h2>今天的任务布置提醒</h2><span>{{ report.today }}</span></div>
+      <p class="section-note">负担提醒使用今天的队列状态。优先减少过载学生的新词量；已暂停的词保留记录，{{ report.pause_days }}天暂停期结束后可重新复测。</p>
+      {% if report.students %}
+      <div class="table-scroll"><table>
+        <caption class="sr-only">授权试点学生的今日复习负担</caption>
+        <thead><tr><th>学生</th><th>今日必做剩余</th><th>已完成</th><th>超出今日安排</th><th>暂停待讲解</th><th>布置建议</th></tr></thead>
+        <tbody>{% for student in report.students %}<tr>
+          <td><a href="?week={{ report.week_start }}&amp;profile_id={{ student.profile_id }}">{{ student.name }}</a></td>
+          <td>{{ student.required_count }} 题</td><td>{{ student.completed_count }} / {{ student.daily_limit }}</td>
+          <td>{{ student.overload_count }} 题</td><td>{{ student.paused_count }} 项</td>
+          <td>{% if student.overloaded %}<strong class="warning">队列过载，建议减少本次新词量</strong>{% elif student.paused_count %}先安排困难词讲解{% else %}按学习情况安排{% endif %}</td>
+        </tr>{% endfor %}</tbody>
+      </table></div>
+      {% else %}<p class="empty">当前没有已启用试点的授权学生。</p>{% endif %}
+      {% if request.args.get('profile_id') %}<p><a href="?week={{ report.week_start }}">返回全部授权学生</a></p>{% endif %}
+      {% if report.has_more_students %}<p class="warning">学生较多，本页显示前200名。可从任务布置提醒进入指定学生的完整清单。</p>{% endif %}
+    </section>
+    <section class="report-card">
+      <div class="section-heading"><h2>本周词汇清单</h2><span>{{ report.week_start }} — {{ report.week_end }}</span></div>
+      <div class="report-metrics">
+        <div><strong>{{ report.totals.paused }}</strong><span>暂停待讲解记录</span></div>
+        <div><strong>{{ report.totals.overdue_overload }}</strong><span>过载逾期转低频</span></div>
+        <div><strong>{{ report.totals.reopened }}</strong><span>重新进入必做</span></div>
+        <div><strong>{{ report.totals.unanswerable }}</strong><span>材料待核对</span></div>
+      </div>
+      <p class="section-note">记录按发生日期归入本周，展开后可查看涉及学生及能力；“当前状态”反映现在，可能已与当时不同。</p>
+      {% for word in report.words %}
+      <details class="word-group">
+        <summary><span><strong>{{ word.word }}</strong><span class="word-meaning">{{ word.meaning }}</span></span><span class="word-count">{{ word.student_count }} 人 · {{ word.event_count }} 条记录</span></summary>
+        <div class="table-scroll"><table>
+          <thead><tr><th>学生</th><th>能力</th><th>日期</th><th>本周记录</th><th>当前状态</th><th>暂停至</th></tr></thead>
+          <tbody>{% for event in word.events %}<tr>
+            <td>{{ event.student_name }}</td><td>{{ event.dimension_label }}</td><td>{{ event.event_date }}</td><td>{{ event.kind_label }}</td><td>{{ event.status_label }}</td><td>{{ event.resume_date or '—' }}</td>
+          </tr>{% endfor %}</tbody>
+        </table></div>
+      </details>
+      {% else %}<p class="empty">这一周暂无需要汇总的记录。</p>{% endfor %}
+      {% if report.has_more_events %}<p class="warning">本周记录较多，当前显示前5000条。请选择具体学生查看完整清单。</p>{% endif %}
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -711,6 +711,12 @@ def _session_due_counts(
 ) -> tuple[int, int]:
     """Return actionable count and due debt outside the frozen session."""
 
+    from services.vocabulary_error_review import session_due_counts
+
+    policy_counts = session_due_counts(user, session, now)
+    if policy_counts is not None:
+        return policy_counts
+
     if due_sense_ids is None:
         due_sense_ids = _due_sense_ids(user, now)
     session_senses = {item.sense_id for item in session.items}
@@ -843,7 +849,10 @@ def _assert_review_session_write_allowed(
     )
     has_assignment_date = task is not None and task_date(task) is not None
     current_date = local_date(now)
-    if not has_assignment_date and session.review_date != current_date:
+    from services.vocabulary_error_review import session_mode
+
+    policy_session = session_mode(user, session, now) is not None
+    if (policy_session or not has_assignment_date) and session.review_date != current_date:
         future = session.review_date > current_date
         state = "future" if future else "expired"
         raise VocabularyAutonomousReviewError(
@@ -1042,7 +1051,7 @@ def _session_payload(
     answered_count = sum(
         item["answered"] and not item["correction_required"] for item in items
     )
-    return {
+    payload = {
         "ok": True,
         "supports_forgot_response": True,
         "session_id": session.id,
@@ -1063,6 +1072,9 @@ def _session_payload(
         "queue_token": session.queue_token,
         "settlement": _settlement_result(session),
     }
+    from services.vocabulary_error_review import decorate_session
+
+    return decorate_session(user, session, payload, now)
 
 
 def _review_item_skip_reason(item: VocabularyReviewItem) -> str | None:
@@ -1264,10 +1276,17 @@ def claim_today_review(
     *,
     origin_task_id=None,
     now: datetime | None = None,
+    optional: bool = False,
 ) -> dict:
     """Restore one active session or claim the next finite due batch."""
 
     now = utc_naive(now)
+    from services import vocabulary_error_review as error_review
+
+    if error_review.enabled(user, now):
+        return error_review.claim_today_review(
+            user, origin_task_id=origin_task_id, now=now, optional=optional
+        )
     origin_task = _validate_origin_task(user, origin_task_id)
     if origin_task:
         try:
@@ -1341,6 +1360,11 @@ def claim_today_review(
             return _session_payload(user, active, now, due_sense_ids=due_sense_ids)
         raise VocabularyAutonomousReviewError("review_claim_conflict", 409) from None
 
+    # Enrollment can commit after the legacy preflight but before this insert.
+    # Holding the writer lock here makes activation and old-session creation
+    # mutually exclusive. Global OFF still performs no policy-table query.
+    if error_review.enabled(user, now):
+        raise VocabularyAutonomousReviewError("review_policy_changed", 409, retryable=True)
     _revalidate_claim_candidates(user, now, materialized_candidates, prepared_signature)
     for index, candidate in enumerate(materialized_candidates):
         word = candidate["word"]
@@ -1471,6 +1495,9 @@ def _apply_review_item_state(
         utc_naive(answered_at),
         bootstrap_dimensions=(),
     )
+    from services.vocabulary_error_review import record_review_answer
+
+    record_review_answer(user, item, is_correct, utc_naive(answered_at))
     if (
         item.first_response_kind == "forgot"
         and item.remediation_kind == "same_dimension"
@@ -1678,6 +1705,9 @@ def submit_review_answer(
         input_grant_id=input_grant_id,
         submitted_at=now,
     )
+    from services.vocabulary_error_review import prepare_answer_write
+
+    prepare_answer_write(VocabularyAutonomousReviewError)
     try:
         with db.session.begin_nested():
             db.session.add(attempt)
@@ -1914,9 +1944,12 @@ def settle_review_session(
         return existing
     if session.status != VocabularyReviewSession.STATUS_ACTIVE:
         raise VocabularyAutonomousReviewError("review_session_not_active", 409)
+    from services import vocabulary_error_review as error_review
+
+    policy_mode = error_review.session_mode(user, session, now)
     # Take the (possibly cold) display snapshot before legacy correction
     # updates or the settlement CAS can acquire the database write lock.
-    due_sense_ids_before = _due_sense_ids(user, now)
+    due_sense_ids_before = set() if policy_mode else _due_sense_ids(user, now)
     items = (
         VocabularyReviewItem.query.filter_by(session_id=session.id, student_id=user.id)
         .order_by(VocabularyReviewItem.queue_index.asc())
@@ -1929,7 +1962,9 @@ def settle_review_session(
     # Settlement only changes this batch's senses. Check the unaffected
     # remainder before taking the write lock; its truth must not come from
     # the short-lived display count cache.
-    outside_due_exists = _has_due(user, now, exclude_sense_ids=affected_senses)
+    outside_due_exists = (
+        False if policy_mode else _has_due(user, now, exclude_sense_ids=affected_senses)
+    )
     if not _supports_correction(payload):
         for item in items:
             _bypass_legacy_correction(item)
@@ -1983,6 +2018,9 @@ def settle_review_session(
             return _safe_json(existing_settlement.result_json)
         raise VocabularyAutonomousReviewError("review_settlement_in_progress", 409)
     session.status = VocabularyReviewSession.STATUS_SETTLING
+
+    if policy_mode and skipped_ids:
+        error_review.mark_skipped(user, skipped_ids, now)
 
     for item in items:
         if item.id in skipped_ids:
@@ -2053,9 +2091,14 @@ def settle_review_session(
         bucket["correct"] += int(bool(attempt.is_correct))
     total_count = len(attempts)
     accuracy = round(correct_count / total_count * 100, 1) if total_count else 0.0
-    with closing(_iter_due_candidates(user, now, only_sense_ids=affected_senses)) as candidates:
-        affected_due_senses = {candidate["mastery"].sense_id for candidate in candidates}
-    remaining_due_count = len((due_sense_ids_before - affected_senses) | affected_due_senses)
+    if policy_mode:
+        policy_counts = error_review.settlement_counts(user, session, now)
+        affected_due_senses = set()
+        remaining_due_count = policy_counts["remaining_due_count"]
+    else:
+        with closing(_iter_due_candidates(user, now, only_sense_ids=affected_senses)) as candidates:
+            affected_due_senses = {candidate["mastery"].sense_id for candidate in candidates}
+        remaining_due_count = len((due_sense_ids_before - affected_senses) | affected_due_senses)
     result = {
         "ok": True,
         "independent_review": True,
@@ -2074,6 +2117,8 @@ def settle_review_session(
         "remaining_due_count": remaining_due_count,
         "continue_available": outside_due_exists or bool(affected_due_senses),
     }
+    if policy_mode:
+        result.update(policy_counts)
     session.status = VocabularyReviewSession.STATUS_SETTLED
     # The write gate above guarantees that settlement stays on the batch's
     # validated review day. Keep the original date so a task finished during
@@ -2113,7 +2158,10 @@ def continue_review(
     session = _session_for_user(user, session_id, session_token, require_token=True)
     if session.status != VocabularyReviewSession.STATUS_SETTLED:
         raise VocabularyAutonomousReviewError("review_session_not_settled", 409)
-    return claim_today_review(user, now=now, origin_task_id=session.origin_task_id)
+    from services.vocabulary_error_review import session_mode
+
+    options = {"optional": True} if session_mode(user, session, now) == "maintenance" else {}
+    return claim_today_review(user, now=now, origin_task_id=session.origin_task_id, **options)
 
 
 def review_preflight(
@@ -2132,6 +2180,10 @@ def review_preflight(
     """
 
     now = utc_naive(now)
+    from services import vocabulary_error_review as error_review
+
+    if error_review.enabled(user, now):
+        return error_review.review_preflight(user, task_id, now=now, gate_only=gate_only)
     task = _validate_origin_task(user, task_id)
     task_flow_started = (
         VocabularyLearningFlow.query.filter_by(
@@ -2190,6 +2242,10 @@ def review_preflight(
 
 def review_summary(user: User, *, now: datetime | None = None) -> dict:
     now = utc_naive(now)
+    from services import vocabulary_error_review as error_review
+
+    if error_review.enabled(user, now):
+        return error_review.review_summary(user, now=now)
     active = _active_session_for_date(user.id, local_date(now))
     due_count = _due_count(user, now)
     active_remaining = 0

@@ -1,0 +1,81 @@
+{
+  "at_utc": "2026-11-17T05:28:10.180689+00:00",
+  "read_only": true,
+  "student_identities_exported": false,
+  "head": "7742a802ed332682671ed8aaaae798e17683d8c6",
+  "tracked_clean": true,
+  "service": {
+    "systemd": {
+      "MainPID": "751748",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Tue 2026-11-17 11:27:51 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "actual_worker_count": 1,
+    "listener_5002_owned": true,
+    "loopback_only": true,
+    "ok": true
+  },
+  "http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "public_http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "dotenv_precedes_worker_start": true,
+  "process_feature_switch_off": true,
+  "code_flag_defaults_off": true,
+  "old_schema_sha256": "c22ec191324dba5f4fdd2565448b50b589008963b9756054ff75cfb678b81e3e",
+  "policy_tables_present": 0,
+  "policy_row_counts": {},
+  "schema_read_changes": 0,
+  "legacy_reads_under_5_seconds": true,
+  "legacy_read_checks": [
+    {
+      "ok": true,
+      "query_only": true,
+      "zero_changes": true,
+      "calls_ms": {
+        "preflight": 398.508,
+        "summary": 1.885
+      }
+    },
+    {
+      "ok": true,
+      "query_only": true,
+      "zero_changes": true,
+      "calls_ms": {
+        "preflight": 532.53,
+        "summary": 1.294
+      }
+    }
+  ],
+  "blocked_sql": 0,
+  "prohibited_imports_absent": true,
+  "ok": true
+}

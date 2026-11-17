@@ -1028,6 +1028,9 @@ def submit_vocabulary_answer(user: User, payload: dict, *, now: datetime | None 
         vocabulary_dimension=item.dimension,
         vocabulary_question_id=item.question_id,
     )
+    from services.vocabulary_error_review import prepare_answer_write
+
+    prepare_answer_write(VocabularyMasteryError)
     try:
         with db.session.begin_nested():
             db.session.add(record)
@@ -1049,6 +1052,11 @@ def submit_vocabulary_answer(user: User, payload: dict, *, now: datetime | None 
         item.first_attempt_id = attempt_id
         item.first_is_correct = is_correct
         item.first_answer = answer[:100]
+        from services.vocabulary_error_review import record_learning_answer
+
+        record_learning_answer(
+            user, item, is_correct, f"learning:{record.id}", now, VocabularyMasteryError
+        )
         # If this word/dimension was due before the teacher snapshot was
         # created, the independent review session owns that due window.  The
         # teacher task may still be answered, but it cannot consume or reset

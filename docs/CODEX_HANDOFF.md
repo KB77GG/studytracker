@@ -1,5 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-17 复习新规则B3实现完成，默认关闭发布验收中
+
+- 用户已确认五参数及三条过载规则、老师按词周清单/暂停7日返回、抽查占必做4题。每日20含最多4抽查、两成功隔2自然日、3不同复测日失败暂停7日、可选10；today-first，仅过载时>7日逾期转低频留事件，不导入历史marker。额外过载学生自动提至30/40仍仅讨论，未实施。B4名单/启用仍待预演后确认。
+- 实施树 `/private/tmp/studytracker-vocabulary-error-pilot-20261117`，`codex/vocabulary-error-pilot-20261117`，基线HEAD `f414a126`；23顶层产品/测试/CI文件及报告本机已完成，尚待本节收尾更新commit/push/deploy事实。主资料 `/Users/zhouxin/Desktop/studytracker` main6ded77d2既有7M/24U保留，只同步交接；不得把其脏业务打包发布。
+- 五新表、三个新service/教师蓝图；旧75model class AST不变，db.create_all模拟仅建5空表，0 ALTER/DROP/DML。全局OFF零新表SQL；启用还需每生enrollment。标准deploy建表，普通请求无DDL；当前生产仍7742a802，五表未建，真实学生未启用。
+- 双Python首轮342全过；最终管理16/集成24（绑定库身份和7参数、防N+1）已单测通过，整套最终结果见报告final-python310/313.log。独立7边界/2双连接并发、教师18/JS6、验收器12mock+旧7安全通过。mandatory 0/5k/20k旧池固定8SQL不扫mastery；optional去N+1后2400合成43SELECT/112ms，旧资格分页最坏仍线性，不承诺全请求恒定耗时。
+- 管理脚本默认SQLite ro/query_only/拒写身份列/10秒预算，摘要绑定IDs/库路径+inode hash/7有效参数。--apply须显式ID/start/digest，写锁下重验并整批回滚；不导历史、不改总开关。本轮生产仅预演，不apply。启用前旧active批需正常完成，不代答/代结算。
+- 学生候选 `/private/tmp/studytracker-vocabulary-error-client-20261117`，4页文件增量+1测试，115Node/两页wcc-wcsc/JS语法通过，451来源SHA核对、447非目标保持。精确归档client/files和manifest不是完整上传包。固定 `/Users/zhouxin/Desktop/studytracker-release` 仍d03a2749、原76M/37U，尚待本节收尾注明应用；禁止main整包覆盖。没有微信上传/提审/发布证据。
+- 生产前核13:28CST：7742a802 tracked clean、active/running、NRestarts0、单worker/gthread6/5002、公网200/匿名401、env/.env默认关闭；旧schema hash已冻结，两例只读preflight399/533ms、暖summary1.9/1.3ms，0写无身份输出。最终发布需分支CI→main→deploy→verify_release --after（5空表/旧schema/SHA/off/服务）→默认只读预演，详见 `docs/reviews/vocabulary-error-pilot-20261117/README.md`。
+- 下一位：先核本节最新事实与git，不重做已完成工作；如本节仍处于发布中则读最新run/production-after/client apply证据继续，绝不能视为已部署。试点名单和启用另确认，两周看负担/7日覆盖及保持率，D30需4–6周。
+
 ## 2026-11-17 缓存按学生失效补丁A已部署；规则B1生产汇总完成，B2待参数确认
 
 - **授权/范围**：用户交接审计分支的 `docs/VOCABULARY_REVIEW_PLAN.md`，执行A应用/测试/部署/回读及B1只读无身份汇总；按其B2要求等用户确认参数后再实现规则。未建新队列表/开关、未迁移或删除学习记录、未启用试点/改判分、未发送通知；另两份DB锁补丁未应用。

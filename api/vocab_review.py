@@ -246,9 +246,11 @@ def get_vocabulary_learning_diagnostics(task_id):
 @require_api_user(User.ROLE_STUDENT)
 def get_vocabulary_review_today():
     try:
+        options = {"optional": True} if request.args.get("mode") == "maintenance" else {}
         result = claim_today_review(
             request.current_api_user,
             origin_task_id=request.args.get("origin_task_id", type=int),
+            **options,
         )
         db.session.commit()
         return jsonify(result)
