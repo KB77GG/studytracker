@@ -1,0 +1,334 @@
+{
+  "synthetic_only": true,
+  "python": "3.10.20",
+  "journal_mode": "delete",
+  "source_hashes": {
+    "models.py": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+    "services/vocabulary_attempt_reporting.py": "e4debf68f45acf57996d27431175b69de0f70b2fbe5a4bd3045bb6021ae63989",
+    "services/vocabulary_autonomous_review.py": "4ce7db96ad1f1cf45ea655878ee96c496d747df10d354fa9df60c4f4f6efbed3",
+    "services/vocabulary_checkpoint_identity.py": "08ca67edd04f5b159110183e7121b46b5fd85d0fe4341140d1abc837db2a1e0a",
+    "services/vocabulary_context.py": "1654c8407903177cc654031bdbacc39487f25c18faaec7798f4d55e2b1ec60d9",
+    "services/vocabulary_context_catalog.py": "4b919b1cf537be614d7df5e0b1093ecef5ebf68f268e3b99f13430086cd775db",
+    "services/vocabulary_due_cache.py": "88a41a0ceaa23700592dc515b59e7f44e4057eec1a1e006e6652c2e54d1923fd",
+    "services/vocabulary_error_queue.py": "bbbd1a4d460a5e0dc3513053fdf66b4e574f83d1778e0f138e1d7b1122781d7a",
+    "services/vocabulary_error_reporting.py": "83b36b2f473fee2de5c3961e83ca62f900340a3c9631c4e255ab8bbf7aff2b35",
+    "services/vocabulary_error_review.py": "a11c410df0a0ff6657fe79d9786635b8cba068f83cd7938d03b13b4643a52844",
+    "services/vocabulary_group_learning.py": "2a305381bc52c531d7a04cdc68097d93532eeeeceae5658be422501b2c848f31",
+    "services/vocabulary_mastery.py": "da5a1261acc078986d809d5f8826cc3c395bd731a08dbbca4f3ed4bbf92d81b8",
+    "services/vocabulary_optional_selection.py": "11618a5a030ee509dff275ba57a9fd69b69d014eff5b787a2d261cc1fe44caec",
+    "services/vocabulary_pilot_metrics.py": "69979330892612cc68695af8c70c36278a3c8cf222728e03275859747a2ff869",
+    "services/vocabulary_policy_planning.py": "42c9befd09877790fe8ebc5e5075fbf338843168a61775c560a89e148464aab3",
+    "services/vocabulary_remediation.py": "ea85b711376d53add2e7508e7b78a2f8128a92f4ac26a57627fd1933e269668d",
+    "services/vocabulary_review_selection.py": "ba22094d2fcef738ea0718445d2ad08763103190d80030f7006672390235a6ef",
+    "services/vocabulary_synonyms.py": "93df2ef677a82daaeb50a669ae714e21f7d80a59d0b686c4863f26730ad2ecdc"
+  },
+  "source_files_unchanged": true,
+  "cases": [
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 1,
+      "backlog_per_student": 2400,
+      "blocked": "partial",
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.10303912498056889,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.1710830256342888,
+          "post_first_dml_to_finish_ms": 0.7291669026017189,
+          "commit_ms": 0.519416993483901,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    },
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 6,
+      "backlog_per_student": 2400,
+      "blocked": "partial",
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.960381249897182,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.0179169476032257,
+          "post_first_dml_to_finish_ms": 12.93608290143311,
+          "commit_ms": 12.493208050727844,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9769307910464704,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.2613749820739031,
+          "post_first_dml_to_finish_ms": 5.209374940022826,
+          "commit_ms": 4.969750065356493,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9900697499979287,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.17720903269946575,
+          "post_first_dml_to_finish_ms": 5.123667186126113,
+          "commit_ms": 4.876415943726897,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 1.001436083111912,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.1865839585661888,
+          "post_first_dml_to_finish_ms": 2.8572080191224813,
+          "commit_ms": 2.622708911076188,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 1.0136919999495149,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.3693751059472561,
+          "post_first_dml_to_finish_ms": 0.41941599920392036,
+          "commit_ms": 0.21641701459884644,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 1.0156532500404865,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 61,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.5266251284629107,
+          "post_first_dml_to_finish_ms": 0.41391700506210327,
+          "commit_ms": 0.22149994038045406,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    }
+  ],
+  "summary": [
+    {
+      "enabled": true,
+      "concurrency": 1,
+      "dimension": "context",
+      "path": "optional_partially_blocked",
+      "statuses": {
+        "200": 1
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 1,
+        "p50": 103.039,
+        "p95": 103.039,
+        "max": 103.039
+      },
+      "first_dml_execute_ms": {
+        "n": 1,
+        "p50": 0.171,
+        "p95": 0.171,
+        "max": 0.171
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 1,
+        "p50": 0.729,
+        "p95": 0.729,
+        "max": 0.729
+      },
+      "writer_begin_execute_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 1,
+        "p50": 0.519,
+        "p95": 0.519,
+        "max": 0.519
+      },
+      "rollback_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 1,
+        "p50": 61,
+        "p95": 61,
+        "max": 61
+      },
+      "fetched_rows": {
+        "n": 1,
+        "p50": 9611,
+        "p95": 9611,
+        "max": 9611
+      }
+    },
+    {
+      "enabled": true,
+      "concurrency": 6,
+      "dimension": "context",
+      "path": "optional_partially_blocked",
+      "statuses": {
+        "200": 6
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 6,
+        "p50": 995.753,
+        "p95": 1015.653,
+        "max": 1015.653
+      },
+      "first_dml_execute_ms": {
+        "n": 6,
+        "p50": 0.315,
+        "p95": 1.527,
+        "max": 1.527
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 6,
+        "p50": 3.99,
+        "p95": 12.936,
+        "max": 12.936
+      },
+      "writer_begin_execute_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 6,
+        "p50": 3.75,
+        "p95": 12.493,
+        "max": 12.493
+      },
+      "rollback_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 6,
+        "p50": 61.0,
+        "p95": 61,
+        "max": 61
+      },
+      "fetched_rows": {
+        "n": 6,
+        "p50": 9611.0,
+        "p95": 9611,
+        "max": 9611
+      }
+    }
+  ]
+}

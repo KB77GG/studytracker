@@ -6,6 +6,8 @@ from sqlalchemy import event, text
 from sqlalchemy.orm import Session, with_loader_criteria
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from services.vocabulary_checkpoint_identity import checkpoint_selection_default
+
 db = SQLAlchemy()
 
 
@@ -1678,19 +1680,21 @@ class VocabularyErrorQueue(db.Model, TimestampMixin):
 
     __tablename__ = "vocabulary_error_queue"
     __table_args__ = (
-        db.UniqueConstraint(
-            "student_id", "sense_id", "dimension", name="uq_vocab_error_ability"
-        ),
+        db.UniqueConstraint("student_id", "sense_id", "dimension", name="uq_vocab_error_ability"),
+        db.Index("ix_vocab_error_due", "student_id", "cohort_key", "status", "due_local_date"),
         db.Index(
-            "ix_vocab_error_due", "student_id", "cohort_key", "status", "due_local_date"
+            "ix_vocab_error_paused",
+            "student_id",
+            "cohort_key",
+            "status",
+            "pause_until_local_date",
+            "id",
         ),
     )
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    sense_id = db.Column(
-        db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False
-    )
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False)
     dimension = db.Column(db.String(32), nullable=False)
     cohort_key = db.Column(db.String(32), nullable=False)
     representative_word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"))
@@ -1717,6 +1721,8 @@ class VocabularyPolicyCheckpoint(db.Model, TimestampMixin):
             "sense_id",
             "dimension",
             "cohort_key",
+            "source_kind",
+            "source_key",
             "interval_days",
             name="uq_vocab_checkpoint_cohort",
         ),
@@ -1727,16 +1733,38 @@ class VocabularyPolicyCheckpoint(db.Model, TimestampMixin):
             "status",
             "due_local_date",
         ),
+        db.Index(
+            "ix_vocab_checkpoint_select",
+            "student_id",
+            "cohort_key",
+            "status",
+            "due_local_date",
+            "selection_key",
+            "id",
+        ),
     )
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    sense_id = db.Column(
-        db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False
-    )
+    sense_id = db.Column(db.Integer, db.ForeignKey("vocabulary_sense.id"), nullable=False)
     dimension = db.Column(db.String(32), nullable=False)
     cohort_key = db.Column(db.String(32), nullable=False)
     representative_word_id = db.Column(db.Integer, db.ForeignKey("dictation_word.id"))
+    source_kind = db.Column(
+        db.String(24), nullable=False, default="first_correct", server_default="first_correct"
+    )
+    source_key = db.Column(
+        db.String(96), nullable=False, default="initial", server_default="initial"
+    )
+    # A graduation links to its immutable closed event; use_alter breaks the
+    # metadata dependency cycle with the event's existing checkpoint reference.
+    origin_event_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "vocabulary_policy_event.id", name="fk_vocab_checkpoint_origin", use_alter=True
+        ),
+    )
+    selection_key = db.Column(db.String(64), nullable=False, default=checkpoint_selection_default)
     anchor_at = db.Column(db.DateTime, nullable=False)
     interval_days = db.Column(db.Integer, nullable=False)
     due_local_date = db.Column(db.Date, nullable=False)

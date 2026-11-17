@@ -1,0 +1,333 @@
+{
+  "synthetic_only": true,
+  "python": "3.10.20",
+  "journal_mode": "delete",
+  "source_hashes": {
+    "models.py": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+    "services/vocabulary_attempt_reporting.py": "e4debf68f45acf57996d27431175b69de0f70b2fbe5a4bd3045bb6021ae63989",
+    "services/vocabulary_autonomous_review.py": "4ce7db96ad1f1cf45ea655878ee96c496d747df10d354fa9df60c4f4f6efbed3",
+    "services/vocabulary_checkpoint_identity.py": "08ca67edd04f5b159110183e7121b46b5fd85d0fe4341140d1abc837db2a1e0a",
+    "services/vocabulary_context.py": "1654c8407903177cc654031bdbacc39487f25c18faaec7798f4d55e2b1ec60d9",
+    "services/vocabulary_context_catalog.py": "4b919b1cf537be614d7df5e0b1093ecef5ebf68f268e3b99f13430086cd775db",
+    "services/vocabulary_due_cache.py": "88a41a0ceaa23700592dc515b59e7f44e4057eec1a1e006e6652c2e54d1923fd",
+    "services/vocabulary_error_queue.py": "bbbd1a4d460a5e0dc3513053fdf66b4e574f83d1778e0f138e1d7b1122781d7a",
+    "services/vocabulary_error_reporting.py": "83b36b2f473fee2de5c3961e83ca62f900340a3c9631c4e255ab8bbf7aff2b35",
+    "services/vocabulary_error_review.py": "4390b5578b223afd8e6e7536d4d2eb5b1f606dbce59902098e8d132895e8b8a1",
+    "services/vocabulary_group_learning.py": "2a305381bc52c531d7a04cdc68097d93532eeeeceae5658be422501b2c848f31",
+    "services/vocabulary_mastery.py": "da5a1261acc078986d809d5f8826cc3c395bd731a08dbbca4f3ed4bbf92d81b8",
+    "services/vocabulary_pilot_metrics.py": "69979330892612cc68695af8c70c36278a3c8cf222728e03275859747a2ff869",
+    "services/vocabulary_policy_planning.py": "42c9befd09877790fe8ebc5e5075fbf338843168a61775c560a89e148464aab3",
+    "services/vocabulary_remediation.py": "ea85b711376d53add2e7508e7b78a2f8128a92f4ac26a57627fd1933e269668d",
+    "services/vocabulary_review_selection.py": "ba22094d2fcef738ea0718445d2ad08763103190d80030f7006672390235a6ef",
+    "services/vocabulary_synonyms.py": "93df2ef677a82daaeb50a669ae714e21f7d80a59d0b686c4863f26730ad2ecdc"
+  },
+  "source_files_unchanged": true,
+  "cases": [
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 1,
+      "backlog_per_student": 2400,
+      "blocked": "partial",
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.21404870809055865,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.18383399583399296,
+          "post_first_dml_to_finish_ms": 0.7143330294638872,
+          "commit_ms": 0.5083750002086163,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    },
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 6,
+      "backlog_per_student": 2400,
+      "blocked": "partial",
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.1881835421081632,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.775457825511694,
+          "post_first_dml_to_finish_ms": 12.21212511882186,
+          "commit_ms": 11.778665939345956,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.208071541041136,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.2708751708269119,
+          "post_first_dml_to_finish_ms": 11.969583109021187,
+          "commit_ms": 11.720666894689202,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.254744250094518,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 72.64104089699686,
+          "post_first_dml_to_finish_ms": 5.857708165422082,
+          "commit_ms": 5.487290909513831,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.262200166936964,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.4419171493500471,
+          "post_first_dml_to_finish_ms": 2.2590418811887503,
+          "commit_ms": 2.005666960030794,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.2659205419477075,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.5174998659640551,
+          "post_first_dml_to_finish_ms": 0.3629589919000864,
+          "commit_ms": 0.16266689635813236,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 3.269086292013526,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 99,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.699667191132903,
+          "post_first_dml_to_finish_ms": 0.3595829475671053,
+          "commit_ms": 0.1657919492572546,
+          "rollback_ms": 0,
+          "fetched_rows": 16811,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    }
+  ],
+  "summary": [
+    {
+      "enabled": true,
+      "concurrency": 1,
+      "dimension": "context",
+      "path": "optional_partially_blocked",
+      "statuses": {
+        "200": 1
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 1,
+        "p50": 214.049,
+        "p95": 214.049,
+        "max": 214.049
+      },
+      "first_dml_execute_ms": {
+        "n": 1,
+        "p50": 0.184,
+        "p95": 0.184,
+        "max": 0.184
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 1,
+        "p50": 0.714,
+        "p95": 0.714,
+        "max": 0.714
+      },
+      "writer_begin_execute_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 1,
+        "p50": 0.508,
+        "p95": 0.508,
+        "max": 0.508
+      },
+      "rollback_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 1,
+        "p50": 99,
+        "p95": 99,
+        "max": 99
+      },
+      "fetched_rows": {
+        "n": 1,
+        "p50": 16811,
+        "p95": 16811,
+        "max": 16811
+      }
+    },
+    {
+      "enabled": true,
+      "concurrency": 6,
+      "dimension": "context",
+      "path": "optional_partially_blocked",
+      "statuses": {
+        "200": 6
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 6,
+        "p50": 3258.472,
+        "p95": 3269.086,
+        "max": 3269.086
+      },
+      "first_dml_execute_ms": {
+        "n": 6,
+        "p50": 1.109,
+        "p95": 72.641,
+        "max": 72.641
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 6,
+        "p50": 4.058,
+        "p95": 12.212,
+        "max": 12.212
+      },
+      "writer_begin_execute_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 6,
+        "p50": 3.746,
+        "p95": 11.779,
+        "max": 11.779
+      },
+      "rollback_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 6,
+        "p50": 99.0,
+        "p95": 99,
+        "max": 99
+      },
+      "fetched_rows": {
+        "n": 6,
+        "p50": 16811.0,
+        "p95": 16811,
+        "max": 16811
+      }
+    }
+  ]
+}

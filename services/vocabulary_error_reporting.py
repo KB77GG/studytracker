@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta
 
 from flask import current_app
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, or_, select, text
 
 from models import (
     StudentProfile,
@@ -17,6 +17,7 @@ from models import (
     db,
 )
 from services import vocabulary_error_queue as policy
+from services import vocabulary_pilot_metrics
 from services.dictation_review import local_date
 from services.vocabulary_mastery import utc_naive
 
@@ -232,6 +233,22 @@ def weekly_report(user, *, week=None, profile_id=None, now=None):
         visible = {row.user_id: row for row in profiles if row.id in active_ids}
         if not visible:
             return result
+        try:
+            metric_rows = vocabulary_pilot_metrics.load_rows(
+                lambda sql, params: db.session.execute(text(sql), params).mappings().all(),
+                student_ids=list(visible),
+                as_of=now,
+            )
+            metrics = vocabulary_pilot_metrics.aggregate(metric_rows, as_of=now, week=start)
+            result["pilot_metrics"] = metrics["summary"]
+            profiles_by_id = {profile.id: profile for profile in profiles}
+            for student in result["students"]:
+                profile = profiles_by_id[student["profile_id"]]
+                student["weekly_paused_words"] = metrics["student_weekly_paused_words"].get(
+                    profile.user_id, 0
+                )
+        except vocabulary_pilot_metrics.MetricsError:
+            result["pilot_metrics_unavailable"] = True
         events = (
             db.session.query(
                 VocabularyPolicyEvent,

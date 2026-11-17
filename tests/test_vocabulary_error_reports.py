@@ -182,6 +182,9 @@ class VocabularyErrorReportsTest(unittest.TestCase):
             },
         )
         self.assertEqual(result["words"][0]["student_count"], 2)
+        self.assertEqual(result["pilot_metrics"]["student_count"], 2)
+        self.assertEqual(result["pilot_metrics"]["weekly_pauses"]["student_words"], 2)
+        self.assertEqual({s["weekly_paused_words"] for s in result["students"]}, {1})
         self.assertNotIn(
             self.profiles["unrelated"].full_name, json.dumps(result, ensure_ascii=False)
         )

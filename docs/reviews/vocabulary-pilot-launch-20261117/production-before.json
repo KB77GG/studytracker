@@ -1,0 +1,89 @@
+{
+  "at_utc": "2026-11-17T11:29:55.734965+00:00",
+  "read_only": true,
+  "student_identities_exported": false,
+  "head": "79dd34f4f07ff435e882908b5454f46fd8dff4f5",
+  "tracked_clean": true,
+  "service": {
+    "systemd": {
+      "MainPID": "752836",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Tue 2026-11-17 13:46:47 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "actual_worker_count": 1,
+    "listener_5002_owned": true,
+    "loopback_only": true,
+    "ok": true
+  },
+  "http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "public_http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "dotenv_precedes_worker_start": true,
+  "process_feature_switch_off": true,
+  "code_flag_defaults_off": true,
+  "old_schema_sha256": "c22ec191324dba5f4fdd2565448b50b589008963b9756054ff75cfb678b81e3e",
+  "policy_tables_present": 5,
+  "policy_row_counts": {
+    "vocabulary_review_policy_enrollment": 0,
+    "vocabulary_error_queue": 0,
+    "vocabulary_policy_checkpoint": 0,
+    "vocabulary_policy_allocation": 0,
+    "vocabulary_policy_event": 0
+  },
+  "schema_read_changes": 0,
+  "legacy_reads_under_5_seconds": true,
+  "legacy_read_checks": [
+    {
+      "ok": true,
+      "query_only": true,
+      "zero_changes": true,
+      "calls_ms": {
+        "preflight": 668.431,
+        "summary": 1.245
+      }
+    },
+    {
+      "ok": true,
+      "query_only": true,
+      "zero_changes": true,
+      "calls_ms": {
+        "preflight": 577.48,
+        "summary": 1.299
+      }
+    }
+  ],
+  "blocked_sql": 0,
+  "prohibited_imports_absent": true,
+  "product_hashes_match": true,
+  "old_schema_unchanged": true,
+  "ok": true
+}

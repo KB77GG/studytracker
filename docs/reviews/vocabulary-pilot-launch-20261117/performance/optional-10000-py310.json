@@ -1,0 +1,233 @@
+{
+  "synthetic_only": true,
+  "python": "3.10.20",
+  "journal_mode": "delete",
+  "source_hashes": {
+    "models.py": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+    "services/vocabulary_attempt_reporting.py": "e4debf68f45acf57996d27431175b69de0f70b2fbe5a4bd3045bb6021ae63989",
+    "services/vocabulary_autonomous_review.py": "6be0f8837c9b8f78bd58f354baf72583d400513e3b644bf2c5c18ee1f7d8a56e",
+    "services/vocabulary_checkpoint_identity.py": "08ca67edd04f5b159110183e7121b46b5fd85d0fe4341140d1abc837db2a1e0a",
+    "services/vocabulary_context.py": "1654c8407903177cc654031bdbacc39487f25c18faaec7798f4d55e2b1ec60d9",
+    "services/vocabulary_context_catalog.py": "4b919b1cf537be614d7df5e0b1093ecef5ebf68f268e3b99f13430086cd775db",
+    "services/vocabulary_due_cache.py": "88a41a0ceaa23700592dc515b59e7f44e4057eec1a1e006e6652c2e54d1923fd",
+    "services/vocabulary_error_queue.py": "bbbd1a4d460a5e0dc3513053fdf66b4e574f83d1778e0f138e1d7b1122781d7a",
+    "services/vocabulary_error_reporting.py": "83b36b2f473fee2de5c3961e83ca62f900340a3c9631c4e255ab8bbf7aff2b35",
+    "services/vocabulary_error_review.py": "a7a5af5f7da47cc7969d198d54cfd5523a4029e6e0ae4e0af62fb6e1776b9592",
+    "services/vocabulary_group_learning.py": "1fd120ad7c0295eb318e8b7ba2928edfa4963336c9e94c966daae49d357013c1",
+    "services/vocabulary_mastery.py": "da5a1261acc078986d809d5f8826cc3c395bd731a08dbbca4f3ed4bbf92d81b8",
+    "services/vocabulary_pilot_metrics.py": "69979330892612cc68695af8c70c36278a3c8cf222728e03275859747a2ff869",
+    "services/vocabulary_policy_planning.py": "1ae0ed7a8373b710e44515fd96f859b84f414efb80f991ce5b58aafa22a14bf9",
+    "services/vocabulary_remediation.py": "ea85b711376d53add2e7508e7b78a2f8128a92f4ac26a57627fd1933e269668d",
+    "services/vocabulary_review_selection.py": "0fff00ca0ce9dc87ea4cd6a30f08e28b6bc4ca3b1f00a1175ab234164a418e76",
+    "services/vocabulary_synonyms.py": "93df2ef677a82daaeb50a669ae714e21f7d80a59d0b686c4863f26730ad2ecdc"
+  },
+  "source_files_unchanged": true,
+  "cases": [
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 1,
+      "backlog_per_student": 10000,
+      "blocked": false,
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.18217870802618563,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 98,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.2446670550853014,
+          "post_first_dml_to_finish_ms": 19.43608303554356,
+          "commit_ms": 0.6240000948309898,
+          "rollback_ms": 0,
+          "fetched_rows": 20390,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        }
+      ],
+      "round": 1
+    },
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 1,
+      "backlog_per_student": 10000,
+      "blocked": true,
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 2.0375288750510663,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 182,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.18362514674663544,
+          "post_first_dml_to_finish_ms": 0.710916006937623,
+          "commit_ms": 0.500708119943738,
+          "rollback_ms": 0,
+          "fetched_rows": 50011,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    }
+  ],
+  "summary": [
+    {
+      "enabled": true,
+      "concurrency": 1,
+      "dimension": "context",
+      "path": "optional_all_blocked",
+      "statuses": {
+        "200": 1
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 1,
+        "p50": 2037.529,
+        "p95": 2037.529,
+        "max": 2037.529
+      },
+      "first_dml_execute_ms": {
+        "n": 1,
+        "p50": 0.184,
+        "p95": 0.184,
+        "max": 0.184
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 1,
+        "p50": 0.711,
+        "p95": 0.711,
+        "max": 0.711
+      },
+      "writer_begin_execute_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 1,
+        "p50": 0.501,
+        "p95": 0.501,
+        "max": 0.501
+      },
+      "rollback_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 1,
+        "p50": 182,
+        "p95": 182,
+        "max": 182
+      },
+      "fetched_rows": {
+        "n": 1,
+        "p50": 50011,
+        "p95": 50011,
+        "max": 50011
+      }
+    },
+    {
+      "enabled": true,
+      "concurrency": 1,
+      "dimension": "context",
+      "path": "optional_available_ten",
+      "statuses": {
+        "200": 1
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 1,
+        "p50": 182.179,
+        "p95": 182.179,
+        "max": 182.179
+      },
+      "first_dml_execute_ms": {
+        "n": 1,
+        "p50": 0.245,
+        "p95": 0.245,
+        "max": 0.245
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 1,
+        "p50": 19.436,
+        "p95": 19.436,
+        "max": 19.436
+      },
+      "writer_begin_execute_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 1,
+        "p50": 0.624,
+        "p95": 0.624,
+        "max": 0.624
+      },
+      "rollback_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 1,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 1,
+        "p50": 98,
+        "p95": 98,
+        "max": 98
+      },
+      "fetched_rows": {
+        "n": 1,
+        "p50": 20390,
+        "p95": 20390,
+        "max": 20390
+      }
+    }
+  ]
+}

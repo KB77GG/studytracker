@@ -1,0 +1,10 @@
+/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py:64: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  result = function(sql, *args)
+/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py:272: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+{"round": 1, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}

@@ -1,0 +1,496 @@
+{
+  "ok": true,
+  "read_only": true,
+  "identities_exported": false,
+  "since_utc_inclusive": "2026-11-10T00:00:00+00:00",
+  "until_utc_exclusive": "2026-11-17T11:30:00+00:00",
+  "scope": "all_requests_to_four_routes_not_student_cohort",
+  "retained_logs_only": true,
+  "files_read": 15,
+  "duplicate_aliases_ignored": 0,
+  "lines_scanned": 169253,
+  "timing_quantile_method": "exact_nearest_rank",
+  "timing_source": "explicit_request_time_only;unlabelled_custom_columns_not_inferred",
+  "daily": [
+    {
+      "day_utc": "2026-11-10",
+      "endpoint": "queue",
+      "requests": 944,
+      "status_499": 3,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 944,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-10",
+      "endpoint": "preflight",
+      "requests": 35,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 35,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-10",
+      "endpoint": "summary",
+      "requests": 39,
+      "status_499": 2,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 39,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-10",
+      "endpoint": "today",
+      "requests": 11,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 11,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-11",
+      "endpoint": "queue",
+      "requests": 805,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 805,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-11",
+      "endpoint": "preflight",
+      "requests": 39,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 39,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-11",
+      "endpoint": "summary",
+      "requests": 55,
+      "status_499": 2,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 55,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-11",
+      "endpoint": "today",
+      "requests": 13,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 13,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-12",
+      "endpoint": "queue",
+      "requests": 676,
+      "status_499": 29,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 676,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-12",
+      "endpoint": "preflight",
+      "requests": 31,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 31,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-12",
+      "endpoint": "summary",
+      "requests": 53,
+      "status_499": 2,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 53,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-12",
+      "endpoint": "today",
+      "requests": 8,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 8,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-13",
+      "endpoint": "queue",
+      "requests": 853,
+      "status_499": 2,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 853,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-13",
+      "endpoint": "preflight",
+      "requests": 34,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 34,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-13",
+      "endpoint": "summary",
+      "requests": 44,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 44,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-13",
+      "endpoint": "today",
+      "requests": 13,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 13,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-14",
+      "endpoint": "queue",
+      "requests": 1296,
+      "status_499": 59,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 1296,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-14",
+      "endpoint": "preflight",
+      "requests": 68,
+      "status_499": 1,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 68,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-14",
+      "endpoint": "summary",
+      "requests": 106,
+      "status_499": 4,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 106,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-14",
+      "endpoint": "today",
+      "requests": 18,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 18,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-15",
+      "endpoint": "queue",
+      "requests": 859,
+      "status_499": 180,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 859,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-15",
+      "endpoint": "preflight",
+      "requests": 56,
+      "status_499": 5,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 56,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-15",
+      "endpoint": "summary",
+      "requests": 103,
+      "status_499": 21,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 103,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-15",
+      "endpoint": "today",
+      "requests": 16,
+      "status_499": 4,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 16,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-16",
+      "endpoint": "queue",
+      "requests": 961,
+      "status_499": 42,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 961,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-16",
+      "endpoint": "preflight",
+      "requests": 56,
+      "status_499": 6,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 56,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-16",
+      "endpoint": "summary",
+      "requests": 81,
+      "status_499": 10,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 81,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-16",
+      "endpoint": "today",
+      "requests": 18,
+      "status_499": 1,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 18,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-17",
+      "endpoint": "queue",
+      "requests": 627,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 627,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-17",
+      "endpoint": "preflight",
+      "requests": 38,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 38,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-17",
+      "endpoint": "summary",
+      "requests": 50,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 50,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    },
+    {
+      "day_utc": "2026-11-17",
+      "endpoint": "today",
+      "requests": 13,
+      "status_499": 0,
+      "status_5xx": 0,
+      "request_time_seconds": {
+        "count": 0,
+        "missing_count": 13,
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "max": null
+      }
+    }
+  ]
+}

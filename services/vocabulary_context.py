@@ -171,6 +171,14 @@ def _options(labels: Iterable[str], seed: str):
 def _stable_candidates(candidates, seed: str):
     """Sort candidate rows before slicing so DB row order cannot alter a snapshot."""
 
+    metadata = getattr(candidates, "context_metadata", None)
+    if metadata is not None:
+        return [
+            row[0]
+            for row in sorted(
+                metadata, key=lambda row: hashlib.sha256(f"{seed}|{row[3]}".encode()).hexdigest()
+            )
+        ]
     return sorted(
         list(candidates or []),
         key=lambda candidate: hashlib.sha256(
@@ -267,6 +275,8 @@ def _meaning_choice(word, candidates, seed):
         candidate_meaning = _meaning(candidate)
         if candidate_meaning and candidate_meaning != meaning:
             distractors.append(candidate_meaning)
+            if len(distractors) == 3:
+                break
     option_values = _options([meaning, *distractors[:3]], f"{seed}|meaning_choice")
     if len(option_values) < 4:
         return None
@@ -348,6 +358,12 @@ class ContextChoiceAvailability:
         self._rows = []
         self._meanings = Counter()
         self._frames = None
+        prepared = getattr(candidates, "context_candidates", None)
+        if prepared is not None:
+            self._rows = prepared.context_metadata
+            self._meanings.update(row[2] for row in self._rows if row[2])
+            self._meaning_count = sum(self._meanings.values())
+            return
         for candidate in candidates or []:
             if is_synonym_word(candidate):
                 continue
@@ -432,7 +448,12 @@ def build_context_question(
 
     if is_synonym_word(word):
         return None
-    candidates = [candidate for candidate in (candidates or []) if not is_synonym_word(candidate)]
+    prepared = getattr(candidates, "context_candidates", None)
+    candidates = (
+        prepared
+        if prepared is not None
+        else [candidate for candidate in (candidates or []) if not is_synonym_word(candidate)]
+    )
     seed = seed or f"word:{getattr(word, 'id', '')}"
     builder_specs = (
         ("example_fill", lambda: _example_fill(word, seed)),
@@ -441,9 +462,7 @@ def build_context_question(
         ("collocation_choice", lambda: _collocation_choice(word, candidates, seed)),
     )
     allowed = {str(kind).strip() for kind in (allowed_kinds or ()) if str(kind).strip()}
-    builders = tuple(
-        builder for kind, builder in builder_specs if not allowed or kind in allowed
-    )
+    builders = tuple(builder for kind, builder in builder_specs if not allowed or kind in allowed)
     if not builders:
         return None
     start = (int(rotation or 0) + int(getattr(word, "id", 0) or 0)) % len(builders)

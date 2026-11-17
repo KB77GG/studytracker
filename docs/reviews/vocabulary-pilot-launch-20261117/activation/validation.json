@@ -1,0 +1,43 @@
+{
+  "worktree": "/private/tmp/studytracker-vocabulary-error-pilot-20261117",
+  "modules": 2,
+  "tests_per_python": 31,
+  "source_sha256": {
+    "scripts/activate_vocabulary_pilot.py": "ac08f7eb0285e8327c29be3b6d9ae2541c6a3ff9805ea8fae184ac4c1b980386",
+    "scripts/manage_vocabulary_error_pilot.py": "a93f715822e2ab11b4f766d770f449a18b8340a68ba9c4b0973d7b5635d05209",
+    "tests/test_vocabulary_pilot_activation.py": "a8cf5bd8018f5a42e42a7853c791e2f9ac1401de793a18d0d19d609406d2d429"
+  },
+  "source_unchanged": true,
+  "runs": [
+    {
+      "version": "310",
+      "command": [
+        "/private/tmp/studytracker-stage2-py310/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_vocabulary_pilot_activation",
+        "tests.test_vocabulary_policy_management",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.628,
+      "log": "docs/reviews/vocabulary-pilot-launch-20261117/activation/python310.log"
+    },
+    {
+      "version": "313",
+      "command": [
+        "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_vocabulary_pilot_activation",
+        "tests.test_vocabulary_policy_management",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.99,
+      "log": "docs/reviews/vocabulary-pilot-launch-20261117/activation/python313.log"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+/private/tmp/studytracker-stage2-py310/lib/python3.10/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 21 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+/private/tmp/studytracker-stage2-py310/lib/python3.10/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 21 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+{"round": 1, "dimension": "meaning", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 6, "enabled": false, "requests": 164, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError"]}
+{"round": 1, "dimension": "meaning", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 6, "enabled": false, "requests": 164, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError"]}
+{"round": 1, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 2, "dimension": "meaning", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 2, "dimension": "meaning", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 2, "dimension": "meaning", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 2, "dimension": "meaning", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 2, "dimension": "meaning", "concurrency": 6, "enabled": false, "requests": 164, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError"]}
+{"round": 2, "dimension": "meaning", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 2, "dimension": "context", "concurrency": 6, "enabled": false, "requests": 167, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "learning_first_queue:409:state_conflict", "BrokenBarrierError"]}
+{"round": 2, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 3, "dimension": "meaning", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 3, "dimension": "meaning", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 3, "dimension": "meaning", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 3, "dimension": "meaning", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 3, "dimension": "meaning", "concurrency": 6, "enabled": false, "requests": 164, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError"]}
+{"round": 3, "dimension": "meaning", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 3, "dimension": "context", "concurrency": 6, "enabled": false, "requests": 167, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "learning_first_queue:409:state_conflict", "BrokenBarrierError"]}
+{"round": 3, "dimension": "context", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}

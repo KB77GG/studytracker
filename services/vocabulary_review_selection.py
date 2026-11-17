@@ -26,7 +26,9 @@ from services.vocabulary_remediation import MAX_REMEDIATION_PER_WORD, dimension_
 SELECTION_PAGE_SIZE = 128
 
 
-def _due_metadata_query(user_id, now, only_sense_ids=None, exclude_sense_ids=None):
+def _due_metadata_query(
+    user_id, now, only_sense_ids=None, exclude_sense_ids=None, extra_mastery_condition=None
+):
     mastery = StudentVocabularyMastery
     item = VocabularyReviewItem
     attempt = VocabularyReviewAttempt
@@ -116,6 +118,8 @@ def _due_metadata_query(user_id, now, only_sense_ids=None, exclude_sense_ids=Non
             filters.append(mastery.sense_id.in_(only_sense_ids))
         if exclude_sense_ids:
             filters.append(~mastery.sense_id.in_(exclude_sense_ids))
+        if extra_mastery_condition is not None:
+            filters.append(extra_mastery_condition)
         branches.append(
             select(
                 mastery.id.label("mastery_id"),
@@ -164,7 +168,14 @@ def _due_metadata_query(user_id, now, only_sense_ids=None, exclude_sense_ids=Non
 
 
 def due_metadata_pages(
-    user_id, now, *, only_sense_ids=None, exclude_sense_ids=None, page_size=SELECTION_PAGE_SIZE
+    user_id,
+    now,
+    *,
+    only_sense_ids=None,
+    exclude_sense_ids=None,
+    page_size=SELECTION_PAGE_SIZE,
+    extra_mastery_condition=None,
+    subsequent_page_size=None,
 ):
     """Yield ordered scalar pages; close the cursor when callers stop early."""
 
@@ -173,13 +184,17 @@ def due_metadata_pages(
         if not only_sense_ids:
             return
     result = db.session.execute(
-        _due_metadata_query(user_id, now, only_sense_ids, exclude_sense_ids)
+        _due_metadata_query(
+            user_id, now, only_sense_ids, exclude_sense_ids, extra_mastery_condition
+        )
     )
     try:
+        current_page_size = page_size
         while True:
-            rows = result.fetchmany(page_size)
+            rows = result.fetchmany(current_page_size)
             if not rows:
                 break
             yield rows
+            current_page_size = subsequent_page_size or page_size
     finally:
         result.close()

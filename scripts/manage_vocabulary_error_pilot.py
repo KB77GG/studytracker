@@ -232,7 +232,9 @@ def preview(connection, *, student_ids=(), starts_at=None, now=None):
     return result
 
 
-def apply_enrollment(database, *, student_ids, starts_at, expected_digest, now=None):
+def apply_enrollment(
+    database, *, student_ids, starts_at, expected_digest, now=None, locked_check=None
+):
     selected = _ids(student_ids)
     now = now or utc_now()
     if not selected or len(selected) > 50 or not expected_digest:
@@ -258,6 +260,8 @@ def apply_enrollment(database, *, student_ids, starts_at, expected_digest, now=N
         try:
             db.session.connection().exec_driver_sql("BEGIN IMMEDIATE")
             raw = db.session.connection().connection.driver_connection
+            if locked_check is not None:
+                locked_check(raw)
             checked = preview(raw, student_ids=selected, starts_at=starts_at, now=now)
             if checked["preview_digest"] != expected_digest:
                 raise ManagementError("preview_changed_repreview_required")

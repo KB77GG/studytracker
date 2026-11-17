@@ -25,11 +25,11 @@
       {% if report.students %}
       <div class="table-scroll"><table>
         <caption class="sr-only">授权试点学生的今日复习负担</caption>
-        <thead><tr><th>学生</th><th>今日必做剩余</th><th>已完成</th><th>超出今日安排</th><th>暂停待讲解</th><th>布置建议</th></tr></thead>
+        <thead><tr><th>学生</th><th>今日必做剩余</th><th>已完成</th><th>超出今日安排</th><th>暂停待讲解</th><th>本周暂停词</th><th>布置建议</th></tr></thead>
         <tbody>{% for student in report.students %}<tr>
           <td><a href="?week={{ report.week_start }}&amp;profile_id={{ student.profile_id }}">{{ student.name }}</a></td>
           <td>{{ student.required_count }} 题</td><td>{{ student.completed_count }} / {{ student.daily_limit }}</td>
-          <td>{{ student.overload_count }} 题</td><td>{{ student.paused_count }} 项</td>
+          <td>{{ student.overload_count }} 题</td><td>{{ student.paused_count }} 项</td><td>{{ student.weekly_paused_words if student.weekly_paused_words is defined else '—' }}</td>
           <td>{% if student.overloaded %}<strong class="warning">队列过载，建议减少本次新词量</strong>{% elif student.paused_count %}先安排困难词讲解{% else %}按学习情况安排{% endif %}</td>
         </tr>{% endfor %}</tbody>
       </table></div>
@@ -37,6 +37,29 @@
       {% if request.args.get('profile_id') %}<p><a href="?week={{ report.week_start }}">返回全部授权学生</a></p>{% endif %}
       {% if report.has_more_students %}<p class="warning">学生较多，本页显示前200名。可从任务布置提醒进入指定学生的完整清单。</p>{% endif %}
     </section>
+    {% if report.pilot_metrics %}
+    {% set metrics = report.pilot_metrics %}
+    <section class="report-card">
+      <div class="section-heading"><h2>试点评估</h2><span>复测与保持累计至 {{ report.today }}</span></div>
+      <div class="report-metrics">
+        <div><strong>{{ metrics.error_abilities }}</strong><span>新错能力项</span></div>
+        <div><strong>{{ metrics.formal_reviews_per_error_ability.mean if metrics.formal_reviews_per_error_ability.mean is not none else '—' }}</strong><span>每错能力平均正式复测次数</span></div>
+        <div><strong>{{ metrics.success_resets.abilities_reset_at_least_twice.numerator }} / {{ metrics.success_resets.abilities_reset_at_least_twice.denominator }}</strong><span>进度清零至少2次的能力项</span></div>
+        <div><strong>{{ metrics.weekly_pauses.student_words }}</strong><span>所选周暂停学生词数</span></div>
+      </div>
+      <p class="section-note">清零只统计已获得成功进度后再次答错、使进度变回0的次数；连续答错而进度一直为0不重复算清零。暂停按“学生 × 词义”去重，同词两个能力只计一个讲解词。</p>
+      <div class="table-scroll"><table>
+        <caption class="sr-only">试点抽查首答正确率与观察覆盖</caption>
+        <thead><tr><th>抽查类型</th><th>按期首答正确率</th><th>到期 / 已观察</th><th>未观察</th><th>尚未到期</th><th>延迟观察</th></tr></thead>
+        <tbody>{% for key, row in metrics.retention.items() %}<tr>
+          <td>{{ {'graduation_d7': '毕业后第7天', 'first_correct_d7': '首次答对后第7天', 'first_correct_d30': '首次答对后第30天'}[key] }}</td>
+          <td>{% if row.on_time_first_accuracy.denominator %}{{ '%.1f'|format(100 * row.on_time_first_accuracy.ratio) }}%（{{ row.on_time_first_accuracy.numerator }}/{{ row.on_time_first_accuracy.denominator }}）{% else %}—（0题）{% endif %}</td>
+          <td>{{ row.due }} / {{ row.observed }}</td><td>{{ row.unobserved }}{% if row.pending_today %}（{{ row.pending_today }}项今日待测）{% endif %}</td><td>{{ row.not_yet_due }}</td><td>{{ row.late_observed }}</td>
+        </tr>{% endfor %}</tbody>
+      </table></div>
+      <p class="section-note">未观察不能当作答对或答错；延迟观察单列，不混入按期保持率。80%–85%仅作复盘参考，不因少量样本自动改变复习规则。第30天抽查需等待足够时间。</p>
+    </section>
+    {% elif report.pilot_metrics_unavailable %}<p class="section-note">试点评估数据暂时无法完整汇总，周清单仍可查看。</p>{% endif %}
     <section class="report-card">
       <div class="section-heading"><h2>本周词汇清单</h2><span>{{ report.week_start }} — {{ report.week_end }}</span></div>
       <div class="report-metrics">

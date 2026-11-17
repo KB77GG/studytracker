@@ -6,7 +6,6 @@ returns before querying any new table, including on an unmigrated database.
 """
 
 from datetime import datetime, timedelta, timezone
-from hashlib import sha256
 
 from flask import current_app, has_app_context
 from sqlalchemy import update
@@ -23,6 +22,7 @@ from models import (
     VocabularyReviewSession,
     db,
 )
+from services.vocabulary_checkpoint_identity import checkpoint_selection_key
 
 DIMENSIONS = frozenset(("meaning_recall", "form_recall", "audio_form_recall", "context_use"))
 FEATURE_FLAG = "VOCABULARY_ERROR_REVIEW_ENABLED"
@@ -229,13 +229,18 @@ def _word_id(word_id, sense_id):
     return word.id
 
 
-def _open_error(user, enrollment, sense_id, dimension, word_id, now):
+def _open_error(
+    user, enrollment, sense_id, dimension, word_id, now, *, reset_source="learning_error"
+):
     day = local_date(now)
     queue = _queue(user.id, sense_id, dimension)
     new_cycle = (
         queue is None
         or queue.cohort_key != _cohort(enrollment)
         or queue.status in {"closed", "maintenance"}
+    )
+    resets_progress = (
+        queue is not None and not new_cycle and queue.status == "active" and queue.success_count > 0
     )
     if queue is None:
         queue = VocabularyErrorQueue(
@@ -264,6 +269,8 @@ def _open_error(user, enrollment, sense_id, dimension, word_id, now):
         _transition(queue, "reopened", now, "new_error")
     if word_id is not None:
         queue.representative_word_id = _word_id(word_id, sense_id)
+    if resets_progress:
+        _transition(queue, "success_reset", now, reset_source)
     queue.success_count = 0
     queue.last_success_local_date = None
     # A new learning error does not bypass the seven-day teaching pause.
@@ -275,7 +282,12 @@ def _open_error(user, enrollment, sense_id, dimension, word_id, now):
 
 def _schedule_checkpoints(user, enrollment, sense_id, dimension, word_id, now):
     if VocabularyPolicyCheckpoint.query.filter_by(
-        student_id=user.id, sense_id=sense_id, dimension=dimension, cohort_key=_cohort(enrollment)
+        student_id=user.id,
+        sense_id=sense_id,
+        dimension=dimension,
+        cohort_key=_cohort(enrollment),
+        source_kind="first_correct",
+        source_key="initial",
     ).first():
         return
     representative_word_id = _word_id(word_id, sense_id)
@@ -287,12 +299,47 @@ def _schedule_checkpoints(user, enrollment, sense_id, dimension, word_id, now):
                 dimension=dimension,
                 cohort_key=_cohort(enrollment),
                 representative_word_id=representative_word_id,
+                source_kind="first_correct",
+                source_key="initial",
                 anchor_at=now,
                 interval_days=interval,
                 due_local_date=local_date(now) + timedelta(days=interval),
                 status="pending",
             )
         )
+
+
+def _schedule_graduation_checkpoint(user, enrollment, queue, closed_event, now):
+    """One D7 opportunity per real graduation; no historical reconstruction."""
+    db.session.flush()  # The closed event is the stable per-cycle provenance.
+    source_key = f"graduation:{closed_event.id}"
+    existing = VocabularyPolicyCheckpoint.query.filter_by(
+        student_id=user.id,
+        sense_id=queue.sense_id,
+        dimension=queue.dimension,
+        cohort_key=_cohort(enrollment),
+        source_kind="graduation",
+        source_key=source_key,
+        interval_days=7,
+    ).first()
+    if existing:
+        return existing
+    checkpoint = VocabularyPolicyCheckpoint(
+        student_id=user.id,
+        sense_id=queue.sense_id,
+        dimension=queue.dimension,
+        cohort_key=_cohort(enrollment),
+        representative_word_id=queue.representative_word_id,
+        source_kind="graduation",
+        source_key=source_key,
+        origin_event_id=closed_event.id,
+        anchor_at=now,
+        interval_days=7,
+        due_local_date=local_date(now) + timedelta(days=7),
+        status="pending",
+    )
+    db.session.add(checkpoint)
+    return checkpoint
 
 
 def record_learning_answer(
@@ -360,9 +407,15 @@ def _entry(queue=None, checkpoint=None):
 
 
 def _stable_sample(row):
-    return sha256(
-        f"{row.student_id}:{row.cohort_key}:{row.sense_id}:{row.dimension}:{row.interval_days}".encode()
-    ).hexdigest()
+    return row.selection_key or checkpoint_selection_key(
+        row.student_id,
+        row.cohort_key,
+        row.sense_id,
+        row.dimension,
+        row.interval_days,
+        row.source_kind,
+        row.source_key,
+    )
 
 
 def _slots(user_id, day):
@@ -374,128 +427,10 @@ def _slots(user_id, day):
     )
 
 
-def _planning(user, enrollment, now):
-    day = local_date(now)
-    settings = policy_settings()
-    cohort = _cohort(enrollment)
-    slots = _slots(user.id, day)
-    mandatory = [slot for slot in slots if slot.mode == "mandatory"]
-    optional = [slot for slot in slots if slot.mode == "maintenance"]
-    allocated_keys = {(slot.sense_id, slot.dimension) for slot in slots}
-    remaining = max(0, settings["daily_limit"] - len(mandatory))
-    sample_left = max(
-        0, settings["sample_limit"] - sum(slot.kind == "sample" for slot in mandatory)
-    )
-    active = (
-        VocabularyErrorQueue.query.populate_existing()
-        .filter(
-            VocabularyErrorQueue.student_id == user.id,
-            VocabularyErrorQueue.cohort_key == cohort,
-            VocabularyErrorQueue.status.in_(("active", "paused")),
-        )
-        .all()
-    )
-    blocked_sample_keys = {(row.sense_id, row.dimension) for row in active}
-    due = [
-        row
-        for row in active
-        if (row.sense_id, row.dimension) not in allocated_keys
-        and (
-            (row.status == "active" and row.due_local_date <= day)
-            or (
-                row.status == "paused"
-                and row.pause_until_local_date is not None
-                and row.pause_until_local_date <= day
-            )
-        )
-    ]
-    checkpoints = (
-        VocabularyPolicyCheckpoint.query.populate_existing()
-        .filter_by(student_id=user.id, cohort_key=cohort, status="pending", due_local_date=day)
-        .all()
-    )
-    checkpoints = [
-        row
-        for row in checkpoints
-        if (row.sense_id, row.dimension) not in allocated_keys | blocked_sample_keys
-    ]
-    checkpoints.sort(key=lambda row: (_stable_sample(row), row.id))
-    chosen_samples = checkpoints[: min(sample_left, remaining)]
-    error_capacity = max(0, remaining - len(chosen_samples))
-    overloaded = len(due) > error_capacity
-    transfer = [
-        row
-        for row in due
-        if overloaded
-        and row.status == "active"
-        and row.due_local_date < day - timedelta(days=settings["overdue_days"])
-    ]
-    transfer_ids = {row.id for row in transfer}
-    due = [row for row in due if row.id not in transfer_ids]
-    # Resuming pauses are due today. Old overdue work never displaces today's schedule.
-    due.sort(
-        key=lambda row: (
-            0 if row.status == "paused" or row.due_local_date == day else 1,
-            day if row.status == "paused" else row.due_local_date,
-            row.opened_at,
-            row.id,
-        )
-    )
-    error_entries = [_entry(queue=row) for row in due[:error_capacity]]
-    for entry in error_entries:
-        if entry["due_local_date"] > day:
-            entry["due_local_date"] = day
-    entries = [_entry(checkpoint=row) for row in chosen_samples] + error_entries
-    pending = sum(slot.status == "reserved" for slot in mandatory)
-    completed = sum(slot.status in {"answered", "skipped"} for slot in mandatory)
-    maintenance_count = VocabularyErrorQueue.query.filter_by(
-        student_id=user.id, cohort_key=cohort, status="maintenance"
-    ).count()
-    transferred_today = VocabularyPolicyEvent.query.filter_by(
-        student_id=user.id, local_date=day, kind="overdue_overload"
-    ).count()
-    summary = {
-        "enabled": True,
-        "mandatory_remaining": pending + len(entries),
-        "mandatory_answered": completed,
-        "mandatory_limit": settings["daily_limit"],
-        "sample_reserved_limit": settings["sample_limit"],
-        "maintenance_remaining": max(0, settings["maintenance_limit"] - len(optional)),
-        "maintenance_limit": settings["maintenance_limit"],
-        "error_due_count": len(due) + len(transfer),
-        "sample_due_count": len(checkpoints),
-        "overloaded": overloaded,
-        "overload_count": max(0, len(due) + len(transfer) - error_capacity),
-        "overdue_transferred_count": transferred_today + len(transfer),
-        "overdue_transferred_today": transferred_today,
-        "overdue_transfer_pending_count": len(transfer),
-        "paused_count": sum(
-            row.status == "paused"
-            and row.pause_until_local_date is not None
-            and row.pause_until_local_date > day
-            for row in active
-        ),
-        "maintenance_count": maintenance_count,
-        "due_count": pending + len(entries),
-        "required_count": pending + len(entries),
-        "completed_count": completed,
-        "daily_limit": settings["daily_limit"],
-        "reviewed_today": completed,
-        "checkup_due_count": len(checkpoints),
-    }
-    return {
-        "summary": summary,
-        "entries": entries,
-        "transfer": transfer,
-        "paused_to_resume": [
-            row
-            for row in active
-            if row.status == "paused"
-            and row.pause_until_local_date is not None
-            and row.pause_until_local_date <= day
-        ],
-        "slots": slots,
-    }
+def _planning(user, enrollment, now, *, cleanup=False):
+    from services.vocabulary_policy_planning import planning
+
+    return planning(user, enrollment, now, cleanup=cleanup)
 
 
 def summary(user, now=None):
@@ -505,12 +440,12 @@ def summary(user, now=None):
     return _planning(user, enrollment, utc_naive(now))["summary"]
 
 
-def plan_today(user, *, now=None, optional=False):
+def plan_today(user, *, now=None, optional=False, prepare=False):
     enrollment = enabled_for(user, now)
     if enrollment is None:
         return {"enabled": False, "entries": []}
     now = utc_naive(now)
-    planned = _planning(user, enrollment, now)
+    planned = _planning(user, enrollment, now, cleanup=prepare)
     entries = planned["entries"]
     if optional:
         used = {(row.sense_id, row.dimension) for row in planned["slots"]}
@@ -519,53 +454,46 @@ def plan_today(user, *, now=None, optional=False):
             .filter_by(student_id=user.id, cohort_key=_cohort(enrollment), status="maintenance")
             .filter(VocabularyErrorQueue.due_local_date <= local_date(now))
             .order_by(VocabularyErrorQueue.due_local_date, VocabularyErrorQueue.id)
-            .limit(planned["summary"]["maintenance_limit"] + len(used))
+            .limit(min(20, planned["summary"]["maintenance_limit"]) + len(used))
             .all()
         )
         entries = [_entry(queue=row) for row in rows if (row.sense_id, row.dimension) not in used][
-            : planned["summary"]["maintenance_remaining"]
+            : min(20, planned["summary"]["maintenance_remaining"])
         ]
-    return {**planned["summary"], "entries": entries, "optional": bool(optional)}
+    result = {**planned["summary"], "entries": entries, "optional": bool(optional)}
+    if prepare:
+        result["_reservation_plan"] = planned
+    return result
 
 
 def _housekeeping(user, enrollment, now, planned):
-    day = local_date(now)
-    for row in planned["paused_to_resume"]:
-        row.status = "active"
-        row.due_local_date = day
-        row.pause_until_local_date = None
-        row.failure_streak = 0
-        row.success_count = 0
-        row.last_success_local_date = None
-        _transition(row, "reopened", now, "pause_elapsed")
-    for row in planned["transfer"]:
-        row.status = "maintenance"
-        row.closed_at = now
-        row.closed_reason = "overdue_overload"
-        _transition(row, "overdue_overload", now, "overdue_overload")
-    # Reserved but unanswered old checkpoints are missed as well; their old
-    # session cannot consume a fresh day's slots or count as an on-time sample.
-    checkpoints = (
-        VocabularyPolicyCheckpoint.query.filter_by(
-            student_id=user.id, cohort_key=_cohort(enrollment), status="pending"
-        )
-        .filter(VocabularyPolicyCheckpoint.due_local_date < day)
-        .all()
-    )
-    for row in checkpoints:
-        row.status = "missed"
-    db.session.flush()
+    from services.vocabulary_policy_planning import housekeeping
+
+    housekeeping(user, enrollment, now, planned)
 
 
-def refresh_day(user, *, now=None):
-    """Persist due transitions even when an explicit claim has no usable items."""
-    if enabled_for(user, now) is None:
+def refresh_day(user, *, now=None, prepared_plan=None, unusable_entries=()):
+    """Persist one bounded pre-read cleanup batch; never scan under the writer."""
+    enrollment = enabled_for(user, now)
+    if enrollment is None:
         return {"enabled": False}
     now = utc_naive(now)
+    planned = prepared_plan or _planning(user, enrollment, now, cleanup=True)
     enrollment = _lock_enrollment(user, now)
-    planned = _planning(user, enrollment, now)
+    if enrollment.state_version != planned["enrollment_version"] + 1:
+        raise PolicyConflict("policy_plan_changed")
+    if unusable_entries:
+        defer_unusable_entries(user, unusable_entries, now=now)
+        invalid_ids = {entry.get("queue_id") for entry in unusable_entries}
+        planned = dict(
+            planned,
+            paused_ids=[value for value in planned["paused_ids"] if value not in invalid_ids],
+            transfer_ids=[value for value in planned["transfer_ids"] if value not in invalid_ids],
+        )
     _housekeeping(user, enrollment, now, planned)
-    return _planning(user, enrollment, now)["summary"]
+    from services.vocabulary_policy_planning import after_claim_summary
+
+    return after_claim_summary(planned, [], False, unusable_entries)
 
 
 def optional_candidate_allowed(user, sense_id, dimension, *, now=None):
@@ -591,10 +519,14 @@ def _identity(entry):
     )
 
 
-def reserve_items(user, session_id, items, *, now=None, optional=False):
-    if enabled_for(user, now) is None:
+def reserve_items(
+    user, session_id, items, *, now=None, optional=False, prepared_plan=None, unusable_entries=()
+):
+    enrollment = enabled_for(user, now)
+    if enrollment is None:
         raise PolicyConflict("policy_not_enabled")
     now = utc_naive(now)
+    planned = prepared_plan or _planning(user, enrollment, now, cleanup=True)
     enrollment = _lock_enrollment(user, now)
     session = db.session.get(VocabularyReviewSession, int(session_id))
     if session is None or session.student_id != user.id or session.status != "active":
@@ -609,11 +541,12 @@ def reserve_items(user, session_id, items, *, now=None, optional=False):
         ):
             return existing
         raise PolicyConflict("session_already_bound")
-    planned = _planning(user, enrollment, now)
+    if enrollment.state_version != planned["enrollment_version"] + 1:
+        raise PolicyConflict("policy_plan_changed")
     candidates = {_identity(entry): entry for entry in planned["entries"]}
     limit = planned["summary"]["maintenance_limit" if optional else "mandatory_limit"]
     used = [row for row in planned["slots"] if row.mode == mode]
-    if len(items) + len(used) > limit:
+    if len(items) > 20 or len(items) + len(used) > limit:
         raise PolicyConflict("daily_policy_capacity_changed")
     supplied = set()
     for item in items:
@@ -652,6 +585,14 @@ def reserve_items(user, session_id, items, *, now=None, optional=False):
             raise PolicyConflict("policy_candidate_changed")
     # Validate against pre-housekeeping versions, then persist transitions in
     # this same outer transaction. Slot references survive paused resumption.
+    if unusable_entries:
+        defer_unusable_entries(user, unusable_entries, now=now)
+        invalid_ids = {entry.get("queue_id") for entry in unusable_entries}
+        planned = dict(
+            planned,
+            paused_ids=[value for value in planned["paused_ids"] if value not in invalid_ids],
+            transfer_ids=[value for value in planned["transfer_ids"] if value not in invalid_ids],
+        )
     _housekeeping(user, enrollment, now, planned)
     ordinal = max((row.ordinal for row in used), default=0)
     allocations = []
@@ -687,6 +628,7 @@ def _apply_error_review(queue, correct, now):
     if queue.last_attempt_local_date == day or queue.due_local_date > day:
         return
     queue.last_attempt_local_date = day
+    closed_event = None
     if correct:
         queue.failure_streak = 0
         if queue.last_success_local_date is None:
@@ -700,12 +642,14 @@ def _apply_error_review(queue, correct, now):
                 queue.status = "closed"
                 queue.closed_at = now
                 queue.closed_reason = "two_delayed_successes"
-                _transition(queue, "closed", now, "two_delayed_successes")
+                closed_event = _transition(queue, "closed", now, "two_delayed_successes")
             else:
                 queue.due_local_date = day + timedelta(days=settings["success_interval_days"])
         # Early formal successes are retained as answer events but do not
         # advance the two-day criterion or postpone the original due date.
     else:
+        if queue.success_count > 0:
+            _transition(queue, "success_reset", now, "review_error")
         queue.success_count = 0
         queue.last_success_local_date = None
         queue.failure_streak += 1
@@ -716,6 +660,7 @@ def _apply_error_review(queue, correct, now):
             queue.due_local_date = queue.pause_until_local_date
             _transition(queue, "paused", now, "consecutive_review_failures")
     queue.version += 1
+    return closed_event
 
 
 def apply_review_answer(user, *, item_id, correct, source_key, now=None, response_kind="answer"):
@@ -768,7 +713,9 @@ def apply_review_answer(user, *, item_id, correct, source_key, now=None, respons
     if allocation.kind == "error":
         if queue is None or queue.cohort_key != _cohort(enrollment) or queue.status != "active":
             raise PolicyConflict("error_queue_changed")
-        _apply_error_review(queue, correct, now)
+        closed_event = _apply_error_review(queue, correct, now)
+        if closed_event is not None:
+            _schedule_graduation_checkpoint(user, enrollment, queue, closed_event, now)
     elif allocation.kind == "sample":
         if (
             checkpoint is None
@@ -785,6 +732,7 @@ def apply_review_answer(user, *, item_id, correct, source_key, now=None, respons
                 allocation.dimension,
                 checkpoint.representative_word_id,
                 now,
+                reset_source="sample_error",
             )
     elif allocation.kind == "maintenance":
         if not correct:
@@ -796,6 +744,7 @@ def apply_review_answer(user, *, item_id, correct, source_key, now=None, respons
                 allocation.dimension,
                 item.word_id if item else None,
                 now,
+                reset_source="maintenance_error",
             )
         elif queue is not None and queue.status == "maintenance":
             queue.status = "closed"

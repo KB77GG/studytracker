@@ -1,0 +1,636 @@
+{
+  "synthetic_only": true,
+  "python": "3.10.20",
+  "journal_mode": "delete",
+  "source_hashes": {
+    "models.py": "53f72d965c301e323699aa7b15288f1b12b42a8073b5084354c9f1ff11e6c562",
+    "services/vocabulary_attempt_reporting.py": "e4debf68f45acf57996d27431175b69de0f70b2fbe5a4bd3045bb6021ae63989",
+    "services/vocabulary_autonomous_review.py": "b041368404fcbd14d14154aa5993dc7fb71e908aeb9cbb9304ce114989c1d8eb",
+    "services/vocabulary_checkpoint_identity.py": "08ca67edd04f5b159110183e7121b46b5fd85d0fe4341140d1abc837db2a1e0a",
+    "services/vocabulary_context.py": "96ced0e3adcfacff91690e6c34094986dcff66fc0ee0f2de399d2ecad564c7dc",
+    "services/vocabulary_context_catalog.py": "2aa748d0076d30956b777d1cd3093498a78bec3858618e573f95d93df4907945",
+    "services/vocabulary_due_cache.py": "88a41a0ceaa23700592dc515b59e7f44e4057eec1a1e006e6652c2e54d1923fd",
+    "services/vocabulary_error_queue.py": "e4ee1f1cbd44a0949e7493cf0e177eca055ecbba96eb5af51f8a18ec69dd979c",
+    "services/vocabulary_error_reporting.py": "83b36b2f473fee2de5c3961e83ca62f900340a3c9631c4e255ab8bbf7aff2b35",
+    "services/vocabulary_error_review.py": "9877196596553464b10ac05a2c4e54855bf5bfd8d22e3e59f5df97e0ea3cdbb6",
+    "services/vocabulary_group_learning.py": "2139119dcbc029116c597ec3d5581b8bb87dc5a981edae98da0f246955e0ab0e",
+    "services/vocabulary_mastery.py": "da5a1261acc078986d809d5f8826cc3c395bd731a08dbbca4f3ed4bbf92d81b8",
+    "services/vocabulary_optional_selection.py": "606ae0e30bfabf2b11350960b40435bdcc73235baa8429465cac8adeb823103d",
+    "services/vocabulary_pilot_metrics.py": "69979330892612cc68695af8c70c36278a3c8cf222728e03275859747a2ff869",
+    "services/vocabulary_policy_planning.py": "fd0fa957a80f79257e5d606d802b09f38e02b7a298d20414cd7a3225592cec16",
+    "services/vocabulary_remediation.py": "ea85b711376d53add2e7508e7b78a2f8128a92f4ac26a57627fd1933e269668d",
+    "services/vocabulary_review_selection.py": "56a655b14fa959b1925fbd8c47563968820dd199bcd5331c03b7836767d9152c",
+    "services/vocabulary_synonyms.py": "93df2ef677a82daaeb50a669ae714e21f7d80a59d0b686c4863f26730ad2ecdc"
+  },
+  "source_files_unchanged": true,
+  "cases": [
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 6,
+      "backlog_per_student": 2400,
+      "blocked": false,
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.7131561250425875,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.3796669188886881,
+          "post_first_dml_to_finish_ms": 175.46008294448256,
+          "commit_ms": 2.710457891225815,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        },
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.7336743341293186,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.21045817993581295,
+          "post_first_dml_to_finish_ms": 13.034290866926312,
+          "commit_ms": 0.5559579003602266,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        },
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.7772780410014093,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 75.3298751078546,
+          "post_first_dml_to_finish_ms": 14.589416095986962,
+          "commit_ms": 0.8811668958514929,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        },
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.8036046659108251,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 231.57995892688632,
+          "post_first_dml_to_finish_ms": 13.970999978482723,
+          "commit_ms": 0.5353330634534359,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        },
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.8466803750488907,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 146.8974167946726,
+          "post_first_dml_to_finish_ms": 15.15116705559194,
+          "commit_ms": 0.5727091338485479,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        },
+        {
+          "kind": "optional_available_ten",
+          "status": 200,
+          "elapsed_s": 0.90816062502563,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 117,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 222.69408381544054,
+          "post_first_dml_to_finish_ms": 17.2582499217242,
+          "commit_ms": 0.6116670556366444,
+          "rollback_ms": 0,
+          "fetched_rows": 5062,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 10
+        }
+      ],
+      "round": 1
+    },
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 6,
+      "backlog_per_student": 2400,
+      "blocked": true,
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.17308416706509888,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 3.2359170727431774,
+          "post_first_dml_to_finish_ms": 4.089958965778351,
+          "commit_ms": 3.312957938760519,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.18834570795297623,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 14.940415974706411,
+          "post_first_dml_to_finish_ms": 5.190707975998521,
+          "commit_ms": 4.6032501850277185,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.19304858380928636,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.37362496368587017,
+          "post_first_dml_to_finish_ms": 0.370207941159606,
+          "commit_ms": 0.169999897480011,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.19589854101650417,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.8146249931305647,
+          "post_first_dml_to_finish_ms": 0.3560830373317003,
+          "commit_ms": 0.16320892609655857,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.19535820907913148,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 10.963915847241879,
+          "post_first_dml_to_finish_ms": 0.3368749748915434,
+          "commit_ms": 0.14633405953645706,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_all_blocked",
+          "status": 200,
+          "elapsed_s": 0.19681666581891477,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 23,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 27.317542117089033,
+          "post_first_dml_to_finish_ms": 0.3570830449461937,
+          "commit_ms": 0.15266705304384232,
+          "rollback_ms": 0,
+          "fetched_rows": 2411,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    },
+    {
+      "enabled": true,
+      "dimension": "context",
+      "concurrency": 6,
+      "backlog_per_student": 2400,
+      "blocked": "partial",
+      "failures": [],
+      "requests": [
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.8640575839672238,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.6944169290363789,
+          "post_first_dml_to_finish_ms": 48.5018331091851,
+          "commit_ms": 48.12054196372628,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.893218208104372,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.2759159542620182,
+          "post_first_dml_to_finish_ms": 27.34350017271936,
+          "commit_ms": 27.096040779724717,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9053758748341352,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 4.978500073775649,
+          "post_first_dml_to_finish_ms": 0.5156658589839935,
+          "commit_ms": 0.285416841506958,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9085651661735028,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.30458299443125725,
+          "post_first_dml_to_finish_ms": 0.42320904321968555,
+          "commit_ms": 0.2318329643458128,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9089149998035282,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 1.6176251228898764,
+          "post_first_dml_to_finish_ms": 0.3402919974178076,
+          "commit_ms": 0.16004196368157864,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        },
+        {
+          "kind": "optional_partially_blocked",
+          "status": 200,
+          "elapsed_s": 0.9320108341053128,
+          "backlog_s": 0.0,
+          "backlog_calls": 0,
+          "sql": 27,
+          "writer_begin_execute_ms": 0,
+          "post_writer_begin_to_finish_ms": 0,
+          "first_dml_execute_ms": 0.14449981972575188,
+          "post_first_dml_to_finish_ms": 0.41691679507493973,
+          "commit_ms": 0.22783293388783932,
+          "rollback_ms": 0,
+          "fetched_rows": 9611,
+          "implicit_finish_ms": 0,
+          "sqlite_errors": [],
+          "error": null,
+          "attempt": 0,
+          "items": 0
+        }
+      ],
+      "round": 1
+    }
+  ],
+  "summary": [
+    {
+      "enabled": true,
+      "concurrency": 6,
+      "dimension": "context",
+      "path": "optional_all_blocked",
+      "statuses": {
+        "200": 6
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 6,
+        "p50": 194.203,
+        "p95": 196.817,
+        "max": 196.817
+      },
+      "first_dml_execute_ms": {
+        "n": 6,
+        "p50": 7.1,
+        "p95": 27.318,
+        "max": 27.318
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 6,
+        "p50": 0.364,
+        "p95": 5.191,
+        "max": 5.191
+      },
+      "writer_begin_execute_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 6,
+        "p50": 0.167,
+        "p95": 4.603,
+        "max": 4.603
+      },
+      "rollback_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 6,
+        "p50": 23.0,
+        "p95": 23,
+        "max": 23
+      },
+      "fetched_rows": {
+        "n": 6,
+        "p50": 2411.0,
+        "p95": 2411,
+        "max": 2411
+      }
+    },
+    {
+      "enabled": true,
+      "concurrency": 6,
+      "dimension": "context",
+      "path": "optional_available_ten",
+      "statuses": {
+        "200": 6
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 6,
+        "p50": 790.441,
+        "p95": 908.161,
+        "max": 908.161
+      },
+      "first_dml_execute_ms": {
+        "n": 6,
+        "p50": 111.114,
+        "p95": 231.58,
+        "max": 231.58
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 6,
+        "p50": 14.87,
+        "p95": 175.46,
+        "max": 175.46
+      },
+      "writer_begin_execute_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 6,
+        "p50": 0.592,
+        "p95": 2.71,
+        "max": 2.71
+      },
+      "rollback_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 6,
+        "p50": 117.0,
+        "p95": 117,
+        "max": 117
+      },
+      "fetched_rows": {
+        "n": 6,
+        "p50": 5062.0,
+        "p95": 5062,
+        "max": 5062
+      }
+    },
+    {
+      "enabled": true,
+      "concurrency": 6,
+      "dimension": "context",
+      "path": "optional_partially_blocked",
+      "statuses": {
+        "200": 6
+      },
+      "retries": 0,
+      "sqlite_errors": {},
+      "wall_ms": {
+        "n": 6,
+        "p50": 906.971,
+        "p95": 932.011,
+        "max": 932.011
+      },
+      "first_dml_execute_ms": {
+        "n": 6,
+        "p50": 0.499,
+        "p95": 4.979,
+        "max": 4.979
+      },
+      "post_first_dml_to_finish_ms": {
+        "n": 6,
+        "p50": 0.469,
+        "p95": 48.502,
+        "max": 48.502
+      },
+      "writer_begin_execute_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "post_writer_begin_to_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "commit_ms": {
+        "n": 6,
+        "p50": 0.259,
+        "p95": 48.121,
+        "max": 48.121
+      },
+      "rollback_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "implicit_finish_ms": {
+        "n": 6,
+        "p50": 0.0,
+        "p95": 0,
+        "max": 0
+      },
+      "sql": {
+        "n": 6,
+        "p50": 27.0,
+        "p95": 27,
+        "max": 27
+      },
+      "fetched_rows": {
+        "n": 6,
+        "p50": 9611.0,
+        "p95": 9611,
+        "max": 9611
+      }
+    }
+  ]
+}

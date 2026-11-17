@@ -648,7 +648,7 @@ def _flow_or_error(user, task_id, *, lock=False):
     return task, flow
 
 
-def _initialize_flow(user, task, now):
+def _initialize_flow(user, task, now, prepared_catalog=None):
     existing = VocabularyLearningFlow.query.filter_by(student_id=user.id, task_id=task.id).first()
     if existing:
         return existing
@@ -663,8 +663,23 @@ def _initialize_flow(user, task, now):
         )
     group_size = group_size_for_goal(goal)
     book_id = task.dictation_book_id
-    candidates = DictationWord.query.filter_by(book_id=book_id).order_by(DictationWord.id.asc()).all()
-    for candidate in candidates:
+    from services.vocabulary_error_review import enabled as error_policy_enabled
+
+    pilot = prepared_catalog is not None or error_policy_enabled(user, now)
+    if pilot:
+        from services.vocabulary_context_catalog import load_question_catalog
+
+        candidates = (
+            prepared_catalog if prepared_catalog is not None else load_question_catalog(book_id)
+        )
+    else:
+        candidates = (
+            DictationWord.query.filter_by(book_id=book_id).order_by(DictationWord.id.asc()).all()
+        )
+    # Distractor builders use catalog text/word IDs, not sense IDs. A pilot
+    # task must not create/load mastery senses for an entire vocabulary book.
+    sense_words = assigned if pilot else candidates
+    for candidate in sense_words:
         ensure_word_sense(candidate)
     db.session.flush()
     groups = build_fixed_groups(assigned, group_size)
@@ -689,9 +704,7 @@ def _initialize_flow(user, task, now):
         # A is a server-ordered familiarity pass. Seed B with the last card's
         # sense so the first active-recall prompt cannot immediately reuse the
         # answer just shown (a one-sense group is the explicit relaxation).
-        previous_sense = (
-            ensure_word_sense(group_words[-1]).id if group_words else None
-        )
+        previous_sense = ensure_word_sense(group_words[-1]).id if group_words else None
         for phase in PHASE_ORDER:
             if goal == "comprehensive" and phase in {PHASE_RECALL, PHASE_DISCRIMINATION}:
                 # The comprehensive builder has already paired each context
@@ -780,9 +793,14 @@ def _ensure_flow(user, task, now):
         raise VocabularyGroupLearningError("state_conflict", 409, retryable=True) from error
     if flow:
         return flow
+    from services.vocabulary_error_review import prepare_flow_creation
+
+    prepared_catalog = prepare_flow_creation(
+        user, now, VocabularyGroupLearningError, book_id=task.dictation_book_id
+    )
     try:
         with db.session.begin_nested():
-            flow = _initialize_flow(user, task, now)
+            flow = _initialize_flow(user, task, now, prepared_catalog=prepared_catalog)
             db.session.flush()
         return flow
     except OperationalError as error:

@@ -1,0 +1,31 @@
+/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py:64: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  result = function(sql, *args)
+/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py:272: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+{"round": 1, "dimension": "meaning", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+{"round": 1, "dimension": "meaning", "concurrency": 6, "enabled": false, "requests": 164, "failures": ["learning_first_queue:409:state_conflict", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError", "BrokenBarrierError"]}
+{"round": 1, "dimension": "meaning", "concurrency": 6, "enabled": true, "requests": 222, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 1, "enabled": false, "requests": 37, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 1, "enabled": true, "requests": 37, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 3, "enabled": false, "requests": 114, "failures": []}
+{"round": 1, "dimension": "context", "concurrency": 3, "enabled": true, "requests": 111, "failures": []}
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py", line 471, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py", line 423, in main
+    case = run_case(
+        Path(temporary),
+    ...<4 lines>...
+        retry_limit=args.retry_limit,
+    )
+  File "/private/tmp/studytracker-vocabulary-error-pilot-20261117/docs/reviews/vocabulary-pilot-launch-20261117/performance/benchmark_delete_concurrency.py", line 317, in run_case
+    thread.join(timeout=240)
+    ~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/threading.py", line 1092, in join
+    self._handle.join(timeout)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^
+KeyboardInterrupt

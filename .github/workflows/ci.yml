@@ -119,6 +119,12 @@ jobs:
           python -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review tests.test_vocabulary_flow_backlog_gate tests.test_vocabulary_due_cache tests.test_vocabulary_review_selection tests.test_vocabulary_stage2_adversarial tests.test_vocabulary_cache_lifecycle -v
       - name: Test default-off vocabulary error policy and enrollment boundaries
         run: python -m unittest tests.test_vocabulary_error_queue tests.test_vocabulary_error_review_integration tests.test_vocabulary_error_reports tests.test_vocabulary_policy_management -v
+      - name: Test pilot graduation checkpoints, migration, metrics and bounded request work
+        run: |
+          python -m unittest tests.test_vocabulary_graduation_checkpoints tests.test_vocabulary_checkpoint_migration tests.test_vocabulary_pilot_metrics tests.test_vocabulary_pilot_selection tests.test_vocabulary_policy_performance tests.test_vocabulary_pilot_activation -v
+          python docs/reviews/vocabulary-pilot-launch-20261117/test_verify_live.py -q
+          python docs/reviews/vocabulary-pilot-launch-20261117/test_audit_http.py -q
+          python docs/reviews/vocabulary-pilot-launch-20261117/test_activate_and_restart.py -q
       - name: Test verified small-class homework recipients and assignments
         run: python -m unittest tests.test_teacher_homework_recipients tests.test_teacher_group_homework tests.test_teacher_practice_access -v
       - name: Test submitted mock paper review access and saved results

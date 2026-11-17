@@ -230,13 +230,17 @@ def _word_for_mastery(mastery: StudentVocabularyMastery) -> DictationWord | None
     return sense.words.order_by(DictationWord.book_id.asc(), DictationWord.sequence.asc()).first()
 
 
-def _candidate_words(word: DictationWord, cache: dict[int, list[DictationWord]]):
+def _candidate_words(
+    word: DictationWord, cache: dict[int, list[DictationWord]], *, prefetch_senses=False
+):
     if word.book_id not in cache:
-        cache[word.book_id] = (
-            DictationWord.query.filter_by(book_id=word.book_id)
-            .order_by(DictationWord.id.asc())
-            .all()
-        )
+        if prefetch_senses:
+            from services.vocabulary_context_catalog import load_question_catalog
+
+            cache[word.book_id] = load_question_catalog(word.book_id)
+            return cache[word.book_id]
+        query = DictationWord.query.filter_by(book_id=word.book_id)
+        cache[word.book_id] = query.order_by(DictationWord.id.asc()).all()
         # A migrated word can have no sense link yet.  Question generation is
         # still allowed to use the catalog, but never invents a distractor.
         for candidate in cache[word.book_id]:
@@ -274,6 +278,8 @@ def _latest_review_items_by_key(
 
 def _bulk_representative_words(
     masteries: list[StudentVocabularyMastery],
+    *,
+    refresh: bool = False,
 ) -> dict[int, DictationWord]:
     """Resolve representatives without triggering relationship N+1 queries."""
 
@@ -291,6 +297,8 @@ def _bulk_representative_words(
             DictationWord.sense_id.in_(sense_ids or {-1}),
         )
     )
+    if refresh:
+        query = query.options(joinedload(DictationWord.sense)).populate_existing()
     words = query.order_by(
         DictationWord.sense_id.asc(),
         DictationWord.book_id.asc(),
@@ -306,8 +314,7 @@ def _bulk_representative_words(
         mastery.id: by_id.get(mastery.representative_word_id)
         or first_by_sense.get(mastery.sense_id)
         for mastery in masteries
-        if by_id.get(mastery.representative_word_id)
-        or first_by_sense.get(mastery.sense_id)
+        if by_id.get(mastery.representative_word_id) or first_by_sense.get(mastery.sense_id)
     }
 
 
@@ -964,7 +971,7 @@ def _public_item(
 ) -> dict:
     snapshot = _safe_json(item.question_snapshot_json)
     answer_payload = _safe_json(item.answer_payload_json)
-    if snapshot.get("mode") == "audio_to_zh" and not snapshot.get("options"):
+    if snapshot.get("mode") == "audio_to_zh" and not snapshot.get("options") and not snapshot.get("catalog_options_frozen"):
         word = word or db.session.get(DictationWord, item.word_id)
         if word:
             candidates = _candidate_words(word, candidate_cache if candidate_cache is not None else {})
@@ -1947,6 +1954,7 @@ def settle_review_session(
     from services import vocabulary_error_review as error_review
 
     policy_mode = error_review.session_mode(user, session, now)
+    policy_snapshot = error_review.prepare_settlement(user, now) if policy_mode else None
     # Take the (possibly cold) display snapshot before legacy correction
     # updates or the settlement CAS can acquire the database write lock.
     due_sense_ids_before = set() if policy_mode else _due_sense_ids(user, now)
@@ -2092,7 +2100,7 @@ def settle_review_session(
     total_count = len(attempts)
     accuracy = round(correct_count / total_count * 100, 1) if total_count else 0.0
     if policy_mode:
-        policy_counts = error_review.settlement_counts(user, session, now)
+        policy_counts = error_review.settlement_counts(user, session, now, policy_snapshot)
         affected_due_senses = set()
         remaining_due_count = policy_counts["remaining_due_count"]
     else:

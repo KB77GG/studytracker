@@ -13,6 +13,7 @@ from contextlib import closing
 
 from flask import current_app
 from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.orm import joinedload
 
 from models import (
     StudentVocabularyMastery,
@@ -57,6 +58,25 @@ def prepare_answer_write(error_class):
         _legacy()._begin_claim_outer_transaction()
     except (IntegrityError, OperationalError) as error:
         raise error_class("state_conflict", 409, retryable=True) from error
+
+
+def prepare_flow_creation(user, now, error_class, *, book_id=None):
+    """Prepare distractors before taking the real writer for flow creation."""
+    if not enabled(user, now):
+        return None
+    from services.vocabulary_context_catalog import load_question_catalog
+
+    catalog = load_question_catalog(book_id) if book_id is not None else None
+    try:
+        connection = db.session.connection()
+        if (
+            connection.dialect.name == "sqlite"
+            and not connection.connection.driver_connection.in_transaction
+        ):
+            connection.exec_driver_sql("BEGIN IMMEDIATE")
+    except (IntegrityError, OperationalError) as error:
+        raise error_class("state_conflict", 409, retryable=True) from error
+    return catalog
 
 
 def _conflict(error):
@@ -123,7 +143,7 @@ def review_summary(user, *, now=None):
         **fields,
         "due_count": due,
         "review_due_count": visible_due,
-        "batch_limit": fields["mandatory_limit"],
+        "batch_limit": min(20, fields["mandatory_limit"]),
         "active_session_id": mandatory_active.id if mandatory_active else None,
         "active_session_token": mandatory_active.session_token if mandatory_active else None,
         "has_active_session": bool(mandatory_active),
@@ -151,7 +171,7 @@ def review_preflight(user, task_id, *, now=None, gate_only=False):
             "task_flow_started": True,
             "due_count": None,
             "remaining_due_count": None,
-            "batch_limit": settings["daily_limit"],
+            "batch_limit": min(20, settings["daily_limit"]),
             "mandatory_limit": settings["daily_limit"],
             "checkpoint_limit": settings["sample_limit"],
             "maintenance_limit": settings["maintenance_limit"],
@@ -184,7 +204,7 @@ def session_due_counts(user, session, now):
     mode = session_mode(user, session, now)
     if not mode:
         return None
-    summary = _policy().summary(user, now=now)
+    summary = getattr(session, "_policy_summary_snapshot", None) or _policy().summary(user, now=now)
     unanswered = _pending_items(session)
     if mode == "maintenance":
         return unanswered, 0
@@ -195,18 +215,61 @@ def session_due_counts(user, session, now):
 def decorate_session(user, session, payload, now):
     mode = session_mode(user, session, now)
     if mode:
-        payload.update(_public_summary(_policy().summary(user, now=now)))
+        summary = getattr(session, "_policy_summary_snapshot", None) or _policy().summary(
+            user, now=now
+        )
+        payload.update(_public_summary(summary))
         payload["session_mode"] = mode
         if mode == "maintenance" and session.status == VocabularyReviewSession.STATUS_ACTIVE:
             payload["optional_available"] = True
     return payload
 
 
-def _materialize_entries(user, entries, now, *, optional=False):
+def _source_signature(word, mastery):
+    effective_book = word.book or mastery.representative_book
+    return tuple(
+        (
+            tuple((column.name, getattr(row, column.name)) for column in row.__table__.columns)
+            if row is not None
+            else None
+        )
+        for row in (word, word.sense, effective_book)
+    )
+
+
+def _build_candidate_question(candidate, catalog):
+    legacy = _legacy()
+    word = candidate["word"]
+    goal = legacy._goal_for_dimension(candidate["dimension"], candidate["mastery"], word)
+    needs_catalog = candidate["dimension"] == "context_use" or (
+        candidate["dimension"] == "meaning_recall" and goal == "listening"
+    )
+    question = legacy._question_for(
+        word,
+        candidate["dimension"],
+        goal,
+        candidate["stage"],
+        legacy._candidate_words(word, catalog, prefetch_senses=True) if needs_catalog else [],
+    )
+    if question:
+        public = dict(question[0])
+        if public.get("mode") == "audio_to_zh":
+            public["catalog_options_frozen"] = True
+        candidate.update(public=public, answer=question[1])
+        return candidate
+    return None
+
+
+def _materialize_entries(
+    user, entries, now, *, optional=False, prepared_candidates=None, catalog=None
+):
     legacy = _legacy()
     sense_ids = {entry["sense_id"] for entry in entries}
     masteries = (
-        StudentVocabularyMastery.query.filter(
+        StudentVocabularyMastery.query.options(
+            joinedload(StudentVocabularyMastery.representative_book)
+        )
+        .filter(
             StudentVocabularyMastery.student_id == user.id,
             StudentVocabularyMastery.sense_id.in_(sense_ids or {-1}),
         )
@@ -214,20 +277,32 @@ def _materialize_entries(user, entries, now, *, optional=False):
         .all()
     )
     by_sense = {row.sense_id: row for row in masteries}
-    words = legacy._bulk_representative_words(masteries)
+    words = legacy._bulk_representative_words(masteries, refresh=True)
     candidates, unusable = [], []
-    catalog, availability = {}, {}
+    catalog = {} if catalog is None else catalog
+    availability = {}
+    prepared_by_key = {
+        (row["mastery"].sense_id, row["dimension"]): row for row in (prepared_candidates or [])
+    }
     for entry in entries:
         mastery = by_sense.get(entry["sense_id"])
         word = words.get(mastery.id) if mastery else None
         dimension = entry["dimension"]
-        if (
-            not mastery
-            or not word
-            or not legacy._candidate_is_eligible(word, mastery, dimension, catalog, availability)
-        ):
+        if not mastery or not word or word.sense_id != mastery.sense_id:
             unusable.append(entry)
             continue
+        source_signature = _source_signature(word, mastery)
+        prepared = prepared_by_key.get((entry["sense_id"], dimension))
+        if prepared_candidates is not None:
+            if prepared is None or source_signature != prepared["source_signature"]:
+                unusable.append(entry)
+                continue
+        else:
+            if dimension == "context_use":
+                legacy._candidate_words(word, catalog, prefetch_senses=True)
+            if not legacy._candidate_is_eligible(word, mastery, dimension, catalog, availability):
+                unusable.append(entry)
+                continue
         due = _dimension_due(mastery, dimension)
         if optional and (due is None or due > now):
             continue
@@ -240,9 +315,17 @@ def _materialize_entries(user, entries, now, *, optional=False):
                 "stage": _dimension_stage(mastery, dimension),
                 "remediation_kind": None,
                 "policy_entry": entry,
+                "source_signature": source_signature,
             }
         )
-    materialized = legacy._materialize_due_candidates(candidates, len(candidates))
+        if prepared is not None:
+            candidates[-1].update(public=prepared["public"], answer=prepared["answer"])
+    if prepared_candidates is not None:
+        return candidates, unusable
+    materialized = []
+    for candidate in candidates:
+        if _build_candidate_question(candidate, catalog):
+            materialized.append(candidate)
     materialized_ids = {id(item["policy_entry"]) for item in materialized}
     unusable.extend(
         item["policy_entry"]
@@ -253,9 +336,12 @@ def _materialize_entries(user, entries, now, *, optional=False):
 
 
 def _optional_candidates(user, now, plan):
-    policy, legacy = _policy(), _legacy()
-    capacity = max(0, int(plan.get("maintenance_remaining", 0)))
-    candidates, unusable = _materialize_entries(user, plan.get("entries", []), now, optional=True)
+    policy = _policy()
+    capacity = min(20, max(0, int(plan.get("maintenance_remaining", 0))))
+    catalog = {}
+    candidates, unusable = _materialize_entries(
+        user, plan.get("entries", []), now, optional=True, catalog=catalog
+    )
     seen = {(item["mastery"].sense_id, item["dimension"]) for item in candidates}
     if len(candidates) < capacity:
         # One scalar snapshot for all candidate exclusions. The legacy iterator
@@ -280,7 +366,13 @@ def _optional_candidates(user, now, plan):
             .filter_by(student_id=user.id, local_date=local_date(now))
             .all()
         )
-        with closing(legacy._iter_due_candidates(user, now)) as old_candidates:
+        from services.vocabulary_optional_selection import iter_candidates
+        from services.vocabulary_policy_planning import optional_mastery_condition
+
+        condition = optional_mastery_condition(user.id, policy._cohort(enrollment), now)
+        with closing(
+            iter_candidates(user, now, blocked=blocked, condition=condition, catalogs=catalog)
+        ) as old_candidates:
             for candidate in old_candidates:
                 key = (candidate["mastery"].sense_id, candidate["dimension"])
                 if key in seen or key in blocked:
@@ -299,17 +391,20 @@ def _optional_candidates(user, now, plan):
                     "kind": "maintenance",
                     "version": None,
                 }
-                materialized = legacy._materialize_due_candidates([candidate], 1)
+                materialized = _build_candidate_question(candidate, catalog)
                 if materialized:
-                    candidates.extend(materialized)
+                    materialized["source_signature"] = _source_signature(
+                        materialized["word"], materialized["mastery"]
+                    )
+                    candidates.append(materialized)
                     seen.add(key)
                 if len(candidates) >= capacity:
                     break
     return candidates[:capacity], unusable
 
 
-def _empty_payload(user, now, origin_task, optional):
-    summary = _public_summary(_policy().summary(user, now=now))
+def _empty_payload(user, now, origin_task, optional, summary=None):
+    summary = _public_summary(summary or _policy().summary(user, now=now))
     remaining = 0 if optional else summary["mandatory_remaining"]
     return {
         "ok": True,
@@ -322,7 +417,7 @@ def _empty_payload(user, now, origin_task, optional):
         "due_count": remaining,
         "remaining_due_count": remaining,
         "continue_available": bool(remaining),
-        "batch_limit": summary["maintenance_limit" if optional else "mandatory_limit"],
+        "batch_limit": min(20, summary["maintenance_limit" if optional else "mandatory_limit"]),
         "items": [],
         "words": [],
         **summary,
@@ -355,24 +450,22 @@ def claim_today_review(user, *, origin_task_id=None, now=None, optional=False):
                 active_session_token=active.session_token,
             )
         return legacy._session_payload(user, active, now)
-    plan = policy.plan_today(user, now=now, optional=optional)
+    plan = policy.plan_today(user, now=now, optional=optional, prepare=True)
+    prepared_plan = plan["_reservation_plan"]
     if optional:
         candidates, unusable = _optional_candidates(user, now, plan)
     else:
         candidates, unusable = _materialize_entries(user, plan.get("entries", []), now)
     prepared = legacy._claim_candidate_signature(candidates)
     legacy._expire_stale_active_sessions(user.id, now)
-    if unusable:
-        try:
-            policy.defer_unusable_entries(user, unusable, now=now)
-        except (policy.PolicyConflict, IntegrityError, OperationalError) as error:
-            raise _conflict(error) from error
     if not candidates:
         try:
-            policy.refresh_day(user, now=now)
+            summary = policy.refresh_day(
+                user, now=now, prepared_plan=prepared_plan, unusable_entries=unusable
+            )
         except (policy.PolicyConflict, IntegrityError, OperationalError) as error:
             raise _conflict(error) from error
-        return _empty_payload(user, now, origin_task, optional)
+        return _empty_payload(user, now, origin_task, optional, summary)
     session = VocabularyReviewSession(
         student_id=user.id,
         origin_task_id=origin_task.id if origin_task else None,
@@ -381,7 +474,7 @@ def claim_today_review(user, *, origin_task_id=None, now=None, optional=False):
         claim_key=f"vocabulary-review:{user.id}:{local_date(now).isoformat()}",
         session_token=secrets.token_urlsafe(32)[: legacy.SESSION_TOKEN_MAX_LENGTH],
         queue_token=secrets.token_urlsafe(32)[: legacy.SESSION_TOKEN_MAX_LENGTH],
-        batch_limit=int(plan["maintenance_limit" if optional else "mandatory_limit"]),
+        batch_limit=min(20, int(plan["maintenance_limit" if optional else "mandatory_limit"])),
         started_at=now,
     )
     try:
@@ -392,7 +485,11 @@ def claim_today_review(user, *, origin_task_id=None, now=None, optional=False):
         # The session insertion owns the SQLite writer lock. Rebuild at most
         # this finite batch and verify fresh question/owner state before reserving.
         refreshed, invalid = _materialize_entries(
-            user, [item["policy_entry"] for item in candidates], now, optional=optional
+            user,
+            [item["policy_entry"] for item in candidates],
+            now,
+            optional=optional,
+            prepared_candidates=candidates,
         )
         if invalid or legacy._claim_candidate_signature(refreshed) != prepared:
             raise legacy.VocabularyAutonomousReviewError("review_claim_changed", 409)
@@ -420,14 +517,30 @@ def claim_today_review(user, *, origin_task_id=None, now=None, optional=False):
             db.session.add(item)
             db.session.flush()
             reservations.append({"item_id": item.id, "entry": candidate["policy_entry"]})
-        policy.reserve_items(user, session.id, reservations, now=now, optional=optional)
+        policy.reserve_items(
+            user,
+            session.id,
+            reservations,
+            now=now,
+            optional=optional,
+            prepared_plan=prepared_plan,
+            unusable_entries=unusable,
+        )
     except policy.PolicyConflict as error:
         raise _conflict(error) from error
     except OperationalError as error:
         raise legacy.VocabularyAutonomousReviewError("review_claim_in_progress", 409) from error
     except IntegrityError as error:
         raise legacy.VocabularyAutonomousReviewError("review_claim_conflict", 409) from error
-    return legacy._session_payload(user, session, now)
+    from services.vocabulary_policy_planning import after_claim_summary
+
+    session._policy_summary_snapshot = after_claim_summary(
+        prepared_plan, [row["entry"] for row in reservations], optional, unusable
+    )
+    try:
+        return legacy._session_payload(user, session, now)
+    finally:
+        del session._policy_summary_snapshot
 
 
 def record_review_answer(user, item, correct, now):
@@ -476,11 +589,30 @@ def mark_skipped(user, item_ids, now):
         raise _conflict(error) from error
 
 
-def settlement_counts(user, session, now):
+def prepare_settlement(user, now):
+    policy = _policy()
+    summary = policy.summary(user, now=now)
+    slots = policy._slots(user.id, local_date(now))
+    pending = sum(row.mode == "mandatory" and row.status == "reserved" for row in slots)
+    return summary, pending
+
+
+def settlement_counts(user, session, now, prepared=None):
     mode = session_mode(user, session, now)
     if mode is None:
         return None
-    summary = _public_summary(_policy().summary(user, now=now))
+    if prepared is None:
+        raw = _policy().summary(user, now=now)
+    else:
+        raw, previous_pending = prepared
+        raw = dict(raw)
+        slots = _policy()._slots(user.id, local_date(now))
+        pending = sum(row.mode == "mandatory" and row.status == "reserved" for row in slots)
+        raw["mandatory_remaining"] = max(0, raw["mandatory_remaining"] + pending - previous_pending)
+        raw["mandatory_answered"] = sum(
+            row.mode == "mandatory" and row.status in {"answered", "skipped"} for row in slots
+        )
+    summary = _public_summary(raw)
     remaining = (
         summary["mandatory_remaining"] if mode == "mandatory" else summary["maintenance_remaining"]
     )
