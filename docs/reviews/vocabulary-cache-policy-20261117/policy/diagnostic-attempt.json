@@ -1,0 +1,12 @@
+{
+  "ok": false,
+  "error": "readonly_audit_failed_or_budget_exceeded",
+  "diagnostic": {
+    "error_class": "OperationalError",
+    "reason": "sqlite_query_interrupted",
+    "phase": "read_learning_events",
+    "query_ordinal": 2,
+    "denied_statements": 0,
+    "elapsed_seconds": 3.001
+  }
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-vocabulary-cache-policy-20261117/docs/reviews/vocabulary-cache-policy-20261117/cache/cache_under_writes_verified.py", line 128, in <module>
+    main()
+  File "/private/tmp/studytracker-vocabulary-cache-policy-20261117/docs/reviews/vocabulary-cache-policy-20261117/cache/cache_under_writes_verified.py", line 76, in main
+    written_per_student = [
+  File "/private/tmp/studytracker-vocabulary-cache-policy-20261117/docs/reviews/vocabulary-cache-policy-20261117/cache/cache_under_writes_verified.py", line 77, in <listcomp>
+    connection.execute(
+sqlite3.OperationalError: no such column: answered_at

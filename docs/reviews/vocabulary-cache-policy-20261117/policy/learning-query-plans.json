@@ -1,0 +1,31 @@
+{
+  "current": [
+    [
+      5,
+      0,
+      0,
+      "SEARCH r USING INDEX ix_dictation_record_created_at (created_at>? AND created_at<?)"
+    ],
+    [
+      17,
+      0,
+      0,
+      "SEARCH q USING INDEX ix_vocabulary_learning_question_student_id (student_id=?)"
+    ]
+  ],
+  "candidate": [
+    [
+      4,
+      0,
+      0,
+      "SCAN q"
+    ],
+    [
+      8,
+      0,
+      0,
+      "SEARCH r USING INDEX uq_dictation_record_student_attempt (student_id=? AND attempt_id=?)"
+    ]
+  ],
+  "successful_changes": 0
+}

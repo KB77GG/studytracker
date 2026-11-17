@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-17 缓存按学生失效补丁A已部署；规则B1生产汇总完成，B2待参数确认
+
+- **授权/范围**：用户交接审计分支的 `docs/VOCABULARY_REVIEW_PLAN.md`，执行A应用/测试/部署/回读及B1只读无身份汇总；按其B2要求等用户确认参数后再实现规则。未建新队列表/开关、未迁移或删除学习记录、未启用试点/改判分、未发送通知；另两份DB锁补丁未应用。
+- **实施/Git**：`/private/tmp/studytracker-vocabulary-cache-policy-20261117`，分支`codex/vocabulary-cache-policy-audit-20261117`，clean输入`d67e147b`（产品与main45bc3a01一致，审计分支只多文档）。6产品/测试/CI文件提交 **7742a802ed332682671ed8aaaae798e17683d8c6** 已push任务分支/main并部署；随带三审计文档提交进入main。报告/计划状态及两交接单独skip-ci同步，不重复部署，最终docsHEAD以Git回读为准。
+- **A实现**：复习状态UPDATE确由student_id=user.id限定，声明本生批量失效；未知范围/词库仍全清。版本拆全局和本生，在途之外不留历史学生版本；双loader/跨日/跨引擎和global变更防ABA。原资格、题目、判分、冷计数和30秒TTL不变，无schema/配置/前端修改。
+- **A验证/发布**：Python3.10.20与3.13.3分别251+8=259项通过（分组，未声称全仓），正式8生命周期测纳入CI；原14缓存/8对抗断言不变，端到端负对照及3生命周期回退检出。增强合成并发0/1/3/6写者均12/12真实loader命中，全部HTTP200/ok；6写者12首答落库，短探针未触发settle不冒称覆盖。精确命令/log/SHA见新报告cache/README.md。分支CI44008547379/main CI44010311062业务job成功，旧advisory lint failure如实保留；Deploy44010311144 success。
+- **生产回读**：11:27:51 CST启动，12:11核对HEAD7742a802、2产品SHA、tracked clean、active/running、NRestarts0、实际单worker/gthread6/127.0.0.1:5002。两例preflight494/582ms、暖summary1.50/1.34ms，query_only/0changes/无待写ORM；公网登录200/0.139s，匿名review401。既有验收器只读，不是真机或生产并发写入验收；无代领/代答/结算。标准部署既有幂等迁移/服务重启照常，无本轮schema/手工DB操作。
+- **B1脚本与执行**：`docs/reviews/vocabulary-cache-policy-20261117/policy/aggregate_policy.py`，最终SHA f1ca56b4d28fff3fcff564a410e9e91a1e3f32c13b5609980536d21b25ffa989。stdlib、URI ro、query_only、列级拒写/拒身份答案；每query3s/总体20s/硬25s/50万行上限，无长读事务。首轮query2超时安全中止，诊断与EXPLAIN证实误选student_id索引；等价CROSS JOIN使用既有student+attempt索引，预算未扩大、生产未加索引。12:14成功8查询/1.429s/0change/0deny。主审通过SSH python -c执行冻结本机源码，仅聚合JSON回传，未复制库或逐学生记录。本组10+独审8项在3.10/3.13通过，真实ORM metadata核列兼容；最终命令与失败记录完整保存。
+- **B1发现/限制**：10/20–11/16完整28日，词汇活跃20；383任务观察片段、错词义中位7/P75 12；学习日复习中位/P75/P90均20。active原始到期词义23976中5497带错误状态代理（22.93%），并非首页可领取精确数，不能据其余77%宣称已掌握/可删。后测日差1/2/3正确率51.0/34.1/32.6%，但覆盖仅7.16/21.76/9.16%，近7日方向反转、来源与难度非随机，不支持决定最优成功间隔。无身份汇总与独立核对见policy/production-aggregate.json和independent/data-readback-review.md。
+- **下一步**：B2建议待确认：两次不同日成功间隔2自然日（目标D1/D3）、每日20道必做能力题、连续3个不同复测日首答失败转教师、保留7/30天抽查、可选低频≤10。此为试行参数未实施，20不保证消化积压；需新词容量控制和存量只读预演。两周只看负担/7天检查，30天结果需4–6周随访。新增队列表避免遍历低频池但COUNT并非自动O(1)。用户确认参数后才实现默认关闭后端，试点名单/开启另确认。
+- **其他worktree/可见性**：桌面`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2，原7M/23U保留，仅两交接/报告镜像/新增计划副本；计划新增1U，当前7M/24U。上轮第二层树45bc3a01未改；固定前端`/Users/zhouxin/Desktop/studytracker-release`仍codex/miniprogram-release@d03a2749，原76M/37U，本轮未触碰或上传/提审/发布。其完整未提交前端仍仅本机；A后台和本轮共享报告可从远端获取，不能用main整包覆盖固定源。
+
 ## 2026-11-17 Claude 独立复核第二层 df4124d3：逻辑等价成立；显示缓存在并发写入下失效，补丁待批
 
 - **范围**：云端会话，分支 `claude/student-tasks-db-lock-audit-67jm7t`，已快进到 main `45bc3a01`。只读代码与合成测试，未访问生产、未改产品代码、未部署。报告 `docs/reviews/vocabulary-entry-stage2-20261117/independent-claude/README.md`。

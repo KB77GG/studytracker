@@ -1,0 +1,92 @@
+[
+  {
+    "workload_timing_report": {
+      "other_students_writing": 0,
+      "seconds_between_each_students_answers": null,
+      "answers_written_during_run": 0,
+      "rounds": 12,
+      "cold_summary_median_ms": 441.6,
+      "second_read_median_ms": 1.3,
+      "second_read_served_from_cache": 12,
+      "second_read_recomputed": 0
+    },
+    "request_counts": {
+      "s": 24
+    },
+    "all_requests_http200_ok": true,
+    "actual_second_read_cache_hits": 12,
+    "actual_second_read_loader_calls": 0,
+    "writers_with_persisted_answers": 0,
+    "persisted_first_answer_items": 0,
+    "settlement_exercised": false
+  },
+  {
+    "workload_timing_report": {
+      "other_students_writing": 1,
+      "seconds_between_each_students_answers": 3.0,
+      "answers_written_during_run": 2,
+      "rounds": 12,
+      "cold_summary_median_ms": 448.0,
+      "second_read_median_ms": 1.2,
+      "second_read_served_from_cache": 12,
+      "second_read_recomputed": 0
+    },
+    "request_counts": {
+      "c": 1,
+      "a": 2,
+      "s": 24
+    },
+    "all_requests_http200_ok": true,
+    "actual_second_read_cache_hits": 12,
+    "actual_second_read_loader_calls": 0,
+    "writers_with_persisted_answers": 1,
+    "persisted_first_answer_items": 2,
+    "settlement_exercised": false
+  },
+  {
+    "workload_timing_report": {
+      "other_students_writing": 3,
+      "seconds_between_each_students_answers": 3.0,
+      "answers_written_during_run": 6,
+      "rounds": 12,
+      "cold_summary_median_ms": 447.6,
+      "second_read_median_ms": 1.1,
+      "second_read_served_from_cache": 12,
+      "second_read_recomputed": 0
+    },
+    "request_counts": {
+      "c": 3,
+      "a": 6,
+      "s": 24
+    },
+    "all_requests_http200_ok": true,
+    "actual_second_read_cache_hits": 12,
+    "actual_second_read_loader_calls": 0,
+    "writers_with_persisted_answers": 3,
+    "persisted_first_answer_items": 6,
+    "settlement_exercised": false
+  },
+  {
+    "workload_timing_report": {
+      "other_students_writing": 6,
+      "seconds_between_each_students_answers": 3.0,
+      "answers_written_during_run": 12,
+      "rounds": 12,
+      "cold_summary_median_ms": 456.6,
+      "second_read_median_ms": 1.1,
+      "second_read_served_from_cache": 12,
+      "second_read_recomputed": 0
+    },
+    "request_counts": {
+      "c": 6,
+      "s": 24,
+      "a": 12
+    },
+    "all_requests_http200_ok": true,
+    "actual_second_read_cache_hits": 12,
+    "actual_second_read_loader_calls": 0,
+    "writers_with_persisted_answers": 6,
+    "persisted_first_answer_items": 12,
+    "settlement_exercised": false
+  }
+]

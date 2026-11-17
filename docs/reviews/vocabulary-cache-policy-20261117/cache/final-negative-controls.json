@@ -1,0 +1,23 @@
+[
+  {
+    "negative_control": "remove_user_epoch_while_another_loader_is_pending",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "regression_detected": true
+  },
+  {
+    "negative_control": "ignore_global_epoch_after_catalog_invalidation",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "regression_detected": true
+  },
+  {
+    "negative_control": "retain_epoch_for_every_past_writer",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "regression_detected": true
+  }
+]

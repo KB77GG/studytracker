@@ -1,0 +1,986 @@
+{
+  "synthetic_only": true,
+  "reader_due_backlog_words": 2400,
+  "cases": [
+    {
+      "workload_timing_report": {
+        "other_students_writing": 0,
+        "seconds_between_each_students_answers": null,
+        "answers_written_during_run": 0,
+        "rounds": 12,
+        "cold_summary_median_ms": 441.6,
+        "second_read_median_ms": 1.3,
+        "second_read_served_from_cache": 12,
+        "second_read_recomputed": 0
+      },
+      "requests": [
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 446.139,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.285,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 437.322,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.315,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 441.563,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.287,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.721,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.275,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 436.576,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.178,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 442.804,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.326,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 438.22,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.347,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 441.568,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.261,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 420.909,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.262,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 440.906,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.517,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 445.381,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.268,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.483,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.284,
+          "exact_loader_calls": 0
+        }
+      ],
+      "request_counts": {
+        "s": 24
+      },
+      "all_requests_http200_ok": true,
+      "actual_second_read_cache_hits": 12,
+      "actual_second_read_loader_calls": 0,
+      "writers_with_persisted_answers": 0,
+      "persisted_first_answer_items": 0,
+      "settlement_exercised": false
+    },
+    {
+      "workload_timing_report": {
+        "other_students_writing": 1,
+        "seconds_between_each_students_answers": 3.0,
+        "answers_written_during_run": 2,
+        "rounds": 12,
+        "cold_summary_median_ms": 448.0,
+        "second_read_median_ms": 1.2,
+        "second_read_served_from_cache": 12,
+        "second_read_recomputed": 0
+      },
+      "requests": [
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 51.778,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 27.557,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 489.235,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.282,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 445.405,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.284,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 440.608,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.215,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 448.483,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.442,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.914,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.312,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 440.579,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.247,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 197.83,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 450.87,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.127,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 449.361,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.099,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 448.204,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.08,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 448.117,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.096,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 439.101,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.084,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 422.219,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.149,
+          "exact_loader_calls": 0
+        }
+      ],
+      "request_counts": {
+        "c": 1,
+        "a": 2,
+        "s": 24
+      },
+      "all_requests_http200_ok": true,
+      "actual_second_read_cache_hits": 12,
+      "actual_second_read_loader_calls": 0,
+      "writers_with_persisted_answers": 1,
+      "persisted_first_answer_items": 2,
+      "settlement_exercised": false
+    },
+    {
+      "workload_timing_report": {
+        "other_students_writing": 3,
+        "seconds_between_each_students_answers": 3.0,
+        "answers_written_during_run": 6,
+        "rounds": 12,
+        "cold_summary_median_ms": 447.6,
+        "second_read_median_ms": 1.1,
+        "second_read_served_from_cache": 12,
+        "second_read_recomputed": 0
+      },
+      "requests": [
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 133.308,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 149.336,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 165.807,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 3.405,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 29.84,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 80.989,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 465.467,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.067,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 445.057,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.278,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 446.846,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.081,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.499,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.084,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.648,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.287,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.005,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.074,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 153.099,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 234.86,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 462.724,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.233,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 209.514,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 448.049,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.316,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 428.298,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.158,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 444.646,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.166,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 447.719,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.096,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 448.45,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.127,
+          "exact_loader_calls": 0
+        }
+      ],
+      "request_counts": {
+        "c": 3,
+        "a": 6,
+        "s": 24
+      },
+      "all_requests_http200_ok": true,
+      "actual_second_read_cache_hits": 12,
+      "actual_second_read_loader_calls": 0,
+      "writers_with_persisted_answers": 3,
+      "persisted_first_answer_items": 6,
+      "settlement_exercised": false
+    },
+    {
+      "workload_timing_report": {
+        "other_students_writing": 6,
+        "seconds_between_each_students_answers": 3.0,
+        "answers_written_during_run": 12,
+        "rounds": 12,
+        "cold_summary_median_ms": 456.6,
+        "second_read_median_ms": 1.1,
+        "second_read_served_from_cache": 12,
+        "second_read_recomputed": 0
+      },
+      "requests": [
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 586.728,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 649.719,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 746.094,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.077,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1079.275,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 145.424,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 702.66,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 475.497,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.084,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1555.001,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 469.06,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.174,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 2027.242,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 100.908,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 735.123,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 472.876,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.015,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "c",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 2502.61,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 87.971,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 2162.317,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 467.808,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.06,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 442.428,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.074,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 446.225,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.085,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 443.756,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.511,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 68.753,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 99.343,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 458.491,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.091,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 454.644,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.838,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 40.368,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 106.181,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 425.167,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.577,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 71.539,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "a",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 99.406,
+          "exact_loader_calls": 0
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 451.117,
+          "exact_loader_calls": 1
+        },
+        {
+          "kind": "s",
+          "status": 200,
+          "ok": true,
+          "elapsed_ms": 1.019,
+          "exact_loader_calls": 0
+        }
+      ],
+      "request_counts": {
+        "c": 6,
+        "s": 24,
+        "a": 12
+      },
+      "all_requests_http200_ok": true,
+      "actual_second_read_cache_hits": 12,
+      "actual_second_read_loader_calls": 0,
+      "writers_with_persisted_answers": 6,
+      "persisted_first_answer_items": 12,
+      "settlement_exercised": false
+    }
+  ]
+}

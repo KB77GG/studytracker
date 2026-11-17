@@ -1,0 +1,12 @@
+======================================================================
+FAIL: test_one_students_review_answer_keeps_other_students_counts_cached (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-vocabulary-cache-policy-20261117/tests/test_vocabulary_flow_backlog_gate.py", line 402, in test_one_students_review_answer_keeps_other_students_counts_cached
+    self.assertEqual(loads.count(reader["id"]), reader_loads_before)
+AssertionError: 2 != 1
+
+----------------------------------------------------------------------
+Ran 1 test in 0.283s
+
+FAILED (failures=1)

@@ -1,0 +1,18 @@
+{
+  "script_sha256": "f1ca56b4d28fff3fcff564a410e9e91a1e3f32c13b5609980536d21b25ffa989",
+  "production_head": "7742a802ed332682671ed8aaaae798e17683d8c6",
+  "executed_from_local_source_via_ssh_python_c": true,
+  "output": "policy/production-aggregate.json",
+  "tests": {
+    "python310": {
+      "policy": 10,
+      "independent": 8
+    },
+    "python313": {
+      "policy": 10,
+      "independent": 8
+    }
+  },
+  "read_only": true,
+  "student_identity_or_answers_exported": false
+}

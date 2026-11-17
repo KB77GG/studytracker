@@ -1,0 +1,86 @@
+{
+  "at_utc": "2026-11-17T04:11:12.211115+00:00",
+  "read_only_service_replay": true,
+  "real_wechat_end_to_end": false,
+  "head": "7742a802ed332682671ed8aaaae798e17683d8c6",
+  "head_matches": true,
+  "product_sha256": {
+    "services/vocabulary_context.py": "e082b83db53965cc57a56ede669dc330e0ccaef4c724e727af947c76a5d5af95",
+    "services/vocabulary_autonomous_review.py": "53beb6306c49a85c65b1f61814a76630c8c6116366d938afc1dd7dfc56956c3f"
+  },
+  "product_sha_matches": true,
+  "tracked_clean": true,
+  "service": {
+    "systemd": {
+      "MainPID": "751748",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Tue 2026-11-17 11:27:51 CST",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "gunicorn_config": {
+      "bind": "127.0.0.1:5002",
+      "workers": 1,
+      "worker_class": "gthread",
+      "threads": 6
+    },
+    "actual_worker_count": 1,
+    "listener_5002_owned": true,
+    "loopback_only": true,
+    "ok": true
+  },
+  "anonymous_http": [
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/api/miniprogram/student/vocabulary-review/summary",
+      "status": 401,
+      "ok": true
+    }
+  ],
+  "cases": [
+    {
+      "case": "case_a",
+      "calls": {
+        "preflight": {
+          "elapsed_ms": 494.437,
+          "ok": true
+        },
+        "summary": {
+          "elapsed_ms": 1.5,
+          "ok": true
+        }
+      },
+      "query_only": true,
+      "same_snapshot_counts_unchanged": true,
+      "total_changes_zero": true,
+      "no_pending_orm_mutations": true,
+      "ok": true
+    },
+    {
+      "case": "case_b",
+      "calls": {
+        "preflight": {
+          "elapsed_ms": 582.229,
+          "ok": true
+        },
+        "summary": {
+          "elapsed_ms": 1.335,
+          "ok": true
+        }
+      },
+      "query_only": true,
+      "same_snapshot_counts_unchanged": true,
+      "total_changes_zero": true,
+      "no_pending_orm_mutations": true,
+      "ok": true
+    }
+  ],
+  "all_read_calls_under_5_seconds": true,
+  "no_prohibited_imports": true,
+  "blocked_sql_attempts": 0,
+  "ok": true
+}

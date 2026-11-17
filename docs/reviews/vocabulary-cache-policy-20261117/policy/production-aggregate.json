@@ -1,0 +1,1398 @@
+{
+  "schema_version": 1,
+  "snapshot_utc": "2026-11-17T04:14:08.224112Z",
+  "timezone": "Asia/Shanghai",
+  "complete_days_end_exclusive": "2026-11-17",
+  "quality": {
+    "excluded_guidance_or_remediation_learning_rows": 54,
+    "observed_first_vocabulary_dictation_records": 21409,
+    "joined_learning_first_records": 21409,
+    "unjoined_first_records": 0
+  },
+  "windows": {
+    "28d": {
+      "start_inclusive": "2026-10-20",
+      "end_exclusive": "2026-11-17",
+      "task_first_errors": {
+        "all": {
+          "tasks_observed": 383,
+          "students_observed": 19,
+          "task_wrong_senses": {
+            "n": 383,
+            "median": 7,
+            "p75": 12,
+            "p90": 18,
+            "max": 61
+          },
+          "task_wrong_fraction": {
+            "n": 383,
+            "median": 0.26,
+            "p75": 0.4231,
+            "p90": 0.7638,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 19,
+            "median": 8,
+            "p75": 9.8091,
+            "p90": 14.24,
+            "max": 40.2174
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 19,
+            "median": 0.2786,
+            "p75": 0.4135,
+            "p90": 0.5903,
+            "max": 0.8417
+          },
+          "tested_sense_task_pairs": 12582,
+          "wrong_sense_task_pairs": 3737
+        },
+        "meaning_recall": {
+          "tasks_observed": 236,
+          "students_observed": 16,
+          "task_wrong_senses": {
+            "n": 236,
+            "median": 2,
+            "p75": 5.25,
+            "p90": 13,
+            "max": 26
+          },
+          "task_wrong_fraction": {
+            "n": 236,
+            "median": 0.06,
+            "p75": 0.1554,
+            "p90": 0.3179,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 16,
+            "median": 1.5278,
+            "p75": 4.5681,
+            "p90": 8.5252,
+            "max": 15.9167
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 16,
+            "median": 0.0601,
+            "p75": 0.1372,
+            "p90": 0.1737,
+            "max": 0.4081
+          },
+          "tested_sense_task_pairs": 8349,
+          "wrong_sense_task_pairs": 987
+        },
+        "form_recall": {
+          "tasks_observed": 146,
+          "students_observed": 13,
+          "task_wrong_senses": {
+            "n": 146,
+            "median": 6,
+            "p75": 11,
+            "p90": 18,
+            "max": 59
+          },
+          "task_wrong_fraction": {
+            "n": 146,
+            "median": 0.2042,
+            "p75": 0.4654,
+            "p90": 0.8248,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 13,
+            "median": 6.7778,
+            "p75": 9.625,
+            "p90": 14.62,
+            "max": 39.5455
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 13,
+            "median": 0.2971,
+            "p75": 0.3685,
+            "p90": 0.7551,
+            "max": 0.8267
+          },
+          "tested_sense_task_pairs": 4212,
+          "wrong_sense_task_pairs": 1329
+        },
+        "audio_form_recall": {
+          "tasks_observed": 162,
+          "students_observed": 15,
+          "task_wrong_senses": {
+            "n": 162,
+            "median": 4,
+            "p75": 7,
+            "p90": 12,
+            "max": 55
+          },
+          "task_wrong_fraction": {
+            "n": 162,
+            "median": 0.1333,
+            "p75": 0.3,
+            "p90": 0.5413,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 15,
+            "median": 3.4444,
+            "p75": 6.1948,
+            "p90": 7.87,
+            "max": 37.4545
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 15,
+            "median": 0.1591,
+            "p75": 0.2366,
+            "p90": 0.3229,
+            "max": 0.7372
+          },
+          "tested_sense_task_pairs": 4746,
+          "wrong_sense_task_pairs": 1083
+        },
+        "context_use": {
+          "tasks_observed": 136,
+          "students_observed": 12,
+          "task_wrong_senses": {
+            "n": 136,
+            "median": 6.5,
+            "p75": 9,
+            "p90": 12,
+            "max": 29
+          },
+          "task_wrong_fraction": {
+            "n": 136,
+            "median": 0.2566,
+            "p75": 0.4,
+            "p90": 0.4773,
+            "max": 0.8571
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 12,
+            "median": 6.9028,
+            "p75": 7.7312,
+            "p90": 8.3725,
+            "max": 23.0909
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 12,
+            "median": 0.3002,
+            "p75": 0.3488,
+            "p90": 0.4399,
+            "max": 0.454
+          },
+          "tested_sense_task_pairs": 4048,
+          "wrong_sense_task_pairs": 1032
+        }
+      },
+      "daily_review_capacity": {
+        "active_students": 20,
+        "vocabulary_learning_student_days": 303,
+        "calendar_student_days_including_zero": 560,
+        "answers": {
+          "total": 5812,
+          "on_vocabulary_learning_days": {
+            "n": 303,
+            "median": 20,
+            "p75": 20,
+            "p90": 20,
+            "max": 80
+          },
+          "on_review_positive_days": {
+            "n": 293,
+            "median": 20,
+            "p75": 20,
+            "p90": 20,
+            "max": 80
+          },
+          "on_all_calendar_days": {
+            "n": 560,
+            "median": 10,
+            "p75": 20,
+            "p90": 20,
+            "max": 80
+          },
+          "student_mean_on_learning_days": {
+            "n": 20,
+            "median": 18.9359,
+            "p75": 20,
+            "p90": 20,
+            "max": 25.1765
+          },
+          "student_mean_on_calendar_days": {
+            "n": 20,
+            "median": 10.1429,
+            "p75": 15.3929,
+            "p90": 17.2143,
+            "max": 20
+          }
+        },
+        "batches": {
+          "total": 288,
+          "on_vocabulary_learning_days": {
+            "n": 303,
+            "median": 1,
+            "p75": 1,
+            "p90": 1,
+            "max": 4
+          },
+          "on_review_positive_days": {
+            "n": 275,
+            "median": 1,
+            "p75": 1,
+            "p90": 1,
+            "max": 4
+          },
+          "on_all_calendar_days": {
+            "n": 560,
+            "median": 0,
+            "p75": 1,
+            "p90": 1,
+            "max": 4
+          },
+          "student_mean_on_learning_days": {
+            "n": 20,
+            "median": 0.9421,
+            "p75": 1,
+            "p90": 1,
+            "max": 1.2941
+          },
+          "student_mean_on_calendar_days": {
+            "n": 20,
+            "median": 0.4821,
+            "p75": 0.7857,
+            "p90": 0.8607,
+            "max": 1
+          }
+        }
+      },
+      "answer_interval_proxy": {
+        "positive_adjacent_pairs": 5509,
+        "nonpositive_pairs_excluded": 0,
+        "max_gap_30s": {
+          "long_pauses_excluded": 791,
+          "seconds": {
+            "n": 4718,
+            "median": 10.4407,
+            "p75": 16.2927,
+            "p90": 22.3715,
+            "max": 29.9721
+          },
+          "student_median_seconds": {
+            "n": 18,
+            "median": 11.3627,
+            "p75": 12.6346,
+            "p90": 14.3633,
+            "max": 16.2475
+          }
+        },
+        "max_gap_60s": {
+          "long_pauses_excluded": 330,
+          "seconds": {
+            "n": 5179,
+            "median": 11.3836,
+            "p75": 18.8869,
+            "p90": 28.795,
+            "max": 59.9736
+          },
+          "student_median_seconds": {
+            "n": 18,
+            "median": 11.8788,
+            "p75": 14.0706,
+            "p90": 17.1211,
+            "max": 18.0332
+          }
+        },
+        "max_gap_120s": {
+          "long_pauses_excluded": 167,
+          "seconds": {
+            "n": 5342,
+            "median": 11.7144,
+            "p75": 19.9467,
+            "p90": 32.8195,
+            "max": 117.3539
+          },
+          "student_median_seconds": {
+            "n": 18,
+            "median": 12.0131,
+            "p75": 14.5164,
+            "p90": 17.6873,
+            "max": 18.9079
+          }
+        }
+      },
+      "delayed_first_retests": {
+        "all": {
+          "wrong_sense_dimension_days": 7889,
+          "wrong_days_with_multiple_formal_exposures": 20,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 7585,
+            "observed_retests": 543,
+            "correct": 277,
+            "correct_fraction_among_retested": 0.5101,
+            "observation_fraction": 0.0716,
+            "students_retested": 17,
+            "retest_source_counts": {
+              "review": 464,
+              "learning": 79
+            },
+            "student_correct_fraction": {
+              "n": 17,
+              "median": 0.5,
+              "p75": 0.6471,
+              "p90": 0.8355,
+              "max": 0.8571
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 7335,
+            "observed_retests": 1596,
+            "correct": 544,
+            "correct_fraction_among_retested": 0.3409,
+            "observation_fraction": 0.2176,
+            "students_retested": 17,
+            "retest_source_counts": {
+              "review": 1553,
+              "learning": 43
+            },
+            "student_correct_fraction": {
+              "n": 17,
+              "median": 0.3667,
+              "p75": 0.5,
+              "p90": 0.6565,
+              "max": 0.9
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 6930,
+            "observed_retests": 635,
+            "correct": 207,
+            "correct_fraction_among_retested": 0.326,
+            "observation_fraction": 0.0916,
+            "students_retested": 16,
+            "retest_source_counts": {
+              "review": 616,
+              "learning": 19
+            },
+            "student_correct_fraction": {
+              "n": 16,
+              "median": 0.407,
+              "p75": 0.5179,
+              "p90": 0.6179,
+              "max": 0.6667
+            }
+          }
+        },
+        "meaning_recall": {
+          "wrong_sense_dimension_days": 1492,
+          "wrong_days_with_multiple_formal_exposures": 0,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 1430,
+            "observed_retests": 123,
+            "correct": 71,
+            "correct_fraction_among_retested": 0.5772,
+            "observation_fraction": 0.086,
+            "students_retested": 15,
+            "retest_source_counts": {
+              "review": 119,
+              "learning": 4
+            },
+            "student_correct_fraction": {
+              "n": 15,
+              "median": 0.5,
+              "p75": 0.7083,
+              "p90": 0.9556,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 1411,
+            "observed_retests": 200,
+            "correct": 73,
+            "correct_fraction_among_retested": 0.365,
+            "observation_fraction": 0.1417,
+            "students_retested": 14,
+            "retest_source_counts": {
+              "review": 195,
+              "learning": 5
+            },
+            "student_correct_fraction": {
+              "n": 14,
+              "median": 0.4375,
+              "p75": 0.5884,
+              "p90": 0.7679,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 1337,
+            "observed_retests": 127,
+            "correct": 51,
+            "correct_fraction_among_retested": 0.4016,
+            "observation_fraction": 0.095,
+            "students_retested": 12,
+            "retest_source_counts": {
+              "review": 114,
+              "learning": 13
+            },
+            "student_correct_fraction": {
+              "n": 12,
+              "median": 0.3673,
+              "p75": 0.5,
+              "p90": 0.5409,
+              "max": 0.6875
+            }
+          }
+        },
+        "form_recall": {
+          "wrong_sense_dimension_days": 2698,
+          "wrong_days_with_multiple_formal_exposures": 9,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 2610,
+            "observed_retests": 166,
+            "correct": 64,
+            "correct_fraction_among_retested": 0.3855,
+            "observation_fraction": 0.0636,
+            "students_retested": 12,
+            "retest_source_counts": {
+              "review": 127,
+              "learning": 39
+            },
+            "student_correct_fraction": {
+              "n": 12,
+              "median": 0.2088,
+              "p75": 0.6334,
+              "p90": 0.9722,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 2503,
+            "observed_retests": 638,
+            "correct": 177,
+            "correct_fraction_among_retested": 0.2774,
+            "observation_fraction": 0.2549,
+            "students_retested": 16,
+            "retest_source_counts": {
+              "review": 625,
+              "learning": 13
+            },
+            "student_correct_fraction": {
+              "n": 16,
+              "median": 0.2917,
+              "p75": 0.51,
+              "p90": 0.6282,
+              "max": 0.6667
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 2376,
+            "observed_retests": 205,
+            "correct": 50,
+            "correct_fraction_among_retested": 0.2439,
+            "observation_fraction": 0.0863,
+            "students_retested": 16,
+            "retest_source_counts": {
+              "review": 203,
+              "learning": 2
+            },
+            "student_correct_fraction": {
+              "n": 16,
+              "median": 0.4143,
+              "p75": 0.5,
+              "p90": 1,
+              "max": 1
+            }
+          }
+        },
+        "audio_form_recall": {
+          "wrong_sense_dimension_days": 1468,
+          "wrong_days_with_multiple_formal_exposures": 4,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 1393,
+            "observed_retests": 134,
+            "correct": 92,
+            "correct_fraction_among_retested": 0.6866,
+            "observation_fraction": 0.0962,
+            "students_retested": 11,
+            "retest_source_counts": {
+              "review": 125,
+              "learning": 9
+            },
+            "student_correct_fraction": {
+              "n": 11,
+              "median": 0.7778,
+              "p75": 0.811,
+              "p90": 1,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 1349,
+            "observed_retests": 201,
+            "correct": 108,
+            "correct_fraction_among_retested": 0.5373,
+            "observation_fraction": 0.149,
+            "students_retested": 13,
+            "retest_source_counts": {
+              "review": 191,
+              "learning": 10
+            },
+            "student_correct_fraction": {
+              "n": 13,
+              "median": 0.4444,
+              "p75": 0.7143,
+              "p90": 0.8818,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 1266,
+            "observed_retests": 81,
+            "correct": 49,
+            "correct_fraction_among_retested": 0.6049,
+            "observation_fraction": 0.064,
+            "students_retested": 12,
+            "retest_source_counts": {
+              "review": 80,
+              "learning": 1
+            },
+            "student_correct_fraction": {
+              "n": 12,
+              "median": 0.6148,
+              "p75": 0.6667,
+              "p90": 0.7417,
+              "max": 0.8
+            }
+          }
+        },
+        "context_use": {
+          "wrong_sense_dimension_days": 2231,
+          "wrong_days_with_multiple_formal_exposures": 7,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 2152,
+            "observed_retests": 120,
+            "correct": 50,
+            "correct_fraction_among_retested": 0.4167,
+            "observation_fraction": 0.0558,
+            "students_retested": 10,
+            "retest_source_counts": {
+              "review": 93,
+              "learning": 27
+            },
+            "student_correct_fraction": {
+              "n": 10,
+              "median": 0.2857,
+              "p75": 0.4781,
+              "p90": 0.7081,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 2072,
+            "observed_retests": 557,
+            "correct": 186,
+            "correct_fraction_among_retested": 0.3339,
+            "observation_fraction": 0.2688,
+            "students_retested": 16,
+            "retest_source_counts": {
+              "review": 542,
+              "learning": 15
+            },
+            "student_correct_fraction": {
+              "n": 16,
+              "median": 0.3374,
+              "p75": 0.66,
+              "p90": 0.875,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 1951,
+            "observed_retests": 222,
+            "correct": 57,
+            "correct_fraction_among_retested": 0.2568,
+            "observation_fraction": 0.1138,
+            "students_retested": 13,
+            "retest_source_counts": {
+              "review": 219,
+              "learning": 3
+            },
+            "student_correct_fraction": {
+              "n": 13,
+              "median": 0.3,
+              "p75": 0.4286,
+              "p90": 0.5706,
+              "max": 0.7143
+            }
+          }
+        }
+      },
+      "weekly_vocabulary_activity": {
+        "rolling_seven_day_blocks": 4,
+        "active_students": 20,
+        "student_week_denominator_including_zero": 80,
+        "tasks_with_formal_answer_per_student_week": {
+          "n": 80,
+          "median": 4.5,
+          "p75": 7,
+          "p90": 12,
+          "max": 16
+        },
+        "completed_tasks_per_student_week": {
+          "n": 80,
+          "median": 4,
+          "p75": 6.25,
+          "p90": 10,
+          "max": 14
+        },
+        "student_mean_completed_tasks_per_week": {
+          "n": 20,
+          "median": 4.25,
+          "p75": 6.0625,
+          "p90": 8.675,
+          "max": 11.75
+        }
+      }
+    },
+    "7d": {
+      "start_inclusive": "2026-11-10",
+      "end_exclusive": "2026-11-17",
+      "task_first_errors": {
+        "all": {
+          "tasks_observed": 92,
+          "students_observed": 17,
+          "task_wrong_senses": {
+            "n": 92,
+            "median": 7.5,
+            "p75": 13,
+            "p90": 18,
+            "max": 52
+          },
+          "task_wrong_fraction": {
+            "n": 92,
+            "median": 0.2276,
+            "p75": 0.505,
+            "p90": 0.7277,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 17,
+            "median": 8.2222,
+            "p75": 14,
+            "p90": 15.96,
+            "max": 46.5
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 17,
+            "median": 0.3472,
+            "p75": 0.5321,
+            "p90": 0.6578,
+            "max": 0.8938
+          },
+          "tested_sense_task_pairs": 3062,
+          "wrong_sense_task_pairs": 883
+        },
+        "meaning_recall": {
+          "tasks_observed": 60,
+          "students_observed": 13,
+          "task_wrong_senses": {
+            "n": 60,
+            "median": 1,
+            "p75": 5.25,
+            "p90": 13.1,
+            "max": 26
+          },
+          "task_wrong_fraction": {
+            "n": 60,
+            "median": 0.0508,
+            "p75": 0.135,
+            "p90": 0.3667,
+            "max": 0.52
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 13,
+            "median": 2,
+            "p75": 6.3333,
+            "p90": 8.1111,
+            "max": 21
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 13,
+            "median": 0.0667,
+            "p75": 0.1267,
+            "p90": 0.2949,
+            "max": 0.3942
+          },
+          "tested_sense_task_pairs": 2165,
+          "wrong_sense_task_pairs": 255
+        },
+        "form_recall": {
+          "tasks_observed": 32,
+          "students_observed": 11,
+          "task_wrong_senses": {
+            "n": 32,
+            "median": 6,
+            "p75": 12.25,
+            "p90": 14.9,
+            "max": 43
+          },
+          "task_wrong_fraction": {
+            "n": 32,
+            "median": 0.2367,
+            "p75": 0.4846,
+            "p90": 0.695,
+            "max": 1
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 11,
+            "median": 6.3333,
+            "p75": 13.2,
+            "p90": 15,
+            "max": 41.5
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 11,
+            "median": 0.3401,
+            "p75": 0.5206,
+            "p90": 0.7,
+            "max": 0.8216
+          },
+          "tested_sense_task_pairs": 891,
+          "wrong_sense_task_pairs": 282
+        },
+        "audio_form_recall": {
+          "tasks_observed": 44,
+          "students_observed": 12,
+          "task_wrong_senses": {
+            "n": 44,
+            "median": 5,
+            "p75": 9,
+            "p90": 12.7,
+            "max": 50
+          },
+          "task_wrong_fraction": {
+            "n": 44,
+            "median": 0.1308,
+            "p75": 0.3083,
+            "p90": 0.6167,
+            "max": 0.88
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 12,
+            "median": 4.9,
+            "p75": 9.25,
+            "p90": 13.9,
+            "max": 47
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 12,
+            "median": 0.1624,
+            "p75": 0.34,
+            "p90": 0.5639,
+            "max": 0.8786
+          },
+          "tested_sense_task_pairs": 1373,
+          "wrong_sense_task_pairs": 321
+        },
+        "context_use": {
+          "tasks_observed": 28,
+          "students_observed": 9,
+          "task_wrong_senses": {
+            "n": 28,
+            "median": 7,
+            "p75": 9.25,
+            "p90": 11.3,
+            "max": 24
+          },
+          "task_wrong_fraction": {
+            "n": 28,
+            "median": 0.3038,
+            "p75": 0.4,
+            "p90": 0.4707,
+            "max": 0.5625
+          },
+          "student_mean_wrong_senses_per_task": {
+            "n": 9,
+            "median": 7.5,
+            "p75": 9.2,
+            "p90": 12.7667,
+            "max": 22.5
+          },
+          "student_mean_task_wrong_fraction": {
+            "n": 9,
+            "median": 0.3296,
+            "p75": 0.3431,
+            "p90": 0.4162,
+            "max": 0.4459
+          },
+          "tested_sense_task_pairs": 825,
+          "wrong_sense_task_pairs": 214
+        }
+      },
+      "daily_review_capacity": {
+        "active_students": 18,
+        "vocabulary_learning_student_days": 69,
+        "calendar_student_days_including_zero": 126,
+        "answers": {
+          "total": 1283,
+          "on_vocabulary_learning_days": {
+            "n": 69,
+            "median": 20,
+            "p75": 20,
+            "p90": 20,
+            "max": 40
+          },
+          "on_review_positive_days": {
+            "n": 66,
+            "median": 20,
+            "p75": 20,
+            "p90": 20,
+            "max": 40
+          },
+          "on_all_calendar_days": {
+            "n": 126,
+            "median": 10.5,
+            "p75": 20,
+            "p90": 20,
+            "max": 40
+          },
+          "student_mean_on_learning_days": {
+            "n": 18,
+            "median": 20,
+            "p75": 20,
+            "p90": 20,
+            "max": 20
+          },
+          "student_mean_on_calendar_days": {
+            "n": 18,
+            "median": 11.4286,
+            "p75": 14.2857,
+            "p90": 17.1429,
+            "max": 20
+          }
+        },
+        "batches": {
+          "total": 64,
+          "on_vocabulary_learning_days": {
+            "n": 69,
+            "median": 1,
+            "p75": 1,
+            "p90": 1,
+            "max": 2
+          },
+          "on_review_positive_days": {
+            "n": 63,
+            "median": 1,
+            "p75": 1,
+            "p90": 1,
+            "max": 2
+          },
+          "on_all_calendar_days": {
+            "n": 126,
+            "median": 0.5,
+            "p75": 1,
+            "p90": 1,
+            "max": 2
+          },
+          "student_mean_on_learning_days": {
+            "n": 18,
+            "median": 1,
+            "p75": 1,
+            "p90": 1,
+            "max": 1
+          },
+          "student_mean_on_calendar_days": {
+            "n": 18,
+            "median": 0.5714,
+            "p75": 0.7143,
+            "p90": 0.8571,
+            "max": 1
+          }
+        }
+      },
+      "answer_interval_proxy": {
+        "positive_adjacent_pairs": 1216,
+        "nonpositive_pairs_excluded": 0,
+        "max_gap_30s": {
+          "long_pauses_excluded": 182,
+          "seconds": {
+            "n": 1034,
+            "median": 10.4336,
+            "p75": 16.0902,
+            "p90": 21.5244,
+            "max": 29.8543
+          },
+          "student_median_seconds": {
+            "n": 17,
+            "median": 10.2272,
+            "p75": 11.5457,
+            "p90": 14.7642,
+            "max": 16.1404
+          }
+        },
+        "max_gap_60s": {
+          "long_pauses_excluded": 88,
+          "seconds": {
+            "n": 1128,
+            "median": 11.3727,
+            "p75": 17.8922,
+            "p90": 27.5294,
+            "max": 59.8429
+          },
+          "student_median_seconds": {
+            "n": 17,
+            "median": 10.8937,
+            "p75": 14.106,
+            "p90": 16.1581,
+            "max": 17.9438
+          }
+        },
+        "max_gap_120s": {
+          "long_pauses_excluded": 47,
+          "seconds": {
+            "n": 1169,
+            "median": 11.7405,
+            "p75": 19.0775,
+            "p90": 32.7093,
+            "max": 117.3539
+          },
+          "student_median_seconds": {
+            "n": 17,
+            "median": 10.9544,
+            "p75": 14.106,
+            "p90": 16.8877,
+            "max": 18.0268
+          }
+        }
+      },
+      "delayed_first_retests": {
+        "all": {
+          "wrong_sense_dimension_days": 1870,
+          "wrong_days_with_multiple_formal_exposures": 3,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 1566,
+            "observed_retests": 38,
+            "correct": 16,
+            "correct_fraction_among_retested": 0.4211,
+            "observation_fraction": 0.0243,
+            "students_retested": 7,
+            "retest_source_counts": {
+              "learning": 4,
+              "review": 34
+            },
+            "student_correct_fraction": {
+              "n": 7,
+              "median": 0.25,
+              "p75": 0.5357,
+              "p90": 0.7429,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 1316,
+            "observed_retests": 209,
+            "correct": 97,
+            "correct_fraction_among_retested": 0.4641,
+            "observation_fraction": 0.1588,
+            "students_retested": 10,
+            "retest_source_counts": {
+              "learning": 8,
+              "review": 201
+            },
+            "student_correct_fraction": {
+              "n": 10,
+              "median": 0.4138,
+              "p75": 0.5667,
+              "p90": 0.6224,
+              "max": 0.8235
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 911,
+            "observed_retests": 96,
+            "correct": 38,
+            "correct_fraction_among_retested": 0.3958,
+            "observation_fraction": 0.1054,
+            "students_retested": 9,
+            "retest_source_counts": {
+              "review": 95,
+              "learning": 1
+            },
+            "student_correct_fraction": {
+              "n": 9,
+              "median": 0.5,
+              "p75": 0.5,
+              "p90": 0.68,
+              "max": 1
+            }
+          }
+        },
+        "meaning_recall": {
+          "wrong_sense_dimension_days": 385,
+          "wrong_days_with_multiple_formal_exposures": 0,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 323,
+            "observed_retests": 8,
+            "correct": 4,
+            "correct_fraction_among_retested": 0.5,
+            "observation_fraction": 0.0248,
+            "students_retested": 3,
+            "retest_source_counts": {
+              "review": 8
+            },
+            "student_correct_fraction": {
+              "n": 3,
+              "median": 0.5,
+              "p75": 0.75,
+              "p90": 0.9,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 304,
+            "observed_retests": 42,
+            "correct": 11,
+            "correct_fraction_among_retested": 0.2619,
+            "observation_fraction": 0.1382,
+            "students_retested": 6,
+            "retest_source_counts": {
+              "review": 42
+            },
+            "student_correct_fraction": {
+              "n": 6,
+              "median": 0.1,
+              "p75": 0.3,
+              "p90": 0.4167,
+              "max": 0.5
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 230,
+            "observed_retests": 32,
+            "correct": 12,
+            "correct_fraction_among_retested": 0.375,
+            "observation_fraction": 0.1391,
+            "students_retested": 5,
+            "retest_source_counts": {
+              "review": 31,
+              "learning": 1
+            },
+            "student_correct_fraction": {
+              "n": 5,
+              "median": 0.4615,
+              "p75": 0.5,
+              "p90": 0.8,
+              "max": 1
+            }
+          }
+        },
+        "form_recall": {
+          "wrong_sense_dimension_days": 607,
+          "wrong_days_with_multiple_formal_exposures": 1,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 519,
+            "observed_retests": 16,
+            "correct": 6,
+            "correct_fraction_among_retested": 0.375,
+            "observation_fraction": 0.0308,
+            "students_retested": 4,
+            "retest_source_counts": {
+              "learning": 1,
+              "review": 15
+            },
+            "student_correct_fraction": {
+              "n": 4,
+              "median": 0.4167,
+              "p75": 0.575,
+              "p90": 0.71,
+              "max": 0.8
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 412,
+            "observed_retests": 70,
+            "correct": 32,
+            "correct_fraction_among_retested": 0.4571,
+            "observation_fraction": 0.1699,
+            "students_retested": 8,
+            "retest_source_counts": {
+              "learning": 4,
+              "review": 66
+            },
+            "student_correct_fraction": {
+              "n": 8,
+              "median": 0.4,
+              "p75": 0.5591,
+              "p90": 0.645,
+              "max": 0.75
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 285,
+            "observed_retests": 27,
+            "correct": 10,
+            "correct_fraction_among_retested": 0.3704,
+            "observation_fraction": 0.0947,
+            "students_retested": 5,
+            "retest_source_counts": {
+              "review": 27
+            },
+            "student_correct_fraction": {
+              "n": 5,
+              "median": 0.5,
+              "p75": 0.6667,
+              "p90": 0.8667,
+              "max": 1
+            }
+          }
+        },
+        "audio_form_recall": {
+          "wrong_sense_dimension_days": 382,
+          "wrong_days_with_multiple_formal_exposures": 0,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 307,
+            "observed_retests": 6,
+            "correct": 3,
+            "correct_fraction_among_retested": 0.5,
+            "observation_fraction": 0.0195,
+            "students_retested": 3,
+            "retest_source_counts": {
+              "review": 6
+            },
+            "student_correct_fraction": {
+              "n": 3,
+              "median": 0.5,
+              "p75": 0.75,
+              "p90": 0.9,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 263,
+            "observed_retests": 23,
+            "correct": 17,
+            "correct_fraction_among_retested": 0.7391,
+            "observation_fraction": 0.0875,
+            "students_retested": 5,
+            "retest_source_counts": {
+              "review": 23
+            },
+            "student_correct_fraction": {
+              "n": 5,
+              "median": 0.5,
+              "p75": 0.875,
+              "p90": 0.95,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 180,
+            "observed_retests": 13,
+            "correct": 7,
+            "correct_fraction_among_retested": 0.5385,
+            "observation_fraction": 0.0722,
+            "students_retested": 2,
+            "retest_source_counts": {
+              "review": 13
+            },
+            "student_correct_fraction": {
+              "n": 2,
+              "median": 0.5833,
+              "p75": 0.625,
+              "p90": 0.65,
+              "max": 0.6667
+            }
+          }
+        },
+        "context_use": {
+          "wrong_sense_dimension_days": 496,
+          "wrong_days_with_multiple_formal_exposures": 2,
+          "first_later_day_gap_1": {
+            "eligible_error_days": 417,
+            "observed_retests": 8,
+            "correct": 3,
+            "correct_fraction_among_retested": 0.375,
+            "observation_fraction": 0.0192,
+            "students_retested": 2,
+            "retest_source_counts": {
+              "learning": 3,
+              "review": 5
+            },
+            "student_correct_fraction": {
+              "n": 2,
+              "median": 0.2143,
+              "p75": 0.3214,
+              "p90": 0.3857,
+              "max": 0.4286
+            }
+          },
+          "first_later_day_gap_2": {
+            "eligible_error_days": 337,
+            "observed_retests": 74,
+            "correct": 37,
+            "correct_fraction_among_retested": 0.5,
+            "observation_fraction": 0.2196,
+            "students_retested": 9,
+            "retest_source_counts": {
+              "learning": 4,
+              "review": 70
+            },
+            "student_correct_fraction": {
+              "n": 9,
+              "median": 0.5556,
+              "p75": 0.6667,
+              "p90": 0.8,
+              "max": 1
+            }
+          },
+          "first_later_day_gap_3": {
+            "eligible_error_days": 216,
+            "observed_retests": 24,
+            "correct": 9,
+            "correct_fraction_among_retested": 0.375,
+            "observation_fraction": 0.1111,
+            "students_retested": 6,
+            "retest_source_counts": {
+              "review": 24
+            },
+            "student_correct_fraction": {
+              "n": 6,
+              "median": 0.2188,
+              "p75": 0.4844,
+              "p90": 0.75,
+              "max": 1
+            }
+          }
+        }
+      },
+      "weekly_vocabulary_activity": {
+        "rolling_seven_day_blocks": 1,
+        "active_students": 18,
+        "student_week_denominator_including_zero": 18,
+        "tasks_with_formal_answer_per_student_week": {
+          "n": 18,
+          "median": 4.5,
+          "p75": 8.25,
+          "p90": 9.3,
+          "max": 16
+        },
+        "completed_tasks_per_student_week": {
+          "n": 18,
+          "median": 4,
+          "p75": 7.5,
+          "p90": 9.3,
+          "max": 13
+        },
+        "student_mean_completed_tasks_per_week": {
+          "n": 18,
+          "median": 4,
+          "p75": 7.5,
+          "p90": 9.3,
+          "max": 13
+        }
+      }
+    }
+  },
+  "backlog_snapshot": {
+    "all_due_students": {
+      "students_with_raw_due": 28,
+      "raw_due_dimension_count": 67050,
+      "raw_due_sense_count": 26406,
+      "dimension_composition": {
+        "normal_consolidation": 40840,
+        "stage0_answered_marker": 7305,
+        "stage0_unanswered": 18904,
+        "stage6_maintenance": 1
+      },
+      "sense_exclusive_priority_composition": {
+        "normal_consolidation": 11148,
+        "stage0_answered_marker": 5836,
+        "stage0_unanswered": 9422
+      },
+      "sense_overlapping_memberships": {
+        "normal_consolidation": 23987,
+        "stage0_answered_marker": 5836,
+        "stage0_unanswered": 12174,
+        "stage6_maintenance": 1
+      },
+      "student_due_sense_distribution": {
+        "n": 28,
+        "median": 503.5,
+        "p75": 1840.5,
+        "p90": 2213.2,
+        "max": 3192
+      },
+      "student_error_marker_sense_distribution": {
+        "n": 28,
+        "median": 61,
+        "p75": 229.5,
+        "p90": 500,
+        "max": 1525
+      },
+      "student_error_marker_fraction": {
+        "n": 28,
+        "median": 0.1847,
+        "p75": 0.3717,
+        "p90": 0.5055,
+        "max": 0.6998
+      }
+    },
+    "active_28d": {
+      "students_with_raw_due": 20,
+      "raw_due_dimension_count": 61138,
+      "raw_due_sense_count": 23976,
+      "dimension_composition": {
+        "normal_consolidation": 36104,
+        "stage0_answered_marker": 6876,
+        "stage0_unanswered": 18157,
+        "stage6_maintenance": 1
+      },
+      "sense_exclusive_priority_composition": {
+        "normal_consolidation": 9523,
+        "stage0_answered_marker": 5497,
+        "stage0_unanswered": 8956
+      },
+      "sense_overlapping_memberships": {
+        "normal_consolidation": 21703,
+        "stage0_answered_marker": 5497,
+        "stage0_unanswered": 11597,
+        "stage6_maintenance": 1
+      },
+      "student_due_sense_distribution": {
+        "n": 20,
+        "median": 1000.5,
+        "p75": 1968.25,
+        "p90": 2287.4,
+        "max": 3192
+      },
+      "student_error_marker_sense_distribution": {
+        "n": 20,
+        "median": 131,
+        "p75": 376.25,
+        "p90": 739.3,
+        "max": 1525
+      },
+      "student_error_marker_fraction": {
+        "n": 20,
+        "median": 0.2049,
+        "p75": 0.3886,
+        "p90": 0.5315,
+        "max": 0.6998
+      }
+    }
+  },
+  "safety": {
+    "query_only": true,
+    "uri_mode_ro": true,
+    "write_authorizer_denied": true,
+    "successful_changes": 0,
+    "denied_statements": 0,
+    "queries": 8,
+    "per_query_seconds": 3,
+    "row_cap_per_query": 500000,
+    "explicit_read_transaction": false,
+    "identity_or_answer_rows_exported": false
+  },
+  "elapsed_seconds": 1.429
+}
