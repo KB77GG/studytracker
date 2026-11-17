@@ -362,6 +362,47 @@ class VocabularyFlowBacklogGateTest(unittest.TestCase):
         self.assertEqual(preflight["due_count"], summary["due_count"])
         self.assertGreater(summary["due_count"], 0)
 
+    def test_one_students_review_answer_keeps_other_students_counts_cached(self):
+        reader = self._student("f", BACKLOG)
+        writer = self._student("g", BACKLOG)
+        summary_url = "/api/miniprogram/student/vocabulary-review/summary"
+        loads = []
+        original = review._eligible_due_sense_ids
+
+        def counted(user, now):
+            loads.append(user.id)
+            return original(user, now)
+
+        with patch.object(review, "_eligible_due_sense_ids", side_effect=counted):
+            self.assertEqual(self._get(reader, summary_url).get_json()["due_count"], BACKLOG)
+            session = self._claim(writer)
+            before = self._get(writer, summary_url).get_json()
+            item = session["items"][0]
+            answered = self._post(
+                writer,
+                f"/api/miniprogram/student/vocabulary-review/sessions/{session['session_id']}/answers",
+                {
+                    "session_token": session["session_token"],
+                    "review_item_id": item["review_item_id"],
+                    "question_id": item["question_id"],
+                    "word_id": item["word_id"],
+                    "sense_id": item["sense_id"],
+                    "dimension": item["dimension"],
+                    "answer": self._stored_answer(VocabularyReviewItem, item["review_item_id"]),
+                    "attempt_id": "cache-isolation-1",
+                    "input_mode": "native",
+                },
+            )
+            self.assertEqual(answered.status_code, 200, answered.get_json())
+            reader_loads_before = loads.count(reader["id"])
+            self.assertEqual(self._get(reader, summary_url).get_json()["due_count"], BACKLOG)
+            after = self._get(writer, summary_url).get_json()
+
+        # The other student's snapshot survived the answer ...
+        self.assertEqual(loads.count(reader["id"]), reader_loads_before)
+        # ... while the answering student's own numbers were recomputed.
+        self.assertEqual(after["due_count"], before["due_count"] - 1)
+
 
 if __name__ == "__main__":
     unittest.main()

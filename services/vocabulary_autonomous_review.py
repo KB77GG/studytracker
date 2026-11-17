@@ -52,6 +52,7 @@ from services.vocabulary_context import (
     _example_fill,
     grade_context_answer,
 )
+from services.vocabulary_due_cache import BULK_USERS_OPTION as DUE_CACHE_BULK_USERS_OPTION
 from services.vocabulary_due_cache import cached_due_sense_ids
 from services.vocabulary_mastery import (
     DIMENSIONS,
@@ -1431,13 +1432,17 @@ def _apply_review_item_state(
     # the database before touching mastery; an ORM-cached False is not proof
     # that the answer has not already consumed its remediation budget.
     try:
-        claimed = VocabularyReviewItem.query.filter_by(
-            id=item.id,
-            student_id=user.id,
-            state_applied=False,
-        ).update(
-            {VocabularyReviewItem.state_applied: True},
-            synchronize_session=False,
+        claimed = (
+            VocabularyReviewItem.query.filter_by(
+                id=item.id,
+                student_id=user.id,
+                state_applied=False,
+            )
+            .execution_options(**{DUE_CACHE_BULK_USERS_OPTION: (user.id,)})
+            .update(
+                {VocabularyReviewItem.state_applied: True},
+                synchronize_session=False,
+            )
         )
     except OperationalError:
         raise VocabularyAutonomousReviewError("review_answer_in_progress", 409) from None

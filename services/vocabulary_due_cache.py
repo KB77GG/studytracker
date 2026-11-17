@@ -26,6 +26,9 @@ MAX_ENTRIES = 128
 MAX_TOTAL_SENSES = 100_000
 _EXTENSION_KEY = "vocabulary_due_display_cache"
 _TRANSACTION_KEY = "vocabulary_due_display_writes"
+# execution_options key: student ids a bulk UPDATE/DELETE on a student table
+# is filtered to, so one student's answer does not empty everyone's snapshot.
+BULK_USERS_OPTION = "vocabulary_due_cache_users"
 _STUDENT_TABLES = {
     "student_vocabulary_mastery",
     "vocabulary_review_item",
@@ -46,7 +49,12 @@ class _DueCache:
         self.lock = RLock()
         self.entries = OrderedDict()
         self.inflight = {}
-        self.version = 0
+        # A load may only be published if nothing that can change *its own*
+        # result was written meanwhile: this student's rows, or the shared
+        # catalog. Other students' answers must not discard it, otherwise the
+        # cache never holds while a class is active.
+        self.global_version = 0
+        self.user_versions = {}
         self.total_senses = 0
 
     def _remove(self, key):
@@ -56,10 +64,21 @@ class _DueCache:
 
     def invalidate(self, users=None):
         with self.lock:
-            self.version += 1
+            if users is None:
+                self.global_version += 1
+                self.user_versions.clear()
+            else:
+                # A removed snapshot needs no generation counter. Keep these
+                # counters only while a loader could publish stale results.
+                inflight_users = {key[1] for key in self.inflight}
+                for user_id in set(users) & inflight_users:
+                    self.user_versions[user_id] = self.user_versions.get(user_id, 0) + 1
             for key in list(self.entries):
                 if users is None or key[1] in users:
                     self._remove(key)
+
+    def _version(self, key):
+        return self.global_version, self.user_versions.get(key[1], 0)
 
     def read(self, key, now, loader, publish_allowed):
         while True:
@@ -79,7 +98,7 @@ class _DueCache:
                 if pending is None:
                     pending = Event()
                     self.inflight[key] = pending
-                    version = self.version
+                    version = self._version(key)
                     break
             # Coalesce simultaneous cold counts for one student. Other
             # students never wait for this loader or share its result.
@@ -88,7 +107,7 @@ class _DueCache:
             senses = frozenset(int(sense_id) for sense_id in loader())
             with self.lock:
                 if (
-                    self.version == version
+                    self._version(key) == version
                     and publish_allowed()
                     and len(senses) <= MAX_TOTAL_SENSES
                 ):
@@ -104,6 +123,8 @@ class _DueCache:
         finally:
             with self.lock:
                 self.inflight.pop(key, None)
+                if not any(other_key[1] == key[1] for other_key in self.inflight):
+                    self.user_versions.pop(key[1], None)
                 pending.set()
 
 
@@ -179,10 +200,14 @@ def _invalidate_bulk_vocabulary(execute_state):
     if not (execute_state.is_update or execute_state.is_delete or execute_state.is_insert):
         return
     table = getattr(getattr(execute_state.statement, "table", None), "name", None)
-    if table in _STUDENT_TABLES | _CATALOG_TABLES:
-        # A bulk statement need not contain loaded per-student instances.
-        # Conservatively invalidate the display cache, never rewrite its SQL.
+    if table in _CATALOG_TABLES:
         _mark_writes(execute_state.session)
+    elif table in _STUDENT_TABLES:
+        # A bulk statement need not contain loaded per-student instances.
+        # Unless the caller states whose rows it is restricted to, invalidate
+        # the display cache for everyone; never rewrite its SQL.
+        users = execute_state.execution_options.get(BULK_USERS_OPTION)
+        _mark_writes(execute_state.session, {int(user) for user in users} if users else None)
 
 
 @event.listens_for(Session, "after_transaction_end")

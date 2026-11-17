@@ -8,8 +8,9 @@ from unittest.mock import Mock, patch
 from flask import Flask
 from sqlalchemy import update
 
-from models import DictationBook, DictationWord, User, db
+from models import DictationBook, DictationWord, StudentVocabularyMastery, User, db
 from services.vocabulary_due_cache import (
+    BULK_USERS_OPTION,
     _cache,
     _DueCache,
     cached_due_sense_ids,
@@ -201,6 +202,55 @@ class VocabularyDueCacheTest(unittest.TestCase):
 
         cache.read(("db", 1, "day"), self.now, loader, lambda: True)
         self.assertFalse(cache.entries)
+
+    def test_other_students_write_during_load_does_not_block_publication(self):
+        cache = _DueCache()
+
+        def loader():
+            cache.invalidate({2})  # a different student answers while this count loads
+            return [1]
+
+        cache.read(("db", 1, "day"), self.now, loader, lambda: True)
+        self.assertIn(("db", 1, "day"), cache.entries)
+
+    def test_catalog_write_during_load_still_prevents_publication(self):
+        cache = _DueCache()
+
+        def loader():
+            cache.invalidate()  # shared catalog edit: every student's count may change
+            return [1]
+
+        cache.read(("db", 1, "day"), self.now, loader, lambda: True)
+        self.assertFalse(cache.entries)
+
+    def test_scoped_bulk_update_only_invalidates_the_named_student(self):
+        loader = Mock(return_value=[1])
+        other_loader = Mock(return_value=[2])
+        self.load(loader)
+        self.load(other_loader, self.other)
+        statement = (
+            update(StudentVocabularyMastery)
+            .where(StudentVocabularyMastery.student_id == self.user.id)
+            .values(meaning_recall_stage=2)
+        )
+        db.session.execute(statement, execution_options={BULK_USERS_OPTION: (self.user.id,)})
+        db.session.commit()
+        self.load(loader)
+        self.load(other_loader, self.other)
+        self.assertEqual(loader.call_count, 2)
+        self.assertEqual(other_loader.call_count, 1)
+
+    def test_unscoped_bulk_update_of_student_rows_invalidates_everyone(self):
+        loader = Mock(return_value=[1])
+        other_loader = Mock(return_value=[2])
+        self.load(loader)
+        self.load(other_loader, self.other)
+        db.session.execute(update(StudentVocabularyMastery).values(meaning_recall_stage=3))
+        db.session.commit()
+        self.load(loader)
+        self.load(other_loader, self.other)
+        self.assertEqual(loader.call_count, 2)
+        self.assertEqual(other_loader.call_count, 2)
 
 
 if __name__ == "__main__":
