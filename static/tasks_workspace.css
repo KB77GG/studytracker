@@ -20,39 +20,7 @@ body:has(.tasks-page) .main-panel{
   background:var(--tasks-ivory) !important;
   color:var(--tasks-ink);
 }
-body:has(.tasks-page) .sidebar{
-  width:176px;
-  flex:0 0 176px;
-  padding:22px 12px 14px;
-  background:var(--tasks-ink) !important;
-  border-right-color:var(--tasks-ink) !important;
-  color:var(--tasks-ivory);
-}
-body:has(.tasks-page) .brand-icon{
-  width:34px;
-  height:34px;
-  background:var(--tasks-sage) !important;
-  border-radius:10px;
-}
-body:has(.tasks-page) .sidebar__brand{ gap:8px; }
-body:has(.tasks-page) .brand-title{ font-size:15px; }
-body:has(.tasks-page) .brand-sub{ font-size:10px; }
-body:has(.tasks-page) .brand-title,
-body:has(.tasks-page) .brand-sub,
-body:has(.tasks-page) .nav-label,
-body:has(.tasks-page) .nav-link{ color:var(--tasks-ivory) !important; }
-body:has(.tasks-page) .nav-label{ opacity:.62; }
-body:has(.tasks-page) .nav-link{ min-height:36px; padding:8px 9px; font-size:12px; }
-body:has(.tasks-page) .nav-link:hover{ background:rgba(39,138,120,.24) !important; }
-body:has(.tasks-page) .nav-link.is-active{
-  background:var(--tasks-sage) !important;
-  color:#fff !important;
-  box-shadow:0 8px 18px rgba(39,138,120,.22);
-}
-body:has(.tasks-page) .sidebar__user{
-  border:1px solid rgba(255,255,255,.11);
-  background:rgba(255,255,255,.07) !important;
-}
+/* The sidebar and brand use the shared admin_suite_v2.css shell. */
 body:has(.tasks-page) .main-header{
   min-height:132px;
   padding:22px 32px 12px;
@@ -557,6 +525,11 @@ body:has(.tasks-page) .header-actions{
   .task-list-inspector{ grid-template-columns:minmax(0,1fr) 330px; }
   .task-subtable thead tr,
   .task-subtable tbody tr{ grid-template-columns:minmax(98px,1fr) minmax(92px,.75fr) minmax(120px,1.3fr) 78px minmax(105px,1fr) 88px; }
+}
+@media (min-width:901px) and (max-width:1120px){
+  /* Keep the task heading and actions readable beside the shared sidebar. */
+  body:has(.tasks-page) .main-header{ flex-wrap:wrap; }
+  body:has(.tasks-page) .header-actions{ width:100%; justify-content:flex-start; }
 }
 @media (max-width:900px){
   body:has(.tasks-page) .main-header{ min-height:128px; padding:22px 18px 16px; background-size:520px auto; }
