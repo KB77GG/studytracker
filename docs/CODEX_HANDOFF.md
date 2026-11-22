@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-22 — 作答过程记录：Codex 审核 8 条已全部修复，仍未部署、小程序未发版
+
+- **输入**：Codex 审核 `f81a5e4..ccbba2a`（报告在 Codex 本机 `/private/tmp/studytracker-answer-integrity-review-20261122/docs/reviews/answer-integrity-review-20261122/README.md`，未 push；Codex 同时在本机主资料树改了两交接，与本分支的交接更新需在本机合并，以本节为准）。结论原为“不建议合并/发版”。本轮在分支 `claude/admiring-mccarthy-9bm1q0` 上逐条核实后修复，新 commit 在 0e916f9 之后，HEAD 以 `git log` 为准。**仍未合并 main、未部署、小程序未上传。**
+- **#1 阻断（已修）**：日志写入移到两个交卷接口 `db.session.commit()` **之后**，`record_answer_timeline` 自己 add+commit，异常时只 rollback 日志；若会话里还有未提交改动则直接跳过不写。新测试 `test_log_insert_failure_never_rolls_back_a_{reading,choice}_submission` 删除日志表制造 INSERT 失败，两入口×有/无 integrity 四组交卷均成功、任务 done、答案/成绩保留；同测试在旧代码上失败（已对照）。
+- **#2 重做误报（已修）**：`redo_wrong/redo_all` 不做速度、集中修改、正确率判断；离开类事实仅以 info 保留。
+- **#3 休息后误报（已修）**：`left_then_burst` 现要求回来后作答速度低于该题型阈值（新增 `returns[].pace_seconds`），离开 <60 秒最高 medium。词汇每题 8 秒+60 秒休息 → none。
+- **#4 纸面作答/先读后录（已修）**：单独 `padded_burst` 最高 medium，文案改为“可能先读完/在纸上做好再统一录入，也可能对照答案填写，建议抽问核实”，删除“其余时间没有作答”。high 只来自 too_fast、带快速作答的 left_then_burst、revision_burst。
+- **#5 末尾集中改答案漏检（已修）**：新增 `revision_burst`（每题最后一次修改时刻，40%题量在阈值速度内被集中改掉）；占位+最后 12 秒全改 → high，零散改 3 题 → none。
+- **#6 弹窗竞态（已修）**：请求序号，关闭/新开即作废旧响应。**#7 编辑后徽标消失（已修）**：不动旧编辑代码，徽标脚本缓存 summary 并用 MutationObserver 在用时格被重写后补回。#6/#7 用 Playwright 离线 harness 对照：旧脚本被 A 覆盖、徽标 0；新脚本显示 B、徽标恢复（harness 不在仓库）。**#8 非法参数 500（已修）**：task_ids 只接受 ASCII 数字且 ≤12 位，`²`/超大数/阿拉伯数字均 200 并被忽略。
+- **验证（云端 venv，轻量依赖）**：`tests.test_answer_timeline_rules tests.test_answer_integrity_routes tests.test_cambridge_same_day_retry tests.test_task_assignment_routes tests.test_reading_vocab_grading tests.test_task_planner_recovery_student_contract_e2e` 78/78；`node --test tests/*.js` 453/453；ruff 新文件 clean，三大旧文件 lint 数与基线同。全量 unittest 结果见下条 WORKLOG。关于全量数字差异：Claude 环境缺 pytest/TOEFL 源文件等，基线即 4F/7E；Codex 环境 2F/0E；两边均“与各自基线一致”。
+- **下一步**：请 Codex 复审本轮 diff（`git diff 0e916f9..HEAD`），重点复核 #1 的提交顺序与 #3/#4/#5 新阈值；通过后由用户决定合并 main 部署后端，再手动发小程序。
+
 ## 2026-11-22 — 作业作答过程记录（防刷题/防拖时长）：代码完成，未部署、小程序未发版
 
 - **背景/授权**：老师反馈学生阅读作业作弊（先是13秒做完12题、30秒全对；发现老师看总用时后改为拖够时长再交）。用户确认做“第一部分”：记录每题作答时间线和切出页面，后端存储并给出可疑标记，老师后台查看。只授权实现；**未授权合并 main / 部署**。
