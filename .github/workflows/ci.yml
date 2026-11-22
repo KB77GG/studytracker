@@ -40,7 +40,10 @@ jobs:
             tests.test_import_toefl_official_reading \
             tests.test_reading_vocab_grading \
             tests.test_stats_utils \
+            tests.test_answer_timeline_rules \
             -v
+      - name: Test homework answer timeline recorder
+        run: node --test tests/test_answer_timeline.js
       - name: Guard legacy spelling correction queue
         run: node tests/test_dictation_spell_queue.js
       - name: Test weekly exam sprint source and public pages

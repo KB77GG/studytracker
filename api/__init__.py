@@ -5,6 +5,7 @@ api_bp = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 
 def init_app(app):
     """Register all API blueprints."""
+    from api.answer_integrity import answer_integrity_bp  # 作答过程记录（老师查看）
     from api.azure_tts import azure_tts_bp  # Azure TTS API
     from api.classroom_vocabulary import classroom_vocabulary_bp
     from api.dictation import dictation_bp  # Dictation API
@@ -34,7 +35,12 @@ def init_app(app):
     from api.vocabulary_error_reports import vocabulary_error_reports_bp
     from api.wechat import wechat_bp
     from api.writing_library import writing_library_bp
-    from models import QuestionTypePracticeAttempt, WritingTypingAttempt, db
+    from models import (
+        AnswerIntegrityLog,
+        QuestionTypePracticeAttempt,
+        WritingTypingAttempt,
+        db,
+    )
 
     app.register_blueprint(wechat_bp, url_prefix="/api/wechat")  # Restore url_prefix
     app.register_blueprint(api_bp)
@@ -65,6 +71,7 @@ def init_app(app):
     app.register_blueprint(mock_exam_review_bp)
     app.register_blueprint(exam_integrity_bp)
     app.register_blueprint(writing_library_bp)
+    app.register_blueprint(answer_integrity_bp)
 
     # The project still uses check-first schema creation for additive SQLite
     # tables in production. Keep this local to the feature instead of adding
@@ -75,3 +82,4 @@ def init_app(app):
         ensure_task_planner_schema()
         WritingTypingAttempt.__table__.create(bind=db.engine, checkfirst=True)
         QuestionTypePracticeAttempt.__table__.create(bind=db.engine, checkfirst=True)
+        AnswerIntegrityLog.__table__.create(bind=db.engine, checkfirst=True)

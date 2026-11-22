@@ -3008,3 +3008,41 @@ class WritingTypingAttempt(db.Model, TimestampMixin):
             f"<WritingTypingAttempt student={self.student_profile_id} "
             f"exercise={self.exercise_id} band={self.band}>"
         )
+
+
+# ---- Homework answer timeline (作答过程记录，辅助老师发现异常作答) ----
+
+
+class AnswerIntegrityLog(db.Model):
+    """One retained answering timeline per homework submission.
+
+    Purely additive: grading and task status never read this table.  Rows are
+    written next to the existing submission and only shown to staff.
+    """
+
+    __tablename__ = "answer_integrity_log"
+
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False, index=True)
+    student_name = db.Column(db.String(64), nullable=False)
+    source = db.Column(db.String(32), nullable=False)
+    mode = db.Column(db.String(20), nullable=False, default="practice")
+    question_count = db.Column(db.Integer, nullable=False, default=0)
+    correct_count = db.Column(db.Integer)
+    accuracy = db.Column(db.Float)
+    duration_seconds = db.Column(db.Integer, nullable=False, default=0)
+    has_timeline = db.Column(db.Boolean, nullable=False, default=False)
+    level = db.Column(db.String(16), nullable=False, default="none", index=True)
+    events_json = db.Column(db.Text)
+    metrics_json = db.Column(db.Text)
+    flags_json = db.Column(db.Text)
+    submitted_at = db.Column(db.DateTime, nullable=False, default=utcnow_naive, index=True)
+
+    task = db.relationship(
+        "Task",
+        backref=db.backref("answer_integrity_logs", lazy="dynamic", cascade="all, delete"),
+    )
+
+    __table_args__ = (
+        db.Index("ix_answer_integrity_student_source", "student_name", "source", "submitted_at"),
+    )

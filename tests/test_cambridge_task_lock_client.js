@@ -40,6 +40,9 @@ function loadPage(subject, response) {
       if (requestPath.endsWith('utils/practice-table.js')) {
         return { tableLayout: () => ({}) }
       }
+      if (requestPath.endsWith('utils/answer-timeline.js')) {
+        return require('../miniprogram/utils/answer-timeline.js')
+      }
       throw new Error(`Unexpected require: ${requestPath}`)
     },
     wx: {
@@ -79,6 +82,26 @@ function loadPage(subject, response) {
   page.fetchCambridgeTask = async () => { calls.refreshes += 1 }
   return { page, calls }
 }
+
+test('reading submit sends the answer timeline beside the answers', async () => {
+  const { createAnswerTimeline } = require('../miniprogram/utils/answer-timeline.js')
+  const { page, calls } = loadPage('reading', {
+    ok: true,
+    task: { id: 4259, status: 'done', read_only: false, can_write: true },
+    result: { correct: 1, total: 1, accuracy: 100 },
+    submission: { answers: { 1: 'answer' } }
+  })
+  page.answerTimeline = createAnswerTimeline()
+  page.answerTimeline.recordAnswer('1')
+
+  await page.submitAnswers()
+
+  const body = calls.requests[0].options.data
+  assert.deepEqual(body.answers, { 1: 'answer' })
+  assert.equal(body.integrity.v, 1)
+  assert.equal(body.integrity.mode, 'practice')
+  assert.deepEqual(body.integrity.events.map(event => event.slice(1)), [['a', '1']])
+})
 
 for (const subject of ['listening', 'reading']) {
   test(`${subject} keeps same-day retry available after a successful submit`, async () => {

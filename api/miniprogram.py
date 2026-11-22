@@ -44,6 +44,8 @@ from .stats_utils import (
     summarize_today_status,
     summarize_weekly,
 )
+from services.answer_integrity import record_answer_timeline
+from services.answer_timeline_rules import source_for_material_type
 from services.vocabulary_attempt_reporting import dictation_attempt_display
 from services.web_practice_reporting import web_practice_task_report
 from services.web_practice_tasks import web_practice_payload, web_practice_required
@@ -2623,6 +2625,16 @@ def submit_reading_vocab_practice(task_id):
     task.accuracy = result.accuracy
     task.completion_rate = result.completion_rate
     task.status = "done"
+    record_answer_timeline(
+        task,
+        source=source_for_material_type(task.material.type),
+        raw_timeline=data.get("integrity"),
+        duration_seconds=duration,
+        question_count=result.total,
+        correct_count=result.correct_count,
+        accuracy=result.accuracy,
+        fallback_mode=submit_mode if submit_mode in ("redo_wrong", "redo_all") else "practice",
+    )
     db.session.commit()
 
     return jsonify({

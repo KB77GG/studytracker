@@ -1,6 +1,7 @@
 const app = getApp()
 const { request, isTaskDateGateError } = require('../../../../utils/request.js')
 const { tableLayout: buildPracticeTableLayout } = require('../../../../utils/practice-table.js')
+const { createAnswerTimeline } = require('../../../../utils/answer-timeline.js')
 
 Page({
     data: {
@@ -41,12 +42,21 @@ Page({
         const token = options.token ? decodeURIComponent(options.token) : ''
         const initialPassage = options.passage ? parseInt(options.passage, 10) : null
         this.initialPassage = initialPassage
+        this.answerTimeline = createAnswerTimeline()
         this.setData({
             taskId,
             token,
             startedAt: Date.now()
         })
         this.fetchReadingTask()
+    },
+
+    onShow() {
+        if (this.answerTimeline) this.answerTimeline.markShown()
+    },
+
+    onHide() {
+        if (this.answerTimeline) this.answerTimeline.markHidden()
     },
 
     async fetchReadingTask() {
@@ -465,6 +475,7 @@ Page({
     },
 
     setAnswer(key, value, refreshGroups = false) {
+        if (this.answerTimeline && !this.data.submitted) this.answerTimeline.recordAnswer(key)
         const answers = { ...this.data.answers }
         const normalized = Array.isArray(value) ? value.join(',') : String(value || '').trim()
         if (normalized) {
@@ -554,6 +565,9 @@ Page({
                 token: this.data.token,
                 answers: this.data.answers,
                 duration_seconds: duration
+            }
+            if (this.answerTimeline) {
+                body.integrity = this.answerTimeline.snapshot()
             }
             if (this.data.passageNumber) {
                 body.passage_number = this.data.passageNumber
@@ -685,6 +699,7 @@ Page({
             retryingWrong: true,
             startedAt: Date.now()
         }, () => {
+            if (this.answerTimeline) this.answerTimeline.reset('redo_wrong')
             this.selectPassage(targetIndex >= 0 ? targetIndex : this.data.activePassageIndex, false)
             wx.pageScrollTo({ scrollTop: 0, duration: 180 })
             wx.showToast({ title: '已进入错题重做', icon: 'none' })

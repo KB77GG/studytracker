@@ -58,6 +58,7 @@ from api.teacher_practice_catalog import (
     build_listening_jijing_options,
 )
 from services.dictation_review import ensure_incremental_schema as _ensure_dictation_review_schema
+from services.answer_integrity import record_answer_timeline
 from services.task_assignment_history import load_previous_day_assignments
 from services.question_type_review import derive_listening_payload
 from services.dictation_assignment_range import (
@@ -8120,6 +8121,15 @@ def api_reading_test_submit(test_id):
     )
     _sync_plan_item_from_task(task)
     _sync_reading_test_score_record(task, payload, grade)
+    record_answer_timeline(
+        task,
+        source="cambridge_reading",
+        raw_timeline=data.get("integrity"),
+        duration_seconds=duration_seconds,
+        question_count=grade["total"],
+        correct_count=grade["correct"],
+        accuracy=grade["accuracy"],
+    )
     db.session.commit()
 
     return jsonify({

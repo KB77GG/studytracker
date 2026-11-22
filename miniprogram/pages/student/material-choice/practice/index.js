@@ -1,4 +1,5 @@
 const { request } = require('../../../../utils/request.js')
+const { createAnswerTimeline } = require('../../../../utils/answer-timeline.js')
 const app = getApp()
 
 function getReadingNotebookCacheKey() {
@@ -59,8 +60,17 @@ Page({
     onLoad(options) {
         const taskId = parseInt(options.taskId, 10)
         const initialMode = (options.mode || '').toLowerCase()
+        this.answerTimeline = createAnswerTimeline({ mode: initialMode })
         this.setData({ taskId, startedAt: Date.now(), mode: initialMode || 'practice' })
         this.fetchPractice(initialMode)
+    },
+
+    onShow() {
+        if (this.answerTimeline) this.answerTimeline.markShown()
+    },
+
+    onHide() {
+        if (this.answerTimeline) this.answerTimeline.markHidden()
     },
 
     async fetchPractice(requestedMode) {
@@ -218,6 +228,7 @@ Page({
         if (!currentQuestion) return
         if (currentQuestion.is_writing || currentQuestion.is_auto_text) return  // text questions use textarea
         if (this.data.sessionResults[currentQuestion.id]) return
+        if (this.answerTimeline) this.answerTimeline.recordAnswer(currentQuestion.id)
 
         const selectedAnswers = {
             ...this.data.selectedAnswers,
@@ -253,6 +264,7 @@ Page({
         const currentQuestion = this.data.currentQuestion
         if (!currentQuestion || (!currentQuestion.is_writing && !currentQuestion.is_auto_text)) return
         const value = e.detail.value || ''
+        if (this.answerTimeline) this.answerTimeline.recordAnswer(currentQuestion.id)
         const textAnswers = {
             ...this.data.textAnswers,
             [currentQuestion.id]: value
@@ -321,6 +333,7 @@ Page({
 
     resetAndReload(mode) {
         if (this.data.readOnly) return
+        if (this.answerTimeline) this.answerTimeline.reset(mode)
         this.setData({
             mode,
             selectedAnswers: {},
@@ -412,7 +425,8 @@ Page({
                         uncertain_question_ids: uncertainQuestionIds,
                         duration_seconds: durationSeconds,
                         note: this.data.note,
-                        mode: submitMode
+                        mode: submitMode,
+                        integrity: this.answerTimeline ? this.answerTimeline.snapshot() : undefined
                     }
                 }
             )

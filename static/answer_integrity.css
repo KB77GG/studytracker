@@ -1,0 +1,133 @@
+/* 任务列表 · 作答过程提示与时间线（配合 static/js/answer_integrity.js） */
+
+.answer-integrity-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+  padding: 1px 8px;
+  border: 1px solid var(--tasks-line-strong, #d6cfc2);
+  border-radius: 999px;
+  background: var(--tasks-surface, #fffdf9);
+  color: var(--tasks-ink-soft, #35515a);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.answer-integrity-badge:hover { border-color: var(--tasks-sage, #278a78); }
+.answer-integrity-badge.is-missing { color: var(--tasks-muted, #70807d); border-style: dashed; }
+.answer-integrity-badge.is-medium { color: var(--tasks-warning, #a66a1a); border-color: currentColor; background: #fdf4e6; }
+.answer-integrity-badge.is-high { color: #fff; border-color: var(--tasks-danger, #a33a2b); background: var(--tasks-danger, #a33a2b); }
+
+.answer-integrity-modal .card {
+  width: min(880px, 94vw);
+  max-height: 84vh;
+  overflow: hidden;
+  padding: 0;
+}
+
+.answer-integrity-note {
+  margin: 0 0 12px;
+  color: var(--tasks-muted, #70807d);
+  font-size: 12px;
+}
+
+.answer-integrity-log {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--tasks-line, #e4ddd2);
+  border-left-width: 4px;
+  border-radius: 10px;
+  background: var(--tasks-surface, #fffdf9);
+}
+.answer-integrity-log.is-medium { border-left-color: var(--tasks-warning, #a66a1a); }
+.answer-integrity-log.is-high { border-left-color: var(--tasks-danger, #a33a2b); }
+
+.answer-integrity-log__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--tasks-ink, #132a36);
+  font-size: 14px;
+}
+.answer-integrity-log__facts {
+  margin: 6px 0 0;
+  color: var(--tasks-ink-soft, #35515a);
+  font-size: 12px;
+}
+
+.answer-integrity-pill {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--tasks-sage-soft, #e8f4ef);
+  color: var(--tasks-sage-dark, #1e6f61);
+  font-size: 12px;
+  font-weight: 700;
+}
+.answer-integrity-pill.is-info { background: #eef1f1; color: var(--tasks-muted, #70807d); }
+.answer-integrity-pill.is-medium { background: #fdf4e6; color: var(--tasks-warning, #a66a1a); }
+.answer-integrity-pill.is-high { background: var(--tasks-danger, #a33a2b); color: #fff; }
+
+.answer-integrity-flags {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+.answer-integrity-flags li { margin: 2px 0; color: var(--tasks-ink, #132a36); }
+.answer-integrity-flags li.is-high { color: var(--tasks-danger, #a33a2b); font-weight: 700; }
+.answer-integrity-flags li.is-medium { color: var(--tasks-warning, #a66a1a); }
+.answer-integrity-flags li.is-info { color: var(--tasks-muted, #70807d); }
+
+.answer-timeline { margin-top: 10px; }
+.answer-timeline__track {
+  position: relative;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--tasks-ivory, #f7f3eb);
+  overflow: hidden;
+}
+.answer-timeline__hidden {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(135deg, #d9d4ca 0 4px, #ebe6dc 4px 8px);
+}
+.answer-timeline__tick {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--tasks-sage, #278a78);
+}
+.answer-timeline__tick.is-revisit { background: var(--tasks-warning, #a66a1a); }
+.answer-timeline__axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  color: var(--tasks-muted, #70807d);
+  font-size: 11px;
+}
+.answer-timeline__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+  color: var(--tasks-muted, #70807d);
+  font-size: 11px;
+}
+.answer-timeline__legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  border-radius: 2px;
+  background: var(--tasks-sage, #278a78);
+}
+.answer-timeline__legend .is-revisit::before { background: var(--tasks-warning, #a66a1a); }
+.answer-timeline__legend .is-hidden::before { background: repeating-linear-gradient(135deg, #d9d4ca 0 3px, #ebe6dc 3px 6px); }
