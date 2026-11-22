@@ -1,0 +1,60 @@
+diff --git a/static/tasks_workspace.css b/static/tasks_workspace.css
+index af080058..5657ac00 100644
+--- a/static/tasks_workspace.css
++++ b/static/tasks_workspace.css
+@@ -23,33 +23 @@ body:has(.tasks-page) .main-panel{
+-body:has(.tasks-page) .sidebar{
+-  width:176px;
+-  flex:0 0 176px;
+-  padding:22px 12px 14px;
+-  background:var(--tasks-ink) !important;
+-  border-right-color:var(--tasks-ink) !important;
+-  color:var(--tasks-ivory);
+-}
+-body:has(.tasks-page) .brand-icon{
+-  width:34px;
+-  height:34px;
+-  background:var(--tasks-sage) !important;
+-  border-radius:10px;
+-}
+-body:has(.tasks-page) .sidebar__brand{ gap:8px; }
+-body:has(.tasks-page) .brand-title{ font-size:15px; }
+-body:has(.tasks-page) .brand-sub{ font-size:10px; }
+-body:has(.tasks-page) .brand-title,
+-body:has(.tasks-page) .brand-sub,
+-body:has(.tasks-page) .nav-label,
+-body:has(.tasks-page) .nav-link{ color:var(--tasks-ivory) !important; }
+-body:has(.tasks-page) .nav-label{ opacity:.62; }
+-body:has(.tasks-page) .nav-link{ min-height:36px; padding:8px 9px; font-size:12px; }
+-body:has(.tasks-page) .nav-link:hover{ background:rgba(39,138,120,.24) !important; }
+-body:has(.tasks-page) .nav-link.is-active{
+-  background:var(--tasks-sage) !important;
+-  color:#fff !important;
+-  box-shadow:0 8px 18px rgba(39,138,120,.22);
+-}
+-body:has(.tasks-page) .sidebar__user{
+-  border:1px solid rgba(255,255,255,.11);
+-  background:rgba(255,255,255,.07) !important;
+-}
++/* The sidebar and brand use the shared admin_suite_v2.css shell. */
+@@ -560,0 +529,5 @@ body:has(.tasks-page) .header-actions{
++@media (min-width:901px) and (max-width:1120px){
++  /* Keep the task heading and actions readable beside the shared sidebar. */
++  body:has(.tasks-page) .main-header{ flex-wrap:wrap; }
++  body:has(.tasks-page) .header-actions{ width:100%; justify-content:flex-start; }
++}
+diff --git a/templates/tasks.html b/templates/tasks.html
+index 0b8ac638..b553cccc 100644
+--- a/templates/tasks.html
++++ b/templates/tasks.html
+@@ -2850 +2850 @@
+-    /* Direction 2 task shell: ink navigation, ivory canvas, sage actions. */
++    /* Direction 2 task workspace: ivory canvas and sage actions. */
+@@ -2852,7 +2851,0 @@
+-    body:has(.tasks-page) .sidebar { background: #132a36; border-right-color: #132a36; color: #f7f3eb; }
+-    body:has(.tasks-page) .brand-title, body:has(.tasks-page) .brand-sub,
+-    body:has(.tasks-page) .nav-label, body:has(.tasks-page) .nav-link { color: #f7f3eb; }
+-    body:has(.tasks-page) .brand-icon { background: #278a78; }
+-    body:has(.tasks-page) .nav-link:hover { background: rgba(39, 138, 120, .24); }
+-    body:has(.tasks-page) .nav-link.is-active { background: #278a78; color: #fff; }
+-    body:has(.tasks-page) .sidebar__user { background: rgba(255,255,255,.08); }

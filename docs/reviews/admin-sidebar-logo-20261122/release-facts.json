@@ -1,0 +1,82 @@
+{
+  "release_commit": "b68d49d8ceec127871456c39f5a7d0b41cc75965",
+  "branch": "codex/admin-sidebar-logo-20261122",
+  "remote_targets": [
+    "main",
+    "codex/admin-sidebar-logo-20261122"
+  ],
+  "authorization": "User explicitly requested deployment after local review",
+  "production_acceptance": "production-acceptance.json",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 44979890266,
+      "headBranch": "main",
+      "name": "Deploy to Alibaba Cloud",
+      "status": "completed",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/44979890266"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 44979890021,
+      "headBranch": "codex/admin-sidebar-logo-20261122",
+      "name": "CI",
+      "status": "completed",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/44979890021"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 44979890271,
+      "headBranch": "main",
+      "name": "CI",
+      "status": "completed",
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/44979890271"
+    }
+  ],
+  "ci_jobs": {
+    "44979890271": [
+      {
+        "name": "lint",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "test",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "account-provisioning",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "task-planner",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "44979890021": [
+      {
+        "name": "account-provisioning",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "task-planner",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "test",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "lint",
+        "status": "completed",
+        "conclusion": "failure"
+      }
+    ]
+  }
+}

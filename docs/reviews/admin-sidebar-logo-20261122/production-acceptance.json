@@ -1,0 +1,77 @@
+{
+  "checked_at_utc": "2026-11-22T03:17:56.616739+00:00",
+  "scope": "Read-only files, systemd, anonymous GET; no app/config import or DB access",
+  "head": "b68d49d8ceec127871456c39f5a7d0b41cc75965",
+  "expected_head": "b68d49d8ceec127871456c39f5a7d0b41cc75965",
+  "tracked_clean": true,
+  "untracked_count": 113,
+  "service": {
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sun 2026-11-22 11:17:23 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "runtime_worker_count": 1,
+  "files_match": {
+    "static/tasks_workspace.css": true,
+    "templates/tasks.html": true,
+    "templates/base.html": true,
+    "templates/materials.html": true,
+    "static/admin_suite_v2.css": true,
+    "static/style.css": true,
+    "static/tasks_workspace_final.css": true,
+    "static/brand/sagepath-mark.png": true
+  },
+  "pages": {
+    "/tasks": {
+      "status": 302,
+      "location": "/login?next=%2Ftasks",
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde"
+    },
+    "/materials": {
+      "status": 302,
+      "location": "/login?next=%2Fmaterials",
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019"
+    },
+    "/login": {
+      "status": 200,
+      "location": null,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43"
+    }
+  },
+  "public_assets": {
+    "static/tasks_workspace.css": {
+      "status": 200,
+      "location": null,
+      "sha256": "6b782efe9598c323b649a580b2090ce1f50508990f069c6c07deb3c818fe755f"
+    },
+    "static/admin_suite_v2.css": {
+      "status": 200,
+      "location": null,
+      "sha256": "170be39ad9f3beeb7495b8f7a5874910bba5babe6cab82387be5c2fc7598ff03"
+    },
+    "static/style.css": {
+      "status": 200,
+      "location": null,
+      "sha256": "c7bd0b28608fc7913c29e6f44bab0b7e7bf598128fe15ef729486241ee84b597"
+    },
+    "static/tasks_workspace_final.css": {
+      "status": 200,
+      "location": null,
+      "sha256": "41ae0dfb6b8723f0318a45279fc4c7998143c255390b9618342457959b442d9a"
+    },
+    "static/brand/sagepath-mark.png": {
+      "status": 200,
+      "location": null,
+      "sha256": "2d0aa186ff212b649bd2c71fe984c1353e5217429d0411e71972d18d11e64959"
+    }
+  },
+  "warning_lines_since_restart": 0,
+  "ok": true
+}

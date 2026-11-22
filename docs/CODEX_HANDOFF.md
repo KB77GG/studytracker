@@ -1,5 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-22 — 后台左上角 Logo 已部署，生产验收通过
+
+- **授权/变更**：用户在本地验收后明确要求部署。仅2产品文件 `static/tasks_workspace.css`、`templates/tasks.html`：移除任务页两处侧栏/品牌专属覆盖，继承公共白底42×42Logo/34×34图片/17px品牌字；901–1120px页头搜索和按钮移至标题下避免挤压。无业务、API、数据库模型或小程序改动。
+- **工作树/版本**：实施树 `/private/tmp/studytracker-admin-sidebar-logo-20261122`，分支 `codex/admin-sidebar-logo-20261122`，基线e9d1069a；产品 **b68d49d8ceec127871456c39f5a7d0b41cc75965** 已commit并原子push至任务分支及main，已部署。发布前fetch无漂移。报告/两交接另以skip-ci文档提交同步，文档后HEAD以git回读，服务器业务HEAD仍b68d49d8。无残留未提交产品。
+- **精确验证**：`node --test tests/test_admin_suite_v2_structure.js tests/test_tasks_workspace_structure.js` 7/7；`node tests/test_dictation_spell_queue.js` exit0；Jinja两模板编译及`git diff --check`通过。前轮离线浏览器 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/admin-sidebar-logo-20261122/visual_check.py` 20场景通过（5屏宽×两页×修前后），修后品牌一致/单行/侧栏无溢出，手机开关/Escape/遮罩关闭正常。发布前两产品SHA再次匹配验收manifest，独立复核无阻塞；未因发布重复整套视觉。1024筛选栏/列表原有内部挤压未扩修，真实任务写入和线上登录态视觉未验。
+- **生产**：Deploy **44979890266 success**；11:17:23 CST重启，11:17:56只读验收 `ok=true`：发布HEAD、tracked clean、8文件SHA/5公网资源200及SHA一致；/tasks、/materials匿名302到登录，/login200；active/running、NRestarts0、实际1worker、配置gthread/6threads/5002，重启后warning以上0，原113untracked保留。验证器`docs/reviews/admin-sidebar-logo-20261122/verify_release.py`经SSH stdin运行，精确参数/exit0见`release-commands.json`，结果见`production-acceptance.json`；无app导入/学生库查询。标准部署执行既有幂等迁移、静态同步和重启，无本任务新增schema/业务数据写入；小程序未上传/提审/发布。
+- **CI/资料**：main CI44979890271、任务分支CI44979890021均success，三个业务job全通过，既有advisory lint仍failure不扩修；详细状态见报告`release-facts.json`。报告 `docs/reviews/admin-sidebar-logo-20261122/` 包含补丁、前后截图、离线复现脚本/资源、产品及发布manifest、验证命令/回读。产品与同步后的文档可跨电脑获取。
+- **主资料树与下一步**：`/Users/zhouxin/Desktop/studytracker`仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，本轮保留原7M/24U，只镜像报告并更新本条与WORKLOG；并行D3试点记录保持，不将其擅自纳入发布。原业务5SHA继续匹配`main-preserved-sha256.json`，全部既有脏路径见`main-status-before.txt`。固定小程序树及其他工作树未改；旧主树源码不是已部署版本，其原未提交内容仍仅本机。下一步用户刷新页面验看；继续开发前先核Git/线上状态，不从旧main直接部署。无待发小程序。
+
 ## 2026-11-17 B4 四人错词试点已开启并生产回读通过
 
 - **授权/方案**：用户委托Codex自行审核、选人、执行后几天复查，不再等待名单/参数确认。沿用B2两次隔2自然日首答正确；新增毕业D7机会，与首次答对D7/D30分来源共用每日最多4抽查。每日20、可选10、连续3复测日失败暂停7日/教师周清单、过载>7日转低频不变；无历史导入、不删除学习记录。

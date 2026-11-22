@@ -1,0 +1,10 @@
+{
+  "preflight": "ssh root@47.110.45.193 'cd /root/apps/studytracker && git rev-parse HEAD && git status --porcelain -uno && systemctl show studytracker -p ActiveState -p SubState -p NRestarts -p MainPID'",
+  "verify": [
+    "ssh",
+    "root@47.110.45.193",
+    "python3 - --expected-head b68d49d8ceec127871456c39f5a7d0b41cc75965 --manifest-b64 ewogICJzdGF0aWMvdGFza3Nfd29ya3NwYWNlLmNzcyI6ICI2Yjc4MmVmZTk1OThjMzIzYjY0OWE1ODBiMjA5MGNlMWY1MDUwODk5MGYwNjljNmMwN2RlYjNjODE4ZmU3NTVmIiwKICAidGVtcGxhdGVzL3Rhc2tzLmh0bWwiOiAiYmRjMzI1ODZiMzVjM2U5NDY0ZDE1ZmZiNGVjY2VmMDUwODlkZjMxMTcwOGZhZTQ4OTRjNjE0NTVlZjU0MTYyOSIsCiAgInRlbXBsYXRlcy9iYXNlLmh0bWwiOiAiYTIwNTUyNTcwOTIzNmFiNTg5YjBmMDM4MDJhYjdlMWZjMTkwZDEzMDhhMDNmOTJjZTY1MWM3NWUyN2Q1OTNlNCIsCiAgInRlbXBsYXRlcy9tYXRlcmlhbHMuaHRtbCI6ICIyMDgwZDYzNzhmZTMzZTJkY2U0NzllMjczMTRlOWRiYjBmMGY3ODc4NjQxNzg2N2MwYmQwYzA3ZTcxMDk0M2ExIiwKICAic3RhdGljL2FkbWluX3N1aXRlX3YyLmNzcyI6ICIxNzBiZTM5YWQ5ZjNiZWViNzQ5NWI4ZjdhNTg3NDkxMGJiYTViYWJlNmNhYjgyMzg3YmU1YzJmYzc1OThmZjAzIiwKICAic3RhdGljL3N0eWxlLmNzcyI6ICJjN2JkMGIyODYwOGZjNzkxM2MyOWU2ZjQ0YmFiMGI3ZTdiZjU5ODEyOGZlMTVlZjcyOTQ4NjI0MWVlODRiNTk3IiwKICAic3RhdGljL3Rhc2tzX3dvcmtzcGFjZV9maW5hbC5jc3MiOiAiNDFhZTBkZmI2Yjg3MjNmMDMxOGE0NTI3OWZjNGM3OTk4MTQzYzI1NTM5MGI5NjE4MzQyNDU3OTU5YjQ0MmQ5YSIsCiAgInN0YXRpYy9icmFuZC9zYWdlcGF0aC1tYXJrLnBuZyI6ICIyZDBhYTE4NmZmMjEyYjY0OWJkMmM3MWZlOTg0YzEzNTNlNTIxNzQyOWQwNDExZTcxOTcyZDE4ZDExZTY0OTU5Igp9Cg=="
+  ],
+  "verify_stdin": "docs/reviews/admin-sidebar-logo-20261122/verify_release.py",
+  "verify_exit_code": 0
+}
