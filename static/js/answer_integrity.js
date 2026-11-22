@@ -27,6 +27,15 @@
     return date.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false });
   }
 
+  const summaryCache = new Map();
+
+  function attachBadge(row) {
+    const item = summaryCache.get(row.dataset.id);
+    const cell = row.querySelector('td.task-time');
+    if (!item || !cell || cell.querySelector('.answer-integrity-badge')) return;
+    cell.appendChild(badgeFor(row.dataset.id, item));
+  }
+
   function taskRows() {
     return Array.from(document.querySelectorAll('tr[data-id]')).filter(row => row.querySelector('td.task-time'));
   }
@@ -58,18 +67,32 @@
         console.warn('answer integrity summary failed', error);
         continue;
       }
-      rows.forEach(row => {
-        const item = payload.items && payload.items[row.dataset.id];
-        const cell = row.querySelector('td.task-time');
-        if (!item || !cell || cell.querySelector('.answer-integrity-badge')) return;
-        cell.appendChild(badgeFor(row.dataset.id, item));
-      });
+      Object.entries(payload.items || {}).forEach(([taskId, item]) => summaryCache.set(taskId, item));
+      rows.forEach(attachBadge);
     }
+    watchRows(rows);
+  }
+
+  // Editing a task rewrites the whole time cell (textContent), which drops the
+  // badge; put it back from the cache instead of touching that legacy code.
+  function watchRows(rows) {
+    if (!summaryCache.size || typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        const row = mutation.target.closest && mutation.target.closest('tr[data-id]');
+        if (row) attachBadge(row);
+      });
+    });
+    rows.forEach(row => {
+      const cell = row.querySelector('td.task-time');
+      if (cell && summaryCache.has(row.dataset.id)) observer.observe(cell, { childList: true });
+    });
   }
 
   // ---- modal ----
 
   let modal = null;
+  let requestSeq = 0;
 
   function ensureModal() {
     if (modal) return modal;
@@ -101,10 +124,12 @@
   }
 
   function closeModal() {
+    requestSeq += 1; // responses for a closed modal are ignored
     if (modal) modal.classList.add('hidden');
   }
 
   async function openModal(taskId) {
+    const seq = ++requestSeq;
     const node = ensureModal();
     node.classList.remove('hidden');
     node.subtitleNode.textContent = '正在读取作答过程';
@@ -114,10 +139,12 @@
         headers: { Accept: 'application/json' },
       });
       const payload = await response.json();
+      if (seq !== requestSeq) return;
       if (!response.ok || !payload.ok) throw new Error(payload.error || 'request_failed');
       node.subtitleNode.textContent = `${payload.task.student_name || ''} · ${payload.task.title || ''}`;
       renderLogs(node.contentNode, payload.logs || []);
     } catch (error) {
+      if (seq !== requestSeq) return;
       const message = error && error.message === 'forbidden_task'
         ? '当前账号无权查看该学生的作答过程。'
         : '作答过程加载失败，请刷新页面后重试。';

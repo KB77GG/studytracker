@@ -89,16 +89,85 @@ class AnalyzeTimelineTest(unittest.TestCase):
         self.assertIn("too_fast", _codes(result))
         self.assertEqual(result["level"], LEVEL_HIGH)
 
-    def test_padded_submission_with_answer_burst_is_flagged(self):
-        # Waits 18 minutes doing nothing, fills all 12 answers in 40 s, waits, submits at 25 min.
+    def test_padded_submission_with_answer_burst_is_flagged_but_not_high(self):
+        # Fills all 12 answers in 40 s after 18 quiet minutes, submits at 25 min. That is
+        # also what "worked on paper, then typed it in" looks like, so it stays "medium".
         events = _answers(18 * 60, 3.5, 12)
         result = analyze_timeline(
             "cambridge_reading", _timeline(events, 25 * 60_000), question_count=12, accuracy=100.0
         )
         self.assertIn("padded_burst", _codes(result))
-        self.assertEqual(result["level"], LEVEL_HIGH)
+        self.assertEqual(result["level"], LEVEL_MEDIUM)
         burst = next(flag for flag in result["flags"] if flag["code"] == "padded_burst")
         self.assertIn("交卷总用时 25 分钟", burst["message"])
+        self.assertIn("在纸上做好再统一录入", burst["message"])
+        self.assertNotIn("其余时间没有作答", burst["message"])
+
+    # ---- regressions from the Codex review (2026-11-22) ----
+
+    def test_paper_first_entry_at_normal_typing_speed_is_medium(self):
+        # Review #4: reads/works 10 minutes, then enters 12 answers 4 s apart, 80% correct.
+        events = _answers(10 * 60, 4, 12)
+        result = analyze_timeline(
+            "cambridge_reading", _timeline(events, 11 * 60_000), question_count=12, accuracy=80.0
+        )
+        self.assertEqual(_codes(result), {"padded_burst"})
+        self.assertEqual(result["level"], LEVEL_MEDIUM)
+
+    def test_fast_redo_after_seeing_answers_is_not_flagged(self):
+        # Review #2: redoing six wrong questions 3 s apart, submitted after 20 s.
+        events = _answers(2, 3, 6)
+        for mode in ("redo_wrong", "redo_all"):
+            result = analyze_timeline(
+                "reading_vocab",
+                _timeline(events, 20_000, mode=mode),
+                question_count=12,
+                accuracy=100.0,
+                baseline_accuracy=40.0,
+            )
+            self.assertEqual(result["flags"], [], mode)
+            self.assertEqual(result["level"], LEVEL_NONE, mode)
+
+    def test_redo_keeps_leave_facts_only_as_info(self):
+        events = [[1000, "h"], [200_000, "s"]] + _answers(201, 1, 10)
+        result = analyze_timeline(
+            "cambridge_reading",
+            _timeline(events, 215_000, mode="redo_wrong"),
+            question_count=10,
+            accuracy=100.0,
+        )
+        self.assertEqual(_codes(result), {"left_then_burst"})
+        self.assertEqual(result["level"], LEVEL_INFO)
+
+    def test_short_break_at_normal_vocab_speed_is_not_flagged(self):
+        # Review #3: ten vocab questions 8 s apart with a 60 s break in the middle.
+        events = _answers(5, 8, 5, prefix="a") + [[45_000, "h"], [105_000, "s"]]
+        events += _answers(106, 8, 5, prefix="b")
+        result = analyze_timeline(
+            "reading_vocab", _timeline(events, 150_000), question_count=10, accuracy=80.0
+        )
+        self.assertEqual(result["metrics"]["returns"][0]["answered_within_60s"], 5)
+        self.assertEqual(result["level"], LEVEL_NONE, result["flags"])
+
+    def test_placeholders_then_mass_correction_is_flagged(self):
+        # Review #5: 12 placeholder answers 45 s apart, all changed in the last 12 s.
+        events = _answers(60, 45, 12)
+        events += [[19 * 60_000 + i * 1000, "a", str(i + 1)] for i in range(12)]
+        result = analyze_timeline(
+            "cambridge_reading", _timeline(events, 20 * 60_000), question_count=12, accuracy=100.0
+        )
+        self.assertIn("revision_burst", _codes(result))
+        self.assertEqual(result["level"], LEVEL_HIGH)
+        self.assertEqual(result["metrics"]["revised_question_count"], 12)
+
+    def test_a_few_spread_out_corrections_are_not_a_revision_burst(self):
+        events = _answers(60, 45, 12)
+        events += [[700_000, "a", "2"], [760_000, "a", "7"], [840_000, "a", "11"]]
+        result = analyze_timeline(
+            "cambridge_reading", _timeline(events, 20 * 60_000), question_count=12, accuracy=75.0
+        )
+        self.assertNotIn("revision_burst", _codes(result))
+        self.assertEqual(result["level"], LEVEL_NONE)
 
     def test_leaving_then_answering_in_a_burst_is_flagged(self):
         events = [[30_000, "a", "1"], [60_000, "h"], [300_000, "s"]]

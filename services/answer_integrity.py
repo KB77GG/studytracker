@@ -1,8 +1,9 @@
 """Persist and read homework answer timelines (作答过程记录).
 
-Submission handlers call :func:`record_answer_timeline` right before their own
-commit.  Recording is best-effort: any problem with the client payload or the
-analysis is logged and skipped so a student's submission is never blocked.
+Submission handlers call :func:`record_answer_timeline` only *after* their own
+commit succeeded.  The log is then written in its own short transaction: any
+problem with the payload, the analysis or the INSERT itself is logged and
+rolled back on its own, so answers, grades and task status are never lost.
 """
 
 from __future__ import annotations
@@ -56,7 +57,11 @@ def record_answer_timeline(
     accuracy: float | None,
     fallback_mode: str = "practice",
 ) -> AnswerIntegrityLog | None:
-    """Add one log row to the current session (the caller commits)."""
+    """Write one log row in its own transaction; call after the submission commit."""
+    if db.session.new or db.session.dirty or db.session.deleted:
+        # Never piggyback on (and risk rolling back) an uncommitted submission.
+        logger.error("answer timeline skipped: submission for task %s not committed", task.id)
+        return None
     try:
         timeline = sanitize_timeline(raw_timeline, duration_seconds=duration_seconds)
         mode = timeline["mode"] if timeline else fallback_mode
@@ -87,8 +92,10 @@ def record_answer_timeline(
             submitted_at=utcnow_naive(),
         )
         db.session.add(row)
+        db.session.commit()
         return row
-    except Exception:  # pragma: no cover - defensive: never block a submission
+    except Exception:
+        db.session.rollback()
         logger.exception("answer timeline recording skipped for task %s", getattr(task, "id", None))
         return None
 

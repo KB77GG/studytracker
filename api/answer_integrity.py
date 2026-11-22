@@ -27,11 +27,15 @@ def _teacher_owns(task: Task) -> bool:
     return int(task.created_by or 0) == int(current_user.id)
 
 
+_MAX_TASK_ID_DIGITS = 12
+
+
 def _parse_task_ids(raw: str) -> list[int]:
+    """Plain ASCII task ids only; anything else (e.g. '²', huge numbers) is skipped."""
     ids: list[int] = []
-    for part in (raw or "").split(","):
+    for part in (raw or "").split(",")[: MAX_SUMMARY_TASKS * 2]:
         part = part.strip()
-        if part.isdigit():
+        if part.isascii() and part.isdigit() and len(part) <= _MAX_TASK_ID_DIGITS:
             ids.append(int(part))
     return list(dict.fromkeys(ids))[:MAX_SUMMARY_TASKS]
 

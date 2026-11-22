@@ -2625,6 +2625,7 @@ def submit_reading_vocab_practice(task_id):
     task.accuracy = result.accuracy
     task.completion_rate = result.completion_rate
     task.status = "done"
+    db.session.commit()
     record_answer_timeline(
         task,
         source=source_for_material_type(task.material.type),
@@ -2635,7 +2636,6 @@ def submit_reading_vocab_practice(task_id):
         accuracy=result.accuracy,
         fallback_mode=submit_mode if submit_mode in ("redo_wrong", "redo_all") else "practice",
     )
-    db.session.commit()
 
     return jsonify({
         "ok": True,

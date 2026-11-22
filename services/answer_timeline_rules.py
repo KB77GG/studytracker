@@ -72,6 +72,7 @@ def source_for_material_type(material_type: str | None) -> str:
 
 MIN_QUESTIONS_FOR_PACE = 5
 BURST_SHARE = 0.8
+CLUSTER_SHARE = 0.4
 RETURN_WINDOW_SECONDS = 60.0
 RETURN_MIN_HIDDEN_SECONDS = 20.0
 BASELINE_MIN_ATTEMPTS = 3
@@ -158,33 +159,62 @@ def _first_answer_offsets(events: list[list]) -> list[int]:
     return offsets
 
 
-def _tightest_window(offsets: list[int], count: int) -> int:
-    """Smallest span in ms that contains ``count`` consecutive first answers."""
+def _final_revision_offsets(events: list[list]) -> list[int]:
+    """Offset of the last edit of every question that was changed after its first answer."""
+    first: dict[str, int] = {}
+    last: dict[str, int] = {}
+    for event in events:
+        if event[1] != "a":
+            continue
+        if event[2] in first:
+            last[event[2]] = event[0]
+        else:
+            first[event[2]] = event[0]
+    return sorted(last.values())
+
+
+def _tightest_window(offsets: list[int], count: int) -> int | None:
+    """Smallest span in ms that contains ``count`` consecutive offsets."""
     if count <= 1 or len(offsets) < count:
-        return 0
+        return None
     return min(offsets[i + count - 1] - offsets[i] for i in range(len(offsets) - count + 1))
 
 
-def timeline_metrics(timeline: dict) -> dict:
+def _cluster_size(question_count: int, answered: int) -> int:
+    """How many questions make a 'batch' worth flagging (40% of the paper, at least 3)."""
+    return max(3, math.ceil(CLUSTER_SHARE * max(question_count, answered)))
+
+
+def timeline_metrics(timeline: dict, *, question_count: int = 0) -> dict:
     events = timeline["events"]
     end_ms = int(timeline["submitted_offset_ms"])
     first_offsets = _first_answer_offsets(events)
+    revision_offsets = _final_revision_offsets(events)
     answer_events = sum(1 for event in events if event[1] == "a")
     hidden = _hidden_intervals(events, end_ms)
     hidden_ms = sum(stop - start for start, stop in hidden)
     answered = len(first_offsets)
     burst_count = math.ceil(answered * BURST_SHARE) if answered else 0
     burst_ms = _tightest_window(first_offsets, burst_count)
+    revision_count = _cluster_size(question_count, answered)
+    revision_ms = _tightest_window(revision_offsets, revision_count)
 
     returns = []
     for start, stop in hidden:
         if stop >= end_ms or (stop - start) < RETURN_MIN_HIDDEN_SECONDS * 1000:
             continue
-        after = sum(
-            1 for offset in first_offsets if stop <= offset <= stop + RETURN_WINDOW_SECONDS * 1000
-        )
+        after = [
+            offset
+            for offset in first_offsets
+            if stop <= offset <= stop + RETURN_WINDOW_SECONDS * 1000
+        ]
         returns.append(
-            {"hidden_seconds": round((stop - start) / 1000, 1), "answered_within_60s": after}
+            {
+                "hidden_seconds": round((stop - start) / 1000, 1),
+                "answered_within_60s": len(after),
+                # Time from coming back to the last of those answers, per answer.
+                "pace_seconds": round((after[-1] - stop) / 1000 / len(after), 1) if after else None,
+            }
         )
 
     return {
@@ -192,13 +222,16 @@ def timeline_metrics(timeline: dict) -> dict:
         "answered_count": answered,
         "answer_event_count": answer_events,
         "revisit_count": max(0, answer_events - answered),
+        "revised_question_count": len(revision_offsets),
         "first_answer_seconds": round(first_offsets[0] / 1000, 1) if first_offsets else None,
         "last_answer_seconds": round(first_offsets[-1] / 1000, 1) if first_offsets else None,
         "leave_count": len(hidden),
         "hidden_seconds": round(hidden_ms / 1000, 1),
         "active_seconds": round(max(0, end_ms - hidden_ms) / 1000, 1),
         "burst_count": burst_count,
-        "burst_seconds": round(burst_ms / 1000, 1),
+        "burst_seconds": round(burst_ms / 1000, 1) if burst_ms is not None else None,
+        "revision_burst_count": revision_count,
+        "revision_burst_seconds": round(revision_ms / 1000, 1) if revision_ms is not None else None,
         "returns": returns,
     }
 
@@ -213,6 +246,10 @@ def _pace_level(pace: float, thresholds: dict) -> str | None:
     if pace < thresholds["medium"]:
         return LEVEL_MEDIUM
     return None
+
+
+def _cap(level: str, ceiling: str) -> str:
+    return level if _LEVEL_RANK[level] <= _LEVEL_RANK[ceiling] else ceiling
 
 
 def _fmt_seconds(seconds: float) -> str:
@@ -239,35 +276,65 @@ def _pace_flags(metrics: dict, thresholds: dict) -> list[dict]:
             )
         ]
     count, burst = metrics["burst_count"], metrics["burst_seconds"]
-    burst_level = _pace_level(burst / max(1, count - 1), thresholds)
+    if burst is None:
+        return []
+    pace = burst / max(1, count - 1)
+    burst_level = _pace_level(pace, thresholds)
     duration = metrics["duration_seconds"]
     if burst_level and duration >= 2 * burst + 60:
+        # Entering answers prepared elsewhere (reading first, working on paper)
+        # looks the same as copying, so a burst alone is never "high".
         return [
             _flag(
                 "padded_burst",
-                burst_level,
-                f"{count} 题集中在 {_fmt_seconds(burst)} 内答完，"
-                f"但交卷总用时 {_fmt_seconds(duration)}，其余时间没有作答。",
+                _cap(burst_level, LEVEL_MEDIUM),
+                f"{count} 题的首次作答集中在 {_fmt_seconds(burst)} 内完成（平均每题 {pace:.1f} 秒），"
+                f"交卷总用时 {_fmt_seconds(duration)}。可能是先读完/在纸上做好再统一录入，"
+                f"也可能是对照答案填写，建议抽问核实。",
             )
         ]
     return []
 
 
-def _leave_flags(metrics: dict, question_count: int) -> list[dict]:
+def _revision_flags(metrics: dict, thresholds: dict) -> list[dict]:
+    count, window = metrics["revision_burst_count"], metrics["revision_burst_seconds"]
+    if window is None:
+        return []
+    pace = window / max(1, count - 1)
+    level = _pace_level(pace, thresholds)
+    if not level:
+        return []
+    return [
+        _flag(
+            "revision_burst",
+            level,
+            f"{count} 道已作答的题在 {_fmt_seconds(window)} 内被集中改掉答案"
+            f"（平均每题 {pace:.1f} 秒），常见于先随意占位、最后统一改成答案。",
+        )
+    ]
+
+
+def _leave_flags(metrics: dict, question_count: int, thresholds: dict) -> list[dict]:
     flags: list[dict] = []
-    needed = max(3, math.ceil(0.4 * max(question_count, metrics["answered_count"])))
+    needed = _cluster_size(question_count, metrics["answered_count"])
     for item in metrics["returns"]:
-        if item["answered_within_60s"] >= needed:
-            level = LEVEL_HIGH if item["hidden_seconds"] >= 60 else LEVEL_MEDIUM
-            flags.append(
-                _flag(
-                    "left_then_burst",
-                    level,
-                    f"离开作答页面 {_fmt_seconds(item['hidden_seconds'])}，"
-                    f"回来后 1 分钟内连续答了 {item['answered_within_60s']} 题。",
-                )
+        if item["answered_within_60s"] < needed or item["pace_seconds"] is None:
+            continue
+        level = _pace_level(item["pace_seconds"], thresholds)
+        if not level:
+            continue
+        if item["hidden_seconds"] < 60:
+            level = _cap(level, LEVEL_MEDIUM)
+        flags.append(
+            _flag(
+                "left_then_burst",
+                level,
+                f"离开作答页面 {_fmt_seconds(item['hidden_seconds'])}，"
+                f"回来后 1 分钟内连续答了 {item['answered_within_60s']} 题"
+                f"（平均每题 {item['pace_seconds']:.1f} 秒）。",
             )
-            break
+        )
+        break
     hidden, duration = metrics["hidden_seconds"], metrics["duration_seconds"]
     long_absence = hidden >= 120 and hidden >= 0.3 * duration and not flags
     if metrics["leave_count"] >= 3 or long_absence:
@@ -284,12 +351,11 @@ def _leave_flags(metrics: dict, question_count: int) -> list[dict]:
 def _accuracy_flags(
     metrics: dict,
     *,
-    mode: str,
     accuracy: float | None,
     question_count: int,
     baseline_accuracy: float | None,
 ) -> list[dict]:
-    if accuracy is None or mode != "practice":
+    if accuracy is None:
         return []
     flags: list[dict] = []
     if baseline_accuracy is not None and accuracy - baseline_accuracy >= BASELINE_JUMP_POINTS:
@@ -333,12 +399,21 @@ def analyze_timeline(
         return {"metrics": None, "flags": flags, "level": overall_level(flags)}
 
     thresholds = SOURCE_PACE_SECONDS.get(source, DEFAULT_PACE_SECONDS)
-    metrics = timeline_metrics(timeline)
+    metrics = timeline_metrics(timeline, question_count=question_count)
+    if timeline.get("mode", "practice") != "practice":
+        # Redoing after the answers/explanations were shown: speed and accuracy
+        # say nothing about honesty, so only keep leave facts as low-level notes.
+        flags = [
+            dict(flag, level=LEVEL_INFO)
+            for flag in _leave_flags(metrics, question_count, thresholds)
+        ]
+        return {"metrics": metrics, "flags": flags, "level": overall_level(flags)}
+
     flags = _pace_flags(metrics, thresholds)
-    flags += _leave_flags(metrics, question_count)
+    flags += _revision_flags(metrics, thresholds)
+    flags += _leave_flags(metrics, question_count, thresholds)
     flags += _accuracy_flags(
         metrics,
-        mode=timeline.get("mode", "practice"),
         accuracy=accuracy,
         question_count=question_count,
         baseline_accuracy=baseline_accuracy,

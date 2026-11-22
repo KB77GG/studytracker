@@ -17,6 +17,7 @@ from models import (
     MaterialBank,
     Question,
     QuestionOption,
+    ReadingTestSubmission,
     StudentAnswer,
     StudentProfile,
     Task,
@@ -192,7 +193,7 @@ class AnswerIntegrityRoutesTest(unittest.TestCase):
 
     # ---- submission recording ----
 
-    def test_cambridge_submit_records_padded_burst_as_high(self):
+    def test_cambridge_submit_records_padded_burst(self):
         task_id = self._reading_task()
         response = self._submit_reading(task_id, _burst_timeline(range(1, 13)))
         self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
@@ -201,7 +202,7 @@ class AnswerIntegrityRoutesTest(unittest.TestCase):
             row = AnswerIntegrityLog.query.filter_by(task_id=task_id).one()
             self.assertEqual(row.source, "cambridge_reading")
             self.assertTrue(row.has_timeline)
-            self.assertEqual(row.level, "high")
+            self.assertEqual(row.level, "medium")
             self.assertEqual(row.duration_seconds, 25 * 60)
             self.assertEqual(row.question_count, 12)
             self.assertIn("padded_burst", {flag["code"] for flag in json.loads(row.flags_json)})
@@ -276,6 +277,75 @@ class AnswerIntegrityRoutesTest(unittest.TestCase):
                 StudentAnswer.query.filter_by(task_id=task_id).count(), len(question_ids)
             )
 
+    def _break_log_inserts(self):
+        """Make only the log INSERT fail (Codex review #1): drop the log table."""
+        with self.app.app_context():
+            AnswerIntegrityLog.__table__.drop(db.engine)
+        return patch("services.answer_integrity._baseline_accuracy", return_value=None)
+
+    def test_log_insert_failure_never_rolls_back_a_reading_submission(self):
+        for integrity in (_burst_timeline(range(1, 13)), None):
+            with self.subTest(integrity=bool(integrity)):
+                task_id = self._reading_task()
+                with self.app.app_context():
+                    AnswerIntegrityLog.__table__.create(db.engine, checkfirst=True)
+                with self._break_log_inserts():
+                    response = self._submit_reading(task_id, integrity)
+                self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+                self.assertTrue(response.get_json()["synced"])
+                with self.app.app_context():
+                    task = db.session.get(Task, task_id)
+                    self.assertEqual(task.status, "done")
+                    self.assertTrue(task.student_submitted)
+                    self.assertEqual(task.accuracy, 100.0)
+                    self.assertEqual(
+                        ReadingTestSubmission.query.filter_by(task_id=task_id).count(), 1
+                    )
+
+    def test_log_insert_failure_never_rolls_back_a_choice_submission(self):
+        for with_timeline in (True, False):
+            with self.subTest(with_timeline=with_timeline):
+                task_id, question_ids = self._choice_task()
+                with self.app.app_context():
+                    AnswerIntegrityLog.__table__.create(db.engine, checkfirst=True)
+                payload = {
+                    "answers": [{"question_id": qid, "answer_key": "A"} for qid in question_ids],
+                    "duration_seconds": 60,
+                }
+                if with_timeline:
+                    payload["integrity"] = {
+                        "v": 1,
+                        "submitted_offset_ms": 60_000,
+                        "events": [[i * 9000, "a", str(qid)] for i, qid in enumerate(question_ids)],
+                    }
+                with self._break_log_inserts():
+                    response = self.app.test_client().post(
+                        f"/api/miniprogram/student/tasks/{task_id}/reading-vocab-practice/submit",
+                        json=payload,
+                        headers=self._student_headers(),
+                    )
+                self.assertEqual(response.status_code, 200, response.get_json())
+                with self.app.app_context():
+                    task = db.session.get(Task, task_id)
+                    self.assertEqual(task.status, "done")
+                    self.assertEqual(task.accuracy, 100.0)
+                    self.assertEqual(
+                        StudentAnswer.query.filter_by(task_id=task_id).count(), len(question_ids)
+                    )
+
+    def test_summary_ignores_non_ascii_and_oversized_ids(self):
+        task_id = self._reading_task()
+        self._submit_reading(task_id, _burst_timeline(range(1, 13)))
+        client = self._staff_client("admin")
+        for raw in ("²", "9223372036854775808", "1" * 40, "٣", f"{task_id},²,-1, ,{task_id}"):
+            with self.subTest(raw=raw):
+                response = client.get(f"/api/staff/answer-integrity/summary?task_ids={raw}")
+                self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        items = client.get(
+            f"/api/staff/answer-integrity/summary?task_ids={task_id},²,99999999999999999999"
+        ).get_json()["items"]
+        self.assertEqual(list(items), [str(task_id)])
+
     # ---- staff read endpoints ----
 
     def test_staff_detail_respects_teacher_ownership(self):
@@ -286,7 +356,7 @@ class AnswerIntegrityRoutesTest(unittest.TestCase):
         owner = self._staff_client("owner").get(path)
         self.assertEqual(owner.status_code, 200)
         log = owner.get_json()["logs"][0]
-        self.assertEqual(log["level_label"], "高度可疑")
+        self.assertEqual(log["level_label"], "需关注")
         self.assertEqual(len(log["events"]), 12)
         self.assertEqual(log["source_label"], "剑雅阅读")
 
@@ -309,7 +379,7 @@ class AnswerIntegrityRoutesTest(unittest.TestCase):
         owner = self._staff_client("owner").get(path).get_json()
         self.assertEqual(
             owner["items"],
-            {str(flagged): {"level": "high", "level_label": "高度可疑", "has_timeline": True}},
+            {str(flagged): {"level": "medium", "level_label": "需关注", "has_timeline": True}},
         )
         self.assertEqual(self._staff_client("other").get(path).get_json()["items"], {})
         self.assertIn(str(flagged), self._staff_client("admin").get(path).get_json()["items"])

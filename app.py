@@ -8121,6 +8121,7 @@ def api_reading_test_submit(test_id):
     )
     _sync_plan_item_from_task(task)
     _sync_reading_test_score_record(task, payload, grade)
+    db.session.commit()
     record_answer_timeline(
         task,
         source="cambridge_reading",
@@ -8130,7 +8131,6 @@ def api_reading_test_submit(test_id):
         correct_count=grade["correct"],
         accuracy=grade["accuracy"],
     )
-    db.session.commit()
 
     return jsonify({
         "ok": True,
