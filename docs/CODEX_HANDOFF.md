@@ -1,5 +1,17 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-22 — 作业作答过程记录（防刷题/防拖时长）：代码完成，未部署、小程序未发版
+
+- **背景/授权**：老师反馈学生阅读作业作弊（先是13秒做完12题、30秒全对；发现老师看总用时后改为拖够时长再交）。用户确认做“第一部分”：记录每题作答时间线和切出页面，后端存储并给出可疑标记，老师后台查看。只授权实现；**未授权合并 main / 部署**。
+- **Git**：分支 `claude/admiring-mccarthy-9bm1q0`（基线 f81a5e4），已 commit 并 push 该分支；**未合并 main，未触发 Deploy**（deploy.yml 只监听 main）。准确 HEAD 以 `git log` 为准。
+- **后端（纯增量）**：新表 `answer_integrity_log`（`models.py` 末尾新分区，不在 legacy 区）；启动时由 `api/__init__.py` `__table__.create(checkfirst=True)` 建表，部署时 `db.create_all()` 也会建，**无旧表改列/迁移**。纯规则 `services/answer_timeline_rules.py`（清洗+指标+标记，阈值按来源区分）；入库/查询 `services/answer_integrity.py`（best-effort，异常只记日志不阻断交卷）；老师只读接口新蓝图 `api/answer_integrity.py`：`GET /api/staff/answer-integrity/summary?task_ids=` 与 `GET /api/staff/tasks/<id>/answer-integrity`，权限同学习轨迹（管理员/助教全部，老师仅 `task.created_by` 为自己）。交卷接入两处仅各加一次调用：`app.py` `api_reading_test_submit`（source=cambridge_reading）、`api/miniprogram.py` `submit_reading_vocab_practice`（source 按材料类型：ielts_reading_practice→material_reading、reading_vocab_choice→reading_vocab、grammar→grammar_choice、translation→translation_choice）。判分、任务状态、旧响应字段均不变；请求多一个可选 `integrity` 字段，旧后端会忽略。
+- **标记规则（只作参考，非自动判定）**：`too_fast`（页面内有效时长/题数低于阈值）、`padded_burst`（80%题集中在很短时间内答完但总用时被拖长——针对“拖时间”）、`left_then_burst`（离开页面≥20秒回来1分钟内连答≥40%题）、`frequent_leave`、`above_baseline`（正确率比该生同类近10次正常作答均值高≥30分，需≥3次历史，重做模式不算）、`perfect_no_revision`（info）、`no_timeline`（网页端/旧版小程序提交，info）。阅读阈值 高<6秒/题、需关注<10秒/题；词汇 1.5/3；语法/翻译 2/4。
+- **小程序**：新 `miniprogram/utils/answer-timeline.js`（只记时刻与题号，不记答案；同题4秒内连续输入合并；最多800事件）；接入 `pages/student/reading/cambridge/index.js` 与 `pages/student/material-choice/practice/index.js`（onShow/onHide、作答、重做 reset、交卷带 `integrity`）。**未上传/提审/发布**，需用户用微信开发者工具手动发版。
+- **老师端**：`templates/tasks.html` 引入 `static/answer_integrity.css`、`static/js/answer_integrity.js`；任务列表“用时”格出现徽标（高度可疑/需关注/作答过程/无过程记录），点开弹窗看每次提交的提示、指标和时间线（作答刻度、改答案、离开页面阴影）。本地离线 harness 截图桌面/390px 无报错、无横向滚动。
+- **验证（本云端会话，Python 3.13 venv 轻量依赖）**：新 `tests.test_answer_timeline_rules`（14）+`tests.test_answer_integrity_routes`（7）通过；相关回归 `tests.test_cambridge_same_day_retry tests.test_task_assignment_routes tests.test_reading_vocab_grading tests.test_task_planner_recovery_student_contract_e2e` 48 通过；全量 `python -m unittest discover -s tests -p "test_*.py"` 1675 项中 4 failures/7 errors，与基线（stash 后同模块）完全一致，均为既有环境问题（缺 pytest、TOEFL 源文件、static audio）。JS `node --test tests/*.js` 453/453（含新 `tests/test_answer_timeline.js` 及更新的 `tests/test_cambridge_task_lock_client.js` 允许加载新工具并断言交卷带 integrity）。ruff 新文件 clean，三大旧文件 lint 数与基线相同。CI 轻量 job 新增 `tests.test_answer_timeline_rules` 与 `node --test tests/test_answer_timeline.js`；路由测试因导入完整 app 未入 CI（同 cambridge_same_day_retry 惯例）。
+- **未覆盖/已知限制**：网页端 `/reading/test/<id>`（`templates/reading/test_practice.html`）未接入记录，网页提交会显示“无过程记录”；question_type_practice 网页专项、听力未接入；小程序老师端未显示；客户端数据理论上可伪造（对普通学生足够）；阈值为经验值，需看真实数据再调。
+- **下一步**：①用户决定后合并到 main 部署后端（新表自动创建，可只读回读 `answer_integrity_log` 是否有新行）；②用户用微信开发者工具上传/提审/发布小程序（建议后端先部署，顺序反了也不会报错，只是期间不记录）；③观察一两周真实标记再调阈值；④可选：网页阅读页接入同一格式。
+
 ## 2026-11-22 — 后台左上角 Logo 已部署，生产验收通过
 
 - **授权/变更**：用户在本地验收后明确要求部署。仅2产品文件 `static/tasks_workspace.css`、`templates/tasks.html`：移除任务页两处侧栏/品牌专属覆盖，继承公共白底42×42Logo/34×34图片/17px品牌字；901–1120px页头搜索和按钮移至标题下避免挤压。无业务、API、数据库模型或小程序改动。

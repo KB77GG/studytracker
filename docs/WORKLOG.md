@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-22 — 作业作答过程记录（防拖时长作弊）代码完成，待部署/发版
+
+应老师反馈“学生拖够时长再交卷”，新增每题作答时间线+切出页面记录：新表answer_integrity_log（纯增量，启动/部署自动建表）、规则服务与老师只读蓝图，剑雅阅读与小程序选择题两个交卷接口各加一处best-effort记录调用，判分/状态不变；小程序两页接入新utils/answer-timeline.js；后台任务列表用时格加可疑徽标和时间线弹窗。新Python21项、相关回归48项、JS453项通过，全量1675项的4F/7E与基线一致（既有环境问题）。已commit/push分支claude/admiring-mccarthy-9bm1q0，未合main未部署，小程序未上传；详情与下一步见CODEX_HANDOFF顶部。
+
 ## 2026-11-22 — 后台侧栏 Logo 已部署
 
 用户明确授权后产品b68d49d8从e9d1069a基线commit并原子push任务分支/main，Deploy44979890266成功。11:17:56CST只读回读HEAD/8SHA/5公网资源/1worker6threads5002/active/0自动重启与匿名入口通过；7Node、spell queue守卫及原20浏览器场景保持，独审无阻塞。报告和两交接skip-ci共享不重复部署，main/分支CI均success，业务全过、既有advisory lint失败保留；无本任务数据库/小程序变更。旧主main6ded77d2原7M/24U及并行D3记录保留，实施树及精确命令见CODEX_HANDOFF。
