@@ -20,6 +20,7 @@ from models import ListeningTestSubmission, ReadingTestSubmission, Task, db
 from services.exam_sprint import publish_snapshot
 from services.exam_sprint_catalog import sprint_assignment_options
 from services.exam_sprint_store import load_ninefen_document
+from services.task_date_gate import beijing_today
 from tests.test_exam_sprint_catalog import SprintCatalogFixture
 
 
@@ -73,6 +74,7 @@ class SprintAssignmentRouteTests(unittest.TestCase):
             if subject == "reading"
             else {"listening_exercise_id": row["id"], "listening_resource_type": "jijing"}
         )
+        values["date"] = beijing_today().isoformat()
         return self.harness._post(
             idempotency_key=f"sprint-{subject}", task_source=subject, detail="", **values, **extra
         )
