@@ -1,5 +1,12 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-26 — 刷题网页审查：已出问题清单、修复分批和练习中心改版稿，待用户决定是否交 Codex 实施
+
+- **状态**：只有审查和方案；没有产品代码改动，没有 commit、push、部署，也没有小程序改动。基线 origin/main=f81a5e4a。
+- **产物（Claude 云端工作区，未跟踪）**：`docs/design/practice-web-audit-20261126.md`（18 项问题，附文件行号、改法和三批实施顺序）；`docs/design/practice-center-redesign.html`（学生端练习中心改版稿，私有 Artifact https://claude.ai/artifact/DP5XbhauGucJerSNtZnkRv）；`docs/reviews/practice-web-audit-20261126/`（boot.py 加 Playwright 巡检脚本和 results.json 基线）。
+- **P0**：① `templates/practice/index_content.html:586-598,705-711` 在学生视角渲染老师组件（无样式，含跳到后台的“布置给学生”），因为 `base.html:20` 只对 staff 加载 `admin_suite_v2.css`；② `index_content.html:69` 的 `display:flex` 让已确认身份后的表单仍可见；③ `static/js/practice_modes.js:147` 覆盖 `reading/test_practice.html:1591` 的显示条件，Reading Study 入口常显，套题没有解析时点进去是 404。
+- **下一步**：用户确认后，Codex 先做“批 1 修复”（可单独上线），再做统一导航和视觉改版；修完用 `docs/reviews/practice-web-audit-20261126/` 的脚本重跑对照。
+
 ## 2026-11-26 — 网页背词任务页：已出计划和原型，待用户确认 §9 后由 Codex 实施
 
 - **状态**：只有计划，没有产品代码改动；没有 commit、push、部署、生产库操作，也没有小程序上传。

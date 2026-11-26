@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-26 — 刷题网页跳转、点击与设计审查（仅方案）
+
+Claude 在 origin/main=f81a5e4a 上用真实 app.py、合成 SQLite 和 Playwright 巡检学生端刷题网页：14 个目录页、8 个做题页、500 个链接、12 条进出流程，以及无效点击探测。确认 3 个 P0（学生看到老师端组件和“布置给学生”、确认身份后表单仍显示、Reading Study 入口无条件显示导致 404）、8 个 P1、7 个 P2。产物：`docs/design/practice-web-audit-20261126.md`、练习中心改版稿 `docs/design/practice-center-redesign.html`、巡检脚本 `docs/reviews/practice-web-audit-20261126/`。没有产品代码改动，没有 commit、push 或部署。
+
 ## 2026-11-26 — 网页背词任务页：Claude 出文件级计划和状态原型（未实施）
 
 Claude 云端会话按用户转来的需求（`docs/requirements/web-vocabulary-task-page.md` 未推送）核查 origin/main=f81a5e4a 后，写出 `docs/design/web-vocabulary-task-page-plan.md` 和可交互原型 `docs/design/web-vocabulary-task-page-prototype.html`。没有产品代码改动，没有 commit、push 或部署。基线回归 102+5 个 Python、27 个 Node 测试通过。两个文件仅在 Claude 云端工作区，需用户授权推送或转交后 Codex 才能读到。
