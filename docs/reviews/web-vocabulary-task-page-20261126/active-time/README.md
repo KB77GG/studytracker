@@ -1,6 +1,6 @@
 # 网页词汇：累计实际学习时间
 
-2026-11-26，用户明确选择可见页面内的活跃时间，替代原“首次进入到结算”的墙钟时间。当前代码位于 `/private/tmp/studytracker-web-vocabulary-20261126`，分支 `codex/web-vocabulary-task-page-20261126`；本轮起点为已推送的 `fc3b049a`。本地代码与自动验证已完成，将沿既有授权仅同步该词汇审查分支并跑 CI；最终提交和 CI 结果在收尾补记。尚未合并或部署。
+2026-11-26，用户明确选择可见页面内的活跃时间，替代原“首次进入到结算”的墙钟时间。当前代码位于 `/private/tmp/studytracker-web-vocabulary-20261126`，分支 `codex/web-vocabulary-task-page-20261126`；本轮起点为已推送的 `fc3b049a`。产品提交 `166d23b726dc18823217d20c8143b7ef7beb7919` 已推送该审查分支，远端 CI 已完成且 overall success。收尾 CI 证据与交接以独立 `[skip ci]` 文档提交共享，最终文档 HEAD 以 Git 为准。尚未合并或部署。
 
 ## 最终口径
 
@@ -36,4 +36,6 @@
 
 用户要求先完成词汇页，再与网页批 1 一起部署。批 1 仍在 `/private/tmp/studytracker-practice-web-batch1-20261126`，未合入本分支；共享 `origin/main` 已有考前冲刺 `79388e26`，也未合入本候选。共同发布前须整合两批及最新 main，保留双方 CI 与交接记录。
 
-本轮不改全局开关，`PRACTICE_VOCABULARY_WEB_ENABLED` 仍默认 false；未访问生产、改配置或数据、触发部署或微信发布。任务分支同步与 CI 的最终事实以本报告收尾记录和规范交接为准。
+远端 [CI 45836063646](https://github.com/KB77GG/studytracker/actions/runs/45836063646) 的 `test`、`account-provisioning`、`task-planner` 全部 success，新计时测试及词汇身份/结算集成步骤均 success。既有非阻断 advisory lint 仍 failure、format skipped；本轮未改 Python 或 Ruff 配置，不声称全仓 lint 通过。完整作业状态在 `ci.json`，精确读取命令和摘要在 `ci-evidence.json`。收尾复核本词汇 36 项及批 1 的 14 项 SHA 均匹配。
+
+本轮不改全局开关，`PRACTICE_VOCABULARY_WEB_ENABLED` 仍默认 false；未访问生产、改配置或数据、触发部署或微信发布。只有该词汇审查分支已同步；批 1 产品仍仅本机。两个实施树和旧资料树的规范交接分别更新，旧资料及批 1 的交接更新仅本机可见。

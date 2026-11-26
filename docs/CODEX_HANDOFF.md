@@ -2,12 +2,13 @@
 
 ## 2026-11-26 — 词汇页改为累计实际学习时间，联合部署仍暂缓
 
-- **用户选择/授权边界**：用户明确选择页面可见且最近5分钟有人为操作才累计，刷新不丢；先做完词汇，与网页批1一起部署。沿此前仅`codex/web-vocabulary-task-page-20261126`提交推送跑CI授权同步此改动；没有本轮合main、部署或开启行为。代码/验证已完成，分支同步和CI在进行，最终状态见本条收尾更新与Git。
+- **用户选择/授权边界**：用户明确选择页面可见且最近5分钟有人为操作才累计，刷新不丢；先做完词汇，与网页批1一起部署。沿此前仅`codex/web-vocabulary-task-page-20261126`提交推送跑CI授权同步此改动；没有本轮合main、部署或开启行为。产品`166d23b726dc18823217d20c8143b7ef7beb7919`已commit/push，CI已通过；收尾证据与交接另用`[skip ci]`文档提交推同分支，最终文档HEAD以Git核对，收尾应clean。
 - **树/基线/改动**：`/private/tmp/studytracker-web-vocabulary-20261126`，开工`fc3b049afafcc5800dd7f974ef75b37e8653ccc1` clean并与远端相同；fresh fetch main`79388e269e924e9ce591dd3e6de3762a61614ddf`。本轮5产品+2测试+1CI，新`static/js/practice_vocabulary_timing.js`/`tests/test_practice_vocabulary_timing.js`；4旧产品、core测试与CI更新；报告`docs/reviews/web-vocabulary-task-page-20261126/active-time/`和旧README/branch-review加新口径入口，两交接同步。36文件SHA/本轮8变化见active-time/manifest.json。
 - **规则/兼容**：visible+近5分钟真实input/IME/key/pointer/wheel；进入有效页或从hidden回来开始当前段，后台/离页/超时/错误/结算等待停计，自动sync/render/focus/scroll不续。每页独立已发生区间、同浏览器并集去重，task含其review、review按session隔离；正常5s脏段落盘/离页即时flush；冻结首次settle、incomplete从恢复点续不补等待、complete不改。旧v1未结算无法还原，不转入active；旧pending payload原样重放/服务端历史结果不改。无存储退本页内存，不能跨刷新或设备；浏览器冻结可能丢未落盘段，5秒不是绝对上界；5分钟闲置宽限仍计入。服务端/评分/schema/小程序未改。
 - **验证**：新core33+timing21、旧任务/导航/词汇反馈27，共Node81/81：`node --test tests/test_practice_vocabulary_core.js tests/test_practice_vocabulary_timing.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js`；独立`node docs/reviews/web-vocabulary-task-page-20261126/active-time/independent_timing_probe.js`16/16，含25分钟示例、跨tab/冻结/存储/事件。双Python3.13与原生3.10的`-m unittest tests.test_practice_vocabulary_routes tests.test_vocabulary_task_submission tests.test_practice_vocabulary_web -v`各47/47，无兼容别名；日志/完整argv见active-time。4JS语法、Jinja实际渲染/9脚本存在与顺序、CI YAML/diff通过。新CI登记timing测试。
+- **远端CI**：[45836063646](https://github.com/KB77GG/studytracker/actions/runs/45836063646)对产品166d23b7 overall success；test/account-provisioning/task-planner全成功，新计时和词汇身份/结算步骤成功。既有advisory lint failure/format skipped，本轮无Python/Ruff变更，不称全仓lint绿。active-time/ci.json与ci-evidence.json保存结果、命令。词汇36项与批1的14项SHA收尾再次匹配。
 - **浏览器/发布门槛**：本轮浏览器未执行，服务启动沙箱Operation not permitted，提权请求未完成后root中断等待，5111无监听；browser-status.json如实记录，不称刷新/真设备通过。之前IAB订正刷新是旧版历史证据；Chrome/Safari系统IME、原生缩放、真断网/丢响应、微信互切和老师家长UI清单继续保留。本轮未访问生产、无DB/环境/服务或微信上传提审发布，flag仍默认false。
-- **联合交接/下一步**：批1仍`/private/tmp/studytracker-practice-web-batch1-20261126` / `codex/practice-web-batch1-20261126@f81a5e4a`，13M/7U/0staged，仅本机，14产品/测试/CI SHA不改；尚未合进本词汇分支。旧资料`/Users/zhouxin/Desktop/studytracker` main6ded77d2原8M/27U保持，仅两交接追加。三树交接将同步最终状态，保留并行记录。联合发布前整合届时最新main与两批，保留双方CI/交接，不合Claude文档分支；完成真设备门槛并按授权先默认关部署、再按授权开启。
+- **联合交接/下一步**：批1仍`/private/tmp/studytracker-practice-web-batch1-20261126` / `codex/practice-web-batch1-20261126@f81a5e4a`，13M/7U/0staged，仅本机，14产品/测试/CI SHA不改；尚未合进本词汇分支。旧资料`/Users/zhouxin/Desktop/studytracker` main6ded77d2原8M/27U保持，仅两交接追加。三树交接同步本轮最终状态，保留并行记录；本词汇交接随分支共享，旧树/批1两交接本机可见，不能据此声称那些产品已推送。联合发布前整合届时最新main与两批，保留双方CI/交接，不合Claude文档分支；完成真设备门槛并按授权先默认关部署、再按授权开启。
 
 ## 2026-11-26 — Claude 六项审查修复已推送，新CI成功，仍默认关闭
 

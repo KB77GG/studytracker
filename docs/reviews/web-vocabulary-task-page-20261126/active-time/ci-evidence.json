@@ -1,0 +1,36 @@
+{
+  "product_commit": "166d23b726dc18823217d20c8143b7ef7beb7919",
+  "branch": "codex/web-vocabulary-task-page-20261126",
+  "run_url": "https://github.com/KB77GG/studytracker/actions/runs/45836063646",
+  "command": "gh run view 45836063646 --json databaseId,headSha,status,conclusion,url,workflowName,jobs",
+  "conclusion": "success",
+  "required_jobs": [
+    {
+      "name": "account-provisioning",
+      "conclusion": "success"
+    },
+    {
+      "name": "task-planner",
+      "conclusion": "success"
+    },
+    {
+      "name": "test",
+      "conclusion": "success"
+    }
+  ],
+  "advisory_lint": {
+    "conclusion": "failure",
+    "format_check": "skipped",
+    "note": "Existing non-blocking advisory job. This iteration changed no Python files or Ruff settings; no claim of repository-wide lint success."
+  },
+  "local_node": 81,
+  "independent_probes": 16,
+  "python_local": {
+    "3.10": 47,
+    "3.13": 47
+  },
+  "browser_executed": false,
+  "deployed": false,
+  "feature_enabled": false,
+  "next": "Complete real-device acceptance and integrate latest main plus local batch 1 before authorized joint deployment."
+}
