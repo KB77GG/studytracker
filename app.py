@@ -121,6 +121,7 @@ from services.ielts_exam_payload import build_simulation_payload as _build_simul
 from services.practice_navigation import navigation_defaults, safe_local_target
 from services.practice_library_offline import filter_offline_catalog_books, load_offline_test_ids
 from services.exam_sprint_store import resolve_listening_part_path, resolve_ninefen_document_path
+from services.exam_sprint_catalog import sprint_assignment, sprint_assignment_options
 from practice_tables import normalize_practice_tables
 from toefl_practice import catalog_summary as _toefl_catalog_summary
 from toefl_practice import toefl_bp
@@ -620,6 +621,13 @@ def _listening_test_question_count(payload: dict) -> int:
 
 def _load_listening_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
     safe_id = secure_filename(test_id)
+    if test_id.startswith("sprint_"):
+        from services.mock_exam_paper_access import load_mock_paper
+
+        loaded = load_mock_paper(app.root_path, "listening", test_id)
+        if loaded is None:
+            return None, None, safe_id
+        return normalize_practice_tables(loaded[0]), loaded[1], safe_id
     test_path = _listening_test_root() / f"{safe_id}.json"
     if not test_path.exists():
         return None, None, safe_id
@@ -1617,6 +1625,13 @@ def _reading_test_question_count(payload: dict) -> int:
 
 def _load_reading_test_payload(test_id: str) -> tuple[dict | None, Path | None, str]:
     safe_id = secure_filename(test_id)
+    if test_id.startswith("sprint_"):
+        from services.mock_exam_paper_access import load_mock_paper
+
+        loaded = load_mock_paper(app.root_path, "reading", test_id)
+        if loaded is None:
+            return None, None, safe_id
+        return normalize_practice_tables(loaded[0]), loaded[1], safe_id
     if safe_id.startswith("ninefen_"):
         test_path = resolve_ninefen_document_path(app.root_path, "reading", test_id)
         if test_path is None:
@@ -3837,6 +3852,7 @@ def tasks_page():
                 assignment = build_listening_jijing_assignment(
                     _listening_jijing_root(),
                     listening_exercise_id,
+                    app_root=app.root_path,
                 )
                 if assignment:
                     listening_exercise_id = assignment["id"]
@@ -3845,7 +3861,7 @@ def tasks_page():
                     listening_default_minutes = assignment["planned_minutes"]
                     question_ids = None
                 else:
-                    listening_error = "选择的虾滑听力练习不存在"
+                    listening_error = "选择的听力刷题资源不存在或已更新，请重新选择"
             else:
                 listening_resource_type = LISTENING_RESOURCE_INTENSIVE
                 listening_training_mode = normalize_training_mode(
@@ -3875,13 +3891,20 @@ def tasks_page():
         reading_access_token = None
         reading_error = None
         reading_default_minutes = 0
-        if reading_test_id:
+        sprint_reading = None
+        if "@" in reading_test_id or reading_test_id.startswith("ninefen_"):
+            sprint_reading = sprint_assignment(app.root_path, "reading", reading_test_id)
+            if sprint_reading:
+                reading_test_id = sprint_reading["id"]
+            else:
+                reading_error = "选择的热榜阅读已更新或不可用，请重新选择"
+        if reading_test_id and not reading_error:
             reading_access_token = secrets.token_urlsafe(16)
             payload, _reading_path, safe_reading_id = _load_reading_test_payload(reading_test_id)
             if not payload:
                 reading_error = "选择的阅读练习不存在"
             else:
-                raw_passage = request.form.get("reading_passage_number")
+                raw_passage = sprint_reading["passage"] if sprint_reading else request.form.get("reading_passage_number")
                 try:
                     reading_passage_number = int(raw_passage) if raw_passage not in (None, "") else None
                 except (TypeError, ValueError):
@@ -3906,6 +3929,10 @@ def tasks_page():
                     )
                     reading_test_id = safe_reading_id
                     reading_default_minutes = 20 if reading_passage_number else 60
+                    if sprint_reading:
+                        detail = sprint_reading["detail"]
+                        category = sprint_reading["category"]
+                        reading_default_minutes = sprint_reading["planned_minutes"]
 
         # 网页端写作真题 / 大作文母题
         writing_snapshot = None
@@ -3961,8 +3988,12 @@ def tasks_page():
         if not student:
             flash("请填写学生姓名")
         elif listening_error:
+            if request.accept_mimetypes.best == "application/json":
+                return jsonify(ok=False, error="invalid_listening_resource", message=listening_error), 400
             flash(listening_error)
         elif reading_error:
+            if request.accept_mimetypes.best == "application/json":
+                return jsonify(ok=False, error="invalid_reading_resource", message=reading_error), 400
             flash(reading_error)
         elif writing_error:
             flash(writing_error)
@@ -4569,6 +4600,10 @@ def tasks_page():
 
     add_reading_exercise_options(_reading_test_catalog(), "剑雅阅读")
     add_reading_exercise_options(_reading_jijing_catalog(), "ZYZ 阅读")
+    sprint_options = sprint_assignment_options(app.root_path)
+    listening_exercises.extend(sprint_options["listening"])
+    reading_exercises.extend(sprint_options["reading"])
+    reading_exercise_passages.update(sprint_options["reading_passages"])
 
     # The specialty builder now lives inside the task drawer.  Keep its
     # inventory server-rendered so the first interaction is useful offline;
@@ -4599,6 +4634,7 @@ def tasks_page():
         listening_training_modes=TRAINING_MODE_OPTIONS,
         reading_exercises=reading_exercises,
         reading_exercise_passages=reading_exercise_passages,
+        sprint_catalogs=sprint_options["catalogs"],
         question_type_summaries=question_type_summaries,
         writing_resources=writing_resources,
         task_filters=workspace_filters,
@@ -8505,59 +8541,9 @@ def admin_mock_exams_create():
         flash("无权限管理模考。")
         return redirect(url_for("index"))
 
-    if request.method == "POST":
-        name = (request.form.get("name") or "").strip()
-        listening_test_id = (request.form.get("listening_test_id") or "").strip()
-        reading_test_id = (request.form.get("reading_test_id") or "").strip()
-        writing_test_id = (request.form.get("writing_test_id") or "").strip()
-        pincode = (request.form.get("pincode") or "").strip().upper() or _generate_mock_exam_pincode()
-        try:
-            listening_minutes = max(1, int(request.form.get("listening_minutes") or 30))
-        except (TypeError, ValueError):
-            listening_minutes = 30
-        try:
-            reading_minutes = max(1, int(request.form.get("reading_minutes") or 60))
-        except (TypeError, ValueError):
-            reading_minutes = 60
-        try:
-            writing_minutes = max(1, int(request.form.get("writing_minutes") or 60))
-        except (TypeError, ValueError):
-            writing_minutes = 60
+    from api.mock_exam_creation import create_mock_exam
 
-        if not name or not listening_test_id or not reading_test_id:
-            flash("请填写名称、听力题目、阅读题目。")
-        elif _load_listening_test_payload(listening_test_id)[0] is None:
-            flash(f"听力题目 {listening_test_id} 不存在。")
-        elif _load_reading_test_payload(reading_test_id)[0] is None:
-            flash(f"阅读题目 {reading_test_id} 不存在。")
-        elif writing_test_id and _load_writing_test_payload(writing_test_id)[0] is None:
-            flash(f"写作题目 {writing_test_id} 不存在。")
-        else:
-            exam = MockExam(
-                name=name,
-                listening_test_id=listening_test_id,
-                reading_test_id=reading_test_id,
-                writing_test_id=writing_test_id or None,
-                listening_minutes=listening_minutes,
-                reading_minutes=reading_minutes,
-                writing_minutes=writing_minutes,
-                pincode=pincode,
-                is_active=True,
-                created_by=current_user.id,
-            )
-            db.session.add(exam)
-            db.session.commit()
-            flash(f"模考「{exam.name}」已创建，pincode：{exam.pincode}")
-            return redirect(url_for("admin_mock_exams_index"))
-
-    return render_template(
-        "admin/mock_exams_form.html",
-        exam=None,
-        listening_options=_mock_exam_listening_options(),
-        reading_options=_mock_exam_reading_options(),
-        writing_options=_mock_exam_writing_options(),
-        suggested_pincode=_generate_mock_exam_pincode(),
-    )
+    return create_mock_exam()
 
 
 @app.post("/admin/mock-exams/<int:exam_id>/regenerate-pincode")

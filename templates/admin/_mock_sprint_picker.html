@@ -1,0 +1,32 @@
+<fieldset class="form-group" data-sprint-picker>
+  <legend style="font-size:16px;font-weight:600;">{{ subject_label }}题目</legend>
+  <label for="{{ subject }}Source">题库来源</label>
+  <select id="{{ subject }}Source" name="{{ subject }}_source" class="form-control" data-sprint-source>
+    <option value="existing">已有整套题库</option>
+    <option value="sprint"{% if request.form.get(subject ~ '_source') == 'sprint' %} selected{% endif %}>7天热榜 · 自选组卷</option>
+  </select>
+  <div data-existing-paper style="margin-top:8px;">
+    <select name="{{ subject }}_test_id" class="form-control" aria-label="{{ subject_label }}整套题目" required>
+      <option value="">-- 请选择 --</option>
+      {% for opt in options %}
+      <option value="{{ opt.id }}"{% if request.form.get(subject ~ '_test_id') == opt.id %} selected{% endif %}>{{ opt.label }}{% if opt.question_count %} · {{ opt.question_count }}题{% endif %}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div data-sprint-parts hidden style="margin-top:12px;">
+    <p class="form-text">每个{{ 'Part' if subject == 'listening' else 'Passage' }}各选一篇，共40题。创建后题目版本固定，周更不影响已布置的模考。</p>
+    <p class="form-text">热榜同步：{{ catalog.updated_at_label or '暂无内容' }}{% if catalog.stale %} · 本周未更新，保留上期题目{% endif %}</p>
+    {% set selected = request.form.getlist(subject ~ '_sprint_part') %}
+    {% for group in catalog.groups %}
+    <label for="{{ subject }}Sprint{{ group.part }}">{{ 'Part' if subject == 'listening' else 'Passage' }} {{ group.part }}</label>
+    <select id="{{ subject }}Sprint{{ group.part }}" name="{{ subject }}_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+      {% for item in group['items'] %}
+      <option value="{{ item.selection_id }}" data-count="{{ item.question_count }}"{% if item.selection_id in selected %} selected{% endif %}>#{{ item.rank }} {{ item.title }} · {{ item.question_count }}题</option>
+      {% endfor %}
+    </select>
+    {% endfor %}
+    <div><button type="button" class="btn btn-outline" data-sprint-suggest>按热度选一套40题</button></div>
+    <p data-sprint-total role="status" aria-live="polite">尚未选题</p>
+  </div>
+</fieldset>

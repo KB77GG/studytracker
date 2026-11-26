@@ -135,9 +135,19 @@ def build_listening_jijing_assignment(
     part_id: str,
     *,
     collection: str = "xiahuar",
+    app_root: str | Path | None = None,
+    catalog_source: str = "",
 ) -> dict | None:
     """Validate one web assignment and return its canonical task metadata."""
 
+    if catalog_source not in {"", "exam_sprint"}:
+        return None
+    if catalog_source == "exam_sprint" or str(part_id).startswith(("ninefen_", "sprint:")):
+        if app_root is None:
+            return None
+        from services.exam_sprint_catalog import sprint_assignment
+
+        return sprint_assignment(app_root, "listening", str(part_id).removeprefix("sprint:"))
     payload, safe_id = load_listening_jijing_part(root, part_id)
     if not payload or payload.get("collection") != collection:
         return None

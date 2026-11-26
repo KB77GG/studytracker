@@ -1,6 +1,9 @@
 """Student-facing guidance for assignments completed on the practice website."""
 
+from flask import current_app
+
 from models import PlanItem, Task
+from services.exam_sprint_student import ninefen_reading_task_path
 from services.question_type_assignments import assignment_url as question_type_url
 from services.writing_assignments import assignment_url as writing_url
 
@@ -26,17 +29,25 @@ def web_practice_payload(task):
         path = writing_url(task)
     elif mode == "question_type_practice":
         path = question_type_url(task)
+    elif str(getattr(task, "reading_test_id", "") or "").startswith("ninefen_"):
+        mode = "exam_sprint_reading"
+        path = ninefen_reading_task_path(current_app.root_path, task)
     else:
         return None
     return _guidance(mode, path)
 
 
 def _guidance(mode, path):
-    if mode not in {"writing_practice", "question_type_practice"}:
+    labels = {
+        "writing_practice": "雅思写作练习",
+        "question_type_practice": "题型专项练习",
+        "exam_sprint_reading": "7天热榜阅读练习",
+    }
+    if mode not in labels:
         return None
     return {
         "kind": mode,
-        "label": "雅思写作练习" if mode == "writing_practice" else "题型专项练习",
+        "label": labels[mode],
         "instruction": WEB_PRACTICE_INSTRUCTION,
         "url": f"https://studytracker.xin{path}" if path else None,
     }
