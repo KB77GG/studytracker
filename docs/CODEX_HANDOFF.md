@@ -1,5 +1,35 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-26 — 网页背词补测通过，授权仅推审查分支
+
+- **授权/范围**：用户认可原验收并明确允许 commit/push `codex/web-vocabulary-task-page-20261126` 跑 CI；不推/合 main、不部署、不启用。本轮只补测试/CI/文档，产品 SHA 保持原验收一致。开关默认 false；全量或名单启用未决定。
+- **工作树**：实施 `/private/tmp/studytracker-web-vocabulary-20261126`，任务分支/开发基线 `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`；本轮 fetch 的 origin/main 同值，文档源 479cab8a 未合并。开工 8M/25U/0 staged，本轮新增 4 个 tests/fixtures 文件及原报告目录内补测资料；原有全部实现均为本任务，待本次提交。旧资料 `/Users/zhouxin/Desktop/studytracker` 仍 main@6ded77d24586327ad94e151e172ae4811b4a2eed、原8M/27U保留（含并行考前记录），仅更新其两交接。
+- **补测**：真实有效身份枚举11新路由，off全部403 feature_disabled，含sync/review，0 SQL、10类学习表全0。A02独立进程从f81a5e4源码archive生成真实HTTP历史响应：同11合成任务输出8行、每行26字段，当前off/on各自完整相等；3.10/3.13再生成字节一致，7源码SHA独立回核。tests/fixtures README给可移植再生方式，无生产数据/网络。
+- **精确验证**：本轮完整参数见 `docs/reviews/web-vocabulary-task-page-20261126/validation/prepush-commands.json`：3.13 `-m unittest <原20模块> -v` 230/230(33.806s)；3.10 `run_compat_tests.py <同模块>` 230/230(37.312s)，旧datetime.UTC仅测试别名限定继续保留；两版本 `-m pytest tests/test_task_date_gate.py -q` 各20(0.32/0.34s)；`node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js` 58/58；新增Python/捕获器Ruff、diff check通过。CI显式Node20/pytest并纳原判分/日期回归，原test_list/routes已登记。
+- **报告/未验**：本轮 `branch-review.md`、34文件 `prepush-manifest.json`、prepush日志/命令新增，历史manifest/原日志保留；README和原粘贴稿标明历史与当前边界。开启前仍需Chrome/Safari系统拼音/长按、订正F5、Offline/网络层丢包刷新、真实微信含订正互切、Chrome原生缩放、老师家长UI。当前无人手实测完成声明。
+- **发布/下一步**：本条写入时补测已过、准备commit/push任务分支并等CI，尚未推送；最终结果随后同报告与交接补记。无生产访问、DB/配置/服务变化、消息或微信上传提审发布。分支CI只跑测试，deploy仅main触发。下一位按本条后续CI事实及Git读取远端代码给Claude审查，保持默认关；部署另需明确授权。
+
+## 2026-11-26 — 网页背词验证补全文，明确尚未全部验收
+
+- **本轮要求/结论**：用户贴回Claude称验证正文截断、云端无实现代码。本轮只补完整可粘贴验证正文并复核已有证据，不将第三方“需要授权推分支”当成commit/push授权。明确更正：实现完成不等于A01–A14全部验收通过。
+- **工作树**：实施 `/private/tmp/studytracker-web-vocabulary-20261126`，`codex/web-vocabulary-task-page-20261126@f81a5e4a4d81282eb67b994a4cfcc5574fb78747`，保留原8M/25U、0 staged；资料 `/Users/zhouxin/Desktop/studytracker`，`main@6ded77d24586327ad94e151e172ae4811b4a2eed`，保留8M/27U、0 staged及并行考前冲刺记录。未fetch、切分支或写产品。
+- **文档变化**：实施树 `docs/reviews/web-vocabulary-task-page-20261126/README.md` 收窄完成措辞；同目录新增 `claude-verification-paste.md`（完整命令、A01–A14逐项证据和待补、5个重点测试）、`verify_report_evidence.py`（只读产品/日志复核器）、`verification-recheck.json`（实际复核结果）；两个工作树同步两交接。既有30产品/配置/测试文件和日志未改。
+- **精确复核**：实施树运行 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/web-vocabulary-task-page-20261126/verify_report_evidence.py` →30文件0散列差异、原3.10日志逐项计数226；同脚本定向Ruff与git diff --check通过，git status/log核对如上。没有重跑产品测试，不把此次读日志当新执行。原日志为双Python各226 unittest+20pytest、Node58；3.10旧测试UTC标准别名入口仍须披露；原小程序group API10项、grading6项均ok。
+- **补充边界**：A01缺boot元数据独立断言/实际列表点击证据；A02是最终代码off/on对比，不是基线历史payload快照；订正状态经sync保留已测，但订正态F5未专门实测；原生125/150缩放、真实键盘长按/系统中文IME、Player慢加载/8秒超时、真离线/网络层丢响应后刷新、微信真机和老师家长真实UI待补。现有1152/960视口与503模拟不可冒充这些验证。五个重点（清洗、fallback、实际换身份409、active列表、订正sync）均有通过测试，具体函数名见粘贴稿。
+- **可见性/发布/下一步**：代码和本轮报告仍仅Mac本机，未commit/push/merge/deploy、远端CI未运行；无生产/数据库/服务/微信发布操作。用户可复制最终回复正文让Claude先审核验证事实；云端逐行代码审查仍需要用户明确授权后仅推任务分支，不推main。之后按列明缺口补人工验收，默认开关仍false。
+
+## 2026-11-26 — 网页背词本地实现与验收完成，默认关闭
+
+- **授权与范围**：用户批准 Claude 计划 §9 全部九项。复用现有助教/老师任务列表，新增背词详情页；姓名会话可写且拒绝同名、综合目标照答案订正不计分、任务内复习门禁、允许粘贴、听音拼写答前不显音标、当前端首次结算时长、排除旧听写。`PRACTICE_VOCABULARY_WEB_ENABLED` 默认 false。没有 commit/push/deploy 授权。
+- **实施树**：`/private/tmp/studytracker-web-vocabulary-20261126`，`codex/web-vocabulary-task-page-20261126@f81a5e4a4d81282eb67b994a4cfcc5574fb78747`，fresh origin/main 基线，开工 clean。计划来源 `origin/claude/clever-heisenberg-8evbm0@479cab8af3b6b3e7abb364224edeca5ffe91fae8` 只用 git show 提取，未合并。来源散列和基线在本树 `docs/reviews/web-vocabulary-task-page-20261126/baseline.json`。
+- **本轮工作树状态**：实施树 8 modified / 25 顶层 untracked、0 staged，精确路径在同报告 `final-worktree-status.json`，30 产品/配置/测试文件 SHA 在 `manifest.json`。已修改 `.github/workflows/ci.yml`（登记测试）、`api/__init__.py`（注册蓝图）、`api/miniprogram.py`（共享结算抽取）、`app.py`（列表薄接入）、`config.py`（默认关）、`templates/practice/index_content.html`（bfcache刷新）及两交接。未跟踪包括 `api/practice_vocabulary.py`、`services/practice_student_identity.py`、`services/practice_vocabulary_tasks.py`、`services/practice_vocabulary_web.py`、`services/task_plan_item_sync.py`、`services/vocabulary_task_submission.py`、`templates/practice/vocabulary_task.html`、`static/css/practice_vocabulary.css`、7 个 `static/js/practice_vocabulary_*.js`（core/events/page/recovery/render/render_details/transport）、9 个新增测试及报告目录；完整清单见 manifest，未遗漏暂存提交。
+- **功能与复核**：11端点、6题型、订正/复习/结果、身份CSRF同源、GET零写、断网同attempt重试、跨端共享进度和PlanItem同步。重复结算只读原结果，不能增时长/证据。独审与浏览器发现并修复选择题反馈内部ID、结果阶段标记复位、切焦点重置复习计时、跨题订正错音频；未改教学算法、数据库schema或小程序前端。
+- **精确验证**：报告 README 和 `validation/commands.json` 记录完整命令。`.venv/bin/python -m unittest <20个明确模块> -q` →226/226（29.723s）；`/private/tmp/studytracker-web-vocab-py310/bin/python docs/reviews/web-vocabulary-task-page-20261126/run_compat_tests.py <相同模块>` →226/226（32.947s）；两解释器分别 `-m pytest tests/test_task_date_gate.py -q` →各20/20；`node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js` →58/58（新增31）；Ruff、10产品Python原生3.10编译、2Jinja解析、7JS语法、diff check通过。3.10仅旧test_miniprogram_grading导入datetime.UTC需测试进程标准别名；第一次全组缺pytest失败补装后重跑，未掩盖。日期文件是pytest函数，已单独收集执行。临时.venv链接已清理，复跑可用 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python`。
+- **浏览器**：内存合成数据完整走综合/写作结算、六mode、复习返回原任务、保存丢包/持续失败重试、结算失败重试、音频失败重播、未来只读、键盘帮助/焦点；1440/1280/1024/390视口及1152×720、960×600缩放空间代理无横溢/主按钮裁切。真实浏览器125%/150%缩放未验证，不能把代理视口冒充缩放。截图/fixture/日志在报告目录，本机服务已停止。localhost链接不能给手机当远程预览。
+- **旧资料树**：`/Users/zhouxin/Desktop/studytracker` 仍 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`，原8M/27U、0 staged保持；本轮仅更新两交接，不含实施产品。不能说旧树已拥有新实现。源计划已在远端文档分支，但本轮产品和报告仍仅本机。
+- **发布与未验证项**：未commit/push/merge/deploy，无生产DB/环境变量/服务重启/通知，未访问生产，小程序未上传/提审/发布；远端CI未运行。未全仓、其他浏览器、真实输入法/微信设备、真实TTS或生产性能验收。不开启默认flag。
+- **下一步**：从实施树读取 `docs/reviews/web-vocabulary-task-page-20261126/README.md` 与 manifest，核Git事实；按报告启动合成fixture供本机验收。补真实缩放/浏览器和微信切换后，用户明确授权才fetch核main漂移、提交推送部署，先保持flag关闭，生产验收后再按授权开启。不要在旧资料树开发，也不要合并Claude文档分支。
+
 ## 2026-11-22 — 后台左上角 Logo 已部署，生产验收通过
 
 - **授权/变更**：用户在本地验收后明确要求部署。仅2产品文件 `static/tasks_workspace.css`、`templates/tasks.html`：移除任务页两处侧栏/品牌专属覆盖，继承公共白底42×42Logo/34×34图片/17px品牌字；901–1120px页头搜索和按钮移至标题下避免挤压。无业务、API、数据库模型或小程序改动。

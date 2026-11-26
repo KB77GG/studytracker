@@ -1,0 +1,149 @@
+{
+  "purpose": "Current branch review candidate; supersedes historical manifest for modified tests and CI only",
+  "worktree": "/private/tmp/studytracker-web-vocabulary-20261126",
+  "branch": "codex/web-vocabulary-task-page-20261126",
+  "baseline_commit": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "f83c3b747c5c0a2e8f9a9a93db324cec91d793965f6b2215d9e5d40582ac8cfb"
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "6e5df6c47ce81cf1c12f283886b48d863bc03a351135be794c1649e483ad8699"
+    },
+    {
+      "path": "api/miniprogram.py",
+      "sha256": "948774ddf2b068f9f7f985c69e29df372ec44627d44af5439831836d6e34686a"
+    },
+    {
+      "path": "app.py",
+      "sha256": "333267db317dfaeaf156e071904b963011e44beb206adf4ea164d7de62b21acb"
+    },
+    {
+      "path": "config.py",
+      "sha256": "9b9acab3eeef0b23141d55f74f9b9b48ccc7dacdbe18cf5714df85680e9e6e34"
+    },
+    {
+      "path": "templates/practice/index_content.html",
+      "sha256": "73cb453e72ce236d568c2dd507b1e039208bcfed74344af49c4d948747bc3a0a"
+    },
+    {
+      "path": "api/practice_vocabulary.py",
+      "sha256": "0f33ab60ecbd9066478f4c0fe83691989eed2162f88cf4020d7f97af2ec30165"
+    },
+    {
+      "path": "services/practice_student_identity.py",
+      "sha256": "aadb2b1a762d0346e9e3a6172b7b85792fe14529e1750898f463c3c2fdce4192"
+    },
+    {
+      "path": "services/practice_vocabulary_tasks.py",
+      "sha256": "e4d094eee2c68efeef32f7717d8cdafbbe55e8c360552b734d07d7f908aac0f8"
+    },
+    {
+      "path": "services/practice_vocabulary_web.py",
+      "sha256": "0ab1484660c3191b683dc7941fe20bb39115fa9efa23351af6666bccee5d535f"
+    },
+    {
+      "path": "services/task_plan_item_sync.py",
+      "sha256": "da4b9e152e45ddac24c379fdff744d9fa182e473931bfd1848131c1a248a2fc7"
+    },
+    {
+      "path": "services/vocabulary_task_submission.py",
+      "sha256": "029eddc898e9d7081a7c397de043bd5220757f78436498425a14a0f267fceea8"
+    },
+    {
+      "path": "static/css/practice_vocabulary.css",
+      "sha256": "5ca1c488809fb906ca2db594ddec2f40c8e68398e27c3682837adbfc03b6fc23"
+    },
+    {
+      "path": "static/js/practice_vocabulary_core.js",
+      "sha256": "4cf0fd54683c404feb908c487627c338dcda5236004ab36a7591448dc601b946"
+    },
+    {
+      "path": "static/js/practice_vocabulary_events.js",
+      "sha256": "49c274025813da36b778484050a62a5b06c0ab855e6cbb22055b9be896bb96ec"
+    },
+    {
+      "path": "static/js/practice_vocabulary_page.js",
+      "sha256": "682c69fd5901e23c3beeb4ce35ce646307c5aca55f82eb30aa8e4a023445ad79"
+    },
+    {
+      "path": "static/js/practice_vocabulary_recovery.js",
+      "sha256": "b4e0b4b2d80f6ee0d7f2b695462e003b79e9123d98b243d530d6e35c78cceba9"
+    },
+    {
+      "path": "static/js/practice_vocabulary_render.js",
+      "sha256": "cbe3b2cbb01ffc5a4c3ff480fc2e6acda14c8280f23dbbdd20f51bc006126a5b"
+    },
+    {
+      "path": "static/js/practice_vocabulary_render_details.js",
+      "sha256": "07ad7d64ec7fbacfeba8b6d367e0a3706884999383eca4ffad22be07b75389d6"
+    },
+    {
+      "path": "static/js/practice_vocabulary_transport.js",
+      "sha256": "185d397390d8211aba37fcc84def9c5c6004427a9406b4a21a9ee6a54ff88365"
+    },
+    {
+      "path": "templates/practice/vocabulary_task.html",
+      "sha256": "f48a395f886874e748d256968cf7ff962170f0d8f0a936a172ac58c955028749"
+    },
+    {
+      "path": "tests/test_practice_student_identity.py",
+      "sha256": "d0d33271af093181711776fbc2d1b5f151c600b36aedeea324483a6f6f7dae11"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_adversarial.py",
+      "sha256": "e5e77bc4ce59d91b5c797c8bb56e81542ed5268a336b623ad413cae5ba09a9f7"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_core.js",
+      "sha256": "e649bf801632df0a507d3c71bdebf183334051606d0a2e3f8d173dac2bd6714f"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_routes.py",
+      "sha256": "b6bfbf552f24e3dcfa4a46f3447247c690c1b1b2d7c8c3eef613b79afa14b29e"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_task_list.py",
+      "sha256": "09c14ffb3a82f9755adeedd7580a8da9895704659118a713345d32361c2dc46e"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_tasks.py",
+      "sha256": "2ef8cb90b6b41602e2d8a1c7a6ba769f62d783ea2e39af47af2f600c2463384e"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_web.py",
+      "sha256": "5aaf085e7f8932feff3aa49e3312c74fd76d6542d4303a439153bc6fceb94211"
+    },
+    {
+      "path": "tests/test_task_plan_item_sync.py",
+      "sha256": "3f06e56fbae7dc350f2312668ecb23142c53a897c2e4dfed86abe4ca8fbbbc12"
+    },
+    {
+      "path": "tests/test_vocabulary_task_submission.py",
+      "sha256": "668261058703387c26c5d99d9b6580b5c351b041d0ad05654b81ba21bde479db"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_a02.json",
+      "sha256": "c1e567861f21f3b3d69ce91ecb6d0358ae81a3964d455cb18890aa4d423aa7c0"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_baseline.py",
+      "sha256": "a30eb6be1bac0cca9ccb141cdc27ce14216c5727f973f544a9cb2d17ce2e2e82"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_f81a5e4.json",
+      "sha256": "10fce8d23fedeff2c8111ae5858030ac19ee946f1d5f351914d1b6ecbd3acad0"
+    },
+    {
+      "path": "tests/fixtures/README-practice-task-list.md",
+      "sha256": "f2990dbf9a75bb25f9ff990f228aa79e9d0d071f7d130bb9bc682ddb37fe24ad"
+    }
+  ],
+  "changed_from_original": [
+    ".github/workflows/ci.yml",
+    "tests/test_practice_vocabulary_routes.py",
+    "tests/test_practice_vocabulary_task_list.py"
+  ]
+}

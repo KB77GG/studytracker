@@ -20,6 +20,7 @@ def init_app(app):
     from api.mock_exam_review import mock_exam_review_bp  # 模考写作批改 / 学生复盘
     from api.mock_exam_student import mock_exam_student_bp  # 学生模考逐题复盘
     from api.practice_history import practice_history_bp
+    from api.practice_vocabulary import practice_vocabulary_bp
     from api.question_type_practice import question_type_practice_bp
     from api.reading_study import reading_study_bp  # Reading Study (阅读句子解析)
     from api.speaking_practice import speaking_bp  # Speaking listen & repeat API
@@ -40,6 +41,7 @@ def init_app(app):
     app.register_blueprint(api_bp)
     app.register_blueprint(mp_bp)
     app.register_blueprint(practice_history_bp)
+    app.register_blueprint(practice_vocabulary_bp)
     app.register_blueprint(exam_sprint_bp)
     app.register_blueprint(question_type_practice_bp)
     app.register_blueprint(task_assignments_bp)

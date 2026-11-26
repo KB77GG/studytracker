@@ -96,7 +96,14 @@ from services.writing_assignments import (
 from services.vocabulary_mastery import (
     default_course_system_for_book_id,
     default_goal_for_book_id,
+    is_vocabulary_v2_task,
     resolve_task_vocabulary_goal,
+)
+from services.practice_vocabulary_tasks import (
+    GOAL_LABELS,
+    vocabulary_flow_states,
+    vocabulary_practice_fields,
+    vocabulary_task_clause,
 )
 from services.ielts_practice_scoring import (
     grade_listening_jijing_answers as _grade_listening_jijing_answers,
@@ -9255,6 +9262,8 @@ def _practice_task_sort_key(task: Task) -> tuple[int, str, int]:
 
 
 def _practice_task_source_label(task: Task) -> str:
+    if is_vocabulary_v2_task(task):
+        return GOAL_LABELS.get(str(task.vocabulary_goal).strip().lower(), "词汇训练")
     if task.grading_mode == "question_type_practice":
         return "IELTS 题型专项"
     if task.grading_mode == WRITING_TASK_TYPE:
@@ -9302,7 +9311,7 @@ def _practice_role_group(role: str | None) -> str | None:
     return None
 
 
-def _practice_task_payload(task) -> dict | None:
+def _practice_task_payload(task, *, vocabulary_states=None) -> dict | None:
     access = task_date_access(task)
     if task.grading_mode == "question_type_practice":
         from services.question_type_assignments import assignment_url
@@ -9359,10 +9368,21 @@ def _practice_task_payload(task) -> dict | None:
                 ("passage",),
                 "Passage",
             )
+    elif app.config.get("PRACTICE_VOCABULARY_WEB_ENABLED") and is_vocabulary_v2_task(task):
+        fields = vocabulary_practice_fields(task, (vocabulary_states or {}).get(task.id))
+        if not fields:
+            return None
+        category, title, url = fields["category"], fields["title"], fields["url"]
     else:
         return None
 
     status_key, status_label = _practice_task_status_label(task)
+    access_fields = access.as_dict()
+    if status_key == "pending" and (vocabulary_states or {}).get(task.id) == "active":
+        status_key, status_label = "in_progress", "进行中"
+        access_fields.update(task_status="in_progress", task_status_label="进行中")
+        if access.state not in {"future", "expired"}:
+            access_fields["status_label"] = status_label
     if access.state in {"future", "expired"} and task_workflow_status(task) in {
         "pending",
         "in_progress",
@@ -9381,7 +9401,7 @@ def _practice_task_payload(task) -> dict | None:
         "raw_status": status_key,
         "status_label": status_label,
         "display_status": access.state,
-        **access.as_dict(),
+        **access_fields,
         "accuracy": round(accuracy, 1) if status_key == "done" else None,
         "completion_rate": round(completion, 1) if completion is not None else None,
         "note": task.note or "",
@@ -9416,6 +9436,7 @@ def api_practice_tasks():
                 Task.reading_test_id.isnot(None),
                 Task.grading_mode == "question_type_practice",
                 Task.grading_mode == WRITING_TASK_TYPE,
+                vocabulary_task_clause() if app.config.get("PRACTICE_VOCABULARY_WEB_ENABLED") else False,
             ),
             or_(
                 Task.date.is_(None),
@@ -9444,6 +9465,10 @@ def api_practice_tasks():
             .all()
         }
 
+    vocabulary_states = (
+        vocabulary_flow_states(profile, rows)
+        if app.config.get("PRACTICE_VOCABULARY_WEB_ENABLED") else {}
+    )
     groups = {"assistant": [], "teacher": []}
     tokens_changed = False
     for task in sorted(rows, key=_practice_task_sort_key):
@@ -9452,7 +9477,7 @@ def api_practice_tasks():
             continue
         had_listening_token = task.listening_access_token
         had_reading_token = task.reading_access_token
-        payload = _practice_task_payload(task)
+        payload = _practice_task_payload(task, vocabulary_states=vocabulary_states)
         if not payload:
             continue
         payload["assigned_by_role"] = creator_roles.get(task.created_by) or ""

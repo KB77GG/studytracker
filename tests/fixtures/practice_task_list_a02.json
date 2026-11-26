@@ -1,0 +1,94 @@
+{
+  "description": "Invented A02 fixtures; every name, identifier and access token is public synthetic test data.",
+  "clock": "2026-11-26T12:00:00+08:00",
+  "student_name": "历史列表合成学生",
+  "users": [
+    {"id": 1, "username": "a02-synthetic-student", "role": "student"},
+    {"id": 2, "username": "a02-synthetic-assistant", "role": "assistant"},
+    {"id": 3, "username": "a02-synthetic-teacher", "role": "teacher"}
+  ],
+  "tasks": [
+    {
+      "id": 101, "created_by": 2, "date": "2026-11-26", "status": "pending",
+      "category": "雅思-听力", "detail": "合成精听任务", "note": "合成助教备注",
+      "listening_exercise_id": "a02 listening/one", "listening_resource_type": "intensive",
+      "listening_access_token": "a02-public-listening-101", "completion_rate": 0
+    },
+    {
+      "id": 102, "created_by": 3, "date": "2026-11-26", "status": "progress",
+      "category": "雅思-听力", "detail": "合成听力整套", "note": "合成老师备注",
+      "listening_exercise_id": "a02_cambridge_test", "listening_resource_type": "cambridge_test",
+      "listening_access_token": "a02-public-listening-102", "completion_rate": 33.333,
+      "accuracy": 91.234
+    },
+    {
+      "id": 201, "created_by": 2, "date": "2026-11-27", "status": "pending",
+      "category": "雅思-阅读", "detail": "合成未来阅读", "note": "未来不能提前开始",
+      "reading_test_id": "a02 reading/test", "reading_passage_number": 2
+    },
+    {
+      "id": 202, "created_by": 3, "date": "2026-11-25", "status": "done",
+      "category": "雅思-阅读", "detail": "合成阅读机经 Passage 3",
+      "reading_test_id": "reading_jijing_a02", "reading_passage_number": 3,
+      "reading_access_token": "a02-public-reading-202", "accuracy": 87.65,
+      "completion_rate": 100, "submitted_at": "2026-11-25T12:00:00"
+    },
+    {
+      "id": 301, "created_by": 2, "date": "2026-11-24", "status": "pending",
+      "category": "雅思-听力-题型专项", "detail": "合成听力选择专项",
+      "grading_mode": "question_type_practice", "listening_access_token": "a02-public-type-301",
+      "question_snapshot": {
+        "task_type": "question_type_practice", "subject": "listening", "pace": "training",
+        "standard_type": "multiple_choice", "standard_type_label": "选择题",
+        "payload": {"id": "a02-question-group-listening", "questions": []}
+      }
+    },
+    {
+      "id": 302, "created_by": 3, "date": "2026-11-24", "status": "done",
+      "category": "雅思-阅读-题型专项", "detail": "",
+      "grading_mode": "question_type_practice", "reading_access_token": "a02-public-type-302",
+      "accuracy": 66.66, "completion_rate": 100,
+      "question_snapshot": {
+        "task_type": "question_type_practice", "subject": "reading", "pace": "exam",
+        "standard_type": "matching_headings", "standard_type_label": "标题匹配",
+        "payload": {"id": "a02-question-group-reading", "questions": []}
+      }
+    },
+    {
+      "id": 401, "created_by": 2, "date": "2026-11-26", "status": "submitted",
+      "category": "雅思-写作", "detail": "列表应优先用冻结标题",
+      "grading_mode": "writing_practice", "completion_rate": 100,
+      "submitted_at": "2026-11-26T03:00:00",
+      "question_snapshot": {
+        "version": 1, "writing_resource_type": "exercise", "writing_resource_id": "a02 essay/one",
+        "title": "合成写作真题", "task": "task2", "prompt": "Invented test prompt."
+      }
+    },
+    {
+      "id": 402, "created_by": 3, "date": "2026-11-26", "status": "pending",
+      "category": "雅思-写作", "grading_mode": "writing_practice", "note": "合成母题备注",
+      "question_snapshot": {
+        "version": 1, "writing_resource_type": "mother_topic", "writing_resource_id": "a02-topic",
+        "title": "合成大作文母题", "task": "task2_topic", "prompt": "Invented mother-topic prompt."
+      }
+    },
+    {
+      "id": 901, "created_by": 2, "date": "2026-11-26", "status": "pending",
+      "listening_exercise_id": "a02-cancelled", "listening_access_token": "a02-public-hidden-901",
+      "cancelled_at": "2026-11-26T02:00:00"
+    },
+    {
+      "id": 902, "created_by": 3, "date": "2026-11-26", "status": "pending",
+      "student_name": "另一个合成学生", "reading_test_id": "a02-other-student",
+      "reading_access_token": "a02-public-hidden-902"
+    },
+    {
+      "id": 903, "created_by": 3, "date": "2026-09-01", "status": "done",
+      "grading_mode": "writing_practice",
+      "question_snapshot": {
+        "version": 1, "writing_resource_type": "exercise", "writing_resource_id": "a02-old-hidden",
+        "title": "已过列表窗口的合成写作"
+      }
+    }
+  ]
+}

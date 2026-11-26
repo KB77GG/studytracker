@@ -1,0 +1,23 @@
+test_active_retry_and_nested_conflict_payloads_hide_current_and_future_answers (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_active_retry_and_nested_conflict_payloads_hide_current_and_future_answers) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/private/tmp/studytracker-web-vocabulary-20261126/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_distinct_web_and_bearer_clients_alternate_and_keep_first_scores (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_distinct_web_and_bearer_clients_alternate_and_keep_first_scores) ... /private/tmp/studytracker-web-vocabulary-20261126/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_feature_off_rejects_every_endpoint_without_sql_writes (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_feature_off_rejects_every_endpoint_without_sql_writes) ... ok
+test_get_state_is_read_only_through_unsaved_settlement_and_cutoff (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_get_state_is_read_only_through_unsaved_settlement_and_cutoff) ... ok
+test_two_connections_same_attempt_commit_exactly_one_first_answer (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_two_connections_same_attempt_commit_exactly_one_first_answer) ... ok
+test_web_settlement_matches_plan_and_existing_parent_api (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_web_settlement_matches_plan_and_existing_parent_api) ... /private/tmp/studytracker-web-vocabulary-20261126/api/miniprogram.py:3416: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 2.188s
+
+OK

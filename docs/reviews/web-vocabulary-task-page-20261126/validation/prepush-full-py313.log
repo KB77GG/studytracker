@@ -1,0 +1,757 @@
+test_course_label_and_legacy_defaults_preserved (tests.test_task_plan_item_sync.TaskPlanItemSyncTest.test_course_label_and_legacy_defaults_preserved) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+ok
+test_legacy_wrapper_uses_request_uploader_and_preserves_higher_time (tests.test_task_plan_item_sync.TaskPlanItemSyncTest.test_legacy_wrapper_uses_request_uploader_and_preserves_higher_time) ... ok
+test_missing_item_returns_none_without_request_context (tests.test_task_plan_item_sync.TaskPlanItemSyncTest.test_missing_item_returns_none_without_request_context) ... ok
+test_non_vocabulary_metadata_and_comment_are_preserved (tests.test_task_plan_item_sync.TaskPlanItemSyncTest.test_non_vocabulary_metadata_and_comment_are_preserved) ... ok
+test_shared_projection_preserves_metadata_duration_and_evidence (tests.test_task_plan_item_sync.TaskPlanItemSyncTest.test_shared_projection_preserves_metadata_duration_and_evidence) ... ok
+test_cancelled_task_is_rejected_even_when_already_in_identity_map (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_cancelled_task_is_rejected_even_when_already_in_identity_map) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+/private/tmp/studytracker-web-vocabulary-20261126/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_first_settlement_syncs_once_and_replay_cannot_add_effects (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_first_settlement_syncs_once_and_replay_cannot_add_effects) ... ok
+test_incomplete_learning_cannot_mark_either_record_done (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_incomplete_learning_cannot_mark_either_record_done) ... ok
+test_projection_failure_rolls_back_completion_and_settlement (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_projection_failure_rolls_back_completion_and_settlement) ... ok
+test_race_loser_with_already_synced_result_does_not_append_evidence (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_race_loser_with_already_synced_result_does_not_append_evidence) ... ok
+test_read_only_replay_still_requires_owner_and_frozen_queue_token (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_read_only_replay_still_requires_owner_and_frozen_queue_token) ... ok
+test_account_wins_over_other_name_and_same_name_profiles (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_account_wins_over_other_name_and_same_name_profiles) ... ok
+test_deleted_duplicate_does_not_block_unique_identity (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_deleted_duplicate_does_not_block_unique_identity) ... ok
+test_duplicate_live_name_is_rejected_without_guessing (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_duplicate_live_name_is_rejected_without_guessing) ... ok
+test_inactive_account_and_linked_nonstudent_are_rejected (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_inactive_account_and_linked_nonstudent_are_rejected) ... ok
+test_missing_or_deleted_name_is_removed (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_missing_or_deleted_name_is_removed) ... ok
+test_name_identity_key_matches_account_and_changes_with_student (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_name_identity_key_matches_account_and_changes_with_student) ... ok
+test_no_identity_has_explicit_unauthenticated_status (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_no_identity_has_explicit_unauthenticated_status) ... ok
+test_staff_and_classroom_modes_cannot_use_name_session (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_staff_and_classroom_modes_cannot_use_name_session) ... ok
+test_unlinked_account_never_falls_back_to_display_or_name_session (tests.test_practice_student_identity.PracticeStudentIdentityTest.test_unlinked_account_never_falls_back_to_display_or_name_session) ... ok
+test_clause_and_payload_reject_legacy_missing_book_and_invalid_goal (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_clause_and_payload_reject_legacy_missing_book_and_invalid_goal) ... ok
+test_states_are_batched_and_never_borrow_another_students_flow (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_states_are_batched_and_never_borrow_another_students_flow) ... ok
+test_title_goal_url_and_flow_status_are_read_only (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_title_goal_url_and_flow_status_are_read_only) ... ok
+test_corrective_copy_keeps_previously_revealed_answer (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_corrective_copy_keeps_previously_revealed_answer) ... ok
+test_fallback_built_before_familiarity_is_hidden (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_fallback_built_before_familiarity_is_hidden) ... ok
+test_feedback_missing_material_and_numeric_audio (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_feedback_missing_material_and_numeric_audio) ... ok
+test_meaning_options_match_actual_miniprogram_algorithm (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_meaning_options_match_actual_miniprogram_algorithm) ... ok
+test_retry_and_error_snapshot_do_not_reveal_answers (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_retry_and_error_snapshot_do_not_reveal_answers) ... ok
+test_review_only_answered_items_reveal_feedback (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_review_only_answered_items_reveal_feedback) ... ok
+test_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_six_modes_only_expose_allowed_prompts) ... ok
+test_actual_name_switch_rejects_old_page_before_task_lookup (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_actual_name_switch_rejects_old_page_before_task_lookup) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+ok
+test_all_four_goals_finish_and_settlement_replay_is_read_only (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_all_four_goals_finish_and_settlement_replay_is_read_only) ... /private/tmp/studytracker-web-vocabulary-20261126/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_cancelled_identity_mapped_task_is_not_accessible (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_cancelled_identity_mapped_task_is_not_accessible) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_practice_vocabulary_routes.py:512: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  task.cancelled_at = datetime.utcnow()
+ok
+test_classroom_synonym_and_missing_examples_keep_real_domain_modes (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_classroom_synonym_and_missing_examples_keep_real_domain_modes) ... ok
+test_completed_get_has_no_database_writes_and_cannot_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_completed_get_has_no_database_writes_and_cannot_answer) ... ok
+test_comprehensive_pending_correction_survives_sync_and_is_bounded (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_comprehensive_pending_correction_survives_sync_and_is_bounded) ... ok
+test_context_choice_correction_accepts_public_label_mapped_to_option_id (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_context_choice_correction_accepts_public_label_mapped_to_option_id) ... ok
+test_correction_duplicate_reports_persisted_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_correction_duplicate_reports_persisted_answer) ... ok
+test_feature_off_blocks_all_registered_routes_before_any_sql (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_blocks_all_registered_routes_before_any_sql) ... ok
+test_feature_off_missing_identity_foreign_and_unsupported_tasks (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_missing_identity_foreign_and_unsupported_tasks) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10bfcb2e0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_foreign_review_session_is_rejected (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_foreign_review_session_is_rejected) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_practice_vocabulary_routes.py:140: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  mastery.meaning_recall_next_due_at = datetime.utcnow() - timedelta(days=1)
+ok
+test_forgot_then_retry_keeps_first_score_and_hides_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_forgot_then_retry_keeps_first_score_and_hides_answer) ... ok
+test_future_and_expired_read_only_no_flow_or_write (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_future_and_expired_read_only_no_flow_or_write) ... ok
+test_grace_boundary_expiry_does_not_advance_existing_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_grace_boundary_expiry_does_not_advance_existing_flow) ... ok
+test_malformed_origin_and_non_ascii_headers_fail_closed (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_malformed_origin_and_non_ascii_headers_fail_closed) ... ok
+test_malformed_recovery_ids_do_not_initialize_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_malformed_recovery_ids_do_not_initialize_flow) ... ok
+test_numeric_task_preserves_input_punctuation_and_tts_hint (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_numeric_task_preserves_input_punctuation_and_tts_hint) ... ok
+test_old_client_keeps_existing_correction_release (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_old_client_keeps_existing_correction_release) ... /private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_page_and_get_state_do_not_create_or_modify_learning (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_page_and_get_state_do_not_create_or_modify_learning) ... ok
+test_premature_settlement_and_operational_failure_do_not_finish (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_premature_settlement_and_operational_failure_do_not_finish) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b9d9c60>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b8dc310>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b05b6a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b9dbf10>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b0593f0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10aa14e50>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1e6f20>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10be289a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10a96ad40>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+[2026-11-26 18:51:17,618] ERROR in practice_vocabulary: Vocabulary web database operation failed
+Traceback (most recent call last):
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/private/tmp/studytracker-web-vocabulary-20261126/api/practice_vocabulary.py", line 198, in settle
+    result = settle_vocabulary_group_submission(
+        g.practice_student.user,
+    ...<2 lines>...
+        uploader_id=g.practice_student.user.id,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+sqlalchemy.exc.OperationalError: (builtins.Exception) locked
+[SQL: synthetic]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ok
+test_resume_and_duplicate_answer_share_one_record_with_miniprogram (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_resume_and_duplicate_answer_share_one_record_with_miniprogram) ... /private/tmp/studytracker-web-vocabulary-20261126/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+ok
+test_review_context_choice_correction_uses_same_public_transport_contract (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_context_choice_correction_uses_same_public_transport_contract) ... ok
+test_review_gate_claim_answer_settle_then_return_to_original_task (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_gate_claim_answer_settle_then_return_to_original_task) ... ok
+test_review_wrong_correction_replay_and_same_student_task_gate (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_wrong_correction_replay_and_same_student_task_gate) ... ok
+test_security_headers_types_size_origin_and_identity_drift (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_security_headers_types_size_origin_and_identity_drift) ... ok
+test_staff_classroom_ambiguous_and_account_priority (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_staff_classroom_ambiguous_and_account_priority) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c0c8040>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c0cb5b0>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10af4c5e0>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10851ff10>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c5fea70>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ca29120>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cdbc040>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d03e3e0>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d361a80>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/interfaces.py:1084: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10db0b100>
+  def create_row_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_stale_question_error_snapshot_and_retry_never_leak_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_stale_question_error_snapshot_and_retry_never_leak_answer) ... ok
+test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_off_matches_real_historical_response) ... ok
+test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_on_matches_real_historical_response) ... ok
+test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_historical_snapshot_provenance_and_coverage) ... ok
+test_active_flow_is_displayed_without_writing_task_status (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_active_flow_is_displayed_without_writing_task_status) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+ok
+test_assistant_and_teacher_tasks_keep_the_existing_groups (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_assistant_and_teacher_tasks_keep_the_existing_groups) ... ok
+test_existing_four_task_payloads_are_unchanged_by_flag (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_existing_four_task_payloads_are_unchanged_by_flag) ... ok
+test_future_expired_and_done_labels_follow_shared_date_gate (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_future_expired_and_done_labels_follow_shared_date_gate) ... ok
+test_off_and_legacy_dictation_are_excluded (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_off_and_legacy_dictation_are_excluded) ... ok
+test_active_retry_and_nested_conflict_payloads_hide_current_and_future_answers (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_active_retry_and_nested_conflict_payloads_hide_current_and_future_answers) ... /private/tmp/studytracker-web-vocabulary-20261126/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_distinct_web_and_bearer_clients_alternate_and_keep_first_scores (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_distinct_web_and_bearer_clients_alternate_and_keep_first_scores) ... /private/tmp/studytracker-web-vocabulary-20261126/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_feature_off_rejects_every_endpoint_without_sql_writes (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_feature_off_rejects_every_endpoint_without_sql_writes) ... ok
+test_get_state_is_read_only_through_unsaved_settlement_and_cutoff (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_get_state_is_read_only_through_unsaved_settlement_and_cutoff) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d03e6b0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10a96ad40>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10aad7b50>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b9db5b0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10abb1030>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_two_connections_same_attempt_commit_exactly_one_first_answer (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_two_connections_same_attempt_commit_exactly_one_first_answer) ... ok
+test_web_settlement_matches_plan_and_existing_parent_api (tests.test_practice_vocabulary_adversarial.VocabularyWebAdversarialTest.test_web_settlement_matches_plan_and_existing_parent_api) ... /private/tmp/studytracker-web-vocabulary-20261126/api/miniprogram.py:3416: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_all_correct_intermediate_group_enters_next_group (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_all_correct_intermediate_group_enters_next_group) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+ok
+test_all_forgotten_first_and_retry_answers_finish_at_zero (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_all_forgotten_first_and_retry_answers_finish_at_zero) ... ok
+test_comprehensive_forgotten_retry_defers_related_wave_to_next_review (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_forgotten_retry_defers_related_wave_to_next_review) ... ok
+test_comprehensive_mixed_retry_only_normal_wrong_gets_group_related_wave (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_mixed_retry_only_normal_wrong_gets_group_related_wave) ... ok
+test_comprehensive_same_dimension_retry_can_release_one_related_dimension (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_same_dimension_retry_can_release_one_related_dimension) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10db885e0>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ae74c70>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b3f8130>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10a505300>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111cb4c0>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:112: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1116b3e20>
+  (process, labels, extra) = list(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_comprehensive_two_base_dimension_errors_are_capped_at_four_formal_questions (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_two_base_dimension_errors_are_capped_at_four_formal_questions) ... ok
+test_comprehensive_uses_two_base_questions_per_word_and_fixed_progress (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_uses_two_base_questions_per_word_and_fixed_progress) ... ok
+test_comprehensive_wrong_answer_requires_idempotent_nonformal_correction (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_comprehensive_wrong_answer_requires_idempotent_nonformal_correction) ... ok
+test_constrained_scheduler_handles_sparse_errors_and_tiny_pool (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_constrained_scheduler_handles_sparse_errors_and_tiny_pool) ... ok
+test_context_choice_only_is_explicit_degraded_single_encounter (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_context_choice_only_is_explicit_degraded_single_encounter) ... ok
+test_daily_clearance_errors_are_normalized_by_group_service (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_daily_clearance_errors_are_normalized_by_group_service) ... ok
+test_empty_forgot_is_valid_for_listening_and_writing_prompts (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_empty_forgot_is_valid_for_listening_and_writing_prompts) ... ok
+test_familiarity_does_not_update_mastery_and_cannot_skip (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_familiarity_does_not_update_mastery_and_cannot_skip) ... ok
+test_familiarity_to_recall_avoids_last_seen_sense (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_familiarity_to_recall_avoids_last_seen_sense) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:325: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111750c70>
+  def __init__(self, iterable: Optional[Iterable[Any]] = None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_forgotten_first_answer_and_conflicting_replay_use_saved_winner (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_forgotten_first_answer_and_conflicting_replay_use_saved_winner) ... ok
+test_forgotten_submission_rejects_foreign_and_expired_task_without_writing (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_forgotten_submission_rejects_foreign_and_expired_task_without_writing) ... ok
+test_group_correction_increments_attempt_id_and_rejects_stale_replay (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_group_correction_increments_attempt_id_and_rejects_stale_replay) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111a12b60>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115c17b0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111e87c0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10db0a110>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10db109a0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d8f72e0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c3aa5c0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c3ab790>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11111aa70>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1110d17b0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111d17e20>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_group_sizes_and_last_remainder_are_server_constants (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_group_sizes_and_last_remainder_are_server_constants) ... ok
+test_legacy_comprehensive_flow_without_formal_ordinals_keeps_old_contract (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_legacy_comprehensive_flow_without_formal_ordinals_keeps_old_contract) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111e184f0>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_listening_has_no_context_questions (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_listening_has_no_context_questions) ... ok
+test_queue_token_and_question_contract_are_required (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_queue_token_and_question_contract_are_required) ... ok
+test_retry_only_forgotten_item_is_in_visible_count_not_first_score_count (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_only_forgotten_item_is_in_visible_count_not_first_score_count) ... ok
+test_retry_shuffle_respects_last_formal_phase_sense_boundary (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_shuffle_respects_last_formal_phase_sense_boundary) ... ok
+test_retry_wrong_can_finish_and_is_marked_for_review (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_retry_wrong_can_finish_and_is_marked_for_review) ... ok
+test_same_attempt_is_idempotent_and_stale_question_cannot_double_advance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_same_attempt_is_idempotent_and_stale_question_cannot_double_advance) ... ok
+test_sqlite_lock_is_a_retryable_state_conflict (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_sqlite_lock_is_a_retryable_state_conflict) ... ok
+test_stable_order_avoids_adjacent_sense_and_is_deterministic (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_stable_order_avoids_adjacent_sense_and_is_deterministic) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:126: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b8f17b0>
+  def _compiler_dispatch(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_started_task_is_blocked_after_assigned_day_ends (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_started_task_is_blocked_after_assigned_day_ends) ... ok
+test_three_context_senses_apply_once_and_choice_is_guidance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_three_context_senses_apply_once_and_choice_is_guidance) ... /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1e49a0>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_wrong_correction_keeps_choice_pending_then_bounded_release (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_wrong_correction_keeps_choice_pending_then_bounded_release) ... ok
+test_wrong_mastery_encounter_requires_one_retry_but_retry_does_not_advance (tests.test_vocabulary_group_learning.VocabularyGroupLearningTest.test_wrong_mastery_encounter_requires_one_retry_but_retry_does_not_advance) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111e6da80>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111e1be20>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c873d0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b79fa60>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d916c0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10aad7a60>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b05ac50>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ca28e50>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10bbdbb50>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1e7e20>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c8ede40>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_empty_assigned_range_is_actionable_and_does_not_create_a_flow (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_empty_assigned_range_is_actionable_and_does_not_create_a_flow) ... ok
+test_existing_history_shows_forgotten_action_and_keeps_raw_answer (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_existing_history_shows_forgotten_action_and_keeps_raw_answer) ... ok
+test_http_comprehensive_correction_is_saved_without_formal_attempt (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_comprehensive_correction_is_saved_without_formal_attempt) ... ok
+test_http_context_choice_and_fill_share_one_mastery_encounter (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_context_choice_and_fill_share_one_mastery_encounter) ... /private/tmp/studytracker-web-vocabulary-20261126/api/miniprogram.py:2616: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  current_task = Task.query.get(task_id)
+ok
+test_http_forgotten_answer_recovers_exact_saved_attempt (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_forgotten_answer_recovers_exact_saved_attempt) ... ok
+test_http_group_queue_requires_contract_and_finalize_is_idempotent (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_group_queue_requires_contract_and_finalize_is_idempotent) ... ok
+test_http_mismatched_word_and_dimension_are_rejected (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_http_mismatched_word_and_dimension_are_rejected) ... ok
+test_legacy_null_goal_keeps_old_queue_contract (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_legacy_null_goal_keeps_old_queue_contract) ... /private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:99: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-web-vocabulary-20261126/services/dictation_review.py:79: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_numeric_word_tts_uses_raw_text_and_licensed_provider (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_numeric_word_tts_uses_raw_text_and_licensed_provider) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ac6ba60>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  rv = self.get(ident)
+ok
+test_published_legacy_client_skips_server_only_correction (tests.test_vocabulary_group_learning_api.VocabularyGroupLearningApiTest.test_published_legacy_client_skips_server_only_correction) ... ok
+test_active_review_blocks_task_queue_and_daily_settlement_clears_second_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_active_review_blocks_task_queue_and_daily_settlement_clears_second_task) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111b4f4c0>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c00f40>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10bbd9030>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cdbd3f0>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b05bf10>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111c9990>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x109fdb010>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ac6b100>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:447: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ac68d60>
+  def label(self, name: Optional[str]) -> Label[_T_co]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_all_bad_items_settle_with_zero_score_and_remain_recoverable (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_all_bad_items_settle_with_zero_score_and_remain_recoverable) ... ok
+test_all_forgot_settles_zero_and_keeps_invalid_material_separate (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_all_forgot_settles_zero_and_keeps_invalid_material_separate) ... ok
+test_answer_feedback_is_returned_after_answer_and_restored_on_refresh (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_answer_feedback_is_returned_after_answer_and_restored_on_refresh) ... ok
+test_answered_active_session_stays_visible_until_settlement (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_answered_active_session_stays_visible_until_settlement) ... ok
+test_autonomous_audio_to_en_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_audio_to_en_has_correction_and_day1_retry) ... ok
+test_autonomous_context_choice_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_context_choice_has_correction_and_day1_retry) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1120ed4e0>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c3a8220>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10bfc9300>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c8ef1f0>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111c9210>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112046f20>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_autonomous_context_fill_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_context_fill_has_correction_and_day1_retry) ... ok
+test_autonomous_en_to_zh_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_en_to_zh_has_correction_and_day1_retry) ... ok
+test_autonomous_failed_delayed_retry_releases_one_related_dimension (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_failed_delayed_retry_releases_one_related_dimension) ... ok
+test_autonomous_zh_to_en_has_correction_and_day1_retry (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_autonomous_zh_to_en_has_correction_and_day1_retry) ... ok
+test_comprehensive_sense_rotates_one_dimension_per_day (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_comprehensive_sense_rotates_one_dimension_per_day) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:663: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1125648b0>
+  def _literal_coercion(self, element, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:663: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1113a7b50>
+  def _literal_coercion(self, element, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:663: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cfb6b60>
+  def _literal_coercion(self, element, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:663: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d667e20>
+  def _literal_coercion(self, element, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:663: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111b57a60>
+  def _literal_coercion(self, element, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_cross_book_batch_is_real_questions_and_repeat_claim_is_idempotent (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_cross_book_batch_is_real_questions_and_repeat_claim_is_idempotent) ... ok
+test_cross_midnight_settlement_is_blocked_after_three_am_cutoff (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_cross_midnight_settlement_is_blocked_after_three_am_cutoff) ... ok
+test_due_batch_never_repeats_a_sense_and_error_wins (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_due_batch_never_repeats_a_sense_and_error_wins) ... ok
+test_empty_review_queue_is_explicit (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_empty_review_queue_is_explicit) ... ok
+test_forgot_cannot_write_another_students_or_expired_session (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_cannot_write_another_students_or_expired_session) ... ok
+test_forgot_delayed_retry_releases_related_without_correction_or_reschedule (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_delayed_retry_releases_related_without_correction_or_reschedule) ... ok
+test_forgot_empty_partial_and_mixed_answers_restore_first_result (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_empty_partial_and_mixed_answers_restore_first_result) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11269f6a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b4bd3f0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111971210>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111970e50>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c8ef010>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d8e9300>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111f36980>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_forgot_for_each_frozen_review_mode_is_wrong_even_with_correct_text (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_for_each_frozen_review_mode_is_wrong_even_with_correct_text) ... ok
+test_forgot_replay_after_other_session_commits_consumes_budget_once (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_forgot_replay_after_other_session_commits_consumes_budget_once)
+An ORM-cached pre-answer item must not reapply a committed first. ... ok
+test_http_answer_settle_continue_are_idempotent_and_independent (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_answer_settle_continue_are_idempotent_and_independent) ... ok
+test_http_forgot_rejects_bad_identity_and_recovers_durable_first (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_forgot_rejects_bad_identity_and_recovers_durable_first) ... ok
+test_http_new_day_replaces_stale_session_and_blocks_every_old_write (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_new_day_replaces_stale_session_and_blocks_every_old_write) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/identity.py:219: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111f37b50>
+  def get(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/identity.py:219: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110f4ac50>
+  def get(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/identity.py:219: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b216c50>
+  def get(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/identity.py:219: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111ad0220>
+  def get(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/identity.py:219: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112672110>
+  def get(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_http_stale_rollover_lock_conflict_is_retryable (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_stale_rollover_lock_conflict_is_retryable) ... ok
+test_http_wrong_review_requires_correction_and_keeps_false_feedback (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_http_wrong_review_requires_correction_and_keeps_false_feedback) ... ok
+test_listening_meaning_review_keeps_audio_cue (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_listening_meaning_review_keeps_audio_cue) ... ok
+test_new_day_expires_partial_session_before_claiming_current_task_review (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_new_day_expires_partial_session_before_claiming_current_task_review) ... ok
+test_preflight_and_http_api_are_independent_from_teacher_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_preflight_and_http_api_are_independent_from_teacher_task) ... ok
+test_previous_day_home_review_rejects_direct_answer_without_origin_task (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_previous_day_home_review_rejects_direct_answer_without_origin_task) ... ok
+test_published_legacy_client_can_settle_wrong_review_without_correction_ui (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_published_legacy_client_can_settle_wrong_review_without_correction_ui) ... ok
+test_task_linked_review_remains_attributed_and_writable_until_three_am (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_task_linked_review_remains_attributed_and_writable_until_three_am) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1126ebb50>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1120ec040>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b79dd50>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111f7ac50>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10bfcbf10>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d8eb3d0>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11270bc40>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/ddl.py:1398: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11240fc40>
+  fixed_dependencies.update(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_undated_origin_task_still_blocks_answers_after_completion (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_undated_origin_task_still_blocks_answers_after_completion) ... ok
+test_valid_item_cannot_be_maliciously_skipped (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_valid_item_cannot_be_maliciously_skipped) ... ok
+test_verified_bad_item_can_settle_without_attempt_and_is_regenerated (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_verified_bad_item_can_settle_without_attempt_and_is_regenerated) ... ok
+test_wrong_is_plus_24h_and_30_60_day_intervals_are_consumed (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_wrong_is_plus_24h_and_30_60_day_intervals_are_consumed) ... ok
+test_wrong_stage_zero_outranks_unanswered_stage_zero (tests.test_vocabulary_autonomous_review.AutonomousVocabularyReviewTest.test_wrong_stage_zero_outranks_unanswered_stage_zero) ... ok
+test_gate_decision_is_identical_in_every_state (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest.test_gate_decision_is_identical_in_every_state) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_vocabulary_flow_backlog_gate.py:115: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  due = datetime.utcnow() - timedelta(days=1)
+/private/tmp/studytracker-web-vocabulary-20261126/tests/test_vocabulary_flow_backlog_gate.py:116: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  later = datetime.utcnow() + timedelta(days=5)
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112be6e30>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10aad55d0>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11240ff10>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b05b100>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111ef3e20>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py:481: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1125dba60>
+  type(self).__name__,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_home_summary_and_task_preflight_still_report_the_backlog (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest.test_home_summary_and_task_preflight_still_report_the_backlog) ... ok
+test_in_progress_task_never_rescans_the_backlog (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest.test_in_progress_task_never_rescans_the_backlog) ... ok
+test_new_task_is_still_blocked_until_the_review_batch_is_done (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest.test_new_task_is_still_blocked_until_the_review_batch_is_done) ... ok
+test_one_students_review_answer_keeps_other_students_counts_cached (tests.test_vocabulary_flow_backlog_gate.VocabularyFlowBacklogGateTest.test_one_students_review_answer_keeps_other_students_counts_cached) ... ok
+test_anonymous_and_nonstaff_cannot_create_accounts (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_anonymous_and_nonstaff_cannot_create_accounts) ... /private/tmp/studytracker-web-vocabulary-20261126/app.py:2448: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+ok
+test_assistant_can_create_accounts (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_assistant_can_create_accounts) ... ok
+test_commit_failure_after_all_inserts_rolls_back_and_allows_retry (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_commit_failure_after_all_inserts_rolls_back_and_allows_retry) ... ok
+test_either_username_conflict_including_inactive_users_is_rejected (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_either_username_conflict_including_inactive_users_is_rejected) ... ok
+test_empty_names_are_rejected_without_writes (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_empty_names_are_rejected_without_writes) ... ok
+test_existing_wechat_bindings_and_parent_children_remain_usable (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_existing_wechat_bindings_and_parent_children_remain_usable) ... /private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "iat": int(datetime.utcnow().timestamp()),
+/private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:28: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "exp": int((datetime.utcnow() + timedelta(hours=TOKEN_TTL_HOURS)).timestamp()),
+/private/tmp/studytracker-web-vocabulary-20261126/models.py:80: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  self.token_issued_at = datetime.utcnow()
+ok
+test_new_parent_link_is_visible_through_authenticated_children_api (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_new_parent_link_is_visible_through_authenticated_children_api) ... ok
+test_old_and_new_student_parent_web_password_login (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_old_and_new_student_parent_web_password_login) ... ok
+test_real_database_failures_rollback_all_rows_and_allow_retry (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_real_database_failures_rollback_all_rows_and_allow_retry) ... ok
+test_repeated_name_preserves_first_pair (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_repeated_name_preserves_first_pair) ... ok
+test_same_name_profile_is_not_merged_or_reassigned (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_same_name_profile_is_not_merged_or_reassigned) ... ok
+test_success_creates_complete_pair_with_legacy_credentials (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_success_creates_complete_pair_with_legacy_credentials) ... ok
+test_wrong_password_and_inactive_accounts_still_cannot_log_in (tests.test_auto_student_accounts.AutoStudentAccountsTest.test_wrong_password_and_inactive_accounts_still_cannot_log_in) ... ok
+test_sync_plan_item_labels_dictation_tasks (tests.test_miniprogram_grading.MiniprogramGradingTest.test_sync_plan_item_labels_dictation_tasks) ... ok
+test_sync_plan_item_preserves_random_dictation_order (tests.test_miniprogram_grading.MiniprogramGradingTest.test_sync_plan_item_preserves_random_dictation_order) ... ok
+test_task_evidence_files_separates_audio_and_images (tests.test_miniprogram_grading.MiniprogramGradingTest.test_task_evidence_files_separates_audio_and_images) ... ok
+test_task_evidence_type_recognizes_miniprogram_audio_formats (tests.test_miniprogram_grading.MiniprogramGradingTest.test_task_evidence_type_recognizes_miniprogram_audio_formats) ... ok
+test_teacher_grading_percentage_validates_range (tests.test_miniprogram_grading.MiniprogramGradingTest.test_teacher_grading_percentage_validates_range) ... ok
+test_teacher_can_list_audio_and_complete_grading (tests.test_miniprogram_grading.TeacherGradingApiTest.test_teacher_can_list_audio_and_complete_grading) ... ok
+test_assignment_notifications_use_the_shared_next_day_cutoff (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest.test_assignment_notifications_use_the_shared_next_day_cutoff) ... ok
+test_cambridge_retry_stays_available_only_while_task_is_writable (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest.test_cambridge_retry_stays_available_only_while_task_is_writable) ... ok
+test_date_gate_error_and_home_display_helpers_prioritize_status (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest.test_date_gate_error_and_home_display_helpers_prioritize_status) ... ok
+test_dictation_appeal_and_content_report_are_not_date_gated (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest.test_dictation_appeal_and_content_report_are_not_date_gated) ... ok
+test_read_only_banners_prioritize_workflow_status_over_date_label (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest.test_read_only_banners_prioritize_workflow_status_over_date_label) ... ok
+test_group_context_guidance_and_remediation_do_not_create_checkpoint_successes (tests.test_vocabulary_error_review_integration.ErrorPolicyLearningHookTest.test_group_context_guidance_and_remediation_do_not_create_checkpoint_successes) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_vocabulary_error_review_integration.py:670: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:344: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1e71f0>
+  def __missing__(self, key: Any) -> Any:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_group_first_wrong_and_forgot_are_atomic_idempotent_but_retries_are_not_successes (tests.test_vocabulary_error_review_integration.ErrorPolicyLearningHookTest.test_group_first_wrong_and_forgot_are_atomic_idempotent_but_retries_are_not_successes) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112b88130>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c4f8310>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cf013f0>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c03880>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b8f2020>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b1e46d0>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/tmp/studytracker-web-vocabulary-20261126/tests/test_vocabulary_error_review_integration.py:638: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+ok
+test_policy_failure_rolls_back_group_position_and_first_record (tests.test_vocabulary_error_review_integration.ErrorPolicyLearningHookTest.test_policy_failure_rolls_back_group_position_and_first_record) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_vocabulary_error_review_integration.py:611: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+ok
+test_policy_failure_rolls_back_legacy_first_record_and_retry_only_records_once (tests.test_vocabulary_error_review_integration.ErrorPolicyLegacyLearningHookTest.test_policy_failure_rolls_back_legacy_first_record_and_retry_only_records_once) ... ok
+test_deployment_configuration_limits_are_returned_and_enforced (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_deployment_configuration_limits_are_returned_and_enforced) ... ok
+test_empty_claim_persists_overdue_transfers_and_optional_can_claim_them (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_empty_claim_persists_overdue_transfers_and_optional_can_claim_them) ... ok
+test_first_answer_replay_and_correction_do_not_graduate_error (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_first_answer_replay_and_correction_do_not_graduate_error) ... ok
+test_four_samples_count_inside_twenty_daily_ability_limit (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_four_samples_count_inside_twenty_daily_ability_limit) ... ok
+test_http_default_is_mandatory_and_explicit_mode_selects_optional (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_http_default_is_mandatory_and_explicit_mode_selects_optional) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11346ef20>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10aad4400>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10abfa7a0>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10a2c58a0>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b79dc60>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11346da80>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:334: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e772e0>
+  return itertools.chain(*[x._cloned_set for x in elements])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_legacy_backlog_never_enters_pilot_gate_or_mandatory_scan (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_legacy_backlog_never_enters_pilot_gate_or_mandatory_scan) ... ok
+test_off_makes_no_new_table_queries_and_keeps_legacy_shape (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_off_makes_no_new_table_queries_and_keeps_legacy_shape) ... ok
+test_only_server_validated_bad_question_can_consume_slot_without_success (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_only_server_validated_bad_question_can_consume_slot_without_success) ... ok
+test_optional_final_reservation_rechecks_new_error_after_bulk_snapshot (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_optional_final_reservation_rechecks_new_error_after_bulk_snapshot) ... ok
+test_optional_forgot_opens_only_that_ability_for_next_day (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_optional_forgot_opens_only_that_ability_for_next_day) ... ok
+test_optional_maintenance_ten_budget_and_active_session_never_gate (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_optional_maintenance_ten_budget_and_active_session_never_gate) ... ok
+test_optional_policy_queries_are_constant_when_large_old_pool_is_excluded (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_optional_policy_queries_are_constant_when_large_old_pool_is_excluded) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b2145e0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c3b45e0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c02020>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11270bd30>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112d6c4f0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_pilot_session_expires_at_midnight_even_task_has_grace (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_pilot_session_expires_at_midnight_even_task_has_grace) ... ok
+test_policy_failure_rolls_back_first_attempt_and_mastery_together (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_policy_failure_rolls_back_first_attempt_and_mastery_together) ... ok
+test_revalidation_rejects_changed_batch_atomically (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_revalidation_rejects_changed_batch_atomically) ... ok
+test_two_abilities_of_same_word_use_two_slots_and_only_requested_dimensions (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_two_abilities_of_same_word_use_two_slots_and_only_requested_dimensions) ... ok
+test_two_successes_are_separated_by_two_natural_dates (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_two_successes_are_separated_by_two_natural_dates) ... ok
+test_unusable_new_error_is_deferred_without_success_or_permanent_gate (tests.test_vocabulary_error_review_integration.ErrorReviewIntegrationTest.test_unusable_new_error_is_deferred_without_success_or_permanent_gate) ... ok
+test_enrollment_wins_after_legacy_candidate_preparation (tests.test_vocabulary_error_review_integration.PolicyActivationRaceTest.test_enrollment_wins_after_legacy_candidate_preparation) ... ok
+test_legacy_claim_wins_and_enrollment_refuses_committed_active_session (tests.test_vocabulary_error_review_integration.PolicyActivationRaceTest.test_legacy_claim_wins_and_enrollment_refuses_committed_active_session) ... ok
+test_all_goals_keep_numeric_only_and_mixed_comprehensive_words (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_all_goals_keep_numeric_only_and_mixed_comprehensive_words) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1137bcb80>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110f4b100>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113ae17b0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113ae0400>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111e18310>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b79d120>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c9bc8b0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111cb880>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1127ab1f0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_comprehensive_separates_numeric_meaning_feedback_from_dictation (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_comprehensive_separates_numeric_meaning_feedback_from_dictation) ... ok
+test_existing_english_snapshot_is_not_reclassified (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_existing_english_snapshot_is_not_reclassified) ... ok
+test_mixed_task_preserves_english_and_skips_only_missing_meaning (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_mixed_task_preserves_english_and_skips_only_missing_meaning) ... /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c84130>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_numeric_only_selected_subset_finishes_with_nonempty_denominator (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_numeric_only_selected_subset_finishes_with_nonempty_denominator) ... ok
+test_numeric_with_meaning_keeps_meaning_question_and_new_audio (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_numeric_with_meaning_keeps_meaning_question_and_new_audio) ... ok
+test_old_initialized_flow_does_not_gain_questions_or_change_snapshot (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_old_initialized_flow_does_not_gain_questions_or_change_snapshot) ... /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10b05ba60>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_phone_wrong_zero_then_retry_preserves_original_and_audio (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_phone_wrong_zero_then_retry_preserves_original_and_audio) ... ok
+test_selected_numeric_with_stage_zero_future_review_still_has_question (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_selected_numeric_with_stage_zero_future_review_still_has_question) ... ok
+test_started_old_task_keeps_questions_answers_and_progress (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_started_old_task_keeps_questions_answers_and_progress) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10c8efd30>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_task_review_queue_and_grading_uses_same_numeric_policy (tests.test_vocabulary_numeric_learning.NumericLearningTest.test_task_review_queue_and_grading_uses_same_numeric_policy) ... ok
+test_date_ambiguity_is_not_silently_reinterpreted (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_date_ambiguity_is_not_silently_reinterpreted) ... ok
+test_decimal_first_and_correction_do_not_use_english_punctuation_rules (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_decimal_first_and_correction_do_not_use_english_punctuation_rules) ... ok
+test_existing_english_snapshot_remains_unchanged_and_uses_old_grader (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_existing_english_snapshot_remains_unchanged_and_uses_old_grader) ... ok
+test_forgotten_replay_retains_frozen_numeric_answer_and_audio (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_forgotten_replay_retains_frozen_numeric_answer_and_audio) ... ok
+test_mixed_queue_keeps_ordinary_english_on_existing_contract (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_mixed_queue_keeps_ordinary_english_on_existing_contract) ... ok
+test_numeric_forgot_is_valid_but_numeric_non_audio_snapshot_is_invalid (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_forgot_is_valid_but_numeric_non_audio_snapshot_is_invalid) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1137ee200>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11413cf40>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11413d300>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11483e3e0>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c87970>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110c86b60>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10db0af20>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ae757b0>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ad74f40>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10abf8130>
+  pi[eps_col].add(metrics)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_numeric_only_queue_keeps_all_answers_and_private_metadata (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_only_queue_keeps_all_answers_and_private_metadata) ... ok
+test_numeric_without_meaning_is_only_eligible_for_audio_form (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_numeric_without_meaning_is_only_eligible_for_audio_form) ... ok
+test_phone_correction_preserves_leading_zero_and_retries_next_day (tests.test_vocabulary_numeric_review.NumericAutonomousReviewTest.test_phone_correction_preserves_leading_zero_and_retries_next_day) ... ok
+test_claim_rechecks_concurrently_invalidated_word_despite_identity_map (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_claim_rechecks_concurrently_invalidated_word_despite_identity_map) ... ok
+test_claim_rechecks_new_cooldown_after_a_concurrent_completed_batch (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_claim_rechecks_new_cooldown_after_a_concurrent_completed_batch) ... ok
+test_claim_rechecks_rescheduled_dimension_after_selection (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_claim_rechecks_rescheduled_dimension_after_selection) ... ok
+test_display_phantom_count_cannot_require_or_create_review (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_display_phantom_count_cannot_require_or_create_review) ... ok
+test_display_zero_cannot_authorize_or_remove_real_queue_items (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_display_zero_cannot_authorize_or_remove_real_queue_items) ... ok
+test_fallback_order_null_sense_representative_and_ties_match_legacy (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_fallback_order_null_sense_representative_and_ties_match_legacy) ... ok
+test_first_claim_conflict_rolls_back_insert_even_without_prior_write (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_first_claim_conflict_rolls_back_insert_even_without_prior_write) ... ok
+test_grace_batch_stays_on_task_date_while_cooldown_uses_current_date (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest.test_grace_batch_stays_on_task_date_while_cooldown_uses_current_date) ... ok
+
+----------------------------------------------------------------------
+Ran 230 tests in 33.806s
+
+OK

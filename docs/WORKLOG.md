@@ -1,5 +1,17 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-26 — 网页背词两项补测完成，准备审查分支推送
+
+用户已授权仅commit/push任务分支跑CI。关闭开关真实身份11路由全部403/0SQL；A02同fixture在历史f81a5e4与当前off/on完整HTTP逐字段一致，双Python再生相同。双Python各230+20日期、Node58、Ruff/diff通过；产品未变，CI显式Node/判分/日期。新增branch-review/prepush证据与4个fixtures，两树两交接更新；提交/推送CI结果随后补记。不动main、不部署不开启；真设备门槛仍待。详见CODEX_HANDOFF顶部。
+
+## 2026-11-26 — 补全给Claude的网页背词验证正文
+
+复核原日志与30文件manifest全部一致，无重跑或产品改动。新增完整claude-verification-paste.md、证据复核器/JSON，README更正为实现完成但A01–A14未全验收；列清原生缩放/真实长按IME/订正F5/音频超时/真离线/微信及老师家长UI等缺口，不将代理视口或503当真实环境验证。实施树f81a5e4原8M25U、资料main6ded原8M27U/并行记录保留；两树两交接已更新。仅本机未commit/push/deploy，未将第三方推送建议当用户授权。详见CODEX_HANDOFF顶部。
+
+## 2026-11-26 — 网页背词本地实现完成，未发布
+
+用户批准§9九项后，从fresh origin/main f81a5e4隔离实施于 `/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126`，文档479cab8a只读提取未合并。现有任务列表接入新背词页，11端点/6题型/订正复习/共享结算完成，默认off。双Python各226回归+20日期、Node58、静态检查及本机合成浏览器完整学习/故障恢复通过；3.10旧测试UTC用标准别名入口，原生缩放/微信真机等未验收项明确保留。修复反馈ID、阶段标记、复习计时和跨题音频。实施树8M/25U、旧main6ded资料树原8M/27U，均0 staged；旧树仅两交接变化。全部本轮实现/报告仅本机、未commit/push/deploy/生产写入/小程序发布。精确命令、SHA、截图、验证边界及下一步见CODEX_HANDOFF和实施树报告README。
+
 ## 2026-11-22 — 后台侧栏 Logo 已部署
 
 用户明确授权后产品b68d49d8从e9d1069a基线commit并原子push任务分支/main，Deploy44979890266成功。11:17:56CST只读回读HEAD/8SHA/5公网资源/1worker6threads5002/active/0自动重启与匿名入口通过；7Node、spell queue守卫及原20浏览器场景保持，独审无阻塞。报告和两交接skip-ci共享不重复部署，main/分支CI均success，业务全过、既有advisory lint失败保留；无本任务数据库/小程序变更。旧主main6ded77d2原7M/24U及并行D3记录保留，实施树及精确命令见CODEX_HANDOFF。

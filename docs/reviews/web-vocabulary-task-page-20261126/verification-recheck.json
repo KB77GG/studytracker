@@ -1,0 +1,90 @@
+{
+  "purpose": "Verify unchanged source and existing logs; not a fresh test run",
+  "manifest_file_count": 30,
+  "mismatches": [],
+  "py310_test_count_by_module": {
+    "tests.test_task_plan_item_sync": 5,
+    "tests.test_vocabulary_task_submission": 6,
+    "tests.test_practice_student_identity": 9,
+    "tests.test_practice_vocabulary_tasks": 3,
+    "tests.test_practice_vocabulary_web": 7,
+    "tests.test_practice_vocabulary_routes": 26,
+    "tests.test_practice_vocabulary_task_list": 5,
+    "tests.test_practice_vocabulary_adversarial": 6,
+    "tests.test_vocabulary_group_learning": 31,
+    "tests.test_vocabulary_group_learning_api": 10,
+    "tests.test_vocabulary_autonomous_review": 37,
+    "tests.test_vocabulary_flow_backlog_gate": 5,
+    "tests.test_auto_student_accounts": 13,
+    "tests.test_miniprogram_grading": 6,
+    "tests.test_task_date_gate_display_contract": 5,
+    "tests.test_vocabulary_error_review_integration": 24,
+    "tests.test_vocabulary_numeric_learning": 11,
+    "tests.test_vocabulary_numeric_review": 9,
+    "tests.test_vocabulary_stage2_adversarial": 8
+  },
+  "py310_total": 226,
+  "logs": {
+    "full-py313": {
+      "sha256": "e816031775d985077a076c368c88fe99c9bd178cafc7b86b1ad9dd57b07faa79",
+      "tail": [
+        "ResourceWarning: Enable tracemalloc to get the object allocation traceback",
+        "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1842: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e0675b0>",
+        "  pi[eps_col].add(metrics)",
+        "ResourceWarning: Enable tracemalloc to get the object allocation traceback",
+        "----------------------------------------------------------------------",
+        "Ran 226 tests in 29.723s",
+        "",
+        "OK"
+      ]
+    },
+    "full-py310": {
+      "sha256": "c2870f5ceac79bc43ff82c270fedb3ade913fa189beeca651f317eb50816ae03",
+      "tail": [
+        "test_fallback_order_null_sense_representative_and_ties_match_legacy (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest) ... ok",
+        "test_first_claim_conflict_rolls_back_insert_even_without_prior_write (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest) ... ok",
+        "test_grace_batch_stays_on_task_date_while_cooldown_uses_current_date (tests.test_vocabulary_stage2_adversarial.VocabularyStage2AdversarialTest) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 226 tests in 32.947s",
+        "",
+        "OK"
+      ]
+    },
+    "date-py313": {
+      "sha256": "d4827b03dfc08b5a95ca1e1f3f18fbbf712ed02f6a8e00de18067d3b63d0897b",
+      "tail": [
+        "....................                                                     [100%]",
+        "20 passed in 0.49s"
+      ]
+    },
+    "date-py310": {
+      "sha256": "fd3287ae817bf44d50af8ac80c09fa4ea2d10127bf8187b54e8ae8180ed210e7",
+      "tail": [
+        "....................                                                     [100%]",
+        "20 passed in 0.39s"
+      ]
+    },
+    "full-node": {
+      "sha256": "19fafe70b548479e2dc26baf7700443790468d91ecf41564e833d0582b65bed3",
+      "tail": [
+        "ℹ tests 58",
+        "ℹ suites 0",
+        "ℹ pass 58",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 130.299917"
+      ]
+    }
+  },
+  "not_completed": [
+    "Native browser 125/150 percent zoom",
+    "Real keyboard long hold and OS Chinese IME candidate confirmation",
+    "Browser refresh specifically while awaiting correction",
+    "Player slow load / eight-second timeout test",
+    "True offline / transport-level lost-response refresh",
+    "Real WeChat client switching and teacher/parent UI inspection"
+  ]
+}

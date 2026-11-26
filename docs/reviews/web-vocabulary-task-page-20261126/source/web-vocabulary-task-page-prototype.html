@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<!-- 设计原型：网页背词任务页各状态。产品页样式在 .pv 作用域内，供 static/css/practice_vocabulary.css 参考。示例词与数字均为样例。 -->
+<title>网页背词任务页</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout concept: a review bench. The left column lists states, the middle shows the 1:1 product
+   screen scaled to fit, and notes sit underneath. The product screen is light-only and scoped to .pv
+   (its own tokens follow DESIGN.md's Student palette); the surrounding chrome follows the viewer's theme. */
+:root {
+  --bg: #F1F4F3;
+  --panel: #FFFFFF;
+  --ink: #15201F;
+  --muted: #586866;
+  --line: #D9E1DF;
+  --accent: #20756F;
+  --accent-soft: #E2F1EE;
+  --chip: #E8EEEC;
+  --font-ui: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1413; --panel: #151E1D; --ink: #E3EBE9; --muted: #95A6A3; --line: #283432;
+    --accent: #5BBDB2; --accent-soft: #19312E; --chip: #1D2827; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1413; --panel: #151E1D; --ink: #E3EBE9; --muted: #95A6A3; --line: #283432;
+  --accent: #5BBDB2; --accent-soft: #19312E; --chip: #1D2827; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); line-height: 1.5; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
+
+.doc {
+  max-width: 1720px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 22px 48px;
+}
+.doc-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; }
+.doc-title { margin: 0; font-size: 22px; font-weight: 750; letter-spacing: 0; text-wrap: balance; }
+.doc-sub { margin: 4px 0 0; color: var(--muted); font-size: 13.5px; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--chip); border: 1px solid var(--line); }
+.seg button { border: 0; background: transparent; padding: 6px 12px; border-radius: 7px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+.doc-body { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 22px; margin-top: 18px; align-items: start; }
+.scene-nav { min-width: 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: grid; gap: 14px; max-height: calc(100vh - 24px); overflow: auto; padding-right: 4px; }
+.scene-group h2 { margin: 0 0 6px; font-size: 11.5px; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.scene-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.scene-group button {
+  width: 100%; text-align: left; border: 0; background: transparent; padding: 6px 10px; border-radius: 8px;
+  font-size: 13.5px; color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; gap: 8px;
+}
+.scene-group button:hover { background: var(--chip); }
+.scene-group button[aria-current="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 650; }
+.scene-group code { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+
+.bench { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.urlbar {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--line); border-bottom: 0;
+  border-radius: 12px 12px 0 0; background: var(--panel); font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+}
+.urlbar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: inline-block; }
+.urlbar span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.urlbar b { margin-left: auto; font-weight: 600; white-space: nowrap; }
+.viewport { border: 1px solid var(--line); border-radius: 0 0 12px 12px; overflow: hidden; background: var(--panel); }
+.frame-shell { position: relative; overflow: hidden; }
+.frame { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.note { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.note h3 { margin: 0 0 6px; font-size: 12px; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+.note ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 13.5px; }
+.note code { font-family: var(--font-mono); font-size: 12px; background: var(--chip); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.scene-name { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.scene-name h2 { margin: 0; font-size: 17px; font-weight: 700; }
+.scene-name span { color: var(--muted); font-size: 13px; }
+
+.demo-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.demo-tools label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.demo-tools .tool-btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 12px; font-size: 13px; cursor: pointer; }
+.keylog { flex: 1 1 320px; min-width: 0; display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.keylog span { background: var(--chip); border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+.keylog span.ok { color: var(--accent); }
+
+@media (max-width: 1100px) { .notes { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 860px) {
+  .doc-body { grid-template-columns: minmax(0, 1fr); }
+  .scene-nav { position: static; max-height: none; display: flex; overflow-x: auto; gap: 18px; padding-bottom: 6px; }
+  .scene-group { flex: 0 0 auto; }
+  .scene-group ul { display: flex; gap: 4px; }
+  .scene-group button { white-space: nowrap; }
+  .scene-group code { display: none; }
+  .notes { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ============ Product screen (light only, scoped) ============ */
+.pv {
+  --pv-canvas: #F4F1EA; --pv-surface: #FFFEFA; --pv-surface-cool: #F7FAF9; --pv-border: #E3E8EE; --pv-border-strong: #D0D5DD;
+  --pv-ink: #18243A; --pv-ink-muted: #667085; --pv-ink-subtle: #98A2B3;
+  --pv-primary: #20756F; --pv-primary-strong: #145C57; --pv-primary-soft: #E6F5F2;
+  --pv-success: #16A34A; --pv-success-ink: #166534; --pv-success-soft: #DCFCE7;
+  --pv-warning: #D97706; --pv-warning-ink: #92400E; --pv-warning-soft: #FEF3C7;
+  --pv-danger: #DC2626; --pv-danger-ink: #991B1B; --pv-danger-soft: #FEE2E2;
+  --pv-neutral-soft: #EEF1F4; --pv-on-primary: #FFFFFF; --pv-toast: #18243A;
+  --pv-font-ui: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --pv-font-entry: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", serif;
+  --pv-font-ipa: "Lucida Sans Unicode", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --pv-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  container-type: inline-size;
+  position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--pv-canvas); color: var(--pv-ink); font-family: var(--pv-font-ui); font-size: 15px; line-height: 1.5;
+  color-scheme: light;
+}
+.pv * { box-sizing: border-box; }
+.pv p { margin: 0; }
+.pv button { font-family: var(--pv-font-ui); cursor: pointer; }
+.pv :focus-visible { outline: 3px solid rgba(32,117,111,.38); outline-offset: 2px; }
+
+.pv-head { flex: 0 0 auto; height: 64px; display: flex; align-items: center; gap: 18px; padding: 0 28px; background: var(--pv-surface); border-bottom: 1px solid var(--pv-border); }
+.pv-back { height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 10px; border: 1px solid var(--pv-border-strong); border-radius: 9px; background: var(--pv-surface); color: var(--pv-ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.pv-back:hover { border-color: var(--pv-primary); color: var(--pv-primary-strong); }
+.pv-titleblock { min-width: 0; flex: 1; display: flex; align-items: center; gap: 12px; }
+.pv-titleblock h1 { margin: 0; min-width: 0; font-size: 16.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-chips { display: flex; gap: 6px; flex: 0 0 auto; }
+.pv-chip { height: 24px; padding: 0 9px; border-radius: 6px; display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; background: var(--pv-neutral-soft); color: var(--pv-ink-muted); white-space: nowrap; }
+.pv-chip--goal { background: var(--pv-primary-soft); color: var(--pv-primary-strong); }
+.pv-chip--warn { background: var(--pv-warning-soft); color: var(--pv-warning-ink); }
+.pv-chip--done { background: var(--pv-success-soft); color: var(--pv-success-ink); }
+.pv-headright { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.pv-save { height: 30px; display: inline-flex; align-items: center; gap: 7px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--pv-border); background: var(--pv-surface); font-size: 12.5px; font-weight: 600; color: var(--pv-ink-muted); white-space: nowrap; }
+.pv-save .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pv-ink-subtle); }
+.pv-save[data-tone="saving"] { color: var(--pv-primary-strong); }
+.pv-save[data-tone="saved"] { color: var(--pv-success-ink); border-color: #BFE6CC; background: #F3FBF6; }
+.pv-save[data-tone="saved"] .dot { background: var(--pv-success); }
+.pv-save[data-tone="error"] { color: var(--pv-danger-ink); border-color: #F4C1C1; background: #FFF6F6; }
+.pv-save[data-tone="error"] .dot { background: var(--pv-danger); }
+.pv-save button { border: 0; background: transparent; color: inherit; font-weight: 700; text-decoration: underline; padding: 0; font-size: 12.5px; }
+.pv-spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: pvspin .8s linear infinite; flex: 0 0 auto; }
+@keyframes pvspin { to { transform: rotate(360deg); } }
+.pv-kbdbtn { height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid var(--pv-border); border-radius: 8px; background: var(--pv-surface); color: var(--pv-ink-muted); font-size: 12.5px; font-weight: 600; }
+
+.pv-rail { flex: 0 0 auto; padding: 14px 28px 0; }
+.pv-steps { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pv-step { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--pv-ink-subtle); white-space: nowrap; }
+.pv-step + .pv-step::before { content: ""; width: 26px; height: 1px; background: var(--pv-border-strong); }
+.pv-step i { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid currentColor; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 700; }
+.pv-step--done { color: var(--pv-ink-muted); }
+.pv-step--done i { background: var(--pv-ink-muted); border-color: var(--pv-ink-muted); color: var(--pv-on-primary); }
+.pv-step--current { color: var(--pv-primary-strong); }
+.pv-step--current i { background: var(--pv-primary); border-color: var(--pv-primary); color: var(--pv-on-primary); }
+.pv-step small { font-family: var(--pv-font-mono); font-size: 12px; font-weight: 500; color: var(--pv-ink-muted); }
+.pv-railbar { height: 3px; margin-top: 12px; border-radius: 2px; background: var(--pv-border); overflow: hidden; }
+.pv-railbar span { display: block; height: 100%; background: var(--pv-primary); transition: width .3s ease; }
+
+.pv-stage { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 26px 28px 30px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.pv-card { background: var(--pv-surface); border: 1px solid var(--pv-border); border-radius: 18px; box-shadow: 0 1px 2px rgba(24,36,58,.04); }
+.pv-cols { width: 100%; max-width: 1120px; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 22px; align-items: start; }
+.pv-entry { padding: 30px 36px 28px; min-width: 0; }
+.pv-eyebrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12.5px; font-weight: 600; color: var(--pv-ink-muted); }
+.pv-tag { height: 22px; padding: 0 8px; border-radius: 6px; background: var(--pv-neutral-soft); display: inline-flex; align-items: center; font-size: 11.5px; }
+.pv-headword { margin: 18px 0 10px; font-family: var(--pv-font-entry); font-size: 56px; font-size: clamp(44px, 5cqi, 64px); font-weight: 700; line-height: 1.05; letter-spacing: -.005em; overflow-wrap: anywhere; }
+.pv-ipa-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.pv-ipa { font-family: var(--pv-font-ipa); font-size: 18px; color: var(--pv-ink-muted); }
+.pv-meaning { margin-top: 18px !important; font-size: 24px; font-weight: 650; }
+.pv-dots { display: flex; gap: 7px; margin-top: 28px; align-items: center; }
+.pv-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--pv-border-strong); }
+.pv-dots .v { background: var(--pv-primary); }
+.pv-dots .c { background: var(--pv-surface); outline: 2px solid var(--pv-primary); outline-offset: 1px; }
+.pv-dots em { margin-left: 8px; font-style: normal; font-size: 12px; color: var(--pv-ink-muted); }
+.pv-material { padding: 24px 28px; display: grid; gap: 20px; background: var(--pv-surface-cool); min-width: 0; }
+.pv-label { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; color: var(--pv-ink-muted); margin-bottom: 6px; }
+.pv-example { font-family: var(--pv-font-entry); font-size: 20px; line-height: 1.55; }
+.pv-example b { font-weight: 700; box-shadow: inset 0 -.42em 0 var(--pv-primary-soft); }
+.pv-trans { margin-top: 6px !important; color: var(--pv-ink-muted); font-size: 14.5px; }
+.pv-colloc { font-family: var(--pv-font-entry); font-size: 18px; }
+.pv-note { font-size: 14.5px; }
+.pv-sparse { color: var(--pv-ink-muted); font-size: 14px; padding: 14px 16px; border: 1px dashed var(--pv-border-strong); border-radius: 12px; }
+
+.pv-audio { height: 40px; display: inline-flex; align-items: center; gap: 9px; padding: 0 14px 0 5px; border-radius: 999px; border: 1px solid var(--pv-border); background: var(--pv-surface); color: var(--pv-ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.pv-audio .ic { width: 30px; height: 30px; border-radius: 50%; background: var(--pv-primary); color: var(--pv-on-primary); display: grid; place-items: center; flex: 0 0 auto; }
+.pv-audio--lg { height: 64px; padding: 0 24px 0 8px; font-size: 16px; gap: 12px; }
+.pv-audio--lg .ic { width: 48px; height: 48px; }
+.pv-audio[data-state="loading"] .ic { background: var(--pv-primary-soft); color: var(--pv-primary-strong); }
+.pv-audio[data-state="error"] { border-color: #F4C1C1; color: var(--pv-danger-ink); }
+.pv-audio[data-state="error"] .ic { background: var(--pv-danger); }
+.pv-bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; }
+.pv-bars b { width: 3px; background: currentColor; border-radius: 1px; animation: pvbar 1s ease-in-out infinite; }
+.pv-bars b:nth-child(2) { animation-delay: .15s; } .pv-bars b:nth-child(3) { animation-delay: .3s; }
+@keyframes pvbar { 0%, 100% { height: 4px; } 50% { height: 14px; } }
+.pv-playcount { font-size: 12.5px; color: var(--pv-ink-muted); }
+
+.pv-qwrap { width: 100%; max-width: 760px; display: grid; gap: 14px; }
+.pv-q { padding: 28px 40px 32px; }
+.pv-qkind { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; color: var(--pv-ink-muted); }
+.pv-prompt-zh { margin-top: 22px !important; font-size: 34px; font-weight: 700; line-height: 1.3; }
+.pv-prompt-word { margin: 20px 0 6px; font-family: var(--pv-font-entry); font-size: 52px; font-weight: 700; line-height: 1.1; }
+.pv-instr { margin-top: 8px !important; color: var(--pv-ink-muted); font-size: 14px; }
+.pv-sentence { margin-top: 22px !important; font-family: var(--pv-font-entry); font-size: 24px; line-height: 1.6; }
+.pv-sentence b { font-weight: 700; box-shadow: inset 0 -.42em 0 var(--pv-primary-soft); }
+.pv-blank { display: inline-block; min-width: 4.2em; border-bottom: 2px solid var(--pv-ink); transform: translateY(-.12em); }
+.pv-transbox { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: var(--pv-surface-cool); border: 1px solid var(--pv-border); font-size: 14.5px; }
+.pv-transbox span { color: var(--pv-ink-muted); font-size: 12px; font-weight: 700; margin-right: 8px; }
+.pv-audio-center { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 22px; }
+
+.pv-line { margin-top: 32px; position: relative; }
+.pv-line input, .pv-fakeinput {
+  width: 100%; border: 0; border-bottom: 2px solid var(--pv-ink); background: transparent; color: var(--pv-ink);
+  font: 500 32px/1.3 var(--pv-font-ui); letter-spacing: .02em; padding: 6px 2px 10px; outline: none; border-radius: 0;
+}
+.pv-line input::placeholder { color: var(--pv-ink-subtle); font-weight: 400; }
+.pv-line input:focus, .pv-fakeinput.is-focus { border-bottom-color: var(--pv-primary); box-shadow: 0 2px 0 var(--pv-primary); }
+.pv-line input[readonly] { color: var(--pv-ink-muted); }
+.pv-fakeinput { min-height: 59px; display: flex; align-items: flex-end; }
+.pv-fakeinput .ime { text-decoration: underline dotted var(--pv-primary); text-underline-offset: 6px; }
+.pv-fakeinput .caret { width: 2px; height: 34px; background: var(--pv-primary); margin-left: 2px; animation: pvblink 1s steps(1) infinite; }
+@keyframes pvblink { 50% { opacity: 0; } }
+.pv-imebar { position: absolute; left: 120px; top: 70px; display: flex; gap: 14px; padding: 8px 14px; border-radius: 10px; background: #FFFFFF; border: 1px solid var(--pv-border-strong); box-shadow: 0 8px 24px rgba(24,36,58,.14); font-size: 16px; }
+.pv-imebar b { color: var(--pv-primary-strong); }
+.pv-linehint { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--pv-ink-muted); }
+.pv-badge { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 6px; background: var(--pv-primary-soft); color: var(--pv-primary-strong); font-size: 12px; font-weight: 600; }
+.pv-inline-alert { margin-top: 14px; display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: #FFF6F6; border: 1px solid #F4C1C1; color: var(--pv-danger-ink); font-size: 14px; }
+
+.pv-options { display: grid; gap: 10px; margin-top: 24px; }
+.pv-opt { width: 100%; display: grid; grid-template-columns: 30px minmax(0, 1fr) 22px; align-items: center; gap: 14px; min-height: 56px; padding: 10px 16px; border: 1.5px solid var(--pv-border); border-radius: 12px; background: var(--pv-surface); color: var(--pv-ink); font-size: 17px; text-align: left; }
+.pv-opt:hover { border-color: var(--pv-border-strong); }
+.pv-opt kbd { width: 28px; height: 28px; border-radius: 8px; background: var(--pv-surface-cool); border: 1px solid var(--pv-border); display: grid; place-items: center; font: 600 13px var(--pv-font-mono); color: var(--pv-ink-muted); }
+.pv-opt .mark { color: var(--pv-primary); opacity: 0; display: grid; place-items: center; }
+.pv-opt[aria-checked="true"] { border-color: var(--pv-primary); background: var(--pv-primary-soft); }
+.pv-opt[aria-checked="true"] kbd { background: var(--pv-primary); border-color: var(--pv-primary); color: var(--pv-on-primary); }
+.pv-opt[aria-checked="true"] .mark { opacity: 1; }
+.pv-opt.is-correct { border-color: var(--pv-success); background: var(--pv-success-soft); }
+.pv-opt.is-correct .mark { opacity: 1; color: var(--pv-success-ink); }
+.pv-opt.is-wrong { border-color: var(--pv-danger); background: var(--pv-danger-soft); }
+.pv-opt.is-wrong .mark { opacity: 1; color: var(--pv-danger-ink); }
+
+.pv-verdict { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; font-size: 16px; font-weight: 700; }
+.pv-verdict .ic { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: var(--pv-on-primary); flex: 0 0 auto; }
+.pv-verdict small { margin-left: auto; font-size: 13px; font-weight: 600; opacity: .9; text-align: right; }
+.pv-verdict--ok { background: var(--pv-success-soft); color: var(--pv-success-ink); } .pv-verdict--ok .ic { background: var(--pv-success); }
+.pv-verdict--bad { background: var(--pv-danger-soft); color: var(--pv-danger-ink); } .pv-verdict--bad .ic { background: var(--pv-danger); }
+.pv-verdict--forgot { background: var(--pv-neutral-soft); color: var(--pv-ink); } .pv-verdict--forgot .ic { background: var(--pv-ink-muted); }
+.pv-verdict--warn { background: var(--pv-warning-soft); color: var(--pv-warning-ink); } .pv-verdict--warn .ic { background: var(--pv-warning); }
+.pv-answers { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px 20px; align-items: baseline; margin: 22px 0 0; }
+.pv-answers dt { font-size: 13px; color: var(--pv-ink-muted); font-weight: 600; }
+.pv-answers dd { margin: 0; font-size: 28px; line-height: 1.6; overflow-wrap: anywhere; }
+.pv-answers dd.correct { font-family: var(--pv-font-entry); font-weight: 700; }
+.pv-answers dd.zh { font-size: 22px; }
+.pv-proof { letter-spacing: .05em; display: inline-block; }
+.pd-del { color: var(--pv-danger-ink); text-decoration: line-through; text-decoration-color: var(--pv-danger); text-decoration-thickness: 2px; }
+.pd-ins { color: var(--pv-primary); font-weight: 700; text-decoration: underline dotted var(--pv-primary); text-decoration-thickness: 2px; text-underline-offset: 7px; }
+.pv-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; font-size: 12px; color: var(--pv-ink-muted); }
+.pv-fb { margin-top: 20px; padding: 16px 18px; border-radius: 14px; background: var(--pv-surface-cool); border: 1px solid var(--pv-border); display: grid; gap: 8px; }
+.pv-fb-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pv-fb-word { font-family: var(--pv-font-entry); font-size: 26px; font-weight: 700; }
+.pv-fb .pv-example { font-size: 17px; }
+.pv-attempts { margin-top: 18px; display: grid; gap: 8px; }
+.pv-attempts div { display: flex; gap: 12px; align-items: center; font-size: 15px; }
+.pv-attempts span { width: 64px; color: var(--pv-ink-muted); font-size: 13px; }
+
+.pv-inter { width: 100%; max-width: 620px; padding: 38px 44px 40px; margin-top: 18px; }
+.pv-inter h2 { margin: 8px 0 10px; font-size: 28px; line-height: 1.25; text-wrap: balance; }
+.pv-inter p { color: var(--pv-ink-muted); font-size: 15px; max-width: 46ch; }
+.pv-inter .pv-btn { margin-top: 26px; }
+.pv-inter--danger { border-color: #F4C1C1; }
+.pv-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.pv-stat { padding: 14px 16px; border-radius: 12px; background: var(--pv-surface-cool); border: 1px solid var(--pv-border); min-width: 0; }
+.pv-stat b { display: block; font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.pv-stat span { font-size: 13px; color: var(--pv-ink-muted); }
+.pv-icon-lg { width: 44px; height: 44px; border-radius: 12px; background: var(--pv-neutral-soft); color: var(--pv-ink-muted); display: grid; place-items: center; }
+
+.pv-result { width: 100%; max-width: 1120px; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 22px; align-items: start; }
+.pv-score { padding: 30px 36px; }
+.pv-score .big { font-size: 72px; font-weight: 750; font-variant-numeric: tabular-nums; line-height: 1; margin-top: 14px; letter-spacing: -.02em; }
+.pv-score .frac { margin-top: 8px !important; font-size: 16px; color: var(--pv-ink-muted); }
+.pv-score .note { margin-top: 22px !important; font-size: 14px; color: var(--pv-ink-muted); line-height: 1.6; padding-top: 16px; border-top: 1px solid var(--pv-border); }
+.pv-list { padding: 22px 24px; }
+.pv-list h3 { margin: 0 0 12px; font-size: 15px; }
+.pv-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--pv-border); }
+.pv-row b { font-family: var(--pv-font-entry); font-size: 19px; }
+.pv-row p { font-size: 13.5px; color: var(--pv-ink-muted); }
+.pv-row .pv-audio { height: 34px; padding: 0 10px 0 4px; font-size: 12.5px; }
+.pv-row .pv-audio .ic { width: 26px; height: 26px; }
+
+.pv-bar { flex: 0 0 auto; height: 76px; display: flex; align-items: center; gap: 12px; padding: 0 28px; background: var(--pv-surface); border-top: 1px solid var(--pv-border); }
+.pv-bar .left, .pv-bar .right { display: flex; gap: 10px; flex: 0 0 auto; }
+.pv-bar .hint { flex: 1; min-width: 0; text-align: center; font-size: 12.5px; color: var(--pv-ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-bar .hint kbd, .pv-kbd { font: 600 11.5px var(--pv-font-mono); padding: 1px 6px; border-radius: 5px; border: 1px solid var(--pv-border); background: var(--pv-surface-cool); color: var(--pv-ink); }
+.pv-btn { height: 46px; min-width: 132px; padding: 0 18px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 11px; border: 1px solid transparent; font-size: 15px; font-weight: 650; white-space: nowrap; }
+.pv-btn--primary { background: var(--pv-primary); color: var(--pv-on-primary); min-width: 156px; }
+.pv-btn--primary:hover { background: var(--pv-primary-strong); }
+.pv-btn--secondary { background: var(--pv-surface); border-color: var(--pv-border-strong); color: var(--pv-ink); }
+.pv-btn--ghost { background: transparent; border-color: var(--pv-border); color: var(--pv-ink-muted); min-width: 96px; }
+.pv-btn--danger { background: var(--pv-danger); color: var(--pv-on-primary); }
+.pv-btn kbd { font: 600 11.5px var(--pv-font-mono); padding: 1px 6px; border-radius: 5px; background: rgba(255,255,255,.2); }
+.pv-btn--secondary kbd, .pv-btn--ghost kbd { background: var(--pv-surface-cool); border: 1px solid var(--pv-border); }
+.pv-btn[disabled] { opacity: .5; cursor: not-allowed; }
+.pv-btn[aria-busy="true"] { opacity: .85; cursor: progress; }
+
+.pv-toast { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center; padding: 10px 16px; border-radius: 10px; background: var(--pv-toast); color: var(--pv-on-primary); font-size: 13.5px; box-shadow: 0 10px 28px rgba(24,36,58,.25); white-space: nowrap; z-index: 5; }
+.pv-pop { position: absolute; top: 10px; right: 24px; width: 380px; padding: 16px 18px; z-index: 6; box-shadow: 0 18px 40px rgba(24,36,58,.18); }
+.pv-pop h3 { margin: 0 0 10px; font-size: 14px; }
+.pv-pop dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 14px; font-size: 13px; }
+.pv-pop dt { white-space: nowrap; } .pv-pop dd { margin: 0; color: var(--pv-ink-muted); }
+
+@container (max-width: 1120px) {
+  .pv-head { padding: 0 20px; gap: 14px; }
+  .pv-rail, .pv-bar { padding-left: 20px; padding-right: 20px; }
+  .pv-stage { padding: 22px 20px 26px; }
+  .pv-cols, .pv-result { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
+  .pv-kbdbtn span { display: none; }
+}
+</style>
+
+<div class="doc">
+  <header class="doc-head">
+    <div>
+      <h1 class="doc-title">网页背词任务页 · 电脑端状态稿</h1>
+      <p class="doc-sub">对应实施计划 §4。左侧切换状态；“试一试”可以用键盘走完一个综合训练小组，验证输入法、长按 Enter 和“先松开再继续”的规则。产品页只做浅色；示例词和数字都是样例。</p>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="模式">
+        <button type="button" id="modeGallery" aria-pressed="true">状态画廊</button>
+        <button type="button" id="modeDemo" aria-pressed="false">试一试</button>
+      </div>
+      <div class="seg" role="group" aria-label="视口宽度">
+        <button type="button" data-w="1440" aria-pressed="false">1440</button>
+        <button type="button" data-w="1280" aria-pressed="true">1280</button>
+        <button type="button" data-w="1024" aria-pressed="false">1024</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc-body">
+    <nav class="scene-nav" id="sceneNav" aria-label="页面状态"></nav>
+    <main class="bench">
+      <div class="scene-name"><h2 id="sceneTitle">熟悉材料</h2><span id="sceneSub"></span></div>
+      <div class="demo-tools" id="demoTools" hidden>
+        <label><input type="checkbox" id="demoOffline"> 下一次提交模拟断网</label>
+        <button type="button" class="tool-btn" id="demoRestart">重新开始</button>
+        <div class="keylog" id="keylog" aria-live="polite"><span>按键判定会显示在这里</span></div>
+      </div>
+      <div>
+        <div class="urlbar"><i></i><i></i><i></i><span>studytracker.xin/practice/vocabulary/tasks/18426</span><b id="vwLabel">1280 × 760</b></div>
+        <div class="viewport" id="viewport">
+          <div class="frame-shell" id="frameShell"><div class="frame" id="frame"></div></div>
+        </div>
+      </div>
+      <section class="notes" aria-label="状态说明">
+        <div class="note"><h3>进入条件与数据</h3><ul id="noteEnter"></ul></div>
+        <div class="note"><h3>键盘与焦点</h3><ul id="noteKeys"></ul></div>
+        <div class="note"><h3>实现要点</h3><ul id="noteImpl"></ul></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const svg = (d, w = 14, extra = '') => `<svg viewBox="0 0 24 24" width="${w}" height="${w}" aria-hidden="true" ${extra}>${d}</svg>`;
+  const I = {
+    play: svg('<path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/>'),
+    playLg: svg('<path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/>', 20),
+    check: svg('<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'),
+    cross: svg('<path d="M7 7l10 10M17 7L7 17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>'),
+    dash: svg('<path d="M7 12h10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>'),
+    pen: svg('<path d="M5 19l3.6-.8 9.5-9.5-2.8-2.8-9.5 9.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>'),
+    back: svg('<path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>', 16),
+    kbd: svg('<rect x="3" y="6.5" width="18" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>', 15),
+    info: svg('<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>', 16),
+    lock: svg('<rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/>', 20),
+    clock: svg('<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>', 20),
+    user: svg('<circle cx="12" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 19.5c1.4-3.3 4-5 7-5s5.6 1.7 7 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>', 20),
+    alert: svg('<path d="M12 4l9 16H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>', 18),
+    review: svg('<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>', 20)
+  };
+
+  // ---------- sample lexicon (examples, not student data) ----------
+  const LEX = {
+    considerable: { word: 'considerable', ipa: '/kənˈsɪdərəbl/', meaning: '相当大的；可观的', colloc: 'a considerable amount of …', ex: ['The project required a ', 'considerable', ' amount of time.'], exZh: '这个项目需要相当多的时间。', note: '多修饰 amount、number、effort 等名词。' },
+    sustain: { word: 'sustain', ipa: '/səˈsteɪn/', meaning: '维持；支撑', colloc: 'sustain growth', ex: ['Few companies can ', 'sustain', ' such rapid growth for long.'], exZh: '很少有公司能长期维持如此快速的增长。', note: '宾语多为增长、努力、生命等持续性的事物。' },
+    allocate: { word: 'allocate', ipa: '/ˈæləkeɪt/', meaning: '分配；拨出', colloc: 'allocate funds to …', ex: ['The council ', 'allocated', ' more money to public transport.'], exZh: '市议会给公共交通拨了更多资金。', note: '常用结构：allocate A to B。' },
+    inevitable: { word: 'inevitable', ipa: '/ɪnˈevɪtəbl/', meaning: '不可避免的', colloc: 'an inevitable consequence', ex: ['Some delay was ', 'inevitable', ' given the weather.'], exZh: '考虑到天气，出现一些延误是不可避免的。', note: '' },
+    deteriorate: { word: 'deteriorate', ipa: '/dɪˈtɪəriəreɪt/', meaning: '恶化；变坏', colloc: 'deteriorate rapidly', ex: ['Her health ', 'deteriorated', ' rapidly after the winter.'], exZh: '冬天过后她的健康状况迅速恶化。', note: '' },
+    threshold: { word: 'threshold', ipa: '/ˈθreʃhəʊld/', meaning: '门槛；阈值', colloc: '', ex: null, exZh: '', note: '' }
+  };
+  const TITLE = '剑桥雅思核心词汇 · 第 41–80 词';
+  const CH = {
+    reading: [['阅读词汇', 'goal'], ['第 2 / 4 组'], ['今日任务']],
+    listening: [['听力词汇', 'goal'], ['第 1 / 5 组'], ['今日任务']],
+    comp: [['综合训练', 'goal'], ['第 3 / 7 组'], ['宽限期内 · 03:00 截止', 'warn']],
+    done: [['阅读词汇', 'goal'], ['已完成', 'done']]
+  };
+  const PHASES = {
+    reading: ['熟悉材料', '主动提取', '语境辨析', '语境产出', '错题再测'],
+    listening: ['熟悉材料', '主动提取', '错题再测'],
+    comp: ['熟悉材料', '主动提取', '语境辨析', '错题再测']
+  };
+
+  // ---------- components ----------
+  function savePill(s) {
+    const [tone, label] = s || ['synced', '已同步'];
+    const lead = tone === 'saving' ? '<span class="pv-spin"></span>' : '<span class="dot"></span>';
+    const tail = tone === 'error' ? ' <button type="button" data-act="retry">重试</button>' : '';
+    return `<span class="pv-save" data-tone="${tone}" role="status" aria-live="polite">${lead}<span>${esc(label)}</span>${tail}</span>`;
+  }
+  function head(o = {}) {
+    const chips = (o.chips || []).map((c) => `<span class="pv-chip${c[1] ? ' pv-chip--' + c[1] : ''}">${esc(c[0])}</span>`).join('');
+    return `<header class="pv-head">
+      <button class="pv-back" type="button" data-act="back">${I.back}<span>返回任务列表</span></button>
+      <div class="pv-titleblock"><h1>${esc(o.title || TITLE)}</h1><div class="pv-chips">${chips}</div></div>
+      <div class="pv-headright">${savePill(o.save)}<button class="pv-kbdbtn" type="button" data-act="kbd" aria-expanded="${o.kbd ? 'true' : 'false'}">${I.kbd}<span>键盘</span></button></div>
+    </header>`;
+  }
+  function rail(goal, current, count, progress) {
+    const steps = PHASES[goal].map((label, i) => {
+      const st = i < current ? 'done' : i === current ? 'current' : 'todo';
+      const mark = st === 'done' ? '✓' : String(i + 1);
+      const small = st === 'current' && count ? ` <small>${esc(count)}</small>` : '';
+      return `<span class="pv-step pv-step--${st}"><i>${mark}</i>${esc(label)}${small}</span>`;
+    }).join('');
+    return `<nav class="pv-rail" aria-label="本组阶段"><div class="pv-steps">${steps}</div><div class="pv-railbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress * 100)}"><span style="width:${Math.round(progress * 100)}%"></span></div></nav>`;
+  }
+  function reviewRail(done, total) {
+    return `<nav class="pv-rail" aria-label="复习进度"><div class="pv-steps"><span class="pv-step pv-step--current"><i>↻</i>今日复习 <small>${done} / ${total}</small></span><span class="pv-step pv-step--todo"><i>→</i>回到本任务</span></div><div class="pv-railbar"><span style="width:${Math.round(done / total * 100)}%"></span></div></nav>`;
+  }
+  function btn(label, o = {}) {
+    const kind = o.kind || 'secondary';
+    const k = o.kbd ? ` <kbd>${esc(o.kbd)}</kbd>` : '';
+    const busy = o.busy ? ' aria-busy="true"' : '';
+    const dis = o.disabled ? ' disabled' : '';
+    const lead = o.busy ? '<span class="pv-spin"></span>' : '';
+    return `<button type="button" class="pv-btn pv-btn--${kind}" ${o.act ? `data-act="${o.act}"` : ''}${busy}${dis}>${lead}<span>${esc(label)}</span>${k}</button>`;
+  }
+  function bar(left, hint, right) {
+    return `<footer class="pv-bar"><div class="left">${(left || []).join('')}</div><div class="hint">${hint || ''}</div><div class="right">${(right || []).join('')}</div></footer>`;
+  }
+  function audio(state = 'idle', label, lg) {
+    const map = {
+      idle: [I.play, label || '播放发音'],
+      loading: ['<span class="pv-spin"></span>', '正在加载…'],
+      playing: ['<span class="pv-bars"><b></b><b></b><b></b></span>', '正在播放'],
+      error: [I.play, '播放失败 · 重试']
+    };
+    const [ic, text] = map[state];
+    return `<button type="button" class="pv-audio${lg ? ' pv-audio--lg' : ''}" data-state="${state}" data-act="audio" aria-label="${esc(text)}"><span class="ic">${lg && state === 'idle' ? I.playLg : ic}</span><span>${esc(text)}</span></button>`;
+  }
+  function dots(total, viewed, current) {
+    let out = '';
+    for (let i = 0; i < total; i++) out += `<span class="${i === current ? 'c' : i < viewed ? 'v' : ''}"></span>`;
+    return `<div class="pv-dots" aria-label="组内浏览进度">${out}<em>已浏览 ${viewed} / ${total}</em></div>`;
+  }
+  function exampleHtml(w) {
+    if (!w.ex) return '';
+    return `${esc(w.ex[0])}<b>${esc(w.ex[1])}</b>${esc(w.ex[2])}`;
+  }
+  function entryCard(w, o = {}) {
+    return `<section class="pv-card pv-entry" aria-label="词条">
+      <div class="pv-eyebrow"><span>组内熟悉 ${o.pos || '3 / 10'}</span><span class="pv-tag">浏览不计分</span></div>
+      <h2 class="pv-headword" lang="en">${esc(w.word)}</h2>
+      <div class="pv-ipa-row"><span class="pv-ipa">${esc(w.ipa)}</span>${audio(o.audio || 'idle')}</div>
+      <p class="pv-meaning">${esc(w.meaning)}</p>
+      ${dots(o.total || 10, o.viewed == null ? 2 : o.viewed, o.current == null ? 2 : o.current)}
+    </section>`;
+  }
+  function materialCard(w) {
+    const parts = [];
+    if (w.ex) parts.push(`<div><div class="pv-label">例句</div><p class="pv-example" lang="en">${exampleHtml(w)}</p>${w.exZh ? `<p class="pv-trans">${esc(w.exZh)}</p>` : ''}</div>`);
+    if (w.colloc) parts.push(`<div><div class="pv-label">搭配</div><p class="pv-colloc" lang="en">${esc(w.colloc)}</p></div>`);
+    if (w.note) parts.push(`<div><div class="pv-label">用法</div><p class="pv-note">${esc(w.note)}</p></div>`);
+    if (!parts.length) return '';
+    return `<section class="pv-card pv-material" aria-label="学习材料">${parts.join('')}</section>`;
+  }
+  function familiarity(w, o) {
+    const mat = materialCard(w);
+    if (!mat) return `<div class="pv-qwrap">${entryCard(w, o)}<p class="pv-sparse">这个词暂时没有例句、搭配和用法，看过词形、读音和释义即可继续。</p></div>`;
+    return `<div class="pv-cols">${entryCard(w, o)}${mat}</div>`;
+  }
+  function qcard(kind, pos, inner) {
+    return `<div class="pv-qwrap"><section class="pv-card pv-q" aria-label="题目"><div class="pv-qkind"><span>${esc(kind)}</span><span>${esc(pos)}</span></div>${inner}</section></div>`;
+  }
+  function line(o = {}) {
+    const attrs = `autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" data-gramm="false"`;
+    const ro = o.readonly ? ' readonly' : '';
+    const input = o.fake
+      ? `<div class="pv-fakeinput is-focus" aria-hidden="true">${o.fake}<i class="caret"></i></div>`
+      : `<input id="${o.id || 'pvAnswer'}" type="text" lang="${o.lang || 'en'}" maxlength="${o.max || 100}" placeholder="${esc(o.ph || '输入答案')}" value="${esc(o.value || '')}" ${attrs}${ro} aria-label="${esc(o.label || '答案')}">`;
+    const hintL = o.hintL == null ? (o.lang === 'zh' ? '输入中文释义，可用输入法' : '空格、连字符、撇号都可以输入') : o.hintL;
+    return `<div class="pv-line">${input}${o.ime || ''}<div class="pv-linehint"><span>${hintL}</span><span>${o.hintR || '<span class="pv-kbd">Enter</span> 提交'}</span></div>${o.alert || ''}</div>`;
+  }
+  function options(items, o = {}) {
+    return `<div class="pv-options" role="radiogroup" aria-label="选项">${items.map((label, i) => {
+      const cls = o.correct === i ? ' is-correct' : o.wrong === i ? ' is-wrong' : '';
+      const mark = o.correct === i ? I.check : o.wrong === i ? I.cross : I.check;
+      return `<button type="button" class="pv-opt${cls}" role="radio" aria-checked="${o.selected === i ? 'true' : 'false'}" tabindex="${(o.selected == null ? i === 0 : o.selected === i) ? 0 : -1}" data-act="opt" data-i="${i}"><kbd>${i + 1}</kbd><span>${esc(label)}</span><span class="mark">${mark}</span></button>`;
+    }).join('')}</div>`;
+  }
+  function verdict(tone, title, small) {
+    const ic = { ok: I.check, bad: I.cross, forgot: I.dash, warn: I.pen }[tone];
+    return `<div class="pv-verdict pv-verdict--${tone}" role="status"><span class="ic">${ic}</span><span>${esc(title)}</span>${small ? `<small>${esc(small)}</small>` : ''}</div>`;
+  }
+  // Proofreading marks: the LCS alignment of the student's spelling against the revealed answer.
+  function proof(student, correct) {
+    const a = student, b = correct, n = a.length, m = b.length;
+    const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) dp[i][j] = a[i].toLowerCase() === b[j].toLowerCase() ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    const ops = []; let i = 0, j = 0;
+    while (i < n || j < m) {
+      if (i < n && j < m && a[i].toLowerCase() === b[j].toLowerCase()) { ops.push(['=', a[i]]); i++; j++; }
+      else if (i < n && j < m && dp[i + 1][j + 1] >= Math.max(dp[i + 1][j], dp[i][j + 1])) { ops.push(['~', a[i], b[j]]); i++; j++; }
+      else if (j < m && (i >= n || dp[i][j + 1] >= dp[i + 1][j])) { ops.push(['+', b[j]]); j++; }
+      else { ops.push(['-', a[i]]); i++; }
+    }
+    return '<span class="pv-proof" lang="en">' + ops.map((op) => {
+      if (op[0] === '=') return esc(op[1]);
+      if (op[0] === '~') return `<del class="pd-del">${esc(op[1])}</del><ins class="pd-ins">${esc(op[2])}</ins>`;
+      if (op[0] === '+') return `<ins class="pd-ins">${esc(op[1])}</ins>`;
+      return `<del class="pd-del">${esc(op[1])}</del>`;
+    }).join('') + '</span>';
+  }
+  const legend = '<div class="pv-legend"><span><ins class="pd-ins">a</ins> 漏写，已补上</span><span><del class="pd-del">a</del> 多写或写错</span></div>';
+  function fbCard(w, o = {}) {
+    return `<div class="pv-fb"><div class="pv-fb-top"><span class="pv-fb-word" lang="en">${esc(w.word)}</span><span class="pv-ipa" style="font-size:15px">${esc(w.ipa)}</span>${audio(o.audio || 'idle', '重播')}</div><p style="font-weight:650">${esc(w.meaning)}</p>${w.ex ? `<p class="pv-example" lang="en">${exampleHtml(w)}</p><p class="pv-trans" style="margin-top:0">${esc(w.exZh)}</p>` : ''}</div>`;
+  }
+  function inter(o) {
+    const stats = o.stats ? `<div class="pv-stats">${o.stats.map((s) => `<div class="pv-stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join('')}</div>` : '';
+    const icon = o.icon ? `<div class="pv-icon-lg">${o.icon}</div>` : '';
+    return `<section class="pv-card pv-inter${o.danger ? ' pv-inter--danger' : ''}">${icon}<div class="pv-eyebrow" style="margin-top:${o.icon ? 16 : 0}px"><span>${esc(o.eyebrow || '')}</span></div><h2>${esc(o.title)}</h2><p>${esc(o.body)}</p>${stats}${o.actions || ''}</section>`;
+  }
+  const toast = (t) => `<div class="pv-toast" role="status">${I.info}<span>${esc(t)}</span></div>`;
+  const kbdHint = (pairs) => pairs.map((p) => `<kbd>${esc(p[0])}</kbd> ${esc(p[1])}`).join('　·　');
+  const BAR_Q = (o = {}) => bar(
+    [btn('忘了', { kind: 'ghost', act: 'forgot', disabled: o.disabled })],
+    kbdHint(o.hint || [['Enter', '提交']]),
+    [btn(o.primary || '提交', { kind: 'primary', kbd: o.busy ? '' : '⏎', act: 'submit', busy: o.busy, disabled: o.disabled })]
+  );
+
+  // ---------- gallery scenes ----------
+  const S = [];
+  const add = (group, id, name, code, build, notes) => S.push({ group, id, name, code, build, notes });
+
+  add('进入与门禁', 'review_gate', '复习门禁', 'review_gate', () => ({
+    head: head({ chips: CH.comp }),
+    rail: reviewRail(0, 12),
+    stage: inter({ icon: I.review, eyebrow: '开始本任务前', title: '先完成今日复习 · 12 题', body: '这是本任务的复习门禁。完成这一批复习后，会自动回到任务。复习题同样按首答记录。', actions: btn('开始复习', { kind: 'primary', kbd: '⏎', act: 'submit' }) }),
+    bar: bar([], '', [])
+  }), {
+    enter: ['任务未开始（无 flow），且 <code>review_preflight(gate_only=True).required</code>', '点击后调用 <code>POST review/claim</code> → <code>claim_today_review(origin_task_id)</code>', '当天已有活动会话时直接恢复，不重复领取'],
+    keys: ['主按钮自动聚焦，Enter 开始', '复习题与任务题共用同一个渲染器和键盘规则'],
+    impl: ['阶段轨换成复习进度；复习结算后前端调 <code>POST sync</code>', '不提供“继续复习”按钮（那是独立复习入口，超出范围）', '答案和订正都显式传 <code>supports_correction=True</code>']
+  });
+  add('进入与门禁', 'future', '尚未开放', 'locked_future', () => ({
+    head: head({ chips: [['阅读词汇', 'goal'], ['11月28日开放']] }), rail: '',
+    stage: inter({ icon: I.lock, eyebrow: '任务日期 11月28日', title: '尚未开放', body: '这个任务从 11月28日 0:00 开始开放，届时可以从任务列表进入学习。', actions: btn('返回任务列表', { kind: 'secondary', act: 'back' }) }),
+    bar: ''
+  }), {
+    enter: ['<code>task_date_access(task).state == "future"</code>', '列表里该卡片在“尚未开放”分组，且为锁定状态'],
+    keys: ['唯一按钮可 Tab 聚焦'],
+    impl: ['GET 页面和 state 均无副作用，不创建 flow', '文案日期来自 <code>access.task_date</code>，不在前端自行推算']
+  });
+  add('进入与门禁', 'expired', '已截止', 'read_only', () => ({
+    head: head({ chips: [['阅读词汇', 'goal'], ['已截止']] }), rail: '',
+    stage: inter({ icon: I.clock, eyebrow: '已于 11月27日 03:00 截止', title: '仅可查看', body: '本任务已过截止时间，不能继续作答。已完成的部分已经保存；如需补做，请联系老师安排。', stats: [['2 / 4', '已完成组数'], ['23', '已首答题数'], ['17', '首答正确']], actions: btn('返回任务列表', { kind: 'secondary', act: 'back' }) }),
+    bar: ''
+  }), {
+    enter: ['<code>access.read_only</code> 且没有 settlement', '数据来自 <code>get_vocabulary_group_queue</code> 的只读分支（不写库）'],
+    keys: ['无作答控件'],
+    impl: ['跨过 03:00 时，下一个写请求会返回 <code>task_expired</code>，页面切到这里，未提交的输入只读保留', '规则不放宽：不提供补交入口']
+  });
+  add('进入与门禁', 'identity', '身份失效', 'identity_missing', () => ({
+    head: head({ chips: [] }), rail: '',
+    stage: inter({ icon: I.user, eyebrow: '学生身份', title: '还没有确认学生身份', body: '请先在练习中心输入学生姓名，或用学生账号登录，再从任务列表进入这个任务。', actions: btn('前往练习中心', { kind: 'primary', act: 'back' }) }),
+    bar: ''
+  }), {
+    enter: ['<code>resolve_practice_student()</code> 抛 <code>identity_missing</code>', '同类状态：<code>ambiguous_student_name</code>（同名）、<code>student_account_missing</code>、<code>staff_mode</code>'],
+    keys: ['主按钮可聚焦'],
+    impl: ['不新增登录页；入口沿用 <code>/practice</code> 的姓名确认或 <code>/login</code>', '任务不属于当前学生时统一返回 404，不区分“不存在”和“不是你的”']
+  });
+  add('进入与门禁', 'staff', '教师 / 课堂模式', 'staff_mode', () => ({
+    head: head({ chips: [] }), rail: '',
+    stage: inter({ icon: I.lock, eyebrow: '当前为课堂模式', title: '不能代学生作答', body: '这个页面会写入学生自己的学习记录。请让学生用自己的身份从任务列表进入。', actions: btn('返回练习中心', { kind: 'secondary', act: 'back' }) }),
+    bar: ''
+  }), {
+    enter: ['staff 角色登录，或 session / Cookie 中 <code>classroom_unlocked</code>', '与 <code>/api/practice/tasks</code> 在教师模式下返回空分组一致'],
+    keys: ['—'],
+    impl: ['403，写端点同样拒绝', '学生账号登录优先于课堂 Cookie（与 app.py 顺序一致）']
+  });
+
+  add('熟悉材料', 'fam', '熟悉材料', 'familiarity', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 0, '3 / 10', .25),
+    stage: familiarity(LEX.considerable, {}),
+    bar: bar([btn('上一词', { kind: 'secondary', kbd: '←', act: 'prev' })], kbdHint([['Enter', '下一词'], ['R', '重播'], ['←', '回看']]), [btn('看过，下一词', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['<code>phase == "familiarity"</code>，词条来自 <code>familiarity[i]</code>', '未浏览的词调用 <code>POST familiarity {queue_token, word_id}</code>；已浏览的词只在本地翻页', '整组浏览完后服务端自动进入主动提取'],
+    keys: ['Enter 或 → 前进；← 回看已浏览的词', 'R 或 ⌥R 重播（焦点不在输入框）', '进入每个词时自动播放一次；浏览器拦截时退回“点击播放”'],
+    impl: ['1024 宽时两栏收为一栏，例句卡落到词条下方', '缺失字段整块隐藏；例句中的目标词加粗并用荧光底标出', '“浏览不计分”标签：看过不等于掌握']
+  });
+  add('熟悉材料', 'fam_sparse', '材料缺失', 'familiarity', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 0, '7 / 10', .65),
+    stage: familiarity(LEX.threshold, { pos: '7 / 10', viewed: 6, current: 6 }),
+    bar: bar([btn('上一词', { kind: 'secondary', kbd: '←', act: 'prev' })], kbdHint([['Enter', '下一词'], ['R', '重播']]), [btn('看过，下一词', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['例句、搭配、用法都为空的词', '服务端 diagnostics 会记录 <code>missing_safe_context_*</code>'],
+    keys: ['同熟悉材料'],
+    impl: ['收为单栏，不留空白卡片', '不生成例句，不显示“暂无”占位卡；一句说明即可', '不阻断：照常可以继续']
+  });
+
+  add('作答', 'q_en_zh', '看英文写中文', 'en_to_zh', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 1, '4 / 10', .4),
+    stage: qcard('主动提取 · 看英文写中文释义', '第 4 / 10 题', `<p class="pv-prompt-word" lang="en">sustain</p><div class="pv-ipa-row"><span class="pv-ipa">/səˈsteɪn/</span>${audio('idle')}</div>${line({ lang: 'zh', max: 200, ph: '输入中文释义' })}`),
+    bar: BAR_Q({ hint: [['Enter', '提交'], ['⌥R', '重播']] })
+  }), {
+    enter: ['<code>mode == "en_to_zh"</code>：<code>prompt.word</code>、<code>prompt.phonetic</code>、<code>audio_tts_url</code>', '提交 <code>POST answers</code>，<code>input_mode="native"</code>'],
+    keys: ['进入题目时输入框自动聚焦', 'Enter：非空提交；为空时提示“请输入答案，或点「忘了」”', '⌥R 重播，并 <code>preventDefault</code>，防止 macOS 输入 ®'],
+    impl: ['<code>lang="zh"</code>，maxlength 200（服务端上限）', '只去掉首尾空白，其余规范化交给服务端', '“忘了”没有单键快捷键，需要点击或 Tab 到按钮']
+  });
+  add('作答', 'q_ime', '中文输入法选词中', 'IME', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 1, '4 / 10', .4),
+    stage: qcard('主动提取 · 看英文写中文释义', '第 4 / 10 题', `<p class="pv-prompt-word" lang="en">sustain</p><div class="pv-ipa-row"><span class="pv-ipa">/səˈsteɪn/</span>${audio('idle')}</div>${line({ fake: '维持；<span class="ime">zhi cheng</span>', ime: '<div class="pv-imebar" aria-hidden="true"><b>1 支撑</b><span>2 支承</span><span>3 指称</span></div>', hintL: '<span class="pv-badge">输入法选词中</span>', hintR: 'Enter 用于确认候选词，不会提交' })}`),
+    bar: BAR_Q({ hint: [['Enter', '确认候选词']] })
+  }), {
+    enter: ['<code>compositionstart</code> 到 <code>compositionend</code> 之间'],
+    keys: ['keydown 时 <code>isComposing</code> 为真或 <code>keyCode === 229</code>：Enter 忽略', 'compositionend 后同一 tick 内的 Enter 也忽略（Safari 的事件顺序）', '“试一试”里可以用真实输入法验证'],
+    impl: ['判定写在 <code>practice_vocabulary_core.js:routeKey()</code>，可以单测', '不承诺能控制所有第三方输入法', '组合中不显示“已保存”，状态胶囊保持不变']
+  });
+  add('作答', 'q_zh_en', '看中文写英文', 'zh_to_en', () => ({
+    head: head({ chips: CH.comp }), rail: rail('comp', 1, '2 / 6', .33),
+    stage: qcard('主动提取 · 看中文写英文', '第 2 / 6 题', `<p class="pv-prompt-zh">分配；拨出</p><p class="pv-instr">根据中文释义填写英文单词或词组</p>${line({ value: 'alloc', ph: '输入英文' })}`),
+    bar: BAR_Q()
+  }), {
+    enter: ['<code>mode == "zh_to_en"</code>（writing、comprehensive 的 form_recall）', '同义词也可能以 <code>context_fill</code> 出现在这个阶段'],
+    keys: ['Enter 提交；数字键、方向键都当作文字输入，不拦截', 'Tab 顺序：输入框 → 忘了 → 提交'],
+    impl: ['<b>作答前不提供音频</b>（读音就是答案）', '<code>autocorrect / autocapitalize / spellcheck</code> 关闭，<code>autocomplete="off"</code>', '不做 A–Z 过滤；maxlength 取 <code>answer_length</code>（100）']
+  });
+  add('作答', 'q_audio_en', '听音拼写', 'audio_to_en', () => ({
+    head: head({ chips: CH.listening }), rail: rail('listening', 1, '9 / 16', .56),
+    stage: qcard('主动提取 · 听音拼写', '第 9 / 16 题', `<div class="pv-audio-center">${audio('playing', '', true)}<span class="pv-playcount">已播放 1 次 · 可重复播放</span></div>${line({ value: 'inevit', ph: '输入听到的单词' })}`),
+    bar: BAR_Q({ hint: [['Enter', '提交'], ['⌥R', '重播']] })
+  }), {
+    enter: ['<code>mode == "audio_to_en"</code>，音频取 <code>prompt.audio_tts_url</code>', 'URL 解析：<code>/dictation/words/{id}/tts</code> → <code>/api/dictation/words/{id}/tts</code>'],
+    keys: ['进入题目时自动播放一次，之后用 ⌥R 或按钮重播（从头播放，不叠加）', '输入框保持焦点，重播不抢焦点'],
+    impl: ['与小程序同难度：<b>不显示音标</b>（服务端虽下发了 phonetic）', '按钮四态：空闲、加载中、播放中、失败；切换时宽度不变', '8 秒没有 canplay 视为失败']
+  });
+  add('作答', 'q_numeric', '数字 / 日期听写', 'audio_to_en · numeric', () => ({
+    head: head({ chips: CH.listening }), rail: rail('listening', 1, '12 / 16', .75),
+    stage: qcard('主动提取 · 听音填写数字或日期', '第 12 / 16 题', `<div class="pv-audio-center">${audio('idle', '播放', true)}<span class="pv-playcount">请按听到的内容填写</span></div>${line({ ph: '例如 1 March 或 15:30', hintL: '提示：日期写成“日 月”，时间用 24 小时制' })}`),
+    bar: BAR_Q({ hint: [['Enter', '提交'], ['⌥R', '重播']] })
+  }), {
+    enter: ['任一目标里的数字词都会强制走 listening 构建', '<code>answer_type == "numeric"</code>，提示语来自 <code>prompt.input_hint</code>'],
+    keys: ['同听音拼写'],
+    impl: ['冒号、空格、斜杠原样提交，判分走 <code>is_numeric_answer_correct</code>', '音频 URL 带 <code>?numeric=1</code>，原样使用', '提示语只用服务端给的 <code>input_hint</code>，样例文字为示意']
+  });
+  add('作答', 'q_audio_zh', '听音选义', 'audio_to_zh', () => ({
+    head: head({ chips: CH.listening }), rail: rail('listening', 1, '10 / 16', .62),
+    stage: qcard('主动提取 · 听音选择中文释义', '第 10 / 16 题', `<div class="pv-audio-center">${audio('idle', '重播', true)}</div>${options(['恶化；变坏', '维持；支撑', '不可避免的', '分配；拨出'], { selected: 1 })}`),
+    bar: BAR_Q({ hint: [['1–4', '选择'], ['Enter', '提交'], ['R', '重播']] })
+  }), {
+    enter: ['<code>mode == "audio_to_zh"</code>；选项来自 <code>question.options</code>', '为空时由适配层在服务端用组内释义回退生成（与小程序 FNV 算法一致）'],
+    keys: ['1–4 选择，↑ / ↓ 移动（roving tabindex），Enter 提交', '焦点不在输入框，所以单键 R 可以重播'],
+    impl: ['<b>提交选项 label 文本</b>（服务端按中文判分），不是 id', 'role=radiogroup，选中时同时用描边、底色和勾号表示', '选项高度 ≥ 56px，点击区域覆盖整行']
+  });
+  add('作答', 'q_choice', '语境辨析', 'context_choice', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 2, '3 / 10', .3),
+    stage: qcard('语境辨析 · 选择词义', '第 3 / 10 题', `<p class="pv-instr" style="margin-top:18px">根据句意选择目标词在此处的正确词义</p><p class="pv-sentence" lang="en">Few companies can <b>sustain</b> such rapid growth for long.</p>${options(['维持；支撑', '分配；拨出', '不可避免的', '恶化；变坏'], { selected: null })}`),
+    bar: BAR_Q({ hint: [['1–4', '选择'], ['Enter', '提交']] })
+  }), {
+    enter: ['<code>mode == "context_choice"</code>：meaning_choice（带 sentence 和 target_word）或 collocation_choice（只有 target_word）', '有产出题时，这道题是 guide，不计分'],
+    keys: ['未选择时按 Enter 提示“请选择答案”，不发请求', '1–4、↑ / ↓、Enter'],
+    impl: ['<b>提交选项 id</b>', '作答前不提供音频', '“是否计分”不在页面上展示，避免学生按计分与否区别对待']
+  });
+  add('作答', 'q_fill', '语境产出', 'context_fill', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 3, '5 / 10', .5),
+    stage: qcard('语境产出 · 例句填词', '第 5 / 10 题', `<p class="pv-instr" style="margin-top:18px">根据例句填写目标词</p><p class="pv-sentence" lang="en">Her health <span class="pv-blank"></span> rapidly after the winter.</p><div class="pv-transbox"><span>句子翻译</span>冬天过后她的健康状况迅速恶化。</div>${line({ value: 'deteriorated', ph: '填写目标词' })}`),
+    bar: BAR_Q()
+  }), {
+    enter: ['<code>mode == "context_fill"</code>：<code>sentence</code>（含 ____）、<code>translation</code>、<code>translation_label</code>', '综合目标里也可能出现在“语境辨析”阶段'],
+    keys: ['同文本题'],
+    impl: ['渲染器只按 mode 分派，不按阶段推断题型', '<code>____</code> 渲染为固定宽度的下划线，不让句子跳动', '作答前不提供音频（会泄露目标词）']
+  });
+
+  add('反馈与订正', 'fb_ok', '答对', 'feedback', () => ({
+    head: head({ chips: CH.comp, save: ['saved', '已保存 14:32'] }), rail: rail('comp', 1, '3 / 6', .5),
+    stage: qcard('主动提取 · 看中文写英文', '第 2 / 6 题', `<div style="margin-top:18px">${verdict('ok', '回答正确', '首答已记录')}</div><dl class="pv-answers"><dt>你的答案</dt><dd lang="en">allocate</dd></dl>${fbCard(LEX.allocate)}`),
+    bar: bar([], kbdHint([['Enter', '继续'], ['R', '重播']]), [btn('继续', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['<code>POST answers</code> 返回 <code>is_correct=true</code>', '反馈卡由适配层补充：词形、音标、释义、搭配、例句、用法、音频'],
+    keys: ['焦点移到“继续”', '用 Enter 提交时，这一下 Enter 还没松开，所以不会直接“继续”；松开后再按才继续'],
+    impl: ['“已保存”只在 2xx 且 ok 之后显示', '点“继续”调用 <code>POST sync</code>，以服务端位置为准']
+  });
+  add('反馈与订正', 'fb_wrong', '答错 · 拼写比对', 'feedback', () => ({
+    head: head({ chips: CH.comp, save: ['saved', '已保存 14:33'] }), rail: rail('comp', 1, '3 / 6', .5),
+    stage: qcard('主动提取 · 看中文写英文', '第 3 / 6 题', `<div style="margin-top:18px">${verdict('bad', '首答错误', '已记录 · 本组稍后再测')}</div><dl class="pv-answers"><dt>你的答案</dt><dd>${proof('alocat', 'allocate')}${legend}</dd><dt>正确答案</dt><dd class="correct" lang="en">allocate</dd></dl>${fbCard(LEX.allocate)}`),
+    bar: bar([], kbdHint([['Enter', '继续']]) + '　·　至少停留 0.5 秒', [btn('继续', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['<code>is_correct=false</code>；<code>revealed_answer</code> 由服务端给出', '综合目标会进一步返回 <code>correction_required</code>，转入订正'],
+    keys: ['错误反馈至少停留 500ms，期间 Enter 不响应', '同样要求先松开 Enter'],
+    impl: ['拼写比对在客户端按 LCS 计算，只在答案已公开后进行', '漏写的字母以主色补在原位并加点状下划线；写错或多写的字母加删除线；读下来正好是正确拼写', '用 <code>&lt;ins&gt;</code> / <code>&lt;del&gt;</code> 标签，读屏软件可读出增删，不只靠颜色']
+  });
+  add('反馈与订正', 'fb_forgot', '忘了', 'response_kind=forgot', () => ({
+    head: head({ chips: CH.reading, save: ['saved', '已保存 14:35'] }), rail: rail('reading', 1, '6 / 10', .6),
+    stage: qcard('主动提取 · 看英文写中文释义', '第 6 / 10 题', `<div style="margin-top:18px">${verdict('forgot', '已标记为忘了', '按未掌握记录 · 本组稍后再测')}</div><dl class="pv-answers"><dt>释义</dt><dd class="zh">不可避免的</dd></dl>${fbCard(LEX.inevitable)}`),
+    bar: bar([], kbdHint([['Enter', '继续']]), [btn('继续', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['点“忘了”→ <code>POST answers {response_kind:"forgot", answer:""}</code>', '服务端记为未掌握，进入再测；“忘了”<b>不触发</b>订正'],
+    keys: ['“忘了”没有单键快捷键（后果明显，避免误触）', '反馈停留规则同答错'],
+    impl: ['前端不能自己跳题，必须等服务端确认后推进', '结算页会列出“标记为忘了的词”（来自 <code>forgot_items</code>）']
+  });
+  add('反馈与订正', 'correction', '订正', 'correction', () => ({
+    head: head({ chips: CH.comp, save: ['saved', '已保存 14:33'] }), rail: rail('comp', 1, '3 / 6', .5),
+    stage: qcard('主动提取 · 订正', '第 3 / 6 题', `<div style="margin-top:18px">${verdict('warn', '订正：照正确答案输入一次', '不计分 · 第 1 / 2 次')}</div><dl class="pv-answers"><dt>正确答案</dt><dd class="correct" lang="en">allocate</dd></dl>${line({ ph: '照着输入一次', hintL: '订正只帮助记忆，不改变首答成绩' , hintR: '<span class="pv-kbd">Enter</span> 提交订正' })}`),
+    bar: bar([], kbdHint([['Enter', '提交订正'], ['R', '重播']]), [btn('提交订正', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['只有综合目标：答错且 <code>supports_correction=True</code> 时返回 <code>correction_required</code>', '<code>POST corrections</code> → <code>submit_vocabulary_group_correction</code>'],
+    keys: ['进入时输入框自动聚焦', 'attempt_id：<code>…:correction:{lqid}:{first|retry}:{n}</code>'],
+    impl: ['网页是第一个声明支持订正的客户端（计划 §9-2）', '最多 2 次；用尽后服务端标记 deferred 并放行', '刷新后 sync 仍停在订正，不会被旧客户端的兼容分支释放']
+  });
+  add('反馈与订正', 'correction_out', '订正用尽', 'correction_exhausted', () => ({
+    head: head({ chips: CH.comp, save: ['saved', '已保存 14:34'] }), rail: rail('comp', 1, '3 / 6', .5),
+    stage: qcard('主动提取 · 订正', '第 3 / 6 题', `<div style="margin-top:18px">${verdict('warn', '订正未通过，已记入待复习', '2 / 2 次')}</div><div class="pv-attempts"><div><span>第 1 次</span>${proof('alocate', 'allocate')}</div><div><span>第 2 次</span>${proof('allocat', 'allocate')}</div></div><dl class="pv-answers"><dt>正确答案</dt><dd class="correct" lang="en">allocate</dd></dl>`),
+    bar: bar([], kbdHint([['Enter', '继续']]), [btn('继续', { kind: 'primary', kbd: '⏎', act: 'submit' })])
+  }), {
+    enter: ['<code>correction_exhausted=true</code>'],
+    keys: ['同反馈'],
+    impl: ['不做第三次输入，不会卡住学生', '文案说“待复习”，不说“掌握”']
+  });
+
+  add('推进', 'retry_intro', '错题再测开场', 'retry', () => ({
+    head: head({ chips: CH.reading }), rail: rail('reading', 4, '0 / 3', 0),
+    stage: inter({ eyebrow: '第 2 组 · 错题再测', title: '3 道题再做一次', body: '刚才答错或标记为忘了的题，现在再测一次。再测只用于巩固，不改变首答成绩。', actions: btn('开始再测', { kind: 'primary', kbd: '⏎', act: 'submit' }) }),
+    bar: ''
+  }), {
+    enter: ['客户端插页：首次进入 <code>phase == "retry"</code> 且有题时显示', '再测题 <code>retry=true</code>，attempt_id 前缀 <code>retry:</code>'],
+    keys: ['Enter 开始（需先松开）'],
+    impl: ['适配层去掉 current_question 里的 <code>revealed_answer</code>、<code>first_answer</code>，再测前不能看到答案', '综合目标的冷却规则由服务端处理，前端不判断']
+  });
+  add('推进', 'group_done', '本组完成', 'group_done', () => ({
+    head: head({ chips: [['阅读词汇', 'goal'], ['第 3 / 4 组'], ['今日任务']], save: ['saved', '已保存 14:41'] }), rail: '',
+    stage: inter({ eyebrow: '第 2 / 4 组完成', title: '接下来是第 3 组', body: '先熟悉 10 个新词，再开始测试。', stats: [['14 / 18', '首答正确'], ['4', '再测完成'], ['1', '仍待复习']], actions: btn('开始第 3 组', { kind: 'primary', kbd: '⏎', act: 'submit' }) }),
+    bar: ''
+  }), {
+    enter: ['客户端插页：<code>group_number</code> 增加时显示', '数字来自适配层透传的 <code>group_results</code> 最后一项'],
+    keys: ['Enter 开始下一组'],
+    impl: ['用“首答正确 / 再测完成 / 仍待复习”，不出现“已掌握”', '不展示排名、积分等无关统计']
+  });
+
+  add('保存与恢复', 'saving', '保存中', 'submitting', () => ({
+    head: head({ chips: CH.comp, save: ['saving', '保存中…'] }), rail: rail('comp', 1, '2 / 6', .33),
+    stage: qcard('主动提取 · 看中文写英文', '第 2 / 6 题', `<p class="pv-prompt-zh">分配；拨出</p><p class="pv-instr">根据中文释义填写英文单词或词组</p>${line({ value: 'allocate', readonly: true })}`),
+    bar: BAR_Q({ busy: true, primary: '提交中…', disabled: true })
+  }), {
+    enter: ['写请求在途（单飞锁）'],
+    keys: ['inFlight 时除 Esc 外所有键都忽略；按钮 <code>disabled</code> 和 <code>aria-busy</code>', '双击、长按 Enter 都不会重复提交'],
+    impl: ['主按钮宽度固定，文字换成“提交中…”时不跳动', '超时 15 秒；自动用同一个 attempt_id 重发 1 次', '发送前把请求写入 sessionStorage 待确认日志']
+  });
+  add('保存与恢复', 'save_failed', '保存失败', 'save_failed', () => ({
+    head: head({ chips: CH.comp, save: ['error', '保存失败'] }), rail: rail('comp', 1, '2 / 6', .33),
+    stage: qcard('主动提取 · 看中文写英文', '第 2 / 6 题', `<p class="pv-prompt-zh">分配；拨出</p><p class="pv-instr">根据中文释义填写英文单词或词组</p>${line({ value: 'allocate', alert: `<div class="pv-inline-alert">${I.alert}<span>网络中断，这次作答还没有保存。输入已保留，网络恢复后点“重试提交”，不会重复计分。</span></div>` })}`),
+    bar: BAR_Q({ primary: '重试提交' })
+  }), {
+    enter: ['超时、断网或 5xx，且自动重试 1 次后仍失败'],
+    keys: ['Enter 重试（同一个 attempt_id）'],
+    impl: ['永远不在未确认时显示“已保存”', '刷新后若待确认日志里的题仍是当前题，先重发，再接受新输入', '保存成功但回包丢失：重发会拿到 <code>idempotent:true</code> 的同一条记录']
+  });
+  add('保存与恢复', 'resynced', '其他窗口已更新', '409 → sync', () => ({
+    head: head({ chips: CH.comp }), rail: rail('comp', 1, '4 / 6', .66),
+    stage: toast('进度已在另一个窗口或设备更新，已同步到最新位置。') + qcard('主动提取 · 看中文写英文', '第 4 / 6 题', `<p class="pv-prompt-zh">维持；支撑</p><p class="pv-instr">根据中文释义填写英文单词或词组</p>${line({ ph: '输入英文' })}`),
+    bar: BAR_Q()
+  }), {
+    enter: ['写请求返回 <code>question_not_current</code>、<code>queue_changed</code>、<code>state_conflict</code> 等 → 自动 sync', '或 BroadcastChannel 收到其他标签页的 <code>advanced</code> 消息后，在页面可见时 sync'],
+    keys: ['同步后重新聚焦新题的输入框'],
+    impl: ['旧回包按 <code>seq</code> 和位置键丢弃，不能覆盖新状态', '同题已在别处提交时（<code>idempotent:true</code> 且答案不同），提示“以下是已保存的结果”']
+  });
+
+  add('结算', 'settling', '结算中', 'settling', () => ({
+    head: head({ chips: CH.reading, save: ['saving', '提交结果中…'] }), rail: '',
+    stage: inter({ eyebrow: '最后一组已完成', title: '正在提交任务结果…', body: '所有作答都已经保存，正在生成本次任务的结果。', actions: btn('提交中…', { kind: 'primary', busy: true, disabled: true }) }),
+    bar: ''
+  }), {
+    enter: ['sync 返回 <code>completed:true</code> 且没有 settlement → 自动 <code>POST settle</code>'],
+    keys: ['无'],
+    impl: ['<code>settle_vocabulary_group_submission</code> = finalize + PlanItem 同步（与小程序共用）', '服务端确认之后才显示“完成”']
+  });
+  add('结算', 'settle_failed', '结算失败', 'settle_failed', () => ({
+    head: head({ chips: CH.reading, save: ['error', '结算未完成'] }), rail: '',
+    stage: inter({ danger: true, icon: I.alert, eyebrow: '最后一步', title: '任务结果还没有提交成功', body: '所有作答都已保存，只差最后一步。网络恢复后点“重试结算”，不会重复计分。', actions: `<div style="display:flex;gap:10px;margin-top:26px">${btn('重试结算', { kind: 'primary', kbd: '⏎', act: 'submit' })}${btn('返回任务列表', { kind: 'secondary', act: 'back' })}</div>` }),
+    bar: ''
+  }), {
+    enter: ['settle 网络失败或 5xx', '<code>retry_incomplete</code> 等 409 不会进入这里，而是 sync 回剩余题目'],
+    keys: ['重试按钮自动聚焦'],
+    impl: ['结算已成功但回包丢失：重试会被门禁拒为 <code>task_completed_read_only</code>，适配层改为只读取回 settlement，返回成功', '离开后再进入，state 仍是 completed 且无 settlement，会再次结算']
+  });
+  add('结算', 'result', '结果回看', 'result', () => ({
+    head: head({ chips: CH.done }), rail: '',
+    stage: `<div class="pv-result"><section class="pv-card pv-score"><div class="pv-eyebrow"><span>首答正确率 · 11月26日完成</span></div><div class="big">82%</div><p class="frac">41 / 50 题首答正确</p><div class="pv-stats"><div class="pv-stat"><b>9</b><span>再测完成</span></div><div class="pv-stat"><b>4</b><span>仍待复习</span></div><div class="pv-stat"><b>1</b><span>资料不足跳过</span></div></div><p class="note">首答成绩已记录。再测只用于巩固，不改变首答成绩。仍待复习的词会进入后续复习。</p></section><section class="pv-card pv-list"><h3>标记为忘了的词 · 3</h3>${[LEX.inevitable, LEX.threshold, LEX.deteriorate].map((w) => `<div class="pv-row"><div><b lang="en">${esc(w.word)}</b><p>${esc(w.meaning)}</p></div>${audio('idle', '发音')}</div>`).join('')}</section></div>`,
+    bar: bar([], '', [btn('返回任务列表', { kind: 'primary', act: 'back' })])
+  }), {
+    enter: ['state 中有 <code>settlement</code>（刚结算完，或已完成的任务再次打开）', '读的是 <code>VocabularyTaskSettlement.result_json</code>，不重新计算'],
+    keys: ['主按钮可聚焦'],
+    impl: ['只读，不再记录首答', '列表里卡片进入“已提交 / 已完成”，显示“正确率 82%”（即首答正确率）', '资料不足跳过数来自 <code>skipped_count</code>']
+  });
+  add('辅助', 'kbd_help', '键盘帮助', 'popover', () => ({
+    head: head({ chips: CH.comp, kbd: true }), rail: rail('comp', 1, '2 / 6', .33),
+    stage: `<section class="pv-card pv-pop" role="dialog" aria-label="键盘操作"><h3>键盘操作</h3><dl>
+      <dt><span class="pv-kbd">Enter</span></dt><dd>提交、继续、下一词（需先松开再按）</dd>
+      <dt><span class="pv-kbd">1</span>–<span class="pv-kbd">4</span></dt><dd>选择题选项（输入框里按数字仍是输入数字）</dd>
+      <dt><span class="pv-kbd">↑</span> <span class="pv-kbd">↓</span></dt><dd>在选项间移动</dd>
+      <dt><span class="pv-kbd">←</span> <span class="pv-kbd">→</span></dt><dd>熟悉材料：回看 / 下一词</dd>
+      <dt><span class="pv-kbd">⌥R</span> / <span class="pv-kbd">Alt+R</span></dt><dd>重播发音（任何时候）</dd>
+      <dt><span class="pv-kbd">R</span></dt><dd>重播发音（不在输入框时）</dd>
+      <dt>忘了</dt><dd>没有快捷键，需要点击或 Tab 到按钮</dd>
+    </dl></section>` + qcard('主动提取 · 看中文写英文', '第 2 / 6 题', `<p class="pv-prompt-zh">分配；拨出</p><p class="pv-instr">根据中文释义填写英文单词或词组</p>${line({ ph: '输入英文' })}`),
+    bar: BAR_Q()
+  }), {
+    enter: ['点页头的“键盘”按钮'],
+    keys: ['Esc 关闭并把焦点还给触发按钮'],
+    impl: ['只列这七条，不做可配置快捷键', '首次进入不自动弹出']
+  });
+
+  // ---------- frame + navigation ----------
+  const H = { 1440: 860, 1280: 760, 1024: 700 };
+  let W = 1280, mode = 'gallery', currentId = 'fam';
+  const frame = document.getElementById('frame');
+  const shell = document.getElementById('frameShell');
+  const viewport = document.getElementById('viewport');
+  const nav = document.getElementById('sceneNav');
+
+  function fit() {
+    const avail = viewport.clientWidth;
+    const s = Math.min(1, avail / W);
+    frame.style.width = W + 'px';
+    frame.style.height = H[W] + 'px';
+    frame.style.transform = `scale(${s})`;
+    frame.style.left = Math.max(0, Math.round((avail - W * s) / 2)) + 'px';
+    shell.style.height = Math.round(H[W] * s) + 'px';
+    document.getElementById('vwLabel').textContent = `${W} × ${H[W]}${s < 1 ? ` · 显示 ${Math.round(s * 100)}%` : ''}`;
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(viewport); else window.addEventListener('resize', fit);
+
+  function paint(parts) {
+    frame.innerHTML = `<div class="pv">${parts.head || ''}${parts.rail || ''}<div class="pv-stage">${parts.stage || ''}</div>${parts.bar || ''}</div>`;
+  }
+  function setNotes(n) {
+    const li = (arr) => arr.map((t) => `<li>${t}</li>`).join('');
+    document.getElementById('noteEnter').innerHTML = li(n.enter);
+    document.getElementById('noteKeys').innerHTML = li(n.keys);
+    document.getElementById('noteImpl').innerHTML = li(n.impl);
+  }
+  function buildNav() {
+    const groups = [];
+    S.forEach((s) => { let g = groups.find((x) => x.name === s.group); if (!g) groups.push(g = { name: s.group, items: [] }); g.items.push(s); });
+    nav.innerHTML = groups.map((g) => `<div class="scene-group"><h2>${esc(g.name)}</h2><ul>${g.items.map((s) => `<li><button type="button" data-scene="${s.id}" aria-current="${s.id === currentId && mode === 'gallery'}"><span>${esc(s.name)}</span><code>${esc(s.code)}</code></button></li>`).join('')}</ul></div>`).join('');
+  }
+  function showScene(id) {
+    const s = S.find((x) => x.id === id) || S[0];
+    currentId = s.id;
+    document.getElementById('sceneTitle').textContent = s.name;
+    document.getElementById('sceneSub').textContent = s.code;
+    paint(s.build());
+    setNotes(s.notes);
+    buildNav();
+    fit();
+  }
+  nav.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-scene]');
+    if (!b) return;
+    if (mode !== 'gallery') setMode('gallery');
+    showScene(b.dataset.scene);
+  });
+  document.querySelectorAll('[data-w]').forEach((b) => b.addEventListener('click', () => {
+    W = Number(b.dataset.w);
+    document.querySelectorAll('[data-w]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    fit();
+  }));
+  // In gallery mode, clicks inside the screen only update local selection; they never act as real operations.
+  frame.addEventListener('click', (e) => {
+    if (mode !== 'gallery') return;
+    const opt = e.target.closest('[data-act="opt"]');
+    if (opt) opt.parentElement.querySelectorAll('.pv-opt').forEach((o) => o.setAttribute('aria-checked', String(o === opt)));
+  });
+
+  // ---------- “试一试”: a scripted comprehensive group with the real keyboard rules ----------
+  const DW = ['allocate', 'sustain', 'inevitable'].map((k) => LEX[k]);
+  const CHOICES = {
+    allocate: { sentence: ['The council ', 'allocated', ' more money to public transport.'], options: ['分配；拨出', '维持；支撑', '恶化；变坏', '不可避免的'], answer: 0 },
+    sustain: { sentence: ['Few companies can ', 'sustain', ' such rapid growth for long.'], options: ['不可避免的', '维持；支撑', '分配；拨出', '相当大的'], answer: 1 },
+    inevitable: { sentence: ['Some delay was ', 'inevitable', ' given the weather.'], options: ['分配；拨出', '恶化；变坏', '不可避免的', '维持；支撑'], answer: 2 }
+  };
+  let D;
+  function demoReset() {
+    D = {
+      view: 'fam', famIndex: 0, viewed: 0,
+      recall: ['sustain', 'allocate', 'inevitable'], context: ['sustain', 'allocate', 'inevitable'],
+      phase: 'recall', qi: 0, retryQueue: [], retryIndex: 0, isRetry: false,
+      input: '', selected: null, result: null, correctionCount: 0,
+      firsts: {}, forgot: [], retried: 0, stillWeak: 0,
+      inFlight: false, enterDown: false, enterArmed: true, dwellUntil: 0, composing: false, justComposed: false,
+      save: ['synced', '已同步'], toast: '', failNote: false, audioState: 'idle'
+    };
+    log('已重新开始：先浏览 3 个词，再做 3 道拼写和 3 道语境题', true);
+    renderDemo();
+  }
+  const lexOf = (k) => LEX[k];
+  function currentQ() {
+    if (D.phase === 'retry') return D.retryQueue[D.retryIndex];
+    const list = D.phase === 'recall' ? D.recall : D.context;
+    const key = list[D.qi];
+    return key ? { key, kind: D.phase === 'recall' ? 'spell' : 'choice', id: `${D.phase}:${key}` } : null;
+  }
+  function railDemo() {
+    const idx = D.view === 'fam' ? 0 : D.phase === 'recall' ? 1 : D.phase === 'context' ? 2 : 3;
+    let count = '', prog = 0;
+    if (D.view === 'fam') { count = `${D.famIndex + 1} / 3`; prog = D.viewed / 3; }
+    else if (D.phase === 'retry') { count = `${Math.min(D.retryIndex + 1, D.retryQueue.length)} / ${D.retryQueue.length}`; prog = D.retryIndex / Math.max(1, D.retryQueue.length); }
+    else { count = `${D.qi + 1} / 3`; prog = D.qi / 3; }
+    return rail('comp', idx, count, prog);
+  }
+  function renderDemo(focus = true) {
+    const active = document.activeElement;
+    const wasInput = !!(active && active.id === 'demoInput');
+    let stage = '', barHtml = '', railHtml = railDemo();
+    const t = D.toast ? toast(D.toast) : '';
+    if (D.view === 'fam') {
+      const w = DW[D.famIndex];
+      stage = familiarity(w, { pos: `${D.famIndex + 1} / 3`, total: 3, viewed: D.viewed, current: D.famIndex, audio: D.audioState });
+      const last = D.famIndex === 2 && D.viewed >= 2;
+      barHtml = bar([btn('上一词', { kind: 'secondary', kbd: '←', act: 'prev', disabled: D.famIndex === 0 || D.inFlight })], kbdHint([['Enter', last ? '开始测试' : '下一词'], ['R', '重播'], ['←', '回看']]), [btn(D.inFlight ? '保存中…' : (last ? '看过，开始测试' : '看过，下一词'), { kind: 'primary', kbd: D.inFlight ? '' : '⏎', act: 'submit', busy: D.inFlight })]);
+    } else if (D.view === 'question' || D.view === 'feedback' || D.view === 'correction') {
+      const q = currentQ(); const w = lexOf(q.key);
+      const label = (D.isRetry ? '错题再测 · ' : q.kind === 'spell' ? '主动提取 · ' : '语境辨析 · ') + (q.kind === 'spell' ? '看中文写英文' : '选择词义');
+      const pos = D.isRetry ? `再测 ${D.retryIndex + 1} / ${D.retryQueue.length}` : `第 ${D.qi + 1} / 3 题`;
+      let inner = '';
+      if (q.kind === 'spell') {
+        inner = `<p class="pv-prompt-zh">${esc(w.meaning)}</p><p class="pv-instr">根据中文释义填写英文单词</p>`;
+      } else {
+        const c = CHOICES[q.key];
+        inner = `<p class="pv-instr" style="margin-top:18px">根据句意选择目标词在此处的正确词义</p><p class="pv-sentence" lang="en">${esc(c.sentence[0])}<b>${esc(c.sentence[1])}</b>${esc(c.sentence[2])}</p>`;
+      }
+      if (D.view === 'question') {
+        if (q.kind === 'spell') inner += line({ id: 'demoInput', value: D.input, ph: '输入英文', readonly: D.inFlight, alert: D.failNote ? `<div class="pv-inline-alert">${I.alert}<span>网络中断，这次作答还没有保存。输入已保留，点“重试提交”不会重复计分。</span></div>` : '' });
+        else inner += options(CHOICES[q.key].options, { selected: D.selected });
+        barHtml = bar([btn('忘了', { kind: 'ghost', act: 'forgot', disabled: D.inFlight })], kbdHint(q.kind === 'spell' ? [['Enter', '提交']] : [['1–4', '选择'], ['Enter', '提交']]), [btn(D.inFlight ? '提交中…' : (D.failNote ? '重试提交' : '提交'), { kind: 'primary', kbd: D.inFlight ? '' : '⏎', act: 'submit', busy: D.inFlight, disabled: D.inFlight })]);
+      } else if (D.view === 'feedback') {
+        const r = D.result;
+        const v = r.forgot ? verdict('forgot', '已标记为忘了', '按未掌握记录 · 稍后再测') : r.ok ? verdict('ok', '回答正确', D.isRetry ? '再测通过' : '首答已记录') : verdict('bad', D.isRetry ? '仍需巩固' : '首答错误', D.isRetry ? '已记录' : '已记录 · 稍后再测');
+        let answers = '';
+        if (q.kind === 'spell') {
+          answers = r.forgot ? `<dl class="pv-answers"><dt>正确答案</dt><dd class="correct" lang="en">${esc(w.word)}</dd></dl>` :
+            r.ok ? `<dl class="pv-answers"><dt>你的答案</dt><dd lang="en">${esc(r.answer)}</dd></dl>` :
+            `<dl class="pv-answers"><dt>你的答案</dt><dd>${proof(r.answer, w.word)}${legend}</dd><dt>正确答案</dt><dd class="correct" lang="en">${esc(w.word)}</dd></dl>`;
+        } else {
+          const c = CHOICES[q.key];
+          answers = options(c.options, { selected: r.forgot ? null : r.choice, correct: c.answer, wrong: (!r.ok && !r.forgot) ? r.choice : null });
+        }
+        inner += `<div style="margin-top:18px">${v}</div>${answers}${fbCard(w, { audio: D.audioState })}`;
+        barHtml = bar([], kbdHint([['Enter', '继续'], ['R', '重播']]) + (r.ok ? '' : '　·　至少停留 0.5 秒'), [btn(D.inFlight ? '同步中…' : '继续', { kind: 'primary', kbd: D.inFlight ? '' : '⏎', act: 'submit', busy: D.inFlight })]);
+      } else {
+        inner += `<div style="margin-top:18px">${verdict('warn', D.correctionCount ? '还不对，再试一次' : '订正：照正确答案输入一次', `不计分 · 第 ${D.correctionCount + 1} / 2 次`)}</div><dl class="pv-answers"><dt>正确答案</dt><dd class="correct" lang="en">${esc(q.kind === 'spell' ? w.word : CHOICES[q.key].options[CHOICES[q.key].answer])}</dd></dl>`;
+        inner += q.kind === 'spell' ? line({ id: 'demoInput', value: D.input, ph: '照着输入一次', hintL: '订正只帮助记忆，不改变首答成绩', hintR: '<span class="pv-kbd">Enter</span> 提交订正', readonly: D.inFlight }) : options(CHOICES[q.key].options, { selected: D.selected });
+        barHtml = bar([], kbdHint([['Enter', '提交订正']]), [btn(D.inFlight ? '提交中…' : '提交订正', { kind: 'primary', kbd: D.inFlight ? '' : '⏎', act: 'submit', busy: D.inFlight, disabled: D.inFlight })]);
+      }
+      stage = t + qcard(label, pos, inner);
+    } else if (D.view === 'retry_intro') {
+      stage = inter({ eyebrow: '错题再测', title: `${D.retryQueue.length} 道题再做一次`, body: '刚才答错或标记为忘了的题，现在再测一次。再测只用于巩固，不改变首答成绩。', actions: btn('开始再测', { kind: 'primary', kbd: '⏎', act: 'submit' }) });
+    } else if (D.view === 'settling') {
+      railHtml = '';
+      stage = inter({ eyebrow: '本组已完成', title: '正在提交任务结果…', body: '所有作答都已经保存，正在生成本次任务的结果。', actions: btn('提交中…', { kind: 'primary', busy: true, disabled: true }) });
+    } else if (D.view === 'result') {
+      railHtml = '';
+      const firstOk = Object.values(D.firsts).filter(Boolean).length, total = Object.keys(D.firsts).length;
+      stage = `<div class="pv-result"><section class="pv-card pv-score"><div class="pv-eyebrow"><span>首答正确率 · 刚刚完成</span></div><div class="big">${total ? Math.round(firstOk / total * 100) : 0}%</div><p class="frac">${firstOk} / ${total} 题首答正确</p><div class="pv-stats"><div class="pv-stat"><b>${D.retried}</b><span>再测完成</span></div><div class="pv-stat"><b>${D.stillWeak}</b><span>仍待复习</span></div><div class="pv-stat"><b>0</b><span>资料不足跳过</span></div></div><p class="note">首答成绩已记录。再测只用于巩固，不改变首答成绩。仍待复习的词会进入后续复习。</p></section><section class="pv-card pv-list"><h3>标记为忘了的词 · ${D.forgot.length}</h3>${D.forgot.length ? D.forgot.map((k) => `<div class="pv-row"><div><b lang="en">${esc(LEX[k].word)}</b><p>${esc(LEX[k].meaning)}</p></div>${audio('idle', '发音')}</div>`).join('') : '<p class="pv-trans">这次没有标记为忘了的词。</p>'}</section></div>`;
+      barHtml = bar([btn('再走一遍', { kind: 'secondary', act: 'restart' })], '', [btn('返回任务列表', { kind: 'primary', act: 'back' })]);
+      D.save = ['saved', '已保存'];
+    }
+    paint({ head: head({ chips: [['综合训练', 'goal'], ['第 1 / 1 组'], [D.view === 'result' ? '已完成' : '今日任务', D.view === 'result' ? 'done' : '']], save: D.save }), rail: railHtml, stage, bar: barHtml });
+    fit();
+    const input = frame.querySelector('#demoInput');
+    if (input) {
+      input.addEventListener('input', () => { D.input = input.value; });
+      input.addEventListener('compositionstart', () => { D.composing = true; });
+      input.addEventListener('compositionend', () => { D.composing = false; D.justComposed = true; setTimeout(() => { D.justComposed = false; }, 0); });
+      if ((focus || wasInput) && !D.inFlight) { input.focus({ preventScroll: true }); const n = input.value.length; try { input.setSelectionRange(n, n); } catch (_) { /* readonly */ } }
+    } else if (focus) {
+      const target = frame.querySelector('.pv-opt[aria-checked="true"]') || frame.querySelector('.pv-opt') || frame.querySelector('.pv-btn--primary:not([disabled])');
+      if (target) target.focus({ preventScroll: true });
+    }
+  }
+  function log(text, ok) {
+    const el = document.getElementById('keylog');
+    const span = document.createElement('span');
+    span.textContent = text; if (ok) span.className = 'ok';
+    if (el.firstChild && el.firstChild.textContent === '按键判定会显示在这里') el.textContent = '';
+    el.prepend(span);
+    while (el.children.length > 4) el.lastChild.remove();
+  }
+  // State changes rearm Enter only when Enter is still physically held (see plan §4.3 rule 3).
+  function transition(fn) { fn(); if (D.enterDown) D.enterArmed = false; renderDemo(); }
+  function fakeRequest(label) {
+    D.inFlight = true; D.save = ['saving', '保存中…']; renderDemo(false);
+    return new Promise((resolve, reject) => {
+      const fail = document.getElementById('demoOffline').checked;
+      setTimeout(() => {
+        if (fail) { document.getElementById('demoOffline').checked = false; D.inFlight = false; D.save = ['error', '保存失败']; reject(new Error('offline')); return; }
+        D.inFlight = false; const now = new Date();
+        D.save = ['saved', `已保存 ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`];
+        log(`${label}：服务端已确认`, true); resolve();
+      }, fail ? 1100 : 480);
+    });
+  }
+  function playDemoAudio() {
+    const q = D.view === 'fam' ? DW[D.famIndex] : (currentQ() && lexOf(currentQ().key));
+    if (!q) return;
+    if (D.view === 'question') { log('忽略：这类题作答前没有音频（读音会泄露答案）'); return; }
+    D.audioState = 'playing'; renderDemo(false);
+    try {
+      if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(q.word); u.lang = 'en-GB'; u.rate = .9; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }
+    } catch (_) { /* speech is optional */ }
+    setTimeout(() => { D.audioState = 'idle'; renderDemo(false); }, 1100);
+    log('重播发音', true);
+  }
+  function famNext() {
+    if (D.famIndex < D.viewed) { transition(() => { D.famIndex = Math.min(2, D.famIndex + 1); }); return; }
+    fakeRequest('熟悉材料').then(() => transition(() => {
+      D.viewed = Math.max(D.viewed, D.famIndex + 1);
+      if (D.viewed >= 3) { D.view = 'question'; D.phase = 'recall'; D.qi = 0; D.input = ''; log('整组浏览完成，服务端进入主动提取', true); }
+      else D.famIndex += 1;
+    })).catch(() => { log('熟悉材料保存失败，可再按 Enter 重试'); renderDemo(); });
+  }
+  function submitAnswer(forgot) {
+    const q = currentQ();
+    let answer = '', ok = false, choice = null;
+    if (q.kind === 'spell') {
+      answer = D.input.trim();
+      if (!forgot && !answer) { log('未提交：输入为空'); D.toast = '请输入答案，或点「忘了」'; renderDemo(); setTimeout(() => { D.toast = ''; renderDemo(); }, 1600); return; }
+      ok = !forgot && answer.toLowerCase() === lexOf(q.key).word;
+    } else {
+      if (!forgot && D.selected == null) { log('未提交：还没有选择'); D.toast = '请选择答案'; renderDemo(); setTimeout(() => { D.toast = ''; renderDemo(); }, 1600); return; }
+      choice = D.selected; ok = !forgot && choice === CHOICES[q.key].answer;
+    }
+    fakeRequest(forgot ? '忘了' : '作答').then(() => transition(() => {
+      D.failNote = false;
+      if (!D.isRetry) D.firsts[q.id] = ok;
+      if (forgot && !D.forgot.includes(q.key)) D.forgot.push(q.key);
+      if (D.isRetry) { D.retried += 1; if (!ok) D.stillWeak += 1; }
+      if (!ok && !D.isRetry) D.retryQueue.push({ ...q, id: q.id + ':retry' });
+      D.result = { ok, forgot, answer, choice };
+      D.view = 'feedback';
+      if (!ok) D.dwellUntil = performance.now() + 500;
+    })).catch(() => { D.failNote = true; log('保存失败：输入已保留，可重试'); renderDemo(); });
+  }
+  function afterFeedback() {
+    const r = D.result;
+    // Comprehensive goal: a wrong (not forgotten) answer requires one correction before moving on.
+    if (!r.ok && !r.forgot) { transition(() => { D.view = 'correction'; D.correctionCount = 0; D.input = ''; D.selected = null; }); return; }
+    advance();
+  }
+  function advance() {
+    fakeRequest('同步').then(() => transition(() => {
+      D.input = ''; D.selected = null; D.result = null;
+      if (D.isRetry) {
+        D.retryIndex += 1;
+        if (D.retryIndex >= D.retryQueue.length) { D.view = 'settling'; setTimeout(settle, 900); return; }
+        D.view = 'question'; return;
+      }
+      D.qi += 1;
+      if (D.qi >= 3) {
+        if (D.phase === 'recall') { D.phase = 'context'; D.qi = 0; D.view = 'question'; log('主动提取完成，进入语境辨析', true); return; }
+        if (D.retryQueue.length) { D.phase = 'retry'; D.isRetry = true; D.retryIndex = 0; D.view = 'retry_intro'; return; }
+        D.view = 'settling'; setTimeout(settle, 900); return;
+      }
+      D.view = 'question';
+    })).catch(() => { log('同步失败，可再按 Enter 重试'); renderDemo(); });
+  }
+  function submitCorrection() {
+    const q = currentQ();
+    const ok = q.kind === 'spell' ? D.input.trim().toLowerCase() === lexOf(q.key).word : D.selected === CHOICES[q.key].answer;
+    if (q.kind === 'spell' && !D.input.trim()) { log('未提交：订正输入为空'); return; }
+    fakeRequest('订正').then(() => {
+      if (ok) { log('订正通过', true); advance(); return; }
+      D.correctionCount += 1;
+      if (D.correctionCount >= 2) { log('订正 2 次未通过：记入待复习并放行'); D.stillWeak += D.isRetry ? 0 : 1; advance(); return; }
+      transition(() => { D.input = ''; D.selected = null; });
+    }).catch(() => { log('订正保存失败，可重试'); renderDemo(); });
+  }
+  function settle() {
+    if (!D || D.view !== 'settling') return;
+    transition(() => { D.view = 'result'; log('结算完成：服务端确认后才显示结果', true); });
+  }
+  function primary() {
+    if (D.view === 'fam') return famNext();
+    if (D.view === 'question') return submitAnswer(false);
+    if (D.view === 'feedback') return afterFeedback();
+    if (D.view === 'correction') return submitCorrection();
+    if (D.view === 'retry_intro') return transition(() => { D.view = 'question'; });
+  }
+  frame.addEventListener('click', (e) => {
+    if (mode !== 'demo') return;
+    const el = e.target.closest('[data-act]');
+    if (!el || el.disabled) return;
+    const act = el.dataset.act;
+    if (D.inFlight && act !== 'back') { log('忽略：请求处理中'); return; }
+    if (act === 'submit') {
+      if (D.view === 'feedback' && performance.now() < D.dwellUntil) { log('忽略：错误反馈停留中'); return; }
+      primary();
+    }
+    else if (act === 'forgot') submitAnswer(true);
+    else if (act === 'prev') transition(() => { D.famIndex = Math.max(0, D.famIndex - 1); });
+    else if (act === 'opt' && (D.view === 'question' || D.view === 'correction')) { D.selected = Number(el.dataset.i); renderDemo(); }
+    else if (act === 'audio') playDemoAudio();
+    else if (act === 'restart') demoReset();
+    else if (act === 'retry') primary();
+    else if (act === 'back') log('原型中不离开页面；产品里会回到任务列表并刷新状态');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (mode !== 'demo' || !D) return;
+    const inChrome = e.target.closest && e.target.closest('.doc-head, .scene-nav, .demo-tools');
+    if (inChrome) return;
+    const typing = e.target.tagName === 'INPUT';
+    if (e.key === 'Enter') {
+      if (e.isComposing || e.keyCode === 229 || D.composing || D.justComposed) { log('忽略 Enter：输入法正在选词'); return; }
+      e.preventDefault();
+      if (e.repeat) { log('忽略 Enter：长按产生的重复事件'); return; }
+      D.enterDown = true;
+      if (!D.enterArmed) { log('忽略 Enter：请先松开再按'); return; }
+      if (D.inFlight) { log('忽略 Enter：请求处理中'); return; }
+      if (D.view === 'feedback' && performance.now() < D.dwellUntil) { log('忽略 Enter：错误反馈至少停留 0.5 秒'); return; }
+      if (['settling', 'result'].includes(D.view)) return;
+      log('Enter：执行主操作', true);
+      primary();
+      return;
+    }
+    if (e.code === 'KeyR' && e.altKey) { e.preventDefault(); playDemoAudio(); return; }
+    if (typing) return; // letters, digits and arrows inside the input stay text
+    if ((e.key === 'r' || e.key === 'R') && !e.metaKey && !e.ctrlKey) { playDemoAudio(); return; }
+    if (D.view === 'fam' && e.key === 'ArrowLeft') { e.preventDefault(); transition(() => { D.famIndex = Math.max(0, D.famIndex - 1); }); return; }
+    if (D.view === 'fam' && e.key === 'ArrowRight') { e.preventDefault(); if (!D.inFlight) famNext(); return; }
+    const choiceView = (D.view === 'question' || D.view === 'correction') && currentQ() && currentQ().kind === 'choice';
+    if (choiceView && /^[1-4]$/.test(e.key)) { D.selected = Number(e.key) - 1; log(`选择第 ${e.key} 项`, true); renderDemo(); return; }
+    if (choiceView && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      e.preventDefault(); const d = e.key === 'ArrowDown' ? 1 : -1;
+      D.selected = ((D.selected == null ? (d > 0 ? -1 : 0) : D.selected) + d + 4) % 4; renderDemo();
+    }
+  });
+  document.addEventListener('keyup', (e) => { if (e.key === 'Enter' && D) { D.enterDown = false; D.enterArmed = true; } });
+  window.addEventListener('blur', () => { if (D) { D.enterDown = false; D.enterArmed = true; } });
+  document.getElementById('demoRestart').addEventListener('click', demoReset);
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('modeGallery').setAttribute('aria-pressed', String(m === 'gallery'));
+    document.getElementById('modeDemo').setAttribute('aria-pressed', String(m === 'demo'));
+    document.getElementById('demoTools').hidden = m !== 'demo';
+    if (m === 'demo') {
+      document.getElementById('sceneTitle').textContent = '试一试 · 综合训练小组';
+      document.getElementById('sceneSub').textContent = '键盘可完整操作';
+      setNotes({
+        enter: ['3 个词：熟悉 → 3 道看中文写英文 → 3 道语境选择 → 错题再测 → 结算', '“下一次提交模拟断网”会让下一次请求失败，用来看保存失败的状态', '判分、保存和同步都是本地模拟，延迟约 0.5 秒'],
+        keys: ['在输入框里试试按住 Enter 不放：只会提交一次', '用中文输入法打字时按 Enter 选词：不会提交', '用 Enter 提交后，要先松开 Enter 才能“继续”；答错时至少停留 0.5 秒', '选择题用 1–4，熟悉材料用 ← / →，R 或 ⌥R 重播'],
+        impl: ['上方的按键判定就是 <code>routeKey()</code> 需要覆盖的单测用例', '答错（不是忘了）会先进入订正，这是综合目标的服务端规则', '音频用浏览器朗读代替 TTS，仅作演示']
+      });
+      buildNav();
+      demoReset();
+    } else {
+      showScene(currentId);
+    }
+  }
+  document.getElementById('modeGallery').addEventListener('click', () => setMode('gallery'));
+  document.getElementById('modeDemo').addEventListener('click', () => setMode('demo'));
+
+  try { const saved = localStorage.getItem('pv-proto-width'); if (saved && H[saved]) W = Number(saved); } catch (_) { /* storage optional */ }
+  document.querySelectorAll('[data-w]').forEach((b) => {
+    b.setAttribute('aria-pressed', String(Number(b.dataset.w) === W));
+    b.addEventListener('click', () => { try { localStorage.setItem('pv-proto-width', b.dataset.w); } catch (_) { /* optional */ } });
+  });
+  showScene(location.hash && S.find((s) => '#' + s.id === location.hash) ? location.hash.slice(1) : 'fam');
+  window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if (S.find((s) => s.id === id)) { setMode('gallery'); showScene(id); } });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_active_flow_is_displayed_without_writing_task_status (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_assistant_and_teacher_tasks_keep_the_existing_groups (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_existing_four_task_payloads_are_unchanged_by_flag (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_future_expired_and_done_labels_follow_shared_date_gate (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_off_and_legacy_dictation_are_excluded (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.488s
+
+OK

@@ -8,7 +8,7 @@ from datetime import datetime, date, timedelta
 from pathlib import Path
 from urllib.parse import quote
 import requests
-from flask import Blueprint, jsonify, request, current_app, url_for
+from flask import has_request_context, Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 from sqlalchemy import func, and_, or_
 
@@ -60,6 +60,11 @@ from services.scheduler_client import (
     fetch_range_schedules_by_dates as _shared_fetch_range_schedules_by_dates,
 )
 from services.vocabulary_mastery import vocabulary_goal_for_task
+from services.task_plan_item_sync import (
+    resolve_task_dictation_order as _resolve_task_dictation_order,
+    sync_plan_item_from_task_submission,
+)
+from services.vocabulary_task_submission import settle_vocabulary_group_submission
 from services.task_deletion import TaskDeletionError, delete_unstarted_task
 from services.teacher_homework_recipients import legacy_homework_is_group
 from services.task_date_gate import (
@@ -100,7 +105,6 @@ IELTS_READING_PRACTICE_TYPE = "ielts_reading_practice"
 # no reference shown to the student.
 CHOICE_PRACTICE_TYPES = {READING_VOCAB_CHOICE_TYPE, IELTS_READING_PRACTICE_TYPE, "grammar", "translation"}
 VALID_DICTATION_MODES = {"audio_to_en", "zh_to_en", "en_to_zh", "spelling_drill"}
-VALID_DICTATION_ORDERS = {"sequence", "random"}
 LISTENING_RESOURCE_INTENSIVE = "intensive"
 LISTENING_RESOURCE_CAMBRIDGE_TEST = "cambridge_test"
 LISTENING_RESOURCE_JIJING = "jijing"
@@ -585,56 +589,16 @@ def _serialize_reading_test_submission(row, include_details: bool = False) -> di
 
 
 def _sync_plan_item_from_legacy_task(task, *, note=None, evidence_files=None, duration=0):
-    item = getattr(task, "plan_item", None)
-    if not item:
-        return None
-    if getattr(task, "dictation_book_id", None):
-        current_exam = item.exam_system or ""
-        item.exam_system = (
-            current_exam
-            if current_exam not in {"", "未分类", "材料练习"}
-            else "词汇"
-        )
-        item.module = "词汇"
-        item.task_name = "单词默写"
-        item.resource_type = PlanItem.RESOURCE_DICTATION
-        item.resource_id = f"dictation_book:{task.dictation_book_id}"
-        item.resource_metadata = json.dumps(
-            {
-                "vocabulary_goal": getattr(task, "vocabulary_goal", None),
-                "learning_goal": getattr(task, "vocabulary_goal", None),
-                "dictation_mode": getattr(task, "dictation_mode", None) or "audio_to_en",
-                "dictation_order": _resolve_task_dictation_order(task),
-                "dictation_word_start": getattr(task, "dictation_word_start", None) or 1,
-                "dictation_word_end": getattr(task, "dictation_word_end", None),
-            },
-            ensure_ascii=False,
-        )
-    item.student_status = PlanItem.STUDENT_SUBMITTED
-    item.submitted_at = task.submitted_at or datetime.now()
-    if note:
-        item.student_comment = str(note)[:255]
-    if duration and duration > 0:
-        item.actual_seconds = max(int(item.actual_seconds or 0), int(duration))
-    elif task.actual_seconds:
-        item.actual_seconds = max(int(item.actual_seconds or 0), int(task.actual_seconds or 0))
-    for file_url in evidence_files or []:
-        file_type = "image"
-        lower_url = str(file_url).lower()
-        if lower_url.endswith((".mp3", ".wav", ".m4a")):
-            file_type = "audio"
-        elif lower_url.endswith((".pdf", ".doc", ".docx")):
-            file_type = "doc"
-        db.session.add(
-            PlanEvidence(
-                plan_item_id=item.id,
-                uploader_id=getattr(request.current_api_user, "id", None),
-                file_type=file_type,
-                storage_path=file_url,
-                original_filename=os.path.basename(file_url),
-            )
-        )
-    return item
+    return sync_plan_item_from_task_submission(
+        task,
+        note=note,
+        evidence_files=evidence_files,
+        duration=duration,
+        uploader_id=(
+            getattr(getattr(request, "current_api_user", None), "id", None)
+            if has_request_context() else None
+        ),
+    )
 
 
 def _task_evidence_type(file_url) -> str:
@@ -915,11 +879,6 @@ def _resolve_task_dictation_mode(task, book_type=None):
     if (book_type or "").strip().lower() == "translation":
         return "zh_to_en"
     return "audio_to_en"
-
-
-def _resolve_task_dictation_order(task):
-    order = (getattr(task, "dictation_order", "") or "").strip().lower()
-    return order if order in VALID_DICTATION_ORDERS else "sequence"
 
 
 def _merge_aliyun_oral_result(result: dict, oral: dict) -> dict:
@@ -2652,7 +2611,6 @@ def submit_task(task_id):
     # retain the existing strict dictation path below.
     from services.vocabulary_group_learning import (
         VocabularyGroupLearningError,
-        finalize_vocabulary_group_task,
     )
     from services.vocabulary_mastery import is_vocabulary_v2_task
     current_task = Task.query.get(task_id)
@@ -2665,20 +2623,14 @@ def submit_task(task_id):
             return blocked
     if is_vocabulary_v2_task(current_task):
         try:
-            result = finalize_vocabulary_group_task(user, task_id, data)
+            result = settle_vocabulary_group_submission(
+                user, task_id, data, uploader_id=user.id
+            )
         except VocabularyGroupLearningError as error:
             db.session.rollback()
             payload = {"ok": False, "error": error.error}
             payload.update(error.details)
             return jsonify(payload), error.status_code
-        task = Task.query.get(task_id)
-        if task:
-            _sync_plan_item_from_legacy_task(
-                task,
-                note=data.get("note"),
-                evidence_files=data.get("evidence_files", []),
-                duration=data.get("duration_seconds", 0),
-            )
         db.session.commit()
         return jsonify(result)
 

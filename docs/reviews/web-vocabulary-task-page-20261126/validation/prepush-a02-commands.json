@@ -1,0 +1,46 @@
+{
+  "baseline_commit": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "historical_snapshot_sha256": "10fce8d23fedeff2c8111ae5858030ac19ee946f1d5f351914d1b6ecbd3acad0",
+  "py310_historical_regeneration_byte_identical_to_py313": true,
+  "synthetic_input_task_count": 11,
+  "returned_task_count": 8,
+  "fields_per_returned_task": [
+    26
+  ],
+  "compared_task_fields_per_flag": 208,
+  "full_response_and_order_compared": true,
+  "commands": [
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/python tests/fixtures/practice_task_list_baseline.py regenerate --repo .",
+      "result": "exit 0; real pinned git archive generated golden JSON"
+    },
+    {
+      "command": "/private/tmp/studytracker-web-vocab-py310/bin/python tests/fixtures/practice_task_list_baseline.py regenerate --repo . --output docs/reviews/web-vocabulary-task-page-20261126/validation/prepush-a02-py310-reproduction.json",
+      "result": "exit 0; byte-identical",
+      "log": "prepush-a02-generation-py310.log"
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m unittest tests.test_practice_vocabulary_task_list -v",
+      "result": "8/8 passed in 2.654s",
+      "log": "prepush-a02-py313.log"
+    },
+    {
+      "command": "/private/tmp/studytracker-web-vocab-py310/bin/python -m unittest tests.test_practice_vocabulary_task_list -v",
+      "result": "8/8 passed in 2.488s",
+      "log": "prepush-a02-py310.log"
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m ruff check tests/test_practice_vocabulary_task_list.py tests/fixtures/practice_task_list_baseline.py",
+      "result": "exit 0"
+    },
+    {
+      "command": "/Users/zhouxin/Desktop/studytracker/.venv/bin/python -m black --check tests/test_practice_vocabulary_task_list.py tests/fixtures/practice_task_list_baseline.py",
+      "result": "exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "result": "exit 0"
+    }
+  ],
+  "scope_limit": "HTTP list payload only; no browser navigation, production, main, deployment or live student data."
+}

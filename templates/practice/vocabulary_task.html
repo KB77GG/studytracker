@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="practice-vocabulary-csrf" content="{{ boot_data.csrf_token | default('') }}">
+  <title>{{ boot_data.get('task', {}).get('title', '背单词') }} · StudyTracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/practice_vocabulary.css') }}">
+</head>
+<body class="pv">
+  <header class="pv-head">
+    <a class="pv-back" href="/practice#practiceAssignedTasks" data-practice-back>← 返回任务列表</a>
+    <div class="pv-titleblock">
+      <h1 id="pv-title">{{ boot_data.get('task', {}).get('title', '背单词') }}</h1>
+      <div class="pv-chips" id="pv-chips"></div>
+    </div>
+    <div class="pv-headright">
+      <span class="pv-save" id="pv-save" role="status" aria-live="polite">同步中</span>
+      <button class="pv-kbdbtn" type="button" id="pv-help" aria-controls="pv-help-dialog">⌨ 键盘</button>
+    </div>
+  </header>
+  <nav class="pv-rail" id="pv-rail" aria-label="本组阶段"></nav>
+  <main class="pv-stage" id="pv-stage" tabindex="-1" aria-busy="true">
+    <section class="pv-card pv-inter"><h2>正在同步学习进度…</h2><p>请稍候。</p></section>
+  </main>
+  <footer class="pv-bar" id="pv-bar"><div class="left"></div><span class="hint"></span><div class="right"></div></footer>
+  <div class="pv-toast" id="pv-toast" role="status" aria-live="polite" hidden></div>
+  <div class="pv-sr" id="pv-announcement" aria-live="polite"></div>
+  <dialog class="pv-card pv-pop" id="pv-help-dialog" aria-labelledby="pv-help-title">
+    <h3 id="pv-help-title">键盘操作</h3>
+    <dl><dt>Enter</dt><dd>提交 / 继续。先松开，再进入下一步。</dd><dt>1–4、方向键</dt><dd>选择题选项；文本题正常输入。</dd><dt>← / →</dt><dd>熟悉材料时回看 / 下一词。</dd><dt>Alt + R</dt><dd>当前题允许时重播音频。</dd><dt>Tab</dt><dd>切换控件；“忘了”需选中按钮再操作。</dd><dt>Esc</dt><dd>关闭帮助。</dd></dl>
+    <button class="pv-btn pv-btn--secondary" type="button" data-help-close>知道了</button>
+  </dialog>
+  <noscript>请启用 JavaScript 后继续背单词。<a href="/practice">返回练习中心</a></noscript>
+  <script id="pv-boot" type="application/json">{{ boot_data | tojson }}</script>
+  <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
+  {% for name in ['core', 'transport', 'render_details', 'render', 'events', 'recovery', 'page'] %}
+  <script src="{{ url_for('static', filename='js/practice_vocabulary_' ~ name ~ '.js') }}" defer></script>
+  {% endfor %}
+</body>
+</html>

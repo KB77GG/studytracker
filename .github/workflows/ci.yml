@@ -48,6 +48,8 @@ jobs:
           python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
+      - name: Test web vocabulary input, recovery and keyboard behavior
+        run: node --test tests/test_practice_vocabulary_core.js
       - name: Test classroom vocabulary import client and assignment preset
         run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js
       - name: Test teacher vocabulary load warning races
@@ -103,12 +105,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - name: Install account regression dependencies
         run: |
           python -m pip install \
             'Flask>=2.3' 'Flask-Login>=0.6' 'Flask-SQLAlchemy>=3.1' \
             'PyJWT>=2.9' 'pypinyin>=0.55' 'requests>=2.31' \
-            'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
+            'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1' 'pytest>=7'
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
       - name: Test classroom vocabulary import and student learning
@@ -119,6 +124,10 @@ jobs:
           python -m unittest tests.test_vocabulary_context_availability tests.test_vocabulary_review_performance tests.test_vocabulary_autonomous_review tests.test_vocabulary_group_learning tests.test_vocabulary_group_learning_api tests.test_vocabulary_numeric_learning tests.test_vocabulary_numeric_review tests.test_vocabulary_flow_backlog_gate tests.test_vocabulary_due_cache tests.test_vocabulary_review_selection tests.test_vocabulary_stage2_adversarial tests.test_vocabulary_cache_lifecycle -v
       - name: Test default-off vocabulary error policy and enrollment boundaries
         run: python -m unittest tests.test_vocabulary_error_queue tests.test_vocabulary_error_review_integration tests.test_vocabulary_error_reports tests.test_vocabulary_policy_management -v
+      - name: Test web vocabulary identity, shared settlement and task integration
+        run: |
+          python -m unittest tests.test_task_plan_item_sync tests.test_vocabulary_task_submission tests.test_practice_student_identity tests.test_practice_vocabulary_tasks tests.test_practice_vocabulary_web tests.test_practice_vocabulary_routes tests.test_practice_vocabulary_task_list tests.test_practice_vocabulary_adversarial tests.test_miniprogram_grading tests.test_task_date_gate_display_contract -v
+          python -m pytest tests/test_task_date_gate.py -q
       - name: Test pilot graduation checkpoints, migration, metrics and bounded request work
         run: |
           python -m unittest tests.test_vocabulary_graduation_checkpoints tests.test_vocabulary_checkpoint_migration tests.test_vocabulary_pilot_metrics tests.test_vocabulary_pilot_selection tests.test_vocabulary_policy_performance tests.test_vocabulary_pilot_activation -v

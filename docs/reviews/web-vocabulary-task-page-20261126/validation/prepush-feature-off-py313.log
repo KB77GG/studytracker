@@ -1,0 +1,11 @@
+test_feature_off_blocks_all_registered_routes_before_any_sql (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_blocks_all_registered_routes_before_any_sql) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.204s
+
+OK
+<sys>:0: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10898c9a0>

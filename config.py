@@ -40,6 +40,9 @@ class Config:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = _env_bool("SESSION_COOKIE_SECURE")
 
+    # Reuse assigned practice tasks; enable only after web acceptance.
+    PRACTICE_VOCABULARY_WEB_ENABLED = _env_bool("PRACTICE_VOCABULARY_WEB_ENABLED")
+
     # Pilot policy also requires an explicitly enabled per-student enrollment.
     # Default-off deployment creates no queue records or changed student flow.
     VOCABULARY_ERROR_REVIEW_ENABLED = _env_bool("VOCABULARY_ERROR_REVIEW_ENABLED")
