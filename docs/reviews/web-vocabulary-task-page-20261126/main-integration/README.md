@@ -23,7 +23,7 @@
 
 ## 浏览器与剩余事项
 
-本轮原生 `cua.getApp('com.google.Chrome')` 未返回，root 中断约 366.6 秒的等待；工具泛称 aborted by user，但不是用户拒绝，也不是测试失败。此前工具 inventory 可见 Chrome/Safari/微信开发者工具。随后尝试可用的浏览器扩展连接，结果在收尾补记 `browser/`。服务尚未启动时不能沿用上轮“服务启动权限”原因。
+本轮没有进入任务页，没有浏览器验收通过项。第一次原生 `cua.getApp('com.google.Chrome')` 未返回，root 中断 366.6 秒等待。第二次准备经 Chrome 扩展访问本机合成服务：普通启动遇 Operation not permitted，正规提权启动调用也未返回，root 在 209.1 秒后中断；尚未执行扩展标签连接。两次工具的 aborted by user 通用标签都不代表用户拒绝。root 于 14:46:42 UTC 用 `lsof -nP -iTCP:5111 -sTCP:LISTEN` 确认当时无监听（exit1/无输出）；没有已确认启动的服务 PID/session。详见 `browser/status.json` 和 README，所有原生/真设备项目保留未验。
 
 Chrome/Safari 原生中文输入法、长按 Enter、原生 125%/150% 缩放、订正刷新、真断网及保存成功后丢响应、真实微信互切、离页 10 分钟后计时、老师/家长界面，均须以实际执行证据判断，不能以 Node 或上述合并测试代替。
 
@@ -33,4 +33,6 @@ Chrome/Safari 原生中文输入法、长按 Enter、原生 125%/150% 缩放、�
 
 批1仍在 `/private/tmp/studytracker-practice-web-batch1-20261126`，`codex/practice-web-batch1-20261126@f81a5e4a`，14 产品/测试/CI SHA 匹配，未合入本分支、未commit/push。与本候选重叠3文件：CI、practice/index_content、listening/test_practice。临时 `git merge-file -p` 预演均 exit0，但未实际联合集成/验收；不能仅凭同一文件判断必然冲突，也不能据文本预演称联合可上线。批1提交时须带 CI 引用的报告 runner。
 
-合并提交与远端 CI 结果收尾补记；只推词汇审查分支。本轮不推main、不部署、不改 `PRACTICE_VOCABULARY_WEB_ENABLED` 默认 false、不访问生产或微信上传/提审/发布。旧资料树仍 main@6ded77d2，保留原8M/27顶层U；本轮只更新两交接及忽略的测试 venv。批1原13M/7顶层U保持，收尾仅两交接追加。发布前仍需完成设备门槛、整合批1并取得后续发布授权。
+合并提交 `96ce82dec4401407d03e32d8eeadf378a824ac56` 已推词汇审查分支。[CI 45842043031](https://github.com/KB77GG/studytracker/actions/runs/45842043031) overall success，test、task-planner、account-provisioning 三个业务作业全部成功；既有非阻断 advisory lint 仍失败，format skipped。完整状态与精确命令见 ci.json / ci-evidence.json。最终证据和交接以独立 `[skip ci]` 文档提交共享，最终文档HEAD以Git核对；产品与已测合并提交一致。本轮不推main、不部署、不改 `PRACTICE_VOCABULARY_WEB_ENABLED` 默认 false、不访问生产或微信上传/提审/发布。旧资料树仍 main@6ded77d2，保留原8M/27顶层U；本轮只更新两交接及忽略的测试 venv。批1原13M/7顶层U保持，收尾仅两交接追加。发布前仍需完成设备门槛、整合批1并取得后续发布授权。
+
+收尾交接更新三个工作树各自的 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md`。本词汇树随审查分支共享；旧资料树和批1的两交接只在本机，批1代码仍未提交。最终64项候选SHA和批1原14项SHA均匹配，见final-product-audit.json。

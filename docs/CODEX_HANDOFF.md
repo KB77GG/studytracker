@@ -2,10 +2,11 @@
 
 ## 2026-11-26 — main f5b06cc3 合入词汇候选，联合部署暂缓
 
-- **范围/工作树**：用户接受计时复核，要求先将最新main合入词汇审查分支再推送CI。`/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126` 开工f6f0f104 clean，fresh main f5b06cc3（共同基线f81a5e4）。本轮仅该分支合并/推送授权，不推main/部署/开启。当前合并验证完成，提交与CI结果待收尾补记。
+- **范围/工作树**：用户接受计时复核，要求先将最新main合入词汇审查分支再推送CI。`/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126` 开工f6f0f104 clean，fresh main f5b06cc3（共同基线f81a5e4）。本轮仅该分支合并/推送授权，不推main/部署/开启。合并提交`96ce82dec4401407d03e32d8eeadf378a824ac56`已commit/push，仅词汇分支；CI已成功。收尾证据/交接以独立skip-ci文档提交共享，最终文档HEAD以Git核对，词汇树收尾clean。
 - **合并/独审**：仅CI、两交接文本冲突；保留pytest与main的Sprint HTTP步骤，所有双方CI/交接内容保留。产品自动合并无手改，词汇timing/events/page不变。全函数AST/import与双方并集匹配、web_practice_tasks字节同main，64文件SHA及完整独审见`docs/reviews/web-vocabulary-task-page-20261126/main-integration/`。
 - **精确验证**：`.venv/bin/python docs/reviews/web-vocabulary-task-page-20261126/main-integration/run_regressions.py py313|py310-project|node`（根解释器完整路径在commands JSON），双Python各574 unittest+20日期，Node111通过；43模块覆盖原词汇、小程序、老师家长、冲刺目录/布置/组卷、会话维护与模考完整性；40 Python原生3.10编译、CI YAML、runner Ruff/diff通过。3.10先/tmp解释器5errors、后base+PYTHONPATH子进程1failure，均测试环境问题/日志保留；最终旧资料树忽略tmp/web-vocab-py310-20261126内venv复用既有依赖后全过，无网络安装/产品检查放宽。全套仍有旧datetime.UTC测试兼容入口限制，详报告。
-- **浏览器/未完**：本轮原生Chrome工具连接未返回，root中断366.6s等待，非用户拒绝/非测试失败；尝试扩展连接继续补验，最终以browser证据为准。原生IME/长按/缩放、真断网丢响应、微信互切、订正刷新、离页10min、老师家长UI未以自动测试代验。计时localStorage条目累积记非阻断后续，不在本次合并改行为。
+- **远端CI/收尾**：[45842043031](https://github.com/KB77GG/studytracker/actions/runs/45842043031)对合并96ce82de overall success，test/task-planner/account-provisioning三作业全部success；旧非阻断advisory lint failure/format skipped仍披露。ci.json/ci-evidence.json保存完整步骤及gh读取命令。64候选SHA与批1原14SHA收尾全部匹配，产品没有测试后修改。三树各自两交接更新；只有词汇树随审查分支共享，旧资料和批1交接仅本机。
+- **浏览器/未完**：本轮未进入浏览器任务页。先原生Chrome工具连接未返回/root中断366.6s，后合成服务普通启动EPERM、正规提权启动无返回/root中断209.1s，均非用户拒绝/非测试失败；未执行扩展标签。14:46:42UTC root lsof确认5111无监听、无已确认PID/session。browser/status.json记录全部未验项。原生IME/长按/缩放、真断网丢响应、微信互切、订正刷新、离页10min、老师家长UI未以自动测试代验。计时localStorage条目累积记非阻断后续，不在本次合并改行为。
 - **其他树/发布**：批1`/private/tmp/studytracker-practice-web-batch1-20261126`仍f81a5e4、13M/7U/0staged，14SHA匹配，仅本机。三个共用文件临时文本三方预演均无冲突，尚未实际联合合并/测试，批1CI引用runner需随提交。旧资料`/Users/zhouxin/Desktop/studytracker`仍main6ded77d2原8M/27U，本轮仅两交接和忽略测试venv；保留并行冲刺发布记录。无本轮生产/DB/环境/服务/微信发布行为，flag默认false。下一位先取最终词汇分支CI/报告，补真设备后整合批1及届时main，再按授权联合发布。
 
 
