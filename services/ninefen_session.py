@@ -36,6 +36,13 @@ ID_PATTERN = re.compile(r"[0-9]{1,24}\Z")
 class CollectionError(ValueError):
     """A safe, credential-free message suitable for command output."""
 
+    def __init__(self, message, *, http_status: int | None = None):
+        super().__init__(message)
+        # Preserve only the numeric status, never the HTTPError/response/request.
+        self.http_status = (
+            http_status if type(http_status) is int and 100 <= http_status <= 599 else None
+        )
+
 
 class ReviewMismatch(CollectionError):
     """A valid existing review contains a different version of this unit."""
@@ -177,7 +184,9 @@ class NinefenSession:
                     time.sleep(attempt + 1)
                     continue
                 error = UncertainSubmission if is_post else CollectionError
-                raise error(f"Official API returned HTTP {code}; stopped") from None
+                raise error(
+                    f"Official API returned HTTP {code}; stopped", http_status=code
+                ) from None
             except CollectionError:
                 # Redirect refusals and other safety checks are never transient.
                 raise

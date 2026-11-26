@@ -45,7 +45,7 @@ jobs:
         run: node tests/test_dictation_spell_queue.js
       - name: Test weekly exam sprint source and public pages
         run: |
-          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v
+          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_ninefen_auth tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
       - name: Test classroom vocabulary import client and assignment preset
