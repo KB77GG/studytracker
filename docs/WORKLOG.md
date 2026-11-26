@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-26 — 考前冲刺补更上线及会话续期修复完成
+
+用户“你处理”后确认旧session官方401，正常重登录恢复；11/26 20:27榜单140/140（60阅读80听力）已导入发布，125native+15legacy、414public文件，SHA eaea443d…b8e79。130回归/全量1600判分及生产140GET/94HEAD/两匿名判分通过。业务7bde8d67已commit/push分支与main，两CI45825718426/45828206265成功（旧advisory lint失败）、Deploy45828206189成功；生产worker1/5002/gthread6、最新页200无过期提示。Mac14代码升级、每日官方同owner续期/安全诊断开启，首次exit0；补更标2026-11-23成功保留attempt3，下次11/30 06:00。无人工学生库写入/微信发包；新周长期与移动视觉未冒称。两树交接/runbook/报告更新，随后skip-ci文档同步；旧main6ded原8M27U保留。
+
 ## 2026-11-22 — 后台侧栏 Logo 已部署
 
 用户明确授权后产品b68d49d8从e9d1069a基线commit并原子push任务分支/main，Deploy44979890266成功。11:17:56CST只读回读HEAD/8SHA/5公网资源/1worker6threads5002/active/0自动重启与匿名入口通过；7Node、spell queue守卫及原20浏览器场景保持，独审无阻塞。报告和两交接skip-ci共享不重复部署，main/分支CI均success，业务全过、既有advisory lint失败保留；无本任务数据库/小程序变更。旧主main6ded77d2原7M/24U及并行D3记录保留，实施树及精确命令见CODEX_HANDOFF。

@@ -1,0 +1,59 @@
+{
+  "worktrees": [
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker/.tmp/exam-sprint-repair-20261126",
+      "head": "7bde8d672d8067b3b8b62236b299d7f9bafa53d7",
+      "branch": "codex/exam-sprint-repair-20261126",
+      "status": "## codex/exam-sprint-repair-20261126...origin/codex/exam-sprint-repair-20261126\n M docs/EXAM_SPRINT_RUNBOOK.md\n?? docs/reviews/exam-sprint-repair-20261126/"
+    },
+    {
+      "path": "/Users/zhouxin/Desktop/studytracker",
+      "head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+      "branch": "main",
+      "status": "## main...origin/main [behind 158]\n M AGENTS.md\n M design-qa.md\n M docs/CODEX_HANDOFF.md\n M docs/WORKLOG.md\n M static/style.css\n M templates/listening/index.html\n M templates/listening/test_practice.html\n M templates/login.html\n?? .tmp/\n?? GEMINI.md\n?? artifacts/\n?? data/idictation_vocab_books/\n?? data/idictation_zyz_vocab/\n?? data/reading_study/browse.html\n?? data/reading_study/preview.html\n?? data/toefl_practice/ets-practice-2/\n?? data/toefl_practice/ets-practice-3/\n?? data/toefl_practice/ets-practice-4/\n?? data/toefl_practice/ets-practice-5/\n?? docs/GEMINI_QUICKSTART.md\n?? docs/VOCABULARY_REVIEW_PLAN.md\n?? docs/design/\n?? docs/dictation_input_policy_proposal.md\n?? docs/dictation_strict_result_layout_fix.md\n?? docs/requirements/\n?? docs/reviews/\n?? prototypes/\n?? scripts/import_idictation_vocab_book.py\n?? scripts/import_zyz_vocab.py\n?? static/brand/auth-staircase-hero.png\n?? templates/auth/\n?? tests/test_auth_entry_pages.py\n?? tests/test_import_idictation_vocab_book.py\n?? tests/test_import_zyz_vocab.py\n?? tests/test_listening_practice_context.py"
+    }
+  ],
+  "business_head": "7bde8d672d8067b3b8b62236b299d7f9bafa53d7",
+  "diagnosis": {
+    "public_hotlist_ok": true,
+    "saved_session_official_http_status": 401,
+    "normal_login_completed_by_user": true
+  },
+  "publication": {
+    "fetched_at": "2026-11-26T12:27:01.394201+00:00",
+    "public_files": 414,
+    "ready": 140,
+    "native": 125,
+    "legacy": 15,
+    "snapshot_sha256": "eaea443d63fa4775caad5f070ff838f90ba971e07ff12b08c0d03824c82b8e79",
+    "production_verified": true
+  },
+  "validation": {
+    "local_regressions": 130,
+    "real_practices": 140,
+    "canonical_correct": 1600,
+    "canonical_total": 1600,
+    "media_head": 94,
+    "audio": 80,
+    "images": 14,
+    "source_renewal_live_succeeded": true,
+    "old_app_session_readonly_probe_succeeded": true
+  },
+  "ci": {
+    "branch_run": 45825718426,
+    "main_run": 45828206265,
+    "overall": "success",
+    "required_jobs": "success",
+    "advisory_lint": "failure"
+  },
+  "deployment": {
+    "run": 45828206189,
+    "conclusion": "success",
+    "runtime_installed": true,
+    "code_commit_push_deploy": true,
+    "miniprogram_published": false,
+    "manual_production_database_write": false
+  },
+  "next_weekly_at": "2026-11-30T06:00:00+08:00",
+  "before_documentation_commit": true
+}

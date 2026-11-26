@@ -1,93 +1,77 @@
 # 九分学长考前冲刺：每周完整题库同步
 
-## 当前状态与授权范围
+## 当前状态（2026-11-26）
 
-来源是本机“九分学长考雅机考平台”的「懂的都懂」7天热榜。公开榜单为阅读 Part 1–3、听力 Part 1–4，每部分20条，共140条；不采集“更多排名”等额外权限内容。抓取时间与来源更新时间分开显示，不宣称命中率。
+来源是本机“九分学长考雅机考平台”的「懂的都懂」7天热榜。公开榜单为阅读 Part 1–3、听力 Part 1–4，每部分20条，共140条；不采集“更多排名”等额外权限内容。抓取时间与来源更新时间分开显示，不宣称命中率。入口为 `/practice/sprint/listening` 与 `/practice/sprint/reading`。
 
-本轮用户已明确允许每周对新题或改版题使用本机登录会话，必要时空白交卷取得官方复盘答案，并允许会话受限长期保存在这台Mac。此前“一次测试交卷”的限制已由本轮明确授权扩展；不能再把它写成当前阻塞。每个unit及题面内容SHA最多尝试一次新交卷，优先复用现有同版本答案/复盘；不确定提交结果保留pending状态，禁止自动重复POST。账号会话、原始复盘及采集checkpoint只留本机，不上传服务器或Git。
+11月23日周更失败的直接原因已确认：独立保存的旧会话调用官方只读 unit-status 返回 HTTP 401。用户正常重新登录后，本机绑定会话已恢复，官方正常续期也已实测成功。续期后原客户端会话的只读 GET 仍有效，只能说明这次观察没有立即撤销旧会话，不能推断服务器永远不撤销或 token 永不过期。
 
-本机全量准备已完成：140份公开题面、124题官方答案齐全，另16条听力沿用严格核对的原题映射；完整`current.json`及`data/exam_sprint/latest.json`种子均已落盘，阅读60/60、听力80/80可练。95个唯一来源媒体（80 MP3、14 PNG、1 JPEG）共763,206,054 bytes全部下载并验证。全量本机GET/访客提交与判分验收通过，1600/1600答案判对；同一完整快照现已在生产激活并完成线上验收。
+最新快照捕获于 **2026-11-26T12:27:01.394201Z**，阅读60/60、听力80/80可练，125条原生导入＋15条严格人工映射。414个公开文件已上传并原子激活，快照 SHA256 为 `eaea443d63fa4775caad5f070ff838f90ba971e07ff12b08c0d03824c82b8e79`。生产140个题页 GET、94个媒体 HEAD、匿名阅读13/13及听力10/10判分均通过，提交均为 `synced=false`。本机140 GET＋140访客 POST、1600/1600答案判对，850处占位符、1450个长题目ID及14张图校验通过，临时内存数据库记录数不变。
 
-用户已明确授权“发布并启用每周更新”。业务提交`154a642fabc017557b92abbefd022dc112a383a5`已commit并push功能分支与main，网页及激活代码已部署。分支[CI 43710428721](https://github.com/KB77GG/studytracker/actions/runs/43710428721)和main [CI 43711098532](https://github.com/KB77GG/studytracker/actions/runs/43711098532)均overall success，三个required job成功；既有advisory lint仍failure。[Deploy 43711098583](https://github.com/KB77GG/studytracker/actions/runs/43711098583)成功，生产HEAD已回读为`154a642f`。343个公开文件已上传并原子激活，完整140题线上验收通过，Mac launchd已安装启用且首次运行正常跳过已发布周。小程序没有上传、提审或发布。
+业务修复 `7bde8d672d8067b3b8b62236b299d7f9bafa53d7` 已提交、推送功能分支和main并部署。分支 [CI 45825718426](https://github.com/KB77GG/studytracker/actions/runs/45825718426)及main [CI 45828206265](https://github.com/KB77GG/studytracker/actions/runs/45828206265)均overall success，三个required job通过，既有advisory lint仍failure；[Deploy 45828206189](https://github.com/KB77GG/studytracker/actions/runs/45828206189)成功。生产最终HEAD回读为`7bde8d67`，tracked clean、active/running、NRestarts=0、实际worker=1，新快照SHA一致。听阅入口的生产HTTP和公网HTTPS均200，显示同步时间`2026-11-26 20:27`，无过期提示，下次为`2026-11-30 06:00`。Mac installer升级及回读成功：14个runtime代码SHA一致、续期开关已启用，launchd runs=1/exit=0，日志为 `session_renewal_completed` 后 `already_published`。本周 `2026-11-23` 已记录成功，原attempts=3保留。代码、数据和本机定时任务全部完成，没有剩余发布阻塞。
 
-## 管道与校验
+用户此前“发布并启用每周更新”、每周新题/改版题必要时空白交卷、会话受限长期保存在这台Mac的授权持续有效，本轮另明确要求“你处理”。这不扩大到其他账号、额外权限题库或上传凭据。修复后的跨日续期、下一真实周采集及长期稳定性尚未实际验证。当前证据见[11月26日修复验收](reviews/exam-sprint-repair-20261126/README.md)；[11月15日首次上线记录](reviews/exam-sprint-20261115/README.md)仅作历史。
 
-网页入口为 `/practice/sprint/listening` 与 `/practice/sprint/reading`，原听力/阅读四个目录顶部提供入口，并保留Part和返回来源导航。
+## 管道与完整性
 
 1. `services/ninefen_source.py`获取公开榜单和题面。固定HTTPS域、证书与hostname验证、响应上限、超时、有限重试、拒绝重定向；两科七组必须完整。
-2. `services/exam_sprint_import.py`验证完整榜单，优先复用题面SHA及本地文件均未变更的人工映射或原生导入。不能按标题猜版本；失效旧导入不会遮住有效人工映射。
-3. 缺答案时由显式授权的`services/ninefen_session.py`采集官方复盘。所有题目身份、题干、选项、说明与正文必须和当前公开题面匹配。答案按question ID和完整source SHA绑定；source rightAnswer=null不能用来猜答案。`collect_ninefen_answers.py`默认只读，只有显式`--allow-new-attempts`才允许有checkpoint保护的新交卷。
-4. `services/ninefen_assets.py`只下载`https://static.9fnnn.com/practice/`白名单媒体，限制格式、大小、超时、重试及路径。资产按实际内容SHA不可变保存；每题manifest核验source SHA、URL全覆盖、字节数、格式与文件SHA。公开源payload不改写。
-5. `services/ninefen_content.py`转换为现有阅读/听力做题及判分格式；不支持或缺失的题型/图片/答案直接中止，不裁剪或伪造。`services/exam_sprint_store.py`保存带来源版本的不可变JSON及完整性receipt；新版本生成新ID，保留旧版本。
-6. `scripts/sync_exam_sprint.py`持互斥锁运行。只有所有来源开放题目均完整可练，才生成候选、归档并原子替换本机`current.json`；失败保旧期。`--dry-run`不替换当前快照且不新交卷，但可能获取公开数据、读取匹配复盘并写入可复用缓存/不可变文档。
-7. `scripts/publish_exam_sprint.py`仅传显式白名单中的公开媒体、转换后文档/receipt和候选快照。服务器`activate_exam_sprint.py`重新校验140条榜单、每个开放题目的身份/内容/资产、人工映射及下架状态，再原子激活并归档。既有不可变文件不覆盖；校验失败保留远端旧期。
+2. `services/exam_sprint_import.py`优先复用题面SHA及本地文件均未变更的人工映射或原生导入。不能按标题猜版本；失效旧导入不会遮住有效人工映射。
+3. 缺答案时由显式授权的`services/ninefen_session.py`采集官方复盘。题目身份、题干、选项、说明与正文必须和当前题面匹配。答案按question ID和完整source SHA绑定，`rightAnswer=null`不能猜答案。每个unit及题面SHA最多尝试一次新交卷；不确定提交保留pending，禁止自动重复POST。`collect_ninefen_answers.py`默认只读，显式`--allow-new-attempts`才允许受checkpoint保护的新交卷。
+4. `services/ninefen_assets.py`只下载`https://static.9fnnn.com/practice/`白名单媒体，限制格式、大小、超时、重试及路径。内容SHA不可变缓存；manifest核验source SHA、URL覆盖、字节数、格式与文件SHA，公开原payload不改写。
+5. `services/ninefen_content.py`转换为现有题页及判分格式；不支持或缺失的题型/图片/答案直接中止，不裁剪或伪造。`services/exam_sprint_store.py`保存版本化不可变JSON及receipt，新版本生成新ID并保留旧版。
+6. `scripts/sync_exam_sprint.py`持互斥锁运行。完整榜单全部开放题目可练才生成候选、归档并原子替换本机`current.json`，失败保旧期。`--dry-run`不替换快照且不新交卷，但可能获取公开数据、读取匹配复盘并写可复用缓存。
+7. `scripts/publish_exam_sprint.py`只传白名单内的公开媒体、转换后文档/receipt和候选快照。服务器`activate_exam_sprint.py`重新核验完整性、人工映射及下架状态，再原子激活并归档；不可变文件不覆盖，失败保远端旧期。
 
-网页读取时重新核对人工映射撤销、本地JSON SHA、下架清单、媒体引用覆盖与实际SHA。媒体hash缓存按路径、size、mtime、inode区分；坏metadata、缺媒体、同长度改写均关闭对应链接。过期或失败不得伪造新的同步时间。
+网页读取时重新核对人工映射撤销、JSON SHA、下架清单、媒体引用覆盖与实际SHA。媒体hash缓存按路径、size、mtime、inode区分；坏metadata、缺媒体、同长度改写均关闭链接。失败不伪造同步时间。
 
-## 本机目录与隐私边界
+## 本机目录与隐私
 
-默认运行数据为`<项目根>/instance/exam_sprint/`，Git忽略。`EXAM_SPRINT_STATE_DIR`可指定替代目录，相关读写进程必须使用同一个值。
+默认数据为`<项目根>/instance/exam_sprint/`，Git忽略。`EXAM_SPRINT_STATE_DIR`可指定替代目录，相关进程必须使用同一值。稳定runtime为 `/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint`。
 
-- `exams/<unit>.json`：公开原题；`media/<unit>.json`：与原题hash绑定的完整媒体manifest。
-- `assets/<sha>.<ext>`：不可变媒体；`content/{reading,listening}/`：版本化练习及receipt。
-- `private/`：本机会话、官方答案缓存、复盘及checkpoint；目录700、敏感文件600，不打印令牌，不上传。
-- `current.json`、`history/`：当前与历史公开快照；`media-validation.json`：本轮媒体验收结果。
-- `data/exam_sprint/mappings.json`：16条旧题人工映射；`latest.json`已更新为完整140题种子（124原生导入＋16人工映射）。种子仍依赖对应本地/服务器媒体与版本文档，只有代码或种子并不等于题库已部署。
+- `exams/<unit>.json`为公开题面，`media/<unit>.json`为与题面SHA绑定的manifest；`assets/<sha>.<ext>`及`content/{reading,listening}/`为不可变媒体、版本化练习和receipt。
+- `current.json`、`history/`为当前及历史快照。`private/`为会话、官方答案缓存、复盘和checkpoint，目录700/敏感文件600；不进Git、不上传服务器，不把token写入plist、日志或命令行。
+- runtime根下`weekly-state.json`、`weekly-config.json`和日志是本机控制数据；owner、文件版本等元数据只保存在受限文件。
+- `data/exam_sprint/mappings.json`仍有16条已审核候选映射，本次实际采用15条。`data/exam_sprint/latest.json`仍是11月15日仓库种子，不是11月26日runtime快照。仅取得代码或种子不等于题库部署完成。
 
-稳定Mac runtime为`~/Library/Application Support/StudyTrackerExamSprint`。安装器只复制必要代码、运行数据和当前人工映射依赖；主资料树提供16条旧听力音频时必须显式给`--legacy-assets-root`，不依赖工作树软链接。会话绝不放入plist、日志、命令行值、远端或仓库。
+安装器只复制必要代码、运行数据和当前人工映射依赖。主资料树提供旧听力音频时显式给`--legacy-assets-root`，不依赖工作树软链接。小程序没有因本次修复上传、提审或发布。
 
-## 复验与本机准备
+## 周更与正常会话续期
 
-以下命令在`/private/tmp/studytracker-exam-sprint-20261115`执行，解释器借用主资料树venv。它们不是部署授权。
+launchd任务`com.sagepath.studytracker-exam-sprint`每周一06:00 Asia/Shanghai运行，另每1800秒补查，并在加载时检查。这台Mac需保持登录、开机联网；休眠/关机期间不在服务器代读账号，唤醒后检查当前到期周。空闲时`not running`不代表未启用。
+
+每周最多3次管道尝试。同步失败不标成功；同步成功但发布失败时保存候选SHA，后续只重试该候选发布，不重新交卷。候选发布不依赖源会话，也不因续期失败受阻。不要删除checkpoint、重置计数或改变旧快照时间来强行重跑。
+
+修复后的安装器显式启用`session_renewal_enabled`。runner在已发布周也最多每24小时尝试一次官方续期，请求前先持久化attempt；成功及网络失败均受每日上限约束。`services/ninefen_auth.py`对固定官方 `/api/user-auth/v1/session/renew` 发一次空JSON POST，token请求头、10秒超时，拒绝重定向/环境代理凭据/任何POST自动重试。只接受相同owner及无歧义会话，原子保存token和续期时间，不保存响应个人资料。
+
+HTTP401/403、明确认证拒绝或owner缺失/不符进入`login_required`并停止自动续期。网络故障保原文件；服务端可能已经旋转token，不能立即补发。替换已提交但仅目录fsync失败时返回`renewed`及`durability_confirmed=false`，不回滚、不视作可重试失败。
+
+正常重新登录、替换绑定会话后，`--resume-session-after-login`只验证会话，不采题、不发布、不重置周更计数。恢复过程中保留阻断，真实同身份续期成功才解除；本地`skipped_recent`不算验证。文件版本未变化时不重试；已恢复的相同文件重复命令为无副作用跳过。`--check`零网络、零状态写入，不创建周更锁。
+
+## 安全诊断与故障恢复
+
+固定JSON日志包含阶段、错误枚举、受限HTTP状态和源码模块/行号，不记录任意异常message、HTTP body或凭据。runner只转发白名单事件，单行最多4 KiB、总解析256 KiB、最多160条，其他stdout/stderr丢弃。`session_rejected`加401/403用于辨别会话问题，不代表可无限重试。
+
+1. 先查看安全日志及`--check`，区分会话、题型/题面、媒体、上传或激活失败；确认周更次数和pending候选。
+2. 认证被拒时让用户在官方客户端正常重新登录。本轮`refresh_local_session.py --save`是固定profile的受限日志读取助手，只处理精确会话记录，不支持任意SST或多账号自动发现，不导出个人资料、不修改客户端profile。JWT userid只是期望owner，本地decode不是签名校验；先通过官方只读GET验证会话，再原子保存600文件，并由真实官方renew响应核对同owner。
+3. 安装修复代码后执行会话恢复命令；成功不重置周更次数。若本周次数已耗尽，仍需显式人工恢复流程，不自动清零。
+4. 采集/转换后先本地全量验收、发布dry-run，再传公开文件并回读生产快照、题页、媒体及匿名判分。全部通过才记本周成功。
+5. 本次`record_recovery.py`仅在生产验收成功、精确快照SHA一致后，持周更锁记录`2026-11-23`成功并保留attempts=3。它是固定日期修复脚本，不是未来周通用的“标成功”工具。
+
+本次工作树为 `/Users/zhouxin/Desktop/studytracker/.tmp/exam-sprint-repair-20261126`，解释器使用主资料树venv。以下维护示例中联网或写状态命令仍须符合已有授权，不为复验额外新交卷：
 
 ```sh
-PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-sprint-20261115/verify_local.py
-PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-sprint-20261115/verify_imported.py
-/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_practice_history -q
-node --test tests/test_practice_shell.js
-/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/cache_exam_sprint_media.py --workers 2
-/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/publish_exam_sprint.py --state-dir instance/exam_sprint --dry-run
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/run_exam_sprint_weekly.py --runtime-dir "/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint" --check
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-sprint-repair-20261126/refresh_local_session.py --save
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/run_exam_sprint_weekly.py --runtime-dir "/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint" --resume-session-after-login
+EXAM_SPRINT_STATE_DIR="/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint/instance/exam_sprint" /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B docs/reviews/exam-sprint-repair-20261126/verify_imported.py
+/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/publish_exam_sprint.py --state-dir "/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint/instance/exam_sprint" --dry-run
 /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/install_exam_sprint_launchd.py
 ```
 
-媒体命令最多2并发，已完整且hash有效的题直接复用，失败题不覆盖旧manifest；联网受沙箱审批约束。发布dry-run只做本地完整校验，不运行ssh/rsync。安装脚本不带`--install`只输出计划。完整快照未生成时发布dry-run应失败，不能为了通过而降低校验。
+安装脚本不带`--install`仅输出计划；实际更新使用`--install --legacy-assets-root /Users/zhouxin/Desktop/studytracker`。只有新建runtime且首次生产发布确已完成时才用`--initial-publish-confirmed`。更新安装持runner同一把锁，不先终止在途POST。生产保持5002、1 worker、gthread6，无数据库schema变更或生产重模型推理。旧systemd榜单方案不与Mac launchd并行启用。
 
-离线榜单复验可用`sync_exam_sprint.py --from-file <albums.json> --fetched-at <真实捕获ISO时间> --exam-dir <公开题面目录> --dry-run`；必须保留真实捕获时间。不要将离线结果称为新一轮联网更新。
+## 验证范围与未验证项
 
-本轮最终本机验收：`verify_local.py`的196项Python通过（不含单独通过的history9项）；`verify_imported.py`完成140个GET、140次访客POST、1600/1600判对、95个练习引用媒体HEAD、828处占位符及1440个长question ID校验，内存数据库记录数不变。公开发布dry-run校验343个公开文件且140/140 ready，只读发布审计无阻断。本机浏览器真实阅读页已验13/13及图表完整；之后屏幕再次锁定，完整榜单刷新与移动端仍待复核。
+证据及精确命令见[修复README](reviews/exam-sprint-repair-20261126/README.md)。11月15日的“124原生＋16映射、95媒体、343文件、首次跳过已发布周、下一次11月16日”等仅为历史。
 
-本轮历史验收与新管道证据见`docs/reviews/exam-sprint-20261115/README.md`。旧资料树的`static/listening_jijing/audio`为既有媒体；工作树相应路径的忽略软链接仅供本机开发，不随Git传输。
-
-## 发布、定时启用及后续维护
-
-本轮已完成：业务154a642f部署、343个公开文件上传及原子激活、140题线上验收、Mac launchd安装与首次运行回读。生产HEAD/快照一致，快照SHA256为`0eb2ca7f78e1405df312625f4e814100d73555b9bcb76b110657ccd5a42214fc`。以下步骤保留为后续维护流程，不需要重复发布同一版本。不要从落后且有其他脏改动的旧桌面main发布。生产仍保持5002、单worker、gthread6；本功能不需数据库schema变更或生产重模型推理。
-
-部署激活脚本与网页代码后，先用`publish_exam_sprint.py --state-dir instance/exam_sprint --dry-run`确认候选，再执行同命令去掉`--dry-run`上传公开资产并激活；必须回读远端快照hash、可练总数、题页/音频/图片与判分。原始题面、会话、checkpoint、私有复盘和原始答案包均不在上传白名单。
-
-本轮在首次远端完整发布及验证成功后，已用以下命令建立本机稳定runtime并注册launchd。未来重新初始化时，`--initial-publish-confirmed`同样必须代表真实完成的首次发布：
-
-```sh
-/Users/zhouxin/Desktop/studytracker/.venv/bin/python -B scripts/install_exam_sprint_launchd.py --install --initial-publish-confirmed --legacy-assets-root /Users/zhouxin/Desktop/studytracker
-```
-
-安装器要求Mac系统时区为Asia/Shanghai、稳定Python及本地受限会话，复制后先在隔离runtime执行完整本地发布校验，成功才注册。更新安装持有与runner相同的锁；正在运行采集时拒绝更新，不会先bootout终止在途POST。
-
-launchd任务名`com.sagepath.studytracker-exam-sprint`，每周一06:00 Asia/Shanghai，另每30分钟检查补跑，并在加载时检查。新runtime记录首次已发布周，首次加载不会立即重抓全量。需要这台Mac保持登录、开机联网且来源登录会话有效；休眠或关机时不会在服务器代为读取账号，唤醒或恢复后补跑当前到期周。
-
-每周最多3次管道尝试。同步失败不标成功；同步已成功但上传失败时保存候选SHA，后续只重试同一候选的发布，不重新交卷。发生pending提交或身份/正文不完整时停住并保留checkpoint，不能删除记录后强行重试。会话过期需通过正常登录续期。
-
-早期systemd榜单方案已被Mac launchd取代，当前`deploy/exam-sprint/`提供launchd plist；不安装或同时启用旧systemd定时。不得把本机会话复制到生产机器。
-
-## 线上与调度验收结果
-
-生产2026-11-15 20:17 CST验收通过：HEAD154a642f、tracked clean、active/running、NRestarts=0；gunicorn仍127.0.0.1:5002、1 worker、gthread、6 threads。140个练习GET及95个媒体HEAD（80音频、15图片）均通过；匿名阅读13/13、听力10/10且`synced=false`。公网HTTPS听阅入口均200且标题正确。脚本不导入app/config/数据库，未读取学生表或来源凭据。
-
-Mac 20:19 CST回读：label注册、runs=1、last exit code=0；首次日志`already_published`，对应周2026-11-09，attempts为空，无新增交卷。周一06:00及1800秒补查配置一致，下一次计划为**2026-11-16 06:00 Asia/Shanghai**；13个runtime代码SHA、快照SHA一致，private700/session600。无ssh-agent依赖的BatchMode连接probe已exit0。正常空闲时launchd显示`not running`，不代表job未启用。
-
-生产和调度报告及精确SSH stdin验收命令见[验收README](reviews/exam-sprint-20261115/README.md)。未来真实新一周自动采集尚未发生；本机5096预览已停止。屏幕再次锁定后的完整榜单浏览器刷新、移动端/微信视觉体验仍未复核，不影响已通过的HTTP、判分与调度注册结果。本轮主发布流程没有剩余阻断。
-
-## 暂停与故障恢复
-
-暂停调度可在本机卸载该launchd job，保留runtime和全部checkpoint；重新加载会按已发布周和pending状态恢复。操作前确认是否有正在进行的采集，不以强制杀进程作为更新步骤。已发布学生练习版本不删除，旧快照/历史保留。
-
-重试前先区分题面/题型变更、会话过期、网络失败、媒体完整性、上传或远端激活失败。缺项期间继续展示旧期并保留真实时间。人工映射错误可从映射清单撤销，之后按正常代码发布流程同步。launchd注册、计划时间及首次跳过已回读通过；真实新一周到期采集尚未发生，届时正常观察日志，不为验收额外触发新交卷。
+本次已实测正常登录恢复、官方续期、代码和数据发布及新版runtime首次运行；修复后的跨日续期、下一真实周自动采集及长期稳定性尚未发生。浏览器完整榜单刷新和移动端/微信视觉体验不包含在HTTP/判分验收内。暂停时保留runtime和全部checkpoint，先确认无在途采集；不强杀进程，不删已发布版本或历史。修复文档由主agent随后统一作skip-ci提交推送；文档提交不代表需要再次重启已验收的生产业务版本。
