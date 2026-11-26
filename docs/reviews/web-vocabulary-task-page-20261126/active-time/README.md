@@ -34,8 +34,10 @@
 
 ## 联合发布安排
 
-用户要求先完成词汇页，再与网页批 1 一起部署。批 1 仍在 `/private/tmp/studytracker-practice-web-batch1-20261126`，未合入本分支；共享 `origin/main` 已有考前冲刺 `79388e26`，也未合入本候选。共同发布前须整合两批及最新 main，保留双方 CI 与交接记录。
+用户要求先完成词汇页，再与网页批 1 一起部署。批 1 仍在 `/private/tmp/studytracker-practice-web-batch1-20261126`，未合入本分支；开工时共享 `origin/main` 为考前冲刺 `79388e26`，未合入本候选。共同发布前须整合两批及最新 main，保留双方 CI 与交接记录。
 
 远端 [CI 45836063646](https://github.com/KB77GG/studytracker/actions/runs/45836063646) 的 `test`、`account-provisioning`、`task-planner` 全部 success，新计时测试及词汇身份/结算集成步骤均 success。既有非阻断 advisory lint 仍 failure、format skipped；本轮未改 Python 或 Ruff 配置，不声称全仓 lint 通过。完整作业状态在 `ci.json`，精确读取命令和摘要在 `ci-evidence.json`。收尾复核本词汇 36 项及批 1 的 14 项 SHA 均匹配。
+
+收尾读取共享远端跟踪引用时，`origin/main` 已由并行任务推进至 `3b26404ce21f7528e3c7e63703ca7f8268ad0465`（考前冲刺布置/组卷，追加4提交）；这是本轮观察值，非本轮推送。较开工79388e26又涉及 `app.py`、`api/miniprogram.py`、`services/web_practice_tasks.py`、CI及听力模板等共用路径。当前词汇候选和批1均未合入该版本，之前只针对79388e26的临时CI合并检查不能代表这次整合。联合发布前须重新fetch、实际整合并验证，不把本分支CI当成整合后验收。
 
 本轮不改全局开关，`PRACTICE_VOCABULARY_WEB_ENABLED` 仍默认 false；未访问生产、改配置或数据、触发部署或微信发布。只有该词汇审查分支已同步；批 1 产品仍仅本机。两个实施树和旧资料树的规范交接分别更新，旧资料及批 1 的交接更新仅本机可见。
