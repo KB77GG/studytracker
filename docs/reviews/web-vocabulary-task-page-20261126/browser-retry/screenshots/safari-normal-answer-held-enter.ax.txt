@@ -1,0 +1,65 @@
+Window: "网页背词 · 合成验收词书 · 第1–2词 · StudyTracker", App: Safari浏览器.
+0 标准窗口 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, ID: SafariWindow?IsSecure=false&UUID=C3795DF7-6DE3-44D7-84EC-267BED90F7C7, Secondary Actions: Raise
+	1 分离组
+		2 分离器 (disabled, settable, float) -1
+		3 标签页组
+			4 滚动区
+				5 HTML内容 Description: 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, URL: localhost:5111/practice/vocabulary/tasks/4
+					6 container
+						7 link ← 返回任务列表, Value: localhost:5111/practice#practiceAssignedTasks
+						8 标题 网页背词 · 合成验收词书 · 第1–2词, Value: 1
+							9 文本 网页背词 · 合成验收词书 · 第1–2词
+						10 text 综合训练 第 1 / 1 组 今日可操作 ✓ 已保存
+						11 按钮 ⌨ 键盘
+					12 container 本组阶段
+						13 text ✓ 熟悉材料 ✓ 主动提取
+						14 container
+							15 text 3 语境辨析 0 / 2
+						16 进度指示条 (settable, float) 当前阶段进度, Value: 0
+					17 container
+						18 文本 ✓
+						19 文本 回答正确
+						20 描述列表
+							21 文本 正确答案
+							22 文本 依赖
+							23 文本 你的答案
+							24 文本 依赖
+						25 文本 depend
+						26 文本 /dɪˈpend/
+						27 按钮 播放音频
+						28 文本 依赖
+						29 文本 depend on
+						30 文本 Students depend on clear feedback.
+						31 文本 学生依赖清晰的反馈。
+						32 文本 常用搭配，请结合句子理解。
+					33 container
+						34 文本 作答后自动保存
+						35 按钮 继续 ↵
+	36 工具栏
+		37 container Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+			38 按钮 Description: 显示边栏, ID: SidebarButton
+			39 菜单按钮 Description: 标签页组选择器, ID: TabGroupPickerButton?TabGroup=
+		40 container BackForwardSegmentedControl
+			41 按钮 Description: 返回, Help: 显示上一页, ID: BackButton
+			42 按钮 (disabled) Description: 前进, Help: 显示下一页, ID: ForwardButton
+		43 container Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+			44 按钮 页面菜单, ID: AssistantButton
+			45 按钮 (disabled) 将页面添加到阅读列表, ID: OneStepBookmarkingButton
+			46 文本栏 (settable) Description: 智能搜索栏, Value: localhost:5111/practice/vocabulary/tasks/4, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD
+			47 按钮 翻译可用, ID: TranslationButton
+			48 按钮 重新加载此页面, ID: ReloadButton
+		49 按钮 Description: 共享, ID: ShareButton, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		50 按钮 Description: 新建标签页, ID: NewTabButton, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		51 按钮 Description: 标签页概览, ID: TabOverviewButton, Secondary Actions: 移到上一项, 从工具栏移除
+	52 关闭按钮
+	53 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	54 最小化按钮
+55 menu bar
+	56 Safari浏览器
+	57 文件
+	58 编辑
+	59 显示, ID: SafariViewMenu
+	60 历史记录
+	61 书签, ID: SafariBookmarksMenu
+	62 窗口, ID: SafariWindowMenu
+	63 帮助, ID: SafariHelpMenu

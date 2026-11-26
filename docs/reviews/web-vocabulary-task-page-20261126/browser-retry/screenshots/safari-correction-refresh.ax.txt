@@ -1,0 +1,29 @@
+The following is a diff from the previous accessibility tree for Window: "网页背词 · 合成验收词书 · 第1–2词 · StudyTracker" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 153-179
++			183 滚动区
++				184 HTML内容 Description: 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, URL: localhost:5111/practice/vocabulary/tasks/4
++					185 container
++						186 link ← 返回任务列表, Value: localhost:5111/practice#practiceAssignedTasks
++						187 标题 网页背词 · 合成验收词书 · 第1–2词, Value: 1
++							188 文本 网页背词 · 合成验收词书 · 第1–2词
++						189 text 综合训练 第 1 / 1 组 今日可操作 ✓ 已保存
++						190 按钮 ⌨ 键盘
++					191 container 本组阶段
++						192 text ✓ 熟悉材料
++						193 container
++							194 text 2 主动提取 2 / 2
++						195 text 3 语境辨析
++						196 进度指示条 (settable, float) 当前阶段进度, Value: 100
++					197 container
++						198 文本 订正：照正确答案输入一次（不计分）
++						199 文本 第 1 / 2 次
++						200 文本 正确答案
++						201 标题 focus, Value: 2
++							202 文本 focus
++						203 按钮 播放音频
++						204 文本 照正确答案输入一次
++						205 文本栏 (settable) 照正确答案输入一次, Placeholder: 在这里输入
++						206 文本 Enter 提交 · 中文输入法确认候选词不会提交
++					207 container
++						208 文本 作答后自动保存
++						209 按钮 提交订正 ↵

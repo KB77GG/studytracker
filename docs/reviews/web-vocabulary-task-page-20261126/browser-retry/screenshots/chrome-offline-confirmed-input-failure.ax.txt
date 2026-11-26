@@ -1,0 +1,243 @@
+Window: "网页背词 · 合成验收词书 · 第1–2词 · StudyTracker", App: Google Chrome.
+0 标准窗口 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - Google Chrome - Kingship, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2, Secondary Actions: Raise
+	1 container 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - Google Chrome - Kingship, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2
+		2 container
+			3 工具栏
+				4 按钮 返回
+				5 按钮 (disabled) 前进
+				6 按钮 重新加载
+				7 container
+					8 弹出式按钮 查看网站信息
+					9 文本栏 (settable) 地址和搜索栏, Value: 127.0.0.1:5114/practice/vocabulary/tasks/2, Placeholder: 问问 Google 或输入网址
+					10 按钮 为此标签页添加书签
+				11 弹出式按钮 扩展程序
+				12 按钮 Kingship
+				13 弹出式按钮 完成更新
+			14 container
+				15 滚动区
+					16 HTML 内容 DevTools, URL: devtools://devtools/bundled/devtools_app.html?remoteBase=https://chrome-devtools-frontend.appspot.com/serve_file/@049750111b1e5c11565c792b2aeed5541f332bad/&targetType=tab&can_dock=true
+						17 container
+							18 container
+								19 container
+									20 container DevTools is now available in Chinese
+										21 文本 DevTools is now available in Chinese
+										22 按钮 Don’t show again
+										23 按钮 Always match Chrome’s language
+										24 按钮 Switch DevTools to Chinese
+										25 container Close
+											26 按钮 Close
+									27 container
+										28 container
+											29 container Main toolbar
+												30 工具栏
+													31 container Select an element in the page to inspect it, Help: Select an element in the page to inspect it - ⌘ ⇧ C
+														32 切换按钮 Select an element in the page to inspect it - ⌘ ⇧ C, Value: 0
+													33 container Toggle device toolbar, Help: Toggle device toolbar - ⌘ ⇧ M
+														34 切换按钮 Toggle device toolbar - ⌘ ⇧ M, Value: 0
+												35 container
+													36 标签页组 Panels
+														37 标签 (settable, integer) Elements, Value: 0
+														38 标签 (settable, integer) Console, Value: 0
+														39 标签 (settable, integer) Sources, Value: 0
+														40 标签 (selected) Network, Value: 1
+													41 弹出式按钮 More tabs
+												42 工具栏
+													43 container
+														44 container Open Console to view 2 errors
+															45 按钮 Open Console to view 2 errors
+														46 container Open Issues to view 1 issue: 1 possible improvement
+															47 按钮 Open Issues to view 1 issue: 1 possible improvement
+													48 container Settings, Help: Settings - F1 - ⇧ ?
+														49 按钮 Settings - F1 - ⇧ ?
+													50 弹出式按钮 Customize and control DevTools
+														51 按钮 Customize and control DevTools
+													52 container Close
+														53 按钮 Close
+											54 container Network panel
+												55 container network
+													56 container
+														57 工具栏
+															58 container Stop recording network log, Help: Stop recording network log - ⌘ E
+																59 切换按钮 Stop recording network log - ⌘ E, Value: 1
+															60 container Clear network log, Help: Clear network log - Ctrl L - ⌘ K
+																61 按钮 Clear network log - Ctrl L - ⌘ K
+															62 container Filter
+																63 切换按钮 Filter, Value: 1
+															64 container Search
+																65 切换按钮 Search, Value: 0
+															66 container
+																67 复选框 Keep log, Value: 1
+																68 文本 Keep log
+															69 container
+																70 复选框 Disable cache, Value: 0
+																71 文本 Disable cache
+															72 弹出式按钮 Throttling, Value: Presets: Offline
+																73 (selected) Presets: Offline
+															74 container More network conditions…
+																75 按钮 More network conditions…
+															76 container Import HAR file…
+																77 按钮 Import HAR file…
+															78 container Export HAR (sanitized)…
+																79 按钮 Export HAR (sanitized)…
+															80 container Network settings
+																81 切换按钮 Network settings, Value: 0
+														82 工具栏
+															83 文本输入区 (settable) Filter
+																84 文本 Filter
+														85 container Inverts the search filter
+															86 复选框 Invert, Value: 0
+															87 文本 Invert
+														88 container Show only/hide requests dropdown
+															89 弹出式按钮 Show only/hide requests
+																90 文本 More filters
+														91 列表框 Request types to include, Help: ⌘ Click to select multiple types
+															92 text All Fetch/XHR Doc CSS JS Font Img Media Manifest Socket Wasm Other
+														93 container Overview grid window
+															94 container
+																95 container
+																	96 文本 0 ms
+																	97 文本 5,000 ms
+																	98 文本 10,000 ms
+																	99 文本 15,000 ms
+																	100 文本 20,000 ms
+															101 滑块 Left resizer, Value: 0, Details: 0 ms, Secondary Actions: Increment, Decrement
+															102 滑块 Right resizer, Value: 100, Details: 18,367 ms, Secondary Actions: Increment, Decrement
+														103 container
+															104 container
+																105 表格
+																	106 row
+																		107 列标题 Name - Sortable column. Press enter to sort.
+																			108 文本 Name
+																		109 列标题 Status - Sortable column. Press enter to sort.
+																			110 文本 Status
+																		111 列标题 Type - Sortable column. Press enter to sort.
+																			112 文本 Type
+																		113 列标题 Initiator - Sortable column. Press enter to sort.
+																			114 文本 Initiator
+																		115 列标题 Size - Sortable column. Press enter to sort.
+																			116 文本 Size
+																		117 列标题 Time - Sortable column. Press enter to sort.
+																			118 文本 Time
+																	119 row
+																		120 单元格 http://127.0.0.1:5114/api/practice/vocabulary/tasks/2/sync
+																			121 图像 Fetch request failed
+																			122 文本 sync
+																		123 单元格 (failed) net::ERR_INTERNET_DISCONNECTED
+																			124 text (failed) net::ERR_INTERNET_DISCONNECTED
+																		125 单元格
+																			126 文本 fetch
+																		127 单元格
+																			128 链接 practice_vocabulary_transport.js:87, Help: http://127.0.0.1:5114/static/js/practice_vocabulary_transport.js:87
+																				129 文本 practice_vocabulary_transport.js:87
+																		130 单元格 0.0 kB transferred over network, resource size: 0.0 kB
+																			131 文本 0.0 kB
+																		132 单元格
+																			133 文本 5 ms
+																	134 row
+																		135 单元格 http://127.0.0.1:5114/api/practice/vocabulary/tasks/2/sync
+																			136 图像 Fetch request failed
+																			137 文本 sync
+																		138 单元格 (failed) net::ERR_INTERNET_DISCONNECTED
+																			139 text (failed) net::ERR_INTERNET_DISCONNECTED
+																		140 单元格
+																			141 文本 fetch
+																		142 单元格
+																			143 链接 practice_vocabulary_transport.js:87, Help: http://127.0.0.1:5114/static/js/practice_vocabulary_transport.js:87
+																				144 文本 practice_vocabulary_transport.js:87
+																		145 单元格 0.0 kB transferred over network, resource size: 0.0 kB
+																			146 文本 0.0 kB
+																		147 单元格
+																			148 文本 2 ms
+															149 container 2 / 3 requests
+																150 文本 2 / 3 requests
+															151 container 0 B / 306 B transferred over network
+																152 文本 0.0 kB / 0.3 kB transferred
+															153 container 0 B / 24044 B resources loaded by the page
+																154 文本 0.0 kB / 24.0 kB resources
+										155 container Drawer
+											156 container
+												157 工具栏
+													158 弹出式按钮 More tools
+														159 按钮 More tools
+												160 标签页组
+													161 标签 (settable, integer) Console, Value: 0
+													162 标签 (settable, integer) AI assistance, Value: 0
+													163 标签 (selected) What’s new, Value: 1
+													164 标签 (settable, integer) Issues, Value: 0
+												165 工具栏
+													166 container Toggle drawer orientation
+														167 按钮 Toggle drawer orientation
+													168 container Minimize drawer
+														169 按钮 Minimize drawer
+													170 container Close drawer
+														171 按钮 Close drawer
+												172 container What’s new panel
+													173 container whats-new
+														174 container
+															175 文本 New in DevTools (November 2026)
+															176 按钮 See all new features
+															177 标题 DevTools for agents, Value: 3
+																178 链接 DevTools for agents, Help: https://developer.chrome.com/blog/new-in-devtools-november-2026/#mcp
+																	179 文本 DevTools for agents
+															180 container
+																181 text Inspect matched rules, inherited styles, pseudo-elements, and  @  rules with the  get_css_styles  tool in Chrome DevTools for agents. You can also manage server flags with a configuration file and parse large performance traces with chunked trace buffer parsing.
+															182 标题 Visual position-area editor for CSS anchor positioning, Value: 3
+																183 链接 Visual position-area editor for CSS anchor positioning, Help: https://developer.chrome.com/blog/new-in-devtools-november-2026/#sources
+																	184 文本 Visual position-area editor for CSS anchor positioning
+															185 container
+																186 text Click the inline swatch next to a  position-area  declaration in the  Styles  tab to visually select anchor grid regions, configure axis modes, and toggle the  self  keyword. Right-click  popover  adorners in the DOM tree to disambiguate multiple implicit anchors.
+															187 标题 Web Install manifest diagnostics and ad script provenance, Value: 3
+																188 链接 Web Install manifest diagnostics and ad script provenance, Help: https://developer.chrome.com/blog/new-in-devtools-november-2026/#web-install-manifest-diagnosti
+																	189 文本 Web Install manifest diagnostics and ad script provenance
+															190 container
+																191 text Diagnose Web Install ( navigator.install  and  <install> ) manifest errors in the  Issues  panel with direct links to affected manifests. In the  Application  panel's  Ads  section, use the new  Ad provenance  column to see whether script ancestry or a filter list rule tagged an ad script.
+							192 文本 Network data available 
+				193 滚动区
+					194 HTML 内容 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2
+						195 container
+							196 link ← 返回任务列表, Value: 127.0.0.1:5114/practice#practiceAssignedTasks
+							197 标题 网页背词 · 合成验收词书 · 第1–2词, Value: 1
+								198 文本 网页背词 · 合成验收词书 · 第1–2词
+							199 container
+								200 text 写作词汇 第 1 / 1 组 今日可操作
+							201 文本 ! 保存失败 · 重试
+							202 按钮 ⌨ 键盘
+							203 container 本组阶段
+								204 text ✓ 熟悉材料
+								205 container
+									206 text 2 主动提取 1 / 2
+								207 text 3 语境辨析 4 语境产出
+								208 进度指示器 当前阶段进度, Value: 50
+							209 container
+								210 标题 保存失败, Value: 2
+									211 文本 保存失败
+								212 文本 网络暂时不可用，输入已保留。请重试；重试不会重复记分。
+							213 文本 作答后自动保存
+							214 按钮 重试保存 ↵
+			215 弹出式按钮 标签页搜索
+			216 container
+				217 标签页组
+					218 标签 (settable, boolean) 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - 内存用量 - 152 MB, Value: off
+						219 按钮 关闭
+					220 标签 (settable, boolean) 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - 内存用量 - 143 MB, Value: off
+						221 按钮 关闭
+					222 标签 (selected, settable, boolean) 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - 内存用量 - 216 MB, Value: on
+						223 按钮 关闭
+			224 按钮 新标签页
+			225 按钮 打开 Chrome 中的 Gemini
+	226 关闭按钮
+	227 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	228 最小化按钮
+229 menu bar
+	230 Chrome
+	231 文件
+	232 编辑
+	233 显示
+	234 历史记录
+	235 书签
+	236 个人资料
+	237 标签页
+	238 窗口
+	239 帮助
+
+The focused UI element is 194 HTML 内容 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2

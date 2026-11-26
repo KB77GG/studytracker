@@ -1,0 +1,36 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5115
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [26/Nov/2026 23:20:53] "GET /__qa/stats HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "[32mGET /__qa/start/writing?fault=transport_drop_once HTTP/1.1[0m" 302 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "GET /practice/vocabulary/tasks/2 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/familiarity HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/familiarity HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "GET /__qa/stats?task_id=2&attempt_id=qa-transport-drop-first HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "GET /__qa/stats?task_id=2&attempt_id=qa-transport-drop-first HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:53] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/answers HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/sync HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/settle HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "GET /__qa/stats?task_id=2&attempt_id=qa-transport-drop-first HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "POST /api/practice/vocabulary/tasks/2/settle HTTP/1.1" 200 -
+127.0.0.1 - - [26/Nov/2026 23:20:54] "GET /__qa/stats?task_id=2&attempt_id=qa-transport-drop-first HTTP/1.1" 200 -

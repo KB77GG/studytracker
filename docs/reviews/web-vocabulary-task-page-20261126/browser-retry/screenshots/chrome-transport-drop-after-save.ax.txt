@@ -1,0 +1,73 @@
+Window: "网页背词 · 合成验收词书 · 第1–2词 · StudyTracker", App: Google Chrome.
+0 标准窗口 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - Google Chrome - Kingship, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2, Secondary Actions: Raise
+	1 container 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - Google Chrome - Kingship, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2
+		2 container
+			3 工具栏
+				4 按钮 返回
+				5 按钮 (disabled) 前进
+				6 按钮 重新加载
+				7 container
+					8 弹出式按钮 查看网站信息
+					9 文本栏 (settable) 地址和搜索栏, Value: 127.0.0.1:5114/practice/vocabulary/tasks/2, Placeholder: 问问 Google 或输入网址
+					10 按钮 为此标签页添加书签
+				11 弹出式按钮 扩展程序
+				12 按钮 Kingship
+				13 弹出式按钮 完成更新
+			14 container
+				15 滚动区
+					16 HTML 内容 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker, URL: 127.0.0.1:5114/practice/vocabulary/tasks/2
+						17 container
+							18 link ← 返回任务列表, Value: 127.0.0.1:5114/practice#practiceAssignedTasks
+							19 标题 网页背词 · 合成验收词书 · 第1–2词, Value: 1
+								20 文本 网页背词 · 合成验收词书 · 第1–2词
+							21 container
+								22 text 写作词汇 第 1 / 1 组 今日可操作
+							23 文本 ✓ 已保存
+							24 按钮 ⌨ 键盘
+							25 container 本组阶段
+								26 text ✓ 熟悉材料
+								27 container
+									28 text 2 主动提取 0 / 2
+								29 text 3 语境辨析 4 语境产出
+								30 进度指示器 当前阶段进度, Value: 0
+							31 container
+								32 text ✓ 回答正确
+								33 定义列表
+									34 container 正确答案
+										35 文本 正确答案
+									36 文本 depend
+									37 container 你的答案
+										38 文本 你的答案
+									39 文本 depend
+								40 text depend /dɪˈpend/
+								41 按钮 播放音频
+								42 text 依赖 depend on Students  depend  on clear feedback. 学生依赖清晰的反馈。 常用搭配，请结合句子理解。
+							43 文本 作答后自动保存
+							44 按钮 继续 ↵
+			45 弹出式按钮 标签页搜索
+			46 container
+				47 标签页组
+					48 标签 (settable, boolean) 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - 内存用量 - 152 MB, Value: off
+						49 按钮 关闭
+					50 标签 (settable, boolean) about:blank - 内存用量 - 145 MB, Value: off
+						51 按钮 关闭
+					52 标签 (selected, settable, boolean) 网页背词 · 合成验收词书 · 第1–2词 · StudyTracker - 内存用量 - 177 MB, Value: on
+						53 按钮 关闭
+			54 按钮 新标签页
+			55 按钮 打开 Chrome 中的 Gemini
+	56 关闭按钮
+	57 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	58 最小化按钮
+59 menu bar
+	60 Chrome
+	61 文件
+	62 编辑
+	63 显示
+	64 历史记录
+	65 书签
+	66 个人资料
+	67 标签页
+	68 窗口
+	69 帮助
+
+The focused UI element is 44 按钮 继续 ↵

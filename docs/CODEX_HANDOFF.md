@@ -1,5 +1,18 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-26 — 原生浏览器补验已恢复，离页计时与网络恢复通过
+
+- **范围/版本**：用户要求再次尝试真设备验收。本轮使用实际Chrome/Safari窗口操作本机合成任务，实施树 `/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126`，开工HEAD `e87325ab107034355c44844a31faca3180557883` 与远端相同且clean；产品仍合并提交 `96ce82de`，64项SHA与main-integration manifest全部相同。没有产品、测试或CI改动；新增 `docs/reviews/web-vocabulary-task-page-20261126/browser-retry/`（报告、合成故障服务、HTTP自测、原始截图/AX、审计与只读证据核对脚本）并更新两交接。
+- **实际通过**：Chrome/Safari订正刷新保留原题/正确答案；CUA原生Return保持1500ms未连跳（无硬件event.repeat日志，不冒称完整物理长按验收）。Chrome写作首答保存后socket真实断开，约1秒自动重试，同attempt仍1条记录，刷新进下一题。Chrome DevTools Offline实际ERR_INTERNET_DISCONNECTED；明确先输入focus后断网，回到页面先sync失败，联网重试保留focus，随后answers200且仅1条。阅读任务真实离页603.267秒，总墙钟698.999秒，最终仅记95秒、刷新仍95秒/结算1条；未注入时钟。
+- **部分与待验**：Chrome原生125%/150%已实际操作并截图，但未完成1280/1440精确窗口宽度组合；系统拼音候选词/Enter事件、完整物理长按、手机/微信互切、老师家长真实UI仍待。初次Offline未先确认input写入，不能作为草稿保留证据；第二次已确认。QA入口清会话会令别的旧页CSRF过期，已用刷新/独立hostname排除环境干扰，未把该现象归为产品缺陷。HTTP自测仅验证故障工具，不替代浏览器。
+- **精确命令/证据**：原服务 `/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/web-vocabulary-task-page-20261126/serve_fixture.py`；增强服务同解释器 `docs/reviews/web-vocabulary-task-page-20261126/browser-retry/serve_retry_fixture.py --port 5114`。同解释器执行 `browser-retry/selftest_retry_fixture.py`（完整相对路径同前）通过HTTP工具自测，先前子agent沙箱启动失败日志保留。`/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/web-vocabulary-task-page-20261126/browser-retry/verify_saved_evidence.py` →ok，离页603.267/用时95/settlement1/丢回包与Offline各唯一记录/64SHA匹配；完整README与evidence-verification.json可复核。产品未改，本轮未重复整套回归或CI，沿用上一条已通过的合并版本结果。
+- **清理/发布**：本轮5111、5114服务均正常停止，5115自测服务已停止，`lsof -nP -iTCP:5111 -iTCP:5114 -iTCP:5115 -sTCP:LISTEN`无输出(exit1无监听)。仅关闭本轮Chrome测试标签/独立窗口与Safari测试窗口；No throttling、Chrome100%已恢复。无生产访问、DB写入、部署、开关开启或微信上传提审发布；合成内存数据库随进程结束。沿已有原审查分支文档同步授权共享本轮证据与词汇树交接，仅该分支；最终文档SHA和push状态用Git核对，不推main。
+- **下一步**：先读browser-retry/README.md，余下真设备项不能标绿。需要重开本机服务时用上述命令，禁止使用真实学生作答来替代合成验收；补齐门槛后再整合网页批1及届时最新main，按用户授权联合部署，默认开关保持关闭。
+
+- **本树状态**：本词汇树本轮新增browser-retry证据目录，提交前两交接为2M、目录为1顶层U；仅证据与交接同步原审查分支，产品/CI无变。
+
+- **截图复核限制**：Safari两张held-enter截图为空白内容区，虽AX记录正确反馈/未连跳，但不能据此判视觉通过；原因未确认，随真实IME/物理长按一起复核。Safari订正刷新截图完整，Chrome网络/计时截图完整。
+
 ## 2026-11-26 — main f5b06cc3 合入词汇候选，联合部署暂缓
 
 - **范围/工作树**：用户接受计时复核，要求先将最新main合入词汇审查分支再推送CI。`/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126` 开工f6f0f104 clean，fresh main f5b06cc3（共同基线f81a5e4）。本轮仅该分支合并/推送授权，不推main/部署/开启。合并提交`96ce82dec4401407d03e32d8eeadf378a824ac56`已commit/push，仅词汇分支；CI已成功。收尾证据/交接以独立skip-ci文档提交共享，最终文档HEAD以Git核对，词汇树收尾clean。

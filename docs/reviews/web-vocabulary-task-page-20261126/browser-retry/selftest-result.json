@@ -1,0 +1,213 @@
+{
+  "ok": true,
+  "kind": "HTTP-only QA wrapper self-check, not browser acceptance",
+  "port": 5115,
+  "network_error": "ProxyError",
+  "successful_server_response_intentionally_lost": true,
+  "http_503_used": false,
+  "transport_drop_events": 1,
+  "after_drop": {
+    "attempt_id": "qa-transport-drop-first",
+    "attempt_record_count": 1,
+    "attempt_record_ids": [
+      1
+    ],
+    "db_task_actual_seconds": 0,
+    "first_record_count": 1,
+    "flow_phase": "active_recall",
+    "flow_state_version": 3,
+    "goal": "writing",
+    "questions": [
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": "xxx",
+        "first_attempt_id": "qa-transport-drop-first",
+        "first_is_correct": false,
+        "id": 1,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 2,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 3,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 4,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 5,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 6,
+        "retry_attempt_id": null,
+        "word_id": 2
+      }
+    ],
+    "record_count": 1,
+    "records": [
+      {
+        "attempt_id": "qa-transport-drop-first",
+        "id": 1,
+        "is_correct": false,
+        "is_first_attempt": true,
+        "response_kind": "answer",
+        "student_answer": "xxx",
+        "word_id": 1
+      }
+    ],
+    "settlement_count": 0,
+    "settlements": [],
+    "task_id": 2,
+    "task_status": "pending",
+    "task_student_submitted": false
+  },
+  "after_same_attempt_replay": {
+    "attempt_id": "qa-transport-drop-first",
+    "attempt_record_count": 1,
+    "attempt_record_ids": [
+      1
+    ],
+    "db_task_actual_seconds": 0,
+    "first_record_count": 1,
+    "flow_phase": "active_recall",
+    "flow_state_version": 3,
+    "goal": "writing",
+    "questions": [
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": "xxx",
+        "first_attempt_id": "qa-transport-drop-first",
+        "first_is_correct": false,
+        "id": 1,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 2,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 3,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 4,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 5,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 6,
+        "retry_attempt_id": null,
+        "word_id": 2
+      }
+    ],
+    "record_count": 1,
+    "records": [
+      {
+        "attempt_id": "qa-transport-drop-first",
+        "id": 1,
+        "is_correct": false,
+        "is_first_attempt": true,
+        "response_kind": "answer",
+        "student_answer": "xxx",
+        "word_id": 1
+      }
+    ],
+    "settlement_count": 0,
+    "settlements": [],
+    "task_id": 2,
+    "task_status": "pending",
+    "task_student_submitted": false
+  },
+  "settlement_replay_request_seconds": [
+    17,
+    777
+  ],
+  "settlement_replay_database_seconds": [
+    17,
+    17
+  ],
+  "settlement_count": 1,
+  "product_javascript_modified": false
+}

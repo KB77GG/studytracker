@@ -1,0 +1,119 @@
+{
+  "drop": {
+    "attempt_id": "vocabulary-group:2:first:7",
+    "attempt_record_count": 1,
+    "attempt_record_ids": [
+      1
+    ],
+    "db_task_actual_seconds": 0,
+    "epoch_ms": 1795707030372,
+    "event": "transport_drop_before_http_reply",
+    "first_record_count": 1,
+    "flow_phase": "active_recall",
+    "flow_state_version": 3,
+    "path": "/api/practice/vocabulary/tasks/2/answers",
+    "record_count": 1,
+    "request_duration_seconds": null,
+    "settlement_count": 0,
+    "status_code": 200,
+    "task_id": 2,
+    "time_utc": "2026-11-26T15:30:30.372007+00:00"
+  },
+  "after_refresh": {
+    "attempt_id": "vocabulary-group:2:first:7",
+    "attempt_record_count": 1,
+    "attempt_record_ids": [
+      1
+    ],
+    "db_task_actual_seconds": 0,
+    "first_record_count": 1,
+    "flow_phase": "active_recall",
+    "flow_state_version": 3,
+    "goal": "writing",
+    "questions": [
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": "depend",
+        "first_attempt_id": "vocabulary-group:2:first:7",
+        "first_is_correct": true,
+        "id": 7,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "form_recall",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 8,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 9,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 10,
+        "retry_attempt_id": null,
+        "word_id": 2
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 11,
+        "retry_attempt_id": null,
+        "word_id": 1
+      },
+      {
+        "correction_attempt_id": null,
+        "correction_count": 0,
+        "dimension": "context_use",
+        "first_answer": null,
+        "first_attempt_id": null,
+        "first_is_correct": null,
+        "id": 12,
+        "retry_attempt_id": null,
+        "word_id": 2
+      }
+    ],
+    "record_count": 1,
+    "records": [
+      {
+        "attempt_id": "vocabulary-group:2:first:7",
+        "id": 1,
+        "is_correct": true,
+        "is_first_attempt": true,
+        "response_kind": "answer",
+        "student_answer": "depend",
+        "word_id": 1
+      }
+    ],
+    "settlement_count": 0,
+    "settlements": [],
+    "task_id": 2,
+    "task_status": "pending",
+    "task_student_submitted": false
+  }
+}

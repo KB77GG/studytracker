@@ -1,0 +1,165 @@
+{
+  "synthetic_only": true,
+  "task_ids": {
+    "comprehensive": 4,
+    "expired": 6,
+    "future": 5,
+    "listening": 3,
+    "reading": 1,
+    "writing": 2
+  },
+  "tasks": [
+    {
+      "attempt_id": null,
+      "attempt_record_count": null,
+      "attempt_record_ids": [],
+      "db_task_actual_seconds": 95,
+      "first_record_count": 6,
+      "flow_phase": "complete",
+      "flow_state_version": 8,
+      "goal": "reading",
+      "questions": [
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "meaning_recall",
+          "first_answer": "依赖",
+          "first_attempt_id": "vocabulary-group:1:first:1",
+          "first_is_correct": true,
+          "id": 1,
+          "retry_attempt_id": null,
+          "word_id": 1
+        },
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "meaning_recall",
+          "first_answer": "集中",
+          "first_attempt_id": "vocabulary-group:1:first:2",
+          "first_is_correct": true,
+          "id": 2,
+          "retry_attempt_id": null,
+          "word_id": 2
+        },
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "context_use",
+          "first_answer": "option_49d62e5f6fd0c141",
+          "first_attempt_id": "vocabulary-group:1:first:3",
+          "first_is_correct": true,
+          "id": 3,
+          "retry_attempt_id": null,
+          "word_id": 1
+        },
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "context_use",
+          "first_answer": "option_71ef94bf6d61afba",
+          "first_attempt_id": "vocabulary-group:1:first:4",
+          "first_is_correct": true,
+          "id": 4,
+          "retry_attempt_id": null,
+          "word_id": 2
+        },
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "context_use",
+          "first_answer": "depend",
+          "first_attempt_id": "vocabulary-group:1:first:5",
+          "first_is_correct": true,
+          "id": 5,
+          "retry_attempt_id": null,
+          "word_id": 1
+        },
+        {
+          "correction_attempt_id": null,
+          "correction_count": 0,
+          "dimension": "context_use",
+          "first_answer": "focus",
+          "first_attempt_id": "vocabulary-group:1:first:6",
+          "first_is_correct": true,
+          "id": 6,
+          "retry_attempt_id": null,
+          "word_id": 2
+        }
+      ],
+      "record_count": 6,
+      "records": [
+        {
+          "attempt_id": "vocabulary-group:1:first:1",
+          "id": 2,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "依赖",
+          "word_id": 1
+        },
+        {
+          "attempt_id": "vocabulary-group:1:first:2",
+          "id": 3,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "集中",
+          "word_id": 2
+        },
+        {
+          "attempt_id": "vocabulary-group:1:first:3",
+          "id": 4,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "option_49d62e5f6fd0c141",
+          "word_id": 1
+        },
+        {
+          "attempt_id": "vocabulary-group:1:first:4",
+          "id": 5,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "option_71ef94bf6d61afba",
+          "word_id": 2
+        },
+        {
+          "attempt_id": "vocabulary-group:1:first:5",
+          "id": 6,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "depend",
+          "word_id": 1
+        },
+        {
+          "attempt_id": "vocabulary-group:1:first:6",
+          "id": 7,
+          "is_correct": true,
+          "is_first_attempt": true,
+          "response_kind": "answer",
+          "student_answer": "focus",
+          "word_id": 2
+        }
+      ],
+      "settlement_count": 1,
+      "settlements": [
+        {
+          "id": 1,
+          "result": {
+            "correct_count": 4,
+            "retry_count": 0,
+            "scorable_count": 4,
+            "total_count": 4
+          },
+          "settled_at": "2026-11-26T15:33:09.587938"
+        }
+      ],
+      "task_id": 1,
+      "task_status": "done",
+      "task_student_submitted": true
+    }
+  ],
+  "time_utc": "2026-11-26T15:36:01.389833+00:00"
+}
