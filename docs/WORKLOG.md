@@ -1,8 +1,8 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
-## 2026-11-26 — 网页背词两项补测完成，准备审查分支推送
+## 2026-11-26 — 网页背词已推审查分支，CI成功
 
-用户已授权仅commit/push任务分支跑CI。关闭开关真实身份11路由全部403/0SQL；A02同fixture在历史f81a5e4与当前off/on完整HTTP逐字段一致，双Python再生相同。双Python各230+20日期、Node58、Ruff/diff通过；产品未变，CI显式Node/判分/日期。新增branch-review/prepush证据与4个fixtures，两树两交接更新；提交/推送CI结果随后补记。不动main、不部署不开启；真设备门槛仍待。详见CODEX_HANDOFF顶部。
+代码/补测 `2f83ebd1` 已commit/push仅 `codex/web-vocabulary-task-page-20261126`，CI45805497320整体success（三业务job成功、旧非阻断lint失败）。off11路由0SQL和A02真实f81a5e4完整payload对比补齐；本地双Python230+20、Node58，远端新步骤82+20全过。报告/截图可跨电脑获取，CI证据和两交接以文档skip-ci共享。main仍f81a5e4、未部署不开启、无生产或微信发布；真设备门槛待。实施树收尾clean，旧main6ded原8M/27U保持、仅两交接本机更新；详见CODEX_HANDOFF/branch-review。
 
 ## 2026-11-26 — 补全给Claude的网页背词验证正文
 

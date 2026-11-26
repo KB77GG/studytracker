@@ -1,0 +1,50 @@
+{
+  "ci_run_id": 45805497320,
+  "code_commit": "2f83ebd145b23f6dc38d68c0cccf15a733498539",
+  "origin_main_after_fetch": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "ci_commands": [
+    "gh run view 45805497320 --json databaseId,headSha,status,conclusion,url,createdAt,updatedAt,jobs",
+    "gh run view 45805497320 --job 139859532224 --log",
+    "gh run view 45805497320 --job 139859532638 --log",
+    "gh run list --branch codex/web-vocabulary-task-page-20261126 --limit 10 --json databaseId,headSha,status,conclusion,url,workflowName"
+  ],
+  "new_tests_and_remote_result_excerpt": [
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:03.0843982Z test_feature_off_blocks_all_registered_routes_before_any_sql (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_blocks_all_registered_routes_before_any_sql) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:12.1220108Z test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_off_matches_real_historical_response) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:15.0165597Z test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_on_matches_real_historical_response) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:15.0167836Z test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_historical_snapshot_provenance_and_coverage) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:23.7238333Z Ran 82 tests in 28.603s",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:23.7238684Z OK",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T10:56:26.2165325Z 20 passed in 1.07s"
+  ],
+  "lint_new_file_diagnostics": [],
+  "lint_changed_legacy_files_local_baseline_comparison": {
+    "api/__init__.py": {
+      "baseline_count": 1,
+      "current_count": 1,
+      "added_code_message_counts": []
+    },
+    "api/miniprogram.py": {
+      "baseline_count": 8,
+      "current_count": 8,
+      "added_code_message_counts": []
+    },
+    "app.py": {
+      "baseline_count": 21,
+      "current_count": 21,
+      "added_code_message_counts": []
+    },
+    "config.py": {
+      "baseline_count": 0,
+      "current_count": 0,
+      "added_code_message_counts": []
+    }
+  },
+  "notes": [
+    "CI overall success; 3 business jobs succeeded; lint advisory failed and format step skipped.",
+    "Only CI appeared for the task branch; deploy listens to main only.",
+    "Diagnostic comparison ignores line-number shifts; original large files retain existing lint debt.",
+    "F811 embeds an original-definition line number in its message; comparison normalizes that line shift as well."
+  ],
+  "local_ruff_command_template": "python -m ruff check --output-format=json --stdin-filename <file> -; stdin separately from git show f81a5e4:<file> and current file; compare code/message counts after embedded line-number normalization"
+}

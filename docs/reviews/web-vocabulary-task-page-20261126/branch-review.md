@@ -49,4 +49,18 @@
 
 实施工作树 `/private/tmp/studytracker-web-vocabulary-20261126`；开发基线及本轮 fetch 后 `origin/main` 均为 `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`。Claude 文档来源仍为 `479cab8a`，未合并。
 
-提交、推送与 CI 的最终结果将在执行后记录于本节及 `ci-review.json`。`.github/workflows/ci.yml` 监听全部分支；`deploy.yml` 仅监听 main。本轮只推任务分支，main 不变。
+实现、补测、完整原验收报告及截图已 commit/push 至任务分支，产品提交 **`2f83ebd145b23f6dc38d68c0cccf15a733498539`**。[远端 CI](https://github.com/KB77GG/studytracker/actions/runs/45805497320) 整体 **success**，`test`、`account-provisioning`、`task-planner` 三个业务 job 全部成功。
+
+`lint` 是既有 `continue-on-error` 非阻断 job，结果 failure，格式检查步骤因前一步失败而 skipped，不能称所有 job 都绿。CI 日志没有本轮新增文件的 lint 诊断；4 个修改的旧 Python 文件对照基线 Ruff 诊断数量相同，忽略行号平移后无新增诊断类别/消息。完整 job 状态见 `ci-review.json`；关键新测试逐项 ok、82 项网页/判分/日期显示回归和 20 项 pytest 的远端输出摘录、lint 对照见 `ci-evidence.json`。
+
+补记 CI 结果的后续提交仅含文档，使用 `[skip ci]`，产品/测试/CI 配置与通过测试的 `2f83ebd1` 保持相同；最终文档 HEAD 以该分支 Git 为准。本轮只出现任务分支 CI，没有部署工作流；最新 fetch 确认 `origin/main` 仍为 `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`。代码和报告可从远端获取，实施树收尾保持干净；旧资料树的非本任务改动继续仅本机保留。
+
+审查者可执行：
+
+```bash
+git fetch origin main codex/web-vocabulary-task-page-20261126
+git diff origin/main...origin/codex/web-vocabulary-task-page-20261126 -- app.py api/miniprogram.py api/practice_vocabulary.py services/
+git show origin/codex/web-vocabulary-task-page-20261126:docs/reviews/web-vocabulary-task-page-20261126/branch-review.md
+```
+
+两树 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md` 已更新；任务分支中的交接随文档共享，旧主资料树的两交接仍为本机改动。没有部署、生产访问/写入、服务配置变更或微信上传提审发布。保持默认关闭，后续先 Claude 代码审查，再按两道门槛执行。

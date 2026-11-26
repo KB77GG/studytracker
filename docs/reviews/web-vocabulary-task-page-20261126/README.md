@@ -1,6 +1,6 @@
 # 网页背词任务页：本地实施与验收
 
-状态：实现及原验收记录已获用户认可；**A01–A14 尚未全部实测通过**。用户已授权仅提交/推送任务分支跑 CI，默认关闭、不得部署或开启。2026-11-26。本轮补测与远端结果以 [审查分支记录](branch-review.md) 为准。
+状态：实现及原验收记录已获用户认可；**A01–A14 尚未全部实测通过**。实现/补测已提交并推送任务分支，代码 `2f83ebd1` 的远端 CI 整体成功（三业务 job 成功、既有非阻断 lint 失败）；默认关闭、未部署或开启。2026-11-26。本轮补测与远端结果以 [审查分支记录](branch-review.md) 为准。
 
 云端需要的完整命令、逐项结论、五个实现重点和未验边界，现集中在 [可直接粘贴给 Claude 的验证补充](claude-verification-paste.md)。上一轮复核确认30个产品/配置/测试文件与原验收manifest一致；没有把模拟IME、缩放空间代理或503故障模拟写成真实设备/原生缩放/真实断网验收。
 
@@ -8,7 +8,7 @@
 
 - 实施树：`/private/tmp/studytracker-web-vocabulary-20261126`
 - 分支：`codex/web-vocabulary-task-page-20261126`
-- HEAD / fresh fetch 后的 `origin/main` 基线：`f81a5e4a4d81282eb67b994a4cfcc5574fb78747`
+- 开发时 fresh fetch 的 `origin/main` 基线（不是当前分支 HEAD）：`f81a5e4a4d81282eb67b994a4cfcc5574fb78747`
 - 计划/原型来源：`origin/claude/clever-heisenberg-8evbm0@479cab8af3b6b3e7abb364224edeca5ffe91fae8`；仅用 `git show` 提取到 [source](source/)，没有合并该文档分支。
 - 用户批准计划 §9 全部九项。姓名会话可写、拒绝同名；网页版综合训练订正开启并展示正确答案、不计分；任务内复习门禁；允许粘贴；听音拼写答前不显音标；本端进入至首次结算计时；排除旧听写；`PRACTICE_VOCABULARY_WEB_ENABLED` 默认 false。
 - 旧资料树 `/Users/zhouxin/Desktop/studytracker` 保持 `main@6ded77d24586327ad94e151e172ae4811b4a2eed`。开工原 8 modified / 27 顶层 untracked，0 staged。本轮仅更新其两份交接，未在旧树开发。开工状态与来源散列见 [baseline.json](baseline.json)。

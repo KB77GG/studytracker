@@ -1,13 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-26 — 网页背词补测通过，授权仅推审查分支
+## 2026-11-26 — 网页背词审查分支已推送，CI 通过，默认关闭
 
-- **授权/范围**：用户认可原验收并明确允许 commit/push `codex/web-vocabulary-task-page-20261126` 跑 CI；不推/合 main、不部署、不启用。本轮只补测试/CI/文档，产品 SHA 保持原验收一致。开关默认 false；全量或名单启用未决定。
-- **工作树**：实施 `/private/tmp/studytracker-web-vocabulary-20261126`，任务分支/开发基线 `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`；本轮 fetch 的 origin/main 同值，文档源 479cab8a 未合并。开工 8M/25U/0 staged，本轮新增 4 个 tests/fixtures 文件及原报告目录内补测资料；原有全部实现均为本任务，待本次提交。旧资料 `/Users/zhouxin/Desktop/studytracker` 仍 main@6ded77d24586327ad94e151e172ae4811b4a2eed、原8M/27U保留（含并行考前记录），仅更新其两交接。
-- **补测**：真实有效身份枚举11新路由，off全部403 feature_disabled，含sync/review，0 SQL、10类学习表全0。A02独立进程从f81a5e4源码archive生成真实HTTP历史响应：同11合成任务输出8行、每行26字段，当前off/on各自完整相等；3.10/3.13再生成字节一致，7源码SHA独立回核。tests/fixtures README给可移植再生方式，无生产数据/网络。
-- **精确验证**：本轮完整参数见 `docs/reviews/web-vocabulary-task-page-20261126/validation/prepush-commands.json`：3.13 `-m unittest <原20模块> -v` 230/230(33.806s)；3.10 `run_compat_tests.py <同模块>` 230/230(37.312s)，旧datetime.UTC仅测试别名限定继续保留；两版本 `-m pytest tests/test_task_date_gate.py -q` 各20(0.32/0.34s)；`node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js` 58/58；新增Python/捕获器Ruff、diff check通过。CI显式Node20/pytest并纳原判分/日期回归，原test_list/routes已登记。
-- **报告/未验**：本轮 `branch-review.md`、34文件 `prepush-manifest.json`、prepush日志/命令新增，历史manifest/原日志保留；README和原粘贴稿标明历史与当前边界。开启前仍需Chrome/Safari系统拼音/长按、订正F5、Offline/网络层丢包刷新、真实微信含订正互切、Chrome原生缩放、老师家长UI。当前无人手实测完成声明。
-- **发布/下一步**：本条写入时补测已过、准备commit/push任务分支并等CI，尚未推送；最终结果随后同报告与交接补记。无生产访问、DB/配置/服务变化、消息或微信上传提审发布。分支CI只跑测试，deploy仅main触发。下一位按本条后续CI事实及Git读取远端代码给Claude审查，保持默认关；部署另需明确授权。
+- **授权/结果**：用户认可原验收，明确授权仅 commit/push `codex/web-vocabulary-task-page-20261126` 跑CI。本轮已完成；不推/合main、不部署不开启。产品/补测提交 **`2f83ebd145b23f6dc38d68c0cccf15a733498539`** 已push，后续CI结果/交接仅文档以 `[skip ci]` 共享，最终文档HEAD用Git核对。代码和完整报告/截图现可跨电脑读取。
+- **工作树/Git**：实施 `/private/tmp/studytracker-web-vocabulary-20261126`，分支同上，开发基线 `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`；收尾fetch确认origin/main仍同值，479cab8a文档源未合并。开工8M/25U均为此前本任务；本轮新增4个tests/fixtures/补测报告，已随代码提交，代码提交后clean。收尾只追加CI证据及两交接/报告文档，独立提交后保持clean，无未提交产品。旧资料 `/Users/zhouxin/Desktop/studytracker` 仍main@6ded77d24586327ad94e151e172ae4811b4a2eed、原8M/27U/0 staged保留（含考前并行记录），本轮仅其两交接，本机可见，不把旧树当已推代码。
+- **补测/改动**：off真实有效身份枚举11路由全部403 feature_disabled（页面/state/9POST含sync/review），请求0SQL、10类学习表0；A02同11合成任务在f81a5e4真实app历史archive与当前off/on输出8行×26字段及顶层/分组/顺序全部相等，3.10/3.13再生字节一致、7历史源码SHA复核。CI显式Node20/pytest并登记原判分/日期。原30文件仅CI/两个测试变化，无产品变化；34文件当前候选见prepush-manifest，原验收证据保留。
+- **精确本地验证**：完整argv/cwd/log见 `docs/reviews/web-vocabulary-task-page-20261126/validation/prepush-commands.json`。3.13 `-m unittest <原20模块> -v`230/230(33.806s)；3.10 `run_compat_tests.py <同模块>`230/230(37.312s)，旧datetime.UTC测试进程别名限定保留；两版本 `-m pytest tests/test_task_date_gate.py -q`各20(0.32/0.34s)；`node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js`58/58；新Python/捕获器Ruff、diff/staged-manifest核查通过。
+- **远端CI**：[45805497320](https://github.com/KB77GG/studytracker/actions/runs/45805497320) overall success，test/account-provisioning/task-planner全部success；新关闭开关/历史off/on/provenance逐项ok，该步骤82unittest+20pytest。既有advisory lint失败，format skipped；新文件无诊断，4旧Python对照f81a5e4诊断数量及忽略行号后的消息相同，不扩修旧债。`ci-review.json`、`ci-evidence.json`保存状态/输出摘录/精确gh命令。后续纯文档skip-ci不重复跑产品检查，非未经测试的产品新版本。
+- **发布/门槛**：未访问生产、无DB/环境变量/服务/通知/微信上传提审发布；只任务分支CI，main部署未触发。全局flag仍默认false，本轮不选名单或全量。默认关闭部署仍需Claude代码审查和明确部署授权；开启前Chrome/Safari系统拼音/长按、订正F5、Offline及丢响应刷新、真实微信含订正互切、Chrome原生缩放、老师家长真实UI全部保留待实测，见branch-review.md。
+- **交接与下一步**：本树docs/CODEX_HANDOFF.md、docs/WORKLOG.md和新branch-review/CI证据随审查分支共享；旧树两交接本机更新。Claude可fetch任务分支，对比origin/main逐行审身份/CSRF/结算和巨型文件；无需再找Mac临时路径。保持默认关，未获授权不部署。
 
 ## 2026-11-26 — 网页背词验证补全文，明确尚未全部验收
 
