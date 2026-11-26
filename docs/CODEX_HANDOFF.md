@@ -1,5 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-26 — 网页背词任务页：已出计划和原型，待用户确认 §9 后由 Codex 实施
+
+- **状态**：只有计划，没有产品代码改动；没有 commit、push、部署、生产库操作，也没有小程序上传。
+- **核查基线**：Claude 云端 `claude/clever-heisenberg-8evbm0` = origin/main = `f81a5e4a4d81282eb67b994a4cfcc5574fb78747`，clean。需求文件 `docs/requirements/web-vocabulary-task-page.md` 不在任何远端分支，以用户消息为准。
+- **产物（仅 Claude 云端工作区，未跟踪）**：`docs/design/web-vocabulary-task-page-plan.md`（8 项文件级计划、A01–A14 测试映射、§9 九个待确认项和推荐默认值）；`docs/design/web-vocabulary-task-page-prototype.html`（27 个状态，加一段可用键盘走完的流程）。同一原型的私有 Artifact：https://claude.ai/artifact/2NvKaLykargHtu51ddT1DT。
+- **基线验证**：隔离 venv（Python 3.13，CI 轻依赖）下，`tests.test_vocabulary_group_learning`、`_api`、`test_vocabulary_autonomous_review`、`test_vocabulary_flow_backlog_gate`、`test_auto_student_accounts`、`test_miniprogram_grading` 共 102 个通过；`test_task_date_gate` 和 `_display_contract` 共 5 个通过（需要 pytest）；`node --test` practice_task_lists、practice_shell、vocabulary_feedback 共 27 个通过。
+- **关键结论**：首版只接 v2 词汇任务（`is_vocabulary_v2_task`）；网页通过新身份服务把姓名会话或学生账号映射到 `User`，不新增登录；PlanItem 同步从 `api/miniprogram.py` 抽到 `services/task_plan_item_sync.py`，与小程序共用；不需要数据库迁移；订正 UI 必须与答题端点同批上线。
+- **下一步**：用户确认计划 §9（尤其是姓名会话写入风险、订正开关、功能开关默认关）后，由 Codex 按计划 §7.1 从最新 origin/main 建隔离 worktree 实施。不要在 Mac 旧树 main@6ded77d2 上开发。
+
 ## 2026-11-22 — 后台左上角 Logo 已部署，生产验收通过
 
 - **授权/变更**：用户在本地验收后明确要求部署。仅2产品文件 `static/tasks_workspace.css`、`templates/tasks.html`：移除任务页两处侧栏/品牌专属覆盖，继承公共白底42×42Logo/34×34图片/17px品牌字；901–1120px页头搜索和按钮移至标题下避免挤压。无业务、API、数据库模型或小程序改动。

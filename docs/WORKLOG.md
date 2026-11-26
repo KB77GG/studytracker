@@ -1,5 +1,9 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
+## 2026-11-26 — 网页背词任务页：Claude 出文件级计划和状态原型（未实施）
+
+Claude 云端会话按用户转来的需求（`docs/requirements/web-vocabulary-task-page.md` 未推送）核查 origin/main=f81a5e4a 后，写出 `docs/design/web-vocabulary-task-page-plan.md` 和可交互原型 `docs/design/web-vocabulary-task-page-prototype.html`。没有产品代码改动，没有 commit、push 或部署。基线回归 102+5 个 Python、27 个 Node 测试通过。两个文件仅在 Claude 云端工作区，需用户授权推送或转交后 Codex 才能读到。
+
 ## 2026-11-22 — 后台侧栏 Logo 已部署
 
 用户明确授权后产品b68d49d8从e9d1069a基线commit并原子push任务分支/main，Deploy44979890266成功。11:17:56CST只读回读HEAD/8SHA/5公网资源/1worker6threads5002/active/0自动重启与匿名入口通过；7Node、spell queue守卫及原20浏览器场景保持，独审无阻塞。报告和两交接skip-ci共享不重复部署，main/分支CI均success，业务全过、既有advisory lint失败保留；无本任务数据库/小程序变更。旧主main6ded77d2原7M/24U及并行D3记录保留，实施树及精确命令见CODEX_HANDOFF。
