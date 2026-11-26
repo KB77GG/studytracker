@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="zh">
+
+
+<head>
+  <meta charset="utf-8">
+  <title>学习计划与打卡系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="/static/style.css" rel="stylesheet">
+
+
+  <link href="/static/admin_suite_v2.css" rel="stylesheet">
+
+</head>
+
+<body class="dashboard-body admin-suite-v2">
+
+
+  <div class="app-shell">
+    <button type="button" class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></button>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <span class="brand-icon"><img src="/static/brand/sagepath-mark.png" alt="Sage Path 睿然国际教育" width="34" height="34"></span>
+        <div>
+          <div class="brand-title">Sage Path</div>
+          <div class="brand-sub">
+            管理后台
+
+          </div>
+        </div>
+      </div>
+      <div class="sidebar__nav">
+        <p class="nav-label">主导航</p>
+
+        <a class="nav-link "
+          href="/materials_list"><i class="nav-link__icon fas fa-book-open" aria-hidden="true"></i><span>材料库</span></a>
+        <a class="nav-link "
+          href="/word_examples_page"><i class="nav-link__icon fas fa-spell-check" aria-hidden="true"></i><span>词汇审核</span></a>
+        <a class="nav-link "
+          href="/tasks_page"><i class="nav-link__icon fas fa-clipboard-list" aria-hidden="true"></i><span>任务管理</span></a>
+        <a class="nav-link "
+          href="/task-planner"><i class="nav-link__icon far fa-calendar-alt" aria-hidden="true"></i><span>任务安排 <small>试用</small></span></a>
+        <a class="nav-link "
+          href="/grading_list"><i class="nav-link__icon fas fa-check-double" aria-hidden="true"></i><span>批改中心</span></a>
+        <a class="nav-link "
+          href="/course_plan_list"><i class="nav-link__icon fas fa-calendar-alt" aria-hidden="true"></i><span>课程计划</span></a>
+
+
+
+        <a class="nav-link "
+          href="/practice_library"><i class="nav-link__icon fas fa-layer-group" aria-hidden="true"></i><span>刷题 / 模考</span></a>
+
+
+        <a class="nav-link "
+          href="/admin_mock_exams_index"><i class="nav-link__icon fas fa-file-alt" aria-hidden="true"></i><span>模考配卷</span></a>
+
+
+        <a class="nav-link" href="/entrance/admin/invitations.html"><i class="nav-link__icon fas fa-user-check" aria-hidden="true"></i><span>入学测试</span></a>
+
+        <p class="nav-label">数据分析</p>
+
+        <a class="nav-link "
+          href="/report_page"><i class="nav-link__icon fas fa-chart-line" aria-hidden="true"></i><span>学习报表</span></a>
+
+
+
+        <a class="nav-link "
+          href="/stage_report_list"><i class="nav-link__icon fas fa-chart-bar" aria-hidden="true"></i><span>阶段报告</span></a>
+
+
+        <p class="nav-label">系统</p>
+        <a class="nav-link "
+          href="/bulk_page"><i class="nav-link__icon fas fa-users" aria-hidden="true"></i><span>批量添加</span></a>
+        <a class="nav-link "
+          href="/users_page"><i class="nav-link__icon fas fa-user-cog" aria-hidden="true"></i><span>用户管理</span></a>
+
+        <a class="nav-link" href="/logout"><i class="nav-link__icon fas fa-sign-out-alt" aria-hidden="true"></i><span>退出登录</span></a>
+      </div>
+      <div class="sidebar__user">
+        <div class="avatar">验</div>
+        <div>
+          <div class="user-name">验收</div>
+          <div class="user-role">Admin</div>
+        </div>
+      </div>
+    </aside>
+    <div class="main-panel">
+      <header class="main-header">
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="打开导航" aria-controls="sidebar" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="main-header__title">
+          <p class="eyebrow">Mock Exam · Create</p>
+          <h1>新建模考</h1>
+          <p class="main-header__description"></p>
+        </div>
+        <div class="header-actions">
+
+          <label class="suite-header-search" for="suiteGlobalSearch">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <span class="sr-only">搜索当前页面</span>
+            <input id="suiteGlobalSearch" type="search" placeholder="搜索当前页面">
+            <kbd>⌘ K</kbd>
+          </label>
+
+
+        </div>
+        <div class="suite-account-tools" aria-label="账户工具">
+          <button class="suite-notification-button" type="button" aria-label="查看提醒" title="提醒">
+            <i class="far fa-bell" aria-hidden="true"></i>
+
+          </button>
+          <span class="suite-header-avatar" aria-hidden="true">验</span>
+        </div>
+      </header>
+      <main class="panel-content">
+
+
+
+
+<div class="container" style="max-width: 760px;">
+  <div class="header-row">
+    <h1>新建模考</h1>
+    <a href="/admin_mock_exams_index" class="btn btn-outline">返回列表</a>
+  </div>
+
+
+
+
+
+  <div class="card">
+    <form method="post" class="form" style="display: grid; gap: 16px; padding: 20px;">
+      <div class="form-group">
+        <label>模考名称</label>
+        <input type="text" name="name" class="form-control" placeholder="例：7天热榜冲刺模考" value="" required>
+      </div>
+
+
+
+
+      <fieldset class="form-group" data-sprint-picker>
+  <legend style="font-size:16px;font-weight:600;">听力题目</legend>
+  <label for="listeningSource">题库来源</label>
+  <select id="listeningSource" name="listening_source" class="form-control" data-sprint-source>
+    <option value="existing">已有整套题库</option>
+    <option value="sprint">7天热榜 · 自选组卷</option>
+  </select>
+  <div data-existing-paper style="margin-top:8px;">
+    <select name="listening_test_id" class="form-control" aria-label="听力整套题目" required>
+      <option value="">-- 请选择 --</option>
+
+      <option value="synthetic-old-listening">Synthetic Cambridge Listening Test · 40题</option>
+
+    </select>
+  </div>
+  <div data-sprint-parts hidden style="margin-top:12px;">
+    <p class="form-text">每个Part各选一篇，共40题。创建后题目版本固定，周更不影响已布置的模考。</p>
+    <p class="form-text">热榜同步：2026-11-26 20:27</p>
+
+
+    <label for="listeningSprint1">Part 1</label>
+    <select id="listeningSprint1" name="listening_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-listening-1-1" data-count="10">#1 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-2" data-count="10">#2 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-3" data-count="10">#3 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-4" data-count="10">#4 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-5" data-count="10">#5 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-6" data-count="10">#6 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-7" data-count="10">#7 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-8" data-count="10">#8 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-9" data-count="10">#9 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-10" data-count="10">#10 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-11" data-count="10">#11 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-12" data-count="10">#12 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-13" data-count="10">#13 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-14" data-count="10">#14 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-15" data-count="10">#15 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-16" data-count="10">#16 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-17" data-count="10">#17 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-18" data-count="10">#18 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-19" data-count="10">#19 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-1-20" data-count="10">#20 Synthetic listening topic 1: public transport in modern cities · 10题</option>
+
+    </select>
+
+    <label for="listeningSprint2">Part 2</label>
+    <select id="listeningSprint2" name="listening_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-listening-2-1" data-count="10">#1 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-2" data-count="10">#2 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-3" data-count="10">#3 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-4" data-count="10">#4 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-5" data-count="10">#5 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-6" data-count="10">#6 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-7" data-count="10">#7 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-8" data-count="10">#8 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-9" data-count="10">#9 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-10" data-count="10">#10 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-11" data-count="10">#11 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-12" data-count="10">#12 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-13" data-count="10">#13 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-14" data-count="10">#14 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-15" data-count="10">#15 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-16" data-count="10">#16 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-17" data-count="10">#17 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-18" data-count="10">#18 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-19" data-count="10">#19 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-2-20" data-count="10">#20 Synthetic listening topic 2: public transport in modern cities · 10题</option>
+
+    </select>
+
+    <label for="listeningSprint3">Part 3</label>
+    <select id="listeningSprint3" name="listening_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-listening-3-1" data-count="10">#1 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-2" data-count="10">#2 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-3" data-count="10">#3 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-4" data-count="10">#4 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-5" data-count="10">#5 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-6" data-count="10">#6 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-7" data-count="10">#7 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-8" data-count="10">#8 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-9" data-count="10">#9 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-10" data-count="10">#10 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-11" data-count="10">#11 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-12" data-count="10">#12 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-13" data-count="10">#13 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-14" data-count="10">#14 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-15" data-count="10">#15 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-16" data-count="10">#16 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-17" data-count="10">#17 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-18" data-count="10">#18 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-19" data-count="10">#19 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-3-20" data-count="10">#20 Synthetic listening topic 3: public transport in modern cities · 10题</option>
+
+    </select>
+
+    <label for="listeningSprint4">Part 4</label>
+    <select id="listeningSprint4" name="listening_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-listening-4-1" data-count="10">#1 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-2" data-count="10">#2 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-3" data-count="10">#3 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-4" data-count="10">#4 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-5" data-count="10">#5 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-6" data-count="10">#6 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-7" data-count="10">#7 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-8" data-count="10">#8 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-9" data-count="10">#9 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-10" data-count="10">#10 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-11" data-count="10">#11 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-12" data-count="10">#12 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-13" data-count="10">#13 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-14" data-count="10">#14 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-15" data-count="10">#15 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-16" data-count="10">#16 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-17" data-count="10">#17 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-18" data-count="10">#18 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-19" data-count="10">#19 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+      <option value="synthetic-listening-4-20" data-count="10">#20 Synthetic listening topic 4: public transport in modern cities · 10题</option>
+
+    </select>
+
+    <div><button type="button" class="btn btn-outline" data-sprint-suggest>按热度选一套40题</button></div>
+    <p data-sprint-total role="status" aria-live="polite">尚未选题</p>
+  </div>
+</fieldset>
+
+
+
+      <fieldset class="form-group" data-sprint-picker>
+  <legend style="font-size:16px;font-weight:600;">阅读题目</legend>
+  <label for="readingSource">题库来源</label>
+  <select id="readingSource" name="reading_source" class="form-control" data-sprint-source>
+    <option value="existing">已有整套题库</option>
+    <option value="sprint">7天热榜 · 自选组卷</option>
+  </select>
+  <div data-existing-paper style="margin-top:8px;">
+    <select name="reading_test_id" class="form-control" aria-label="阅读整套题目" required>
+      <option value="">-- 请选择 --</option>
+
+      <option value="synthetic-old-reading">Synthetic Cambridge Reading Test · 40题</option>
+
+    </select>
+  </div>
+  <div data-sprint-parts hidden style="margin-top:12px;">
+    <p class="form-text">每个Passage各选一篇，共40题。创建后题目版本固定，周更不影响已布置的模考。</p>
+    <p class="form-text">热榜同步：2026-11-26 20:27</p>
+
+
+    <label for="readingSprint1">Passage 1</label>
+    <select id="readingSprint1" name="reading_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-reading-1-1" data-count="14">#1 Synthetic reading topic 1: public transport in modern cities · 14题</option>
+
+      <option value="synthetic-reading-1-2" data-count="13">#2 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-3" data-count="13">#3 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-4" data-count="13">#4 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-5" data-count="13">#5 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-6" data-count="13">#6 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-7" data-count="13">#7 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-8" data-count="13">#8 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-9" data-count="13">#9 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-10" data-count="13">#10 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-11" data-count="13">#11 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-12" data-count="13">#12 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-13" data-count="13">#13 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-14" data-count="13">#14 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-15" data-count="13">#15 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-16" data-count="13">#16 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-17" data-count="13">#17 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-18" data-count="13">#18 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-19" data-count="13">#19 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-1-20" data-count="13">#20 Synthetic reading topic 1: public transport in modern cities · 13题</option>
+
+    </select>
+
+    <label for="readingSprint2">Passage 2</label>
+    <select id="readingSprint2" name="reading_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-reading-2-1" data-count="14">#1 Synthetic reading topic 2: public transport in modern cities · 14题</option>
+
+      <option value="synthetic-reading-2-2" data-count="13">#2 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-3" data-count="13">#3 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-4" data-count="13">#4 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-5" data-count="13">#5 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-6" data-count="13">#6 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-7" data-count="13">#7 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-8" data-count="13">#8 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-9" data-count="13">#9 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-10" data-count="13">#10 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-11" data-count="13">#11 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-12" data-count="13">#12 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-13" data-count="13">#13 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-14" data-count="13">#14 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-15" data-count="13">#15 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-16" data-count="13">#16 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-17" data-count="13">#17 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-18" data-count="13">#18 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-19" data-count="13">#19 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-2-20" data-count="13">#20 Synthetic reading topic 2: public transport in modern cities · 13题</option>
+
+    </select>
+
+    <label for="readingSprint3">Passage 3</label>
+    <select id="readingSprint3" name="reading_sprint_part" class="form-control" data-sprint-part required disabled>
+      <option value="">-- 请选择本部分题目 --</option>
+
+      <option value="synthetic-reading-3-1" data-count="14">#1 Synthetic reading topic 3: public transport in modern cities · 14题</option>
+
+      <option value="synthetic-reading-3-2" data-count="13">#2 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-3" data-count="13">#3 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-4" data-count="13">#4 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-5" data-count="13">#5 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-6" data-count="13">#6 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-7" data-count="13">#7 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-8" data-count="13">#8 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-9" data-count="13">#9 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-10" data-count="13">#10 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-11" data-count="13">#11 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-12" data-count="13">#12 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-13" data-count="13">#13 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-14" data-count="13">#14 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-15" data-count="13">#15 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-16" data-count="13">#16 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-17" data-count="13">#17 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-18" data-count="13">#18 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-19" data-count="13">#19 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+      <option value="synthetic-reading-3-20" data-count="13">#20 Synthetic reading topic 3: public transport in modern cities · 13题</option>
+
+    </select>
+
+    <div><button type="button" class="btn btn-outline" data-sprint-suggest>按热度选一套40题</button></div>
+    <p data-sprint-total role="status" aria-live="polite">尚未选题</p>
+  </div>
+</fieldset>
+
+
+      <div class="form-group">
+        <label>写作题目（剑桥，可选）</label>
+        <select name="writing_test_id" class="form-control">
+          <option value="">-- 不考写作（两科模考）--</option>
+
+        </select>
+        <small style="color: #888;">不选＝仅听力+阅读；选了会在阅读后追加 Writing 科。</small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label>听力时长（分钟）</label>
+          <input type="number" name="listening_minutes" class="form-control" value="32" min="1" max="180">
+          <div class="form-text">正式机考节奏：约 30 分钟录音 + 2 分钟最终检查。</div>
+        </div>
+        <div class="form-group">
+          <label>阅读时长（分钟）</label>
+          <input type="number" name="reading_minutes" class="form-control" value="60" min="1" max="180">
+        </div>
+        <div class="form-group">
+          <label>写作时长（分钟）</label>
+          <input type="number" name="writing_minutes" class="form-control" value="60" min="1" max="180">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Pincode（学生进入用，留空将随机生成）</label>
+        <input type="text" name="pincode" class="form-control" value="QA123" maxlength="16" style="font-family: monospace; letter-spacing: 0.2em;">
+        <small style="color: #888;">5 位字母数字，例如 <code>QA123</code></small>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="submit" class="btn btn-primary">创建模考</button>
+        <a href="/admin_mock_exams_index" class="btn btn-outline">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="/static/js/mock_sprint_picker.js"></script>
+
+      </main>
+      <footer aria-label="网站备案信息" style="position: relative; padding: 16px 20px; text-align: center; font-size: 14px; line-height: 1.6; color: #526072;">
+  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">苏ICP备2025214908号-1</a>
+</footer>
+    </div>
+  </div>
+
+
+
+  <!-- jQuery, Popper.js, and Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <script>window.PRACTICE_NAVIGATION_DEFAULTS = {"identity_mode": "guest", "module_exit_label": "\u9000\u51fa\u5237\u9898", "module_exit_url": "/login", "module_root_url": "/practice"};</script>
+  <script src="/static/js/practice_shell.js"></script>
+
+  <script src="/static/js/admin_suite_v2.js"></script>
+
+  <script>
+    PracticeShell.installListContext(window.PRACTICE_NAVIGATION_DEFAULTS);
+    PracticeShell.installHub(window.PRACTICE_NAVIGATION_DEFAULTS);
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const list = document.querySelectorAll('.flashes, .flash, .alert, .message');
+      list.forEach(function (el) {
+        el.style.transition = 'opacity 0.8s ease';
+        setTimeout(function () { el.style.opacity = '0'; }, 2500);
+        setTimeout(function () { el.remove(); }, 3500);
+      });
+
+      // Mobile sidebar drawer
+      const toggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (toggle && sidebar && overlay) {
+        const openDrawer = function () {
+          sidebar.classList.add('is-open');
+          overlay.classList.add('is-open');
+          toggle.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+        };
+        const closeDrawer = function () {
+          sidebar.classList.remove('is-open');
+          overlay.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        };
+        toggle.addEventListener('click', function () {
+          if (sidebar.classList.contains('is-open')) closeDrawer(); else openDrawer();
+        });
+        overlay.addEventListener('click', closeDrawer);
+        sidebar.querySelectorAll('.nav-link').forEach(function (a) {
+          a.addEventListener('click', function () { if (window.innerWidth <= 768) closeDrawer(); });
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && sidebar.classList.contains('is-open')) closeDrawer();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

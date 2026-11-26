@@ -1168,6 +1168,10 @@ const test = assignedSectionNumber
   : rawTest;
 const audio = document.getElementById('audio');
 const audioBase = "{{ url_for('static', filename='listening/') }}";
+function sectionAudioUrl(section) {
+  const path = String(section?.audio || '');
+  return path.startsWith('/') && !path.startsWith('//') ? path : audioBase + path;
+}
 const storageScope = assignedSectionNumber ? `section_${assignedSectionNumber}` : 'full';
 const practiceStorageOwner = localStorage.getItem('listening_student') || 'guest';
 const storageKey = examContext
@@ -1225,7 +1229,7 @@ function richText(value) {
 }
 
 function usableImage(url) {
-  return /^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || '');
+  return /^\/practice\/sprint\/assets\/[a-f0-9]{64}\.(png|jpg|jpeg|webp|gif)$/.test(url || '') || (/^https?:\/\//.test(url || '') && !/aliyuncs\.com\/?$/.test(url || ''));
 }
 
 function imageSrc(group) {
@@ -1750,7 +1754,7 @@ function switchSection(index, scroll = true, preserveAudioRequest = false) {
   document.querySelectorAll('.panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
   const section = test.sections[index];
   if (!experienceCapabilities.requiresAudioPreflight && section && !audio.src.endsWith(section.audio)) {
-    audio.src = audioBase + section.audio;
+    audio.src = sectionAudioUrl(section);
   }
   const activeSectionLabel = document.getElementById('activeSectionLabel');
   const sectionLabel = section ? sectionNavigationLabel(section, index) : '-';
@@ -1769,7 +1773,7 @@ function simulationResourceRows() {
   return test.sections.map((section, index) => ({
     index,
     label: `Part ${section.section || index + 1}`,
-    url: new URL(audioBase + section.audio, window.location.origin).href
+    url: new URL(sectionAudioUrl(section), window.location.origin).href
   }));
 }
 

@@ -362,6 +362,7 @@
               <button type="button" class="listening-type-filter__btn is-active" data-listening-filter="intensive">精听切句</button>
               <button type="button" class="listening-type-filter__btn" data-listening-filter="cambridge_test">整套 Test</button>
               <button type="button" class="listening-type-filter__btn" data-listening-filter="jijing">虾滑刷题</button>
+              <button type="button" class="listening-type-filter__btn" data-listening-filter="exam_sprint">7天热榜</button>
             </div>
             <label class="listening-search-field" for="listeningPickerSearch">
               <span>搜索</span>
@@ -382,8 +383,15 @@
           </optgroup>
           <optgroup label="虾滑听力">
           {% for ex in listening_exercises %}
-          {% if ex.resource_type == 'jijing' %}
+          {% if ex.resource_type == 'jijing' and ex.catalog_source != 'exam_sprint' %}
           <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-resource-type="{{ ex.resource_type }}">{{ ex.title }} ({{ ex.question_count }}题)</option>
+          {% endif %}
+          {% endfor %}
+          </optgroup>
+          <optgroup label="7天热榜 · 听力">
+          {% for ex in listening_exercises %}
+          {% if ex.catalog_source == 'exam_sprint' %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-resource-type="jijing" data-catalog-source="exam_sprint" data-target-id="{{ ex.target_id }}">{{ ex.title }} ({{ ex.question_count }}题)</option>
           {% endif %}
           {% endfor %}
           </optgroup>
@@ -395,6 +403,9 @@
           {% endfor %}
           </optgroup>
         </select>
+        {% if sprint_catalogs is defined %}
+        <small class="text-muted">7天热榜 · {{ sprint_catalogs.listening.total }} 篇可布置{% if sprint_catalogs.listening.updated_at_label %} · 更新 {{ sprint_catalogs.listening.updated_at_label }}{% endif %}{% if sprint_catalogs.listening.stale %} · 当前显示上期题单{% endif %}</small>
+        {% endif %}
         <div id="listeningTrainingModeField" style="display:none; margin-top:14px;">
           <label for="listeningTrainingModeSelect">精听训练方式</label>
           <select class="form-select" id="listeningTrainingModeSelect" name="listening_training_mode">
@@ -456,7 +467,17 @@
           {% endif %}
           {% endfor %}
           </optgroup>
+          <optgroup label="7天热榜 · 阅读">
+          {% for ex in reading_exercises %}
+          {% if ex.source_label == '7天热榜' %}
+          <option value="{{ ex.id }}" data-title="{{ ex.title }}" data-target-id="{{ ex.target_id }}" data-catalog-source="exam_sprint" data-passage-count="1" data-question-count="{{ ex.question_count }}">{{ ex.title }} ({{ ex.question_count }}题)</option>
+          {% endif %}
+          {% endfor %}
+          </optgroup>
         </select>
+        {% if sprint_catalogs is defined %}
+        <small class="text-muted">7天热榜 · {{ sprint_catalogs.reading.total }} 篇可布置{% if sprint_catalogs.reading.updated_at_label %} · 更新 {{ sprint_catalogs.reading.updated_at_label }}{% endif %}{% if sprint_catalogs.reading.stale %} · 当前显示上期题单{% endif %}</small>
+        {% endif %}
       </div>
     </div>
 
@@ -464,7 +485,7 @@
       <div class="field field--wide">
         <label>阅读布置范围</label>
         <div id="readingPassageChoices" class="range-choice-row"></div>
-        <small class="text-muted">可布置整套 40 题，也可只布置单篇 Passage。</small>
+        <small class="text-muted">剑雅和 ZYZ 可选整套或单篇；7天热榜仅布置所选篇章。</small>
       </div>
     </div>
 
@@ -738,7 +759,7 @@
           <span class="timer" aria-label="计时" title="计时">00:00:00</span>
           <button class="btn-start" type="button">开始计时</button><button class="btn-pause" type="button" style="display:none;">暂停</button><button class="btn-stop" type="button" style="display:none;">结束</button>
           <div class="task-actions">
-            {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开虾滑题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
+            {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else (('打开热榜题目' if '7天热榜' in (t.category or '') else '打开听力题目') if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
             {% if t.reading_test_id and t.reading_url %}<a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>{% endif %}
             {% if t.question_type_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>{% endif %}
             {% if t.writing_url %}<a class="task-action-link task-action-link--primary" href="{{ t.writing_url }}" target="_blank">{{ '打开母题' if t.writing_resource_type == 'mother_topic' else '打开写作' }}</a>{% endif %}
@@ -3343,6 +3364,19 @@
         const writingSelect = document.getElementById('writingResourceSelect');
         const writingType = document.getElementById('writingResourceType');
         const categorySelect = document.getElementById('taskCategory');
+        const repeatOptionValue = (select, original, sprintValue) => {
+          const value = String(original || '');
+          if (!value) return '';
+          if (hasOption(select, value)) return value;
+          return hasOption(select, sprintValue) ? sprintValue : '';
+        };
+        const listeningValue = repeatOptionValue(
+          listeningSelect, repeat.listening_exercise_id, `sprint:${repeat.listening_exercise_id || ''}`
+        );
+        const readingValue = repeatOptionValue(
+          readingSelect, repeat.reading_test_id,
+          `${repeat.reading_test_id || ''}@${repeat.reading_passage_number || ''}`
+        );
 
         if (!sourceRadio) {
           setStatus('该任务来源当前不可用，未回填。', true);
@@ -3352,11 +3386,11 @@
           setStatus('昨天使用的材料当前已停用或不存在，未回填。', true);
           return;
         }
-        if (source === 'listening' && !hasOption(listeningSelect, repeat.listening_exercise_id)) {
+        if (source === 'listening' && !listeningValue) {
           setStatus('昨天使用的听力练习当前不可用，未回填。', true);
           return;
         }
-        if (source === 'reading' && !hasOption(readingSelect, repeat.reading_test_id)) {
+        if (source === 'reading' && !readingValue) {
           setStatus('昨天使用的阅读练习当前不可用，未回填。', true);
           return;
         }
@@ -3420,7 +3454,7 @@
           setQuestionSelection(repeat.question_ids);
           updateDictationRangeSuggestion();
         } else if (source === 'listening') {
-          listeningSelect.value = repeat.listening_exercise_id || '';
+          listeningSelect.value = listeningValue;
           const resourceType = document.getElementById('listeningResourceType');
           if (resourceType) resourceType.value = repeat.listening_resource_type || 'intensive';
           await handleListeningExerciseChange();
@@ -3437,7 +3471,7 @@
           });
           setQuestionSelection(repeat.question_ids);
         } else if (source === 'reading') {
-          readingSelect.value = repeat.reading_test_id || '';
+          readingSelect.value = readingValue;
           handleReadingExerciseChange();
           const passageValue = repeat.reading_passage_number
             ? String(repeat.reading_passage_number)
@@ -3832,12 +3866,15 @@
           return {
             value: option.value,
             resourceType,
+            catalogSource: option.dataset.catalogSource || resourceType,
             title,
             label,
             book: structuredTitle.book,
             test: structuredTitle.test,
             section: structuredTitle.section,
-            meta: resourceType === 'cambridge_test'
+            meta: option.dataset.catalogSource === 'exam_sprint'
+              ? `7天热榜${metaMatch ? ` · ${metaMatch[1]}` : ''}`
+              : resourceType === 'cambridge_test'
               ? `整套 Test${metaMatch ? ` · ${metaMatch[1]}` : ''}`
               : resourceType === 'jijing'
                 ? `虾滑刷题${metaMatch ? ` · ${metaMatch[1]}` : ''}`
@@ -3870,7 +3907,9 @@
           return;
         }
         const resourceType = option.dataset.resourceType || 'intensive';
-        const typeLabel = resourceType === 'cambridge_test'
+        const typeLabel = option.dataset.catalogSource === 'exam_sprint'
+          ? '7天热榜'
+          : resourceType === 'cambridge_test'
           ? '整套 Test'
           : resourceType === 'jijing'
             ? '虾滑刷题'
@@ -3883,7 +3922,7 @@
         const queryTokens = query ? query.split(' ') : [];
         const structuredQuery = parseStructuredQuery(query);
         const matches = items.filter(item => {
-          if (item.resourceType !== state.filter) return false;
+          if (item.catalogSource !== state.filter) return false;
           if (structuredQuery.book && item.book !== structuredQuery.book) return false;
           if (structuredQuery.test && item.test !== structuredQuery.test) return false;
           if (structuredQuery.section && item.section !== structuredQuery.section) return false;
@@ -3936,7 +3975,7 @@
       function syncListeningPickerFromSelect(options) {
         const option = selectedOption();
         if (option && !(options && options.preserveFilter)) {
-          state.filter = option.dataset.resourceType || 'intensive';
+          state.filter = option.dataset.catalogSource || option.dataset.resourceType || 'intensive';
         } else if (!option && !(options && options.preserveFilter)) {
           state.filter = 'intensive';
         }
@@ -4581,9 +4620,10 @@
         return;
       }
       if (resourceType === 'jijing') {
-        setQuestionSelectionMeta('虾滑听力刷题', '学生进入虾滑网页题目完成练习');
+        const sprint = option?.dataset.catalogSource === 'exam_sprint';
+        setQuestionSelectionMeta(sprint ? '7天热榜听力' : '虾滑听力刷题', '学生进入网页题目完成练习，判分同步到任务');
         questionRow.style.display = 'none';
-        container.innerHTML = '<div class="text-muted">虾滑题目会在网页刷题页打开。</div>';
+        container.innerHTML = '<div class="text-muted">题目会在网页刷题页打开。</div>';
         questionIds.value = '';
         return;
       }
@@ -4621,11 +4661,11 @@
       }
     }
 
-    function renderReadingPassageChoices(passages) {
+    function renderReadingPassageChoices(passages, singlePassageOnly = false) {
       const holder = document.getElementById('readingPassageChoices');
       if (!holder) return;
       const options = [
-        { number: '', label: '整套 Test' },
+        ...(singlePassageOnly ? [] : [{ number: '', label: '整套 Test' }]),
         ...(passages || [])
       ];
       holder.innerHTML = options.map((item, index) => `
@@ -4653,9 +4693,10 @@
       const option = readingSelect.options[readingSelect.selectedIndex];
       detailInput.value = option?.getAttribute('data-title') || option?.textContent?.trim() || '';
       const passages = readingExercisePassages[readingSelect.value] || [];
-      renderReadingPassageChoices(passages);
+      const sprint = option?.dataset.catalogSource === 'exam_sprint';
+      renderReadingPassageChoices(passages, sprint);
       passageRow.style.display = 'flex';
-      if (plannedInput && !plannedInput.value) plannedInput.placeholder = '整套 60 / 单篇 20';
+      if (plannedInput && !plannedInput.value) plannedInput.placeholder = sprint ? '例如 20' : '整套 60 / 单篇 20';
 
       const holder = document.getElementById('readingPassageChoices');
       if (holder && plannedInput) {
@@ -5844,16 +5885,20 @@
         const source = document.querySelector('input[name="task_source"]:checked')?.value || 'custom';
         const material = document.getElementById('material_id')?.value || '';
         const dictationMatch = material.match(/^dictation-(\d+)$/);
+        const resourceId = id => {
+          const select = document.getElementById(id);
+          return select?.selectedOptions?.[0]?.dataset.targetId || select?.value || '';
+        };
         return {
           source, task_source: source, material_id: material && !dictationMatch ? material : '',
           dictation_book_id: dictationMatch ? dictationMatch[1] : '',
           dictation_word_start: document.querySelector('[name="dictation_word_start"]')?.value || 1,
           dictation_word_end: document.querySelector('[name="dictation_word_end"]')?.value || '',
           speaking_book_id: (material.match(/^speaking-(\d+)$/) || [])[1] || '',
-          listening_exercise_id: document.getElementById('listeningExerciseSelect')?.value || '',
+          listening_exercise_id: resourceId('listeningExerciseSelect'),
           listening_resource_type: document.getElementById('listeningResourceType')?.value || '',
           listening_section_number: document.querySelector('[name="listening_section_number"]:checked')?.value || '',
-          reading_test_id: document.getElementById('readingExerciseSelect')?.value || '',
+          reading_test_id: resourceId('readingExerciseSelect'),
           reading_passage_number: document.querySelector('[name="reading_passage_number"]:checked')?.value || '',
           writing_resource_type: document.getElementById('writingResourceType')?.value || '',
           writing_resource_id: document.getElementById('writingResourceSelect')?.value || '',

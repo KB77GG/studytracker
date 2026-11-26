@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "head": "3b26404ce21f7528e3c7e63703ca7f8268ad0465",
+  "tracked_clean": true,
+  "service": "MainPID=788989\nNRestarts=0\nActiveState=active\nSubState=running",
+  "workers": 1,
+  "catalogs": [
+    {
+      "subject": "listening",
+      "ready": 80,
+      "edition": "2026-11-26 20:27",
+      "correct": 40,
+      "total": 40,
+      "http": 200
+    },
+    {
+      "subject": "reading",
+      "ready": 60,
+      "edition": "2026-11-26 20:27",
+      "correct": 40,
+      "total": 40,
+      "http": 200
+    }
+  ],
+  "scope": "Read-only files and anonymous loopback GET; no app/model import, no learner writes, no saved mock.",
+  "public_picker": {
+    "http": 200,
+    "sha256": "b1785c8f9843bbbbb2b34e059b8dd524b334d4a785f370033d1c2561405159fd",
+    "matches_release": true
+  }
+}

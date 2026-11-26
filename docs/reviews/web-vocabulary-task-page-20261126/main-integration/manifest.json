@@ -1,0 +1,263 @@
+{
+  "vocabulary_parent": "f6f0f10445c4746bdbd1153f46db2411a0bda577",
+  "main_parent": "f5b06cc3cb44fa1f77720ca771bde3134c83a71d",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "57689b304919d609c2beca335ed50a633bcbb3a57f13b2cbbcd25f9d12d224ab"
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "6e5df6c47ce81cf1c12f283886b48d863bc03a351135be794c1649e483ad8699"
+    },
+    {
+      "path": "api/miniprogram.py",
+      "sha256": "abbdd73b7c545d7b56e37fbc480848360608506a599c2cf67ab572c7174d1383"
+    },
+    {
+      "path": "api/mock_exam_creation.py",
+      "sha256": "ce6f716e22e31f39786c3837c5e94e7aa97857eadd03a6a82446c962183d10df"
+    },
+    {
+      "path": "api/practice_vocabulary.py",
+      "sha256": "61d1db5b759e7a8d439577875a01d155f30b80af09ff3c5c0673c9d16ab49b3a"
+    },
+    {
+      "path": "api/teacher_practice_catalog.py",
+      "sha256": "106332a563f3d35ea711295a30a0d4a461e71ed16a56ad5b2062632dc12d5141"
+    },
+    {
+      "path": "app.py",
+      "sha256": "39ca98aaebfd9aa67b23cf0762feb8408b08ebcf0de17005f84042606d5d4b92"
+    },
+    {
+      "path": "config.py",
+      "sha256": "9b9acab3eeef0b23141d55f74f9b9b48ccc7dacdbe18cf5714df85680e9e6e34"
+    },
+    {
+      "path": "scripts/install_exam_sprint_launchd.py",
+      "sha256": "c51e17f049dba0fa84b700898ed796818161aa58c112817469e2649177cc67f4"
+    },
+    {
+      "path": "scripts/run_exam_sprint_weekly.py",
+      "sha256": "e1a76274936e9f4ad63fb8e6a62aedf573bba9ab25613a037bdd4681cdcc3286"
+    },
+    {
+      "path": "scripts/sync_exam_sprint.py",
+      "sha256": "aaf3d00c5ec9a3d56bfef2acfd500cc0bd2d77fbd0731fbcd6e45ec19fac6e6d"
+    },
+    {
+      "path": "services/exam_sprint_catalog.py",
+      "sha256": "531a5466bbd8ced02ef7f49ad38e4fa997a9062519d7ea3faaa32de50332214b"
+    },
+    {
+      "path": "services/exam_sprint_papers.py",
+      "sha256": "ec9fe452b1d9608f2fe3c42413ee4dcb480964b04cae8da81047315ce96e59af"
+    },
+    {
+      "path": "services/exam_sprint_student.py",
+      "sha256": "c7314e72229b9d81f7c5f01261f20e83ed5bcd7fbdf57fc47123904f94ed462c"
+    },
+    {
+      "path": "services/mock_exam_paper_access.py",
+      "sha256": "c03b89b8c854b565af46800902887a53942d23cfe7a99f6d60ad0f058578f0a0"
+    },
+    {
+      "path": "services/ninefen_auth.py",
+      "sha256": "274c7a22923d6b00d4eef36f50fdf7cb83581f80db7b6385fc599bd86d12869a"
+    },
+    {
+      "path": "services/ninefen_session.py",
+      "sha256": "616f2eb7409470e6c80dd30f65a50dd5f1dcacd4157fb22110e9cc9229c099e6"
+    },
+    {
+      "path": "services/practice_student_identity.py",
+      "sha256": "aadb2b1a762d0346e9e3a6172b7b85792fe14529e1750898f463c3c2fdce4192"
+    },
+    {
+      "path": "services/practice_vocabulary_tasks.py",
+      "sha256": "e2204bbf86b8e5f15e4457b43e3a49668420767eb21ef0b6ce4ef2b8009749ec"
+    },
+    {
+      "path": "services/practice_vocabulary_web.py",
+      "sha256": "0201456366e0d6da1ee6fcc6ce6f7a1e8153524ccea298921cef5b0b769754ae"
+    },
+    {
+      "path": "services/task_plan_item_sync.py",
+      "sha256": "da4b9e152e45ddac24c379fdff744d9fa182e473931bfd1848131c1a248a2fc7"
+    },
+    {
+      "path": "services/vocabulary_task_submission.py",
+      "sha256": "029eddc898e9d7081a7c397de043bd5220757f78436498425a14a0f267fceea8"
+    },
+    {
+      "path": "services/web_practice_tasks.py",
+      "sha256": "78ba58b69227f27020e33b3ecc0cff08107638104e3d8549f7241b69be68b398"
+    },
+    {
+      "path": "static/css/practice_vocabulary.css",
+      "sha256": "5ca1c488809fb906ca2db594ddec2f40c8e68398e27c3682837adbfc03b6fc23"
+    },
+    {
+      "path": "static/js/mock_sprint_picker.js",
+      "sha256": "b1785c8f9843bbbbb2b34e059b8dd524b334d4a785f370033d1c2561405159fd"
+    },
+    {
+      "path": "static/js/practice_vocabulary_core.js",
+      "sha256": "4cf0fd54683c404feb908c487627c338dcda5236004ab36a7591448dc601b946"
+    },
+    {
+      "path": "static/js/practice_vocabulary_events.js",
+      "sha256": "15244787156b97cb7fef188b00bf2f0bce82e423114431a505db98c7fe7bae3f"
+    },
+    {
+      "path": "static/js/practice_vocabulary_page.js",
+      "sha256": "a02aad4c9e4d6a32460b969269b0b5089fc8d7b8164792c0bc4dbe07eb0cdca8"
+    },
+    {
+      "path": "static/js/practice_vocabulary_recovery.js",
+      "sha256": "b4e0b4b2d80f6ee0d7f2b695462e003b79e9123d98b243d530d6e35c78cceba9"
+    },
+    {
+      "path": "static/js/practice_vocabulary_render.js",
+      "sha256": "cbe3b2cbb01ffc5a4c3ff480fc2e6acda14c8280f23dbbdd20f51bc006126a5b"
+    },
+    {
+      "path": "static/js/practice_vocabulary_render_details.js",
+      "sha256": "07ad7d64ec7fbacfeba8b6d367e0a3706884999383eca4ffad22be07b75389d6"
+    },
+    {
+      "path": "static/js/practice_vocabulary_timing.js",
+      "sha256": "998c094c2e61b58a5b9922c292ae96d18123010a2bcca50a976ed52c283e7227"
+    },
+    {
+      "path": "static/js/practice_vocabulary_transport.js",
+      "sha256": "2cbe73a5afce2d79441eb78507c52ab442a8c254fee2e711a87471a8c25dcb03"
+    },
+    {
+      "path": "templates/admin/_mock_sprint_picker.html",
+      "sha256": "c9409ef9e5f3da29b77157b4671458ae7f58cc4e060295fb55a054c5b8ed6162"
+    },
+    {
+      "path": "templates/admin/mock_exams_form.html",
+      "sha256": "9804fac22568e6f2110b3e0b6f509659a72c343a927f3f6a44a0c945f3d0a562"
+    },
+    {
+      "path": "templates/listening/test_practice.html",
+      "sha256": "e64167f71f4c7e516c850008e6b48b26180fa69b496c9e5de5677a61416c1557"
+    },
+    {
+      "path": "templates/practice/index_content.html",
+      "sha256": "73cb453e72ce236d568c2dd507b1e039208bcfed74344af49c4d948747bc3a0a"
+    },
+    {
+      "path": "templates/practice/vocabulary_task.html",
+      "sha256": "5a11722a5483c362a119c27a4423971ffd744e4e6f104eb7d67d8b2096772bea"
+    },
+    {
+      "path": "templates/tasks.html",
+      "sha256": "c5363204e13cb59d22e5fc14bab3a39b85f9b7829e38ca08189d75e7932eb323"
+    },
+    {
+      "path": "tests/fixtures/README-practice-task-list.md",
+      "sha256": "f2990dbf9a75bb25f9ff990f228aa79e9d0d071f7d130bb9bc682ddb37fe24ad"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_a02.json",
+      "sha256": "c1e567861f21f3b3d69ce91ecb6d0358ae81a3964d455cb18890aa4d423aa7c0"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_baseline.py",
+      "sha256": "a30eb6be1bac0cca9ccb141cdc27ce14216c5727f973f544a9cb2d17ce2e2e82"
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_f81a5e4.json",
+      "sha256": "10fce8d23fedeff2c8111ae5858030ac19ee946f1d5f351914d1b6ecbd3acad0"
+    },
+    {
+      "path": "tests/test_exam_integrity_e2e.py",
+      "sha256": "6abdefa74d9921263813819abebb11033e9c74e1eb105beb6531442d230c7eed"
+    },
+    {
+      "path": "tests/test_exam_sprint_assignment_picker.js",
+      "sha256": "687f1d5aee184308597d1e6d9863905f3ce7144b3feb20c9604af9e436f0909e"
+    },
+    {
+      "path": "tests/test_exam_sprint_assignments.py",
+      "sha256": "76ee5f59cc4c21b0ef117c7f5a4d6eec09645586c17258b67719db54df47af53"
+    },
+    {
+      "path": "tests/test_exam_sprint_catalog.py",
+      "sha256": "6e13d3a97a236f0ccbf99092c4579b80f914c319e81b769228358e09bb921749"
+    },
+    {
+      "path": "tests/test_exam_sprint_papers.py",
+      "sha256": "ab7baa734ee77a7450b96fc83fc1581d947b6a5a61520c71f4e830658036a521"
+    },
+    {
+      "path": "tests/test_exam_sprint_student.py",
+      "sha256": "94155453a981186c59d3a7fcaabb88d84facf53ede656d9477800d5360011815"
+    },
+    {
+      "path": "tests/test_exam_sprint_weekly.py",
+      "sha256": "6ba28a7e2f7c66b5da8b60b2236d588f09bda2a4dba7eac4608ae9d2fa8b8a18"
+    },
+    {
+      "path": "tests/test_mock_sprint_creation.py",
+      "sha256": "67fae2298acc7c0913b4b2b391fdcc25b55c25d93b769fa03718cdd14ffc668b"
+    },
+    {
+      "path": "tests/test_mock_sprint_picker.js",
+      "sha256": "cea12b6282924d5ef1e42c0fa0126a2f022be0b97e392d9d647daaa2092e7cc5"
+    },
+    {
+      "path": "tests/test_ninefen_auth.py",
+      "sha256": "2e9152912f71e2642115c6f40c6b4a2aa18080d39c7a912c0fa4e1f6a73b95c3"
+    },
+    {
+      "path": "tests/test_ninefen_session.py",
+      "sha256": "4b60b38e666e94e2d89789b2ee82a0138092486fe2e42b52ef8a6a0596c218ef"
+    },
+    {
+      "path": "tests/test_practice_student_identity.py",
+      "sha256": "d0d33271af093181711776fbc2d1b5f151c600b36aedeea324483a6f6f7dae11"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_adversarial.py",
+      "sha256": "e5e77bc4ce59d91b5c797c8bb56e81542ed5268a336b623ad413cae5ba09a9f7"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_core.js",
+      "sha256": "0609e929d295e7d566212e0a11e61e0f620dc17271faac1c471f46d6f1f10f72"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_routes.py",
+      "sha256": "57b2e19ee43bb14844cf7aa1f23be07acd05c3cca382d7eda108d9740fe48986"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_task_list.py",
+      "sha256": "f02293222d93f90eba4fbaaf112aa27bfc7b40f1d4600fd7a7782b5500d384e3"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_tasks.py",
+      "sha256": "8d894d36dd11608292fc093e141ad82dfbf78c37d137707195ff944adb484c03"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_timing.js",
+      "sha256": "3890076dd221c88e2168562d008b2dd814a49b85922ad02c8817ffe573bdbd63"
+    },
+    {
+      "path": "tests/test_practice_vocabulary_web.py",
+      "sha256": "5a4a66d183ea7d2d888ae6b6a26e147c0e2080c791bb4923716d5623f063e32e"
+    },
+    {
+      "path": "tests/test_task_plan_item_sync.py",
+      "sha256": "3f06e56fbae7dc350f2312668ecb23142c53a897c2e4dfed86abe4ca8fbbbc12"
+    },
+    {
+      "path": "tests/test_vocabulary_task_submission.py",
+      "sha256": "668261058703387c26c5d99d9b6580b5c351b041d0ad05654b81ba21bde479db"
+    }
+  ],
+  "file_count": 64
+}

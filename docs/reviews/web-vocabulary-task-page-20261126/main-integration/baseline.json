@@ -1,0 +1,16 @@
+{
+  "worktree": "/private/tmp/studytracker-web-vocabulary-20261126",
+  "branch": "codex/web-vocabulary-task-page-20261126",
+  "vocabulary_parent": "f6f0f10445c4746bdbd1153f46db2411a0bda577",
+  "main_parent": "f5b06cc3cb44fa1f77720ca771bde3134c83a71d",
+  "merge_base": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "conflicts": [
+    ".github/workflows/ci.yml",
+    "docs/CODEX_HANDOFF.md",
+    "docs/WORKLOG.md"
+  ],
+  "resolution": "Retain pytest and new sprint HTTP journey step; keep both sets of CI steps and all handoff entries. No product code manual edits.",
+  "scope": "merge main into vocabulary review branch only; batch1 remains separate local work; no main push/deploy/flag change",
+  "browser": "pending separate browser report",
+  "cleanup_suggestion": "Known non-blocking accumulation of per-page timing records; no change to reviewed timing behavior in this integration."
+}

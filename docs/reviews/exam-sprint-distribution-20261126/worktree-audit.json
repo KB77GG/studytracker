@@ -1,0 +1,74 @@
+{
+  "old_main": {
+    "path": "/Users/zhouxin/Desktop/studytracker",
+    "branch": "main",
+    "head": "6ded77d24586327ad94e151e172ae4811b4a2eed",
+    "status": [
+      " M AGENTS.md",
+      " M design-qa.md",
+      " M docs/CODEX_HANDOFF.md",
+      " M docs/WORKLOG.md",
+      " M static/style.css",
+      " M templates/listening/index.html",
+      " M templates/listening/test_practice.html",
+      " M templates/login.html",
+      "?? .tmp/",
+      "?? GEMINI.md",
+      "?? artifacts/",
+      "?? data/idictation_vocab_books/",
+      "?? data/idictation_zyz_vocab/",
+      "?? data/reading_study/browse.html",
+      "?? data/reading_study/preview.html",
+      "?? data/toefl_practice/ets-practice-2/",
+      "?? data/toefl_practice/ets-practice-3/",
+      "?? data/toefl_practice/ets-practice-4/",
+      "?? data/toefl_practice/ets-practice-5/",
+      "?? docs/GEMINI_QUICKSTART.md",
+      "?? docs/VOCABULARY_REVIEW_PLAN.md",
+      "?? docs/design/",
+      "?? docs/dictation_input_policy_proposal.md",
+      "?? docs/dictation_strict_result_layout_fix.md",
+      "?? docs/requirements/",
+      "?? docs/reviews/",
+      "?? prototypes/",
+      "?? scripts/import_idictation_vocab_book.py",
+      "?? scripts/import_zyz_vocab.py",
+      "?? static/brand/auth-staircase-hero.png",
+      "?? templates/auth/",
+      "?? tests/test_auth_entry_pages.py",
+      "?? tests/test_import_idictation_vocab_book.py",
+      "?? tests/test_import_zyz_vocab.py",
+      "?? tests/test_listening_practice_context.py"
+    ],
+    "modified_count": 8,
+    "untracked_top_level_count": 27,
+    "staged_count": 0,
+    "tracked_non_handoff_sha256": {
+      "AGENTS.md": "4a76ea19938b10ec6672e0cb8660b07971dca80009a0919e2025d8600ff4fda2",
+      "design-qa.md": "b644c496bbf63b78d5d98559dddd32fbbfac16965a0464ce92bfe74b7d434d40",
+      "static/style.css": "9eead60c81db7e466b3ae60add3c2948d8bd478d9d2848d7a8bd910f26344b9b",
+      "templates/listening/index.html": "ef43c9cd5176a978dbe189619dd1198c1811d37478729796a69f4028abe15f7a",
+      "templates/listening/test_practice.html": "90becb856ea1015f979ee0a50fe90ee1b043272a23dc180aa51e171ead2410af",
+      "templates/login.html": "a8ad1fc4b6701fe26007d885dca8a07889a1646fa940e572370e70c55a58ce93"
+    },
+    "scope": "Only two handoff files changed by this extension; other prior changes preserved."
+  },
+  "implementation": {
+    "path": "/Users/zhouxin/Desktop/studytracker/.tmp/exam-sprint-distribution-20261126",
+    "branch": "codex/exam-sprint-distribution-20261126",
+    "baseline": "79388e269e924e9ce591dd3e6de3762a61614ddf",
+    "release_head": "3b26404ce21f7528e3c7e63703ca7f8268ad0465",
+    "pre_document_commit_status": [
+      " M docs/CODEX_HANDOFF.md",
+      " M docs/EXAM_SPRINT_RUNBOOK.md",
+      " M docs/WORKLOG.md",
+      "?? docs/reviews/exam-sprint-distribution-20261126/"
+    ],
+    "expected_final": "Documentation committed/pushed with [skip ci]; clean tracked/untracked status; ignored local media symlink remains."
+  },
+  "untouched": {
+    "repair": "/Users/zhouxin/Desktop/studytracker/.tmp/exam-sprint-repair-20261126 @79388e26",
+    "miniprogram": "/Users/zhouxin/Desktop/studytracker-release @d03a2749, prior dirty source retained; no upload/review/release",
+    "runtime": "/Users/zhouxin/Library/Application Support/StudyTrackerExamSprint; collector7bde8d67 and existing schedule unchanged"
+  }
+}

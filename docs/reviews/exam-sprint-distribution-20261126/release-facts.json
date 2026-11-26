@@ -1,0 +1,58 @@
+{
+  "observed_at": "2026-11-26T14:21:54.818456+00:00",
+  "release_head": "3b26404ce21f7528e3c7e63703ca7f8268ad0465",
+  "code_committed": true,
+  "pushed_to": [
+    "codex/exam-sprint-distribution-20261126",
+    "main"
+  ],
+  "deployed": true,
+  "ci": {
+    "branch": {
+      "run": 45836190657,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "main": {
+      "run": 45836191351,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "required_jobs": {
+      "test": "success",
+      "account-provisioning": "success",
+      "task-planner": "success"
+    },
+    "advisory_lint": "failure, existing nonblocking debt"
+  },
+  "deploy": {
+    "run": 45836191831,
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "3b26404ce21f7528e3c7e63703ca7f8268ad0465"
+  },
+  "production_verifier_argv": [
+    "ssh",
+    "root@47.110.45.193",
+    "cd /root/apps/studytracker && PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -c '\"\"\"Production read-only code/catalog/composition acceptance; no app or DB import.\"\"\"\n\nimport argparse\nimport json\nimport subprocess\nfrom urllib.request import urlopen\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--expected-head\", required=True)\nargs = parser.parse_args()\nhead = subprocess.check_output([\"git\", \"rev-parse\", \"HEAD\"], text=True).strip()\nassert head == args.expected_head, (head, args.expected_head)\ntracked = subprocess.check_output(\n    [\"git\", \"status\", \"--porcelain\", \"--untracked-files=no\"], text=True\n).strip()\nassert not tracked, tracked\nservice = subprocess.check_output(\n    [\"systemctl\", \"show\", \"studytracker\", \"--property=ActiveState,SubState,NRestarts,MainPID\"],\n    text=True,\n).strip()\nassert \"ActiveState=active\" in service and \"SubState=running\" in service\nproperties = dict(line.split(\"=\", 1) for line in service.splitlines() if \"=\" in line)\nworkers = subprocess.check_output([\"pgrep\", \"-P\", properties[\"MainPID\"]], text=True).split()\nassert len(workers) == 1, len(workers)\nfrom services.exam_sprint_catalog import load_sprint_catalog\nfrom services.exam_sprint_papers import compose_sprint_paper\nfrom services.ielts_exam_payload import build_simulation_payload\nfrom services.ielts_practice_scoring import grade_listening_test_answers, grade_reading_test_answers\n\nrows = []\nfor subject, total in [(\"listening\", 80), (\"reading\", 60)]:\n    catalog = load_sprint_catalog(\".\", subject)\n    assert catalog[\"total\"] == total, (subject, catalog[\"total\"])\n    paper = compose_sprint_paper(\n        \".\", subject, [g[\"items\"][0][\"selection_id\"] for g in catalog[\"groups\"]], catalog=catalog\n    )\n    units = paper[\"sections\" if subject == \"listening\" else \"passages\"]\n    answers = {}\n    for unit in units:\n        for group in unit[\"groups\"]:\n            questions = group[\"questions\"]\n            values = str(questions[0][\"answer\"]).split(\",\")\n            shared = (\n                len(values) > 1\n                and len(values) == len(questions)\n                and all(q[\"answer\"] == questions[0][\"answer\"] for q in questions)\n            )\n            for index, q in enumerate(questions):\n                answers[q[\"id\"]] = values[index] if shared else str(q[\"answer\"]).split(\"/\")[0]\n    grade = (\n        grade_listening_test_answers if subject == \"listening\" else grade_reading_test_answers\n    )(paper, answers)\n    assert grade[\"correct\"] == grade[\"total\"] == 40\n    safe = json.dumps(build_simulation_payload(paper, subject))\n    assert '\"'\"'\"answer\":'\"'\"' not in safe and '\"'\"'\"analysis\":'\"'\"' not in safe\n    with urlopen(\"http://127.0.0.1:5002/practice/sprint/\" + subject, timeout=15) as response:\n        html = response.read().decode()\n        assert response.status == 200\n    assert catalog[\"updated_at_label\"] in html\n    rows.append(\n        {\n            \"subject\": subject,\n            \"ready\": total,\n            \"edition\": catalog[\"updated_at_label\"],\n            \"correct\": grade[\"correct\"],\n            \"total\": grade[\"total\"],\n            \"http\": 200,\n        }\n    )\nprint(\n    json.dumps(\n        {\n            \"passed\": True,\n            \"head\": head,\n            \"tracked_clean\": True,\n            \"service\": service,\n            \"workers\": len(workers),\n            \"catalogs\": rows,\n            \"scope\": \"Read-only files and anonymous loopback GET; no app/model import, no learner writes, no saved mock.\",\n        },\n        ensure_ascii=False,\n        indent=2,\n    )\n)\n' --expected-head 3b26404ce21f7528e3c7e63703ca7f8268ad0465"
+  ],
+  "public_static_verifier_argv": [
+    "curl",
+    "-L",
+    "-sS",
+    "--max-time",
+    "20",
+    "https://studytracker.xin/static/js/mock_sprint_picker.js",
+    "-o",
+    "/private/tmp/studytracker-sprint-picker-live-20261126.js",
+    "-w",
+    "%{http_code}\n"
+  ],
+  "production_report": "production-acceptance.json",
+  "documentation": "Separate [skip ci] commit; final HEAD is Git HEAD after documentation push; deployed business HEAD remains release_head.",
+  "no_real_student_tasks_created": true,
+  "no_messages_sent": true,
+  "no_miniprogram_release": true,
+  "browser_visual": "not executed; approval canceled",
+  "writing_live_catalog": "not executed; approval canceled; static code inspection only"
+}

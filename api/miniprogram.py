@@ -47,6 +47,7 @@ from .stats_utils import (
 from services.vocabulary_attempt_reporting import dictation_attempt_display
 from services.web_practice_reporting import web_practice_task_report
 from services.web_practice_tasks import web_practice_payload, web_practice_required
+from services.exam_sprint_student import load_student_ninefen_reading, sprint_reading_image_url
 from .wechat import send_subscribe_message, send_subscribe_message_result
 from .ielts_eval import run_ielts_eval, run_quick_reply
 from .aliyun_asr import transcribe_audio_url
@@ -418,6 +419,8 @@ def _load_cambridge_reading_test(test_id: str) -> tuple[dict | None, str]:
 
 def _load_student_reading_test(test_id: str) -> tuple[dict | None, str]:
     safe_id = secure_filename(test_id or "")
+    if str(test_id or "").startswith("ninefen_") or safe_id.startswith("ninefen_"):
+        return load_student_ninefen_reading(current_app.root_path, test_id), safe_id
     for root_name in ("reading_tests", "reading_jijing"):
         payload = _load_static_json(root_name, f"{safe_id}.json")
         if payload:
@@ -447,6 +450,9 @@ def _serialize_reading_question(question: dict, legacy_safe: bool = False) -> di
 
 
 def _usable_reading_image(group: dict) -> str:
+    img_url = group.get("img_url")
+    if isinstance(img_url, str) and img_url.startswith("/practice/sprint/assets/"):
+        return sprint_reading_image_url(current_app.root_path, img_url)
     img_local = (group.get("img_local") or "").strip()
     if img_local:
         return f"https://studytracker.xin/static/{img_local.lstrip('/')}"

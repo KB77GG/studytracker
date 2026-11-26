@@ -1,0 +1,15 @@
+{
+  "environment": "/Users/zhouxin/Desktop/studytracker/tmp/web-vocab-py310-20261126",
+  "python_version": "3.10.20",
+  "creation_argv": [
+    "/Users/zhouxin/.local/share/uv/python/cpython-3.10.20-macos-aarch64-none/bin/python3.10",
+    "-m",
+    "venv",
+    "--without-pip",
+    "/Users/zhouxin/Desktop/studytracker/tmp/web-vocab-py310-20261126"
+  ],
+  "dependency_pth": "lib/python3.10/site-packages/existing_test_dependencies.pth",
+  "dependency_pth_content": "/private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages",
+  "network_install": false,
+  "note": "Local test venv in gitignored project tmp directory; reuses matching preinstalled dependencies, no product guard or sys.executable patch. Stable base-only attempt failed the subprocess dependency check because that test intentionally removes PYTHONPATH. Initial logs retained."
+}

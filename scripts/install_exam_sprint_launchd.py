@@ -40,6 +40,7 @@ CODE_FILES = (
     "services/practice_library_offline.py",
     "services/ninefen_source.py",
     "services/ninefen_session.py",
+    "services/ninefen_auth.py",
     "services/ninefen_content.py",
     "services/ninefen_assets.py",
     "scripts/sync_exam_sprint.py",
@@ -321,6 +322,7 @@ def install(args) -> None:
             {
                 "schema_version": 1,
                 "enabled": True,
+                "session_renewal_enabled": True,
                 "timezone": "Asia/Shanghai",
                 "python": python,
                 "host": "root@47.110.45.193",

@@ -125,13 +125,34 @@ class PrivateSessionTests(unittest.TestCase):
     def test_auth_failure_and_unknown_status_stop(self, build):
         session = ns.NinefenSession(self.session_file)
         build.return_value.open.side_effect = urllib.error.HTTPError("", 401, "", {}, None)
-        with self.assertRaises(ns.CollectionError):
+        with self.assertRaises(ns.CollectionError) as raised:
             session.existing_result(UNIT_ID)
+        self.assertEqual(raised.exception.http_status, 401)
         self.assertEqual(build.return_value.open.call_count, 1)
         build.return_value.open.side_effect = None
         build.return_value.open.return_value = io.BytesIO(b'{"code":200,"data":{"list":[]}}')
         with self.assertRaises(ns.CollectionError):
             session.existing_result(UNIT_ID)
+
+    @patch.object(ns.urllib.request, "build_opener")
+    def test_post_auth_failure_keeps_uncertain_semantics_and_safe_status(self, build):
+        session = ns.NinefenSession(self.session_file, allow_new_attempts=True)
+        build.return_value.open.side_effect = urllib.error.HTTPError(
+            "https://invalid/synthetic-test-only",
+            401,
+            "synthetic-test-only",
+            {},
+            io.BytesIO(b"synthetic-test-only"),
+        )
+        with self.assertRaises(ns.UncertainSubmission) as raised:
+            session.submit_blank({"unitId": UNIT_ID})
+        self.assertEqual(raised.exception.http_status, 401)
+        self.assertNotIn("synthetic-test-only", str(raised.exception))
+        self.assertEqual(build.return_value.open.call_count, 1)
+
+    def test_status_metadata_is_only_a_bounded_integer(self):
+        for value in ("401", True, 0, 600, {"token": "synthetic-test-only"}):
+            self.assertIsNone(ns.CollectionError("safe", http_status=value).http_status)
 
     @patch.object(ns.time, "sleep")
     @patch.object(ns.urllib.request, "build_opener")
