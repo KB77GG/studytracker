@@ -1,0 +1,47 @@
+✔ IME, composition-end guard, held Enter and in-flight writes cannot submit (0.836583ms)
+✔ text input keeps digits, arrow keys and R; option selection uses 1–4 and arrows (0.123917ms)
+✔ audio shortcuts respect disclosure rules and native controls keep native Enter (0.06125ms)
+✔ six modes submit the correct representation without normalizing student text (0.107917ms)
+✔ attempt IDs share the mobile first/retry slots and isolate correction attempts (0.471291ms)
+✔ copying a revealed context choice label submits its option id for correction (0.070583ms)
+✔ question identity includes retry and correction slots for safe drafts (0.085167ms)
+✔ hidden audio is unavailable in spelling/context prompts and safe URLs resolve (0.151584ms)
+✔ spelling diff exposes text operations whose accepted reading is exactly expected (0.195334ms)
+✔ service facts govern the state machine including empty completed review and read-only (0.134375ms)
+✔ blocked sessionStorage does not prevent learning (0.884ms)
+✔ network retries reuse identical payload, send identity and clear journal only after ok (0.609916ms)
+✔ failed or malformed success preserves the pending answer, including during recovery sync (0.431792ms)
+✔ single-flight and sequence guard reject duplicate writes and obsolete callbacks (0.437791ms)
+✔ actual submit includes domain identity tuple and audio choice submits label (1.342ms)
+✔ empty answers stay local; forgotten response is explicit and distinct (0.835792ms)
+✔ review answer forwards session ownership and correct item fields (0.764792ms)
+✔ recovery displays saved feedback without auto-settling behind it (1.979167ms)
+✔ review recovery reads answered item instead of falsely advancing past missing feedback (0.878291ms)
+✔ same-session focus refresh preserves review elapsed time and a new session resets it (0.946ms)
+✔ task timer survives reload and reentry, then freezes the successful settlement payload (2.246125ms)
+✔ unacknowledged settlement retains its snapshot across reload instead of adding retry delay (1.417291ms)
+✔ persistent timing is isolated by task, student and review session (0.31575ms)
+✔ damaged or future timer storage starts a conservative current-page clock (2.365292ms)
+✔ disabled timer storage falls back to this page and unavailable task visits do not start timers (0.636917ms)
+✔ incomplete settlement resumes elapsed time but a completed timer never grows (0.289833ms)
+✔ incomplete settlement invalidates other tabs cached task and review snapshots (0.550667ms)
+✔ restored storage supersedes an older cached snapshot after another tab resumes (0.529875ms)
+✔ correction audio uses the current revealed question rather than stale feedback (0.061375ms)
+✔ cross-device advancement clears unmatched feedback before rendering a different correction (0.747375ms)
+✔ review gate displays the bounded batch rather than the entire backlog (0.040417ms)
+✔ all six prompt renderers reject hidden answer fields and treat strings as text (4.705209ms)
+✔ feedback safely reveals answer only after submission, and correction labels unscored copying (0.557709ms)
+✔ task and review choice feedback render saved labels instead of internal option ids (0.698458ms)
+✔ unknown saved option ids use a readable fallback without guessing the answer (0.32075ms)
+✔ settled task marks stages complete while retaining the pending review count (0.472583ms)
+✔ real keyboard wiring requires Enter release across state changes (0.751167ms)
+✔ composition-end same-turn Enter stays local, then the next deliberate Enter submits (0.361792ms)
+✔ native button repeat is prevented and mouse transitions do not swallow the next Enter (0.333416ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 104.937

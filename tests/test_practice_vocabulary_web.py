@@ -13,10 +13,29 @@ from services.practice_vocabulary_web import (
     sanitize_question,
     sanitize_review,
     sanitized_error_details,
+    task_metadata,
 )
 
 
 class VocabularyWebPresentationTest(unittest.TestCase):
+    def test_task_metadata_uses_shared_trimmed_title_and_range_contract(self):
+        task = SimpleNamespace(
+            id=7,
+            dictation_book_id=12,
+            detail="  ",
+            vocabulary_goal=" Reading ",
+            dictation_word_start=None,
+            dictation_word_end=8,
+        )
+        metadata = task_metadata(task, book_titles={12: "合成词书"})
+        self.assertEqual(metadata["title"], "合成词书 · 第1–8词")
+        self.assertEqual(metadata["scope"], "第1–8词")
+        self.assertEqual(metadata["goal_label"], "阅读词汇")
+        self.assertEqual((metadata["word_start"], metadata["word_end"]), (None, 8))
+        task.detail = "  指定标题  "
+        self.assertEqual(task_metadata(task, book_titles={})["title"], "指定标题")
+        self.assertEqual(task_metadata(task, book_titles={})["book_title"], "词汇学习")
+
     def test_retry_and_error_snapshot_do_not_reveal_answers(self):
         payload = {
             "phase": "retry",

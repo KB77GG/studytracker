@@ -1,0 +1,29 @@
+test_clause_and_payload_reject_legacy_missing_book_and_invalid_goal (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest) ... ok
+test_derived_active_status_preserves_cutoff_and_submitted_completed_labels (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest) ... ok
+test_disabled_batch_and_supplied_missing_book_map_do_not_query (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest) ... ok
+test_states_are_batched_and_never_borrow_another_students_flow (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest) ... ok
+test_title_goal_url_and_flow_status_are_read_only (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest) ... ok
+test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest) ... ok
+test_active_flow_is_displayed_without_writing_task_status (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_active_vocabulary_sorts_with_existing_progress_before_pending (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_assistant_and_teacher_tasks_keep_the_existing_groups (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_existing_four_task_payloads_are_unchanged_by_flag (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_future_expired_and_done_labels_follow_shared_date_gate (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_mixed_legacy_fields_keep_old_task_kind_priority (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_off_and_legacy_dictation_are_excluded (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest) ... ok
+test_corrective_copy_keeps_previously_revealed_answer (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_fallback_built_before_familiarity_is_hidden (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_feedback_missing_material_and_numeric_audio (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_meaning_options_match_actual_miniprogram_algorithm (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_retry_and_error_snapshot_do_not_reveal_answers (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_review_only_answered_items_reveal_feedback (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 3.117s
+
+OK

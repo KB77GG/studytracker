@@ -1,5 +1,6 @@
 """Real SQLite/domain integration for the desktop task adapter, with no network."""
 
+import io
 import json
 import unittest
 from datetime import datetime, time, timedelta
@@ -71,6 +72,38 @@ class VocabularyWebRoutesTest(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200, response.get_json())
         return response.get_json()
+
+    def _stream_request(
+        self, body, *, length=None, terminated=False, chunk_size=None, chunked=False
+    ):
+        class ObservedInput:
+            def __init__(self):
+                self.buffer = io.BytesIO(body)
+                self.bytes_read = 0
+                self.read_sizes = []
+
+            def read(self, size=-1):
+                if not 0 <= size <= 16_385:
+                    raise AssertionError(f"unbounded body read: {size}")
+                self.read_sizes.append(size)
+                chunk = self.buffer.read(min(size, chunk_size) if chunk_size else size)
+                self.bytes_read += len(chunk)
+                return chunk
+
+        stream = ObservedInput()
+        environ = {"wsgi.input": stream, "CONTENT_TYPE": "application/json", "CONTENT_LENGTH": ""}
+        if length is not None:
+            environ["CONTENT_LENGTH"] = str(length)
+        if terminated:
+            environ["wsgi.input_terminated"] = True
+        if chunked:
+            environ["HTTP_TRANSFER_ENCODING"] = "chunked"
+        response = self.client.post(
+            f"/api/practice/vocabulary/tasks/{self.task_id}/sync",
+            headers=self.web_headers,
+            environ_overrides=environ,
+        )
+        return response, stream
 
     def _question_payload(self, flow, task_id=None, wrong=False, forgot=False):
         question = flow["current_question"]
@@ -494,7 +527,7 @@ class VocabularyWebRoutesTest(unittest.TestCase):
         path = f"/api/practice/vocabulary/tasks/{self.task_id}/sync"
         for extra in (
             {"Origin": "http://[broken"},
-            {"Origin": "https://localhost"},
+            {"Origin": "https://localhost:444"},
             {"Origin": "ftp://localhost"},
             {"X-CSRF-Token": "无效"},
             {"X-Practice-Identity": "无效"},
@@ -505,6 +538,127 @@ class VocabularyWebRoutesTest(unittest.TestCase):
             path, json={}, headers={**self.web_headers, "Origin": "http://localhost"}
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust(self):
+        path = f"/api/practice/vocabulary/tasks/{self.task_id}/sync"
+        for origin in ("https://localhost", "http://localhost"):
+            response = self.client.post(
+                path,
+                json={},
+                headers={
+                    **self.web_headers,
+                    "Origin": origin,
+                    "Forwarded": "host=evil.example;proto=ftp",
+                    "X-Forwarded-Host": "evil.example",
+                    "X-Forwarded-Proto": "ftp",
+                },
+                environ_overrides={"wsgi.url_scheme": "http"},
+            )
+            self.assertEqual(response.status_code, 200, response.get_json())
+        for missing in ("X-CSRF-Token", "X-Practice-Identity"):
+            headers = {**self.web_headers, "Origin": "https://localhost"}
+            headers.pop(missing)
+            response = self.client.post(path, json={}, headers=headers)
+            self.assertIn(response.status_code, (403, 409))
+        response = self.client.post(path, json={}, headers=self.web_headers)
+        self.assertEqual(response.status_code, 200)  # Missing Origin remains compatible.
+        response = self.client.post(
+            path,
+            base_url="http://localhost:5002",
+            json={},
+            headers={**self.web_headers, "Origin": "https://localhost:5002"},
+        )
+        self.assertEqual(response.status_code, 200, response.get_json())
+
+    def test_origin_rejects_other_hosts_ports_and_non_origin_url_components(self):
+        path = f"/api/practice/vocabulary/tasks/{self.task_id}/sync"
+        for origin in (
+            "https://evil.example",
+            "https://localhost.evil.example",
+            "https://localhost:444",
+            "https://localhost:invalid",
+            "https://localhost:99999",
+            "https://user@localhost",
+            "https://localhost/",
+            "https://localhost?x=1",
+            "https://localhost#fragment",
+            "https://localhost?",
+            "https://localhost#",
+            "https://local\thost",
+            " https://localhost",
+            "https://localhost\\@evil.example",
+            "https://[broken",
+            "ftp://localhost",
+            "//localhost",
+            "null",
+            "",
+        ):
+            with self.subTest(origin=origin):
+                response = self.client.post(
+                    path,
+                    json={},
+                    headers={
+                        **self.web_headers,
+                        "Origin": origin,
+                        "Forwarded": "host=localhost;proto=https",
+                        "X-Forwarded-Host": "localhost",
+                        "X-Forwarded-Proto": "https",
+                    },
+                )
+                self.assertEqual(response.status_code, 403)
+                self.assertEqual(response.get_json()["error"], "csrf")
+        with self.app.app_context():
+            self.assertEqual(VocabularyLearningFlow.query.count(), 0)
+
+    def test_declared_oversize_body_is_rejected_without_reading(self):
+        response, stream = self._stream_request(b"{}", length=16_385)
+        self.assertEqual(response.status_code, 413)
+        self.assertEqual(response.get_json()["error"], "request_too_large")
+        self.assertEqual(stream.read_sizes, [])
+        with self.app.app_context():
+            self.assertEqual(VocabularyLearningFlow.query.count(), 0)
+
+    def test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length(self):
+        body = b"{}" + b" " * 200_000
+        for length, chunked in ((None, False), (None, True), (2, False), (0, False)):
+            with self.subTest(length=length, chunked=chunked):
+                response, stream = self._stream_request(
+                    body, length=length, terminated=True, chunk_size=113, chunked=chunked
+                )
+                self.assertEqual(response.status_code, 413)
+                self.assertEqual(response.get_json()["error"], "request_too_large")
+                self.assertEqual(stream.bytes_read, 16_385)
+                self.assertGreater(len(stream.read_sizes), 1)
+        with self.app.app_context():
+            self.assertEqual(VocabularyLearningFlow.query.count(), 0)
+
+    def test_exact_byte_limit_json_and_small_chunked_json_are_accepted(self):
+        body = '{"padding":"词"}'.encode()
+        body += b" " * (16_384 - len(body))
+        for payload, length, terminated, chunked in (
+            (body, len(body), False, False),
+            (body, None, True, True),
+            (b"{}", None, True, True),
+        ):
+            with self.subTest(length=length, terminated=terminated):
+                response, stream = self._stream_request(
+                    payload, length=length, terminated=terminated, chunked=chunked
+                )
+                self.assertEqual(response.status_code, 200, response.get_json())
+                self.assertEqual(stream.bytes_read, len(payload))
+
+    def test_unsafe_unknown_length_and_truncated_json_fail_without_unbounded_reads(self):
+        response, stream = self._stream_request(b"{}" + b" " * 200_000)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["error"], "invalid_json")
+        self.assertEqual(stream.bytes_read, 0)  # Preserve Werkzeug's safe WSGI fallback.
+        for body, length in ((b'{"answer":"word"}', 2), (b"{}", 30)):
+            response, stream = self._stream_request(body, length=length)
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.get_json()["error"], "invalid_json")
+            self.assertLessEqual(stream.bytes_read, min(len(body), length))
+        with self.app.app_context():
+            self.assertEqual(VocabularyLearningFlow.query.count(), 0)
 
     def test_cancelled_identity_mapped_task_is_not_accessible(self):
         with self.app.app_context():

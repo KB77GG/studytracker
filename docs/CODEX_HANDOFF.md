@@ -1,5 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-26 — Claude 六项审查修复完成，准备同分支复推
+
+- **范围/基线**：沿用户已授权的仅任务分支commit/push+CI，处理最新Claude审查；不合/推main、不部署不开启。实施 `/private/tmp/studytracker-web-vocabulary-20261126`、`codex/web-vocabulary-task-page-20261126@f804998fd5f09bc7d062defe19d91367905e8537` 开工clean；fetch后任务远端同HEAD、origin/main仍f81a5e4，文档源479cab8a未合并。旧资料 `/Users/zhouxin/Desktop/studytracker` main6ded77d2原8M/27U/0staged保留，仅两交接更新。
+- **修复**：Origin合法http/https只比host+port，不依赖代理scheme，不读Forwarded；CSRF/identity/归属保留，畸形来源拒绝。请求体按WSGI安全流限读16385字节，声明超限0读取；没有安全EOF的未知长度保持400空流。计时按任务/学生localStorage持久化，复习再按session，首次结算快照冻结、未完成恢复有generation防旧标签回写，故障退内存；仍墙钟包含离页，不是净学习时长、不跨设备。active排序、book单批查询、列表/详情共享标题均service化，mixed旧字段优先级保持；app对原main14+/3-。无schema/配置/小程序变更。
+- **变更文件**：11M产品/测试为 api/practice_vocabulary.py、app.py、services/practice_vocabulary_tasks.py/web.py、static/js/practice_vocabulary_page.js/transport.js、tests/test_practice_vocabulary_core.js/routes.py/task_list.py/tasks.py/web.py；未跟踪仅报告目录下review-fixes.md、34文件review-fix-manifest.json、review-fix验证日志/命令与3截图/2浏览器JSON。两树交接本轮更新；旧报告/manifest/CI保留历史。所有文件本次提交前仅本机。
+- **验证**：`validation/review-fix-commands.json`保存原20模块完整argv：3.13 -m unittest各模块-v →242/242(34.702s)；3.10原run_compat_tests.py →242/242(38.378s)，旧datetime.UTC测试别名限定保留；两版本-m pytest tests/test_task_date_gate.py -q各20(0.35s)；node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js →66/66(新页39)；原生3.10编译10产品、新Python/Ruff、JS语法、diff通过。新增12Python/8Node，A02历史fixture不改仍匹配。词书+flow各1查询只指新增查询，非整个列表总查询。
+- **浏览器与限制**：合成IAB真实reload订正页仍同题/正确答案/第1次，提交后可继续；最终focus再刷新也通过，截图/DOM在review-fix报告。Chrome工具导航失败、原生Mac锁屏，不报Chrome/Safari/物理F5/IME通过；真断网/手机互切/原生缩放/老师家长界面仍待。测试IAB已关闭、本机5111已停止。存储禁用/清空不能跨刷新延续，WSGI边界外不探读；未查询真实生产代理配置。
+- **下一步/发布**：待将本候选提交推同分支并等待新CI，随后补最终SHA与CI事实。无生产访问/DB/环境/服务/通知/微信上传提审发布；默认flag false，部署与开启仍需后续授权及门槛。Claude可从同分支看修复diff和review-fixes.md。
+
 ## 2026-11-26 — 网页背词审查分支已推送，CI 通过，默认关闭
 
 - **授权/结果**：用户认可原验收，明确授权仅 commit/push `codex/web-vocabulary-task-page-20261126` 跑CI。本轮已完成；不推/合main、不部署不开启。产品/补测提交 **`2f83ebd145b23f6dc38d68c0cccf15a733498539`** 已push，后续CI结果/交接仅文档以 `[skip ci]` 共享，最终文档HEAD用Git核对。代码和完整报告/截图现可跨电脑读取。

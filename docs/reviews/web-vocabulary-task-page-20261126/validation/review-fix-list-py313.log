@@ -1,0 +1,33 @@
+test_clause_and_payload_reject_legacy_missing_book_and_invalid_goal (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_clause_and_payload_reject_legacy_missing_book_and_invalid_goal) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+ok
+test_derived_active_status_preserves_cutoff_and_submitted_completed_labels (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_derived_active_status_preserves_cutoff_and_submitted_completed_labels) ... ok
+test_disabled_batch_and_supplied_missing_book_map_do_not_query (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_disabled_batch_and_supplied_missing_book_map_do_not_query) ... ok
+test_states_are_batched_and_never_borrow_another_students_flow (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_states_are_batched_and_never_borrow_another_students_flow) ... ok
+test_title_goal_url_and_flow_status_are_read_only (tests.test_practice_vocabulary_tasks.PracticeVocabularyTasksTest.test_title_goal_url_and_flow_status_are_read_only) ... ok
+test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_off_matches_real_historical_response) ... ok
+test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_on_matches_real_historical_response) ... ok
+test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_historical_snapshot_provenance_and_coverage) ... ok
+test_active_flow_is_displayed_without_writing_task_status (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_active_flow_is_displayed_without_writing_task_status) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+ok
+test_active_vocabulary_sorts_with_existing_progress_before_pending (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_active_vocabulary_sorts_with_existing_progress_before_pending) ... ok
+test_assistant_and_teacher_tasks_keep_the_existing_groups (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_assistant_and_teacher_tasks_keep_the_existing_groups) ... ok
+test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count) ... ok
+test_existing_four_task_payloads_are_unchanged_by_flag (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_existing_four_task_payloads_are_unchanged_by_flag) ... ok
+test_future_expired_and_done_labels_follow_shared_date_gate (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_future_expired_and_done_labels_follow_shared_date_gate) ... ok
+test_mixed_legacy_fields_keep_old_task_kind_priority (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_mixed_legacy_fields_keep_old_task_kind_priority) ... ok
+test_off_and_legacy_dictation_are_excluded (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_off_and_legacy_dictation_are_excluded) ... ok
+test_corrective_copy_keeps_previously_revealed_answer (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_corrective_copy_keeps_previously_revealed_answer) ... ok
+test_fallback_built_before_familiarity_is_hidden (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_fallback_built_before_familiarity_is_hidden) ... ok
+test_feedback_missing_material_and_numeric_audio (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_feedback_missing_material_and_numeric_audio) ... ok
+test_meaning_options_match_actual_miniprogram_algorithm (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_meaning_options_match_actual_miniprogram_algorithm) ... ok
+test_retry_and_error_snapshot_do_not_reveal_answers (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_retry_and_error_snapshot_do_not_reveal_answers) ... ok
+test_review_only_answered_items_reveal_feedback (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_review_only_answered_items_reveal_feedback) ... ok
+test_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_six_modes_only_expose_allowed_prompts) ... ok
+test_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_task_metadata_uses_shared_trimmed_title_and_range_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 3.168s
+
+OK

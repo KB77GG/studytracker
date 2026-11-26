@@ -5,9 +5,7 @@
   class Page {
     constructor(boot) {
       this.boot = boot;
-      this.started = Date.now();
-      this.reviewStarted = Date.now();
-      this.reviewSessionId = null;
+      this.timing = new T.Timing(boot.task_id, boot.identity_key, () => Date.now());
       let storage;
       try {
         storage = sessionStorage;
@@ -125,6 +123,8 @@
         return;
       }
       if (C.RESYNC.has(error.code) || error.code === 'task_completed_read_only') {
+        if (error.code.endsWith('_incomplete') && this.lastFailed?.kind.endsWith('settle'))
+          this.timing.resume(this.lastFailed.payload.session_id);
         if (this.lastFailed && this.lastFailed.kind === 'sync') {
           this.show('save_failed');
           return;
@@ -160,20 +160,13 @@
       const oldPosition = C.position(this.model.data.flow, this.model.data.review);
       this.saveDraft();
       this.model.data = { ...this.boot, ...data };
+      this.timing.observe(data);
       let state = C.decideView(data),
         f = data.flow,
         review = data.stage === 'review' ? data.review : null;
       this.model.q = review ? C.reviewQuestion(review) : f && f.current_question;
       if (this.model.q && f && f.phase === 'retry') this.model.q = { ...this.model.q, retry: true };
       if (!C.sameQuestion(this.model.q, this.model.feedback)) this.model.feedback = null;
-      if (
-        review &&
-        review.session_id != null &&
-        String(review.session_id) !== this.reviewSessionId
-      ) {
-        this.reviewSessionId = String(review.session_id);
-        this.reviewStarted = Date.now();
-      }
       const key = C.questionKey(this.model.q, review),
         saved = this.storage.get('draft:' + key);
       this.model.draft = (saved && saved.text) || '';
@@ -331,6 +324,7 @@
       if (data) await this.acceptWrite(endpoint, data, payload, q);
     }
     async acceptWrite(kind, data, payload, q) {
+      if (kind.endsWith('settle')) this.timing.finish(payload.session_id, payload.duration_seconds);
       if (kind.endsWith('answers')) {
         const feedback = data.feedback || data;
         feedback.local_answer_differs =
@@ -365,10 +359,7 @@
         f = this.model.data.flow || {},
         payload = {
           queue_token: review ? r.queue_token : f.queue_token,
-          duration_seconds: Math.max(
-            0,
-            Math.floor((Date.now() - (review ? this.reviewStarted : this.started)) / 1000),
-          ),
+          duration_seconds: this.timing.snapshot(review ? r.session_id : null),
           supports_correction: true,
         };
       if (review)

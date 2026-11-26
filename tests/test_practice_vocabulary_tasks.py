@@ -3,6 +3,7 @@
 import unittest
 from datetime import datetime
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from flask import Flask
 from sqlalchemy import event
@@ -10,9 +11,12 @@ from sqlalchemy import event
 from models import DictationBook, Task, VocabularyLearningFlow, db
 from services.practice_vocabulary_tasks import (
     vocabulary_flow_states,
+    vocabulary_list_payloads,
     vocabulary_practice_fields,
     vocabulary_task_clause,
+    vocabulary_task_metadata,
 )
+from services.task_date_gate import SHANGHAI
 
 
 class PracticeVocabularyTasksTest(unittest.TestCase):
@@ -126,3 +130,51 @@ class PracticeVocabularyTasksTest(unittest.TestCase):
         self.assertFalse(db.session.dirty or db.session.new)
         self.assertEqual(vocabulary_flow_states(SimpleNamespace(user_id=None), self.tasks), {})
         self.assertEqual(VocabularyLearningFlow.query.count(), 3)
+
+    def test_disabled_batch_and_supplied_missing_book_map_do_not_query(self):
+        task = self.tasks[0]
+        db.session.refresh(task)
+        statements = []
+
+        def track(conn, cursor, statement, parameters, context, executemany):
+            statements.append(statement)
+
+        event.listen(db.engine, "before_cursor_execute", track)
+        try:
+            self.assertEqual(vocabulary_list_payloads(SimpleNamespace(user_id=10), self.tasks), {})
+            metadata = vocabulary_task_metadata(task, book_titles={})
+        finally:
+            event.remove(db.engine, "before_cursor_execute", track)
+        self.assertEqual(statements, [])
+        self.assertEqual(metadata["title"], "词汇学习 · 第8–16词")
+        self.assertEqual(metadata["book_title"], "词汇学习")
+
+    def test_derived_active_status_preserves_cutoff_and_submitted_completed_labels(self):
+        task = self.tasks[0]
+        self._flow(task, 10, "active")
+        db.session.commit()
+        with patch(
+            "services.task_date_gate._local_now",
+            return_value=datetime(2026, 11, 26, 12, tzinfo=SHANGHAI),
+        ):
+            for date, status, expected_status, expected_label, read_only in (
+                ("2026-11-26", "pending", "in_progress", "进行中", False),
+                ("2026-11-27", "pending", "in_progress", "尚未开放", True),
+                ("2026-11-24", "pending", "in_progress", "未完成·已截止", True),
+                ("2026-11-26", "submitted", "submitted", "已提交，待批改", False),
+                ("2026-11-24", "submitted", "submitted", "已提交，待批改", True),
+                ("2026-11-24", "done", "done", "已完成", True),
+            ):
+                with self.subTest(date=date, status=status):
+                    task.date, task.status = date, status
+                    db.session.commit()
+                    payload = vocabulary_list_payloads(
+                        SimpleNamespace(user_id=10), [task], enabled=True
+                    )[task.id]
+                    self.assertEqual(
+                        (payload["status"], payload["status_label"], payload["read_only"]),
+                        (expected_status, expected_label, read_only),
+                    )
+                    db.session.refresh(task)
+                    self.assertEqual(task.status, status)
+                    self.assertFalse(db.session.dirty or db.session.new)

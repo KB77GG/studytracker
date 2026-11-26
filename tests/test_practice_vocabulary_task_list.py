@@ -11,8 +11,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 from flask import g
+from sqlalchemy import event
 
 from models import DictationBook, StudentProfile, Task, User, VocabularyLearningFlow, db
+from services.practice_vocabulary_web import task_metadata
 from services.task_date_gate import SHANGHAI
 from services.web_practice_tasks import web_practice_required
 from tests import test_auto_student_accounts as account_tests
@@ -195,8 +197,7 @@ class PracticeVocabularyTaskListTest(unittest.TestCase):
         self.app.config["PRACTICE_VOCABULARY_WEB_ENABLED"] = False
         self.assertEqual(self.groups(), {"assistant": [], "teacher": []})
 
-    def test_active_flow_is_displayed_without_writing_task_status(self):
-        task = self.task()
+    def flow(self, task):
         db.session.add(
             VocabularyLearningFlow(
                 student_id=self.student.id,
@@ -213,11 +214,116 @@ class PracticeVocabularyTaskListTest(unittest.TestCase):
             )
         )
         db.session.commit()
+
+    def test_active_flow_is_displayed_without_writing_task_status(self):
+        task = self.task()
+        self.flow(task)
         item = self.groups()["assistant"][0]
         self.assertEqual((item["status"], item["status_label"]), ("in_progress", "进行中"))
         self.assertEqual(item["task_status"], "in_progress")
         db.session.refresh(task)
         self.assertEqual(task.status, "pending")
+
+    def test_active_vocabulary_sorts_with_existing_progress_before_pending(self):
+        pending = self.task(date="2026-11-24")
+        legacy = self.task(
+            date="2026-11-25",
+            status="progress",
+            dictation_book_id=None,
+            vocabulary_goal=None,
+            listening_exercise_id="synthetic-progress",
+            listening_access_token="synthetic-progress-token",
+        )
+        active = self.task()
+        second_active = self.task()
+        done = self.task(status="done", accuracy=81.24, completion_rate=99.96)
+        self.flow(active)
+        self.flow(second_active)
+        items = self.groups()["assistant"]
+        self.assertEqual(
+            [row["id"] for row in items],
+            [legacy.id, active.id, second_active.id, pending.id, done.id],
+        )
+        self.assertEqual((items[-1]["accuracy"], items[-1]["completion_rate"]), (81.2, 100.0))
+        db.session.refresh(active)
+        db.session.refresh(second_active)
+        self.assertEqual((active.status, second_active.status), ("pending", "pending"))
+
+    def test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count(self):
+        tasks = [
+            self.task(detail="  老师指定标题  "),
+            self.task(detail="  ", dictation_word_end=None),
+        ]
+        for index in range(8):
+            book = DictationBook(
+                title=f"合成词书{index}", created_by=self.teacher.id, word_count=20
+            )
+            db.session.add(book)
+            db.session.flush()
+            tasks.append(self.task(dictation_book_id=book.id))
+        tasks.append(self.task(dictation_book_id=999999, detail=" ", dictation_word_start=None))
+        self.flow(tasks[0])
+        statements = []
+
+        def track(conn, cursor, statement, parameters, context, executemany):
+            statements.append(statement.lower())
+
+        event.listen(db.engine, "before_cursor_execute", track)
+        try:
+            items = self.groups()["assistant"]
+        finally:
+            event.remove(db.engine, "before_cursor_execute", track)
+        self.assertEqual(len(items), 11)
+        self.assertEqual(sum("from dictation_book" in sql for sql in statements), 1)
+        self.assertEqual(sum("from vocabulary_learning_flow" in sql for sql in statements), 1)
+        self.assertFalse(
+            any(sql.lstrip().startswith(("insert", "update", "delete")) for sql in statements)
+        )
+        titles = {row["id"]: row["title"] for row in items}
+        for task in tasks:
+            self.assertEqual(titles[task.id], task_metadata(task)["title"])
+        self.assertEqual(titles[tasks[0].id], "老师指定标题")
+        self.assertEqual(titles[tasks[1].id], "合成词书 · 第2词起")
+        self.assertEqual(titles[tasks[-1].id], "词汇学习 · 第1–7词")
+
+    def test_mixed_legacy_fields_keep_old_task_kind_priority(self):
+        tasks = [
+            self.task(listening_exercise_id="mixed-audio", listening_access_token="fixture-token"),
+            self.task(reading_test_id="mixed-reading", reading_access_token="fixture-token"),
+            self.task(
+                grading_mode="question_type_practice",
+                listening_access_token="fixture-token",
+                question_ids=json.dumps(
+                    {
+                        "task_type": "question_type_practice",
+                        "payload": {},
+                        "standard_type_label": "合成专项",
+                    }
+                ),
+            ),
+            self.task(
+                grading_mode="writing_practice",
+                question_ids=json.dumps(
+                    {
+                        "writing_resource_type": "exercise",
+                        "writing_resource_id": "mixed-writing",
+                        "title": "合成写作",
+                    }
+                ),
+            ),
+        ]
+        for task in tasks:
+            self.flow(task)
+        items = self.groups()["assistant"]
+        self.assertEqual(
+            [row["category"] for row in items], ["精听", "阅读", "题型专项", "写作真题"]
+        )
+        self.assertEqual(
+            [row["source_label"] for row in items],
+            ["精听", "剑雅阅读", "IELTS 题型专项", "IELTS 写作真题"],
+        )
+        self.assertTrue(all(row["status"] == "pending" for row in items))
+        self.assertTrue(all("/practice/vocabulary/" not in row["url"] for row in items))
 
     def test_future_expired_and_done_labels_follow_shared_date_gate(self):
         self.task(date="2026-11-27")
@@ -268,7 +374,7 @@ class PracticeVocabularyTaskListTest(unittest.TestCase):
             before = [self.module._practice_task_payload(task) for task in tasks]
             self.app.config["PRACTICE_VOCABULARY_WEB_ENABLED"] = True
             after = [
-                self.module._practice_task_payload(task, vocabulary_states={}) for task in tasks
+                self.module._practice_task_payload(task, vocabulary_payloads={}) for task in tasks
             ]
         self.assertTrue(all(before))
         self.assertEqual(before, after)

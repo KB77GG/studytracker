@@ -7,6 +7,7 @@ from urllib.parse import urlsplit
 
 from flask import Blueprint, current_app, g, jsonify, render_template, request, session
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
+from werkzeug.exceptions import BadRequest, RequestEntityTooLarge
 
 from models import VocabularyLearningQuestion, db
 from services import vocabulary_autonomous_review as review
@@ -30,6 +31,7 @@ from services.vocabulary_task_submission import settle_vocabulary_group_submissi
 
 practice_vocabulary_bp = Blueprint("practice_vocabulary", __name__)
 API = "/api/practice/vocabulary/tasks/<int:task_id>"
+MAX_JSON_BODY_BYTES = 16_384
 
 
 def _enabled():
@@ -42,6 +44,63 @@ def _context(task_id):
     return student, owned_task(student, task_id)
 
 
+def _read_json_payload():
+    if (request.content_length or 0) > MAX_JSON_BODY_BYTES:
+        raise PracticeVocabularyError("request_too_large", 413)
+    if not request.is_json:
+        raise PracticeVocabularyError("json_required", 415)
+    body = bytearray()
+    try:
+        # Respect WSGI's message boundary. Missing-length/chunked bodies are
+        # readable only when the server declares wsgi.input_terminated; never
+        # bypass Werkzeug's safe fallback by reading the raw input stream.
+        stream = request.stream
+        while len(body) <= MAX_JSON_BODY_BYTES:
+            chunk = stream.read(MAX_JSON_BODY_BYTES + 1 - len(body))
+            if not chunk:
+                break
+            body.extend(chunk)
+    except RequestEntityTooLarge:
+        raise PracticeVocabularyError("request_too_large", 413) from None
+    except BadRequest:
+        raise PracticeVocabularyError("invalid_json", 400) from None
+    if len(body) > MAX_JSON_BODY_BYTES:
+        raise PracticeVocabularyError("request_too_large", 413)
+    try:
+        payload = current_app.json.loads(body)
+    except (ValueError, UnicodeError, RecursionError):
+        raise PracticeVocabularyError("invalid_json", 400) from None
+    if not isinstance(payload, dict):
+        raise PracticeVocabularyError("invalid_json", 400)
+    return payload
+
+
+def _valid_origin(origin):
+    if origin is None:
+        return True
+    if (
+        not origin
+        or any(char in origin for char in "\\?#")
+        or any(ord(char) <= 32 or ord(char) >= 127 for char in origin)
+    ):
+        return False
+    try:
+        parsed = urlsplit(origin)
+        # Validate the port even when the authority does not match. Do not
+        # trust Forwarded headers or require the proxy's internal URL scheme.
+        _ = parsed.port
+        return (
+            parsed.scheme in {"http", "https"}
+            and parsed.netloc == request.host
+            and bool(parsed.hostname)
+            and parsed.username is None
+            and parsed.password is None
+            and not (parsed.path or parsed.query or parsed.fragment)
+        )
+    except ValueError:
+        return False
+
+
 @practice_vocabulary_bp.before_request
 def validate_request():
     if not request.path.startswith("/api/practice/vocabulary/"):
@@ -51,26 +110,13 @@ def validate_request():
     if request.method in {"GET", "HEAD", "OPTIONS"}:
         g.practice_task = owned_task(g.practice_student, request.view_args["task_id"])
         return
-    if (request.content_length or 0) > 16384 or len(request.get_data()) > 16384:
-        raise PracticeVocabularyError("request_too_large", 413)
-    if not request.is_json:
-        raise PracticeVocabularyError("json_required", 415)
-    payload = request.get_json(silent=True)
-    if not isinstance(payload, dict):
-        raise PracticeVocabularyError("invalid_json", 400)
+    payload = _read_json_payload()
     expected = str(session.get("practice_vocabulary_csrf") or "")
     actual = request.headers.get("X-CSRF-Token", "")
     if not expected or not secrets.compare_digest(expected.encode(), actual.encode()):
         raise PracticeVocabularyError("csrf", 403)
-    origin = request.headers.get("Origin")
-    if origin:
-        try:
-            parsed = urlsplit(origin)
-            valid_origin = parsed.scheme == request.scheme and parsed.netloc == request.host
-        except ValueError:
-            valid_origin = False
-        if not valid_origin:
-            raise PracticeVocabularyError("csrf", 403)
+    if not _valid_origin(request.headers.get("Origin")):
+        raise PracticeVocabularyError("csrf", 403)
     identity = request.headers.get("X-Practice-Identity", "")
     if not secrets.compare_digest(g.practice_student.identity_key.encode(), identity.encode()):
         raise PracticeVocabularyError("identity_changed", 409)

@@ -9,7 +9,6 @@ from sqlalchemy import func
 
 from dictation_answers import canonical_vocabulary_word
 from models import (
-    DictationBook,
     Task,
     VocabularyLearningFlow,
     VocabularyLearningQuestion,
@@ -17,16 +16,11 @@ from models import (
     db,
 )
 from services import vocabulary_group_learning as learning
+from services.practice_vocabulary_tasks import vocabulary_task_metadata as task_metadata
 from services.task_date_gate import task_date_access
 from services.vocabulary_autonomous_review import review_preflight
 from services.vocabulary_mastery import is_vocabulary_v2_task
 
-GOAL_LABELS = {
-    "reading": "阅读词汇",
-    "listening": "听力词汇",
-    "writing": "写作词汇",
-    "comprehensive": "综合训练",
-}
 PROMPT_FIELDS = {
     "en_to_zh": {"word", "phonetic", "instruction", "audio_url", "audio_tts_url"},
     "zh_to_en": {"meaning", "instruction", "input_hint"},
@@ -64,25 +58,6 @@ def owned_task(student, task_id):
     if not is_vocabulary_v2_task(task):
         raise PracticeVocabularyError("task_not_vocabulary_v2", 409)
     return task
-
-
-def task_metadata(task):
-    book = db.session.get(DictationBook, task.dictation_book_id)
-    title = book.title if book else "词汇任务"
-    start, end = task.dictation_word_start, task.dictation_word_end
-    scope = f"第 {start or 1}–{end} 词" if end else f"第 {start or 1} 词起"
-    goal = str(task.vocabulary_goal or "").strip().lower()
-    return {
-        "id": task.id,
-        "title": task.detail or f"{title} · {scope}",
-        "book_id": task.dictation_book_id,
-        "book_title": title,
-        "word_start": start,
-        "word_end": end,
-        "scope": scope,
-        "goal": goal,
-        "goal_label": GOAL_LABELS.get(goal, "词汇学习"),
-    }
 
 
 def envelope(student, task, stage, **data):
