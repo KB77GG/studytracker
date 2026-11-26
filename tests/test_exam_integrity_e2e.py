@@ -12,7 +12,7 @@ from tests.exam_integrity_e2e_support import ROOT, IntegritySandbox
 
 BASELINE_SHA = {
     "exam/process.html": "d403c724ce8fd41d0b094aaae344865a00acc657e9465b7584c57bf52687e0d5",
-    "listening/test_practice.html": "058e26cea2c535e8ab84d27a4974b689ff51257c1b42a90bf6a6bd13a26d0fdb",
+    "listening/test_practice.html": "aad8dda7a6475f4f1ccba98174f53c9d75caceb991c07dc9e52c1ec2f0fe2856",
     "reading/test_practice.html": "498e7025c2df7a29b5b0d114eddc44071398bc7849511353e63d20f883c0d9c7",
     "exam/writing.html": "2da9eedc76cd1d4cfa024480ff888fbbe45ffe78d113bd4148c344b564edd91d",
 }
@@ -169,7 +169,8 @@ class ExamIntegrityRealFlowTest(unittest.TestCase):
                 include = "{% if exam_context %}" + include + "{% endif %}"
             source = (ROOT / "templates" / template_name).read_text().replace(include, "")
             # Reviewed upstream sources keep this test usable in shallow CI clones.
-            # Reading tracks main@3d8e7b57; the other three remain ecc06f23.
+            # Reading tracks main@3d8e7b57; listening tracks dcfbd46d
+            # (reviewed sprint media paths); process/writing remain ecc06f23.
             self.assertEqual(
                 hashlib.sha256(source.encode()).hexdigest(), BASELINE_SHA[template_name]
             )

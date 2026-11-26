@@ -759,7 +759,7 @@
           <span class="timer" aria-label="计时" title="计时">00:00:00</span>
           <button class="btn-start" type="button">开始计时</button><button class="btn-pause" type="button" style="display:none;">暂停</button><button class="btn-stop" type="button" style="display:none;">结束</button>
           <div class="task-actions">
-            {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else ('打开听力题目' if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
+            {% if t.listening_exercise_id %}<a class="task-action-link task-action-link--primary" href="{{ t.listening_url or ('/tasks/' ~ t.id ~ '/listening') }}" target="_blank">{{ '打开整套' if t.listening_resource_type == 'cambridge_test' else (('打开热榜题目' if '7天热榜' in (t.category or '') else '打开听力题目') if t.listening_resource_type == 'jijing' else '精听明细') }}</a>{% endif %}
             {% if t.reading_test_id and t.reading_url %}<a class="task-action-link task-action-link--primary" href="{{ t.reading_url }}" target="_blank">打开阅读</a>{% endif %}
             {% if t.question_type_url %}<a class="task-action-link task-action-link--primary" href="{{ t.question_type_url }}" target="_blank">打开专项</a>{% endif %}
             {% if t.writing_url %}<a class="task-action-link task-action-link--primary" href="{{ t.writing_url }}" target="_blank">{{ '打开母题' if t.writing_resource_type == 'mother_topic' else '打开写作' }}</a>{% endif %}
@@ -3364,6 +3364,19 @@
         const writingSelect = document.getElementById('writingResourceSelect');
         const writingType = document.getElementById('writingResourceType');
         const categorySelect = document.getElementById('taskCategory');
+        const repeatOptionValue = (select, original, sprintValue) => {
+          const value = String(original || '');
+          if (!value) return '';
+          if (hasOption(select, value)) return value;
+          return hasOption(select, sprintValue) ? sprintValue : '';
+        };
+        const listeningValue = repeatOptionValue(
+          listeningSelect, repeat.listening_exercise_id, `sprint:${repeat.listening_exercise_id || ''}`
+        );
+        const readingValue = repeatOptionValue(
+          readingSelect, repeat.reading_test_id,
+          `${repeat.reading_test_id || ''}@${repeat.reading_passage_number || ''}`
+        );
 
         if (!sourceRadio) {
           setStatus('该任务来源当前不可用，未回填。', true);
@@ -3373,11 +3386,11 @@
           setStatus('昨天使用的材料当前已停用或不存在，未回填。', true);
           return;
         }
-        if (source === 'listening' && !hasOption(listeningSelect, repeat.listening_exercise_id)) {
+        if (source === 'listening' && !listeningValue) {
           setStatus('昨天使用的听力练习当前不可用，未回填。', true);
           return;
         }
-        if (source === 'reading' && !hasOption(readingSelect, repeat.reading_test_id)) {
+        if (source === 'reading' && !readingValue) {
           setStatus('昨天使用的阅读练习当前不可用，未回填。', true);
           return;
         }
@@ -3441,7 +3454,7 @@
           setQuestionSelection(repeat.question_ids);
           updateDictationRangeSuggestion();
         } else if (source === 'listening') {
-          listeningSelect.value = repeat.listening_exercise_id || '';
+          listeningSelect.value = listeningValue;
           const resourceType = document.getElementById('listeningResourceType');
           if (resourceType) resourceType.value = repeat.listening_resource_type || 'intensive';
           await handleListeningExerciseChange();
@@ -3458,7 +3471,7 @@
           });
           setQuestionSelection(repeat.question_ids);
         } else if (source === 'reading') {
-          readingSelect.value = repeat.reading_test_id || '';
+          readingSelect.value = readingValue;
           handleReadingExerciseChange();
           const passageValue = repeat.reading_passage_number
             ? String(repeat.reading_passage_number)
