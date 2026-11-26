@@ -1,0 +1,188 @@
+{
+  "baseline": "fc3b049afafcc5800dd7f974ef75b37e8653ccc1",
+  "worktree": "/private/tmp/studytracker-web-vocabulary-20261126",
+  "branch": "codex/web-vocabulary-task-page-20261126",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "14607d9d6a9402218e41a5a45d20eb9a831f1ee5e2aa70365ba499e391e0de99",
+      "changed_this_round": true
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "6e5df6c47ce81cf1c12f283886b48d863bc03a351135be794c1649e483ad8699",
+      "changed_this_round": false
+    },
+    {
+      "path": "api/miniprogram.py",
+      "sha256": "948774ddf2b068f9f7f985c69e29df372ec44627d44af5439831836d6e34686a",
+      "changed_this_round": false
+    },
+    {
+      "path": "api/practice_vocabulary.py",
+      "sha256": "61d1db5b759e7a8d439577875a01d155f30b80af09ff3c5c0673c9d16ab49b3a",
+      "changed_this_round": false
+    },
+    {
+      "path": "app.py",
+      "sha256": "a47a417c73263f9d0b0b35d82d815ff98edae81615f2ee83c2db8f58f14ef08e",
+      "changed_this_round": false
+    },
+    {
+      "path": "config.py",
+      "sha256": "9b9acab3eeef0b23141d55f74f9b9b48ccc7dacdbe18cf5714df85680e9e6e34",
+      "changed_this_round": false
+    },
+    {
+      "path": "services/practice_student_identity.py",
+      "sha256": "aadb2b1a762d0346e9e3a6172b7b85792fe14529e1750898f463c3c2fdce4192",
+      "changed_this_round": false
+    },
+    {
+      "path": "services/practice_vocabulary_tasks.py",
+      "sha256": "e2204bbf86b8e5f15e4457b43e3a49668420767eb21ef0b6ce4ef2b8009749ec",
+      "changed_this_round": false
+    },
+    {
+      "path": "services/practice_vocabulary_web.py",
+      "sha256": "0201456366e0d6da1ee6fcc6ce6f7a1e8153524ccea298921cef5b0b769754ae",
+      "changed_this_round": false
+    },
+    {
+      "path": "services/task_plan_item_sync.py",
+      "sha256": "da4b9e152e45ddac24c379fdff744d9fa182e473931bfd1848131c1a248a2fc7",
+      "changed_this_round": false
+    },
+    {
+      "path": "services/vocabulary_task_submission.py",
+      "sha256": "029eddc898e9d7081a7c397de043bd5220757f78436498425a14a0f267fceea8",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/css/practice_vocabulary.css",
+      "sha256": "5ca1c488809fb906ca2db594ddec2f40c8e68398e27c3682837adbfc03b6fc23",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/js/practice_vocabulary_core.js",
+      "sha256": "4cf0fd54683c404feb908c487627c338dcda5236004ab36a7591448dc601b946",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/js/practice_vocabulary_events.js",
+      "sha256": "15244787156b97cb7fef188b00bf2f0bce82e423114431a505db98c7fe7bae3f",
+      "changed_this_round": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_page.js",
+      "sha256": "a02aad4c9e4d6a32460b969269b0b5089fc8d7b8164792c0bc4dbe07eb0cdca8",
+      "changed_this_round": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_recovery.js",
+      "sha256": "b4e0b4b2d80f6ee0d7f2b695462e003b79e9123d98b243d530d6e35c78cceba9",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/js/practice_vocabulary_render.js",
+      "sha256": "cbe3b2cbb01ffc5a4c3ff480fc2e6acda14c8280f23dbbdd20f51bc006126a5b",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/js/practice_vocabulary_render_details.js",
+      "sha256": "07ad7d64ec7fbacfeba8b6d367e0a3706884999383eca4ffad22be07b75389d6",
+      "changed_this_round": false
+    },
+    {
+      "path": "static/js/practice_vocabulary_timing.js",
+      "sha256": "998c094c2e61b58a5b9922c292ae96d18123010a2bcca50a976ed52c283e7227",
+      "changed_this_round": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_transport.js",
+      "sha256": "2cbe73a5afce2d79441eb78507c52ab442a8c254fee2e711a87471a8c25dcb03",
+      "changed_this_round": true
+    },
+    {
+      "path": "templates/practice/index_content.html",
+      "sha256": "73cb453e72ce236d568c2dd507b1e039208bcfed74344af49c4d948747bc3a0a",
+      "changed_this_round": false
+    },
+    {
+      "path": "templates/practice/vocabulary_task.html",
+      "sha256": "5a11722a5483c362a119c27a4423971ffd744e4e6f104eb7d67d8b2096772bea",
+      "changed_this_round": true
+    },
+    {
+      "path": "tests/fixtures/README-practice-task-list.md",
+      "sha256": "f2990dbf9a75bb25f9ff990f228aa79e9d0d071f7d130bb9bc682ddb37fe24ad",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_a02.json",
+      "sha256": "c1e567861f21f3b3d69ce91ecb6d0358ae81a3964d455cb18890aa4d423aa7c0",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_baseline.py",
+      "sha256": "a30eb6be1bac0cca9ccb141cdc27ce14216c5727f973f544a9cb2d17ce2e2e82",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_f81a5e4.json",
+      "sha256": "10fce8d23fedeff2c8111ae5858030ac19ee946f1d5f351914d1b6ecbd3acad0",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_student_identity.py",
+      "sha256": "d0d33271af093181711776fbc2d1b5f151c600b36aedeea324483a6f6f7dae11",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_vocabulary_adversarial.py",
+      "sha256": "e5e77bc4ce59d91b5c797c8bb56e81542ed5268a336b623ad413cae5ba09a9f7",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_vocabulary_core.js",
+      "sha256": "0609e929d295e7d566212e0a11e61e0f620dc17271faac1c471f46d6f1f10f72",
+      "changed_this_round": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_routes.py",
+      "sha256": "57b2e19ee43bb14844cf7aa1f23be07acd05c3cca382d7eda108d9740fe48986",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_vocabulary_task_list.py",
+      "sha256": "f02293222d93f90eba4fbaaf112aa27bfc7b40f1d4600fd7a7782b5500d384e3",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_vocabulary_tasks.py",
+      "sha256": "8d894d36dd11608292fc093e141ad82dfbf78c37d137707195ff944adb484c03",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_practice_vocabulary_timing.js",
+      "sha256": "3890076dd221c88e2168562d008b2dd814a49b85922ad02c8817ffe573bdbd63",
+      "changed_this_round": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_web.py",
+      "sha256": "5a4a66d183ea7d2d888ae6b6a26e147c0e2080c791bb4923716d5623f063e32e",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_task_plan_item_sync.py",
+      "sha256": "3f06e56fbae7dc350f2312668ecb23142c53a897c2e4dfed86abe4ca8fbbbc12",
+      "changed_this_round": false
+    },
+    {
+      "path": "tests/test_vocabulary_task_submission.py",
+      "sha256": "668261058703387c26c5d99d9b6580b5c351b041d0ad05654b81ba21bde479db",
+      "changed_this_round": false
+    }
+  ],
+  "changed_count": 8
+}

@@ -49,7 +49,7 @@ jobs:
       - name: Test current and historical student task lists
         run: node --test tests/test_practice_task_lists.js
       - name: Test web vocabulary input, recovery and keyboard behavior
-        run: node --test tests/test_practice_vocabulary_core.js
+        run: node --test tests/test_practice_vocabulary_core.js tests/test_practice_vocabulary_timing.js
       - name: Test classroom vocabulary import client and assignment preset
         run: node --test tests/test_classroom_vocabulary.js tests/test_task_dictation_preset.js tests/test_classroom_synonym_client.js
       - name: Test teacher vocabulary load warning races

@@ -1,0 +1,72 @@
+[
+  {
+    "argv": [
+      "node",
+      "--test",
+      "tests/test_practice_vocabulary_core.js",
+      "tests/test_practice_vocabulary_timing.js",
+      "tests/test_practice_task_lists.js",
+      "tests/test_practice_shell.js",
+      "tests/test_vocabulary_feedback.js"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.161,
+    "log": "node-regression.log"
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_vocabulary_timing.js"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.043,
+    "log": "static-1.log"
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_vocabulary_transport.js"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.04,
+    "log": "static-2.log"
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_vocabulary_events.js"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.041,
+    "log": "static-3.log"
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_vocabulary_page.js"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.042,
+    "log": "static-4.log"
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 0.015,
+    "log": "static-5.log"
+  }
+]

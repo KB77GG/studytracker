@@ -1,0 +1,36 @@
+[
+  {
+    "label": "py313",
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-m",
+      "unittest",
+      "tests.test_practice_vocabulary_routes",
+      "tests.test_vocabulary_task_submission",
+      "tests.test_practice_vocabulary_web",
+      "-v"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 5.258,
+    "log": "py313-regression.log",
+    "tail": "st_six_modes_only_expose_allowed_prompts) ... ok\ntest_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_task_metadata_uses_shared_trimmed_title_and_range_contract) ... ok\n\n----------------------------------------------------------------------\nRan 47 tests in 4.481s\n\nOK\n"
+  },
+  {
+    "label": "py310",
+    "argv": [
+      "/private/tmp/studytracker-web-vocab-py310/bin/python",
+      "-m",
+      "unittest",
+      "tests.test_practice_vocabulary_routes",
+      "tests.test_vocabulary_task_submission",
+      "tests.test_practice_vocabulary_web",
+      "-v"
+    ],
+    "cwd": "/private/tmp/studytracker-web-vocabulary-20261126",
+    "exit": 0,
+    "seconds": 5.861,
+    "log": "py310-regression.log",
+    "tail": "_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok\ntest_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok\n\n----------------------------------------------------------------------\nRan 47 tests in 5.107s\n\nOK\n"
+  }
+]

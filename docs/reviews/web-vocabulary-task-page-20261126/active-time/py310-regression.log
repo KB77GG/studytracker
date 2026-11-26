@@ -1,0 +1,79 @@
+test_actual_name_switch_rejects_old_page_before_task_lookup (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... /private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 14 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+ok
+test_all_four_goals_finish_and_settlement_replay_is_read_only (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_cancelled_identity_mapped_task_is_not_accessible (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_classroom_synonym_and_missing_examples_keep_real_domain_modes (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_completed_get_has_no_database_writes_and_cannot_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_comprehensive_pending_correction_survives_sync_and_is_bounded (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_context_choice_correction_accepts_public_label_mapped_to_option_id (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_correction_duplicate_reports_persisted_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_declared_oversize_body_is_rejected_without_reading (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_exact_byte_limit_json_and_small_chunked_json_are_accepted (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_feature_off_blocks_all_registered_routes_before_any_sql (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_feature_off_missing_identity_foreign_and_unsupported_tasks (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_foreign_review_session_is_rejected (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_forgot_then_retry_keeps_first_score_and_hides_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_future_and_expired_read_only_no_flow_or_write (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_grace_boundary_expiry_does_not_advance_existing_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_malformed_origin_and_non_ascii_headers_fail_closed (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_malformed_recovery_ids_do_not_initialize_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_numeric_task_preserves_input_punctuation_and_tts_hint (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_old_client_keeps_existing_correction_release (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... /private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 14 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_origin_rejects_other_hosts_ports_and_non_origin_url_components (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_page_and_get_state_do_not_create_or_modify_learning (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_premature_settlement_and_operational_failure_do_not_finish (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... [2026-11-26 21:52:57,882] ERROR in practice_vocabulary: Vocabulary web database operation failed
+Traceback (most recent call last):
+  File "/private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/private/tmp/studytracker-web-vocab-py310/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/private/tmp/studytracker-web-vocabulary-20261126/api/practice_vocabulary.py", line 244, in settle
+    result = settle_vocabulary_group_submission(
+  File "/Users/zhouxin/.local/share/uv/python/cpython-3.10-macos-aarch64-none/lib/python3.10/unittest/mock.py", line 1114, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/Users/zhouxin/.local/share/uv/python/cpython-3.10-macos-aarch64-none/lib/python3.10/unittest/mock.py", line 1118, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/Users/zhouxin/.local/share/uv/python/cpython-3.10-macos-aarch64-none/lib/python3.10/unittest/mock.py", line 1173, in _execute_mock_call
+    raise effect
+sqlalchemy.exc.OperationalError: (builtins.Exception) locked
+[SQL: synthetic]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ok
+test_resume_and_duplicate_answer_share_one_record_with_miniprogram (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... /private/tmp/studytracker-web-vocabulary-20261126/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+ok
+test_review_context_choice_correction_uses_same_public_transport_contract (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_review_gate_claim_answer_settle_then_return_to_original_task (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_review_wrong_correction_replay_and_same_student_task_gate (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_security_headers_types_size_origin_and_identity_drift (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_staff_classroom_ambiguous_and_account_priority (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_stale_question_error_snapshot_and_retry_never_leak_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_unsafe_unknown_length_and_truncated_json_fail_without_unbounded_reads (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest) ... ok
+test_cancelled_task_is_rejected_even_when_already_in_identity_map (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_first_settlement_syncs_once_and_replay_cannot_add_effects (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_incomplete_learning_cannot_mark_either_record_done (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_projection_failure_rolls_back_completion_and_settlement (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_race_loser_with_already_synced_result_does_not_append_evidence (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_read_only_replay_still_requires_owner_and_frozen_queue_token (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest) ... ok
+test_corrective_copy_keeps_previously_revealed_answer (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_fallback_built_before_familiarity_is_hidden (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_feedback_missing_material_and_numeric_audio (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_meaning_options_match_actual_miniprogram_algorithm (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_retry_and_error_snapshot_do_not_reveal_answers (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_review_only_answered_items_reveal_feedback (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+test_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 5.107s
+
+OK

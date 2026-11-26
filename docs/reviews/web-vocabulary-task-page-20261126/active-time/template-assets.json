@@ -1,0 +1,16 @@
+{
+  "actual_template_rendered": true,
+  "sources": [
+    "/static/js/practice_shell.js",
+    "/static/js/practice_vocabulary_core.js",
+    "/static/js/practice_vocabulary_transport.js",
+    "/static/js/practice_vocabulary_timing.js",
+    "/static/js/practice_vocabulary_render_details.js",
+    "/static/js/practice_vocabulary_render.js",
+    "/static/js/practice_vocabulary_events.js",
+    "/static/js/practice_vocabulary_recovery.js",
+    "/static/js/practice_vocabulary_page.js"
+  ],
+  "exists": true,
+  "load_order": "transport < timing < page"
+}

@@ -191,7 +191,8 @@ function loadTransport(fetchImpl, localStorage) {
     timers = new Map();
   let id = 0;
   vm.runInNewContext(
-    fs.readFileSync(require.resolve('../static/js/practice_vocabulary_transport.js'), 'utf8'),
+    fs.readFileSync(require.resolve('../static/js/practice_vocabulary_transport.js'), 'utf8') + '\n' +
+      fs.readFileSync(require.resolve('../static/js/practice_vocabulary_timing.js'), 'utf8'),
     {
       window: win,
       fetch: fetchImpl,
@@ -212,6 +213,8 @@ function loadTransport(fetchImpl, localStorage) {
 function memoryStorage() {
   const map = new Map();
   return {
+    get length() { return map.size; },
+    key: (index) => [...map.keys()][index] || null,
     getItem: (k) => map.get(k) || null,
     setItem: (k, v) => map.set(k, v),
     removeItem: (k) => map.delete(k),
@@ -487,10 +490,10 @@ test('same-session focus refresh preserves review elapsed time and a new session
   };
   page.reply = { stage: 'review', review };
   await page.claimReview();
-  assert.equal(page.timing.entry(4).startedAt, 1000);
+  assert.equal(page.timing.entry(4).windows[0][0], 1000);
   now = 61000;
   await page.refresh();
-  assert.equal(page.timing.entry(4).startedAt, 1000);
+  assert.equal(page.timing.entry(4).windows[0][0], 1000);
   now = 62000;
   page.reply = null;
   await page.settle(true);
@@ -498,7 +501,7 @@ test('same-session focus refresh preserves review elapsed time and a new session
   now = 121000;
   page.reply = { stage: 'review', review: { ...review, session_id: 5 } };
   await page.claimReview();
-  assert.equal(page.timing.entry(5).startedAt, 121000);
+  assert.equal(page.timing.entry(5).windows[0][0], 121000);
 });
 
 test('task timer survives reload and reentry, then freezes the successful settlement payload', async () => {
@@ -512,9 +515,10 @@ test('task timer survives reload and reentry, then freezes the successful settle
   const first = pageHarness(clock, { local });
   first.page.apply(learning, true);
   now = 31000;
+  first.page.timing.visibility(false); // Real pagehide persists the final active interval.
   const reloaded = pageHarness(clock, { local });
   reloaded.page.apply(learning, true);
-  assert.equal(reloaded.page.timing.entry(null).startedAt, 1000);
+  assert.equal(reloaded.page.timing.entry(null).windows[0][0], 1000);
   now = 61000;
   reloaded.page.reply = { stage: 'result', settlement: { accuracy: 100 } };
   await reloaded.page.settle(false);
@@ -544,163 +548,6 @@ test('unacknowledged settlement retains its snapshot across reload instead of ad
   await reloaded.page.settle(false);
   assert.equal(reloaded.calls[0].payload.duration_seconds, 20);
   assert.equal(reloaded.page.timing.entry(null).complete, false);
-});
-
-test('persistent timing is isolated by task, student and review session', () => {
-  let now = 1000;
-  const local = memoryStorage(),
-    T = loadTransport(undefined, local),
-    clock = () => now;
-  const a = new T.Timing(1, 'student-a', clock);
-  a.observe({ stage: 'review', review: { session_id: 7 } });
-  now = 21000;
-  const otherTask = new T.Timing(2, 'student-a', clock);
-  otherTask.observe({ stage: 'learning' });
-  now = 41000;
-  const otherStudent = new T.Timing(1, 'student-b', clock);
-  otherStudent.observe({ stage: 'review', review: { session_id: 7 } });
-  now = 61000;
-  const reentered = new T.Timing(1, 'student-a', clock);
-  reentered.observe({ stage: 'review', review: { session_id: 7 } });
-  assert.equal(reentered.snapshot(null), 60);
-  assert.equal(reentered.snapshot(7), 60);
-  assert.equal(otherTask.snapshot(null), 40);
-  assert.equal(otherStudent.snapshot(null), 20);
-  reentered.observe({ stage: 'review', review: { session_id: 8 } });
-  now = 62000;
-  assert.equal(reentered.snapshot(8), 1);
-});
-
-test('damaged or future timer storage starts a conservative current-page clock', () => {
-  const invalid = [
-    '{',
-    'null',
-    '[]',
-    { version: 2, startedAt: 1000, seconds: null, complete: false },
-    { version: 1, startedAt: '1000', seconds: null, complete: false },
-    { version: 1, startedAt: -1, seconds: null, complete: false },
-    { version: 1, startedAt: 30000, seconds: null, complete: false },
-    { version: 1, startedAt: 1000, seconds: -1, complete: false },
-    { version: 1, startedAt: 1000, seconds: 999999999, complete: false },
-    { version: 1, startedAt: 1000, seconds: null, complete: true },
-  ];
-  for (const value of invalid) {
-    let now = 20000;
-    const local = memoryStorage(),
-      T = loadTransport(undefined, local);
-    local.setItem(
-      'pv:10:identity:timer:task',
-      typeof value === 'string' ? value : JSON.stringify(value),
-    );
-    const timer = new T.Timing(10, 'identity', () => now);
-    timer.observe({ stage: 'learning' });
-    now = 25000;
-    assert.equal(timer.snapshot(null), 5);
-  }
-});
-
-test('disabled timer storage falls back to this page and unavailable task visits do not start timers', () => {
-  let now = 1000;
-  const broken = {
-    getItem() {
-      throw Error();
-    },
-    setItem() {
-      throw Error();
-    },
-  };
-  const T = loadTransport(undefined, broken),
-    timer = new T.Timing(1, 'student', () => now);
-  timer.observe({ stage: 'learning' });
-  now = 61000;
-  assert.equal(timer.snapshot(null), 60);
-  const reloaded = new T.Timing(1, 'student', () => now);
-  reloaded.observe({ stage: 'learning' });
-  now = 62000;
-  assert.equal(reloaded.snapshot(null), 1);
-  const local = memoryStorage(),
-    Available = loadTransport(undefined, local);
-  for (const data of [
-    { stage: 'blocked' },
-    { stage: 'read_only', access: { read_only: true } },
-    { stage: 'learning', access: { task_date_state: 'future' } },
-    { stage: 'result', settlement: { accuracy: 100 } },
-  ]) {
-    new Available.Timing(2, 'student', () => now).observe(data);
-    assert.equal(local.getItem('pv:2:student:timer:task'), null);
-  }
-});
-
-test('incomplete settlement resumes elapsed time but a completed timer never grows', () => {
-  let now = 1000;
-  const T = loadTransport(undefined, memoryStorage()),
-    timer = new T.Timing(1, 'student', () => now);
-  timer.observe({ stage: 'learning' });
-  now = 11000;
-  assert.equal(timer.snapshot(null), 10);
-  now = 21000;
-  timer.resume(null);
-  now = 31000;
-  assert.equal(timer.snapshot(null), 30);
-  timer.finish(null, 30);
-  now = 41000;
-  timer.resume(null);
-  assert.equal(timer.snapshot(null), 30);
-});
-
-test('incomplete settlement invalidates other tabs cached task and review snapshots', () => {
-  for (const sessionId of [null, 7]) {
-    let now = 1000;
-    const T = loadTransport(undefined, memoryStorage());
-    const first = new T.Timing(1, 'student', () => now);
-    const second = new T.Timing(1, 'student', () => now);
-    first.entry(sessionId);
-    second.entry(sessionId);
-    now = 61000;
-    assert.equal(first.snapshot(sessionId), 60);
-    assert.equal(second.snapshot(sessionId), 60);
-    first.resume(sessionId);
-    now = 121000;
-    assert.equal(second.snapshot(sessionId), 120);
-    assert.equal(first.snapshot(sessionId), 120);
-    second.finish(sessionId, 120);
-    now = 181000;
-    first.resume(sessionId);
-    assert.equal(first.snapshot(sessionId), 120);
-  }
-});
-
-test('restored storage supersedes an older cached snapshot after another tab resumes', () => {
-  let now = 1000,
-    denied = false;
-  const shared = memoryStorage();
-  const unstable = {
-    getItem(key) {
-      if (denied) throw Error('storage unavailable');
-      return shared.getItem(key);
-    },
-    setItem(key, value) {
-      if (denied) throw Error('storage unavailable');
-      shared.setItem(key, value);
-    },
-  };
-  const A = loadTransport(undefined, shared),
-    B = loadTransport(undefined, unstable);
-  const first = new A.Timing(1, 'student', () => now);
-  const second = new B.Timing(1, 'student', () => now);
-  first.observe({ stage: 'learning' });
-  second.observe({ stage: 'learning' });
-  now = 61000;
-  assert.equal(first.snapshot(null), 60);
-  assert.equal(second.snapshot(null), 60);
-  denied = true;
-  first.resume(null);
-  now = 91000;
-  assert.equal(second.snapshot(null), 60);
-  denied = false;
-  now = 121000;
-  assert.equal(second.snapshot(null), 120);
-  assert.equal(first.snapshot(null), 120);
 });
 
 test('correction audio uses the current revealed question rather than stale feedback', () => {

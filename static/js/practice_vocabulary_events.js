@@ -10,6 +10,15 @@
       enterArmed: true,
     };
     app.keyState = keyState;
+    // User input, including IME and wheel scrolling, renews the idle window.
+    // Programmatic scrolling, focus refreshes and repeated keys do not.
+    const activity = (event) => {
+      if (event.isTrusted && !event.repeat) app.timing?.activity();
+    };
+    ['pointerdown', 'pointermove', 'wheel', 'keydown', 'input', 'compositionstart', 'compositionend'].forEach(type =>
+      document.addEventListener(type, activity, { capture: true, passive: true }));
+    app.timing?.visibility(document.visibilityState === 'visible');
+    if (app.timing) window.setInterval(() => app.timing.tick(), 5000);
     document.addEventListener('compositionstart', () => {
       keyState.composing = true;
     });
@@ -95,9 +104,14 @@
     function refresh() {
       if (document.visibilityState === 'visible' && !app.model.busy && !dialog.open) app.refresh();
     }
-    document.addEventListener('visibilitychange', refresh);
+    document.addEventListener('visibilitychange', () => {
+      app.timing?.visibility(document.visibilityState === 'visible');
+      refresh();
+    });
+    window.addEventListener('pageshow', () => app.timing?.visibility(document.visibilityState === 'visible'));
     window.addEventListener('focus', refresh);
     window.addEventListener('pagehide', () => {
+      app.timing?.visibility(false);
       app.saveDraft();
       app.player.stop();
     });

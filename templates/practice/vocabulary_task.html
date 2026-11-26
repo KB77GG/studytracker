@@ -34,7 +34,7 @@
   <noscript>请启用 JavaScript 后继续背单词。<a href="/practice">返回练习中心</a></noscript>
   <script id="pv-boot" type="application/json">{{ boot_data | tojson }}</script>
   <script src="{{ url_for('static', filename='js/practice_shell.js') }}"></script>
-  {% for name in ['core', 'transport', 'render_details', 'render', 'events', 'recovery', 'page'] %}
+  {% for name in ['core', 'transport', 'timing', 'render_details', 'render', 'events', 'recovery', 'page'] %}
   <script src="{{ url_for('static', filename='js/practice_vocabulary_' ~ name ~ '.js') }}" defer></script>
   {% endfor %}
 </body>

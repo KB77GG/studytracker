@@ -1,0 +1,119 @@
+test_actual_name_switch_rejects_old_page_before_task_lookup (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_actual_name_switch_rejects_old_page_before_task_lookup) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+ok
+test_all_four_goals_finish_and_settlement_replay_is_read_only (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_all_four_goals_finish_and_settlement_replay_is_read_only) ... /private/tmp/studytracker-web-vocabulary-20261126/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+ok
+test_cancelled_identity_mapped_task_is_not_accessible (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_cancelled_identity_mapped_task_is_not_accessible) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_practice_vocabulary_routes.py:666: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  task.cancelled_at = datetime.utcnow()
+ok
+test_classroom_synonym_and_missing_examples_keep_real_domain_modes (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_classroom_synonym_and_missing_examples_keep_real_domain_modes) ... ok
+test_completed_get_has_no_database_writes_and_cannot_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_completed_get_has_no_database_writes_and_cannot_answer) ... ok
+test_comprehensive_pending_correction_survives_sync_and_is_bounded (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_comprehensive_pending_correction_survives_sync_and_is_bounded) ... ok
+test_context_choice_correction_accepts_public_label_mapped_to_option_id (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_context_choice_correction_accepts_public_label_mapped_to_option_id) ... ok
+test_correction_duplicate_reports_persisted_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_correction_duplicate_reports_persisted_answer) ... ok
+test_declared_oversize_body_is_rejected_without_reading (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_declared_oversize_body_is_rejected_without_reading) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/event/base.py:404: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ec0db70>
+  @classmethod
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_exact_byte_limit_json_and_small_chunked_json_are_accepted (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_exact_byte_limit_json_and_small_chunked_json_are_accepted) ... ok
+test_feature_off_blocks_all_registered_routes_before_any_sql (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_blocks_all_registered_routes_before_any_sql) ... ok
+test_feature_off_missing_identity_foreign_and_unsupported_tasks (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_feature_off_missing_identity_foreign_and_unsupported_tasks) ... ok
+test_foreign_review_session_is_rejected (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_foreign_review_session_is_rejected) ... /private/tmp/studytracker-web-vocabulary-20261126/tests/test_practice_vocabulary_routes.py:173: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  mastery.meaning_recall_next_due_at = datetime.utcnow() - timedelta(days=1)
+ok
+test_forgot_then_retry_keeps_first_score_and_hides_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_forgot_then_retry_keeps_first_score_and_hides_answer) ... ok
+test_future_and_expired_read_only_no_flow_or_write (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_future_and_expired_read_only_no_flow_or_write) ... ok
+test_grace_boundary_expiry_does_not_advance_existing_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_grace_boundary_expiry_does_not_advance_existing_flow) ... ok
+test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust) ... ok
+test_malformed_origin_and_non_ascii_headers_fail_closed (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_malformed_origin_and_non_ascii_headers_fail_closed) ... ok
+test_malformed_recovery_ids_do_not_initialize_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_malformed_recovery_ids_do_not_initialize_flow) ... ok
+test_numeric_task_preserves_input_punctuation_and_tts_hint (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_numeric_task_preserves_input_punctuation_and_tts_hint) ... ok
+test_old_client_keeps_existing_correction_release (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_old_client_keeps_existing_correction_release) ... /private/tmp/studytracker-web-vocabulary-20261126/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-web-vocabulary-20261126/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+ok
+test_origin_rejects_other_hosts_ports_and_non_origin_url_components (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_origin_rejects_other_hosts_ports_and_non_origin_url_components) ... ok
+test_page_and_get_state_do_not_create_or_modify_learning (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_page_and_get_state_do_not_create_or_modify_learning) ... ok
+test_premature_settlement_and_operational_failure_do_not_finish (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_premature_settlement_and_operational_failure_do_not_finish) ... [2026-11-26 21:52:57,301] ERROR in practice_vocabulary: Vocabulary web database operation failed
+Traceback (most recent call last):
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/private/tmp/studytracker-web-vocabulary-20261126/api/practice_vocabulary.py", line 244, in settle
+    result = settle_vocabulary_group_submission(
+        g.practice_student.user,
+    ...<2 lines>...
+        uploader_id=g.practice_student.user.id,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+sqlalchemy.exc.OperationalError: (builtins.Exception) locked
+[SQL: synthetic]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ok
+test_resume_and_duplicate_answer_share_one_record_with_miniprogram (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_resume_and_duplicate_answer_share_one_record_with_miniprogram) ... /private/tmp/studytracker-web-vocabulary-20261126/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+ok
+test_review_context_choice_correction_uses_same_public_transport_contract (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_context_choice_correction_uses_same_public_transport_contract) ... ok
+test_review_gate_claim_answer_settle_then_return_to_original_task (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_gate_claim_answer_settle_then_return_to_original_task) ... ok
+test_review_wrong_correction_replay_and_same_student_task_gate (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_wrong_correction_replay_and_same_student_task_gate) ... ok
+test_security_headers_types_size_origin_and_identity_drift (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_security_headers_types_size_origin_and_identity_drift) ... ok
+test_staff_classroom_ambiguous_and_account_priority (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_staff_classroom_ambiguous_and_account_priority) ... ok
+test_stale_question_error_snapshot_and_retry_never_leak_answer (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_stale_question_error_snapshot_and_retry_never_leak_answer) ... ok
+test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length) ... ok
+test_unsafe_unknown_length_and_truncated_json_fail_without_unbounded_reads (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_unsafe_unknown_length_and_truncated_json_fail_without_unbounded_reads) ... ok
+test_cancelled_task_is_rejected_even_when_already_in_identity_map (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_cancelled_task_is_rejected_even_when_already_in_identity_map) ... ok
+test_first_settlement_syncs_once_and_replay_cannot_add_effects (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_first_settlement_syncs_once_and_replay_cannot_add_effects) ... ok
+test_incomplete_learning_cannot_mark_either_record_done (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_incomplete_learning_cannot_mark_either_record_done) ... ok
+test_projection_failure_rolls_back_completion_and_settlement (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_projection_failure_rolls_back_completion_and_settlement) ... /Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1114ae6b0>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f66fa60>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f66ea70>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e9a15d0>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10eb55300>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fcdab60>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f77be20>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:495: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10dd22110>
+  return iter(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_race_loser_with_already_synced_result_does_not_append_evidence (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_race_loser_with_already_synced_result_does_not_append_evidence) ... ok
+test_read_only_replay_still_requires_owner_and_frozen_queue_token (tests.test_vocabulary_task_submission.VocabularyTaskSubmissionTest.test_read_only_replay_still_requires_owner_and_frozen_queue_token) ... ok
+test_corrective_copy_keeps_previously_revealed_answer (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_corrective_copy_keeps_previously_revealed_answer) ... ok
+test_fallback_built_before_familiarity_is_hidden (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_fallback_built_before_familiarity_is_hidden) ... ok
+test_feedback_missing_material_and_numeric_audio (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_feedback_missing_material_and_numeric_audio) ... ok
+test_meaning_options_match_actual_miniprogram_algorithm (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_meaning_options_match_actual_miniprogram_algorithm) ... ok
+test_retry_and_error_snapshot_do_not_reveal_answers (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_retry_and_error_snapshot_do_not_reveal_answers) ... ok
+test_review_only_answered_items_reveal_feedback (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_review_only_answered_items_reveal_feedback) ... ok
+test_six_modes_only_expose_allowed_prompts (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_six_modes_only_expose_allowed_prompts) ... ok
+test_task_metadata_uses_shared_trimmed_title_and_range_contract (tests.test_practice_vocabulary_web.VocabularyWebPresentationTest.test_task_metadata_uses_shared_trimmed_title_and_range_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 4.481s
+
+OK

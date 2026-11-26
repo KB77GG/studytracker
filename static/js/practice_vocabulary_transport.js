@@ -15,8 +15,10 @@
     put(key, value) {
       try {
         this.storage.setItem(this.prefix + key, JSON.stringify(value));
+        return true;
       } catch (_) {
         /* Private browsing can deny storage. */
+        return false;
       }
     }
     remove(key) {
@@ -25,125 +27,6 @@
       } catch (_) {
         /* Best effort. */
       }
-    }
-  }
-  class Timing {
-    // Wall-clock time on this browser, isolated by task and stable student ID.
-    // The first settlement payload is frozen before transmission so a lost
-    // response, reload, or second tab cannot add retry time to that payload.
-    constructor(taskId, identity, now = () => Date.now()) {
-      this.now = now;
-      this.enteredAt = now();
-      this.memory = new Map();
-      let local;
-      try {
-        local = taskId && identity ? root.localStorage : null;
-      } catch (_) {
-        local = null;
-      }
-      this.store = new Storage(taskId, identity, local);
-    }
-    key(sessionId) {
-      return sessionId == null ? 'timer:task' : `timer:review:${sessionId}`;
-    }
-    valid(record, now) {
-      return (
-        !!record &&
-        record.version === 1 &&
-        (record.generation == null ||
-          (Number.isSafeInteger(record.generation) && record.generation >= 0)) &&
-        typeof record.complete === 'boolean' &&
-        Number.isSafeInteger(record.startedAt) &&
-        record.startedAt >= 0 &&
-        record.startedAt <= now &&
-        (record.seconds === null
-          ? !record.complete
-          : Number.isSafeInteger(record.seconds) &&
-            record.seconds >= 0 &&
-            record.seconds <= Math.floor((now - record.startedAt) / 1000))
-      );
-    }
-    entry(sessionId, create = true) {
-      const key = this.key(sessionId),
-        now = this.now();
-      const records = [this.store.get(key), this.memory.get(key)].filter((record) =>
-        this.valid(record, now),
-      );
-      if (!records.length && !create) return null;
-      const startedAt = records.length
-        ? Math.min(...records.map((record) => record.startedAt))
-        : sessionId == null && this.enteredAt <= now
-          ? this.enteredAt
-          : now;
-      // A rejected incomplete settlement starts a new generation. An older
-      // tab's cached snapshot must not refreeze time after another tab resumes.
-      const generation = Math.max(0, ...records.map((record) => record.generation || 0));
-      const current = records.filter((record) => (record.generation || 0) === generation);
-      const snapshots = current.filter((record) => record.seconds !== null);
-      const result = {
-        version: 1,
-        generation,
-        startedAt,
-        seconds: snapshots.length ? Math.min(...snapshots.map((record) => record.seconds)) : null,
-        complete: current.some((record) => record.complete),
-      };
-      this.save(sessionId, result);
-      return result;
-    }
-    save(sessionId, record) {
-      const key = this.key(sessionId);
-      this.memory.set(key, record);
-      this.store.put(key, record);
-    }
-    observe(data) {
-      if (data.settlement || (data.flow || {}).settlement) {
-        if (this.entry(null, false)) this.finish(null);
-        return;
-      }
-      const access = data.access || {};
-      if (
-        access.read_only ||
-        access.can_write === false ||
-        data.stage === 'blocked' ||
-        ['future', 'expired', 'completed'].includes(access.task_date_state || access.state)
-      )
-        return;
-      if (
-        ['learning', 'in_progress', 'not_started', 'review', 'review_gate'].includes(data.stage)
-      ) {
-        this.entry(null);
-        if (data.stage === 'review' && data.review && data.review.session_id != null)
-          this.entry(data.review.session_id);
-      }
-    }
-    snapshot(sessionId) {
-      const record = this.entry(sessionId);
-      if (record.seconds === null) {
-        record.seconds = Math.max(0, Math.floor((this.now() - record.startedAt) / 1000));
-        this.save(sessionId, record);
-      }
-      return record.seconds;
-    }
-    finish(sessionId, submittedSeconds) {
-      const record = this.entry(sessionId);
-      if (record.seconds === null) {
-        const elapsed = Math.max(0, Math.floor((this.now() - record.startedAt) / 1000));
-        record.seconds =
-          Number.isSafeInteger(submittedSeconds) && submittedSeconds >= 0
-            ? Math.min(elapsed, submittedSeconds)
-            : elapsed;
-      }
-      record.complete = true;
-      this.save(sessionId, record);
-    }
-    resume(sessionId) {
-      // A definitive incomplete-flow response means there is more work to do.
-      // A completed settlement can never be reopened by a client-side retry.
-      const record = this.entry(sessionId, false);
-      if (!record || record.complete) return;
-      record.seconds = null;
-      record.generation++;
-      this.save(sessionId, record);
     }
   }
   class RequestError extends Error {
@@ -311,5 +194,5 @@
       }
     }
   }
-  root.PracticeVocabularyTransport = { Storage, Timing, Client, Player, RequestError };
+  root.PracticeVocabularyTransport = { Storage, Client, Player, RequestError };
 })(window);

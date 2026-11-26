@@ -1,5 +1,7 @@
 # 网页背词审查分支：补测、推送与启用门槛
 
+> 当前用户已将网页版计时口径改为“页面可见且最近 5 分钟有操作的累计时间”。本轮修改与验证见 [active-time/README.md](active-time/README.md)；下面的墙钟计时和旧 CI 结果是历史记录，不能代表新版本验收。
+
 > 最新审查修复 `364336db` 已推送，新 CI 45821205587 整体成功（三业务成功、旧非阻断lint失败）。详情见 [review-fixes.md](review-fixes.md)；下文首次推送/CI记录保留为历史证据。
 
 用户认可上一份验收记录，并授权提交、推送且运行 CI，**仅限 `codex/web-vocabulary-task-page-20261126`**。不合并或推送 main，不部署，不开启功能。原已认可的验收正文保留在 `claude-verification-paste.md`；其中“仅本机”等表述是当时状态，本文件记录后续变化。

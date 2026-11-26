@@ -1,0 +1,71 @@
+{
+  "kind": "independent mocked-clock timing probe",
+  "checks": [
+    {
+      "name": "ten minutes + five-hour departure + fifteen minutes = twenty-five minutes",
+      "ok": true
+    },
+    {
+      "name": "idle is capped at five minutes; resumed input never backfills idle gap",
+      "ok": true
+    },
+    {
+      "name": "hidden activity cannot renew or credit the hidden interval",
+      "ok": true
+    },
+    {
+      "name": "overlapping tabs use the union, in either flush order",
+      "ok": true
+    },
+    {
+      "name": "review switch stops the old session; task retains both sessions",
+      "ok": true
+    },
+    {
+      "name": "task and identity isolate accumulated intervals",
+      "ok": true
+    },
+    {
+      "name": "late stale tab excludes frozen settlement wait after incomplete resume",
+      "ok": true
+    },
+    {
+      "name": "refresh after frozen payload preserves seconds and adds no retry delay",
+      "ok": true
+    },
+    {
+      "name": "completed value does not change on late finish or resume",
+      "ok": true
+    },
+    {
+      "name": "write failure keeps current-page intervals; restored storage survives reload",
+      "ok": true
+    },
+    {
+      "name": "blocked/error/readonly/result views cannot accumulate after leaving learning",
+      "ok": true
+    },
+    {
+      "name": "future or readonly domain state cannot start a timer even with question UI",
+      "ok": true
+    },
+    {
+      "name": "legacy wall-clock record is not converted into active learning time",
+      "ok": true
+    },
+    {
+      "name": "large forward clock jump never counts more than the idle grace window",
+      "ok": true
+    },
+    {
+      "name": "damaged frozen value and future page ranges do not inflate time",
+      "ok": true
+    },
+    {
+      "name": "actual event wiring ignores auto scroll/focus and repeated keys, honors IME and lifecycle",
+      "ok": true
+    }
+  ],
+  "passed": 16,
+  "total": 16
+}

@@ -193,6 +193,7 @@
       else if (!deferAutomatic && state === 'review_settling') this.settle(true);
     }
     show(state) {
+      this.timing.setState(state);
       this.events.transition();
       this.player.stop();
       this.model.state = state;
