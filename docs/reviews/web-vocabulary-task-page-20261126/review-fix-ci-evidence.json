@@ -1,0 +1,60 @@
+{
+  "code_commit": "364336db69cfb887a09eeeb4d16be50e88e7c7b2",
+  "ci_run_id": 45821205587,
+  "origin_main_after_fetch": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "ci_commands": [
+    "gh run view 45821205587 --json databaseId,headSha,status,conclusion,url,createdAt,updatedAt,jobs",
+    "gh run view 45821205587 --job 139913605814 --log",
+    "gh run view 45821205587 --job 139913605352 --log"
+  ],
+  "key_test_excerpt": [
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:38:55.6651016Z test_declared_oversize_body_is_rejected_without_reading (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_declared_oversize_body_is_rejected_without_reading) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:38:57.8447889Z test_grace_boundary_expiry_does_not_advance_existing_flow (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_grace_boundary_expiry_does_not_advance_existing_flow) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:38:58.1573762Z test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_https_origin_is_allowed_behind_http_proxy_without_forwarded_trust) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:38:58.4353164Z test_malformed_origin_and_non_ascii_headers_fail_closed (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_malformed_origin_and_non_ascii_headers_fail_closed) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:38:59.6118862Z test_origin_rejects_other_hosts_ports_and_non_origin_url_components (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_origin_rejects_other_hosts_ports_and_non_origin_url_components) ... /opt/hostedtoolcache/Python/3.13.18/x64/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:124: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7c5c91181f30>",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:01.6404993Z test_review_gate_claim_answer_settle_then_return_to_original_task (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_review_gate_claim_answer_settle_then_return_to_original_task) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:02.6018488Z test_security_headers_types_size_origin_and_identity_drift (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_security_headers_types_size_origin_and_identity_drift) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:03.4041403Z test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length (tests.test_practice_vocabulary_routes.VocabularyWebRoutesTest.test_streaming_bodies_stop_after_one_probe_byte_despite_missing_or_false_length) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:06.3502120Z test_current_flag_off_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_off_matches_real_historical_response) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:09.3785332Z test_current_flag_on_matches_real_historical_response (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_current_flag_on_matches_real_historical_response) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:09.3789320Z test_historical_snapshot_provenance_and_coverage (tests.test_practice_vocabulary_task_list.PracticeTaskListHistoricalBaselineTest.test_historical_snapshot_provenance_and_coverage) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:10.5377559Z test_active_vocabulary_sorts_with_existing_progress_before_pending (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_active_vocabulary_sorts_with_existing_progress_before_pending) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:10.8395518Z test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_batch_books_and_shared_detail_titles_do_not_scale_with_task_count) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:11.2786623Z test_mixed_legacy_fields_keep_old_task_kind_priority (tests.test_practice_vocabulary_task_list.PracticeVocabularyTaskListTest.test_mixed_legacy_fields_keep_old_task_kind_priority) ... ok",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:18.3677865Z Ran 94 tests in 30.708s",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:18.3678229Z OK",
+    "account-provisioning\tTest web vocabulary identity, shared settlement and task integration\t2026-11-26T12:39:21.1239341Z 20 passed in 1.09s"
+  ],
+  "new_file_lint_diagnostics": [],
+  "changed_legacy_python_lint": {
+    "api/__init__.py": {
+      "baseline_count": 1,
+      "current_count": 1,
+      "added_code_message_counts": []
+    },
+    "api/miniprogram.py": {
+      "baseline_count": 8,
+      "current_count": 8,
+      "added_code_message_counts": []
+    },
+    "app.py": {
+      "baseline_count": 21,
+      "current_count": 21,
+      "added_code_message_counts": []
+    },
+    "config.py": {
+      "baseline_count": 0,
+      "current_count": 0,
+      "added_code_message_counts": []
+    }
+  },
+  "local_lint_comparison": "python -m ruff check --output-format=json --stdin-filename <file> -; stdin git show f81a5e4:<file> versus current file; compare codes/messages ignoring embedded source line shifts",
+  "independent_timer_review": "Final generation independently replayed for task/review: 60s snapshots, resume, then both tabs 120s; read/write failure and write-only failure recovery keep generation; different identity isolated. Existing Node cases cover these boundaries.",
+  "limits": [
+    "Overall CI success; 3 business jobs successful; advisory lint failure and format skipped.",
+    "Production proxy configuration was not inspected; proxy behavior tested using synthetic HTTP requests.",
+    "IAB correction reload passed; native Chrome/Safari IME, real offline/lost-response, phone switching, zoom and teacher/parent UI remain gates.",
+    "No production actions, main push, deployment or feature activation."
+  ]
+}

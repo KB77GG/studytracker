@@ -1,13 +1,14 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-26 — Claude 六项审查修复完成，准备同分支复推
+## 2026-11-26 — Claude 六项审查修复已推送，新CI成功，仍默认关闭
 
-- **范围/基线**：沿用户已授权的仅任务分支commit/push+CI，处理最新Claude审查；不合/推main、不部署不开启。实施 `/private/tmp/studytracker-web-vocabulary-20261126`、`codex/web-vocabulary-task-page-20261126@f804998fd5f09bc7d062defe19d91367905e8537` 开工clean；fetch后任务远端同HEAD、origin/main仍f81a5e4，文档源479cab8a未合并。旧资料 `/Users/zhouxin/Desktop/studytracker` main6ded77d2原8M/27U/0staged保留，仅两交接更新。
-- **修复**：Origin合法http/https只比host+port，不依赖代理scheme，不读Forwarded；CSRF/identity/归属保留，畸形来源拒绝。请求体按WSGI安全流限读16385字节，声明超限0读取；没有安全EOF的未知长度保持400空流。计时按任务/学生localStorage持久化，复习再按session，首次结算快照冻结、未完成恢复有generation防旧标签回写，故障退内存；仍墙钟包含离页，不是净学习时长、不跨设备。active排序、book单批查询、列表/详情共享标题均service化，mixed旧字段优先级保持；app对原main14+/3-。无schema/配置/小程序变更。
-- **变更文件**：11M产品/测试为 api/practice_vocabulary.py、app.py、services/practice_vocabulary_tasks.py/web.py、static/js/practice_vocabulary_page.js/transport.js、tests/test_practice_vocabulary_core.js/routes.py/task_list.py/tasks.py/web.py；未跟踪仅报告目录下review-fixes.md、34文件review-fix-manifest.json、review-fix验证日志/命令与3截图/2浏览器JSON。两树交接本轮更新；旧报告/manifest/CI保留历史。所有文件本次提交前仅本机。
-- **验证**：`validation/review-fix-commands.json`保存原20模块完整argv：3.13 -m unittest各模块-v →242/242(34.702s)；3.10原run_compat_tests.py →242/242(38.378s)，旧datetime.UTC测试别名限定保留；两版本-m pytest tests/test_task_date_gate.py -q各20(0.35s)；node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js →66/66(新页39)；原生3.10编译10产品、新Python/Ruff、JS语法、diff通过。新增12Python/8Node，A02历史fixture不改仍匹配。词书+flow各1查询只指新增查询，非整个列表总查询。
-- **浏览器与限制**：合成IAB真实reload订正页仍同题/正确答案/第1次，提交后可继续；最终focus再刷新也通过，截图/DOM在review-fix报告。Chrome工具导航失败、原生Mac锁屏，不报Chrome/Safari/物理F5/IME通过；真断网/手机互切/原生缩放/老师家长界面仍待。测试IAB已关闭、本机5111已停止。存储禁用/清空不能跨刷新延续，WSGI边界外不探读；未查询真实生产代理配置。
-- **下一步/发布**：待将本候选提交推同分支并等待新CI，随后补最终SHA与CI事实。无生产访问/DB/环境/服务/通知/微信上传提审发布；默认flag false，部署与开启仍需后续授权及门槛。Claude可从同分支看修复diff和review-fixes.md。
+- **授权/版本**：沿用户仅审查分支commit/push+CI授权修复六项，产品 **`364336db69cfb887a09eeeb4d16be50e88e7c7b2`** 已push至 `codex/web-vocabulary-task-page-20261126`。CI结果与交接后续纯文档 `[skip ci]` 共享，最终文档HEAD用Git核对。没有合并/推main、部署或开启授权；本轮不执行这些操作。
+- **工作树**：实施 `/private/tmp/studytracker-web-vocabulary-20261126`，开工同分支 `f804998fd5f09bc7d062defe19d91367905e8537` clean；本轮6产品+5测试、报告证据/两交接已随修复提交，产品提交后clean，收尾文档提交后无残留。final fetch `origin/main=f81a5e4a4d81282eb67b994a4cfcc5574fb78747`不变，479cab8a文档分支未合并。旧资料 `/Users/zhouxin/Desktop/studytracker` main6ded77d24586327ad94e151e172ae4811b4a2eed原8M/27U/0staged保留，仅两交接更新，本机可见。
+- **修复事实**：Origin按合法http/https主机+端口，不依赖内部scheme、不信Forwarded；CSRF/identity/归属保留。body安全流限读16KiB+1，声明超限0读取，未知无EOF保持空流400不探跨报文。任务/身份localStorage计时、复习session隔离，首次结算冻结、明确incomplete恢复用generation防旧页签回写，存储失效退内存；仍墙钟含离页、不跨设备，清空存储无法跨刷新。active排序、批量book、共用标题及专属payload移service，mixed旧类型优先；app相对main14+/3-。无schema/配置/小程序变更；34文件当前SHA见review-fix-manifest，11文件相对审查基线变化。
+- **本地验证**：报告validation/review-fix-commands.json给原20模块完整argv/cwd/log：3.13 unittest242/242(34.702s)，3.10兼容入口242/242(38.378s)，旧datetime.UTC测试别名限定仍披露；两版本pytest tests/test_task_date_gate.py各20(0.35s)；node --test tests/test_practice_vocabulary_core.js tests/test_practice_task_lists.js tests/test_practice_shell.js tests/test_vocabulary_feedback.js 66/66(新页39)。原生3.10编译10产品、新Python/Ruff、JS语法、diff与34文件暂存SHA通过。新增12Python/8Node，A02fixture/历史snapshot不改仍通过；新增book/flow各1查询不是整个列表总查询。
+- **新远端CI**：[45821205587](https://github.com/KB77GG/studytracker/actions/runs/45821205587) overall success，三个业务job(test/account-provisioning/task-planner)成功，网页后端步骤94unittest+20pytest及新前端步骤成功。既有advisory lint failure/format skipped，新文件无诊断；4旧Python基线对照无新增诊断消息。review-fix-ci.json与review-fix-ci-evidence.json保存完整job/关键输出/gh命令；独审generation多实例60→120秒、存储读写/仅写失败恢复、换身份均通过，无提交阻塞。纯文档后续不重复跑CI，源码/测试与已过CI提交相同。
+- **浏览器/未验**：合成IAB实际reload depend/focus订正仍原题/正确答案/第1次，depend订正后可继续；最终generation脚本再次reload通过。截图及DOM在报告，IAB标签与5111服务已关闭。Chrome导航工具失败、Mac原生锁屏，未报Chrome/Safari、物理F5、IME、长按通过；真实断网/丢响应、微信含订正互切、原生缩放、老师家长UI待。未查询真实代理配置，不能断言原生产一定触发scheme问题。范围见review-fixes.md。
+- **发布/交接/下一步**：无生产访问/DB/环境变量/服务/通知/微信上传提审发布，flag默认false。两树docs/CODEX_HANDOFF.md/WORKLOG.md已更新；实现树报告/交接随任务分支可跨机获取，旧树非本任务仍仅本机。Claude可fetch并用 `git diff f804998f..origin/codex/web-vocabulary-task-page-20261126`复审；部署与开启按原两道门槛另行授权，不自动上线。
 
 ## 2026-11-26 — 网页背词审查分支已推送，CI 通过，默认关闭
 

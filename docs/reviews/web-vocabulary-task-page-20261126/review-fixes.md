@@ -43,7 +43,22 @@
 
 ## 提交与CI
 
-当前为待推候选；本轮修复将在同一任务分支提交/推送，取得新CI结果后补记。此前2f83ebd1的CI仍是历史证据，不能代表本轮修复版本。
+本轮修复 **`364336db69cfb887a09eeeb4d16be50e88e7c7b2`** 已 commit/push 至 `codex/web-vocabulary-task-page-20261126`。[新 CI 45821205587](https://github.com/KB77GG/studytracker/actions/runs/45821205587) 整体 **success**，`test`、`account-provisioning`、`task-planner` 三个业务 job 全部成功；网页后端/原判分/日期显示步骤94项 unittest 与20项pytest通过，新增Node计时所在前端步骤成功。
+
+既有非阻断 `lint` job 为 failure，format步骤skipped。新文件没有lint诊断；4个改动的旧Python文件对照f81a5e4诊断数量相同，忽略嵌入行号平移后无新增消息。完整远端状态见 `review-fix-ci.json`，关键测试输出/精确gh命令/对照结果见 `review-fix-ci-evidence.json`。独审另复演任务与复习多标签60秒→未完成恢复→120秒，存储读写失败及仅写失败恢复后不倒退，不同身份隔离，无剩余提交阻塞。
+
+CI结果与交接用后续纯文档 `[skip ci]` 提交共享，最终文档HEAD以Git为准；当前34文件manifest与CI测试代码保持完全相同。此前2f83ebd1的CI只作历史证据。实施工作树收尾clean；旧主资料树8M/27U的非本任务内容保留，本轮仅两交接仍本机。
+
+最终fetch确认 `origin/main=f81a5e4a4d81282eb67b994a4cfcc5574fb78747`，没有合并/推送main、部署、启用、生产访问/数据库写入、服务配置变更或微信上传提审发布。开启前真设备门槛仍待，不能因为本轮修复/CI完成而开启。
+
+复审增量：
+
+```bash
+git fetch origin codex/web-vocabulary-task-page-20261126
+git diff f804998f..origin/codex/web-vocabulary-task-page-20261126 -- api/practice_vocabulary.py app.py services/ static/js/ tests/
+```
+
+两树 `docs/CODEX_HANDOFF.md`、`docs/WORKLOG.md` 已更新；任务分支中的交接/报告可跨电脑获取。
 
 ## 启用门槛
 

@@ -1,0 +1,519 @@
+{
+  "conclusion": "success",
+  "createdAt": "2026-11-26T12:36:18Z",
+  "databaseId": 45821205587,
+  "headSha": "364336db69cfb887a09eeeb4d16be50e88e7c7b2",
+  "jobs": [
+    {
+      "completedAt": "2026-11-26T12:36:34Z",
+      "conclusion": "failure",
+      "databaseId": 139913605352,
+      "name": "lint",
+      "startedAt": "2026-11-26T12:36:21Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-26T12:36:22Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-26T12:36:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:30Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-26T12:36:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:30Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "startedAt": "2026-11-26T12:36:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:31Z",
+          "conclusion": "success",
+          "name": "Install ruff",
+          "number": 4,
+          "startedAt": "2026-11-26T12:36:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:31Z",
+          "conclusion": "failure",
+          "name": "Ruff check (advisory)",
+          "number": 5,
+          "startedAt": "2026-11-26T12:36:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:31Z",
+          "conclusion": "skipped",
+          "name": "Ruff format check (advisory)",
+          "number": 6,
+          "startedAt": "2026-11-26T12:36:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:31Z",
+          "conclusion": "skipped",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 11,
+          "startedAt": "2026-11-26T12:36:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:32Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 12,
+          "startedAt": "2026-11-26T12:36:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:32Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-11-26T12:36:32Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/45821205587/job/139913605352"
+    },
+    {
+      "completedAt": "2026-11-26T12:36:53Z",
+      "conclusion": "success",
+      "databaseId": 139913605669,
+      "name": "test",
+      "startedAt": "2026-11-26T12:36:21Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-26T12:36:22Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-26T12:36:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:29Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-26T12:36:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:29Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "startedAt": "2026-11-26T12:36:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:32Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 4,
+          "startedAt": "2026-11-26T12:36:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:36Z",
+          "conclusion": "success",
+          "name": "Install minimal deps",
+          "number": 5,
+          "startedAt": "2026-11-26T12:36:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:37Z",
+          "conclusion": "success",
+          "name": "Run dependency-light unit tests",
+          "number": 6,
+          "startedAt": "2026-11-26T12:36:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:37Z",
+          "conclusion": "success",
+          "name": "Guard legacy spelling correction queue",
+          "number": 7,
+          "startedAt": "2026-11-26T12:36:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test weekly exam sprint source and public pages",
+          "number": 8,
+          "startedAt": "2026-11-26T12:36:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test current and historical student task lists",
+          "number": 9,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test web vocabulary input, recovery and keyboard behavior",
+          "number": 10,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test classroom vocabulary import client and assignment preset",
+          "number": 11,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test teacher vocabulary load warning races",
+          "number": 12,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test small-class homework client",
+          "number": 13,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:39Z",
+          "conclusion": "success",
+          "name": "Test optional exam guard fail-open behavior",
+          "number": 14,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:50Z",
+          "conclusion": "success",
+          "name": "Test Cambridge content and review delivery",
+          "number": 15,
+          "startedAt": "2026-11-26T12:36:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:50Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 28,
+          "startedAt": "2026-11-26T12:36:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:50Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 29,
+          "startedAt": "2026-11-26T12:36:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:51Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 30,
+          "startedAt": "2026-11-26T12:36:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:51Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 31,
+          "startedAt": "2026-11-26T12:36:51Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/45821205587/job/139913605669"
+    },
+    {
+      "completedAt": "2026-11-26T12:41:19Z",
+      "conclusion": "success",
+      "databaseId": 139913605814,
+      "name": "account-provisioning",
+      "startedAt": "2026-11-26T12:36:21Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-26T12:36:22Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-26T12:36:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:29Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-26T12:36:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:29Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "startedAt": "2026-11-26T12:36:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:33Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 4,
+          "startedAt": "2026-11-26T12:36:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:40Z",
+          "conclusion": "success",
+          "name": "Install account regression dependencies",
+          "number": 5,
+          "startedAt": "2026-11-26T12:36:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:53Z",
+          "conclusion": "success",
+          "name": "Test automatic student and parent accounts",
+          "number": 6,
+          "startedAt": "2026-11-26T12:36:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:59Z",
+          "conclusion": "success",
+          "name": "Test classroom vocabulary import and student learning",
+          "number": 7,
+          "startedAt": "2026-11-26T12:36:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:38:08Z",
+          "conclusion": "success",
+          "name": "Test vocabulary entry performance and review eligibility",
+          "number": 8,
+          "startedAt": "2026-11-26T12:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:38:46Z",
+          "conclusion": "success",
+          "name": "Test default-off vocabulary error policy and enrollment boundaries",
+          "number": 9,
+          "startedAt": "2026-11-26T12:38:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:39:21Z",
+          "conclusion": "success",
+          "name": "Test web vocabulary identity, shared settlement and task integration",
+          "number": 10,
+          "startedAt": "2026-11-26T12:38:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:39:57Z",
+          "conclusion": "success",
+          "name": "Test pilot graduation checkpoints, migration, metrics and bounded request work",
+          "number": 11,
+          "startedAt": "2026-11-26T12:39:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:40:10Z",
+          "conclusion": "success",
+          "name": "Test verified small-class homework recipients and assignments",
+          "number": 12,
+          "startedAt": "2026-11-26T12:39:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:40:18Z",
+          "conclusion": "success",
+          "name": "Test submitted mock paper review access and saved results",
+          "number": 13,
+          "startedAt": "2026-11-26T12:40:10Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:40:54Z",
+          "conclusion": "success",
+          "name": "Test optional exam integrity and unchanged exam journeys",
+          "number": 14,
+          "startedAt": "2026-11-26T12:40:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:41:17Z",
+          "conclusion": "success",
+          "name": "Test recovery assistant and student journeys with isolated data",
+          "number": 15,
+          "startedAt": "2026-11-26T12:40:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:41:17Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 28,
+          "startedAt": "2026-11-26T12:41:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:41:18Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 29,
+          "startedAt": "2026-11-26T12:41:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:41:18Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 30,
+          "startedAt": "2026-11-26T12:41:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:41:18Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 31,
+          "startedAt": "2026-11-26T12:41:18Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/45821205587/job/139913605814"
+    },
+    {
+      "completedAt": "2026-11-26T12:37:55Z",
+      "conclusion": "success",
+      "databaseId": 139913605850,
+      "name": "task-planner",
+      "startedAt": "2026-11-26T12:36:22Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-26T12:36:25Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-26T12:36:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:36Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-26T12:36:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:36Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "startedAt": "2026-11-26T12:36:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:40Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 4,
+          "startedAt": "2026-11-26T12:36:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:36:47Z",
+          "conclusion": "success",
+          "name": "Install planner regression dependencies",
+          "number": 5,
+          "startedAt": "2026-11-26T12:36:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:50Z",
+          "conclusion": "success",
+          "name": "Test scheduled assignment transactions and resources",
+          "number": 6,
+          "startedAt": "2026-11-26T12:36:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:50Z",
+          "conclusion": "success",
+          "name": "Test planner client behavior",
+          "number": 7,
+          "startedAt": "2026-11-26T12:37:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:50Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 12,
+          "startedAt": "2026-11-26T12:37:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:50Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 13,
+          "startedAt": "2026-11-26T12:37:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:51Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 14,
+          "startedAt": "2026-11-26T12:37:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-26T12:37:51Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-11-26T12:37:51Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/KB77GG/studytracker/actions/runs/45821205587/job/139913605850"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-11-26T12:41:20Z",
+  "url": "https://github.com/KB77GG/studytracker/actions/runs/45821205587"
+}

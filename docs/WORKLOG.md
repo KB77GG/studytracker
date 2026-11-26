@@ -1,8 +1,8 @@
 # 工作日志（跨账号 / 跨任务 / 跨机器进度同步）
 
-## 2026-11-26 — Claude审查六项修复与回归完成
+## 2026-11-26 — Claude六项修复已推送，新CI通过
 
-Origin代理兼容/有界body、持久计时含跨标签generation、active排序/批量词书/统一标题/service化完成；app较原main14+/3-。双Python242+20、Node66、3.10原生编译与静态通过，A02旧快照不改；合成IAB订正reload实过，Chrome/Safari等真设备仍待。报告review-fixes与两树交接更新；本轮候选待同任务分支commit/push跑新CI，不动main不部署不开启；原两树状态保持，详见CODEX_HANDOFF。
+修复 `364336db` 已commit/push仅任务分支，CI45821205587整体success（三业务job成功、旧非阻断lint失败）。代理Origin/有界body、持久计时与generation、排序/批量标题/service化完成；双Python242+20、Node66、原生3.10编译、IAB订正reload通过，独审无剩余阻塞。报告review-fixes/新CI证据及两交接以文档skip-ci共享，代码可跨机复审。main仍f81a5e4未动、未部署不开启、无生产/微信发布；真设备门槛仍待。实施收尾clean，旧main6ded原8M/27U保留仅两交接更新。
 
 ## 2026-11-26 — 网页背词已推审查分支，CI成功
 
