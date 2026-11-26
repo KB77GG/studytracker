@@ -24,13 +24,23 @@
 - Python3.13与3.10各：词汇/冲刺/模考等574 unittest、日期20 pytest、批1私有SQLite57 unittest全部通过。
 - 3.10的574套件沿原已审runner仅对旧测试datetime.UTC做进程内兼容别名；产品未注入别名。批1 57项和日期20项直接原生3.10运行，无别名。生产Python3.10编译检查独立通过。
 - Node198/198，独立精听退出9/9，部署拼写队列guard exit0。
-- 71项原生3.10编译/Jinja/JS/YAML检查通过（`static-checks.json`），定向Ruff与diff通过。缺PyYAML时改用已安装Ruby YAML，没有安装依赖。
+- 71项原生3.10编译/Jinja/JS/YAML检查通过（`static-checks.json`），定向Ruff与产品/测试/CI范围diff通过。缺PyYAML时改用已安装Ruby YAML，没有安装依赖。
 - 初跑Node5项因旧mock缺window监听失败；Python唯一失败为旧模板SHA。初始日志保留，修复测试适配后上述套件全过，未删测试或放宽产品断言。
 - 生产预检`production-preflight.json`通过：旧生产3b26404c tracked clean、active/running、worker1、gthread6、5002，词汇flag未配置/默认false；本轮未修改生产环境、未加载app或模型来验证。
 
 ## 发布状态
 
-候选本地回归与独审已通过。先推联合分支并等待远端CI通过，再将同一候选推main触发标准部署；部署后仅GET与系统只读核对。最终commit/CI/deploy/生产结果在收尾补记，不以本地通过冒称已上线。
+产品提交 **`efeac80c468cc47a6347d6136b6736c1ddbd0996`** 已commit/push至联合分支及main，并成功部署。
+
+- 分支CI [45859881600](https://github.com/KB77GG/studytracker/actions/runs/45859881600)：overall success，test/account-provisioning/task-planner三业务作业全部success；既有非阻断lint failure仍存在，不称全仓lint通过。
+- 部署 [45860718737](https://github.com/KB77GG/studytracker/actions/runs/45860718737)：success；生产启动时间2026-11-27 00:39:46 CST。
+- main CI [45860718805](https://github.com/KB77GG/studytracker/actions/runs/45860718805)：overall success，三个业务作业全部success，与分支CI为同一SHA；旧非阻断lint failure仍保留，完整结果见main-ci.json。
+- `production-postdeploy.json`全部检查通过：生产HEAD与产品提交一致、tracked clean、active/running、NRestarts0、实际单worker，配置gthread6/5002保持；28项产品SHA和11项公网静态资产SHA全部一致。`production-postdeploy-command.json`记录精确只读命令。
+- localhost和公网的词汇任务0页面/GET state均403 feature_disabled/no-store；页面boot为blocked，且没有学生身份/CSRF数据，关闭提示文案已随JS发布。生产开关未配置，默认false。`/practice`和登录页健康，受保护后台仍跳转登录。没有匿名调用任何写接口。
+- 刷题批1修复已生效；词汇代码已部署，但**尚未开放给学生**。剩余真设备门槛保留，不能将部署授权当作开启授权。
+- 当前报告、生产证据与最终交接以独立`[skip ci]`文档提交同步main/联合分支，不重复部署。最终文档HEAD以Git为准，服务器业务HEAD仍为上述产品提交。
+
+产品/测试/CI范围`git diff origin/main基线..产品提交 --check`通过；全量原始文档diff有patch上下文、初始失败日志空行和复制runner末尾空行的格式告警，原始证据保留，见`diff-check-evidence.json`。它们未改变测试结果；不能把全量文档diff说成零告警。
 
 ## 尚未验收与操作边界
 

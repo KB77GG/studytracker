@@ -1,0 +1,230 @@
+{
+  "checked_at_utc": "2026-11-26T16:40:51.655365+00:00",
+  "mode": "postdeploy",
+  "scope": "Read-only files/systemd/proc and anonymous GET; no app/model import, DB, POST, or student session.",
+  "head": "efeac80c468cc47a6347d6136b6736c1ddbd0996",
+  "expected_head": "efeac80c468cc47a6347d6136b6736c1ddbd0996",
+  "tracked_clean": true,
+  "service": {
+    "MainPID": "790067",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Fri 2026-11-27 00:39:46 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn_file_config": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "runtime_worker_count": 1,
+  "configured_vocabulary_flag": {
+    "enabled": false,
+    "source": "default_false"
+  },
+  "files_match": {
+    "api/__init__.py": true,
+    "api/miniprogram.py": true,
+    "api/practice_vocabulary.py": true,
+    "api/reading_study.py": true,
+    "app.py": true,
+    "config.py": true,
+    "services/practice_student_identity.py": true,
+    "services/practice_vocabulary_tasks.py": true,
+    "services/practice_vocabulary_web.py": true,
+    "services/task_plan_item_sync.py": true,
+    "services/vocabulary_task_submission.py": true,
+    "static/css/practice_vocabulary.css": true,
+    "static/js/practice_modes.js": true,
+    "static/js/practice_shell.js": true,
+    "static/js/practice_vocabulary_core.js": true,
+    "static/js/practice_vocabulary_events.js": true,
+    "static/js/practice_vocabulary_page.js": true,
+    "static/js/practice_vocabulary_recovery.js": true,
+    "static/js/practice_vocabulary_render.js": true,
+    "static/js/practice_vocabulary_render_details.js": true,
+    "static/js/practice_vocabulary_timing.js": true,
+    "static/js/practice_vocabulary_transport.js": true,
+    "templates/base.html": true,
+    "templates/listening/player.html": true,
+    "templates/listening/test_practice.html": true,
+    "templates/practice/index_content.html": true,
+    "templates/practice/vocabulary_task.html": true,
+    "templates/reading/test_practice.html": true
+  },
+  "loopback_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43",
+      "redirects_to_login": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "563ee2038963d5b734a72db489db5cd4c7ea386bd162c478f7d9be56e1ad873b",
+      "redirects_to_login": false,
+      "no_store": true,
+      "batch1_markers_present": true
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "no_store": true
+    },
+    "/practice/vocabulary/tasks/0": {
+      "status": 403,
+      "sha256": "70b16f58d864c1f5d983fa76a8da6999a1e56ab679c3121afe073f868a987cdb",
+      "redirects_to_login": false,
+      "no_store": true,
+      "boot_blocked": true,
+      "boot_feature_disabled": true,
+      "boot_has_no_student_or_csrf": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 403,
+      "sha256": "bbad2a21d1434728feaa67e6a50f9f887cb1457f030c358625571af107583767",
+      "redirects_to_login": false,
+      "no_store": true,
+      "feature_disabled": true
+    }
+  },
+  "public_pages": {
+    "/practice/vocabulary/tasks/0": {
+      "status": 403,
+      "sha256": "70b16f58d864c1f5d983fa76a8da6999a1e56ab679c3121afe073f868a987cdb",
+      "redirects_to_login": false,
+      "no_store": true,
+      "boot_blocked": true,
+      "boot_feature_disabled": true,
+      "boot_has_no_student_or_csrf": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 403,
+      "sha256": "bbad2a21d1434728feaa67e6a50f9f887cb1457f030c358625571af107583767",
+      "redirects_to_login": false,
+      "no_store": true,
+      "feature_disabled": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "563ee2038963d5b734a72db489db5cd4c7ea386bd162c478f7d9be56e1ad873b",
+      "redirects_to_login": false,
+      "no_store": true
+    }
+  },
+  "public_assets": {
+    "static/css/practice_vocabulary.css": {
+      "status": 200,
+      "sha256": "5ca1c488809fb906ca2db594ddec2f40c8e68398e27c3682837adbfc03b6fc23",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_modes.js": {
+      "status": 200,
+      "sha256": "20964c02457d873e17f1ef4e3bfad5410ec1917daba33b15055959741791ed96",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_shell.js": {
+      "status": 200,
+      "sha256": "b3c875efefa1a6ff111ae794d09520a16df9b3964cce70e62ee314034305f42e",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_core.js": {
+      "status": 200,
+      "sha256": "4cf0fd54683c404feb908c487627c338dcda5236004ab36a7591448dc601b946",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_events.js": {
+      "status": 200,
+      "sha256": "15244787156b97cb7fef188b00bf2f0bce82e423114431a505db98c7fe7bae3f",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_page.js": {
+      "status": 200,
+      "sha256": "a02aad4c9e4d6a32460b969269b0b5089fc8d7b8164792c0bc4dbe07eb0cdca8",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_recovery.js": {
+      "status": 200,
+      "sha256": "b4e0b4b2d80f6ee0d7f2b695462e003b79e9123d98b243d530d6e35c78cceba9",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_render.js": {
+      "status": 200,
+      "sha256": "cbe3b2cbb01ffc5a4c3ff480fc2e6acda14c8280f23dbbdd20f51bc006126a5b",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_render_details.js": {
+      "status": 200,
+      "sha256": "07ad7d64ec7fbacfeba8b6d367e0a3706884999383eca4ffad22be07b75389d6",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_timing.js": {
+      "status": 200,
+      "sha256": "998c094c2e61b58a5b9922c292ae96d18123010a2bcca50a976ed52c283e7227",
+      "redirects_to_login": false,
+      "no_store": false
+    },
+    "static/js/practice_vocabulary_transport.js": {
+      "status": 200,
+      "sha256": "2cbe73a5afce2d79441eb78507c52ab442a8c254fee2e711a87471a8c25dcb03",
+      "redirects_to_login": false,
+      "no_store": false
+    }
+  },
+  "checks": {
+    "head_matches": true,
+    "tracked_clean": true,
+    "service_active": true,
+    "gunicorn_config_expected": true,
+    "one_worker_running": true,
+    "configured_flag_disabled": true,
+    "loopback_/login": true,
+    "loopback_/practice": true,
+    "practice_batch1_markup": true,
+    "loopback_/tasks": true,
+    "loopback_/materials": true,
+    "public_asset_static/css/practice_vocabulary.css": true,
+    "public_asset_static/js/practice_modes.js": true,
+    "public_asset_static/js/practice_shell.js": true,
+    "public_asset_static/js/practice_vocabulary_core.js": true,
+    "public_asset_static/js/practice_vocabulary_events.js": true,
+    "public_asset_static/js/practice_vocabulary_page.js": true,
+    "public_asset_static/js/practice_vocabulary_recovery.js": true,
+    "public_asset_static/js/practice_vocabulary_render.js": true,
+    "public_asset_static/js/practice_vocabulary_render_details.js": true,
+    "public_asset_static/js/practice_vocabulary_timing.js": true,
+    "public_asset_static/js/practice_vocabulary_transport.js": true,
+    "source_manifest_matches": true,
+    "required_assets_in_manifest": true,
+    "loopback_vocabulary_page_disabled": true,
+    "loopback_vocabulary_state_disabled": true,
+    "public_vocabulary_page_disabled": true,
+    "public_vocabulary_state_disabled": true,
+    "disabled_ui_copy_shipped": true,
+    "public_practice_healthy": true
+  },
+  "limitations": [
+    "Anonymous HTTP checks do not validate a real student's assigned-task list or browser rendering.",
+    "gunicorn settings are read from the tracked config; process worker count and loopback port are checked independently.",
+    "Process environment may omit values appended by dotenv after exec; disabled HTTP responses are the postdeploy runtime evidence.",
+    "No new write endpoint is called, even with the feature disabled."
+  ],
+  "ok": true
+}

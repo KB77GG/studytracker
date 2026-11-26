@@ -1,11 +1,16 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-27 — 用户授权词汇与刷题批1联合部署，候选验证通过
+## 2026-11-27 — 词汇默认关闭与刷题批1已联合部署
 
-- **授权/树**：用户明确“你部署吧”，依此前一起部署约定整合词汇与批1；词汇开关保持关闭。新隔离树 `/private/tmp/studytracker-practice-web-joint-release-20261127` / `codex/practice-web-joint-release-20261127`，fresh main f5b06cc3，ff词汇0ab901e8，再按批1原14SHA核验后3way导入，原三树业务不动。开始干净；当前联合候选产品/测试/CI、报告/原审查证据及两交接待提交，路径由本轮manifest和Git状态记录。
-- **实现/复核**：8批1产品/5测试/CI与词汇/冲刺共同文件自动合并，保留全部；独审无默认关发布阻塞。仅追加两测试适配：window监听mock及缓存返回身份测试、经独审的模考模板SHA；原渲染字节断言保留。报告 `docs/reviews/practice-web-joint-release-20261127/` 含75项SHA与28项改动产品、初失败日志、精确argv/结果、生产只读脚本。
-- **验证**：同项目`.venv/bin/python docs/reviews/practice-web-joint-release-20261127/run_checks.py py313|py310|node`，双Python各574 unittest+20日期+57私有SQLite通过；3.10大套件仅旧datetime.UTC测试使用已审兼容入口，57+20原生无别名。Node198、退出9、拼写队列均过；71静态/原生3.10编译及定向Ruff/diff通过。未重复真设备，不把旧缺项标绿。
-- **发布预检/下一步**：仅SSH只读预检通过，生产仍3b26404c、active/running、单worker/gthread6/5002，开关默认false。候选尚未推main/部署；先推联合分支等CI，再同版本推main走标准部署，使用verify_production.py核对HEAD、产品/公网JS SHA、关开关的page/state403/no-store、原页面健康。不得开启词汇、写学生库或上传微信。最终发布状态收尾更新。
+- **授权/版本**：用户明确“你部署吧”。依此前联合发布和默认关闭约定，产品 **`efeac80c468cc47a6347d6136b6736c1ddbd0996`** 已commit/push联合分支及main并部署。词汇flag仍false，不是开放给学生；不包含网页批2/批3或微信前端发布。收尾报告/生产证据与两交接通过独立skip-ci文档提交同步main/联合分支，最终文档HEAD看Git；服务器业务HEAD保持efeac80c。
+- **实施树/来源**：`/private/tmp/studytracker-practice-web-joint-release-20261127` / `codex/practice-web-joint-release-20261127`，fresh main f5b06cc3新建clean树，ff词汇0ab901e8，再将批1源树14项SHA核验后3way导入。CI/index_content/listening模板自动合并并独审保留全部改动；未合Claude文档分支。只有两测试适配（window事件mock/缓存返回身份断言、已审模板SHA），无额外产品行为修改。源三树业务未改，详本树状态。
+- **验证**：`/Users/zhouxin/Desktop/studytracker/.venv/bin/python docs/reviews/practice-web-joint-release-20261127/run_checks.py py313|py310|node`（每模式独立执行）→双Python各574 unittest+20日期+57批1私有SQLite通过；Node198、独立退出9、拼写guard通过。3.10大套件仍仅对旧datetime.UTC测试使用已审兼容入口，57+20原生无别名；71项原生3.10编译/Jinja/JS/YAML、定向Ruff和产品diff通过。初Node mock/旧模板SHA失败与重跑日志均保留。原始patch/log及复制runner尾空行有文档diff格式告警，未改原始证据，不能称全量diff零告警。
+- **CI/部署**：[分支CI45859881600](https://github.com/KB77GG/studytracker/actions/runs/45859881600) overall success，test/account-provisioning/task-planner全部成功，旧非阻断lint failure保留。[Deploy45860718737](https://github.com/KB77GG/studytracker/actions/runs/45860718737) success。[main CI45860718805](https://github.com/KB77GG/studytracker/actions/runs/45860718805)同SHA overall success，三个业务作业均成功；旧非阻断lint failure保留，完整结果见报告main-ci.json。
+- **生产验收**：`verify_production.py`经SSH/stdin只读运行，精确argv在production-postdeploy-command.json；不导入app/模型、不调用POST、不读学生会话。生产/root/apps/studytracker HEAD efeac80c/ tracked clean、active/running、NRestarts0、实际1worker，gthread6/5002配置保持，00:39:46 CST启动。28产品SHA、11公网JS/CSS SHA全匹配；loopback+公网词汇task0页面/state均403 feature_disabled/no-store，boot blocked且无身份/CSRF，`/practice`与登录健康、后台登录门禁仍在。环境开关未配置、default_false，未改环境值。无本次schema变更、人工生产学生记录写入、微信上传/提审/发布。
+- **证据/未验**：报告 `docs/reviews/practice-web-joint-release-20261127/README.md`，manifest75项、完整命令/日志/独审/CI/预检后验/版本事实可复核。旧浏览器订正刷新、Chrome网络恢复和离页603秒只计95秒证据有效；系统IME/物理长按（Safari截图空白待查）、指定宽度原生缩放、手机互切、教师家长真实UI仍待，不因部署标绿。匿名GET不冒称已登录学生逐个看卡片。
+- **下一步**：本次默认关闭部署已完成，刷题批1修复已生效。要对学生开放词汇，先完成余下验收并按用户新授权开启开关。后续开发以fresh main建立隔离树，不继续用旧Mac主树或批1源树直接发布。原测试端口本轮未启动，未遗留本地合成服务。
+
+- **本树状态**：联合树本轮发布前15个产品/测试/CI变化（批1原14项加模考快照测试）、复制审查证据/新报告与两交接已随产品commit；收尾仅发布证据/交接待skip-ci文档同步，之后应clean。
 
 ## 2026-11-26 — 原生浏览器补验已恢复，离页计时与网络恢复通过
 

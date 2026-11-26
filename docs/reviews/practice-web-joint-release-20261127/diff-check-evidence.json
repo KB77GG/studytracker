@@ -1,0 +1,34 @@
+{
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "0ab901e8..HEAD",
+        "--check"
+      ],
+      "returncode": 2,
+      "output": "docs/reviews/practice-web-batch1-20261126/run_tests.py:65: new blank line at EOF.\ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:39: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:42: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:53: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:60: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:61: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:77: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:133: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:149: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:169: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:182: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:189: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:203: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:209: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:239: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:253: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:264: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:267: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:301: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:306: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:405: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:468: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:480: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:486: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:492: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:503: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:508: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:526: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:656: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:658: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:1028: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:1034: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/batch1.patch:1069: trailing whitespace.\n+ \ndocs/reviews/practice-web-joint-release-20261127/node-initial-missing-window-listener.log:215: trailing whitespace.\n+  \ndocs/reviews/practice-web-joint-release-20261127/node-initial-missing-window-listener.log:233: trailing whitespace.\n+  \ndocs/reviews/practice-web-joint-release-20261127/node-initial-missing-window-listener.log:251: trailing whitespace.\n+  \ndocs/reviews/practice-web-joint-release-20261127/node-initial-missing-window-listener.log:269: trailing whitespace.\n+  \ndocs/reviews/practice-web-joint-release-20261127/node-initial-missing-window-listener.log:287: trailing whitespace.\n+  \n"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "origin/main..HEAD",
+        "--check",
+        "--",
+        ".github",
+        "api",
+        "services",
+        "static",
+        "templates",
+        "tests",
+        "app.py",
+        "config.py"
+      ],
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "note": "Full new-document diff flags raw patch context, raw failure-log blank lines, and copied test-runner final blank line. Original evidence preserved. Product/test/CI diff check passes; no functional change required."
+}
