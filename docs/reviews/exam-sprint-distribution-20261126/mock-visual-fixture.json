@@ -1,0 +1,18 @@
+{
+  "scope": "Real Flask-rendered staff mock template, CSS and first-party JS; synthetic catalog only; no app import, database, server, network or form submission.",
+  "synthetic_catalog": {
+    "listening_groups": 4,
+    "reading_groups": 3,
+    "items_per_group": 20
+  },
+  "source_sha256": {
+    "templates/base.html": "a205525709236ab589b0f03802ab7e1fc190d1308a03f92ce651c75e27d593e4",
+    "templates/admin/mock_exams_form.html": "9804fac22568e6f2110b3e0b6f509659a72c343a927f3f6a44a0c945f3d0a562",
+    "templates/admin/_mock_sprint_picker.html": "c9409ef9e5f3da29b77157b4671458ae7f58cc4e060295fb55a054c5b8ed6162",
+    "static/js/mock_sprint_picker.js": "b1785c8f9843bbbbb2b34e059b8dd524b334d4a785f370033d1c2561405159fd",
+    "static/style.css": "c7bd0b28608fc7913c29e6f44bab0b7e7bf598128fe15ef729486241ee84b597",
+    "static/admin_suite_v2.css": "170be39ad9f3beeb7495b8f7a5874910bba5babe6cab82387be5c2fc7598ff03"
+  },
+  "third_party_js": "Planned browser interception only; Chrome launch approval was aborted, so no browser requests or screenshots were observed.",
+  "status": "fixture_only_browser_not_executed"
+}

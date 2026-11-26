@@ -1,0 +1,52 @@
+{
+  "product_commit": "dcfbd46dad34e957add0301d2a27d954b2c0b699",
+  "files": {
+    ".github/workflows/ci.yml": "e6b19713711c948f461a9fa3ded578646a9acd63c42e64ab9c4a39c44c2ac22b",
+    "api/miniprogram.py": "1e56ff7ed785eee35068fdcfab82e92c34b1f1829f9ad1128a81f86aff2c9f5a",
+    "api/mock_exam_creation.py": "ce6f716e22e31f39786c3837c5e94e7aa97857eadd03a6a82446c962183d10df",
+    "api/teacher_practice_catalog.py": "106332a563f3d35ea711295a30a0d4a461e71ed16a56ad5b2062632dc12d5141",
+    "app.py": "86214eebe2a47c4504a77fcb651ec73da8d9ce95d2f5a038a16323aa5f8c25d5",
+    "services/exam_sprint_catalog.py": "531a5466bbd8ced02ef7f49ad38e4fa997a9062519d7ea3faaa32de50332214b",
+    "services/exam_sprint_papers.py": "ec9fe452b1d9608f2fe3c42413ee4dcb480964b04cae8da81047315ce96e59af",
+    "services/exam_sprint_student.py": "c7314e72229b9d81f7c5f01261f20e83ed5bcd7fbdf57fc47123904f94ed462c",
+    "services/mock_exam_paper_access.py": "c03b89b8c854b565af46800902887a53942d23cfe7a99f6d60ad0f058578f0a0",
+    "services/web_practice_tasks.py": "78ba58b69227f27020e33b3ecc0cff08107638104e3d8549f7241b69be68b398",
+    "static/js/mock_sprint_picker.js": "b1785c8f9843bbbbb2b34e059b8dd524b334d4a785f370033d1c2561405159fd",
+    "templates/admin/_mock_sprint_picker.html": "c9409ef9e5f3da29b77157b4671458ae7f58cc4e060295fb55a054c5b8ed6162",
+    "templates/admin/mock_exams_form.html": "9804fac22568e6f2110b3e0b6f509659a72c343a927f3f6a44a0c945f3d0a562",
+    "templates/listening/test_practice.html": "e64167f71f4c7e516c850008e6b48b26180fa69b496c9e5de5677a61416c1557",
+    "templates/tasks.html": "c5363204e13cb59d22e5fc14bab3a39b85f9b7829e38ca08189d75e7932eb323",
+    "tests/test_exam_sprint_assignment_picker.js": "687f1d5aee184308597d1e6d9863905f3ce7144b3feb20c9604af9e436f0909e",
+    "tests/test_exam_sprint_assignments.py": "76ee5f59cc4c21b0ef117c7f5a4d6eec09645586c17258b67719db54df47af53",
+    "tests/test_exam_sprint_catalog.py": "6e13d3a97a236f0ccbf99092c4579b80f914c319e81b769228358e09bb921749",
+    "tests/test_exam_sprint_papers.py": "ab7baa734ee77a7450b96fc83fc1581d947b6a5a61520c71f4e830658036a521",
+    "tests/test_exam_sprint_student.py": "94155453a981186c59d3a7fcaabb88d84facf53ede656d9477800d5360011815",
+    "tests/test_mock_sprint_creation.py": "67fae2298acc7c0913b4b2b391fdcc25b55c25d93b769fa03718cdd14ffc668b",
+    "tests/test_mock_sprint_picker.js": "cea12b6282924d5ef1e42c0fa0126a2f022be0b97e392d9d647daaa2092e7cc5",
+    "tests/test_exam_integrity_e2e.py": "6abdefa74d9921263813819abebb11033e9c74e1eb105beb6531442d230c7eed"
+  },
+  "python_regression": {
+    "passed": 96,
+    "command": "PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_sprint_catalog tests.test_exam_sprint_assignments tests.test_exam_sprint_student tests.test_exam_sprint_papers tests.test_mock_sprint_creation tests.test_miniprogram_web_practice tests.test_miniprogram_teacher_jijing tests.test_miniprogram_parent_report tests.test_parent_web_practice_report tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes tests.test_mock_exam_student_review tests.test_mock_exam_template_isolation tests.test_exam_sprint_routes -q"
+  },
+  "node_regression": {
+    "passed": 30,
+    "command": "node --test tests/test_exam_sprint_assignment_picker.js tests/test_mock_sprint_picker.js tests/test_listening_practice_client.js tests/test_mock_review_paper.js"
+  },
+  "data_acceptance": "current-papers-acceptance.json",
+  "python310_ast": "passed",
+  "targeted_ruff": "passed",
+  "targeted_black": "passed",
+  "independent_review": "integration_map reviewed mock answer access, immutable composition and student compatibility; no remaining blockers",
+  "release_head": "3b26404ce21f7528e3c7e63703ca7f8268ad0465",
+  "followup_checks": {
+    "malformed_paper_json_guard": "6 store tests passed",
+    "beijing_task_fixture_date": "4 assignment route tests passed",
+    "browser_visual": "Not run: Chrome approval aborted; no screenshot or pass claim."
+  },
+  "exam_regression": {
+    "passed": 115,
+    "command": "PYTHONWARNINGS=ignore /Users/zhouxin/Desktop/studytracker/.venv/bin/python -B -m unittest tests.test_exam_integrity_service tests.test_exam_integrity_routes tests.test_exam_integrity_adversarial tests.test_exam_integrity_e2e tests.test_mock_exam_runtime tests.test_mock_exam_runtime_routes -q",
+    "note": "Existing integrity template guard retained, baseline hash updated only for reviewed listening media path changes; 96/115 suites overlap and must not be summed."
+  }
+}
