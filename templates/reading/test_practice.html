@@ -478,7 +478,7 @@ body[data-experience-mode="simulation"] .group {
     <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
   </div>
   <div class="exam-mode-shell__right">
-    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
+    <span class="exam-mode-shell__saved" id="examSavedIndicator">Not saved</span>
     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
     <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
   </div>
@@ -504,13 +504,13 @@ body[data-experience-mode="simulation"] .group {
     </div>
     <div class="topbar-actions">
       {% if not exam_context and test.source != 'ninefen' %}
-      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
+      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden aria-hidden="true" data-reveal-when-ready="false" data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
       {% endif %}
       <div class="timer" aria-live="polite" data-capability="showElapsedTimer">
         <div class="timer-label">用时</div>
         <div class="timer-value" id="timerValue">00:00</div>
       </div>
-      <span class="practice-shell__save" data-practice-save-status aria-live="polite" data-capability="showPracticeSyncStatus">已保存</span>
+      <span class="practice-shell__save" data-practice-save-status aria-live="polite" data-capability="showPracticeSyncStatus">尚未保存</span>
       <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
       <button class="btn" type="button" id="resetBtn" hidden>重做</button>
     </div>
@@ -574,7 +574,13 @@ body[data-experience-mode="simulation"] .group {
 <dialog class="practice-exit-dialog" id="practiceExitDialog">
   <div class="practice-exit-dialog__body">
     <h2>退出并保存进度？</h2>
-    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
+    {% if exam_context %}
+    <p>模考会保留当前答案。你可以继续答题，或退出后从模考流程重新进入；已经开始的计时不会暂停。</p>
+    {% elif practice_context %}
+    <p>退出前会先保存当前答案。保存成功后返回任务列表，可以再次进入继续作答。</p>
+    {% else %}
+    <p>退出前会先保存当前答案。使用同一浏览器再次进入，可以继续作答。</p>
+    {% endif %}
   </div>
   <div class="practice-exit-dialog__actions">
     <button type="button" data-practice-exit-cancel>继续答题</button>
@@ -745,7 +751,12 @@ function restoreExamDraft() {
   if (practiceContext?.read_only) return;
   try {
     const saved = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}");
-    if (saved && typeof saved === "object" && !Array.isArray(saved)) Object.assign(answers, saved);
+    if (saved && typeof saved === "object" && !Array.isArray(saved)) {
+      Object.assign(answers, saved);
+      if (Object.values(saved).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
+        updateExamSavedIndicator("Restored");
+      }
+    }
   } catch (_error) {
     localStorage.removeItem(examDraftStorageKey);
   }
@@ -760,6 +771,9 @@ async function restoreServerExamDraft() {
     const local = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}") || {};
     Object.assign(answers, data.answers, local);
     renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
+    if (Object.values(data.answers).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
+      updateExamSavedIndicator("Restored");
+    }
     updateSummary();
     syncQuestionNav();
   } catch (_error) {
@@ -1538,7 +1552,7 @@ async function loadExistingSubmission() {
     updateSummary();
     setSyncStatus(isMockExamReview ? "已加载模考原题与作答记录" : "已加载题型专项原题与作答记录", "ok");
     lockReadOnlyReviewControls();
-    practiceShellController?.markSaved();
+    practiceShellController?.markRestored?.('已加载记录');
     syncQuestionNav();
     return;
   }
@@ -1580,7 +1594,7 @@ async function loadExistingSubmission() {
     paintResults();
     updateSummary();
     setSyncStatus("已加载今天的上次提交记录", "ok");
-    practiceShellController?.markSaved();
+    practiceShellController?.markRestored?.('已加载记录');
     syncQuestionNav();
   } catch (_error) {
     // 历史记录加载失败不影响当前练习。
@@ -1596,7 +1610,10 @@ async function revealReadingStudyEntry() {
     });
     if (!response.ok) return;
     const data = await response.json();
-    if ((data.passages || []).length) entry.hidden = false;
+    const ready = Array.isArray(data.passages) && data.passages.length > 0;
+    entry.dataset.revealWhenReady = String(ready);
+    entry.hidden = !ready || !experienceCapabilities.canUseReadingStudy;
+    entry.setAttribute("aria-hidden", String(entry.hidden));
   } catch (_error) {
     // 解析入口是渐进增强；查询失败不影响刷题页。
   }
@@ -1626,9 +1643,11 @@ setInterval(() => {
 // its own back guard to the joint browser history.
 practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'ninefen' ? '/practice/sprint/reading' : rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
-  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : (rawTestData.source === 'ninefen' ? 'exam_sprint' : rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
-  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
-  initialSaved: true,
+  fallbackMode: isMockExamReview ? 'mock_exam_review' : examContext ? 'mock_exam_process' : practiceContext ? 'task_detail' : (rawTestData.source === 'ninefen' ? 'exam_sprint' : rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
+  confirmExit: ({ dirty, saving }) => !practiceContext?.read_only && Boolean(
+    dirty || saving || (examContext?.started_at && examContext?.deadline_at)
+  ),
+  initialSaved: false,
   save: persistExamDraft
 });
 restoreExamDraft();

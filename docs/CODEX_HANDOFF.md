@@ -1,5 +1,12 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
+## 2026-11-27 — 用户授权词汇与刷题批1联合部署，候选验证通过
+
+- **授权/树**：用户明确“你部署吧”，依此前一起部署约定整合词汇与批1；词汇开关保持关闭。新隔离树 `/private/tmp/studytracker-practice-web-joint-release-20261127` / `codex/practice-web-joint-release-20261127`，fresh main f5b06cc3，ff词汇0ab901e8，再按批1原14SHA核验后3way导入，原三树业务不动。开始干净；当前联合候选产品/测试/CI、报告/原审查证据及两交接待提交，路径由本轮manifest和Git状态记录。
+- **实现/复核**：8批1产品/5测试/CI与词汇/冲刺共同文件自动合并，保留全部；独审无默认关发布阻塞。仅追加两测试适配：window监听mock及缓存返回身份测试、经独审的模考模板SHA；原渲染字节断言保留。报告 `docs/reviews/practice-web-joint-release-20261127/` 含75项SHA与28项改动产品、初失败日志、精确argv/结果、生产只读脚本。
+- **验证**：同项目`.venv/bin/python docs/reviews/practice-web-joint-release-20261127/run_checks.py py313|py310|node`，双Python各574 unittest+20日期+57私有SQLite通过；3.10大套件仅旧datetime.UTC测试使用已审兼容入口，57+20原生无别名。Node198、退出9、拼写队列均过；71静态/原生3.10编译及定向Ruff/diff通过。未重复真设备，不把旧缺项标绿。
+- **发布预检/下一步**：仅SSH只读预检通过，生产仍3b26404c、active/running、单worker/gthread6/5002，开关默认false。候选尚未推main/部署；先推联合分支等CI，再同版本推main走标准部署，使用verify_production.py核对HEAD、产品/公网JS SHA、关开关的page/state403/no-store、原页面健康。不得开启词汇、写学生库或上传微信。最终发布状态收尾更新。
+
 ## 2026-11-26 — 原生浏览器补验已恢复，离页计时与网络恢复通过
 
 - **范围/版本**：用户要求再次尝试真设备验收。本轮使用实际Chrome/Safari窗口操作本机合成任务，实施树 `/private/tmp/studytracker-web-vocabulary-20261126` / `codex/web-vocabulary-task-page-20261126`，开工HEAD `e87325ab107034355c44844a31faca3180557883` 与远端相同且clean；产品仍合并提交 `96ce82de`，64项SHA与main-integration manifest全部相同。没有产品、测试或CI改动；新增 `docs/reviews/web-vocabulary-task-page-20261126/browser-retry/`（报告、合成故障服务、HTTP自测、原始截图/AX、审计与只读证据核对脚本）并更新两交接。

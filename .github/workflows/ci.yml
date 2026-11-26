@@ -92,6 +92,9 @@ jobs:
             tests/test_listening_review_audio.js \
             tests/test_question_type_review_readonly.js \
             tests/test_practice_shell.js \
+            tests/test_practice_modes.js \
+            tests/test_practice_center_identity.js \
+            tests/test_reading_study_entry.js \
             tests/test_mock_exam_review_frames.js \
             tests/test_mock_review_paper.js \
             tests/test_listening_clip_player.js \
@@ -124,6 +127,17 @@ jobs:
         run: python -m unittest tests.test_exam_sprint_assignments tests.test_exam_sprint_student tests.test_mock_sprint_creation -v
       - name: Test automatic student and parent accounts
         run: python -m unittest tests.test_auto_student_accounts -v
+      - name: Test practice center and reading study entry with isolated data
+        run: |
+          python docs/reviews/practice-web-batch1-20261126/run_tests.py \
+            tests.test_practice_center_batch1 \
+            tests.test_reading_study \
+            tests.test_practice_navigation \
+            tests.test_practice_navigation_routes \
+            tests.test_practice_workspace_regression \
+            tests.test_practice_portal_catalog_grouping \
+            tests.test_practice_catalog \
+            tests.test_reading_practice_layout
       - name: Test classroom vocabulary import and student learning
         run: python -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -v
       - name: Test vocabulary entry performance and review eligibility

@@ -1,0 +1,805 @@
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+...../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+............................/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:951: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  cursor.execute(statement, parameters)
+./private/tmp/studytracker-practice-web-joint-release-20261127/services/vocabulary_mastery.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_practice_vocabulary_routes.py:666: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  task.cancelled_at = datetime.utcnow()
+..../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f2e22f0>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_practice_vocabulary_routes.py:173: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  mastery.meaning_recall_next_due_at = datetime.utcnow() - timedelta(days=1)
+..../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10edd3010>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e17f970>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f3e85e0>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f6a54e0>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fa52020>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1101def20>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../private/tmp/studytracker-practice-web-joint-release-20261127/api/auth_utils.py:79: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/vocab_review.py:152: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+...[2026-11-27 00:30:10,771] ERROR in practice_vocabulary: Vocabulary web database operation failed
+Traceback (most recent call last):
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/private/tmp/studytracker-practice-web-joint-release-20261127/api/practice_vocabulary.py", line 244, in settle
+    result = settle_vocabulary_group_submission(
+        g.practice_student.user,
+    ...<2 lines>...
+        uploader_id=g.practice_student.user.id,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+sqlalchemy.exc.OperationalError: (builtins.Exception) locked
+[SQL: synthetic]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+./private/tmp/studytracker-practice-web-joint-release-20261127/api/dictation.py:78: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(int(payload.get("sub", 0)))
+./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f6a56c0>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e17f010>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fdd3e20>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fd61990>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ff257b0>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10897c4f0>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11067d8a0>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1108e2e30>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110a27a60>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/topological.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f27cd60>
+  edges[child].add(parent)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.........../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11109c040>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f475210>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f27cf40>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f493100>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10eaa3100>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea349a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111d65c0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111442980>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d79210>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f5a80>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+............./private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:3422: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c18220>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea631f0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110ace890>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110893d30>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110624b80>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1223: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c36b60>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a58a0>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f64d0>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11067e3e0>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1108be020>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11111c5e0>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112896200>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:541: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112a79300>
+  return [make_row(row) for row in rows]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:126: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1127ec310>
+  def _compiler_dispatch(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fa50c70>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112dcc8b0>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11143fc40>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1127ec040>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112dcc220>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c372e0>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c37d30>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f6a4130>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110893c40>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fdd0f40>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d78d60>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111d7e20>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:337: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112b05a80>
+  def _de_clone(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ebd18a0>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ebd2c50>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2622: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  current_task = Task.query.get(task_id)
+./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113106d40>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1131049a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1118949a0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fa532e0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea631f0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110ace3e0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea36200>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e40220>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1125d96c0>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e40310>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:837: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110555d50>
+  code = compile(module, "<werkzeug routing>", "exec")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../private/tmp/studytracker-practice-web-joint-release-20261127/api/vocab_review.py:99: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/dictation_review.py:79: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = value or datetime.utcnow()
+./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  rv = self.get(ident)
+./Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111ce5030>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110557e20>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f11de40>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e926110>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111ce7b50>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111ce6e30>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:3108: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ebd08b0>
+  flattened_clauses = itertools.chain.from_iterable(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fc5e6b0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112477790>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ed35c60>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ebd1120>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112f9c4f0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1132a88b0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:1335: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1133bb1f0>
+  def __get__(self, obj, cls):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11356d3f0>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110554e50>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c1a7a0>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d7b4c0>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112d73e20>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1137ee200>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112d73f10>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10eaa04f0>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fc92a70>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1122c76a0>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fa50400>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:221: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1133fb100>
+  @util.preload_module("sqlalchemy.sql.elements")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1132434c0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110891990>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e927e20>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c193f0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fc93f10>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1122af4c0>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1591: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112069f30>
+  return frozenset(_expand_cloned(self.proxy_set))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113174d60>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e17e6b0>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea36110>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c1a3e0>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d795d0>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1136533d0>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/cache_key.py:289: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113a2f970>
+  result += (attrname, obj)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_vocabulary_flow_backlog_gate.py:115: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  due = datetime.utcnow() - timedelta(days=1)
+/private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_vocabulary_flow_backlog_gate.py:116: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  later = datetime.utcnow() + timedelta(days=5)
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11368ca90>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea63880>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e924f40>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1125db1f0>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fc90b80>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:812: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1124623e0>
+  def _instance_processor(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../private/tmp/studytracker-practice-web-joint-release-20261127/app.py:2457: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+...../private/tmp/studytracker-practice-web-joint-release-20261127/api/auth_utils.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "iat": int(datetime.utcnow().timestamp()),
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/auth_utils.py:28: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "exp": int((datetime.utcnow() + timedelta(hours=TOKEN_TTL_HOURS)).timestamp()),
+/private/tmp/studytracker-practice-web-joint-release-20261127/models.py:80: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  self.token_issued_at = datetime.utcnow()
+.................../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_vocabulary_error_review_integration.py:670: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:933: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f6a5990>
+  cached_populators["quick"].append((prop.key, getter))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_vocabulary_error_review_integration.py:638: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_vocabulary_error_review_integration.py:611: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113d57d30>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ea37880>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ebd2b60>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110554f40>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f11ea70>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f0757b0>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/coercions.py:524: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110891b70>
+  def _post_coercion(self, resolved, **kw):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113ceb010>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110892d40>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110acf3d0>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1125649a0>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110150f40>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1667: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1141b5b70>
+  for row_value, col in zip(row, returning_cols):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1105565c0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11443f100>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1148364d0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111827100>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f6f20>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113abe980>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11329a6b0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113f2c6d0>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py:957: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x114060b80>
+  populators = {key: list(value) for key, value in cached_populators.items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py:3804: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112dcfc40>
+  if bp.key in cksm:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:126: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11289a020>
+  def _compiler_dispatch(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x114bafe20>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x114bae2f0>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d7b3d0>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112dcdb70>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1118255d0>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112dcfa60>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e17cf40>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x114f196c0>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10edd25c0>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/crud.py:159: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10ed34c70>
+  visiting_cte = kw.get("visiting_cte", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+............/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1585: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110acc7c0>
+  return frozenset([self._deannotate()]).union(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1585: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x110d78d60>
+  return frozenset([self._deannotate()]).union(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:1585: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x11289a7a0>
+  return frozenset([self._deannotate()]).union(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+............./private/tmp/studytracker-practice-web-joint-release-20261127/app.py:721: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  published_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8059: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8101: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:7720: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:7747: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+.../private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2108: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+../private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2762: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+.../private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2673: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2714: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  item = PlanItem.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2804: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  item = PlanItem.query.get(task_id)
+.../private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:1901: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  task = Task.query.get(task_id)
+................../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113500e50>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f4765c0>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_miniprogram_web_practice.py:165: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  plan_item=item, started_at=datetime.utcnow() - timedelta(seconds=60),
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2867: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  session = PlanItemSession.query.get(session_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2870: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  requested_task = Task.query.get(task_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:2874: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  else PlanItem.query.get(task_id)
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:126: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113b29300>
+  def _compiler_dispatch(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113b29300>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f4771f0>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1101ddb70>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113b29120>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x113b29a80>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e9267a0>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/weakref.py:415: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e927970>
+  return self.data[ref(key)]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e9267a0>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e925030>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/werkzeug/routing/rules.py:771: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f6110>
+  _convert(elem) if is_dynamic else ast.Constant(elem)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:410: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f7970>
+  def _gen_cache_key(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:410: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f6110>
+  def _gen_cache_key(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:410: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f73d0>
+  def _gen_cache_key(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+../private/tmp/studytracker-practice-web-joint-release-20261127/api/question_type_practice.py:403: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  attempt.started_at = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/question_type_practice.py:445: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  submitted_at = datetime.utcnow()
+./Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:172: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e805b70>
+  return operator.itemgetter(index)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py:172: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e8071f0>
+  return operator.itemgetter(index)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/miniprogram.py:3579: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ten_min_ago = datetime.utcnow() - timedelta(minutes=10)
+../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/base.py:1128: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e8048b0>
+  self._with_options += tuple(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a53f0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/visitors.py:134: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a66b0>
+  meth = getter(visitor)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......./private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:38: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at = now or datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:129: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:167: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "saved_at": datetime.utcnow().isoformat() + "Z",
+.../private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:106: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  current_time = now or datetime.utcnow()
+../Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:54: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x111c36b60>
+  return compile(source, filename, mode, flags,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:54: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a66b0>
+  return compile(source, filename, mode, flags,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:54: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a7d30>
+  return compile(source, filename, mode, flags,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:54: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a76a0>
+  return compile(source, filename, mode, flags,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:54: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a6f20>
+  return compile(source, filename, mode, flags,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_review_workflow.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return datetime.utcnow()
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/visitor.py:33: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a7880>
+  return getattr(self, f"visit_{type(node).__name__}", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/jinja2/visitor.py:33: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a5990>
+  return getattr(self, f"visit_{type(node).__name__}", None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.................................................................................................................................................../private/tmp/studytracker-practice-web-joint-release-20261127/services/exam_integrity_rules.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  value = now or datetime.utcnow()
+................................../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+........................../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_routes.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  reading_started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_routes.py:92: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  reading_deadline_at=datetime.utcnow() + timedelta(hours=1),
+../private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_routes.py:537: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_routes.py:575: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  state.last_seen_at = datetime.utcnow() - timedelta(seconds=10)
+../Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10fed9300>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e924e50>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e926f20>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e927c40>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e41a80>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e42d40>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x112e43010>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1135025c0>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10f475300>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e805990>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a4d60>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e9273d0>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d549c60>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f7880>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1111f7010>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e8072e0>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e807970>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1115a5c60>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/sqlalchemy/util/_collections.py:327: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10d2d0f40>
+  self._members = OrderedDict()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..../private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:38: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:129: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/api/mock_exam_student.py:167: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "saved_at": datetime.utcnow().isoformat() + "Z",
+................................/Users/zhouxin/Desktop/studytracker/.venv/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  rv = self.get(ident)
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_review_workflow.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8513: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:207: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  current_time = now or datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_e2e.py:157: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  setattr(row, section + "_submitted_at", datetime.utcnow())
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8773: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8817: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8513: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:91: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at = now or datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:58: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return bool(deadline and (now or datetime.utcnow()) >= deadline)
+/private/tmp/studytracker-practice-web-joint-release-20261127/services/mock_exam_runtime.py:161: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  submitted_at = now or datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8773: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8817: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8977: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8513: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/tests/test_exam_integrity_e2e.py:47: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  row.locked_at = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8773: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8817: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8977: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8513: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/tests/exam_integrity_e2e_support.py:177: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  setattr(row, section + "_deadline_at", datetime.utcnow() + timedelta(seconds=seconds))
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8773: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8817: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8977: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+./private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  started_at=datetime.utcnow(),
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8513: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  exam = MockExam.query.get(exam_id)
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8773: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8817: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+/private/tmp/studytracker-practice-web-joint-release-20261127/app.py:8977: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  now = datetime.utcnow()
+.
+----------------------------------------------------------------------
+Ran 574 tests in 47.067s
+
+OK

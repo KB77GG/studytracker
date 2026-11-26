@@ -1,0 +1,1071 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 05250e09..0f434f1c 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -84,6 +84,9 @@ jobs:
+             tests/test_listening_review_audio.js \
+             tests/test_question_type_review_readonly.js \
+             tests/test_practice_shell.js \
++            tests/test_practice_modes.js \
++            tests/test_practice_center_identity.js \
++            tests/test_reading_study_entry.js \
+             tests/test_mock_exam_review_frames.js \
+             tests/test_mock_review_paper.js \
+             tests/test_listening_clip_player.js \
+@@ -111,6 +114,17 @@ jobs:
+             'certifi>=2024.0.0' 'websocket-client>=1.7' 'openpyxl>=3.1'
+       - name: Test automatic student and parent accounts
+         run: python -m unittest tests.test_auto_student_accounts -v
++      - name: Test practice center and reading study entry with isolated data
++        run: |
++          python docs/reviews/practice-web-batch1-20261126/run_tests.py \
++            tests.test_practice_center_batch1 \
++            tests.test_reading_study \
++            tests.test_practice_navigation \
++            tests.test_practice_navigation_routes \
++            tests.test_practice_workspace_regression \
++            tests.test_practice_portal_catalog_grouping \
++            tests.test_practice_catalog \
++            tests.test_reading_practice_layout
+       - name: Test classroom vocabulary import and student learning
+         run: python -m unittest tests.test_classroom_vocabulary tests.test_classroom_vocabulary_learning tests.test_dictation_answers -v
+       - name: Test vocabulary entry performance and review eligibility
+diff --git a/api/reading_study.py b/api/reading_study.py
+index c13baebd..a0d4c47a 100644
+--- a/api/reading_study.py
++++ b/api/reading_study.py
+@@ -8,12 +8,14 @@ push logic into ``_helper`` functions per repo convention.
+ from __future__ import annotations
+ 
+ import re
++from urllib.parse import quote, urlencode
+ 
+ from flask import (
+     Blueprint,
+     Response,
+     abort,
+     jsonify,
++    redirect,
+     render_template,
+     request,
+     session,
+@@ -63,11 +65,25 @@ def _ready_passages(test_id: str) -> list[ReadingPassageAnalysis]:
+ 
+ def _practice_url(test_id: str, source_kind: str) -> str:
+     """Link back to the matching reading practice page (app.py routes)."""
++    test_id = quote(test_id, safe="")
+     if source_kind == "reading_jijing":
+         return f"/reading/jijing/{test_id}"
+     return f"/reading/test/{test_id}"
+ 
+ 
++def _unavailable_study_redirect(test_id: str):
++    """Keep the student on this test when its analysis is not published yet."""
++    # The generic reading route loads both Cambridge and Jijing tests. Do not
++    # trust a caller-supplied return URL to choose the redirect destination.
++    target = _practice_url(test_id, "reading_test")
++    keys = (
++        "task_id", "token", "passage", "history_attempt",
++        "practice_return", "practice_exit", "practice_source", "practice_identity",
++    )
++    query = urlencode({key: request.args[key] for key in keys if key in request.args})
++    return redirect(f"{target}?{query}" if query else target)
++
++
+ def _current_student() -> StudentProfile | None:
+     """Resolve the practice student identity for Reading Study.
+ 
+@@ -117,7 +133,7 @@ def _requested_normalized_text() -> str:
+ def reading_study_page(test_id: str):
+     rows = sorted(_ready_passages(test_id), key=_passage_sort_key)
+     if not rows:
+-        abort(404)
++        return _unavailable_study_redirect(test_id)
+     context = {
+         "test_id": test_id,
+         "passages": [_passage_meta(row) for row in rows],
+diff --git a/static/js/practice_modes.js b/static/js/practice_modes.js
+index b7639806..b43f1269 100644
+--- a/static/js/practice_modes.js
++++ b/static/js/practice_modes.js
+@@ -144,8 +144,11 @@
+     scope.querySelectorAll("[data-capability]").forEach((node) => {
+       const capability = node.dataset.capability;
+       const available = Boolean(caps[capability]);
+-      node.hidden = !available;
+-      node.setAttribute("aria-hidden", String(!available));
++      // Some entries also need asynchronously loaded content. A permitted mode
++      // must not reveal them before their content owner has marked them ready.
++      const gated = Object.prototype.hasOwnProperty.call(node.dataset, "revealWhenReady");
++      node.hidden = !available || (gated && node.dataset.revealWhenReady !== "true");
++      node.setAttribute("aria-hidden", String(node.hidden));
+       if ("disabled" in node && !available) node.disabled = true;
+       if ("disabled" in node && available && node.dataset.capabilityDisabled !== "true") node.disabled = false;
+     });
+diff --git a/static/js/practice_shell.js b/static/js/practice_shell.js
+index 605aee48..31f04232 100644
+--- a/static/js/practice_shell.js
++++ b/static/js/practice_shell.js
+@@ -284,9 +284,10 @@
+       if (!isPracticeEntry(link, win) || event.defaultPrevented) return;
+       const target = linkTarget(link, win);
+       const cleanTarget = target ? cleanNavigationUrl(target, win.location.origin) : null;
++      const currentSettings = mergedOptions(win, options);
+       const context = captureListState(win, {
+-        ...settings,
+-        activeTab: settings.activeTab || decodeURIComponent(win.location.hash.replace(/^#/, "")),
++        ...currentSettings,
++        activeTab: currentSettings.activeTab || decodeURIComponent(win.location.hash.replace(/^#/, "")),
+         targetPath: cleanTarget ? cleanTarget.pathname + cleanTarget.search + cleanTarget.hash : ""
+       });
+       if (target && target.origin === win.location.origin) {
+@@ -302,7 +303,7 @@
+       let scrollTimer = 0;
+       win.addEventListener("scroll", () => {
+         win.clearTimeout(scrollTimer);
+-        scrollTimer = win.setTimeout(() => captureListState(win, settings), 120);
++        scrollTimer = win.setTimeout(() => captureListState(win, mergedOptions(win, options)), 120);
+       }, { passive: true });
+     }
+   }
+@@ -322,6 +323,14 @@
+   }
+ 
+   function resolveContext(win, fallbackUrl, fallbackMode, options = {}) {
++    // A task detail is a mini-program screen, not a destination on this website.
++    // Explicit and captured source contexts below still take precedence.
++    const miniProgram = win.__wxjs_environment === "miniprogram"
++      || /\bminiProgram\b/i.test(win.navigator?.userAgent || "");
++    if (fallbackMode === "task_detail" && !miniProgram) {
++      fallbackUrl = "/practice#practiceAssignedTasks";
++      fallbackMode = "practice_library";
++    }
+     const settings = mergedOptions(win, options);
+     const origin = win.location.origin;
+     const browserUrl = currentUrl(win);
+@@ -480,6 +489,12 @@
+       if (retryButton) retryButton.hidden = tone !== "error";
+     }
+ 
++    function savedStatus() {
++      const now = new Date();
++      const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
++      setStatus(`已保存 ${time}`, "saved");
++    }
++
+     async function flush(reason = "manual") {
+       win.clearTimeout(saveTimer);
+       if (!dirty && reason !== "force") return true;
+@@ -490,7 +505,7 @@
+         .then((result) => {
+           if (result === false) throw new Error("save_failed");
+           dirty = false;
+-          setStatus("已保存", "saved");
++          savedStatus();
+           return true;
+         })
+         .catch(() => {
+@@ -510,10 +525,18 @@
+ 
+     function markSaved() {
+       dirty = false;
+-      setStatus("已保存", "saved");
++      savedStatus();
++    }
++
++    function markRestored(label = "已恢复草稿") {
++      // A late read must not clear a newer edit, a running save, or its error.
++      if (dirty || saving || saveStatus?.dataset.tone === "error") return false;
++      setStatus(label);
++      return true;
+     }
+ 
+     async function leave(targetKind = "back") {
++      if (typeof options.beforeLeave === "function" && await options.beforeLeave() === false) return false;
+       const saved = await flush("exit");
+       if (!saved) return false;
+       const returning = targetKind === "back";
+@@ -529,7 +552,10 @@
+ 
+     function requestExit(targetKind = "back") {
+       pendingTarget = targetKind;
+-      if (options.confirmExit && dialog && typeof dialog.showModal === "function") {
++      const needsConfirmation = typeof options.confirmExit === "function"
++        ? options.confirmExit({ dirty, saving: Boolean(saving) })
++        : options.confirmExit;
++      if (needsConfirmation && dialog && typeof dialog.showModal === "function") {
+         dialog.showModal();
+         return;
+       }
+@@ -574,8 +600,8 @@
+       if (doc.visibilityState === "hidden") flush("visibilitychange");
+     });
+ 
+-    setStatus(options.initialSaved === false ? "尚未保存" : "已保存", options.initialSaved === false ? "" : "saved");
+-    return { context, flush, leave, markDirty, markSaved, setStatus };
++    setStatus(options.initialSaved === true ? "已同步" : "尚未保存");
++    return { context, flush, leave, markDirty, markSaved, markRestored, setStatus };
+   }
+ 
+   return {
+diff --git a/templates/base.html b/templates/base.html
+index 3a52835a..ce7d014f 100644
+--- a/templates/base.html
++++ b/templates/base.html
+@@ -151,7 +151,9 @@
+     <h1>学习计划与打卡系统</h1>
+     <nav>
+       {% if request.path.startswith('/practice') %}
++      {% if request.endpoint != 'practice_library' %}
+       <a href="{{ url_for('practice_library') }}" data-practice-module-back>练习中心</a>
++      {% endif %}
+       <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
+       {% else %}
+       <a href="{{ url_for('index') }}">首页</a>
+diff --git a/templates/listening/player.html b/templates/listening/player.html
+index 46738ac7..efcc0f26 100644
+--- a/templates/listening/player.html
++++ b/templates/listening/player.html
+@@ -880,7 +880,7 @@ body {
+     <div class="topbar">
+       <div class="topbar-title" id="currentSentenceLabel">第1句</div>
+       <div class="topbar-actions">
+-        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
++        <span class="practice-shell__save" data-practice-save-status aria-live="polite">尚未保存</span>
+         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
+         <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重做</button>
+         <button class="practice-shell__back back-link" type="button" data-practice-back>← 返回精听列表</button>
+@@ -1008,12 +1008,12 @@ body {
+ 
+ <dialog class="practice-exit-dialog" id="practiceExitDialog">
+   <div class="practice-exit-dialog__body">
+-    <h2>退出并保存进度？</h2>
+-    <p>当前听写进度和错因笔记会先保存，再返回进入本页前的位置。</p>
++    <h2>退出练习？</h2>
++    <p>已提交的听写进度会保留，错因笔记会先保存。尚未提交的听写答案可能丢失，请确认后再退出。</p>
+   </div>
+   <div class="practice-exit-dialog__actions">
+     <button type="button" data-practice-exit-cancel>继续练习</button>
+-    <button type="button" data-practice-exit-confirm>退出并保存</button>
++    <button type="button" data-practice-exit-confirm>确认退出</button>
+   </div>
+ </dialog>
+ 
+@@ -1095,8 +1095,10 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
+   function saveErrorSummaries() {
+     try {
+       localStorage.setItem(getErrorSummaryStorageKey(), JSON.stringify(errorSummaries));
++      return true;
+     } catch (err) {
+       console.warn('error summary save failed', err);
++      return false;
+     }
+   }
+ 
+@@ -1118,25 +1120,33 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
+   }
+ 
+   function persistCurrentErrorSummary(force) {
+-    if (taskReadOnly) return;
++    if (taskReadOnly) return true;
+     const ta = document.getElementById('errorSummaryInput');
+-    if (!ta) return;
++    if (!ta) return true;
+     const segGlobalIdx = getGlobalSegmentIndex();
+     const val = ta.value;
+     const prev = errorSummaries[segGlobalIdx] || '';
+     if (!force && val === prev) {
+       errorSummaryDirty = false;
+-      return;
++      return true;
+     }
+     if (val.trim()) {
+       errorSummaries[segGlobalIdx] = val;
+     } else {
+       delete errorSummaries[segGlobalIdx];
+     }
+-    saveErrorSummaries();
++    if (!saveErrorSummaries()) {
++      if (prev) errorSummaries[segGlobalIdx] = prev;
++      else delete errorSummaries[segGlobalIdx];
++      errorSummaryDirty = true;
++      setErrorSummaryStatus('保存失败，请重试', 'error');
++      practiceShellController?.setStatus('保存失败，点击重试', 'error');
++      return false;
++    }
+     errorSummaryDirty = false;
+     setErrorSummaryStatus('已保存', 'saved');
+     practiceShellController?.markSaved();
++    return true;
+   }
+ 
+   function scheduleErrorSummarySave() {
+@@ -1167,13 +1177,42 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
+     }
+   }
+ 
++  function hasUnconfirmedFirstAttempt() {
++    if (pendingFirstAttempts.size) return true;
++    if (!data) return false;
++    const progress = getActiveProgressMap();
++    return getSegmentLocations().some(location =>
++      !getEffectiveProgress(progress, location.globalIndex, getPracticeText(location.seg))
++      && firstAttemptGates.get(dictationStateKey(location.globalIndex))?.canPost());
++  }
++
++  function hasUnsubmittedDictationDraft() {
++    if (!data) return false;
++    const progress = getActiveProgressMap();
++    return getSegmentLocations().some(location => {
++      const key = dictationStateKey(location.globalIndex);
++      const saved = getEffectiveProgress(progress, location.globalIndex, getPracticeText(location.seg));
++      if (saved && !correctionSegments.has(key)) return false;
++      return Array.from(dictationDrafts).some(([draftKey, values]) =>
++        draftKey.startsWith(`${key}:`) && values.some(value => String(value || '').trim()));
++    });
++  }
++
+   practiceShellController = PracticeShell.init({
+     fallbackUrl: taskId ? "{{ url_for('tasks_page') }}" : "{{ url_for('listening_index') }}",
+     fallbackMode: taskId ? 'task_detail' : 'intensive_library',
+-    confirmExit: Boolean(taskId),
+-    initialSaved: true,
++    confirmExit: ({ dirty, saving }) => !taskReadOnly && Boolean(
++      dirty || saving || errorSummaryDirty || hasUnsubmittedDictationDraft() || hasUnconfirmedFirstAttempt()
++    ),
++    initialSaved: false,
++    beforeLeave: () => {
++      if (!hasUnconfirmedFirstAttempt()) return true;
++      practiceShellController?.setStatus('首答保存尚未确认，请刷新确认', 'pending');
++      return false;
++    },
+     save: () => {
+-      if (errorSummaryDirty) persistCurrentErrorSummary(true);
++      if (hasUnconfirmedFirstAttempt()) return false;
++      if (errorSummaryDirty && !persistCurrentErrorSummary(true)) return false;
+       return savePracticeRedoState() && (taskId ? true : saveFreeProgress());
+     }
+   });
+@@ -1558,6 +1597,9 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
+     if (initialPending && !practiceRedoState) selectSegmentLocation(initialPending);
+     else selectSegment(0);
+     updateTaskCompletionPanel();
++    if (Object.keys(getActiveProgressMap()).length || Object.keys(errorSummaries).length || practiceRedoState) {
++      practiceShellController?.markRestored?.('已恢复进度');
++    }
+     audio.addEventListener('timeupdate', onTimeUpdate);
+     audio.addEventListener('loadedmetadata', updateAudioProgressDisplay);
+   }
+diff --git a/templates/listening/test_practice.html b/templates/listening/test_practice.html
+index e00fce9c..0244e72c 100644
+--- a/templates/listening/test_practice.html
++++ b/templates/listening/test_practice.html
+@@ -950,7 +950,7 @@ body.practice-listening-page .practice-bottom-score .result-box {
+     <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
+   </div>
+   <div class="exam-mode-shell__right">
+-    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
++    <span class="exam-mode-shell__saved" id="examSavedIndicator">Not saved</span>
+     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
+     <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
+   </div>
+@@ -1010,7 +1010,7 @@ body[data-experience-mode="simulation"] .group::before {
+       <div class="practice-shell__facts" aria-label="练习状态" data-capability="showPracticeSyncStatus">
+         <span class="practice-shell__fact" id="practiceShellSection">Section 1</span>
+         <span class="practice-shell__fact" id="practiceShellMode">{{ '模考' if exam_context else '练习' }}</span>
+-        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
++        <span class="practice-shell__save" data-practice-save-status aria-live="polite">尚未保存</span>
+         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
+       </div>
+       <button class="practice-shell__back" type="button" id="resetBtn" hidden>重做</button>
+@@ -1111,7 +1111,13 @@ body[data-experience-mode="simulation"] .group::before {
+ <dialog class="practice-exit-dialog" id="practiceExitDialog">
+   <div class="practice-exit-dialog__body">
+     <h2>退出并保存进度？</h2>
+-    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
++    {% if exam_context %}
++    <p>模考会保留当前答案。你可以继续答题，或退出后从模考流程重新进入；已经开始的计时不会暂停。</p>
++    {% elif practice_context %}
++    <p>退出前会先保存当前答案。保存成功后返回任务列表，可以再次进入继续作答。</p>
++    {% else %}
++    <p>退出前会先保存当前答案。使用同一浏览器再次进入，可以继续作答。</p>
++    {% endif %}
+   </div>
+   <div class="practice-exit-dialog__actions">
+     <button type="button" data-practice-exit-cancel>继续答题</button>
+@@ -2099,6 +2105,10 @@ function restoreAnswers() {
+   let rows = {};
+   try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
+   applyAnswerRows(rows);
++  if (Object.values(rows).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
++    const indicator = document.getElementById('examSavedIndicator');
++    if (indicator) indicator.textContent = 'Restored';
++  }
+ }
+ 
+ async function restoreServerAnswers() {
+@@ -2109,6 +2119,10 @@ async function restoreServerAnswers() {
+     if (!response.ok || !data.ok || !data.answers || practiceRedo.skipRestore()) return;
+     const local = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
+     applyAnswerRows({ ...data.answers, ...local });
++    if (Object.values(data.answers).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
++      const indicator = document.getElementById('examSavedIndicator');
++      if (indicator) indicator.textContent = 'Restored';
++    }
+   } catch (_error) {
+     // Local session draft remains available when server recovery is unreachable.
+   }
+@@ -2232,7 +2246,7 @@ async function loadExistingSubmission() {
+     );
+     lockReadOnlyReviewControls();
+     openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
+-    practiceShellController?.markSaved();
++    practiceShellController?.markRestored?.('已加载记录');
+     return;
+   }
+   // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
+@@ -2277,7 +2291,7 @@ async function loadExistingSubmission() {
+         : '已同步后台'
+     );
+     openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
+-    practiceShellController?.markSaved();
++    practiceShellController?.markRestored?.('已加载记录');
+   } catch (err) {
+     // 已提交结果加载失败时，不影响学生继续做题或重新提交。
+   }
+@@ -2688,9 +2702,11 @@ if (!examContext) {
+ // its own back guard to the joint browser history.
+ practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
+   fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",
+-  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : 'listening_tests',
+-  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
+-  initialSaved: true,
++  fallbackMode: isMockExamReview ? 'mock_exam_review' : examContext ? 'mock_exam_process' : practiceContext ? 'task_detail' : 'listening_tests',
++  confirmExit: ({ dirty, saving }) => !practiceContext?.read_only && Boolean(
++    dirty || saving || (examContext?.started_at && examContext?.deadline_at)
++  ),
++  initialSaved: false,
+   save: persistAnswers
+ });
+ render();
+diff --git a/templates/practice/index_content.html b/templates/practice/index_content.html
+index 536e8db7..f7db4205 100644
+--- a/templates/practice/index_content.html
++++ b/templates/practice/index_content.html
+@@ -3,6 +3,9 @@
+ main.container {
+   width: auto;
+ }
++.practice-page [hidden] {
++  display: none !important;
++}
+ .practice-page {
+   max-width: 1180px;
+   margin: 0 auto;
+@@ -583,6 +586,7 @@ a.practice-resource:hover {
+     <div class="practice-mock-review-list" id="practiceMockReviewList"></div>
+   </section>
+ 
++  {% if is_practice_staff_mode %}
+   <aside class="practice-suite-filters" aria-label="资源筛选">
+     <section>
+       <h3>科目</h3>
+@@ -591,14 +595,13 @@ a.practice-resource:hover {
+       <button type="button" data-practice-target-index="2"><i class="fas fa-pen-nib" aria-hidden="true"></i> 写作</button>
+       <button type="button" data-practice-target-index="3"><i class="fas fa-microphone" aria-hidden="true"></i> 题型专项</button>
+     </section>
+-    <section><h3>资源类型</h3><label><input type="checkbox" checked> 单项练习</label><label><input type="checkbox" checked> 整套 Test</label><label><input type="checkbox" checked> 模考</label></section>
+-    <section><h3>考试系列</h3><label><input type="checkbox" checked> IELTS</label><label><input type="checkbox" checked> TOEFL</label></section>
+   </aside>
+ 
+   <nav class="practice-exam-switch" aria-label="考试类型">
+     <a href="#ieltsPractice">IELTS 雅思</a>
+     <a href="#toeflPractice">TOEFL 托福</a>
+   </nav>
++  {% endif %}
+ 
+   <div class="practice-section-heading" id="ieltsPractice">
+     <div>
+@@ -702,6 +705,7 @@ a.practice-resource:hover {
+     <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl_mock.mock_catalog') }}">进入全新模考</a>
+   </section>
+ 
++  {% if is_practice_staff_mode %}
+   <aside class="practice-suite-preview" aria-label="练习预览">
+     <p class="suite-inspector__kicker">练习预览</p>
+     <div class="suite-inspector__identity"><span class="practice-suite-preview__icon"><i class="fas fa-headphones" aria-hidden="true"></i></span><div><h3>剑雅听力真题</h3><p>IELTS · {{ summary.listening.cambridge_books }} 本书</p></div></div>
+@@ -709,6 +713,7 @@ a.practice-resource:hover {
+     <section class="suite-inspector__section"><h4>任务适配</h4><p>可直接进入练习，也可从任务管理统一布置给学生并检查重复记录。</p></section>
+     <div class="suite-inspector__actions"><button class="btn" type="button" data-practice-open-selected><i class="far fa-play-circle" aria-hidden="true"></i> 进入练习</button><a class="btn btn-outline" href="{{ url_for('tasks_page') }}"><i class="far fa-paper-plane" aria-hidden="true"></i> 布置给学生</a></div>
+   </aside>
++  {% endif %}
+ </main>
+ 
+ <style>
+@@ -915,8 +920,19 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
+     }
+   }
+ 
++  function setNavigationIdentity(mode) {
++    const defaults = window.PRACTICE_NAVIGATION_DEFAULTS || {};
++    // Account sessions retain their account exit; name verification changes only
++    // the public practice identity used by the next navigation capture.
++    if (defaults.identityMode === 'student_account' || defaults.identity_mode === 'student_account') return;
++    defaults.identityMode = mode;
++    defaults.identity_mode = mode;
++    window.PRACTICE_NAVIGATION_DEFAULTS = defaults;
++  }
++
+   function setVerified(name) {
+     verified = true;
++    setNavigationIdentity('verified_student');
+     localStorage.setItem('listening_student', name);
+     sessionStorage.setItem('listening_student', name);
+     nameEl.textContent = name;
+@@ -941,6 +957,7 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
+ 
+   function setUnverified(message) {
+     verified = false;
++    setNavigationIdentity('guest');
+     nameEl.textContent = '未绑定';
+     hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
+     form.hidden = false;
+diff --git a/templates/reading/test_practice.html b/templates/reading/test_practice.html
+index 4209a3aa..48e2d1b0 100644
+--- a/templates/reading/test_practice.html
++++ b/templates/reading/test_practice.html
+@@ -478,7 +478,7 @@ body[data-experience-mode="simulation"] .group {
+     <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
+   </div>
+   <div class="exam-mode-shell__right">
+-    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
++    <span class="exam-mode-shell__saved" id="examSavedIndicator">Not saved</span>
+     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
+     <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
+   </div>
+@@ -504,13 +504,13 @@ body[data-experience-mode="simulation"] .group {
+     </div>
+     <div class="topbar-actions">
+       {% if not exam_context and test.source != 'ninefen' %}
+-      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
++      <a class="reading-study-mode" id="readingStudyMode" href="/reading/study/{{ test.id }}" hidden aria-hidden="true" data-reveal-when-ready="false" data-practice-entry data-capability="canUseReadingStudy">Reading Study</a>
+       {% endif %}
+       <div class="timer" aria-live="polite" data-capability="showElapsedTimer">
+         <div class="timer-label">用时</div>
+         <div class="timer-value" id="timerValue">00:00</div>
+       </div>
+-      <span class="practice-shell__save" data-practice-save-status aria-live="polite" data-capability="showPracticeSyncStatus">已保存</span>
++      <span class="practice-shell__save" data-practice-save-status aria-live="polite" data-capability="showPracticeSyncStatus">尚未保存</span>
+       <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
+       <button class="btn" type="button" id="resetBtn" hidden>重做</button>
+     </div>
+@@ -574,7 +574,13 @@ body[data-experience-mode="simulation"] .group {
+ <dialog class="practice-exit-dialog" id="practiceExitDialog">
+   <div class="practice-exit-dialog__body">
+     <h2>退出并保存进度？</h2>
+-    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
++    {% if exam_context %}
++    <p>模考会保留当前答案。你可以继续答题，或退出后从模考流程重新进入；已经开始的计时不会暂停。</p>
++    {% elif practice_context %}
++    <p>退出前会先保存当前答案。保存成功后返回任务列表，可以再次进入继续作答。</p>
++    {% else %}
++    <p>退出前会先保存当前答案。使用同一浏览器再次进入，可以继续作答。</p>
++    {% endif %}
+   </div>
+   <div class="practice-exit-dialog__actions">
+     <button type="button" data-practice-exit-cancel>继续答题</button>
+@@ -745,7 +751,12 @@ function restoreExamDraft() {
+   if (practiceContext?.read_only) return;
+   try {
+     const saved = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}");
+-    if (saved && typeof saved === "object" && !Array.isArray(saved)) Object.assign(answers, saved);
++    if (saved && typeof saved === "object" && !Array.isArray(saved)) {
++      Object.assign(answers, saved);
++      if (Object.values(saved).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
++        updateExamSavedIndicator("Restored");
++      }
++    }
+   } catch (_error) {
+     localStorage.removeItem(examDraftStorageKey);
+   }
+@@ -760,6 +771,9 @@ async function restoreServerExamDraft() {
+     const local = JSON.parse(localStorage.getItem(examDraftStorageKey) || "{}") || {};
+     Object.assign(answers, data.answers, local);
+     renderPassage(testData.passages.find((passage) => passage.id === currentPassageId));
++    if (Object.values(data.answers).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
++      updateExamSavedIndicator("Restored");
++    }
+     updateSummary();
+     syncQuestionNav();
+   } catch (_error) {
+@@ -1538,7 +1552,7 @@ async function loadExistingSubmission() {
+     updateSummary();
+     setSyncStatus(isMockExamReview ? "已加载模考原题与作答记录" : "已加载题型专项原题与作答记录", "ok");
+     lockReadOnlyReviewControls();
+-    practiceShellController?.markSaved();
++    practiceShellController?.markRestored?.('已加载记录');
+     syncQuestionNav();
+     return;
+   }
+@@ -1580,7 +1594,7 @@ async function loadExistingSubmission() {
+     paintResults();
+     updateSummary();
+     setSyncStatus("已加载今天的上次提交记录", "ok");
+-    practiceShellController?.markSaved();
++    practiceShellController?.markRestored?.('已加载记录');
+     syncQuestionNav();
+   } catch (_error) {
+     // 历史记录加载失败不影响当前练习。
+@@ -1596,7 +1610,10 @@ async function revealReadingStudyEntry() {
+     });
+     if (!response.ok) return;
+     const data = await response.json();
+-    if ((data.passages || []).length) entry.hidden = false;
++    const ready = Array.isArray(data.passages) && data.passages.length > 0;
++    entry.dataset.revealWhenReady = String(ready);
++    entry.hidden = !ready || !experienceCapabilities.canUseReadingStudy;
++    entry.setAttribute("aria-hidden", String(entry.hidden));
+   } catch (_error) {
+     // 解析入口是渐进增强；查询失败不影响刷题页。
+   }
+@@ -1626,9 +1643,11 @@ setInterval(() => {
+ // its own back guard to the joint browser history.
+ practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
+   fallbackUrl: persistenceContext?.exit_url || (rawTestData.source === 'ninefen' ? '/practice/sprint/reading' : rawTestData.source === 'idictation_reading_jijing' ? "{{ url_for('reading_jijing_index') }}" : "{{ url_for('reading_test_index') }}"),
+-  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : (rawTestData.source === 'ninefen' ? 'exam_sprint' : rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
+-  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
+-  initialSaved: true,
++  fallbackMode: isMockExamReview ? 'mock_exam_review' : examContext ? 'mock_exam_process' : practiceContext ? 'task_detail' : (rawTestData.source === 'ninefen' ? 'exam_sprint' : rawTestData.source === 'idictation_reading_jijing' ? 'reading_jijing' : 'reading_tests'),
++  confirmExit: ({ dirty, saving }) => !practiceContext?.read_only && Boolean(
++    dirty || saving || (examContext?.started_at && examContext?.deadline_at)
++  ),
++  initialSaved: false,
+   save: persistExamDraft
+ });
+ restoreExamDraft();
+diff --git a/tests/test_practice_shell.js b/tests/test_practice_shell.js
+index 6e90560e..c26c3dbe 100644
+--- a/tests/test_practice_shell.js
++++ b/tests/test_practice_shell.js
+@@ -1,5 +1,8 @@
+ const assert = require('node:assert/strict')
+ const test = require('node:test')
++const fs = require('node:fs')
++const path = require('node:path')
++const vm = require('node:vm')
+ 
+ const shell = require('../static/js/practice_shell.js')
+ 
+@@ -169,3 +172,359 @@ test('explicit identity keeps the correct module exit label in a new tab', () =>
+   assert.equal(staffContext.identityMode, 'staff')
+   assert.equal(staffContext.moduleExitLabel, '返回工作台')
+ })
++
++test('a bookmarked web task falls back to the task list, while mini-program and exam sources stay intact', () => {
++  const win = fakeWindow('/reading/test/ielts10_test1', '?task_id=3&token=opaque')
++  win.location.hash = ''
++  // The SDK can exist on a normal WeChat browser page; that alone is not a mini-program.
++  win.wx = { miniProgram: {} }
++  const context = shell.resolveContext(win, '/tasks', 'task_detail')
++  assert.equal(shell.contextUrl(context, win.location.origin), '/practice#practiceAssignedTasks')
++  assert.equal(shell.returnLabel(context.sourceMode), '返回练习中心')
++
++  win.__wxjs_environment = 'miniprogram'
++  assert.equal(shell.resolveContext(win, '/tasks', 'task_detail').sourceMode, 'task_detail')
++  delete win.__wxjs_environment
++  win.navigator = { userAgent: 'MicroMessenger miniProgram' }
++  assert.equal(shell.resolveContext(win, '/tasks', 'task_detail').sourceMode, 'task_detail')
++  delete win.navigator
++
++  const exam = shell.resolveContext(win, '/exam/1/session/token', 'mock_exam_process')
++  assert.equal(shell.contextUrl(exam, win.location.origin), '/exam/1/session/token')
++  assert.equal(shell.returnLabel(exam.sourceMode), '返回模考流程')
++  win.location.search += '&practice_return=%2Fstudent%2Ftoday&practice_source=student_today'
++  const explicit = shell.resolveContext(win, '/tasks', 'task_detail')
++  assert.equal(shell.contextUrl(explicit, win.location.origin), '/student/today')
++  assert.equal(shell.returnLabel(explicit.sourceMode), '返回今日计划')
++})
++
++function eventNode() {
++  const handlers = {}
++  return {
++    dataset: {}, textContent: '', hidden: false,
++    addEventListener: (name, callback) => { handlers[name] = callback },
++    setAttribute: () => {},
++    fire: (name, event = {}) => handlers[name]?.({ preventDefault() {}, ...event })
++  }
++}
++
++function interactiveWindow() {
++  const win = fakeWindow('/reading/test/ielts10_test1', '?task_id=3')
++  win.location.hash = ''
++  win.location.assign = value => { win.assigned = value }
++  const back = eventNode(), status = eventNode(), retry = eventNode()
++  const confirm = eventNode(), cancel = eventNode()
++  const dialog = {
++    shown: 0, open: false,
++    showModal() { this.shown++; this.open = true },
++    close() { this.open = false },
++    querySelector: selector => selector.includes('cancel') ? cancel : confirm
++  }
++  const documentEvents = {}, windowEvents = {}, timers = new Map()
++  let timerId = 0
++  win.document.addEventListener = (name, callback) => { documentEvents[name] = callback }
++  win.document.querySelectorAll = selector => selector === '[data-practice-back]' ? [back] : []
++  win.document.querySelector = selector => selector.includes('save-status') ? status : retry
++  win.document.getElementById = () => dialog
++  win.history = { state: {}, replaceState() {}, pushState() {} }
++  win.addEventListener = (name, callback) => { windowEvents[name] = callback }
++  win.setTimeout = callback => { timers.set(++timerId, callback); return timerId }
++  win.clearTimeout = id => timers.delete(id)
++  return { win, back, status, retry, dialog, confirm, cancel, documentEvents, windowEvents, timers }
++}
++
++const settled = () => new Promise(resolve => setImmediate(resolve))
++
++test('opening an untouched task neither claims a save nor blocks returning', async () => {
++  const ui = interactiveWindow()
++  let saves = 0
++  shell.init({
++    fallbackMode: 'task_detail', fallbackUrl: '/tasks',
++    confirmExit: ({ dirty, saving }) => dirty || saving,
++    save: () => { saves++; return true }
++  }, ui.win)
++  assert.equal(ui.status.textContent, '尚未保存')
++  ui.back.fire('click')
++  await settled()
++  assert.equal(ui.dialog.shown, 0)
++  assert.equal(ui.win.assigned, '/practice#practiceAssignedTasks')
++  assert.equal(saves, 0)
++})
++
++test('only an actual save receives a saved time, while restored state starts as synced', async () => {
++  const ui = interactiveWindow()
++  const controller = shell.init({ initialSaved: true, save: () => true }, ui.win)
++  assert.equal(ui.status.textContent, '已同步')
++  assert.notEqual(ui.status.dataset.tone, 'saved')
++  controller.markDirty()
++  assert.equal(await controller.flush(), true)
++  assert.match(ui.status.textContent, /^已保存 \d{2}:\d{2}$/)
++  assert.equal(ui.status.dataset.tone, 'saved')
++})
++
++test('unsaved answers prompt, failed saving keeps the page, and a successful retry permits return', async () => {
++  const ui = interactiveWindow()
++  let saveWorks = false
++  const controller = shell.init({
++    fallbackUrl: '/practice#practiceAssignedTasks', fallbackMode: 'practice_library',
++    confirmExit: ({ dirty, saving }) => dirty || saving,
++    save: () => saveWorks
++  }, ui.win)
++  controller.markDirty()
++  ui.back.fire('click')
++  assert.equal(ui.dialog.shown, 1)
++  assert.equal(ui.win.assigned, undefined)
++  ui.confirm.fire('click')
++  await settled()
++  assert.equal(ui.win.assigned, undefined)
++  assert.equal(ui.status.dataset.tone, 'error')
++  assert.equal(ui.retry.hidden, false)
++  saveWorks = true
++  ui.retry.fire('click')
++  await settled()
++  assert.match(ui.status.textContent, /^已保存 \d{2}:\d{2}$/)
++  ui.back.fire('click')
++  await settled()
++  assert.equal(ui.dialog.shown, 1)
++  assert.equal(ui.win.assigned, '/practice#practiceAssignedTasks')
++})
++
++test('exit guard is evaluated at click time and protects active timing or an in-flight save', async () => {
++  const ui = interactiveWindow()
++  let timerRunning = false, finishSave
++  const controller = shell.init({
++    confirmExit: ({ dirty, saving }) => dirty || saving || timerRunning,
++    save: () => new Promise(resolve => { finishSave = resolve })
++  }, ui.win)
++  timerRunning = true
++  ui.back.fire('click')
++  assert.equal(ui.dialog.shown, 1)
++  ui.cancel.fire('click')
++  assert.equal(ui.win.assigned, undefined)
++  timerRunning = false
++  controller.markDirty()
++  const pending = controller.flush()
++  await settled()
++  ui.windowEvents.popstate()
++  assert.equal(ui.dialog.shown, 2)
++  finishSave(true)
++  assert.equal(await pending, true)
++})
++
++test('navigation uses changed identity after installation, with explicit options still taking precedence', () => {
++  function installed(options = {}) {
++    const ui = interactiveWindow()
++    ui.win.location.pathname = '/practice'
++    ui.win.location.search = ''
++    ui.win.PRACTICE_NAVIGATION_DEFAULTS = { identityMode: 'guest' }
++    const link = { href: 'http://practice.test/listening/tests', dataset: {}, hasAttribute: () => false }
++    ui.win.document.querySelectorAll = selector => selector === 'a[href], [data-href]' ? [link] : []
++    shell.installListContext(options, ui.win)
++    return { ...ui, link }
++  }
++  const ui = installed()
++  for (const identity of ['verified_student', 'guest']) {
++    ui.win.PRACTICE_NAVIGATION_DEFAULTS.identityMode = identity
++    ui.documentEvents.click({ target: { closest: () => ui.link }, defaultPrevented: false })
++    assert.equal(new URL(ui.link.href).searchParams.get('practice_identity'), identity)
++    ui.windowEvents.scroll()
++    for (const callback of ui.timers.values()) callback()
++    assert.equal(JSON.parse(ui.win.sessionStorage.getItem(shell.CONTEXT_KEY)).identityMode, identity)
++  }
++  const explicit = installed({ identityMode: 'student_account' })
++  explicit.win.PRACTICE_NAVIGATION_DEFAULTS.identityMode = 'verified_student'
++  explicit.documentEvents.click({ target: { closest: () => explicit.link }, defaultPrevented: false })
++  assert.equal(new URL(explicit.link.href).searchParams.get('practice_identity'), 'student_account')
++})
++
++for (const subject of ['listening', 'reading']) {
++  test(`${subject} page exit wiring protects real exam timing without treating page load as work`, () => {
++    const template = fs.readFileSync(path.join(__dirname, `../templates/${subject}/test_practice.html`), 'utf8')
++    const expression = template.match(/confirmExit:\s*([\s\S]*?),\n\s*initialSaved:/)?.[1]
++    assert.ok(expression, 'page must supply its live exit policy')
++    const context = { practiceContext: { task_id: 3 }, examContext: null }
++    const guard = vm.runInNewContext(`(${expression})`, context)
++    assert.equal(guard({ dirty: false, saving: false }), false)
++    assert.equal(guard({ dirty: true, saving: false }), true)
++    assert.equal(guard({ dirty: false, saving: true }), true)
++    context.examContext = { started_at: null, deadline_at: null }
++    assert.equal(guard({ dirty: false, saving: false }), false)
++    context.examContext = { started_at: '2026-11-26T12:00:00Z', deadline_at: '2026-11-26T13:00:00Z' }
++    assert.equal(guard({ dirty: false, saving: false }), true)
++    context.practiceContext = { read_only: true }
++    assert.equal(guard({ dirty: true, saving: true }), false)
++  })
++}
++
++test('intensive page does not prompt on initial load, but does protect a pending note', () => {
++  const template = fs.readFileSync(path.join(__dirname, '../templates/listening/player.html'), 'utf8')
++  const expression = template.match(/confirmExit:\s*([\s\S]*?),\n\s*initialSaved:/)?.[1]
++  const context = {
++    taskReadOnly: false, errorSummaryDirty: false,
++    hasUnsubmittedDictationDraft: () => false, hasUnconfirmedFirstAttempt: () => false
++  }
++  const guard = vm.runInNewContext(`(${expression})`, context)
++  assert.equal(guard({ dirty: false, saving: false }), false)
++  context.errorSummaryDirty = true
++  assert.equal(guard({ dirty: false, saving: false }), true)
++  context.taskReadOnly = true
++  assert.equal(guard({ dirty: true, saving: false }), false)
++})
++
++test('restoring records cannot masquerade as a write or clear newer changes and errors', async () => {
++  const ui = interactiveWindow()
++  let completeSave
++  const controller = shell.init({
++    confirmExit: ({ dirty, saving }) => dirty || saving,
++    save: () => new Promise(resolve => { completeSave = resolve })
++  }, ui.win)
++  assert.equal(controller.markRestored(), true)
++  assert.equal(ui.status.textContent, '已恢复草稿')
++  assert.doesNotMatch(ui.status.textContent, /已保存|\d{2}:\d{2}/)
++  controller.markDirty()
++  assert.equal(controller.markRestored('已加载记录'), false)
++  const pending = controller.flush()
++  await settled()
++  assert.equal(controller.markRestored('已加载记录'), false)
++  completeSave(false)
++  assert.equal(await pending, false)
++  assert.equal(controller.markRestored('已加载记录'), false)
++  assert.equal(ui.status.dataset.tone, 'error')
++  ui.back.fire('click')
++  assert.equal(ui.dialog.shown, 1)
++})
++
++test('a pending first-answer gate blocks both confirmed exit and browser back until recovery', async () => {
++  const ui = interactiveWindow()
++  let pending = true
++  shell.init({
++    fallbackUrl: '/practice#practiceAssignedTasks', fallbackMode: 'practice_library',
++    confirmExit: () => pending,
++    beforeLeave: () => !pending
++  }, ui.win)
++  ui.back.fire('click')
++  ui.confirm.fire('click')
++  await settled()
++  assert.equal(ui.win.assigned, undefined)
++  ui.windowEvents.popstate()
++  ui.confirm.fire('click')
++  await settled()
++  assert.equal(ui.win.assigned, undefined)
++  pending = false
++  ui.back.fire('click')
++  await settled()
++  assert.equal(ui.win.assigned, '/practice#practiceAssignedTasks')
++})
++
++test('actual intensive guard distinguishes untouched, unsubmitted, pending and saved first answers', () => {
++  const template = fs.readFileSync(path.join(__dirname, '../templates/listening/player.html'), 'utf8')
++  const helpers = template.slice(template.indexOf('  function hasUnconfirmedFirstAttempt()'), template.indexOf('  practiceShellController = PracticeShell.init('))
++  const guardExpression = template.match(/confirmExit:\s*([\s\S]*?),\n\s*initialSaved:/)[1]
++  const beforeExpression = template.match(/beforeLeave:\s*([\s\S]*?),\n\s*save:/)[1]
++  const cloze = require('../static/js/listening-cloze.js')
++  const progress = {}, messages = []
++  const context = {
++    data: {}, taskReadOnly: false, errorSummaryDirty: false,
++    pendingFirstAttempts: new Map(), firstAttemptGates: new Map(),
++    dictationDrafts: new Map(), correctionSegments: new Set(),
++    getActiveProgressMap: () => progress,
++    getSegmentLocations: () => [{ globalIndex: 4, seg: { text: 'synthetic' } }],
++    getEffectiveProgress: (rows, key) => rows[key], getPracticeText: seg => seg.text,
++    dictationStateKey: id => String(id),
++    practiceShellController: { setStatus: text => messages.push(text) }
++  }
++  vm.createContext(context)
++  vm.runInContext(helpers, context)
++  const guard = vm.runInContext(`(${guardExpression})`, context)
++  const before = vm.runInContext(`(${beforeExpression})`, context)
++  const clean = { dirty: false, saving: false }
++  assert.equal(guard(clean), false)
++  assert.equal(before(), true)
++  context.dictationDrafts.set('4:standard', ['unfinished'])
++  assert.equal(guard(clean), true, 'typed but unsubmitted answer needs an explicit discard choice')
++  assert.equal(before(), true)
++  const gate = cloze.createFirstAttemptGate(false)
++  context.firstAttemptGates.set('4', gate)
++  gate.beginFirstAttempt()
++  assert.equal(guard(clean), true)
++  assert.equal(before(), false, 'in-flight first answer is not a saved result')
++  context.pendingFirstAttempts.set('4', { answers: ['unfinished'] })
++  assert.equal(before(), false, 'failed/uncertain first answer still cannot leave')
++  assert.match(messages.at(-1), /刷新确认/)
++  context.pendingFirstAttempts.clear()
++  progress[4] = { is_completed: true }
++  assert.equal(guard(clean), false, 'confirmed saved progress is not pending')
++  assert.equal(before(), true)
++})
++
++for (const subject of ['listening', 'reading']) {
++  test(`${subject} local/server restoration reports a read and preserves a newer dirty save state`, async () => {
++    const template = fs.readFileSync(path.join(__dirname, `../templates/${subject}/test_practice.html`), 'utf8')
++    const localName = subject === 'listening' ? 'restoreAnswers' : 'restoreExamDraft'
++    const serverName = subject === 'listening' ? 'restoreServerAnswers' : 'restoreServerExamDraft'
++    function extract(name) {
++      const at = template.indexOf(`function ${name}(`)
++      return template.slice(template.slice(at - 6, at) === 'async ' ? at - 6 : at, template.indexOf('\n}', at) + 2)
++    }
++    const ui = interactiveWindow()
++    const controller = shell.init({ confirmExit: ({ dirty, saving }) => dirty || saving }, ui.win)
++    const indicator = { textContent: 'Not saved' }
++    let resolveFetch
++    const context = {
++      practiceContext: null, practiceRedo: { skipRestore: () => false }, historyAttemptId: '',
++      persistenceContext: { draft_url: '/synthetic-draft' },
++      storageKey: 'draft', examDraftStorageKey: 'draft', localStorage: ui.win.localStorage,
++      practiceShellController: controller, answers: {}, applyAnswerRows() {},
++      document: { getElementById: () => indicator },
++      renderPassage() {}, currentPassageId: 'p1', testData: { passages: [{ id: 'p1' }] },
++      updateExamSavedIndicator: text => { indicator.textContent = text },
++      fetch: () => new Promise(resolve => { resolveFetch = resolve })
++    }
++    vm.createContext(context)
++    vm.runInContext(extract(localName) + '\n' + extract(serverName), context)
++    context.localStorage.setItem('draft', JSON.stringify({ q: '' }))
++    context[localName]()
++    assert.equal(ui.status.textContent, '尚未保存', 'empty draft does not imply prior work')
++    context.localStorage.setItem('draft', JSON.stringify({ q: 'previous answer' }))
++    context[localName]()
++    assert.equal(ui.status.textContent, '已恢复草稿')
++    assert.equal(indicator.textContent, 'Restored')
++    const pending = context[serverName]()
++    controller.markDirty()
++    indicator.textContent = 'Saving…'
++    resolveFetch({ ok: true, json: async () => ({ ok: true, answers: { q: 'server answer' } }) })
++    await pending
++    assert.equal(ui.status.textContent, '保存中')
++    assert.equal(indicator.textContent, 'Saving…')
++    ui.back.fire('click')
++    assert.equal(ui.dialog.shown, 1, 'a late restore did not clear the newer dirty flag')
++  })
++}
++
++test('intensive note storage failure remains unsaved and a later successful retry can save', () => {
++  const template = fs.readFileSync(path.join(__dirname, '../templates/listening/player.html'), 'utf8')
++  function extract(name) {
++    const at = template.indexOf(`  function ${name}(`)
++    return template.slice(at, template.indexOf('\n  }', at) + 4)
++  }
++  let fail = true, saved = 0
++  const context = {
++    taskReadOnly: false, errorSummaryDirty: true, errorSummaries: { 0: 'old' },
++    document: { getElementById: () => ({ value: 'new note' }) },
++    getGlobalSegmentIndex: () => 0, getErrorSummaryStorageKey: () => 'notes',
++    localStorage: { setItem: () => { if (fail) throw Error('quota') } },
++    console: { warn() {} }, setErrorSummaryStatus() {},
++    practiceShellController: { setStatus() {}, markSaved: () => saved++ }
++  }
++  vm.createContext(context)
++  vm.runInContext(extract('saveErrorSummaries') + '\n' + extract('persistCurrentErrorSummary'), context)
++  assert.equal(context.persistCurrentErrorSummary(true), false)
++  assert.equal(context.errorSummaryDirty, true)
++  assert.equal(context.errorSummaries[0], 'old')
++  assert.equal(saved, 0)
++  fail = false
++  assert.equal(context.persistCurrentErrorSummary(false), true)
++  assert.equal(context.errorSummaryDirty, false)
++  assert.equal(context.errorSummaries[0], 'new note')
++  assert.equal(saved, 1)
++})
+diff --git a/tests/test_reading_study.py b/tests/test_reading_study.py
+index 030f3ce8..ac3338ce 100644
+--- a/tests/test_reading_study.py
++++ b/tests/test_reading_study.py
+@@ -17,6 +17,7 @@ import sys
+ import tempfile
+ import unittest
+ from pathlib import Path
++from urllib.parse import parse_qs, urlsplit
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ SCRIPTS_DIR = ROOT / "scripts"
+@@ -356,9 +357,38 @@ class ReadOnlyApiTest(_ApiTestBase):
+         self.assertIn("concepts", data)
+         self.assertIn("subject", data["concepts"])
+ 
+-    def test_page_route_404_without_ready_passages(self):
++    def test_page_route_returns_to_practice_without_ready_passages(self):
+         resp = self.client.get("/reading/study/no_such_test")
+-        self.assertEqual(resp.status_code, 404)
++        self.assertEqual(resp.status_code, 302)
++        self.assertEqual(resp.headers["Location"], "/reading/test/no_such_test")
++
++    def test_unpublished_analysis_returns_with_task_and_navigation_context(self):
++        row = ReadingPassageAnalysis.query.filter_by(test_id=MINI_TEST_ID).one()
++        row.status = "draft"
++        db.session.commit()
++        context = {
++            "task_id": "19", "token": "synthetic-token", "passage": "2",
++            "history_attempt": "7", "practice_return": "/practice#practiceAssignedTasks",
++            "practice_exit": "/login", "practice_source": "practice_library",
++            "practice_identity": "verified_student",
++        }
++        resp = self.client.get(f"/reading/study/{MINI_TEST_ID}", query_string=context)
++        self.assertEqual(resp.status_code, 302)
++        target = urlsplit(resp.headers["Location"])
++        self.assertEqual(target.path, f"/reading/test/{MINI_TEST_ID}")
++        self.assertEqual(parse_qs(target.query), {key: [value] for key, value in context.items()})
++        self.assertEqual(row.status, "draft")
++
++    def test_missing_analysis_never_redirects_to_caller_destination(self):
++        resp = self.client.get("/reading/study/test%3Fnext%3Doutside", query_string={
++            "next": "https://outside.invalid", "return_url": "//outside.invalid",
++            "practice_return": "https://outside.invalid",
++        })
++        target = urlsplit(resp.headers["Location"])
++        self.assertEqual(resp.status_code, 302)
++        self.assertEqual(target.netloc, "")
++        self.assertEqual(target.path, "/reading/test/test%3Fnext%3Doutside")
++        self.assertEqual(parse_qs(target.query), {"practice_return": ["https://outside.invalid"]})
+ 
+     def test_page_route_falls_back_when_template_missing(self):
+         resp = self.client.get(f"/reading/study/{MINI_TEST_ID}")

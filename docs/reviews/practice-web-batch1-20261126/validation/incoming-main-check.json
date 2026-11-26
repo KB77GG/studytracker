@@ -1,0 +1,13 @@
+{
+  "base": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "incoming": "79388e269e924e9ce591dd3e6de3762a61614ddf",
+  "shared_paths": [
+    ".github/workflows/ci.yml"
+  ],
+  "method": "git merge-file -p on temporary copies; repository unchanged",
+  "exit_code": 0,
+  "retains_incoming_auth_test": true,
+  "retains_local_reading_entry_test": true,
+  "retains_local_python_step": true,
+  "incoming_ci_diff": "diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml\nindex 05250e09..01f2700b 100644\n--- a/.github/workflows/ci.yml\n+++ b/.github/workflows/ci.yml\n@@ -45,7 +45,7 @@ jobs:\n         run: node tests/test_dictation_spell_queue.js\n       - name: Test weekly exam sprint source and public pages\n         run: |\n-          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v\n+          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_ninefen_auth tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v\n       - name: Test current and historical student task lists\n         run: node --test tests/test_practice_task_lists.js\n       - name: Test classroom vocabulary import client and assignment preset\n"
+}

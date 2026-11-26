@@ -3,6 +3,9 @@
 main.container {
   width: auto;
 }
+.practice-page [hidden] {
+  display: none !important;
+}
 .practice-page {
   max-width: 1180px;
   margin: 0 auto;
@@ -583,6 +586,7 @@ a.practice-resource:hover {
     <div class="practice-mock-review-list" id="practiceMockReviewList"></div>
   </section>
 
+  {% if is_practice_staff_mode %}
   <aside class="practice-suite-filters" aria-label="资源筛选">
     <section>
       <h3>科目</h3>
@@ -591,14 +595,13 @@ a.practice-resource:hover {
       <button type="button" data-practice-target-index="2"><i class="fas fa-pen-nib" aria-hidden="true"></i> 写作</button>
       <button type="button" data-practice-target-index="3"><i class="fas fa-microphone" aria-hidden="true"></i> 题型专项</button>
     </section>
-    <section><h3>资源类型</h3><label><input type="checkbox" checked> 单项练习</label><label><input type="checkbox" checked> 整套 Test</label><label><input type="checkbox" checked> 模考</label></section>
-    <section><h3>考试系列</h3><label><input type="checkbox" checked> IELTS</label><label><input type="checkbox" checked> TOEFL</label></section>
   </aside>
 
   <nav class="practice-exam-switch" aria-label="考试类型">
     <a href="#ieltsPractice">IELTS 雅思</a>
     <a href="#toeflPractice">TOEFL 托福</a>
   </nav>
+  {% endif %}
 
   <div class="practice-section-heading" id="ieltsPractice">
     <div>
@@ -702,6 +705,7 @@ a.practice-resource:hover {
     <a class="practice-toefl__button js-practice-resource" href="{{ url_for('toefl_mock.mock_catalog') }}">进入全新模考</a>
   </section>
 
+  {% if is_practice_staff_mode %}
   <aside class="practice-suite-preview" aria-label="练习预览">
     <p class="suite-inspector__kicker">练习预览</p>
     <div class="suite-inspector__identity"><span class="practice-suite-preview__icon"><i class="fas fa-headphones" aria-hidden="true"></i></span><div><h3>剑雅听力真题</h3><p>IELTS · {{ summary.listening.cambridge_books }} 本书</p></div></div>
@@ -709,6 +713,7 @@ a.practice-resource:hover {
     <section class="suite-inspector__section"><h4>任务适配</h4><p>可直接进入练习，也可从任务管理统一布置给学生并检查重复记录。</p></section>
     <div class="suite-inspector__actions"><button class="btn" type="button" data-practice-open-selected><i class="far fa-play-circle" aria-hidden="true"></i> 进入练习</button><a class="btn btn-outline" href="{{ url_for('tasks_page') }}"><i class="far fa-paper-plane" aria-hidden="true"></i> 布置给学生</a></div>
   </aside>
+  {% endif %}
 </main>
 
 <style>
@@ -915,8 +920,19 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
     }
   }
 
+  function setNavigationIdentity(mode) {
+    const defaults = window.PRACTICE_NAVIGATION_DEFAULTS || {};
+    // Account sessions retain their account exit; name verification changes only
+    // the public practice identity used by the next navigation capture.
+    if (defaults.identityMode === 'student_account' || defaults.identity_mode === 'student_account') return;
+    defaults.identityMode = mode;
+    defaults.identity_mode = mode;
+    window.PRACTICE_NAVIGATION_DEFAULTS = defaults;
+  }
+
   function setVerified(name) {
     verified = true;
+    setNavigationIdentity('verified_student');
     localStorage.setItem('listening_student', name);
     sessionStorage.setItem('listening_student', name);
     nameEl.textContent = name;
@@ -941,6 +957,7 @@ body.admin-suite-v2 .practice-page{display:grid;grid-template-columns:190px minm
 
   function setUnverified(message) {
     verified = false;
+    setNavigationIdentity('guest');
     nameEl.textContent = '未绑定';
     hintEl.textContent = '输入后台学生档案中的姓名后，刷题记录会同步到后台。';
     form.hidden = false;

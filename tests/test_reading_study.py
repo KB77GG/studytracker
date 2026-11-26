@@ -17,6 +17,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT / "scripts"
@@ -356,9 +357,38 @@ class ReadOnlyApiTest(_ApiTestBase):
         self.assertIn("concepts", data)
         self.assertIn("subject", data["concepts"])
 
-    def test_page_route_404_without_ready_passages(self):
+    def test_page_route_returns_to_practice_without_ready_passages(self):
         resp = self.client.get("/reading/study/no_such_test")
-        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.headers["Location"], "/reading/test/no_such_test")
+
+    def test_unpublished_analysis_returns_with_task_and_navigation_context(self):
+        row = ReadingPassageAnalysis.query.filter_by(test_id=MINI_TEST_ID).one()
+        row.status = "draft"
+        db.session.commit()
+        context = {
+            "task_id": "19", "token": "synthetic-token", "passage": "2",
+            "history_attempt": "7", "practice_return": "/practice#practiceAssignedTasks",
+            "practice_exit": "/login", "practice_source": "practice_library",
+            "practice_identity": "verified_student",
+        }
+        resp = self.client.get(f"/reading/study/{MINI_TEST_ID}", query_string=context)
+        self.assertEqual(resp.status_code, 302)
+        target = urlsplit(resp.headers["Location"])
+        self.assertEqual(target.path, f"/reading/test/{MINI_TEST_ID}")
+        self.assertEqual(parse_qs(target.query), {key: [value] for key, value in context.items()})
+        self.assertEqual(row.status, "draft")
+
+    def test_missing_analysis_never_redirects_to_caller_destination(self):
+        resp = self.client.get("/reading/study/test%3Fnext%3Doutside", query_string={
+            "next": "https://outside.invalid", "return_url": "//outside.invalid",
+            "practice_return": "https://outside.invalid",
+        })
+        target = urlsplit(resp.headers["Location"])
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(target.netloc, "")
+        self.assertEqual(target.path, "/reading/test/test%3Fnext%3Doutside")
+        self.assertEqual(parse_qs(target.query), {"practice_return": ["https://outside.invalid"]})
 
     def test_page_route_falls_back_when_template_missing(self):
         resp = self.client.get(f"/reading/study/{MINI_TEST_ID}")

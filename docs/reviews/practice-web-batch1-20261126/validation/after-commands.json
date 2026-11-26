@@ -1,0 +1,72 @@
+[
+  {
+    "name": "crawl",
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-batch1-20261126/rerun_audit.js",
+      "crawl",
+      "5113",
+      "/private/tmp/practice-web-batch1-after"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit": 0,
+    "seconds": 57.23,
+    "log": "docs/reviews/practice-web-batch1-20261126/validation/after-crawl.log"
+  },
+  {
+    "name": "flows",
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-batch1-20261126/rerun_audit.js",
+      "flows",
+      "5113",
+      "/private/tmp/practice-web-batch1-after"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit": 0,
+    "seconds": 99.484,
+    "log": "docs/reviews/practice-web-batch1-20261126/validation/after-flows.log"
+  },
+  {
+    "name": "dialog",
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-batch1-20261126/rerun_audit.js",
+      "dialog",
+      "5113",
+      "/private/tmp/practice-web-batch1-after"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit": 0,
+    "seconds": 12.566,
+    "log": "docs/reviews/practice-web-batch1-20261126/validation/after-dialog.log"
+  },
+  {
+    "name": "probe",
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-batch1-20261126/rerun_audit.js",
+      "probe",
+      "5113",
+      "/private/tmp/practice-web-batch1-after"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit": 0,
+    "seconds": 3.623,
+    "log": "docs/reviews/practice-web-batch1-20261126/validation/after-probe.log"
+  },
+  {
+    "name": "probe2",
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-batch1-20261126/rerun_audit.js",
+      "probe2",
+      "5113",
+      "/private/tmp/practice-web-batch1-after"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit": 1,
+    "seconds": 33.449,
+    "log": "docs/reviews/practice-web-batch1-20261126/validation/after-probe2.log"
+  }
+]

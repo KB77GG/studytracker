@@ -1,0 +1,49 @@
+[
+  {
+    "argv": [
+      "node",
+      "--test",
+      "tests/test_practice_vocabulary_core.js",
+      "tests/test_practice_vocabulary_timing.js",
+      "tests/test_practice_task_lists.js",
+      "tests/test_practice_shell.js",
+      "tests/test_vocabulary_feedback.js",
+      "tests/test_exam_sprint_assignment_picker.js",
+      "tests/test_mock_sprint_picker.js",
+      "tests/test_listening_practice_client.js",
+      "tests/test_mock_review_paper.js",
+      "tests/test_practice_center_identity.js",
+      "tests/test_reading_study_entry.js",
+      "tests/test_practice_modes.js",
+      "tests/test_reading_practice_navigation.js",
+      "tests/test_listening_practice_navigation.js",
+      "tests/test_listening_player_redo.js",
+      "tests/test_practice_redo.js",
+      "tests/test_admin_suite_v2_structure.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-joint-release-20261127",
+    "returncode": 0,
+    "seconds": 0.489,
+    "log": "node-1.log"
+  },
+  {
+    "argv": [
+      "node",
+      "/private/tmp/studytracker-practice-web-joint-release-20261127/docs/reviews/practice-web-batch1-20261126/independent_exit_probe.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-joint-release-20261127",
+    "returncode": 0,
+    "seconds": 0.061,
+    "log": "node-2.log"
+  },
+  {
+    "argv": [
+      "node",
+      "tests/test_dictation_spell_queue.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-joint-release-20261127",
+    "returncode": 0,
+    "seconds": 0.051,
+    "log": "node-3.log"
+  }
+]

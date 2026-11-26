@@ -284,9 +284,10 @@
       if (!isPracticeEntry(link, win) || event.defaultPrevented) return;
       const target = linkTarget(link, win);
       const cleanTarget = target ? cleanNavigationUrl(target, win.location.origin) : null;
+      const currentSettings = mergedOptions(win, options);
       const context = captureListState(win, {
-        ...settings,
-        activeTab: settings.activeTab || decodeURIComponent(win.location.hash.replace(/^#/, "")),
+        ...currentSettings,
+        activeTab: currentSettings.activeTab || decodeURIComponent(win.location.hash.replace(/^#/, "")),
         targetPath: cleanTarget ? cleanTarget.pathname + cleanTarget.search + cleanTarget.hash : ""
       });
       if (target && target.origin === win.location.origin) {
@@ -302,7 +303,7 @@
       let scrollTimer = 0;
       win.addEventListener("scroll", () => {
         win.clearTimeout(scrollTimer);
-        scrollTimer = win.setTimeout(() => captureListState(win, settings), 120);
+        scrollTimer = win.setTimeout(() => captureListState(win, mergedOptions(win, options)), 120);
       }, { passive: true });
     }
   }
@@ -322,6 +323,14 @@
   }
 
   function resolveContext(win, fallbackUrl, fallbackMode, options = {}) {
+    // A task detail is a mini-program screen, not a destination on this website.
+    // Explicit and captured source contexts below still take precedence.
+    const miniProgram = win.__wxjs_environment === "miniprogram"
+      || /\bminiProgram\b/i.test(win.navigator?.userAgent || "");
+    if (fallbackMode === "task_detail" && !miniProgram) {
+      fallbackUrl = "/practice#practiceAssignedTasks";
+      fallbackMode = "practice_library";
+    }
     const settings = mergedOptions(win, options);
     const origin = win.location.origin;
     const browserUrl = currentUrl(win);
@@ -480,6 +489,12 @@
       if (retryButton) retryButton.hidden = tone !== "error";
     }
 
+    function savedStatus() {
+      const now = new Date();
+      const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      setStatus(`已保存 ${time}`, "saved");
+    }
+
     async function flush(reason = "manual") {
       win.clearTimeout(saveTimer);
       if (!dirty && reason !== "force") return true;
@@ -490,7 +505,7 @@
         .then((result) => {
           if (result === false) throw new Error("save_failed");
           dirty = false;
-          setStatus("已保存", "saved");
+          savedStatus();
           return true;
         })
         .catch(() => {
@@ -510,10 +525,18 @@
 
     function markSaved() {
       dirty = false;
-      setStatus("已保存", "saved");
+      savedStatus();
+    }
+
+    function markRestored(label = "已恢复草稿") {
+      // A late read must not clear a newer edit, a running save, or its error.
+      if (dirty || saving || saveStatus?.dataset.tone === "error") return false;
+      setStatus(label);
+      return true;
     }
 
     async function leave(targetKind = "back") {
+      if (typeof options.beforeLeave === "function" && await options.beforeLeave() === false) return false;
       const saved = await flush("exit");
       if (!saved) return false;
       const returning = targetKind === "back";
@@ -529,7 +552,10 @@
 
     function requestExit(targetKind = "back") {
       pendingTarget = targetKind;
-      if (options.confirmExit && dialog && typeof dialog.showModal === "function") {
+      const needsConfirmation = typeof options.confirmExit === "function"
+        ? options.confirmExit({ dirty, saving: Boolean(saving) })
+        : options.confirmExit;
+      if (needsConfirmation && dialog && typeof dialog.showModal === "function") {
         dialog.showModal();
         return;
       }
@@ -574,8 +600,8 @@
       if (doc.visibilityState === "hidden") flush("visibilitychange");
     });
 
-    setStatus(options.initialSaved === false ? "尚未保存" : "已保存", options.initialSaved === false ? "" : "saved");
-    return { context, flush, leave, markDirty, markSaved, setStatus };
+    setStatus(options.initialSaved === true ? "已同步" : "尚未保存");
+    return { context, flush, leave, markDirty, markSaved, markRestored, setStatus };
   }
 
   return {

@@ -1,0 +1,74 @@
+{
+  "checked_at_utc": "2026-11-26T16:31:02.237838+00:00",
+  "mode": "preflight",
+  "scope": "Read-only files/systemd/proc and anonymous GET; no app/model import, DB, POST, or student session.",
+  "head": "3b26404ce21f7528e3c7e63703ca7f8268ad0465",
+  "expected_head": null,
+  "tracked_clean": true,
+  "service": {
+    "MainPID": "788989",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Thu 2026-11-26 22:10:19 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn_file_config": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "runtime_worker_count": 1,
+  "configured_vocabulary_flag": {
+    "enabled": false,
+    "source": "default_false"
+  },
+  "files_match": {},
+  "loopback_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "6f578e9e1ad0f05f8c77bb270ce87530b53a2b42fbb283b59a4b409b76127a43",
+      "redirects_to_login": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "6240a9376a6b67937363872a2ab6823f0228dcedec11861c9a7f2538d764e98b",
+      "redirects_to_login": false,
+      "no_store": true
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "no_store": true
+    }
+  },
+  "public_pages": {},
+  "public_assets": {},
+  "checks": {
+    "head_matches": true,
+    "tracked_clean": true,
+    "service_active": true,
+    "gunicorn_config_expected": true,
+    "one_worker_running": true,
+    "configured_flag_disabled": true,
+    "loopback_/login": true,
+    "loopback_/practice": true,
+    "loopback_/tasks": true,
+    "loopback_/materials": true
+  },
+  "limitations": [
+    "Anonymous HTTP checks do not validate a real student's assigned-task list or browser rendering.",
+    "gunicorn settings are read from the tracked config; process worker count and loopback port are checked independently.",
+    "Process environment may omit values appended by dotenv after exec; disabled HTTP responses are the postdeploy runtime evidence.",
+    "No new write endpoint is called, even with the feature disabled."
+  ],
+  "ok": true
+}

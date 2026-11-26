@@ -1,0 +1,111 @@
+{
+  "final": [
+    {
+      "name": "student center 1440 / blocked external CDN",
+      "ok": true,
+      "evidence": {
+        "formVisible": false,
+        "formDisplay": "none",
+        "staffFilters": 0,
+        "preview": 0,
+        "selfBack": 0,
+        "identity": "verified_student",
+        "overflow": 0
+      }
+    },
+    {
+      "name": "student center 1280 / blocked external CDN",
+      "ok": true,
+      "evidence": {
+        "formVisible": false,
+        "formDisplay": "none",
+        "staffFilters": 0,
+        "preview": 0,
+        "selfBack": 0,
+        "identity": "verified_student",
+        "overflow": 0
+      }
+    },
+    {
+      "name": "student center 1024 / blocked external CDN",
+      "ok": true,
+      "evidence": {
+        "formVisible": false,
+        "formDisplay": "none",
+        "staffFilters": 0,
+        "preview": 0,
+        "selfBack": 0,
+        "identity": "verified_student",
+        "overflow": 0
+      }
+    },
+    {
+      "name": "student center 390 / blocked external CDN",
+      "ok": true,
+      "evidence": {
+        "formVisible": false,
+        "formDisplay": "none",
+        "staffFilters": 0,
+        "preview": 0,
+        "selfBack": 0,
+        "identity": "verified_student",
+        "overflow": 0
+      }
+    },
+    {
+      "name": "identity updates actual navigation without reload",
+      "ok": true,
+      "evidence": "verified_student link → guest blocked by existing identity gate → reverified link"
+    },
+    {
+      "name": "three untouched tasks return without confirmation",
+      "ok": true,
+      "evidence": [
+        {
+          "from": "/listening/ielts10_test1_s1",
+          "save": "尚未保存",
+          "returned": "/practice"
+        },
+        {
+          "from": "/reading/test/ielts10_test1_reading",
+          "save": "尚未保存",
+          "returned": "/practice"
+        },
+        {
+          "from": "/listening/test/ielts10_test1",
+          "save": "尚未保存",
+          "returned": "/practice"
+        }
+      ]
+    },
+    {
+      "name": "bookmark task fallback goes to task section",
+      "ok": true,
+      "evidence": "← 返回练习中心"
+    },
+    {
+      "name": "no analysis stays hidden, stale direct link redirects",
+      "ok": true,
+      "evidence": {
+        "visible": false,
+        "direct": 302,
+        "destination": "/reading/test/ielts21_test1_reading"
+      }
+    },
+    {
+      "name": "teacher keeps styled suite and working subject selection",
+      "ok": true,
+      "evidence": {
+        "suite": true,
+        "deadCheckboxes": 0,
+        "subject": "阅读",
+        "assignment": "/tasks"
+      }
+    }
+  ],
+  "sources": [
+    "acceptance.json",
+    "acceptance-recheck.json"
+  ],
+  "note": "Initial identity probe incorrectly expected guest navigation and used exact/relative href selectors. Corrected probe respects existing identity gate and decorated absolute URLs; no product changes for these probe corrections."
+}

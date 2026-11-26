@@ -1,0 +1,74 @@
+{
+ "formHiddenAttr": true,
+ "formVisible": false,
+ "formDisplay": "none",
+ "filters": [
+  {
+   "tag": "BUTTON",
+   "text": "听力",
+   "visible": true
+  },
+  {
+   "tag": "BUTTON",
+   "text": "阅读",
+   "visible": true
+  },
+  {
+   "tag": "BUTTON",
+   "text": "写作",
+   "visible": true
+  },
+  {
+   "tag": "BUTTON",
+   "text": "题型专项",
+   "visible": true
+  },
+  {
+   "tag": "INPUT",
+   "text": "单项练习",
+   "visible": true
+  },
+  {
+   "tag": "INPUT",
+   "text": "整套 Test",
+   "visible": true
+  },
+  {
+   "tag": "INPUT",
+   "text": "模考",
+   "visible": true
+  },
+  {
+   "tag": "INPUT",
+   "text": "IELTS",
+   "visible": true
+  },
+  {
+   "tag": "INPUT",
+   "text": "TOEFL",
+   "visible": true
+  }
+ ],
+ "assignBtn": [
+  {
+   "text": "进入练习",
+   "href": null,
+   "cls": "btn"
+  },
+  {
+   "text": "布置给学生",
+   "href": "/tasks",
+   "cls": "btn btn-outline"
+  }
+ ],
+ "previewSection": {
+  "tag": "ASIDE",
+  "cls": "practice-suite-preview",
+  "id": ""
+ },
+ "selfBack": [
+  "/practice"
+ ]
+}
+FILTER CLICKS [{"i":0,"label":"听力","scrolled":true,"urlChanged":false,"outsideMutations":2},{"i":1,"label":"阅读","scrolled":true,"urlChanged":false,"outsideMutations":2},{"i":2,"label":"写作","scrolled":true,"urlChanged":false,"outsideMutations":2},{"i":3,"label":"题型专项","scrolled":true,"urlChanged":false,"outsideMutations":2},{"i":4,"label":"单项练习","scrolled":true,"urlChanged":false,"outsideMutations":0},{"i":5,"label":"整套 Test","scrolled":true,"urlChanged":false,"outsideMutations":0},{"i":6,"label":"模考","scrolled":true,"urlChanged":false,"outsideMutations":0},{"i":7,"label":"IELTS","scrolled":true,"urlChanged":false,"outsideMutations":0},{"i":8,"label":"TOEFL","scrolled":true,"urlChanged":false,"outsideMutations":0}]
+ASSIGN href /tasks

@@ -950,7 +950,7 @@ body.practice-listening-page .practice-bottom-score .result-box {
     <span class="exam-mode-shell__sub">{{ exam_context.section_label }} · 考号：{{ exam_context.student_name }}</span>
   </div>
   <div class="exam-mode-shell__right">
-    <span class="exam-mode-shell__saved" id="examSavedIndicator">Saved</span>
+    <span class="exam-mode-shell__saved" id="examSavedIndicator">Not saved</span>
     <span class="exam-mode-shell__timer" id="examCountdown">--:--</span>
     <button class="exam-mode-shell__exit" type="button" data-practice-exam-exit>退出模考</button>
   </div>
@@ -1010,7 +1010,7 @@ body[data-experience-mode="simulation"] .group::before {
       <div class="practice-shell__facts" aria-label="练习状态" data-capability="showPracticeSyncStatus">
         <span class="practice-shell__fact" id="practiceShellSection">Section 1</span>
         <span class="practice-shell__fact" id="practiceShellMode">{{ '模考' if exam_context else '练习' }}</span>
-        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+        <span class="practice-shell__save" data-practice-save-status aria-live="polite">尚未保存</span>
         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
       </div>
       <button class="practice-shell__back" type="button" id="resetBtn" hidden>重做</button>
@@ -1111,7 +1111,13 @@ body[data-experience-mode="simulation"] .group::before {
 <dialog class="practice-exit-dialog" id="practiceExitDialog">
   <div class="practice-exit-dialog__body">
     <h2>退出并保存进度？</h2>
-    <p>模考会保留当前答案。你可以继续答题，或退出后从任务详情重新进入。</p>
+    {% if exam_context %}
+    <p>模考会保留当前答案。你可以继续答题，或退出后从模考流程重新进入；已经开始的计时不会暂停。</p>
+    {% elif practice_context %}
+    <p>退出前会先保存当前答案。保存成功后返回任务列表，可以再次进入继续作答。</p>
+    {% else %}
+    <p>退出前会先保存当前答案。使用同一浏览器再次进入，可以继续作答。</p>
+    {% endif %}
   </div>
   <div class="practice-exit-dialog__actions">
     <button type="button" data-practice-exit-cancel>继续答题</button>
@@ -2103,6 +2109,10 @@ function restoreAnswers() {
   let rows = {};
   try { rows = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (err) { rows = {}; }
   applyAnswerRows(rows);
+  if (Object.values(rows).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
+    const indicator = document.getElementById('examSavedIndicator');
+    if (indicator) indicator.textContent = 'Restored';
+  }
 }
 
 async function restoreServerAnswers() {
@@ -2113,6 +2123,10 @@ async function restoreServerAnswers() {
     if (!response.ok || !data.ok || !data.answers || practiceRedo.skipRestore()) return;
     const local = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
     applyAnswerRows({ ...data.answers, ...local });
+    if (Object.values(data.answers).some(value => String(value || '').trim()) && practiceShellController?.markRestored?.()) {
+      const indicator = document.getElementById('examSavedIndicator');
+      if (indicator) indicator.textContent = 'Restored';
+    }
   } catch (_error) {
     // Local session draft remains available when server recovery is unreachable.
   }
@@ -2236,7 +2250,7 @@ async function loadExistingSubmission() {
     );
     lockReadOnlyReviewControls();
     openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
-    practiceShellController?.markSaved();
+    practiceShellController?.markRestored?.('已加载记录');
     return;
   }
   // 模考答案只属于当前 access token；普通刷题的历史提交绝不能灌进模考卷。
@@ -2281,7 +2295,7 @@ async function loadExistingSubmission() {
         : '已同步后台'
     );
     openReviewCard(currentQuestionId || allQuestions()[0]?.id || allQuestions()[0]?.number);
-    practiceShellController?.markSaved();
+    practiceShellController?.markRestored?.('已加载记录');
   } catch (err) {
     // 已提交结果加载失败时，不影响学生继续做题或重新提交。
   }
@@ -2692,9 +2706,11 @@ if (!examContext) {
 // its own back guard to the joint browser history.
 practiceShellController = practiceContext?.embed_review ? null : PracticeShell.init({
   fallbackUrl: persistenceContext?.exit_url || "{{ url_for('listening_test_index') }}",
-  fallbackMode: isMockExamReview ? 'mock_exam_review' : persistenceContext ? 'task_detail' : 'listening_tests',
-  confirmExit: Boolean(persistenceContext && !practiceContext?.read_only),
-  initialSaved: true,
+  fallbackMode: isMockExamReview ? 'mock_exam_review' : examContext ? 'mock_exam_process' : practiceContext ? 'task_detail' : 'listening_tests',
+  confirmExit: ({ dirty, saving }) => !practiceContext?.read_only && Boolean(
+    dirty || saving || (examContext?.started_at && examContext?.deadline_at)
+  ),
+  initialSaved: false,
   save: persistAnswers
 });
 render();

@@ -1,0 +1,66 @@
+ARGV: ["/Users/zhouxin/Desktop/studytracker/.venv/bin/python", "-c", "from pathlib import Path; from jinja2 import Environment; import sys; env=Environment(); [(env.parse(Path(p).read_text()),print('Jinja parse OK:',p)) for p in sys.argv[1:]]", "templates/base.html", "templates/listening/player.html", "templates/listening/test_practice.html", "templates/practice/index_content.html", "templates/reading/test_practice.html"]
+EXIT: 0
+Jinja parse OK: templates/base.html
+Jinja parse OK: templates/listening/player.html
+Jinja parse OK: templates/listening/test_practice.html
+Jinja parse OK: templates/practice/index_content.html
+Jinja parse OK: templates/reading/test_practice.html
+
+
+ARGV: ["ruby", "-e", "require \"yaml\"; data=YAML.load_file(ARGV[0]); abort \"missing jobs\" unless data[\"jobs\"].keys.sort == %w[account-provisioning lint task-planner test]; puts \"CI YAML parse OK\"", ".github/workflows/ci.yml"]
+EXIT: 0
+CI YAML parse OK
+
+
+ARGV: ["/private/tmp/studytracker-web-vocab-py310/bin/python", "-c", "import pathlib, py_compile, sys, tempfile; print(sys.version);\nwith tempfile.TemporaryDirectory(prefix='practice-native310-compile-') as d:\n for i,p in enumerate(sys.argv[1:]):\n  py_compile.compile(p,cfile=str(pathlib.Path(d)/f'{i}.pyc'),doraise=True)\n  print('Native 3.10 compile OK:',p)", "api/reading_study.py", "tests/test_practice_center_batch1.py", "tests/test_reading_study.py", "docs/reviews/practice-web-batch1-20261126/run_tests.py"]
+EXIT: 0
+3.10.20 (main, Aug  7 2026, 02:15:13) [Clang 22.1.3 ]
+Native 3.10 compile OK: api/reading_study.py
+Native 3.10 compile OK: tests/test_practice_center_batch1.py
+Native 3.10 compile OK: tests/test_reading_study.py
+Native 3.10 compile OK: docs/reviews/practice-web-batch1-20261126/run_tests.py
+
+
+ARGV: ["/Users/zhouxin/Desktop/studytracker/.venv/bin/python", "-m", "ruff", "check", "api/reading_study.py", "tests/test_practice_center_batch1.py", "tests/test_reading_study.py", "docs/reviews/practice-web-batch1-20261126/run_tests.py"]
+EXIT: 0
+All checks passed!
+
+
+ARGV: ["node", "--check", "static/js/practice_modes.js"]
+EXIT: 0
+
+
+ARGV: ["node", "--check", "static/js/practice_shell.js"]
+EXIT: 0
+
+
+ARGV: ["node", "--check", "tests/test_practice_center_identity.js"]
+EXIT: 0
+
+
+ARGV: ["node", "--check", "tests/test_practice_shell.js"]
+EXIT: 0
+
+
+ARGV: ["node", "--check", "tests/test_reading_study_entry.js"]
+EXIT: 0
+
+
+ARGV: ["git", "diff", "--check"]
+EXIT: 0
+
+
+INCOMING MAIN READ-ONLY COMPARISON
+{
+  "base": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "incoming": "79388e269e924e9ce591dd3e6de3762a61614ddf",
+  "shared_paths": [
+    ".github/workflows/ci.yml"
+  ],
+  "method": "git merge-file -p on temporary copies; repository unchanged",
+  "exit_code": 0,
+  "retains_incoming_auth_test": true,
+  "retains_local_reading_entry_test": true,
+  "retains_local_python_step": true,
+  "incoming_ci_diff": "diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml\nindex 05250e09..01f2700b 100644\n--- a/.github/workflows/ci.yml\n+++ b/.github/workflows/ci.yml\n@@ -45,7 +45,7 @@ jobs:\n         run: node tests/test_dictation_spell_queue.js\n       - name: Test weekly exam sprint source and public pages\n         run: |\n-          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v\n+          python -m unittest tests.test_exam_sprint tests.test_ninefen_source tests.test_exam_sprint_routes tests.test_exam_sprint_matching tests.test_ninefen_content tests.test_ninefen_assets tests.test_ninefen_session tests.test_ninefen_auth tests.test_exam_sprint_store tests.test_exam_sprint_import tests.test_exam_sprint_publish tests.test_exam_sprint_weekly -v\n       - name: Test current and historical student task lists\n         run: node --test tests/test_practice_task_lists.js\n       - name: Test classroom vocabulary import client and assignment preset\n"
+}

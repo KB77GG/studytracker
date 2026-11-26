@@ -151,7 +151,9 @@
     <h1>学习计划与打卡系统</h1>
     <nav>
       {% if request.path.startswith('/practice') %}
+      {% if request.endpoint != 'practice_library' %}
       <a href="{{ url_for('practice_library') }}" data-practice-module-back>练习中心</a>
+      {% endif %}
       <a href="{{ practice_navigation.module_exit_url }}" data-practice-module-exit>{{ practice_navigation.module_exit_label }}</a>
       {% else %}
       <a href="{{ url_for('index') }}">首页</a>

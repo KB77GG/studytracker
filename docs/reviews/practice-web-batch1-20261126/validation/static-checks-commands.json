@@ -1,0 +1,117 @@
+[
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-c",
+      "from pathlib import Path; from jinja2 import Environment; import sys; env=Environment(); [(env.parse(Path(p).read_text()),print('Jinja parse OK:',p)) for p in sys.argv[1:]]",
+      "templates/base.html",
+      "templates/listening/player.html",
+      "templates/listening/test_practice.html",
+      "templates/practice/index_content.html",
+      "templates/reading/test_practice.html"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.068
+  },
+  {
+    "argv": [
+      "ruby",
+      "-e",
+      "require \"yaml\"; data=YAML.load_file(ARGV[0]); abort \"missing jobs\" unless data[\"jobs\"].keys.sort == %w[account-provisioning lint task-planner test]; puts \"CI YAML parse OK\"",
+      ".github/workflows/ci.yml"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.079
+  },
+  {
+    "argv": [
+      "/private/tmp/studytracker-web-vocab-py310/bin/python",
+      "-c",
+      "import pathlib, py_compile, sys, tempfile; print(sys.version);\nwith tempfile.TemporaryDirectory(prefix='practice-native310-compile-') as d:\n for i,p in enumerate(sys.argv[1:]):\n  py_compile.compile(p,cfile=str(pathlib.Path(d)/f'{i}.pyc'),doraise=True)\n  print('Native 3.10 compile OK:',p)",
+      "api/reading_study.py",
+      "tests/test_practice_center_batch1.py",
+      "tests/test_reading_study.py",
+      "docs/reviews/practice-web-batch1-20261126/run_tests.py"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.047
+  },
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-m",
+      "ruff",
+      "check",
+      "api/reading_study.py",
+      "tests/test_practice_center_batch1.py",
+      "tests/test_reading_study.py",
+      "docs/reviews/practice-web-batch1-20261126/run_tests.py"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.05
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_modes.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.144
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "static/js/practice_shell.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.042
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "tests/test_practice_center_identity.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.041
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "tests/test_practice_shell.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.041
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "tests/test_reading_study_entry.js"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.041
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch1-20261126",
+    "exit_code": 0,
+    "elapsed_seconds": 0.12
+  }
+]

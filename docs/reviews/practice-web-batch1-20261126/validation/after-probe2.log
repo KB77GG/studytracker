@@ -1,0 +1,8 @@
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-practice-open-selected]')[22m
+
+    at /private/tmp/studytracker-practice-web-batch1-20261126/docs/reviews/practice-web-audit-20261126/probe2.js:10:52 {
+  log: [ "  - waiting for locator('[data-practice-open-selected]')" ],
+  name: 'TimeoutError'
+}

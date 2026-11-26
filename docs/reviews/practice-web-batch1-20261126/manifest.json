@@ -1,0 +1,107 @@
+{
+  "worktree": "/private/tmp/studytracker-practice-web-batch1-20261126",
+  "branch": "codex/practice-web-batch1-20261126",
+  "head": "f81a5e4a4d81282eb67b994a4cfcc5574fb78747",
+  "origin_main_observed": "79388e269e924e9ce591dd3e6de3762a61614ddf",
+  "file_count": 14,
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 10493,
+      "sha256": "87e5e2cbf9ad513409e71eb4920aed4b14b6d9f7fed9ce5c2aeb6af7f0ae631c",
+      "base_sha256": "c1bbb1706f1c0aa59dcfacb4c6102a7e3c90e5f6c1249048c21fdffa04055161",
+      "change": "modified"
+    },
+    {
+      "path": "api/reading_study.py",
+      "bytes": 9663,
+      "sha256": "d4b046674557c30b96b7f9948ad676c1ffb289719b88f03a2bc872760816672e",
+      "base_sha256": "d2120b2447893f1ccdc9289c0d25f662e8bfa50d65988bc86df124093f056ac8",
+      "change": "modified"
+    },
+    {
+      "path": "static/js/practice_modes.js",
+      "bytes": 5391,
+      "sha256": "20964c02457d873e17f1ef4e3bfad5410ec1917daba33b15055959741791ed96",
+      "base_sha256": "bc739aa1f6cd23d2e184bc1aa26e8e4bf0f7f3cf948360e0a77451cd0e02cf95",
+      "change": "modified"
+    },
+    {
+      "path": "static/js/practice_shell.js",
+      "bytes": 26782,
+      "sha256": "b3c875efefa1a6ff111ae794d09520a16df9b3964cce70e62ee314034305f42e",
+      "base_sha256": "4d29ef31fc4fc2fc5902664a98052f55c5d2cce59dce6c1a450009a429401bac",
+      "change": "modified"
+    },
+    {
+      "path": "templates/base.html",
+      "bytes": 12997,
+      "sha256": "333757fea79330aa4c6bd7de4d4576581eb5edcbff7cd7268aca752d3a0d341f",
+      "base_sha256": "a205525709236ab589b0f03802ab7e1fc190d1308a03f92ce651c75e27d593e4",
+      "change": "modified"
+    },
+    {
+      "path": "templates/listening/player.html",
+      "bytes": 96808,
+      "sha256": "1049801dd4f528d972115476d4c41a57a8dfab58a26ce5b1307e36c0bf4e9410",
+      "base_sha256": "6ef132dc6cd4d08a124ddc3e8bc6797564721384b634dec52ae437320f756628",
+      "change": "modified"
+    },
+    {
+      "path": "templates/listening/test_practice.html",
+      "bytes": 111165,
+      "sha256": "2e0748ed28a59653f628fec5c5ba76ec19d3ac1d4cae18dc5bb75274cd2853af",
+      "base_sha256": "30adad4054c860294912614541feafda967f692859a5634f1464a2bfde4f2c4e",
+      "change": "modified"
+    },
+    {
+      "path": "templates/practice/index_content.html",
+      "bytes": 42618,
+      "sha256": "eb4292e43516bdd557e3f6f335bb95ca18a2d534d5d8d6b948cabdb66316dc68",
+      "base_sha256": "aed8452d01b23dab93acc4c2bd44dd94cace29ce5b77bf953c7b42ba35bc7b45",
+      "change": "modified"
+    },
+    {
+      "path": "templates/reading/test_practice.html",
+      "bytes": 74529,
+      "sha256": "803c9a719186ba1daae37fbd1c004a892416e4469207e02b11f75e8397c99b39",
+      "base_sha256": "1aa0189f082dcf85f98f287f0cc65b122ca92dd5f5c58f6b1c4f106bff95b753",
+      "change": "modified"
+    },
+    {
+      "path": "tests/test_practice_center_batch1.py",
+      "bytes": 4275,
+      "sha256": "99037db048497521e7d72c3d69bf1a1744fb510aa3cb30effc3ab68f6e6ea167",
+      "base_sha256": null,
+      "change": "added"
+    },
+    {
+      "path": "tests/test_practice_center_identity.js",
+      "bytes": 5062,
+      "sha256": "f653219f4ef47a0657c2144e814749ff1cdd3f5183a73df1d4d80241041ccdcf",
+      "base_sha256": null,
+      "change": "added"
+    },
+    {
+      "path": "tests/test_practice_shell.js",
+      "bytes": 25251,
+      "sha256": "7cf9155acd51b827ee0fbf57268e8bba179b04641330d524d82b447754365a72",
+      "base_sha256": "888f74b0660202344e7656e7c5a2c8ff53a8f85365a5ac78424a7383b3de5233",
+      "change": "modified"
+    },
+    {
+      "path": "tests/test_reading_study.py",
+      "bytes": 19047,
+      "sha256": "f2741a2209fd55cce6853d03e76ccb94f36427afd61e6dfbdbe957bbe8567036",
+      "base_sha256": "d00883f1957a362905b0b369b99a4fff8e88f9be596c54a8204ae299d42f9a95",
+      "change": "modified"
+    },
+    {
+      "path": "tests/test_reading_study_entry.js",
+      "bytes": 3154,
+      "sha256": "488889efe2980023dd521ea3f5f8b1e7df3dfab242bf0ab0a6b531bd5395a8e7",
+      "base_sha256": null,
+      "change": "added"
+    }
+  ]
+}

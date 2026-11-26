@@ -1,0 +1,437 @@
+{
+  "checks": [
+    {
+      "path": "api/__init__.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "api/miniprogram.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "api/mock_exam_creation.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "api/practice_vocabulary.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "api/reading_study.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "api/teacher_practice_catalog.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "app.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "config.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "scripts/install_exam_sprint_launchd.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "scripts/run_exam_sprint_weekly.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "scripts/sync_exam_sprint.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/exam_sprint_catalog.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/exam_sprint_papers.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/exam_sprint_student.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/mock_exam_paper_access.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/ninefen_auth.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/ninefen_session.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/practice_student_identity.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/practice_vocabulary_tasks.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/practice_vocabulary_web.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/task_plan_item_sync.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/vocabulary_task_submission.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "services/web_practice_tasks.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "static/js/mock_sprint_picker.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/mock_sprint_picker.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_modes.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_modes.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_shell.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_shell.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_core.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_core.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_events.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_events.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_page.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_page.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_recovery.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_recovery.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_render.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_render.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_render_details.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_render_details.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_timing.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_timing.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "static/js/practice_vocabulary_transport.js",
+      "argv": [
+        "node",
+        "--check",
+        "static/js/practice_vocabulary_transport.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "templates/admin/_mock_sprint_picker.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/admin/mock_exams_form.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/base.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/listening/player.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/listening/test_practice.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/practice/index_content.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/practice/vocabulary_task.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/reading/test_practice.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "templates/tasks.html",
+      "check": "Jinja parse",
+      "ok": true
+    },
+    {
+      "path": "tests/fixtures/practice_task_list_baseline.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_integrity_e2e.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_assignment_picker.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_exam_sprint_assignment_picker.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_assignments.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_catalog.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_papers.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_student.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_exam_sprint_weekly.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_mock_sprint_creation.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_mock_sprint_picker.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_mock_sprint_picker.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_ninefen_auth.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_ninefen_session.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_center_batch1.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_center_identity.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_center_identity.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_shell.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_shell.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_student_identity.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_adversarial.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_core.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_vocabulary_core.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_routes.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_task_list.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_tasks.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_timing.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_practice_vocabulary_timing.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_practice_vocabulary_web.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_reading_study.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_reading_study_entry.js",
+      "argv": [
+        "node",
+        "--check",
+        "tests/test_reading_study_entry.js"
+      ],
+      "ok": true
+    },
+    {
+      "path": "tests/test_task_plan_item_sync.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "path": "tests/test_vocabulary_task_submission.py",
+      "check": "native Python 3.10.20 compile",
+      "ok": true
+    },
+    {
+      "argv": [
+        "ruby",
+        "-e",
+        "require \"yaml\"; data=YAML.load_file(ARGV[0]); abort \"missing jobs\" unless data[\"jobs\"].keys.sort == %w[account-provisioning lint task-planner test]",
+        ".github/workflows/ci.yml"
+      ],
+      "check": "Ruby YAML load",
+      "ok": true
+    }
+  ],
+  "initial_tooling_note": "Python YAML import unavailable; used existing Ruby YAML parser instead; no package install"
+}

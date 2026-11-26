@@ -880,7 +880,7 @@ body {
     <div class="topbar">
       <div class="topbar-title" id="currentSentenceLabel">第1句</div>
       <div class="topbar-actions">
-        <span class="practice-shell__save" data-practice-save-status aria-live="polite">已保存</span>
+        <span class="practice-shell__save" data-practice-save-status aria-live="polite">尚未保存</span>
         <button class="practice-shell__retry" type="button" data-practice-save-retry hidden>重试</button>
         <button class="ctrl-btn" id="btnResetFreeProgress" type="button" style="display:none">重做</button>
         <button class="practice-shell__back back-link" type="button" data-practice-back>← 返回精听列表</button>
@@ -1008,12 +1008,12 @@ body {
 
 <dialog class="practice-exit-dialog" id="practiceExitDialog">
   <div class="practice-exit-dialog__body">
-    <h2>退出并保存进度？</h2>
-    <p>当前听写进度和错因笔记会先保存，再返回进入本页前的位置。</p>
+    <h2>退出练习？</h2>
+    <p>已提交的听写进度会保留，错因笔记会先保存。尚未提交的听写答案可能丢失，请确认后再退出。</p>
   </div>
   <div class="practice-exit-dialog__actions">
     <button type="button" data-practice-exit-cancel>继续练习</button>
-    <button type="button" data-practice-exit-confirm>退出并保存</button>
+    <button type="button" data-practice-exit-confirm>确认退出</button>
   </div>
 </dialog>
 
@@ -1095,8 +1095,10 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   function saveErrorSummaries() {
     try {
       localStorage.setItem(getErrorSummaryStorageKey(), JSON.stringify(errorSummaries));
+      return true;
     } catch (err) {
       console.warn('error summary save failed', err);
+      return false;
     }
   }
 
@@ -1118,25 +1120,33 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
   }
 
   function persistCurrentErrorSummary(force) {
-    if (taskReadOnly) return;
+    if (taskReadOnly) return true;
     const ta = document.getElementById('errorSummaryInput');
-    if (!ta) return;
+    if (!ta) return true;
     const segGlobalIdx = getGlobalSegmentIndex();
     const val = ta.value;
     const prev = errorSummaries[segGlobalIdx] || '';
     if (!force && val === prev) {
       errorSummaryDirty = false;
-      return;
+      return true;
     }
     if (val.trim()) {
       errorSummaries[segGlobalIdx] = val;
     } else {
       delete errorSummaries[segGlobalIdx];
     }
-    saveErrorSummaries();
+    if (!saveErrorSummaries()) {
+      if (prev) errorSummaries[segGlobalIdx] = prev;
+      else delete errorSummaries[segGlobalIdx];
+      errorSummaryDirty = true;
+      setErrorSummaryStatus('保存失败，请重试', 'error');
+      practiceShellController?.setStatus('保存失败，点击重试', 'error');
+      return false;
+    }
     errorSummaryDirty = false;
     setErrorSummaryStatus('已保存', 'saved');
     practiceShellController?.markSaved();
+    return true;
   }
 
   function scheduleErrorSummarySave() {
@@ -1167,13 +1177,42 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     }
   }
 
+  function hasUnconfirmedFirstAttempt() {
+    if (pendingFirstAttempts.size) return true;
+    if (!data) return false;
+    const progress = getActiveProgressMap();
+    return getSegmentLocations().some(location =>
+      !getEffectiveProgress(progress, location.globalIndex, getPracticeText(location.seg))
+      && firstAttemptGates.get(dictationStateKey(location.globalIndex))?.canPost());
+  }
+
+  function hasUnsubmittedDictationDraft() {
+    if (!data) return false;
+    const progress = getActiveProgressMap();
+    return getSegmentLocations().some(location => {
+      const key = dictationStateKey(location.globalIndex);
+      const saved = getEffectiveProgress(progress, location.globalIndex, getPracticeText(location.seg));
+      if (saved && !correctionSegments.has(key)) return false;
+      return Array.from(dictationDrafts).some(([draftKey, values]) =>
+        draftKey.startsWith(`${key}:`) && values.some(value => String(value || '').trim()));
+    });
+  }
+
   practiceShellController = PracticeShell.init({
     fallbackUrl: taskId ? "{{ url_for('tasks_page') }}" : "{{ url_for('listening_index') }}",
     fallbackMode: taskId ? 'task_detail' : 'intensive_library',
-    confirmExit: Boolean(taskId),
-    initialSaved: true,
+    confirmExit: ({ dirty, saving }) => !taskReadOnly && Boolean(
+      dirty || saving || errorSummaryDirty || hasUnsubmittedDictationDraft() || hasUnconfirmedFirstAttempt()
+    ),
+    initialSaved: false,
+    beforeLeave: () => {
+      if (!hasUnconfirmedFirstAttempt()) return true;
+      practiceShellController?.setStatus('首答保存尚未确认，请刷新确认', 'pending');
+      return false;
+    },
     save: () => {
-      if (errorSummaryDirty) persistCurrentErrorSummary(true);
+      if (hasUnconfirmedFirstAttempt()) return false;
+      if (errorSummaryDirty && !persistCurrentErrorSummary(true)) return false;
       return savePracticeRedoState() && (taskId ? true : saveFreeProgress());
     }
   });
@@ -1558,6 +1597,9 @@ const intensiveListeningCapabilities = PracticeModes.apply(document, intensiveLi
     if (initialPending && !practiceRedoState) selectSegmentLocation(initialPending);
     else selectSegment(0);
     updateTaskCompletionPanel();
+    if (Object.keys(getActiveProgressMap()).length || Object.keys(errorSummaries).length || practiceRedoState) {
+      practiceShellController?.markRestored?.('已恢复进度');
+    }
     audio.addEventListener('timeupdate', onTimeUpdate);
     audio.addEventListener('loadedmetadata', updateAudioProgressDisplay);
   }

@@ -144,8 +144,11 @@
     scope.querySelectorAll("[data-capability]").forEach((node) => {
       const capability = node.dataset.capability;
       const available = Boolean(caps[capability]);
-      node.hidden = !available;
-      node.setAttribute("aria-hidden", String(!available));
+      // Some entries also need asynchronously loaded content. A permitted mode
+      // must not reveal them before their content owner has marked them ready.
+      const gated = Object.prototype.hasOwnProperty.call(node.dataset, "revealWhenReady");
+      node.hidden = !available || (gated && node.dataset.revealWhenReady !== "true");
+      node.setAttribute("aria-hidden", String(node.hidden));
       if ("disabled" in node && !available) node.disabled = true;
       if ("disabled" in node && available && node.dataset.capabilityDisabled !== "true") node.disabled = false;
     });

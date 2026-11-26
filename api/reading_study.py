@@ -8,12 +8,14 @@ push logic into ``_helper`` functions per repo convention.
 from __future__ import annotations
 
 import re
+from urllib.parse import quote, urlencode
 
 from flask import (
     Blueprint,
     Response,
     abort,
     jsonify,
+    redirect,
     render_template,
     request,
     session,
@@ -63,9 +65,23 @@ def _ready_passages(test_id: str) -> list[ReadingPassageAnalysis]:
 
 def _practice_url(test_id: str, source_kind: str) -> str:
     """Link back to the matching reading practice page (app.py routes)."""
+    test_id = quote(test_id, safe="")
     if source_kind == "reading_jijing":
         return f"/reading/jijing/{test_id}"
     return f"/reading/test/{test_id}"
+
+
+def _unavailable_study_redirect(test_id: str):
+    """Keep the student on this test when its analysis is not published yet."""
+    # The generic reading route loads both Cambridge and Jijing tests. Do not
+    # trust a caller-supplied return URL to choose the redirect destination.
+    target = _practice_url(test_id, "reading_test")
+    keys = (
+        "task_id", "token", "passage", "history_attempt",
+        "practice_return", "practice_exit", "practice_source", "practice_identity",
+    )
+    query = urlencode({key: request.args[key] for key in keys if key in request.args})
+    return redirect(f"{target}?{query}" if query else target)
 
 
 def _current_student() -> StudentProfile | None:
@@ -117,7 +133,7 @@ def _requested_normalized_text() -> str:
 def reading_study_page(test_id: str):
     rows = sorted(_ready_passages(test_id), key=_passage_sort_key)
     if not rows:
-        abort(404)
+        return _unavailable_study_redirect(test_id)
     context = {
         "test_id": test_id,
         "passages": [_passage_meta(row) for row in rows],

@@ -12,8 +12,8 @@ from tests.exam_integrity_e2e_support import ROOT, IntegritySandbox
 
 BASELINE_SHA = {
     "exam/process.html": "d403c724ce8fd41d0b094aaae344865a00acc657e9465b7584c57bf52687e0d5",
-    "listening/test_practice.html": "aad8dda7a6475f4f1ccba98174f53c9d75caceb991c07dc9e52c1ec2f0fe2856",
-    "reading/test_practice.html": "498e7025c2df7a29b5b0d114eddc44071398bc7849511353e63d20f883c0d9c7",
+    "listening/test_practice.html": "adb2382bcad0be14e5c4e1d1ec991017c516ed71f5d86d1ab840e264459f89cc",
+    "reading/test_practice.html": "5d998b3c9ff56cd6f28f738eb4205d97c1cfe7135c198a483f13e24a8b7c1e81",
     "exam/writing.html": "2da9eedc76cd1d4cfa024480ff888fbbe45ffe78d113bd4148c344b564edd91d",
 }
 
@@ -169,8 +169,9 @@ class ExamIntegrityRealFlowTest(unittest.TestCase):
                 include = "{% if exam_context %}" + include + "{% endif %}"
             source = (ROOT / "templates" / template_name).read_text().replace(include, "")
             # Reviewed upstream sources keep this test usable in shallow CI clones.
-            # Reading tracks main@3d8e7b57; listening tracks dcfbd46d
-            # (reviewed sprint media paths); process/writing remain ecc06f23.
+            # Listening/reading track the reviewed 2026-11-27 batch1 integration
+            # (exit/save state and analysis readiness); integrity includes are
+            # unchanged. Process/writing remain ecc06f23. See joint merge review.
             self.assertEqual(
                 hashlib.sha256(source.encode()).hexdigest(), BASELINE_SHA[template_name]
             )
