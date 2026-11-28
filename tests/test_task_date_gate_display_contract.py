@@ -61,9 +61,14 @@ class TaskDateGateDisplayContractTest(unittest.TestCase):
             "availabilityLabel: t.status_label || t.task_status_label || t.availability_label",
         )
         self.assert_contains(
-            "templates/listening/index.html",
-            "task.status_label || task.task_status_label || task.availability_label",
+            "templates/practice/index_content.html",
+            "escapeHtml(task.status_label || '')",
         )
+        # Batch two keeps task summaries only in the practice center.
+        intensive = (ROOT / "templates/listening/index.html").read_text(encoding="utf-8")
+        self.assertIn("#practiceAssignedTasks", intensive)
+        self.assertNotIn("/api/listening/tasks", intensive)
+        self.assertNotIn("/api/practice/tasks", intensive)
 
     def test_dictation_appeal_and_content_report_are_not_date_gated(self):
         source = (ROOT / "api/dictation.py").read_text(encoding="utf-8")

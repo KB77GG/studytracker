@@ -1,0 +1,10 @@
+test_assignment_notifications_use_the_shared_next_day_cutoff (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest) ... ok
+test_cambridge_retry_stays_available_only_while_task_is_writable (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest) ... ok
+test_date_gate_error_and_home_display_helpers_prioritize_status (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest) ... ok
+test_dictation_appeal_and_content_report_are_not_date_gated (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest) ... ok
+test_read_only_banners_prioritize_workflow_status_over_date_label (tests.test_task_date_gate_display_contract.TaskDateGateDisplayContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+OK

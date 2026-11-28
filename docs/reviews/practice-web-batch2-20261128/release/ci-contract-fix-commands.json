@@ -1,0 +1,50 @@
+[
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-m",
+      "unittest",
+      "tests.test_task_plan_item_sync",
+      "tests.test_vocabulary_task_submission",
+      "tests.test_practice_student_identity",
+      "tests.test_practice_vocabulary_tasks",
+      "tests.test_practice_vocabulary_web",
+      "tests.test_practice_vocabulary_routes",
+      "tests.test_practice_vocabulary_task_list",
+      "tests.test_practice_vocabulary_adversarial",
+      "tests.test_miniprogram_grading",
+      "tests.test_task_date_gate_display_contract",
+      "-v"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "seconds": 9.58,
+    "log": "ci-contract-fix-1.log"
+  },
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_task_date_gate.py",
+      "-q"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "seconds": 0.511,
+    "log": "ci-contract-fix-2.log"
+  },
+  {
+    "argv": [
+      "/Users/zhouxin/Desktop/studytracker/tmp/web-vocab-py310-20261126/bin/python",
+      "-m",
+      "unittest",
+      "tests.test_task_date_gate_display_contract",
+      "-v"
+    ],
+    "cwd": "/private/tmp/studytracker-practice-web-batch2-20261128",
+    "exit_code": 0,
+    "seconds": 0.025,
+    "log": "ci-contract-fix-3.log"
+  }
+]

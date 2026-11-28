@@ -12,7 +12,7 @@
 | 分支 | `codex/practice-web-batch2-20261128` |
 | 开发基线 / 报告起草时 HEAD | `9c211ee807fa1084017cbf8e8a05c1c9fe95de77` |
 | 本机候选 | 产品、测试、CI 登记、增强流程和证据尚有未提交改动；下列验证针对本机候选 |
-| 最终产品 manifest / 补丁 | [source-manifest.json](source-manifest.json) 28 项、[product-manifest.json](product-manifest.json) 15 项，均记录逐文件 SHA256；[batch2.patch](batch2.patch) 为 160129 字节，临时 index 适用性检查通过 |
+| 最终产品 manifest / 补丁 | [source-manifest.json](source-manifest.json) 29 项、[product-manifest.json](product-manifest.json) 15 项，均记录逐文件 SHA256；[batch2.patch](batch2.patch) 为 161334 字节，临时 index 适用性检查通过 |
 | 发布提交 | **待填写完整 commit SHA** |
 | 推送 / main 状态 | **待填写远端分支和 SHA** |
 | 远端 CI | **待填写 run URL、提交 SHA、结论** |
@@ -117,3 +117,9 @@ node docs/reviews/practice-web-audit-20261126/flows.js
 ## 补丁交给另一位 Codex
 
 本目录 batch2.patch 取代上级目录历史补丁，适用于基线9c211ee8的独立树。已发布main上不要重复应用；直接fetch main并读取本报告及规范交接。离线审查可在基线独立树执行 `git apply --check /path/to/release/batch2.patch`、`git apply /path/to/release/batch2.patch`，再按上面的命令复验。补丁不包含滚动交接、原始日志或自身；本报告、source-manifest及验证证据与补丁一并传递。
+
+## 首次远端 CI 及测试契约修正
+
+首次分支CI [46105985596](https://github.com/KB77GG/studytracker/actions/runs/46105985596) 在9bf0cf7a上：test/task-planner通过，account-provisioning因一条精听旧任务区状态字符串断言失败；非阻断lint仍有存量失败。完整结果与失败日志保存在branch-ci-first.json / branch-ci-first-failures.log。没有据此推送main。
+
+仅将 tests/test_task_date_gate_display_contract.py 的web任务状态展示断言移到现有练习中心 renderTaskList（后端status_label仍由workflow_label生成），并断言精听链接任务区且不再请求重复任务。其他日期门禁断言不动，15产品文件SHA未改变。独审确认语义保持；重跑同CI组合94/94、日期门禁pytest20/20、原生Python3.10静态契约5/5和Ruff通过，精确命令见ci-contract-fix-commands.json。最终源清单29项和补丁已刷新并再次独立index apply --check通过。
