@@ -1,6 +1,6 @@
 # 网页刷题第二批导航补丁（2026-11-28）
 
-> 当前状态：用户已授权部署；浏览器 44/44、双 Python 各85、扩展66、Node207及退出9均通过。最新发布过程、命令、最终补丁/manifest见 [release/README.md](release/README.md)。下文为第一次本地交付存档（包括当时权限限制）；旧 batch2.patch / manifest.json 不包含发布前最后修复，请勿再用于部署。
+> 当前状态：第二批已提交、推送main并部署，生产43/43检查通过。最终补丁、29项源清单、命令、CI及发布结果见 [release/README.md](release/README.md)。下文为第一次本地交付存档；旧 batch2.patch / manifest.json / tar.gz 不包含发布前最后修复，请勿用于部署。
 
 实现已完成，双 Python 与 Node 回归通过；浏览器流程脚本已补充，但本轮因本地监听权限未完成而未实跑。未提交、推送或部署，不能据此宣称第二批已上线。
 

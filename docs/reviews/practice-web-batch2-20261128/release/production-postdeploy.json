@@ -1,0 +1,620 @@
+{
+  "checked_at_utc": "2026-11-28T04:33:03.191270+00:00",
+  "mode": "postdeploy",
+  "scope": "Read-only git/files/systemd/proc metadata and anonymous GET; no app/models import, DB, secrets/environment, cookies or write requests.",
+  "head": "695f84d68d2d29657ee9526918ab0365e21eaefa",
+  "expected_head": "695f84d68d2d29657ee9526918ab0365e21eaefa",
+  "tracked_clean": true,
+  "service": {
+    "MainPID": "799274",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Sat 2026-11-28 12:23:20 CST",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "gunicorn_file_config": {
+    "bind": "127.0.0.1:5002",
+    "workers": 1,
+    "worker_class": "gthread",
+    "threads": 6
+  },
+  "runtime_worker_count": 1,
+  "files_match": {
+    "static/js/practice_shell.js": true,
+    "templates/auth/_entrance_shell.html": true,
+    "templates/base.html": true,
+    "templates/listening/index.html": true,
+    "templates/listening/jijing_index.html": true,
+    "templates/listening/test_index.html": true,
+    "templates/practice/_workspace_header.html": true,
+    "templates/practice/_workspace_styles.html": true,
+    "templates/practice/exam_sprint.html": true,
+    "templates/practice/index_content.html": true,
+    "templates/question_type_practice/student_index.html": true,
+    "templates/reading/jijing_index.html": true,
+    "templates/reading/test_index.html": true,
+    "templates/writing/index.html": true,
+    "templates/writing/topics.html": true
+  },
+  "loopback_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "3be5a3cc85cd4218d5cbb1cddae1322a2f14b54a8263330cd7fe4db75d654640",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "86151722ce7c2e4d42b858d124bfab8127ef4c60012c4830fc5626e87d748c75",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "batch1_identity_tasks_preserved": true
+        },
+        "ok": true
+      }
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice/vocabulary/tasks/0": {
+      "status": 401,
+      "sha256": "2d8ca071ed41109440936c0e950c20dfd04c96ae87484b1320e8315f4a99cfa6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 401,
+      "sha256": "c343b38becd0e2848569bb91ca591ca1f5c55176ed3f218a453feeaef6855e87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/practices": {
+      "status": 200,
+      "sha256": "30b3401b3429c613598d0ebd1659f0c22c481d88a3b2054baffef3f91c156996",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "identity_gate_preserved": true,
+          "duplicate_overview_removed": true
+        },
+        "ok": true
+      }
+    },
+    "/listening": {
+      "status": 200,
+      "sha256": "30b3401b3429c613598d0ebd1659f0c22c481d88a3b2054baffef3f91c156996",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "identity_gate_preserved": true,
+          "duplicate_overview_removed": true
+        },
+        "ok": true
+      }
+    },
+    "/listening/tests": {
+      "status": 200,
+      "sha256": "3b6dc5463e5ef18c35e34d3d4e59293800f8608de46c5e40154ae79119d7ee31",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/reading/tests": {
+      "status": 200,
+      "sha256": "f86d25f7017b5c8302d6864e9e045f308bb6a35de13b9790ecf073c9678f4a0d",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/listening/jijing": {
+      "status": 200,
+      "sha256": "2d08f092b8a7f4b21cf82e286c7418fde32efa8c4e7eca98b580393f07b153f6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/reading/jijing": {
+      "status": 200,
+      "sha256": "7fbdcf1b1a222b0c1b649d48ae46109b832b4788ad192d35b561e1a459222f8b",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/sprint/listening": {
+      "status": 200,
+      "sha256": "11947fd5ad9ae549891263343925b5dcea8c6097e4dc83f5ef38be2ee87d5c87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/sprint/reading": {
+      "status": 200,
+      "sha256": "ee1c484ed0011288786c7dfa6bea3e56d58e84e8cbd2e078eebe11e70e4df785",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/question-types": {
+      "status": 200,
+      "sha256": "781e1fd540801ce4b734ba156f832255c80e84888e66d926f0c1d13a6f9e52fd",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/writing/": {
+      "status": 302,
+      "sha256": "f4a4e2c7c5380ac36931da67f3003137eb54e636b8c7c39c72acb2d039bd5917",
+      "redirects_to_login": false,
+      "redirects_to_practice": true,
+      "no_store": true
+    },
+    "/writing/topics": {
+      "status": 302,
+      "sha256": "f4a4e2c7c5380ac36931da67f3003137eb54e636b8c7c39c72acb2d039bd5917",
+      "redirects_to_login": false,
+      "redirects_to_practice": true,
+      "no_store": true
+    }
+  },
+  "public_pages": {
+    "/login": {
+      "status": 200,
+      "sha256": "3be5a3cc85cd4218d5cbb1cddae1322a2f14b54a8263330cd7fe4db75d654640",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice": {
+      "status": 200,
+      "sha256": "86151722ce7c2e4d42b858d124bfab8127ef4c60012c4830fc5626e87d748c75",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "batch1_identity_tasks_preserved": true
+        },
+        "ok": true
+      }
+    },
+    "/tasks": {
+      "status": 302,
+      "sha256": "70d4d99b05dbacf5809382cb9c91c31e4956ddf4b3f31b20b806ecdb5c2bddde",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/materials": {
+      "status": 302,
+      "sha256": "f971d4b6ecbd150682a89fbdec87c8b91a53686ce049ccf1363cf8b3c98d6019",
+      "redirects_to_login": true,
+      "redirects_to_practice": false,
+      "no_store": true
+    },
+    "/practice/vocabulary/tasks/0": {
+      "status": 401,
+      "sha256": "2d8ca071ed41109440936c0e950c20dfd04c96ae87484b1320e8315f4a99cfa6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/api/practice/vocabulary/tasks/0/state": {
+      "status": 401,
+      "sha256": "c343b38becd0e2848569bb91ca591ca1f5c55176ed3f218a453feeaef6855e87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "identity_missing": true,
+      "no_student_or_csrf_payload": true
+    },
+    "/practices": {
+      "status": 200,
+      "sha256": "30b3401b3429c613598d0ebd1659f0c22c481d88a3b2054baffef3f91c156996",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "identity_gate_preserved": true,
+          "duplicate_overview_removed": true
+        },
+        "ok": true
+      }
+    },
+    "/listening": {
+      "status": 200,
+      "sha256": "30b3401b3429c613598d0ebd1659f0c22c481d88a3b2054baffef3f91c156996",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true,
+          "identity_gate_preserved": true,
+          "duplicate_overview_removed": true
+        },
+        "ok": true
+      }
+    },
+    "/listening/tests": {
+      "status": 200,
+      "sha256": "3b6dc5463e5ef18c35e34d3d4e59293800f8608de46c5e40154ae79119d7ee31",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/reading/tests": {
+      "status": 200,
+      "sha256": "f86d25f7017b5c8302d6864e9e045f308bb6a35de13b9790ecf073c9678f4a0d",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/listening/jijing": {
+      "status": 200,
+      "sha256": "2d08f092b8a7f4b21cf82e286c7418fde32efa8c4e7eca98b580393f07b153f6",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/reading/jijing": {
+      "status": 200,
+      "sha256": "7fbdcf1b1a222b0c1b649d48ae46109b832b4788ad192d35b561e1a459222f8b",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/sprint/listening": {
+      "status": 200,
+      "sha256": "11947fd5ad9ae549891263343925b5dcea8c6097e4dc83f5ef38be2ee87d5c87",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/sprint/reading": {
+      "status": 200,
+      "sha256": "ee1c484ed0011288786c7dfa6bea3e56d58e84e8cbd2e078eebe11e70e4df785",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/practice/question-types": {
+      "status": 200,
+      "sha256": "781e1fd540801ce4b734ba156f832255c80e84888e66d926f0c1d13a6f9e52fd",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": true,
+      "structure": {
+        "shared_header_count": 1,
+        "checks": {
+          "brand_intact": true,
+          "five_navigation_items": true,
+          "one_context_back_or_none_at_root": true,
+          "one_module_exit": true,
+          "guest_identity_label": true,
+          "one_expected_h1": true,
+          "branded_title": true
+        },
+        "ok": true
+      }
+    },
+    "/writing/": {
+      "status": 302,
+      "sha256": "f4a4e2c7c5380ac36931da67f3003137eb54e636b8c7c39c72acb2d039bd5917",
+      "redirects_to_login": false,
+      "redirects_to_practice": true,
+      "no_store": true
+    },
+    "/writing/topics": {
+      "status": 302,
+      "sha256": "f4a4e2c7c5380ac36931da67f3003137eb54e636b8c7c39c72acb2d039bd5917",
+      "redirects_to_login": false,
+      "redirects_to_practice": true,
+      "no_store": true
+    }
+  },
+  "public_assets": {
+    "static/js/practice_shell.js": {
+      "status": 200,
+      "sha256": "833f3de7167f63c609dc005b1d9c38f275ae16691b5754236dcf72aad4259035",
+      "redirects_to_login": false,
+      "redirects_to_practice": false,
+      "no_store": false
+    }
+  },
+  "checks": {
+    "head_matches": true,
+    "tracked_clean": true,
+    "service_active": true,
+    "gunicorn_config_expected": true,
+    "one_worker_running": true,
+    "loopback/login_health": true,
+    "loopback/practice_health": true,
+    "loopback/tasks_health": true,
+    "loopback/materials_health": true,
+    "loopback/practice/vocabulary/tasks/0_enabled_and_gated": true,
+    "loopback/api/practice/vocabulary/tasks/0/state_enabled_and_gated": true,
+    "loopback/practice_batch2_markup": true,
+    "loopback/practices_batch2_markup": true,
+    "loopback/listening_batch2_markup": true,
+    "loopback/listening/tests_batch2_markup": true,
+    "loopback/reading/tests_batch2_markup": true,
+    "loopback/listening/jijing_batch2_markup": true,
+    "loopback/reading/jijing_batch2_markup": true,
+    "loopback/practice/sprint/listening_batch2_markup": true,
+    "loopback/practice/sprint/reading_batch2_markup": true,
+    "loopback/practice/question-types_batch2_markup": true,
+    "loopback/writing/_anonymous_gate": true,
+    "loopback/writing/topics_anonymous_gate": true,
+    "public/login_health": true,
+    "public/practice_health": true,
+    "public/tasks_health": true,
+    "public/materials_health": true,
+    "public/practice/vocabulary/tasks/0_enabled_and_gated": true,
+    "public/api/practice/vocabulary/tasks/0/state_enabled_and_gated": true,
+    "public/practice_batch2_markup": true,
+    "public/practices_batch2_markup": true,
+    "public/listening_batch2_markup": true,
+    "public/listening/tests_batch2_markup": true,
+    "public/reading/tests_batch2_markup": true,
+    "public/listening/jijing_batch2_markup": true,
+    "public/reading/jijing_batch2_markup": true,
+    "public/practice/sprint/listening_batch2_markup": true,
+    "public/practice/sprint/reading_batch2_markup": true,
+    "public/practice/question-types_batch2_markup": true,
+    "public/writing/_anonymous_gate": true,
+    "public/writing/topics_anonymous_gate": true,
+    "source_manifest_matches": true,
+    "public_practice_shell_sha_matches": true
+  },
+  "limitations": [
+    "Anonymous HTML structure checks do not execute JS, render a browser or prove signed-in/student/teacher journeys.",
+    "Writing catalogs retain their existing anonymous redirect; their authenticated HTML is not checked here.",
+    "Gunicorn class/thread/bind values are read from config; worker count and loopback health are independent runtime checks.",
+    "Vocabulary feature remains enabled by requiring existing identity_missing responses; no .env or process environment is read or changed."
+  ],
+  "ok": true
+}

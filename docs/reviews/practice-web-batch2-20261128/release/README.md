@@ -1,26 +1,26 @@
-# 网页刷题第二批导航发布候选与验收（2026-11-28）
+# 网页刷题第二批导航已部署（2026-11-28）
 
-用户本轮已明确授权：修复完成后可以直接部署。当前候选已完成本机浏览器导航验收与生产只读预检；提交、远端 CI、部署及后验结果须由主 agent 完成后填写下表。**生产预检通过不等于第二批已部署。**
+用户授权后，第二批导航已提交、推送main并通过正式部署。生产业务HEAD为 `695f84d68d2d29657ee9526918ab0365e21eaefa`，2026-11-28 12:23:20 CST启动；只读后验43/43通过。分支与main同SHA CI均为overall success，三个业务作业全部成功，结果见下表。
 
-本报告接续 [初始补丁报告](../README.md)，更新其中“浏览器未运行、未获部署授权”的历史状态。初始报告、失败证据和补丁仍保留；发布结论以本报告最终填写的提交、CI 和生产后验为准。
+本报告取代[初始补丁报告](../README.md)中的待浏览器/待授权状态；初始失败、旧补丁保留为历史证据，当前补丁和manifest均在本目录。
 
 ## 候选与发布状态
 
-| 项目 | 已确认状态 / 待补结果 |
+| 项目 | 已确认状态 |
 | --- | --- |
 | 实施工作树 | `/private/tmp/studytracker-practice-web-batch2-20261128` |
 | 分支 | `codex/practice-web-batch2-20261128` |
-| 开发基线 / 报告起草时 HEAD | `9c211ee807fa1084017cbf8e8a05c1c9fe95de77` |
-| 本机候选 | 产品、测试、CI 登记、增强流程和证据尚有未提交改动；下列验证针对本机候选 |
+| 开发基线 / 开发起点HEAD | `9c211ee807fa1084017cbf8e8a05c1c9fe95de77` |
+| 本机候选 | 产品与测试已commit/push；发布证据与规范交接另做skip-ci文档同步，避免重复部署 |
 | 最终产品 manifest / 补丁 | [source-manifest.json](source-manifest.json) 29 项、[product-manifest.json](product-manifest.json) 15 项，均记录逐文件 SHA256；[batch2.patch](batch2.patch) 为 161334 字节，临时 index 适用性检查通过 |
-| 发布提交 | **待填写完整 commit SHA** |
-| 推送 / main 状态 | **待填写远端分支和 SHA** |
-| 远端 CI | **待填写 run URL、提交 SHA、结论** |
-| 后端 / 网页部署 | **待填写部署时间、生产 HEAD、工作流结果** |
-| 生产后验 | **待填写报告路径、全部检查结果、15 个产品文件和公网 JS SHA 一致性** |
-| 数据库 / 配置 / 小程序 | 本次导航变更不需要数据库迁移、词汇开关调整或小程序发布；实际发布操作由主 agent 收尾核对 |
+| 发布提交 | `695f84d68d2d29657ee9526918ab0365e21eaefa`（产品提交9bf0cf7a，随后695f84d6仅适配旧日期显示测试） |
+| 推送 / main 状态 | 任务分支和main已快进至 `695f84d68d2d29657ee9526918ab0365e21eaefa`，未force push |
+| 远端 CI | [分支CI46106789381](https://github.com/KB77GG/studytracker/actions/runs/46106789381) overall success，test/account-provisioning/task-planner均成功；[mainCI46107250772](https://github.com/KB77GG/studytracker/actions/runs/46107250772)同SHA overall success，三个业务作业成功。旧advisory lint失败继续披露 |
+| 后端 / 网页部署 | [Deploy46107250763](https://github.com/KB77GG/studytracker/actions/runs/46107250763) success；12:23:20 CST服务启动，生产HEAD与发布提交相同 |
+| 生产后验 | [production-postdeploy.json](production-postdeploy.json) **43/43通过**，15产品文件和公网practice_shell.js SHA全部匹配；[精确SSH命令](production-postdeploy-command.json) |
+| 数据库 / 配置 / 小程序 | 无本次schema变更、人工生产学生记录写入或生产配置调整；既有部署链正常执行。词汇保持开启；无小程序上传/提审/发布 |
 
-旧资料树 `/Users/zhouxin/Desktop/studytracker` 有既有业务改动，并非本候选工作树。规范交接由主 agent 统一更新两树的 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md`，不得把本机未提交结果写成远端或生产已有。
+旧资料树 `/Users/zhouxin/Desktop/studytracker` 有既有业务改动，并非本候选工作树。规范交接已统一更新两树的 `docs/CODEX_HANDOFF.md` 与 `docs/WORKLOG.md`，不得把本机未提交结果写成远端或生产已有。
 
 ## 产品范围与独审修复
 
@@ -43,6 +43,7 @@
 | 截图独审 | **8 张未见阻断问题** | 独审查看首轮中的练习中心、剑雅听力、精听、题型专项各两个宽度；不冒充全部 22 张独立复核 |
 | 本机冲刺 fixture 自检 | **8 / 8 通过** | [serve-fixture-notes.json](serve-fixture-notes.json)，真实模板及目标页面 GET；额外阻断 socket 与 DNS，零调用 |
 | 生产探针本机自检 | **通过** | [production-probe-selftest.json](production-probe-selftest.json)：12 个页面 / gate 检查、manifest 规则及无网络边界 |
+| 生产发布后只读验收 | **43 / 43 通过** | [production-postdeploy.json](production-postdeploy.json)：本机回环与公网10目录结构、写作匿名门禁、健康、身份门禁、版本及SHA |
 | 生产发布前只读预检 | **17 / 17 通过** | [production-preflight.json](production-preflight.json)，只说明发布前运行状态 |
 | 最终 Ruff / 静态范围 / 补丁检查 | **通过 / 39 / 39 / 通过** | [scope-check.json](../scope-check.json)、[patch-check.json](patch-check.json)；补丁以基线临时 Git index 执行 `git apply --check --cached`，未改真实暂存区 |
 
@@ -112,7 +113,7 @@ node docs/reviews/practice-web-audit-20261126/flows.js
 
 [verify_production.py](verify_production.py) 仅使用标准库，读取固定 Git / systemd / proc 元数据、允许列表内产品文件与匿名 GET；不 import app / models，不读学生数据库、秘密或服务环境，不发送 POST，不记录 Cookie、姓名或 token。主 agent 已执行预检；后验须指定最终完整 SHA 与最终 15 产品文件 SHA256 manifest，再检查 loopback / 公网目录品牌、唯一返回、h1、身份 gate、服务健康及公网 JS 内容 SHA。写作匿名入口保留既有跳转，只读探针不声称验证其登录后页面。
 
-发布完成前由主 agent 填齐上表并更新规范交接：明确本机、已 commit、已 push、已部署分别处于什么状态，补充 CI / 部署链接和后验结果。若任一步失败，保留实际失败证据与未完成项，不将生产预检或本机 44 项通过当作已上线证明。
+生产后验通过：HEAD一致、tracked clean、active/running、NRestarts0，实际1worker；gthread/6threads/5002配置保持。10目录在回环及公网均满足单品牌/五主导航/唯一来源返回（中心无自返回）/h1/匿名身份；写作匿名门禁保持。15产品SHA及公网JS一致，词汇匿名page/state仍401 identity_missing/no-store。本轮5116已Ctrl+C停止，lsof无监听；来源不明5055未动。
 
 ## 补丁交给另一位 Codex
 
@@ -123,3 +124,9 @@ node docs/reviews/practice-web-audit-20261126/flows.js
 首次分支CI [46105985596](https://github.com/KB77GG/studytracker/actions/runs/46105985596) 在9bf0cf7a上：test/task-planner通过，account-provisioning因一条精听旧任务区状态字符串断言失败；非阻断lint仍有存量失败。完整结果与失败日志保存在branch-ci-first.json / branch-ci-first-failures.log。没有据此推送main。
 
 仅将 tests/test_task_date_gate_display_contract.py 的web任务状态展示断言移到现有练习中心 renderTaskList（后端status_label仍由workflow_label生成），并断言精听链接任务区且不再请求重复任务。其他日期门禁断言不动，15产品文件SHA未改变。独审确认语义保持；重跑同CI组合94/94、日期门禁pytest20/20、原生Python3.10静态契约5/5和Ruff通过，精确命令见ci-contract-fix-commands.json。最终源清单29项和补丁已刷新并再次独立index apply --check通过。
+
+## 收尾同步
+
+两次成功CI完整JSON见 [branch-ci.json](branch-ci.json) 与 [main-ci.json](main-ci.json)，部署见 [deploy.json](deploy.json)。既有非阻断lint日志保存在branch-ci-advisory-lint.log；本次所有改动Python文件定向Ruff通过。最终源/补丁SHA再次核对见 [release-source-check.json](release-source-check.json)。
+
+发布证据及两份规范交接以单独 `[skip ci]` 文档提交同步任务分支和main，生产继续运行已验业务695f84d6；文档提交号用 `git log -1` 核对。实施树收尾应clean；旧资料树原8M/27顶层U业务保持，只有它的两份镜像交接仍仅本机。未进行小程序上传、提审或发布。

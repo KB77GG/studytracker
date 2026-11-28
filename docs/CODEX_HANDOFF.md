@@ -1,14 +1,15 @@
 # StudyTracker — Codex 跨账号 / 跨电脑开发交接
 
-## 2026-11-28 — 网页刷题批2已通过发布验收，正在执行授权部署
+## 2026-11-28 — 网页刷题第二批导航已部署
 
-- 用户已明确允许修复完成后直接部署；本轮沿任务分支提交、CI验证后fast-forward main触发既有部署链。当前尚未提交/推送，生产预检仍为 `efeac80c468cc47a6347d6136b6736c1ddbd0996`，不能把候选写成已上线。
-- 实施树 `/private/tmp/studytracker-practice-web-batch2-20261128`，分支 `codex/practice-web-batch2-20261128`，基线/当前HEAD `9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，最新fetch main无推进。开工clean；本轮共享顶栏、品牌/唯一来源返回、父级与环路保护、精听去重复列表、h1/title和身份教师保留。追加修复父母账号不冒充学生标签，补两例身份回归。受保护235文件、shell init到EOF、精听管理/进度等8项逐字相同；判分计时保存/第三批不变。
-- 本轮未提交文件：产品15项、测试/CI/flows与复现工具详 `docs/reviews/practice-web-batch2-20261128/release/source-manifest.json`；新共享header、新导航测试、整个批2证据目录和两份交接；无开工既有改动。源树 `/Users/zhouxin/Desktop/studytracker` 仍main@6ded77d2，既有8M/27顶层U/0staged，业务文件未改，仅两交接镜像。
-- 最终验证：Python3.13/原生3.10各85/85，额外冲刺/写作/模考/防作弊66/66，Node207/207、精听退出9/9；私有SQLite、无.env/app.db、network0。精确argv和日志在release/python-commands.json及extra-commands.json；来源核验39/39、14Jinja、4JS，定向Ruff通过。源比对命令 `.venv/bin/python docs/reviews/practice-web-batch2-20261128/verify_scope.py --baseline 9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，解释器实际为旧资料树绝对路径。
-- 浏览器已获本机端口/Chromium启动权限，复用原flows.js最终44/44、22张1440/390截图，无目录横溢；8张独审。命令与合成服务见release/README.md，修复任务render等待/折叠条目选择、仅测试fixture补真实题目的合成冲刺入口。原失败证据保留。未验Safari/原生zoom/真机/音频CDN/生产真实学生UI；不得将合成热榜当生产热榜验收。
-- 生产只读预检17/17：active/running、1worker/gthread6/5002，tracked clean；词汇开关此前已开启，匿名page/state401 identity_missing/no-store（此事实覆盖11/27较早默认关闭记录），本轮不改开关/数据库。未部署或小程序上传提审发布。
-- 直接下一步：按release报告完成分支CI→main→Deploy→只读生产HEAD及15文件SHA/公开结构验收，更新此段为实际结果；停止本轮5116合成服务，勿动来源不明5055。
+- **授权与发布**：用户明确允许修复后直接部署；产品提交`9bf0cf7a677bf95d13039cc43732fd219b66cd72`，随后仅测试契约适配提交`695f84d68d2d29657ee9526918ab0365e21eaefa`已commit/push任务分支及main（普通fast-forward）。生产业务HEAD为后者，2026-11-28 12:23:20 CST启动。本次收尾证据/交接另以skip-ci文档提交同步main及任务分支，不重复部署；最终文档HEAD请用git核对，生产保持上述已验业务SHA。
+- **实施树/源树**：`/private/tmp/studytracker-practice-web-batch2-20261128` / `codex/practice-web-batch2-20261128`，基线`9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，开工clean。15产品与测试/CI/flows/复现工具29项清单见release/source-manifest.json；新header、新导航测试和批2证据已随代码提交。收尾两交接及报告/CI/生产JSON通过独立skip-ci文档提交同步，最终应clean。旧资料树`/Users/zhouxin/Desktop/studytracker`仍main@6ded77d24586327ad94e151e172ae4811b4a2eed，原8M/27顶层U/0staged保持；仅更新其两份交接，业务文件未覆盖，未在此树pull/切分支/提交。
+- **完成范围**：依第二批#6/#9/#12/#18，共享顶栏、品牌与唯一来源返回、冲刺多层父级/重访环路、精听去重复任务与记录、页面h1/title；学生/课堂/教师权限与入口保留。独审修复家长未确认孩子时不误标为学生、已确认显示孩子。未改判分/计时/保存主体、数据库模型或第三批视觉方案。保护235文件及8项逐字对照通过，含shell init到EOF、精听宏/进度管理脚本。
+- **本地验证**：双Python3.13/原生3.10各85/85；扩展冲刺/写作/模考/完整性66/66；Node207/207及退出探针9/9；CI旧精听任务断言适配后同CI组合94/94、pytest日期门禁20/20、原生3.10契约5/5。Python主runner临时SQLite、无.env/app.db/network0；原生3.10无兼容别名。精确argv、退出码、日志见release/python-commands.json、extra-commands.json、ci-contract-fix-commands.json；本机解释器分别为旧资料树`.venv/bin/python`与`tmp/web-vocab-py310-20261126/bin/python`。静态范围39/39（14Jinja/4JS）、定向Ruff、29源/15产品SHA和最终补丁基线apply --check通过。复现命令及最新版161334字节patch在release/README.md，父目录旧patch/manifest/tar明确仅历史。
+- **浏览器**：获本机监听/Chromium权限后复用原审计flows.js，最终44/44、22张1440/390截图，8张独审；身份/教师、页面/浏览器返回、冲刺多层与无循环、目录无横溢通过。首轮异步任务等待/折叠条目与缺热榜资源失败保留；仅fixture以醒目标识提供阅读冲刺合成导航入口，未改产品/seed/真实热榜。5116服务已停止、lsof无监听，5055未动。
+- **CI**：[首次46105985596](https://github.com/KB77GG/studytracker/actions/runs/46105985596)一条旧精听列表状态断言失败，未因此部署；将断言迁到实际承接任务的练习中心并保留所有日期门禁检查后，[分支46106789381](https://github.com/KB77GG/studytracker/actions/runs/46106789381) overall success，test/account-provisioning/task-planner全成功。[Deploy46107250763](https://github.com/KB77GG/studytracker/actions/runs/46107250763) success；[mainCI46107250772](https://github.com/KB77GG/studytracker/actions/runs/46107250772)同SHA overall success、三个业务作业均成功。既有advisory lint failure仍披露，未称全仓lint干净。
+- **生产后验**：只读SSH探针`release/verify_production.py`实际命令见production-postdeploy-command.json；不import app/模型、不读学生库/环境secret、不POST。43/43通过，HEAD匹配/tracked clean/active-running/NRestarts0/实际1worker，gunicorn配置gthread6/5002保持；回环与公网10目录结构、写作匿名跳转、登录/后台门禁/健康通过，15产品及公网practice_shell.js SHA一致。词汇此前已开启，本轮匿名page/state保持401 identity_missing/no-store，此事实覆盖11/27更早默认关闭记录，未改开关。无本次schema变更、人工学生记录写入或小程序上传/提审/发布。
+- **边界与下一步**：未验Safari、原生zoom/IME、微信真机、真实登录后师生UI、当前热榜内容和真实音频/CDN；合成Chromium不是这些项目的验收。本批线上已生效，可从main获取完整代码及报告；后续任务fresh main隔离开发，不在旧脏树套旧补丁，第三批需另定范围。
 
 ## 2026-11-27 — 词汇默认关闭与刷题批1已联合部署
 

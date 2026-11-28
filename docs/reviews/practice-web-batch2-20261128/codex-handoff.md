@@ -1,6 +1,6 @@
 # 可直接交给 Codex 的接手指令
 
-> 当前状态：用户已授权部署；浏览器 44/44、双 Python 各85、扩展66、Node207及退出9均通过。最新发布过程、命令、最终补丁/manifest见 [release/README.md](release/README.md)。下文为第一次本地交付存档（包括当时权限限制）；旧 batch2.patch / manifest.json 不包含发布前最后修复，请勿再用于部署。
+> 当前状态：第二批已提交、推送main并部署，生产43/43检查通过。最终补丁、29项源清单、命令、CI及发布结果见 [release/README.md](release/README.md)。下文为第一次本地交付存档；旧 batch2.patch / manifest.json / tar.gz 不包含发布前最后修复，请勿用于部署。
 
 请接续 StudyTracker 网页刷题第二批导航优化。附件 `batch2.patch` 的基线是 main `9c211ee807fa1084017cbf8e8a05c1c9fe95de77`，依据仓库 `docs/design/practice-web-audit-20261126.md` 第二批 #6/#9/#12/#18。第一批已由 `docs/reviews/practice-web-joint-release-20261127/README.md` 确认部署。
 

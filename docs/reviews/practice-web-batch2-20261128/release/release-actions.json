@@ -1,0 +1,29 @@
+{
+  "release_head": "695f84d68d2d29657ee9526918ab0365e21eaefa",
+  "baseline": "9c211ee807fa1084017cbf8e8a05c1c9fe95de77",
+  "branch": "codex/practice-web-batch2-20261128",
+  "commands": [
+    "git fetch origin main",
+    "git push -u origin codex/practice-web-batch2-20261128",
+    "git push origin codex/practice-web-batch2-20261128",
+    "git fetch origin main",
+    "git push origin HEAD:main"
+  ],
+  "branch_ci_first": 46105985596,
+  "branch_ci_success": 46106789381,
+  "main_ci": 46107250772,
+  "deploy": 46107250763,
+  "no_force_push": true,
+  "production_probe": "production-postdeploy-command.json",
+  "server_head": "695f84d68d2d29657ee9526918ab0365e21eaefa",
+  "server_restart_local_time": "2026-11-28 12:23:20 CST",
+  "no_mini_program_release": true,
+  "branch_ci_conclusion": "success",
+  "main_ci_conclusion": "success",
+  "deploy_conclusion": "success",
+  "required_business_jobs": "test/account-provisioning/task-planner all success on both successful CI runs",
+  "advisory_lint": "failure retained",
+  "production_checks_passed": 43,
+  "production_checks_failed": 0,
+  "documentation_sync": "separate [skip ci] commit; production stays at release_head"
+}
